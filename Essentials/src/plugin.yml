@@ -1,0 +1,248 @@
+# This determines the command prefix when there are conflicts (/name:home, /name:help, etc.)
+name: Essentials
+main: com.earth2me.essentials.Essentials
+# Note to developers: This next line cannot change, or the automatic versioning system will break.
+version: TeamCity
+website: http://www.earth2me.net:8001/
+description: Provides an essential, core set of commands for Bukkit.
+authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo]
+commands:
+  afk:
+    description: Marks you as away-from-keyboard.
+    usage: /<command>
+  antioch:
+    description: 'A little surprise for operators. Warning: Point away from face.'
+    usage: /<command>
+  back:
+    description: Teleports you to your location prior to teleporting/spawning/warping.
+    usage: /<command>
+  backup:
+    description: Runs the backup command
+    usage: /<command>
+  balance:
+    description: States the current balance of a player.  Defaults to self.
+    usage: /<command> <player>
+    aliases: bal,money
+  ban:
+    description: Bans a player.
+    usage: /<command> [player] <reason>
+  banip:
+    description: Bans an IP address.
+    usage: /<command> [address]
+  broadcast:
+    description: Broadcasts a message to the entire server.
+    usage: /<command> [msg]
+  bigtree:
+    description: Spawn a big tree where you are looking.
+    usage: /<command> [tree|redwood]
+  burn:
+    description: Set a player on fire.
+    usage: /<command> [player] [seconds]
+  clearinventory:
+    description: Clear all items in your inventory.
+    usage: /<command>
+  compass:
+    description: Describes your current bearing.
+    usage: /<command>
+  deljail:
+    description: Removes a jail
+    usage: /<command> [jailname]
+  delwarp:
+    description: Deletes the specified warp.
+    usage: /<command> [warp]
+    aliases: [remwarp,rmwarp]
+  depth:
+    description: States current depth, relative to sea level.
+    usage: /depth
+  eco:
+    description: Manages the server economy.
+    usage: /<command> [give|take|reset] [player] [amount]
+    aliases: economy
+  essentials:
+    description: Reloads essentials.
+    usage: /<command>
+  ext:
+    description: Extinguish players.
+    usage: /<command> <player>
+  getpos:
+    description: Get your current coordinates.
+    usage: /<command>
+    aliases: [coords]
+  gc:
+    description: Reports garbage collection info; useful to plugin/CraftBukkit developers
+    usage: /<command>
+    aliases: [mem,memory]
+  give:
+    description: Give a player an item.
+    usage: /<command> [player] [item|numeric] <amount>
+  god:
+    description: Enables your godly powers.
+    usage: /<command>
+    aliases: [tgm,godmode]
+  heal:
+    description: Heals you or the given player.
+    usage: /<command> <player>
+  help:
+    description: Views a list of available commands.
+    usage: /<command>
+  helpop:
+    description: Request help from online operators.
+    usage: /<command> [message]
+  home:
+    description: Teleport to your home.
+    usage: /<command>
+  invsee:
+    description: See the inventory of other players.
+    usage: /<command> <player>
+  item:
+    description: Spawn an item.
+    usage: /<command> [item|numeric] <amount>
+    aliases: [i]
+  jails:
+    description: List all jails.
+    usage: /<command>
+  jump:
+    description: Jumps to the nearest block in the line of sight.
+    usage: /<command>
+    aliases: [j]
+  kick:
+    description: Kicks a specified player with a reason.
+    usage: /<command> <player> <reason>
+  kickall:
+    description: Kicks all players off the server except the issuer.
+    usage: /<command> <reason>
+  kit:
+    description: Obtains the specified kit or views all available kits.
+    usage: /<command> <kit>
+  kill:
+    description: Kills specified player.
+    usage: /<command> <player>
+  list:
+    description: List all online players.
+    usage: /<command>
+    aliases: [playerlist,who,online]
+  mail:
+    description: Manages inter-player, intra-server mail.
+    usage: /<command> [read|clear|send [to] [message]]
+  me:
+    description: Describes an action in the context of the player.
+    usage: /<command> [description]
+  motd:
+    description: Views the Message Of The Day.
+    usage: /<command>
+  msg:
+    description: Sends a private message to the specified player.
+    usage: /<command> <to> <message>
+    aliases: [m,t]
+  mute:
+    description: Mutes or unmutes a player.
+    usage: /<command> [player]
+  nick:
+    description: Change your nickname or that of another player.
+    usage: /<command> <player> [nickname|off]
+  nuble:
+    description: Used by Nuble to request permission for takeoff.
+    usage: /<command> identify [id]
+  pay:
+    description: Pays another player from your balance
+    usage: /<command> [player] [amount]
+  ping:
+    description: Pong!
+    usage: /<command>
+    aliases: [pong]
+  plugin:
+    description: Enables, disables, or reloads a plugin.
+    usage: /<command> [enable|disable|reload] [plugin]
+  r:
+    description: Quickly reply to the last player to message you.
+    usage: /<command> [message]
+  rules:
+    description: Views the server rules.
+    usage: /<command>
+  reloadall:
+    description: Reloads all plugins.
+    usage: /<command>
+    aliases: [rel]
+  sell:
+    description: Sells the item currently in your hand.
+    usage: /<command> <-><amount>
+  sethome:
+    description: Set your home to your current location.
+    usage: /<command>
+  setjail:
+    description: Creates a jail where you specified named [jailname]
+    usage: /<command> [jailname]
+  setwarp:
+    description: Creates a new warp.
+    usage: /<command> [warp]
+    aliases: [createwarp]
+  spawnmob:
+    description: Spawns a mob.
+    usage: /<command> [mob],<mount>:<slime-size> <amount>
+  suicide:
+    description: Causes you to perish
+    usage: /<command>
+  time:
+    description: Change the server time to day or night.
+    usage: /<command> [day|night]
+  togglejail:
+    description: Prevents a player from interacting with the world and teleports him/her to the the jail specified
+    usage: /<command> [player] [jailname]
+    aliases: [tjail]
+  top:
+    description: Teleport to the highest block at your current coordinates.
+    usage: /<command>
+  tp:
+    description: Teleport to a player.
+    usage: /<command> [player]
+  tpa:
+    description: Request to teleport to the specified player.
+    usage: /<command> <player>
+  tpaccept:
+    description: Accepts a teleport request.
+    usage: /<command>
+  tpahere:
+    description: Request that the specified player teleport to you.
+    usage: /<command> <player>
+  tpdeny:
+    description: Reject a teleport request.
+    usage: /<command>
+  tphere:
+    description: Teleport a player to you.
+    usage: /<command> [player]
+    aliases: s
+  tpo:
+    description: Teleport override for tptoggle.
+    usage: /<command> <player>
+  tpohere:
+    description: Teleport here override for tptoggle.
+    usage: /<command> <player>
+  tppos:
+    description: Teleport to coordinates.
+    usage: /<command> <x> <y> <z>
+  tptoggle:
+    description: Blocks all forms of teleportation.
+    usage: /<command>
+  tree:
+    description: Spawn a tree where you are looking.
+    usage: /<command> [tree|birch|redwood]
+  unban:
+    description: Unbans the specified player.
+    usage: /<command> [player]
+    aliases: pardon
+  unbanip:
+    description: Unbans the specified IP address.
+    usage: /<command> [address]
+    aliases: pardonip
+  warp:
+    description: List all warps or warp to the specified location.
+    usage: /<command> <warp>
+  whois:
+    description: Determine the username behind a nickname.
+    usage: /<command> [nickname]
+  world:
+    description: Switch between worlds.
+    usage: /<command> [world]
+  worth:
+    description: Calculates the worth of items in hand or as specified.
+    usage: /<command> <item> <amount>

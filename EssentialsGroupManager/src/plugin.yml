@@ -1,0 +1,165 @@
+name: GroupManager
+version: 1.0(alpha-5)
+main: org.anjocaido.groupmanager.GroupManager
+website: http://www.anjocaido.info/
+description: Provides on-the-fly system for Permission system created by Nijikokun. But all in memory, and with flat-file saving schedule.
+authors:
+  - AnjoCaido
+  - Gabriel Couto
+commands:
+  manuadd:
+    description: Move a player to desired group.(Adds to the file if not exists)
+    usage: /<command> <player> <group>
+    permission: groupmanager.manuadd
+  manudel:
+    description: Remove any user specific configuration. Make him default group.
+    usage: /<command> <player>
+    permission: groupmanager.manudel
+  manuaddsub:
+    description: Add a group to a player's subgroup list.
+    usage: /<command> <player> <group>
+    permission: groupmanager.manuaddsub
+  manudelsub:
+    description: Remove a group to a player's subgroup list.
+    usage: /<command> <player> <group>
+    permission: groupmanager.manudelsub
+  mangadd:
+    description: Add group to the system.
+    usage: /<command> <group>
+    permission: groupmanager.mangadd
+  mangdel:
+    description: Removes group from the system(all it's users become default)
+    usage: /<command> <group>
+    permission: groupmanager.mangdel
+  manuaddp:
+    description: Add permission diretly to the player.
+    usage: /<command> <player> <permission>
+    permission: groupmanager.manuaddp
+  manudelp:
+    description: Removes permission diretly from the player.
+    usage: /<command> <player> <permission>
+    permission: groupmanager.manudelp
+  manulistp:
+    description: List all permissions from a player.
+    usage: /<command> <player>
+    permission: groupmanager.manulistp
+  manucheckp:
+    description: Verify if user has a permission, and where it comes from.
+    usage: /<command> <player> <permission>
+    permission: groupmanager.manucheckp
+  mangaddp:
+    description: Add permission to a group.
+    usage: /<command> <group> <permission>
+    permission: groupmanager.mangaddp
+  mangdelp:
+    description: Removes permission from a group.
+    usage: /<command> <group> <permission>
+    permission: groupmanager.mangdelp
+  manglistp:
+    description: Lists all permissions from a group.
+    usage: /<command> <group>
+    permission: groupmanager.manglistp
+  mangcheckp:
+    description: Check if group has a permission, and where it comes from.
+    usage: /<command> <group> <permission>
+    permission: groupmanager.mangcheckp
+  mangaddi:
+    description: Add a group to another group inheritance list.
+    usage: /<command> <group1> <group2>
+    permission: groupmanager.mangaddi
+  mangdeli:
+    description: Remove a group from another group inheritance list.
+    usage: /<command> <group1> <group2>
+    permission: groupmanager.mangdeli
+  manuaddv:
+    description: Add, or replaces, a variable to a user (like prefix or suffix).
+    usage: /<command> <user> <variable> <value>
+    permission: groupmanager.manuaddv
+  manudelv:
+    description: Remove a variable from a user.
+    usage: /<command> <user> <variable>
+    permission: groupmanager.manudelv
+  manulistv:
+    description: List variables a user has (like prefix or suffix).
+    usage: /<command> <user>
+    permission: groupmanager.manulistv
+  manucheckv:
+    description: Verify a value of a variable of user, and where it comes from.
+    usage: /<command> <user> <variable>
+    permission: groupmanager.manucheckv
+  mangaddv:
+    description: Add, or replaces, a variable to a group (like prefix or suffix).
+    usage: /<command> <group> <variable> <value>
+    permission: groupmanager.mangaddv
+  mangdelv:
+    description: Remove a variable from a group.
+    usage: /<command> <group> <variable>
+    permission: groupmanager.mangdelv
+  manglistv:
+    description: List variables a group has (like prefix or suffix).
+    usage: /<command> <group>
+    permission: groupmanager.manglistv
+  mangcheckv:
+    description: Verify a value of a variable of group, and where it comes from.
+    usage: /<command> <group> <variable>
+    permission: groupmanager.mangckeckv
+  manwhois:
+    description: Tell the group that user belongs.
+    usage: /<command> <player>
+    permission: groupmanager.manwhois
+  tempadd:
+    description: Creates a temporary permission copy for that user.
+    usage: /<command> <player>
+    permission: groupmanager.tempadd
+  tempdel:
+    description: Remove the temporary permission copy for player.
+    usage: /<command> <player>
+    permission: groupmanager.tempdel
+  templist:
+    description: List players in overload-permissions mode made by /tempadd.
+    usage: /<command>
+    permission: groupmanager.templist
+  tempdelall:
+    description: Remove all overrides made by command /tempadd.
+    usage: /<command>
+    permission: groupmanager.tempdelall
+  mansave:
+    description: Save all permissions on file.
+    usage: /<command>
+    permission: groupmanager.mansave
+  manload:
+    description: Reload current world and config.yml. Or load given world.
+    usage: /<command> [world]
+    permission: groupmanager.manload
+  listgroups:
+    description: List the groups available.
+    usage: /<command>
+    permission: groupmanager.listgroups
+  manpromote:
+    description: Promote a player in the same heritage line to a higher rank.
+    usage: /<command> <player> <group>
+    permission: groupmanager.manpromote
+  mandemote:
+    description: Demote a player in the same heritage line to a lower rank.
+    usage: /<command> <player> <group>
+    permission: groupmanager.mandemote
+  mantogglevalidate:
+    description: Toggle on/off the validating if player is online.
+    usage: /<command>
+    permission: groupmanager.mantogglevalidate
+  mantogglesave:
+    description: Toggle on/ff the autosave.
+    usage: /<command>
+    permission: groupmanager.mantogglesave
+  manworld:
+    description: Prints the selected world name
+    usage: /<command>
+    permission: groupmanager.manworld
+  manselect:
+    description: Select a world to work with next commands.
+    usage: /<command> <world>
+    permission: groupmanager.manselect
+  manclear:
+    description: Clear world selection. Next commands will work on your world.
+    usage: /<command>
+    permission: groupmanager.manclear

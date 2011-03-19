@@ -1,0 +1,385 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                       Notes                          | #
+# +------------------------------------------------------+ #
+############################################################
+
+# If you want to use special characters in this document, such as accented letters, you MUST save the file as UTF-8, not ANSI.
+# If you receive an error when Essentials loads, ensure that:
+#   - No tabs are present: YAML only allows spaces
+#   - Indents are correct: YAML heirarchy is based entirely on indentation
+#   - You have "escaped" all apostrophes in your text: If you want to write "don't", for example, write "don''t" instead (note the doubled apostrphe)
+#   - List items are prefixed with a hyphen and indented:
+#       lists:
+#         - look like this
+#       not:
+#       - like this
+#   - Text with symbols is enclosed in single or double quotation marks
+#   - CraftBukkit and Permissions have been updated: CraftBukkit and Essentials almost always line up, but sometimes other plugins fall behind CraftBukkit's multiple daily updates
+#   - You have saved the document as UTF-8, NOT the default, ANSI
+
+
+
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                 Essentials (Global)                  | #
+# +------------------------------------------------------+ #
+############################################################
+
+# A color code between 0-9 or a-f. Set to 'none' to disable.
+ops-name-color: 'c'
+
+# The character(s) to prefix all nicknames, so that you know they are not true usernames.
+nickname-prefix: '~'
+
+# The delay, in seconds, required between /home, /tp, etc.
+teleport-cooldown: 0
+
+# The delay, in seconds, before a user actually teleports.  If the user moves or gets attacked in this timeframe, the teleport never occurs.
+teleport-delay: 0
+
+# The delay, in seconds, required between /heal attempts
+heal-cooldown: 60
+
+# The number of items given if the quantity parameter is left out in /item or /give.
+default-stack-size: 64
+
+#what to prevent from /i /give
+#e.g item-spawn-blacklist: 46,11,10
+item-spawn-blacklist: 
+
+# Whether or not to reclaim memory on player logout; this is technical, and should only be changed under special circumstances.
+# This generally increases server stability unless very specific runtime configurations are used.
+# HOWEVER, it is known to cause lag upon users logging OUT, so beware!
+reclaim-onlogout: false
+
+# Should primitive spawn protection be enabled?  For most servers, this should be flase; it is better to use a third-party plugin to protect it.
+spawn-protection: false
+
+# Nether settings (switch between worlds with "/world nether" and "/world normal")
+# Sets whether the nether system is enabled, what folder to save the world in, and whether portals should teleport players between worlds.
+nether:
+  enabled: false
+  folder: nether
+  portals-enabled: false
+  generate-exit-portals: false
+
+# Mob limit on spawnmob
+spawnmob-limit: 10
+
+# The message of the day, displayed on connect and by typing /motd.
+motd:
+  - '&cWelcome, {PLAYER}&c!'
+  - '&fType &c/help&f for a list of commands.'
+  - 'Currently online: {PLAYERLIST}'
+
+# The server rules, available by typing /rules
+rules:
+  - '[1] Be respectful'
+  - '[2] Be ethical'
+  - '[3] Use common sense'
+
+# Disabled commands will be completelly unavailable on the server.
+disabled-commands:
+# - nick
+
+# Restricted commands will only be available to ops.
+# These will have NO EFFECT if you have Permissions installed!
+# These are here only if you want something simpler than Permissions.
+restricted-commands:
+  - bigtree
+  - item
+  - give
+  - heal
+  - plugin
+  - time
+  - top
+  - tp
+  - tphere
+  - tree
+  - setspawn
+  - antioch
+  - kick
+  - ban
+  - unban
+  - top
+  - jump
+  - tpo
+  - tppos
+  - tpohere
+  - economy
+  - setwarp
+  - delwarp
+  - essentials
+  - gc
+  - spawnmob
+  - broadcast
+  - burn
+  - ext
+  - kill
+  - ping
+  - banip
+  - unban
+  - mute
+  - kick
+  - kickall
+  - unbanip
+  - togglejail
+  - setjail
+
+# Note: All items MUST be followed by a quantity!
+# Times are measured in seconds.
+kits:
+  tools:
+    delay: 10
+    items:
+      - 277 1
+      - 278 1
+      - 279 1
+
+# Disable all signs
+signs-disabled: false
+
+# Backup runs a command while saving is disabled
+backup:
+  # Interval in minutes
+  interval: 60
+  # Add a command that backups your data, e.g.
+  # command: 'rdiff-backup World1 backups/World1'
+
+# Set this true to enable permission per warp.
+per-warp-permission: false
+
+# Sort output of /list command by groups
+sort-list-by-groups: false
+
+############################################################
+# +------------------------------------------------------+ #
+# |                   EssentialsHome                     | #
+# +------------------------------------------------------+ #
+############################################################
+
+# When users die, should they respawn at their homes, instead of the spawnpoint?
+respawn-at-home: false
+
+# When a user interacts with a bed, should their home be set to that location?
+# If you enable this and remove default user access to the /sethome command, you can make beds the only way for players to set their home location.
+bed-sethome: false
+
+
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                   EssentialsEco                      | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Defines the balance with which new players begin.  Defaults to 0.
+starting-balance: 0
+
+# worth-# defines the value of an item when it is sold to the server via /sell.
+#worth-1: 1
+#worth-278: 1000
+
+# Defines the cost to use the given commands PER USE
+command-costs:
+  # /example costs $1000 PER USE
+  #example: 1000
+  # /kit tools costs $1500 PER USE
+ # kit-tools: 1500
+
+
+
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                   EssentialsHelp                     | #
+# +------------------------------------------------------+ #
+############################################################
+
+#Show other plugins commands in help
+non-ess-in-help: true
+
+
+
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                EssentialsServerlist                  | #
+# +------------------------------------------------------+ #
+############################################################
+
+# This is your server's mcserverlist.net API key.  Register your server at mcserverlist.net if you haven't already.
+mcsl-key: ''
+
+
+
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                   EssentialsChat                     | #
+# +------------------------------------------------------+ #
+############################################################
+
+# If EssentialsChat is installed, this will define how far a player's voice travels, in blocks.  Set to 0 to make all chat global.
+# Note that users with the "essentials.chat.spy" permission will hear everything, regardless of this setting.
+# Users with essentials.chat.shout can override this by prefixing text with an exclamation mark (!)
+# Or with essentials.chat.question can override this by prefixing text with a question mark (?)
+chat:
+  radius: 0
+  
+  # If you want the default chat format, uncomment the next line and comment the other format.
+  #format: '<{DISPLAYNAME}> {MESSAGE}'
+  format: '&7[{GROUP}]&f {DISPLAYNAME}&7:&f {MESSAGE}'
+  
+  # You can also have group-specific formats:
+  group-formats:
+    Default: '{WORLDNAME} {DISPLAYNAME}&7:&f {MESSAGE}'
+    Admins: '{WORLDNAME} &c[{GROUP}]&f {DISPLAYNAME}&7:&c {MESSAGE}'
+
+
+
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                 EssentialsProtect                    | #
+# +------------------------------------------------------+ #
+############################################################
+
+protect:
+  # Database settings for sign/rail protection
+  # get mysql.jar and sqlite and place it in your serverroot/lib directory from here:
+  # http://java.net/projects/essentials/sources/svn/show/lib?rev=435
+
+  # mysql, sqlite or none
+  datatype: 'sqlite'
+
+  # If you specified MySQL above, you MUST enter the appropriate details here.
+  # If you specified SQLite above, these will be IGNORED.
+  username: 'root'
+  password: 'root'
+  mysqlDb: 'jdbc:mysql://localhost:3306/minecraft'
+
+  # For which block types would you like to be alerted?
+  # You can find a list of IDs in plugins/Essentials/Items.db after loading Essentials for the first time.
+  alert:
+    # 10: lava
+    # 11: still lava
+    # 46: TNT
+    on-placement: 10,11,46
+    # 1: rock (just an example--doesn't actually do much)
+    on-use: 1
+    # 46: TNT
+    on-break: 46
+
+  # Users cannot PLACE these types of blocks/items.
+  # < 255 designates a BLOCK
+  # > 255 designates an ITEM (Some blocks can be placed as blocks OR items; lava blocks can be placed by lava buckets, for example.)
+  blacklist:
+    placement: 327,326,14,56,46,11,10,9,8
+    usage: 327,326,325
+    
+    #prevent people from breaking blocks
+    #break: 20,50
+    break:
+
+
+  # General physics/behavior modifications
+  prevent:
+    lava-flow: false
+    water-flow: false
+    water-bucket-flow: false
+    fire-spread: false
+    lava-fire-spread: false
+    flint-fire: false
+    tnt-explosion: false
+    creeper-explosion: false
+    creeper-playerdamage: false
+    creeper-blockdamage: false
+    # Prevent the spawning of creatures
+    spawn:
+      creeper: false
+      ghast: true
+      slime: true
+  
+  # Maximum height the creeper should explode. -1 allows them to explode everywhere.
+  # Set prevent.creeper-explosion to true, if you want to disable creeper explosions.
+  creeper:
+    max-height: -1
+  
+  # Protect various blocks.
+  protect:
+    # Protect all signs
+    signs: true
+
+    # Prevent users from destroying rails
+    rails: true
+
+    # Blocks below rails/signs are also protected if the respective rail/sign is protected.
+    # This makes it more difficult to circumvent protection, and should be enabled.
+    # This only has an effect if "rails" or "signs" is also enabled.
+    block-below: true
+
+   # Prevent placing blocks above protected rails, this is to stop a potential griefing
+    prevent-block-on-rails: false
+
+  # Disable various default physics and behaviors
+  disable:
+    # Should fall damage be disabled?
+    fall: false
+
+    # Users with the essentials.protect.pvp permission will still be able to attack each other if this is set to true.
+    # They will be unable to attack users without that same permission node.
+    pvp: false
+
+    # Should drowning damage be disabled?
+    # (Split into two behaviors; generally, you want both set to the same value)
+    drown: false
+    suffocate: false
+
+    # Should damage via lava be disabled?  Items that fall into lava will still burn to a crisp. ;)
+    lavadmg: false
+
+    # Should arrows cause damage?
+    projectiles: false
+
+    # This will disable damage from touching cacti.
+    contactdmg: false
+
+    # Burn, baby, burn!  Should fire damage be disabled?
+    firedmg: false
+
+    # Should people with build: false in permissions be allowed to build
+    # Set true to disable building for those people
+    build: false
+
+
+
+
+
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                    New Players                       | #
+# +------------------------------------------------------+ #
+############################################################
+
+newbies:
+  # Should we announce to the server when someone logs in for the first time?
+  # If so, use this format, replacing {DISPLAYNAME} with the player name.
+  # If not, set to ''
+  #announce-format: ''
+  announce-format: '&dWelcome {DISPLAYNAME} to the server!'
+  
+  # When we spawn for the first time, which spawnpoint do we use?
+  spawnpoint: newbies
+
+# End of File <-- No seriously, you're done with configuration.
