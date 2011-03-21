@@ -36,7 +36,7 @@ public class Commandwhois extends EssentialsCommand
 			sender.sendMessage(ChatColor.BLUE + " - Health: " + u.getHealth() + "/20");
 			sender.sendMessage(ChatColor.BLUE + " - Location: (" + u.getLocation().getBlockX() + ", " + u.getLocation().getBlockY() + ", " + u.getLocation().getBlockZ() + ")");
 			if (!parent.getConfiguration().getBoolean("disable-eco", false)) sender.sendMessage(ChatColor.BLUE + " - Money: $" + u.getMoney());
-			sender.sendMessage(ChatColor.BLUE + " - Status: " + (parent.away.contains(u) ? "§cAway" : "Available"));
+			sender.sendMessage(ChatColor.BLUE + " - Status: " + (parent.away.contains(u) ? "§cAway§f" : "Available"));
 			sender.sendMessage(ChatColor.BLUE + " - IP Address: " + u.getAddress().getAddress().toString());
 
 		}
