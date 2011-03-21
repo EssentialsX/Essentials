@@ -81,7 +81,6 @@ public class EssentialsConf extends Configuration
 				ostr.write(buffer, 0, length);
 				length = istr.read(buffer);
 			}
-			ostr.close();
 			istr.close();
 		}
 		catch (IOException ex)
@@ -93,7 +92,9 @@ public class EssentialsConf extends Configuration
 		{
 			try
 			{
-				ostr.close();
+				if (ostr != null) {
+					ostr.close();
+				}
 			}
 			catch (IOException ex)
 			{
