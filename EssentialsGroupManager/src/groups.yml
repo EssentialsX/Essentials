@@ -1,80 +1,136 @@
+# "For a more advanced configuration example utilizing the advanced features of GroupManager, se http://pastebin.com/MeCpqVZv"
 groups:
   Default:
     default: true
     permissions:
     - essentials.help
-    - essentials.home
+    - essentials.helpop
+    - essentials.list
     - essentials.motd
-    - essentials.sethome
+    - essentials.rules
     - essentials.spawn
     inheritance: []
     info:
-      prefix: ''
+      prefix: '&e'
       build: false
       suffix: ''
   SemiAdmin:
     default: false
     permissions:
-    - +groupmanager.mandemote
-    - +groupmanager.manpromote
-    - -groupmanager.*
-    - '*'
+    - essentials.clearinventory
+    - essentials.cooldown.bypass
+    - essentials.deljail
+    - essentials.give
+    - essentials.god
+    - essentials.heal
+    - essentials.heal.others
+    - essentials.invsee
+    - essentials.item
+    - essentials.jails
+    - essentials.kit.*
+    - essentials.mute
+    - essentials.reloadall
+    - essentials.setjail
+    - essentials.signs.disposal.create
+    - essentials.spawmob
+    - essentials.togglejail
+    - groupmanager.*
     inheritance:
     - moderator
     info:
-      prefix: '&c'
+      prefix: '&1'
       build: true
-      suffix: SemiAdmin
-  RedFaction:
+      suffix: ''
+  Builder:
     default: false
-    permissions: []
+    permissions:
+    - essentials.afk
+    - essentials.back.death
+    - essentials.balance
+    - essentials.chat.shout
+    - essentials.home
+    - essentials.kit
+    - essentials.kit.tools
+    - essentials.mail
+    - essentials.mail.send
+    - essentials.me
+    - essentials.msg
+    - essentials.nick
+    - essentials.pay
+    - essentials.portal
+    - essentials.protect
+    - essentials.sell
+    - essentials.sethome
+    - essentials.signs.buy.use
+    - essentials.signs.disposal.use
+    - essentials.signs.free.use
+    - essentials.signs.heal.use
+    - essentials.signs.mail.create
+    - essentials.signs.mail.use
+    - essentials.signs.protection.create
+    - essentials.signs.protection.use
+    - essentials.signs.sell.use
+    - essentials.signs.trade.create
+    - essentials.signs.trade.use
+    - essentials.tpa
+    - essentials.tpaccept
+    - essentials.tpahere
+    - essentials.tpdeny
+    - essentials.warp
+    - essentials.warp.list
+    - essentials.worth
     inheritance:
-    - peasant
+    - default
     info:
-      prefix: '&c'
-      roles-category: faction
+      prefix: '&5'
       build: true
-      suffix: Red
-  Farmer:
-    default: false
-    permissions:
-    - essentials.kit
-    - essentials.kit.farmer
-    - essentials.spawnmob
-    inheritance: []
-    info:
-      roles-requirement:
-      - BlueFaction
-      - RedFaction
-      prefix: ''
-      roles-category: job
-      build: false
       suffix: ''
-  Healer:
+  Moderator:
     default: false
     permissions:
-    - essentials.kit
-    - essentials.kit.healer
-    - essentials.heal
-    inheritance: []
+    - essentials.back
+    - essentials.ban
+    - essentials.banip
+    - essentials.broadcast
+    - essentials.compass
+    - essentials.delwarp
+    - essentials.depth
+    - essentials.eco
+    - essentials.getpos
+    - essentials.jump
+    - essentials.kick
+    - essentials.kill
+    - essentials.setwarp
+    - essentials.time
+    - essentials.togglejail
+    - essentials.top
+    - essentials.tp
+    - essentials.tpa
+    - essentials.tpaaccept
+    - essentials.tpahere
+    - essentials.tpdeny
+    - essentials.tphere
+    - essentials.tpo
+    - essentials.tpohere
+    - essentials.tppos
+    - essentials.tptoggle
+    - essentials.unban
+    - essentials.unbanip
+    - essentials.whois
+    - essentials.world
+    - groupmanager.listgroups
+    - groupmanager.mandemote
+    - groupmanager.manload
+    - groupmanager.manpromote
+    - groupmanager.mansave
+    - groupmanager.manselect
+    - groupmanager.manuadd
+    - groupmanager.manudel
+    inheritance:
+    - builder
     info:
-      roles-requirement:
-      - BlueFaction
-      - RedFaction
-      prefix: ''
-      roles-category: job
-      build: false
-      suffix: ''
-  Fighter:
-    default: false
-    permissions:
-    - essentials.kit
-    - essentials.kit.fighter
-    inheritance: []
-    info:
-      prefix: ''
-      roles-category: skill
-      build: false
+      prefix: '&9'
+      build: true
       suffix: ''
   Admin:
     default: false
@@ -83,90 +139,6 @@ groups:
     inheritance:
     - semiadmin
     info:
-      prefix: ''
+      prefix: '&4'
       build: true
       suffix: ''
-  Miner:
-    default: false
-    permissions:
-    - essentials.kit
-    - essentials.kit.miner
-    - flashlight.regular
-    inheritance: []
-    info:
-      roles-requirement:
-      - BlueFaction
-      - RedFaction
-      prefix: ''
-      roles-category: job
-      build: false
-      suffix: ''
-  FlyingMan:
-    default: false
-    permissions:
-    - nocheat.moving
-    inheritance: []
-    info:
-      roles-requirement: Fighter&SuperCart
-      prefix: ''
-      roles-category: skill
-      build: false
-      suffix: ''
-  Peasant:
-    default: false
-    permissions:
-    - roles.joinrole
-    - roles.leaverole
-    - roles.myroles
-    inheritance:
-    - default
-    info:
-      prefix: '&e'
-      build: true
-      suffix: Peasant
-  BlueFaction:
-    default: false
-    permissions: []
-    inheritance:
-    - peasant
-    info:
-      prefix: '&d'
-      roles-category: faction
-      build: true
-      suffix: Blue
-  Railer:
-    default: false
-    permissions:
-    - essentials.kit
-    - essentials.kit.railer
-    inheritance: []
-    info:
-      roles-requirement: Miner
-      prefix: ''
-      roles-category: subjob
-      build: false
-      suffix: ''
-  SuperCart:
-    default: false
-    permissions:
-    - minecartmania.*
-    inheritance: []
-    info:
-      roles-requirement: Railer
-      prefix: ''
-      roles-category: skill
-      build: false
-      suffix: ''
-  Moderator:
-    default: false
-    permissions:
-    - essentials.tp
-    - essentials.tphere
-    - essentials.item
-    - essentials.give
-    inheritance:
-    - default
-    info:
-      prefix: '&c'
-      build: true
-      suffix: Mod
