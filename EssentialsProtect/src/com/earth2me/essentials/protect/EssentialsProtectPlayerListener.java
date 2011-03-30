@@ -2,9 +2,7 @@ package com.earth2me.essentials.protect;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
-import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.inventory.ItemStack;
@@ -31,36 +29,18 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 	}
 
 	@Override
-	public void onPlayerInteract(PlayerInteractEvent event)
+	public void onPlayerItem(PlayerItemEvent event)
 	{
-		initialize();
-		if (event.isCancelled()) return;
+		if(event.isCancelled()) return;
 		ItemStack item = event.getItem();
 		User user = User.get(event.getPlayer());
-		Block blockClicked = event.getClickedBlock();
-
-		if (EssentialsProtect.playerSettings.get("protect.disable.build") && !user.canBuild())
-		{
-			event.setCancelled(true);
-			return;
-		}
-
+		Block blockPlaced = event.getBlockClicked();
 		if (EssentialsProtect.checkProtectionItems(EssentialsProtect.usageList, item.getTypeId()) && !user.isAuthorized("essentials.protect.exemptusage"))
 		{
 			event.setCancelled(true);
 			return;
 		}
 
-		if (user.isAuthorized("essentials.protect.admin"))
-		{
-			String ownerName = spData.getBlockOwner(user.getWorld().getName(), user.getName(),
-													blockClicked);
-			if (ownerName != null)
-			{
-				user.sendMessage(ChatColor.GOLD + "[EssentialsProtect] Protection owner: "
-								 + ownerName);
-			}
-		}
 		if (EssentialsProtect.onUseAlert.contains(String.valueOf(item.getTypeId())))
 		{
 			parent.alert(user, item.getType().toString(), "used: ");
@@ -73,9 +53,9 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 				if (user.isAuthorized("essentials.protect"))
 				{
 
-					signBlockX = blockClicked.getX();
-					signBlockY = blockClicked.getY();
-					signBlockZ = blockClicked.getZ();
+					signBlockX = blockPlaced.getX();
+					signBlockY = blockPlaced.getY();
+					signBlockZ = blockPlaced.getZ();
 
 					initialize();
 					spData.insertProtectionIntoDb(user.getWorld().getName(), user.getName(), signBlockX,
@@ -89,6 +69,5 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 				}
 			}
 		}
-		
 	}
 }

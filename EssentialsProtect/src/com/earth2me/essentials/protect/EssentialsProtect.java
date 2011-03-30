@@ -48,15 +48,17 @@ public class EssentialsProtect extends JavaPlugin
 		playerListener = new EssentialsProtectPlayerListener(this);
 		blockListener = new EssentialsProtectBlockListener(this);
 		entityListener = new EssentialsProtectEntityListener(this);
-		pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Priority.Low, this);
+		pm.registerEvent(Type.PLAYER_ITEM, playerListener, Priority.Low, this);
 		// Why is this commented?
 		//pm.registerEvent(Type.BLOCK_DAMAGED, blockListener, Priority.High, this);
-		pm.registerEvent(Type.BLOCK_PLACE, blockListener, Priority.Highest, this);
-		pm.registerEvent(Type.BLOCK_FROMTO, blockListener, Priority.Highest, this);
+		pm.registerEvent(Type.BLOCK_RIGHTCLICKED, blockListener, Priority.Low, this);
+		pm.registerEvent(Type.BLOCK_PLACED, blockListener, Priority.Highest, this);
+		pm.registerEvent(Type.BLOCK_INTERACT, blockListener, Priority.Highest, this);
+		pm.registerEvent(Type.BLOCK_FLOW, blockListener, Priority.Highest, this);
 		pm.registerEvent(Type.BLOCK_IGNITE, blockListener, Priority.Highest, this);
 		pm.registerEvent(Type.BLOCK_BURN, blockListener, Priority.Highest, this);
 		pm.registerEvent(Type.ENTITY_EXPLODE, entityListener, Priority.Highest, this);
-		pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Priority.Highest, this);
+		pm.registerEvent(Type.ENTITY_DAMAGED, entityListener, Priority.Highest, this);
 		pm.registerEvent(Type.BLOCK_BREAK, blockListener, Priority.Highest, this);
 		pm.registerEvent(Type.CREATURE_SPAWN, entityListener, Priority.Highest, this);
 
