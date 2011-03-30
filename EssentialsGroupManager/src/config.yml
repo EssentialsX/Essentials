@@ -1,0 +1,14 @@
+settings:
+  data:
+    save:
+      minutes: 10
+  logging:
+    level: INFO
+  permission:
+    world:
+      mirror:
+        world1:
+          - world2
+          - world3
+        world4:
+          - world5

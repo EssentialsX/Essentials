@@ -1,0 +1,154 @@
+package com.earth2me.essentials.protect;
+
+import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.IConf;
+import com.earth2me.essentials.User;
+import com.earth2me.essentials.protect.data.IProtectedBlock;
+import com.earth2me.essentials.protect.data.ProtectedBlockMemory;
+import com.earth2me.essentials.protect.data.ProtectedBlockMySQL;
+import com.earth2me.essentials.protect.data.ProtectedBlockSQLite;
+import java.beans.PropertyVetoException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Event.Priority;
+import org.bukkit.event.Event.Type;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
+
+
+public class EssentialsProtect extends JavaPlugin implements IConf
+{
+	private EssentialsProtectBlockListener blockListener = null;
+	private EssentialsProtectPlayerListener playerListener = null;
+	private EssentialsProtectEntityListener entityListener = null;
+	public static final String AUTHORS = Essentials.AUTHORS;
+	private static final Logger logger = Logger.getLogger("Minecraft");
+	public static HashMap<String, Boolean> genSettings = null;
+	public static HashMap<String, String> dataSettings = null;
+	public static HashMap<String, Boolean> guardSettings = null;
+	public static HashMap<String, Boolean> playerSettings = null;
+	public static ArrayList usageList = null;
+	public static ArrayList blackListPlace = null;
+	public static ArrayList breakBlackList = null;
+	public static ArrayList onPlaceAlert = null;
+	public static ArrayList onUseAlert = null;
+	public static ArrayList onBreakAlert = null;
+
+	private IProtectedBlock storage = null;
+	private static EssentialsProtect instance = null;
+
+	public EssentialsProtect()
+	{
+	}
+
+	public void onEnable()
+	{
+		PluginManager pm = this.getServer().getPluginManager();
+		Essentials ess = (Essentials)pm.getPlugin("Essentials");
+		if (!ess.isEnabled()) {
+			pm.enablePlugin(ess);
+		}
+
+		instance = this;
+		reloadConfig();
+
+		playerListener = new EssentialsProtectPlayerListener(this);
+		blockListener = new EssentialsProtectBlockListener(this);
+		entityListener = new EssentialsProtectEntityListener(this);
+		pm.registerEvent(Type.PLAYER_PICKUP_ITEM, playerListener, Priority.Low, this);
+		pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Priority.Low, this);
+		pm.registerEvent(Type.BLOCK_PLACE, blockListener, Priority.Highest, this);
+		pm.registerEvent(Type.BLOCK_FROMTO, blockListener, Priority.Highest, this);
+		pm.registerEvent(Type.BLOCK_IGNITE, blockListener, Priority.Highest, this);
+		pm.registerEvent(Type.BLOCK_BURN, blockListener, Priority.Highest, this);
+		pm.registerEvent(Type.ENTITY_EXPLODE, entityListener, Priority.Highest, this);
+		pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Priority.Highest, this);
+		pm.registerEvent(Type.BLOCK_BREAK, blockListener, Priority.Highest, this);
+		pm.registerEvent(Type.CREATURE_SPAWN, entityListener, Priority.Highest, this);
+
+		if (!this.getDescription().getVersion().equals(Essentials.getStatic().getDescription().getVersion())) {
+			logger.log(Level.WARNING, "Version mismatch! Please update all Essentials jars to the same version.");
+		}
+		logger.info("Loaded " + this.getDescription().getName() + " build " + this.getDescription().getVersion() + " maintained by " + AUTHORS);
+	}
+
+	public static boolean checkProtectionItems(ArrayList itemList, int id)
+	{
+		return !itemList.isEmpty() && itemList.contains(String.valueOf(id));
+	}
+
+	@Override
+	public void onDisable()
+	{
+		genSettings.clear();
+		dataSettings.clear();
+		
+		blockListener = null;
+		playerListener = null;
+		entityListener = null;
+		genSettings = null;
+		dataSettings = null;
+		guardSettings = null;
+		playerSettings = null;
+		usageList = null;
+		blackListPlace = null;
+		onPlaceAlert = null;
+		onUseAlert = null;
+		onBreakAlert = null;
+	}
+
+	public void alert(User user, String item, String type)
+	{
+		Location loc = user.getLocation();
+		for (Player p : this.getServer().getOnlinePlayers())
+		{
+			User alertUser = User.get(p);
+			if (alertUser.isAuthorized("essentials.protect.alerts"))
+				alertUser.sendMessage(ChatColor.DARK_AQUA + "[" + user.getName() + "] " + ChatColor.WHITE + type + ChatColor.GOLD + item + " at: " + formatCoords(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+		}
+	}
+	
+	public static String formatCoords(int x, int y, int z)
+	{
+		return x + "," + y + "," + z;
+	}
+
+	public void reloadConfig() {
+		dataSettings = Essentials.getSettings().getEpDBSettings();
+		genSettings = Essentials.getSettings().getEpSettings();
+		guardSettings = Essentials.getSettings().getEpGuardSettings();
+		usageList = Essentials.getSettings().epBlackListUsage();
+		blackListPlace = Essentials.getSettings().epBlackListPlacement();
+		breakBlackList = Essentials.getSettings().epBlockBreakingBlacklist();
+		onPlaceAlert = Essentials.getSettings().getEpAlertOnPlacement();
+		onUseAlert = Essentials.getSettings().getEpAlertOnUse();
+		onBreakAlert = Essentials.getSettings().getEpAlertOnBreak();
+		playerSettings = Essentials.getSettings().getEpPlayerSettings();
+		
+		if (dataSettings.get("protect.datatype").equals("mysql")) {
+			try {
+				storage = new ProtectedBlockMySQL(dataSettings.get("protect.mysqlDb"), dataSettings.get("protect.username"), dataSettings.get("protect.password"));
+			} catch (PropertyVetoException ex) {
+				logger.log(Level.SEVERE, null, ex);
+			}
+		} else {
+			try {
+				storage = new ProtectedBlockSQLite("jdbc:sqlite:plugins/Essentials/EssentialsProtect.db");
+			} catch (PropertyVetoException ex) {
+				logger.log(Level.SEVERE, null, ex);
+			}
+		}
+		if (genSettings.get("protect.memstore")) {
+			storage = new ProtectedBlockMemory(storage);
+		}
+	}
+	
+	public static IProtectedBlock getStorage() {
+		return EssentialsProtect.instance.storage;
+	}
+}

@@ -1,0 +1,172 @@
+groups:
+  Default:
+    default: true
+    permissions:
+    - essentials.help
+    - essentials.home
+    - essentials.motd
+    - essentials.sethome
+    - essentials.spawn
+    inheritance: []
+    info:
+      prefix: ''
+      build: false
+      suffix: ''
+  SemiAdmin:
+    default: false
+    permissions:
+    - +groupmanager.mandemote
+    - +groupmanager.manpromote
+    - -groupmanager.*
+    - '*'
+    inheritance:
+    - moderator
+    info:
+      prefix: '&c'
+      build: true
+      suffix: SemiAdmin
+  RedFaction:
+    default: false
+    permissions: []
+    inheritance:
+    - peasant
+    info:
+      prefix: '&c'
+      roles-category: faction
+      build: true
+      suffix: Red
+  Farmer:
+    default: false
+    permissions:
+    - essentials.kit
+    - essentials.kit.farmer
+    - essentials.spawnmob
+    inheritance: []
+    info:
+      roles-requirement:
+      - BlueFaction
+      - RedFaction
+      prefix: ''
+      roles-category: job
+      build: false
+      suffix: ''
+  Healer:
+    default: false
+    permissions:
+    - essentials.kit
+    - essentials.kit.healer
+    - essentials.heal
+    inheritance: []
+    info:
+      roles-requirement:
+      - BlueFaction
+      - RedFaction
+      prefix: ''
+      roles-category: job
+      build: false
+      suffix: ''
+  Fighter:
+    default: false
+    permissions:
+    - essentials.kit
+    - essentials.kit.fighter
+    inheritance: []
+    info:
+      prefix: ''
+      roles-category: skill
+      build: false
+      suffix: ''
+  Admin:
+    default: false
+    permissions:
+    - '*'
+    inheritance:
+    - semiadmin
+    info:
+      prefix: ''
+      build: true
+      suffix: ''
+  Miner:
+    default: false
+    permissions:
+    - essentials.kit
+    - essentials.kit.miner
+    - flashlight.regular
+    inheritance: []
+    info:
+      roles-requirement:
+      - BlueFaction
+      - RedFaction
+      prefix: ''
+      roles-category: job
+      build: false
+      suffix: ''
+  FlyingMan:
+    default: false
+    permissions:
+    - nocheat.moving
+    inheritance: []
+    info:
+      roles-requirement: Fighter&SuperCart
+      prefix: ''
+      roles-category: skill
+      build: false
+      suffix: ''
+  Peasant:
+    default: false
+    permissions:
+    - roles.joinrole
+    - roles.leaverole
+    - roles.myroles
+    inheritance:
+    - default
+    info:
+      prefix: '&e'
+      build: true
+      suffix: Peasant
+  BlueFaction:
+    default: false
+    permissions: []
+    inheritance:
+    - peasant
+    info:
+      prefix: '&d'
+      roles-category: faction
+      build: true
+      suffix: Blue
+  Railer:
+    default: false
+    permissions:
+    - essentials.kit
+    - essentials.kit.railer
+    inheritance: []
+    info:
+      roles-requirement: Miner
+      prefix: ''
+      roles-category: subjob
+      build: false
+      suffix: ''
+  SuperCart:
+    default: false
+    permissions:
+    - minecartmania.*
+    inheritance: []
+    info:
+      roles-requirement: Railer
+      prefix: ''
+      roles-category: skill
+      build: false
+      suffix: ''
+  Moderator:
+    default: false
+    permissions:
+    - essentials.tp
+    - essentials.tphere
+    - essentials.item
+    - essentials.give
+    inheritance:
+    - default
+    info:
+      prefix: '&c'
+      build: true
+      suffix: Mod
