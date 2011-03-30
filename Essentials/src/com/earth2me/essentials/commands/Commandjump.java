@@ -45,6 +45,6 @@ public class Commandjump extends EssentialsCommand
 		}
 
 		user.canAfford(this);
-		user.teleport(loc, this.getName());
+		user.teleportTo(loc, this.getName());
 	}
 }

@@ -52,20 +52,15 @@ public class EssentialsChatWorker
 
 	public static void onPlayerChat(Server server, PlayerChatEvent event)
 	{
+		if (event.isCancelled()) return;
 		User user = User.get(event.getPlayer());
 		updateDisplayName(user);
 
 		if (user.isAuthorized("essentials.chat.color"))
 			event.setMessage(event.getMessage().replaceAll("&([0-9a-f])", "§$1"));
-		
-		event.setFormat(Essentials.getSettings().getChatFormat(user.getGroup())
-				.replace('&', '§')
-				.replace("§§", "&")
-				.replace("{DISPLAYNAME}", "%1$s")
-				.replace("{GROUP}", user.getGroup())
-				.replace("{MESSAGE}", "%2$s")
-		        .replace("{WORLDNAME}", user.getWorld().getName()));
-		
+
+		event.setFormat(Essentials.getSettings().getChatFormat(user.getGroup()).replace('&', '§').replace("§§", "&").replace("{DISPLAYNAME}", "%1$s").replace("{GROUP}", user.getGroup()).replace("{MESSAGE}", "%2$s").replace("{WORLDNAME}", user.getWorld().getName()));
+
 		int radius = Essentials.getSettings().getChatRadius();
 		if (radius < 1) return;
 
@@ -81,7 +76,7 @@ public class EssentialsChatWorker
 			event.setCancelled(true);
 			return;
 		}
-		
+
 		if (event.getMessage().startsWith("?") && event.getMessage().length() > 1)
 		{
 			if (user.isAuthorized("essentials.chat.question"))

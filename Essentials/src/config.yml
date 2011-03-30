@@ -181,6 +181,7 @@ bed-sethome: false
 starting-balance: 0
 
 # worth-# defines the value of an item when it is sold to the server via /sell.
+# For a premade list which you may copy and paste in: http://pastie.org/1707782
 #worth-1: 1
 #worth-278: 1000
 
@@ -234,14 +235,14 @@ mcsl-key: ''
 chat:
   radius: 0
   
-  # If you want the default chat format, uncomment the next line and comment the other format.
-  #format: '<{DISPLAYNAME}> {MESSAGE}'
-  format: '&7[{GROUP}]&f {DISPLAYNAME}&7:&f {MESSAGE}'
+  # If set to the default chat format which "should" be compatible with ichat.
+  format: '<{DISPLAYNAME}> {MESSAGE}'
+  #format: '&7[{GROUP}]&f {DISPLAYNAME}&7:&f {MESSAGE}'
   
-  # You can also have group-specific formats:
+  # You can also have group-specific formats, uncomment to enable:
   group-formats:
-    Default: '{WORLDNAME} {DISPLAYNAME}&7:&f {MESSAGE}'
-    Admins: '{WORLDNAME} &c[{GROUP}]&f {DISPLAYNAME}&7:&c {MESSAGE}'
+  #  Default: '{WORLDNAME} {DISPLAYNAME}&7:&f {MESSAGE}'
+  #  Admins: '{WORLDNAME} &c[{GROUP}]&f {DISPLAYNAME}&7:&c {MESSAGE}'
 
 
 
@@ -268,7 +269,7 @@ protect:
   mysqlDb: 'jdbc:mysql://localhost:3306/minecraft'
 
   # For which block types would you like to be alerted?
-  # You can find a list of IDs in plugins/Essentials/Items.csv after loading Essentials for the first time.
+  # You can find a list of IDs in plugins/Essentials/items.csv after loading Essentials for the first time.
   alert:
     # 10: lava
     # 11: still lava
@@ -347,7 +348,7 @@ protect:
     # Should damage via lava be disabled?  Items that fall into lava will still burn to a crisp. ;)
     lavadmg: false
 
-    # Should arrow damage be disabled
+    # Should arrows cause damage?
     projectiles: false
 
     # This will disable damage from touching cacti.

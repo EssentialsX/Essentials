@@ -1,10 +1,15 @@
 package com.earth2me.essentials;
 
 import java.util.ArrayList;
+import java.util.List;
+import net.minecraft.server.InventoryPlayer;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.craftbukkit.block.CraftSign;
+import org.bukkit.craftbukkit.inventory.CraftInventoryPlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.*;
+import org.bukkit.inventory.ItemStack;
 
 
 public class EssentialsBlockListener extends BlockListener
@@ -47,7 +52,6 @@ public class EssentialsBlockListener extends BlockListener
 			user.sendMessage("§cYou do not have permission to destroy that sign.");
 		}
 	}
-
 	@Override
 	public void onSignChange(SignChangeEvent event)
 	{
@@ -137,7 +141,7 @@ public class EssentialsBlockListener extends BlockListener
 	private static final int ALLOWED = 1;
 	private static final int NOSIGN = 2;
 
-	private static int checkProtectionSign(Block block, User user)
+	private int checkProtectionSign(Block block, User user)
 	{
 		if (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN)
 		{
@@ -162,7 +166,7 @@ public class EssentialsBlockListener extends BlockListener
 		return NOSIGN;
 	}
 
-	private static Block[] getAdjacentBlocks(Block block)
+	private Block[] getAdjacentBlocks(Block block)
 	{
 		return new Block[]
 				{
@@ -175,7 +179,7 @@ public class EssentialsBlockListener extends BlockListener
 				};
 	}
 
-	public static boolean isBlockProtected(Block block, User user)
+	public boolean isBlockProtected(Block block, User user)
 	{
 		Block[] faces = getAdjacentBlocks(block);
 		boolean protect = false;

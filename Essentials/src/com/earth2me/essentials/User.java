@@ -91,7 +91,7 @@ public class User extends PlayerExtension implements Comparable<User>
 
 	public void respawn(Spawn spawn, final String chargeFor) throws Exception
 	{
-		teleport(getSafeDestination(spawn.getSpawn(getGroup())), chargeFor);
+		teleportTo(getSafeDestination(spawn.getSpawn(getGroup())), chargeFor);
 	}
 
 	private User update(Player base)
@@ -383,7 +383,7 @@ public class User extends PlayerExtension implements Comparable<User>
 		cancelTeleport(false);
 	}
 
-	public boolean teleport(final Location loc, final String chargeFor)
+	public void teleportTo(final Location loc, final String chargeFor)
 	{
 		final long delay = Essentials.getSettings().getTeleportDelay();
 
@@ -393,13 +393,13 @@ public class User extends PlayerExtension implements Comparable<User>
 			{
 				if (chargeFor != null) charge(chargeFor);
 				teleportCooldown(false);
-				return teleportToNow(loc);
+				teleportToNow(loc);
 			}
 			catch (Throwable ex)
 			{
 				sendMessage("§cError: " + ex.getMessage());
-				return false;
 			}
+			return;
 		}
 
 		cancelTeleport();
@@ -424,16 +424,15 @@ public class User extends PlayerExtension implements Comparable<User>
 				cancelTeleport();
 			}
 		}, 10, 10);
-		return true;
 	}
 
 	@Override
-	public boolean teleport(final Location loc)
+	public void teleportTo(final Location loc)
 	{
-		return teleport(loc, null);
+		teleportTo(loc, null);
 	}
 
-	public boolean teleport(final Entity entity, final String chargeFor)
+	public void teleportTo(final Entity entity, final String chargeFor)
 	{
 		final long delay = Essentials.getSettings().getTeleportDelay();
 
@@ -443,13 +442,13 @@ public class User extends PlayerExtension implements Comparable<User>
 			{
 				if (chargeFor != null) charge(chargeFor);
 				teleportCooldown(false);
-				return teleportToNow(entity);
+				teleportToNow(entity);
 			}
 			catch (Throwable ex)
 			{
 				sendMessage("§cError: " + ex.getMessage());
-				return false;
 			}
+			return;
 		}
 
 		cancelTeleport();
@@ -474,13 +473,12 @@ public class User extends PlayerExtension implements Comparable<User>
 				cancelTeleport();
 			}
 		}, 10, 10);
-		return true;
 	}
 
 	@Override
-	public boolean teleport(final Entity entity)
+	public void teleportTo(final Entity entity)
 	{
-		return teleport(entity, null);
+		teleportTo(entity, null);
 	}
 
 	public Location getHome() throws Exception
@@ -581,23 +579,23 @@ public class User extends PlayerExtension implements Comparable<User>
 		teleportToHome(null);
 	}
 
-	public boolean teleportToNow(Location loc) throws Exception
+	public void teleportToNow(Location loc) throws Exception
 	{
 		cancelTeleport();
 		lastLocation = getLocation();
-		return getBase().teleport(getSafeDestination(loc));
+		getBase().teleportTo(getSafeDestination(loc));
 	}
 
-	public boolean teleportToNow(Entity entity)
+	public void teleportToNow(Entity entity)
 	{
 		cancelTeleport();
 		lastLocation = getLocation();
-		return getBase().teleport(entity);
+		getBase().teleportTo(entity);
 	}
 
 	public void teleportBack(final String chargeFor)
 	{
-		teleport(lastLocation, chargeFor);
+		teleportTo(lastLocation, chargeFor);
 	}
 
 	public void teleportBack()
@@ -669,7 +667,7 @@ public class User extends PlayerExtension implements Comparable<User>
 	{
 		lastLocation = getLocation();
 		Location loc = Essentials.getWarps().getWarp(warp);
-		teleport(loc, chargeFor);
+		teleportTo(loc, chargeFor);
 		sendMessage("§7Warping to " + warp + ".");
 	}
 

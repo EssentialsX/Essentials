@@ -38,6 +38,7 @@ public class Essentials extends JavaPlugin
 	private EssentialsPlayerListener playerListener;
 	private EssentialsBlockListener blockListener;
 	private EssentialsEntityListener entityListener;
+	private JailPlayerListener jailPlayerListener;
 	private static Essentials staticThis = null;
 	public Spawn spawn;
 	private Jail jail;
@@ -159,7 +160,7 @@ public class Essentials extends JavaPlugin
 			pm.registerEvent(Type.PLAYER_MOVE, playerListener, Priority.High, this);
 		pm.registerEvent(Type.PLAYER_LOGIN, playerListener, Priority.High, this);
 		pm.registerEvent(Type.PLAYER_TELEPORT, playerListener, Priority.High, this);
-		pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Priority.Monitor, this);
+		pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Priority.High, this);
 
 		blockListener = new EssentialsBlockListener(this);
 		pm.registerEvent(Type.SIGN_CHANGE, blockListener, Priority.Monitor, this);
@@ -172,11 +173,12 @@ public class Essentials extends JavaPlugin
 		pm.registerEvent(Type.ENTITY_DEATH, entityListener, Priority.Lowest, this);
 
 		jail = new Jail(this.getDataFolder());
+		jailPlayerListener = new JailPlayerListener(this);
 		confList.add(jail);
 		pm.registerEvent(Type.BLOCK_BREAK, jail, Priority.High, this);
 		pm.registerEvent(Type.BLOCK_DAMAGE, jail, Priority.High, this);
 		pm.registerEvent(Type.BLOCK_PLACE, jail, Priority.High, this);
-
+		pm.registerEvent(Type.PLAYER_INTERACT, jailPlayerListener, Priority.High, this);
 		attachEcoListeners();
 
 		if (settings.isNetherEnabled() && getServer().getWorlds().size() < 2)
@@ -662,9 +664,11 @@ public class Essentials extends JavaPlugin
 	private void attachEcoListeners()
 	{
 		PluginManager pm = getServer().getPluginManager();
-		EssentialsEcoBlockListener blockListener = new EssentialsEcoBlockListener();
-		pm.registerEvent(Type.BLOCK_BREAK, blockListener, Priority.High, this);
-		pm.registerEvent(Type.SIGN_CHANGE, blockListener, Priority.Monitor, this);
+		EssentialsEcoBlockListener ecoBlockListener = new EssentialsEcoBlockListener();
+		EssentialsEcoPlayerListener ecoPlayerListener = new EssentialsEcoPlayerListener();
+		pm.registerEvent(Type.PLAYER_INTERACT, ecoPlayerListener, Priority.High, this);
+		pm.registerEvent(Type.BLOCK_BREAK, ecoBlockListener, Priority.High, this);
+		pm.registerEvent(Type.SIGN_CHANGE, ecoBlockListener, Priority.Monitor, this);
 	}
 
 	public CraftScheduler getScheduler()

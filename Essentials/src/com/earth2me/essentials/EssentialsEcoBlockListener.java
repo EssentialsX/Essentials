@@ -65,6 +65,7 @@ public class EssentialsEcoBlockListener extends BlockListener
 		}
 	}
 
+	
 	@Override
 	public void onSignChange(SignChangeEvent event)
 	{

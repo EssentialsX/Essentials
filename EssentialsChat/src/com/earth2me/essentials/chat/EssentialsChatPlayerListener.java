@@ -2,7 +2,10 @@ package com.earth2me.essentials.chat;
 
 import com.earth2me.essentials.Essentials;
 import org.bukkit.Server;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.PlayerEvent;
+import org.bukkit.event.player.PlayerListener;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
 
 public class EssentialsChatPlayerListener extends PlayerListener
@@ -16,7 +19,7 @@ public class EssentialsChatPlayerListener extends PlayerListener
 
 	@Override
 	@SuppressWarnings("CallToThreadDumpStack")
-	public void onPlayerJoin(PlayerJoinEvent event)
+	public void onPlayerJoin(PlayerEvent event)
 	{
 		try
 		{

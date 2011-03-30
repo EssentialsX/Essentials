@@ -37,6 +37,6 @@ public class Commandtppos extends EssentialsCommand
 		user.canAfford(this);
 		user.teleportCooldown();
 		user.sendMessage("§7Teleporting...");
-		user.teleport(user.getSafeDestination(l), this.getName());
+		user.teleportTo(user.getSafeDestination(l), this.getName());
 	}
 }

@@ -154,15 +154,15 @@ public class PlayerWrapper implements Player
 	}
 	
 	@Override
-	public boolean teleport(Location lctn)
+	public void teleportTo(Location lctn)
 	{
-		return base.teleport(lctn);
+		base.teleportTo(lctn);
 	}
 	
 	@Override
-	public boolean teleport(Entity entity)
+	public void teleportTo(Entity entity)
 	{
-		return base.teleport(entity);
+		base.teleportTo(entity);
 	}
 
 	@Override
@@ -329,88 +329,7 @@ public class PlayerWrapper implements Player
 		return base.getEyeLocation();
 	}
 
-	@Override
 	public void sendRawMessage(String string) {
 		base.sendRawMessage(string);
-	}
-
-	@Override
-	public Location getCompassTarget()
-	{
-		return base.getCompassTarget();
-	}
-
-	@Override
-	public int getMaximumNoDamageTicks()
-	{
-		return base.getMaximumNoDamageTicks();
-	}
-
-	@Override
-	public void setMaximumNoDamageTicks(int i)
-	{
-		base.setMaximumNoDamageTicks(i);
-	}
-
-	@Override
-	public int getLastDamage()
-	{
-		return base.getLastDamage();
-	}
-
-	@Override
-	public void setLastDamage(int i)
-	{
-		base.setLastDamage(i);
-	}
-
-	@Override
-	public int getNoDamageTicks()
-	{
-		return base.getNoDamageTicks();
-	}
-
-	@Override
-	public void setNoDamageTicks(int i)
-	{
-		base.setNoDamageTicks(i);
-	}
-
-	@Override
-	public Entity getPassenger()
-	{
-		return base.getPassenger();
-	}
-
-	@Override
-	public boolean setPassenger(Entity entity)
-	{
-		return base.setPassenger(entity);
-	}
-
-	@Override
-	public boolean isEmpty()
-	{
-		return base.isEmpty();
-	}
-
-	@Override
-	public boolean eject()
-	{
-		return base.eject();
-	}
-
-	@Override
-	@Deprecated
-	public void teleportTo(Location lctn)
-	{
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
-
-	@Override
-	@Deprecated
-	public void teleportTo(Entity entity)
-	{
-		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }

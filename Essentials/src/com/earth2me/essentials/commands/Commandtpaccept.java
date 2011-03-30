@@ -27,14 +27,14 @@ public class Commandtpaccept extends EssentialsCommand
 			user.canAfford(this);
 			user.sendMessage("§7Teleport request accepted.");
 			p.sendMessage("§7Teleport request accepted.");
-			user.teleport(p, this.getName());
+			user.teleportTo(p, this.getName());
 		}
 		else
 		{
 			user.canAfford(this);
 			user.sendMessage("§7Teleport request accepted.");
 			p.sendMessage("§7Teleport request accepted.");
-			p.teleport(user, this.getName());
+			p.teleportTo(user, this.getName());
 		}
 	}
 }

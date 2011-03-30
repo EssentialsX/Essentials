@@ -1,0 +1,5 @@
+name: EssentialsServerlist
+main: net.mcserverlist.bukkit.Mcsl
+version: TeamCity
+website: http://mcserverlist.net/
+description: Official MCServerlist API implementation

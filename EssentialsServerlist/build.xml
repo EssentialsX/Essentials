@@ -8,9 +8,10 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
-<project name="EssentialsProtect" default="default" basedir=".">
-	<description>Builds, tests, and runs the project EssentialsProtect.</description>
-	<import file="nbproject/build-impl.xml"/>
+<project name="EssentialsServerlist" default="default" basedir=".">
+    <description>Builds, tests, and runs the project EssentialsServerlist.</description>
+    <import file="nbproject/build-impl.xml"/>
+	&buildinc;
     <!--
 
     There exist several targets which are by default empty and which can be 
@@ -60,7 +61,7 @@
 
     An example of overriding the target for project execution could look like this:
 
-        <target name="run" depends="EssentialsProtect-impl.jar">
+        <target name="run" depends="EssentialsServerlist-impl.jar">
             <exec dir="bin" executable="launcher.exe">
                 <arg file="${dist.jar}"/>
             </exec>
@@ -72,15 +73,4 @@
     nbproject/build-impl.xml file. 
 
     -->
-
-  <target name="-post-jar">
-    <jar jarfile="${dist.dir}/EssentialsProtect.jar">
-      <zipfileset src="${dist.jar}" excludes="META-INF/*" />
-      <zipfileset src="../lib/mysql.jar" excludes="META-INF/*" />
-      <zipfileset src="../lib/sqlite.jar" excludes="META-INF/*" />
-      <manifest>
-        <attribute name="Classpath" value="Essentials.jar"/>
-      </manifest>
-    </jar>
-  </target>
 </project>

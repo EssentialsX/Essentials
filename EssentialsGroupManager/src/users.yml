@@ -1,59 +1,15 @@
+# "For a more advanced configuration example utilizing the advanced features of GroupManager, see http://pastebin.com/a8ZA0j5G"
 users:
-  aMiner:
-    subgroups:
-    - Miner
-    permissions: []
-    group: BlueFaction
-    info:
-      prefix: '&d'
-      suffix: Miner
-  gmcouto:
-    subgroups: []
-    permissions: []
-    group: SemiAdmin
-  tempRailer:
-    subgroups:
-    - Miner
-    - Railer
-    permissions: []
-    group: BlueFaction
-    info:
-      prefix: '&d'
-      suffix: Miner
-  anjocaido:
+  kimkandor:
     subgroups: []
     permissions: []
     group: Admin
-    info:
-      prefix: '&c'
-      suffix: King
-  aFarmer:
-    subgroups:
-    - Farmer
+  mudzereli:
+    subgroups: []
     permissions: []
-    group: RedFaction
-    info:
-      prefix: '&d'
-      suffix: Farmer
+    group: Builder
   zenexer:
     subgroups: []
-    permissions:
-    - essentials.god
-    group: Moderator
-  Teste:
-    subgroups:
-    - Miner
-    - Railer
-    - SuperCart
-    - Fighter
-    - FlyingMan
     permissions: []
-    group: BlueFaction
-  aHealer:
-    subgroups:
-    - Healer
-    permissions: []
-    group: RedFaction
-    info:
-      prefix: '&d'
-      suffix: Healer
+    group: Admin
+
