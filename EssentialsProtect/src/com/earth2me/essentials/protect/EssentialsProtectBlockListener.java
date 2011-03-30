@@ -38,23 +38,6 @@ public class EssentialsProtectBlockListener extends BlockListener
 	}
 
 	@Override
-	public void onBlockRightClick(BlockRightClickEvent event)
-	{
-		initialize();
-		User user = User.get(event.getPlayer());
-		if (user.isAuthorized("essentials.protect.admin"))
-		{
-			String ownerName = spData.getBlockOwner(user.getWorld().getName(), user.getName(),
-													event.getBlock());
-			if (ownerName != null)
-			{
-				user.sendMessage(ChatColor.GOLD + "[EssentialsProtect] Protection owner: "
-								 + ownerName);
-			}
-		}
-	}
-
-	@Override
 	public void onBlockPlace(BlockPlaceEvent event)
 	{
 		if (event.isCancelled()) return;
@@ -177,22 +160,6 @@ public class EssentialsProtectBlockListener extends BlockListener
 			event.setCancelled(EssentialsProtect.guardSettings.get("protect.prevent.water-bucket-flow"));
 			return;
 		}
-	}
-
-	@Override
-	public void onBlockInteract(BlockInteractEvent event)
-	{
-		if (event.isCancelled()) return;
-		if (!event.isPlayer()) return;
-
-		User user = User.get((Player)event.getEntity());
-
-		if (EssentialsProtect.playerSettings.get("protect.disable.build") && !user.canBuild())
-		{
-			event.setCancelled(true);
-			return;
-		}
-
 	}
 
 	@Override
