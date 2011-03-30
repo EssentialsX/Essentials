@@ -136,6 +136,8 @@ public class User extends PlayerExtension implements Comparable<User>
 
 	public void teleportCooldown(boolean justCheck) throws Exception
 	{
+		return; // TODO: Fix this regression
+		/*
 		long now = Calendar.getInstance().getTimeInMillis();
 		long cooldown = Essentials.getSettings().getTeleportCooldown();
 		long left = lastTeleport + cooldown - now;
@@ -143,6 +145,7 @@ public class User extends PlayerExtension implements Comparable<User>
 			throw new Exception("Time before next teleport: " + Essentials.FormatTime(left));
 		// if justCheck is set, don't update lastTeleport; we're just checking
 		if (!justCheck) lastTeleport = now;
+		*/
 	}
 
 	public void teleportCooldown() throws Exception
