@@ -130,35 +130,7 @@ public class EssentialsPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerQuit(PlayerEvent event)
 	{
-		if (!Essentials.getSettings().getReclaimSetting())
-		{
-			return;
-		}
 		User.get(event.getPlayer()).dispose();
-		Thread thread = new Thread(new Runnable()
-		{
-			@SuppressWarnings("LoggerStringConcat")
-			public void run()
-			{
-				try
-				{
-					Thread.sleep(1000);
-					Runtime rt = Runtime.getRuntime();
-					double mem = rt.freeMemory();
-					rt.runFinalization();
-					rt.gc();
-					mem = rt.freeMemory() - mem;
-					mem /= 1024 * 1024;
-					logger.info("Freed " + mem + " MB.");
-				}
-				catch (InterruptedException ex)
-				{
-					return;
-				}
-			}
-		});
-		thread.setPriority(Thread.MIN_PRIORITY);
-		thread.start();
 	}
 
 	@Override

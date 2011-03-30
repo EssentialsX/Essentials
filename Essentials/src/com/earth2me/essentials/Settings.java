@@ -151,11 +151,6 @@ public class Settings implements IConf
 		return ChatColor.getByCode(Integer.parseInt(colorName, 16));
 	}
 
-	public boolean getReclaimSetting()
-	{
-		return config.getBoolean("reclaim-onlogout", true);
-	}
-
 	public String getNetherName()
 	{
 		return config.getString("nether.folder", "nether");
