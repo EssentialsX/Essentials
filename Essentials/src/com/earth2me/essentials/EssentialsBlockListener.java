@@ -6,6 +6,7 @@ import net.minecraft.server.InventoryPlayer;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.craftbukkit.block.CraftSign;
+import org.bukkit.craftbukkit.inventory.CraftInventory;
 import org.bukkit.craftbukkit.inventory.CraftInventoryPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.*;
@@ -81,10 +82,18 @@ public class EssentialsBlockListener extends BlockListener
 			}
 			if (event.getLine(0).equalsIgnoreCase("[Heal]"))
 			{
-				if (user.isAuthorized("essentials.signs.heal.create"))
+				event.setLine(0, "§4[Heal]");
+				if (user.isAuthorized("essentials.signs.heal.create")) {
+					if (!event.getLine(1).isEmpty()) {
+						String[] l1 = event.getLine(1).split("[ :-]+");
+						boolean m1 = l1[0].matches("\\$[0-9]+");
+						int q1 = Integer.parseInt(m1 ? l1[0].substring(1) : l1[0]);
+						if (q1 < 1) throw new Exception("Quantities must be greater than 0.");
+						if (!m1) ItemDb.get(l1[1]);
+						event.setLine(1, (m1 ? "$" + q1 : q1 + " " + l1[1]));
+					}
 					event.setLine(0, "§1[Heal]");
-				else
-					event.setLine(0, "§4[Heal]");
+				}
 				return;
 			}
 			if (event.getLine(0).equalsIgnoreCase("[Free]"))
@@ -102,6 +111,95 @@ public class EssentialsBlockListener extends BlockListener
 					event.setLine(0, "§1[Mail]");
 				else
 					event.setLine(0, "§4[Mail]");
+				return;
+			}
+			if (event.getLine(0).equalsIgnoreCase("[Balance]"))
+			{
+				if (user.isAuthorized("essentials.signs.balance.create"))
+				
+					event.setLine(0, "§1[Balance]");
+				else
+					event.setLine(0, "§4[Balance]");
+				return;
+			}
+		}
+		catch (Throwable ex)
+		{
+			user.sendMessage("§cError: " + ex.getMessage());
+		}
+	}
+
+	@Override
+	public void onBlockRightClick(BlockRightClickEvent event)
+	{
+		User user = User.get(event.getPlayer());
+		if (user.isJailed()) return;
+		if (Essentials.getSettings().areSignsDisabled()) return;
+		if (event.getBlock().getType() != Material.WALL_SIGN && event.getBlock().getType() != Material.SIGN_POST)
+			return;
+		Sign sign = new CraftSign(event.getBlock());
+
+		try
+		{
+			if (sign.getLine(0).equals("§1[Free]") && user.isAuthorized("essentials.signs.free.use"))
+			{
+				ItemStack item = ItemDb.get(sign.getLine(1));
+				CraftInventoryPlayer inv = new CraftInventoryPlayer(new InventoryPlayer(user.getHandle()));
+				inv.clear();
+				item.setAmount(9 * 4 * 64);
+				inv.addItem(item);
+				user.showInventory(inv);
+				return;
+			}
+			if (sign.getLine(0).equals("§1[Disposal]") && user.isAuthorized("essentials.signs.disposal.use"))
+			{
+				CraftInventoryPlayer inv = new CraftInventoryPlayer(new InventoryPlayer(user.getHandle()));
+				inv.clear();
+				user.showInventory(inv);
+				return;
+			}
+			if (sign.getLine(0).equals("§1[Heal]") && user.isAuthorized("essentials.signs.heal.use"))
+			{
+				if (!sign.getLine(1).isEmpty()) {
+					String[] l1 = sign.getLine(1).split("[ :-]+");
+					boolean m1 = l1[0].matches("\\$[0-9]+");
+					int q1 = Integer.parseInt(m1 ? l1[0].substring(1) : l1[0]);
+					if (q1 < 1) throw new Exception("Quantities must be greater than 0.");
+					if (m1)
+					{
+						if (user.getMoney() < q1) throw 
+							new Exception("You do not have sufficient funds.");
+						user.takeMoney(q1);
+						user.sendMessage("$" + q1 + " taken from your bank account.");
+					}
+					else
+					{
+						ItemStack i = ItemDb.get(l1[1], q1);
+						if (!InventoryWorkaround.containsItem((CraftInventory)user.getInventory(), true, i)) 
+							throw new Exception("You do not have " + q1 + "x " + l1[1] + ".");
+						InventoryWorkaround.removeItem((CraftInventory)user.getInventory(), true, i);
+						user.updateInventory();
+					}
+				}
+				user.setHealth(20);
+				user.sendMessage("§7You have been healed.");
+				return;
+			}
+			if (sign.getLine(0).equals("§1[Mail]") && user.isAuthorized("essentials.signs.mail.use") && user.isAuthorized("essentials.mail"))
+			{
+				List<String> mail = Essentials.readMail(user);
+				if (mail.isEmpty())
+				{
+					user.sendMessage("§cYou do not have any mail!");
+					return;
+				}
+				for (String s : mail) user.sendMessage(s);
+				user.sendMessage("§cTo mark your mail as read, type §c/mail clear");
+				return;
+			}
+			if (sign.getLine(0).equals("§1[Balance]") && user.isAuthorized("essentials.signs.balance.use"))
+			{
+				user.sendMessage("§7Balance: $" + user.getMoney());
 				return;
 			}
 		}
