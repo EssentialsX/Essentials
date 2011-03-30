@@ -78,6 +78,7 @@
       <zipfileset src="${dist.jar}" excludes="META-INF/*" />
       <zipfileset src="../lib/mysql.jar" excludes="META-INF/*" />
       <zipfileset src="../lib/sqlite.jar" excludes="META-INF/*" />
+      <zipfileset src="../lib/c3p0-0.9.1.2.jar" excludes="META-INF/*" />
       <manifest>
         <attribute name="Classpath" value="Essentials.jar"/>
       </manifest>
