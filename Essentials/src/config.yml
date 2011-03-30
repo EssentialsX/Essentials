@@ -268,7 +268,7 @@ protect:
   mysqlDb: 'jdbc:mysql://localhost:3306/minecraft'
 
   # For which block types would you like to be alerted?
-  # You can find a list of IDs in plugins/Essentials/Items.db after loading Essentials for the first time.
+  # You can find a list of IDs in plugins/Essentials/Items.csv after loading Essentials for the first time.
   alert:
     # 10: lava
     # 11: still lava
@@ -347,7 +347,7 @@ protect:
     # Should damage via lava be disabled?  Items that fall into lava will still burn to a crisp. ;)
     lavadmg: false
 
-    # Should arrows cause damage?
+    # Should arrow damage be disabled
     projectiles: false
 
     # This will disable damage from touching cacti.

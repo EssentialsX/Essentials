@@ -2,28 +2,24 @@ package com.earth2me.essentials.protect;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
-import org.bukkit.ChatColor;
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
-import org.bukkit.event.block.BlockInteractEvent;
 import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.block.BlockRightClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 
 public class EssentialsProtectBlockListener extends BlockListener
 {
 	private EssentialsProtect parent;
-	private int railBlockX;
-	private int railBlockY;
-	private int railBlockZ;
-	private EssentialsProtectData spData;
 
 	public EssentialsProtectBlockListener(EssentialsProtect parent)
 	{
@@ -31,34 +27,10 @@ public class EssentialsProtectBlockListener extends BlockListener
 		this.parent = parent;
 	}
 
-	private void initialize()
-	{
-		if (spData != null) return;
-		spData = new EssentialsProtectData();
-	}
-
-	@Override
-	public void onBlockRightClick(BlockRightClickEvent event)
-	{
-		initialize();
-		User user = User.get(event.getPlayer());
-		if (user.isAuthorized("essentials.protect.admin"))
-		{
-			String ownerName = spData.getBlockOwner(user.getWorld().getName(), user.getName(),
-													event.getBlock());
-			if (ownerName != null)
-			{
-				user.sendMessage(ChatColor.GOLD + "[EssentialsProtect] Protection owner: "
-								 + ownerName);
-			}
-		}
-	}
-
 	@Override
 	public void onBlockPlace(BlockPlaceEvent event)
 	{
 		if (event.isCancelled()) return;
-		initialize();
 		ItemStack item = event.getItemInHand();
 		User user = User.get(event.getPlayer());
 
@@ -68,7 +40,6 @@ public class EssentialsProtectBlockListener extends BlockListener
 			return;
 		}
 
-		Block blockPlaced = event.getBlockAgainst();
 		int id = event.getBlockPlaced().getTypeId();
 
 		if (EssentialsProtect.checkProtectionItems(EssentialsProtect.blackListPlace, id) && !user.isAuthorized("essentials.protect.exemptplacement"))
@@ -82,32 +53,47 @@ public class EssentialsProtectBlockListener extends BlockListener
 			parent.alert(user, item.getType().toString(), "placed: ");
 		}
 
-		if (spData.isBlockAboveProtectedRail(blockPlaced))
-		{
+		Block blockPlaced = event.getBlockPlaced();
+		Block below = blockPlaced.getFace(BlockFace.DOWN);
+		if (below.getType() == Material.RAILS) {
 			if (EssentialsProtect.genSettings.get("protect.protect.prevent.block-on-rail"))
 			{
-				event.setCancelled(true);
-				return;
+				if (EssentialsProtect.getStorage().isProtected(below, user.getName())) {
+					event.setCancelled(true);
+					return;
+				}
 			}
 		}
 
-		if (item.getTypeId() == 66)
-		{
+		List<Block> protect = new ArrayList<Block>();
+		if (blockPlaced.getType() == Material.RAILS) {
 			if (EssentialsProtect.genSettings.get("protect.protect.rails"))
 			{
 				if (user.isAuthorized("essentials.protect"))
 				{
-					railBlockX = blockPlaced.getX();
-					railBlockY = blockPlaced.getY();
-					railBlockZ = blockPlaced.getZ();
-
-					spData.insertProtectionIntoDb(user.getWorld().getName(), user.getName(), railBlockX, railBlockY + 1, railBlockZ);
+					protect.add(blockPlaced);
 					if (EssentialsProtect.genSettings.get("protect.protect.block-below"))
 					{
-						spData.insertProtectionIntoDb(user.getWorld().getName(), user.getName(), railBlockX, railBlockY, railBlockZ);
+						protect.add(blockPlaced.getFace(BlockFace.DOWN));
 					}
 				}
 			}
+		}
+		if (blockPlaced.getType() == Material.SIGN_POST || blockPlaced.getType() == Material.WALL_SIGN) {
+			if (EssentialsProtect.genSettings.get("protect.protect.signs"))
+			{
+				if (user.isAuthorized("essentials.protect"))
+				{
+					protect.add(blockPlaced);
+					if (EssentialsProtect.genSettings.get("protect.protect.block-below"))
+					{
+						protect.add(event.getBlockAgainst());
+					}
+				}
+			}
+		}
+		for (Block block : protect) {
+			EssentialsProtect.getStorage().protectBlock(block, user.getName());
 		}
 	}
 
@@ -145,7 +131,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 	}
 
 	@Override
-	public void onBlockFlow(BlockFromToEvent event)
+	public void onBlockFromTo(BlockFromToEvent event)
 	{
 		if (event.isCancelled()) return;
 		Block block = event.getBlock();
@@ -180,22 +166,6 @@ public class EssentialsProtectBlockListener extends BlockListener
 	}
 
 	@Override
-	public void onBlockInteract(BlockInteractEvent event)
-	{
-		if (event.isCancelled()) return;
-		if (!event.isPlayer()) return;
-
-		User user = User.get((Player)event.getEntity());
-
-		if (EssentialsProtect.playerSettings.get("protect.disable.build") && !user.canBuild())
-		{
-			event.setCancelled(true);
-			return;
-		}
-
-	}
-
-	@Override
 	public void onBlockBurn(BlockBurnEvent event)
 	{
 		Block block = event.getBlock();
@@ -220,7 +190,6 @@ public class EssentialsProtectBlockListener extends BlockListener
 	public void onBlockBreak(BlockBreakEvent event)
 	{
 		if (event.isCancelled()) return;
-		initialize();
 		User user = User.get(event.getPlayer());
 		Block block = event.getBlock();
 		if (EssentialsProtect.playerSettings.get("protect.disable.build") && !user.canBuild())
@@ -244,28 +213,57 @@ public class EssentialsProtectBlockListener extends BlockListener
 		{
 			if (block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST || block.getType() == Material.RAILS)
 			{
-				spData.removeProtectionFromDB(block, true);
+				EssentialsProtect.getStorage().unprotectBlock(block);
+				if (block.getType() == Material.RAILS || block.getType() == Material.SIGN_POST) {
+					Block below = block.getFace(BlockFace.DOWN);
+					EssentialsProtect.getStorage().unprotectBlock(below);
+				} else {
+					BlockFace[] faces = new BlockFace[] {
+						BlockFace.NORTH,
+						BlockFace.EAST,
+						BlockFace.SOUTH,
+						BlockFace.WEST
+					};
+					for (BlockFace blockFace : faces) {
+						Block against = block.getFace(blockFace);
+						EssentialsProtect.getStorage().unprotectBlock(against);
+					}
+				}
 			}
 			else
 			{
-				spData.removeProtectionFromDB(block);
+				EssentialsProtect.getStorage().unprotectBlock(block);
 			}
 			return;
 		}
 		else
 		{
-			boolean canDestroy = spData.canDestroy(user.getWorld().getName(), user.getName(), block);
-			if (canDestroy)
-			{
+
+			boolean isProtected = EssentialsProtect.getStorage().isProtected(block, user.getName());
+			if (!isProtected) {
 				if (block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST || block.getType() == Material.RAILS)
-				{
-					spData.removeProtectionFromDB(block, true);
+				{		
+					EssentialsProtect.getStorage().unprotectBlock(block);
+					if (block.getType() == Material.RAILS || block.getType() == Material.SIGN_POST) {
+						Block below = block.getFace(BlockFace.DOWN);
+						EssentialsProtect.getStorage().unprotectBlock(below);
+					} else {
+						BlockFace[] faces = new BlockFace[] {
+							BlockFace.NORTH,
+							BlockFace.EAST,
+							BlockFace.SOUTH,
+							BlockFace.WEST
+						};
+						for (BlockFace blockFace : faces) {
+							Block against = block.getFace(blockFace);
+							EssentialsProtect.getStorage().unprotectBlock(against);
+						}
+					}
 				}
 				else
 				{
-					spData.removeProtectionFromDB(block);
+					EssentialsProtect.getStorage().unprotectBlock(block);
 				}
-				return;
 			}
 			event.setCancelled(true);
 			return;

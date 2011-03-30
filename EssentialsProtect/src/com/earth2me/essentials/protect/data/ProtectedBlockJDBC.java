@@ -1,0 +1,292 @@
+package com.earth2me.essentials.protect.data;
+
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+import java.beans.PropertyVetoException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.bukkit.block.Block;
+
+public abstract class ProtectedBlockJDBC implements IProtectedBlock {
+	protected static final Logger logger = Logger.getLogger("Minecraft");
+	protected ComboPooledDataSource cpds;
+
+	protected abstract PreparedStatement getStatementCreateTable(Connection conn) throws SQLException;
+	protected abstract PreparedStatement getStatementDeleteAll(Connection conn) throws SQLException;
+	protected abstract PreparedStatement getStatementInsert(Connection conn, String world, int x, int y, int z, String playerName) throws SQLException;
+	protected abstract PreparedStatement getStatementPlayerCountByLocation(Connection conn, String world, int x, int y, int z, String playerName) throws SQLException;
+	protected abstract PreparedStatement getStatementPlayersByLocation(Connection conn, String name, int x, int y, int z) throws SQLException;
+	protected abstract PreparedStatement getStatementDeleteByLocation(Connection conn, String world, int x, int y, int z) throws SQLException;
+	protected abstract PreparedStatement getStatementAllBlocks(Connection conn) throws SQLException;
+	
+	public ProtectedBlockJDBC(String driver, String url) throws PropertyVetoException {
+		this(driver, url, null, null);
+	}
+	
+	public ProtectedBlockJDBC(String driver, String url, String username, String password) throws PropertyVetoException {
+		cpds = new ComboPooledDataSource();
+		cpds.setDriverClass(driver);
+		cpds.setJdbcUrl(url);
+		if (username != null) {
+			cpds.setUser(username);
+			cpds.setPassword(password);
+		}
+		cpds.setMaxStatements(20);
+		createAndConvertTable();
+	}
+	
+	
+	private void createAndConvertTable() {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			conn = cpds.getConnection();
+			ps = getStatementCreateTable(conn);
+			ps.execute();
+		} catch (SQLException ex) {
+			logger.log(Level.SEVERE, null, ex);
+		} finally {
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException ex) {
+					logger.log(Level.SEVERE, null, ex);
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException ex) {
+					logger.log(Level.SEVERE, null, ex);
+				}
+			}
+		}
+	}
+	
+	public void clearProtections() {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			conn = cpds.getConnection();
+			ps = getStatementDeleteAll(conn);
+			ps.executeUpdate();
+		} catch (SQLException ex) {
+			logger.log(Level.SEVERE, null, ex);
+		} finally {
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException ex) {
+					logger.log(Level.SEVERE, null, ex);
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException ex) {
+					logger.log(Level.SEVERE, null, ex);
+				}
+			}
+		}
+	}
+	
+	public void importProtections(List<OwnedBlock> blocks) {
+		for (OwnedBlock ownedBlock : blocks) {
+			if (ownedBlock.playerName == null) {
+				continue;
+			}
+			protectBlock(ownedBlock.world, ownedBlock.x, ownedBlock.y, ownedBlock.z, ownedBlock.playerName);
+		}
+	}
+	
+	public List<OwnedBlock> exportProtections() {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		List<OwnedBlock> blocks = new ArrayList<OwnedBlock>();
+		try {
+			conn = cpds.getConnection();
+			ps = getStatementAllBlocks(conn);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				OwnedBlock ob = new OwnedBlock();
+				ob.world = rs.getString(1);
+				ob.x = rs.getInt(2);
+				ob.y = rs.getInt(3);
+				ob.z = rs.getInt(4);
+				ob.playerName = rs.getString(5);
+				blocks.add(ob);
+			}
+			return blocks;
+		} catch (SQLException ex) {
+			logger.log(Level.SEVERE, null, ex);
+			return blocks;
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException ex) {
+					logger.log(Level.SEVERE, null, ex);
+				}
+			}
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException ex) {
+					logger.log(Level.SEVERE, null, ex);
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException ex) {
+					logger.log(Level.SEVERE, null, ex);
+				}
+			}
+		}
+	}
+	
+	public void protectBlock(Block block, String playerName) {
+		protectBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), playerName);
+	}
+	
+	private void protectBlock(String world, int x, int y, int z, String playerName) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			conn = cpds.getConnection();
+			ps = getStatementInsert(conn, world, x, y, z, playerName);
+			ps.executeUpdate();
+		} catch (SQLException ex) {
+			logger.log(Level.SEVERE, null, ex);
+		} finally {
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException ex) {
+					logger.log(Level.SEVERE, null, ex);
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException ex) {
+					logger.log(Level.SEVERE, null, ex);
+				}
+			}
+		}
+	}
+	
+	public boolean isProtected(Block block, String playerName) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			conn = cpds.getConnection();
+			ps = getStatementPlayerCountByLocation(conn, block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), playerName);
+			rs = ps.executeQuery();
+			rs.next();
+			return rs.getInt(1) > 0 && rs.getInt(2) == 0;
+		} catch (SQLException ex) {
+			logger.log(Level.SEVERE, null, ex);
+			return true;
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException ex) {
+					logger.log(Level.SEVERE, null, ex);
+				}
+			}
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException ex) {
+					logger.log(Level.SEVERE, null, ex);
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException ex) {
+					logger.log(Level.SEVERE, null, ex);
+				}
+			}
+		}
+	}
+	
+	public List<String> getOwners(Block block) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		List<String> owners = new ArrayList<String>();
+		try {
+			conn = cpds.getConnection();
+			ps = getStatementPlayersByLocation(conn, block.getWorld().getName(), block.getX(), block.getY(), block.getZ());
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				owners.add(rs.getString(1));
+			}
+			return owners;
+		} catch (SQLException ex) {
+			logger.log(Level.SEVERE, null, ex);
+			return owners;
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException ex) {
+					logger.log(Level.SEVERE, null, ex);
+				}
+			}
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException ex) {
+					logger.log(Level.SEVERE, null, ex);
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException ex) {
+					logger.log(Level.SEVERE, null, ex);
+				}
+			}
+		}
+	}
+
+	public int unprotectBlock(Block block) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			conn = cpds.getConnection();
+			ps = getStatementDeleteByLocation(conn, block.getWorld().getName(), block.getX(), block.getY(), block.getZ());
+			return ps.executeUpdate();
+		} catch (SQLException ex) {
+			logger.log(Level.SEVERE, null, ex);
+			return 0;
+		} finally {
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException ex) {
+					logger.log(Level.SEVERE, null, ex);
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException ex) {
+					logger.log(Level.SEVERE, null, ex);
+				}
+			}
+		}
+	}
+	
+}

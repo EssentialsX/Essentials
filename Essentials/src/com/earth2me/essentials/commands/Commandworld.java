@@ -62,6 +62,6 @@ public class Commandworld extends EssentialsCommand
 
 		user.canAfford(this);
 		user.teleportCooldown();
-		user.teleportTo(loc, this.getName());
+		user.teleport(loc, this.getName());
 	}
 }

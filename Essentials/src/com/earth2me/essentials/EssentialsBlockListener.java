@@ -1,21 +1,16 @@
 package com.earth2me.essentials;
 
 import java.util.ArrayList;
-import java.util.List;
-import net.minecraft.server.InventoryPlayer;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.craftbukkit.block.CraftSign;
-import org.bukkit.craftbukkit.inventory.CraftInventoryPlayer;
-import org.bukkit.entity.Player;
 import org.bukkit.event.block.*;
-import org.bukkit.inventory.ItemStack;
 
 
 public class EssentialsBlockListener extends BlockListener
 {
 	private final Essentials parent;
-	private final static ArrayList<Material> protectedBlocks = new ArrayList<Material>(4);
+	public final static ArrayList<Material> protectedBlocks = new ArrayList<Material>(4);
 
 	static
 	{
@@ -50,40 +45,6 @@ public class EssentialsBlockListener extends BlockListener
 		{
 			event.setCancelled(true);
 			user.sendMessage("§cYou do not have permission to destroy that sign.");
-		}
-	}
-
-	@Override
-	public void onBlockInteract(BlockInteractEvent event)
-	{
-		if (event.isCancelled()) return;
-		if (!(event.getEntity() instanceof Player)) return;
-
-		User user = User.get((Player)event.getEntity());
-
-		if (!Essentials.getSettings().areSignsDisabled() && protectedBlocks.contains(event.getBlock().getType()))
-		{
-			if (!user.isAuthorized("essentials.signs.protection.override"))
-			{
-				if (isBlockProtected(event.getBlock(), user))
-				{
-					event.setCancelled(true);
-					user.sendMessage("§cYou do not have permission to access that chest.");
-					return;
-				}
-			}
-		}
-
-		if (Essentials.getSettings().getBedSetsHome() && event.getBlock().getType() == Material.BED_BLOCK)
-		{
-			try
-			{
-				user.setHome();
-				user.sendMessage("§7Your home is now set to this bed.");
-			}
-			catch (Throwable ex)
-			{
-			}
 		}
 	}
 
@@ -147,60 +108,6 @@ public class EssentialsBlockListener extends BlockListener
 	}
 
 	@Override
-	public void onBlockRightClick(BlockRightClickEvent event)
-	{
-		User user = User.get(event.getPlayer());
-		if (user.isJailed()) return;
-		if (Essentials.getSettings().areSignsDisabled()) return;
-		if (event.getBlock().getType() != Material.WALL_SIGN && event.getBlock().getType() != Material.SIGN_POST)
-			return;
-		Sign sign = new CraftSign(event.getBlock());
-
-		try
-		{
-			if (sign.getLine(0).equals("§1[Free]") && user.isAuthorized("essentials.signs.free.use"))
-			{
-				ItemStack item = ItemDb.get(sign.getLine(1));
-				CraftInventoryPlayer inv = new CraftInventoryPlayer(new InventoryPlayer(user.getHandle()));
-				inv.clear();
-				item.setAmount(9 * 4 * 64);
-				inv.addItem(item);
-				user.showInventory(inv);
-				return;
-			}
-			if (sign.getLine(0).equals("§1[Disposal]") && user.isAuthorized("essentials.signs.disposal.use"))
-			{
-				CraftInventoryPlayer inv = new CraftInventoryPlayer(new InventoryPlayer(user.getHandle()));
-				inv.clear();
-				user.showInventory(inv);
-				return;
-			}
-			if (sign.getLine(0).equals("§1[Heal]") && user.isAuthorized("essentials.signs.heal.use"))
-			{
-				user.setHealth(20);
-				user.sendMessage("§7You have been healed.");
-				return;
-			}
-			if (sign.getLine(0).equals("§1[Mail]") && user.isAuthorized("essentials.signs.mail.use") && user.isAuthorized("essentials.mail"))
-			{
-				List<String> mail = Essentials.readMail(user);
-				if (mail.isEmpty())
-				{
-					user.sendMessage("§cYou do not have any mail!");
-					return;
-				}
-				for (String s : mail) user.sendMessage(s);
-				user.sendMessage("§cTo mark your mail as read, type §c/mail clear");
-				return;
-			}
-		}
-		catch (Throwable ex)
-		{
-			user.sendMessage("§cError: " + ex.getMessage());
-		}
-	}
-
-	@Override
 	public void onBlockPlace(BlockPlaceEvent event) {
 		Block signBlock = event.getBlockAgainst();
 		if (signBlock.getType()  == Material.WALL_SIGN || signBlock.getType() == Material.SIGN_POST) {
@@ -230,7 +137,7 @@ public class EssentialsBlockListener extends BlockListener
 	private static final int ALLOWED = 1;
 	private static final int NOSIGN = 2;
 
-	private int checkProtectionSign(Block block, User user)
+	private static int checkProtectionSign(Block block, User user)
 	{
 		if (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN)
 		{
@@ -255,7 +162,7 @@ public class EssentialsBlockListener extends BlockListener
 		return NOSIGN;
 	}
 
-	private Block[] getAdjacentBlocks(Block block)
+	private static Block[] getAdjacentBlocks(Block block)
 	{
 		return new Block[]
 				{
@@ -268,7 +175,7 @@ public class EssentialsBlockListener extends BlockListener
 				};
 	}
 
-	private boolean isBlockProtected(Block block, User user)
+	public static boolean isBlockProtected(Block block, User user)
 	{
 		Block[] faces = getAdjacentBlocks(block);
 		boolean protect = false;

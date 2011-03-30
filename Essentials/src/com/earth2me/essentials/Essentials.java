@@ -159,25 +159,23 @@ public class Essentials extends JavaPlugin
 			pm.registerEvent(Type.PLAYER_MOVE, playerListener, Priority.High, this);
 		pm.registerEvent(Type.PLAYER_LOGIN, playerListener, Priority.High, this);
 		pm.registerEvent(Type.PLAYER_TELEPORT, playerListener, Priority.High, this);
+		pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Priority.Monitor, this);
 
 		blockListener = new EssentialsBlockListener(this);
 		pm.registerEvent(Type.SIGN_CHANGE, blockListener, Priority.Monitor, this);
-		pm.registerEvent(Type.BLOCK_RIGHTCLICKED, blockListener, Priority.Monitor, this);
-		pm.registerEvent(Type.BLOCK_INTERACT, blockListener, Priority.Monitor, this);
 		pm.registerEvent(Type.BLOCK_BREAK, blockListener, Priority.Monitor, this);
-		pm.registerEvent(Type.BLOCK_PLACED, blockListener, Priority.Monitor, this);
+		pm.registerEvent(Type.BLOCK_PLACE, blockListener, Priority.Monitor, this);
 
 		entityListener = new EssentialsEntityListener(this);
-		pm.registerEvent(Type.ENTITY_DAMAGED, entityListener, Priority.Lowest, this);
+		pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Priority.Lowest, this);
 		pm.registerEvent(Type.ENTITY_COMBUST, entityListener, Priority.Lowest, this);
 		pm.registerEvent(Type.ENTITY_DEATH, entityListener, Priority.Lowest, this);
 
 		jail = new Jail(this.getDataFolder());
 		confList.add(jail);
 		pm.registerEvent(Type.BLOCK_BREAK, jail, Priority.High, this);
-		pm.registerEvent(Type.BLOCK_DAMAGED, jail, Priority.High, this);
-		pm.registerEvent(Type.BLOCK_INTERACT, jail, Priority.High, this);
-		pm.registerEvent(Type.BLOCK_PLACED, jail, Priority.High, this);
+		pm.registerEvent(Type.BLOCK_DAMAGE, jail, Priority.High, this);
+		pm.registerEvent(Type.BLOCK_PLACE, jail, Priority.High, this);
 
 		attachEcoListeners();
 
@@ -665,8 +663,6 @@ public class Essentials extends JavaPlugin
 	{
 		PluginManager pm = getServer().getPluginManager();
 		EssentialsEcoBlockListener blockListener = new EssentialsEcoBlockListener();
-		pm.registerEvent(Type.BLOCK_INTERACT, blockListener, Priority.Lowest, this);
-		pm.registerEvent(Type.BLOCK_RIGHTCLICKED, blockListener, Priority.High, this);
 		pm.registerEvent(Type.BLOCK_BREAK, blockListener, Priority.High, this);
 		pm.registerEvent(Type.SIGN_CHANGE, blockListener, Priority.Monitor, this);
 	}

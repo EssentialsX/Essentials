@@ -28,7 +28,7 @@ public class Commandtp extends EssentialsCommand
 			if (!p.isTeleEnabled()) throw new Exception(p.getDisplayName() + " has teleportation disabled.");
 			user.sendMessage("§7Teleporting...");
 			user.canAfford(this);
-			user.teleportTo(p, this.getName());
+			user.teleport(p, this.getName());
 			break;
 
 		case 2:

@@ -21,6 +21,11 @@ public class Commandme extends EssentialsCommand
 	@Override
 	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
 	{
+		if (user.isMuted())
+		{ user.sendMessage("§7Your voice has been silenced");
+		  return;
+		}
+
 		if (args.length < 1)
 		{
 			user.sendMessage("§cUsage: /me [description]");
