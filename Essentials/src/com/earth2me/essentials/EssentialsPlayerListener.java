@@ -240,7 +240,6 @@ public class EssentialsPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
-
 		if (event.isCancelled()) return;
 		if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 		User user = User.get(event.getPlayer());
