@@ -139,7 +139,7 @@ public class User extends PlayerExtension implements Comparable<User>
 		long now = Calendar.getInstance().getTimeInMillis();
 		long cooldown = Essentials.getSettings().getTeleportCooldown();
 		long left = lastTeleport + cooldown - now;
-		if (left > 0 && !isOp() && !isAuthorized("essentials.teleport.cooldown.bypass"))
+		if ((left > 0 && !isOp() && !isAuthorized("essentials.teleport.cooldown.bypass")) | !isJailed())
 			throw new Exception("Time before next teleport: " + Essentials.FormatTime(left));
 		// if justCheck is set, don't update lastTeleport; we're just checking
 		if (!justCheck) lastTeleport = now;
@@ -385,6 +385,7 @@ public class User extends PlayerExtension implements Comparable<User>
 
 	public void teleportTo(final Location loc, final String chargeFor)
 	{
+
 		final long delay = Essentials.getSettings().getTeleportDelay();
 
 		if (delay <= 0 || isOp() || isAuthorized("essentials.teleport.timer.bypass"))
@@ -434,6 +435,7 @@ public class User extends PlayerExtension implements Comparable<User>
 
 	public void teleportTo(final Entity entity, final String chargeFor)
 	{
+
 		final long delay = Essentials.getSettings().getTeleportDelay();
 
 		if (delay <= 0 || isOp() || isAuthorized("essentials.teleport.timer.bypass"))
