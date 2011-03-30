@@ -348,7 +348,7 @@ protect:
     # Should damage via lava be disabled?  Items that fall into lava will still burn to a crisp. ;)
     lavadmg: false
 
-    # Should arrows cause damage?
+    # Should arrow damage be disabled
     projectiles: false
 
     # This will disable damage from touching cacti.
