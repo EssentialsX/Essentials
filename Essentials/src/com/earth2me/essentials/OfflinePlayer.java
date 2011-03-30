@@ -283,4 +283,69 @@ public class OfflinePlayer implements Player
 	public void sendRawMessage(String string) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
+	public Location getCompassTarget()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public int getMaximumNoDamageTicks()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public void setMaximumNoDamageTicks(int i)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public int getLastDamage()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public void setLastDamage(int i)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public int getNoDamageTicks()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public void setNoDamageTicks(int i)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public boolean teleport(Location lctn)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public boolean teleport(Entity entity)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public Entity getPassenger()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public boolean setPassenger(Entity entity)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public boolean isEmpty()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public boolean eject()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }

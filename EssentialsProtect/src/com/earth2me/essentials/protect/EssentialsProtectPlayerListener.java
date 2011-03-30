@@ -5,7 +5,6 @@ import com.earth2me.essentials.User;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.inventory.ItemStack;
 

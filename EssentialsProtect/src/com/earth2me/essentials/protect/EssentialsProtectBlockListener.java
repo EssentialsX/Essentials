@@ -2,18 +2,14 @@ package com.earth2me.essentials.protect;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
-import org.bukkit.event.block.BlockInteractEvent;
 import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.block.BlockRightClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -128,7 +124,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 	}
 
 	@Override
-	public void onBlockFlow(BlockFromToEvent event)
+	public void onBlockFromTo(BlockFromToEvent event)
 	{
 		if (event.isCancelled()) return;
 		Block block = event.getBlock();

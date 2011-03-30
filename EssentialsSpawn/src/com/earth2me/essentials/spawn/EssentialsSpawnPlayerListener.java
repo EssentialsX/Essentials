@@ -4,7 +4,7 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.bukkit.event.player.PlayerEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
@@ -32,7 +32,7 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 	}
 
 	@Override
-	public void onPlayerJoin(PlayerEvent event)
+	public void onPlayerJoin(PlayerJoinEvent event)
 	{
 		Essentials.loadClasses();
 		User user = User.get(event.getPlayer());

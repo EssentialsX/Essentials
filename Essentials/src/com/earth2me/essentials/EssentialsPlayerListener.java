@@ -1,6 +1,5 @@
 package com.earth2me.essentials;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import net.minecraft.server.InventoryPlayer;
@@ -128,33 +127,49 @@ public class EssentialsPlayerListener extends PlayerListener
 	}
 
 	@Override
-	public void onPlayerQuit(PlayerEvent event)
+	public void onPlayerQuit(PlayerQuitEvent event)
 	{
+		if (!Essentials.getSettings().getReclaimSetting())
+		{
+			return;
+		}
 		User.get(event.getPlayer()).dispose();
+		Thread thread = new Thread(new Runnable()
+		{
+			@SuppressWarnings("LoggerStringConcat")
+			public void run()
+			{
+				try
+				{
+					Thread.sleep(1000);
+					Runtime rt = Runtime.getRuntime();
+					double mem = rt.freeMemory();
+					rt.runFinalization();
+					rt.gc();
+					mem = rt.freeMemory() - mem;
+					mem /= 1024 * 1024;
+					logger.info("Freed " + mem + " MB.");
+				}
+				catch (InterruptedException ex)
+				{
+					return;
+				}
+			}
+		});
+		thread.setPriority(Thread.MIN_PRIORITY);
+		thread.start();
 	}
 
 	@Override
-	public void onPlayerLogin(PlayerLoginEvent event)
+	public void onPlayerJoin(PlayerJoinEvent event)
 	{
+		Essentials.getStatic().backup.onPlayerJoin();
 		User user = User.get(event.getPlayer());
-		if (event.getResult() != Result.ALLOWED)
-			return;
 
-		if (user.isBanned())
-		{
-			event.disallow(Result.KICK_BANNED, "The Ban Hammer has spoken!");
-			return;
-		}
-		
+		//we do not know the ip address on playerlogin so we need to do this here.
 		if (user.isIpBanned())
 		{
 			user.kickPlayer("The Ban Hammer has spoken!");
-			return;
-		}
-
-		if (server.getOnlinePlayers().length >= server.getMaxPlayers() && !user.isOp())
-		{
-			event.disallow(Result.KICK_FULL, "Server is full");
 			return;
 		}
 
@@ -175,6 +190,26 @@ public class EssentialsPlayerListener extends PlayerListener
 			if (mail.isEmpty()) user.sendMessage("§7You have no new mail.");
 			else user.sendMessage("§cYou have " + mail.size() + " messages!§f Type §7/mail read§f to view your mail.");
 		}
+	}
+
+	@Override
+	public void onPlayerLogin(PlayerLoginEvent event)
+	{
+		User user = User.get(event.getPlayer());
+		if (event.getResult() != Result.ALLOWED)
+			return;
+
+		if (user.isBanned())
+		{
+			event.disallow(Result.KICK_BANNED, "The Ban Hammer has spoken!");
+			return;
+		}
+
+		if (server.getOnlinePlayers().length >= server.getMaxPlayers() && !user.isOp())
+		{
+			event.disallow(Result.KICK_FULL, "Server is full");
+			return;
+		}
 
 		updateCompass(user);
 	}
@@ -192,7 +227,7 @@ public class EssentialsPlayerListener extends PlayerListener
 	}
 
 	@Override
-	public void onPlayerTeleport(PlayerMoveEvent event)
+	public void onPlayerTeleport(PlayerTeleportEvent event)
 	{
 		User user = User.get(event.getPlayer());
 		if (user.currentJail == null || user.currentJail.isEmpty())
