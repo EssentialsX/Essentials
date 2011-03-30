@@ -162,15 +162,27 @@ public class EssentialsPlayerListener extends PlayerListener
 	}
 
 	@Override
-	public void onPlayerJoin(PlayerEvent event)
+	public void onPlayerLogin(PlayerLoginEvent event)
 	{
-		Essentials.getStatic().backup.onPlayerJoin();
 		User user = User.get(event.getPlayer());
+		if (event.getResult() != Result.ALLOWED)
+			return;
 
-		//we do not know the ip address on playerlogin so we need to do this here.
+		if (user.isBanned())
+		{
+			event.disallow(Result.KICK_BANNED, "The Ban Hammer has spoken!");
+			return;
+		}
+		
 		if (user.isIpBanned())
 		{
 			user.kickPlayer("The Ban Hammer has spoken!");
+			return;
+		}
+
+		if (server.getOnlinePlayers().length >= server.getMaxPlayers() && !user.isOp())
+		{
+			event.disallow(Result.KICK_FULL, "Server is full");
 			return;
 		}
 
@@ -190,26 +202,6 @@ public class EssentialsPlayerListener extends PlayerListener
 			List<String> mail = Essentials.readMail(user);
 			if (mail.isEmpty()) user.sendMessage("§7You have no new mail.");
 			else user.sendMessage("§cYou have " + mail.size() + " messages!§f Type §7/mail read§f to view your mail.");
-		}
-	}
-
-	@Override
-	public void onPlayerLogin(PlayerLoginEvent event)
-	{
-		User user = User.get(event.getPlayer());
-		if (event.getResult() != Result.ALLOWED)
-			return;
-
-		if (user.isBanned())
-		{
-			event.disallow(Result.KICK_BANNED, "The Ban Hammer has spoken!");
-			return;
-		}
-
-		if (server.getOnlinePlayers().length >= server.getMaxPlayers() && !user.isOp())
-		{
-			event.disallow(Result.KICK_FULL, "Server is full");
-			return;
 		}
 
 		updateCompass(user);
