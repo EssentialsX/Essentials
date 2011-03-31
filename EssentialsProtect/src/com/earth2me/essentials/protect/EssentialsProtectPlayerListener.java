@@ -44,11 +44,12 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 			return;
 		}
 
-		if (EssentialsProtect.checkProtectionItems(EssentialsProtect.usageList, item.getTypeId()) && !user.isAuthorized("essentials.protect.exemptusage"))
-		{
-			event.setCancelled(true);
-			return;
-		}
+
+			if (item != null && EssentialsProtect.checkProtectionItems(EssentialsProtect.usageList, item.getTypeId()) && !user.isAuthorized("essentials.protect.exemptusage"))
+			{
+				event.setCancelled(true);
+				return;
+			}
 
 		if (user.isAuthorized("essentials.protect.admin"))
 		{
@@ -60,12 +61,12 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 								 + ownerName);
 			}
 		}
-		if (EssentialsProtect.onUseAlert.contains(String.valueOf(item.getTypeId())))
+		if (item != null && EssentialsProtect.onUseAlert.contains(String.valueOf(item.getTypeId())))
 		{
 			parent.alert(user, item.getType().toString(), "used: ");
 		}
 
-		if (item.getTypeId() == 323)
+		if (item != null && item.getTypeId() == 323)
 		{
 			if (EssentialsProtect.genSettings.get("protect.protect.signs"))
 			{
@@ -88,6 +89,6 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 				}
 			}
 		}
-		
+
 	}
 }
