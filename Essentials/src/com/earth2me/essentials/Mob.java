@@ -26,7 +26,8 @@ public enum Mob
 	SPIDER("Spider", Enemies.ENEMY),
 	SQUID("Squid", Enemies.FRIENDLY),
 	ZOMBIE("Zombie", Enemies.ENEMY),
-	MONSTER("Monster", Enemies.ENEMY);
+	MONSTER("Monster", Enemies.ENEMY),
+	WOLF("Wolf", Enemies.NEUTRAL);
 
 	public static final Logger logger = Logger.getLogger("Minecraft");
 
@@ -77,7 +78,10 @@ public enum Mob
 		}
 	}
 
-	@SuppressWarnings({"unchecked", "CallToThreadDumpStack"})
+	@SuppressWarnings(
+	{
+		"unchecked", "CallToThreadDumpStack"
+	})
 	public CraftEntity spawn(Player player, Server server) throws MobException
 	{
 		try

@@ -33,7 +33,7 @@ public class Commandspawnmob extends EssentialsCommand
 		if (args.length < 1)
 		{
 			user.sendMessage("§cUsage: /spawnmob [mob]<,mount><:size> <quantity>");
-			user.sendMessage("§7Mobs: Zombie PigZombie Skeleton Slime Chicken Pig Monster Spider Creeper Ghast Squid Giant Cow Sheep");
+			user.sendMessage("§7Mobs: Zombie PigZombie Skeleton Slime Chicken Pig Monster Spider Creeper Ghast Squid Giant Cow Sheep Wolf");
 			return;
 		}
 
