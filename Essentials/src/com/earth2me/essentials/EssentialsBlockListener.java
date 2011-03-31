@@ -47,6 +47,7 @@ public class EssentialsBlockListener extends BlockListener
 			user.sendMessage("§cYou do not have permission to destroy that sign.");
 		}
 	}
+
 	@Override
 	public void onSignChange(SignChangeEvent event)
 	{
@@ -77,8 +78,10 @@ public class EssentialsBlockListener extends BlockListener
 			if (event.getLine(0).equalsIgnoreCase("[Heal]"))
 			{
 				event.setLine(0, "§4[Heal]");
-				if (user.isAuthorized("essentials.signs.heal.create")) {
-					if (!event.getLine(1).isEmpty()) {
+				if (user.isAuthorized("essentials.signs.heal.create"))
+				{
+					if (!event.getLine(1).isEmpty())
+					{
 						String[] l1 = event.getLine(1).split("[ :-]+");
 						boolean m1 = l1[0].matches("\\$[0-9]+");
 						int q1 = Integer.parseInt(m1 ? l1[0].substring(1) : l1[0]);
@@ -101,7 +104,6 @@ public class EssentialsBlockListener extends BlockListener
 			if (event.getLine(0).equalsIgnoreCase("[Mail]"))
 			{
 				if (user.isAuthorized("essentials.signs.mail.create"))
-				
 					event.setLine(0, "§1[Mail]");
 				else
 					event.setLine(0, "§4[Mail]");
@@ -110,7 +112,6 @@ public class EssentialsBlockListener extends BlockListener
 			if (event.getLine(0).equalsIgnoreCase("[Balance]"))
 			{
 				if (user.isAuthorized("essentials.signs.balance.create"))
-				
 					event.setLine(0, "§1[Balance]");
 				else
 					event.setLine(0, "§4[Balance]");
@@ -124,18 +125,19 @@ public class EssentialsBlockListener extends BlockListener
 	}
 
 	@Override
-	public void onBlockPlace(BlockPlaceEvent event) {
+	public void onBlockPlace(BlockPlaceEvent event)
+	{
 		Block signBlock = event.getBlockAgainst();
-		if (signBlock.getType()  == Material.WALL_SIGN || signBlock.getType() == Material.SIGN_POST) {
+		if (signBlock.getType() == Material.WALL_SIGN || signBlock.getType() == Material.SIGN_POST)
+		{
 			Sign sign = new CraftSign(signBlock);
-			if (sign.getLine(0).matches("§1\\[[a-zA-Z]+\\]")) {
+			if (sign.getLine(0).matches("§1\\[[a-zA-Z]+\\]"))
+			{
 				event.setCancelled(true);
 				return;
 			}
 		}
 	}
-	
-	
 
 	public boolean hasAdjacentChest(Block block)
 	{
