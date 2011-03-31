@@ -155,7 +155,7 @@ public class Essentials extends JavaPlugin
 		playerListener = new EssentialsPlayerListener(this);
 		pm.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
 		pm.registerEvent(Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
-		pm.registerEvent(Type.PLAYER_CHAT, playerListener, Priority.Monitor, this);
+		pm.registerEvent(Type.PLAYER_CHAT, playerListener, Priority.Lowest, this);
 		if (getSettings().getNetherPortalsEnabled())
 			pm.registerEvent(Type.PLAYER_MOVE, playerListener, Priority.High, this);
 		pm.registerEvent(Type.PLAYER_LOGIN, playerListener, Priority.High, this);
