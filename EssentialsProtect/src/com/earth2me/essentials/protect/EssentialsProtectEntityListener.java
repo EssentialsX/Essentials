@@ -10,6 +10,7 @@ import net.minecraft.server.Packet60Explosion;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.CraftServer;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -89,7 +90,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 					event.setCancelled(true);
 					return;
 				}
-				
+
 				if (eAttack instanceof Creeper && EssentialsProtect.guardSettings.get("protect.prevent.creeper-playerdamage"))
 				{
 					event.setCancelled(true);
@@ -144,32 +145,36 @@ public class EssentialsProtectEntityListener extends EntityListener
 		{
 			//Nicccccccccce plaaacccccccccce..
 			int maxHeight = Essentials.getSettings().getEpCreeperMaxHeight();
-			if (	EssentialsProtect.guardSettings.get("protect.prevent.creeper-explosion") ||
-				EssentialsProtect.guardSettings.get("protect.prevent.creeper-blockdamage") || 
-				(maxHeight >= 0 && event.getLocation().getBlockY() > maxHeight))
+			if (EssentialsProtect.guardSettings.get("protect.prevent.creeper-explosion")
+				|| EssentialsProtect.guardSettings.get("protect.prevent.creeper-blockdamage")
+				|| (maxHeight >= 0 && event.getLocation().getBlockY() > maxHeight))
 			{
 				HashSet<ChunkPosition> set = new HashSet<ChunkPosition>(event.blockList().size());
 				Player[] players = parent.getServer().getOnlinePlayers();
 				List<ChunkPosition> blocksUnderPlayers = new ArrayList<ChunkPosition>(players.length);
 				Location loc = event.getLocation();
-				for (Player player : players) {
-					if (player.getWorld().equals(loc.getWorld())) {
+				for (Player player : players)
+				{
+					if (player.getWorld().equals(loc.getWorld()))
+					{
 						blocksUnderPlayers.add(
-							new ChunkPosition(
+								new ChunkPosition(
 								player.getLocation().getBlockX(),
 								player.getLocation().getBlockY() - 1,
 								player.getLocation().getBlockZ()));
 					}
 				}
-				for (Block block : event.blockList()) {
+				for (Block block : event.blockList())
+				{
 					ChunkPosition cp = new ChunkPosition(block.getX(), block.getY(), block.getZ());
-					if (!blocksUnderPlayers.contains(cp)) {
+					if (!blocksUnderPlayers.contains(cp))
+					{
 						set.add(cp);
 					}
 				}
-				
-				((CraftServer)parent.getServer()).getServer().f.a(loc.getX(), loc.getY(), loc.getZ(), 64.0D, 
-					new Packet60Explosion(loc.getX(), loc.getY(), loc.getZ(), 3.0f, set));
+
+				((CraftServer)parent.getServer()).getServer().f.a(loc.getX(), loc.getY(), loc.getZ(), 64.0D,
+																  new Packet60Explosion(loc.getX(), loc.getY(), loc.getZ(), 3.0f, set));
 				event.setCancelled(true);
 				return;
 			}
@@ -185,12 +190,17 @@ public class EssentialsProtectEntityListener extends EntityListener
 	}
 
 	@Override
-	public void onCreatureSpawn(CreatureSpawnEvent event) {
+	public void onCreatureSpawn(CreatureSpawnEvent event)
+	{
+		if (event.getEntity() instanceof CraftPlayer) return;
+		if (event.isCancelled()) return;
 		String creatureName = event.getCreatureType().toString().toLowerCase();
-		if (creatureName == null || creatureName.isEmpty()) {
+		if (creatureName == null || creatureName.isEmpty())
+		{
 			return;
 		}
-		if (EssentialsProtect.guardSettings.get("protect.prevent.spawn."+creatureName)) {
+		if (EssentialsProtect.guardSettings.get("protect.prevent.spawn." + creatureName))
+		{
 			event.setCancelled(true);
 		}
 	}
