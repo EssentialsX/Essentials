@@ -492,8 +492,9 @@ public class User extends PlayerExtension implements Comparable<User>
 		{
 			List<Object> vals = (List<Object>)data.get("home");
 			World world = getServer() == null ? null : getServer().getWorlds().get(0);
-			if (vals.size() > 5 && getServer() != null)
-				getServer().getWorld((String)vals.get(5));
+			if (vals.size() > 5 && getServer() != null) {
+				world = getServer().getWorld((String)vals.get(5));
+			}
 			return new Location(
 					world,
 					(Double)vals.get(0),
@@ -508,8 +509,9 @@ public class User extends PlayerExtension implements Comparable<User>
 			Map<String, Object> gdata = Essentials.getData(this);
 			List<Object> vals = (List<Object>)gdata.get("home");
 			World world = getServer().getWorlds().get(0);
-			if (vals.size() > 5)
-				getServer().getWorld((String)vals.get(5));
+			if (vals.size() > 5) {
+				world = getServer().getWorld((String)vals.get(5));
+			}
 			return new Location(world,
 								(Double)vals.get(0),
 								(Double)vals.get(1),
