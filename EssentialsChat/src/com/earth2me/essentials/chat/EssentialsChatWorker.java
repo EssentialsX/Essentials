@@ -38,7 +38,7 @@ public class EssentialsChatWorker
 				String prefix = Permissions.Security.getGroupPrefix(user.getWorld().getName(), group).replace('&', '§').replace("{WORLDNAME}", user.getWorld().getName());
 				String suffix = Permissions.Security.getGroupSuffix(user.getWorld().getName(), group).replace('&', '§').replace("{WORLDNAME}", user.getWorld().getName());
 				
-				user.setDisplayName(prefix + user.getNick() + suffix + (suffix.substring(suffix.length() -2).equals("§") ? "" : "§f"));
+				user.setDisplayName(prefix + user.getNick() + suffix + (suffix.length() > 1 && suffix.substring(suffix.length() -2).equals("§") ? "" : "§f"));
 			}
 			catch (Throwable ex)
 			{
