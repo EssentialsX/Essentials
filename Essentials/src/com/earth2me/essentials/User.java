@@ -590,14 +590,14 @@ public class User extends PlayerExtension implements Comparable<User>
 	{
 		cancelTeleport();
 		lastLocation = getLocation();
-		getBase().teleportTo(getSafeDestination(loc));
+		getBase().teleport(getSafeDestination(loc));
 	}
 
 	public void teleportToNow(Entity entity)
 	{
 		cancelTeleport();
 		lastLocation = getLocation();
-		getBase().teleportTo(entity);
+		getBase().teleport(entity);
 	}
 
 	public void teleportBack(final String chargeFor)
