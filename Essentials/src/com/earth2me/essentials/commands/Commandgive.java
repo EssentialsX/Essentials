@@ -34,15 +34,18 @@ public class Commandgive extends EssentialsCommand
 			sender.sendMessage(ChatColor.RED + "You are not allowed to spawn that item");
 			return;
 		}
-		if (itemArgs.length > 1)
+		if (itemArgs.length > 1) {
 			stack.setDurability(Short.parseShort(itemArgs[1]));
-		if (args.length > 2)
+		}
+		if (args.length > 2 && Integer.parseInt(args[2]) > 0) {
 			stack.setAmount(Integer.parseInt(args[2]));
+		}
 
 		User giveTo = getPlayer(server, args, 0);
 		String itemName = stack.getType().name().toLowerCase().replace('_', ' ');
-		if (sender instanceof Player)
+		if (sender instanceof Player) {
 			User.get(sender).charge(this);
+		}
 		sender.sendMessage(ChatColor.BLUE + "Giving " + stack.getAmount() + " of " + itemName + " to " + giveTo.getDisplayName() + ".");
 		giveTo.getInventory().addItem(stack);
 	}

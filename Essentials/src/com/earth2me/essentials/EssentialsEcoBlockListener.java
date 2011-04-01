@@ -78,7 +78,10 @@ public class EssentialsEcoBlockListener extends BlockListener
 			{
 				event.setLine(0, "§1[Buy]");
 				event.setLine(1, "" + Math.abs(Integer.parseInt(event.getLine(1))));
-				ItemDb.get(event.getLine(2));
+				ItemStack is = ItemDb.get(event.getLine(2));
+				if (is.getTypeId() == 0 || Math.abs(Integer.parseInt(event.getLine(1))) == 0) {
+					throw new Exception("Don't sell air.");
+				}
 				event.setLine(3, "$" + Integer.parseInt(event.getLine(3).replaceAll("[^0-9]", "")));
 			}
 			catch (Throwable ex)
@@ -98,7 +101,10 @@ public class EssentialsEcoBlockListener extends BlockListener
 			{
 				event.setLine(0, "§1[Sell]");
 				event.setLine(1, "" + Math.abs(Integer.parseInt(event.getLine(1))));
-				ItemDb.get(event.getLine(2));
+				ItemStack is = ItemDb.get(event.getLine(2));
+				if (is.getTypeId() == 0 || Math.abs(Integer.parseInt(event.getLine(1))) == 0) {
+					throw new Exception("Don't buy air.");
+				}
 				event.setLine(3, "$" + Integer.parseInt(event.getLine(3).replaceAll("[^0-9]", "")));
 			}
 			catch (Throwable ex)

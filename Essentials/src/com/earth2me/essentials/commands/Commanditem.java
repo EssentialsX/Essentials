@@ -31,11 +31,13 @@ public class Commanditem extends EssentialsCommand
 			user.sendMessage(ChatColor.RED + "You are not allowed to spawn that item");
 			return;
 		}
-		if (itemArgs.length > 1)
+		if (itemArgs.length > 1) {
 			stack.setDurability(Short.parseShort(itemArgs[1]));
+		}
 		
-		if (args.length > 1)
+		if (args.length > 1 && Integer.parseInt(args[1]) > 0) {
 			stack.setAmount(Integer.parseInt(args[1]));
+		}
 
 		String itemName = stack.getType().name().toLowerCase().replace('_', ' ');
 		user.charge(this);
