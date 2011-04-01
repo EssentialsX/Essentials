@@ -468,6 +468,12 @@ delayeron,94,0
 delayon,94,0
 dioderon,94,0
 diodeon,94,0
+lockedchest,95,0
+lockchest,95,0
+jokechest,95,0
+aprilfoolschest,95,0
+aprilchest,95,0
+lootchest,95,0
 ironshovel,256,0
 ironspade,256,0
 ishovel,256,0
@@ -484,6 +490,8 @@ apple,260,0
 bow,261,0
 arrow,262,0
 coal,263,0
+charcoal,263,1
+ccoal,263,1
 diamond,264,0
 ironingot,265,0
 ironbar,265,0
@@ -925,6 +933,7 @@ repeat,356,0
 delayer,356,0
 delay,356,0
 diode,356,0
+cookie,357,0
 goldrecord,2256,0
 golddisk,2256,0
 gorecord,2256,0
