@@ -1,16 +1,20 @@
 package com.earth2me.essentials;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.ChatColor;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import java.io.File;
 import java.util.ArrayList;
 import org.bukkit.entity.CreatureType;
+import org.bukkit.inventory.ItemStack;
 
 
 public class Settings implements IConf
 {
 	private EssentialsConf config;
+	private final static Logger logger = Logger.getLogger("Minecraft");
 
 	public Settings(File dataFolder)
 	{
@@ -197,39 +201,94 @@ public class Settings implements IConf
 		return epSettings;
 	}
 
-	public ArrayList getEpAlertOnPlacement()
+	public ArrayList<Integer> getEpAlertOnPlacement()
 	{
-		ArrayList epAlertPlace = new ArrayList();
-		epAlertPlace.addAll(Arrays.asList(config.getString("protect.alert.on-placement", "").split(",")));
+		ArrayList<Integer> epAlertPlace = new ArrayList<Integer>();
+		for (String itemName : config.getString("protect.alert.on-placement", "").split(",")) {
+			if (itemName.isEmpty()) {
+				continue;
+			}
+			ItemStack is;
+			try {
+				is = ItemDb.get(itemName);
+				epAlertPlace.add(is.getTypeId());
+			} catch (Exception ex) {
+				logger.log(Level.SEVERE, "Unknown item " + itemName + " in alert on placement list.");
+			}
+		}
 		return epAlertPlace;
 	}
 
-	public ArrayList getEpAlertOnUse()
+	public ArrayList<Integer> getEpAlertOnUse()
 	{
-		ArrayList epAlertUse = new ArrayList();
-		epAlertUse.addAll(Arrays.asList(config.getString("protect.alert.on-use", "").split(",")));
+		ArrayList<Integer> epAlertUse = new ArrayList<Integer>();
+		for (String itemName : config.getString("protect.alert.on-use", "").split(",")) {
+			if (itemName.isEmpty()) {
+				continue;
+			}
+			ItemStack is;
+			try {
+				is = ItemDb.get(itemName);
+				epAlertUse.add(is.getTypeId());
+			} catch (Exception ex) {
+				logger.log(Level.SEVERE, "Unknown item " + itemName + " in alert on use list.");
+			}
+		}
 		return epAlertUse;
 	}
 
-	public ArrayList getEpAlertOnBreak()
+	public ArrayList<Integer> getEpAlertOnBreak()
 	{
-		ArrayList epAlertPlace = new ArrayList();
-		epAlertPlace.addAll(Arrays.asList(config.getString("protect.alert.on-break", "").split(",")));
+		ArrayList<Integer> epAlertPlace = new ArrayList<Integer>();
+		for (String itemName : config.getString("protect.alert.on-break", "").split(",")) {
+			if (itemName.isEmpty()) {
+				continue;
+			}
+			ItemStack is;
+			try {
+				is = ItemDb.get(itemName);
+				epAlertPlace.add(is.getTypeId());
+			} catch (Exception ex) {
+				logger.log(Level.SEVERE, "Unknown item " + itemName + " in alert on break list.");
+			}
+		}
 		return epAlertPlace;
 	}
 
-	public ArrayList epBlackListPlacement()
+	public ArrayList<Integer> epBlackListPlacement()
 	{
-		ArrayList epBlack = new ArrayList();
-		epBlack.addAll(Arrays.asList(config.getString("protect.blacklist.placement", "").split(",")));
-		return epBlack;
+		ArrayList<Integer> epBlacklistPlacement = new ArrayList<Integer>();
+		for (String itemName : config.getString("protect.blacklist.placement", "").split(",")) {
+			if (itemName.isEmpty()) {
+				continue;
+			}
+			ItemStack is;
+			try {
+				is = ItemDb.get(itemName);
+				epBlacklistPlacement.add(is.getTypeId());
+			} catch (Exception ex) {
+				logger.log(Level.SEVERE, "Unknown item " + itemName + " in placement blacklist.");
+			}
+		}
+		return epBlacklistPlacement;
 	}
 
-	public ArrayList epBlackListUsage()
+	public ArrayList<Integer> epBlackListUsage()
 	{
-		ArrayList epBlack = new ArrayList();
-		epBlack.addAll(Arrays.asList(config.getString("protect.blacklist.usage", "").split(",")));
-		return epBlack;
+		ArrayList<Integer> epBlackListUsage = new ArrayList<Integer>();
+		for (String itemName : config.getString("protect.blacklist.usage", "").split(",")) {
+			if (itemName.isEmpty()) {
+				continue;
+			}
+			ItemStack is;
+			try {
+				is = ItemDb.get(itemName);
+				epBlackListUsage.add(is.getTypeId());
+			} catch (Exception ex) {
+				logger.log(Level.SEVERE, "Unknown item " + itemName + " in usage blacklist.");
+			}
+		}
+		return epBlackListUsage;
 	}
 
 	public HashMap<String, Boolean> getEpGuardSettings()
@@ -332,17 +391,39 @@ public class Settings implements IConf
 		config.load();
 	}
 
-	public ArrayList itemSpawnBlacklist()
+	public ArrayList<Integer> itemSpawnBlacklist()
 	{
-		ArrayList epItemSpwn = new ArrayList();
-		epItemSpwn.addAll(Arrays.asList(config.getString("item-spawn-blacklist", "").split(",")));
+		ArrayList<Integer> epItemSpwn = new ArrayList<Integer>();
+		for (String itemName : config.getString("item-spawn-blacklist", "").split(",")) {
+			if (itemName.isEmpty()) {
+				continue;
+			}
+			ItemStack is;
+			try {
+				is = ItemDb.get(itemName);
+				epItemSpwn.add(is.getTypeId());
+			} catch (Exception ex) {
+				logger.log(Level.SEVERE, "Unknown item " + itemName + " in item spawn blacklist.");
+			}
+		}
 		return epItemSpwn;
 	}
 
-	public ArrayList epBlockBreakingBlacklist()
+	public ArrayList<Integer> epBlockBreakingBlacklist()
 	{
-		ArrayList epBreakList = new ArrayList();
-		epBreakList.addAll(Arrays.asList(config.getString("protect.blacklist.break", "").split(",")));
+		ArrayList<Integer> epBreakList = new ArrayList<Integer>();
+		for (String itemName : config.getString("protect.blacklist.break", "").split(",")) {
+			if (itemName.isEmpty()) {
+				continue;
+			}
+			ItemStack is;
+			try {
+				is = ItemDb.get(itemName);
+				epBreakList.add(is.getTypeId());
+			} catch (Exception ex) {
+				logger.log(Level.SEVERE, "Unknown item " + itemName + " in block breaking blacklist.");
+			}
+		}
 		return epBreakList;
 	}
 }

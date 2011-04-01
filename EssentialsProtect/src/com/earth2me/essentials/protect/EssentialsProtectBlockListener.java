@@ -56,7 +56,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 			return;
 		}
 
-		if (!EssentialsProtect.onPlaceAlert.isEmpty() && EssentialsProtect.onPlaceAlert.contains(String.valueOf(item.getTypeId())))
+		if (EssentialsProtect.checkProtectionItems(EssentialsProtect.onPlaceAlert, id))
 		{
 			parent.alert(user, item.getType().toString(), "placed: ");
 		}
@@ -192,13 +192,13 @@ public class EssentialsProtectBlockListener extends BlockListener
 			return;
 		}
 
-		if(EssentialsProtect.breakBlackList.contains(String.valueOf(block.getTypeId())) && !user.isAuthorized("essentials.protect.exemptbreak"))
+		if (EssentialsProtect.checkProtectionItems(EssentialsProtect.breakBlackList, block.getTypeId()) && !user.isAuthorized("essentials.protect.exemptbreak"))
 		{
 			event.setCancelled(true);
 			return;
 		}
 
-		if (!EssentialsProtect.onBreakAlert.isEmpty() && EssentialsProtect.onBreakAlert.contains(String.valueOf(block.getTypeId())))
+		if (EssentialsProtect.checkProtectionItems(EssentialsProtect.onBreakAlert, block.getTypeId()))
 		{
 			parent.alert(user, block.getType().toString(), "broke: ");
 		}

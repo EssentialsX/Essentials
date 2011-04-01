@@ -26,12 +26,12 @@ public class EssentialsProtect extends JavaPlugin
 	public static HashMap<String, String> dataSettings = null;
 	public static HashMap<String, Boolean> guardSettings = null;
 	public static HashMap<String, Boolean> playerSettings = null;
-	public static ArrayList usageList = null;
-	public static ArrayList blackListPlace = null;
-	public static ArrayList breakBlackList = null;
-	public static ArrayList onPlaceAlert = null;
-	public static ArrayList onUseAlert = null;
-	public static ArrayList onBreakAlert = null;
+	public static ArrayList<Integer> usageList = null;
+	public static ArrayList<Integer> blackListPlace = null;
+	public static ArrayList<Integer> breakBlackList = null;
+	public static ArrayList<Integer> onPlaceAlert = null;
+	public static ArrayList<Integer> onUseAlert = null;
+	public static ArrayList<Integer> onBreakAlert = null;
 
 
 	public EssentialsProtect()
@@ -65,9 +65,9 @@ public class EssentialsProtect extends JavaPlugin
 		logger.info("Loaded " + this.getDescription().getName() + " build " + this.getDescription().getVersion() + " maintained by " + AUTHORS);
 	}
 
-	public static boolean checkProtectionItems(ArrayList itemList, int id)
+	public static boolean checkProtectionItems(ArrayList<Integer> itemList, int id)
 	{
-		return !itemList.isEmpty() && itemList.contains(String.valueOf(id));
+		return !itemList.isEmpty() && itemList.contains(id);
 	}
 
 	@Override
