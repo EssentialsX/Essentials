@@ -692,7 +692,6 @@ public class User extends PlayerExtension implements Comparable<User>
 
 	public Boolean canSpawnItem(int itemId)
 	{
-		if(Essentials.getSettings().itemSpawnBlacklist().contains(itemId))return false;
-		return true;
+		return !Essentials.getSettings().itemSpawnBlacklist().contains(itemId);
 	}
 }
