@@ -117,6 +117,26 @@ public class EssentialsBlockListener extends BlockListener
 					event.setLine(0, "§4[Balance]");
 				return;
 			}
+                        if (event.getLine(0).equalsIgnoreCase("[Warp]"))
+			{
+				if (user.isAuthorized("essentials.signs.warp.create"))
+                                        if (event.getLine(1).isEmpty())
+                                        {
+                                            event.setLine(0, "§4[Warp]");
+                                            event.setLine(1, "§dWarp name here!");
+                                            return;
+                                        } else
+                                        {
+                                           event.setLine(0, "§1[Warp]");
+                                           return;
+                                        }
+                                        if (event.getLine(2).equalsIgnoreCase("Free"))
+                                            event.setLine(2, "§2Free");
+
+				else
+					event.setLine(0, "§4[Warp]");
+				return;
+			}
 		}
 		catch (Throwable ex)
 		{
