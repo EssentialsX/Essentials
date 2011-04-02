@@ -205,6 +205,7 @@ public class Settings implements IConf
 	{
 		ArrayList<Integer> epAlertPlace = new ArrayList<Integer>();
 		for (String itemName : config.getString("protect.alert.on-placement", "").split(",")) {
+			itemName = itemName.trim();
 			if (itemName.isEmpty()) {
 				continue;
 			}
@@ -223,6 +224,7 @@ public class Settings implements IConf
 	{
 		ArrayList<Integer> epAlertUse = new ArrayList<Integer>();
 		for (String itemName : config.getString("protect.alert.on-use", "").split(",")) {
+			itemName = itemName.trim();
 			if (itemName.isEmpty()) {
 				continue;
 			}
@@ -241,6 +243,7 @@ public class Settings implements IConf
 	{
 		ArrayList<Integer> epAlertPlace = new ArrayList<Integer>();
 		for (String itemName : config.getString("protect.alert.on-break", "").split(",")) {
+			itemName = itemName.trim();
 			if (itemName.isEmpty()) {
 				continue;
 			}
@@ -259,6 +262,7 @@ public class Settings implements IConf
 	{
 		ArrayList<Integer> epBlacklistPlacement = new ArrayList<Integer>();
 		for (String itemName : config.getString("protect.blacklist.placement", "").split(",")) {
+			itemName = itemName.trim();
 			if (itemName.isEmpty()) {
 				continue;
 			}
@@ -277,6 +281,7 @@ public class Settings implements IConf
 	{
 		ArrayList<Integer> epBlackListUsage = new ArrayList<Integer>();
 		for (String itemName : config.getString("protect.blacklist.usage", "").split(",")) {
+			itemName = itemName.trim();
 			if (itemName.isEmpty()) {
 				continue;
 			}
@@ -395,6 +400,7 @@ public class Settings implements IConf
 	{
 		ArrayList<Integer> epItemSpwn = new ArrayList<Integer>();
 		for (String itemName : config.getString("item-spawn-blacklist", "").split(",")) {
+			itemName = itemName.trim();
 			if (itemName.isEmpty()) {
 				continue;
 			}
@@ -413,6 +419,7 @@ public class Settings implements IConf
 	{
 		ArrayList<Integer> epBreakList = new ArrayList<Integer>();
 		for (String itemName : config.getString("protect.blacklist.break", "").split(",")) {
+			itemName = itemName.trim();
 			if (itemName.isEmpty()) {
 				continue;
 			}
