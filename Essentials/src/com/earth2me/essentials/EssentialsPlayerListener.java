@@ -7,6 +7,7 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.craftbukkit.block.CraftSign;
+import org.bukkit.craftbukkit.inventory.CraftInventory;
 import org.bukkit.craftbukkit.inventory.CraftInventoryPlayer;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.*;
@@ -295,6 +296,31 @@ public class EssentialsPlayerListener extends PlayerListener
 			}
 			if (sign.getLine(0).equals("§1[Heal]") && user.isAuthorized("essentials.signs.heal.use"))
 			{
+				if (!sign.getLine(1).isEmpty()) {
+					String[] l1 = sign.getLine(1).split("[ :-]+");
+					boolean m1 = l1[0].matches("\\$[0-9]+");
+					int q1 = Integer.parseInt(m1 ? l1[0].substring(1) : l1[0]);
+					if (q1 < 1) {
+						throw new Exception("Quantities must be greater than 0.");
+					}
+					if (m1)
+					{
+						if (user.getMoney() < q1) {
+							throw new Exception("You do not have sufficient funds.");
+						}
+						user.takeMoney(q1);
+						user.sendMessage("$" + q1 + " taken from your bank account.");
+					}
+					else
+					{
+						ItemStack i = ItemDb.get(l1[1], q1);
+						if (!InventoryWorkaround.containsItem((CraftInventory)user.getInventory(), true, i)) {
+							throw new Exception("You do not have " + q1 + "x " + l1[1] + ".");
+						}
+						InventoryWorkaround.removeItem((CraftInventory)user.getInventory(), true, i);
+						user.updateInventory();
+					}
+				}
 				user.setHealth(20);
 				user.sendMessage("§7You have been healed.");
 				return;
@@ -309,6 +335,11 @@ public class EssentialsPlayerListener extends PlayerListener
 				}
 				for (String s : mail) user.sendMessage(s);
 				user.sendMessage("§cTo mark your mail as read, type §c/mail clear");
+				return;
+			}
+			if (sign.getLine(0).equals("§1[Balance]") && user.isAuthorized("essentials.signs.balance.use"))
+			{
+				user.sendMessage("§7Balance: $" + user.getMoney());
 				return;
 			}
 		}
