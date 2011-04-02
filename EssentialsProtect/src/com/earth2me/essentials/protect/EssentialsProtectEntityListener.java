@@ -1,6 +1,7 @@
 package com.earth2me.essentials.protect;
 
 import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.EssentialsBlockListener;
 import com.earth2me.essentials.User;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -8,7 +9,9 @@ import java.util.List;
 import net.minecraft.server.ChunkPosition;
 import net.minecraft.server.Packet60Explosion;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Creeper;
@@ -183,6 +186,33 @@ public class EssentialsProtectEntityListener extends EntityListener
 		{ //OH NOES TNT
 			if (EssentialsProtect.guardSettings.get("protect.prevent.tnt-explosion"))
 			{
+				event.setCancelled(true);
+				return;
+			}
+		}
+		// This code will prevent explosions near protected rails, signs or protected chests
+		// TODO: Use protect db instead of this code
+		for (Block block : event.blockList())
+		{
+			if ((block.getType() == Material.RAILS || block.getFace(BlockFace.UP).getType() == Material.RAILS) && EssentialsProtect.genSettings.get("protect.protect.rails"))
+			{
+				event.setCancelled(true);
+				return;
+			}
+			if ((	block.getType() == Material.WALL_SIGN || 
+				block.getFace(BlockFace.NORTH).getType() == Material.WALL_SIGN || 
+				block.getFace(BlockFace.EAST).getType() == Material.WALL_SIGN || 
+				block.getFace(BlockFace.SOUTH).getType() == Material.WALL_SIGN || 
+				block.getFace(BlockFace.WEST).getType() == Material.WALL_SIGN ||
+				block.getType() == Material.SIGN_POST ||
+				block.getFace(BlockFace.UP).getType() == Material.SIGN_POST) && 
+				EssentialsProtect.genSettings.get("protect.protect.signs"))
+			{
+				event.setCancelled(true);
+				return;
+			}
+			if (	EssentialsBlockListener.protectedBlocks.contains(block.getType()) && 
+				EssentialsBlockListener.isBlockProtected(block)) {
 				event.setCancelled(true);
 				return;
 			}

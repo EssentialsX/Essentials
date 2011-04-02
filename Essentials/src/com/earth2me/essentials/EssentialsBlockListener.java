@@ -180,7 +180,7 @@ public class EssentialsBlockListener extends BlockListener
 		return NOSIGN;
 	}
 
-	private Block[] getAdjacentBlocks(Block block)
+	private static Block[] getAdjacentBlocks(Block block)
 	{
 		return new Block[]
 				{
@@ -228,5 +228,38 @@ public class EssentialsBlockListener extends BlockListener
 			}
 		}
 		return protect;
+	}
+		
+	public static boolean isBlockProtected(Block block)
+	{
+		Block[] faces = getAdjacentBlocks(block);
+		for (Block b : faces)
+		{
+			if (b.getType() == Material.SIGN_POST || b.getType() == Material.WALL_SIGN)
+			{
+				Sign sign = new CraftSign(b);
+				if (sign.getLine(0).equalsIgnoreCase("§1[Protection]"))
+				{
+					return true;
+				}
+			}
+			if (protectedBlocks.contains(b.getType()))
+			{
+				Block[] faceChest = getAdjacentBlocks(b);
+
+				for (Block a : faceChest)
+				{
+					if (a.getType() == Material.SIGN_POST || a.getType() == Material.WALL_SIGN)
+					{
+						Sign sign = new CraftSign(a);
+						if (sign.getLine(0).equalsIgnoreCase("§1[Protection]"))
+						{
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 }

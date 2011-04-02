@@ -75,7 +75,8 @@ public class Essentials extends JavaPlugin
 			"Settings",
 			"OfflinePlayer",
 			"ItemDb",
-			"Mob"
+			"Mob",
+			"EssentialsBlockListener"
 		};
 
 		try
