@@ -135,8 +135,8 @@ public class EssentialsBlockListener extends BlockListener
 						return;
 					} else {
 						Essentials.getWarps().getWarp(event.getLine(1));
-						if (event.getLine(2).equalsIgnoreCase("Free")) {
-							event.setLine(2, "§2Free");
+						if (event.getLine(2).equalsIgnoreCase("Everyone")) {
+							event.setLine(2, "§2Everyone");
 						}
 						event.setLine(0, "§1[Warp]");						
 					}

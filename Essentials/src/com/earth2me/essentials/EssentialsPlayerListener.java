@@ -370,7 +370,7 @@ public class EssentialsPlayerListener extends PlayerListener
 					}
 				}
 				if (!sign.getLine(2).isEmpty()) {
-					if (sign.getLine(2).equals("§2Free")) {
+					if (sign.getLine(2).equals("§2Everyone")) {
 						user.teleportCooldown();
 						user.warpTo(sign.getLine(1));
 						return;
