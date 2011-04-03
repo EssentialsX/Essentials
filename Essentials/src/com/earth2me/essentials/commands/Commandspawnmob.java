@@ -9,6 +9,10 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.Mob.MobException;
 import com.earth2me.essentials.TargetBlock;
+import net.minecraft.server.EntitySheep;
+import org.bukkit.DyeColor;
+import org.bukkit.craftbukkit.entity.CraftSheep;
+import org.bukkit.craftbukkit.entity.CraftSlime;
 
 
 public class Commandspawnmob extends EssentialsCommand
@@ -102,11 +106,23 @@ public class Commandspawnmob extends EssentialsCommand
 		{
 			try
 			{
-				//((EntitySlime)spawned.getHandle()).a(Integer.parseInt(split1[1]));
+				((CraftSlime)spawned).setSize(Integer.parseInt(split1[1]));
 			}
 			catch (Exception e)
 			{
 				user.sendMessage("Malformed size.");
+				return;
+			}
+		}
+		if (split1.length == 2 && "Sheep".equals(mob.name))
+		{
+			try
+			{
+				((CraftSheep)spawned).setColor(DyeColor.valueOf(split1[1].toUpperCase()));
+			}
+			catch (Exception e)
+			{
+				user.sendMessage("Malformed color.");
 				return;
 			}
 		}
