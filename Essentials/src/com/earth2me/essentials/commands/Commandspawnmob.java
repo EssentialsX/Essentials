@@ -129,15 +129,15 @@ public class Commandspawnmob extends EssentialsCommand
 				return;
 			}
 		}
-		if (split1.length == 2 && "Wolf".equals(mob.name) && split1[1].equalsIgnoreCase("tamed"))
-		{	
-			EntityWolf wolf = ((CraftWolf)spawned).getHandle();
+		if (split1.length == 2 && "Wolf".equals(mob.name) && split1[1].equalsIgnoreCase("tamed")) 
+		{
+			EntityWolf wolf = ((CraftWolf) spawned).getHandle();
 			wolf.d(true);
-                        wolf.a((PathEntity) null);
-                        wolf.b(true);
-                        wolf.health = 20;
-                        wolf.a(user.getName());
-                        wolf.world.a(wolf, (byte) 7);
+			wolf.a((PathEntity) null);
+			wolf.b(true);
+			wolf.health = 20;
+			wolf.a(user.getName());
+			wolf.world.a(wolf, (byte) 7);
 		}
 		if (split1.length == 2 && "Wolf".equals(mob.name) && split1[1].equalsIgnoreCase("angry"))
 		{
