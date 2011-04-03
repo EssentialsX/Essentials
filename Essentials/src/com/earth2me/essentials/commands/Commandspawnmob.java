@@ -10,9 +10,12 @@ import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.Mob.MobException;
 import com.earth2me.essentials.TargetBlock;
 import net.minecraft.server.EntitySheep;
+import net.minecraft.server.EntityWolf;
+import net.minecraft.server.PathEntity;
 import org.bukkit.DyeColor;
 import org.bukkit.craftbukkit.entity.CraftSheep;
 import org.bukkit.craftbukkit.entity.CraftSlime;
+import org.bukkit.craftbukkit.entity.CraftWolf;
 
 
 public class Commandspawnmob extends EssentialsCommand
@@ -125,6 +128,20 @@ public class Commandspawnmob extends EssentialsCommand
 				user.sendMessage("Malformed color.");
 				return;
 			}
+		}
+		if (split1.length == 2 && "Wolf".equals(mob.name) && split1[1].equalsIgnoreCase("tamed"))
+		{	
+			EntityWolf wolf = ((CraftWolf)spawned).getHandle();
+			wolf.d(true);
+                        wolf.a((PathEntity) null);
+                        wolf.b(true);
+                        wolf.health = 20;
+                        wolf.a(user.getName());
+                        wolf.world.a(wolf, (byte) 7);
+		}
+		if (split1.length == 2 && "Wolf".equals(mob.name) && split1[1].equalsIgnoreCase("angry"))
+		{
+			((CraftWolf)spawned).setAngry(true);
 		}
 		if (args.length == 2)
 		{
