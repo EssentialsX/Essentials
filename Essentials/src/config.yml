@@ -289,8 +289,7 @@ protect:
     # 11: still lava
     # 46: TNT
     on-placement: 10,11,46
-    # 1: rock (just an example--doesn't actually do much)
-    on-use: 1
+    on-use: 
     # 46: TNT
     on-break: 46
 
@@ -373,7 +372,7 @@ protect:
 
     # Should people with build: false in permissions be allowed to build
     # Set true to disable building for those people
-    build: false
+    build: true
 
 
 
