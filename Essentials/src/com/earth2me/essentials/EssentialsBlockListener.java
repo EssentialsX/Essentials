@@ -121,6 +121,15 @@ public class EssentialsBlockListener extends BlockListener
 			{
 				event.setLine(0, "§4[Warp]");
 				if (user.isAuthorized("essentials.signs.warp.create")) {
+					if (!event.getLine(3).isEmpty())
+					{
+						String[] l1 = event.getLine(3).split("[ :-]+");
+						boolean m1 = l1[0].matches("\\$[0-9]+");
+						int q1 = Integer.parseInt(m1 ? l1[0].substring(1) : l1[0]);
+						if (q1 < 1) throw new Exception("Quantities must be greater than 0.");
+						if (!m1) ItemDb.get(l1[1]);
+						event.setLine(3, (m1 ? "$" + q1 : q1 + " " + l1[1]));
+					}
 					if (event.getLine(1).isEmpty()) {
 						event.setLine(1, "§dWarp name here!");
 						return;
