@@ -1,10 +1,13 @@
 package com.earth2me.essentials;
 
 import java.util.ArrayList;
+import java.util.List;
+import javax.media.jai.operator.MeanDescriptor;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.craftbukkit.block.CraftSign;
 import org.bukkit.event.block.*;
+import org.bukkit.inventory.ItemStack;
 
 
 public class EssentialsBlockListener extends BlockListener
@@ -161,6 +164,59 @@ public class EssentialsBlockListener extends BlockListener
 			{
 				event.setCancelled(true);
 				return;
+			}
+		}
+		if (Essentials.getSettings().isInfinitePlacingEnabled()) {
+			final User user = User.get(event.getPlayer());
+			if (user.isAuthorized("essentials.infinite.placing")) {
+				final ItemStack is = event.getItemInHand();
+				if (is.getType() == Material.AIR) {
+					is.setType(event.getBlockPlaced().getType());
+				}
+				switch(is.getType()) {
+					case WOODEN_DOOR:
+						is.setType(Material.WOOD_DOOR);
+						break;
+					case IRON_DOOR_BLOCK:
+						is.setType(Material.IRON_DOOR);
+						break;
+					case SIGN_POST:
+					case WALL_SIGN:
+						is.setType(Material.SIGN);
+						break;
+					case CROPS:
+						is.setType(Material.SEEDS);
+						break;
+					case CAKE_BLOCK:
+						is.setType(Material.CAKE);
+						break;
+					case BED_BLOCK:
+						is.setType(Material.BED);
+						break;
+					case REDSTONE_WIRE:
+						is.setType(Material.REDSTONE);
+						break;
+					case REDSTONE_TORCH_OFF:
+						is.setType(Material.REDSTONE_TORCH_ON);
+						break;
+					case DIODE_BLOCK_OFF:
+					case DIODE_BLOCK_ON:
+						is.setType(Material.DIODE);
+						break;
+				}
+				List<Integer> whitelist = Essentials.getSettings().getInfiniteWhitelist();
+				if (whitelist.isEmpty() || whitelist.contains(is.getTypeId()) ||
+					user.isAuthorized("essentials.infinite.whitelist.override")) {
+					is.setAmount(1);
+					Essentials.getStatic().getScheduler().scheduleSyncDelayedTask(Essentials.getStatic(), 
+						new Runnable() {
+
+						public void run() {
+							user.getInventory().addItem(is);
+							user.updateInventory();
+						}
+					});
+				}
 			}
 		}
 	}

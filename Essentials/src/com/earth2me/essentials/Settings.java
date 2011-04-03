@@ -433,4 +433,35 @@ public class Settings implements IConf
 		}
 		return epBreakList;
 	}
+
+	boolean isInfinitePlacingEnabled() {
+		return config.getBoolean("infinite.placing",false);
+	}
+
+	boolean isInfiniteEggThrowEnabled() {
+		return config.getBoolean("infinite.eggthrow",false);
+	}
+
+	boolean isInfiniteBucketsEnabled() {
+		return config.getBoolean("infinite.buckets",false);
+	}
+	
+	public ArrayList<Integer> getInfiniteWhitelist()
+	{
+		ArrayList<Integer> infiniteWhitelist = new ArrayList<Integer>();
+		for (String itemName : config.getString("infinite.whitelist", "").split(",")) {
+			itemName = itemName.trim();
+			if (itemName.isEmpty()) {
+				continue;
+			}
+			ItemStack is;
+			try {
+				is = ItemDb.get(itemName);
+				infiniteWhitelist.add(is.getTypeId());
+			} catch (Exception ex) {
+				logger.log(Level.SEVERE, "Unknown item " + itemName + " in infinite whitelist.");
+			}
+		}
+		return infiniteWhitelist;
+	}
 }

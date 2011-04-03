@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.minecraft.server.InventoryPlayer;
 import org.bukkit.*;
@@ -392,6 +393,38 @@ public class EssentialsPlayerListener extends PlayerListener
 		catch (Throwable ex)
 		{
 			user.sendMessage("§cError: " + ex.getMessage());
+		}
+	}
+
+	@Override
+	public void onPlayerEggThrow(PlayerEggThrowEvent event) {
+		if (Essentials.getSettings().isInfiniteEggThrowEnabled()) {
+			User user = User.get(event.getPlayer());
+			if (user.isAuthorized("essentials.infinite.eggthrow")) {
+				user.getInventory().addItem(new ItemStack(Material.EGG, 1));
+				user.updateInventory();
+			}
+		}
+	}
+
+	@Override
+	public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event) {
+		if (Essentials.getSettings().isInfiniteBucketsEnabled()) {
+			final User user = User.get(event.getPlayer());
+			if (user.isAuthorized("essentials.infinite.buckets")) {
+				List<Integer> whitelist = Essentials.getSettings().getInfiniteWhitelist();
+				if (whitelist.isEmpty() || whitelist.contains(event.getBucket().getId()) ||
+					user.isAuthorized("essentials.infinite.whitelist.override")) {
+					event.getItemStack().setType(event.getBucket());
+					Essentials.getStatic().getScheduler().scheduleSyncDelayedTask(Essentials.getStatic(), 
+						new Runnable() {
+
+						public void run() {
+							user.updateInventory();
+						}
+					});
+				}
+			}
 		}
 	}
 }
