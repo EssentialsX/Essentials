@@ -163,7 +163,7 @@ infinite:
   eggthrow: false
   # permission essentials.infinite.buckets
   buckets: false
-  # Use this whitelist the restrict the use of infinite placing and buckets
+  # Use this whitelist to restrict the use of infinite placing and buckets
   # Permission essentials.infinite.whitelist.override let players ignore this list
   whitelist:
   # example: (You can use ids or names from items.csv)
