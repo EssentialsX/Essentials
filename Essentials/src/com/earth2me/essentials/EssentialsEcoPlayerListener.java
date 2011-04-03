@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import java.util.Map;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.craftbukkit.block.CraftSign;
@@ -33,7 +34,10 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 				int cost = Integer.parseInt(sign.getLine(3).substring(1));
 				if (user.getMoney() < cost) throw new Exception("You do not have sufficient funds.");
 				user.takeMoney(cost);
-				user.getInventory().addItem(item);
+				Map<Integer, ItemStack> leftOver = user.getInventory().addItem(item);
+				for (ItemStack itemStack : leftOver.values()) {
+					user.getWorld().dropItem(user.getLocation(), itemStack);
+				}
 				user.updateInventory();
 			}
 			catch (Throwable ex)
