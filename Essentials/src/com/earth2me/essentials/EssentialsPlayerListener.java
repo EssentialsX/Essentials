@@ -339,30 +339,29 @@ public class EssentialsPlayerListener extends PlayerListener
 			}
 			if (sign.getLine(0).equals("§1[Balance]") && user.isAuthorized("essentials.signs.balance.use"))
 			{
-                                user.sendMessage("§7Balance: $" + user.getMoney());
+				user.sendMessage("§7Balance: $" + user.getMoney());
 				return;
 			}
                         if (sign.getLine(0).equals("§1[Warp]"))
 			{
-                            if (!sign.getLine(2).isEmpty())
-                            {
-                                if (sign.getLine(2).equals("§2Free"))
-                                {
-                                   user.teleportCooldown();
-                                   user.warpTo(sign.getLine(1));
-                                   return;
-                                }
-                                if (user.getGroup() == sign.getLine(2))
-                                {
-                                    user.teleportCooldown();
-                                    user.warpTo(sign.getLine(1));
-                                    return;
-                                }
-                            }
-                            if (user.isAuthorized("essentials.signs.warp.use"))
-                                        user.teleportCooldown();
-                                        user.warpTo(sign.getLine(1));
-                                        return;
+				if (!sign.getLine(2).isEmpty()) {
+					if (sign.getLine(2).equals("§2Free")) {
+						user.teleportCooldown();
+						user.warpTo(sign.getLine(1));
+						return;
+					}
+					if (user.getGroup().equalsIgnoreCase(sign.getLine(2))) {
+						user.teleportCooldown();
+						user.warpTo(sign.getLine(1));
+						return;
+					}
+				}
+				if (user.isAuthorized("essentials.signs.warp.use") && 
+					user.isAuthorized("essentials.warp." + sign.getLine(1))) {
+					user.teleportCooldown();
+					user.warpTo(sign.getLine(1));
+				}
+				return;
                         }
 		}
 		catch (Throwable ex)
