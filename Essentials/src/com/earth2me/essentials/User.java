@@ -708,13 +708,15 @@ public class User extends PlayerExtension implements Comparable<User>
 	}
 
 	@SuppressWarnings("unchecked")
-	public void setUnlimited(ItemStack stack, boolean b) {
+	public void setUnlimited(ItemStack stack, boolean state) {
 		List<Integer> items = new ArrayList<Integer>();
 		if (data.containsKey("unlimited")) {
 			items = (List<Integer>)data.get("unlimited");
 		}
-		items.remove(stack.getTypeId());
-		if (b) {
+		if (items.contains(stack.getTypeId())) {
+			items.remove(Integer.valueOf(stack.getTypeId()));
+		}
+		if (state) {
 			items.add(stack.getTypeId());
 		}
 		data.put("unlimited", items);
