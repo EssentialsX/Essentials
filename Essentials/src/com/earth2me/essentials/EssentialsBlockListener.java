@@ -2,7 +2,6 @@ package com.earth2me.essentials;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.media.jai.operator.MeanDescriptor;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.craftbukkit.block.CraftSign;

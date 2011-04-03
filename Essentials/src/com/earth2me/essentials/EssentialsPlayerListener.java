@@ -1,7 +1,6 @@
 package com.earth2me.essentials;
 
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.minecraft.server.InventoryPlayer;
 import org.bukkit.*;
