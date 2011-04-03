@@ -234,6 +234,9 @@ commands:
     description: Unbans the specified IP address.
     usage: /<command> [address]
     aliases: pardonip
+  unlimited:
+    description: Allows the unlimited placing of items.
+    usage: /<command> [item] <player>
   warp:
     description: List all warps or warp to the specified location.
     usage: /<command> <warp>
