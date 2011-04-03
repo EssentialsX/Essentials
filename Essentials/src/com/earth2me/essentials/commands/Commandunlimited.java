@@ -1,10 +1,12 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.InventoryWorkaround;
 import com.earth2me.essentials.ItemDb;
 import com.earth2me.essentials.User;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
+import org.bukkit.craftbukkit.inventory.CraftInventory;
 import org.bukkit.inventory.ItemStack;
 
 public class Commandunlimited extends EssentialsCommand
@@ -22,7 +24,7 @@ public class Commandunlimited extends EssentialsCommand
 			user.sendMessage("§cUsage: /" + commandLabel + " [item] <player>");
 			return;
 		}
-		ItemStack stack = ItemDb.get(args[0]);
+		ItemStack stack = ItemDb.get(args[0], 1);
 
 		if(!user.isAuthorized("essentials.infinite.whitelist.override") && 
 			Essentials.getSettings().getUnlimitedWhitelist().contains(stack.getTypeId()))
@@ -51,7 +53,9 @@ public class Commandunlimited extends EssentialsCommand
 			user.sendMessage("§7Giving unlimited amount of " + itemName + " to " + user.getDisplayName() + ".");
 		}
 		target.sendMessage("§7Giving unlimited amount of " + itemName + " to " + user.getDisplayName() + ".");
-		target.getInventory().addItem(stack);
+		if (!InventoryWorkaround.containsItem((CraftInventory)target.getInventory(), true, stack)) {
+			target.getInventory().addItem(stack);
+		}
 		target.setUnlimited(stack, true);
 	}
 }
