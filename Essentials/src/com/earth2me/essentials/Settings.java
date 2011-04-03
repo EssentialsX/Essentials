@@ -434,22 +434,22 @@ public class Settings implements IConf
 		return epBreakList;
 	}
 
-	boolean isInfinitePlacingEnabled() {
-		return config.getBoolean("infinite.placing",false);
+	boolean isUnlimitedPlacingEnabled() {
+		return config.getBoolean("unlimited.placing",false);
 	}
 
-	boolean isInfiniteEggThrowEnabled() {
-		return config.getBoolean("infinite.eggthrow",false);
+	boolean isUnlimitedEggThrowEnabled() {
+		return config.getBoolean("unlimited.eggthrow",false);
 	}
 
-	boolean isInfiniteBucketsEnabled() {
-		return config.getBoolean("infinite.buckets",false);
+	boolean isUnlimitedBucketsEnabled() {
+		return config.getBoolean("unlimited.buckets",false);
 	}
 	
-	public ArrayList<Integer> getInfiniteWhitelist()
+	public ArrayList<Integer> getUnlimitedWhitelist()
 	{
-		ArrayList<Integer> infiniteWhitelist = new ArrayList<Integer>();
-		for (String itemName : config.getString("infinite.whitelist", "").split(",")) {
+		ArrayList<Integer> unlimitedWhitelist = new ArrayList<Integer>();
+		for (String itemName : config.getString("unlimited.whitelist", "").split(",")) {
 			itemName = itemName.trim();
 			if (itemName.isEmpty()) {
 				continue;
@@ -457,11 +457,11 @@ public class Settings implements IConf
 			ItemStack is;
 			try {
 				is = ItemDb.get(itemName);
-				infiniteWhitelist.add(is.getTypeId());
+				unlimitedWhitelist.add(is.getTypeId());
 			} catch (Exception ex) {
-				logger.log(Level.SEVERE, "Unknown item " + itemName + " in infinite whitelist.");
+				logger.log(Level.SEVERE, "Unknown item " + itemName + " in unlimited whitelist.");
 			}
 		}
-		return infiniteWhitelist;
+		return unlimitedWhitelist;
 	}
 }

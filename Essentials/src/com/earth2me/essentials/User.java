@@ -8,6 +8,7 @@ import com.earth2me.essentials.commands.IEssentialsCommand;
 import net.minecraft.server.EntityHuman;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.entity.*;
+import org.bukkit.inventory.ItemStack;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
 import org.yaml.snakeyaml.reader.UnicodeReader;
@@ -695,5 +696,28 @@ public class User extends PlayerExtension implements Comparable<User>
 	public Boolean canSpawnItem(int itemId)
 	{
 		return !Essentials.getSettings().itemSpawnBlacklist().contains(itemId);
+	}
+
+	public boolean hasUnlimited(ItemStack stack) {
+		if (!data.containsKey("unlimited")) {
+			return false;
+		}
+		@SuppressWarnings("unchecked")
+		List<Integer> items = (List<Integer>)data.get("unlimited");
+		return items.contains(stack.getTypeId());
+	}
+
+	@SuppressWarnings("unchecked")
+	public void setUnlimited(ItemStack stack, boolean b) {
+		List<Integer> items = new ArrayList<Integer>();
+		if (data.containsKey("unlimited")) {
+			items = (List<Integer>)data.get("unlimited");
+		}
+		items.remove(stack.getTypeId());
+		if (b) {
+			items.add(stack.getTypeId());
+		}
+		data.put("unlimited", items);
+		flush();
 	}
 }
