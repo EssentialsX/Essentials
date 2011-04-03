@@ -357,7 +357,7 @@ public class EssentialsPlayerListener extends PlayerListener
 					}
 				}
 				if (user.isAuthorized("essentials.signs.warp.use") && 
-					user.isAuthorized("essentials.warp." + sign.getLine(1))) {
+					(!Essentials.getSettings().getPerWarpPermission() || user.isAuthorized("essentials.warp." + sign.getLine(1)))) {
 					user.teleportCooldown();
 					user.warpTo(sign.getLine(1));
 				}
