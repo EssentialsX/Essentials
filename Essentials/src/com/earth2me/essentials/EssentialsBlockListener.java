@@ -155,6 +155,7 @@ public class EssentialsBlockListener extends BlockListener
 	@Override
 	public void onBlockPlace(BlockPlaceEvent event)
 	{
+		if (event.isCancelled()) return;
 		Block signBlock = event.getBlockAgainst();
 		if (signBlock.getType() == Material.WALL_SIGN || signBlock.getType() == Material.SIGN_POST)
 		{
