@@ -450,7 +450,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			return;
 		}
 		if (command.matches(".*\\{player\\}.*")) {
-			user.sendMessage("Click a player to use this command");
+			//user.sendMessage("Click a player to use this command");
 			return;
 		}
 		user.getServer().dispatchCommand(user, command);
