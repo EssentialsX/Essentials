@@ -239,7 +239,7 @@ commands:
     aliases: pardonip
   unlimited:
     description: Allows the unlimited placing of items.
-    usage: /<command> [item] <player>
+    usage: /<command> [list|item] <player>
   warp:
     description: List all warps or warp to the specified location.
     usage: /<command> <warp>

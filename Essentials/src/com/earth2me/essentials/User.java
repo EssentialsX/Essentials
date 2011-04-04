@@ -698,21 +698,21 @@ public class User extends PlayerExtension implements Comparable<User>
 		return !Essentials.getSettings().itemSpawnBlacklist().contains(itemId);
 	}
 
-	public boolean hasUnlimited(ItemStack stack) {
+	@SuppressWarnings("unchecked")
+	public List<Integer> getUnlimited() {
 		if (!data.containsKey("unlimited")) {
-			return false;
+			return new ArrayList<Integer>();
 		}
-		@SuppressWarnings("unchecked")
-		List<Integer> items = (List<Integer>)data.get("unlimited");
-		return items.contains(stack.getTypeId());
+		return (List<Integer>)data.get("unlimited");
+	}
+	
+	public boolean hasUnlimited(ItemStack stack) {
+		return getUnlimited().contains(stack.getTypeId());
 	}
 
 	@SuppressWarnings("unchecked")
 	public void setUnlimited(ItemStack stack, boolean state) {
-		List<Integer> items = new ArrayList<Integer>();
-		if (data.containsKey("unlimited")) {
-			items = (List<Integer>)data.get("unlimited");
-		}
+		List<Integer> items = getUnlimited();
 		if (items.contains(stack.getTypeId())) {
 			items.remove(Integer.valueOf(stack.getTypeId()));
 		}

@@ -22,16 +22,33 @@ public class Commandunlimited extends EssentialsCommand
 	{
 		if (args.length < 1)
 		{
-			user.sendMessage("§cUsage: /" + commandLabel + " [item] <player>");
+			user.sendMessage("§cUsage: /" + commandLabel + " [list|item] <player>");
 			return;
 		}
-		ItemStack stack = ItemDb.get(args[0], 1);
-
+		
 		User target = user;
 		
 		if (args.length > 1 && user.isAuthorized("essentials.unlimited.others")) {
 			target = getPlayer(server, args, 1);
-		}		
+		}
+		
+		if (args[0].equalsIgnoreCase("list")) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("Unlimited items: ");
+			boolean first = true;
+			for (Integer integer : target.getUnlimited()) {
+				if (!first) {
+					sb.append(", ");
+					first = true;
+				}
+				String matname = Material.getMaterial(integer).toString().toLowerCase().replace("_", "-");
+				sb.append(matname);
+			}
+			user.sendMessage(sb.toString());
+			return;
+		}
+		
+		ItemStack stack = ItemDb.get(args[0], 1);
 		
 		String itemname = stack.getType().toString().toLowerCase().replace("_", "-");
 		if (!user.isAuthorized("essentials.unlimited.item-add") && 
