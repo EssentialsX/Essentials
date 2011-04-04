@@ -51,7 +51,7 @@ public class Commandunlimited extends EssentialsCommand
 		ItemStack stack = ItemDb.get(args[0], 1);
 		
 		String itemname = stack.getType().toString().toLowerCase().replace("_", "");
-		if (!user.isAuthorized("essentials.unlimited.item-add") && 
+		if (!user.isAuthorized("essentials.unlimited.item-all") && 
 			!user.isAuthorized("essentials.unlimited.item-"+itemname) &&
 			!user.isAuthorized("essentials.unlimited.item-"+stack.getTypeId()) &&
 			!((stack.getType() == Material.WATER_BUCKET || stack.getType() == Material.LAVA_BUCKET) &&
