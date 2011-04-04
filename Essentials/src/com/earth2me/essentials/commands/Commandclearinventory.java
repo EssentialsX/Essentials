@@ -33,6 +33,7 @@ public class Commandclearinventory extends EssentialsCommand
 						user.sendMessage("§7Inventory of §c" + p.getDisplayName() + "§7 cleared.");
 						user.charge(this);
 					}
+					return;
 				}
 				throw new Exception("Player not found");
 			}
@@ -79,6 +80,7 @@ public class Commandclearinventory extends EssentialsCommand
 					p.getInventory().clear();
 					sender.sendMessage("§7Inventory of §c" + p.getDisplayName() + "§7 cleared.");
 				}
+				return;
 			}
 			throw new Exception("Player not found");
 		}
