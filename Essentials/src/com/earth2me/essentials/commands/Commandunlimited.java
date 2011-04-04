@@ -4,6 +4,7 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.InventoryWorkaround;
 import com.earth2me.essentials.ItemDb;
 import com.earth2me.essentials.User;
+import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -36,11 +37,15 @@ public class Commandunlimited extends EssentialsCommand
 			StringBuilder sb = new StringBuilder();
 			sb.append("Unlimited items: ");
 			boolean first = true;
-			for (Integer integer : target.getUnlimited()) {
+			List<Integer> items = target.getUnlimited();
+			if (items.isEmpty()) {
+				sb.append("none");
+			}
+			for (Integer integer : items) {
 				if (!first) {
 					sb.append(", ");
-					first = false;
 				}
+				first = false;
 				String matname = Material.getMaterial(integer).toString().toLowerCase().replace("_", "");
 				sb.append(matname);
 			}
