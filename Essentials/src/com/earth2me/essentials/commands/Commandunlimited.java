@@ -5,6 +5,7 @@ import com.earth2me.essentials.InventoryWorkaround;
 import com.earth2me.essentials.ItemDb;
 import com.earth2me.essentials.User;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.craftbukkit.inventory.CraftInventory;
 import org.bukkit.inventory.ItemStack;
@@ -36,6 +37,24 @@ public class Commandunlimited extends EssentialsCommand
 		
 		if (args.length > 1 && user.isAuthorized("essentials.unlimited.others")) {
 			target = getPlayer(server, args, 1);
+		}
+		
+		if (target.isAuthorized("essentials.unlimited.eggthrow") && stack.getType() == Material.EGG) {
+			user.sendMessage(ChatColor.RED + "Unlimited eggs already activated by permissions.");
+			return;
+		}
+		
+		if (target.isAuthorized("essentials.unlimited.buckets") && 
+			(stack.getType() == Material.WATER_BUCKET || stack.getType() == Material.LAVA_BUCKET)) {
+			user.sendMessage(ChatColor.RED + "Unlimited buckets already activated by permissions.");
+			return;
+		}
+		
+		if (target.isAuthorized("essentials.unlimited.placing") && 
+			(stack.getType() != Material.WATER_BUCKET && stack.getType() != Material.LAVA_BUCKET &&
+			 stack.getType() != Material.EGG)) {
+			user.sendMessage(ChatColor.RED + "Unlimited placing already activated by permissions.");
+			return;
 		}
 		
 		String itemName = stack.getType().name().toLowerCase().replace('_', ' ');
