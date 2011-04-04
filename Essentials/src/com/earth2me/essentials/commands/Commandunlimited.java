@@ -41,7 +41,7 @@ public class Commandunlimited extends EssentialsCommand
 					sb.append(", ");
 					first = false;
 				}
-				String matname = Material.getMaterial(integer).toString().toLowerCase().replace("_", "-");
+				String matname = Material.getMaterial(integer).toString().toLowerCase().replace("_", "");
 				sb.append(matname);
 			}
 			user.sendMessage(sb.toString());
@@ -50,7 +50,7 @@ public class Commandunlimited extends EssentialsCommand
 		
 		ItemStack stack = ItemDb.get(args[0], 1);
 		
-		String itemname = stack.getType().toString().toLowerCase().replace("_", "-");
+		String itemname = stack.getType().toString().toLowerCase().replace("_", "");
 		if (!user.isAuthorized("essentials.unlimited.item-add") && 
 			!user.isAuthorized("essentials.unlimited.item-"+itemname) &&
 			!user.isAuthorized("essentials.unlimited.item-"+stack.getTypeId()) &&
