@@ -398,36 +398,26 @@ public class EssentialsPlayerListener extends PlayerListener
 
 	@Override
 	public void onPlayerEggThrow(PlayerEggThrowEvent event) {
-		if (Essentials.getSettings().isUnlimitedEggThrowEnabled()) {
-			User user = User.get(event.getPlayer());
-			ItemStack is = new ItemStack(Material.EGG, 1);
-			if (user.isAuthorized("essentials.unlimited.eggthrow") || user.hasUnlimited(is)) {
-				user.getInventory().addItem(is);
-				user.updateInventory();
-			}
+		User user = User.get(event.getPlayer());
+		ItemStack is = new ItemStack(Material.EGG, 1);
+		if (user.hasUnlimited(is)) {
+			user.getInventory().addItem(is);
+			user.updateInventory();
 		}
 	}
 
 	@Override
 	public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event) {
-		if (Essentials.getSettings().isUnlimitedBucketsEnabled()) {
-			final User user = User.get(event.getPlayer());
-			boolean unlimitedForUser = user.hasUnlimited(new ItemStack(event.getBucket()));
-			if (user.isAuthorized("essentials.unlimited.buckets") || unlimitedForUser) {
-				List<Integer> whitelist = Essentials.getSettings().getUnlimitedWhitelist();
-				if (whitelist.isEmpty() || whitelist.contains(event.getBucket().getId()) ||
-					user.isAuthorized("essentials.unlimited.whitelist.override") ||
-					unlimitedForUser) {
-					event.getItemStack().setType(event.getBucket());
-					Essentials.getStatic().getScheduler().scheduleSyncDelayedTask(Essentials.getStatic(), 
-						new Runnable() {
+		final User user = User.get(event.getPlayer());
+		if (user.hasUnlimited(new ItemStack(event.getBucket()))) {
+			event.getItemStack().setType(event.getBucket());
+			Essentials.getStatic().getScheduler().scheduleSyncDelayedTask(Essentials.getStatic(), 
+				new Runnable() {
 
-						public void run() {
-							user.updateInventory();
-						}
-					});
+				public void run() {
+					user.updateInventory();
 				}
-			}
+			});
 		}
 	}
 

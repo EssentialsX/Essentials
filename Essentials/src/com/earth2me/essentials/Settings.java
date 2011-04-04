@@ -433,35 +433,4 @@ public class Settings implements IConf
 		}
 		return epBreakList;
 	}
-
-	boolean isUnlimitedPlacingEnabled() {
-		return config.getBoolean("unlimited.placing",false);
-	}
-
-	boolean isUnlimitedEggThrowEnabled() {
-		return config.getBoolean("unlimited.eggthrow",false);
-	}
-
-	boolean isUnlimitedBucketsEnabled() {
-		return config.getBoolean("unlimited.buckets",false);
-	}
-	
-	public ArrayList<Integer> getUnlimitedWhitelist()
-	{
-		ArrayList<Integer> unlimitedWhitelist = new ArrayList<Integer>();
-		for (String itemName : config.getString("unlimited.whitelist", "").split(",")) {
-			itemName = itemName.trim();
-			if (itemName.isEmpty()) {
-				continue;
-			}
-			ItemStack is;
-			try {
-				is = ItemDb.get(itemName);
-				unlimitedWhitelist.add(is.getTypeId());
-			} catch (Exception ex) {
-				logger.log(Level.SEVERE, "Unknown item " + itemName + " in unlimited whitelist.");
-			}
-		}
-		return unlimitedWhitelist;
-	}
 }

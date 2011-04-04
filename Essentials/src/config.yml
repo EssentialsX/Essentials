@@ -155,26 +155,6 @@ per-warp-permission: false
 # Sort output of /list command by groups
 sort-list-by-groups: false
 
-# Unlimited placement of blocks, throwing of eggs, using of buckets
-# You have to enabled this here if you want to use the /unlimited command.
-# The following permissions will activate unlimited for all items:
-#   - essentials.unlimited.placing
-#   - essentials.unlimited.eggthrow
-#   - essentials.unlimited.buckets
-# Since admins commonly have a '*' permission, they get everything unlimited.
-# If you want to avoid that, explicitly deactivate the above permissions.
-unlimited:
-  placing: false
-  eggthrow: false
-  buckets: false
-  # Use this whitelist to restrict the use of unlimited placing and buckets
-  # Set permission 
-  #  - essentials.unlimited.whitelist.override
-  # for players, that are not bound to this list.
-  # If empty, all items are allowed.
-  whitelist:
-  # Example: (You can use ids or names from items.csv)
-  # whitelist: cobblestone, dirt, waterbucket
 
 ############################################################
 # +------------------------------------------------------+ #

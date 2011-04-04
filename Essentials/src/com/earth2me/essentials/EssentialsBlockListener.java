@@ -166,59 +166,53 @@ public class EssentialsBlockListener extends BlockListener
 				return;
 			}
 		}
-		if (Essentials.getSettings().isUnlimitedPlacingEnabled()) {
-			final User user = User.get(event.getPlayer());
-			final ItemStack is = event.getItemInHand();
-			if (is.getType() == Material.AIR) {
-				is.setType(event.getBlockPlaced().getType());
-			}
-			switch(is.getType()) {
-				case WOODEN_DOOR:
-					is.setType(Material.WOOD_DOOR);
-					break;
-				case IRON_DOOR_BLOCK:
-					is.setType(Material.IRON_DOOR);
-					break;
-				case SIGN_POST:
-				case WALL_SIGN:
-					is.setType(Material.SIGN);
-					break;
-				case CROPS:
-					is.setType(Material.SEEDS);
-					break;
-				case CAKE_BLOCK:
-					is.setType(Material.CAKE);
-					break;
-				case BED_BLOCK:
-					is.setType(Material.BED);
-					break;
-				case REDSTONE_WIRE:
-					is.setType(Material.REDSTONE);
-					break;
-				case REDSTONE_TORCH_OFF:
-					is.setType(Material.REDSTONE_TORCH_ON);
-					break;
-				case DIODE_BLOCK_OFF:
-				case DIODE_BLOCK_ON:
-					is.setType(Material.DIODE);
-					break;
-			}
-			boolean unlimitedForUser = user.hasUnlimited(is);
-			if (user.isAuthorized("essentials.unlimited.placing") || unlimitedForUser) {
-				List<Integer> whitelist = Essentials.getSettings().getUnlimitedWhitelist();
-				if (whitelist.isEmpty() || whitelist.contains(is.getTypeId()) ||
-					user.isAuthorized("essentials.unlimited.whitelist.override") || unlimitedForUser) {
-					is.setAmount(1);
-					Essentials.getStatic().getScheduler().scheduleSyncDelayedTask(Essentials.getStatic(), 
-						new Runnable() {
+		final User user = User.get(event.getPlayer());
+		final ItemStack is = event.getItemInHand();
+		if (is.getType() == Material.AIR) {
+			is.setType(event.getBlockPlaced().getType());
+		}
+		switch(is.getType()) {
+			case WOODEN_DOOR:
+				is.setType(Material.WOOD_DOOR);
+				break;
+			case IRON_DOOR_BLOCK:
+				is.setType(Material.IRON_DOOR);
+				break;
+			case SIGN_POST:
+			case WALL_SIGN:
+				is.setType(Material.SIGN);
+				break;
+			case CROPS:
+				is.setType(Material.SEEDS);
+				break;
+			case CAKE_BLOCK:
+				is.setType(Material.CAKE);
+				break;
+			case BED_BLOCK:
+				is.setType(Material.BED);
+				break;
+			case REDSTONE_WIRE:
+				is.setType(Material.REDSTONE);
+				break;
+			case REDSTONE_TORCH_OFF:
+				is.setType(Material.REDSTONE_TORCH_ON);
+				break;
+			case DIODE_BLOCK_OFF:
+			case DIODE_BLOCK_ON:
+				is.setType(Material.DIODE);
+				break;
+		}
+		boolean unlimitedForUser = user.hasUnlimited(is);
+		if (unlimitedForUser) {
+			is.setAmount(1);
+			Essentials.getStatic().getScheduler().scheduleSyncDelayedTask(Essentials.getStatic(), 
+				new Runnable() {
 
-						public void run() {
-							user.getInventory().addItem(is);
-							user.updateInventory();
-						}
-					});
+				public void run() {
+					user.getInventory().addItem(is);
+					user.updateInventory();
 				}
-			}
+			});
 		}
 	}
 

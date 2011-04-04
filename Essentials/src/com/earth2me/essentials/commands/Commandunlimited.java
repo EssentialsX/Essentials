@@ -27,35 +27,21 @@ public class Commandunlimited extends EssentialsCommand
 		}
 		ItemStack stack = ItemDb.get(args[0], 1);
 
-		if(!user.isAuthorized("essentials.infinite.whitelist.override") && 
-			Essentials.getSettings().getUnlimitedWhitelist().contains(stack.getTypeId()))
-		{
-			user.sendMessage(ChatColor.RED + "You are not allowed to spawn that item");
-			return;
-		}
 		User target = user;
 		
 		if (args.length > 1 && user.isAuthorized("essentials.unlimited.others")) {
 			target = getPlayer(server, args, 1);
-		}
+		}		
 		
-		if (target.isAuthorized("essentials.unlimited.eggthrow") && stack.getType() == Material.EGG) {
-			user.sendMessage(ChatColor.RED + "Unlimited eggs already activated by permissions.");
+		String itemname = stack.getType().toString().toLowerCase().replace("_", "-");
+		if (!user.isAuthorized("essentials.unlimited.item-add") && 
+			!user.isAuthorized("essentials.unlimited.item-"+itemname)
+			&& !((stack.getType() == Material.WATER_BUCKET || stack.getType() == Material.LAVA_BUCKET)
+			&& user.isAuthorized("essentials.unlimited.item-bucket"))) {
+			user.sendMessage(ChatColor.RED + "No permission for unlimited item "+itemname+".");
 			return;
 		}
 		
-		if (target.isAuthorized("essentials.unlimited.buckets") && 
-			(stack.getType() == Material.WATER_BUCKET || stack.getType() == Material.LAVA_BUCKET)) {
-			user.sendMessage(ChatColor.RED + "Unlimited buckets already activated by permissions.");
-			return;
-		}
-		
-		if (target.isAuthorized("essentials.unlimited.placing") && 
-			(stack.getType() != Material.WATER_BUCKET && stack.getType() != Material.LAVA_BUCKET &&
-			 stack.getType() != Material.EGG)) {
-			user.sendMessage(ChatColor.RED + "Unlimited placing already activated by permissions.");
-			return;
-		}
 		
 		String itemName = stack.getType().name().toLowerCase().replace('_', ' ');
 		
