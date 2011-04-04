@@ -39,7 +39,7 @@ public class Commandunlimited extends EssentialsCommand
 			for (Integer integer : target.getUnlimited()) {
 				if (!first) {
 					sb.append(", ");
-					first = true;
+					first = false;
 				}
 				String matname = Material.getMaterial(integer).toString().toLowerCase().replace("_", "-");
 				sb.append(matname);
