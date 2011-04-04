@@ -52,29 +52,28 @@ public class Commandunlimited extends EssentialsCommand
 		
 		String itemname = stack.getType().toString().toLowerCase().replace("_", "-");
 		if (!user.isAuthorized("essentials.unlimited.item-add") && 
-			!user.isAuthorized("essentials.unlimited.item-"+itemname)
-			&& !((stack.getType() == Material.WATER_BUCKET || stack.getType() == Material.LAVA_BUCKET)
-			&& user.isAuthorized("essentials.unlimited.item-bucket"))) {
+			!user.isAuthorized("essentials.unlimited.item-"+itemname) &&
+			!user.isAuthorized("essentials.unlimited.item-"+stack.getTypeId()) &&
+			!((stack.getType() == Material.WATER_BUCKET || stack.getType() == Material.LAVA_BUCKET) &&
+				user.isAuthorized("essentials.unlimited.item-bucket"))) {
 			user.sendMessage(ChatColor.RED + "No permission for unlimited item "+itemname+".");
 			return;
 		}
 		
 		
-		String itemName = stack.getType().name().toLowerCase().replace('_', ' ');
-		
 		if (target.hasUnlimited(stack)) {
 			if (user != target) {
-				user.sendMessage("§7Disable unlimited placing of " + itemName + " for " + user.getDisplayName() + ".");
+				user.sendMessage("§7Disable unlimited placing of " + itemname + " for " + user.getDisplayName() + ".");
 			}
-			target.sendMessage("§7Disable unlimited placing of " + itemName + " for " + user.getDisplayName() + ".");
+			target.sendMessage("§7Disable unlimited placing of " + itemname + " for " + user.getDisplayName() + ".");
 			target.setUnlimited(stack, false);
 			return;
 		}
 		user.charge(this);
 		if (user != target) {
-			user.sendMessage("§7Giving unlimited amount of " + itemName + " to " + user.getDisplayName() + ".");
+			user.sendMessage("§7Giving unlimited amount of " + itemname + " to " + user.getDisplayName() + ".");
 		}
-		target.sendMessage("§7Giving unlimited amount of " + itemName + " to " + user.getDisplayName() + ".");
+		target.sendMessage("§7Giving unlimited amount of " + itemname + " to " + user.getDisplayName() + ".");
 		if (!InventoryWorkaround.containsItem((CraftInventory)target.getInventory(), true, stack)) {
 			target.getInventory().addItem(stack);
 		}
