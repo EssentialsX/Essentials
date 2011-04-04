@@ -9,10 +9,12 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.Mob.MobException;
 import com.earth2me.essentials.TargetBlock;
-import net.minecraft.server.EntitySheep;
 import net.minecraft.server.EntityWolf;
 import net.minecraft.server.PathEntity;
 import org.bukkit.DyeColor;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.entity.CraftSheep;
 import org.bukkit.craftbukkit.entity.CraftSlime;
 import org.bukkit.craftbukkit.entity.CraftWolf;
@@ -39,35 +41,48 @@ public class Commandspawnmob extends EssentialsCommand
 	{
 		if (args.length < 1)
 		{
-			user.sendMessage("§cUsage: /spawnmob [mob]<,mount><:size> <quantity>");
+			user.sendMessage("§cUsage: /spawnmob [mob]<:data><,mount<:data>> <quantity>");
 			user.sendMessage("§7Mobs: Zombie PigZombie Skeleton Slime Chicken Pig Monster Spider Creeper Ghast Squid Giant Cow Sheep Wolf");
 			return;
 		}
 
-		String[] split1 = args[0].split(":");
-		String[] split0 = null;
-		CraftEntity spawned1 = null;
-		Mob mob2 = null;
-		if (split1.length == 1 && !split1[0].equalsIgnoreCase("Slime"))
-		{
-			split0 = args[0].split(",");
-			split1[0] = split0[0];
+		
+		String[] mountparts = args[0].split(",");
+		String[] parts = mountparts[0].split(":");
+		String mobType = parts[0];
+		mobType = mobType.equalsIgnoreCase("PigZombie") ? "PigZombie" : capitalCase(mobType);
+		String mobData = null;
+		if (parts.length == 2) {
+			mobData = parts[1];
 		}
-		if (split1.length == 2)
-		{
-			args[0] = split1[0] + "";
+		String mountType = null;
+		String mountData = null;
+		if (mountparts.length > 1) {
+			parts = mountparts[1].split(":");
+			mountType = parts[0];
+			mountType = mountType.equalsIgnoreCase("PigZombie") ? "PigZombie" : capitalCase(mountType);
+			if (parts.length == 2) {
+				mountData = parts[1];
+			}
 		}
-		Mob mob = Mob.fromName(split1[0].equalsIgnoreCase("PigZombie") ? "PigZombie" : capitalCase(split1[0]));
+		
+		
+		CraftEntity spawnedMob = null;
+		Mob mob = null;
+		CraftEntity spawnedMount = null;
+		Mob mobMount = null;
+
+		mob = Mob.fromName(mobType);
 		if (mob == null)
 		{
 			user.sendMessage("Invalid mob type.");
 			return;
 		}
-		WorldServer world = ((org.bukkit.craftbukkit.CraftWorld)user.getWorld()).getHandle();
-		CraftEntity spawned = null;
+		user.charge(this);
+		WorldServer world = ((CraftWorld)user.getWorld()).getHandle();
 		try
 		{
-			spawned = mob.spawn(user, server);
+			spawnedMob = mob.spawn(user, server);
 		}
 		catch (MobException e)
 		{
@@ -76,72 +91,42 @@ public class Commandspawnmob extends EssentialsCommand
 		}
 		int[] ignore = {8, 9};
 		Location loc = (new TargetBlock(user, 300, 0.2, ignore)).getTargetBlock().getLocation();
-		int blkId = user.getWorld().getBlockTypeIdAt(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-		while (!(blkId == 0 || blkId == 8 || blkId == 9))
+		
+		Block block = user.getWorld().getBlockAt(loc);
+		while (!(block.getType() == Material.AIR || block.getType() == Material.WATER || block.getType() == Material.STATIONARY_WATER ))
 		{
 			loc.setY(loc.getY() + 1);
-			blkId = user.getWorld().getBlockTypeIdAt(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+			block = user.getWorld().getBlockAt(loc);
 		}
-		spawned.teleportTo(loc);
-		world.a(spawned.getHandle());
-		if (split0 != null && split0.length == 2)
+		spawnedMob.teleportTo(loc);
+		world.a(spawnedMob.getHandle());
+		
+		if (mountType != null)
 		{
-			mob2 = Mob.fromName(split0[1].equalsIgnoreCase("PigZombie") ? "PigZombie" : capitalCase(split0[1]));
-			if (mob2 == null)
+			mobMount = Mob.fromName(mountType);
+			if (mobMount == null)
 			{
 				user.sendMessage("Invalid mob type.");
 				return;
 			}
 			try
 			{
-				spawned1 = mob2.spawn(user, server);
+				spawnedMount = mobMount.spawn(user, server);
 			}
 			catch (MobException e)
 			{
 				user.sendMessage("Unable to spawn mob.");
 				return;
 			}
-			spawned1.teleportTo(spawned);
-			spawned1.getHandle().setPassengerOf(spawned.getHandle());
-			world.a(spawned1.getHandle());
+			spawnedMount.teleportTo(spawnedMob);
+			spawnedMount.getHandle().setPassengerOf(spawnedMob.getHandle());
+			world.a(spawnedMount.getHandle());
 		}
-		if (split1.length == 2 && "Slime".equals(mob.name))
-		{
-			try
-			{
-				((CraftSlime)spawned).setSize(Integer.parseInt(split1[1]));
-			}
-			catch (Exception e)
-			{
-				user.sendMessage("Malformed size.");
-				return;
-			}
+		if (mobData != null) {
+			changeMobData(mob.name, spawnedMob, mobData, user);
 		}
-		if (split1.length == 2 && "Sheep".equals(mob.name))
-		{
-			try
-			{
-				((CraftSheep)spawned).setColor(DyeColor.valueOf(split1[1].toUpperCase()));
-			}
-			catch (Exception e)
-			{
-				user.sendMessage("Malformed color.");
-				return;
-			}
-		}
-		if (split1.length == 2 && "Wolf".equals(mob.name) && split1[1].equalsIgnoreCase("tamed")) 
-		{
-			EntityWolf wolf = ((CraftWolf) spawned).getHandle();
-			wolf.d(true);
-			wolf.a((PathEntity) null);
-			wolf.b(true);
-			wolf.health = 20;
-			wolf.a(user.getName());
-			wolf.world.a(wolf, (byte) 7);
-		}
-		if (split1.length == 2 && "Wolf".equals(mob.name) && split1[1].equalsIgnoreCase("angry"))
-		{
-			((CraftWolf)spawned).setAngry(true);
+		if (spawnedMount != null && mountData != null) {
+			changeMobData(mobMount.name, spawnedMount, mountData, user);
 		}
 		if (args.length == 2)
 		{
@@ -152,52 +137,41 @@ public class Commandspawnmob extends EssentialsCommand
 				mobCount = serverLimit;
 				user.sendMessage("Mob quantity limited to server limit");
 			}
-			user.charge(this);
+			
 			try
 			{
 				for (int i = 1; i < mobCount; i++)
 				{
-					spawned = mob.spawn(user, server);
-					spawned.teleportTo(loc);
-					if (split1.length > 1 && "Slime".equals("Slime"))
+					spawnedMob = mob.spawn(user, server);
+					spawnedMob.teleportTo(loc);
+					world.a(spawnedMob.getHandle());
+					if (mobMount != null)
 					{
 						try
 						{
-							//((EntitySlime)spawned.getHandle()).a(Integer.parseInt(split1[1]));
-						}
-						catch (Exception e)
-						{
-							user.sendMessage("Malformed size.");
-							return;
-						}
-					}
-					world.a(spawned.getHandle());
-					if (split0.length == 2)
-					{
-						if (mob2 == null)
-						{
-							user.sendMessage("Invalid mob mount.");
-							return;
-						}
-						try
-						{
-							spawned1 = mob2.spawn(user, server);
+							spawnedMount = mobMount.spawn(user, server);
 						}
 						catch (MobException e)
 						{
 							user.sendMessage("Unable to spawn mob.");
 							return;
 						}
-						spawned1.teleportTo(spawned);
-						spawned1.getHandle().setPassengerOf(spawned.getHandle());
-						world.a(spawned1.getHandle());
+						spawnedMount.teleportTo(spawnedMob);
+						spawnedMount.getHandle().setPassengerOf(spawnedMob.getHandle());
+						world.a(spawnedMount.getHandle());
+					}
+					if (mobData != null) {
+						changeMobData(mob.name, spawnedMob, mobData, user);
+					}
+					if (spawnedMount != null && mountData != null) {
+						changeMobData(mobMount.name, spawnedMount, mountData, user);
 					}
 				}
 				user.sendMessage(args[1] + " " + mob.name.toLowerCase() + mob.s + " spawned.");
 			}
 			catch (MobException e1)
 			{
-				throw new Exception("Unable to spawn mobs.  Insert bad excuse here.");
+				throw new Exception("Unable to spawn mobs. Insert bad excuse here.");
 			}
 			catch (NumberFormatException e2)
 			{
@@ -217,5 +191,40 @@ public class Commandspawnmob extends EssentialsCommand
 	private String capitalCase(String s)
 	{
 		return s.toUpperCase().charAt(0) + s.toLowerCase().substring(1);
+	}
+
+	private void changeMobData(String type, CraftEntity spawned, String data, User user) throws Exception {
+		if ("Slime".equalsIgnoreCase(type)) {
+			try
+			{
+				((CraftSlime)spawned).setSize(Integer.parseInt(data));
+			}
+			catch (Exception e)
+			{
+				throw new Exception("Malformed size.");
+			}
+		}
+		if ("Sheep".equalsIgnoreCase(type)) {
+			try
+			{
+				((CraftSheep)spawned).setColor(DyeColor.valueOf(data.toUpperCase()));
+			}
+			catch (Exception e)
+			{
+				throw new Exception("Malformed color.");
+			}
+		}
+		if ("Wolf".equalsIgnoreCase(type) && data.equalsIgnoreCase("tamed")) {
+			EntityWolf wolf = ((CraftWolf) spawned).getHandle();
+			wolf.d(true);
+			wolf.a((PathEntity) null);
+			wolf.b(true);
+			wolf.health = 20;
+			wolf.a(user.getName());
+			wolf.world.a(wolf, (byte) 7);
+		}
+		if ("Wolf".equalsIgnoreCase(type) && data.equalsIgnoreCase("angry")) {
+			((CraftWolf)spawned).setAngry(true);
+		}
 	}
 }

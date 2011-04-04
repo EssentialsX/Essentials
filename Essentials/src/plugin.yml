@@ -181,7 +181,7 @@ commands:
     aliases: [createwarp]
   spawnmob:
     description: Spawns a mob.
-    usage: /<command> [mob],<mount>:<slime-size> <amount>
+    usage: /<command> [mob]<:data><,mount<:data>> <amount>
   suicide:
     description: Causes you to perish
     usage: /<command>
