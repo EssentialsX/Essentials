@@ -68,17 +68,17 @@ public class Commandunlimited extends EssentialsCommand
 		
 		if (target.hasUnlimited(stack)) {
 			if (user != target) {
-				user.sendMessage("§7Disable unlimited placing of " + itemname + " for " + user.getDisplayName() + ".");
+				user.sendMessage("§7Disable unlimited placing of " + itemname + " for " + target.getDisplayName() + ".");
 			}
-			target.sendMessage("§7Disable unlimited placing of " + itemname + " for " + user.getDisplayName() + ".");
+			target.sendMessage("§7Disable unlimited placing of " + itemname + " for " + target.getDisplayName() + ".");
 			target.setUnlimited(stack, false);
 			return;
 		}
 		user.charge(this);
 		if (user != target) {
-			user.sendMessage("§7Giving unlimited amount of " + itemname + " to " + user.getDisplayName() + ".");
+			user.sendMessage("§7Giving unlimited amount of " + itemname + " to " + target.getDisplayName() + ".");
 		}
-		target.sendMessage("§7Giving unlimited amount of " + itemname + " to " + user.getDisplayName() + ".");
+		target.sendMessage("§7Giving unlimited amount of " + itemname + " to " + target.getDisplayName() + ".");
 		if (!InventoryWorkaround.containsItem((CraftInventory)target.getInventory(), true, stack)) {
 			target.getInventory().addItem(stack);
 		}
