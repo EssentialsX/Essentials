@@ -722,4 +722,27 @@ public class User extends PlayerExtension implements Comparable<User>
 		data.put("unlimited", items);
 		flush();
 	}
+	
+	public String getPowertool(ItemStack stack) {
+		if (!data.containsKey("powertools")) {
+			return null;
+		}
+		@SuppressWarnings("unchecked")
+		Map<Integer, String> tools = (Map<Integer, String>)data.get("powertools");
+		return tools.get(stack.getTypeId());
+	}
+
+	public void setPowertool(ItemStack stack, String command) {
+		Map<Integer, String> tools = new HashMap<Integer, String>();
+		if (data.containsKey("powertools")) {
+			tools = (Map<Integer, String>)data.get("powertools");
+		}
+		if (command == null || command.trim().isEmpty()) {
+			tools.remove(Integer.valueOf(stack.getTypeId()));
+			return;
+		}
+		tools.put(Integer.valueOf(stack.getTypeId()), command.trim());
+		data.put("powertools", tools);
+		flush();
+	}
 }

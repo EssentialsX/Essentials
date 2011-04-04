@@ -164,6 +164,7 @@ public class Essentials extends JavaPlugin
 		pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Priority.High, this);
 		pm.registerEvent(Type.PLAYER_EGG_THROW, playerListener, Priority.High, this);
 		pm.registerEvent(Type.PLAYER_BUCKET_EMPTY, playerListener, Priority.High, this);
+		pm.registerEvent(Type.PLAYER_ANIMATION, playerListener, Priority.High, this);
 
 		blockListener = new EssentialsBlockListener(this);
 		pm.registerEvent(Type.SIGN_CHANGE, blockListener, Priority.Low, this);

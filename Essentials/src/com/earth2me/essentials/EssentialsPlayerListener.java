@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.minecraft.server.InventoryPlayer;
 import org.bukkit.*;
@@ -428,5 +429,30 @@ public class EssentialsPlayerListener extends PlayerListener
 				}
 			}
 		}
+	}
+
+	@Override
+	public void onPlayerAnimation(PlayerAnimationEvent event) {
+		usePowertools(event);
+	}
+	
+	private void usePowertools(PlayerAnimationEvent event) {
+		if (event.getAnimationType() != PlayerAnimationType.ARM_SWING) {
+			return;
+		}
+		User user = User.get(event.getPlayer());
+		ItemStack is = user.getItemInHand();
+		if (is.getType() == Material.AIR) {
+			return;
+		}
+		String command = user.getPowertool(is);
+		if (command == null || command.isEmpty()) {
+			return;
+		}
+		if (command.matches(".*\\{player\\}.*")) {
+			user.sendMessage("Click a player to use this command");
+			return;
+		}
+		user.getServer().dispatchCommand(user, command);
 	}
 }

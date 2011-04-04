@@ -2,13 +2,16 @@ package com.earth2me.essentials;
 
 import org.bukkit.Server;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageByProjectileEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityListener;
+import org.bukkit.inventory.ItemStack;
 
 
 public class EssentialsEntityListener extends EntityListener
@@ -25,6 +28,24 @@ public class EssentialsEntityListener extends EntityListener
 	@Override
 	public void onEntityDamage(EntityDamageEvent event)
 	{
+		if (event instanceof EntityDamageByEntityEvent)
+		{
+			EntityDamageByEntityEvent edEvent = (EntityDamageByEntityEvent)event;
+			Entity eAttack = edEvent.getDamager();
+			Entity eDefend = edEvent.getEntity();
+			if (eDefend instanceof Player && eAttack instanceof Player)
+			{
+				User defender = User.get(eDefend);
+				User attacker = User.get(eAttack);
+				ItemStack is = attacker.getItemInHand();
+				String command = attacker.getPowertool(is);
+				if (command != null && !command.isEmpty()) {
+					attacker.getServer().dispatchCommand(attacker, command.replaceAll("\\{player\\}", defender.getName()));
+					event.setCancelled(true);
+					return;
+				}
+			}
+		}
 		if (event instanceof EntityDamageEvent || event instanceof EntityDamageByBlockEvent || event instanceof EntityDamageByProjectileEvent)
 		{
 
