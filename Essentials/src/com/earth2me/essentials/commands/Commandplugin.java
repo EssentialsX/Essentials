@@ -36,28 +36,36 @@ public class Commandplugin extends EssentialsCommand
 
 		switch (sub)
 		{
-		case LOAD:
-			if (args.length < 2) return;
+		case LOAD: // All disable functions are broken until 
+			// http://leaky.bukkit.org/issues/641 is fixed.
+			sender.sendMessage("This function is broken. Performing /reload now.");
+			server.reload();
+			/*if (args.length < 2) return;
 			User.charge(sender, this);
-			loadPlugin(args[1], sender);
+			loadPlugin(args[1], sender);*/
 			return;
 
 		case RELOAD:
-			if (args.length < 2) return;
+			sender.sendMessage("This function is broken. Performing /reload now.");
+			server.reload();
+			/*if (args.length < 2) return;
 			User.charge(sender, this);
-			reloadPlugin(args[1], sender);
+			reloadPlugin(args[1], sender);*/
 			return;
 
 		case ENABLE:
-			if (args.length < 2) return;
+			sender.sendMessage("This function is broken. Performing /reload now.");
+			server.reload();
+			/*if (args.length < 2) return;
 			User.charge(sender, this);
-			enablePlugin(args[1], sender);
+			enablePlugin(args[1], sender);*/
 			return;
 
 		case DISABLE:
-			if (args.length < 2) return;
+			sender.sendMessage("This function is broken.");
+			/*if (args.length < 2) return;
 			User.charge(sender, this);
-			disablePlugin(args[1], sender);
+			disablePlugin(args[1], sender);*/
 			return;
 
 		case LIST:
