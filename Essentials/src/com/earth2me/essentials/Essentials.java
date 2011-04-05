@@ -78,7 +78,8 @@ public class Essentials extends JavaPlugin
 			"Mob",
 			"EssentialsBlockListener",
 			"EssentialsBlockListener$1",
-			"EssentialsBlockListener$2"
+			"EssentialsBlockListener$2",
+			"EssentialsPlayerListener"
 		};
 
 		try
