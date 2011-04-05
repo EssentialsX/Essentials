@@ -59,7 +59,7 @@ public class Commandlist extends EssentialsCommand
 						first = false;
 					}
 					if (parent.away.contains(user)) {
-						groupString.append("§7[AFK]");
+						groupString.append("§7[AFK]§f");
 					}
 					groupString.append(user.getDisplayName());
 				}
@@ -83,7 +83,7 @@ public class Commandlist extends EssentialsCommand
 					first = false;
 				}
 				if (parent.away.contains(user)) {
-					onlineUsers.append("§7[AFK]");
+					onlineUsers.append("§7[AFK]§f");
 				}
 				onlineUsers.append(user.getDisplayName());
 			}
