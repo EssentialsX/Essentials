@@ -38,11 +38,12 @@ public class Commandmsg extends EssentialsCommand
 		
 		if (args[0].equalsIgnoreCase(Console.NAME))
 		{
-			sender.sendMessage("[Me -> " + senderName + "§f] " + message);
+			sender.sendMessage("[Me -> " + Console.NAME + "§f] " + message);
 			CommandSender cs = Console.getCommandSender(server);
 			cs.sendMessage("[" + senderName + " -> Me§f] " + message);
 			replyTo.setReplyTo(cs);
 			Console.getConsoleReplyTo().setReplyTo(sender);
+			return;
 		}
 		
 		List<Player> matches = server.matchPlayer(args[0]);
