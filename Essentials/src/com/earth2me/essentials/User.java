@@ -138,16 +138,13 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 
 	public void teleportCooldown(boolean justCheck) throws Exception
 	{
-		return; // TODO: Fix this regression
-		/*
 		long now = Calendar.getInstance().getTimeInMillis();
 		long cooldown = Essentials.getSettings().getTeleportCooldown();
 		long left = lastTeleport + cooldown - now;
-		if ((left > 0 && !isOp() && !isAuthorized("essentials.teleport.cooldown.bypass")) | !isJailed())
+		if (left > 0 && !isOp() && !isAuthorized("essentials.teleport.cooldown.bypass"))
 			throw new Exception("Time before next teleport: " + Essentials.FormatTime(left));
 		// if justCheck is set, don't update lastTeleport; we're just checking
 		if (!justCheck) lastTeleport = now;
-		*/
 	}
 
 	public void teleportCooldown() throws Exception
