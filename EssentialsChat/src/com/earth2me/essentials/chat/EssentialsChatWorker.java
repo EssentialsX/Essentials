@@ -6,6 +6,7 @@ import com.nijikokun.bukkit.Permissions.Permissions;
 import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.Server;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerEvent;
@@ -95,6 +96,7 @@ public class EssentialsChatWorker
 		logger.info("Local: <" + user.getName() + "> " + event.getMessage());
 
 		Location loc = user.getLocation();
+		World w = loc.getWorld();
 		int x = loc.getBlockX();
 		int y = loc.getBlockY();
 		int z = loc.getBlockZ();
@@ -109,7 +111,7 @@ public class EssentialsChatWorker
 				int dy = Math.abs(y - l.getBlockY());
 				int dz = Math.abs(z - l.getBlockZ());
 				int delta = dx + dy + dz;
-				if (delta > radius) continue;
+				if (delta > radius || w != l.getWorld()) continue;
 			}
 
 			u.sendMessage(String.format(event.getFormat(), user.getDisplayName(), event.getMessage()));
