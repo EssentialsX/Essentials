@@ -33,8 +33,8 @@ public class Commandmsg extends EssentialsCommand
 
 		String message = getFinalArg(args, 1);
 		
-		IReplyTo replyTo = sender instanceof User?(User)sender:Console.getConsoleReplyTo();
-		String senderName = sender instanceof User?((User)sender).getDisplayName():Console.NAME;
+		IReplyTo replyTo = sender instanceof Player?User.get((Player)sender):Console.getConsoleReplyTo();
+		String senderName = sender instanceof Player?((Player)sender).getDisplayName():Console.NAME;
 		
 		if (args[0].equalsIgnoreCase(Console.NAME))
 		{

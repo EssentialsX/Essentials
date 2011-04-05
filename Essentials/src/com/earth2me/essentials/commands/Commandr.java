@@ -25,10 +25,10 @@ public class Commandr extends EssentialsCommand
 		}
 
 		String message = getFinalArg(args, 0);
-		IReplyTo replyTo = sender instanceof User?(User)sender:Console.getConsoleReplyTo();
-		String senderName = sender instanceof User?((User)sender).getDisplayName():Console.NAME;
+		IReplyTo replyTo = sender instanceof Player?User.get((Player)sender):Console.getConsoleReplyTo();
+		String senderName = sender instanceof Player?((Player)sender).getDisplayName():Console.NAME;
 		CommandSender target = replyTo.getReplyTo();
-		String targetName = target instanceof User?((User)target).getDisplayName():Console.NAME;
+		String targetName = target instanceof Player?((Player)target).getDisplayName():Console.NAME;
 
 		if (target == null)
 		{
@@ -39,10 +39,12 @@ public class Commandr extends EssentialsCommand
 		sender.sendMessage("[Me -> " + targetName + "] " + message);
 		target.sendMessage("[" + senderName  + " -> Me] " + message);
 		replyTo.setReplyTo(target);
-		if (target instanceof Player) {
-			User.get((Player)target).setReplyTo(sender);
-		} else {
-			Console.getConsoleReplyTo().setReplyTo(sender);
+		if (target != sender) {
+			if (target instanceof Player) {
+				User.get((Player)target).setReplyTo(sender);
+			} else {
+				Console.getConsoleReplyTo().setReplyTo(sender);
+			}
 		}
 	}
 }
