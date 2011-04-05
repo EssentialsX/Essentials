@@ -6,6 +6,7 @@ import java.io.*;
 import org.bukkit.*;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import net.minecraft.server.EntityHuman;
+import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
@@ -14,7 +15,7 @@ import org.yaml.snakeyaml.constructor.SafeConstructor;
 import org.yaml.snakeyaml.reader.UnicodeReader;
 
 
-public class User extends PlayerExtension implements Comparable<User> 
+public class User extends PlayerExtension implements Comparable<User>, IReplyTo 
 {
 	private static final Logger logger = Logger.getLogger("Minecraft");
 	private final Yaml yaml = new Yaml(new SafeConstructor());
@@ -29,7 +30,7 @@ public class User extends PlayerExtension implements Comparable<User>
 	//private TimerTask teleTimer = null;
 	private int teleTimer = -1;
 	public Location lastLocation = null;
-	private User replyTo = null;
+	private CommandSender replyTo = null;
 	private boolean isNew = false;
 	public String currentJail;
 	public CraftItemStack[] savedInventory;
@@ -631,12 +632,12 @@ public class User extends PlayerExtension implements Comparable<User>
 		justPortaled = value;
 	}
 
-	public void setReplyTo(User user)
+	public void setReplyTo(CommandSender user)
 	{
 		replyTo = user;
 	}
 
-	public User getReplyTo()
+	public CommandSender getReplyTo()
 	{
 		return replyTo;
 	}

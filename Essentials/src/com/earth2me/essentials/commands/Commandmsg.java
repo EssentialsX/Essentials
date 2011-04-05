@@ -5,6 +5,8 @@ import org.bukkit.Server;
 import com.earth2me.essentials.Essentials;
 import org.bukkit.entity.Player;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Console;
+import com.earth2me.essentials.IReplyTo;
 import org.bukkit.command.CommandSender;
 
 public class Commandmsg extends EssentialsCommand
@@ -21,40 +23,6 @@ public class Commandmsg extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
-	{
-		if (args.length < 2 || args[0].trim().length() == 0 || args[1].trim().length() == 0)
-		{
-			user.sendMessage("§cUsage: /" + commandLabel + " [player] [message]");
-			return;
-		}
-
-		StringBuilder message = new StringBuilder();
-		for (int i = 1; i < args.length; i++)
-		{
-			message.append(args[i]);
-			message.append(' ');
-		}
-		
-		List<Player> matches = server.matchPlayer(args[0]);
-
-		if (matches.isEmpty())
-		{
-			user.sendMessage("§cThere are no players matching that name.");
-			return;
-		}
-
-		user.charge(this);
-		for (Player p : matches)
-		{
-			user.sendMessage("[Me -> " + p.getDisplayName() + "§f] " + message);
-			p.sendMessage("[" + user.getDisplayName() + " -> Me§f] " + message);
-			user.setReplyTo(User.get(p));
-			User.get(p).setReplyTo(user);
-		}
-	}
-
-	@Override
 	public void run(Server server, Essentials parent, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
 		if (args.length < 2 || args[0].trim().length() == 0 || args[1].trim().length() == 0)
@@ -63,23 +31,35 @@ public class Commandmsg extends EssentialsCommand
 			return;
 		}
 
-		StringBuilder message = new StringBuilder();
-		for (int i = 1; i < args.length; i++)
+		String message = getFinalArg(args, 1);
+		
+		IReplyTo replyTo = sender instanceof User?(User)sender:Console.getConsoleReplyTo();
+		String senderName = sender instanceof User?((User)sender).getDisplayName():Console.NAME;
+		
+		if (args[0].equalsIgnoreCase(Console.NAME))
 		{
-			message.append(args[i]);
-			message.append(' ');
+			sender.sendMessage("[Me -> " + senderName + "§f] " + message);
+			CommandSender cs = Console.getCommandSender(server);
+			cs.sendMessage("[" + senderName + " -> Me§f] " + message);
+			replyTo.setReplyTo(cs);
+			Console.getConsoleReplyTo().setReplyTo(sender);
 		}
+		
 		List<Player> matches = server.matchPlayer(args[0]);
 
 		if (matches.isEmpty())
 		{
 			sender.sendMessage("§cThere are no players matching that name.");
+			return;
 		}
 
+		charge(sender);
 		for (Player p : matches)
 		{
-			sender.sendMessage("[§2Me -> " + p.getDisplayName() + "§f] " + message);
-			p.sendMessage("[§2{Console} -> Me§f] " + message);
+			sender.sendMessage("[Me -> " + p.getDisplayName() + "§f] " + message);
+			p.sendMessage("[" + senderName + " -> Me§f] " + message);
+			replyTo.setReplyTo(User.get(p));
+			User.get(p).setReplyTo(sender);
 		}
 	}
 }
