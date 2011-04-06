@@ -60,8 +60,8 @@ public class Commandtogglejail extends EssentialsCommand
 			}
 			sender.sendMessage("§7Player " + p.getName() + " " + (p.toggleJailed() ? "jailed." : "unjailed."));
 			p.sendMessage("§7You have been released");
-			p.teleportBack();
 			p.currentJail = "";
+			p.teleportBack();
 		}
 	}
 }
