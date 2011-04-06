@@ -43,6 +43,7 @@ public class Commandtogglejail extends EssentialsCommand
 			User.charge(sender, this);
 			sender.sendMessage("§7Player " + p.getName() + " " + (p.toggleJailed() ? "jailed." : "unjailed."));
 			p.sendMessage("§7You have been jailed");
+			p.currentJail = null;
 			Essentials.getJail().sendToJail(p, args[1]);
 			p.currentJail = (args[1]);
 			return;
