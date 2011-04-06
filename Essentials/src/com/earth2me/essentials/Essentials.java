@@ -50,7 +50,7 @@ public class Essentials extends JavaPlugin
 
 	public Essentials() throws IOException
 	{
-		loadClasses();
+		//loadClasses();
 	}
 
 	public static void ensureEnabled(Server server)
@@ -59,11 +59,11 @@ public class Essentials extends JavaPlugin
 		Essentials ess = (Essentials)pm.getPlugin("Essentials");
 		if (!ess.isEnabled())
 			pm.enablePlugin(ess);
-		loadClasses();
+		//loadClasses();
 	}
 
 	@SuppressWarnings("CallToThreadDumpStack")
-	public static void loadClasses()
+	public static void disabledloadClasses()
 	{
 		final String[] classes = new String[]
 		{
@@ -79,7 +79,8 @@ public class Essentials extends JavaPlugin
 			"EssentialsBlockListener",
 			"EssentialsBlockListener$1",
 			"EssentialsBlockListener$2",
-			"EssentialsPlayerListener"
+			"EssentialsPlayerListener",
+			"Backup"			
 		};
 
 		try
