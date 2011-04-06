@@ -123,12 +123,12 @@ public class Settings implements IConf
 
 	public long getTeleportCooldown()
 	{
-		return (long)config.getInt("teleport-cooldown", 60) * 1000L;
+		return ((Number)config.getInt("teleport-cooldown", 60)).longValue() * 1000L;
 	}
 
 	public long getHealCooldown()
 	{
-		return (long)config.getInt("heal-cooldown", 60) * 1000L;
+		return ((Number)config.getInt("heal-cooldown", 60)).longValue() * 1000L;
 	}
 
 	public Object getKit(String name)

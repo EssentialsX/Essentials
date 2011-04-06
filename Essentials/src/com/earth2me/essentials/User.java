@@ -262,9 +262,10 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 		load();
 		if (data.containsKey("money"))
 		{
-			if (data.get("money") instanceof Integer)
-				return (double)((Integer)data.get("money"));
-			return (Double)data.get("money");
+			if (data.get("money") instanceof Number) {
+				return ((Number)data.get("money")).doubleValue();
+			}
+			logger.log(Level.SEVERE, "Can't convert money value to double:"+ data.get("money"));
 		}
 
 		try
@@ -276,7 +277,7 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 			try
 			{
 				Map<String, Object> idata = Essentials.getData(this);
-				return (Integer)idata.get("money");
+				return ((Number)idata.get("money")).doubleValue();
 			}
 			catch (Throwable ex2)
 			{
@@ -496,11 +497,11 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 			}
 			return new Location(
 					world,
-					(Double)vals.get(0),
-					(Double)vals.get(1),
-					(Double)vals.get(2),
-					((Double)vals.get(3)).floatValue(),
-					((Double)vals.get(4)).floatValue());
+					((Number)vals.get(0)).doubleValue(),
+					((Number)vals.get(1)).doubleValue(),
+					((Number)vals.get(2)).doubleValue(),
+					((Number)vals.get(3)).floatValue(),
+					((Number)vals.get(4)).floatValue());
 		}
 
 		try
@@ -512,11 +513,11 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 				world = getServer().getWorld((String)vals.get(5));
 			}
 			return new Location(world,
-								(Double)vals.get(0),
-								(Double)vals.get(1),
-								(Double)vals.get(2),
-								((Double)vals.get(3)).floatValue(),
-								((Double)vals.get(4)).floatValue());
+						((Number)vals.get(0)).doubleValue(),
+						((Number)vals.get(1)).doubleValue(),
+						((Number)vals.get(2)).doubleValue(),
+						((Number)vals.get(3)).floatValue(),
+						((Number)vals.get(4)).floatValue());
 		}
 		catch (Throwable ex)
 		{

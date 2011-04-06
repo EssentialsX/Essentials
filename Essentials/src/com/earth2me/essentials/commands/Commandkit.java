@@ -69,7 +69,7 @@ public class Commandkit extends EssentialsCommand
 					//System.out.println("Kit is timed");
 					Map<String, Object> els = (Map<String, Object>)kit;
 					items = (List<String>)els.get("items");
-					long delay = els.containsKey("delay") ? (Integer)els.get("delay") * 1000L : 0L;
+					long delay = els.containsKey("delay") ? ((Number)els.get("delay")).longValue() * 1000L : 0L;
 					long time = Calendar.getInstance().getTimeInMillis();
 
 					Map<String, Long> kitTimes;
