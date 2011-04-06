@@ -50,7 +50,7 @@ public class Essentials extends JavaPlugin
 
 	public Essentials() throws IOException
 	{
-		//loadClasses();
+		loadClasses();
 	}
 
 	public static void ensureEnabled(Server server)
@@ -59,13 +59,14 @@ public class Essentials extends JavaPlugin
 		Essentials ess = (Essentials)pm.getPlugin("Essentials");
 		if (!ess.isEnabled())
 			pm.enablePlugin(ess);
-		//loadClasses();
+		loadClasses();
 	}
 
 	@SuppressWarnings("CallToThreadDumpStack")
-	public static void disabledloadClasses()
+	public static void loadClasses()
 	{
-		final String[] classes = new String[]
+		return;
+		/*final String[] classes = new String[]
 		{
 			"commands.IEssentialsCommand",
 			"commands.EssentialsCommand",
@@ -91,7 +92,7 @@ public class Essentials extends JavaPlugin
 		catch (Throwable ex)
 		{
 			ex.printStackTrace();
-		}
+		}*/
 	}
 
 	public static Essentials getStatic()
