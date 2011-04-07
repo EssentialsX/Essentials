@@ -309,6 +309,7 @@ public class Settings implements IConf
 		epSettings.put("protect.prevent.creeper-explosion", config.getBoolean("protect.prevent.creeper-explosion", false));
 		epSettings.put("protect.prevent.creeper-playerdamage", config.getBoolean("protect.prevent.creeper-playerdamage", false));
 		epSettings.put("protect.prevent.creeper-blockdamage", config.getBoolean("protect.prevent.creeper-blockdamage", false));
+		epSettings.put("protect.prevent.entitytarget", config.getBoolean("protect.prevent.entitytarget", false));
 		for (CreatureType ct : CreatureType.values()) {
 			String name = ct.toString().toLowerCase();
 			epSettings.put("protect.prevent.spawn."+name, config.getBoolean("protect.prevent.spawn."+name, false));
