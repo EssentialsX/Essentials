@@ -304,6 +304,9 @@ protect:
     creeper-explosion: false
     creeper-playerdamage: false
     creeper-blockdamage: false
+    # Monsters won't follow players
+    # permission essentials.protect.entitytarget.bypass disables this
+    entity-target: false
     # Prevent the spawning of creatures
     spawn:
       creeper: false

@@ -55,6 +55,7 @@ public class EssentialsProtect extends JavaPlugin
 		pm.registerEvent(Type.BLOCK_BURN, blockListener, Priority.Highest, this);
 		pm.registerEvent(Type.ENTITY_EXPLODE, entityListener, Priority.Highest, this);
 		pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Priority.Highest, this);
+		pm.registerEvent(Type.ENTITY_TARGET, entityListener, Priority.Highest, this);
 		pm.registerEvent(Type.BLOCK_BREAK, blockListener, Priority.Highest, this);
 		pm.registerEvent(Type.CREATURE_SPAWN, entityListener, Priority.Highest, this);
 

@@ -27,6 +27,8 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityListener;
+import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.EntityTargetEvent.TargetReason;
 
 
 public class EssentialsProtectEntityListener extends EntityListener
@@ -234,4 +236,24 @@ public class EssentialsProtectEntityListener extends EntityListener
 			event.setCancelled(true);
 		}
 	}
+
+	@Override
+	public void onEntityTarget(EntityTargetEvent event) {
+		if (!(event.getTarget() instanceof Player)) {
+			return;
+		}
+		User user = User.get(event.getTarget());
+		if ((event.getReason() == TargetReason.CLOSEST_PLAYER ||
+			event.getReason() == TargetReason.TARGET_ATTACKED_ENTITY ||
+			event.getReason() == TargetReason.PIG_ZOMBIE_TARGET) &&
+			EssentialsProtect.guardSettings.get("protect.prevent.entitiytarget") &&
+			!user.isAuthorized("essentials.protect.entitytarget.bypass")
+			)
+			{
+				event.setCancelled(true);
+				return;
+			}
+	}
+	
+	
 }
