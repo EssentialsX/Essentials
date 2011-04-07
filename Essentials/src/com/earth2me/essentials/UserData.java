@@ -42,8 +42,11 @@ public abstract class UserData extends PlayerExtension implements IConf {
 		ignoredPlayers = getIgnoredPlayers();
 		godmode = getGodModeEnabled();
 		muted = getMuted();
+		muteTimeout = _getMuteTimeout();
 		jailed = getJailed();
-		
+		jailTimeout = _getJailTimeout();
+		lastLogin = _getLastLogin();
+		lastLogout = _getLastLogout();		
 	}
 	
 	public double getMoney() {
@@ -239,6 +242,10 @@ public abstract class UserData extends PlayerExtension implements IConf {
 		return config.getStringList("mail", new ArrayList<String>());
 	}
 	
+	public List<String> getMails() {
+		return mails;
+	}
+	
 	public void setMails(List<String> mails) {
 		if (mails == null) {
 			config.removeProperty("mail");
@@ -384,6 +391,22 @@ public abstract class UserData extends PlayerExtension implements IConf {
 		return ret;
 	}
 	
+	private long muteTimeout;
+	
+	private long _getMuteTimeout() {
+		return config.getLong("timestamps.mute", 0);
+	}
+	
+	public long getMuteTimeout() {
+		return muteTimeout;
+	}
+	
+	public void setMuteTimeout(long time) {
+		muteTimeout = time;
+		config.setProperty("timestamps.mute", time);
+		config.save();
+	}
+	
 	private boolean jailed;
 	
 	private boolean getJailed() {
@@ -404,6 +427,73 @@ public abstract class UserData extends PlayerExtension implements IConf {
 		boolean ret = !isJailed();
 		setJailed(ret);
 		return ret;
+	}
+	
+	private long jailTimeout;
+	
+	private long _getJailTimeout() {
+		return config.getLong("timestamps.jail", 0);
+	}
+	
+	public long getJailTimeout() {
+		return jailTimeout;
+	}
+	
+	public void setJailTimeout(long time) {
+		jailTimeout = time;
+		config.setProperty("timestamps.jail", time);
+		config.save();
+	}
+	
+	
+	public String getBanReason() {
+		return config.getString("ban.reason");
+	}
+	
+	public void setBanReason(String reason) {
+		config.setProperty("ban.reason", reason);
+		config.save();
+	}
+	
+	public long getBanTimeout() {
+		return config.getLong("ban.timeout", 0);
+	}
+	
+	public void setBanTimeout(long time) {
+		config.setProperty("ban.timeout", time);
+		config.save();
+	}
+	
+	private long lastLogin;
+	
+	private long _getLastLogin() {
+		return config.getLong("timestamps.login", 0);
+	}
+	
+	public long getLastLogin() {
+		return lastLogin;
+	}
+	
+	public void setLastLogin(long time) {
+		lastLogin = time;
+		config.setProperty("timestamps.login", time);
+		config.save();
+	}
+	
+	private long lastLogout;
+	
+	private long _getLastLogout() {
+		return config.getLong("timestamps.logout", 0);
+	}
+	
+	public long getLastLogout() {
+		return lastLogout;
+	}
+	
+	public void setLastLogout(long time) {
+		lastLogout = time;
+		config.setProperty("timestamps.logout", time);
+		config.save();
 	}
 	
 	private void updateConfig() {
