@@ -139,10 +139,13 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 	public void teleportCooldown(boolean justCheck) throws Exception
 	{
 		long now = Calendar.getInstance().getTimeInMillis();
-		long cooldown = Essentials.getSettings().getTeleportCooldown();
-		long left = lastTeleport + cooldown - now;
-		if (left > 0 && !isOp() && !isAuthorized("essentials.teleport.cooldown.bypass"))
-			throw new Exception("Time before next teleport: " + Essentials.FormatTime(left));
+		if (lastTeleport > 0) {
+			long cooldown = Essentials.getSettings().getTeleportCooldown();
+			long left = lastTeleport + cooldown - now;
+			if (left > 0 && !isOp() && !isAuthorized("essentials.teleport.cooldown.bypass")) {
+				throw new Exception("Time before next teleport: " + Essentials.FormatTime(left));
+			}
+		} 
 		// if justCheck is set, don't update lastTeleport; we're just checking
 		if (!justCheck) lastTeleport = now;
 	}
@@ -155,10 +158,13 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 	public void healCooldown() throws Exception
 	{
 		long now = Calendar.getInstance().getTimeInMillis();
-		long cooldown = Essentials.getSettings().getHealCooldown();
-		long left = lastHeal + cooldown - now;
-		if (left > 0 && !isOp() && !isAuthorized("essentials.heal.cooldown.bypass"))
-			throw new Exception("Time before next heal: " + Essentials.FormatTime(left));
+		if (lastHeal > 0) {
+			long cooldown = Essentials.getSettings().getHealCooldown();
+			long left = lastHeal + cooldown - now;
+			if (left > 0 && !isOp() && !isAuthorized("essentials.heal.cooldown.bypass")) {
+				throw new Exception("Time before next heal: " + Essentials.FormatTime(left));
+			}
+		}
 		lastHeal = now;
 	}
 
