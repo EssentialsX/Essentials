@@ -246,7 +246,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 		if ((event.getReason() == TargetReason.CLOSEST_PLAYER ||
 			event.getReason() == TargetReason.TARGET_ATTACKED_ENTITY ||
 			event.getReason() == TargetReason.PIG_ZOMBIE_TARGET) &&
-			EssentialsProtect.guardSettings.get("protect.prevent.entitiytarget") &&
+			EssentialsProtect.guardSettings.get("protect.prevent.entitytarget") &&
 			!user.isAuthorized("essentials.protect.entitytarget.bypass")
 			)
 			{
