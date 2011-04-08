@@ -34,7 +34,7 @@ groups:
     - essentials.sell
     - essentials.setjail
     - essentials.signs.protection.override
-    - essentials.spawmob
+    - essentials.spawnmob
     - essentials.teleport.cooldown.bypass
     - essentials.teleport.timer.bypass
     - essentials.togglejail
