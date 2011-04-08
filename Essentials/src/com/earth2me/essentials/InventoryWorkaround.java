@@ -19,6 +19,9 @@ public class InventoryWorkaround {
 		ItemStack[] inventory = ci.getContents();
 		for (int i = start; i < inventory.length; i++) {
 			ItemStack cItem = inventory[i];
+			if (cItem == null) {
+				continue;
+			}
 			if (item.getTypeId() == cItem.getTypeId() && (!forceAmount || item.getAmount() == cItem.getAmount()) && (!forceDurability || cItem.getDurability() == item.getDurability())) {
 				return i;
 			}
