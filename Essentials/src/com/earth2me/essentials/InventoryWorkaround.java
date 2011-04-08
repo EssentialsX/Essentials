@@ -1,8 +1,7 @@
 package com.earth2me.essentials;
 
 import java.util.HashMap;
-import org.bukkit.craftbukkit.inventory.CraftInventory;
-import org.bukkit.craftbukkit.inventory.CraftItemStack;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 /*
@@ -12,11 +11,11 @@ import org.bukkit.inventory.ItemStack;
  */
 public class InventoryWorkaround {
 
-	public static int first(CraftInventory ci,  ItemStack item, boolean forceDurability, boolean forceAmount) {
+	public static int first(Inventory ci,  ItemStack item, boolean forceDurability, boolean forceAmount) {
 		return next(ci, item, 0, forceDurability, forceAmount);
 	}
 
-	public static int next(CraftInventory ci, ItemStack item, int start, boolean forceDurability, boolean forceAmount) {
+	public static int next(Inventory ci, ItemStack item, int start, boolean forceDurability, boolean forceAmount) {
 		ItemStack[] inventory = ci.getContents();
 		for (int i = start; i < inventory.length; i++) {
 			ItemStack cItem = inventory[i];
@@ -27,7 +26,7 @@ public class InventoryWorkaround {
 		return -1;
 	}
 
-	public static HashMap<Integer, ItemStack> removeItem(CraftInventory ci, boolean forceDurability, ItemStack... items) {
+	public static HashMap<Integer, ItemStack> removeItem(Inventory ci, boolean forceDurability, ItemStack... items) {
 		HashMap<Integer, ItemStack> leftover = new HashMap<Integer, ItemStack>();
 
 		// TODO: optimization
@@ -74,7 +73,7 @@ public class InventoryWorkaround {
 		return leftover;
 	}
 
-	public static boolean containsItem(CraftInventory ci, boolean forceDurability, ItemStack... items) {
+	public static boolean containsItem(Inventory ci, boolean forceDurability, ItemStack... items) {
 		HashMap<Integer, ItemStack> leftover = new HashMap<Integer, ItemStack>();
 
 		// TODO: optimization

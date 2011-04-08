@@ -8,7 +8,6 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Server;
-import org.bukkit.craftbukkit.inventory.CraftInventory;
 import org.bukkit.inventory.ItemStack;
 
 public class Commandunlimited extends EssentialsCommand
@@ -79,7 +78,7 @@ public class Commandunlimited extends EssentialsCommand
 			user.sendMessage("§7Giving unlimited amount of " + itemname + " to " + target.getDisplayName() + ".");
 		}
 		target.sendMessage("§7Giving unlimited amount of " + itemname + " to " + target.getDisplayName() + ".");
-		if (!InventoryWorkaround.containsItem((CraftInventory)target.getInventory(), true, stack)) {
+		if (!InventoryWorkaround.containsItem(target.getInventory(), true, stack)) {
 			target.getInventory().addItem(stack);
 		}
 		target.setUnlimited(stack, true);

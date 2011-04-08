@@ -1,14 +1,12 @@
 package com.earth2me.essentials;
 
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.minecraft.server.InventoryPlayer;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.craftbukkit.block.CraftSign;
-import org.bukkit.craftbukkit.inventory.CraftInventory;
 import org.bukkit.craftbukkit.inventory.CraftInventoryPlayer;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.*;
@@ -315,10 +313,10 @@ public class EssentialsPlayerListener extends PlayerListener
 					else
 					{
 						ItemStack i = ItemDb.get(l1[1], q1);
-						if (!InventoryWorkaround.containsItem((CraftInventory)user.getInventory(), true, i)) {
+						if (!InventoryWorkaround.containsItem(user.getInventory(), true, i)) {
 							throw new Exception("You do not have " + q1 + "x " + l1[1] + ".");
 						}
-						InventoryWorkaround.removeItem((CraftInventory)user.getInventory(), true, i);
+						InventoryWorkaround.removeItem(user.getInventory(), true, i);
 						user.updateInventory();
 					}
 				}
@@ -363,10 +361,10 @@ public class EssentialsPlayerListener extends PlayerListener
 					else
 					{
 						ItemStack i = ItemDb.get(l1[1], q1);
-						if (!InventoryWorkaround.containsItem((CraftInventory)user.getInventory(), true, i)) {
+						if (!InventoryWorkaround.containsItem(user.getInventory(), true, i)) {
 							throw new Exception("You do not have " + q1 + "x " + l1[1] + ".");
 						}
-						InventoryWorkaround.removeItem((CraftInventory)user.getInventory(), true, i);
+						InventoryWorkaround.removeItem(user.getInventory(), true, i);
 						user.updateInventory();
 					}
 				}

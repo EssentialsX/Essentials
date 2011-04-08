@@ -3,7 +3,6 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
-import org.bukkit.craftbukkit.inventory.CraftInventory;
 
 public class Commandinvsee extends EssentialsCommand {
 
@@ -22,7 +21,7 @@ public class Commandinvsee extends EssentialsCommand {
 			invUser = getPlayer(server, args, 0);
 		}
 		if (invUser == user && user.savedInventory != null) {
-			((CraftInventory)invUser.getInventory()).setContents(user.savedInventory);
+			invUser.getInventory().setContents(user.savedInventory);
 			user.savedInventory = null;
 			user.sendMessage("Your inventory has been restored.");
 			return;
@@ -32,7 +31,7 @@ public class Commandinvsee extends EssentialsCommand {
 		if (user.savedInventory == null) {
 			user.savedInventory = user.getInventory().getContents();
 		}
-		((CraftInventory)user.getInventory()).setContents(((CraftInventory)invUser.getInventory()).getContents());
+		user.getInventory().setContents(invUser.getInventory().getContents());
 		user.sendMessage("You see the inventory of "+invUser.getDisplayName()+".");
 		user.sendMessage("Use /invsee to restore your inventory.");
 	}

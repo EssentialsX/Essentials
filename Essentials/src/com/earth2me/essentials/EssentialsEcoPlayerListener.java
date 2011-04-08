@@ -4,7 +4,6 @@ import java.util.Map;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.craftbukkit.block.CraftSign;
-import org.bukkit.craftbukkit.inventory.CraftInventory;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerListener;
@@ -54,9 +53,9 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 				int amount = Integer.parseInt(sign.getLine(1));
 				ItemStack item = ItemDb.get(sign.getLine(2), amount);
 				int cost = Integer.parseInt(sign.getLine(3).substring(1));
-				if (!InventoryWorkaround.containsItem((CraftInventory)user.getInventory(), true, item)) throw new Exception("You do not have enough items to sell.");
+				if (!InventoryWorkaround.containsItem(user.getInventory(), true, item)) throw new Exception("You do not have enough items to sell.");
 				user.giveMoney(cost);
-				InventoryWorkaround.removeItem((CraftInventory)user.getInventory(), true, item);
+				InventoryWorkaround.removeItem(user.getInventory(), true, item);
 				user.updateInventory();
 			}
 			catch (Throwable ex)
@@ -109,7 +108,7 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 					}
 					else
 					{
-						if (!InventoryWorkaround.containsItem((CraftInventory)user.getInventory(), true, qi1))
+						if (!InventoryWorkaround.containsItem(user.getInventory(), true, qi1))
 							throw new Exception("You do not have " + q1 + "x " + l1[1] + ".");
 					}
 
@@ -118,7 +117,7 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 					if (m1)
 						user.takeMoney(q1);
 					else
-						InventoryWorkaround.removeItem((CraftInventory)user.getInventory(), true, qi1);
+						InventoryWorkaround.removeItem(user.getInventory(), true, qi1);
 
 					if (m2)
 						user.giveMoney(q2);

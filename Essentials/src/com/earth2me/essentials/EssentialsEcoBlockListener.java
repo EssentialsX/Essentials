@@ -3,7 +3,6 @@ package com.earth2me.essentials;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.craftbukkit.block.CraftSign;
-import org.bukkit.craftbukkit.inventory.CraftInventory;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.SignChangeEvent;
@@ -142,8 +141,8 @@ public class EssentialsEcoBlockListener extends BlockListener
 				else
 				{
 					ItemStack i2 = ItemDb.get(l2[1], r2);
-					if (!InventoryWorkaround.containsItem((CraftInventory)user.getInventory(), true, i2)) throw new Exception("You do not have " + r2 + "x " + l2[1] + ".");
-					InventoryWorkaround.removeItem((CraftInventory)user.getInventory(), true, i2);
+					if (!InventoryWorkaround.containsItem(user.getInventory(), true, i2)) throw new Exception("You do not have " + r2 + "x " + l2[1] + ".");
+					InventoryWorkaround.removeItem(user.getInventory(), true, i2);
 					user.updateInventory();
 				}
 
