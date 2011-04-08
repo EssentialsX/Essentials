@@ -51,7 +51,7 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 			return;
 		}
 
-		if (user.isAuthorized("essentials.protect.admin"))
+		if (user.isAuthorized("essentials.protect.ownerinfo"))
 		{
 			String ownerName = spData.getBlockOwner(user.getWorld().getName(), user.getName(),
 													blockClicked);
