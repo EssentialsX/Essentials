@@ -16,7 +16,7 @@ public class Commandpowertool extends EssentialsCommand {
 	protected void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception {
 		
 		ItemStack is = user.getItemInHand();
-		if (is.getType() == Material.AIR) {
+		if (is == null || is.getType() == Material.AIR) {
 			user.sendMessage("Command can't be attached to air.");
 		}
 		String command = getFinalArg(args, 0);

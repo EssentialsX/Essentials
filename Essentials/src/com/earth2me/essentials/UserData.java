@@ -287,7 +287,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
 			savedInventory = is;
 			config.setProperty("inventory.size", is.length);
 			for (int i = 0; i < is.length; i++) {
-				if (is[i].getType() == Material.AIR) {
+				if (is[i] == null || is[i].getType() == Material.AIR) {
 					continue;
 				}
 				config.setProperty("inventory."+i, is[i]);
