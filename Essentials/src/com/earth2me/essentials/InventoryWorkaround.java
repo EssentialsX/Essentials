@@ -17,9 +17,9 @@ public class InventoryWorkaround {
 	}
 
 	public static int next(CraftInventory ci, ItemStack item, int start, boolean forceDurability, boolean forceAmount) {
-		CraftItemStack[] inventory = ci.getContents();
+		ItemStack[] inventory = ci.getContents();
 		for (int i = start; i < inventory.length; i++) {
-			CraftItemStack cItem = inventory[i];
+			ItemStack cItem = inventory[i];
 			if (item.getTypeId() == cItem.getTypeId() && (!forceAmount || item.getAmount() == cItem.getAmount()) && (!forceDurability || cItem.getDurability() == item.getDurability())) {
 				return i;
 			}
@@ -55,7 +55,7 @@ public class InventoryWorkaround {
 					leftover.put(i, item);
 					break;
 				} else {
-					CraftItemStack itemStack = ci.getItem(first);
+					ItemStack itemStack = ci.getItem(first);
 					int amount = itemStack.getAmount();
 
 					if (amount <= toDelete) {
@@ -119,7 +119,7 @@ public class InventoryWorkaround {
 					leftover.put(i, item);
 					break;
 				} else {
-					CraftItemStack itemStack = ci.getItem(slot);
+					ItemStack itemStack = ci.getItem(slot);
 					int amount = itemStack.getAmount();
 
 					if (amount <= mustHave) {

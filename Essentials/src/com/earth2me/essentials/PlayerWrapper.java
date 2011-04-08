@@ -413,4 +413,44 @@ public class PlayerWrapper implements Player
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
+	public void saveData()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public void loadData()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public boolean isSleeping()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public int getSleepTicks()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public List<Entity> getNearbyEntities(double d, double d1, double d2)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public boolean isDead()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public float getFallDistance()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public void setFallDistance(float f)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }

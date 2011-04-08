@@ -33,7 +33,7 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 	private CommandSender replyTo = null;
 	private boolean isNew = false;
 	public String currentJail;
-	public CraftItemStack[] savedInventory;
+	public ItemStack[] savedInventory;
 
 	private User(Player base)
 	{

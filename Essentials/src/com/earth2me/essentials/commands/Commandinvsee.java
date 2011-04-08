@@ -30,7 +30,7 @@ public class Commandinvsee extends EssentialsCommand {
 		
 		user.charge(this);
 		if (user.savedInventory == null) {
-			user.savedInventory = ((CraftInventory)user.getInventory()).getContents();
+			user.savedInventory = user.getInventory().getContents();
 		}
 		((CraftInventory)user.getInventory()).setContents(((CraftInventory)invUser.getInventory()).getContents());
 		user.sendMessage("You see the inventory of "+invUser.getDisplayName()+".");
