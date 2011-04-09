@@ -207,6 +207,9 @@ commands:
   tpahere:
     description: Request that the specified player teleport to you.
     usage: /<command> <player>
+  tpall:
+    desctiption: Teleport all online players to another player.
+    usage: /<command> <player>
   tpdeny:
     description: Reject a teleport request.
     usage: /<command>
