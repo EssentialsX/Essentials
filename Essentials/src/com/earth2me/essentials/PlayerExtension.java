@@ -28,8 +28,10 @@ public class PlayerExtension extends PlayerWrapper
 
 	public float getCorrectedYaw()
 	{
-		float angle = (getLocation().getYaw() - 90) % 360;
-		if (angle < 0) angle += 360.0F;
+		float angle = (getLocation().getYaw() - 90.0f) % 360.0f;
+		if (angle < 0) {
+			angle += 360.0f;
+		}
 		return angle;
 	}
 	
@@ -46,14 +48,14 @@ public class PlayerExtension extends PlayerWrapper
 	public Location getSafeDestination(Location loc) throws Exception
 	{
 		World world = loc.getWorld();
-		double x = loc.getX();
-		double y = loc.getY();
-		double z = loc.getZ();
+		double x = Math.round(loc.getX())+0.5;
+		double y = Math.round(loc.getY());
+		double z = Math.round(loc.getZ())+0.5;
 
 		while (isBlockAboveAir(world, x, y, z))
 		{
 			y -= 1.0D;
-			if (y < 0) {
+			if (y < 0.0D) {
 				throw new Exception("Hole in floor");
 			}
 		}
@@ -131,7 +133,7 @@ public class PlayerExtension extends PlayerWrapper
 
 	public EntityPlayer getHandle()
 	{
-		return (EntityPlayer)getCraftPlayer().getHandle();
+		return getCraftPlayer().getHandle();
 	}
 
 	public CraftPlayer getCraftPlayer()
