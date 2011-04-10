@@ -66,7 +66,7 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 			parent.alert(user, item.getType().toString(), "used: ");
 		}
 
-		if (item != null && item.getTypeId() == 323)
+		/*if (item != null && item.getTypeId() == 323)
 		{
 			if (EssentialsProtect.genSettings.get("protect.protect.signs"))
 			{
@@ -88,7 +88,7 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 					}
 				}
 			}
-		}
+		}*/
 
 	}
 }

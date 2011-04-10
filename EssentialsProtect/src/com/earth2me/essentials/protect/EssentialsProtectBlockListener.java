@@ -4,6 +4,7 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockFromToEvent;
@@ -47,7 +48,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 			return;
 		}
 
-		Block blockPlaced = event.getBlockAgainst();
+		Block blockPlaced = event.getBlockPlaced();
 		int id = event.getBlockPlaced().getTypeId();
 
 		if (EssentialsProtect.checkProtectionItems(EssentialsProtect.blackListPlace, id) && !user.isAuthorized("essentials.protect.exemptplacement"))
@@ -61,7 +62,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 			parent.alert(user, item.getType().toString(), "placed: ");
 		}
 
-		if (spData.isBlockAboveProtectedRail(blockPlaced))
+		if (spData.isBlockAboveProtectedRail(blockPlaced.getFace(BlockFace.DOWN)))
 		{
 			if (EssentialsProtect.genSettings.get("protect.protect.prevent.block-on-rail"))
 			{
@@ -70,7 +71,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 			}
 		}
 
-		if (item.getTypeId() == 66)
+		if (blockPlaced.getType() == Material.RAILS)
 		{
 			if (EssentialsProtect.genSettings.get("protect.protect.rails"))
 			{
@@ -80,10 +81,34 @@ public class EssentialsProtectBlockListener extends BlockListener
 					railBlockY = blockPlaced.getY();
 					railBlockZ = blockPlaced.getZ();
 
-					spData.insertProtectionIntoDb(user.getWorld().getName(), user.getName(), railBlockX, railBlockY + 1, railBlockZ);
+					spData.insertProtectionIntoDb(user.getWorld().getName(), user.getName(), railBlockX, railBlockY, railBlockZ);
 					if (EssentialsProtect.genSettings.get("protect.protect.block-below"))
 					{
-						spData.insertProtectionIntoDb(user.getWorld().getName(), user.getName(), railBlockX, railBlockY, railBlockZ);
+						spData.insertProtectionIntoDb(user.getWorld().getName(), user.getName(), railBlockX, railBlockY - 1, railBlockZ);
+					}
+				}
+			}
+		}
+		if (blockPlaced.getType() == Material.SIGN_POST || blockPlaced.getType() == Material.WALL_SIGN) {
+			if (EssentialsProtect.genSettings.get("protect.protect.signs"))
+			{
+				if (user.isAuthorized("essentials.protect"))
+				{
+					int signBlockX = blockPlaced.getX();
+					int signBlockY = blockPlaced.getY();
+					int signBlockZ = blockPlaced.getZ();
+
+					initialize();
+					spData.insertProtectionIntoDb(user.getWorld().getName(), user.getName(), signBlockX,
+												  signBlockY, signBlockZ);
+
+					if (EssentialsProtect.genSettings.get("protect.protect.block-below"))
+					{
+						signBlockX = event.getBlockAgainst().getX();
+						signBlockY = event.getBlockAgainst().getY();
+						signBlockZ = event.getBlockAgainst().getZ();
+						spData.insertProtectionIntoDb(user.getWorld().getName(), user.getName(), signBlockX,
+													  signBlockY, signBlockZ);
 					}
 				}
 			}
