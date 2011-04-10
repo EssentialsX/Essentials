@@ -7,7 +7,6 @@ import org.bukkit.*;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import net.minecraft.server.EntityHuman;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.yaml.snakeyaml.Yaml;
@@ -337,6 +336,10 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 
 	public void charge(String cmd) throws Exception
 	{
+		if (isAuthorized("essentials.nocommandcost.all") ||
+			isAuthorized("essentials.nocommandcost."+cmd)) {
+			return;
+		}
 		double mon = getMoney();
 		double cost = Essentials.getSettings().getCommandCost(cmd.startsWith("/") ? cmd.substring(1) : cmd);
 		if (mon < cost && !isOp())
