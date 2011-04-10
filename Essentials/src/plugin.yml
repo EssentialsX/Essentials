@@ -91,6 +91,9 @@ commands:
   home:
     description: Teleport to your home.
     usage: /<command>
+  info:
+    description: Shows information set by the server owner
+    usage: /<command> [chapter] [page]
   invsee:
     description: See the inventory of other players.
     usage: /<command> <player>
