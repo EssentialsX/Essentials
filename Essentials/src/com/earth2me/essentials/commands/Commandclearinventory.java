@@ -17,6 +17,15 @@ public class Commandclearinventory extends EssentialsCommand
 	}
 
 	@Override
+	public String[] getTriggers()
+	{
+		return new String[]
+				{
+					getName(), "ci"
+				};
+	}
+
+	@Override
 	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
 	{
 		if (args.length > 0 && user.isAuthorized("essentials.clearinventory.others"))
