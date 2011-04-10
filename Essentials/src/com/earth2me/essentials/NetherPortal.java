@@ -41,12 +41,12 @@ public class NetherPortal
 		{
 		// portal is in X direction
 			return new Location(block.getWorld(), block.getX() + 1,
-								block.getY(), block.getZ() + 1.5 - 2 * Math.round(Math.random()));
+								block.getY(), block.getZ() + 1 - 2 * Math.round(Math.random()));
 		}
 		else
 		{
 		// portal is in Z direction
-			return new Location(block.getWorld(), block.getX() + 1.5 - 2 * Math.round(Math.random()),
+			return new Location(block.getWorld(), block.getX() + 1 - 2 * Math.round(Math.random()),
 								block.getY(), block.getZ() + 1);
 		}
 	}
