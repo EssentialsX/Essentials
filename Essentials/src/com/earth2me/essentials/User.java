@@ -504,6 +504,9 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 			if (vals.size() > 5 && getServer() != null) {
 				world = getServer().getWorld((String)vals.get(5));
 			}
+			if (world == null) {
+				throw new Exception();
+			}
 			return new Location(
 					world,
 					((Number)vals.get(0)).doubleValue(),
@@ -520,6 +523,9 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 			World world = getServer().getWorlds().get(0);
 			if (vals.size() > 5) {
 				world = getServer().getWorld((String)vals.get(5));
+			}
+			if (world == null) {
+				throw new Exception();
 			}
 			return new Location(world,
 						((Number)vals.get(0)).doubleValue(),
