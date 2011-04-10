@@ -7,8 +7,11 @@ package org.anjocaido.groupmanager.dataholder;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -756,8 +759,13 @@ public class WorldDataHolder {
         DumperOptions opt = new DumperOptions();
         opt.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         final Yaml yaml = new Yaml(opt);
+	try {
+		yaml.dump(root, new OutputStreamWriter(new FileOutputStream(groupsFile), "UTF-8"));
+	} catch (UnsupportedEncodingException ex) {
+	} catch (FileNotFoundException ex) {
+	}
 
-        FileWriter tx = null;
+        /*FileWriter tx = null;
         try {
             tx = new FileWriter(groupsFile, false);
             tx.write(yaml.dump(root));
@@ -768,7 +776,7 @@ public class WorldDataHolder {
                 tx.close();
             } catch (IOException ex) {
             }
-        }
+        }*/
     }
 
     /**
@@ -813,8 +821,12 @@ public class WorldDataHolder {
         DumperOptions opt = new DumperOptions();
         opt.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         final Yaml yaml = new Yaml(opt);
-
-        FileWriter tx = null;
+	try {
+		yaml.dump(root, new OutputStreamWriter(new FileOutputStream(usersFile), "UTF-8"));
+	} catch (UnsupportedEncodingException ex) {
+	} catch (FileNotFoundException ex) {
+	}
+        /*FileWriter tx = null;
         try {
             tx = new FileWriter(usersFile, false);
             tx.write(yaml.dump(root));
@@ -825,7 +837,7 @@ public class WorldDataHolder {
                 tx.close();
             } catch (IOException ex) {
             }
-        }
+        }*/
     }
 
     /**
