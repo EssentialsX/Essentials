@@ -86,7 +86,11 @@ public abstract class UserData extends PlayerExtension implements IConf {
 				String defaultWorld = config.getString("home.default");
 				worldHome = "home.worlds." + defaultWorld;
 			}
-			return config.getLocation(worldHome, getServer());
+			Location loc = config.getLocation(worldHome, getServer());
+			if (loc == null) {
+				throw new Exception();
+			}
+			return loc;
 		} else {
 			throw new Exception("You have not set a home.");
 		}
