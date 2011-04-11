@@ -163,13 +163,16 @@ commands:
   r:
     description: Quickly reply to the last player to message you.
     usage: /<command> [message]
-  rules:
-    description: Views the server rules.
-    usage: /<command>
+  realname:
+    description: Displays the username of a user based on his/her nickname.
+    usage: /<command> [nickname]
   reloadall:
     description: Reloads all plugins.
     usage: /<command>
     aliases: [rel]
+  rules:
+    description: Views the server rules.
+    usage: /<command>
   sell:
     description: Sells the item currently in your hand.
     usage: /<command> <-><amount>
