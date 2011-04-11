@@ -48,9 +48,9 @@ public class PlayerExtension extends PlayerWrapper
 	public Location getSafeDestination(Location loc) throws Exception
 	{
 		World world = loc.getWorld();
-		double x = Math.round(loc.getX())+0.5;
-		double y = Math.round(loc.getY());
-		double z = Math.round(loc.getZ())+0.5;
+		double x = Math.floor(loc.getX())+0.5;
+		double y = Math.floor(loc.getY());
+		double z = Math.floor(loc.getZ())+0.5;
 
 		while (isBlockAboveAir(world, x, y, z))
 		{
