@@ -20,11 +20,11 @@ public class Commandantioch extends EssentialsCommand
 	@Override
 	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
 	{
-		if (!user.isOp())
+		/*if (!user.isOp())
 		{
 			user.sendMessage("§cNone shall pass.");
 			return;
-		}
+		}*/
 		
 		server.broadcastMessage("...lobbest thou thy Holy Hand Grenade of Antioch towards thy foe,");
 		server.broadcastMessage("who being naughty in My sight, shall snuff it.");
