@@ -304,6 +304,7 @@ public class Settings implements IConf
 		epSettings.put("protect.prevent.water-bucket-flow", config.getBoolean("protect.prevent.water-bucket-flow", false));
 		epSettings.put("protect.prevent.fire-spread", config.getBoolean("protect.prevent.fire-spread", false));
 		epSettings.put("protect.prevent.flint-fire", config.getBoolean("protect.prevent.flint-fire", false));
+		epSettings.put("protect.prevent.portal-creation", config.getBoolean("protect.prevent.portal-creation", false));
 		epSettings.put("protect.prevent.lava-fire-spread", config.getBoolean("protect.prevent.lava-fire-spread", false));
 		epSettings.put("protect.prevent.tnt-explosion", config.getBoolean("protect.prevent.tnt-explosion", false));
 		epSettings.put("protect.prevent.creeper-explosion", config.getBoolean("protect.prevent.creeper-explosion", false));

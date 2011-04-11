@@ -2,6 +2,8 @@ package com.earth2me.essentials.protect;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -129,6 +131,14 @@ public class EssentialsProtectBlockListener extends BlockListener
 			event.setCancelled(true);
 			return;
 		}
+		
+		if (event.getBlock().getType() == Material.OBSIDIAN || 
+			event.getBlock().getFace(BlockFace.DOWN).getType() == Material.OBSIDIAN)
+		{
+			event.setCancelled(EssentialsProtect.guardSettings.get("protect.prevent.portal-creation"));
+			return;
+		}
+				
 		if ((event.getCause().equals(BlockIgniteEvent.IgniteCause.SPREAD)))
 		{
 			event.setCancelled(EssentialsProtect.guardSettings.get("protect.prevent.fire-spread"));
