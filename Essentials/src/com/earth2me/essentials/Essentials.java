@@ -59,40 +59,10 @@ public class Essentials extends JavaPlugin
 		Essentials ess = (Essentials)pm.getPlugin("Essentials");
 		if (!ess.isEnabled())
 			pm.enablePlugin(ess);
-		loadClasses();
 	}
 
-	@SuppressWarnings("CallToThreadDumpStack")
 	public static void loadClasses()
 	{
-		return;
-		/*final String[] classes = new String[]
-		{
-			"commands.IEssentialsCommand",
-			"commands.EssentialsCommand",
-			"User",
-			"TargetBlock",
-			"Spawn",
-			"Settings",
-			"OfflinePlayer",
-			"ItemDb",
-			"Mob",
-			"EssentialsBlockListener",
-			"EssentialsBlockListener$1",
-			"EssentialsBlockListener$2",
-			"EssentialsPlayerListener",
-			"Backup"			
-		};
-
-		try
-		{
-			for (String c : classes)
-				Essentials.class.getClassLoader().loadClass("com.earth2me.essentials." + c);
-		}
-		catch (Throwable ex)
-		{
-			ex.printStackTrace();
-		}*/
 	}
 
 	public static Essentials getStatic()

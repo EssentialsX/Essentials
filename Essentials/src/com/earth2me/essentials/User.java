@@ -678,7 +678,7 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 	public String getNick()
 	{
 		Essentials ess = Essentials.getStatic();
-		String name = ess.getConfiguration().getBoolean("disable-nick", false) ? getName() : ess.readNickname(this);
+		String name = Essentials.getSettings().isCommandDisabled("nick") ? getName() : ess.readNickname(this);
 		if (isOp() && ess.getConfiguration().getString("ops-name-color", "c").matches("^[0-9a-f]$")) {
 			name = "§" + ess.getConfiguration().getString("ops-name-color", "c") + name + "§f";
 		}
