@@ -22,7 +22,7 @@ commands:
   balance:
     description: States the current balance of a player.  Defaults to self.
     usage: /<command> <player>
-    aliases: bal,money
+    aliases: [bal,money]
   ban:
     description: Bans a player.
     usage: /<command> [player] <reason>
@@ -79,10 +79,11 @@ commands:
   god:
     description: Enables your godly powers.
     usage: /<command>
-    aliases: [tgm,godmode]
+    aliases: [tgm,godmode,egod]
   heal:
     description: Heals you or the given player.
     usage: /<command> <player>
+    aliases: [eheal]
   help:
     description: Views a list of available commands.
     usage: /<command>
