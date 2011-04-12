@@ -14,6 +14,13 @@ public class Commandgod extends EssentialsCommand
 	}
 
 	@Override
+	public String[] getTriggers() {
+		return new String[] {
+			getName(), "egod"
+		};
+	}
+	
+	@Override
 	protected void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
 	{
 		if (args.length > 0 && (user.isAuthorized("essentials.god.others") || user.isOp()))
