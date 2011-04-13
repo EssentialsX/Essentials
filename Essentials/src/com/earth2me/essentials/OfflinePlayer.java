@@ -388,4 +388,14 @@ public class OfflinePlayer implements Player
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
+	public void setSleepingIgnored(boolean bln)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public boolean isSleepingIgnored()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }
