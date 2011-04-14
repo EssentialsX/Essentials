@@ -2,8 +2,7 @@ package com.earth2me.essentials.protect;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -46,6 +45,10 @@ public class EssentialsProtectBlockListener extends BlockListener
 
 		if (EssentialsProtect.playerSettings.get("protect.disable.build") && !user.canBuild())
 		{
+			if(Essentials.getSettings().warnOnBuildDisallow())
+			{
+				user.sendMessage(ChatColor.RED + "You are not permitted to build");
+			}
 			event.setCancelled(true);
 			return;
 		}

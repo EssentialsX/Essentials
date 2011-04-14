@@ -438,6 +438,11 @@ public class Settings implements IConf
 
 	public Boolean spawnIfNoHome()
 	{
-		return config.getBoolean("spawn-if-no-home", true);
+		return config.getBoolean("spawn-if-no-home", false);
+	}
+
+	public Boolean warnOnBuildDisallow()
+	{
+		return config.getBoolean("warn-on-build-disallow", false);
 	}
 }

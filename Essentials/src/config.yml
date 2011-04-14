@@ -378,6 +378,9 @@ protect:
     # Set true to disable building for those people
     build: true
 
+    #Should we tell people they are not allowed to build
+    warn-on-build-disallow: false
+
 
 
 

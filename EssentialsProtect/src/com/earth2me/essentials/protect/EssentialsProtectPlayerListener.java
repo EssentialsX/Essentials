@@ -40,6 +40,10 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 
 		if (EssentialsProtect.playerSettings.get("protect.disable.build") && !user.canBuild())
 		{
+			if(Essentials.getSettings().warnOnBuildDisallow())
+			{
+				user.sendMessage(ChatColor.RED + "You are not permitted to build");
+			}
 			event.setCancelled(true);
 			return;
 		}
