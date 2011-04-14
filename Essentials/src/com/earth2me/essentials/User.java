@@ -624,9 +624,6 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 	public void teleportToHome()
 	{
 		teleportToHome(null);
-
-
-
 	}
 
 	public void teleportToNow(Location loc) throws Exception
@@ -634,9 +631,6 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 		cancelTeleport();
 		lastLocation = getLocation();
 		getBase().teleport(getSafeDestination(loc));
-
-
-
 	}
 
 	public void teleportToNow(Entity entity)
@@ -644,41 +638,26 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 		cancelTeleport();
 		lastLocation = getLocation();
 		getBase().teleport(entity);
-
-
-
 	}
 
 	public void teleportBack(final String chargeFor)
 	{
 		teleportTo(lastLocation, chargeFor);
-
-
-
 	}
 
 	public void teleportBack()
 	{
 		teleportBack(null);
-
-
-
 	}
 
 	public void dispose()
 	{
 		this.base = new OfflinePlayer(getName());
-
-
-
 	}
 
 	public void charge(IEssentialsCommand cmd) throws Exception
 	{
 		charge(cmd.getName());
-
-
-
 	}
 
 	public boolean getJustPortaled()
@@ -692,33 +671,21 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 	public void setJustPortaled(boolean value)
 	{
 		justPortaled = value;
-
-
-
 	}
 
 	public void setReplyTo(CommandSender user)
 	{
 		replyTo = user;
-
-
-
 	}
 
 	public CommandSender getReplyTo()
 	{
 		return replyTo;
-
-
-
 	}
 
 	public void setHome()
 	{
 		setHome(getLocation());
-
-
-
 	}
 
 	public void setHome(Location home)
@@ -733,76 +700,46 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 		data.put("home", vals);
 		flush();
 
-		setCompassTarget(
-				home);
-
-
-
+		setCompassTarget(home);
 	}
 
 	public String getNick()
 	{
 		Essentials ess = Essentials.getStatic();
 		String name = Essentials.getSettings().isCommandDisabled("nick") ? getName() : ess.readNickname(this);
-
-
-
 		if (isOp() && ess.getConfiguration().getString("ops-name-color", "c").matches("^[0-9a-f]$"))
 		{
 			name = "§" + ess.getConfiguration().getString("ops-name-color", "c") + name + "§f";
-
-
-
 		}
 		return name;
-
-
-
 	}
 
 	public void warpTo(String warp, final String chargeFor) throws Exception
 	{
 		lastLocation = getLocation();
 		Location loc = Essentials.getWarps().getWarp(warp);
-		teleportTo(
-				loc, chargeFor);
-		sendMessage(
-				"§7Warping to " + warp + ".");
-
-
-
+		teleportTo(loc, chargeFor);
+		sendMessage("§7Warping to " + warp + ".");
 	}
 
 	public void warpTo(String string) throws Exception
 	{
 		warpTo(string, null);
-
-
-
 	}
 
 	public void clearNewFlag()
 	{
 		isNew = false;
-
-
-
 	}
 
 	public int compareTo(User t)
 	{
 		return ChatColor.stripColor(this.getDisplayName()).compareToIgnoreCase(ChatColor.stripColor(t.getDisplayName()));
-
-
-
 	}
 
 	public Boolean canSpawnItem(int itemId)
 	{
 		return !Essentials.getSettings().itemSpawnBlacklist().contains(itemId);
-
-
-
 	}
 
 	@SuppressWarnings("unchecked")
@@ -811,50 +748,29 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 		if (!data.containsKey("unlimited"))
 		{
 			return new ArrayList<Integer>();
-
-
-
 		}
 		return (List<Integer>)data.get("unlimited");
-
-
-
 	}
 
 	public boolean hasUnlimited(ItemStack stack)
 	{
 		return getUnlimited().contains(stack.getTypeId());
-
-
-
 	}
 
 	@SuppressWarnings("unchecked")
 	public void setUnlimited(ItemStack stack, boolean state)
 	{
 		List<Integer> items = getUnlimited();
-
-
-
 		if (items.contains(stack.getTypeId()))
 		{
 			items.remove(Integer.valueOf(stack.getTypeId()));
-
-
-
 		}
 		if (state)
 		{
 			items.add(stack.getTypeId());
-
-
-
 		}
 		data.put("unlimited", items);
 		flush();
-
-
-
 	}
 
 	public String getPowertool(ItemStack stack)
@@ -862,48 +778,26 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 		if (!data.containsKey("powertools"))
 		{
 			return null;
-
-
-
 		}
 		@SuppressWarnings("unchecked")
 		Map<Integer, String> tools = (Map<Integer, String>)data.get("powertools");
-
-
-
 		return tools.get(stack.getTypeId());
-
-
-
 	}
 
 	public void setPowertool(ItemStack stack, String command)
 	{
 		Map<Integer, String> tools = new HashMap<Integer, String>();
-
-
-
 		if (data.containsKey("powertools"))
 		{
 			tools = (Map<Integer, String>)data.get("powertools");
-
-
-
 		}
 		if (command == null || command.trim().isEmpty())
 		{
 			tools.remove(Integer.valueOf(stack.getTypeId()));
-
-
-
 			return;
-
-
-
 		}
 		tools.put(Integer.valueOf(stack.getTypeId()), command.trim());
 		data.put("powertools", tools);
 		flush();
-
 	}
 }
