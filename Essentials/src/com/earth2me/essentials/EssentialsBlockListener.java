@@ -7,6 +7,7 @@ import org.bukkit.block.*;
 import org.bukkit.craftbukkit.block.CraftSign;
 import org.bukkit.event.block.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.MaterialData;
 
 
 public class EssentialsBlockListener extends BlockListener
@@ -167,10 +168,9 @@ public class EssentialsBlockListener extends BlockListener
 			}
 		}
 		final User user = User.get(event.getPlayer());
-		final ItemStack is = event.getItemInHand();
-		if (is.getType() == Material.AIR) {
-			is.setType(event.getBlockPlaced().getType());
-		}
+		// Do not rely on getItemInHand();
+		// http://leaky.bukkit.org/issues/663
+		final ItemStack is = new ItemStack(event.getBlockPlaced().getType(), 1, (short)0, event.getBlockPlaced().getData());
 		switch(is.getType()) {
 			case WOODEN_DOOR:
 				is.setType(Material.WOOD_DOOR);
@@ -204,7 +204,6 @@ public class EssentialsBlockListener extends BlockListener
 		}
 		boolean unlimitedForUser = user.hasUnlimited(is);
 		if (unlimitedForUser) {
-			is.setAmount(1);
 			Essentials.getStatic().getScheduler().scheduleSyncDelayedTask(Essentials.getStatic(), 
 				new Runnable() {
 
