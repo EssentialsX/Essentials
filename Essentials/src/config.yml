@@ -169,7 +169,8 @@ respawn-at-home: false
 # If you enable this and remove default user access to the /sethome command, you can make beds the only way for players to set their home location.
 bed-sethome: false
 
-
+#if no home is set send you to spawn when /home is used
+spawn-if-no-home: false
 
 
 ############################################################

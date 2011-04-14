@@ -435,4 +435,9 @@ public class Settings implements IConf
 		}
 		return epBreakList;
 	}
+
+	public Boolean spawnIfNoHome()
+	{
+		return config.getBoolean("spawn-if-no-home", true);
+	}
 }

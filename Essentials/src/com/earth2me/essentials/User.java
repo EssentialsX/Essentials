@@ -14,7 +14,7 @@ import org.yaml.snakeyaml.constructor.SafeConstructor;
 import org.yaml.snakeyaml.reader.UnicodeReader;
 
 
-public class User extends PlayerExtension implements Comparable<User>, IReplyTo 
+public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 {
 	private static final Logger logger = Logger.getLogger("Minecraft");
 	private final Yaml yaml = new Yaml(new SafeConstructor());
@@ -62,18 +62,18 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 	{
 		if (base == null)
 			return null;
-		
+
 		if (base instanceof User)
 			return (User)base;
-		
+
 		if (users.containsKey(base.getName()))
 			return users.get(base.getName()).update(base);
-		
+
 		User u = new User(base);
 		users.put(u.getName(), u);
 		return u;
 	}
-	
+
 	public static <T> void charge(T base, IEssentialsCommand cmd) throws Exception
 	{
 		if (base instanceof Player)
@@ -138,13 +138,15 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 	public void teleportCooldown(boolean justCheck) throws Exception
 	{
 		long now = Calendar.getInstance().getTimeInMillis();
-		if (lastTeleport > 0) {
+		if (lastTeleport > 0)
+		{
 			long cooldown = Essentials.getSettings().getTeleportCooldown();
 			long left = lastTeleport + cooldown - now;
-			if (left > 0 && !isOp() && !isAuthorized("essentials.teleport.cooldown.bypass")) {
+			if (left > 0 && !isOp() && !isAuthorized("essentials.teleport.cooldown.bypass"))
+			{
 				throw new Exception("Time before next teleport: " + Essentials.FormatTime(left));
 			}
-		} 
+		}
 		// if justCheck is set, don't update lastTeleport; we're just checking
 		if (!justCheck) lastTeleport = now;
 	}
@@ -157,10 +159,12 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 	public void healCooldown() throws Exception
 	{
 		long now = Calendar.getInstance().getTimeInMillis();
-		if (lastHeal > 0) {
+		if (lastHeal > 0)
+		{
 			long cooldown = Essentials.getSettings().getHealCooldown();
 			long left = lastHeal + cooldown - now;
-			if (left > 0 && !isOp() && !isAuthorized("essentials.heal.cooldown.bypass")) {
+			if (left > 0 && !isOp() && !isAuthorized("essentials.heal.cooldown.bypass"))
+			{
 				throw new Exception("Time before next heal: " + Essentials.FormatTime(left));
 			}
 		}
@@ -267,10 +271,11 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 		load();
 		if (data.containsKey("money"))
 		{
-			if (data.get("money") instanceof Number) {
+			if (data.get("money") instanceof Number)
+			{
 				return ((Number)data.get("money")).doubleValue();
 			}
-			logger.log(Level.SEVERE, "Can't convert money value to double:"+ data.get("money"));
+			logger.log(Level.SEVERE, "Can't convert money value to double:" + data.get("money"));
 		}
 
 		try
@@ -336,8 +341,9 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 
 	public void charge(String cmd) throws Exception
 	{
-		if (isAuthorized("essentials.nocommandcost.all") ||
-			isAuthorized("essentials.nocommandcost."+cmd)) {
+		if (isAuthorized("essentials.nocommandcost.all")
+			|| isAuthorized("essentials.nocommandcost." + cmd))
+		{
 			return;
 		}
 		double mon = getMoney();
@@ -431,7 +437,7 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 					sendMessage("§cError: " + ex.getMessage());
 				}
 			}
-			
+
 			public void DoCancel()
 			{
 				cancelTeleport();
@@ -481,7 +487,7 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 					sendMessage("§cError: " + ex.getMessage());
 				}
 			}
-			
+
 			public void DoCancel()
 			{
 				cancelTeleport();
@@ -501,10 +507,12 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 		{
 			List<Object> vals = (List<Object>)data.get("home");
 			World world = getServer() == null ? null : getServer().getWorlds().get(0);
-			if (vals.size() > 5 && getServer() != null) {
+			if (vals.size() > 5 && getServer() != null)
+			{
 				world = getServer().getWorld((String)vals.get(5));
 			}
-			if (world == null) {
+			if (world == null)
+			{
 				throw new Exception();
 			}
 			return new Location(
@@ -521,18 +529,20 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 			Map<String, Object> gdata = Essentials.getData(this);
 			List<Object> vals = (List<Object>)gdata.get("home");
 			World world = getServer().getWorlds().get(0);
-			if (vals.size() > 5) {
+			if (vals.size() > 5)
+			{
 				world = getServer().getWorld((String)vals.get(5));
 			}
-			if (world == null) {
+			if (world == null)
+			{
 				throw new Exception();
 			}
 			return new Location(world,
-						((Number)vals.get(0)).doubleValue(),
-						((Number)vals.get(1)).doubleValue(),
-						((Number)vals.get(2)).doubleValue(),
-						((Number)vals.get(3)).floatValue(),
-						((Number)vals.get(4)).floatValue());
+								((Number)vals.get(0)).doubleValue(),
+								((Number)vals.get(1)).doubleValue(),
+								((Number)vals.get(2)).doubleValue(),
+								((Number)vals.get(3)).floatValue(),
+								((Number)vals.get(4)).floatValue());
 		}
 		catch (Throwable ex)
 		{
@@ -552,10 +562,23 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 		}
 		catch (Throwable ex)
 		{
+			if (Essentials.getSettings().spawnIfNoHome())
+			{
+				try
+				{
+					respawn(Essentials.getStatic().spawn, null);
+					return;
+				}
+				catch (Throwable rex)
+				{
+					sendMessage("§cTeleport: " + rex.getMessage());
+					return;
+				}
+			}
+
 			sendMessage("§cTeleport: " + ex.getMessage());
 			return;
 		}
-
 		if (delay <= 0 || isOp() || isAuthorized("essentials.teleport.timer.bypass"))
 		{
 			try
@@ -573,7 +596,9 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 		}
 
 		cancelTeleport();
-		sendMessage("§7Teleportation will commence in " + Essentials.FormatTime(delay) + ". Don't move.");
+
+		sendMessage("§7Teleportation will commence in "
+					+ Essentials.FormatTime(delay) + ". Don't move.");
 		teleTimer = getServer().getScheduler().scheduleSyncRepeatingTask(Essentials.getStatic(), new TeleportTimer(this, delay)
 		{
 			public void DoTeleport()
@@ -588,7 +613,7 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 					sendMessage("§cError: " + ex.getMessage());
 				}
 			}
-			
+
 			public void DoCancel()
 			{
 				cancelTeleport();
@@ -599,6 +624,9 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 	public void teleportToHome()
 	{
 		teleportToHome(null);
+
+
+
 	}
 
 	public void teleportToNow(Location loc) throws Exception
@@ -606,6 +634,9 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 		cancelTeleport();
 		lastLocation = getLocation();
 		getBase().teleport(getSafeDestination(loc));
+
+
+
 	}
 
 	public void teleportToNow(Entity entity)
@@ -613,51 +644,81 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 		cancelTeleport();
 		lastLocation = getLocation();
 		getBase().teleport(entity);
+
+
+
 	}
 
 	public void teleportBack(final String chargeFor)
 	{
 		teleportTo(lastLocation, chargeFor);
+
+
+
 	}
 
 	public void teleportBack()
 	{
 		teleportBack(null);
+
+
+
 	}
 
 	public void dispose()
 	{
 		this.base = new OfflinePlayer(getName());
+
+
+
 	}
 
 	public void charge(IEssentialsCommand cmd) throws Exception
 	{
 		charge(cmd.getName());
+
+
+
 	}
 
 	public boolean getJustPortaled()
 	{
 		return justPortaled;
+
+
+
 	}
 
 	public void setJustPortaled(boolean value)
 	{
 		justPortaled = value;
+
+
+
 	}
 
 	public void setReplyTo(CommandSender user)
 	{
 		replyTo = user;
+
+
+
 	}
 
 	public CommandSender getReplyTo()
 	{
 		return replyTo;
+
+
+
 	}
 
 	public void setHome()
 	{
 		setHome(getLocation());
+
+
+
 	}
 
 	public void setHome(Location home)
@@ -672,91 +733,177 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 		data.put("home", vals);
 		flush();
 
-		setCompassTarget(home);
+		setCompassTarget(
+				home);
+
+
+
 	}
 
 	public String getNick()
 	{
 		Essentials ess = Essentials.getStatic();
 		String name = Essentials.getSettings().isCommandDisabled("nick") ? getName() : ess.readNickname(this);
-		if (isOp() && ess.getConfiguration().getString("ops-name-color", "c").matches("^[0-9a-f]$")) {
+
+
+
+		if (isOp() && ess.getConfiguration().getString("ops-name-color", "c").matches("^[0-9a-f]$"))
+		{
 			name = "§" + ess.getConfiguration().getString("ops-name-color", "c") + name + "§f";
+
+
+
 		}
 		return name;
+
+
+
 	}
 
 	public void warpTo(String warp, final String chargeFor) throws Exception
 	{
 		lastLocation = getLocation();
 		Location loc = Essentials.getWarps().getWarp(warp);
-		teleportTo(loc, chargeFor);
-		sendMessage("§7Warping to " + warp + ".");
+		teleportTo(
+				loc, chargeFor);
+		sendMessage(
+				"§7Warping to " + warp + ".");
+
+
+
 	}
 
 	public void warpTo(String string) throws Exception
 	{
 		warpTo(string, null);
+
+
+
 	}
 
 	public void clearNewFlag()
 	{
 		isNew = false;
+
+
+
 	}
 
-	public int compareTo(User t) {
+	public int compareTo(User t)
+	{
 		return ChatColor.stripColor(this.getDisplayName()).compareToIgnoreCase(ChatColor.stripColor(t.getDisplayName()));
+
+
+
 	}
 
 	public Boolean canSpawnItem(int itemId)
 	{
 		return !Essentials.getSettings().itemSpawnBlacklist().contains(itemId);
+
+
+
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Integer> getUnlimited() {
-		if (!data.containsKey("unlimited")) {
+	public List<Integer> getUnlimited()
+	{
+		if (!data.containsKey("unlimited"))
+		{
 			return new ArrayList<Integer>();
+
+
+
 		}
 		return (List<Integer>)data.get("unlimited");
+
+
+
 	}
-	
-	public boolean hasUnlimited(ItemStack stack) {
+
+	public boolean hasUnlimited(ItemStack stack)
+	{
 		return getUnlimited().contains(stack.getTypeId());
+
+
+
 	}
 
 	@SuppressWarnings("unchecked")
-	public void setUnlimited(ItemStack stack, boolean state) {
+	public void setUnlimited(ItemStack stack, boolean state)
+	{
 		List<Integer> items = getUnlimited();
-		if (items.contains(stack.getTypeId())) {
+
+
+
+		if (items.contains(stack.getTypeId()))
+		{
 			items.remove(Integer.valueOf(stack.getTypeId()));
+
+
+
 		}
-		if (state) {
+		if (state)
+		{
 			items.add(stack.getTypeId());
+
+
+
 		}
 		data.put("unlimited", items);
 		flush();
+
+
+
 	}
-	
-	public String getPowertool(ItemStack stack) {
-		if (!data.containsKey("powertools")) {
+
+	public String getPowertool(ItemStack stack)
+	{
+		if (!data.containsKey("powertools"))
+		{
 			return null;
+
+
+
 		}
 		@SuppressWarnings("unchecked")
 		Map<Integer, String> tools = (Map<Integer, String>)data.get("powertools");
+
+
+
 		return tools.get(stack.getTypeId());
+
+
+
 	}
 
-	public void setPowertool(ItemStack stack, String command) {
+	public void setPowertool(ItemStack stack, String command)
+	{
 		Map<Integer, String> tools = new HashMap<Integer, String>();
-		if (data.containsKey("powertools")) {
+
+
+
+		if (data.containsKey("powertools"))
+		{
 			tools = (Map<Integer, String>)data.get("powertools");
+
+
+
 		}
-		if (command == null || command.trim().isEmpty()) {
+		if (command == null || command.trim().isEmpty())
+		{
 			tools.remove(Integer.valueOf(stack.getTypeId()));
+
+
+
 			return;
+
+
+
 		}
 		tools.put(Integer.valueOf(stack.getTypeId()), command.trim());
 		data.put("powertools", tools);
 		flush();
+
 	}
 }
