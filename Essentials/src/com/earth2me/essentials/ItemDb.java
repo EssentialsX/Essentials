@@ -65,8 +65,8 @@ public class ItemDb
 					
 					int numeric = Integer.parseInt(parts[1]);
 					
-					durabilities.put(parts[0], parts.length > 2 && !parts[2].equals("0") ? Short.parseShort(parts[2]) : 0);
-					items.put(parts[0], numeric);
+					durabilities.put(parts[0].toLowerCase(), parts.length > 2 && !parts[2].equals("0") ? Short.parseShort(parts[2]) : 0);
+					items.put(parts[0].toLowerCase(), numeric);
 				}
 				catch (Exception ex)
 				{
@@ -81,7 +81,7 @@ public class ItemDb
 	}
 	
 	public static ItemStack get(String id, int quantity) throws Exception {
-		ItemStack retval = get(id);
+		ItemStack retval = get(id.toLowerCase());
 		retval.setAmount(quantity);
 		return retval;
 	}
@@ -90,7 +90,7 @@ public class ItemDb
 	{
 		ItemStack retval = new ItemStack(getUnsafe(id));
 		retval.setAmount(Essentials.getSettings().getDefaultStackSize());
-		retval.setDurability(durabilities.containsKey(id) ? durabilities.get(id) : 0);
+		retval.setDurability(durabilities.containsKey(id.toLowerCase()) ? durabilities.get(id.toLowerCase()) : 0);
 		if (items.containsValue(retval.getTypeId()) || true) return retval;
 		throw new Exception("Unknown item numeric: " + retval);
 	}
@@ -103,7 +103,7 @@ public class ItemDb
 		}
 		catch (NumberFormatException ex)
 		{
-			if (items.containsKey(id)) return items.get(id);
+			if (items.containsKey(id.toLowerCase())) return items.get(id.toLowerCase());
 			throw new Exception("Unknown item name: " + id);
 		}
 	}
