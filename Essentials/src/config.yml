@@ -219,23 +219,6 @@ command-costs:
 #Show other plugins commands in help
 non-ess-in-help: true
 
-
-
-
-
-############################################################
-# +------------------------------------------------------+ #
-# |                EssentialsServerlist                  | #
-# +------------------------------------------------------+ #
-############################################################
-
-# This is your server's mcserverlist.net API key.  Register your server at mcserverlist.net if you haven't already.
-mcsl-key: ''
-
-
-
-
-
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsChat                     | #
