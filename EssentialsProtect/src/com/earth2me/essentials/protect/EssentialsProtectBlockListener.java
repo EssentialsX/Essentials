@@ -69,7 +69,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 
 		if (spData.isBlockAboveProtectedRail(blockPlaced.getFace(BlockFace.DOWN)))
 		{
-			if (EssentialsProtect.genSettings.get("protect.protect.prevent.block-on-rail"))
+			if (EssentialsProtect.genSettings.get("protect.protect.prevent-block-on-rails"))
 			{
 				event.setCancelled(true);
 				return;
