@@ -456,6 +456,6 @@ public class Settings implements IConf
 
 	public boolean warnOnBuildDisallow()
 	{
-		return config.getBoolean("warn-on-build-disallow", false);
+		return config.getBoolean("protect.disable.warn-on-build-disallow", false);
 	}
 }
