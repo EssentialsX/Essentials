@@ -26,9 +26,9 @@ public class Commandnick extends EssentialsCommand
 
 		if (args.length > 1)
 		{
-			if (!user.isOp())
+			if (!user.isAuthorized("essentials.nick.others"))
 			{
-				user.sendMessage("§cOnly operators can change the nicknames of other users.");
+				user.sendMessage("§cYou do not have permission to change the nickname of others");
 				return;
 			}
 
