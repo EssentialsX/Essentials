@@ -496,31 +496,34 @@ public class Essentials extends JavaPlugin
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args)
 	{
 		// Allow plugins to override the command via onCommand
-		for (Plugin p : getServer().getPluginManager().getPlugins())
+		if (!getSettings().isCommandOverridden(command.getName()) && !commandLabel.startsWith("e"))
 		{
-			if (p == this)
-				continue;
+			for (Plugin p : getServer().getPluginManager().getPlugins())
+			{
+				if (p == this)
+					continue;
 
-			PluginDescriptionFile desc = p.getDescription();
-			if (desc == null)
-				continue;
+				PluginDescriptionFile desc = p.getDescription();
+				if (desc == null)
+					continue;
 
-			if (desc.getName() == null)
-				continue;
+				if (desc.getName() == null)
+					continue;
 
-			if (!(desc.getCommands() instanceof Map))
-				continue;
+				if (!(desc.getCommands() instanceof Map))
+					continue;
 
-			Map<String, Object> cmds = (Map<String, Object>)desc.getCommands();
-			if (!cmds.containsKey(command.getName()))
-				continue;
+				Map<String, Object> cmds = (Map<String, Object>)desc.getCommands();
+				if (!cmds.containsKey(command.getName()))
+					continue;
 
-			PluginCommand pcmd = getServer().getPluginCommand(desc.getName() + ":" + commandLabel);
+				PluginCommand pcmd = getServer().getPluginCommand(desc.getName() + ":" + commandLabel);
 
-			if (pcmd == null)
-				continue;
+				if (pcmd == null)
+					continue;
 
-			return getServer().getPluginCommand(p.getDescription().getName() + ":" + commandLabel).execute(sender, commandLabel, args);
+				return getServer().getPluginCommand(p.getDescription().getName() + ":" + commandLabel).execute(sender, commandLabel, args);
+			}
 		}
 
 		try

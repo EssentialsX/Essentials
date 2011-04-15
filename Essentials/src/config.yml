@@ -74,12 +74,24 @@ motd:
   - '&cWelcome, {PLAYER}&c!'
   - '&fType &c/help&f for a list of commands.'
   - 'Currently online: {PLAYERLIST}'
+  - 'Did you know that you can make [Disposal] signs with Essentials?'
 
 # The server rules, available by typing /rules
 rules:
   - '[1] Be respectful'
   - '[2] Be ethical'
   - '[3] Use common sense'
+  
+# When a command conflicts with another plugin, by default, Essentials will try to force the OTHER plugin to take
+# priority.  If a command is in this list, Essentials will try to give ITSELF priority.  This does not always work:
+# usually whichever plugin was updated most recently wins out.  However, the full name of the command will always work.
+# For example, if WorldGuard and Essentials are both enabled, and WorldGuard takes control over /god, /essentials:god
+# will still map to Essentials, whereas it might normally get forced upon WorldGuard.  Commands prefixed with an "e",
+# such as /egod, will always grant Essentials priority.
+# Because WorldGuard's /god is broken/unreliable, we should try to take priority over /god.  If this doesn't work, use
+# /essentials:god or /egod.  Do NOT use WorldGuard's /god, or you will likely be stuck in god mode.
+overridden-commands:
+  - god
 
 # Disabled commands will be completelly unavailable on the server.
 disabled-commands:

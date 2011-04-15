@@ -98,6 +98,19 @@ public class Settings implements IConf
 		return config.getBoolean("restrict-" + label.toLowerCase(), false);
 	}
 
+	public boolean isCommandOverridden(String name)
+	{
+		List<String> defaultList = new ArrayList<String>(1);
+		defaultList.add("god");
+		for (String c : config.getStringList("overridden-commands", defaultList))
+		{
+			if (!c.equalsIgnoreCase(name))
+				continue;
+			return true;
+		}
+		return config.getBoolean("override-" + name.toLowerCase(), false);
+	}
+
 	public int getCommandCost(IEssentialsCommand cmd)
 	{
 		return getCommandCost(cmd.getName());
@@ -436,12 +449,12 @@ public class Settings implements IConf
 		return epBreakList;
 	}
 
-	public Boolean spawnIfNoHome()
+	public boolean spawnIfNoHome()
 	{
 		return config.getBoolean("spawn-if-no-home", false);
 	}
 
-	public Boolean warnOnBuildDisallow()
+	public boolean warnOnBuildDisallow()
 	{
 		return config.getBoolean("warn-on-build-disallow", false);
 	}
