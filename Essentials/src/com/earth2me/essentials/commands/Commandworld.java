@@ -51,7 +51,14 @@ public class Commandworld extends EssentialsCommand
 
 		double factor;
 		if (user.getWorld().getEnvironment() == World.Environment.NETHER && world.getEnvironment() == World.Environment.NORMAL)
-			factor = 16;
+			if (Essentials.getSettings().use1to1RatioInNether())
+			{
+				factor = 1;
+			}
+			else
+			{
+				factor = 16;
+			}
 		else if (user.getWorld().getEnvironment() != world.getEnvironment())
 			factor = 1 / 16;
 		else

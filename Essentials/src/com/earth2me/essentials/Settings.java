@@ -458,4 +458,9 @@ public class Settings implements IConf
 	{
 		return config.getBoolean("protect.disable.warn-on-build-disallow", false);
 	}
+
+	public boolean use1to1RatioInNether()
+	{
+		return config.getBoolean("nether.use-1to1-ratio", false);
+	}
 }
