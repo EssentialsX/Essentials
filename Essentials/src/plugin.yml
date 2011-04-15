@@ -22,7 +22,7 @@ commands:
   balance:
     description: States the current balance of a player.  Defaults to self.
     usage: /<command> <player>
-    aliases: [bal,money]
+    aliases: [bal,emoney]
   ban:
     description: Bans a player.
     usage: /<command> [player] <reason>
