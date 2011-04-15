@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.minecraft.server.InventoryPlayer;
 import org.bukkit.*;
@@ -8,6 +9,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.craftbukkit.block.CraftSign;
 import org.bukkit.craftbukkit.inventory.CraftInventoryPlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.*;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
@@ -20,7 +22,6 @@ public class EssentialsPlayerListener extends PlayerListener
 	private final Server server;
 	private final Essentials parent;
 	private EssentialsBlockListener essBlockListener = null;
-
 
 	public EssentialsPlayerListener(Essentials parent)
 	{
@@ -229,10 +230,18 @@ public class EssentialsPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerTeleport(PlayerTeleportEvent event)
 	{
+		if (event.isCancelled()) return;
 		User user = User.get(event.getPlayer());
 		if (user.currentJail == null || user.currentJail.isEmpty())
 			return;
-		event.setCancelled(true);
+		try
+		{
+			event.setTo(Essentials.getJail().getJail(user.currentJail));
+		}
+		catch (Exception ex)
+		{
+			logger.log(Level.WARNING, "Error occured when trying to return player to jail.", ex);
+		}
 		user.sendMessage(ChatColor.RED + "You do the crime, you do the time.");
 	}
 
@@ -295,16 +304,19 @@ public class EssentialsPlayerListener extends PlayerListener
 			}
 			if (sign.getLine(0).equals("§1[Heal]") && user.isAuthorized("essentials.signs.heal.use"))
 			{
-				if (!sign.getLine(1).isEmpty()) {
+				if (!sign.getLine(1).isEmpty())
+				{
 					String[] l1 = sign.getLine(1).split("[ :-]+");
 					boolean m1 = l1[0].matches("\\$[0-9]+");
 					int q1 = Integer.parseInt(m1 ? l1[0].substring(1) : l1[0]);
-					if (q1 < 1) {
+					if (q1 < 1)
+					{
 						throw new Exception("Quantities must be greater than 0.");
 					}
 					if (m1)
 					{
-						if (user.getMoney() < q1) {
+						if (user.getMoney() < q1)
+						{
 							throw new Exception("You do not have sufficient funds.");
 						}
 						user.takeMoney(q1);
@@ -313,7 +325,8 @@ public class EssentialsPlayerListener extends PlayerListener
 					else
 					{
 						ItemStack i = ItemDb.get(l1[1], q1);
-						if (!InventoryWorkaround.containsItem(user.getInventory(), true, i)) {
+						if (!InventoryWorkaround.containsItem(user.getInventory(), true, i))
+						{
 							throw new Exception("You do not have " + q1 + "x " + l1[1] + ".");
 						}
 						InventoryWorkaround.removeItem(user.getInventory(), true, i);
@@ -341,18 +354,21 @@ public class EssentialsPlayerListener extends PlayerListener
 				user.sendMessage("§7Balance: $" + user.getMoney());
 				return;
 			}
-                        if (sign.getLine(0).equals("§1[Warp]"))
+			if (sign.getLine(0).equals("§1[Warp]"))
 			{
-				if (!sign.getLine(3).isEmpty()) {
+				if (!sign.getLine(3).isEmpty())
+				{
 					String[] l1 = sign.getLine(3).split("[ :-]+");
 					boolean m1 = l1[0].matches("\\$[0-9]+");
 					int q1 = Integer.parseInt(m1 ? l1[0].substring(1) : l1[0]);
-					if (q1 < 1) {
+					if (q1 < 1)
+					{
 						throw new Exception("Quantities must be greater than 0.");
 					}
 					if (m1)
 					{
-						if (user.getMoney() < q1) {
+						if (user.getMoney() < q1)
+						{
 							throw new Exception("You do not have sufficient funds.");
 						}
 						user.takeMoney(q1);
@@ -361,32 +377,37 @@ public class EssentialsPlayerListener extends PlayerListener
 					else
 					{
 						ItemStack i = ItemDb.get(l1[1], q1);
-						if (!InventoryWorkaround.containsItem(user.getInventory(), true, i)) {
+						if (!InventoryWorkaround.containsItem(user.getInventory(), true, i))
+						{
 							throw new Exception("You do not have " + q1 + "x " + l1[1] + ".");
 						}
 						InventoryWorkaround.removeItem(user.getInventory(), true, i);
 						user.updateInventory();
 					}
 				}
-				if (!sign.getLine(2).isEmpty()) {
-					if (sign.getLine(2).equals("§2Everyone")) {
+				if (!sign.getLine(2).isEmpty())
+				{
+					if (sign.getLine(2).equals("§2Everyone"))
+					{
 						user.teleportCooldown();
 						user.warpTo(sign.getLine(1));
 						return;
 					}
-					if (user.getGroup().equalsIgnoreCase(sign.getLine(2))) {
+					if (user.getGroup().equalsIgnoreCase(sign.getLine(2)))
+					{
 						user.teleportCooldown();
 						user.warpTo(sign.getLine(1));
 						return;
 					}
 				}
-				if (user.isAuthorized("essentials.signs.warp.use") && 
-					(!Essentials.getSettings().getPerWarpPermission() || user.isAuthorized("essentials.warp." + sign.getLine(1)))) {
+				if (user.isAuthorized("essentials.signs.warp.use")
+					&& (!Essentials.getSettings().getPerWarpPermission() || user.isAuthorized("essentials.warp." + sign.getLine(1))))
+				{
 					user.teleportCooldown();
 					user.warpTo(sign.getLine(1));
 				}
 				return;
-                        }
+			}
 		}
 		catch (Throwable ex)
 		{
@@ -395,24 +416,29 @@ public class EssentialsPlayerListener extends PlayerListener
 	}
 
 	@Override
-	public void onPlayerEggThrow(PlayerEggThrowEvent event) {
+	public void onPlayerEggThrow(PlayerEggThrowEvent event)
+	{
 		User user = User.get(event.getPlayer());
 		ItemStack is = new ItemStack(Material.EGG, 1);
-		if (user.hasUnlimited(is)) {
+		if (user.hasUnlimited(is))
+		{
 			user.getInventory().addItem(is);
 			user.updateInventory();
 		}
 	}
 
 	@Override
-	public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event) {
+	public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event)
+	{
 		final User user = User.get(event.getPlayer());
-		if (user.hasUnlimited(new ItemStack(event.getBucket()))) {
+		if (user.hasUnlimited(new ItemStack(event.getBucket())))
+		{
 			event.getItemStack().setType(event.getBucket());
-			Essentials.getStatic().getScheduler().scheduleSyncDelayedTask(Essentials.getStatic(), 
-				new Runnable() {
-
-				public void run() {
+			Essentials.getStatic().getScheduler().scheduleSyncDelayedTask(Essentials.getStatic(),
+																		  new Runnable()
+			{
+				public void run()
+				{
 					user.updateInventory();
 				}
 			});
@@ -420,27 +446,43 @@ public class EssentialsPlayerListener extends PlayerListener
 	}
 
 	@Override
-	public void onPlayerAnimation(PlayerAnimationEvent event) {
+	public void onPlayerAnimation(PlayerAnimationEvent event)
+	{
 		usePowertools(event);
 	}
-	
-	private void usePowertools(PlayerAnimationEvent event) {
-		if (event.getAnimationType() != PlayerAnimationType.ARM_SWING) {
+
+	private void usePowertools(PlayerAnimationEvent event)
+	{
+		if (event.getAnimationType() != PlayerAnimationType.ARM_SWING)
+		{
 			return;
 		}
 		User user = User.get(event.getPlayer());
 		ItemStack is = user.getItemInHand();
-		if (is == null || is.getType() == Material.AIR) {
+		if (is == null || is.getType() == Material.AIR)
+		{
 			return;
 		}
 		String command = user.getPowertool(is);
-		if (command == null || command.isEmpty()) {
+		if (command == null || command.isEmpty())
+		{
 			return;
 		}
-		if (command.matches(".*\\{player\\}.*")) {
+		if (command.matches(".*\\{player\\}.*"))
+		{
 			//user.sendMessage("Click a player to use this command");
 			return;
 		}
-		user.getServer().dispatchCommand(user, command);
+		if (command.startsWith("c:"))
+		{
+			for (Player p : server.getOnlinePlayers())
+			{
+				p.sendMessage(user.getDisplayName() + ":" + command.substring(2));
+			}
+		}
+		else
+		{
+			user.getServer().dispatchCommand(user, command);
+		}
 	}
 }
