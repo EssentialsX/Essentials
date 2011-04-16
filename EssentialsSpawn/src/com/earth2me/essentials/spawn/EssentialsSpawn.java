@@ -52,7 +52,6 @@ public class EssentialsSpawn extends JavaPlugin
 	{
 		try
 		{
-			Essentials.loadClasses();
 			Essentials.previewCommand(sender, command, commandLabel, args);
 			return EssentialsSpawnWorker.onCommand(sender, command, commandLabel, args);
 		}

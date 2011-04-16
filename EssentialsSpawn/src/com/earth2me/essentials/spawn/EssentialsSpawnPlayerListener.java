@@ -14,7 +14,6 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerRespawn(PlayerRespawnEvent event)
 	{
-		Essentials.loadClasses();
 		User user = User.get(event.getPlayer());
 
 		try
@@ -34,7 +33,6 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerJoin(PlayerJoinEvent event)
 	{
-		Essentials.loadClasses();
 		User user = User.get(event.getPlayer());
 		
 		if (!user.isNew()) return;

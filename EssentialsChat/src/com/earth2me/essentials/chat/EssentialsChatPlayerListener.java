@@ -23,7 +23,6 @@ public class EssentialsChatPlayerListener extends PlayerListener
 	{
 		try
 		{
-			Essentials.loadClasses();
 			EssentialsChatWorker.onPlayerJoin(server, event);
 		}
 		catch (Throwable ex)
@@ -38,7 +37,6 @@ public class EssentialsChatPlayerListener extends PlayerListener
 	{
 		try
 		{
-			Essentials.loadClasses();
 			EssentialsChatWorker.onPlayerRespawn(server, event);
 		}
 		catch (Throwable ex)
@@ -53,7 +51,6 @@ public class EssentialsChatPlayerListener extends PlayerListener
 	{
 		try
 		{
-			Essentials.loadClasses();
 			EssentialsChatWorker.onPlayerChat(server, event);
 		}
 		catch (Throwable ex)

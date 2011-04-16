@@ -37,7 +37,6 @@ public class EssentialsProtectEntityListener extends EntityListener
 
 	public EssentialsProtectEntityListener(EssentialsProtect parent)
 	{
-		Essentials.loadClasses();
 		this.parent = parent;
 	}
 

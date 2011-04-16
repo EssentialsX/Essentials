@@ -25,7 +25,6 @@ public class EssentialsProtectBlockListener extends BlockListener
 
 	public EssentialsProtectBlockListener(EssentialsProtect parent)
 	{
-		Essentials.loadClasses();
 		this.parent = parent;
 	}
 

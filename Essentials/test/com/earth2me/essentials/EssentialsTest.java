@@ -30,7 +30,6 @@ public class EssentialsTest extends TestCase
 	public void testLoadClasses()
 	{
 		should("make all classes accessible");
-		Essentials.loadClasses();
 		try
 		{
 			ItemDb itemDb = null;

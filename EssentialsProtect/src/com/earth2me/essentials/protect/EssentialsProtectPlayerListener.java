@@ -19,7 +19,6 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 
 	public EssentialsProtectPlayerListener(EssentialsProtect parent)
 	{
-		Essentials.loadClasses();
 		this.parent = parent;
 	}
 
