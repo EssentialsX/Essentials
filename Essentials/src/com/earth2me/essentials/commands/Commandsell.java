@@ -71,8 +71,8 @@ public class Commandsell extends EssentialsCommand
 		if (amount > max || amount < 1)
 		{
 			user.sendMessage("§cYou do not have enough of that item to sell.");
-			user.sendMessage("§7If you meant to sell all of your items of that type, use /sell without parameters.");
-			user.sendMessage("§7/sell -1 will sell all but one item, etc.");
+			user.sendMessage("§7If you meant to sell all of your items of that type, use /sell itemname");
+			user.sendMessage("§7/sell itemname -1 will sell all but one item, etc.");
 			return;
 		}
 
