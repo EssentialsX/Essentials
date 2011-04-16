@@ -794,9 +794,9 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 		if (command == null || command.trim().isEmpty())
 		{
 			tools.remove(Integer.valueOf(stack.getTypeId()));
-			return;
+		} else {
+			tools.put(Integer.valueOf(stack.getTypeId()), command.trim());
 		}
-		tools.put(Integer.valueOf(stack.getTypeId()), command.trim());
 		data.put("powertools", tools);
 		flush();
 	}
