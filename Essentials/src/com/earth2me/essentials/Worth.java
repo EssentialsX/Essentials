@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 public class Worth implements IConf
 {
 	private static final Logger logger = Logger.getLogger("Minecraft");
-	public EssentialsConf config;
+	private EssentialsConf config;
 
 	public Worth(File dataFolder)
 	{
@@ -25,7 +25,6 @@ public class Worth implements IConf
 	{
 		config.setProperty("worth-" + id, price);
 		config.save();
-		reloadConfig();
 	}
 
 	public void reloadConfig()

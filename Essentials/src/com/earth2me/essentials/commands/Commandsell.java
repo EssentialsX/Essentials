@@ -24,7 +24,7 @@ public class Commandsell extends EssentialsCommand
 		int id = is.getTypeId();
 		int amount = 0;
 		if (args.length > 0) amount = Integer.parseInt(args[0].replaceAll("[^0-9]", ""));
-		int worth = Essentials.getWorth().config.getInt("worth-" + id, 0);
+		int worth = Essentials.getWorth().getPrice(String.valueOf(id));
 		boolean stack = args.length > 0 && args[0].endsWith("s");
 		boolean requireStack = parent.getConfiguration().getBoolean("trade-in-stacks-" + id, false);
 
