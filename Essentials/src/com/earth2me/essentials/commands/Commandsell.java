@@ -47,6 +47,9 @@ public class Commandsell extends EssentialsCommand
 		int max = 0;
 		for (ItemStack s : user.getInventory().getContents())
 		{
+			if (s == null) {
+				continue;
+			}
 			if (s.getTypeId() != is.getTypeId()) {
 				continue;
 			}
