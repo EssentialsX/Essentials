@@ -23,6 +23,9 @@ public class EssentialsUpgrade {
 	private void moveWorthValuesToWorthYml(File dataFolder) {
 		try {
 			File configFile = new File(dataFolder, "config.yml");
+			if (!configFile.exists()) {
+				return;
+			}
 			EssentialsConf conf = new EssentialsConf(configFile);
 			conf.load();
 			Worth w = new Worth(dataFolder);
