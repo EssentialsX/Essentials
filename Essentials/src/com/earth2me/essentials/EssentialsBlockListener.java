@@ -242,7 +242,7 @@ public class EssentialsBlockListener extends BlockListener
 					String line = sign.getLine(i);
 					if (line.startsWith("(") && line.endsWith(")")) {
 						line = line.substring(1, line.length() - 2);
-						if (user.getGroup().equalsIgnoreCase(line)) {
+						if (user.inGroup(line)) {
 							return ALLOWED;
 						}
 					} else if (line.equalsIgnoreCase(user.getName())) {

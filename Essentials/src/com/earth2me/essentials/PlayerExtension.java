@@ -118,6 +118,18 @@ public class PlayerExtension extends PlayerWrapper
 			return "default";
 		}
 	}
+	
+	public boolean inGroup(String group)
+	{
+		try
+		{
+			return com.nijikokun.bukkit.Permissions.Permissions.Security.inGroup(getWorld().getName(), getName(), group);
+		}
+		catch (Throwable ex)
+		{
+			return false;
+		}
+	}
 
 	public boolean canBuild()
 	{
