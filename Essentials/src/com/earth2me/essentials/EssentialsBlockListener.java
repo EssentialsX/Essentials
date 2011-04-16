@@ -238,13 +238,16 @@ public class EssentialsBlockListener extends BlockListener
 			Sign sign = new CraftSign(block);
 			if (sign.getLine(0).equalsIgnoreCase("§1[Protection]") && !user.isAuthorized("essentials.signs.protection.override"))
 			{
-				if (sign.getLine(1).equalsIgnoreCase(user.getName()))
-				{
-					return ALLOWED;
-				}
-				if (sign.getLine(2).equalsIgnoreCase(user.getName()))
-				{
-					return ALLOWED;
+				for (int i = 1; i <= 2; i++) {
+					String line = sign.getLine(i);
+					if (line.startsWith("(") && line.endsWith(")")) {
+						line = line.substring(1, line.length() - 2);
+						if (user.getGroup().equalsIgnoreCase(line)) {
+							return ALLOWED;
+						}
+					} else if (line.equalsIgnoreCase(user.getName())) {
+						return ALLOWED;
+					}
 				}
 				if (sign.getLine(3).equalsIgnoreCase(user.getName()))
 				{
