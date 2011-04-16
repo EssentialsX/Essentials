@@ -177,7 +177,7 @@ commands:
     usage: /<command>
   sell:
     description: Sells the item currently in your hand.
-    usage: /<command> <-><amount>
+    usage: /<command> [itemname|id] [-][amount]
   sethome:
     description: Set your home to your current location.
     usage: /<command>

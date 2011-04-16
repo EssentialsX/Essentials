@@ -20,7 +20,7 @@ public class Commandsell extends EssentialsCommand
 	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
 	{
 		if (args.length < 1) {
-			user.sendMessage("§cUsage: /sell <itemname> [amount]");
+			user.sendMessage("§cUsage: /sell [itemname|id] [-][amount]");
 			return;
 		}
 		ItemStack is = ItemDb.get(args[0]);
