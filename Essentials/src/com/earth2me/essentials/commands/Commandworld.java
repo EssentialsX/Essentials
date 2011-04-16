@@ -50,19 +50,29 @@ public class Commandworld extends EssentialsCommand
 		}
 
 		double factor;
-		if (user.getWorld().getEnvironment() == World.Environment.NETHER && world.getEnvironment() == World.Environment.NORMAL)
+		if (user.getWorld().getEnvironment() == World.Environment.NETHER && world.getEnvironment() == World.Environment.NORMAL) {
 			if (Essentials.getSettings().use1to1RatioInNether())
 			{
-				factor = 1;
+				factor = 1.0;
 			}
 			else
 			{
-				factor = 16;
+				factor = 16.0;
 			}
-		else if (user.getWorld().getEnvironment() != world.getEnvironment())
-			factor = 1 / 16;
-		else
-			factor = 1;
+		}
+		else if (user.getWorld().getEnvironment() != world.getEnvironment()) {
+			if (Essentials.getSettings().use1to1RatioInNether())
+			{
+				factor = 1.0;
+			}
+			else
+			{
+				factor = 1.0 / 16.0;
+			}
+		}
+		else {
+			factor = 1.0;
+		}
 
 		Location loc = user.getLocation();
 		loc = new Location(world, loc.getBlockX() * factor + .5, loc.getBlockY(), loc.getBlockZ() * factor + .5);

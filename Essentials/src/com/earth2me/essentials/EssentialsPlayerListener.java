@@ -68,12 +68,29 @@ public class EssentialsPlayerListener extends PlayerListener
 			final World world = worlds.get(user.getWorld() == worlds.get(0) ? 1 : 0);
 
 			double factor;
-			if (user.getWorld().getEnvironment() == World.Environment.NETHER && world.getEnvironment() == World.Environment.NORMAL)
-				factor = 16.0;
-			else if (user.getWorld().getEnvironment() != world.getEnvironment())
-				factor = 1.0 / 16.0;
-			else
+			if (user.getWorld().getEnvironment() == World.Environment.NETHER && world.getEnvironment() == World.Environment.NORMAL) {
+				if (Essentials.getSettings().use1to1RatioInNether())
+				{
+					factor = 1.0;
+				}
+				else
+				{
+					factor = 16.0;
+				}
+			}
+			else if (user.getWorld().getEnvironment() != world.getEnvironment()) {
+				if (Essentials.getSettings().use1to1RatioInNether())
+				{
+					factor = 1.0;
+				}
+				else
+				{
+					factor = 1.0 / 16.0;
+				}
+			}
+			else {
 				factor = 1.0;
+			}
 
 			int x = loc.getBlockX();
 			int y = loc.getBlockY();
