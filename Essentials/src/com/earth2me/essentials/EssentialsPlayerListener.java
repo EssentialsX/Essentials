@@ -130,11 +130,18 @@ public class EssentialsPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerQuit(PlayerQuitEvent event)
 	{
+		User user = User.get(event.getPlayer());
+		
+		if(user.savedInventory != null)
+		{
+			user.getInventory().setContents(user.savedInventory);
+			user.savedInventory = null;
+		}
 		if (!Essentials.getSettings().getReclaimSetting())
 		{
 			return;
 		}
-		User.get(event.getPlayer()).dispose();
+		user.dispose();
 		Thread thread = new Thread(new Runnable()
 		{
 			@SuppressWarnings("LoggerStringConcat")
