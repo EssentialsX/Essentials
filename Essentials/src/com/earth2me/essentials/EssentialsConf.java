@@ -170,7 +170,8 @@ public class EssentialsConf extends Configuration
 		map.put("type", stack.getType().toString());
 		map.put("amount", stack.getAmount());
 		map.put("damage", stack.getDurability());
-		map.put("data", stack.getData().getData());
+		// getData().getData() is broken
+		map.put("data", stack.getDurability());
 		setProperty(path, map);
 	}
 	
