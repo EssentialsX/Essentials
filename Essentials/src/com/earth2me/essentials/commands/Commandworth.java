@@ -40,7 +40,7 @@ public class Commandworth extends EssentialsCommand
 			amount = 64;
 		}
 
-		int worth = parent.getConfiguration().getInt("worth-" + id, 0);
+		int worth = Essentials.getWorth().config.getInt("worth-" + id, 0);
 
 		user.charge(this);
 		user.sendMessage("§7Stack of " + id + " worth §c$" + (worth * amount) + "§7 (" + amount + " item(s) at $" + worth + " each)");

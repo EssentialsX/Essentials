@@ -3,7 +3,6 @@ package com.earth2me.essentials.commands;
 import org.bukkit.Server;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.commands.EssentialsCommand;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -25,7 +24,7 @@ public class Commandsell extends EssentialsCommand
 		int id = is.getTypeId();
 		int amount = 0;
 		if (args.length > 0) amount = Integer.parseInt(args[0].replaceAll("[^0-9]", ""));
-		int worth = parent.getConfiguration().getInt("worth-" + id, 0);
+		int worth = Essentials.getWorth().config.getInt("worth-" + id, 0);
 		boolean stack = args.length > 0 && args[0].endsWith("s");
 		boolean requireStack = parent.getConfiguration().getBoolean("trade-in-stacks-" + id, false);
 

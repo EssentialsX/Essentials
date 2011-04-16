@@ -9,6 +9,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.CreatureType;
 
+
 public class Commandspawner extends EssentialsCommand
 {
 	public Commandspawner()
@@ -31,11 +32,11 @@ public class Commandspawner extends EssentialsCommand
 
 		try
 		{
+			user.charge(this);
 			((CreatureSpawner)target).setCreatureType(CreatureType.fromName(args[0]));
 		}
 		catch (Throwable ex)
 		{
-
 		}
 	}
 }

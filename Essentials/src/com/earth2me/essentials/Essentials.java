@@ -43,6 +43,7 @@ public class Essentials extends JavaPlugin
 	public Spawn spawn;
 	private Jail jail;
 	private Warps warps;
+	private Worth worth;
 	private List<IConf> confList;
 	public ArrayList bans = new ArrayList();
 	public ArrayList bannedIps = new ArrayList();
@@ -106,6 +107,8 @@ public class Essentials extends JavaPlugin
 		confList.add(spawn);
 		warps = new Warps(getServer(), this.getDataFolder());
 		confList.add(warps);
+		worth = new Worth(this.getDataFolder());
+		confList.add(worth);
 		reload();
 		this.backup = new Backup();
 
@@ -666,5 +669,10 @@ public class Essentials extends JavaPlugin
 	public static Warps getWarps()
 	{
 		return getStatic().warps;
+	}
+
+	public static Worth getWorth()
+	{
+		return getStatic().worth;
 	}
 }

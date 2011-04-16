@@ -188,6 +188,9 @@ commands:
     description: Creates a new warp.
     usage: /<command> [warp]
     aliases: [createwarp]
+  setworth:
+    description: Set the value of an item for sale, will add item if doesn't exist
+    usage: /<command> [itemname|id] [price]
   spawnmob:
     description: Spawns a mob.
     usage: /<command> [mob]<:data><,mount<:data>> <amount>

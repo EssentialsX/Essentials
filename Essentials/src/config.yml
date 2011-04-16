@@ -196,9 +196,7 @@ spawn-if-no-home: false
 starting-balance: 0
 
 # worth-# defines the value of an item when it is sold to the server via /sell.
-# For a premade list which you may copy and paste in: http://pastie.org/1707782
-#worth-1: 1
-#worth-278: 1000
+# These are now defined in worth.yml
 
 # Defines the cost to use the given commands PER USE
 command-costs:
