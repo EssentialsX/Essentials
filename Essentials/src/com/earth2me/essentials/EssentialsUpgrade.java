@@ -67,7 +67,7 @@ public class EssentialsUpgrade {
 		br.close();
 		bw.close();
 		if (needUpdate) {
-			file.renameTo(new File(file.getParentFile(), file.getName().concat("."+System.currentTimeMillis()+".upgraded")));
+			file.renameTo(new File(file.getParentFile(), file.getName().concat("."+System.currentTimeMillis()+".upgradebackup")));
 			tempFile.renameTo(file);
 		}
 	}
