@@ -31,7 +31,7 @@ public class Commandsell extends EssentialsCommand
 		int id = is.getTypeId();
 		int amount = 0;
 		if (args.length > 1) {
-			amount = Integer.parseInt(args[0].replaceAll("[^0-9]", ""));
+			amount = Integer.parseInt(args[1].replaceAll("[^0-9]", ""));
 		}
 		double worth = Essentials.getWorth().getPrice(is);
 		boolean stack = args.length > 1 && args[1].endsWith("s");
