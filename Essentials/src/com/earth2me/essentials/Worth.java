@@ -27,7 +27,7 @@ public class Worth implements IConf
 			result = config.getDouble("worth."+itemStack.getType().toString().toLowerCase().replace("_", ""), Double.NaN);
 		}
 		if (Double.isNaN(result)) {
-			result = config.getDouble("worth-"+itemStack.getTypeId(), 0.0);
+			result = config.getDouble("worth-"+itemStack.getTypeId(), Double.NaN);
 		}
 		return result;
 	}

@@ -37,6 +37,9 @@ public class Commandworth extends EssentialsCommand
 
 		is.setAmount(amount);
 		double worth = Essentials.getWorth().getPrice(is);
+		if (Double.isNaN(worth)) {
+			throw new Exception("That item cannot be sold to the server.");
+		}
 
 		user.charge(this);
 		user.sendMessage("§7Stack of " + is.getType().toString().toLowerCase().replace("_", "") + " worth §c$" + (worth * amount) + "§7 (" + amount + " item(s) at $" + worth + " each)");

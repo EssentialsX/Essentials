@@ -37,7 +37,7 @@ public class Commandsell extends EssentialsCommand
 		boolean stack = args.length > 1 && args[1].endsWith("s");
 		boolean requireStack = parent.getConfiguration().getBoolean("trade-in-stacks-" + id, false);
 
-		if (worth < 1) {
+		if (Double.isNaN(worth)) {
 			throw new Exception("That item cannot be sold to the server.");
 		}
 		if (requireStack && !stack) {
