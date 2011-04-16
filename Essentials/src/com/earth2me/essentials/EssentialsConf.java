@@ -182,4 +182,13 @@ public class EssentialsConf extends Configuration
 		}
 		return num.longValue();
 	}
+	
+	@Override
+	public double getDouble(String path, double def) {
+		Number num = (Number)getProperty(path);
+		if (num == null) {
+			return def;
+		}
+		return num.doubleValue();
+	}
 }

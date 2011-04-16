@@ -19,12 +19,14 @@ public class Worth implements IConf
 
 	public double getPrice(ItemStack itemStack)
 	{
-		double result = config.getDouble("worth."+itemStack.getType().toString().toLowerCase().replace("_", "")+"."+itemStack.getDurability(), Double.NaN);
+		String itemname = itemStack.getType().toString().toLowerCase().replace("_", "");
+		double result;
+		result = config.getDouble("worth."+itemname+"."+itemStack.getDurability(), Double.NaN);
 		if (Double.isNaN(result)) {
-			result = config.getDouble("worth."+itemStack.getType().toString().toLowerCase().replace("_", "")+".0", Double.NaN);
+			result = config.getDouble("worth."+itemname+".0", Double.NaN);
 		}
 		if (Double.isNaN(result)) {
-			result = config.getDouble("worth."+itemStack.getType().toString().toLowerCase().replace("_", ""), Double.NaN);
+			result = config.getDouble("worth."+itemname, Double.NaN);
 		}
 		if (Double.isNaN(result)) {
 			result = config.getDouble("worth-"+itemStack.getTypeId(), Double.NaN);
@@ -38,7 +40,6 @@ public class Worth implements IConf
 			config.setProperty("worth." + itemStack.getType().toString().toLowerCase().replace("_", ""), price);
 		} else {
 			// Bukkit-bug: getDurability still contains the correct value, while getData().getData() is 0.
-			itemStack.getData();
 			config.setProperty("worth." + itemStack.getType().toString().toLowerCase().replace("_", "")+"."+itemStack.getDurability(), price);
 		}
 		config.removeProperty("worth-"+itemStack.getTypeId());
