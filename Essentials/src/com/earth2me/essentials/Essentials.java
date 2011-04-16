@@ -51,7 +51,6 @@ public class Essentials extends JavaPlugin
 
 	public Essentials() throws IOException
 	{
-		loadClasses();
 	}
 
 	public static void ensureEnabled(Server server)
@@ -60,10 +59,6 @@ public class Essentials extends JavaPlugin
 		Essentials ess = (Essentials)pm.getPlugin("Essentials");
 		if (!ess.isEnabled())
 			pm.enablePlugin(ess);
-	}
-
-	public static void loadClasses()
-	{
 	}
 
 	public static Essentials getStatic()
@@ -100,6 +95,7 @@ public class Essentials extends JavaPlugin
 	public void onEnable()
 	{
 		setStatic();
+		new EssentialsUpgrade(this.getDescription().getVersion(), this.getDataFolder());
 		confList = new ArrayList<IConf>();
 		settings = new Settings(this.getDataFolder());
 		confList.add(settings);
