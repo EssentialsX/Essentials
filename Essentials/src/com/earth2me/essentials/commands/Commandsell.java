@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
 import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.InventoryWorkaround;
 import com.earth2me.essentials.User;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -24,7 +25,7 @@ public class Commandsell extends EssentialsCommand
 		int id = is.getTypeId();
 		int amount = 0;
 		if (args.length > 0) amount = Integer.parseInt(args[0].replaceAll("[^0-9]", ""));
-		int worth = Essentials.getWorth().getPrice(String.valueOf(id));
+		double worth = Essentials.getWorth().getPrice(is);
 		boolean stack = args.length > 0 && args[0].endsWith("s");
 		boolean requireStack = parent.getConfiguration().getBoolean("trade-in-stacks-" + id, false);
 
@@ -34,6 +35,8 @@ public class Commandsell extends EssentialsCommand
 		int max = 0;
 		for (ItemStack s :  user.getInventory().all(is).values())
 		{
+			if (s.getDurability() != is.getDurability()) 
+				continue;
 			max += s.getAmount();
 		}
 
@@ -54,7 +57,7 @@ public class Commandsell extends EssentialsCommand
 		}
 
 		user.charge(this);
-		user.getInventory().removeItem(new ItemStack(id, amount));
+		InventoryWorkaround.removeItem(user.getInventory(), true, new ItemStack(is.getType(), amount, is.getDurability()));
 		user.updateInventory();
 		user.giveMoney(worth * amount);
 		user.sendMessage("§7Sold for §c$" + (worth * amount) + "§7 (" + amount + " items at $" + worth + " each)");

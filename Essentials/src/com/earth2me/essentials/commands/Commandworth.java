@@ -39,7 +39,7 @@ public class Commandworth extends EssentialsCommand
 			amount = 64;
 		}
 
-		int worth = Essentials.getWorth().getPrice(String.valueOf(id));
+		double worth = Essentials.getWorth().getPrice(is);
 
 		user.charge(this);
 		user.sendMessage("§7Stack of " + id + " worth §c$" + (worth * amount) + "§7 (" + amount + " item(s) at $" + worth + " each)");

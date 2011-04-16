@@ -2,6 +2,7 @@ package com.earth2me.essentials;
 
 import java.io.File;
 import java.util.logging.Logger;
+import org.bukkit.inventory.ItemStack;
 
 
 public class Worth implements IConf
@@ -16,14 +17,26 @@ public class Worth implements IConf
 		config.load();
 	}
 
-	public int getPrice(String id)
+	public double getPrice(ItemStack itemStack)
 	{
-		return config.getInt("worth-" + id, 0);
+		double result = config.getDouble("worth."+itemStack.getType().toString().toLowerCase()+"."+itemStack.getData().getData(), Double.NaN);
+		if (Double.isNaN(result)) {
+			result = config.getDouble("worth."+itemStack.getType().toString().toLowerCase(), Double.NaN);
+		}
+		if (Double.isNaN(result)) {
+			result = config.getDouble("worth-"+itemStack.getTypeId(), 0.0);
+		}
+		return result;
 	}
 
-	public void setPrice(String id, int price)
+	public void setPrice(ItemStack itemStack, double price)
 	{
-		config.setProperty("worth-" + id, price);
+		if (itemStack.getType().getData() == null) {
+			config.setProperty("worth." + itemStack.getType().toString().toLowerCase(), price);
+		} else {
+			config.setProperty("worth." + itemStack.getType().toString().toLowerCase()+"."+itemStack.getData().getData(), price);
+		}
+		config.removeProperty("worth-"+itemStack.getTypeId());
 		config.save();
 	}
 

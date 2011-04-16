@@ -23,7 +23,7 @@ public class Commandsetworth extends EssentialsCommand
 			return;
 		}
 		ItemStack stack = ItemDb.get(args[0]);
-		Essentials.getWorth().setPrice(Integer.toString(stack.getTypeId()), Integer.parseInt(args[1]));
+		Essentials.getWorth().setPrice(stack, Integer.parseInt(args[1]));
 		user.charge(this);
 		user.sendMessage("§7Worth value set");
 	}
