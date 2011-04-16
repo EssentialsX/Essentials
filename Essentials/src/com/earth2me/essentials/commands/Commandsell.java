@@ -20,10 +20,15 @@ public class Commandsell extends EssentialsCommand
 	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
 	{
 		if (args.length < 1) {
-			user.sendMessage("§cUsage: /sell [itemname|id] [-][amount]");
+			user.sendMessage("§cUsage: /sell [itemname|id|hand] [-][amount]");
 			return;
 		}
-		ItemStack is = ItemDb.get(args[0]);
+		ItemStack is;
+		if (args[0].equalsIgnoreCase("hand")) {
+			is = user.getItemInHand();
+		} else {
+			is = ItemDb.get(args[0]);
+		}
 		if(is.getType() == Material.AIR) {
 			throw new Exception("You really tried to sell Air? Put an item in your hand.");
 		}
