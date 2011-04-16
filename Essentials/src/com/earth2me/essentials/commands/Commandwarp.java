@@ -17,15 +17,17 @@ public class Commandwarp extends EssentialsCommand
 	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
 	{
 		boolean perWarpPermission = Essentials.getSettings().getPerWarpPermission();
-		if (args.length == 0) {
+		if (args.length == 0)
+		{
 			if (!user.isAuthorized("essentials.warp.list"))
 			{
 				user.sendMessage("§cYou do not have Permission to list that warps.");
 				return;
 			}
-			
+
 			Warps warps = Essentials.getWarps();
-			if (warps.isEmpty()) {
+			if (warps.isEmpty())
+			{
 				throw new Exception("No warps defined");
 			}
 			StringBuilder sb = new StringBuilder();
@@ -51,7 +53,8 @@ public class Commandwarp extends EssentialsCommand
 			return;
 		}
 
-		try {
+		try
+		{
 			if (perWarpPermission)
 			{
 				if (user.isAuthorized("essentials.warp." + args[0]))
@@ -67,7 +70,9 @@ public class Commandwarp extends EssentialsCommand
 			user.canAfford(this);
 			user.teleportCooldown();
 			user.warpTo(args[0], this.getName());
-		} catch (Exception ex) {
+		}
+		catch (Exception ex)
+		{
 			user.sendMessage(ex.getMessage());
 		}
 	}
