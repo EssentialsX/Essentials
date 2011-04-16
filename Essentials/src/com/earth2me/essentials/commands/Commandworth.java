@@ -18,30 +18,27 @@ public class Commandworth extends EssentialsCommand
 	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
 	{
 		ItemStack is = user.getInventory().getItemInHand();
-		int id = is.getTypeId();
 		int amount = is.getAmount();
 
-		try
-		{
-			if (args.length > 0) id = Integer.parseInt(args[0]);
-		}
-		catch (NumberFormatException ex)
-		{
-			id = ItemDb.get(args[0]).getTypeId();
+		if (args.length > 0) {
+			is = ItemDb.get(args[0]);
 		}
 
 		try
 		{
-		if (args.length > 1) amount = Integer.parseInt(args[1]);
+			if (args.length > 1) {
+				amount = Integer.parseInt(args[1]);
+			}
 		}
 		catch (NumberFormatException ex)
 		{
 			amount = 64;
 		}
 
+		is.setAmount(amount);
 		double worth = Essentials.getWorth().getPrice(is);
 
 		user.charge(this);
-		user.sendMessage("§7Stack of " + id + " worth §c$" + (worth * amount) + "§7 (" + amount + " item(s) at $" + worth + " each)");
+		user.sendMessage("§7Stack of " + is.getType().toString().toLowerCase().replace("_", "") + " worth §c$" + (worth * amount) + "§7 (" + amount + " item(s) at $" + worth + " each)");
 	}
 }

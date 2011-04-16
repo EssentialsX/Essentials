@@ -19,9 +19,9 @@ public class Worth implements IConf
 
 	public double getPrice(ItemStack itemStack)
 	{
-		double result = config.getDouble("worth."+itemStack.getType().toString().toLowerCase()+"."+itemStack.getData().getData(), Double.NaN);
+		double result = config.getDouble("worth."+itemStack.getType().toString().toLowerCase().replace("_", "")+"."+itemStack.getData().getData(), Double.NaN);
 		if (Double.isNaN(result)) {
-			result = config.getDouble("worth."+itemStack.getType().toString().toLowerCase(), Double.NaN);
+			result = config.getDouble("worth."+itemStack.getType().toString().toLowerCase().replace("_", ""), Double.NaN);
 		}
 		if (Double.isNaN(result)) {
 			result = config.getDouble("worth-"+itemStack.getTypeId(), 0.0);
@@ -32,9 +32,9 @@ public class Worth implements IConf
 	public void setPrice(ItemStack itemStack, double price)
 	{
 		if (itemStack.getType().getData() == null) {
-			config.setProperty("worth." + itemStack.getType().toString().toLowerCase(), price);
+			config.setProperty("worth." + itemStack.getType().toString().toLowerCase().replace("_", ""), price);
 		} else {
-			config.setProperty("worth." + itemStack.getType().toString().toLowerCase()+"."+itemStack.getData().getData(), price);
+			config.setProperty("worth." + itemStack.getType().toString().toLowerCase().replace("_", "")+"."+itemStack.getData().getData(), price);
 		}
 		config.removeProperty("worth-"+itemStack.getTypeId());
 		config.save();
