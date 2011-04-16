@@ -44,7 +44,8 @@ public class EssentialsBlockListener extends BlockListener
 			}
 		}
 
-		if (checkProtectionSign(event.getBlock(), user) != OWNER)
+		if (checkProtectionSign(event.getBlock(), user) != NOSIGN &&
+			checkProtectionSign(event.getBlock(), user) != OWNER)
 		{
 			event.setCancelled(true);
 			user.sendMessage("§cYou do not have permission to destroy that sign.");
