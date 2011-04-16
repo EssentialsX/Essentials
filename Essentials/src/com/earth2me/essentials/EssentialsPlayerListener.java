@@ -417,7 +417,7 @@ public class EssentialsPlayerListener extends PlayerListener
 						user.warpTo(sign.getLine(1));
 						return;
 					}
-					if (user.getGroup().equalsIgnoreCase(sign.getLine(2)))
+					if (user.inGroup(sign.getLine(2)))
 					{
 						user.teleportCooldown();
 						user.warpTo(sign.getLine(1));
