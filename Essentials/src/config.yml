@@ -168,6 +168,8 @@ per-warp-permission: false
 # Sort output of /list command by groups
 sort-list-by-groups: false
 
+# More output to the console
+debug: false
 
 ############################################################
 # +------------------------------------------------------+ #

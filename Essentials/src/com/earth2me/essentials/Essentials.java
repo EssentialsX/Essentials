@@ -572,7 +572,9 @@ public class Essentials extends JavaPlugin
 			catch (Throwable ex)
 			{
 				sender.sendMessage(ChatColor.RED + "Error: " + ex.getMessage());
-				logger.log(Level.WARNING, "Error calling command /"+commandLabel, ex);
+				if (getSettings().isDebug()) {
+					logger.log(Level.WARNING, "Error calling command /"+commandLabel, ex);
+				}
 				return true;
 			}
 		}

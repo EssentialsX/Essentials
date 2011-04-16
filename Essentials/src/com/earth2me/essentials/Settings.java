@@ -463,4 +463,9 @@ public class Settings implements IConf
 	{
 		return config.getBoolean("nether.use-1to1-ratio", false);
 	}
+	
+	public boolean isDebug()
+	{
+		return config.getBoolean("debug", false);
+	}
 }
