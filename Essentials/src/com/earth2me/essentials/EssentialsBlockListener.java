@@ -44,7 +44,7 @@ public class EssentialsBlockListener extends BlockListener
 			}
 		}
 
-		if (checkProtectionSign(event.getBlock(), user) == NOT_ALLOWED)
+		if (checkProtectionSign(event.getBlock(), user) != OWNER)
 		{
 			event.setCancelled(true);
 			user.sendMessage("§cYou do not have permission to destroy that sign.");
@@ -230,6 +230,7 @@ public class EssentialsBlockListener extends BlockListener
 	private static final int NOT_ALLOWED = 0;
 	private static final int ALLOWED = 1;
 	private static final int NOSIGN = 2;
+	private static final int OWNER = 3;
 
 	private int checkProtectionSign(Block block, User user)
 	{
@@ -251,7 +252,7 @@ public class EssentialsBlockListener extends BlockListener
 				}
 				if (sign.getLine(3).equalsIgnoreCase(user.getName()))
 				{
-					return ALLOWED;
+					return OWNER;
 				}
 				return NOT_ALLOWED;
 			}
@@ -283,7 +284,7 @@ public class EssentialsBlockListener extends BlockListener
 			{
 				protect = true;
 			}
-			if (check == ALLOWED)
+			if (check == ALLOWED || check == OWNER)
 			{
 				return false;
 			}
@@ -299,7 +300,7 @@ public class EssentialsBlockListener extends BlockListener
 					{
 						protect = true;
 					}
-					if (check == ALLOWED)
+					if (check == ALLOWED || check == OWNER)
 					{
 						return false;
 					}
