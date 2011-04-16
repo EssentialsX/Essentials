@@ -21,6 +21,7 @@ public class Commandsetworth extends EssentialsCommand
 		if(args.length < 2)
 		{
 			user.sendMessage("§cUsage: /" + commandLabel + " [itemname|id] [price]");
+			return;
 		}
 		ItemStack stack = ItemDb.get(args[0]);
 		Essentials.getWorth().setPrice(Integer.toString(stack.getTypeId()), Integer.parseInt(args[1]));
