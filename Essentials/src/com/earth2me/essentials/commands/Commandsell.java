@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import org.bukkit.Server;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.InventoryWorkaround;
+import com.earth2me.essentials.ItemDb;
 import com.earth2me.essentials.User;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -18,30 +19,49 @@ public class Commandsell extends EssentialsCommand
 	@Override
 	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
 	{
-		ItemStack is = user.getInventory().getItemInHand();
-		if(is.getType() == Material.AIR)
+		if (args.length < 1) {
+			user.sendMessage("§cUsage: /sell <itemname> [amount]");
+			return;
+		}
+		ItemStack is = ItemDb.get(args[0]);
+		if(is.getType() == Material.AIR) {
 			throw new Exception("You really tried to sell Air? Put an item in your hand.");
+		}
 
 		int id = is.getTypeId();
 		int amount = 0;
-		if (args.length > 0) amount = Integer.parseInt(args[0].replaceAll("[^0-9]", ""));
+		if (args.length > 1) {
+			amount = Integer.parseInt(args[0].replaceAll("[^0-9]", ""));
+		}
 		double worth = Essentials.getWorth().getPrice(is);
-		boolean stack = args.length > 0 && args[0].endsWith("s");
+		boolean stack = args.length > 1 && args[1].endsWith("s");
 		boolean requireStack = parent.getConfiguration().getBoolean("trade-in-stacks-" + id, false);
 
-		if (worth < 1) throw new Exception("That item cannot be sold to the server.");
-		if (requireStack && !stack) throw new Exception("Item must be traded in stacks. A quantity of 2s would be two stacks, etc.");
+		if (worth < 1) {
+			throw new Exception("That item cannot be sold to the server.");
+		}
+		if (requireStack && !stack) {
+			throw new Exception("Item must be traded in stacks. A quantity of 2s would be two stacks, etc.");
+		}
 
 		int max = 0;
-		for (ItemStack s :  user.getInventory().all(is).values())
+		for (ItemStack s : user.getInventory().getContents())
 		{
-			if (s.getDurability() != is.getDurability()) 
+			if (s.getTypeId() != is.getTypeId()) {
 				continue;
+			}
+			if (s.getDurability() != is.getDurability()) {
+				continue;
+			}
 			max += s.getAmount();
 		}
 
-		if (stack) amount *= 64;
-		if (amount < 1) amount += max;
+		if (stack) {
+			amount *= 64;
+		}
+		if (amount < 1) {
+			amount += max;
+		}
 
 		if (requireStack)
 		{
