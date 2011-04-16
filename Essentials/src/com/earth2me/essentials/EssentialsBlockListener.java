@@ -2,6 +2,8 @@ package com.earth2me.essentials;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.craftbukkit.block.CraftSign;
@@ -243,7 +245,7 @@ public class EssentialsBlockListener extends BlockListener
 				for (int i = 1; i <= 2; i++) {
 					String line = sign.getLine(i);
 					if (line.startsWith("(") && line.endsWith(")")) {
-						line = line.substring(1, line.length() - 2);
+						line = line.substring(1, line.length() - 1);
 						if (user.inGroup(line)) {
 							return ALLOWED;
 						}
