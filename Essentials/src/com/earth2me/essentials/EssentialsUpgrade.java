@@ -38,7 +38,7 @@ public class EssentialsUpgrade {
 			}
 			removeLinesFromConfig(configFile,"\\s*#?\\s*worth-[0-9]+.*", "# Worth values have been moved to worth.yml");
 		} catch (Throwable e) {
-			logger.log(Level.WARNING, "Error while upgrading the files", e);
+			logger.log(Level.SEVERE, "Error while upgrading the files", e);
 		}
 	}
 
@@ -70,8 +70,12 @@ public class EssentialsUpgrade {
 		br.close();
 		bw.close();
 		if (needUpdate) {
-			file.renameTo(new File(file.getParentFile(), file.getName().concat("."+System.currentTimeMillis()+".upgradebackup")));
-			tempFile.renameTo(file);
+			if (!file.renameTo(new File(file.getParentFile(), file.getName().concat("."+System.currentTimeMillis()+".upgradebackup")))) {
+				throw new Exception("Failed to move config.yml to backup location.");
+			}
+			if (!tempFile.renameTo(file)) {
+				throw new Exception("Failed to rename temp file to config.yml");
+			}
 		}
 	}
 }
