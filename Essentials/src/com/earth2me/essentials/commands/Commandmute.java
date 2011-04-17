@@ -10,7 +10,7 @@ public class Commandmute extends EssentialsCommand
 {
 	public Commandmute()
 	{
-		super("kick");
+		super("mute");
 	}
 
 	@Override
