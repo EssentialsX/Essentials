@@ -92,7 +92,7 @@ commands:
     usage: /<command> [message]
   home:
     description: Teleport to your home.
-    usage: /<command>
+    usage: /<command> <player>
   info:
     description: Shows information set by the server owner
     usage: /<command> [chapter] [page]
