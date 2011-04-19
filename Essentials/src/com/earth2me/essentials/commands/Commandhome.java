@@ -16,7 +16,7 @@ public class Commandhome extends EssentialsCommand
 	{
 		user.canAfford(this);
 		user.teleportCooldown();
-		if(args.length > 1 && user.isAuthorized("essentials.home.others"))
+		if(args.length > 0 && user.isAuthorized("essentials.home.others"))
 		{
 			user.teleportToHome(args[0]);
 			return;
