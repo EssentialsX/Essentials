@@ -94,7 +94,10 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 					}
 					else if (i1 != null)
 					{
-						user.getInventory().addItem(i1);
+						Map<Integer, ItemStack> leftOver = user.getInventory().addItem(i1);
+						for (ItemStack itemStack : leftOver.values()) {
+							user.getWorld().dropItem(user.getLocation(), itemStack);
+						}
 						user.updateInventory();
 					}
 					r1 = 0;
@@ -122,8 +125,12 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 
 					if (m2)
 						user.giveMoney(q2);
-					else
-						user.getInventory().addItem(qi2);
+					else {
+						Map<Integer, ItemStack> leftOver = user.getInventory().addItem(qi2);
+						for (ItemStack itemStack : leftOver.values()) {
+							user.getWorld().dropItem(user.getLocation(), itemStack);
+						}
+					}
 
 					user.updateInventory();
 
