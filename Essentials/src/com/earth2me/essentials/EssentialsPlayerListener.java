@@ -65,7 +65,20 @@ public class EssentialsPlayerListener extends PlayerListener
 			if (user.getJustPortaled()) return;
 
 			Location loc = event.getTo();
-			final World world = worlds.get(user.getWorld() == worlds.get(0) ? 1 : 0);
+			World nether = server.getWorld(Essentials.getSettings().getNetherName());
+			if (nether == null) {
+				for (World world : worlds)
+				{
+					if (world.getEnvironment() == World.Environment.NETHER) {
+						nether = world;
+						break;
+					}
+				}
+				if (nether == null) {
+					return;
+				}
+			}
+			final World world = user.getWorld() == nether ? worlds.get(0) : nether;
 
 			double factor;
 			if (user.getWorld().getEnvironment() == World.Environment.NETHER && world.getEnvironment() == World.Environment.NORMAL) {

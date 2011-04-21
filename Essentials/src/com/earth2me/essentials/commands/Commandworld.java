@@ -23,7 +23,20 @@ public class Commandworld extends EssentialsCommand
 
 		if (args.length < 1)
 		{
-			world = worlds.get(user.getWorld() == worlds.get(0) && worlds.size() > 1 ? 1 : 0);
+			World nether = server.getWorld(Essentials.getSettings().getNetherName());
+			if (nether == null) {
+				for (World world2 : worlds)
+				{
+					if (world2.getEnvironment() == World.Environment.NETHER) {
+						nether = world2;
+						break;
+					}
+				}
+				if (nether == null) {
+					return;
+				}
+			}
+			world = user.getWorld() == nether ? worlds.get(0) : nether;
 		}
 		else
 		{
