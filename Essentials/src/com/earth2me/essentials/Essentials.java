@@ -25,7 +25,7 @@ import org.yaml.snakeyaml.reader.UnicodeReader;
 public class Essentials extends JavaPlugin
 {
 	public static final String AUTHORS = "Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo and ceulemans.";
-	public static final int minBukkitBuildVersion = 698;
+	public static final int minBukkitBuildVersion = 699;
 	private static final Logger logger = Logger.getLogger("Minecraft");
 	private static final Yaml yaml = new Yaml(new SafeConstructor());
 	private static Map<String, Object> users;
