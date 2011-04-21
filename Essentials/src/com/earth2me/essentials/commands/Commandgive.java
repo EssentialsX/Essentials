@@ -6,6 +6,7 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.ItemDb;
 import com.earth2me.essentials.User;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -39,6 +40,11 @@ public class Commandgive extends EssentialsCommand
 		}
 		if (args.length > 2 && Integer.parseInt(args[2]) > 0) {
 			stack.setAmount(Integer.parseInt(args[2]));
+		}
+		
+		if (stack.getType() == Material.AIR) {
+			sender.sendMessage(ChatColor.RED + "You can't give air.");
+			return;
 		}
 
 		User giveTo = getPlayer(server, args, 0);

@@ -5,6 +5,7 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.ItemDb;
 import com.earth2me.essentials.User;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -37,6 +38,11 @@ public class Commanditem extends EssentialsCommand
 		
 		if (args.length > 1 && Integer.parseInt(args[1]) > 0) {
 			stack.setAmount(Integer.parseInt(args[1]));
+		}
+		
+		if (stack.getType() == Material.AIR) {
+			user.sendMessage(ChatColor.RED + "You can't get air.");
+			return;
 		}
 
 		String itemName = stack.getType().name().toLowerCase().replace('_', ' ');
