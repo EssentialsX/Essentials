@@ -187,7 +187,15 @@ is divided into following sections:
         <condition else="" property="endorsed.classpath.cmd.line.arg" value="-Xbootclasspath/p:'${toString:endorsed.classpath.path}'">
             <length length="0" string="${endorsed.classpath}" when="greater"/>
         </condition>
-        <property name="javac.fork" value="false"/>
+        <condition else="false" property="jdkBug6558476">
+            <and>
+                <matches pattern="1\.[56]" string="${java.specification.version}"/>
+                <not>
+                    <os family="unix"/>
+                </not>
+            </and>
+        </condition>
+        <property name="javac.fork" value="${jdkBug6558476}"/>
         <property name="jar.index" value="false"/>
         <property name="jar.index.metainf" value="${jar.index}"/>
         <available file="${meta.inf.dir}/persistence.xml" property="has.persistence.xml"/>
@@ -658,7 +666,7 @@ is divided into following sections:
     </target>
     <target depends="init" if="do.archive" name="-do-jar-with-libraries-create-manifest" unless="manifest.available">
         <tempfile deleteonexit="true" destdir="${build.dir}" property="tmp.manifest.file"/>
-        <touch file="${tmp.manifest.file}"/>
+        <touch file="${tmp.manifest.file}" verbose="false"/>
     </target>
     <target depends="init" if="do.archive+manifest.available" name="-do-jar-with-libraries-copy-manifest">
         <tempfile deleteonexit="true" destdir="${build.dir}" property="tmp.manifest.file"/>
