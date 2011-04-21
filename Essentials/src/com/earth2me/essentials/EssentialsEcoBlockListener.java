@@ -23,7 +23,7 @@ public class EssentialsEcoBlockListener extends BlockListener
 
 		if (sign.getLine(0).equals("§1[Trade]"))
 		{
-			if (!sign.getLine(3).substring(2).equals(user.getName())) {
+			if (!sign.getLine(3).substring(2).equals(user.getName().substring(0, 14))) {
 				if (!user.isOp()) {
 					event.setCancelled(true);
 				}
@@ -149,7 +149,7 @@ public class EssentialsEcoBlockListener extends BlockListener
 				event.setLine(0, "§1[Trade]");
 				event.setLine(1, (m1 ? "$" + q1 : q1 + " " + l1[1]) + ":0");
 				event.setLine(2, (m2 ? "$" + q2 : q2 + " " + l2[1]) + ":" + r2);
-				event.setLine(3, "§8" + user.getName());
+				event.setLine(3, "§8" + user.getName().substring(0, 14));
 			}
 			catch (Throwable ex)
 			{
@@ -157,7 +157,7 @@ public class EssentialsEcoBlockListener extends BlockListener
 				event.setLine(0, "§4[Trade]");
 				event.setLine(1, "# ItemOr$");
 				event.setLine(2, "# ItemOr$:#");
-				event.setLine(3, "§8" + user.getName());
+				event.setLine(3, "§8" + user.getName().substring(0, 14));
 			}
 			return;
 		}

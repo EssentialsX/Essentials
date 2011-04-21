@@ -70,7 +70,7 @@ public class EssentialsBlockListener extends BlockListener
 					event.setLine(0, "§1[Protection]");
 				else
 					event.setLine(0, "§4[Protection]");
-				event.setLine(3, user.getName());
+				event.setLine(3, user.getName().substring(0, 14));
 				return;
 			}
 			if (event.getLine(0).equalsIgnoreCase("[Disposal]"))
@@ -249,11 +249,11 @@ public class EssentialsBlockListener extends BlockListener
 						if (user.inGroup(line)) {
 							return ALLOWED;
 						}
-					} else if (line.equalsIgnoreCase(user.getName())) {
+					} else if (line.equalsIgnoreCase(user.getName().substring(0, 14))) {
 						return ALLOWED;
 					}
 				}
-				if (sign.getLine(3).equalsIgnoreCase(user.getName()))
+				if (sign.getLine(3).equalsIgnoreCase(user.getName().substring(0, 14)))
 				{
 					return OWNER;
 				}

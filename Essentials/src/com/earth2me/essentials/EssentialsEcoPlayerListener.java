@@ -85,7 +85,7 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 				ItemStack qi1 = m1 ? null : ItemDb.get(l1[1], q1);
 				ItemStack qi2 = m2 ? null : ItemDb.get(l2[1], q2);
 
-				if (user.getName().equals(sign.getLines()[3].substring(2)))
+				if (user.getName().substring(0, 14).equals(sign.getLines()[3].substring(2)))
 				{
 					if (m1)
 					{
