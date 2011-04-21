@@ -256,10 +256,9 @@ public class EssentialsPlayerListener extends PlayerListener
 	{
 		try
 		{
-			if (server.getPluginManager().isPluginEnabled("EssentialsHome"))
-				user.setCompassTarget(user.getHome());
+			user.setCompassTarget(user.getHome());
 		}
-		catch (Throwable ex)
+		catch (Exception ex)
 		{
 		}
 	}
