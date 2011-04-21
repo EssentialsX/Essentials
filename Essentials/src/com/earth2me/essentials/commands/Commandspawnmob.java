@@ -218,7 +218,7 @@ public class Commandspawnmob extends EssentialsCommand
 			EntityWolf wolf = ((CraftWolf) spawned).getHandle();
 			wolf.d(true);
 			wolf.a((PathEntity) null);
-			wolf.b(true);
+			wolf.setSitting(true);
 			wolf.health = 20;
 			wolf.a(user.getName());
 			wolf.world.a(wolf, (byte) 7);
