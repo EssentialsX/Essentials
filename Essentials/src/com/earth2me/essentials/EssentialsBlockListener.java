@@ -60,6 +60,7 @@ public class EssentialsBlockListener extends BlockListener
 		if (event.isCancelled()) return;
 		if (Essentials.getSettings().areSignsDisabled()) return;
 		User user = User.get(event.getPlayer());
+		String username = user.getName().substring(0, user.getName().length() > 14 ? 14 : user.getName().length());
 
 		try
 		{
@@ -70,7 +71,7 @@ public class EssentialsBlockListener extends BlockListener
 					event.setLine(0, "§1[Protection]");
 				else
 					event.setLine(0, "§4[Protection]");
-				event.setLine(3, user.getName().substring(0, 14));
+				event.setLine(3, username);
 				return;
 			}
 			if (event.getLine(0).equalsIgnoreCase("[Disposal]"))
@@ -237,6 +238,7 @@ public class EssentialsBlockListener extends BlockListener
 
 	private int checkProtectionSign(Block block, User user)
 	{
+		String username = user.getName().substring(0, user.getName().length() > 14 ? 14 : user.getName().length());
 		if (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN)
 		{
 			Sign sign = new CraftSign(block);
@@ -249,11 +251,11 @@ public class EssentialsBlockListener extends BlockListener
 						if (user.inGroup(line)) {
 							return ALLOWED;
 						}
-					} else if (line.equalsIgnoreCase(user.getName().substring(0, 14))) {
+					} else if (line.equalsIgnoreCase(username)) {
 						return ALLOWED;
 					}
 				}
-				if (sign.getLine(3).equalsIgnoreCase(user.getName().substring(0, 14)))
+				if (sign.getLine(3).equalsIgnoreCase(username))
 				{
 					return OWNER;
 				}

@@ -20,6 +20,7 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 		if (Essentials.getSettings().areSignsDisabled()) return;
 		if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 		User user = User.get(event.getPlayer());
+		String username = user.getName().substring(0, user.getName().length() > 14 ? 14 : user.getName().length());
 		if (event.getClickedBlock().getType() != Material.WALL_SIGN && event.getClickedBlock().getType() != Material.SIGN_POST)
 			return;
 		Sign sign = new CraftSign(event.getClickedBlock());
@@ -85,7 +86,7 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 				ItemStack qi1 = m1 ? null : ItemDb.get(l1[1], q1);
 				ItemStack qi2 = m2 ? null : ItemDb.get(l2[1], q2);
 
-				if (user.getName().substring(0, 14).equals(sign.getLines()[3].substring(2)))
+				if (username.equals(sign.getLines()[3].substring(2)))
 				{
 					if (m1)
 					{
