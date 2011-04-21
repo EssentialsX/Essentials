@@ -343,6 +343,7 @@ public class Settings implements IConf
 		epPlayerSettings.put("protect.disable.contactdmg", config.getBoolean("protect.disable.contactdmg", false));
 		epPlayerSettings.put("protect.disable.firedmg", config.getBoolean("protect.disable.firedmg", false));
 		epPlayerSettings.put("protect.disable.build", config.getBoolean("protect.disable.build", false));
+		epPlayerSettings.put("protect.disable.lightning", config.getBoolean("protect.disable.lightning", false));
 		return epPlayerSettings;
 
 	}

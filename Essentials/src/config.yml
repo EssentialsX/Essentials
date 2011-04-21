@@ -369,6 +369,9 @@ protect:
 
     # Burn, baby, burn!  Should fire damage be disabled?
     firedmg: false
+    
+    # Should the damage after hit by a lightning be disabled?
+    lightning: false
 
     # Should people with build: false in permissions be allowed to build
     # Set true to disable building for those people

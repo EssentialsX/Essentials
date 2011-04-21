@@ -111,7 +111,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 				return;
 			}
 		}
-
+		
 		DamageCause cause = event.getCause();
 		Entity casualty = event.getEntity();
 		if (casualty instanceof Player)
@@ -134,6 +134,11 @@ public class EssentialsProtectEntityListener extends EntityListener
 				return;
 			}
 			if (EssentialsProtect.playerSettings.get("protect.disable.drown") && cause == DamageCause.DROWNING)
+			{
+				event.setCancelled(true);
+				return;
+			}
+			if (EssentialsProtect.playerSettings.get("protect.disable.lightning") && cause == DamageCause.LIGHTNING)
 			{
 				event.setCancelled(true);
 				return;
