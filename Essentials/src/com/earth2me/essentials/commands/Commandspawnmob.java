@@ -15,6 +15,7 @@ import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.craftbukkit.entity.CraftCreeper;
 import org.bukkit.craftbukkit.entity.CraftSheep;
 import org.bukkit.craftbukkit.entity.CraftSlime;
 import org.bukkit.craftbukkit.entity.CraftWolf;
@@ -225,6 +226,9 @@ public class Commandspawnmob extends EssentialsCommand
 		}
 		if ("Wolf".equalsIgnoreCase(type) && data.equalsIgnoreCase("angry")) {
 			((CraftWolf)spawned).setAngry(true);
+		}
+		if ("Creeper".equalsIgnoreCase(type) && data.equalsIgnoreCase("powered")) {
+			((CraftCreeper)spawned).setPowered(true);
 		}
 	}
 }
