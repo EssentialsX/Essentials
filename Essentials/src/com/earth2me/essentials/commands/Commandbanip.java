@@ -22,7 +22,7 @@ public class Commandbanip extends EssentialsCommand
 			return;
 		}
 
-		((CraftServer)server).getHandle().c.f.c(args[0]);
+		((CraftServer)server).getHandle().c(args[0]);
 		sender.sendMessage("§7Banned IP address.");
 		Essentials.getStatic().loadBanList();
 

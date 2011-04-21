@@ -28,7 +28,7 @@ public class Commandunban extends EssentialsCommand
 			return;
 		}
 
-		((CraftServer)server).getHandle().c.f.b(args[0]);
+		((CraftServer)server).getHandle().b(args[0]);
 		sender.sendMessage("Unbanned player.");
 		Essentials.getStatic().loadBanList();
 	}

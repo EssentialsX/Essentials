@@ -177,8 +177,8 @@ public class EssentialsProtectEntityListener extends EntityListener
 					}
 				}
 
-				((CraftServer)parent.getServer()).getServer().f.a(loc.getX(), loc.getY(), loc.getZ(), 64.0D,
-																  new Packet60Explosion(loc.getX(), loc.getY(), loc.getZ(), 3.0f, set));
+				((CraftServer)parent.getServer()).getHandle().a(loc.getX(), loc.getY(), loc.getZ(), 64.0D,
+                                                                                                                            new Packet60Explosion(loc.getX(), loc.getY(), loc.getZ(), 3.0f, set));
 				event.setCancelled(true);
 				return;
 			}

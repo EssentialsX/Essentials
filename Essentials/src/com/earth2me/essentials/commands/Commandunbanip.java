@@ -28,7 +28,7 @@ public class Commandunbanip extends EssentialsCommand
 			return;
 		}
 
-		((CraftServer)server).getHandle().c.f.d(args[0]);
+		((CraftServer)server).getHandle().d(args[0]);
 		sender.sendMessage("Unbanned IP address.");
 		Essentials.getStatic().loadBanList();
 	}

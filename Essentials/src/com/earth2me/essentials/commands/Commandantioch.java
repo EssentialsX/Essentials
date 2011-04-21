@@ -33,7 +33,7 @@ public class Commandantioch extends EssentialsCommand
 		World world = ((CraftWorld)user.getWorld()).getHandle();
 		loc = new TargetBlock(user).getTargetBlock().getLocation();
 		EntityTNTPrimed tnt = new EntityTNTPrimed(world, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-		world.a(tnt);
-		world.a(tnt, "random.fuse", 1.0F, 1.0F);
+		world.addEntity(tnt);
+		world.makeSound(tnt, "random.fuse", 1.0F, 1.0F);
 	}
 }

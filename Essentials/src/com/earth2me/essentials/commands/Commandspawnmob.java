@@ -99,7 +99,7 @@ public class Commandspawnmob extends EssentialsCommand
 			block = user.getWorld().getBlockAt(loc);
 		}
 		spawnedMob.teleportTo(loc);
-		world.a(spawnedMob.getHandle());
+		world.addEntity(spawnedMob.getHandle());
 		
 		if (mountType != null)
 		{
@@ -120,7 +120,7 @@ public class Commandspawnmob extends EssentialsCommand
 			}
 			spawnedMount.teleportTo(spawnedMob);
 			spawnedMount.getHandle().setPassengerOf(spawnedMob.getHandle());
-			world.a(spawnedMount.getHandle());
+			world.addEntity(spawnedMount.getHandle());
 		}
 		if (mobData != null) {
 			changeMobData(mob.name, spawnedMob, mobData, user);
@@ -144,7 +144,7 @@ public class Commandspawnmob extends EssentialsCommand
 				{
 					spawnedMob = mob.spawn(user, server);
 					spawnedMob.teleportTo(loc);
-					world.a(spawnedMob.getHandle());
+					world.addEntity(spawnedMob.getHandle());
 					if (mobMount != null)
 					{
 						try
@@ -158,7 +158,7 @@ public class Commandspawnmob extends EssentialsCommand
 						}
 						spawnedMount.teleportTo(spawnedMob);
 						spawnedMount.getHandle().setPassengerOf(spawnedMob.getHandle());
-						world.a(spawnedMount.getHandle());
+						world.addEntity(spawnedMount.getHandle());
 					}
 					if (mobData != null) {
 						changeMobData(mob.name, spawnedMob, mobData, user);
