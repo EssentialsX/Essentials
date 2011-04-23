@@ -3,8 +3,11 @@ package com.earth2me.essentials;
 import java.net.InetSocketAddress;
 import java.util.HashSet;
 import java.util.List;
+import org.bukkit.Achievement;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Server;
+import org.bukkit.Statistic;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Arrow;
@@ -395,6 +398,31 @@ public class OfflinePlayer implements Player
 	}
 
 	public boolean isSleepingIgnored()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public void awardAchievement(Achievement a)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public void incrementStatistic(Statistic ststc)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public void incrementStatistic(Statistic ststc, int i)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public void incrementStatistic(Statistic ststc, Material mtrl)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public void incrementStatistic(Statistic ststc, Material mtrl, int i)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}

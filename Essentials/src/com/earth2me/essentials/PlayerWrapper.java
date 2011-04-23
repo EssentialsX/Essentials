@@ -404,63 +404,88 @@ public class PlayerWrapper implements Player
 	@Deprecated
 	public void teleportTo(Location lctn)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		base.teleportTo(lctn);
 	}
 
 	@Override
 	@Deprecated
 	public void teleportTo(Entity entity)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		base.teleportTo(entity);
 	}
 
 	public void saveData()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		base.saveData();
 	}
 
 	public void loadData()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		base.loadData();
 	}
 
 	public boolean isSleeping()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		return base.isSleeping();
 	}
 
 	public int getSleepTicks()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		return base.getSleepTicks();
 	}
 
 	public List<Entity> getNearbyEntities(double d, double d1, double d2)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		return base.getNearbyEntities(d, d1, d2);
 	}
 
 	public boolean isDead()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		return base.isDead();
 	}
 
 	public float getFallDistance()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		return base.getFallDistance();
 	}
 
 	public void setFallDistance(float f)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		base.setFallDistance(f);
 	}
 
 	public void setSleepingIgnored(boolean bln)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		base.setSleepingIgnored(bln);
 	}
 
 	public boolean isSleepingIgnored()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		return base.isSleepingIgnored();
+	}
+
+	public void awardAchievement(Achievement a)
+	{
+		base.awardAchievement(a);
+	}
+
+	public void incrementStatistic(Statistic ststc)
+	{
+		base.incrementStatistic(ststc);
+	}
+
+	public void incrementStatistic(Statistic ststc, int i)
+	{
+		base.incrementStatistic(ststc, i);
+	}
+
+	public void incrementStatistic(Statistic ststc, Material mtrl)
+	{
+		base.incrementStatistic(ststc, mtrl);
+	}
+
+	public void incrementStatistic(Statistic ststc, Material mtrl, int i)
+	{
+		base.incrementStatistic(ststc, mtrl, i);
 	}
 }
