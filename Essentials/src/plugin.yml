@@ -228,9 +228,12 @@ commands:
     usage: /<command> [mob]<:data><,mount<:data>> <amount>
     aliases: [espawnmob]
   suicide:
-    description: Causes you to perish
+    description: Causes you to perish.
     usage: /<command>
     aliases: [esuicide]
+  thunder:
+    description: Enable/disable thunder.
+    usage: /<command> <true/false> [duration]
   time:
     description: Change the server time to day or night.
     usage: /<command> [day|night]
@@ -299,6 +302,9 @@ commands:
     description: List all warps or warp to the specified location.
     usage: /<command> <warp>
     aliases: [ewarp]
+  weather:
+    description: Setting the weather.
+    usage: /<command> <storm/sun> [duration]
   whois:
     description: Determine the username behind a nickname.
     usage: /<command> [nickname]
