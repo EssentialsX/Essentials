@@ -5,7 +5,6 @@ import java.util.logging.*;
 import java.io.*;
 import org.bukkit.*;
 import com.earth2me.essentials.commands.IEssentialsCommand;
-import net.minecraft.server.EntityHuman;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
@@ -38,11 +37,7 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 	{
 		super(base);
 		this.folder = new File((Essentials.getStatic() == null ? new File(".") : Essentials.getStatic().getDataFolder()), "userdata");
-
-		if (base instanceof EntityHuman)
-		{
-			this.lastLocation = getBase().getLocation();
-		}
+		this.lastLocation = getBase().getLocation();
 		load();
 	}
 
