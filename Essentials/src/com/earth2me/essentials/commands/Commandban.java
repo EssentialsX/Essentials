@@ -23,20 +23,27 @@ public class Commandban extends EssentialsCommand
 			return;
 		}
 
-
-		User p = null;
-		if (server.matchPlayer(args[0]).isEmpty())
+		try
 		{
-			((CraftServer)server).getHandle().a(args[0]);
-			sender.sendMessage("§cPlayer " + args[0] + " banned");
+			User p = null;
+			if (server.matchPlayer(args[0]).isEmpty())
+			{
+				((CraftServer)server).getHandle().a(args[0]);
+				sender.sendMessage("§cPlayer " + args[0] + " banned");
+			}
+			else
+			{
+				p = User.get(server.matchPlayer(args[0]).get(0));
+				p.kickPlayer(args.length > 1 ? getFinalArg(args, 1) : "Banned from server");
+				((CraftServer)server).getHandle().a(p.getName());
+				sender.sendMessage("§cPlayer " + p.getName() + " banned");
+			}
+			Essentials.getStatic().loadBanList();
 		}
-		else
+		catch (Throwable ex)
 		{
-			p = User.get(server.matchPlayer(args[0]).get(0));
-			p.kickPlayer(args.length > 1 ? getFinalArg(args, 1) : "Banned from server");
-			((CraftServer)server).getHandle().a(p.getName());
-			sender.sendMessage("§cPlayer " + p.getName() + " banned");
+			ex.printStackTrace();
+			sender.sendMessage("Error: " + ex);
 		}
-		Essentials.getStatic().loadBanList();
 	}
 }
