@@ -168,9 +168,6 @@ commands:
     description: Change your nickname or that of another player.
     usage: /<command> <player> [nickname|off]
     aliases: [enick]
-  nuble:
-    description: Used by Nuble to request permission for takeoff.
-    usage: /<command> identify [id]
   pay:
     description: Pays another player from your balance
     usage: /<command> [player] [amount]
