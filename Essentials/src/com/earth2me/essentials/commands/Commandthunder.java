@@ -24,12 +24,6 @@ public class Commandthunder extends EssentialsCommand
 			return;
 		}
 
-		if (!user.isAuthorized(this))
-		{
-			user.sendMessage("§cThe power of the Thor has been denied to you");
-			return;
-		}
-
 		user.charge(this);
 		World world = user.getWorld();
 		boolean setThunder = args[0].equalsIgnoreCase("true");

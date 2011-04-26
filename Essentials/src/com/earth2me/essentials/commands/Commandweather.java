@@ -23,13 +23,7 @@ public class Commandweather extends EssentialsCommand
 			return;
 		}
 
-		if (!user.isAuthorized(this))
-		{
-			user.sendMessage("§cThe power of the sky has been denied to you");
-			return;
-		}
-
-		boolean isStorm = args[0].equalsIgnoreCase("storm");
+	boolean isStorm = args[0].equalsIgnoreCase("storm");
 		World world = user.getWorld();
 		user.charge(this);
 		if (!args[1].isEmpty() || args[1] != null)
