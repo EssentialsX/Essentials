@@ -27,7 +27,7 @@ public class Commandthunder extends EssentialsCommand
 		user.charge(this);
 		World world = user.getWorld();
 		boolean setThunder = args[0].equalsIgnoreCase("true");
-		if (!args[1].isEmpty() || args[1] != null)
+		if (args.length > 1)
 		{
 
 			world.setThundering(setThunder ? true : false);
