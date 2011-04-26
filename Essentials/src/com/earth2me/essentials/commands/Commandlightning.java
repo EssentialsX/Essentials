@@ -37,7 +37,7 @@ public class Commandlightning extends EssentialsCommand
 		{
 			user.sendMessage("§7Smiting" + p.getDisplayName());
 			world.strikeLightning(p.getLocation());
-			p.setHealth(0);
+			p.setHealth(p.getHealth() - 5);
 			p.sendMessage("§7You have just been smited");
 		}
 		user.charge(this);
