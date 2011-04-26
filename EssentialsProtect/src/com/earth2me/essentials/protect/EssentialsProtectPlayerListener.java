@@ -68,30 +68,5 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 		{
 			parent.alert(user, item.getType().toString(), "used: ");
 		}
-
-		/*if (item != null && item.getTypeId() == 323)
-		{
-			if (EssentialsProtect.genSettings.get("protect.protect.signs"))
-			{
-				if (user.isAuthorized("essentials.protect"))
-				{
-
-					signBlockX = blockClicked.getX();
-					signBlockY = blockClicked.getY();
-					signBlockZ = blockClicked.getZ();
-
-					initialize();
-					spData.insertProtectionIntoDb(user.getWorld().getName(), user.getName(), signBlockX,
-												  signBlockY + 1, signBlockZ);
-
-					if (EssentialsProtect.genSettings.get("protect.protect.block-below"))
-					{
-						spData.insertProtectionIntoDb(user.getWorld().getName(), user.getName(), signBlockX,
-													  signBlockY, signBlockZ);
-					}
-				}
-			}
-		}*/
-
 	}
 }

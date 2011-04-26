@@ -327,7 +327,8 @@ public class Settings implements IConf
 		for (CreatureType ct : CreatureType.values()) {
 			String name = ct.toString().toLowerCase();
 			epSettings.put("protect.prevent.spawn."+name, config.getBoolean("protect.prevent.spawn."+name, false));
-		}		
+		}
+		epSettings.put("protect.prevent.lightning-fire-spread", config.getBoolean("protect.prevent.lightning-fire-spread", false));
 		return epSettings;
 	}
 

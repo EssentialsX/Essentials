@@ -297,6 +297,7 @@ protect:
     fire-spread: false
     lava-fire-spread: false
     flint-fire: false
+    lightning-fire-spread: false
     portal-creation: false
     tnt-explosion: false
     creeper-explosion: false

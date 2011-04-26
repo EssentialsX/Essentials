@@ -158,6 +158,12 @@ public class EssentialsProtectBlockListener extends BlockListener
 			event.setCancelled(EssentialsProtect.guardSettings.get("protect.prevent.lava-fire-spread"));
 			return;
 		}
+
+		if (event.getCause().equals(BlockIgniteEvent.IgniteCause.LIGHTNING))
+		{
+			event.setCancelled(EssentialsProtect.guardSettings.get("protect.prevent.lightning-fire-spread"));
+			return;
+		}
 	}
 
 	@Override
