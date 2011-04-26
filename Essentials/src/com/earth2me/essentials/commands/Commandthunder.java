@@ -4,10 +4,12 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 
 import org.bukkit.Server;
+import org.bukkit.World;
+
 
 public class Commandthunder extends EssentialsCommand
 {
-        public Commandthunder()
+	public Commandthunder()
 	{
 		super("thunder");
 	}
@@ -15,56 +17,34 @@ public class Commandthunder extends EssentialsCommand
 	@Override
 	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
 	{
-                switch (args.length)
-                {
-                case 0:
-                        if (user.isAuthorized("essentials.thunder"))
-                        {
-                             user.sendMessage("§cUsage: /" + commandLabel + " <true/false> [duration]");
-                             break;
-                        }
-                        user.sendMessage("§cYou are not allowed to change the thunder");
-                        break;
-                case 1:
-                        if (user.isAuthorized("essentials.thunder"))
-                        {
-                            if(args[0].equalsIgnoreCase("true"))
-                            {
-                                user.getWorld().setThundering(true);
-                                user.sendMessage("§7You enabled thunder in your world");
-                                break;
-                            }
-                            if(args[0].equalsIgnoreCase("false"))
-                            {
-                                user.getWorld().setThundering(false);
-                                user.sendMessage("§7You disabled thunder in your world");
-                                break;
-                            }
-                             user.sendMessage("§cUsage: /" + commandLabel + " <true/false> [duration]");
-                        }
-                        user.sendMessage("§cYou are not allowed to change the thunder");
-                        break;
-                case 2:
-                        if (user.isAuthorized("essentials.thunder"))
-                        {
-                            if(args[0].equalsIgnoreCase("true"))
-                            {
-                                user.getWorld().setThundering(true);
-                                user.getWorld().setWeatherDuration(Integer.parseInt(args[1]) * 20);
-                                user.sendMessage("§7You enabled thunder in your world for " + args[1] + " seconds");
-                                break;
-                            }
-                            if(args[0].equalsIgnoreCase("false"))
-                            {
-                                user.getWorld().setThundering(false);
-                                user.getWorld().setWeatherDuration(Integer.parseInt(args[1]) * 20);
-                                user.sendMessage("§7You disabled thunder in your world for " + args[1] + " seconds");
-                                break;
-                            }
-                             user.sendMessage("§cUsage: /" + commandLabel + " <true/false> [duration]");
-                        }
-                        user.sendMessage("§cYou are not allowed to change the thunder");
-                        break;
-                }
-    }
+
+		if (args.length < 1)
+		{
+			user.sendMessage("§cUsage: /" + commandLabel + " <true/false> [duration]");
+			return;
+		}
+
+		if (!user.isAuthorized(this))
+		{
+			user.sendMessage("§cThe power of the Thor has been denied to you");
+			return;
+		}
+
+		user.charge(this);
+		World world = user.getWorld();
+		boolean setThunder = args[0].equalsIgnoreCase("true");
+		if (!args[1].isEmpty() || args[1] != null)
+		{
+
+			world.setThundering(setThunder ? true : false);
+			world.setThunderDuration(Integer.parseInt(args[1]) * 20);
+			user.sendMessage("§7You " + (setThunder ? "enabled" : "disabled") + " thunder in your world for " + args[1] + " seconds");
+		}
+		else
+		{
+			world.setThundering(setThunder ? true : false);
+			user.sendMessage("§7You " + (setThunder ? "enabled" : "disabled") + " thunder in your world");
+		}
+
+	}
 }

@@ -4,6 +4,7 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 
 import org.bukkit.Server;
+import org.bukkit.World;
 
 
 public class Commandweather extends EssentialsCommand
@@ -16,41 +17,37 @@ public class Commandweather extends EssentialsCommand
 	@Override
 	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
 	{
-		switch (args.length)
+		if (args.length < 1)
 		{
-		case 0:
 			user.sendMessage("§cUsage: /" + commandLabel + " <storm/sun> [duration]");
-			break;
-		case 1:
-			if (args[0].equalsIgnoreCase("storm"))
-			{
-				user.getWorld().setStorm(true);
-				user.sendMessage("§7You set the weather in your world to storm");
-				break;
-			}
-			if (args[0].equalsIgnoreCase("sun"))
-			{
-				user.getWorld().setStorm(false);
-				user.sendMessage("§7You set the weather in your world to sun");
-				break;
-			}
-			user.sendMessage("§cUsage: /" + commandLabel + " <storm/sun> [duration]");
-		case 2:
-			if (args[0].equalsIgnoreCase("storm"))
-			{
-				user.getWorld().setStorm(true);
-				user.getWorld().setWeatherDuration(Integer.parseInt(args[1]) * 20);
-				user.sendMessage("§7You set the weather in your world to storm for " + args[1] + " seconds");
-				break;
-			}
-			if (args[0].equalsIgnoreCase("sun"))
-			{
-				user.getWorld().setStorm(false);
-				user.getWorld().setWeatherDuration(Integer.parseInt(args[1]) * 20);
-				user.sendMessage("§7You set the weather in your world to sun for " + args[1] + " seconds");
-				break;
-			}
-			user.sendMessage("§cUsage: /" + commandLabel + " <storm/sun> [duration]");
+			return;
+		}
+
+		if (!user.isAuthorized(this))
+		{
+			user.sendMessage("§cThe power of the sky has been denied to you");
+			return;
+		}
+
+		boolean isStorm = args[0].equalsIgnoreCase("storm");
+		World world = user.getWorld();
+		user.charge(this);
+		if (!args[1].isEmpty() || args[1] != null)
+		{
+
+			world.setStorm(isStorm ? true : false);
+			world.setWeatherDuration(Integer.parseInt(args[1]) * 20);
+			user.sendMessage("§7You set the weather to  " + (isStorm ? "storm" : "sun") + " in your world for " + args[1] + " seconds");
+			return;
+		}
+		else
+		{
+			world.setStorm(isStorm ? true : false);
+			user.sendMessage("§7You set the weather to  " + (isStorm ? "storm" : "sun") + " in your world");
+			return;
 		}
 	}
 }
+
+
+
