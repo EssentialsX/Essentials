@@ -178,32 +178,48 @@ public class EssentialsBlockListener extends BlockListener
 		switch(is.getType()) {
 			case WOODEN_DOOR:
 				is.setType(Material.WOOD_DOOR);
+				is.setDurability((short)0);
 				break;
 			case IRON_DOOR_BLOCK:
 				is.setType(Material.IRON_DOOR);
+				is.setDurability((short)0);
 				break;
 			case SIGN_POST:
 			case WALL_SIGN:
 				is.setType(Material.SIGN);
+				is.setDurability((short)0);
 				break;
 			case CROPS:
 				is.setType(Material.SEEDS);
+				is.setDurability((short)0);
 				break;
 			case CAKE_BLOCK:
 				is.setType(Material.CAKE);
+				is.setDurability((short)0);
 				break;
 			case BED_BLOCK:
 				is.setType(Material.BED);
+				is.setDurability((short)0);
 				break;
 			case REDSTONE_WIRE:
 				is.setType(Material.REDSTONE);
+				is.setDurability((short)0);
 				break;
 			case REDSTONE_TORCH_OFF:
+			case REDSTONE_TORCH_ON:
 				is.setType(Material.REDSTONE_TORCH_ON);
+				is.setDurability((short)0);
 				break;
 			case DIODE_BLOCK_OFF:
 			case DIODE_BLOCK_ON:
 				is.setType(Material.DIODE);
+				is.setDurability((short)0);
+				break;
+			case DOUBLE_STEP:
+				is.setType(Material.STEP);
+				break;
+			case TORCH:
+				is.setDurability((short)0);
 				break;
 		}
 		boolean unlimitedForUser = user.hasUnlimited(is);
