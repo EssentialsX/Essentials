@@ -23,7 +23,6 @@ public class Commandlightning extends EssentialsCommand
 		if (args.length < 1)
 		{
 			world.strikeLightning(user.getTargetBlock(null, 600).getLocation());
-			user.sendMessage("§7CRACK");
 			return;
 		}
 
