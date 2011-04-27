@@ -145,8 +145,8 @@ commands:
     usage: /<command>
     aliases: [playerlist,who,online,elist]
   lightning:
-    description: Smite down players with the power of Thor, will take 5 hearts
-    usage: /<command> [player]
+    description: Command the power of Thor. Look and strike or pass a player args.
+    usage: /<command> <player>
   mail:
     description: Manages inter-player, intra-server mail.
     usage: /<command> [read|clear|send [to] [message]]
