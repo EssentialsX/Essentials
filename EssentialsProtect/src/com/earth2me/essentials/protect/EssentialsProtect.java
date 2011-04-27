@@ -20,6 +20,7 @@ public class EssentialsProtect extends JavaPlugin
 	private EssentialsProtectBlockListener blockListener = null;
 	private EssentialsProtectPlayerListener playerListener = null;
 	private EssentialsProtectEntityListener entityListener = null;
+	private EssentialsProtectWeatherListener weatherListener = null;
 	public static final String AUTHORS = Essentials.AUTHORS;
 	private static final Logger logger = Logger.getLogger("Minecraft");
 	public static HashMap<String, Boolean> genSettings = null;
@@ -32,7 +33,6 @@ public class EssentialsProtect extends JavaPlugin
 	public static ArrayList<Integer> onPlaceAlert = null;
 	public static ArrayList<Integer> onUseAlert = null;
 	public static ArrayList<Integer> onBreakAlert = null;
-
 
 	public EssentialsProtect()
 	{
@@ -48,6 +48,7 @@ public class EssentialsProtect extends JavaPlugin
 		playerListener = new EssentialsProtectPlayerListener(this);
 		blockListener = new EssentialsProtectBlockListener(this);
 		entityListener = new EssentialsProtectEntityListener(this);
+		weatherListener = new EssentialsProtectWeatherListener(this);
 		pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Priority.Low, this);
 		pm.registerEvent(Type.BLOCK_PLACE, blockListener, Priority.Highest, this);
 		pm.registerEvent(Type.BLOCK_FROMTO, blockListener, Priority.Highest, this);
@@ -58,9 +59,12 @@ public class EssentialsProtect extends JavaPlugin
 		pm.registerEvent(Type.ENTITY_TARGET, entityListener, Priority.Highest, this);
 		pm.registerEvent(Type.BLOCK_BREAK, blockListener, Priority.Highest, this);
 		pm.registerEvent(Type.CREATURE_SPAWN, entityListener, Priority.Highest, this);
-
+		pm.registerEvent(Type.WEATHER_CHANGE, weatherListener, Priority.Highest, this);
+		pm.registerEvent(Type.THUNDER_CHANGE, weatherListener, Priority.Highest, this);
+		pm.registerEvent(Type.LIGHTNING_STRIKE, weatherListener, Priority.Highest, this);
 		loadSettings();
-		if (!this.getDescription().getVersion().equals(Essentials.getStatic().getDescription().getVersion())) {
+		if (!this.getDescription().getVersion().equals(Essentials.getStatic().getDescription().getVersion()))
+		{
 			logger.log(Level.WARNING, "Version mismatch! Please update all Essentials jars to the same version.");
 		}
 		logger.info("Loaded " + this.getDescription().getName() + " build " + this.getDescription().getVersion() + " maintained by " + AUTHORS);
@@ -76,7 +80,7 @@ public class EssentialsProtect extends JavaPlugin
 	{
 		genSettings.clear();
 		dataSettings.clear();
-		
+
 		blockListener = null;
 		playerListener = null;
 		entityListener = null;

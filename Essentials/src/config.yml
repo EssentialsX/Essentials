@@ -382,10 +382,11 @@ protect:
     warn-on-build-disallow: false
 
 
-
-
-
-
+    #disable weather options
+    weather:
+      storm: false
+      thunder: false
+      lightning: false
 
 ############################################################
 # +------------------------------------------------------+ #

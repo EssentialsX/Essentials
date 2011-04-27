@@ -345,6 +345,9 @@ public class Settings implements IConf
 		epPlayerSettings.put("protect.disable.firedmg", config.getBoolean("protect.disable.firedmg", false));
 		epPlayerSettings.put("protect.disable.build", config.getBoolean("protect.disable.build", false));
 		epPlayerSettings.put("protect.disable.lightning", config.getBoolean("protect.disable.lightning", false));
+		epPlayerSettings.put("protect.disable.weather.lightning", config.getBoolean("protect.disable.weather.lightning", false));
+		epPlayerSettings.put("protect.disable.weather.storm", config.getBoolean("protect.disable.weather.storm", false));
+		epPlayerSettings.put("protect.disable.weather.thunder", config.getBoolean("protect.disable.weather.thunder", false));
 		return epPlayerSettings;
 
 	}
