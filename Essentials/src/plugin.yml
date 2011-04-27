@@ -305,6 +305,7 @@ commands:
   weather:
     description: Setting the weather.
     usage: /<command> <storm/sun> [duration]
+    aliases: [sky]
   whois:
     description: Determine the username behind a nickname.
     usage: /<command> [nickname]
