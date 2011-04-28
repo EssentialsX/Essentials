@@ -18,7 +18,7 @@ public class Commandhome extends EssentialsCommand
 		user.teleportCooldown();
 		if(args.length > 0 && user.isAuthorized("essentials.home.others"))
 		{
-			user.teleportToHome(args[0]);
+			user.teleportToHome(this.getName(), args[0]);
 			return;
 		}
 		user.teleportToHome(this.getName());

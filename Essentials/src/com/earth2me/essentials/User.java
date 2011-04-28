@@ -498,9 +498,24 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 
 	public Location getHome() throws Exception
 	{
-		if (data.containsKey("home"))
+		return getHome(null);
+	}
+
+	public Location getHome(String playerName) throws Exception
+	{
+		Map<String, Object> userData = new HashMap<String, Object>();
+		if (playerName == null)
 		{
-			List<Object> vals = (List<Object>)data.get("home");
+			userData = data;
+		}
+		else
+		{
+			userData = Essentials.getData(playerName);
+		}
+
+		if (userData.containsKey("home"))
+		{
+			List<Object> vals = (List<Object>)userData.get("home");
 			World world = getServer() == null ? null : getServer().getWorlds().get(0);
 			if (vals.size() > 5 && getServer() != null)
 			{
@@ -521,7 +536,16 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 
 		try
 		{
-			Map<String, Object> gdata = Essentials.getData(this);
+			Map<String, Object> gdata = null;
+			if (playerName != null)
+			{
+				gdata = Essentials.getData(playerName);
+			}
+			else
+			{
+				gdata = Essentials.getData(this);
+			}
+
 			List<Object> vals = (List<Object>)gdata.get("home");
 			World world = getServer().getWorlds().get(0);
 			if (vals.size() > 5)
@@ -547,13 +571,24 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 
 	public void teleportToHome(final String chargeFor)
 	{
+		teleportToHome(chargeFor, null);
+	}
+
+	public void teleportToHome(final String chargeFor, String otherPlayer)
+	{
 		final long delay = Essentials.getSettings().getTeleportDelay();
 
 		Location loc = null;
 		try
-		{
-			// check this first in case user hasn't set a home yet
-			loc = getHome();
+		{// check this first in case user hasn't set a home yet
+			if (otherPlayer == null)
+			{
+				loc = getHome();
+			}
+			else
+			{
+				loc = getHome(otherPlayer);
+			}
 		}
 		catch (Throwable ex)
 		{
@@ -787,7 +822,9 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 		if (command == null || command.trim().isEmpty())
 		{
 			tools.remove(Integer.valueOf(stack.getTypeId()));
-		} else {
+		}
+		else
+		{
 			tools.put(Integer.valueOf(stack.getTypeId()), command.trim());
 		}
 		data.put("powertools", tools);
