@@ -70,6 +70,9 @@ nether:
 # Mob limit on spawnmob
 spawnmob-limit: 10
 
+#Shall we notify users when using /lightning
+warn-on-smite: true
+
 # The message of the day, displayed on connect and by typing /motd.
 motd:
   - '&cWelcome, {PLAYER}&c!'

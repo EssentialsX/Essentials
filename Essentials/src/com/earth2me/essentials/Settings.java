@@ -473,4 +473,9 @@ public class Settings implements IConf
 	{
 		return config.getBoolean("debug", false);
 	}
+
+	public boolean warnOnSmite()
+	{
+		return config.getBoolean("warn-on-smite" ,true);
+	}
 }
