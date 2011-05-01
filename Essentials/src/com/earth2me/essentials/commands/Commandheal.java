@@ -2,7 +2,6 @@ package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
-import com.earth2me.essentials.Essentials;
 import org.bukkit.entity.Player;
 import com.earth2me.essentials.User;
 
@@ -15,46 +14,46 @@ public class Commandheal extends EssentialsCommand
 	}
 
 	@Override
-	public String[] getTriggers() {
-		return new String[] {
-			getName(), "eheal"
-		};
-	}
-	
-	@Override
-	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
+	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
+
 		if (args.length > 0 && user.isAuthorized("essentials.heal.others"))
 		{
-			if (!user.isAuthorized("essentials.heal.cooldown.bypass")) user.healCooldown();
-			user.charge(this);
-			for (Player p : server.matchPlayer(args[0]))
+			if (!user.isAuthorized("essentials.heal.cooldown.bypass"))
 			{
-				p.setHealth(20);
-				user.sendMessage("§7Healed " + p.getDisplayName() + ".");
+				user.healCooldown();
 			}
+			charge(user);
+			healOtherPlayers(server, user, commandLabel);
 			return;
 		}
-		
-		if (!user.isAuthorized("essentials.heal.cooldown.bypass")) user.healCooldown();
-		user.charge(this);
+
+		if (!user.isAuthorized("essentials.heal.cooldown.bypass"))
+		{
+			user.healCooldown();
+		}
+		charge(user);
 		user.setHealth(20);
 		user.sendMessage("§7You have been healed.");
 	}
 
 	@Override
-	public void run(Server server, Essentials parent, CommandSender sender, String commandLabel, String[] args) throws Exception
+	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
-			sender.sendMessage("Usage: /" + commandLabel + " [player]");
-			return;
+			throw new NotEnoughArgumentsException();
 		}
 
-		for (Player p : server.matchPlayer(args[0]))
+		healOtherPlayers(server, sender, args[0]);
+	}
+
+	private void healOtherPlayers(Server server, CommandSender sender, String name)
+	{
+		for (Player p : server.matchPlayer(name))
 		{
 			p.setHealth(20);
-			sender.sendMessage("Healed " + p.getDisplayName() + ".");
+			sender.sendMessage("§7Healed " + p.getDisplayName() + ".");
 		}
 	}
 }

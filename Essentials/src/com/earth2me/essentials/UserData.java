@@ -13,23 +13,29 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public abstract class UserData extends PlayerExtension implements IConf {
+
+public abstract class UserData extends PlayerExtension implements IConf
+{
 	private EssentialsConf config;
 	private static final Logger logger = Logger.getLogger("Minecraft");
-	
-	protected UserData(Player base, File folder) {
+	protected Essentials ess;
+
+	protected UserData(Player base, Essentials ess)
+	{
 		super(base);
-		folder = new File(folder, "userdata");
-		if (!folder.exists()) {
+		this.ess = ess;
+		File folder = new File(ess.getDataFolder(), "userdata");
+		if (!folder.exists())
+		{
 			folder.mkdirs();
 		}
-		config = new EssentialsConf(new File(folder, base.getName()+".yml"));
+		config = new EssentialsConf(new File(folder, Util.sanitizeFileName(base.getName()) + ".yml"));
 		reloadConfig();
 	}
 
-	public final void reloadConfig() {
+	public final void reloadConfig()
+	{
 		config.load();
-		updateConfig();
 		unlimited = _getUnlimited();
 		powertools = getPowertools();
 		lastLocation = _getLastLocation();
@@ -46,13 +52,16 @@ public abstract class UserData extends PlayerExtension implements IConf {
 		jailed = getJailed();
 		jailTimeout = _getJailTimeout();
 		lastLogin = _getLastLogin();
-		lastLogout = _getLastLogout();		
+		lastLogout = _getLastLogout();
+		afk = getAfk();
+		geolocation = _getGeoLocation();
 	}
-	
-	public double getMoney() {
+
+	public double getMoney()
+	{
 		if (config.hasProperty("money"))
 		{
-			return config.getDouble("money", Essentials.getSettings().getStartingBalance());
+			return config.getDouble("money", ess.getSettings().getStartingBalance());
 		}
 
 		try
@@ -61,11 +70,12 @@ public abstract class UserData extends PlayerExtension implements IConf {
 		}
 		catch (Throwable ex)
 		{
-			return Essentials.getSettings().getStartingBalance();
+			return ess.getSettings().getStartingBalance();
 		}
 	}
-	
-	public void setMoney(double value) {
+
+	public void setMoney(double value)
+	{
 		try
 		{
 			com.nijiko.coelho.iConomy.iConomy.getBank().getAccount(getName()).setBalance(value);
@@ -76,447 +86,573 @@ public abstract class UserData extends PlayerExtension implements IConf {
 			config.save();
 		}
 	}
-	
-	public Location getHome() throws Exception {
+
+	public Location getHome()
+	{
 		if (config.hasProperty("home"))
 		{
 			World world = getLocation().getWorld();
 			String worldHome = "home.worlds." + world.getName().toLowerCase();
-			if (!config.hasProperty(worldHome)) {
+			if (!config.hasProperty(worldHome))
+			{
 				String defaultWorld = config.getString("home.default");
 				worldHome = "home.worlds." + defaultWorld;
 			}
 			Location loc = config.getLocation(worldHome, getServer());
-			if (loc == null) {
-				throw new Exception();
-			}
 			return loc;
-		} else {
-			throw new Exception("You have not set a home.");
 		}
+		return null;
 	}
 
-	public void setHome(Location loc, boolean b) {
+	public void setHome(Location loc, boolean b)
+	{
 		String worldName = loc.getWorld().getName().toLowerCase();
-		if (worldName == null || worldName.isEmpty()) {
+		if (worldName == null || worldName.isEmpty())
+		{
 			logger.log(Level.WARNING, "Set Home: World name is null or empty.");
 			return;
 		}
-		if (b) {
+		if (b || !config.hasProperty("home.default"))
+		{
 			config.setProperty("home.default", worldName);
 		}
-		
-		config.setProperty("home.worlds."+worldName, loc);
+
+		config.setProperty("home.worlds." + worldName, loc);
 		config.save();
 	}
-	
-	public String getNickname() {
+
+	public String getNickname()
+	{
 		return config.getString("nickname");
 	}
-	
-	public void setNickname(String nick) {
+
+	public void setNickname(String nick)
+	{
 		config.setProperty("nickname", nick);
 		config.save();
 	}
-	
 	private List<Integer> unlimited;
-	
-	private List<Integer> _getUnlimited() {
+
+	private List<Integer> _getUnlimited()
+	{
 		return config.getIntList("unlimited", new ArrayList<Integer>());
 	}
-	
-	public List<Integer> getUnlimited() {
+
+	public List<Integer> getUnlimited()
+	{
 		return unlimited;
 	}
-	
-	public boolean hasUnlimited(ItemStack stack) {
+
+	public boolean hasUnlimited(ItemStack stack)
+	{
 		return unlimited.contains(stack.getTypeId());
 	}
 
-	public void setUnlimited(ItemStack stack, boolean state) {
-		if (unlimited.contains(stack.getTypeId())) {
+	public void setUnlimited(ItemStack stack, boolean state)
+	{
+		if (unlimited.contains(stack.getTypeId()))
+		{
 			unlimited.remove(Integer.valueOf(stack.getTypeId()));
 		}
-		if (state) {
+		if (state)
+		{
 			unlimited.add(stack.getTypeId());
 		}
 		config.setProperty("unlimited", unlimited);
 		config.save();
 	}
-	
 	private Map<Integer, String> powertools;
-	
+
 	@SuppressWarnings("unchecked")
-	private Map<Integer, String> getPowertools() {
+	private Map<Integer, String> getPowertools()
+	{
 		Object o = config.getProperty("powertools");
-		if (o != null && o instanceof Map) {
+		if (o != null && o instanceof Map)
+		{
 			return (Map<Integer, String>)o;
-		} else {
+		}
+		else
+		{
 			return new HashMap<Integer, String>();
 		}
-		
+
 	}
-	
-	public String getPowertool(ItemStack stack) {
+
+	public String getPowertool(ItemStack stack)
+	{
 		return powertools.get(stack.getTypeId());
 	}
 
-	public void setPowertool(ItemStack stack, String command) {
-		if (command == null || command.isEmpty()) {
+	public void setPowertool(ItemStack stack, String command)
+	{
+		if (command == null || command.isEmpty())
+		{
 			powertools.remove(stack.getTypeId());
-		} else {
+		}
+		else
+		{
 			powertools.put(stack.getTypeId(), command);
 		}
 		config.setProperty("powertools", powertools);
 		config.save();
 	}
-	
 	private Location lastLocation;
-	
-	private Location _getLastLocation() {
+
+	private Location _getLastLocation()
+	{
 		return config.getLocation("lastlocation", getServer());
 	}
-	
-	public Location getLastLocation() {
+
+	public Location getLastLocation()
+	{
 		return lastLocation;
 	}
-	
-	public void setLastLocation(Location loc) {
+
+	public void setLastLocation(Location loc)
+	{
 		lastLocation = loc;
 		config.setProperty("lastlocation", loc);
 		config.save();
 	}
-	
 	private long lastTeleportTimestamp;
-	
-	private long _getLastTeleportTimestamp() {
+
+	private long _getLastTeleportTimestamp()
+	{
 		return config.getLong("timestamps.lastteleport", 0);
 	}
-	
-	public long getLastTeleportTimestamp() {
+
+	public long getLastTeleportTimestamp()
+	{
 		return lastTeleportTimestamp;
 	}
-	
-	public void setLastTeleportTimestamp(long time) {
+
+	public void setLastTeleportTimestamp(long time)
+	{
 		lastTeleportTimestamp = time;
 		config.setProperty("timestamps.lastteleport", time);
 		config.save();
 	}
-	
 	private long lastHealTimestamp;
-	
-	private long _getLastHealTimestamp() {
+
+	private long _getLastHealTimestamp()
+	{
 		return config.getLong("timestamps.lastheal", 0);
 	}
-	
-	public long getLastHealTimestamp() {
+
+	public long getLastHealTimestamp()
+	{
 		return lastHealTimestamp;
 	}
-	
-	public void setLastHealTimestamp(long time) {
+
+	public void setLastHealTimestamp(long time)
+	{
 		lastHealTimestamp = time;
 		config.setProperty("timestamps.lastheal", time);
 		config.save();
 	}
-	
 	private String jail;
-	
-	private String _getJail() {
+
+	private String _getJail()
+	{
 		return config.getString("jail");
 	}
-	
-	public String getJail() {
+
+	public String getJail()
+	{
 		return jail;
 	}
-	
-	public void setJail(String jail) {
-		if (jail == null || jail.isEmpty()) {
+
+	public void setJail(String jail)
+	{
+		if (jail == null || jail.isEmpty())
+		{
 			this.jail = null;
 			config.removeProperty("jail");
-		} else {
+		}
+		else
+		{
 			this.jail = jail;
 			config.setProperty("jail", jail);
 		}
 		config.save();
 	}
-	
 	private List<String> mails;
-	
-	private List<String> _getMails() {
+
+	private List<String> _getMails()
+	{
 		return config.getStringList("mail", new ArrayList<String>());
 	}
-	
-	public List<String> getMails() {
+
+	public List<String> getMails()
+	{
 		return mails;
 	}
-	
-	public void setMails(List<String> mails) {
-		if (mails == null) {
+
+	public void setMails(List<String> mails)
+	{
+		if (mails == null)
+		{
 			config.removeProperty("mail");
-		} else {
+		}
+		else
+		{
 			config.setProperty("mail", mails);
 		}
 		this.mails = mails;
 		config.save();
 	}
-	
-	public void addMail(String mail) {
+
+	public void addMail(String mail)
+	{
 		mails.add(mail);
 		setMails(mails);
 	}
-	
 	private ItemStack[] savedInventory;
-	
-	public ItemStack[] getSavedInventory() {
+
+	public ItemStack[] getSavedInventory()
+	{
 		return savedInventory;
 	}
-	
-	private ItemStack[] _getSavedInventory() {
+
+	private ItemStack[] _getSavedInventory()
+	{
 		int size = config.getInt("inventory.size", 0);
-		if (size < 1 || size > getInventory().getSize()) {
+		if (size < 1 || size > getInventory().getSize())
+		{
 			return null;
 		}
 		ItemStack[] is = new ItemStack[size];
-		for (int i = 0; i < size; i++) {
-			is[i] = config.getItemStack("inventory."+i); 
+		for (int i = 0; i < size; i++)
+		{
+			is[i] = config.getItemStack("inventory." + i);
 		}
 		return is;
 	}
-	
-	public void setSavedInventory(ItemStack[] is) {
-		if (is == null || is.length == 0) {
+
+	public void setSavedInventory(ItemStack[] is)
+	{
+		if (is == null || is.length == 0)
+		{
 			savedInventory = null;
 			config.removeProperty("inventory");
-		} else {
+		}
+		else
+		{
 			savedInventory = is;
 			config.setProperty("inventory.size", is.length);
-			for (int i = 0; i < is.length; i++) {
-				if (is[i] == null || is[i].getType() == Material.AIR) {
+			for (int i = 0; i < is.length; i++)
+			{
+				if (is[i] == null || is[i].getType() == Material.AIR)
+				{
 					continue;
 				}
-				config.setProperty("inventory."+i, is[i]);
+				config.setProperty("inventory." + i, is[i]);
 			}
 		}
+		config.save();
 	}
-	
 	private boolean teleportEnabled;
-	
-	private boolean getTeleportEnabled() {
+
+	private boolean getTeleportEnabled()
+	{
 		return config.getBoolean("teleportenabled", true);
 	}
-	
-	public boolean isTeleportEnabled() {
+
+	public boolean isTeleportEnabled()
+	{
 		return teleportEnabled;
 	}
-	
-	public void setTeleportEnabled(boolean set) {
+
+	public void setTeleportEnabled(boolean set)
+	{
 		teleportEnabled = set;
 		config.setProperty("teleportenabled", set);
 		config.save();
 	}
-	
-	public boolean toggleTeleportEnabled() {
+
+	public boolean toggleTeleportEnabled()
+	{
 		boolean ret = !isTeleportEnabled();
 		setTeleportEnabled(ret);
 		return ret;
 	}
-	
 	private List<String> ignoredPlayers;
-	
-	public List<String> getIgnoredPlayers() {
+
+	public List<String> getIgnoredPlayers()
+	{
 		return config.getStringList("ignore", new ArrayList<String>());
 	}
-	
-	public void setIgnoredPlayers(List<String> players) {
-		if (players == null || players.isEmpty()) {
+
+	public void setIgnoredPlayers(List<String> players)
+	{
+		if (players == null || players.isEmpty())
+		{
 			ignoredPlayers = new ArrayList<String>();
 			config.removeProperty("ignore");
-		} else {
+		}
+		else
+		{
 			ignoredPlayers = players;
 			config.setProperty("ignore", players);
 		}
 		config.save();
 	}
 
-	public boolean isIgnoredPlayer(String name) {
+	public boolean isIgnoredPlayer(String name)
+	{
 		return ignoredPlayers.contains(name);
 	}
-	
-	public void setIgnoredPlayer(String name, boolean set) {
-		if (set) {
+
+	public void setIgnoredPlayer(String name, boolean set)
+	{
+		if (set)
+		{
 			ignoredPlayers.add(name);
-		} else {
+		}
+		else
+		{
 			ignoredPlayers.remove(name);
 		}
 		setIgnoredPlayers(ignoredPlayers);
 	}
-	
 	private boolean godmode;
-	
-	private boolean getGodModeEnabled() {
-		return config.getBoolean("godmode", true);
+
+	private boolean getGodModeEnabled()
+	{
+		return config.getBoolean("godmode", false);
 	}
-	
-	public boolean isGodModeEnabled() {
+
+	public boolean isGodModeEnabled()
+	{
 		return godmode;
 	}
-	
-	public void setGodModeEnabled(boolean set) {
+
+	public void setGodModeEnabled(boolean set)
+	{
 		godmode = set;
 		config.setProperty("godmode", set);
 		config.save();
 	}
-	
-	public boolean toggleGodModeEnabled() {
+
+	public boolean toggleGodModeEnabled()
+	{
 		boolean ret = !isGodModeEnabled();
 		setGodModeEnabled(ret);
 		return ret;
 	}
-
 	private boolean muted;
-	
-	private boolean getMuted() {
-		return config.getBoolean("muted", true);
+
+	private boolean getMuted()
+	{
+		return config.getBoolean("muted", false);
 	}
-	
-	public boolean isMuted() {
+
+	public boolean isMuted()
+	{
 		return muted;
 	}
-	
-	public void setMuted(boolean set) {
+
+	public void setMuted(boolean set)
+	{
 		muted = set;
 		config.setProperty("muted", set);
 		config.save();
 	}
-	
-	public boolean toggleMuted() {
+
+	public boolean toggleMuted()
+	{
 		boolean ret = !isMuted();
 		setMuted(ret);
 		return ret;
 	}
-	
 	private long muteTimeout;
-	
-	private long _getMuteTimeout() {
+
+	private long _getMuteTimeout()
+	{
 		return config.getLong("timestamps.mute", 0);
 	}
-	
-	public long getMuteTimeout() {
+
+	public long getMuteTimeout()
+	{
 		return muteTimeout;
 	}
-	
-	public void setMuteTimeout(long time) {
+
+	public void setMuteTimeout(long time)
+	{
 		muteTimeout = time;
 		config.setProperty("timestamps.mute", time);
 		config.save();
 	}
-	
 	private boolean jailed;
-	
-	private boolean getJailed() {
-		return config.getBoolean("jailed", true);
+
+	private boolean getJailed()
+	{
+		return config.getBoolean("jailed", false);
 	}
-	
-	public boolean isJailed() {
+
+	public boolean isJailed()
+	{
 		return jailed;
 	}
-	
-	public void setJailed(boolean set) {
+
+	public void setJailed(boolean set)
+	{
 		jailed = set;
 		config.setProperty("jailed", set);
 		config.save();
 	}
-	
-	public boolean toggleJailed() {
+
+	public boolean toggleJailed()
+	{
 		boolean ret = !isJailed();
 		setJailed(ret);
 		return ret;
 	}
-	
 	private long jailTimeout;
-	
-	private long _getJailTimeout() {
+
+	private long _getJailTimeout()
+	{
 		return config.getLong("timestamps.jail", 0);
 	}
-	
-	public long getJailTimeout() {
+
+	public long getJailTimeout()
+	{
 		return jailTimeout;
 	}
-	
-	public void setJailTimeout(long time) {
+
+	public void setJailTimeout(long time)
+	{
 		jailTimeout = time;
 		config.setProperty("timestamps.jail", time);
 		config.save();
 	}
-	
-	
-	public String getBanReason() {
+
+	public String getBanReason()
+	{
 		return config.getString("ban.reason");
 	}
-	
-	public void setBanReason(String reason) {
+
+	public void setBanReason(String reason)
+	{
 		config.setProperty("ban.reason", reason);
 		config.save();
 	}
-	
-	public long getBanTimeout() {
+
+	public long getBanTimeout()
+	{
 		return config.getLong("ban.timeout", 0);
 	}
-	
-	public void setBanTimeout(long time) {
+
+	public void setBanTimeout(long time)
+	{
 		config.setProperty("ban.timeout", time);
 		config.save();
 	}
-	
 	private long lastLogin;
-	
-	private long _getLastLogin() {
+
+	private long _getLastLogin()
+	{
 		return config.getLong("timestamps.login", 0);
 	}
-	
-	public long getLastLogin() {
+
+	public long getLastLogin()
+	{
 		return lastLogin;
 	}
-	
-	public void setLastLogin(long time) {
+
+	public void setLastLogin(long time)
+	{
 		lastLogin = time;
 		config.setProperty("timestamps.login", time);
 		config.save();
 	}
-	
 	private long lastLogout;
-	
-	private long _getLastLogout() {
+
+	private long _getLastLogout()
+	{
 		return config.getLong("timestamps.logout", 0);
 	}
-	
-	public long getLastLogout() {
+
+	public long getLastLogout()
+	{
 		return lastLogout;
 	}
-	
-	public void setLastLogout(long time) {
+
+	public void setLastLogout(long time)
+	{
 		lastLogout = time;
 		config.setProperty("timestamps.logout", time);
 		config.save();
 	}
+	private boolean afk;
+
+	private boolean getAfk()
+	{
+		return config.getBoolean("afk", false);
+	}
+
+	public boolean isAfk()
+	{
+		return afk;
+	}
+
+	public void setAfk(boolean set)
+	{
+		afk = set;
+		config.setProperty("afk", set);
+		config.save();
+	}
+
+	public boolean toggleAfk()
+	{
+		boolean ret = !isAfk();
+		setAfk(ret);
+		return ret;
+	}
 	
-	private void updateConfig() {
-		if (config.hasProperty("home") && !config.hasProperty("home.default")) {
-			@SuppressWarnings("unchecked")
-			List<Object> vals = (List<Object>)config.getProperty("home");
-			World world = getServer() == null ? null : getServer().getWorlds().get(0);
-			if (vals.size() > 5 && getServer() != null) {
-				world = getServer().getWorld((String)vals.get(5));
-			}
-			Location loc = new Location(
-					world,
-					((Number)vals.get(0)).doubleValue(),
-					((Number)vals.get(1)).doubleValue(),
-					((Number)vals.get(2)).doubleValue(),
-					((Number)vals.get(3)).floatValue(),
-					((Number)vals.get(4)).floatValue());
-			config.removeProperty("home");
-			setHome(loc, true);
+	private boolean newplayer;
+
+	private boolean getNew()
+	{
+		return config.getBoolean("newplayer", true);
+	}
+
+	public boolean isNew()
+	{
+		return newplayer;
+	}
+
+	public void setNew(boolean set)
+	{
+		newplayer = set;
+		config.setProperty("newplayer", set);
+		config.save();
+	}
+	
+	private String geolocation;
+
+	private String _getGeoLocation()
+	{
+		return config.getString("geolocation");
+	}
+
+	public String getGeoLocation()
+	{
+		return geolocation;
+	}
+
+	public void setGeoLocation(String geolocation)
+	{
+		if (geolocation == null || geolocation.isEmpty())
+		{
+			this.geolocation = null;
+			config.removeProperty("geolocation");
 		}
+		else
+		{
+			this.geolocation = geolocation;
+			config.setProperty("geolocation", geolocation);
+		}
+		config.save();
 	}
 }

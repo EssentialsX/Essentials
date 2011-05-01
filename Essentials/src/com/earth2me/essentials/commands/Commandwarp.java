@@ -14,9 +14,9 @@ public class Commandwarp extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
+	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		boolean perWarpPermission = Essentials.getSettings().getPerWarpPermission();
+		boolean perWarpPermission = ess.getSettings().getPerWarpPermission();
 		if (args.length == 0)
 		{
 			if (!user.isAuthorized("essentials.warp.list"))
@@ -60,16 +60,14 @@ public class Commandwarp extends EssentialsCommand
 				if (user.isAuthorized("essentials.warp." + args[0]))
 				{
 					user.canAfford(this);
-					user.teleportCooldown();
-					user.warpTo(args[0], this.getName());
+					user.getTeleport().warp(args[0], this.getName());
 					return;
 				}
 				user.sendMessage("§cYou do not have Permission to use that warp.");
 				return;
 			}
 			user.canAfford(this);
-			user.teleportCooldown();
-			user.warpTo(args[0], this.getName());
+			user.getTeleport().warp(args[0], this.getName());
 		}
 		catch (Exception ex)
 		{

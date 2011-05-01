@@ -2,8 +2,8 @@ package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 
 
 public class Commandmute extends EssentialsCommand
@@ -14,51 +14,21 @@ public class Commandmute extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
+	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
-			user.sendMessage("§7Usage: /" + commandLabel + " [player] <reason>");
-			return;
+			throw new NotEnoughArgumentsException();
 		}
 
-		String[] sects2 = args[0].split(" +");
-		User p;
-		try
-		{
-			p = User.get(server.matchPlayer(args[0]).get(0));
+		User p = getPlayer(server, args, 0);
+		long muteTimestamp = 0;
+		if (args.length > 1) {
+			String time = getFinalArg(args, 1);
+			muteTimestamp = Util.parseDateDiff(time, true);
 		}
-		catch (Exception ex)
-		{
-			user.sendMessage("§cThat player does not exist!");
-			return;
-		}
-	
-		user.sendMessage("§7Player " + p.getName() + " " + (p.toggleMuted() ? "muted." : "unmuted."));
-	}
-
-	@Override
-	public void run(Server server, Essentials parent, CommandSender sender, String commandLabel, String[] args) throws Exception
-	{
-		if (args.length < 1)
-		{
-			sender.sendMessage("Usage: /" + commandLabel + " [player] <reason>");
-			return;
-		}
-
-		String[] sects2 = args[0].split(" +");
-		User p;
-		try
-		{
-			p = User.get(server.matchPlayer(args[0]).get(0));
-		}
-		catch (Exception ex)
-		{
-			sender.sendMessage("§cThat player does not exist!");
-			return;
-		}
-
-		sender.sendMessage("Player " + p.getName() + " " + (p.toggleMuted() ? "muted." : "unmuted."));
-
+		p.setMuteTimeout(muteTimestamp);
+		charge(sender);
+		sender.sendMessage("Player " + p.getDisplayName() + " " + (p.toggleMuted() ? "muted" : "unmuted") + (muteTimestamp > 0 ? " for" + Util.formatDateDiff(muteTimestamp) : "") + ".");
 	}
 }

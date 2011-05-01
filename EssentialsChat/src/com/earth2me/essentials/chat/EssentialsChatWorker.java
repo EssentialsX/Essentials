@@ -19,13 +19,13 @@ public class EssentialsChatWorker
 
 	public static void onPlayerRespawn(Server server, PlayerRespawnEvent event)
 	{
-		User user = User.get(event.getPlayer());
+		User user = Essentials.getStatic().getUser(event.getPlayer());
 		updateDisplayName(user);
 	}
 
 	public static void onPlayerJoin(Server server, PlayerEvent event)
 	{
-		User user = User.get(event.getPlayer());
+		User user = Essentials.getStatic().getUser(event.getPlayer());
 		updateDisplayName(user);
 	}
 
@@ -55,15 +55,15 @@ public class EssentialsChatWorker
 	public static void onPlayerChat(Server server, PlayerChatEvent event)
 	{
 		if (event.isCancelled()) return;
-		User user = User.get(event.getPlayer());
+		User user = Essentials.getStatic().getUser(event.getPlayer());
 		updateDisplayName(user);
 
 		if (user.isAuthorized("essentials.chat.color"))
 			event.setMessage(event.getMessage().replaceAll("&([0-9a-f])", "§$1"));
 
-		event.setFormat(Essentials.getSettings().getChatFormat(user.getGroup()).replace('&', '§').replace("§§", "&").replace("{DISPLAYNAME}", "%1$s").replace("{GROUP}", user.getGroup()).replace("{MESSAGE}", "%2$s").replace("{WORLDNAME}", user.getWorld().getName()));
+		event.setFormat(Essentials.getStatic().getSettings().getChatFormat(user.getGroup()).replace('&', '§').replace("§§", "&").replace("{DISPLAYNAME}", "%1$s").replace("{GROUP}", user.getGroup()).replace("{MESSAGE}", "%2$s").replace("{WORLDNAME}", user.getWorld().getName()));
 
-		int radius = Essentials.getSettings().getChatRadius();
+		int radius = Essentials.getStatic().getSettings().getChatRadius();
 		if (radius < 1) return;
 
 		if (event.getMessage().startsWith("!") && event.getMessage().length() > 1)
@@ -103,7 +103,7 @@ public class EssentialsChatWorker
 
 		for (Player p : server.getOnlinePlayers())
 		{
-			User u = User.get(p);
+			User u = Essentials.getStatic().getUser(p);
 			if (u != user && !u.isAuthorized("essentials.chat.spy"))
 			{
 				Location l = u.getLocation();

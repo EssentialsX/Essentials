@@ -38,9 +38,9 @@ public class Settings implements IConf
 		return config.getInt("chat.radius", config.getInt("chat-radius", 0));
 	}
 
-	public long getTeleportDelay()
+	public double getTeleportDelay()
 	{
-		return config.getInt("teleport-delay", 0) * 1000L;
+		return config.getDouble("teleport-delay", 0);
 	}
 
 	public int getDefaultStackSize()
@@ -134,14 +134,14 @@ public class Settings implements IConf
 		return config.getString("nickname-prefix", "");
 	}
 
-	public long getTeleportCooldown()
+	public double getTeleportCooldown()
 	{
-		return ((Number)config.getInt("teleport-cooldown", 60)).longValue() * 1000L;
+		return config.getDouble("teleport-cooldown", 60);
 	}
 
-	public long getHealCooldown()
+	public double getHealCooldown()
 	{
-		return ((Number)config.getInt("heal-cooldown", 60)).longValue() * 1000L;
+		return config.getDouble("heal-cooldown", 60);
 	}
 
 	public Object getKit(String name)

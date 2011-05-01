@@ -12,17 +12,30 @@ import org.bukkit.inventory.ItemStack;
 
 public class EssentialsEcoPlayerListener extends PlayerListener
 {
-
-@Override
+	Essentials ess;
+	
+	EssentialsEcoPlayerListener(Essentials ess)
+	{
+		this.ess = ess;
+	}
+	
+	@Override
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
-
-		if (Essentials.getSettings().areSignsDisabled()) return;
-		if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-		User user = User.get(event.getPlayer());
+		if (ess.getSettings().areSignsDisabled())
+		{
+			return;
+		}
+		if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
+		{
+			return;
+		}
+		User user = ess.getUser(event.getPlayer());
 		String username = user.getName().substring(0, user.getName().length() > 14 ? 14 : user.getName().length());
 		if (event.getClickedBlock().getType() != Material.WALL_SIGN && event.getClickedBlock().getType() != Material.SIGN_POST)
+		{
 			return;
+		}
 		Sign sign = new CraftSign(event.getClickedBlock());
 
 		if (sign.getLine(0).equals("§1[Buy]") && user.isAuthorized("essentials.signs.buy.use"))
@@ -32,10 +45,14 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 				int amount = Integer.parseInt(sign.getLine(1));
 				ItemStack item = ItemDb.get(sign.getLine(2), amount);
 				int cost = Integer.parseInt(sign.getLine(3).substring(1));
-				if (user.getMoney() < cost) throw new Exception("You do not have sufficient funds.");
+				if (user.getMoney() < cost)
+				{
+					throw new Exception("You do not have sufficient funds.");
+				}
 				user.takeMoney(cost);
 				Map<Integer, ItemStack> leftOver = user.getInventory().addItem(item);
-				for (ItemStack itemStack : leftOver.values()) {
+				for (ItemStack itemStack : leftOver.values())
+				{
 					user.getWorld().dropItem(user.getLocation(), itemStack);
 				}
 				user.updateInventory();
@@ -54,7 +71,10 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 				int amount = Integer.parseInt(sign.getLine(1));
 				ItemStack item = ItemDb.get(sign.getLine(2), amount);
 				int cost = Integer.parseInt(sign.getLine(3).substring(1));
-				if (!InventoryWorkaround.containsItem(user.getInventory(), true, item)) throw new Exception("You do not have enough items to sell.");
+				if (!InventoryWorkaround.containsItem(user.getInventory(), true, item))
+				{
+					throw new Exception("You do not have enough items to sell.");
+				}
 				user.giveMoney(cost);
 				InventoryWorkaround.removeItem(user.getInventory(), true, item);
 				user.updateInventory();
@@ -80,9 +100,12 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 				int r2 = Integer.parseInt(l2[m2 ? 1 : 2]);
 				r1 = r1 - r1 % q1;
 				r2 = r2 - r2 % q2;
-				if (q1 < 1 || q2 < 1) throw new Exception("Quantities must be greater than 0.");
+				if (q1 < 1 || q2 < 1)
+				{
+					throw new Exception("Quantities must be greater than 0.");
+				}
 
-				ItemStack i1 = m1 || r1 <= 0? null : ItemDb.get(l1[1], r1);
+				ItemStack i1 = m1 || r1 <= 0 ? null : ItemDb.get(l1[1], r1);
 				ItemStack qi1 = m1 ? null : ItemDb.get(l1[1], q1);
 				ItemStack qi2 = m2 ? null : ItemDb.get(l2[1], q2);
 
@@ -95,7 +118,8 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 					else if (i1 != null)
 					{
 						Map<Integer, ItemStack> leftOver = user.getInventory().addItem(i1);
-						for (ItemStack itemStack : leftOver.values()) {
+						for (ItemStack itemStack : leftOver.values())
+						{
 							user.getWorld().dropItem(user.getLocation(), itemStack);
 						}
 						user.updateInventory();
@@ -108,26 +132,41 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 					if (m1)
 					{
 						if (user.getMoney() < q1)
+						{
 							throw new Exception("You do not have sufficient funds.");
+						}
 					}
 					else
 					{
 						if (!InventoryWorkaround.containsItem(user.getInventory(), true, qi1))
+						{
 							throw new Exception("You do not have " + q1 + "x " + l1[1] + ".");
+						}
 					}
 
-					if (r2 < q2) throw new Exception("The trade sign does not have enough supply left.");
+					if (r2 < q2)
+					{
+						throw new Exception("The trade sign does not have enough supply left.");
+					}
 
 					if (m1)
+					{
 						user.takeMoney(q1);
+					}
 					else
+					{
 						InventoryWorkaround.removeItem(user.getInventory(), true, qi1);
+					}
 
 					if (m2)
+					{
 						user.giveMoney(q2);
-					else {
+					}
+					else
+					{
 						Map<Integer, ItemStack> leftOver = user.getInventory().addItem(qi2);
-						for (ItemStack itemStack : leftOver.values()) {
+						for (ItemStack itemStack : leftOver.values())
+						{
 							user.getWorld().dropItem(user.getLocation(), itemStack);
 						}
 					}

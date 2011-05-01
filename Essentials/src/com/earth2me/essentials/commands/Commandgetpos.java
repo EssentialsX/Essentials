@@ -2,7 +2,6 @@ package com.earth2me.essentials.commands;
 
 import org.bukkit.Location;
 import org.bukkit.Server;
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 
 
@@ -14,15 +13,9 @@ public class Commandgetpos extends EssentialsCommand
 	}
 
 	@Override
-	public String[] getTriggers()
+	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		return new String[] { getName(), "coords" };
-	}
-
-	@Override
-	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
-	{
-		user.charge(this);
+		charge(user);
 		Location coords = user.getLocation();
 		user.sendMessage("§7X: " + coords.getBlockX() + " (-North <-> +South)");
 		user.sendMessage("§7Y: " + coords.getBlockY() + " (+Up <-> -Down)");

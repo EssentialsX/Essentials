@@ -1,25 +1,22 @@
 package com.earth2me.essentials;
 
-import org.bukkit.Server;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerListener;
 
 
 public class JailPlayerListener extends PlayerListener
 {
-	private final Server server;
-	private final Essentials parent;
+	private final Essentials ess;
 
 	public JailPlayerListener(Essentials parent)
 	{
-		this.parent = parent;
-		this.server = parent.getServer();
+		this.ess = parent;
 	}
 
 	@Override
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
-		User user = User.get(event.getPlayer());
+		User user = ess.getUser(event.getPlayer());
 		if (user.isJailed())
 		{
 			event.setCancelled(true);

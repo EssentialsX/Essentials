@@ -1,8 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
-
 import org.bukkit.Server;
 import org.bukkit.World;
 
@@ -15,12 +13,11 @@ public class Commandweather extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
+	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
-			user.sendMessage("§cUsage: /" + commandLabel + " <storm/sun> [duration]");
-			return;
+			throw new NotEnoughArgumentsException();
 		}
 
 		boolean isStorm = args[0].equalsIgnoreCase("storm");

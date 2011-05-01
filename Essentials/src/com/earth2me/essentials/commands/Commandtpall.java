@@ -1,8 +1,8 @@
 package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
@@ -14,31 +14,41 @@ public class Commandtpall extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
+	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
-			user.charge(this);
-			user.sendMessage("§7Teleporting...");
-			for (Player player : server.getOnlinePlayers()) {
-				User p = User.get(player);
-				if (p == user) {
-					continue;
-				}
-				p.teleportToNow(user);
+			if (sender instanceof Player)
+			{
+				charge(sender);
+				teleportAllPlayers(server, sender, ess.getUser(sender));
+				return;
 			}
+			throw new NotEnoughArgumentsException();
 		}
-		else
+
+		User p = getPlayer(server, args, 0);
+		charge(sender);
+		teleportAllPlayers(server, sender, p);
+	}
+
+	private void teleportAllPlayers(Server server, CommandSender sender, User p)
+	{
+		sender.sendMessage("§7Teleporting all players...");
+		for (Player player : server.getOnlinePlayers())
 		{
-			User p = getPlayer(server, args, 0);
-			user.charge(this);
-			user.sendMessage("§7Teleporting...");
-			for (Player player : server.getOnlinePlayers()) {
-				User u = User.get(player);
-				if (p == u) {
-					continue;
-				}
-				u.teleportToNow(p);
+			User u = ess.getUser(player);
+			if (p == u)
+			{
+				continue;
+			}
+			try
+			{
+				u.getTeleport().now(p);
+			}
+			catch (Exception ex)
+			{
+				sender.sendMessage("Error: "+ex.getMessage());
 			}
 		}
 	}

@@ -1,7 +1,6 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.TargetBlock;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -16,7 +15,7 @@ public class Commandlightning extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
+	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
 
 		World world = user.getWorld();
@@ -26,7 +25,7 @@ public class Commandlightning extends EssentialsCommand
 			return;
 		}
 
-		if(server.matchPlayer(args[0]).isEmpty())
+		if (server.matchPlayer(args[0]).isEmpty())
 		{
 			user.sendMessage("§cPlayer not found");
 			return;
@@ -37,7 +36,7 @@ public class Commandlightning extends EssentialsCommand
 			user.sendMessage("§7Smiting " + p.getDisplayName());
 			world.strikeLightning(p.getLocation());
 			p.setHealth(p.getHealth() < 5 ? 0 : p.getHealth() -5);
-			if(Essentials.getSettings().warnOnSmite())
+			if(ess.getSettings().warnOnSmite())
 			{
 			p.sendMessage("§7You have just been smited");
 			}

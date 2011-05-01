@@ -15,49 +15,47 @@ public class Commandtime extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
+	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		World world = user.getWorld();
-		long time = world.getTime();
-		time = time - time % 24000;
 		if (args.length < 1)
 		{
-			user.sendMessage("§cUsage: /time [day|night]");
-			return;
+			throw new NotEnoughArgumentsException();
 		}
-		if ("day".equalsIgnoreCase(args[0]))
+		World world = user.getWorld();
+
+		charge(user);
+		setWorldTime(world, args[0]);
+	}
+
+	@Override
+	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	{
+		if (args.length < 1)
 		{
-			user.charge(this);
+			throw new NotEnoughArgumentsException();
+		}
+		for (World world : server.getWorlds())
+		{
+			setWorldTime(world, args[0]);
+		}
+
+		sender.sendMessage("Time set in all worlds.");
+	}
+
+	private void setWorldTime(World world, String timeString) throws Exception
+	{
+		long time = world.getTime();
+		time = time - time % 24000;
+		if ("day".equalsIgnoreCase(timeString))
+		{
 			world.setTime(time + 24000);
 			return;
 		}
-		if ("night".equalsIgnoreCase(args[0]))
+		if ("night".equalsIgnoreCase(timeString))
 		{
-			user.charge(this);
 			world.setTime(time + 37700);
 			return;
 		}
 		throw new Exception("/time only supports day/night.");
-	}
-
-	@Override
-	public void run(Server server, Essentials parent, CommandSender sender, String commandLabel, String[] args) throws Exception
-	{
-		for (World world : server.getWorlds())
-		{
-			long time = world.getTime();
-			time = time - time % 24000;
-			if (args.length < 1)
-			{
-				sender.sendMessage("Usage: /time [day|night]");
-				return;
-			}
-
-			if ("day".equalsIgnoreCase(args[0])) world.setTime(time + 24000);
-			else if ("night".equalsIgnoreCase(args[0])) world.setTime(time + 37700);
-			else throw new Exception("/time only supports day/night.");
-		}
-
-		sender.sendMessage("Time set in all worlds.");
 	}
 }

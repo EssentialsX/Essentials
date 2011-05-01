@@ -15,18 +15,20 @@ public class Commandworth extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
+	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
 		ItemStack is = user.getInventory().getItemInHand();
 		int amount = is.getAmount();
 
-		if (args.length > 0) {
+		if (args.length > 0)
+		{
 			is = ItemDb.get(args[0]);
 		}
 
 		try
 		{
-			if (args.length > 1) {
+			if (args.length > 1)
+			{
 				amount = Integer.parseInt(args[1]);
 			}
 		}
@@ -37,7 +39,8 @@ public class Commandworth extends EssentialsCommand
 
 		is.setAmount(amount);
 		double worth = Essentials.getWorth().getPrice(is);
-		if (Double.isNaN(worth)) {
+		if (Double.isNaN(worth))
+		{
 			throw new Exception("That item cannot be sold to the server.");
 		}
 

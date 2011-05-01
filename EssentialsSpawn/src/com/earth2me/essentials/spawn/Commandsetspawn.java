@@ -14,11 +14,11 @@ public class Commandsetspawn extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
+	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
 		user.charge(this);
 		String group = args.length > 0 ? getFinalArg(args, 0) : "default";
-		parent.spawn.setSpawn(user.getLocation(), group);
+		Essentials.getSpawn().setSpawn(user.getLocation(), group);
 		user.sendMessage("§7Spawn location set for group \"" + group + "\".");
 	}
 }

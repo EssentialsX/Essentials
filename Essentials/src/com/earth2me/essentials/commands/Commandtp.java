@@ -1,7 +1,6 @@
 package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 import org.bukkit.command.CommandSender;
 
@@ -14,48 +13,51 @@ public class Commandtp extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
+	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
 		switch (args.length)
 		{
 		case 0:
-			user.sendMessage("§cUsage: /" + commandLabel + " <target> [to-player]");
-			return;
+			throw new NotEnoughArgumentsException();
 
 		case 1:
 			User p = getPlayer(server, args, 0);
-			user.teleportCooldown();
-			if (!p.isTeleEnabled()) throw new Exception(p.getDisplayName() + " has teleportation disabled.");
+			if (!p.isTeleportEnabled())
+			{
+				throw new Exception(p.getDisplayName() + " has teleportation disabled.");
+			}
 			user.sendMessage("§7Teleporting...");
 			user.canAfford(this);
-			user.teleportTo(p, this.getName());
+			user.getTeleport().teleport(p, this.getName());
 			break;
 
 		case 2:
-			if (!user.isAuthorized("essentials.tpohere")) throw new Exception("You need access to /tpohere to teleport other players.");
+			if (!user.isAuthorized("essentials.tpohere"))
+			{
+				throw new Exception("You need access to /tpohere to teleport other players.");
+			}
 			user.sendMessage("§7Teleporting...");
-			user.charge(this);
+			charge(user);
 			User target = getPlayer(server, args, 0);
 			User toPlayer = getPlayer(server, args, 1);
-			target.teleportToNow(toPlayer);
+			target.getTeleport().now(toPlayer);
 			target.sendMessage("§7" + user.getDisplayName() + "§7 teleported you to " + toPlayer.getDisplayName() + "§7.");
 			break;
 		}
 	}
 
 	@Override
-	public void run(Server server, Essentials parent, CommandSender sender, String commandLabel, String[] args) throws Exception
+	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
 		if (args.length < 2)
 		{
-			sender.sendMessage("Usage: /" + commandLabel + " [target] [to-player]");
-			return;
+			throw new NotEnoughArgumentsException();
 		}
 
 		sender.sendMessage("§7Teleporting...");
 		User target = getPlayer(server, args, 0);
 		User toPlayer = getPlayer(server, args, 1);
-		target.teleportToNow(toPlayer);
+		target.getTeleport().now(toPlayer);
 		target.sendMessage("§7{Console}§7 teleported you to " + toPlayer.getDisplayName() + "§7.");
 	}
 }

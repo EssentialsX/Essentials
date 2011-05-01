@@ -15,26 +15,29 @@ public class Commandeco extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, Essentials parent, CommandSender sender, String commandLabel, String[] args) throws Exception
+	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
+		if (args.length < 2)
+		{
+			throw new NotEnoughArgumentsException();
+		}
 		EcoCommands cmd;
-		int amount;
+		double amount;
 		try
 		{
 			cmd = EcoCommands.valueOf(args[0].toUpperCase());
-			amount = Integer.parseInt(args[2].replaceAll("[^0-9]", ""));
+			amount = Double.parseDouble(args[2].replaceAll("[^0-9\\.]", ""));
 		}
 		catch (Exception ex)
 		{
-			sender.sendMessage("§cUsage: /eco [give|take|reset] [player] [money]");
-			return;
+			throw new NotEnoughArgumentsException();
 		}
 
 		if (args[1].contentEquals("*"))
 		{
 			for (Player p : server.getOnlinePlayers())
 			{
-				User u = User.get(p);
+				User u = ess.getUser(p);
 				switch (cmd)
 				{
 				case GIVE:
@@ -46,7 +49,7 @@ public class Commandeco extends EssentialsCommand
 					break;
 
 				case RESET:
-					u.setMoney(amount == 0 ? Essentials.getSettings().getStartingBalance() : amount);
+					u.setMoney(amount == 0 ? ess.getSettings().getStartingBalance() : amount);
 					break;
 				}
 			}
@@ -55,7 +58,7 @@ public class Commandeco extends EssentialsCommand
 		{
 			for (Player p : server.matchPlayer(args[1]))
 			{
-				User u = User.get(p);
+				User u = ess.getUser(p);
 				switch (cmd)
 				{
 				case GIVE:
@@ -67,7 +70,7 @@ public class Commandeco extends EssentialsCommand
 					break;
 
 				case RESET:
-					u.setMoney(amount == 0 ? Essentials.getSettings().getStartingBalance() : amount);
+					u.setMoney(amount == 0 ? ess.getSettings().getStartingBalance() : amount);
 					break;
 				}
 			}

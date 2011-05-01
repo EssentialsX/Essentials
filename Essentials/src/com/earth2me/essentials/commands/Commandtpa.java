@@ -1,7 +1,6 @@
 package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 
 
@@ -13,19 +12,20 @@ public class Commandtpa extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, Essentials parent, User player, String commandLabel, String[] args) throws Exception
+	public void run(Server server, User player, String commandLabel, String[] args) throws Exception
 	{
-		if(args.length < 1)
+		if (args.length < 1)
 		{
-			player.sendMessage("§cUsage: /tpa [playername]");
-			return;
+			throw new NotEnoughArgumentsException();
 		}
 
 		User p = getPlayer(server, args, 0);
-		if (!p.isTeleEnabled()) throw new Exception(p.getDisplayName() + " has teleportation disabled.");
+		if (!p.isTeleportEnabled())
+		{
+			throw new Exception(p.getDisplayName() + " has teleportation disabled.");
+		}
 		player.charge(this);
-		parent.tpcRequests.put(p, player);
-		parent.tpcHere.put(p, false);
+		p.requestTeleport(player, false);
 		p.sendMessage("§c" + player.getDisplayName() + "§c has requested to teleport to you.");
 		p.sendMessage("§7To teleport, type §c/tpaccept§7.");
 		p.sendMessage("§7To deny this request, type §c/tpdeny§7.");

@@ -10,11 +10,9 @@ public interface IEssentialsCommand
 {
 	String getName();
 
-	String[] getTriggers();
-
-	void run(Server server, Essentials parent, User user, String commandLabel, Command cmd, String[] args)
+	void run(Server server, User user, String commandLabel, Command cmd, String[] args)
 			throws Exception;
 
-	void run(Server server, Essentials parent, CommandSender sender, String commandLabel, Command cmd, String[] args)
+	void run(Server server, CommandSender sender, String commandLabel, Command cmd, String[] args)
 			throws Exception;
 }

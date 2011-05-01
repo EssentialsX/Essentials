@@ -11,21 +11,37 @@ import org.bukkit.inventory.ItemStack;
 
 public class EssentialsEcoBlockListener extends BlockListener
 {
+	Essentials ess;
+	public EssentialsEcoBlockListener(Essentials ess)
+	{
+		this.ess = ess;
+	}
+	
 	@Override
 	public void onBlockBreak(BlockBreakEvent event)
 	{
-		if (event.isCancelled()) return;
-		if (Essentials.getSettings().areSignsDisabled()) return;
-		User user = User.get(event.getPlayer());
+		if (event.isCancelled())
+		{
+			return;
+		}
+		if (ess.getSettings().areSignsDisabled())
+		{
+			return;
+		}
+		User user = ess.getUser(event.getPlayer());
 		String username = user.getName().substring(0, user.getName().length() > 14 ? 14 : user.getName().length());
 		if (event.getBlock().getType() != Material.WALL_SIGN && event.getBlock().getType() != Material.SIGN_POST)
+		{
 			return;
+		}
 		Sign sign = new CraftSign(event.getBlock());
 
 		if (sign.getLine(0).equals("§1[Trade]"))
 		{
-			if (!sign.getLine(3).substring(2).equals(username)) {
-				if (!user.isOp()) {
+			if (!sign.getLine(3).substring(2).equals(username))
+			{
+				if (!user.isOp())
+				{
 					event.setCancelled(true);
 				}
 				return;
@@ -40,20 +56,31 @@ public class EssentialsEcoBlockListener extends BlockListener
 				int q2 = Integer.parseInt(m2 ? l2[0].substring(1) : l2[0]);
 				int r1 = Integer.parseInt(l1[m1 ? 1 : 2]);
 				int r2 = Integer.parseInt(l2[m2 ? 1 : 2]);
-				if (q1 < 1 || q2 < 1) throw new Exception("Quantities must be greater than 0.");
+				if (q1 < 1 || q2 < 1)
+				{
+					throw new Exception("Quantities must be greater than 0.");
+				}
 
 				ItemStack i1 = m1 || r1 <= 0 ? null : ItemDb.get(l1[1], r1);
 				ItemStack i2 = m2 || r2 <= 0 ? null : ItemDb.get(l2[1], r2);
 
 				if (m1)
+				{
 					user.giveMoney(r1);
+				}
 				else if (i1 != null)
+				{
 					user.getWorld().dropItem(user.getLocation(), i1);
+				}
 
 				if (m2)
+				{
 					user.giveMoney(r2);
+				}
 				else if (i2 != null)
+				{
 					user.getWorld().dropItem(user.getLocation(), i2);
+				}
 
 				sign.setType(Material.AIR);
 			}
@@ -65,12 +92,14 @@ public class EssentialsEcoBlockListener extends BlockListener
 		}
 	}
 
-	
 	@Override
 	public void onSignChange(SignChangeEvent event)
 	{
-		if (Essentials.getSettings().areSignsDisabled()) return;
-		User user = User.get(event.getPlayer());
+		if (ess.getSettings().areSignsDisabled())
+		{
+			return;
+		}
+		User user = ess.getUser(event.getPlayer());
 		String username = user.getName().substring(0, user.getName().length() > 14 ? 14 : user.getName().length());
 
 		if (event.getLine(0).equalsIgnoreCase("[Buy]") && user.isAuthorized("essentials.signs.buy.create"))
@@ -80,7 +109,8 @@ public class EssentialsEcoBlockListener extends BlockListener
 				event.setLine(0, "§1[Buy]");
 				event.setLine(1, "" + Math.abs(Integer.parseInt(event.getLine(1))));
 				ItemStack is = ItemDb.get(event.getLine(2));
-				if (is.getTypeId() == 0 || Math.abs(Integer.parseInt(event.getLine(1))) == 0) {
+				if (is.getTypeId() == 0 || Math.abs(Integer.parseInt(event.getLine(1))) == 0)
+				{
 					throw new Exception("Don't sell air.");
 				}
 				event.setLine(3, "$" + Integer.parseInt(event.getLine(3).replaceAll("[^0-9]", "")));
@@ -103,7 +133,8 @@ public class EssentialsEcoBlockListener extends BlockListener
 				event.setLine(0, "§1[Sell]");
 				event.setLine(1, "" + Math.abs(Integer.parseInt(event.getLine(1))));
 				ItemStack is = ItemDb.get(event.getLine(2));
-				if (is.getTypeId() == 0 || Math.abs(Integer.parseInt(event.getLine(1))) == 0) {
+				if (is.getTypeId() == 0 || Math.abs(Integer.parseInt(event.getLine(1))) == 0)
+				{
 					throw new Exception("Don't buy air.");
 				}
 				event.setLine(3, "$" + Integer.parseInt(event.getLine(3).replaceAll("[^0-9]", "")));
@@ -131,19 +162,31 @@ public class EssentialsEcoBlockListener extends BlockListener
 				int q2 = Integer.parseInt(m2 ? l2[0].substring(1) : l2[0]);
 				int r2 = Integer.parseInt(l2[m2 ? 1 : 2]);
 				r2 = r2 - r2 % q2;
-				if (q1 < 1 || q2 < 1 || r2 < 1) throw new Exception("Quantities must be greater than 0.");
-				if (!m1) ItemDb.get(l1[1]);
+				if (q1 < 1 || q2 < 1 || r2 < 1)
+				{
+					throw new Exception("Quantities must be greater than 0.");
+				}
+				if (!m1)
+				{
+					ItemDb.get(l1[1]);
+				}
 
 				if (m2)
 				{
-					if (user.getMoney() < r2) throw new Exception("You do not have sufficient funds.");
+					if (user.getMoney() < r2)
+					{
+						throw new Exception("You do not have sufficient funds.");
+					}
 					user.takeMoney(r2);
 					user.sendMessage("r2: " + r2 + "    q2: " + q2);
 				}
 				else
 				{
 					ItemStack i2 = ItemDb.get(l2[1], r2);
-					if (!InventoryWorkaround.containsItem(user.getInventory(), true, i2)) throw new Exception("You do not have " + r2 + "x " + l2[1] + ".");
+					if (!InventoryWorkaround.containsItem(user.getInventory(), true, i2))
+					{
+						throw new Exception("You do not have " + r2 + "x " + l2[1] + ".");
+					}
 					InventoryWorkaround.removeItem(user.getInventory(), true, i2);
 					user.updateInventory();
 				}

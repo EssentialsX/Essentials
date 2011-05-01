@@ -1,7 +1,6 @@
 package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
-import com.earth2me.essentials.Essentials;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import com.earth2me.essentials.User;
@@ -17,16 +16,7 @@ public class Commandclearinventory extends EssentialsCommand
 	}
 
 	@Override
-	public String[] getTriggers()
-	{
-		return new String[]
-				{
-					getName(), "ci"
-				};
-	}
-
-	@Override
-	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
+	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
 		if (args.length > 0 && user.isAuthorized("essentials.clearinventory.others"))
 		{
@@ -36,11 +26,11 @@ public class Commandclearinventory extends EssentialsCommand
 
 				if (!online.isEmpty())
 				{
+					charge(user);
 					for (Player p : online)
 					{
 						p.getInventory().clear();
 						user.sendMessage("§7Inventory of §c" + p.getDisplayName() + "§7 cleared.");
-						user.charge(this);
 					}
 					return;
 				}
@@ -48,12 +38,12 @@ public class Commandclearinventory extends EssentialsCommand
 			}
 			else
 			{
-				Player u = server.getPlayer(args[0]);
-				if (u != null)
+				Player p = server.getPlayer(args[0]);
+				if (p != null)
 				{
-					u.getInventory().clear();
-					user.sendMessage("§7Inventory of §c" + u.getDisplayName() + "§7 cleared.");
-					user.charge(this);
+					charge(user);
+					p.getInventory().clear();
+					user.sendMessage("§7Inventory of §c" + p.getDisplayName() + "§7 cleared.");
 				}
 				else
 				{
@@ -63,14 +53,14 @@ public class Commandclearinventory extends EssentialsCommand
 		}
 		else
 		{
+			charge(user);
 			user.getInventory().clear();
 			user.sendMessage("§7Inventory cleared.");
-			user.charge(this);
 		}
 	}
 
 	@Override
-	protected void run(Server server, Essentials parent, CommandSender sender, String commandLabel, String[] args) throws Exception
+	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{

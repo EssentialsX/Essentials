@@ -16,13 +16,11 @@ import org.bukkit.inventory.ItemStack;
 
 public class EssentialsEntityListener extends EntityListener
 {
-	private final Server server;
-	private final Essentials parent;
+	private final Essentials ess;
 
 	public EssentialsEntityListener(Essentials parent)
 	{
-		this.parent = parent;
-		this.server = parent.getServer();
+		this.ess = parent;
 	}
 
 	@Override
@@ -35,11 +33,12 @@ public class EssentialsEntityListener extends EntityListener
 			Entity eDefend = edEvent.getEntity();
 			if (eDefend instanceof Player && eAttack instanceof Player)
 			{
-				User defender = User.get(eDefend);
-				User attacker = User.get(eAttack);
+				User defender = ess.getUser(eDefend);
+				User attacker = ess.getUser(eAttack);
 				ItemStack is = attacker.getItemInHand();
 				String command = attacker.getPowertool(is);
-				if (command != null && !command.isEmpty()) {
+				if (command != null && !command.isEmpty())
+				{
 					attacker.getServer().dispatchCommand(attacker, command.replaceAll("\\{player\\}", defender.getName()));
 					event.setCancelled(true);
 					return;
@@ -49,7 +48,7 @@ public class EssentialsEntityListener extends EntityListener
 		if (event instanceof EntityDamageEvent || event instanceof EntityDamageByBlockEvent || event instanceof EntityDamageByProjectileEvent)
 		{
 
-			if (event.getEntity() instanceof Player && User.get(event.getEntity()).isGodModeEnabled())
+			if (event.getEntity() instanceof Player && ess.getUser(event.getEntity()).isGodModeEnabled())
 			{
 				CraftPlayer player = (CraftPlayer)event.getEntity();
 				player.getHandle().fireTicks = 0;
@@ -59,11 +58,10 @@ public class EssentialsEntityListener extends EntityListener
 		}
 	}
 
-	
 	@Override
 	public void onEntityCombust(EntityCombustEvent event)
 	{
-		if (event.getEntity() instanceof Player && User.get(event.getEntity()).isGodModeEnabled())
+		if (event.getEntity() instanceof Player && ess.getUser(event.getEntity()).isGodModeEnabled())
 		{
 			event.setCancelled(true);
 		}
@@ -74,13 +72,12 @@ public class EssentialsEntityListener extends EntityListener
 	{
 		if (event.getEntity() instanceof Player)
 		{
-			User user = User.get(event.getEntity());
-			if(user.isAuthorized("essentials.back.ondeath"))
+			User user = ess.getUser(event.getEntity());
+			if (user.isAuthorized("essentials.back.ondeath"))
 			{
-			user.lastLocation = user.getLocation();
-			user.sendMessage("§7Use the /back command to return to your death point");
+				user.setLastLocation();
+				user.sendMessage("§7Use the /back command to return to your death point");
 			}
 		}
 	}
-
 }

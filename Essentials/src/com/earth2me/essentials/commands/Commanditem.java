@@ -1,7 +1,6 @@
 package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.ItemDb;
 import com.earth2me.essentials.User;
 import org.bukkit.ChatColor;
@@ -17,12 +16,11 @@ public class Commanditem extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
+	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
-			user.sendMessage("§cUsage: /" + commandLabel + " [item] <amount>");
-			return;
+			throw new NotEnoughArgumentsException();
 		}
 		String[] itemArgs = args[0].split("[^a-zA-Z0-9]");
 		ItemStack stack = ItemDb.get(itemArgs[0]);
@@ -46,7 +44,7 @@ public class Commanditem extends EssentialsCommand
 		}
 
 		String itemName = stack.getType().name().toLowerCase().replace('_', ' ');
-		user.charge(this);
+		charge(user);
 		user.sendMessage("§7Giving " + stack.getAmount() + " of " + itemName + " to " + user.getDisplayName() + ".");
 		user.getInventory().addItem(stack);
 	}

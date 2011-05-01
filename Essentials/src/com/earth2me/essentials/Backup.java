@@ -26,7 +26,7 @@ public class Backup implements Runnable {
 	
 	private void startTask() {
 		if (!running) {
-			long interval = Essentials.getSettings().getBackupInterval()*1200; // minutes -> ticks
+			long interval = Essentials.getStatic().getSettings().getBackupInterval()*1200; // minutes -> ticks
 			if (interval < 1200) {
 				return;
 			}
@@ -38,7 +38,7 @@ public class Backup implements Runnable {
 	public void run() {
 		if (active) return;
 		active = true;
-		final String command = Essentials.getSettings().getBackupCommand();
+		final String command = Essentials.getStatic().getSettings().getBackupCommand();
 		if (command == null || "".equals(command)) {
 			return;
 		}

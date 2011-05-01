@@ -2,8 +2,6 @@ package com.earth2me.essentials.commands;
 
 import java.io.File;
 import org.bukkit.Server;
-import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.User;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -19,7 +17,7 @@ public class Commandplugin extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, Essentials parent, CommandSender sender, String commandLabel, String[] args) throws Exception
+	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
 		this.server = server;
 
@@ -69,7 +67,7 @@ public class Commandplugin extends EssentialsCommand
 			return;
 
 		case LIST:
-			User.charge(sender, this);
+			charge(sender);
 			listPlugins(sender);
 			return;
 		}
@@ -115,7 +113,9 @@ public class Commandplugin extends EssentialsCommand
 		{
 			final PluginManager pm = server.getPluginManager();
 			final Plugin plugin = pm.getPlugin(name);
-			if (!plugin.isEnabled()) new Thread(new Runnable()
+			if (!plugin.isEnabled()) 
+			{	
+				new Thread(new Runnable()
 				{
 					public void run()
 					{
@@ -125,6 +125,7 @@ public class Commandplugin extends EssentialsCommand
 						}
 					}
 				}).start();
+			}
 			sender.sendMessage("§7Plugin enabled.");
 			return true;
 		}
@@ -141,7 +142,9 @@ public class Commandplugin extends EssentialsCommand
 		{
 			final PluginManager pm = server.getPluginManager();
 			final Plugin plugin = pm.getPlugin(name);
-			if (plugin.isEnabled()) new Thread(new Runnable()
+			if (plugin.isEnabled())
+			{
+				new Thread(new Runnable()
 				{
 					public void run()
 					{
@@ -151,6 +154,7 @@ public class Commandplugin extends EssentialsCommand
 						}
 					}
 				}).start();
+			}
 			sender.sendMessage("§7Plugin disabled.");
 			return true;
 		}

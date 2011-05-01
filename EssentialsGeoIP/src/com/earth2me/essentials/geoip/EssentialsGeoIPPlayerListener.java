@@ -1,5 +1,6 @@
 package com.earth2me.essentials.geoip;
 
+import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.EssentialsConf;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.User;
@@ -42,7 +43,8 @@ public class EssentialsGeoIPPlayerListener extends PlayerListener implements ICo
 	@Override
 	public void onPlayerJoin(PlayerJoinEvent event)
 	{
-		User u = User.get(event.getPlayer());
+		Essentials ess = Essentials.getStatic();
+		User u = ess.getUser(event.getPlayer());
 		if (u.isAuthorized("essentials.geoip.hide"))
 		{
 			return;
@@ -73,13 +75,13 @@ public class EssentialsGeoIPPlayerListener extends PlayerListener implements ICo
 		}
 		if (config.getBoolean("show-on-whois", true))
 		{
-			u.setMetadata("location", sb.toString());
+			u.setGeoLocation(sb.toString());
 		}
 		if (config.getBoolean("show-on-login", true))
 		{
 			for (Player player : event.getPlayer().getServer().getOnlinePlayers())
 			{
-				User user = User.get(player);
+				User user = ess.getUser(player);
 				if (user.isAuthorized("essentials.geoip.show")) {
 					user.sendMessage("Player " + u.getDisplayName() + " comes from " + sb.toString());
 				}

@@ -7,6 +7,8 @@ import java.util.Map;
 import org.bukkit.Server;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
+import java.util.GregorianCalendar;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -20,13 +22,14 @@ public class Commandkit extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
+	@SuppressWarnings("unchecked")
+	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
 			try
 			{
-				Map<String, Object> kits = (Map<String, Object>)parent.getConfiguration().getProperty("kits");
+				Map<String, Object> kits = (Map<String, Object>)ess.getConfiguration().getProperty("kits");
 				StringBuilder list = new StringBuilder();
 				for (String k : kits.keySet())
 				{
@@ -54,7 +57,7 @@ public class Commandkit extends EssentialsCommand
 			try
 			{
 				String kitName = args[0].toLowerCase();
-				Object kit = Essentials.getSettings().getKit(kitName);
+				Object kit = ess.getSettings().getKit(kitName);
 				List<String> items;
 
 				if (!user.isAuthorized("essentials.kit." + kitName))
@@ -69,8 +72,13 @@ public class Commandkit extends EssentialsCommand
 					//System.out.println("Kit is timed");
 					Map<String, Object> els = (Map<String, Object>)kit;
 					items = (List<String>)els.get("items");
-					long delay = els.containsKey("delay") ? ((Number)els.get("delay")).longValue() * 1000L : 0L;
-					long time = Calendar.getInstance().getTimeInMillis();
+					double delay = els.containsKey("delay") ? ((Number)els.get("delay")).doubleValue() : 0L;
+					Calendar c = new GregorianCalendar();
+					c.add(Calendar.SECOND, (int)delay);
+					c.add(Calendar.MILLISECOND, (int)((delay*1000.0)%1000.0));
+			
+					long time = c.getTimeInMillis();
+					Calendar now = new GregorianCalendar();
 
 					Map<String, Long> kitTimes;
 					if (!kitPlayers.containsKey(user))
@@ -86,15 +94,13 @@ public class Commandkit extends EssentialsCommand
 						{
 							kitTimes.put(kitName, time);
 						}
-						else if (kitTimes.get(kitName) + delay <= time)
+						else if (kitTimes.get(kitName) < now.getTimeInMillis())
 						{
 							kitTimes.put(kitName, time);
 						}
 						else
 						{
-							long left = kitTimes.get(kitName) + delay - time;
-							user.sendMessage("§cYou can't use that kit again for another " + Essentials.FormatTime(left) + ".");
-
+							user.sendMessage("§cYou can't use that kit again for another " + Util.formatDateDiff(kitTimes.get(kitName)) + ".");
 							return;
 						}
 					}
@@ -104,9 +110,12 @@ public class Commandkit extends EssentialsCommand
 					items = (List<String>)kit;
 				}
 
-				try {
+				try
+				{
 					user.canAfford("kit-" + kitName);
-				} catch (Exception ex) {
+				}
+				catch (Exception ex)
+				{
 					user.sendMessage(ex.getMessage());
 					return;
 				}
@@ -118,24 +127,24 @@ public class Commandkit extends EssentialsCommand
 					int id = Integer.parseInt(parts[0]);
 					int amount = parts.length > 1 ? Integer.parseInt(parts[parts.length > 2 ? 2 : 1]) : 1;
 					short data = parts.length > 2 ? Short.parseShort(parts[1]) : 0;
-					if(user.getInventory().firstEmpty() != -1)
+					HashMap<Integer,ItemStack> overfilled = user.getInventory().addItem(new ItemStack(id, amount, data));
+					for (ItemStack itemStack : overfilled.values())
 					{
-					user.getInventory().addItem(new ItemStack(id, amount, data));
-					}
-					else
-					{
+						user.getWorld().dropItemNaturally(user.getLocation(), itemStack);
 						spew = true;
-						user.getWorld().dropItemNaturally(user.getLocation(), new ItemStack(id, amount, data));
 					}
 				}
-				if(spew)
+				if (spew)
 				{
 					user.sendMessage("§7Your inventory was full, placing kit on the floor");
 				}
-				try {
+				try
+				{
 					user.charge(this);
 					user.charge("kit-" + kitName);
-				} catch (Exception ex) {
+				}
+				catch (Exception ex)
+				{
 					user.sendMessage(ex.getMessage());
 				}
 				user.sendMessage("§7Giving kit " + args[0].toLowerCase() + ".");

@@ -34,12 +34,12 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 		initialize();
 		if (event.isCancelled()) return;
 		ItemStack item = event.getItem();
-		User user = User.get(event.getPlayer());
+		User user = Essentials.getStatic().getUser(event.getPlayer());
 		Block blockClicked = event.getClickedBlock();
 
 		if (EssentialsProtect.playerSettings.get("protect.disable.build") && !user.canBuild())
 		{
-			if(Essentials.getSettings().warnOnBuildDisallow())
+			if(Essentials.getStatic().getSettings().warnOnBuildDisallow())
 			{
 				user.sendMessage(ChatColor.RED + "You are not permitted to build");
 			}

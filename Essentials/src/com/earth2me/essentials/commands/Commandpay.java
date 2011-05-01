@@ -1,11 +1,8 @@
 package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
-import com.earth2me.essentials.Essentials;
 import org.bukkit.entity.Player;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.commands.EssentialsCommand;
 
 
 public class Commandpay extends EssentialsCommand
@@ -16,27 +13,19 @@ public class Commandpay extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
+	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
+		if (args.length < 2)
+		{
+			throw new NotEnoughArgumentsException();
+		}
 
-		int amount;
-		try
-		{
-			amount = Integer.parseInt(args[1].replaceAll("[^0-9]", ""));
-		}
-		catch (Exception ex)
-		{
-			user.sendMessage("§cUsage: /" + commandLabel + " [player] [money]");
-			return;
-		}
+		double amount = Double.parseDouble(args[1].replaceAll("[^0-9\\.]", ""));
 
 		for (Player p : server.matchPlayer(args[0]))
 		{
-			User u = User.get(p);
+			User u = ess.getUser(p);
 			user.payUser(u, amount);
 		}
 	}
-
-
-	
 }

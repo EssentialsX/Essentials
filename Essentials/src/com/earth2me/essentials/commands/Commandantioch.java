@@ -5,7 +5,6 @@ import net.minecraft.server.World;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.craftbukkit.CraftWorld;
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.TargetBlock;
 
@@ -18,14 +17,9 @@ public class Commandantioch extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
+	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		/*if (!user.isOp())
-		{
-			user.sendMessage("§cNone shall pass.");
-			return;
-		}*/
-		
+		charge(user);
 		server.broadcastMessage("...lobbest thou thy Holy Hand Grenade of Antioch towards thy foe,");
 		server.broadcastMessage("who being naughty in My sight, shall snuff it.");
 

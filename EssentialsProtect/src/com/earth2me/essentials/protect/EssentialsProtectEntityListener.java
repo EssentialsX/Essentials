@@ -76,8 +76,8 @@ public class EssentialsProtectEntityListener extends EntityListener
 			{
 				if (EssentialsProtect.playerSettings.get("protect.disable.pvp"))
 				{
-					User defender = User.get(eDefend);
-					User attacker = User.get(eAttack);
+					User defender = Essentials.getStatic().getUser(eDefend);
+					User attacker = Essentials.getStatic().getUser(eAttack);
 
 					if (!defender.isAuthorized("essentials.protect.pvp") || !attacker.isAuthorized("essentials.protect.pvp"))
 					{
@@ -153,7 +153,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 		if (event.getEntity() instanceof LivingEntity)
 		{
 			//Nicccccccccce plaaacccccccccce..
-			int maxHeight = Essentials.getSettings().getEpCreeperMaxHeight();
+			int maxHeight = Essentials.getStatic().getSettings().getEpCreeperMaxHeight();
 			if (EssentialsProtect.guardSettings.get("protect.prevent.creeper-explosion")
 				|| EssentialsProtect.guardSettings.get("protect.prevent.creeper-blockdamage")
 				|| (maxHeight >= 0 && event.getLocation().getBlockY() > maxHeight))
@@ -246,7 +246,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 		if (!(event.getTarget() instanceof Player)) {
 			return;
 		}
-		User user = User.get(event.getTarget());
+		User user = Essentials.getStatic().getUser(event.getTarget());
 		if ((event.getReason() == TargetReason.CLOSEST_PLAYER ||
 			event.getReason() == TargetReason.TARGET_ATTACKED_ENTITY ||
 			event.getReason() == TargetReason.PIG_ZOMBIE_TARGET) &&

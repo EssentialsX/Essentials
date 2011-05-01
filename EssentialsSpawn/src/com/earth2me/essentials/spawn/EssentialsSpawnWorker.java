@@ -16,7 +16,7 @@ public class EssentialsSpawnWorker
 	})
 	public static boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args)
 	{
-		User user = User.get(sender);
+		User user = Essentials.getStatic().getUser(sender);
 
 		IEssentialsCommand cmd;
 		try
@@ -42,9 +42,9 @@ public class EssentialsSpawnWorker
 		try
 		{
 			if (user == null)
-				cmd.run(Essentials.getStatic().getServer(), Essentials.getStatic(), sender, commandLabel, command, args);
+				cmd.run(Essentials.getStatic().getServer(), sender, commandLabel, command, args);
 			else
-				cmd.run(Essentials.getStatic().getServer(), Essentials.getStatic(), user, commandLabel, command, args);
+				cmd.run(Essentials.getStatic().getServer(), user, commandLabel, command, args);
 			return true;
 		}
 		catch (Exception ex)

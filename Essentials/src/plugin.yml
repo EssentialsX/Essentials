@@ -165,7 +165,7 @@ commands:
     aliases: [m,t,emsg]
   mute:
     description: Mutes or unmutes a player.
-    usage: /<command> [player]
+    usage: /<command> [player] <datediff>
     aliases: [emute]
   nick:
     description: Change your nickname or that of another player.
@@ -203,6 +203,9 @@ commands:
     description: Views the server rules.
     usage: /<command>
     aliases: [erules]
+  seen:
+    description: Shows the last logout time of a player
+    usage: /<command> [playername]
   sell:
     description: Sells the item currently in your hand.
     usage: /<command> [itemname|id|hand] [-][amount]
@@ -231,6 +234,9 @@ commands:
     description: Causes you to perish.
     usage: /<command>
     aliases: [esuicide]
+  tempban:
+    description: Temporary ban a user.
+    usage: /<command> [playername] [datediff]
   thunder:
     description: Enable/disable thunder.
     usage: /<command> <true/false> [duration]
@@ -240,7 +246,7 @@ commands:
     aliases: [etime]
   togglejail:
     description: Prevents a player from interacting with the world and teleports him/her to the the jail specified
-    usage: /<command> [player] [jailname]
+    usage: /<command> [player] [jailname] <datediff>
     aliases: [tjail,etogglejail]
   top:
     description: Teleport to the highest block at your current coordinates.

@@ -3,8 +3,9 @@ package com.earth2me.essentials.commands;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.TreeType;
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
+
 
 public class Commandtree extends EssentialsCommand
 {
@@ -14,13 +15,12 @@ public class Commandtree extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
+	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
 		Object tree = new Object();
 		if (args.length < 1)
 		{
-			user.sendMessage("§cUsage: /tree [tree|birch|redwood]");
-			return;
+			throw new NotEnoughArgumentsException();
 		}
 		else if (args[0].equalsIgnoreCase("birch"))
 		{
@@ -36,8 +36,7 @@ public class Commandtree extends EssentialsCommand
 		}
 		else
 		{
-		   user.sendMessage("§cUsage: /tree [tree|birch|redwood]");
-		   return;
+			throw new NotEnoughArgumentsException();
 		}
 
 		double x = user.getLocation().getX();
@@ -46,12 +45,24 @@ public class Commandtree extends EssentialsCommand
 
 		// offset tree in direction player is facing
 		int r = (int)user.getCorrectedYaw();
-		if (r < 68 || r > 292) x -= 3.0D;			// north
-		else if (r > 112 && r < 248) x += 3.0D;		// south
-		if (r > 22 && r < 158) z -= 3.0D;			// east
-		else if (r > 202 && r < 338) z += 3.0D;		// west
+		if (r < 68 || r > 292)			// north
+		{
+			x -= 3.0D;
+		}
+		else if (r > 112 && r < 248)	// south
+		{
+			x += 3.0D;
+		}
+		if (r > 22 && r < 158)			// east
+		{
+			z -= 3.0D;
+		}
+		else if (r > 202 && r < 338)	// west
+		{
+			z += 3.0D;
+		}
 
-		Location safeLocation = user.getSafeDestination(new Location(user.getWorld(), x, y, z));
+		Location safeLocation = Util.getSafeDestination(new Location(user.getWorld(), x, y, z));
 		boolean success = user.getWorld().generateTree(safeLocation, (TreeType)tree);
 		if (success)
 		{
@@ -59,6 +70,8 @@ public class Commandtree extends EssentialsCommand
 			user.sendMessage("§7Tree spawned.");
 		}
 		else
+		{
 			user.sendMessage("§cTree generation failure. Try again on grass or dirt.");
+		}
 	}
 }

@@ -97,16 +97,16 @@ public class EssentialsProtect extends JavaPlugin
 
 	public static void loadSettings()
 	{
-		dataSettings = Essentials.getSettings().getEpDBSettings();
-		genSettings = Essentials.getSettings().getEpSettings();
-		guardSettings = Essentials.getSettings().getEpGuardSettings();
-		usageList = Essentials.getSettings().epBlackListUsage();
-		blackListPlace = Essentials.getSettings().epBlackListPlacement();
-		breakBlackList = Essentials.getSettings().epBlockBreakingBlacklist();
-		onPlaceAlert = Essentials.getSettings().getEpAlertOnPlacement();
-		onUseAlert = Essentials.getSettings().getEpAlertOnUse();
-		onBreakAlert = Essentials.getSettings().getEpAlertOnBreak();
-		playerSettings = Essentials.getSettings().getEpPlayerSettings();
+		dataSettings = Essentials.getStatic().getSettings().getEpDBSettings();
+		genSettings = Essentials.getStatic().getSettings().getEpSettings();
+		guardSettings = Essentials.getStatic().getSettings().getEpGuardSettings();
+		usageList = Essentials.getStatic().getSettings().epBlackListUsage();
+		blackListPlace = Essentials.getStatic().getSettings().epBlackListPlacement();
+		breakBlackList = Essentials.getStatic().getSettings().epBlockBreakingBlacklist();
+		onPlaceAlert = Essentials.getStatic().getSettings().getEpAlertOnPlacement();
+		onUseAlert = Essentials.getStatic().getSettings().getEpAlertOnUse();
+		onBreakAlert = Essentials.getStatic().getSettings().getEpAlertOnBreak();
+		playerSettings = Essentials.getStatic().getSettings().getEpPlayerSettings();
 		EssentialsProtectData.createSqlTable();
 	}
 
@@ -115,7 +115,7 @@ public class EssentialsProtect extends JavaPlugin
 		Location loc = user.getLocation();
 		for (Player p : this.getServer().getOnlinePlayers())
 		{
-			User alertUser = User.get(p);
+			User alertUser = Essentials.getStatic().getUser(p);
 			if (alertUser.isAuthorized("essentials.protect.alerts"))
 				alertUser.sendMessage(ChatColor.DARK_AQUA + "[" + user.getName() + "] " + ChatColor.WHITE + type + ChatColor.GOLD + item + " at: " + EssentialsProtectData.formatCoords(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
 		}

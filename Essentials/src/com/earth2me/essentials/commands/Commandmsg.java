@@ -2,12 +2,11 @@ package com.earth2me.essentials.commands;
 
 import java.util.List;
 import org.bukkit.Server;
-import com.earth2me.essentials.Essentials;
 import org.bukkit.entity.Player;
-import com.earth2me.essentials.User;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.IReplyTo;
 import org.bukkit.command.CommandSender;
+
 
 public class Commandmsg extends EssentialsCommand
 {
@@ -17,25 +16,18 @@ public class Commandmsg extends EssentialsCommand
 	}
 
 	@Override
-	public String[] getTriggers()
+	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
-		return new String[] { getName(), "m", "tell", "whisper" };
-	}
-
-	@Override
-	public void run(Server server, Essentials parent, CommandSender sender, String commandLabel, String[] args) throws Exception
-	{
-		if (args.length < 2 || args[0].trim().length() == 0 || args[1].trim().length() == 0)
+		if (args.length < 2 || args[0].trim().isEmpty() || args[1].trim().isEmpty())
 		{
-			sender.sendMessage("§cUsage: /" + commandLabel + " [player] [message]");
-			return;
+			throw new NotEnoughArgumentsException();
 		}
 
 		String message = getFinalArg(args, 1);
-		
-		IReplyTo replyTo = sender instanceof Player?User.get((Player)sender):Console.getConsoleReplyTo();
-		String senderName = sender instanceof Player?((Player)sender).getDisplayName():Console.NAME;
-		
+
+		IReplyTo replyTo = sender instanceof Player ? ess.getUser((Player)sender) : Console.getConsoleReplyTo();
+		String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
+
 		if (args[0].equalsIgnoreCase(Console.NAME))
 		{
 			sender.sendMessage("[Me -> " + Console.NAME + "§f] " + message);
@@ -45,7 +37,7 @@ public class Commandmsg extends EssentialsCommand
 			Console.getConsoleReplyTo().setReplyTo(sender);
 			return;
 		}
-		
+
 		List<Player> matches = server.matchPlayer(args[0]);
 
 		if (matches.isEmpty())
@@ -59,8 +51,8 @@ public class Commandmsg extends EssentialsCommand
 		{
 			sender.sendMessage("[Me -> " + p.getDisplayName() + "§f] " + message);
 			p.sendMessage("[" + senderName + " -> Me§f] " + message);
-			replyTo.setReplyTo(User.get(p));
-			User.get(p).setReplyTo(sender);
+			replyTo.setReplyTo(ess.getUser(p));
+			ess.getUser(p).setReplyTo(sender);
 		}
 	}
 }

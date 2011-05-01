@@ -39,7 +39,6 @@ public class EssentialsTest extends TestCase
 			Settings settings = null;
 			Spawn spawn = null;
 			TargetBlock targetBlock = null;
-			TeleportTimer teleportTimer = null;
 			User user = null;
 			assertNull(itemDb);
 			assertNull(mob);
@@ -48,7 +47,6 @@ public class EssentialsTest extends TestCase
 			assertNull(settings);
 			assertNull(spawn);
 			assertNull(targetBlock);
-			assertNull(teleportTimer);
 			assertNull(user);
 		}
 		catch (Throwable ex)

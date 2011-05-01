@@ -1,20 +1,16 @@
 package com.earth2me.essentials;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.craftbukkit.block.CraftSign;
 import org.bukkit.event.block.*;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.MaterialData;
 
 
 public class EssentialsBlockListener extends BlockListener
 {
-	private final Essentials parent;
+	private final Essentials ess;
 	public final static ArrayList<Material> protectedBlocks = new ArrayList<Material>(4);
 
 	static
@@ -25,17 +21,17 @@ public class EssentialsBlockListener extends BlockListener
 		protectedBlocks.add(Material.DISPENSER);
 	}
 
-	public EssentialsBlockListener(Essentials parent)
+	public EssentialsBlockListener(Essentials ess)
 	{
-		this.parent = parent;
+		this.ess = ess;
 	}
 
 	@Override
 	public void onBlockBreak(BlockBreakEvent event)
 	{
 		if (event.isCancelled()) return;
-		if (Essentials.getSettings().areSignsDisabled()) return;
-		User user = User.get(event.getPlayer());
+		if (ess.getSettings().areSignsDisabled()) return;
+		User user = ess.getUser(event.getPlayer());
 		if (protectedBlocks.contains(event.getBlock().getType()) && !user.isAuthorized("essentials.signs.protection.override"))
 		{
 			if (isBlockProtected(event.getBlock(), user))
@@ -58,8 +54,8 @@ public class EssentialsBlockListener extends BlockListener
 	public void onSignChange(SignChangeEvent event)
 	{
 		if (event.isCancelled()) return;
-		if (Essentials.getSettings().areSignsDisabled()) return;
-		User user = User.get(event.getPlayer());
+		if (ess.getSettings().areSignsDisabled()) return;
+		User user = ess.getUser(event.getPlayer());
 		String username = user.getName().substring(0, user.getName().length() > 14 ? 14 : user.getName().length());
 
 		try
@@ -171,7 +167,7 @@ public class EssentialsBlockListener extends BlockListener
 				return;
 			}
 		}
-		final User user = User.get(event.getPlayer());
+		final User user = ess.getUser(event.getPlayer());
 		// Do not rely on getItemInHand();
 		// http://leaky.bukkit.org/issues/663
 		final ItemStack is = new ItemStack(event.getBlockPlaced().getType(), 1, (short)0, event.getBlockPlaced().getData());
@@ -236,7 +232,7 @@ public class EssentialsBlockListener extends BlockListener
 		}
 		boolean unlimitedForUser = user.hasUnlimited(is);
 		if (unlimitedForUser) {
-			Essentials.getStatic().getScheduler().scheduleSyncDelayedTask(Essentials.getStatic(), 
+			ess.getScheduler().scheduleSyncDelayedTask(ess, 
 				new Runnable() {
 
 				public void run() {

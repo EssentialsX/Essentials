@@ -14,10 +14,9 @@ public class Commandspawn extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
+	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
 		user.canAfford(this);
-		user.teleportCooldown();
-		user.respawn(Essentials.getStatic().spawn, this.getName());
+		user.getTeleport().respawn(Essentials.getSpawn(), this.getName());
 	}
 }

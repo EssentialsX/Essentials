@@ -1,9 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.commands.EssentialsCommand;
 
 
 public class Commandtpaccept extends EssentialsCommand
@@ -14,27 +12,29 @@ public class Commandtpaccept extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
+	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-	
-		User p = parent.tpcRequests.get(user);
-		if (p == null) throw new Exception("You do not have a pending request.");
-		parent.tpcRequests.remove(user);
-		
-		if (parent.tpcHere.get(user))
+
+		User p = user.getTeleportRequest();
+		if (p == null)
 		{
-			user.teleportCooldown();
+			throw new Exception("You do not have a pending request.");
+		}
+
+		if (user.isTeleportRequestHere())
+		{
 			user.canAfford(this);
 			user.sendMessage("§7Teleport request accepted.");
 			p.sendMessage("§7Teleport request accepted.");
-			user.teleportTo(p, this.getName());
+			user.getTeleport().teleport(p, this.getName());
 		}
 		else
 		{
 			user.canAfford(this);
 			user.sendMessage("§7Teleport request accepted.");
 			p.sendMessage("§7Teleport request accepted.");
-			p.teleportTo(user, this.getName());
+			user.getTeleport().teleport(user, this.getName());
 		}
+		user.requestTeleport(null, false);
 	}
 }

@@ -15,16 +15,16 @@ public class Commandsetworth extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
+	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		if(args.length < 2)
+		if (args.length < 2)
 		{
-			user.sendMessage("§cUsage: /" + commandLabel + " [itemname|id] [price]");
-			return;
+			throw new NotEnoughArgumentsException();
 		}
+
 		ItemStack stack = ItemDb.get(args[0]);
+		charge(user);
 		Essentials.getWorth().setPrice(stack, Double.parseDouble(args[1]));
-		user.charge(this);
 		user.sendMessage("§7Worth value set");
 	}
 }

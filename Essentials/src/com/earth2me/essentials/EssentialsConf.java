@@ -28,7 +28,8 @@ public class EssentialsConf extends Configuration
 	{
 		super(configFile);
 		this.configFile = configFile;
-		if (this.root == null) {
+		if (this.root == null)
+		{
 			this.root = new HashMap<String, Object>();
 		}
 	}
@@ -62,7 +63,8 @@ public class EssentialsConf extends Configuration
 			}
 		}
 		super.load();
-		if (this.root == null) {
+		if (this.root == null)
+		{
 			this.root = new HashMap<String, Object>();
 		}
 	}
@@ -98,7 +100,8 @@ public class EssentialsConf extends Configuration
 		{
 			try
 			{
-				if (ostr != null) {
+				if (ostr != null)
+				{
 					ostr.close();
 				}
 			}
@@ -120,73 +123,83 @@ public class EssentialsConf extends Configuration
 		return configFile;
 	}
 
-	public void setTemplateName(String templateName, Class<?> resClass) {
+	public void setTemplateName(String templateName, Class<?> resClass)
+	{
 		this.templateName = templateName;
 		this.resourceClass = resClass;
 	}
-	
-	public boolean hasProperty(String path) {
+
+	public boolean hasProperty(String path)
+	{
 		return getProperty(path) != null;
 	}
-	
-	public Location getLocation(String path, Server server) {
-		String worldName = getString(path+".world");
-		if (worldName == null || worldName.isEmpty()) {
+
+	public Location getLocation(String path, Server server)
+	{
+		String worldName = getString((path != null ? path + "." : "") + "world");
+		if (worldName == null || worldName.isEmpty())
+		{
 			return null;
 		}
 		World world = server.getWorld(worldName);
-		if (world == null) {
+		if (world == null)
+		{
 			return null;
 		}
-		return new Location(world, 
-			getDouble(path+".x", 0),
-			getDouble(path+".y", 0),
-			getDouble(path+".z", 0),
-			(float)getDouble(path+".paw", 0),
-			(float)getDouble(path+".pitch", 0));
+		return new Location(world,
+							getDouble((path != null ? path + "." : "") + "x", 0),
+							getDouble((path != null ? path + "." : "") + "y", 0),
+							getDouble((path != null ? path + "." : "") + "z", 0),
+							(float)getDouble((path != null ? path + "." : "") + "yaw", 0),
+							(float)getDouble((path != null ? path + "." : "") + "pitch", 0));
 	}
-	
-	public void setProperty(String path, Location loc) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("world", loc.getWorld().getName());
-		map.put("x", loc.getX());
-		map.put("y", loc.getY());
-		map.put("z", loc.getZ());
-		map.put("yaw", loc.getYaw());
-		map.put("pitch", loc.getPitch());
-		setProperty(path, map);
+
+	public void setProperty(String path, Location loc)
+	{
+		setProperty((path != null ? path + "." : "") + "world", loc.getWorld().getName());
+		setProperty((path != null ? path + "." : "") + "x", loc.getX());
+		setProperty((path != null ? path + "." : "") + "y", loc.getY());
+		setProperty((path != null ? path + "." : "") + "z", loc.getZ());
+		setProperty((path != null ? path + "." : "") + "yaw", loc.getYaw());
+		setProperty((path != null ? path + "." : "") + "pitch", loc.getPitch());
 	}
-	
-	public ItemStack getItemStack(String path) {
+
+	public ItemStack getItemStack(String path)
+	{
 		return new ItemStack(
-			Material.valueOf(getString(path+".type", "AIR")),
-			getInt(path+".amount", 1),
-			(short)getInt(path+".damage", 0),
-			(byte)getInt(path+".data", 0));
+				Material.valueOf(getString(path + ".type", "AIR")),
+				getInt(path + ".amount", 1),
+				(short)getInt(path + ".damage", 0)/*,
+				(byte)getInt(path + ".data", 0)*/);
 	}
-	
-	public void setProperty(String path, ItemStack stack) {
+
+	public void setProperty(String path, ItemStack stack)
+	{
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("type", stack.getType().toString());
 		map.put("amount", stack.getAmount());
 		map.put("damage", stack.getDurability());
 		// getData().getData() is broken
-		map.put("data", stack.getDurability());
+		//map.put("data", stack.getDurability());
 		setProperty(path, map);
 	}
-	
-	public long getLong(String path, long def) {
+
+	public long getLong(String path, long def)
+	{
 		Number num = (Number)getProperty(path);
-		if (num == null) {
+		if (num == null)
+		{
 			return def;
 		}
 		return num.longValue();
 	}
-	
+
 	@Override
-	public double getDouble(String path, double def) {
+	public double getDouble(String path, double def)
+	{
 		Number num = (Number)getProperty(path);
-		if (num == null) {
+		if (num == null)
+		{
 			return def;
 		}
 		return num.doubleValue();

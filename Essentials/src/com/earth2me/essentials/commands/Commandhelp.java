@@ -26,7 +26,7 @@ public class Commandhelp extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
+	protected void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
 		int page;
 		try
@@ -38,7 +38,7 @@ public class Commandhelp extends EssentialsCommand
 			page = 1;
 		}
 
-		List<String> lines = getHelpLines(parent, user);
+		List<String> lines = getHelpLines(user);
 		int start = (page - 1) * 9;
 		int pages = lines.size() / 9 + (lines.size() % 9 > 0 ? 1 : 0);
 
@@ -50,16 +50,16 @@ public class Commandhelp extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(Server server, Essentials parent, CommandSender sender, String commandLabel, String[] args) throws Exception
+	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
 		sender.sendMessage("To view help from the console, type \"?\".");
 	}
 
 	@SuppressWarnings("CallToThreadDumpStack")
-	private List<String> getHelpLines(Essentials parent, User user) throws Exception
+	private List<String> getHelpLines(User user) throws Exception
 	{
 		List<String> retval = new ArrayList<String>();
-		File file = new File(parent.getDataFolder(), "help.txt");
+		File file = new File(ess.getDataFolder(), "help.txt");
 		if (file.exists())
 		{
 			BufferedReader rx = new BufferedReader(new FileReader(file));
@@ -71,7 +71,7 @@ public class Commandhelp extends EssentialsCommand
 		}
 
 		boolean reported = false;
-		for (Plugin p : parent.getServer().getPluginManager().getPlugins())
+		for (Plugin p : ess.getServer().getPluginManager().getPlugins())
 		{
 			try
 			{
@@ -82,7 +82,7 @@ public class Commandhelp extends EssentialsCommand
 					if (p.getDescription().getName().toLowerCase().contains("essentials"))
 					{
 						String node = "essentials." + k;
-						if (!Essentials.getSettings().isCommandDisabled(k) && user.isAuthorized(node))
+						if (!ess.getSettings().isCommandDisabled(k) && user.isAuthorized(node))
 						{
 							HashMap<String, String> v = cmds.get(k);
 							retval.add("§c" + k + "§7: " + v.get("description"));
@@ -90,7 +90,7 @@ public class Commandhelp extends EssentialsCommand
 					}
 					else
 					{
-						if (Essentials.getSettings().showNonEssCommandsInHelp())
+						if (ess.getSettings().showNonEssCommandsInHelp())
 						{
 							HashMap<String, String> v = cmds.get(k);
 							if (v.containsKey("permission") && v.get("permission") != null && !(v.get("permission").equals("")))
@@ -111,7 +111,6 @@ public class Commandhelp extends EssentialsCommand
 			}
 			catch (NullPointerException ex)
 			{
-
 				continue;
 			}
 			catch (Exception ex)

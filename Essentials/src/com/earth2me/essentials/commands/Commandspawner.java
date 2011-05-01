@@ -1,8 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
@@ -18,25 +16,27 @@ public class Commandspawner extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
+	protected void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
-			user.sendMessage(ChatColor.RED + "Usage: /" + commandLabel + " [mob]");
-			return;
+			throw new NotEnoughArgumentsException();
 		}
 
 		Block target = user.getTarget().getTargetBlock();
 		if (target.getType() != Material.MOB_SPAWNER)
+		{
 			throw new Exception("Target block must be a mob spawner.");
+		}
 
+		charge(user);
 		try
 		{
-			user.charge(this);
 			((CreatureSpawner)target).setCreatureType(CreatureType.fromName(args[0]));
 		}
 		catch (Throwable ex)
 		{
+			throw new Exception("Error while changing mob spawner.");
 		}
 	}
 }

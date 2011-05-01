@@ -4,6 +4,7 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 
 
 public class Commandtogglejail extends EssentialsCommand
@@ -14,55 +15,67 @@ public class Commandtogglejail extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, Essentials parent, CommandSender sender, String commandLabel, String[] args) throws Exception
+	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
-		if (args.length < 1 || args.length > 2)
+		if (args.length < 1)
 		{
-			sender.sendMessage("Usage: /" + commandLabel + " [player] [jailname]");
-			return;
-		}
-		
-		User p;
-		try
-		{
-			p = User.get(server.matchPlayer(args[0]).get(0));
-		}
-		catch (Exception ex)
-		{
-			sender.sendMessage("§cThat player does not exist.");
-			return;
+			throw new NotEnoughArgumentsException();
 		}
 
-		if (p.isOp() || p.isAuthorized("essentials.jail.exempt"))
+		User p = getPlayer(server, args, 0);
+
+		if (p.isAuthorized("essentials.jail.exempt"))
 		{
 			sender.sendMessage("§cYou may not jail that person");
 			return;
 		}
-		
-		if (args.length == 2 && !p.isJailed()) {
-			User.charge(sender, this);
-			sender.sendMessage("§7Player " + p.getName() + " " + (p.toggleJailed() ? "jailed." : "unjailed."));
+
+		if (args.length >= 2 && !p.isJailed())
+		{
+			charge(sender);
+			p.setJailed(true);
 			p.sendMessage("§7You have been jailed");
-			p.currentJail = null;
+			p.setJail(null);
 			Essentials.getJail().sendToJail(p, args[1]);
-			p.currentJail = (args[1]);
-			return;
-		}
-		
-		if (args.length == 2 && p.isJailed() && !args[1].equalsIgnoreCase(p.currentJail)) {
-			sender.sendMessage("§cPerson is already in jail "+ p.currentJail);
-			return;
-		}
-		
-		if (args.length == 1 || (args.length == 2 && args[1].equalsIgnoreCase(p.currentJail))) {
-			if (!p.isJailed()) {
-				sender.sendMessage("Usage: /" + commandLabel + " [player] [jailname]");
-				return;
+			p.setJail(args[1]);
+			long timeDiff = 0;
+			if (args.length > 2)
+			{
+				String time = getFinalArg(args, 2);
+				timeDiff = Util.parseDateDiff(time, true);
+				p.setJailTimeout(timeDiff);
 			}
-			sender.sendMessage("§7Player " + p.getName() + " " + (p.toggleJailed() ? "jailed." : "unjailed."));
+			sender.sendMessage("§7Player " + p.getName() + " jailed" + (timeDiff > 0 ? " for" + Util.formatDateDiff(timeDiff) : "") + ".");
+			return;
+		}
+
+		if (args.length == 2 && p.isJailed() && !args[1].equalsIgnoreCase(p.getJail()))
+		{
+			sender.sendMessage("§cPerson is already in jail " + p.getJail());
+			return;
+		}
+
+		if (args.length >= 2 && p.isJailed() && !args[1].equalsIgnoreCase(p.getJail()))
+		{
+			String time = getFinalArg(args, 2);
+			long timeDiff = Util.parseDateDiff(time, true);
+			p.setJailTimeout(timeDiff);
+			sender.sendMessage("Jail time extend to " + Util.formatDateDiff(timeDiff));
+			return;
+		}
+
+		if (args.length == 1 || (args.length == 2 && args[1].equalsIgnoreCase(p.getJail())))
+		{
+			if (!p.isJailed())
+			{
+				throw new NotEnoughArgumentsException();
+			}
+			p.setJailed(false);
+			p.setJailTimeout(0);
 			p.sendMessage("§7You have been released");
-			p.currentJail = "";
-			p.teleportBack();
+			p.setJail(null);
+			p.getTeleport().back();
+			sender.sendMessage("§7Player " + p.getName() + " unjailed.");
 		}
 	}
 }

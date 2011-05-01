@@ -2,7 +2,6 @@ package com.earth2me.essentials.commands;
 
 import org.bukkit.Location;
 import org.bukkit.Server;
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.TargetBlock;
 import com.earth2me.essentials.User;
 
@@ -15,16 +14,7 @@ public class Commandjump extends EssentialsCommand
 	}
 
 	@Override
-	public String[] getTriggers()
-	{
-		return new String[]
-				{
-					getName(), "j"
-				};
-	}
-
-	@Override
-	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
+	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
 		Location loc;
 		Location cloc = user.getLocation();
@@ -45,6 +35,6 @@ public class Commandjump extends EssentialsCommand
 		}
 
 		user.canAfford(this);
-		user.teleportTo(loc, this.getName());
+		user.getTeleport().teleport(loc, this.getName());
 	}
 }

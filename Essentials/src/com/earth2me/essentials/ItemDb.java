@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -96,7 +95,7 @@ public class ItemDb
 			throw new Exception("Unknown item id: "+itemid);
 		}
 		ItemStack retval = new ItemStack(mat);
-		retval.setAmount(Essentials.getSettings().getDefaultStackSize());
+		retval.setAmount(Essentials.getStatic().getSettings().getDefaultStackSize());
 		retval.setDurability(durabilities.containsKey(id.toLowerCase()) ? durabilities.get(id.toLowerCase()) : 0);
 		return retval;
 	}

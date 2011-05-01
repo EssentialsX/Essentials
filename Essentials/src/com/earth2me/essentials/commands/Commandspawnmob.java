@@ -29,45 +29,38 @@ public class Commandspawnmob extends EssentialsCommand
 	}
 
 	@Override
-	public String[] getTriggers()
-	{
-		return new String[]
-				{
-					getName(), "mob"
-				};
-	}
-
-	@Override
-	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
+	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
-			user.sendMessage("§cUsage: /spawnmob [mob]<:data><,mount<:data>> <quantity>");
-			user.sendMessage("§7Mobs: Zombie PigZombie Skeleton Slime Chicken Pig Monster Spider Creeper Ghast Squid Giant Cow Sheep Wolf");
-			return;
+			throw new NotEnoughArgumentsException();
+			//TODO: user.sendMessage("§7Mobs: Zombie PigZombie Skeleton Slime Chicken Pig Monster Spider Creeper Ghast Squid Giant Cow Sheep Wolf");
 		}
 
-		
+
 		String[] mountparts = args[0].split(",");
 		String[] parts = mountparts[0].split(":");
 		String mobType = parts[0];
 		mobType = mobType.equalsIgnoreCase("PigZombie") ? "PigZombie" : capitalCase(mobType);
 		String mobData = null;
-		if (parts.length == 2) {
+		if (parts.length == 2)
+		{
 			mobData = parts[1];
 		}
 		String mountType = null;
 		String mountData = null;
-		if (mountparts.length > 1) {
+		if (mountparts.length > 1)
+		{
 			parts = mountparts[1].split(":");
 			mountType = parts[0];
 			mountType = mountType.equalsIgnoreCase("PigZombie") ? "PigZombie" : capitalCase(mountType);
-			if (parts.length == 2) {
+			if (parts.length == 2)
+			{
 				mountData = parts[1];
 			}
 		}
-		
-		
+
+
 		CraftEntity spawnedMob = null;
 		Mob mob = null;
 		CraftEntity spawnedMount = null;
@@ -79,7 +72,7 @@ public class Commandspawnmob extends EssentialsCommand
 			user.sendMessage("Invalid mob type.");
 			return;
 		}
-		user.charge(this);
+		charge(user);
 		WorldServer world = ((CraftWorld)user.getWorld()).getHandle();
 		try
 		{
@@ -90,18 +83,21 @@ public class Commandspawnmob extends EssentialsCommand
 			user.sendMessage("Unable to spawn mob.");
 			return;
 		}
-		int[] ignore = {8, 9};
+		int[] ignore =
+		{
+			8, 9
+		};
 		Location loc = (new TargetBlock(user, 300, 0.2, ignore)).getTargetBlock().getLocation();
-		
+
 		Block block = user.getWorld().getBlockAt(loc);
-		while (!(block.getType() == Material.AIR || block.getType() == Material.WATER || block.getType() == Material.STATIONARY_WATER ))
+		while (!(block.getType() == Material.AIR || block.getType() == Material.WATER || block.getType() == Material.STATIONARY_WATER))
 		{
 			loc.setY(loc.getY() + 1);
 			block = user.getWorld().getBlockAt(loc);
 		}
 		spawnedMob.teleportTo(loc);
 		world.addEntity(spawnedMob.getHandle());
-		
+
 		if (mountType != null)
 		{
 			mobMount = Mob.fromName(mountType);
@@ -123,22 +119,24 @@ public class Commandspawnmob extends EssentialsCommand
 			spawnedMount.getHandle().setPassengerOf(spawnedMob.getHandle());
 			world.addEntity(spawnedMount.getHandle());
 		}
-		if (mobData != null) {
+		if (mobData != null)
+		{
 			changeMobData(mob.name, spawnedMob, mobData, user);
 		}
-		if (spawnedMount != null && mountData != null) {
+		if (spawnedMount != null && mountData != null)
+		{
 			changeMobData(mobMount.name, spawnedMount, mountData, user);
 		}
 		if (args.length == 2)
 		{
 			int mobCount = Integer.parseInt(args[1]);
-			int serverLimit =  Essentials.getSettings().getSpawnMobLimit();
-			if(mobCount > serverLimit)
+			int serverLimit = ess.getSettings().getSpawnMobLimit();
+			if (mobCount > serverLimit)
 			{
 				mobCount = serverLimit;
 				user.sendMessage("Mob quantity limited to server limit");
 			}
-			
+
 			try
 			{
 				for (int i = 1; i < mobCount; i++)
@@ -161,10 +159,12 @@ public class Commandspawnmob extends EssentialsCommand
 						spawnedMount.getHandle().setPassengerOf(spawnedMob.getHandle());
 						world.addEntity(spawnedMount.getHandle());
 					}
-					if (mobData != null) {
+					if (mobData != null)
+					{
 						changeMobData(mob.name, spawnedMob, mobData, user);
 					}
-					if (spawnedMount != null && mountData != null) {
+					if (spawnedMount != null && mountData != null)
+					{
 						changeMobData(mobMount.name, spawnedMount, mountData, user);
 					}
 				}
@@ -194,8 +194,10 @@ public class Commandspawnmob extends EssentialsCommand
 		return s.toUpperCase().charAt(0) + s.toLowerCase().substring(1);
 	}
 
-	private void changeMobData(String type, CraftEntity spawned, String data, User user) throws Exception {
-		if ("Slime".equalsIgnoreCase(type)) {
+	private void changeMobData(String type, CraftEntity spawned, String data, User user) throws Exception
+	{
+		if ("Slime".equalsIgnoreCase(type))
+		{
 			try
 			{
 				((CraftSlime)spawned).setSize(Integer.parseInt(data));
@@ -205,7 +207,8 @@ public class Commandspawnmob extends EssentialsCommand
 				throw new Exception("Malformed size.");
 			}
 		}
-		if ("Sheep".equalsIgnoreCase(type)) {
+		if ("Sheep".equalsIgnoreCase(type))
+		{
 			try
 			{
 				((CraftSheep)spawned).setColor(DyeColor.valueOf(data.toUpperCase()));
@@ -215,16 +218,18 @@ public class Commandspawnmob extends EssentialsCommand
 				throw new Exception("Malformed color.");
 			}
 		}
-		if ("Wolf".equalsIgnoreCase(type) && data.equalsIgnoreCase("tamed")) {
-			EntityWolf wolf = ((CraftWolf) spawned).getHandle();
+		if ("Wolf".equalsIgnoreCase(type) && data.equalsIgnoreCase("tamed"))
+		{
+			EntityWolf wolf = ((CraftWolf)spawned).getHandle();
 			wolf.d(true);
-			wolf.a((PathEntity) null);
+			wolf.a((PathEntity)null);
 			wolf.setSitting(true);
 			wolf.health = 20;
 			wolf.a(user.getName());
-			wolf.world.a(wolf, (byte) 7);
+			wolf.world.a(wolf, (byte)7);
 		}
-		if ("Wolf".equalsIgnoreCase(type) && data.equalsIgnoreCase("angry")) {
+		if ("Wolf".equalsIgnoreCase(type) && data.equalsIgnoreCase("angry"))
+		{
 			((CraftWolf)spawned).setAngry(true);
 		}
 		if ("Creeper".equalsIgnoreCase(type) && data.equalsIgnoreCase("powered")) {

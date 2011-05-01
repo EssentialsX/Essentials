@@ -17,60 +17,73 @@ public class Commandsell extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
+	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		if (args.length < 1) {
-			user.sendMessage("§cUsage: /sell [itemname|id|hand] [-][amount]");
-			return;
+		if (args.length < 1)
+		{
+			throw new NotEnoughArgumentsException();
 		}
 		ItemStack is;
-		if (args[0].equalsIgnoreCase("hand")) {
+		if (args[0].equalsIgnoreCase("hand"))
+		{
 			is = user.getItemInHand();
-		} else {
+		}
+		else
+		{
 			is = ItemDb.get(args[0]);
 		}
-		if(is.getType() == Material.AIR) {
+		if (is.getType() == Material.AIR)
+		{
 			throw new Exception("You really tried to sell Air? Put an item in your hand.");
 		}
 
 		int id = is.getTypeId();
 		int amount = 0;
-		if (args.length > 1) {
+		if (args.length > 1)
+		{
 			amount = Integer.parseInt(args[1].replaceAll("[^0-9]", ""));
-			if (args[1].startsWith("-")) {
+			if (args[1].startsWith("-"))
+			{
 				amount = -amount;
 			}
 		}
 		double worth = Essentials.getWorth().getPrice(is);
 		boolean stack = args.length > 1 && args[1].endsWith("s");
-		boolean requireStack = parent.getConfiguration().getBoolean("trade-in-stacks-" + id, false);
+		boolean requireStack = ess.getConfiguration().getBoolean("trade-in-stacks-" + id, false);
 
-		if (Double.isNaN(worth)) {
+		if (Double.isNaN(worth))
+		{
 			throw new Exception("That item cannot be sold to the server.");
 		}
-		if (requireStack && !stack) {
+		if (requireStack && !stack)
+		{
 			throw new Exception("Item must be traded in stacks. A quantity of 2s would be two stacks, etc.");
 		}
 
 		int max = 0;
 		for (ItemStack s : user.getInventory().getContents())
 		{
-			if (s == null) {
+			if (s == null)
+			{
 				continue;
 			}
-			if (s.getTypeId() != is.getTypeId()) {
+			if (s.getTypeId() != is.getTypeId())
+			{
 				continue;
 			}
-			if (s.getDurability() != is.getDurability()) {
+			if (s.getDurability() != is.getDurability())
+			{
 				continue;
 			}
 			max += s.getAmount();
 		}
 
-		if (stack) {
+		if (stack)
+		{
 			amount *= 64;
 		}
-		if (amount < 1) {
+		if (amount < 1)
+		{
 			amount += max;
 		}
 
@@ -78,7 +91,7 @@ public class Commandsell extends EssentialsCommand
 		{
 			amount -= amount % 64;
 		}
-		
+
 		if (amount > max || amount < 1)
 		{
 			user.sendMessage("§cYou do not have enough of that item to sell.");
@@ -87,7 +100,7 @@ public class Commandsell extends EssentialsCommand
 			return;
 		}
 
-		user.charge(this);
+		charge(user);
 		InventoryWorkaround.removeItem(user.getInventory(), true, new ItemStack(is.getType(), amount, is.getDurability()));
 		user.updateInventory();
 		user.giveMoney(worth * amount);
