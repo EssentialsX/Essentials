@@ -41,6 +41,11 @@ public class EssentialsGeoIPPlayerListener extends PlayerListener implements ICo
 	@Override
 	public void onPlayerJoin(PlayerJoinEvent event)
 	{
+		User u = User.get(event.getPlayer());
+		if (u.isAuthorized("essentials.geoip.hide"))
+		{
+			return;
+		}
 		InetAddress address = event.getPlayer().getAddress().getAddress();
 		StringBuilder sb = new StringBuilder();
 		if (config.getBoolean("database.show-cities", false))
