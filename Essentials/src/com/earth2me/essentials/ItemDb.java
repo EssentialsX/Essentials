@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -88,11 +90,15 @@ public class ItemDb
 
 	public static ItemStack get(String id) throws Exception
 	{
-		ItemStack retval = new ItemStack(getUnsafe(id));
+		int itemid = getUnsafe(id);
+		Material mat = Material.getMaterial(itemid);
+		if (mat == null) {
+			throw new Exception("Unknown item id: "+itemid);
+		}
+		ItemStack retval = new ItemStack(mat);
 		retval.setAmount(Essentials.getSettings().getDefaultStackSize());
 		retval.setDurability(durabilities.containsKey(id.toLowerCase()) ? durabilities.get(id.toLowerCase()) : 0);
-		if (items.containsValue(retval.getTypeId()) || true) return retval;
-		throw new Exception("Unknown item numeric: " + retval);
+		return retval;
 	}
 
 	private static int getUnsafe(String id) throws Exception
