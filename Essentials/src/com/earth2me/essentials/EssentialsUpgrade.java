@@ -197,19 +197,21 @@ public class EssentialsUpgrade
 			{
 				@SuppressWarnings("unchecked")
 				List<Object> vals = (List<Object>)usersConfig.getProperty(username + ".home");
-				World world = ess.getServer().getWorlds().get(0);
-				if (vals.size() > 5)
-				{
-					world = ess.getWorld((String)vals.get(5));
-				}
-				if (world != null)
-				{
-					user.setHome(new Location(world,
-											  ((Number)vals.get(0)).doubleValue(),
-											  ((Number)vals.get(1)).doubleValue(),
-											  ((Number)vals.get(2)).doubleValue(),
-											  ((Number)vals.get(3)).floatValue(),
-											  ((Number)vals.get(4)).floatValue()), true);
+				if (vals != null) {
+					World world = ess.getServer().getWorlds().get(0);
+					if (vals.size() > 5)
+					{
+						world = ess.getWorld((String)vals.get(5));
+					}
+					if (world != null)
+					{
+						user.setHome(new Location(world,
+												  ((Number)vals.get(0)).doubleValue(),
+												  ((Number)vals.get(1)).doubleValue(),
+												  ((Number)vals.get(2)).doubleValue(),
+												  ((Number)vals.get(3)).floatValue(),
+												  ((Number)vals.get(4)).floatValue()), true);
+					}
 				}
 			}
 		}
