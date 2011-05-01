@@ -193,7 +193,7 @@ public class EssentialsUpgrade
 			{
 				user.setMails(mails);
 			}
-			if (user.getHome() == null)
+			if (!user.hasHome())
 			{
 				@SuppressWarnings("unchecked")
 				List<Object> vals = (List<Object>)usersConfig.getProperty(username + ".home");

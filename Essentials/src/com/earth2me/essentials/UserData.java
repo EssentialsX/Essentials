@@ -87,21 +87,30 @@ public abstract class UserData extends PlayerExtension implements IConf
 		}
 	}
 
-	public Location getHome()
+	public boolean hasHome()
 	{
 		if (config.hasProperty("home"))
 		{
-			World world = getLocation().getWorld();
-			String worldHome = "home.worlds." + world.getName().toLowerCase();
-			if (!config.hasProperty(worldHome))
-			{
-				String defaultWorld = config.getString("home.default");
-				worldHome = "home.worlds." + defaultWorld;
-			}
-			Location loc = config.getLocation(worldHome, getServer());
-			return loc;
+			return true;
 		}
-		return null;
+		return false;
+	}
+	
+	public Location getHome()
+	{
+		if (!hasHome())
+		{
+			return null;
+		}
+		World world = getLocation().getWorld();
+		String worldHome = "home.worlds." + world.getName().toLowerCase();
+		if (!config.hasProperty(worldHome))
+		{
+			String defaultWorld = config.getString("home.default");
+			worldHome = "home.worlds." + defaultWorld;
+		}
+		Location loc = config.getLocation(worldHome, getServer());
+		return loc;
 	}
 
 	public void setHome(Location loc, boolean b)
