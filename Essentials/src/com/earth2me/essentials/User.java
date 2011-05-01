@@ -32,6 +32,7 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 	private boolean isNew = false;
 	public String currentJail;
 	public ItemStack[] savedInventory;
+	private Map<String,Object> metadata = new HashMap<String,Object>();
 
 	private User(Player base)
 	{
@@ -829,5 +830,13 @@ public class User extends PlayerExtension implements Comparable<User>, IReplyTo
 		}
 		data.put("powertools", tools);
 		flush();
+	}
+	
+	public Map<String,Object> getMetadata() {
+		return metadata;
+	}
+	
+	public void setMetadata(String key, Object value) {
+		metadata.put(key, value);
 	}
 }

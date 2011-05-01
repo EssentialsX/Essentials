@@ -1,0 +1,10 @@
+database:
+  show-cities: false
+  download-if-missing: true
+  # Url for country
+  download-url: "http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz"
+  # Url for cities
+  download-url-city: "http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz"
+
+show-on-login: true
+show-on-whois: true

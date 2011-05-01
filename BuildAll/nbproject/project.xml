@@ -32,6 +32,14 @@
                 <id>jar</id>
             </reference>
             <reference>
+                <foreign-project>EssentialsGeoIP</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
                 <foreign-project>EssentialsGroupBridge</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
@@ -57,6 +65,14 @@
             </reference>
             <reference>
                 <foreign-project>EssentialsSpawn</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
+                <foreign-project>EssentialsiConomyBridge</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
