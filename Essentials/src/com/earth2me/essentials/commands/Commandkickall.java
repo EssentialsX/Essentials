@@ -16,13 +16,6 @@ public class Commandkickall extends EssentialsCommand
 	@Override
 	public void run(Server server, Essentials parent, User user, String commandLabel, String[] args) throws Exception
 	{
-		if (args.length < 1)
-		{
-			user.sendMessage("§7Usage: /" + commandLabel + "<reason>");
-			return;
-		}
-
-
 		for (Player p : server.getOnlinePlayers())
 		{
 			if (server.getOnlinePlayers().length == 1 && p.getName().equalsIgnoreCase(user.getName()))
@@ -34,7 +27,7 @@ public class Commandkickall extends EssentialsCommand
 			{
 				if (!p.getName().equalsIgnoreCase(user.getName()))
 				{
-					p.kickPlayer(args.length < 1 ? args[0] : "Kicked from server");
+					p.kickPlayer(args.length < 1 ? getFinalArg(args, 0) : "Kicked from server");
 				}
 			}
 		}
@@ -43,13 +36,9 @@ public class Commandkickall extends EssentialsCommand
 	@Override
 	public void run(Server server, Essentials parent, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
-		if (args.length < 1)
-		{
-			sender.sendMessage("Usage: /" + commandLabel + "<reason>");
-			return;
-		}
-
 		for (Player p : server.getOnlinePlayers())
-			p.kickPlayer(args.length < 1 ? args[0] : "Kicked from server");
+		{
+			p.kickPlayer(args.length < 1 ? getFinalArg(args, 0) : "Kicked from server");
+		}
 	}
 }
