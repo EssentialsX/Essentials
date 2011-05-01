@@ -30,16 +30,24 @@ public class Commandwhois extends EssentialsCommand
 		{
 			User u = User.get(p);
 			String dn = ChatColor.stripColor(u.getNick());
-			if (!whois.equalsIgnoreCase(dn) && !whois.equalsIgnoreCase(dn.substring(prefixLength)) && !whois.equalsIgnoreCase(u.getName())) continue;
+			if (!whois.equalsIgnoreCase(dn) && !whois.equalsIgnoreCase(dn.substring(prefixLength)) && !whois.equalsIgnoreCase(u.getName()))
+			{
+				continue;
+			}
 			sender.sendMessage("");
 			sender.sendMessage(u.getDisplayName() + " is " + u.getName());
 			sender.sendMessage(ChatColor.BLUE + " - Health: " + u.getHealth() + "/20");
 			sender.sendMessage(ChatColor.BLUE + " - Location: (" + u.getLocation().getWorld().getName() + ", " + u.getLocation().getBlockX() + ", " + u.getLocation().getBlockY() + ", " + u.getLocation().getBlockZ() + ")");
-			if (!parent.getConfiguration().getBoolean("disable-eco", false)) sender.sendMessage(ChatColor.BLUE + " - Money: $" + u.getMoney());
+			if (!parent.getConfiguration().getBoolean("disable-eco", false))
+			{
+				sender.sendMessage(ChatColor.BLUE + " - Money: $" + u.getMoney());
+			}
 			sender.sendMessage(ChatColor.BLUE + " - Status: " + (parent.away.contains(u) ? "§cAway§f" : "Available"));
 			sender.sendMessage(ChatColor.BLUE + " - IP Address: " + u.getAddress().getAddress().toString());
 			Object location = u.getMetadata().get("location");
-			if (location != null && location instanceof String) {
+			if (location != null && location instanceof String
+				&& (sender instanceof Player ? User.get(sender).isAuthorized("essentials.geoip.show") : true))
+			{
 				sender.sendMessage(ChatColor.BLUE + " - Location: " + location.toString());
 			}
 		}
