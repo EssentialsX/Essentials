@@ -219,6 +219,18 @@ public class EssentialsBlockListener extends BlockListener
 				is.setType(Material.STEP);
 				break;
 			case TORCH:
+			case RAILS:
+			case LADDER:
+			case WOOD_STAIRS:
+			case COBBLESTONE_STAIRS:
+			case LEVER:
+			case STONE_BUTTON:
+			case FURNACE:
+			case DISPENSER:
+			case PUMPKIN:
+			case JACK_O_LANTERN:
+			case WOOD_PLATE:
+			case STONE_PLATE:
 				is.setDurability((short)0);
 				break;
 		}
