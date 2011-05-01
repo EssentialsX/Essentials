@@ -215,6 +215,7 @@ public class EssentialsUpgrade
 				}
 			}
 		}
+		usersFile.renameTo(new File(usersFile.getAbsolutePath() + ".old"));
 	}
 
 	private void convertWarps()
@@ -338,19 +339,24 @@ public class EssentialsUpgrade
 			{
 				continue;
 			}
-			String sanitizedFilename = Util.sanitizeFileName(filename);
+			String sanitizedFilename = Util.sanitizeFileName(filename.substring(0, filename.length() - 4)) + ".yml";
 			if (sanitizedFilename.equals(filename))
 			{
 				continue;
 			}
+			File tmpFile = new File(listOfFiles[i].getParentFile(), sanitizedFilename + ".tmp");
 			File newFile = new File(listOfFiles[i].getParentFile(), sanitizedFilename);
+			if (!listOfFiles[i].renameTo(tmpFile)) {
+				logger.log(Level.WARNING, "Failed to move userdata/"+filename+" to userdata/"+sanitizedFilename+".tmp");
+				continue;
+			}
 			if (newFile.exists())
 			{
 				logger.log(Level.WARNING, "Duplicated userdata: "+filename+" and "+sanitizedFilename);
 				continue;
 			}
-			if (!listOfFiles[i].renameTo(newFile)) {
-				logger.log(Level.WARNING, "Failed to move userdata/"+filename+" to userdata/"+sanitizedFilename);
+			if (!tmpFile.renameTo(newFile)) {
+				logger.log(Level.WARNING, "Failed to move userdata/"+sanitizedFilename+".tmp to userdata/"+sanitizedFilename);
 			}
 		}
 	}
