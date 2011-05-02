@@ -139,12 +139,16 @@ public class EssentialsUpgrade
 				continue;
 			}
 			EssentialsConf config = new EssentialsConf(file);
+			config.load();
 			if (config.hasProperty("home") && !config.hasProperty("home.default"))
 			{
 				@SuppressWarnings("unchecked")
 				List<Object> vals = (List<Object>)config.getProperty("home");
-				World world = ess.getServer() == null ? null : ess.getServer().getWorlds().get(0);
-				if (vals.size() > 5 && ess.getServer() != null)
+				if (vals == null) {
+					continue;
+				}
+				World world = ess.getServer().getWorlds().get(0);
+				if (vals.size() > 5)
 				{
 					world = ess.getServer().getWorld((String)vals.get(5));
 				}
