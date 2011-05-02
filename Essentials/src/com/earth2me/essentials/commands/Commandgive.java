@@ -28,11 +28,16 @@ public class Commandgive extends EssentialsCommand
 		String[] itemArgs = args[1].split("[^a-zA-Z0-9]");
 		ItemStack stack = ItemDb.get(itemArgs[0]);
 
+		String itemname = stack.getType().toString().toLowerCase().replace("_", "");
 		if (sender instanceof Player
-			&& !ess.getUser(sender).isAuthorized("essentials.itemspawn.exempt")
-			&& !ess.getUser(sender).canSpawnItem(stack.getTypeId()))
+			&& (ess.getSettings().permissionBasedItemSpawn()
+				? !ess.getUser(sender).isAuthorized("essentials.give.item-all")
+				  && !ess.getUser(sender).isAuthorized("essentials.give.item-" + itemname)
+				  && !ess.getUser(sender).isAuthorized("essentials.give.item-" + stack.getTypeId())
+				: !ess.getUser(sender).isAuthorized("essentials.itemspawn.exempt")
+				  && !ess.getUser(sender).canSpawnItem(stack.getTypeId())))
 		{
-			sender.sendMessage(ChatColor.RED + "You are not allowed to spawn that item");
+			sender.sendMessage(ChatColor.RED + "You are not allowed to spawn the item " + itemname);
 			return;
 		}
 		if (itemArgs.length > 1)
@@ -43,8 +48,9 @@ public class Commandgive extends EssentialsCommand
 		{
 			stack.setAmount(Integer.parseInt(args[2]));
 		}
-		
-		if (stack.getType() == Material.AIR) {
+
+		if (stack.getType() == Material.AIR)
+		{
 			sender.sendMessage(ChatColor.RED + "You can't give air.");
 			return;
 		}

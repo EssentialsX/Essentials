@@ -46,9 +46,19 @@ heal-cooldown: 60
 # The number of items given if the quantity parameter is left out in /item or /give.
 default-stack-size: 64
 
-#what to prevent from /i /give
-#e.g item-spawn-blacklist: 46,11,10
-item-spawn-blacklist: 
+# What to prevent from /i /give
+# e.g item-spawn-blacklist: 46,11,10
+item-spawn-blacklist:
+
+# Set this to true if you want permission based item spawn rules
+# Permissions:
+#  - essentials.itemspawn.item-all
+#  - essentials.itemspawn.item-[itemname]
+#  - essentials.itemspawn.item-[itemid]
+#  - essentials.give.item-all
+#  - essentials.give.item-[itemname]
+#  - essentials.give.item-[itemid]
+permission-based-item-spawn: false
 
 # Whether or not to reclaim memory on player logout; this is technical, and should only be changed under special circumstances.
 # This generally increases server stability unless very specific runtime configurations are used.

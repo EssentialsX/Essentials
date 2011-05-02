@@ -478,4 +478,9 @@ public class Settings implements IConf
 	{
 		return config.getBoolean("warn-on-smite" ,true);
 	}
+	
+	public boolean permissionBasedItemSpawn()
+	{
+		return config.getBoolean("permission-based-item-spawn", false);
+	}
 }
