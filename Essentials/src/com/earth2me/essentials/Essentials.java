@@ -56,15 +56,15 @@ public class Essentials extends JavaPlugin
 	{
 		return settings;
 	}
-	
+
 	public void setupForTesting() throws IOException, InvalidDescriptionException
 	{
 		File dataFolder = File.createTempFile("essentialstest", "");
 		dataFolder.delete();
 		dataFolder.mkdir();
-		logger.log(Level.INFO,"Using temp folder for testing:");
-		logger.log(Level.INFO,dataFolder.toString());
-		this.initialize(null, null, new PluginDescriptionFile(new FileReader(new File("src"+File.separator+"plugin.yml"))), dataFolder, null, null);
+		logger.log(Level.INFO, "Using temp folder for testing:");
+		logger.log(Level.INFO, dataFolder.toString());
+		this.initialize(null, null, new PluginDescriptionFile(new FileReader(new File("src" + File.separator + "plugin.yml"))), dataFolder, null, null);
 		settings = new Settings(dataFolder);
 	}
 
@@ -78,7 +78,8 @@ public class Essentials extends JavaPlugin
 	{
 		setStatic();
 		EssentialsUpgrade upgrade = new EssentialsUpgrade(this.getDescription().getVersion(), this);
-		if (newWorldsLoaded) {
+		if (newWorldsLoaded)
+		{
 			logger.log(Level.SEVERE, "New worlds have been loaded while upgrading files. The server will stop now, please restart it.");
 			try
 			{
@@ -355,9 +356,12 @@ public class Essentials extends JavaPlugin
 			if (user != null && !getSettings().isCommandDisabled("mail") && !commandLabel.equals("mail") && user.isAuthorized("essentials.mail"))
 			{
 				List<String> mail = user.getMails();
-				if (!mail.isEmpty())
+				if (mail != null)
 				{
-					user.sendMessage(ChatColor.RED + "You have " + mail.size() + " messages!§f Type §7/mail read§f to view your mail.");
+					if (mail.size() > 0)
+					{
+						user.sendMessage(ChatColor.RED + "You have " + mail.size() + " messages!§f Type §7/mail read§f to view your mail.");
+					}
 				}
 			}
 
@@ -606,12 +610,14 @@ public class Essentials extends JavaPlugin
 		}
 		return null;
 	}
-		
-	public void setIConomyFallback(boolean iConomyFallback) {
+
+	public void setIConomyFallback(boolean iConomyFallback)
+	{
 		this.iConomyFallback = iConomyFallback;
 	}
-	
-	public boolean isIConomyFallbackEnabled() {
+
+	public boolean isIConomyFallbackEnabled()
+	{
 		return iConomyFallback;
 	}
 }
