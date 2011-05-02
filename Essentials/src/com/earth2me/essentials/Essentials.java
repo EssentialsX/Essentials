@@ -78,8 +78,15 @@ public class Essentials extends JavaPlugin
 		setStatic();
 		EssentialsUpgrade upgrade = new EssentialsUpgrade(this.getDescription().getVersion(), this);
 		if (newWorldsLoaded) {
-			logger.log(Level.SEVERE, "New worlds have been loaded while upgrading files. Will reload the server.");
-			getServer().reload();
+			logger.log(Level.SEVERE, "New worlds have been loaded while upgrading files. The server will stop now, please restart it.");
+			try
+			{
+				getServer().dispatchCommand(Console.getCommandSender(getServer()), "stop");
+			}
+			catch (Exception ex)
+			{
+				logger.log(Level.SEVERE, "Failed to stop the server!", ex);
+			}
 		}
 		confList = new ArrayList<IConf>();
 		settings = new Settings(this.getDataFolder());
