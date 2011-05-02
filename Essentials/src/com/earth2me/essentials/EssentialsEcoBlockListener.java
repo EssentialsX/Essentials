@@ -12,13 +12,14 @@ import org.bukkit.inventory.ItemStack;
 
 public class EssentialsEcoBlockListener extends BlockListener
 {
-        public static DecimalFormat df = new  DecimalFormat ("0.##");
+	public static DecimalFormat df = new DecimalFormat("0.##");
 	Essentials ess;
+
 	public EssentialsEcoBlockListener(Essentials ess)
 	{
 		this.ess = ess;
 	}
-	
+
 	@Override
 	public void onBlockBreak(BlockBreakEvent event)
 	{
@@ -57,14 +58,14 @@ public class EssentialsEcoBlockListener extends BlockListener
 				double q1 = Double.parseDouble(m1 ? l1[0].substring(1) : l1[0]);
 				double q2 = Double.parseDouble(m2 ? l2[0].substring(1) : l2[0]);
 				double r1 = Double.parseDouble(l1[m1 ? 1 : 2]);
-                                double r2 = Double.parseDouble(l2[m2 ? 1 : 2]);
+				double r2 = Double.parseDouble(l2[m2 ? 1 : 2]);
 				if (q1 < 1 || q2 < 1)
 				{
 					throw new Exception("Quantities must be greater than 0.");
 				}
 
-				ItemStack i1 = m1 || r1 <= 0 ? null : ItemDb.get(l1[1], (int) r1);
-				ItemStack i2 = m2 || r2 <= 0 ? null : ItemDb.get(l2[1], (int) r2);
+				ItemStack i1 = m1 || r1 <= 0 ? null : ItemDb.get(l1[1], (int)r1);
+				ItemStack i2 = m2 || r2 <= 0 ? null : ItemDb.get(l2[1], (int)r2);
 
 				if (m1)
 				{
@@ -115,9 +116,9 @@ public class EssentialsEcoBlockListener extends BlockListener
 				{
 					throw new Exception("Don't sell air.");
 				}
-                                String d = df.format (Double.parseDouble(event.getLine(3).replaceAll("[^0-9\\.]", "")));
-                                Double dbl = new Double (d);
-				event.setLine(3, "$" + (double) dbl);
+				String d = df.format(Double.parseDouble(event.getLine(3).replaceAll("[^0-9\\.]", "")));
+				Double dbl = new Double(d);
+				event.setLine(3, "$" + (double)dbl);
 			}
 			catch (Throwable ex)
 			{
@@ -141,9 +142,9 @@ public class EssentialsEcoBlockListener extends BlockListener
 				{
 					throw new Exception("Don't buy air.");
 				}
-                                String d = df.format (Double.parseDouble(event.getLine(3).replaceAll("[^0-9\\.]", "")));
-                                Double dbl = new Double (d);
-				event.setLine(3, "$" + (double) dbl);
+				String d = df.format(Double.parseDouble(event.getLine(3).replaceAll("[^0-9\\.]", "")));
+				Double dbl = new Double(d);
+				event.setLine(3, "$" + (double)dbl);
 			}
 			catch (Throwable ex)
 			{
@@ -188,7 +189,7 @@ public class EssentialsEcoBlockListener extends BlockListener
 				}
 				else
 				{
-					ItemStack i2 = ItemDb.get(l2[1], (int) r2);
+					ItemStack i2 = ItemDb.get(l2[1], (int)r2);
 					if (!InventoryWorkaround.containsItem(user.getInventory(), true, i2))
 					{
 						throw new Exception("You do not have " + r2 + "x " + l2[1] + ".");
