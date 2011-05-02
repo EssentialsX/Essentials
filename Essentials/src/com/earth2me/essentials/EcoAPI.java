@@ -164,6 +164,7 @@ public class EcoAPI
 			}
 			return;
 		}
+		User user = usrConv(name);
 		double result = user.getMoney() + money;
 		user.setMoney(result);
 		return;
