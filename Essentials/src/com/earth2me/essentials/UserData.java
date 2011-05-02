@@ -307,6 +307,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		if (mails == null)
 		{
 			config.removeProperty("mail");
+			mails = _getMails();
 		}
 		else
 		{
