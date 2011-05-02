@@ -256,4 +256,19 @@ public class Util
 		}
 		return isBlockAboveAir(world, x, y, z);
 	}
+	public static boolean detectFay()
+	{
+		try
+		{
+			if (com.nijiko.coelho.iConomy.iConomy.isFay())
+			{
+				return true;
+			}
+		}
+		catch (Throwable ex)
+		{
+			return false;			
+		}
+		return false;
+	}
 }

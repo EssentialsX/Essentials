@@ -8,35 +8,37 @@ import java.text.DecimalFormat;
 import org.bukkit.Bukkit;
 
 
-public class EcoAPI {
+
+public class EcoAPI
+{
+	protected static Essentials ess=Essentials.getStatic();
 	
-	protected static Essentials ess;
-	protected static Settings set;
-   
 	//Does the file exists?
-	
-	protected static boolean accountCreated(String name){
-		
+	protected static boolean accountCreated(String name)
+	{
 		File folder = new File(ess.getDataFolder(), "userdata");
 		File account = new File(folder, Util.sanitizeFileName(name) + ".yml");
 		return account.exists();
 	}
-	
+
 	//We create the file for the NPC
-	
-	protected static void createAccount(String name){
+	protected static void createAccount(String name)
+	{
 
 		//Where we will store npc accounts!
 
 		File folder = new File(ess.getDataFolder(), "userdata");
 		File npcFile = new File(folder, name + ".yml");
+		
 		try
 		{
-			if(!npcFile.createNewFile())
+			if (!npcFile.createNewFile())
+			{
 				System.out.println("Failed file creation");
+			}
 			return;
 		}
-		catch(IOException e)
+		catch (IOException e)
 		{
 			System.out.println("Could not create Non-player account file!");
 		}
@@ -44,8 +46,10 @@ public class EcoAPI {
 		BufferedWriter bufferWriter = null;
 		try
 		{
-			if(!npcFile.exists())
+			if (!npcFile.exists())
+			{
 				npcFile.createNewFile();
+			}
 
 			fileWriter = new FileWriter(npcFile);
 			bufferWriter = new BufferedWriter(fileWriter);
@@ -53,235 +57,251 @@ public class EcoAPI {
 			//This is the default for NPC's, 0
 
 			bufferWriter.append("money: ");
-			bufferWriter.append(((Integer) 0).toString());
+			bufferWriter.append(((Integer)0).toString());
 			bufferWriter.newLine();
 		}
-			catch(IOException e)
+		catch (IOException e)
+		{
+			System.out.println("Exception on config creation: ");
+		}
+		finally
+		{
+			try
 			{
-				System.out.println("Exception on config creation: ");
-			}
-			finally
-			{
-				try
+				if (bufferWriter != null)
 				{
-					if(bufferWriter != null)
-					{
-						bufferWriter.flush();
-						bufferWriter.close();
-					}
+					bufferWriter.flush();
+					bufferWriter.close();
+				}
 
-					if(fileWriter != null)
+				if (fileWriter != null)
+				{
 					fileWriter.close();
 				}
-				catch(IOException e)
-				{
-					System.out.println("IO Exception writing file: " + npcFile.getName());
-				}
 			}
+			catch (IOException e)
+			{
+				System.out.println("IO Exception writing file: " + npcFile.getName());
+			}
+		}
 	}
-	
+
 	//Convert a string into an essentials User
-	
-	protected static User usrConv(String name){
-		User user=null;
-		if (Bukkit.getServer().getPlayer(name)!=null){
-			user=ess.getUser(Bukkit.getServer().getPlayer(name));
+	protected static User usrConv(String name)
+	{
+		User user = null;
+		if (Bukkit.getServer().getPlayer(name) != null)
+		{
+			user = ess.getUser(Bukkit.getServer().getPlayer(name));
 			return user;
-		 }
-		else{
-			user=ess.getOfflineUser(name);
+		}
+		else
+		{
+			user = ess.getOfflineUser(name);
 		}
 		return user;
 	}
 
 	//We have to make sure the user exists, or they are an NPC!
+	public static boolean exist(String name)
+	{
 
-	public static boolean exist(String name){
-		
-		if (name==null){
+		if (name == null)
+		{
 			System.out.println("EcoAPI - Whatever plugin is calling for users that are null is BROKEN!");
 			return false;
 		}
-			if (Bukkit.getServer().getPlayer(name)!=null){
-				return true;
-			}
+		if (Bukkit.getServer().getPlayer(name) != null)
+		{
+			return true;
+		}
 		return false;
 	}
-	
+
 	//Eco return balance
-	
-	public static double getMoney(String name){
-		if (!exist(name)){
-			if (accountCreated(name)){
-				User user=usrConv(name);
+	public static double getMoney(String name)
+	{
+		if (!exist(name))
+		{
+			if (accountCreated(name))
+			{
+				User user = usrConv(name);				
 				return user.getMoney();
-			}			
+			}
 			return 0;
 		}
-		User user=usrConv(name);
+		User user = usrConv(name);
 		return user.getMoney();
 	}
 
 	//Eco Set Money
-
-	public static void setMoney(String name, double bal){
-		if (!exist(name)){
-			if (accountCreated(name)){
-				User user=usrConv(name);
-				user.setMoney(bal);				
+	public static void setMoney(String name, double bal)
+	{
+		if (!exist(name))
+		{
+			if (accountCreated(name))
+			{
+				User user = usrConv(name);
+				user.setMoney(bal);
 			}
 			return;
 		}
-		User user=usrConv(name);
+		User user = usrConv(name);
 		user.setMoney(bal);
 		return;
 	}
 
 	//Eco add balance
-
-	public static void add(String name, double money){
-		if (!exist(name)){
-			if (accountCreated(name)){
-				User user=usrConv(name);
-				double result=user.getMoney()+money;				
+	public static void add(String name, double money)
+	{
+		if (!exist(name))
+		{
+			if (accountCreated(name))
+			{
+				User user = usrConv(name);
+				double result = user.getMoney() + money;
 				user.setMoney(money);
 			}
 			return;
 		}
-			User user=usrConv(name);
-			double result=user.getMoney()+money;				
-			user.setMoney(result);
-			return;
-	}
-	
-	//Eco divide balance
-
-	public static void divide(String name, double money){
-		if (!exist(name)){
-			if (accountCreated(name)){
-				User user=usrConv(name);
-				double result=user.getMoney()/money;				
-				user.setMoney(result);
-				return;	
-			}
-			return;
-		}
-		User user=usrConv(name);
-		double result=user.getMoney()/money;				
+		double result = user.getMoney() + money;
 		user.setMoney(result);
 		return;
 	}
-	
-	//Eco multiply balance
-	
-	public static void multiply(String name, double money){
-		if (!exist(name)){
-			if (accountCreated(name)){
-				User user=usrConv(name);
-				double result=user.getMoney()*money;				
+
+	//Eco divide balance
+	public static void divide(String name, double money)
+	{
+		if (!exist(name))
+		{
+			if (accountCreated(name))
+			{
+				User user = usrConv(name);
+				double result = user.getMoney() / money;
 				user.setMoney(result);
-				return;			
+				return;
 			}
 			return;
 		}
-		User user=usrConv(name);
-		double result=user.getMoney()*money;				
+		User user = usrConv(name);
+		double result = user.getMoney() / money;
+		user.setMoney(result);
+		return;
+	}
+
+	//Eco multiply balance
+	public static void multiply(String name, double money)
+	{
+		if (!exist(name))
+		{
+			if (accountCreated(name))
+			{
+				User user = usrConv(name);
+				double result = user.getMoney() * money;
+				user.setMoney(result);
+				return;
+			}
+			return;
+		}
+		User user = usrConv(name);
+		double result = user.getMoney() * money;
 		user.setMoney(result);
 		return;
 	}
 
 	//Eco subtract balance
-
-	public static void subtract(String name, double money){
-		if (!exist(name)){
-			if (accountCreated(name)){
-				User user=usrConv(name);
-				double result=user.getMoney()-money;				
+	public static void subtract(String name, double money)
+	{
+		if (!exist(name))
+		{
+			if (accountCreated(name))
+			{
+				User user = usrConv(name);
+				double result = user.getMoney() - money;
 				user.setMoney(result);
-				return;			
+				return;
 			}
 			return;
 		}
-		User user=usrConv(name);
-		double result=user.getMoney()-money;				
+		User user = usrConv(name);
+		double result = user.getMoney() - money;
 		user.setMoney(result);
 		return;
 	}
 
-    //Eco reset balance!
-
-	public static void resetBalance(String name){
-    	setMoney(name, set.getStartingBalance());
+	//Eco reset balance!
+	public static void resetBalance(String name)
+	{
+		setMoney(name, 0);
 	}
 
-    //Eco has enough check
-
-	public static boolean hasEnough(String name, double amount){
+	//Eco has enough check
+	public static boolean hasEnough(String name, double amount)
+	{
 		return amount <= getMoney(name);
 	}
 
-    //Eco hasMore balance check
-
-	public static boolean hasMore(String name, double amount){
+	//Eco hasMore balance check
+	public static boolean hasMore(String name, double amount)
+	{
 		return amount < getMoney(name);
 	}
 
-    //Eco hasLess balance check
-
-	public static boolean hasLess(String name, double amount){
+	//Eco hasLess balance check
+	public static boolean hasLess(String name, double amount)
+	{
 		return amount > getMoney(name);
 	}
 
-    //Eco currency
-
-	public static String getCurrency(){
-		return set.getCurrency();
+	//Eco currency
+	public static String getCurrency()
+	{
+		return ess.getSettings().getCurrency();
 	}
 
-    //Eco currency Plural
-    
-	public static String getCurrencyPlural(){
-		return set.getCurrencyPlural();
+	//Eco currency Plural
+	public static String getCurrencyPlural()
+	{
+		return ess.getSettings().getCurrencyPlural();
 	}
 
-    //Eco is negative check!
-
-	public static boolean isNegative(String name){
+	//Eco is negative check!
+	public static boolean isNegative(String name)
+	{
 		return getMoney(name) < 0.0;
 	}
 
-    //Eco Formatter
-    
-	public static String format(double amount) {
+	//Eco Formatter
+	public static String format(double amount)
+	{
 		DecimalFormat ecoForm = new DecimalFormat("#,##0.##");
-		String fakeFormed = ecoForm.format(amount);
-		if (fakeFormed.endsWith(".")) {
-			fakeFormed = fakeFormed.substring(0, fakeFormed.length() - 1);
+		String formed = ecoForm.format(amount);
+		if (formed.endsWith("."))
+		{
+			formed = formed.substring(0, formed.length() - 1);
 		}
-
-		return fakeFormed + " " + ((amount <= 1 && amount >= -1) ? set.getCurrency() : set.getCurrencyPlural());
+		getCurrency();
+		getCurrencyPlural();
+		return formed + " " + ((amount <= 1 && amount >= -1) ? ess.getSettings().getCurrency() : ess.getSettings().getCurrency());
 	}
 
-	
-	
-    //************************!WARNING!**************************
-    //**********DO NOT USING THE FOLLOWING FOR PLAYERS!**********
-    //**************THESE ARE FOR NPC ACCOUNTS ONLY!*************
-	
-	
-
+	//************************!WARNING!**************************
+	//**********DO NOT USING THE FOLLOWING FOR PLAYERS!**********
+	//**************THESE ARE FOR NPC ACCOUNTS ONLY!*************
 	//Eco account exist for NPCs ONLY!
-
-	public static boolean accountExist(String account) {
+	public static boolean accountExist(String account)
+	{
 		return accountCreated(account);
-}
+	}
 
-    //Eco NPC account creator!  Will return false if it already exists.
+	//Eco NPC account creator!  Will return false if it already exists.
+	public static boolean newAccount(String account)
+	{
 
-	public static boolean newAccount(String account){
-			
-		if (!exist(account)){
-			if (!accountCreated(account)){
+		if (!exist(account))
+		{
+			if (!accountCreated(account))
+			{
 				createAccount(account);
 				return true;
 			}
@@ -291,11 +311,13 @@ public class EcoAPI {
 	}
 
 	//Eco remove account, only use this for NPCS!
+	public static void removeAccount(String name)
+	{
 
-	public static void removeAccount(String name){
-		
-		if (!exist(name)){	
-			if (accountCreated(name)){
+		if (!exist(name))
+		{
+			if (accountCreated(name))
+			{
 				File folder = new File(ess.getDataFolder(), "userdata");
 				File account = new File(folder, Util.sanitizeFileName(name) + ".yml");
 				account.delete();
