@@ -41,7 +41,7 @@ public class Commandtempban extends EssentialsCommand
 		long banTimestamp = Util.parseDateDiff(time, true);
 
 		p = ess.getUser(server.matchPlayer(args[0]).get(0));
-		String banReason = "Temporary banned from server for " + Util.formatDateDiff(banTimestamp);
+		String banReason = "Temporarily banned from server for " + Util.formatDateDiff(banTimestamp);
 		p.setBanReason(banReason);
 		p.setBanTimeout(banTimestamp);
 		p.kickPlayer(banReason);

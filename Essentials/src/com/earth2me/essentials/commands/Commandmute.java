@@ -29,6 +29,6 @@ public class Commandmute extends EssentialsCommand
 		}
 		p.setMuteTimeout(muteTimestamp);
 		charge(sender);
-		sender.sendMessage("Player " + p.getDisplayName() + " " + (p.toggleMuted() ? "muted" : "unmuted") + (muteTimestamp > 0 ? " for" + Util.formatDateDiff(muteTimestamp) : "") + ".");
+		sender.sendMessage("Player " + p.getDisplayName() + " " + (p.toggleMuted() ? "muted" : "unmuted") + (muteTimestamp > 0 ? " for " + Util.formatDateDiff(muteTimestamp) : "") + ".");
 	}
 }
