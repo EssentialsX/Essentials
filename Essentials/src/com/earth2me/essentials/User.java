@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.IEssentialsCommand;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Logger;
@@ -18,6 +19,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo
 	private boolean teleportRequestHere;
 	private Teleport teleport;
 	private long lastActivity;
+	private static DecimalFormat df = new DecimalFormat("0.##");
 
 	User(Player base, Essentials ess)
 	{
@@ -84,7 +86,8 @@ public class User extends UserData implements Comparable<User>, IReplyTo
 			return;
 		}
 		setMoney(getMoney() + value);
-		sendMessage("§a$" + value + " has been added to your account.");
+		String d = df.format(Double.parseDouble(Double.toString(value)));
+		sendMessage("§a$" + d + " has been added to your account.");
 	}
 
 	public void payUser(User reciever, double value) throws Exception
@@ -101,8 +104,9 @@ public class User extends UserData implements Comparable<User>, IReplyTo
 		{
 			setMoney(getMoney() - value);
 			reciever.setMoney(reciever.getMoney() + value);
-			sendMessage("§a$" + value + " has been sent to " + reciever.getDisplayName());
-			reciever.sendMessage("§a$" + value + " has been recieved from " + getDisplayName());
+			String d = df.format(Double.parseDouble(Double.toString(value)));
+			sendMessage("§a$" + d + " has been sent to " + reciever.getDisplayName());                        
+			reciever.sendMessage("§a$" + d + " has been recieved from " + getDisplayName());
 		}
 	}
 
@@ -113,7 +117,8 @@ public class User extends UserData implements Comparable<User>, IReplyTo
 			return;
 		}
 		setMoney(getMoney() - value);
-		sendMessage("§c$" + value + " has been taken from your account.");
+		String d = df.format(Double.parseDouble(Double.toString(value)));
+		sendMessage("§c$" + d + " has been taken from your account.");
 	}
 
 	public void charge(String cmd) throws Exception
