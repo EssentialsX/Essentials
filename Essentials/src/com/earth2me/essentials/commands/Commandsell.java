@@ -32,7 +32,7 @@ public class Commandsell extends EssentialsCommand
 		{
 			is = ItemDb.get(args[0]);
 		}
-		if (is.getType() == Material.AIR)
+		if (is == null || is.getType() == Material.AIR)
 		{
 			throw new Exception("You really tried to sell Air? Put an item in your hand.");
 		}
