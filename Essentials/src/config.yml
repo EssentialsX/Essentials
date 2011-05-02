@@ -219,6 +219,10 @@ command-costs:
   #example: 1000
   # /kit tools costs $1500 PER USE
  # kit-tools: 1500
+ 
+ #This defines the name of your currencies, in singular and plural
+ currnceyName: Coin
+ currencyNamePlural: Coins
 
 
 

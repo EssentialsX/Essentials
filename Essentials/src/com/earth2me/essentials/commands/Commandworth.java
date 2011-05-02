@@ -4,11 +4,13 @@ import org.bukkit.Server;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.ItemDb;
 import com.earth2me.essentials.User;
+import java.text.DecimalFormat;
 import org.bukkit.inventory.ItemStack;
 
 
 public class Commandworth extends EssentialsCommand
 {
+	private static DecimalFormat df = new DecimalFormat("0.##");
 	public Commandworth()
 	{
 		super("worth");
@@ -45,6 +47,8 @@ public class Commandworth extends EssentialsCommand
 		}
 
 		user.charge(this);
-		user.sendMessage("§7Stack of " + is.getType().toString().toLowerCase().replace("_", "") + " worth §c$" + (worth * amount) + "§7 (" + amount + " item(s) at $" + worth + " each)");
+		String d = df.format(Double.parseDouble(Double.toString(worth)));
+		String d2 = df.format(Double.parseDouble(Double.toString(Double.parseDouble(d)*amount)));		
+		user.sendMessage("§7Stack of " + is.getType().toString().toLowerCase().replace("_", "") + " worth §c$" + d2 + "§7 (" + amount + " item(s) at $" + d + " each)");
 	}
 }

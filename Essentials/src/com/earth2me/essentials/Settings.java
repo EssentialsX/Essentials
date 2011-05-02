@@ -47,7 +47,17 @@ public class Settings implements IConf
 	{
 		return config.getInt("default-stack-size", 64);
 	}
-
+	
+	public String getCurrency()
+	{
+		return config.getString("currencyName", "Coin");
+	}
+	
+	public String getCurrencyPlural()
+	{
+		return config.getString("currencyNamePlural", "Coins");
+	}
+	
 	public int getStartingBalance()
 	{
 		return config.getInt("starting-balance", 0);
