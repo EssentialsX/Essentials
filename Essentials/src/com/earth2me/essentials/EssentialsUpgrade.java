@@ -120,6 +120,8 @@ public class EssentialsUpgrade
 			{
 				throw new Exception("Failed to rename temp file to config.yml");
 			}
+		} else {
+			tempFile.delete();
 		}
 	}
 
