@@ -105,7 +105,7 @@ public class EssentialsEcoBlockListener extends BlockListener
 		User user = ess.getUser(event.getPlayer());
 		String username = user.getName().substring(0, user.getName().length() > 14 ? 14 : user.getName().length());
 
-		if (event.getLine(0).equalsIgnoreCase("[Buy]") || event.getLine(0).equalsIgnoreCase("#1[Buy]") && user.isAuthorized("essentials.signs.buy.create"))
+		if ((event.getLine(0).equalsIgnoreCase("[Buy]") || event.getLine(0).equalsIgnoreCase("#1[Buy]")) && user.isAuthorized("essentials.signs.buy.create"))
 		{
 			try
 			{
@@ -117,8 +117,7 @@ public class EssentialsEcoBlockListener extends BlockListener
 					throw new Exception("Don't sell air.");
 				}
 				String d = df.format(Double.parseDouble(event.getLine(3).replaceAll("[^0-9\\.]", "")));
-				Double dbl = new Double(d);
-				event.setLine(3, "$" + (double)dbl);
+				event.setLine(3, "$" + d);
 			}
 			catch (Throwable ex)
 			{
@@ -131,7 +130,7 @@ public class EssentialsEcoBlockListener extends BlockListener
 			return;
 		}
 
-		if (event.getLine(0).equalsIgnoreCase("[Sell]") || event.getLine(0).equalsIgnoreCase("#1[Sell]") && user.isAuthorized("essentials.signs.sell.create"))
+		if ((event.getLine(0).equalsIgnoreCase("[Sell]") || event.getLine(0).equalsIgnoreCase("#1[Sell]")) && user.isAuthorized("essentials.signs.sell.create"))
 		{
 			try
 			{
@@ -143,8 +142,7 @@ public class EssentialsEcoBlockListener extends BlockListener
 					throw new Exception("Don't buy air.");
 				}
 				String d = df.format(Double.parseDouble(event.getLine(3).replaceAll("[^0-9\\.]", "")));
-				Double dbl = new Double(d);
-				event.setLine(3, "$" + (double)dbl);
+				event.setLine(3, "$" + d);
 			}
 			catch (Throwable ex)
 			{
@@ -157,7 +155,7 @@ public class EssentialsEcoBlockListener extends BlockListener
 			return;
 		}
 
-		if (event.getLine(0).equalsIgnoreCase("[Trade]") || event.getLine(0).equalsIgnoreCase("#1[Trade]") && user.isAuthorized("essentials.signs.trade.create"))
+		if ((event.getLine(0).equalsIgnoreCase("[Trade]") || event.getLine(0).equalsIgnoreCase("#1[Trade]")) && user.isAuthorized("essentials.signs.trade.create"))
 		{
 			try
 			{
