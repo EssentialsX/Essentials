@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import java.text.DecimalFormat;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.craftbukkit.block.CraftSign;
@@ -11,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class EssentialsEcoBlockListener extends BlockListener
 {
+        public static DecimalFormat df = new  DecimalFormat ("0.##");
 	Essentials ess;
 	public EssentialsEcoBlockListener(Essentials ess)
 	{
@@ -50,19 +52,19 @@ public class EssentialsEcoBlockListener extends BlockListener
 			{
 				String[] l1 = sign.getLines()[1].split("[ :-]+");
 				String[] l2 = sign.getLines()[2].split("[ :-]+");
-				boolean m1 = l1[0].matches("\\$[0-9]+");
-				boolean m2 = l2[0].matches("\\$[0-9]+");
-				int q1 = Integer.parseInt(m1 ? l1[0].substring(1) : l1[0]);
-				int q2 = Integer.parseInt(m2 ? l2[0].substring(1) : l2[0]);
-				int r1 = Integer.parseInt(l1[m1 ? 1 : 2]);
-				int r2 = Integer.parseInt(l2[m2 ? 1 : 2]);
+				boolean m1 = l1[0].matches("\\$[0-9]+(\\.[0-9]+)?");
+				boolean m2 = l2[0].matches("\\$[0-9]+(\\.[0-9]+)?");
+				double q1 = Double.parseDouble(m1 ? l1[0].substring(1) : l1[0]);
+				double q2 = Double.parseDouble(m2 ? l2[0].substring(1) : l2[0]);
+				double r1 = Double.parseDouble(l1[m1 ? 1 : 2]);
+                                double r2 = Double.parseDouble(l2[m2 ? 1 : 2]);
 				if (q1 < 1 || q2 < 1)
 				{
 					throw new Exception("Quantities must be greater than 0.");
 				}
 
-				ItemStack i1 = m1 || r1 <= 0 ? null : ItemDb.get(l1[1], r1);
-				ItemStack i2 = m2 || r2 <= 0 ? null : ItemDb.get(l2[1], r2);
+				ItemStack i1 = m1 || r1 <= 0 ? null : ItemDb.get(l1[1], (int) r1);
+				ItemStack i2 = m2 || r2 <= 0 ? null : ItemDb.get(l2[1], (int) r2);
 
 				if (m1)
 				{
@@ -102,7 +104,7 @@ public class EssentialsEcoBlockListener extends BlockListener
 		User user = ess.getUser(event.getPlayer());
 		String username = user.getName().substring(0, user.getName().length() > 14 ? 14 : user.getName().length());
 
-		if (event.getLine(0).equalsIgnoreCase("[Buy]") && user.isAuthorized("essentials.signs.buy.create"))
+		if (event.getLine(0).equalsIgnoreCase("[Buy]") || event.getLine(0).equalsIgnoreCase("#1[Buy]") && user.isAuthorized("essentials.signs.buy.create"))
 		{
 			try
 			{
@@ -113,7 +115,9 @@ public class EssentialsEcoBlockListener extends BlockListener
 				{
 					throw new Exception("Don't sell air.");
 				}
-				event.setLine(3, "$" + Integer.parseInt(event.getLine(3).replaceAll("[^0-9]", "")));
+                                String d = df.format (Double.parseDouble(event.getLine(3).replaceAll("[^0-9\\.]", "")));
+                                Double dbl = new Double (d);
+				event.setLine(3, "$" + (double) dbl);
 			}
 			catch (Throwable ex)
 			{
@@ -126,7 +130,7 @@ public class EssentialsEcoBlockListener extends BlockListener
 			return;
 		}
 
-		if (event.getLine(0).equalsIgnoreCase("[Sell]") && user.isAuthorized("essentials.signs.sell.create"))
+		if (event.getLine(0).equalsIgnoreCase("[Sell]") || event.getLine(0).equalsIgnoreCase("#1[Sell]") && user.isAuthorized("essentials.signs.sell.create"))
 		{
 			try
 			{
@@ -137,7 +141,9 @@ public class EssentialsEcoBlockListener extends BlockListener
 				{
 					throw new Exception("Don't buy air.");
 				}
-				event.setLine(3, "$" + Integer.parseInt(event.getLine(3).replaceAll("[^0-9]", "")));
+                                String d = df.format (Double.parseDouble(event.getLine(3).replaceAll("[^0-9\\.]", "")));
+                                Double dbl = new Double (d);
+				event.setLine(3, "$" + (double) dbl);
 			}
 			catch (Throwable ex)
 			{
@@ -150,17 +156,17 @@ public class EssentialsEcoBlockListener extends BlockListener
 			return;
 		}
 
-		if (event.getLine(0).equalsIgnoreCase("[Trade]") && user.isAuthorized("essentials.signs.trade.create"))
+		if (event.getLine(0).equalsIgnoreCase("[Trade]") || event.getLine(0).equalsIgnoreCase("#1[Trade]") && user.isAuthorized("essentials.signs.trade.create"))
 		{
 			try
 			{
 				String[] l1 = event.getLines()[1].split("[ :-]+");
 				String[] l2 = event.getLines()[2].split("[ :-]+");
-				boolean m1 = l1[0].matches("\\$[0-9]+");
-				boolean m2 = l2[0].matches("\\$[0-9]+");
-				int q1 = Integer.parseInt(m1 ? l1[0].substring(1) : l1[0]);
-				int q2 = Integer.parseInt(m2 ? l2[0].substring(1) : l2[0]);
-				int r2 = Integer.parseInt(l2[m2 ? 1 : 2]);
+				boolean m1 = l1[0].matches("\\$[0-9]+(\\.[0-9]+)?");
+				boolean m2 = l2[0].matches("\\$[0-9]+(\\.[0-9]+)?");
+				double q1 = Double.parseDouble(m1 ? l1[0].substring(1) : l1[0]);
+				double q2 = Double.parseDouble(m2 ? l2[0].substring(1) : l2[0]);
+				double r2 = Double.parseDouble(l2[m2 ? 1 : 2]);
 				r2 = r2 - r2 % q2;
 				if (q1 < 1 || q2 < 1 || r2 < 1)
 				{
@@ -182,7 +188,7 @@ public class EssentialsEcoBlockListener extends BlockListener
 				}
 				else
 				{
-					ItemStack i2 = ItemDb.get(l2[1], r2);
+					ItemStack i2 = ItemDb.get(l2[1], (int) r2);
 					if (!InventoryWorkaround.containsItem(user.getInventory(), true, i2))
 					{
 						throw new Exception("You do not have " + r2 + "x " + l2[1] + ".");
