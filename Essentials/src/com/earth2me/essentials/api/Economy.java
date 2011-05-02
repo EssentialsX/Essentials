@@ -1,5 +1,8 @@
-package com.earth2me.essentials;
+package com.earth2me.essentials.api;
 
+import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -8,11 +11,10 @@ import java.text.DecimalFormat;
 import org.bukkit.Bukkit;
 
 
-
-public class EcoAPI
+public class Economy
 {
-	protected static Essentials ess=Essentials.getStatic();
-	
+	protected static Essentials ess = Essentials.getStatic();
+
 	//Does the file exists?
 	protected static boolean accountCreated(String name)
 	{
@@ -29,7 +31,7 @@ public class EcoAPI
 
 		File folder = new File(ess.getDataFolder(), "userdata");
 		File npcFile = new File(folder, name + ".yml");
-		
+
 		try
 		{
 			if (!npcFile.createNewFile())
@@ -125,7 +127,7 @@ public class EcoAPI
 		{
 			if (accountCreated(name))
 			{
-				User user = usrConv(name);				
+				User user = usrConv(name);
 				return user.getMoney();
 			}
 			return 0;
@@ -314,7 +316,6 @@ public class EcoAPI
 	//Eco remove account, only use this for NPCS!
 	public static void removeAccount(String name)
 	{
-
 		if (!exist(name))
 		{
 			if (accountCreated(name))

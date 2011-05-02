@@ -1,6 +1,5 @@
 package com.earth2me.essentials;
 
-import java.text.DecimalFormat;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.craftbukkit.block.CraftSign;
@@ -12,7 +11,6 @@ import org.bukkit.inventory.ItemStack;
 
 public class EssentialsEcoBlockListener extends BlockListener
 {
-	public static DecimalFormat df = new DecimalFormat("0.##");
 	Essentials ess;
 
 	public EssentialsEcoBlockListener(Essentials ess)
@@ -116,8 +114,8 @@ public class EssentialsEcoBlockListener extends BlockListener
 				{
 					throw new Exception("Don't sell air.");
 				}
-				String d = df.format(Double.parseDouble(event.getLine(3).replaceAll("[^0-9\\.]", "")));
-				event.setLine(3, "$" + d);
+				double price = Double.parseDouble(event.getLine(3).replaceAll("[^0-9\\.]", ""));
+				event.setLine(3, Util.formatCurrency(price));
 			}
 			catch (Throwable ex)
 			{
@@ -141,8 +139,8 @@ public class EssentialsEcoBlockListener extends BlockListener
 				{
 					throw new Exception("Don't buy air.");
 				}
-				String d = df.format(Double.parseDouble(event.getLine(3).replaceAll("[^0-9\\.]", "")));
-				event.setLine(3, "$" + d);
+				double price = Double.parseDouble(event.getLine(3).replaceAll("[^0-9\\.]", ""));
+				event.setLine(3, Util.formatCurrency(price));
 			}
 			catch (Throwable ex)
 			{

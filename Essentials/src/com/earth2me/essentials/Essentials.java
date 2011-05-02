@@ -41,6 +41,7 @@ public class Essentials extends JavaPlugin
 	private Backup backup;
 	private Map<String, User> users = new HashMap<String, User>();
 	private EssentialsTimer timer;
+	private boolean iConomyFallback = true;
 
 	public Essentials()
 	{
@@ -604,5 +605,13 @@ public class Essentials extends JavaPlugin
 			return w;
 		}
 		return null;
+	}
+		
+	public void setIConomyFallback(boolean iConomyFallback) {
+		this.iConomyFallback = iConomyFallback;
+	}
+	
+	public boolean isIConomyFallbackEnabled() {
+		return iConomyFallback;
 	}
 }

@@ -1,39 +1,58 @@
 package com.nijiko.coelho.iConomy;
 
+import com.earth2me.essentials.Essentials;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.nijiko.coelho.iConomy.system.Bank;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 
-//This is not iConomy and I take NO credit for iConomy!
-//This is FayConomy, a iConomy Essentials Eco bridge!
-//@author Xeology
+/**
+ * This is not iConomy and I take NO credit for iConomy!
+ * This is FayConomy, a iConomy Essentials Eco bridge!
+ * @author Xeology
+ */
 
-//Pretend we are iConomy
+public class iConomy extends JavaPlugin
+{
+	public static Bank Bank = null;
+	private static final Logger logger = Logger.getLogger("Minecraft");
 
-public class iConomy extends JavaPlugin{
-	public static Bank Bank=null;
-
-	//This is for the Essentials to detect FayConomy!
-
-	public static boolean isFay(){
-		return true;
+	@Override
+	public void onDisable()
+	{
 	}
 
 	@Override
-	public void onDisable() {		
-	}
+	public void onEnable()
+	{
+		PluginManager pm = this.getServer().getPluginManager();
+		Plugin p = pm.getPlugin("Essentials");
+		if (p != null)
+		{
+			if (!pm.isPluginEnabled(p))
+			{
+				pm.enablePlugin(p);
+			}
+		}
 
-	@Override
-	public void onEnable() {
-		Bank=new Bank();
+		String version = this.getDescription().getDescription().replaceAll(".*: ", "");
+		if (!version.equals(Essentials.getStatic().getDescription().getVersion()))
+		{
+			logger.log(Level.WARNING, "Version mismatch! Please update all Essentials jars to the same version.");
+		}
+		Essentials.getStatic().setIConomyFallback(false);
 
-		//Can not announce my plugin.yml file, this is NOT iConomy!
+		Bank = new Bank();
 		
-		System.out.println("Essentials iConomy Bridge v1.0 iz in ur Bukkitz emulating ur iConomyz!");
+		logger.info("Loaded " + this.getDescription().getDescription() + " by " + Essentials.AUTHORS);
+		logger.info("Make sure you don't have iConomy installed, if you use this.");
 	}
-	
+
 	//Fake bank
-	
-    public static Bank getBank() {
-        return Bank;
-    }
+	public static Bank getBank()
+	{
+		return Bank;
+	}
 }

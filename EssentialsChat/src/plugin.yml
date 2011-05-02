@@ -5,4 +5,4 @@ main: com.earth2me.essentials.chat.EssentialsChat
 version: TeamCity
 website: http://www.earth2me.net:8001/
 description: Provides chat control features for Essentials.  Requires Permissions.
-authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo]
+authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology]

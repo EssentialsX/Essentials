@@ -4,13 +4,13 @@ import org.bukkit.Server;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.ItemDb;
 import com.earth2me.essentials.User;
-import java.text.DecimalFormat;
+import com.earth2me.essentials.Util;
 import org.bukkit.inventory.ItemStack;
 
 
 public class Commandworth extends EssentialsCommand
 {
-	private static DecimalFormat df = new DecimalFormat("0.##");
+	
 	public Commandworth()
 	{
 		super("worth");
@@ -46,9 +46,10 @@ public class Commandworth extends EssentialsCommand
 			throw new Exception("That item cannot be sold to the server.");
 		}
 
-		user.charge(this);
-		String d = df.format(Double.parseDouble(Double.toString(worth)));
-		String d2 = df.format(Double.parseDouble(Double.toString(Double.parseDouble(d)*amount)));		
-		user.sendMessage("§7Stack of " + is.getType().toString().toLowerCase().replace("_", "") + " worth §c$" + d2 + "§7 (" + amount + " item(s) at $" + d + " each)");
+		user.charge(this);		
+		user.sendMessage("§7Stack of " 
+				+ is.getType().toString().toLowerCase().replace("_", "") 
+				+ " worth §c$" + Util.formatCurrency(worth*amount) + "§7 (" 
+				+ amount + " item(s) at $" + Util.formatCurrency(worth) + " each)");
 	}
 }

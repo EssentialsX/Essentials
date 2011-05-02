@@ -125,7 +125,7 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 						user.updateInventory();
 					}
 					r1 = 0;
-					sign.setLine(1, (m1 ? "$" + q1 : q1 + " " + l1[1]) + ":" + r1);
+					sign.setLine(1, (m1 ? Util.formatCurrency(q1) : (int)q1 + " " + l1[1]) + ":" + r1);
 				}
 				else
 				{
@@ -177,8 +177,8 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 					r2 -= q2;
 
 					sign.setLine(0, "§1[Trade]");
-					sign.setLine(1, (m1 ? "$" + q1 : q1 + " " + l1[1]) + ":" + r1);
-					sign.setLine(2, (m2 ? "$" + q2 : q2 + " " + l2[1]) + ":" + r2);
+					sign.setLine(1, (m1 ? Util.formatCurrency(q1) : (int)q1 + " " + l1[1]) + ":" + r1);
+					sign.setLine(2, (m2 ? Util.formatCurrency(q2) : (int)q2 + " " + l2[1]) + ":" + r2);
 
 					user.sendMessage("§7Trade completed.");
 				}

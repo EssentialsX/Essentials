@@ -63,28 +63,33 @@ public abstract class UserData extends PlayerExtension implements IConf
 		{
 			return config.getDouble("money", ess.getSettings().getStartingBalance());
 		}
-
-		try
+		if (ess.isIConomyFallbackEnabled())
 		{
-			return com.nijiko.coelho.iConomy.iConomy.getBank().getAccount(getName()).getBalance();
+			try
+			{
+				return com.nijiko.coelho.iConomy.iConomy.getBank().getAccount(getName()).getBalance();
+			}
+			catch (Throwable ex)
+			{	
+			}
 		}
-		catch (Throwable ex)
-		{
-			return ess.getSettings().getStartingBalance();
-		}
+		return ess.getSettings().getStartingBalance();
 	}
 
 	public void setMoney(double value)
 	{
-		try
+		if (ess.isIConomyFallbackEnabled())
 		{
-			com.nijiko.coelho.iConomy.iConomy.getBank().getAccount(getName()).setBalance(value);
+			try
+			{
+				com.nijiko.coelho.iConomy.iConomy.getBank().getAccount(getName()).setBalance(value);
+			}
+			catch (Throwable ex)
+			{
+			}
 		}
-		catch (Throwable ex)
-		{
-			config.setProperty("money", value);
-			config.save();
-		}
+		config.setProperty("money", value);
+		config.save();
 	}
 
 	public boolean hasHome()
