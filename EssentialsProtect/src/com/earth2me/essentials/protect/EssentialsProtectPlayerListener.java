@@ -12,9 +12,6 @@ import org.bukkit.inventory.ItemStack;
 public class EssentialsProtectPlayerListener extends PlayerListener
 {
 	private EssentialsProtect parent;
-	private int signBlockX;
-	private int signBlockY;
-	private int signBlockZ;
 	private EssentialsProtectData spData = null;
 
 	public EssentialsProtectPlayerListener(EssentialsProtect parent)

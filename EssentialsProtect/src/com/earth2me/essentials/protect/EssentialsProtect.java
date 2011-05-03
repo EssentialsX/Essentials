@@ -21,6 +21,7 @@ public class EssentialsProtect extends JavaPlugin
 	private EssentialsProtectPlayerListener playerListener = null;
 	private EssentialsProtectEntityListener entityListener = null;
 	private EssentialsProtectWeatherListener weatherListener = null;
+	private EssentialsProtectServerListener serverListener = null;
 	public static final String AUTHORS = Essentials.AUTHORS;
 	private static final Logger logger = Logger.getLogger("Minecraft");
 	public static HashMap<String, Boolean> genSettings = null;
@@ -49,19 +50,31 @@ public class EssentialsProtect extends JavaPlugin
 		blockListener = new EssentialsProtectBlockListener(this);
 		entityListener = new EssentialsProtectEntityListener(this);
 		weatherListener = new EssentialsProtectWeatherListener(this);
+		serverListener = new EssentialsProtectServerListener(this);
+		
 		pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Priority.Low, this);
+		
+		//blocklistener
 		pm.registerEvent(Type.BLOCK_PLACE, blockListener, Priority.Highest, this);
 		pm.registerEvent(Type.BLOCK_FROMTO, blockListener, Priority.Highest, this);
 		pm.registerEvent(Type.BLOCK_IGNITE, blockListener, Priority.Highest, this);
 		pm.registerEvent(Type.BLOCK_BURN, blockListener, Priority.Highest, this);
+		pm.registerEvent(Type.BLOCK_BREAK, blockListener, Priority.Highest, this);
+		
+		//entitylistener
 		pm.registerEvent(Type.ENTITY_EXPLODE, entityListener, Priority.Highest, this);
 		pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Priority.Highest, this);
 		pm.registerEvent(Type.ENTITY_TARGET, entityListener, Priority.Highest, this);
-		pm.registerEvent(Type.BLOCK_BREAK, blockListener, Priority.Highest, this);
 		pm.registerEvent(Type.CREATURE_SPAWN, entityListener, Priority.Highest, this);
+
+		//weatherlistener
 		pm.registerEvent(Type.WEATHER_CHANGE, weatherListener, Priority.Highest, this);
 		pm.registerEvent(Type.THUNDER_CHANGE, weatherListener, Priority.Highest, this);
 		pm.registerEvent(Type.LIGHTNING_STRIKE, weatherListener, Priority.Highest, this);
+		
+		//serverlistener
+		pm.registerEvent(Type.PLUGIN_ENABLE, serverListener, Priority.Highest, this);
+	
 		loadSettings();
 		if (!this.getDescription().getVersion().equals(Essentials.getStatic().getDescription().getVersion()))
 		{
