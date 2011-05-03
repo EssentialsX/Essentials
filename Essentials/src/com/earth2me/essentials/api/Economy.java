@@ -285,7 +285,7 @@ public class Economy
 		}
 		getCurrency();
 		getCurrencyPlural();
-		return formed + " " + ((amount <= 1 && amount >= -1) ? ess.getSettings().getCurrency() : ess.getSettings().getCurrency());
+		return formed + " " + ((amount <= 1 && amount >= -1) ? ess.getSettings().getCurrency() : ess.getSettings().getCurrencyPlural());
 	}
 
 	//************************!WARNING!**************************
