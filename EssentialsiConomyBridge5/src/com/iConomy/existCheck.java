@@ -21,7 +21,7 @@ public class existCheck
 		{
 			return true;
 		}
-		double amount=12;
+		double amount = 12;
 		return false;
 	}
 }

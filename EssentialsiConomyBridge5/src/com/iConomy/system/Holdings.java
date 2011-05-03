@@ -27,13 +27,16 @@ public class Holdings
 		this.bankId = id;
 		this.name = name;
 	}
-	    public boolean isBank() {
-        return bank;
-    }
 
-    public double balance() {
-        return get();
-    }
+	public boolean isBank()
+	{
+		return bank;
+	}
+
+	public double balance()
+	{
+		return get();
+	}
 
 	public double get()
 	{

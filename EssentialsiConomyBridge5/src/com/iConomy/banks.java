@@ -1,16 +1,13 @@
-
 package com.iConomy;
 
 import com.earth2me.essentials.api.Economy;
 
 
-
 public class banks
 {
-	
-	
-	public int count(String name){
-		int count=0;
+	public int count(String name)
+	{
+		int count = 0;
 		int breaker = 0;
 		for (int ctr = 1; breaker != 1; ctr++)
 		{
@@ -34,20 +31,7 @@ public class banks
 				breaker = 1;
 			}
 		}
-					
-		return count;	
+
+		return count;
 	}
-
-
 }
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-

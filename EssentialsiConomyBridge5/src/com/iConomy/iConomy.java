@@ -18,7 +18,7 @@ import org.bukkit.plugin.PluginManager;
  */
 public class iConomy extends JavaPlugin
 {
-	public static Bank Bank=null;
+	public static Bank Bank = null;
 	public static boolean Banking = true;
 	public static boolean BankingMultiple = true;
 	private static final Logger logger = Logger.getLogger("Minecraft");
@@ -31,7 +31,7 @@ public class iConomy extends JavaPlugin
 	@Override
 	public void onEnable()
 	{
-		Bank=new Bank("hello");
+		Bank = new Bank("hello");
 		PluginManager pm = this.getServer().getPluginManager();
 		Plugin p = pm.getPlugin("Essentials");
 		if (p != null)
@@ -65,7 +65,7 @@ public class iConomy extends JavaPlugin
 	{
 		return Economy.format(amount);
 	}
-	
+
 	public static String format(String account)
 	{
 		return getAccount(account).getHoldings().toString();
@@ -77,7 +77,7 @@ public class iConomy extends JavaPlugin
 	}
 
 	public static Account getAccount(String name)
-	{	
+	{
 		return Bank.getAccount(name);
 
 	}

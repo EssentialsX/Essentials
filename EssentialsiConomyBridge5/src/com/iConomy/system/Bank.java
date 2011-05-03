@@ -8,13 +8,13 @@ public class Bank
 {
 	private String id = null;
 	private String name = null;
-	
+
 	public Bank(String name)
 	{
 		this.id = name;
 		this.name = name;
 	}
-	
+
 	//Fake currency!
 	public String getCurrency()
 	{

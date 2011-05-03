@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 public class Account
 {
-
 	private String name;
 
 	public Holdings getHoldings()
@@ -101,7 +100,5 @@ public class Account
 		return bank;
 
 
-	}	
-
-
+	}
 }
