@@ -59,14 +59,14 @@ public class Commandwarp extends EssentialsCommand
 			{
 				if (user.isAuthorized("essentials.warp." + args[0]))
 				{
-					user.canAfford(this);
+					user.charge(this);
 					user.getTeleport().warp(args[0], this.getName());
 					return;
 				}
 				user.sendMessage("§cYou do not have Permission to use that warp.");
 				return;
 			}
-			user.canAfford(this);
+			user.charge(this);
 			user.getTeleport().warp(args[0], this.getName());
 		}
 		catch (Exception ex)
