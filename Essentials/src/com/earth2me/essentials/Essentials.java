@@ -23,7 +23,7 @@ import org.bukkit.plugin.java.*;
 public class Essentials extends JavaPlugin
 {
 	public static final String AUTHORS = "Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo and ceulemans.";
-	public static final int minBukkitBuildVersion = 733;
+	public static final int minBukkitBuildVersion = 740;
 	private static final Logger logger = Logger.getLogger("Minecraft");
 	private Settings settings;
 	private EssentialsPlayerListener playerListener;
@@ -304,6 +304,22 @@ public class Essentials extends JavaPlugin
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args)
 	{
+
+		if ("msg".equals(commandLabel.toLowerCase()) || "mail".equals(commandLabel.toLowerCase()) &  sender instanceof Player)
+		{
+			StringBuilder str = new StringBuilder();
+			for (String a : args)
+			{
+				str.append(a + " ");
+			}
+			for (Player player : getServer().getOnlinePlayers())
+			{
+				if (getUser(player).isSocialSpyEnabled())
+				{
+					player.sendMessage(getUser(sender).getDisplayName() + " : " + str);
+				}
+			}
+		}
 		// Allow plugins to override the command via onCommand
 		if (!getSettings().isCommandOverridden(command.getName()) && !commandLabel.startsWith("e"))
 		{

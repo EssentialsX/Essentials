@@ -55,6 +55,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		lastLogout = _getLastLogout();
 		afk = getAfk();
 		geolocation = _getGeoLocation();
+		isSocialSpyEnabled = _isSocialSpyEnabled();
 	}
 
 	public double getMoney()
@@ -391,6 +392,12 @@ public abstract class UserData extends PlayerExtension implements IConf
 		setTeleportEnabled(ret);
 		return ret;
 	}
+	public boolean toggleSocialSpy()
+	{
+		boolean ret = !isSocialSpyEnabled();
+		setSocialSpyEnabled(ret);
+		return ret;
+	}
 	private List<String> ignoredPlayers;
 
 	public List<String> getIgnoredPlayers()
@@ -668,6 +675,24 @@ public abstract class UserData extends PlayerExtension implements IConf
 			this.geolocation = geolocation;
 			config.setProperty("geolocation", geolocation);
 		}
+		config.save();
+	}
+	
+	private boolean isSocialSpyEnabled;
+	
+	private boolean _isSocialSpyEnabled()
+	{
+		return config.getBoolean("socialspy", false);
+	}
+	
+	public boolean isSocialSpyEnabled()
+	{
+		return isSocialSpyEnabled;
+	}
+	
+	public void setSocialSpyEnabled(Boolean status)
+	{
+		config.setProperty("socialspy", status);
 		config.save();
 	}
 }
