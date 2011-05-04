@@ -11,7 +11,7 @@ groups:
     inheritance: []
     info:
       prefix: '&e'
-      build: false
+      build: true
       suffix: ''
   SemiAdmin:
     default: false
