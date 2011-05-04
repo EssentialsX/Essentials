@@ -24,19 +24,43 @@ public class Commandsell extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 		ItemStack is;
+		ItemStack[] isArray;
 		if (args[0].equalsIgnoreCase("hand"))
 		{
 			is = user.getItemInHand();
+
+		}
+		if (args[0].equalsIgnoreCase("inventory"))
+		{
+			for (ItemStack stack : user.getInventory().getContents())
+			{
+				if(stack.getType() == Material.AIR) continue;
+				sellItem(user, stack, args);
+			}
+			return;
+		}
+		if (args[0].equalsIgnoreCase("blocks"))
+		{
+			for (ItemStack stack : user.getInventory().getContents())
+			{
+				if (stack.getTypeId() > 255 || stack.getType() == Material.AIR) continue;
+				sellItem(user, stack, args);
+			}
+			return;
 		}
 		else
 		{
 			is = ItemDb.get(args[0]);
 		}
+		sellItem(user, is, args);
+	}
+
+	private void sellItem(User user, ItemStack is, String[] args) throws Exception
+	{
 		if (is == null || is.getType() == Material.AIR)
 		{
 			throw new Exception("You really tried to sell Air? Put an item in your hand.");
 		}
-
 		int id = is.getTypeId();
 		int amount = 0;
 		if (args.length > 1)
