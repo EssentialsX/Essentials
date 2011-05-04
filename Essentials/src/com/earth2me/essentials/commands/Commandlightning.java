@@ -4,6 +4,7 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
@@ -15,32 +16,38 @@ public class Commandlightning extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
 
-		World world = user.getWorld();
-		if (args.length < 1)
+		User user = null;
+		if (sender instanceof Player)
 		{
-			world.strikeLightning(user.getTargetBlock(null, 600).getLocation());
+			user = ess.getUser(((Player)sender));
+		}
+		if (args.length < 1 & user != null)
+		{
+			user.getWorld().strikeLightning(user.getTargetBlock(null, 600).getLocation());
+			user.charge(this);
 			return;
 		}
 
 		if (server.matchPlayer(args[0]).isEmpty())
 		{
-			user.sendMessage("§cPlayer not found");
+			sender.sendMessage("§cPlayer not found");
 			return;
 		}
 
 		for (Player p : server.matchPlayer(args[0]))
 		{
-			user.sendMessage("§7Smiting " + p.getDisplayName());
-			world.strikeLightning(p.getLocation());
-			p.setHealth(p.getHealth() < 5 ? 0 : p.getHealth() -5);
-			if(ess.getSettings().warnOnSmite())
+			sender.sendMessage("§7Smiting " + p.getDisplayName());
+			p.getWorld().strikeLightning(p.getLocation());
+			p.setHealth(p.getHealth() < 5 ? 0 : p.getHealth() - 5);
+			if (ess.getSettings().warnOnSmite())
 			{
-			p.sendMessage("§7You have just been smited");
+				p.sendMessage("§7You have just been smited");
 			}
 		}
-		user.charge(this);
+		if (user != null)
+			user.charge(this);
 	}
 }
