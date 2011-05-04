@@ -260,6 +260,6 @@ public class Util
 	
 	private static DecimalFormat df = new DecimalFormat("0.##");
 	public static String formatCurrency(double value) {
-		return "$"+df.format(value);
+		return "$"+Double.valueOf(df.format(value));
 	}
 }

@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import java.text.DecimalFormat;
 import org.bukkit.command.CommandSender;
 
@@ -21,8 +22,7 @@ public class Commandbalance extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		String d = df.format(Double.parseDouble(Double.toString(getPlayer(server, args, 0).getMoney())));
-		sender.sendMessage("§7Balance: $" + d);
+		sender.sendMessage("§7Balance: " + Util.formatCurrency(getPlayer(server, args, 0).getMoney()));
 	}
 
 	@Override
@@ -32,7 +32,6 @@ public class Commandbalance extends EssentialsCommand
 		double bal = (args.length < 1 || !user.isAuthorized("essentials.balance.other")
 										   ? user
 										   : getPlayer(server, args, 0)).getMoney();
-		String d = df.format(Double.parseDouble(Double.toString(bal)));
-		user.sendMessage("§7Balance: $" + d);
+		user.sendMessage("§7Balance: " + Util.formatCurrency(bal));
 	}
 }

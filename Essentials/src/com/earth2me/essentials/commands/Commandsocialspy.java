@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
+
 
 
 public class Commandsocialspy extends EssentialsCommand

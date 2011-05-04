@@ -53,8 +53,8 @@ public class EssentialsEcoBlockListener extends BlockListener
 				String[] l2 = sign.getLines()[2].split("[ :-]+");
 				boolean m1 = l1[0].matches("\\$[0-9]+(\\.[0-9]+)?");
 				boolean m2 = l2[0].matches("\\$[0-9]+(\\.[0-9]+)?");
-				double q1 = Double.parseDouble(m1 ? l1[0].substring(1) : l1[0]);
-				double q2 = Double.parseDouble(m2 ? l2[0].substring(1) : l2[0]);
+				int q1 = Integer.parseInt(m1 ? l1[0].substring(1) : l1[0]);
+				int q2 = Integer.parseInt(m2 ? l2[0].substring(1) : l2[0]);
 				double r1 = Double.parseDouble(l1[m1 ? 1 : 2]);
 				double r2 = Double.parseDouble(l2[m2 ? 1 : 2]);
 				if (q1 < 1 || q2 < 1)
@@ -137,7 +137,7 @@ public class EssentialsEcoBlockListener extends BlockListener
 				ItemStack is = ItemDb.get(event.getLine(2));
 				if (is.getTypeId() == 0 || Math.abs(Integer.parseInt(event.getLine(1))) == 0)
 				{
-					throw new Exception("Don't buy air.");
+					throw new Exception("Can't buy air.");
 				}
 				double price = Double.parseDouble(event.getLine(3).replaceAll("[^0-9\\.]", ""));
 				event.setLine(3, Util.formatCurrency(price));
@@ -161,8 +161,8 @@ public class EssentialsEcoBlockListener extends BlockListener
 				String[] l2 = event.getLines()[2].split("[ :-]+");
 				boolean m1 = l1[0].matches("\\$[0-9]+(\\.[0-9]+)?");
 				boolean m2 = l2[0].matches("\\$[0-9]+(\\.[0-9]+)?");
-				double q1 = Double.parseDouble(m1 ? l1[0].substring(1) : l1[0]);
-				double q2 = Double.parseDouble(m2 ? l2[0].substring(1) : l2[0]);
+				int q1 = Integer.parseInt(m1 ? l1[0].substring(1) : l1[0]);
+				int q2 = Integer.parseInt(m2 ? l2[0].substring(1) : l2[0]);
 				double r2 = Double.parseDouble(l2[m2 ? 1 : 2]);
 				r2 = r2 - r2 % q2;
 				if (q1 < 1 || q2 < 1 || r2 < 1)
