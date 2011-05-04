@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.User;
 import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
 
 
 public class Commandrules extends EssentialsCommand
@@ -12,12 +12,12 @@ public class Commandrules extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
-		charge(user);
-		for (String m : ess.getLines(user, "rules", "§cThere are no rules specified yet."))
+		charge(sender);
+		for (String m : ess.getLines(sender, "rules", "§cThere are no rules specified yet."))
 		{
-			user.sendMessage(m);
+			sender.sendMessage(m);
 		}
 	}
 }
