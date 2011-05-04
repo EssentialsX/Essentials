@@ -251,6 +251,7 @@ public class Essentials extends JavaPlugin
 				m = m.replace("{PLAYER}", user.getDisplayName());
 				m = m.replace("{IP}", user.getAddress().toString());
 				m = m.replace("{BALANCE}", Double.toString(user.getMoney()));
+				m = m.replace("{MAILS}", Integer.toString(user.getMails().size()));
 			}
 
 			m = m.replace("{ONLINE}", Integer.toString(getServer().getOnlinePlayers().length));
