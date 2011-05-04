@@ -4,6 +4,7 @@ import org.bukkit.Server;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Warps;
+import org.bukkit.command.CommandSender;
 
 
 public class Commandwarp extends EssentialsCommand
@@ -16,7 +17,7 @@ public class Commandwarp extends EssentialsCommand
 	@Override
 	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		boolean perWarpPermission = ess.getSettings().getPerWarpPermission();
+
 		if (args.length == 0)
 		{
 			if (!user.isAuthorized("essentials.warp.list"))
@@ -34,7 +35,7 @@ public class Commandwarp extends EssentialsCommand
 			int i = 0;
 			for (String warpName : warps.getWarpNames())
 			{
-				if (perWarpPermission)
+				if (ess.getSettings().getPerWarpPermission())
 				{
 					if (user.isAuthorized("essentials.warp." + warpName))
 					{
@@ -52,26 +53,37 @@ public class Commandwarp extends EssentialsCommand
 			user.sendMessage(sb.toString());
 			return;
 		}
-
-		try
+		if (args.length > 0)
 		{
-			if (perWarpPermission)
+			User otherUser = null;
+			if (args.length == 2 && user.isAuthorized("essentials.warp.otherplayers"))
 			{
-				if (user.isAuthorized("essentials.warp." + args[0]))
+				otherUser = ess.getUser(server.getPlayer(args[1]));
+				if(otherUser == null)
 				{
-					user.charge(this);
-					user.getTeleport().warp(args[0], this.getName());
+					user.sendMessage("§cPlayer not found");
 					return;
 				}
-				user.sendMessage("§cYou do not have Permission to use that warp.");
+				warpUser(otherUser, args[0]);
+			}
+			warpUser(user, args[0]);
+		}
+	}
+
+	private void warpUser(User user, String name) throws Exception
+	{
+		if (ess.getSettings().getPerWarpPermission())
+		{
+			if (user.isAuthorized("essentials.warp." + name))
+			{
+				charge(user);
+				user.getTeleport().warp(name, this.getName());
 				return;
 			}
-			user.charge(this);
-			user.getTeleport().warp(args[0], this.getName());
+			user.sendMessage("§cYou do not have Permission to use that warp.");
+			return;
 		}
-		catch (Exception ex)
-		{
-			user.sendMessage(ex.getMessage());
-		}
+		charge(user);
+		user.getTeleport().warp(name, this.getName());
 	}
 }
