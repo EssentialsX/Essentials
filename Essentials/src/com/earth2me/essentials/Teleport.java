@@ -87,11 +87,12 @@ public class Teleport implements Runnable
 				user.sendMessage("§7Teleportation commencing...");
 				try
 				{
+					
+					now(teleportTarget);
 					if (chargeFor != null)
 					{
 						user.charge(chargeFor);
 					}
-					now(teleportTarget);
 				}
 				catch (Throwable ex)
 				{
@@ -188,11 +189,11 @@ public class Teleport implements Runnable
 		cooldown(true);
 		if (delay <= 0 || user.isAuthorized("essentials.teleport.timer.bypass"))
 		{
+			now(target);
 			if (chargeFor != null)
 			{
 				user.charge(chargeFor);
 			}
-			now(target);
 			return;
 		}
 

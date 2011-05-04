@@ -65,6 +65,7 @@ public class Commandwarp extends EssentialsCommand
 					return;
 				}
 				warpUser(otherUser, args[0]);
+				return;
 			}
 			warpUser(user, args[0]);
 		}
@@ -76,14 +77,12 @@ public class Commandwarp extends EssentialsCommand
 		{
 			if (user.isAuthorized("essentials.warp." + name))
 			{
-				charge(user);
 				user.getTeleport().warp(name, this.getName());
 				return;
 			}
 			user.sendMessage("§cYou do not have Permission to use that warp.");
 			return;
 		}
-		charge(user);
 		user.getTeleport().warp(name, this.getName());
 	}
 }
