@@ -208,7 +208,7 @@ commands:
     usage: /<command> [playername]
   sell:
     description: Sells the item currently in your hand.
-    usage: /<command> [itemname|id|hand] [-][amount]
+    usage: /<command> [itemname|id|hand|inventory|blocks] [-][amount]
     aliases: [esell]
   sethome:
     description: Set your home to your current location.

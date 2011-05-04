@@ -23,18 +23,16 @@ public class Commandsell extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		ItemStack is;
-		ItemStack[] isArray;
+		ItemStack is = null;
 		if (args[0].equalsIgnoreCase("hand"))
 		{
 			is = user.getItemInHand();
-
 		}
 		if (args[0].equalsIgnoreCase("inventory"))
 		{
 			for (ItemStack stack : user.getInventory().getContents())
 			{
-				if(stack.getType() == Material.AIR) continue;
+				if (stack == null || stack.getType() == Material.AIR) continue;
 				sellItem(user, stack, args);
 			}
 			return;
@@ -43,12 +41,12 @@ public class Commandsell extends EssentialsCommand
 		{
 			for (ItemStack stack : user.getInventory().getContents())
 			{
-				if (stack.getTypeId() > 255 || stack.getType() == Material.AIR) continue;
+				if (stack == null || stack.getTypeId() > 255 || stack.getType() == Material.AIR) continue;
 				sellItem(user, stack, args);
 			}
 			return;
 		}
-		else
+		if (is == null)
 		{
 			is = ItemDb.get(args[0]);
 		}
