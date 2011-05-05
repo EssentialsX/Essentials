@@ -592,8 +592,9 @@ public class Essentials extends JavaPlugin
 		File userFolder = new File(getDataFolder(), "userdata");
 		File userFile = new File(userFolder, Util.sanitizeFileName(name) + ".yml");
 		if (userFile.exists())
-		{
-			return new User(new OfflinePlayer(name), this);
+		{	//Users do not get offline changes saved without being reproccessed as Users! ~ Xeology :)
+			User user=getUser((Player) new OfflinePlayer(name));
+			return user;
 		}
 		return null;
 	}
