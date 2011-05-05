@@ -4,6 +4,7 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.inventory.ItemStack;
@@ -51,7 +52,7 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 			return;
 		}
 
-		if (user.isAuthorized("essentials.protect.ownerinfo"))
+		if (event.getAction() == Action.RIGHT_CLICK_BLOCK && user.isAuthorized("essentials.protect.ownerinfo"))
 		{
 			String ownerName = spData.getBlockOwner(user.getWorld().getName(), user.getName(),
 													blockClicked);
