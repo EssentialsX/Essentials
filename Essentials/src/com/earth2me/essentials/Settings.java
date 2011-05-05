@@ -50,12 +50,12 @@ public class Settings implements IConf
 	
 	public String getCurrency()
 	{
-		return config.getString("currencyName", "Coin");
+		return config.getString("currency-name", "Coin");
 	}
 	
 	public String getCurrencyPlural()
 	{
-		return config.getString("currencyNamePlural", "Coins");
+		return config.getString("currency-name-plural", "Coins");
 	}
 	
 	public int getStartingBalance()
@@ -66,16 +66,6 @@ public class Settings implements IConf
 	public boolean getNetherPortalsEnabled()
 	{
 		return isNetherEnabled() && config.getBoolean("nether.portals-enabled", false);
-	}
-
-	public String getMcslKey()
-	{
-		return config.getString("mcsl-key", "").replaceAll("[^a-zA-Z0-9]", "");
-	}
-
-	public boolean getWhitelistEnabled()
-	{
-		return false;
 	}
 
 	public boolean isCommandDisabled(IEssentialsCommand cmd)
