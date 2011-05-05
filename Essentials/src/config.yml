@@ -222,8 +222,8 @@ command-costs:
  # kit-tools: 1500
  
  #This defines the name of your currencies, in singular and plural
- currencyName: Coin
- currencyNamePlural: Coins
+currencyName: Coin
+currencyNamePlural: Coins
 
 
 
