@@ -156,6 +156,8 @@ public class Settings implements IConf
 
 		if (colorName == null)
 			return ChatColor.RED;
+		if("none".equalsIgnoreCase(colorName))
+			return ChatColor.WHITE;
 
 		try
 		{
