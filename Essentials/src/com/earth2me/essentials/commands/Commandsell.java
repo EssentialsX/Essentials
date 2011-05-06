@@ -5,6 +5,7 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.InventoryWorkaround;
 import com.earth2me.essentials.ItemDb;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -126,6 +127,6 @@ public class Commandsell extends EssentialsCommand
 		InventoryWorkaround.removeItem(user.getInventory(), true, new ItemStack(is.getType(), amount, is.getDurability()));
 		user.updateInventory();
 		user.giveMoney(worth * amount);
-		user.sendMessage("§7Sold for §c$" + (worth * amount) + "§7 (" + amount + " items at $" + worth + " each)");
+		user.sendMessage("§7Sold for §c$" + Util.formatCurrency(worth * amount) + "§7 (" + amount + " items at $" + Util.formatCurrency(worth) + " each)");
 	}
 }
