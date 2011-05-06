@@ -161,8 +161,8 @@ public class EssentialsEcoBlockListener extends BlockListener
 				String[] l2 = event.getLines()[2].split("[ :-]+");
 				boolean m1 = l1[0].matches("\\$[0-9]+(\\.[0-9]+)?");
 				boolean m2 = l2[0].matches("\\$[0-9]+(\\.[0-9]+)?");
-				int q1 = Integer.parseInt(m1 ? l1[0].substring(1) : l1[0]);
-				int q2 = Integer.parseInt(m2 ? l2[0].substring(1) : l2[0]);
+				double q1 = Double.parseDouble(m1 ? l1[0].substring(1) : l1[0]);
+				double q2 = Double.parseDouble(m2 ? l2[0].substring(1) : l2[0]);
 				double r2 = Double.parseDouble(l2[m2 ? 1 : 2]);
 				r2 = r2 - r2 % q2;
 				if (q1 < 1 || q2 < 1 || r2 < 1)
@@ -196,7 +196,7 @@ public class EssentialsEcoBlockListener extends BlockListener
 
 				event.setLine(0, "§1[Trade]");
 				event.setLine(1, (m1 ? "$" + q1 : q1 + " " + l1[1]) + ":0");
-				event.setLine(2, (m2 ? "$" + q2 : q2 + " " + l2[1]) + ":" + r2);
+				event.setLine(2, (m2 ? "$" + q2 : String.format("%.0f", q2)+ " " + l2[1]) + ":" + String.format("%.0f",r2));
 				event.setLine(3, "§8" + username);
 			}
 			catch (Throwable ex)
