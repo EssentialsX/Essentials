@@ -4,6 +4,7 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import org.bukkit.ChatColor;
 
 
@@ -41,7 +42,7 @@ public class Commandwhois extends EssentialsCommand
 			sender.sendMessage(ChatColor.BLUE + " - Location: (" + u.getLocation().getWorld().getName() + ", " + u.getLocation().getBlockX() + ", " + u.getLocation().getBlockY() + ", " + u.getLocation().getBlockZ() + ")");
 			if (!ess.getConfiguration().getBoolean("disable-eco", false))
 			{
-				sender.sendMessage(ChatColor.BLUE + " - Money: $" + u.getMoney());
+				sender.sendMessage(ChatColor.BLUE + " - Money: " + Util.formatCurrency(u.getMoney()));
 			}
 			sender.sendMessage(ChatColor.BLUE + " - Status: " + (u.isAfk() ? "§cAway§f" : "Available"));
 			sender.sendMessage(ChatColor.BLUE + " - IP Address: " + u.getAddress().getAddress().toString());

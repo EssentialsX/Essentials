@@ -127,6 +127,6 @@ public class Commandsell extends EssentialsCommand
 		InventoryWorkaround.removeItem(user.getInventory(), true, new ItemStack(is.getType(), amount, is.getDurability()));
 		user.updateInventory();
 		user.giveMoney(worth * amount);
-		user.sendMessage("§7Sold for §c$" + Util.formatCurrency(worth * amount) + "§7 (" + amount + " items at $" + Util.formatCurrency(worth) + " each)");
+		user.sendMessage("§7Sold for §c" + Util.formatCurrency(worth * amount) + "§7 (" + amount + " items at " + Util.formatCurrency(worth) + " each)");
 	}
 }

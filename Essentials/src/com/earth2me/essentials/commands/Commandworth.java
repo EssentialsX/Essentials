@@ -49,7 +49,7 @@ public class Commandworth extends EssentialsCommand
 		user.charge(this);		
 		user.sendMessage("§7Stack of " 
 				+ is.getType().toString().toLowerCase().replace("_", "") 
-				+ " worth §c$" + Util.formatCurrency(worth*amount) + "§7 (" 
-				+ amount + " item(s) at $" + Util.formatCurrency(worth) + " each)");
+				+ " worth §c" + Util.formatCurrency(worth*amount) + "§7 (" 
+				+ amount + " item(s) at " + Util.formatCurrency(worth) + " each)");
 	}
 }
