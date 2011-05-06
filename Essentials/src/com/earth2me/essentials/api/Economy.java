@@ -19,7 +19,7 @@ public class Economy
 	protected static boolean accountCreated(String name)
 	{
 		File folder = new File(ess.getDataFolder(), "userdata");
-		File account = new File(folder, Util.sanitizeFileName(name) + ".yml");
+		File account = new File(folder, name.toLowerCase() + ".yml");
 		return account.exists();
 	}
 
@@ -283,9 +283,7 @@ public class Economy
 		{
 			formed = formed.substring(0, formed.length() - 1);
 		}
-		getCurrency();
-		getCurrencyPlural();
-		return formed + " " + ((amount <= 1 && amount >= -1) ? ess.getSettings().getCurrency() : ess.getSettings().getCurrencyPlural());
+		return formed + " " + ((amount <= 1 && amount >= -1) ? getCurrency() : getCurrencyPlural());
 	}
 
 	//************************!WARNING!**************************
