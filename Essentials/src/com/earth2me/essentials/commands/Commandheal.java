@@ -4,6 +4,7 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import com.earth2me.essentials.User;
+import java.util.List;
 
 
 public class Commandheal extends EssentialsCommand
@@ -24,7 +25,7 @@ public class Commandheal extends EssentialsCommand
 				user.healCooldown();
 			}
 			charge(user);
-			healOtherPlayers(server, user, commandLabel);
+			healOtherPlayers(server, user, args[0]);
 			return;
 		}
 
@@ -50,7 +51,13 @@ public class Commandheal extends EssentialsCommand
 
 	private void healOtherPlayers(Server server, CommandSender sender, String name)
 	{
-		for (Player p : server.matchPlayer(name))
+		List<Player> players = server.matchPlayer(name);
+		if(players.isEmpty())
+		{
+			sender.sendMessage("§cPlayer matching " + name + " not found");
+			return;
+		}
+		for (Player p : players)
 		{
 			p.setHealth(20);
 			sender.sendMessage("§7Healed " + p.getDisplayName() + ".");
