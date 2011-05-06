@@ -33,7 +33,7 @@ public class Commandtpaccept extends EssentialsCommand
 			user.canAfford(this);
 			user.sendMessage("§7Teleport request accepted.");
 			p.sendMessage("§7Teleport request accepted.");
-			user.getTeleport().teleport(user, this.getName());
+			p.getTeleport().teleport(user, this.getName());
 		}
 		user.requestTeleport(null, false);
 	}
