@@ -12,6 +12,7 @@ import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.scheduler.CraftScheduler;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
@@ -306,9 +307,10 @@ public class Essentials extends JavaPlugin
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args)
 	{
 
-		if ("msg".equals(commandLabel.toLowerCase()) || "mail".equals(commandLabel.toLowerCase()) &  sender instanceof Player)
+		if ("msg".equals(commandLabel.toLowerCase()) || "mail".equals(commandLabel.toLowerCase()) &  sender instanceof CraftPlayer)
 		{
 			StringBuilder str = new StringBuilder();
+			str.append(commandLabel + " ");
 			for (String a : args)
 			{
 				str.append(a + " ");

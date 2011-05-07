@@ -692,6 +692,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 	
 	public void setSocialSpyEnabled(Boolean status)
 	{
+		isSocialSpyEnabled = status;
 		config.setProperty("socialspy", status);
 		config.save();
 	}
