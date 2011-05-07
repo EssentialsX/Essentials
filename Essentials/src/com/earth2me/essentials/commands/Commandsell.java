@@ -34,7 +34,7 @@ public class Commandsell extends EssentialsCommand
 			for (ItemStack stack : user.getInventory().getContents())
 			{
 				if (stack == null || stack.getType() == Material.AIR) continue;
-				sellItem(user, stack, args);
+				sellItem(user, stack, args, true);
 			}
 			return;
 		}
@@ -43,7 +43,7 @@ public class Commandsell extends EssentialsCommand
 			for (ItemStack stack : user.getInventory().getContents())
 			{
 				if (stack == null || stack.getTypeId() > 255 || stack.getType() == Material.AIR) continue;
-				sellItem(user, stack, args);
+				sellItem(user, stack, args, true);
 			}
 			return;
 		}
@@ -51,10 +51,10 @@ public class Commandsell extends EssentialsCommand
 		{
 			is = ItemDb.get(args[0]);
 		}
-		sellItem(user, is, args);
+		sellItem(user, is, args, false);
 	}
 
-	private void sellItem(User user, ItemStack is, String[] args) throws Exception
+	private void sellItem(User user, ItemStack is, String[] args, boolean isBulkSell) throws Exception
 	{
 		if (is == null || is.getType() == Material.AIR)
 		{
@@ -83,22 +83,30 @@ public class Commandsell extends EssentialsCommand
 			throw new Exception("Item must be traded in stacks. A quantity of 2s would be two stacks, etc.");
 		}
 
+
 		int max = 0;
-		for (ItemStack s : user.getInventory().getContents())
+		if (!isBulkSell)
 		{
-			if (s == null)
+			for (ItemStack s : user.getInventory().getContents())
 			{
-				continue;
+				if (s == null)
+				{
+					continue;
+				}
+				if (s.getTypeId() != is.getTypeId())
+				{
+					continue;
+				}
+				if (s.getDurability() != is.getDurability())
+				{
+					continue;
+				}
+				max += s.getAmount();
 			}
-			if (s.getTypeId() != is.getTypeId())
-			{
-				continue;
-			}
-			if (s.getDurability() != is.getDurability())
-			{
-				continue;
-			}
-			max += s.getAmount();
+		}
+		else
+		{
+			max += is.getAmount();
 		}
 
 		if (stack)
