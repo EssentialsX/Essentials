@@ -13,12 +13,12 @@ import org.bukkit.inventory.ItemStack;
 public class EssentialsEcoPlayerListener extends PlayerListener
 {
 	Essentials ess;
-	
+
 	EssentialsEcoPlayerListener(Essentials ess)
 	{
 		this.ess = ess;
 	}
-	
+
 	@Override
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
@@ -98,16 +98,16 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 				double q2 = Double.parseDouble(m2 ? l2[0].substring(1) : l2[0]);
 				double r1 = Double.parseDouble(l1[m1 ? 1 : 2]);
 				double r2 = Double.parseDouble(l2[m2 ? 1 : 2]);
-				r1 = r1 - r1 % q1;
-				r2 = r2 - r2 % q2;
+				r1 = m1 ? r1 : r1 - r1 % q1;
+				r2 = m2 ? r2 : r2 - r2 % q2;
 				if ((!m1 & q1 < 1) || (!m2 & q2 < 1))
 				{
 					throw new Exception("Quantities must be greater than 0.");
 				}
 
-				ItemStack i1 = m1 || r1 <= 0 ? null : ItemDb.get(l1[1], (int) r1);
-				ItemStack qi1 = m1 ? null : ItemDb.get(l1[1], (int) q1);
-				ItemStack qi2 = m2 ? null : ItemDb.get(l2[1], (int) q2);
+				ItemStack i1 = m1 || r1 <= 0 ? null : ItemDb.get(l1[1], (int)r1);
+				ItemStack qi1 = m1 ? null : ItemDb.get(l1[1], (int)q1);
+				ItemStack qi2 = m2 ? null : ItemDb.get(l2[1], (int)q2);
 
 				if (username.equals(sign.getLines()[3].substring(2)))
 				{
@@ -125,7 +125,8 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 						user.updateInventory();
 					}
 					r1 = 0;
-					sign.setLine(1, (m1 ? Util.formatCurrency(q1) : (int)q1 + " " + l1[1]) + ":" + r1);
+					sign.setLine(1, (m1 ? Util.formatCurrency(q1) : String.format("%.0f", q1) + " " + l1[1]) + ":" + r1);
+					sign.update();
 				}
 				else
 				{
@@ -140,7 +141,7 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 					{
 						if (!InventoryWorkaround.containsItem(user.getInventory(), true, qi1))
 						{
-							throw new Exception("You do not have " + q1 + "x " + l1[1] + ".");
+							throw new Exception("You do not have " + String.valueOf((int)q1) + "x " + l1[1] + ".");
 						}
 					}
 
@@ -175,11 +176,12 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 
 					r1 += q1;
 					r2 -= q2;
+					user.sendMessage("r1 = " + Util.roundDouble(r1) + "r2 = " + Util.roundDouble(r2));
 
 					sign.setLine(0, "§1[Trade]");
-					sign.setLine(1, (m1 ? Util.formatCurrency(q1) : String.format("%.0f",q1) + " " + l1[1]) + ":" + String.format("%.0f",r1));
-					sign.setLine(2, (m2 ? Util.formatCurrency(q2) : String.format("%.0f",q2) + " " + l2[1]) + ":" + String.format("%.0f",r2));
-
+					sign.setLine(1, (m1 ? Util.formatCurrency(q1) : String.format("%.0f", q1) + " " + l1[1]) + ":" + String.format((m1 ? "%.2f" : "%.0f"), Util.roundDouble(r1)));
+					sign.setLine(2, (m2 ? Util.formatCurrency(q2) : String.format("%.0f", q2) + " " + l2[1]) + ":" + String.format((m2 ? "%.2f" : "%.0f"), Util.roundDouble(r2)));
+					sign.update();
 					user.sendMessage("§7Trade completed.");
 				}
 			}

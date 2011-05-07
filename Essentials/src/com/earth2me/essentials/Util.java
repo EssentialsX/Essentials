@@ -25,7 +25,7 @@ public class Util
 		Calendar now = new GregorianCalendar();
 		return Util.formatDateDiff(now, c);
 	}
-	
+
 	public static String formatDateDiff(Calendar fromDate, Calendar toDate)
 	{
 		boolean future = false;
@@ -190,7 +190,7 @@ public class Util
 		}
 		return c.getTimeInMillis();
 	}
-	
+
 	public static Location getSafeDestination(Location loc) throws Exception
 	{
 		if (loc == null)
@@ -257,9 +257,15 @@ public class Util
 		}
 		return isBlockAboveAir(world, x, y, z);
 	}
-	
-	private static DecimalFormat df = new DecimalFormat("0.##");
-	public static String formatCurrency(double value) {
-		return "$"+Double.valueOf(df.format(value));
+	private static DecimalFormat df = new DecimalFormat("#.00");
+
+	public static String formatCurrency(double value)
+	{
+		return "$" + Double.valueOf(df.format(value));
+	}
+
+	public static double roundDouble(double d)
+	{
+		return Double.valueOf(df.format(d));
 	}
 }
