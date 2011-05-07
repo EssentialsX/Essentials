@@ -53,11 +53,11 @@ public class EssentialsEcoBlockListener extends BlockListener
 				String[] l2 = sign.getLines()[2].split("[ :-]+");
 				boolean m1 = l1[0].matches("\\$[0-9]+(\\.[0-9]+)?");
 				boolean m2 = l2[0].matches("\\$[0-9]+(\\.[0-9]+)?");
-				int q1 = Integer.parseInt(m1 ? l1[0].substring(1) : l1[0]);
-				int q2 = Integer.parseInt(m2 ? l2[0].substring(1) : l2[0]);
+				double q1 = Double.parseDouble(m1 ? l1[0].substring(1) : l1[0]);
+				double q2 = Double.parseDouble(m2 ? l2[0].substring(1) : l2[0]);
 				double r1 = Double.parseDouble(l1[m1 ? 1 : 2]);
 				double r2 = Double.parseDouble(l2[m2 ? 1 : 2]);
-				if (q1 < 1 || q2 < 1)
+				if ((!m1 & q1 < 1) || (!m2 & q2 < 1))
 				{
 					throw new Exception("Quantities must be greater than 0.");
 				}
