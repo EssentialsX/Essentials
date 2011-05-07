@@ -89,14 +89,25 @@ public class ItemDb
 
 	public static ItemStack get(String id) throws Exception
 	{
-		int itemid = getUnsafe(id);
+		int itemid;
+		short metaData =0;
+		if(id.matches("^\\d+:\\d+$"))
+		{
+			itemid = getUnsafe(id.split(":")[0]);
+			metaData = (short)getUnsafe(id.split(":")[1]);
+		}
+		else
+		{
+			itemid = getUnsafe(id);
+		}
+			
 		Material mat = Material.getMaterial(itemid);
 		if (mat == null) {
 			throw new Exception("Unknown item id: "+itemid);
 		}
 		ItemStack retval = new ItemStack(mat);
 		retval.setAmount(Essentials.getStatic().getSettings().getDefaultStackSize());
-		retval.setDurability(durabilities.containsKey(id.toLowerCase()) ? durabilities.get(id.toLowerCase()) : 0);
+		retval.setDurability(metaData !=0 ? metaData :(durabilities.containsKey(id.toLowerCase()) ? durabilities.get(id.toLowerCase()) : 0));
 		return retval;
 	}
 
