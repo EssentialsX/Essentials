@@ -113,7 +113,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo
 			return;
 		}
 		setMoney(getMoney() - value);
-		sendMessage("§c$" + Util.formatCurrency(value) + " has been taken from your account.");
+		sendMessage("§c" + Util.formatCurrency(value) + " has been taken from your account.");
 	}
 
 	public void charge(String cmd) throws Exception
