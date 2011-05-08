@@ -162,14 +162,12 @@ public class Economy
 			if (accountCreated(name))
 			{				
 				result = getMoney(name) + money;
-				User user = usrConv(name);
-				user.setMoney(money);
+				setMoney(name,result);
 			}
 			return;
 		}
 		result = getMoney(name) + money;
-		User user = usrConv(name);
-		user.setMoney(result);
+		setMoney(name,result);
 		return;
 	}
 
@@ -182,15 +180,13 @@ public class Economy
 			if (accountCreated(name))
 			{
 				result = getMoney(name)/ money;
-				User user = usrConv(name);
-				user.setMoney(result);
+				setMoney(name,result);
 				return;
 			}
 			return;
 		}
 		result = getMoney(name) / money;
-		User user = usrConv(name);
-		user.setMoney(result);
+		setMoney(name,result);
 		return;
 	}
 
@@ -203,15 +199,13 @@ public class Economy
 			if (accountCreated(name))
 			{
 				result = getMoney(name) * money;
-				User user = usrConv(name);
-				user.setMoney(result);
+				setMoney(name,result);
 				return;
 			}
 			return;
 		}
 		result = getMoney(name) * money;
-		User user = usrConv(name);
-		user.setMoney(result);
+		setMoney(name,result);
 		return;
 	}
 
@@ -224,15 +218,13 @@ public class Economy
 			if (accountCreated(name))
 			{
 				result = getMoney(name) - money;
-				User user = usrConv(name);
-				user.setMoney(result);
+				setMoney(name,result);
 				return;
 			}
 			return;
 		}
 		result = getMoney(name) - money;
-		User user = usrConv(name);
-		user.setMoney(result);
+		setMoney(name,result);
 		return;
 	}
 
