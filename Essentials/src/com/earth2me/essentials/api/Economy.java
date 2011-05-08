@@ -156,18 +156,19 @@ public class Economy
 	//Eco add balance
 	public static void add(String name, double money)
 	{
+		double result;
 		if (!exist(name))
 		{
 			if (accountCreated(name))
 			{
 				User user = usrConv(name);
-				double result = user.getMoney() + money;
+				result = user.getMoney() + money;
 				user.setMoney(money);
 			}
 			return;
 		}
 		User user = usrConv(name);
-		double result = user.getMoney() + money;
+		result = user.getMoney() + money;
 		user.setMoney(result);
 		return;
 	}
@@ -175,19 +176,20 @@ public class Economy
 	//Eco divide balance
 	public static void divide(String name, double money)
 	{
+		double result;
 		if (!exist(name))
 		{
 			if (accountCreated(name))
 			{
 				User user = usrConv(name);
-				double result = user.getMoney() / money;
+				result = user.getMoney() / money;
 				user.setMoney(result);
 				return;
 			}
 			return;
 		}
 		User user = usrConv(name);
-		double result = user.getMoney() / money;
+		result = user.getMoney() / money;
 		user.setMoney(result);
 		return;
 	}
@@ -195,19 +197,20 @@ public class Economy
 	//Eco multiply balance
 	public static void multiply(String name, double money)
 	{
+		double result;
 		if (!exist(name))
 		{
 			if (accountCreated(name))
 			{
 				User user = usrConv(name);
-				double result = user.getMoney() * money;
+				result = user.getMoney() * money;
 				user.setMoney(result);
 				return;
 			}
 			return;
 		}
 		User user = usrConv(name);
-		double result = user.getMoney() * money;
+		result = user.getMoney() * money;
 		user.setMoney(result);
 		return;
 	}
@@ -215,19 +218,20 @@ public class Economy
 	//Eco subtract balance
 	public static void subtract(String name, double money)
 	{
+		double result;
 		if (!exist(name))
 		{
 			if (accountCreated(name))
 			{
 				User user = usrConv(name);
-				double result = user.getMoney() - money;
+				result = user.getMoney() - money;
 				user.setMoney(result);
 				return;
 			}
 			return;
 		}
 		User user = usrConv(name);
-		double result = user.getMoney() - money;
+		result = user.getMoney() - money;
 		user.setMoney(result);
 		return;
 	}
