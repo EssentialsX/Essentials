@@ -68,7 +68,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		{
 			try
 			{
-				return com.nijiko.coelho.iConomy.iConomy.getBank().getAccount(getName()).getBalance();
+				return com.iConomy.iConomy.getAccount(getName()).getHoldings().balance();
 			}
 			catch (Throwable ex)
 			{	
@@ -83,7 +83,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		{
 			try
 			{
-				com.nijiko.coelho.iConomy.iConomy.getBank().getAccount(getName()).setBalance(value);
+				com.iConomy.iConomy.getAccount(getName()).getHoldings().set(value);
 			}
 			catch (Throwable ex)
 			{
