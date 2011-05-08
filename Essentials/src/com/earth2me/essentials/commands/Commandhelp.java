@@ -12,8 +12,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 
 
 public class Commandhelp extends EssentialsCommand
@@ -59,10 +59,18 @@ public class Commandhelp extends EssentialsCommand
 	private List<String> getHelpLines(User user) throws Exception
 	{
 		List<String> retval = new ArrayList<String>();
-		File file = new File(ess.getDataFolder(), "help.txt");
-		if (file.exists())
+		File helpFile = new File(ess.getDataFolder(), "help_"+Util.sanitizeFileName(user.getName()) +".txt");
+		if (!helpFile.exists())
 		{
-			BufferedReader rx = new BufferedReader(new FileReader(file));
+			helpFile = new File(ess.getDataFolder(), "help_"+Util.sanitizeFileName(user.getGroup()) +".txt");
+		}
+		if (!helpFile.exists())
+		{
+			helpFile = new File(ess.getDataFolder(), "help.txt");
+		}
+		if (helpFile.exists())
+		{
+			BufferedReader rx = new BufferedReader(new FileReader(helpFile));
 			for (String l = null; rx.ready() && (l = rx.readLine()) != null;)
 			{
 				retval.add(l.replace('&', '§'));
