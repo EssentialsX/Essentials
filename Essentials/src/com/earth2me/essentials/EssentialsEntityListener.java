@@ -73,7 +73,7 @@ public class EssentialsEntityListener extends EntityListener
 		if (event.getEntity() instanceof Player)
 		{
 			User user = ess.getUser(event.getEntity());
-			if (user.isAuthorized("essentials.back.ondeath"))
+			if (user.isAuthorized("essentials.back.ondeath") && !ess.getSettings().isCommandDisabled("back"))
 			{
 				user.setLastLocation();
 				user.sendMessage("§7Use the /back command to return to your death point");
