@@ -176,7 +176,7 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 
 					r1 += q1;
 					r2 -= q2;
-					user.sendMessage("r1 = " + Util.roundDouble(r1) + "r2 = " + Util.roundDouble(r2));
+					
 
 					sign.setLine(0, "§1[Trade]");
 					sign.setLine(1, (m1 ? Util.formatCurrency(q1) : String.format("%.0f", q1) + " " + l1[1]) + ":" + String.format((m1 ? "%.2f" : "%.0f"), Util.roundDouble(r1)));
