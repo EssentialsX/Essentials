@@ -174,12 +174,12 @@ public class Teleport implements Runnable
 
 	public void teleport(Location loc, String name) throws Exception
 	{
-		teleport(new Target(loc), chargeFor);
+		teleport(new Target(loc), name);
 	}
 
 	public void teleport(Entity entity, String name) throws Exception
 	{
-		teleport(new Target(entity), chargeFor);
+		teleport(new Target(entity), name);
 	}
 
 	private void teleport(Target target, String chargeFor) throws Exception
