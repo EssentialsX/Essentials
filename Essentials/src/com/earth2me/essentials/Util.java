@@ -261,11 +261,11 @@ public class Util
 
 	public static String formatCurrency(double value)
 	{
-		return "$" + Double.valueOf(df.format(value));
+		return "$" + df.format(value);
 	}
 
 	public static double roundDouble(double d)
 	{
-		return Double.valueOf(df.format(d));
+		return Math.round(d*100.0)/100.0;
 	}
 }
