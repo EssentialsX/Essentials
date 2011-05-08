@@ -156,7 +156,7 @@ public class Settings implements IConf
 
 		if (colorName == null)
 			return ChatColor.RED;
-		if("none".equalsIgnoreCase(colorName))
+		if("none".equalsIgnoreCase(colorName) || colorName.isEmpty())
 			return ChatColor.WHITE;
 
 		try
@@ -485,4 +485,5 @@ public class Settings implements IConf
 	{
 		return config.getBoolean("permission-based-item-spawn", false);
 	}
+
 }
