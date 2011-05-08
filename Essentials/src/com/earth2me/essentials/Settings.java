@@ -471,6 +471,14 @@ public class Settings implements IConf
 		return config.getBoolean("nether.use-1to1-ratio", false);
 	}
 	
+	public double getNetherRatio()
+	{
+		if (config.getBoolean("nether.use-1to1-ratio", false)) {
+			return 1.0;
+		}
+		return config.getDouble("nether.ratio", 16.0);
+	}
+	
 	public boolean isDebug()
 	{
 		return config.getBoolean("debug", false);

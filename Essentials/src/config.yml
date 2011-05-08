@@ -75,7 +75,7 @@ nether:
   folder: nether
   portals-enabled: false
   generate-exit-portals: false
-  use-1to1-ratio: false
+  ratio: 16
 
 # Mob limit on spawnmob
 spawnmob-limit: 10

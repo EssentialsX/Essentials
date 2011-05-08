@@ -101,25 +101,11 @@ public class EssentialsPlayerListener extends PlayerListener
 			double factor;
 			if (user.getWorld().getEnvironment() == World.Environment.NETHER && world.getEnvironment() == World.Environment.NORMAL)
 			{
-				if (ess.getSettings().use1to1RatioInNether())
-				{
-					factor = 1.0;
-				}
-				else
-				{
-					factor = 16.0;
-				}
+				factor = ess.getSettings().getNetherRatio();
 			}
 			else if (user.getWorld().getEnvironment() != world.getEnvironment())
 			{
-				if (ess.getSettings().use1to1RatioInNether())
-				{
-					factor = 1.0;
-				}
-				else
-				{
-					factor = 1.0 / 16.0;
-				}
+				factor = 1.0 / ess.getSettings().getNetherRatio();
 			}
 			else
 			{
