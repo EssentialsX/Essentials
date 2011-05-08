@@ -2,6 +2,7 @@ package com.nijiko.coelho.iConomy;
 
 import com.nijiko.coelho.iConomy.system.Bank;
 import java.util.logging.Logger;
+import org.bukkit.plugin.java.JavaPlugin;
 
 
 /**
@@ -10,7 +11,7 @@ import java.util.logging.Logger;
  * @author Xeology
  */
 
-public class iConomy{
+public class iConomy extends JavaPlugin{
 	public static Bank Bank = new Bank();
 	private static final Logger logger = Logger.getLogger("Minecraft");
 
@@ -18,5 +19,17 @@ public class iConomy{
 	public static Bank getBank()
 	{
 		return Bank;
+	}
+
+	@Override
+	public void onDisable()
+	{
+
+	}
+
+	@Override
+	public void onEnable()
+	{
+		logger.info("Essentials iConomy Bridge is now activated!!");
 	}
 }
