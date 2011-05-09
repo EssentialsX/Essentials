@@ -25,8 +25,7 @@ public class Commandgive extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		String[] itemArgs = args[1].split("[^a-zA-Z0-9]");
-		ItemStack stack = ItemDb.get(itemArgs[0]);
+		ItemStack stack = ItemDb.get(args[0]);
 
 		String itemname = stack.getType().toString().toLowerCase().replace("_", "");
 		if (sender instanceof Player
@@ -39,10 +38,6 @@ public class Commandgive extends EssentialsCommand
 		{
 			sender.sendMessage(ChatColor.RED + "You are not allowed to spawn the item " + itemname);
 			return;
-		}
-		if (itemArgs.length > 1)
-		{
-			stack.setDurability(Short.parseShort(itemArgs[1]));
 		}
 		if (args.length > 2 && Integer.parseInt(args[2]) > 0)
 		{

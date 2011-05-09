@@ -85,7 +85,7 @@ public class EssentialsBlockListener extends BlockListener
 				{
 					if (!event.getLine(1).isEmpty())
 					{
-						String[] l1 = event.getLine(1).split("[ :-]+");
+						String[] l1 = event.getLine(1).split("[ :-]+", 2);
 						boolean m1 = l1[0].matches("\\$[0-9]+");
 						int q1 = Integer.parseInt(m1 ? l1[0].substring(1) : l1[0]);
 						if (q1 < 1) throw new Exception("Quantities must be greater than 0.");
@@ -126,7 +126,7 @@ public class EssentialsBlockListener extends BlockListener
 				if (user.isAuthorized("essentials.signs.warp.create")) {
 					if (!event.getLine(3).isEmpty())
 					{
-						String[] l1 = event.getLine(3).split("[ :-]+");
+						String[] l1 = event.getLine(3).split("[ :-]+", 2);
 						boolean m1 = l1[0].matches("\\$[0-9]+");
 						int q1 = Integer.parseInt(m1 ? l1[0].substring(1) : l1[0]);
 						if (q1 < 1) throw new Exception("Quantities must be greater than 0.");
