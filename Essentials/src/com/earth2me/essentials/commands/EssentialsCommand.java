@@ -7,12 +7,14 @@ import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.Essentials;
 import org.bukkit.entity.Player;
 import com.earth2me.essentials.User;
+import java.util.logging.Logger;
 
 
 public abstract class EssentialsCommand implements IEssentialsCommand
 {
 	private final String name;
 	protected Essentials ess;
+	protected final static Logger logger = Logger.getLogger("Minecraft");
 
 	protected EssentialsCommand(String name)
 	{

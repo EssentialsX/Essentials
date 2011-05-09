@@ -6,6 +6,8 @@ import com.earth2me.essentials.InventoryWorkaround;
 import com.earth2me.essentials.ItemDb;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import com.sun.tools.javac.util.Log;
+import java.util.logging.Level;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -136,5 +138,7 @@ public class Commandsell extends EssentialsCommand
 		user.updateInventory();
 		user.giveMoney(worth * amount);
 		user.sendMessage("§7Sold for §c" + Util.formatCurrency(worth * amount) + "§7 (" + amount + " items at " + Util.formatCurrency(worth) + " each)");
+		logger.log(Level.INFO, user.getDisplayName() + " sold "+is.getType().toString().toLowerCase() + " for §c" + Util.formatCurrency(worth * amount) + "§7 (" + amount + " items at " + Util.formatCurrency(worth) + " each)");
+	
 	}
 }
