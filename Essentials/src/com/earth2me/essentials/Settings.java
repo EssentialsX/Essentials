@@ -494,4 +494,8 @@ public class Settings implements IConf
 		return config.getBoolean("permission-based-item-spawn", false);
 	}
 
+	public String getLocale()
+	{
+		return config.getString("locale", "en_US");
+	}
 }

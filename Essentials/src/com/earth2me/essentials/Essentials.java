@@ -23,7 +23,7 @@ import org.bukkit.plugin.java.*;
 
 public class Essentials extends JavaPlugin
 {
-	public static final String AUTHORS = "Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans and Xeology.";
+	public static final String AUTHORS = "Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans and Xeology";
 	public static final int minBukkitBuildVersion = 740;
 	private static final Logger logger = Logger.getLogger("Minecraft");
 	private Settings settings;
@@ -94,6 +94,7 @@ public class Essentials extends JavaPlugin
 		confList = new ArrayList<IConf>();
 		settings = new Settings(this.getDataFolder());
 		confList.add(settings);
+		Util.updateLocale(settings.getLocale(), this.getDataFolder());
 		spawn = new Spawn(getServer(), this.getDataFolder());
 		confList.add(spawn);
 		warps = new Warps(getServer(), this.getDataFolder());
@@ -171,7 +172,7 @@ public class Essentials extends JavaPlugin
 		timer = new EssentialsTimer(this);
 		getScheduler().scheduleSyncRepeatingTask(this, timer, 1, 50);
 
-		logger.info("Loaded " + this.getDescription().getName() + " build " + this.getDescription().getVersion() + " maintained by " + AUTHORS);
+		logger.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), AUTHORS));
 	}
 
 	public void onDisable()

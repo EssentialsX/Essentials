@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 
 
 public class Commandafk extends EssentialsCommand
@@ -18,11 +19,11 @@ public class Commandafk extends EssentialsCommand
 
 		if (!user.toggleAfk())
 		{
-			user.sendMessage("§7You are no longer marked as away.");
-			server.broadcastMessage("§7" + user.getDisplayName() + " is no longer AFK");
+			user.sendMessage(Util.i18n("markedAsNotAway"));
+			server.broadcastMessage(Util.format("userIsNotAway", user.getDisplayName()));
 		} else {
-			user.sendMessage("§7You are now marked as away.");
-			server.broadcastMessage("§7" + user.getDisplayName() + " is now AFK");
+			user.sendMessage(Util.i18n("markedAsAway"));
+			server.broadcastMessage(Util.format("userIsAway", user.getDisplayName()));
 		}
 	}
 }
