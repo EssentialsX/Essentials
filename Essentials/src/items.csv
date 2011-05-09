@@ -793,12 +793,12 @@ cblock,82,0
 blockc,82,0
 reedblock,83,0
 reedsblock,83,0
-supercaneblock,83,0
+sugarcaneblock,83,0
 scaneblock,83,0
 bambooblock,83,0
 blockreed,83,0
 blockreeds,83,0
-blocksupercane,83,0
+blocksugarcane,83,0
 blockscane,83,0
 blockbamboo,83,0
 jukebox,84,0
@@ -1304,7 +1304,7 @@ cball,337,0
 clay,337,0
 reeds,338,0
 reed,338,0
-sugercane,338,0
+sugarcane,338,0
 scane,338,0
 bamboo,338,0
 paper,339,0
