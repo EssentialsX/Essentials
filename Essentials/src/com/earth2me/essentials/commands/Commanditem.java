@@ -51,5 +51,6 @@ public class Commanditem extends EssentialsCommand
 		charge(user);
 		user.sendMessage("§7Giving " + stack.getAmount() + " of " + itemName + " to " + user.getDisplayName() + ".");
 		user.getInventory().addItem(stack);
+		user.updateInventory();
 	}
 }

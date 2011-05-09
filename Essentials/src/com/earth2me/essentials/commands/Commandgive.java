@@ -55,5 +55,6 @@ public class Commandgive extends EssentialsCommand
 		charge(sender);
 		sender.sendMessage(ChatColor.BLUE + "Giving " + stack.getAmount() + " of " + itemName + " to " + giveTo.getDisplayName() + ".");
 		giveTo.getInventory().addItem(stack);
+		giveTo.updateInventory();
 	}
 }
