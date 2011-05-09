@@ -30,11 +30,11 @@ public class Commandgive extends EssentialsCommand
 		String itemname = stack.getType().toString().toLowerCase().replace("_", "");
 		if (sender instanceof Player
 			&& (ess.getSettings().permissionBasedItemSpawn()
-				? !ess.getUser(sender).isAuthorized("essentials.give.item-all")
-				  && !ess.getUser(sender).isAuthorized("essentials.give.item-" + itemname)
-				  && !ess.getUser(sender).isAuthorized("essentials.give.item-" + stack.getTypeId())
-				: !ess.getUser(sender).isAuthorized("essentials.itemspawn.exempt")
-				  && !ess.getUser(sender).canSpawnItem(stack.getTypeId())))
+				? (!ess.getUser(sender).isAuthorized("essentials.give.item-all")
+				   && !ess.getUser(sender).isAuthorized("essentials.give.item-" + itemname)
+				   && !ess.getUser(sender).isAuthorized("essentials.give.item-" + stack.getTypeId()))
+				: (!ess.getUser(sender).isAuthorized("essentials.itemspawn.exempt")
+				   && !ess.getUser(sender).canSpawnItem(stack.getTypeId()))))
 		{
 			sender.sendMessage(ChatColor.RED + "You are not allowed to spawn the item " + itemname);
 			return;

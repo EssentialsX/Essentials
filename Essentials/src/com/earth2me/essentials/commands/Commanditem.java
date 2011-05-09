@@ -26,11 +26,11 @@ public class Commanditem extends EssentialsCommand
 
 		String itemname = stack.getType().toString().toLowerCase().replace("_", "");
 		if (ess.getSettings().permissionBasedItemSpawn()
-			? !user.isAuthorized("essentials.itemspawn.item-all")
-			  && !user.isAuthorized("essentials.itemspawn.item-" + itemname)
-			  && !user.isAuthorized("essentials.itemspawn.item-" + stack.getTypeId())
-			: !user.isAuthorized("essentials.itemspawn.exempt")
-			  && !user.canSpawnItem(stack.getTypeId()))
+			? (!user.isAuthorized("essentials.itemspawn.item-all")
+			   && !user.isAuthorized("essentials.itemspawn.item-" + itemname)
+			   && !user.isAuthorized("essentials.itemspawn.item-" + stack.getTypeId()))
+			: (!user.isAuthorized("essentials.itemspawn.exempt")
+			   && !user.canSpawnItem(stack.getTypeId())))
 		{
 			user.sendMessage(ChatColor.RED + "You are not allowed to spawn the item " + itemname);
 			return;
