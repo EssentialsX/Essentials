@@ -6,7 +6,6 @@ import com.earth2me.essentials.InventoryWorkaround;
 import com.earth2me.essentials.ItemDb;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
-import com.sun.tools.javac.util.Log;
 import java.util.logging.Level;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
