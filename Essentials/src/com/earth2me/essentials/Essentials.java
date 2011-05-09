@@ -63,7 +63,7 @@ public class Essentials extends JavaPlugin
 		File dataFolder = File.createTempFile("essentialstest", "");
 		dataFolder.delete();
 		dataFolder.mkdir();
-		logger.log(Level.INFO, "Using temp folder for testing:");
+		logger.log(Level.INFO, Util.i18n("usingTempFolderForTesting"));
 		logger.log(Level.INFO, dataFolder.toString());
 		this.initialize(null, null, new PluginDescriptionFile(new FileReader(new File("src" + File.separator + "plugin.yml"))), dataFolder, null, null);
 		settings = new Settings(dataFolder);
@@ -74,21 +74,20 @@ public class Essentials extends JavaPlugin
 		instance = this;
 	}
 
-	@SuppressWarnings("LoggerStringConcat")
 	public void onEnable()
 	{
 		setStatic();
 		EssentialsUpgrade upgrade = new EssentialsUpgrade(this.getDescription().getVersion(), this);
 		if (newWorldsLoaded)
 		{
-			logger.log(Level.SEVERE, "New worlds have been loaded while upgrading files. The server will stop now, please restart it.");
+			logger.log(Level.SEVERE, Util.i18n("worldsLoadedRestartServer"));
 			try
 			{
 				getServer().dispatchCommand(Console.getCommandSender(getServer()), "stop");
 			}
 			catch (Exception ex)
 			{
-				logger.log(Level.SEVERE, "Failed to stop the server!", ex);
+				logger.log(Level.SEVERE, Util.i18n("failedStopServer"), ex);
 			}
 		}
 		confList = new ArrayList<IConf>();
@@ -111,7 +110,7 @@ public class Essentials extends JavaPlugin
 			{
 				if (!plugin.getDescription().getVersion().equals(this.getDescription().getVersion()))
 				{
-					logger.log(Level.WARNING, "Version mismatch! Please update " + plugin.getDescription().getName() + " to the same version.");
+					logger.log(Level.WARNING, Util.format("versionMismatch", plugin.getDescription().getName()));
 				}
 			}
 		}
@@ -121,12 +120,12 @@ public class Essentials extends JavaPlugin
 			int versionNumber = Integer.parseInt(versionMatch.group(4));
 			if (versionNumber < minBukkitBuildVersion)
 			{
-				logger.log(Level.WARNING, "Bukkit version is not the recommended build for Essentials.");
+				logger.log(Level.WARNING, Util.i18n("notRecommendedBukkit"));
 			}
 		}
 		else
 		{
-			logger.log(Level.INFO, "Bukkit version format changed. Version not checked.");
+			logger.log(Level.INFO, Util.i18n("bukkitFormatChanged"));
 		}
 
 
@@ -195,7 +194,7 @@ public class Essentials extends JavaPlugin
 		}
 		catch (Exception ex)
 		{
-			logger.log(Level.WARNING, "Could not load items.csv.", ex);
+			logger.log(Level.WARNING, Util.i18n("itemsCsvNotLoaded"), ex);
 		}
 	}
 
@@ -227,7 +226,7 @@ public class Essentials extends JavaPlugin
 			}
 			catch (Throwable ex2)
 			{
-				System.out.println(ChatColor.DARK_RED + "Notice: Your configuration file has a corrupt " + node + " node.");
+				logger.log(Level.WARNING, Util.format("corruptNodeInConfig", node));
 				return new String[0];
 			}
 		}
@@ -380,7 +379,7 @@ public class Essentials extends JavaPlugin
 				{
 					if (mail.size() > 0)
 					{
-						user.sendMessage(ChatColor.RED + "You have " + mail.size() + " messages!§f Type §7/mail read§f to view your mail.");
+						user.sendMessage(Util.format("youHaveNewMail", mail.size()));
 					}
 				}
 			}
@@ -398,16 +397,16 @@ public class Essentials extends JavaPlugin
 			}
 			catch (Exception ex)
 			{
-				sender.sendMessage(ChatColor.RED + "That command is improperly loaded.");
-				logger.log(Level.SEVERE, "Command " + commandLabel + " is improperly loaded.", ex);
+				sender.sendMessage(Util.format("commandNotLoaded", commandLabel));
+				logger.log(Level.SEVERE, Util.format("commandNotLoaded", commandLabel), ex);
 				return true;
 			}
 
 			// Check authorization
 			if (user != null && !user.isAuthorized(cmd))
 			{
-				logger.log(Level.WARNING, user.getName() + " was denied access to command.");
-				user.sendMessage(ChatColor.RED + "You do not have access to that command.");
+				logger.log(Level.WARNING, Util.format("deniedAccessCommand", user.getName()));
+				user.sendMessage(Util.i18n("noAccessCommand"));
 				return true;
 			}
 
@@ -435,14 +434,14 @@ public class Essentials extends JavaPlugin
 				sender.sendMessage(ChatColor.RED + "Error: " + ex.getMessage());
 				if (getSettings().isDebug())
 				{
-					logger.log(Level.WARNING, "Error calling command /" + commandLabel, ex);
+					logger.log(Level.WARNING, Util.format("errorCallingCommand", commandLabel), ex);
 				}
 				return true;
 			}
 		}
 		catch (Throwable ex)
 		{
-			logger.log(Level.SEVERE, "Command " + commandLabel + " failed: ", ex);
+			logger.log(Level.SEVERE, Util.format("commandFailed", commandLabel), ex);
 			return true;
 		}
 	}
@@ -456,7 +455,7 @@ public class Essentials extends JavaPlugin
 		{
 			if (!file.exists())
 			{
-				throw new FileNotFoundException("banned-players.txt not found");
+				throw new FileNotFoundException(Util.i18n("bannedPlayersFileNotFound"));
 			}
 
 			BufferedReader rx = new BufferedReader(new FileReader(file));
@@ -477,19 +476,19 @@ public class Essentials extends JavaPlugin
 			}
 			catch (IOException io)
 			{
-				logger.log(Level.SEVERE, "Error reading banned-players.txt", io);
+				logger.log(Level.SEVERE, Util.i18n("bannedPlayersFileError"), io);
 			}
 		}
 		catch (FileNotFoundException ex)
 		{
-			logger.log(Level.SEVERE, "Error reading banned-players.txt", ex);
+			logger.log(Level.SEVERE, Util.i18n("bannedPlayersFileError"), ex);
 		}
 
 		try
 		{
 			if (!ipFile.exists())
 			{
-				throw new FileNotFoundException("banned-ips.txt not found");
+				throw new FileNotFoundException(Util.i18n("bannedIpsFileNotFound"));
 			}
 
 			BufferedReader rx = new BufferedReader(new FileReader(ipFile));
@@ -510,12 +509,12 @@ public class Essentials extends JavaPlugin
 			}
 			catch (IOException io)
 			{
-				logger.log(Level.SEVERE, "Error reading banned-ips.txt", io);
+				logger.log(Level.SEVERE, Util.i18n("bannedIpsFileError"), io);
 			}
 		}
 		catch (FileNotFoundException ex)
 		{
-			logger.log(Level.SEVERE, "Error reading banned-ips.txt", ex);
+			logger.log(Level.SEVERE, Util.i18n("bannedIpsFileError"), ex);
 		}
 	}
 

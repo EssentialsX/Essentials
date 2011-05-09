@@ -37,7 +37,7 @@ public class EssentialsBlockListener extends BlockListener
 			if (isBlockProtected(event.getBlock(), user))
 			{
 				event.setCancelled(true);
-				user.sendMessage("§cYou do not have permission to destroy that chest.");
+				user.sendMessage(Util.format("noDestroyPermission", event.getBlock().getType().toString().toLowerCase()));
 				return;
 			}
 		}
@@ -46,7 +46,7 @@ public class EssentialsBlockListener extends BlockListener
 			checkProtectionSign(event.getBlock(), user) != OWNER)
 		{
 			event.setCancelled(true);
-			user.sendMessage("§cYou do not have permission to destroy that sign.");
+			user.sendMessage(Util.format("noDestroyPermission", event.getBlock().getType().toString().toLowerCase()));
 		}
 	}
 
@@ -88,7 +88,7 @@ public class EssentialsBlockListener extends BlockListener
 						String[] l1 = event.getLine(1).split("[ :-]+", 2);
 						boolean m1 = l1[0].matches("\\$[0-9]+");
 						int q1 = Integer.parseInt(m1 ? l1[0].substring(1) : l1[0]);
-						if (q1 < 1) throw new Exception("Quantities must be greater than 0.");
+						if (q1 < 1) throw new Exception(Util.i18n("moreThanZero"));
 						if (!m1) ItemDb.get(l1[1]);
 						event.setLine(1, (m1 ? "$" + q1 : q1 + " " + l1[1]));
 					}
@@ -129,7 +129,7 @@ public class EssentialsBlockListener extends BlockListener
 						String[] l1 = event.getLine(3).split("[ :-]+", 2);
 						boolean m1 = l1[0].matches("\\$[0-9]+");
 						int q1 = Integer.parseInt(m1 ? l1[0].substring(1) : l1[0]);
-						if (q1 < 1) throw new Exception("Quantities must be greater than 0.");
+						if (q1 < 1) throw new Exception(Util.i18n("moreThanZero"));
 						if (!m1) ItemDb.get(l1[1]);
 						event.setLine(3, (m1 ? "$" + q1 : q1 + " " + l1[1]));
 					}
@@ -149,7 +149,7 @@ public class EssentialsBlockListener extends BlockListener
 		}
 		catch (Throwable ex)
 		{
-			user.sendMessage("§cError: " + ex.getMessage());
+			user.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
 		}
 	}
 

@@ -42,7 +42,7 @@ public class Backup implements Runnable {
 		if (command == null || "".equals(command)) {
 			return;
 		}
-		logger.log(Level.INFO, "Backup started");
+		logger.log(Level.INFO, Util.i18n("backupStarted"));
 		final CommandSender cs = server.getServer().console;
 		server.dispatchCommand(cs, "save-all");
 		server.dispatchCommand(cs, "save-off");
@@ -71,7 +71,7 @@ public class Backup implements Runnable {
 								}
 							}
 							active = false;
-							logger.log(Level.INFO, "Backup finished");
+							logger.log(Level.INFO, Util.i18n("backupFinished"));
 						}
 					});
 				}

@@ -15,7 +15,7 @@ public class Console implements IReplyTo {
 	
 	public static CommandSender getCommandSender(Server server) throws Exception {
 		if (! (server instanceof CraftServer)) {
-			throw new Exception("Invalid server!");
+			throw new Exception(Util.i18n("invalidServer"));
 		}
 		return ((CraftServer)server).getServer().console;
 	}
