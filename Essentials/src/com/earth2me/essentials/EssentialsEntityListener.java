@@ -1,6 +1,5 @@
 package com.earth2me.essentials;
 
-import org.bukkit.Server;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -76,7 +75,7 @@ public class EssentialsEntityListener extends EntityListener
 			if (user.isAuthorized("essentials.back.ondeath") && !ess.getSettings().isCommandDisabled("back"))
 			{
 				user.setLastLocation();
-				user.sendMessage("§7Use the /back command to return to your death point");
+				user.sendMessage(Util.i18n("backAfterDeath"));
 			}
 		}
 	}

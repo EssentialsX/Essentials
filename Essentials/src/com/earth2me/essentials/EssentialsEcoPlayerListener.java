@@ -47,7 +47,7 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 				double cost = Double.parseDouble(sign.getLine(3).substring(1));
 				if (user.getMoney() < cost)
 				{
-					throw new Exception("You do not have sufficient funds.");
+					throw new Exception(Util.i18n("notEnoughMoney"));
 				}
 				user.takeMoney(cost);
 				Map<Integer, ItemStack> leftOver = user.getInventory().addItem(item);
@@ -59,7 +59,7 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 			}
 			catch (Throwable ex)
 			{
-				user.sendMessage("§cError: " + ex.getMessage());
+				user.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
 			}
 			return;
 		}
@@ -73,7 +73,7 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 				double cost = Double.parseDouble(sign.getLine(3).substring(1));
 				if (!InventoryWorkaround.containsItem(user.getInventory(), true, item))
 				{
-					throw new Exception("You do not have enough items to sell.");
+					throw new Exception(Util.format("missingItems", amount, sign.getLine(2)));
 				}
 				user.giveMoney(cost);
 				InventoryWorkaround.removeItem(user.getInventory(), true, item);
@@ -81,7 +81,7 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 			}
 			catch (Throwable ex)
 			{
-				user.sendMessage("§cError: " + ex.getMessage());
+				user.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
 			}
 			return;
 		}
@@ -102,7 +102,7 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 				r2 = m2 ? r2 : r2 - r2 % q2;
 				if ((!m1 & q1 < 1) || (!m2 & q2 < 1))
 				{
-					throw new Exception("Quantities must be greater than 0.");
+					throw new Exception(Util.i18n("moreThanZero"));
 				}
 
 				ItemStack i1 = m1 || r1 <= 0 ? null : ItemDb.get(l1[1], (int)r1);
@@ -134,20 +134,20 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 					{
 						if (user.getMoney() < q1)
 						{
-							throw new Exception("You do not have sufficient funds.");
+							throw new Exception(Util.i18n("notEnoughMoney"));
 						}
 					}
 					else
 					{
 						if (!InventoryWorkaround.containsItem(user.getInventory(), true, qi1))
 						{
-							throw new Exception("You do not have " + String.valueOf((int)q1) + "x " + l1[1] + ".");
+							throw new Exception(Util.format("missingItems", (int)q1, l1[1]));
 						}
 					}
 
 					if (r2 < q2)
 					{
-						throw new Exception("The trade sign does not have enough supply left.");
+						throw new Exception(Util.i18n("tradeSignEmpty"));
 					}
 
 					if (m1)
@@ -182,12 +182,12 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 					sign.setLine(1, (m1 ? Util.formatCurrency(q1) : String.format("%.0f", q1) + " " + l1[1]) + ":" + String.format((m1 ? "%.2f" : "%.0f"), Util.roundDouble(r1)));
 					sign.setLine(2, (m2 ? Util.formatCurrency(q2) : String.format("%.0f", q2) + " " + l2[1]) + ":" + String.format((m2 ? "%.2f" : "%.0f"), Util.roundDouble(r2)));
 					sign.update();
-					user.sendMessage("§7Trade completed.");
+					user.sendMessage(Util.i18n("tradeCompleted"));
 				}
 			}
 			catch (Throwable ex)
 			{
-				user.sendMessage("§cError: " + ex.getMessage());
+				user.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
 			}
 			return;
 		}

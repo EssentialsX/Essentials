@@ -54,7 +54,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		if (user.isMuted())
 		{
 			event.setCancelled(true);
-			logger.info(user.getName() + " tried to speak, but is muted.");
+			logger.info(Util.format("mutedUserSpeaks", user.getName()));
 		}
 	}
 
@@ -136,15 +136,15 @@ public class EssentialsPlayerListener extends PlayerListener
 				if (world.getEnvironment() == World.Environment.NETHER || ess.getSettings().getGenerateExitPortals())
 				{
 					portal = NetherPortal.createPortal(dest);
-					logger.info(event.getPlayer().getName() + " used a portal and generated an exit portal.");
-					user.sendMessage("§7Generating an exit portal.");
+					logger.info(Util.format("userCreatedPortal ", event.getPlayer().getName()));
+					user.sendMessage(Util.i18n("generatingPortal"));
 					loc = portal.getSpawn();
 				}
 			}
 			else
 			{
-				logger.info(event.getPlayer().getName() + " used a portal and used an existing exit portal.");
-				user.sendMessage("§7Teleporting via portal to an existing portal.");
+				logger.info(Util.format("userUsedPortal", event.getPlayer().getName()));
+				user.sendMessage(Util.i18n("usingPortal"));
 				loc = portal.getSpawn();
 			}
 
@@ -159,7 +159,7 @@ public class EssentialsPlayerListener extends PlayerListener
 				user.sendMessage(ex.getMessage());
 			}
 			user.setJustPortaled(true);
-			user.sendMessage("§7Teleporting via portal.");
+			user.sendMessage(Util.i18n("teleportingPortal"));
 
 			event.setCancelled(true);
 			return;
@@ -185,7 +185,6 @@ public class EssentialsPlayerListener extends PlayerListener
 		user.dispose();
 		Thread thread = new Thread(new Runnable()
 		{
-			@SuppressWarnings("LoggerStringConcat")
 			public void run()
 			{
 				try
@@ -197,7 +196,7 @@ public class EssentialsPlayerListener extends PlayerListener
 					rt.gc();
 					mem = rt.freeMemory() - mem;
 					mem /= 1024 * 1024;
-					logger.info("Freed " + mem + " MB.");
+					logger.log(Level.INFO, Util.format("freedMemory", mem));
 				}
 				catch (InterruptedException ex)
 				{
@@ -219,7 +218,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		if (user.isIpBanned())
 		{
 			String banReason = user.getBanReason();
-			user.kickPlayer(banReason != null && !banReason.isEmpty() ? banReason : "The Ban Hammer has spoken!");
+			user.kickPlayer(banReason != null && !banReason.isEmpty() ? banReason : Util.i18n("defaultBanReason"));
 			return;
 		}
 
@@ -242,11 +241,11 @@ public class EssentialsPlayerListener extends PlayerListener
 			List<String> mail = user.getMails();
 			if (mail.isEmpty())
 			{
-				user.sendMessage("§7You have no new mail.");
+				user.sendMessage(Util.i18n("noNewMail"));
 			}
 			else
 			{
-				user.sendMessage("§cYou have " + mail.size() + " messages!§f Type §7/mail read§f to view your mail.");
+				user.sendMessage(Util.format("youHaveNewMail", mail.size()));
 			}
 		}
 	}
@@ -263,13 +262,13 @@ public class EssentialsPlayerListener extends PlayerListener
 		if (user.isBanned())
 		{
 			String banReason = user.getBanReason();
-			event.disallow(Result.KICK_BANNED, banReason != null && !banReason.isEmpty() ? banReason : "The Ban Hammer has spoken!");
+			event.disallow(Result.KICK_BANNED, banReason != null && !banReason.isEmpty() ? banReason : Util.i18n("defaultBanReason"));
 			return;
 		}
 
 		if (server.getOnlinePlayers().length >= server.getMaxPlayers() && !user.isAuthorized("essentials.joinfullserver"))
 		{
-			event.disallow(Result.KICK_FULL, "Server is full");
+			event.disallow(Result.KICK_FULL, Util.i18n("serverFull"));
 			return;
 		}
 
@@ -306,9 +305,9 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 		catch (Exception ex)
 		{
-			logger.log(Level.WARNING, "Error occured when trying to return player to jail.", ex);
+			logger.log(Level.WARNING, Util.i18n("returnPlayerToJailError"), ex);
 		}
-		user.sendMessage(ChatColor.RED + "You do the crime, you do the time.");
+		user.sendMessage(Util.i18n("jailMessage"));
 	}
 
 	@Override
@@ -335,7 +334,7 @@ public class EssentialsPlayerListener extends PlayerListener
 				if (essBlockListener.isBlockProtected(event.getClickedBlock(), user))
 				{
 					event.setCancelled(true);
-					user.sendMessage("§cYou do not have permission to access that chest.");
+					user.sendMessage(Util.format("noAccessPermission", event.getClickedBlock().getType().toString().toLowerCase()));
 					return;
 				}
 			}
@@ -346,7 +345,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			try
 			{
 				user.setHome();
-				user.sendMessage("§7Your home is now set to this bed.");
+				user.sendMessage(Util.i18n("homeSetToBed"));
 			}
 			catch (Throwable ex)
 			{
@@ -392,30 +391,30 @@ public class EssentialsPlayerListener extends PlayerListener
 					int q1 = Integer.parseInt(m1 ? l1[0].substring(1) : l1[0]);
 					if (q1 < 1)
 					{
-						throw new Exception("Quantities must be greater than 0.");
+						throw new Exception(Util.i18n("moreThanZero"));
 					}
 					if (m1)
 					{
 						if (user.getMoney() < q1)
 						{
-							throw new Exception("You do not have sufficient funds.");
+							throw new Exception(Util.i18n("notEnoughMoney"));
 						}
 						user.takeMoney(q1);
-						user.sendMessage("$" + q1 + " taken from your bank account.");
+						user.sendMessage(Util.format("moneyTaken", Util.formatCurrency(q1)));
 					}
 					else
 					{
 						ItemStack i = ItemDb.get(l1[1], q1);
 						if (!InventoryWorkaround.containsItem(user.getInventory(), true, i))
 						{
-							throw new Exception("You do not have " + q1 + "x " + l1[1] + ".");
+							throw new Exception(Util.format("missingItems", q1, l1[1]));
 						}
 						InventoryWorkaround.removeItem(user.getInventory(), true, i);
 						user.updateInventory();
 					}
 				}
 				user.setHealth(20);
-				user.sendMessage("§7You have been healed.");
+				user.sendMessage(Util.i18n("youAreHealed"));
 				return;
 			}
 			if (sign.getLine(0).equals("§1[Mail]") && user.isAuthorized("essentials.signs.mail.use") && user.isAuthorized("essentials.mail"))
@@ -423,19 +422,19 @@ public class EssentialsPlayerListener extends PlayerListener
 				List<String> mail = user.getMails();
 				if (mail.isEmpty())
 				{
-					user.sendMessage("§cYou do not have any mail!");
+					user.sendMessage(Util.i18n("noNewMail"));
 					return;
 				}
 				for (String s : mail)
 				{
 					user.sendMessage(s);
 				}
-				user.sendMessage("§cTo mark your mail as read, type §c/mail clear");
+				user.sendMessage(Util.i18n("markMailAsRead"));
 				return;
 			}
 			if (sign.getLine(0).equals("§1[Balance]") && user.isAuthorized("essentials.signs.balance.use"))
 			{
-				user.sendMessage("§7Balance: $" + user.getMoney());
+				user.sendMessage(Util.format("balance", user.getMoney()));
 				return;
 			}
 			if (sign.getLine(0).equals("§1[Warp]"))
@@ -467,7 +466,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 		catch (Throwable ex)
 		{
-			user.sendMessage("§cError: " + ex.getMessage());
+			user.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
 		}
 	}
 	
@@ -480,23 +479,23 @@ public class EssentialsPlayerListener extends PlayerListener
 			int q1 = Integer.parseInt(m1 ? l1[0].substring(1) : l1[0]);
 			if (q1 < 1)
 			{
-				throw new Exception("Quantities must be greater than 0.");
+				throw new Exception(Util.i18n("moreThanZero"));
 			}
 			if (m1)
 			{
 				if (user.getMoney() < q1)
 				{
-					throw new Exception("You do not have sufficient funds.");
+					throw new Exception(Util.i18n("notEnoughMoney"));
 				}
 				user.takeMoney(q1);
-				user.sendMessage("$" + q1 + " taken from your bank account.");
+				user.sendMessage(Util.format("moneyTaken", Util.formatCurrency(q1)));
 			}
 			else
 			{
 				ItemStack i = ItemDb.get(l1[1], q1);
 				if (!InventoryWorkaround.containsItem(user.getInventory(), true, i))
 				{
-					throw new Exception("You do not have " + q1 + "x " + l1[1] + ".");
+					throw new Exception(Util.format("missingItems", q1, l1[1]));
 				}
 				InventoryWorkaround.removeItem(user.getInventory(), true, i);
 				user.updateInventory();
