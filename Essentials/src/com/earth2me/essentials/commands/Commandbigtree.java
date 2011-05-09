@@ -59,11 +59,11 @@ public class Commandbigtree extends EssentialsCommand
 		if (success)
 		{
 			charge(user);
-			user.sendMessage("Big tree spawned.");
+			user.sendMessage(Util.i18n("bigTreeSuccess"));
 		}
 		else
 		{
-			user.sendMessage("§cBig tree generation failure. Try again on grass or dirt.");
+			user.sendMessage(Util.i18n("bigTreeFailure"));
 		}
 	}
 }

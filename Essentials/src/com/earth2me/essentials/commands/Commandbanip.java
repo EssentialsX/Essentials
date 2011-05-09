@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.CraftServer;
@@ -21,7 +22,7 @@ public class Commandbanip extends EssentialsCommand
 		}
 
 		((CraftServer)server).getHandle().c(args[0]);
-		sender.sendMessage("§7Banned IP address.");
+		sender.sendMessage(Util.i18n("banIpAddress"));
 		ess.loadBanList();
 
 	}

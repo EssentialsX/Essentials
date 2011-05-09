@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Backup;
 import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
@@ -23,6 +24,6 @@ public class Commandbackup extends EssentialsCommand
 		}
 		charge(sender);
 		backup.run();
-		sender.sendMessage("Backup started");
+		sender.sendMessage(Util.i18n("backupStarted"));
 	}
 }

@@ -4,6 +4,7 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.CraftServer;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 
 
 public class Commandban extends EssentialsCommand
@@ -25,19 +26,19 @@ public class Commandban extends EssentialsCommand
 		if (server.matchPlayer(args[0]).isEmpty())
 		{
 			((CraftServer)server).getHandle().a(args[0]);
-			sender.sendMessage("§cPlayer " + args[0] + " banned");
+			sender.sendMessage(Util.format("playerBanned",args[0]));
 		}
 		else
 		{
 			p = ess.getUser(server.matchPlayer(args[0]).get(0));
-			String banReason = "Banned from server";
+			String banReason =  Util.i18n("defaultBanReason");
 			if(args.length > 1) {
 				banReason = getFinalArg(args, 1);
 				p.setBanReason(commandLabel);
 			}
 			p.kickPlayer(banReason);
 			((CraftServer)server).getHandle().a(p.getName());
-			sender.sendMessage("§cPlayer " + p.getName() + " banned");
+			sender.sendMessage(Util.format("playerBanned", p.getName()));
 		}
 		ess.loadBanList();
 	}
