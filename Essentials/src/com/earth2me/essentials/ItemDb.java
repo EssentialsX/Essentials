@@ -97,28 +97,42 @@ public class ItemDb
 
 	public static ItemStack get(String id) throws Exception
 	{
-		int itemid;
+		int itemid = 0;
+		String itemname = null;
 		short metaData = 0;
-		if (id.matches("^\\d+:\\d+$"))
+		if (id.matches("^\\d+[:+',;.]\\d+$"))
 		{
-			itemid = Integer.parseInt(id.split(":")[0]);
-			metaData = Short.parseShort(id.split(":")[1]);
+			itemid = Integer.parseInt(id.split("[:+',;.]")[0]);
+			metaData = Short.parseShort(id.split("[:+',;.]")[1]);
 		}
 		else if (id.matches("^\\d+$"))
 		{
 			itemid = Integer.parseInt(id);
 		}
-		else if (items.containsKey(id.toLowerCase()))
+		else if (id.matches("^[^:+',;.]+[:+',;.]\\d+$"))
 		{
-			itemid = items.get(id.toLowerCase());
-			if (durabilities.containsKey(id.toLowerCase()))
-			{
-				metaData = durabilities.get(id.toLowerCase());
-			}
+			itemname = id.split("[:+',;.]")[0].toLowerCase();
+			metaData = Short.parseShort(id.split("[:+',;.]")[1]);
 		}
-		else
+		else 
 		{
-			throw new Exception("Unknown item name: " + id);
+			itemname = id.toLowerCase();
+		}
+		
+		if (itemname != null)
+		{
+			if (items.containsKey(itemname))
+			{
+				itemid = items.get(itemname);
+				if (durabilities.containsKey(itemname) && metaData == 0)
+				{
+					metaData = durabilities.get(itemname);
+				}
+			}
+			else
+			{
+				throw new Exception("Unknown item name: " + id);
+			}
 		}
 
 		Material mat = Material.getMaterial(itemid);
