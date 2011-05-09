@@ -496,6 +496,6 @@ public class Settings implements IConf
 
 	public String getLocale()
 	{
-		return config.getString("locale", "en_US");
+		return config.getString("locale", "");
 	}
 }

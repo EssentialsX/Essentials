@@ -185,6 +185,10 @@ sort-list-by-groups: false
 # More output to the console
 debug: false
 
+# Set the locale for all messages
+# If you don't set this, the default locale of the server will be used.
+#locale: de_DE
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #

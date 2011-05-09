@@ -1,8 +1,21 @@
 package com.earth2me.essentials;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.DecimalFormat;
+import java.text.MessageFormat;
 import java.util.Calendar;
+import java.util.Enumeration;
 import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.bukkit.Location;
@@ -267,5 +280,115 @@ public class Util
 	public static double roundDouble(double d)
 	{
 		return Math.round(d*100.0)/100.0;
+	}
+	
+	private static class ConfigClassLoader extends ClassLoader {
+		private File dataFolder;
+		private ClassLoader cl;
+
+		public ConfigClassLoader(File dataFolder, ClassLoader cl)
+		{
+			this.dataFolder = dataFolder;
+			this.cl = cl;
+		}
+		
+		@Override
+		public URL getResource(String string)
+		{
+			File file = new File(dataFolder, string);
+			if (file.exists())
+			{
+				try
+				{
+					return file.toURI().toURL();
+				}
+				catch (MalformedURLException ex)
+				{
+					return cl.getResource(string);
+				}
+			}
+			return cl.getResource(string);
+		}
+
+		@Override
+		public synchronized void clearAssertionStatus()
+		{
+			cl.clearAssertionStatus();
+		}
+
+		@Override
+		public InputStream getResourceAsStream(String string)
+		{
+			File file = new File(dataFolder, string);
+			if (file.exists())
+			{
+				try
+				{
+					return new FileInputStream(file);
+				}
+				catch (FileNotFoundException ex)
+				{
+					return cl.getResourceAsStream(string);
+				}
+			}
+			return cl.getResourceAsStream(string);
+		}
+
+		@Override
+		public Enumeration<URL> getResources(String string) throws IOException
+		{
+			return cl.getResources(string);
+		}
+
+		@Override
+		public Class<?> loadClass(String string) throws ClassNotFoundException
+		{
+			return cl.loadClass(string);
+		}
+
+		@Override
+		public synchronized void setClassAssertionStatus(String string, boolean bln)
+		{
+			cl.setClassAssertionStatus(string, bln);
+		}
+
+		@Override
+		public synchronized void setDefaultAssertionStatus(boolean bln)
+		{
+			cl.setDefaultAssertionStatus(bln);
+		}
+
+		@Override
+		public synchronized void setPackageAssertionStatus(String string, boolean bln)
+		{
+			cl.setPackageAssertionStatus(string, bln);
+		}
+	}
+	
+	private static final Locale defaultLocale = Locale.getDefault();
+	public static Locale currentLocale = defaultLocale;
+	private static ResourceBundle bundle = ResourceBundle.getBundle("messages", defaultLocale);
+	
+	public static String i18n(String string) {
+		return bundle.getString(string);
+	}
+	
+	public static String format(String string, Object... objects) {
+		MessageFormat mf = new MessageFormat(i18n(string));
+		return mf.format(objects);
+	}
+
+	public static void updateLocale(String loc, File dataFolder) {
+		if (loc == null || loc.isEmpty()) {
+			return;
+		}
+		String[] parts = loc.split("_");
+		if (parts.length == 1) {
+			currentLocale = new Locale(parts[0]);
+		}
+		if (parts.length == 2) {
+			currentLocale = new Locale(parts[0], parts[1]);
+		}
+		bundle = ResourceBundle.getBundle("messages", currentLocale, new ConfigClassLoader(dataFolder, Util.class.getClassLoader()));
 	}
 }
