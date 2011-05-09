@@ -46,7 +46,7 @@ public class EssentialsConf extends Configuration
 		{
 			if (templateName != null)
 			{
-				logger.log(Level.INFO, Util.format("creatingConfigFromTemplate ", configFile.toString()));
+				logger.log(Level.INFO, Util.format("creatingConfigFromTemplate", configFile.toString()));
 				createFromTemplate();
 			}
 			else
