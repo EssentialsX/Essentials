@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -24,7 +25,7 @@ public class Commandburn extends EssentialsCommand
 		for (Player p : server.matchPlayer(args[0]))
 		{
 			p.setFireTicks(Integer.parseInt(args[1]) * 20);
-			sender.sendMessage("§cYou set " + p.getDisplayName() + " on fire for " + Integer.parseInt(args[1]) + "seconds.");
+			sender.sendMessage(Util.format("burnMsg", p.getDisplayName(), Integer.parseInt(args[1])));
 		}
 	}
 }

@@ -4,6 +4,7 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import java.util.List;
 import org.bukkit.ChatColor;
 
@@ -34,7 +35,7 @@ public class Commandclearinventory extends EssentialsCommand
 					}
 					return;
 				}
-				throw new Exception("Player not found");
+				throw new Exception(Util.i18n("playerNotFound"));
 			}
 			else
 			{
@@ -43,11 +44,11 @@ public class Commandclearinventory extends EssentialsCommand
 				{
 					charge(user);
 					p.getInventory().clear();
-					user.sendMessage("§7Inventory of §c" + p.getDisplayName() + "§7 cleared.");
+					user.sendMessage(Util.format("inventoryClearedOthers", p.getDisplayName()));
 				}
 				else
 				{
-					throw new Exception("Player not found");
+					throw new Exception(Util.i18n("playerNotFound"));
 				}
 			}
 		}
@@ -55,7 +56,7 @@ public class Commandclearinventory extends EssentialsCommand
 		{
 			charge(user);
 			user.getInventory().clear();
-			user.sendMessage("§7Inventory cleared.");
+			user.sendMessage(Util.i18n("inventoryCleared"));
 		}
 	}
 
@@ -64,8 +65,7 @@ public class Commandclearinventory extends EssentialsCommand
 	{
 		if (args.length < 1)
 		{
-			sender.sendMessage(ChatColor.RED + "Usage: " + commandLabel + " [player]");
-			return;
+			throw new NotEnoughArgumentsException();
 		}
 
 		if (args[0].length() >= 3)
@@ -77,11 +77,11 @@ public class Commandclearinventory extends EssentialsCommand
 				for (Player p : online)
 				{
 					p.getInventory().clear();
-					sender.sendMessage("§7Inventory of §c" + p.getDisplayName() + "§7 cleared.");
+					sender.sendMessage(Util.format("inventoryClearedOthers", p.getDisplayName()));
 				}
 				return;
 			}
-			throw new Exception("Player not found");
+			throw new Exception(Util.i18n("playerNotFound"));
 		}
 		else
 		{
@@ -89,11 +89,11 @@ public class Commandclearinventory extends EssentialsCommand
 			if (u != null)
 			{
 				u.getInventory().clear();
-				sender.sendMessage("§7Inventory of §c" + u.getDisplayName() + "§7 cleared.");
+				sender.sendMessage(Util.format("inventoryClearedOthers", u.getDisplayName()));
 			}
 			else
 			{
-				throw new Exception("Player not found");
+				throw new Exception(Util.i18n("playerNotFound"));
 			}
 		}
 	}

@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 
 
 public class Commandcompass extends EssentialsCommand
@@ -26,6 +27,6 @@ public class Commandcompass extends EssentialsCommand
 		else if (r < 293) dir = "W";
 		else if (r < 338) dir = "NW";
 		else dir = "N";
-		user.sendMessage("§7Bearing: " + dir + " (" + r + " degrees)");
+		user.sendMessage(Util.format("compassBearing", dir, r));
 	}
 }

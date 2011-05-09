@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.Util;
 
 
 public class Commanddelwarp extends EssentialsCommand
@@ -21,6 +22,6 @@ public class Commanddelwarp extends EssentialsCommand
 		}
 		charge(sender);
 		Essentials.getWarps().delWarp(args[0]);
-		sender.sendMessage("§7Warp removed.");
+		sender.sendMessage(Util.format("deleteWarp", args[0]));
 	}
 }

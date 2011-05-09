@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -31,7 +32,7 @@ public class Commandext extends EssentialsCommand
 		{
 			charge(user);
 			user.setFireTicks(0);
-			user.sendMessage("§7You extinguished yourself.");
+			user.sendMessage(Util.i18n("extinguish"));
 			return;
 		}
 
@@ -44,7 +45,7 @@ public class Commandext extends EssentialsCommand
 		{
 			charge(sender);
 			p.setFireTicks(0);
-			sender.sendMessage("§7You extinguished " + p.getDisplayName() + ".");
+			sender.sendMessage(Util.format("extinguishOthers", p.getDisplayName()));
 		}
 	}
 }
