@@ -1,7 +1,9 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import java.util.Arrays;
 import org.bukkit.Server;
+import org.bukkit.inventory.ItemStack;
 
 
 public class Commandinvsee extends EssentialsCommand
@@ -37,7 +39,15 @@ public class Commandinvsee extends EssentialsCommand
 		{
 			user.setSavedInventory(user.getInventory().getContents());
 		}
-		user.getInventory().setContents(invUser.getInventory().getContents());
+		ItemStack[] invUserStack = invUser.getInventory().getContents();
+		int userStackLength = user.getInventory().getContents().length;
+		if (invUserStack.length < userStackLength) {
+			invUserStack = Arrays.copyOf(invUserStack, userStackLength);
+		}
+		if (invUserStack.length > userStackLength) {
+			throw new Exception("The other users inventory is bigger than yours.");
+		}
+		user.getInventory().setContents(invUserStack);
 		user.sendMessage("You see the inventory of " + invUser.getDisplayName() + ".");
 		user.sendMessage("Use /invsee to restore your inventory.");
 	}
