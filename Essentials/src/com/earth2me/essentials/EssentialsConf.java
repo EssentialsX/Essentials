@@ -46,19 +46,19 @@ public class EssentialsConf extends Configuration
 		{
 			if (templateName != null)
 			{
-				logger.log(Level.INFO, "Creating config from template: " + configFile.toString());
+				logger.log(Level.INFO, Util.format("creatingConfigFromTemplate ", configFile.toString()));
 				createFromTemplate();
 			}
 			else
 			{
 				try
 				{
-					logger.log(Level.INFO, "Creating empty config: " + configFile.toString());
+					logger.log(Level.INFO, Util.format("creatingEmptyConfig", configFile.toString()));
 					configFile.createNewFile();
 				}
 				catch (IOException ex)
 				{
-					logger.log(Level.SEVERE, "Failed to create config " + configFile.toString(), ex);
+					logger.log(Level.SEVERE, Util.format("failedToCreateConfig", configFile.toString()), ex);
 				}
 			}
 		}
@@ -77,7 +77,7 @@ public class EssentialsConf extends Configuration
 			InputStream istr = resourceClass.getResourceAsStream(templateName);
 			if (istr == null)
 			{
-				logger.log(Level.SEVERE, "Could not find template " + templateName);
+				logger.log(Level.SEVERE, Util.format("couldNotFindTemplate", templateName));
 				return;
 			}
 			ostr = new FileOutputStream(configFile);
@@ -93,7 +93,7 @@ public class EssentialsConf extends Configuration
 		}
 		catch (IOException ex)
 		{
-			logger.log(Level.SEVERE, "Failed to write config " + configFile.toString(), ex);
+			logger.log(Level.SEVERE, Util.format("failedToWriteConfig", configFile.toString()), ex);
 			return;
 		}
 		finally
@@ -107,7 +107,7 @@ public class EssentialsConf extends Configuration
 			}
 			catch (IOException ex)
 			{
-				logger.log(Level.SEVERE, "Failed to close config " + configFile.toString(), ex);
+				logger.log(Level.SEVERE, Util.format("failedToCloseConfig", configFile.toString()), ex);
 				return;
 			}
 		}

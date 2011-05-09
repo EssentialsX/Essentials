@@ -59,7 +59,7 @@ public class EssentialsEcoBlockListener extends BlockListener
 				double r2 = Double.parseDouble(l2[m2 ? 1 : 2]);
 				if ((!m1 & q1 < 1) || (!m2 & q2 < 1))
 				{
-					throw new Exception("Quantities must be greater than 0.");
+					throw new Exception(Util.i18n("moreThanZero"));
 				}
 
 				ItemStack i1 = m1 || r1 <= 0 ? null : ItemDb.get(l1[1], (int)r1);
@@ -87,7 +87,7 @@ public class EssentialsEcoBlockListener extends BlockListener
 			}
 			catch (Throwable ex)
 			{
-				user.sendMessage("§cError: " + ex.getMessage());
+				user.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
 			}
 			return;
 		}
@@ -167,7 +167,7 @@ public class EssentialsEcoBlockListener extends BlockListener
 				r2 = m2 ? r2 : r2 - r2 % q2;
 				if ((!m1 & q1 < 1) || (!m2 &q2 < 1) || r2 < 1)
 				{
-					throw new Exception("Quantities must be greater than 0.");
+					throw new Exception(Util.i18n("moreThanZero"));
 				}
 				if (!m1)
 				{
@@ -178,17 +178,17 @@ public class EssentialsEcoBlockListener extends BlockListener
 				{
 					if (user.getMoney() < r2)
 					{
-						throw new Exception("You do not have sufficient funds.");
+						throw new Exception(Util.i18n("notEnoughMoney"));
 					}
 					user.takeMoney(r2);
-					user.sendMessage("r2: " + r2 + "    q2: " + q2);
+					//user.sendMessage("r2: " + r2 + "    q2: " + q2);
 				}
 				else
 				{
 					ItemStack i2 = ItemDb.get(l2[1], (int)r2);
 					if (!InventoryWorkaround.containsItem(user.getInventory(), true, i2))
 					{
-						throw new Exception("You do not have " + r2 + "x " + l2[1] + ".");
+						throw new Exception(Util.format("missingItems", r2, l2[1]));
 					}
 					InventoryWorkaround.removeItem(user.getInventory(), true, i2);
 					user.updateInventory();
