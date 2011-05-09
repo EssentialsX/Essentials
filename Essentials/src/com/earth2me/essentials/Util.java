@@ -1,10 +1,8 @@
 package com.earth2me.essentials;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -279,10 +277,12 @@ public class Util
 
 	public static double roundDouble(double d)
 	{
-		return Math.round(d*100.0)/100.0;
+		return Math.round(d * 100.0) / 100.0;
 	}
-	
-	private static class ConfigClassLoader extends ClassLoader {
+
+
+	private static class ConfigClassLoader extends ClassLoader
+	{
 		private File dataFolder;
 		private ClassLoader cl;
 
@@ -291,7 +291,7 @@ public class Util
 			this.dataFolder = dataFolder;
 			this.cl = cl;
 		}
-		
+
 		@Override
 		public URL getResource(String string)
 		{
@@ -364,29 +364,34 @@ public class Util
 			cl.setPackageAssertionStatus(string, bln);
 		}
 	}
-	
 	private static final Locale defaultLocale = Locale.getDefault();
 	public static Locale currentLocale = defaultLocale;
 	private static ResourceBundle bundle = ResourceBundle.getBundle("messages", defaultLocale);
-	
-	public static String i18n(String string) {
+
+	public static String i18n(String string)
+	{
 		return bundle.getString(string);
 	}
-	
-	public static String format(String string, Object... objects) {
+
+	public static String format(String string, Object... objects)
+	{
 		MessageFormat mf = new MessageFormat(i18n(string));
 		return mf.format(objects);
 	}
 
-	public static void updateLocale(String loc, File dataFolder) {
-		if (loc == null || loc.isEmpty()) {
+	public static void updateLocale(String loc, File dataFolder)
+	{
+		if (loc == null || loc.isEmpty())
+		{
 			return;
 		}
 		String[] parts = loc.split("_");
-		if (parts.length == 1) {
+		if (parts.length == 1)
+		{
 			currentLocale = new Locale(parts[0]);
 		}
-		if (parts.length == 2) {
+		if (parts.length == 2)
+		{
 			currentLocale = new Locale(parts[0], parts[1]);
 		}
 		bundle = ResourceBundle.getBundle("messages", currentLocale, new ConfigClassLoader(dataFolder, Util.class.getClassLoader()));
