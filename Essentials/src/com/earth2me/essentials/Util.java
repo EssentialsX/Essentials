@@ -106,7 +106,7 @@ public class Util
 			+ "(?:([0-9]+)\\s*d[a-z]*[,\\s]*)?"
 			+ "(?:([0-9]+)\\s*h[a-z]*[,\\s]*)?"
 			+ "(?:([0-9]+)\\s*m[a-z]*[,\\s]*)?"
-			+ "(?:([0-9]+)\\s*s[a-z]*)?", Pattern.CASE_INSENSITIVE);
+			+ "(?:([0-9]+)\\s*(?:s[a-z]*)?)?", Pattern.CASE_INSENSITIVE);
 
 	public static long parseDateDiff(String time, boolean future) throws Exception
 	{
