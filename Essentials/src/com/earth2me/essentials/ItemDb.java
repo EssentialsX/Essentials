@@ -31,7 +31,10 @@ public class ItemDb
 			FileWriter tx = new FileWriter(file);
 			try
 			{
-				for (int i = 0; (i = res.read()) > 0;) tx.write(i);
+				for (int i = 0; (i = res.read()) > 0;)
+				{
+					tx.write(i);
+				}
 			}
 			finally
 			{
@@ -58,14 +61,18 @@ public class ItemDb
 				{
 					String line = rx.readLine().trim().toLowerCase();
 					if (line.startsWith("#"))
+					{
 						continue;
-					
+					}
+
 					String[] parts = line.split("[^a-z0-9]");
 					if (parts.length < 2)
+					{
 						continue;
-					
+					}
+
 					int numeric = Integer.parseInt(parts[1]);
-					
+
 					durabilities.put(parts[0].toLowerCase(), parts.length > 2 && !parts[2].equals("0") ? Short.parseShort(parts[2]) : 0);
 					items.put(parts[0].toLowerCase(), numeric);
 				}
@@ -80,8 +87,9 @@ public class ItemDb
 			rx.close();
 		}
 	}
-	
-	public static ItemStack get(String id, int quantity) throws Exception {
+
+	public static ItemStack get(String id, int quantity) throws Exception
+	{
 		ItemStack retval = get(id.toLowerCase());
 		retval.setAmount(quantity);
 		return retval;
@@ -90,37 +98,37 @@ public class ItemDb
 	public static ItemStack get(String id) throws Exception
 	{
 		int itemid;
-		short metaData =0;
-		if(id.matches("^\\d+:\\d+$"))
+		short metaData = 0;
+		if (id.matches("^\\d+:\\d+$"))
 		{
-			itemid = getUnsafe(id.split(":")[0]);
-			metaData = (short)getUnsafe(id.split(":")[1]);
+			itemid = Integer.parseInt(id.split(":")[0]);
+			metaData = Short.parseShort(id.split(":")[1]);
+		}
+		else if (id.matches("^\\d+$"))
+		{
+			itemid = Integer.parseInt(id);
+		}
+		else if (items.containsKey(id.toLowerCase()))
+		{
+			itemid = items.get(id.toLowerCase());
+			if (durabilities.containsKey(id.toLowerCase()))
+			{
+				metaData = durabilities.get(id.toLowerCase());
+			}
 		}
 		else
 		{
-			itemid = getUnsafe(id);
+			throw new Exception("Unknown item name: " + id);
 		}
-			
+
 		Material mat = Material.getMaterial(itemid);
-		if (mat == null) {
-			throw new Exception("Unknown item id: "+itemid);
+		if (mat == null)
+		{
+			throw new Exception("Unknown item id: " + itemid);
 		}
 		ItemStack retval = new ItemStack(mat);
 		retval.setAmount(Essentials.getStatic().getSettings().getDefaultStackSize());
-		retval.setDurability(metaData !=0 ? metaData :(durabilities.containsKey(id.toLowerCase()) ? durabilities.get(id.toLowerCase()) : 0));
+		retval.setDurability(metaData);
 		return retval;
-	}
-
-	private static int getUnsafe(String id) throws Exception
-	{
-		try
-		{
-			return Integer.parseInt(id);
-		}
-		catch (NumberFormatException ex)
-		{
-			if (items.containsKey(id.toLowerCase())) return items.get(id.toLowerCase());
-			throw new Exception("Unknown item name: " + id);
-		}
 	}
 }
