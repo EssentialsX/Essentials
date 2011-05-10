@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import java.util.List;
 import org.bukkit.Server;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -22,21 +23,21 @@ public class Commandmail extends EssentialsCommand
 			List<String> mail = user.getMails();
 			if (mail.isEmpty())
 			{
-				user.sendMessage("§cYou do not have any mail!");
+				user.sendMessage(Util.i18n("noMail"));
 				return;
 			}
 			for (String s : mail)
 			{
 				user.sendMessage(s);
 			}
-			user.sendMessage("§cTo mark your mail as read, type §c/mail clear");
+			user.sendMessage(Util.i18n("mailClear"));
 			return;
 		}
 		if (args.length >= 3 && "send".equalsIgnoreCase(args[0]))
 		{
 			if (!user.isAuthorized("essentials.mail.send"))
 			{
-				user.sendMessage("§cYou do not have the §fessentials.mail.send§c permission.");
+				user.sendMessage(Util.i18n("noMailSendPerm"));
 				return;
 			}
 
@@ -52,20 +53,20 @@ public class Commandmail extends EssentialsCommand
 			}
 			if (u == null)
 			{
-				user.sendMessage("§cPlayer " + args[1] + " never was on this server.");
+				user.sendMessage(Util.format("playerNeverOnServer", args[1]));
 				return;
 			}
 			charge(user);
 			u.addMail(ChatColor.stripColor(user.getDisplayName()) + ": " + getFinalArg(args, 2));
-			user.sendMessage("§7Mail sent!");
+			user.sendMessage(Util.i18n("mailSent"));
 			return;
 		}
 		if (args.length >= 1 && "clear".equalsIgnoreCase(args[0]))
 		{
 			user.setMails(null);
-			user.sendMessage("§7Mail cleared!");
+			user.sendMessage(Util.i18n("mailCleared"));
 			return;
 		}
-		user.sendMessage("§7Usage: /mail [read|clear|send [to] [message]]");
+		user.sendMessage(Util.format("usage", "/mail [read|clear|send [to] [message]]"));
 	}
 }

@@ -44,12 +44,12 @@ public class Commandkit extends EssentialsCommand
 				}
 				else
 				{
-					user.sendMessage("§7There are no kits available yet");
+					user.sendMessage(Util.i18n("noKits"));
 				}
 			}
 			catch (Exception ex)
 			{
-				user.sendMessage("§cThere are no valid kits.");
+				user.sendMessage(Util.i18n("kitError"));
 			}
 		}
 		else
@@ -62,7 +62,7 @@ public class Commandkit extends EssentialsCommand
 
 				if (!user.isAuthorized("essentials.kit." + kitName))
 				{
-					user.sendMessage("§cYou need the §fessentials.kit." + kitName + "§c permission to use that kit.");
+					user.sendMessage(Util.format("noKitPermission", "essentials.kit." + kitName));
 					return;
 				}
 
@@ -100,7 +100,7 @@ public class Commandkit extends EssentialsCommand
 						}
 						else
 						{
-							user.sendMessage("§cYou can't use that kit again for another " + Util.formatDateDiff(kitTimes.get(kitName)) + ".");
+							user.sendMessage(Util.format("kitTimed", Util.formatDateDiff(kitTimes.get(kitName))));
 							return;
 						}
 					}
@@ -136,7 +136,7 @@ public class Commandkit extends EssentialsCommand
 				}
 				if (spew)
 				{
-					user.sendMessage("§7Your inventory was full, placing kit on the floor");
+					user.sendMessage(Util.i18n("kitInvFull"));
 				}
 				try
 				{
@@ -147,12 +147,12 @@ public class Commandkit extends EssentialsCommand
 				{
 					user.sendMessage(ex.getMessage());
 				}
-				user.sendMessage("§7Giving kit " + args[0].toLowerCase() + ".");
+				user.sendMessage(Util.format("kitGive", args[0].toLowerCase()));
 			}
 			catch (Exception ex)
 			{
-				user.sendMessage("§cThat kit does not exist or is improperly defined.");
-				user.sendMessage("§cPerhaps an item is missing a quantity in the configuration?");
+				user.sendMessage(Util.i18n("kitError2"));
+				user.sendMessage(Util.i18n("kitErrorHelp"));
 			}
 		}
 	}

@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import org.bukkit.Server;
 import com.earth2me.essentials.ItemDb;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -32,7 +33,7 @@ public class Commanditem extends EssentialsCommand
 			: (!user.isAuthorized("essentials.itemspawn.exempt")
 			   && !user.canSpawnItem(stack.getTypeId())))
 		{
-			user.sendMessage(ChatColor.RED + "You are not allowed to spawn the item " + itemname);
+			user.sendMessage(Util.format("cantSpawnItem", itemname));
 			return;
 		}
 
@@ -43,13 +44,13 @@ public class Commanditem extends EssentialsCommand
 
 		if (stack.getType() == Material.AIR)
 		{
-			user.sendMessage(ChatColor.RED + "You can't get air.");
+			user.sendMessage(Util.format("cantSpawnItem", "Air"));
 			return;
 		}
 
 		String itemName = stack.getType().name().toLowerCase().replace('_', ' ');
 		charge(user);
-		user.sendMessage("§7Giving " + stack.getAmount() + " of " + itemName + " to " + user.getDisplayName() + ".");
+		user.sendMessage(Util.format("itemSpawn", stack.getAmount(), itemName));
 		user.getInventory().addItem(stack);
 		user.updateInventory();
 	}

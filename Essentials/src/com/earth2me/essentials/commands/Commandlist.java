@@ -5,6 +5,7 @@ import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.Essentials;
 import org.bukkit.entity.Player;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -84,7 +85,7 @@ public class Commandlist extends EssentialsCommand
 			Collections.sort(users);
 
 			StringBuilder onlineUsers = new StringBuilder();
-			onlineUsers.append("Connected players: ");
+			onlineUsers.append(Util.i18n("connectedPlayers"));
 			boolean first = true;
 			for (User user : users)
 			{

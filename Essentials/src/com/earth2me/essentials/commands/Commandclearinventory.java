@@ -31,7 +31,7 @@ public class Commandclearinventory extends EssentialsCommand
 					for (Player p : online)
 					{
 						p.getInventory().clear();
-						user.sendMessage("§7Inventory of §c" + p.getDisplayName() + "§7 cleared.");
+						user.sendMessage(Util.format("inventoryClearedOthers", p.getDisplayName()));
 					}
 					return;
 				}

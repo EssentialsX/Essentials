@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -34,7 +35,7 @@ public class Commandgod extends EssentialsCommand
 			return;
 		}
 
-		user.sendMessage("§7God mode " + (user.toggleGodModeEnabled() ? "enabled." : "disabled."));
+		user.sendMessage(Util.format("godMode", (user.toggleGodModeEnabled()?  Util.i18n("godEnabled") : Util.i18n("godDisabled"))));
 	}
 
 	private void godOtherPlayers(Server server, CommandSender sender, String name)
@@ -43,8 +44,8 @@ public class Commandgod extends EssentialsCommand
 		{
 			User u = ess.getUser(p);
 			boolean enabled = u.toggleGodModeEnabled();
-			u.sendMessage("§7God mode " + (enabled ? "enabled." : "disabled."));
-			sender.sendMessage("§7God mode " + (enabled ? "enabled for " : "disabled for ") + p.getDisplayName() + ".");
+			u.sendMessage(Util.format("godMode", (enabled ? Util.i18n("godEnabled") : Util.i18n("godDisabled"))));
+			sender.sendMessage(Util.format("godMode",Util.format(enabled ? Util.i18n("godEnabledFor"): Util.i18n("godDisabledFor"), p.getDisplayName())));
 		}
 	}
 }

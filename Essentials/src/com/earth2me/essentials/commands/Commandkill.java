@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -24,7 +25,7 @@ public class Commandkill extends EssentialsCommand
 		for (Player p : server.matchPlayer(args[0]))
 		{
 			p.setHealth(0);
-			sender.sendMessage("§cKilled " + p.getDisplayName() + ".");
+			sender.sendMessage(Util.format("kill", p.getDisplayName()));
 		}
 	}
 }

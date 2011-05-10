@@ -42,7 +42,7 @@ public class Commandhelp extends EssentialsCommand
 		int start = (page - 1) * 9;
 		int pages = lines.size() / 9 + (lines.size() % 9 > 0 ? 1 : 0);
 
-		user.sendMessage("Page §c" + page + "§f of §c" + pages + "§f:");
+		user.sendMessage(Util.format("helpPages", page, pages));
 		for (int i = start; i < lines.size() && i < start + 9; i++)
 		{
 			user.sendMessage(lines.get(i));
@@ -52,7 +52,7 @@ public class Commandhelp extends EssentialsCommand
 	@Override
 	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
-		sender.sendMessage("To view help from the console, type \"?\".");
+		sender.sendMessage(Util.i18n("helpConsole"));
 	}
 
 	@SuppressWarnings("CallToThreadDumpStack")

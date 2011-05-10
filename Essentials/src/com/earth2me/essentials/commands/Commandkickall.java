@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -25,7 +26,7 @@ public class Commandkickall extends EssentialsCommand
 			}
 			else
 			{
-				p.kickPlayer(args.length < 1 ? getFinalArg(args, 0) : "Kicked from server");
+				p.kickPlayer(args.length < 1 ? getFinalArg(args, 0) : Util.i18n("kickDefault"));
 			}
 		}
 	}

@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 
 
 public class Commandhelpop extends EssentialsCommand
@@ -28,7 +29,7 @@ public class Commandhelpop extends EssentialsCommand
 			{
 				continue;
 			}
-			u.sendMessage("§c[HelpOp]§f §7" + user.getDisplayName() + ":§f " + getFinalArg(args, 0));
+			u.sendMessage(Util.format("helpOp", user.getDisplayName(), getFinalArg(args, 0)));
 		}
 	}
 }

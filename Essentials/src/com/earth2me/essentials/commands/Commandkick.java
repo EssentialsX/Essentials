@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import org.bukkit.ChatColor;
 
 
@@ -28,11 +29,11 @@ public class Commandkick extends EssentialsCommand
 		}
 		catch (Throwable ex)
 		{
-			sender.sendMessage(ChatColor.RED + "That player does not exist!");
+			sender.sendMessage(Util.i18n("playerNotFound"));
 			return;
 		}
 
 		charge(sender);
-		u.kickPlayer(args.length > 1 ? getFinalArg(args, 1) : "Kicked from server");
+		u.kickPlayer(args.length > 1 ? getFinalArg(args, 1) : Util.i18n("kickDefault"));
 	}
 }

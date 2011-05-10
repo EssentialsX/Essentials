@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import com.earth2me.essentials.TargetBlock;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 
 
 public class Commandjump extends EssentialsCommand
@@ -31,7 +32,7 @@ public class Commandjump extends EssentialsCommand
 		}
 		catch (NullPointerException ex)
 		{
-			throw new Exception("That would hurt your computer's brain.", ex);
+			throw new Exception(Util.i18n("jumpError"), ex);
 		}
 
 		user.canAfford(this);

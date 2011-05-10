@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
@@ -16,6 +17,6 @@ public class Commandessentials extends EssentialsCommand
 	{
 		ess.reload();
 		charge(sender);
-		sender.sendMessage("§7Essentials Reloaded " + ess.getDescription().getVersion());
+		sender.sendMessage(Util.format("essentialsReload", ess.getDescription().getVersion()));
 	}
 }
