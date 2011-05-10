@@ -1,6 +1,7 @@
 package com.earth2me.essentials.protect;
 
 import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
-public class EssentialsProtect extends JavaPlugin
+public class EssentialsProtect extends JavaPlugin implements IConf
 {
 	private EssentialsProtectBlockListener blockListener = null;
 	private EssentialsProtectPlayerListener playerListener = null;
@@ -76,7 +77,8 @@ public class EssentialsProtect extends JavaPlugin
 		//serverlistener
 		pm.registerEvent(Type.PLUGIN_ENABLE, serverListener, Priority.Highest, this);
 	
-		loadSettings();
+		reloadConfig();
+		Essentials.getStatic().addReloadListener(this);
 		if (!this.getDescription().getVersion().equals(Essentials.getStatic().getDescription().getVersion())) {
 			logger.log(Level.WARNING, Util.i18n("versionMismatchAll"));
 		}
@@ -108,7 +110,7 @@ public class EssentialsProtect extends JavaPlugin
 		onBreakAlert = null;
 	}
 
-	public static void loadSettings()
+	public void reloadConfig()
 	{
 		dataSettings = Essentials.getStatic().getSettings().getEpDBSettings();
 		genSettings = Essentials.getStatic().getSettings().getEpSettings();

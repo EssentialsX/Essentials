@@ -187,6 +187,11 @@ public class Essentials extends JavaPlugin
 		{
 			iConf.reloadConfig();
 		}
+		
+		for (User user : users.values())
+		{
+			user.reloadConfig();
+		}
 
 		try
 		{
@@ -643,5 +648,10 @@ public class Essentials extends JavaPlugin
 	public boolean isIConomyFallbackEnabled()
 	{
 		return iConomyFallback;
+	}
+	
+	public void addReloadListener(IConf listener)
+	{
+		confList.add(listener);
 	}
 }
