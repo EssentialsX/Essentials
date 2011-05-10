@@ -2,6 +2,7 @@ package com.earth2me.essentials.protect;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.IConf;
+import com.earth2me.essentials.IConfExternal;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.util.ArrayList;
@@ -77,7 +78,7 @@ public class EssentialsProtect extends JavaPlugin
 		pm.registerEvent(Type.PLUGIN_ENABLE, serverListener, Priority.Highest, this);
 	
 		reloadConfig();
-		Essentials.getStatic().addReloadListener(new IConf() {
+		Essentials.getStatic().addReloadListener(new IConfExternal() {
 
 			public void reloadConfig()
 			{
