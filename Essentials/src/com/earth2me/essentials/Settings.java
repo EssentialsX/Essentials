@@ -150,14 +150,14 @@ public class Settings implements IConf
 		return kits.get(name.replace('.', '_').replace('/', '_'));
 	}
 
-	public ChatColor getOperatorColor()
+	public ChatColor getOperatorColor() throws Exception
 	{
 		String colorName = config.getString("ops-name-color", null);
 
 		if (colorName == null)
 			return ChatColor.RED;
 		if("none".equalsIgnoreCase(colorName) || colorName.isEmpty())
-			return ChatColor.WHITE;
+			throw new Exception();
 
 		try
 		{

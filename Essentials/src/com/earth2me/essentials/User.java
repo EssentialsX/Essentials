@@ -244,7 +244,13 @@ public class User extends UserData implements Comparable<User>, IReplyTo
 		}
 		if (isOp())
 		{
-			nickname = ess.getSettings().getOperatorColor().toString() + nickname + "§f";
+			try
+			{
+				nickname = ess.getSettings().getOperatorColor().toString() + nickname + "§f";
+			}
+			catch(Exception e)
+			{
+			}
 		}
 		return nickname;
 	}
