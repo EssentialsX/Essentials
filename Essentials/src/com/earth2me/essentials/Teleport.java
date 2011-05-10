@@ -84,7 +84,7 @@ public class Teleport implements Runnable
 			try
 			{
 				cooldown(false);
-				user.sendMessage("§7Teleportation commencing...");
+				user.sendMessage(Util.i18n("teleportationCommencing"));
 				try
 				{
 					
@@ -96,13 +96,13 @@ public class Teleport implements Runnable
 				}
 				catch (Throwable ex)
 				{
-					user.sendMessage("§cError: " + ex.getMessage());
+					user.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
 				}
 				return;
 			}
 			catch (Exception ex)
 			{
-				user.sendMessage("§cCooldown: " + ex.getMessage());
+				user.sendMessage(Util.format("cooldownWithMessage", ex.getMessage()));
 			}
 		}
 	}
@@ -122,7 +122,7 @@ public class Teleport implements Runnable
 	{
 		Location loc = Essentials.getWarps().getWarp(warp);
 		teleport(new Target(loc), chargeFor);
-		user.sendMessage("§7Warping to " + warp + ".");
+		user.sendMessage(Util.format("warpingTo", warp));
 	}
 
 	public void cooldown(boolean check) throws Exception
@@ -137,7 +137,7 @@ public class Teleport implements Runnable
 			cooldownTime.add(Calendar.MILLISECOND, (int)((cooldown * 1000.0) % 1000.0));
 			if (cooldownTime.after(now) && !user.isAuthorized("essentials.teleport.cooldown.bypass"))
 			{
-				throw new Exception("Time before next teleport: " + Util.formatDateDiff(cooldownTime.getTimeInMillis()));
+				throw new Exception(Util.format("timeBeforeTeleport", Util.formatDateDiff(cooldownTime.getTimeInMillis())));
 			}
 		}
 		// if justCheck is set, don't update lastTeleport; we're just checking
@@ -158,7 +158,7 @@ public class Teleport implements Runnable
 			user.getServer().getScheduler().cancelTask(teleTimer);
 			if (notifyUser)
 			{
-				user.sendMessage("§cPending teleportation request cancelled.");
+				user.sendMessage(Util.i18n("pendingTeleportCancelled"));
 			}
 		}
 		finally
@@ -201,7 +201,7 @@ public class Teleport implements Runnable
 		Calendar c = new GregorianCalendar();
 		c.add(Calendar.SECOND, (int)delay);
 		c.add(Calendar.MILLISECOND, (int)((delay * 1000.0) % 1000.0));
-		user.sendMessage("§7Teleportation will commence in " + Util.formatDateDiff(c.getTimeInMillis()) + ". Don't move.");
+		user.sendMessage(Util.format("dontMoveMessage", Util.formatDateDiff(c.getTimeInMillis())));
 		initTimer((long)(delay * 1000.0), target, chargeFor);
 
 		teleTimer = user.getServer().getScheduler().scheduleSyncRepeatingTask(Essentials.getStatic(), this, 10, 10);
@@ -250,7 +250,7 @@ public class Teleport implements Runnable
 			}
 			else
 			{
-				throw new Exception(user == this.user ? "You have not set a home." : "Player has not set a home.");
+				throw new Exception(user == this.user ? Util.i18n("noHomeSet") : Util.i18n("noHomeSetPlayer"));
 			}
 		}
 		teleport(new Target(loc), chargeFor);

@@ -120,7 +120,7 @@ public class NetherPortal
 		// For now, don't worry about direction
 
 		int x = dest.getX(), y = dest.getY(), z = dest.getZ();
-		Logger.getLogger("Minecraft").log(Level.INFO, "Creating portal at "+x+","+y+","+z+"."); 
+		Logger.getLogger("Minecraft").log(Level.INFO, Util.format("creatingPortal", x, y, z)); 
 
 		// Clear area around portal
 		ArrayList<Block> columns = new ArrayList<Block>();

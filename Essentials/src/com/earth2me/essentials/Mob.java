@@ -93,7 +93,7 @@ public enum Mob
 		}
 		catch (Exception ex)
 		{
-			logger.warning("Unable to spawn mob.");
+			logger.warning(Util.i18n("unableToSpawnMob"));
 			ex.printStackTrace();
 			throw new MobException();
 		}

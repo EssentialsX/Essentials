@@ -42,7 +42,7 @@ public class Util
 		boolean future = false;
 		if (toDate.equals(fromDate))
 		{
-			return "now";
+			return Util.i18n("now");
 		}
 		if (toDate.after(fromDate))
 		{
@@ -61,23 +61,25 @@ public class Util
 		};
 		String[] names = new String[]
 		{
-			"year",
-			"month",
-			"day",
-			"hour",
-			"minute",
-			"second"
+			Util.i18n("year"),
+			Util.i18n("years"),
+			Util.i18n("month"),
+			Util.i18n("months"),
+			Util.i18n("day"),
+			Util.i18n("days"),
+			Util.i18n("hour"),
+			Util.i18n("hours"),
+			Util.i18n("minute"),
+			Util.i18n("minutes"),
+			Util.i18n("second"),
+			Util.i18n("seconds")
 		};
 		for (int i = 0; i < types.length; i++)
 		{
 			int diff = dateDiff(types[i], fromDate, toDate, future);
 			if (diff > 0)
 			{
-				sb.append(" ").append(diff).append(" ").append(names[i]);
-				if (diff > 1)
-				{
-					sb.append("s");
-				}
+				sb.append(" ").append(diff).append(" ").append(names[i * 2 + (diff > 1 ? 1 : 0)]);
 			}
 		}
 		if (sb.length() == 0)
@@ -206,7 +208,7 @@ public class Util
 	{
 		if (loc == null)
 		{
-			throw new Exception("Destination not set");
+			throw new Exception(Util.i18n("destinationNotSet"));
 		}
 		World world = loc.getWorld();
 		double x = Math.floor(loc.getX()) + 0.5;
@@ -218,7 +220,7 @@ public class Util
 			y -= 1.0D;
 			if (y < 0.0D)
 			{
-				throw new Exception("Hole in floor");
+				throw new Exception(Util.i18n("holeInFloor"));
 			}
 		}
 
@@ -268,11 +270,11 @@ public class Util
 		}
 		return isBlockAboveAir(world, x, y, z);
 	}
-	private static DecimalFormat df = new DecimalFormat("#.00");
+	//private static DecimalFormat df = new DecimalFormat("#.00");
 
 	public static String formatCurrency(double value)
 	{
-		return "$" + df.format(value);
+		return Util.format("currency", value);
 	}
 
 	public static double roundDouble(double d)

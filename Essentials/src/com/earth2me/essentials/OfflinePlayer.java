@@ -160,22 +160,22 @@ public class OfflinePlayer implements Player
 
 	public int getRemainingAir()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public void setRemainingAir(int i)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public int getMaximumAir()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public void setMaximumAir(int i)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public boolean isSneaking()
@@ -185,62 +185,62 @@ public class OfflinePlayer implements Player
 
 	public void setSneaking(boolean bln)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public void updateInventory()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public void chat(String string)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public double getEyeHeight()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public double getEyeHeight(boolean bln)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public List<Block> getLineOfSight(HashSet<Byte> hs, int i)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public Block getTargetBlock(HashSet<Byte> hs, int i)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public List<Block> getLastTwoTargetBlocks(HashSet<Byte> hs, int i)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public int getFireTicks()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public int getMaxFireTicks()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public void setFireTicks(int i)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public void remove()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public Server getServer()
@@ -250,195 +250,195 @@ public class OfflinePlayer implements Player
 
 	public Vector getMomentum()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public void setMomentum(Vector vector)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public void setVelocity(Vector vector)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public Vector getVelocity()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public void damage(int i)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public void damage(int i, Entity entity)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public Location getEyeLocation()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public void sendRawMessage(String string) {
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public Location getCompassTarget()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public int getMaximumNoDamageTicks()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public void setMaximumNoDamageTicks(int i)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public int getLastDamage()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public void setLastDamage(int i)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public int getNoDamageTicks()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public void setNoDamageTicks(int i)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public boolean teleport(Location lctn)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public boolean teleport(Entity entity)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public Entity getPassenger()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public boolean setPassenger(Entity entity)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public boolean isEmpty()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public boolean eject()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public void saveData()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public void loadData()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public boolean isSleeping()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public int getSleepTicks()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public List<Entity> getNearbyEntities(double d, double d1, double d2)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public boolean isDead()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public float getFallDistance()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public void setFallDistance(float f)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public void setSleepingIgnored(boolean bln)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public boolean isSleepingIgnored()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public void awardAchievement(Achievement a)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public void incrementStatistic(Statistic ststc)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public void incrementStatistic(Statistic ststc, int i)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public void incrementStatistic(Statistic ststc, Material mtrl)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public void incrementStatistic(Statistic ststc, Material mtrl, int i)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public void playNote(Location lctn, byte b, byte b1)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public void sendBlockChange(Location lctn, Material mtrl, byte b)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
 	public void sendBlockChange(Location lctn, int i, byte b)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 }

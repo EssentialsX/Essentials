@@ -229,7 +229,7 @@ public class Settings implements IConf
 				is = ItemDb.get(itemName);
 				epAlertPlace.add(is.getTypeId());
 			} catch (Exception ex) {
-				logger.log(Level.SEVERE, "Unknown item " + itemName + " in alert on placement list.");
+				logger.log(Level.SEVERE, Util.format("unknownItemInList", itemName, "alert.on-placement"));
 			}
 		}
 		return epAlertPlace;
@@ -248,7 +248,7 @@ public class Settings implements IConf
 				is = ItemDb.get(itemName);
 				epAlertUse.add(is.getTypeId());
 			} catch (Exception ex) {
-				logger.log(Level.SEVERE, "Unknown item " + itemName + " in alert on use list.");
+				logger.log(Level.SEVERE, Util.format("unknownItemInList", itemName, "alert.on-use"));
 			}
 		}
 		return epAlertUse;
@@ -267,7 +267,7 @@ public class Settings implements IConf
 				is = ItemDb.get(itemName);
 				epAlertPlace.add(is.getTypeId());
 			} catch (Exception ex) {
-				logger.log(Level.SEVERE, "Unknown item " + itemName + " in alert on break list.");
+				logger.log(Level.SEVERE, Util.format("unknownItemInList", itemName, "alert.on-break"));
 			}
 		}
 		return epAlertPlace;
@@ -286,7 +286,7 @@ public class Settings implements IConf
 				is = ItemDb.get(itemName);
 				epBlacklistPlacement.add(is.getTypeId());
 			} catch (Exception ex) {
-				logger.log(Level.SEVERE, "Unknown item " + itemName + " in placement blacklist.");
+				logger.log(Level.SEVERE, Util.format("unknownItemInList", itemName, "blacklist.placement"));
 			}
 		}
 		return epBlacklistPlacement;
@@ -305,7 +305,7 @@ public class Settings implements IConf
 				is = ItemDb.get(itemName);
 				epBlackListUsage.add(is.getTypeId());
 			} catch (Exception ex) {
-				logger.log(Level.SEVERE, "Unknown item " + itemName + " in usage blacklist.");
+				logger.log(Level.SEVERE, Util.format("unknownItemInList", itemName, "blacklist.usage"));
 			}
 		}
 		return epBlackListUsage;
@@ -431,7 +431,7 @@ public class Settings implements IConf
 				is = ItemDb.get(itemName);
 				epItemSpwn.add(is.getTypeId());
 			} catch (Exception ex) {
-				logger.log(Level.SEVERE, "Unknown item " + itemName + " in item spawn blacklist.");
+				logger.log(Level.SEVERE, Util.format("unknownItemInList", itemName, "item-spawn-blacklist"));
 			}
 		}
 		return epItemSpwn;
@@ -450,7 +450,7 @@ public class Settings implements IConf
 				is = ItemDb.get(itemName);
 				epBreakList.add(is.getTypeId());
 			} catch (Exception ex) {
-				logger.log(Level.SEVERE, "Unknown item " + itemName + " in block breaking blacklist.");
+				logger.log(Level.SEVERE, Util.format("unknownItemInList", itemName, "blacklist.break"));
 			}
 		}
 		return epBreakList;

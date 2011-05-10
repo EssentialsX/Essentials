@@ -71,7 +71,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo
 			cooldownTime.add(Calendar.MILLISECOND, (int)((cooldown * 1000.0) % 1000.0));
 			if (cooldownTime.after(now) && !isAuthorized("essentials.heal.cooldown.bypass"))
 			{
-				throw new Exception("Time before next heal: " + Util.formatDateDiff(cooldownTime.getTimeInMillis()));
+				throw new Exception(Util.format("timeBeforeHeal", Util.formatDateDiff(cooldownTime.getTimeInMillis())));
 			}
 		}
 		setLastHealTimestamp(now.getTimeInMillis());
@@ -84,7 +84,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo
 			return;
 		}
 		setMoney(getMoney() + value);
-		sendMessage("§a" + Util.formatCurrency(value) + " has been added to your account.");
+		sendMessage(Util.format("addedToAccount", Util.formatCurrency(value)));
 	}
 
 	public void payUser(User reciever, double value) throws Exception
@@ -95,14 +95,14 @@ public class User extends UserData implements Comparable<User>, IReplyTo
 		}
 		if (!canAfford(value))
 		{
-			throw new Exception("You do not have sufficient funds.");
+			throw new Exception(Util.i18n("notEnoughMoney"));
 		}
 		else
 		{
 			setMoney(getMoney() - value);
 			reciever.setMoney(reciever.getMoney() + value);
-			sendMessage("§a" + Util.formatCurrency(value) + " has been sent to " + reciever.getDisplayName());                        
-			reciever.sendMessage("§a" + Util.formatCurrency(value) + " has been recieved from " + getDisplayName());
+			sendMessage(Util.format("moneySentTo", Util.formatCurrency(value), reciever.getDisplayName()));                        
+			reciever.sendMessage(Util.format("moneyRecievedFrom", Util.formatCurrency(value), getDisplayName()));
 		}
 	}
 
@@ -113,7 +113,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo
 			return;
 		}
 		setMoney(getMoney() - value);
-		sendMessage("§c" + Util.formatCurrency(value) + " has been taken from your account.");
+		sendMessage(Util.format("takenFromAccount", Util.formatCurrency(value)));
 	}
 
 	public void charge(String cmd) throws Exception
@@ -127,7 +127,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo
 		double cost = ess.getSettings().getCommandCost(cmd.startsWith("/") ? cmd.substring(1) : cmd);
 		if (mon < cost && !isAuthorized("essentials.eco.loan"))
 		{
-			throw new Exception("You do not have sufficient funds.");
+			throw new Exception(Util.i18n("notEnoughMoney"));
 		}
 		takeMoney(cost);
 	}
@@ -138,7 +138,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo
 		double cost = ess.getSettings().getCommandCost(cmd.startsWith("/") ? cmd.substring(1) : cmd);
 		if (mon < cost && !isAuthorized("essentials.eco.loan"))
 		{
-			throw new Exception("You do not have sufficient funds.");
+			throw new Exception(Util.i18n("notEnoughMoney"));
 		}
 	}
 

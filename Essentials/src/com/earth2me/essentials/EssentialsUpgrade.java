@@ -64,7 +64,7 @@ public class EssentialsUpgrade
 		}
 		catch (Throwable e)
 		{
-			logger.log(Level.SEVERE, "Error while upgrading the files", e);
+			logger.log(Level.SEVERE, Util.i18n("upgradingFilesError"), e);
 		}
 	}
 
@@ -114,11 +114,11 @@ public class EssentialsUpgrade
 		{
 			if (!file.renameTo(new File(file.getParentFile(), file.getName().concat("." + System.currentTimeMillis() + ".upgradebackup"))))
 			{
-				throw new Exception("Failed to move config.yml to backup location.");
+				throw new Exception(Util.i18n("configFileMoveError"));
 			}
 			if (!tempFile.renameTo(file))
 			{
-				throw new Exception("Failed to rename temp file to config.yml");
+				throw new Exception(Util.i18n("configFileRenameError"));
 			}
 		} else {
 			tempFile.delete();
@@ -273,7 +273,7 @@ public class EssentialsUpgrade
 						Essentials.getWarps().setWarp(filename.substring(0, filename.length() - 4), loc);
 						if (!listOfFiles[i].renameTo(new File(warpsFolder, filename + ".old")))
 						{
-							throw new Exception("Renaming file " + filename + " failed");
+							throw new Exception(Util.format("fileRenameError", filename));
 						}
 					}
 					catch (Exception ex)
@@ -319,7 +319,7 @@ public class EssentialsUpgrade
 					Essentials.getWarps().setWarp(name, loc);
 					if (!warpFile.renameTo(new File(ess.getDataFolder(), "warps.txt.old")))
 					{
-						throw new Exception("Renaming warps.txt failed");
+						throw new Exception(Util.format("fileRenameError", "warps.txt"));
 					}
 				}
 			}
@@ -353,16 +353,16 @@ public class EssentialsUpgrade
 			File tmpFile = new File(listOfFiles[i].getParentFile(), sanitizedFilename + ".tmp");
 			File newFile = new File(listOfFiles[i].getParentFile(), sanitizedFilename);
 			if (!listOfFiles[i].renameTo(tmpFile)) {
-				logger.log(Level.WARNING, "Failed to move userdata/"+filename+" to userdata/"+sanitizedFilename+".tmp");
+				logger.log(Level.WARNING, Util.format("userdataMoveError", filename, sanitizedFilename));
 				continue;
 			}
 			if (newFile.exists())
 			{
-				logger.log(Level.WARNING, "Duplicated userdata: "+filename+" and "+sanitizedFilename);
+				logger.log(Level.WARNING, Util.format("duplicatedUserdata", filename, sanitizedFilename));
 				continue;
 			}
 			if (!tmpFile.renameTo(newFile)) {
-				logger.log(Level.WARNING, "Failed to move userdata/"+sanitizedFilename+".tmp to userdata/"+sanitizedFilename);
+				logger.log(Level.WARNING, Util.format("userdataMoveBackError", sanitizedFilename, sanitizedFilename));
 			}
 		}
 	}

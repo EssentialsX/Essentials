@@ -48,13 +48,13 @@ public class EssentialsTimer implements Runnable, IConf
 			}
 			if (user.getMuteTimeout() > 0 && user.getMuteTimeout() < currentTime && user.isMuted()) {
 				user.setMuteTimeout(0);
-				user.sendMessage("§7You can talk again");
+				user.sendMessage(Util.i18n("canTalkAgain"));
 				user.setMuted(false);
 			}
 			if (user.getJailTimeout() > 0 && user.getJailTimeout() < currentTime && user.isJailed()) {
 				user.setJailTimeout(0);
 				user.setJailed(false);
-				user.sendMessage("§7You have been released");
+				user.sendMessage(Util.i18n("haveBeenReleased"));
 				user.setJail(null);
 				try
 				{

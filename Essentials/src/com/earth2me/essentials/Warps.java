@@ -50,7 +50,7 @@ public class Warps implements IConf
 		EssentialsConf conf = warpPoints.get(new StringIgnoreCase(warp));
 		if (conf == null)
 		{
-			throw new Exception("That warp does not exist.");
+			throw new Exception(Util.i18n("warpNotExist"));
 		}
 		return conf.getLocation(null, server);
 	}
@@ -64,7 +64,7 @@ public class Warps implements IConf
 			File confFile = new File(warpsFolder, filename + ".yml");
 			if (confFile.exists())
 			{
-				throw new Exception("A warp with a similar name already exists.");
+				throw new Exception(Util.i18n("similarWarpExist"));
 			}
 			conf = new EssentialsConf(confFile);
 			warpPoints.put(new StringIgnoreCase(name), conf);
@@ -79,11 +79,11 @@ public class Warps implements IConf
 		EssentialsConf conf = warpPoints.get(new StringIgnoreCase(name));
 		if (conf == null)
 		{
-			throw new Exception("Warp does not exist.");
+			throw new Exception(Util.i18n("warpNotExist"));
 		}
 		if (!conf.getFile().delete())
 		{
-			throw new Exception("Problem deleting the warp file.");
+			throw new Exception(Util.i18n("warpDeleteError"));
 		}
 		warpPoints.remove(new StringIgnoreCase(name));
 	}

@@ -124,7 +124,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		String worldName = loc.getWorld().getName().toLowerCase();
 		if (worldName == null || worldName.isEmpty())
 		{
-			logger.log(Level.WARNING, "Set Home: World name is null or empty.");
+			logger.log(Level.WARNING, Util.i18n("emptyWorldName"));
 			return;
 		}
 		if (b || !config.hasProperty("home.default"))

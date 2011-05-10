@@ -18,7 +18,6 @@ public class ItemDb
 	private static Map<String, Integer> items = new HashMap<String, Integer>();
 	private static Map<String, Short> durabilities = new HashMap<String, Short>();
 
-	@SuppressWarnings("LoggerStringConcat")
 	public static void load(File folder, String fname) throws IOException
 	{
 		folder.mkdirs();
@@ -78,7 +77,7 @@ public class ItemDb
 				}
 				catch (Exception ex)
 				{
-					logger.warning("Error parsing " + fname + " on line " + i);
+					logger.warning(Util.format("parseError", fname, i));
 				}
 			}
 		}
@@ -131,14 +130,14 @@ public class ItemDb
 			}
 			else
 			{
-				throw new Exception("Unknown item name: " + id);
+				throw new Exception(Util.format("unknownItemName", id));
 			}
 		}
 
 		Material mat = Material.getMaterial(itemid);
 		if (mat == null)
 		{
-			throw new Exception("Unknown item id: " + itemid);
+			throw new Exception(Util.format("unknownItemId", itemid));
 		}
 		ItemStack retval = new ItemStack(mat);
 		retval.setAmount(Essentials.getStatic().getSettings().getDefaultStackSize());
