@@ -2,6 +2,7 @@ package com.earth2me.essentials.protect;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -46,7 +47,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 		{
 			if(Essentials.getStatic().getSettings().warnOnBuildDisallow())
 			{
-				user.sendMessage(ChatColor.RED + "You are not permitted to build");
+				user.sendMessage(Util.i18n("buildAlert"));
 			}
 			event.setCancelled(true);
 			return;
@@ -63,7 +64,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 
 		if (EssentialsProtect.checkProtectionItems(EssentialsProtect.onPlaceAlert, id))
 		{
-			parent.alert(user, item.getType().toString(), "placed: ");
+			parent.alert(user, item.getType().toString(), Util.i18n("alertPlaced"));
 		}
 
 		if (spData.isBlockAboveProtectedRail(blockPlaced.getFace(BlockFace.DOWN)))
@@ -243,7 +244,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 
 		if (EssentialsProtect.checkProtectionItems(EssentialsProtect.onBreakAlert, block.getTypeId()))
 		{
-			parent.alert(user, block.getType().toString(), "broke: ");
+			parent.alert(user, block.getType().toString(), Util.i18n("alertBroke"));
 		}
 
 		if (user.isAuthorized("essentials.protect.admin"))

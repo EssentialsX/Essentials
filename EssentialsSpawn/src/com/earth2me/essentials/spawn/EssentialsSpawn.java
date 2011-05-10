@@ -20,7 +20,6 @@ public class EssentialsSpawn extends JavaPlugin
 		
 	}
 
-	@SuppressWarnings("LoggerStringConcat")
 	public void onEnable()
 	{
 		Plugin p = this.getServer().getPluginManager().getPlugin("Essentials");
@@ -34,31 +33,18 @@ public class EssentialsSpawn extends JavaPlugin
 		getServer().getPluginManager().registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Low, this);
 		
 		if (!this.getDescription().getVersion().equals(Essentials.getStatic().getDescription().getVersion())) {
-			logger.log(Level.WARNING, "Version mismatch! Please update all Essentials jars to the same version.");
+			logger.log(Level.WARNING, Util.i18n("versionMismatchAll"));
 		}
-		logger.info("Loaded " + this.getDescription().getName() + " build " + this.getDescription().getVersion() + " maintained by " + AUTHORS);
+		logger.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), Essentials.AUTHORS));
 	}
 
 	public void onDisable()
 	{
 	}
 
-	@SuppressWarnings(
-	{
-		"LoggerStringConcat", "CallToThreadDumpStack"
-	})
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args)
 	{
-		try
-		{
-			Essentials.previewCommand(sender, command, commandLabel, args);
-			return EssentialsSpawnWorker.onCommand(sender, command, commandLabel, args);
-		}
-		catch (Throwable ex)
-		{
-			ex.printStackTrace();
-			return true;
-		}
+		return Essentials.getStatic().onCommandEssentials(sender, command, commandLabel, args, EssentialsSpawn.class.getClassLoader(), "com.earth2me.essentials.spawn.Command");
 	}
 }

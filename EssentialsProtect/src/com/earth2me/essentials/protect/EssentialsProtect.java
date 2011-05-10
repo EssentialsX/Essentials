@@ -2,6 +2,7 @@ package com.earth2me.essentials.protect;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -76,11 +77,10 @@ public class EssentialsProtect extends JavaPlugin
 		pm.registerEvent(Type.PLUGIN_ENABLE, serverListener, Priority.Highest, this);
 	
 		loadSettings();
-		if (!this.getDescription().getVersion().equals(Essentials.getStatic().getDescription().getVersion()))
-		{
-			logger.log(Level.WARNING, "Version mismatch! Please update all Essentials jars to the same version.");
+		if (!this.getDescription().getVersion().equals(Essentials.getStatic().getDescription().getVersion())) {
+			logger.log(Level.WARNING, Util.i18n("versionMismatchAll"));
 		}
-		logger.info("Loaded " + this.getDescription().getName() + " build " + this.getDescription().getVersion() + " maintained by " + AUTHORS);
+		logger.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), Essentials.AUTHORS));
 	}
 
 	public static boolean checkProtectionItems(ArrayList<Integer> itemList, int id)
@@ -130,7 +130,7 @@ public class EssentialsProtect extends JavaPlugin
 		{
 			User alertUser = Essentials.getStatic().getUser(p);
 			if (alertUser.isAuthorized("essentials.protect.alerts"))
-				alertUser.sendMessage(ChatColor.DARK_AQUA + "[" + user.getName() + "] " + ChatColor.WHITE + type + ChatColor.GOLD + item + " at: " + EssentialsProtectData.formatCoords(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+				alertUser.sendMessage(Util.format("alertFormat", user.getName(), type, item, EssentialsProtectData.formatCoords(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())));
 		}
 	}
 }

@@ -306,7 +306,11 @@ public class Essentials extends JavaPlugin
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args)
 	{
-
+		return onCommandEssentials(sender, command, commandLabel, args, Essentials.class.getClassLoader(), "com.earth2me.essentials.commands.Command");
+	}
+	
+	public boolean onCommandEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath)
+	{
 		if ("msg".equals(commandLabel.toLowerCase()) || "mail".equals(commandLabel.toLowerCase()) &  sender instanceof CraftPlayer)
 		{
 			StringBuilder str = new StringBuilder();
@@ -393,7 +397,7 @@ public class Essentials extends JavaPlugin
 			IEssentialsCommand cmd;
 			try
 			{
-				cmd = (IEssentialsCommand)Essentials.class.getClassLoader().loadClass("com.earth2me.essentials.commands.Command" + command.getName()).newInstance();
+				cmd = (IEssentialsCommand)classLoader.loadClass(commandPath + command.getName()).newInstance();
 			}
 			catch (Exception ex)
 			{

@@ -2,6 +2,7 @@ package com.earth2me.essentials.chat;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import com.nijikokun.bukkit.Permissions.Permissions;
 import java.util.logging.Logger;
 import org.bukkit.Location;
@@ -43,12 +44,12 @@ public class EssentialsChatWorker
 			}
 			catch (Throwable ex)
 			{
-				logger.warning("Missing a prefix or suffix for " + group);
+				logger.warning(Util.format("missingPrefixSuffix", group));
 			}
 		}
 		catch (Throwable ex)
 		{
-			logger.warning("Missing Permissions/GroupManager; chat prefixes/suffixes will be disabled.");
+			logger.warning(Util.i18n("permissionsError"));
 		}
 	}
 
@@ -71,10 +72,10 @@ public class EssentialsChatWorker
 			if (user.isAuthorized("essentials.chat.shout"))
 			{
 				event.setMessage(event.getMessage().substring(1));
-				event.setFormat("§7[Shout]§f " + event.getFormat());
+				event.setFormat(Util.format("shoutFormat", event.getFormat()));
 				return;
 			}
-			user.sendMessage("§cYou are not authorized to shout.");
+			user.sendMessage(Util.i18n("notAllowedToShout"));
 			event.setCancelled(true);
 			return;
 		}
@@ -84,16 +85,16 @@ public class EssentialsChatWorker
 			if (user.isAuthorized("essentials.chat.question"))
 			{
 				event.setMessage(event.getMessage().substring(1));
-				event.setFormat("§7[Question]§f " + event.getFormat());
+				event.setFormat(Util.format("questionFormat", event.getFormat()));
 				return;
 			}
-			user.sendMessage("§cYou are not authorized to use question.");
+			user.sendMessage(Util.i18n("notAllowedToQuestion"));
 			event.setCancelled(true);
 			return;
 		}
 
 		event.setCancelled(true);
-		logger.info("Local: <" + user.getName() + "> " + event.getMessage());
+		logger.info(Util.format("localFormat", user.getName(), event.getMessage()));
 
 		Location loc = user.getLocation();
 		World w = loc.getWorld();

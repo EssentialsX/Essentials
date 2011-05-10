@@ -4,6 +4,7 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.EssentialsConf;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import com.maxmind.geoip.Location;
 import com.maxmind.geoip.LookupService;
 import com.maxmind.geoip.regionName;
@@ -83,7 +84,7 @@ public class EssentialsGeoIPPlayerListener extends PlayerListener implements ICo
 			{
 				User user = ess.getUser(player);
 				if (user.isAuthorized("essentials.geoip.show")) {
-					user.sendMessage("Player " + u.getDisplayName() + " comes from " + sb.toString());
+					user.sendMessage(Util.format("geoipJoinFormat", u.getDisplayName(), sb.toString()));
 				}
 			}
 		}
@@ -110,7 +111,7 @@ public class EssentialsGeoIPPlayerListener extends PlayerListener implements ICo
 			}
 			else
 			{
-				logger.log(Level.SEVERE, "Can't find GeoIP database!");
+				logger.log(Level.SEVERE, Util.i18n("cantFindGeoIpDB"));
 				return;
 			}
 		}
@@ -120,7 +121,7 @@ public class EssentialsGeoIPPlayerListener extends PlayerListener implements ICo
 		}
 		catch (IOException ex)
 		{
-			logger.log(Level.SEVERE, "Failed to read GeoIP database!", ex);
+			logger.log(Level.SEVERE, Util.i18n("cantReadGeoIpDB"), ex);
 		}
 	}
 
@@ -139,10 +140,10 @@ public class EssentialsGeoIPPlayerListener extends PlayerListener implements ICo
 			}
 			if (url == null || url.isEmpty())
 			{
-				logger.log(Level.SEVERE, "GeoIP download url is empty.");
+				logger.log(Level.SEVERE, Util.i18n("geoIpUrlEmpty"));
 				return;
 			}
-			logger.log(Level.INFO, "Downloading GeoIP database ... this might take a while (country: 0.6 MB, city: 20MB)");
+			logger.log(Level.INFO, Util.i18n("downloadingGeoIp"));
 			URL downloadUrl = new URL(url);
 			URLConnection conn = downloadUrl.openConnection();
 			conn.setConnectTimeout(10000);
@@ -165,12 +166,12 @@ public class EssentialsGeoIPPlayerListener extends PlayerListener implements ICo
 		}
 		catch (MalformedURLException ex)
 		{
-			logger.log(Level.SEVERE, "GeoIP download url is invalid.", ex);
+			logger.log(Level.SEVERE, Util.i18n("geoIpUrlInvalid"), ex);
 			return;
 		}
 		catch (IOException ex)
 		{
-			logger.log(Level.SEVERE, "Failed to open connection.", ex);
+			logger.log(Level.SEVERE, Util.i18n("connectionFailed"), ex);
 		}
 	}
 }

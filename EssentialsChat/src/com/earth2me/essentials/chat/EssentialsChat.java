@@ -1,6 +1,7 @@
 package com.earth2me.essentials.chat;
 
 import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.Util;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.event.Event.Priority;
@@ -32,9 +33,9 @@ public class EssentialsChat extends JavaPlugin
 		pm.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
 		pm.registerEvent(Type.PLAYER_CHAT, playerListener, Priority.Highest, this);
 		if (!this.getDescription().getVersion().equals(Essentials.getStatic().getDescription().getVersion())) {
-			logger.log(Level.WARNING, "Version mismatch! Please update all Essentials jars to the same version.");
+			logger.log(Level.WARNING, Util.i18n("versionMismatchAll"));
 		}
-		logger.info("Loaded " + this.getDescription().getName() + " build " + this.getDescription().getVersion() + " by " + Essentials.AUTHORS);
+		logger.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), Essentials.AUTHORS));
 	}
 
 	public void onDisable()

@@ -2,6 +2,7 @@ package com.earth2me.essentials.spawn;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -43,7 +44,7 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 		try {
 			user.getTeleport().now(Essentials.getSpawn().getSpawn(Essentials.getStatic().getSettings().getNewbieSpawn()));
 		} catch (Exception ex) {
-			Logger.getLogger("Minecraft").log(Level.WARNING, "Failed to teleport new player", ex);
+			Logger.getLogger("Minecraft").log(Level.WARNING, Util.i18n("teleportNewPlayerError"), ex);
 		}
 
 		if (Essentials.getStatic().getSettings().getAnnounceNewPlayers())
