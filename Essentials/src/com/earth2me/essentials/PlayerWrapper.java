@@ -488,4 +488,19 @@ public class PlayerWrapper implements Player
 	{
 		base.incrementStatistic(ststc, mtrl, i);
 	}
+
+	public void playNote(Location lctn, byte b, byte b1)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public void sendBlockChange(Location lctn, Material mtrl, byte b)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public void sendBlockChange(Location lctn, int i, byte b)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }
