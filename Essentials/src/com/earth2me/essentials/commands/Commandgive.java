@@ -25,7 +25,7 @@ public class Commandgive extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		ItemStack stack = ItemDb.get(args[0]);
+		ItemStack stack = ItemDb.get(args[1]);
 
 		String itemname = stack.getType().toString().toLowerCase().replace("_", "");
 		if (sender instanceof Player
