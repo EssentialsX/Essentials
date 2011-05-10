@@ -28,8 +28,8 @@ public class Commandbalance extends EssentialsCommand
 	{
 		charge(user);
 		double bal = (args.length < 1
-					  || !user.isAuthorized("essentials.balance.others")
-					  || !user.isAuthorized("essentials.balance.other")
+					  || !(user.isAuthorized("essentials.balance.others")
+						   || user.isAuthorized("essentials.balance.other"))
 					  ? user
 					  : getPlayer(server, args, 0)).getMoney();
 		user.sendMessage(Util.format("balance", Util.formatCurrency(bal)));
