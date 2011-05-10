@@ -60,6 +60,7 @@ public class Commandinfo extends EssentialsCommand
 		else
 		{
 			sender.sendMessage(Util.i18n("infoFileDoesNotExist"));
+			file.createNewFile();
 			return;
 		}
 
