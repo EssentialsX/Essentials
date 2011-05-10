@@ -491,16 +491,16 @@ public class PlayerWrapper implements Player
 
 	public void playNote(Location lctn, byte b, byte b1)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		base.playNote(lctn, b, b1);
 	}
 
 	public void sendBlockChange(Location lctn, Material mtrl, byte b)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		base.sendBlockChange(lctn, mtrl, b);
 	}
 
 	public void sendBlockChange(Location lctn, int i, byte b)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		base.sendBlockChange(lctn, i, b);
 	}
 }
