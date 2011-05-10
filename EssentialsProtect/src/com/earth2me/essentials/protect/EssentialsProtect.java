@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
@@ -17,7 +16,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
-public class EssentialsProtect extends JavaPlugin implements IConf
+public class EssentialsProtect extends JavaPlugin
 {
 	private EssentialsProtectBlockListener blockListener = null;
 	private EssentialsProtectPlayerListener playerListener = null;
@@ -78,7 +77,13 @@ public class EssentialsProtect extends JavaPlugin implements IConf
 		pm.registerEvent(Type.PLUGIN_ENABLE, serverListener, Priority.Highest, this);
 	
 		reloadConfig();
-		Essentials.getStatic().addReloadListener(this);
+		Essentials.getStatic().addReloadListener(new IConf() {
+
+			public void reloadConfig()
+			{
+				EssentialsProtect.this.reloadConfig();
+			}
+		});
 		if (!this.getDescription().getVersion().equals(Essentials.getStatic().getDescription().getVersion())) {
 			logger.log(Level.WARNING, Util.i18n("versionMismatchAll"));
 		}
