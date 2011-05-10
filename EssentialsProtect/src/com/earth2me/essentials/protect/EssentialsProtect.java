@@ -1,7 +1,6 @@
 package com.earth2me.essentials.protect;
 
 import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.IConfExternal;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
