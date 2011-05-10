@@ -1,5 +1,7 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -9,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 
 public class Commandinfo extends EssentialsCommand
@@ -26,7 +29,20 @@ public class Commandinfo extends EssentialsCommand
 		List<String> lines = new ArrayList<String>();
 		List<String> chapters = new ArrayList<String>();
 		Map<String, Integer> bookmarks = new HashMap<String, Integer>();
-		File file = new File(ess.getDataFolder(), "info.txt");
+		File file = null;
+		if (sender instanceof Player)
+		{
+			User user = ess.getUser(sender);
+			file = new File(ess.getDataFolder(), "info_"+Util.sanitizeFileName(user.getName()) +".txt");
+			if (!file.exists())
+			{
+				file = new File(ess.getDataFolder(), "info_"+Util.sanitizeFileName(user.getGroup()) +".txt");
+			}
+		}
+		if (file == null || !file.exists())
+		{
+			file = new File(ess.getDataFolder(), "info.txt");
+		}
 		if (file.exists())
 		{
 			BufferedReader rx = new BufferedReader(new FileReader(file));
@@ -35,8 +51,8 @@ public class Commandinfo extends EssentialsCommand
 			{
 				if (l.startsWith("#"))
 				{
-					bookmarks.put(l.substring(1).toLowerCase(), i);
-					chapters.add(l.substring(1));
+					bookmarks.put(l.substring(1).toLowerCase().replaceAll("&[0-9a-f]", ""), i);
+					chapters.add(l.substring(1).replace('&', '§'));
 				}
 				lines.add(l.replace('&', '§'));
 			}
