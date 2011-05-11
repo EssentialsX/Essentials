@@ -44,7 +44,7 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 			{
 				int amount = Integer.parseInt(sign.getLine(1));
 				ItemStack item = ItemDb.get(sign.getLine(2), amount);
-				double cost = Double.parseDouble(sign.getLine(3).substring(1));
+				double cost = Double.parseDouble(sign.getLine(3).substring(1).replaceAll(",", "."));
 				if (user.getMoney() < cost)
 				{
 					throw new Exception(Util.i18n("notEnoughMoney"));
@@ -70,7 +70,8 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 			{
 				int amount = Integer.parseInt(sign.getLine(1));
 				ItemStack item = ItemDb.get(sign.getLine(2), amount);
-				double cost = Double.parseDouble(sign.getLine(3).substring(1));
+				double cost = Double.parseDouble(sign.getLine(3).substring(1).replaceAll(",", "."));
+				
 				if (!InventoryWorkaround.containsItem(user.getInventory(), true, item))
 				{
 					throw new Exception(Util.format("missingItems", amount, sign.getLine(2)));
