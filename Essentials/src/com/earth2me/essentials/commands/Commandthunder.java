@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.World;
 
@@ -29,12 +30,13 @@ public class Commandthunder extends EssentialsCommand
 
 			world.setThundering(setThunder ? true : false);
 			world.setThunderDuration(Integer.parseInt(args[1]) * 20);
-			user.sendMessage("§7You " + (setThunder ? "enabled" : "disabled") + " thunder in your world for " + args[1] + " seconds");
+			user.sendMessage(Util.format("thunderDuration", (setThunder ? Util.i18n("enabled") : Util.i18n("disabled")), Util.i18n("for"), Util.i18n("seconds")));
+			
 		}
 		else
 		{
 			world.setThundering(setThunder ? true : false);
-			user.sendMessage("§7You " + (setThunder ? "enabled" : "disabled") + " thunder in your world");
+			user.sendMessage(Util.format("thunder", setThunder ? Util.i18n("enabled") : Util.i18n("disabled")));
 		}
 
 	}

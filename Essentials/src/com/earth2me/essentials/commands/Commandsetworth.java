@@ -4,6 +4,7 @@ import org.bukkit.Server;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.ItemDb;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -25,6 +26,6 @@ public class Commandsetworth extends EssentialsCommand
 		ItemStack stack = ItemDb.get(args[0]);
 		charge(user);
 		Essentials.getWorth().setPrice(stack, Double.parseDouble(args[1]));
-		user.sendMessage("§7Worth value set");
+		user.sendMessage(Util.i18n("worthSet"));
 	}
 }

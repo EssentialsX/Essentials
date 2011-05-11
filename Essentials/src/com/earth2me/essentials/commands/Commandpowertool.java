@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
@@ -20,16 +21,16 @@ public class Commandpowertool extends EssentialsCommand
 		ItemStack is = user.getItemInHand();
 		if (is == null || is.getType() == Material.AIR)
 		{
-			user.sendMessage("Command can't be attached to air.");
+			user.sendMessage(Util.i18n("powerToolAir"));
 		}
 		String command = getFinalArg(args, 0);
 		if (command != null && !command.isEmpty())
 		{
-			user.sendMessage("Command assigned to " + is.getType().toString().toLowerCase().replaceAll("_", " "));
+			user.sendMessage(Util.format("powerToolAttach",is.getType().toString().toLowerCase().replaceAll("_", " ")));
 		}
 		else
 		{
-			user.sendMessage("Command removed from " + is.getType().toString().toLowerCase().replaceAll("_", " "));
+			user.sendMessage(Util.format("powerToolRemove", is.getType().toString().toLowerCase().replaceAll("_", " ")));
 		}
 		charge(user);
 		user.setPowertool(is, command);

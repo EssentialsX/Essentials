@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 
 
@@ -16,7 +17,7 @@ public class Commandsocialspy extends EssentialsCommand
 	{
 		
 		charge(user);
-		user.sendMessage("§7SocialSpy " + (user.toggleSocialSpy() ? "enabled." : "disabled."));
+		user.sendMessage("§7SocialSpy " + (user.toggleSocialSpy() ? Util.i18n("enabled") : Util.i18n("disabled")));
 	
 	}
 }

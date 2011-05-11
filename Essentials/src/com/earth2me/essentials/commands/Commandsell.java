@@ -59,7 +59,7 @@ public class Commandsell extends EssentialsCommand
 	{
 		if (is == null || is.getType() == Material.AIR)
 		{
-			throw new Exception("You really tried to sell Air? Put an item in your hand.");
+			throw new Exception(Util.i18n("itemSellAir"));
 		}
 		int id = is.getTypeId();
 		int amount = 0;
@@ -77,11 +77,11 @@ public class Commandsell extends EssentialsCommand
 
 		if (Double.isNaN(worth))
 		{
-			throw new Exception("That item cannot be sold to the server.");
+			throw new Exception(Util.i18n("itemCannotBeSold"));
 		}
 		if (requireStack && !stack)
 		{
-			throw new Exception("Item must be traded in stacks. A quantity of 2s would be two stacks, etc.");
+			throw new Exception(Util.i18n("itemMustBeStacked"));
 		}
 
 
@@ -126,9 +126,9 @@ public class Commandsell extends EssentialsCommand
 
 		if (amount > max || amount < 1)
 		{
-			user.sendMessage("§cYou do not have enough of that item to sell.");
-			user.sendMessage("§7If you meant to sell all of your items of that type, use /sell itemname");
-			user.sendMessage("§7/sell itemname -1 will sell all but one item, etc.");
+			user.sendMessage(Util.i18n("itemNotEnough1"));
+			user.sendMessage(Util.i18n("itemNotEnough2"));
+			user.sendMessage(Util.i18n("itemNotEnough3"));
 			return;
 		}
 
@@ -136,8 +136,8 @@ public class Commandsell extends EssentialsCommand
 		InventoryWorkaround.removeItem(user.getInventory(), true, new ItemStack(is.getType(), amount, is.getDurability()));
 		user.updateInventory();
 		user.giveMoney(worth * amount);
-		user.sendMessage("§7Sold for §c" + Util.formatCurrency(worth * amount) + "§7 (" + amount + " items at " + Util.formatCurrency(worth) + " each)");
-		logger.log(Level.INFO, user.getDisplayName() + " sold "+is.getType().toString().toLowerCase() + " for §c" + Util.formatCurrency(worth * amount) + "§7 (" + amount + " items at " + Util.formatCurrency(worth) + " each)");
+		user.sendMessage(Util.format("itemSold", Util.formatCurrency(worth * amount), amount,  Util.formatCurrency(worth)));
+		logger.log(Level.INFO, Util.format("itemSoldConsole",user.getDisplayName(),is.getType().toString().toLowerCase(), Util.formatCurrency(worth * amount), amount, Util.formatCurrency(worth)));
 	
 	}
 }

@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
@@ -26,7 +27,7 @@ public class Commandspawner extends EssentialsCommand
 		Block target = user.getTarget().getTargetBlock();
 		if (target.getType() != Material.MOB_SPAWNER)
 		{
-			throw new Exception("Target block must be a mob spawner.");
+			throw new Exception(Util.i18n("mobSpawnTarget"));
 		}
 
 		charge(user);
@@ -36,7 +37,7 @@ public class Commandspawner extends EssentialsCommand
 		}
 		catch (Throwable ex)
 		{
-			throw new Exception("Error while changing mob spawner.");
+			throw new Exception(Util.i18n("mobSpawnError"));
 		}
 	}
 }

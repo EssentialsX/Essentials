@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 
 
 public class Commandsethome extends EssentialsCommand
@@ -16,6 +17,6 @@ public class Commandsethome extends EssentialsCommand
 	{
 		user.setHome(args.length > 0 && args[0].equalsIgnoreCase("default"));
 		charge(user);
-		user.sendMessage("§7Home set.");
+		user.sendMessage(Util.i18n("homeSet"));
 	}
 }

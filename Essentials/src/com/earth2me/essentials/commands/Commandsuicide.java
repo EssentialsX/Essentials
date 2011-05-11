@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 
 
 public class Commandsuicide extends EssentialsCommand
@@ -16,7 +17,7 @@ public class Commandsuicide extends EssentialsCommand
 	{
 		charge(user);
 		user.setHealth(0);
-		user.sendMessage("§cGoodbye Cruel World...");
-		server.broadcastMessage("§7" + user.getDisplayName() + " took their own life");
+		user.sendMessage(Util.i18n("suicideMessage"));
+		server.broadcastMessage(Util.format("suicideSuccess",user.getDisplayName()));
 	}
 }

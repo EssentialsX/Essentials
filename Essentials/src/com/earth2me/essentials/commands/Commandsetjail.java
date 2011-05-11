@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import org.bukkit.Server;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 
 
 public class Commandsetjail extends EssentialsCommand
@@ -21,7 +22,7 @@ public class Commandsetjail extends EssentialsCommand
 		}
 		charge(user);
 		Essentials.getJail().setJail(user.getLocation(), args[0]);
-		user.sendMessage("§7Jail " + args[0] + " has been set");
+		user.sendMessage(Util.format("jailSet",args[0]));
 		
 	}
 }

@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
@@ -16,6 +17,6 @@ public class Commandreloadall extends EssentialsCommand
 	{
 		charge(sender);
 		server.reload();
-		sender.sendMessage("§7Reloaded all plugins.");
+		sender.sendMessage(Util.i18n("reloadAllPlugins"));
 	}
 }

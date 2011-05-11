@@ -9,6 +9,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.Mob.MobException;
 import com.earth2me.essentials.TargetBlock;
+import com.earth2me.essentials.Util;
 import net.minecraft.server.EntityWolf;
 import net.minecraft.server.PathEntity;
 import org.bukkit.DyeColor;
@@ -69,7 +70,7 @@ public class Commandspawnmob extends EssentialsCommand
 		mob = Mob.fromName(mobType);
 		if (mob == null)
 		{
-			user.sendMessage("Invalid mob type.");
+			user.sendMessage(Util.i18n("invalidMob"));
 			return;
 		}
 		charge(user);
@@ -80,7 +81,7 @@ public class Commandspawnmob extends EssentialsCommand
 		}
 		catch (MobException e)
 		{
-			user.sendMessage("Unable to spawn mob.");
+			user.sendMessage(Util.i18n("unableToSpawnMob"));
 			return;
 		}
 		int[] ignore =
@@ -103,7 +104,7 @@ public class Commandspawnmob extends EssentialsCommand
 			mobMount = Mob.fromName(mountType);
 			if (mobMount == null)
 			{
-				user.sendMessage("Invalid mob type.");
+				user.sendMessage(Util.i18n("invalidMob"));
 				return;
 			}
 			try
@@ -112,7 +113,7 @@ public class Commandspawnmob extends EssentialsCommand
 			}
 			catch (MobException e)
 			{
-				user.sendMessage("Unable to spawn mob.");
+				user.sendMessage(Util.i18n("unableToSpawnMob"));
 				return;
 			}
 			spawnedMount.teleportTo(spawnedMob);
@@ -134,7 +135,7 @@ public class Commandspawnmob extends EssentialsCommand
 			if (mobCount > serverLimit)
 			{
 				mobCount = serverLimit;
-				user.sendMessage("Mob quantity limited to server limit");
+				user.sendMessage(Util.i18n("mobSpawnLimit"));
 			}
 
 			try
@@ -152,7 +153,7 @@ public class Commandspawnmob extends EssentialsCommand
 						}
 						catch (MobException e)
 						{
-							user.sendMessage("Unable to spawn mob.");
+							user.sendMessage(Util.i18n("unableToSpawnMob"));
 							return;
 						}
 						spawnedMount.teleportTo(spawnedMob);
@@ -168,24 +169,24 @@ public class Commandspawnmob extends EssentialsCommand
 						changeMobData(mobMount.name, spawnedMount, mountData, user);
 					}
 				}
-				user.sendMessage(args[1] + " " + mob.name.toLowerCase() + mob.s + " spawned.");
+				user.sendMessage(args[1] + " " + mob.name.toLowerCase() + mob.s + Util.i18n("spawned"));
 			}
 			catch (MobException e1)
 			{
-				throw new Exception("Unable to spawn mobs. Insert bad excuse here.");
+				throw new Exception(Util.i18n("unableToSpawnMob"));
 			}
 			catch (NumberFormatException e2)
 			{
-				throw new Exception("A number goes there, silly.");
+				throw new Exception(Util.i18n("numberRequired"));
 			}
 			catch (NullPointerException np)
 			{
-				throw new Exception("That mob likes to be alone");
+				throw new Exception(Util.i18n("soloMob"));
 			}
 		}
 		else
 		{
-			user.sendMessage(mob.name + " spawned.");
+			user.sendMessage(mob.name + " " + Util.i18n("spawned"));
 		}
 	}
 
@@ -204,7 +205,7 @@ public class Commandspawnmob extends EssentialsCommand
 			}
 			catch (Exception e)
 			{
-				throw new Exception("Malformed size.");
+				throw new Exception(Util.i18n("slimeMalformedSize"));
 			}
 		}
 		if ("Sheep".equalsIgnoreCase(type))
@@ -215,7 +216,7 @@ public class Commandspawnmob extends EssentialsCommand
 			}
 			catch (Exception e)
 			{
-				throw new Exception("Malformed color.");
+				throw new Exception(Util.i18n("sheepMalformedColor"));
 			}
 		}
 		if ("Wolf".equalsIgnoreCase(type) && data.equalsIgnoreCase("tamed"))

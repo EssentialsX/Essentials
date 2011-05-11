@@ -23,7 +23,7 @@ public class Commandseen extends EssentialsCommand
 		try
 		{
 			User u = getPlayer(server, args, 0);
-			sender.sendMessage("Player " + u.getDisplayName() + " is online since" + Util.formatDateDiff(u.getLastLogin()));
+			sender.sendMessage(Util.format("seenOnline",u.getDisplayName(), Util.formatDateDiff(u.getLastLogin())));
 		}
 		catch (NoSuchFieldException e)
 		{
@@ -32,7 +32,7 @@ public class Commandseen extends EssentialsCommand
 			{
 				return;
 			}
-			sender.sendMessage("Player " + u.getDisplayName() + " is offline since" + Util.formatDateDiff(u.getLastLogout()));
+			sender.sendMessage(Util.format("seenOffline", u.getDisplayName(), Util.formatDateDiff(u.getLastLogout())));
 		}
 	}
 }

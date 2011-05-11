@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.IReplyTo;
+import com.earth2me.essentials.Util;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -30,12 +31,12 @@ public class Commandr extends EssentialsCommand
 
 		if (target == null)
 		{
-			sender.sendMessage("§cYou have nobody to whom you can reply.");
+			sender.sendMessage(Util.i18n("foreverAlone"));
 		}
 
 		charge(sender);
-		sender.sendMessage("[Me -> " + targetName + "] " + message);
-		target.sendMessage("[" + senderName + " -> Me] " + message);
+		sender.sendMessage("[" + Util.i18n("me")+ " -> " + targetName + "] " + message);
+		target.sendMessage("[" + senderName + " -> " + Util.i18n("me") +"] " + message);
 		replyTo.setReplyTo(target);
 		if (target != sender)
 		{

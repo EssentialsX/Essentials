@@ -34,19 +34,19 @@ public class Commandtempban extends EssentialsCommand
 		}
 		if (p == null)
 		{
-			sender.sendMessage("§cPlayer " + args[0] + " not found");
+			sender.sendMessage(Util.format("playerNotFound"));
 		}
 
 		String time = getFinalArg(args, 1);
 		long banTimestamp = Util.parseDateDiff(time, true);
 
 		p = ess.getUser(server.matchPlayer(args[0]).get(0));
-		String banReason = "Temporarily banned from server for " + Util.formatDateDiff(banTimestamp);
+		String banReason = Util.format("tempBanned",  Util.formatDateDiff(banTimestamp));
 		p.setBanReason(banReason);
 		p.setBanTimeout(banTimestamp);
 		p.kickPlayer(banReason);
 		((CraftServer)server).getHandle().a(p.getName());
-		sender.sendMessage("§cPlayer " + p.getName() + " banned");
+		sender.sendMessage(Util.format("playerBanned", p.getName()));
 		Essentials.getStatic().loadBanList();
 	}
 }
