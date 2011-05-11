@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 
 
 public class Commandme extends EssentialsCommand
@@ -16,7 +17,7 @@ public class Commandme extends EssentialsCommand
 	{
 		if (user.isMuted())
 		{
-			user.sendMessage("§7Your voice has been silenced");
+			user.sendMessage(Util.i18n("voiceSilenced"));
 			return;
 		}
 

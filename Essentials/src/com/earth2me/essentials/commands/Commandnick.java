@@ -5,6 +5,7 @@ import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.Essentials;
 import org.bukkit.entity.Player;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 
 
 public class Commandnick extends EssentialsCommand
@@ -26,7 +27,7 @@ public class Commandnick extends EssentialsCommand
 		{
 			if (!user.isAuthorized("essentials.nick.others"))
 			{
-				user.sendMessage("§cYou do not have permission to change the nickname of others");
+				user.sendMessage(Util.i18n("nickOthersPermission"));
 				return;
 			}
 
@@ -40,13 +41,13 @@ public class Commandnick extends EssentialsCommand
 		{
 			user.setDisplayName(user.getName());
 			user.setNickname(null);
-			user.sendMessage("§7You no longer have a nickname.");
+			user.sendMessage(Util.i18n("nickNoMore"));
 			return;
 		}
 
 		if (nick.matches("[^a-zA-Z_0-9]"))
 		{
-			user.sendMessage("§cNicknames must be alphanumeric.");
+			user.sendMessage(Util.i18n("nickNamesAlpha"));
 			return;
 		}
 
@@ -61,7 +62,7 @@ public class Commandnick extends EssentialsCommand
 			String nk = nick.toLowerCase();
 			if (nk.equals(dn) || nk.equals(n))
 			{
-				user.sendMessage("§cThat name is already in use.");
+				user.sendMessage(Util.i18n("nickInUse"));
 				return;
 			}
 		}
@@ -69,7 +70,7 @@ public class Commandnick extends EssentialsCommand
 		user.charge(this);
 		user.setDisplayName(ess.getConfiguration().getString("nickname-prefix", "~") + nick);
 		user.setNickname(nick);
-		user.sendMessage("§7Your nickname is now §c" + user.getDisplayName() + "§7.");
+		user.sendMessage(Util.format("nickSet", user.getDisplayName() + "§7."));
 	}
 
 	@Override
@@ -92,14 +93,14 @@ public class Commandnick extends EssentialsCommand
 		{
 			target.setDisplayName(target.getName());
 			target.setNickname(null);
-			target.sendMessage("§7You no longer have a nickname.");
+			target.sendMessage(Util.i18n("nickNoMore"));
 		}
 		else
 		{
 			target.setDisplayName(ess.getSettings().getNicknamePrefix() + nick);
 			target.setNickname(nick);
-			target.sendMessage("§7Your nickname is now §c" + target.getDisplayName() + "§7.");
+			target.sendMessage(Util.format("nickSet", target.getDisplayName() + "§7."));
 		}
-		sender.sendMessage("Nickname changed.");
+		sender.sendMessage(Util.i18n("nickChanged"));
 	}
 }
