@@ -270,11 +270,11 @@ public class Util
 		}
 		return isBlockAboveAir(world, x, y, z);
 	}
-	//private static DecimalFormat df = new DecimalFormat("#.00");
+	private static DecimalFormat df = new DecimalFormat("#.00");
 
 	public static String formatCurrency(double value)
 	{
-		return Util.format("currency", value);
+		return "$"+df.format(value);
 	}
 
 	public static double roundDouble(double d)
