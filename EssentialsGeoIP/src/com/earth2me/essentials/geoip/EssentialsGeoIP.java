@@ -28,14 +28,6 @@ public class EssentialsGeoIP extends JavaPlugin
 	public void onEnable()
 	{
 		PluginManager pm = getServer().getPluginManager();
-		Plugin ess = pm.getPlugin("Essentials");
-		if (ess != null)
-		{
-			if (!pm.isPluginEnabled(ess))
-			{
-				pm.enablePlugin(ess);
-			}
-		}
 		EssentialsGeoIPPlayerListener playerListener = new EssentialsGeoIPPlayerListener(getDataFolder());
 		pm.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
 

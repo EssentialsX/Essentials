@@ -6,3 +6,4 @@ version: TeamCity
 website: http://www.earth2me.net:8001/
 description: Provides protection for various parts of the world.
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology]
+depend: [Essentials]

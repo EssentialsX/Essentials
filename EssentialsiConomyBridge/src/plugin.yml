@@ -3,4 +3,5 @@ version: 4.65
 main: com.nijiko.coelho.iConomy.iConomy
 website: http://www.earth2me.net:8001/
 description: "Essentials iConomy Bridge version: TeamCity"
-authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology]
+authors: [Xeology]
+depend: [Essentials]

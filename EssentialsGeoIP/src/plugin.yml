@@ -6,3 +6,4 @@ version: TeamCity
 website: http://www.earth2me.net:8001/
 description: Shows the country or city of a user on login and /whois.
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology]
+depend: [Essentials]

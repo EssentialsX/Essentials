@@ -1,3 +1,4 @@
 name: Permissions
-version: 2.5.1
+version: 2.7.2
 main: com.nijikokun.bukkit.Permissions.Permissions
+depend: [GroupManager]

@@ -22,12 +22,6 @@ public class EssentialsSpawn extends JavaPlugin
 
 	public void onEnable()
 	{
-		Plugin p = this.getServer().getPluginManager().getPlugin("Essentials");
-		if (p != null) {
-			if (!this.getServer().getPluginManager().isPluginEnabled(p)) {
-				this.getServer().getPluginManager().enablePlugin(p);
-			}
-		}
 		EssentialsSpawnPlayerListener playerListener = new EssentialsSpawnPlayerListener();
 		getServer().getPluginManager().registerEvent(Type.PLAYER_RESPAWN, playerListener, Priority.Low, this);
 		getServer().getPluginManager().registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Low, this);
