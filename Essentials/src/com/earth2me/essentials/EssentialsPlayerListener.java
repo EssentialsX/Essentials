@@ -136,7 +136,7 @@ public class EssentialsPlayerListener extends PlayerListener
 				if (world.getEnvironment() == World.Environment.NETHER || ess.getSettings().getGenerateExitPortals())
 				{
 					portal = NetherPortal.createPortal(dest);
-					logger.info(Util.format("userCreatedPortal ", event.getPlayer().getName()));
+					logger.info(Util.format("userCreatedPortal", event.getPlayer().getName()));
 					user.sendMessage(Util.i18n("generatingPortal"));
 					loc = portal.getSpawn();
 				}
