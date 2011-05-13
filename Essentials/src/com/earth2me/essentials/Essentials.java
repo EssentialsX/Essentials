@@ -192,6 +192,9 @@ public class Essentials extends JavaPlugin
 		{
 			user.reloadConfig();
 		}
+		
+		// for motd
+		getConfiguration().load();
 
 		try
 		{
