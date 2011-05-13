@@ -2,7 +2,6 @@ package com.essentials.register.payment;
 
 import com.iConomy.iConomy;
 import cosine.boseconomy.BOSEconomy;
-import com.earth2me.essentials.Essentials;
 
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -25,9 +24,7 @@ public class Methods {
                 else { Method = new MethodiCo4((com.nijiko.coelho.iConomy.iConomy)method); }
             } else if(name.equalsIgnoreCase("boseconomy")) {
                 Method = new MethodBOSEconomy((BOSEconomy)method);
-            } else if(name.equalsIgnoreCase("essentials")) {
-                Method = new MethodEEco((Essentials)method);
-            }
+            } 
         }
         
         if(!hasMethod()) {
@@ -39,9 +36,6 @@ public class Methods {
             } else if(loader.getPlugin("BOSEconomy") != null) {
                 method = loader.getPlugin("BOSEconomy");
                 Method = new MethodBOSEconomy((BOSEconomy)method);
-            } else if(loader.getPlugin("Essentials") != null) {
-                method = loader.getPlugin("Essentials");
-                Method = new MethodEEco((Essentials)method);
             }
         }
         
