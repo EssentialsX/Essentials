@@ -188,7 +188,7 @@ public class Essentials extends JavaPlugin
 		pm.registerEvent(Type.BLOCK_PLACE, jail, Priority.High, this);
 		pm.registerEvent(Type.PLAYER_INTERACT, jailPlayerListener, Priority.High, this);
 		attachEcoListeners();
-
+		
 		if (settings.isNetherEnabled() && getServer().getWorlds().size() < 2)
 		{
 			getServer().createWorld(settings.getNetherName(), World.Environment.NETHER);

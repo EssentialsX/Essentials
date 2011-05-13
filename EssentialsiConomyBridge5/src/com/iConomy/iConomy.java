@@ -47,7 +47,7 @@ public class iConomy extends JavaPlugin
 		{
 			logger.log(Level.WARNING, "Version mismatch! Please update all Essentials jars to the same version.");
 		}
-		Essentials.getStatic().setIConomyFallback(false);
+		Essentials.getStatic().setRegisterFallback(false);
 
 
 
