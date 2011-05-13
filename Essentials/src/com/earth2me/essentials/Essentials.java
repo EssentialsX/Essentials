@@ -67,6 +67,7 @@ public class Essentials extends JavaPlugin
 		logger.log(Level.INFO, dataFolder.toString());
 		this.initialize(null, null, new PluginDescriptionFile(new FileReader(new File("src" + File.separator + "plugin.yml"))), dataFolder, null, null);
 		settings = new Settings(dataFolder);
+		setStatic();
 	}
 
 	public void setStatic()
