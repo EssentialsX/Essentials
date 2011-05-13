@@ -253,11 +253,11 @@ public class EssentialsPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerLogin(PlayerLoginEvent event)
 	{
-		User user = ess.getUser(event.getPlayer());
 		if (event.getResult() != Result.ALLOWED)
 		{
 			return;
 		}
+		User user = ess.getUser(event.getPlayer());
 
 		if (user.isBanned())
 		{
