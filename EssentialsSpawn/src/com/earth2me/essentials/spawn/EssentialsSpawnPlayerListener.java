@@ -5,6 +5,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bukkit.Location;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -21,7 +22,11 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 		{
 			if (Essentials.getStatic().getSettings().getRespawnAtHome())
 			{
-				event.setRespawnLocation(user.getHome());
+				Location home = user.getHome();
+				if (home == null) {
+					throw new Exception();
+				}
+				event.setRespawnLocation(home);
 				return;
 			}
 		}
