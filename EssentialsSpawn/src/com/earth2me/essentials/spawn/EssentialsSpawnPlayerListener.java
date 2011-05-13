@@ -33,7 +33,11 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 		catch (Throwable ex)
 		{
 		}
-		event.setRespawnLocation(Essentials.getSpawn().getSpawn(user.getGroup()));
+		Location spawn = Essentials.getSpawn().getSpawn(user.getGroup());
+		if (spawn == null) {
+			return;
+		}
+		event.setRespawnLocation(spawn);
 	}
 
 	@Override
