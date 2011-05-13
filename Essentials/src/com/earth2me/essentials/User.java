@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.IEssentialsCommand;
+import com.nijikokun.register.payment.Method;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Logger;
@@ -277,7 +278,12 @@ public class User extends UserData implements Comparable<User>, IReplyTo
 		{
 			try
 			{
-				return ess.getPaymentMethod().getMethod().getAccount(this.getName()).balance();
+				Method method = ess.getPaymentMethod().getMethod();
+				if (!method.hasAccount(this.getName())) {
+					throw new Exception();
+				}
+				Method.MethodAccount account = ess.getPaymentMethod().getMethod().getAccount(this.getName());
+				return account.balance();
 			}
 			catch (Throwable ex)
 			{	
@@ -293,8 +299,13 @@ public class User extends UserData implements Comparable<User>, IReplyTo
 		{
 			try
 			{
-				double amount = value - ess.getPaymentMethod().getMethod().getAccount(this.getName()).balance();
-				ess.getPaymentMethod().getMethod().getAccount(this.getName()).add(amount);
+				Method method = ess.getPaymentMethod().getMethod();
+				if (!method.hasAccount(this.getName())) {
+					throw new Exception();
+				}
+				Method.MethodAccount account = ess.getPaymentMethod().getMethod().getAccount(this.getName());
+				double amount = value - account.balance();
+				account.add(amount);
 			}
 			catch (Throwable ex)
 			{
