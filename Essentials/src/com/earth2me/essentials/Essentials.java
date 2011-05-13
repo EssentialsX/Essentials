@@ -60,7 +60,7 @@ public class Essentials extends JavaPlugin
 	private Backup backup;
 	private Map<String, User> users = new HashMap<String, User>();
 	private EssentialsTimer timer;
-	private boolean iConomyFallback = true;
+	private boolean registerFallback = true;
 	private Methods paymentMethod = new Methods();
 
 	public Essentials()
@@ -669,14 +669,14 @@ public class Essentials extends JavaPlugin
 		return null;
 	}
 
-	public void setIConomyFallback(boolean iConomyFallback)
+	public void setRegisterFallback(boolean registerFallback)
 	{
-		this.iConomyFallback = iConomyFallback;
+		this.registerFallback = registerFallback;
 	}
 
 	public boolean isRegisterFallbackEnabled()
 	{
-		return iConomyFallback;
+		return registerFallback;
 	}
 
 	public void addReloadListener(IConf listener)
