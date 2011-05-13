@@ -311,10 +311,10 @@ protect:
     lava-flow: false
     water-flow: false
     water-bucket-flow: false
-    fire-spread: false
-    lava-fire-spread: false
+    fire-spread: true
+    lava-fire-spread: true
     flint-fire: false
-    lightning-fire-spread: false
+    lightning-fire-spread: true
     portal-creation: false
     tnt-explosion: false
     creeper-explosion: false

@@ -307,10 +307,10 @@ public class Settings implements IConf
 		epSettings.put("protect.prevent.lava-flow", config.getBoolean("protect.prevent.lava-flow", false));
 		epSettings.put("protect.prevent.water-flow", config.getBoolean("protect.prevent.water-flow", false));
 		epSettings.put("protect.prevent.water-bucket-flow", config.getBoolean("protect.prevent.water-bucket-flow", false));
-		epSettings.put("protect.prevent.fire-spread", config.getBoolean("protect.prevent.fire-spread", false));
+		epSettings.put("protect.prevent.fire-spread", config.getBoolean("protect.prevent.fire-spread", true));
 		epSettings.put("protect.prevent.flint-fire", config.getBoolean("protect.prevent.flint-fire", false));
 		epSettings.put("protect.prevent.portal-creation", config.getBoolean("protect.prevent.portal-creation", false));
-		epSettings.put("protect.prevent.lava-fire-spread", config.getBoolean("protect.prevent.lava-fire-spread", false));
+		epSettings.put("protect.prevent.lava-fire-spread", config.getBoolean("protect.prevent.lava-fire-spread", true));
 		epSettings.put("protect.prevent.tnt-explosion", config.getBoolean("protect.prevent.tnt-explosion", false));
 		epSettings.put("protect.prevent.creeper-explosion", config.getBoolean("protect.prevent.creeper-explosion", false));
 		epSettings.put("protect.prevent.creeper-playerdamage", config.getBoolean("protect.prevent.creeper-playerdamage", false));
@@ -320,7 +320,7 @@ public class Settings implements IConf
 			String name = ct.toString().toLowerCase();
 			epSettings.put("protect.prevent.spawn."+name, config.getBoolean("protect.prevent.spawn."+name, false));
 		}
-		epSettings.put("protect.prevent.lightning-fire-spread", config.getBoolean("protect.prevent.lightning-fire-spread", false));
+		epSettings.put("protect.prevent.lightning-fire-spread", config.getBoolean("protect.prevent.lightning-fire-spread", true));
 		return epSettings;
 	}
 
