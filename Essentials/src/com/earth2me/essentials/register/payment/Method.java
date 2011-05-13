@@ -1,4 +1,4 @@
-package com.essentials.register.payment;
+package com.earth2me.essentials.register.payment;
 
 public interface Method {
     public Object getPlugin();

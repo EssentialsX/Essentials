@@ -1,4 +1,4 @@
-package com.essentials.register.payment;
+package com.earth2me.essentials.register.payment;
 
 import com.nijiko.coelho.iConomy.iConomy;
 import com.nijiko.coelho.iConomy.system.Account;
