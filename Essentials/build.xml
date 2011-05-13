@@ -72,4 +72,13 @@
     nbproject/build-impl.xml file. 
 
     -->
+	<target name="-post-jar">
+	    <jar jarfile="${dist.dir}/Essentials.jar">
+	      <zipfileset src="${dist.jar}" excludes="META-INF/*" />
+	      <zipfileset src="../lib/register.jar" excludes="META-INF/*" />
+	      <manifest>
+	        <attribute name="Classpath" value="Essentials.jar"/>
+	      </manifest>
+	    </jar>
+	  </target>
 </project>

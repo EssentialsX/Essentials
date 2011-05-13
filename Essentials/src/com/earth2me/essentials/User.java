@@ -273,11 +273,11 @@ public class User extends UserData implements Comparable<User>, IReplyTo
 	@Override
 	public double getMoney()
 	{
-		if (ess.isIConomyFallbackEnabled())
+		if (ess.isRegisterFallbackEnabled() && ess.getPaymentMethod().hasMethod())
 		{
 			try
 			{
-				return com.iConomy.iConomy.getAccount(getName()).getHoldings().balance();
+				return ess.getPaymentMethod().getMethod().getAccount(this.getName()).balance();
 			}
 			catch (Throwable ex)
 			{	
@@ -289,11 +289,12 @@ public class User extends UserData implements Comparable<User>, IReplyTo
 	@Override
 	public void setMoney(double value)
 	{
-		if (ess.isIConomyFallbackEnabled())
+		if (ess.isRegisterFallbackEnabled() && ess.getPaymentMethod().hasMethod())
 		{
 			try
 			{
-				com.iConomy.iConomy.getAccount(getName()).getHoldings().set(value);
+				double amount = value - ess.getPaymentMethod().getMethod().getAccount(this.getName()).balance();
+				ess.getPaymentMethod().getMethod().getAccount(this.getName()).add(amount);
 			}
 			catch (Throwable ex)
 			{

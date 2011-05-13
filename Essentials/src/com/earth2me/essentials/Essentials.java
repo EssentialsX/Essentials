@@ -26,6 +26,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
+import com.nijikokun.register.payment.Methods;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.bukkit.command.PluginCommand;
@@ -60,6 +61,7 @@ public class Essentials extends JavaPlugin
 	private Map<String, User> users = new HashMap<String, User>();
 	private EssentialsTimer timer;
 	private boolean iConomyFallback = true;
+	private Methods paymentMethod = new Methods();
 
 	public Essentials()
 	{
@@ -129,6 +131,12 @@ public class Essentials extends JavaPlugin
 				if (!plugin.getDescription().getVersion().equals(this.getDescription().getVersion()))
 				{
 					logger.log(Level.WARNING, Util.format("versionMismatch", plugin.getDescription().getName()));
+				}
+			}
+			if (!paymentMethod.hasMethod() && plugin != this)
+			{
+				if (getPaymentMethod().setMethod(plugin)) {
+					logger.log(Level.INFO, "Payment method found (" + getPaymentMethod().getMethod().getName() + " version: " + getPaymentMethod().getMethod().getVersion() + ")");
 				}
 			}
 		}
@@ -205,12 +213,12 @@ public class Essentials extends JavaPlugin
 		{
 			iConf.reloadConfig();
 		}
-		
+
 		for (User user : users.values())
 		{
 			user.reloadConfig();
 		}
-		
+
 		// for motd
 		getConfiguration().load();
 
@@ -334,10 +342,10 @@ public class Essentials extends JavaPlugin
 	{
 		return onCommandEssentials(sender, command, commandLabel, args, Essentials.class.getClassLoader(), "com.earth2me.essentials.commands.Command");
 	}
-	
+
 	public boolean onCommandEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath)
 	{
-		if ("msg".equals(commandLabel.toLowerCase()) || "mail".equals(commandLabel.toLowerCase()) &  sender instanceof CraftPlayer)
+		if ("msg".equals(commandLabel.toLowerCase()) || "mail".equals(commandLabel.toLowerCase()) & sender instanceof CraftPlayer)
 		{
 			StringBuilder str = new StringBuilder();
 			str.append(commandLabel + " ");
@@ -625,8 +633,8 @@ public class Essentials extends JavaPlugin
 		File userFile = new File(userFolder, Util.sanitizeFileName(name) + ".yml");
 		if (userFile.exists())
 		{	//Users do not get offline changes saved without being reproccessed as Users! ~ Xeology :)
-			return getUser((Player) new OfflinePlayer(name));
-			
+			return getUser((Player)new OfflinePlayer(name));
+
 		}
 		return null;
 	}
@@ -666,13 +674,18 @@ public class Essentials extends JavaPlugin
 		this.iConomyFallback = iConomyFallback;
 	}
 
-	public boolean isIConomyFallbackEnabled()
+	public boolean isRegisterFallbackEnabled()
 	{
 		return iConomyFallback;
 	}
-	
+
 	public void addReloadListener(IConf listener)
 	{
 		confList.add(listener);
+	}
+
+	public Methods getPaymentMethod()
+	{
+		return paymentMethod;
 	}
 }
