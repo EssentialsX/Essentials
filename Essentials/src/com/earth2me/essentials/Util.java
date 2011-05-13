@@ -270,11 +270,15 @@ public class Util
 		}
 		return isBlockAboveAir(world, x, y, z);
 	}
-	private static DecimalFormat df = new DecimalFormat("#.00");
+	private static DecimalFormat df = new DecimalFormat("#0.##");
 
 	public static String formatCurrency(double value)
 	{
-		return "$"+df.format(value);
+		String str = Essentials.getStatic().getSettings().getCurrencySymbol()+df.format(value);
+		if (str.endsWith(".")) {
+			return str.substring(0, str.length()-1);
+		}
+		return str;
 	}
 
 	public static double roundDouble(double d)

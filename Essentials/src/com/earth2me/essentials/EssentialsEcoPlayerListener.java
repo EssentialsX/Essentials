@@ -44,7 +44,7 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 			{
 				int amount = Integer.parseInt(sign.getLine(1));
 				ItemStack item = ItemDb.get(sign.getLine(2), amount);
-				double cost = Double.parseDouble(sign.getLine(3).substring(1).replaceAll(",", "."));
+				double cost = Double.parseDouble(sign.getLine(3).substring(1));
 				if (user.getMoney() < cost)
 				{
 					throw new Exception(Util.i18n("notEnoughMoney"));
@@ -70,7 +70,7 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 			{
 				int amount = Integer.parseInt(sign.getLine(1));
 				ItemStack item = ItemDb.get(sign.getLine(2), amount);
-				double cost = Double.parseDouble(sign.getLine(3).substring(1).replaceAll(",", "."));
+				double cost = Double.parseDouble(sign.getLine(3).substring(1));
 				
 				if (!InventoryWorkaround.containsItem(user.getInventory(), true, item))
 				{
@@ -93,8 +93,8 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 			{
 				String[] l1 = sign.getLines()[1].split("[ :-]+");
 				String[] l2 = sign.getLines()[2].split("[ :-]+");
-				boolean m1 = l1[0].matches("\\$[0-9]+(\\.[0-9]+)?");
-				boolean m2 = l2[0].matches("\\$[0-9]+(\\.[0-9]+)?");
+				boolean m1 = l1[0].matches("[^0-9][0-9]+(\\.[0-9]+)?");
+				boolean m2 = l2[0].matches("[^0-9][0-9]+(\\.[0-9]+)?");
 				double q1 = Double.parseDouble(m1 ? l1[0].substring(1) : l1[0]);
 				double q2 = Double.parseDouble(m2 ? l2[0].substring(1) : l2[0]);
 				double r1 = Double.parseDouble(l1[m1 ? 1 : 2]);
@@ -126,7 +126,7 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 						user.updateInventory();
 					}
 					r1 = 0;
-					sign.setLine(1, (m1 ? Util.formatCurrency(q1) : String.format("%.0f", q1) + " " + l1[1]) + ":" + r1);
+					sign.setLine(1, (m1 ? Util.formatCurrency(q1) : ((int)q1) + " " + l1[1]) + ":" + r1);
 					sign.update();
 				}
 				else
@@ -180,8 +180,8 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 					
 
 					sign.setLine(0, "§1[Trade]");
-					sign.setLine(1, (m1 ? Util.formatCurrency(q1) : String.format("%.0f", q1) + " " + l1[1]) + ":" + String.format((m1 ? "%.2f" : "%.0f"), Util.roundDouble(r1)));
-					sign.setLine(2, (m2 ? Util.formatCurrency(q2) : String.format("%.0f", q2) + " " + l2[1]) + ":" + String.format((m2 ? "%.2f" : "%.0f"), Util.roundDouble(r2)));
+					sign.setLine(1, (m1 ? Util.formatCurrency(q1) : ((int)q1) + " " + l1[1]) + ":" + String.format((m1 ? "%.2f" : "%.0f"), Util.roundDouble(r1)));
+					sign.setLine(2, (m2 ? Util.formatCurrency(q2) : ((int)q2) + " " + l2[1]) + ":" + String.format((m2 ? "%.2f" : "%.0f"), Util.roundDouble(r2)));
 					sign.update();
 					user.sendMessage(Util.i18n("tradeCompleted"));
 				}

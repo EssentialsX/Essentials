@@ -51,8 +51,8 @@ public class EssentialsEcoBlockListener extends BlockListener
 			{
 				String[] l1 = sign.getLines()[1].split("[ :-]+");
 				String[] l2 = sign.getLines()[2].split("[ :-]+");
-				boolean m1 = l1[0].matches("\\$[0-9]+(\\.[0-9]+)?");
-				boolean m2 = l2[0].matches("\\$[0-9]+(\\.[0-9]+)?");
+				boolean m1 = l1[0].matches("[^0-9][0-9]+(\\.[0-9]+)?");
+				boolean m2 = l2[0].matches("[^0-9][0-9]+(\\.[0-9]+)?");
 				double q1 = Double.parseDouble(m1 ? l1[0].substring(1) : l1[0]);
 				double q2 = Double.parseDouble(m2 ? l2[0].substring(1) : l2[0]);
 				double r1 = Double.parseDouble(l1[m1 ? 1 : 2]);
@@ -159,8 +159,8 @@ public class EssentialsEcoBlockListener extends BlockListener
 			{
 				String[] l1 = event.getLines()[1].split("[ :-]+");
 				String[] l2 = event.getLines()[2].split("[ :-]+");
-				boolean m1 = l1[0].matches("\\$[0-9]+(\\.[0-9]+)?");
-				boolean m2 = l2[0].matches("\\$[0-9]+(\\.[0-9]+)?");
+				boolean m1 = l1[0].matches("[^0-9][0-9]+(\\.[0-9]+)?");
+				boolean m2 = l2[0].matches("[^0-9][0-9]+(\\.[0-9]+)?");
 				double q1 = Double.parseDouble(m1 ? l1[0].substring(1) : l1[0]);
 				double q2 = Double.parseDouble(m2 ? l2[0].substring(1) : l2[0]);
 				double r2 = Double.parseDouble(l2[m2 ? 1 : 2]);
@@ -195,16 +195,16 @@ public class EssentialsEcoBlockListener extends BlockListener
 				}
 
 				event.setLine(0, "§1[Trade]");
-				event.setLine(1, (m1 ? "$" + q1 : String.format("%.0f",q1) + " " + l1[1]) + ":0");
-				event.setLine(2, (m2 ? "$" + q2 : String.format("%.0f", q2)+ " " + l2[1]) + ":" + String.format("%.0f",r2));
+				event.setLine(1, (m1 ? ess.getSettings().getCurrencySymbol() + q1 : String.format("%.0f",q1) + " " + l1[1]) + ":0");
+				event.setLine(2, (m2 ? ess.getSettings().getCurrencySymbol() + q2 : String.format("%.0f", q2)+ " " + l2[1]) + ":" + String.format("%.0f",r2));
 				event.setLine(3, "§8" + username);
 			}
 			catch (Throwable ex)
 			{
 				user.sendMessage("§cError: " + ex.getMessage());
 				event.setLine(0, "§4[Trade]");
-				event.setLine(1, "# ItemOr$");
-				event.setLine(2, "# ItemOr$:#");
+				event.setLine(1, "# ItemOr"+ess.getSettings().getCurrencySymbol());
+				event.setLine(2, "# ItemOr"+ess.getSettings().getCurrencySymbol()+":#");
 				event.setLine(3, "§8" + username);
 			}
 			return;

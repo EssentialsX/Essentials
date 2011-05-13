@@ -36,6 +36,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 	public final void reloadConfig()
 	{
 		config.load();
+		money = _getMoney();
 		unlimited = _getUnlimited();
 		powertools = getPowertools();
 		lastLocation = _getLastLocation();
@@ -57,38 +58,28 @@ public abstract class UserData extends PlayerExtension implements IConf
 		geolocation = _getGeoLocation();
 		isSocialSpyEnabled = _isSocialSpyEnabled();
 	}
-
-	public double getMoney()
-	{
+	
+	double money;
+	
+	private double _getMoney() {
 		if (config.hasProperty("money"))
 		{
 			return config.getDouble("money", ess.getSettings().getStartingBalance());
 		}
-		if (ess.isIConomyFallbackEnabled())
+		else
 		{
-			try
-			{
-				return com.iConomy.iConomy.getAccount(getName()).getHoldings().balance();
-			}
-			catch (Throwable ex)
-			{	
-			}
+			return ess.getSettings().getStartingBalance();
 		}
-		return ess.getSettings().getStartingBalance();
+	}
+
+	public double getMoney()
+	{
+		return money;
 	}
 
 	public void setMoney(double value)
 	{
-		if (ess.isIConomyFallbackEnabled())
-		{
-			try
-			{
-				com.iConomy.iConomy.getAccount(getName()).getHoldings().set(value);
-			}
-			catch (Throwable ex)
-			{
-			}
-		}
+		money = value;
 		config.setProperty("money", value);
 		config.save();
 	}
@@ -690,10 +681,29 @@ public abstract class UserData extends PlayerExtension implements IConf
 		return isSocialSpyEnabled;
 	}
 	
-	public void setSocialSpyEnabled(Boolean status)
+	public void setSocialSpyEnabled(boolean status)
 	{
 		isSocialSpyEnabled = status;
 		config.setProperty("socialspy", status);
+		config.save();
+	}
+	
+	private boolean isNPC;
+	
+	private boolean _isNPC()
+	{
+		return config.getBoolean("npc", false);
+	}
+	
+	public boolean isNPC()
+	{
+		return isNPC;
+	}
+	
+	void setNPC(boolean set)
+	{
+		isNPC = set;
+		config.setProperty("npc", set);
 		config.save();
 	}
 }

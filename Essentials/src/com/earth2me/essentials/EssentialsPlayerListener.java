@@ -258,6 +258,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			return;
 		}
 		User user = ess.getUser(event.getPlayer());
+		user.setNPC(false);
 
 		if (user.isBanned())
 		{

@@ -1,324 +1,260 @@
 package com.earth2me.essentials.api;
 
 import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.EssentialsConf;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.UserData;
 import com.earth2me.essentials.Util;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import org.bukkit.Bukkit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.bukkit.entity.Player;
 
 
 public class Economy
 {
-	protected static Essentials ess = Essentials.getStatic();
+	private static final Logger logger = Logger.getLogger("Minecraft");
 
-	//Does the file exists?
-	protected static boolean accountCreated(String name)
+	private static void createNPCFile(String name)
 	{
-		File folder = new File(ess.getDataFolder(), "userdata");
-		File account = new File(folder, name.toLowerCase() + ".yml");
-		return account.exists();
+		File folder = new File(Essentials.getStatic().getDataFolder(), "userdata");
+		EssentialsConf npcConfig = new EssentialsConf(new File(folder, Util.sanitizeFileName(name) + ".yml"));
+		npcConfig.load();
+		npcConfig.setProperty("npc", true);
+		npcConfig.setProperty("money", Essentials.getStatic().getSettings().getStartingBalance());
+		npcConfig.save();
 	}
-
-	//We create the file for the NPC
-	protected static void createAccount(String name)
+	
+	private static void deleteNPC(String name)
 	{
-
-		//Where we will store npc accounts!
-
-		File folder = new File(ess.getDataFolder(), "userdata");
-		File npcFile = new File(folder, name + ".yml");
-
-		try
-		{
-			if (!npcFile.createNewFile())
-			{
-				System.out.println("Failed file creation");
-			}
-			return;
-		}
-		catch (IOException e)
-		{
-			System.out.println("Could not create Non-player account file!");
-		}
-		FileWriter fileWriter = null;
-		BufferedWriter bufferWriter = null;
-		try
-		{
-			if (!npcFile.exists())
-			{
-				npcFile.createNewFile();
-			}
-
-			fileWriter = new FileWriter(npcFile);
-			bufferWriter = new BufferedWriter(fileWriter);
-
-			//This is the default for NPC's, 0
-
-			bufferWriter.append("money: ");
-			bufferWriter.append(((Integer)0).toString());
-			bufferWriter.newLine();
-		}
-		catch (IOException e)
-		{
-			System.out.println("Exception on config creation: ");
-		}
-		finally
-		{
-			try
-			{
-				if (bufferWriter != null)
-				{
-					bufferWriter.flush();
-					bufferWriter.close();
-				}
-
-				if (fileWriter != null)
-				{
-					fileWriter.close();
-				}
-			}
-			catch (IOException e)
-			{
-				System.out.println("IO Exception writing file: " + npcFile.getName());
+		File folder = new File(Essentials.getStatic().getDataFolder(), "userdata");
+		File config = new File(folder, Util.sanitizeFileName(name) + ".yml");
+		EssentialsConf npcConfig = new EssentialsConf(config);
+		npcConfig.load();
+		if (npcConfig.hasProperty("npc") && npcConfig.getBoolean("npc", false)) {
+			if (!config.delete()) {
+				logger.log(Level.WARNING, Util.format("deleteFileError", config));
 			}
 		}
 	}
-
-	//Convert a string into an essentials User
-	protected static User usrConv(String name)
+	
+	private static User getUserByName(String name)
 	{
-		User user = null;
-		if (Bukkit.getServer().getPlayer(name) != null)
+		User user;
+		Player player = Essentials.getStatic().getServer().getPlayer(name);
+		if (player != null)
 		{
-			user = ess.getUser(Bukkit.getServer().getPlayer(name));
-			return user;
+			user = Essentials.getStatic().getUser(player);
 		}
 		else
 		{
-			user = ess.getOfflineUser(name);
+			user = Essentials.getStatic().getOfflineUser(name);
 		}
 		return user;
 	}
 
-	//We have to make sure the user exists, or they are an NPC!
-	public static boolean exist(String name)
+	/**
+	 * Returns the balance of a user
+	 * @param name Name of the user
+	 * @return balance
+	 * @throws UserDoesNotExistException 
+	 */
+	public static double getMoney(String name) throws UserDoesNotExistException
 	{
-
-		if (name == null)
-		{
-			System.out.println("EcoAPI - Whatever plugin is calling for users that are null is BROKEN!");
-			return false;
+		User user = getUserByName(name);
+		if (user == null) {
+			throw new UserDoesNotExistException(name);
 		}
-		if (Bukkit.getServer().getPlayer(name) != null)
-		{
-			return true;
-		}
-		return false;
+		// Use UserData to avoid calls to iConomy and Register
+		return ((UserData)user).getMoney();
 	}
 
-	//Eco return balance
-	public static double getMoney(String name)
+	/**
+	 * Sets the balance of a user
+	 * @param name Name of the user
+	 * @param balance The balance you want to set
+	 * @throws UserDoesNotExistException If a user by that name does not exists
+	 * @throws NoLoanPermittedException If the user is not allowed to have a negative balance
+	 */
+	public static void setMoney(String name, double balance) throws UserDoesNotExistException, NoLoanPermittedException
 	{
-		if (!exist(name))
-		{
-			if (accountCreated(name))
-			{
-				User user = usrConv(name);
-				return user.getMoney();
-			}
-			return 0;
+		User user = getUserByName(name);
+		if (user == null) {
+			throw new UserDoesNotExistException(name);
 		}
-		User user = usrConv(name);
-		return user.getMoney();
-	}
-
-	//Eco Set Money
-	public static void setMoney(String name, double bal)
-	{
-		if (!exist(name))
+		if (balance < 0.0 && !user.isAuthorized("essentials.eco.loan"))
 		{
-			if (accountCreated(name))
-			{
-				User user = usrConv(name);
-				user.setMoney(bal);
-			}
-			return;
+			throw new NoLoanPermittedException();
 		}
-		User user = usrConv(name);
-		user.setMoney(bal);
-		return;
+		// Use UserData to avoid calls to iConomy and Register
+		((UserData)user).setMoney(balance);
 	}
 
-	//Eco add balance
-	public static void add(String name, double money)
+	/**
+	 * Adds money to the balance of a user
+	 * @param name Name of the user
+	 * @param amount The money you want to add
+	 * @throws UserDoesNotExistException If a user by that name does not exists
+	 * @throws NoLoanPermittedException If the user is not allowed to have a negative balance
+	 */
+	public static void add(String name, double amount) throws UserDoesNotExistException, NoLoanPermittedException
 	{
-		double result;
-		if (!exist(name))
-		{
-			if (accountCreated(name))
-			{				
-				result = getMoney(name) + money;
-				setMoney(name,result);
-			}
-			return;
-		}
-		result = getMoney(name) + money;
-		setMoney(name,result);
-		return;
+		double result = getMoney(name) + amount;
+		setMoney(name, result);
 	}
-
-	//Eco divide balance
-	public static void divide(String name, double money)
+	
+	/**
+	 * Substracts money from the balance of a user
+	 * @param name Name of the user
+	 * @param amount The money you want to substract
+	 * @throws UserDoesNotExistException If a user by that name does not exists
+	 * @throws NoLoanPermittedException If the user is not allowed to have a negative balance
+	 */
+	public static void subtract(String name, double amount) throws UserDoesNotExistException, NoLoanPermittedException
 	{
-		double result;
-		if (!exist(name))
-		{
-			if (accountCreated(name))
-			{
-				result = getMoney(name)/ money;
-				setMoney(name,result);
-				return;
-			}
-			return;
-		}
-		result = getMoney(name) / money;
-		setMoney(name,result);
-		return;
+		double result = getMoney(name) - amount;
+		setMoney(name, result);
 	}
 
-	//Eco multiply balance
-	public static void multiply(String name, double money)
+	/**
+	 * Divides the balance of a user by a value
+	 * @param name Name of the user
+	 * @param value The balance is divided by this value
+	 * @throws UserDoesNotExistException If a user by that name does not exists
+	 * @throws NoLoanPermittedException If the user is not allowed to have a negative balance
+	 */
+	public static void divide(String name, double value) throws UserDoesNotExistException, NoLoanPermittedException
 	{
-		double result;
-		if (!exist(name))
-		{
-			if (accountCreated(name))
-			{
-				result = getMoney(name) * money;
-				setMoney(name,result);
-				return;
-			}
-			return;
-		}
-		result = getMoney(name) * money;
-		setMoney(name,result);
-		return;
+		double result = getMoney(name) / value;
+		setMoney(name, result);
 	}
 
-	//Eco subtract balance
-	public static void subtract(String name, double money)
+	/**
+	 * Multiplies the balance of a user by a value
+	 * @param name Name of the user
+	 * @param value The balance is multiplied by this value
+	 * @throws UserDoesNotExistException If a user by that name does not exists
+	 * @throws NoLoanPermittedException If the user is not allowed to have a negative balance
+	 */
+	public static void multiply(String name, double value) throws UserDoesNotExistException, NoLoanPermittedException
 	{
-		double result;
-		if (!exist(name))
-		{
-			if (accountCreated(name))
-			{
-				result = getMoney(name) - money;
-				setMoney(name,result);
-				return;
-			}
-			return;
-		}
-		result = getMoney(name) - money;
-		setMoney(name,result);
-		return;
+		double result = getMoney(name) * value;
+		setMoney(name, result);
 	}
 
-	//Eco reset balance!
-	public static void resetBalance(String name)
+	/**
+	 * Resets the balance of a user to the starting balance
+	 * @param name Name of the user
+	 * @throws UserDoesNotExistException If a user by that name does not exists
+	 * @throws NoLoanPermittedException If the user is not allowed to have a negative balance
+	 */
+	public static void resetBalance(String name) throws UserDoesNotExistException, NoLoanPermittedException
 	{
-		setMoney(name, 0);
+		setMoney(name, Essentials.getStatic().getSettings().getStartingBalance());
 	}
 
-	//Eco has enough check
-	public static boolean hasEnough(String name, double amount)
+	/**
+	 * @param name Name of the user
+	 * @param amount The amount of money the user should have
+	 * @return true, if the user has more or an equal amount of money
+	 * @throws UserDoesNotExistException If a user by that name does not exists
+	 */
+	public static boolean hasEnough(String name, double amount) throws UserDoesNotExistException
 	{
 		return amount <= getMoney(name);
 	}
 
-	//Eco hasMore balance check
-	public static boolean hasMore(String name, double amount)
+	/**
+	 * @param name Name of the user
+	 * @param amount The amount of money the user should have
+	 * @return true, if the user has more money
+	 * @throws UserDoesNotExistException If a user by that name does not exists
+	 */
+	public static boolean hasMore(String name, double amount) throws UserDoesNotExistException
 	{
 		return amount < getMoney(name);
 	}
 
-	//Eco hasLess balance check
-	public static boolean hasLess(String name, double amount)
+	/**
+	 * @param name Name of the user
+	 * @param amount The amount of money the user should not have
+	 * @return true, if the user has less money
+	 * @throws UserDoesNotExistException If a user by that name does not exists
+	 */
+	public static boolean hasLess(String name, double amount) throws UserDoesNotExistException
 	{
 		return amount > getMoney(name);
 	}
 
-	//Eco currency
-	public static String getCurrency()
-	{
-		return ess.getSettings().getCurrency();
-	}
-
-	//Eco currency Plural
-	public static String getCurrencyPlural()
-	{
-		return ess.getSettings().getCurrencyPlural();
-	}
-
-	//Eco is negative check!
-	public static boolean isNegative(String name)
+	/**
+	 * Test if the user has a negative balance
+	 * @param name Name of the user
+	 * @return true, if the user has a negative balance
+	 * @throws UserDoesNotExistException If a user by that name does not exists
+	 */
+	public static boolean isNegative(String name) throws UserDoesNotExistException
 	{
 		return getMoney(name) < 0.0;
 	}
 
-	//Eco Formatter
+	/**
+	 * Formats the amount of money like all other Essentials functions.
+	 * Example: $100000 or $12345.67
+	 * @param amount The amount of money
+	 * @return Formatted money
+	 */
 	public static String format(double amount)
 	{
-		DecimalFormat ecoForm = new DecimalFormat("#,##0.##");
-		String formed = ecoForm.format(amount);
-		if (formed.endsWith("."))
-		{
-			formed = formed.substring(0, formed.length() - 1);
+		return Util.formatCurrency(amount);
+	}
+	
+	/**
+	 * Test if a player exists to avoid the UserDoesNotExistException
+	 * @param name Name of the user
+	 * @return true, if the user exists
+	 */
+	public static boolean playerExists(String name) {
+		return getUserByName(name) != null;
+	}
+	
+	/**
+	 * Test if a player is a npc
+	 * @param name Name of the player
+	 * @return true, if it's a npc
+	 * @throws UserDoesNotExistException 
+	 */
+	public static boolean isNPC(String name) throws UserDoesNotExistException
+	{
+		User user = getUserByName(name);
+		if (user == null) {
+			throw new UserDoesNotExistException(name);
 		}
-		return formed + " " + ((amount <= 1 && amount >= -1) ? getCurrency() : getCurrencyPlural());
+		return user.isNPC();
+	}
+	
+	/**
+	 * Creates dummy files for a npc, if there is no player yet with that name.
+	 * @param name Name of the player
+	 */
+	public static void createNPC(String name)
+	{
+		User user = getUserByName(name);
+		if (user == null) {
+			createNPCFile(name);
+		}
 	}
 
-	//************************!WARNING!**************************
-	//**********DO NOT USING THE FOLLOWING FOR PLAYERS!**********
-	//**************THESE ARE FOR NPC ACCOUNTS ONLY!*************
-	//Eco account exist for NPCs ONLY!
-	public static boolean accountExist(String account)
+	/**
+	 * Deletes a user, if it is marked as npc. 
+	 * @param name Name of the player
+	 * @throws UserDoesNotExistException 
+	 */
+	public static void removeNPC(String name) throws UserDoesNotExistException
 	{
-		return accountCreated(account);
-	}
-
-	//Eco NPC account creator!  Will return false if it already exists.
-	public static boolean newAccount(String account)
-	{
-
-		if (!exist(account))
-		{
-			if (!accountCreated(account))
-			{
-				createAccount(account);
-				return true;
-			}
-			return false;
+		User user = getUserByName(name);
+		if (user == null) {
+			throw new UserDoesNotExistException(name);
 		}
-		return false;
-	}
-
-	//Eco remove account, only use this for NPCS!
-	public static void removeAccount(String name)
-	{
-		if (!exist(name))
-		{
-			if (accountCreated(name))
-			{
-				File folder = new File(ess.getDataFolder(), "userdata");
-				File account = new File(folder, Util.sanitizeFileName(name) + ".yml");
-				account.delete();
-			}
-		}
-		return;
+		deleteNPC(name);
 	}
 }

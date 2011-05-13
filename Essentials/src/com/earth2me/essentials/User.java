@@ -269,4 +269,36 @@ public class User extends UserData implements Comparable<User>, IReplyTo
 	{
 		lastActivity = timestamp;
 	}
+
+	@Override
+	public double getMoney()
+	{
+		if (ess.isIConomyFallbackEnabled())
+		{
+			try
+			{
+				return com.iConomy.iConomy.getAccount(getName()).getHoldings().balance();
+			}
+			catch (Throwable ex)
+			{	
+			}
+		}
+		return super.getMoney();
+	}
+
+	@Override
+	public void setMoney(double value)
+	{
+		if (ess.isIConomyFallbackEnabled())
+		{
+			try
+			{
+				com.iConomy.iConomy.getAccount(getName()).getHoldings().set(value);
+			}
+			catch (Throwable ex)
+			{
+			}
+		}
+		super.setMoney(value);
+	}
 }

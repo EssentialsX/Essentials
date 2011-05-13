@@ -48,16 +48,6 @@ public class Settings implements IConf
 		return config.getInt("default-stack-size", 64);
 	}
 	
-	public String getCurrency()
-	{
-		return config.getString("currency-name", "Coin");
-	}
-	
-	public String getCurrencyPlural()
-	{
-		return config.getString("currency-name-plural", "Coins");
-	}
-	
 	public int getStartingBalance()
 	{
 		return config.getInt("starting-balance", 0);
@@ -497,5 +487,10 @@ public class Settings implements IConf
 	public String getLocale()
 	{
 		return config.getString("locale", "");
+	}
+
+	public String getCurrencySymbol()
+	{
+		return config.getString("currency-symbol", "$").substring(0, 1).replaceAll("[0-9]", "$");
 	}
 }
