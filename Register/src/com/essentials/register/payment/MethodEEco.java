@@ -1,4 +1,4 @@
-package com.nijikokun.register.payment;
+package com.essentials.register.payment;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.api.Economy;

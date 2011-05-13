@@ -1,7 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.IEssentialsCommand;
-import com.nijikokun.register.payment.Method;
+import com.essentials.register.payment.Method;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Logger;

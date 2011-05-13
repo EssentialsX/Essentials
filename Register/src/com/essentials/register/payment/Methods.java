@@ -1,4 +1,4 @@
-package com.nijikokun.register.payment;
+package com.essentials.register.payment;
 
 import com.iConomy.iConomy;
 import cosine.boseconomy.BOSEconomy;

@@ -1,4 +1,4 @@
-package com.nijikokun.register.payment;
+package com.essentials.register.payment;
 
 public interface Method {
     public Object getPlugin();

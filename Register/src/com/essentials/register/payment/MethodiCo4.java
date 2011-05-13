@@ -1,4 +1,4 @@
-package com.nijikokun.register.payment;
+package com.essentials.register.payment;
 
 import com.nijiko.coelho.iConomy.iConomy;
 import com.nijiko.coelho.iConomy.system.Account;
