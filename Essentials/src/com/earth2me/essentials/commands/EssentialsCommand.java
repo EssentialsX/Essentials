@@ -32,6 +32,13 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 		if (args.length <= pos) throw new IndexOutOfBoundsException("§cInvalid command syntax. Did you forget an argument?");
 		List<Player> matches = server.matchPlayer(args[pos]);
 		if (matches.size() < 1) throw new NoSuchFieldException("§cNo matching players could be found.");
+		for (Player p : matches)
+		{
+			if (p.getDisplayName().startsWith(args[pos]))
+			{
+				return ess.getUser(p);
+			}
+		}
 		return ess.getUser(matches.get(0));
 	}
 
