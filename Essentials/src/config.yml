@@ -103,8 +103,8 @@ rules:
 # For example, if WorldGuard and Essentials are both enabled, and WorldGuard takes control over /god, /essentials:god
 # will still map to Essentials, whereas it might normally get forced upon WorldGuard.  Commands prefixed with an "e",
 # such as /egod, will always grant Essentials priority.
-# Because WorldGuard's /god is broken/unreliable, we should try to take priority over /god.  If this doesn't work, use
-# /essentials:god or /egod.  Do NOT use WorldGuard's /god, or you will likely be stuck in god mode.
+# We should try to take priority over /god.  If this doesn't work, use
+# /essentials:god or /egod.  If god is set using WorldGuard, use /ungod to remove then use whichever you see fit.
 overridden-commands:
   - god
 
