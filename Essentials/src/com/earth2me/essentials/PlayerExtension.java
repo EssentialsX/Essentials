@@ -76,7 +76,7 @@ public class PlayerExtension extends PlayerWrapper
 	{
 		try
 		{
-			return com.nijikokun.bukkit.Permissions.Permissions.Security.canGroupBuild(getWorld().getName(), getGroup());
+			return isOp() || com.nijikokun.bukkit.Permissions.Permissions.Security.canGroupBuild(getWorld().getName(), getGroup());
 		}
 		catch (Throwable ex)
 		{
