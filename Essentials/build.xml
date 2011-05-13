@@ -75,7 +75,7 @@
 	<target name="-post-jar">
 	    <jar jarfile="${dist.dir}/Essentials.jar">
 	      <zipfileset src="${dist.jar}" excludes="META-INF/*" />
-	      <zipfileset src="../lib/Register.jar" excludes="META-INF/*" />
+	      <zipfileset src="${dist.dir}/lib/Register.jar" excludes="META-INF/*" />
 	      <manifest>
 	        <attribute name="Classpath" value="Essentials.jar"/>
 	      </manifest>
