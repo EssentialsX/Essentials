@@ -58,14 +58,14 @@ public class Essentials extends JavaPlugin
 		return settings;
 	}
 
-	public void setupForTesting() throws IOException, InvalidDescriptionException
+	public void setupForTesting(Server server) throws IOException, InvalidDescriptionException
 	{
 		File dataFolder = File.createTempFile("essentialstest", "");
 		dataFolder.delete();
 		dataFolder.mkdir();
 		logger.log(Level.INFO, Util.i18n("usingTempFolderForTesting"));
 		logger.log(Level.INFO, dataFolder.toString());
-		this.initialize(null, null, new PluginDescriptionFile(new FileReader(new File("src" + File.separator + "plugin.yml"))), dataFolder, null, null);
+		this.initialize(null, server, new PluginDescriptionFile(new FileReader(new File("src" + File.separator + "plugin.yml"))), dataFolder, null, null);
 		settings = new Settings(dataFolder);
 		setStatic();
 	}

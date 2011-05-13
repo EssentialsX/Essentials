@@ -18,6 +18,10 @@ public class Economy
 	private static void createNPCFile(String name)
 	{
 		File folder = new File(Essentials.getStatic().getDataFolder(), "userdata");
+		if (!folder.exists())
+		{
+			folder.mkdirs();
+		}
 		EssentialsConf npcConfig = new EssentialsConf(new File(folder, Util.sanitizeFileName(name) + ".yml"));
 		npcConfig.load();
 		npcConfig.setProperty("npc", true);
@@ -28,6 +32,10 @@ public class Economy
 	private static void deleteNPC(String name)
 	{
 		File folder = new File(Essentials.getStatic().getDataFolder(), "userdata");
+		if (!folder.exists())
+		{
+			folder.mkdirs();
+		}
 		File config = new File(folder, Util.sanitizeFileName(name) + ".yml");
 		EssentialsConf npcConfig = new EssentialsConf(config);
 		npcConfig.load();
@@ -235,13 +243,16 @@ public class Economy
 	/**
 	 * Creates dummy files for a npc, if there is no player yet with that name.
 	 * @param name Name of the player
+	 * @return true, if a new npc was created
 	 */
-	public static void createNPC(String name)
+	public static boolean createNPC(String name)
 	{
 		User user = getUserByName(name);
 		if (user == null) {
 			createNPCFile(name);
+			return true;
 		}
+		return false;
 	}
 
 	/**

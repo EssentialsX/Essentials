@@ -155,6 +155,7 @@ restricted-commands:
   - unbanip
   - togglejail
   - setjail
+  - eco.loan
 
 # Note: All items MUST be followed by a quantity!
 # Times are measured in seconds.

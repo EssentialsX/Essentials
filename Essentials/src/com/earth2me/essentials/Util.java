@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
 import java.util.Calendar;
 import java.util.Enumeration;
@@ -270,13 +271,13 @@ public class Util
 		}
 		return isBlockAboveAir(world, x, y, z);
 	}
-	private static DecimalFormat df = new DecimalFormat("#0.##");
+	private static DecimalFormat df = new DecimalFormat("#0.00", DecimalFormatSymbols.getInstance(Locale.US));
 
 	public static String formatCurrency(double value)
 	{
 		String str = Essentials.getStatic().getSettings().getCurrencySymbol()+df.format(value);
-		if (str.endsWith(".")) {
-			return str.substring(0, str.length()-1);
+		if (str.endsWith(".00")) {
+			str = str.substring(0, str.length()-3);
 		}
 		return str;
 	}

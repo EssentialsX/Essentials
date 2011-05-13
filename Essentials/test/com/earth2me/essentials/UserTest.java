@@ -2,6 +2,9 @@ package com.earth2me.essentials;
 
 import java.io.IOException;
 import junit.framework.TestCase;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.plugin.InvalidDescriptionException;
 
 
@@ -9,14 +12,17 @@ public class UserTest extends TestCase
 {
 	private OfflinePlayer base1;
 	private Essentials ess;
+	private FakeServer server;
 
 	public UserTest(String testName)
 	{
 		super(testName);
 		ess = new Essentials();
+		server = new FakeServer();
+		server.createWorld("testWorld", Environment.NORMAL);
 		try
 		{
-			ess.setupForTesting();
+			ess.setupForTesting(server);
 		}
 		catch (InvalidDescriptionException ex)
 		{
@@ -26,7 +32,8 @@ public class UserTest extends TestCase
 		{
 			fail("IOException");
 		}
-		base1 = new OfflinePlayer("TestPlayer1");
+		base1 = server.createPlayer("testPlayer1");
+		server.addPlayer(base1);
 	}
 
 	private void should(String what)
@@ -34,36 +41,28 @@ public class UserTest extends TestCase
 		System.out.println(getName() + " should " + what);
 	}
 
-	@Override
-	protected void setUp() throws Exception
-	{
-		super.setUp();
-	}
-
-	@Override
-	protected void tearDown() throws Exception
-	{
-		super.tearDown();
-	}
-
 	public void testUpdate()
 	{
-		should("update an existing player with the same name, rather than creating a new player");
-		ess.getUser(base1);
-		//int size1 = User.size();
-		OfflinePlayer base1alt = new OfflinePlayer(base1.getName());
+		OfflinePlayer base1alt = server.createPlayer(base1.getName());
 		assertEquals(base1alt, ess.getUser(base1alt).getBase());
-		//assertTrue(size1 == User.size());
+	}
+	
+	public void testHome()
+	{
+		User user = ess.getUser(base1);
+		Location loc = base1.getLocation();
+		user.setHome();
+		OfflinePlayer base2 = server.createPlayer(base1.getName());
+		User user2 = ess.getUser(base2);
+		Location home = user2.getHome();
+		assertEquals(loc.getWorld().getName(), home.getWorld().getName());
+		assertEquals(loc.getX(), home.getX());
+		assertEquals(loc.getY(), home.getY());
+		assertEquals(loc.getZ(), home.getZ());
+		assertEquals(loc.getYaw(), home.getYaw());
+		assertEquals(loc.getPitch(), home.getPitch());
 	}
 
-	/*public void testHome() throws Exception
-	{
-	should("return the home set by setHome");
-	Location home = new Location(null, 1, 2, 3, 4, 5);
-	User user = User.get(base1);
-	user.setHome(home);
-	assertEquals(user.getHome(), home);
-	}*/
 	public void testMoney()
 	{
 		should("properly set, take, give, and get money");

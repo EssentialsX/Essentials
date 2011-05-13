@@ -25,6 +25,7 @@ public class OfflinePlayer implements Player
 {
 	private final String name;
 	private Location location = new Location(null, 0, 0, 0, 0, 0);
+	private World world = null;
 
 	public OfflinePlayer(String name)
 	{
@@ -132,7 +133,13 @@ public class OfflinePlayer implements Player
 
 	public World getWorld()
 	{
-		return null;
+		return world;
+	}
+	
+	public void setLocation(Location loc)
+	{
+		location = loc;
+		world = loc.getWorld();
 	}
 
 	public void teleportTo(Location lctn)
