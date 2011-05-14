@@ -33,7 +33,7 @@ public class Commandkit extends EssentialsCommand
 				StringBuilder list = new StringBuilder();
 				for (String k : kits.keySet())
 				{
-					if (user.isAuthorized("essentials.kit." + k))
+					if (user.isAuthorized("essentials.kit." + k.toLowerCase()))
 					{
 						list.append(" ").append(k);
 					}
@@ -147,7 +147,7 @@ public class Commandkit extends EssentialsCommand
 				{
 					user.sendMessage(ex.getMessage());
 				}
-				user.sendMessage(Util.format("kitGive", args[0].toLowerCase()));
+				user.sendMessage(Util.format("kitGive", kitName));
 			}
 			catch (Exception ex)
 			{

@@ -137,7 +137,13 @@ public class Settings implements IConf
 	public Object getKit(String name)
 	{
 		Map<String, Object> kits = (Map<String, Object>)config.getProperty("kits");
-		return kits.get(name.replace('.', '_').replace('/', '_'));
+		for (Map.Entry<String, Object> entry : kits.entrySet())
+		{
+			if (entry.getKey().equalsIgnoreCase(name.replace('.', '_').replace('/', '_'))) {
+				return entry.getValue();
+			}
+		}
+		return null;
 	}
 
 	public ChatColor getOperatorColor() throws Exception
