@@ -55,8 +55,10 @@ public abstract class UserData extends PlayerExtension implements IConf
 		lastLogin = _getLastLogin();
 		lastLogout = _getLastLogout();
 		afk = getAfk();
+		newplayer = getNew();
 		geolocation = _getGeoLocation();
 		isSocialSpyEnabled = _isSocialSpyEnabled();
+		isNPC = _isNPC();
 	}
 	
 	double money;
