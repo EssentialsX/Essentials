@@ -1,7 +1,9 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.Console;
 import org.bukkit.Server;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import org.bukkit.command.CommandSender;
 
 
@@ -24,9 +26,9 @@ public class Commandtp extends EssentialsCommand
 			User p = getPlayer(server, args, 0);
 			if (!p.isTeleportEnabled())
 			{
-				throw new Exception(p.getDisplayName() + " has teleportation disabled.");
+				throw new Exception(Util.format("teleportDisabled", p.getDisplayName()));
 			}
-			user.sendMessage("§7Teleporting...");
+			user.sendMessage(Util.i18n("teleporting"));
 			user.canAfford(this);
 			user.getTeleport().teleport(p, this.getName());
 			break;
@@ -36,12 +38,12 @@ public class Commandtp extends EssentialsCommand
 			{
 				throw new Exception("You need access to /tpohere to teleport other players.");
 			}
-			user.sendMessage("§7Teleporting...");
+			user.sendMessage(Util.i18n("teleporting"));
 			charge(user);
 			User target = getPlayer(server, args, 0);
 			User toPlayer = getPlayer(server, args, 1);
 			target.getTeleport().now(toPlayer);
-			target.sendMessage("§7" + user.getDisplayName() + "§7 teleported you to " + toPlayer.getDisplayName() + "§7.");
+			target.sendMessage(Util.format("teleportAtoB", user.getDisplayName(), toPlayer.getDisplayName()));
 			break;
 		}
 	}
@@ -54,10 +56,10 @@ public class Commandtp extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		sender.sendMessage("§7Teleporting...");
+		sender.sendMessage(Util.i18n("teleporting"));
 		User target = getPlayer(server, args, 0);
 		User toPlayer = getPlayer(server, args, 1);
 		target.getTeleport().now(toPlayer);
-		target.sendMessage("§7{Console}§7 teleported you to " + toPlayer.getDisplayName() + "§7.");
+		target.sendMessage(Util.format("teleportAtoB", Console.NAME, toPlayer.getDisplayName()));
 	}
 }

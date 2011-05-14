@@ -26,7 +26,7 @@ public class Commandtogglejail extends EssentialsCommand
 
 		if (p.isAuthorized("essentials.jail.exempt"))
 		{
-			sender.sendMessage("§cYou may not jail that person");
+			sender.sendMessage(Util.i18n("mayNotJail"));
 			return;
 		}
 
@@ -34,7 +34,7 @@ public class Commandtogglejail extends EssentialsCommand
 		{
 			charge(sender);
 			p.setJailed(true);
-			p.sendMessage("§7You have been jailed");
+			p.sendMessage(Util.i18n("userJailed"));
 			p.setJail(null);
 			Essentials.getJail().sendToJail(p, args[1]);
 			p.setJail(args[1]);
@@ -45,7 +45,9 @@ public class Commandtogglejail extends EssentialsCommand
 				timeDiff = Util.parseDateDiff(time, true);
 				p.setJailTimeout(timeDiff);
 			}
-			sender.sendMessage("§7Player " + p.getName() + " jailed" + (timeDiff > 0 ? " for" + Util.formatDateDiff(timeDiff) : "") + ".");
+			sender.sendMessage((timeDiff > 0
+								? Util.format("playerJailedFor", p.getName(), Util.formatDateDiff(timeDiff))
+								: Util.format("playerJailed", p.getName())));
 			return;
 		}
 

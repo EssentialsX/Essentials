@@ -3,8 +3,8 @@ package com.earth2me.essentials.commands;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 
 
 public class Commandtime extends EssentialsCommand
@@ -39,7 +39,7 @@ public class Commandtime extends EssentialsCommand
 			setWorldTime(world, args[0]);
 		}
 
-		sender.sendMessage("Time set in all worlds.");
+		sender.sendMessage(Util.i18n("timeSet"));
 	}
 
 	private void setWorldTime(World world, String timeString) throws Exception
@@ -56,6 +56,6 @@ public class Commandtime extends EssentialsCommand
 			world.setTime(time + 37700);
 			return;
 		}
-		throw new Exception("/time only supports day/night.");
+		throw new Exception(Util.i18n("onlyDayNight"));
 	}
 }

@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 
 
 public class Commandtop extends EssentialsCommand
@@ -20,6 +21,6 @@ public class Commandtop extends EssentialsCommand
 		int topY = user.getWorld().getHighestBlockYAt(topX, topZ);
 		charge(user);
 		user.getTeleport().teleport(new Location(user.getWorld(), user.getLocation().getX(), topY + 1, user.getLocation().getZ()), this.getName());
-		user.sendMessage("§7Teleporting to top.");
+		user.sendMessage(Util.i18n("teleportTop"));
 	}
 }

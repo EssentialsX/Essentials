@@ -30,7 +30,7 @@ public class Commandthunder extends EssentialsCommand
 
 			world.setThundering(setThunder ? true : false);
 			world.setThunderDuration(Integer.parseInt(args[1]) * 20);
-			user.sendMessage(Util.format("thunderDuration", (setThunder ? Util.i18n("enabled") : Util.i18n("disabled")), Util.i18n("for"), Util.i18n("seconds")));
+			user.sendMessage(Util.format("thunderDuration", (setThunder ? Util.i18n("enabled") : Util.i18n("disabled")), Integer.parseInt(args[1])));
 			
 		}
 		else
