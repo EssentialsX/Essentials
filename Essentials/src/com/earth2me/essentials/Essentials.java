@@ -332,7 +332,7 @@ public class Essentials extends JavaPlugin
 
 	public boolean onCommandEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath)
 	{
-		if ("msg".equals(commandLabel.toLowerCase()) || "mail".equals(commandLabel.toLowerCase()) & sender instanceof CraftPlayer)
+		if ("msg".equals(commandLabel.toLowerCase()) || "r".equals(commandLabel.toLowerCase()) || "mail".equals(commandLabel.toLowerCase()) & sender instanceof CraftPlayer)
 		{
 			StringBuilder str = new StringBuilder();
 			str.append(commandLabel).append(" ");
