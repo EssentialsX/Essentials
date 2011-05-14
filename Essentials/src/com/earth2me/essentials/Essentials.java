@@ -35,6 +35,7 @@ import org.bukkit.craftbukkit.scheduler.CraftScheduler;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
+import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.*;
 import org.bukkit.plugin.java.*;
 
@@ -121,12 +122,6 @@ public class Essentials extends JavaPlugin
 					logger.log(Level.WARNING, Util.format("versionMismatch", plugin.getDescription().getName()));
 				}
 			}
-			if (!paymentMethod.hasMethod() && plugin != this)
-			{
-				if (getPaymentMethod().setMethod(plugin)) {
-					logger.log(Level.INFO, "Payment method found (" + getPaymentMethod().getMethod().getName() + " version: " + getPaymentMethod().getMethod().getVersion() + ")");
-				}
-			}
 		}
 		Matcher versionMatch = Pattern.compile("git-Bukkit-([0-9]+).([0-9]+).([0-9]+)-[0-9]+-[0-9a-z]+-b([0-9]+)jnks.*").matcher(getServer().getVersion());
 		if (versionMatch.matches())
@@ -142,6 +137,10 @@ public class Essentials extends JavaPlugin
 			logger.log(Level.INFO, Util.i18n("bukkitFormatChanged"));
 		}
 
+
+		ServerListener serverListener = new EssentialsPluginListener(paymentMethod);
+		pm.registerEvent(Type.PLUGIN_ENABLE, serverListener, Priority.Low, this);
+		pm.registerEvent(Type.PLUGIN_DISABLE, serverListener, Priority.Low, this);
 
 		playerListener = new EssentialsPlayerListener(this);
 		pm.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
@@ -176,7 +175,7 @@ public class Essentials extends JavaPlugin
 		pm.registerEvent(Type.BLOCK_PLACE, jail, Priority.High, this);
 		pm.registerEvent(Type.PLAYER_INTERACT, jailPlayerListener, Priority.High, this);
 		attachEcoListeners();
-		
+
 		if (settings.isNetherEnabled() && getServer().getWorlds().size() < 2)
 		{
 			getServer().createWorld(settings.getNetherName(), World.Environment.NETHER);
@@ -336,10 +335,10 @@ public class Essentials extends JavaPlugin
 		if ("msg".equals(commandLabel.toLowerCase()) || "mail".equals(commandLabel.toLowerCase()) & sender instanceof CraftPlayer)
 		{
 			StringBuilder str = new StringBuilder();
-			str.append(commandLabel + " ");
+			str.append(commandLabel).append(" ");
 			for (String a : args)
 			{
-				str.append(a + " ");
+				str.append(a).append(" ");
 			}
 			for (Player player : getServer().getOnlinePlayers())
 			{

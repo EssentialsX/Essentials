@@ -9,7 +9,8 @@ public class BOSE implements Method {
     private BOSEconomy BOSEconomy;
 
     static {
-        MethodFactory.addMethod(new BOSE());
+        MethodFactory.addMethod("BOSEconomy", new BOSE());
+
     }
 
     public BOSEconomy getPlugin() {

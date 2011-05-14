@@ -10,7 +10,7 @@ public class iCo4 implements Method {
     private iConomy iConomy;
 
     static {
-        MethodFactory.addMethod(new iCo4());
+        MethodFactory.addMethod("iConomy", new iCo4());
     }
 
     public iConomy getPlugin() {

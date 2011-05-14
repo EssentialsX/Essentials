@@ -13,7 +13,7 @@ public class iCo5 implements Method {
     private iConomy iConomy;
 
     static {
-        MethodFactory.addMethod(new iCo5());
+        MethodFactory.addMethod("iConomy", new iCo5());
     }
 
     public iConomy getPlugin() {
