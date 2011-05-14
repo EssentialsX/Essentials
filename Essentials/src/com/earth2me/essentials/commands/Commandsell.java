@@ -34,8 +34,17 @@ public class Commandsell extends EssentialsCommand
 		{
 			for (ItemStack stack : user.getInventory().getContents())
 			{
-				if (stack == null || stack.getType() == Material.AIR) continue;
-				sellItem(user, stack, args, true);
+				if (stack == null || stack.getType() == Material.AIR)
+				{
+					continue;
+				}
+				try
+				{
+					sellItem(user, stack, args, true);
+				}
+				catch (Exception e)
+				{
+				}
 			}
 			return;
 		}
@@ -43,8 +52,17 @@ public class Commandsell extends EssentialsCommand
 		{
 			for (ItemStack stack : user.getInventory().getContents())
 			{
-				if (stack == null || stack.getTypeId() > 255 || stack.getType() == Material.AIR) continue;
-				sellItem(user, stack, args, true);
+				if (stack == null || stack.getTypeId() > 255 || stack.getType() == Material.AIR)
+				{
+					continue;
+				}
+				try
+				{
+					sellItem(user, stack, args, true);
+				}
+				catch (Exception e)
+				{
+				}
 			}
 			return;
 		}
@@ -136,8 +154,8 @@ public class Commandsell extends EssentialsCommand
 		InventoryWorkaround.removeItem(user.getInventory(), true, new ItemStack(is.getType(), amount, is.getDurability()));
 		user.updateInventory();
 		user.giveMoney(worth * amount);
-		user.sendMessage(Util.format("itemSold", Util.formatCurrency(worth * amount), amount,  Util.formatCurrency(worth)));
-		logger.log(Level.INFO, Util.format("itemSoldConsole",user.getDisplayName(),is.getType().toString().toLowerCase(), Util.formatCurrency(worth * amount), amount, Util.formatCurrency(worth)));
-	
+		user.sendMessage(Util.format("itemSold", Util.formatCurrency(worth * amount), amount, Util.formatCurrency(worth)));
+		logger.log(Level.INFO, Util.format("itemSoldConsole", user.getDisplayName(), is.getType().toString().toLowerCase(), Util.formatCurrency(worth * amount), amount, Util.formatCurrency(worth)));
+
 	}
 }
