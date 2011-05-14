@@ -625,7 +625,6 @@ public class Essentials extends JavaPlugin
 		}
 		return null;
 	}
-	private boolean newWorldsLoaded = false;
 
 	public World getWorld(String name)
 	{
