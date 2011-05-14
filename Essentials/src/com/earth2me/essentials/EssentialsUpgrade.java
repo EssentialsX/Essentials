@@ -207,7 +207,7 @@ public class EssentialsUpgrade
 					World world = ess.getServer().getWorlds().get(0);
 					if (vals.size() > 5)
 					{
-						world = ess.getWorld((String)vals.get(5));
+						world = getFakeWorld((String)vals.get(5));
 					}
 					if (world != null)
 					{
@@ -258,12 +258,11 @@ public class EssentialsUpgrade
 								break;
 							}
 						}
-						boolean forceWorldName = false;
 						if (worldName != null)
 						{
 							worldName.trim();
 							World w1 = null;
-							w1 = ess.getWorld(worldName);
+							w1 = getFakeWorld(worldName);
 							if (w1 != null)
 							{
 								w = w1;
@@ -365,5 +364,16 @@ public class EssentialsUpgrade
 				logger.log(Level.WARNING, Util.format("userdataMoveBackError", sanitizedFilename, sanitizedFilename));
 			}
 		}
+	}
+	
+	private World getFakeWorld(String name)
+	{
+		File bukkitDirectory = ess.getDataFolder().getParentFile().getParentFile();
+		File worldDirectory = new File(bukkitDirectory, name);
+		if (worldDirectory.exists() && worldDirectory.isDirectory())
+		{
+			return new FakeWorld(worldDirectory.getName(), World.Environment.NORMAL);
+		}
+		return null;
 	}
 }

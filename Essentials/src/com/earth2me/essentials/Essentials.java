@@ -98,18 +98,6 @@ public class Essentials extends JavaPlugin
 	{
 		setStatic();
 		EssentialsUpgrade upgrade = new EssentialsUpgrade(this.getDescription().getVersion(), this);
-		if (newWorldsLoaded)
-		{
-			logger.log(Level.SEVERE, Util.i18n("worldsLoadedRestartServer"));
-			try
-			{
-				getServer().dispatchCommand(Console.getCommandSender(getServer()), "stop");
-			}
-			catch (Exception ex)
-			{
-				logger.log(Level.SEVERE, Util.i18n("failedStopServer"), ex);
-			}
-		}
 		confList = new ArrayList<IConf>();
 		settings = new Settings(this.getDataFolder());
 		confList.add(settings);
@@ -653,17 +641,6 @@ public class Essentials extends JavaPlugin
 		World w = getServer().getWorld(name);
 		if (w != null)
 		{
-			return w;
-		}
-		File bukkitDirectory = getStatic().getDataFolder().getParentFile().getParentFile();
-		File worldDirectory = new File(bukkitDirectory, name);
-		if (worldDirectory.exists() && worldDirectory.isDirectory())
-		{
-			w = getServer().createWorld(name, World.Environment.NORMAL);
-			if (w != null)
-			{
-				newWorldsLoaded = true;
-			}
 			return w;
 		}
 		return null;
