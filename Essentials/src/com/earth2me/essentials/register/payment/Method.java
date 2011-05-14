@@ -1,5 +1,7 @@
 package com.earth2me.essentials.register.payment;
 
+import org.bukkit.plugin.Plugin;
+
 public interface Method {
     public Object getPlugin();
     public String getName();
@@ -11,9 +13,12 @@ public interface Method {
     public boolean hasBankAccount(String bank, String name);
     public MethodAccount getAccount(String name);
     public MethodBankAccount getBankAccount(String bank, String name);
+    public boolean isCompatible(Plugin plugin);
+    public void setPlugin(Plugin plugin);
 
     public interface MethodAccount {
         public double balance();
+        public boolean set(double amount);
         public boolean add(double amount);
         public boolean subtract(double amount);
         public boolean multiply(double amount);
@@ -32,6 +37,7 @@ public interface Method {
         public double balance();
         public String getBankName();
         public int getBankId();
+        public boolean set(double amount);
         public boolean add(double amount);
         public boolean subtract(double amount);
         public boolean multiply(double amount);
