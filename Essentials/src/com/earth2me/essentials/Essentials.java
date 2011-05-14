@@ -604,13 +604,13 @@ public class Essentials extends JavaPlugin
 			return (User)base;
 		}
 
-		if (users.containsKey(base.getName()))
+		if (users.containsKey(base.getName().toLowerCase()))
 		{
-			return users.get(base.getName()).update(base);
+			return users.get(base.getName().toLowerCase()).update(base);
 		}
 
 		User u = new User(base, this);
-		users.put(u.getName(), u);
+		users.put(u.getName().toLowerCase(), u);
 		return u;
 	}
 
