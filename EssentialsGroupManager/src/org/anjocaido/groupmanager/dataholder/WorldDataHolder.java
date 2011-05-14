@@ -335,7 +335,7 @@ public class WorldDataHolder {
                 Map<String, Object> thisGroupNode = (Map<String, Object>) allGroupsNode.get(groupKey);
                 Group thisGrp = ph.createGroup(groupKey);
                 if (thisGrp == null) {
-                    throw new IllegalArgumentException("I think this user was declared more than once: " + groupKey);
+                    throw new IllegalArgumentException("I think this group was declared more than once: " + groupKey);
                 }
                 if (thisGroupNode.get("default") == null) {
                     thisGroupNode.put("default", false);
@@ -408,7 +408,8 @@ public class WorldDataHolder {
             Map<String, Object> thisUserNode = (Map<String, Object>) allUsersNode.get(usersKey);
             User thisUser = ph.createUser(usersKey);
             if (thisUser == null) {
-                throw new IllegalArgumentException("I think this user was declared more than once: " + usersKey);
+                GroupManager.logger.warning("I think this user was declared more than once: " + usersKey);
+				continue;
             }
             if (thisUserNode.get("permissions") == null) {
                 thisUserNode.put("permissions", new ArrayList<String>());
@@ -434,8 +435,9 @@ public class WorldDataHolder {
             if (thisUserNode.get("group") != null) {
                 Group hisGroup = ph.getGroup(thisUserNode.get("group").toString());
                 if (hisGroup == null) {
-                    throw new IllegalArgumentException("There is no group " + thisUserNode.get("group").toString() + ", as stated for player " + thisUser.getName());
-                }
+                    GroupManager.logger.warning("There is no group " + thisUserNode.get("group").toString() + ", as stated for player " + thisUser.getName());
+					thisUser.setGroup(ph.defaultGroup);
+				}
                 thisUser.setGroup(hisGroup);
             } else {
                 thisUser.setGroup(ph.defaultGroup);
