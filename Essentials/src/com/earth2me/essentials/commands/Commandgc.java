@@ -24,7 +24,7 @@ public class Commandgc extends EssentialsCommand
 			sender.sendMessage(
 					(w.getEnvironment() == World.Environment.NETHER ? "Nether" : "World") + " \"" + w.getName() + "\": "
 					+ w.getLoadedChunks().length + Util.i18n("gcchunks")
-					+ w.getEntities().size() + Util.i18n("entities"));
+					+ w.getEntities().size() + Util.i18n("gcentities"));
 		}
 	}
 }
