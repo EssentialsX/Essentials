@@ -304,8 +304,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo
 					throw new Exception();
 				}
 				Method.MethodAccount account = ess.getPaymentMethod().getMethod().getAccount(this.getName());
-				double amount = value - account.balance();
-				account.(amount);
+				account.set(value);
 			}
 			catch (Throwable ex)
 			{
