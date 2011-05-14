@@ -45,7 +45,7 @@ public class Commandgod extends EssentialsCommand
 			User u = ess.getUser(p);
 			boolean enabled = u.toggleGodModeEnabled();
 			u.sendMessage(Util.format("godMode", (enabled ? Util.i18n("enabled") : Util.i18n("disabled"))));
-			sender.sendMessage(Util.format("godMode",Util.format(enabled ? Util.i18n("godEnabledFor"): Util.i18n("godDisabledFor"), p.getDisplayName())));
+			sender.sendMessage(Util.format("godMode",Util.format(enabled ? "godEnabledFor": "godDisabledFor", p.getDisplayName())));
 		}
 	}
 }
