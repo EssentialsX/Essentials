@@ -180,8 +180,8 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 
 
 					sign.setLine(0, "§1[Trade]");
-					sign.setLine(1, (m1 ? Util.formatCurrency(q1) : ((int)q1) + " " + l1[1]) + ":" + (m1 ? Util.roundDouble(r1) : (int)r1));
-					sign.setLine(2, (m2 ? Util.formatCurrency(q2) : ((int)q2) + " " + l2[1]) + ":" + (m2 ? Util.roundDouble(r2) : (int)r2));
+					sign.setLine(1, (m1 ? Util.formatCurrency(q1) : ((int)q1) + " " + l1[1]) + ":" + (m1 ? Util.roundDouble(r1) : "" + (int)r1));
+					sign.setLine(2, (m2 ? Util.formatCurrency(q2) : ((int)q2) + " " + l2[1]) + ":" + (m2 ? Util.roundDouble(r2) : "" + (int)r2));
 					sign.update();
 					user.sendMessage(Util.i18n("tradeCompleted"));
 				}

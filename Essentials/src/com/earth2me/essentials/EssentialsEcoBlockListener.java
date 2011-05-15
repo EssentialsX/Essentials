@@ -119,7 +119,7 @@ public class EssentialsEcoBlockListener extends BlockListener
 			}
 			catch (Throwable ex)
 			{
-				user.sendMessage("§cError: " + ex.getMessage());
+				user.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
 				event.setLine(0, "§4[Buy]");
 				event.setLine(1, "#");
 				event.setLine(2, "Item");
@@ -144,7 +144,7 @@ public class EssentialsEcoBlockListener extends BlockListener
 			}
 			catch (Throwable ex)
 			{
-				user.sendMessage("§cError: " + ex.getMessage());
+				user.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
 				event.setLine(0, "§4[Sell]");
 				event.setLine(1, "#");
 				event.setLine(2, "Item");
@@ -188,7 +188,7 @@ public class EssentialsEcoBlockListener extends BlockListener
 					ItemStack i2 = ItemDb.get(l2[1], (int)r2);
 					if (!InventoryWorkaround.containsItem(user.getInventory(), true, i2))
 					{
-						throw new Exception(Util.format("missingItems", r2, l2[1]));
+						throw new Exception(Util.format("missingItems", (int)r2, l2[1]));
 					}
 					InventoryWorkaround.removeItem(user.getInventory(), true, i2);
 					user.updateInventory();
@@ -196,12 +196,12 @@ public class EssentialsEcoBlockListener extends BlockListener
 
 				event.setLine(0, "§1[Trade]");
 				event.setLine(1, (m1 ? Util.formatCurrency(q1) : (int)q1 + " " + l1[1]) + ":0");
-				event.setLine(2, (m2 ? Util.formatCurrency(q2) : (int)q2 + " " + l2[1]) + ":" + (m2 ? Util.roundDouble(r2) : (int)r2));
+				event.setLine(2, (m2 ? Util.formatCurrency(q2) : (int)q2 + " " + l2[1]) + ":" + (m2 ? Util.roundDouble(r2) : "" + (int)r2));
 				event.setLine(3, "§8" + username);
 			}
 			catch (Throwable ex)
 			{
-				user.sendMessage("§cError: " + ex.getMessage());
+				user.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
 				event.setLine(0, "§4[Trade]");
 				event.setLine(1, "# ItemOr" + ess.getSettings().getCurrencySymbol());
 				event.setLine(2, "# ItemOr" + ess.getSettings().getCurrencySymbol() + ":#");
