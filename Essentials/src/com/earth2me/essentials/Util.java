@@ -337,6 +337,7 @@ public class Util
 				{
 					BufferedReader br = new BufferedReader(new FileReader(file));
 					String version = br.readLine();
+					br.close();
 					if (version == null || !version.equals("#version: "+Essentials.getStatic().getDescription().getVersion())) {
 						Logger.getLogger("Minecraft").log(Level.WARNING, "Translation file "+file+" is not updated for Essentials version. Will use default.");
 						return cl.getResourceAsStream(string);
