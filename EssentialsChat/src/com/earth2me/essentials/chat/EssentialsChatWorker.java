@@ -105,6 +105,9 @@ public class EssentialsChatWorker
 		for (Player p : server.getOnlinePlayers())
 		{
 			User u = Essentials.getStatic().getUser(p);
+			if (u.isIgnoredPlayer(user.getName()) && !user.isOp()) {
+				continue;
+			}
 			if (u != user && !u.isAuthorized("essentials.chat.spy"))
 			{
 				Location l = u.getLocation();
