@@ -139,6 +139,7 @@ groups:
     default: false
     permissions:
     - '*'
+    - -essentials.protect.damage.*
     inheritance:
     - semiadmin
     info:

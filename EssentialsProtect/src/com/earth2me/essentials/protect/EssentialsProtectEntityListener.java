@@ -43,22 +43,31 @@ public class EssentialsProtectEntityListener extends EntityListener
 	@Override
 	public void onEntityDamage(EntityDamageEvent event)
 	{
-		if (event.isCancelled()) return;
+		if (event.isCancelled())
+		{
+			return;
+		}
 		if (event instanceof EntityDamageByBlockEvent)
 		{
 			DamageCause cause = event.getCause();
 
-			if (EssentialsProtect.playerSettings.get("protect.disable.contactdmg") && cause == DamageCause.CONTACT)
+			if (EssentialsProtect.playerSettings.get("protect.disable.contactdmg") && cause == DamageCause.CONTACT
+				&& !(event.getEntity() instanceof Player
+					 && Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.contact")))
 			{
 				event.setCancelled(true);
 				return;
 			}
-			if (EssentialsProtect.playerSettings.get("protect.disable.lavadmg") && cause == DamageCause.LAVA)
+			if (EssentialsProtect.playerSettings.get("protect.disable.lavadmg") && cause == DamageCause.LAVA
+				&& !(event.getEntity() instanceof Player
+					 && Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.lava")))
 			{
 				event.setCancelled(true);
 				return;
 			}
-			if (EssentialsProtect.guardSettings.get("protect.prevent.tnt-explosion") && cause == DamageCause.BLOCK_EXPLOSION)
+			if (EssentialsProtect.guardSettings.get("protect.prevent.tnt-explosion") && cause == DamageCause.BLOCK_EXPLOSION
+				&& !(event.getEntity() instanceof Player
+					 && Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.tnt")))
 			{
 				event.setCancelled(true);
 				return;
@@ -89,13 +98,17 @@ public class EssentialsProtectEntityListener extends EntityListener
 			//Creeper explode prevention
 			if (eAttack != null && eAttack instanceof Monster)
 			{
-				if (eAttack instanceof Creeper && EssentialsProtect.guardSettings.get("protect.prevent.creeper-explosion"))
+				if (eAttack instanceof Creeper && EssentialsProtect.guardSettings.get("protect.prevent.creeper-explosion")
+					&& !(event.getEntity() instanceof Player
+						 && Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.creeper")))
 				{
 					event.setCancelled(true);
 					return;
 				}
 
-				if (eAttack instanceof Creeper && EssentialsProtect.guardSettings.get("protect.prevent.creeper-playerdamage"))
+				if (eAttack instanceof Creeper && EssentialsProtect.guardSettings.get("protect.prevent.creeper-playerdamage")
+					&& !(event.getEntity() instanceof Player
+						 && Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.creeper")))
 				{
 					event.setCancelled(true);
 					return;
@@ -105,40 +118,47 @@ public class EssentialsProtectEntityListener extends EntityListener
 
 		if (event instanceof EntityDamageByProjectileEvent)
 		{
-			if (event.getEntity() instanceof Player)
+			if (event.getEntity() instanceof Player
+				&& EssentialsProtect.playerSettings.get("protect.disable.projectiles")
+				&& !Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.projectiles"))
 			{
-				event.setCancelled(EssentialsProtect.playerSettings.get("protect.disable.projectiles"));
+				event.setCancelled(true);
 				return;
 			}
 		}
-		
+
 		DamageCause cause = event.getCause();
 		Entity casualty = event.getEntity();
 		if (casualty instanceof Player)
 		{
-			if (EssentialsProtect.playerSettings.get("protect.disable.fall") && cause == DamageCause.FALL)
+			if (EssentialsProtect.playerSettings.get("protect.disable.fall") && cause == DamageCause.FALL
+				&& !(Essentials.getStatic().getUser(casualty).isAuthorized("essentials.protect.damage.fall")))
 			{
 				event.setCancelled(true);
 				return;
 			}
 
-			if (EssentialsProtect.playerSettings.get("protect.disable.suffocate") && cause == DamageCause.SUFFOCATION)
+			if (EssentialsProtect.playerSettings.get("protect.disable.suffocate") && cause == DamageCause.SUFFOCATION
+				&& !(Essentials.getStatic().getUser(casualty).isAuthorized("essentials.protect.damage.suffocation")))
 			{
 				event.setCancelled(true);
 				return;
 			}
 			if (EssentialsProtect.playerSettings.get("protect.disable.firedmg") && (cause == DamageCause.FIRE
-																					|| cause == DamageCause.FIRE_TICK))
+																					|| cause == DamageCause.FIRE_TICK)
+				&& !(Essentials.getStatic().getUser(casualty).isAuthorized("essentials.protect.damage.fire")))
 			{
 				event.setCancelled(true);
 				return;
 			}
-			if (EssentialsProtect.playerSettings.get("protect.disable.drown") && cause == DamageCause.DROWNING)
+			if (EssentialsProtect.playerSettings.get("protect.disable.drown") && cause == DamageCause.DROWNING
+				&& !(Essentials.getStatic().getUser(casualty).isAuthorized("essentials.protect.damage.drowning")))
 			{
 				event.setCancelled(true);
 				return;
 			}
-			if (EssentialsProtect.playerSettings.get("protect.disable.lightning") && cause == DamageCause.LIGHTNING)
+			if (EssentialsProtect.playerSettings.get("protect.disable.lightning") && cause == DamageCause.LIGHTNING
+				&& !(Essentials.getStatic().getUser(casualty).isAuthorized("essentials.protect.damage.lightning")))
 			{
 				event.setCancelled(true);
 				return;
@@ -149,7 +169,10 @@ public class EssentialsProtectEntityListener extends EntityListener
 	@Override
 	public void onEntityExplode(EntityExplodeEvent event)
 	{
-		if (event.isCancelled()) return;
+		if (event.isCancelled())
+		{
+			return;
+		}
 		if (event.getEntity() instanceof LivingEntity)
 		{
 			//Nicccccccccce plaaacccccccccce..
@@ -183,7 +206,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 				}
 
 				((CraftServer)parent.getServer()).getHandle().a(loc.getX(), loc.getY(), loc.getZ(), 64.0D,
-                                                                                                                            new Packet60Explosion(loc.getX(), loc.getY(), loc.getZ(), 3.0f, set));
+																new Packet60Explosion(loc.getX(), loc.getY(), loc.getZ(), 3.0f, set));
 				event.setCancelled(true);
 				return;
 			}
@@ -205,20 +228,21 @@ public class EssentialsProtectEntityListener extends EntityListener
 				event.setCancelled(true);
 				return;
 			}
-			if ((	block.getType() == Material.WALL_SIGN || 
-				block.getFace(BlockFace.NORTH).getType() == Material.WALL_SIGN || 
-				block.getFace(BlockFace.EAST).getType() == Material.WALL_SIGN || 
-				block.getFace(BlockFace.SOUTH).getType() == Material.WALL_SIGN || 
-				block.getFace(BlockFace.WEST).getType() == Material.WALL_SIGN ||
-				block.getType() == Material.SIGN_POST ||
-				block.getFace(BlockFace.UP).getType() == Material.SIGN_POST) && 
-				EssentialsProtect.genSettings.get("protect.protect.signs"))
+			if ((block.getType() == Material.WALL_SIGN
+				 || block.getFace(BlockFace.NORTH).getType() == Material.WALL_SIGN
+				 || block.getFace(BlockFace.EAST).getType() == Material.WALL_SIGN
+				 || block.getFace(BlockFace.SOUTH).getType() == Material.WALL_SIGN
+				 || block.getFace(BlockFace.WEST).getType() == Material.WALL_SIGN
+				 || block.getType() == Material.SIGN_POST
+				 || block.getFace(BlockFace.UP).getType() == Material.SIGN_POST)
+				&& EssentialsProtect.genSettings.get("protect.protect.signs"))
 			{
 				event.setCancelled(true);
 				return;
 			}
-			if (	EssentialsBlockListener.protectedBlocks.contains(block.getType()) && 
-				EssentialsBlockListener.isBlockProtected(block)) {
+			if (EssentialsBlockListener.protectedBlocks.contains(block.getType())
+				&& EssentialsBlockListener.isBlockProtected(block))
+			{
 				event.setCancelled(true);
 				return;
 			}
@@ -228,8 +252,14 @@ public class EssentialsProtectEntityListener extends EntityListener
 	@Override
 	public void onCreatureSpawn(CreatureSpawnEvent event)
 	{
-		if (event.getEntity() instanceof CraftPlayer) return;
-		if (event.isCancelled()) return;
+		if (event.getEntity() instanceof CraftPlayer)
+		{
+			return;
+		}
+		if (event.isCancelled())
+		{
+			return;
+		}
 		String creatureName = event.getCreatureType().toString().toLowerCase();
 		if (creatureName == null || creatureName.isEmpty())
 		{
@@ -242,22 +272,21 @@ public class EssentialsProtectEntityListener extends EntityListener
 	}
 
 	@Override
-	public void onEntityTarget(EntityTargetEvent event) {
-		if (!(event.getTarget() instanceof Player)) {
+	public void onEntityTarget(EntityTargetEvent event)
+	{
+		if (!(event.getTarget() instanceof Player))
+		{
 			return;
 		}
 		User user = Essentials.getStatic().getUser(event.getTarget());
-		if ((event.getReason() == TargetReason.CLOSEST_PLAYER ||
-			event.getReason() == TargetReason.TARGET_ATTACKED_ENTITY ||
-			event.getReason() == TargetReason.PIG_ZOMBIE_TARGET) &&
-			EssentialsProtect.guardSettings.get("protect.prevent.entitytarget") &&
-			!user.isAuthorized("essentials.protect.entitytarget.bypass")
-			)
-			{
-				event.setCancelled(true);
-				return;
-			}
+		if ((event.getReason() == TargetReason.CLOSEST_PLAYER
+			 || event.getReason() == TargetReason.TARGET_ATTACKED_ENTITY
+			 || event.getReason() == TargetReason.PIG_ZOMBIE_TARGET)
+			&& EssentialsProtect.guardSettings.get("protect.prevent.entitytarget")
+			&& !user.isAuthorized("essentials.protect.entitytarget.bypass"))
+		{
+			event.setCancelled(true);
+			return;
+		}
 	}
-	
-	
 }
