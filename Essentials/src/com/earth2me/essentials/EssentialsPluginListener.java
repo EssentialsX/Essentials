@@ -25,7 +25,7 @@ public class EssentialsPluginListener extends ServerListener
 		{
 			if (methods.setMethod(event.getPlugin()))
 			{
-				logger.log(Level.INFO, "Payment method found (" + methods.getMethod().getName() + " version: " + methods.getMethod().getVersion() + ")");
+				logger.log(Level.INFO, "[Essentials] Payment method found (" + methods.getMethod().getName() + " version: " + methods.getMethod().getVersion() + ")");
 			}
 		}
 	}
@@ -38,7 +38,7 @@ public class EssentialsPluginListener extends ServerListener
 		{
 			if (methods.checkDisabled(event.getPlugin()))
 			{
-				logger.log(Level.INFO, "Payment method was disabled. No longer accepting payments.");
+				logger.log(Level.INFO, "[Essentials] Payment method was disabled. No longer accepting payments.");
 			}
 		}
 	}
