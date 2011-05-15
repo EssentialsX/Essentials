@@ -186,7 +186,15 @@ public class EssentialsConf extends Configuration
 
 	public long getLong(String path, long def)
 	{
-		Number num = (Number)getProperty(path);
+		Number num;
+		try
+		{
+			num = (Number)getProperty(path);
+		}
+		catch(ClassCastException ex)
+		{
+			return def;
+		}
 		if (num == null)
 		{
 			return def;
@@ -197,7 +205,15 @@ public class EssentialsConf extends Configuration
 	@Override
 	public double getDouble(String path, double def)
 	{
-		Number num = (Number)getProperty(path);
+		Number num;
+		try
+		{
+			num = (Number)getProperty(path);
+		}
+		catch(ClassCastException ex)
+		{
+			return def;
+		}
 		if (num == null)
 		{
 			return def;
