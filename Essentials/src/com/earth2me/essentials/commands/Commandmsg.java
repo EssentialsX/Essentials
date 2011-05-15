@@ -32,9 +32,9 @@ public class Commandmsg extends EssentialsCommand
 
 		if (args[0].equalsIgnoreCase(Console.NAME))
 		{
-			sender.sendMessage("[" + translatedMe + " -> " + Console.NAME + "§f] " + message);
+			sender.sendMessage(Util.format("msgFormat", translatedMe, Console.NAME, message));
 			CommandSender cs = Console.getCommandSender(server);
-			cs.sendMessage("[" + senderName + " -> " + translatedMe + "§f] " + message);
+			cs.sendMessage(Util.format("msgFormat", senderName, translatedMe, message));
 			replyTo.setReplyTo(cs);
 			Console.getConsoleReplyTo().setReplyTo(sender);
 			return;
@@ -55,8 +55,8 @@ public class Commandmsg extends EssentialsCommand
 			{
 				continue;
 			}
-			sender.sendMessage("[" + translatedMe + " -> " + p.getDisplayName() + "§f] " + message);
-			p.sendMessage("[" + senderName + " -> " + translatedMe + "§f] " + message);
+			sender.sendMessage(Util.format("msgFormat", translatedMe, p.getDisplayName(), message));
+			p.sendMessage(Util.format("msgFormat", senderName, translatedMe, message));
 			replyTo.setReplyTo(ess.getUser(p));
 			ess.getUser(p).setReplyTo(sender);
 		}

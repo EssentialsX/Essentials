@@ -36,7 +36,7 @@ public class Commandr extends EssentialsCommand
 		}
 
 		charge(sender);
-		sender.sendMessage("[" + Util.i18n("me")+ " -> " + targetName + "] " + message);
+		sender.sendMessage(Util.format("msgFormat", Util.i18n("me"), targetName, message));
 		if (target instanceof Player)
 		{
 			User u = ess.getUser(target);
@@ -45,7 +45,7 @@ public class Commandr extends EssentialsCommand
 				return;
 			}
 		}
-		target.sendMessage("[" + senderName + " -> " + Util.i18n("me") +"] " + message);
+		target.sendMessage(Util.format("msgFormat", senderName, Util.i18n("me"), message));
 		replyTo.setReplyTo(target);
 		if (target != sender)
 		{

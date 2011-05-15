@@ -1,8 +1,10 @@
 package com.earth2me.essentials;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -15,6 +17,8 @@ import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.bukkit.Location;
@@ -331,9 +335,15 @@ public class Util
 			{
 				try
 				{
+					BufferedReader br = new BufferedReader(new FileReader(file));
+					String version = br.readLine();
+					if (version == null || !version.equals("#version: "+Essentials.getStatic().getDescription().getVersion())) {
+						Logger.getLogger("Minecraft").log(Level.WARNING, "Translation file "+file+" is not updated for Essentials version. Will use default.");
+						return cl.getResourceAsStream(string);
+					}
 					return new FileInputStream(file);
 				}
-				catch (FileNotFoundException ex)
+				catch (IOException ex)
 				{
 					return cl.getResourceAsStream(string);
 				}
