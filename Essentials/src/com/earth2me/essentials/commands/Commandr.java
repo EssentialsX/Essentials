@@ -33,6 +33,7 @@ public class Commandr extends EssentialsCommand
 		if (target == null)
 		{
 			sender.sendMessage(Util.i18n("foreverAlone"));
+			return;
 		}
 
 		charge(sender);
