@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 
 
 public class Commandtppos extends EssentialsCommand
@@ -25,7 +26,7 @@ public class Commandtppos extends EssentialsCommand
 		int z = Integer.parseInt(args[2]);
 		Location l = new Location(user.getWorld(), x, y, z);
 		user.canAfford(this);
-		user.sendMessage("§7Teleporting...");
+		user.sendMessage(Util.i18n("teleporting"));
 		user.getTeleport().teleport(l, this.getName());
 	}
 }

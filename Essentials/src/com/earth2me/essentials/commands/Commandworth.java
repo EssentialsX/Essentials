@@ -10,7 +10,6 @@ import org.bukkit.inventory.ItemStack;
 
 public class Commandworth extends EssentialsCommand
 {
-	
 	public Commandworth()
 	{
 		super("worth");
@@ -43,14 +42,21 @@ public class Commandworth extends EssentialsCommand
 		double worth = Essentials.getWorth().getPrice(is);
 		if (Double.isNaN(worth))
 		{
-			throw new Exception("That item cannot be sold to the server.");
+			throw new Exception(Util.i18n("itemCannotBeSold"));
 		}
 
-		user.charge(this);		
-		user.sendMessage("§7Stack of " 
-				+ is.getType().toString().toLowerCase().replace("_", "") 
-				+ (is.getDurability() !=0 ? " with metadata of "+ String.valueOf(is.getDurability()) : "")
-				+ " worth §c" + Util.formatCurrency(worth*amount) + "§7 (" 
-				+ amount + " item(s) at " + Util.formatCurrency(worth) + " each)");
+		user.charge(this);
+		user.sendMessage(is.getDurability() != 0
+						 ? Util.format("worthMeta",
+									   is.getType().toString().toLowerCase().replace("_", ""),
+									   is.getDurability(),
+									   Util.formatCurrency(worth * amount),
+									   amount,
+									   Util.formatCurrency(worth))
+						 : Util.format("worth",
+									   is.getType().toString().toLowerCase().replace("_", ""),
+									   Util.formatCurrency(worth * amount),
+									   amount,
+									   Util.formatCurrency(worth)));
 	}
 }

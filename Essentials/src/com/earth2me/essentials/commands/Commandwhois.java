@@ -20,8 +20,7 @@ public class Commandwhois extends EssentialsCommand
 	{
 		if (args.length < 1)
 		{
-			sender.sendMessage("§cUsage: /whois [nickname]");
-			return;
+			throw new NotEnoughArgumentsException();
 		}
 		String whois = args[0].toLowerCase();
 		charge(sender);
@@ -37,20 +36,22 @@ public class Commandwhois extends EssentialsCommand
 				continue;
 			}
 			sender.sendMessage("");
-			sender.sendMessage(u.getDisplayName() + " is " + u.getName());
-			sender.sendMessage(ChatColor.BLUE + " - Health: " + u.getHealth() + "/20");
-			sender.sendMessage(ChatColor.BLUE + " - Location: (" + u.getLocation().getWorld().getName() + ", " + u.getLocation().getBlockX() + ", " + u.getLocation().getBlockY() + ", " + u.getLocation().getBlockZ() + ")");
+			sender.sendMessage(Util.format("whoisIs", u.getDisplayName(), u.getName()));
+			sender.sendMessage(Util.format("whoisHealth", u.getHealth()));
+			sender.sendMessage(Util.format("whoisLocation", u.getLocation().getWorld().getName(), u.getLocation().getBlockX(), u.getLocation().getBlockY(), u.getLocation().getBlockZ()));
 			if (!ess.getConfiguration().getBoolean("disable-eco", false))
 			{
-				sender.sendMessage(ChatColor.BLUE + " - Money: " + Util.formatCurrency(u.getMoney()));
+				sender.sendMessage(Util.format("whoisMoney", Util.formatCurrency(u.getMoney())));
 			}
-			sender.sendMessage(ChatColor.BLUE + " - Status: " + (u.isAfk() ? "§cAway§f" : "Available"));
-			sender.sendMessage(ChatColor.BLUE + " - IP Address: " + u.getAddress().getAddress().toString());
+			sender.sendMessage(u.isAfk() 
+					? Util.i18n("whoisStatusAway") 
+					: Util.i18n("whoisStatusAvailable"));
+			sender.sendMessage(Util.format("whoisIPAddress", u.getAddress().getAddress().toString()));
 			String location = u.getGeoLocation();
 			if (location != null 
 				&& (sender instanceof Player ? ess.getUser(sender).isAuthorized("essentials.geoip.show") : true))
 			{
-				sender.sendMessage(ChatColor.BLUE + " - Location: " + location.toString());
+				sender.sendMessage(Util.format("whoisGeoLocation", location.toString()));
 			}
 		}
 	}

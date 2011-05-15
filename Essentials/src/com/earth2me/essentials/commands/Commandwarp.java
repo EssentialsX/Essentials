@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import org.bukkit.Server;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import com.earth2me.essentials.Warps;
 import org.bukkit.command.CommandSender;
 
@@ -22,14 +23,14 @@ public class Commandwarp extends EssentialsCommand
 		{
 			if (!user.isAuthorized("essentials.warp.list"))
 			{
-				user.sendMessage("§cYou do not have Permission to list that warps.");
+				user.sendMessage(Util.i18n("warpListPermission"));
 				return;
 			}
 
 			Warps warps = Essentials.getWarps();
 			if (warps.isEmpty())
 			{
-				throw new Exception("No warps defined");
+				throw new Exception(Util.i18n("noWarpsDefined"));
 			}
 			StringBuilder sb = new StringBuilder();
 			int i = 0;
@@ -61,7 +62,7 @@ public class Commandwarp extends EssentialsCommand
 				otherUser = ess.getUser(server.getPlayer(args[1]));
 				if(otherUser == null)
 				{
-					user.sendMessage("§cPlayer not found");
+					user.sendMessage(Util.i18n("playerNotFound"));
 					return;
 				}
 				warpUser(otherUser, args[0]);
@@ -80,7 +81,7 @@ public class Commandwarp extends EssentialsCommand
 				user.getTeleport().warp(name, this.getName());
 				return;
 			}
-			user.sendMessage("§cYou do not have Permission to use that warp.");
+			user.sendMessage(Util.i18n("warpUsePermission"));
 			return;
 		}
 		user.getTeleport().warp(name, this.getName());

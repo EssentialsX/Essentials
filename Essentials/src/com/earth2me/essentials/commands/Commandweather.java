@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.World;
 
@@ -28,13 +29,17 @@ public class Commandweather extends EssentialsCommand
 
 			world.setStorm(isStorm ? true : false);
 			world.setWeatherDuration(Integer.parseInt(args[1]) * 20);
-			user.sendMessage("§7You set the weather to  " + (isStorm ? "storm" : "sun") + " in your world for " + args[1] + " seconds");
+			user.sendMessage(isStorm
+							 ? Util.format("weatherStormFor", args[1])
+							 : Util.format("weatherSunFor", args[1]));
 			return;
 		}
 		else
 		{
 			world.setStorm(isStorm ? true : false);
-			user.sendMessage("§7You set the weather to  " + (isStorm ? "storm" : "sun") + " in your world");
+			user.sendMessage(isStorm
+							 ? Util.i18n("weatherStorm")
+							 : Util.i18n("weatherSun"));
 			return;
 		}
 	}

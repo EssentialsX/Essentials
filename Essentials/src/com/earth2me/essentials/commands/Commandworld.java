@@ -6,6 +6,7 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 
 
 public class Commandworld extends EssentialsCommand
@@ -43,9 +44,9 @@ public class Commandworld extends EssentialsCommand
 			world = ess.getWorld(getFinalArg(args, 0));
 			if (world == null)
 			{
-				user.sendMessage("§cInvalid world.");
-				user.sendMessage("§7Possible worlds are the numbers 0 through " + (server.getWorlds().size() - 1) + ".");
-				user.sendMessage("§7You can also type the name of a specific world.");
+				user.sendMessage(Util.i18n("invalidWorld"));
+				user.sendMessage(Util.format("possibleWorlds", server.getWorlds().size() - 1));
+				user.sendMessage(Util.i18n("typeWorldName"));
 				return;
 			}
 		}

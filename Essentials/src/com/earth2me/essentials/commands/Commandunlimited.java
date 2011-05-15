@@ -3,8 +3,8 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.InventoryWorkaround;
 import com.earth2me.essentials.ItemDb;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import java.util.List;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
@@ -35,12 +35,12 @@ public class Commandunlimited extends EssentialsCommand
 		if (args[0].equalsIgnoreCase("list"))
 		{
 			StringBuilder sb = new StringBuilder();
-			sb.append("Unlimited items: ");
+			sb.append(Util.i18n("unlimitedItems")).append(" ");
 			boolean first = true;
 			List<Integer> items = target.getUnlimited();
 			if (items.isEmpty())
 			{
-				sb.append("none");
+				sb.append(Util.i18n("none"));
 			}
 			for (Integer integer : items)
 			{
@@ -65,7 +65,7 @@ public class Commandunlimited extends EssentialsCommand
 			&& !((stack.getType() == Material.WATER_BUCKET || stack.getType() == Material.LAVA_BUCKET)
 				 && user.isAuthorized("essentials.unlimited.item-bucket")))
 		{
-			user.sendMessage(ChatColor.RED + "No permission for unlimited item " + itemname + ".");
+			user.sendMessage(Util.format("unlimitedItemPermission", itemname));
 			return;
 		}
 
@@ -74,18 +74,18 @@ public class Commandunlimited extends EssentialsCommand
 		{
 			if (user != target)
 			{
-				user.sendMessage("§7Disable unlimited placing of " + itemname + " for " + target.getDisplayName() + ".");
+				user.sendMessage(Util.format("disableUnlimited", itemname, target.getDisplayName()));
 			}
-			target.sendMessage("§7Disable unlimited placing of " + itemname + " for " + target.getDisplayName() + ".");
+			target.sendMessage(Util.format("disableUnlimited", itemname, target.getDisplayName()));
 			target.setUnlimited(stack, false);
 			return;
 		}
 		charge(user);
 		if (user != target)
 		{
-			user.sendMessage("§7Giving unlimited amount of " + itemname + " to " + target.getDisplayName() + ".");
+			user.sendMessage(Util.format("enableUnlimited", itemname, target.getDisplayName()));
 		}
-		target.sendMessage("§7Giving unlimited amount of " + itemname + " to " + target.getDisplayName() + ".");
+		target.sendMessage(Util.format("enableUnlimited", itemname, target.getDisplayName()));
 		if (!InventoryWorkaround.containsItem(target.getInventory(), true, stack))
 		{
 			target.getInventory().addItem(stack);

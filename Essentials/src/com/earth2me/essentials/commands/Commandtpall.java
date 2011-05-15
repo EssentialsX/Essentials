@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -34,7 +35,7 @@ public class Commandtpall extends EssentialsCommand
 
 	private void teleportAllPlayers(Server server, CommandSender sender, User p)
 	{
-		sender.sendMessage("§7Teleporting all players...");
+		sender.sendMessage(Util.i18n("teleportAll"));
 		for (Player player : server.getOnlinePlayers())
 		{
 			User u = ess.getUser(player);
@@ -48,7 +49,7 @@ public class Commandtpall extends EssentialsCommand
 			}
 			catch (Exception ex)
 			{
-				sender.sendMessage("Error: "+ex.getMessage());
+				sender.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
 			}
 		}
 	}

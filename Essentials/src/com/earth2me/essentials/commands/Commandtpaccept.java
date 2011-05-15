@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 
 
 public class Commandtpaccept extends EssentialsCommand
@@ -18,21 +19,19 @@ public class Commandtpaccept extends EssentialsCommand
 		User p = user.getTeleportRequest();
 		if (p == null)
 		{
-			throw new Exception("You do not have a pending request.");
+			throw new Exception(Util.i18n("noPendingRequest"));
 		}
 
+		user.canAfford(this);
+		user.sendMessage(Util.i18n("requestAccepted"));
+		p.sendMessage(Util.i18n("requestAccepted"));
+		
 		if (user.isTeleportRequestHere())
 		{
-			user.canAfford(this);
-			user.sendMessage("§7Teleport request accepted.");
-			p.sendMessage("§7Teleport request accepted.");
 			user.getTeleport().teleport(p, this.getName());
 		}
 		else
 		{
-			user.canAfford(this);
-			user.sendMessage("§7Teleport request accepted.");
-			p.sendMessage("§7Teleport request accepted.");
 			p.getTeleport().teleport(user, this.getName());
 		}
 		user.requestTeleport(null, false);

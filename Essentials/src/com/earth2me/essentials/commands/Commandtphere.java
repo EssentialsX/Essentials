@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 
 
 public class Commandtphere extends EssentialsCommand
@@ -17,10 +18,10 @@ public class Commandtphere extends EssentialsCommand
 		User p = getPlayer(server, args, 0);
 		if (!p.isTeleportEnabled())
 		{
-			throw new Exception(p.getDisplayName() + " has teleportation disabled.");
+			throw new Exception(Util.format("teleportDisabled", p.getDisplayName()));
 		}
 		p.getTeleport().teleport(user, commandLabel);
-		user.sendMessage("§7Teleporting...");
-		p.sendMessage("§7Teleporting...");
+		user.sendMessage(Util.i18n("teleporting"));
+		p.sendMessage(Util.i18n("teleporting"));
 	}
 }

@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 
 
 public class Commandtpo extends EssentialsCommand
@@ -23,6 +24,6 @@ public class Commandtpo extends EssentialsCommand
 		User p = getPlayer(server, args, 0);
 		charge(user);
 		user.getTeleport().now(p);
-		user.sendMessage("§7Teleporting...");
+		user.sendMessage(Util.i18n("teleporting"));
 	}
 }

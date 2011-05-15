@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 
 
 public class Commandtpahere extends EssentialsCommand
@@ -22,12 +23,12 @@ public class Commandtpahere extends EssentialsCommand
 		User p = getPlayer(server, args, 0);
 		if (!p.isTeleportEnabled())
 		{
-			throw new Exception(p.getDisplayName() + " has teleportation disabled.");
+			throw new Exception(Util.format("teleportDisabled", p.getDisplayName()));
 		}
 		user.charge(this);
 		p.requestTeleport(user, true);
-		p.sendMessage("§c" + user.getDisplayName() + "§c has requested that you teleport to him/her.");
-		p.sendMessage("§7To teleport, type §c/tpaccept§7.");
-		user.sendMessage("§7Request sent to " + p.getDisplayName() + "§c.");
+		p.sendMessage(Util.format("teleportHereRequest", user.getDisplayName()));
+		p.sendMessage(Util.i18n("typeTpaccept"));
+		user.sendMessage(Util.format("requestSent", p.getDisplayName()));
 	}
 }

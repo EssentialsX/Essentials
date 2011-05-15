@@ -67,11 +67,11 @@ public class Commandtree extends EssentialsCommand
 		if (success)
 		{
 			user.charge(this);
-			user.sendMessage("§7Tree spawned.");
+			user.sendMessage(Util.i18n("treeSpawned"));
 		}
 		else
 		{
-			user.sendMessage("§cTree generation failure. Try again on grass or dirt.");
+			user.sendMessage(Util.i18n("treeFailure"));
 		}
 	}
 }

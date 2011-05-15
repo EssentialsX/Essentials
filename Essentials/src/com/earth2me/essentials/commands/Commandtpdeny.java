@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 
 
 public class Commandtpdeny extends EssentialsCommand
@@ -17,21 +18,12 @@ public class Commandtpdeny extends EssentialsCommand
 		User p = user.getTeleportRequest();
 		if (p == null)
 		{
-			throw new Exception("You do not have a pending request.");
+			throw new Exception(Util.i18n("noPendingRequest"));
 		}
 
-		if (user.isTeleportRequestHere())
-		{
-			user.charge(this);
-			user.sendMessage("§7Teleport request denied.");
-			p.sendMessage("§7Teleport request denied.");
-		}
-		else
-		{
-			user.charge(this);
-			user.sendMessage("§7Teleport request denied.");
-			p.sendMessage("§7Teleport request denied.");
-		}
+		user.charge(this);
+		user.sendMessage(Util.i18n("requestDenied"));
+		p.sendMessage(Util.i18n("requestDenied"));
 		user.requestTeleport(null, false);
 	}
 }

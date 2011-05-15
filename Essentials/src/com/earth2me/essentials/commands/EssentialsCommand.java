@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.Essentials;
 import org.bukkit.entity.Player;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import java.util.logging.Logger;
 
 
@@ -27,11 +28,11 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 		return name;
 	}
 
-	protected User getPlayer(Server server, String[] args, int pos) throws IndexOutOfBoundsException, NoSuchFieldException
+	protected User getPlayer(Server server, String[] args, int pos) throws NoSuchFieldException, NotEnoughArgumentsException
 	{
-		if (args.length <= pos) throw new IndexOutOfBoundsException("§cInvalid command syntax. Did you forget an argument?");
+		if (args.length <= pos) throw new NotEnoughArgumentsException();
 		List<Player> matches = server.matchPlayer(args[pos]);
-		if (matches.size() < 1) throw new NoSuchFieldException("§cNo matching players could be found.");
+		if (matches.size() < 1) throw new NoSuchFieldException(Util.i18n("noPlayerFound"));
 		for (Player p : matches)
 		{
 			if (p.getDisplayName().startsWith(args[pos]))
@@ -61,7 +62,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 
 	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
-		throw new Exception("Only in-game players can use " + commandLabel + ".");
+		throw new Exception(Util.format("onlyPlayers", commandLabel));
 	}
 
 	public static String getFinalArg(String[] args, int start)
