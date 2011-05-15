@@ -70,6 +70,6 @@ public class Commandmail extends EssentialsCommand
 			user.sendMessage(Util.i18n("mailCleared"));
 			return;
 		}
-		user.sendMessage(Util.format("usage", "/mail [read|clear|send [to] [message]]"));
+		throw new NotEnoughArgumentsException();
 	}
 }
