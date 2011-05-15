@@ -241,7 +241,7 @@ public class Teleport implements Runnable
 
 	public void home(User user, String chargeFor) throws Exception
 	{
-		Location loc = user.getHome();
+		Location loc = user.getHome(this.user.getLocation());
 		if (loc == null)
 		{
 			if (ess.getSettings().spawnIfNoHome())

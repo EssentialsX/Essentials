@@ -54,7 +54,7 @@ public class UserTest extends TestCase
 		user.setHome();
 		OfflinePlayer base2 = server.createPlayer(base1.getName());
 		User user2 = ess.getUser(base2);
-		Location home = user2.getHome();
+		Location home = user2.getHome(loc);
 		assertEquals(loc.getWorld().getName(), home.getWorld().getName());
 		assertEquals(loc.getX(), home.getX());
 		assertEquals(loc.getY(), home.getY());

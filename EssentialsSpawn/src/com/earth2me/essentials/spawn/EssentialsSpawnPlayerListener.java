@@ -22,7 +22,7 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 		{
 			if (Essentials.getStatic().getSettings().getRespawnAtHome())
 			{
-				Location home = user.getHome();
+				Location home = user.getHome(user.getLocation());
 				if (home == null) {
 					throw new Exception();
 				}
