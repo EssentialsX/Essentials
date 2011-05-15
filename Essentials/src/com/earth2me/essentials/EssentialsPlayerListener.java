@@ -292,7 +292,7 @@ public class EssentialsPlayerListener extends PlayerListener
 	{
 		try
 		{
-			user.setCompassTarget(user.getHome());
+			user.setCompassTarget(user.getHome(user.getLocation()));
 		}
 		catch (Exception ex)
 		{
