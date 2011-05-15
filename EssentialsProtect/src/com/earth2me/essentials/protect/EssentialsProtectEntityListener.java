@@ -53,21 +53,24 @@ public class EssentialsProtectEntityListener extends EntityListener
 
 			if (EssentialsProtect.playerSettings.get("protect.disable.contactdmg") && cause == DamageCause.CONTACT
 				&& !(event.getEntity() instanceof Player
-					 && Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.contact")))
+					 && Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.contact")
+					 && !Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.disable")))
 			{
 				event.setCancelled(true);
 				return;
 			}
 			if (EssentialsProtect.playerSettings.get("protect.disable.lavadmg") && cause == DamageCause.LAVA
 				&& !(event.getEntity() instanceof Player
-					 && Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.lava")))
+					 && Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.lava")
+					 && !Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.disable")))
 			{
 				event.setCancelled(true);
 				return;
 			}
 			if (EssentialsProtect.guardSettings.get("protect.prevent.tnt-explosion") && cause == DamageCause.BLOCK_EXPLOSION
 				&& !(event.getEntity() instanceof Player
-					 && Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.tnt")))
+					 && Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.tnt")
+					 && !Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.disable")))
 			{
 				event.setCancelled(true);
 				return;
@@ -100,7 +103,8 @@ public class EssentialsProtectEntityListener extends EntityListener
 			{
 				if (eAttack instanceof Creeper && EssentialsProtect.guardSettings.get("protect.prevent.creeper-explosion")
 					&& !(event.getEntity() instanceof Player
-						 && Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.creeper")))
+						 && Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.creeper")
+						 && !Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.disable")))
 				{
 					event.setCancelled(true);
 					return;
@@ -108,7 +112,8 @@ public class EssentialsProtectEntityListener extends EntityListener
 
 				if (eAttack instanceof Creeper && EssentialsProtect.guardSettings.get("protect.prevent.creeper-playerdamage")
 					&& !(event.getEntity() instanceof Player
-						 && Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.creeper")))
+						 && Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.creeper")
+						 && !Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.disable")))
 				{
 					event.setCancelled(true);
 					return;
@@ -120,7 +125,8 @@ public class EssentialsProtectEntityListener extends EntityListener
 		{
 			if (event.getEntity() instanceof Player
 				&& EssentialsProtect.playerSettings.get("protect.disable.projectiles")
-				&& !Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.projectiles"))
+				&& !Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.projectiles")
+				&& !Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.disable"))
 			{
 				event.setCancelled(true);
 				return;
@@ -132,33 +138,38 @@ public class EssentialsProtectEntityListener extends EntityListener
 		if (casualty instanceof Player)
 		{
 			if (EssentialsProtect.playerSettings.get("protect.disable.fall") && cause == DamageCause.FALL
-				&& !(Essentials.getStatic().getUser(casualty).isAuthorized("essentials.protect.damage.fall")))
+				&& !(Essentials.getStatic().getUser(casualty).isAuthorized("essentials.protect.damage.fall")
+					 && !Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.disable")))
 			{
 				event.setCancelled(true);
 				return;
 			}
 
 			if (EssentialsProtect.playerSettings.get("protect.disable.suffocate") && cause == DamageCause.SUFFOCATION
-				&& !(Essentials.getStatic().getUser(casualty).isAuthorized("essentials.protect.damage.suffocation")))
+				&& !(Essentials.getStatic().getUser(casualty).isAuthorized("essentials.protect.damage.suffocation")
+					 && !Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.disable")))
 			{
 				event.setCancelled(true);
 				return;
 			}
 			if (EssentialsProtect.playerSettings.get("protect.disable.firedmg") && (cause == DamageCause.FIRE
 																					|| cause == DamageCause.FIRE_TICK)
-				&& !(Essentials.getStatic().getUser(casualty).isAuthorized("essentials.protect.damage.fire")))
+				&& !(Essentials.getStatic().getUser(casualty).isAuthorized("essentials.protect.damage.fire")
+					 && !Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.disable")))
 			{
 				event.setCancelled(true);
 				return;
 			}
 			if (EssentialsProtect.playerSettings.get("protect.disable.drown") && cause == DamageCause.DROWNING
-				&& !(Essentials.getStatic().getUser(casualty).isAuthorized("essentials.protect.damage.drowning")))
+				&& !(Essentials.getStatic().getUser(casualty).isAuthorized("essentials.protect.damage.drowning")
+					 && !Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.disable")))
 			{
 				event.setCancelled(true);
 				return;
 			}
 			if (EssentialsProtect.playerSettings.get("protect.disable.lightning") && cause == DamageCause.LIGHTNING
-				&& !(Essentials.getStatic().getUser(casualty).isAuthorized("essentials.protect.damage.lightning")))
+				&& !(Essentials.getStatic().getUser(casualty).isAuthorized("essentials.protect.damage.lightning")
+					 && !Essentials.getStatic().getUser(event.getEntity()).isAuthorized("essentials.protect.damage.disable")))
 			{
 				event.setCancelled(true);
 				return;
