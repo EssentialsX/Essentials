@@ -71,7 +71,7 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 				int amount = Integer.parseInt(sign.getLine(1));
 				ItemStack item = ItemDb.get(sign.getLine(2), amount);
 				double cost = Double.parseDouble(sign.getLine(3).substring(1));
-				
+
 				if (!InventoryWorkaround.containsItem(user.getInventory(), true, item))
 				{
 					throw new Exception(Util.format("missingItems", amount, sign.getLine(2)));
@@ -126,7 +126,7 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 						user.updateInventory();
 					}
 					r1 = 0;
-					sign.setLine(1, (m1 ? Util.formatCurrency(q1) : ((int)q1) + " " + l1[1]) + ":" + r1);
+					sign.setLine(1, (m1 ? Util.formatCurrency(q1) : ((int)q1) + " " + l1[1]) + ":0");
 					sign.update();
 				}
 				else
@@ -177,11 +177,11 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 
 					r1 += q1;
 					r2 -= q2;
-					
+
 
 					sign.setLine(0, "§1[Trade]");
-					sign.setLine(1, (m1 ? Util.formatCurrency(q1) : ((int)q1) + " " + l1[1]) + ":" + String.format((m1 ? "%.2f" : "%.0f"), Util.roundDouble(r1)));
-					sign.setLine(2, (m2 ? Util.formatCurrency(q2) : ((int)q2) + " " + l2[1]) + ":" + String.format((m2 ? "%.2f" : "%.0f"), Util.roundDouble(r2)));
+					sign.setLine(1, (m1 ? Util.formatCurrency(q1) : ((int)q1) + " " + l1[1]) + ":" + (m1 ? Util.roundDouble(r1) : (int)r1));
+					sign.setLine(2, (m2 ? Util.formatCurrency(q2) : ((int)q2) + " " + l2[1]) + ":" + (m2 ? Util.roundDouble(r2) : (int)r2));
 					sign.update();
 					user.sendMessage(Util.i18n("tradeCompleted"));
 				}

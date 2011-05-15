@@ -165,7 +165,7 @@ public class EssentialsEcoBlockListener extends BlockListener
 				double q2 = Double.parseDouble(m2 ? l2[0].substring(1) : l2[0]);
 				double r2 = Double.parseDouble(l2[m2 ? 1 : 2]);
 				r2 = m2 ? r2 : r2 - r2 % q2;
-				if ((!m1 & q1 < 1) || (!m2 &q2 < 1) || r2 < 1)
+				if ((!m1 & q1 < 1) || (!m2 & q2 < 1) || r2 < 1)
 				{
 					throw new Exception(Util.i18n("moreThanZero"));
 				}
@@ -195,16 +195,16 @@ public class EssentialsEcoBlockListener extends BlockListener
 				}
 
 				event.setLine(0, "§1[Trade]");
-				event.setLine(1, (m1 ? ess.getSettings().getCurrencySymbol() + q1 : String.format("%.0f",q1) + " " + l1[1]) + ":0");
-				event.setLine(2, (m2 ? ess.getSettings().getCurrencySymbol() + q2 : String.format("%.0f", q2)+ " " + l2[1]) + ":" + String.format("%.0f",r2));
+				event.setLine(1, (m1 ? Util.formatCurrency(q1) : (int)q1 + " " + l1[1]) + ":0");
+				event.setLine(2, (m2 ? Util.formatCurrency(q2) : (int)q2 + " " + l2[1]) + ":" + (m2 ? Util.roundDouble(r2) : (int)r2));
 				event.setLine(3, "§8" + username);
 			}
 			catch (Throwable ex)
 			{
 				user.sendMessage("§cError: " + ex.getMessage());
 				event.setLine(0, "§4[Trade]");
-				event.setLine(1, "# ItemOr"+ess.getSettings().getCurrencySymbol());
-				event.setLine(2, "# ItemOr"+ess.getSettings().getCurrencySymbol()+":#");
+				event.setLine(1, "# ItemOr" + ess.getSettings().getCurrencySymbol());
+				event.setLine(2, "# ItemOr" + ess.getSettings().getCurrencySymbol() + ":#");
 				event.setLine(3, "§8" + username);
 			}
 			return;

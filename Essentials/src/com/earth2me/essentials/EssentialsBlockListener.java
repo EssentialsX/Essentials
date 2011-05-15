@@ -86,11 +86,11 @@ public class EssentialsBlockListener extends BlockListener
 					if (!event.getLine(1).isEmpty())
 					{
 						String[] l1 = event.getLine(1).split("[ :-]+", 2);
-						boolean m1 = l1[0].matches("\\$[0-9]+");
-						int q1 = Integer.parseInt(m1 ? l1[0].substring(1) : l1[0]);
-						if (q1 < 1) throw new Exception(Util.i18n("moreThanZero"));
+						boolean m1 = l1[0].matches("^[^0-9][\\.0-9]+");
+						double q1 = Double.parseDouble(m1 ? l1[0].substring(1) : l1[0]);
+						if (q1 < 1 || (!m1 && (int)q1 < 1)) throw new Exception(Util.i18n("moreThanZero"));
 						if (!m1) ItemDb.get(l1[1]);
-						event.setLine(1, (m1 ? "$" + q1 : q1 + " " + l1[1]));
+						event.setLine(1, (m1 ? Util.formatCurrency(q1) : (int)q1 + " " + l1[1]));
 					}
 					event.setLine(0, "§1[Heal]");
 				}
@@ -127,11 +127,11 @@ public class EssentialsBlockListener extends BlockListener
 					if (!event.getLine(3).isEmpty())
 					{
 						String[] l1 = event.getLine(3).split("[ :-]+", 2);
-						boolean m1 = l1[0].matches("\\$[0-9]+");
-						int q1 = Integer.parseInt(m1 ? l1[0].substring(1) : l1[0]);
-						if (q1 < 1) throw new Exception(Util.i18n("moreThanZero"));
+						boolean m1 = l1[0].matches("^[^0-9][\\.0-9]+");
+						double q1 = Double.parseDouble(m1 ? l1[0].substring(1) : l1[0]);
+						if ((int)q1 < 1) throw new Exception(Util.i18n("moreThanZero"));
 						if (!m1) ItemDb.get(l1[1]);
-						event.setLine(3, (m1 ? "$" + q1 : q1 + " " + l1[1]));
+						event.setLine(3, (m1 ? Util.formatCurrency(q1) : (int)q1 + " " + l1[1]));
 					}
 					if (event.getLine(1).isEmpty()) {
 						event.setLine(1, "§dWarp name here!");

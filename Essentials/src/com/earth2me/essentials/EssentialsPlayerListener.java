@@ -388,9 +388,9 @@ public class EssentialsPlayerListener extends PlayerListener
 				if (!sign.getLine(1).isEmpty())
 				{
 					String[] l1 = sign.getLine(1).split("[ :-]+");
-					boolean m1 = l1[0].matches("\\$[0-9]+");
-					int q1 = Integer.parseInt(m1 ? l1[0].substring(1) : l1[0]);
-					if (q1 < 1)
+					boolean m1 = l1[0].matches("^[^0-9][\\.0-9]+");
+					double q1 = Double.parseDouble(m1 ? l1[0].substring(1) : l1[0]);
+					if (!m1 && (int)q1 < 1)
 					{
 						throw new Exception(Util.i18n("moreThanZero"));
 					}
@@ -405,10 +405,10 @@ public class EssentialsPlayerListener extends PlayerListener
 					}
 					else
 					{
-						ItemStack i = ItemDb.get(l1[1], q1);
+						ItemStack i = ItemDb.get(l1[1], (int)q1);
 						if (!InventoryWorkaround.containsItem(user.getInventory(), true, i))
 						{
-							throw new Exception(Util.format("missingItems", q1, l1[1]));
+							throw new Exception(Util.format("missingItems", (int)q1, l1[1]));
 						}
 						InventoryWorkaround.removeItem(user.getInventory(), true, i);
 						user.updateInventory();
@@ -476,9 +476,9 @@ public class EssentialsPlayerListener extends PlayerListener
 		if (!sign.getLine(3).isEmpty())
 		{
 			String[] l1 = sign.getLine(3).split("[ :-]+");
-			boolean m1 = l1[0].matches("\\$[0-9]+");
-			int q1 = Integer.parseInt(m1 ? l1[0].substring(1) : l1[0]);
-			if (q1 < 1)
+			boolean m1 = l1[0].matches("^[^0-9][\\.0-9]+");
+			double q1 = Double.parseDouble(m1 ? l1[0].substring(1) : l1[0]);
+			if (!m1 && (int)q1 < 1)
 			{
 				throw new Exception(Util.i18n("moreThanZero"));
 			}
@@ -493,10 +493,10 @@ public class EssentialsPlayerListener extends PlayerListener
 			}
 			else
 			{
-				ItemStack i = ItemDb.get(l1[1], q1);
+				ItemStack i = ItemDb.get(l1[1], (int)q1);
 				if (!InventoryWorkaround.containsItem(user.getInventory(), true, i))
 				{
-					throw new Exception(Util.format("missingItems", q1, l1[1]));
+					throw new Exception(Util.format("missingItems", (int)q1, l1[1]));
 				}
 				InventoryWorkaround.removeItem(user.getInventory(), true, i);
 				user.updateInventory();
