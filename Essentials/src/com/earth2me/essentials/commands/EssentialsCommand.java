@@ -32,7 +32,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 	{
 		if (args.length <= pos) throw new NotEnoughArgumentsException();
 		List<Player> matches = server.matchPlayer(args[pos]);
-		if (matches.size() < 1) throw new NoSuchFieldException(Util.i18n("noPlayerFound"));
+		if (matches.size() < 1) throw new NoSuchFieldException(Util.i18n("playerNotFound"));
 		for (Player p : matches)
 		{
 			if (p.getDisplayName().startsWith(args[pos]))
