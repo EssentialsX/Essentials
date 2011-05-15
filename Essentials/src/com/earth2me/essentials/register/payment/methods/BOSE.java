@@ -1,17 +1,11 @@
 package com.earth2me.essentials.register.payment.methods;
 
 import com.earth2me.essentials.register.payment.Method;
-import com.earth2me.essentials.register.payment.MethodFactory;
 import cosine.boseconomy.BOSEconomy;
 import org.bukkit.plugin.Plugin;
 
 public class BOSE implements Method {
     private BOSEconomy BOSEconomy;
-
-    static {
-        MethodFactory.addMethod("BOSEconomy", new BOSE());
-
-    }
 
     public BOSEconomy getPlugin() {
         return this.BOSEconomy;

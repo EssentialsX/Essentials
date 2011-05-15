@@ -2,6 +2,14 @@ package com.earth2me.essentials.register.payment;
 
 import org.bukkit.plugin.Plugin;
 
+/**
+ * Method.java
+ * Interface for all sub-methods for payment.
+ *
+ * @author: Nijikokun<nijikokun@gmail.com> (@nijikokun)
+ * @copyright: Copyright (C) 2011
+ * @license: GNUv3 Affero License <http://www.gnu.org/licenses/agpl-3.0.html>
+ */
 public interface Method {
     public Object getPlugin();
     public String getName();

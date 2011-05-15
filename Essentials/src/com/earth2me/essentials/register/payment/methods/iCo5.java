@@ -5,16 +5,13 @@ import com.iConomy.system.Account;
 import com.iConomy.system.BankAccount;
 import com.iConomy.system.Holdings;
 import com.iConomy.util.Constants;
+
 import com.earth2me.essentials.register.payment.Method;
-import com.earth2me.essentials.register.payment.MethodFactory;
+
 import org.bukkit.plugin.Plugin;
 
 public class iCo5 implements Method {
     private iConomy iConomy;
-
-    static {
-        MethodFactory.addMethod("iConomy", new iCo5());
-    }
 
     public iConomy getPlugin() {
         return this.iConomy;
@@ -57,7 +54,7 @@ public class iCo5 implements Method {
     }
 	
     public boolean isCompatible(Plugin plugin) {
-        return plugin.getDescription().getName().equalsIgnoreCase("iconomy") && plugin instanceof iConomy;
+        return plugin.getDescription().getName().equalsIgnoreCase("iconomy") && plugin.getClass().getName().equals("com.iConomy.iConomy") && plugin instanceof iConomy;
     }
 
     public void setPlugin(Plugin plugin) {
