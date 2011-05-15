@@ -57,7 +57,10 @@ public class Commandmail extends EssentialsCommand
 				return;
 			}
 			charge(user);
-			u.addMail(ChatColor.stripColor(user.getDisplayName()) + ": " + getFinalArg(args, 2));
+			if (!u.isIgnoredPlayer(user.getName()))
+			{
+				u.addMail(ChatColor.stripColor(user.getDisplayName()) + ": " + getFinalArg(args, 2));
+			}
 			user.sendMessage(Util.i18n("mailSent"));
 			return;
 		}

@@ -20,8 +20,8 @@ public class Commandantioch extends EssentialsCommand
 	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
 		charge(user);
-		server.broadcastMessage("...lobbest thou thy Holy Hand Grenade of Antioch towards thy foe,");
-		server.broadcastMessage("who being naughty in My sight, shall snuff it.");
+		ess.broadcastMessage(user.getName(), "...lobbest thou thy Holy Hand Grenade of Antioch towards thy foe,");
+		ess.broadcastMessage(user.getName(), "who being naughty in My sight, shall snuff it.");
 
 		Location loc = user.getLocation();
 		World world = ((CraftWorld)user.getWorld()).getHandle();

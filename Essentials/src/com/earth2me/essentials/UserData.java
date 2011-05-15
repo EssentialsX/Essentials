@@ -415,18 +415,18 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	public boolean isIgnoredPlayer(String name)
 	{
-		return ignoredPlayers.contains(name);
+		return ignoredPlayers.contains(name.toLowerCase());
 	}
 
 	public void setIgnoredPlayer(String name, boolean set)
 	{
 		if (set)
 		{
-			ignoredPlayers.add(name);
+			ignoredPlayers.add(name.toLowerCase());
 		}
 		else
 		{
-			ignoredPlayers.remove(name);
+			ignoredPlayers.remove(name.toLowerCase());
 		}
 		setIgnoredPlayers(ignoredPlayers);
 	}

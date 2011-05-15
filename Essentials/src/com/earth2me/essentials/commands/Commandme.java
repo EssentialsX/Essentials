@@ -32,6 +32,6 @@ public class Commandme extends EssentialsCommand
 			message.append(' ');
 		}
 		charge(user);
-		server.broadcastMessage("* " + user.getDisplayName() + " " + message);
+		ess.broadcastMessage(user.getName(), "* " + user.getDisplayName() + " " + message);
 	}
 }

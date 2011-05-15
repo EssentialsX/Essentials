@@ -18,6 +18,7 @@ public class Commandsuicide extends EssentialsCommand
 		charge(user);
 		user.setHealth(0);
 		user.sendMessage(Util.i18n("suicideMessage"));
-		server.broadcastMessage(Util.format("suicideSuccess",user.getDisplayName()));
+		ess.broadcastMessage(user.getName(),
+								Util.format("suicideSuccess",user.getDisplayName()));
 	}
 }

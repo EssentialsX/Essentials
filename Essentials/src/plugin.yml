@@ -107,6 +107,10 @@ commands:
     description: Teleport to your home.
     usage: /<command> <player>
     aliases: [ehome]
+  ignore:
+    description: Ignore other players.
+    usage: /<command> <player>
+    aliases: [eignore]
   info:
     description: Shows information set by the server owner
     usage: /<command> [chapter] [page]

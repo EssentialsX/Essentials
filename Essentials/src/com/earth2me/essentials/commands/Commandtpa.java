@@ -26,10 +26,13 @@ public class Commandtpa extends EssentialsCommand
 			throw new Exception(Util.format("teleportDisabled", p.getDisplayName()));
 		}
 		player.charge(this);
-		p.requestTeleport(player, false);
-		p.sendMessage(Util.format("teleportRequest", player.getDisplayName()));
-		p.sendMessage(Util.i18n("typeTpaccept"));
-		p.sendMessage(Util.i18n("typeTpdeny"));
+		if (!p.isIgnoredPlayer(player.getName()))
+		{
+			p.requestTeleport(player, false);
+			p.sendMessage(Util.format("teleportRequest", player.getDisplayName()));
+			p.sendMessage(Util.i18n("typeTpaccept"));
+			p.sendMessage(Util.i18n("typeTpdeny"));
+		}
 		player.sendMessage(Util.format("requestSent", p.getDisplayName()));
 	}
 }

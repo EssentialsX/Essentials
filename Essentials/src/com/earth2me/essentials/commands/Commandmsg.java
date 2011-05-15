@@ -51,6 +51,10 @@ public class Commandmsg extends EssentialsCommand
 		charge(sender);
 		for (Player p : matches)
 		{
+			if (sender instanceof Player && ess.getUser(p).isIgnoredPlayer(((Player)sender).getName()))
+			{
+				continue;
+			}
 			sender.sendMessage("[" + translatedMe + " -> " + p.getDisplayName() + "§f] " + message);
 			p.sendMessage("[" + senderName + " -> " + translatedMe + "§f] " + message);
 			replyTo.setReplyTo(ess.getUser(p));

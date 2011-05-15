@@ -1,6 +1,8 @@
 package com.earth2me.essentials;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.minecraft.server.InventoryPlayer;
@@ -55,6 +57,15 @@ public class EssentialsPlayerListener extends PlayerListener
 		{
 			event.setCancelled(true);
 			logger.info(Util.format("mutedUserSpeaks", user.getName()));
+		}
+		Iterator<Player> it = event.getRecipients().iterator();
+		while (it.hasNext())
+		{
+			User u = ess.getUser(it.next());
+			if (u.isIgnoredPlayer(user.getName()))
+			{
+				it.remove();
+			}
 		}
 	}
 

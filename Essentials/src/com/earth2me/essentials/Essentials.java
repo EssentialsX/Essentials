@@ -451,7 +451,7 @@ public class Essentials extends JavaPlugin
 			catch (NotEnoughArgumentsException ex)
 			{
 				sender.sendMessage(command.getDescription());
-				sender.sendMessage(command.getUsage());
+				sender.sendMessage(command.getUsage().replaceAll("<command>", commandLabel));
 				return true;
 			}
 			catch (Throwable ex)
@@ -663,4 +663,18 @@ public class Essentials extends JavaPlugin
 	{
 		return paymentMethod;
 	}
+	
+	public int broadcastMessage(String name, String message) {
+        Player[] players = getServer().getOnlinePlayers();
+
+        for (Player player : players) {
+			User u = getUser(player);
+			if (!u.isIgnoredPlayer(name))
+			{
+				player.sendMessage(message);
+			}
+        }
+
+        return players.length;
+    }
 }
