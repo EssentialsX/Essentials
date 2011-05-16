@@ -42,16 +42,21 @@ public class EssentialsUpgrade
 			EssentialsConf conf = new EssentialsConf(configFile);
 			conf.load();
 			Worth w = new Worth(ess.getDataFolder());
+			boolean found = false;
 			for (Material mat : Material.values())
 			{
 				int id = mat.getId();
 				double value = conf.getDouble("worth-" + id, Double.NaN);
 				if (!Double.isNaN(value))
 				{
+					found = true;
 					w.setPrice(new ItemStack(mat, 1, (short)0, (byte)0), value);
 				}
 			}
-			removeLinesFromConfig(configFile, "\\s*#?\\s*worth-[0-9]+.*", "# Worth values have been moved to worth.yml");
+			if (found)
+			{
+				removeLinesFromConfig(configFile, "\\s*#?\\s*worth-[0-9]+.*", "# Worth values have been moved to worth.yml");
+			}
 		}
 		catch (Throwable e)
 		{
