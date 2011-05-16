@@ -99,9 +99,11 @@ public class Essentials extends JavaPlugin
 	{
 		setStatic();
 		EssentialsUpgrade upgrade = new EssentialsUpgrade(this.getDescription().getVersion(), this);
+		upgrade.beforeSettings();
 		confList = new ArrayList<IConf>();
 		settings = new Settings(this.getDataFolder());
 		confList.add(settings);
+		upgrade.afterSettings();
 		Util.updateLocale(settings.getLocale(), this.getDataFolder());
 		spawn = new Spawn(getServer(), this.getDataFolder());
 		confList.add(spawn);

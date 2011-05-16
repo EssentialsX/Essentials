@@ -28,15 +28,6 @@ public class EssentialsUpgrade
 		}
 		alreadyRun = true;
 		ess = essentials;
-		if (!ess.getDataFolder().exists())
-		{
-			ess.getDataFolder().mkdirs();
-		}
-		moveWorthValuesToWorthYml();
-		sanitizeAllUserFilenames();
-		updateUsersToNewDefaultHome();
-		moveUsersDataToUserdataFolder();
-		convertWarps();
 	}
 
 	private void moveWorthValuesToWorthYml()
@@ -375,5 +366,22 @@ public class EssentialsUpgrade
 			return new FakeWorld(worldDirectory.getName(), World.Environment.NORMAL);
 		}
 		return null;
+	}
+
+	void beforeSettings()
+	{
+		if (!ess.getDataFolder().exists())
+		{
+			ess.getDataFolder().mkdirs();
+		}
+		moveWorthValuesToWorthYml();
+	}
+
+	void afterSettings()
+	{
+		sanitizeAllUserFilenames();
+		updateUsersToNewDefaultHome();
+		moveUsersDataToUserdataFolder();
+		convertWarps();
 	}
 }
