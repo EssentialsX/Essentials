@@ -3,7 +3,6 @@ package com.earth2me.essentials;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,8 +14,11 @@ import java.text.MessageFormat;
 import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -29,6 +31,8 @@ import org.bukkit.block.Block;
 
 public class Util
 {
+	private final static Logger logger = Logger.getLogger("Minecraft");
+	
 	public static String sanitizeFileName(String name)
 	{
 		return name.toLowerCase().replaceAll("[^a-z0-9]", "_");
@@ -110,13 +114,13 @@ public class Util
 	public static long parseDateDiff(String time, boolean future) throws Exception
 	{
 		Pattern timePattern = Pattern.compile(
-			"(?:([0-9]+)\\s*y[a-z]*[,\\s]*)?"
-			+ "(?:([0-9]+)\\s*mo[a-z]*[,\\s]*)?"
-			+ "(?:([0-9]+)\\s*w[a-z]*[,\\s]*)?"
-			+ "(?:([0-9]+)\\s*d[a-z]*[,\\s]*)?"
-			+ "(?:([0-9]+)\\s*h[a-z]*[,\\s]*)?"
-			+ "(?:([0-9]+)\\s*m[a-z]*[,\\s]*)?"
-			+ "(?:([0-9]+)\\s*(?:s[a-z]*)?)?", Pattern.CASE_INSENSITIVE);
+				"(?:([0-9]+)\\s*y[a-z]*[,\\s]*)?"
+				+ "(?:([0-9]+)\\s*mo[a-z]*[,\\s]*)?"
+				+ "(?:([0-9]+)\\s*w[a-z]*[,\\s]*)?"
+				+ "(?:([0-9]+)\\s*d[a-z]*[,\\s]*)?"
+				+ "(?:([0-9]+)\\s*h[a-z]*[,\\s]*)?"
+				+ "(?:([0-9]+)\\s*m[a-z]*[,\\s]*)?"
+				+ "(?:([0-9]+)\\s*(?:s[a-z]*)?)?", Pattern.CASE_INSENSITIVE);
 		Matcher m = timePattern.matcher(time);
 		int years = 0;
 		int months = 0;
@@ -279,9 +283,10 @@ public class Util
 
 	public static String formatCurrency(double value)
 	{
-		String str = Essentials.getStatic().getSettings().getCurrencySymbol()+df.format(value);
-		if (str.endsWith(".00")) {
-			str = str.substring(0, str.length()-3);
+		String str = Essentials.getStatic().getSettings().getCurrencySymbol() + df.format(value);
+		if (str.endsWith(".00"))
+		{
+			str = str.substring(0, str.length() - 3);
 		}
 		return str;
 	}
@@ -338,8 +343,9 @@ public class Util
 					BufferedReader br = new BufferedReader(new FileReader(file));
 					String version = br.readLine();
 					br.close();
-					if (version == null || !version.equals("#version: "+Essentials.getStatic().getDescription().getVersion())) {
-						Logger.getLogger("Minecraft").log(Level.WARNING, "Translation file "+file+" is not updated for Essentials version. Will use default.");
+					if (version == null || !version.equals("#version: " + Essentials.getStatic().getDescription().getVersion()))
+					{
+						logger.log(Level.WARNING, String.format("Translation file %s is not updated for Essentials version. Will use default.", file));
 						return cl.getResourceAsStream(string);
 					}
 					return new FileInputStream(file);
@@ -385,10 +391,18 @@ public class Util
 	private static final Locale defaultLocale = Locale.getDefault();
 	public static Locale currentLocale = defaultLocale;
 	private static ResourceBundle bundle = ResourceBundle.getBundle("messages", defaultLocale);
+	private static ResourceBundle defaultBundle = ResourceBundle.getBundle("messages", Locale.US);
 
 	public static String i18n(String string)
 	{
-		return bundle.getString(string);
+		try {
+			return bundle.getString(string);
+		}
+		catch (MissingResourceException ex) 
+		{
+			logger.log(Level.WARNING, String.format("Missing translation key \"%s\" in translation file %s", ex.getKey(), bundle.getLocale().toString()));
+			return defaultBundle.getString(string);
+		}
 	}
 
 	public static String format(String string, Object... objects)
@@ -403,7 +417,7 @@ public class Util
 		{
 			return;
 		}
-		String[] parts = loc.split("_");
+		String[] parts = loc.split("[_\\.]");
 		if (parts.length == 1)
 		{
 			currentLocale = new Locale(parts[0]);
@@ -412,6 +426,14 @@ public class Util
 		{
 			currentLocale = new Locale(parts[0], parts[1]);
 		}
+		if (parts.length == 3)
+		{
+			currentLocale = new Locale(parts[0], parts[1], parts[2]);
+		}
+		logger.log(Level.INFO, String.format("Using locale %s", currentLocale.toString()));
 		bundle = ResourceBundle.getBundle("messages", currentLocale, new ConfigClassLoader(dataFolder, Util.class.getClassLoader()));
+		if (!bundle.keySet().containsAll(defaultBundle.keySet())) {
+			logger.log(Level.WARNING, String.format("Translation file %s does not contain all translation keys.", currentLocale.toString()));
+		}
 	}
 }

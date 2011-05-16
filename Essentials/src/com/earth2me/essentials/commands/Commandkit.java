@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.bukkit.Server;
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.util.GregorianCalendar;
@@ -40,7 +39,7 @@ public class Commandkit extends EssentialsCommand
 				}
 				if (list.length() > 0)
 				{
-					user.sendMessage("§7Kits:" + list.toString());
+					user.sendMessage(Util.format("kits", list.toString()));
 				}
 				else
 				{

@@ -200,6 +200,8 @@ public class Essentials extends JavaPlugin
 		{
 			iConf.reloadConfig();
 		}
+		
+		Util.updateLocale(settings.getLocale(), this.getDataFolder());
 
 		for (User user : users.values())
 		{
