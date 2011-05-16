@@ -1,5 +1,7 @@
 package com.earth2me.essentials;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import junit.framework.TestCase;
@@ -8,12 +10,28 @@ import junit.framework.TestCase;
 public class UtilTest extends TestCase
 {
 	public void testFDDnow() {
+		try
+		{
+			Util.updateLocale("en_US", File.createTempFile("test1", "").getParentFile());
+		}
+		catch (IOException ex)
+		{
+			fail(ex.getMessage());
+		}
 		Calendar c = new GregorianCalendar();
 		String resp = Util.formatDateDiff(c, c);
 		assertEquals(resp, "now");
 	}
 	
 	public void testFDDfuture() {
+		try
+		{
+			Util.updateLocale("en_US", File.createTempFile("test2", "").getParentFile());
+		}
+		catch (IOException ex)
+		{
+			fail(ex.getMessage());
+		}
 		Calendar a, b;
 		a = new GregorianCalendar(2010, 1, 1, 10, 0, 0);
 		b = new GregorianCalendar(2010, 1, 1, 10, 0, 1);
@@ -78,6 +96,14 @@ public class UtilTest extends TestCase
 	}
 	
 	public void testFDDpast() {
+		try
+		{
+			Util.updateLocale("en_US", File.createTempFile("test3", "").getParentFile());
+		}
+		catch (IOException ex)
+		{
+			fail(ex.getMessage());
+		}
 		Calendar a, b;
 		a = new GregorianCalendar(2010, 1, 1, 10, 0, 0);
 		b = new GregorianCalendar(2010, 1, 1, 9, 59, 59);
