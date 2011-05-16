@@ -14,6 +14,7 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import java.util.logging.Level;
 
 
 public class Commandhelp extends EssentialsCommand
@@ -79,6 +80,7 @@ public class Commandhelp extends EssentialsCommand
 		}
 
 		boolean reported = false;
+		String pluginName = "";
 		for (Plugin p : ess.getServer().getPluginManager().getPlugins())
 		{
 			try
@@ -100,6 +102,7 @@ public class Commandhelp extends EssentialsCommand
 					{
 						if (ess.getSettings().showNonEssCommandsInHelp())
 						{
+							pluginName = p.getDescription().getName();
 							HashMap<String, String> v = cmds.get(k);
 							if (v.containsKey("permission") && v.get("permission") != null && !(v.get("permission").equals("")))
 							{
@@ -125,7 +128,10 @@ public class Commandhelp extends EssentialsCommand
 			{
 				if (!reported)
 				{
+					logger.log(Level.WARNING, "Error getting help for:" + pluginName);
 					ex.printStackTrace();
+					
+					
 				}
 				reported = true;
 				continue;
