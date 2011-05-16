@@ -5,8 +5,8 @@ import java.util.Set;
 
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
-
-/**
+ 
+/***
  * Methods.java
  * Controls the getting / setting of methods & the method of payment used.
  *
@@ -24,6 +24,7 @@ public class Methods {
         this.addMethod("iConomy", new com.earth2me.essentials.register.payment.methods.iCo4());
         this.addMethod("iConomy", new com.earth2me.essentials.register.payment.methods.iCo5());
         this.addMethod("BOSEconomy", new com.earth2me.essentials.register.payment.methods.BOSE());
+      
     }
 
     public Set<String> getDependencies() {
@@ -51,23 +52,19 @@ public class Methods {
     }
 
     public boolean setMethod(Plugin method) {
+        if(hasMethod()) return true;
+
         PluginManager manager = method.getServer().getPluginManager();
+        Plugin plugin = null;
 
-        if (method != null && method.isEnabled()) {
-            Method plugin = this.createMethod(method);
-            if (plugin != null) Method = plugin;
-        } else {
-            for(String name: this.getDependencies()) {
-                if(hasMethod()) break;
+        for(String name: this.getDependencies()) {
+            if(hasMethod()) break;
+            if(method.getDescription().getName().equals(name)) plugin = method; else  plugin = manager.getPlugin(name);
+            if(plugin == null) continue;
+            if(!plugin.isEnabled()) continue;
 
-                method = manager.getPlugin(name);
-                if(method == null) continue;
-                if(!method.isEnabled()) manager.enablePlugin(method);
-                if(!method.isEnabled()) continue;
-
-                Method plugin = this.createMethod(method);
-                if (plugin != null) Method = plugin;
-            }
+            Method current = this.createMethod(plugin);
+            if (current != null) this.Method = current;
         }
 
         return hasMethod();
