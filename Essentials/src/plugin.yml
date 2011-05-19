@@ -183,10 +183,6 @@ commands:
     description: Pong!
     usage: /<command>
     aliases: [pong,eping]
-  plugin:
-    description: Enables, disables, or reloads a plugin.
-    usage: /<command> [enable|disable|reload] [plugin]
-    aliases: [plugins,eplugin]
   powertool:
     description: Assigns a command to the item in hand, {player} will be replaced by the name of the player that you click.
     usage: /<command> [command] <arguments>
