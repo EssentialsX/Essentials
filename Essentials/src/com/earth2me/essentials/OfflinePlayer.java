@@ -16,6 +16,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
 import org.bukkit.entity.Vehicle;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.util.Vector;
@@ -445,6 +446,16 @@ public class OfflinePlayer implements Player
 	}
 
 	public void sendBlockChange(Location lctn, int i, byte b)
+	{
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
+	}
+
+	public void setLastDamageCause(EntityDamageEvent ede)
+	{
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
+	}
+
+	public EntityDamageEvent getLastDamageCause()
 	{
 		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}

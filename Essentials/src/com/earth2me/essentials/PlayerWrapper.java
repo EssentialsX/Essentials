@@ -5,6 +5,7 @@ import java.util.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.util.Vector;
 
@@ -502,5 +503,16 @@ public class PlayerWrapper implements Player
 	public void sendBlockChange(Location lctn, int i, byte b)
 	{
 		base.sendBlockChange(lctn, i, b);
+	}
+
+	public void setLastDamageCause(EntityDamageEvent ede)
+	{
+		base.setLastDamageCause(ede);
+		
+	}
+
+	public EntityDamageEvent getLastDamageCause()
+	{
+		return base.getLastDamageCause();
 	}
 }
