@@ -173,11 +173,12 @@ public class InventoryWorkaround
 
 	public static Item[] dropItem(Location loc, ItemStack itm)
 	{
-		int stacks = itm.getAmount() / itm.getMaxStackSize();
-		int leftover = itm.getAmount() % itm.getMaxStackSize();
+		int maxStackSize = itm.getType().getMaxStackSize();
+		int stacks = itm.getAmount() / maxStackSize;
+		int leftover = itm.getAmount() % maxStackSize;
 		Item[] itemStacks = new Item[stacks + (leftover > 0 ? 1 : 0)];
 		for (int i = 0; i < stacks; i++) {
-			itemStacks[i] = loc.getWorld().dropItem(loc, new ItemStack(itm.getType(), itm.getMaxStackSize(), itm.getDurability()));	
+			itemStacks[i] = loc.getWorld().dropItem(loc, new ItemStack(itm.getType(), maxStackSize, itm.getDurability()));	
 		}
 		if (leftover > 0) {
 			itemStacks[stacks] = loc.getWorld().dropItem(loc, new ItemStack(itm.getType(), leftover, itm.getDurability()));	
