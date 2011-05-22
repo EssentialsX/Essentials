@@ -10,7 +10,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.entity.Player;
 
-
+/**
+ * Instead of using this api directly, we recommend to use the register plugin:
+ * http://bit.ly/RegisterMethod
+ */
 public class Economy
 {
 	private static final Logger logger = Logger.getLogger("Minecraft");
