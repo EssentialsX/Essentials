@@ -137,7 +137,7 @@ public class EssentialsBlockListener extends BlockListener
 						event.setLine(3, (m1 ? Util.formatCurrency(q1) : (int)q1 + " " + l1[1]));
 					}
 					if (event.getLine(1).isEmpty()) {
-						event.setLine(1, "§dWarp name here!");
+						event.setLine(1, "§dWarp name!");
 						return;
 					} else {
 						Essentials.getWarps().getWarp(event.getLine(1));
