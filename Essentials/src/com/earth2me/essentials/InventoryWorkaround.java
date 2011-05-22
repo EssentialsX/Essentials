@@ -2,7 +2,6 @@ package com.earth2me.essentials;
 
 import java.util.HashMap;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
