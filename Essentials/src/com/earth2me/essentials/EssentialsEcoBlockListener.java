@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Material;
@@ -74,7 +75,11 @@ public class EssentialsEcoBlockListener extends BlockListener
 				}
 				else if (i1 != null)
 				{
-					InventoryWorkaround.dropItem(user.getLocation(), i1);
+					Map<Integer, ItemStack> leftOver = user.getInventory().addItem(i1);
+					for (ItemStack itemStack : leftOver.values())
+					{
+						InventoryWorkaround.dropItem(user.getLocation(), itemStack);
+					}
 				}
 
 				if (m2)
@@ -83,8 +88,13 @@ public class EssentialsEcoBlockListener extends BlockListener
 				}
 				else if (i2 != null)
 				{
-					InventoryWorkaround.dropItem(user.getLocation(), i2);
+					Map<Integer, ItemStack> leftOver = user.getInventory().addItem(i2);
+					for (ItemStack itemStack : leftOver.values())
+					{
+						InventoryWorkaround.dropItem(user.getLocation(), itemStack);
+					}
 				}
+				user.updateInventory();
 
 				sign.setType(Material.AIR);
 			}
