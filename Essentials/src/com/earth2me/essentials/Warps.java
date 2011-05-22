@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -99,12 +100,19 @@ public class Warps implements IConf
 				String filename = listOfFiles[i].getName();
 				if (listOfFiles[i].isFile() && filename.endsWith(".yml"))
 				{
-					EssentialsConf conf = new EssentialsConf(listOfFiles[i]);
-					conf.load();
-					String name = conf.getString("name");
-					if (name != null)
+					try
 					{
-						warpPoints.put(new StringIgnoreCase(name), conf);
+						EssentialsConf conf = new EssentialsConf(listOfFiles[i]);
+						conf.load();
+						String name = conf.getString("name");
+						if (name != null)
+						{
+							warpPoints.put(new StringIgnoreCase(name), conf);
+						}
+					}
+					catch (Exception ex)
+					{
+						logger.log(Level.WARNING, Util.format("loadWarpError", filename), ex);
 					}
 				}
 			}
