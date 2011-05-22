@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import javax.crypto.spec.IvParameterSpec;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.craftbukkit.block.CraftSign;
@@ -71,7 +72,7 @@ public class EssentialsEcoBlockListener extends BlockListener
 				}
 				else if (i1 != null)
 				{
-					user.getWorld().dropItem(user.getLocation(), i1);
+					InventoryWorkaround.dropItem(user.getLocation(), i1);
 				}
 
 				if (m2)
@@ -80,7 +81,7 @@ public class EssentialsEcoBlockListener extends BlockListener
 				}
 				else if (i2 != null)
 				{
-					user.getWorld().dropItem(user.getLocation(), i2);
+					InventoryWorkaround.dropItem(user.getLocation(), i2);
 				}
 
 				sign.setType(Material.AIR);

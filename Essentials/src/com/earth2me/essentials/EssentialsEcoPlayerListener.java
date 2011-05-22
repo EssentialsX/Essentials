@@ -53,7 +53,7 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 				Map<Integer, ItemStack> leftOver = user.getInventory().addItem(item);
 				for (ItemStack itemStack : leftOver.values())
 				{
-					user.getWorld().dropItem(user.getLocation(), itemStack);
+					InventoryWorkaround.dropItem(user.getLocation(), itemStack);
 				}
 				user.updateInventory();
 			}
@@ -121,7 +121,7 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 						Map<Integer, ItemStack> leftOver = user.getInventory().addItem(i1);
 						for (ItemStack itemStack : leftOver.values())
 						{
-							user.getWorld().dropItem(user.getLocation(), itemStack);
+							InventoryWorkaround.dropItem(user.getLocation(), itemStack);
 						}
 						user.updateInventory();
 					}
@@ -169,7 +169,7 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 						Map<Integer, ItemStack> leftOver = user.getInventory().addItem(qi2);
 						for (ItemStack itemStack : leftOver.values())
 						{
-							user.getWorld().dropItem(user.getLocation(), itemStack);
+							InventoryWorkaround.dropItem(user.getLocation(), itemStack);
 						}
 					}
 
