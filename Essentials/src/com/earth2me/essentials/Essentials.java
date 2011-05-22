@@ -353,7 +353,8 @@ public class Essentials extends JavaPlugin
 			}
 		}
 		// Allow plugins to override the command via onCommand
-		if (!getSettings().isCommandOverridden(command.getName()) && !commandLabel.startsWith("e"))
+		// Removed because of changes in bukkit
+		/*if (!getSettings().isCommandOverridden(command.getName()) && !commandLabel.startsWith("e"))
 		{
 			for (Plugin p : getServer().getPluginManager().getPlugins())
 			{
@@ -393,7 +394,7 @@ public class Essentials extends JavaPlugin
 
 				return getServer().getPluginCommand(p.getDescription().getName() + ":" + commandLabel).execute(sender, commandLabel, args);
 			}
-		}
+		}*/
 
 		try
 		{
