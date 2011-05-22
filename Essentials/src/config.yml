@@ -105,9 +105,8 @@ rules:
 # such as /egod, will always grant Essentials priority.
 # We should try to take priority over /god.  If this doesn't work, use
 # /essentials:god or /egod.  If god is set using WorldGuard, use /ungod to remove then use whichever you see fit.
-#overridden-commands:
-#  - god
-# Attention: because of changes in bukkit, this won't work anymore.
+overridden-commands:
+  - god
 
 # Disabled commands will be completelly unavailable on the server.
 disabled-commands:

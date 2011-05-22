@@ -88,8 +88,6 @@ public class Settings implements IConf
 		return config.getBoolean("restrict-" + label.toLowerCase(), false);
 	}
 
-	// Removed because of changes in bukkit
-	/*
 	public boolean isCommandOverridden(String name)
 	{
 		List<String> defaultList = new ArrayList<String>(1);
@@ -102,7 +100,6 @@ public class Settings implements IConf
 		}
 		return config.getBoolean("override-" + name.toLowerCase(), false);
 	}
-	*/
 
 	public int getCommandCost(IEssentialsCommand cmd)
 	{
