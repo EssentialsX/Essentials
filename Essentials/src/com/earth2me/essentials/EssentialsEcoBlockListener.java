@@ -182,12 +182,20 @@ public class EssentialsEcoBlockListener extends BlockListener
 		{
 			try
 			{
-				String[] l1 = event.getLines()[1].split("[ :-]+");
-				String[] l2 = event.getLines()[2].split("[ :-]+");
+				String[] l1 = event.getLine(1).split("[ :-]+");
+				String[] l2 = event.getLine(2).split("[ :-]+");
 				boolean m1 = l1[0].matches("[^0-9][0-9]+(\\.[0-9]+)?");
 				boolean m2 = l2[0].matches("[^0-9][0-9]+(\\.[0-9]+)?");
 				double q1 = Double.parseDouble(m1 ? l1[0].substring(1) : l1[0]);
 				double q2 = Double.parseDouble(m2 ? l2[0].substring(1) : l2[0]);
+				if (m1 ? l2.length != 1 : l2.length != 2)
+				{
+					throw new Exception(Util.format("invalidSignLine", 2));
+				}
+				if (m2 ? l2.length != 2 : l2.length != 3)
+				{
+					throw new Exception(Util.format("invalidSignLine", 3));
+				}
 				double r2 = Double.parseDouble(l2[m2 ? 1 : 2]);
 				r2 = m2 ? r2 : r2 - r2 % q2;
 				if ((!m1 & q1 < 1) || (!m2 & q2 < 1) || r2 < 1)

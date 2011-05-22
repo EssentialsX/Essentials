@@ -131,6 +131,10 @@ public class EssentialsBlockListener extends BlockListener
 					{
 						String[] l1 = event.getLine(3).split("[ :-]+", 2);
 						boolean m1 = l1[0].matches("^[^0-9][\\.0-9]+");
+						if (!m1 && l1.length != 2)
+						{
+							throw new Exception(Util.format("invalidSignLine", 4));
+						}
 						double q1 = Double.parseDouble(m1 ? l1[0].substring(1) : l1[0]);
 						if ((int)q1 < 1) throw new Exception(Util.i18n("moreThanZero"));
 						if (!m1) ItemDb.get(l1[1]);
