@@ -1,11 +1,11 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.Charge;
 import org.bukkit.Server;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.Warps;
-import org.bukkit.command.CommandSender;
 
 
 public class Commandwarp extends EssentialsCommand
@@ -74,16 +74,18 @@ public class Commandwarp extends EssentialsCommand
 
 	private void warpUser(User user, String name) throws Exception
 	{
+		Charge charge = new Charge(this);
+		charge.isAffordableFor(user);
 		if (ess.getSettings().getPerWarpPermission())
 		{
 			if (user.isAuthorized("essentials.warp." + name))
 			{
-				user.getTeleport().warp(name, this.getName());
+				user.getTeleport().warp(name, charge);
 				return;
 			}
 			user.sendMessage(Util.i18n("warpUsePermission"));
 			return;
 		}
-		user.getTeleport().warp(name, this.getName());
+		user.getTeleport().warp(name, charge);
 	}
 }

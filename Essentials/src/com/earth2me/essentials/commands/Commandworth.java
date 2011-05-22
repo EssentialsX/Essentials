@@ -45,7 +45,7 @@ public class Commandworth extends EssentialsCommand
 			throw new Exception(Util.i18n("itemCannotBeSold"));
 		}
 
-		user.charge(this);
+		charge(user);
 		user.sendMessage(is.getDurability() != 0
 						 ? Util.format("worthMeta",
 									   is.getType().toString().toLowerCase().replace("_", ""),

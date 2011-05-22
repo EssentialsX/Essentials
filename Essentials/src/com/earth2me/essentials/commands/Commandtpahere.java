@@ -25,7 +25,7 @@ public class Commandtpahere extends EssentialsCommand
 		{
 			throw new Exception(Util.format("teleportDisabled", p.getDisplayName()));
 		}
-		user.charge(this);
+		charge(user);
 		p.requestTeleport(user, true);
 		p.sendMessage(Util.format("teleportHereRequest", user.getDisplayName()));
 		p.sendMessage(Util.i18n("typeTpaccept"));

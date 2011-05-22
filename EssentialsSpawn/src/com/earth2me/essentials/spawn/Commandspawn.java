@@ -1,5 +1,6 @@
 package com.earth2me.essentials.spawn;
 
+import com.earth2me.essentials.Charge;
 import org.bukkit.Server;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
@@ -16,7 +17,8 @@ public class Commandspawn extends EssentialsCommand
 	@Override
 	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		user.canAfford(this);
-		user.getTeleport().respawn(Essentials.getSpawn(), this.getName());
+		Charge charge = new Charge(this);
+		charge.isAffordableFor(user);
+		user.getTeleport().respawn(Essentials.getSpawn(), charge);
 	}
 }

@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.Charge;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -109,9 +110,10 @@ public class Commandkit extends EssentialsCommand
 					items = (List<String>)kit;
 				}
 
+				Charge charge = new Charge("kit-" + kitName);
 				try
 				{
-					user.canAfford("kit-" + kitName);
+					charge.isAffordableFor(user);
 				}
 				catch (Exception ex)
 				{
@@ -139,8 +141,8 @@ public class Commandkit extends EssentialsCommand
 				}
 				try
 				{
-					user.charge(this);
-					user.charge("kit-" + kitName);
+					charge(user);
+					charge.charge(user);
 				}
 				catch (Exception ex)
 				{

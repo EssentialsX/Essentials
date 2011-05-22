@@ -22,7 +22,7 @@ public class Commandthunder extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		user.charge(this);
+		charge(user);
 		World world = user.getWorld();
 		boolean setThunder = args[0].equalsIgnoreCase("true");
 		if (args.length > 1)

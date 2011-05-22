@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.Charge;
 import org.bukkit.Server;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
@@ -22,17 +23,25 @@ public class Commandtpaccept extends EssentialsCommand
 			throw new Exception(Util.i18n("noPendingRequest"));
 		}
 
-		user.canAfford(this);
+		Charge charge = new Charge(this);
+		if (user.isTeleportRequestHere())
+		{
+			charge.isAffordableFor(user);
+		}
+		else
+		{
+			charge.isAffordableFor(p);
+		}
 		user.sendMessage(Util.i18n("requestAccepted"));
 		p.sendMessage(Util.i18n("requestAccepted"));
 		
 		if (user.isTeleportRequestHere())
 		{
-			user.getTeleport().teleport(p, this.getName());
+			user.getTeleport().teleport(p, charge);
 		}
 		else
 		{
-			p.getTeleport().teleport(user, this.getName());
+			p.getTeleport().teleport(user, charge);
 		}
 		user.requestTeleport(null, false);
 	}

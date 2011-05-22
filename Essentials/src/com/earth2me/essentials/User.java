@@ -117,32 +117,6 @@ public class User extends UserData implements Comparable<User>, IReplyTo
 		sendMessage(Util.format("takenFromAccount", Util.formatCurrency(value)));
 	}
 
-	public void charge(String cmd) throws Exception
-	{
-		if (isAuthorized("essentials.nocommandcost.all")
-			|| isAuthorized("essentials.nocommandcost." + cmd))
-		{
-			return;
-		}
-		double mon = getMoney();
-		double cost = ess.getSettings().getCommandCost(cmd.startsWith("/") ? cmd.substring(1) : cmd);
-		if (mon < cost && !isAuthorized("essentials.eco.loan"))
-		{
-			throw new Exception(Util.i18n("notEnoughMoney"));
-		}
-		takeMoney(cost);
-	}
-
-	public void canAfford(String cmd) throws Exception
-	{
-		double mon = getMoney();
-		double cost = ess.getSettings().getCommandCost(cmd.startsWith("/") ? cmd.substring(1) : cmd);
-		if (mon < cost && !isAuthorized("essentials.eco.loan"))
-		{
-			throw new Exception(Util.i18n("notEnoughMoney"));
-		}
-	}
-
 	public boolean canAfford(double cost)
 	{
 		double mon = getMoney();
@@ -156,19 +130,9 @@ public class User extends UserData implements Comparable<User>, IReplyTo
 		}
 	}
 
-	public void canAfford(IEssentialsCommand cmd) throws Exception
-	{
-		canAfford(cmd.getName());
-	}
-
 	public void dispose()
 	{
 		this.base = new OfflinePlayer(getName());
-	}
-
-	public void charge(IEssentialsCommand cmd) throws Exception
-	{
-		charge(cmd.getName());
 	}
 
 	public boolean getJustPortaled()

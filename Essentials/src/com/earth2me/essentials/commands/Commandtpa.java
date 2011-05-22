@@ -13,7 +13,7 @@ public class Commandtpa extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User player, String commandLabel, String[] args) throws Exception
+	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -25,14 +25,14 @@ public class Commandtpa extends EssentialsCommand
 		{
 			throw new Exception(Util.format("teleportDisabled", p.getDisplayName()));
 		}
-		player.charge(this);
-		if (!p.isIgnoredPlayer(player.getName()))
+		charge(user);
+		if (!p.isIgnoredPlayer(user.getName()))
 		{
-			p.requestTeleport(player, false);
-			p.sendMessage(Util.format("teleportRequest", player.getDisplayName()));
+			p.requestTeleport(user, false);
+			p.sendMessage(Util.format("teleportRequest", user.getDisplayName()));
 			p.sendMessage(Util.i18n("typeTpaccept"));
 			p.sendMessage(Util.i18n("typeTpdeny"));
 		}
-		player.sendMessage(Util.format("requestSent", p.getDisplayName()));
+		user.sendMessage(Util.format("requestSent", p.getDisplayName()));
 	}
 }

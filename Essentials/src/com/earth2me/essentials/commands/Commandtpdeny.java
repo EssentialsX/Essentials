@@ -21,7 +21,7 @@ public class Commandtpdeny extends EssentialsCommand
 			throw new Exception(Util.i18n("noPendingRequest"));
 		}
 
-		user.charge(this);
+		charge(user);
 		user.sendMessage(Util.i18n("requestDenied"));
 		p.sendMessage(Util.i18n("requestDenied"));
 		user.requestTeleport(null, false);

@@ -2,7 +2,6 @@ package com.earth2me.essentials;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.minecraft.server.InventoryPlayer;
@@ -163,7 +162,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			event.setTo(loc);
 			try
 			{
-				user.getTeleport().teleport(loc, "portal");
+				user.getTeleport().teleport(loc, new Charge("portal"));
 			}
 			catch (Exception ex)
 			{
@@ -456,22 +455,22 @@ public class EssentialsPlayerListener extends PlayerListener
 				{
 					if (sign.getLine(2).equals("§2Everyone"))
 					{
-						chargeUserForWarp(sign, user);
-						user.getTeleport().warp(sign.getLine(1), "warpsign");
+						Charge charge = chargeUserForWarp(sign, user);
+						user.getTeleport().warp(sign.getLine(1), charge);
 						return;
 					}
 					if (user.inGroup(sign.getLine(2)))
 					{
-						chargeUserForWarp(sign, user);
-						user.getTeleport().warp(sign.getLine(1), "warpsign");
+						Charge charge = chargeUserForWarp(sign, user);
+						user.getTeleport().warp(sign.getLine(1), charge);
 						return;
 					}
 				}
 				if (user.isAuthorized("essentials.signs.warp.use")
 					&& (!ess.getSettings().getPerWarpPermission() || user.isAuthorized("essentials.warp." + sign.getLine(1))))
 				{
-					chargeUserForWarp(sign, user);
-					user.getTeleport().warp(sign.getLine(1), "warpsign");
+					Charge charge = chargeUserForWarp(sign, user);
+					user.getTeleport().warp(sign.getLine(1), charge);
 				}
 				return;
 			}
@@ -482,7 +481,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 	}
 	
-	private void chargeUserForWarp(Sign sign, User user) throws Exception
+	private Charge chargeUserForWarp(Sign sign, User user) throws Exception
 	{
 		if (!sign.getLine(3).isEmpty())
 		{
@@ -495,24 +494,15 @@ public class EssentialsPlayerListener extends PlayerListener
 			}
 			if (m1)
 			{
-				if (user.getMoney() < q1)
-				{
-					throw new Exception(Util.i18n("notEnoughMoney"));
-				}
-				user.takeMoney(q1);
-				user.sendMessage(Util.format("moneyTaken", Util.formatCurrency(q1)));
+				return new Charge(q1);
 			}
 			else
 			{
 				ItemStack i = ItemDb.get(l1[1], (int)q1);
-				if (!InventoryWorkaround.containsItem(user.getInventory(), true, i))
-				{
-					throw new Exception(Util.format("missingItems", (int)q1, l1[1]));
-				}
-				InventoryWorkaround.removeItem(user.getInventory(), true, i);
-				user.updateInventory();
+				return new Charge(i);
 			}
 		}
+		return new Charge("warpsign");
 	}
 
 	@Override

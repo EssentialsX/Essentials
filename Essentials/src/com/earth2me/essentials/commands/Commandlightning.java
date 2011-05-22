@@ -28,7 +28,7 @@ public class Commandlightning extends EssentialsCommand
 		if (args.length < 1 & user != null)
 		{
 			user.getWorld().strikeLightning(user.getTargetBlock(null, 600).getLocation());
-			user.charge(this);
+			charge(user);
 			return;
 		}
 
@@ -38,6 +38,10 @@ public class Commandlightning extends EssentialsCommand
 			return;
 		}
 
+		if (user != null)
+		{
+			charge(user);
+		}
 		for (Player p : server.matchPlayer(args[0]))
 		{
 			sender.sendMessage(Util.format("lightningUse", p.getDisplayName()));
@@ -48,7 +52,5 @@ public class Commandlightning extends EssentialsCommand
 				p.sendMessage(Util.i18n("lightningSmited"));
 			}
 		}
-		if (user != null)
-			user.charge(this);
 	}
 }

@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.Charge;
 import org.bukkit.Server;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
@@ -15,7 +16,8 @@ public class Commandhome extends EssentialsCommand
 	@Override
 	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		user.canAfford(this);
+		Charge charge = new Charge(this);
+		charge.isAffordableFor(user);
 		if(args.length > 0 && user.isAuthorized("essentials.home.others"))
 		{
 			User u;
@@ -31,9 +33,9 @@ public class Commandhome extends EssentialsCommand
 			{
 				throw new Exception(Util.i18n("playerNotFound"));
 			}
-			user.getTeleport().home(u, this.getName());
+			user.getTeleport().home(u, charge);
 			return;
 		}
-		user.getTeleport().home(this.getName());
+		user.getTeleport().home(charge);
 	}
 }

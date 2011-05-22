@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.Charge;
 import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -68,7 +69,8 @@ public class Commandworld extends EssentialsCommand
 		Location loc = user.getLocation();
 		loc = new Location(world, loc.getBlockX() * factor + .5, loc.getBlockY(), loc.getBlockZ() * factor + .5);
 
-		user.canAfford(this);
-		user.getTeleport().teleport(loc, this.getName());
+		Charge charge = new Charge(this);
+		charge.isAffordableFor(user);
+		user.getTeleport().teleport(loc, charge);
 	}
 }

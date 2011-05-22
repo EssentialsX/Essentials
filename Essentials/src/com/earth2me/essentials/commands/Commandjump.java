@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.Charge;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import com.earth2me.essentials.TargetBlock;
@@ -35,7 +36,8 @@ public class Commandjump extends EssentialsCommand
 			throw new Exception(Util.i18n("jumpError"), ex);
 		}
 
-		user.canAfford(this);
-		user.getTeleport().teleport(loc, this.getName());
+		Charge charge = new Charge(this);
+		charge.isAffordableFor(user);
+		user.getTeleport().teleport(loc, charge);
 	}
 }

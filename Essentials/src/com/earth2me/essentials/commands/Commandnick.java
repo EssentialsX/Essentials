@@ -2,7 +2,6 @@ package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
-import com.earth2me.essentials.Essentials;
 import org.bukkit.entity.Player;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
@@ -67,7 +66,7 @@ public class Commandnick extends EssentialsCommand
 			}
 		}
 
-		user.charge(this);
+		charge(user);
 		user.setDisplayName(ess.getConfiguration().getString("nickname-prefix", "~") + nick);
 		user.setNickname(nick);
 		user.sendMessage(Util.format("nickSet", user.getDisplayName() + "§7."));

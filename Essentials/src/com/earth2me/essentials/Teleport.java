@@ -44,10 +44,10 @@ public class Teleport implements Runnable
 	private long initY;
 	private long initZ;
 	private Target teleportTarget;
-	private String chargeFor;
+	private Charge chargeFor;
 	private Essentials ess;
 
-	private void initTimer(long delay, Target target, String chargeFor)
+	private void initTimer(long delay, Target target, Charge chargeFor)
 	{
 		this.started = System.currentTimeMillis();
 		this.delay = delay;
@@ -91,7 +91,7 @@ public class Teleport implements Runnable
 					now(teleportTarget);
 					if (chargeFor != null)
 					{
-						user.charge(chargeFor);
+						chargeFor.charge(user);
 					}
 				}
 				catch (Throwable ex)
@@ -113,12 +113,12 @@ public class Teleport implements Runnable
 		this.ess = ess;
 	}
 
-	public void respawn(Spawn spawn, String chargeFor) throws Exception
+	public void respawn(Spawn spawn, Charge chargeFor) throws Exception
 	{
 		teleport(new Target(spawn.getSpawn(user.getGroup())), chargeFor);
 	}
 
-	public void warp(String warp, String chargeFor) throws Exception
+	public void warp(String warp, Charge chargeFor) throws Exception
 	{
 		Location loc = Essentials.getWarps().getWarp(warp);
 		teleport(new Target(loc), chargeFor);
@@ -172,27 +172,28 @@ public class Teleport implements Runnable
 		cancel(false);
 	}
 
-	public void teleport(Location loc, String name) throws Exception
+	public void teleport(Location loc, Charge chargeFor) throws Exception
 	{
-		teleport(new Target(loc), name);
+		teleport(new Target(loc), chargeFor);
 	}
 
-	public void teleport(Entity entity, String name) throws Exception
+	public void teleport(Entity entity, Charge chargeFor) throws Exception
 	{
-		teleport(new Target(entity), name);
+		teleport(new Target(entity), chargeFor);
 	}
 
-	private void teleport(Target target, String chargeFor) throws Exception
+	private void teleport(Target target, Charge chargeFor) throws Exception
 	{
 		double delay = ess.getSettings().getTeleportDelay();
 
+		chargeFor.isAffordableFor(user);
 		cooldown(true);
 		if (delay <= 0 || user.isAuthorized("essentials.teleport.timer.bypass"))
 		{
 			now(target);
 			if (chargeFor != null)
 			{
-				user.charge(chargeFor);
+				chargeFor.charge(user);
 			}
 			return;
 		}
@@ -224,7 +225,7 @@ public class Teleport implements Runnable
 		now(new Target(entity));
 	}
 
-	public void back(final String chargeFor) throws Exception
+	public void back(final Charge chargeFor) throws Exception
 	{
 		teleport(new Target(user.getLastLocation()), chargeFor);
 	}
@@ -234,12 +235,12 @@ public class Teleport implements Runnable
 		back(null);
 	}
 
-	public void home(String chargeFor) throws Exception
+	public void home(Charge chargeFor) throws Exception
 	{
 		home(user, chargeFor);
 	}
 
-	public void home(User user, String chargeFor) throws Exception
+	public void home(User user, Charge chargeFor) throws Exception
 	{
 		Location loc = user.getHome(this.user.getLocation());
 		if (loc == null)

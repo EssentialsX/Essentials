@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.Charge;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import org.bukkit.Server;
@@ -15,8 +16,9 @@ public class Commandback extends EssentialsCommand
 	@Override
 	protected void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		user.canAfford(this);
+		Charge charge = new Charge(this);
+		charge.isAffordableFor(user);
 		user.sendMessage(Util.i18n("backUsageMsg"));
-		user.getTeleport().back(this.getName());
+		user.getTeleport().back(charge);
 	}
 }
