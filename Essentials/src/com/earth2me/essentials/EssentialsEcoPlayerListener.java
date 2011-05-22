@@ -31,7 +31,7 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 			return;
 		}
 		User user = ess.getUser(event.getPlayer());
-		String username = user.getName().substring(0, user.getName().length() > 14 ? 14 : user.getName().length());
+		String username = user.getName().substring(0, user.getName().length() > 13 ? 13 : user.getName().length());
 		if (event.getClickedBlock().getType() != Material.WALL_SIGN && event.getClickedBlock().getType() != Material.SIGN_POST)
 		{
 			return;
@@ -91,8 +91,8 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 		{
 			try
 			{
-				String[] l1 = sign.getLines()[1].split("[ :-]+");
-				String[] l2 = sign.getLines()[2].split("[ :-]+");
+				String[] l1 = sign.getLine(1).split("[ :-]+");
+				String[] l2 = sign.getLine(2).split("[ :-]+");
 				boolean m1 = l1[0].matches("[^0-9][0-9]+(\\.[0-9]+)?");
 				boolean m2 = l2[0].matches("[^0-9][0-9]+(\\.[0-9]+)?");
 				double q1 = Double.parseDouble(m1 ? l1[0].substring(1) : l1[0]);
@@ -110,7 +110,7 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 				ItemStack qi1 = m1 ? null : ItemDb.get(l1[1], (int)q1);
 				ItemStack qi2 = m2 ? null : ItemDb.get(l2[1], (int)q2);
 
-				if (username.equals(sign.getLines()[3].substring(2)))
+				if (username.equals(sign.getLine(3).substring(2)))
 				{
 					if (m1)
 					{

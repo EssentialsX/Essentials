@@ -30,7 +30,7 @@ public class EssentialsEcoBlockListener extends BlockListener
 			return;
 		}
 		User user = ess.getUser(event.getPlayer());
-		String username = user.getName().substring(0, user.getName().length() > 14 ? 14 : user.getName().length());
+		String username = user.getName().substring(0, user.getName().length() > 13 ? 13 : user.getName().length());
 		if (event.getBlock().getType() != Material.WALL_SIGN && event.getBlock().getType() != Material.SIGN_POST)
 		{
 			return;
@@ -101,7 +101,7 @@ public class EssentialsEcoBlockListener extends BlockListener
 			return;
 		}
 		User user = ess.getUser(event.getPlayer());
-		String username = user.getName().substring(0, user.getName().length() > 14 ? 14 : user.getName().length());
+		String username = user.getName().substring(0, user.getName().length() > 13 ? 13 : user.getName().length());
 
 		if ((event.getLine(0).equalsIgnoreCase("[Buy]") || event.getLine(0).equalsIgnoreCase("#1[Buy]")) && user.isAuthorized("essentials.signs.buy.create"))
 		{
