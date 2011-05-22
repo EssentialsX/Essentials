@@ -190,6 +190,7 @@ public class Teleport implements Runnable
 		cooldown(true);
 		if (delay <= 0 || user.isAuthorized("essentials.teleport.timer.bypass"))
 		{
+			cooldown(false);
 			now(target);
 			if (chargeFor != null)
 			{
@@ -217,11 +218,20 @@ public class Teleport implements Runnable
 
 	public void now(Location loc) throws Exception
 	{
+		cooldown(false);
+		now(new Target(loc));
+	}
+	
+	public void now(Location loc, Charge chargeFor) throws Exception
+	{
+		cooldown(false);
+		chargeFor.charge(user);
 		now(new Target(loc));
 	}
 
 	public void now(Entity entity) throws Exception
 	{
+		cooldown(false);
 		now(new Target(entity));
 	}
 

@@ -162,7 +162,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			event.setTo(loc);
 			try
 			{
-				user.getTeleport().teleport(loc, new Charge("portal"));
+				user.getTeleport().now(loc, new Charge("portal"));
 			}
 			catch (Exception ex)
 			{
