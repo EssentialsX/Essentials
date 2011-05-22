@@ -18,8 +18,11 @@ public class EssentialsProtectWeatherListener extends WeatherListener
 	@Override
 	public void onWeatherChange(WeatherChangeEvent event)
 	{
-		if (event.isCancelled()) return;
-		if(EssentialsProtect.playerSettings.get("protect.disable.weather.storm") && event.toWeatherState())
+		if (event.isCancelled())
+		{
+			return;
+		}
+		if (EssentialsProtect.playerSettings.get("protect.disable.weather.storm") && event.toWeatherState())
 		{
 			event.setCancelled(true);
 			return;
@@ -30,8 +33,11 @@ public class EssentialsProtectWeatherListener extends WeatherListener
 	@Override
 	public void onLightningStrike(LightningStrikeEvent event)
 	{
-		if (event.isCancelled()) return;
-		if(EssentialsProtect.playerSettings.get("protect.disable.weather.lightning"))
+		if (event.isCancelled())
+		{
+			return;
+		}
+		if (EssentialsProtect.playerSettings.get("protect.disable.weather.lightning"))
 		{
 			event.setCancelled(true);
 			return;
@@ -41,8 +47,11 @@ public class EssentialsProtectWeatherListener extends WeatherListener
 	@Override
 	public void onThunderChange(ThunderChangeEvent event)
 	{
-		if (event.isCancelled()) return;
-		if(EssentialsProtect.playerSettings.get("protect.disable.weather.thunder") && event.toThunderState())
+		if (event.isCancelled())
+		{
+			return;
+		}
+		if (EssentialsProtect.playerSettings.get("protect.disable.weather.thunder") && event.toThunderState())
 		{
 			event.setCancelled(true);
 			return;
