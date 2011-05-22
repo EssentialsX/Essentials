@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import org.bukkit.Server;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import java.util.logging.Level;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -50,6 +51,10 @@ public class Commandtpall extends EssentialsCommand
 			catch (Exception ex)
 			{
 				sender.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
+				if (ess.getSettings().isDebug())
+				{
+					logger.log(Level.WARNING, ex.getMessage(), ex);
+				}
 			}
 		}
 	}

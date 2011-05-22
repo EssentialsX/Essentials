@@ -2,6 +2,8 @@ package com.earth2me.essentials;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
@@ -46,6 +48,7 @@ public class Teleport implements Runnable
 	private Target teleportTarget;
 	private Charge chargeFor;
 	private Essentials ess;
+	private static final Logger logger = Logger.getLogger("Minecraft");
 
 	private void initTimer(long delay, Target target, Charge chargeFor)
 	{
@@ -97,6 +100,10 @@ public class Teleport implements Runnable
 				catch (Throwable ex)
 				{
 					user.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
+					if (ess.getSettings().isDebug())
+					{
+						logger.log(Level.WARNING, ex.getMessage(), ex);
+					}
 				}
 				return;
 			}

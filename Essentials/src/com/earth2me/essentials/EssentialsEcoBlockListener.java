@@ -1,5 +1,7 @@
 package com.earth2me.essentials;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.craftbukkit.block.CraftSign;
@@ -12,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 public class EssentialsEcoBlockListener extends BlockListener
 {
 	Essentials ess;
+	private static final Logger logger = Logger.getLogger("Minecraft");
 
 	public EssentialsEcoBlockListener(Essentials ess)
 	{
@@ -88,6 +91,10 @@ public class EssentialsEcoBlockListener extends BlockListener
 			catch (Throwable ex)
 			{
 				user.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
+				if (ess.getSettings().isDebug())
+				{
+					logger.log(Level.WARNING, ex.getMessage(), ex);
+				}
 			}
 			return;
 		}
@@ -120,6 +127,10 @@ public class EssentialsEcoBlockListener extends BlockListener
 			catch (Throwable ex)
 			{
 				user.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
+				if (ess.getSettings().isDebug())
+				{
+					logger.log(Level.WARNING, ex.getMessage(), ex);
+				}
 				event.setLine(0, "§4[Buy]");
 				event.setLine(1, "#");
 				event.setLine(2, "Item");
@@ -145,6 +156,10 @@ public class EssentialsEcoBlockListener extends BlockListener
 			catch (Throwable ex)
 			{
 				user.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
+				if (ess.getSettings().isDebug())
+				{
+					logger.log(Level.WARNING, ex.getMessage(), ex);
+				}
 				event.setLine(0, "§4[Sell]");
 				event.setLine(1, "#");
 				event.setLine(2, "Item");
@@ -202,6 +217,10 @@ public class EssentialsEcoBlockListener extends BlockListener
 			catch (Throwable ex)
 			{
 				user.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
+				if (ess.getSettings().isDebug())
+				{
+					logger.log(Level.WARNING, ex.getMessage(), ex);
+				}
 				event.setLine(0, "§4[Trade]");
 				event.setLine(1, "# ItemOr" + ess.getSettings().getCurrencySymbol());
 				event.setLine(2, "# ItemOr" + ess.getSettings().getCurrencySymbol() + ":#");

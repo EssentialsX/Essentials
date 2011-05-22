@@ -478,6 +478,10 @@ public class EssentialsPlayerListener extends PlayerListener
 		catch (Throwable ex)
 		{
 			user.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
+			if (ess.getSettings().isDebug())
+			{
+				logger.log(Level.WARNING, ex.getMessage(), ex);
+			}
 		}
 	}
 	

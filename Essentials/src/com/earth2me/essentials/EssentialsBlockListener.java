@@ -1,6 +1,8 @@
 package com.earth2me.essentials;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.craftbukkit.block.CraftSign;
@@ -11,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 public class EssentialsBlockListener extends BlockListener
 {
 	private final Essentials ess;
+	private static final Logger logger = Logger.getLogger("Minecraft");
 	public final static ArrayList<Material> protectedBlocks = new ArrayList<Material>(4);
 
 	static
@@ -150,6 +153,10 @@ public class EssentialsBlockListener extends BlockListener
 		catch (Throwable ex)
 		{
 			user.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
+			if (ess.getSettings().isDebug())
+			{
+				logger.log(Level.WARNING, ex.getMessage(), ex);
+			}
 		}
 	}
 

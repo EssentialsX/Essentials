@@ -1,6 +1,8 @@
 package com.earth2me.essentials;
 
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.craftbukkit.block.CraftSign;
@@ -13,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 public class EssentialsEcoPlayerListener extends PlayerListener
 {
 	Essentials ess;
+	private static final Logger logger = Logger.getLogger("Minecraft");
 
 	EssentialsEcoPlayerListener(Essentials ess)
 	{
@@ -60,6 +63,10 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 			catch (Throwable ex)
 			{
 				user.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
+				if (ess.getSettings().isDebug())
+				{
+					logger.log(Level.WARNING, ex.getMessage(), ex);
+				}
 			}
 			return;
 		}
@@ -83,6 +90,10 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 			catch (Throwable ex)
 			{
 				user.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
+				if (ess.getSettings().isDebug())
+				{
+					logger.log(Level.WARNING, ex.getMessage(), ex);
+				}
 			}
 			return;
 		}
@@ -189,6 +200,10 @@ public class EssentialsEcoPlayerListener extends PlayerListener
 			catch (Throwable ex)
 			{
 				user.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
+				if (ess.getSettings().isDebug())
+				{
+					logger.log(Level.WARNING, ex.getMessage(), ex);
+				}
 			}
 			return;
 		}
