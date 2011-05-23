@@ -137,38 +137,46 @@ public class EssentialsUpgrade
 				continue;
 			}
 			EssentialsConf config = new EssentialsConf(file);
-			config.load();
-			if (config.hasProperty("home") && !config.hasProperty("home.default"))
+			try
 			{
-				@SuppressWarnings("unchecked")
-				List<Object> vals = (List<Object>)config.getProperty("home");
-				if (vals == null) {
-					continue;
-				}
-				World world = ess.getServer().getWorlds().get(0);
-				if (vals.size() > 5)
+				config.load();
+				if (config.hasProperty("home") && !config.hasProperty("home.default"))
 				{
-					world = ess.getServer().getWorld((String)vals.get(5));
-				}
-				if (world != null)
-				{
-					Location loc = new Location(
-							world,
-							((Number)vals.get(0)).doubleValue(),
-							((Number)vals.get(1)).doubleValue(),
-							((Number)vals.get(2)).doubleValue(),
-							((Number)vals.get(3)).floatValue(),
-							((Number)vals.get(4)).floatValue());
-
-					String worldName = world.getName().toLowerCase();
-					if (worldName != null && !worldName.isEmpty())
+					@SuppressWarnings("unchecked")
+					List<Object> vals = (List<Object>)config.getProperty("home");
+					if (vals == null) {
+						continue;
+					}
+					World world = ess.getServer().getWorlds().get(0);
+					if (vals.size() > 5)
 					{
-						config.removeProperty("home");
-						config.setProperty("home.default", worldName);
-						config.setProperty("home.worlds." + worldName, loc);
-						config.save();
+						world = ess.getServer().getWorld((String)vals.get(5));
+					}
+					if (world != null)
+					{
+						Location loc = new Location(
+								world,
+								((Number)vals.get(0)).doubleValue(),
+								((Number)vals.get(1)).doubleValue(),
+								((Number)vals.get(2)).doubleValue(),
+								((Number)vals.get(3)).floatValue(),
+								((Number)vals.get(4)).floatValue());
+
+						String worldName = world.getName().toLowerCase();
+						if (worldName != null && !worldName.isEmpty())
+						{
+							config.removeProperty("home");
+							config.setProperty("home.default", worldName);
+							config.setProperty("home.worlds." + worldName, loc);
+							config.save();
+						}
 					}
 				}
+			}
+			catch (RuntimeException ex)
+			{
+				logger.log(Level.INFO, "File: "+file.toString());
+				throw ex;
 			}
 		}
 	}
