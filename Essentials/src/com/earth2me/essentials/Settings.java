@@ -101,16 +101,16 @@ public class Settings implements IConf
 		return config.getBoolean("override-" + name.toLowerCase(), false);
 	}
 
-	public int getCommandCost(IEssentialsCommand cmd)
+	public double getCommandCost(IEssentialsCommand cmd)
 	{
 		return getCommandCost(cmd.getName());
 	}
 
-	public int getCommandCost(String label)
+	public double getCommandCost(String label)
 	{
-		int cost = config.getInt("command-costs." + label, 0);
-		if (cost == 0)
-			cost = config.getInt("cost-" + label, 0);
+		double cost = config.getDouble("command-costs." + label, 0.0);
+		if (cost == 0.0)
+			cost = config.getDouble("cost-" + label, 0.0);
 		return cost;
 	}
 

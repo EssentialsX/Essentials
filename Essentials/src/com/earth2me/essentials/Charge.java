@@ -66,14 +66,13 @@ public class Charge
 	public void charge(User user) throws Exception
 	{
 		double mon = user.getMoney();
-		if (costs != null && costs != 0.0)
+		if (costs != null)
 		{
 			if (mon < costs && !user.isAuthorized("essentials.eco.loan"))
 			{
 				throw new Exception(Util.i18n("notEnoughMoney"));
 			}
 			user.takeMoney(costs);
-			user.sendMessage(Util.format("moneyTaken", Util.formatCurrency(costs)));
 		}
 		if (items != null)
 		{
@@ -92,16 +91,12 @@ public class Charge
 				return;
 			}
 
-			int cost = ess.getSettings().getCommandCost(command.startsWith("/") ? command.substring(1) : command);
-			if (cost != 0)
+			double cost = ess.getSettings().getCommandCost(command.startsWith("/") ? command.substring(1) : command);
+			if (mon < cost && !user.isAuthorized("essentials.eco.loan"))
 			{
-				if (mon < cost && !user.isAuthorized("essentials.eco.loan"))
-				{
-					throw new Exception(Util.i18n("notEnoughMoney"));
-				}
-				user.takeMoney(cost);
-				user.sendMessage(Util.format("moneyTaken", Util.formatCurrency(cost)));
+				throw new Exception(Util.i18n("notEnoughMoney"));
 			}
+			user.takeMoney(cost);
 		}
 	}
 }
