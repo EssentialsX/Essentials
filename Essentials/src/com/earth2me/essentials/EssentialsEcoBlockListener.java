@@ -188,7 +188,7 @@ public class EssentialsEcoBlockListener extends BlockListener
 				boolean m2 = l2[0].matches("[^0-9][0-9]+(\\.[0-9]+)?");
 				double q1 = Double.parseDouble(m1 ? l1[0].substring(1) : l1[0]);
 				double q2 = Double.parseDouble(m2 ? l2[0].substring(1) : l2[0]);
-				if (m1 ? l2.length != 1 : l2.length != 2)
+				if (m1 ? l1.length != 1 : l1.length != 2)
 				{
 					throw new Exception(Util.format("invalidSignLine", 2));
 				}
