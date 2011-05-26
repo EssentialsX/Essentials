@@ -13,6 +13,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.CraftServer;
+import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
@@ -216,7 +217,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 					}
 				}
 
-				((CraftServer)parent.getServer()).getHandle().a(loc.getX(), loc.getY(), loc.getZ(), 64.0D,
+				((CraftServer)parent.getServer()).getHandle().a(loc.getX(), loc.getY(), loc.getZ(), 64.0D, ((CraftWorld)loc.getWorld()).getHandle().worldProvider.dimension,
 																new Packet60Explosion(loc.getX(), loc.getY(), loc.getZ(), 3.0f, set));
 				event.setCancelled(true);
 				return;
