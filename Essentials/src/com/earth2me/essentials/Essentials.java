@@ -29,7 +29,6 @@ import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import com.earth2me.essentials.register.payment.Methods;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.scheduler.CraftScheduler;
 import org.bukkit.entity.Player;
@@ -383,15 +382,7 @@ public class Essentials extends JavaPlugin
 				{
 					continue;
 				}
-
-				PluginCommand pcmd = getServer().getPluginCommand(desc.getName() + ":" + commandLabel);
-
-				if (pcmd == null)
-				{
-					continue;
-				}
-
-				return getServer().getPluginCommand(p.getDescription().getName() + ":" + commandLabel).execute(sender, commandLabel, args);
+				return p.onCommand(sender, command, commandLabel, args);
 			}
 		}
 
