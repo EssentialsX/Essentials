@@ -42,7 +42,7 @@ public class iCo5 implements Method {
     }
 
     public boolean hasBankAccount(String bank, String name) {
-        return (hasBank(bank)) ? false : this.iConomy.getBank(name).hasAccount(name);
+        return (!hasBank(bank)) ? false : this.iConomy.getBank(bank).hasAccount(name);
     }
 
     public MethodAccount getAccount(String name) {
