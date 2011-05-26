@@ -26,7 +26,7 @@ public class Commandkickall extends EssentialsCommand
 			}
 			else
 			{
-				p.kickPlayer(args.length < 1 ? getFinalArg(args, 0) : Util.i18n("kickDefault"));
+				p.kickPlayer(args.length > 0 ? getFinalArg(args, 0) : Util.i18n("kickDefault"));
 			}
 		}
 	}
