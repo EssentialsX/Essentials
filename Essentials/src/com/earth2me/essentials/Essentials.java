@@ -356,7 +356,7 @@ public class Essentials extends JavaPlugin
 		{
 			for (Plugin p : getServer().getPluginManager().getPlugins())
 			{
-				if (p == this)
+				if (p.getDescription().getMain().contains("com.earth2me.essentials"))
 				{
 					continue;
 				}
