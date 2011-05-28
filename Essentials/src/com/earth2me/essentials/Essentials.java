@@ -27,6 +27,7 @@ import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import com.earth2me.essentials.register.payment.Methods;
+import java.math.BigInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
@@ -60,8 +61,11 @@ public class Essentials extends JavaPlugin
 	private Backup backup;
 	private Map<String, User> users = new HashMap<String, User>();
 	private EssentialsTimer timer;
+	private EssentialsUpdateTimer updateTimer;
 	private boolean registerFallback = true;
 	private Methods paymentMethod = new Methods();
+	private boolean enableErrorLogging = false;
+	private EssentialsErrorHandler errorHandler = new EssentialsErrorHandler();
 
 	public Essentials()
 	{
@@ -96,6 +100,10 @@ public class Essentials extends JavaPlugin
 
 	public void onEnable()
 	{
+		if (enableErrorLogging)
+		{
+			logger.addHandler(errorHandler);
+		}
 		setStatic();
 		EssentialsUpgrade upgrade = new EssentialsUpgrade(this.getDescription().getVersion(), this);
 		upgrade.beforeSettings();
@@ -184,13 +192,18 @@ public class Essentials extends JavaPlugin
 
 		timer = new EssentialsTimer(this);
 		getScheduler().scheduleSyncRepeatingTask(this, timer, 1, 50);
-
+		if (enableErrorLogging)
+		{
+			updateTimer = new EssentialsUpdateTimer(this);
+			getScheduler().scheduleAsyncRepeatingTask(this, updateTimer, 50, 50 * 60 * (this.getDescription().getVersion().startsWith("Dev") ? 60 : 360));
+		}
 		logger.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), AUTHORS));
 	}
 
 	public void onDisable()
 	{
 		instance = null;
+		logger.removeHandler(errorHandler);
 	}
 
 	public void reload()
@@ -201,7 +214,7 @@ public class Essentials extends JavaPlugin
 		{
 			iConf.reloadConfig();
 		}
-		
+
 		Util.updateLocale(settings.getLocale(), this.getDataFolder());
 
 		for (User user : users.values())
@@ -451,10 +464,20 @@ public class Essentials extends JavaPlugin
 			}
 			catch (Throwable ex)
 			{
-				sender.sendMessage(Util.format("errorWithMessage",  ex.getMessage()));
+				sender.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
+				LogRecord lr = new LogRecord(Level.WARNING, Util.format("errorCallingCommand", commandLabel));
+				lr.setThrown(ex);
 				if (getSettings().isDebug())
 				{
-					logger.log(Level.WARNING, Util.format("errorCallingCommand", commandLabel), ex);
+					logger.log(lr);
+				}
+				else
+				{
+					if (enableErrorLogging)
+					{
+						errorHandler.publish(lr);
+						errorHandler.flush();
+					}
 				}
 				return true;
 			}
@@ -658,18 +681,25 @@ public class Essentials extends JavaPlugin
 	{
 		return paymentMethod;
 	}
-	
-	public int broadcastMessage(String name, String message) {
-        Player[] players = getServer().getOnlinePlayers();
 
-        for (Player player : players) {
+	public int broadcastMessage(String name, String message)
+	{
+		Player[] players = getServer().getOnlinePlayers();
+
+		for (Player player : players)
+		{
 			User u = getUser(player);
 			if (!u.isIgnoredPlayer(name))
 			{
 				player.sendMessage(message);
 			}
-        }
+		}
 
-        return players.length;
-    }
+		return players.length;
+	}
+	
+	public Map<BigInteger, String> getErrors()
+	{
+		return errorHandler.errors;
+	}
 }
