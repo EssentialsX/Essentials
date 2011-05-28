@@ -42,7 +42,7 @@ import org.bukkit.plugin.java.*;
 public class Essentials extends JavaPlugin
 {
 	public static final String AUTHORS = "Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans and Xeology";
-	public static final int minBukkitBuildVersion = 812;
+	public static final int minBukkitBuildVersion = 815;
 	private static final Logger logger = Logger.getLogger("Minecraft");
 	private Settings settings;
 	private EssentialsPlayerListener playerListener;
