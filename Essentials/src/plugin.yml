@@ -228,7 +228,10 @@ commands:
     aliases: [esetworth]
   socialspy:
     description: Toggles if you can see /msg and /mail commands in chat.
-    usage: /<command> 
+    usage: /<command>
+  spawner:
+    description: Change the mob type of a spawner
+    usage: /<command> [mob]
   spawnmob:
     description: Spawns a mob.
     usage: /<command> [mob]<:data><,mount<:data>> <amount>
