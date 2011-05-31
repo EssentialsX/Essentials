@@ -93,6 +93,9 @@ public class UtilTest extends TestCase
 		a = new GregorianCalendar(2010, 9, 17, 23, 45, 45);
 		b = new GregorianCalendar(2015, 3, 7, 10, 0, 0);
 		assertEquals(" 4 years 5 months 20 days 10 hours 14 minutes 15 seconds", Util.formatDateDiff(a, b));
+		a = new GregorianCalendar(2011, 4, 31, 10, 0, 0);
+		b = new GregorianCalendar(2011, 4, 31, 10, 5, 0);
+		assertEquals(" 5 minutes", Util.formatDateDiff(a, b));
 	}
 	
 	public void testFDDpast() {

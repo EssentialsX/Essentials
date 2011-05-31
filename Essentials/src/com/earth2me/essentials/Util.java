@@ -97,15 +97,17 @@ public class Util
 	}
 
 	private static int dateDiff(int type, Calendar fromDate, Calendar toDate, boolean future)
-	{
+	{	 
 		int diff = 0;
+		long savedDate = fromDate.getTimeInMillis();
 		while ((future && !fromDate.after(toDate)) || (!future && !fromDate.before(toDate)))
 		{
+			savedDate = fromDate.getTimeInMillis();
 			fromDate.add(type, future ? 1 : -1);
 			diff++;
 		}
 		diff--;
-		fromDate.add(type, future ? -1 : 1);
+		fromDate.setTimeInMillis(savedDate);
 		return diff;
 	}
 
