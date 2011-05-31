@@ -187,7 +187,8 @@ public class Essentials extends JavaPlugin
 
 		if (settings.isNetherEnabled() && getServer().getWorlds().size() < 2)
 		{
-			getServer().createWorld(settings.getNetherName(), World.Environment.NETHER);
+			logger.log(Level.WARNING, "Old nether is disabled until multiworld support in bukkit is fixed.");
+			//getServer().createWorld(settings.getNetherName(), World.Environment.NETHER);
 		}
 
 		timer = new EssentialsTimer(this);
