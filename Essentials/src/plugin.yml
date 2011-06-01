@@ -6,7 +6,6 @@ version: TeamCity
 website: http://www.earth2me.net:8001/
 description: Provides an essential, core set of commands for Bukkit.
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology]
-softdepend: [iConomy, BOSEconomy, Permissions]
 commands:
   afk:
     description: Marks you as away-from-keyboard.
