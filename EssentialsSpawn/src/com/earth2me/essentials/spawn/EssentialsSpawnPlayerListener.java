@@ -1,6 +1,7 @@
 package com.earth2me.essentials.spawn;
 
 import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.util.logging.Level;
@@ -16,11 +17,12 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerRespawn(PlayerRespawnEvent event)
 	{
-		User user = Essentials.getStatic().getUser(event.getPlayer());
+		final IEssentials ess = Essentials.getStatic();
+		final User user = ess.getUser(event.getPlayer());
 
 		try
 		{
-			if (Essentials.getStatic().getSettings().getRespawnAtHome())
+			if (ess.getSettings().getRespawnAtHome())
 			{
 				Location home = user.getHome(user.getLocation());
 				if (home == null) {
@@ -33,7 +35,7 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 		catch (Throwable ex)
 		{
 		}
-		Location spawn = Essentials.getSpawn().getSpawn(user.getGroup());
+		Location spawn = ess.getSpawn().getSpawn(user.getGroup());
 		if (spawn == null) {
 			return;
 		}
@@ -43,7 +45,8 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerJoin(PlayerJoinEvent event)
 	{
-		User user = Essentials.getStatic().getUser(event.getPlayer());
+		final IEssentials ess = Essentials.getStatic();
+		final User user = ess.getUser(event.getPlayer());
 		
 		if (!user.isNew())
 		{
@@ -51,14 +54,14 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 		}
 		user.setNew(false);
 		try {
-			user.getTeleport().now(Essentials.getSpawn().getSpawn(Essentials.getStatic().getSettings().getNewbieSpawn()));
+			user.getTeleport().now(ess.getSpawn().getSpawn(ess.getSettings().getNewbieSpawn()));
 		} catch (Exception ex) {
 			Logger.getLogger("Minecraft").log(Level.WARNING, Util.i18n("teleportNewPlayerError"), ex);
 		}
 
-		if (Essentials.getStatic().getSettings().getAnnounceNewPlayers())
+		if (ess.getSettings().getAnnounceNewPlayers())
 		{
-			Essentials.getStatic().broadcastMessage(user.getName(), Essentials.getStatic().getSettings().getAnnounceNewPlayerFormat(user));
+			ess.broadcastMessage(user.getName(), ess.getSettings().getAnnounceNewPlayerFormat(user));
 		}
 	}
 }

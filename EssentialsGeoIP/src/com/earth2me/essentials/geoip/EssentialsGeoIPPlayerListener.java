@@ -3,6 +3,7 @@ package com.earth2me.essentials.geoip;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.EssentialsConf;
 import com.earth2me.essentials.IConf;
+import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import com.maxmind.geoip.Location;
@@ -44,7 +45,7 @@ public class EssentialsGeoIPPlayerListener extends PlayerListener implements ICo
 	@Override
 	public void onPlayerJoin(PlayerJoinEvent event)
 	{
-		Essentials ess = Essentials.getStatic();
+		IEssentials ess = Essentials.getStatic();
 		User u = ess.getUser(event.getPlayer());
 		if (u.isAuthorized("essentials.geoip.hide"))
 		{

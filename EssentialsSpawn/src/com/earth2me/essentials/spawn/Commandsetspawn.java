@@ -2,6 +2,7 @@ package com.earth2me.essentials.spawn;
 
 import org.bukkit.Server;
 import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.commands.EssentialsCommand;
@@ -17,9 +18,10 @@ public class Commandsetspawn extends EssentialsCommand
 	@Override
 	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
+		final IEssentials ess = Essentials.getStatic();
 		charge(user);
-		String group = args.length > 0 ? getFinalArg(args, 0) : "default";
-		Essentials.getSpawn().setSpawn(user.getLocation(), group);
+		final String group = args.length > 0 ? getFinalArg(args, 0) : "default";
+		ess.getSpawn().setSpawn(user.getLocation(), group);
 		user.sendMessage(Util.format("spawnSet", group));
 	}
 }

@@ -3,7 +3,6 @@ package com.earth2me.essentials.protect;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;

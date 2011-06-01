@@ -4,8 +4,8 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Location;
@@ -25,16 +25,16 @@ public class EssentialsProtect extends JavaPlugin implements IConf
 	private EssentialsProtectServerListener serverListener = null;
 	public static final String AUTHORS = Essentials.AUTHORS;
 	private static final Logger logger = Logger.getLogger("Minecraft");
-	public static HashMap<String, Boolean> genSettings = null;
-	public static HashMap<String, String> dataSettings = null;
-	public static HashMap<String, Boolean> guardSettings = null;
-	public static HashMap<String, Boolean> playerSettings = null;
-	public static ArrayList<Integer> usageList = null;
-	public static ArrayList<Integer> blackListPlace = null;
-	public static ArrayList<Integer> breakBlackList = null;
-	public static ArrayList<Integer> onPlaceAlert = null;
-	public static ArrayList<Integer> onUseAlert = null;
-	public static ArrayList<Integer> onBreakAlert = null;
+	public static Map<String, Boolean> genSettings = null;
+	public static Map<String, String> dataSettings = null;
+	public static Map<String, Boolean> guardSettings = null;
+	public static Map<String, Boolean> playerSettings = null;
+	public static List<Integer> usageList = null;
+	public static List<Integer> blackListPlace = null;
+	public static List<Integer> breakBlackList = null;
+	public static List<Integer> onPlaceAlert = null;
+	public static List<Integer> onUseAlert = null;
+	public static List<Integer> onBreakAlert = null;
 
 	public EssentialsProtect()
 	{
@@ -81,7 +81,7 @@ public class EssentialsProtect extends JavaPlugin implements IConf
 		logger.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), Essentials.AUTHORS));
 	}
 
-	public static boolean checkProtectionItems(ArrayList<Integer> itemList, int id)
+	public static boolean checkProtectionItems(List<Integer> itemList, int id)
 	{
 		return !itemList.isEmpty() && itemList.contains(id);
 	}
