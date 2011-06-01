@@ -2,7 +2,6 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Charge;
 import org.bukkit.Server;
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.Warps;
@@ -27,7 +26,7 @@ public class Commandwarp extends EssentialsCommand
 				return;
 			}
 
-			Warps warps = Essentials.getWarps();
+			Warps warps = ess.getWarps();
 			if (warps.isEmpty())
 			{
 				throw new Exception(Util.i18n("noWarpsDefined"));
@@ -74,7 +73,7 @@ public class Commandwarp extends EssentialsCommand
 
 	private void warpUser(User user, String name) throws Exception
 	{
-		Charge charge = new Charge(this);
+		Charge charge = new Charge(this.getName(), ess);
 		charge.isAffordableFor(user);
 		if (ess.getSettings().getPerWarpPermission())
 		{

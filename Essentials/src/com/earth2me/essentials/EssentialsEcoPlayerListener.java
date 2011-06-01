@@ -14,10 +14,10 @@ import org.bukkit.inventory.ItemStack;
 
 public class EssentialsEcoPlayerListener extends PlayerListener
 {
-	Essentials ess;
+	private final IEssentials ess;
 	private static final Logger logger = Logger.getLogger("Minecraft");
 
-	EssentialsEcoPlayerListener(Essentials ess)
+	EssentialsEcoPlayerListener(IEssentials ess)
 	{
 		this.ess = ess;
 	}

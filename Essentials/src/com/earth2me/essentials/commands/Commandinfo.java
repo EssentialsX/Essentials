@@ -45,16 +45,25 @@ public class Commandinfo extends EssentialsCommand
 		}
 		if (file.exists())
 		{
-			BufferedReader rx = new BufferedReader(new FileReader(file));
-			int i = 0;
-			for (String l = null; rx.ready() && (l = rx.readLine()) != null; i++)
+			final BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+			try
 			{
-				if (l.startsWith("#"))
+				int lineNumber = 0;
+				while (bufferedReader.ready())
 				{
-					bookmarks.put(l.substring(1).toLowerCase().replaceAll("&[0-9a-f]", ""), i);
-					chapters.add(l.substring(1).replace('&', '§'));
+					final String line = bufferedReader.readLine();
+					if (line.length() > 0 && line.charAt(0) == '#')
+					{
+						bookmarks.put(line.substring(1).toLowerCase().replaceAll("&[0-9a-f]", ""), lineNumber);
+						chapters.add(line.substring(1).replace('&', '§'));
+					}
+					lines.add(line.replace('&', '§'));
+					lineNumber++;
 				}
-				lines.add(l.replace('&', '§'));
+			}
+			finally
+			{
+				bufferedReader.close();
 			}
 		}
 		else

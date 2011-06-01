@@ -10,9 +10,9 @@ import org.bukkit.plugin.InvalidDescriptionException;
 
 public class UserTest extends TestCase
 {
-	private OfflinePlayer base1;
-	private Essentials ess;
-	private FakeServer server;
+	private final OfflinePlayer base1;
+	private final Essentials ess;
+	private final FakeServer server;
 
 	public UserTest(String testName)
 	{

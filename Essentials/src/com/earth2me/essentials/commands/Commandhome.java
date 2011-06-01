@@ -16,7 +16,7 @@ public class Commandhome extends EssentialsCommand
 	@Override
 	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		Charge charge = new Charge(this);
+		Charge charge = new Charge(this.getName(), ess);
 		charge.isAffordableFor(user);
 		if(args.length > 0 && user.isAuthorized("essentials.home.others"))
 		{

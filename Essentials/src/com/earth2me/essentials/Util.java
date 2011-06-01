@@ -29,8 +29,11 @@ import org.bukkit.block.Block;
 
 public class Util
 {
+	private Util()
+	{
+	}
 	private final static Logger logger = Logger.getLogger("Minecraft");
-	
+
 	public static String sanitizeFileName(String name)
 	{
 		return name.toLowerCase().replaceAll("[^a-z0-9]", "_");
@@ -97,7 +100,7 @@ public class Util
 	}
 
 	private static int dateDiff(int type, Calendar fromDate, Calendar toDate, boolean future)
-	{	 
+	{
 		int diff = 0;
 		long savedDate = fromDate.getTimeInMillis();
 		while ((future && !fromDate.after(toDate)) || (!future && !fromDate.before(toDate)))
@@ -296,11 +299,16 @@ public class Util
 		return Math.round(d * 100.0) / 100.0;
 	}
 
+	public static Locale getCurrentLocale()
+	{
+		return currentLocale;
+	}
+
 
 	private static class ConfigClassLoader extends ClassLoader
 	{
-		private File dataFolder;
-		private ClassLoader cl;
+		private final File dataFolder;
+		private final ClassLoader cl;
 
 		public ConfigClassLoader(File dataFolder, ClassLoader cl)
 		{
@@ -389,16 +397,17 @@ public class Util
 		}
 	}
 	private static final Locale defaultLocale = Locale.getDefault();
-	public static Locale currentLocale = defaultLocale;
+	private static Locale currentLocale = defaultLocale;
 	private static ResourceBundle bundle = ResourceBundle.getBundle("messages", defaultLocale);
 	private static ResourceBundle defaultBundle = ResourceBundle.getBundle("messages", Locale.US);
 
 	public static String i18n(String string)
 	{
-		try {
+		try
+		{
 			return bundle.getString(string);
 		}
-		catch (MissingResourceException ex) 
+		catch (MissingResourceException ex)
 		{
 			logger.log(Level.WARNING, String.format("Missing translation key \"%s\" in translation file %s", ex.getKey(), bundle.getLocale().toString()), ex);
 			return defaultBundle.getString(string);
@@ -432,7 +441,8 @@ public class Util
 		}
 		logger.log(Level.INFO, String.format("Using locale %s", currentLocale.toString()));
 		bundle = ResourceBundle.getBundle("messages", currentLocale, new ConfigClassLoader(dataFolder, Util.class.getClassLoader()));
-		if (!bundle.keySet().containsAll(defaultBundle.keySet())) {
+		if (!bundle.keySet().containsAll(defaultBundle.keySet()))
+		{
 			logger.log(Level.WARNING, String.format("Translation file %s does not contain all translation keys.", currentLocale.toString()));
 		}
 	}

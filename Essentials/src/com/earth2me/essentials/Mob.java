@@ -2,6 +2,8 @@ package com.earth2me.essentials;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.minecraft.server.Entity;
 import net.minecraft.server.WorldServer;
@@ -68,7 +70,7 @@ public enum Mob
 	public Enemies type;
 	private String entityClass;
 	private String craftClass;
-	private static final HashMap<String, Mob> hashMap = new HashMap<String, Mob>();
+	private static final Map<String, Mob> hashMap = new HashMap<String, Mob>();
 
 	static
 	{
@@ -93,9 +95,8 @@ public enum Mob
 		}
 		catch (Exception ex)
 		{
-			logger.warning(Util.i18n("unableToSpawnMob"));
-			ex.printStackTrace();
-			throw new MobException();
+			logger.log(Level.WARNING, Util.i18n("unableToSpawnMob"), ex);
+			throw new MobException(ex);
 		}
 	}
 
@@ -114,9 +115,14 @@ public enum Mob
 	}
 
 
-	public class MobException extends Exception
+	public static class MobException extends Exception
 	{
 		private static final long serialVersionUID = 1L;
+
+		private MobException(Exception ex)
+		{
+			super(ex);
+		}
 	}
 
 	public static Mob fromName(String n)

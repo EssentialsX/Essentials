@@ -21,7 +21,7 @@ public class Commandtop extends EssentialsCommand
 		int topZ = user.getLocation().getBlockZ();
 		int topY = user.getWorld().getHighestBlockYAt(topX, topZ);
 		charge(user);
-		user.getTeleport().teleport(new Location(user.getWorld(), user.getLocation().getX(), topY + 1, user.getLocation().getZ()), new Charge(this));
+		user.getTeleport().teleport(new Location(user.getWorld(), user.getLocation().getX(), topY + 1, user.getLocation().getZ()), new Charge(this.getName(), ess));
 		user.sendMessage(Util.i18n("teleportTop"));
 	}
 }

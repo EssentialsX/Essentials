@@ -10,17 +10,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
-public class User extends UserData implements Comparable<User>, IReplyTo
+public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 {
 	private static final Logger logger = Logger.getLogger("Minecraft");
 	private boolean justPortaled = false;
 	private CommandSender replyTo = null;
 	private User teleportRequester;
 	private boolean teleportRequestHere;
-	private Teleport teleport;
+	private final Teleport teleport;
 	private long lastActivity;
 
-	User(Player base, Essentials ess)
+	User(Player base, IEssentials ess)
 	{
 		super(base, ess);
 		teleport = new Teleport(this, ess);
@@ -120,14 +120,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo
 	public boolean canAfford(double cost)
 	{
 		double mon = getMoney();
-		if (mon < cost && !isAuthorized("essentials.eco.loan"))
-		{
-			return false;
-		}
-		else
-		{
-			return true;
-		}
+		return mon >= cost || isAuthorized("essentials.eco.loan");
 	}
 
 	public void dispose()
@@ -158,6 +151,23 @@ public class User extends UserData implements Comparable<User>, IReplyTo
 	public int compareTo(User t)
 	{
 		return ChatColor.stripColor(this.getDisplayName()).compareToIgnoreCase(ChatColor.stripColor(t.getDisplayName()));
+	}
+
+	@Override
+	public boolean equals(Object o)
+	{
+		if (!(o instanceof User))
+		{
+			return false;
+		}
+		return ChatColor.stripColor(this.getDisplayName()).equalsIgnoreCase(ChatColor.stripColor(((User) o).getDisplayName()));
+	
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return ChatColor.stripColor(this.getDisplayName()).hashCode();
 	}
 
 	public Boolean canSpawnItem(int itemId)

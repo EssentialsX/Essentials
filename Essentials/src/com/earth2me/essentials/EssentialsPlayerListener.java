@@ -5,15 +5,30 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.minecraft.server.InventoryPlayer;
-import org.bukkit.*;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Server;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.craftbukkit.block.CraftSign;
 import org.bukkit.craftbukkit.inventory.CraftInventoryPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerAnimationEvent;
+import org.bukkit.event.player.PlayerAnimationType;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.PlayerEggThrowEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerListener;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -21,10 +36,10 @@ public class EssentialsPlayerListener extends PlayerListener
 {
 	private static final Logger logger = Logger.getLogger("Minecraft");
 	private final Server server;
-	private final Essentials ess;
-	private EssentialsBlockListener essBlockListener = null;
+	private final IEssentials ess;
+	private final EssentialsBlockListener essBlockListener;
 
-	public EssentialsPlayerListener(Essentials parent)
+	public EssentialsPlayerListener(IEssentials parent)
 	{
 		this.ess = parent;
 		this.server = parent.getServer();
@@ -40,7 +55,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		if (user.isJailed() && user.getJail() != null && !user.getJail().isEmpty()) {
 			try
 			{
-				event.setRespawnLocation(Essentials.getJail().getJail(user.getJail()));
+				event.setRespawnLocation(ess.getJail().getJail(user.getJail()));
 			}
 			catch (Exception ex)
 			{
@@ -162,7 +177,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			event.setTo(loc);
 			try
 			{
-				user.getTeleport().now(loc, new Charge("portal"));
+				user.getTeleport().now(loc, new Charge("portal", ess));
 			}
 			catch (Exception ex)
 			{
@@ -221,7 +236,7 @@ public class EssentialsPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerJoin(PlayerJoinEvent event)
 	{
-		Essentials.getBackup().onPlayerJoin();
+		ess.getBackup().onPlayerJoin();
 		User user = ess.getUser(event.getPlayer());
 
 		//we do not know the ip address on playerlogin so we need to do this here.
@@ -312,7 +327,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 		try
 		{
-			event.setTo(Essentials.getJail().getJail(user.getJail()));
+			event.setTo(ess.getJail().getJail(user.getJail()));
 		}
 		catch (Exception ex)
 		{
@@ -498,15 +513,15 @@ public class EssentialsPlayerListener extends PlayerListener
 			}
 			if (m1)
 			{
-				return new Charge(q1);
+				return new Charge(q1, ess);
 			}
 			else
 			{
 				ItemStack i = ItemDb.get(l1[1], (int)q1);
-				return new Charge(i);
+				return new Charge(i, ess);
 			}
 		}
-		return new Charge("warpsign");
+		return new Charge("warpsign", ess);
 	}
 
 	@Override
@@ -528,8 +543,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		if (user.hasUnlimited(new ItemStack(event.getBucket())))
 		{
 			event.getItemStack().setType(event.getBucket());
-			Essentials.getStatic().getScheduler().scheduleSyncDelayedTask(Essentials.getStatic(),
-																		  new Runnable()
+			ess.scheduleSyncDelayedTask(new Runnable()
 			{
 				public void run()
 				{

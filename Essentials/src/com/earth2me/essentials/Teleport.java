@@ -12,17 +12,19 @@ public class Teleport implements Runnable
 {
 	private static class Target
 	{
-		private Location location = null;
-		private Entity entity = null;
+		private final Location location;
+		private final Entity entity;
 
 		public Target(Location location)
 		{
 			this.location = location;
+			this.entity = null;
 		}
 
 		public Target(Entity entity)
 		{
 			this.entity = entity;
+			this.location = null;
 		}
 
 		public Location getLocation()
@@ -34,7 +36,7 @@ public class Teleport implements Runnable
 			return location;
 		}
 	}
-	User user;
+	private IUser user;
 	private int teleTimer = -1;
 	private long started;	// time this task was initiated
 	private long delay;		// how long to delay the teleport
@@ -47,7 +49,7 @@ public class Teleport implements Runnable
 	private long initZ;
 	private Target teleportTarget;
 	private Charge chargeFor;
-	private Essentials ess;
+	private final IEssentials ess;
 	private static final Logger logger = Logger.getLogger("Minecraft");
 
 	private void initTimer(long delay, Target target, Charge chargeFor)
@@ -114,7 +116,7 @@ public class Teleport implements Runnable
 		}
 	}
 
-	public Teleport(User user, Essentials ess)
+	public Teleport(IUser user, IEssentials ess)
 	{
 		this.user = user;
 		this.ess = ess;
@@ -127,7 +129,7 @@ public class Teleport implements Runnable
 
 	public void warp(String warp, Charge chargeFor) throws Exception
 	{
-		Location loc = Essentials.getWarps().getWarp(warp);
+		Location loc = ess.getWarps().getWarp(warp);
 		teleport(new Target(loc), chargeFor);
 		user.sendMessage(Util.format("warpingTo", warp));
 	}
@@ -162,7 +164,7 @@ public class Teleport implements Runnable
 		}
 		try
 		{
-			user.getServer().getScheduler().cancelTask(teleTimer);
+			ess.getServer().getScheduler().cancelTask(teleTimer);
 			if (notifyUser)
 			{
 				user.sendMessage(Util.i18n("pendingTeleportCancelled"));
@@ -193,7 +195,10 @@ public class Teleport implements Runnable
 	{
 		double delay = ess.getSettings().getTeleportDelay();
 
-		chargeFor.isAffordableFor(user);
+		if (chargeFor != null)
+		{
+			chargeFor.isAffordableFor(user);
+		}
 		cooldown(true);
 		if (delay <= 0 || user.isAuthorized("essentials.teleport.timer.bypass"))
 		{
@@ -213,7 +218,7 @@ public class Teleport implements Runnable
 		user.sendMessage(Util.format("dontMoveMessage", Util.formatDateDiff(c.getTimeInMillis())));
 		initTimer((long)(delay * 1000.0), target, chargeFor);
 
-		teleTimer = user.getServer().getScheduler().scheduleSyncRepeatingTask(Essentials.getStatic(), this, 10, 10);
+		teleTimer = ess.scheduleSyncRepeatingTask(this, 10, 10);
 	}
 
 	private void now(Target target) throws Exception
@@ -242,7 +247,7 @@ public class Teleport implements Runnable
 		now(new Target(entity));
 	}
 
-	public void back(final Charge chargeFor) throws Exception
+	public void back(Charge chargeFor) throws Exception
 	{
 		teleport(new Target(user.getLastLocation()), chargeFor);
 	}
@@ -257,14 +262,14 @@ public class Teleport implements Runnable
 		home(user, chargeFor);
 	}
 
-	public void home(User user, Charge chargeFor) throws Exception
+	public void home(IUser user, Charge chargeFor) throws Exception
 	{
 		Location loc = user.getHome(this.user.getLocation());
 		if (loc == null)
 		{
 			if (ess.getSettings().spawnIfNoHome())
 			{
-				respawn(Essentials.getSpawn(), chargeFor);
+				respawn(ess.getSpawn(), chargeFor);
 			}
 			else
 			{

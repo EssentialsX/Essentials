@@ -4,24 +4,27 @@ import org.bukkit.craftbukkit.entity.CraftPlayer;
 import net.minecraft.server.EntityPlayer;
 import net.minecraft.server.IInventory;
 import org.bukkit.craftbukkit.inventory.CraftInventoryPlayer;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Player;
 
 
 public class PlayerExtension extends PlayerWrapper
 {
-	public PlayerExtension(Player base)
+	protected final IEssentials ess;
+	
+	public PlayerExtension(Player base, IEssentials ess)
 	{
 		super(base);
+		this.ess = ess;
 	}
 
 	public boolean isBanned()
 	{
-		return Essentials.getStatic().bans.contains(getName());
+		return ess.getBans().contains(getName());
 	}
 
 	public boolean isIpBanned()
 	{
-		return Essentials.getStatic().bannedIps.contains(getAddress().getAddress().toString().replace("/", ""));
+		return ess.getBannedIps().contains(getAddress().getAddress().toString().replace("/", ""));
 	}
 
 	public float getCorrectedYaw()

@@ -4,6 +4,8 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
@@ -11,8 +13,8 @@ import java.util.logging.LogRecord;
 
 class EssentialsErrorHandler extends Handler
 {
-	HashMap<BigInteger, String> errors = new HashMap<BigInteger, String>();
-	private final LinkedList<LogRecord> records = new LinkedList<LogRecord>();
+	private final Map<BigInteger, String> errors = new HashMap<BigInteger, String>();
+	private final List<LogRecord> records = new LinkedList<LogRecord>();
 
 	public EssentialsErrorHandler()
 	{
@@ -74,7 +76,7 @@ class EssentialsErrorHandler extends Handler
 						break;
 					}
 				}
-				if (essentialsFound == false && tr.getCause() != null)
+				if (!essentialsFound && tr.getCause() != null)
 				{
 					Throwable cause = tr.getCause();
 					StackTraceElement[] elements2 = cause.getStackTrace();
@@ -117,5 +119,10 @@ class EssentialsErrorHandler extends Handler
 			}
 		}
 		records.clear();
+	}
+
+	Map<BigInteger, String> getErrors()
+	{
+		return errors;
 	}
 }

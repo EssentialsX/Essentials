@@ -18,16 +18,16 @@ public class EssentialsUpgrade
 {
 	private static boolean alreadyRun = false;
 	private final static Logger logger = Logger.getLogger("Minecraft");
-	private Essentials ess;
+	private final IEssentials ess;
 
-	EssentialsUpgrade(String version, Essentials essentials)
+	EssentialsUpgrade(String version, IEssentials essentials)
 	{
-		if (alreadyRun == true)
+		ess = essentials;
+		if (alreadyRun)
 		{
 			return;
 		}
 		alreadyRun = true;
-		ess = essentials;
 	}
 
 	private void moveWorthValuesToWorthYml()
@@ -79,7 +79,7 @@ public class EssentialsUpgrade
 			}
 			if (line.matches(regex))
 			{
-				if (needUpdate == false && info != null)
+				if (!needUpdate && info != null)
 				{
 					bw.write(info, 0, info.length());
 					bw.newLine();
@@ -246,13 +246,26 @@ public class EssentialsUpgrade
 					try
 					{
 						BufferedReader rx = new BufferedReader(new FileReader(listOfFiles[i]));
-						double x = Double.parseDouble(rx.readLine().trim());
-						double y = Double.parseDouble(rx.readLine().trim());
-						double z = Double.parseDouble(rx.readLine().trim());
-						float yaw = Float.parseFloat(rx.readLine().trim());
-						float pitch = Float.parseFloat(rx.readLine().trim());
-						String worldName = rx.readLine();
-						rx.close();
+						double x, y, z;
+						float yaw, pitch;
+						String worldName;
+						try
+						{
+							if (!rx.ready()) continue;
+							x = Double.parseDouble(rx.readLine().trim());
+							if (!rx.ready()) continue;
+							y = Double.parseDouble(rx.readLine().trim());
+							if (!rx.ready()) continue;
+							z = Double.parseDouble(rx.readLine().trim());
+							if (!rx.ready()) continue;
+							yaw = Float.parseFloat(rx.readLine().trim());
+							if (!rx.ready()) continue;
+							pitch = Float.parseFloat(rx.readLine().trim());
+							worldName = rx.readLine();
+						}
+						finally {
+							rx.close();
+						}
 						World w = null;
 						for (World world : ess.getServer().getWorlds())
 						{
@@ -264,7 +277,7 @@ public class EssentialsUpgrade
 						}
 						if (worldName != null)
 						{
-							worldName.trim();
+							worldName = worldName.trim();
 							World w1 = null;
 							w1 = getFakeWorld(worldName);
 							if (w1 != null)
@@ -273,7 +286,7 @@ public class EssentialsUpgrade
 							}
 						}
 						Location loc = new Location(w, x, y, z, yaw, pitch);
-						Essentials.getWarps().setWarp(filename.substring(0, filename.length() - 4), loc);
+						ess.getWarps().setWarp(filename.substring(0, filename.length() - 4), loc);
 						if (!listOfFiles[i].renameTo(new File(warpsFolder, filename + ".old")))
 						{
 							throw new Exception(Util.format("fileRenameError", filename));
@@ -293,6 +306,8 @@ public class EssentialsUpgrade
 			try
 			{
 				BufferedReader rx = new BufferedReader(new FileReader(warpFile));
+				try 
+				{
 				for (String[] parts = new String[0]; rx.ready(); parts = rx.readLine().split(":"))
 				{
 					if (parts.length < 6)
@@ -319,11 +334,16 @@ public class EssentialsUpgrade
 						}
 					}
 					Location loc = new Location(w, x, y, z, yaw, pitch);
-					Essentials.getWarps().setWarp(name, loc);
+					ess.getWarps().setWarp(name, loc);
 					if (!warpFile.renameTo(new File(ess.getDataFolder(), "warps.txt.old")))
 					{
 						throw new Exception(Util.format("fileRenameError", "warps.txt"));
 					}
+				}
+				}
+				finally
+				{
+					rx.close();
 				}
 			}
 			catch (Exception ex)
@@ -381,7 +401,7 @@ public class EssentialsUpgrade
 		return null;
 	}
 
-	void beforeSettings()
+	public void beforeSettings()
 	{
 		if (!ess.getDataFolder().exists())
 		{
@@ -390,7 +410,7 @@ public class EssentialsUpgrade
 		moveWorthValuesToWorthYml();
 	}
 
-	void afterSettings()
+	public void afterSettings()
 	{
 		sanitizeAllUserFilenames();
 		updateUsersToNewDefaultHome();

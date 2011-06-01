@@ -22,6 +22,7 @@ public class Commandpowertool extends EssentialsCommand
 		if (is == null || is.getType() == Material.AIR)
 		{
 			user.sendMessage(Util.i18n("powerToolAir"));
+			return;
 		}
 		String command = getFinalArg(args, 0);
 		if (command != null && !command.isEmpty())

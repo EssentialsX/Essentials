@@ -36,7 +36,7 @@ public class Commandjump extends EssentialsCommand
 			throw new Exception(Util.i18n("jumpError"), ex);
 		}
 
-		Charge charge = new Charge(this);
+		Charge charge = new Charge(this.getName(), ess);
 		charge.isAffordableFor(user);
 		user.getTeleport().teleport(loc, charge);
 	}

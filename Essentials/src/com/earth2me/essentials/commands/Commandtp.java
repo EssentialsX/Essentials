@@ -30,7 +30,7 @@ public class Commandtp extends EssentialsCommand
 				throw new Exception(Util.format("teleportDisabled", p.getDisplayName()));
 			}
 			user.sendMessage(Util.i18n("teleporting"));
-			Charge charge = new Charge(this);
+			Charge charge = new Charge(this.getName(), ess);
 			charge.isAffordableFor(user);
 			user.getTeleport().teleport(p, charge);
 			break;

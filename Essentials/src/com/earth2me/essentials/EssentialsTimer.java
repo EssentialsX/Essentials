@@ -9,13 +9,13 @@ import org.bukkit.entity.Player;
 
 public class EssentialsTimer implements Runnable, IConf
 {
-	private Essentials parent;
-	private Set<User> allUsers = new HashSet<User>(); 
+	private final IEssentials ess;
+	private final Set<User> allUsers = new HashSet<User>(); 
 	
-	EssentialsTimer(Essentials parent)
+	EssentialsTimer(IEssentials ess)
 	{
-		this.parent = parent;
-		File userdir = new File(parent.getDataFolder(), "userdata");
+		this.ess = ess;
+		File userdir = new File(ess.getDataFolder(), "userdata");
 		if (!userdir.exists()) {
 			return;
 		}
@@ -25,7 +25,7 @@ public class EssentialsTimer implements Runnable, IConf
 				continue;
 			}
 			String name = string.substring(0, string.length()-4);
-			User u = parent.getUser(new OfflinePlayer(name));
+			User u = ess.getUser(new OfflinePlayer(name));
 			allUsers.add(u);
 		}
 	}
@@ -33,9 +33,9 @@ public class EssentialsTimer implements Runnable, IConf
 	public void run()
 	{
 		long currentTime = System.currentTimeMillis();
-		for (Player player : parent.getServer().getOnlinePlayers())
+		for (Player player : ess.getServer().getOnlinePlayers())
 		{
-			User u = parent.getUser(player);
+			User u = ess.getUser(player);
 			allUsers.add(u);
 			u.setLastActivity(currentTime);
 		}
@@ -43,8 +43,8 @@ public class EssentialsTimer implements Runnable, IConf
 		for (User user: allUsers) {
 			if (user.getBanTimeout() > 0 && user.getBanTimeout() < currentTime) {
 				user.setBanTimeout(0);
-				((CraftServer)parent.getServer()).getHandle().b(user.getName());
-				Essentials.getStatic().loadBanList();
+				((CraftServer)ess.getServer()).getHandle().b(user.getName());
+				ess.loadBanList();
 			}
 			if (user.getMuteTimeout() > 0 && user.getMuteTimeout() < currentTime && user.isMuted()) {
 				user.setMuteTimeout(0);

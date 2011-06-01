@@ -14,8 +14,11 @@ import org.bukkit.entity.Player;
  * Instead of using this api directly, we recommend to use the register plugin:
  * http://bit.ly/RegisterMethod
  */
-public class Economy
+public final class Economy
 {
+	private Economy()
+	{
+	}
 	private static final Logger logger = Logger.getLogger("Minecraft");
 
 	private static void createNPCFile(String name)

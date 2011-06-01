@@ -1,7 +1,6 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Util;
-import com.earth2me.essentials.commands.EssentialsCommand;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 

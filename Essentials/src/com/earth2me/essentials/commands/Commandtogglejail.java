@@ -36,7 +36,7 @@ public class Commandtogglejail extends EssentialsCommand
 			p.setJailed(true);
 			p.sendMessage(Util.i18n("userJailed"));
 			p.setJail(null);
-			Essentials.getJail().sendToJail(p, args[1]);
+			ess.getJail().sendToJail(p, args[1]);
 			p.setJail(args[1]);
 			long timeDiff = 0;
 			if (args.length > 2)

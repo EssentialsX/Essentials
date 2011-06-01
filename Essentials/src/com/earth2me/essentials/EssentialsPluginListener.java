@@ -10,8 +10,8 @@ import org.bukkit.event.server.ServerListener;
 
 public class EssentialsPluginListener extends ServerListener
 {
-	Methods methods;
-	private final Logger logger = Logger.getLogger("Minecraft");
+	private final Methods methods;
+	private static final Logger logger = Logger.getLogger("Minecraft");
 
 	public EssentialsPluginListener(Methods methods)
 	{

@@ -22,14 +22,13 @@ public class Commandkit extends EssentialsCommand
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
 			try
 			{
-				Map<String, Object> kits = (Map<String, Object>)ess.getConfiguration().getProperty("kits");
+				Map<String, Object> kits = ess.getSettings().getKits();
 				StringBuilder list = new StringBuilder();
 				for (String k : kits.keySet())
 				{
@@ -110,7 +109,7 @@ public class Commandkit extends EssentialsCommand
 					items = (List<String>)kit;
 				}
 
-				Charge charge = new Charge("kit-" + kitName);
+				Charge charge = new Charge("kit-" + kitName, ess);
 				try
 				{
 					charge.isAffordableFor(user);

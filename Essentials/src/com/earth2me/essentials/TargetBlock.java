@@ -21,7 +21,7 @@ public class TargetBlock {
     private Vector targetPos = new Vector();
     private Vector targetPosDouble = new Vector();
     private Vector prevPos = new Vector();
-    private Vector offset = new Vector();
+    private final Vector offset = new Vector();
 
     /**
      * Constructor requiring a player, uses default values

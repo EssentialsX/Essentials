@@ -25,8 +25,8 @@ import org.bukkit.util.Vector;
 public class FakeWorld implements World
 {
 
-	private String name;
-	private Environment env;
+	private final String name;
+	private final Environment env;
 	FakeWorld(String string, Environment environment)
 	{
 		this.name = string;

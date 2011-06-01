@@ -20,7 +20,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 public class FakeServer implements Server
 {
 	private List<Player> players = new ArrayList<Player>();
-	private List<World> worlds = new ArrayList<World>();
+	private final List<World> worlds = new ArrayList<World>();
 
 	public String getName()
 	{
@@ -186,12 +186,12 @@ public class FakeServer implements Server
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
-	void addPlayer(Player base1)
+	public void addPlayer(Player base1)
 	{
 		players.add(base1);
 	}
 	
-	OfflinePlayer createPlayer(String name)
+	public OfflinePlayer createPlayer(String name)
 	{
 		OfflinePlayer player = new OfflinePlayer(name);
 		player.setLocation(new Location(worlds.get(0), 0, 0, 0, 0, 0));

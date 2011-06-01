@@ -8,13 +8,15 @@ import org.bukkit.craftbukkit.CraftServer;
 
 public class Backup implements Runnable {
 	private static final Logger logger = Logger.getLogger("Minecraft");
-	private CraftServer server;
+	private final CraftServer server;
+	private final IEssentials ess;
 	private boolean running = false;
 	private int taskId = -1;
 	private boolean active = false;
 
-	public Backup() {
-		server = (CraftServer)Essentials.getStatic().getServer();
+	public Backup(IEssentials ess) {
+		this.ess = ess;
+		server = (CraftServer)ess.getServer();
 		if (server.getOnlinePlayers().length > 0) {
 			startTask();
 		}
@@ -26,11 +28,11 @@ public class Backup implements Runnable {
 	
 	private void startTask() {
 		if (!running) {
-			long interval = Essentials.getStatic().getSettings().getBackupInterval()*1200; // minutes -> ticks
+			long interval = ess.getSettings().getBackupInterval()*1200; // minutes -> ticks
 			if (interval < 1200) {
 				return;
 			}
-			taskId = server.getScheduler().scheduleSyncRepeatingTask(Essentials.getStatic(), this, interval, interval);
+			taskId = ess.scheduleSyncRepeatingTask(this, interval, interval);
 			running = true;
 		}
 	}
@@ -38,7 +40,7 @@ public class Backup implements Runnable {
 	public void run() {
 		if (active) return;
 		active = true;
-		final String command = Essentials.getStatic().getSettings().getBackupCommand();
+		final String command = ess.getSettings().getBackupCommand();
 		if (command == null || "".equals(command)) {
 			return;
 		}
@@ -47,7 +49,7 @@ public class Backup implements Runnable {
 		server.dispatchCommand(cs, "save-all");
 		server.dispatchCommand(cs, "save-off");
 		
-		server.getScheduler().scheduleAsyncDelayedTask(Essentials.getStatic(),
+		ess.scheduleAsyncDelayedTask(
 			new Runnable() {
 
 			public void run() {
@@ -59,7 +61,7 @@ public class Backup implements Runnable {
 				} catch (IOException ex) {
 					logger.log(Level.SEVERE, null, ex);
 				} finally {
-					server.getScheduler().scheduleSyncDelayedTask(Essentials.getStatic(),
+					ess.scheduleSyncDelayedTask(
 						new Runnable() {
 
 						public void run() {

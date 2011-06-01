@@ -15,9 +15,9 @@ import org.bukkit.Server;
 public class Warps implements IConf
 {
 	private static final Logger logger = Logger.getLogger("Minecraft");
-	Map<StringIgnoreCase, EssentialsConf> warpPoints = new HashMap<StringIgnoreCase, EssentialsConf>();
-	File warpsFolder;
-	Server server;
+	private final Map<StringIgnoreCase, EssentialsConf> warpPoints = new HashMap<StringIgnoreCase, EssentialsConf>();
+	private final File warpsFolder;
+	private final Server server;
 
 	public Warps(Server server, File dataFolder)
 	{
@@ -40,7 +40,7 @@ public class Warps implements IConf
 		List<String> keys = new ArrayList<String>();
 		for (StringIgnoreCase stringIgnoreCase : warpPoints.keySet())
 		{
-			keys.add(stringIgnoreCase.string);
+			keys.add(stringIgnoreCase.getString());
 		}
 		Collections.sort(keys, String.CASE_INSENSITIVE_ORDER);
 		return keys;
@@ -120,9 +120,9 @@ public class Warps implements IConf
 	}
 
 
-	private class StringIgnoreCase
+	private static class StringIgnoreCase
 	{
-		String string;
+		private final String string;
 
 		public StringIgnoreCase(String string)
 		{
@@ -132,21 +132,22 @@ public class Warps implements IConf
 		@Override
 		public int hashCode()
 		{
-			return string.toLowerCase().hashCode();
+			return getString().toLowerCase().hashCode();
 		}
 
 		@Override
 		public boolean equals(Object o)
 		{
-			if (o instanceof String)
-			{
-				return string.equalsIgnoreCase((String)o);
-			}
 			if (o instanceof StringIgnoreCase)
 			{
-				return string.equalsIgnoreCase(((StringIgnoreCase)o).string);
+				return getString().equalsIgnoreCase(((StringIgnoreCase)o).getString());
 			}
 			return false;
+		}
+
+		public String getString()
+		{
+			return string;
 		}
 	}
 }

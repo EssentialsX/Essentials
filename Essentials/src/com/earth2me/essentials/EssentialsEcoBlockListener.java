@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class EssentialsEcoBlockListener extends BlockListener
 {
-	Essentials ess;
+	private final IEssentials ess;
 	private static final Logger logger = Logger.getLogger("Minecraft");
 
 	public EssentialsEcoBlockListener(Essentials ess)

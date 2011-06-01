@@ -26,7 +26,7 @@ public class Commandtppos extends EssentialsCommand
 		int y = Integer.parseInt(args[1]);
 		int z = Integer.parseInt(args[2]);
 		Location l = new Location(user.getWorld(), x, y, z);
-		Charge charge = new Charge(this);
+		Charge charge = new Charge(this.getName(), ess);
 		charge.isAffordableFor(user);
 		user.sendMessage(Util.i18n("teleporting"));
 		user.getTeleport().teleport(l, charge);

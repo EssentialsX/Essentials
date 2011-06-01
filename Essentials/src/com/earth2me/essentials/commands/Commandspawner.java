@@ -37,7 +37,7 @@ public class Commandspawner extends EssentialsCommand
 		}
 		catch (Throwable ex)
 		{
-			throw new Exception(Util.i18n("mobSpawnError"));
+			throw new Exception(Util.i18n("mobSpawnError"), ex);
 		}
 	}
 }

@@ -6,9 +6,9 @@ import org.bukkit.event.player.PlayerListener;
 
 public class JailPlayerListener extends PlayerListener
 {
-	private final Essentials ess;
+	private final IEssentials ess;
 
-	public JailPlayerListener(Essentials parent)
+	public JailPlayerListener(IEssentials parent)
 	{
 		this.ess = parent;
 	}

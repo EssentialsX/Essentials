@@ -40,7 +40,7 @@ import org.bukkit.plugin.*;
 import org.bukkit.plugin.java.*;
 
 
-public class Essentials extends JavaPlugin
+public class Essentials extends JavaPlugin implements IEssentials
 {
 	public static final String AUTHORS = "Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans and Xeology";
 	public static final int minBukkitBuildVersion = 818;
@@ -59,19 +59,15 @@ public class Essentials extends JavaPlugin
 	public ArrayList bans = new ArrayList();
 	public ArrayList bannedIps = new ArrayList();
 	private Backup backup;
-	private Map<String, User> users = new HashMap<String, User>();
+	private final Map<String, User> users = new HashMap<String, User>();
 	private EssentialsTimer timer;
 	private EssentialsUpdateTimer updateTimer;
 	private boolean registerFallback = true;
-	private Methods paymentMethod = new Methods();
-	private boolean enableErrorLogging = false;
-	private EssentialsErrorHandler errorHandler = new EssentialsErrorHandler();
+	private final Methods paymentMethod = new Methods();
+	private final static boolean enableErrorLogging = false;
+	private final EssentialsErrorHandler errorHandler = new EssentialsErrorHandler();
 
-	public Essentials()
-	{
-	}
-
-	public static Essentials getStatic()
+	public static IEssentials getStatic()
 	{
 		return instance;
 	}
@@ -119,7 +115,7 @@ public class Essentials extends JavaPlugin
 		worth = new Worth(this.getDataFolder());
 		confList.add(worth);
 		reload();
-		backup = new Backup();
+		backup = new Backup(this);
 
 		PluginManager pm = getServer().getPluginManager();
 		for (Plugin plugin : pm.getPlugins())
@@ -349,7 +345,7 @@ public class Essentials extends JavaPlugin
 
 	public boolean onCommandEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath)
 	{
-		if ("msg".equals(commandLabel.toLowerCase()) || "r".equals(commandLabel.toLowerCase()) || "mail".equals(commandLabel.toLowerCase()) & sender instanceof CraftPlayer)
+		if ("msg".equals(commandLabel.toLowerCase()) || "r".equals(commandLabel.toLowerCase()) || "mail".equals(commandLabel.toLowerCase()) && sender instanceof CraftPlayer)
 		{
 			StringBuilder str = new StringBuilder();
 			str.append(commandLabel).append(" ");
@@ -408,13 +404,10 @@ public class Essentials extends JavaPlugin
 			// New mail notification
 			if (user != null && !getSettings().isCommandDisabled("mail") && !commandLabel.equals("mail") && user.isAuthorized("essentials.mail"))
 			{
-				List<String> mail = user.getMails();
-				if (mail != null)
+				final List<String> mail = user.getMails();
+				if (mail != null && !mail.isEmpty())
 				{
-					if (mail.size() > 0)
-					{
-						user.sendMessage(Util.format("youHaveNewMail", mail.size()));
-					}
+					user.sendMessage(Util.format("youHaveNewMail", mail.size()));
 				}
 			}
 
@@ -428,6 +421,7 @@ public class Essentials extends JavaPlugin
 			try
 			{
 				cmd = (IEssentialsCommand)classLoader.loadClass(commandPath + command.getName()).newInstance();
+				cmd.setEssentials(this);
 			}
 			catch (Exception ex)
 			{
@@ -502,15 +496,15 @@ public class Essentials extends JavaPlugin
 				throw new FileNotFoundException(Util.i18n("bannedPlayersFileNotFound"));
 			}
 
-			BufferedReader rx = new BufferedReader(new FileReader(file));
-			bans.clear();
+			final BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
 			try
 			{
-				for (int i = 0; rx.ready(); i++)
+				bans.clear();
+				while (bufferedReader.ready())
 				{
 
-					String line = rx.readLine().trim().toLowerCase();
-					if (line.startsWith("#"))
+					final String line = bufferedReader.readLine().trim().toLowerCase();
+					if (line.length() > 0 && line.charAt(0) == '#')
 					{
 						continue;
 					}
@@ -521,6 +515,17 @@ public class Essentials extends JavaPlugin
 			catch (IOException io)
 			{
 				logger.log(Level.SEVERE, Util.i18n("bannedPlayersFileError"), io);
+			}
+			finally
+			{
+				try
+				{
+					bufferedReader.close();
+				}
+				catch (IOException ex)
+				{
+					logger.log(Level.SEVERE, Util.i18n("bannedPlayersFileError"), ex);
+				}
 			}
 		}
 		catch (FileNotFoundException ex)
@@ -535,15 +540,15 @@ public class Essentials extends JavaPlugin
 				throw new FileNotFoundException(Util.i18n("bannedIpsFileNotFound"));
 			}
 
-			BufferedReader rx = new BufferedReader(new FileReader(ipFile));
-			bannedIps.clear();
+			final BufferedReader bufferedReader = new BufferedReader(new FileReader(ipFile));
 			try
 			{
-				for (int i = 0; rx.ready(); i++)
+				bannedIps.clear();
+				while (bufferedReader.ready())
 				{
 
-					String line = rx.readLine().trim().toLowerCase();
-					if (line.startsWith("#"))
+					final String line = bufferedReader.readLine().trim().toLowerCase();
+					if (line.length() > 0 && line.charAt(0) == '#')
 					{
 						continue;
 					}
@@ -554,6 +559,17 @@ public class Essentials extends JavaPlugin
 			catch (IOException io)
 			{
 				logger.log(Level.SEVERE, Util.i18n("bannedIpsFileError"), io);
+			}
+			finally
+			{
+				try
+				{
+					bufferedReader.close();
+				}
+				catch (IOException ex)
+				{
+					logger.log(Level.SEVERE, Util.i18n("bannedIpsFileError"), ex);
+				}
 			}
 		}
 		catch (FileNotFoundException ex)
@@ -577,32 +593,32 @@ public class Essentials extends JavaPlugin
 		return (CraftScheduler)this.getServer().getScheduler();
 	}
 
-	public static Jail getJail()
+	public Jail getJail()
 	{
-		return getStatic().jail;
+		return jail;
 	}
 
-	public static Warps getWarps()
+	public Warps getWarps()
 	{
-		return getStatic().warps;
+		return warps;
 	}
 
-	public static Worth getWorth()
+	public Worth getWorth()
 	{
-		return getStatic().worth;
+		return worth;
 	}
 
-	public static Backup getBackup()
+	public Backup getBackup()
 	{
-		return getStatic().backup;
+		return backup;
 	}
 
-	public static Spawn getSpawn()
+	public Spawn getSpawn()
 	{
-		return getStatic().spawn;
+		return spawn;
 	}
 
-	public <T> User getUser(T base)
+	public User getUser(Object base)
 	{
 		if (base instanceof Player)
 		{
@@ -698,9 +714,34 @@ public class Essentials extends JavaPlugin
 
 		return players.length;
 	}
-	
+
 	public Map<BigInteger, String> getErrors()
 	{
-		return errorHandler.errors;
+		return errorHandler.getErrors();
+	}
+
+	public int scheduleAsyncDelayedTask(final Runnable run)
+	{
+		return this.getScheduler().scheduleAsyncDelayedTask(this, run);
+	}
+
+	public int scheduleSyncDelayedTask(final Runnable run)
+	{
+		return this.getScheduler().scheduleSyncDelayedTask(this, run);
+	}
+
+	public int scheduleSyncRepeatingTask(final Runnable run, long delay, long period)
+	{
+		return this.getScheduler().scheduleSyncRepeatingTask(this, run, delay, period);
+	}
+
+	public List<String> getBans()
+	{
+		return bans;
+	}
+
+	public List<String> getBannedIps()
+	{
+		return bannedIps;
 	}
 }

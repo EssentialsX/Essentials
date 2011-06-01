@@ -67,7 +67,7 @@ public class Commandnick extends EssentialsCommand
 		}
 
 		charge(user);
-		user.setDisplayName(ess.getConfiguration().getString("nickname-prefix", "~") + nick);
+		user.setDisplayName(ess.getSettings().getNicknamePrefix() + nick);
 		user.setNickname(nick);
 		user.sendMessage(Util.format("nickSet", user.getDisplayName() + "§7."));
 	}

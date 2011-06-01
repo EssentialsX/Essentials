@@ -25,7 +25,7 @@ public class Commandsetworth extends EssentialsCommand
 
 		ItemStack stack = ItemDb.get(args[0]);
 		charge(user);
-		Essentials.getWorth().setPrice(stack, Double.parseDouble(args[1]));
+		ess.getWorth().setPrice(stack, Double.parseDouble(args[1]));
 		user.sendMessage(Util.i18n("worthSet"));
 	}
 }

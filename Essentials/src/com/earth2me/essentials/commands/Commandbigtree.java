@@ -17,7 +17,7 @@ public class Commandbigtree extends EssentialsCommand
 	@Override
 	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		Object tree = new Object();
+		TreeType tree = TreeType.TREE;
 		if (args.length > 0 && args[0].equalsIgnoreCase("redwood"))
 		{
 			tree = TreeType.TALL_REDWOOD;

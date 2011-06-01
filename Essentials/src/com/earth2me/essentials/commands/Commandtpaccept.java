@@ -23,7 +23,7 @@ public class Commandtpaccept extends EssentialsCommand
 			throw new Exception(Util.i18n("noPendingRequest"));
 		}
 
-		Charge charge = new Charge(this);
+		Charge charge = new Charge(this.getName(), ess);
 		if (user.isTeleportRequestHere())
 		{
 			charge.isAffordableFor(user);

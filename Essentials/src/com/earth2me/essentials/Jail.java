@@ -13,10 +13,10 @@ import org.bukkit.event.block.BlockPlaceEvent;
 public class Jail extends BlockListener implements IConf
 {
 	private static final Logger logger = Logger.getLogger("Minecraft");
-	private EssentialsConf config;
-	private Essentials ess;
+	private final EssentialsConf config;
+	private final IEssentials ess;
 
-	public Jail(Essentials ess)
+	public Jail(IEssentials ess)
 	{
 		this.ess = ess;
 		config = new EssentialsConf(new File(ess.getDataFolder(), "jail.yml"));
@@ -36,7 +36,7 @@ public class Jail extends BlockListener implements IConf
 			throw new Exception(Util.i18n("jailNotExist"));
 		}
 
-		Location loc = config.getLocation(jailName.toLowerCase(), Essentials.getStatic().getServer());
+		Location loc = config.getLocation(jailName.toLowerCase(), ess.getServer());
 		return loc;
 	}
 

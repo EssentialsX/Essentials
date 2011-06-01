@@ -12,8 +12,8 @@ import org.bukkit.World.Environment;
 public class Spawn implements IConf {
 
 	private static final Logger logger = Logger.getLogger("Minecraft");
-	private EssentialsConf config;
-	private Server server;
+	private final EssentialsConf config;
+	private final Server server;
 
 	public Spawn(Server server, File dataFolder) {
 		File configFile = new File(dataFolder, "spawn.yml");

@@ -15,11 +15,11 @@ import org.bukkit.inventory.ItemStack;
 
 public class EssentialsEntityListener extends EntityListener
 {
-	private final Essentials ess;
+	private final IEssentials ess;
 
-	public EssentialsEntityListener(Essentials parent)
+	public EssentialsEntityListener(IEssentials ess)
 	{
-		this.ess = parent;
+		this.ess = ess;
 	}
 
 	@Override

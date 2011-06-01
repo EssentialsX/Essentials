@@ -30,7 +30,7 @@ public class Commandeco extends EssentialsCommand
 		}
 		catch (Exception ex)
 		{
-			throw new NotEnoughArgumentsException();
+			throw new NotEnoughArgumentsException(ex);
 		}
 
 		if (args[1].contentEquals("*"))

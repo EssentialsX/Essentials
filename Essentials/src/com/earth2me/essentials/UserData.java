@@ -16,14 +16,12 @@ import org.bukkit.inventory.ItemStack;
 
 public abstract class UserData extends PlayerExtension implements IConf
 {
-	private EssentialsConf config;
+	private final EssentialsConf config;
 	private static final Logger logger = Logger.getLogger("Minecraft");
-	protected Essentials ess;
 
-	protected UserData(Player base, Essentials ess)
+	protected UserData(Player base, IEssentials ess)
 	{
-		super(base);
-		this.ess = ess;
+		super(base, ess);
 		File folder = new File(ess.getDataFolder(), "userdata");
 		if (!folder.exists())
 		{
@@ -61,7 +59,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		isNPC = _isNPC();
 	}
 	
-	double money;
+	private double money;
 	
 	private double _getMoney() {
 		if (config.hasProperty("money"))
@@ -175,7 +173,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 	private Map<Integer, String> getPowertools()
 	{
 		Object o = config.getProperty("powertools");
-		if (o != null && o instanceof Map)
+		if (o instanceof Map)
 		{
 			return (Map<Integer, String>)o;
 		}
@@ -702,7 +700,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		return isNPC;
 	}
 	
-	void setNPC(boolean set)
+	public void setNPC(boolean set)
 	{
 		isNPC = set;
 		config.setProperty("npc", set);

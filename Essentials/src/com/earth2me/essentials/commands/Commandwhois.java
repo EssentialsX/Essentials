@@ -39,7 +39,7 @@ public class Commandwhois extends EssentialsCommand
 			sender.sendMessage(Util.format("whoisIs", u.getDisplayName(), u.getName()));
 			sender.sendMessage(Util.format("whoisHealth", u.getHealth()));
 			sender.sendMessage(Util.format("whoisLocation", u.getLocation().getWorld().getName(), u.getLocation().getBlockX(), u.getLocation().getBlockY(), u.getLocation().getBlockZ()));
-			if (!ess.getConfiguration().getBoolean("disable-eco", false))
+			if (!ess.getSettings().isEcoDisabled())
 			{
 				sender.sendMessage(Util.format("whoisMoney", Util.formatCurrency(u.getMoney())));
 			}
@@ -47,11 +47,11 @@ public class Commandwhois extends EssentialsCommand
 					? Util.i18n("whoisStatusAway") 
 					: Util.i18n("whoisStatusAvailable"));
 			sender.sendMessage(Util.format("whoisIPAddress", u.getAddress().getAddress().toString()));
-			String location = u.getGeoLocation();
+			final String location = u.getGeoLocation();
 			if (location != null 
 				&& (sender instanceof Player ? ess.getUser(sender).isAuthorized("essentials.geoip.show") : true))
 			{
-				sender.sendMessage(Util.format("whoisGeoLocation", location.toString()));
+				sender.sendMessage(Util.format("whoisGeoLocation", location));
 			}
 		}
 	}

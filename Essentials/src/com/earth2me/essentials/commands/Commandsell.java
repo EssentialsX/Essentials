@@ -89,9 +89,9 @@ public class Commandsell extends EssentialsCommand
 				amount = -amount;
 			}
 		}
-		double worth = Essentials.getWorth().getPrice(is);
+		double worth = ess.getWorth().getPrice(is);
 		boolean stack = args.length > 1 && args[1].endsWith("s");
-		boolean requireStack = ess.getConfiguration().getBoolean("trade-in-stacks-" + id, false);
+		boolean requireStack = ess.getSettings().isTradeInStacks(id);
 
 		if (Double.isNaN(worth))
 		{

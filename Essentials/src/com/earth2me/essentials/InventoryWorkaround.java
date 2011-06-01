@@ -12,8 +12,12 @@ import org.bukkit.inventory.ItemStack;
  * is accepted to CraftBukkit
  */
 
-public class InventoryWorkaround
+public final class InventoryWorkaround
 {
+	private InventoryWorkaround()
+	{
+	}
+	
 	public static int first(Inventory ci, ItemStack item, boolean forceDurability, boolean forceAmount)
 	{
 		return next(ci, item, 0, forceDurability, forceAmount);

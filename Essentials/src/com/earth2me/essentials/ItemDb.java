@@ -12,8 +12,12 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 
-public class ItemDb
+public final class ItemDb
 {
+	private ItemDb()
+	{
+	}
+	
 	private final static Logger logger = Logger.getLogger("Minecraft");
 	private static Map<String, Integer> items = new HashMap<String, Integer>();
 	private static Map<String, Short> durabilities = new HashMap<String, Short>();
@@ -27,21 +31,31 @@ public class ItemDb
 		{
 			file.createNewFile();
 			InputStream res = ItemDb.class.getResourceAsStream("/items.csv");
-			FileWriter tx = new FileWriter(file);
+			FileWriter tx = null;
 			try
 			{
+				tx = new FileWriter(file);
 				for (int i = 0; (i = res.read()) > 0;)
 				{
 					tx.write(i);
 				}
+				tx.flush();
 			}
 			finally
 			{
 				try
 				{
-					tx.flush();
-					tx.close();
 					res.close();
+				}
+				catch (Exception ex)
+				{
+				}
+				try
+				{
+					if (tx != null)
+					{
+						tx.close();
+					}
 				}
 				catch (Exception ex)
 				{

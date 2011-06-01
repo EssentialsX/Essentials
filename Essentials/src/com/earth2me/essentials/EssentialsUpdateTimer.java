@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 class EssentialsUpdateTimer implements Runnable
 {
 	private URL url;
-	private Essentials ess;
+	private final Essentials ess;
 	private static final Logger logger = Logger.getLogger("Minecraft");
 	
 	public EssentialsUpdateTimer(Essentials ess)
@@ -40,7 +40,7 @@ class EssentialsUpdateTimer implements Runnable
 			sb.append("v=").append(URLEncoder.encode(ess.getDescription().getVersion(),"UTF-8"));
 			sb.append("&b=").append(URLEncoder.encode(ess.getServer().getVersion(),"UTF-8"));
 			sb.append("&jv=").append(URLEncoder.encode(System.getProperty("java.version"),"UTF-8"));
-			sb.append("&l=").append(URLEncoder.encode(Util.currentLocale.toString(),"UTF-8"));
+			sb.append("&l=").append(URLEncoder.encode(Util.getCurrentLocale().toString(),"UTF-8"));
 			sb.append("&on=").append(URLEncoder.encode(System.getProperty("os.name"),"UTF-8"));
 			sb.append("&ov=").append(URLEncoder.encode(System.getProperty("os.version"),"UTF-8"));
 			for (BigInteger bigInteger : ess.getErrors().keySet())

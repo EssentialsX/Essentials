@@ -1,37 +1,39 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.commands.EssentialsCommand;
 import org.bukkit.inventory.ItemStack;
 
 
 public class Charge
 {
-	private String command = null;
-	private Double costs = null;
-	private ItemStack items = null;
-	private Essentials ess = Essentials.getStatic();
+	private final String command;
+	private final Double costs;
+	private final ItemStack items;
+	private final IEssentials ess;
 
-	public Charge(String command)
+	public Charge(String command, IEssentials ess)
+	{
+		this(command, null, null, ess);
+	}
+
+	public Charge(double money, IEssentials ess)
+	{
+		this(null, money, null, ess);
+	}
+
+	public Charge(ItemStack items, IEssentials ess)
+	{
+		this(null, null, items, ess);
+	}
+	
+	private Charge(String command, Double money, ItemStack item, IEssentials ess)
 	{
 		this.command = command;
-	}
-
-	public Charge(double money)
-	{
 		this.costs = money;
+		this.items = item;
+		this.ess = ess;
 	}
 
-	public Charge(ItemStack items)
-	{
-		this.items = items;
-	}
-
-	public Charge(EssentialsCommand command)
-	{
-		this.command = command.getName();
-	}
-
-	public void isAffordableFor(User user) throws Exception
+	public void isAffordableFor(IUser user) throws Exception
 	{
 		double mon = user.getMoney();
 		if (costs != null)
@@ -63,7 +65,7 @@ public class Charge
 		}
 	}
 
-	public void charge(User user) throws Exception
+	public void charge(IUser user) throws Exception
 	{
 		double mon = user.getMoney();
 		if (costs != null)

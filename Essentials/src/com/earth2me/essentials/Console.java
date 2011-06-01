@@ -4,7 +4,7 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.CraftServer;
 
-public class Console implements IReplyTo {
+public final class Console implements IReplyTo {
 	private static Console instance = new Console();
 	private CommandSender replyTo;
 	public final static String NAME = "Console";

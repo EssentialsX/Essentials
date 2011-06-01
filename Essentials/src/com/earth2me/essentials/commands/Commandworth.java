@@ -1,7 +1,6 @@
 package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.ItemDb;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
@@ -39,7 +38,7 @@ public class Commandworth extends EssentialsCommand
 		}
 
 		is.setAmount(amount);
-		double worth = Essentials.getWorth().getPrice(is);
+		double worth = ess.getWorth().getPrice(is);
 		if (Double.isNaN(worth))
 		{
 			throw new Exception(Util.i18n("itemCannotBeSold"));

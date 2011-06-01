@@ -6,6 +6,7 @@ import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.IEssentials;
 import org.bukkit.entity.Player;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
@@ -15,13 +16,17 @@ import java.util.logging.Logger;
 public abstract class EssentialsCommand implements IEssentialsCommand
 {
 	private final String name;
-	protected Essentials ess;
+	protected IEssentials ess;
 	protected final static Logger logger = Logger.getLogger("Minecraft");
 
 	protected EssentialsCommand(String name)
 	{
 		this.name = name;
-		this.ess = Essentials.getStatic();
+	}
+	
+	public void setEssentials(IEssentials ess)
+	{
+		this.ess = ess;
 	}
 
 	public String getName()
@@ -84,7 +89,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 	{
 		if (sender instanceof Player)
 		{
-			Charge charge = new Charge(this);
+			Charge charge = new Charge(this.getName(), ess);
 			charge.charge(ess.getUser((Player)sender));
 		}
 	}

@@ -1,19 +1,21 @@
 package com.earth2me.essentials;
 
-import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.ChatColor;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.bukkit.entity.CreatureType;
 import org.bukkit.inventory.ItemStack;
 
 
 public class Settings implements IConf
 {
-	private EssentialsConf config;
+	private final EssentialsConf config;
 	private final static Logger logger = Logger.getLogger("Minecraft");
 
 	public Settings(File dataFolder)
@@ -58,7 +60,7 @@ public class Settings implements IConf
 		return isNetherEnabled() && config.getBoolean("nether.portals-enabled", false);
 	}
 
-	public boolean isCommandDisabled(IEssentialsCommand cmd)
+	public boolean isCommandDisabled(final IEssentialsCommand cmd)
 	{
 		return isCommandDisabled(cmd.getName());
 	}
@@ -121,7 +123,7 @@ public class Settings implements IConf
 
 	public String getNicknamePrefix()
 	{
-		return config.getString("nickname-prefix", "");
+		return config.getString("nickname-prefix", "~");
 	}
 
 	public double getTeleportCooldown()
@@ -144,6 +146,11 @@ public class Settings implements IConf
 			}
 		}
 		return null;
+	}
+	
+	public Map<String, Object> getKits()
+	{
+		return (Map<String, Object>)config.getProperty("kits");
 	}
 
 	public ChatColor getOperatorColor() throws Exception
@@ -191,9 +198,9 @@ public class Settings implements IConf
 		return config.getBoolean("non-ess-in-help", true);
 	}
 
-	public HashMap<String, Boolean> getEpSettings()
+	public Map<String, Boolean> getEpSettings()
 	{
-		HashMap<String, Boolean> epSettings = new HashMap<String, Boolean>();
+		Map<String, Boolean> epSettings = new HashMap<String, Boolean>();
 
 		epSettings.put("protect.protect.signs", config.getBoolean("protect.protect.signs", true));
 		epSettings.put("protect.protect.rails", config.getBoolean("protect.protect.rails", true));
@@ -202,9 +209,9 @@ public class Settings implements IConf
 		return epSettings;
 	}
 
-	public HashMap<String, String> getEpDBSettings()
+	public Map<String, String> getEpDBSettings()
 	{
-		HashMap<String, String> epSettings = new HashMap<String, String>();
+		Map<String, String> epSettings = new HashMap<String, String>();
 		epSettings.put("protect.datatype", config.getString("protect.datatype", "sqlite"));
 		epSettings.put("protect.username", config.getString("protect.username", "root"));
 		epSettings.put("protect.password", config.getString("protect.password", "root"));
@@ -212,9 +219,9 @@ public class Settings implements IConf
 		return epSettings;
 	}
 
-	public ArrayList<Integer> getEpAlertOnPlacement()
+	public List<Integer> getEpAlertOnPlacement()
 	{
-		ArrayList<Integer> epAlertPlace = new ArrayList<Integer>();
+		final List<Integer> epAlertPlace = new ArrayList<Integer>();
 		for (String itemName : config.getString("protect.alert.on-placement", "").split(",")) {
 			itemName = itemName.trim();
 			if (itemName.isEmpty()) {
@@ -231,9 +238,9 @@ public class Settings implements IConf
 		return epAlertPlace;
 	}
 
-	public ArrayList<Integer> getEpAlertOnUse()
+	public List<Integer> getEpAlertOnUse()
 	{
-		ArrayList<Integer> epAlertUse = new ArrayList<Integer>();
+		final List<Integer> epAlertUse = new ArrayList<Integer>();
 		for (String itemName : config.getString("protect.alert.on-use", "").split(",")) {
 			itemName = itemName.trim();
 			if (itemName.isEmpty()) {
@@ -250,9 +257,9 @@ public class Settings implements IConf
 		return epAlertUse;
 	}
 
-	public ArrayList<Integer> getEpAlertOnBreak()
+	public List<Integer> getEpAlertOnBreak()
 	{
-		ArrayList<Integer> epAlertPlace = new ArrayList<Integer>();
+		final List<Integer> epAlertPlace = new ArrayList<Integer>();
 		for (String itemName : config.getString("protect.alert.on-break", "").split(",")) {
 			itemName = itemName.trim();
 			if (itemName.isEmpty()) {
@@ -269,9 +276,9 @@ public class Settings implements IConf
 		return epAlertPlace;
 	}
 
-	public ArrayList<Integer> epBlackListPlacement()
+	public List<Integer> epBlackListPlacement()
 	{
-		ArrayList<Integer> epBlacklistPlacement = new ArrayList<Integer>();
+		final List<Integer> epBlacklistPlacement = new ArrayList<Integer>();
 		for (String itemName : config.getString("protect.blacklist.placement", "").split(",")) {
 			itemName = itemName.trim();
 			if (itemName.isEmpty()) {
@@ -288,9 +295,9 @@ public class Settings implements IConf
 		return epBlacklistPlacement;
 	}
 
-	public ArrayList<Integer> epBlackListUsage()
+	public List<Integer> epBlackListUsage()
 	{
-		ArrayList<Integer> epBlackListUsage = new ArrayList<Integer>();
+		final List<Integer> epBlackListUsage = new ArrayList<Integer>();
 		for (String itemName : config.getString("protect.blacklist.usage", "").split(",")) {
 			itemName = itemName.trim();
 			if (itemName.isEmpty()) {
@@ -307,9 +314,9 @@ public class Settings implements IConf
 		return epBlackListUsage;
 	}
 
-	public HashMap<String, Boolean> getEpGuardSettings()
+	public Map<String, Boolean> getEpGuardSettings()
 	{
-		HashMap<String, Boolean> epSettings = new HashMap<String, Boolean>();
+		final Map<String, Boolean> epSettings = new HashMap<String, Boolean>();
 		epSettings.put("protect.prevent.lava-flow", config.getBoolean("protect.prevent.lava-flow", false));
 		epSettings.put("protect.prevent.water-flow", config.getBoolean("protect.prevent.water-flow", false));
 		epSettings.put("protect.prevent.water-bucket-flow", config.getBoolean("protect.prevent.water-bucket-flow", false));
@@ -323,16 +330,16 @@ public class Settings implements IConf
 		epSettings.put("protect.prevent.creeper-blockdamage", config.getBoolean("protect.prevent.creeper-blockdamage", false));
 		epSettings.put("protect.prevent.entitytarget", config.getBoolean("protect.prevent.entitytarget", false));
 		for (CreatureType ct : CreatureType.values()) {
-			String name = ct.toString().toLowerCase();
+			final String name = ct.toString().toLowerCase();
 			epSettings.put("protect.prevent.spawn."+name, config.getBoolean("protect.prevent.spawn."+name, false));
 		}
 		epSettings.put("protect.prevent.lightning-fire-spread", config.getBoolean("protect.prevent.lightning-fire-spread", true));
 		return epSettings;
 	}
 
-	public HashMap<String, Boolean> getEpPlayerSettings()
+	public Map<String, Boolean> getEpPlayerSettings()
 	{
-		HashMap<String, Boolean> epPlayerSettings = new HashMap<String, Boolean>();
+		final Map<String, Boolean> epPlayerSettings = new HashMap<String, Boolean>();
 		epPlayerSettings.put("protect.disable.fall", config.getBoolean("protect.disable.fall", false));
 		epPlayerSettings.put("protect.disable.pvp", config.getBoolean("protect.disable.pvp", false));
 		epPlayerSettings.put("protect.disable.drown", config.getBoolean("protect.disable.drown", false));
@@ -386,12 +393,12 @@ public class Settings implements IConf
 		return !config.getString("newbies.announce-format", "-").isEmpty();
 	}
 
-	public String getAnnounceNewPlayerFormat(User user)
+	public String getAnnounceNewPlayerFormat(IUser user)
 	{
 		return format(config.getString("newbies.announce-format", "&dWelcome {DISPLAYNAME} to the server!"), user);
 	}
 
-	public String format(String format, User user)
+	public String format(String format, IUser user)
 	{
 		return format.replace('&', '§').replace("§§", "&").replace("{PLAYER}", user.getDisplayName()).replace("{DISPLAYNAME}", user.getDisplayName()).replace("{GROUP}", user.getGroup()).replace("{USERNAME}", user.getName()).replace("{ADDRESS}", user.getAddress().toString());
 	}
@@ -498,5 +505,15 @@ public class Settings implements IConf
 	public String getCurrencySymbol()
 	{
 		return config.getString("currency-symbol", "$").substring(0, 1).replaceAll("[0-9]", "$");
+	}
+
+	public boolean isTradeInStacks(int id)
+	{
+		return config.getBoolean("trade-in-stacks-" + id, false);
+	}
+
+	public boolean isEcoDisabled()
+	{
+		return config.getBoolean("disable-eco", false);
 	}
 }

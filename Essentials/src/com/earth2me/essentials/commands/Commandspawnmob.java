@@ -173,15 +173,15 @@ public class Commandspawnmob extends EssentialsCommand
 			}
 			catch (MobException e1)
 			{
-				throw new Exception(Util.i18n("unableToSpawnMob"));
+				throw new Exception(Util.i18n("unableToSpawnMob"), e1);
 			}
 			catch (NumberFormatException e2)
 			{
-				throw new Exception(Util.i18n("numberRequired"));
+				throw new Exception(Util.i18n("numberRequired"), e2);
 			}
 			catch (NullPointerException np)
 			{
-				throw new Exception(Util.i18n("soloMob"));
+				throw new Exception(Util.i18n("soloMob"), np);
 			}
 		}
 		else
@@ -205,7 +205,7 @@ public class Commandspawnmob extends EssentialsCommand
 			}
 			catch (Exception e)
 			{
-				throw new Exception(Util.i18n("slimeMalformedSize"));
+				throw new Exception(Util.i18n("slimeMalformedSize"), e);
 			}
 		}
 		if ("Sheep".equalsIgnoreCase(type))
@@ -216,7 +216,7 @@ public class Commandspawnmob extends EssentialsCommand
 			}
 			catch (Exception e)
 			{
-				throw new Exception(Util.i18n("sheepMalformedColor"));
+				throw new Exception(Util.i18n("sheepMalformedColor"), e);
 			}
 		}
 		if ("Wolf".equalsIgnoreCase(type) && data.equalsIgnoreCase("tamed"))

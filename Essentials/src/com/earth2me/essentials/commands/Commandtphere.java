@@ -21,7 +21,7 @@ public class Commandtphere extends EssentialsCommand
 		{
 			throw new Exception(Util.format("teleportDisabled", p.getDisplayName()));
 		}
-		p.getTeleport().teleport(user, new Charge(this));
+		p.getTeleport().teleport(user, new Charge(this.getName(), ess));
 		user.sendMessage(Util.i18n("teleporting"));
 		p.sendMessage(Util.i18n("teleporting"));
 	}

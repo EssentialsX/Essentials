@@ -12,8 +12,8 @@ import org.bukkit.plugin.InvalidDescriptionException;
 
 public class EconomyTest extends TestCase
 {
-	private OfflinePlayer base1;
-	private Essentials ess;
+	private final OfflinePlayer base1;
+	private final Essentials ess;
 
 	public EconomyTest(String testName)
 	{

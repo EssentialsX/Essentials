@@ -1,10 +1,13 @@
 package com.earth2me.essentials;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.bukkit.*;
-import org.bukkit.block.*;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.Sign;
 import org.bukkit.craftbukkit.block.CraftSign;
 import org.bukkit.event.block.*;
 import org.bukkit.inventory.ItemStack;
@@ -12,9 +15,9 @@ import org.bukkit.inventory.ItemStack;
 
 public class EssentialsBlockListener extends BlockListener
 {
-	private final Essentials ess;
+	private final IEssentials ess;
 	private static final Logger logger = Logger.getLogger("Minecraft");
-	public final static ArrayList<Material> protectedBlocks = new ArrayList<Material>(4);
+	public final static List<Material> protectedBlocks = new ArrayList<Material>(4);
 
 	static
 	{
@@ -24,7 +27,7 @@ public class EssentialsBlockListener extends BlockListener
 		protectedBlocks.add(Material.DISPENSER);
 	}
 
-	public EssentialsBlockListener(Essentials ess)
+	public EssentialsBlockListener(IEssentials ess)
 	{
 		this.ess = ess;
 	}
@@ -144,7 +147,7 @@ public class EssentialsBlockListener extends BlockListener
 						event.setLine(1, "§dWarp name!");
 						return;
 					} else {
-						Essentials.getWarps().getWarp(event.getLine(1));
+						ess.getWarps().getWarp(event.getLine(1));
 						if (event.getLine(2).equalsIgnoreCase("Everyone")) {
 							event.setLine(2, "§2Everyone");
 						}
@@ -243,7 +246,7 @@ public class EssentialsBlockListener extends BlockListener
 		}
 		boolean unlimitedForUser = user.hasUnlimited(is);
 		if (unlimitedForUser) {
-			ess.getScheduler().scheduleSyncDelayedTask(ess, 
+			ess.scheduleSyncDelayedTask(
 				new Runnable() {
 
 				public void run() {

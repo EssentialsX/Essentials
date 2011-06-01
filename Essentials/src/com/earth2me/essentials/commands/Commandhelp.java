@@ -14,6 +14,7 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 
 
@@ -71,10 +72,18 @@ public class Commandhelp extends EssentialsCommand
 		}
 		if (helpFile.exists())
 		{
-			BufferedReader rx = new BufferedReader(new FileReader(helpFile));
-			for (String l = null; rx.ready() && (l = rx.readLine()) != null;)
+			final BufferedReader bufferedReader = new BufferedReader(new FileReader(helpFile));
+			try {
+				
+				while (bufferedReader.ready())
+				{
+					final String line = bufferedReader.readLine();
+					retval.add(line.replace('&', '§'));
+				}
+			}
+			finally
 			{
-				retval.add(l.replace('&', '§'));
+				bufferedReader.close();
 			}
 			return retval;
 		}
@@ -85,17 +94,16 @@ public class Commandhelp extends EssentialsCommand
 		{
 			try
 			{
-				PluginDescriptionFile desc = p.getDescription();
-				HashMap<String, HashMap<String, String>> cmds = (HashMap<String, HashMap<String, String>>)desc.getCommands();
-				for (String k : cmds.keySet())
+				final PluginDescriptionFile desc = p.getDescription();
+				final HashMap<String, HashMap<String, String>> cmds = (HashMap<String, HashMap<String, String>>)desc.getCommands();
+				for (Entry<String, HashMap<String, String>> k : cmds.entrySet())
 				{
 					if (p.getDescription().getName().toLowerCase().contains("essentials"))
 					{
-						String node = "essentials." + k;
-						if (!ess.getSettings().isCommandDisabled(k) && user.isAuthorized(node))
+						final String node = "essentials." + k.getKey();
+						if (!ess.getSettings().isCommandDisabled(k.getKey()) && user.isAuthorized(node))
 						{
-							HashMap<String, String> v = cmds.get(k);
-							retval.add("§c" + k + "§7: " + v.get("description"));
+							retval.add("§c" + k.getKey() + "§7: " + k.getValue().get("description"));
 						}
 					}
 					else
@@ -103,17 +111,17 @@ public class Commandhelp extends EssentialsCommand
 						if (ess.getSettings().showNonEssCommandsInHelp())
 						{
 							pluginName = p.getDescription().getName();
-							HashMap<String, String> v = cmds.get(k);
-							if (v.containsKey("permission") && v.get("permission") != null && !(v.get("permission").equals("")))
+							final HashMap<String, String> value = k.getValue();
+							if (value.containsKey("permission") && value.get("permission") != null && !(value.get("permission").equals("")))
 							{
-								if (user.isAuthorized(v.get("permission")))
+								if (user.isAuthorized(value.get("permission")))
 								{
-									retval.add("§c" + k + "§7: " + v.get("description"));
+									retval.add("§c" + k.getKey() + "§7: " + value.get("description"));
 								}
 							}
 							else
 							{
-								retval.add("§c" + k + "§7: " + v.get("description"));
+								retval.add("§c" + k.getKey() + "§7: " + value.get("description"));
 							}
 						}
 
@@ -128,10 +136,7 @@ public class Commandhelp extends EssentialsCommand
 			{
 				if (!reported)
 				{
-					logger.log(Level.WARNING, "Error getting help for:" + pluginName);
-					ex.printStackTrace();
-					
-					
+					logger.log(Level.WARNING, "Error getting help for:" + pluginName, ex);
 				}
 				reported = true;
 				continue;
