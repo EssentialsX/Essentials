@@ -43,7 +43,7 @@ import org.bukkit.plugin.java.*;
 public class Essentials extends JavaPlugin
 {
 	public static final String AUTHORS = "Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans and Xeology";
-	public static final int minBukkitBuildVersion = 817;
+	public static final int minBukkitBuildVersion = 818;
 	private static final Logger logger = Logger.getLogger("Minecraft");
 	private Settings settings;
 	private EssentialsPlayerListener playerListener;
@@ -188,7 +188,7 @@ public class Essentials extends JavaPlugin
 		if (settings.isNetherEnabled() && getServer().getWorlds().size() < 2)
 		{
 			logger.log(Level.WARNING, "Old nether is disabled until multiworld support in bukkit is fixed.");
-			//getServer().createWorld(settings.getNetherName(), World.Environment.NETHER);
+			getServer().createWorld(settings.getNetherName(), World.Environment.NETHER);
 		}
 
 		timer = new EssentialsTimer(this);
