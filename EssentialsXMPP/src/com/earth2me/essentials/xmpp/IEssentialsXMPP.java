@@ -17,8 +17,8 @@ public interface IEssentialsXMPP
 
 	void sendMessage(final String address, final String message);
 
-	void setAddress(final Player user, final String address) throws Exception;
+	void setAddress(final Player user, final String address);
 
-	boolean toggleSpy(final Player user) throws Exception;
+	boolean toggleSpy(final Player user);
 	
 }

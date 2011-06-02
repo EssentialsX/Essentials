@@ -68,7 +68,7 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 	}
 	
 	@Override
-	public void setAddress(final Player user, final String address) throws Exception
+	public void setAddress(final Player user, final String address)
 	{
 		final String username = user.getName().toLowerCase();
 		instance.users.setAddress(username, address);
@@ -81,7 +81,7 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 	}
 
 	@Override
-	public boolean toggleSpy(final Player user) throws Exception
+	public boolean toggleSpy(final Player user)
 	{
 		final String username = user.getName().toLowerCase();
 		final boolean spy = !instance.users.isSpy(username);

@@ -27,7 +27,7 @@ public class UserManager implements IConf
 		return users.getBoolean(username.toLowerCase() + "." + SPY, false);
 	}
 
-	public void setSpy(final String username, boolean spy) throws Exception
+	public void setSpy(final String username, final boolean spy)
 	{
 		setUser(username.toLowerCase(), getAddress(username), spy);
 	}
@@ -37,7 +37,7 @@ public class UserManager implements IConf
 		return users.getString(username.toLowerCase() + "." + ADDRESS, null);
 	}
 
-	public void setAddress(final String username, final String address) throws Exception
+	public void setAddress(final String username, final String address)
 	{
 		setUser(username.toLowerCase(), address, isSpy(username));
 	}
@@ -47,7 +47,7 @@ public class UserManager implements IConf
 		return spyusers;
 	}
 
-	private void setUser(String username, String address, boolean spy) throws Exception
+	private void setUser(final String username, final String address, final boolean spy)
 	{
 		final Map<String, Object> userdata = new HashMap<String, Object>();
 		userdata.put(ADDRESS, address);

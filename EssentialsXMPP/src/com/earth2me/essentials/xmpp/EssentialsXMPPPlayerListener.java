@@ -50,6 +50,7 @@ class EssentialsXMPPPlayerListener extends PlayerListener
 		}
 		catch (Exception ex)
 		{
+			// Ignore exceptions
 		}
 	}
 }

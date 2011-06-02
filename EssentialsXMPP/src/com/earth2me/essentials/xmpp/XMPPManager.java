@@ -101,15 +101,15 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 		final String serviceName = config.getString("xmpp.servicename", server);
 		final String xmppuser = config.getString("xmpp.user");
 		final String password = config.getString("xmpp.password");
-		final ConnectionConfiguration cc = new ConnectionConfiguration(server, port, serviceName);
-		final StringBuilder sb = new StringBuilder();
-		sb.append("Connecting to xmpp server ").append(server).append(":").append(port);
-		sb.append(" as user ").append(xmppuser).append(".");
-		LOGGER.log(Level.INFO, sb.toString());
-		cc.setSASLAuthenticationEnabled(config.getBoolean("xmpp.sasl-enabled", false));
-		cc.setSendPresence(true);
-		cc.setReconnectionAllowed(true);
-		connection = new XMPPConnection(cc);
+		final ConnectionConfiguration connConf = new ConnectionConfiguration(server, port, serviceName);
+		final StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("Connecting to xmpp server ").append(server).append(":").append(port);
+		stringBuilder.append(" as user ").append(xmppuser).append(".");
+		LOGGER.log(Level.INFO, stringBuilder.toString());
+		connConf.setSASLAuthenticationEnabled(config.getBoolean("xmpp.sasl-enabled", false));
+		connConf.setSendPresence(true);
+		connConf.setReconnectionAllowed(true);
+		connection = new XMPPConnection(connConf);
 		try
 		{
 			connection.connect();
@@ -208,11 +208,13 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 	@Override
 	public void flush()
 	{
+		// Ignore this
 	}
 
 	@Override
 	public void close() throws SecurityException
 	{
+		// Ignore this
 	}
 
 	private void startChat(final String address) throws XMPPException
