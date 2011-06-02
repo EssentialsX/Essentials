@@ -73,14 +73,13 @@
 
     -->
 
-  <!--target name="-post-jar">
+  <target name="-post-jar">
     <jar jarfile="${dist.dir}/EssentialsProtect.jar">
       <zipfileset src="${dist.jar}" excludes="META-INF/*" />
-      <zipfileset src="../lib/mysql.jar" excludes="META-INF/*" />
-      <zipfileset src="../lib/sqlite.jar" excludes="META-INF/*" />
+      <zipfileset src="../lib/c3p0-0.9.1.2.jar" excludes="META-INF/*" />
       <manifest>
         <attribute name="Classpath" value="Essentials.jar"/>
       </manifest>
     </jar>
-  </target-->
+  </target>
 </project>

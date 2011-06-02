@@ -362,6 +362,9 @@ protect:
 
    # Prevent placing blocks above protected rails, this is to stop a potential griefing
     prevent-block-on-rails: false
+    
+    #Store blocks / signs in memory before writing
+    memstore: false
 
   # Disable various default physics and behaviors
   disable:

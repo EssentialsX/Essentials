@@ -198,20 +198,21 @@ public class Settings implements IConf
 		return config.getBoolean("non-ess-in-help", true);
 	}
 
-	public Map<String, Boolean> getEpSettings()
+	public HashMap<String, Boolean> getEpSettings()
 	{
-		Map<String, Boolean> epSettings = new HashMap<String, Boolean>();
+		HashMap<String, Boolean> epSettings = new HashMap<String, Boolean>();
 
 		epSettings.put("protect.protect.signs", config.getBoolean("protect.protect.signs", true));
 		epSettings.put("protect.protect.rails", config.getBoolean("protect.protect.rails", true));
 		epSettings.put("protect.protect.block-below", config.getBoolean("protect.protect.block-below", true));
 		epSettings.put("protect.protect.prevent-block-on-rails", config.getBoolean("protect.protect.prevent-block-on-rails", false));
+		epSettings.put("protect.memstore", config.getBoolean("protect.memstore", false));
 		return epSettings;
 	}
 
-	public Map<String, String> getEpDBSettings()
+	public HashMap<String, String> getEpDBSettings()
 	{
-		Map<String, String> epSettings = new HashMap<String, String>();
+		HashMap<String, String> epSettings = new HashMap<String, String>();
 		epSettings.put("protect.datatype", config.getString("protect.datatype", "sqlite"));
 		epSettings.put("protect.username", config.getString("protect.username", "root"));
 		epSettings.put("protect.password", config.getString("protect.password", "root"));
@@ -219,9 +220,9 @@ public class Settings implements IConf
 		return epSettings;
 	}
 
-	public List<Integer> getEpAlertOnPlacement()
+	public ArrayList getEpAlertOnPlacement()
 	{
-		final List<Integer> epAlertPlace = new ArrayList<Integer>();
+		final ArrayList epAlertPlace = new ArrayList();
 		for (String itemName : config.getString("protect.alert.on-placement", "").split(",")) {
 			itemName = itemName.trim();
 			if (itemName.isEmpty()) {
@@ -238,9 +239,9 @@ public class Settings implements IConf
 		return epAlertPlace;
 	}
 
-	public List<Integer> getEpAlertOnUse()
+	public ArrayList getEpAlertOnUse()
 	{
-		final List<Integer> epAlertUse = new ArrayList<Integer>();
+		final ArrayList epAlertUse = new ArrayList();
 		for (String itemName : config.getString("protect.alert.on-use", "").split(",")) {
 			itemName = itemName.trim();
 			if (itemName.isEmpty()) {
@@ -257,9 +258,9 @@ public class Settings implements IConf
 		return epAlertUse;
 	}
 
-	public List<Integer> getEpAlertOnBreak()
+	public ArrayList getEpAlertOnBreak()
 	{
-		final List<Integer> epAlertPlace = new ArrayList<Integer>();
+		final ArrayList epAlertPlace = new ArrayList();
 		for (String itemName : config.getString("protect.alert.on-break", "").split(",")) {
 			itemName = itemName.trim();
 			if (itemName.isEmpty()) {
@@ -276,9 +277,9 @@ public class Settings implements IConf
 		return epAlertPlace;
 	}
 
-	public List<Integer> epBlackListPlacement()
+	public ArrayList epBlackListPlacement()
 	{
-		final List<Integer> epBlacklistPlacement = new ArrayList<Integer>();
+		final ArrayList epBlacklistPlacement = new ArrayList();
 		for (String itemName : config.getString("protect.blacklist.placement", "").split(",")) {
 			itemName = itemName.trim();
 			if (itemName.isEmpty()) {
@@ -295,9 +296,9 @@ public class Settings implements IConf
 		return epBlacklistPlacement;
 	}
 
-	public List<Integer> epBlackListUsage()
+	public ArrayList epBlackListUsage()
 	{
-		final List<Integer> epBlackListUsage = new ArrayList<Integer>();
+		final ArrayList epBlackListUsage = new ArrayList();
 		for (String itemName : config.getString("protect.blacklist.usage", "").split(",")) {
 			itemName = itemName.trim();
 			if (itemName.isEmpty()) {
@@ -314,9 +315,9 @@ public class Settings implements IConf
 		return epBlackListUsage;
 	}
 
-	public Map<String, Boolean> getEpGuardSettings()
+	public HashMap<String, Boolean> getEpGuardSettings()
 	{
-		final Map<String, Boolean> epSettings = new HashMap<String, Boolean>();
+		final HashMap<String, Boolean> epSettings = new HashMap<String, Boolean>();
 		epSettings.put("protect.prevent.lava-flow", config.getBoolean("protect.prevent.lava-flow", false));
 		epSettings.put("protect.prevent.water-flow", config.getBoolean("protect.prevent.water-flow", false));
 		epSettings.put("protect.prevent.water-bucket-flow", config.getBoolean("protect.prevent.water-bucket-flow", false));
@@ -337,9 +338,9 @@ public class Settings implements IConf
 		return epSettings;
 	}
 
-	public Map<String, Boolean> getEpPlayerSettings()
+	public HashMap<String, Boolean> getEpPlayerSettings()
 	{
-		final Map<String, Boolean> epPlayerSettings = new HashMap<String, Boolean>();
+		final HashMap<String, Boolean> epPlayerSettings = new HashMap<String, Boolean>();
 		epPlayerSettings.put("protect.disable.fall", config.getBoolean("protect.disable.fall", false));
 		epPlayerSettings.put("protect.disable.pvp", config.getBoolean("protect.disable.pvp", false));
 		epPlayerSettings.put("protect.disable.drown", config.getBoolean("protect.disable.drown", false));
@@ -421,9 +422,9 @@ public class Settings implements IConf
 		config.load();
 	}
 
-	public ArrayList<Integer> itemSpawnBlacklist()
+	public ArrayList itemSpawnBlacklist()
 	{
-		ArrayList<Integer> epItemSpwn = new ArrayList<Integer>();
+		ArrayList epItemSpwn = new ArrayList();
 		for (String itemName : config.getString("item-spawn-blacklist", "").split(",")) {
 			itemName = itemName.trim();
 			if (itemName.isEmpty()) {
@@ -440,9 +441,9 @@ public class Settings implements IConf
 		return epItemSpwn;
 	}
 
-	public ArrayList<Integer> epBlockBreakingBlacklist()
+	public ArrayList epBlockBreakingBlacklist()
 	{
-		ArrayList<Integer> epBreakList = new ArrayList<Integer>();
+		ArrayList epBreakList = new ArrayList();
 		for (String itemName : config.getString("protect.blacklist.break", "").split(",")) {
 			itemName = itemName.trim();
 			if (itemName.isEmpty()) {
