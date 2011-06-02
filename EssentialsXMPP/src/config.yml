@@ -1,0 +1,17 @@
+xmpp:
+  server: 'example.com'
+  user: 'name@example.com'
+  password: 'password'
+#  servicename: 'example.com'
+#  port: 5222
+#  sasl-enabled: false
+
+op-users:
+#  - 'name@example.com'
+
+
+log-enabled: false
+# Level is minimum level that should be send: info, warning, severe
+log-level: warning
+log-users:
+#  - 'name@example.com'
