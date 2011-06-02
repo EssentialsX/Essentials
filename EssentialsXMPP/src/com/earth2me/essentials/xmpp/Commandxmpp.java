@@ -23,7 +23,6 @@ public class Commandxmpp extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		final String message = getFinalArg(args, 1);
 		final String address = EssentialsXMPP.getInstance().getAddress(args[0]);
 		if (address == null)
 		{
@@ -31,6 +30,7 @@ public class Commandxmpp extends EssentialsCommand
 		}
 		else
 		{
+			final String message = getFinalArg(args, 1);
 			final String senderName = sender instanceof Player ? ess.getUser(sender).getDisplayName() : Console.NAME;
 			sender.sendMessage("[" + senderName + ">" + address + "] " + message);
 			EssentialsXMPP.getInstance().sendMessage(address, "[" + senderName + "] " + message);

@@ -11,10 +11,10 @@ depend: [Essentials]
 commands:
   setxmpp:
     description: set your xmpp address
-    usage: /<command> address
+    usage: /<command> <address>
   xmpp:
     description: send a message to a player
-    usage: /<command> player message
+    usage: /<command> <player> <message>
   xmppspy:
-    description: toggle xmpp spy for all message
-    usage: /<command> player
+    description: toggle xmpp spy for all messages
+    usage: /<command> <player>

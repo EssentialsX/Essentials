@@ -51,28 +51,20 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 
 	public void sendMessage(final String address, final String message)
 	{
-		Chat chat = null;
-		try
+		if (address != null && !address.isEmpty())
 		{
-			if (address == null || address.isEmpty())
+			try
 			{
-				return;
+				startChat(address);
+				final Chat chat = chats.get(address);
+				if (chat != null)
+				{
+					chat.sendMessage(message.replaceAll("§[0-9a-f]", ""));
+				}
 			}
-			startChat(address);
-			chat = chats.get(address);
-			if (chat == null)
+			catch (XMPPException ex)
 			{
-				return;
-			}
-			chat.sendMessage(message.replaceAll("§[0-9a-f]", ""));
-		}
-		catch (XMPPException ex)
-		{
-			if (chat != null)
-			{
-				chat.removeMessageListener(this);
-				chats.remove(address);
-				LOGGER.log(Level.WARNING, "Failed to send xmpp message.", ex);
+				disableChat(address, ex);
 			}
 		}
 	}
@@ -260,7 +252,9 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 				{
 					LOGGER.log(Level.WARNING, "Failed to send xmpp message.", ex);
 				}
-			} else {
+			}
+			else
+			{
 				for (Player p : matches)
 				{
 					p.sendMessage("[" + chat.getParticipant() + ">" + p.getDisplayName() + "]  " + message);
@@ -278,6 +272,17 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 			{
 				craftServer.dispatchCommand(new ConsoleCommandSender(craftServer), message.substring(1));
 			}
+		}
+	}
+
+	private void disableChat(final String address, final XMPPException exception)
+	{
+		final Chat chat = chats.get(address);
+		if (chat != null)
+		{
+			chat.removeMessageListener(this);
+			chats.remove(address);
+			LOGGER.log(Level.WARNING, "Failed to send xmpp message.", exception);
 		}
 	}
 }
