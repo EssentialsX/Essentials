@@ -6,7 +6,6 @@ import com.earth2me.essentials.*;
 import org.bukkit.command.*;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.*;
 
 
