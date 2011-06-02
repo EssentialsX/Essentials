@@ -23,10 +23,9 @@ public class Commandantioch extends EssentialsCommand
 		ess.broadcastMessage(user.getName(), "...lobbest thou thy Holy Hand Grenade of Antioch towards thy foe,");
 		ess.broadcastMessage(user.getName(), "who being naughty in My sight, shall snuff it.");
 
-		Location loc = user.getLocation();
-		World world = ((CraftWorld)user.getWorld()).getHandle();
-		loc = new TargetBlock(user).getTargetBlock().getLocation();
-		EntityTNTPrimed tnt = new EntityTNTPrimed(world, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+		final World world = ((CraftWorld)user.getWorld()).getHandle();
+		final Location loc = new TargetBlock(user).getTargetBlock().getLocation();
+		final EntityTNTPrimed tnt = new EntityTNTPrimed(world, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
 		world.addEntity(tnt);
 		world.makeSound(tnt, "random.fuse", 1.0F, 1.0F);
 	}

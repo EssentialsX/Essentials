@@ -249,7 +249,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 		String[] retval = new String[lines.size()];
 
-		if (lines == null || lines.isEmpty() || lines.get(0) == null)
+		if (lines.isEmpty() || lines.get(0) == null)
 		{
 			try
 			{

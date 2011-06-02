@@ -22,23 +22,27 @@ public class Commandban extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		User p = null;
 		if (server.matchPlayer(args[0]).isEmpty())
 		{
 			((CraftServer)server).getHandle().a(args[0]);
-			sender.sendMessage(Util.format("playerBanned",args[0]));
+			sender.sendMessage(Util.format("playerBanned", args[0]));
 		}
 		else
 		{
-			p = ess.getUser(server.matchPlayer(args[0]).get(0));
-			String banReason =  Util.i18n("defaultBanReason");
-			if(args.length > 1) {
+			final User player = ess.getUser(server.matchPlayer(args[0]).get(0));
+			String banReason;
+			if (args.length > 1)
+			{
 				banReason = getFinalArg(args, 1);
-				p.setBanReason(commandLabel);
+				player.setBanReason(commandLabel);
 			}
-			p.kickPlayer(banReason);
-			((CraftServer)server).getHandle().a(p.getName());
-			sender.sendMessage(Util.format("playerBanned", p.getName()));
+			else
+			{
+				banReason = Util.i18n("defaultBanReason");
+			}
+			player.kickPlayer(banReason);
+			((CraftServer)server).getHandle().a(player.getName());
+			sender.sendMessage(Util.format("playerBanned", player.getName()));
 		}
 		ess.loadBanList();
 	}
