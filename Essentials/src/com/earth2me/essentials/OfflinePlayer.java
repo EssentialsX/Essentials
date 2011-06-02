@@ -25,6 +25,7 @@ import org.bukkit.util.Vector;
 public class OfflinePlayer implements Player
 {
 	private final String name;
+	final IEssentials ess = Essentials.getStatic();
 	private Location location = new Location(null, 0, 0, 0, 0, 0);
 	private World world = null;
 
@@ -136,7 +137,7 @@ public class OfflinePlayer implements Player
 	{
 		return world;
 	}
-	
+
 	public void setLocation(Location loc)
 	{
 		location = loc;
@@ -253,7 +254,7 @@ public class OfflinePlayer implements Player
 
 	public Server getServer()
 	{
-		return Essentials.getStatic() == null ? null : Essentials.getStatic().getServer();
+		return ess == null ? null : ess.getServer();
 	}
 
 	public Vector getMomentum()
@@ -291,7 +292,8 @@ public class OfflinePlayer implements Player
 		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
-	public void sendRawMessage(String string) {
+	public void sendRawMessage(String string)
+	{
 		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
