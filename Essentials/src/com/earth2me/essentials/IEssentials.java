@@ -60,9 +60,13 @@ public interface IEssentials
 	
 	int scheduleSyncDelayedTask(Runnable run);
 	
+	int scheduleSyncDelayedTask(Runnable run, long delay);
+	
 	int scheduleSyncRepeatingTask(final Runnable run, long delay, long period);
 
 	List<String> getBans();
 
 	List<String> getBannedIps();
+
+	TNTExplodeListener getTNTListener();
 }

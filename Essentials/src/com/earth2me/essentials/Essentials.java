@@ -30,7 +30,6 @@ import com.earth2me.essentials.register.payment.Methods;
 import java.math.BigInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.scheduler.CraftScheduler;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
@@ -50,6 +49,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private EssentialsBlockListener blockListener;
 	private EssentialsEntityListener entityListener;
 	private JailPlayerListener jailPlayerListener;
+	private TNTExplodeListener tntListener;
 	private static Essentials instance = null;
 	private Spawn spawn;
 	private Jail jail;
@@ -186,6 +186,9 @@ public class Essentials extends JavaPlugin implements IEssentials
 			logger.log(Level.WARNING, "Old nether is disabled until multiworld support in bukkit is fixed.");
 			getServer().createWorld(settings.getNetherName(), World.Environment.NETHER);
 		}
+
+		tntListener = new TNTExplodeListener(this);
+		pm.registerEvent(Type.ENTITY_EXPLODE, tntListener, Priority.High, this);
 
 		timer = new EssentialsTimer(this);
 		getScheduler().scheduleSyncRepeatingTask(this, timer, 1, 50);
@@ -730,6 +733,11 @@ public class Essentials extends JavaPlugin implements IEssentials
 		return this.getScheduler().scheduleSyncDelayedTask(this, run);
 	}
 
+	public int scheduleSyncDelayedTask(final Runnable run, final long delay)
+	{
+		return this.getScheduler().scheduleSyncDelayedTask(this, run, delay);
+	}
+
 	public int scheduleSyncRepeatingTask(final Runnable run, long delay, long period)
 	{
 		return this.getScheduler().scheduleSyncRepeatingTask(this, run, delay, period);
@@ -743,5 +751,10 @@ public class Essentials extends JavaPlugin implements IEssentials
 	public List<String> getBannedIps()
 	{
 		return bannedIps;
+	}
+
+	public TNTExplodeListener getTNTListener()
+	{
+		return tntListener;
 	}
 }
