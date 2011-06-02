@@ -452,12 +452,16 @@ sweb,30,0
 web,30,0
 longgrass,31,0
 tallgrass,31,0
+wildgrass,31,0
 grasslong,31,0
 grasstall,31,0
+grasswild,31,0
 lgrass,31,0
 tgrass,31,0
+wgrass,31,0
 grassl,31,0
 grasst,31,0
+grassw,31,0
 deadshrub,32,0
 shrubdead,32,0
 dshrub,32,0
@@ -794,6 +798,8 @@ blockdynamite,46,0
 tnt,46,0
 bomb,46,0
 dynamite,46,0
+bookcase,47,0
+casebook,47,0
 bookshelf,47,0
 shelfbook,47,0
 bookblock,47,0
