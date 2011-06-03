@@ -40,7 +40,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 	private transient List<String> logUsers;
 	private transient Level logLevel;
 	private transient boolean ignoreLagMessages = true;
-
+	
 	public XMPPManager(final JavaPlugin parent)
 	{
 		super();
@@ -49,7 +49,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 		config.setTemplateName("/config.yml", EssentialsXMPP.class);
 		reloadConfig();
 	}
-
+	
 	public void sendMessage(final String address, final String message)
 	{
 		if (address != null && !address.isEmpty())
@@ -65,17 +65,19 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 			}
 			catch (XMPPException ex)
 			{
-				disableChat(address, ex);
+				disableChat(address);
 			}
 		}
 	}
-
+	
 	@Override
 	public void processMessage(final Chat chat, final Message msg)
 	{
-		final String message = msg.getBody();
-		if (message.length() > 0)
+		// Normally we should log the error message
+		// But we would create a loop if the connection to a log-user fails.
+		if (msg.getType() != Message.Type.error && msg.getBody().length() > 0)
 		{
+			final String message = msg.getBody();
 			switch (message.charAt(0))
 			{
 			case '@':
@@ -89,7 +91,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 			}
 		}
 	}
-
+	
 	private void connect()
 	{
 		final String server = config.getString("xmpp.server");
@@ -124,7 +126,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 			LOGGER.log(Level.WARNING, "Failed to connect to server: " + server, ex);
 		}
 	}
-
+	
 	public final void disconnect()
 	{
 		if (connection != null)
@@ -132,7 +134,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 			connection.disconnect(new Presence(Presence.Type.unavailable));
 		}
 	}
-
+	
 	@Override
 	public void chatCreated(final Chat chat, final boolean createdLocally)
 	{
@@ -146,7 +148,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 			}
 		}
 	}
-
+	
 	@Override
 	public final void reloadConfig()
 	{
@@ -174,7 +176,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 			ignoreLagMessages = config.getBoolean("ignore-lag-messages", true);
 		}
 	}
-
+	
 	@Override
 	public void publish(final LogRecord logRecord)
 	{
@@ -199,25 +201,23 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 		}
 		catch (Exception e)
 		{
-			// Ignore all exception and just print them to the console
+			// Ignore all exceptions
 			// Otherwise we create a loop.
-			System.out.println(e.getMessage());
-			e.printStackTrace();
 		}
 	}
-
+	
 	@Override
 	public void flush()
 	{
 		// Ignore this
 	}
-
+	
 	@Override
 	public void close() throws SecurityException
 	{
 		// Ignore this
 	}
-
+	
 	private void startChat(final String address) throws XMPPException
 	{
 		if (chatManager == null)
@@ -237,14 +237,14 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 			}
 		}
 	}
-
+	
 	private void sendPrivateMessage(final Chat chat, final String message)
 	{
 		final String[] parts = message.split(" ", 2);
 		if (parts.length == 2)
 		{
 			final List<Player> matches = parent.getServer().matchPlayer(parts[0].substring(1));
-
+			
 			if (matches.isEmpty())
 			{
 				try
@@ -258,7 +258,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 			}
 			else
 			{
-				final String from = "[X:" + EssentialsXMPP.getInstance().getUserByAddress(StringUtils.parseBareAddress(chat.getParticipant()))  + ">";
+				final String from = "[X:" + EssentialsXMPP.getInstance().getUserByAddress(StringUtils.parseBareAddress(chat.getParticipant())) + ">";
 				for (Player p : matches)
 				{
 					p.sendMessage(from + p.getDisplayName() + "]  " + message);
@@ -266,7 +266,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 			}
 		}
 	}
-
+	
 	private void sendCommand(final Chat chat, final String message)
 	{
 		if (config.getStringList("op-users", new ArrayList<String>()).contains(StringUtils.parseBareAddress(chat.getParticipant())))
@@ -278,15 +278,14 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 			}
 		}
 	}
-
-	private void disableChat(final String address, final XMPPException exception)
+	
+	private void disableChat(final String address)
 	{
 		final Chat chat = chats.get(address);
 		if (chat != null)
 		{
 			chat.removeMessageListener(this);
 			chats.remove(address);
-			LOGGER.log(Level.WARNING, "Failed to send xmpp message.", exception);
 		}
 	}
 }
