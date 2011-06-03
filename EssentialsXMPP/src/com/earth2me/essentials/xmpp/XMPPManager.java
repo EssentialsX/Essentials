@@ -26,6 +26,7 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smack.util.StringUtils;
 
 
 public class XMPPManager extends Handler implements MessageListener, ChatManagerListener, IConf
@@ -84,7 +85,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 				sendCommand(chat, message);
 				break;
 			default:
-				parent.getServer().broadcastMessage("<XMPP:" + chat.getParticipant() + "> " + message);
+				parent.getServer().broadcastMessage("<XMPP:" + StringUtils.parseBareAddress(chat.getParticipant()) + "> " + message);
 			}
 		}
 	}
@@ -138,7 +139,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 		if (!createdLocally)
 		{
 			chat.addMessageListener(this);
-			final Chat old = chats.put(chat.getParticipant(), chat);
+			final Chat old = chats.put(StringUtils.parseBareAddress(chat.getParticipant()), chat);
 			if (old != null)
 			{
 				old.removeMessageListener(this);
@@ -259,7 +260,8 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 			{
 				for (Player p : matches)
 				{
-					p.sendMessage("[" + chat.getParticipant() + ">" + p.getDisplayName() + "]  " + message);
+					
+					p.sendMessage("[" +StringUtils.parseBareAddress(chat.getParticipant()) + ">" + p.getDisplayName() + "]  " + message);
 				}
 			}
 		}
@@ -267,7 +269,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 
 	private void sendCommand(final Chat chat, final String message)
 	{
-		if (config.getStringList("op-users", new ArrayList<String>()).contains(chat.getParticipant()))
+		if (config.getStringList("op-users", new ArrayList<String>()).contains(StringUtils.parseBareAddress(chat.getParticipant())))
 		{
 			final CraftServer craftServer = (CraftServer)parent.getServer();
 			if (craftServer != null)

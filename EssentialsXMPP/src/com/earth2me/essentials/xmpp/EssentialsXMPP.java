@@ -48,6 +48,7 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 		xmpp = new XMPPManager(this);
 		
 		ess.addReloadListener(users);
+		ess.addReloadListener(xmpp);
 		
 		if (!this.getDescription().getVersion().equals(Essentials.getStatic().getDescription().getVersion())) {
 			LOGGER.log(Level.WARNING, Util.i18n("versionMismatchAll"));
