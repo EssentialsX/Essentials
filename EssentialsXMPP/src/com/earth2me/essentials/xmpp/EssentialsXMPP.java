@@ -80,6 +80,12 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 	{
 		return instance.users.getAddress(name);
 	}
+	
+	@Override
+	public String getUserByAddress(final String address)
+	{
+		return instance.users.getUserByAddress(address);
+	}
 
 	@Override
 	public boolean toggleSpy(final Player user)

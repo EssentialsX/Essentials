@@ -85,7 +85,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 				sendCommand(chat, message);
 				break;
 			default:
-				parent.getServer().broadcastMessage("<XMPP:" + StringUtils.parseBareAddress(chat.getParticipant()) + "> " + message);
+				parent.getServer().broadcastMessage("<X:" + EssentialsXMPP.getInstance().getUserByAddress(StringUtils.parseBareAddress(chat.getParticipant())) + "> " + message);
 			}
 		}
 	}
@@ -258,10 +258,10 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 			}
 			else
 			{
+				final String from = "[X:" + EssentialsXMPP.getInstance().getUserByAddress(StringUtils.parseBareAddress(chat.getParticipant()))  + ">";
 				for (Player p : matches)
 				{
-					
-					p.sendMessage("[" +StringUtils.parseBareAddress(chat.getParticipant()) + ">" + p.getDisplayName() + "]  " + message);
+					p.sendMessage(from + p.getDisplayName() + "]  " + message);
 				}
 			}
 		}

@@ -36,6 +36,19 @@ public class UserManager implements IConf
 	{
 		return users.getString(username.toLowerCase() + "." + ADDRESS, null);
 	}
+	
+	public final String getUserByAddress(final String search)
+	{
+		final List<String> usernames = users.getKeys(null);
+		for (String username : usernames)
+		{
+			final String address = users.getString(username + "." + ADDRESS, null);
+			if (address != null && search.equalsIgnoreCase(address)) {
+				return username;
+			}
+		}
+		return search;
+	}
 
 	public void setAddress(final String username, final String address)
 	{

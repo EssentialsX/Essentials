@@ -12,6 +12,8 @@ public interface IEssentialsXMPP
 	String getAddress(final String name);
 
 	List<String> getSpyUsers();
+	
+	String getUserByAddress(final String address);
 
 	void sendMessage(final Player user, final String message);
 
