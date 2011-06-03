@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
+import org.bukkit.craftbukkit.block.CraftCreatureSpawner;
 import org.bukkit.entity.CreatureType;
 
 
@@ -33,7 +34,7 @@ public class Commandspawner extends EssentialsCommand
 		charge(user);
 		try
 		{
-			((CreatureSpawner)target).setCreatureType(CreatureType.fromName(args[0]));
+			new CraftCreatureSpawner(target).setCreatureType(CreatureType.fromName(args[0]));
 		}
 		catch (Throwable ex)
 		{
