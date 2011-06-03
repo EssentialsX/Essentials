@@ -12,6 +12,8 @@ import com.earth2me.essentials.protect.data.ProtectedBlockSQLite;
 import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Location;
@@ -30,16 +32,16 @@ public class EssentialsProtect extends JavaPlugin implements IConf
 	private EssentialsProtectWeatherListener weatherListener = null;
 	public static final String AUTHORS = Essentials.AUTHORS;
 	private static final Logger logger = Logger.getLogger("Minecraft");
-	public static HashMap<String, Boolean> genSettings = null;
-	public static HashMap<String, String> dataSettings = null;
-	public static HashMap<String, Boolean> guardSettings = null;
-	public static HashMap<String, Boolean> playerSettings = null;
-	public static ArrayList usageList = null;
-	public static ArrayList blackListPlace = null;
-	public static ArrayList breakBlackList = null;
-	public static ArrayList onPlaceAlert = null;
-	public static ArrayList onUseAlert = null;
-	public static ArrayList onBreakAlert = null;
+	public static Map<String, Boolean> genSettings = null;
+	public static Map<String, String> dataSettings = null;
+	public static Map<String, Boolean> guardSettings = null;
+	public static Map<String, Boolean> playerSettings = null;
+	public static List<Integer> usageList = null;
+	public static List<Integer> blackListPlace = null;
+	public static List<Integer> breakBlackList = null;
+	public static List<Integer> onPlaceAlert = null;
+	public static List<Integer> onUseAlert = null;
+	public static List<Integer> onBreakAlert = null;
 	private IProtectedBlock storage = null;
 	IEssentials ess = null;
 	private static EssentialsProtect instance = null;
@@ -54,8 +56,6 @@ public class EssentialsProtect extends JavaPlugin implements IConf
 		PluginManager pm = this.getServer().getPluginManager();
 		ess = Essentials.getStatic();
 		ess.getDependancyChecker().checkProtectDependancies();
-		instance = this;
-		reloadConfig();
 
 		playerListener = new EssentialsProtectPlayerListener(this);
 		blockListener = new EssentialsProtectBlockListener(this);
@@ -77,13 +77,15 @@ public class EssentialsProtect extends JavaPlugin implements IConf
 		if (!this.getDescription().getVersion().equals(Essentials.getStatic().getDescription().getVersion()))
 		{
 			logger.log(Level.WARNING, "Version mismatch! Please update all Essentials jars to the same version.");
+		reloadConfig();
+		Essentials.getStatic().addReloadListener(this);
 		}
-		logger.info("Loaded " + this.getDescription().getName() + " build " + this.getDescription().getVersion() + " maintained by " + AUTHORS);
+		logger.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), Essentials.AUTHORS));
 	}
 
-	public static boolean checkProtectionItems(ArrayList itemList, int id)
+	public static boolean checkProtectionItems(List<Integer> itemList, int id)
 	{
-		return !itemList.isEmpty() && itemList.contains(String.valueOf(id));
+		return !itemList.isEmpty() && itemList.contains(id);
 	}
 
 	@Override
