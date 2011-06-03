@@ -69,4 +69,6 @@ public interface IEssentials
 	List<String> getBannedIps();
 
 	TNTExplodeListener getTNTListener();
+	
+	EssentialsDependancyChecker getDependancyChecker();
 }

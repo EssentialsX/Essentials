@@ -50,6 +50,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private EssentialsEntityListener entityListener;
 	private JailPlayerListener jailPlayerListener;
 	private TNTExplodeListener tntListener;
+	private EssentialsDependancyChecker essDep;
 	private static Essentials instance = null;
 	private Spawn spawn;
 	private Jail jail;
@@ -116,6 +117,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		confList.add(worth);
 		reload();
 		backup = new Backup(this);
+		essDep = new EssentialsDependancyChecker(this);
 
 		PluginManager pm = getServer().getPluginManager();
 		for (Plugin plugin : pm.getPlugins())
@@ -183,7 +185,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 
 		if (settings.isNetherEnabled() && getServer().getWorlds().size() < 2)
 		{
-			logger.log(Level.WARNING, "Old nether is disabled until multiworld support in bukkit is fixed.");
 			getServer().createWorld(settings.getNetherName(), World.Environment.NETHER);
 		}
 
@@ -757,4 +758,10 @@ public class Essentials extends JavaPlugin implements IEssentials
 	{
 		return tntListener;
 	}
+	
+	public EssentialsDependancyChecker getDependancyChecker()
+	{
+		return essDep;
+	}
+
 }

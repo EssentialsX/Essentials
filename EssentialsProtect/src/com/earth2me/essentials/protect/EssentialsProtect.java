@@ -50,14 +50,10 @@ public class EssentialsProtect extends JavaPlugin implements IConf
 
 	public void onEnable()
 	{
-		ess = Essentials.getStatic();
-		PluginManager pm = this.getServer().getPluginManager();
-		Essentials ess = (Essentials)pm.getPlugin("Essentials");
-		if (!ess.isEnabled())
-		{
-			pm.enablePlugin(ess);
-		}
 
+		PluginManager pm = this.getServer().getPluginManager();
+		ess = Essentials.getStatic();
+		ess.getDependancyChecker().checkProtectDependancies();
 		instance = this;
 		reloadConfig();
 
@@ -77,7 +73,7 @@ public class EssentialsProtect extends JavaPlugin implements IConf
 		pm.registerEvent(Type.LIGHTNING_STRIKE, weatherListener, Priority.Highest, this);
 		pm.registerEvent(Type.THUNDER_CHANGE, weatherListener, Priority.Highest, this);
 		pm.registerEvent(Type.WEATHER_CHANGE, weatherListener, Priority.Highest, this);
-		
+
 		if (!this.getDescription().getVersion().equals(Essentials.getStatic().getDescription().getVersion()))
 		{
 			logger.log(Level.WARNING, "Version mismatch! Please update all Essentials jars to the same version.");
