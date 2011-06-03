@@ -10,8 +10,6 @@ import com.earth2me.essentials.protect.data.ProtectedBlockMemory;
 import com.earth2me.essentials.protect.data.ProtectedBlockMySQL;
 import com.earth2me.essentials.protect.data.ProtectedBlockSQLite;
 import java.beans.PropertyVetoException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -53,10 +51,10 @@ public class EssentialsProtect extends JavaPlugin implements IConf
 	public void onEnable()
 	{
 
-		PluginManager pm = this.getServer().getPluginManager();
+
 		ess = Essentials.getStatic();
 		ess.getDependancyChecker().checkProtectDependancies();
-
+		PluginManager pm = this.getServer().getPluginManager();
 		playerListener = new EssentialsProtectPlayerListener(this);
 		blockListener = new EssentialsProtectBlockListener(this);
 		entityListener = new EssentialsProtectEntityListener(this);
@@ -73,12 +71,11 @@ public class EssentialsProtect extends JavaPlugin implements IConf
 		pm.registerEvent(Type.LIGHTNING_STRIKE, weatherListener, Priority.Highest, this);
 		pm.registerEvent(Type.THUNDER_CHANGE, weatherListener, Priority.Highest, this);
 		pm.registerEvent(Type.WEATHER_CHANGE, weatherListener, Priority.Highest, this);
-
+		reloadConfig();
+		ess.addReloadListener(this);
 		if (!this.getDescription().getVersion().equals(Essentials.getStatic().getDescription().getVersion()))
 		{
-			logger.log(Level.WARNING, "Version mismatch! Please update all Essentials jars to the same version.");
-		reloadConfig();
-		Essentials.getStatic().addReloadListener(this);
+			logger.log(Level.WARNING, Util.i18n("versionMismatchAll"));
 		}
 		logger.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), Essentials.AUTHORS));
 	}
