@@ -110,6 +110,13 @@ public class EssentialsProtectBlockListener extends BlockListener
 			event.setCancelled(true);
 			return;
 		}
+		if (event.getBlock().getType() == Material.OBSIDIAN || 
+			event.getBlock().getFace(BlockFace.DOWN).getType() == Material.OBSIDIAN)
+		{
+			event.setCancelled(EssentialsProtect.guardSettings.get("protect.prevent.portal-creation"));
+			return;
+		}
+				
 		if ((event.getCause().equals(BlockIgniteEvent.IgniteCause.SPREAD)))
 		{
 			event.setCancelled(EssentialsProtect.guardSettings.get("protect.prevent.fire-spread"));
@@ -125,6 +132,11 @@ public class EssentialsProtectBlockListener extends BlockListener
 		if (event.getCause().equals(BlockIgniteEvent.IgniteCause.LAVA))
 		{
 			event.setCancelled(EssentialsProtect.guardSettings.get("protect.prevent.lava-fire-spread"));
+			return;
+		}
+		if (event.getCause().equals(BlockIgniteEvent.IgniteCause.LIGHTNING))
+		{
+			event.setCancelled(EssentialsProtect.guardSettings.get("protect.prevent.lightning-fire-spread"));
 			return;
 		}
 	}

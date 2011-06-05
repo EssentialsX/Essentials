@@ -50,8 +50,6 @@ public class EssentialsProtect extends JavaPlugin implements IConf
 
 	public void onEnable()
 	{
-
-
 		ess = Essentials.getStatic();
 		ess.getDependancyChecker().checkProtectDependancies();
 		PluginManager pm = this.getServer().getPluginManager();
@@ -90,7 +88,6 @@ public class EssentialsProtect extends JavaPlugin implements IConf
 	{
 		genSettings.clear();
 		dataSettings.clear();
-
 		blockListener = null;
 		playerListener = null;
 		entityListener = null;
