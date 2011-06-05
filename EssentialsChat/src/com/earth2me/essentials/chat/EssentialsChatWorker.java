@@ -62,7 +62,7 @@ public class EssentialsChatWorker
 		if (user.isAuthorized("essentials.chat.color"))
 			event.setMessage(event.getMessage().replaceAll("&([0-9a-f])", "§$1"));
 
-		event.setFormat(Essentials.getStatic().getSettings().getChatFormat(user.getGroup()).replace('&', '§').replace("§§", "&").replace("{DISPLAYNAME}", "%1$s").replace("{GROUP}", user.getGroup()).replace("{MESSAGE}", "%2$s").replace("{WORLDNAME}", user.getWorld().getName()));
+		event.setFormat(Essentials.getStatic().getSettings().getChatFormat(user.getGroup()).replace('&', '§').replace("§§", "&").replace("{DISPLAYNAME}", "%1$s").replace("{GROUP}", user.getGroup()).replace("{MESSAGE}", "%2$s").replace("{WORLDNAME}", user.getWorld().getName()).replace("{SHORTWORLDNAME}", user.getWorld().getName().substring(0, 1).toUpperCase()));
 
 		int radius = Essentials.getStatic().getSettings().getChatRadius();
 		if (radius < 1) return;
