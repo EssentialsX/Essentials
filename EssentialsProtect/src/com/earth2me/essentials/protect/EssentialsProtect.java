@@ -69,6 +69,7 @@ public class EssentialsProtect extends JavaPlugin implements IConf
 		pm.registerEvent(Type.LIGHTNING_STRIKE, weatherListener, Priority.Highest, this);
 		pm.registerEvent(Type.THUNDER_CHANGE, weatherListener, Priority.Highest, this);
 		pm.registerEvent(Type.WEATHER_CHANGE, weatherListener, Priority.Highest, this);
+		pm.registerEvent(Type.ENTITY_TARGET, entityListener, Priority.Highest, this);
 		reloadConfig();
 		ess.addReloadListener(this);
 		if (!this.getDescription().getVersion().equals(Essentials.getStatic().getDescription().getVersion()))
