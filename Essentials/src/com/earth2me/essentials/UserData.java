@@ -324,7 +324,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 	private ItemStack[] _getSavedInventory()
 	{
 		int size = config.getInt("inventory.size", 0);
-		if (getInventory() == null || size < 1 || size > getInventory().getSize())
+		if (getInventory() != null && (size < 1 || size > getInventory().getSize()))
 		{
 			return null;
 		}
