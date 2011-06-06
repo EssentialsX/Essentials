@@ -1,5 +1,6 @@
 package com.earth2me.essentials.xmpp;
 
+import com.earth2me.essentials.Console;
 import com.earth2me.essentials.EssentialsConf;
 import com.earth2me.essentials.IConf;
 import java.io.File;
@@ -12,8 +13,6 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jivesoftware.smack.Chat;
@@ -271,10 +270,13 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 	{
 		if (config.getStringList("op-users", new ArrayList<String>()).contains(StringUtils.parseBareAddress(chat.getParticipant())))
 		{
-			final CraftServer craftServer = (CraftServer)parent.getServer();
-			if (craftServer != null)
+			try
 			{
-				craftServer.dispatchCommand(new ConsoleCommandSender(craftServer), message.substring(1));
+				parent.getServer().dispatchCommand(Console.getCommandSender(parent.getServer()), message.substring(1));
+			}
+			catch (Exception ex)
+			{
+				LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
 			}
 		}
 	}
