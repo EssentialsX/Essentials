@@ -45,10 +45,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 	public static final int minBukkitBuildVersion = 818;
 	private static final Logger logger = Logger.getLogger("Minecraft");
 	private Settings settings;
-	private EssentialsPlayerListener playerListener;
-	private EssentialsBlockListener blockListener;
-	private EssentialsEntityListener entityListener;
-	private JailPlayerListener jailPlayerListener;
 	private TNTExplodeListener tntListener;
 	private EssentialsDependancyChecker essDep;
 	private static Essentials instance = null;
@@ -61,7 +57,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 	public ArrayList bannedIps = new ArrayList();
 	private Backup backup;
 	private final Map<String, User> users = new HashMap<String, User>();
-	private EssentialsTimer timer;
 	private EssentialsUpdateTimer updateTimer;
 	private boolean registerFallback = true;
 	private final Methods paymentMethod = new Methods();
@@ -145,11 +140,11 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 
 
-		ServerListener serverListener = new EssentialsPluginListener(paymentMethod);
+		final ServerListener serverListener = new EssentialsPluginListener(paymentMethod);
 		pm.registerEvent(Type.PLUGIN_ENABLE, serverListener, Priority.Low, this);
 		pm.registerEvent(Type.PLUGIN_DISABLE, serverListener, Priority.Low, this);
 
-		playerListener = new EssentialsPlayerListener(this);
+		final EssentialsPlayerListener playerListener = new EssentialsPlayerListener(this);
 		pm.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
 		pm.registerEvent(Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
 		pm.registerEvent(Type.PLAYER_CHAT, playerListener, Priority.Lowest, this);
@@ -164,18 +159,18 @@ public class Essentials extends JavaPlugin implements IEssentials
 		pm.registerEvent(Type.PLAYER_BUCKET_EMPTY, playerListener, Priority.High, this);
 		pm.registerEvent(Type.PLAYER_ANIMATION, playerListener, Priority.High, this);
 
-		blockListener = new EssentialsBlockListener(this);
+		final EssentialsBlockListener blockListener = new EssentialsBlockListener(this);
 		pm.registerEvent(Type.SIGN_CHANGE, blockListener, Priority.Low, this);
 		pm.registerEvent(Type.BLOCK_BREAK, blockListener, Priority.Lowest, this);
 		pm.registerEvent(Type.BLOCK_PLACE, blockListener, Priority.Lowest, this);
 
-		entityListener = new EssentialsEntityListener(this);
+		final EssentialsEntityListener entityListener = new EssentialsEntityListener(this);
 		pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Priority.Lowest, this);
 		pm.registerEvent(Type.ENTITY_COMBUST, entityListener, Priority.Lowest, this);
 		pm.registerEvent(Type.ENTITY_DEATH, entityListener, Priority.Lowest, this);
 
 		jail = new Jail(this);
-		jailPlayerListener = new JailPlayerListener(this);
+		final JailPlayerListener jailPlayerListener = new JailPlayerListener(this);
 		confList.add(jail);
 		pm.registerEvent(Type.BLOCK_BREAK, jail, Priority.High, this);
 		pm.registerEvent(Type.BLOCK_DAMAGE, jail, Priority.High, this);
@@ -191,7 +186,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		tntListener = new TNTExplodeListener(this);
 		pm.registerEvent(Type.ENTITY_EXPLODE, tntListener, Priority.High, this);
 
-		timer = new EssentialsTimer(this);
+		final EssentialsTimer timer = new EssentialsTimer(this);
 		getScheduler().scheduleSyncRepeatingTask(this, timer, 1, 50);
 		if (enableErrorLogging)
 		{
