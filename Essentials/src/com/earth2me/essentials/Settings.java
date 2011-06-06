@@ -422,9 +422,9 @@ public class Settings implements IConf
 		config.load();
 	}
 
-	public ArrayList itemSpawnBlacklist()
+	public List<Integer> itemSpawnBlacklist()
 	{
-		ArrayList epItemSpwn = new ArrayList();
+		final List<Integer> epItemSpwn = new ArrayList<Integer>();
 		for (String itemName : config.getString("item-spawn-blacklist", "").split(",")) {
 			itemName = itemName.trim();
 			if (itemName.isEmpty()) {
@@ -441,9 +441,9 @@ public class Settings implements IConf
 		return epItemSpwn;
 	}
 
-	public ArrayList<Integer> epBlockBreakingBlacklist()
+	public List<Integer> epBlockBreakingBlacklist()
 	{
-		ArrayList<Integer> epBreakList = new ArrayList<Integer>();
+		final List<Integer> epBreakList = new ArrayList<Integer>();
 		for (String itemName : config.getString("protect.blacklist.break", "").split(",")) {
 			itemName = itemName.trim();
 			if (itemName.isEmpty()) {
