@@ -1,5 +1,5 @@
 # This determines the command prefix when there are conflicts (/name:home, /name:help, etc.)
-name: Essentials
+name: EssentialsPermissionsCommands
 main: com.earth2me.essentials.permissions.EssentialsPermissionsCommands
 # Note to developers: This next line cannot change, or the automatic versioning system will break.
 version: TeamCity

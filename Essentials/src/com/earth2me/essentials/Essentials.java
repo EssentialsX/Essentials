@@ -115,7 +115,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		backup = new Backup(this);
 		essDep = new EssentialsDependancyChecker(this);
 
-		PluginManager pm = getServer().getPluginManager();
+		final PluginManager pm = getServer().getPluginManager();
 		for (Plugin plugin : pm.getPlugins())
 		{
 			if (plugin.getDescription().getName().startsWith("Essentials"))
