@@ -52,7 +52,8 @@ public class EssentialsPlayerListener extends PlayerListener
 		User user = ess.getUser(event.getPlayer());
 		user.setDisplayName(user.getNick());
 		updateCompass(user);
-		if (user.isJailed() && user.getJail() != null && !user.getJail().isEmpty()) {
+		if (user.isJailed() && user.getJail() != null && !user.getJail().isEmpty())
+		{
 			try
 			{
 				event.setRespawnLocation(ess.getJail().getJail(user.getJail()));
@@ -109,15 +110,18 @@ public class EssentialsPlayerListener extends PlayerListener
 
 			Location loc = event.getTo();
 			World nether = server.getWorld(ess.getSettings().getNetherName());
-			if (nether == null) {
+			if (nether == null)
+			{
 				for (World world : worlds)
 				{
-					if (world.getEnvironment() == World.Environment.NETHER) {
+					if (world.getEnvironment() == World.Environment.NETHER)
+					{
 						nether = world;
 						break;
 					}
 				}
-				if (nether == null) {
+				if (nether == null)
+				{
 					return;
 				}
 			}
@@ -465,7 +469,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			}
 			if (sign.getLine(0).equals("§1[Warp]"))
 			{
-				
+
 				if (!sign.getLine(2).isEmpty())
 				{
 					if (sign.getLine(2).equals("§2Everyone"))
@@ -489,6 +493,22 @@ public class EssentialsPlayerListener extends PlayerListener
 				}
 				return;
 			}
+			if (sign.getLine(0).equals("§1[Time]") && user.isAuthorized("essentials.signs.time.use"))
+			{
+				long time = user.getWorld().getTime();
+				time -= time % 24000;
+				if ("day".equalsIgnoreCase(sign.getLine(1)))
+				{
+					user.getWorld().setTime(time + 24000);
+					return;
+				}
+				if ("night".equalsIgnoreCase(sign.getLine(1)))
+				{
+					user.getWorld().setTime(time + 37700);
+					return;
+				}
+				throw new Exception(Util.i18n("onlyDayNight"));
+			}
 		}
 		catch (Throwable ex)
 		{
@@ -499,7 +519,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			}
 		}
 	}
-	
+
 	private Charge chargeUserForWarp(Sign sign, User user) throws Exception
 	{
 		if (!sign.getLine(3).isEmpty())
