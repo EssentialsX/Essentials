@@ -83,6 +83,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		logger.log(Level.INFO, dataFolder.toString());
 		this.initialize(null, server, new PluginDescriptionFile(new FileReader(new File("src" + File.separator + "plugin.yml"))), dataFolder, null, null);
 		settings = new Settings(dataFolder);
+		permissionsHandler = new ConfigPermissionsHandler(this);
 		setStatic();
 	}
 
