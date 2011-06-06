@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import java.util.HashMap;
+import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.Inventory;
@@ -18,17 +19,17 @@ public final class InventoryWorkaround
 	{
 	}
 	
-	public static int first(Inventory ci, ItemStack item, boolean forceDurability, boolean forceAmount)
+	public static int first(final Inventory inventory, final ItemStack item, final boolean forceDurability, final boolean forceAmount)
 	{
-		return next(ci, item, 0, forceDurability, forceAmount);
+		return next(inventory, item, 0, forceDurability, forceAmount);
 	}
 
-	public static int next(Inventory ci, ItemStack item, int start, boolean forceDurability, boolean forceAmount)
+	public static int next(final Inventory cinventory, final ItemStack item, final int start, final boolean forceDurability, final boolean forceAmount)
 	{
-		ItemStack[] inventory = ci.getContents();
+		final ItemStack[] inventory = cinventory.getContents();
 		for (int i = start; i < inventory.length; i++)
 		{
-			ItemStack cItem = inventory[i];
+			final ItemStack cItem = inventory[i];
 			if (cItem == null)
 			{
 				continue;
@@ -41,15 +42,15 @@ public final class InventoryWorkaround
 		return -1;
 	}
 
-	public static HashMap<Integer, ItemStack> removeItem(Inventory ci, boolean forceDurability, ItemStack... items)
+	public static Map<Integer, ItemStack> removeItem(final Inventory cinventory, final boolean forceDurability, final ItemStack... items)
 	{
-		HashMap<Integer, ItemStack> leftover = new HashMap<Integer, ItemStack>();
+		final Map<Integer, ItemStack> leftover = new HashMap<Integer, ItemStack>();
 
 		// TODO: optimization
 
 		for (int i = 0; i < items.length; i++)
 		{
-			ItemStack item = items[i];
+			final ItemStack item = items[i];
 			if (item == null)
 			{
 				continue;
@@ -66,7 +67,7 @@ public final class InventoryWorkaround
 				}
 
 				// get first Item, ignore the amount
-				int first = first(ci, item, forceDurability, false);
+				final int first = first(cinventory, item, forceDurability, false);
 
 				// Drat! we don't have this type in the inventory
 				if (first == -1)
@@ -77,20 +78,20 @@ public final class InventoryWorkaround
 				}
 				else
 				{
-					ItemStack itemStack = ci.getItem(first);
-					int amount = itemStack.getAmount();
+					final ItemStack itemStack = cinventory.getItem(first);
+					final int amount = itemStack.getAmount();
 
 					if (amount <= toDelete)
 					{
 						toDelete -= amount;
 						// clear the slot, all used up
-						ci.clear(first);
+						cinventory.clear(first);
 					}
 					else
 					{
 						// split the stack and store
 						itemStack.setAmount(amount - toDelete);
-						ci.setItem(first, itemStack);
+						cinventory.setItem(first, itemStack);
 						toDelete = 0;
 					}
 				}
@@ -99,9 +100,9 @@ public final class InventoryWorkaround
 		return leftover;
 	}
 
-	public static boolean containsItem(Inventory ci, boolean forceDurability, ItemStack... items)
+	public static boolean containsItem(final Inventory cinventory, final boolean forceDurability, final ItemStack... items)
 	{
-		HashMap<Integer, ItemStack> leftover = new HashMap<Integer, ItemStack>();
+		final Map<Integer, ItemStack> leftover = new HashMap<Integer, ItemStack>();
 
 		// TODO: optimization
 
@@ -131,7 +132,7 @@ public final class InventoryWorkaround
 
 		for (int i = 0; i < combined.length; i++)
 		{
-			ItemStack item = combined[i];
+			final ItemStack item = combined[i];
 			if (item == null)
 			{
 				continue;
@@ -147,7 +148,7 @@ public final class InventoryWorkaround
 					break;
 				}
 
-				int slot = next(ci, item, position, forceDurability, false);
+				final int slot = next(cinventory, item, position, forceDurability, false);
 
 				// Drat! we don't have this type in the inventory
 				if (slot == -1)
@@ -157,8 +158,8 @@ public final class InventoryWorkaround
 				}
 				else
 				{
-					ItemStack itemStack = ci.getItem(slot);
-					int amount = itemStack.getAmount();
+					final ItemStack itemStack = cinventory.getItem(slot);
+					final int amount = itemStack.getAmount();
 
 					if (amount <= mustHave)
 					{
@@ -175,11 +176,11 @@ public final class InventoryWorkaround
 		return leftover.isEmpty();
 	}
 
-	public static Item[] dropItem(Location loc, ItemStack itm)
+	public static Item[] dropItem(final Location loc, final ItemStack itm)
 	{
-		int maxStackSize = itm.getType().getMaxStackSize();
-		int stacks = itm.getAmount() / maxStackSize;
-		int leftover = itm.getAmount() % maxStackSize;
+		final int maxStackSize = itm.getType().getMaxStackSize();
+		final int stacks = itm.getAmount() / maxStackSize;
+		final int leftover = itm.getAmount() % maxStackSize;
 		Item[] itemStacks = new Item[stacks + (leftover > 0 ? 1 : 0)];
 		for (int i = 0; i < stacks; i++) {
 			itemStacks[i] = loc.getWorld().dropItem(loc, new ItemStack(itm.getType(), maxStackSize, itm.getDurability()));	
