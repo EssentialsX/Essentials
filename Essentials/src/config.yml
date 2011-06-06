@@ -88,7 +88,6 @@ motd:
   - '&cWelcome, {PLAYER}&c!'
   - '&fType &c/help&f for a list of commands.'
   - 'Currently online: {PLAYERLIST}'
-  - 'Did you know that you can make [Disposal] signs with Essentials?'
   - 'You have {MAILS} mail messages'
 
 # The server rules, available by typing /rules
