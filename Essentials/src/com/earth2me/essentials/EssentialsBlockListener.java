@@ -156,6 +156,14 @@ public class EssentialsBlockListener extends BlockListener
 				}
 				return;
 			}
+			if (event.getLine(0).equalsIgnoreCase("[Time]"))
+			{
+				if (user.isAuthorized("essentials.signs.time.create"))
+					event.setLine(0, "§1[Time]");
+				else
+					event.setLine(0, "§4[Time]");
+				return;
+			}
 		}
 		catch (Throwable ex)
 		{
