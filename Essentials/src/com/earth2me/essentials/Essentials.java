@@ -62,6 +62,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private final Methods paymentMethod = new Methods();
 	private final static boolean enableErrorLogging = false;
 	private final EssentialsErrorHandler errorHandler = new EssentialsErrorHandler();
+	private IPermissionsHandler permissionsHandler;
 
 	public static IEssentials getStatic()
 	{
@@ -139,6 +140,20 @@ public class Essentials extends JavaPlugin implements IEssentials
 			logger.log(Level.INFO, Util.i18n("bukkitFormatChanged"));
 		}
 
+		Plugin permissionsPlugin = pm.getPlugin("Permissions");
+
+		if (permissionsPlugin != null)
+		{
+			if (permissionsPlugin.getDescription().getVersion().charAt(0) == '3') {
+				this.permissionsHandler = new Permissions3Handler(permissionsPlugin);
+			} else {
+				this.permissionsHandler = new Permissions2Handler(permissionsPlugin);
+			}
+		}
+		else
+		{
+			this.permissionsHandler = new ConfigPermissionsHandler(this);
+		}
 
 		final ServerListener serverListener = new EssentialsPluginListener(paymentMethod);
 		pm.registerEvent(Type.PLUGIN_ENABLE, serverListener, Priority.Low, this);
@@ -753,10 +768,14 @@ public class Essentials extends JavaPlugin implements IEssentials
 	{
 		return tntListener;
 	}
-	
+
 	public EssentialsDependancyChecker getDependancyChecker()
 	{
 		return essDep;
 	}
 
+	public IPermissionsHandler getPermissionsHandler()
+	{
+		return permissionsHandler;
+	}
 }

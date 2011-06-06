@@ -48,16 +48,8 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		{
 			return false;
 		}
-
-		try
-		{
-			return com.nijikokun.bukkit.Permissions.Permissions.Security.permission(base, node);
-		}
-		catch (Throwable ex)
-		{
-			String[] cmds = node.split("\\.", 2);
-			return !ess.getSettings().isCommandRestricted(cmds[cmds.length - 1]);
-		}
+		
+		return ess.getPermissionsHandler().hasPermission(this, node);
 	}
 
 	public void healCooldown() throws Exception

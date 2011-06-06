@@ -71,4 +71,6 @@ public interface IEssentials
 	TNTExplodeListener getTNTListener();
 	
 	EssentialsDependancyChecker getDependancyChecker();
+
+	IPermissionsHandler getPermissionsHandler();
 }
