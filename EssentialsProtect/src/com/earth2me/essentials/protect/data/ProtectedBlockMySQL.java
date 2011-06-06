@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ProtectedBlockMySQL extends ProtectedBlockJDBC {
 
@@ -50,10 +52,24 @@ public class ProtectedBlockMySQL extends ProtectedBlockJDBC {
 			}
 		} finally {
 			if (testRS != null) {
-				testRS.close();
+				try
+				{
+					testRS.close();
+				}
+				catch (SQLException ex)
+				{
+					Logger.getLogger(ProtectedBlockMySQL.class.getName()).log(Level.SEVERE, null, ex);
+				}
 			}
 			if (testPS != null) {
-				testPS.close();
+				try
+				{
+					testPS.close();
+				}
+				catch (SQLException ex)
+				{
+					Logger.getLogger(ProtectedBlockMySQL.class.getName()).log(Level.SEVERE, null, ex);
+				}
 			}
 		}
 	}

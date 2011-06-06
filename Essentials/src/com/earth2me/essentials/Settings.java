@@ -198,167 +198,7 @@ public class Settings implements IConf
 		return config.getBoolean("non-ess-in-help", true);
 	}
 
-	public Map<String, Boolean> getEpSettings()
-	{
-		Map<String, Boolean> epSettings = new HashMap<String, Boolean>();
-
-		epSettings.put("protect.protect.signs", config.getBoolean("protect.protect.signs", true));
-		epSettings.put("protect.protect.rails", config.getBoolean("protect.protect.rails", true));
-		epSettings.put("protect.protect.block-below", config.getBoolean("protect.protect.block-below", true));
-		epSettings.put("protect.protect.prevent-block-on-rails", config.getBoolean("protect.protect.prevent-block-on-rails", false));
-		epSettings.put("protect.memstore", config.getBoolean("protect.memstore", false));
-		return epSettings;
-	}
-
-	public Map<String, String> getEpDBSettings()
-	{
-		Map<String, String> epSettings = new HashMap<String, String>();
-		epSettings.put("protect.datatype", config.getString("protect.datatype", "sqlite"));
-		epSettings.put("protect.username", config.getString("protect.username", "root"));
-		epSettings.put("protect.password", config.getString("protect.password", "root"));
-		epSettings.put("protect.mysqlDb", config.getString("protect.mysqlDb", "jdbc:mysql://localhost:3306/minecraft"));
-		return epSettings;
-	}
-
-	public List<Integer> getEpAlertOnPlacement()
-	{
-		final List<Integer> epAlertPlace = new ArrayList<Integer>();
-		for (String itemName : config.getString("protect.alert.on-placement", "").split(",")) {
-			itemName = itemName.trim();
-			if (itemName.isEmpty()) {
-				continue;
-			}
-			ItemStack is;
-			try {
-				is = ItemDb.get(itemName);
-				epAlertPlace.add(is.getTypeId());
-			} catch (Exception ex) {
-				logger.log(Level.SEVERE, Util.format("unknownItemInList", itemName, "alert.on-placement"));
-			}
-		}
-		return epAlertPlace;
-	}
-
-	public List<Integer> getEpAlertOnUse()
-	{
-		final List<Integer> epAlertUse = new ArrayList<Integer>();
-		for (String itemName : config.getString("protect.alert.on-use", "").split(",")) {
-			itemName = itemName.trim();
-			if (itemName.isEmpty()) {
-				continue;
-			}
-			ItemStack is;
-			try {
-				is = ItemDb.get(itemName);
-				epAlertUse.add(is.getTypeId());
-			} catch (Exception ex) {
-				logger.log(Level.SEVERE, Util.format("unknownItemInList", itemName, "alert.on-use"));
-			}
-		}
-		return epAlertUse;
-	}
-
-	public List<Integer> getEpAlertOnBreak()
-	{
-		final List<Integer> epAlertPlace = new ArrayList<Integer>();
-		for (String itemName : config.getString("protect.alert.on-break", "").split(",")) {
-			itemName = itemName.trim();
-			if (itemName.isEmpty()) {
-				continue;
-			}
-			ItemStack is;
-			try {
-				is = ItemDb.get(itemName);
-				epAlertPlace.add(is.getTypeId());
-			} catch (Exception ex) {
-				logger.log(Level.SEVERE, Util.format("unknownItemInList", itemName, "alert.on-break"));
-			}
-		}
-		return epAlertPlace;
-	}
-
-	public List<Integer> epBlackListPlacement()
-	{
-		final List<Integer> epBlacklistPlacement = new ArrayList<Integer>();
-		for (String itemName : config.getString("protect.blacklist.placement", "").split(",")) {
-			itemName = itemName.trim();
-			if (itemName.isEmpty()) {
-				continue;
-			}
-			ItemStack is;
-			try {
-				is = ItemDb.get(itemName);
-				epBlacklistPlacement.add(is.getTypeId());
-			} catch (Exception ex) {
-				logger.log(Level.SEVERE, Util.format("unknownItemInList", itemName, "blacklist.placement"));
-			}
-		}
-		return epBlacklistPlacement;
-	}
-
-	public List<Integer> epBlackListUsage()
-	{
-		final List<Integer> epBlackListUsage = new ArrayList<Integer>();
-		for (String itemName : config.getString("protect.blacklist.usage", "").split(",")) {
-			itemName = itemName.trim();
-			if (itemName.isEmpty()) {
-				continue;
-			}
-			ItemStack is;
-			try {
-				is = ItemDb.get(itemName);
-				epBlackListUsage.add(is.getTypeId());
-			} catch (Exception ex) {
-				logger.log(Level.SEVERE, Util.format("unknownItemInList", itemName, "blacklist.usage"));
-			}
-		}
-		return epBlackListUsage;
-	}
-
-	public Map<String, Boolean> getEpGuardSettings()
-	{
-		final Map<String, Boolean> epSettings = new HashMap<String, Boolean>();
-		epSettings.put("protect.prevent.lava-flow", config.getBoolean("protect.prevent.lava-flow", false));
-		epSettings.put("protect.prevent.water-flow", config.getBoolean("protect.prevent.water-flow", false));
-		epSettings.put("protect.prevent.water-bucket-flow", config.getBoolean("protect.prevent.water-bucket-flow", false));
-		epSettings.put("protect.prevent.fire-spread", config.getBoolean("protect.prevent.fire-spread", true));
-		epSettings.put("protect.prevent.flint-fire", config.getBoolean("protect.prevent.flint-fire", false));
-		epSettings.put("protect.prevent.portal-creation", config.getBoolean("protect.prevent.portal-creation", false));
-		epSettings.put("protect.prevent.lava-fire-spread", config.getBoolean("protect.prevent.lava-fire-spread", true));
-		epSettings.put("protect.prevent.tnt-explosion", config.getBoolean("protect.prevent.tnt-explosion", false));
-		epSettings.put("protect.prevent.creeper-explosion", config.getBoolean("protect.prevent.creeper-explosion", false));
-		epSettings.put("protect.prevent.creeper-playerdamage", config.getBoolean("protect.prevent.creeper-playerdamage", false));
-		epSettings.put("protect.prevent.creeper-blockdamage", config.getBoolean("protect.prevent.creeper-blockdamage", false));
-		epSettings.put("protect.prevent.entitytarget", config.getBoolean("protect.prevent.entitytarget", false));
-		for (CreatureType ct : CreatureType.values()) {
-			final String name = ct.toString().toLowerCase();
-			epSettings.put("protect.prevent.spawn."+name, config.getBoolean("protect.prevent.spawn."+name, false));
-		}
-		epSettings.put("protect.prevent.lightning-fire-spread", config.getBoolean("protect.prevent.lightning-fire-spread", true));
-		return epSettings;
-	}
-
-	public Map<String, Boolean> getEpPlayerSettings()
-	{
-		final Map<String, Boolean> epPlayerSettings = new HashMap<String, Boolean>();
-		epPlayerSettings.put("protect.disable.fall", config.getBoolean("protect.disable.fall", false));
-		epPlayerSettings.put("protect.disable.pvp", config.getBoolean("protect.disable.pvp", false));
-		epPlayerSettings.put("protect.disable.drown", config.getBoolean("protect.disable.drown", false));
-		epPlayerSettings.put("protect.disable.suffocate", config.getBoolean("protect.disable.suffocate", false));
-		epPlayerSettings.put("protect.disable.lavadmg", config.getBoolean("protect.disable.lavadmg", false));
-		epPlayerSettings.put("protect.disable.projectiles", config.getBoolean("protect.disable.projectiles", false));
-		epPlayerSettings.put("protect.disable.contactdmg", config.getBoolean("protect.disable.contactdmg", false));
-		epPlayerSettings.put("protect.disable.firedmg", config.getBoolean("protect.disable.firedmg", false));
-		epPlayerSettings.put("protect.disable.build", config.getBoolean("protect.disable.build", false));
-		epPlayerSettings.put("protect.disable.lightning", config.getBoolean("protect.disable.lightning", false));
-		epPlayerSettings.put("protect.disable.weather.lightning", config.getBoolean("protect.disable.weather.lightning", false));
-		epPlayerSettings.put("protect.disable.weather.storm", config.getBoolean("protect.disable.weather.storm", false));
-		epPlayerSettings.put("protect.disable.weather.thunder", config.getBoolean("protect.disable.weather.thunder", false));
-		return epPlayerSettings;
-
-	}
-	
-	public int getEpCreeperMaxHeight()
+	public int getProtectCreeperMaxHeight()
 	{
 		return config.getInt("protect.creeper.max-height", -1);
 	}
@@ -441,25 +281,6 @@ public class Settings implements IConf
 		return epItemSpwn;
 	}
 
-	public List<Integer> epBlockBreakingBlacklist()
-	{
-		final List<Integer> epBreakList = new ArrayList<Integer>();
-		for (String itemName : config.getString("protect.blacklist.break", "").split(",")) {
-			itemName = itemName.trim();
-			if (itemName.isEmpty()) {
-				continue;
-			}
-			ItemStack is;
-			try {
-				is = ItemDb.get(itemName);
-				epBreakList.add(is.getTypeId());
-			} catch (Exception ex) {
-				logger.log(Level.SEVERE, Util.format("unknownItemInList", itemName, "blacklist.break"));
-			}
-		}
-		return epBreakList;
-	}
-
 	public boolean spawnIfNoHome()
 	{
 		return config.getBoolean("spawn-if-no-home", false);
@@ -516,5 +337,39 @@ public class Settings implements IConf
 	public boolean isEcoDisabled()
 	{
 		return config.getBoolean("disable-eco", false);
+	}
+
+	public boolean getProtectPreventSpawn(final String creatureName)
+	{
+		return config.getBoolean("protect.prevent.spawn."+creatureName, false);
+	}
+
+	public List<Integer> getProtectList(final String configName)
+	{
+		final List<Integer> list = new ArrayList<Integer>();
+		for (String itemName : config.getString(configName, "").split(",")) {
+			itemName = itemName.trim();
+			if (itemName.isEmpty()) {
+				continue;
+			}
+			ItemStack itemStack;
+			try {
+				itemStack = ItemDb.get(itemName);
+				list.add(itemStack.getTypeId());
+			} catch (Exception ex) {
+				logger.log(Level.SEVERE, Util.format("unknownItemInList", itemName, configName));
+			}
+		}
+		return list;
+	}
+
+	public String getProtectString(final String configName)
+	{
+		return config.getString(configName, null);
+	}
+
+	public boolean getProtectBoolean(final String configName, boolean def)
+	{
+		return config.getBoolean(configName, def);
 	}
 }

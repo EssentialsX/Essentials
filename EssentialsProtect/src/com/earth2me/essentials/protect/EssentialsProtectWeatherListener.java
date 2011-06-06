@@ -8,53 +8,43 @@ import org.bukkit.event.weather.WeatherListener;
 
 public class EssentialsProtectWeatherListener extends WeatherListener
 {
-	private EssentialsProtect parent;
+	private final transient IProtect prot;
 
-	public EssentialsProtectWeatherListener(EssentialsProtect parent)
+	public EssentialsProtectWeatherListener(final IProtect prot)
 	{
-		this.parent = parent;
+		this.prot = prot;
 	}
 
 	@Override
-	public void onWeatherChange(WeatherChangeEvent event)
+	public void onWeatherChange(final WeatherChangeEvent event)
 	{
-		if (event.isCancelled())
-		{
-			return;
-		}
-		if (EssentialsProtect.playerSettings.get("protect.disable.weather.storm") && event.toWeatherState())
+		if (!event.isCancelled()
+			&& prot.getSettingBool(ProtectConfig.disable_weather_storm)
+			&& event.toWeatherState())
 		{
 			event.setCancelled(true);
-			return;
 		}
 
 	}
 
 	@Override
-	public void onLightningStrike(LightningStrikeEvent event)
+	public void onLightningStrike(final LightningStrikeEvent event)
 	{
-		if (event.isCancelled())
-		{
-			return;
-		}
-		if (EssentialsProtect.playerSettings.get("protect.disable.weather.lightning"))
+		if (!event.isCancelled()
+			&& prot.getSettingBool(ProtectConfig.disable_weather_lightning))
 		{
 			event.setCancelled(true);
-			return;
 		}
 	}
 
 	@Override
-	public void onThunderChange(ThunderChangeEvent event)
+	public void onThunderChange(final ThunderChangeEvent event)
 	{
-		if (event.isCancelled())
-		{
-			return;
-		}
-		if (EssentialsProtect.playerSettings.get("protect.disable.weather.thunder") && event.toThunderState())
+		if (!event.isCancelled()
+			&& prot.getSettingBool(ProtectConfig.disable_weather_thunder)
+			&& event.toThunderState())
 		{
 			event.setCancelled(true);
-			return;
 		}
 	}
 }

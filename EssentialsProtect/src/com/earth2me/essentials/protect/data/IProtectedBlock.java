@@ -1,7 +1,6 @@
 package com.earth2me.essentials.protect.data;
 
 import java.util.List;
-import java.util.Set;
 import org.bukkit.block.Block;
 
 public interface  IProtectedBlock {

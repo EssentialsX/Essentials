@@ -10,6 +10,7 @@ import com.earth2me.essentials.protect.data.ProtectedBlockMemory;
 import com.earth2me.essentials.protect.data.ProtectedBlockMySQL;
 import com.earth2me.essentials.protect.data.ProtectedBlockSQLite;
 import java.beans.PropertyVetoException;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -22,125 +23,104 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
-public class EssentialsProtect extends JavaPlugin implements IConf
+public class EssentialsProtect extends JavaPlugin implements IConf, IProtect
 {
-	private EssentialsProtectBlockListener blockListener = null;
-	private EssentialsProtectPlayerListener playerListener = null;
-	private EssentialsProtectEntityListener entityListener = null;
-	private EssentialsProtectWeatherListener weatherListener = null;
-	public static final String AUTHORS = Essentials.AUTHORS;
-	private static final Logger logger = Logger.getLogger("Minecraft");
-	public static Map<String, Boolean> genSettings = null;
-	public static Map<String, String> dataSettings = null;
-	public static Map<String, Boolean> guardSettings = null;
-	public static Map<String, Boolean> playerSettings = null;
-	public static List<Integer> usageList = null;
-	public static List<Integer> blackListPlace = null;
-	public static List<Integer> breakBlackList = null;
-	public static List<Integer> onPlaceAlert = null;
-	public static List<Integer> onUseAlert = null;
-	public static List<Integer> onBreakAlert = null;
-	private IProtectedBlock storage = null;
-	IEssentials ess = null;
-	private static EssentialsProtect instance = null;
+	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 
-	public EssentialsProtect()
-	{
-	}
+	private final transient Map<ProtectConfig, Boolean> settingsBoolean = new EnumMap<ProtectConfig, Boolean>(ProtectConfig.class);
+	private final transient Map<ProtectConfig, String> settingsString = new EnumMap<ProtectConfig, String>(ProtectConfig.class);
+	private final transient Map<ProtectConfig, List<Integer>> settingsList = new EnumMap<ProtectConfig, List<Integer>>(ProtectConfig.class);
+	private transient IProtectedBlock storage = null;
+	public transient IEssentials ess = null;
 
 	public void onEnable()
 	{
 		ess = Essentials.getStatic();
 		ess.getDependancyChecker().checkProtectDependancies();
-		PluginManager pm = this.getServer().getPluginManager();
-		playerListener = new EssentialsProtectPlayerListener(this);
-		blockListener = new EssentialsProtectBlockListener(this);
-		entityListener = new EssentialsProtectEntityListener(this);
-		weatherListener = new EssentialsProtectWeatherListener(this);
+		final PluginManager pm = this.getServer().getPluginManager();
+
+		final EssentialsProtectPlayerListener playerListener = new EssentialsProtectPlayerListener(this);
 		pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Priority.Low, this);
+
+		final EssentialsProtectBlockListener blockListener = new EssentialsProtectBlockListener(this);
 		pm.registerEvent(Type.BLOCK_PLACE, blockListener, Priority.Highest, this);
 		pm.registerEvent(Type.BLOCK_FROMTO, blockListener, Priority.Highest, this);
 		pm.registerEvent(Type.BLOCK_IGNITE, blockListener, Priority.Highest, this);
 		pm.registerEvent(Type.BLOCK_BURN, blockListener, Priority.Highest, this);
+		pm.registerEvent(Type.BLOCK_BREAK, blockListener, Priority.Highest, this);
+
+		final EssentialsProtectEntityListener entityListener = new EssentialsProtectEntityListener(this);
 		pm.registerEvent(Type.ENTITY_EXPLODE, entityListener, Priority.Highest, this);
 		pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Priority.Highest, this);
-		pm.registerEvent(Type.BLOCK_BREAK, blockListener, Priority.Highest, this);
 		pm.registerEvent(Type.CREATURE_SPAWN, entityListener, Priority.Highest, this);
+		pm.registerEvent(Type.ENTITY_TARGET, entityListener, Priority.Highest, this);
+
+		final EssentialsProtectWeatherListener weatherListener = new EssentialsProtectWeatherListener(this);
 		pm.registerEvent(Type.LIGHTNING_STRIKE, weatherListener, Priority.Highest, this);
 		pm.registerEvent(Type.THUNDER_CHANGE, weatherListener, Priority.Highest, this);
 		pm.registerEvent(Type.WEATHER_CHANGE, weatherListener, Priority.Highest, this);
-		pm.registerEvent(Type.ENTITY_TARGET, entityListener, Priority.Highest, this);
+
 		reloadConfig();
 		ess.addReloadListener(this);
-		if (!this.getDescription().getVersion().equals(Essentials.getStatic().getDescription().getVersion()))
+		if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion()))
 		{
-			logger.log(Level.WARNING, Util.i18n("versionMismatchAll"));
+			LOGGER.log(Level.WARNING, Util.i18n("versionMismatchAll"));
 		}
-		logger.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), Essentials.AUTHORS));
-	}
-
-	public static boolean checkProtectionItems(List<Integer> itemList, int id)
-	{
-		return !itemList.isEmpty() && itemList.contains(id);
+		LOGGER.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), Essentials.AUTHORS));
 	}
 
 	@Override
-	public void onDisable()
+	public boolean checkProtectionItems(final ProtectConfig list, final int id)
 	{
-		genSettings.clear();
-		dataSettings.clear();
-		blockListener = null;
-		playerListener = null;
-		entityListener = null;
-		genSettings = null;
-		dataSettings = null;
-		guardSettings = null;
-		playerSettings = null;
-		usageList = null;
-		blackListPlace = null;
-		onPlaceAlert = null;
-		onUseAlert = null;
-		onBreakAlert = null;
+		final List<Integer> itemList = settingsList.get(list);
+		return itemList != null && !itemList.isEmpty() && itemList.contains(id);
 	}
 
-	public void alert(User user, String item, String type)
+	@Override
+	public void alert(final User user, final String item, final String type)
 	{
-		Location loc = user.getLocation();
+		final Location loc = user.getLocation();
 		for (Player p : this.getServer().getOnlinePlayers())
 		{
-			User alertUser = ess.getUser(p);
+			final User alertUser = ess.getUser(p);
 			if (alertUser.isAuthorized("essentials.protect.alerts"))
+			{
 				alertUser.sendMessage(Util.format("alertFormat", user.getName(), type, item, formatCoords(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())));
+			}
 		}
 	}
 
-	public static String formatCoords(int x, int y, int z)
+	public static String formatCoords(final int x, final int y, final int z)
 	{
 		return x + "," + y + "," + z;
 	}
 
 	public void reloadConfig()
 	{
-		dataSettings = ess.getSettings().getEpDBSettings();
-		genSettings = ess.getSettings().getEpSettings();
-		guardSettings = ess.getSettings().getEpGuardSettings();
-		usageList = ess.getSettings().epBlackListUsage();
-		blackListPlace = ess.getSettings().epBlackListPlacement();
-		breakBlackList = ess.getSettings().epBlockBreakingBlacklist();
-		onPlaceAlert = ess.getSettings().getEpAlertOnPlacement();
-		onUseAlert = ess.getSettings().getEpAlertOnUse();
-		onBreakAlert = ess.getSettings().getEpAlertOnBreak();
-		playerSettings = ess.getSettings().getEpPlayerSettings();
+		for (ProtectConfig protectConfig : ProtectConfig.values())
+		{
+			if (protectConfig.isList()) {
+				settingsList.put(protectConfig, ess.getSettings().getProtectList(protectConfig.getConfigName()));
+			} else if (protectConfig.isString()) {
+				settingsString.put(protectConfig, ess.getSettings().getProtectString(protectConfig.getConfigName()));
+			} else {
+				settingsBoolean.put(protectConfig, ess.getSettings().getProtectBoolean(protectConfig.getConfigName(), protectConfig.getDefaultValueBoolean()));
+			}
+			
+		}
 
-		if (dataSettings.get("protect.datatype").equals("mysql"))
+		if (getSettingString(ProtectConfig.datatype).equalsIgnoreCase("mysql"))
 		{
 			try
 			{
-				storage = new ProtectedBlockMySQL(dataSettings.get("protect.mysqlDb"), dataSettings.get("protect.username"), dataSettings.get("protect.password"));
+				storage = new ProtectedBlockMySQL(
+						getSettingString(ProtectConfig.mysqlDB),
+						getSettingString(ProtectConfig.dbUsername),
+						getSettingString(ProtectConfig.dbPassword));
 			}
 			catch (PropertyVetoException ex)
 			{
-				logger.log(Level.SEVERE, null, ex);
+				LOGGER.log(Level.SEVERE, null, ex);
 			}
 		}
 		else
@@ -151,17 +131,41 @@ public class EssentialsProtect extends JavaPlugin implements IConf
 			}
 			catch (PropertyVetoException ex)
 			{
-				logger.log(Level.SEVERE, null, ex);
+				LOGGER.log(Level.SEVERE, null, ex);
 			}
 		}
-		if (genSettings.get("protect.memstore"))
+		if (getSettingBool(ProtectConfig.memstore))
 		{
-			storage = new ProtectedBlockMemory(storage);
+			storage = new ProtectedBlockMemory(storage, this);
 		}
 	}
 
-	public static IProtectedBlock getStorage()
+	@Override
+	public IProtectedBlock getStorage()
 	{
-		return EssentialsProtect.instance.storage;
+		return storage;
+	}
+	
+	@Override
+	public boolean getSettingBool(final ProtectConfig protectConfig)
+	{
+		final Boolean bool = settingsBoolean.get(protectConfig);
+		return bool == null ? protectConfig.getDefaultValueBoolean() : bool;
+	}
+	
+	@Override
+	public String getSettingString(final ProtectConfig protectConfig)
+	{
+		final String str = settingsString.get(protectConfig);
+		return str == null ? protectConfig.getDefaultValueString() : str;
+	}
+
+	public void onDisable()
+	{
+	}
+
+	public IEssentials getEssentials()
+	{
+		return ess;
 	}
 }

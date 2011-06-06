@@ -1,39 +1,45 @@
 package com.earth2me.essentials.protect;
 
+import com.earth2me.essentials.IEssentials;
 import org.bukkit.block.Block;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.inventory.ItemStack;
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 
+
 public class EssentialsProtectPlayerListener extends PlayerListener
 {
-	private EssentialsProtect parent;
+	private final transient IProtect prot;
+	private final transient IEssentials ess;
 
-	public EssentialsProtectPlayerListener(EssentialsProtect parent)
+	public EssentialsProtectPlayerListener(final IProtect prot)
 	{
-		
-		this.parent = parent;
+		this.prot = prot;
+		this.ess = prot.getEssentials();
 	}
 
 	@Override
-	public void onPlayerInteract(PlayerInteractEvent event)
+	public void onPlayerInteract(final PlayerInteractEvent event)
 	{
-		if (event.isCancelled()) return;
-		ItemStack item = event.getItem();
-		User user = parent.ess.getUser(event.getPlayer());
-		Block blockClicked = event.getClickedBlock();
+		if (event.isCancelled())
+		{
+			return;
+		}
 
-		if (EssentialsProtect.playerSettings.get("protect.disable.build") && !user.canBuild())
+		final User user = ess.getUser(event.getPlayer());
+
+		if (prot.getSettingBool(ProtectConfig.disable_build) && !user.canBuild())
 		{
 			event.setCancelled(true);
 			return;
 		}
 
-
-		if (item != null && EssentialsProtect.checkProtectionItems(EssentialsProtect.usageList, item.getTypeId()) && !user.isAuthorized("essentials.protect.exemptusage"))
+		final ItemStack item = event.getItem();
+		if (item != null
+			&& prot.checkProtectionItems(ProtectConfig.blacklist_usage, item.getTypeId())
+			&& !user.isAuthorized("essentials.protect.exemptusage"))
 		{
 			event.setCancelled(true);
 			return;
@@ -41,26 +47,28 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 
 		if (user.isAuthorized("essentials.protect.admin"))
 		{
-			StringBuilder sb = new StringBuilder();
+			final StringBuilder stringBuilder = new StringBuilder();
 			boolean first = true;
-			for (String owner : EssentialsProtect.getStorage().getOwners(blockClicked))
+			final Block blockClicked = event.getClickedBlock();
+			for (String owner : prot.getStorage().getOwners(blockClicked))
 			{
 				if (!first)
 				{
-					sb.append(", ");
+					stringBuilder.append(", ");
 				}
 				first = false;
-				sb.append(owner);
+				stringBuilder.append(owner);
 			}
-			String ownerNames = sb.toString();
+			final String ownerNames = stringBuilder.toString();
 			if (ownerNames != null && !ownerNames.isEmpty())
 			{
 				user.sendMessage(Util.format("protectionOwner", ownerNames));
 			}
 		}
-		if (item != null && EssentialsProtect.onUseAlert.contains(String.valueOf(item.getTypeId())))
+		if (item != null
+			&& prot.checkProtectionItems(ProtectConfig.alert_on_use, item.getTypeId()))
 		{
-			parent.alert(user, item.getType().toString(), Util.i18n("alertUsed"));
+			prot.alert(user, item.getType().toString(), Util.i18n("alertUsed"));
 		}
 	}
 }
