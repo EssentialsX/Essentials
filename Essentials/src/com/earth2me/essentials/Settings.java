@@ -6,10 +6,8 @@ import org.bukkit.ChatColor;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.bukkit.entity.CreatureType;
 import org.bukkit.inventory.ItemStack;
 
 
