@@ -36,7 +36,6 @@ public class EssentialsProtect extends JavaPlugin implements IConf, IProtect
 	public void onEnable()
 	{
 		ess = Essentials.getStatic();
-		ess.getDependancyChecker().checkProtectDependancies();
 		final PluginManager pm = this.getServer().getPluginManager();
 
 		final EssentialsProtectPlayerListener playerListener = new EssentialsProtectPlayerListener(this);
