@@ -6,11 +6,11 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
 
-public class Commandmanudelsub extends EssentialsCommand
+public class Commandmanudelp extends EssentialsCommand
 {
-	public Commandmanudelsub()
+	public Commandmanudelp()
 	{
-		super("manudelsub");
+		super("manudelp");
 	}
 
 	@Override
@@ -21,8 +21,8 @@ public class Commandmanudelsub extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 		final String player = args[0];
-		final String group = args[1];
-		ess.getServer().dispatchCommand(sender, "/permissions "+player+" parents remove "+group+"");
+		final String perm = args[1];
+		ess.getServer().dispatchCommand(sender, "/permissions "+player+" perms remove "+perm+"");
 	}
 	
 	
