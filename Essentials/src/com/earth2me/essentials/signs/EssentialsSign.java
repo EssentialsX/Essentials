@@ -136,17 +136,24 @@ public class EssentialsSign
 			{
 				throw new SignException(Util.i18n("invalidCharge"));
 			}
-			final int quantity = Integer.parseInt(split[0]);
-			if (quantity <= 1)
+			try
 			{
-				throw new SignException(Util.i18n("moreThanZero"));
+				final int quantity = Integer.parseInt(split[0]);
+				if (quantity <= 1)
+				{
+					throw new SignException(Util.i18n("moreThanZero"));
+				}
+				final String item = split[1].toLowerCase();
+				if (!item.equalsIgnoreCase("times"))
+				{
+					getItemStack(item);
+				}
+				sign.setLine(index, quantity + " " + item);
 			}
-			final String item = split[1].toLowerCase();
-			if (!item.equalsIgnoreCase("times"))
+			catch (NumberFormatException ex)
 			{
-				getItemStack(item);
+				throw new SignException(Util.i18n("invalidCharge"), ex);
 			}
-			sign.setLine(index, quantity + " " + item);
 		}
 	}
 
@@ -187,22 +194,29 @@ public class EssentialsSign
 			{
 				throw new SignException(Util.i18n("invalidCharge"));
 			}
-			final int quantity = Integer.parseInt(split[0]);
-			if (quantity <= 1)
+			try
 			{
-				throw new SignException(Util.i18n("moreThanZero"));
+				final int quantity = Integer.parseInt(split[0]);
+				if (quantity <= 1)
+				{
+					throw new SignException(Util.i18n("moreThanZero"));
+				}
+				final String item = split[1].toLowerCase();
+				if (item.equalsIgnoreCase("times"))
+				{
+					sign.setLine(index, (quantity - 1) + " times");
+					return new Charge(signName.toLowerCase() + "sign", ess);
+				}
+				else
+				{
+					final ItemStack stack = getItemStack(item);
+					stack.setAmount(quantity);
+					return new Charge(quantity, ess);
+				}
 			}
-			final String item = split[1].toLowerCase();
-			if (item.equalsIgnoreCase("times"))
+			catch (NumberFormatException ex)
 			{
-				sign.setLine(index, (quantity - 1) + " times");
-				return new Charge(signName.toLowerCase() + "sign", ess);
-			}
-			else
-			{
-				final ItemStack stack = getItemStack(item);
-				stack.setAmount(quantity);
-				return new Charge(quantity, ess);
+				throw new SignException(Util.i18n("invalidCharge"), ex);
 			}
 		}
 	}
