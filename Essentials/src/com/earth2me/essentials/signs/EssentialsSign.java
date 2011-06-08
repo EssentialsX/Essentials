@@ -31,7 +31,8 @@ public class EssentialsSign
 		final ISign sign = new EventSign(event);
 		sign.setLine(0, String.format(FORMAT_FAIL, this.signName));
 		final User user = ess.getUser(event.getPlayer());
-		if (!user.isAuthorized("essentials.signs." + signName.toLowerCase() + ".create"))
+		if (!(user.isAuthorized("essentials.signs." + signName.toLowerCase() + ".create")
+			  || user.isAuthorized("essentials.signs.create." + signName.toLowerCase())))
 		{
 			return false;
 		}
@@ -63,7 +64,8 @@ public class EssentialsSign
 		final User user = ess.getUser(event.getPlayer());
 		try
 		{
-			return user.isAuthorized("essentials.signs." + signName.toLowerCase() + ".use")
+			return (user.isAuthorized("essentials.signs." + signName.toLowerCase() + ".use")
+					|| user.isAuthorized("essentials.signs.use." + signName.toLowerCase()))
 				   && onSignInteract(sign, user, getUsername(user), ess);
 		}
 		catch (ChargeException ex)
@@ -84,7 +86,7 @@ public class EssentialsSign
 		final User user = ess.getUser(event.getPlayer());
 		try
 		{
-			return user.isAuthorized("essentials.signs." + signName.toLowerCase() + ".break")
+			return user.isAuthorized("essentials.signs.break." + signName.toLowerCase())
 				   && onSignBreak(sign, user, getUsername(user), ess);
 		}
 		catch (SignException ex)
