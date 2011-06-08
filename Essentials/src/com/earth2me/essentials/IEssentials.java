@@ -73,4 +73,6 @@ public interface IEssentials
 	EssentialsDependancyChecker getDependancyChecker();
 
 	IPermissionsHandler getPermissionsHandler();
+	
+	void showError(final CommandSender sender, final Throwable exception, final String commandLabel);
 }

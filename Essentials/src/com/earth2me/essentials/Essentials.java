@@ -474,21 +474,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 			}
 			catch (Throwable ex)
 			{
-				sender.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
-				LogRecord lr = new LogRecord(Level.WARNING, Util.format("errorCallingCommand", commandLabel));
-				lr.setThrown(ex);
-				if (getSettings().isDebug())
-				{
-					logger.log(lr);
-				}
-				else
-				{
-					if (enableErrorLogging)
-					{
-						errorHandler.publish(lr);
-						errorHandler.flush();
-					}
-				}
+				showError(sender, ex, commandLabel);
 				return true;
 			}
 		}
@@ -496,6 +482,25 @@ public class Essentials extends JavaPlugin implements IEssentials
 		{
 			logger.log(Level.SEVERE, Util.format("commandFailed", commandLabel), ex);
 			return true;
+		}
+	}
+
+	public void showError(final CommandSender sender, final Throwable exception, final String commandLabel)
+	{
+		sender.sendMessage(Util.format("errorWithMessage", exception.getMessage()));
+		final LogRecord logRecord = new LogRecord(Level.WARNING, Util.format("errorCallingCommand", commandLabel));
+		logRecord.setThrown(exception);
+		if (getSettings().isDebug())
+		{
+			logger.log(logRecord);
+		}
+		else
+		{
+			if (enableErrorLogging)
+			{
+				errorHandler.publish(logRecord);
+				errorHandler.flush();
+			}
 		}
 	}
 

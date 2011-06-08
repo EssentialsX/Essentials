@@ -50,11 +50,7 @@ public class Commandtpall extends EssentialsCommand
 			}
 			catch (Exception ex)
 			{
-				sender.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
-				if (ess.getSettings().isDebug())
-				{
-					logger.log(Level.WARNING, ex.getMessage(), ex);
-				}
+				ess.showError(sender, ex, getName());
 			}
 		}
 	}
