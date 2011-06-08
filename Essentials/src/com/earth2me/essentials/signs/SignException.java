@@ -7,7 +7,7 @@ public class SignException extends Exception
 	{
 		super(message);
 	}
-	
+
 	public SignException(final String message, final Throwable throwable)
 	{
 		super(message, throwable);
