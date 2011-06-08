@@ -6,22 +6,23 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
 
-public class Commandmanulistp extends EssentialsCommand
+public class Commandmangcheckp extends EssentialsCommand
 {
-	public Commandmanulistp()
+	public Commandmangcheckp()
 	{
-		super("manulistp");
+		super("mangcheckp");
 	}
 
 	@Override
 	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
-		if (args.length < 1)
+		if (args.length < 2)
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		final String player = args[0];
-		ess.getServer().dispatchCommand(sender, "/permissions "+player+" perms list");
+		final String target = args[0];
+		final String perm = args[1];
+		ess.getServer().dispatchCommand(sender, "/permissions g:"+target+" has "+perm+"");
 	}
 	
 	
