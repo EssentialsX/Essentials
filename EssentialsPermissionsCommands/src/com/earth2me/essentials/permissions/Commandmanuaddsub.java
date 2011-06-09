@@ -6,11 +6,11 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
 
-public class Commandmanuadd extends EssentialsCommand
+public class Commandmanuaddsub extends EssentialsCommand
 {
-	public Commandmanuadd()
+	public Commandmanuaddsub()
 	{
-		super("manuadd");
+		super("manuaddsub");
 	}
 
 	@Override
@@ -22,7 +22,6 @@ public class Commandmanuadd extends EssentialsCommand
 		}
 		final String player = args[0];
 		final String group = args[1];
-                //TODO: Make this command add a player if it doesnt exist /permissions +player+ create
 		ess.getServer().dispatchCommand(sender, "/permissions "+player+" parents add "+group+"");
 	}
 	
