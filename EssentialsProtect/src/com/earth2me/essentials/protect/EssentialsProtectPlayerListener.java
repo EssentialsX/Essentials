@@ -7,6 +7,7 @@ import org.bukkit.event.player.PlayerListener;
 import org.bukkit.inventory.ItemStack;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import org.bukkit.event.block.Action;
 
 
 public class EssentialsProtectPlayerListener extends PlayerListener
@@ -45,7 +46,7 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 			return;
 		}
 
-		if (user.isAuthorized("essentials.protect.admin"))
+		if (user.isAuthorized("essentials.protect.admin") && event.getAction() == Action.RIGHT_CLICK_BLOCK)
 		{
 			final StringBuilder stringBuilder = new StringBuilder();
 			boolean first = true;
