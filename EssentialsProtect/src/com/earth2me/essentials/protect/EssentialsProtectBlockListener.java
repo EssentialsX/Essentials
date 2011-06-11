@@ -208,7 +208,10 @@ public class EssentialsProtectBlockListener extends BlockListener
 		BlockFace.NORTH,
 		BlockFace.EAST,
 		BlockFace.SOUTH,
-		BlockFace.WEST
+		BlockFace.WEST,
+		BlockFace.UP,
+		BlockFace.DOWN,
+		BlockFace.SELF
 	};
 
 	@Override
@@ -263,8 +266,12 @@ public class EssentialsProtectBlockListener extends BlockListener
 			}
 			else
 			{
-				storage.unprotectBlock(block);
-			}
+				for (BlockFace blockFace : faces)
+					{
+						final Block against = block.getFace(blockFace);
+						storage.unprotectBlock(against);
+					}
+				}
 			return;
 		}
 		else
@@ -292,7 +299,11 @@ public class EssentialsProtectBlockListener extends BlockListener
 				}
 				else
 				{
-					storage.unprotectBlock(block);
+					for (BlockFace blockFace : faces)
+					{
+						final Block against = block.getFace(blockFace);
+						storage.unprotectBlock(against);
+					}
 				}
 			}
 			event.setCancelled(true);
