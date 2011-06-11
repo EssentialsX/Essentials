@@ -515,4 +515,19 @@ public class PlayerWrapper implements Player
 	{
 		return base.getLastDamageCause();
 	}
+
+	public void playEffect(Location lctn, Effect effect, int i)
+	{
+		base.playEffect(lctn, effect, i);
+	}
+
+	public boolean sendChunkChange(Location lctn, int i, int i1, int i2, byte[] bytes)
+	{
+		return base.sendChunkChange(lctn, i, i1, i2, bytes);
+	}
+
+	public UUID getUniqueId()
+	{
+		return base.getUniqueId();
+	}
 }
