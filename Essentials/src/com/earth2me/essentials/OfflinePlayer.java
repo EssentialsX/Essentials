@@ -3,7 +3,9 @@ package com.earth2me.essentials;
 import java.net.InetSocketAddress;
 import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 import org.bukkit.Achievement;
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -27,6 +29,7 @@ public class OfflinePlayer implements Player
 	private final String name;
 	private Location location = new Location(null, 0, 0, 0, 0, 0);
 	private World world = null;
+	private UUID uniqueId = UUID.randomUUID();
 
 	public OfflinePlayer(String name)
 	{
@@ -458,5 +461,20 @@ public class OfflinePlayer implements Player
 	public EntityDamageEvent getLastDamageCause()
 	{
 		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
+	}
+
+	public void playEffect(Location lctn, Effect effect, int i)
+	{
+		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
+	}
+
+	public boolean sendChunkChange(Location lctn, int i, int i1, int i2, byte[] bytes)
+	{
+		return true;
+	}
+
+	public UUID getUniqueId()
+	{
+		return uniqueId;
 	}
 }

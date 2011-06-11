@@ -11,6 +11,7 @@ import org.bukkit.World.Environment;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.ServicesManager;
@@ -196,5 +197,25 @@ public class FakeServer implements Server
 		OfflinePlayer player = new OfflinePlayer(name);
 		player.setLocation(new Location(worlds.get(0), 0, 0, 0, 0, 0));
 		return player;
+	}
+
+	public World createWorld(String string, Environment e, ChunkGenerator cg)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public World createWorld(String string, Environment e, long l, ChunkGenerator cg)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public boolean unloadWorld(String string, boolean bln)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public boolean unloadWorld(World world, boolean bln)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }
