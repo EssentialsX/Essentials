@@ -33,7 +33,7 @@ public class SignBuy extends EssentialsSign
 		item.setAmount(amount);
 		final Charge charge = getCharge(sign, 3, ess);
 		charge.isAffordableFor(player);
-		final Map<Integer, ItemStack> leftOver = player.getInventory().addItem(item);
+		final Map<Integer, ItemStack> leftOver = InventoryWorkaround.addItem(player.getInventory(), true, item);
 		for (ItemStack itemStack : leftOver.values())
 		{
 			InventoryWorkaround.dropItem(player.getLocation(), itemStack);
