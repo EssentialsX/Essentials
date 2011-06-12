@@ -86,7 +86,8 @@ public class EssentialsSign
 		final User user = ess.getUser(event.getPlayer());
 		try
 		{
-			return user.isAuthorized("essentials.signs.break." + signName.toLowerCase())
+			return (user.isAuthorized("essentials.signs." + signName.toLowerCase() + ".break")
+					|| user.isAuthorized("essentials.signs.break." + signName.toLowerCase()))
 				   && onSignBreak(sign, user, getUsername(user), ess);
 		}
 		catch (SignException ex)
