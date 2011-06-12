@@ -46,7 +46,7 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 			return;
 		}
 
-		if (user.isAuthorized("essentials.protect.admin") && event.getAction() == Action.RIGHT_CLICK_BLOCK)
+		if (user.isAuthorized("essentials.protect.ownerinfo") && event.getAction() == Action.RIGHT_CLICK_BLOCK)
 		{
 			final StringBuilder stringBuilder = new StringBuilder();
 			boolean first = true;
