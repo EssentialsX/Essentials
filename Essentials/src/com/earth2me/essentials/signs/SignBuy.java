@@ -28,8 +28,8 @@ public class SignBuy extends EssentialsSign
 	@Override
 	protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException
 	{
-		final int amount = getInteger(sign.getLine(1));
 		final ItemStack item = getItemStack(sign.getLine(2));
+		final int amount = Math.min(getInteger(sign.getLine(1)), item.getType().getMaxStackSize()*player.getInventory().getSize());
 		item.setAmount(amount);
 		final Charge charge = getCharge(sign, 3, ess);
 		charge.isAffordableFor(player);
