@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -18,7 +19,7 @@ public final class InventoryWorkaround
 	private InventoryWorkaround()
 	{
 	}
-	
+
 	public static int first(final Inventory inventory, final ItemStack item, final boolean forceDurability, final boolean forceAmount)
 	{
 		return next(inventory, item, 0, forceDurability, forceAmount);
@@ -40,6 +41,124 @@ public final class InventoryWorkaround
 			}
 		}
 		return -1;
+	}
+
+	public int firstPartial(final Inventory cinventory, final ItemStack item, final boolean forceDurability)
+	{
+		if (item == null)
+		{
+			return -1;
+		}
+		final ItemStack[] inventory = cinventory.getContents();
+		for (int i = 0; i < inventory.length; i++)
+		{
+			final ItemStack cItem = inventory[i];
+			if (cItem == null)
+			{
+				continue;
+			}
+			if (item.getTypeId() == cItem.getTypeId() && cItem.getAmount() < cItem.getType().getMaxStackSize() && (!forceDurability || cItem.getDurability() == item.getDurability()))
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	public Map<Integer, ItemStack> addItem(final Inventory cinventory, final boolean forceDurability, final ItemStack... items)
+	{
+		final Map<Integer, ItemStack> leftover = new HashMap<Integer, ItemStack>();
+
+		/* TODO: some optimization
+		 *  - Create a 'firstPartial' with a 'fromIndex'
+		 *  - Record the lastPartial per Material
+		 *  - Cache firstEmpty result
+		 */
+
+		// combine items
+
+		ItemStack[] combined = new ItemStack[items.length];
+		for (int i = 0; i < items.length; i++)
+		{
+			if (items[i] == null)
+			{
+				continue;
+			}
+			for (int j = 0; j < combined.length; j++)
+			{
+				if (combined[j] == null)
+				{
+					combined[j] = new ItemStack(items[i].getType(), items[i].getAmount(), items[i].getDurability());
+					break;
+				}
+				if (combined[j].getTypeId() == items[i].getTypeId() && (!forceDurability || combined[j].getDurability() == items[i].getDurability()))
+				{
+					combined[j].setAmount(combined[j].getAmount() + items[i].getAmount());
+					break;
+				}
+			}
+		}
+
+
+		for (int i = 0; i < items.length; i++)
+		{
+			final ItemStack item = items[i];
+			while (true)
+			{
+				// Do we already have a stack of it?
+				final int firstPartial = firstPartial(cinventory, item, forceDurability);
+
+				// Drat! no partial stack
+				if (firstPartial == -1)
+				{
+					// Find a free spot!
+					final int firstFree = cinventory.firstEmpty();
+
+					if (firstFree == -1)
+					{
+						// No space at all!
+						leftover.put(i, item);
+						break;
+					}
+					else
+					{
+						// More than a single stack!
+						if (item.getAmount() > item.getType().getMaxStackSize())
+						{
+							cinventory.setItem(firstFree, new CraftItemStack(item.getTypeId(), item.getType().getMaxStackSize(), item.getDurability()));
+							item.setAmount(item.getAmount() - item.getType().getMaxStackSize());
+						}
+						else
+						{
+							// Just store it
+							cinventory.setItem(firstFree, item);
+							break;
+						}
+					}
+				}
+				else
+				{
+					// So, apparently it might only partially fit, well lets do just that
+					final ItemStack partialItem = cinventory.getItem(firstPartial);
+
+					final int amount = item.getAmount();
+					final int partialAmount = partialItem.getAmount();
+					final int maxAmount = partialItem.getType().getMaxStackSize();
+
+					// Check if it fully fits
+					if (amount + partialAmount <= maxAmount)
+					{
+						partialItem.setAmount(amount + partialAmount);
+						break;
+					}
+
+					// It fits partially
+					partialItem.setAmount(maxAmount);
+					item.setAmount(amount + partialAmount - maxAmount);
+				}
+			}
+		}
+		return leftover;
 	}
 
 	public static Map<Integer, ItemStack> removeItem(final Inventory cinventory, final boolean forceDurability, final ItemStack... items)
@@ -182,11 +301,13 @@ public final class InventoryWorkaround
 		final int stacks = itm.getAmount() / maxStackSize;
 		final int leftover = itm.getAmount() % maxStackSize;
 		Item[] itemStacks = new Item[stacks + (leftover > 0 ? 1 : 0)];
-		for (int i = 0; i < stacks; i++) {
-			itemStacks[i] = loc.getWorld().dropItem(loc, new ItemStack(itm.getType(), maxStackSize, itm.getDurability()));	
+		for (int i = 0; i < stacks; i++)
+		{
+			itemStacks[i] = loc.getWorld().dropItem(loc, new ItemStack(itm.getType(), maxStackSize, itm.getDurability()));
 		}
-		if (leftover > 0) {
-			itemStacks[stacks] = loc.getWorld().dropItem(loc, new ItemStack(itm.getType(), leftover, itm.getDurability()));	
+		if (leftover > 0)
+		{
+			itemStacks[stacks] = loc.getWorld().dropItem(loc, new ItemStack(itm.getType(), leftover, itm.getDurability()));
 		}
 		return itemStacks;
 	}
