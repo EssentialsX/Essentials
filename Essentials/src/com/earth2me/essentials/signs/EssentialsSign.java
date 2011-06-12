@@ -114,7 +114,7 @@ public class EssentialsSign
 
 	protected final void validateCharge(final ISign sign, final int index) throws SignException
 	{
-		final String line = sign.getLine(index);
+		final String line = sign.getLine(index).trim();
 		if (line.isEmpty())
 		{
 			return;
@@ -158,6 +158,49 @@ public class EssentialsSign
 		}
 	}
 
+	protected final void validateInteger(final ISign sign, final int index) throws SignException
+	{
+		final String line = sign.getLine(index).trim();
+		if (line.isEmpty())
+		{
+			throw new SignException("Empty line " + index);
+		}
+		final int quantity = getInteger(line);
+		sign.setLine(index, Integer.toString(quantity));
+	}
+
+	protected final int getInteger(final String line) throws SignException
+	{
+		try
+		{
+			final int quantity = Integer.parseInt(line);
+			if (quantity <= 1)
+			{
+				throw new SignException(Util.i18n("moreThanZero"));
+			}
+			return quantity;
+		}
+		catch (NumberFormatException ex)
+		{
+			throw new SignException("Invalid sign", ex);
+		}
+	}
+
+	protected final void validateItem(final ISign sign, final int index, final boolean noair) throws SignException
+	{
+		final String line = sign.getLine(index).trim();
+		if (line.isEmpty())
+		{
+			throw new SignException("Empty line " + index);
+		}
+		ItemStack item = getItemStack(line);
+		if (noair && item.getTypeId() == 0)
+		{
+			throw new SignException("Don't sell air.");
+		}
+		sign.setLine(index, line);
+	}
+
 	protected final ItemStack getItemStack(final String itemName) throws SignException
 	{
 		try
@@ -170,9 +213,45 @@ public class EssentialsSign
 		}
 	}
 
+	protected final void validateMoney(final ISign sign, final int index) throws SignException
+	{
+		final String line = sign.getLine(index).trim();
+		if (line.isEmpty())
+		{
+			throw new SignException("Empty line " + index);
+		}
+		final double quantity = getMoney(line);
+		sign.setLine(index, Util.formatCurrency(quantity));
+	}
+
+	protected final double getMoney(final String line) throws SignException
+	{
+		final boolean isMoney = line.matches("^[^0-9-][\\.0-9]+");
+		if (isMoney)
+		{
+			try
+			{
+				final double quantity = Double.parseDouble(line.substring(1));
+				if (quantity <= 0)
+				{
+					throw new SignException(Util.i18n("moreThanZero"));
+				}
+				return quantity;
+			}
+			catch (NumberFormatException ex)
+			{
+				throw new SignException(ex.getMessage(), ex);
+			}
+		}
+		else
+		{
+			throw new SignException("Invalid money");
+		}
+	}
+
 	protected final Charge getCharge(final ISign sign, final int index, final IEssentials ess) throws SignException
 	{
-		final String line = sign.getLine(index);
+		final String line = sign.getLine(index).trim();
 		if (line.isEmpty())
 		{
 			return new Charge(signName.toLowerCase() + "sign", ess);
@@ -181,12 +260,19 @@ public class EssentialsSign
 		final boolean isMoney = line.matches("^[^0-9-][\\.0-9]+");
 		if (isMoney)
 		{
-			final double quantity = Double.parseDouble(line.substring(1));
-			if (quantity <= 0)
+			try
 			{
-				throw new SignException(Util.i18n("moreThanZero"));
+				final double quantity = Double.parseDouble(line.substring(1));
+				if (quantity <= 0)
+				{
+					throw new SignException(Util.i18n("moreThanZero"));
+				}
+				return new Charge(quantity, ess);
 			}
-			return new Charge(quantity, ess);
+			catch (NumberFormatException ex)
+			{
+				throw new SignException(ex.getMessage(), ex);
+			}
 		}
 		else
 		{
