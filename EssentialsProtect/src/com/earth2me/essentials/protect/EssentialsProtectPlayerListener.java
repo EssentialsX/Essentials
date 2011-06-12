@@ -33,6 +33,10 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 
 		if (prot.getSettingBool(ProtectConfig.disable_build) && !user.canBuild())
 		{
+			if (ess.getSettings().warnOnBuildDisallow())
+			{
+				user.sendMessage(Util.i18n("buildAlert"));
+			}
 			event.setCancelled(true);
 			return;
 		}
