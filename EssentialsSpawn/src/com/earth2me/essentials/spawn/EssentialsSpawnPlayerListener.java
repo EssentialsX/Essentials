@@ -15,7 +15,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 public class EssentialsSpawnPlayerListener extends PlayerListener
 {
 	@Override
-	public void onPlayerRespawn(PlayerRespawnEvent event)
+	public void onPlayerRespawn(final PlayerRespawnEvent event)
 	{
 		final IEssentials ess = Essentials.getStatic();
 		final User user = ess.getUser(event.getPlayer());
@@ -25,7 +25,8 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 			if (ess.getSettings().getRespawnAtHome())
 			{
 				Location home = user.getHome(user.getLocation());
-				if (home == null) {
+				if (home == null)
+				{
 					throw new Exception();
 				}
 				event.setRespawnLocation(home);
@@ -36,28 +37,38 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 		{
 		}
 		Location spawn = ess.getSpawn().getSpawn(user.getGroup());
-		if (spawn == null) {
+		if (spawn == null)
+		{
 			return;
 		}
 		event.setRespawnLocation(spawn);
 	}
 
 	@Override
-	public void onPlayerJoin(PlayerJoinEvent event)
+	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
 		final IEssentials ess = Essentials.getStatic();
 		final User user = ess.getUser(event.getPlayer());
-		
+
 		if (!user.isNew())
 		{
 			return;
 		}
 		user.setNew(false);
-		try {
-			user.getTeleport().now(ess.getSpawn().getSpawn(ess.getSettings().getNewbieSpawn()));
-		} catch (Exception ex) {
-			Logger.getLogger("Minecraft").log(Level.WARNING, Util.i18n("teleportNewPlayerError"), ex);
-		}
+		ess.scheduleSyncDelayedTask(new Runnable()
+		{
+			public void run()
+			{
+				try
+				{
+					user.getTeleport().now(ess.getSpawn().getSpawn(ess.getSettings().getNewbieSpawn()));
+				}
+				catch (Exception ex)
+				{
+					Logger.getLogger("Minecraft").log(Level.WARNING, Util.i18n("teleportNewPlayerError"), ex);
+				}
+			}
+		});
 
 		if (ess.getSettings().getAnnounceNewPlayers())
 		{
