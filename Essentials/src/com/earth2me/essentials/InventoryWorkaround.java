@@ -43,7 +43,7 @@ public final class InventoryWorkaround
 		return -1;
 	}
 
-	public int firstPartial(final Inventory cinventory, final ItemStack item, final boolean forceDurability)
+	public static int firstPartial(final Inventory cinventory, final ItemStack item, final boolean forceDurability)
 	{
 		if (item == null)
 		{
@@ -65,7 +65,7 @@ public final class InventoryWorkaround
 		return -1;
 	}
 
-	public Map<Integer, ItemStack> addItem(final Inventory cinventory, final boolean forceDurability, final ItemStack... items)
+	public static Map<Integer, ItemStack> addItem(final Inventory cinventory, final boolean forceDurability, final ItemStack... items)
 	{
 		final Map<Integer, ItemStack> leftover = new HashMap<Integer, ItemStack>();
 
