@@ -33,6 +33,8 @@ public interface IUser
 
 	void takeMoney(double value);
 
+	void giveMoney(double value);
+
 	PlayerInventory getInventory();
 
 	void updateInventory();

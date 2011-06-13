@@ -1,6 +1,6 @@
 package com.earth2me.essentials.signs;
 
-import com.earth2me.essentials.Charge;
+import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
@@ -16,7 +16,7 @@ public class SignWarp extends EssentialsSign
 	@Override
 	protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException
 	{
-		validateCharge(sign, 3);
+		validateTrade(sign, 3, ess);
 		final String warpName = sign.getLine(1);
 
 		if (warpName.isEmpty())
@@ -53,7 +53,7 @@ public class SignWarp extends EssentialsSign
 				 || player.inGroup(group)))
 			|| (!ess.getSettings().getPerWarpPermission() || player.isAuthorized("essentials.warp." + warpName)))
 		{
-			final Charge charge = getCharge(sign, 3, ess);
+			final Trade charge = getTrade(sign, 3, ess);
 			try
 			{
 				player.getTeleport().warp(warpName, charge);

@@ -1,6 +1,6 @@
 package com.earth2me.essentials.signs;
 
-import com.earth2me.essentials.Charge;
+import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
@@ -17,7 +17,7 @@ public class SignTime extends EssentialsSign
 	@Override
 	protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException
 	{
-		validateCharge(sign, 2);
+		validateTrade(sign, 2, ess);
 		final String timeString = sign.getLine(1);
 		if ("Day".equalsIgnoreCase(timeString))
 		{
@@ -35,7 +35,7 @@ public class SignTime extends EssentialsSign
 	@Override
 	protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException
 	{
-		final Charge charge = getCharge(sign, 2, ess);
+		final Trade charge = getTrade(sign, 2, ess);
 		charge.isAffordableFor(player);
 		final String timeString = sign.getLine(1);
 		long time = player.getWorld().getTime();

@@ -48,11 +48,11 @@ public class Teleport implements Runnable
 	private long initY;
 	private long initZ;
 	private Target teleportTarget;
-	private Charge chargeFor;
+	private Trade chargeFor;
 	private final IEssentials ess;
 	private static final Logger logger = Logger.getLogger("Minecraft");
 
-	private void initTimer(long delay, Target target, Charge chargeFor)
+	private void initTimer(long delay, Target target, Trade chargeFor)
 	{
 		this.started = System.currentTimeMillis();
 		this.delay = delay;
@@ -118,12 +118,12 @@ public class Teleport implements Runnable
 		this.ess = ess;
 	}
 
-	public void respawn(Spawn spawn, Charge chargeFor) throws Exception
+	public void respawn(Spawn spawn, Trade chargeFor) throws Exception
 	{
 		teleport(new Target(spawn.getSpawn(user.getGroup())), chargeFor);
 	}
 
-	public void warp(String warp, Charge chargeFor) throws Exception
+	public void warp(String warp, Trade chargeFor) throws Exception
 	{
 		Location loc = ess.getWarps().getWarp(warp);
 		teleport(new Target(loc), chargeFor);
@@ -177,17 +177,17 @@ public class Teleport implements Runnable
 		cancel(false);
 	}
 
-	public void teleport(Location loc, Charge chargeFor) throws Exception
+	public void teleport(Location loc, Trade chargeFor) throws Exception
 	{
 		teleport(new Target(loc), chargeFor);
 	}
 
-	public void teleport(Entity entity, Charge chargeFor) throws Exception
+	public void teleport(Entity entity, Trade chargeFor) throws Exception
 	{
 		teleport(new Target(entity), chargeFor);
 	}
 
-	private void teleport(Target target, Charge chargeFor) throws Exception
+	private void teleport(Target target, Trade chargeFor) throws Exception
 	{
 		double delay = ess.getSettings().getTeleportDelay();
 
@@ -230,7 +230,7 @@ public class Teleport implements Runnable
 		now(new Target(loc));
 	}
 	
-	public void now(Location loc, Charge chargeFor) throws Exception
+	public void now(Location loc, Trade chargeFor) throws Exception
 	{
 		cooldown(false);
 		chargeFor.charge(user);
@@ -243,7 +243,7 @@ public class Teleport implements Runnable
 		now(new Target(entity));
 	}
 
-	public void back(Charge chargeFor) throws Exception
+	public void back(Trade chargeFor) throws Exception
 	{
 		teleport(new Target(user.getLastLocation()), chargeFor);
 	}
@@ -253,12 +253,12 @@ public class Teleport implements Runnable
 		back(null);
 	}
 
-	public void home(Charge chargeFor) throws Exception
+	public void home(Trade chargeFor) throws Exception
 	{
 		home(user, chargeFor);
 	}
 
-	public void home(IUser user, Charge chargeFor) throws Exception
+	public void home(IUser user, Trade chargeFor) throws Exception
 	{
 		Location loc = user.getHome(this.user.getLocation());
 		if (loc == null)

@@ -1,52 +1,53 @@
 package com.earth2me.essentials;
 
+import java.util.Map;
 import org.bukkit.inventory.ItemStack;
 
 
-public class Charge
+public class Trade
 {
 	private final transient String command;
-	private final transient Double costs;
-	private final transient ItemStack items;
+	private final transient Double money;
+	private final transient ItemStack itemStack;
 	private final transient IEssentials ess;
 
-	public Charge(final String command, final IEssentials ess)
+	public Trade(final String command, final IEssentials ess)
 	{
 		this(command, null, null, ess);
 	}
 
-	public Charge(final double money, final IEssentials ess)
+	public Trade(final double money, final IEssentials ess)
 	{
 		this(null, money, null, ess);
 	}
 
-	public Charge(final ItemStack items, final IEssentials ess)
+	public Trade(final ItemStack items, final IEssentials ess)
 	{
 		this(null, null, items, ess);
 	}
 
-	private Charge(final String command, final Double money, final ItemStack item, final IEssentials ess)
+	private Trade(final String command, final Double money, final ItemStack item, final IEssentials ess)
 	{
 		this.command = command;
-		this.costs = money;
-		this.items = item;
+		this.money = money;
+		this.itemStack = item;
 		this.ess = ess;
 	}
 
 	public void isAffordableFor(final IUser user) throws ChargeException
 	{
 		final double mon = user.getMoney();
-		if (costs != null
-			&& mon < costs
+		if (getMoney() != null
+			&& mon < getMoney()
 			&& !user.isAuthorized("essentials.eco.loan"))
 		{
 			throw new ChargeException(Util.i18n("notEnoughMoney"));
 		}
 
-		if (items != null
-			&& !InventoryWorkaround.containsItem(user.getInventory(), true, items))
+		if (getItemStack() != null
+			&& !InventoryWorkaround.containsItem(user.getInventory(), true, itemStack))
 		{
-			throw new ChargeException(Util.format("missingItems", items.getAmount(), items.getType().toString().toLowerCase().replace("_", " ")));
+			throw new ChargeException(Util.format("missingItems", getItemStack().getAmount(), getItemStack().getType().toString().toLowerCase().replace("_", " ")));
 		}
 
 		if (command != null && !command.isEmpty()
@@ -59,24 +60,41 @@ public class Charge
 		}
 	}
 
+	public void pay(final IUser user)
+	{
+		if (getMoney() != null)
+		{
+			user.giveMoney(getMoney());
+		}
+		if (getItemStack() != null)
+		{
+			final Map<Integer, ItemStack> leftOver = InventoryWorkaround.addItem(user.getInventory(), true, getItemStack());
+			for (ItemStack itemStack : leftOver.values())
+			{
+				InventoryWorkaround.dropItem(user.getLocation(), itemStack);
+			}
+			user.updateInventory();
+		}
+	}
+
 	public void charge(final IUser user) throws ChargeException
 	{
-		if (costs != null)
+		if (getMoney() != null)
 		{
 			final double mon = user.getMoney();
-			if (mon < costs && !user.isAuthorized("essentials.eco.loan"))
+			if (mon < getMoney() && !user.isAuthorized("essentials.eco.loan"))
 			{
 				throw new ChargeException(Util.i18n("notEnoughMoney"));
 			}
-			user.takeMoney(costs);
+			user.takeMoney(getMoney());
 		}
-		if (items != null)
+		if (getItemStack() != null)
 		{
-			if (!InventoryWorkaround.containsItem(user.getInventory(), true, items))
+			if (!InventoryWorkaround.containsItem(user.getInventory(), true, itemStack))
 			{
-				throw new ChargeException(Util.format("missingItems", items.getAmount(), items.getType().toString().toLowerCase().replace("_", " ")));
+				throw new ChargeException(Util.format("missingItems", getItemStack().getAmount(), getItemStack().getType().toString().toLowerCase().replace("_", " ")));
 			}
-			InventoryWorkaround.removeItem(user.getInventory(), true, items);
+			InventoryWorkaround.removeItem(user.getInventory(), true, getItemStack());
 			user.updateInventory();
 		}
 		if (command != null && !command.isEmpty()
@@ -91,5 +109,15 @@ public class Charge
 			}
 			user.takeMoney(cost);
 		}
+	}
+
+	public Double getMoney()
+	{
+		return money;
+	}
+
+	public ItemStack getItemStack()
+	{
+		return itemStack;
 	}
 }
