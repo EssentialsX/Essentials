@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.Charge;
+import com.earth2me.essentials.Trade;
 import java.util.List;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
@@ -89,7 +89,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 	{
 		if (sender instanceof Player)
 		{
-			Charge charge = new Charge(this.getName(), ess);
+			Trade charge = new Trade(this.getName(), ess);
 			charge.charge(ess.getUser((Player)sender));
 		}
 	}

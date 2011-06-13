@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.Charge;
+import com.earth2me.essentials.Trade;
 import org.bukkit.Server;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
@@ -23,7 +23,7 @@ public class Commandtpaccept extends EssentialsCommand
 			throw new Exception(Util.i18n("noPendingRequest"));
 		}
 
-		Charge charge = new Charge(this.getName(), ess);
+		Trade charge = new Trade(this.getName(), ess);
 		if (user.isTeleportRequestHere())
 		{
 			charge.isAffordableFor(user);

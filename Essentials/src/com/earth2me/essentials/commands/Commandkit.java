@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.Charge;
+import com.earth2me.essentials.Trade;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -109,7 +109,7 @@ public class Commandkit extends EssentialsCommand
 					items = (List<String>)kit;
 				}
 
-				Charge charge = new Charge("kit-" + kitName, ess);
+				Trade charge = new Trade("kit-" + kitName, ess);
 				try
 				{
 					charge.isAffordableFor(user);

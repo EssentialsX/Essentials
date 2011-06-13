@@ -181,7 +181,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			event.setTo(loc);
 			try
 			{
-				user.getTeleport().now(loc, new Charge("portal", ess));
+				user.getTeleport().now(loc, new Trade("portal", ess));
 			}
 			catch (Exception ex)
 			{
@@ -474,13 +474,13 @@ public class EssentialsPlayerListener extends PlayerListener
 				{
 					if (sign.getLine(2).equals("§2Everyone"))
 					{
-						Charge charge = chargeUserForWarp(sign, user);
+						Trade charge = chargeUserForWarp(sign, user);
 						user.getTeleport().warp(sign.getLine(1), charge);
 						return;
 					}
 					if (user.inGroup(sign.getLine(2)))
 					{
-						Charge charge = chargeUserForWarp(sign, user);
+						Trade charge = chargeUserForWarp(sign, user);
 						user.getTeleport().warp(sign.getLine(1), charge);
 						return;
 					}
@@ -488,7 +488,7 @@ public class EssentialsPlayerListener extends PlayerListener
 				if (user.isAuthorized("essentials.signs.warp.use")
 					&& (!ess.getSettings().getPerWarpPermission() || user.isAuthorized("essentials.warp." + sign.getLine(1))))
 				{
-					Charge charge = chargeUserForWarp(sign, user);
+					Trade charge = chargeUserForWarp(sign, user);
 					user.getTeleport().warp(sign.getLine(1), charge);
 				}
 				return;
@@ -520,7 +520,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 	}
 
-	private Charge chargeUserForWarp(Sign sign, User user) throws Exception
+	private Trade chargeUserForWarp(Sign sign, User user) throws Exception
 	{
 		if (!sign.getLine(3).isEmpty())
 		{
@@ -533,15 +533,15 @@ public class EssentialsPlayerListener extends PlayerListener
 			}
 			if (m1)
 			{
-				return new Charge(q1, ess);
+				return new Trade(q1, ess);
 			}
 			else
 			{
 				ItemStack i = ItemDb.get(l1[1], (int)q1);
-				return new Charge(i, ess);
+				return new Trade(i, ess);
 			}
 		}
-		return new Charge("warpsign", ess);
+		return new Trade("warpsign", ess);
 	}
 
 	@Override
