@@ -130,152 +130,7 @@ public class EssentialsSign
 		}
 	}
 
-	protected final void validateTrade(final ISign sign, final int index, final boolean amountNeeded, final IEssentials ess) throws SignException
-	{
-		final String line = sign.getLine(index).trim();
-		if (line.isEmpty())
-		{
-			throw new SignException("Empty line");
-		}
-		final String[] split = line.split("[ :]+");
-
-		if (split.length == 1 && !amountNeeded)
-		{
-			final Double money = getMoney(split[0]);
-			if (money != null)
-			{
-				sign.setLine(index, Util.formatCurrency(money) + ":0");
-				return;
-			}
-		}
-
-		if (split.length == 2 && amountNeeded)
-		{
-			final Double money = getMoney(split[0]);
-			final Double amount = getDouble(split[1]);
-			if (money != null && amount != null)
-			{
-				sign.setLine(index, Util.formatCurrency(money) + ":" + Util.formatCurrency(amount).substring(1));
-				return;
-			}
-		}
-
-		if (split.length == 2 && !amountNeeded)
-		{
-			final int amount = getInteger(split[0]);
-			final ItemStack item = getItemStack(split[1], amount);
-			if (amount < 1 || item.getTypeId() == 0)
-			{
-				throw new SignException(Util.i18n("moreThanZero"));
-			}
-			sign.setLine(index, amount + " " + split[1] + ":0");
-			return;
-		}
-
-		if (split.length == 3 && amountNeeded)
-		{
-			final int stackamount = getInteger(split[0]);
-			final ItemStack item = getItemStack(split[1], stackamount);
-			int amount = getInteger(split[2]);
-			amount -= amount % stackamount;
-			if (amount < 1 || stackamount < 1 || item.getTypeId() == 0)
-			{
-				throw new SignException(Util.i18n("moreThanZero"));
-			}
-			sign.setLine(index, stackamount + " " + split[1] + ":" + amount);
-			return;
-		}
-		throw new SignException(Util.format("invalidSignLine", index));
-	}
-
-	protected final Trade getTrade(final ISign sign, final int index, final boolean fullAmount, final IEssentials ess) throws SignException
-	{
-		final String line = sign.getLine(index).trim();
-		if (line.isEmpty())
-		{
-			throw new SignException("Empty line");
-		}
-		final String[] split = line.split("[ :]+");
-
-		if (split.length == 2)
-		{
-			final Double money = getMoney(split[0]);
-			final Double amount = getDouble(split[1]);
-			if (money != null && amount != null)
-			{
-				return new Trade(fullAmount ? amount : money, ess);
-			}
-		}
-
-		if (split.length == 3)
-		{
-			final int stackamount = getInteger(split[0]);
-			final ItemStack item = getItemStack(split[1], stackamount);
-			int amount = getInteger(split[2]);
-			amount -= amount % stackamount;
-			if (amount < 1 || stackamount < 1 || item.getTypeId() == 0)
-			{
-				throw new SignException(Util.i18n("moreThanZero"));
-			}
-			item.setAmount(fullAmount ? amount : stackamount);
-			return new Trade(item, ess);
-		}
-		throw new SignException(Util.format("invalidSignLine", index));
-	}
 	
-	protected final void substractAmount(final ISign sign, final int index, final Trade trade) throws SignException
-	{
-		final Double money = trade.getMoney();
-		if (money != null) {
-			changeAmount(sign, index, -money);
-		}
-		final ItemStack item = trade.getItemStack();
-		if (item != null) {
-			changeAmount(sign, index, -item.getAmount());
-		}
-	}
-	protected final void addAmount(final ISign sign, final int index, final Trade trade) throws SignException
-	{
-		final Double money = trade.getMoney();
-		if (money != null) {
-			changeAmount(sign, index, money);
-		}
-		final ItemStack item = trade.getItemStack();
-		if (item != null) {
-			changeAmount(sign, index, item.getAmount());
-		}
-	}
-	
-	private void changeAmount(final ISign sign, final int index, final double value) throws SignException
-	{
-		final String line = sign.getLine(index).trim();
-		if (line.isEmpty())
-		{
-			throw new SignException("Empty line");
-		}
-		final String[] split = line.split("[ :]+");
-
-		if (split.length == 2)
-		{
-			final Double money = getMoney(split[0]);
-			final Double amount = getDouble(split[1]);
-			if (money != null && amount != null)
-			{
-				sign.setLine(index, Util.formatCurrency(money) + ":" + Util.formatCurrency(amount+value).substring(1));
-				return;
-			}
-		}
-
-		if (split.length == 3)
-		{
-			final int stackamount = getInteger(split[0]);
-			final ItemStack item = getItemStack(split[1], stackamount);
-			int amount = getInteger(split[2]);
-			sign.setLine(index, stackamount + " " + split[1] + ":" + (amount+Math.round(value)));
-			return;
-		}
-		throw new SignException(Util.format("invalidSignLine", index));
-	}
 
 	protected final void validateTrade(final ISign sign, final int amountIndex, final int itemIndex,
 									   final User player, final IEssentials ess) throws SignException
@@ -342,13 +197,13 @@ public class EssentialsSign
 		}
 	}
 
-	private final Double getMoney(final String line) throws SignException
+	protected final Double getMoney(final String line) throws SignException
 	{
 		final boolean isMoney = line.matches("^[^0-9-\\.][\\.0-9]+");
 		return isMoney ? getDouble(line.substring(1)) : null;
 	}
 
-	private final Double getDouble(final String line) throws SignException
+	protected final Double getDouble(final String line) throws SignException
 	{
 		try
 		{
