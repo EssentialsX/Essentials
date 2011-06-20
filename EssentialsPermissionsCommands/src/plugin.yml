@@ -5,7 +5,7 @@ main: com.earth2me.essentials.permissions.EssentialsPermissionsCommands
 version: TeamCity
 website: http://www.earth2me.net:8001/
 description: Adds commands aliases to Permissions 3
-authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology]
+authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, jessenic]
 depend: [Permissions, Essentials]
 commands:
   manuadd:
@@ -103,7 +103,7 @@ commands:
   mangcheckv:
     description: Verify a value of a variable of group, and where it comes from.
     usage: /<command> <group> <variable>
-    permission: groupmanager.mangckeckv
+    permission: groupmanager.mangcheckv
   manwhois:
     description: Tell the group that user belongs.
     usage: /<command> <player>
