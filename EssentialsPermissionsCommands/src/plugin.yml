@@ -5,7 +5,7 @@ main: com.earth2me.essentials.permissions.EssentialsPermissionsCommands
 version: TeamCity
 website: http://www.earth2me.net:8001/
 description: Adds commands aliases to Permissions 3
-authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, jessenic]
+authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology]
 depend: [Permissions, Essentials]
 commands:
   manuadd:
