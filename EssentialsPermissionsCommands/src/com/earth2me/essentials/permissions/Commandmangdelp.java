@@ -22,7 +22,9 @@ public class Commandmangdelp extends EssentialsCommand
 		}
 		final String target = args[0];
 		final String perm = args[1];
-		ess.getServer().dispatchCommand(sender, "/permissions g:"+target+" perms remove "+perm+"");
+		String command = "/permissions g:"+target+" perms remove "+perm;
+		sender.sendMessage(commandLabel + " is deprecated. Use " + command + " instead.");
+		ess.getServer().dispatchCommand(sender, command);
 	}
 	
 	

@@ -23,7 +23,9 @@ public class Commandmanuadd extends EssentialsCommand
 		final String player = args[0];
 		final String group = args[1];
                 //TODO: Make this command add a player if it doesnt exist /permissions +player+ create
-		ess.getServer().dispatchCommand(sender, "/permissions "+player+" parents add "+group+"");
+		String command = "/permissions "+player+" parents add "+group;
+		sender.sendMessage(commandLabel + " is deprecated. Use " + command + " instead.");
+		ess.getServer().dispatchCommand(sender, command);
 	}
 	
 	

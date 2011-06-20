@@ -21,8 +21,9 @@ public class Commandmangadd extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 		final String group = args[0];
-
-		ess.getServer().dispatchCommand(sender, "/permissions g:"+group+" create");
+		String command = "/permissions g:" + group + " create";
+		sender.sendMessage(commandLabel + " is deprecated. Use " + command + " instead.");
+		ess.getServer().dispatchCommand(sender, command);
 	}
 	
 	
