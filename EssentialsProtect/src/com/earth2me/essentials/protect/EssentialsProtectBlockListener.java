@@ -267,18 +267,21 @@ public class EssentialsProtectBlockListener extends BlockListener
 			else
 			{
 				for (BlockFace blockFace : faces)
-					{
-						final Block against = block.getFace(blockFace);
-						storage.unprotectBlock(against);
-					}
+				{
+					final Block against = block.getFace(blockFace);
+					storage.unprotectBlock(against);
 				}
-			return;
+			}
 		}
 		else
 		{
 
 			final boolean isProtected = storage.isProtected(block, user.getName());
-			if (!isProtected)
+			if (isProtected)
+			{
+				event.setCancelled(true);
+			}
+			else
 			{
 				if (type == Material.WALL_SIGN || type == Material.SIGN_POST || type == Material.RAILS)
 				{
@@ -306,8 +309,6 @@ public class EssentialsProtectBlockListener extends BlockListener
 					}
 				}
 			}
-			event.setCancelled(true);
-			return;
 		}
 	}
 }
