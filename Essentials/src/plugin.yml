@@ -181,7 +181,7 @@ commands:
     aliases: [enick]
   nuke:
     description: May death rain upon them.
-    usage: /<command>
+    usage: /<command> <player>
     aliases: [enuke]
   pay:
     description: Pays another player from your balance
