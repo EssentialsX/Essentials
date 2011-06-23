@@ -95,6 +95,11 @@ public class Essentials extends JavaPlugin implements IEssentials
 
 	public void onEnable()
 	{
+		final String[] javaversion = System.getProperty("java.version").split("\\.", 3);
+		if (javaversion == null || javaversion.length < 2 || Integer.parseInt(javaversion[1]) < 6)
+		{
+			logger.log(Level.SEVERE, "Java version not supported! Please install Java 1.6. You have " + System.getProperty("java.version"));
+		}
 		if (enableErrorLogging)
 		{
 			logger.addHandler(errorHandler);
@@ -146,9 +151,12 @@ public class Essentials extends JavaPlugin implements IEssentials
 
 		if (permissionsPlugin != null)
 		{
-			if (permissionsPlugin.getDescription().getVersion().charAt(0) == '3') {
+			if (permissionsPlugin.getDescription().getVersion().charAt(0) == '3')
+			{
 				this.permissionsHandler = new Permissions3Handler(permissionsPlugin);
-			} else {
+			}
+			else
+			{
 				this.permissionsHandler = new Permissions2Handler(permissionsPlugin);
 			}
 		}
@@ -398,8 +406,9 @@ public class Essentials extends JavaPlugin implements IEssentials
 					continue;
 				}
 
-				PluginCommand pc = getServer().getPluginCommand(desc.getName()+":"+commandLabel);
-				if (pc != null) {
+				PluginCommand pc = getServer().getPluginCommand(desc.getName() + ":" + commandLabel);
+				if (pc != null)
+				{
 					return pc.execute(sender, commandLabel, args);
 				}
 			}
