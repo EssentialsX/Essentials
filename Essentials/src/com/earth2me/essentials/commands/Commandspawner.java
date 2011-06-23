@@ -20,12 +20,12 @@ public class Commandspawner extends EssentialsCommand
 	@Override
 	protected void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		if (args.length < 1)
+		if (args.length < 1 || args[0].length() < 2)
 		{
 			throw new NotEnoughArgumentsException();
 		}
 
-		Block target = user.getTarget().getTargetBlock();
+		final Block target = user.getTarget().getTargetBlock();
 		if (target.getType() != Material.MOB_SPAWNER)
 		{
 			throw new Exception(Util.i18n("mobSpawnTarget"));
@@ -34,7 +34,8 @@ public class Commandspawner extends EssentialsCommand
 		charge(user);
 		try
 		{
-			new CraftCreatureSpawner(target).setCreatureType(CreatureType.fromName(args[0]));
+			final String name = args[0].substring(0, 1).toUpperCase() +  args[0].substring(1).toLowerCase();
+			new CraftCreatureSpawner(target).setCreatureType(CreatureType.fromName(name));
 		}
 		catch (Throwable ex)
 		{
