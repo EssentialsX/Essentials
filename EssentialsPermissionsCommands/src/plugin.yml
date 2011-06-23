@@ -103,7 +103,7 @@ commands:
   mangcheckv:
     description: Verify a value of a variable of group, and where it comes from.
     usage: /<command> <group> <variable>
-    permission: groupmanager.mangckeckv
+    permission: groupmanager.mangcheckv
   manwhois:
     description: Tell the group that user belongs.
     usage: /<command> <player>

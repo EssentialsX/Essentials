@@ -21,7 +21,9 @@ public class Commandmanglistp extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 		final String target = args[0];
-		ess.getServer().dispatchCommand(sender, "/permissions g:"+target+" perms list");
+		String command = "/permissions g:"+target+" perms list";
+		sender.sendMessage(commandLabel + " is deprecated. Use " + command + " instead.");
+		ess.getServer().dispatchCommand(sender, command);
 	}
 	
 	

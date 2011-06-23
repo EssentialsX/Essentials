@@ -22,7 +22,9 @@ public class Commandmangaddi extends EssentialsCommand
 		}
 		final String target = args[0];
 		final String group = args[1];
-		ess.getServer().dispatchCommand(sender, "/permissions g:"+target+" parents add "+group+"");
+		String command = "/permissions g:"+target+" parents add "+group;
+		sender.sendMessage(commandLabel + " is deprecated. Use " + command + " instead.");
+		ess.getServer().dispatchCommand(sender, command);
 	}
 	
 	
