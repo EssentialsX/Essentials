@@ -155,6 +155,8 @@ restricted-commands:
   - togglejail
   - setjail
   - eco.loan
+  - teleport.timer.bypass
+  - teleport.cooldown.bypass
 
 # Note: All items MUST be followed by a quantity!
 # Times are measured in seconds.
