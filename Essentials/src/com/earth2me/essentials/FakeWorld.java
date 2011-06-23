@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import java.util.List;
 import org.bukkit.BlockChangeDelegate;
 import org.bukkit.Chunk;
+import org.bukkit.ChunkSnapshot;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.TreeType;
@@ -352,6 +353,41 @@ public class FakeWorld implements World
 	}
 
 	public void playEffect(Location lctn, Effect effect, int i, int i1)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public boolean createExplosion(double d, double d1, double d2, float f, boolean bln)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public boolean createExplosion(Location lctn, float f, boolean bln)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public <T extends Entity> T spawn(Location lctn, Class<T> type) throws IllegalArgumentException
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public ChunkSnapshot getEmptyChunkSnapshot(int i, int i1, boolean bln, boolean bln1)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public void setSpawnFlags(boolean bln, boolean bln1)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public boolean getAllowAnimals()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public boolean getAllowMonsters()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}

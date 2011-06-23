@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.UUID;
 import org.bukkit.Achievement;
 import org.bukkit.Effect;
+import org.bukkit.Instrument;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Note;
 import org.bukkit.Server;
 import org.bukkit.Statistic;
 import org.bukkit.World;
@@ -476,5 +478,35 @@ public class OfflinePlayer implements Player
 	public UUID getUniqueId()
 	{
 		return uniqueId;
+	}
+
+	public void playNote(Location lctn, Instrument i, Note note)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public void setPlayerTime(long l, boolean bln)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public long getPlayerTime()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public long getPlayerTimeOffset()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public boolean isPlayerTimeRelative()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public void resetPlayerTime()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }

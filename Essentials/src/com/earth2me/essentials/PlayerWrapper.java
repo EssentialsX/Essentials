@@ -530,4 +530,34 @@ public class PlayerWrapper implements Player
 	{
 		return base.getUniqueId();
 	}
+
+	public void playNote(Location lctn, Instrument i, Note note)
+	{
+		base.playNote(lctn, i, note);
+	}
+
+	public void setPlayerTime(long l, boolean bln)
+	{
+		base.setPlayerTime(l, bln);
+	}
+
+	public long getPlayerTime()
+	{
+		return base.getPlayerTime();
+	}
+
+	public long getPlayerTimeOffset()
+	{
+		return base.getPlayerTimeOffset();
+	}
+
+	public boolean isPlayerTimeRelative()
+	{
+		return base.isPlayerTimeRelative();
+	}
+
+	public void resetPlayerTime()
+	{
+		base.resetPlayerTime();
+	}
 }

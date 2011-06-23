@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import com.avaje.ebean.config.ServerConfig;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -215,6 +216,26 @@ public class FakeServer implements Server
 	}
 
 	public boolean unloadWorld(World world, boolean bln)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public Map<String, String[]> getCommandAliases()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public int getSpawnRadius()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public void setSpawnRadius(int i)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public boolean getOnlineMode()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
