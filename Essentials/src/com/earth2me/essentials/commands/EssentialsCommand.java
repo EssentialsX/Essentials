@@ -5,7 +5,6 @@ import java.util.List;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.IEssentials;
 import org.bukkit.entity.Player;
 import com.earth2me.essentials.User;
