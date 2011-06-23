@@ -1,15 +1,11 @@
 package com.earth2me.essentials;
 
-import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.minecraft.server.Entity;
-import net.minecraft.server.WorldServer;
 import org.bukkit.Server;
-import org.bukkit.craftbukkit.entity.CraftEntity;
-import org.bukkit.craftbukkit.CraftServer;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 
@@ -84,14 +80,15 @@ public enum Mob
 	{
 		"unchecked", "CallToThreadDumpStack"
 	})
-	public CraftEntity spawn(Player player, Server server) throws MobException
+	public Entity spawn(Player player, Server server) throws MobException
 	{
 		try
 		{
-			WorldServer world = ((org.bukkit.craftbukkit.CraftWorld)player.getWorld()).getHandle();
-			Constructor<CraftEntity> craft = (Constructor<CraftEntity>)ClassLoader.getSystemClassLoader().loadClass("org.bukkit.craftbukkit.entity.Craft" + craftClass).getConstructors()[0];
-			Constructor<Entity> entity = (Constructor<Entity>)ClassLoader.getSystemClassLoader().loadClass("net.minecraft.server.Entity" + entityClass).getConstructors()[0];
-			return craft.newInstance((CraftServer)server, entity.newInstance(world));
+			return player.getWorld().spawn(player.getLocation(), (Class<Entity>)ClassLoader.getSystemClassLoader().loadClass("net.minecraft.server.Entity" + entityClass));
+			//WorldServer world = ((org.bukkit.craftbukkit.CraftWorld)player.getWorld()).getHandle();
+			//Constructor<CraftEntity> craft = (Constructor<CraftEntity>)ClassLoader.getSystemClassLoader().loadClass("org.bukkit.craftbukkit.entity.Craft" + craftClass).getConstructors()[0];
+			//Constructor<Entity> entity = (Constructor<Entity>)ClassLoader.getSystemClassLoader().loadClass("net.minecraft.server.Entity" + entityClass).getConstructors()[0];
+			//return craft.newInstance((CraftServer)server, entity.newInstance(world));
 		}
 		catch (Exception ex)
 		{

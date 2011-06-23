@@ -3,8 +3,6 @@ package com.earth2me.essentials.commands;
 import net.minecraft.server.WorldServer;
 import org.bukkit.Location;
 import org.bukkit.Server;
-import org.bukkit.craftbukkit.entity.CraftEntity;
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.Mob.MobException;
@@ -20,6 +18,7 @@ import org.bukkit.craftbukkit.entity.CraftCreeper;
 import org.bukkit.craftbukkit.entity.CraftSheep;
 import org.bukkit.craftbukkit.entity.CraftSlime;
 import org.bukkit.craftbukkit.entity.CraftWolf;
+import org.bukkit.entity.Entity;
 
 
 public class Commandspawnmob extends EssentialsCommand
@@ -62,9 +61,9 @@ public class Commandspawnmob extends EssentialsCommand
 		}
 
 
-		CraftEntity spawnedMob = null;
+		Entity spawnedMob = null;
 		Mob mob = null;
-		CraftEntity spawnedMount = null;
+		Entity spawnedMount = null;
 		Mob mobMount = null;
 
 		mob = Mob.fromName(mobType);
@@ -96,8 +95,8 @@ public class Commandspawnmob extends EssentialsCommand
 			loc.setY(loc.getY() + 1);
 			block = user.getWorld().getBlockAt(loc);
 		}
-		spawnedMob.teleportTo(loc);
-		world.addEntity(spawnedMob.getHandle());
+		spawnedMob.teleport(loc);
+		//world.addEntity((CraftEntity)spawnedMob).getHandle());
 
 		if (mountType != null)
 		{
@@ -116,9 +115,10 @@ public class Commandspawnmob extends EssentialsCommand
 				user.sendMessage(Util.i18n("unableToSpawnMob"));
 				return;
 			}
-			spawnedMount.teleportTo(spawnedMob);
-			spawnedMount.getHandle().setPassengerOf(spawnedMob.getHandle());
-			world.addEntity(spawnedMount.getHandle());
+			spawnedMount.teleport(spawnedMob);
+			spawnedMob.setPassenger(spawnedMount);
+			//spawnedMount.getHandle().setPassengerOf(spawnedMob.getHandle());
+			//world.addEntity(spawnedMount.getHandle());
 		}
 		if (mobData != null)
 		{
@@ -143,8 +143,8 @@ public class Commandspawnmob extends EssentialsCommand
 				for (int i = 1; i < mobCount; i++)
 				{
 					spawnedMob = mob.spawn(user, server);
-					spawnedMob.teleportTo(loc);
-					world.addEntity(spawnedMob.getHandle());
+					spawnedMob.teleport(loc);
+					//world.addEntity(spawnedMob.getHandle());
 					if (mobMount != null)
 					{
 						try
@@ -156,9 +156,10 @@ public class Commandspawnmob extends EssentialsCommand
 							user.sendMessage(Util.i18n("unableToSpawnMob"));
 							return;
 						}
-						spawnedMount.teleportTo(spawnedMob);
-						spawnedMount.getHandle().setPassengerOf(spawnedMob.getHandle());
-						world.addEntity(spawnedMount.getHandle());
+						spawnedMount.teleport(spawnedMob);
+						spawnedMob.setPassenger(spawnedMount);
+						//spawnedMount.getHandle().setPassengerOf(spawnedMob.getHandle());
+						//world.addEntity(spawnedMount.getHandle());
 					}
 					if (mobData != null)
 					{
@@ -195,7 +196,7 @@ public class Commandspawnmob extends EssentialsCommand
 		return s.toUpperCase().charAt(0) + s.toLowerCase().substring(1);
 	}
 
-	private void changeMobData(String type, CraftEntity spawned, String data, User user) throws Exception
+	private void changeMobData(String type, Entity spawned, String data, User user) throws Exception
 	{
 		if ("Slime".equalsIgnoreCase(type))
 		{
