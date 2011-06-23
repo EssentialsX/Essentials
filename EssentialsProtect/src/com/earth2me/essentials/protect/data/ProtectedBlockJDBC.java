@@ -272,8 +272,7 @@ public abstract class ProtectedBlockJDBC implements IProtectedBlock
 			conn = cpds.getConnection();
 			ps = getStatementPlayerCountByLocation(conn, block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), playerName);
 			rs = ps.executeQuery();
-			rs.next();
-			return rs.getInt(1) > 0 && rs.getInt(2) == 0;
+			return rs.next() && rs.getInt(1) > 0 && rs.getInt(2) == 0;
 		}
 		catch (SQLException ex)
 		{
