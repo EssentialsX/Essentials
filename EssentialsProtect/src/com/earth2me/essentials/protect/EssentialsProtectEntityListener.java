@@ -293,7 +293,10 @@ public class EssentialsProtectEntityListener extends EntityListener
 		User user = Essentials.getStatic().getUser(event.getTarget());
 		if ((event.getReason() == TargetReason.CLOSEST_PLAYER
 			 || event.getReason() == TargetReason.TARGET_ATTACKED_ENTITY
-			 || event.getReason() == TargetReason.PIG_ZOMBIE_TARGET)
+			 || event.getReason() == TargetReason.PIG_ZOMBIE_TARGET
+			 || event.getReason() == TargetReason.RANDOM_TARGET
+			 || event.getReason() == TargetReason.TARGET_ATTACKED_OWNER
+			 || event.getReason() == TargetReason.OWNER_ATTACKED_TARGET)
 			&& EssentialsProtect.guardSettings.get("protect.prevent.entitytarget")
 			&& !user.isAuthorized("essentials.protect.entitytarget.bypass"))
 		{
