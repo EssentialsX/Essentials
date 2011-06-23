@@ -76,6 +76,10 @@ commands:
     description: Extinguish players.
     usage: /<command> <player>
     aliases: [extinguish]
+  fireball:
+    description: Throw a fireball.
+    usage: /<command>
+    aliases: [efireball]
   getpos:
     description: Get your current coordinates.
     usage: /<command>
