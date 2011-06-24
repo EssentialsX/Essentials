@@ -190,11 +190,16 @@ public class Settings implements IConf
 	{
 		return config.getInt("spawnmob-limit", 10);
 	}
-
+        
 	public boolean showNonEssCommandsInHelp()
 	{
 		return config.getBoolean("non-ess-in-help", true);
 	}
+        
+        public boolean hidePermissionlessHelp()
+	{
+		return config.getBoolean("hide-permissionless-help", true);
+	}          
 
 	public int getProtectCreeperMaxHeight()
 	{

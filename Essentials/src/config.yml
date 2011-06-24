@@ -88,7 +88,6 @@ motd:
   - '&cWelcome, {PLAYER}&c!'
   - '&fType &c/help&f for a list of commands.'
   - 'Currently online: {PLAYERLIST}'
-  - 'You have {MAILS} mail messages'
 
 # The server rules, available by typing /rules
 rules:
@@ -238,6 +237,9 @@ currency-symbol: '$'
 
 #Show other plugins commands in help
 non-ess-in-help: true
+
+#Hide plugins which dont give a permission
+hide-permissionless-help: true
 
 ############################################################
 # +------------------------------------------------------+ #
