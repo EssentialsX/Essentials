@@ -39,6 +39,7 @@ public class Trade
 		final double mon = user.getMoney();
 		if (getMoney() != null
 			&& mon < getMoney()
+			&& getMoney() > 0
 			&& !user.isAuthorized("essentials.eco.loan"))
 		{
 			throw new ChargeException(Util.i18n("notEnoughMoney"));
@@ -54,6 +55,7 @@ public class Trade
 			&& !user.isAuthorized("essentials.nocommandcost.all")
 			&& !user.isAuthorized("essentials.nocommandcost." + command)
 			&& mon < ess.getSettings().getCommandCost(command.charAt(0) == '/' ? command.substring(1) : command)
+			&& 0 < ess.getSettings().getCommandCost(command.charAt(0) == '/' ? command.substring(1) : command)
 			&& !user.isAuthorized("essentials.eco.loan"))
 		{
 			throw new ChargeException(Util.i18n("notEnoughMoney"));
@@ -62,7 +64,7 @@ public class Trade
 
 	public void pay(final IUser user)
 	{
-		if (getMoney() != null)
+		if (getMoney() != null && getMoney() > 0)
 		{
 			user.giveMoney(getMoney());
 		}
@@ -82,7 +84,7 @@ public class Trade
 		if (getMoney() != null)
 		{
 			final double mon = user.getMoney();
-			if (mon < getMoney() && !user.isAuthorized("essentials.eco.loan"))
+			if (mon < getMoney() && getMoney() > 0 && !user.isAuthorized("essentials.eco.loan"))
 			{
 				throw new ChargeException(Util.i18n("notEnoughMoney"));
 			}
@@ -103,7 +105,7 @@ public class Trade
 		{
 			final double mon = user.getMoney();
 			final double cost = ess.getSettings().getCommandCost(command.charAt(0) == '/' ? command.substring(1) : command);
-			if (mon < cost && !user.isAuthorized("essentials.eco.loan"))
+			if (mon < cost && cost > 0 && !user.isAuthorized("essentials.eco.loan"))
 			{
 				throw new ChargeException(Util.i18n("notEnoughMoney"));
 			}
