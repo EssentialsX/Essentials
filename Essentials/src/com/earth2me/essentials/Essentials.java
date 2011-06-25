@@ -43,7 +43,7 @@ import org.bukkit.plugin.java.*;
 public class Essentials extends JavaPlugin implements IEssentials
 {
 	public static final String AUTHORS = "Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans and Xeology";
-	public static final int minBukkitBuildVersion = 867;
+	public static final int minBukkitBuildVersion = 928;
 	private static final Logger logger = Logger.getLogger("Minecraft");
 	private Settings settings;
 	private TNTExplodeListener tntListener;
