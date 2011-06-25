@@ -3,7 +3,6 @@ package com.earth2me.essentials.api;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.EssentialsConf;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.UserData;
 import com.earth2me.essentials.Util;
 import java.io.File;
 import java.util.logging.Level;
@@ -79,8 +78,7 @@ public final class Economy
 		if (user == null) {
 			throw new UserDoesNotExistException(name);
 		}
-		// Use UserData to avoid calls to iConomy and Register
-		return ((UserData)user).getMoney();
+		return user.getMoney();
 	}
 
 	/**
@@ -100,8 +98,7 @@ public final class Economy
 		{
 			throw new NoLoanPermittedException();
 		}
-		// Use UserData to avoid calls to iConomy and Register
-		((UserData)user).setMoney(balance);
+		user.setMoney(balance);
 	}
 
 	/**
