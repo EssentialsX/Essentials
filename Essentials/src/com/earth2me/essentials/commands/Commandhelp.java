@@ -31,18 +31,18 @@ public class Commandhelp extends EssentialsCommand
 	protected void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
 		int page = 1;
-                String match = args[0].toLowerCase();                
+		String match = args[0].toLowerCase();
 		try
 		{
 			if (args.length > 0)
 			{
-				page = Integer.parseInt(args[args.length - 1]);	
+				page = Integer.parseInt(args[args.length - 1]);
 				if (args.length == 1)
 				{
-				  match = "";
+					match = "";
 				}
 			}
-			
+
 		}
 		catch (Exception ex)
 		{
@@ -69,10 +69,10 @@ public class Commandhelp extends EssentialsCommand
 	private List<String> getHelpLines(User user, String match) throws Exception
 	{
 		List<String> retval = new ArrayList<String>();
-		File helpFile = new File(ess.getDataFolder(), "help_"+Util.sanitizeFileName(user.getName()) +".txt");
+		File helpFile = new File(ess.getDataFolder(), "help_" + Util.sanitizeFileName(user.getName()) + ".txt");
 		if (!helpFile.exists())
 		{
-			helpFile = new File(ess.getDataFolder(), "help_"+Util.sanitizeFileName(user.getGroup()) +".txt");
+			helpFile = new File(ess.getDataFolder(), "help_" + Util.sanitizeFileName(user.getGroup()) + ".txt");
 		}
 		if (!helpFile.exists())
 		{
@@ -81,8 +81,9 @@ public class Commandhelp extends EssentialsCommand
 		if (helpFile.exists())
 		{
 			final BufferedReader bufferedReader = new BufferedReader(new FileReader(helpFile));
-			try {
-				
+			try
+			{
+
 				while (bufferedReader.ready())
 				{
 					final String line = bufferedReader.readLine();
@@ -107,11 +108,11 @@ public class Commandhelp extends EssentialsCommand
 				for (Entry<String, HashMap<String, String>> k : cmds.entrySet())
 				{
 					if ((!match.equalsIgnoreCase("")) && (!p.getDescription().getName().toLowerCase().contains(match))
-									&& (!p.getDescription().getDescription().toLowerCase().contains(match)))
+						&& (!p.getDescription().getDescription().toLowerCase().contains(match)))
 					{
 						continue;
 					}
-					
+
 					if (p.getDescription().getName().toLowerCase().contains("essentials"))
 					{
 						final String node = "essentials." + k.getKey();
