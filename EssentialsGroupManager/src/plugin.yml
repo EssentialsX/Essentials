@@ -1,5 +1,5 @@
 name: GroupManager
-version: 1.0(alpha-5)
+version: "1.0(alpha-5) [Zombie-Version, please switch to Permissions 3]"
 main: org.anjocaido.groupmanager.GroupManager
 website: http://www.anjocaido.info/
 description: Provides on-the-fly system for Permission system created by Nijikokun. But all in memory, and with flat-file saving schedule.
