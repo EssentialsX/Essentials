@@ -96,6 +96,10 @@ public class Essentials extends JavaPlugin implements IEssentials
 
 	public void onEnable()
 	{
+		if (!Thread.currentThread().getStackTrace()[5].getMethodName().equals("loadPlugin")) {
+			logger.log(Level.SEVERE, "Another plugin is trying to enable Essentials manually. Don't do this! It's probably "
+					+ Thread.currentThread().getStackTrace()[5].getClassName());
+		}
 		if (enableErrorLogging)
 		{
 			logger.addHandler(errorHandler);
