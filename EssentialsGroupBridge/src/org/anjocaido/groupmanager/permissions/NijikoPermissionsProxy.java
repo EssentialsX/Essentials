@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.Map;
 import org.anjocaido.groupmanager.GroupManager;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.util.config.Configuration;
 
 /**
@@ -424,5 +425,10 @@ public class NijikoPermissionsProxy extends Control {
     public double getPermissionDouble(String name, String permission) {
         return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getPermissionDouble(name,permission);
     }
+
+	public void setGM(Plugin p)
+	{
+		this.plugin = (GroupManager)p;
+	}
 
 }
