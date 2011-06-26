@@ -64,7 +64,7 @@ public class GroupManager extends JavaPlugin {
     @Override
     public void onEnable() {
 		if (!Thread.currentThread().getStackTrace()[5].getMethodName().equals("loadPlugin")) {
-			logger.log(Level.SEVERE, "Another plugin is trying to enable Essentials manually. Don't do this! It's probably "
+			logger.log(Level.SEVERE, "Another plugin is trying to enable GroupManager manually. Don't do this! It's probably "
 					+ Thread.currentThread().getStackTrace()[5].getClassName());
 		}
         GroupManager.logger.setUseParentHandlers(false);
