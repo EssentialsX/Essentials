@@ -31,10 +31,15 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		setBase(base);
 		return this;
 	}
-
+	
 	public boolean isAuthorized(IEssentialsCommand cmd)
 	{
-		return isAuthorized("essentials." + (cmd.getName().equals("r") ? "msg" : cmd.getName()));
+		return isAuthorized(cmd, "essentials.");
+	}
+
+	public boolean isAuthorized(IEssentialsCommand cmd, String permissionPrefix)
+	{
+		return isAuthorized(permissionPrefix + (cmd.getName().equals("r") ? "msg" : cmd.getName()));
 	}
 
 	public boolean isAuthorized(String node)

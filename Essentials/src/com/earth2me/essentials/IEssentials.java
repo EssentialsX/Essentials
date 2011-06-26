@@ -16,7 +16,7 @@ public interface IEssentials
 			
 	void reload();
 	
-	boolean onCommandEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath);
+	boolean onCommandEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath, String permissionPrefix);
 	
 	User getUser(Object base);
 	

@@ -352,22 +352,13 @@ public class Essentials extends JavaPlugin implements IEssentials
 		return retval;
 	}
 
-	@SuppressWarnings("LoggerStringConcat")
-	public static void previewCommand(CommandSender sender, Command command, String commandLabel, String[] args)
-	{
-		if (sender instanceof Player)
-		{
-			logger.info(ChatColor.BLUE + "[PLAYER_COMMAND] " + ((Player)sender).getName() + ": /" + commandLabel + " " + EssentialsCommand.getFinalArg(args, 0));
-		}
-	}
-
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args)
 	{
-		return onCommandEssentials(sender, command, commandLabel, args, Essentials.class.getClassLoader(), "com.earth2me.essentials.commands.Command");
+		return onCommandEssentials(sender, command, commandLabel, args, Essentials.class.getClassLoader(), "com.earth2me.essentials.commands.Command", "essentials.");
 	}
 
-	public boolean onCommandEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath)
+	public boolean onCommandEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath, String permissionPrefix)
 	{
 		if (("msg".equals(commandLabel.toLowerCase()) || "r".equals(commandLabel.toLowerCase()) || "mail".equals(commandLabel.toLowerCase())) && sender instanceof Player)
 		{
@@ -416,8 +407,12 @@ public class Essentials extends JavaPlugin implements IEssentials
 
 		try
 		{
-			previewCommand(sender, command, commandLabel, args);
-			User user = sender instanceof Player ? getUser(sender) : null;
+			User user = null;
+			if (sender instanceof Player)
+			{
+				user = getUser(sender);
+				logger.log(Level.INFO, String.format("[PLAYER_COMMAND] %s: /%s %s ", ((Player)sender).getName(), commandLabel , EssentialsCommand.getFinalArg(args, 0)));
+			}
 
 			// New mail notification
 			if (user != null && !getSettings().isCommandDisabled("mail") && !commandLabel.equals("mail") && user.isAuthorized("essentials.mail"))
@@ -449,7 +444,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 			}
 
 			// Check authorization
-			if (user != null && !user.isAuthorized(cmd))
+			if (user != null && !user.isAuthorized(cmd, permissionPrefix))
 			{
 				logger.log(Level.WARNING, Util.format("deniedAccessCommand", user.getName()));
 				user.sendMessage(Util.i18n("noAccessCommand"));

@@ -35,7 +35,7 @@ public class EssentialsPermissionsCommands extends JavaPlugin
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args)
 	{
-		return Essentials.getStatic().onCommandEssentials(sender, command, label, args, EssentialsPermissionsCommands.class.getClassLoader(), "com.earth2me.essentials.permissions.Command");
+		return Essentials.getStatic().onCommandEssentials(sender, command, label, args, EssentialsPermissionsCommands.class.getClassLoader(), "com.earth2me.essentials.permissions.Command", "groupmanager.");
 	}
 
 	@Override

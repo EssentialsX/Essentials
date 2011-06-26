@@ -21,7 +21,7 @@ public class Commandmanload extends EssentialsCommand
 		{
 			world = args[0];
 		}
-		String command = "/permissions -reload "+world;
+		String command = "permissions -reload "+world;
 		sender.sendMessage(commandLabel + " is deprecated. Use " + command + " instead.");
 		ess.getServer().dispatchCommand(sender, command);
 	}

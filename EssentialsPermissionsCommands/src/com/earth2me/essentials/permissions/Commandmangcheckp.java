@@ -22,7 +22,7 @@ public class Commandmangcheckp extends EssentialsCommand
 		}
 		final String target = args[0];
 		final String perm = args[1];
-		String command = "/permissions g:"+target+" has "+perm;
+		String command = "permissions g:"+target+" has "+perm;
 		sender.sendMessage(commandLabel + " is deprecated. Use " + command + " instead.");
 		ess.getServer().dispatchCommand(sender, command);
 	}
