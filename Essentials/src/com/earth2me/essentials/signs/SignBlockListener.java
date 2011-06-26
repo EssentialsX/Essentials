@@ -10,6 +10,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockListener;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 
 
@@ -82,9 +83,36 @@ public class SignBlockListener extends BlockListener
 		for (Signs signs : Signs.values())
 		{
 			final EssentialsSign sign = signs.getSign();
-			if (event.getLine(0).equalsIgnoreCase(sign.getTemplateName()))
+			if (event.getLine(0).equalsIgnoreCase(sign.getTemplateName())
+				&& !sign.onSignCreate(event, ess))
 			{
-				event.setCancelled(!sign.onSignCreate(event, ess));
+				event.setCancelled(true);
+				return;
+			}
+		}
+	}
+
+	@Override
+	public void onBlockPlace(final BlockPlaceEvent event)
+	{
+		if (event.isCancelled() || ess.getSettings().areSignsDisabled())
+		{
+			return;
+		}
+
+		final Block block = event.getBlock();
+		if (block.getType() == Material.WALL_SIGN
+			|| block.getType() == Material.SIGN_POST)
+		{
+			return;
+		}
+		for (Signs signs : Signs.values())
+		{
+			final EssentialsSign sign = signs.getSign();
+			if (sign.getBlocks().contains(block.getType())
+				&& !sign.onBlockPlace(block, event.getPlayer(), ess))
+			{
+				event.setCancelled(true);
 				return;
 			}
 		}
@@ -98,7 +126,7 @@ public class SignBlockListener extends BlockListener
 			return;
 		}
 
-		Block block = event.getBlock();
+		final Block block = event.getBlock();
 		if ((block.getType() == Material.WALL_SIGN
 			 || block.getType() == Material.SIGN_POST
 			 || EssentialsSign.checkIfBlockBreaksSigns(block)))
@@ -109,9 +137,10 @@ public class SignBlockListener extends BlockListener
 		for (Signs signs : Signs.values())
 		{
 			final EssentialsSign sign = signs.getSign();
-			if (sign.getBlocks().contains(block.getType()))
+			if (sign.getBlocks().contains(block.getType())
+				&& !sign.onBlockBurn(block, ess))
 			{
-				event.setCancelled(!sign.onBlockBurn(block, ess));
+				event.setCancelled(true);
 				return;
 			}
 		}

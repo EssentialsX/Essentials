@@ -231,6 +231,48 @@ public class SignProtection extends EssentialsSign
 	{
 		return protectedBlocks;
 	}
+	
+	@Override
+	protected boolean onBlockPlace(final Block block, final User player, final String username, final IEssentials ess) throws SignException
+	{
+		final SignProtectionState state = isBlockProtected(block, player, username);
+
+		if (state == SignProtectionState.OWNER || state == SignProtectionState.NOSIGN)
+		{
+			return true;
+		}
+
+		if ((state == SignProtectionState.ALLOWED || state == SignProtectionState.NOT_ALLOWED)
+			&& player.isAuthorized("essentials.signs.protection.override"))
+		{
+			return true;
+		}
+
+
+		player.sendMessage(Util.format("noPlacePermission", block.getType().toString().toLowerCase()));
+		return false;
+	}
+	
+	@Override
+	protected boolean onBlockInteract(final Block block, final User player, final String username, final IEssentials ess) throws SignException
+	{
+		final SignProtectionState state = isBlockProtected(block, player, username);
+
+		if (state == SignProtectionState.OWNER || state == SignProtectionState.NOSIGN || state == SignProtectionState.ALLOWED)
+		{
+			return true;
+		}
+
+		if (state == SignProtectionState.NOT_ALLOWED
+			&& player.isAuthorized("essentials.signs.protection.override"))
+		{
+			return true;
+		}
+
+
+		player.sendMessage(Util.format("noAccessPermission", block.getType().toString().toLowerCase()));
+		return false;
+	}
 
 	@Override
 	protected boolean onBlockBreak(final Block block, final User player, final String username, final IEssentials ess) throws SignException
