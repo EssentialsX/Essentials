@@ -357,7 +357,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			event.setCancelled(true);
 			return;
 		}
-		if (!ess.getSettings().areSignsDisabled() && EssentialsBlockListener.protectedBlocks.contains(event.getClickedBlock().getType()))
+		/*if (!ess.getSettings().areSignsDisabled() && EssentialsBlockListener.protectedBlocks.contains(event.getClickedBlock().getType()))
 		{
 			if (!user.isAuthorized("essentials.signs.protection.override"))
 			{
@@ -368,7 +368,7 @@ public class EssentialsPlayerListener extends PlayerListener
 					return;
 				}
 			}
-		}
+		}*/
 
 		if (ess.getSettings().getBedSetsHome() && event.getClickedBlock().getType() == Material.BED_BLOCK)
 		{
@@ -383,7 +383,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 
 
-		if (ess.getSettings().areSignsDisabled())
+		/*if (ess.getSettings().areSignsDisabled())
 		{
 			return;
 		}
@@ -517,9 +517,10 @@ public class EssentialsPlayerListener extends PlayerListener
 			{
 				logger.log(Level.WARNING, ex.getMessage(), ex);
 			}
-		}
+		}*/
 	}
 
+	@Deprecated
 	private Trade chargeUserForWarp(Sign sign, User user) throws Exception
 	{
 		if (!sign.getLine(3).isEmpty())

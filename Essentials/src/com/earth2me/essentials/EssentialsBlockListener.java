@@ -33,6 +33,7 @@ public class EssentialsBlockListener extends BlockListener
 	}
 
 	@Override
+	@Deprecated
 	public void onBlockBreak(BlockBreakEvent event)
 	{
 		if (event.isCancelled())
@@ -63,6 +64,7 @@ public class EssentialsBlockListener extends BlockListener
 	}
 
 	@Override
+	@Deprecated
 	public void onSignChange(SignChangeEvent event)
 	{
 		if (event.isCancelled())
@@ -231,7 +233,7 @@ public class EssentialsBlockListener extends BlockListener
 		{
 			return;
 		}
-		Block signBlock = event.getBlockAgainst();
+		/*Block signBlock = event.getBlockAgainst();
 		if (signBlock.getType() == Material.WALL_SIGN || signBlock.getType() == Material.SIGN_POST)
 		{
 			Sign sign = new CraftSign(signBlock);
@@ -240,7 +242,7 @@ public class EssentialsBlockListener extends BlockListener
 				event.setCancelled(true);
 				return;
 			}
-		}
+		}*/
 		final User user = ess.getUser(event.getPlayer());
 		// Do not rely on getItemInHand();
 		// http://leaky.bukkit.org/issues/663
@@ -320,7 +322,8 @@ public class EssentialsBlockListener extends BlockListener
 		}
 	}
 
-	public boolean hasAdjacentChest(Block block)
+	@Deprecated
+	private boolean hasAdjacentChest(Block block)
 	{
 		Block[] faces = getAdjacentBlocks(block);
 		for (Block b : faces)
@@ -337,6 +340,7 @@ public class EssentialsBlockListener extends BlockListener
 	private static final int NOSIGN = 2;
 	private static final int OWNER = 3;
 
+	@Deprecated
 	private int checkProtectionSign(Block block, User user)
 	{
 		String username = user.getName().substring(0, user.getName().length() > 14 ? 14 : user.getName().length());
@@ -371,6 +375,7 @@ public class EssentialsBlockListener extends BlockListener
 		return NOSIGN;
 	}
 
+	@Deprecated
 	private static Block[] getAdjacentBlocks(Block block)
 	{
 		return new Block[]
@@ -384,7 +389,8 @@ public class EssentialsBlockListener extends BlockListener
 				};
 	}
 
-	public boolean isBlockProtected(Block block, User user)
+	@Deprecated
+	private boolean isBlockProtected(Block block, User user)
 	{
 		Block[] faces = getAdjacentBlocks(block);
 		boolean protect = false;
@@ -421,7 +427,8 @@ public class EssentialsBlockListener extends BlockListener
 		return protect;
 	}
 
-	public static boolean isBlockProtected(Block block)
+	@Deprecated
+	private static boolean isBlockProtected(Block block)
 	{
 		Block[] faces = getAdjacentBlocks(block);
 		for (Block b : faces)

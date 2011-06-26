@@ -249,12 +249,12 @@ public class EssentialsProtectEntityListener extends EntityListener
 				event.setCancelled(true);
 				return;
 			}
-			if (EssentialsBlockListener.protectedBlocks.contains(block.getType())
+			/*if (EssentialsBlockListener.protectedBlocks.contains(block.getType())
 				&& EssentialsBlockListener.isBlockProtected(block))
 			{
 				event.setCancelled(true);
 				return;
-			}
+			}*/
 		}
 	}
 

@@ -27,6 +27,9 @@ import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import com.earth2me.essentials.register.payment.Methods;
+import com.earth2me.essentials.signs.SignBlockListener;
+import com.earth2me.essentials.signs.SignEntityListener;
+import com.earth2me.essentials.signs.SignPlayerListener;
 import java.math.BigInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -185,9 +188,22 @@ public class Essentials extends JavaPlugin implements IEssentials
 		pm.registerEvent(Type.PLAYER_ANIMATION, playerListener, Priority.High, this);
 
 		final EssentialsBlockListener blockListener = new EssentialsBlockListener(this);
-		pm.registerEvent(Type.SIGN_CHANGE, blockListener, Priority.Low, this);
-		pm.registerEvent(Type.BLOCK_BREAK, blockListener, Priority.Lowest, this);
+		//pm.registerEvent(Type.SIGN_CHANGE, blockListener, Priority.Low, this);
+		//pm.registerEvent(Type.BLOCK_BREAK, blockListener, Priority.Lowest, this);
 		pm.registerEvent(Type.BLOCK_PLACE, blockListener, Priority.Lowest, this);
+		
+		final SignBlockListener signBlockListener = new SignBlockListener(this);
+		pm.registerEvent(Type.SIGN_CHANGE, signBlockListener, Priority.Low, this);
+		pm.registerEvent(Type.BLOCK_PLACE, signBlockListener, Priority.Low, this);
+		pm.registerEvent(Type.BLOCK_BREAK, signBlockListener, Priority.Low, this);
+		pm.registerEvent(Type.BLOCK_IGNITE, signBlockListener, Priority.Low, this);
+		pm.registerEvent(Type.BLOCK_BURN, signBlockListener, Priority.Low, this);
+		
+		final SignPlayerListener signPlayerListener = new SignPlayerListener(this);
+		pm.registerEvent(Type.PLAYER_INTERACT, signPlayerListener, Priority.Low, this);
+		
+		final SignEntityListener signEntityListener = new SignEntityListener(this);
+		pm.registerEvent(Type.ENTITY_EXPLODE, signEntityListener, Priority.Low, this);
 
 		final EssentialsEntityListener entityListener = new EssentialsEntityListener(this);
 		pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Priority.Lowest, this);
@@ -201,7 +217,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		pm.registerEvent(Type.BLOCK_DAMAGE, jail, Priority.High, this);
 		pm.registerEvent(Type.BLOCK_PLACE, jail, Priority.High, this);
 		pm.registerEvent(Type.PLAYER_INTERACT, jailPlayerListener, Priority.High, this);
-		attachEcoListeners();
+		//attachEcoListeners();
 
 		if (settings.isNetherEnabled() && getServer().getWorlds().size() < 2)
 		{
@@ -598,12 +614,12 @@ public class Essentials extends JavaPlugin implements IEssentials
 
 	private void attachEcoListeners()
 	{
-		PluginManager pm = getServer().getPluginManager();
-		EssentialsEcoBlockListener ecoBlockListener = new EssentialsEcoBlockListener(this);
-		EssentialsEcoPlayerListener ecoPlayerListener = new EssentialsEcoPlayerListener(this);
-		pm.registerEvent(Type.PLAYER_INTERACT, ecoPlayerListener, Priority.High, this);
-		pm.registerEvent(Type.BLOCK_BREAK, ecoBlockListener, Priority.High, this);
-		pm.registerEvent(Type.SIGN_CHANGE, ecoBlockListener, Priority.Monitor, this);
+		//PluginManager pm = getServer().getPluginManager();
+		//EssentialsEcoBlockListener ecoBlockListener = new EssentialsEcoBlockListener(this);
+		//EssentialsEcoPlayerListener ecoPlayerListener = new EssentialsEcoPlayerListener(this);
+		//pm.registerEvent(Type.PLAYER_INTERACT, ecoPlayerListener, Priority.High, this);
+		//pm.registerEvent(Type.BLOCK_BREAK, ecoBlockListener, Priority.High, this);
+		//pm.registerEvent(Type.SIGN_CHANGE, ecoBlockListener, Priority.Monitor, this);
 	}
 
 	public CraftScheduler getScheduler()
