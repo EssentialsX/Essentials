@@ -84,7 +84,7 @@ public enum Mob
 	{
 		try
 		{
-			return player.getWorld().spawn(player.getLocation(), (Class<Entity>)ClassLoader.getSystemClassLoader().loadClass("net.minecraft.server.Entity" + entityClass));
+			return player.getWorld().spawn(player.getLocation(), (Class<Entity>)ClassLoader.getSystemClassLoader().loadClass("org.bukkit.craftbukkit.entity.Craft" + craftClass));
 			//WorldServer world = ((org.bukkit.craftbukkit.CraftWorld)player.getWorld()).getHandle();
 			//Constructor<CraftEntity> craft = (Constructor<CraftEntity>)ClassLoader.getSystemClassLoader().loadClass("org.bukkit.craftbukkit.entity.Craft" + craftClass).getConstructors()[0];
 			//Constructor<Entity> entity = (Constructor<Entity>)ClassLoader.getSystemClassLoader().loadClass("net.minecraft.server.Entity" + entityClass).getConstructors()[0];
