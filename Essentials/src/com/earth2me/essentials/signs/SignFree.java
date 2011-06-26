@@ -1,8 +1,6 @@
 package com.earth2me.essentials.signs;
 
-import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.ItemDb;
 import com.earth2me.essentials.User;
 import net.minecraft.server.InventoryPlayer;
 import org.bukkit.craftbukkit.inventory.CraftInventoryPlayer;

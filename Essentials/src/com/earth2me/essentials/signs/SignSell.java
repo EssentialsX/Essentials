@@ -12,7 +12,7 @@ public class SignSell extends EssentialsSign
 	{
 		super("Sell");
 	}
-	
+
 	@Override
 	protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException
 	{
@@ -20,7 +20,7 @@ public class SignSell extends EssentialsSign
 		validateTrade(sign, 3, ess);
 		return true;
 	}
-	
+
 	@Override
 	protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException
 	{

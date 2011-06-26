@@ -65,7 +65,7 @@ public class SignTrade extends EssentialsSign
 			return false;
 		}
 	}
-	
+
 	protected final void validateTrade(final ISign sign, final int index, final boolean amountNeeded, final IEssentials ess) throws SignException
 	{
 		final String line = sign.getLine(index).trim();
