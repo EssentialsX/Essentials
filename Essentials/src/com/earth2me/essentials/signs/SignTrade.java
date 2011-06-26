@@ -98,7 +98,7 @@ public class SignTrade extends EssentialsSign
 
 		if (split.length == 2 && !amountNeeded)
 		{
-			final int amount = getInteger(split[0]);
+			final int amount = getIntegerPositive(split[0]);
 			final ItemStack item = getItemStack(split[1], amount);
 			if (amount < 1 || item.getTypeId() == 0)
 			{
@@ -110,9 +110,9 @@ public class SignTrade extends EssentialsSign
 
 		if (split.length == 3 && amountNeeded)
 		{
-			final int stackamount = getInteger(split[0]);
+			final int stackamount = getIntegerPositive(split[0]);
 			final ItemStack item = getItemStack(split[1], stackamount);
-			int amount = getInteger(split[2]);
+			int amount = getIntegerPositive(split[2]);
 			amount -= amount % stackamount;
 			if (amount < 1 || stackamount < 1 || item.getTypeId() == 0)
 			{
@@ -145,9 +145,9 @@ public class SignTrade extends EssentialsSign
 
 		if (split.length == 3)
 		{
-			final int stackamount = getInteger(split[0]);
+			final int stackamount = getIntegerPositive(split[0]);
 			final ItemStack item = getItemStack(split[1], stackamount);
-			int amount = getInteger(split[2]);
+			int amount = getIntegerPositive(split[2]);
 			amount -= amount % stackamount;
 			if (amount < 1 || stackamount < 1 || item.getTypeId() == 0)
 			{
@@ -209,7 +209,7 @@ public class SignTrade extends EssentialsSign
 
 		if (split.length == 3)
 		{
-			final int stackamount = getInteger(split[0]);
+			final int stackamount = getIntegerPositive(split[0]);
 			final ItemStack item = getItemStack(split[1], stackamount);
 			int amount = getInteger(split[2]);
 			sign.setLine(index, stackamount + " " + split[1] + ":" + (amount + Math.round(value)));

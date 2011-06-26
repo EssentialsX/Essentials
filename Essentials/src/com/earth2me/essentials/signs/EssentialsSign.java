@@ -267,7 +267,7 @@ public class EssentialsSign
 	{
 
 		final ItemStack item = getItemStack(sign.getLine(itemIndex), 1);
-		final int amount = Math.min(getInteger(sign.getLine(amountIndex)), item.getType().getMaxStackSize() * player.getInventory().getSize());
+		final int amount = Math.min(getIntegerPositive(sign.getLine(amountIndex)), item.getType().getMaxStackSize() * player.getInventory().getSize());
 		if (item.getTypeId() == 0 || amount < 1)
 		{
 			throw new SignException(Util.i18n("moreThanZero"));
@@ -283,8 +283,18 @@ public class EssentialsSign
 		{
 			throw new SignException("Empty line " + index);
 		}
-		final int quantity = getInteger(line);
+		final int quantity = getIntegerPositive(line);
 		sign.setLine(index, Integer.toString(quantity));
+	}
+
+	protected final int getIntegerPositive(final String line) throws SignException
+	{
+		final int quantity = getInteger(line);
+		if (quantity <= 1)
+		{
+			throw new SignException(Util.i18n("moreThanZero"));
+		}
+		return quantity;
 	}
 
 	protected final int getInteger(final String line) throws SignException
@@ -292,10 +302,7 @@ public class EssentialsSign
 		try
 		{
 			final int quantity = Integer.parseInt(line);
-			if (quantity <= 1)
-			{
-				throw new SignException(Util.i18n("moreThanZero"));
-			}
+
 			return quantity;
 		}
 		catch (NumberFormatException ex)
@@ -362,7 +369,7 @@ public class EssentialsSign
 			{
 				throw new SignException(Util.i18n("invalidCharge"));
 			}
-			final int quantity = getInteger(split[0]);
+			final int quantity = getIntegerPositive(split[0]);
 
 			final String item = split[1].toLowerCase();
 			if (item.equalsIgnoreCase("times"))
@@ -380,6 +387,9 @@ public class EssentialsSign
 		else
 		{
 			return new Trade(money, ess);
+
+
+
 		}
 	}
 
