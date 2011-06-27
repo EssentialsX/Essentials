@@ -73,16 +73,6 @@ public class Commandspawnmob extends EssentialsCommand
 			return;
 		}
 		charge(user);
-		WorldServer world = ((CraftWorld)user.getWorld()).getHandle();
-		try
-		{
-			spawnedMob = mob.spawn(user, server);
-		}
-		catch (MobException e)
-		{
-			user.sendMessage(Util.i18n("unableToSpawnMob"));
-			return;
-		}
 		int[] ignore =
 		{
 			8, 9
@@ -95,8 +85,16 @@ public class Commandspawnmob extends EssentialsCommand
 			loc.setY(loc.getY() + 1);
 			block = user.getWorld().getBlockAt(loc);
 		}
-		spawnedMob.teleport(loc);
-		//world.addEntity((CraftEntity)spawnedMob).getHandle());
+		
+		try
+		{
+			spawnedMob = mob.spawn(user, server, loc);
+		}
+		catch (MobException e)
+		{
+			user.sendMessage(Util.i18n("unableToSpawnMob"));
+			return;
+		}
 
 		if (mountType != null)
 		{
@@ -108,17 +106,14 @@ public class Commandspawnmob extends EssentialsCommand
 			}
 			try
 			{
-				spawnedMount = mobMount.spawn(user, server);
+				spawnedMount = mobMount.spawn(user, server, loc);
 			}
 			catch (MobException e)
 			{
 				user.sendMessage(Util.i18n("unableToSpawnMob"));
 				return;
 			}
-			spawnedMount.teleport(spawnedMob);
 			spawnedMob.setPassenger(spawnedMount);
-			//spawnedMount.getHandle().setPassengerOf(spawnedMob.getHandle());
-			//world.addEntity(spawnedMount.getHandle());
 		}
 		if (mobData != null)
 		{
@@ -142,24 +137,19 @@ public class Commandspawnmob extends EssentialsCommand
 			{
 				for (int i = 1; i < mobCount; i++)
 				{
-					spawnedMob = mob.spawn(user, server);
-					spawnedMob.teleport(loc);
-					//world.addEntity(spawnedMob.getHandle());
+					spawnedMob = mob.spawn(user, server, loc);
 					if (mobMount != null)
 					{
 						try
 						{
-							spawnedMount = mobMount.spawn(user, server);
+							spawnedMount = mobMount.spawn(user, server, loc);
 						}
 						catch (MobException e)
 						{
 							user.sendMessage(Util.i18n("unableToSpawnMob"));
 							return;
 						}
-						spawnedMount.teleport(spawnedMob);
 						spawnedMob.setPassenger(spawnedMount);
-						//spawnedMount.getHandle().setPassengerOf(spawnedMob.getHandle());
-						//world.addEntity(spawnedMount.getHandle());
 					}
 					if (mobData != null)
 					{
@@ -170,7 +160,7 @@ public class Commandspawnmob extends EssentialsCommand
 						changeMobData(mobMount.name, spawnedMount, mountData, user);
 					}
 				}
-				user.sendMessage(args[1] + " " + mob.name.toLowerCase() + mob.s + Util.i18n("spawned"));
+				user.sendMessage(args[1] + " " + mob.name.toLowerCase() + mob.suffix + Util.i18n("spawned"));
 			}
 			catch (MobException e1)
 			{
