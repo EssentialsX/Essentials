@@ -1,75 +1,55 @@
 package com.earth2me.essentials;
 
-import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.minecraft.server.Entity;
-import net.minecraft.server.WorldServer;
+import org.bukkit.Location;
 import org.bukkit.Server;
-import org.bukkit.craftbukkit.entity.CraftEntity;
-import org.bukkit.craftbukkit.CraftServer;
+import org.bukkit.entity.CreatureType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 
 public enum Mob
 {
-	CHICKEN("Chicken", Enemies.FRIENDLY),
-	COW("Cow", Enemies.FRIENDLY),
-	CREEPER("Creeper", Enemies.ENEMY),
-	GHAST("Ghast", Enemies.ENEMY),
-	GIANT("Giant", "GiantZombie", Enemies.ENEMY),
-	PIG("Pig", Enemies.FRIENDLY),
-	PIGZOMB("PigZombie", Enemies.NEUTRAL),
-	SHEEP("Sheep", Enemies.FRIENDLY, ""),
-	SKELETON("Skeleton", Enemies.ENEMY),
-	SLIME("Slime", Enemies.ENEMY),
-	SPIDER("Spider", Enemies.ENEMY),
-	SQUID("Squid", Enemies.FRIENDLY),
-	ZOMBIE("Zombie", Enemies.ENEMY),
-	MONSTER("Monster", Enemies.ENEMY),
-	WOLF("Wolf", Enemies.NEUTRAL);
+	CHICKEN("Chicken", Enemies.FRIENDLY, CreatureType.CHICKEN),
+	COW("Cow", Enemies.FRIENDLY, CreatureType.COW),
+	CREEPER("Creeper", Enemies.ENEMY, CreatureType.CREEPER),
+	GHAST("Ghast", Enemies.ENEMY, CreatureType.GHAST),
+	GIANT("Giant", Enemies.ENEMY, CreatureType.GIANT),
+	PIG("Pig", Enemies.FRIENDLY, CreatureType.PIG),
+	PIGZOMB("PigZombie", Enemies.NEUTRAL, CreatureType.PIG_ZOMBIE),
+	SHEEP("Sheep", Enemies.FRIENDLY, "", CreatureType.SHEEP),
+	SKELETON("Skeleton", Enemies.ENEMY, CreatureType.SKELETON),
+	SLIME("Slime", Enemies.ENEMY, CreatureType.SLIME),
+	SPIDER("Spider", Enemies.ENEMY, CreatureType.SPIDER),
+	SQUID("Squid", Enemies.FRIENDLY, CreatureType.SQUID),
+	ZOMBIE("Zombie", Enemies.ENEMY, CreatureType.ZOMBIE),
+	MONSTER("Monster", Enemies.ENEMY, CreatureType.MONSTER),
+	WOLF("Wolf", Enemies.NEUTRAL, CreatureType.WOLF);
 
 	public static final Logger logger = Logger.getLogger("Minecraft");
 
-	private Mob(String n, Enemies en, String s)
+	private Mob(String n, Enemies en, String s, CreatureType type)
 	{
-		this.s = s;
+		this.suffix = s;
 		this.name = n;
-		this.craftClass = n;
-		this.entityClass = n;
 		this.type = en;
+		this.bukkitType = type;
 	}
 
-	private Mob(String n, Enemies en)
+	private Mob(String n, Enemies en, CreatureType type)
 	{
 		this.name = n;
-		this.craftClass = n;
-		this.entityClass = n;
 		this.type = en;
+		this.bukkitType = type;
 	}
 
-	private Mob(String n, String ec, Enemies en)
-	{
-		this.name = n;
-		this.craftClass = n;
-		this.entityClass = ec;
-		this.type = en;
-	}
-
-	private Mob(String n, String ec, String cc, Enemies en)
-	{
-		this.name = n;
-		this.entityClass = ec;
-		this.craftClass = cc;
-		this.type = en;
-	}
-	public String s = "s";
-	public String name;
-	public Enemies type;
-	private String entityClass;
-	private String craftClass;
+	public String suffix = "s";
+	final public String name;
+	final public Enemies type;
+	final private CreatureType bukkitType;
 	private static final Map<String, Mob> hashMap = new HashMap<String, Mob>();
 
 	static
@@ -80,24 +60,16 @@ public enum Mob
 		}
 	}
 
-	@SuppressWarnings(
+	public LivingEntity spawn(final Player player, final Server server, final Location loc) throws MobException
 	{
-		"unchecked", "CallToThreadDumpStack"
-	})
-	public CraftEntity spawn(Player player, Server server) throws MobException
-	{
-		try
+
+		final LivingEntity entity = player.getWorld().spawnCreature(loc, this.bukkitType);
+		if (entity == null)
 		{
-			WorldServer world = ((org.bukkit.craftbukkit.CraftWorld)player.getWorld()).getHandle();
-			Constructor<CraftEntity> craft = (Constructor<CraftEntity>)ClassLoader.getSystemClassLoader().loadClass("org.bukkit.craftbukkit.entity.Craft" + craftClass).getConstructors()[0];
-			Constructor<Entity> entity = (Constructor<Entity>)ClassLoader.getSystemClassLoader().loadClass("net.minecraft.server.Entity" + entityClass).getConstructors()[0];
-			return craft.newInstance((CraftServer)server, entity.newInstance(world));
+			logger.log(Level.WARNING, Util.i18n("unableToSpawnMob"));
+			throw new MobException();
 		}
-		catch (Exception ex)
-		{
-			logger.log(Level.WARNING, Util.i18n("unableToSpawnMob"), ex);
-			throw new MobException(ex);
-		}
+		return entity;
 	}
 
 
@@ -107,22 +79,17 @@ public enum Mob
 		NEUTRAL("neutral"),
 		ENEMY("enemy");
 
-		private Enemies(String t)
+		private Enemies(final String t)
 		{
 			this.type = t;
 		}
-		protected String type;
+		final protected String type;
 	}
 
 
 	public static class MobException extends Exception
 	{
 		private static final long serialVersionUID = 1L;
-
-		private MobException(Exception ex)
-		{
-			super(ex);
-		}
 	}
 
 	public static Mob fromName(String n)
