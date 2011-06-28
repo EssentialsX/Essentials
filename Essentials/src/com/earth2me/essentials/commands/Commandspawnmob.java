@@ -213,11 +213,11 @@ public class Commandspawnmob extends EssentialsCommand
 		if ("Wolf".equalsIgnoreCase(type) && data.equalsIgnoreCase("tamed"))
 		{
 			EntityWolf wolf = ((CraftWolf)spawned).getHandle();
-			wolf.d(true);
-			wolf.a((PathEntity)null);
+			wolf.setTamed(true);
+			wolf.setPathEntity((PathEntity)null);
 			wolf.setSitting(true);
 			wolf.health = 20;
-			wolf.a(user.getName());
+			wolf.setOwnerName(user.getName());
 			wolf.world.a(wolf, (byte)7);
 		}
 		if ("Wolf".equalsIgnoreCase(type) && data.equalsIgnoreCase("angry"))
