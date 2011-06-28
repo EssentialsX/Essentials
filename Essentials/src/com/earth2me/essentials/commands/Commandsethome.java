@@ -11,12 +11,28 @@ public class Commandsethome extends EssentialsCommand
 	{
 		super("sethome");
 	}
-	
+
 	@Override
 	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		user.setHome(args.length > 0 && args[0].equalsIgnoreCase("default"));
-		charge(user);
-		user.sendMessage(Util.i18n("homeSet"));
+		if (args.length > 0)
+		{
+			if (args.length < 2)
+			{
+				user.setHome(args[0].equalsIgnoreCase("default"));
+			}
+			else
+			{
+				if (user.isAuthorized("essentials.sethome.others"))
+				{
+					User usersHome = ess.getUser(ess.getServer().getPlayer(args[0]));
+					usersHome.setHome(args[1].equalsIgnoreCase("default"));
+				}
+			}
+			charge(user);
+			user.sendMessage(Util.i18n("homeSet"));
+		}
+		
+		
 	}
 }
