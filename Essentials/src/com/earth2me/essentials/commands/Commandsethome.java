@@ -29,10 +29,13 @@ public class Commandsethome extends EssentialsCommand
 					usersHome.setHome(args[1].equalsIgnoreCase("default"));
 				}
 			}
-			charge(user);
-			user.sendMessage(Util.i18n("homeSet"));
 		}
-		
-		
+		else
+		{
+			user.setHome(false);
+		}
+		charge(user);
+		user.sendMessage(Util.i18n("homeSet"));
+
 	}
 }
