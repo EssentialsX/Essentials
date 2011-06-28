@@ -176,6 +176,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		pm.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
 		pm.registerEvent(Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
 		pm.registerEvent(Type.PLAYER_CHAT, playerListener, Priority.Lowest, this);
+		pm.registerEvent(Type.PLAYER_COMMAND_PREPROCESS, playerListener, Priority.Lowest, this);
 		if (getSettings().getNetherPortalsEnabled())
 		{
 			pm.registerEvent(Type.PLAYER_MOVE, playerListener, Priority.High, this);
@@ -375,23 +376,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	}
 
 	public boolean onCommandEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath, String permissionPrefix)
-	{
-		if (("msg".equals(commandLabel.toLowerCase()) || "r".equals(commandLabel.toLowerCase()) || "mail".equals(commandLabel.toLowerCase())) && sender instanceof Player)
-		{
-			StringBuilder str = new StringBuilder();
-			str.append(commandLabel).append(" ");
-			for (String a : args)
-			{
-				str.append(a).append(" ");
-			}
-			for (Player player : getServer().getOnlinePlayers())
-			{
-				if (getUser(player).isSocialSpyEnabled())
-				{
-					player.sendMessage(getUser(sender).getDisplayName() + " : " + str);
-				}
-			}
-		}
+	{		
 		// Allow plugins to override the command via onCommand
 		if (!getSettings().isCommandOverridden(command.getName()) && !commandLabel.startsWith("e"))
 		{

@@ -4,21 +4,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.minecraft.server.InventoryPlayer;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
-import org.bukkit.craftbukkit.block.CraftSign;
-import org.bukkit.craftbukkit.inventory.CraftInventoryPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerAnimationType;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -612,6 +610,24 @@ public class EssentialsPlayerListener extends PlayerListener
 		else
 		{
 			user.getServer().dispatchCommand(user, command);
+		}
+	}
+	
+	@Override
+	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event)
+	{
+		if (event.isCancelled()) return;
+	    Player commandUser = event.getPlayer();
+		String cmd = event.getMessage().toLowerCase();		
+		if (("msg".equals(cmd) || "r".equals(cmd) || "mail".equals(cmd)))
+		{
+			for (Player player : ess.getServer().getOnlinePlayers())
+			{
+				if (ess.getUser(player).isSocialSpyEnabled())
+				{
+					player.sendMessage(ess.getUser(commandUser).getDisplayName() + " : " + cmd);
+				}
+			}
 		}
 	}
 }
