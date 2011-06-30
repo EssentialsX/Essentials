@@ -20,12 +20,12 @@ public class SignBlockListener extends BlockListener
 {
 	private final transient IEssentials ess;
 	private final static Logger LOGGER = Logger.getLogger("Minecraft");
-
+	
 	public SignBlockListener(IEssentials ess)
 	{
 		this.ess = ess;
 	}
-
+	
 	@Override
 	public void onBlockBreak(final BlockBreakEvent event)
 	{
@@ -33,13 +33,13 @@ public class SignBlockListener extends BlockListener
 		{
 			return;
 		}
-
+		
 		if (protectSignsAndBlocks(event.getBlock(), event.getPlayer()))
 		{
 			event.setCancelled(true);
 		}
 	}
-
+	
 	public boolean protectSignsAndBlocks(final Block block, final Player player)
 	{
 		final int mat = block.getTypeId();
@@ -77,7 +77,7 @@ public class SignBlockListener extends BlockListener
 		}
 		return false;
 	}
-
+	
 	@Override
 	public void onSignChange(final SignChangeEvent event)
 	{
@@ -96,7 +96,7 @@ public class SignBlockListener extends BlockListener
 			}
 		}
 	}
-
+	
 	@Override
 	public void onBlockPlace(final BlockPlaceEvent event)
 	{
@@ -104,7 +104,14 @@ public class SignBlockListener extends BlockListener
 		{
 			return;
 		}
-
+		
+		final Block against = event.getBlockAgainst();
+		if (against.getType() == Material.WALL_SIGN
+			|| against.getType() == Material.SIGN_POST)
+		{
+			event.setCancelled(true);
+			return;
+		}
 		final Block block = event.getBlock();
 		if (block.getType() == Material.WALL_SIGN
 			|| block.getType() == Material.SIGN_POST)
@@ -122,7 +129,7 @@ public class SignBlockListener extends BlockListener
 			}
 		}
 	}
-
+	
 	@Override
 	public void onBlockBurn(final BlockBurnEvent event)
 	{
@@ -130,7 +137,7 @@ public class SignBlockListener extends BlockListener
 		{
 			return;
 		}
-
+		
 		final Block block = event.getBlock();
 		if ((block.getType() == Material.WALL_SIGN
 			 || block.getType() == Material.SIGN_POST
@@ -150,7 +157,7 @@ public class SignBlockListener extends BlockListener
 			}
 		}
 	}
-
+	
 	@Override
 	public void onBlockIgnite(final BlockIgniteEvent event)
 	{
@@ -158,7 +165,7 @@ public class SignBlockListener extends BlockListener
 		{
 			return;
 		}
-
+		
 		if (protectSignsAndBlocks(event.getBlock(), event.getPlayer()))
 		{
 			event.setCancelled(true);
