@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.craftbukkit.block.CraftSign;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerListener;
 
@@ -30,6 +31,10 @@ public class SignPlayerListener extends PlayerListener
 		final int mat = block.getTypeId();
 		if (mat == Material.SIGN_POST.getId() || mat == Material.WALL_SIGN.getId())
 		{
+			if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
+			{
+				return;
+			}
 			final Sign csign = new CraftSign(block);
 			for (Signs signs : Signs.values())
 			{
