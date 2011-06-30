@@ -327,7 +327,7 @@ public class EssentialsSign
 
 	protected final Double getMoney(final String line) throws SignException
 	{
-		final boolean isMoney = line.matches("^[^0-9-\\.][\\.0-9]+");
+		final boolean isMoney = line.matches("^[^0-9-\\.][\\.0-9]+$");
 		return isMoney ? getDouble(line.substring(1)) : null;
 	}
 
@@ -381,15 +381,12 @@ public class EssentialsSign
 			{
 				final ItemStack stack = getItemStack(item, quantity);
 				sign.setLine(index, quantity + " " + item);
-				return new Trade(quantity, ess);
+				return new Trade(stack, ess);
 			}
 		}
 		else
 		{
 			return new Trade(money, ess);
-
-
-
 		}
 	}
 
