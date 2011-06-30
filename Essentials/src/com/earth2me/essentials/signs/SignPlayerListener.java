@@ -39,9 +39,9 @@ public class SignPlayerListener extends PlayerListener
 			for (Signs signs : Signs.values())
 			{
 				final EssentialsSign sign = signs.getSign();
-				if (csign.getLine(0).equalsIgnoreCase(sign.getSuccessName())
-					&& !sign.onSignInteract(block, event.getPlayer(), ess))
+				if (csign.getLine(0).equalsIgnoreCase(sign.getSuccessName()))
 				{
+					sign.onSignInteract(block, event.getPlayer(), ess);
 					event.setCancelled(true);
 					return;
 				}
