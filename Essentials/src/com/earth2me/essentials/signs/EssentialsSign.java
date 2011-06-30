@@ -290,7 +290,7 @@ public class EssentialsSign
 	protected final int getIntegerPositive(final String line) throws SignException
 	{
 		final int quantity = getInteger(line);
-		if (quantity <= 1)
+		if (quantity < 1)
 		{
 			throw new SignException(Util.i18n("moreThanZero"));
 		}
@@ -328,19 +328,24 @@ public class EssentialsSign
 	protected final Double getMoney(final String line) throws SignException
 	{
 		final boolean isMoney = line.matches("^[^0-9-\\.][\\.0-9]+$");
-		return isMoney ? getDouble(line.substring(1)) : null;
+		return isMoney ? getDoublePositive(line.substring(1)) : null;
+	}
+
+	protected final Double getDoublePositive(final String line) throws SignException
+	{
+		final double quantity = getDouble(line);
+		if (quantity <= 0.0)
+		{
+			throw new SignException(Util.i18n("moreThanZero"));
+		}
+		return quantity;
 	}
 
 	protected final Double getDouble(final String line) throws SignException
 	{
 		try
 		{
-			final double quantity = Double.parseDouble(line);
-			if (quantity <= 0.0)
-			{
-				throw new SignException(Util.i18n("moreThanZero"));
-			}
-			return quantity;
+			return Double.parseDouble(line);
 		}
 		catch (NumberFormatException ex)
 		{
