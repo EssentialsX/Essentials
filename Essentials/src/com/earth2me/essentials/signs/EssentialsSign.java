@@ -194,7 +194,7 @@ public class EssentialsSign
 	{
 		if (block.getFace(BlockFace.UP).getType() == Material.SIGN_POST)
 		{
-			return false;
+			return true;
 		}
 		final BlockFace[] directions = new BlockFace[]
 		{
@@ -211,11 +211,11 @@ public class EssentialsSign
 				final org.bukkit.material.Sign sign = (org.bukkit.material.Sign)signblock.getState().getData();
 				if (sign.getFacing() == blockFace)
 				{
-					return false;
+					return true;
 				}
 			}
 		}
-		return true;
+		return false;
 	}
 
 	protected boolean onBlockPlace(final Block block, final User player, final String username, final IEssentials ess) throws SignException, ChargeException
