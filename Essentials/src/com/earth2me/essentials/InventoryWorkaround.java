@@ -80,7 +80,7 @@ public final class InventoryWorkaround
 		ItemStack[] combined = new ItemStack[items.length];
 		for (int i = 0; i < items.length; i++)
 		{
-			if (items[i] == null)
+			if (items[i] == null || items[i].getAmount() < 1)
 			{
 				continue;
 			}
