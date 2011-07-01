@@ -451,6 +451,8 @@ pistonstickybase,29,0
 stickypiston,29,0
 stickyp,29,0
 psticky,29,0
+spiston,29,0
+pistons,29,0
 spiderweb,30,0
 sweb,30,0
 web,30,0
@@ -472,6 +474,7 @@ dshrub,32,0
 shrubd,32,0
 pistonbase,33,0
 piston,33,0
+pistonblock,33,0
 pistonextension,34,0
 pistonext,34,0
 whitecloth,35,0
@@ -605,7 +608,6 @@ blawool,35,15
 blacotton,35,15
 pistonmovingpiece,36,0
 pistonmp,36,0
-ppusher,36,0
 yellowflower,37,0
 yflower,37,0
 flower,37,0

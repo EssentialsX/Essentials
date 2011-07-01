@@ -304,6 +304,8 @@ public class EssentialsBlockListener extends BlockListener
 		case JACK_O_LANTERN:
 		case WOOD_PLATE:
 		case STONE_PLATE:
+		case PISTON_STICKY_BASE:
+		case PISTON_BASE:
 			is.setDurability((short)0);
 			break;
 		}
