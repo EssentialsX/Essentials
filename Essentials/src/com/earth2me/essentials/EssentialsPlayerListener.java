@@ -91,6 +91,12 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 		final User user = ess.getUser(event.getPlayer());
 
+		if(user.isAfk())
+		{
+			user.setAfk(false);
+			ess.broadcastMessage(user.getName(), Util.format("userIsNotAway", user.getDisplayName()));
+		}
+		
 		if (!ess.getSettings().getNetherPortalsEnabled())
 		{
 			return;
