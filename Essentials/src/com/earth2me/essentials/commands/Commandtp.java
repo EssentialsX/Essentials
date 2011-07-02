@@ -44,7 +44,7 @@ public class Commandtp extends EssentialsCommand
 			charge(user);
 			User target = getPlayer(server, args, 0);
 			User toPlayer = getPlayer(server, args, 1);
-			target.getTeleport().now(toPlayer);
+			target.getTeleport().now(toPlayer, false);
 			target.sendMessage(Util.format("teleportAtoB", user.getDisplayName(), toPlayer.getDisplayName()));
 			break;
 		}
@@ -61,7 +61,7 @@ public class Commandtp extends EssentialsCommand
 		sender.sendMessage(Util.i18n("teleporting"));
 		User target = getPlayer(server, args, 0);
 		User toPlayer = getPlayer(server, args, 1);
-		target.getTeleport().now(toPlayer);
+		target.getTeleport().now(toPlayer, false);
 		target.sendMessage(Util.format("teleportAtoB", Console.NAME, toPlayer.getDisplayName()));
 	}
 }

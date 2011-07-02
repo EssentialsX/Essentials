@@ -23,7 +23,7 @@ public class Commandtpohere extends EssentialsCommand
 		//Just basically the old tphere command
 		User p = getPlayer(server, args, 0);
 		charge(user);
-		p.getTeleport().now(user);
+		p.getTeleport().now(user, false);
 		user.sendMessage(Util.i18n("teleporting"));
 	}
 }

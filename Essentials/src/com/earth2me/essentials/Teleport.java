@@ -10,6 +10,7 @@ import org.bukkit.entity.Entity;
 
 public class Teleport implements Runnable
 {
+	private static final double MOVE_CONSTANT = 0.3;
 	private static class Target
 	{
 		private final Location location;
@@ -57,9 +58,9 @@ public class Teleport implements Runnable
 		this.started = System.currentTimeMillis();
 		this.delay = delay;
 		this.health = user.getHealth();
-		this.initX = Math.round(user.getLocation().getX() * 10000);
-		this.initY = Math.round(user.getLocation().getY() * 10000);
-		this.initZ = Math.round(user.getLocation().getZ() * 10000);
+		this.initX = Math.round(user.getLocation().getX()*MOVE_CONSTANT);
+		this.initY = Math.round(user.getLocation().getY()*MOVE_CONSTANT);
+		this.initZ = Math.round(user.getLocation().getZ()*MOVE_CONSTANT);
 		this.teleportTarget = target;
 		this.chargeFor = chargeFor;
 	}
@@ -72,9 +73,9 @@ public class Teleport implements Runnable
 			cancel();
 			return;
 		}
-		if (Math.round(user.getLocation().getX() * 10000) != initX
-			|| Math.round(user.getLocation().getY() * 10000) != initY
-			|| Math.round(user.getLocation().getZ() * 10000) != initZ
+		if (Math.round(user.getLocation().getX()*MOVE_CONSTANT) != initX
+			|| Math.round(user.getLocation().getY()*MOVE_CONSTANT) != initY
+			|| Math.round(user.getLocation().getZ()*MOVE_CONSTANT) != initZ
 			|| user.getHealth() < health)
 		{	// user moved, cancel teleport
 			cancel(true);
@@ -237,9 +238,12 @@ public class Teleport implements Runnable
 		now(new Target(loc));
 	}
 
-	public void now(Entity entity) throws Exception
+	public void now(Entity entity, boolean cooldown) throws Exception
 	{
-		cooldown(false);
+		if (cooldown)
+		{
+			cooldown(false);
+		}
 		now(new Target(entity));
 	}
 
