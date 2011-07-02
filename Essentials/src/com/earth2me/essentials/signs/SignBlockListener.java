@@ -88,6 +88,11 @@ public class SignBlockListener extends BlockListener
 		for (Signs signs : Signs.values())
 		{
 			final EssentialsSign sign = signs.getSign();
+			if (event.getLine(0).equalsIgnoreCase(sign.getSuccessName()))
+			{
+				event.setCancelled(true);
+				return;
+			}
 			if (event.getLine(0).equalsIgnoreCase(sign.getTemplateName())
 				&& !sign.onSignCreate(event, ess))
 			{
