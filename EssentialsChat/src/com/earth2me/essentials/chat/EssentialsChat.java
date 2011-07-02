@@ -17,6 +17,9 @@ public class EssentialsChat extends JavaPlugin
 	public void onEnable()
 	{
 		final PluginManager pluginManager = getServer().getPluginManager();
+
+		EssentialsChatPlayerListener.checkFactions(pluginManager);
+
 		final EssentialsChatPlayerListener playerListener = new EssentialsChatPlayerListener(getServer());
 		pluginManager.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Lowest, this);
 		pluginManager.registerEvent(Type.PLAYER_CHAT, playerListener, Priority.Highest, this);
