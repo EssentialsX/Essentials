@@ -13,6 +13,10 @@ import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
+
+import org.mcteam.factions.Factions;
 
 
 public class EssentialsChatPlayerListener extends PlayerListener
@@ -20,6 +24,7 @@ public class EssentialsChatPlayerListener extends PlayerListener
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private final transient IEssentials ess = Essentials.getStatic();
 	private final transient Server server;
+	private static Factions factions = null;
 
 	public EssentialsChatPlayerListener(final Server server)
 	{
@@ -48,6 +53,10 @@ public class EssentialsChatPlayerListener extends PlayerListener
 		{
 			return;
 		}
+
+		if (factions != null && (factions.shouldLetFactionsHandleThisChat(event)))
+			return;
+
 		final User user = ess.getUser(event.getPlayer());
 		updateDisplayName(user);
 
@@ -118,8 +127,39 @@ public class EssentialsChatPlayerListener extends PlayerListener
 					continue;
 				}
 			}
+			String message = String.format(event.getFormat(), user.getDisplayName(), event.getMessage());
 
-			u.sendMessage(String.format(event.getFormat(), user.getDisplayName(), event.getMessage()));
+			if (factions != null)
+				message = message.replace("{FACTION}", factions.getPlayerFactionTagRelation(event.getPlayer(), p)).replace("{FACTION_TITLE}", factions.getPlayerTitle(event.getPlayer()));
+
+			u.sendMessage(message);
 		}
+	}
+
+	protected static void checkFactions(PluginManager pm)
+	{
+		if (factions != null)
+			return;
+
+		Plugin factionsPlugin = pm.getPlugin("Factions");
+		if (factionsPlugin == null)
+			return;
+
+		factions = (Factions)factionsPlugin;
+		try
+		{  // make sure Factions is sufficiently up-to-date
+			if (factions.hookSupportVersion() < 1)
+				factions = null;
+		}
+		catch (NoSuchMethodError ex)
+		{  // if not, we can't work with it, so don't bother
+			factions = null;
+		}
+
+		if (factions == null)
+			return;
+
+		// normally a good thing, but we'll skip it to let Factions handle faction tags for global messages
+		//factions.handleFactionTagExternally(true);
 	}
 }
