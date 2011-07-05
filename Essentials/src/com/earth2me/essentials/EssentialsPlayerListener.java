@@ -261,6 +261,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 
 		user.setDisplayName(user.getNick());
+		user.setAfk(false);
 
 		if (!ess.getSettings().isCommandDisabled("motd") && user.isAuthorized("essentials.motd"))
 		{

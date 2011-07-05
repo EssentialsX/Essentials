@@ -31,7 +31,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		setBase(base);
 		return this;
 	}
-	
+
 	public boolean isAuthorized(IEssentialsCommand cmd)
 	{
 		return isAuthorized(cmd, "essentials.");
@@ -53,7 +53,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		{
 			return false;
 		}
-		
+
 		return ess.getPermissionsHandler().hasPermission(this, node);
 	}
 
@@ -99,7 +99,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		{
 			setMoney(getMoney() - value);
 			reciever.setMoney(reciever.getMoney() + value);
-			sendMessage(Util.format("moneySentTo", Util.formatCurrency(value), reciever.getDisplayName()));                        
+			sendMessage(Util.format("moneySentTo", Util.formatCurrency(value), reciever.getDisplayName()));
 			reciever.sendMessage(Util.format("moneyRecievedFrom", Util.formatCurrency(value), getDisplayName()));
 		}
 	}
@@ -157,8 +157,8 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		{
 			return false;
 		}
-		return ChatColor.stripColor(this.getDisplayName()).equalsIgnoreCase(ChatColor.stripColor(((User) o).getDisplayName()));
-	
+		return ChatColor.stripColor(this.getDisplayName()).equalsIgnoreCase(ChatColor.stripColor(((User)o).getDisplayName()));
+
 	}
 
 	@Override
@@ -220,7 +220,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			{
 				nickname = ess.getSettings().getOperatorColor().toString() + nickname + "§f";
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 			}
 		}
@@ -250,14 +250,15 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			try
 			{
 				Method method = ess.getPaymentMethod().getMethod();
-				if (!method.hasAccount(this.getName())) {
+				if (!method.hasAccount(this.getName()))
+				{
 					throw new Exception();
 				}
 				Method.MethodAccount account = ess.getPaymentMethod().getMethod().getAccount(this.getName());
 				return account.balance();
 			}
 			catch (Throwable ex)
-			{	
+			{
 			}
 		}
 		return super.getMoney();
@@ -271,7 +272,8 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			try
 			{
 				Method method = ess.getPaymentMethod().getMethod();
-				if (!method.hasAccount(this.getName())) {
+				if (!method.hasAccount(this.getName()))
+				{
 					throw new Exception();
 				}
 				Method.MethodAccount account = ess.getPaymentMethod().getMethod().getAccount(this.getName());
@@ -282,5 +284,20 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			}
 		}
 		super.setMoney(value);
+	}
+
+	@Override
+	public void setAfk(boolean set)
+	{
+		this.setSleepingIgnored(set);
+		super.setAfk(set);
+	}
+
+	@Override
+	public boolean toggleAfk()
+	{
+		boolean now = super.toggleAfk();
+		this.setSleepingIgnored(now);
+		return now;
 	}
 }
