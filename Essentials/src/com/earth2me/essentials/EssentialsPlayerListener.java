@@ -80,6 +80,11 @@ public class EssentialsPlayerListener extends PlayerListener
 				it.remove();
 			}
 		}
+		if(user.isAfk())
+		{
+			user.setAfk(false);
+			ess.broadcastMessage(user.getName(), Util.format("userIsNotAway", user.getDisplayName()));
+		}
 	}
 
 	@Override
@@ -91,6 +96,12 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 		final User user = ess.getUser(event.getPlayer());
 
+		if(user.isAfk())
+		{
+			user.setAfk(false);
+			ess.broadcastMessage(user.getName(), Util.format("userIsNotAway", user.getDisplayName()));
+		}
+		
 		if (!ess.getSettings().getNetherPortalsEnabled())
 		{
 			return;
@@ -617,7 +628,7 @@ public class EssentialsPlayerListener extends PlayerListener
 	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event)
 	{
 		if (event.isCancelled()) return;
-	    Player commandUser = event.getPlayer();
+		User user = ess.getUser(event.getPlayer());	    	
 		String cmd = event.getMessage().toLowerCase();		
 		if (("msg".equals(cmd) || "r".equals(cmd) || "mail".equals(cmd)))
 		{
@@ -625,9 +636,14 @@ public class EssentialsPlayerListener extends PlayerListener
 			{
 				if (ess.getUser(player).isSocialSpyEnabled())
 				{
-					player.sendMessage(ess.getUser(commandUser).getDisplayName() + " : " + cmd);
+					player.sendMessage(user.getDisplayName() + " : " + cmd);
 				}
 			}
+		}
+		if(user.isAfk())
+		{
+			user.setAfk(false);
+			ess.broadcastMessage(user.getName(), Util.format("userIsNotAway", user.getDisplayName()));
 		}
 	}
 }
