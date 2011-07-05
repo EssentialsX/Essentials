@@ -31,6 +31,7 @@ public enum ProtectConfig
 	prevent_portal_creation("protect.prevent.portal-creation", false),
 	prevent_block_on_rail("protect.protect.prevent-block-on-rails", false),
 	prevent_tnt_explosion("protect.prevent.tnt-explosion", false),
+	prevent_fireball_explosion("protect.prevent.fireball-explosion", false),
 	prevent_creeper_explosion("protect.prevent.creeper-explosion", true),
 	prevent_creeper_playerdmg("protect.prevent.creeper-playerdamage", false),
 	prevent_creeper_blockdmg("protect.prevent.creeper-blockdamage", false),

@@ -13,7 +13,9 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.craftbukkit.entity.CraftFireball;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.craftbukkit.entity.CraftTNTPrimed;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -221,8 +223,14 @@ public class EssentialsProtectEntityListener extends EntityListener
 			event.setCancelled(true);
 			return;
 		}
-		else if (!(event.getEntity() instanceof LivingEntity)
+		else if (event.getEntity() instanceof CraftTNTPrimed
 				 && prot.getSettingBool(ProtectConfig.prevent_tnt_explosion))
+		{
+			event.setCancelled(true);
+			return;
+		}
+		else if (event.getEntity() instanceof CraftFireball
+				 && prot.getSettingBool(ProtectConfig.prevent_fireball_explosion))
 		{
 			event.setCancelled(true);
 			return;
