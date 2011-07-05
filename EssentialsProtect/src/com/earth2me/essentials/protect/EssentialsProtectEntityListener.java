@@ -125,6 +125,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 				 && !user.isAuthorized("essentials.protect.damage.disable")))
 		{
 			event.setCancelled(true);
+			((EntityDamageByProjectileEvent)event).setBounce(true);
 			return;
 		}
 
