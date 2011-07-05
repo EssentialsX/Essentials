@@ -80,6 +80,10 @@ public class SignTrade extends EssentialsSign
 			final Double money = getMoney(split[0]);
 			if (money != null)
 			{
+				if (Util.formatCurrency(money).length() * 2 > 15)
+				{
+					throw new SignException("Line can be too long!");
+				}
 				sign.setLine(index, Util.formatCurrency(money) + ":0");
 				return;
 			}
@@ -104,7 +108,12 @@ public class SignTrade extends EssentialsSign
 			{
 				throw new SignException(Util.i18n("moreThanZero"));
 			}
-			sign.setLine(index, amount + " " + split[1] + ":0");
+			String newline = amount + " " + split[1] + ":0";
+			if ((newline + amount).length() > 16)
+			{
+				throw new SignException("Line can be too long!");
+			}
+			sign.setLine(index, newline);
 			return;
 		}
 
