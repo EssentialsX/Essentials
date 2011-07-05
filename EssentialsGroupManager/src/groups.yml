@@ -54,6 +54,7 @@ groups:
     default: false
     permissions:
     - essentials.afk
+    - essentials.back
     - essentials.back.ondeath
     - essentials.balance
     - essentials.chat.shout
@@ -98,7 +99,6 @@ groups:
   Moderator:
     default: false
     permissions:
-    - essentials.back
     - essentials.ban
     - essentials.banip
     - essentials.broadcast
