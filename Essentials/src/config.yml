@@ -229,6 +229,10 @@ command-costs:
 # Set this to a currency symbol you want to use.
 currency-symbol: '$'
 
+# Set the maximum amount of money a player can have
+# The amount is always limited to 10 trillions because of the limitations of a java double
+max-money: 10000000000000
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHelp                     | #

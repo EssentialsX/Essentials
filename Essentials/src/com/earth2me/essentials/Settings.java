@@ -375,4 +375,14 @@ public class Settings implements IConf
 	{
 		return config.getBoolean(configName, def);
 	}
+
+	private final static double MAXMONEY = 10000000000000.0;
+	double getMaxMoney()
+	{
+		double max = config.getDouble("max-money", MAXMONEY);
+		if (Math.abs(max) > MAXMONEY) {
+			max = max < 0 ? -MAXMONEY : MAXMONEY;
+		}
+		return max;
+	}
 }
