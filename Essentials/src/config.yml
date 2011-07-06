@@ -233,6 +233,9 @@ currency-symbol: '$'
 # The amount is always limited to 10 trillions because of the limitations of a java double
 max-money: 10000000000000
 
+# Enable this to log all interactions with trade/buy/sell signs and sell command
+economy-log-enabled: false
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHelp                     | #
