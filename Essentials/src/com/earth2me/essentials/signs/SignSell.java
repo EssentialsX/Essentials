@@ -29,6 +29,7 @@ public class SignSell extends EssentialsSign
 		charge.isAffordableFor(player);
 		money.pay(player);
 		charge.charge(player);
+		Trade.log("Sign", "Sell", "Interact", username, charge, username, money, ess);
 		return true;
 	}
 }

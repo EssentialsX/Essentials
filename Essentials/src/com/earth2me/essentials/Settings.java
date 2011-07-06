@@ -385,4 +385,9 @@ public class Settings implements IConf
 		}
 		return max;
 	}
+
+	boolean isEcoLogEnabled()
+	{
+		return config.getBoolean("economy-log-enabled", false);
+	}
 }

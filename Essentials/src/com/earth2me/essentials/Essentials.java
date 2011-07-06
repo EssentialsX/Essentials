@@ -241,11 +241,13 @@ public class Essentials extends JavaPlugin implements IEssentials
 	public void onDisable()
 	{
 		instance = null;
+		Trade.closeLog();
 		logger.removeHandler(errorHandler);
 	}
 
 	public void reload()
 	{
+		Trade.closeLog();
 		loadBanList();
 
 		for (IConf iConf : confList)

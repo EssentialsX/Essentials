@@ -24,6 +24,7 @@ public class SignTrade extends EssentialsSign
 		charge.isAffordableFor(player);
 		sign.setLine(3, "§8" + username);
 		charge.charge(player);
+		Trade.log("Sign", "Trade", "Create", username, charge, username, null, ess);
 		return true;
 	}
 
@@ -35,6 +36,7 @@ public class SignTrade extends EssentialsSign
 			final Trade stored = getTrade(sign, 1, true, true, ess);
 			substractAmount(sign, 1, stored);
 			stored.pay(player);
+			Trade.log("Sign", "Trade", "OwnerInteract", username, null, username, stored, ess);
 		}
 		else
 		{
@@ -45,6 +47,7 @@ public class SignTrade extends EssentialsSign
 			trade.pay(player);
 			addAmount(sign, 1, charge);
 			charge.charge(player);
+			Trade.log("Sign", "Trade", "Interact", sign.getLine(3), charge, username, trade, ess);
 		}
 		return true;
 	}
@@ -58,6 +61,7 @@ public class SignTrade extends EssentialsSign
 			final Trade stored2 = getTrade(sign, 2, true, false, ess);
 			stored1.pay(player);
 			stored2.pay(player);
+			Trade.log("Sign", "Trade", "Break", username, stored2, username, stored1, ess);
 			return true;
 		}
 		else
