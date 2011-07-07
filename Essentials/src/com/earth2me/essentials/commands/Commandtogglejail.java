@@ -23,11 +23,6 @@ public class Commandtogglejail extends EssentialsCommand
 		}
 
 		User p = getPlayer(server, args, 0, true);
-
-		if(p == null)
-		{
-			
-		}
 		if (p.isAuthorized("essentials.jail.exempt"))
 		{
 			sender.sendMessage(Util.i18n("mayNotJail"));
