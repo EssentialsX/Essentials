@@ -80,7 +80,7 @@ public class EssentialsPlayerListener extends PlayerListener
 				it.remove();
 			}
 		}
-		if(user.isAfk())
+		if (user.isAfk())
 		{
 			user.setAfk(false);
 			ess.broadcastMessage(user.getName(), Util.format("userIsNotAway", user.getDisplayName()));
@@ -96,12 +96,12 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 		final User user = ess.getUser(event.getPlayer());
 
-		if(user.isAfk())
+		if (user.isAfk())
 		{
 			user.setAfk(false);
 			ess.broadcastMessage(user.getName(), Util.format("userIsNotAway", user.getDisplayName()));
 		}
-		
+
 		if (!ess.getSettings().getNetherPortalsEnabled())
 		{
 			return;
@@ -210,7 +210,13 @@ public class EssentialsPlayerListener extends PlayerListener
 	public void onPlayerQuit(PlayerQuitEvent event)
 	{
 		User user = ess.getUser(event.getPlayer());
-
+		if (ess.getSettings().removeGodOnDiscon())
+		{
+			if (user.isGodModeEnabled())
+			{
+				user.toggleGodModeEnabled();
+			}
+		}
 		if (user.getSavedInventory() != null)
 		{
 			user.getInventory().setContents(user.getSavedInventory());
@@ -369,15 +375,15 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 		/*if (!ess.getSettings().areSignsDisabled() && EssentialsBlockListener.protectedBlocks.contains(event.getClickedBlock().getType()))
 		{
-			if (!user.isAuthorized("essentials.signs.protection.override"))
-			{
-				if (essBlockListener.isBlockProtected(event.getClickedBlock(), user))
-				{
-					event.setCancelled(true);
-					user.sendMessage(Util.format("noAccessPermission", event.getClickedBlock().getType().toString().toLowerCase()));
-					return;
-				}
-			}
+		if (!user.isAuthorized("essentials.signs.protection.override"))
+		{
+		if (essBlockListener.isBlockProtected(event.getClickedBlock(), user))
+		{
+		event.setCancelled(true);
+		user.sendMessage(Util.format("noAccessPermission", event.getClickedBlock().getType().toString().toLowerCase()));
+		return;
+		}
+		}
 		}*/
 
 		if (ess.getSettings().getBedSetsHome() && event.getClickedBlock().getType() == Material.BED_BLOCK)
@@ -395,138 +401,138 @@ public class EssentialsPlayerListener extends PlayerListener
 
 		/*if (ess.getSettings().areSignsDisabled())
 		{
-			return;
+		return;
 		}
 		if (event.getClickedBlock().getType() != Material.WALL_SIGN && event.getClickedBlock().getType() != Material.SIGN_POST)
 		{
-			return;
+		return;
 		}
 		Sign sign = new CraftSign(event.getClickedBlock());
-
+		
 		try
 		{
-			if (sign.getLine(0).equals("§1[Free]") && user.isAuthorized("essentials.signs.free.use"))
-			{
-				ItemStack item = ItemDb.get(sign.getLine(1));
-				CraftInventoryPlayer inv = new CraftInventoryPlayer(new InventoryPlayer(user.getHandle()));
-				inv.clear();
-				item.setAmount(9 * 4 * 64);
-				inv.addItem(item);
-				user.showInventory(inv);
-				return;
-			}
-			if (sign.getLine(0).equals("§1[Disposal]") && user.isAuthorized("essentials.signs.disposal.use"))
-			{
-				CraftInventoryPlayer inv = new CraftInventoryPlayer(new InventoryPlayer(user.getHandle()));
-				inv.clear();
-				user.showInventory(inv);
-				return;
-			}
-			if (sign.getLine(0).equals("§1[Heal]") && user.isAuthorized("essentials.signs.heal.use"))
-			{
-				if (!sign.getLine(1).isEmpty())
-				{
-					String[] l1 = sign.getLine(1).split("[ :-]+");
-					boolean m1 = l1[0].matches("^[^0-9][\\.0-9]+");
-					double q1 = Double.parseDouble(m1 ? l1[0].substring(1) : l1[0]);
-					if (!m1 && (int)q1 < 1)
-					{
-						throw new Exception(Util.i18n("moreThanZero"));
-					}
-					if (m1)
-					{
-						if (user.getMoney() < q1)
-						{
-							throw new Exception(Util.i18n("notEnoughMoney"));
-						}
-						user.takeMoney(q1);
-						user.sendMessage(Util.format("moneyTaken", Util.formatCurrency(q1)));
-					}
-					else
-					{
-						ItemStack i = ItemDb.get(l1[1], (int)q1);
-						if (!InventoryWorkaround.containsItem(user.getInventory(), true, i))
-						{
-							throw new Exception(Util.format("missingItems", (int)q1, l1[1]));
-						}
-						InventoryWorkaround.removeItem(user.getInventory(), true, i);
-						user.updateInventory();
-					}
-				}
-				user.setHealth(20);
-				user.sendMessage(Util.i18n("youAreHealed"));
-				return;
-			}
-			if (sign.getLine(0).equals("§1[Mail]") && user.isAuthorized("essentials.signs.mail.use") && user.isAuthorized("essentials.mail"))
-			{
-				List<String> mail = user.getMails();
-				if (mail.isEmpty())
-				{
-					user.sendMessage(Util.i18n("noNewMail"));
-					return;
-				}
-				for (String s : mail)
-				{
-					user.sendMessage(s);
-				}
-				user.sendMessage(Util.i18n("markMailAsRead"));
-				return;
-			}
-			if (sign.getLine(0).equals("§1[Balance]") && user.isAuthorized("essentials.signs.balance.use"))
-			{
-				user.sendMessage(Util.format("balance", user.getMoney()));
-				return;
-			}
-			if (sign.getLine(0).equals("§1[Warp]"))
-			{
-
-				if (!sign.getLine(2).isEmpty())
-				{
-					if (sign.getLine(2).equals("§2Everyone"))
-					{
-						Trade charge = chargeUserForWarp(sign, user);
-						user.getTeleport().warp(sign.getLine(1), charge);
-						return;
-					}
-					if (user.inGroup(sign.getLine(2)))
-					{
-						Trade charge = chargeUserForWarp(sign, user);
-						user.getTeleport().warp(sign.getLine(1), charge);
-						return;
-					}
-				}
-				if (user.isAuthorized("essentials.signs.warp.use")
-					&& (!ess.getSettings().getPerWarpPermission() || user.isAuthorized("essentials.warp." + sign.getLine(1))))
-				{
-					Trade charge = chargeUserForWarp(sign, user);
-					user.getTeleport().warp(sign.getLine(1), charge);
-				}
-				return;
-			}
-			if (sign.getLine(0).equals("§1[Time]") && user.isAuthorized("essentials.signs.time.use"))
-			{
-				long time = user.getWorld().getTime();
-				time -= time % 24000;
-				if ("day".equalsIgnoreCase(sign.getLine(1)))
-				{
-					user.getWorld().setTime(time + 24000);
-					return;
-				}
-				if ("night".equalsIgnoreCase(sign.getLine(1)))
-				{
-					user.getWorld().setTime(time + 37700);
-					return;
-				}
-				throw new Exception(Util.i18n("onlyDayNight"));
-			}
+		if (sign.getLine(0).equals("§1[Free]") && user.isAuthorized("essentials.signs.free.use"))
+		{
+		ItemStack item = ItemDb.get(sign.getLine(1));
+		CraftInventoryPlayer inv = new CraftInventoryPlayer(new InventoryPlayer(user.getHandle()));
+		inv.clear();
+		item.setAmount(9 * 4 * 64);
+		inv.addItem(item);
+		user.showInventory(inv);
+		return;
+		}
+		if (sign.getLine(0).equals("§1[Disposal]") && user.isAuthorized("essentials.signs.disposal.use"))
+		{
+		CraftInventoryPlayer inv = new CraftInventoryPlayer(new InventoryPlayer(user.getHandle()));
+		inv.clear();
+		user.showInventory(inv);
+		return;
+		}
+		if (sign.getLine(0).equals("§1[Heal]") && user.isAuthorized("essentials.signs.heal.use"))
+		{
+		if (!sign.getLine(1).isEmpty())
+		{
+		String[] l1 = sign.getLine(1).split("[ :-]+");
+		boolean m1 = l1[0].matches("^[^0-9][\\.0-9]+");
+		double q1 = Double.parseDouble(m1 ? l1[0].substring(1) : l1[0]);
+		if (!m1 && (int)q1 < 1)
+		{
+		throw new Exception(Util.i18n("moreThanZero"));
+		}
+		if (m1)
+		{
+		if (user.getMoney() < q1)
+		{
+		throw new Exception(Util.i18n("notEnoughMoney"));
+		}
+		user.takeMoney(q1);
+		user.sendMessage(Util.format("moneyTaken", Util.formatCurrency(q1)));
+		}
+		else
+		{
+		ItemStack i = ItemDb.get(l1[1], (int)q1);
+		if (!InventoryWorkaround.containsItem(user.getInventory(), true, i))
+		{
+		throw new Exception(Util.format("missingItems", (int)q1, l1[1]));
+		}
+		InventoryWorkaround.removeItem(user.getInventory(), true, i);
+		user.updateInventory();
+		}
+		}
+		user.setHealth(20);
+		user.sendMessage(Util.i18n("youAreHealed"));
+		return;
+		}
+		if (sign.getLine(0).equals("§1[Mail]") && user.isAuthorized("essentials.signs.mail.use") && user.isAuthorized("essentials.mail"))
+		{
+		List<String> mail = user.getMails();
+		if (mail.isEmpty())
+		{
+		user.sendMessage(Util.i18n("noNewMail"));
+		return;
+		}
+		for (String s : mail)
+		{
+		user.sendMessage(s);
+		}
+		user.sendMessage(Util.i18n("markMailAsRead"));
+		return;
+		}
+		if (sign.getLine(0).equals("§1[Balance]") && user.isAuthorized("essentials.signs.balance.use"))
+		{
+		user.sendMessage(Util.format("balance", user.getMoney()));
+		return;
+		}
+		if (sign.getLine(0).equals("§1[Warp]"))
+		{
+		
+		if (!sign.getLine(2).isEmpty())
+		{
+		if (sign.getLine(2).equals("§2Everyone"))
+		{
+		Trade charge = chargeUserForWarp(sign, user);
+		user.getTeleport().warp(sign.getLine(1), charge);
+		return;
+		}
+		if (user.inGroup(sign.getLine(2)))
+		{
+		Trade charge = chargeUserForWarp(sign, user);
+		user.getTeleport().warp(sign.getLine(1), charge);
+		return;
+		}
+		}
+		if (user.isAuthorized("essentials.signs.warp.use")
+		&& (!ess.getSettings().getPerWarpPermission() || user.isAuthorized("essentials.warp." + sign.getLine(1))))
+		{
+		Trade charge = chargeUserForWarp(sign, user);
+		user.getTeleport().warp(sign.getLine(1), charge);
+		}
+		return;
+		}
+		if (sign.getLine(0).equals("§1[Time]") && user.isAuthorized("essentials.signs.time.use"))
+		{
+		long time = user.getWorld().getTime();
+		time -= time % 24000;
+		if ("day".equalsIgnoreCase(sign.getLine(1)))
+		{
+		user.getWorld().setTime(time + 24000);
+		return;
+		}
+		if ("night".equalsIgnoreCase(sign.getLine(1)))
+		{
+		user.getWorld().setTime(time + 37700);
+		return;
+		}
+		throw new Exception(Util.i18n("onlyDayNight"));
+		}
 		}
 		catch (Throwable ex)
 		{
-			user.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
-			if (ess.getSettings().isDebug())
-			{
-				logger.log(Level.WARNING, ex.getMessage(), ex);
-			}
+		user.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
+		if (ess.getSettings().isDebug())
+		{
+		logger.log(Level.WARNING, ex.getMessage(), ex);
+		}
 		}*/
 	}
 
@@ -624,13 +630,13 @@ public class EssentialsPlayerListener extends PlayerListener
 			user.getServer().dispatchCommand(user, command);
 		}
 	}
-	
+
 	@Override
 	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event)
 	{
 		if (event.isCancelled()) return;
-		User user = ess.getUser(event.getPlayer());	    	
-		String cmd = event.getMessage().toLowerCase();		
+		User user = ess.getUser(event.getPlayer());
+		String cmd = event.getMessage().toLowerCase();
 		if (("msg".equals(cmd) || "r".equals(cmd) || "mail".equals(cmd)))
 		{
 			for (Player player : ess.getServer().getOnlinePlayers())
@@ -641,7 +647,7 @@ public class EssentialsPlayerListener extends PlayerListener
 				}
 			}
 		}
-		if(user.isAfk())
+		if (user.isAfk())
 		{
 			user.setAfk(false);
 			ess.broadcastMessage(user.getName(), Util.format("userIsNotAway", user.getDisplayName()));

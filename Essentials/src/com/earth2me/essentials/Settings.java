@@ -390,4 +390,10 @@ public class Settings implements IConf
 	{
 		return config.getBoolean("economy-log-enabled", false);
 	}
+	
+	boolean removeGodOnDiscon()
+	{
+		return config.getBoolean("remove-god-on-discon", false);
+	}
+	
 }

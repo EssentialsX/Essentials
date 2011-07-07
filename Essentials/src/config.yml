@@ -191,6 +191,8 @@ debug: false
 # If you don't set this, the default locale of the server will be used.
 #locale: de_DE
 
+#turn off god mode when people exit
+remove-god-on-discon: false
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #
