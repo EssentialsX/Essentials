@@ -31,11 +31,12 @@ public class Commandhelp extends EssentialsCommand
 	protected void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
 		int page = 1;
-		String match = args[0].toLowerCase();
+		String match = "";
 		try
 		{
 			if (args.length > 0)
 			{
+				match = args[0].toLowerCase();
 				page = Integer.parseInt(args[args.length - 1]);
 				if (args.length == 1)
 				{
@@ -46,6 +47,10 @@ public class Commandhelp extends EssentialsCommand
 		}
 		catch (Exception ex)
 		{
+			if (args.length == 1)
+			{
+				match = args[0].toLowerCase();
+			}
 		}
 
 		List<String> lines = getHelpLines(user, match);
@@ -107,8 +112,8 @@ public class Commandhelp extends EssentialsCommand
 				final HashMap<String, HashMap<String, String>> cmds = (HashMap<String, HashMap<String, String>>)desc.getCommands();
 				for (Entry<String, HashMap<String, String>> k : cmds.entrySet())
 				{
-					if ((!match.equalsIgnoreCase("")) && (!p.getDescription().getName().toLowerCase().contains(match))
-						&& (!p.getDescription().getDescription().toLowerCase().contains(match)))
+					if ((!match.equalsIgnoreCase("")) && (!k.getKey().toLowerCase().contains(match))
+						&& (!k.getValue().get("description").toLowerCase().contains(match)))
 					{
 						continue;
 					}
