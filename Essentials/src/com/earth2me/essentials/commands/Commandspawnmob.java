@@ -60,6 +60,12 @@ public class Commandspawnmob extends EssentialsCommand
 			}
 		}
 
+		if (ess.getSettings().getProtectPreventSpawn(mobType.toLowerCase())
+			|| (mountType != null && ess.getSettings().getProtectPreventSpawn(mountType.toLowerCase())))
+		{
+			user.sendMessage(Util.i18n("unableToSpawnMob"));
+			return;
+		}
 
 		Entity spawnedMob = null;
 		Mob mob = null;
@@ -85,7 +91,7 @@ public class Commandspawnmob extends EssentialsCommand
 			loc.setY(loc.getY() + 1);
 			block = user.getWorld().getBlockAt(loc);
 		}
-		
+
 		try
 		{
 			spawnedMob = mob.spawn(user, server, loc);
@@ -224,7 +230,8 @@ public class Commandspawnmob extends EssentialsCommand
 		{
 			((CraftWolf)spawned).setAngry(true);
 		}
-		if ("Creeper".equalsIgnoreCase(type) && data.equalsIgnoreCase("powered")) {
+		if ("Creeper".equalsIgnoreCase(type) && data.equalsIgnoreCase("powered"))
+		{
 			((CraftCreeper)spawned).setPowered(true);
 		}
 	}
