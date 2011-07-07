@@ -55,7 +55,8 @@ public class SignTrade extends EssentialsSign
 	@Override
 	protected boolean onSignBreak(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException
 	{
-		if (sign.getLine(3).length() > 3 && sign.getLine(3).substring(2).equalsIgnoreCase(username))
+		if ((sign.getLine(3).length() > 3 && sign.getLine(3).substring(2).equalsIgnoreCase(username))
+			|| player.isAuthorized("essentials.signs.trade.override"))
 		{
 			final Trade stored1 = getTrade(sign, 1, true, false, ess);
 			final Trade stored2 = getTrade(sign, 2, true, false, ess);
