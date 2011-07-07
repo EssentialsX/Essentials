@@ -51,6 +51,7 @@ default-stack-size: 64
 item-spawn-blacklist:
 
 # Set this to true if you want permission based item spawn rules
+# Note: The blacklist above will be ignored then.
 # Permissions:
 #  - essentials.itemspawn.item-all
 #  - essentials.itemspawn.item-[itemname]
@@ -229,6 +230,13 @@ command-costs:
 # Set this to a currency symbol you want to use.
 currency-symbol: '$'
 
+# Set the maximum amount of money a player can have
+# The amount is always limited to 10 trillions because of the limitations of a java double
+max-money: 10000000000000
+
+# Enable this to log all interactions with trade/buy/sell signs and sell command
+economy-log-enabled: false
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHelp                     | #
@@ -321,6 +329,7 @@ protect:
     lightning-fire-spread: true
     portal-creation: false
     tnt-explosion: false
+    fireball-explosion: false
     creeper-explosion: false
     creeper-playerdamage: false
     creeper-blockdamage: false

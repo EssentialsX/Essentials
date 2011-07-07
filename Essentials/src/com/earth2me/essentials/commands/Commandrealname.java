@@ -4,6 +4,7 @@ import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import org.bukkit.ChatColor;
 
 
 public class Commandrealname extends EssentialsCommand
@@ -20,15 +21,15 @@ public class Commandrealname extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		String whois = args[0].toLowerCase();
+		final String whois = args[0].toLowerCase();
 		charge(user);
 		for (Player p : server.getOnlinePlayers())
 		{
-			User u = ess.getUser(p);
-			String dn = u.getDisplayName().toLowerCase();
-			if (!whois.equals(dn)
-				&& !whois.equals(ess.getSettings().getNicknamePrefix() + dn)
-				&& !whois.equals(u.getName().toLowerCase()))
+			final User u = ess.getUser(p);
+			final String displayName = ChatColor.stripColor(u.getDisplayName()).toLowerCase();
+			if (!whois.equals(displayName)
+				&& !displayName.equals(ChatColor.stripColor(ess.getSettings().getNicknamePrefix()) + whois)
+				&& !whois.equalsIgnoreCase(u.getName()))
 			{
 				continue;
 			}

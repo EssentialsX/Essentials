@@ -18,13 +18,18 @@ groups:
     permissions:
     - -groupmanager.mantogglesave
     - essentials
+    - essentials.antioch
+    - essentials.burn
     - essentials.clearinventory
     - essentials.cooldown.bypass
     - essentials.deljail
+    - essentials.fireball
+    - essentials.gc
     - essentials.give
     - essentials.god
     - essentials.heal
     - essentials.heal.others
+    - essentials.lightning
     - essentials.invsee
     - essentials.item
     - essentials.jails
@@ -33,13 +38,12 @@ groups:
     - essentials.mute
     - essentials.sell
     - essentials.setjail
-    - essentials.signs.protection.override
+    - essentials.signs.*
     - essentials.spawnmob
     - essentials.teleport.cooldown.bypass
     - essentials.teleport.timer.bypass
     - essentials.togglejail
     - groupmanager.*
-    - essentials.burn
     inheritance:
     - moderator
     info:
@@ -50,11 +54,13 @@ groups:
     default: false
     permissions:
     - essentials.afk
+    - essentials.back
     - essentials.back.ondeath
     - essentials.balance
     - essentials.chat.shout
     - essentials.compass
     - essentials.home
+    - essentials.depth
     - essentials.kit
     - essentials.kit.tools
     - essentials.mail
@@ -64,20 +70,18 @@ groups:
     - essentials.nick
     - essentials.pay
     - essentials.portal
+    - essentials.powertool
     - essentials.protect
     - essentials.sethome
-    - essentials.signs.buy.use
-    - essentials.signs.disposal.create
-    - essentials.signs.disposal.use
-    - essentials.signs.free.use
-    - essentials.signs.heal.use
-    - essentials.signs.mail.create
-    - essentials.signs.mail.use
-    - essentials.signs.protection.create
-    - essentials.signs.protection.use
-    - essentials.signs.sell.use
-    - essentials.signs.trade.create
-    - essentials.signs.trade.use
+    - essentials.signs.use.*
+    - essentials.signs.create.disposal
+    - essentials.signs.create.mail
+    - essentials.signs.create.protection
+    - essentials.signs.create.trade
+    - essentials.signs.break.disposal
+    - essentials.signs.break.mail
+    - essentials.signs.break.protection
+    - essentials.signs.break.trade
     - essentials.suicide
     - essentials.tpa
     - essentials.tpaccept
@@ -95,19 +99,23 @@ groups:
   Moderator:
     default: false
     permissions:
-    - essentials.back
     - essentials.ban
     - essentials.banip
     - essentials.broadcast
     - essentials.delwarp
-    - essentials.depth
     - essentials.eco
+    - essentials.ext
     - essentials.getpos
     - essentials.jump
     - essentials.kick
     - essentials.kill
     - essentials.setwarp
+    - essentials.signs.create.*
+    - essentials.signs.break.*
+    - essentials.spawner
+    - essentials.thunder
     - essentials.time
+    - essentials.time.world
     - essentials.togglejail
     - essentials.top
     - essentials.tp
@@ -118,6 +126,7 @@ groups:
     - essentials.tptoggle
     - essentials.unban
     - essentials.unbanip
+    - essentials.weather
     - essentials.whois
     - essentials.world
     - groupmanager.listgroups
@@ -128,7 +137,6 @@ groups:
     - groupmanager.manselect
     - groupmanager.manuadd
     - groupmanager.manudel
-    - essentials.ext
     inheritance:
     - builder
     info:
@@ -139,7 +147,6 @@ groups:
     default: false
     permissions:
     - '*'
-    - -essentials.protect.damage.*
     inheritance:
     - semiadmin
     info:

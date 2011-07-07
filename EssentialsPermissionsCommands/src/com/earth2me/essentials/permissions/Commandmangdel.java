@@ -21,7 +21,7 @@ public class Commandmangdel extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 		final String group = args[0];
-		String command = "/permissions g:"+group+" delete";
+		String command = "permissions g:"+group+" delete";
 		sender.sendMessage(commandLabel + " is deprecated. Use " + command + " instead.");
 		ess.getServer().dispatchCommand(sender, command);
 	}

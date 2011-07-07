@@ -94,7 +94,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 	private void connect()
 	{
 		final String server = config.getString("xmpp.server");
-		if (server == null)
+		if (server == null || server.equals("example.com"))
 		{
 			LOGGER.log(Level.WARNING, "config broken for xmpp");
 			return;

@@ -65,7 +65,7 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args)
 	{
-		return Essentials.getStatic().onCommandEssentials(sender, command, commandLabel, args, EssentialsXMPP.class.getClassLoader(), "com.earth2me.essentials.xmpp.Command");
+		return Essentials.getStatic().onCommandEssentials(sender, command, commandLabel, args, EssentialsXMPP.class.getClassLoader(), "com.earth2me.essentials.xmpp.Command", "essentials.");
 	}
 	
 	@Override

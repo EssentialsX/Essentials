@@ -21,7 +21,7 @@ public class Commandmanudel extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 		final String player = args[0];
-		String command = "/permissions "+player+" delete";
+		String command = "permissions "+player+" delete";
 		sender.sendMessage(commandLabel + " is deprecated. Use " + command + " instead.");
 		ess.getServer().dispatchCommand(sender, command);
 	}

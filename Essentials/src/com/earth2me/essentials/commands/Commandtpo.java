@@ -23,7 +23,7 @@ public class Commandtpo extends EssentialsCommand
 		//Just basically the old tp command
 		User p = getPlayer(server, args, 0);
 		charge(user);
-		user.getTeleport().now(p);
+		user.getTeleport().now(p, false);
 		user.sendMessage(Util.i18n("teleporting"));
 	}
 }

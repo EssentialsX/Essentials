@@ -22,7 +22,7 @@ public class Commandmanuaddp extends EssentialsCommand
 		}
 		final String player = args[0];
 		final String perm = args[1];
-		String command = "/permissions "+player+" perms add "+perm;
+		String command = "permissions "+player+" perms add "+perm;
 		sender.sendMessage(commandLabel + " is deprecated. Use " + command + " instead.");
 		ess.getServer().dispatchCommand(sender, command);
 	}

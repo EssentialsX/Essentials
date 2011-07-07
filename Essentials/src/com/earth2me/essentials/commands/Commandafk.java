@@ -17,11 +17,29 @@ public class Commandafk extends EssentialsCommand
 	{
 		charge(user);
 
+		if (args.length > 0 && user.isAuthorized("essentials.afk.others"))
+		{
+			User afkUser = ess.getUser(ess.getServer().matchPlayer(args[0]));
+			if (afkUser != null)
+			{
+				toggleAfk(afkUser);
+			}
+		}
+		else
+		{
+			toggleAfk(user);
+		}
+	}
+
+	private final void toggleAfk(User user)
+	{
 		if (!user.toggleAfk())
 		{
 			user.sendMessage(Util.i18n("markedAsNotAway"));
 			ess.broadcastMessage(user.getName(), Util.format("userIsNotAway", user.getDisplayName()));
-		} else {
+		}
+		else
+		{
 			user.sendMessage(Util.i18n("markedAsAway"));
 			ess.broadcastMessage(user.getName(), Util.format("userIsAway", user.getDisplayName()));
 		}

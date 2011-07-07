@@ -4,21 +4,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.minecraft.server.InventoryPlayer;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
-import org.bukkit.craftbukkit.block.CraftSign;
-import org.bukkit.craftbukkit.inventory.CraftInventoryPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerAnimationType;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -82,6 +80,11 @@ public class EssentialsPlayerListener extends PlayerListener
 				it.remove();
 			}
 		}
+		if(user.isAfk())
+		{
+			user.setAfk(false);
+			ess.broadcastMessage(user.getName(), Util.format("userIsNotAway", user.getDisplayName()));
+		}
 	}
 
 	@Override
@@ -93,6 +96,12 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 		final User user = ess.getUser(event.getPlayer());
 
+		if(user.isAfk())
+		{
+			user.setAfk(false);
+			ess.broadcastMessage(user.getName(), Util.format("userIsNotAway", user.getDisplayName()));
+		}
+		
 		if (!ess.getSettings().getNetherPortalsEnabled())
 		{
 			return;
@@ -252,6 +261,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 
 		user.setDisplayName(user.getNick());
+		user.setAfk(false);
 
 		if (!ess.getSettings().isCommandDisabled("motd") && user.isAuthorized("essentials.motd"))
 		{
@@ -357,7 +367,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			event.setCancelled(true);
 			return;
 		}
-		if (!ess.getSettings().areSignsDisabled() && EssentialsBlockListener.protectedBlocks.contains(event.getClickedBlock().getType()))
+		/*if (!ess.getSettings().areSignsDisabled() && EssentialsBlockListener.protectedBlocks.contains(event.getClickedBlock().getType()))
 		{
 			if (!user.isAuthorized("essentials.signs.protection.override"))
 			{
@@ -368,7 +378,7 @@ public class EssentialsPlayerListener extends PlayerListener
 					return;
 				}
 			}
-		}
+		}*/
 
 		if (ess.getSettings().getBedSetsHome() && event.getClickedBlock().getType() == Material.BED_BLOCK)
 		{
@@ -383,7 +393,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 
 
-		if (ess.getSettings().areSignsDisabled())
+		/*if (ess.getSettings().areSignsDisabled())
 		{
 			return;
 		}
@@ -517,9 +527,10 @@ public class EssentialsPlayerListener extends PlayerListener
 			{
 				logger.log(Level.WARNING, ex.getMessage(), ex);
 			}
-		}
+		}*/
 	}
 
+	@Deprecated
 	private Trade chargeUserForWarp(Sign sign, User user) throws Exception
 	{
 		if (!sign.getLine(3).isEmpty())
@@ -611,6 +622,29 @@ public class EssentialsPlayerListener extends PlayerListener
 		else
 		{
 			user.getServer().dispatchCommand(user, command);
+		}
+	}
+	
+	@Override
+	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event)
+	{
+		if (event.isCancelled()) return;
+		User user = ess.getUser(event.getPlayer());	    	
+		String cmd = event.getMessage().toLowerCase();		
+		if (("msg".equals(cmd) || "r".equals(cmd) || "mail".equals(cmd)))
+		{
+			for (Player player : ess.getServer().getOnlinePlayers())
+			{
+				if (ess.getUser(player).isSocialSpyEnabled())
+				{
+					player.sendMessage(user.getDisplayName() + " : " + cmd);
+				}
+			}
+		}
+		if(user.isAfk())
+		{
+			user.setAfk(false);
+			ess.broadcastMessage(user.getName(), Util.format("userIsNotAway", user.getDisplayName()));
 		}
 	}
 }

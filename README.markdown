@@ -14,3 +14,5 @@ Recommended NetBeans plugins:
 In the root folder of the repository is a file called settings.zip. It contains the code guidelines settings. Open the preferences of NetBeans and import the zip file. Use "Source > Format" before each commit please.
 
 To build all jars, select the BuildAll project and build that. You'll find all jars inside the dist/lib folder of the BuildAll project.
+
+If you create pull requests, always make them for the master branch.

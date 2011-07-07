@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.inventory.ItemStack;
 
-
+@Deprecated
 public class EssentialsEcoPlayerListener extends PlayerListener
 {
 	private final IEssentials ess;

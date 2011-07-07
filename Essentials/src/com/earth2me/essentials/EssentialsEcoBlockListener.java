@@ -11,7 +11,7 @@ import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
-
+@Deprecated
 public class EssentialsEcoBlockListener extends BlockListener
 {
 	private final IEssentials ess;

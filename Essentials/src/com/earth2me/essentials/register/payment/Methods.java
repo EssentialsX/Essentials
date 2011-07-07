@@ -2,6 +2,8 @@ package com.earth2me.essentials.register.payment;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -68,7 +70,8 @@ public class Methods {
 
             if(!plugin.isEnabled()) {
                 this.self = true;
-                manager.enablePlugin(plugin);
+				Logger.getLogger("Minecraft").log(Level.SEVERE, name + " Plugin was found, but not enabled before Essentials. Read the Essentials thread for help."); 
+                //manager.enablePlugin(plugin);
             }
 
             if(plugin == null) continue;

@@ -4,6 +4,7 @@ import org.bukkit.Server;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.InventoryWorkaround;
 import com.earth2me.essentials.ItemDb;
+import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.util.logging.Level;
@@ -151,8 +152,10 @@ public class Commandsell extends EssentialsCommand
 		}
 
 		charge(user);
-		InventoryWorkaround.removeItem(user.getInventory(), true, new ItemStack(is.getType(), amount, is.getDurability()));
+		final ItemStack ris = new ItemStack(is.getType(), amount, is.getDurability());
+		InventoryWorkaround.removeItem(user.getInventory(), true, ris);
 		user.updateInventory();
+		Trade.log("Command", "Sell", "Item", user.getName(), new Trade(ris, ess), user.getName(), new Trade(worth*amount, ess), ess);
 		user.giveMoney(worth * amount);
 		user.sendMessage(Util.format("itemSold", Util.formatCurrency(worth * amount), amount, Util.formatCurrency(worth)));
 		logger.log(Level.INFO, Util.format("itemSoldConsole", user.getDisplayName(), is.getType().toString().toLowerCase(), Util.formatCurrency(worth * amount), amount, Util.formatCurrency(worth)));

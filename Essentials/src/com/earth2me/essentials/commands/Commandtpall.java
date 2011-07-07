@@ -45,7 +45,7 @@ public class Commandtpall extends EssentialsCommand
 			}
 			try
 			{
-				u.getTeleport().now(p);
+				u.getTeleport().now(p, false);
 			}
 			catch (Exception ex)
 			{

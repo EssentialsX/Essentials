@@ -13,7 +13,9 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.craftbukkit.entity.CraftFireball;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.craftbukkit.entity.CraftTNTPrimed;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -125,6 +127,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 				 && !user.isAuthorized("essentials.protect.damage.disable")))
 		{
 			event.setCancelled(true);
+			((EntityDamageByProjectileEvent)event).setBounce(true);
 			return;
 		}
 
@@ -215,13 +218,19 @@ public class EssentialsProtectEntityListener extends EntityListener
 				}
 			}
 
-			((CraftServer)ess.getServer()).getHandle().a(loc.getX(), loc.getY(), loc.getZ(), 64.0D, ((CraftWorld)loc.getWorld()).getHandle().worldProvider.dimension,
+			((CraftServer)ess.getServer()).getHandle().sendPacketNearby(loc.getX(), loc.getY(), loc.getZ(), 64.0D, ((CraftWorld)loc.getWorld()).getHandle().worldProvider.dimension,
 														  new Packet60Explosion(loc.getX(), loc.getY(), loc.getZ(), 3.0f, set));
 			event.setCancelled(true);
 			return;
 		}
-		else if (!(event.getEntity() instanceof LivingEntity)
+		else if (event.getEntity() instanceof CraftTNTPrimed
 				 && prot.getSettingBool(ProtectConfig.prevent_tnt_explosion))
+		{
+			event.setCancelled(true);
+			return;
+		}
+		else if (event.getEntity() instanceof CraftFireball
+				 && prot.getSettingBool(ProtectConfig.prevent_fireball_explosion))
 		{
 			event.setCancelled(true);
 			return;
@@ -249,12 +258,12 @@ public class EssentialsProtectEntityListener extends EntityListener
 				event.setCancelled(true);
 				return;
 			}
-			if (EssentialsBlockListener.protectedBlocks.contains(block.getType())
+			/*if (EssentialsBlockListener.protectedBlocks.contains(block.getType())
 				&& EssentialsBlockListener.isBlockProtected(block))
 			{
 				event.setCancelled(true);
 				return;
-			}
+			}*/
 		}
 	}
 

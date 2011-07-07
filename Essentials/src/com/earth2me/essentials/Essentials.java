@@ -27,6 +27,9 @@ import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import com.earth2me.essentials.register.payment.Methods;
+import com.earth2me.essentials.signs.SignBlockListener;
+import com.earth2me.essentials.signs.SignEntityListener;
+import com.earth2me.essentials.signs.SignPlayerListener;
 import java.math.BigInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,7 +46,7 @@ import org.bukkit.plugin.java.*;
 public class Essentials extends JavaPlugin implements IEssentials
 {
 	public static final String AUTHORS = "Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans and Xeology";
-	public static final int minBukkitBuildVersion = 867;
+	public static final int minBukkitBuildVersion = 953;
 	private static final Logger logger = Logger.getLogger("Minecraft");
 	private Settings settings;
 	private TNTExplodeListener tntListener;
@@ -173,6 +176,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		pm.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
 		pm.registerEvent(Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
 		pm.registerEvent(Type.PLAYER_CHAT, playerListener, Priority.Lowest, this);
+		pm.registerEvent(Type.PLAYER_COMMAND_PREPROCESS, playerListener, Priority.Lowest, this);
 		if (getSettings().getNetherPortalsEnabled())
 		{
 			pm.registerEvent(Type.PLAYER_MOVE, playerListener, Priority.High, this);
@@ -185,9 +189,22 @@ public class Essentials extends JavaPlugin implements IEssentials
 		pm.registerEvent(Type.PLAYER_ANIMATION, playerListener, Priority.High, this);
 
 		final EssentialsBlockListener blockListener = new EssentialsBlockListener(this);
-		pm.registerEvent(Type.SIGN_CHANGE, blockListener, Priority.Low, this);
-		pm.registerEvent(Type.BLOCK_BREAK, blockListener, Priority.Lowest, this);
+		//pm.registerEvent(Type.SIGN_CHANGE, blockListener, Priority.Low, this);
+		//pm.registerEvent(Type.BLOCK_BREAK, blockListener, Priority.Lowest, this);
 		pm.registerEvent(Type.BLOCK_PLACE, blockListener, Priority.Lowest, this);
+		
+		final SignBlockListener signBlockListener = new SignBlockListener(this);
+		pm.registerEvent(Type.SIGN_CHANGE, signBlockListener, Priority.Low, this);
+		pm.registerEvent(Type.BLOCK_PLACE, signBlockListener, Priority.Low, this);
+		pm.registerEvent(Type.BLOCK_BREAK, signBlockListener, Priority.Lowest, this);
+		pm.registerEvent(Type.BLOCK_IGNITE, signBlockListener, Priority.Low, this);
+		pm.registerEvent(Type.BLOCK_BURN, signBlockListener, Priority.Low, this);
+		
+		final SignPlayerListener signPlayerListener = new SignPlayerListener(this);
+		pm.registerEvent(Type.PLAYER_INTERACT, signPlayerListener, Priority.Low, this);
+		
+		final SignEntityListener signEntityListener = new SignEntityListener(this);
+		pm.registerEvent(Type.ENTITY_EXPLODE, signEntityListener, Priority.Low, this);
 
 		final EssentialsEntityListener entityListener = new EssentialsEntityListener(this);
 		pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Priority.Lowest, this);
@@ -201,7 +218,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		pm.registerEvent(Type.BLOCK_DAMAGE, jail, Priority.High, this);
 		pm.registerEvent(Type.BLOCK_PLACE, jail, Priority.High, this);
 		pm.registerEvent(Type.PLAYER_INTERACT, jailPlayerListener, Priority.High, this);
-		attachEcoListeners();
+		//attachEcoListeners();
 
 		if (settings.isNetherEnabled() && getServer().getWorlds().size() < 2)
 		{
@@ -224,11 +241,13 @@ public class Essentials extends JavaPlugin implements IEssentials
 	public void onDisable()
 	{
 		instance = null;
+		Trade.closeLog();
 		logger.removeHandler(errorHandler);
 	}
 
 	public void reload()
 	{
+		Trade.closeLog();
 		loadBanList();
 
 		for (IConf iConf : confList)
@@ -352,39 +371,14 @@ public class Essentials extends JavaPlugin implements IEssentials
 		return retval;
 	}
 
-	@SuppressWarnings("LoggerStringConcat")
-	public static void previewCommand(CommandSender sender, Command command, String commandLabel, String[] args)
-	{
-		if (sender instanceof Player)
-		{
-			logger.info(ChatColor.BLUE + "[PLAYER_COMMAND] " + ((Player)sender).getName() + ": /" + commandLabel + " " + EssentialsCommand.getFinalArg(args, 0));
-		}
-	}
-
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args)
 	{
-		return onCommandEssentials(sender, command, commandLabel, args, Essentials.class.getClassLoader(), "com.earth2me.essentials.commands.Command");
+		return onCommandEssentials(sender, command, commandLabel, args, Essentials.class.getClassLoader(), "com.earth2me.essentials.commands.Command", "essentials.");
 	}
 
-	public boolean onCommandEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath)
-	{
-		if (("msg".equals(commandLabel.toLowerCase()) || "r".equals(commandLabel.toLowerCase()) || "mail".equals(commandLabel.toLowerCase())) && sender instanceof Player)
-		{
-			StringBuilder str = new StringBuilder();
-			str.append(commandLabel).append(" ");
-			for (String a : args)
-			{
-				str.append(a).append(" ");
-			}
-			for (Player player : getServer().getOnlinePlayers())
-			{
-				if (getUser(player).isSocialSpyEnabled())
-				{
-					player.sendMessage(getUser(sender).getDisplayName() + " : " + str);
-				}
-			}
-		}
+	public boolean onCommandEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath, String permissionPrefix)
+	{		
 		// Allow plugins to override the command via onCommand
 		if (!getSettings().isCommandOverridden(command.getName()) && !commandLabel.startsWith("e"))
 		{
@@ -416,8 +410,12 @@ public class Essentials extends JavaPlugin implements IEssentials
 
 		try
 		{
-			previewCommand(sender, command, commandLabel, args);
-			User user = sender instanceof Player ? getUser(sender) : null;
+			User user = null;
+			if (sender instanceof Player)
+			{
+				user = getUser(sender);
+				logger.log(Level.INFO, String.format("[PLAYER_COMMAND] %s: /%s %s ", ((Player)sender).getName(), commandLabel , EssentialsCommand.getFinalArg(args, 0)));
+			}
 
 			// New mail notification
 			if (user != null && !getSettings().isCommandDisabled("mail") && !commandLabel.equals("mail") && user.isAuthorized("essentials.mail"))
@@ -449,7 +447,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 			}
 
 			// Check authorization
-			if (user != null && !user.isAuthorized(cmd))
+			if (user != null && !user.isAuthorized(cmd, permissionPrefix))
 			{
 				logger.log(Level.WARNING, Util.format("deniedAccessCommand", user.getName()));
 				user.sendMessage(Util.i18n("noAccessCommand"));
@@ -603,12 +601,12 @@ public class Essentials extends JavaPlugin implements IEssentials
 
 	private void attachEcoListeners()
 	{
-		PluginManager pm = getServer().getPluginManager();
-		EssentialsEcoBlockListener ecoBlockListener = new EssentialsEcoBlockListener(this);
-		EssentialsEcoPlayerListener ecoPlayerListener = new EssentialsEcoPlayerListener(this);
-		pm.registerEvent(Type.PLAYER_INTERACT, ecoPlayerListener, Priority.High, this);
-		pm.registerEvent(Type.BLOCK_BREAK, ecoBlockListener, Priority.High, this);
-		pm.registerEvent(Type.SIGN_CHANGE, ecoBlockListener, Priority.Monitor, this);
+		//PluginManager pm = getServer().getPluginManager();
+		//EssentialsEcoBlockListener ecoBlockListener = new EssentialsEcoBlockListener(this);
+		//EssentialsEcoPlayerListener ecoPlayerListener = new EssentialsEcoPlayerListener(this);
+		//pm.registerEvent(Type.PLAYER_INTERACT, ecoPlayerListener, Priority.High, this);
+		//pm.registerEvent(Type.BLOCK_BREAK, ecoBlockListener, Priority.High, this);
+		//pm.registerEvent(Type.SIGN_CHANGE, ecoBlockListener, Priority.Monitor, this);
 	}
 
 	public CraftScheduler getScheduler()
