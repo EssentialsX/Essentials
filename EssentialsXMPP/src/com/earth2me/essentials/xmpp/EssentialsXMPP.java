@@ -103,15 +103,15 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 	}
 
 	@Override
-	public void sendMessage(final Player user, final String message)
+	public boolean sendMessage(final Player user, final String message)
 	{
-		instance.xmpp.sendMessage(instance.users.getAddress(user.getName()), message);
+		return instance.xmpp.sendMessage(instance.users.getAddress(user.getName()), message);
 	}
 
 	@Override
-	public void sendMessage(final String address, final String message)
+	public boolean sendMessage(final String address, final String message)
 	{
-		instance.xmpp.sendMessage(address, message);
+		return instance.xmpp.sendMessage(address, message);
 	}
 
 	@Override
