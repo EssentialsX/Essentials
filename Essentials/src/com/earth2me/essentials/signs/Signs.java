@@ -3,6 +3,7 @@ package com.earth2me.essentials.signs;
 
 public enum Signs
 {
+	BALANCE(new SignBalance()),
 	BUY(new SignBuy()),
 	DISPOSAL(new SignDisposal()),
 	FREE(new SignFree()),
@@ -12,7 +13,8 @@ public enum Signs
 	SELL(new SignSell()),
 	TIME(new SignTime()),
 	TRADE(new SignTrade()),
-	WARP(new SignWarp());
+	WARP(new SignWarp()),
+	WEATHER(new SignWeather());
 	private final EssentialsSign sign;
 
 	private Signs(final EssentialsSign sign)
