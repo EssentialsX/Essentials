@@ -15,9 +15,9 @@ public interface IEssentialsXMPP
 	
 	String getUserByAddress(final String address);
 
-	void sendMessage(final Player user, final String message);
+	boolean sendMessage(final Player user, final String message);
 
-	void sendMessage(final String address, final String message);
+	boolean sendMessage(final String address, final String message);
 
 	void setAddress(final Player user, final String address);
 
