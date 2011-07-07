@@ -192,7 +192,7 @@ debug: false
 #locale: de_DE
 
 #turn off god mode when people exit
-remove-god-on-discon: false
+remove-god-on-disconnect: false
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #

@@ -210,7 +210,7 @@ public class EssentialsPlayerListener extends PlayerListener
 	public void onPlayerQuit(PlayerQuitEvent event)
 	{
 		User user = ess.getUser(event.getPlayer());
-		if (ess.getSettings().removeGodOnDiscon())
+		if (ess.getSettings().removeGodOnDisconnect())
 		{
 			if (user.isGodModeEnabled())
 			{
