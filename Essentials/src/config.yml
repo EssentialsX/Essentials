@@ -51,6 +51,7 @@ default-stack-size: 64
 item-spawn-blacklist:
 
 # Set this to true if you want permission based item spawn rules
+# Note: The blacklist above will be ignored then.
 # Permissions:
 #  - essentials.itemspawn.item-all
 #  - essentials.itemspawn.item-[itemname]
