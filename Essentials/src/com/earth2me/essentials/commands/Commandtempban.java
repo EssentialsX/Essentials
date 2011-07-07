@@ -40,7 +40,6 @@ public class Commandtempban extends EssentialsCommand
 		String time = getFinalArg(args, 1);
 		long banTimestamp = Util.parseDateDiff(time, true);
 
-		p = ess.getUser(server.matchPlayer(args[0]).get(0));
 		String banReason = Util.format("tempBanned",  Util.formatDateDiff(banTimestamp));
 		p.setBanReason(banReason);
 		p.setBanTimeout(banTimestamp);
