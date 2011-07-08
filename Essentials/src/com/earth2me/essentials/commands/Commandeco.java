@@ -58,7 +58,7 @@ public class Commandeco extends EssentialsCommand
 			User u = ess.getUser(args[1]);
 			if (u == null)
 			{
-				u = ess.getOfflineUser(args[0]);
+				u = ess.getOfflineUser(args[1]);
 			}
 			switch (cmd)
 			{
