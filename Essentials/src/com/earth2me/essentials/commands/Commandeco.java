@@ -2,7 +2,6 @@ package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
-import com.earth2me.essentials.Essentials;
 import org.bukkit.entity.Player;
 import com.earth2me.essentials.User;
 
@@ -56,27 +55,27 @@ public class Commandeco extends EssentialsCommand
 		}
 		else
 		{
-			for (Player p : server.matchPlayer(args[1]))
+			User u = ess.getUser(args[1]);
+			if (u == null)
 			{
-				User u = ess.getUser(p);
-				switch (cmd)
-				{
-				case GIVE:
-					u.giveMoney(amount);
-					break;
+				u = ess.getOfflineUser(args[0]);
+			}
+			switch (cmd)
+			{
+			case GIVE:
+				u.giveMoney(amount);
+				break;
 
-				case TAKE:
-					u.takeMoney(amount);
-					break;
+			case TAKE:
+				u.takeMoney(amount);
+				break;
 
-				case RESET:
-					u.setMoney(amount == 0 ? ess.getSettings().getStartingBalance() : amount);
-					break;
-				}
+			case RESET:
+				u.setMoney(amount == 0 ? ess.getSettings().getStartingBalance() : amount);
+				break;
 			}
 		}
 	}
-
 
 	private enum EcoCommands
 	{
