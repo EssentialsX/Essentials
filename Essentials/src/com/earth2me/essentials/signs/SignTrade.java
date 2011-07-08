@@ -49,6 +49,7 @@ public class SignTrade extends EssentialsSign
 			charge.charge(player);
 			Trade.log("Sign", "Trade", "Interact", sign.getLine(3), charge, username, trade, ess);
 		}
+		sign.updateSign();
 		return true;
 	}
 

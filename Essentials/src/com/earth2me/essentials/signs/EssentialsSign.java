@@ -421,6 +421,12 @@ public class EssentialsSign
 		{
 			return block;
 		}
+
+		public void updateSign()
+		{
+			return;
+		}
+
 	}
 
 
@@ -449,6 +455,11 @@ public class EssentialsSign
 		{
 			return block;
 		}
+		
+		public final void updateSign()
+		{
+			sign.update();
+		}
 	}
 
 
@@ -459,5 +470,7 @@ public class EssentialsSign
 		void setLine(final int index, final String text);
 
 		public Block getBlock();
+		
+		void updateSign();
 	}
 }
