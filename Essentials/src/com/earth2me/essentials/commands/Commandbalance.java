@@ -31,7 +31,7 @@ public class Commandbalance extends EssentialsCommand
 					  || !(user.isAuthorized("essentials.balance.others")
 						   || user.isAuthorized("essentials.balance.other"))
 					  ? user
-					  : getPlayer(server, args, 0)).getMoney();
+					  : getPlayer(server, args, 0, true)).getMoney();
 		user.sendMessage(Util.format("balance", Util.formatCurrency(bal)));
 	}
 }

@@ -55,19 +55,15 @@ public class Commandeco extends EssentialsCommand
 		}
 		else
 		{
-			User u = ess.getUser(args[1]);
-			if (u == null)
-			{
-				u = ess.getOfflineUser(args[1]);
-			}
+			User u = getPlayer(server, args, 0, true);
 			switch (cmd)
 			{
 			case GIVE:
-				u.giveMoney(amount);
+				u.giveMoney(amount, sender);
 				break;
 
 			case TAKE:
-				u.takeMoney(amount);
+				u.takeMoney(amount, sender);
 				break;
 
 			case RESET:
