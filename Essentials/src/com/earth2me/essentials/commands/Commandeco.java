@@ -55,7 +55,7 @@ public class Commandeco extends EssentialsCommand
 		}
 		else
 		{
-			User u = getPlayer(server, args, 0, true);
+			User u = getPlayer(server, args, 1, true);
 			switch (cmd)
 			{
 			case GIVE:
