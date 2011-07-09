@@ -239,4 +239,9 @@ public class FakeServer implements Server
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
+	public World getWorld(long l)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }

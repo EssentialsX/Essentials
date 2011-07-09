@@ -391,5 +391,10 @@ public class FakeWorld implements World
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
+	public long getUID()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 	
 }
