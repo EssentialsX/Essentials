@@ -452,6 +452,7 @@ stickypistonbase,29,0
 stickypiston,29,0
 stickpistonbase,29,0
 stickpiston,29,0
+stickyp,29,0
 spistonbase,29,0
 spiston,29,0
 pistonstickybase,29,0
@@ -460,6 +461,7 @@ pistonstickbase,29,0
 pistonstick,29,0
 pistonsbase,29,0
 pistons,29,0
+psticky,29,0
 spiderweb,30,0
 sweb,30,0
 web,30,0
@@ -493,6 +495,7 @@ pistonnbase,33,0
 pistonn,33,0
 pistonbase,33,0
 piston,33,0
+pistonblock,33,0
 pistonextensionnormal,34,0
 pistonextensionnorm,34,0
 pistonextensionn,34,0
@@ -646,6 +649,8 @@ blackcotton,35,15
 blacloth,35,15
 blawool,35,15
 blacotton,35,15
+pistonmovingpiece,36,0
+pistonmp,36,0
 yellowflower,37,0
 yflower,37,0
 flower,37,0
