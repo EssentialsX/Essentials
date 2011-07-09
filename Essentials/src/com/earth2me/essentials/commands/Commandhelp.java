@@ -139,6 +139,13 @@ public class Commandhelp extends EssentialsCommand
 									retval.add("§c" + k.getKey() + "§7: " + value.get("description"));
 								}
 							}
+							else if (value.containsKey("permissions") && value.get("permissions") != null && !(value.get("permissions").equals("")))
+							{
+								if (user.isAuthorized(value.get("permissions")))
+								{
+									retval.add("§c" + k.getKey() + "§7: " + value.get("description"));
+								}
+							}
 							else
 							{
 								if (!ess.getSettings().hidePermissionlessHelp())
