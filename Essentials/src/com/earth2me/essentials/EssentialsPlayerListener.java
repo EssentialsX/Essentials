@@ -636,14 +636,14 @@ public class EssentialsPlayerListener extends PlayerListener
 	{
 		if (event.isCancelled()) return;
 		User user = ess.getUser(event.getPlayer());
-		String cmd = event.getMessage().toLowerCase();
+		String cmd = event.getMessage().toLowerCase().split(" ")[0].replace("/", "").toLowerCase();
 		if (("msg".equals(cmd) || "r".equals(cmd) || "mail".equals(cmd)))
 		{
 			for (Player player : ess.getServer().getOnlinePlayers())
 			{
 				if (ess.getUser(player).isSocialSpyEnabled())
 				{
-					player.sendMessage(user.getDisplayName() + " : " + cmd);
+					player.sendMessage(user.getDisplayName() + " : " + event.getMessage());
 				}
 			}
 		}
