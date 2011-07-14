@@ -90,7 +90,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		sendMessage(Util.format("addedToAccount", Util.formatCurrency(value)));
 		if (initiator != null)
 		{
-			initiator.sendMessage((Util.format("addedToAccount", Util.formatCurrency(value))));
+			initiator.sendMessage((Util.format("addedToOthersAccount", Util.formatCurrency(value), this.getDisplayName())));
 		}
 	}
 	
@@ -127,7 +127,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		sendMessage(Util.format("takenFromAccount", Util.formatCurrency(value)));
 		if (initiator != null)
 		{
-			initiator.sendMessage((Util.format("takenFromAccount", Util.formatCurrency(value))));
+			initiator.sendMessage((Util.format("takenFromOthersAccount", Util.formatCurrency(value), this.getDisplayName())));
 		}
 	}
 	
