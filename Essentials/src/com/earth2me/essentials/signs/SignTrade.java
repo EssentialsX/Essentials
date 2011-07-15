@@ -136,7 +136,7 @@ public class SignTrade extends EssentialsSign
 			sign.setLine(index, stackamount + " " + split[1] + ":" + amount);
 			return;
 		}
-		throw new SignException(Util.format("invalidSignLine", index));
+		throw new SignException(Util.format("invalidSignLine", index+1));
 	}
 
 	protected final Trade getTrade(final ISign sign, final int index, final boolean fullAmount, final boolean notEmpty, final IEssentials ess) throws SignException
@@ -171,7 +171,7 @@ public class SignTrade extends EssentialsSign
 			item.setAmount(fullAmount ? amount : stackamount);
 			return new Trade(item, ess);
 		}
-		throw new SignException(Util.format("invalidSignLine", index));
+		throw new SignException(Util.format("invalidSignLine", index+1));
 	}
 
 	protected final void substractAmount(final ISign sign, final int index, final Trade trade) throws SignException
@@ -230,6 +230,6 @@ public class SignTrade extends EssentialsSign
 			sign.setLine(index, stackamount + " " + split[1] + ":" + (amount + Math.round(value)));
 			return;
 		}
-		throw new SignException(Util.format("invalidSignLine", index));
+		throw new SignException(Util.format("invalidSignLine", index+1));
 	}
 }
