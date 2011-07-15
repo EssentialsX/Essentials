@@ -87,10 +87,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			return;
 		}
 		setMoney(getMoney() + value);
-		sendMessage(Util.format("addedToAccount", Util.formatCurrency(value)));
+		sendMessage(Util.format("addedToAccount", Util.formatCurrency(value, ess)));
 		if (initiator != null)
 		{
-			initiator.sendMessage((Util.format("addedToOthersAccount", Util.formatCurrency(value), this.getDisplayName())));
+			initiator.sendMessage((Util.format("addedToOthersAccount", Util.formatCurrency(value, ess), this.getDisplayName())));
 		}
 	}
 
@@ -108,8 +108,8 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		{
 			setMoney(getMoney() - value);
 			reciever.setMoney(reciever.getMoney() + value);
-			sendMessage(Util.format("moneySentTo", Util.formatCurrency(value), reciever.getDisplayName()));
-			reciever.sendMessage(Util.format("moneyRecievedFrom", Util.formatCurrency(value), getDisplayName()));
+			sendMessage(Util.format("moneySentTo", Util.formatCurrency(value, ess), reciever.getDisplayName()));
+			reciever.sendMessage(Util.format("moneyRecievedFrom", Util.formatCurrency(value, ess), getDisplayName()));
 		}
 	}
 
@@ -125,10 +125,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			return;
 		}
 		setMoney(getMoney() - value);
-		sendMessage(Util.format("takenFromAccount", Util.formatCurrency(value)));
+		sendMessage(Util.format("takenFromAccount", Util.formatCurrency(value, ess)));
 		if (initiator != null)
 		{
-			initiator.sendMessage((Util.format("takenFromOthersAccount", Util.formatCurrency(value), this.getDisplayName())));
+			initiator.sendMessage((Util.format("takenFromOthersAccount", Util.formatCurrency(value, ess), this.getDisplayName())));
 		}
 	}
 
@@ -140,7 +140,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 	public void dispose()
 	{
-		this.base = new OfflinePlayer(getName());
+		this.base = new OfflinePlayer(getName(), ess);
 	}
 
 	public boolean getJustPortaled()

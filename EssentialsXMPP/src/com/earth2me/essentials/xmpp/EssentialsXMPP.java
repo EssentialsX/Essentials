@@ -21,24 +21,25 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 	private static EssentialsXMPP instance = null;
 	private transient UserManager users;
 	private transient XMPPManager xmpp;
-
+	private transient IEssentials ess;
+	
 	public static IEssentialsXMPP getInstance()
 	{
 		return instance;
 	}
-	
+
 	@Override
 	public void onEnable()
 	{
 		instance = this;
 
-		final IEssentials ess = Essentials.getStatic();
+		final PluginManager pluginManager = getServer().getPluginManager();
+		ess = (IEssentials)pluginManager.getPlugin("Essentials");
 		if (ess == null)
 		{
 			LOGGER.log(Level.SEVERE, "Failed to load Essentials before EssentialsXMPP");
 		}
-
-		final PluginManager pluginManager = getServer().getPluginManager();
+		
 		final EssentialsXMPPPlayerListener playerListener = new EssentialsXMPPPlayerListener(ess);
 		pluginManager.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
 		pluginManager.registerEvent(Type.PLAYER_CHAT, playerListener, Priority.Monitor, this);
@@ -46,14 +47,15 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 
 		users = new UserManager(this.getDataFolder());
 		xmpp = new XMPPManager(this);
-		
+
 		ess.addReloadListener(users);
 		ess.addReloadListener(xmpp);
-		
-		if (!this.getDescription().getVersion().equals(Essentials.getStatic().getDescription().getVersion())) {
+
+		if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion()))
+		{
 			LOGGER.log(Level.WARNING, Util.i18n("versionMismatchAll"));
 		}
-		LOGGER.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), Essentials.AUTHORS));
+		LOGGER.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
 	}
 
 	@Override
@@ -65,9 +67,9 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args)
 	{
-		return Essentials.getStatic().onCommandEssentials(sender, command, commandLabel, args, EssentialsXMPP.class.getClassLoader(), "com.earth2me.essentials.xmpp.Command", "essentials.");
+		return ess.onCommandEssentials(sender, command, commandLabel, args, EssentialsXMPP.class.getClassLoader(), "com.earth2me.essentials.xmpp.Command", "essentials.");
 	}
-	
+
 	@Override
 	public void setAddress(final Player user, final String address)
 	{
@@ -80,7 +82,7 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 	{
 		return instance.users.getAddress(name);
 	}
-	
+
 	@Override
 	public String getUserByAddress(final String address)
 	{

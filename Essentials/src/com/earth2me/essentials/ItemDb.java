@@ -7,30 +7,31 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 
-public final class ItemDb
+public class ItemDb implements IConf
 {
-	private ItemDb()
-	{
-	}
-	
-	private final static Logger logger = Logger.getLogger("Minecraft");
-	private static Map<String, Integer> items = new HashMap<String, Integer>();
-	private static Map<String, Short> durabilities = new HashMap<String, Short>();
+	private final transient IEssentials ess;
 
-	public static void load(File folder, String fname) throws IOException
+	public ItemDb(IEssentials ess)
 	{
-		folder.mkdirs();
-		File file = new File(folder, fname);
+		this.ess = ess;
+	}
+	private final static Logger LOGGER = Logger.getLogger("Minecraft");
+	private final transient Map<String, Integer> items = new HashMap<String, Integer>();
+	private final transient Map<String, Short> durabilities = new HashMap<String, Short>();
+
+	public void reloadConfig()
+	{
+		final File file = new File(ess.getDataFolder(), "items.csv");
 
 		if (!file.exists())
 		{
-			file.createNewFile();
-			InputStream res = ItemDb.class.getResourceAsStream("/items.csv");
+			final InputStream res = ItemDb.class.getResourceAsStream("/items.csv");
 			FileWriter tx = null;
 			try
 			{
@@ -40,6 +41,11 @@ public final class ItemDb
 					tx.write(i);
 				}
 				tx.flush();
+			}
+			catch (IOException ex)
+			{
+				LOGGER.log(Level.SEVERE, Util.i18n("itemsCsvNotLoaded"), ex);
+				return;
 			}
 			finally
 			{
@@ -63,52 +69,67 @@ public final class ItemDb
 			}
 		}
 
-		BufferedReader rx = new BufferedReader(new FileReader(file));
+		BufferedReader rx = null;
 		try
 		{
+			rx = new BufferedReader(new FileReader(file));
+			durabilities.clear();
 			items.clear();
 
 			for (int i = 0; rx.ready(); i++)
 			{
 				try
 				{
-					String line = rx.readLine().trim().toLowerCase();
+					final String line = rx.readLine().trim().toLowerCase();
 					if (line.startsWith("#"))
 					{
 						continue;
 					}
 
-					String[] parts = line.split("[^a-z0-9]");
+					final String[] parts = line.split("[^a-z0-9]");
 					if (parts.length < 2)
 					{
 						continue;
 					}
 
-					int numeric = Integer.parseInt(parts[1]);
+					final int numeric = Integer.parseInt(parts[1]);
 
 					durabilities.put(parts[0].toLowerCase(), parts.length > 2 && !parts[2].equals("0") ? Short.parseShort(parts[2]) : 0);
 					items.put(parts[0].toLowerCase(), numeric);
 				}
 				catch (Exception ex)
 				{
-					logger.warning(Util.format("parseError", fname, i));
+					LOGGER.warning(Util.format("parseError", "items.csv", i));
 				}
 			}
 		}
+		catch (IOException ex)
+		{
+			LOGGER.log(Level.SEVERE, Util.i18n("itemsCsvNotLoaded"), ex);
+		}
 		finally
 		{
-			rx.close();
+			if (rx != null) {
+				try
+				{
+					rx.close();
+				}
+				catch (IOException ex)
+				{
+					LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+				}
+			}
 		}
 	}
 
-	public static ItemStack get(String id, int quantity) throws Exception
+	public ItemStack get(final String id, final int quantity) throws Exception
 	{
-		ItemStack retval = get(id.toLowerCase());
+		final ItemStack retval = get(id.toLowerCase());
 		retval.setAmount(quantity);
 		return retval;
 	}
 
-	public static ItemStack get(String id) throws Exception
+	public ItemStack get(final String id) throws Exception
 	{
 		int itemid = 0;
 		String itemname = null;
@@ -127,11 +148,11 @@ public final class ItemDb
 			itemname = id.split("[:+',;.]")[0].toLowerCase();
 			metaData = Short.parseShort(id.split("[:+',;.]")[1]);
 		}
-		else 
+		else
 		{
 			itemname = id.toLowerCase();
 		}
-		
+
 		if (itemname != null)
 		{
 			if (items.containsKey(itemname))
@@ -148,13 +169,13 @@ public final class ItemDb
 			}
 		}
 
-		Material mat = Material.getMaterial(itemid);
+		final Material mat = Material.getMaterial(itemid);
 		if (mat == null)
 		{
 			throw new Exception(Util.format("unknownItemId", itemid));
 		}
-		ItemStack retval = new ItemStack(mat);
-		retval.setAmount(Essentials.getStatic().getSettings().getDefaultStackSize());
+		final ItemStack retval = new ItemStack(mat);
+		retval.setAmount(ess.getSettings().getDefaultStackSize());
 		retval.setDurability(metaData);
 		return retval;
 	}

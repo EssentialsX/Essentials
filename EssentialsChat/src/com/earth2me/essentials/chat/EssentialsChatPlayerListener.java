@@ -1,6 +1,5 @@
 package com.earth2me.essentials.chat;
 
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
@@ -12,7 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
-import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
@@ -22,19 +20,14 @@ import org.mcteam.factions.Factions;
 public class EssentialsChatPlayerListener extends PlayerListener
 {
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
-	private final transient IEssentials ess = Essentials.getStatic();
+	private final transient IEssentials ess;
 	private final transient Server server;
 	private static Factions factions = null;
 
-	public EssentialsChatPlayerListener(final Server server)
+	public EssentialsChatPlayerListener(final Server server, final IEssentials ess)
 	{
 		this.server = server;
-	}
-
-	@Override
-	public void onPlayerJoin(final PlayerJoinEvent event)
-	{
-		final User user = ess.getUser(event.getPlayer());
+		this.ess = ess;
 	}
 
 	@Override

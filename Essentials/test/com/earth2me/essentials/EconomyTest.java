@@ -32,7 +32,7 @@ public class EconomyTest extends TestCase
 		{
 			fail("IOException");
 		}
-		server.addPlayer(new OfflinePlayer(PLAYERNAME));
+		server.addPlayer(new OfflinePlayer(PLAYERNAME, ess));
 	}
 
 	// only one big test, since we use static instances

@@ -3,7 +3,6 @@ package com.earth2me.essentials.signs;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.ItemDb;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.util.HashSet;
@@ -249,7 +248,7 @@ public class EssentialsSign
 		final Double money = trade.getMoney();
 		if (money != null)
 		{
-			sign.setLine(index, Util.formatCurrency(money));
+			sign.setLine(index, Util.formatCurrency(money, ess));
 		}
 	}
 
@@ -266,7 +265,7 @@ public class EssentialsSign
 								   final User player, final IEssentials ess) throws SignException
 	{
 
-		final ItemStack item = getItemStack(sign.getLine(itemIndex), 1);
+		final ItemStack item = getItemStack(sign.getLine(itemIndex), 1, ess);
 		final int amount = Math.min(getIntegerPositive(sign.getLine(amountIndex)), item.getType().getMaxStackSize() * player.getInventory().getSize());
 		if (item.getTypeId() == 0 || amount < 1)
 		{
@@ -311,11 +310,11 @@ public class EssentialsSign
 		}
 	}
 
-	protected final ItemStack getItemStack(final String itemName, final int quantity) throws SignException
+	protected final ItemStack getItemStack(final String itemName, final int quantity, final IEssentials ess) throws SignException
 	{
 		try
 		{
-			final ItemStack item = ItemDb.get(itemName);
+			final ItemStack item = ess.getItemDb().get(itemName);
 			item.setAmount(quantity);
 			return item;
 		}
@@ -384,7 +383,7 @@ public class EssentialsSign
 			}
 			else
 			{
-				final ItemStack stack = getItemStack(item, quantity);
+				final ItemStack stack = getItemStack(item, quantity, ess);
 				sign.setLine(index, quantity + " " + item);
 				return new Trade(stack, ess);
 			}

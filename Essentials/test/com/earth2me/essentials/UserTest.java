@@ -3,7 +3,6 @@ package com.earth2me.essentials;
 import java.io.IOException;
 import junit.framework.TestCase;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.plugin.InvalidDescriptionException;
 
@@ -32,7 +31,7 @@ public class UserTest extends TestCase
 		{
 			fail("IOException");
 		}
-		base1 = server.createPlayer("testPlayer1");
+		base1 = server.createPlayer("testPlayer1", ess);
 		server.addPlayer(base1);
 	}
 
@@ -43,7 +42,7 @@ public class UserTest extends TestCase
 
 	public void testUpdate()
 	{
-		OfflinePlayer base1alt = server.createPlayer(base1.getName());
+		OfflinePlayer base1alt = server.createPlayer(base1.getName(), ess);
 		assertEquals(base1alt, ess.getUser(base1alt).getBase());
 	}
 	
@@ -52,7 +51,7 @@ public class UserTest extends TestCase
 		User user = ess.getUser(base1);
 		Location loc = base1.getLocation();
 		user.setHome();
-		OfflinePlayer base2 = server.createPlayer(base1.getName());
+		OfflinePlayer base2 = server.createPlayer(base1.getName(), ess);
 		User user2 = ess.getUser(base2);
 		Location home = user2.getHome(loc);
 		assertEquals(loc.getWorld().getName(), home.getWorld().getName());

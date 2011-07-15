@@ -5,7 +5,6 @@ import com.earth2me.essentials.Util;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
-import org.bukkit.block.CreatureSpawner;
 import org.bukkit.craftbukkit.block.CraftCreatureSpawner;
 import org.bukkit.entity.CreatureType;
 

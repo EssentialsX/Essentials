@@ -1,9 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.InventoryWorkaround;
-import com.earth2me.essentials.ItemDb;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
@@ -69,7 +67,7 @@ public class Commandsell extends EssentialsCommand
 		}
 		if (is == null)
 		{
-			is = ItemDb.get(args[0]);
+			is = ess.getItemDb().get(args[0]);
 		}
 		sellItem(user, is, args, false);
 	}
@@ -157,8 +155,8 @@ public class Commandsell extends EssentialsCommand
 		user.updateInventory();
 		Trade.log("Command", "Sell", "Item", user.getName(), new Trade(ris, ess), user.getName(), new Trade(worth*amount, ess), ess);
 		user.giveMoney(worth * amount);
-		user.sendMessage(Util.format("itemSold", Util.formatCurrency(worth * amount), amount, Util.formatCurrency(worth)));
-		logger.log(Level.INFO, Util.format("itemSoldConsole", user.getDisplayName(), is.getType().toString().toLowerCase(), Util.formatCurrency(worth * amount), amount, Util.formatCurrency(worth)));
+		user.sendMessage(Util.format("itemSold", Util.formatCurrency(worth * amount, ess), amount, Util.formatCurrency(worth, ess)));
+		logger.log(Level.INFO, Util.format("itemSoldConsole", user.getDisplayName(), is.getType().toString().toLowerCase(), Util.formatCurrency(worth * amount, ess), amount, Util.formatCurrency(worth, ess)));
 
 	}
 }

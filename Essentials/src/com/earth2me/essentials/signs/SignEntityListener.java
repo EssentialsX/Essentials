@@ -3,7 +3,6 @@ package com.earth2me.essentials.signs;
 import com.earth2me.essentials.IEssentials;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityListener;
 

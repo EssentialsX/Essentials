@@ -2,7 +2,6 @@ package com.earth2me.essentials;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;

@@ -1,6 +1,6 @@
 package com.earth2me.essentials.chat;
 
-import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.Util;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,17 +17,17 @@ public class EssentialsChat extends JavaPlugin
 	public void onEnable()
 	{
 		final PluginManager pluginManager = getServer().getPluginManager();
+		final IEssentials ess = (IEssentials)pluginManager.getPlugin("Essentials");
 
 		EssentialsChatPlayerListener.checkFactions(pluginManager);
 
-		final EssentialsChatPlayerListener playerListener = new EssentialsChatPlayerListener(getServer());
-		pluginManager.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Lowest, this);
+		final EssentialsChatPlayerListener playerListener = new EssentialsChatPlayerListener(getServer(), ess);
 		pluginManager.registerEvent(Type.PLAYER_CHAT, playerListener, Priority.Highest, this);
-		if (!this.getDescription().getVersion().equals(Essentials.getStatic().getDescription().getVersion()))
+		if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion()))
 		{
 			LOGGER.log(Level.WARNING, Util.i18n("versionMismatchAll"));
 		}
-		LOGGER.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), Essentials.AUTHORS));
+		LOGGER.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
 	}
 
 	public void onDisable()

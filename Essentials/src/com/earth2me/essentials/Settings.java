@@ -13,12 +13,14 @@ import org.bukkit.inventory.ItemStack;
 
 public class Settings implements IConf
 {
-	private final EssentialsConf config;
+	private final transient EssentialsConf config;
 	private final static Logger logger = Logger.getLogger("Minecraft");
+	private final transient IEssentials ess;
 
-	public Settings(File dataFolder)
+	public Settings(IEssentials ess)
 	{
-		config = new EssentialsConf(new File(dataFolder, "config.yml"));
+		this.ess = ess;
+		config = new EssentialsConf(new File(ess.getDataFolder(), "config.yml"));
 		config.setTemplateName("/config.yml");
 		config.load();
 	}
@@ -275,7 +277,7 @@ public class Settings implements IConf
 			}
 			ItemStack is;
 			try {
-				is = ItemDb.get(itemName);
+				is = ess.getItemDb().get(itemName);
 				epItemSpwn.add(is.getTypeId());
 			} catch (Exception ex) {
 				logger.log(Level.SEVERE, Util.format("unknownItemInList", itemName, "item-spawn-blacklist"));
@@ -357,7 +359,7 @@ public class Settings implements IConf
 			}
 			ItemStack itemStack;
 			try {
-				itemStack = ItemDb.get(itemName);
+				itemStack = ess.getItemDb().get(itemName);
 				list.add(itemStack.getTypeId());
 			} catch (Exception ex) {
 				logger.log(Level.SEVERE, Util.format("unknownItemInList", itemName, configName));

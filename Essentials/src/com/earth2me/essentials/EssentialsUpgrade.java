@@ -192,7 +192,7 @@ public class EssentialsUpgrade
 		usersConfig.load();
 		for (String username : usersConfig.getKeys(null))
 		{
-			User user = new User(new OfflinePlayer(username), ess);
+			User user = new User(new OfflinePlayer(username, ess), ess);
 			String nickname = usersConfig.getString(username + ".nickname");
 			if (nickname != null && !nickname.isEmpty() && !nickname.equals(username))
 			{

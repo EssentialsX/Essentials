@@ -60,7 +60,7 @@ public class Commandbalancetop extends EssentialsCommand
 			{
 				break;
 			}
-			sender.sendMessage(entry.getKey().getDisplayName() + ", " + Util.formatCurrency(entry.getValue()));
+			sender.sendMessage(entry.getKey().getDisplayName() + ", " + Util.formatCurrency(entry.getValue(), ess));
 			count++;
 		}
 	}

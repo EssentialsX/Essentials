@@ -29,14 +29,15 @@ import org.bukkit.util.Vector;
 public class OfflinePlayer implements Player
 {
 	private final String name;
-	final IEssentials ess = Essentials.getStatic();
+	final transient IEssentials ess;
 	private Location location = new Location(null, 0, 0, 0, 0, 0);
 	private World world = null;
 	private UUID uniqueId = UUID.randomUUID();
 
-	public OfflinePlayer(String name)
+	public OfflinePlayer(String name, IEssentials ess)
 	{
 		this.name = name;
+		this.ess = ess;
 	}
 
 	public boolean isOnline()

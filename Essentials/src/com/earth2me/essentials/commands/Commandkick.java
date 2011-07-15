@@ -4,7 +4,6 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
-import org.bukkit.ChatColor;
 
 
 public class Commandkick extends EssentialsCommand

@@ -1,6 +1,5 @@
 package com.earth2me.essentials.protect;
 
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
@@ -34,8 +33,8 @@ public class EssentialsProtect extends JavaPlugin implements IConf, IProtect
 
 	public void onEnable()
 	{
-		ess = Essentials.getStatic();
 		final PluginManager pm = this.getServer().getPluginManager();
+		ess = (IEssentials)pm.getPlugin("Essentials");
 
 		final EssentialsProtectPlayerListener playerListener = new EssentialsProtectPlayerListener(this);
 		pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Priority.Low, this);
@@ -64,7 +63,7 @@ public class EssentialsProtect extends JavaPlugin implements IConf, IProtect
 		{
 			LOGGER.log(Level.WARNING, Util.i18n("versionMismatchAll"));
 		}
-		LOGGER.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), Essentials.AUTHORS));
+		LOGGER.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
 	}
 
 	@Override

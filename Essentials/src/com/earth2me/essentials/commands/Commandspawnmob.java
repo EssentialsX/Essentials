@@ -1,6 +1,5 @@
 package com.earth2me.essentials.commands;
 
-import net.minecraft.server.WorldServer;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import com.earth2me.essentials.User;
@@ -13,7 +12,6 @@ import net.minecraft.server.PathEntity;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.entity.CraftCreeper;
 import org.bukkit.craftbukkit.entity.CraftSheep;
 import org.bukkit.craftbukkit.entity.CraftSlime;

@@ -1,6 +1,5 @@
 package com.earth2me.essentials.geoip;
 
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.EssentialsConf;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.IEssentials;
@@ -33,9 +32,11 @@ public class EssentialsGeoIPPlayerListener extends PlayerListener implements ICo
 	File databaseFile;
 	File dataFolder;
 	EssentialsConf config;
+	private final transient IEssentials ess;
 
-	public EssentialsGeoIPPlayerListener(File dataFolder)
+	public EssentialsGeoIPPlayerListener(File dataFolder, IEssentials ess)
 	{
+		this.ess = ess;
 		this.dataFolder = dataFolder;
 		this.config = new EssentialsConf(new File(dataFolder, "config.yml"));
 		config.setTemplateName("/config.yml", EssentialsGeoIP.class);
@@ -45,7 +46,6 @@ public class EssentialsGeoIPPlayerListener extends PlayerListener implements ICo
 	@Override
 	public void onPlayerJoin(PlayerJoinEvent event)
 	{
-		IEssentials ess = Essentials.getStatic();
 		User u = ess.getUser(event.getPlayer());
 		if (u.isAuthorized("essentials.geoip.hide"))
 		{

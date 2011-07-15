@@ -1,37 +1,45 @@
 package com.earth2me.essentials;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import junit.framework.TestCase;
+import org.bukkit.World.Environment;
+import org.bukkit.plugin.InvalidDescriptionException;
 
 
 public class UtilTest extends TestCase
 {
-	public void testFDDnow() {
+	private final Essentials ess;
+	private final FakeServer server;
+
+	public UtilTest()
+	{
+		ess = new Essentials();
+		server = new FakeServer();
+		server.createWorld("testWorld", Environment.NORMAL);
 		try
 		{
-			Util.updateLocale("en_US", File.createTempFile("test1", "").getParentFile());
+			ess.setupForTesting(server);
+		}
+		catch (InvalidDescriptionException ex)
+		{
+			fail("InvalidDescriptionException");
 		}
 		catch (IOException ex)
 		{
-			fail(ex.getMessage());
+			fail("IOException");
 		}
+		Util.updateLocale("en_US", ess);
+	}	
+	
+	public void testFDDnow() {
 		Calendar c = new GregorianCalendar();
 		String resp = Util.formatDateDiff(c, c);
 		assertEquals(resp, "now");
 	}
 	
 	public void testFDDfuture() {
-		try
-		{
-			Util.updateLocale("en_US", File.createTempFile("test2", "").getParentFile());
-		}
-		catch (IOException ex)
-		{
-			fail(ex.getMessage());
-		}
 		Calendar a, b;
 		a = new GregorianCalendar(2010, 1, 1, 10, 0, 0);
 		b = new GregorianCalendar(2010, 1, 1, 10, 0, 1);
@@ -99,14 +107,6 @@ public class UtilTest extends TestCase
 	}
 	
 	public void testFDDpast() {
-		try
-		{
-			Util.updateLocale("en_US", File.createTempFile("test3", "").getParentFile());
-		}
-		catch (IOException ex)
-		{
-			fail(ex.getMessage());
-		}
 		Calendar a, b;
 		a = new GregorianCalendar(2010, 1, 1, 10, 0, 0);
 		b = new GregorianCalendar(2010, 1, 1, 9, 59, 59);

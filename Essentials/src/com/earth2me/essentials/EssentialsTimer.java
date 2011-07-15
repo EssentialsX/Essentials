@@ -3,7 +3,6 @@ package com.earth2me.essentials;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
-import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.entity.Player;
 
 
@@ -25,7 +24,7 @@ public class EssentialsTimer implements Runnable, IConf
 				continue;
 			}
 			String name = string.substring(0, string.length()-4);
-			User u = ess.getUser(new OfflinePlayer(name));
+			User u = ess.getUser(new OfflinePlayer(name, ess));
 			allUsers.add(u);
 		}
 	}

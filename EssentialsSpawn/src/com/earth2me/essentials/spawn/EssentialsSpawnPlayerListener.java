@@ -1,6 +1,5 @@
 package com.earth2me.essentials.spawn;
 
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
@@ -14,10 +13,16 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 
 public class EssentialsSpawnPlayerListener extends PlayerListener
 {
+	private final transient IEssentials ess;
+
+	public EssentialsSpawnPlayerListener(IEssentials ess)
+	{
+		this.ess = ess;
+	}
+
 	@Override
 	public void onPlayerRespawn(final PlayerRespawnEvent event)
 	{
-		final IEssentials ess = Essentials.getStatic();
 		final User user = ess.getUser(event.getPlayer());
 
 		try
@@ -47,7 +52,6 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
-		final IEssentials ess = Essentials.getStatic();
 		final User user = ess.getUser(event.getPlayer());
 
 		if (!user.isNew())

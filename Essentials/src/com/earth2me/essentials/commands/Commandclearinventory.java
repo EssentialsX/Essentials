@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.util.List;
-import org.bukkit.ChatColor;
 
 
 public class Commandclearinventory extends EssentialsCommand

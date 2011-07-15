@@ -1,18 +1,15 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.register.payment.Methods;
-import java.io.File;
-import java.util.List;
 import java.util.Map;
-import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.scheduler.CraftScheduler;
-import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.Plugin;
 
 
-public interface IEssentials
+public interface IEssentials extends Plugin
 {
 	void addReloadListener(IConf listener);
 
@@ -47,12 +44,6 @@ public interface IEssentials
 	Spawn getSpawn();
 
 	Methods getPaymentMethod();
-	
-	Server getServer();
-
-	File getDataFolder();
-
-	PluginDescriptionFile getDescription();
 
 	int scheduleAsyncDelayedTask(Runnable run);
 
@@ -71,4 +62,6 @@ public interface IEssentials
 	void showError(final CommandSender sender, final Throwable exception, final String commandLabel);
 
 	Map<String, User> getAllUsers();
+	
+	ItemDb getItemDb();
 }

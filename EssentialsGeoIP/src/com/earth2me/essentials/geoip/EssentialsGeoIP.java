@@ -1,6 +1,7 @@
 package com.earth2me.essentials.geoip;
 
 import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.Util;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,14 +27,15 @@ public class EssentialsGeoIP extends JavaPlugin
 	@Override
 	public void onEnable()
 	{
-		PluginManager pm = getServer().getPluginManager();
-		EssentialsGeoIPPlayerListener playerListener = new EssentialsGeoIPPlayerListener(getDataFolder());
+		final PluginManager pm = getServer().getPluginManager();
+		final IEssentials ess = (IEssentials)pm.getPlugin("Essentials");
+		final EssentialsGeoIPPlayerListener playerListener = new EssentialsGeoIPPlayerListener(getDataFolder(), ess);
 		pm.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
 
-		if (!this.getDescription().getVersion().equals(Essentials.getStatic().getDescription().getVersion())) {
+		if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion())) {
 			logger.log(Level.WARNING, Util.i18n("versionMismatchAll"));
 		}
-		logger.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), Essentials.AUTHORS));
+		logger.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
 		
 		logger.log(Level.INFO, "This product includes GeoLite data created by MaxMind, available from http://www.maxmind.com/.");
 	}

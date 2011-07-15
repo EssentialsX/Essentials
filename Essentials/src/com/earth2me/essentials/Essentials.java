@@ -17,6 +17,7 @@
  */
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.api.Economy;
 import com.earth2me.essentials.commands.EssentialsCommand;
 import java.io.*;
 import java.util.*;
@@ -45,12 +46,10 @@ import org.bukkit.plugin.java.*;
 
 public class Essentials extends JavaPlugin implements IEssentials
 {
-	public static final String AUTHORS = "Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans and Xeology";
 	public static final int BUKKIT_VERSION = 974;
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private transient Settings settings;
 	private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
-	private static Essentials instance = null;
 	private transient Spawn spawn;
 	private transient Jail jail;
 	private transient Warps warps;
@@ -58,17 +57,13 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private transient List<IConf> confList;
 	private transient Backup backup;
 	private transient BanWorkaround bans;
+	private transient ItemDb itemDb;
 	private transient final Map<String, User> users = new HashMap<String, User>();
 	private transient EssentialsUpdateTimer updateTimer;
 	private transient final Methods paymentMethod = new Methods();
 	private transient final static boolean enableErrorLogging = false;
 	private transient final EssentialsErrorHandler errorHandler = new EssentialsErrorHandler();
 	private transient IPermissionsHandler permissionsHandler;
-
-	public static IEssentials getStatic()
-	{
-		return instance;
-	}
 
 	public Settings getSettings()
 	{
@@ -89,14 +84,9 @@ public class Essentials extends JavaPlugin implements IEssentials
 		LOGGER.log(Level.INFO, Util.i18n("usingTempFolderForTesting"));
 		LOGGER.log(Level.INFO, dataFolder.toString());
 		this.initialize(null, server, new PluginDescriptionFile(new FileReader(new File("src" + File.separator + "plugin.yml"))), dataFolder, null, null);
-		settings = new Settings(dataFolder);
+		settings = new Settings(this);
 		permissionsHandler = new ConfigPermissionsHandler(this);
-		setStatic();
-	}
-
-	public void setStatic()
-	{
-		instance = this;
+		Economy.setEss(this);
 	}
 
 	public void onEnable()
@@ -110,14 +100,13 @@ public class Essentials extends JavaPlugin implements IEssentials
 		{
 			LOGGER.addHandler(errorHandler);
 		}
-		setStatic();
 		EssentialsUpgrade upgrade = new EssentialsUpgrade(this.getDescription().getVersion(), this);
 		upgrade.beforeSettings();
 		confList = new ArrayList<IConf>();
-		settings = new Settings(this.getDataFolder());
+		settings = new Settings(this);
 		confList.add(settings);
 		upgrade.afterSettings();
-		Util.updateLocale(settings.getLocale(), this.getDataFolder());
+		Util.updateLocale(settings.getLocale(), this);
 		spawn = new Spawn(getServer(), this.getDataFolder());
 		confList.add(spawn);
 		warps = new Warps(getServer(), this.getDataFolder());
@@ -126,6 +115,8 @@ public class Essentials extends JavaPlugin implements IEssentials
 		confList.add(worth);
 		bans = new BanWorkaround(this);
 		confList.add(bans);
+		itemDb = new ItemDb(this);
+		confList.add(itemDb);
 		reload();
 		backup = new Backup(this);
 
@@ -230,17 +221,17 @@ public class Essentials extends JavaPlugin implements IEssentials
 
 		final EssentialsTimer timer = new EssentialsTimer(this);
 		getScheduler().scheduleSyncRepeatingTask(this, timer, 1, 50);
+		Economy.setEss(this);
 		if (enableErrorLogging)
 		{
 			updateTimer = new EssentialsUpdateTimer(this);
 			getScheduler().scheduleAsyncRepeatingTask(this, updateTimer, 50, 50 * 60 * (this.getDescription().getVersion().startsWith("Dev") ? 60 : 360));
 		}
-		LOGGER.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), AUTHORS));
+		LOGGER.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), Util.joinList(this.getDescription().getAuthors())));
 	}
 
 	public void onDisable()
 	{
-		instance = null;
 		Trade.closeLog();
 		LOGGER.removeHandler(errorHandler);
 	}
@@ -254,7 +245,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 			iConf.reloadConfig();
 		}
 
-		Util.updateLocale(settings.getLocale(), this.getDataFolder());
+		Util.updateLocale(settings.getLocale(), this);
 
 		for (User user : users.values())
 		{
@@ -263,15 +254,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 
 		// for motd
 		getConfiguration().load();
-
-		try
-		{
-			ItemDb.load(getDataFolder(), "items.csv");
-		}
-		catch (Exception ex)
-		{
-			LOGGER.log(Level.WARNING, Util.i18n("itemsCsvNotLoaded"), ex);
-		}
 	}
 
 	public String[] getMotd(CommandSender sender, String def)
@@ -373,7 +355,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args)
 	{
-		return onCommandEssentials(sender, command, commandLabel, args, Essentials.class.getClassLoader(), "com.earth2me.essentials.commands.Command", "essentials.");
+		return onCommandEssentials(sender, command, commandLabel, args, Thread.currentThread().getContextClassLoader(), "com.earth2me.essentials.commands.Command", "essentials.");
 	}
 
 	public boolean onCommandEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath, String permissionPrefix)
@@ -576,7 +558,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		File userFile = new File(userFolder, Util.sanitizeFileName(name) + ".yml");
 		if (userFile.exists())
 		{	//Users do not get offline changes saved without being reproccessed as Users! ~ Xeology :)
-			return getUser((Player)new OfflinePlayer(name));
+			return getUser((Player)new OfflinePlayer(name, this));
 
 		}
 		return null;
@@ -659,5 +641,10 @@ public class Essentials extends JavaPlugin implements IEssentials
 	public BanWorkaround getBans()
 	{
 		return bans;
+	}
+	
+	public ItemDb getItemDb()
+	{
+		return itemDb;
 	}
 }
