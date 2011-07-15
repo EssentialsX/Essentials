@@ -472,4 +472,14 @@ public class Util
         }));
         return keys;
     }
+	 
+ public static List<Object> getKeysFromValue(Map<?, ?> map, Object value){
+    List <Object>list = new ArrayList<Object>();
+    for(Object o:map.keySet()){
+        if(map.get(o).equals(value)) {
+            list.add(o);
+        }
+    }
+    return list;
+  }
 }

@@ -3,9 +3,12 @@ package com.earth2me.essentials.commands;
 import org.bukkit.Server;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -35,26 +38,20 @@ public class Commandbalancetop extends EssentialsCommand
 				//catch it because they tried to enter a string not number.
 			}
 		}
-		HashMap<User, Double> balances = new HashMap<User, Double>();
+		Map<Double, User> balances = new TreeMap<Double, User>(Collections.reverseOrder());
 		for (Map.Entry<String, User> u : ess.getAllUsers().entrySet())
 		{
-			balances.put(u.getValue(), u.getValue().getMoney());
+			balances.put(u.getValue().getMoney(), u.getValue());
 		}
 		int count = 0;
-		server.broadcastMessage(Util.format("balanceTop", max));
-		for (Iterator i = Util.sortMapByValueDesc(balances).iterator(); i.hasNext();)
+		sender.sendMessage(Util.format("balanceTop", max));
+		for (Map.Entry<Double, User> ba : balances.entrySet())
 		{
 			if (count == max)
 			{
 				break;
 			}
-			User key = (User)i.next();
-			
-			server.broadcastMessage(key.getDisplayName() + ", " + Util.formatCurrency(balances.get(key)));
-			if(!(sender instanceof Player))
-			{
-			sender.sendMessage(key.getDisplayName() + ", " + Util.formatCurrency(balances.get(key)));
-			}
+			sender.sendMessage(ba.getValue().getDisplayName() + ", " + Util.formatCurrency(ba.getKey()));
 			count++;
 		}
 	}
