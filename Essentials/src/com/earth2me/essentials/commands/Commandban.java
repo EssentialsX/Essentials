@@ -20,28 +20,26 @@ public class Commandban extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-
-		if (server.matchPlayer(args[0]).isEmpty())
+		final User player = getPlayer(server, args, 0, true);
+		if (player.isAuthorized("essentials.ban.exempt"))
 		{
-			ess.getBans().banByName(args[0]);
-			server.broadcastMessage(Util.format("playerBanned", args[0], Util.i18n("defaultBanReason")));
+			sender.sendMessage(Util.i18n("banExempt"));
+			return;
+		}
+		
+		String banReason;
+		if (args.length > 1)
+		{
+			banReason = getFinalArg(args, 1);
+			player.setBanReason(commandLabel);
 		}
 		else
 		{
-			final User player = ess.getUser(server.matchPlayer(args[0]).get(0));
-			String banReason;
-			if (args.length > 1)
-			{
-				banReason = getFinalArg(args, 1);
-				player.setBanReason(commandLabel);
-			}
-			else
-			{
-				banReason = Util.i18n("defaultBanReason");
-			}
-			player.kickPlayer(banReason);
-			ess.getBans().banByName(args[0]);
-			server.broadcastMessage(Util.format("playerBanned", player.getName(), banReason));
+			banReason = Util.i18n("defaultBanReason");
 		}
+		player.kickPlayer(banReason);
+		ess.getBans().banByName(player.getName());
+		server.broadcastMessage(Util.format("playerBanned", player.getName(), banReason));
 	}
 }
+

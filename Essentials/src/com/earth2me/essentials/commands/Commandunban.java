@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -20,7 +21,8 @@ public class Commandunban extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		ess.getBans().unbanByName(args[0]);
+		User u = getPlayer(server, args, 0, true);
+		ess.getBans().unbanByName(u.getName());
 		sender.sendMessage(Util.i18n("unbannedPlayer"));
 	}
 }
