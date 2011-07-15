@@ -25,7 +25,7 @@ public class Commandban extends EssentialsCommand
 		if (server.matchPlayer(args[0]).isEmpty())
 		{
 			((CraftServer)server).getHandle().a(args[0]);
-			sender.sendMessage(Util.format("playerBanned", args[0]));
+			server.broadcastMessage(Util.format("playerBanned", args[0], Util.i18n("defaultBanReason")));
 		}
 		else
 		{
@@ -42,7 +42,7 @@ public class Commandban extends EssentialsCommand
 			}
 			player.kickPlayer(banReason);
 			((CraftServer)server).getHandle().a(player.getName());
-			sender.sendMessage(Util.format("playerBanned", player.getName()));
+			server.broadcastMessage(Util.format("playerBanned", player.getName(), banReason));
 		}
 		ess.loadBanList();
 	}

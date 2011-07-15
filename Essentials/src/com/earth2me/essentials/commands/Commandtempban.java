@@ -45,7 +45,7 @@ public class Commandtempban extends EssentialsCommand
 		p.setBanTimeout(banTimestamp);
 		p.kickPlayer(banReason);
 		((CraftServer)server).getHandle().a(p.getName());
-		sender.sendMessage(Util.format("playerBanned", p.getName()));
+		server.broadcastMessage(Util.format("playerBanned", p.getName(), banReason));
 		Essentials.getStatic().loadBanList();
 	}
 }

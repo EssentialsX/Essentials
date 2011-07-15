@@ -34,6 +34,8 @@ public class Commandkick extends EssentialsCommand
 		}
 
 		charge(sender);
-		u.kickPlayer(args.length > 1 ? getFinalArg(args, 1) : Util.i18n("kickDefault"));
+		final String kickReason = args.length > 1 ? getFinalArg(args, 1) : Util.i18n("kickDefault");
+		u.kickPlayer(kickReason);
+		server.broadcastMessage(Util.format("playerKicked", u.getName(), kickReason));
 	}
 }
