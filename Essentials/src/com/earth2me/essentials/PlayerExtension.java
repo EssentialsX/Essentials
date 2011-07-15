@@ -19,12 +19,12 @@ public class PlayerExtension extends PlayerWrapper
 
 	public boolean isBanned()
 	{
-		return ess.getBans().contains(getName());
+		return ess.getBans().isNameBanned(this.getName());
 	}
 
 	public boolean isIpBanned()
 	{
-		return ess.getBannedIps().contains(getAddress().getAddress().toString().replace("/", ""));
+		return ess.getBans().isIpBanned(getAddress().getAddress().getHostAddress());
 	}
 
 	public float getCorrectedYaw()
