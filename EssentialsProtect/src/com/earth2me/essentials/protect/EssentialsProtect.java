@@ -26,7 +26,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class EssentialsProtect extends JavaPlugin implements IConf, IProtect
 {
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
-
 	private final transient Map<ProtectConfig, Boolean> settingsBoolean = new EnumMap<ProtectConfig, Boolean>(ProtectConfig.class);
 	private final transient Map<ProtectConfig, String> settingsString = new EnumMap<ProtectConfig, String>(ProtectConfig.class);
 	private final transient Map<ProtectConfig, List<Integer>> settingsList = new EnumMap<ProtectConfig, List<Integer>>(ProtectConfig.class);
@@ -79,33 +78,37 @@ public class EssentialsProtect extends JavaPlugin implements IConf, IProtect
 	public void alert(final User user, final String item, final String type)
 	{
 		final Location loc = user.getLocation();
+		final String warnMessage = Util.format("alertFormat", user.getName(), type, item,
+											   loc.getWorld().getName() + "," + loc.getBlockX() + ","
+											   + loc.getBlockY() + "," + loc.getBlockZ());
+		LOGGER.log(Level.WARNING, warnMessage);
 		for (Player p : this.getServer().getOnlinePlayers())
 		{
 			final User alertUser = ess.getUser(p);
 			if (alertUser.isAuthorized("essentials.protect.alerts"))
 			{
-				alertUser.sendMessage(Util.format("alertFormat", user.getName(), type, item, formatCoords(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())));
+				alertUser.sendMessage(warnMessage);
 			}
 		}
-	}
-
-	public static String formatCoords(final int x, final int y, final int z)
-	{
-		return x + "," + y + "," + z;
 	}
 
 	public void reloadConfig()
 	{
 		for (ProtectConfig protectConfig : ProtectConfig.values())
 		{
-			if (protectConfig.isList()) {
+			if (protectConfig.isList())
+			{
 				settingsList.put(protectConfig, ess.getSettings().getProtectList(protectConfig.getConfigName()));
-			} else if (protectConfig.isString()) {
+			}
+			else if (protectConfig.isString())
+			{
 				settingsString.put(protectConfig, ess.getSettings().getProtectString(protectConfig.getConfigName()));
-			} else {
+			}
+			else
+			{
 				settingsBoolean.put(protectConfig, ess.getSettings().getProtectBoolean(protectConfig.getConfigName(), protectConfig.getDefaultValueBoolean()));
 			}
-			
+
 		}
 
 		if (getSettingString(ProtectConfig.datatype).equalsIgnoreCase("mysql"))
@@ -144,14 +147,14 @@ public class EssentialsProtect extends JavaPlugin implements IConf, IProtect
 	{
 		return storage;
 	}
-	
+
 	@Override
 	public boolean getSettingBool(final ProtectConfig protectConfig)
 	{
 		final Boolean bool = settingsBoolean.get(protectConfig);
 		return bool == null ? protectConfig.getDefaultValueBoolean() : bool;
 	}
-	
+
 	@Override
 	public String getSettingString(final ProtectConfig protectConfig)
 	{
