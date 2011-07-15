@@ -20,7 +20,7 @@ public class Commandbalance extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		sender.sendMessage(Util.format("balance", Util.formatCurrency(getPlayer(server, args, 0).getMoney())));
+		sender.sendMessage(Util.format("balance", Util.formatCurrency(getPlayer(server, args, 0, true).getMoney())));
 	}
 
 	@Override
