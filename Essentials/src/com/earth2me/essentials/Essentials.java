@@ -189,8 +189,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 		pm.registerEvent(Type.PLAYER_ANIMATION, playerListener, Priority.High, this);
 
 		final EssentialsBlockListener blockListener = new EssentialsBlockListener(this);
-		//pm.registerEvent(Type.SIGN_CHANGE, blockListener, Priority.Low, this);
-		//pm.registerEvent(Type.BLOCK_BREAK, blockListener, Priority.Lowest, this);
 		pm.registerEvent(Type.BLOCK_PLACE, blockListener, Priority.Lowest, this);
 
 		final SignBlockListener signBlockListener = new SignBlockListener(this);
@@ -214,11 +212,12 @@ public class Essentials extends JavaPlugin implements IEssentials
 		jail = new Jail(this);
 		final JailPlayerListener jailPlayerListener = new JailPlayerListener(this);
 		confList.add(jail);
-		pm.registerEvent(Type.BLOCK_BREAK, jail, Priority.High, this);
-		pm.registerEvent(Type.BLOCK_DAMAGE, jail, Priority.High, this);
-		pm.registerEvent(Type.BLOCK_PLACE, jail, Priority.High, this);
-		pm.registerEvent(Type.PLAYER_INTERACT, jailPlayerListener, Priority.High, this);
-		//attachEcoListeners();
+		pm.registerEvent(Type.BLOCK_BREAK, jail, Priority.Low, this);
+		pm.registerEvent(Type.BLOCK_DAMAGE, jail, Priority.Low, this);
+		pm.registerEvent(Type.BLOCK_PLACE, jail, Priority.Low, this);
+		pm.registerEvent(Type.PLAYER_INTERACT, jailPlayerListener, Priority.Low, this);
+		pm.registerEvent(Type.PLAYER_RESPAWN, jailPlayerListener, Priority.High, this);
+		pm.registerEvent(Type.PLAYER_TELEPORT, jailPlayerListener, Priority.High, this);
 
 		if (settings.isNetherEnabled() && getServer().getWorlds().size() < 2)
 		{
@@ -597,16 +596,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 		{
 			logger.log(Level.SEVERE, Util.i18n("bannedIpsFileError"), ex);
 		}
-	}
-
-	private void attachEcoListeners()
-	{
-		//PluginManager pm = getServer().getPluginManager();
-		//EssentialsEcoBlockListener ecoBlockListener = new EssentialsEcoBlockListener(this);
-		//EssentialsEcoPlayerListener ecoPlayerListener = new EssentialsEcoPlayerListener(this);
-		//pm.registerEvent(Type.PLAYER_INTERACT, ecoPlayerListener, Priority.High, this);
-		//pm.registerEvent(Type.BLOCK_BREAK, ecoBlockListener, Priority.High, this);
-		//pm.registerEvent(Type.SIGN_CHANGE, ecoBlockListener, Priority.Monitor, this);
 	}
 
 	public CraftScheduler getScheduler()

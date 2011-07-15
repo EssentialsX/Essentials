@@ -9,7 +9,6 @@ import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerAnimationEvent;
@@ -32,34 +31,22 @@ import org.bukkit.inventory.ItemStack;
 
 public class EssentialsPlayerListener extends PlayerListener
 {
-	private static final Logger logger = Logger.getLogger("Minecraft");
-	private final Server server;
-	private final IEssentials ess;
-	private final EssentialsBlockListener essBlockListener;
+	private static final Logger LOGGER = Logger.getLogger("Minecraft");
+	private final transient Server server;
+	private final transient IEssentials ess;
 
-	public EssentialsPlayerListener(IEssentials parent)
+	public EssentialsPlayerListener(final IEssentials parent)
 	{
 		this.ess = parent;
 		this.server = parent.getServer();
-		essBlockListener = new EssentialsBlockListener(parent);
 	}
 
 	@Override
-	public void onPlayerRespawn(PlayerRespawnEvent event)
+	public void onPlayerRespawn(final PlayerRespawnEvent event)
 	{
-		User user = ess.getUser(event.getPlayer());
+		final User user = ess.getUser(event.getPlayer());
 		user.setDisplayName(user.getNick());
 		updateCompass(user);
-		if (user.isJailed() && user.getJail() != null && !user.getJail().isEmpty())
-		{
-			try
-			{
-				event.setRespawnLocation(ess.getJail().getJail(user.getJail()));
-			}
-			catch (Exception ex)
-			{
-			}
-		}
 		if (ess.getSettings().changeDisplayName())
 		{
 			user.setDisplayName(user.getNick());
@@ -67,18 +54,18 @@ public class EssentialsPlayerListener extends PlayerListener
 	}
 
 	@Override
-	public void onPlayerChat(PlayerChatEvent event)
+	public void onPlayerChat(final PlayerChatEvent event)
 	{
-		User user = ess.getUser(event.getPlayer());
+		final User user = ess.getUser(event.getPlayer());
 		if (user.isMuted())
 		{
 			event.setCancelled(true);
-			logger.info(Util.format("mutedUserSpeaks", user.getName()));
+			LOGGER.info(Util.format("mutedUserSpeaks", user.getName()));
 		}
-		Iterator<Player> it = event.getRecipients().iterator();
+		final Iterator<Player> it = event.getRecipients().iterator();
 		while (it.hasNext())
 		{
-			User u = ess.getUser(it.next());
+			final User u = ess.getUser(it.next());
 			if (u.isIgnoredPlayer(user.getName()))
 			{
 				it.remove();
@@ -96,7 +83,7 @@ public class EssentialsPlayerListener extends PlayerListener
 	}
 
 	@Override
-	public void onPlayerMove(PlayerMoveEvent event)
+	public void onPlayerMove(final PlayerMoveEvent event)
 	{
 		if (event.isCancelled())
 		{
@@ -116,7 +103,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 
 		final Block block = event.getPlayer().getWorld().getBlockAt(event.getTo().getBlockX(), event.getTo().getBlockY(), event.getTo().getBlockZ());
-		List<World> worlds = server.getWorlds();
+		final List<World> worlds = server.getWorlds();
 
 		if (block.getType() == Material.PORTAL && worlds.size() > 1 && user.isAuthorized("essentials.portal"))
 		{
@@ -125,7 +112,6 @@ public class EssentialsPlayerListener extends PlayerListener
 				return;
 			}
 
-			Location loc = event.getTo();
 			World nether = server.getWorld(ess.getSettings().getNetherName());
 			if (nether == null)
 			{
@@ -149,7 +135,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			{
 				factor = ess.getSettings().getNetherRatio();
 			}
-			else if (user.getWorld().getEnvironment() != world.getEnvironment())
+			else if (user.getWorld().getEnvironment() == World.Environment.NORMAL && world.getEnvironment() == World.Environment.NETHER)
 			{
 				factor = 1.0 / ess.getSettings().getNetherRatio();
 			}
@@ -158,6 +144,7 @@ public class EssentialsPlayerListener extends PlayerListener
 				factor = 1.0;
 			}
 
+			Location loc = event.getTo();
 			int x = loc.getBlockX();
 			int y = loc.getBlockY();
 			int z = loc.getBlockZ();
@@ -182,14 +169,14 @@ public class EssentialsPlayerListener extends PlayerListener
 				if (world.getEnvironment() == World.Environment.NETHER || ess.getSettings().getGenerateExitPortals())
 				{
 					portal = NetherPortal.createPortal(dest);
-					logger.info(Util.format("userCreatedPortal", event.getPlayer().getName()));
+					LOGGER.info(Util.format("userCreatedPortal", event.getPlayer().getName()));
 					user.sendMessage(Util.i18n("generatingPortal"));
 					loc = portal.getSpawn();
 				}
 			}
 			else
 			{
-				logger.info(Util.format("userUsedPortal", event.getPlayer().getName()));
+				LOGGER.info(Util.format("userUsedPortal", event.getPlayer().getName()));
 				user.sendMessage(Util.i18n("usingPortal"));
 				loc = portal.getSpawn();
 			}
@@ -215,15 +202,12 @@ public class EssentialsPlayerListener extends PlayerListener
 	}
 
 	@Override
-	public void onPlayerQuit(PlayerQuitEvent event)
+	public void onPlayerQuit(final PlayerQuitEvent event)
 	{
-		User user = ess.getUser(event.getPlayer());
-		if (ess.getSettings().removeGodOnDisconnect())
+		final User user = ess.getUser(event.getPlayer());
+		if (ess.getSettings().removeGodOnDisconnect() && user.isGodModeEnabled())
 		{
-			if (user.isGodModeEnabled())
-			{
-				user.toggleGodModeEnabled();
-			}
+			user.toggleGodModeEnabled();
 		}
 		if (user.getSavedInventory() != null)
 		{
@@ -235,7 +219,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			return;
 		}
 		user.dispose();
-		Thread thread = new Thread(new Runnable()
+		final Thread thread = new Thread(new Runnable()
 		{
 			public void run()
 			{
@@ -248,7 +232,7 @@ public class EssentialsPlayerListener extends PlayerListener
 					rt.gc();
 					mem = rt.freeMemory() - mem;
 					mem /= 1024 * 1024;
-					logger.log(Level.INFO, Util.format("freedMemory", mem));
+					LOGGER.log(Level.INFO, Util.format("freedMemory", mem));
 				}
 				catch (InterruptedException ex)
 				{
@@ -261,15 +245,15 @@ public class EssentialsPlayerListener extends PlayerListener
 	}
 
 	@Override
-	public void onPlayerJoin(PlayerJoinEvent event)
+	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
 		ess.getBackup().onPlayerJoin();
-		User user = ess.getUser(event.getPlayer());
+		final User user = ess.getUser(event.getPlayer());
 
 		//we do not know the ip address on playerlogin so we need to do this here.
 		if (user.isIpBanned())
 		{
-			String banReason = user.getBanReason();
+			final String banReason = user.getBanReason();
 			user.kickPlayer(banReason != null && !banReason.isEmpty() ? banReason : Util.i18n("defaultBanReason"));
 			return;
 		}
@@ -298,7 +282,7 @@ public class EssentialsPlayerListener extends PlayerListener
 
 		if (!ess.getSettings().isCommandDisabled("mail") && user.isAuthorized("essentials.mail"))
 		{
-			List<String> mail = user.getMails();
+			final List<String> mail = user.getMails();
 			if (mail.isEmpty())
 			{
 				user.sendMessage(Util.i18n("noNewMail"));
@@ -311,18 +295,18 @@ public class EssentialsPlayerListener extends PlayerListener
 	}
 
 	@Override
-	public void onPlayerLogin(PlayerLoginEvent event)
+	public void onPlayerLogin(final PlayerLoginEvent event)
 	{
 		if (event.getResult() != Result.ALLOWED)
 		{
 			return;
 		}
-		User user = ess.getUser(event.getPlayer());
+		final User user = ess.getUser(event.getPlayer());
 		user.setNPC(false);
 
 		if (user.isBanned())
 		{
-			String banReason = user.getBanReason();
+			final String banReason = user.getBanReason();
 			event.disallow(Result.KICK_BANNED, banReason != null && !banReason.isEmpty() ? banReason : Util.i18n("defaultBanReason"));
 			return;
 		}
@@ -337,7 +321,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		updateCompass(user);
 	}
 
-	private void updateCompass(User user)
+	private void updateCompass(final User user)
 	{
 		try
 		{
@@ -355,28 +339,16 @@ public class EssentialsPlayerListener extends PlayerListener
 		{
 			return;
 		}
-		User user = ess.getUser(event.getPlayer());
+		final User user = ess.getUser(event.getPlayer());
 		if (ess.getSettings().changeDisplayName())
 		{
 			user.setDisplayName(user.getNick());
 		}
-		if (!user.isJailed() || user.getJail() == null || user.getJail().isEmpty())
-		{
-			return;
-		}
-		try
-		{
-			event.setTo(ess.getJail().getJail(user.getJail()));
-		}
-		catch (Exception ex)
-		{
-			logger.log(Level.WARNING, Util.i18n("returnPlayerToJailError"), ex);
-		}
-		user.sendMessage(Util.i18n("jailMessage"));
+		updateCompass(user);
 	}
 
 	@Override
-	public void onPlayerInteract(PlayerInteractEvent event)
+	public void onPlayerInteract(final PlayerInteractEvent event)
 	{
 		if (event.isCancelled())
 		{
@@ -386,29 +358,12 @@ public class EssentialsPlayerListener extends PlayerListener
 		{
 			return;
 		}
-		User user = ess.getUser(event.getPlayer());
-		if (user.isJailed())
-		{
-			event.setCancelled(true);
-			return;
-		}
-		/*if (!ess.getSettings().areSignsDisabled() && EssentialsBlockListener.protectedBlocks.contains(event.getClickedBlock().getType()))
-		{
-		if (!user.isAuthorized("essentials.signs.protection.override"))
-		{
-		if (essBlockListener.isBlockProtected(event.getClickedBlock(), user))
-		{
-		event.setCancelled(true);
-		user.sendMessage(Util.format("noAccessPermission", event.getClickedBlock().getType().toString().toLowerCase()));
-		return;
-		}
-		}
-		}*/
 
 		if (ess.getSettings().getBedSetsHome() && event.getClickedBlock().getType() == Material.BED_BLOCK)
 		{
 			try
 			{
+				final User user = ess.getUser(event.getPlayer());
 				user.setHome();
 				user.sendMessage(Util.i18n("homeSetToBed"));
 			}
@@ -416,175 +371,13 @@ public class EssentialsPlayerListener extends PlayerListener
 			{
 			}
 		}
-
-
-		/*if (ess.getSettings().areSignsDisabled())
-		{
-		return;
-		}
-		if (event.getClickedBlock().getType() != Material.WALL_SIGN && event.getClickedBlock().getType() != Material.SIGN_POST)
-		{
-		return;
-		}
-		Sign sign = new CraftSign(event.getClickedBlock());
-		
-		try
-		{
-		if (sign.getLine(0).equals("§1[Free]") && user.isAuthorized("essentials.signs.free.use"))
-		{
-		ItemStack item = ItemDb.get(sign.getLine(1));
-		CraftInventoryPlayer inv = new CraftInventoryPlayer(new InventoryPlayer(user.getHandle()));
-		inv.clear();
-		item.setAmount(9 * 4 * 64);
-		inv.addItem(item);
-		user.showInventory(inv);
-		return;
-		}
-		if (sign.getLine(0).equals("§1[Disposal]") && user.isAuthorized("essentials.signs.disposal.use"))
-		{
-		CraftInventoryPlayer inv = new CraftInventoryPlayer(new InventoryPlayer(user.getHandle()));
-		inv.clear();
-		user.showInventory(inv);
-		return;
-		}
-		if (sign.getLine(0).equals("§1[Heal]") && user.isAuthorized("essentials.signs.heal.use"))
-		{
-		if (!sign.getLine(1).isEmpty())
-		{
-		String[] l1 = sign.getLine(1).split("[ :-]+");
-		boolean m1 = l1[0].matches("^[^0-9][\\.0-9]+");
-		double q1 = Double.parseDouble(m1 ? l1[0].substring(1) : l1[0]);
-		if (!m1 && (int)q1 < 1)
-		{
-		throw new Exception(Util.i18n("moreThanZero"));
-		}
-		if (m1)
-		{
-		if (user.getMoney() < q1)
-		{
-		throw new Exception(Util.i18n("notEnoughMoney"));
-		}
-		user.takeMoney(q1);
-		user.sendMessage(Util.format("moneyTaken", Util.formatCurrency(q1)));
-		}
-		else
-		{
-		ItemStack i = ItemDb.get(l1[1], (int)q1);
-		if (!InventoryWorkaround.containsItem(user.getInventory(), true, i))
-		{
-		throw new Exception(Util.format("missingItems", (int)q1, l1[1]));
-		}
-		InventoryWorkaround.removeItem(user.getInventory(), true, i);
-		user.updateInventory();
-		}
-		}
-		user.setHealth(20);
-		user.sendMessage(Util.i18n("youAreHealed"));
-		return;
-		}
-		if (sign.getLine(0).equals("§1[Mail]") && user.isAuthorized("essentials.signs.mail.use") && user.isAuthorized("essentials.mail"))
-		{
-		List<String> mail = user.getMails();
-		if (mail.isEmpty())
-		{
-		user.sendMessage(Util.i18n("noNewMail"));
-		return;
-		}
-		for (String s : mail)
-		{
-		user.sendMessage(s);
-		}
-		user.sendMessage(Util.i18n("markMailAsRead"));
-		return;
-		}
-		if (sign.getLine(0).equals("§1[Balance]") && user.isAuthorized("essentials.signs.balance.use"))
-		{
-		user.sendMessage(Util.format("balance", user.getMoney()));
-		return;
-		}
-		if (sign.getLine(0).equals("§1[Warp]"))
-		{
-		
-		if (!sign.getLine(2).isEmpty())
-		{
-		if (sign.getLine(2).equals("§2Everyone"))
-		{
-		Trade charge = chargeUserForWarp(sign, user);
-		user.getTeleport().warp(sign.getLine(1), charge);
-		return;
-		}
-		if (user.inGroup(sign.getLine(2)))
-		{
-		Trade charge = chargeUserForWarp(sign, user);
-		user.getTeleport().warp(sign.getLine(1), charge);
-		return;
-		}
-		}
-		if (user.isAuthorized("essentials.signs.warp.use")
-		&& (!ess.getSettings().getPerWarpPermission() || user.isAuthorized("essentials.warp." + sign.getLine(1))))
-		{
-		Trade charge = chargeUserForWarp(sign, user);
-		user.getTeleport().warp(sign.getLine(1), charge);
-		}
-		return;
-		}
-		if (sign.getLine(0).equals("§1[Time]") && user.isAuthorized("essentials.signs.time.use"))
-		{
-		long time = user.getWorld().getTime();
-		time -= time % 24000;
-		if ("day".equalsIgnoreCase(sign.getLine(1)))
-		{
-		user.getWorld().setTime(time + 24000);
-		return;
-		}
-		if ("night".equalsIgnoreCase(sign.getLine(1)))
-		{
-		user.getWorld().setTime(time + 37700);
-		return;
-		}
-		throw new Exception(Util.i18n("onlyDayNight"));
-		}
-		}
-		catch (Throwable ex)
-		{
-		user.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
-		if (ess.getSettings().isDebug())
-		{
-		logger.log(Level.WARNING, ex.getMessage(), ex);
-		}
-		}*/
-	}
-
-	@Deprecated
-	private Trade chargeUserForWarp(Sign sign, User user) throws Exception
-	{
-		if (!sign.getLine(3).isEmpty())
-		{
-			String[] l1 = sign.getLine(3).split("[ :-]+");
-			boolean m1 = l1[0].matches("^[^0-9][\\.0-9]+");
-			double q1 = Double.parseDouble(m1 ? l1[0].substring(1) : l1[0]);
-			if (!m1 && (int)q1 < 1)
-			{
-				throw new Exception(Util.i18n("moreThanZero"));
-			}
-			if (m1)
-			{
-				return new Trade(q1, ess);
-			}
-			else
-			{
-				ItemStack i = ItemDb.get(l1[1], (int)q1);
-				return new Trade(i, ess);
-			}
-		}
-		return new Trade("warpsign", ess);
 	}
 
 	@Override
-	public void onPlayerEggThrow(PlayerEggThrowEvent event)
+	public void onPlayerEggThrow(final PlayerEggThrowEvent event)
 	{
-		User user = ess.getUser(event.getPlayer());
-		ItemStack is = new ItemStack(Material.EGG, 1);
+		final User user = ess.getUser(event.getPlayer());
+		final ItemStack is = new ItemStack(Material.EGG, 1);
 		if (user.hasUnlimited(is))
 		{
 			user.getInventory().addItem(is);
@@ -593,7 +386,7 @@ public class EssentialsPlayerListener extends PlayerListener
 	}
 
 	@Override
-	public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event)
+	public void onPlayerBucketEmpty(final PlayerBucketEmptyEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
 		if (user.hasUnlimited(new ItemStack(event.getBucket())))
@@ -610,24 +403,24 @@ public class EssentialsPlayerListener extends PlayerListener
 	}
 
 	@Override
-	public void onPlayerAnimation(PlayerAnimationEvent event)
+	public void onPlayerAnimation(final PlayerAnimationEvent event)
 	{
 		usePowertools(event);
 	}
 
-	private void usePowertools(PlayerAnimationEvent event)
+	private void usePowertools(final PlayerAnimationEvent event)
 	{
 		if (event.getAnimationType() != PlayerAnimationType.ARM_SWING)
 		{
 			return;
 		}
-		User user = ess.getUser(event.getPlayer());
-		ItemStack is = user.getItemInHand();
+		final User user = ess.getUser(event.getPlayer());
+		final ItemStack is = user.getItemInHand();
 		if (is == null || is.getType() == Material.AIR)
 		{
 			return;
 		}
-		String command = user.getPowertool(is);
+		final String command = user.getPowertool(is);
 		if (command == null || command.isEmpty())
 		{
 			return;
@@ -651,14 +444,14 @@ public class EssentialsPlayerListener extends PlayerListener
 	}
 
 	@Override
-	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event)
+	public void onPlayerCommandPreprocess(final PlayerCommandPreprocessEvent event)
 	{
 		if (event.isCancelled())
 		{
 			return;
 		}
-		User user = ess.getUser(event.getPlayer());
-		String cmd = event.getMessage().toLowerCase().split(" ")[0].replace("/", "").toLowerCase();
+		final User user = ess.getUser(event.getPlayer());
+		final String cmd = event.getMessage().toLowerCase().split(" ")[0].replace("/", "").toLowerCase();
 		if (("msg".equals(cmd) || "r".equals(cmd) || "mail".equals(cmd)))
 		{
 			for (Player player : ess.getServer().getOnlinePlayers())
