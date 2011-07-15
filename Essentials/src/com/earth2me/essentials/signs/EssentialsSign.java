@@ -334,7 +334,7 @@ public class EssentialsSign
 	protected final Double getDoublePositive(final String line) throws SignException
 	{
 		final double quantity = getDouble(line);
-		if (quantity <= 0.0)
+		if (Math.round(quantity*100.0) < 1.0)
 		{
 			throw new SignException(Util.i18n("moreThanZero"));
 		}
