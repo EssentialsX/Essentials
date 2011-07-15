@@ -30,7 +30,7 @@ commands:
   balancetop:
     description: Gets the top x balance values. (max 10)
     usage: /<command> <max>
-    aliases: 
+    aliases: [baltop,ebaltop,ebalancetop]
   ban:
     description: Bans a player.
     usage: /<command> [player] <reason>
@@ -58,6 +58,7 @@ commands:
   compass:
     description: Describes your current bearing.
     usage: /<command>
+    aliases: [ecompass]
   deljail:
     description: Removes a jail
     usage: /<command> [jailname]
@@ -80,7 +81,7 @@ commands:
   ext:
     description: Extinguish players.
     usage: /<command> <player>
-    aliases: [extinguish]
+    aliases: [extinguish,eext,eextinguish]
   fireball:
     description: Throw a fireball.
     usage: /<command>
@@ -162,6 +163,7 @@ commands:
   lightning:
     description: The power of Thor. Strike at cursor or player.
     usage: /<command> [player]
+    aliases: [strike,elightning,estrike]
   mail:
     description: Manages inter-player, intra-server mail.
     usage: /<command> [read|clear|send [to] [message]]
@@ -205,7 +207,7 @@ commands:
   r:
     description: Quickly reply to the last player to message you.
     usage: /<command> [message]
-    aliases: [er]
+    aliases: [er,reply,ereply]
   realname:
     description: Displays the username of a user based on nickname.
     usage: /<command> [nickname]
