@@ -308,6 +308,8 @@ public class EssentialsBlockListener extends BlockListener
 		case PISTON_BASE:
 			is.setDurability((short)0);
 			break;
+		case FIRE:
+			return;
 		}
 		boolean unlimitedForUser = user.hasUnlimited(is);
 		if (unlimitedForUser)
