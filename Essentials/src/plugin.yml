@@ -27,6 +27,10 @@ commands:
     description: States the current balance of a player.
     usage: /<command> <player>
     aliases: [bal,emoney,ebalance,ebal]
+  balancetop:
+    description: Gets the top x balance values. (max 10)
+    usage: /<command> <max>
+    aliases: 
   ban:
     description: Bans a player.
     usage: /<command> [player] <reason>

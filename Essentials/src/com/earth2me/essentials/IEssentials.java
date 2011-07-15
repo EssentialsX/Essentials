@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.register.payment.Methods;
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -75,4 +76,6 @@ public interface IEssentials
 	IPermissionsHandler getPermissionsHandler();
 	
 	void showError(final CommandSender sender, final Throwable exception, final String commandLabel);
+	
+	Map<String, User> getAllUsers();
 }

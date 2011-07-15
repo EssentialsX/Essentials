@@ -192,17 +192,17 @@ public class Essentials extends JavaPlugin implements IEssentials
 		//pm.registerEvent(Type.SIGN_CHANGE, blockListener, Priority.Low, this);
 		//pm.registerEvent(Type.BLOCK_BREAK, blockListener, Priority.Lowest, this);
 		pm.registerEvent(Type.BLOCK_PLACE, blockListener, Priority.Lowest, this);
-		
+
 		final SignBlockListener signBlockListener = new SignBlockListener(this);
 		pm.registerEvent(Type.SIGN_CHANGE, signBlockListener, Priority.Highest, this);
 		pm.registerEvent(Type.BLOCK_PLACE, signBlockListener, Priority.Low, this);
 		pm.registerEvent(Type.BLOCK_BREAK, signBlockListener, Priority.Highest, this);
 		pm.registerEvent(Type.BLOCK_IGNITE, signBlockListener, Priority.Low, this);
 		pm.registerEvent(Type.BLOCK_BURN, signBlockListener, Priority.Low, this);
-		
+
 		final SignPlayerListener signPlayerListener = new SignPlayerListener(this);
 		pm.registerEvent(Type.PLAYER_INTERACT, signPlayerListener, Priority.Low, this);
-		
+
 		final SignEntityListener signEntityListener = new SignEntityListener(this);
 		pm.registerEvent(Type.ENTITY_EXPLODE, signEntityListener, Priority.Low, this);
 
@@ -378,7 +378,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	}
 
 	public boolean onCommandEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath, String permissionPrefix)
-	{		
+	{
 		// Allow plugins to override the command via onCommand
 		if (!getSettings().isCommandOverridden(command.getName()) && !commandLabel.startsWith("e"))
 		{
@@ -414,7 +414,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 			if (sender instanceof Player)
 			{
 				user = getUser(sender);
-				logger.log(Level.INFO, String.format("[PLAYER_COMMAND] %s: /%s %s ", ((Player)sender).getName(), commandLabel , EssentialsCommand.getFinalArg(args, 0)));
+				logger.log(Level.INFO, String.format("[PLAYER_COMMAND] %s: /%s %s ", ((Player)sender).getName(), commandLabel, EssentialsCommand.getFinalArg(args, 0)));
 			}
 
 			// New mail notification
@@ -668,6 +668,11 @@ public class Essentials extends JavaPlugin implements IEssentials
 		User u = new User(base, this);
 		users.put(u.getName().toLowerCase(), u);
 		return u;
+	}
+
+	public Map<String, User> getAllUsers()
+	{
+		return users;
 	}
 
 	public User getOfflineUser(String name)
