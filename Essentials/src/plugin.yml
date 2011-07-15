@@ -267,8 +267,8 @@ commands:
     usage: /<command> <true/false> [duration]
     aliases: [ethunder]
   time:
-    description: Change the server time to day or night.
-    usage: /<command> [day|night]
+    description: Change the time to day or night of the player (default) or world (essentials.time.world permission).
+    usage: /<command> [day|night|reset] <playername>
     aliases: [etime]
   togglejail:
     description: Prevents a player from interacting with the world and teleports him/her to the the jail specified

@@ -21,33 +21,28 @@ public class Commandtime extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		if (user.isAuthorized("essentials.time.world"))
+		if (args.length < 2)
 		{
-			final World world = user.getWorld();
+			if (user.isAuthorized("essentials.time.world"))
+			{
+				final World world = user.getWorld();
 
-			charge(user);
-			setWorldTime(world, args[0]);
+				charge(user);
+				setWorldTime(world, args[0]);
+			}
+			else
+			{
+				charge(user);
+				setPlayerTime(user, commandLabel);
+			}
 		}
 		else
 		{
-			if (user.isAuthorized("essentials.time.player"))
+			if (user.isAuthorized("essentials.time.others"))
 			{
-
-				long time = user.getPlayerTime();
-				time -= time % 24000;
-				if ("day".equalsIgnoreCase(args[0]))
-				{
-					final World world = user.getWorld();
-					user.setPlayerTime(time + 24000 - world.getTime(), true);
-					return;
-				}
-				if ("night".equalsIgnoreCase(args[0]))
-				{
-					final World world = user.getWorld();
-					user.setPlayerTime(time + 37700 - world.getTime(), true);
-					return;
-				}
-				throw new Exception(Util.i18n("onlyDayNight"));
+				User u = getPlayer(server, args, 1);
+				charge(user);
+				setPlayerTime(u, args[0]);
 			}
 		}
 	}
@@ -59,9 +54,17 @@ public class Commandtime extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		for (World world : server.getWorlds())
+		if (args.length < 2)
 		{
-			setWorldTime(world, args[0]);
+			for (World world : server.getWorlds())
+			{
+				setWorldTime(world, args[0]);
+			}
+		}
+		else
+		{
+			User u = getPlayer(server, args, 1);
+			setPlayerTime(u, args[0]);
 		}
 
 		sender.sendMessage(Util.i18n("timeSet"));
@@ -80,6 +83,29 @@ public class Commandtime extends EssentialsCommand
 		{
 			world.setTime(time + 37700);
 			return;
+		}
+		throw new Exception(Util.i18n("onlyDayNight"));
+	}
+
+	private void setPlayerTime(final User user, final String timeString) throws Exception
+	{
+		long time = user.getPlayerTime();
+		time -= time % 24000;
+		if ("day".equalsIgnoreCase(timeString))
+		{
+			final World world = user.getWorld();
+			user.setPlayerTime(time + 24000 - world.getTime(), true);
+			return;
+		}
+		if ("night".equalsIgnoreCase(timeString))
+		{
+			final World world = user.getWorld();
+			user.setPlayerTime(time + 37700 - world.getTime(), true);
+			return;
+		}
+		if ("reset".equalsIgnoreCase(timeString))
+		{
+			user.resetPlayerTime();
 		}
 		throw new Exception(Util.i18n("onlyDayNight"));
 	}
