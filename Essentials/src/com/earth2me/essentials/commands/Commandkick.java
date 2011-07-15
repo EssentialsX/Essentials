@@ -13,7 +13,7 @@ public class Commandkick extends EssentialsCommand
 	{
 		super("kick");
 	}
-
+	
 	@Override
 	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
@@ -21,18 +21,12 @@ public class Commandkick extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-
-		User u;
-		try
+		
+		User u = getPlayer(server, args, 0);
+		if (u.isAuthorized("essentials.kick.exempt"))
 		{
-			u = ess.getUser(server.matchPlayer(args[0]).get(0));
+			sender.sendMessage(Util.i18n("kickExempt"));
 		}
-		catch (Throwable ex)
-		{
-			sender.sendMessage(Util.i18n("playerNotFound"));
-			return;
-		}
-
 		charge(sender);
 		final String kickReason = args.length > 1 ? getFinalArg(args, 1) : Util.i18n("kickDefault");
 		u.kickPlayer(kickReason);

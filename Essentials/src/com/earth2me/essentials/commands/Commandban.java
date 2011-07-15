@@ -21,7 +21,12 @@ public class Commandban extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-
+		final User player = getPlayer(server, args, 0, true);
+		if (player.isAuthorized("essentials.ban.exempt"))
+		{
+			sender.sendMessage(Util.i18n("banExempt"));
+			return;
+		}
 		if (server.matchPlayer(args[0]).isEmpty())
 		{
 			((CraftServer)server).getHandle().a(args[0]);
@@ -29,7 +34,6 @@ public class Commandban extends EssentialsCommand
 		}
 		else
 		{
-			final User player = ess.getUser(server.matchPlayer(args[0]).get(0));
 			String banReason;
 			if (args.length > 1)
 			{
