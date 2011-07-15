@@ -46,27 +46,24 @@ import org.bukkit.plugin.java.*;
 public class Essentials extends JavaPlugin implements IEssentials
 {
 	public static final String AUTHORS = "Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans and Xeology";
-	public static final int minBukkitBuildVersion = 974;
-	private static final Logger logger = Logger.getLogger("Minecraft");
-	private Settings settings;
-	private TNTExplodeListener tntListener;
-	private EssentialsDependancyChecker essDep;
+	public static final int BUKKIT_VERSION = 974;
+	private static final Logger LOGGER = Logger.getLogger("Minecraft");
+	private transient Settings settings;
+	private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
 	private static Essentials instance = null;
-	private Spawn spawn;
-	private Jail jail;
-	private Warps warps;
-	private Worth worth;
-	private List<IConf> confList;
-	public ArrayList bans = new ArrayList();
-	public ArrayList bannedIps = new ArrayList();
-	private Backup backup;
-	private final Map<String, User> users = new HashMap<String, User>();
-	private EssentialsUpdateTimer updateTimer;
-	private boolean registerFallback = true;
-	private final Methods paymentMethod = new Methods();
-	private final static boolean enableErrorLogging = false;
-	private final EssentialsErrorHandler errorHandler = new EssentialsErrorHandler();
-	private IPermissionsHandler permissionsHandler;
+	private transient Spawn spawn;
+	private transient Jail jail;
+	private transient Warps warps;
+	private transient Worth worth;
+	private transient List<IConf> confList;
+	private transient Backup backup;
+	private transient BanWorkaround bans;
+	private transient final Map<String, User> users = new HashMap<String, User>();
+	private transient EssentialsUpdateTimer updateTimer;
+	private transient final Methods paymentMethod = new Methods();
+	private transient final static boolean enableErrorLogging = false;
+	private transient final EssentialsErrorHandler errorHandler = new EssentialsErrorHandler();
+	private transient IPermissionsHandler permissionsHandler;
 
 	public static IEssentials getStatic()
 	{
@@ -78,13 +75,19 @@ public class Essentials extends JavaPlugin implements IEssentials
 		return settings;
 	}
 
-	public void setupForTesting(Server server) throws IOException, InvalidDescriptionException
+	public void setupForTesting(final Server server) throws IOException, InvalidDescriptionException
 	{
-		File dataFolder = File.createTempFile("essentialstest", "");
-		dataFolder.delete();
-		dataFolder.mkdir();
-		logger.log(Level.INFO, Util.i18n("usingTempFolderForTesting"));
-		logger.log(Level.INFO, dataFolder.toString());
+		final File dataFolder = File.createTempFile("essentialstest", "");
+		if (!dataFolder.delete())
+		{
+			throw new IOException();
+		}
+		if (!dataFolder.mkdir())
+		{
+			throw new IOException();
+		}
+		LOGGER.log(Level.INFO, Util.i18n("usingTempFolderForTesting"));
+		LOGGER.log(Level.INFO, dataFolder.toString());
 		this.initialize(null, server, new PluginDescriptionFile(new FileReader(new File("src" + File.separator + "plugin.yml"))), dataFolder, null, null);
 		settings = new Settings(dataFolder);
 		permissionsHandler = new ConfigPermissionsHandler(this);
@@ -101,11 +104,11 @@ public class Essentials extends JavaPlugin implements IEssentials
 		final String[] javaversion = System.getProperty("java.version").split("\\.", 3);
 		if (javaversion == null || javaversion.length < 2 || Integer.parseInt(javaversion[1]) < 6)
 		{
-			logger.log(Level.SEVERE, "Java version not supported! Please install Java 1.6. You have " + System.getProperty("java.version"));
+			LOGGER.log(Level.SEVERE, "Java version not supported! Please install Java 1.6. You have " + System.getProperty("java.version"));
 		}
 		if (enableErrorLogging)
 		{
-			logger.addHandler(errorHandler);
+			LOGGER.addHandler(errorHandler);
 		}
 		setStatic();
 		EssentialsUpgrade upgrade = new EssentialsUpgrade(this.getDescription().getVersion(), this);
@@ -121,36 +124,35 @@ public class Essentials extends JavaPlugin implements IEssentials
 		confList.add(warps);
 		worth = new Worth(this.getDataFolder());
 		confList.add(worth);
+		bans = new BanWorkaround(this);
+		confList.add(bans);
 		reload();
 		backup = new Backup(this);
-		essDep = new EssentialsDependancyChecker(this);
 
 		final PluginManager pm = getServer().getPluginManager();
 		for (Plugin plugin : pm.getPlugins())
 		{
-			if (plugin.getDescription().getName().startsWith("Essentials"))
+			if (plugin.getDescription().getName().startsWith("Essentials")
+				&& !plugin.getDescription().getVersion().equals(this.getDescription().getVersion()))
 			{
-				if (!plugin.getDescription().getVersion().equals(this.getDescription().getVersion()))
-				{
-					logger.log(Level.WARNING, Util.format("versionMismatch", plugin.getDescription().getName()));
-				}
+				LOGGER.log(Level.WARNING, Util.format("versionMismatch", plugin.getDescription().getName()));
 			}
 		}
-		Matcher versionMatch = Pattern.compile("git-Bukkit-([0-9]+).([0-9]+).([0-9]+)-[0-9]+-[0-9a-z]+-b([0-9]+)jnks.*").matcher(getServer().getVersion());
+		final Matcher versionMatch = Pattern.compile("git-Bukkit-([0-9]+).([0-9]+).([0-9]+)-[0-9]+-[0-9a-z]+-b([0-9]+)jnks.*").matcher(getServer().getVersion());
 		if (versionMatch.matches())
 		{
-			int versionNumber = Integer.parseInt(versionMatch.group(4));
-			if (versionNumber < minBukkitBuildVersion)
+			final int versionNumber = Integer.parseInt(versionMatch.group(4));
+			if (versionNumber < BUKKIT_VERSION)
 			{
-				logger.log(Level.WARNING, Util.i18n("notRecommendedBukkit"));
+				LOGGER.log(Level.WARNING, Util.i18n("notRecommendedBukkit"));
 			}
 		}
 		else
 		{
-			logger.log(Level.INFO, Util.i18n("bukkitFormatChanged"));
+			LOGGER.log(Level.INFO, Util.i18n("bukkitFormatChanged"));
 		}
 
-		Plugin permissionsPlugin = pm.getPlugin("Permissions");
+		final Plugin permissionsPlugin = pm.getPlugin("Permissions");
 
 		if (permissionsPlugin != null)
 		{
@@ -224,7 +226,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 			getServer().createWorld(settings.getNetherName(), World.Environment.NETHER);
 		}
 
-		tntListener = new TNTExplodeListener(this);
 		pm.registerEvent(Type.ENTITY_EXPLODE, tntListener, Priority.High, this);
 
 		final EssentialsTimer timer = new EssentialsTimer(this);
@@ -234,20 +235,19 @@ public class Essentials extends JavaPlugin implements IEssentials
 			updateTimer = new EssentialsUpdateTimer(this);
 			getScheduler().scheduleAsyncRepeatingTask(this, updateTimer, 50, 50 * 60 * (this.getDescription().getVersion().startsWith("Dev") ? 60 : 360));
 		}
-		logger.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), AUTHORS));
+		LOGGER.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), AUTHORS));
 	}
 
 	public void onDisable()
 	{
 		instance = null;
 		Trade.closeLog();
-		logger.removeHandler(errorHandler);
+		LOGGER.removeHandler(errorHandler);
 	}
 
 	public void reload()
 	{
 		Trade.closeLog();
-		loadBanList();
 
 		for (IConf iConf : confList)
 		{
@@ -270,7 +270,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 		catch (Exception ex)
 		{
-			logger.log(Level.WARNING, Util.i18n("itemsCsvNotLoaded"), ex);
+			LOGGER.log(Level.WARNING, Util.i18n("itemsCsvNotLoaded"), ex);
 		}
 	}
 
@@ -302,7 +302,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 			}
 			catch (Throwable ex2)
 			{
-				logger.log(Level.WARNING, Util.format("corruptNodeInConfig", node));
+				LOGGER.log(Level.WARNING, Util.format("corruptNodeInConfig", node));
 				return new String[0];
 			}
 		}
@@ -413,7 +413,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 			if (sender instanceof Player)
 			{
 				user = getUser(sender);
-				logger.log(Level.INFO, String.format("[PLAYER_COMMAND] %s: /%s %s ", ((Player)sender).getName(), commandLabel, EssentialsCommand.getFinalArg(args, 0)));
+				LOGGER.log(Level.INFO, String.format("[PLAYER_COMMAND] %s: /%s %s ", ((Player)sender).getName(), commandLabel, EssentialsCommand.getFinalArg(args, 0)));
 			}
 
 			// New mail notification
@@ -441,14 +441,14 @@ public class Essentials extends JavaPlugin implements IEssentials
 			catch (Exception ex)
 			{
 				sender.sendMessage(Util.format("commandNotLoaded", commandLabel));
-				logger.log(Level.SEVERE, Util.format("commandNotLoaded", commandLabel), ex);
+				LOGGER.log(Level.SEVERE, Util.format("commandNotLoaded", commandLabel), ex);
 				return true;
 			}
 
 			// Check authorization
 			if (user != null && !user.isAuthorized(cmd, permissionPrefix))
 			{
-				logger.log(Level.WARNING, Util.format("deniedAccessCommand", user.getName()));
+				LOGGER.log(Level.WARNING, Util.format("deniedAccessCommand", user.getName()));
 				user.sendMessage(Util.i18n("noAccessCommand"));
 				return true;
 			}
@@ -480,7 +480,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 		catch (Throwable ex)
 		{
-			logger.log(Level.SEVERE, Util.format("commandFailed", commandLabel), ex);
+			LOGGER.log(Level.SEVERE, Util.format("commandFailed", commandLabel), ex);
 			return true;
 		}
 	}
@@ -492,7 +492,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		logRecord.setThrown(exception);
 		if (getSettings().isDebug())
 		{
-			logger.log(logRecord);
+			LOGGER.log(logRecord);
 		}
 		else
 		{
@@ -501,100 +501,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 				errorHandler.publish(logRecord);
 				errorHandler.flush();
 			}
-		}
-	}
-
-	public void loadBanList()
-	{
-		//I don't like this but it needs to be done until CB fixors
-		File file = new File("banned-players.txt");
-		File ipFile = new File("banned-ips.txt");
-		try
-		{
-			if (!file.exists())
-			{
-				throw new FileNotFoundException(Util.i18n("bannedPlayersFileNotFound"));
-			}
-
-			final BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-			try
-			{
-				bans.clear();
-				while (bufferedReader.ready())
-				{
-
-					final String line = bufferedReader.readLine().trim().toLowerCase();
-					if (line.length() > 0 && line.charAt(0) == '#')
-					{
-						continue;
-					}
-					bans.add(line);
-
-				}
-			}
-			catch (IOException io)
-			{
-				logger.log(Level.SEVERE, Util.i18n("bannedPlayersFileError"), io);
-			}
-			finally
-			{
-				try
-				{
-					bufferedReader.close();
-				}
-				catch (IOException ex)
-				{
-					logger.log(Level.SEVERE, Util.i18n("bannedPlayersFileError"), ex);
-				}
-			}
-		}
-		catch (FileNotFoundException ex)
-		{
-			logger.log(Level.SEVERE, Util.i18n("bannedPlayersFileError"), ex);
-		}
-
-		try
-		{
-			if (!ipFile.exists())
-			{
-				throw new FileNotFoundException(Util.i18n("bannedIpsFileNotFound"));
-			}
-
-			final BufferedReader bufferedReader = new BufferedReader(new FileReader(ipFile));
-			try
-			{
-				bannedIps.clear();
-				while (bufferedReader.ready())
-				{
-
-					final String line = bufferedReader.readLine().trim().toLowerCase();
-					if (line.length() > 0 && line.charAt(0) == '#')
-					{
-						continue;
-					}
-					bannedIps.add(line);
-
-				}
-			}
-			catch (IOException io)
-			{
-				logger.log(Level.SEVERE, Util.i18n("bannedIpsFileError"), io);
-			}
-			finally
-			{
-				try
-				{
-					bufferedReader.close();
-				}
-				catch (IOException ex)
-				{
-					logger.log(Level.SEVERE, Util.i18n("bannedIpsFileError"), ex);
-				}
-			}
-		}
-		catch (FileNotFoundException ex)
-		{
-			logger.log(Level.SEVERE, Util.i18n("bannedIpsFileError"), ex);
 		}
 	}
 
@@ -676,35 +582,20 @@ public class Essentials extends JavaPlugin implements IEssentials
 		return null;
 	}
 
-	public World getWorld(String name)
+	public World getWorld(final String name)
 	{
 		if (name.matches("[0-9]+"))
 		{
-			int id = Integer.parseInt(name);
+			final int id = Integer.parseInt(name);
 			if (id < getServer().getWorlds().size())
 			{
 				return getServer().getWorlds().get(id);
 			}
 		}
-		World w = getServer().getWorld(name);
-		if (w != null)
-		{
-			return w;
-		}
-		return null;
+		return getServer().getWorld(name);
 	}
 
-	public void setRegisterFallback(boolean registerFallback)
-	{
-		this.registerFallback = registerFallback;
-	}
-
-	public boolean isRegisterFallbackEnabled()
-	{
-		return registerFallback;
-	}
-
-	public void addReloadListener(IConf listener)
+	public void addReloadListener(final IConf listener)
 	{
 		confList.add(listener);
 	}
@@ -714,7 +605,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		return paymentMethod;
 	}
 
-	public int broadcastMessage(String name, String message)
+	public int broadcastMessage(final String name, final String message)
 	{
 		Player[] players = getServer().getOnlinePlayers();
 
@@ -750,19 +641,9 @@ public class Essentials extends JavaPlugin implements IEssentials
 		return this.getScheduler().scheduleSyncDelayedTask(this, run, delay);
 	}
 
-	public int scheduleSyncRepeatingTask(final Runnable run, long delay, long period)
+	public int scheduleSyncRepeatingTask(final Runnable run, final long delay, final long period)
 	{
 		return this.getScheduler().scheduleSyncRepeatingTask(this, run, delay, period);
-	}
-
-	public List<String> getBans()
-	{
-		return bans;
-	}
-
-	public List<String> getBannedIps()
-	{
-		return bannedIps;
 	}
 
 	public TNTExplodeListener getTNTListener()
@@ -770,13 +651,13 @@ public class Essentials extends JavaPlugin implements IEssentials
 		return tntListener;
 	}
 
-	public EssentialsDependancyChecker getDependancyChecker()
-	{
-		return essDep;
-	}
-
 	public IPermissionsHandler getPermissionsHandler()
 	{
 		return permissionsHandler;
+	}
+
+	public BanWorkaround getBans()
+	{
+		return bans;
 	}
 }

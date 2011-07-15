@@ -2,7 +2,6 @@ package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.CraftServer;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 
@@ -15,7 +14,7 @@ public class Commandban extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -29,7 +28,7 @@ public class Commandban extends EssentialsCommand
 		}
 		if (server.matchPlayer(args[0]).isEmpty())
 		{
-			((CraftServer)server).getHandle().a(args[0]);
+			ess.getBans().banByName(args[0]);
 			server.broadcastMessage(Util.format("playerBanned", args[0], Util.i18n("defaultBanReason")));
 		}
 		else
@@ -45,9 +44,8 @@ public class Commandban extends EssentialsCommand
 				banReason = Util.i18n("defaultBanReason");
 			}
 			player.kickPlayer(banReason);
-			((CraftServer)server).getHandle().a(player.getName());
+			ess.getBans().banByName(args[0]);
 			server.broadcastMessage(Util.format("playerBanned", player.getName(), banReason));
 		}
-		ess.loadBanList();
 	}
 }

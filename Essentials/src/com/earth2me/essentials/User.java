@@ -276,7 +276,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	@Override
 	public double getMoney()
 	{
-		if (ess.isRegisterFallbackEnabled() && ess.getPaymentMethod().hasMethod())
+		if (ess.getPaymentMethod().hasMethod())
 		{
 			try
 			{
@@ -298,7 +298,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	@Override
 	public void setMoney(double value)
 	{
-		if (ess.isRegisterFallbackEnabled() && ess.getPaymentMethod().hasMethod())
+		if (ess.getPaymentMethod().hasMethod())
 		{
 			try
 			{

@@ -43,8 +43,7 @@ public class EssentialsTimer implements Runnable, IConf
 		for (User user: allUsers) {
 			if (user.getBanTimeout() > 0 && user.getBanTimeout() < currentTime) {
 				user.setBanTimeout(0);
-				((CraftServer)ess.getServer()).getHandle().b(user.getName());
-				ess.loadBanList();
+				ess.getBans().unbanByName(user.getName());
 			}
 			if (user.getMuteTimeout() > 0 && user.getMuteTimeout() < currentTime && user.isMuted()) {
 				user.setMuteTimeout(0);
