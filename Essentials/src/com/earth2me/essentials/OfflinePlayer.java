@@ -31,13 +31,14 @@ public class OfflinePlayer implements Player
 	private final String name;
 	final transient IEssentials ess;
 	private Location location = new Location(null, 0, 0, 0, 0, 0);
-	private World world = ess.getServer().getWorlds().get(0);
+	private World world;
 	private UUID uniqueId = UUID.randomUUID();
 
 	public OfflinePlayer(String name, IEssentials ess)
 	{
 		this.name = name;
 		this.ess = ess;
+		this.world = ess.getServer().getWorlds().get(0);
 	}
 
 	public boolean isOnline()
