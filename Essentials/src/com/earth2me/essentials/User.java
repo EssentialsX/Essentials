@@ -223,26 +223,39 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 	public String getNick()
 	{
-		String nickname = getNickname();
-		if (ess.getSettings().isCommandDisabled("nick") || nickname == null || nickname.isEmpty() || nickname.equals(getName()))
+		final StringBuilder nickname = new StringBuilder();
+		final String nick = getNickname();
+		if (ess.getSettings().isCommandDisabled("nick") || nick == null || nick.isEmpty() || nick.equals(getName()))
 		{
-			nickname = getName();
+			nickname.append(getName());
 		}
 		else
 		{
-			nickname = ess.getSettings().getNicknamePrefix() + nickname;
+			nickname.append(ess.getSettings().getNicknamePrefix()).append(nick);
 		}
 		if (isOp())
 		{
 			try
 			{
-				nickname = ess.getSettings().getOperatorColor().toString() + nickname + "§f";
+				nickname.insert(0, ess.getSettings().getOperatorColor().toString());
+				nickname.append("§f");
 			}
 			catch (Exception e)
 			{
 			}
 		}
-		return nickname;
+
+		final String prefix = ess.getPermissionsHandler().getPrefix(this).replace('&', '§').replace("{WORLDNAME}", this.getWorld().getName());
+		final String suffix = ess.getPermissionsHandler().getSuffix(this).replace('&', '§').replace("{WORLDNAME}", this.getWorld().getName());
+
+		nickname.insert(0, prefix);
+		nickname.append(suffix);
+		if (suffix.length() > 1 && suffix.substring(suffix.length() - 2, suffix.length() - 1).equals("§"))
+		{
+			nickname.append("§f");
+		}
+
+		return nickname.toString();
 	}
 
 	public Teleport getTeleport()

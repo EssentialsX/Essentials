@@ -395,5 +395,10 @@ public class Settings implements IConf
 	{
 		return config.getBoolean("remove-god-on-disconnect", false);
 	}
+
+	boolean changeDisplayName()
+	{
+		return config.getBoolean("change-displayname", true);
+	}
 	
 }

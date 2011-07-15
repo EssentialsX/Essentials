@@ -35,15 +35,6 @@ public class EssentialsChatPlayerListener extends PlayerListener
 	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
-		updateDisplayName(user);
-	}
-
-	private void updateDisplayName(final User user)
-	{
-		final String prefix = ess.getPermissionsHandler().getPrefix(user).replace('&', '§').replace("{WORLDNAME}", user.getWorld().getName());
-		final String suffix = ess.getPermissionsHandler().getSuffix(user).replace('&', '§').replace("{WORLDNAME}", user.getWorld().getName());
-
-		user.setDisplayName(prefix + user.getNick() + suffix + (suffix.length() > 1 && suffix.substring(suffix.length() - 2, suffix.length() - 1).equals("§") ? "" : "§f"));
 	}
 
 	@Override
@@ -58,7 +49,6 @@ public class EssentialsChatPlayerListener extends PlayerListener
 			return;
 
 		final User user = ess.getUser(event.getPlayer());
-		updateDisplayName(user);
 
 		if (user.isAuthorized("essentials.chat.color"))
 		{

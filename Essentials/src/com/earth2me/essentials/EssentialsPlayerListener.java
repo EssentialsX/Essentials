@@ -60,6 +60,10 @@ public class EssentialsPlayerListener extends PlayerListener
 			{
 			}
 		}
+		if (ess.getSettings().changeDisplayName())
+		{
+			user.setDisplayName(user.getNick());
+		}
 	}
 
 	@Override
@@ -84,6 +88,10 @@ public class EssentialsPlayerListener extends PlayerListener
 		{
 			user.setAfk(false);
 			ess.broadcastMessage(user.getName(), Util.format("userIsNotAway", user.getDisplayName()));
+		}
+		if (ess.getSettings().changeDisplayName())
+		{
+			user.setDisplayName(user.getNick());
 		}
 	}
 
@@ -266,9 +274,13 @@ public class EssentialsPlayerListener extends PlayerListener
 			return;
 		}
 
-		user.setDisplayName(user.getNick());
+		if (ess.getSettings().changeDisplayName())
+		{
+			user.setDisplayName(user.getNick());
+		}
 		user.setAfk(false);
-		if (user.isAuthorized("essentials.sleepingignored")) {
+		if (user.isAuthorized("essentials.sleepingignored"))
+		{
 			user.setSleepingIgnored(true);
 		}
 
@@ -344,6 +356,10 @@ public class EssentialsPlayerListener extends PlayerListener
 			return;
 		}
 		User user = ess.getUser(event.getPlayer());
+		if (ess.getSettings().changeDisplayName())
+		{
+			user.setDisplayName(user.getNick());
+		}
 		if (!user.isJailed() || user.getJail() == null || user.getJail().isEmpty())
 		{
 			return;
@@ -637,7 +653,10 @@ public class EssentialsPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event)
 	{
-		if (event.isCancelled()) return;
+		if (event.isCancelled())
+		{
+			return;
+		}
 		User user = ess.getUser(event.getPlayer());
 		String cmd = event.getMessage().toLowerCase().split(" ")[0].replace("/", "").toLowerCase();
 		if (("msg".equals(cmd) || "r".equals(cmd) || "mail".equals(cmd)))
