@@ -451,35 +451,4 @@ public class Util
 			logger.log(Level.WARNING, String.format("Translation file %s does not contain all translation keys.", currentLocale.toString()));
 		}
 	}
-	
-	 public static List sortMapByValueDesc(final Map m) {
-        List keys = new ArrayList();
-        keys.addAll(m.keySet());
-        Collections.sort(keys, Collections.reverseOrder(new Comparator() {
-            public int compare(Object o1, Object o2) {
-                Object v1 = m.get(o1);
-                Object v2 = m.get(o2);
-                if (v1 == null) {
-                    return (v2 == null) ? 0 : 1;
-                }
-                else if (v1 instanceof Comparable) {
-                    return ((Comparable) v1).compareTo(v2);
-                }
-                else {
-                    return 0;
-                }
-            }
-        }));
-        return keys;
-    }
-	 
- public static List<Object> getKeysFromValue(Map<?, ?> map, Object value){
-    List <Object>list = new ArrayList<Object>();
-    for(Object o:map.keySet()){
-        if(map.get(o).equals(value)) {
-            list.add(o);
-        }
-    }
-    return list;
-  }
 }
