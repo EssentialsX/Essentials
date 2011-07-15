@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 
 public class Commandbalancetop extends EssentialsCommand
@@ -40,6 +41,7 @@ public class Commandbalancetop extends EssentialsCommand
 			balances.put(u.getValue(), u.getValue().getMoney());
 		}
 		int count = 0;
+		server.broadcastMessage(Util.format("balanceTop", max));
 		for (Iterator i = Util.sortMapByValueDesc(balances).iterator(); i.hasNext();)
 		{
 			if (count == max)
@@ -47,7 +49,12 @@ public class Commandbalancetop extends EssentialsCommand
 				break;
 			}
 			User key = (User)i.next();
+			
+			server.broadcastMessage(key.getDisplayName() + ", " + Util.formatCurrency(balances.get(key)));
+			if(!(sender instanceof Player))
+			{
 			sender.sendMessage(key.getDisplayName() + ", " + Util.formatCurrency(balances.get(key)));
+			}
 			count++;
 		}
 	}
