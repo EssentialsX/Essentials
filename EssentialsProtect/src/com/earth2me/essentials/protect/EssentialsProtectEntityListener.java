@@ -292,6 +292,10 @@ public class EssentialsProtectEntityListener extends EntityListener
 	@Override
 	public void onEntityTarget(final EntityTargetEvent event)
 	{
+		if (event.isCancelled())
+		{
+			return;
+		}
 		if (!(event.getTarget() instanceof Player))
 		{
 			return;
