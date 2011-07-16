@@ -48,7 +48,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 {
 	public static final int BUKKIT_VERSION = 974;
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
-	private transient Settings settings;
+	private transient ISettings settings;
 	private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
 	private transient Spawn spawn;
 	private transient Jail jail;
@@ -65,7 +65,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private transient final EssentialsErrorHandler errorHandler = new EssentialsErrorHandler();
 	private transient IPermissionsHandler permissionsHandler;
 
-	public Settings getSettings()
+	public ISettings getSettings()
 	{
 		return settings;
 	}
