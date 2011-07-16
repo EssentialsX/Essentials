@@ -126,4 +126,6 @@ public interface ISettings extends IConf
 	boolean removeGodOnDisconnect();
 
 	boolean changeDisplayName();
+
+	boolean isPlayerCommand(String string);
 }

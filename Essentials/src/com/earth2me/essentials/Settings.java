@@ -100,6 +100,17 @@ public class Settings implements ISettings
 		}
 		return config.getBoolean("restrict-" + label.toLowerCase(), false);
 	}
+	
+	@Override
+	public boolean isPlayerCommand(String label)
+	{
+		for (String c : config.getStringList("player-commands", new ArrayList<String>(0)))
+		{
+			if (!c.equalsIgnoreCase(label)) continue;
+			return true;
+		}
+		return false;
+	}
 
 	@Override
 	public boolean isCommandOverridden(String name)
