@@ -70,7 +70,7 @@ public class Methods {
 
             if(!plugin.isEnabled()) {
                 this.self = true;
-				Logger.getLogger("Minecraft").log(Level.SEVERE, name + " Plugin was found, but not enabled before Essentials. Read the Essentials thread for help."); 
+				//Logger.getLogger("Minecraft").log(Level.SEVERE, name + " Plugin was found, but not enabled before Essentials. Read the Essentials thread for help."); 
                 //manager.enablePlugin(plugin);
             }
 
