@@ -41,6 +41,6 @@ public class EssentialsSpawn extends JavaPlugin
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args)
 	{
-		return ess.onCommandEssentials(sender, command, commandLabel, args, Thread.currentThread().getContextClassLoader(), "com.earth2me.essentials.spawn.Command", "essentials.");
+		return ess.onCommandEssentials(sender, command, commandLabel, args, EssentialsSpawn.class.getClassLoader(), "com.earth2me.essentials.spawn.Command", "essentials.");
 	}
 }
