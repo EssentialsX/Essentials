@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.Charge;
+import com.earth2me.essentials.Trade;
 import org.bukkit.Server;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
@@ -21,7 +21,7 @@ public class Commandtphere extends EssentialsCommand
 		{
 			throw new Exception(Util.format("teleportDisabled", p.getDisplayName()));
 		}
-		p.getTeleport().teleport(user, new Charge(this.getName(), ess));
+		p.getTeleport().teleport(user, new Trade(this.getName(), ess));
 		user.sendMessage(Util.i18n("teleporting"));
 		p.sendMessage(Util.i18n("teleporting"));
 	}

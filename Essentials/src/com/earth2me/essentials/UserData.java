@@ -58,18 +58,20 @@ public abstract class UserData extends PlayerExtension implements IConf
 		isSocialSpyEnabled = _isSocialSpyEnabled();
 		isNPC = _isNPC();
 	}
-	
 	private double money;
-	
-	private double _getMoney() {
+
+	private double _getMoney()
+	{
+		double money = ess.getSettings().getStartingBalance();
 		if (config.hasProperty("money"))
 		{
-			return config.getDouble("money", ess.getSettings().getStartingBalance());
+			money = config.getDouble("money", money);
 		}
-		else
+		if (Math.abs(money) > ess.getSettings().getMaxMoney())
 		{
-			return ess.getSettings().getStartingBalance();
+			money = money < 0 ? -ess.getSettings().getMaxMoney() : ess.getSettings().getMaxMoney();
 		}
+		return money;
 	}
 
 	public double getMoney()
@@ -80,6 +82,10 @@ public abstract class UserData extends PlayerExtension implements IConf
 	public void setMoney(double value)
 	{
 		money = value;
+		if (Math.abs(money) > ess.getSettings().getMaxMoney())
+		{
+			money = money < 0 ? -ess.getSettings().getMaxMoney() : ess.getSettings().getMaxMoney();
+		}
 		config.setProperty("money", value);
 		config.save();
 	}
@@ -92,7 +98,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		}
 		return false;
 	}
-	
+
 	public Location getHome(Location location)
 	{
 		if (!hasHome())
@@ -383,6 +389,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		setTeleportEnabled(ret);
 		return ret;
 	}
+
 	public boolean toggleSocialSpy()
 	{
 		boolean ret = !isSocialSpyEnabled();
@@ -622,7 +629,6 @@ public abstract class UserData extends PlayerExtension implements IConf
 		setAfk(ret);
 		return ret;
 	}
-	
 	private boolean newplayer;
 
 	private boolean getNew()
@@ -641,7 +647,6 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.setProperty("newplayer", set);
 		config.save();
 	}
-	
 	private String geolocation;
 
 	private String _getGeoLocation()
@@ -668,38 +673,36 @@ public abstract class UserData extends PlayerExtension implements IConf
 		}
 		config.save();
 	}
-	
 	private boolean isSocialSpyEnabled;
-	
+
 	private boolean _isSocialSpyEnabled()
 	{
 		return config.getBoolean("socialspy", false);
 	}
-	
+
 	public boolean isSocialSpyEnabled()
 	{
 		return isSocialSpyEnabled;
 	}
-	
+
 	public void setSocialSpyEnabled(boolean status)
 	{
 		isSocialSpyEnabled = status;
 		config.setProperty("socialspy", status);
 		config.save();
 	}
-	
 	private boolean isNPC;
-	
+
 	private boolean _isNPC()
 	{
 		return config.getBoolean("npc", false);
 	}
-	
+
 	public boolean isNPC()
 	{
 		return isNPC;
 	}
-	
+
 	public void setNPC(boolean set)
 	{
 		isNPC = set;

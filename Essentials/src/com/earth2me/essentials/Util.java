@@ -284,9 +284,9 @@ public class Util
 	}
 	private static DecimalFormat df = new DecimalFormat("#0.00", DecimalFormatSymbols.getInstance(Locale.US));
 
-	public static String formatCurrency(double value)
+	public static String formatCurrency(final double value, final IEssentials ess)
 	{
-		String str = Essentials.getStatic().getSettings().getCurrencySymbol() + df.format(value);
+		String str = ess.getSettings().getCurrencySymbol() + df.format(value);
 		if (str.endsWith(".00"))
 		{
 			str = str.substring(0, str.length() - 3);
@@ -307,19 +307,21 @@ public class Util
 
 	private static class ConfigClassLoader extends ClassLoader
 	{
-		private final File dataFolder;
-		private final ClassLoader cl;
+		private final transient File dataFolder;
+		private final transient ClassLoader cl;
+		private final transient IEssentials ess;
 
-		public ConfigClassLoader(File dataFolder, ClassLoader cl)
+		public ConfigClassLoader(final ClassLoader cl, final IEssentials ess)
 		{
-			this.dataFolder = dataFolder;
+			this.ess = ess;
+			this.dataFolder = ess.getDataFolder();
 			this.cl = cl;
 		}
 
 		@Override
-		public URL getResource(String string)
+		public URL getResource(final String string)
 		{
-			File file = new File(dataFolder, string);
+			final File file = new File(dataFolder, string);
 			if (file.exists())
 			{
 				try
@@ -341,17 +343,18 @@ public class Util
 		}
 
 		@Override
-		public InputStream getResourceAsStream(String string)
+		public InputStream getResourceAsStream(final String string)
 		{
-			File file = new File(dataFolder, string);
+			final File file = new File(dataFolder, string);
 			if (file.exists())
 			{
+				BufferedReader br = null;
 				try
 				{
-					BufferedReader br = new BufferedReader(new FileReader(file));
-					String version = br.readLine();
-					br.close();
-					if (version == null || !version.equals("#version: " + Essentials.getStatic().getDescription().getVersion()))
+					br = new BufferedReader(new FileReader(file));
+					final String version = br.readLine();
+
+					if (version == null || !version.equals("#version: " + ess.getDescription().getVersion()))
 					{
 						logger.log(Level.WARNING, String.format("Translation file %s is not updated for Essentials version. Will use default.", file));
 						return cl.getResourceAsStream(string);
@@ -362,36 +365,50 @@ public class Util
 				{
 					return cl.getResourceAsStream(string);
 				}
+				finally
+				{
+					if (br != null)
+					{
+						try
+						{
+							br.close();
+						}
+						catch (IOException ex)
+						{
+							return cl.getResourceAsStream(string);
+						}
+					}
+				}
 			}
 			return cl.getResourceAsStream(string);
 		}
 
 		@Override
-		public Enumeration<URL> getResources(String string) throws IOException
+		public Enumeration<URL> getResources(final String string) throws IOException
 		{
 			return cl.getResources(string);
 		}
 
 		@Override
-		public Class<?> loadClass(String string) throws ClassNotFoundException
+		public Class<?> loadClass(final String string) throws ClassNotFoundException
 		{
 			return cl.loadClass(string);
 		}
 
 		@Override
-		public synchronized void setClassAssertionStatus(String string, boolean bln)
+		public synchronized void setClassAssertionStatus(final String string, final boolean bln)
 		{
 			cl.setClassAssertionStatus(string, bln);
 		}
 
 		@Override
-		public synchronized void setDefaultAssertionStatus(boolean bln)
+		public synchronized void setDefaultAssertionStatus(final boolean bln)
 		{
 			cl.setDefaultAssertionStatus(bln);
 		}
 
 		@Override
-		public synchronized void setPackageAssertionStatus(String string, boolean bln)
+		public synchronized void setPackageAssertionStatus(final String string, final boolean bln)
 		{
 			cl.setPackageAssertionStatus(string, bln);
 		}
@@ -420,7 +437,7 @@ public class Util
 		return mf.format(objects);
 	}
 
-	public static void updateLocale(String loc, File dataFolder)
+	public static void updateLocale(String loc, IEssentials ess)
 	{
 		if (loc == null || loc.isEmpty())
 		{
@@ -440,10 +457,27 @@ public class Util
 			currentLocale = new Locale(parts[0], parts[1], parts[2]);
 		}
 		logger.log(Level.INFO, String.format("Using locale %s", currentLocale.toString()));
-		bundle = ResourceBundle.getBundle("messages", currentLocale, new ConfigClassLoader(dataFolder, Util.class.getClassLoader()));
+		bundle = ResourceBundle.getBundle("messages", currentLocale, new ConfigClassLoader(Util.class.getClassLoader(), ess));
 		if (!bundle.keySet().containsAll(defaultBundle.keySet()))
 		{
 			logger.log(Level.WARNING, String.format("Translation file %s does not contain all translation keys.", currentLocale.toString()));
 		}
+	}
+
+	public static String joinList(Object... list)
+	{
+		final StringBuilder buf = new StringBuilder();
+		boolean first = true;
+		for (Object each : list)
+		{
+			if (!first)
+			{
+				buf.append(", ");
+
+			}
+			first = false;
+			buf.append(each);
+		}
+		return buf.toString();
 	}
 }

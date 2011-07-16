@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.Charge;
+import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.Console;
 import org.bukkit.Server;
 import com.earth2me.essentials.User;
@@ -30,7 +30,7 @@ public class Commandtp extends EssentialsCommand
 				throw new Exception(Util.format("teleportDisabled", p.getDisplayName()));
 			}
 			user.sendMessage(Util.i18n("teleporting"));
-			Charge charge = new Charge(this.getName(), ess);
+			Trade charge = new Trade(this.getName(), ess);
 			charge.isAffordableFor(user);
 			user.getTeleport().teleport(p, charge);
 			break;
@@ -44,7 +44,7 @@ public class Commandtp extends EssentialsCommand
 			charge(user);
 			User target = getPlayer(server, args, 0);
 			User toPlayer = getPlayer(server, args, 1);
-			target.getTeleport().now(toPlayer);
+			target.getTeleport().now(toPlayer, false);
 			target.sendMessage(Util.format("teleportAtoB", user.getDisplayName(), toPlayer.getDisplayName()));
 			break;
 		}
@@ -61,7 +61,7 @@ public class Commandtp extends EssentialsCommand
 		sender.sendMessage(Util.i18n("teleporting"));
 		User target = getPlayer(server, args, 0);
 		User toPlayer = getPlayer(server, args, 1);
-		target.getTeleport().now(toPlayer);
+		target.getTeleport().now(toPlayer, false);
 		target.sendMessage(Util.format("teleportAtoB", Console.NAME, toPlayer.getDisplayName()));
 	}
 }

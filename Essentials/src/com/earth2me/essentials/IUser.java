@@ -22,6 +22,8 @@ public interface IUser
 	boolean isAuthorized(String node);
 
 	boolean isAuthorized(IEssentialsCommand cmd);
+	
+	boolean isAuthorized(IEssentialsCommand cmd, String permissionPrefix);
 
 	void setLastTeleportTimestamp(long time);
 
@@ -32,6 +34,8 @@ public interface IUser
 	double getMoney();
 
 	void takeMoney(double value);
+
+	void giveMoney(double value);
 
 	PlayerInventory getInventory();
 

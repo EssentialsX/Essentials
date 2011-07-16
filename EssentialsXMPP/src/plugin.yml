@@ -1,0 +1,20 @@
+# This determines the command prefix when there are conflicts (/name:home, /name:help, etc.)
+name: EssentialsXMPP
+main: com.earth2me.essentials.xmpp.EssentialsXMPP
+# Note to developers: This next line cannot change, or the automatic versioning system will break.
+version: TeamCity
+website: http://www.earth2me.net:8001/
+description: Provides xmpp communication.
+authors:
+  - snowleo
+depend: [Essentials]
+commands:
+  setxmpp:
+    description: set your xmpp address
+    usage: /<command> <address>
+  xmpp:
+    description: send a message to a player
+    usage: /<command> <player> <message>
+  xmppspy:
+    description: toggle xmpp spy for all messages
+    usage: /<command> <player>

@@ -1,11 +1,10 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.Charge;
+import com.earth2me.essentials.Trade;
 import java.util.List;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.IEssentials;
 import org.bukkit.entity.Player;
 import com.earth2me.essentials.User;
@@ -23,7 +22,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 	{
 		this.name = name;
 	}
-	
+
 	public void setEssentials(IEssentials ess)
 	{
 		this.ess = ess;
@@ -36,9 +35,22 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 
 	protected User getPlayer(Server server, String[] args, int pos) throws NoSuchFieldException, NotEnoughArgumentsException
 	{
+		return getPlayer(server, args, pos, false);
+	}
+
+	protected User getPlayer(Server server, String[] args, int pos, boolean getOffline) throws NoSuchFieldException, NotEnoughArgumentsException
+	{
 		if (args.length <= pos) throw new NotEnoughArgumentsException();
 		List<Player> matches = server.matchPlayer(args[pos]);
-		if (matches.size() < 1) throw new NoSuchFieldException(Util.i18n("playerNotFound"));
+
+		if (matches.size() < 1)
+		{
+			if (!getOffline) throw new NoSuchFieldException(Util.i18n("playerNotFound"));
+			User u = ess.getOfflineUser(args[pos]);
+			if (u == null) throw new NoSuchFieldException(Util.i18n("playerNotFound"));
+			return u;
+		}
+
 		for (Player p : matches)
 		{
 			if (p.getDisplayName().startsWith(args[pos]))
@@ -89,7 +101,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 	{
 		if (sender instanceof Player)
 		{
-			Charge charge = new Charge(this.getName(), ess);
+			Trade charge = new Trade(this.getName(), ess);
 			charge.charge(ess.getUser((Player)sender));
 		}
 	}

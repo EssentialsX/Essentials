@@ -29,13 +29,16 @@ import org.bukkit.util.Vector;
 public class OfflinePlayer implements Player
 {
 	private final String name;
+	final transient IEssentials ess;
 	private Location location = new Location(null, 0, 0, 0, 0, 0);
-	private World world = null;
+	private World world;
 	private UUID uniqueId = UUID.randomUUID();
 
-	public OfflinePlayer(String name)
+	public OfflinePlayer(String name, IEssentials ess)
 	{
 		this.name = name;
+		this.ess = ess;
+		this.world = ess.getServer().getWorlds().get(0);
 	}
 
 	public boolean isOnline()
@@ -141,7 +144,7 @@ public class OfflinePlayer implements Player
 	{
 		return world;
 	}
-	
+
 	public void setLocation(Location loc)
 	{
 		location = loc;
@@ -258,7 +261,7 @@ public class OfflinePlayer implements Player
 
 	public Server getServer()
 	{
-		return Essentials.getStatic() == null ? null : Essentials.getStatic().getServer();
+		return ess == null ? null : ess.getServer();
 	}
 
 	public Vector getMomentum()
@@ -296,7 +299,8 @@ public class OfflinePlayer implements Player
 		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 
-	public void sendRawMessage(String string) {
+	public void sendRawMessage(String string)
+	{
 		throw new UnsupportedOperationException(Util.i18n("notSupportedYet"));
 	}
 

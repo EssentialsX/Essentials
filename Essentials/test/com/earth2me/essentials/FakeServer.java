@@ -193,9 +193,9 @@ public class FakeServer implements Server
 		players.add(base1);
 	}
 	
-	public OfflinePlayer createPlayer(String name)
+	public OfflinePlayer createPlayer(String name, IEssentials ess)
 	{
-		OfflinePlayer player = new OfflinePlayer(name);
+		OfflinePlayer player = new OfflinePlayer(name, ess);
 		player.setLocation(new Location(worlds.get(0), 0, 0, 0, 0, 0));
 		return player;
 	}
@@ -236,6 +236,11 @@ public class FakeServer implements Server
 	}
 
 	public boolean getOnlineMode()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public World getWorld(long l)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}

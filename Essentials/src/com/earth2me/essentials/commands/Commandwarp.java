@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.Charge;
+import com.earth2me.essentials.Trade;
 import org.bukkit.Server;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
@@ -73,7 +73,7 @@ public class Commandwarp extends EssentialsCommand
 
 	private void warpUser(User user, String name) throws Exception
 	{
-		Charge charge = new Charge(this.getName(), ess);
+		Trade charge = new Trade(this.getName(), ess);
 		charge.isAffordableFor(user);
 		if (ess.getSettings().getPerWarpPermission())
 		{

@@ -34,6 +34,9 @@ ops-name-color: 'c'
 # The character(s) to prefix all nicknames, so that you know they are not true usernames.
 nickname-prefix: '~'
 
+# Disable this if you have any other plugin, that modifies the displayname of a user.
+change-displayname: true
+
 # The delay, in seconds, required between /home, /tp, etc.
 teleport-cooldown: 0
 
@@ -51,6 +54,7 @@ default-stack-size: 64
 item-spawn-blacklist:
 
 # Set this to true if you want permission based item spawn rules
+# Note: The blacklist above will be ignored then.
 # Permissions:
 #  - essentials.itemspawn.item-all
 #  - essentials.itemspawn.item-[itemname]
@@ -88,8 +92,6 @@ motd:
   - '&cWelcome, {PLAYER}&c!'
   - '&fType &c/help&f for a list of commands.'
   - 'Currently online: {PLAYERLIST}'
-  - 'Did you know that you can make [Disposal] signs with Essentials?'
-  - 'You have {MAILS} mail messages'
 
 # The server rules, available by typing /rules
 rules:
@@ -112,50 +114,42 @@ overridden-commands:
 disabled-commands:
 # - nick
 
-# Restricted commands will only be available to ops.
+# Restricted commands have been removed.
+# Now we have a whitelist, all commands not on this list are only available to ops.
 # These will have NO EFFECT if you have Permissions installed!
 # These are here only if you want something simpler than Permissions.
-restricted-commands:
-  - bigtree
-  - item
-  - give
-  - heal
-  - plugin
-  - time
-  - top
-  - tp
-  - tphere
-  - tree
-  - setspawn
-  - antioch
-  - kick
-  - ban
-  - unban
-  - top
-  - jump
-  - tpo
-  - tppos
-  - tpohere
-  - economy
-  - setwarp
-  - delwarp
-  - essentials
-  - gc
-  - spawnmob
-  - broadcast
-  - burn
-  - ext
-  - kill
-  - ping
-  - banip
-  - unban
-  - mute
-  - kick
-  - kickall
-  - unbanip
-  - togglejail
-  - setjail
-  - eco.loan
+player-commands:
+  - afk
+  - back
+  - back.ondeath
+  - balance
+  - clearinventory
+  - compass
+  - help
+  - helpop
+  - home
+  - home.others
+  - ignore
+  - info
+  - list
+  - mail
+  - motd
+  - msg
+  - nick
+  - pay
+  - powertool
+  - r
+  - rules
+  - seen
+  - sell
+  - sethome
+  - suicide
+  - tpa
+  - tpaccept
+  - tpahere
+  - tpdeny
+  - world
+  - worth
 
 # Note: All items MUST be followed by a quantity!
 # Times are measured in seconds.
@@ -190,6 +184,8 @@ debug: false
 # If you don't set this, the default locale of the server will be used.
 #locale: de_DE
 
+#turn off god mode when people exit
+remove-god-on-disconnect: false
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #
@@ -229,6 +225,13 @@ command-costs:
 # Set this to a currency symbol you want to use.
 currency-symbol: '$'
 
+# Set the maximum amount of money a player can have
+# The amount is always limited to 10 trillions because of the limitations of a java double
+max-money: 10000000000000
+
+# Enable this to log all interactions with trade/buy/sell signs and sell command
+economy-log-enabled: false
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHelp                     | #
@@ -237,6 +240,9 @@ currency-symbol: '$'
 
 #Show other plugins commands in help
 non-ess-in-help: true
+
+#Hide plugins which dont give a permission
+hide-permissionless-help: true
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -318,6 +324,7 @@ protect:
     lightning-fire-spread: true
     portal-creation: false
     tnt-explosion: false
+    fireball-explosion: false
     creeper-explosion: false
     creeper-playerdamage: false
     creeper-blockdamage: false
@@ -362,6 +369,9 @@ protect:
 
    # Prevent placing blocks above protected rails, this is to stop a potential griefing
     prevent-block-on-rails: false
+    
+    #Store blocks / signs in memory before writing
+    memstore: false
 
   # Disable various default physics and behaviors
   disable:

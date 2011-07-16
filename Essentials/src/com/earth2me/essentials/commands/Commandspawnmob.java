@@ -1,6 +1,5 @@
 package com.earth2me.essentials.commands;
 
-import net.minecraft.server.WorldServer;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import com.earth2me.essentials.User;
@@ -13,7 +12,6 @@ import net.minecraft.server.PathEntity;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.entity.CraftCreeper;
 import org.bukkit.craftbukkit.entity.CraftSheep;
 import org.bukkit.craftbukkit.entity.CraftSlime;
@@ -60,6 +58,12 @@ public class Commandspawnmob extends EssentialsCommand
 			}
 		}
 
+		if (ess.getSettings().getProtectPreventSpawn(mobType.toLowerCase())
+			|| (mountType != null && ess.getSettings().getProtectPreventSpawn(mountType.toLowerCase())))
+		{
+			user.sendMessage(Util.i18n("unableToSpawnMob"));
+			return;
+		}
 
 		Entity spawnedMob = null;
 		Mob mob = null;
@@ -85,7 +89,7 @@ public class Commandspawnmob extends EssentialsCommand
 			loc.setY(loc.getY() + 1);
 			block = user.getWorld().getBlockAt(loc);
 		}
-		
+
 		try
 		{
 			spawnedMob = mob.spawn(user, server, loc);
@@ -224,7 +228,8 @@ public class Commandspawnmob extends EssentialsCommand
 		{
 			((CraftWolf)spawned).setAngry(true);
 		}
-		if ("Creeper".equalsIgnoreCase(type) && data.equalsIgnoreCase("powered")) {
+		if ("Creeper".equalsIgnoreCase(type) && data.equalsIgnoreCase("powered"))
+		{
 			((CraftCreeper)spawned).setPowered(true);
 		}
 	}

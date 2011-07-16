@@ -2,7 +2,6 @@ package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
-import com.earth2me.essentials.ItemDb;
 import com.earth2me.essentials.User;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -25,7 +24,7 @@ public class Commandgive extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		ItemStack stack = ItemDb.get(args[1]);
+		ItemStack stack = ess.getItemDb().get(args[1]);
 
 		String itemname = stack.getType().toString().toLowerCase().replace("_", "");
 		if (sender instanceof Player

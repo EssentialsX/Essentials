@@ -19,12 +19,12 @@ public class PlayerExtension extends PlayerWrapper
 
 	public boolean isBanned()
 	{
-		return ess.getBans().contains(getName());
+		return ess.getBans().isNameBanned(this.getName());
 	}
 
 	public boolean isIpBanned()
 	{
-		return ess.getBannedIps().contains(getAddress().getAddress().toString().replace("/", ""));
+		return ess.getBans().isIpBanned(getAddress().getAddress().getHostAddress());
 	}
 
 	public float getCorrectedYaw()
@@ -53,38 +53,17 @@ public class PlayerExtension extends PlayerWrapper
 
 	public String getGroup()
 	{
-		try
-		{
-			return com.nijikokun.bukkit.Permissions.Permissions.Security.getGroup(getWorld().getName(), getName());
-		}
-		catch (Throwable ex)
-		{
-			return "default";
-		}
+		return ess.getPermissionsHandler().getGroup(base);
 	}
 	
 	public boolean inGroup(String group)
 	{
-		try
-		{
-			return com.nijikokun.bukkit.Permissions.Permissions.Security.inGroup(getWorld().getName(), getName(), group);
-		}
-		catch (Throwable ex)
-		{
-			return false;
-		}
+		return ess.getPermissionsHandler().inGroup(base, group);
 	}
 
 	public boolean canBuild()
 	{
-		try
-		{
-			return isOp() || com.nijikokun.bukkit.Permissions.Permissions.Security.canGroupBuild(getWorld().getName(), getGroup());
-		}
-		catch (Throwable ex)
-		{
-			return true;
-		}
+		return ess.getPermissionsHandler().canBuild(base, getGroup());
 	}
 
 	public EntityPlayer getHandle()

@@ -4,7 +4,6 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
-import org.bukkit.ChatColor;
 
 
 public class Commandkick extends EssentialsCommand
@@ -13,7 +12,7 @@ public class Commandkick extends EssentialsCommand
 	{
 		super("kick");
 	}
-
+	
 	@Override
 	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
@@ -21,19 +20,16 @@ public class Commandkick extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-
-		User u;
-		try
+		
+		User u = getPlayer(server, args, 0);
+		if (u.isAuthorized("essentials.kick.exempt"))
 		{
-			u = ess.getUser(server.matchPlayer(args[0]).get(0));
-		}
-		catch (Throwable ex)
-		{
-			sender.sendMessage(Util.i18n("playerNotFound"));
+			sender.sendMessage(Util.i18n("kickExempt"));
 			return;
 		}
-
 		charge(sender);
-		u.kickPlayer(args.length > 1 ? getFinalArg(args, 1) : Util.i18n("kickDefault"));
+		final String kickReason = args.length > 1 ? getFinalArg(args, 1) : Util.i18n("kickDefault");
+		u.kickPlayer(kickReason);
+		server.broadcastMessage(Util.format("playerKicked", u.getName(), kickReason));
 	}
 }

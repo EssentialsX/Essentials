@@ -1,7 +1,6 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.InventoryWorkaround;
-import com.earth2me.essentials.ItemDb;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.util.List;
@@ -56,7 +55,7 @@ public class Commandunlimited extends EssentialsCommand
 			return;
 		}
 
-		ItemStack stack = ItemDb.get(args[0], 1);
+		ItemStack stack = ess.getItemDb().get(args[0], 1);
 
 		String itemname = stack.getType().toString().toLowerCase().replace("_", "");
 		if (!user.isAuthorized("essentials.unlimited.item-all")

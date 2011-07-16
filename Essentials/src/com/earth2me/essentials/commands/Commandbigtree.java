@@ -17,7 +17,7 @@ public class Commandbigtree extends EssentialsCommand
 	@Override
 	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		TreeType tree = TreeType.TREE;
+		TreeType tree;
 		if (args.length > 0 && args[0].equalsIgnoreCase("redwood"))
 		{
 			tree = TreeType.TALL_REDWOOD;
@@ -36,7 +36,7 @@ public class Commandbigtree extends EssentialsCommand
 		double z = user.getLocation().getZ();
 
 		// offset tree in direction player is facing
-		int r = (int)user.getCorrectedYaw();
+		final int r = (int)user.getCorrectedYaw();
 		if (r < 68 || r > 292)			// north
 		{
 			x -= 3.0D;
@@ -54,8 +54,8 @@ public class Commandbigtree extends EssentialsCommand
 			z += 3.0D;
 		}		
 
-		Location safeLocation = Util.getSafeDestination(new Location(user.getWorld(), x, y, z));
-		boolean success = user.getWorld().generateTree(safeLocation, (TreeType)tree);
+		final Location safeLocation = Util.getSafeDestination(new Location(user.getWorld(), x, y, z));
+		final boolean success = user.getWorld().generateTree(safeLocation, (TreeType)tree);
 		if (success)
 		{
 			charge(user);

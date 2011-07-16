@@ -17,6 +17,7 @@
  */
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.api.Economy;
 import com.earth2me.essentials.commands.EssentialsCommand;
 import java.io.*;
 import java.util.*;
@@ -27,10 +28,13 @@ import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import com.earth2me.essentials.register.payment.Methods;
+import com.earth2me.essentials.signs.SignBlockListener;
+import com.earth2me.essentials.signs.SignEntityListener;
+import com.earth2me.essentials.signs.SignPlayerListener;
 import java.math.BigInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.craftbukkit.scheduler.CraftScheduler;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
@@ -42,119 +46,130 @@ import org.bukkit.plugin.java.*;
 
 public class Essentials extends JavaPlugin implements IEssentials
 {
-	public static final String AUTHORS = "Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans and Xeology";
-	public static final int minBukkitBuildVersion = 953;
-	private static final Logger logger = Logger.getLogger("Minecraft");
-	private Settings settings;
-	private EssentialsPlayerListener playerListener;
-	private EssentialsBlockListener blockListener;
-	private EssentialsEntityListener entityListener;
-	private JailPlayerListener jailPlayerListener;
-	private static Essentials instance = null;
-	private Spawn spawn;
-	private Jail jail;
-	private Warps warps;
-	private Worth worth;
-	private List<IConf> confList;
-	public ArrayList bans = new ArrayList();
-	public ArrayList bannedIps = new ArrayList();
-	private Backup backup;
-	private final Map<String, User> users = new HashMap<String, User>();
-	private EssentialsTimer timer;
-	private EssentialsUpdateTimer updateTimer;
-	private boolean registerFallback = true;
-	private final Methods paymentMethod = new Methods();
-	private final static boolean enableErrorLogging = false;
-	private final EssentialsErrorHandler errorHandler = new EssentialsErrorHandler();
+	public static final int BUKKIT_VERSION = 974;
+	private static final Logger LOGGER = Logger.getLogger("Minecraft");
+	private transient ISettings settings;
+	private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
+	private transient Spawn spawn;
+	private transient Jail jail;
+	private transient Warps warps;
+	private transient Worth worth;
+	private transient List<IConf> confList;
+	private transient Backup backup;
+	private transient BanWorkaround bans;
+	private transient ItemDb itemDb;
+	private transient final Map<String, User> users = new HashMap<String, User>();
+	private transient EssentialsUpdateTimer updateTimer;
+	private transient final Methods paymentMethod = new Methods();
+	private transient final static boolean enableErrorLogging = false;
+	private transient final EssentialsErrorHandler errorHandler = new EssentialsErrorHandler();
+	private transient IPermissionsHandler permissionsHandler;
 
-	public static IEssentials getStatic()
-	{
-		return instance;
-	}
-
-	public Settings getSettings()
+	public ISettings getSettings()
 	{
 		return settings;
 	}
 
-	public void setupForTesting(Server server) throws IOException, InvalidDescriptionException
+	public void setupForTesting(final Server server) throws IOException, InvalidDescriptionException
 	{
-		File dataFolder = File.createTempFile("essentialstest", "");
-		dataFolder.delete();
-		dataFolder.mkdir();
-		logger.log(Level.INFO, Util.i18n("usingTempFolderForTesting"));
-		logger.log(Level.INFO, dataFolder.toString());
+		final File dataFolder = File.createTempFile("essentialstest", "");
+		if (!dataFolder.delete())
+		{
+			throw new IOException();
+		}
+		if (!dataFolder.mkdir())
+		{
+			throw new IOException();
+		}
+		LOGGER.log(Level.INFO, Util.i18n("usingTempFolderForTesting"));
+		LOGGER.log(Level.INFO, dataFolder.toString());
 		this.initialize(null, server, new PluginDescriptionFile(new FileReader(new File("src" + File.separator + "plugin.yml"))), dataFolder, null, null);
-		settings = new Settings(dataFolder);
-		setStatic();
-	}
-
-	public void setStatic()
-	{
-		instance = this;
+		settings = new Settings(this);
+		permissionsHandler = new ConfigPermissionsHandler(this);
+		Economy.setEss(this);
 	}
 
 	public void onEnable()
 	{
-		if (!Thread.currentThread().getStackTrace()[5].getMethodName().equals("loadPlugin")) {
-			logger.log(Level.SEVERE, "Another plugin is trying to enable Essentials manually. Don't do this! It's probably "
-					+ Thread.currentThread().getStackTrace()[5].getClassName());
+		final String[] javaversion = System.getProperty("java.version").split("\\.", 3);
+		if (javaversion == null || javaversion.length < 2 || Integer.parseInt(javaversion[1]) < 6)
+		{
+			LOGGER.log(Level.SEVERE, "Java version not supported! Please install Java 1.6. You have " + System.getProperty("java.version"));
 		}
 		if (enableErrorLogging)
 		{
-			logger.addHandler(errorHandler);
+			LOGGER.addHandler(errorHandler);
 		}
-		setStatic();
 		EssentialsUpgrade upgrade = new EssentialsUpgrade(this.getDescription().getVersion(), this);
 		upgrade.beforeSettings();
 		confList = new ArrayList<IConf>();
-		settings = new Settings(this.getDataFolder());
+		settings = new Settings(this);
 		confList.add(settings);
 		upgrade.afterSettings();
-		Util.updateLocale(settings.getLocale(), this.getDataFolder());
+		Util.updateLocale(settings.getLocale(), this);
 		spawn = new Spawn(getServer(), this.getDataFolder());
 		confList.add(spawn);
 		warps = new Warps(getServer(), this.getDataFolder());
 		confList.add(warps);
 		worth = new Worth(this.getDataFolder());
 		confList.add(worth);
+		bans = new BanWorkaround(this);
+		confList.add(bans);
+		itemDb = new ItemDb(this);
+		confList.add(itemDb);
 		reload();
 		backup = new Backup(this);
 
-		PluginManager pm = getServer().getPluginManager();
+		final PluginManager pm = getServer().getPluginManager();
 		for (Plugin plugin : pm.getPlugins())
 		{
-			if (plugin.getDescription().getName().startsWith("Essentials"))
+			if (plugin.getDescription().getName().startsWith("Essentials")
+				&& !plugin.getDescription().getVersion().equals(this.getDescription().getVersion()))
 			{
-				if (!plugin.getDescription().getVersion().equals(this.getDescription().getVersion()))
-				{
-					logger.log(Level.WARNING, Util.format("versionMismatch", plugin.getDescription().getName()));
-				}
+				LOGGER.log(Level.WARNING, Util.format("versionMismatch", plugin.getDescription().getName()));
 			}
 		}
-		Matcher versionMatch = Pattern.compile("git-Bukkit-([0-9]+).([0-9]+).([0-9]+)-[0-9]+-[0-9a-z]+-b([0-9]+)jnks.*").matcher(getServer().getVersion());
+		final Matcher versionMatch = Pattern.compile("git-Bukkit-([0-9]+).([0-9]+).([0-9]+)-[0-9]+-[0-9a-z]+-b([0-9]+)jnks.*").matcher(getServer().getVersion());
 		if (versionMatch.matches())
 		{
-			int versionNumber = Integer.parseInt(versionMatch.group(4));
-			if (versionNumber < minBukkitBuildVersion)
+			final int versionNumber = Integer.parseInt(versionMatch.group(4));
+			if (versionNumber < BUKKIT_VERSION)
 			{
-				logger.log(Level.WARNING, Util.i18n("notRecommendedBukkit"));
+				LOGGER.log(Level.WARNING, Util.i18n("notRecommendedBukkit"));
 			}
 		}
 		else
 		{
-			logger.log(Level.INFO, Util.i18n("bukkitFormatChanged"));
+			LOGGER.log(Level.INFO, Util.i18n("bukkitFormatChanged"));
 		}
 
+		final Plugin permissionsPlugin = pm.getPlugin("Permissions");
 
-		ServerListener serverListener = new EssentialsPluginListener(paymentMethod);
+		if (permissionsPlugin != null)
+		{
+			if (permissionsPlugin.getDescription().getVersion().charAt(0) == '3')
+			{
+				this.permissionsHandler = new Permissions3Handler(permissionsPlugin);
+			}
+			else
+			{
+				this.permissionsHandler = new Permissions2Handler(permissionsPlugin);
+			}
+		}
+		else
+		{
+			this.permissionsHandler = new ConfigPermissionsHandler(this);
+		}
+
+		final ServerListener serverListener = new EssentialsPluginListener(paymentMethod);
 		pm.registerEvent(Type.PLUGIN_ENABLE, serverListener, Priority.Low, this);
 		pm.registerEvent(Type.PLUGIN_DISABLE, serverListener, Priority.Low, this);
 
-		playerListener = new EssentialsPlayerListener(this);
+		final EssentialsPlayerListener playerListener = new EssentialsPlayerListener(this);
 		pm.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
 		pm.registerEvent(Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
 		pm.registerEvent(Type.PLAYER_CHAT, playerListener, Priority.Lowest, this);
+		pm.registerEvent(Type.PLAYER_COMMAND_PREPROCESS, playerListener, Priority.Lowest, this);
 		if (getSettings().getNetherPortalsEnabled())
 		{
 			pm.registerEvent(Type.PLAYER_MOVE, playerListener, Priority.High, this);
@@ -166,57 +181,71 @@ public class Essentials extends JavaPlugin implements IEssentials
 		pm.registerEvent(Type.PLAYER_BUCKET_EMPTY, playerListener, Priority.High, this);
 		pm.registerEvent(Type.PLAYER_ANIMATION, playerListener, Priority.High, this);
 
-		blockListener = new EssentialsBlockListener(this);
-		pm.registerEvent(Type.SIGN_CHANGE, blockListener, Priority.Low, this);
-		pm.registerEvent(Type.BLOCK_BREAK, blockListener, Priority.Lowest, this);
+		final EssentialsBlockListener blockListener = new EssentialsBlockListener(this);
 		pm.registerEvent(Type.BLOCK_PLACE, blockListener, Priority.Lowest, this);
 
-		entityListener = new EssentialsEntityListener(this);
+		final SignBlockListener signBlockListener = new SignBlockListener(this);
+		pm.registerEvent(Type.SIGN_CHANGE, signBlockListener, Priority.Highest, this);
+		pm.registerEvent(Type.BLOCK_PLACE, signBlockListener, Priority.Low, this);
+		pm.registerEvent(Type.BLOCK_BREAK, signBlockListener, Priority.Highest, this);
+		pm.registerEvent(Type.BLOCK_IGNITE, signBlockListener, Priority.Low, this);
+		pm.registerEvent(Type.BLOCK_BURN, signBlockListener, Priority.Low, this);
+
+		final SignPlayerListener signPlayerListener = new SignPlayerListener(this);
+		pm.registerEvent(Type.PLAYER_INTERACT, signPlayerListener, Priority.Low, this);
+
+		final SignEntityListener signEntityListener = new SignEntityListener(this);
+		pm.registerEvent(Type.ENTITY_EXPLODE, signEntityListener, Priority.Low, this);
+
+		final EssentialsEntityListener entityListener = new EssentialsEntityListener(this);
 		pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Priority.Lowest, this);
 		pm.registerEvent(Type.ENTITY_COMBUST, entityListener, Priority.Lowest, this);
 		pm.registerEvent(Type.ENTITY_DEATH, entityListener, Priority.Lowest, this);
 
 		jail = new Jail(this);
-		jailPlayerListener = new JailPlayerListener(this);
+		final JailPlayerListener jailPlayerListener = new JailPlayerListener(this);
 		confList.add(jail);
-		pm.registerEvent(Type.BLOCK_BREAK, jail, Priority.High, this);
-		pm.registerEvent(Type.BLOCK_DAMAGE, jail, Priority.High, this);
-		pm.registerEvent(Type.BLOCK_PLACE, jail, Priority.High, this);
-		pm.registerEvent(Type.PLAYER_INTERACT, jailPlayerListener, Priority.High, this);
-		attachEcoListeners();
+		pm.registerEvent(Type.BLOCK_BREAK, jail, Priority.Low, this);
+		pm.registerEvent(Type.BLOCK_DAMAGE, jail, Priority.Low, this);
+		pm.registerEvent(Type.BLOCK_PLACE, jail, Priority.Low, this);
+		pm.registerEvent(Type.PLAYER_INTERACT, jailPlayerListener, Priority.Low, this);
+		pm.registerEvent(Type.PLAYER_RESPAWN, jailPlayerListener, Priority.High, this);
+		pm.registerEvent(Type.PLAYER_TELEPORT, jailPlayerListener, Priority.High, this);
 
 		if (settings.isNetherEnabled() && getServer().getWorlds().size() < 2)
 		{
-			logger.log(Level.WARNING, "Old nether is disabled until multiworld support in bukkit is fixed.");
 			getServer().createWorld(settings.getNetherName(), World.Environment.NETHER);
 		}
 
-		timer = new EssentialsTimer(this);
+		pm.registerEvent(Type.ENTITY_EXPLODE, tntListener, Priority.High, this);
+
+		final EssentialsTimer timer = new EssentialsTimer(this);
 		getScheduler().scheduleSyncRepeatingTask(this, timer, 1, 50);
+		Economy.setEss(this);
 		if (enableErrorLogging)
 		{
 			updateTimer = new EssentialsUpdateTimer(this);
 			getScheduler().scheduleAsyncRepeatingTask(this, updateTimer, 50, 50 * 60 * (this.getDescription().getVersion().startsWith("Dev") ? 60 : 360));
 		}
-		logger.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), AUTHORS));
+		LOGGER.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), Util.joinList(this.getDescription().getAuthors())));
 	}
 
 	public void onDisable()
 	{
-		instance = null;
-		logger.removeHandler(errorHandler);
+		Trade.closeLog();
+		LOGGER.removeHandler(errorHandler);
 	}
 
 	public void reload()
 	{
-		loadBanList();
+		Trade.closeLog();
 
 		for (IConf iConf : confList)
 		{
 			iConf.reloadConfig();
 		}
 
-		Util.updateLocale(settings.getLocale(), this.getDataFolder());
+		Util.updateLocale(settings.getLocale(), this);
 
 		for (User user : users.values())
 		{
@@ -225,15 +254,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 
 		// for motd
 		getConfiguration().load();
-
-		try
-		{
-			ItemDb.load(getDataFolder(), "items.csv");
-		}
-		catch (Exception ex)
-		{
-			logger.log(Level.WARNING, Util.i18n("itemsCsvNotLoaded"), ex);
-		}
 	}
 
 	public String[] getMotd(CommandSender sender, String def)
@@ -250,7 +270,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 		String[] retval = new String[lines.size()];
 
-		if (lines == null || lines.isEmpty() || lines.get(0) == null)
+		if (lines.isEmpty() || lines.get(0) == null)
 		{
 			try
 			{
@@ -264,7 +284,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 			}
 			catch (Throwable ex2)
 			{
-				logger.log(Level.WARNING, Util.format("corruptNodeInConfig", node));
+				LOGGER.log(Level.WARNING, Util.format("corruptNodeInConfig", node));
 				return new String[0];
 			}
 		}
@@ -332,39 +352,14 @@ public class Essentials extends JavaPlugin implements IEssentials
 		return retval;
 	}
 
-	@SuppressWarnings("LoggerStringConcat")
-	public static void previewCommand(CommandSender sender, Command command, String commandLabel, String[] args)
-	{
-		if (sender instanceof Player)
-		{
-			logger.info(ChatColor.BLUE + "[PLAYER_COMMAND] " + ((Player)sender).getName() + ": /" + commandLabel + " " + EssentialsCommand.getFinalArg(args, 0));
-		}
-	}
-
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args)
 	{
-		return onCommandEssentials(sender, command, commandLabel, args, Essentials.class.getClassLoader(), "com.earth2me.essentials.commands.Command");
+		return onCommandEssentials(sender, command, commandLabel, args, Essentials.class.getClassLoader(), "com.earth2me.essentials.commands.Command", "essentials.");
 	}
 
-	public boolean onCommandEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath)
+	public boolean onCommandEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath, String permissionPrefix)
 	{
-		if (("msg".equals(commandLabel.toLowerCase()) || "r".equals(commandLabel.toLowerCase()) || "mail".equals(commandLabel.toLowerCase())) && sender instanceof Player)
-		{
-			StringBuilder str = new StringBuilder();
-			str.append(commandLabel).append(" ");
-			for (String a : args)
-			{
-				str.append(a).append(" ");
-			}
-			for (Player player : getServer().getOnlinePlayers())
-			{
-				if (getUser(player).isSocialSpyEnabled())
-				{
-					player.sendMessage(getUser(sender).getDisplayName() + " : " + str);
-				}
-			}
-		}
 		// Allow plugins to override the command via onCommand
 		if (!getSettings().isCommandOverridden(command.getName()) && !commandLabel.startsWith("e"))
 		{
@@ -386,24 +381,22 @@ public class Essentials extends JavaPlugin implements IEssentials
 					continue;
 				}
 
-				if (!(desc.getCommands() instanceof Map))
+				PluginCommand pc = getServer().getPluginCommand(desc.getName() + ":" + commandLabel);
+				if (pc != null)
 				{
-					continue;
+					return pc.execute(sender, commandLabel, args);
 				}
-
-				Map<String, Object> cmds = (Map<String, Object>)desc.getCommands();
-				if (!cmds.containsKey(command.getName()))
-				{
-					continue;
-				}
-				return p.onCommand(sender, command, commandLabel, args);
 			}
 		}
 
 		try
 		{
-			previewCommand(sender, command, commandLabel, args);
-			User user = sender instanceof Player ? getUser(sender) : null;
+			User user = null;
+			if (sender instanceof Player)
+			{
+				user = getUser(sender);
+				LOGGER.log(Level.INFO, String.format("[PLAYER_COMMAND] %s: /%s %s ", ((Player)sender).getName(), commandLabel, EssentialsCommand.getFinalArg(args, 0)));
+			}
 
 			// New mail notification
 			if (user != null && !getSettings().isCommandDisabled("mail") && !commandLabel.equals("mail") && user.isAuthorized("essentials.mail"))
@@ -430,14 +423,14 @@ public class Essentials extends JavaPlugin implements IEssentials
 			catch (Exception ex)
 			{
 				sender.sendMessage(Util.format("commandNotLoaded", commandLabel));
-				logger.log(Level.SEVERE, Util.format("commandNotLoaded", commandLabel), ex);
+				LOGGER.log(Level.SEVERE, Util.format("commandNotLoaded", commandLabel), ex);
 				return true;
 			}
 
 			// Check authorization
-			if (user != null && !user.isAuthorized(cmd))
+			if (user != null && !user.isAuthorized(cmd, permissionPrefix))
 			{
-				logger.log(Level.WARNING, Util.format("deniedAccessCommand", user.getName()));
+				LOGGER.log(Level.WARNING, Util.format("deniedAccessCommand", user.getName()));
 				user.sendMessage(Util.i18n("noAccessCommand"));
 				return true;
 			}
@@ -463,133 +456,34 @@ public class Essentials extends JavaPlugin implements IEssentials
 			}
 			catch (Throwable ex)
 			{
-				sender.sendMessage(Util.format("errorWithMessage", ex.getMessage()));
-				LogRecord lr = new LogRecord(Level.WARNING, Util.format("errorCallingCommand", commandLabel));
-				lr.setThrown(ex);
-				if (getSettings().isDebug())
-				{
-					logger.log(lr);
-				}
-				else
-				{
-					if (enableErrorLogging)
-					{
-						errorHandler.publish(lr);
-						errorHandler.flush();
-					}
-				}
+				showError(sender, ex, commandLabel);
 				return true;
 			}
 		}
 		catch (Throwable ex)
 		{
-			logger.log(Level.SEVERE, Util.format("commandFailed", commandLabel), ex);
+			LOGGER.log(Level.SEVERE, Util.format("commandFailed", commandLabel), ex);
 			return true;
 		}
 	}
 
-	public void loadBanList()
+	public void showError(final CommandSender sender, final Throwable exception, final String commandLabel)
 	{
-		//I don't like this but it needs to be done until CB fixors
-		File file = new File("banned-players.txt");
-		File ipFile = new File("banned-ips.txt");
-		try
+		sender.sendMessage(Util.format("errorWithMessage", exception.getMessage()));
+		final LogRecord logRecord = new LogRecord(Level.WARNING, Util.format("errorCallingCommand", commandLabel));
+		logRecord.setThrown(exception);
+		if (getSettings().isDebug())
 		{
-			if (!file.exists())
+			LOGGER.log(logRecord);
+		}
+		else
+		{
+			if (enableErrorLogging)
 			{
-				throw new FileNotFoundException(Util.i18n("bannedPlayersFileNotFound"));
-			}
-
-			final BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-			try
-			{
-				bans.clear();
-				while (bufferedReader.ready())
-				{
-
-					final String line = bufferedReader.readLine().trim().toLowerCase();
-					if (line.length() > 0 && line.charAt(0) == '#')
-					{
-						continue;
-					}
-					bans.add(line);
-
-				}
-			}
-			catch (IOException io)
-			{
-				logger.log(Level.SEVERE, Util.i18n("bannedPlayersFileError"), io);
-			}
-			finally
-			{
-				try
-				{
-					bufferedReader.close();
-				}
-				catch (IOException ex)
-				{
-					logger.log(Level.SEVERE, Util.i18n("bannedPlayersFileError"), ex);
-				}
+				errorHandler.publish(logRecord);
+				errorHandler.flush();
 			}
 		}
-		catch (FileNotFoundException ex)
-		{
-			logger.log(Level.SEVERE, Util.i18n("bannedPlayersFileError"), ex);
-		}
-
-		try
-		{
-			if (!ipFile.exists())
-			{
-				throw new FileNotFoundException(Util.i18n("bannedIpsFileNotFound"));
-			}
-
-			final BufferedReader bufferedReader = new BufferedReader(new FileReader(ipFile));
-			try
-			{
-				bannedIps.clear();
-				while (bufferedReader.ready())
-				{
-
-					final String line = bufferedReader.readLine().trim().toLowerCase();
-					if (line.length() > 0 && line.charAt(0) == '#')
-					{
-						continue;
-					}
-					bannedIps.add(line);
-
-				}
-			}
-			catch (IOException io)
-			{
-				logger.log(Level.SEVERE, Util.i18n("bannedIpsFileError"), io);
-			}
-			finally
-			{
-				try
-				{
-					bufferedReader.close();
-				}
-				catch (IOException ex)
-				{
-					logger.log(Level.SEVERE, Util.i18n("bannedIpsFileError"), ex);
-				}
-			}
-		}
-		catch (FileNotFoundException ex)
-		{
-			logger.log(Level.SEVERE, Util.i18n("bannedIpsFileError"), ex);
-		}
-	}
-
-	private void attachEcoListeners()
-	{
-		PluginManager pm = getServer().getPluginManager();
-		EssentialsEcoBlockListener ecoBlockListener = new EssentialsEcoBlockListener(this);
-		EssentialsEcoPlayerListener ecoPlayerListener = new EssentialsEcoPlayerListener(this);
-		pm.registerEvent(Type.PLAYER_INTERACT, ecoPlayerListener, Priority.High, this);
-		pm.registerEvent(Type.BLOCK_BREAK, ecoBlockListener, Priority.High, this);
-		pm.registerEvent(Type.SIGN_CHANGE, ecoBlockListener, Priority.Monitor, this);
 	}
 
 	public CraftScheduler getScheduler()
@@ -653,47 +547,37 @@ public class Essentials extends JavaPlugin implements IEssentials
 		return u;
 	}
 
+	public Map<String, User> getAllUsers()
+	{
+		return users;
+	}
+
 	public User getOfflineUser(String name)
 	{
 		File userFolder = new File(getDataFolder(), "userdata");
 		File userFile = new File(userFolder, Util.sanitizeFileName(name) + ".yml");
 		if (userFile.exists())
 		{	//Users do not get offline changes saved without being reproccessed as Users! ~ Xeology :)
-			return getUser((Player)new OfflinePlayer(name));
+			return getUser((Player)new OfflinePlayer(name, this));
 
 		}
 		return null;
 	}
 
-	public World getWorld(String name)
+	public World getWorld(final String name)
 	{
 		if (name.matches("[0-9]+"))
 		{
-			int id = Integer.parseInt(name);
+			final int id = Integer.parseInt(name);
 			if (id < getServer().getWorlds().size())
 			{
 				return getServer().getWorlds().get(id);
 			}
 		}
-		World w = getServer().getWorld(name);
-		if (w != null)
-		{
-			return w;
-		}
-		return null;
+		return getServer().getWorld(name);
 	}
 
-	public void setRegisterFallback(boolean registerFallback)
-	{
-		this.registerFallback = registerFallback;
-	}
-
-	public boolean isRegisterFallbackEnabled()
-	{
-		return registerFallback;
-	}
-
-	public void addReloadListener(IConf listener)
+	public void addReloadListener(final IConf listener)
 	{
 		confList.add(listener);
 	}
@@ -703,7 +587,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		return paymentMethod;
 	}
 
-	public int broadcastMessage(String name, String message)
+	public int broadcastMessage(final String name, final String message)
 	{
 		Player[] players = getServer().getOnlinePlayers();
 
@@ -734,18 +618,33 @@ public class Essentials extends JavaPlugin implements IEssentials
 		return this.getScheduler().scheduleSyncDelayedTask(this, run);
 	}
 
-	public int scheduleSyncRepeatingTask(final Runnable run, long delay, long period)
+	public int scheduleSyncDelayedTask(final Runnable run, final long delay)
+	{
+		return this.getScheduler().scheduleSyncDelayedTask(this, run, delay);
+	}
+
+	public int scheduleSyncRepeatingTask(final Runnable run, final long delay, final long period)
 	{
 		return this.getScheduler().scheduleSyncRepeatingTask(this, run, delay, period);
 	}
 
-	public List<String> getBans()
+	public TNTExplodeListener getTNTListener()
+	{
+		return tntListener;
+	}
+
+	public IPermissionsHandler getPermissionsHandler()
+	{
+		return permissionsHandler;
+	}
+
+	public BanWorkaround getBans()
 	{
 		return bans;
 	}
-
-	public List<String> getBannedIps()
+	
+	public ItemDb getItemDb()
 	{
-		return bannedIps;
+		return itemDb;
 	}
 }

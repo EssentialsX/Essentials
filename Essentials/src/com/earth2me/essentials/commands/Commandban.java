@@ -2,7 +2,6 @@ package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.CraftServer;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 
@@ -15,31 +14,32 @@ public class Commandban extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
-
-		User p = null;
-		if (server.matchPlayer(args[0]).isEmpty())
+		final User player = getPlayer(server, args, 0, true);
+		if (player.isAuthorized("essentials.ban.exempt"))
 		{
-			((CraftServer)server).getHandle().a(args[0]);
-			sender.sendMessage(Util.format("playerBanned",args[0]));
+			sender.sendMessage(Util.i18n("banExempt"));
+			return;
+		}
+		
+		String banReason;
+		if (args.length > 1)
+		{
+			banReason = getFinalArg(args, 1);
+			player.setBanReason(commandLabel);
 		}
 		else
 		{
-			p = ess.getUser(server.matchPlayer(args[0]).get(0));
-			String banReason =  Util.i18n("defaultBanReason");
-			if(args.length > 1) {
-				banReason = getFinalArg(args, 1);
-				p.setBanReason(commandLabel);
-			}
-			p.kickPlayer(banReason);
-			((CraftServer)server).getHandle().a(p.getName());
-			sender.sendMessage(Util.format("playerBanned", p.getName()));
+			banReason = Util.i18n("defaultBanReason");
 		}
-		ess.loadBanList();
+		player.kickPlayer(banReason);
+		ess.getBans().banByName(player.getName());
+		server.broadcastMessage(Util.format("playerBanned", player.getName(), banReason));
 	}
 }
+

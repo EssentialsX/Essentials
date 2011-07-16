@@ -18,7 +18,8 @@ public class Commandgc extends EssentialsCommand
 	{
 		charge(sender);
 		sender.sendMessage(Util.format("gcmax", (Runtime.getRuntime().maxMemory() / 1024 / 1024)));
-		sender.sendMessage(Util.format("gcmin", (Runtime.getRuntime().freeMemory() / 1024 / 1024)));
+		sender.sendMessage(Util.format("gcfree", (Runtime.getRuntime().freeMemory() / 1024 / 1024)));
+		sender.sendMessage(Util.format("gctotal", (Runtime.getRuntime().totalMemory() / 1024 / 1024)));
 		for (World w : server.getWorlds())
 		{
 			sender.sendMessage(

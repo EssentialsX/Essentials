@@ -2,7 +2,6 @@ package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 
@@ -22,8 +21,7 @@ public class Commandtogglejail extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		User p = getPlayer(server, args, 0);
-
+		User p = getPlayer(server, args, 0, true);
 		if (p.isAuthorized("essentials.jail.exempt"))
 		{
 			sender.sendMessage(Util.i18n("mayNotJail"));

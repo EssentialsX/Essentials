@@ -30,24 +30,44 @@ public class Commandhelp extends EssentialsCommand
 	@Override
 	protected void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		int page;
+		int page = 1;
+		String match = "";
 		try
 		{
-			page = args.length > 0 ? Integer.parseInt(args[0]) : 1;
+			if (args.length > 0)
+			{
+				match = args[0].toLowerCase();
+				page = Integer.parseInt(args[args.length - 1]);
+				if (args.length == 1)
+				{
+					match = "";
+				}
+			}
+
 		}
 		catch (Exception ex)
 		{
-			page = 1;
+			if (args.length == 1)
+			{
+				match = args[0].toLowerCase();
+			}
 		}
 
-		List<String> lines = getHelpLines(user);
-		int start = (page - 1) * 9;
-		int pages = lines.size() / 9 + (lines.size() % 9 > 0 ? 1 : 0);
-
-		user.sendMessage(Util.format("helpPages", page, pages));
-		for (int i = start; i < lines.size() && i < start + 9; i++)
+		List<String> lines = getHelpLines(user, match);
+		if (lines.size() > 0)
 		{
-			user.sendMessage(lines.get(i));
+			int start = (page - 1) * 9;
+			int pages = lines.size() / 9 + (lines.size() % 9 > 0 ? 1 : 0);
+
+			user.sendMessage(Util.format("helpPages", page, pages));
+			for (int i = start; i < lines.size() && i < start + 9; i++)
+			{
+				user.sendMessage(lines.get(i));
+			}
+		}
+		else
+		{
+			user.sendMessage(Util.i18n("noHelpFound"));
 		}
 	}
 
@@ -58,13 +78,13 @@ public class Commandhelp extends EssentialsCommand
 	}
 
 	@SuppressWarnings("CallToThreadDumpStack")
-	private List<String> getHelpLines(User user) throws Exception
+	private List<String> getHelpLines(User user, String match) throws Exception
 	{
 		List<String> retval = new ArrayList<String>();
-		File helpFile = new File(ess.getDataFolder(), "help_"+Util.sanitizeFileName(user.getName()) +".txt");
+		File helpFile = new File(ess.getDataFolder(), "help_" + Util.sanitizeFileName(user.getName()) + ".txt");
 		if (!helpFile.exists())
 		{
-			helpFile = new File(ess.getDataFolder(), "help_"+Util.sanitizeFileName(user.getGroup()) +".txt");
+			helpFile = new File(ess.getDataFolder(), "help_" + Util.sanitizeFileName(user.getGroup()) + ".txt");
 		}
 		if (!helpFile.exists())
 		{
@@ -73,8 +93,9 @@ public class Commandhelp extends EssentialsCommand
 		if (helpFile.exists())
 		{
 			final BufferedReader bufferedReader = new BufferedReader(new FileReader(helpFile));
-			try {
-				
+			try
+			{
+
 				while (bufferedReader.ready())
 				{
 					final String line = bufferedReader.readLine();
@@ -98,6 +119,12 @@ public class Commandhelp extends EssentialsCommand
 				final HashMap<String, HashMap<String, String>> cmds = (HashMap<String, HashMap<String, String>>)desc.getCommands();
 				for (Entry<String, HashMap<String, String>> k : cmds.entrySet())
 				{
+					if ((!match.equalsIgnoreCase("")) && (!k.getKey().toLowerCase().contains(match))
+						&& (!k.getValue().get("description").toLowerCase().contains(match)))
+					{
+						continue;
+					}
+
 					if (p.getDescription().getName().toLowerCase().contains("essentials"))
 					{
 						final String node = "essentials." + k.getKey();
@@ -119,9 +146,19 @@ public class Commandhelp extends EssentialsCommand
 									retval.add("§c" + k.getKey() + "§7: " + value.get("description"));
 								}
 							}
+							else if (value.containsKey("permissions") && value.get("permissions") != null && !(value.get("permissions").equals("")))
+							{
+								if (user.isAuthorized(value.get("permissions")))
+								{
+									retval.add("§c" + k.getKey() + "§7: " + value.get("description"));
+								}
+							}
 							else
 							{
-								retval.add("§c" + k.getKey() + "§7: " + value.get("description"));
+								if (!ess.getSettings().hidePermissionlessHelp())
+								{
+									retval.add("§c" + k.getKey() + "§7: " + value.get("description"));
+								}
 							}
 						}
 

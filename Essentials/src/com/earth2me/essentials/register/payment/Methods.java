@@ -68,6 +68,14 @@ public class Methods {
             if(method.getDescription().getName().equals(name)) plugin = method; else  plugin = manager.getPlugin(name);
             if(plugin == null) continue;
 
+            if(!plugin.isEnabled()) {
+                this.self = true;
+				//Logger.getLogger("Minecraft").log(Level.SEVERE, name + " Plugin was found, but not enabled before Essentials. Read the Essentials thread for help."); 
+                //manager.enablePlugin(plugin);
+            }
+
+            if(plugin == null) continue;
+
             Method current = this.createMethod(plugin);
             if(current == null) continue;
 
@@ -91,7 +99,9 @@ public class Methods {
                             break;
                         }
 
-                        if(count != 0) {
+                        if(this.preferred.isEmpty()) this.Method = attached;
+
+                        if(count == 0) {
                             if(this.preferred.equalsIgnoreCase(attached.getName()))
                                 this.Method = attached;
                         } else {

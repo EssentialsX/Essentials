@@ -1,7 +1,6 @@
 package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
-import com.earth2me.essentials.ItemDb;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import org.bukkit.inventory.ItemStack;
@@ -22,7 +21,7 @@ public class Commandworth extends EssentialsCommand
 
 		if (args.length > 0)
 		{
-			is = ItemDb.get(args[0]);
+			is = ess.getItemDb().get(args[0]);
 		}
 
 		try
@@ -49,13 +48,13 @@ public class Commandworth extends EssentialsCommand
 						 ? Util.format("worthMeta",
 									   is.getType().toString().toLowerCase().replace("_", ""),
 									   is.getDurability(),
-									   Util.formatCurrency(worth * amount),
+									   Util.formatCurrency(worth * amount, ess),
 									   amount,
-									   Util.formatCurrency(worth))
+									   Util.formatCurrency(worth, ess))
 						 : Util.format("worth",
 									   is.getType().toString().toLowerCase().replace("_", ""),
-									   Util.formatCurrency(worth * amount),
+									   Util.formatCurrency(worth * amount, ess),
 									   amount,
-									   Util.formatCurrency(worth)));
+									   Util.formatCurrency(worth, ess)));
 	}
 }

@@ -34,7 +34,12 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 	public boolean isAuthorized(IEssentialsCommand cmd)
 	{
-		return isAuthorized("essentials." + (cmd.getName().equals("r") ? "msg" : cmd.getName()));
+		return isAuthorized(cmd, "essentials.");
+	}
+
+	public boolean isAuthorized(IEssentialsCommand cmd, String permissionPrefix)
+	{
+		return isAuthorized(permissionPrefix + (cmd.getName().equals("r") ? "msg" : cmd.getName()));
 	}
 
 	public boolean isAuthorized(String node)
@@ -49,15 +54,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			return false;
 		}
 
-		try
-		{
-			return com.nijikokun.bukkit.Permissions.Permissions.Security.permission(base, node);
-		}
-		catch (Throwable ex)
-		{
-			String[] cmds = node.split("\\.", 2);
-			return !ess.getSettings().isCommandRestricted(cmds[cmds.length - 1]);
-		}
+		return ess.getPermissionsHandler().hasPermission(this, node);
 	}
 
 	public void healCooldown() throws Exception
@@ -80,12 +77,21 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 	public void giveMoney(double value)
 	{
+		giveMoney(value, null);
+	}
+
+	public void giveMoney(double value, CommandSender initiator)
+	{
 		if (value == 0)
 		{
 			return;
 		}
 		setMoney(getMoney() + value);
-		sendMessage(Util.format("addedToAccount", Util.formatCurrency(value)));
+		sendMessage(Util.format("addedToAccount", Util.formatCurrency(value, ess)));
+		if (initiator != null)
+		{
+			initiator.sendMessage((Util.format("addedToOthersAccount", Util.formatCurrency(value, ess), this.getDisplayName())));
+		}
 	}
 
 	public void payUser(User reciever, double value) throws Exception
@@ -102,19 +108,28 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		{
 			setMoney(getMoney() - value);
 			reciever.setMoney(reciever.getMoney() + value);
-			sendMessage(Util.format("moneySentTo", Util.formatCurrency(value), reciever.getDisplayName()));                        
-			reciever.sendMessage(Util.format("moneyRecievedFrom", Util.formatCurrency(value), getDisplayName()));
+			sendMessage(Util.format("moneySentTo", Util.formatCurrency(value, ess), reciever.getDisplayName()));
+			reciever.sendMessage(Util.format("moneyRecievedFrom", Util.formatCurrency(value, ess), getDisplayName()));
 		}
 	}
 
 	public void takeMoney(double value)
+	{
+		takeMoney(value, null);
+	}
+
+	public void takeMoney(double value, CommandSender initiator)
 	{
 		if (value == 0)
 		{
 			return;
 		}
 		setMoney(getMoney() - value);
-		sendMessage(Util.format("takenFromAccount", Util.formatCurrency(value)));
+		sendMessage(Util.format("takenFromAccount", Util.formatCurrency(value, ess)));
+		if (initiator != null)
+		{
+			initiator.sendMessage((Util.format("takenFromOthersAccount", Util.formatCurrency(value, ess), this.getDisplayName())));
+		}
 	}
 
 	public boolean canAfford(double cost)
@@ -125,7 +140,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 	public void dispose()
 	{
-		this.base = new OfflinePlayer(getName());
+		this.base = new OfflinePlayer(getName(), ess);
 	}
 
 	public boolean getJustPortaled()
@@ -160,8 +175,8 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		{
 			return false;
 		}
-		return ChatColor.stripColor(this.getDisplayName()).equalsIgnoreCase(ChatColor.stripColor(((User) o).getDisplayName()));
-	
+		return ChatColor.stripColor(this.getDisplayName()).equalsIgnoreCase(ChatColor.stripColor(((User)o).getDisplayName()));
+
 	}
 
 	@Override
@@ -208,26 +223,39 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 	public String getNick()
 	{
-		String nickname = getNickname();
-		if (ess.getSettings().isCommandDisabled("nick") || nickname == null || nickname.isEmpty() || nickname.equals(getName()))
+		final StringBuilder nickname = new StringBuilder();
+		final String nick = getNickname();
+		if (ess.getSettings().isCommandDisabled("nick") || nick == null || nick.isEmpty() || nick.equals(getName()))
 		{
-			nickname = getName();
+			nickname.append(getName());
 		}
 		else
 		{
-			nickname = ess.getSettings().getNicknamePrefix() + nickname;
+			nickname.append(ess.getSettings().getNicknamePrefix()).append(nick);
 		}
 		if (isOp())
 		{
 			try
 			{
-				nickname = ess.getSettings().getOperatorColor().toString() + nickname + "§f";
+				nickname.insert(0, ess.getSettings().getOperatorColor().toString());
+				nickname.append("§f");
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 			}
 		}
-		return nickname;
+
+		final String prefix = ess.getPermissionsHandler().getPrefix(this).replace('&', '§').replace("{WORLDNAME}", this.getWorld().getName());
+		final String suffix = ess.getPermissionsHandler().getSuffix(this).replace('&', '§').replace("{WORLDNAME}", this.getWorld().getName());
+
+		nickname.insert(0, prefix);
+		nickname.append(suffix);
+		if (suffix.length() > 1 && suffix.substring(suffix.length() - 2, suffix.length() - 1).equals("§"))
+		{
+			nickname.append("§f");
+		}
+
+		return nickname.toString();
 	}
 
 	public Teleport getTeleport()
@@ -248,19 +276,20 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	@Override
 	public double getMoney()
 	{
-		if (ess.isRegisterFallbackEnabled() && ess.getPaymentMethod().hasMethod())
+		if (ess.getPaymentMethod().hasMethod())
 		{
 			try
 			{
 				Method method = ess.getPaymentMethod().getMethod();
-				if (!method.hasAccount(this.getName())) {
+				if (!method.hasAccount(this.getName()))
+				{
 					throw new Exception();
 				}
 				Method.MethodAccount account = ess.getPaymentMethod().getMethod().getAccount(this.getName());
 				return account.balance();
 			}
 			catch (Throwable ex)
-			{	
+			{
 			}
 		}
 		return super.getMoney();
@@ -269,12 +298,13 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	@Override
 	public void setMoney(double value)
 	{
-		if (ess.isRegisterFallbackEnabled() && ess.getPaymentMethod().hasMethod())
+		if (ess.getPaymentMethod().hasMethod())
 		{
 			try
 			{
 				Method method = ess.getPaymentMethod().getMethod();
-				if (!method.hasAccount(this.getName())) {
+				if (!method.hasAccount(this.getName()))
+				{
 					throw new Exception();
 				}
 				Method.MethodAccount account = ess.getPaymentMethod().getMethod().getAccount(this.getName());
@@ -285,5 +315,20 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			}
 		}
 		super.setMoney(value);
+	}
+
+	@Override
+	public void setAfk(boolean set)
+	{
+		this.setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") ? true : set);
+		super.setAfk(set);
+	}
+
+	@Override
+	public boolean toggleAfk()
+	{
+		boolean now = super.toggleAfk();
+		this.setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") ? true : now);
+		return now;
 	}
 }
