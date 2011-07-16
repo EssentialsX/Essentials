@@ -21,9 +21,10 @@ public class Commandtempban extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 		final User player = getPlayer(server, args, 0, true);
-		if(player.isAuthorized("essentials.tempban.exempt"))
+		if (player.isAuthorized("essentials.tempban.exempt"))
 		{
 			sender.sendMessage(Util.i18n("tempbanExempt"));
+			return;
 		}
 		final String time = getFinalArg(args, 1);
 		final long banTimestamp = Util.parseDateDiff(time, true);
