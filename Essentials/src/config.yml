@@ -114,52 +114,42 @@ overridden-commands:
 disabled-commands:
 # - nick
 
-# Restricted commands will only be available to ops.
+# Restricted commands have been removed.
+# Now we have a whitelist, all commands not on this list are only available to ops.
 # These will have NO EFFECT if you have Permissions installed!
 # These are here only if you want something simpler than Permissions.
-restricted-commands:
-  - bigtree
-  - item
-  - give
-  - heal
-  - plugin
-  - time
-  - top
-  - tp
-  - tphere
-  - tree
-  - setspawn
-  - antioch
-  - kick
-  - ban
-  - unban
-  - top
-  - jump
-  - tpo
-  - tppos
-  - tpohere
-  - economy
-  - setwarp
-  - delwarp
-  - essentials
-  - gc
-  - spawnmob
-  - broadcast
-  - burn
-  - ext
-  - kill
-  - ping
-  - banip
-  - unban
-  - mute
-  - kick
-  - kickall
-  - unbanip
-  - togglejail
-  - setjail
-  - eco.loan
-  - teleport.timer.bypass
-  - teleport.cooldown.bypass
+player-commands:
+  - afk
+  - back
+  - back.ondeath
+  - balance
+  - clearinventory
+  - compass
+  - help
+  - helpop
+  - home
+  - home.others
+  - ignore
+  - info
+  - list
+  - mail
+  - motd
+  - msg
+  - nick
+  - pay
+  - powertool
+  - r
+  - rules
+  - seen
+  - sell
+  - sethome
+  - suicide
+  - tpa
+  - tpaccept
+  - tpahere
+  - tpdeny
+  - world
+  - worth
 
 # Note: All items MUST be followed by a quantity!
 # Times are measured in seconds.

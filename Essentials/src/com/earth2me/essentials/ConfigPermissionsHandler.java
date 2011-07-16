@@ -30,7 +30,8 @@ public class ConfigPermissionsHandler implements IPermissionsHandler
 	public boolean hasPermission(final Player base, final String node)
 	{
 		final String[] cmds = node.split("\\.", 2);
-		return !ess.getSettings().isCommandRestricted(cmds[cmds.length - 1]);
+		return !ess.getSettings().isCommandRestricted(cmds[cmds.length - 1]) 
+				&& ess.getSettings().isPlayerCommand(cmds[cmds.length - 1]);
 	}
 
 	public String getPrefix(final Player base)

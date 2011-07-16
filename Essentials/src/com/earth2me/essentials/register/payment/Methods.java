@@ -1,14 +1,12 @@
 package com.earth2me.essentials.register.payment;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
- 
-/***
+
+import java.util.HashSet;
+import java.util.Set;
+
+/**
  * Methods.java
  * Controls the getting / setting of methods & the method of payment used.
  *
@@ -19,18 +17,36 @@ import org.bukkit.plugin.PluginManager;
 public class Methods {
     private boolean self = false;
     private Method Method = null;
-	private String preferred = "";
+    private String preferred = "";
     private Set<Method> Methods = new HashSet<Method>();
     private Set<String> Dependencies = new HashSet<String>();
-	private Set<Method> Attachables = new HashSet<Method>();
+    private Set<Method> Attachables = new HashSet<Method>();
 
     public Methods() {
-        this.addMethod("iConomy", new com.earth2me.essentials.register.payment.methods.iCo4());
-        this.addMethod("iConomy", new com.earth2me.essentials.register.payment.methods.iCo5());
-        this.addMethod("BOSEconomy", new com.earth2me.essentials.register.payment.methods.BOSE());
+        this._init();
     }
 
-   public Set<String> getDependencies() {
+    /**
+     * Allows you to set which economy plugin is most preferred.
+     * 
+     * @param preferred - preferred economy plugin
+     */
+    public Methods(String preferred) {
+        this._init();
+
+        if(this.Dependencies.contains(preferred)) {
+            this.preferred = preferred;
+        }
+    }
+
+    private void _init() {
+        this.addMethod("iConomy", new com.earth2me.essentials.register.payment.methods.iCo4());
+        this.addMethod("iConomy", new com.earth2me.essentials.register.payment.methods.iCo5());
+        this.addMethod("BOSEconomy", new com.earth2me.essentials.register.payment.methods.BOSE6());
+        this.addMethod("BOSEconomy", new com.earth2me.essentials.register.payment.methods.BOSE7());
+    }
+
+    public Set<String> getDependencies() {
         return Dependencies;
     }
 
@@ -60,20 +76,12 @@ public class Methods {
 
         int count = 0;
         boolean match = false;
-        Plugin plugin = null;
+        Plugin plugin;
         PluginManager manager = method.getServer().getPluginManager();
 
         for(String name: this.getDependencies()) {
             if(hasMethod()) break;
             if(method.getDescription().getName().equals(name)) plugin = method; else  plugin = manager.getPlugin(name);
-            if(plugin == null) continue;
-
-            if(!plugin.isEnabled()) {
-                this.self = true;
-				Logger.getLogger("Minecraft").log(Level.SEVERE, name + " Plugin was found, but not enabled before Essentials. Read the Essentials thread for help."); 
-                //manager.enablePlugin(plugin);
-            }
-
             if(plugin == null) continue;
 
             Method current = this.createMethod(plugin);
@@ -86,7 +94,7 @@ public class Methods {
             }
         }
 
-		if(!this.preferred.isEmpty()) {
+        if(!this.preferred.isEmpty()) {
             do {
                 if(hasMethod()) {
                     match = true;

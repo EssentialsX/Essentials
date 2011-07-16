@@ -11,7 +11,7 @@ import java.util.Map;
 import org.bukkit.inventory.ItemStack;
 
 
-public class Settings implements IConf
+public class Settings implements ISettings
 {
 	private final transient EssentialsConf config;
 	private final static Logger logger = Logger.getLogger("Minecraft");
@@ -22,49 +22,58 @@ public class Settings implements IConf
 		this.ess = ess;
 		config = new EssentialsConf(new File(ess.getDataFolder(), "config.yml"));
 		config.setTemplateName("/config.yml");
-		config.load();
+		reloadConfig();
 	}
 
+	@Override
 	public boolean getRespawnAtHome()
 	{
 		return config.getBoolean("respawn-at-home", false);
 	}
 
+	@Override
 	public boolean getBedSetsHome()
 	{
 		return config.getBoolean("bed-sethome", false);
 	}
 
+	@Override
 	public int getChatRadius()
 	{
 		return config.getInt("chat.radius", config.getInt("chat-radius", 0));
 	}
 
+	@Override
 	public double getTeleportDelay()
 	{
 		return config.getDouble("teleport-delay", 0);
 	}
 
+	@Override
 	public int getDefaultStackSize()
 	{
 		return config.getInt("default-stack-size", 64);
 	}
 	
+	@Override
 	public int getStartingBalance()
 	{
 		return config.getInt("starting-balance", 0);
 	}
 
+	@Override
 	public boolean getNetherPortalsEnabled()
 	{
 		return isNetherEnabled() && config.getBoolean("nether.portals-enabled", false);
 	}
 
+	@Override
 	public boolean isCommandDisabled(final IEssentialsCommand cmd)
 	{
 		return isCommandDisabled(cmd.getName());
 	}
 
+	@Override
 	public boolean isCommandDisabled(String label)
 	{
 		for (String c : config.getStringList("disabled-commands", new ArrayList<String>(0)))
@@ -75,11 +84,13 @@ public class Settings implements IConf
 		return config.getBoolean("disable-" + label.toLowerCase(), false);
 	}
 
+	@Override
 	public boolean isCommandRestricted(IEssentialsCommand cmd)
 	{
 		return isCommandRestricted(cmd.getName());
 	}
 
+	@Override
 	public boolean isCommandRestricted(String label)
 	{
 		for (String c : config.getStringList("restricted-commands", new ArrayList<String>(0)))
@@ -89,7 +100,19 @@ public class Settings implements IConf
 		}
 		return config.getBoolean("restrict-" + label.toLowerCase(), false);
 	}
+	
+	@Override
+	public boolean isPlayerCommand(String label)
+	{
+		for (String c : config.getStringList("player-commands", new ArrayList<String>(0)))
+		{
+			if (!c.equalsIgnoreCase(label)) continue;
+			return true;
+		}
+		return false;
+	}
 
+	@Override
 	public boolean isCommandOverridden(String name)
 	{
 		List<String> defaultList = new ArrayList<String>(1);
@@ -103,11 +126,13 @@ public class Settings implements IConf
 		return config.getBoolean("override-" + name.toLowerCase(), false);
 	}
 
+	@Override
 	public double getCommandCost(IEssentialsCommand cmd)
 	{
 		return getCommandCost(cmd.getName());
 	}
 
+	@Override
 	public double getCommandCost(String label)
 	{
 		double cost = config.getDouble("command-costs." + label, 0.0);
@@ -116,26 +141,25 @@ public class Settings implements IConf
 		return cost;
 	}
 
-	public String getCommandPrefix()
-	{
-		return config.getString("command-prefix", "");
-	}
-
+	@Override
 	public String getNicknamePrefix()
 	{
 		return config.getString("nickname-prefix", "~");
 	}
 
+	@Override
 	public double getTeleportCooldown()
 	{
 		return config.getDouble("teleport-cooldown", 60);
 	}
 
+	@Override
 	public double getHealCooldown()
 	{
 		return config.getDouble("heal-cooldown", 60);
 	}
 
+	@Override
 	public Object getKit(String name)
 	{
 		Map<String, Object> kits = (Map<String, Object>)config.getProperty("kits");
@@ -148,11 +172,13 @@ public class Settings implements IConf
 		return null;
 	}
 	
+	@Override
 	public Map<String, Object> getKits()
 	{
 		return (Map<String, Object>)config.getProperty("kits");
 	}
 
+	@Override
 	public ChatColor getOperatorColor() throws Exception
 	{
 		String colorName = config.getString("ops-name-color", null);
@@ -173,100 +199,120 @@ public class Settings implements IConf
 		return ChatColor.getByCode(Integer.parseInt(colorName, 16));
 	}
 
+	@Override
 	public boolean getReclaimSetting()
 	{
 		return config.getBoolean("reclaim-onlogout", true);
 	}
 
+	@Override
 	public String getNetherName()
 	{
 		return config.getString("nether.folder", "nether");
 	}
 
+	@Override
 	public boolean isNetherEnabled()
 	{
 		return config.getBoolean("nether.enabled", true);
 	}
 
+	@Override
 	public int getSpawnMobLimit()
 	{
 		return config.getInt("spawnmob-limit", 10);
 	}
         
+	@Override
 	public boolean showNonEssCommandsInHelp()
 	{
 		return config.getBoolean("non-ess-in-help", true);
 	}
         
+	@Override
         public boolean hidePermissionlessHelp()
 	{
 		return config.getBoolean("hide-permissionless-help", true);
 	}          
 
+	@Override
 	public int getProtectCreeperMaxHeight()
 	{
 		return config.getInt("protect.creeper.max-height", -1);
 	}
 
+	@Override
 	public boolean areSignsDisabled()
 	{
 		return config.getBoolean("signs-disabled", false);
 	}
 
+	@Override
 	public long getBackupInterval()
 	{
 		return config.getInt("backup.interval", 1440); // 1440 = 24 * 60
 	}
 
+	@Override
 	public String getBackupCommand()
 	{
 		return config.getString("backup.command", null);
 	}
 
+	@Override
 	public String getChatFormat(String group)
 	{
 		return config.getString("chat.group-formats." + (group == null ? "Default" : group),
 								config.getString("chat.format", "&7[{GROUP}]&f {DISPLAYNAME}&7:&f {MESSAGE}"));
 	}
 
+	@Override
 	public boolean getGenerateExitPortals()
 	{
 		return config.getBoolean("nether.generate-exit-portals", true);
 	}
 
+	@Override
 	public boolean getAnnounceNewPlayers()
 	{
 		return !config.getString("newbies.announce-format", "-").isEmpty();
 	}
 
+	@Override
 	public String getAnnounceNewPlayerFormat(IUser user)
 	{
 		return format(config.getString("newbies.announce-format", "&dWelcome {DISPLAYNAME} to the server!"), user);
 	}
 
+	@Override
 	public String format(String format, IUser user)
 	{
 		return format.replace('&', '§').replace("§§", "&").replace("{PLAYER}", user.getDisplayName()).replace("{DISPLAYNAME}", user.getDisplayName()).replace("{GROUP}", user.getGroup()).replace("{USERNAME}", user.getName()).replace("{ADDRESS}", user.getAddress().toString());
 	}
 
+	@Override
 	public String getNewbieSpawn()
 	{
 		return config.getString("newbies.spawnpoint", "default");
 	}
+	@Override
         public boolean getPerWarpPermission()
 	{
 		return config.getBoolean("per-warp-permission", false);
 	}
 	
+	@Override
 	public boolean getSortListByGroups()
 	{
 		return config.getBoolean("sort-list-by-groups", true);
 	}
 
+	@Override
 	public void reloadConfig() {
 		config.load();
 	}
 
+	@Override
 	public List<Integer> itemSpawnBlacklist()
 	{
 		final List<Integer> epItemSpwn = new ArrayList<Integer>();
@@ -286,21 +332,25 @@ public class Settings implements IConf
 		return epItemSpwn;
 	}
 
+	@Override
 	public boolean spawnIfNoHome()
 	{
 		return config.getBoolean("spawn-if-no-home", false);
 	}
 
+	@Override
 	public boolean warnOnBuildDisallow()
 	{
 		return config.getBoolean("protect.disable.warn-on-build-disallow", false);
 	}
 
+	@Override
 	public boolean use1to1RatioInNether()
 	{
 		return config.getBoolean("nether.use-1to1-ratio", false);
 	}
 	
+	@Override
 	public double getNetherRatio()
 	{
 		if (config.getBoolean("nether.use-1to1-ratio", false)) {
@@ -309,46 +359,55 @@ public class Settings implements IConf
 		return config.getDouble("nether.ratio", 16.0);
 	}
 	
+	@Override
 	public boolean isDebug()
 	{
 		return config.getBoolean("debug", false);
 	}
 
+	@Override
 	public boolean warnOnSmite()
 	{
 		return config.getBoolean("warn-on-smite" ,true);
 	}
 	
+	@Override
 	public boolean permissionBasedItemSpawn()
 	{
 		return config.getBoolean("permission-based-item-spawn", false);
 	}
 
+	@Override
 	public String getLocale()
 	{
 		return config.getString("locale", "");
 	}
 
+	@Override
 	public String getCurrencySymbol()
 	{
 		return config.getString("currency-symbol", "$").substring(0, 1).replaceAll("[0-9]", "$");
 	}
 
+	@Override
 	public boolean isTradeInStacks(int id)
 	{
 		return config.getBoolean("trade-in-stacks-" + id, false);
 	}
 
+	@Override
 	public boolean isEcoDisabled()
 	{
 		return config.getBoolean("disable-eco", false);
 	}
 
+	@Override
 	public boolean getProtectPreventSpawn(final String creatureName)
 	{
 		return config.getBoolean("protect.prevent.spawn."+creatureName, false);
 	}
 
+	@Override
 	public List<Integer> getProtectList(final String configName)
 	{
 		final List<Integer> list = new ArrayList<Integer>();
@@ -368,18 +427,20 @@ public class Settings implements IConf
 		return list;
 	}
 
+	@Override
 	public String getProtectString(final String configName)
 	{
 		return config.getString(configName, null);
 	}
 
+	@Override
 	public boolean getProtectBoolean(final String configName, boolean def)
 	{
 		return config.getBoolean(configName, def);
 	}
 
 	private final static double MAXMONEY = 10000000000000.0;
-	double getMaxMoney()
+	public double getMaxMoney()
 	{
 		double max = config.getDouble("max-money", MAXMONEY);
 		if (Math.abs(max) > MAXMONEY) {
@@ -388,17 +449,17 @@ public class Settings implements IConf
 		return max;
 	}
 
-	boolean isEcoLogEnabled()
+	public boolean isEcoLogEnabled()
 	{
 		return config.getBoolean("economy-log-enabled", false);
 	}
 	
-	boolean removeGodOnDisconnect()
+	public boolean removeGodOnDisconnect()
 	{
 		return config.getBoolean("remove-god-on-disconnect", false);
 	}
 
-	boolean changeDisplayName()
+	public boolean changeDisplayName()
 	{
 		return config.getBoolean("change-displayname", true);
 	}

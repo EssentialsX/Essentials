@@ -24,7 +24,7 @@ public class Commandmute extends EssentialsCommand
 		User p = getPlayer(server, args, 0, true);
 		if (p.isAuthorized("essentials.mute.exempt"))
 		{
-			sender.sendMessage(commandLabel);
+			sender.sendMessage(Util.i18n("muteExempt"));
 			return;
 		}
 		long muteTimestamp = 0;
@@ -48,6 +48,5 @@ public class Commandmute extends EssentialsCommand
 				   ? Util.format("playerMutedFor", Util.formatDateDiff(muteTimestamp))
 				   : Util.i18n("playerMuted"))
 				: Util.i18n("playerUnmuted"));
-
 	}
 }

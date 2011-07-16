@@ -97,6 +97,10 @@ public class EssentialsProtectBlockListener extends BlockListener
 	@Override
 	public void onBlockIgnite(BlockIgniteEvent event)
 	{
+		if (event.isCancelled())
+		{
+			return;
+		}
 		Block block = event.getBlock();
 		if (block.getType() == Material.RAILS
 			&& prot.getSettingBool(ProtectConfig.protect_rails))
@@ -185,6 +189,10 @@ public class EssentialsProtectBlockListener extends BlockListener
 	@Override
 	public void onBlockBurn(final BlockBurnEvent event)
 	{
+		if (event.isCancelled())
+		{
+			return;
+		}
 		final Block block = event.getBlock();
 		if (block.getType() == Material.RAILS && prot.getSettingBool(ProtectConfig.protect_rails))
 		{

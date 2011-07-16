@@ -25,7 +25,7 @@ public interface IEssentials extends Plugin
 
 	int broadcastMessage(String name, String message);
 
-	Settings getSettings();
+	ISettings getSettings();
 
 	CraftScheduler getScheduler();
 

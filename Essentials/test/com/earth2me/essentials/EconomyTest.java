@@ -5,6 +5,7 @@ import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
 import java.io.IOException;
 import junit.framework.TestCase;
+import org.bukkit.World.Environment;
 import org.bukkit.plugin.InvalidDescriptionException;
 import org.junit.Test;
 
@@ -20,6 +21,7 @@ public class EconomyTest extends TestCase
 		super(testName);
 		ess = new Essentials();
 		final FakeServer server = new FakeServer();
+		server.createWorld("testWorld", Environment.NORMAL);
 		try
 		{
 			ess.setupForTesting(server);
