@@ -25,6 +25,7 @@ public class Commandkick extends EssentialsCommand
 		if (u.isAuthorized("essentials.kick.exempt"))
 		{
 			sender.sendMessage(Util.i18n("kickExempt"));
+			return;
 		}
 		charge(sender);
 		final String kickReason = args.length > 1 ? getFinalArg(args, 1) : Util.i18n("kickDefault");
