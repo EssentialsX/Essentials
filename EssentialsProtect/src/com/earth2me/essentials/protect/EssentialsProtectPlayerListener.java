@@ -24,6 +24,10 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerInteract(final PlayerInteractEvent event)
 	{
+		if (event.isCancelled())
+		{
+			return;
+		}
 		final User user = ess.getUser(event.getPlayer());
 
 		if (prot.getSettingBool(ProtectConfig.disable_build) && !user.canBuild())
