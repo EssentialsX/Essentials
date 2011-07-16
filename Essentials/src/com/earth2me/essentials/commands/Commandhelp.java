@@ -54,13 +54,20 @@ public class Commandhelp extends EssentialsCommand
 		}
 
 		List<String> lines = getHelpLines(user, match);
-		int start = (page - 1) * 9;
-		int pages = lines.size() / 9 + (lines.size() % 9 > 0 ? 1 : 0);
-
-		user.sendMessage(Util.format("helpPages", page, pages));
-		for (int i = start; i < lines.size() && i < start + 9; i++)
+		if (lines.size() > 0)
 		{
-			user.sendMessage(lines.get(i));
+			int start = (page - 1) * 9;
+			int pages = lines.size() / 9 + (lines.size() % 9 > 0 ? 1 : 0);
+
+			user.sendMessage(Util.format("helpPages", page, pages));
+			for (int i = start; i < lines.size() && i < start + 9; i++)
+			{
+				user.sendMessage(lines.get(i));
+			}
+		}
+		else
+		{
+			user.sendMessage(Util.i18n("noHelpFound"));
 		}
 	}
 
