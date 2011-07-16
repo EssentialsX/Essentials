@@ -21,7 +21,7 @@ public class Commandmute extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		User p = getPlayer(server, args, 0);
+		User p = getPlayer(server, args, 0, true);
 		long muteTimestamp = 0;
 		if (args.length > 1)
 		{
