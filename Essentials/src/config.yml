@@ -182,10 +182,16 @@ debug: false
 
 # Set the locale for all messages
 # If you don't set this, the default locale of the server will be used.
+# Don't forget to remove the # infront of the line
 #locale: de_DE
 
 #turn off god mode when people exit
 remove-god-on-disconnect: false
+
+# Use the permission system of bukkit
+# This only works if no other permission plugins are installed
+use-bukkit-permissions: false
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #

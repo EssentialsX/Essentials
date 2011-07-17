@@ -158,7 +158,14 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 		else
 		{
-			this.permissionsHandler = new ConfigPermissionsHandler(this);
+			if (this.getSettings().useBukkitPermissions())
+			{
+				this.permissionsHandler = new BukkitPermissionsHandler();
+			}
+			else
+			{
+				this.permissionsHandler = new ConfigPermissionsHandler(this);
+			}
 		}
 
 		final ServerListener serverListener = new EssentialsPluginListener(paymentMethod);
@@ -642,7 +649,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	{
 		return bans;
 	}
-	
+
 	public ItemDb getItemDb()
 	{
 		return itemDb;

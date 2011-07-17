@@ -521,22 +521,22 @@ public class OfflinePlayer implements Player
 
 	public boolean isPermissionSet(String string)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		return false;
 	}
 
 	public boolean isPermissionSet(Permission prmsn)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		return false;
 	}
 
 	public boolean hasPermission(String string)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		return false;
 	}
 
 	public boolean hasPermission(Permission prmsn)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		return false;
 	}
 
 	public PermissionAttachment addAttachment(Plugin plugin, String string, boolean bln)
@@ -566,7 +566,6 @@ public class OfflinePlayer implements Player
 
 	public void recalculatePermissions()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	public Set<PermissionAttachmentInfo> getEffectivePermissions()
@@ -576,6 +575,5 @@ public class OfflinePlayer implements Player
 
 	public void setOp(boolean bln)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }
