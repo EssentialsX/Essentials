@@ -463,5 +463,9 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("change-displayname", true);
 	}
-	
+
+	public boolean useBukkitPermissions()
+	{
+		return config.getBoolean("use-bukkit-permissions", false);
+	}
 }

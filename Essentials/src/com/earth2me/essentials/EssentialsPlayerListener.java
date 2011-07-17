@@ -60,6 +60,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		if (user.isMuted())
 		{
 			event.setCancelled(true);
+			user.sendMessage(Util.i18n("playerMuted"));
 			LOGGER.info(Util.format("mutedUserSpeaks", user.getName()));
 		}
 		final Iterator<Player> it = event.getRecipients().iterator();

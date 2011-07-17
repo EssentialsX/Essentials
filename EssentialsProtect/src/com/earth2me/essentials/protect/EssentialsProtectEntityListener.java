@@ -240,19 +240,19 @@ public class EssentialsProtectEntityListener extends EntityListener
 
 		for (Block block : event.blockList())
 		{
-			if ((block.getType() == Material.RAILS || block.getFace(BlockFace.UP).getType() == Material.RAILS)
+			if ((block.getType() == Material.RAILS || block.getRelative(BlockFace.UP).getType() == Material.RAILS)
 				&& prot.getSettingBool(ProtectConfig.protect_rails))
 			{
 				event.setCancelled(true);
 				return;
 			}
 			if ((block.getType() == Material.WALL_SIGN
-				 || block.getFace(BlockFace.NORTH).getType() == Material.WALL_SIGN
-				 || block.getFace(BlockFace.EAST).getType() == Material.WALL_SIGN
-				 || block.getFace(BlockFace.SOUTH).getType() == Material.WALL_SIGN
-				 || block.getFace(BlockFace.WEST).getType() == Material.WALL_SIGN
+				 || block.getRelative(BlockFace.NORTH).getType() == Material.WALL_SIGN
+				 || block.getRelative(BlockFace.EAST).getType() == Material.WALL_SIGN
+				 || block.getRelative(BlockFace.SOUTH).getType() == Material.WALL_SIGN
+				 || block.getRelative(BlockFace.WEST).getType() == Material.WALL_SIGN
 				 || block.getType() == Material.SIGN_POST
-				 || block.getFace(BlockFace.UP).getType() == Material.SIGN_POST)
+				 || block.getRelative(BlockFace.UP).getType() == Material.SIGN_POST)
 				&& prot.getSettingBool(ProtectConfig.protect_signs))
 			{
 				event.setCancelled(true);

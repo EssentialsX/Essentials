@@ -46,7 +46,7 @@ import org.bukkit.plugin.java.*;
 
 public class Essentials extends JavaPlugin implements IEssentials
 {
-	public static final int BUKKIT_VERSION = 974;
+	public static final int BUKKIT_VERSION = 1000;
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private transient ISettings settings;
 	private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
@@ -158,7 +158,14 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 		else
 		{
-			this.permissionsHandler = new ConfigPermissionsHandler(this);
+			if (this.getSettings().useBukkitPermissions())
+			{
+				this.permissionsHandler = new BukkitPermissionsHandler();
+			}
+			else
+			{
+				this.permissionsHandler = new ConfigPermissionsHandler(this);
+			}
 		}
 
 		final ServerListener serverListener = new EssentialsPluginListener(paymentMethod);
@@ -190,6 +197,8 @@ public class Essentials extends JavaPlugin implements IEssentials
 		pm.registerEvent(Type.BLOCK_BREAK, signBlockListener, Priority.Highest, this);
 		pm.registerEvent(Type.BLOCK_IGNITE, signBlockListener, Priority.Low, this);
 		pm.registerEvent(Type.BLOCK_BURN, signBlockListener, Priority.Low, this);
+		pm.registerEvent(Type.BLOCK_PISTON_EXTEND, signBlockListener, Priority.Low, this);
+		pm.registerEvent(Type.BLOCK_PISTON_RETRACT, signBlockListener, Priority.Low, this);
 
 		final SignPlayerListener signPlayerListener = new SignPlayerListener(this);
 		pm.registerEvent(Type.PLAYER_INTERACT, signPlayerListener, Priority.Low, this);
@@ -642,7 +651,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	{
 		return bans;
 	}
-	
+
 	public ItemDb getItemDb()
 	{
 		return itemDb;

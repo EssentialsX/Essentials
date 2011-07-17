@@ -128,4 +128,6 @@ public interface ISettings extends IConf
 	boolean changeDisplayName();
 
 	boolean isPlayerCommand(String string);
+
+	public boolean useBukkitPermissions();
 }

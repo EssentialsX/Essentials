@@ -7,6 +7,10 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.*;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.permissions.PermissionAttachmentInfo;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
 public class PlayerWrapper implements Player
@@ -559,5 +563,65 @@ public class PlayerWrapper implements Player
 	public void resetPlayerTime()
 	{
 		base.resetPlayerTime();
+	}
+
+	public boolean isPermissionSet(String string)
+	{
+		return base.isPermissionSet(string);
+	}
+
+	public boolean isPermissionSet(Permission prmsn)
+	{
+		return base.isPermissionSet(prmsn);
+	}
+
+	public boolean hasPermission(String string)
+	{
+		return base.hasPermission(string);
+	}
+
+	public boolean hasPermission(Permission prmsn)
+	{
+		return base.hasPermission(prmsn);
+	}
+
+	public PermissionAttachment addAttachment(Plugin plugin, String string, boolean bln)
+	{
+		return base.addAttachment(plugin, string, bln);
+	}
+
+	public PermissionAttachment addAttachment(Plugin plugin)
+	{
+		return base.addAttachment(plugin);
+	}
+	
+	public PermissionAttachment addAttachment(Plugin plugin, String string, boolean bln, int i)
+	{
+		return base.addAttachment(plugin, string, bln, i);
+	}
+
+	public PermissionAttachment addAttachment(Plugin plugin, int i)
+	{
+		return base.addAttachment(plugin, i);
+	}
+
+	public void removeAttachment(PermissionAttachment pa)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public void recalculatePermissions()
+	{
+		base.recalculatePermissions();
+	}
+
+	public Set<PermissionAttachmentInfo> getEffectivePermissions()
+	{
+		return base.getEffectivePermissions();
+	}
+
+	public void setOp(boolean bln)
+	{
+		base.setOp(bln);
 	}
 }

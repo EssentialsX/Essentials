@@ -22,6 +22,11 @@ public class Commandmute extends EssentialsCommand
 		}
 
 		User p = getPlayer(server, args, 0, true);
+		if (p.isAuthorized("essentials.mute.exempt"))
+		{
+			sender.sendMessage(Util.i18n("muteExempt"));
+			return;
+		}
 		long muteTimestamp = 0;
 		if (args.length > 1)
 		{
@@ -30,13 +35,18 @@ public class Commandmute extends EssentialsCommand
 		}
 		p.setMuteTimeout(muteTimestamp);
 		charge(sender);
-
-
+		boolean muted = p.toggleMuted();
 		sender.sendMessage(
-				p.toggleMuted()
+				muted
 				? (muteTimestamp > 0
 				   ? Util.format("mutedPlayerFor", p.getDisplayName(), Util.formatDateDiff(muteTimestamp))
 				   : Util.format("mutedPlayer", p.getDisplayName()))
 				: Util.format("unmutedPlayer", p.getDisplayName()));
+		p.sendMessage(
+				muted
+				? (muteTimestamp > 0
+				   ? Util.format("playerMutedFor", Util.formatDateDiff(muteTimestamp))
+				   : Util.i18n("playerMuted"))
+				: Util.i18n("playerUnmuted"));
 	}
 }

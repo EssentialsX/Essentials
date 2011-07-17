@@ -4,6 +4,7 @@ import com.avaje.ebean.config.ServerConfig;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -241,6 +242,11 @@ public class FakeServer implements Server
 	}
 
 	public World getWorld(long l)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public World getWorld(UUID uuid)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}

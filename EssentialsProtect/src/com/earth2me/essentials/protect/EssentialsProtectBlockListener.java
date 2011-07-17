@@ -14,6 +14,8 @@ import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockListener;
+import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 
@@ -58,7 +60,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 			prot.alert(user, blockPlaced.getType().toString(), Util.i18n("alertPlaced"));
 		}
 
-		final Block below = blockPlaced.getFace(BlockFace.DOWN);
+		final Block below = blockPlaced.getRelative(BlockFace.DOWN);
 		if (below.getType() == Material.RAILS
 			&& prot.getSettingBool(ProtectConfig.prevent_block_on_rail)
 			&& prot.getStorage().isProtected(below, user.getName()))
@@ -75,7 +77,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 			protect.add(blockPlaced);
 			if (prot.getSettingBool(ProtectConfig.protect_below_rails))
 			{
-				protect.add(blockPlaced.getFace(BlockFace.DOWN));
+				protect.add(blockPlaced.getRelative(BlockFace.DOWN));
 			}
 		}
 		if ((blockPlaced.getType() == Material.SIGN_POST || blockPlaced.getType() == Material.WALL_SIGN)
@@ -115,7 +117,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 			return;
 		}
 		if (event.getBlock().getType() == Material.OBSIDIAN
-			|| event.getBlock().getFace(BlockFace.DOWN).getType() == Material.OBSIDIAN)
+			|| event.getBlock().getRelative(BlockFace.DOWN).getType() == Material.OBSIDIAN)
 		{
 			event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_portal_creation));
 			return;
@@ -260,14 +262,14 @@ public class EssentialsProtectBlockListener extends BlockListener
 				storage.unprotectBlock(block);
 				if (type == Material.RAILS || type == Material.SIGN_POST)
 				{
-					final Block below = block.getFace(BlockFace.DOWN);
+					final Block below = block.getRelative(BlockFace.DOWN);
 					storage.unprotectBlock(below);
 				}
 				else
 				{
 					for (BlockFace blockFace : faces)
 					{
-						final Block against = block.getFace(blockFace);
+						final Block against = block.getRelative(blockFace);
 						storage.unprotectBlock(against);
 					}
 				}
@@ -276,7 +278,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 			{
 				for (BlockFace blockFace : faces)
 				{
-					final Block against = block.getFace(blockFace);
+					final Block against = block.getRelative(blockFace);
 					storage.unprotectBlock(against);
 				}
 			}
@@ -296,14 +298,14 @@ public class EssentialsProtectBlockListener extends BlockListener
 					storage.unprotectBlock(block);
 					if (type == Material.RAILS || type == Material.SIGN_POST)
 					{
-						final Block below = block.getFace(BlockFace.DOWN);
+						final Block below = block.getRelative(BlockFace.DOWN);
 						storage.unprotectBlock(below);
 					}
 					else
 					{
 						for (BlockFace blockFace : faces)
 						{
-							final Block against = block.getFace(blockFace);
+							final Block against = block.getRelative(blockFace);
 							storage.unprotectBlock(against);
 						}
 					}
@@ -312,9 +314,105 @@ public class EssentialsProtectBlockListener extends BlockListener
 				{
 					for (BlockFace blockFace : faces)
 					{
-						final Block against = block.getFace(blockFace);
+						final Block against = block.getRelative(blockFace);
 						storage.unprotectBlock(against);
 					}
+				}
+			}
+		}
+	}
+
+	@Override
+	public void onBlockPistonExtend(BlockPistonExtendEvent event)
+	{
+		if (event.isCancelled())
+		{
+			return;
+		}
+		for (Block block : event.getBlocks())
+		{
+			if (prot.checkProtectionItems(ProtectConfig.blacklist_piston, block.getTypeId()))
+			{
+				event.setCancelled(true);
+				return;
+			}
+			if ((block.getRelative(BlockFace.UP).getType() == Material.RAILS
+				 || block.getType() == Material.RAILS)
+				&& prot.getSettingBool(ProtectConfig.protect_rails))
+			{
+				event.setCancelled(true);
+				return;
+			}
+			if (prot.getSettingBool(ProtectConfig.protect_signs))
+			{
+				for (BlockFace blockFace : faces)
+				{
+					if (blockFace == BlockFace.DOWN)
+					{
+						continue;
+					}
+					final Block sign = block.getRelative(blockFace);
+					if ((blockFace == BlockFace.UP || blockFace == BlockFace.SELF)
+						&& sign.getType() == Material.SIGN_POST)
+					{
+						event.setCancelled(true);
+						return;
+					}
+					if ((blockFace == BlockFace.NORTH || blockFace == BlockFace.EAST
+						 || blockFace == BlockFace.SOUTH || blockFace == BlockFace.WEST
+						 || blockFace == BlockFace.SELF)
+						&& sign.getType() == Material.WALL_SIGN)
+					{
+						event.setCancelled(true);
+						return;
+					}
+				}
+			}
+		}
+	}
+
+	@Override
+	public void onBlockPistonRetract(BlockPistonRetractEvent event)
+	{
+		if (event.isCancelled() || !event.isSticky())
+		{
+			return;
+		}
+		final Block block = event.getRetractLocation().getBlock();
+		if (prot.checkProtectionItems(ProtectConfig.blacklist_piston, block.getTypeId()))
+		{
+			event.setCancelled(true);
+			return;
+		}
+		if ((block.getRelative(BlockFace.UP).getType() == Material.RAILS
+			 || block.getType() == Material.RAILS)
+			&& prot.getSettingBool(ProtectConfig.protect_rails))
+		{
+			event.setCancelled(true);
+			return;
+		}
+		if (prot.getSettingBool(ProtectConfig.protect_signs))
+		{
+			for (BlockFace blockFace : faces)
+			{
+				if (blockFace == BlockFace.DOWN)
+				{
+					continue;
+				}
+				final Block sign = block.getRelative(blockFace);
+				if ((blockFace == BlockFace.UP || blockFace == BlockFace.SELF)
+					&& sign.getType() == Material.SIGN_POST)
+				{
+					event.setCancelled(true);
+					return;
+				}
+				if ((blockFace == BlockFace.NORTH || blockFace == BlockFace.EAST
+					 || blockFace == BlockFace.SOUTH || blockFace == BlockFace.WEST
+					 || blockFace == BlockFace.SELF)
+					&& sign.getType() == Material.WALL_SIGN)
+				{
+					event.setCancelled(true);
+					return;
 				}
 			}
 		}
