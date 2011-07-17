@@ -168,12 +168,12 @@ public class SignProtection extends EssentialsSign
 	{
 		return new Block[]
 				{
-					block.getFace(BlockFace.NORTH),
-					block.getFace(BlockFace.SOUTH),
-					block.getFace(BlockFace.EAST),
-					block.getFace(BlockFace.WEST),
-					block.getFace(BlockFace.DOWN),
-					block.getFace(BlockFace.UP)
+					block.getRelative(BlockFace.NORTH),
+					block.getRelative(BlockFace.SOUTH),
+					block.getRelative(BlockFace.EAST),
+					block.getRelative(BlockFace.WEST),
+					block.getRelative(BlockFace.DOWN),
+					block.getRelative(BlockFace.UP)
 				};
 	}
 

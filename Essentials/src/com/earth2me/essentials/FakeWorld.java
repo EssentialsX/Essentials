@@ -174,26 +174,6 @@ public class FakeWorld implements World
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
-	public Minecart spawnMinecart(Location lctn)
-	{
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
-
-	public StorageMinecart spawnStorageMinecart(Location lctn)
-	{
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
-
-	public PoweredMinecart spawnPoweredMinecart(Location lctn)
-	{
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
-
-	public Boat spawnBoat(Location lctn)
-	{
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
-
 	public LivingEntity spawnCreature(Location lctn, CreatureType ct)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");

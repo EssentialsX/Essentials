@@ -60,7 +60,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 			prot.alert(user, blockPlaced.getType().toString(), Util.i18n("alertPlaced"));
 		}
 
-		final Block below = blockPlaced.getFace(BlockFace.DOWN);
+		final Block below = blockPlaced.getRelative(BlockFace.DOWN);
 		if (below.getType() == Material.RAILS
 			&& prot.getSettingBool(ProtectConfig.prevent_block_on_rail)
 			&& prot.getStorage().isProtected(below, user.getName()))
@@ -77,7 +77,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 			protect.add(blockPlaced);
 			if (prot.getSettingBool(ProtectConfig.protect_below_rails))
 			{
-				protect.add(blockPlaced.getFace(BlockFace.DOWN));
+				protect.add(blockPlaced.getRelative(BlockFace.DOWN));
 			}
 		}
 		if ((blockPlaced.getType() == Material.SIGN_POST || blockPlaced.getType() == Material.WALL_SIGN)
@@ -117,7 +117,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 			return;
 		}
 		if (event.getBlock().getType() == Material.OBSIDIAN
-			|| event.getBlock().getFace(BlockFace.DOWN).getType() == Material.OBSIDIAN)
+			|| event.getBlock().getRelative(BlockFace.DOWN).getType() == Material.OBSIDIAN)
 		{
 			event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_portal_creation));
 			return;
@@ -262,14 +262,14 @@ public class EssentialsProtectBlockListener extends BlockListener
 				storage.unprotectBlock(block);
 				if (type == Material.RAILS || type == Material.SIGN_POST)
 				{
-					final Block below = block.getFace(BlockFace.DOWN);
+					final Block below = block.getRelative(BlockFace.DOWN);
 					storage.unprotectBlock(below);
 				}
 				else
 				{
 					for (BlockFace blockFace : faces)
 					{
-						final Block against = block.getFace(blockFace);
+						final Block against = block.getRelative(blockFace);
 						storage.unprotectBlock(against);
 					}
 				}
@@ -278,7 +278,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 			{
 				for (BlockFace blockFace : faces)
 				{
-					final Block against = block.getFace(blockFace);
+					final Block against = block.getRelative(blockFace);
 					storage.unprotectBlock(against);
 				}
 			}
@@ -298,14 +298,14 @@ public class EssentialsProtectBlockListener extends BlockListener
 					storage.unprotectBlock(block);
 					if (type == Material.RAILS || type == Material.SIGN_POST)
 					{
-						final Block below = block.getFace(BlockFace.DOWN);
+						final Block below = block.getRelative(BlockFace.DOWN);
 						storage.unprotectBlock(below);
 					}
 					else
 					{
 						for (BlockFace blockFace : faces)
 						{
-							final Block against = block.getFace(blockFace);
+							final Block against = block.getRelative(blockFace);
 							storage.unprotectBlock(against);
 						}
 					}
@@ -314,7 +314,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 				{
 					for (BlockFace blockFace : faces)
 					{
-						final Block against = block.getFace(blockFace);
+						final Block against = block.getRelative(blockFace);
 						storage.unprotectBlock(against);
 					}
 				}

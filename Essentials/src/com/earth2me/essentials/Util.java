@@ -375,7 +375,6 @@ public class Util
 						}
 						catch (IOException ex)
 						{
-							return cl.getResourceAsStream(string);
 						}
 					}
 				}

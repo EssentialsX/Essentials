@@ -196,7 +196,7 @@ public class EssentialsSign
 
 	public static boolean checkIfBlockBreaksSigns(final Block block)
 	{
-		if (block.getFace(BlockFace.UP).getType() == Material.SIGN_POST)
+		if (block.getRelative(BlockFace.UP).getType() == Material.SIGN_POST)
 		{
 			return true;
 		}
@@ -209,7 +209,7 @@ public class EssentialsSign
 		};
 		for (BlockFace blockFace : directions)
 		{
-			final Block signblock = block.getFace(blockFace);
+			final Block signblock = block.getRelative(blockFace);
 			if (signblock.getType() == Material.WALL_SIGN)
 			{
 				final org.bukkit.material.Sign sign = (org.bukkit.material.Sign)signblock.getState().getData();
