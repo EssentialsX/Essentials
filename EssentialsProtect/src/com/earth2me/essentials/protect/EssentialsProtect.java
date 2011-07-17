@@ -45,6 +45,8 @@ public class EssentialsProtect extends JavaPlugin implements IConf, IProtect
 		pm.registerEvent(Type.BLOCK_IGNITE, blockListener, Priority.Highest, this);
 		pm.registerEvent(Type.BLOCK_BURN, blockListener, Priority.Highest, this);
 		pm.registerEvent(Type.BLOCK_BREAK, blockListener, Priority.Highest, this);
+		pm.registerEvent(Type.BLOCK_PISTON_EXTEND, blockListener, Priority.Highest, this);
+		pm.registerEvent(Type.BLOCK_PISTON_RETRACT, blockListener, Priority.Highest, this);
 
 		final EssentialsProtectEntityListener entityListener = new EssentialsProtectEntityListener(this);
 		pm.registerEvent(Type.ENTITY_EXPLODE, entityListener, Priority.Highest, this);

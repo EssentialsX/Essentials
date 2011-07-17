@@ -14,6 +14,8 @@ import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockListener;
+import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 
@@ -317,6 +319,37 @@ public class EssentialsProtectBlockListener extends BlockListener
 					}
 				}
 			}
+		}
+	}
+
+	@Override
+	public void onBlockPistonExtend(BlockPistonExtendEvent event)
+	{
+		if (event.isCancelled())
+		{
+			return;
+		}
+		for (Block block : event.getBlocks())
+		{
+			if (prot.checkProtectionItems(ProtectConfig.blacklist_piston, block.getTypeId()))
+			{
+				event.setCancelled(true);
+				return;
+			}
+		}
+	}
+
+	@Override
+	public void onBlockPistonRetract(BlockPistonRetractEvent event)
+	{
+		if (event.isCancelled() || !event.isSticky())
+		{
+			return;
+		}
+		if (prot.checkProtectionItems(ProtectConfig.blacklist_piston, event.getRetractLocation().getBlock().getTypeId()))
+		{
+			event.setCancelled(true);
+			return;
 		}
 	}
 }

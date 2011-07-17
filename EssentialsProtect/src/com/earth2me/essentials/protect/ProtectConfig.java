@@ -45,7 +45,8 @@ public enum ProtectConfig
 	alert_on_break("protect.alert.on-break"),
 	blacklist_placement("protect.blacklist.placement"),
 	blacklist_usage("protect.blacklist.usage"),
-	blacklist_break("protect.blacklist.break");
+	blacklist_break("protect.blacklist.break"),
+	blacklist_piston("protect.blacklist.piston");
 	private final String configName;
 	private final String defValueString;
 	private final boolean defValueBoolean;

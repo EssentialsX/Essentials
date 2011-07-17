@@ -305,7 +305,7 @@ protect:
     on-placement: 10,11,46
     on-use: 
     # 46: TNT
-    on-break: 46
+    on-break: 
 
   # Users cannot PLACE these types of blocks/items.
   # < 255 designates a BLOCK
@@ -317,7 +317,9 @@ protect:
     #prevent people from breaking blocks
     #break: 20,50
     break:
-
+    
+    # Which blocks should not be pushed by pistons
+    piston:
 
   # General physics/behavior modifications
   prevent:
