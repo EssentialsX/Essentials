@@ -46,7 +46,7 @@ import org.bukkit.plugin.java.*;
 
 public class Essentials extends JavaPlugin implements IEssentials
 {
-	public static final int BUKKIT_VERSION = 974;
+	public static final int BUKKIT_VERSION = 1000;
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private transient ISettings settings;
 	private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);

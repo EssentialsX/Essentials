@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import java.util.List;
+import java.util.UUID;
 import org.bukkit.BlockChangeDelegate;
 import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;
@@ -8,6 +9,7 @@ import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.TreeType;
 import org.bukkit.World;
+import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Boat;
@@ -392,7 +394,33 @@ public class FakeWorld implements World
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
-	public long getUID()
+	public UUID getUID()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public Block getHighestBlockAt(int i, int i1)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public Block getHighestBlockAt(Location lctn)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+
+	public Biome getBiome(int i, int i1)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public double getTemperature(int i, int i1)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public double getHumidity(int i, int i1)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}

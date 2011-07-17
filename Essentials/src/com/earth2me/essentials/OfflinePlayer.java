@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import java.net.InetSocketAddress;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import org.bukkit.Achievement;
 import org.bukkit.Effect;
@@ -23,6 +24,10 @@ import org.bukkit.entity.Vehicle;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.permissions.PermissionAttachmentInfo;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
 
@@ -510,6 +515,66 @@ public class OfflinePlayer implements Player
 	}
 
 	public void resetPlayerTime()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public boolean isPermissionSet(String string)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public boolean isPermissionSet(Permission prmsn)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public boolean hasPermission(String string)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public boolean hasPermission(Permission prmsn)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public PermissionAttachment addAttachment(Plugin plugin, String string, boolean bln)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public PermissionAttachment addAttachment(Plugin plugin)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public PermissionAttachment addAttachment(Plugin plugin, String string, boolean bln, int i)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public PermissionAttachment addAttachment(Plugin plugin, int i)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public void removeAttachment(PermissionAttachment pa)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public void recalculatePermissions()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public Set<PermissionAttachmentInfo> getEffectivePermissions()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public void setOp(boolean bln)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
