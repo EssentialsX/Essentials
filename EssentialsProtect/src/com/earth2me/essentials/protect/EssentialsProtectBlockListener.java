@@ -336,6 +336,38 @@ public class EssentialsProtectBlockListener extends BlockListener
 				event.setCancelled(true);
 				return;
 			}
+			if ((block.getRelative(BlockFace.UP).getType() == Material.RAILS
+				 || block.getType() == Material.RAILS)
+				&& prot.getSettingBool(ProtectConfig.protect_rails))
+			{
+				event.setCancelled(true);
+				return;
+			}
+			if (prot.getSettingBool(ProtectConfig.protect_signs))
+			{
+				for (BlockFace blockFace : faces)
+				{
+					if (blockFace == BlockFace.DOWN)
+					{
+						continue;
+					}
+					final Block sign = block.getRelative(blockFace);
+					if ((blockFace == BlockFace.UP || blockFace == BlockFace.SELF)
+						&& sign.getType() == Material.SIGN_POST)
+					{
+						event.setCancelled(true);
+						return;
+					}
+					if ((blockFace == BlockFace.NORTH || blockFace == BlockFace.EAST
+						 || blockFace == BlockFace.SOUTH || blockFace == BlockFace.WEST
+						 || blockFace == BlockFace.SELF)
+						&& sign.getType() == Material.WALL_SIGN)
+					{
+						event.setCancelled(true);
+						return;
+					}
+				}
+			}
 		}
 	}
 
@@ -346,10 +378,43 @@ public class EssentialsProtectBlockListener extends BlockListener
 		{
 			return;
 		}
-		if (prot.checkProtectionItems(ProtectConfig.blacklist_piston, event.getRetractLocation().getBlock().getTypeId()))
+		final Block block = event.getRetractLocation().getBlock();
+		if (prot.checkProtectionItems(ProtectConfig.blacklist_piston, block.getTypeId()))
 		{
 			event.setCancelled(true);
 			return;
+		}
+		if ((block.getRelative(BlockFace.UP).getType() == Material.RAILS
+			 || block.getType() == Material.RAILS)
+			&& prot.getSettingBool(ProtectConfig.protect_rails))
+		{
+			event.setCancelled(true);
+			return;
+		}
+		if (prot.getSettingBool(ProtectConfig.protect_signs))
+		{
+			for (BlockFace blockFace : faces)
+			{
+				if (blockFace == BlockFace.DOWN)
+				{
+					continue;
+				}
+				final Block sign = block.getRelative(blockFace);
+				if ((blockFace == BlockFace.UP || blockFace == BlockFace.SELF)
+					&& sign.getType() == Material.SIGN_POST)
+				{
+					event.setCancelled(true);
+					return;
+				}
+				if ((blockFace == BlockFace.NORTH || blockFace == BlockFace.EAST
+					 || blockFace == BlockFace.SOUTH || blockFace == BlockFace.WEST
+					 || blockFace == BlockFace.SELF)
+					&& sign.getType() == Material.WALL_SIGN)
+				{
+					event.setCancelled(true);
+					return;
+				}
+			}
 		}
 	}
 }
