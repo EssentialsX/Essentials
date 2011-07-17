@@ -197,6 +197,8 @@ public class Essentials extends JavaPlugin implements IEssentials
 		pm.registerEvent(Type.BLOCK_BREAK, signBlockListener, Priority.Highest, this);
 		pm.registerEvent(Type.BLOCK_IGNITE, signBlockListener, Priority.Low, this);
 		pm.registerEvent(Type.BLOCK_BURN, signBlockListener, Priority.Low, this);
+		pm.registerEvent(Type.BLOCK_PISTON_EXTEND, signBlockListener, Priority.Low, this);
+		pm.registerEvent(Type.BLOCK_PISTON_RETRACT, signBlockListener, Priority.Low, this);
 
 		final SignPlayerListener signPlayerListener = new SignPlayerListener(this);
 		pm.registerEvent(Type.PLAYER_INTERACT, signPlayerListener, Priority.Low, this);

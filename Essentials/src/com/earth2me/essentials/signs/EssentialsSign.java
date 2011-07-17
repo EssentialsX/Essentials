@@ -189,6 +189,11 @@ public class EssentialsSign
 		return true;
 	}
 
+	public boolean onBlockPush(Block block, IEssentials ess)
+	{
+		return true;
+	}
+
 	public static boolean checkIfBlockBreaksSigns(final Block block)
 	{
 		if (block.getFace(BlockFace.UP).getType() == Material.SIGN_POST)
@@ -333,7 +338,7 @@ public class EssentialsSign
 	protected final Double getDoublePositive(final String line) throws SignException
 	{
 		final double quantity = getDouble(line);
-		if (Math.round(quantity*100.0) < 1.0)
+		if (Math.round(quantity * 100.0) < 1.0)
 		{
 			throw new SignException(Util.i18n("moreThanZero"));
 		}
@@ -425,7 +430,6 @@ public class EssentialsSign
 		{
 			return;
 		}
-
 	}
 
 
@@ -454,7 +458,7 @@ public class EssentialsSign
 		{
 			return block;
 		}
-		
+
 		public final void updateSign()
 		{
 			sign.update();
@@ -469,7 +473,7 @@ public class EssentialsSign
 		void setLine(final int index, final String text);
 
 		public Block getBlock();
-		
+
 		void updateSign();
 	}
 }

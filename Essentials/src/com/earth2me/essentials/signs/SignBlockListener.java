@@ -13,6 +13,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockListener;
+import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 
@@ -21,12 +23,12 @@ public class SignBlockListener extends BlockListener
 {
 	private final transient IEssentials ess;
 	private final static Logger LOGGER = Logger.getLogger("Minecraft");
-	
+
 	public SignBlockListener(IEssentials ess)
 	{
 		this.ess = ess;
 	}
-	
+
 	@Override
 	public void onBlockBreak(final BlockBreakEvent event)
 	{
@@ -34,13 +36,13 @@ public class SignBlockListener extends BlockListener
 		{
 			return;
 		}
-		
+
 		if (protectSignsAndBlocks(event.getBlock(), event.getPlayer()))
 		{
 			event.setCancelled(true);
 		}
 	}
-	
+
 	public boolean protectSignsAndBlocks(final Block block, final Player player)
 	{
 		final int mat = block.getTypeId();
@@ -78,7 +80,7 @@ public class SignBlockListener extends BlockListener
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void onSignChange(final SignChangeEvent event)
 	{
@@ -104,12 +106,13 @@ public class SignBlockListener extends BlockListener
 		User user = ess.getUser(event.getPlayer());
 		if (user.isAuthorized("essentials.signs.color"))
 		{
-			for (int i = 0; i < 4; i++) {
+			for (int i = 0; i < 4; i++)
+			{
 				event.setLine(i, event.getLine(i).replaceAll("&([0-9a-f])", "§$1"));
 			}
 		}
 	}
-	
+
 	@Override
 	public void onBlockPlace(final BlockPlaceEvent event)
 	{
@@ -117,7 +120,7 @@ public class SignBlockListener extends BlockListener
 		{
 			return;
 		}
-		
+
 		final Block against = event.getBlockAgainst();
 		if (against.getType() == Material.WALL_SIGN
 			|| against.getType() == Material.SIGN_POST)
@@ -142,7 +145,7 @@ public class SignBlockListener extends BlockListener
 			}
 		}
 	}
-	
+
 	@Override
 	public void onBlockBurn(final BlockBurnEvent event)
 	{
@@ -150,7 +153,7 @@ public class SignBlockListener extends BlockListener
 		{
 			return;
 		}
-		
+
 		final Block block = event.getBlock();
 		if ((block.getType() == Material.WALL_SIGN
 			 || block.getType() == Material.SIGN_POST
@@ -170,7 +173,7 @@ public class SignBlockListener extends BlockListener
 			}
 		}
 	}
-	
+
 	@Override
 	public void onBlockIgnite(final BlockIgniteEvent event)
 	{
@@ -178,10 +181,61 @@ public class SignBlockListener extends BlockListener
 		{
 			return;
 		}
-		
+
 		if (protectSignsAndBlocks(event.getBlock(), event.getPlayer()))
 		{
 			event.setCancelled(true);
+		}
+	}
+
+	@Override
+	public void onBlockPistonExtend(BlockPistonExtendEvent event)
+	{
+		for (Block block : event.getBlocks())
+		{
+			if ((block.getType() == Material.WALL_SIGN
+				 || block.getType() == Material.SIGN_POST
+				 || EssentialsSign.checkIfBlockBreaksSigns(block)))
+			{
+				event.setCancelled(true);
+				return;
+			}
+			for (Signs signs : Signs.values())
+			{
+				final EssentialsSign sign = signs.getSign();
+				if (sign.getBlocks().contains(block.getType())
+					&& !sign.onBlockPush(block, ess))
+				{
+					event.setCancelled(true);
+					return;
+				}
+			}
+		}
+	}
+
+	@Override
+	public void onBlockPistonRetract(BlockPistonRetractEvent event)
+	{
+		if (event.isSticky())
+		{
+			final Block block = event.getBlock();
+			if ((block.getType() == Material.WALL_SIGN
+				 || block.getType() == Material.SIGN_POST
+				 || EssentialsSign.checkIfBlockBreaksSigns(block)))
+			{
+				event.setCancelled(true);
+				return;
+			}
+			for (Signs signs : Signs.values())
+			{
+				final EssentialsSign sign = signs.getSign();
+				if (sign.getBlocks().contains(block.getType())
+					&& !sign.onBlockPush(block, ess))
+				{
+					event.setCancelled(true);
+					return;
+				}
+			}
 		}
 	}
 }
