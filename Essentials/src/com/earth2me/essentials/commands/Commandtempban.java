@@ -1,9 +1,11 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import org.bukkit.entity.Player;
 
 
 public class Commandtempban extends EssentialsCommand
@@ -21,10 +23,22 @@ public class Commandtempban extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 		final User player = getPlayer(server, args, 0, true);
-		if (player.isAuthorized("essentials.tempban.exempt"))
+		if (player.getBase() instanceof OfflinePlayer)
 		{
-			sender.sendMessage(Util.i18n("tempbanExempt"));
-			return;
+			if (sender instanceof Player
+				&& !ess.getUser(sender).isAuthorized("essentials.tempban.offline"))
+			{
+				sender.sendMessage(Util.i18n("tempbanExempt"));
+				return;
+			}
+		}
+		else
+		{
+			if (player.isAuthorized("essentials.tempban.exempt"))
+			{
+				sender.sendMessage(Util.i18n("tempbanExempt"));
+				return;
+			}
 		}
 		final String time = getFinalArg(args, 1);
 		final long banTimestamp = Util.parseDateDiff(time, true);

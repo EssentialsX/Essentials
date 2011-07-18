@@ -1,9 +1,11 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import org.bukkit.entity.Player;
 
 
 public class Commandban extends EssentialsCommand
@@ -21,12 +23,24 @@ public class Commandban extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 		final User player = getPlayer(server, args, 0, true);
-		if (player.isAuthorized("essentials.ban.exempt"))
+		if (player.getBase() instanceof OfflinePlayer)
 		{
-			sender.sendMessage(Util.i18n("banExempt"));
-			return;
+			if (sender instanceof Player
+				&& !ess.getUser(sender).isAuthorized("essentials.ban.offline"))
+			{
+				sender.sendMessage(Util.i18n("banExempt"));
+				return;
+			}
 		}
-		
+		else
+		{
+			if (player.isAuthorized("essentials.ban.exempt"))
+			{
+				sender.sendMessage(Util.i18n("banExempt"));
+				return;
+			}
+		}
+
 		String banReason;
 		if (args.length > 1)
 		{
@@ -42,4 +56,3 @@ public class Commandban extends EssentialsCommand
 		server.broadcastMessage(Util.format("playerBanned", player.getName(), banReason));
 	}
 }
-
