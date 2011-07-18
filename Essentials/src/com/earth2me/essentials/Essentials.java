@@ -329,6 +329,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 				}
 			}
 			m = m.replace("{ONLINE}", Integer.toString(getServer().getOnlinePlayers().length - playerHidden));
+			m = m.replace("{UNIQUE}", Integer.toString(users.size()));
 
 			if (m.matches(".*\\{PLAYERLIST\\}.*"))
 			{
