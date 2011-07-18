@@ -7,6 +7,7 @@ import org.bukkit.event.player.PlayerListener;
 import org.bukkit.inventory.ItemStack;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import org.bukkit.Material;
 import org.bukkit.event.block.Action;
 
 
@@ -30,7 +31,20 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 		}
 		final User user = ess.getUser(event.getPlayer());
 
-		if (prot.getSettingBool(ProtectConfig.disable_build) && !user.canBuild())
+		if (event.hasItem()
+			&& (event.getItem().getType() == Material.WATER_BUCKET
+				|| event.getItem().getType() == Material.LAVA_BUCKET)
+			&& prot.getSettingBool(ProtectConfig.disable_build) && !user.canBuild())
+		{
+			if (ess.getSettings().warnOnBuildDisallow())
+			{
+				user.sendMessage(Util.i18n("buildAlert"));
+			}
+			event.setCancelled(true);
+			return;
+		}
+
+		if (prot.getSettingBool(ProtectConfig.disable_use) && !user.canBuild())
 		{
 			if (ess.getSettings().warnOnBuildDisallow())
 			{
