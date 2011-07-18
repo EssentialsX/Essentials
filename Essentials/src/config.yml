@@ -125,31 +125,41 @@ player-commands:
   - balance
   - clearinventory
   - compass
+  - depth
+  - getpos
   - help
   - helpop
   - home
   - home.others
   - ignore
   - info
+  - kit
   - list
   - mail
+  - mail.send
+  - me
   - motd
   - msg
   - nick
   - pay
+  - ping
   - powertool
   - r
   - rules
   - seen
   - sell
   - sethome
+  - setxmpp
+  - spawn
   - suicide
   - tpa
   - tpaccept
   - tpahere
   - tpdeny
+  - warp
   - world
   - worth
+  - xmpp
 
 # Note: All items MUST be followed by a quantity!
 # Times are measured in seconds.
