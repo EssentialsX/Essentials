@@ -60,6 +60,7 @@ public final class Economy
 			{
 				logger.log(Level.WARNING, Util.format("deleteFileError", config));
 			}
+			ess.getAllUsers().remove(name.toLowerCase());
 		}
 	}
 
