@@ -22,13 +22,25 @@ public class Commandwhois extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
+		boolean showhidden = false;
+		if (sender instanceof Player)
+		{
+			if (ess.getUser(sender).isAuthorized("essentials.list.hidden"))
+			{
+				showhidden = true;
+			}
+		}
+		else
+		{
+			showhidden = true;
+		}
 		String whois = args[0].toLowerCase();
 		charge(sender);
 		int prefixLength = ChatColor.stripColor(ess.getSettings().getNicknamePrefix()).length();
 		for (Player p : server.getOnlinePlayers())
 		{
 			User u = ess.getUser(p);
-			if (u.isHidden())
+			if (u.isHidden() && !showhidden)
 			{
 				continue;
 			}

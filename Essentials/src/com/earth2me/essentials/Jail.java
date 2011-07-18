@@ -42,7 +42,10 @@ public class Jail extends BlockListener implements IConf
 
 	public void sendToJail(User user, String jail) throws Exception
 	{
-		user.getTeleport().now(getJail(jail));
+		if (!(user.getBase() instanceof OfflinePlayer))
+		{
+			user.getTeleport().now(getJail(jail));
+		}
 		user.setJail(jail);
 	}
 

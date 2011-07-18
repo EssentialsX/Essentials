@@ -217,6 +217,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		pm.registerEvent(Type.PLAYER_INTERACT, jailPlayerListener, Priority.Low, this);
 		pm.registerEvent(Type.PLAYER_RESPAWN, jailPlayerListener, Priority.High, this);
 		pm.registerEvent(Type.PLAYER_TELEPORT, jailPlayerListener, Priority.High, this);
+		pm.registerEvent(Type.PLAYER_JOIN, jailPlayerListener, Priority.High, this);
 
 		if (settings.isNetherEnabled() && getServer().getWorlds().size() < 2)
 		{
@@ -328,6 +329,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 				}
 			}
 			m = m.replace("{ONLINE}", Integer.toString(getServer().getOnlinePlayers().length - playerHidden));
+			m = m.replace("{UNIQUE}", Integer.toString(users.size()));
 
 			if (m.matches(".*\\{PLAYERLIST\\}.*"))
 			{

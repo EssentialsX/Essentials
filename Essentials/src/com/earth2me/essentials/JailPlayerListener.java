@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -62,6 +63,22 @@ public class JailPlayerListener extends PlayerListener
 		}
 		user.sendMessage(Util.i18n("jailMessage"));
 	}
-	
-	
+
+	@Override
+	public void onPlayerJoin(final PlayerJoinEvent event)
+	{
+		User u = ess.getUser(event.getPlayer());
+		if (u.isJailed())
+		{
+			try
+			{
+				ess.getJail().sendToJail(u, u.getJail());
+			}
+			catch (Exception ex)
+			{
+				LOGGER.log(Level.WARNING, Util.i18n("returnPlayerToJailError"), ex);
+			}
+			u.sendMessage(Util.i18n("jailMessage"));
+		}
+	}
 }

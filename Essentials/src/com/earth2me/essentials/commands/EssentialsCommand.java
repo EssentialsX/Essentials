@@ -41,6 +41,15 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 	protected User getPlayer(Server server, String[] args, int pos, boolean getOffline) throws NoSuchFieldException, NotEnoughArgumentsException
 	{
 		if (args.length <= pos) throw new NotEnoughArgumentsException();
+		User user = ess.getAllUsers().get(args[pos].toLowerCase());
+		if (user != null)
+		{
+			if(!getOffline && user.isHidden())
+			{
+				throw new NoSuchFieldException(Util.i18n("playerNotFound"));
+			}
+			return user;
+		}	
 		List<Player> matches = server.matchPlayer(args[pos]);
 
 		if (matches.size() < 1)
