@@ -5,6 +5,7 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import org.bukkit.entity.Player;
 
 
 public class Commandtogglejail extends EssentialsCommand
@@ -23,19 +24,39 @@ public class Commandtogglejail extends EssentialsCommand
 		}
 
 		User p = getPlayer(server, args, 0, true);
-		if (p.isAuthorized("essentials.jail.exempt"))
-		{
-			sender.sendMessage(Util.i18n("mayNotJail"));
-			return;
-		}
 
 		if (args.length >= 2 && !p.isJailed())
 		{
+			if (p.getBase() instanceof OfflinePlayer)
+			{
+				if (sender instanceof Player
+					&& !ess.getUser(sender).isAuthorized("essentials.togglejail.offline"))
+				{
+					sender.sendMessage(Util.i18n("mayNotJail"));
+					return;
+				}
+			}
+			else
+			{
+				if (p.isAuthorized("essentials.jail.exempt"))
+				{
+					sender.sendMessage(Util.i18n("mayNotJail"));
+					return;
+				}
+			}
 			charge(sender);
 			p.setJailed(true);
 			p.sendMessage(Util.i18n("userJailed"));
 			p.setJail(null);
-			ess.getJail().sendToJail(p, args[1]);
+			if (!(p.getBase() instanceof OfflinePlayer))
+			{
+				ess.getJail().sendToJail(p, args[1]);
+			}
+			else
+			{
+				// Check if jail exists
+				ess.getJail().getJail(args[1]);
+			}
 			p.setJail(args[1]);
 			long timeDiff = 0;
 			if (args.length > 2)
@@ -56,7 +77,7 @@ public class Commandtogglejail extends EssentialsCommand
 			return;
 		}
 
-		if (args.length >= 2 && p.isJailed() && !args[1].equalsIgnoreCase(p.getJail()))
+		if (args.length >= 2 && p.isJailed() && args[1].equalsIgnoreCase(p.getJail()))
 		{
 			String time = getFinalArg(args, 2);
 			long timeDiff = Util.parseDateDiff(time, true);
