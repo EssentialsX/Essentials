@@ -150,7 +150,7 @@ public class Trade
 			}
 		}
 		StringBuilder sb = new StringBuilder();
-		sb.append(type).append(",").append(subtype).append(",").append("event").append(",\"");
+		sb.append(type).append(",").append(subtype).append(",").append(event).append(",\"");
 		sb.append(DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL).format(new Date()));
 		sb.append("\",\"");
 		if (sender != null)
