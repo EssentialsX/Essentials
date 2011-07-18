@@ -47,7 +47,7 @@ public class Commandlist extends EssentialsCommand
 		charge(sender);
 		StringBuilder online = new StringBuilder();
 		online.append(ChatColor.BLUE).append("There are ").append(ChatColor.RED).append(server.getOnlinePlayers().length - playerHidden);
-		if (showhidden)
+		if (showhidden && playerHidden > 0)
 		{
 			online.append(ChatColor.GRAY).append("/").append(playerHidden);
 		}
