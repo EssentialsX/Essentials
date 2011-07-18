@@ -215,11 +215,11 @@ public class EssentialsPlayerListener extends PlayerListener
 			user.getInventory().setContents(user.getSavedInventory());
 			user.setSavedInventory(null);
 		}
+		user.dispose();
 		if (!ess.getSettings().getReclaimSetting())
 		{
 			return;
 		}
-		user.dispose();
 		final Thread thread = new Thread(new Runnable()
 		{
 			public void run()
