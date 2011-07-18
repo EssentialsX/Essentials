@@ -23,14 +23,14 @@ public class Commandtogglejail extends EssentialsCommand
 		}
 
 		User p = getPlayer(server, args, 0, true);
-		if (p.isAuthorized("essentials.jail.exempt"))
-		{
-			sender.sendMessage(Util.i18n("mayNotJail"));
-			return;
-		}
 
 		if (args.length >= 2 && !p.isJailed())
 		{
+			if (p.isAuthorized("essentials.jail.exempt"))
+			{
+				sender.sendMessage(Util.i18n("mayNotJail"));
+				return;
+			}
 			charge(sender);
 			p.setJailed(true);
 			p.sendMessage(Util.i18n("userJailed"));
@@ -64,7 +64,7 @@ public class Commandtogglejail extends EssentialsCommand
 			return;
 		}
 
-		if (args.length >= 2 && p.isJailed() && !args[1].equalsIgnoreCase(p.getJail()))
+		if (args.length >= 2 && p.isJailed() && args[1].equalsIgnoreCase(p.getJail()))
 		{
 			String time = getFinalArg(args, 2);
 			long timeDiff = Util.parseDateDiff(time, true);
