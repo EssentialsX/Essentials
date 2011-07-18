@@ -18,8 +18,10 @@ import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.entity.CraftTNTPrimed;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Fireball;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -30,6 +32,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityListener;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTargetEvent.TargetReason;
+import org.bukkit.event.entity.ExplosionPrimeEvent;
 
 
 public class EssentialsProtectEntityListener extends EntityListener
@@ -113,6 +116,24 @@ public class EssentialsProtectEntityListener extends EntityListener
 			if (eAttack instanceof Creeper && prot.getSettingBool(ProtectConfig.prevent_creeper_playerdmg)
 				&& !(target instanceof Player
 					 && user.isAuthorized("essentials.protect.damage.creeper")
+					 && !user.isAuthorized("essentials.protect.damage.disable")))
+			{
+				event.setCancelled(true);
+				return;
+			}
+			
+			if (eAttack instanceof Fireball && prot.getSettingBool(ProtectConfig.prevent_fireball_playerdmg)
+				&& !(target instanceof Player
+					 && user.isAuthorized("essentials.protect.damage.fireball")
+					 && !user.isAuthorized("essentials.protect.damage.disable")))
+			{
+				event.setCancelled(true);
+				return;
+			}
+			
+			if (eAttack instanceof TNTPrimed && prot.getSettingBool(ProtectConfig.prevent_tnt_playerdmg)
+				&& !(target instanceof Player
+					 && user.isAuthorized("essentials.protect.damage.tnt")
 					 && !user.isAuthorized("essentials.protect.damage.disable")))
 			{
 				event.setCancelled(true);
@@ -312,6 +333,16 @@ public class EssentialsProtectEntityListener extends EntityListener
 		{
 			event.setCancelled(true);
 			return;
+		}
+	}
+
+	@Override
+	public void onExplosionPrime(ExplosionPrimeEvent event)
+	{
+		if (event.getEntity() instanceof CraftFireball
+				 && prot.getSettingBool(ProtectConfig.prevent_fireball_fire))
+		{
+			event.setFire(false);
 		}
 	}
 }

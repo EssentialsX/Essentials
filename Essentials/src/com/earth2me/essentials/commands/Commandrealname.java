@@ -26,6 +26,10 @@ public class Commandrealname extends EssentialsCommand
 		for (Player p : server.getOnlinePlayers())
 		{
 			final User u = ess.getUser(p);
+			if (u.isHidden())
+			{
+				continue;
+			}
 			final String displayName = ChatColor.stripColor(u.getDisplayName()).toLowerCase();
 			if (!whois.equals(displayName)
 				&& !displayName.equals(ChatColor.stripColor(ess.getSettings().getNicknamePrefix()) + whois)

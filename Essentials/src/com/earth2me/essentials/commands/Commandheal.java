@@ -53,13 +53,17 @@ public class Commandheal extends EssentialsCommand
 	private void healOtherPlayers(Server server, CommandSender sender, String name)
 	{
 		List<Player> players = server.matchPlayer(name);
-		if(players.isEmpty())
+		if (players.isEmpty())
 		{
 			sender.sendMessage(Util.i18n("playerNotFound"));
 			return;
 		}
 		for (Player p : players)
 		{
+			if (ess.getUser(p).isHidden())
+			{
+				continue;
+			}
 			p.setHealth(20);
 			sender.sendMessage(Util.format("healOther", p.getDisplayName()));
 		}

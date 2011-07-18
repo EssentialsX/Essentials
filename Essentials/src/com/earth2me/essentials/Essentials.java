@@ -177,10 +177,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		pm.registerEvent(Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
 		pm.registerEvent(Type.PLAYER_CHAT, playerListener, Priority.Lowest, this);
 		pm.registerEvent(Type.PLAYER_COMMAND_PREPROCESS, playerListener, Priority.Lowest, this);
-		if (getSettings().getNetherPortalsEnabled())
-		{
-			pm.registerEvent(Type.PLAYER_MOVE, playerListener, Priority.High, this);
-		}
+		pm.registerEvent(Type.PLAYER_MOVE, playerListener, Priority.High, this);
 		pm.registerEvent(Type.PLAYER_LOGIN, playerListener, Priority.High, this);
 		pm.registerEvent(Type.PLAYER_TELEPORT, playerListener, Priority.High, this);
 		pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Priority.High, this);
@@ -320,15 +317,27 @@ public class Essentials extends JavaPlugin implements IEssentials
 				m = m.replace("{IP}", user.getAddress().toString());
 				m = m.replace("{BALANCE}", Double.toString(user.getMoney()));
 				m = m.replace("{MAILS}", Integer.toString(user.getMails().size()));
+				m = m.replace("{WORLD}", user.getLocation().getWorld().getName());
 			}
-
-			m = m.replace("{ONLINE}", Integer.toString(getServer().getOnlinePlayers().length));
+			int playerHidden = 0;
+			for (Player p : getServer().getOnlinePlayers())
+			{
+				if (getUser(p).isHidden())
+				{
+					playerHidden++;
+				}
+			}
+			m = m.replace("{ONLINE}", Integer.toString(getServer().getOnlinePlayers().length - playerHidden));
 
 			if (m.matches(".*\\{PLAYERLIST\\}.*"))
 			{
 				StringBuilder online = new StringBuilder();
 				for (Player p : getServer().getOnlinePlayers())
 				{
+					if (getUser(p).isHidden())
+					{
+						continue;
+					}
 					if (online.length() > 0)
 					{
 						online.append(", ");
@@ -563,6 +572,12 @@ public class Essentials extends JavaPlugin implements IEssentials
 
 	public User getOfflineUser(String name)
 	{
+		// Don't create a new offline user, if we already have that user loaded.
+		User u = users.get(name.toLowerCase());
+		if (u != null)
+		{
+			return u;
+		}
 		File userFolder = new File(getDataFolder(), "userdata");
 		File userFile = new File(userFolder, Util.sanitizeFileName(name) + ".yml");
 		if (userFile.exists())

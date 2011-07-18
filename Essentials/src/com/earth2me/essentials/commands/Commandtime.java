@@ -106,6 +106,7 @@ public class Commandtime extends EssentialsCommand
 		if ("reset".equalsIgnoreCase(timeString))
 		{
 			user.resetPlayerTime();
+			return;
 		}
 		throw new Exception(Util.i18n("onlyDayNight"));
 	}

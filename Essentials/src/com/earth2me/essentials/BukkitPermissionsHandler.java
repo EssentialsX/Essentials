@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 
 public class BukkitPermissionsHandler implements IPermissionsHandler
 {
-
 	public String getGroup(Player base)
 	{
 		return "default";
@@ -23,6 +22,20 @@ public class BukkitPermissionsHandler implements IPermissionsHandler
 
 	public boolean hasPermission(Player base, String node)
 	{
+		if (base.hasPermission("-" + node))
+		{
+			return false;
+		}
+		final String[] parts = node.split("\\.");
+		final StringBuilder sb = new StringBuilder();
+		for (String part : parts)
+		{
+			if (base.hasPermission(sb.toString() + "*"))
+			{
+				return true;
+			}
+			sb.append(part).append(".");
+		}
 		return base.hasPermission(node);
 	}
 
@@ -35,5 +48,4 @@ public class BukkitPermissionsHandler implements IPermissionsHandler
 	{
 		return "";
 	}
-	
 }

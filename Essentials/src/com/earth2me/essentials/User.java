@@ -19,6 +19,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	private boolean teleportRequestHere;
 	private final Teleport teleport;
 	private long lastActivity;
+	private boolean hidden = false;
 
 	User(Player base, IEssentials ess)
 	{
@@ -250,10 +251,6 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 		nickname.insert(0, prefix);
 		nickname.append(suffix);
-		if (suffix.length() > 1 && suffix.substring(suffix.length() - 2, suffix.length() - 1).equals("§"))
-		{
-			nickname.append("§f");
-		}
 
 		return nickname.toString();
 	}
@@ -330,5 +327,15 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		boolean now = super.toggleAfk();
 		this.setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") ? true : now);
 		return now;
+	}
+
+	public boolean isHidden()
+	{
+		return hidden;
+	}
+
+	public void setHidden(boolean hidden)
+	{
+		this.hidden = hidden;
 	}
 }
