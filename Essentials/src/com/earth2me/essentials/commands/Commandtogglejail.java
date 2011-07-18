@@ -35,7 +35,15 @@ public class Commandtogglejail extends EssentialsCommand
 			p.setJailed(true);
 			p.sendMessage(Util.i18n("userJailed"));
 			p.setJail(null);
-			ess.getJail().sendToJail(p, args[1]);
+			if (!(p.getBase() instanceof OfflinePlayer))
+			{
+				ess.getJail().sendToJail(p, args[1]);
+			}
+			else
+			{
+				// Check if jail exists
+				ess.getJail().getJail(args[1]);
+			}
 			p.setJail(args[1]);
 			long timeDiff = 0;
 			if (args.length > 2)
