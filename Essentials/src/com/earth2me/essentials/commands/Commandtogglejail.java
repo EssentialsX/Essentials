@@ -74,7 +74,10 @@ public class Commandtogglejail extends EssentialsCommand
 			p.setJailTimeout(0);
 			p.sendMessage("§7You have been released");
 			p.setJail(null);
-			p.getTeleport().back();
+			if (p.getLastActivity() > 0)
+			{
+				p.getTeleport().back();
+			}
 			sender.sendMessage("§7Player " + p.getName() + " unjailed.");
 		}
 	}

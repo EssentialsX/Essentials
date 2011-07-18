@@ -42,7 +42,10 @@ public class Jail extends BlockListener implements IConf
 
 	public void sendToJail(User user, String jail) throws Exception
 	{
-		user.getTeleport().now(getJail(jail));
+		if (user.getLastActivity() > 0)
+		{
+			user.getTeleport().now(getJail(jail));
+		}
 		user.setJail(jail);
 	}
 
