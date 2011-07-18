@@ -153,7 +153,7 @@ public class Commandsell extends EssentialsCommand
 		final ItemStack ris = new ItemStack(is.getType(), amount, is.getDurability());
 		InventoryWorkaround.removeItem(user.getInventory(), true, ris);
 		user.updateInventory();
-		Trade.log("Command", "Sell", "Item", user.getName(), new Trade(ris, ess), user.getName(), new Trade(worth*amount, ess), ess);
+		Trade.log("Command", "Sell", "Item", user.getName(), new Trade(ris, ess), user.getName(), new Trade(worth*amount, ess), user.getLocation(), ess);
 		user.giveMoney(worth * amount);
 		user.sendMessage(Util.format("itemSold", Util.formatCurrency(worth * amount, ess), amount, Util.formatCurrency(worth, ess)));
 		logger.log(Level.INFO, Util.format("itemSoldConsole", user.getDisplayName(), is.getType().toString().toLowerCase(), Util.formatCurrency(worth * amount, ess), amount, Util.formatCurrency(worth, ess)));

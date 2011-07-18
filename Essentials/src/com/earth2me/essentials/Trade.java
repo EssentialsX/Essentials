@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -131,7 +132,7 @@ public class Trade
 	}
 	private static FileWriter fw = null;
 
-	public static void log(String type, String subtype, String event, String sender, Trade charge, String receiver, Trade pay, IEssentials ess)
+	public static void log(String type, String subtype, String event, String sender, Trade charge, String receiver, Trade pay, Location loc, IEssentials ess)
 	{
 		if (!ess.getSettings().isEcoLogEnabled())
 		{
@@ -200,6 +201,18 @@ public class Trade
 				sb.append("money").append(",");
 				sb.append(ess.getSettings().getCurrencySymbol());
 			}
+		}
+		if (loc == null)
+		{
+			sb.append(",\"\",\"\",\"\",\"\"");
+		}
+		else
+		{
+			sb.append(",\"");
+			sb.append(loc.getWorld().getName()).append("\",");
+			sb.append(loc.getBlockX()).append(",");
+			sb.append(loc.getBlockY()).append(",");
+			sb.append(loc.getBlockZ()).append(",");
 		}
 		sb.append("\n");
 		try
