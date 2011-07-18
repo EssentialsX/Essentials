@@ -5,6 +5,7 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import org.bukkit.entity.Player;
 
 
 public class Commandtogglejail extends EssentialsCommand
@@ -26,10 +27,22 @@ public class Commandtogglejail extends EssentialsCommand
 
 		if (args.length >= 2 && !p.isJailed())
 		{
-			if (p.isAuthorized("essentials.jail.exempt"))
+			if (p.getBase() instanceof OfflinePlayer)
 			{
-				sender.sendMessage(Util.i18n("mayNotJail"));
-				return;
+				if (sender instanceof Player
+					&& !ess.getUser(sender).isAuthorized("essentials.togglejail.offline"))
+				{
+					sender.sendMessage(Util.i18n("mayNotJail"));
+					return;
+				}
+			}
+			else
+			{
+				if (p.isAuthorized("essentials.jail.exempt"))
+				{
+					sender.sendMessage(Util.i18n("mayNotJail"));
+					return;
+				}
 			}
 			charge(sender);
 			p.setJailed(true);
