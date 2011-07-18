@@ -251,10 +251,6 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 		nickname.insert(0, prefix);
 		nickname.append(suffix);
-		if (suffix.length() > 1 && suffix.substring(suffix.length() - 2, suffix.length() - 1).equals("§"))
-		{
-			nickname.append("§f");
-		}
 
 		return nickname.toString();
 	}
