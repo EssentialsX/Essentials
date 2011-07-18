@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.User;
@@ -74,7 +75,7 @@ public class Commandtogglejail extends EssentialsCommand
 			p.setJailTimeout(0);
 			p.sendMessage("§7You have been released");
 			p.setJail(null);
-			if (p.getLastActivity() > 0)
+			if (!(p.getBase() instanceof OfflinePlayer))
 			{
 				p.getTeleport().back();
 			}

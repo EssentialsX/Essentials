@@ -44,7 +44,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 		User user = ess.getAllUsers().get(args[pos]);
 		if (user != null)
 		{
-			if(user.isHidden())
+			if(!getOffline && user.isHidden())
 			{
 				throw new NoSuchFieldException(Util.i18n("playerNotFound"));
 			}
