@@ -53,12 +53,18 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 
 		for (Player p : matches)
 		{
-			if (p.getDisplayName().startsWith(args[pos]))
+			final User u = ess.getUser(p);
+			if (u.getDisplayName().startsWith(args[pos]) && (getOffline || !u.isHidden()))
 			{
-				return ess.getUser(p);
+				return u;
 			}
 		}
-		return ess.getUser(matches.get(0));
+		final User u = ess.getUser(matches.get(0));
+		if (!getOffline && u.isHidden())
+		{
+			throw new NoSuchFieldException(Util.i18n("playerNotFound"));
+		}
+		return u;
 	}
 
 	@Override

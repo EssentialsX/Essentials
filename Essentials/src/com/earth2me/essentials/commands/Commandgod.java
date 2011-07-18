@@ -43,6 +43,10 @@ public class Commandgod extends EssentialsCommand
 		for (Player p : server.matchPlayer(name))
 		{
 			User u = ess.getUser(p);
+			if (u.isHidden()) 
+			{
+				continue;
+			}
 			boolean enabled = u.toggleGodModeEnabled();
 			u.sendMessage(Util.format("godMode", (enabled ? Util.i18n("enabled") : Util.i18n("disabled"))));
 			sender.sendMessage(Util.format("godMode",Util.format(enabled ? "godEnabledFor": "godDisabledFor", p.getDisplayName())));

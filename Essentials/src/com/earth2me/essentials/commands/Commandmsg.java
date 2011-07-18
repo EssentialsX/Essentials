@@ -5,6 +5,7 @@ import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.IReplyTo;
+import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import org.bukkit.command.CommandSender;
 
@@ -52,7 +53,8 @@ public class Commandmsg extends EssentialsCommand
 		for (Player p : matches)
 		{	
 			sender.sendMessage(Util.format("msgFormat", translatedMe, p.getDisplayName(), message));
-			if (sender instanceof Player && ess.getUser(p).isIgnoredPlayer(((Player)sender).getName()))
+			final User u = ess.getUser(p);
+			if (sender instanceof Player && (u.isIgnoredPlayer(((Player)sender).getName()) || u.isHidden()))
 			{
 				continue;
 			}

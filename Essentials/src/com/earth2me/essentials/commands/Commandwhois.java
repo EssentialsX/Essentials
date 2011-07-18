@@ -28,6 +28,10 @@ public class Commandwhois extends EssentialsCommand
 		for (Player p : server.getOnlinePlayers())
 		{
 			User u = ess.getUser(p);
+			if (u.isHidden())
+			{
+				continue;
+			}
 			String dn = ChatColor.stripColor(u.getNick());
 			if (!whois.equalsIgnoreCase(dn)
 				&& !whois.equalsIgnoreCase(dn.substring(prefixLength))

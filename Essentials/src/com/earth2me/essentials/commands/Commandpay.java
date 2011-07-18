@@ -25,6 +25,10 @@ public class Commandpay extends EssentialsCommand
 		for (Player p : server.matchPlayer(args[0]))
 		{
 			User u = ess.getUser(p);
+			if (u.isHidden())
+			{
+				continue;
+			}
 			user.payUser(u, amount);
 		}
 	}
