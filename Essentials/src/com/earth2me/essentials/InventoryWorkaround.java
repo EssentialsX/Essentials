@@ -100,9 +100,9 @@ public final class InventoryWorkaround
 		}
 
 
-		for (int i = 0; i < items.length; i++)
+		for (int i = 0; i < combined.length; i++)
 		{
-			final ItemStack item = items[i];
+			final ItemStack item = combined[i];
 			while (true)
 			{
 				// Do we already have a stack of it?
