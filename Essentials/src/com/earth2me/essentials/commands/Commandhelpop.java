@@ -4,6 +4,7 @@ import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import java.util.logging.Level;
 
 
 public class Commandhelpop extends EssentialsCommand
@@ -22,6 +23,8 @@ public class Commandhelpop extends EssentialsCommand
 		}
 
 		charge(user);
+		final String message = Util.format("helpOp", user.getDisplayName(), getFinalArg(args, 0));
+		logger.log(Level.INFO, message);
 		for (Player p : server.getOnlinePlayers())
 		{
 			User u = ess.getUser(p);
@@ -29,7 +32,7 @@ public class Commandhelpop extends EssentialsCommand
 			{
 				continue;
 			}
-			u.sendMessage(Util.format("helpOp", user.getDisplayName(), getFinalArg(args, 0)));
+			u.sendMessage(message);
 		}
 	}
 }
