@@ -53,6 +53,7 @@ public class EssentialsProtect extends JavaPlugin implements IConf, IProtect
 		pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Priority.Highest, this);
 		pm.registerEvent(Type.CREATURE_SPAWN, entityListener, Priority.Highest, this);
 		pm.registerEvent(Type.ENTITY_TARGET, entityListener, Priority.Highest, this);
+		pm.registerEvent(Type.EXPLOSION_PRIME, entityListener, Priority.Highest, this);
 
 		final EssentialsProtectWeatherListener weatherListener = new EssentialsProtectWeatherListener(this);
 		pm.registerEvent(Type.LIGHTNING_STRIKE, weatherListener, Priority.Highest, this);

@@ -342,7 +342,10 @@ protect:
     lightning-fire-spread: true
     portal-creation: false
     tnt-explosion: false
+    tnt-playerdamage: false
     fireball-explosion: false
+    fireball-fire: false
+    fireball-playerdamage: false
     creeper-explosion: false
     creeper-playerdamage: false
     creeper-blockdamage: false
