@@ -177,10 +177,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		pm.registerEvent(Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
 		pm.registerEvent(Type.PLAYER_CHAT, playerListener, Priority.Lowest, this);
 		pm.registerEvent(Type.PLAYER_COMMAND_PREPROCESS, playerListener, Priority.Lowest, this);
-		if (getSettings().getNetherPortalsEnabled())
-		{
-			pm.registerEvent(Type.PLAYER_MOVE, playerListener, Priority.High, this);
-		}
+		pm.registerEvent(Type.PLAYER_MOVE, playerListener, Priority.High, this);
 		pm.registerEvent(Type.PLAYER_LOGIN, playerListener, Priority.High, this);
 		pm.registerEvent(Type.PLAYER_TELEPORT, playerListener, Priority.High, this);
 		pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Priority.High, this);
