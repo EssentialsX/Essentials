@@ -12,7 +12,9 @@ import java.beans.PropertyVetoException;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Filter;
 import java.util.logging.Level;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -59,7 +61,7 @@ public class EssentialsProtect extends JavaPlugin implements IConf, IProtect
 		pm.registerEvent(Type.LIGHTNING_STRIKE, weatherListener, Priority.Highest, this);
 		pm.registerEvent(Type.THUNDER_CHANGE, weatherListener, Priority.Highest, this);
 		pm.registerEvent(Type.WEATHER_CHANGE, weatherListener, Priority.Highest, this);
-
+		
 		reloadConfig();
 		ess.addReloadListener(this);
 		if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion()))
@@ -96,6 +98,10 @@ public class EssentialsProtect extends JavaPlugin implements IConf, IProtect
 
 	public void reloadConfig()
 	{
+		if (storage != null)
+		{
+			storage.onPluginDeactivation();
+		}
 		for (ProtectConfig protectConfig : ProtectConfig.values())
 		{
 			if (protectConfig.isList())
@@ -166,6 +172,10 @@ public class EssentialsProtect extends JavaPlugin implements IConf, IProtect
 
 	public void onDisable()
 	{
+		if (storage != null)
+		{
+			storage.onPluginDeactivation();
+		}
 	}
 
 	public IEssentials getEssentials()
