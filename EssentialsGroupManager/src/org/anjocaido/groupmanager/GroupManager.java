@@ -48,6 +48,7 @@ public class GroupManager extends JavaPlugin {
     private boolean validateOnlinePlayer = true;
     private boolean isReady = false;
     private GMConfiguration config;
+	private GMLoggerHandler ch;
     public static final Logger logger = Logger.getLogger(GroupManager.class.getName());
 
     @Override
@@ -59,6 +60,7 @@ public class GroupManager extends JavaPlugin {
         // EXAMPLE: Custom code, here we just output some info so we can check all is well
         PluginDescriptionFile pdfFile = this.getDescription();
         System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is disabled!");
+		GroupManager.logger.removeHandler(ch);
     }
 
     @Override
@@ -68,7 +70,7 @@ public class GroupManager extends JavaPlugin {
 					+ Thread.currentThread().getStackTrace()[5].getClassName());
 		}
         GroupManager.logger.setUseParentHandlers(false);
-        GMLoggerHandler ch = new GMLoggerHandler();
+        ch = new GMLoggerHandler();
         GroupManager.logger.addHandler(ch);
         logger.setLevel(Level.ALL);
         if (worldsHolder == null) {
