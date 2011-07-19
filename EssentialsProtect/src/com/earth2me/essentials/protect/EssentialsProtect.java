@@ -27,11 +27,25 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class EssentialsProtect extends JavaPlugin implements IConf, IProtect
 {
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
+	private static com.mchange.v2.log.MLogger C3P0logger;
 	private final transient Map<ProtectConfig, Boolean> settingsBoolean = new EnumMap<ProtectConfig, Boolean>(ProtectConfig.class);
 	private final transient Map<ProtectConfig, String> settingsString = new EnumMap<ProtectConfig, String>(ProtectConfig.class);
 	private final transient Map<ProtectConfig, List<Integer>> settingsList = new EnumMap<ProtectConfig, List<Integer>>(ProtectConfig.class);
 	private transient IProtectedBlock storage = null;
 	public transient IEssentials ess = null;
+
+	@Override
+	public void onLoad()
+	{
+		C3P0logger = com.mchange.v2.log.MLog.getLogger(com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource.class);
+		C3P0logger.setFilter(new Filter()
+		{
+			public boolean isLoggable(LogRecord lr)
+			{
+				return lr.getLevel() != Level.INFO;
+			}
+		});
+	}
 
 	public void onEnable()
 	{
@@ -61,7 +75,7 @@ public class EssentialsProtect extends JavaPlugin implements IConf, IProtect
 		pm.registerEvent(Type.LIGHTNING_STRIKE, weatherListener, Priority.Highest, this);
 		pm.registerEvent(Type.THUNDER_CHANGE, weatherListener, Priority.Highest, this);
 		pm.registerEvent(Type.WEATHER_CHANGE, weatherListener, Priority.Highest, this);
-		
+
 		reloadConfig();
 		ess.addReloadListener(this);
 		if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion()))
