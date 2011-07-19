@@ -418,4 +418,9 @@ public abstract class ProtectedBlockJDBC implements IProtectedBlock
 			}
 		}
 	}
+
+	public void onPluginDeactivation()
+	{
+		cpds.close();
+	}
 }

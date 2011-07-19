@@ -11,4 +11,5 @@ public interface  IProtectedBlock {
 	public boolean isProtected(Block block, String playerName);
 	public List<String> getOwners(Block block);
 	public int unprotectBlock(Block block);
+	public void onPluginDeactivation();
 }
