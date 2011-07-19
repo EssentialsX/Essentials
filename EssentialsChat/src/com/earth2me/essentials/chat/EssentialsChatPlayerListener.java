@@ -3,31 +3,30 @@ package com.earth2me.essentials.chat;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import java.util.Map;
 import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChatEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
 
-import org.mcteam.factions.Factions;
-
+//import org.mcteam.factions.Factions;
 
 public class EssentialsChatPlayerListener extends PlayerListener
 {
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private final transient IEssentials ess;
 	private final transient Server server;
-	private static Factions factions = null;
+	private final transient Map<String, IEssentialsChatListener> listeners;
+	//private static Factions factions = null;
 
-	public EssentialsChatPlayerListener(final Server server, final IEssentials ess)
+	public EssentialsChatPlayerListener(final Server server, final IEssentials ess, final Map<String, IEssentialsChatListener> listeners)
 	{
 		this.server = server;
 		this.ess = ess;
+		this.listeners = listeners;
 	}
 
 	@Override
@@ -38,8 +37,15 @@ public class EssentialsChatPlayerListener extends PlayerListener
 			return;
 		}
 
-		if (factions != null && (factions.shouldLetFactionsHandleThisChat(event)))
-			return;
+		//if (factions != null && (factions.shouldLetFactionsHandleThisChat(event)))
+		//	return;
+		for (IEssentialsChatListener listener : listeners.values())
+		{
+			if (listener.shouldHandleThisChat(event))
+			{
+				return;
+			}
+		}
 
 		final User user = ess.getUser(event.getPlayer());
 
@@ -112,37 +118,42 @@ public class EssentialsChatPlayerListener extends PlayerListener
 			}
 			String message = String.format(event.getFormat(), user.getDisplayName(), event.getMessage());
 
-			if (factions != null)
-				message = message.replace("{FACTION}", factions.getPlayerFactionTagRelation(event.getPlayer(), p)).replace("{FACTION_TITLE}", factions.getPlayerTitle(event.getPlayer()));
+			for (IEssentialsChatListener listener : listeners.values())
+			{
+				message = listener.modifyMessage(message);
+
+			}
+			//if (factions != null)
+			//	message = message.replace("{FACTION}", factions.getPlayerFactionTagRelation(event.getPlayer(), p)).replace("{FACTION_TITLE}", factions.getPlayerTitle(event.getPlayer()));
 
 			u.sendMessage(message);
 		}
 	}
 
-	protected static void checkFactions(PluginManager pm)
+	/*protected static void checkFactions(PluginManager pm)
 	{
-		if (factions != null)
-			return;
-
-		Plugin factionsPlugin = pm.getPlugin("Factions");
-		if (factionsPlugin == null)
-			return;
-
-		factions = (Factions)factionsPlugin;
-		try
-		{  // make sure Factions is sufficiently up-to-date
-			if (factions.hookSupportVersion() < 1)
-				factions = null;
-		}
-		catch (NoSuchMethodError ex)
-		{  // if not, we can't work with it, so don't bother
-			factions = null;
-		}
-
-		if (factions == null)
-			return;
-
-		// normally a good thing, but we'll skip it to let Factions handle faction tags for global messages
-		//factions.handleFactionTagExternally(true);
+	if (factions != null)
+	return;
+	
+	Plugin factionsPlugin = pm.getPlugin("Factions");
+	if (factionsPlugin == null)
+	return;
+	
+	factions = (Factions)factionsPlugin;
+	try
+	{  // make sure Factions is sufficiently up-to-date
+	if (factions.hookSupportVersion() < 1)
+	factions = null;
 	}
+	catch (NoSuchMethodError ex)
+	{  // if not, we can't work with it, so don't bother
+	factions = null;
+	}
+	
+	if (factions == null)
+	return;
+	
+	// normally a good thing, but we'll skip it to let Factions handle faction tags for global messages
+	//factions.handleFactionTagExternally(true);
+	}*/
 }

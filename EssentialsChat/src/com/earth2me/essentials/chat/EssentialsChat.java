@@ -2,6 +2,8 @@ package com.earth2me.essentials.chat;
 
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.Util;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.event.Event.Priority;
@@ -13,15 +15,17 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class EssentialsChat extends JavaPlugin
 {
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
+	private Map<String, IEssentialsChatListener> chatListener;
 
 	public void onEnable()
 	{
 		final PluginManager pluginManager = getServer().getPluginManager();
 		final IEssentials ess = (IEssentials)pluginManager.getPlugin("Essentials");
 
-		EssentialsChatPlayerListener.checkFactions(pluginManager);
+		chatListener = new HashMap<String, IEssentialsChatListener>(); 
+		//EssentialsChatPlayerListener.checkFactions(pluginManager);
 
-		final EssentialsChatPlayerListener playerListener = new EssentialsChatPlayerListener(getServer(), ess);
+		final EssentialsChatPlayerListener playerListener = new EssentialsChatPlayerListener(getServer(), ess, chatListener);
 		pluginManager.registerEvent(Type.PLAYER_CHAT, playerListener, Priority.Highest, this);
 		if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion()))
 		{
@@ -32,5 +36,11 @@ public class EssentialsChat extends JavaPlugin
 
 	public void onDisable()
 	{
+		chatListener.clear();
+	}
+	
+	public void addEssentialsChatListener(String plugin, IEssentialsChatListener listener)
+	{
+		chatListener.put(plugin, listener);
 	}
 }
