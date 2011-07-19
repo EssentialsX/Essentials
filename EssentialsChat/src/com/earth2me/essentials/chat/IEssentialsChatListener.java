@@ -7,5 +7,5 @@ public interface IEssentialsChatListener
 {
 	boolean shouldHandleThisChat(PlayerChatEvent event);
 
-	String modifyMessage(String message);
+	String modifyMessage(PlayerChatEvent event, String message);
 }

@@ -120,7 +120,7 @@ public class EssentialsChatPlayerListener extends PlayerListener
 
 			for (IEssentialsChatListener listener : listeners.values())
 			{
-				message = listener.modifyMessage(message);
+				message = listener.modifyMessage(event, message);
 
 			}
 			//if (factions != null)
