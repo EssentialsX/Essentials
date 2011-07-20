@@ -1,5 +1,8 @@
 package com.earth2me.essentials;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -34,13 +37,13 @@ public class EssentialsPlayerListener extends PlayerListener
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private final transient Server server;
 	private final transient IEssentials ess;
-
+	
 	public EssentialsPlayerListener(final IEssentials parent)
 	{
 		this.ess = parent;
 		this.server = parent.getServer();
 	}
-
+	
 	@Override
 	public void onPlayerRespawn(final PlayerRespawnEvent event)
 	{
@@ -52,7 +55,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			user.setDisplayName(user.getNick());
 		}
 	}
-
+	
 	@Override
 	public void onPlayerChat(final PlayerChatEvent event)
 	{
@@ -82,7 +85,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			user.setDisplayName(user.getNick());
 		}
 	}
-
+	
 	@Override
 	public void onPlayerMove(final PlayerMoveEvent event)
 	{
@@ -91,28 +94,28 @@ public class EssentialsPlayerListener extends PlayerListener
 			return;
 		}
 		final User user = ess.getUser(event.getPlayer());
-
+		
 		if (user.isAfk())
 		{
 			user.setAfk(false);
 			ess.broadcastMessage(user.getName(), Util.format("userIsNotAway", user.getDisplayName()));
 		}
-
+		
 		if (!ess.getSettings().getNetherPortalsEnabled())
 		{
 			return;
 		}
-
+		
 		final Block block = event.getPlayer().getWorld().getBlockAt(event.getTo().getBlockX(), event.getTo().getBlockY(), event.getTo().getBlockZ());
 		final List<World> worlds = server.getWorlds();
-
+		
 		if (block.getType() == Material.PORTAL && worlds.size() > 1 && user.isAuthorized("essentials.portal"))
 		{
 			if (user.getJustPortaled())
 			{
 				return;
 			}
-
+			
 			World nether = server.getWorld(ess.getSettings().getNetherName());
 			if (nether == null)
 			{
@@ -130,7 +133,7 @@ public class EssentialsPlayerListener extends PlayerListener
 				}
 			}
 			final World world = user.getWorld() == nether ? worlds.get(0) : nether;
-
+			
 			double factor;
 			if (user.getWorld().getEnvironment() == World.Environment.NETHER && world.getEnvironment() == World.Environment.NORMAL)
 			{
@@ -144,12 +147,12 @@ public class EssentialsPlayerListener extends PlayerListener
 			{
 				factor = 1.0;
 			}
-
+			
 			Location loc = event.getTo();
 			int x = loc.getBlockX();
 			int y = loc.getBlockY();
 			int z = loc.getBlockZ();
-
+			
 			if (user.getWorld().getBlockAt(x, y, z - 1).getType() == Material.PORTAL)
 			{
 				z--;
@@ -158,11 +161,11 @@ public class EssentialsPlayerListener extends PlayerListener
 			{
 				x--;
 			}
-
+			
 			x = (int)(x * factor);
 			z = (int)(z * factor);
 			loc = new Location(world, x + .5, y, z + .5);
-
+			
 			Block dest = world.getBlockAt(x, y, z);
 			NetherPortal portal = NetherPortal.findPortal(dest);
 			if (portal == null)
@@ -181,7 +184,7 @@ public class EssentialsPlayerListener extends PlayerListener
 				user.sendMessage(Util.i18n("usingPortal"));
 				loc = portal.getSpawn();
 			}
-
+			
 			event.setFrom(loc);
 			event.setTo(loc);
 			try
@@ -194,14 +197,14 @@ public class EssentialsPlayerListener extends PlayerListener
 			}
 			user.setJustPortaled(true);
 			user.sendMessage(Util.i18n("teleportingPortal"));
-
+			
 			event.setCancelled(true);
 			return;
 		}
-
+		
 		user.setJustPortaled(false);
 	}
-
+	
 	@Override
 	public void onPlayerQuit(final PlayerQuitEvent event)
 	{
@@ -244,7 +247,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		thread.setPriority(Thread.MIN_PRIORITY);
 		thread.start();
 	}
-
+	
 	@Override
 	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
@@ -258,7 +261,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			user.kickPlayer(banReason != null && !banReason.isEmpty() ? banReason : Util.i18n("defaultBanReason"));
 			return;
 		}
-
+		
 		if (ess.getSettings().changeDisplayName())
 		{
 			user.setDisplayName(user.getNick());
@@ -268,7 +271,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		{
 			user.setSleepingIgnored(true);
 		}
-
+		
 		if (!ess.getSettings().isCommandDisabled("motd") && user.isAuthorized("essentials.motd"))
 		{
 			for (String m : ess.getMotd(user, null))
@@ -280,7 +283,7 @@ public class EssentialsPlayerListener extends PlayerListener
 				user.sendMessage(m);
 			}
 		}
-
+		
 		if (!ess.getSettings().isCommandDisabled("mail") && user.isAuthorized("essentials.mail"))
 		{
 			final List<String> mail = user.getMails();
@@ -294,7 +297,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			}
 		}
 	}
-
+	
 	@Override
 	public void onPlayerLogin(final PlayerLoginEvent event)
 	{
@@ -304,24 +307,24 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 		final User user = ess.getUser(event.getPlayer());
 		user.setNPC(false);
-
+		
 		if (user.isBanned())
 		{
 			final String banReason = user.getBanReason();
 			event.disallow(Result.KICK_BANNED, banReason != null && !banReason.isEmpty() ? banReason : Util.i18n("defaultBanReason"));
 			return;
 		}
-
+		
 		if (server.getOnlinePlayers().length >= server.getMaxPlayers() && !user.isAuthorized("essentials.joinfullserver"))
 		{
 			event.disallow(Result.KICK_FULL, Util.i18n("serverFull"));
 			return;
 		}
-
+		
 		user.setLastLogin(System.currentTimeMillis());
 		updateCompass(user);
 	}
-
+	
 	private void updateCompass(final User user)
 	{
 		try
@@ -332,7 +335,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		{
 		}
 	}
-
+	
 	@Override
 	public void onPlayerTeleport(PlayerTeleportEvent event)
 	{
@@ -347,7 +350,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 		updateCompass(user);
 	}
-
+	
 	@Override
 	public void onPlayerInteract(final PlayerInteractEvent event)
 	{
@@ -359,7 +362,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		{
 			return;
 		}
-
+		
 		if (ess.getSettings().getBedSetsHome() && event.getClickedBlock().getType() == Material.BED_BLOCK)
 		{
 			try
@@ -373,7 +376,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			}
 		}
 	}
-
+	
 	@Override
 	public void onPlayerEggThrow(final PlayerEggThrowEvent event)
 	{
@@ -385,7 +388,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			user.updateInventory();
 		}
 	}
-
+	
 	@Override
 	public void onPlayerBucketEmpty(final PlayerBucketEmptyEvent event)
 	{
@@ -402,13 +405,13 @@ public class EssentialsPlayerListener extends PlayerListener
 			});
 		}
 	}
-
+	
 	@Override
 	public void onPlayerAnimation(final PlayerAnimationEvent event)
 	{
 		usePowertools(event);
 	}
-
+	
 	private void usePowertools(final PlayerAnimationEvent event)
 	{
 		if (event.getAnimationType() != PlayerAnimationType.ARM_SWING)
@@ -443,7 +446,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			user.getServer().dispatchCommand(user, command);
 		}
 	}
-
+	
 	@Override
 	public void onPlayerCommandPreprocess(final PlayerCommandPreprocessEvent event)
 	{
@@ -453,7 +456,8 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 		final User user = ess.getUser(event.getPlayer());
 		final String cmd = event.getMessage().toLowerCase().split(" ")[0].replace("/", "").toLowerCase();
-		if (("msg".equals(cmd) || "r".equals(cmd) || "mail".equals(cmd)))
+		final List<String> commands = Arrays.asList("msg", "r", "mail", "m" , "t","emsg","tell","er","reply","ereply","email");
+		if (commands.contains(cmd))
 		{
 			for (Player player : ess.getServer().getOnlinePlayers())
 			{
