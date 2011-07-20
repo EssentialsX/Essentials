@@ -39,8 +39,13 @@ public class EssentialsChat extends JavaPlugin
 		chatListener.clear();
 	}
 	
-	public void addEssentialsChatListener(String plugin, IEssentialsChatListener listener)
+	public void addEssentialsChatListener(final String plugin, final IEssentialsChatListener listener)
 	{
 		chatListener.put(plugin, listener);
+	}
+	
+	public IEssentialsChatListener removeEssentialsChatListener(final String plugin)
+	{
+		return chatListener.remove(plugin);
 	}
 }
