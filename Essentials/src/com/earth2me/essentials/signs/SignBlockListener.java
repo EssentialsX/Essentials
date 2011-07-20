@@ -88,6 +88,14 @@ public class SignBlockListener extends BlockListener
 		{
 			return;
 		}
+		User user = ess.getUser(event.getPlayer());
+		if (user.isAuthorized("essentials.signs.color"))
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				event.setLine(i, event.getLine(i).replaceAll("&([0-9a-f])", "§$1"));
+			}
+		}
 		for (Signs signs : Signs.values())
 		{
 			final EssentialsSign sign = signs.getSign();
@@ -101,14 +109,6 @@ public class SignBlockListener extends BlockListener
 			{
 				event.setCancelled(true);
 				return;
-			}
-		}
-		User user = ess.getUser(event.getPlayer());
-		if (user.isAuthorized("essentials.signs.color"))
-		{
-			for (int i = 0; i < 4; i++)
-			{
-				event.setLine(i, event.getLine(i).replaceAll("&([0-9a-f])", "§$1"));
 			}
 		}
 	}
