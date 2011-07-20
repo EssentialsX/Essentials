@@ -11,6 +11,7 @@ public enum Signs
 	MAIL(new SignMail()),
 	PROTECTION(new SignProtection()),
 	SELL(new SignSell()),
+	SPAWNMOB(new SignSpawnmob()),
 	TIME(new SignTime()),
 	TRADE(new SignTrade()),
 	WARP(new SignWarp()),
