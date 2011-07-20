@@ -22,7 +22,7 @@ public class Commandmute extends EssentialsCommand
 		}
 
 		User p = getPlayer(server, args, 0, true);
-		if (p.isAuthorized("essentials.mute.exempt"))
+		if (!p.isMuted() && p.isAuthorized("essentials.mute.exempt"))
 		{
 			sender.sendMessage(Util.i18n("muteExempt"));
 			return;
