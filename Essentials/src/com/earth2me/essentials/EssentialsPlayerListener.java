@@ -1,5 +1,8 @@
 package com.earth2me.essentials;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -453,7 +456,8 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 		final User user = ess.getUser(event.getPlayer());
 		final String cmd = event.getMessage().toLowerCase().split(" ")[0].replace("/", "").toLowerCase();
-		if (("msg".equals(cmd) || "r".equals(cmd) || "mail".equals(cmd)))
+		final List<String> commands = Arrays.asList("msg", "r", "mail", "m", "t", "emsg", "tell", "er", "reply", "ereply", "email");
+		if (commands.contains(cmd))
 		{
 			for (Player player : ess.getServer().getOnlinePlayers())
 			{
