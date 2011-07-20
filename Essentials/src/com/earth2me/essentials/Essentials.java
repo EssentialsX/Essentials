@@ -143,32 +143,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 			LOGGER.log(Level.INFO, Util.i18n("bukkitFormatChanged"));
 		}
 
-		final Plugin permissionsPlugin = pm.getPlugin("Permissions");
-
-		if (permissionsPlugin != null)
-		{
-			if (permissionsPlugin.getDescription().getVersion().charAt(0) == '3')
-			{
-				this.permissionsHandler = new Permissions3Handler(permissionsPlugin);
-			}
-			else
-			{
-				this.permissionsHandler = new Permissions2Handler(permissionsPlugin);
-			}
-		}
-		else
-		{
-			if (this.getSettings().useBukkitPermissions())
-			{
-				this.permissionsHandler = new BukkitPermissionsHandler();
-			}
-			else
-			{
-				this.permissionsHandler = new ConfigPermissionsHandler(this);
-			}
-		}
-
-		final ServerListener serverListener = new EssentialsPluginListener(paymentMethod);
+		final ServerListener serverListener = new EssentialsPluginListener(this);
 		pm.registerEvent(Type.PLUGIN_ENABLE, serverListener, Priority.Low, this);
 		pm.registerEvent(Type.PLUGIN_DISABLE, serverListener, Priority.Low, this);
 
@@ -662,6 +637,11 @@ public class Essentials extends JavaPlugin implements IEssentials
 	public IPermissionsHandler getPermissionsHandler()
 	{
 		return permissionsHandler;
+	}
+	
+	public void setPermissionsHandler(IPermissionsHandler handler)
+	{
+		this.permissionsHandler = handler;
 	}
 
 	public BanWorkaround getBans()
