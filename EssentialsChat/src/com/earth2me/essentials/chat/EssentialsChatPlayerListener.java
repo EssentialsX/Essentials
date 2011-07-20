@@ -100,7 +100,7 @@ public class EssentialsChatPlayerListener extends PlayerListener
 			{
 				continue;
 			}
-			if (u.equals(user) && !u.isAuthorized("essentials.chat.spy"))
+			if (!u.equals(user) && !u.isAuthorized("essentials.chat.spy"))
 			{
 				final Location l = u.getLocation();
 				final int dx = Math.abs(x - l.getBlockX());
