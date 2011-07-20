@@ -48,10 +48,25 @@ public class Commandmsg extends EssentialsCommand
 			sender.sendMessage(Util.i18n("playerNotFound"));
 			return;
 		}
+		
+		int i = 0;
+		for (Player p : matches)
+		{
+			final User u = ess.getUser(p);
+			if (u.isHidden())
+			{
+				i++;
+			}
+		}
+		if (i == matches.size())
+		{
+			sender.sendMessage(Util.i18n("playerNotFound"));
+			return;
+		}
 
 		charge(sender);
 		for (Player p : matches)
-		{	
+		{
 			sender.sendMessage(Util.format("msgFormat", translatedMe, p.getDisplayName(), message));
 			final User u = ess.getUser(p);
 			if (sender instanceof Player && (u.isIgnoredPlayer(((Player)sender).getName()) || u.isHidden()))
