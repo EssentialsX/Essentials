@@ -33,7 +33,7 @@ public class Commandtime extends EssentialsCommand
 			else
 			{
 				charge(user);
-				setPlayerTime(user, commandLabel);
+				setPlayerTime(user, args[0]);
 			}
 		}
 		else
