@@ -6,6 +6,7 @@ import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.OfflinePlayer;
 import org.bukkit.entity.Player;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
@@ -44,7 +45,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 		User user = ess.getAllUsers().get(args[pos].toLowerCase());
 		if (user != null)
 		{
-			if(!getOffline && user.isHidden())
+			if(!getOffline && (user.getBase() instanceof OfflinePlayer || user.isHidden()))
 			{
 				throw new NoSuchFieldException(Util.i18n("playerNotFound"));
 			}

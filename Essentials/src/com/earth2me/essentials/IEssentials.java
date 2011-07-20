@@ -59,9 +59,11 @@ public interface IEssentials extends Plugin
 
 	IPermissionsHandler getPermissionsHandler();
 
+	void setPermissionsHandler(IPermissionsHandler handler);
+
 	void showError(final CommandSender sender, final Throwable exception, final String commandLabel);
 
 	Map<String, User> getAllUsers();
-	
+
 	ItemDb getItemDb();
 }

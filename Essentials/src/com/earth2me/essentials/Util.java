@@ -218,7 +218,7 @@ public class Util
 
 	public static Location getSafeDestination(Location loc) throws Exception
 	{
-		if (loc == null)
+		if (loc == null || loc.getWorld() == null)
 		{
 			throw new Exception(Util.i18n("destinationNotSet"));
 		}
