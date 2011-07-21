@@ -52,11 +52,12 @@ public class EssentialsChatPlayerListener extends PlayerListener
 
 		event.setFormat(ess.getSettings().getChatFormat(user.getGroup()).replace('&', '§').replace("§§", "&").replace("{DISPLAYNAME}", "%1$s").replace("{GROUP}", user.getGroup()).replace("{MESSAGE}", "%2$s").replace("{WORLDNAME}", user.getWorld().getName()).replace("{SHORTWORLDNAME}", user.getWorld().getName().substring(0, 1).toUpperCase()));
 
-		final int radius = ess.getSettings().getChatRadius();
+		long radius = ess.getSettings().getChatRadius();
 		if (radius < 1)
 		{
 			return;
 		}
+		radius *= radius;
 
 		if (event.getMessage().startsWith("!") && event.getMessage().length() > 1)
 		{
@@ -100,13 +101,13 @@ public class EssentialsChatPlayerListener extends PlayerListener
 			{
 				continue;
 			}
-			if (!u.equals(user) && !u.isAuthorized("essentials.chat.spy"))
+			if (!u.isAuthorized("essentials.chat.spy"))
 			{
 				final Location l = u.getLocation();
-				final int dx = Math.abs(x - l.getBlockX());
-				final int dy = Math.abs(y - l.getBlockY());
-				final int dz = Math.abs(z - l.getBlockZ());
-				final int delta = dx + dy + dz;
+				final int dx = x - l.getBlockX();
+				final int dy = y - l.getBlockY();
+				final int dz = z - l.getBlockZ();
+				final long delta = dx*dx + dy*dy + dz*dz;
 				if (delta > radius || world != l.getWorld())
 				{
 					continue;
