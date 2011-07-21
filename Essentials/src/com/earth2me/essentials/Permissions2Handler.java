@@ -9,7 +9,7 @@ import org.bukkit.plugin.Plugin;
 public class Permissions2Handler implements IPermissionsHandler
 {
 	private final transient PermissionHandler permissionHandler;
-	
+
 	Permissions2Handler(final Plugin permissionsPlugin)
 	{
 		permissionHandler = ((Permissions)permissionsPlugin).getHandler();
@@ -37,12 +37,13 @@ public class Permissions2Handler implements IPermissionsHandler
 
 	public String getPrefix(final Player base)
 	{
-		return permissionHandler.getGroupPrefix(base.getWorld().getName(), getGroup(base));
+		final String prefix = permissionHandler.getGroupPrefix(base.getWorld().getName(), getGroup(base));
+		return prefix == null ? "" : prefix;
 	}
 
 	public String getSuffix(final Player base)
 	{
-		return permissionHandler.getGroupSuffix(base.getWorld().getName(), getGroup(base));
+		final String suffix = permissionHandler.getGroupSuffix(base.getWorld().getName(), getGroup(base));
+		return suffix == null ? "" : suffix;
 	}
-	
 }

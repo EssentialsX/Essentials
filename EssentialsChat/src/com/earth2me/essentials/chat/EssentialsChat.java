@@ -22,8 +22,7 @@ public class EssentialsChat extends JavaPlugin
 		final PluginManager pluginManager = getServer().getPluginManager();
 		final IEssentials ess = (IEssentials)pluginManager.getPlugin("Essentials");
 
-		chatListener = new HashMap<String, IEssentialsChatListener>(); 
-		//EssentialsChatPlayerListener.checkFactions(pluginManager);
+		chatListener = new HashMap<String, IEssentialsChatListener>();
 
 		final EssentialsChatPlayerListener playerListener = new EssentialsChatPlayerListener(getServer(), ess, chatListener);
 		pluginManager.registerEvent(Type.PLAYER_CHAT, playerListener, Priority.Highest, this);
