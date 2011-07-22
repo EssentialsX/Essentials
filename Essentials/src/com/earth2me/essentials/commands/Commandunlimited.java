@@ -56,7 +56,7 @@ public class Commandunlimited extends EssentialsCommand
 		}
 
 		final ItemStack stack = ess.getItemDb().get(args[0], 1);
-		stack.setAmount(stack.getType().getMaxStackSize());
+		stack.setAmount(Math.min(stack.getType().getMaxStackSize(), 2));
 
 		String itemname = stack.getType().toString().toLowerCase().replace("_", "");
 		if (!user.isAuthorized("essentials.unlimited.item-all")
