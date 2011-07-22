@@ -468,4 +468,9 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("use-bukkit-permissions", false);
 	}
+
+	public boolean addPrefixSuffix()
+	{
+		return config.getBoolean("add-prefix-suffix", false);
+	}
 }
