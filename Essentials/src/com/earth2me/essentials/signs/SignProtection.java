@@ -158,7 +158,7 @@ public class SignProtection extends EssentialsSign
 				return SignProtectionState.ALLOWED;
 			}
 		}
-		if (ChatColor.stripColor(sign.getLine(3).substring(2)).equalsIgnoreCase(username))
+		if (ChatColor.stripColor(sign.getLine(3)).equalsIgnoreCase(username))
 		{
 			return SignProtectionState.OWNER;
 		}
