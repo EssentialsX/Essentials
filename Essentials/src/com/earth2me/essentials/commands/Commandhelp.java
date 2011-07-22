@@ -43,6 +43,7 @@ public class Commandhelp extends EssentialsCommand
 					match = "";
 				}
 			}
+
 		}
 		catch (Exception ex)
 		{
@@ -172,6 +173,7 @@ public class Commandhelp extends EssentialsCommand
 			{
 				if (!reported)
 				{
+                                    //
 					logger.log(Level.WARNING, Util.format("commandHelpFailedForPlugin", pluginName), ex);
 				}
 				reported = true;
