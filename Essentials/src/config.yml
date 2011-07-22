@@ -117,7 +117,8 @@ disabled-commands:
 # Restricted commands have been removed.
 # Now we have a whitelist, all commands not on this list are only available to ops.
 # These will have NO EFFECT if you have Permissions installed!
-# These are here only if you want something simpler than Permissions.
+# They are here only if you want something simpler than Permissions.
+# These are the permissions without the "essentials." part.
 player-commands:
   - afk
   - back
@@ -127,6 +128,7 @@ player-commands:
   - compass
   - depth
   - getpos
+  - geoip.show
   - help
   - helpop
   - home
@@ -143,13 +145,31 @@ player-commands:
   - nick
   - pay
   - ping
+  - portal
   - powertool
+  - protect
   - r
   - rules
   - seen
   - sell
   - sethome
   - setxmpp
+  - signs.create.protection
+  - signs.create.trade
+  - signs.break.protection
+  - signs.break.trade
+  - signs.use.balance
+  - signs.use.buy
+  - signs.use.disposal
+  - signs.use.free
+  - signs.use.heal
+  - signs.use.mail
+  - signs.use.protection
+  - signs.use.sell
+  - signs.use.time
+  - signs.use.trade
+  - signs.use.warp
+  - signs.use.weather
   - spawn
   - suicide
   - tpa
@@ -157,6 +177,7 @@ player-commands:
   - tpahere
   - tpdeny
   - warp
+  - warp.list
   - world
   - worth
   - xmpp
