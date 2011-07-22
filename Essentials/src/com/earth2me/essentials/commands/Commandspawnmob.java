@@ -164,7 +164,7 @@ public class Commandspawnmob extends EssentialsCommand
 						changeMobData(mobMount.name, spawnedMount, mountData, user);
 					}
 				}
-				user.sendMessage(args[1] + " " + mob.name.toLowerCase() + mob.suffix + Util.i18n("spawned"));
+				user.sendMessage(args[1] + " " + mob.name.toLowerCase() + mob.suffix + " " + Util.i18n("spawned"));
 			}
 			catch (MobException e1)
 			{
