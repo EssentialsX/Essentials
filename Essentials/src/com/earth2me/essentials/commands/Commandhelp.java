@@ -173,7 +173,8 @@ public class Commandhelp extends EssentialsCommand
 			{
 				if (!reported)
 				{
-					logger.log(Level.WARNING, "Error getting help for:" + pluginName, ex);
+                                    //
+					logger.log(Level.WARNING, Util.format("commandHelpFailedForPlugin", pluginName), ex);
 				}
 				reported = true;
 				continue;
