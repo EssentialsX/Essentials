@@ -28,6 +28,10 @@ public class SignPlayerListener extends PlayerListener
 		}
 
 		final Block block = event.getClickedBlock();
+		if (block == null)
+		{
+			return;
+		}
 		final int mat = block.getTypeId();
 		if (mat == Material.SIGN_POST.getId() || mat == Material.WALL_SIGN.getId())
 		{
