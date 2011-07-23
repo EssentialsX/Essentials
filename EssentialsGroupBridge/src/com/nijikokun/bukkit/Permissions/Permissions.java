@@ -3,7 +3,6 @@ package com.nijikokun.bukkit.Permissions;
 import com.nijiko.Misc;
 import com.nijiko.configuration.DefaultConfiguration;
 import com.nijiko.permissions.PermissionHandler;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.permissions.NijikoPermissionsProxy;
@@ -56,10 +55,6 @@ public class Permissions extends JavaPlugin {
 
     @Override
     public void onEnable() {
-		if (!Thread.currentThread().getStackTrace()[5].getMethodName().equals("loadPlugin")) {
-			Logger.getLogger("Minecraft").log(Level.SEVERE, "Another plugin is trying to enable Permissions manually. Don't do this! It's probably "
-					+ Thread.currentThread().getStackTrace()[5].getClassName());
-		}
         Server = this.getServer();
         PluginDescriptionFile pdfFile = this.getDescription();
 
