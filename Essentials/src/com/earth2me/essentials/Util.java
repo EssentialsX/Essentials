@@ -216,21 +216,21 @@ public class Util
 		return c.getTimeInMillis();
 	}
 
-	public static Location getSafeDestination(Location loc) throws Exception
+	public static Location getSafeDestination(final Location loc) throws Exception
 	{
 		if (loc == null || loc.getWorld() == null)
 		{
 			throw new Exception(Util.i18n("destinationNotSet"));
 		}
-		World world = loc.getWorld();
-		double x = Math.floor(loc.getX()) + 0.5;
-		double y = Math.floor(loc.getY());
-		double z = Math.floor(loc.getZ()) + 0.5;
+		final World world = loc.getWorld();
+		int x = loc.getBlockX();
+		int y = loc.getBlockY();
+		int z = loc.getBlockZ();
 
 		while (isBlockAboveAir(world, x, y, z))
 		{
-			y -= 1.0D;
-			if (y < 0.0D)
+			y -= 1;
+			if (y < 0)
 			{
 				throw new Exception(Util.i18n("holeInFloor"));
 			}
@@ -238,33 +238,33 @@ public class Util
 
 		while (isBlockUnsafe(world, x, y, z))
 		{
-			y += 1.0D;
-			if (y >= 110.0D)
+			y += 1;
+			if (y >= 127)
 			{
-				x += 1.0D;
+				x += 1;
 				break;
 			}
 		}
 		while (isBlockUnsafe(world, x, y, z))
 		{
-			y -= 1.0D;
-			if (y <= 1.0D)
+			y -= 1;
+			if (y <= 1)
 			{
-				y = 110.0D;
-				x += 1.0D;
+				y = 127;
+				x += 1;
 			}
 		}
-		return new Location(world, x, y, z, loc.getYaw(), loc.getPitch());
+		return new Location(world, x + 0.5D, y, z + 0.5D, loc.getYaw(), loc.getPitch());
 	}
 
-	private static boolean isBlockAboveAir(World world, double x, double y, double z)
+	private static boolean isBlockAboveAir(final World world, final int x, final int y, final int z)
 	{
-		return world.getBlockAt((int)Math.floor(x), (int)Math.floor(y - 1.0D), (int)Math.floor(z)).getType() == Material.AIR;
+		return world.getBlockAt(x, y - 1, z).getType() == Material.AIR;
 	}
 
-	public static boolean isBlockUnsafe(World world, double x, double y, double z)
+	public static boolean isBlockUnsafe(final World world, final int x, final int y, final int z)
 	{
-		Block below = world.getBlockAt((int)Math.floor(x), (int)Math.floor(y - 1.0D), (int)Math.floor(z));
+		final Block below = world.getBlockAt(x, y - 1, z);
 		if (below.getType() == Material.LAVA || below.getType() == Material.STATIONARY_LAVA)
 		{
 			return true;
@@ -275,8 +275,8 @@ public class Util
 			return true;
 		}
 
-		if ((world.getBlockAt((int)Math.floor(x), (int)Math.floor(y), (int)Math.floor(z)).getType() != Material.AIR)
-			|| (world.getBlockAt((int)Math.floor(x), (int)Math.floor(y + 1.0D), (int)Math.floor(z)).getType() != Material.AIR))
+		if ((world.getBlockAt(x, y, z).getType() != Material.AIR)
+			|| (world.getBlockAt(x, y + 1, z).getType() != Material.AIR))
 		{
 			return true;
 		}
@@ -294,7 +294,7 @@ public class Util
 		return str;
 	}
 
-	public static double roundDouble(double d)
+	public static double roundDouble(final double d)
 	{
 		return Math.round(d * 100.0) / 100.0;
 	}
