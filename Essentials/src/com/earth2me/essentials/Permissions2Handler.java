@@ -17,7 +17,8 @@ public class Permissions2Handler implements IPermissionsHandler
 
 	public String getGroup(final Player base)
 	{
-		return permissionHandler.getGroup(base.getWorld().getName(), base.getName());
+		final String group = permissionHandler.getGroup(base.getWorld().getName(), base.getName());
+		return group == null ? "default" : group;
 	}
 
 	public boolean canBuild(final Player base, final String group)
