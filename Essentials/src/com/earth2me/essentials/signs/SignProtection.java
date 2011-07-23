@@ -9,6 +9,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -157,7 +158,7 @@ public class SignProtection extends EssentialsSign
 				return SignProtectionState.ALLOWED;
 			}
 		}
-		if (sign.getLine(3).substring(2).equalsIgnoreCase(username))
+		if (ChatColor.stripColor(sign.getLine(3)).equalsIgnoreCase(username))
 		{
 			return SignProtectionState.OWNER;
 		}

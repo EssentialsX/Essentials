@@ -102,6 +102,7 @@ public class Commandlist extends EssentialsCommand
 						groupString.append("§7[HIDDEN]§f");
 					}
 					groupString.append(user.getDisplayName());
+					groupString.append("§f");
 				}
 				sender.sendMessage(groupString.toString());
 			}
@@ -142,6 +143,7 @@ public class Commandlist extends EssentialsCommand
 					onlineUsers.append("§7[HIDDEN]§f");
 				}
 				onlineUsers.append(user.getDisplayName());
+				onlineUsers.append("§f");
 			}
 			sender.sendMessage(onlineUsers.toString());
 		}

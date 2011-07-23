@@ -53,6 +53,13 @@ public class Commandban extends EssentialsCommand
 		}
 		player.kickPlayer(banReason);
 		ess.getBans().banByName(player.getName());
-		server.broadcastMessage(Util.format("playerBanned", player.getName(), banReason));
+		for(Player p : server.getOnlinePlayers())
+		{
+			User u = ess.getUser(p);
+			if(u.isAuthorized("essentials.ban.notify"))
+			{
+			p.sendMessage(Util.format("playerBanned", player.getName(), banReason));
+			}
+		}
 	}
 }

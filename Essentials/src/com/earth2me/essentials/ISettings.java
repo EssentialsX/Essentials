@@ -130,4 +130,6 @@ public interface ISettings extends IConf
 	boolean isPlayerCommand(String string);
 
 	public boolean useBukkitPermissions();
+
+	public boolean addPrefixSuffix();
 }
