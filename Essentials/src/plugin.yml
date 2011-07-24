@@ -152,6 +152,7 @@ commands:
   kit:
     description: Obtains the specified kit or views all available kits.
     usage: /<command> <kit>
+    aliases: [ekit,kits]
   kill:
     description: Kills specified player.
     usage: /<command> <player>
@@ -334,7 +335,7 @@ commands:
   warp:
     description: List all warps or warp to the specified location.
     usage: /<command> <warp> <player>
-    aliases: [ewarp]
+    aliases: [ewarp,warps]
   weather:
     description: Setting the weather.
     usage: /<command> <storm/sun> [duration]
