@@ -102,7 +102,7 @@ public class SignTrade extends EssentialsSign
 			if (money != null && amount != null)
 			{
 				amount -= amount % money;
-				if (amount < 1 || money < 1)
+				if (amount < 0.01 || money < 0.01)
 				{
 					throw new SignException(Util.i18n("moreThanZero"));
 				}
