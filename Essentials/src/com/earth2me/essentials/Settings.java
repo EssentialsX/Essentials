@@ -471,6 +471,6 @@ public class Settings implements ISettings
 
 	public boolean addPrefixSuffix()
 	{
-		return config.getBoolean("add-prefix-suffix", false);
+		return config.getBoolean("add-prefix-suffix", ess.getServer().getPluginManager().isPluginEnabled("EssentialsChat"));
 	}
 }

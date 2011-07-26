@@ -11,7 +11,10 @@ Recommended NetBeans plugins:
 * Git
 * PMD & FindBugs ( http://kenai.com/projects/sqe/pages/Home )
 
-In the root folder of the repository is a file called settings.zip. It contains the code guidelines settings. Open the preferences of NetBeans and import the zip file. Use "Source > Format" before each commit please.
+You don't need to import settings.zip anymore, since the format guidelines have been added to the project properties.
+
+Windows users, please read this: http://help.github.com/line-endings/
+The default line ending is LF.
 
 To build all jars, select the BuildAll project and build that. You'll find all jars inside the dist/lib folder of the BuildAll project.
 

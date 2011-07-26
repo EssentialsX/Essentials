@@ -42,7 +42,7 @@ commands:
   broadcast:
     description: Broadcasts a message to the entire server.
     usage: /<command> [msg]
-    aliases: [ebroadcast,bcast]
+    aliases: [ebroadcast,bcast,ebcast]
   bigtree:
     description: Spawn a big tree where you are looking.
     usage: /<command> [tree|redwood]
@@ -66,7 +66,7 @@ commands:
   delwarp:
     description: Deletes the specified warp.
     usage: /<command> [warp]
-    aliases: [edelwarp,remwarp,rmwarp]
+    aliases: [edelwarp,remwarp,rmwarp,eremwarp,ermwarp]
   depth:
     description: States current depth, relative to sea level.
     usage: /depth
@@ -93,7 +93,7 @@ commands:
   gc:
     description: Reports garbage collection info; useful to developers.
     usage: /<command>
-    aliases: [mem,memory,egc]
+    aliases: [mem,memory,egc,emem,ememory]
   give:
     description: Give a player an item.
     usage: /<command> [player] [item|numeric] <amount>
@@ -101,7 +101,7 @@ commands:
   god:
     description: Enables your godly powers.
     usage: /<command>
-    aliases: [tgm,godmode,egod]
+    aliases: [tgm,godmode,egod,egodmode,etgm]
   heal:
     description: Heals you or the given player.
     usage: /<command> <player>
@@ -124,7 +124,7 @@ commands:
   info:
     description: Shows information set by the server owner
     usage: /<command> [chapter] [page]
-    aliases: [ifo,einfo,eabout,news]
+    aliases: [ifo,einfo,eabout,news,enews,eifo]
   invsee:
     description: See the inventory of other players.
     usage: /<command> <player>
@@ -152,6 +152,7 @@ commands:
   kit:
     description: Obtains the specified kit or views all available kits.
     usage: /<command> <kit>
+    aliases: [ekit,kits]
   kill:
     description: Kills specified player.
     usage: /<command> <player>
@@ -159,7 +160,7 @@ commands:
   list:
     description: List all online players.
     usage: /<command>
-    aliases: [playerlist,who,online,elist]
+    aliases: [playerlist,who,online,elist,ewho,eplayerlist,eonline]
   lightning:
     description: The power of Thor. Strike at cursor or player.
     usage: /<command> [player]
@@ -179,7 +180,7 @@ commands:
   msg:
     description: Sends a private message to the specified player.
     usage: /<command> <to> <message>
-    aliases: [m,t,emsg,tell]
+    aliases: [m,t,emsg,tell,etell,whisper,ewhisper]
   mute:
     description: Mutes or unmutes a player.
     usage: /<command> [player] <datediff>
@@ -199,7 +200,7 @@ commands:
   ping:
     description: Pong!
     usage: /<command>
-    aliases: [pong,eping]
+    aliases: [pong,eping,epong]
   powertool:
     description: Assigns a command to the item in hand, {player} will be replaced by the name of the player that you click.
     usage: /<command> [command] <arguments>
@@ -290,6 +291,7 @@ commands:
   tpaccept:
     description: Accepts a teleport request.
     usage: /<command>
+    aliases: [tpyes]
   tpahere:
     description: Request that the specified player teleport to you.
     usage: /<command> <player>
@@ -299,6 +301,7 @@ commands:
   tpdeny:
     description: Reject a teleport request.
     usage: /<command>
+    aliases: [tpno]
   tphere:
     description: Teleport a player to you.
     usage: /<command> [player]
@@ -330,15 +333,15 @@ commands:
   unlimited:
     description: Allows the unlimited placing of items.
     usage: /<command> [list|item] <player>
-    aliases: [eunlimited]
+    aliases: [eunlimited,ul,eul]
   warp:
     description: List all warps or warp to the specified location.
     usage: /<command> <warp> <player>
-    aliases: [ewarp]
+    aliases: [ewarp,warps]
   weather:
     description: Setting the weather.
     usage: /<command> <storm/sun> [duration]
-    aliases: [sky,sun,storm,eweather]
+    aliases: [sky,sun,storm,eweather,esky,esun,estorm]
   whois:
     description: Determine the username behind a nickname.
     usage: /<command> [nickname]

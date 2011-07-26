@@ -1,7 +1,0 @@
-# NetBeans cruft
-/build
-/dist
-/nbproject/private
-
-# Mac cruft
-.DS_Store
