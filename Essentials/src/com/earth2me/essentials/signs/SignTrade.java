@@ -98,9 +98,14 @@ public class SignTrade extends EssentialsSign
 		if (split.length == 2 && amountNeeded)
 		{
 			final Double money = getMoney(split[0]);
-			final Double amount = getDoublePositive(split[1]);
+			Double amount = getDoublePositive(split[1]);
 			if (money != null && amount != null)
 			{
+				amount -= amount % money;
+				if (amount < 1 || money < 1)
+				{
+					throw new SignException(Util.i18n("moreThanZero"));
+				}
 				sign.setLine(index, Util.formatCurrency(money, ess) + ":" + Util.formatCurrency(amount, ess).substring(1));
 				return;
 			}
