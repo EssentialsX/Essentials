@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.Console;
 import com.earth2me.essentials.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -48,6 +49,15 @@ public class Commandtempban extends EssentialsCommand
 		player.setBanTimeout(banTimestamp);
 		player.kickPlayer(banReason);
 		ess.getBans().banByName(player.getName());
-		server.broadcastMessage(Util.format("playerBanned", player.getName(), banReason));
+		String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
+		
+		for(Player p : server.getOnlinePlayers())
+		{
+			User u = ess.getUser(p);
+			if(u.isAuthorized("essentials.ban.notify"))
+			{
+			p.sendMessage(Util.format("playerBanned", senderName, player.getName(), banReason));
+			}
+		}
 	}
 }
