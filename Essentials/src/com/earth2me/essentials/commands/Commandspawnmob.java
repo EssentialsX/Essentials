@@ -7,6 +7,7 @@ import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.Mob.MobException;
 import com.earth2me.essentials.TargetBlock;
 import com.earth2me.essentials.Util;
+import java.util.Random;
 import net.minecraft.server.EntityWolf;
 import net.minecraft.server.PathEntity;
 import org.bukkit.DyeColor;
@@ -207,7 +208,15 @@ public class Commandspawnmob extends EssentialsCommand
 		{
 			try
 			{
-				((CraftSheep)spawned).setColor(DyeColor.valueOf(data.toUpperCase()));
+				if (data.equalsIgnoreCase("random"))
+				{
+				  Random rand = new Random();
+				  ((CraftSheep)spawned).setColor(DyeColor.values()[rand.nextInt(DyeColor.values().length)]);
+				}
+				else 
+				{	
+					((CraftSheep)spawned).setColor(DyeColor.valueOf(data.toUpperCase()));
+				}
 			}
 			catch (Exception e)
 			{
