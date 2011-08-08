@@ -37,10 +37,6 @@ public class Commandptime extends EssentialsCommand
 		{
 			userSelector = args[1];
 		}
-		if (args.length == 3)
-		{
-			userSelector = args[2];
-		}
 		Set<User> users = getUsers(server, sender, userSelector);
 
 		// If no arguments we are reading the time
@@ -59,7 +55,7 @@ public class Commandptime extends EssentialsCommand
 
 		Long ticks;
 		// Parse the target time int ticks from args[0]
-		String timeParam = args.length == 2 ? args[0] : args[0] + args[1];
+		String timeParam = args[0];
 		if (DescParseTickFormat.meansReset(timeParam))
 		{
 			ticks = null;

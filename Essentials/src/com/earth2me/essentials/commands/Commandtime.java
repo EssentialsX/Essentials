@@ -32,10 +32,6 @@ public class Commandtime extends EssentialsCommand
 		{
 			worldSelector = args[1];
 		}
-		if (args.length == 3)
-		{
-			worldSelector = args[2];
-		}
 		Set<World> worlds = getWorlds(server, sender, worldSelector);
 
 		// If no arguments we are reading the time
@@ -56,7 +52,7 @@ public class Commandtime extends EssentialsCommand
 		long ticks;
 		try
 		{
-			ticks = DescParseTickFormat.parse(args.length == 2 ? args[0] : args[0] + args[1]);
+			ticks = DescParseTickFormat.parse(args[0]);
 		}
 		catch (NumberFormatException e)
 		{
