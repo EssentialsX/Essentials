@@ -71,8 +71,6 @@ public final class DescParseTickFormat
 	// --------------------------------------------
 	public static long parse(String desc) throws NumberFormatException
 	{
-		Long ret;
-
 		// Only look at alphanumeric and lowercase and : for 24:00
 		desc = desc.toLowerCase().replaceAll("[^A-Za-z0-9:]", "");
 
@@ -275,7 +273,7 @@ public final class DescParseTickFormat
 		ticks = ticks - ticksAtMidnight + ticksPerDay;
 
 		// How many ingame days have passed since the server start?
-		long days = ticks / ticksPerDay;
+		final long days = ticks / ticksPerDay;
 		ticks = ticks - days * ticksPerDay;
 
 		// How many hours on the last day?

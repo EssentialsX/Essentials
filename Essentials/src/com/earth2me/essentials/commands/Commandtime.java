@@ -94,7 +94,9 @@ public class Commandtime extends EssentialsCommand
 		// Update the time
 		for (World world : worlds)
 		{
-			world.setTime(ticks);
+			long time = world.getTime();
+			time -= time % 24000;
+			world.setTime(time + 24000 + ticks);
 		}
 
 		// Inform the sender of the change
