@@ -37,16 +37,15 @@ public class Commandptime extends EssentialsCommand
 		// If no arguments we are reading the time
 		if (args.length == 0)
 		{
-			// TODO do we need to check for the essentials.time permission? Or is that tested for us already.
 			getUsersTime(sender, users);
 			return;
 		}
 
 		User user = ess.getUser(sender);
-		if ( user != null && ! user.isAuthorized("essentials.time.player"))
+		if ( user != null && ! user.isAuthorized("essentials.ptime.others"))
 		{
 			// TODO should not be hardcoded !!
-			sender.sendMessage(colorBad + "You are no authorized to set PlayerTime");
+			sender.sendMessage(colorBad + "You are not authorized to set others PlayerTime");
 			return; // TODO: How to not just die silently? in a good way??
 		}
 		
