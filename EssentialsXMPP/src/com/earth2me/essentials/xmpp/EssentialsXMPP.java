@@ -127,9 +127,9 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 		ess.broadcastMessage(name, message);
 		try
 		{
-			for (String address : EssentialsXMPP.getInstance().getSpyUsers())
+			for (String address : getSpyUsers())
 			{
-				EssentialsXMPP.getInstance().sendMessage(address, message);
+				sendMessage(address, message);
 			}
 		}
 		catch (Exception ex)
