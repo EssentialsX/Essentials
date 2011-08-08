@@ -196,7 +196,8 @@ public class EssentialsSign
 
 	public static boolean checkIfBlockBreaksSigns(final Block block)
 	{
-		if (block.getRelative(BlockFace.UP).getType() == Material.SIGN_POST)
+		final Block sign = block.getRelative(BlockFace.UP);
+		if (sign.getType() == Material.SIGN_POST && isValidSign(new BlockSign(sign)))
 		{
 			return true;
 		}
@@ -212,14 +213,19 @@ public class EssentialsSign
 			final Block signblock = block.getRelative(blockFace);
 			if (signblock.getType() == Material.WALL_SIGN)
 			{
-				final org.bukkit.material.Sign sign = (org.bukkit.material.Sign)signblock.getState().getData();
-				if (sign.getFacing() == blockFace)
+				final org.bukkit.material.Sign signMat = (org.bukkit.material.Sign)signblock.getState().getData();
+				if (signMat.getFacing() == blockFace && isValidSign(new BlockSign(signblock)))
 				{
 					return true;
 				}
 			}
 		}
 		return false;
+	}
+
+	public static boolean isValidSign(final ISign sign)
+	{
+		return sign.getLine(0).matches("§1\\[.*\\]");
 	}
 
 	protected boolean onBlockPlace(final Block block, final User player, final String username, final IEssentials ess) throws SignException, ChargeException

@@ -122,8 +122,9 @@ public class SignBlockListener extends BlockListener
 		}
 
 		final Block against = event.getBlockAgainst();
-		if (against.getType() == Material.WALL_SIGN
-			|| against.getType() == Material.SIGN_POST)
+		if ((against.getType() == Material.WALL_SIGN
+			 || against.getType() == Material.SIGN_POST)
+			&& EssentialsSign.isValidSign(new EssentialsSign.BlockSign(against)))
 		{
 			event.setCancelled(true);
 			return;
@@ -155,9 +156,10 @@ public class SignBlockListener extends BlockListener
 		}
 
 		final Block block = event.getBlock();
-		if ((block.getType() == Material.WALL_SIGN
-			 || block.getType() == Material.SIGN_POST
-			 || EssentialsSign.checkIfBlockBreaksSigns(block)))
+		if (((block.getType() == Material.WALL_SIGN
+			  || block.getType() == Material.SIGN_POST)
+			 && EssentialsSign.isValidSign(new EssentialsSign.BlockSign(block)))
+			|| EssentialsSign.checkIfBlockBreaksSigns(block))
 		{
 			event.setCancelled(true);
 			return;
@@ -189,13 +191,14 @@ public class SignBlockListener extends BlockListener
 	}
 
 	@Override
-	public void onBlockPistonExtend(BlockPistonExtendEvent event)
+	public void onBlockPistonExtend(final BlockPistonExtendEvent event)
 	{
 		for (Block block : event.getBlocks())
 		{
-			if ((block.getType() == Material.WALL_SIGN
-				 || block.getType() == Material.SIGN_POST
-				 || EssentialsSign.checkIfBlockBreaksSigns(block)))
+			if (((block.getType() == Material.WALL_SIGN
+				  || block.getType() == Material.SIGN_POST)
+				 && EssentialsSign.isValidSign(new EssentialsSign.BlockSign(block)))
+				|| EssentialsSign.checkIfBlockBreaksSigns(block))
 			{
 				event.setCancelled(true);
 				return;
@@ -214,14 +217,15 @@ public class SignBlockListener extends BlockListener
 	}
 
 	@Override
-	public void onBlockPistonRetract(BlockPistonRetractEvent event)
+	public void onBlockPistonRetract(final BlockPistonRetractEvent event)
 	{
 		if (event.isSticky())
 		{
 			final Block block = event.getBlock();
-			if ((block.getType() == Material.WALL_SIGN
-				 || block.getType() == Material.SIGN_POST
-				 || EssentialsSign.checkIfBlockBreaksSigns(block)))
+			if (((block.getType() == Material.WALL_SIGN
+				  || block.getType() == Material.SIGN_POST)
+				 && EssentialsSign.isValidSign(new EssentialsSign.BlockSign(block)))
+				|| EssentialsSign.checkIfBlockBreaksSigns(block))
 			{
 				event.setCancelled(true);
 				return;
