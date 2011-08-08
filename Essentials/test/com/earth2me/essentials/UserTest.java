@@ -33,6 +33,7 @@ public class UserTest extends TestCase
 		}
 		base1 = server.createPlayer("testPlayer1", ess);
 		server.addPlayer(base1);
+		ess.getUser(base1);
 	}
 
 	private void should(String what)

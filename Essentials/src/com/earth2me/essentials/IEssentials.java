@@ -1,12 +1,11 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.register.payment.Methods;
-import java.util.Map;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.scheduler.CraftScheduler;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitScheduler;
 
 
 public interface IEssentials extends Plugin
@@ -27,7 +26,7 @@ public interface IEssentials extends Plugin
 
 	ISettings getSettings();
 
-	CraftScheduler getScheduler();
+	BukkitScheduler getScheduler();
 
 	String[] getMotd(CommandSender sender, String def);
 
@@ -63,7 +62,7 @@ public interface IEssentials extends Plugin
 
 	void showError(final CommandSender sender, final Throwable exception, final String commandLabel);
 
-	Map<String, User> getAllUsers();
-
 	ItemDb getItemDb();
+
+	UserMap getUserMap();
 }

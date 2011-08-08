@@ -35,13 +35,13 @@ import java.math.BigInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.craftbukkit.scheduler.CraftScheduler;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
 import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.*;
 import org.bukkit.plugin.java.*;
+import org.bukkit.scheduler.BukkitScheduler;
 
 
 public class Essentials extends JavaPlugin implements IEssentials
@@ -64,7 +64,9 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private transient final static boolean enableErrorLogging = false;
 	private transient final EssentialsErrorHandler errorHandler = new EssentialsErrorHandler();
 	private transient IPermissionsHandler permissionsHandler;
+	private transient UserMap userMap;
 
+	@Override
 	public ISettings getSettings()
 	{
 		return settings;
@@ -85,10 +87,12 @@ public class Essentials extends JavaPlugin implements IEssentials
 		LOGGER.log(Level.INFO, dataFolder.toString());
 		this.initialize(null, server, new PluginDescriptionFile(new FileReader(new File("src" + File.separator + "plugin.yml"))), dataFolder, null, null);
 		settings = new Settings(this);
+		userMap = new UserMap(this);
 		permissionsHandler = new ConfigPermissionsHandler(this);
 		Economy.setEss(this);
 	}
 
+	@Override
 	public void onEnable()
 	{
 		final String[] javaversion = System.getProperty("java.version").split("\\.", 3);
@@ -100,13 +104,15 @@ public class Essentials extends JavaPlugin implements IEssentials
 		{
 			LOGGER.addHandler(errorHandler);
 		}
-		EssentialsUpgrade upgrade = new EssentialsUpgrade(this.getDescription().getVersion(), this);
+		final EssentialsUpgrade upgrade = new EssentialsUpgrade(this);
 		upgrade.beforeSettings();
 		confList = new ArrayList<IConf>();
 		settings = new Settings(this);
 		confList.add(settings);
 		upgrade.afterSettings();
 		Util.updateLocale(settings.getLocale(), this);
+		userMap = new UserMap(this);
+		confList.add(userMap);
 		spawn = new Spawn(getServer(), this.getDataFolder());
 		confList.add(spawn);
 		warps = new Warps(getServer(), this.getDataFolder());
@@ -212,12 +218,14 @@ public class Essentials extends JavaPlugin implements IEssentials
 		LOGGER.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), Util.joinList(this.getDescription().getAuthors())));
 	}
 
+	@Override
 	public void onDisable()
 	{
 		Trade.closeLog();
 		LOGGER.removeHandler(errorHandler);
 	}
 
+	@Override
 	public void reload()
 	{
 		Trade.closeLog();
@@ -238,12 +246,14 @@ public class Essentials extends JavaPlugin implements IEssentials
 		getConfiguration().load();
 	}
 
-	public String[] getMotd(CommandSender sender, String def)
+	@Override
+	public String[] getMotd(final CommandSender sender, final String def)
 	{
 		return getLines(sender, "motd", def);
 	}
 
-	public String[] getLines(CommandSender sender, String node, String def)
+	@Override
+	public String[] getLines(final CommandSender sender, final String node, final String def)
 	{
 		List<String> lines = (List<String>)getConfiguration().getProperty(node);
 		if (lines == null)
@@ -348,12 +358,13 @@ public class Essentials extends JavaPlugin implements IEssentials
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args)
+	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args)
 	{
 		return onCommandEssentials(sender, command, commandLabel, args, Essentials.class.getClassLoader(), "com.earth2me.essentials.commands.Command", "essentials.");
 	}
 
-	public boolean onCommandEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath, String permissionPrefix)
+	@Override
+	public boolean onCommandEssentials(final CommandSender sender, final Command command, final String commandLabel, final String[] args, final ClassLoader classLoader, final String commandPath, final String permissionPrefix)
 	{
 		// Allow plugins to override the command via onCommand
 		if (!getSettings().isCommandOverridden(command.getName()) && !commandLabel.startsWith("e"))
@@ -365,7 +376,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 					continue;
 				}
 
-				PluginDescriptionFile desc = p.getDescription();
+				final PluginDescriptionFile desc = p.getDescription();
 				if (desc == null)
 				{
 					continue;
@@ -376,7 +387,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 					continue;
 				}
 
-				PluginCommand pc = getServer().getPluginCommand(desc.getName() + ":" + commandLabel);
+				final PluginCommand pc = getServer().getPluginCommand(desc.getName() + ":" + commandLabel);
 				if (pc != null)
 				{
 					return pc.execute(sender, commandLabel, args);
@@ -462,6 +473,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 	}
 
+	@Override
 	public void showError(final CommandSender sender, final Throwable exception, final String commandLabel)
 	{
 		sender.sendMessage(Util.format("errorWithMessage", exception.getMessage()));
@@ -481,46 +493,64 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 	}
 
-	public CraftScheduler getScheduler()
+	@Override
+	public BukkitScheduler getScheduler()
 	{
-		return (CraftScheduler)this.getServer().getScheduler();
+		return this.getServer().getScheduler();
 	}
 
+	@Override
 	public Jail getJail()
 	{
 		return jail;
 	}
 
+	@Override
 	public Warps getWarps()
 	{
 		return warps;
 	}
 
+	@Override
 	public Worth getWorth()
 	{
 		return worth;
 	}
 
+	@Override
 	public Backup getBackup()
 	{
 		return backup;
 	}
 
+	@Override
 	public Spawn getSpawn()
 	{
 		return spawn;
 	}
 
-	public User getUser(Object base)
+	@Override
+	public User getUser(final Object base)
 	{
 		if (base instanceof Player)
 		{
 			return getUser((Player)base);
 		}
+		if (base instanceof String)
+		{
+			try
+			{
+				return userMap.getUser((String)base);
+			}
+			catch (NullPointerException ex)
+			{
+				return null;
+			}
+		}
 		return null;
 	}
 
-	private <T extends Player> User getUser(T base)
+	private <T extends Player> User getUser(final T base)
 	{
 		if (base == null)
 		{
@@ -532,70 +562,57 @@ public class Essentials extends JavaPlugin implements IEssentials
 			return (User)base;
 		}
 
-		if (users.containsKey(base.getName().toLowerCase()))
-		{
-			return users.get(base.getName().toLowerCase()).update(base);
-		}
-
-		User u = new User(base, this);
-		users.put(u.getName().toLowerCase(), u);
-		return u;
+		return userMap.getUser(base.getName()).update(base);
 	}
 
-	public Map<String, User> getAllUsers()
+	@Override
+	public User getOfflineUser(final String name)
 	{
-		return users;
-	}
-
-	public User getOfflineUser(String name)
-	{
-		// Don't create a new offline user, if we already have that user loaded.
-		User u = users.get(name.toLowerCase());
-		if (u != null)
+		try
 		{
-			return u;
+			return userMap.getUser(name);
 		}
-		File userFolder = new File(getDataFolder(), "userdata");
-		File userFile = new File(userFolder, Util.sanitizeFileName(name) + ".yml");
-		if (userFile.exists())
-		{	//Users do not get offline changes saved without being reproccessed as Users! ~ Xeology :)
-			return getUser((Player)new OfflinePlayer(name, this));
-
+		catch (NullPointerException ex)
+		{
+			return null;
 		}
-		return null;
 	}
 
+	@Override
 	public World getWorld(final String name)
 	{
 		if (name.matches("[0-9]+"))
 		{
-			final int id = Integer.parseInt(name);
-			if (id < getServer().getWorlds().size())
+			final int worldId = Integer.parseInt(name);
+			if (worldId < getServer().getWorlds().size())
 			{
-				return getServer().getWorlds().get(id);
+				return getServer().getWorlds().get(worldId);
 			}
 		}
 		return getServer().getWorld(name);
 	}
 
+	@Override
 	public void addReloadListener(final IConf listener)
 	{
 		confList.add(listener);
 	}
 
+	@Override
 	public Methods getPaymentMethod()
 	{
 		return paymentMethod;
 	}
 
+	@Override
 	public int broadcastMessage(final String name, final String message)
 	{
-		Player[] players = getServer().getOnlinePlayers();
+		final Player[] players = getServer().getOnlinePlayers();
 
 		for (Player player : players)
 		{
-			User u = getUser(player);
-			if (!u.isIgnoredPlayer(name))
+			final User user = getUser(player);
+			if (!user.isIgnoredPlayer(name))
 			{
 				player.sendMessage(message);
 			}
@@ -609,48 +626,63 @@ public class Essentials extends JavaPlugin implements IEssentials
 		return errorHandler.getErrors();
 	}
 
+	@Override
 	public int scheduleAsyncDelayedTask(final Runnable run)
 	{
 		return this.getScheduler().scheduleAsyncDelayedTask(this, run);
 	}
 
+	@Override
 	public int scheduleSyncDelayedTask(final Runnable run)
 	{
 		return this.getScheduler().scheduleSyncDelayedTask(this, run);
 	}
 
+	@Override
 	public int scheduleSyncDelayedTask(final Runnable run, final long delay)
 	{
 		return this.getScheduler().scheduleSyncDelayedTask(this, run, delay);
 	}
 
+	@Override
 	public int scheduleSyncRepeatingTask(final Runnable run, final long delay, final long period)
 	{
 		return this.getScheduler().scheduleSyncRepeatingTask(this, run, delay, period);
 	}
 
+	@Override
 	public TNTExplodeListener getTNTListener()
 	{
 		return tntListener;
 	}
 
+	@Override
 	public IPermissionsHandler getPermissionsHandler()
 	{
 		return permissionsHandler;
 	}
-	
-	public void setPermissionsHandler(IPermissionsHandler handler)
+
+	@Override
+	public void setPermissionsHandler(final IPermissionsHandler handler)
 	{
 		this.permissionsHandler = handler;
 	}
 
+	@Override
 	public BanWorkaround getBans()
 	{
 		return bans;
 	}
 
+	@Override
 	public ItemDb getItemDb()
 	{
 		return itemDb;
+	}
+
+	@Override
+	public UserMap getUserMap()
+	{
+		return userMap;
 	}
 }

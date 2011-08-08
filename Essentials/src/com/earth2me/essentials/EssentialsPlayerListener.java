@@ -1,8 +1,6 @@
 package com.earth2me.essentials;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -307,6 +305,11 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 		final User user = ess.getUser(event.getPlayer());
 		user.setNPC(false);
+
+		final long currentTime = System.currentTimeMillis();
+		user.checkBanTimeout(currentTime);
+		user.checkMuteTimeout(currentTime);
+		user.checkJailTimeout(currentTime);
 
 		if (user.isBanned())
 		{

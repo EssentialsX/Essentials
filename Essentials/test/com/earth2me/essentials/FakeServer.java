@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -15,9 +17,12 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.Recipe;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.ServicesManager;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.scheduler.BukkitWorker;
 
 
 public class FakeServer implements Server
@@ -118,7 +123,93 @@ public class FakeServer implements Server
 
 	public BukkitScheduler getScheduler()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		return new BukkitScheduler() {
+
+			@Override
+			public int scheduleSyncDelayedTask(Plugin plugin, Runnable r, long l)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public int scheduleSyncDelayedTask(Plugin plugin, Runnable r)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public int scheduleSyncRepeatingTask(Plugin plugin, Runnable r, long l, long l1)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public int scheduleAsyncDelayedTask(Plugin plugin, Runnable r, long l)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public int scheduleAsyncDelayedTask(Plugin plugin, Runnable r)
+			{
+				r.run();
+				return 0;
+			}
+
+			@Override
+			public int scheduleAsyncRepeatingTask(Plugin plugin, Runnable r, long l, long l1)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> clbl)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public void cancelTask(int i)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public void cancelTasks(Plugin plugin)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public void cancelAllTasks()
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public boolean isCurrentlyRunning(int i)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public boolean isQueued(int i)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public List<BukkitWorker> getActiveWorkers()
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public List<BukkitTask> getPendingTasks()
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+		};
 	}
 
 	public ServicesManager getServicesManager()
