@@ -72,7 +72,7 @@ public class EssentialsSign
 
 	private String getUsername(final User user)
 	{
-		return user.getName().substring(0, user.getName().length() > 14 ? 14 : user.getName().length());
+		return user.getName().substring(0, user.getName().length() > 13 ? 13 : user.getName().length());
 	}
 
 	public final boolean onSignInteract(final Block block, final Player player, final IEssentials ess)
