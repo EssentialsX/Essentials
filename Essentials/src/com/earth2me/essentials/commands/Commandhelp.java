@@ -120,7 +120,8 @@ public class Commandhelp extends EssentialsCommand
 				for (Entry<String, HashMap<String, String>> k : cmds.entrySet())
 				{
 					if ((!match.equalsIgnoreCase("")) && (!k.getKey().toLowerCase().contains(match))
-						&& (!k.getValue().get("description").toLowerCase().contains(match)))
+						&& (!k.getValue().get("description").toLowerCase().contains(match))
+						&& (!p.getDescription().getName().contains(match)))
 					{
 						continue;
 					}
