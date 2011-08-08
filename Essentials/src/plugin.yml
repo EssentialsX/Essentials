@@ -206,6 +206,10 @@ commands:
     description: Assigns a command to the item in hand, {player} will be replaced by the name of the player that you click.
     usage: /<command> [command] <arguments>
     aliases: [pt,epowertool,ept]
+  ptime:
+    description: Set or reset the playertime for yourself or the player(s) specified.
+    usage: /<command> [reset|day|night|dawn|17:30|4pm|4000ticks] <playername|all>
+    aliases: [eptime]
   r:
     description: Quickly reply to the last player to message you.
     usage: /<command> [message]
@@ -271,8 +275,8 @@ commands:
     usage: /<command> <true/false> [duration]
     aliases: [ethunder]
   time:
-    description: Change the time to day or night of the player (default) or world (essentials.time.world permission).
-    usage: /<command> [day|night|reset] <playername>
+    description: Change the time in the world where you are (default) or in the world(s) specified
+    usage: /<command> [day|night|dawn|17:30|4pm|4000ticks] <worldname|all>
     aliases: [etime, day, night, playertime]
   togglejail:
     description: Prevents a player from interacting with the world and teleports him/her to the the jail specified

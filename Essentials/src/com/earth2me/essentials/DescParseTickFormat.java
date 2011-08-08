@@ -3,8 +3,6 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.commands.Commandtime;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 /**
@@ -16,7 +14,7 @@ import java.util.logging.Logger;
  * 
  * @author Olof Larsson
  */
-public class DescParseTickFormat
+public final class DescParseTickFormat
 {
 	// ============================================
 	// First some information vars. TODO: Should this be in a config file?
@@ -64,6 +62,10 @@ public class DescParseTickFormat
 		resetAliases.add("default");
 	}
 
+	private DescParseTickFormat()
+	{
+	}
+
 	// ============================================
 	// PARSE. From describing String to int
 	// --------------------------------------------
@@ -71,8 +73,8 @@ public class DescParseTickFormat
 	{
 		Long ret;
 
-		// Only look at alphanumeric and lowercase
-		desc = desc.toLowerCase().replaceAll("[^A-Za-z0-9]", "");
+		// Only look at alphanumeric and lowercase and : for 24:00
+		desc = desc.toLowerCase().replaceAll("[^A-Za-z0-9:]", "");
 
 		// Detect ticks format
 		try
@@ -140,8 +142,8 @@ public class DescParseTickFormat
 			throw new NumberFormatException();
 		}
 
-		int hours = Integer.parseInt(desc.substring(0, 2));
-		int minutes = Integer.parseInt(desc.substring(2, 4));
+		final int hours = Integer.parseInt(desc.substring(0, 2));
+		final int minutes = Integer.parseInt(desc.substring(2, 4));
 
 		return hoursMinutesToTicks(hours, minutes);
 	}
@@ -193,7 +195,7 @@ public class DescParseTickFormat
 		return hoursMinutesToTicks(hours, minutes);
 	}
 
-	public static long hoursMinutesToTicks(int hours, int minutes)
+	public static long hoursMinutesToTicks(final int hours, final int minutes)
 	{
 		long ret = ticksAtMidnight;
 		ret += (hours - 1) * ticksPerHour;
@@ -204,9 +206,9 @@ public class DescParseTickFormat
 		return ret;
 	}
 
-	public static long parseAlias(String desc) throws NumberFormatException
+	public static long parseAlias(final String desc) throws NumberFormatException
 	{
-		Integer ret = nameToTicks.get(desc);
+		final Integer ret = nameToTicks.get(desc);
 		if (ret == null)
 		{
 			throw new NumberFormatException();
@@ -215,7 +217,7 @@ public class DescParseTickFormat
 		return ret;
 	}
 
-	public static boolean meansReset(String desc)
+	public static boolean meansReset(final String desc)
 	{
 		return resetAliases.contains(desc);
 	}
@@ -223,9 +225,9 @@ public class DescParseTickFormat
 	// ============================================
 	// FORMAT. From int to describing String
 	// --------------------------------------------
-	public static String format(long ticks)
+	public static String format(final long ticks)
 	{
-		StringBuilder msg = new StringBuilder();
+		final StringBuilder msg = new StringBuilder();
 		msg.append(Commandtime.colorHighlight1);
 		msg.append(format24(ticks));
 		msg.append(Commandtime.colorDefault);
@@ -239,24 +241,30 @@ public class DescParseTickFormat
 		return msg.toString();
 	}
 
-	public static String formatTicks(long ticks)
+	public static String formatTicks(final long ticks)
 	{
-		return "" + ticks % ticksPerDay + "ticks";
+		return (ticks % ticksPerDay) + "ticks";
 	}
 
-	public static String format24(long ticks)
+	public static String format24(final long ticks)
 	{
-		return formatDateFormat(ticks, SDFTwentyFour);
+		synchronized (SDFTwentyFour)
+		{
+			return formatDateFormat(ticks, SDFTwentyFour);
+		}
 	}
 
-	public static String format12(long ticks)
+	public static String format12(final long ticks)
 	{
-		return formatDateFormat(ticks, SDFTwelve);
+		synchronized (SDFTwelve)
+		{
+			return formatDateFormat(ticks, SDFTwelve);
+		}
 	}
 
-	public static String formatDateFormat(long ticks, SimpleDateFormat format)
+	public static String formatDateFormat(final long ticks, final SimpleDateFormat format)
 	{
-		Date date = ticksToDate(ticks);
+		final Date date = ticksToDate(ticks);
 		return format.format(date);
 	}
 
@@ -271,18 +279,18 @@ public class DescParseTickFormat
 		ticks = ticks - days * ticksPerDay;
 
 		// How many hours on the last day?
-		long hours = ticks / ticksPerHour;
+		final long hours = ticks / ticksPerHour;
 		ticks = ticks - hours * ticksPerHour;
 
 		// How many minutes on the last day?
-		long minutes = (long)Math.floor(ticks / ticksPerMinute);
-		double dticks = ticks - minutes * ticksPerMinute;
+		final long minutes = (long)Math.floor(ticks / ticksPerMinute);
+		final double dticks = ticks - minutes * ticksPerMinute;
 
 		// How many seconds on the last day?
-		long seconds = (long)Math.floor(dticks / ticksPerSecond);
+		final long seconds = (long)Math.floor(dticks / ticksPerSecond);
 
 		// Now we create an english GMT calendar (We wan't no daylight savings)
-		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.ENGLISH);
+		final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.ENGLISH);
 		cal.setLenient(true);
 
 		// And we set the time to 0! And append the time that passed!

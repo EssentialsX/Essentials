@@ -17,7 +17,7 @@ public class Commandtime extends EssentialsCommand
 	public static final ChatColor colorLogo = ChatColor.GREEN;
 	public static final ChatColor colorHighlight1 = ChatColor.AQUA;
 	public static final ChatColor colorBad = ChatColor.RED;
-	
+
 	public Commandtime()
 	{
 		super("time");
@@ -32,8 +32,12 @@ public class Commandtime extends EssentialsCommand
 		{
 			worldSelector = args[1];
 		}
+		if (args.length == 3)
+		{
+			worldSelector = args[2];
+		}
 		Set<World> worlds = getWorlds(server, sender, worldSelector);
-		
+
 		// If no arguments we are reading the time
 		if (args.length == 0)
 		{
@@ -42,29 +46,26 @@ public class Commandtime extends EssentialsCommand
 		}
 
 		User user = ess.getUser(sender);
-		if ( user != null && ! user.isAuthorized("essentials.time.set"))
+		if (user != null && !user.isAuthorized("essentials.time.set"))
 		{
 			// TODO should not be hardcoded !!
-			sender.sendMessage(colorBad + "You are not authorized to set the time");
-			return; // TODO: How to not just die silently? in a good way??
+			throw new Exception(colorBad + "You are not authorized to set the time");
 		}
-		
+
 		// Parse the target time int ticks from args[0]
 		long ticks;
 		try
 		{
-			ticks = DescParseTickFormat.parse(args[0]);
+			ticks = DescParseTickFormat.parse(args.length == 2 ? args[0] : args[0] + args[1]);
 		}
 		catch (NumberFormatException e)
 		{
-			// TODO: Display an error with help included... on how to specify the time
-			sender.sendMessage(colorBad + "Unknown time descriptor... brlalidididiablidadadibibibiiba!! TODO");
-			return;
+			throw new NotEnoughArgumentsException();
 		}
 
 		setWorldsTime(sender, worlds, ticks);
 	}
-	
+
 	/**
 	 * Used to get the time and inform
 	 */
@@ -77,14 +78,14 @@ public class Commandtime extends EssentialsCommand
 			sender.sendMessage(DescParseTickFormat.format(iter.next().getTime()));
 			return;
 		}
-		
-		for (World world : worlds)		
+
+		for (World world : worlds)
 		{
-			sender.sendMessage(colorDefault + world.getName()+": " + DescParseTickFormat.format(world.getTime()));
+			sender.sendMessage(colorDefault + world.getName() + ": " + DescParseTickFormat.format(world.getTime()));
 		}
 		return;
 	}
-	
+
 	/**
 	 * Used to set the time and inform of the change
 	 */
@@ -95,19 +96,19 @@ public class Commandtime extends EssentialsCommand
 		{
 			world.setTime(ticks);
 		}
-		
+
 		// Inform the sender of the change
 		sender.sendMessage("");
 		sender.sendMessage(colorDefault + "The time was set to");
 		sender.sendMessage(DescParseTickFormat.format(ticks));
-		
+
 		StringBuilder msg = new StringBuilder();
 		msg.append(colorDefault);
 		msg.append("In ");
 		boolean first = true;
 		for (World world : worlds)
 		{
-			if ( ! first)
+			if (!first)
 			{
 				msg.append(colorDefault);
 				msg.append(", ");
@@ -116,21 +117,21 @@ public class Commandtime extends EssentialsCommand
 			{
 				first = false;
 			}
-			
+
 			msg.append(colorHighlight1);
 			msg.append(world.getName());
 		}
-		
+
 		sender.sendMessage(msg.toString());
 	}
-	
+
 	/**
 	 * Used to parse an argument of the type "world(s) selector"
-	 */ 
+	 */
 	private Set<World> getWorlds(Server server, CommandSender sender, String selector) throws Exception
 	{
 		Set<World> worlds = new TreeSet<World>(new WorldNameComparator());
-		
+
 		// If there is no selector we want the world the user is currently in. Or all worlds if it isn't a user.
 		if (selector == null)
 		{
@@ -145,7 +146,7 @@ public class Commandtime extends EssentialsCommand
 			}
 			return worlds;
 		}
-		
+
 		// Try to find the world with name = selector
 		World world = server.getWorld(selector);
 		if (world != null)
@@ -160,16 +161,16 @@ public class Commandtime extends EssentialsCommand
 		// We failed to understand the world target...
 		else
 		{
-			throw new Exception("Could not find the world(s) \""+selector+"\"");
+			throw new Exception("Could not find the world(s) \"" + selector + "\"");
 		}
-		
+
 		return worlds;
 	}
 }
 
 
-
-class WorldNameComparator implements Comparator<World> {
+class WorldNameComparator implements Comparator<World>
+{
 	public int compare(World a, World b)
 	{
 		return a.getName().compareTo(b.getName());
