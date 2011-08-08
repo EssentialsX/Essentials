@@ -33,13 +33,15 @@ public class EssentialsSign
 	public final boolean onSignCreate(final SignChangeEvent event, final IEssentials ess)
 	{
 		final ISign sign = new EventSign(event);
-		sign.setLine(0, String.format(FORMAT_FAIL, this.signName));
 		final User user = ess.getUser(event.getPlayer());
 		if (!(user.isAuthorized("essentials.signs." + signName.toLowerCase() + ".create")
 			  || user.isAuthorized("essentials.signs.create." + signName.toLowerCase())))
 		{
-			return false;
+			// Return true, so other plugins can use the same sign title, just hope
+			// they won't change it to §1[Signname]
+			return true;
 		}
+		sign.setLine(0, String.format(FORMAT_FAIL, this.signName));
 		try
 		{
 			final boolean ret = onSignCreate(sign, user, getUsername(user), ess);
@@ -57,7 +59,8 @@ public class EssentialsSign
 		{
 			ess.showError(user, ex, signName);
 		}
-		return false;
+		// Return true, so the player sees the wrong sign.
+		return true;
 	}
 
 	public String getSuccessName()
