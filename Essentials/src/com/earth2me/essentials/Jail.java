@@ -31,7 +31,7 @@ public class Jail extends BlockListener implements IConf
 
 	public Location getJail(String jailName) throws Exception
 	{
-		if (config.getProperty(jailName.toLowerCase()) == null)
+		if (jailName == null || config.getProperty(jailName.toLowerCase()) == null)
 		{
 			throw new Exception(Util.i18n("jailNotExist"));
 		}
