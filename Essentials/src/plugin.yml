@@ -20,7 +20,7 @@ commands:
     usage: /<command>
     aliases: [eback]
   backup:
-    description: Runs the backup command
+    description: Runs the backup if configured.
     usage: /<command>
     aliases: [ebackup]
   balance:
@@ -74,7 +74,7 @@ commands:
   eco:
     description: Manages the server economy.
     usage: /<command> [give|take|reset] [player] [amount]
-    aliases: economy
+    aliases: [economy,emoney]
   essentials:
     description: Reloads essentials.
     usage: /<command>
@@ -113,6 +113,7 @@ commands:
   helpop:
     description: Request help from online operators.
     usage: /<command> [message]
+    aliases: [ehelpop]
   home:
     description: Teleport to your home.
     usage: /<command> <player>
@@ -164,7 +165,7 @@ commands:
   lightning:
     description: The power of Thor. Strike at cursor or player.
     usage: /<command> [player]
-    aliases: [strike,elightning,estrike]
+    aliases: [strike,smite,elightning,estrike,esmite]
   mail:
     description: Manages inter-player, intra-server mail.
     usage: /<command> [read|clear|send [to] [message]]
@@ -272,7 +273,7 @@ commands:
   time:
     description: Change the time to day or night of the player (default) or world (essentials.time.world permission).
     usage: /<command> [day|night|reset] <playername>
-    aliases: [etime]
+    aliases: [etime, day, night, playertime]
   togglejail:
     description: Prevents a player from interacting with the world and teleports him/her to the the jail specified
     usage: /<command> [player] [jailname] <datediff>
