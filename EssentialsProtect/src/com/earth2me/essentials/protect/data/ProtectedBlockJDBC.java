@@ -76,7 +76,10 @@ public abstract class ProtectedBlockJDBC implements IProtectedBlock
 			{
 				try
 				{
-					ps.close();
+					if (!ps.isClosed())
+					{
+						ps.close();
+					}
 				}
 				catch (SQLException ex)
 				{
@@ -117,7 +120,10 @@ public abstract class ProtectedBlockJDBC implements IProtectedBlock
 			{
 				try
 				{
-					ps.close();
+					if (!ps.isClosed())
+					{
+						ps.close();
+					}
 				}
 				catch (SQLException ex)
 				{
@@ -195,7 +201,10 @@ public abstract class ProtectedBlockJDBC implements IProtectedBlock
 			{
 				try
 				{
-					ps.close();
+					if (!ps.isClosed())
+					{
+						ps.close();
+					}
 				}
 				catch (SQLException ex)
 				{
@@ -241,7 +250,10 @@ public abstract class ProtectedBlockJDBC implements IProtectedBlock
 			{
 				try
 				{
-					ps.close();
+					if (!ps.isClosed())
+					{
+						ps.close();
+					}
 				}
 				catch (SQLException ex)
 				{
@@ -296,7 +308,10 @@ public abstract class ProtectedBlockJDBC implements IProtectedBlock
 			{
 				try
 				{
-					ps.close();
+					if (!ps.isClosed())
+					{
+						ps.close();
+					}
 				}
 				catch (SQLException ex)
 				{
@@ -356,7 +371,10 @@ public abstract class ProtectedBlockJDBC implements IProtectedBlock
 			{
 				try
 				{
-					ps.close();
+					if (!ps.isClosed())
+					{
+						ps.close();
+					}
 				}
 				catch (SQLException ex)
 				{
@@ -398,7 +416,10 @@ public abstract class ProtectedBlockJDBC implements IProtectedBlock
 			{
 				try
 				{
-					ps.close();
+					if (!ps.isClosed())
+					{
+						ps.close();
+					}
 				}
 				catch (SQLException ex)
 				{
