@@ -68,6 +68,10 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 				}
 				if (chat != null)
 				{
+					if (!connection.isConnected()) {
+						disconnect();
+						connect();
+					}
 					chat.sendMessage(message.replaceAll("§[0-9a-f]", ""));
 					return true;
 				}
