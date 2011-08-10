@@ -23,9 +23,10 @@ public class Commandptime extends EssentialsCommand
 	public static final ChatColor colorLogo = ChatColor.GREEN;
 	public static final ChatColor colorHighlight1 = ChatColor.AQUA;
 	public static final ChatColor colorBad = ChatColor.RED;
-	
 	public static final Set<String> getAliases = new HashSet<String>();
-	static {
+
+	static
+	{
 		getAliases.add("get");
 		getAliases.add("list");
 		getAliases.add("show");
@@ -65,6 +66,13 @@ public class Commandptime extends EssentialsCommand
 		Long ticks;
 		// Parse the target time int ticks from args[0]
 		String timeParam = args[0];
+		Boolean relative = true;
+		if (timeParam.startsWith("@"))
+		{
+			relative = false;
+			timeParam = timeParam.substring(1);
+		}
+
 		if (getAliases.contains(timeParam))
 		{
 			getUsersTime(sender, users);
@@ -86,7 +94,7 @@ public class Commandptime extends EssentialsCommand
 			}
 		}
 
-		setUsersTime(sender, users, ticks);
+		setUsersTime(sender, users, ticks, relative);
 	}
 
 	/**
@@ -98,27 +106,35 @@ public class Commandptime extends EssentialsCommand
 		{
 			final User user = users.iterator().next();
 
-			//Todo: Find out why this doesn't work?
-			// if (user.isPlayerTimeRelative())
 			if (user.getPlayerTimeOffset() == 0)
 			{
 				sender.sendMessage(colorDefault + user.getName() + "'s time is normal. Time is the same as on the server.");
 			}
 			else
 			{
-				sender.sendMessage(colorDefault + user.getName() + "'s time is fixed to: " + DescParseTickFormat.format(user.getPlayerTime()));
+				String time = DescParseTickFormat.format(user.getPlayerTime());
+				if (!user.isPlayerTimeRelative())
+				{
+					time = "fixed to " + time;
+				}
+				sender.sendMessage(colorDefault + user.getName() + "'s time is " + time);
 			}
 			return;
 		}
 
-		sender.sendMessage(colorDefault + "These players have fixed time:");
+		sender.sendMessage(colorDefault + "These players have their own time:");
 
 		for (User user : users)
 		{
 			//if (!user.isPlayerTimeRelative())
 			if (user.getPlayerTimeOffset() != 0)
 			{
-				sender.sendMessage(colorDefault + user.getName() + ": " + DescParseTickFormat.format(user.getPlayerTime()));
+				String time = DescParseTickFormat.format(user.getPlayerTime());
+				if (!user.isPlayerTimeRelative())
+				{
+					time = "fixed to " + time;
+				}
+				sender.sendMessage(colorDefault + user.getName() + "'s time is " + time);
 			}
 		}
 		return;
@@ -127,7 +143,7 @@ public class Commandptime extends EssentialsCommand
 	/**
 	 * Used to set the time and inform of the change
 	 */
-	private void setUsersTime(final CommandSender sender, final Collection<User> users, final Long ticks)
+	private void setUsersTime(final CommandSender sender, final Collection<User> users, final Long ticks, Boolean relative)
 	{
 		// Update the time
 		if (ticks == null)
@@ -143,10 +159,15 @@ public class Commandptime extends EssentialsCommand
 			// Set
 			for (User user : users)
 			{
+				final World world = user.getWorld();
 				long time = user.getPlayerTime();
 				time -= time % 24000;
-				final World world = user.getWorld();
-				user.setPlayerTime(time + 24000 + ticks - world.getTime(), true);
+				time += 24000 + ticks;
+				if (relative)
+				{
+					time -= world.getTime();
+				}
+				user.setPlayerTime(time, relative);
 			}
 		}
 
