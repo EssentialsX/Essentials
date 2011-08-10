@@ -98,7 +98,9 @@ public class Commandptime extends EssentialsCommand
 		{
 			final User user = users.iterator().next();
 
-			if (user.isPlayerTimeRelative())
+			//Todo: Find out why this doesn't work?
+			// if (user.isPlayerTimeRelative())
+			if (user.getPlayerTimeOffset() == 0)
 			{
 				sender.sendMessage(colorDefault + user.getName() + "'s time is normal. Time is the same as on the server.");
 			}
