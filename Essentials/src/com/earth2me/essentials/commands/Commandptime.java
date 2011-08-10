@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.User;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -22,6 +23,14 @@ public class Commandptime extends EssentialsCommand
 	public static final ChatColor colorLogo = ChatColor.GREEN;
 	public static final ChatColor colorHighlight1 = ChatColor.AQUA;
 	public static final ChatColor colorBad = ChatColor.RED;
+	
+	public static final Set<String> getAliases = new HashSet<String>();
+	static {
+		getAliases.add("get");
+		getAliases.add("list");
+		getAliases.add("show");
+		getAliases.add("display");
+	}
 
 	public Commandptime()
 	{
@@ -56,7 +65,12 @@ public class Commandptime extends EssentialsCommand
 		Long ticks;
 		// Parse the target time int ticks from args[0]
 		String timeParam = args[0];
-		if (DescParseTickFormat.meansReset(timeParam))
+		if (getAliases.contains(timeParam))
+		{
+			getUsersTime(sender, users);
+			return;
+		}
+		else if (DescParseTickFormat.meansReset(timeParam))
 		{
 			ticks = null;
 		}
