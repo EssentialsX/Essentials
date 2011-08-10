@@ -163,6 +163,11 @@ public class ItemDb implements IConf
 					metaData = durabilities.get(itemname);
 				}
 			}
+			else if(Material.getMaterial(itemname) != null)
+			{
+				itemid = Material.getMaterial(itemname).getId();
+				metaData = 0;
+			}
 			else
 			{
 				throw new Exception(Util.format("unknownItemName", id));
