@@ -31,6 +31,8 @@ public final class DescParseTickFormat
 
 	static
 	{
+		SDFTwentyFour.setTimeZone(TimeZone.getTimeZone("GMT"));
+		SDFTwelve.setTimeZone(TimeZone.getTimeZone("GMT"));
 
 		nameToTicks.put("sunrise", 23000);
 		nameToTicks.put("rise", 23000);
@@ -196,7 +198,7 @@ public final class DescParseTickFormat
 	public static long hoursMinutesToTicks(final int hours, final int minutes)
 	{
 		long ret = ticksAtMidnight;
-		ret += (hours - 1) * ticksPerHour;
+		ret += (hours) * ticksPerHour;
 
 		ret += (minutes / 60.0) * ticksPerHour;
 
