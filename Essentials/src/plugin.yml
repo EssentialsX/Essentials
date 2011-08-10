@@ -208,7 +208,7 @@ commands:
     aliases: [pt,epowertool,ept]
   ptime:
     description: Adjust player's client time.
-    usage: /<command> [list|reset|day|night|dawn|17:30|4pm|4000ticks] <player|all>
+    usage: /<command> [list|reset|day|night|dawn|17:30|4pm|4000ticks] <player|*>
     aliases: [playertime, eptime, eplayertime]
   r:
     description: Quickly reply to the last player to message you.
