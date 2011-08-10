@@ -32,14 +32,14 @@ public final class DescParseTickFormat
 	static
 	{
 
-		nameToTicks.put("sunrise", 22000);
-		nameToTicks.put("rise", 22000);
-		nameToTicks.put("dawn", 22000);
+		nameToTicks.put("sunrise", 23000);
+		nameToTicks.put("rise", 23000);
+		nameToTicks.put("dawn", 23000);
 
 		nameToTicks.put("daystart", 0);
 		nameToTicks.put("day", 0);
 
-		nameToTicks.put("morning", 3000);
+		nameToTicks.put("morning", 1000);
 
 		nameToTicks.put("midday", 6000);
 		nameToTicks.put("noon", 6000);
