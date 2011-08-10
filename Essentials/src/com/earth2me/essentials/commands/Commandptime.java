@@ -115,7 +115,8 @@ public class Commandptime extends EssentialsCommand
 
 		for (User user : users)
 		{
-			if (!user.isPlayerTimeRelative())
+			//if (!user.isPlayerTimeRelative())
+			if (user.getPlayerTimeOffset() != 0)
 			{
 				sender.sendMessage(colorDefault + user.getName() + ": " + DescParseTickFormat.format(user.getPlayerTime()));
 			}

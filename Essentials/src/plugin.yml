@@ -275,8 +275,8 @@ commands:
     usage: /<command> <true/false> [duration]
     aliases: [ethunder]
   time:
-    description: Change the time in the world where you are (default) or in the world(s) specified
-    usage: /<command> [day|night|dawn|17:30|4pm|4000ticks] <worldname|all>
+    description: Change the world time. Defaults tos current world.
+    usage: /<command> [day|night|dawn|17:30|4pm|4000ticks] [worldname|all]
     aliases: [etime, day, night]
   togglejail:
     description: Prevents a player from interacting with the world and teleports him/her to the the jail specified
