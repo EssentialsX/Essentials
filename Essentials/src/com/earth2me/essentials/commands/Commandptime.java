@@ -181,8 +181,12 @@ public class Commandptime extends EssentialsCommand
 		}
 		else
 		{
-			sender.sendMessage(colorDefault + "The players time was fixed to:");
-			sender.sendMessage(DescParseTickFormat.format(ticks));
+			String time = DescParseTickFormat.format(ticks);
+			if (!relative)
+			{
+				time = "fixed to " + time;
+			}
+			sender.sendMessage(colorDefault + "The players time is " + time);
 			msg.append(colorDefault);
 			msg.append("For: ");
 		}
