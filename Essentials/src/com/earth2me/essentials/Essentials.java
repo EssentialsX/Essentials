@@ -561,7 +561,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		{
 			return (User)base;
 		}
-
+		//Todo: catch this and deal with it?
 		return userMap.getUser(base.getName()).update(base);
 	}
 

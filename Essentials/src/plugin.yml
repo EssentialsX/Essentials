@@ -338,7 +338,7 @@ commands:
   unlimited:
     description: Allows the unlimited placing of items.
     usage: /<command> [list|item] <player>
-    aliases: [eunlimited,ul,eul]
+    aliases: [eunlimited,ul,unl,eul,eunl]
   warp:
     description: List all warps or warp to the specified location.
     usage: /<command> <warp> <player>
