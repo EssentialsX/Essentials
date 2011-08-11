@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 
 
 public class Commandpay extends EssentialsCommand
@@ -22,6 +23,7 @@ public class Commandpay extends EssentialsCommand
 
 		double amount = Double.parseDouble(args[1].replaceAll("[^0-9\\.]", ""));
 
+		Boolean foundUser = false;
 		for (Player p : server.matchPlayer(args[0]))
 		{
 			User u = ess.getUser(p);
@@ -30,6 +32,11 @@ public class Commandpay extends EssentialsCommand
 				continue;
 			}
 			user.payUser(u, amount);
+			foundUser = true;
+		}
+		
+		if(foundUser == false) {
+			throw new NoSuchFieldException(Util.i18n("playerNotFound"));
 		}
 	}
 }
