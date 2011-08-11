@@ -30,6 +30,10 @@ public class Commandsethome extends EssentialsCommand
 					{
 						usersHome = ess.getOfflineUser(args[0]);
 					}
+					if (usersHome == null)
+					{
+						throw new Exception(Util.i18n("playerNotFound"));
+					}
 					usersHome.setHome(user.getLocation(), args[1].equalsIgnoreCase("default"));
 				}
 			}
