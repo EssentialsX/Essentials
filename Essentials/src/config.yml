@@ -484,6 +484,7 @@ newbies:
   announce-format: '&dWelcome {DISPLAYNAME} to the server!'
   
   # When we spawn for the first time, which spawnpoint do we use?
+  # Set to "none" if you want to use the spawn point of the world.
   spawnpoint: newbies
 
 # End of File <-- No seriously, you're done with configuration.
