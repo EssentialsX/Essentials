@@ -252,7 +252,7 @@ public class Util
 			{
 				y = 127;
 				x += 1;
-				if (x - 16 > loc.getBlockX())
+				if (x - 32 > loc.getBlockX())
 				{
 					throw new Exception(Util.i18n("holeInFloor"));
 				}
