@@ -117,56 +117,63 @@ public class Commandhelp extends EssentialsCommand
 			{
 				final PluginDescriptionFile desc = p.getDescription();
 				final HashMap<String, HashMap<String, String>> cmds = (HashMap<String, HashMap<String, String>>)desc.getCommands();
+				pluginName = p.getDescription().getName().toLowerCase();
 				for (Entry<String, HashMap<String, String>> k : cmds.entrySet())
 				{
-					if ((!match.equalsIgnoreCase("")) && (!k.getKey().toLowerCase().contains(match))
-						&& (!k.getValue().get("description").toLowerCase().contains(match))
-						&& (!p.getDescription().getName().contains(match)))
+					try
+					{
+						if ((!match.equalsIgnoreCase(""))
+							&& (!k.getKey().toLowerCase().contains(match))
+							&& (!k.getValue().get("description").toLowerCase().contains(match))
+							&& (!pluginName.contains(match)))
+						{
+							continue;
+						}
+
+						if (pluginName.contains("essentials"))
+						{
+							final String node = "essentials." + k.getKey();
+							if (!ess.getSettings().isCommandDisabled(k.getKey()) && user.isAuthorized(node))
+							{
+								retval.add("§c" + k.getKey() + "§7: " + k.getValue().get("description"));
+							}
+						}
+						else
+						{
+							if (ess.getSettings().showNonEssCommandsInHelp())
+							{
+								final HashMap<String, String> value = k.getValue();
+								if (value.containsKey("permission") && value.get("permission") != null && !(value.get("permission").equals("")))
+								{
+									if (user.isAuthorized(value.get("permission")))
+									{
+										retval.add("§c" + k.getKey() + "§7: " + value.get("description"));
+									}
+								}
+								else if (value.containsKey("permissions") && value.get("permissions") != null && !(value.get("permissions").equals("")))
+								{
+									if (user.isAuthorized(value.get("permissions")))
+									{
+										retval.add("§c" + k.getKey() + "§7: " + value.get("description"));
+									}
+								}
+								else if (user.isAuthorized("essentials.help." + pluginName))
+								{
+									retval.add("§c" + k.getKey() + "§7: " + value.get("description"));
+								}
+								else
+								{
+									if (!ess.getSettings().hidePermissionlessHelp())
+									{
+										retval.add("§c" + k.getKey() + "§7: " + value.get("description"));
+									}
+								}
+							}
+						}
+					}
+					catch (NullPointerException ex)
 					{
 						continue;
-					}
-
-					if (p.getDescription().getName().toLowerCase().contains("essentials"))
-					{
-						final String node = "essentials." + k.getKey();
-						if (!ess.getSettings().isCommandDisabled(k.getKey()) && user.isAuthorized(node))
-						{
-							retval.add("§c" + k.getKey() + "§7: " + k.getValue().get("description"));
-						}
-					}
-					else
-					{
-						if (ess.getSettings().showNonEssCommandsInHelp())
-						{
-							pluginName = p.getDescription().getName();
-							final HashMap<String, String> value = k.getValue();
-							if (value.containsKey("permission") && value.get("permission") != null && !(value.get("permission").equals("")))
-							{
-								if (user.isAuthorized(value.get("permission")))
-								{
-									retval.add("§c" + k.getKey() + "§7: " + value.get("description"));
-								}
-							}
-							else if (value.containsKey("permissions") && value.get("permissions") != null && !(value.get("permissions").equals("")))
-							{
-								if (user.isAuthorized(value.get("permissions")))
-								{
-									retval.add("§c" + k.getKey() + "§7: " + value.get("description"));
-								}
-							}
-							else if (user.isAuthorized("essentials.help." + pluginName))
-							{
-								retval.add("§c" + k.getKey() + "§7: " + value.get("description"));								
-							}		
-							else
-							{
-								if (!ess.getSettings().hidePermissionlessHelp())
-								{
-									retval.add("§c" + k.getKey() + "§7: " + value.get("description"));
-								}
-							}
-						}
-
 					}
 				}
 			}
