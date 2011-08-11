@@ -207,7 +207,7 @@ commands:
     usage: /<command> [command] <arguments>
     aliases: [pt,epowertool,ept]
   ptime:
-    description: Adjust player's client time.
+    description: Adjust player's client time. Add @ prefix to fix.
     usage: /<command> [list|reset|day|night|dawn|17:30|4pm|4000ticks] <player|*>
     aliases: [playertime, eptime, eplayertime]
   r:
