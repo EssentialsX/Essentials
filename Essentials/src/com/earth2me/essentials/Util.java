@@ -226,12 +226,7 @@ public class Util
 		int x = loc.getBlockX();
 		int y = loc.getBlockY();
 		int z = loc.getBlockZ();
-
-		if (isBlockAboveAir(world, x, y, z) && (y < 125))
-		{
-		  y += 2;	
-		}
-		
+	
 		while (isBlockAboveAir(world, x, y, z))
 		{
 			y -= 1;
@@ -257,6 +252,10 @@ public class Util
 			{
 				y = 127;
 				x += 1;
+				if (x - 16 > loc.getBlockX())
+				{
+					throw new Exception(Util.i18n("holeInFloor"));
+				}
 			}
 		}
 		return new Location(world, x + 0.5D, y, z + 0.5D, loc.getYaw(), loc.getPitch());
