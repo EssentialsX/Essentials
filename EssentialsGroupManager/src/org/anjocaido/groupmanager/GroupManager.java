@@ -32,6 +32,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
+@SuppressWarnings("unused")
 /**
  *
  * @author gabrielcouto
@@ -48,7 +49,7 @@ public class GroupManager extends JavaPlugin {
     private boolean validateOnlinePlayer = true;
     private boolean isReady = false;
     private GMConfiguration config;
-	private GMLoggerHandler ch;
+    private GMLoggerHandler ch;
     public static final Logger logger = Logger.getLogger(GroupManager.class.getName());
 
     @Override
@@ -60,7 +61,7 @@ public class GroupManager extends JavaPlugin {
         // EXAMPLE: Custom code, here we just output some info so we can check all is well
         PluginDescriptionFile pdfFile = this.getDescription();
         System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is disabled!");
-		GroupManager.logger.removeHandler(ch);
+        GroupManager.logger.removeHandler(ch);
     }
 
     @Override
@@ -166,7 +167,7 @@ public class GroupManager extends JavaPlugin {
     }
 
     /**
-     *  A simple interface, for ones that don't want to mess with overloading.
+     * A simple interface, for ones that don't want to mess with overloading.
      * Yet it is affected by overloading. But seamless.
      * @return the dataholder with all information
      */
@@ -176,8 +177,8 @@ public class GroupManager extends JavaPlugin {
     }
 
     /**
-     *  Use this if you want to play with overloading.
-     * @return  a dataholder with overloading interface
+     * Use this if you want to play with overloading.
+     * @return a dataholder with overloading interface
      */
     @Deprecated
     public OverloadedWorldHolder getOverloadedClassData() {
@@ -186,10 +187,11 @@ public class GroupManager extends JavaPlugin {
 
     /**
      * Called when a command registered by this plugin is received.
-     * @param sender 
-     * @param cmd 
+     * @param sender
+     * @param cmd
      * @param args
      */
+    @SuppressWarnings({"null", "deprecation"})
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         boolean playerCanDo = false;
@@ -246,9 +248,9 @@ public class GroupManager extends JavaPlugin {
         } catch (Exception e) {
             //this error happened once with someone. now im prepared... i think
             GroupManager.logger.severe("===================================================");
-            GroupManager.logger.severe("=              ERROR REPORT START                 =");
+            GroupManager.logger.severe("= ERROR REPORT START =");
             GroupManager.logger.severe("===================================================");
-            GroupManager.logger.severe("=  COPY AND PASTE THIS TO GROUPMANAGER DEVELOPER  =");
+            GroupManager.logger.severe("= COPY AND PASTE THIS TO GROUPMANAGER DEVELOPER =");
             GroupManager.logger.severe("===================================================");
             GroupManager.logger.severe(this.getDescription().getName());
             GroupManager.logger.severe(this.getDescription().getVersion());
@@ -265,7 +267,7 @@ public class GroupManager extends JavaPlugin {
                 GroupManager.logger.severe(val.name());
             }
             GroupManager.logger.severe("===================================================");
-            GroupManager.logger.severe("=              ERROR REPORT ENDED                 =");
+            GroupManager.logger.severe("= ERROR REPORT ENDED =");
             GroupManager.logger.severe("===================================================");
             sender.sendMessage("An error occurred. Ask the admin to take a look at the console.");
         }
@@ -889,7 +891,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //PARECE OK
                     auxGroup.addInherits(auxGroup2);
-                    sender.sendMessage(ChatColor.RED + "Group  " + auxGroup2.getName() + " is now in " + auxGroup.getName() + " inheritance list.");
+                    sender.sendMessage(ChatColor.RED + "Group " + auxGroup2.getName() + " is now in " + auxGroup.getName() + " inheritance list.");
 
                     return true;
                 case mangdeli:
@@ -925,7 +927,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //PARECE OK
                     auxGroup.removeInherits(auxGroup2.getName());
-                    sender.sendMessage(ChatColor.RED + "Group  " + auxGroup2.getName() + " was removed from " + auxGroup.getName() + " inheritance list.");
+                    sender.sendMessage(ChatColor.RED + "Group " + auxGroup2.getName() + " was removed from " + auxGroup.getName() + " inheritance list.");
 
                     return true;
                 case manuaddv:

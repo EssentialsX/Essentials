@@ -27,7 +27,7 @@ public abstract class DataUnit {
     }
 
     /**
-     *  Every group is matched only by their names and DataSources names.
+     * Every group is matched only by their names and DataSources names.
      * @param o
      * @return true if they are equal. false if not.
      */
@@ -49,9 +49,6 @@ public abstract class DataUnit {
         return hash;
     }
 
-
-   
-
     /**
      * @return the dataSource
      */
@@ -67,10 +64,10 @@ public abstract class DataUnit {
     }
 
     public void flagAsChanged() {
-        GroupManager.logger.finest("DataSource: "+getDataSource().getName()+" - DataUnit: "+getName()+" flagged as changed!");
-//        for(StackTraceElement st: Thread.currentThread().getStackTrace()){
-//            GroupManager.logger.finest(st.toString());
-//        }
+        GroupManager.logger.finest("DataSource: " + getDataSource().getName() + " - DataUnit: " + getName() + " flagged as changed!");
+// for(StackTraceElement st: Thread.currentThread().getStackTrace()){
+// GroupManager.logger.finest(st.toString());
+// }
         changed = true;
     }
 
@@ -79,7 +76,7 @@ public abstract class DataUnit {
     }
 
     public void flagAsSaved() {
-        GroupManager.logger.finest("DataSource: "+getDataSource().getName()+" - DataUnit: "+getName()+" flagged as saved!");
+        GroupManager.logger.finest("DataSource: " + getDataSource().getName() + " - DataUnit: " + getName() + " flagged as saved!");
         changed = false;
     }
 
@@ -108,7 +105,7 @@ public abstract class DataUnit {
         return (ArrayList<String>) permissions.clone();
     }
 
-    public void sortPermissions(){
+    public void sortPermissions() {
         Collections.sort(permissions, StringPermissionComparator.getInstance());
     }
 }

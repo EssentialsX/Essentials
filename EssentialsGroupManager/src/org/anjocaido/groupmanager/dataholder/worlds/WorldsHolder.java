@@ -37,7 +37,7 @@ public class WorldsHolder {
      * Map of mirrors: <nonExistingWorldName, existingAndLoadedWorldName>
      * The key is the mirror.
      * The object is the mirrored.
-     * 
+     *
      * Mirror shows the same data of mirrored.
      */
     private Map<String, String> mirrors = new HashMap<String, String>();
@@ -63,7 +63,8 @@ public class WorldsHolder {
         initialWorldLoading();
         mirrorSetUp();
     }
-    private void initialWorldLoading(){
+
+    private void initialWorldLoading() {
         //LOAD EVERY WORLD POSSIBLE
         loadWorld(serverDefaultWorldName);
         defaultWorld = worldsData.get(serverDefaultWorldName);
@@ -77,7 +78,9 @@ public class WorldsHolder {
             }
         }
     }
-    public void mirrorSetUp(){
+
+    @SuppressWarnings("rawtypes")
+    public void mirrorSetUp() {
         mirrors.clear();
         Map<String, Object> mirrorsMap = plugin.getConfig().getMirrorsMap();
         if (mirrorsMap != null) {
@@ -122,7 +125,7 @@ public class WorldsHolder {
     }
 
     /**
-     * 
+     *
      */
     public void saveChanges() {
         ArrayList<WorldDataHolder> alreadyDone = new ArrayList<WorldDataHolder>();
@@ -136,7 +139,7 @@ public class WorldsHolder {
                 continue;
             }
             if (w.haveGroupsChanged()) {
-                String groupsFolderName = w.getGroupsFile().getParentFile().getName();
+                //String groupsFolderName = w.getGroupsFile().getParentFile().getName();
                 File backupGroups = new File(plugin.getBackupFolder(), "bkp_" + w.getName() + "_g_" + Tasks.getDateString() + ".yml");
                 try {
                     Tasks.copy(w.getGroupsFile(), backupGroups);
@@ -368,7 +371,7 @@ public class WorldsHolder {
                 GroupManager.logger.log(Level.SEVERE, null, ex);
                 return;
             }
-            GroupManager.logger.severe("Failed to load world " + worldName + "...");
+            //GroupManager.logger.severe("Failed to load world " + worldName + "...");
         }
     }
 
@@ -376,7 +379,7 @@ public class WorldsHolder {
      * Tells if the such world has been mapped.
      *
      * It will return true if world is a mirror.
-     * 
+     *
      * @param worldName
      * @return true if world is loaded or mirrored. false if not listed
      */

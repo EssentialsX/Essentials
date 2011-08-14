@@ -11,6 +11,7 @@ import org.anjocaido.groupmanager.data.DataUnit;
  * @author gabrielcouto
  */
 public class PermissionCheckResult {
+
     /**
      * It should be the owner of the access level found.
      *

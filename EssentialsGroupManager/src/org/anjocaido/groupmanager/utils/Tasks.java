@@ -10,7 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import org.anjocaido.groupmanager.data.Group;
@@ -62,48 +62,51 @@ public abstract class Tasks {
     public static String getDateString() {
         GregorianCalendar now = new GregorianCalendar();
         String date = "";
-        date += now.get(GregorianCalendar.DAY_OF_MONTH);
+        date += now.get(Calendar.DAY_OF_MONTH);
         date += "-";
-        date += now.get(GregorianCalendar.HOUR);
+        date += now.get(Calendar.HOUR);
         date += "-";
-        date += now.get(GregorianCalendar.MINUTE);
+        date += now.get(Calendar.MINUTE);
         return date;
     }
-    public static String getStringListInString(List<String> list){
-        if(list==null){
+
+    public static String getStringListInString(List<String> list) {
+        if (list == null) {
             return "";
         }
-        String result="";
-        for(int i=0;i<list.size();i++){
-            result+=list.get(i);
-            if(i<list.size()-1){
-                result+=", ";
+        String result = "";
+        for (int i = 0; i < list.size(); i++) {
+            result += list.get(i);
+            if (i < list.size() - 1) {
+                result += ", ";
             }
         }
         return result;
     }
-    public static String getStringArrayInString(String[] list){
-        if(list==null){
+
+    public static String getStringArrayInString(String[] list) {
+        if (list == null) {
             return "";
         }
-        String result="";
-        for(int i=0;i<list.length;i++){
-            result+=list[i];
-            if(i<((list.length)-1)){
-                result+=", ";
+        String result = "";
+        for (int i = 0; i < list.length; i++) {
+            result += list[i];
+            if (i < ((list.length) - 1)) {
+                result += ", ";
             }
         }
         return result;
     }
-    public static String getGroupListInString(List<Group> list){
-        if(list==null){
+
+    public static String getGroupListInString(List<Group> list) {
+        if (list == null) {
             return "";
         }
-        String result="";
-        for(int i=0;i<list.size();i++){
-            result+=list.get(i).getName();
-            if(i<list.size()-1){
-                result+=", ";
+        String result = "";
+        for (int i = 0; i < list.size(); i++) {
+            result += list.get(i).getName();
+            if (i < list.size() - 1) {
+                result += ", ";
             }
         }
         return result;

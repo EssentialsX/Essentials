@@ -30,18 +30,18 @@ public class Group extends DataUnit implements Cloneable {
      * @param name
      */
     public Group(WorldDataHolder source, String name) {
-        super(source,name);
+        super(source, name);
     }
 
     /**
-     *  Clone this group
+     * Clone this group
      * @return a clone of this group
      */
     @Override
     public Group clone() {
         Group clone = new Group(getDataSource(), this.getName());
         clone.inherits = ((ArrayList<String>) this.getInherits().clone());
-        for(String perm: this.getPermissionList()){
+        for (String perm : this.getPermissionList()) {
             clone.addPermission(perm);
         }
         clone.variables = ((GroupVariables) variables).clone(clone);
@@ -60,7 +60,7 @@ public class Group extends DataUnit implements Cloneable {
         }
         Group clone = getDataSource().createGroup(this.getName());
         clone.inherits = ((ArrayList<String>) this.getInherits().clone());
-        for(String perm: this.getPermissionList()){
+        for (String perm : this.getPermissionList()) {
             clone.addPermission(perm);
         }
         clone.variables = variables.clone(clone);
@@ -108,13 +108,13 @@ public class Group extends DataUnit implements Cloneable {
     }
 
     /**
-     * 
+     *
      * @param varList
      */
     public void setVariables(Map<String, Object> varList) {
         GroupVariables temp = new GroupVariables(this, varList);
         variables.clearVars();
-        for(String key: temp.getVarKeyList()){
+        for (String key : temp.getVarKeyList()) {
             variables.addVar(key, temp.getVarObject(key));
         }
         flagAsChanged();

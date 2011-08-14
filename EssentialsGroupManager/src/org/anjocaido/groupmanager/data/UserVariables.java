@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.anjocaido.groupmanager.data;
 
 import java.util.Map;
@@ -11,19 +10,23 @@ import java.util.Map;
  *
  * @author gabrielcouto
  */
-public class UserVariables extends Variables{
+public class UserVariables extends Variables {
+
     private User owner;
-    public UserVariables(User owner){
+
+    public UserVariables(User owner) {
         super(owner);
         this.owner = owner;
     }
+
     public UserVariables(User owner, Map<String, Object> varList) {
         super(owner);
         this.variables = varList;
         this.owner = owner;
     }
+
     /**
-     *  A clone of all vars here.
+     * A clone of all vars here.
      * @return
      */
     protected UserVariables clone(User newOwner) {
@@ -34,6 +37,7 @@ public class UserVariables extends Variables{
         newOwner.flagAsChanged();
         return clone;
     }
+
     /**
      * @return the owner
      */
@@ -41,5 +45,4 @@ public class UserVariables extends Variables{
     public User getOwner() {
         return owner;
     }
-
 }
