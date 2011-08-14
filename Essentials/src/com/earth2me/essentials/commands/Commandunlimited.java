@@ -33,63 +33,90 @@ public class Commandunlimited extends EssentialsCommand
 
 		if (args[0].equalsIgnoreCase("list"))
 		{
-			StringBuilder sb = new StringBuilder();
-			sb.append(Util.i18n("unlimitedItems")).append(" ");
-			boolean first = true;
-			List<Integer> items = target.getUnlimited();
-			if (items.isEmpty())
+			String list = getList(target);
+			user.sendMessage(list);
+		}
+		else if (args[0].equalsIgnoreCase("clear"))
+		{
+			List<Integer> itemList = target.getUnlimited();
+
+			int index = 0;
+			while (itemList.size() > index)
 			{
-				sb.append(Util.i18n("none"));
-			}
-			for (Integer integer : items)
-			{
-				if (!first)
+				Integer item = itemList.get(index);
+				if (toggleUnlimited(user, target, item.toString()) == false)
 				{
-					sb.append(", ");
+					index++;
 				}
-				first = false;
-				String matname = Material.getMaterial(integer).toString().toLowerCase().replace("_", "");
-				sb.append(matname);
 			}
-			user.sendMessage(sb.toString());
-			return;
+		}
+		else
+		{
+			toggleUnlimited(user, target, args[0]);
+		}
+	}
+
+	private String getList(User target)
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append(Util.i18n("unlimitedItems")).append(" ");
+		boolean first = true;
+		List<Integer> items = target.getUnlimited();
+		if (items.isEmpty())
+		{
+			sb.append(Util.i18n("none"));
+		}
+		for (Integer integer : items)
+		{
+			if (!first)
+			{
+				sb.append(", ");
+			}
+			first = false;
+			String matname = Material.getMaterial(integer).toString().toLowerCase().replace("_", "");
+			sb.append(matname);
 		}
 
-		final ItemStack stack = ess.getItemDb().get(args[0], 1);
+		return sb.toString();
+	}
+
+	private Boolean toggleUnlimited(User user, User target, String item) throws Exception
+	{
+		ItemStack stack = ess.getItemDb().get(item, 1);
 		stack.setAmount(Math.min(stack.getType().getMaxStackSize(), 2));
 
 		String itemname = stack.getType().toString().toLowerCase().replace("_", "");
-		if (!user.isAuthorized("essentials.unlimited.item-all")
-			&& !user.isAuthorized("essentials.unlimited.item-" + itemname)
-			&& !user.isAuthorized("essentials.unlimited.item-" + stack.getTypeId())
-			&& !((stack.getType() == Material.WATER_BUCKET || stack.getType() == Material.LAVA_BUCKET)
-				 && user.isAuthorized("essentials.unlimited.item-bucket")))
+		if (ess.getSettings().permissionBasedItemSpawn()
+			&& (!user.isAuthorized("essentials.unlimited.item-all")
+				&& !user.isAuthorized("essentials.unlimited.item-" + itemname)
+				&& !user.isAuthorized("essentials.unlimited.item-" + stack.getTypeId())
+				&& !((stack.getType() == Material.WATER_BUCKET || stack.getType() == Material.LAVA_BUCKET)
+					 && user.isAuthorized("essentials.unlimited.item-bucket"))))
 		{
 			user.sendMessage(Util.format("unlimitedItemPermission", itemname));
-			return;
+			return false;
 		}
 
-
-		if (target.hasUnlimited(stack))
+		String message = "disableUnlimited";
+		Boolean enableUnlimited = false;
+		if (!target.hasUnlimited(stack))
 		{
-			if (user != target)
+			message = "enableUnlimited";
+			enableUnlimited = true;
+			charge(user);
+			if (!InventoryWorkaround.containsItem(target.getInventory(), true, stack))
 			{
-				user.sendMessage(Util.format("disableUnlimited", itemname, target.getDisplayName()));
+				target.getInventory().addItem(stack);
 			}
-			target.sendMessage(Util.format("disableUnlimited", itemname, target.getDisplayName()));
-			target.setUnlimited(stack, false);
-			return;
 		}
-		charge(user);
+
 		if (user != target)
 		{
-			user.sendMessage(Util.format("enableUnlimited", itemname, target.getDisplayName()));
+			user.sendMessage(Util.format(message, itemname, target.getDisplayName()));
 		}
-		target.sendMessage(Util.format("enableUnlimited", itemname, target.getDisplayName()));
-		if (!InventoryWorkaround.containsItem(target.getInventory(), true, stack))
-		{
-			target.getInventory().addItem(stack);
-		}
-		target.setUnlimited(stack, true);
+		target.sendMessage(Util.format(message, itemname, target.getDisplayName()));
+		target.setUnlimited(stack, enableUnlimited);
+
+		return true;
 	}
 }
