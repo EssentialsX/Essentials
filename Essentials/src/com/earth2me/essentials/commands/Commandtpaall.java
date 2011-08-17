@@ -51,6 +51,7 @@ public class Commandtpaall extends EssentialsCommand
 			{
 				u.requestTeleport(p, true);
 				u.sendMessage(Util.format("teleportHereRequest", p.getDisplayName()));
+				u.sendMessage(Util.i18n("typeTpaccept"));
 			}
 			catch (Exception ex)
 			{
