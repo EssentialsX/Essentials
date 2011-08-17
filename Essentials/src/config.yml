@@ -40,7 +40,9 @@ change-displayname: true
 # Adds the prefix and suffix to the displayname of the player, so it will be displayed in messages and lists.
 # The prefix/suffix can be set using Permissions, Group Manager or PermissionsEx.
 # The value of change-displayname (above) has to be true.
-add-prefix-suffix: false
+# If you don't set this, it will default to true if essentials chat is installed.
+# Don't forget to remove the # infront of the line
+#add-prefix-suffix: false
 
 # The delay, in seconds, required between /home, /tp, etc.
 teleport-cooldown: 0
