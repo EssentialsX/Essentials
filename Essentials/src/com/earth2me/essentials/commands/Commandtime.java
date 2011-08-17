@@ -97,8 +97,7 @@ public class Commandtime extends EssentialsCommand
 
 		// Inform the sender of the change
 		sender.sendMessage("");
-		sender.sendMessage(colorDefault + "The time was set to");
-		sender.sendMessage(DescParseTickFormat.format(ticks));
+		sender.sendMessage(colorDefault + "The time was set to " + DescParseTickFormat.format(ticks));
 
 		StringBuilder msg = new StringBuilder();
 		msg.append(colorDefault);

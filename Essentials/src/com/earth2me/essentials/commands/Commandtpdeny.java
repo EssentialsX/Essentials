@@ -23,7 +23,7 @@ public class Commandtpdeny extends EssentialsCommand
 
 		charge(user);
 		user.sendMessage(Util.i18n("requestDenied"));
-		p.sendMessage(Util.i18n("requestDenied"));
+		p.sendMessage(Util.format("requestDeniedFrom", user.getDisplayName()));
 		user.requestTeleport(null, false);
 	}
 }

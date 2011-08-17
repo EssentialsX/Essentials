@@ -293,6 +293,9 @@ commands:
   tpa:
     description: Request to teleport to the specified player.
     usage: /<command> <player>
+  tpaall:
+    description: Requests all players online to teleport to you.
+    usage: /<command> <player>
   tpaccept:
     description: Accepts a teleport request.
     usage: /<command>
