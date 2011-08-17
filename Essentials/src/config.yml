@@ -299,6 +299,7 @@ hide-permissionless-help: true
 # Note that users with the "essentials.chat.spy" permission will hear everything, regardless of this setting.
 # Users with essentials.chat.shout can override this by prefixing text with an exclamation mark (!)
 # Or with essentials.chat.question can override this by prefixing text with a question mark (?)
+# You can add command costs for shout/question by adding chat-shout and chat-question to the command costs section."
 chat:
   radius: 0
   
