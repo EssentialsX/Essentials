@@ -11,20 +11,20 @@ public class SignEntityListener extends EntityListener
 {
 	private final transient IEssentials ess;
 
-	public SignEntityListener(IEssentials ess)
+	public SignEntityListener(final IEssentials ess)
 	{
 		this.ess = ess;
 	}
 
-	
 	@Override
-	public void onEntityExplode(EntityExplodeEvent event)
+	public void onEntityExplode(final EntityExplodeEvent event)
 	{
 		for (Block block : event.blockList())
 		{
-			if ((block.getType() == Material.WALL_SIGN
-				 || block.getType() == Material.SIGN_POST
-				 || EssentialsSign.checkIfBlockBreaksSigns(block)))
+			if (((block.getType() == Material.WALL_SIGN
+				  || block.getType() == Material.SIGN_POST)
+				 && EssentialsSign.isValidSign(new EssentialsSign.BlockSign(block)))
+				|| EssentialsSign.checkIfBlockBreaksSigns(block))
 			{
 				event.setCancelled(true);
 				return;

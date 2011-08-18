@@ -38,14 +38,14 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 	private transient ChatManager chatManager;
 	private final transient Map<String, Chat> chats = Collections.synchronizedMap(new HashMap<String, Chat>());
 	private final transient Set<LogRecord> logrecords = Collections.synchronizedSet(new HashSet<LogRecord>());
-	private final transient JavaPlugin parent;
+	private final transient IEssentialsXMPP parent;
 	private transient List<String> logUsers;
 	private transient Level logLevel;
 	private transient boolean ignoreLagMessages = true;
 	private transient Thread loggerThread;
 	private transient boolean threadrunning = true;
 
-	public XMPPManager(final JavaPlugin parent)
+	public XMPPManager(final IEssentialsXMPP parent)
 	{
 		super();
 		this.parent = parent;
@@ -68,6 +68,10 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 				}
 				if (chat != null)
 				{
+					if (!connection.isConnected()) {
+						disconnect();
+						connect();
+					}
 					chat.sendMessage(message.replaceAll("§[0-9a-f]", ""));
 					return true;
 				}
@@ -97,7 +101,8 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 				sendCommand(chat, message);
 				break;
 			default:
-				parent.getServer().broadcastMessage("<X:" + EssentialsXMPP.getInstance().getUserByAddress(StringUtils.parseBareAddress(chat.getParticipant())) + "> " + message);
+				final String name = parent.getUserByAddress(StringUtils.parseBareAddress(chat.getParticipant()));
+				parent.broadcastMessage(name, "="+name+": "+ message);
 			}
 		}
 	}
@@ -346,7 +351,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 			}
 			else
 			{
-				final String from = "[X:" + EssentialsXMPP.getInstance().getUserByAddress(StringUtils.parseBareAddress(chat.getParticipant())) + ">";
+				final String from = "[" + parent.getUserByAddress(StringUtils.parseBareAddress(chat.getParticipant())) + ">";
 				for (Player p : matches)
 				{
 					p.sendMessage(from + p.getDisplayName() + "]  " + message);

@@ -33,7 +33,7 @@ public class Commandtpaccept extends EssentialsCommand
 			charge.isAffordableFor(p);
 		}
 		user.sendMessage(Util.i18n("requestAccepted"));
-		p.sendMessage(Util.i18n("requestAccepted"));
+		p.sendMessage(Util.format("requestAcceptedFrom", user.getDisplayName()));
 		
 		if (user.isTeleportRequestHere())
 		{

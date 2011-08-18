@@ -20,6 +20,7 @@ public class Commandclearinventory extends EssentialsCommand
 	{
 		if (args.length > 0 && user.isAuthorized("essentials.clearinventory.others"))
 		{
+			//TODO: Fix fringe user match case.
 			if (args[0].length() >= 3)
 			{
 				List<Player> online = server.matchPlayer(args[0]);

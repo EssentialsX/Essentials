@@ -7,6 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.*;
+import org.bukkit.map.MapView;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
@@ -405,20 +406,6 @@ public class PlayerWrapper implements Player
 		return base.eject();
 	}
 
-	@Override
-	@Deprecated
-	public void teleportTo(Location lctn)
-	{
-		base.teleportTo(lctn);
-	}
-
-	@Override
-	@Deprecated
-	public void teleportTo(Entity entity)
-	{
-		base.teleportTo(entity);
-	}
-
 	public void saveData()
 	{
 		base.saveData();
@@ -623,5 +610,11 @@ public class PlayerWrapper implements Player
 	public void setOp(boolean bln)
 	{
 		base.setOp(bln);
+	}
+
+	@Override
+	public void sendMap(MapView mv)
+	{
+		base.sendMap(mv);
 	}
 }

@@ -71,7 +71,7 @@ public class Commandtogglejail extends EssentialsCommand
 			return;
 		}
 
-		if (args.length == 2 && p.isJailed() && !args[1].equalsIgnoreCase(p.getJail()))
+		if (args.length >= 2 && p.isJailed() && !args[1].equalsIgnoreCase(p.getJail()))
 		{
 			sender.sendMessage("§cPerson is already in jail " + p.getJail());
 			return;

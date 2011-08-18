@@ -25,6 +25,16 @@ public class Commandmsg extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
+		if (sender instanceof Player)
+		{
+			User user = ess.getUser(sender);
+			if (user.isMuted())
+			{
+				user.sendMessage(Util.i18n("voiceSilenced"));
+				return;
+			}
+		}
+
 		String message = getFinalArg(args, 1);
 		String translatedMe = Util.i18n("me");
 
@@ -48,7 +58,7 @@ public class Commandmsg extends EssentialsCommand
 			sender.sendMessage(Util.i18n("playerNotFound"));
 			return;
 		}
-		
+
 		int i = 0;
 		for (Player p : matches)
 		{

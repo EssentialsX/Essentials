@@ -1,6 +1,8 @@
 package com.earth2me.essentials.chat;
 
+import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.util.Map;
@@ -8,6 +10,7 @@ import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerListener;
@@ -59,29 +62,38 @@ public class EssentialsChatPlayerListener extends PlayerListener
 		}
 		radius *= radius;
 
-		if (event.getMessage().startsWith("!") && event.getMessage().length() > 1)
-		{
-			if (user.isAuthorized("essentials.chat.shout"))
+		try {
+			if (event.getMessage().startsWith("!") && event.getMessage().length() > 1)
 			{
-				event.setMessage(event.getMessage().substring(1));
-				event.setFormat(Util.format("shoutFormat", event.getFormat()));
+				if (user.isAuthorized("essentials.chat.shout"))
+				{
+					charge(user,"chat-shout");
+					event.setMessage(event.getMessage().substring(1));
+					event.setFormat(Util.format("shoutFormat", event.getFormat()));				
+					return;
+				}
+				user.sendMessage(Util.i18n("notAllowedToShout"));
+				event.setCancelled(true);
 				return;
 			}
-			user.sendMessage(Util.i18n("notAllowedToShout"));
-			event.setCancelled(true);
-			return;
-		}
 
-		if (event.getMessage().startsWith("?") && event.getMessage().length() > 1)
-		{
-			if (user.isAuthorized("essentials.chat.question"))
+			if (event.getMessage().startsWith("?") && event.getMessage().length() > 1)
 			{
-				event.setMessage(event.getMessage().substring(1));
-				event.setFormat(Util.format("questionFormat", event.getFormat()));
+				if (user.isAuthorized("essentials.chat.question"))
+				{
+					charge(user,"chat-question");
+					event.setMessage(event.getMessage().substring(1));
+					event.setFormat(Util.format("questionFormat", event.getFormat()));
+					return;
+				}
+				user.sendMessage(Util.i18n("notAllowedToQuestion"));
+				event.setCancelled(true);
 				return;
 			}
-			user.sendMessage(Util.i18n("notAllowedToQuestion"));
-			event.setCancelled(true);
+		}
+		catch (ChargeException ex)
+		{
+			ess.showError(user, ex, "Shout");
 			return;
 		}
 
@@ -121,6 +133,14 @@ public class EssentialsChatPlayerListener extends PlayerListener
 			}
 
 			u.sendMessage(message);
+		}
+	}
+	protected void charge(final CommandSender sender, final String command) throws ChargeException
+	{
+		if (sender instanceof Player)
+		{
+			final Trade charge = new Trade(command, ess);
+			charge.charge(ess.getUser((Player)sender));
 		}
 	}
 }

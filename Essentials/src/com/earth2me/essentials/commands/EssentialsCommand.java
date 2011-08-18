@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.Trade;
 import java.util.List;
 import org.bukkit.Server;
@@ -15,16 +16,16 @@ import java.util.logging.Logger;
 
 public abstract class EssentialsCommand implements IEssentialsCommand
 {
-	private final String name;
-	protected IEssentials ess;
+	private final transient String name;
+	protected transient IEssentials ess;
 	protected final static Logger logger = Logger.getLogger("Minecraft");
 
-	protected EssentialsCommand(String name)
+	protected EssentialsCommand(final String name)
 	{
 		this.name = name;
 	}
 
-	public void setEssentials(IEssentials ess)
+	public void setEssentials(final IEssentials ess)
 	{
 		this.ess = ess;
 	}
@@ -34,74 +35,72 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 		return name;
 	}
 
-	protected User getPlayer(Server server, String[] args, int pos) throws NoSuchFieldException, NotEnoughArgumentsException
+	protected User getPlayer(final Server server, final String[] args, final int pos) throws NoSuchFieldException, NotEnoughArgumentsException
 	{
 		return getPlayer(server, args, pos, false);
 	}
 
-	protected User getPlayer(Server server, String[] args, int pos, boolean getOffline) throws NoSuchFieldException, NotEnoughArgumentsException
+	protected User getPlayer(final Server server, final String[] args, final int pos, final boolean getOffline) throws NoSuchFieldException, NotEnoughArgumentsException
 	{
-		if (args.length <= pos) throw new NotEnoughArgumentsException();
-		User user = ess.getAllUsers().get(args[pos].toLowerCase());
+		if (args.length <= pos)
+		{
+			throw new NotEnoughArgumentsException();
+		}
+		final User user = ess.getUser(args[pos]);
 		if (user != null)
 		{
-			if(!getOffline && (user.getBase() instanceof OfflinePlayer || user.isHidden()))
+			if (!getOffline && (user.getBase() instanceof OfflinePlayer || user.isHidden()))
 			{
 				throw new NoSuchFieldException(Util.i18n("playerNotFound"));
 			}
 			return user;
-		}	
-		List<Player> matches = server.matchPlayer(args[pos]);
-
-		if (matches.size() < 1)
-		{
-			if (!getOffline) throw new NoSuchFieldException(Util.i18n("playerNotFound"));
-			User u = ess.getOfflineUser(args[pos]);
-			if (u == null) throw new NoSuchFieldException(Util.i18n("playerNotFound"));
-			return u;
 		}
+		final List<Player> matches = server.matchPlayer(args[pos]);
 
-		for (Player p : matches)
+		if (!matches.isEmpty())
 		{
-			final User u = ess.getUser(p);
-			if (u.getDisplayName().startsWith(args[pos]) && (getOffline || !u.isHidden()))
+			for (Player player : matches)
 			{
-				return u;
+				final User userMatch = ess.getUser(player);
+				if (userMatch.getDisplayName().startsWith(args[pos]) && (getOffline || !userMatch.isHidden()))
+				{
+					return userMatch;
+				}
+			}
+			final User userMatch = ess.getUser(matches.get(0));
+			if (getOffline || !userMatch.isHidden())
+			{
+				return userMatch;
 			}
 		}
-		final User u = ess.getUser(matches.get(0));
-		if (!getOffline && u.isHidden())
-		{
-			throw new NoSuchFieldException(Util.i18n("playerNotFound"));
-		}
-		return u;
+		throw new NoSuchFieldException(Util.i18n("playerNotFound"));
 	}
 
 	@Override
-	public final void run(Server server, User user, String commandLabel, Command cmd, String[] args) throws Exception
+	public final void run(final Server server, final User user, final String commandLabel, final Command cmd, final String[] args) throws Exception
 	{
 		run(server, user, commandLabel, args);
 	}
 
-	protected void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		run(server, (CommandSender)user.getBase(), commandLabel, args);
 	}
 
 	@Override
-	public final void run(Server server, CommandSender sender, String commandLabel, Command cmd, String[] args) throws Exception
+	public final void run(final Server server, final CommandSender sender, final String commandLabel, final Command cmd, final String[] args) throws Exception
 	{
 		run(server, sender, commandLabel, args);
 	}
 
-	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		throw new Exception(Util.format("onlyPlayers", commandLabel));
 	}
 
-	public static String getFinalArg(String[] args, int start)
+	public static String getFinalArg(final String[] args, final int start)
 	{
-		StringBuilder bldr = new StringBuilder();
+		final StringBuilder bldr = new StringBuilder();
 		for (int i = start; i < args.length; i++)
 		{
 			if (i != start)
@@ -113,11 +112,11 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 		return bldr.toString();
 	}
 
-	protected void charge(CommandSender sender) throws Exception
+	protected void charge(final CommandSender sender) throws ChargeException
 	{
 		if (sender instanceof Player)
 		{
-			Trade charge = new Trade(this.getName(), ess);
+			final Trade charge = new Trade(this.getName(), ess);
 			charge.charge(ess.getUser((Player)sender));
 		}
 	}

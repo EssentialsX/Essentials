@@ -20,7 +20,7 @@ commands:
     usage: /<command>
     aliases: [eback]
   backup:
-    description: Runs the backup command
+    description: Runs the backup if configured.
     usage: /<command>
     aliases: [ebackup]
   balance:
@@ -74,7 +74,7 @@ commands:
   eco:
     description: Manages the server economy.
     usage: /<command> [give|take|reset] [player] [amount]
-    aliases: economy
+    aliases: [economy,emoney]
   essentials:
     description: Reloads essentials.
     usage: /<command>
@@ -113,6 +113,7 @@ commands:
   helpop:
     description: Request help from online operators.
     usage: /<command> [message]
+    aliases: [ehelpop]
   home:
     description: Teleport to your home.
     usage: /<command> <player>
@@ -164,7 +165,7 @@ commands:
   lightning:
     description: The power of Thor. Strike at cursor or player.
     usage: /<command> [player]
-    aliases: [strike,elightning,estrike]
+    aliases: [strike,smite,elightning,estrike,esmite]
   mail:
     description: Manages inter-player, intra-server mail.
     usage: /<command> [read|clear|send [to] [message]]
@@ -205,6 +206,10 @@ commands:
     description: Assigns a command to the item in hand, {player} will be replaced by the name of the player that you click.
     usage: /<command> [command] <arguments>
     aliases: [pt,epowertool,ept]
+  ptime:
+    description: Adjust player's client time. Add @ prefix to fix.
+    usage: /<command> [list|reset|day|night|dawn|17:30|4pm|4000ticks] <player|*>
+    aliases: [playertime, eptime, eplayertime]
   r:
     description: Quickly reply to the last player to message you.
     usage: /<command> [message]
@@ -270,9 +275,9 @@ commands:
     usage: /<command> <true/false> [duration]
     aliases: [ethunder]
   time:
-    description: Change the time to day or night of the player (default) or world (essentials.time.world permission).
-    usage: /<command> [day|night|reset] <playername>
-    aliases: [etime]
+    description: Change the world time. Defaults tos current world.
+    usage: /<command> [day|night|dawn|17:30|4pm|4000ticks] [worldname|all]
+    aliases: [etime, day, night]
   togglejail:
     description: Prevents a player from interacting with the world and teleports him/her to the the jail specified
     usage: /<command> [player] [jailname] <datediff>
@@ -287,6 +292,9 @@ commands:
     aliases: [etp]
   tpa:
     description: Request to teleport to the specified player.
+    usage: /<command> <player>
+  tpaall:
+    description: Requests all players online to teleport to you.
     usage: /<command> <player>
   tpaccept:
     description: Accepts a teleport request.
@@ -333,7 +341,7 @@ commands:
   unlimited:
     description: Allows the unlimited placing of items.
     usage: /<command> [list|item] <player>
-    aliases: [eunlimited,ul,eul]
+    aliases: [eunlimited,ul,unl,eul,eunl]
   warp:
     description: List all warps or warp to the specified location.
     usage: /<command> <warp> <player>

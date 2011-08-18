@@ -33,7 +33,10 @@ public class Commandspawner extends EssentialsCommand
 		charge(user);
 		try
 		{
-			final String name = args[0].substring(0, 1).toUpperCase() +  args[0].substring(1).toLowerCase();
+			String name = args[0].substring(0, 1).toUpperCase() +  args[0].substring(1).toLowerCase();
+			if (name.equalsIgnoreCase("Pigzombie")) {
+				name = "PigZombie";
+			} 
 			new CraftCreatureSpawner(target).setCreatureType(CreatureType.fromName(name));
 		}
 		catch (Throwable ex)

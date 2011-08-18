@@ -46,7 +46,7 @@ public class Commanditem extends EssentialsCommand
 			return;
 		}
 
-		String itemName = stack.getType().name().toLowerCase().replace('_', ' ');
+		String itemName = stack.getType().toString().toLowerCase().replace('_', ' ');
 		charge(user);
 		user.sendMessage(Util.format("itemSpawn", stack.getAmount(), itemName));
 		user.getInventory().addItem(stack);

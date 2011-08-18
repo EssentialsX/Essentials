@@ -30,7 +30,7 @@ public class Commandseen extends EssentialsCommand
 			User u = ess.getOfflineUser(args[0]);
 			if (u == null)
 			{
-				return;
+				throw new Exception(Util.i18n("playerNotFound"));
 			}
 			sender.sendMessage(Util.format("seenOffline", u.getDisplayName(), Util.formatDateDiff(u.getLastLogout())));
 		}

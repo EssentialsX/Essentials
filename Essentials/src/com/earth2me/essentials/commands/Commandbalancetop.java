@@ -39,7 +39,7 @@ public class Commandbalancetop extends EssentialsCommand
 			}
 		}
 		final Map<User, Double> balances = new HashMap<User, Double>();
-		for (User u : ess.getAllUsers().values())
+		for (User u : ess.getUserMap().getAllUsers())
 		{
 			balances.put(u, u.getMoney());
 		}

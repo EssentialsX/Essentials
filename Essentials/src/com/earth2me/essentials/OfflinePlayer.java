@@ -24,6 +24,7 @@ import org.bukkit.entity.Vehicle;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.map.MapView;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
@@ -575,5 +576,11 @@ public class OfflinePlayer implements Player
 
 	public void setOp(boolean bln)
 	{
+	}
+
+	@Override
+	public void sendMap(MapView mv)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }

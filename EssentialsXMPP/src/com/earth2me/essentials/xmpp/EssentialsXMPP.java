@@ -1,6 +1,5 @@
 package com.earth2me.essentials.xmpp;
 
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.Util;
 import java.util.List;
@@ -120,5 +119,22 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 	public List<String> getSpyUsers()
 	{
 		return instance.users.getSpyUsers();
+	}
+
+	@Override
+	public void broadcastMessage(final String name, final String message)
+	{
+		ess.broadcastMessage(name, message);
+		try
+		{
+			for (String address : getSpyUsers())
+			{
+				sendMessage(address, message);
+			}
+		}
+		catch (Exception ex)
+		{
+			// Ignore exceptions
+		}
 	}
 }

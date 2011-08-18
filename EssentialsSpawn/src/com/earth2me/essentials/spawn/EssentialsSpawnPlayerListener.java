@@ -59,20 +59,23 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 			return;
 		}
 		user.setNew(false);
-		ess.scheduleSyncDelayedTask(new Runnable()
+		if (!"none".equalsIgnoreCase(ess.getSettings().getNewbieSpawn()))
 		{
-			public void run()
+			ess.scheduleSyncDelayedTask(new Runnable()
 			{
-				try
+				public void run()
 				{
-					user.getTeleport().now(ess.getSpawn().getSpawn(ess.getSettings().getNewbieSpawn()));
+					try
+					{
+						user.getTeleport().now(ess.getSpawn().getSpawn(ess.getSettings().getNewbieSpawn()));
+					}
+					catch (Exception ex)
+					{
+						Logger.getLogger("Minecraft").log(Level.WARNING, Util.i18n("teleportNewPlayerError"), ex);
+					}
 				}
-				catch (Exception ex)
-				{
-					Logger.getLogger("Minecraft").log(Level.WARNING, Util.i18n("teleportNewPlayerError"), ex);
-				}
-			}
-		});
+			});
+		}
 
 		if (ess.getSettings().getAnnounceNewPlayers())
 		{

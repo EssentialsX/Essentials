@@ -33,13 +33,15 @@ public class EssentialsSign
 	public final boolean onSignCreate(final SignChangeEvent event, final IEssentials ess)
 	{
 		final ISign sign = new EventSign(event);
-		sign.setLine(0, String.format(FORMAT_FAIL, this.signName));
 		final User user = ess.getUser(event.getPlayer());
 		if (!(user.isAuthorized("essentials.signs." + signName.toLowerCase() + ".create")
 			  || user.isAuthorized("essentials.signs.create." + signName.toLowerCase())))
 		{
-			return false;
+			// Return true, so other plugins can use the same sign title, just hope
+			// they won't change it to §1[Signname]
+			return true;
 		}
+		sign.setLine(0, String.format(FORMAT_FAIL, this.signName));
 		try
 		{
 			final boolean ret = onSignCreate(sign, user, getUsername(user), ess);
@@ -57,7 +59,8 @@ public class EssentialsSign
 		{
 			ess.showError(user, ex, signName);
 		}
-		return false;
+		// Return true, so the player sees the wrong sign.
+		return true;
 	}
 
 	public String getSuccessName()
@@ -72,7 +75,7 @@ public class EssentialsSign
 
 	private String getUsername(final User user)
 	{
-		return user.getName().substring(0, user.getName().length() > 14 ? 14 : user.getName().length());
+		return user.getName().substring(0, user.getName().length() > 13 ? 13 : user.getName().length());
 	}
 
 	public final boolean onSignInteract(final Block block, final Player player, final IEssentials ess)
@@ -196,7 +199,8 @@ public class EssentialsSign
 
 	public static boolean checkIfBlockBreaksSigns(final Block block)
 	{
-		if (block.getRelative(BlockFace.UP).getType() == Material.SIGN_POST)
+		final Block sign = block.getRelative(BlockFace.UP);
+		if (sign.getType() == Material.SIGN_POST && isValidSign(new BlockSign(sign)))
 		{
 			return true;
 		}
@@ -212,14 +216,19 @@ public class EssentialsSign
 			final Block signblock = block.getRelative(blockFace);
 			if (signblock.getType() == Material.WALL_SIGN)
 			{
-				final org.bukkit.material.Sign sign = (org.bukkit.material.Sign)signblock.getState().getData();
-				if (sign.getFacing() == blockFace)
+				final org.bukkit.material.Sign signMat = (org.bukkit.material.Sign)signblock.getState().getData();
+				if (signMat.getFacing() == blockFace && isValidSign(new BlockSign(signblock)))
 				{
 					return true;
 				}
 			}
 		}
 		return false;
+	}
+
+	public static boolean isValidSign(final ISign sign)
+	{
+		return sign.getLine(0).matches("§1\\[.*\\]");
 	}
 
 	protected boolean onBlockPlace(final Block block, final User player, final String username, final IEssentials ess) throws SignException, ChargeException
