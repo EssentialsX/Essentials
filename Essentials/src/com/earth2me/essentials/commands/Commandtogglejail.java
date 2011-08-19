@@ -45,9 +45,6 @@ public class Commandtogglejail extends EssentialsCommand
 				}
 			}
 			charge(sender);
-			p.setJailed(true);
-			p.sendMessage(Util.i18n("userJailed"));
-			p.setJail(null);
 			if (!(p.getBase() instanceof OfflinePlayer))
 			{
 				ess.getJail().sendToJail(p, args[1]);
@@ -57,6 +54,9 @@ public class Commandtogglejail extends EssentialsCommand
 				// Check if jail exists
 				ess.getJail().getJail(args[1]);
 			}
+			p.setJailed(true);
+			p.sendMessage(Util.i18n("userJailed"));
+			p.setJail(null);
 			p.setJail(args[1]);
 			long timeDiff = 0;
 			if (args.length > 2)
