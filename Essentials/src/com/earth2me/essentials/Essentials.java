@@ -58,7 +58,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private transient Backup backup;
 	private transient BanWorkaround bans;
 	private transient ItemDb itemDb;
-	private transient final Map<String, User> users = new HashMap<String, User>();
 	private transient EssentialsUpdateTimer updateTimer;
 	private transient final Methods paymentMethod = new Methods();
 	private transient final static boolean enableErrorLogging = false;
@@ -237,11 +236,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 
 		Util.updateLocale(settings.getLocale(), this);
 
-		for (User user : users.values())
-		{
-			user.reloadConfig();
-		}
-
 		// for motd
 		getConfiguration().load();
 	}
@@ -314,7 +308,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 				}
 			}
 			m = m.replace("{ONLINE}", Integer.toString(getServer().getOnlinePlayers().length - playerHidden));
-			m = m.replace("{UNIQUE}", Integer.toString(users.size()));
+			m = m.replace("{UNIQUE}", Integer.toString(userMap.getUniqueUsers()));
 
 			if (m.matches(".*\\{PLAYERLIST\\}.*"))
 			{
