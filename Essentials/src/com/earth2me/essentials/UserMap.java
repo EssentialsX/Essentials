@@ -104,4 +104,9 @@ public class UserMap implements Function<String, User>, IConf
 		}
 		return userSet;
 	}
+
+	public int getUniqueUsers()
+	{
+		return users.size();
+	}
 }
