@@ -146,6 +146,10 @@ public class SignProtection extends EssentialsSign
 		{
 			return SignProtectionState.OWNER;
 		}
+		if (ChatColor.stripColor(sign.getLine(3)).equalsIgnoreCase(username))
+		{
+			return SignProtectionState.OWNER;
+		}
 		for (int i = 1; i <= 2; i++)
 		{
 			final String line = sign.getLine(i);
@@ -157,10 +161,6 @@ public class SignProtection extends EssentialsSign
 			{
 				return SignProtectionState.ALLOWED;
 			}
-		}
-		if (ChatColor.stripColor(sign.getLine(3)).equalsIgnoreCase(username))
-		{
-			return SignProtectionState.OWNER;
 		}
 		return SignProtectionState.NOT_ALLOWED;
 	}
