@@ -483,4 +483,9 @@ public class Util
 		}
 		return buf.toString();
 	}
+	
+	public static String capitalCase(String s)
+	{
+		return s.toUpperCase().charAt(0) + s.toLowerCase().substring(1);
+	}
 }

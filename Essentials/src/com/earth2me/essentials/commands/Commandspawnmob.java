@@ -40,7 +40,7 @@ public class Commandspawnmob extends EssentialsCommand
 		String[] mountparts = args[0].split(",");
 		String[] parts = mountparts[0].split(":");
 		String mobType = parts[0];
-		mobType = mobType.equalsIgnoreCase("PigZombie") ? "PigZombie" : capitalCase(mobType);
+		mobType = mobType.equalsIgnoreCase("PigZombie") ? "PigZombie" : Util.capitalCase(mobType);
 		String mobData = null;
 		if (parts.length == 2)
 		{
@@ -52,7 +52,7 @@ public class Commandspawnmob extends EssentialsCommand
 		{
 			parts = mountparts[1].split(":");
 			mountType = parts[0];
-			mountType = mountType.equalsIgnoreCase("PigZombie") ? "PigZombie" : capitalCase(mountType);
+			mountType = mountType.equalsIgnoreCase("PigZombie") ? "PigZombie" : Util.capitalCase(mountType);
 			if (parts.length == 2)
 			{
 				mountData = parts[1];
@@ -186,11 +186,6 @@ public class Commandspawnmob extends EssentialsCommand
 		}
 	}
 
-	private String capitalCase(String s)
-	{
-		return s.toUpperCase().charAt(0) + s.toLowerCase().substring(1);
-	}
-
 	private void changeMobData(String type, Entity spawned, String data, User user) throws Exception
 	{
 		if ("Slime".equalsIgnoreCase(type))
@@ -210,11 +205,11 @@ public class Commandspawnmob extends EssentialsCommand
 			{
 				if (data.equalsIgnoreCase("random"))
 				{
-				  Random rand = new Random();
-				  ((CraftSheep)spawned).setColor(DyeColor.values()[rand.nextInt(DyeColor.values().length)]);
+					Random rand = new Random();
+					((CraftSheep)spawned).setColor(DyeColor.values()[rand.nextInt(DyeColor.values().length)]);
 				}
-				else 
-				{	
+				else
+				{
 					((CraftSheep)spawned).setColor(DyeColor.valueOf(data.toUpperCase()));
 				}
 			}
