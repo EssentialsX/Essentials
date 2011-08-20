@@ -1,14 +1,11 @@
 # "For a more advanced configuration example utilizing the advanced features of GroupManager, see http://pastebin.com/a8ZA0j5G"
+# "You will want to remove these users and replace them with your own"
 users:
-  kimkandor:
+  snowleo:
     subgroups: []
     permissions: []
     group: Admin
-  mudzereli:
-    subgroups: []
-    permissions: []
-    group: Builder
-  zenexer:
+  khobbits:
     subgroups: []
     permissions: []
     group: Admin
