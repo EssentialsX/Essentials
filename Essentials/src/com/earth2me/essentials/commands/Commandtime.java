@@ -5,19 +5,12 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import java.util.*;
-import org.bukkit.ChatColor;
 
 
 public class Commandtime extends EssentialsCommand
 {
-	// TODO: I suggest that the chat colors be centralized in the config file.
-	public static final ChatColor colorDefault = ChatColor.YELLOW;
-	public static final ChatColor colorChrome = ChatColor.GOLD;
-	public static final ChatColor colorLogo = ChatColor.GREEN;
-	public static final ChatColor colorHighlight1 = ChatColor.AQUA;
-	public static final ChatColor colorBad = ChatColor.RED;
-
 	public Commandtime()
 	{
 		super("time");
@@ -44,8 +37,8 @@ public class Commandtime extends EssentialsCommand
 		User user = ess.getUser(sender);
 		if (user != null && !user.isAuthorized("essentials.time.set"))
 		{
-			// TODO should not be hardcoded !!
-			throw new Exception(colorBad + "You are not authorized to set the time");
+			user.sendMessage(Util.i18n("timeSetPermission"));
+			return;
 		}
 
 		// Parse the target time int ticks from args[0]
@@ -67,7 +60,6 @@ public class Commandtime extends EssentialsCommand
 	 */
 	private void getWorldsTime(CommandSender sender, Collection<World> worlds)
 	{
-		// TODO do we need to check for the essentials.time permission? Or is that tested for us already.
 		if (worlds.size() == 1)
 		{
 			Iterator<World> iter = worlds.iterator();
@@ -77,7 +69,7 @@ public class Commandtime extends EssentialsCommand
 
 		for (World world : worlds)
 		{
-			sender.sendMessage(colorDefault + world.getName() + ": " + DescParseTickFormat.format(world.getTime()));
+			sender.sendMessage(Util.format("timeCurrentWorld", world.getName(), DescParseTickFormat.format(world.getTime())));
 		}
 		return;
 	}
@@ -96,30 +88,21 @@ public class Commandtime extends EssentialsCommand
 		}
 
 		// Inform the sender of the change
-		sender.sendMessage("");
-		sender.sendMessage(colorDefault + "The time was set to " + DescParseTickFormat.format(ticks));
+		//sender.sendMessage("");
 
 		StringBuilder msg = new StringBuilder();
-		msg.append(colorDefault);
-		msg.append("In ");
 		boolean first = true;
 		for (World world : worlds)
 		{
-			if (!first)
+			if (msg.length() > 0)
 			{
-				msg.append(colorDefault);
 				msg.append(", ");
 			}
-			else
-			{
-				first = false;
-			}
 
-			msg.append(colorHighlight1);
 			msg.append(world.getName());
 		}
 
-		sender.sendMessage(msg.toString());
+		sender.sendMessage(Util.format("timeWorldSet", DescParseTickFormat.format(ticks), msg.toString()));
 	}
 
 	/**
@@ -158,7 +141,7 @@ public class Commandtime extends EssentialsCommand
 		// We failed to understand the world target...
 		else
 		{
-			throw new Exception("Could not find the world(s) \"" + selector + "\"");
+			throw new Exception(Util.i18n("invalidWorld"));
 		}
 
 		return worlds;

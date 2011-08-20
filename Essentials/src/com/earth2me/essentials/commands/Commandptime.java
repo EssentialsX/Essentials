@@ -4,6 +4,7 @@ import com.earth2me.essentials.DescParseTickFormat;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -17,12 +18,6 @@ import org.bukkit.entity.Player;
 
 public class Commandptime extends EssentialsCommand
 {
-	// TODO: I suggest that the chat colors be centralized in the config file.
-	public static final ChatColor colorDefault = ChatColor.YELLOW;
-	public static final ChatColor colorChrome = ChatColor.GOLD;
-	public static final ChatColor colorLogo = ChatColor.GREEN;
-	public static final ChatColor colorHighlight1 = ChatColor.AQUA;
-	public static final ChatColor colorBad = ChatColor.RED;
 	public static final Set<String> getAliases = new HashSet<String>();
 
 	static
@@ -57,10 +52,10 @@ public class Commandptime extends EssentialsCommand
 		}
 
 		User user = ess.getUser(sender);
-		if (user != null && !user.isAuthorized("essentials.ptime.others"))
+		if ((!users.contains(user) || users.size() > 1) && user != null && !user.isAuthorized("essentials.ptime.others"))
 		{
-			// TODO should not be hardcoded !!
-			throw new Exception(colorBad + "You are not authorized to set others PlayerTime");
+			user.sendMessage(Util.i18n("pTimeOthersPermission"));
+			return;
 		}
 
 		Long ticks;
@@ -102,41 +97,29 @@ public class Commandptime extends EssentialsCommand
 	 */
 	private void getUsersTime(final CommandSender sender, final Collection<User> users)
 	{
-		if (users.size() == 1)
+		if (users.size() > 1) 
 		{
-			final User user = users.iterator().next();
-
-			if (user.getPlayerTimeOffset() == 0)
-			{
-				sender.sendMessage(colorDefault + user.getName() + "'s time is normal. Time is the same as on the server.");
-			}
-			else
-			{
-				String time = DescParseTickFormat.format(user.getPlayerTime());
-				if (!user.isPlayerTimeRelative())
-				{
-					time = "fixed to " + time;
-				}
-				sender.sendMessage(colorDefault + user.getName() + "'s time is " + time);
-			}
-			return;
+			sender.sendMessage(Util.format("pTimePlayers"));
 		}
-
-		sender.sendMessage(colorDefault + "These players have their own time:");
-
-		for (User user : users)
+		
+		for (User user : users) 
 		{
-			//if (!user.isPlayerTimeRelative())
-			if (user.getPlayerTimeOffset() != 0)
+			if(user.getPlayerTimeOffset() == 0)
 			{
+				sender.sendMessage(Util.format("pTimeNormal", user.getName()));
+			}
+			else {
 				String time = DescParseTickFormat.format(user.getPlayerTime());
-				if (!user.isPlayerTimeRelative())
+				if(!user.isPlayerTimeRelative()) 
 				{
-					time = "fixed to " + time;
+					sender.sendMessage(Util.format("pTimeCurrentFixed", user.getName(), time));
 				}
-				sender.sendMessage(colorDefault + user.getName() + "'s time is " + time);
+				else {
+					sender.sendMessage(Util.format("pTimeCurrent", user.getName(), time));
+				}
 			}
 		}
+		
 		return;
 	}
 
@@ -171,44 +154,33 @@ public class Commandptime extends EssentialsCommand
 			}
 		}
 
+		final StringBuilder msg = new StringBuilder();
+		for (User user : users)
+		{
+			if (msg.length() > 0)
+			{
+				msg.append(", ");
+			}
+
+			msg.append(user.getName());
+		}
 
 		// Inform the sender of the change
-		sender.sendMessage("");
-		final StringBuilder msg = new StringBuilder();
 		if (ticks == null)
 		{
-			sender.sendMessage(colorDefault + "The players time was reset for:");
+			sender.sendMessage(Util.format("pTimeReset", msg.toString()));
 		}
 		else
 		{
 			String time = DescParseTickFormat.format(ticks);
 			if (!relative)
 			{
-				time = "fixed to " + time;
+				sender.sendMessage(Util.format("pTimeSetFixed", time, msg.toString()));
 			}
-			sender.sendMessage(colorDefault + "The players time is " + time);
-			msg.append(colorDefault);
-			msg.append("For: ");
+			else {
+				sender.sendMessage(Util.format("pTimeSet", time, msg.toString()));
+			}
 		}
-
-		boolean first = true;
-		for (User user : users)
-		{
-			if (!first)
-			{
-				msg.append(colorDefault);
-				msg.append(", ");
-			}
-			else
-			{
-				first = false;
-			}
-
-			msg.append(colorHighlight1);
-			msg.append(user.getName());
-		}
-
-		sender.sendMessage(msg.toString());
 	}
 
 	/**
@@ -258,7 +230,7 @@ public class Commandptime extends EssentialsCommand
 		// We failed to understand the world target...
 		else
 		{
-			throw new Exception("Could not find the player(s) \"" + selector + "\"");
+			throw new Exception(Util.i18n("playerNotFound"));
 		}
 
 		return users;
