@@ -13,43 +13,6 @@ groups:
       prefix: '&e'
       build: false
       suffix: ''
-  SemiAdmin:
-    default: false
-    permissions:
-    - -groupmanager.mantogglesave
-    - essentials
-    - essentials.antioch
-    - essentials.burn
-    - essentials.clearinventory
-    - essentials.cooldown.bypass
-    - essentials.deljail
-    - essentials.fireball
-    - essentials.gc
-    - essentials.give
-    - essentials.god
-    - essentials.heal
-    - essentials.heal.others
-    - essentials.lightning
-    - essentials.invsee
-    - essentials.item
-    - essentials.jails
-    - essentials.kickall
-    - essentials.kit.*
-    - essentials.mute
-    - essentials.sell
-    - essentials.setjail
-    - essentials.signs.*
-    - essentials.spawnmob
-    - essentials.teleport.cooldown.bypass
-    - essentials.teleport.timer.bypass
-    - essentials.togglejail
-    - groupmanager.*
-    inheritance:
-    - moderator
-    info:
-      prefix: '&c'
-      build: true
-      suffix: ''
   Builder:
     default: false
     permissions:
@@ -57,10 +20,15 @@ groups:
     - essentials.back
     - essentials.back.ondeath
     - essentials.balance
+    - essentials.balance.others
+    - essentials.balancetop
+    - essentials.chat.color
     - essentials.chat.shout
+    - essentials.chat.question
     - essentials.compass
-    - essentials.home
     - essentials.depth
+    - essentials.home
+    - essentials.ignore
     - essentials.kit
     - essentials.kit.tools
     - essentials.mail
@@ -69,6 +37,7 @@ groups:
     - essentials.msg
     - essentials.nick
     - essentials.pay
+    - essentials.ping
     - essentials.portal
     - essentials.powertool
     - essentials.protect
@@ -83,6 +52,7 @@ groups:
     - essentials.signs.break.protection
     - essentials.signs.break.trade
     - essentials.suicide
+    - essentials.time
     - essentials.tpa
     - essentials.tpaccept
     - essentials.tpahere
@@ -100,28 +70,41 @@ groups:
     default: false
     permissions:
     - essentials.ban
+    - essentials.ban.notify
     - essentials.banip
     - essentials.broadcast
+    - essentials.clearinventory
     - essentials.delwarp
-    - essentials.eco
+    - essentials.eco.loan
     - essentials.ext
     - essentials.getpos
+    - essentials.helpop.recieve
+    - essentials.home.others
+    - essentials.invsee
+    - essentials.jails
     - essentials.jump
     - essentials.kick
+    - essentials.kick.notify
     - essentials.kill
+    - essentials.mute
+    - essentials.nick.others
+    - essentials.realname
     - essentials.setwarp
     - essentials.signs.create.*
     - essentials.signs.break.*
     - essentials.spawner
     - essentials.thunder
     - essentials.time
-    - essentials.time.world
+    - essentials.time.set
+    - essentials.protect.alerts
+    - essentials.protect.admin
+    - essentials.protect.ownerinfo
+    - essentials.ptime
+    - essentials.ptime.others
     - essentials.togglejail
     - essentials.top
     - essentials.tp
     - essentials.tphere
-    - essentials.tpo
-    - essentials.tpohere
     - essentials.tppos
     - essentials.tptoggle
     - essentials.unban
@@ -131,12 +114,11 @@ groups:
     - essentials.world
     - groupmanager.listgroups
     - groupmanager.mandemote
-    - groupmanager.manload
     - groupmanager.manpromote
-    - groupmanager.mansave
     - groupmanager.manselect
     - groupmanager.manuadd
     - groupmanager.manudel
+    - groupmanager.manwhois
     inheritance:
     - builder
     info:
@@ -146,9 +128,30 @@ groups:
   Admin:
     default: false
     permissions:
+    - -essentials.backup
+    - -essentials.essentials
+    - -essentials.setspawn
+    - -essentials.reloadall
+    - -essentials.plugin
+    - essentials.*
+    - groupmanager.mantogglevalidate
+    - groupmanager.mansave
+    - groupmanager.mangcheckp
+    - groupmanager.manglistp
+    - groupmanager.manucheckp
+    - groupmanager.manulistp
+    inheritance:
+    - moderator
+    info:
+      prefix: '&c'
+      build: true
+      suffix: ''
+  Owner:
+    default: false
+    permissions:
     - '*'
     inheritance:
-    - semiadmin
+    - admin
     info:
       prefix: '&4'
       build: true
