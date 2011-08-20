@@ -45,22 +45,23 @@ public class Commandrepair extends EssentialsCommand
 			}
 
 			String itemName = item.getType().toString().toLowerCase().replace('_', ' ');
+			charge(user);
 			user.sendMessage(Util.format("repair", itemName));
 		}
 		else if (args[0].equalsIgnoreCase("all"))
 		{
 			StringBuilder itemList = new StringBuilder();
 			itemList.append(repairItems(user.getInventory().getContents()));
-			
+
 			String armor = repairItems(user.getInventory().getArmorContents());
-			
-			if(armor.length() > 0) 
+
+			if (armor.length() > 0)
 			{
-				if(itemList.length() > 0)
+				if (itemList.length() > 0)
 				{
 					itemList.append(", ");
 				}
-				
+
 				itemList.append(armor);
 			}
 
@@ -70,6 +71,7 @@ public class Commandrepair extends EssentialsCommand
 			}
 			else
 			{
+				charge(user);
 				user.sendMessage(Util.format("repair", itemList.toString()));
 			}
 
@@ -88,15 +90,15 @@ public class Commandrepair extends EssentialsCommand
 		{
 			throw new Exception(Util.i18n("repairInvalidType"));
 		}
-		
+
 		if (item.getDurability() == 0)
 		{
 			throw new Exception(Util.i18n("repairAlreadyFixed"));
 		}
-		
+
 		item.setDurability((short)0);
 	}
-	
+
 	private String repairItems(ItemStack[] items)
 	{
 		StringBuilder itemList = new StringBuilder();
