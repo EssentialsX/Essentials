@@ -2,6 +2,7 @@ package com.earth2me.essentials;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -35,9 +36,9 @@ public class Warps implements IConf
 		return warpPoints.isEmpty();
 	}
 
-	public Iterable<String> getWarpNames()
+	public Collection<String> getWarpNames()
 	{
-		List<String> keys = new ArrayList<String>();
+		final List<String> keys = new ArrayList<String>();
 		for (StringIgnoreCase stringIgnoreCase : warpPoints.keySet())
 		{
 			keys.add(stringIgnoreCase.getString());
