@@ -83,17 +83,10 @@ public class Commandspawnmob extends EssentialsCommand
 			8, 9
 		};
 		Location loc = (new TargetBlock(user, 300, 0.2, ignore)).getTargetBlock().getLocation();
-
-		Block block = user.getWorld().getBlockAt(loc);
-		while (!(block.getType() == Material.AIR || block.getType() == Material.WATER || block.getType() == Material.STATIONARY_WATER))
-		{
-			loc.setY(loc.getY() + 1);
-			block = user.getWorld().getBlockAt(loc);
-		}
-
+		Location sloc = Util.getSafeDestination(loc);
 		try
 		{
-			spawnedMob = mob.spawn(user, server, loc);
+			spawnedMob = mob.spawn(user, server, sloc);
 		}
 		catch (MobException e)
 		{

@@ -16,6 +16,7 @@ public class Commandgive extends EssentialsCommand
 		super("give");
 	}
 
+	//TODO: move these messages to message file
 	@Override
 	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
