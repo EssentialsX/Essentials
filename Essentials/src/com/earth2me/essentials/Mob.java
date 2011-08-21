@@ -86,6 +86,9 @@ public enum Mob
 		final protected String type;
 	}
 
+	public CreatureType getType () {	
+		return bukkitType;
+	}
 
 	public static class MobException extends Exception
 	{

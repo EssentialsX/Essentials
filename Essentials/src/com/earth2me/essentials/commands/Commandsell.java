@@ -29,7 +29,7 @@ public class Commandsell extends EssentialsCommand
 		{
 			is = user.getItemInHand();
 		}
-		if (args[0].equalsIgnoreCase("inventory"))
+		else if (args[0].equalsIgnoreCase("inventory"))
 		{
 			for (ItemStack stack : user.getInventory().getContents())
 			{
@@ -47,7 +47,7 @@ public class Commandsell extends EssentialsCommand
 			}
 			return;
 		}
-		if (args[0].equalsIgnoreCase("blocks"))
+		else if (args[0].equalsIgnoreCase("blocks"))
 		{
 			for (ItemStack stack : user.getInventory().getContents())
 			{

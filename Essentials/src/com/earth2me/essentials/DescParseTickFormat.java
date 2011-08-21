@@ -35,7 +35,6 @@ public final class DescParseTickFormat
 		SDFTwelve.setTimeZone(TimeZone.getTimeZone("GMT"));
 
 		nameToTicks.put("sunrise", 23000);
-		nameToTicks.put("rise", 23000);
 		nameToTicks.put("dawn", 23000);
 
 		nameToTicks.put("daystart", 0);
@@ -49,7 +48,6 @@ public final class DescParseTickFormat
 		nameToTicks.put("afternoon", 9000);
 
 		nameToTicks.put("sunset", 12000);
-		nameToTicks.put("set", 12000);
 		nameToTicks.put("dusk", 12000);
 		nameToTicks.put("sundown", 12000);
 		nameToTicks.put("nightfall", 12000);
@@ -227,18 +225,7 @@ public final class DescParseTickFormat
 	// --------------------------------------------
 	public static String format(final long ticks)
 	{
-		final StringBuilder msg = new StringBuilder();
-		msg.append(Commandtime.colorHighlight1);
-		msg.append(format24(ticks));
-		msg.append(Commandtime.colorDefault);
-		msg.append(" or ");
-		msg.append(Commandtime.colorHighlight1);
-		msg.append(format12(ticks));
-		msg.append(Commandtime.colorDefault);
-		msg.append(" or ");
-		msg.append(Commandtime.colorHighlight1);
-		msg.append(formatTicks(ticks));
-		return msg.toString();
+		return Util.format("timeFormat", format24(ticks), format12(ticks), formatTicks(ticks));
 	}
 
 	public static String formatTicks(final long ticks)

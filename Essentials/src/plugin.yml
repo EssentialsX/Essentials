@@ -222,6 +222,10 @@ commands:
     description: Reloads all plugins.
     usage: /<command>
     aliases: [rel,ereloadall,ereload,erel]
+  repair:
+    description: Repairs the item in hand, or all items in the current inventory.
+    usage: /<command> [hand|all]
+    aliases: [fix]
   rules:
     description: Views the server rules.
     usage: /<command>
@@ -275,7 +279,7 @@ commands:
     usage: /<command> <true/false> [duration]
     aliases: [ethunder]
   time:
-    description: Change the world time. Defaults tos current world.
+    description: Change the world time. Defaults to current world.
     usage: /<command> [day|night|dawn|17:30|4pm|4000ticks] [worldname|all]
     aliases: [etime, day, night]
   togglejail:

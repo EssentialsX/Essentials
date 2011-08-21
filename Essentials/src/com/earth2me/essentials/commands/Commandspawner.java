@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import org.bukkit.Material;
@@ -22,6 +23,7 @@ public class Commandspawner extends EssentialsCommand
 		if (args.length < 1 || args[0].length() < 2)
 		{
 			throw new NotEnoughArgumentsException();
+			//TODO: user.sendMessage("§7Mobs: Zombie PigZombie Skeleton Slime Chicken Pig Monster Spider Creeper Ghast Squid Giant Cow Sheep Wolf");
 		}
 
 		final Block target = user.getTarget().getTargetBlock();
@@ -33,11 +35,18 @@ public class Commandspawner extends EssentialsCommand
 		charge(user);
 		try
 		{
-			String name = args[0].substring(0, 1).toUpperCase() +  args[0].substring(1).toLowerCase();
-			if (name.equalsIgnoreCase("Pigzombie")) {
-				name = "PigZombie";
-			} 
-			new CraftCreatureSpawner(target).setCreatureType(CreatureType.fromName(name));
+			String name = args[0];
+			name = name.equalsIgnoreCase("PigZombie") ? "PigZombie" : Util.capitalCase(name);
+		
+			Mob mob = null;
+			mob = Mob.fromName(name);
+			if (mob == null)
+			{
+				user.sendMessage(Util.i18n("invalidMob"));
+				return;
+			}
+			new CraftCreatureSpawner(target).setCreatureType(mob.getType());
+			user.sendMessage(Util.format("setSpawner", mob.name));
 		}
 		catch (Throwable ex)
 		{
