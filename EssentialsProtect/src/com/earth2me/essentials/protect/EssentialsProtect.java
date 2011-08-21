@@ -190,6 +190,14 @@ public class EssentialsProtect extends JavaPlugin implements IConf, IProtect
 		{
 			storage.onPluginDeactivation();
 		}
+		// Sleep for a second to allow the database to close.
+		try
+		{
+			Thread.sleep(1000);
+		}
+		catch (InterruptedException ex)
+		{
+		}
 	}
 
 	public IEssentials getEssentials()
