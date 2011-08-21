@@ -182,16 +182,6 @@ public abstract class UserData extends PlayerExtension implements IConf
 	
 		if (o instanceof Map)
 		{
-			for(Map.Entry<Integer, Object> entry : ((Map<Integer, Object>)o).entrySet())
-			{
-				if(entry.getValue() instanceof String)
-				{
-					List<String> temp = new ArrayList<String>();
-					temp.add((String)entry.getValue());
-					((Map<Integer, Object>)o).put(entry.getKey(), temp);
-				}
-			}
-			
 			return (Map<Integer, Object>)o;
 		}
 		else

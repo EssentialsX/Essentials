@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import java.util.List;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -35,12 +36,15 @@ public class EssentialsEntityListener extends EntityListener
 				User defender = ess.getUser(eDefend);
 				User attacker = ess.getUser(eAttack);
 				ItemStack is = attacker.getItemInHand();
-				String command = attacker.getPowertool(is);
-				if (command != null && !command.isEmpty())
+				List<String> commandList = attacker.getPowertool(is);
+				for(String command : commandList)
 				{
-					attacker.getServer().dispatchCommand(attacker, command.replaceAll("\\{player\\}", defender.getName()));
-					event.setCancelled(true);
-					return;
+					if (command != null && !command.isEmpty())
+					{
+						attacker.getServer().dispatchCommand(attacker, command.replaceAll("\\{player\\}", defender.getName()));
+						event.setCancelled(true);
+						return;
+					}
 				}
 			}
 		}

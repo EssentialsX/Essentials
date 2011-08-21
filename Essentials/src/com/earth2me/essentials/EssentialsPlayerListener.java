@@ -430,30 +430,30 @@ public class EssentialsPlayerListener extends PlayerListener
 		{
 			return;
 		}
-		final List<String> commands = user.getPowertool(is);
-		if (commands == null || commands.isEmpty())
+		final List<String> commandList = user.getPowertool(is);
+		if (commandList == null || commandList.isEmpty())
 		{
 			return;
 		}
 		
 		// We need to loop through each command and execute
-		for (String commandPtr : commands)
+		for (String command : commandList)
 		{
-			if (commandPtr.matches(".*\\{player\\}.*"))
+			if (command.matches(".*\\{player\\}.*"))
 			{
 				//user.sendMessage("Click a player to use this command");
 				continue;
 			}
-			else if (commandPtr.startsWith("c:"))
+			else if (command.startsWith("c:"))
 			{
 				for (Player p : server.getOnlinePlayers())
 				{
-					p.sendMessage(user.getDisplayName() + ":" + commandPtr.substring(2));
+					p.sendMessage(user.getDisplayName() + ":" + command.substring(2));
 				}
 			}
 			else
 			{
-				user.getServer().dispatchCommand(user, commandPtr);
+				user.getServer().dispatchCommand(user, command);
 			}
 		}
 	}

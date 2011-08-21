@@ -5,7 +5,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Location;
@@ -194,6 +196,59 @@ public class EssentialsUpgrade
 			}
 		}
 		doneFile.setProperty("updateUsersToNewDefaultHome", true);
+		doneFile.save();
+	}
+
+	private void updateUsersPowerToolsFormat()
+	{
+		if (doneFile.getBoolean("updateUsersPowerToolsFormat", false))
+		{
+			return;
+		}
+		final File userdataFolder = new File(ess.getDataFolder(), "userdata");
+		if (!userdataFolder.exists() || !userdataFolder.isDirectory())
+		{
+			return;
+		}
+		final File[] userFiles = userdataFolder.listFiles();
+
+		for (File file : userFiles)
+		{
+			if (!file.isFile() || !file.getName().endsWith(".yml"))
+			{
+				continue;
+			}
+			final EssentialsConf config = new EssentialsConf(file);
+			try
+			{
+				config.load();
+				if (config.hasProperty("powertools"))
+				{
+					@SuppressWarnings("unchecked")
+					final Map<Integer, Object> powertools = (Map<Integer, Object>)config.getProperty("powertools");
+					if (powertools == null)
+					{
+						continue;
+					}
+					for (Map.Entry<Integer, Object> entry : powertools.entrySet())
+					{
+						if (entry.getValue() instanceof String)
+						{
+							List<String> temp = new ArrayList<String>();
+							temp.add((String)entry.getValue());
+							((Map<Integer, Object>)powertools).put(entry.getKey(), temp);
+						}
+					}
+					config.save();
+				}
+			}
+			catch (RuntimeException ex)
+			{
+				LOGGER.log(Level.INFO, "File: " + file.toString());
+				throw ex;
+			}
+		}
+		doneFile.setProperty("updateUsersPowerToolsFormat", true);
 		doneFile.save();
 	}
 
@@ -457,5 +512,6 @@ public class EssentialsUpgrade
 		updateUsersToNewDefaultHome();
 		moveUsersDataToUserdataFolder();
 		convertWarps();
+		updateUsersPowerToolsFormat();
 	}
 }

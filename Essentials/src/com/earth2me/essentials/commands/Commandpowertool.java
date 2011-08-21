@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
@@ -31,13 +32,13 @@ public class Commandpowertool extends EssentialsCommand
 			if (command.equalsIgnoreCase("list"))
 			{
 				List<String> powertools = user.getPowertool(is);
-				if (powertools == null || powertools.empty())
+				if (powertools == null || powertools.isEmpty())
 				{
 					user.sendMessage(Util.format("powerToolListEmpty", itemName));
 				}
 				else
 				{
-					user.sendMessage(Util.format("powerToolList", powertools.replace("|", ", "), itemName));
+					user.sendMessage(Util.format("powerToolList", powertools.toString(), itemName));
 				}
 				return;
 			}
@@ -85,7 +86,7 @@ public class Commandpowertool extends EssentialsCommand
 	private String appendPowerTool(User user, String command, ItemStack is, String itemName) throws Exception
 	{
 		command = command.substring(2); // Ignore the first 2 chars
-		String powertools = user.getPowertool(is);
+		/*String powertools = user.getPowertool(is);
 		if (powertools != null)
 		{
 			if (powertools.contains(command))
@@ -96,12 +97,13 @@ public class Commandpowertool extends EssentialsCommand
 			StringBuilder newCommand = new StringBuilder();
 			command = newCommand.append(powertools).append("|").append(command).toString();
 		}
-
+*/
 		return command;
 	}
 
 	private String removePowerTool(User user, String command, ItemStack is, String itemName) throws Exception
 	{
+		/*
 		String powertools = user.getPowertool(is);
 		if (!powertools.contains(command))
 		{
@@ -119,7 +121,7 @@ public class Commandpowertool extends EssentialsCommand
 		{
 			command = command.substring(0, command.length() - 1);
 		}
-
+*/
 		return command;
 	}
 }
