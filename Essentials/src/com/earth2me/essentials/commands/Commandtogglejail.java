@@ -15,6 +15,7 @@ public class Commandtogglejail extends EssentialsCommand
 		super("togglejail");
 	}
 
+	//TODO: move these to messages file
 	@Override
 	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{

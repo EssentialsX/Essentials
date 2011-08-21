@@ -21,7 +21,7 @@ public class SignTrade extends EssentialsSign
 	{
 		validateTrade(sign, 1, false, ess);
 		validateTrade(sign, 2, true, ess);
-		final Trade charge = getTrade(sign, 2, true, false, ess);
+		final Trade charge = getTrade(sign, 2, true, true, ess);
 		charge.isAffordableFor(player);
 		sign.setLine(3, "§8" + username);
 		charge.charge(player);
