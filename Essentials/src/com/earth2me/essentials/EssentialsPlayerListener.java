@@ -435,21 +435,26 @@ public class EssentialsPlayerListener extends PlayerListener
 		{
 			return;
 		}
-		if (command.matches(".*\\{player\\}.*"))
+		
+		// We need to loop through each command and execute
+		for (String commandPtr : command.split("\\|"))
 		{
-			//user.sendMessage("Click a player to use this command");
-			return;
-		}
-		if (command.startsWith("c:"))
-		{
-			for (Player p : server.getOnlinePlayers())
+			if (commandPtr.matches(".*\\{player\\}.*"))
 			{
-				p.sendMessage(user.getDisplayName() + ":" + command.substring(2));
+				//user.sendMessage("Click a player to use this command");
+				continue;
 			}
-		}
-		else
-		{
-			user.getServer().dispatchCommand(user, command);
+			else if (commandPtr.startsWith("c:"))
+			{
+				for (Player p : server.getOnlinePlayers())
+				{
+					p.sendMessage(user.getDisplayName() + ":" + commandPtr.substring(2));
+				}
+			}
+			else
+			{
+				user.getServer().dispatchCommand(user, commandPtr);
+			}
 		}
 	}
 
