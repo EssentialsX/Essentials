@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -19,6 +20,7 @@ public class Commandpowertool extends EssentialsCommand
 	protected void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
 		ItemStack is = user.getItemInHand();
+		List<String> powertools = user.getPowertool(is);
 		if (is == null || is.getType() == Material.AIR)
 		{
 			user.sendMessage(Util.i18n("powerToolAir"));
@@ -31,7 +33,6 @@ public class Commandpowertool extends EssentialsCommand
 		{
 			if (command.equalsIgnoreCase("list"))
 			{
-				List<String> powertools = user.getPowertool(is);
 				if (powertools == null || powertools.isEmpty())
 				{
 					user.sendMessage(Util.format("powerToolListEmpty", itemName));
@@ -46,9 +47,15 @@ public class Commandpowertool extends EssentialsCommand
 			{
 				try
 				{
-					String removedCommand = command.substring(2);
-					command = removePowerTool(user, removedCommand, is, itemName);
-					user.sendMessage(Util.format("powerToolRemove", removedCommand, itemName));
+					command = command.substring(2);
+					if (!powertools.contains(command))
+					{
+						user.sendMessage(Util.format("powerToolNoSuchCommandAssigned", command, itemName));
+						return;
+					}
+
+					powertools.remove(command);
+					user.sendMessage(Util.format("powerToolRemove", command, itemName));
 				}
 				catch (Exception e)
 				{
@@ -60,18 +67,25 @@ public class Commandpowertool extends EssentialsCommand
 			{
 				if (command.startsWith("a:"))
 				{
-					try
+					command = command.substring(2);
+					if(powertools.contains(command))
 					{
-						command = appendPowerTool(user, command, is, itemName);
-					}
-					catch (Exception e)
-					{
-						user.sendMessage(e.getMessage());
+						user.sendMessage(Util.format("powerToolAlreadySet", command, itemName));
 						return;
 					}
 				}
+				else if (powertools != null && !powertools.isEmpty())
+				{
+					// Replace all commands with this one
+					powertools.clear();
+				}
+				else
+				{
+					powertools = new ArrayList<String>();
+				}
 
-				user.sendMessage(Util.format("powerToolAttach", command.replace("|", ", "), itemName));
+				powertools.add(command);
+				user.sendMessage(Util.format("powerToolAttach", powertools.toString(), itemName));
 			}
 		}
 		else
@@ -80,7 +94,7 @@ public class Commandpowertool extends EssentialsCommand
 		}
 
 		charge(user);
-		user.setPowertool(is, command);
+		user.setPowertool(is, powertools);
 	}
 
 	private String appendPowerTool(User user, String command, ItemStack is, String itemName) throws Exception
