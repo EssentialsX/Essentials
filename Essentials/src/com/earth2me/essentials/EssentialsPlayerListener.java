@@ -430,14 +430,14 @@ public class EssentialsPlayerListener extends PlayerListener
 		{
 			return;
 		}
-		final String command = user.getPowertool(is);
-		if (command == null || command.isEmpty())
+		final List<String> commands = user.getPowertool(is);
+		if (commands == null || commands.isEmpty())
 		{
 			return;
 		}
 		
 		// We need to loop through each command and execute
-		for (String commandPtr : command.split("\\|"))
+		for (String commandPtr : commands)
 		{
 			if (commandPtr.matches(".*\\{player\\}.*"))
 			{

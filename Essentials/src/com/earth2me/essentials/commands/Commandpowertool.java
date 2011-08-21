@@ -30,8 +30,8 @@ public class Commandpowertool extends EssentialsCommand
 		{
 			if (command.equalsIgnoreCase("list"))
 			{
-				String powertools = user.getPowertool(is);
-				if (powertools == null)
+				List<String> powertools = user.getPowertool(is);
+				if (powertools == null || powertools.empty())
 				{
 					user.sendMessage(Util.format("powerToolListEmpty", itemName));
 				}

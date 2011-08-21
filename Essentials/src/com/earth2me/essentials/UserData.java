@@ -173,26 +173,46 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.setProperty("unlimited", unlimited);
 		config.save();
 	}
-	private Map<Integer, String> powertools;
+	private Map<Integer, Object> powertools;
 
 	@SuppressWarnings("unchecked")
-	private Map<Integer, String> getPowertools()
+	private Map<Integer, Object> getPowertools()
 	{
 		Object o = config.getProperty("powertools");
+	
 		if (o instanceof Map)
 		{
-			return (Map<Integer, String>)o;
+			for(Map.Entry<Integer, Object> entry : ((Map<Integer, Object>)o).entrySet())
+			{
+				if(entry.getValue() instanceof String)
+				{
+					List<String> temp = new ArrayList<String>();
+					temp.add((String)entry.getValue());
+					((Map<Integer, Object>)o).put(entry.getKey(), temp);
+				}
+			}
+			
+			return (Map<Integer, Object>)o;
 		}
 		else
 		{
-			return new HashMap<Integer, String>();
+			return new HashMap<Integer, Object>();
 		}
 
 	}
 
-	public String getPowertool(ItemStack stack)
+	public List<String> getPowertool(ItemStack stack)
 	{
-		return powertools.get(stack.getTypeId());
+		return (List<String>)powertools.get(stack.getTypeId());
+	}
+
+	public List<String> getPowertoolList(ItemStack stack)
+	{
+		Map<String, Object> tools = (Map<String, Object>)config.getProperty("powertools");
+		List<String> commands;
+		
+		commands = (List<String>)tools.get(stack.getTypeId());
+		return commands;
 	}
 
 	public void setPowertool(ItemStack stack, String command)
