@@ -14,6 +14,7 @@ import java.text.MessageFormat;
 import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -487,5 +488,27 @@ public class Util
 	public static String capitalCase(String s)
 	{
 		return s.toUpperCase().charAt(0) + s.toLowerCase().substring(1);
+	}
+	
+	public static String concat(List list)
+	{
+		return concat(",", list);
+	}
+	
+	public static String concat(String seperator, List list)
+	{
+		StringBuilder sb = new StringBuilder();
+		
+		for(Object item : list)
+		{
+			if(sb.length() > 0)
+			{
+				sb.append(seperator);
+			}
+			
+			sb.append(item.toString());
+		}
+		
+		return sb.toString();
 	}
 }
