@@ -68,7 +68,12 @@ public class EssentialsConf extends Configuration
 				}
 			}
 		}
-		super.load();
+		try {
+			super.load();
+		} catch(RuntimeException e) {
+			logger.log(Level.INFO, "File: " + configFile.toString());
+			throw e;
+		}
 		if (this.root == null)
 		{
 			this.root = new HashMap<String, Object>();
