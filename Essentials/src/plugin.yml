@@ -348,7 +348,7 @@ commands:
     aliases: [eunlimited,ul,unl,eul,eunl]
   warp:
     description: List all warps or warp to the specified location.
-    usage: /<command> <warp> <player>
+    usage: /<command> [pagenumber|warp] <player>
     aliases: [ewarp,warps]
   weather:
     description: Setting the weather.
