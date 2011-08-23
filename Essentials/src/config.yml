@@ -230,6 +230,9 @@ remove-god-on-disconnect: false
 # This only works if no other permission plugins are installed
 use-bukkit-permissions: false
 
+# Check for updates
+update-check: true
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #
