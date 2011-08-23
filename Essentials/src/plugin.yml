@@ -59,6 +59,10 @@ commands:
     description: Describes your current bearing.
     usage: /<command>
     aliases: [ecompass]
+  delhome:
+    description: Removes a home
+    usage: /<command> [player] <name>
+    aliases: [edelhome,remhome,rmhome,eremhome,ermhome]
   deljail:
     description: Removes a jail
     usage: /<command> [jailname]

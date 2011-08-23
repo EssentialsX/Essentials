@@ -21,9 +21,14 @@ public class Commandsethome extends EssentialsCommand
 			{
 				if (user.isAuthorized("essentials.sethome.multiple"))
 				{
-					if (user.isAuthorized("essentials.sethome.multiple.unlimited") || user.getHomes().size() <= ess.getSettings().getMultipleHomes())
+					if ((user.isAuthorized("essentials.sethome.multiple.unlimited")) || (user.getHomes().size() <= ess.getSettings().getMultipleHomes())
+							|| (user.getHomes().contains(args[0])))
 					{
 						user.setHome(args[0]);
+					}
+					else 
+					{
+						throw new Exception(Util.format("maxHomes", ess.getSettings().getMultipleHomes()));
 					}
 
 				}

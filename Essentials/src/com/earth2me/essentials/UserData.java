@@ -158,6 +158,20 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.save();
 	}
 
+	public void delHome(String name) throws Exception
+	{
+		if (getHome(name) != null)
+		{
+			homes.remove(name);
+			config.removeProperty("homes." + name);
+			config.save();
+		}
+		else {
+			//TODO: move this message to messages file
+			throw new Exception("Home "+name+" doesn't exist");
+		}
+	}
+
 	public boolean hasHome()
 	{
 		if (config.hasProperty("home"))
