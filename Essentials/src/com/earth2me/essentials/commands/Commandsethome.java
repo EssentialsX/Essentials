@@ -19,14 +19,21 @@ public class Commandsethome extends EssentialsCommand
 		{
 			if (args.length < 2)
 			{
-				user.setHome(args[0].equalsIgnoreCase("default"));
+				if (user.isAuthorized("essentials.sethome.multiple"))
+				{
+					if (user.isAuthorized("essentials.sethome.multiple.unlimited") || user.getHomes().size() <= ess.getSettings().getMultipleHomes())
+					{
+						user.setHome(args[0]);
+					}
+
+				}
 			}
 			else
 			{
 				if (user.isAuthorized("essentials.sethome.others"))
 				{
 					User usersHome = ess.getUser(ess.getServer().getPlayer(args[0]));
-					if(usersHome == null)
+					if (usersHome == null)
 					{
 						usersHome = ess.getOfflineUser(args[0]);
 					}
@@ -34,13 +41,13 @@ public class Commandsethome extends EssentialsCommand
 					{
 						throw new Exception(Util.i18n("playerNotFound"));
 					}
-					usersHome.setHome(user.getLocation(), args[1].equalsIgnoreCase("default"));
+					usersHome.setHome(args[1], user.getLocation());
 				}
 			}
 		}
 		else
 		{
-			user.setHome(false);
+			user.setHome();
 		}
 		charge(user);
 		user.sendMessage(Util.i18n("homeSet"));

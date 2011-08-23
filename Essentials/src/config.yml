@@ -246,6 +246,10 @@ bed-sethome: false
 #if no home is set send you to spawn when /home is used
 spawn-if-no-home: false
 
+# If users have essentials.sethome.multiple how many homes can they have
+# People with essentials.sethome.multiple.unlimited are not limited by this number
+multiple-homes: 5
+
 
 ############################################################
 # +------------------------------------------------------+ #

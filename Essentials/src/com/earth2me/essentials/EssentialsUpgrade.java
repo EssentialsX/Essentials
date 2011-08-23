@@ -287,12 +287,12 @@ public class EssentialsUpgrade
 					}
 					if (world != null)
 					{
-						user.setHome(new Location(world,
+						user.setHome("home", new Location(world,
 												  ((Number)vals.get(0)).doubleValue(),
 												  ((Number)vals.get(1)).doubleValue(),
 												  ((Number)vals.get(2)).doubleValue(),
 												  ((Number)vals.get(3)).floatValue(),
-												  ((Number)vals.get(4)).floatValue()), true);
+												  ((Number)vals.get(4)).floatValue()));
 					}
 				}
 			}
@@ -513,5 +513,6 @@ public class EssentialsUpgrade
 		moveUsersDataToUserdataFolder();
 		convertWarps();
 		updateUsersPowerToolsFormat();
+		//TODO: Convert 2.5.7 homes to new format
 	}
 }

@@ -10,6 +10,8 @@ import org.bukkit.entity.Entity;
 public class Teleport implements Runnable
 {
 	private static final double MOVE_CONSTANT = 0.3;
+
+
 	private static class Target
 	{
 		private final Location location;
@@ -57,9 +59,9 @@ public class Teleport implements Runnable
 		this.started = System.currentTimeMillis();
 		this.delay = delay;
 		this.health = user.getHealth();
-		this.initX = Math.round(user.getLocation().getX()*MOVE_CONSTANT);
-		this.initY = Math.round(user.getLocation().getY()*MOVE_CONSTANT);
-		this.initZ = Math.round(user.getLocation().getZ()*MOVE_CONSTANT);
+		this.initX = Math.round(user.getLocation().getX() * MOVE_CONSTANT);
+		this.initY = Math.round(user.getLocation().getY() * MOVE_CONSTANT);
+		this.initZ = Math.round(user.getLocation().getZ() * MOVE_CONSTANT);
 		this.teleportTarget = target;
 		this.chargeFor = chargeFor;
 	}
@@ -72,9 +74,9 @@ public class Teleport implements Runnable
 			cancel();
 			return;
 		}
-		if (Math.round(user.getLocation().getX()*MOVE_CONSTANT) != initX
-			|| Math.round(user.getLocation().getY()*MOVE_CONSTANT) != initY
-			|| Math.round(user.getLocation().getZ()*MOVE_CONSTANT) != initZ
+		if (Math.round(user.getLocation().getX() * MOVE_CONSTANT) != initX
+			|| Math.round(user.getLocation().getY() * MOVE_CONSTANT) != initY
+			|| Math.round(user.getLocation().getZ() * MOVE_CONSTANT) != initZ
 			|| user.getHealth() < health)
 		{	// user moved, cancel teleport
 			cancel(true);
@@ -92,7 +94,7 @@ public class Teleport implements Runnable
 				user.sendMessage(Util.i18n("teleportationCommencing"));
 				try
 				{
-					
+
 					now(teleportTarget);
 					if (chargeFor != null)
 					{
@@ -229,7 +231,7 @@ public class Teleport implements Runnable
 		cooldown(false);
 		now(new Target(loc));
 	}
-	
+
 	public void now(Location loc, Trade chargeFor) throws Exception
 	{
 		cooldown(false);
@@ -261,9 +263,19 @@ public class Teleport implements Runnable
 		home(user, chargeFor);
 	}
 
+	public void home(String home, Trade chargeFor) throws Exception
+	{
+		home(user, home, chargeFor);
+	}
+
 	public void home(IUser user, Trade chargeFor) throws Exception
 	{
-		Location loc = user.getHome(this.user.getLocation());
+		home(user, "0", chargeFor);
+	}
+
+	public void home(IUser user, String home, Trade chargeFor) throws Exception
+	{
+		final Location loc = user.getHome(home);
 		if (loc == null)
 		{
 			if (ess.getSettings().spawnIfNoHome())

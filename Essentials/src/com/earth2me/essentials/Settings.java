@@ -30,6 +30,12 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("respawn-at-home", false);
 	}
+	
+	@Override
+	public int getMultipleHomes()
+	{
+		return config.getInt("multiple-homes", 5);
+	}
 
 	@Override
 	public boolean getBedSetsHome()

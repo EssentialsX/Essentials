@@ -72,6 +72,8 @@ public interface ISettings extends IConf
 	boolean getReclaimSetting();
 
 	boolean getRespawnAtHome();
+	
+	int getMultipleHomes();
 
 	boolean getSortListByGroups();
 
