@@ -326,6 +326,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			event.disallow(Result.KICK_FULL, Util.i18n("serverFull"));
 			return;
 		}
+		event.allow();
 
 		user.setLastLogin(System.currentTimeMillis());
 		updateCompass(user);
