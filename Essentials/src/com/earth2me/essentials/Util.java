@@ -11,7 +11,6 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
@@ -471,21 +470,33 @@ public class Util
 
 	public static String joinList(Object... list)
 	{
+		return joinList(", ", list);
+	}
+	
+	public static String joinList(String seperator, Object... list)
+	{
 		StringBuilder buf = new StringBuilder();
 		for (Object each : list)
 		{
 			if (buf.length() > 0)
 			{
-				buf.append(", ");
+				buf.append(seperator);
 			}
 			
 			if(each instanceof List)
 			{
-				buf.append(joinList(((List)each).toArray()));
+				buf.append(joinList(seperator, ((List)each).toArray()));
 			}
 			else
 			{
-				buf.append(each.toString());
+				try 
+				{
+					buf.append(each.toString());
+				}
+				catch (Exception e)
+				{
+					buf.append(each.toString());
+				}
 			}
 		}
 		return buf.toString();

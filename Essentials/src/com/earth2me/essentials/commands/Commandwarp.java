@@ -55,16 +55,7 @@ public class Commandwarp extends EssentialsCommand
 				user.sendMessage(Util.format("warpsCount", warpNameList.size(), page, (int)Math.ceil(warpNameList.size() / (double)WARPS_PER_PAGE)));
 			}
 			final int warpPage = (page - 1) * WARPS_PER_PAGE;
-			final StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < Math.min(warpNameList.size() - warpPage, WARPS_PER_PAGE); i++)
-			{
-				if (i > 0)
-				{
-					sb.append(", ");
-				}
-				sb.append(warpNameList.get(i + warpPage));
-			}
-			user.sendMessage(sb.toString());
+			user.sendMessage(Util.joinList(warpNameList.subList(warpPage, warpPage+Math.min(warpNameList.size() - warpPage, WARPS_PER_PAGE))));
 			return;
 		}
 		if (args.length > 0)
