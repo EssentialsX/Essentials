@@ -39,7 +39,7 @@ public class Commandpowertool extends EssentialsCommand
 				}
 				else
 				{
-					user.sendMessage(Util.format("powerToolList", Util.concat(powertools), itemName));
+					user.sendMessage(Util.format("powerToolList", Util.joinList(powertools), itemName));
 				}
 				return;
 			}
@@ -85,7 +85,7 @@ public class Commandpowertool extends EssentialsCommand
 				}
 
 				powertools.add(command);
-				user.sendMessage(Util.format("powerToolAttach", Util.concat(powertools), itemName));
+				user.sendMessage(Util.format("powerToolAttach", Util.joinList(powertools), itemName));
 			}
 		}
 		else

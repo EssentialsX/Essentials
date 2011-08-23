@@ -11,6 +11,7 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
@@ -470,17 +471,22 @@ public class Util
 
 	public static String joinList(Object... list)
 	{
-		final StringBuilder buf = new StringBuilder();
-		boolean first = true;
+		StringBuilder buf = new StringBuilder();
 		for (Object each : list)
 		{
-			if (!first)
+			if (buf.length() > 0)
 			{
 				buf.append(", ");
-
 			}
-			first = false;
-			buf.append(each);
+			
+			if(each instanceof List)
+			{
+				buf.append(joinList(((List)each).toArray()));
+			}
+			else
+			{
+				buf.append(each.toString());
+			}
 		}
 		return buf.toString();
 	}
@@ -488,27 +494,5 @@ public class Util
 	public static String capitalCase(String s)
 	{
 		return s.toUpperCase().charAt(0) + s.toLowerCase().substring(1);
-	}
-	
-	public static String concat(List list)
-	{
-		return concat(",", list);
-	}
-	
-	public static String concat(String seperator, List list)
-	{
-		StringBuilder sb = new StringBuilder();
-		
-		for(Object item : list)
-		{
-			if(sb.length() > 0)
-			{
-				sb.append(seperator);
-			}
-			
-			sb.append(item.toString());
-		}
-		
-		return sb.toString();
-	}
+	}	
 }

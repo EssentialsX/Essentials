@@ -82,7 +82,12 @@ public class Commandspawnmob extends EssentialsCommand
 		{
 			8, 9
 		};
-		Location loc = (new TargetBlock(user, 300, 0.2, ignore)).getTargetBlock().getLocation();
+		Block block = (new TargetBlock(user, 300, 0.2, ignore)).getTargetBlock();
+		if(block == null) {
+			user.sendMessage(Util.i18n("unableToSpawnMob"));
+			return;
+		}
+		Location loc = block.getLocation();
 		Location sloc = Util.getSafeDestination(loc);
 		try
 		{
