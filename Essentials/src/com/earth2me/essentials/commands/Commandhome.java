@@ -55,7 +55,7 @@ public class Commandhome extends EssentialsCommand
 			}
 			else
 			{
-				user.sendMessage(Util.format("homes", homes.toString()));
+				user.sendMessage(Util.format("homes", Util.joinList(homes)));
 			}
 		}
 	}

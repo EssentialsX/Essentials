@@ -55,16 +55,6 @@ public class Commandrepair extends EssentialsCommand
 
 			String armor = repairItems(user.getInventory().getArmorContents());
 
-			if (armor.length() > 0)
-			{
-				if (itemList.length() > 0)
-				{
-					itemList.append(", ");
-				}
-
-				itemList.append(armor);
-			}
-
 			if (itemList.length() == 0)
 			{
 				user.sendMessage(Util.format("repairNone"));
@@ -72,7 +62,7 @@ public class Commandrepair extends EssentialsCommand
 			else
 			{
 				charge(user);
-				user.sendMessage(Util.format("repair", itemList.toString()));
+				user.sendMessage(Util.format("repair", Util.joinList(itemList)));
 			}
 
 		}
