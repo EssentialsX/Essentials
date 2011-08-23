@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -107,10 +108,21 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	public Location getHome(String name)
 	{
-		Location loc = (Location)homes.get(name);
+		Location loc = config.getLocation("homes." + name, getServer());
 		if (loc == null)
 		{
-			loc = (Location)homes.get(getHomes().get(Integer.parseInt(name) - 1));
+			try
+			{
+				loc = config.getLocation("homes." + getHomes().get(Integer.parseInt(name) - 1), getServer());
+			}
+			catch (IndexOutOfBoundsException e)
+			{
+				return null;
+			}
+			catch (NumberFormatException e)
+			{
+				return null;
+			}
 		}
 
 		return loc;
@@ -121,14 +133,14 @@ public abstract class UserData extends PlayerExtension implements IConf
 		Location loc;
 		for (String home : getHomes())
 		{
-			loc = (Location)homes.get(home);
+			loc = config.getLocation("homes." + home, getServer());
 			if (world.getWorld() == loc.getWorld())
 			{
 				return loc;
 			}
 
 		}
-		loc = (Location)homes.get(getHomes().get(0));
+		loc = config.getLocation("homes." + getHomes().get(0), getServer());
 		return loc;
 	}
 

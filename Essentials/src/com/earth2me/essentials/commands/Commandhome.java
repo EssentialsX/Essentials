@@ -19,51 +19,44 @@ public class Commandhome extends EssentialsCommand
 	{
 		Trade charge = new Trade(this.getName(), ess);
 		charge.isAffordableFor(user);
-		if (args.length == 0)
+		User u = user;
+		String homeName = "";
+		String[] nameParts;
+		if (args.length > 0)
 		{
-			List<String> homes = user.getHomes();
-			if (homes.isEmpty())
+			nameParts = args[0].split(":");
+			if (nameParts[0].length() == args[0].length())
 			{
-				throw new Exception(Util.i18n("noHomeSet"));
-			}
-			else if (homes.size() == 1)
-			{
-				user.getTeleport().home(homes.get(0), charge);
-			}
-			else
-			{
-				//TODO: move to messages file
-				user.sendMessage("Homes: " + homes.toString());
-			}
-
-		}
-		else
-		{
-			User u;
-			String homeName;
-			String[] nameParts = args[0].split(":");
-			if (nameParts.length == 1)
-			{
-				u = user;
 				homeName = nameParts[0];
 			}
 			else
 			{
-				try
+				u = getPlayer(server, nameParts[0].split(" "), 0, true);
+				if (nameParts.length > 1)
 				{
-					u = getPlayer(server, args, 0);
+					homeName = nameParts[1];
 				}
-				catch (NoSuchFieldException ex)
-				{
-					u = ess.getOfflineUser(args[0]);
-				}
-				if (u == null)
-				{
-					throw new Exception(Util.i18n("playerNotFound"));
-				}
-				homeName = nameParts[1];
 			}
+		}
+		try
+		{
 			user.getTeleport().home(u, homeName, charge);
+		}
+		catch (NotEnoughArgumentsException e)
+		{
+			List<String> homes = u.getHomes();
+			if (homes.isEmpty())
+			{
+				throw new Exception(u == user ? Util.i18n("noHomeSet") : Util.i18n("noHomeSetPlayer"));
+			}
+			else if ((homes.size() == 1) && u == user)
+			{
+				user.getTeleport().home(u, homes.get(0), charge);
+			}
+			else
+			{
+				user.sendMessage(Util.format("homes", homes.toString()));
+			}
 		}
 	}
 }

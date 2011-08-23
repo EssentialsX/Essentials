@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.IEssentialsCommand;
+import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import com.earth2me.essentials.register.payment.Method;
 import java.util.Calendar;
 import java.util.GregorianCalendar;

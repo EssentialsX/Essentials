@@ -22,7 +22,7 @@ public interface IUser
 	boolean isAuthorized(String node);
 
 	boolean isAuthorized(IEssentialsCommand cmd);
-	
+
 	boolean isAuthorized(IEssentialsCommand cmd, String permissionPrefix);
 
 	void setLastTeleportTimestamp(long time);
@@ -46,7 +46,7 @@ public interface IUser
 	void setLastLocation();
 
 	Location getHome(String name);
-	
+
 	Location getHome(Location loc);
 
 	String getName();

@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Logger;
@@ -258,21 +259,6 @@ public class Teleport implements Runnable
 		back(null);
 	}
 
-	public void home(Trade chargeFor) throws Exception
-	{
-		home(user, chargeFor);
-	}
-
-	public void home(String home, Trade chargeFor) throws Exception
-	{
-		home(user, home, chargeFor);
-	}
-
-	public void home(IUser user, Trade chargeFor) throws Exception
-	{
-		home(user, "0", chargeFor);
-	}
-
 	public void home(IUser user, String home, Trade chargeFor) throws Exception
 	{
 		final Location loc = user.getHome(home);
@@ -284,7 +270,7 @@ public class Teleport implements Runnable
 			}
 			else
 			{
-				throw new Exception(user == this.user ? Util.i18n("noHomeSet") : Util.i18n("noHomeSetPlayer"));
+				throw new NotEnoughArgumentsException();
 			}
 		}
 		teleport(new Target(loc), chargeFor);
