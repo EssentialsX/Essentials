@@ -282,11 +282,12 @@ public class EssentialsUpgrade
 					final String defworld = (String)config.getProperty("home.default");
 					final Location defloc = config.getLocation("home.worlds." + defworld, ess.getServer());
 
-					String worldName = defloc.getWorld().getName().toLowerCase();
+					;
 					config.setProperty("homes.home", defloc);
 
 					List<String> worlds = config.getKeys("home.worlds");
 					Location loc;
+					String worldName;
 
 					if (worlds == null)
 					{

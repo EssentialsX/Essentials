@@ -21,10 +21,10 @@ public class Commandsethome extends EssentialsCommand
 			{
 				if (user.isAuthorized("essentials.sethome.multiple"))
 				{
-					if ((user.isAuthorized("essentials.sethome.multiple.unlimited")) || (user.getHomes().size() <= ess.getSettings().getMultipleHomes())
-							|| (user.getHomes().contains(args[0])))
+					if ((user.isAuthorized("essentials.sethome.multiple.unlimited")) || (user.getHomes().size() < ess.getSettings().getMultipleHomes())
+							|| (user.getHomes().contains(args[0].toLowerCase())))
 					{
-						user.setHome(args[0]);
+						user.setHome(args[0].toLowerCase());
 					}
 					else 
 					{
@@ -46,7 +46,7 @@ public class Commandsethome extends EssentialsCommand
 					{
 						throw new Exception(Util.i18n("playerNotFound"));
 					}
-					usersHome.setHome(args[1], user.getLocation());
+					usersHome.setHome(args[1].toLowerCase(), user.getLocation());
 				}
 			}
 		}

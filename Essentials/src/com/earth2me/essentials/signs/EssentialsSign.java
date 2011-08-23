@@ -21,6 +21,7 @@ public class EssentialsSign
 {
 	private static final Set<Material> EMPTY_SET = new HashSet<Material>();
 	protected transient final String signName;
+	//TODO: Add these settings to messages
 	private static final String FORMAT_SUCCESS = "§1[%s]";
 	private static final String FORMAT_TEMPLATE = "[%s]";
 	private static final String FORMAT_FAIL = "§4[%s]";

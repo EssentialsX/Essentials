@@ -40,7 +40,7 @@ public class Commandhome extends EssentialsCommand
 		}
 		try
 		{
-			user.getTeleport().home(u, homeName, charge);
+			user.getTeleport().home(u, homeName.toLowerCase(), charge);
 		}
 		catch (NotEnoughArgumentsException e)
 		{

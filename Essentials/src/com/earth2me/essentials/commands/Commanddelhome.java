@@ -36,7 +36,7 @@ public class Commanddelhome extends EssentialsCommand
 			user = getPlayer(server, args, 0);
 			name = args[1];
 		}
-		user.delHome(name);
-		sender.sendMessage(Util.format("deleteHome", args[0]));
+		user.delHome(name.toLowerCase());
+		sender.sendMessage(Util.format("deleteHome", name));
 	}
 }
