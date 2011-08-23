@@ -209,10 +209,10 @@ public class Essentials extends JavaPlugin implements IEssentials
 		final EssentialsTimer timer = new EssentialsTimer(this);
 		getScheduler().scheduleSyncRepeatingTask(this, timer, 1, 50);
 		Economy.setEss(this);
-		if (enableErrorLogging)
+		if (getSettings().isUpdateEnabled())
 		{
 			updateTimer = new EssentialsUpdateTimer(this);
-			getScheduler().scheduleAsyncRepeatingTask(this, updateTimer, 50, 50 * 60 * (this.getDescription().getVersion().startsWith("Dev") ? 60 : 360));
+			getScheduler().scheduleAsyncRepeatingTask(this, updateTimer, 20 * 60, 20 * 3600 * 6);
 		}
 		LOGGER.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), Util.joinList(this.getDescription().getAuthors())));
 	}
