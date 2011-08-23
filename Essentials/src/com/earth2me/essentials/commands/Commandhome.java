@@ -4,6 +4,7 @@ import com.earth2me.essentials.Trade;
 import org.bukkit.Server;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import java.util.List;
 
 
 public class Commandhome extends EssentialsCommand
@@ -18,24 +19,44 @@ public class Commandhome extends EssentialsCommand
 	{
 		Trade charge = new Trade(this.getName(), ess);
 		charge.isAffordableFor(user);
-		if(args.length > 0 && user.isAuthorized("essentials.home.others"))
+		User u = user;
+		String homeName = "";
+		String[] nameParts;
+		if (args.length > 0)
 		{
-			User u;
-			try
+			nameParts = args[0].split(":");
+			if (nameParts[0].length() == args[0].length())
 			{
-				u = getPlayer(server, args, 0);
+				homeName = nameParts[0];
 			}
-			catch(NoSuchFieldException ex)
+			else
 			{
-				u = ess.getOfflineUser(args[0]);
+				u = getPlayer(server, nameParts[0].split(" "), 0, true);
+				if (nameParts.length > 1)
+				{
+					homeName = nameParts[1];
+				}
 			}
-			if (u == null)
-			{
-				throw new Exception(Util.i18n("playerNotFound"));
-			}
-			user.getTeleport().home(u, charge);
-			return;
 		}
-		user.getTeleport().home(charge);
+		try
+		{
+			user.getTeleport().home(u, homeName.toLowerCase(), charge);
+		}
+		catch (NotEnoughArgumentsException e)
+		{
+			List<String> homes = u.getHomes();
+			if (homes.isEmpty())
+			{
+				throw new Exception(u == user ? Util.i18n("noHomeSet") : Util.i18n("noHomeSetPlayer"));
+			}
+			else if ((homes.size() == 1) && u == user)
+			{
+				user.getTeleport().home(u, homes.get(0), charge);
+			}
+			else
+			{
+				user.sendMessage(Util.format("homes", homes.toString()));
+			}
+		}
 	}
 }

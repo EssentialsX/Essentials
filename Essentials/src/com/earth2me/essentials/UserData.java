@@ -1,15 +1,14 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -36,7 +35,8 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.load();
 		money = _getMoney();
 		unlimited = _getUnlimited();
-		powertools = getPowertools();
+		powertools = _getPowertools();
+		homes = _getHomes();
 		lastLocation = _getLastLocation();
 		lastTeleportTimestamp = _getLastTeleportTimestamp();
 		lastHealTimestamp = _getLastHealTimestamp();
@@ -89,6 +89,88 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.setProperty("money", value);
 		config.save();
 	}
+	private Map<String, Object> homes;
+
+	private Map<String, Object> _getHomes()
+	{
+		Object o = config.getProperty("homes");
+
+		if (o instanceof Map)
+		{
+			return (Map<String, Object>)o;
+		}
+		else
+		{
+			return new HashMap<String, Object>();
+		}
+
+	}
+
+	public Location getHome(String name)
+	{
+		Location loc = config.getLocation("homes." + name, getServer());
+		if (loc == null)
+		{
+			try
+			{
+				loc = config.getLocation("homes." + getHomes().get(Integer.parseInt(name) - 1), getServer());
+			}
+			catch (IndexOutOfBoundsException e)
+			{
+				return null;
+			}
+			catch (NumberFormatException e)
+			{
+				return null;
+			}
+		}
+
+		return loc;
+	}
+
+	public Location getHome(Location world)
+	{
+		Location loc;
+		for (String home : getHomes())
+		{
+			loc = config.getLocation("homes." + home, getServer());
+			if (world.getWorld() == loc.getWorld())
+			{
+				return loc;
+			}
+
+		}
+		loc = config.getLocation("homes." + getHomes().get(0), getServer());
+		return loc;
+	}
+
+	public List<String> getHomes()
+	{
+		List<String> list = new ArrayList(homes.keySet());
+		return list;
+
+	}
+
+	public void setHome(String name, Location loc)
+	{
+		homes.put(name, loc);
+		config.setProperty("homes." + name, loc);
+		config.save();
+	}
+
+	public void delHome(String name) throws Exception
+	{
+		if (getHome(name) != null)
+		{
+			homes.remove(name);
+			config.removeProperty("homes." + name);
+			config.save();
+		}
+		else {
+			//TODO: move this message to messages file
+			throw new Exception("Home "+name+" doesn't exist");
+		}
+	}
 
 	public boolean hasHome()
 	{
@@ -97,40 +179,6 @@ public abstract class UserData extends PlayerExtension implements IConf
 			return true;
 		}
 		return false;
-	}
-
-	public Location getHome(Location location)
-	{
-		if (!hasHome())
-		{
-			return null;
-		}
-		World world = location.getWorld();
-		String worldHome = "home.worlds." + world.getName().toLowerCase();
-		if (!config.hasProperty(worldHome))
-		{
-			String defaultWorld = config.getString("home.default");
-			worldHome = "home.worlds." + defaultWorld;
-		}
-		Location loc = config.getLocation(worldHome, getServer());
-		return loc;
-	}
-
-	public void setHome(Location loc, boolean b)
-	{
-		String worldName = loc.getWorld().getName().toLowerCase();
-		if (worldName == null || worldName.isEmpty())
-		{
-			logger.log(Level.WARNING, Util.i18n("emptyWorldName"));
-			return;
-		}
-		if (b || !config.hasProperty("home.default"))
-		{
-			config.setProperty("home.default", worldName);
-		}
-
-		config.setProperty("home.worlds." + worldName, loc);
-		config.save();
 	}
 
 	public String getNickname()
@@ -176,10 +224,10 @@ public abstract class UserData extends PlayerExtension implements IConf
 	private Map<Integer, Object> powertools;
 
 	@SuppressWarnings("unchecked")
-	private Map<Integer, Object> getPowertools()
+	private Map<Integer, Object> _getPowertools()
 	{
 		Object o = config.getProperty("powertools");
-	
+
 		if (o instanceof Map)
 		{
 			return (Map<Integer, Object>)o;

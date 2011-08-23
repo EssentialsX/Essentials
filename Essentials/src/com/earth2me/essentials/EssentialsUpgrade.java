@@ -252,6 +252,79 @@ public class EssentialsUpgrade
 		doneFile.save();
 	}
 
+	private void updateUsersHomesFormat()
+	{
+		if (doneFile.getBoolean("updateUsersHomesFormat", false))
+		{
+			return;
+		}
+		final File userdataFolder = new File(ess.getDataFolder(), "userdata");
+		if (!userdataFolder.exists() || !userdataFolder.isDirectory())
+		{
+			return;
+		}
+		final File[] userFiles = userdataFolder.listFiles();
+
+		for (File file : userFiles)
+		{
+			if (!file.isFile() || !file.getName().endsWith(".yml"))
+			{
+				continue;
+			}
+			final EssentialsConf config = new EssentialsConf(file);
+			try
+			{
+
+				config.load();
+				if (config.hasProperty("home") && config.hasProperty("home.default"))
+				{
+					@SuppressWarnings("unchecked")
+					final String defworld = (String)config.getProperty("home.default");
+					final Location defloc = config.getLocation("home.worlds." + defworld, ess.getServer());
+
+					;
+					config.setProperty("homes.home", defloc);
+
+					List<String> worlds = config.getKeys("home.worlds");
+					Location loc;
+					String worldName;
+
+					if (worlds == null)
+					{
+						continue;
+					}
+					for (String world : worlds)
+					{
+						if (defworld.equalsIgnoreCase(world))
+						{
+							continue;
+						}
+						loc = config.getLocation("home.worlds." + world, ess.getServer());
+						if (loc == null)
+						{
+							continue;
+						}
+						worldName = loc.getWorld().getName().toLowerCase();
+						if (worldName != null && !worldName.isEmpty())
+						{
+							config.setProperty("homes." + worldName, loc);
+						}
+					}
+					config.removeProperty("home");
+					config.save();
+				}
+
+			}
+			catch (RuntimeException ex)
+			{
+				LOGGER.log(Level.INFO, "File: " + file.toString());
+				throw ex;
+			}
+		}
+		doneFile.setProperty("updateUsersHomesFormat", true);
+		doneFile.save();
+	}
+
 	private void moveUsersDataToUserdataFolder()
 	{
 		final File usersFile = new File(ess.getDataFolder(), "users.yml");
@@ -287,12 +360,12 @@ public class EssentialsUpgrade
 					}
 					if (world != null)
 					{
-						user.setHome(new Location(world,
-												  ((Number)vals.get(0)).doubleValue(),
-												  ((Number)vals.get(1)).doubleValue(),
-												  ((Number)vals.get(2)).doubleValue(),
-												  ((Number)vals.get(3)).floatValue(),
-												  ((Number)vals.get(4)).floatValue()), true);
+						user.setHome("home", new Location(world,
+														  ((Number)vals.get(0)).doubleValue(),
+														  ((Number)vals.get(1)).doubleValue(),
+														  ((Number)vals.get(2)).doubleValue(),
+														  ((Number)vals.get(3)).floatValue(),
+														  ((Number)vals.get(4)).floatValue()));
 					}
 				}
 			}
@@ -513,5 +586,6 @@ public class EssentialsUpgrade
 		moveUsersDataToUserdataFolder();
 		convertWarps();
 		updateUsersPowerToolsFormat();
+		updateUsersHomesFormat();
 	}
 }

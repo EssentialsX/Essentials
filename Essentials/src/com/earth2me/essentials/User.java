@@ -1,11 +1,13 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.IEssentialsCommand;
+import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import com.earth2me.essentials.register.payment.Method;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Logger;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -20,44 +22,44 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	private final Teleport teleport;
 	private long lastActivity;
 	private boolean hidden = false;
-	
+
 	User(Player base, IEssentials ess)
 	{
 		super(base, ess);
 		teleport = new Teleport(this, ess);
 	}
-	
+
 	User update(Player base)
 	{
 		setBase(base);
 		return this;
 	}
-	
+
 	public boolean isAuthorized(IEssentialsCommand cmd)
 	{
 		return isAuthorized(cmd, "essentials.");
 	}
-	
+
 	public boolean isAuthorized(IEssentialsCommand cmd, String permissionPrefix)
 	{
 		return isAuthorized(permissionPrefix + (cmd.getName().equals("r") ? "msg" : cmd.getName()));
 	}
-	
+
 	public boolean isAuthorized(String node)
 	{
 		if (isOp())
 		{
 			return true;
 		}
-		
+
 		if (isJailed())
 		{
 			return false;
 		}
-		
+
 		return ess.getPermissionsHandler().hasPermission(this, node);
 	}
-	
+
 	public void healCooldown() throws Exception
 	{
 		Calendar now = new GregorianCalendar();
@@ -75,12 +77,12 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		}
 		setLastHealTimestamp(now.getTimeInMillis());
 	}
-	
+
 	public void giveMoney(double value)
 	{
 		giveMoney(value, null);
 	}
-	
+
 	public void giveMoney(double value, CommandSender initiator)
 	{
 		if (value == 0)
@@ -94,7 +96,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			initiator.sendMessage((Util.format("addedToOthersAccount", Util.formatCurrency(value, ess), this.getDisplayName())));
 		}
 	}
-	
+
 	public void payUser(User reciever, double value) throws Exception
 	{
 		if (value == 0)
@@ -113,12 +115,12 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			reciever.sendMessage(Util.format("moneyRecievedFrom", Util.formatCurrency(value, ess), getDisplayName()));
 		}
 	}
-	
+
 	public void takeMoney(double value)
 	{
 		takeMoney(value, null);
 	}
-	
+
 	public void takeMoney(double value, CommandSender initiator)
 	{
 		if (value == 0)
@@ -132,43 +134,43 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			initiator.sendMessage((Util.format("takenFromOthersAccount", Util.formatCurrency(value, ess), this.getDisplayName())));
 		}
 	}
-	
+
 	public boolean canAfford(double cost)
 	{
 		double mon = getMoney();
 		return mon >= cost || isAuthorized("essentials.eco.loan");
 	}
-	
+
 	public void dispose()
 	{
 		this.base = new OfflinePlayer(getName(), ess);
 	}
-	
+
 	public boolean getJustPortaled()
 	{
 		return justPortaled;
 	}
-	
+
 	public void setJustPortaled(boolean value)
 	{
 		justPortaled = value;
 	}
-	
+
 	public void setReplyTo(CommandSender user)
 	{
 		replyTo = user;
 	}
-	
+
 	public CommandSender getReplyTo()
 	{
 		return replyTo;
 	}
-	
+
 	public int compareTo(User t)
 	{
 		return ChatColor.stripColor(this.getDisplayName()).compareToIgnoreCase(ChatColor.stripColor(t.getDisplayName()));
 	}
-	
+
 	@Override
 	public boolean equals(Object o)
 	{
@@ -177,51 +179,56 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			return false;
 		}
 		return ChatColor.stripColor(this.getDisplayName()).equalsIgnoreCase(ChatColor.stripColor(((User)o).getDisplayName()));
-		
+
 	}
-	
+
 	@Override
 	public int hashCode()
 	{
 		return ChatColor.stripColor(this.getDisplayName()).hashCode();
 	}
-	
+
 	public Boolean canSpawnItem(int itemId)
 	{
 		return !ess.getSettings().itemSpawnBlacklist().contains(itemId);
 	}
-	
+
+	public Location getHome()
+	{
+		return getHome(getHomes().get(0));
+	}
+
 	public void setHome()
 	{
-		setHome(getLocation(), true);
+		setHome("home", getLocation());
 	}
-	
-	public void setHome(boolean defaultHome)
+
+	public void setHome(String name)
 	{
-		setHome(getLocation(), defaultHome);
+		setHome(name, getLocation());
 	}
-	
+
 	public void setLastLocation()
 	{
 		setLastLocation(getLocation());
 	}
-	
+
 	public void requestTeleport(User player, boolean here)
 	{
 		teleportRequester = player;
 		teleportRequestHere = here;
 	}
-	
+
 	public User getTeleportRequest()
 	{
 		return teleportRequester;
 	}
-	
+
 	public boolean isTeleportRequestHere()
 	{
 		return teleportRequestHere;
 	}
-	
+
 	public String getNick()
 	{
 		final StringBuilder nickname = new StringBuilder();
@@ -245,12 +252,12 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			{
 			}
 		}
-		
+
 		if (ess.getSettings().addPrefixSuffix())
 		{
 			final String prefix = ess.getPermissionsHandler().getPrefix(this).replace('&', '§').replace("{WORLDNAME}", this.getWorld().getName());
 			final String suffix = ess.getPermissionsHandler().getSuffix(this).replace('&', '§').replace("{WORLDNAME}", this.getWorld().getName());
-			
+
 			nickname.insert(0, prefix);
 			nickname.append(suffix);
 			if (suffix.length() < 2 || !suffix.substring(suffix.length() - 2, suffix.length() - 1).equals("§"))
@@ -258,25 +265,25 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 				nickname.append("§f");
 			}
 		}
-		
+
 		return nickname.toString();
 	}
-	
+
 	public Teleport getTeleport()
 	{
 		return teleport;
 	}
-	
+
 	public long getLastActivity()
 	{
 		return lastActivity;
 	}
-	
+
 	public void setLastActivity(long timestamp)
 	{
 		lastActivity = timestamp;
 	}
-	
+
 	@Override
 	public double getMoney()
 	{
@@ -298,7 +305,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		}
 		return super.getMoney();
 	}
-	
+
 	@Override
 	public void setMoney(double value)
 	{
@@ -320,14 +327,14 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		}
 		super.setMoney(value);
 	}
-	
+
 	@Override
 	public void setAfk(boolean set)
 	{
 		this.setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") ? true : set);
 		super.setAfk(set);
 	}
-	
+
 	@Override
 	public boolean toggleAfk()
 	{
@@ -335,17 +342,17 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		this.setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") ? true : now);
 		return now;
 	}
-	
+
 	public boolean isHidden()
 	{
 		return hidden;
 	}
-	
+
 	public void setHidden(boolean hidden)
 	{
 		this.hidden = hidden;
 	}
-	
+
 	public void checkJailTimeout(final long currentTime)
 	{
 		if (getJailTimeout() > 0 && getJailTimeout() < currentTime && isJailed())
@@ -363,7 +370,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			}
 		}
 	}
-	
+
 	public void checkMuteTimeout(final long currentTime)
 	{
 		if (getMuteTimeout() > 0 && getMuteTimeout() < currentTime && isMuted())
@@ -373,7 +380,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			setMuted(false);
 		}
 	}
-	
+
 	public void checkBanTimeout(final long currentTime)
 	{
 		if (getBanTimeout() > 0 && getBanTimeout() < currentTime && ess.getBans().isNameBanned(getName()))
