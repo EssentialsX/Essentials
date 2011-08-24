@@ -280,7 +280,7 @@ public class EssentialsUpgrade
 				{
 					@SuppressWarnings("unchecked")
 					final String defworld = (String)config.getProperty("home.default");
-					final Location defloc = config.getLocation("home.worlds." + defworld, ess.getServer());
+					final Location defloc = getFakeLocation(config,"home.worlds." + defworld);
 					if (defloc != null)
 					{
 						config.setProperty("homes.home", defloc);
@@ -300,7 +300,7 @@ public class EssentialsUpgrade
 						{
 							continue;
 						}
-						loc = config.getLocation("home.worlds." + world, ess.getServer());
+						loc = getFakeLocation(config, "home.worlds." + world);
 						if (loc == null)
 						{
 							continue;
@@ -569,6 +569,25 @@ public class EssentialsUpgrade
 			return new FakeWorld(worldDirectory.getName(), World.Environment.NORMAL);
 		}
 		return null;
+	}
+	public Location getFakeLocation(EssentialsConf config, String path)
+	{
+		String worldName = config.getString((path != null ? path + "." : "") + "world");
+		if (worldName == null || worldName.isEmpty())
+		{
+			return null;
+		}
+		World world = getFakeWorld(worldName);
+		if (world == null)
+		{
+			return null;
+		}
+		return new Location(world,
+							config.getDouble((path != null ? path + "." : "") + "x", 0),
+							config.getDouble((path != null ? path + "." : "") + "y", 0),
+							config.getDouble((path != null ? path + "." : "") + "z", 0),
+							(float)config.getDouble((path != null ? path + "." : "") + "yaw", 0),
+							(float)config.getDouble((path != null ? path + "." : "") + "pitch", 0));
 	}
 
 	public void beforeSettings()

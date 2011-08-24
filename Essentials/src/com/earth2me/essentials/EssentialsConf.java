@@ -155,7 +155,7 @@ public class EssentialsConf extends Configuration
 		return getProperty(path) != null;
 	}
 
-	public Location getLocation(String path, Server server)
+	public Location getLocation(String path, Server server) throws Exception
 	{
 		String worldName = getString((path != null ? path + "." : "") + "world");
 		if (worldName == null || worldName.isEmpty())
@@ -165,7 +165,7 @@ public class EssentialsConf extends Configuration
 		World world = server.getWorld(worldName);
 		if (world == null)
 		{
-			return null;
+			throw new Exception(Util.i18n("invalidWorld"));
 		}
 		return new Location(world,
 							getDouble((path != null ? path + "." : "") + "x", 0),
