@@ -192,8 +192,13 @@ public class EssentialsSign
 	{
 		return true;
 	}
+	
+	public boolean onBlockIgnite(final Block block, final IEssentials ess)
+	{
+		return true;
+	}
 
-	public boolean onBlockPush(Block block, IEssentials ess)
+	public boolean onBlockPush(final Block block, final IEssentials ess)
 	{
 		return true;
 	}
