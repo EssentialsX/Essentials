@@ -1,6 +1,5 @@
 package com.earth2me.essentials.protect;
 
-import com.earth2me.essentials.EssentialsBlockListener;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import java.util.HashSet;
@@ -21,11 +20,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageByProjectileEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -47,7 +46,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 	}
 
 	@Override
-	public void onEntityDamage(EntityDamageEvent event)
+	public void onEntityDamage(final EntityDamageEvent event)
 	{
 		if (event.isCancelled())
 		{
@@ -102,7 +101,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 				event.setCancelled(true);
 				return;
 			}
-			
+
 			//Creeper explode prevention
 			if (eAttack instanceof Creeper && prot.getSettingBool(ProtectConfig.prevent_creeper_explosion)
 				&& !(target instanceof Player
@@ -121,7 +120,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 				event.setCancelled(true);
 				return;
 			}
-			
+
 			if (eAttack instanceof Fireball && prot.getSettingBool(ProtectConfig.prevent_fireball_playerdmg)
 				&& !(target instanceof Player
 					 && user.isAuthorized("essentials.protect.damage.fireball")
@@ -130,7 +129,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 				event.setCancelled(true);
 				return;
 			}
-			
+
 			if (eAttack instanceof TNTPrimed && prot.getSettingBool(ProtectConfig.prevent_tnt_playerdmg)
 				&& !(target instanceof Player
 					 && user.isAuthorized("essentials.protect.damage.tnt")
@@ -139,17 +138,20 @@ public class EssentialsProtectEntityListener extends EntityListener
 				event.setCancelled(true);
 				return;
 			}
-		}
 
-		if (event instanceof EntityDamageByProjectileEvent
-			&& target instanceof Player
-			&& prot.getSettingBool(ProtectConfig.disable_projectiles)
-			&& !(user.isAuthorized("essentials.protect.damage.projectiles")
-				 && !user.isAuthorized("essentials.protect.damage.disable")))
-		{
-			event.setCancelled(true);
-			((EntityDamageByProjectileEvent)event).setBounce(true);
-			return;
+			if (edEvent.getDamager() instanceof Projectile
+				&& target instanceof Player
+				&& ((prot.getSettingBool(ProtectConfig.disable_projectiles)
+					 && !(user.isAuthorized("essentials.protect.damage.projectiles")
+						  && !user.isAuthorized("essentials.protect.damage.disable")))
+					|| (((Projectile)edEvent.getDamager()).getShooter() instanceof Player
+						&& prot.getSettingBool(ProtectConfig.disable_pvp)
+						&& (!user.isAuthorized("essentials.protect.pvp")
+							|| !ess.getUser(((Projectile)edEvent.getDamager()).getShooter()).isAuthorized("essentials.protect.pvp")))))
+			{
+				event.setCancelled(true);
+				return;
+			}
 		}
 
 		final DamageCause cause = event.getCause();
@@ -201,7 +203,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 	}
 
 	@Override
-	public void onEntityExplode(EntityExplodeEvent event)
+	public void onEntityExplode(final EntityExplodeEvent event)
 	{
 		if (event.isCancelled())
 		{
@@ -240,7 +242,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 			}
 
 			((CraftServer)ess.getServer()).getHandle().sendPacketNearby(loc.getX(), loc.getY(), loc.getZ(), 64.0D, ((CraftWorld)loc.getWorld()).getHandle().worldProvider.dimension,
-														  new Packet60Explosion(loc.getX(), loc.getY(), loc.getZ(), 3.0f, set));
+																		new Packet60Explosion(loc.getX(), loc.getY(), loc.getZ(), 3.0f, set));
 			event.setCancelled(true);
 			return;
 		}
@@ -279,12 +281,6 @@ public class EssentialsProtectEntityListener extends EntityListener
 				event.setCancelled(true);
 				return;
 			}
-			/*if (EssentialsBlockListener.protectedBlocks.contains(block.getType())
-				&& EssentialsBlockListener.isBlockProtected(block))
-			{
-				event.setCancelled(true);
-				return;
-			}*/
 		}
 	}
 
@@ -340,7 +336,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 	public void onExplosionPrime(ExplosionPrimeEvent event)
 	{
 		if (event.getEntity() instanceof CraftFireball
-				 && prot.getSettingBool(ProtectConfig.prevent_fireball_fire))
+			&& prot.getSettingBool(ProtectConfig.prevent_fireball_fire))
 		{
 			event.setFire(false);
 		}
