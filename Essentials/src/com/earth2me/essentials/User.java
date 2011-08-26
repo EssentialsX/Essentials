@@ -193,7 +193,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		return !ess.getSettings().itemSpawnBlacklist().contains(itemId);
 	}
 
-	public Location getHome()
+	public Location getHome() throws Exception
 	{
 		return getHome(getHomes().get(0));
 	}

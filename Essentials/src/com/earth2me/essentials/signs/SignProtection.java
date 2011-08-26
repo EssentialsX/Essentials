@@ -312,6 +312,14 @@ public class SignProtection extends EssentialsSign
 
 		return state == SignProtectionState.NOSIGN;
 	}
+	
+	@Override
+	public boolean onBlockIgnite(final Block block, final IEssentials ess)
+	{
+		final SignProtectionState state = isBlockProtected(block, null, null, false);
+
+		return state == SignProtectionState.NOSIGN;
+	}
 
 	@Override
 	public boolean onBlockPush(final Block block, final IEssentials ess)

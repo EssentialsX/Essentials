@@ -37,13 +37,17 @@ public class EssentialsEntityListener extends EntityListener
 				User attacker = ess.getUser(eAttack);
 				ItemStack is = attacker.getItemInHand();
 				List<String> commandList = attacker.getPowertool(is);
-				for(String command : commandList)
+				if (commandList != null && !commandList.isEmpty())
 				{
-					if (command != null && !command.isEmpty())
+					for (String command : commandList)
 					{
-						attacker.getServer().dispatchCommand(attacker, command.replaceAll("\\{player\\}", defender.getName()));
-						event.setCancelled(true);
-						return;
+
+						if (command != null && !command.isEmpty())
+						{
+							attacker.getServer().dispatchCommand(attacker, command.replaceAll("\\{player\\}", defender.getName()));
+							event.setCancelled(true);
+							return;
+						}
 					}
 				}
 			}

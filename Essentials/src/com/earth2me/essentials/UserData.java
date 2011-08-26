@@ -106,7 +106,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	}
 
-	public Location getHome(String name)
+	public Location getHome(String name) throws Exception
 	{
 		Location loc = config.getLocation("homes." + name, getServer());
 		if (loc == null)
@@ -128,7 +128,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		return loc;
 	}
 
-	public Location getHome(Location world)
+	public Location getHome(Location world) throws Exception
 	{
 		Location loc;
 		for (String home : getHomes())
@@ -166,9 +166,10 @@ public abstract class UserData extends PlayerExtension implements IConf
 			config.removeProperty("homes." + name);
 			config.save();
 		}
-		else {
+		else
+		{
 			//TODO: move this message to messages file
-			throw new Exception("Home "+name+" doesn't exist");
+			throw new Exception("Home " + name + " doesn't exist");
 		}
 	}
 
@@ -261,7 +262,14 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	private Location _getLastLocation()
 	{
-		return config.getLocation("lastlocation", getServer());
+		try
+		{
+			return config.getLocation("lastlocation", getServer());
+		}
+		catch (Exception e)
+		{
+			return null;
+		}
 	}
 
 	public Location getLastLocation()

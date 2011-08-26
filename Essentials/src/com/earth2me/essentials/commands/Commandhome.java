@@ -25,7 +25,7 @@ public class Commandhome extends EssentialsCommand
 		if (args.length > 0)
 		{
 			nameParts = args[0].split(":");
-			if (nameParts[0].length() == args[0].length())
+			if (nameParts[0].length() == args[0].length() || !user.isAuthorized("essentials.home.others"))
 			{
 				homeName = nameParts[0];
 			}

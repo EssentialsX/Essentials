@@ -46,7 +46,7 @@ public class UserTest extends TestCase
 		OfflinePlayer base1alt = server.createPlayer(base1.getName(), ess);
 		assertEquals(base1alt, ess.getUser(base1alt).getBase());
 	}
-	
+
 	public void testHome()
 	{
 		User user = ess.getUser(base1);
@@ -54,13 +54,21 @@ public class UserTest extends TestCase
 		user.setHome();
 		OfflinePlayer base2 = server.createPlayer(base1.getName(), ess);
 		User user2 = ess.getUser(base2);
-		Location home = user2.getHome(loc);
-		assertEquals(loc.getWorld().getName(), home.getWorld().getName());
-		assertEquals(loc.getX(), home.getX());
-		assertEquals(loc.getY(), home.getY());
-		assertEquals(loc.getZ(), home.getZ());
-		assertEquals(loc.getYaw(), home.getYaw());
-		assertEquals(loc.getPitch(), home.getPitch());
+		try
+		{
+			Location home = user2.getHome(loc);
+			assertEquals(loc.getWorld().getName(), home.getWorld().getName());
+			assertEquals(loc.getX(), home.getX());
+			assertEquals(loc.getY(), home.getY());
+			assertEquals(loc.getZ(), home.getZ());
+			assertEquals(loc.getYaw(), home.getYaw());
+			assertEquals(loc.getPitch(), home.getPitch());
+		}
+		catch (Exception ex)
+		{
+			fail("Exception");
+		}
+
 	}
 
 	public void testMoney()

@@ -45,9 +45,9 @@ public interface IUser
 
 	void setLastLocation();
 
-	Location getHome(String name);
+	Location getHome(String name) throws Exception;
 
-	Location getHome(Location loc);
+	Location getHome(Location loc) throws Exception;
 
 	String getName();
 
