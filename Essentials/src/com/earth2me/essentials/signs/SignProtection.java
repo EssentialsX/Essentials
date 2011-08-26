@@ -41,8 +41,7 @@ public class SignProtection extends EssentialsSign
 			sign.setLine(3, "§1" + username);
 			return true;
 		}
-		//TODO: move to messages
-		player.sendMessage("§4You are not allowed to create sign here.");
+		player.sendMessage(Util.i18n("signProtectInvalidLocation"));
 		return false;
 	}
 
