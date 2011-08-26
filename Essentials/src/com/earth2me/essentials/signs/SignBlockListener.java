@@ -184,9 +184,24 @@ public class SignBlockListener extends BlockListener
 			return;
 		}
 
-		if (protectSignsAndBlocks(event.getBlock(), event.getPlayer()))
+		final Block block = event.getBlock();
+		if (((block.getType() == Material.WALL_SIGN
+			  || block.getType() == Material.SIGN_POST)
+			 && EssentialsSign.isValidSign(new EssentialsSign.BlockSign(block)))
+			|| EssentialsSign.checkIfBlockBreaksSigns(block))
 		{
 			event.setCancelled(true);
+			return;
+		}
+		for (Signs signs : Signs.values())
+		{
+			final EssentialsSign sign = signs.getSign();
+			if (sign.getBlocks().contains(block.getType())
+				&& !sign.onBlockIgnite(block, ess))
+			{
+				event.setCancelled(true);
+				return;
+			}
 		}
 	}
 
