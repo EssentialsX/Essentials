@@ -148,9 +148,10 @@ public class Essentials extends JavaPlugin implements IEssentials
 			LOGGER.log(Level.INFO, Util.i18n("bukkitFormatChanged"));
 		}
 
-		final ServerListener serverListener = new EssentialsPluginListener(this);
+		final EssentialsPluginListener serverListener = new EssentialsPluginListener(this);
 		pm.registerEvent(Type.PLUGIN_ENABLE, serverListener, Priority.Low, this);
 		pm.registerEvent(Type.PLUGIN_DISABLE, serverListener, Priority.Low, this);
+		confList.add(serverListener);
 
 		final EssentialsPlayerListener playerListener = new EssentialsPlayerListener(this);
 		pm.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
