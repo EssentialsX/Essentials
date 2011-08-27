@@ -16,7 +16,6 @@ public class Commandsetspawn extends EssentialsCommand
 	@Override
 	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		charge(user);
 		final String group = args.length > 0 ? getFinalArg(args, 0) : "default";
 		ess.getSpawn().setSpawn(user.getLocation(), group);
 		user.sendMessage(Util.format("spawnSet", group));
