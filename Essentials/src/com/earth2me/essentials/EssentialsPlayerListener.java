@@ -96,7 +96,14 @@ public class EssentialsPlayerListener extends PlayerListener
 			to.setX(from.getX());
 			to.setY(from.getY());
 			to.setZ(from.getZ());
-			event.setTo(to);
+			try
+			{
+				event.setTo(Util.getSafeDestination(to));
+			}
+			catch (Exception ex)
+			{
+				event.setTo(to);
+			}
 			return;
 		}
 
