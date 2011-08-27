@@ -485,4 +485,22 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("update-check", true);
 	}
+
+	@Override
+	public long getAutoAfk()
+	{
+		return config.getLong("auto-afk", 300);
+	}
+
+	@Override
+	public long getAutoAfkKick()
+	{
+		return config.getLong("auto-afk-kick", -1);
+	}
+
+	@Override
+	public boolean getFreezeAfkPlayers()
+	{
+		return config.getBoolean("freeze-afk-players", false);
+	}
 }

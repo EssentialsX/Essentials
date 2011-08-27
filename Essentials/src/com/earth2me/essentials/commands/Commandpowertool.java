@@ -31,7 +31,7 @@ public class Commandpowertool extends EssentialsCommand
 		String command = getFinalArg(args, 0);
 		if (command != null && !command.isEmpty())
 		{
-			if (command.equalsIgnoreCase("list"))
+			if (command.equalsIgnoreCase("l:"))
 			{
 				if (powertools == null || powertools.isEmpty())
 				{
@@ -90,6 +90,7 @@ public class Commandpowertool extends EssentialsCommand
 		}
 		else
 		{
+			powertools.clear();
 			user.sendMessage(Util.format("powerToolRemoveAll", itemName));
 		}
 

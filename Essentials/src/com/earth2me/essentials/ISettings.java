@@ -109,8 +109,6 @@ public interface ISettings extends IConf
 
 	boolean permissionBasedItemSpawn();
 
-	void reloadConfig();
-
 	boolean showNonEssCommandsInHelp();
 
 	boolean spawnIfNoHome();
@@ -136,4 +134,10 @@ public interface ISettings extends IConf
 	boolean addPrefixSuffix();
 
 	boolean isUpdateEnabled();
+
+	long getAutoAfk();
+
+	long getAutoAfkKick();
+
+	boolean getFreezeAfkPlayers();
 }

@@ -24,16 +24,17 @@ public class EssentialsTimer implements Runnable
 		{
 			final User user = ess.getUser(player);
 			onlineUsers.add(user);
-			user.setLastActivity(currentTime);
+			user.setLastOnlineActivity(currentTime);
+			user.checkActivity();
 		}
 
 		final Iterator<User> iterator = onlineUsers.iterator();
 		while (iterator.hasNext())
 		{
 			final User user = iterator.next();
-			if (user.getLastActivity() < currentTime && user.getLastActivity() > user.getLastLogout())
+			if (user.getLastOnlineActivity() < currentTime && user.getLastOnlineActivity() > user.getLastLogout())
 			{
-				user.setLastLogout(user.getLastActivity());
+				user.setLastLogout(user.getLastOnlineActivity());
 				iterator.remove();
 				continue;
 			}
