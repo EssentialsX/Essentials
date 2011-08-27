@@ -423,7 +423,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		if (autoafkkick > 0 && lastActivity + autoafkkick * 1000 < System.currentTimeMillis()
 			&& !isAuthorized("essentials.kick.exempt") && !isAuthorized("essentials.afk.kickexempt"))
 		{
-			final String kickReason = Util.i18n("autoAfkKickReason");
+			final String kickReason = Util.format("autoAfkKickReason", autoafkkick/60.0);
 			kickPlayer(kickReason);
 
 

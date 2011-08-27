@@ -21,6 +21,11 @@ public class Commandnick extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
+		
+		if (!ess.getSettings().changeDisplayName()) {
+			user.sendMessage(Util.i18n("nickDisplayName"));
+			return;
+		}
 
 		if (args.length > 1)
 		{
@@ -78,6 +83,11 @@ public class Commandnick extends EssentialsCommand
 		if (args.length < 2)
 		{
 			throw new NotEnoughArgumentsException();
+		}
+		
+		if (!ess.getSettings().changeDisplayName()) {
+			sender.sendMessage(Util.i18n("nickDisplayName"));
+			return;
 		}
 		
 		setOthersNickname(server, sender, args);
