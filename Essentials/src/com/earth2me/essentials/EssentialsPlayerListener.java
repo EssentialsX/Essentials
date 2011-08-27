@@ -89,11 +89,17 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 		final User user = ess.getUser(event.getPlayer());
 
-		if (user.isAfk() && ess.getSettings().getFreezeAfkPlayers()) {
-			event.setCancelled(true);
+		if (user.isAfk() && ess.getSettings().getFreezeAfkPlayers())
+		{
+			final Location from = event.getFrom();
+			final Location to = event.getTo().clone();
+			to.setX(from.getX());
+			to.setY(from.getY());
+			to.setZ(from.getZ());
+			event.setTo(to);
 			return;
 		}
-		
+
 		user.updateActivity();
 
 		if (!ess.getSettings().getNetherPortalsEnabled())
@@ -478,6 +484,9 @@ public class EssentialsPlayerListener extends PlayerListener
 				}
 			}
 		}
-		user.updateActivity();
+		if (!cmd.equalsIgnoreCase("afk"))
+		{
+			user.updateActivity();
+		}
 	}
 }

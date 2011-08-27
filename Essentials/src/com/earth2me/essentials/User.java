@@ -17,7 +17,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	private transient User teleportRequester;
 	private transient boolean teleportRequestHere;
 	private transient final Teleport teleport;
-	private transient long lastOnlineActivity;
+	private transient long lastOnlineActivity = System.currentTimeMillis();;
 	private transient long lastActivity;
 	private boolean hidden = false;
 	private transient boolean godStateBeforeAfk;
@@ -437,7 +437,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			}
 		}
 		final long autoafk = ess.getSettings().getAutoAfk();
-		if (autoafk > 0 && lastActivity + autoafk * 1000 < System.currentTimeMillis())
+		if (!isAfk() && autoafk > 0 && lastActivity + autoafk * 1000 < System.currentTimeMillis())
 		{
 			setAfk(true);
 			ess.broadcastMessage(getName(), Util.format("userIsAway", getDisplayName()));

@@ -250,7 +250,7 @@ auto-afk-kick: -1
 # Other players or monsters can't push him out of afk mode then.
 # This will also enable temporary god mode for the afk player.
 # The player has to use the command /afk to leave the afk mode.
-freeze-afk-player: false
+freeze-afk-players: false
 
 ############################################################
 # +------------------------------------------------------+ #
