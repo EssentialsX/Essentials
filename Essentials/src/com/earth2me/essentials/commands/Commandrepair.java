@@ -103,37 +103,33 @@ public class Commandrepair extends EssentialsCommand
 		{
 			final String itemName = item.getType().toString().toLowerCase();
 			final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), ess);
-			boolean canBeRepaired = true;
 			try
 			{
 				charge.isAffordableFor(user);
 			}
 			catch (ChargeException ex)
 			{
-				canBeRepaired = false;
+				user.sendMessage(ex.getMessage());
+				continue;
 			}
 
-			if (canBeRepaired)
+			try
 			{
-				try
-				{
-					repairItem(item);
-				}
-				catch (Exception e)
-				{
-					continue;
-				}
-				try
-				{
-					charge.charge(user);
-				}
-				catch (ChargeException ex)
-				{
-					user.sendMessage(ex.getMessage());
-				}
-				repaired.add(itemName.replace('_', ' '));
+				repairItem(item);
 			}
-
+			catch (Exception e)
+			{
+				continue;
+			}
+			try
+			{
+				charge.charge(user);
+			}
+			catch (ChargeException ex)
+			{
+				user.sendMessage(ex.getMessage());
+			}
+			repaired.add(itemName.replace('_', ' '));
 		}
 	}
 }
