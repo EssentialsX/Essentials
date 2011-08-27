@@ -17,8 +17,8 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	private transient User teleportRequester;
 	private transient boolean teleportRequestHere;
 	private transient final Teleport teleport;
-	private transient long lastOnlineActivity = System.currentTimeMillis();;
-	private transient long lastActivity;
+	private transient long lastOnlineActivity ;
+	private transient long lastActivity = System.currentTimeMillis();
 	private boolean hidden = false;
 	private transient boolean godStateBeforeAfk;
 
