@@ -3,7 +3,6 @@ package com.earth2me.essentials;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -130,7 +129,7 @@ public final class InventoryWorkaround
 						// More than a single stack!
 						if (item.getAmount() > item.getType().getMaxStackSize())
 						{
-							cinventory.setItem(firstFree, new CraftItemStack(item.getTypeId(), item.getType().getMaxStackSize(), item.getDurability()));
+							cinventory.setItem(firstFree, new ItemStack(item.getTypeId(), item.getType().getMaxStackSize(), item.getDurability()));
 							item.setAmount(item.getAmount() - item.getType().getMaxStackSize());
 						}
 						else

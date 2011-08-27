@@ -4,7 +4,6 @@ import com.earth2me.essentials.IEssentials;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
-import org.bukkit.craftbukkit.block.CraftSign;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerListener;
@@ -39,7 +38,7 @@ public class SignPlayerListener extends PlayerListener
 			{
 				return;
 			}
-			final Sign csign = new CraftSign(block);
+			final Sign csign = (Sign)block.getState();
 			for (Signs signs : Signs.values())
 			{
 				final EssentialsSign sign = signs.getSign();

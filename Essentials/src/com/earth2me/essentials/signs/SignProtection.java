@@ -15,7 +15,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
-import org.bukkit.craftbukkit.block.CraftSign;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -204,7 +203,7 @@ public class SignProtection extends EssentialsSign
 		{
 			if (b.getType() == Material.SIGN_POST || b.getType() == Material.WALL_SIGN)
 			{
-				final Sign sign = new CraftSign(b);
+				final Sign sign = (Sign)b.getState();
 				if (sign.getLine(0).equalsIgnoreCase("§1[Protection]"))
 				{
 					return true;
@@ -218,7 +217,7 @@ public class SignProtection extends EssentialsSign
 				{
 					if (a.getType() == Material.SIGN_POST || a.getType() == Material.WALL_SIGN)
 					{
-						final Sign sign = new CraftSign(a);
+						final Sign sign = (Sign)a.getState();
 						if (sign.getLine(0).equalsIgnoreCase("§1[Protection]"))
 						{
 							return true;

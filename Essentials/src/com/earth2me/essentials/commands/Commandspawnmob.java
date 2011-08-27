@@ -8,16 +8,13 @@ import com.earth2me.essentials.Mob.MobException;
 import com.earth2me.essentials.TargetBlock;
 import com.earth2me.essentials.Util;
 import java.util.Random;
-import net.minecraft.server.EntityWolf;
-import net.minecraft.server.PathEntity;
 import org.bukkit.DyeColor;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.entity.CraftCreeper;
-import org.bukkit.craftbukkit.entity.CraftSheep;
-import org.bukkit.craftbukkit.entity.CraftSlime;
-import org.bukkit.craftbukkit.entity.CraftWolf;
+import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Sheep;
+import org.bukkit.entity.Slime;
+import org.bukkit.entity.Wolf;
 
 
 public class Commandspawnmob extends EssentialsCommand
@@ -190,7 +187,7 @@ public class Commandspawnmob extends EssentialsCommand
 		{
 			try
 			{
-				((CraftSlime)spawned).setSize(Integer.parseInt(data));
+				((Slime)spawned).setSize(Integer.parseInt(data));
 			}
 			catch (Exception e)
 			{
@@ -204,11 +201,11 @@ public class Commandspawnmob extends EssentialsCommand
 				if (data.equalsIgnoreCase("random"))
 				{
 					Random rand = new Random();
-					((CraftSheep)spawned).setColor(DyeColor.values()[rand.nextInt(DyeColor.values().length)]);
+					((Sheep)spawned).setColor(DyeColor.values()[rand.nextInt(DyeColor.values().length)]);
 				}
 				else
 				{
-					((CraftSheep)spawned).setColor(DyeColor.valueOf(data.toUpperCase()));
+					((Sheep)spawned).setColor(DyeColor.valueOf(data.toUpperCase()));
 				}
 			}
 			catch (Exception e)
@@ -218,21 +215,18 @@ public class Commandspawnmob extends EssentialsCommand
 		}
 		if ("Wolf".equalsIgnoreCase(type) && data.equalsIgnoreCase("tamed"))
 		{
-			EntityWolf wolf = ((CraftWolf)spawned).getHandle();
+			Wolf wolf = ((Wolf)spawned);
 			wolf.setTamed(true);
-			wolf.setPathEntity((PathEntity)null);
+			wolf.setOwner(user);
 			wolf.setSitting(true);
-			wolf.health = 20;
-			wolf.setOwnerName(user.getName());
-			wolf.world.a(wolf, (byte)7);
 		}
 		if ("Wolf".equalsIgnoreCase(type) && data.equalsIgnoreCase("angry"))
 		{
-			((CraftWolf)spawned).setAngry(true);
+			((Wolf)spawned).setAngry(true);
 		}
 		if ("Creeper".equalsIgnoreCase(type) && data.equalsIgnoreCase("powered"))
 		{
-			((CraftCreeper)spawned).setPowered(true);
+			((Creeper)spawned).setPowered(true);
 		}
 	}
 }
