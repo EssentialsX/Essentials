@@ -61,7 +61,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 		}
 
 		final Block below = blockPlaced.getRelative(BlockFace.DOWN);
-		if (below.getType() == Material.RAILS
+		if ((below.getType() == Material.RAILS || below.getType() == Material.POWERED_RAIL || below.getType() == Material.DETECTOR_RAIL)
 			&& prot.getSettingBool(ProtectConfig.prevent_block_on_rail)
 			&& prot.getStorage().isProtected(below, user.getName()))
 		{
@@ -70,7 +70,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 		}
 
 		final List<Block> protect = new ArrayList<Block>();
-		if (blockPlaced.getType() == Material.RAILS
+		if ((blockPlaced.getType() == Material.RAILS || blockPlaced.getType() == Material.POWERED_RAIL || blockPlaced.getType() == Material.DETECTOR_RAIL)
 			&& prot.getSettingBool(ProtectConfig.protect_rails)
 			&& user.isAuthorized("essentials.protect"))
 		{
@@ -103,8 +103,8 @@ public class EssentialsProtectBlockListener extends BlockListener
 		{
 			return;
 		}
-		Block block = event.getBlock();
-		if (block.getType() == Material.RAILS
+		final Block block = event.getBlock();
+		if ((block.getType() == Material.RAILS || block.getType() == Material.POWERED_RAIL || block.getType() == Material.DETECTOR_RAIL)
 			&& prot.getSettingBool(ProtectConfig.protect_rails))
 		{
 			event.setCancelled(true);
@@ -155,7 +155,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 			return;
 		}
 		final Block toBlock = event.getToBlock();
-		if (toBlock.getType() == Material.RAILS
+		if ((toBlock.getType() == Material.RAILS || toBlock.getType() == Material.POWERED_RAIL || toBlock.getType() == Material.DETECTOR_RAIL)
 			&& prot.getSettingBool(ProtectConfig.protect_rails))
 		{
 			event.setCancelled(true);
@@ -196,7 +196,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 			return;
 		}
 		final Block block = event.getBlock();
-		if (block.getType() == Material.RAILS && prot.getSettingBool(ProtectConfig.protect_rails))
+		if ((block.getType() == Material.RAILS || block.getType() == Material.POWERED_RAIL || block.getType() == Material.DETECTOR_RAIL) && prot.getSettingBool(ProtectConfig.protect_rails))
 		{
 			event.setCancelled(true);
 			return;
@@ -257,10 +257,10 @@ public class EssentialsProtectBlockListener extends BlockListener
 
 		if (user.isAuthorized("essentials.protect.admin"))
 		{
-			if (type == Material.WALL_SIGN || type == Material.SIGN_POST || type == Material.RAILS)
+			if (type == Material.WALL_SIGN || type == Material.SIGN_POST || type == Material.RAILS || type == Material.POWERED_RAIL || type == Material.DETECTOR_RAIL)
 			{
 				storage.unprotectBlock(block);
-				if (type == Material.RAILS || type == Material.SIGN_POST)
+				if (type == Material.RAILS || type == Material.POWERED_RAIL || type == Material.DETECTOR_RAIL || type == Material.SIGN_POST)
 				{
 					final Block below = block.getRelative(BlockFace.DOWN);
 					storage.unprotectBlock(below);
@@ -293,10 +293,10 @@ public class EssentialsProtectBlockListener extends BlockListener
 			}
 			else
 			{
-				if (type == Material.WALL_SIGN || type == Material.SIGN_POST || type == Material.RAILS)
+				if (type == Material.WALL_SIGN || type == Material.SIGN_POST || type == Material.RAILS || type == Material.POWERED_RAIL || type == Material.DETECTOR_RAIL)
 				{
 					storage.unprotectBlock(block);
-					if (type == Material.RAILS || type == Material.SIGN_POST)
+					if (type == Material.RAILS || type == Material.POWERED_RAIL || type == Material.DETECTOR_RAIL || type == Material.SIGN_POST)
 					{
 						final Block below = block.getRelative(BlockFace.DOWN);
 						storage.unprotectBlock(below);
@@ -337,7 +337,11 @@ public class EssentialsProtectBlockListener extends BlockListener
 				return;
 			}
 			if ((block.getRelative(BlockFace.UP).getType() == Material.RAILS
-				 || block.getType() == Material.RAILS)
+				 || block.getType() == Material.RAILS
+				 || block.getRelative(BlockFace.UP).getType() == Material.POWERED_RAIL
+				 || block.getType() == Material.POWERED_RAIL
+				 || block.getRelative(BlockFace.UP).getType() == Material.DETECTOR_RAIL
+				 || block.getType() == Material.DETECTOR_RAIL)
 				&& prot.getSettingBool(ProtectConfig.protect_rails))
 			{
 				event.setCancelled(true);
@@ -385,7 +389,11 @@ public class EssentialsProtectBlockListener extends BlockListener
 			return;
 		}
 		if ((block.getRelative(BlockFace.UP).getType() == Material.RAILS
-			 || block.getType() == Material.RAILS)
+			 || block.getType() == Material.RAILS
+			 || block.getRelative(BlockFace.UP).getType() == Material.POWERED_RAIL
+			 || block.getType() == Material.POWERED_RAIL
+			 || block.getRelative(BlockFace.UP).getType() == Material.DETECTOR_RAIL
+			 || block.getType() == Material.DETECTOR_RAIL)
 			&& prot.getSettingBool(ProtectConfig.protect_rails))
 		{
 			event.setCancelled(true);
