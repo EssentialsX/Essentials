@@ -21,7 +21,6 @@ public class Commandtpall extends EssentialsCommand
 		{
 			if (sender instanceof Player)
 			{
-				charge(sender);
 				teleportAllPlayers(server, sender, ess.getUser(sender));
 				return;
 			}
@@ -29,7 +28,6 @@ public class Commandtpall extends EssentialsCommand
 		}
 
 		User p = getPlayer(server, args, 0);
-		charge(sender);
 		teleportAllPlayers(server, sender, p);
 	}
 

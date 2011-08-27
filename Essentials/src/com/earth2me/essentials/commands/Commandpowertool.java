@@ -23,8 +23,7 @@ public class Commandpowertool extends EssentialsCommand
 		List<String> powertools = user.getPowertool(is);
 		if (is == null || is.getType() == Material.AIR)
 		{
-			user.sendMessage(Util.i18n("powerToolAir"));
-			return;
+			throw new Exception(Util.i18n("powerToolAir"));
 		}
 
 		String itemName = is.getType().toString().toLowerCase().replaceAll("_", " ");
@@ -35,7 +34,7 @@ public class Commandpowertool extends EssentialsCommand
 			{
 				if (powertools == null || powertools.isEmpty())
 				{
-					user.sendMessage(Util.format("powerToolListEmpty", itemName));
+					throw new Exception(Util.format("powerToolListEmpty", itemName));
 				}
 				else
 				{
@@ -50,8 +49,7 @@ public class Commandpowertool extends EssentialsCommand
 					command = command.substring(2);
 					if (!powertools.contains(command))
 					{
-						user.sendMessage(Util.format("powerToolNoSuchCommandAssigned", command, itemName));
-						return;
+						throw new Exception(Util.format("powerToolNoSuchCommandAssigned", command, itemName));
 					}
 
 					powertools.remove(command);
@@ -70,8 +68,7 @@ public class Commandpowertool extends EssentialsCommand
 					command = command.substring(2);
 					if(powertools.contains(command))
 					{
-						user.sendMessage(Util.format("powerToolAlreadySet", command, itemName));
-						return;
+						throw new Exception(Util.format("powerToolAlreadySet", command, itemName));
 					}
 				}
 				else if (powertools != null && !powertools.isEmpty())
@@ -94,7 +91,6 @@ public class Commandpowertool extends EssentialsCommand
 			user.sendMessage(Util.format("powerToolRemoveAll", itemName));
 		}
 
-		charge(user);
 		user.setPowertool(is, powertools);
 	}
 }

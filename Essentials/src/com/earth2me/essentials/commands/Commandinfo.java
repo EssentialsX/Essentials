@@ -68,9 +68,8 @@ public class Commandinfo extends EssentialsCommand
 		}
 		else
 		{
-			sender.sendMessage(Util.i18n("infoFileDoesNotExist"));
 			file.createNewFile();
-			return;
+			throw new Exception(Util.i18n("infoFileDoesNotExist"));
 		}
 
 		if (bookmarks.isEmpty())
@@ -88,7 +87,6 @@ public class Commandinfo extends EssentialsCommand
 			int start = (page - 1) * 9;
 			int pages = lines.size() / 9 + (lines.size() % 9 > 0 ? 1 : 0);
 
-			charge(sender);
 			sender.sendMessage(Util.format("infoPages", page, pages ));
 			for (int i = start; i < lines.size() && i < start + 9; i++)
 			{
@@ -140,7 +138,6 @@ public class Commandinfo extends EssentialsCommand
 				}
 				int pages = end / 9 + (end % 9 > 0 ? 1 : 0);
 
-				charge(sender);
 				sender.sendMessage(Util.format("infoPages", page, pages ));
 				for (int i = start; i < end && i < start + 9; i++)
 				{
@@ -182,7 +179,6 @@ public class Commandinfo extends EssentialsCommand
 		int page = chapterpage + 1;
 		int pages = (chapterend - chapterstart) / 9 + ((chapterend - chapterstart) % 9 > 0 ? 1 : 0);
 
-		charge(sender);
 		sender.sendMessage(Util.format("infoChapterPages", pageStr, page , pages));
 		for (int i = start; i < chapterend && i < start + 9; i++)
 		{

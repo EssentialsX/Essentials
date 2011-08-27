@@ -31,11 +31,9 @@ public class Commandinvsee extends EssentialsCommand
 		{
 			invUser.getInventory().setContents(user.getSavedInventory());
 			user.setSavedInventory(null);
-			user.sendMessage(Util.i18n("invRestored"));
-			return;
+			throw new Exception(Util.i18n("invRestored"));
 		}
 
-		charge(user);
 		if (user.getSavedInventory() == null)
 		{
 			user.setSavedInventory(user.getInventory().getContents());

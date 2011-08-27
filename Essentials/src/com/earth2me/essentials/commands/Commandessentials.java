@@ -102,7 +102,6 @@ public class Commandessentials extends EssentialsCommand
 			return;
 		}
 		ess.reload();
-		charge(sender);
 		sender.sendMessage(Util.format("essentialsReload", ess.getDescription().getVersion()));
 	}
 

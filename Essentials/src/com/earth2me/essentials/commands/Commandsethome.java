@@ -66,7 +66,6 @@ public class Commandsethome extends EssentialsCommand
 		{
 			user.setHome();
 		}
-		charge(user);
 		user.sendMessage(Util.i18n("homeSet"));
 
 	}

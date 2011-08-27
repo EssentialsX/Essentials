@@ -32,11 +32,9 @@ public class Commandr extends EssentialsCommand
 
 		if (target == null)
 		{
-			sender.sendMessage(Util.i18n("foreverAlone"));
-			return;
+			throw new Exception(Util.i18n("foreverAlone"));
 		}
 
-		charge(sender);
 		sender.sendMessage(Util.format("msgFormat", Util.i18n("me"), targetName, message));
 		if (target instanceof Player)
 		{

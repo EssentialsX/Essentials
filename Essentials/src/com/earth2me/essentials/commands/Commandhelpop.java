@@ -22,7 +22,6 @@ public class Commandhelpop extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		charge(user);
 		final String message = Util.format("helpOp", user.getDisplayName(), getFinalArg(args, 0));
 		logger.log(Level.INFO, message);
 		for (Player p : server.getOnlinePlayers())

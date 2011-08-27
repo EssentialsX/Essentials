@@ -41,12 +41,11 @@ public class Commandbigtree extends EssentialsCommand
 		final boolean success = user.getWorld().generateTree(safeLocation, (TreeType)tree);
 		if (success)
 		{
-			charge(user);
 			user.sendMessage(Util.i18n("bigTreeSuccess"));
 		}
 		else
 		{
-			user.sendMessage(Util.i18n("bigTreeFailure"));
+			throw new Exception(Util.i18n("bigTreeFailure"));
 		}
 	}
 }

@@ -33,28 +33,12 @@ public class Commandrepair extends EssentialsCommand
 			final String itemName = item.getType().toString().toLowerCase();
 			final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), ess);
 
-			try
-			{
-				charge.isAffordableFor(user);
-			}
-			catch (Exception ex)
-			{
-				user.sendMessage(ex.getMessage());
-				return;
-			}
+			charge.isAffordableFor(user);
 
-			try
-			{
-				repairItem(item);
-			}
-			catch (Exception e)
-			{
-				user.sendMessage(e.getMessage());
-				return;
-			}
+			repairItem(item);
+
 			charge.charge(user);
 
-			charge(user);
 			user.sendMessage(Util.format("repair", itemName.replace('_', ' ')));
 		}
 		else if (args[0].equalsIgnoreCase("all"))
@@ -66,11 +50,10 @@ public class Commandrepair extends EssentialsCommand
 
 			if (repaired.isEmpty())
 			{
-				user.sendMessage(Util.format("repairNone"));
+				throw new Exception(Util.format("repairNone"));
 			}
 			else
 			{
-				charge(user);
 				user.sendMessage(Util.format("repair", Util.joinList(repaired)));
 			}
 

@@ -93,8 +93,7 @@ public class Commandunlimited extends EssentialsCommand
 				&& !((stack.getType() == Material.WATER_BUCKET || stack.getType() == Material.LAVA_BUCKET)
 					 && user.isAuthorized("essentials.unlimited.item-bucket"))))
 		{
-			user.sendMessage(Util.format("unlimitedItemPermission", itemname));
-			return false;
+			throw new Exception(Util.format("unlimitedItemPermission", itemname));
 		}
 
 		String message = "disableUnlimited";
@@ -103,7 +102,6 @@ public class Commandunlimited extends EssentialsCommand
 		{
 			message = "enableUnlimited";
 			enableUnlimited = true;
-			charge(user);
 			if (!InventoryWorkaround.containsItem(target.getInventory(), true, stack))
 			{
 				target.getInventory().addItem(stack);

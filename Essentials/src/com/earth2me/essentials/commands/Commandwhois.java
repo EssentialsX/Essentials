@@ -35,7 +35,6 @@ public class Commandwhois extends EssentialsCommand
 			showhidden = true;
 		}
 		String whois = args[0].toLowerCase();
-		charge(sender);
 		int prefixLength = ChatColor.stripColor(ess.getSettings().getNicknamePrefix()).length();
 		for (Player p : server.getOnlinePlayers())
 		{

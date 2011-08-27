@@ -25,7 +25,6 @@ public class Commandtpa extends EssentialsCommand
 		{
 			throw new Exception(Util.format("teleportDisabled", p.getDisplayName()));
 		}
-		charge(user);
 		if (!p.isIgnoredPlayer(user.getName()))
 		{
 			p.requestTeleport(user, false);

@@ -33,7 +33,6 @@ public class Commandtpohere extends EssentialsCommand
 		// Verify permission
 		if (!p.isHidden() || user.isAuthorized("essentials.teleport.hidden"))
 		{
-			charge(user);
 			p.getTeleport().now(user, false);
 			user.sendMessage(Util.i18n("teleporting"));
 		}

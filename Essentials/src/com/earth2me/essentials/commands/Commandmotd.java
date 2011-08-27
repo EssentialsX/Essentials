@@ -15,7 +15,6 @@ public class Commandmotd extends EssentialsCommand
 	@Override
 	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
-		charge(sender);
 		for (String m : ess.getMotd(sender, Util.i18n("noMotd")))
 		{
 			sender.sendMessage(m);

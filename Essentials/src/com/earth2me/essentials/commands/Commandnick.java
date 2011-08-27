@@ -23,16 +23,14 @@ public class Commandnick extends EssentialsCommand
 		}
 		
 		if (!ess.getSettings().changeDisplayName()) {
-			user.sendMessage(Util.i18n("nickDisplayName"));
-			return;
+			throw new Exception(Util.i18n("nickDisplayName"));
 		}
 
 		if (args.length > 1)
 		{
 			if (!user.isAuthorized("essentials.nick.others"))
 			{
-				user.sendMessage(Util.i18n("nickOthersPermission"));
-				return;
+				throw new Exception(Util.i18n("nickOthersPermission"));
 			}
 
 			setOthersNickname(server, user, args);
@@ -51,8 +49,7 @@ public class Commandnick extends EssentialsCommand
 
 		if (nick.matches("[^a-zA-Z_0-9]"))
 		{
-			user.sendMessage(Util.i18n("nickNamesAlpha"));
-			return;
+			throw new Exception(Util.i18n("nickNamesAlpha"));
 		}
 
 		for (Player p : server.getOnlinePlayers())
@@ -66,12 +63,10 @@ public class Commandnick extends EssentialsCommand
 			String nk = nick.toLowerCase();
 			if (nk.equals(dn) || nk.equals(n))
 			{
-				user.sendMessage(Util.i18n("nickInUse"));
-				return;
+				throw new Exception(Util.i18n("nickInUse"));
 			}
 		}
 
-		charge(user);
 		user.setDisplayName(ess.getSettings().getNicknamePrefix() + nick);
 		user.setNickname(nick);
 		user.sendMessage(Util.format("nickSet", user.getDisplayName() + "§7."));

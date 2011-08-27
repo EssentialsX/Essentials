@@ -17,8 +17,7 @@ public class Commandme extends EssentialsCommand
 	{
 		if (user.isMuted())
 		{
-			user.sendMessage(Util.i18n("voiceSilenced"));
-			return;
+			throw new Exception(Util.i18n("voiceSilenced"));
 		}
 
 		if (args.length < 1)
@@ -31,7 +30,6 @@ public class Commandme extends EssentialsCommand
 			message.append(args[i]);
 			message.append(' ');
 		}
-		charge(user);
 		ess.broadcastMessage(user.getName(), "* " + user.getDisplayName() + " " + message);
 	}
 }

@@ -21,7 +21,6 @@ public class Commandsetwarp extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		charge(user);
 		Location loc = user.getLocation();
 		ess.getWarps().setWarp(args[0], loc);
 		user.sendMessage(Util.format("warpSet", args[0]));

@@ -31,7 +31,6 @@ public class Commandspawner extends EssentialsCommand
 			throw new Exception(Util.i18n("mobSpawnTarget"));
 		}
 
-		charge(user);
 		try
 		{
 			String name = args[0];

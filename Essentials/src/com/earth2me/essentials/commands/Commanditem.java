@@ -31,8 +31,7 @@ public class Commanditem extends EssentialsCommand
 			: (!user.isAuthorized("essentials.itemspawn.exempt")
 			   && !user.canSpawnItem(stack.getTypeId())))
 		{
-			user.sendMessage(Util.format("cantSpawnItem", itemname));
-			return;
+			throw new Exception(Util.format("cantSpawnItem", itemname));
 		}
 
 		if (args.length > 1 && Integer.parseInt(args[1]) > 0)
@@ -42,12 +41,10 @@ public class Commanditem extends EssentialsCommand
 
 		if (stack.getType() == Material.AIR)
 		{
-			user.sendMessage(Util.format("cantSpawnItem", "Air"));
-			return;
+			throw new Exception(Util.format("cantSpawnItem", "Air"));
 		}
 
 		String itemName = stack.getType().toString().toLowerCase().replace('_', ' ');
-		charge(user);
 		user.sendMessage(Util.format("itemSpawn", stack.getAmount(), itemName));
 		user.getInventory().addItem(stack);
 		user.updateInventory();
