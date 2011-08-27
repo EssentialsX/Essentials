@@ -1,6 +1,8 @@
 package com.earth2me.essentials;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,12 +21,12 @@ import org.bukkit.util.config.Configuration;
 
 public class EssentialsConf extends Configuration
 {
-	private static final Logger logger = Logger.getLogger("Minecraft");
-	private File configFile;
-	private String templateName = null;
-	private Class<?> resourceClass = EssentialsConf.class;
+	private static final Logger LOGGER = Logger.getLogger("Minecraft");
+	private transient File configFile;
+	private transient String templateName = null;
+	private transient Class<?> resourceClass = EssentialsConf.class;
 
-	public EssentialsConf(File configFile)
+	public EssentialsConf(final File configFile)
 	{
 		super(configFile);
 		this.configFile = configFile;
@@ -42,38 +44,84 @@ public class EssentialsConf extends Configuration
 		{
 			if (!configFile.getParentFile().mkdirs())
 			{
-				logger.log(Level.SEVERE, Util.format("failedToCreateConfig", configFile.toString()));
+				LOGGER.log(Level.SEVERE, Util.format("failedToCreateConfig", configFile.toString()));
 			}
 		}
+		if (configFile.exists() && configFile.length() == 0 && !configFile.delete())
+		{
+			LOGGER.log(Level.SEVERE, "Could not delete file " + configFile.toString());
+		}
+
+		// This will delete files where the first character is 0. In most cases they are broken.
+		if (configFile.exists() && configFile.length() != 0)
+		{
+			try
+			{
+				final InputStream input = new FileInputStream(configFile);
+				try
+				{
+					if (input.read() == 0)
+					{
+						input.close();
+						configFile.delete();
+					}
+				}
+				catch (IOException ex)
+				{
+					LOGGER.log(Level.SEVERE, null, ex);
+				}
+				finally
+				{
+					try
+					{
+						input.close();
+					}
+					catch (IOException ex)
+					{
+						LOGGER.log(Level.SEVERE, null, ex);
+					}
+				}
+			}
+			catch (FileNotFoundException ex)
+			{
+				LOGGER.log(Level.SEVERE, null, ex);
+			}
+		}
+
 		if (!configFile.exists())
 		{
 			if (templateName != null)
 			{
-				logger.log(Level.INFO, Util.format("creatingConfigFromTemplate", configFile.toString()));
+				LOGGER.log(Level.INFO, Util.format("creatingConfigFromTemplate", configFile.toString()));
 				createFromTemplate();
 			}
 			else
 			{
 				try
 				{
-					logger.log(Level.INFO, Util.format("creatingEmptyConfig", configFile.toString()));
+					LOGGER.log(Level.INFO, Util.format("creatingEmptyConfig", configFile.toString()));
 					if (!configFile.createNewFile())
 					{
-						logger.log(Level.SEVERE, Util.format("failedToCreateConfig", configFile.toString()));
+						LOGGER.log(Level.SEVERE, Util.format("failedToCreateConfig", configFile.toString()));
 					}
 				}
 				catch (IOException ex)
 				{
-					logger.log(Level.SEVERE, Util.format("failedToCreateConfig", configFile.toString()), ex);
+					LOGGER.log(Level.SEVERE, Util.format("failedToCreateConfig", configFile.toString()), ex);
 				}
 			}
 		}
-		try {
+
+		try
+		{
 			super.load();
-		} catch(RuntimeException e) {
-			logger.log(Level.INFO, "File: " + configFile.toString());
+		}
+		catch (RuntimeException e)
+		{
+			LOGGER.log(Level.INFO, "File: " + configFile.toString());
 			throw e;
 		}
+
 		if (this.root == null)
 		{
 			this.root = new HashMap<String, Object>();
@@ -89,7 +137,7 @@ public class EssentialsConf extends Configuration
 			istr = resourceClass.getResourceAsStream(templateName);
 			if (istr == null)
 			{
-				logger.log(Level.SEVERE, Util.format("couldNotFindTemplate", templateName));
+				LOGGER.log(Level.SEVERE, Util.format("couldNotFindTemplate", templateName));
 				return;
 			}
 			ostr = new FileOutputStream(configFile);
@@ -104,7 +152,7 @@ public class EssentialsConf extends Configuration
 		}
 		catch (IOException ex)
 		{
-			logger.log(Level.SEVERE, Util.format("failedToWriteConfig", configFile.toString()), ex);
+			LOGGER.log(Level.SEVERE, Util.format("failedToWriteConfig", configFile.toString()), ex);
 			return;
 		}
 		finally
@@ -129,12 +177,12 @@ public class EssentialsConf extends Configuration
 			}
 			catch (IOException ex)
 			{
-				logger.log(Level.SEVERE, Util.format("failedToCloseConfig", configFile.toString()), ex);
+				LOGGER.log(Level.SEVERE, Util.format("failedToCloseConfig", configFile.toString()), ex);
 			}
 		}
 	}
 
-	public void setTemplateName(String templateName)
+	public void setTemplateName(final String templateName)
 	{
 		this.templateName = templateName;
 	}
@@ -144,48 +192,48 @@ public class EssentialsConf extends Configuration
 		return configFile;
 	}
 
-	public void setTemplateName(String templateName, Class<?> resClass)
+	public void setTemplateName(final String templateName, final Class<?> resClass)
 	{
 		this.templateName = templateName;
 		this.resourceClass = resClass;
 	}
 
-	public boolean hasProperty(String path)
+	public boolean hasProperty(final String path)
 	{
 		return getProperty(path) != null;
 	}
 
-	public Location getLocation(String path, Server server) throws Exception
+	public Location getLocation(final String path, final Server server) throws Exception
 	{
-		String worldName = getString((path != null ? path + "." : "") + "world");
+		final String worldName = getString((path == null ? "" : path + ".") + "world");
 		if (worldName == null || worldName.isEmpty())
 		{
 			return null;
 		}
-		World world = server.getWorld(worldName);
+		final World world = server.getWorld(worldName);
 		if (world == null)
 		{
 			throw new Exception(Util.i18n("invalidWorld"));
 		}
 		return new Location(world,
-							getDouble((path != null ? path + "." : "") + "x", 0),
-							getDouble((path != null ? path + "." : "") + "y", 0),
-							getDouble((path != null ? path + "." : "") + "z", 0),
-							(float)getDouble((path != null ? path + "." : "") + "yaw", 0),
-							(float)getDouble((path != null ? path + "." : "") + "pitch", 0));
+							getDouble((path == null ? "" : path + ".") + "x", 0),
+							getDouble((path == null ? "" : path + ".") + "y", 0),
+							getDouble((path == null ? "" : path + ".") + "z", 0),
+							(float)getDouble((path == null ? "" : path + ".") + "yaw", 0),
+							(float)getDouble((path == null ? "" : path + ".") + "pitch", 0));
 	}
 
-	public void setProperty(String path, Location loc)
+	public void setProperty(final String path, final Location loc)
 	{
-		setProperty((path != null ? path + "." : "") + "world", loc.getWorld().getName());
-		setProperty((path != null ? path + "." : "") + "x", loc.getX());
-		setProperty((path != null ? path + "." : "") + "y", loc.getY());
-		setProperty((path != null ? path + "." : "") + "z", loc.getZ());
-		setProperty((path != null ? path + "." : "") + "yaw", loc.getYaw());
-		setProperty((path != null ? path + "." : "") + "pitch", loc.getPitch());
+		setProperty((path == null ? "" : path + ".") + "world", loc.getWorld().getName());
+		setProperty((path == null ? "" : path + ".") + "x", loc.getX());
+		setProperty((path == null ? "" : path + ".") + "y", loc.getY());
+		setProperty((path == null ? "" : path + ".") + "z", loc.getZ());
+		setProperty((path == null ? "" : path + ".") + "yaw", loc.getYaw());
+		setProperty((path == null ? "" : path + ".") + "pitch", loc.getPitch());
 	}
 
-	public ItemStack getItemStack(String path)
+	public ItemStack getItemStack(final String path)
 	{
 		return new ItemStack(
 				Material.valueOf(getString(path + ".type", "AIR")),
@@ -194,9 +242,9 @@ public class EssentialsConf extends Configuration
 				(byte)getInt(path + ".data", 0)*/);
 	}
 
-	public void setProperty(String path, ItemStack stack)
+	public void setProperty(final String path, final ItemStack stack)
 	{
-		Map<String, Object> map = new HashMap<String, Object>();
+		final Map<String, Object> map = new HashMap<String, Object>();
 		map.put("type", stack.getType().toString());
 		map.put("amount", stack.getAmount());
 		map.put("damage", stack.getDurability());
@@ -205,40 +253,30 @@ public class EssentialsConf extends Configuration
 		setProperty(path, map);
 	}
 
-	public long getLong(String path, long def)
+	public long getLong(final String path, final long def)
 	{
-		Number num;
 		try
 		{
-			num = (Number)getProperty(path);
+			final Number num = (Number)getProperty(path);
+			return num == null ? def : num.longValue();
 		}
-		catch(ClassCastException ex)
+		catch (ClassCastException ex)
 		{
 			return def;
 		}
-		if (num == null)
-		{
-			return def;
-		}
-		return num.longValue();
 	}
 
 	@Override
-	public double getDouble(String path, double def)
+	public double getDouble(final String path, final double def)
 	{
-		Number num;
 		try
 		{
-			num = (Number)getProperty(path);
+			Number num = (Number)getProperty(path);
+			return num == null ? def : num.doubleValue();
 		}
-		catch(ClassCastException ex)
+		catch (ClassCastException ex)
 		{
 			return def;
 		}
-		if (num == null)
-		{
-			return def;
-		}
-		return num.doubleValue();
 	}
 }
