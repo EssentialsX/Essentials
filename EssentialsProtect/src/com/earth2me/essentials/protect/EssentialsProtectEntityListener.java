@@ -263,7 +263,12 @@ public class EssentialsProtectEntityListener extends EntityListener
 
 		for (Block block : event.blockList())
 		{
-			if ((block.getType() == Material.RAILS || block.getRelative(BlockFace.UP).getType() == Material.RAILS)
+			if ((block.getRelative(BlockFace.UP).getType() == Material.RAILS
+				 || block.getType() == Material.RAILS 
+				 || block.getRelative(BlockFace.UP).getType() == Material.POWERED_RAIL 
+				 || block.getType() == Material.POWERED_RAIL 
+				 || block.getRelative(BlockFace.UP).getType() == Material.DETECTOR_RAIL 
+				 || block.getType() == Material.DETECTOR_RAIL)
 				&& prot.getSettingBool(ProtectConfig.protect_rails))
 			{
 				event.setCancelled(true);
