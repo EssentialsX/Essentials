@@ -91,7 +91,7 @@ nether:
 # Mob limit on spawnmob
 spawnmob-limit: 10
 
-#Shall we notify users when using /lightning
+# Shall we notify users when using /lightning
 warn-on-smite: true
 
 # The message of the day, displayed on connect and by typing /motd.
@@ -207,7 +207,7 @@ backup:
   # Interval in minutes
   interval: 60
   # Add a command that backups your data, e.g.
-  # command: 'rdiff-backup World1 backups/World1'
+  #command: 'rdiff-backup World1 backups/World1'
 
 # Set this true to enable permission per warp.
 per-warp-permission: false
@@ -223,7 +223,7 @@ debug: false
 # Don't forget to remove the # infront of the line
 #locale: de_DE
 
-#turn off god mode when people exit
+# Turn off god mode when people exit
 remove-god-on-disconnect: false
 
 # Use the permission system of bukkit
@@ -231,7 +231,26 @@ remove-god-on-disconnect: false
 use-bukkit-permissions: false
 
 # Check for updates
+# We do not recommend to disable this unless you are using CraftbukkitUpToDate or Bukget.
+# If you don't like the notices in game, remove the permission
+# essentials.admin.notices.update from your user.
 update-check: true
+
+# Auto-AFK
+# After this timeout in seconds, the user will be set as afk.
+# Set to -1 for no timeout.
+auto-afk: 300
+
+# Auto-AFK Kick
+# After this timeout in seconds, the user will be kicked from the server.
+# Set to -1 for no timeout.
+auto-afk-kick: -1
+
+# Set this to true, if you want to freeze the player, if he is afk.
+# Other players or monsters can't push him out of afk mode then.
+# This will also enable temporary god mode for the afk player.
+# The player has to use the command /afk to leave the afk mode.
+freeze-afk-player: false
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -246,7 +265,7 @@ respawn-at-home: false
 # If you enable this and remove default user access to the /sethome command, you can make beds the only way for players to set their home location.
 bed-sethome: false
 
-#if no home is set send you to spawn when /home is used
+# If no home is set send you to spawn when /home is used
 spawn-if-no-home: false
 
 # If users have essentials.sethome.multiple how many homes can they have
@@ -289,13 +308,13 @@ economy-log-enabled: false
 # +------------------------------------------------------+ #
 ############################################################
 
-#Show other plugins commands in help
+# Show other plugins commands in help
 non-ess-in-help: true
 
-#Hide plugins which dont give a permission
-#You can override a true value here for a single plugin by adding a permission to a user/group.
-#The indervidual permission is: essentials.help.<plugin>, anyone with essentials.* or '*' will see all help this setting reguardless.
-#You can use negitive permissions to remove access to just a single plugins help if the following is enabled.
+# Hide plugins which dont give a permission
+# You can override a true value here for a single plugin by adding a permission to a user/group.
+# The indervidual permission is: essentials.help.<plugin>, anyone with essentials.* or '*' will see all help this setting reguardless.
+# You can use negitive permissions to remove access to just a single plugins help if the following is enabled.
 hide-permissionless-help: true
 
 ############################################################
@@ -427,10 +446,10 @@ protect:
     # This only has an effect if "rails" or "signs" is also enabled.
     block-below: true
 
-   # Prevent placing blocks above protected rails, this is to stop a potential griefing
+    # Prevent placing blocks above protected rails, this is to stop a potential griefing
     prevent-block-on-rails: false
     
-    #Store blocks / signs in memory before writing
+    # Store blocks / signs in memory before writing
     memstore: false
 
   # Disable various default physics and behaviors
@@ -470,11 +489,11 @@ protect:
     # Set true to disable useing for those people
     use: true
 
-    #Should we tell people they are not allowed to build
+    # Should we tell people they are not allowed to build
     warn-on-build-disallow: false
 
 
-    #disable weather options
+    # Disable weather options
     weather:
       storm: false
       thunder: false

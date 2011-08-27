@@ -73,11 +73,7 @@ public class EssentialsPlayerListener extends PlayerListener
 				it.remove();
 			}
 		}
-		if (user.isAfk())
-		{
-			user.setAfk(false);
-			ess.broadcastMessage(user.getName(), Util.format("userIsNotAway", user.getDisplayName()));
-		}
+		user.updateActivity();
 		if (ess.getSettings().changeDisplayName())
 		{
 			user.setDisplayName(user.getNick());
@@ -93,11 +89,12 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 		final User user = ess.getUser(event.getPlayer());
 
-		if (user.isAfk())
-		{
-			user.setAfk(false);
-			ess.broadcastMessage(user.getName(), Util.format("userIsNotAway", user.getDisplayName()));
+		if (user.isAfk() && ess.getSettings().getFreezeAfkPlayers()) {
+			event.setCancelled(true);
+			return;
 		}
+		
+		user.updateActivity();
 
 		if (!ess.getSettings().getNetherPortalsEnabled())
 		{
@@ -216,6 +213,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			user.getInventory().setContents(user.getSavedInventory());
 			user.setSavedInventory(null);
 		}
+		user.updateActivity();
 		user.dispose();
 		if (!ess.getSettings().getReclaimSetting())
 		{
@@ -304,7 +302,8 @@ public class EssentialsPlayerListener extends PlayerListener
 			return;
 		}
 		User user = ess.getUser(event.getPlayer());
-		if (user == null) {
+		if (user == null)
+		{
 			user = new User(event.getPlayer(), ess);
 		}
 		user.setNPC(false);
@@ -436,7 +435,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		{
 			return;
 		}
-		
+
 		// We need to loop through each command and execute
 		for (String command : commandList)
 		{
@@ -479,10 +478,6 @@ public class EssentialsPlayerListener extends PlayerListener
 				}
 			}
 		}
-		if (user.isAfk())
-		{
-			user.setAfk(false);
-			ess.broadcastMessage(user.getName(), Util.format("userIsNotAway", user.getDisplayName()));
-		}
+		user.updateActivity();
 	}
 }
