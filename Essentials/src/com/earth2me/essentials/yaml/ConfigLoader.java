@@ -6,7 +6,7 @@ public class ConfigLoader
 
 	public ConfigLoader()
 	{
-		new Settings().getTest();
+		new Settings();
 	}
 	
 }
