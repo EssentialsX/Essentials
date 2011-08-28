@@ -8,79 +8,51 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 
-public class PermissionsBukkitHandler implements IPermissionsHandler
+public class PermissionsBukkitHandler extends SuperpermsHandler
 {
 	private final transient PermissionsPlugin plugin;
 
-	public PermissionsBukkitHandler(Plugin plugin)
+	public PermissionsBukkitHandler(final Plugin plugin)
 	{
 		this.plugin = (PermissionsPlugin)plugin;
 	}
-	
-	
-	public String getGroup(Player base)
+
+	@Override
+	public String getGroup(final Player base)
 	{
 		final PermissionInfo info = plugin.getPlayerInfo(base.getName());
-		if (info == null) {
+		if (info == null)
+		{
 			return "default";
 		}
 		final List<Group> groups = info.getGroups();
-		if (groups == null || groups.isEmpty()) {
+		if (groups == null || groups.isEmpty())
+		{
 			return "default";
 		}
 		return groups.get(0).getName();
 	}
 
-	public boolean canBuild(Player base, String group)
-	{
-		return true;
-	}
-
-	public boolean inGroup(Player base, String group)
+	@Override
+	public boolean inGroup(final Player base, final String group)
 	{
 		final PermissionInfo info = plugin.getPlayerInfo(base.getName());
-		if (info == null) {
+		if (info == null)
+		{
 			return false;
 		}
 		final List<Group> groups = info.getGroups();
-		if (groups == null || groups.isEmpty()) {
+		if (groups == null || groups.isEmpty())
+		{
 			return false;
 		}
 		for (Group group1 : groups)
 		{
-			if(group1.getName().equalsIgnoreCase(group)) {
+			if (group1.getName().equalsIgnoreCase(group))
+			{
 				return true;
 			}
 		}
 		return false;
-	}
-
-	public boolean hasPermission(Player base, String node)
-	{
-		if (base.hasPermission("-" + node))
-		{
-			return false;
-		}
-		final String[] parts = node.split("\\.");
-		final StringBuilder sb = new StringBuilder();
-		for (String part : parts)
-		{
-			if (base.hasPermission(sb.toString() + "*"))
-			{
-				return true;
-			}
-			sb.append(part).append(".");
-		}
-		return base.hasPermission(node);
-	}
-
-	public String getPrefix(Player base)
-	{
-		return "";
-	}
-
-	public String getSuffix(Player base)
-	{
-		return "";
 	}
 }

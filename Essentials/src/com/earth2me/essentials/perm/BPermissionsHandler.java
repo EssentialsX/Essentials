@@ -7,7 +7,7 @@ import java.util.List;
 import org.bukkit.entity.Player;
 
 
-public class BPermissionsHandler implements IPermissionsHandler
+public class BPermissionsHandler extends SuperpermsHandler
 {
 	private final transient WorldPermissionsManager wpm;
 
@@ -33,13 +33,7 @@ public class BPermissionsHandler implements IPermissionsHandler
 	}
 
 	@Override
-	public boolean canBuild(Player base, String group)
-	{
-		return true;
-	}
-
-	@Override
-	public boolean inGroup(Player base, String group)
+	public boolean inGroup(final Player base, final String group)
 	{
 		final PermissionSet pset = wpm.getPermissionSet(base.getWorld());
 		if (pset == null)
@@ -52,37 +46,5 @@ public class BPermissionsHandler implements IPermissionsHandler
 			return false;
 		}
 		return groups.contains(group);
-	}
-
-	@Override
-	public boolean hasPermission(Player base, String node)
-	{
-		if (base.hasPermission("-" + node))
-		{
-			return false;
-		}
-		final String[] parts = node.split("\\.");
-		final StringBuilder sb = new StringBuilder();
-		for (String part : parts)
-		{
-			if (base.hasPermission(sb.toString() + "*"))
-			{
-				return true;
-			}
-			sb.append(part).append(".");
-		}
-		return base.hasPermission(node);
-	}
-
-	@Override
-	public String getPrefix(Player base)
-	{
-		return "";
-	}
-
-	@Override
-	public String getSuffix(Player base)
-	{
-		return "";
 	}
 }

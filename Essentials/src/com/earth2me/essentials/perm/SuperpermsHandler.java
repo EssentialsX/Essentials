@@ -5,22 +5,26 @@ import org.bukkit.entity.Player;
 
 public class SuperpermsHandler implements IPermissionsHandler
 {
-	public String getGroup(Player base)
+	@Override
+	public String getGroup(final Player base)
 	{
 		return "default";
 	}
 
-	public boolean canBuild(Player base, String group)
+	@Override
+	public boolean canBuild(final Player base, final String group)
 	{
-		return true;
+		return hasPermission(base, "essentials.build");
 	}
 
-	public boolean inGroup(Player base, String group)
+	@Override
+	public boolean inGroup(final Player base, final String group)
 	{
 		return false;
 	}
 
-	public boolean hasPermission(Player base, String node)
+	@Override
+	public boolean hasPermission(final Player base, final String node)
 	{
 		if (base.hasPermission("-" + node))
 		{
@@ -39,14 +43,15 @@ public class SuperpermsHandler implements IPermissionsHandler
 		return base.hasPermission(node);
 	}
 
-	public String getPrefix(Player base)
+	@Override
+	public String getPrefix(final Player base)
 	{
 		return "";
 	}
 
-	public String getSuffix(Player base)
+	@Override
+	public String getSuffix(final Player base)
 	{
 		return "";
 	}
 }
-
