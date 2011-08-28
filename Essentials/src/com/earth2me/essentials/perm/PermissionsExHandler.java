@@ -1,4 +1,4 @@
-package com.earth2me.essentials;
+package com.earth2me.essentials.perm;
 
 import org.bukkit.entity.Player;
 import ru.tehkode.permissions.PermissionManager;
@@ -6,7 +6,7 @@ import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 
-class PermissionsExHandler implements IPermissionsHandler
+public class PermissionsExHandler implements IPermissionsHandler
 {
 	private final transient PermissionManager manager;
 

@@ -17,6 +17,8 @@
  */
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.perm.IPermissionsHandler;
+import com.earth2me.essentials.perm.ConfigPermissionsHandler;
 import com.earth2me.essentials.api.Economy;
 import com.earth2me.essentials.commands.EssentialsCommand;
 import java.io.*;

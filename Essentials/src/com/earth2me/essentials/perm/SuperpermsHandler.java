@@ -1,9 +1,9 @@
-package com.earth2me.essentials;
+package com.earth2me.essentials.perm;
 
 import org.bukkit.entity.Player;
 
 
-public class BukkitPermissionsHandler implements IPermissionsHandler
+public class SuperpermsHandler implements IPermissionsHandler
 {
 	public String getGroup(Player base)
 	{
@@ -49,3 +49,4 @@ public class BukkitPermissionsHandler implements IPermissionsHandler
 		return "";
 	}
 }
+

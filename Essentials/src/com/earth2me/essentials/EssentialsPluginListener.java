@@ -1,5 +1,10 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.perm.ConfigPermissionsHandler;
+import com.earth2me.essentials.perm.BukkitPermissionsHandler;
+import com.earth2me.essentials.perm.Permissions3Handler;
+import com.earth2me.essentials.perm.Permissions2Handler;
+import com.earth2me.essentials.perm.PermissionsExHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.event.server.PluginDisableEvent;
