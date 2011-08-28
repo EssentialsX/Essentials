@@ -315,10 +315,6 @@ public class EssentialsPlayerListener extends PlayerListener
 			return;
 		}
 		User user = ess.getUser(event.getPlayer());
-		if (user == null)
-		{
-			user = new User(event.getPlayer(), ess);
-		}
 		user.setNPC(false);
 
 		final long currentTime = System.currentTimeMillis();

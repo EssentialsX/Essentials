@@ -564,7 +564,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 		catch (NullPointerException ex)
 		{
-			return null;
+			return new User(base, this);
 		}
 	}
 
