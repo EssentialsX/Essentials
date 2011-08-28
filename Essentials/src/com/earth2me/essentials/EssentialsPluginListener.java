@@ -58,33 +58,30 @@ public class EssentialsPluginListener extends ServerListener implements IConf
 			final Plugin permissionsPlugin = pm.getPlugin("Permissions");
 			if (permissionsPlugin == null || !permissionsPlugin.isEnabled())
 			{
-				if (ess.getSettings().useBukkitPermissions())
+				final Plugin permissionsBukkitPlugin = pm.getPlugin("PermissionsBukkit");
+				final Plugin bPermissionsPlugin = pm.getPlugin("bPermissions");
+				if (permissionsBukkitPlugin != null && permissionsBukkitPlugin.isEnabled())
 				{
-					final Plugin permissionsBukkitPlugin = pm.getPlugin("PermissionsBukkit");
-					final Plugin bPermissionsPlugin = pm.getPlugin("bPermissions");
-					if (permissionsBukkitPlugin != null && permissionsBukkitPlugin.isEnabled())
+					if (!(ess.getPermissionsHandler() instanceof PermissionsBukkitHandler))
 					{
-						if (!(ess.getPermissionsHandler() instanceof PermissionsBukkitHandler))
-						{
-							LOGGER.log(Level.INFO, "Essentials: Using PermissionsBukkit based permissions.");
-							ess.setPermissionsHandler(new PermissionsBukkitHandler(permissionsBukkitPlugin));
-						}
+						LOGGER.log(Level.INFO, "Essentials: Using PermissionsBukkit based permissions.");
+						ess.setPermissionsHandler(new PermissionsBukkitHandler(permissionsBukkitPlugin));
 					}
-					else if (bPermissionsPlugin != null && bPermissionsPlugin.isEnabled())
+				}
+				else if (bPermissionsPlugin != null && bPermissionsPlugin.isEnabled())
+				{
+					if (!(ess.getPermissionsHandler() instanceof BPermissionsHandler))
 					{
-						if (!(ess.getPermissionsHandler() instanceof BPermissionsHandler))
-						{
-							LOGGER.log(Level.INFO, "Essentials: Using bPermissions based permissions.");
-							ess.setPermissionsHandler(new BPermissionsHandler());
-						}
+						LOGGER.log(Level.INFO, "Essentials: Using bPermissions based permissions.");
+						ess.setPermissionsHandler(new BPermissionsHandler());
 					}
-					else
+				}
+				else if (ess.getSettings().useBukkitPermissions())
+				{
+					if (!(ess.getPermissionsHandler() instanceof SuperpermsHandler))
 					{
-						if (!(ess.getPermissionsHandler() instanceof SuperpermsHandler))
-						{
-							LOGGER.log(Level.INFO, "Essentials: Using superperms based permissions.");
-							ess.setPermissionsHandler(new SuperpermsHandler());
-						}
+						LOGGER.log(Level.INFO, "Essentials: Using superperms based permissions.");
+						ess.setPermissionsHandler(new SuperpermsHandler());
 					}
 				}
 				else
