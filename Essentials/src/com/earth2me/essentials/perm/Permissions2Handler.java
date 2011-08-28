@@ -10,7 +10,7 @@ public class Permissions2Handler implements IPermissionsHandler
 {
 	private final transient PermissionHandler permissionHandler;
 
-	Permissions2Handler(final Plugin permissionsPlugin)
+	public Permissions2Handler(final Plugin permissionsPlugin)
 	{
 		permissionHandler = ((Permissions)permissionsPlugin).getHandler();
 	}

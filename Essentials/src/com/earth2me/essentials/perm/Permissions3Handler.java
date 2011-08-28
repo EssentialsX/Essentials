@@ -10,7 +10,7 @@ public class Permissions3Handler implements IPermissionsHandler
 {
 	private final transient PermissionHandler permissionHandler;
 	
-	Permissions3Handler(final Plugin permissionsPlugin)
+	public Permissions3Handler(final Plugin permissionsPlugin)
 	{
 		permissionHandler = ((Permissions)permissionsPlugin).getHandler();
 	}

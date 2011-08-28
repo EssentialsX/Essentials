@@ -1,10 +1,12 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.perm.BPermissionsHandler;
 import com.earth2me.essentials.perm.ConfigPermissionsHandler;
-import com.earth2me.essentials.perm.BukkitPermissionsHandler;
 import com.earth2me.essentials.perm.Permissions3Handler;
 import com.earth2me.essentials.perm.Permissions2Handler;
+import com.earth2me.essentials.perm.PermissionsBukkitHandler;
 import com.earth2me.essentials.perm.PermissionsExHandler;
+import com.earth2me.essentials.perm.SuperpermsHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.event.server.PluginDisableEvent;
@@ -58,10 +60,31 @@ public class EssentialsPluginListener extends ServerListener implements IConf
 			{
 				if (ess.getSettings().useBukkitPermissions())
 				{
-					if (!(ess.getPermissionsHandler() instanceof BukkitPermissionsHandler))
+					final Plugin permissionsBukkitPlugin = pm.getPlugin("PermissionsBukkit");
+					final Plugin bPermissionsPlugin = pm.getPlugin("bPermissions");
+					if (permissionsBukkitPlugin != null && permissionsBukkitPlugin.isEnabled())
 					{
-						LOGGER.log(Level.INFO, "Essentials: Using superperms based permissions.");
-						ess.setPermissionsHandler(new BukkitPermissionsHandler());
+						if (!(ess.getPermissionsHandler() instanceof PermissionsBukkitHandler))
+						{
+							LOGGER.log(Level.INFO, "Essentials: Using PermissionsBukkit based permissions.");
+							ess.setPermissionsHandler(new PermissionsBukkitHandler(permissionsBukkitPlugin));
+						}
+					}
+					else if (bPermissionsPlugin != null && bPermissionsPlugin.isEnabled())
+					{
+						if (!(ess.getPermissionsHandler() instanceof BPermissionsHandler))
+						{
+							LOGGER.log(Level.INFO, "Essentials: Using bPermissions based permissions.");
+							ess.setPermissionsHandler(new BPermissionsHandler());
+						}
+					}
+					else
+					{
+						if (!(ess.getPermissionsHandler() instanceof SuperpermsHandler))
+						{
+							LOGGER.log(Level.INFO, "Essentials: Using superperms based permissions.");
+							ess.setPermissionsHandler(new SuperpermsHandler());
+						}
 					}
 				}
 				else
