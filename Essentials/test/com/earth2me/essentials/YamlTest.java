@@ -23,15 +23,15 @@ public class YamlTest extends TestCase
 		options.setExplicitRoot(Tag.MAP);
 		final Yaml yaml = new Yaml(options);
 		//Settings settings = (Settings)yaml.load("");
-		Settings set1 = new Settings();
-		final String dump = yaml.dump(set1);
-		final Yaml yaml2 = new Yaml(new Constructor(Settings.class));
-		final Settings set = (Settings)yaml2.load(dump);
+		/*Settings set1 = new Settings();
+		//final String dump = yaml.dump(set1);
+		//final Yaml yaml2 = new Yaml(new Constructor(Settings.class));
+		//final Settings set = (Settings)yaml2.load(dump);
 		if (set != null)
 		{
 			//assert set.getGeneral().getLocation() == null;
 			//assert set.equals(new Settings());
 			System.out.println(dump);
-		}
+		}*/
 	}
 }
