@@ -36,8 +36,7 @@ public class Commandgive extends EssentialsCommand
 				: (!ess.getUser(sender).isAuthorized("essentials.itemspawn.exempt")
 				   && !ess.getUser(sender).canSpawnItem(stack.getTypeId()))))
 		{
-			sender.sendMessage(ChatColor.RED + "You are not allowed to spawn the item " + itemname);
-			return;
+			throw new Exception(ChatColor.RED + "You are not allowed to spawn the item " + itemname);
 		}
 		if (args.length > 2 && Integer.parseInt(args[2]) > 0)
 		{
@@ -46,13 +45,11 @@ public class Commandgive extends EssentialsCommand
 
 		if (stack.getType() == Material.AIR)
 		{
-			sender.sendMessage(ChatColor.RED + "You can't give air.");
-			return;
+			throw new Exception(ChatColor.RED + "You can't give air.");
 		}
 
 		User giveTo = getPlayer(server, args, 0);
 		String itemName = stack.getType().toString().toLowerCase().replace('_', ' ');
-		charge(sender);
 		sender.sendMessage(ChatColor.BLUE + "Giving " + stack.getAmount() + " of " + itemName + " to " + giveTo.getDisplayName() + ".");
 		giveTo.getInventory().addItem(stack);
 		giveTo.updateInventory();

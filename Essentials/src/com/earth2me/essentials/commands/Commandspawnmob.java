@@ -8,16 +8,13 @@ import com.earth2me.essentials.Mob.MobException;
 import com.earth2me.essentials.TargetBlock;
 import com.earth2me.essentials.Util;
 import java.util.Random;
-import net.minecraft.server.EntityWolf;
-import net.minecraft.server.PathEntity;
 import org.bukkit.DyeColor;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.entity.CraftCreeper;
-import org.bukkit.craftbukkit.entity.CraftSheep;
-import org.bukkit.craftbukkit.entity.CraftSlime;
-import org.bukkit.craftbukkit.entity.CraftWolf;
+import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Sheep;
+import org.bukkit.entity.Slime;
+import org.bukkit.entity.Wolf;
 
 
 public class Commandspawnmob extends EssentialsCommand
@@ -62,8 +59,7 @@ public class Commandspawnmob extends EssentialsCommand
 		if (ess.getSettings().getProtectPreventSpawn(mobType.toLowerCase())
 			|| (mountType != null && ess.getSettings().getProtectPreventSpawn(mountType.toLowerCase())))
 		{
-			user.sendMessage(Util.i18n("unableToSpawnMob"));
-			return;
+			throw new Exception(Util.i18n("unableToSpawnMob"));
 		}
 
 		Entity spawnedMob = null;
@@ -74,15 +70,18 @@ public class Commandspawnmob extends EssentialsCommand
 		mob = Mob.fromName(mobType);
 		if (mob == null)
 		{
-			user.sendMessage(Util.i18n("invalidMob"));
-			return;
+			throw new Exception(Util.i18n("invalidMob"));
 		}
-		charge(user);
 		int[] ignore =
 		{
 			8, 9
 		};
-		Location loc = (new TargetBlock(user, 300, 0.2, ignore)).getTargetBlock().getLocation();
+		Block block = (new TargetBlock(user, 300, 0.2, ignore)).getTargetBlock();
+		if(block == null) {
+			user.sendMessage(Util.i18n("unableToSpawnMob"));
+			return;
+		}
+		Location loc = block.getLocation();
 		Location sloc = Util.getSafeDestination(loc);
 		try
 		{
@@ -185,7 +184,7 @@ public class Commandspawnmob extends EssentialsCommand
 		{
 			try
 			{
-				((CraftSlime)spawned).setSize(Integer.parseInt(data));
+				((Slime)spawned).setSize(Integer.parseInt(data));
 			}
 			catch (Exception e)
 			{
@@ -199,11 +198,11 @@ public class Commandspawnmob extends EssentialsCommand
 				if (data.equalsIgnoreCase("random"))
 				{
 					Random rand = new Random();
-					((CraftSheep)spawned).setColor(DyeColor.values()[rand.nextInt(DyeColor.values().length)]);
+					((Sheep)spawned).setColor(DyeColor.values()[rand.nextInt(DyeColor.values().length)]);
 				}
 				else
 				{
-					((CraftSheep)spawned).setColor(DyeColor.valueOf(data.toUpperCase()));
+					((Sheep)spawned).setColor(DyeColor.valueOf(data.toUpperCase()));
 				}
 			}
 			catch (Exception e)
@@ -213,21 +212,18 @@ public class Commandspawnmob extends EssentialsCommand
 		}
 		if ("Wolf".equalsIgnoreCase(type) && data.equalsIgnoreCase("tamed"))
 		{
-			EntityWolf wolf = ((CraftWolf)spawned).getHandle();
+			Wolf wolf = ((Wolf)spawned);
 			wolf.setTamed(true);
-			wolf.setPathEntity((PathEntity)null);
+			wolf.setOwner(user);
 			wolf.setSitting(true);
-			wolf.health = 20;
-			wolf.setOwnerName(user.getName());
-			wolf.world.a(wolf, (byte)7);
 		}
 		if ("Wolf".equalsIgnoreCase(type) && data.equalsIgnoreCase("angry"))
 		{
-			((CraftWolf)spawned).setAngry(true);
+			((Wolf)spawned).setAngry(true);
 		}
 		if ("Creeper".equalsIgnoreCase(type) && data.equalsIgnoreCase("powered"))
 		{
-			((CraftCreeper)spawned).setPowered(true);
+			((Creeper)spawned).setPowered(true);
 		}
 	}
 }

@@ -6,8 +6,7 @@ import com.earth2me.essentials.Util;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.block.CraftCreatureSpawner;
-import org.bukkit.entity.CreatureType;
+import org.bukkit.block.CreatureSpawner;
 
 
 public class Commandspawner extends EssentialsCommand
@@ -32,7 +31,6 @@ public class Commandspawner extends EssentialsCommand
 			throw new Exception(Util.i18n("mobSpawnTarget"));
 		}
 
-		charge(user);
 		try
 		{
 			String name = args[0];
@@ -45,7 +43,7 @@ public class Commandspawner extends EssentialsCommand
 				user.sendMessage(Util.i18n("invalidMob"));
 				return;
 			}
-			new CraftCreatureSpawner(target).setCreatureType(mob.getType());
+			((CreatureSpawner)target.getState()).setCreatureType(mob.getType());
 			user.sendMessage(Util.format("setSpawner", mob.name));
 		}
 		catch (Throwable ex)

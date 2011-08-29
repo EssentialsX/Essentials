@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.perm.IPermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
 import org.bukkit.World;
 import org.bukkit.command.Command;

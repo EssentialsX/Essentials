@@ -15,7 +15,6 @@ public class Commandreloadall extends EssentialsCommand
 	@Override
 	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
-		charge(sender);
 		server.reload();
 		sender.sendMessage(Util.i18n("reloadAllPlugins"));
 	}

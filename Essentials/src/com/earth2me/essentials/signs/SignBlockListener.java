@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
-import org.bukkit.craftbukkit.block.CraftSign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
@@ -48,7 +47,7 @@ public class SignBlockListener extends BlockListener
 		final int mat = block.getTypeId();
 		if (mat == Material.SIGN_POST.getId() || mat == Material.WALL_SIGN.getId())
 		{
-			final Sign csign = new CraftSign(block);
+			final Sign csign = (Sign)block.getState();
 			for (Signs signs : Signs.values())
 			{
 				final EssentialsSign sign = signs.getSign();
@@ -184,9 +183,24 @@ public class SignBlockListener extends BlockListener
 			return;
 		}
 
-		if (protectSignsAndBlocks(event.getBlock(), event.getPlayer()))
+		final Block block = event.getBlock();
+		if (((block.getType() == Material.WALL_SIGN
+			  || block.getType() == Material.SIGN_POST)
+			 && EssentialsSign.isValidSign(new EssentialsSign.BlockSign(block)))
+			|| EssentialsSign.checkIfBlockBreaksSigns(block))
 		{
 			event.setCancelled(true);
+			return;
+		}
+		for (Signs signs : Signs.values())
+		{
+			final EssentialsSign sign = signs.getSign();
+			if (sign.getBlocks().contains(block.getType())
+				&& !sign.onBlockIgnite(block, ess))
+			{
+				event.setCancelled(true);
+				return;
+			}
 		}
 	}
 

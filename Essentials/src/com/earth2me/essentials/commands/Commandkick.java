@@ -26,10 +26,8 @@ public class Commandkick extends EssentialsCommand
 		User player = getPlayer(server, args, 0);
 		if (player.isAuthorized("essentials.kick.exempt"))
 		{
-			sender.sendMessage(Util.i18n("kickExempt"));
-			return;
+			throw new Exception(Util.i18n("kickExempt"));
 		}
-		charge(sender);
 		final String kickReason = args.length > 1 ? getFinalArg(args, 1) : Util.i18n("kickDefault");
 		player.kickPlayer(kickReason);
 		String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;

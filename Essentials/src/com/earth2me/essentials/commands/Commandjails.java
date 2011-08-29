@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
@@ -14,12 +15,6 @@ public class Commandjails extends EssentialsCommand
 	@Override
 	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
-		StringBuilder jailList = new StringBuilder();
-		for (String j : ess.getJail().getJails())
-		{
-			jailList.append(j);
-			jailList.append(' ');
-		}
-		sender.sendMessage("§7" + jailList);
+		sender.sendMessage("§7" + Util.joinList(" ", ess.getJail().getJails()));
 	}
 }

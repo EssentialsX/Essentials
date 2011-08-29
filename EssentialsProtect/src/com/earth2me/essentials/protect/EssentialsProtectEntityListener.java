@@ -1,10 +1,11 @@
 package com.earth2me.essentials.protect;
 
-import com.earth2me.essentials.EssentialsBlockListener;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.minecraft.server.ChunkPosition;
 import net.minecraft.server.Packet60Explosion;
 import org.bukkit.Location;
@@ -13,19 +14,16 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.CraftWorld;
-import org.bukkit.craftbukkit.entity.CraftFireball;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
-import org.bukkit.craftbukkit.entity.CraftTNTPrimed;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageByProjectileEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -39,15 +37,15 @@ public class EssentialsProtectEntityListener extends EntityListener
 {
 	private final transient IProtect prot;
 	private final transient IEssentials ess;
-
+	
 	public EssentialsProtectEntityListener(final IProtect prot)
 	{
 		this.prot = prot;
 		this.ess = prot.getEssentials();
 	}
-
+	
 	@Override
-	public void onEntityDamage(EntityDamageEvent event)
+	public void onEntityDamage(final EntityDamageEvent event)
 	{
 		if (event.isCancelled())
 		{
@@ -58,7 +56,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 		if (event instanceof EntityDamageByBlockEvent)
 		{
 			final DamageCause cause = event.getCause();
-
+			
 			if (prot.getSettingBool(ProtectConfig.disable_contactdmg)
 				&& cause == DamageCause.CONTACT
 				&& !(target instanceof Player
@@ -87,7 +85,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 				return;
 			}
 		}
-
+		
 		if (event instanceof EntityDamageByEntityEvent)
 		{
 			final EntityDamageByEntityEvent edEvent = (EntityDamageByEntityEvent)event;
@@ -102,7 +100,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 				event.setCancelled(true);
 				return;
 			}
-			
+
 			//Creeper explode prevention
 			if (eAttack instanceof Creeper && prot.getSettingBool(ProtectConfig.prevent_creeper_explosion)
 				&& !(target instanceof Player
@@ -112,7 +110,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 				event.setCancelled(true);
 				return;
 			}
-
+			
 			if (eAttack instanceof Creeper && prot.getSettingBool(ProtectConfig.prevent_creeper_playerdmg)
 				&& !(target instanceof Player
 					 && user.isAuthorized("essentials.protect.damage.creeper")
@@ -139,19 +137,22 @@ public class EssentialsProtectEntityListener extends EntityListener
 				event.setCancelled(true);
 				return;
 			}
+			
+			if (edEvent.getDamager() instanceof Projectile
+				&& target instanceof Player
+				&& ((prot.getSettingBool(ProtectConfig.disable_projectiles)
+					 && !(user.isAuthorized("essentials.protect.damage.projectiles")
+						  && !user.isAuthorized("essentials.protect.damage.disable")))
+					|| (((Projectile)edEvent.getDamager()).getShooter() instanceof Player
+						&& prot.getSettingBool(ProtectConfig.disable_pvp)
+						&& (!user.isAuthorized("essentials.protect.pvp")
+							|| !ess.getUser(((Projectile)edEvent.getDamager()).getShooter()).isAuthorized("essentials.protect.pvp")))))
+			{
+				event.setCancelled(true);
+				return;
+			}
 		}
-
-		if (event instanceof EntityDamageByProjectileEvent
-			&& target instanceof Player
-			&& prot.getSettingBool(ProtectConfig.disable_projectiles)
-			&& !(user.isAuthorized("essentials.protect.damage.projectiles")
-				 && !user.isAuthorized("essentials.protect.damage.disable")))
-		{
-			event.setCancelled(true);
-			((EntityDamageByProjectileEvent)event).setBounce(true);
-			return;
-		}
-
+		
 		final DamageCause cause = event.getCause();
 		if (target instanceof Player)
 		{
@@ -163,7 +164,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 				event.setCancelled(true);
 				return;
 			}
-
+			
 			if (cause == DamageCause.SUFFOCATION
 				&& prot.getSettingBool(ProtectConfig.disable_suffocate)
 				&& !(user.isAuthorized("essentials.protect.damage.suffocation")
@@ -199,9 +200,9 @@ public class EssentialsProtectEntityListener extends EntityListener
 			}
 		}
 	}
-
+	
 	@Override
-	public void onEntityExplode(EntityExplodeEvent event)
+	public void onEntityExplode(final EntityExplodeEvent event)
 	{
 		if (event.isCancelled())
 		{
@@ -214,43 +215,50 @@ public class EssentialsProtectEntityListener extends EntityListener
 				|| prot.getSettingBool(ProtectConfig.prevent_creeper_blockdmg)
 				|| (maxHeight >= 0 && event.getLocation().getBlockY() > maxHeight)))
 		{
-			final Set<ChunkPosition> set = new HashSet<ChunkPosition>(event.blockList().size());
-			final Player[] players = ess.getServer().getOnlinePlayers();
-			final Set<ChunkPosition> blocksUnderPlayers = new HashSet<ChunkPosition>(players.length);
-			final Location loc = event.getLocation();
-			for (Player player : players)
+			try
 			{
-				if (player.getWorld().equals(loc.getWorld()))
+				final Set<ChunkPosition> set = new HashSet<ChunkPosition>(event.blockList().size());
+				final Player[] players = ess.getServer().getOnlinePlayers();
+				final Set<ChunkPosition> blocksUnderPlayers = new HashSet<ChunkPosition>(players.length);
+				final Location loc = event.getLocation();
+				for (Player player : players)
 				{
-					blocksUnderPlayers.add(
-							new ChunkPosition(
-							player.getLocation().getBlockX(),
-							player.getLocation().getBlockY() - 1,
-							player.getLocation().getBlockZ()));
+					if (player.getWorld().equals(loc.getWorld()))
+					{
+						blocksUnderPlayers.add(
+								new ChunkPosition(
+								player.getLocation().getBlockX(),
+								player.getLocation().getBlockY() - 1,
+								player.getLocation().getBlockZ()));
+					}
 				}
+				ChunkPosition cp;
+				for (Block block : event.blockList())
+				{
+					cp = new ChunkPosition(block.getX(), block.getY(), block.getZ());
+					if (!blocksUnderPlayers.contains(cp))
+					{
+						set.add(cp);
+					}
+				}
+				
+				((CraftServer)ess.getServer()).getHandle().sendPacketNearby(loc.getX(), loc.getY(), loc.getZ(), 64.0D, ((CraftWorld)loc.getWorld()).getHandle().worldProvider.dimension,
+																			new Packet60Explosion(loc.getX(), loc.getY(), loc.getZ(), 3.0f, set));
 			}
-			ChunkPosition cp;
-			for (Block block : event.blockList())
+			catch (Throwable ex)
 			{
-				cp = new ChunkPosition(block.getX(), block.getY(), block.getZ());
-				if (!blocksUnderPlayers.contains(cp))
-				{
-					set.add(cp);
-				}
+				Logger.getLogger("Minecraft").log(Level.SEVERE, null, ex);
 			}
-
-			((CraftServer)ess.getServer()).getHandle().sendPacketNearby(loc.getX(), loc.getY(), loc.getZ(), 64.0D, ((CraftWorld)loc.getWorld()).getHandle().worldProvider.dimension,
-														  new Packet60Explosion(loc.getX(), loc.getY(), loc.getZ(), 3.0f, set));
 			event.setCancelled(true);
 			return;
 		}
-		else if (event.getEntity() instanceof CraftTNTPrimed
+		else if (event.getEntity() instanceof TNTPrimed
 				 && prot.getSettingBool(ProtectConfig.prevent_tnt_explosion))
 		{
 			event.setCancelled(true);
 			return;
 		}
-		else if (event.getEntity() instanceof CraftFireball
+		else if (event.getEntity() instanceof Fireball
 				 && prot.getSettingBool(ProtectConfig.prevent_fireball_explosion))
 		{
 			event.setCancelled(true);
@@ -261,7 +269,12 @@ public class EssentialsProtectEntityListener extends EntityListener
 
 		for (Block block : event.blockList())
 		{
-			if ((block.getType() == Material.RAILS || block.getRelative(BlockFace.UP).getType() == Material.RAILS)
+			if ((block.getRelative(BlockFace.UP).getType() == Material.RAILS
+				 || block.getType() == Material.RAILS
+				 || block.getRelative(BlockFace.UP).getType() == Material.POWERED_RAIL
+				 || block.getType() == Material.POWERED_RAIL
+				 || block.getRelative(BlockFace.UP).getType() == Material.DETECTOR_RAIL
+				 || block.getType() == Material.DETECTOR_RAIL)
 				&& prot.getSettingBool(ProtectConfig.protect_rails))
 			{
 				event.setCancelled(true);
@@ -279,19 +292,13 @@ public class EssentialsProtectEntityListener extends EntityListener
 				event.setCancelled(true);
 				return;
 			}
-			/*if (EssentialsBlockListener.protectedBlocks.contains(block.getType())
-				&& EssentialsBlockListener.isBlockProtected(block))
-			{
-				event.setCancelled(true);
-				return;
-			}*/
 		}
 	}
-
+	
 	@Override
 	public void onCreatureSpawn(final CreatureSpawnEvent event)
 	{
-		if (event.getEntity() instanceof CraftPlayer)
+		if (event.getEntity() instanceof Player)
 		{
 			return;
 		}
@@ -309,7 +316,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 			event.setCancelled(true);
 		}
 	}
-
+	
 	@Override
 	public void onEntityTarget(final EntityTargetEvent event)
 	{
@@ -335,12 +342,12 @@ public class EssentialsProtectEntityListener extends EntityListener
 			return;
 		}
 	}
-
+	
 	@Override
 	public void onExplosionPrime(ExplosionPrimeEvent event)
 	{
-		if (event.getEntity() instanceof CraftFireball
-				 && prot.getSettingBool(ProtectConfig.prevent_fireball_fire))
+		if (event.getEntity() instanceof Fireball
+			&& prot.getSettingBool(ProtectConfig.prevent_fireball_fire))
 		{
 			event.setFire(false);
 		}

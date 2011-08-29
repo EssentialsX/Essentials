@@ -30,8 +30,7 @@ public class Commandmsg extends EssentialsCommand
 			User user = ess.getUser(sender);
 			if (user.isMuted())
 			{
-				user.sendMessage(Util.i18n("voiceSilenced"));
-				return;
+				throw new Exception(Util.i18n("voiceSilenced"));
 			}
 		}
 
@@ -55,8 +54,7 @@ public class Commandmsg extends EssentialsCommand
 
 		if (matches.isEmpty())
 		{
-			sender.sendMessage(Util.i18n("playerNotFound"));
-			return;
+			throw new Exception(Util.i18n("playerNotFound"));
 		}
 
 		int i = 0;
@@ -70,11 +68,9 @@ public class Commandmsg extends EssentialsCommand
 		}
 		if (i == matches.size())
 		{
-			sender.sendMessage(Util.i18n("playerNotFound"));
-			return;
+			throw new Exception(Util.i18n("playerNotFound"));
 		}
 
-		charge(sender);
 		for (Player p : matches)
 		{
 			sender.sendMessage(Util.format("msgFormat", translatedMe, p.getDisplayName(), message));

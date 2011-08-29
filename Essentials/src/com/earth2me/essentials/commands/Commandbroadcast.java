@@ -22,7 +22,6 @@ public class Commandbroadcast extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		charge(sender);
 		ess.broadcastMessage(sender instanceof Player ? ((Player)sender).getName() : Console.NAME,
 							 Util.format("broadcast", getFinalArg(args, 0)));
 	}

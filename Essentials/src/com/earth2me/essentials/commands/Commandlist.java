@@ -44,7 +44,6 @@ public class Commandlist extends EssentialsCommand
 				playerHidden++;
 			}
 		}
-		charge(sender);
 		//TODO: move these to messages file
 		StringBuilder online = new StringBuilder();
 		online.append(ChatColor.BLUE).append("There are ").append(ChatColor.RED).append(server.getOnlinePlayers().length - playerHidden);

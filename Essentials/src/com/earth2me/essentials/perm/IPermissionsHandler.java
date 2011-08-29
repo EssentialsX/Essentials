@@ -1,4 +1,4 @@
-package com.earth2me.essentials;
+package com.earth2me.essentials.perm;
 
 import org.bukkit.entity.Player;
 

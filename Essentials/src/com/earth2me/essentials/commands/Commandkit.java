@@ -9,6 +9,7 @@ import org.bukkit.Server;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.util.GregorianCalendar;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -124,7 +125,7 @@ public class Commandkit extends EssentialsCommand
 				for (String d : items)
 				{
 					String[] parts = d.split("[^0-9]+", 3);
-					int id = Integer.parseInt(parts[0]);
+					int id = Material.getMaterial(Integer.parseInt(parts[0])).getId();
 					int amount = parts.length > 1 ? Integer.parseInt(parts[parts.length > 2 ? 2 : 1]) : 1;
 					short data = parts.length > 2 ? Short.parseShort(parts[1]) : 0;
 					HashMap<Integer,ItemStack> overfilled = user.getInventory().addItem(new ItemStack(id, amount, data));
@@ -140,7 +141,6 @@ public class Commandkit extends EssentialsCommand
 				}
 				try
 				{
-					charge(user);
 					charge.charge(user);
 				}
 				catch (Exception ex)

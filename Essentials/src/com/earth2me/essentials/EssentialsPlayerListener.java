@@ -73,11 +73,7 @@ public class EssentialsPlayerListener extends PlayerListener
 				it.remove();
 			}
 		}
-		if (user.isAfk())
-		{
-			user.setAfk(false);
-			ess.broadcastMessage(user.getName(), Util.format("userIsNotAway", user.getDisplayName()));
-		}
+		user.updateActivity();
 		if (ess.getSettings().changeDisplayName())
 		{
 			user.setDisplayName(user.getNick());
@@ -93,11 +89,25 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 		final User user = ess.getUser(event.getPlayer());
 
-		if (user.isAfk())
+		if (user.isAfk() && ess.getSettings().getFreezeAfkPlayers())
 		{
-			user.setAfk(false);
-			ess.broadcastMessage(user.getName(), Util.format("userIsNotAway", user.getDisplayName()));
+			final Location from = event.getFrom();
+			final Location to = event.getTo().clone();
+			to.setX(from.getX());
+			to.setY(from.getY());
+			to.setZ(from.getZ());
+			try
+			{
+				event.setTo(Util.getSafeDestination(to));
+			}
+			catch (Exception ex)
+			{
+				event.setTo(to);
+			}
+			return;
 		}
+
+		user.updateActivity();
 
 		if (!ess.getSettings().getNetherPortalsEnabled())
 		{
@@ -216,6 +226,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			user.getInventory().setContents(user.getSavedInventory());
 			user.setSavedInventory(null);
 		}
+		user.updateActivity();
 		user.dispose();
 		if (!ess.getSettings().getReclaimSetting())
 		{
@@ -304,9 +315,6 @@ public class EssentialsPlayerListener extends PlayerListener
 			return;
 		}
 		User user = ess.getUser(event.getPlayer());
-		if (user == null) {
-			user = new User(event.getPlayer(), ess);
-		}
 		user.setNPC(false);
 
 		final long currentTime = System.currentTimeMillis();
@@ -326,6 +334,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			event.disallow(Result.KICK_FULL, Util.i18n("serverFull"));
 			return;
 		}
+		event.allow();
 
 		user.setLastLogin(System.currentTimeMillis());
 		updateCompass(user);
@@ -430,26 +439,31 @@ public class EssentialsPlayerListener extends PlayerListener
 		{
 			return;
 		}
-		final String command = user.getPowertool(is);
-		if (command == null || command.isEmpty())
+		final List<String> commandList = user.getPowertool(is);
+		if (commandList == null || commandList.isEmpty())
 		{
 			return;
 		}
-		if (command.matches(".*\\{player\\}.*"))
+
+		// We need to loop through each command and execute
+		for (String command : commandList)
 		{
-			//user.sendMessage("Click a player to use this command");
-			return;
-		}
-		if (command.startsWith("c:"))
-		{
-			for (Player p : server.getOnlinePlayers())
+			if (command.matches(".*\\{player\\}.*"))
 			{
-				p.sendMessage(user.getDisplayName() + ":" + command.substring(2));
+				//user.sendMessage("Click a player to use this command");
+				continue;
 			}
-		}
-		else
-		{
-			user.getServer().dispatchCommand(user, command);
+			else if (command.startsWith("c:"))
+			{
+				for (Player p : server.getOnlinePlayers())
+				{
+					p.sendMessage(user.getDisplayName() + ":" + command.substring(2));
+				}
+			}
+			else
+			{
+				user.getServer().dispatchCommand(user, command);
+			}
 		}
 	}
 
@@ -473,10 +487,9 @@ public class EssentialsPlayerListener extends PlayerListener
 				}
 			}
 		}
-		if (user.isAfk())
+		if (!cmd.equalsIgnoreCase("afk"))
 		{
-			user.setAfk(false);
-			ess.broadcastMessage(user.getName(), Util.format("userIsNotAway", user.getDisplayName()));
+			user.updateActivity();
 		}
 	}
 }

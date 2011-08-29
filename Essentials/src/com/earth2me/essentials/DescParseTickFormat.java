@@ -155,10 +155,6 @@ public final class DescParseTickFormat
 
 		int hours = 0;
 		int minutes = 0;
-		if (desc.endsWith("pm"))
-		{
-			hours += 12;
-		}
 
 		desc = desc.toLowerCase().replaceAll("[^0-9]", "");
 
@@ -188,6 +184,16 @@ public final class DescParseTickFormat
 		else
 		{
 			throw new NumberFormatException();
+		}
+		
+		if (desc.endsWith("pm") && hours != 12)
+		{
+			hours += 12;
+		}
+		
+		if (desc.endsWith("am") && hours == 12)
+		{
+			hours -= 12;
 		}
 
 		return hoursMinutesToTicks(hours, minutes);

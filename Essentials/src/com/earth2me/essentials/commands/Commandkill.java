@@ -21,7 +21,6 @@ public class Commandkill extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		charge(sender);
 		for (Player p : server.matchPlayer(args[0]))
 		{
 			p.setHealth(0);

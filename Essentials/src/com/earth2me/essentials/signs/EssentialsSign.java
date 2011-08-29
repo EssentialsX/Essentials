@@ -11,7 +11,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
-import org.bukkit.craftbukkit.block.CraftSign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.ItemStack;
@@ -21,6 +20,7 @@ public class EssentialsSign
 {
 	private static final Set<Material> EMPTY_SET = new HashSet<Material>();
 	protected transient final String signName;
+	//TODO: Add these settings to messages
 	private static final String FORMAT_SUCCESS = "§1[%s]";
 	private static final String FORMAT_TEMPLATE = "[%s]";
 	private static final String FORMAT_FAIL = "§4[%s]";
@@ -191,8 +191,13 @@ public class EssentialsSign
 	{
 		return true;
 	}
+	
+	public boolean onBlockIgnite(final Block block, final IEssentials ess)
+	{
+		return true;
+	}
 
-	public boolean onBlockPush(Block block, IEssentials ess)
+	public boolean onBlockPush(final Block block, final IEssentials ess)
 	{
 		return true;
 	}
@@ -450,7 +455,7 @@ public class EssentialsSign
 		public BlockSign(final Block block)
 		{
 			this.block = block;
-			this.sign = new CraftSign(block);
+			this.sign = (Sign)block.getState();
 		}
 
 		public final String getLine(final int index)

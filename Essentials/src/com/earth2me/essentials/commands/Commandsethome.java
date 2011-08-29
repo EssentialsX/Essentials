@@ -17,16 +17,35 @@ public class Commandsethome extends EssentialsCommand
 	{
 		if (args.length > 0)
 		{
+			//Allowing both formats /sethome khobbits house | /sethome khobbits:house
+			final String[] nameParts = args[0].split(":");
+			if (nameParts[0].length() != args[0].length())
+			{
+				args = nameParts;
+			}
+
 			if (args.length < 2)
 			{
-				user.setHome(args[0].equalsIgnoreCase("default"));
+				if (user.isAuthorized("essentials.sethome.multiple"))
+				{
+					if ((user.isAuthorized("essentials.sethome.multiple.unlimited")) || (user.getHomes().size() < ess.getSettings().getMultipleHomes())
+						|| (user.getHomes().contains(args[0].toLowerCase())))
+					{
+						user.setHome(args[0].toLowerCase());
+					}
+					else
+					{
+						throw new Exception(Util.format("maxHomes", ess.getSettings().getMultipleHomes()));
+					}
+
+				}
 			}
 			else
 			{
 				if (user.isAuthorized("essentials.sethome.others"))
 				{
 					User usersHome = ess.getUser(ess.getServer().getPlayer(args[0]));
-					if(usersHome == null)
+					if (usersHome == null)
 					{
 						usersHome = ess.getOfflineUser(args[0]);
 					}
@@ -34,15 +53,19 @@ public class Commandsethome extends EssentialsCommand
 					{
 						throw new Exception(Util.i18n("playerNotFound"));
 					}
-					usersHome.setHome(user.getLocation(), args[1].equalsIgnoreCase("default"));
+					String name = args[1].toLowerCase();
+					if (!user.isAuthorized("essentials.sethome.multiple"))
+					{
+						name = "home";
+					}
+					usersHome.setHome(name, user.getLocation());
 				}
 			}
 		}
 		else
 		{
-			user.setHome(false);
+			user.setHome();
 		}
-		charge(user);
 		user.sendMessage(Util.i18n("homeSet"));
 
 	}

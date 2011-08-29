@@ -26,20 +26,14 @@ public class Commandlightning extends EssentialsCommand
 		if (args.length < 1 & user != null)
 		{
 			user.getWorld().strikeLightning(user.getTargetBlock(null, 600).getLocation());
-			charge(user);
 			return;
 		}
 
 		if (server.matchPlayer(args[0]).isEmpty())
 		{
-			sender.sendMessage(Util.i18n("playerNotFound"));
-			return;
+			throw new Exception(Util.i18n("playerNotFound"));
 		}
 
-		if (user != null)
-		{
-			charge(user);
-		}
 		for (Player p : server.matchPlayer(args[0]))
 		{
 			sender.sendMessage(Util.format("lightningUse", p.getDisplayName()));

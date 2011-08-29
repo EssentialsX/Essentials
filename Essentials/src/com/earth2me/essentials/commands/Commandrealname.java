@@ -22,7 +22,6 @@ public class Commandrealname extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 		final String whois = args[0].toLowerCase();
-		charge(user);
 		for (Player p : server.getOnlinePlayers())
 		{
 			final User u = ess.getUser(p);

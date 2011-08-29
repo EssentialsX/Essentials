@@ -5,7 +5,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Location;
@@ -197,6 +199,133 @@ public class EssentialsUpgrade
 		doneFile.save();
 	}
 
+	private void updateUsersPowerToolsFormat()
+	{
+		if (doneFile.getBoolean("updateUsersPowerToolsFormat", false))
+		{
+			return;
+		}
+		final File userdataFolder = new File(ess.getDataFolder(), "userdata");
+		if (!userdataFolder.exists() || !userdataFolder.isDirectory())
+		{
+			return;
+		}
+		final File[] userFiles = userdataFolder.listFiles();
+
+		for (File file : userFiles)
+		{
+			if (!file.isFile() || !file.getName().endsWith(".yml"))
+			{
+				continue;
+			}
+			final EssentialsConf config = new EssentialsConf(file);
+			try
+			{
+				config.load();
+				if (config.hasProperty("powertools"))
+				{
+					@SuppressWarnings("unchecked")
+					final Map<Integer, Object> powertools = (Map<Integer, Object>)config.getProperty("powertools");
+					if (powertools == null)
+					{
+						continue;
+					}
+					for (Map.Entry<Integer, Object> entry : powertools.entrySet())
+					{
+						if (entry.getValue() instanceof String)
+						{
+							List<String> temp = new ArrayList<String>();
+							temp.add((String)entry.getValue());
+							((Map<Integer, Object>)powertools).put(entry.getKey(), temp);
+						}
+					}
+					config.save();
+				}
+			}
+			catch (RuntimeException ex)
+			{
+				LOGGER.log(Level.INFO, "File: " + file.toString());
+				throw ex;
+			}
+		}
+		doneFile.setProperty("updateUsersPowerToolsFormat", true);
+		doneFile.save();
+	}
+
+	private void updateUsersHomesFormat()
+	{
+		if (doneFile.getBoolean("updateUsersHomesFormat", false))
+		{
+			return;
+		}
+		final File userdataFolder = new File(ess.getDataFolder(), "userdata");
+		if (!userdataFolder.exists() || !userdataFolder.isDirectory())
+		{
+			return;
+		}
+		final File[] userFiles = userdataFolder.listFiles();
+
+		for (File file : userFiles)
+		{
+			if (!file.isFile() || !file.getName().endsWith(".yml"))
+			{
+				continue;
+			}
+			final EssentialsConf config = new EssentialsConf(file);
+			try
+			{
+
+				config.load();
+				if (config.hasProperty("home") && config.hasProperty("home.default"))
+				{
+					@SuppressWarnings("unchecked")
+					final String defworld = (String)config.getProperty("home.default");
+					final Location defloc = getFakeLocation(config,"home.worlds." + defworld);
+					if (defloc != null)
+					{
+						config.setProperty("homes.home", defloc);
+					}			
+
+					List<String> worlds = config.getKeys("home.worlds");
+					Location loc;
+					String worldName;
+
+					if (worlds == null)
+					{
+						continue;
+					}
+					for (String world : worlds)
+					{
+						if (defworld.equalsIgnoreCase(world))
+						{
+							continue;
+						}
+						loc = getFakeLocation(config, "home.worlds." + world);
+						if (loc == null)
+						{
+							continue;
+						}
+						worldName = loc.getWorld().getName().toLowerCase();
+						if (worldName != null && !worldName.isEmpty())
+						{
+							config.setProperty("homes." + worldName, loc);
+						}
+					}
+					config.removeProperty("home");
+					config.save();
+				}
+
+			}
+			catch (RuntimeException ex)
+			{
+				LOGGER.log(Level.INFO, "File: " + file.toString());
+				throw ex;
+			}
+		}
+		doneFile.setProperty("updateUsersHomesFormat", true);
+		doneFile.save();
+	}
+
 	private void moveUsersDataToUserdataFolder()
 	{
 		final File usersFile = new File(ess.getDataFolder(), "users.yml");
@@ -232,12 +361,12 @@ public class EssentialsUpgrade
 					}
 					if (world != null)
 					{
-						user.setHome(new Location(world,
-												  ((Number)vals.get(0)).doubleValue(),
-												  ((Number)vals.get(1)).doubleValue(),
-												  ((Number)vals.get(2)).doubleValue(),
-												  ((Number)vals.get(3)).floatValue(),
-												  ((Number)vals.get(4)).floatValue()), true);
+						user.setHome("home", new Location(world,
+														  ((Number)vals.get(0)).doubleValue(),
+														  ((Number)vals.get(1)).doubleValue(),
+														  ((Number)vals.get(2)).doubleValue(),
+														  ((Number)vals.get(3)).floatValue(),
+														  ((Number)vals.get(4)).floatValue()));
 					}
 				}
 			}
@@ -441,6 +570,25 @@ public class EssentialsUpgrade
 		}
 		return null;
 	}
+	public Location getFakeLocation(EssentialsConf config, String path)
+	{
+		String worldName = config.getString((path != null ? path + "." : "") + "world");
+		if (worldName == null || worldName.isEmpty())
+		{
+			return null;
+		}
+		World world = getFakeWorld(worldName);
+		if (world == null)
+		{
+			return null;
+		}
+		return new Location(world,
+							config.getDouble((path != null ? path + "." : "") + "x", 0),
+							config.getDouble((path != null ? path + "." : "") + "y", 0),
+							config.getDouble((path != null ? path + "." : "") + "z", 0),
+							(float)config.getDouble((path != null ? path + "." : "") + "yaw", 0),
+							(float)config.getDouble((path != null ? path + "." : "") + "pitch", 0));
+	}
 
 	public void beforeSettings()
 	{
@@ -457,5 +605,7 @@ public class EssentialsUpgrade
 		updateUsersToNewDefaultHome();
 		moveUsersDataToUserdataFolder();
 		convertWarps();
+		updateUsersPowerToolsFormat();
+		updateUsersHomesFormat();
 	}
 }

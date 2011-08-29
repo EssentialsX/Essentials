@@ -1,21 +1,17 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.ChargeException;
+import com.earth2me.essentials.IUser;
+import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.MaterialData;
 
 
-/**
- *
- * @author Seiji
- */
 public class Commandrepair extends EssentialsCommand
 {
 	public Commandrepair()
@@ -24,7 +20,7 @@ public class Commandrepair extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -33,46 +29,32 @@ public class Commandrepair extends EssentialsCommand
 
 		if (args[0].equalsIgnoreCase("hand"))
 		{
-			ItemStack item = user.getItemInHand();
-			try
-			{
-				repairItem(item);
-			}
-			catch (Exception e)
-			{
-				user.sendMessage(e.getMessage());
-				return;
-			}
+			final ItemStack item = user.getItemInHand();
+			final String itemName = item.getType().toString().toLowerCase();
+			final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), ess);
 
-			String itemName = item.getType().toString().toLowerCase().replace('_', ' ');
-			charge(user);
-			user.sendMessage(Util.format("repair", itemName));
+			charge.isAffordableFor(user);
+
+			repairItem(item);
+
+			charge.charge(user);
+
+			user.sendMessage(Util.format("repair", itemName.replace('_', ' ')));
 		}
 		else if (args[0].equalsIgnoreCase("all"))
 		{
-			StringBuilder itemList = new StringBuilder();
-			itemList.append(repairItems(user.getInventory().getContents()));
+			final List<String> repaired = new ArrayList<String>();
+			repairItems(user.getInventory().getContents(), user, repaired);
 
-			String armor = repairItems(user.getInventory().getArmorContents());
+			repairItems(user.getInventory().getArmorContents(), user, repaired);
 
-			if (armor.length() > 0)
+			if (repaired.isEmpty())
 			{
-				if (itemList.length() > 0)
-				{
-					itemList.append(", ");
-				}
-
-				itemList.append(armor);
-			}
-
-			if (itemList.length() == 0)
-			{
-				user.sendMessage(Util.format("repairNone"));
+				throw new Exception(Util.format("repairNone"));
 			}
 			else
 			{
-				charge(user);
-				user.sendMessage(Util.format("repair", itemList.toString()));
+				user.sendMessage(Util.format("repair", Util.joinList(repaired)));
 			}
 
 		}
@@ -82,10 +64,9 @@ public class Commandrepair extends EssentialsCommand
 		}
 	}
 
-	private void repairItem(ItemStack item) throws Exception
+	private void repairItem(final ItemStack item) throws Exception
 	{
-		Material material = Material.getMaterial(item.getTypeId());
-		String error = null;
+		final Material material = Material.getMaterial(item.getTypeId());
 		if (material.isBlock() || material.getMaxDurability() < 0)
 		{
 			throw new Exception(Util.i18n("repairInvalidType"));
@@ -99,28 +80,39 @@ public class Commandrepair extends EssentialsCommand
 		item.setDurability((short)0);
 	}
 
-	private String repairItems(ItemStack[] items)
+	private void repairItems(final ItemStack[] items, final IUser user, final List<String> repaired)
 	{
-		StringBuilder itemList = new StringBuilder();
 		for (ItemStack item : items)
 		{
+			final String itemName = item.getType().toString().toLowerCase();
+			final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), ess);
+			try
+			{
+				charge.isAffordableFor(user);
+			}
+			catch (ChargeException ex)
+			{
+				user.sendMessage(ex.getMessage());
+				continue;
+			}
+
 			try
 			{
 				repairItem(item);
-				if (itemList.length() > 0)
-				{
-					itemList.append(", ");
-				}
-
-				String itemName = item.getType().toString().toLowerCase().replace('_', ' ');
-				itemList.append(itemName);
 			}
 			catch (Exception e)
 			{
+				continue;
 			}
-
+			try
+			{
+				charge.charge(user);
+			}
+			catch (ChargeException ex)
+			{
+				user.sendMessage(ex.getMessage());
+			}
+			repaired.add(itemName.replace('_', ' '));
 		}
-
-		return itemList.toString();
 	}
 }

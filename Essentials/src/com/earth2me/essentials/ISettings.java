@@ -72,6 +72,8 @@ public interface ISettings extends IConf
 	boolean getReclaimSetting();
 
 	boolean getRespawnAtHome();
+	
+	int getMultipleHomes();
 
 	boolean getSortListByGroups();
 
@@ -107,8 +109,6 @@ public interface ISettings extends IConf
 
 	boolean permissionBasedItemSpawn();
 
-	void reloadConfig();
-
 	boolean showNonEssCommandsInHelp();
 
 	boolean spawnIfNoHome();
@@ -129,7 +129,15 @@ public interface ISettings extends IConf
 
 	boolean isPlayerCommand(String string);
 
-	public boolean useBukkitPermissions();
+	boolean useBukkitPermissions();
 
-	public boolean addPrefixSuffix();
+	boolean addPrefixSuffix();
+
+	boolean isUpdateEnabled();
+
+	long getAutoAfk();
+
+	long getAutoAfkKick();
+
+	boolean getFreezeAfkPlayers();
 }

@@ -15,8 +15,6 @@ public class Commandafk extends EssentialsCommand
 	@Override
 	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		charge(user);
-
 		if (args.length > 0 && user.isAuthorized("essentials.afk.others"))
 		{
 			User afkUser = ess.getUser(ess.getServer().matchPlayer(args[0]));
@@ -35,12 +33,13 @@ public class Commandafk extends EssentialsCommand
 	{
 		if (!user.toggleAfk())
 		{
-			user.sendMessage(Util.i18n("markedAsNotAway"));
+			//user.sendMessage(Util.i18n("markedAsNotAway"));
 			ess.broadcastMessage(user.getName(), Util.format("userIsNotAway", user.getDisplayName()));
+			user.updateActivity();
 		}
 		else
 		{
-			user.sendMessage(Util.i18n("markedAsAway"));
+			//user.sendMessage(Util.i18n("markedAsAway"));
 			ess.broadcastMessage(user.getName(), Util.format("userIsAway", user.getDisplayName()));
 		}
 	}

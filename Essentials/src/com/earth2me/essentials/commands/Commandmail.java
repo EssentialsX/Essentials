@@ -23,22 +23,19 @@ public class Commandmail extends EssentialsCommand
 			List<String> mail = user.getMails();
 			if (mail.isEmpty())
 			{
-				user.sendMessage(Util.i18n("noMail"));
-				return;
+				throw new Exception(Util.i18n("noMail"));
 			}
 			for (String s : mail)
 			{
 				user.sendMessage(s);
 			}
-			user.sendMessage(Util.i18n("mailClear"));
-			return;
+			throw new Exception(Util.i18n("mailClear"));
 		}
 		if (args.length >= 3 && "send".equalsIgnoreCase(args[0]))
 		{
 			if (!user.isAuthorized("essentials.mail.send"))
 			{
-				user.sendMessage(Util.i18n("noMailSendPerm"));
-				return;
+				throw new Exception(Util.i18n("noMailSendPerm"));
 			}
 
 			Player player = server.getPlayer(args[1]);
@@ -53,10 +50,8 @@ public class Commandmail extends EssentialsCommand
 			}
 			if (u == null)
 			{
-				user.sendMessage(Util.format("playerNeverOnServer", args[1]));
-				return;
+				throw new Exception(Util.format("playerNeverOnServer", args[1]));
 			}
-			charge(user);
 			if (!u.isIgnoredPlayer(user.getName()))
 			{
 				u.addMail(ChatColor.stripColor(user.getDisplayName()) + ": " + getFinalArg(args, 2));
@@ -67,8 +62,7 @@ public class Commandmail extends EssentialsCommand
 		if (args.length >= 1 && "clear".equalsIgnoreCase(args[0]))
 		{
 			user.setMails(null);
-			user.sendMessage(Util.i18n("mailCleared"));
-			return;
+			throw new Exception(Util.i18n("mailCleared"));
 		}
 		throw new NotEnoughArgumentsException();
 	}

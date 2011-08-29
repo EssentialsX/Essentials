@@ -79,7 +79,10 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 	@Override
 	public final void run(final Server server, final User user, final String commandLabel, final Command cmd, final String[] args) throws Exception
 	{
+		final Trade charge = new Trade(this.getName(), ess);
+		charge.isAffordableFor(user);
 		run(server, user, commandLabel, args);
+		charge.charge(user);
 	}
 
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
@@ -110,14 +113,5 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 			bldr.append(args[i]);
 		}
 		return bldr.toString();
-	}
-
-	protected void charge(final CommandSender sender) throws ChargeException
-	{
-		if (sender instanceof Player)
-		{
-			final Trade charge = new Trade(this.getName(), ess);
-			charge.charge(ess.getUser((Player)sender));
-		}
 	}
 }

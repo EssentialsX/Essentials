@@ -30,7 +30,6 @@ public class Commandext extends EssentialsCommand
 	{
 		if (args.length < 1)
 		{
-			charge(user);
 			user.setFireTicks(0);
 			user.sendMessage(Util.i18n("extinguish"));
 			return;
@@ -43,7 +42,6 @@ public class Commandext extends EssentialsCommand
 	{
 		for (Player p : server.matchPlayer(name))
 		{
-			charge(sender);
 			p.setFireTicks(0);
 			sender.sendMessage(Util.format("extinguishOthers", p.getDisplayName()));
 		}

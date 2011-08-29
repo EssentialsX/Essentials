@@ -32,7 +32,6 @@ public class Commandtpo extends EssentialsCommand
 		// Verify permission
 		if (!p.isHidden() || user.isAuthorized("essentials.teleport.hidden"))
 		{
-			charge(user);
 			user.getTeleport().now(p, false);
 			user.sendMessage(Util.i18n("teleporting"));
 		}

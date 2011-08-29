@@ -17,6 +17,8 @@
  */
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.perm.IPermissionsHandler;
+import com.earth2me.essentials.perm.ConfigPermissionsHandler;
 import com.earth2me.essentials.api.Economy;
 import com.earth2me.essentials.commands.EssentialsCommand;
 import java.io.*;
@@ -148,9 +150,10 @@ public class Essentials extends JavaPlugin implements IEssentials
 			LOGGER.log(Level.INFO, Util.i18n("bukkitFormatChanged"));
 		}
 
-		final ServerListener serverListener = new EssentialsPluginListener(this);
+		final EssentialsPluginListener serverListener = new EssentialsPluginListener(this);
 		pm.registerEvent(Type.PLUGIN_ENABLE, serverListener, Priority.Low, this);
 		pm.registerEvent(Type.PLUGIN_DISABLE, serverListener, Priority.Low, this);
+		confList.add(serverListener);
 
 		final EssentialsPlayerListener playerListener = new EssentialsPlayerListener(this);
 		pm.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
@@ -209,10 +212,10 @@ public class Essentials extends JavaPlugin implements IEssentials
 		final EssentialsTimer timer = new EssentialsTimer(this);
 		getScheduler().scheduleSyncRepeatingTask(this, timer, 1, 50);
 		Economy.setEss(this);
-		if (enableErrorLogging)
+		if (getSettings().isUpdateEnabled())
 		{
 			updateTimer = new EssentialsUpdateTimer(this);
-			getScheduler().scheduleAsyncRepeatingTask(this, updateTimer, 50, 50 * 60 * (this.getDescription().getVersion().startsWith("Dev") ? 60 : 360));
+			getScheduler().scheduleAsyncRepeatingTask(this, updateTimer, 20 * 60, 20 * 3600 * 6);
 		}
 		LOGGER.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), Util.joinList(this.getDescription().getAuthors())));
 	}
@@ -561,7 +564,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 		catch (NullPointerException ex)
 		{
-			return null;
+			return new User(base, this);
 		}
 	}
 
