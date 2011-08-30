@@ -215,7 +215,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		if (getSettings().isUpdateEnabled())
 		{
 			updateTimer = new EssentialsUpdateTimer(this);
-			getScheduler().scheduleAsyncRepeatingTask(this, updateTimer, 20 * 60, 20 * 3600 * 6);
+			getScheduler().scheduleAsyncRepeatingTask(this, updateTimer, 20 * 60 * 10, 20 * 3600 * 6);
 		}
 		LOGGER.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), Util.joinList(this.getDescription().getAuthors())));
 	}
