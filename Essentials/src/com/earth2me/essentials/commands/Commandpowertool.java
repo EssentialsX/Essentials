@@ -17,17 +17,17 @@ public class Commandpowertool extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		ItemStack is = user.getItemInHand();
-		List<String> powertools = user.getPowertool(is);
-		if (is == null || is.getType() == Material.AIR)
+		final ItemStack itemStack = user.getItemInHand();
+		if (itemStack == null || itemStack.getType() == Material.AIR)
 		{
 			throw new Exception(Util.i18n("powerToolAir"));
 		}
 
-		String itemName = is.getType().toString().toLowerCase().replaceAll("_", " ");
+		final String itemName = itemStack.getType().toString().toLowerCase().replaceAll("_", " ");
 		String command = getFinalArg(args, 0);
+		List<String> powertools = user.getPowertool(itemStack);
 		if (command != null && !command.isEmpty())
 		{
 			if (command.equalsIgnoreCase("l:"))
@@ -66,7 +66,7 @@ public class Commandpowertool extends EssentialsCommand
 				if (command.startsWith("a:"))
 				{
 					command = command.substring(2);
-					if(powertools.contains(command))
+					if (powertools.contains(command))
 					{
 						throw new Exception(Util.format("powerToolAlreadySet", command, itemName));
 					}
@@ -87,10 +87,13 @@ public class Commandpowertool extends EssentialsCommand
 		}
 		else
 		{
-			powertools.clear();
+			if (powertools != null)
+			{
+				powertools.clear();
+			}
 			user.sendMessage(Util.format("powerToolRemoveAll", itemName));
 		}
 
-		user.setPowertool(is, powertools);
+		user.setPowertool(itemStack, powertools);
 	}
 }

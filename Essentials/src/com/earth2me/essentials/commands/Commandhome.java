@@ -58,5 +58,6 @@ public class Commandhome extends EssentialsCommand
 				user.sendMessage(Util.format("homes", Util.joinList(homes)));
 			}
 		}
+		throw new NoChargeException();
 	}
 }

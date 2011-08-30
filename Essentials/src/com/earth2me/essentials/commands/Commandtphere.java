@@ -24,5 +24,6 @@ public class Commandtphere extends EssentialsCommand
 		p.getTeleport().teleport(user, new Trade(this.getName(), ess));
 		user.sendMessage(Util.i18n("teleporting"));
 		p.sendMessage(Util.i18n("teleporting"));
+		throw new NoChargeException();
 	}
 }

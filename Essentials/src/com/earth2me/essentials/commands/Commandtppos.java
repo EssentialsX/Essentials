@@ -30,5 +30,6 @@ public class Commandtppos extends EssentialsCommand
 		charge.isAffordableFor(user);
 		user.sendMessage(Util.i18n("teleporting"));
 		user.getTeleport().teleport(l, charge);
+		throw new NoChargeException();
 	}
 }

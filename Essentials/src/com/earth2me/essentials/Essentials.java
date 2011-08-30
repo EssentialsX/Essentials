@@ -28,6 +28,7 @@ import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.commands.IEssentialsCommand;
+import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import com.earth2me.essentials.register.payment.Methods;
 import com.earth2me.essentials.signs.SignBlockListener;
@@ -215,7 +216,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		if (getSettings().isUpdateEnabled())
 		{
 			updateTimer = new EssentialsUpdateTimer(this);
-			getScheduler().scheduleAsyncRepeatingTask(this, updateTimer, 20 * 60, 20 * 3600 * 6);
+			getScheduler().scheduleAsyncRepeatingTask(this, updateTimer, 20 * 60 * 10, 20 * 3600 * 6);
 		}
 		LOGGER.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), Util.joinList(this.getDescription().getAuthors())));
 	}
@@ -449,6 +450,10 @@ public class Essentials extends JavaPlugin implements IEssentials
 				{
 					cmd.run(getServer(), user, commandLabel, command, args);
 				}
+				return true;
+			}
+			catch (NoChargeException ex)
+			{
 				return true;
 			}
 			catch (NotEnoughArgumentsException ex)
