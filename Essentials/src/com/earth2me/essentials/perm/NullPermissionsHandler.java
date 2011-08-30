@@ -1,10 +1,11 @@
 package com.earth2me.essentials.perm;
 
+import java.util.Collections;
 import java.util.List;
 import org.bukkit.entity.Player;
 
 
-public class SuperpermsHandler implements IPermissionsHandler
+public class NullPermissionsHandler implements IPermissionsHandler
 {
 	@Override
 	public String getGroup(final Player base)
@@ -15,13 +16,13 @@ public class SuperpermsHandler implements IPermissionsHandler
 	@Override
 	public List<String> getGroups(final Player base)
 	{
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override
 	public boolean canBuild(final Player base, final String group)
 	{
-		return hasPermission(base, "essentials.build");
+		return false;
 	}
 
 	@Override
@@ -33,23 +34,7 @@ public class SuperpermsHandler implements IPermissionsHandler
 	@Override
 	public boolean hasPermission(final Player base, final String node)
 	{
-		if (base.hasPermission("-" + node))
-		{
-			return false;
-		}
-		final String[] parts = node.split("\\.");
-		final StringBuilder builder = new StringBuilder(node.length());
-		for (String part : parts)
-		{
-			builder.append('*');
-			if (base.hasPermission(builder.toString()))
-			{
-				return true;
-			}
-			builder.deleteCharAt(builder.length() - 1);
-			builder.append(part).append('.');
-		}
-		return base.hasPermission(node);
+		return false;
 	}
 
 	@Override

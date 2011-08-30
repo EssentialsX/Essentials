@@ -19,28 +19,29 @@ public class BPermissionsHandler extends SuperpermsHandler
 	@Override
 	public String getGroup(final Player base)
 	{
-		final PermissionSet pset = wpm.getPermissionSet(base.getWorld());
-		if (pset == null)
-		{
-			return "default";
-		}
-		final List<String> groups = pset.getGroups(base);
+		final List<String> groups = getGroups(base);
 		if (groups == null || groups.isEmpty())
 		{
-			return "default";
+			return null;
 		}
 		return groups.get(0);
 	}
 
 	@Override
-	public boolean inGroup(final Player base, final String group)
+	public List<String> getGroups(final Player base)
 	{
 		final PermissionSet pset = wpm.getPermissionSet(base.getWorld());
 		if (pset == null)
 		{
-			return false;
+			return null;
 		}
-		final List<String> groups = pset.getGroups(base);
+		return pset.getGroups(base);
+	}
+
+	@Override
+	public boolean inGroup(final Player base, final String group)
+	{
+		final List<String> groups = getGroups(base);
 		if (groups == null || groups.isEmpty())
 		{
 			return false;

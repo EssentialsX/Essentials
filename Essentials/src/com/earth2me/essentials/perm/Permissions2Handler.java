@@ -2,6 +2,8 @@ package com.earth2me.essentials.perm;
 
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
+import java.util.Arrays;
+import java.util.List;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -18,8 +20,13 @@ public class Permissions2Handler implements IPermissionsHandler
 	@Override
 	public String getGroup(final Player base)
 	{
-		final String group = permissionHandler.getGroup(base.getWorld().getName(), base.getName());
-		return group == null ? "default" : group;
+		return permissionHandler.getGroup(base.getWorld().getName(), base.getName());
+	}
+
+	@Override
+	public List<String> getGroups(final Player base)
+	{
+		return Arrays.asList(permissionHandler.getGroups(base.getWorld().getName(), base.getName()));
 	}
 
 	@Override
@@ -43,14 +50,12 @@ public class Permissions2Handler implements IPermissionsHandler
 	@Override
 	public String getPrefix(final Player base)
 	{
-		final String prefix = permissionHandler.getGroupPrefix(base.getWorld().getName(), getGroup(base));
-		return prefix == null ? "" : prefix;
+		return permissionHandler.getGroupPrefix(base.getWorld().getName(), getGroup(base));
 	}
 
 	@Override
 	public String getSuffix(final Player base)
 	{
-		final String suffix = permissionHandler.getGroupSuffix(base.getWorld().getName(), getGroup(base));
-		return suffix == null ? "" : suffix;
+		return permissionHandler.getGroupSuffix(base.getWorld().getName(), getGroup(base));
 	}
 }

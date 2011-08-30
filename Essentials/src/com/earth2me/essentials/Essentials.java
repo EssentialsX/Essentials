@@ -30,6 +30,7 @@ import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
+import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
 import com.earth2me.essentials.signs.SignBlockListener;
 import com.earth2me.essentials.signs.SignEntityListener;
@@ -65,7 +66,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private transient final Methods paymentMethod = new Methods();
 	private transient final static boolean enableErrorLogging = false;
 	private transient final EssentialsErrorHandler errorHandler = new EssentialsErrorHandler();
-	private transient IPermissionsHandler permissionsHandler;
+	private transient PermissionsHandler permissionsHandler;
 	private transient UserMap userMap;
 
 	@Override
@@ -90,7 +91,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		this.initialize(null, server, new PluginDescriptionFile(new FileReader(new File("src" + File.separator + "plugin.yml"))), dataFolder, null, null);
 		settings = new Settings(this);
 		userMap = new UserMap(this);
-		permissionsHandler = new ConfigPermissionsHandler(this);
+		permissionsHandler = new PermissionsHandler(this, false);
 		Economy.setEss(this);
 	}
 
@@ -151,6 +152,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 			LOGGER.log(Level.INFO, Util.i18n("bukkitFormatChanged"));
 		}
 
+		permissionsHandler = new PermissionsHandler(this, settings.useBukkitPermissions());
 		final EssentialsPluginListener serverListener = new EssentialsPluginListener(this);
 		pm.registerEvent(Type.PLUGIN_ENABLE, serverListener, Priority.Low, this);
 		pm.registerEvent(Type.PLUGIN_DISABLE, serverListener, Priority.Low, this);
@@ -665,15 +667,9 @@ public class Essentials extends JavaPlugin implements IEssentials
 	}
 
 	@Override
-	public IPermissionsHandler getPermissionsHandler()
+	public PermissionsHandler getPermissionsHandler()
 	{
 		return permissionsHandler;
-	}
-
-	@Override
-	public void setPermissionsHandler(final IPermissionsHandler handler)
-	{
-		this.permissionsHandler = handler;
 	}
 
 	@Override
