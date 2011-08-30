@@ -28,6 +28,7 @@ import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.commands.IEssentialsCommand;
+import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import com.earth2me.essentials.register.payment.Methods;
 import com.earth2me.essentials.signs.SignBlockListener;
@@ -449,6 +450,10 @@ public class Essentials extends JavaPlugin implements IEssentials
 				{
 					cmd.run(getServer(), user, commandLabel, command, args);
 				}
+				return true;
+			}
+			catch (NoChargeException ex)
+			{
 				return true;
 			}
 			catch (NotEnoughArgumentsException ex)
