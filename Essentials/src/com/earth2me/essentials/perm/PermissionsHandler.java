@@ -101,73 +101,74 @@ public class PermissionsHandler implements IPermissionsHandler
 		final PluginManager pluginManager = plugin.getServer().getPluginManager();
 		final Plugin permExPlugin = pluginManager.getPlugin("PermissionsEx");
 
-		if (permExPlugin == null || !permExPlugin.isEnabled())
-		{
-			final Plugin permBukkitPlugin = pluginManager.getPlugin("PermissionsBukkit");
-			final Plugin bPermPlugin = pluginManager.getPlugin("bPermissions");
-			final Plugin permPlugin = pluginManager.getPlugin("Permissions");
-
-			if (permBukkitPlugin != null && permBukkitPlugin.isEnabled())
-			{
-				if (!(handler instanceof PermissionsBukkitHandler))
-				{
-					LOGGER.log(Level.INFO, "Essentials: Using PermissionsBukkit based permissions.");
-					handler = new PermissionsBukkitHandler(permBukkitPlugin);
-				}
-			}
-			else if (bPermPlugin != null && bPermPlugin.isEnabled())
-			{
-				if (!(handler instanceof BPermissionsHandler))
-				{
-					LOGGER.log(Level.INFO, "Essentials: Using bPermissions based permissions.");
-					handler = new BPermissionsHandler();
-				}
-			}
-			else if (permPlugin == null || !permPlugin.isEnabled())
-			{
-				if (useSuperperms)
-				{
-					if (!(handler instanceof SuperpermsHandler))
-					{
-						LOGGER.log(Level.INFO, "Essentials: Using superperms based permissions.");
-						handler = new SuperpermsHandler();
-					}
-				}
-				else
-				{
-					if (!(handler instanceof ConfigPermissionsHandler))
-					{
-						LOGGER.log(Level.INFO, "Essentials: Using config based permissions. Enable superperms in config.");
-						handler = new ConfigPermissionsHandler(plugin);
-					}
-				}
-			}
-			else
-			{
-				if (permPlugin.getDescription().getVersion().charAt(0) == '3')
-				{
-					if (!(handler instanceof Permissions3Handler))
-					{
-						LOGGER.log(Level.INFO, "Essentials: Using Permissions 3 based permissions.");
-						handler = new Permissions3Handler(permPlugin);
-					}
-				}
-				else
-				{
-					if (!(handler instanceof Permissions2Handler))
-					{
-						LOGGER.log(Level.INFO, "Essentials: Using Permissions 2 based permissions.");
-						handler = new Permissions2Handler(permPlugin);
-					}
-				}
-			}
-		}
-		else
+		if (permExPlugin != null && permExPlugin.isEnabled())
 		{
 			if (!(handler instanceof PermissionsExHandler))
 			{
 				LOGGER.log(Level.INFO, "Essentials: Using PermissionsEx based permissions.");
 				handler = new PermissionsExHandler();
+			}
+			return;
+		}
+
+		final Plugin permBukkitPlugin = pluginManager.getPlugin("PermissionsBukkit");
+		if (permBukkitPlugin != null && permBukkitPlugin.isEnabled())
+		{
+			if (!(handler instanceof PermissionsBukkitHandler))
+			{
+				LOGGER.log(Level.INFO, "Essentials: Using PermissionsBukkit based permissions.");
+				handler = new PermissionsBukkitHandler(permBukkitPlugin);
+			}
+			return;
+		}
+
+		final Plugin bPermPlugin = pluginManager.getPlugin("bPermissions");
+		if (bPermPlugin != null && bPermPlugin.isEnabled())
+		{
+			if (!(handler instanceof BPermissionsHandler))
+			{
+				LOGGER.log(Level.INFO, "Essentials: Using bPermissions based permissions.");
+				handler = new BPermissionsHandler();
+			}
+			return;
+		}
+
+		final Plugin permPlugin = pluginManager.getPlugin("Permissions");
+		if (permPlugin != null && permPlugin.isEnabled())
+		{
+			if (permPlugin.getDescription().getVersion().charAt(0) == '3')
+			{
+				if (!(handler instanceof Permissions3Handler))
+				{
+					LOGGER.log(Level.INFO, "Essentials: Using Permissions 3 based permissions.");
+					handler = new Permissions3Handler(permPlugin);
+				}
+			}
+			else
+			{
+				if (!(handler instanceof Permissions2Handler))
+				{
+					LOGGER.log(Level.INFO, "Essentials: Using Permissions 2 based permissions.");
+					handler = new Permissions2Handler(permPlugin);
+				}
+			}
+			return;
+		}
+
+		if (useSuperperms)
+		{
+			if (!(handler instanceof SuperpermsHandler))
+			{
+				LOGGER.log(Level.INFO, "Essentials: Using superperms based permissions.");
+				handler = new SuperpermsHandler();
+			}
+		}
+		else
+		{
+			if (!(handler instanceof ConfigPermissionsHandler))
+			{
+				LOGGER.log(Level.INFO, "Essentials: Using config based permissions. Enable superperms in config.");
+				handler = new ConfigPermissionsHandler(plugin);
 			}
 		}
 	}
