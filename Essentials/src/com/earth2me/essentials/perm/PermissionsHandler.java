@@ -71,7 +71,7 @@ public class PermissionsHandler implements IPermissionsHandler
 	@Override
 	public boolean hasPermission(final Player base, final String node)
 	{
-		return handler.inGroup(base, node);
+		return handler.hasPermission(base, node);
 	}
 
 	@Override
