@@ -17,7 +17,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	private transient User teleportRequester;
 	private transient boolean teleportRequestHere;
 	private transient final Teleport teleport;
-	private transient long lastOnlineActivity ;
+	private transient long lastOnlineActivity;
 	private transient long lastActivity = System.currentTimeMillis();
 	private boolean hidden = false;
 	private transient boolean godStateBeforeAfk;
@@ -50,6 +50,11 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	@Override
 	public boolean isAuthorized(final String node)
 	{
+		if (base instanceof OfflinePlayer)
+		{
+			return false;
+		}
+
 		if (isOp())
 		{
 			return true;
@@ -60,7 +65,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			return false;
 		}
 
-		return ess.getPermissionsHandler().hasPermission(this, node);
+		return ess.getPermissionsHandler().hasPermission(base, node);
 	}
 
 	public void healCooldown() throws Exception
@@ -264,8 +269,8 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 		if (ess.getSettings().addPrefixSuffix())
 		{
-			final String prefix = ess.getPermissionsHandler().getPrefix(this).replace('&', '§').replace("{WORLDNAME}", this.getWorld().getName());
-			final String suffix = ess.getPermissionsHandler().getSuffix(this).replace('&', '§').replace("{WORLDNAME}", this.getWorld().getName());
+			final String prefix = ess.getPermissionsHandler().getPrefix(base).replace('&', '§').replace("{WORLDNAME}", this.getWorld().getName());
+			final String suffix = ess.getPermissionsHandler().getSuffix(base).replace('&', '§').replace("{WORLDNAME}", this.getWorld().getName());
 
 			nickname.insert(0, prefix);
 			nickname.append(suffix);
@@ -341,11 +346,13 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public void setAfk(final boolean set)
 	{
 		this.setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") ? true : set);
-		if (set && !isAfk() && ess.getSettings().getFreezeAfkPlayers()) {
+		if (set && !isAfk() && ess.getSettings().getFreezeAfkPlayers())
+		{
 			godStateBeforeAfk = isGodModeEnabled();
 			setGodModeEnabled(true);
 		}
-		if (!set && isAfk() && ess.getSettings().getFreezeAfkPlayers()) {
+		if (!set && isAfk() && ess.getSettings().getFreezeAfkPlayers())
+		{
 			setGodModeEnabled(godStateBeforeAfk);
 		}
 		super.setAfk(set);
@@ -406,12 +413,15 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		}
 	}
 
-	public void updateActivity()
+	public void updateActivity(final boolean broadcast)
 	{
 		if (isAfk())
 		{
 			setAfk(false);
-			ess.broadcastMessage(getName(), Util.format("userIsNotAway", getDisplayName()));
+			if (broadcast)
+			{
+				ess.broadcastMessage(getName(), Util.format("userIsNotAway", getDisplayName()));
+			}
 			return;
 		}
 		lastActivity = System.currentTimeMillis();
@@ -423,7 +433,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		if (autoafkkick > 0 && lastActivity + autoafkkick * 1000 < System.currentTimeMillis()
 			&& !isAuthorized("essentials.kick.exempt") && !isAuthorized("essentials.afk.kickexempt"))
 		{
-			final String kickReason = Util.format("autoAfkKickReason", autoafkkick/60.0);
+			final String kickReason = Util.format("autoAfkKickReason", autoafkkick / 60.0);
 			kickPlayer(kickReason);
 
 

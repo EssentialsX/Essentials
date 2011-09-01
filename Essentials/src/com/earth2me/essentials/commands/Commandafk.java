@@ -35,7 +35,7 @@ public class Commandafk extends EssentialsCommand
 		{
 			//user.sendMessage(Util.i18n("markedAsNotAway"));
 			ess.broadcastMessage(user.getName(), Util.format("userIsNotAway", user.getDisplayName()));
-			user.updateActivity();
+			user.updateActivity(false);
 		}
 		else
 		{

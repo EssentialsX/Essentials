@@ -1,5 +1,7 @@
 package com.earth2me.essentials.perm;
 
+import java.util.Arrays;
+import java.util.List;
 import org.bukkit.entity.Player;
 import ru.tehkode.permissions.PermissionManager;
 import ru.tehkode.permissions.PermissionUser;
@@ -21,9 +23,20 @@ public class PermissionsExHandler implements IPermissionsHandler
 		final PermissionUser user = manager.getUser(base.getName());
 		if (user == null)
 		{
-			return "default";
+			return null;
 		}
 		return user.getGroupsNames()[0];
+	}
+
+	@Override
+	public List<String> getGroups(final Player base)
+	{
+		final PermissionUser user = manager.getUser(base.getName());
+		if (user == null)
+		{
+			return null;
+		}
+		return Arrays.asList(user.getGroupsNames());
 	}
 
 	@Override
@@ -62,7 +75,7 @@ public class PermissionsExHandler implements IPermissionsHandler
 		final PermissionUser user = manager.getUser(base.getName());
 		if (user == null)
 		{
-			return "";
+			return null;
 		}
 		return user.getPrefix();
 	}
@@ -73,7 +86,7 @@ public class PermissionsExHandler implements IPermissionsHandler
 		final PermissionUser user = manager.getUser(base.getName());
 		if (user == null)
 		{
-			return "";
+			return null;
 		}
 		return user.getSuffix();
 	}
