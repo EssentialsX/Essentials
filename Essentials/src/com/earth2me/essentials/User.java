@@ -413,12 +413,15 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		}
 	}
 
-	public void updateActivity()
+	public void updateActivity(final boolean broadcast)
 	{
 		if (isAfk())
 		{
 			setAfk(false);
-			ess.broadcastMessage(getName(), Util.format("userIsNotAway", getDisplayName()));
+			if (broadcast)
+			{
+				ess.broadcastMessage(getName(), Util.format("userIsNotAway", getDisplayName()));
+			}
 			return;
 		}
 		lastActivity = System.currentTimeMillis();

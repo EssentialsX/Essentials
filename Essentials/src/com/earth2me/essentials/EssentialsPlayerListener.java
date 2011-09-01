@@ -73,7 +73,7 @@ public class EssentialsPlayerListener extends PlayerListener
 				it.remove();
 			}
 		}
-		user.updateActivity();
+		user.updateActivity(true);
 		if (ess.getSettings().changeDisplayName())
 		{
 			user.setDisplayName(user.getNick());
@@ -107,7 +107,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			return;
 		}
 
-		user.updateActivity();
+		user.updateActivity(true);
 
 		if (!ess.getSettings().getNetherPortalsEnabled())
 		{
@@ -226,7 +226,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			user.getInventory().setContents(user.getSavedInventory());
 			user.setSavedInventory(null);
 		}
-		user.updateActivity();
+		user.updateActivity(false);
 		user.dispose();
 		if (!ess.getSettings().getReclaimSetting())
 		{
@@ -275,7 +275,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		{
 			user.setDisplayName(user.getNick());
 		}
-		user.setAfk(false);
+		user.updateActivity(false);
 		if (user.isAuthorized("essentials.sleepingignored"))
 		{
 			user.setSleepingIgnored(true);
@@ -489,7 +489,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 		if (!cmd.equalsIgnoreCase("afk"))
 		{
-			user.updateActivity();
+			user.updateActivity(true);
 		}
 	}
 }

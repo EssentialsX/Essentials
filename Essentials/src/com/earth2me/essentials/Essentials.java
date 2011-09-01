@@ -17,8 +17,6 @@
  */
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.perm.IPermissionsHandler;
-import com.earth2me.essentials.perm.ConfigPermissionsHandler;
 import com.earth2me.essentials.api.Economy;
 import com.earth2me.essentials.commands.EssentialsCommand;
 import java.io.*;
@@ -42,7 +40,6 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
-import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.*;
 import org.bukkit.plugin.java.*;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -213,7 +210,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		pm.registerEvent(Type.ENTITY_EXPLODE, tntListener, Priority.High, this);
 
 		final EssentialsTimer timer = new EssentialsTimer(this);
-		getScheduler().scheduleSyncRepeatingTask(this, timer, 1, 50);
+		getScheduler().scheduleSyncRepeatingTask(this, timer, 1, 100);
 		Economy.setEss(this);
 		if (getSettings().isUpdateEnabled())
 		{
