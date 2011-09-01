@@ -310,7 +310,7 @@ public class EssentialsPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerLogin(final PlayerLoginEvent event)
 	{
-		if (event.getResult() != Result.ALLOWED && event.getResult() != Result.KICK_FULL)
+		if (event.getResult() != Result.ALLOWED && event.getResult() != Result.KICK_FULL && event.getResult() != Result.KICK_BANNED)
 		{
 			return;
 		}
