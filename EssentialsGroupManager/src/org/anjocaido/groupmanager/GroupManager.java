@@ -5,6 +5,7 @@
 package org.anjocaido.groupmanager;
 
 import org.anjocaido.groupmanager.permissions.AnjoPermissionsHandler;
+import org.anjocaido.groupmanager.permissions.BukkitPermissions;
 import org.anjocaido.groupmanager.utils.GroupManagerPermissions;
 import org.anjocaido.groupmanager.data.Variables;
 import org.anjocaido.groupmanager.data.User;
@@ -45,15 +46,19 @@ public class GroupManager extends JavaPlugin {
     private ScheduledThreadPoolExecutor scheduler;
     private Map<String, ArrayList<User>> overloadedUsers = new HashMap<String, ArrayList<User>>();
     private Map<CommandSender, String> selectedWorlds = new HashMap<CommandSender, String>();
-    private WorldsHolder worldsHolder;
+    private static WorldsHolder worldsHolder;
     private boolean validateOnlinePlayer = true;
     private boolean isReady = false;
+    public static boolean isLoaded = false;
     private GMConfiguration config;
     private GMLoggerHandler ch;
+    public static BukkitPermissions BukkitPermissions;
     public static final Logger logger = Logger.getLogger(GroupManager.class.getName());
 
     @Override
     public void onDisable() {
+    	isLoaded = false;
+    	
         if (worldsHolder != null) {
             worldsHolder.saveChanges();
         }
@@ -82,8 +87,11 @@ public class GroupManager extends JavaPlugin {
             this.getServer().getPluginManager().disablePlugin(this);
             throw new IllegalStateException("An error ocurred while loading GroupManager");
         }
+        
+        BukkitPermissions = new BukkitPermissions(this);
 
         enableScheduler();
+        isLoaded = true;
         System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
     }
 
@@ -110,7 +118,7 @@ public class GroupManager extends JavaPlugin {
 
                 @Override
                 public void run() {
-                    GroupManager.this.worldsHolder.saveChanges();
+                    GroupManager.worldsHolder.saveChanges();
                 }
             };
             scheduler = new ScheduledThreadPoolExecutor(1);
@@ -153,7 +161,7 @@ public class GroupManager extends JavaPlugin {
         worldsHolder.reloadAll();
     }
 
-    public WorldsHolder getWorldsHolder() {
+    public static WorldsHolder getWorldsHolder() {
         return worldsHolder;
     }
 

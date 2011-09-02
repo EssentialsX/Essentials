@@ -4,6 +4,7 @@
  */
 package org.anjocaido.groupmanager.data;
 
+import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.dataholder.WorldDataHolder;
 import java.util.ArrayList;
 import java.util.Map;
@@ -52,7 +53,7 @@ public class Group extends DataUnit implements Cloneable {
     /**
      * Use this to deliver a group from a different dataSource to another
      * @param dataSource
-     * @return
+     * @return Null or Clone
      */
     public Group clone(WorldDataHolder dataSource) {
         if (dataSource.groupExists(this.getName())) {
@@ -79,7 +80,7 @@ public class Group extends DataUnit implements Cloneable {
     }
 
     /**
-     * @param inherits the inherits to set
+     * @param inherit the inherits to set
      */
     public void addInherits(Group inherit) {
         if (!this.getDataSource().groupExists(inherit.getName())) {
@@ -89,6 +90,8 @@ public class Group extends DataUnit implements Cloneable {
             inherits.add(inherit.getName().toLowerCase());
         }
         flagAsChanged();
+        if (GroupManager.isLoaded)
+        	GroupManager.BukkitPermissions.updateAllPlayers();
     }
 
     public boolean removeInherits(String inherit) {
@@ -118,5 +121,7 @@ public class Group extends DataUnit implements Cloneable {
             variables.addVar(key, temp.getVarObject(key));
         }
         flagAsChanged();
+        if (GroupManager.isLoaded)
+        	GroupManager.BukkitPermissions.updateAllPlayers();
     }
 }

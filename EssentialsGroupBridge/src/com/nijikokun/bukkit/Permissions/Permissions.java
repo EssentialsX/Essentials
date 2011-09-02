@@ -2,7 +2,7 @@ package com.nijikokun.bukkit.Permissions;
 
 import com.nijiko.permissions.PermissionHandler;
 import java.util.logging.Logger;
-import org.anjocaido.groupmanager.GroupManager;
+//import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.permissions.NijikoPermissionsProxy;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
@@ -63,7 +63,7 @@ public class Permissions extends JavaPlugin {
     }
 
     private void setGM(final Plugin p) {
-        GroupManager groupManager = (GroupManager) p;
+        //GroupManager groupManager = (GroupManager) p;
         ((NijikoPermissionsProxy) Security).setGM(p);
     }
 

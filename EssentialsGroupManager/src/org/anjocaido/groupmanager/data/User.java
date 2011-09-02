@@ -6,6 +6,8 @@ package org.anjocaido.groupmanager.data;
 
 //import com.sun.org.apache.bcel.internal.generic.AALOAD;
 import java.util.ArrayList;
+
+import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.dataholder.WorldDataHolder;
 import java.util.Map;
 
@@ -102,6 +104,8 @@ public class User extends DataUnit implements Cloneable {
     public void setGroup(String group) {
         this.group = group;
         flagAsChanged();
+        if (GroupManager.isLoaded)
+        	GroupManager.BukkitPermissions.updateAllPlayers();
     }
 
     /**
@@ -114,6 +118,8 @@ public class User extends DataUnit implements Cloneable {
         group = getDataSource().getGroup(group.getName());
         this.group = group.getName();
         flagAsChanged();
+        if (GroupManager.isLoaded)
+        	GroupManager.BukkitPermissions.updateAllPlayers();
     }
 
     public void addSubGroup(Group subGroup) {
@@ -127,6 +133,8 @@ public class User extends DataUnit implements Cloneable {
         removeSubGroup(subGroup);
         subGroups.add(subGroup.getName());
         flagAsChanged();
+        if (GroupManager.isLoaded)
+        	GroupManager.BukkitPermissions.updateAllPlayers();
     }
 
     public int subGroupsSize() {
@@ -145,6 +153,8 @@ public class User extends DataUnit implements Cloneable {
         try {
             if (subGroups.remove(subGroup.getName())) {
                 flagAsChanged();
+                if (GroupManager.isLoaded)
+                	GroupManager.BukkitPermissions.updateAllPlayers();
                 return true;
             }
         } catch (Exception e) {
@@ -187,5 +197,7 @@ public class User extends DataUnit implements Cloneable {
             variables.addVar(key, temp.getVarObject(key));
         }
         flagAsChanged();
+        if (GroupManager.isLoaded)
+        	GroupManager.BukkitPermissions.updateAllPlayers();
     }
 }
