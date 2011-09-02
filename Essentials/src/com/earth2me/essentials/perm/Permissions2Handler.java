@@ -44,7 +44,7 @@ public class Permissions2Handler implements IPermissionsHandler
 	@Override
 	public boolean hasPermission(final Player base, final String node)
 	{
-		return permissionHandler.permission(base.getWorld().getName(), base.getName(), node);
+		return permissionHandler.permission(base.getName(), node);
 	}
 
 	@Override
