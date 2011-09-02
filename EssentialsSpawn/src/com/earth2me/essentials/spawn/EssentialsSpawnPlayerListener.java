@@ -79,7 +79,7 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 
 		if (ess.getSettings().getAnnounceNewPlayers())
 		{
-			ess.broadcastMessage(user.getName(), ess.getSettings().getAnnounceNewPlayerFormat(user));
+			ess.broadcastMessage(user, ess.getSettings().getAnnounceNewPlayerFormat(user));
 		}
 	}
 }

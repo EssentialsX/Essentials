@@ -3,6 +3,7 @@ package com.earth2me.essentials.xmpp;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.EssentialsConf;
 import com.earth2me.essentials.IConf;
+import com.earth2me.essentials.IUser;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -101,8 +102,8 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 				sendCommand(chat, message);
 				break;
 			default:
-				final String name = parent.getUserByAddress(StringUtils.parseBareAddress(chat.getParticipant()));
-				parent.broadcastMessage(name, "="+name+": "+ message);
+				final IUser sender = parent.getUserByAddress(StringUtils.parseBareAddress(chat.getParticipant()));
+				parent.broadcastMessage(sender, "="+sender.getDisplayName()+": "+ message);
 			}
 		}
 	}

@@ -17,7 +17,7 @@ public class Commandsuicide extends EssentialsCommand
 	{
 		user.setHealth(0);
 		user.sendMessage(Util.i18n("suicideMessage"));
-		ess.broadcastMessage(user.getName(),
+		ess.broadcastMessage(user,
 								Util.format("suicideSuccess",user.getDisplayName()));
 	}
 }

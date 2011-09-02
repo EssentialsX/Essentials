@@ -47,7 +47,7 @@ public class UserManager implements IConf
 				return username;
 			}
 		}
-		return search;
+		return null;
 	}
 
 	public void setAddress(final String username, final String address)

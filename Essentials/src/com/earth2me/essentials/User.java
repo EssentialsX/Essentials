@@ -21,12 +21,14 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	private transient long lastActivity = System.currentTimeMillis();
 	private boolean hidden = false;
 	private transient boolean godStateBeforeAfk;
+	private transient Location afkPosition;
 
 	User(final Player base, final IEssentials ess)
 	{
 		super(base, ess);
 		teleport = new Teleport(this, ess);
 		godStateBeforeAfk = isGodModeEnabled();
+		afkPosition = getLocation();
 	}
 
 	User update(final Player base)
@@ -355,6 +357,9 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		{
 			setGodModeEnabled(godStateBeforeAfk);
 		}
+		if (set && !isAfk()) {
+			afkPosition = getLocation();
+		}
 		super.setAfk(set);
 	}
 
@@ -418,9 +423,9 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		if (isAfk())
 		{
 			setAfk(false);
-			if (broadcast)
+			if (broadcast && !isHidden())
 			{
-				ess.broadcastMessage(getName(), Util.format("userIsNotAway", getDisplayName()));
+				ess.broadcastMessage(this, Util.format("userIsNotAway", getDisplayName()));
 			}
 			return;
 		}
@@ -431,7 +436,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	{
 		final long autoafkkick = ess.getSettings().getAutoAfkKick();
 		if (autoafkkick > 0 && lastActivity + autoafkkick * 1000 < System.currentTimeMillis()
-			&& !isAuthorized("essentials.kick.exempt") && !isAuthorized("essentials.afk.kickexempt"))
+			&& !isHidden() && !isAuthorized("essentials.kick.exempt") && !isAuthorized("essentials.afk.kickexempt"))
 		{
 			final String kickReason = Util.format("autoAfkKickReason", autoafkkick / 60.0);
 			kickPlayer(kickReason);
@@ -450,7 +455,14 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		if (!isAfk() && autoafk > 0 && lastActivity + autoafk * 1000 < System.currentTimeMillis())
 		{
 			setAfk(true);
-			ess.broadcastMessage(getName(), Util.format("userIsAway", getDisplayName()));
+			if (!isHidden()) {
+				ess.broadcastMessage(this, Util.format("userIsAway", getDisplayName()));
+			}
 		}
+	}
+
+	public Location getAfkPosition()
+	{
+		return afkPosition;
 	}
 }

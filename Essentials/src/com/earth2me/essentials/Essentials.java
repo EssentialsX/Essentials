@@ -612,14 +612,20 @@ public class Essentials extends JavaPlugin implements IEssentials
 	}
 
 	@Override
-	public int broadcastMessage(final String name, final String message)
+	public int broadcastMessage(final IUser sender, final String message)
 	{
+		if (sender == null) {
+			return getServer().broadcastMessage(message);
+		}
+		if (sender.isHidden()) {
+			return 0;
+		}
 		final Player[] players = getServer().getOnlinePlayers();
 
 		for (Player player : players)
 		{
 			final User user = getUser(player);
-			if (!user.isIgnoredPlayer(name))
+			if (!user.isIgnoredPlayer(sender.getName()))
 			{
 				player.sendMessage(message);
 			}
