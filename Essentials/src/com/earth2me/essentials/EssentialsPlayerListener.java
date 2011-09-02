@@ -107,7 +107,8 @@ public class EssentialsPlayerListener extends PlayerListener
 			return;
 		}
 
-		if (user.getAfkPosition().distanceSquared(user.getLocation()) > 9) {
+		Location afk = user.getAfkPosition();
+		if (afk == null || !event.getTo().getWorld().equals(afk.getWorld()) || afk.distanceSquared(event.getTo()) > 9) {
 			user.updateActivity(true);
 		}
 
