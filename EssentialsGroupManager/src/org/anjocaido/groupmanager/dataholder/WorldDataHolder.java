@@ -578,6 +578,11 @@ public class WorldDataHolder {
 
         // PROCESS USERS FILE
         Map<String, Object> allUsersNode = (Map<String, Object>) usersRootDataNode.get("users");
+        
+        // Stop loading if the file is empty
+        if (allUsersNode == null)
+        	return ph;
+
         for (String usersKey : allUsersNode.keySet()) {
             Map<String, Object> thisUserNode = (Map<String, Object>) allUsersNode.get(usersKey);
             User thisUser = ph.createUser(usersKey);

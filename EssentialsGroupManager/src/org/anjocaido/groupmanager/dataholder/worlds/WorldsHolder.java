@@ -265,7 +265,7 @@ public class WorldsHolder {
             File groupsFile = new File(defaultWorldFolder, "groups.yml");
             File usersFile = new File(defaultWorldFolder, "users.yml");
             File oldDataFile = new File(plugin.getDataFolder(), "data.yml");
-            if (!groupsFile.exists()) {
+            if (!groupsFile.exists() || groupsFile.length() == 0) {
                 if (oldDataFile.exists()) {
                     try {
                         Tasks.copy(oldDataFile, groupsFile);
@@ -281,7 +281,7 @@ public class WorldsHolder {
                     }
                 }
             }
-            if (!usersFile.exists()) {
+            if (!usersFile.exists() || usersFile.length() == 0) {
                 if (oldDataFile.exists()) {
                     try {
                         Tasks.copy(oldDataFile, usersFile);
