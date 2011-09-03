@@ -54,6 +54,10 @@ public class GroupManager extends JavaPlugin {
     private GMLoggerHandler ch;
     public static BukkitPermissions BukkitPermissions;
     public static final Logger logger = Logger.getLogger(GroupManager.class.getName());
+    
+    //PERMISSIONS FOR COMMAND BEING LOADED
+    OverloadedWorldHolder dataHolder = null;
+    AnjoPermissionsHandler permissionHandler = null;
 
     @Override
     public void onDisable() {
@@ -222,8 +226,8 @@ public class GroupManager extends JavaPlugin {
         }
 
         //PERMISSIONS FOR COMMAND BEING LOADED
-        OverloadedWorldHolder dataHolder = null;
-        AnjoPermissionsHandler permissionHandler = null;
+        dataHolder = null;
+        permissionHandler = null;
 
         if (senderPlayer != null) {
             dataHolder = worldsHolder.getWorldData(senderPlayer);
@@ -1623,10 +1627,6 @@ public class GroupManager extends JavaPlugin {
      * Sets up the default world for use.
      */
     private boolean setDefaultWorldHandler(CommandSender sender) {
-    	
-    	//PERMISSIONS FOR COMMAND BEING LOADED
-        OverloadedWorldHolder dataHolder = null;
-        AnjoPermissionsHandler permissionHandler = null;
  
     	dataHolder = worldsHolder.getWorldData(worldsHolder.getDefaultWorld().getName());
         permissionHandler = dataHolder.getPermissionsHandler();

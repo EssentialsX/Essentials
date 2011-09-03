@@ -630,7 +630,9 @@ public class WorldDataHolder {
             if (thisUserNode.get("group") != null) {
                 Group hisGroup = ph.getGroup(thisUserNode.get("group").toString());
                 if (hisGroup == null) {
-                    throw new IllegalArgumentException("There is no group " + thisUserNode.get("group").toString() + ", as stated for player " + thisUser.getName());
+                	GroupManager.logger.warning("There is no group " + thisUserNode.get("group").toString() + ", as stated for player " + thisUser.getName() + ": Set to '" + ph.getDefaultGroup().getName() + "'.");
+                	hisGroup = ph.defaultGroup;
+                    //throw new IllegalArgumentException("There is no group " + thisUserNode.get("group").toString() + ", as stated for player " + thisUser.getName());
                 }
                 thisUser.setGroup(hisGroup);
             } else {
