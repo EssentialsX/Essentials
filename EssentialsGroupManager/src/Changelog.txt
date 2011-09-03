@@ -2,5 +2,6 @@ Changelog
 
 v 1.1:
 	- Fixed users being able to use 'manuadd' to add users to higher groups than their own.
-	- Added SuperPerms support so GM will update adn provide the permissions to plugins which only support Bukkit Perms.
+	- Added SuperPerms support so GM will update and provide the permissions to plugins which only support Bukkit Perms.
 	- Added more helpful output to errors on argument lengths.
+	- GroupManager will now attempt to select the default world when using commands instead of failing and telling you to use '/manselect <world>'.
