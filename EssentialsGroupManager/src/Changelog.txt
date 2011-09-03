@@ -8,3 +8,4 @@ v 1.1:
 	- Invalid groups assigned to players in users.yml will no longer cause a crash. GM will now set them to the default group instead.
 	- Fix for Users.yml containing only 'users:' causing a crash.
 	- GroupManager will now generate a fresh Users and Groups yml if either file is empty.
+	- Fix for an infinite loop bug with the new Bukkit Perms during a new user creation.

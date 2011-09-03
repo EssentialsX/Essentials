@@ -56,6 +56,7 @@ public class BukkitPermissions {
     protected Plugin plugin;
     protected boolean dumpAllPermissions = true;
     protected boolean dumpMatchedPermissions = true;
+    public boolean player_join = false;
 
     public BukkitPermissions(Plugin plugin) {
         this.plugin = plugin;
@@ -142,7 +143,14 @@ public class BukkitPermissions {
 
         @Override
         public void onPlayerJoin(PlayerJoinEvent event) {
-            updatePermissions(event.getPlayer());
+        	player_join = true;
+        	Player player = event.getPlayer();
+        	//force GM to create the player if they are not already listed.
+        	if (GroupManager.getWorldsHolder().getWorldData(player.getWorld().getName()).getUser(player.getName()) != null) {
+        		player_join = false;
+        		updatePermissions(event.getPlayer());
+        	} else
+        		player_join = false;
         }
 
         @Override
