@@ -291,7 +291,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player> <group>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -311,11 +311,29 @@ public class GroupManager extends JavaPlugin {
                         sender.sendMessage(ChatColor.RED + "Group not found!");
                         return false;
                     }
+
                     //VALIDANDO PERMISSAO
                     if (!isConsole && !senderPlayer.isOp() && (senderGroup != null ? permissionHandler.inGroup(auxUser.getName(), senderGroup.getName()) : false)) {
                         sender.sendMessage(ChatColor.RED + "Can't modify player with same permissions than you, or higher.");
                         return false;
                     }
+                    if (!isConsole && !senderPlayer.isOp() && (permissionHandler.hasGroupInInheritance(auxGroup, senderGroup.getName()))) {
+                        sender.sendMessage(ChatColor.RED + "The destination group can't be the same as yours, or higher.");
+                        return false;
+                    }
+                    if (!isConsole && !senderPlayer.isOp() && (!permissionHandler.inGroup(senderUser.getName(), auxUser.getGroupName()) || !permissionHandler.inGroup(senderUser.getName(), auxGroup.getName()))) {
+                        sender.sendMessage(ChatColor.RED + "Can't modify player involving a group that you don't inherit.");
+                        return false;
+                    }
+                    if (!isConsole && !senderPlayer.isOp() && (!permissionHandler.hasGroupInInheritance(auxUser.getGroup(), auxGroup.getName()) && !permissionHandler.hasGroupInInheritance(auxGroup, auxUser.getGroupName()))) {
+                        sender.sendMessage(ChatColor.RED + "Can't modify player using groups with different heritage line.");
+                        return false;
+                    }
+                    if (!isConsole && !senderPlayer.isOp() && (!permissionHandler.hasGroupInInheritance(auxGroup, auxUser.getGroupName()))) {
+                        sender.sendMessage(ChatColor.RED + "The new group must be a higher rank.");
+                        return false;
+                    }
+                    
                     //PARECE OK
                     auxUser.setGroup(auxGroup);
                     sender.sendMessage(ChatColor.YELLOW + "You changed player '" + auxUser.getName() + "' group to '" + auxGroup.getName() + "'.");
@@ -331,7 +349,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 1) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -365,7 +383,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player> <group>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -403,8 +421,8 @@ public class GroupManager extends JavaPlugin {
                         return true;
                     }
                     //VALIDANDO ARGUMENTOS
-                    if (args.length != 1) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                    if (args.length != 2) {
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/manudelsub <user> <group>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -438,7 +456,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 1) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <group>)");
                         return false;
                     }
                     auxGroup = dataHolder.getGroup(args[0]);
@@ -460,7 +478,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 1) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <group>)");
                         return false;
                     }
                     auxGroup = dataHolder.getGroup(args[0]);
@@ -482,7 +500,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player> <permission>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -547,7 +565,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player> <permission>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -599,7 +617,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 1) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -654,7 +672,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player> <permission>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -702,7 +720,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <group> <permission>)");
                         return false;
                     }
                     auxGroup = dataHolder.getGroup(args[0]);
@@ -756,6 +774,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
+                    	sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <group> <permission>)");
                         return false;
                     }
                     auxGroup = dataHolder.getGroup(args[0]);
@@ -795,7 +814,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 1) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <group>)");
                         return false;
                     }
                     auxGroup = dataHolder.getGroup(args[0]);
@@ -844,7 +863,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <group> <permission>)");
                         return false;
                     }
                     auxGroup = dataHolder.getGroup(args[0]);
@@ -879,7 +898,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <group1> <group2>)");
                         return false;
                     }
                     auxGroup = dataHolder.getGroup(args[0]);
@@ -911,7 +930,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <group1> <group2>)");
                         return false;
                     }
                     auxGroup = dataHolder.getGroup(args[0]);
@@ -947,7 +966,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length < 3) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <user> <variable> <value>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -983,7 +1002,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <user> <variable>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -1015,7 +1034,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 1) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <user>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -1053,7 +1072,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <user> <variable>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -1096,7 +1115,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length < 3) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <group> <variable> <value>)");
                         return false;
                     }
                     auxGroup = dataHolder.getGroup(args[0]);
@@ -1126,7 +1145,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <group> <variable>)");
                         return false;
                     }
                     auxGroup = dataHolder.getGroup(args[0]);
@@ -1152,7 +1171,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 1) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <group>)");
                         return false;
                     }
                     auxGroup = dataHolder.getGroup(args[0]);
@@ -1190,7 +1209,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <group> <variable>)");
                         return false;
                     }
                     auxGroup = dataHolder.getGroup(args[0]);
@@ -1218,7 +1237,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 1) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -1253,7 +1272,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 1) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -1292,7 +1311,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 1) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -1449,7 +1468,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player> <group>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -1505,7 +1524,7 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player> <group>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -1585,7 +1604,7 @@ public class GroupManager extends JavaPlugin {
                     return true;
                 case manselect:
                     if (args.length < 1) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <world>)");
                         sender.sendMessage(ChatColor.YELLOW + "Worlds available: ");
                         ArrayList<OverloadedWorldHolder> worlds = worldsHolder.allWorldsDataList();
                         auxString = "";
