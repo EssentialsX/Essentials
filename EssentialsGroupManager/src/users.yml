@@ -1,6 +1,6 @@
 # "For a more advanced configuration example utilizing the advanced features of GroupManager, see http://pastebin.com/a8ZA0j5G"
 users:
-  kimkandor:
+  snowleo:
     subgroups: []
     permissions: []
     group: Admin
@@ -8,7 +8,7 @@ users:
     subgroups: []
     permissions: []
     group: Builder
-  zenexer:
+  ElgarL:
     subgroups: []
     permissions: []
     group: Admin
