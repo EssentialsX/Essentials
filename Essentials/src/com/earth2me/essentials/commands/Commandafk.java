@@ -34,13 +34,19 @@ public class Commandafk extends EssentialsCommand
 		if (!user.toggleAfk())
 		{
 			//user.sendMessage(Util.i18n("markedAsNotAway"));
-			ess.broadcastMessage(user.getName(), Util.format("userIsNotAway", user.getDisplayName()));
+			if (!user.isHidden())
+			{
+				ess.broadcastMessage(user, Util.format("userIsNotAway", user.getDisplayName()));
+			}
 			user.updateActivity(false);
 		}
 		else
 		{
 			//user.sendMessage(Util.i18n("markedAsAway"));
-			ess.broadcastMessage(user.getName(), Util.format("userIsAway", user.getDisplayName()));
+			if (!user.isHidden())
+			{
+				ess.broadcastMessage(user, Util.format("userIsAway", user.getDisplayName()));
+			}
 		}
 	}
 }

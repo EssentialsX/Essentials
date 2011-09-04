@@ -23,7 +23,7 @@ public interface IEssentials extends Plugin
 
 	World getWorld(String name);
 
-	int broadcastMessage(String name, String message);
+	int broadcastMessage(IUser sender, String message);
 
 	ISettings getSettings();
 

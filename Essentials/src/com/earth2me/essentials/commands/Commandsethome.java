@@ -39,6 +39,9 @@ public class Commandsethome extends EssentialsCommand
 					}
 
 				}
+				else {
+					throw new Exception(Util.format("maxHomes", 1));
+				}
 			}
 			else
 			{

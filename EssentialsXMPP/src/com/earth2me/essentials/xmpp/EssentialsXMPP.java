@@ -1,6 +1,7 @@
 package com.earth2me.essentials.xmpp;
 
 import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.Util;
 import java.util.List;
 import java.util.logging.Level;
@@ -83,9 +84,10 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 	}
 
 	@Override
-	public String getUserByAddress(final String address)
+	public IUser getUserByAddress(final String address)
 	{
-		return instance.users.getUserByAddress(address);
+		String username = instance.users.getUserByAddress(address);
+		return username == null ? null : ess.getUser(username);
 	}
 
 	@Override
@@ -122,9 +124,9 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 	}
 
 	@Override
-	public void broadcastMessage(final String name, final String message)
+	public void broadcastMessage(final IUser sender, final String message)
 	{
-		ess.broadcastMessage(name, message);
+		ess.broadcastMessage(sender, message);
 		try
 		{
 			for (String address : getSpyUsers())

@@ -483,7 +483,7 @@ public class Settings implements ISettings
 	@Override
 	public boolean isUpdateEnabled()
 	{
-		return config.getBoolean("update-check", true);
+		return config.getBoolean("update-check", false);
 	}
 
 	@Override

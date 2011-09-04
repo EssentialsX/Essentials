@@ -107,7 +107,10 @@ public class EssentialsPlayerListener extends PlayerListener
 			return;
 		}
 
-		user.updateActivity(true);
+		Location afk = user.getAfkPosition();
+		if (afk == null || !event.getTo().getWorld().equals(afk.getWorld()) || afk.distanceSquared(event.getTo()) > 9) {
+			user.updateActivity(true);
+		}
 
 		if (!ess.getSettings().getNetherPortalsEnabled())
 		{
