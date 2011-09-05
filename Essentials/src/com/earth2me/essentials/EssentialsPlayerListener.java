@@ -465,7 +465,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			}
 			else
 			{
-				user.getServer().dispatchCommand(user, command);
+				user.getServer().dispatchCommand(event.getPlayer(), command);
 			}
 		}
 	}
