@@ -427,7 +427,6 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			{
 				ess.broadcastMessage(this, Util.format("userIsNotAway", getDisplayName()));
 			}
-			return;
 		}
 		lastActivity = System.currentTimeMillis();
 	}
