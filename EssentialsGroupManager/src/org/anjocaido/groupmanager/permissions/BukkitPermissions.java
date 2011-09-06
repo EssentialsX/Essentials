@@ -16,8 +16,10 @@
 
 package org.anjocaido.groupmanager.permissions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -39,6 +41,7 @@ import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.ServerListener;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
@@ -115,22 +118,45 @@ public class BukkitPermissions {
         PermissionAttachment attachment = this.attachments.get(player);
 
         User user =  GroupManager.getWorldsHolder().getWorldData(world).getUser(player.getName());
-
+        List<String> permissions = user.getPermissionList();
+        
         // clear permissions
         for (String permission : attachment.getPermissions().keySet()) {
             attachment.unsetPermission(permission);
-        }
-
+        }      
+        
+        // find matching permissions
         for (Permission permission : registeredPermissions) {
             boolean permissionValue = user.getGroup().hasSamePermissionNode(permission.getName());
-
-            //GroupManager.logger.info(permission.getName() + " : " + Boolean.toString(permissionValue));
-
             attachment.setPermission(permission, permissionValue);
-        }    
+        } 
+        
+        // all permissions
+        for (String permission : permissions) {
+            Boolean value = true;
+            if (permission.startsWith("-")) {
+                permission = permission.substring(1); // cut off -
+                value = false;
+            }
 
+            if (!attachment.getPermissions().containsKey(permission)) {
+                attachment.setPermission(permission, value);
+            }
+        }
+        
         player.recalculatePermissions();
+        /*
+        // List perms for this player
+        GroupManager.logger.info("Attachment Permissions:");
+        for(Map.Entry<String, Boolean> entry : attachment.getPermissions().entrySet()){
+        	GroupManager.logger.info(" " + entry.getKey() + " = " + entry.getValue());
+        }
 
+        GroupManager.logger.info("Effective Permissions:");
+        for(PermissionAttachmentInfo info : player.getEffectivePermissions()){
+        	GroupManager.logger.info(" " + info.getPermission() + " = " + info.getValue());
+        }
+		*/
     }
 
     public void updateAllPlayers() {
