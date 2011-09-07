@@ -39,22 +39,24 @@ public class OfflinePlayer implements Player
 	private Location location = new Location(null, 0, 0, 0, 0, 0);
 	private World world;
 	private UUID uniqueId = UUID.randomUUID();
+	private org.bukkit.OfflinePlayer base;
 
 	public OfflinePlayer(String name, IEssentials ess)
 	{
 		this.name = name;
 		this.ess = ess;
 		this.world = ess.getServer().getWorlds().get(0);
+		this.base = ess.getServer().getOfflinePlayer(name);
 	}
 
 	public boolean isOnline()
 	{
-		return false;
+		return base.isOnline();
 	}
 
 	public boolean isOp()
 	{
-		return false;
+		return base.isOp();
 	}
 
 	public void sendMessage(String string)
@@ -576,11 +578,36 @@ public class OfflinePlayer implements Player
 
 	public void setOp(boolean bln)
 	{
+		base.setOp(bln);
 	}
 
 	@Override
 	public void sendMap(MapView mv)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public boolean isBanned()
+	{
+		return base.isBanned();
+	}
+
+	@Override
+	public void setBanned(boolean bln)
+	{
+		base.setBanned(bln);
+	}
+
+	@Override
+	public boolean isWhitelisted()
+	{
+		return base.isWhitelisted();
+	}
+
+	@Override
+	public void setWhitelisted(boolean bln)
+	{
+		base.setWhitelisted(bln);
 	}
 }

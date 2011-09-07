@@ -17,16 +17,6 @@ public class PlayerExtension extends PlayerWrapper
 		this.ess = ess;
 	}
 
-	public boolean isBanned()
-	{
-		return ess.getBans().isNameBanned(this.getName());
-	}
-
-	public boolean isIpBanned()
-	{
-		return ess.getBans().isIpBanned(getAddress().getAddress().getHostAddress());
-	}
-
 	public float getCorrectedYaw()
 	{
 		float angle = (getLocation().getYaw() - 90.0f) % 360.0f;

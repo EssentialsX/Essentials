@@ -26,12 +26,12 @@ public class Commandunban extends EssentialsCommand
 		{
 			User u = getPlayer(server, args, 0, true);
 			name = u.getName();
+			u.setBanned(false);
+			sender.sendMessage(Util.i18n("unbannedPlayer"));
 		}
 		catch (NoSuchFieldException e)
 		{
-			name = args[0];
+			sender.sendMessage(Util.i18n("playerNotFound"));
 		}
-		ess.getBans().unbanByName(name);
-		sender.sendMessage(Util.i18n("unbannedPlayer"));
 	}
 }

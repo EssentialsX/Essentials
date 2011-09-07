@@ -20,7 +20,7 @@ public class Commandbanip extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		ess.getBans().banByIp(args[0]);
+		ess.getServer().banIP(args[0]);
 		sender.sendMessage(Util.i18n("banIpAddress"));
 	}
 }

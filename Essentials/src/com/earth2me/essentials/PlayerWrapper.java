@@ -617,4 +617,28 @@ public class PlayerWrapper implements Player
 	{
 		base.sendMap(mv);
 	}
+
+	@Override
+	public boolean isBanned()
+	{
+		return base.isBanned();
+	}
+
+	@Override
+	public void setBanned(boolean bln)
+	{
+		base.setBanned(bln);
+	}
+
+	@Override
+	public boolean isWhitelisted()
+	{
+		return base.isWhitelisted();
+	}
+
+	@Override
+	public void setWhitelisted(boolean bln)
+	{
+		base.setWhitelisted(bln);
+	}
 }
