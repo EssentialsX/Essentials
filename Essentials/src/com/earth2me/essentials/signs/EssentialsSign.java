@@ -11,7 +11,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
-import org.bukkit.craftbukkit.block.CraftSign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.ItemStack;
@@ -452,7 +451,7 @@ public class EssentialsSign
 		public BlockSign(final Block block)
 		{
 			this.block = block;
-			this.sign = new CraftSign(block);
+			this.sign = (Sign)block.getState();
 		}
 
 		public final String getLine(final int index)

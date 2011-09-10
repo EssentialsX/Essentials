@@ -26,8 +26,7 @@ public class Commandwarp extends EssentialsCommand
 		{
 			if (!user.isAuthorized("essentials.warp.list"))
 			{
-				user.sendMessage(Util.i18n("warpListPermission"));
-				return;
+				throw new Exception(Util.i18n("warpListPermission"));
 			}
 
 			Warps warps = ess.getWarps();
@@ -56,7 +55,7 @@ public class Commandwarp extends EssentialsCommand
 			}
 			final int warpPage = (page - 1) * WARPS_PER_PAGE;
 			user.sendMessage(Util.joinList(warpNameList.subList(warpPage, warpPage+Math.min(warpNameList.size() - warpPage, WARPS_PER_PAGE))));
-			return;
+			throw new NoChargeException();
 		}
 		if (args.length > 0)
 		{
@@ -66,13 +65,13 @@ public class Commandwarp extends EssentialsCommand
 				otherUser = ess.getUser(server.getPlayer(args[1]));
 				if (otherUser == null)
 				{
-					user.sendMessage(Util.i18n("playerNotFound"));
-					return;
+					throw new Exception(Util.i18n("playerNotFound"));
 				}
 				warpUser(otherUser, args[0]);
-				return;
+				throw new NoChargeException();
 			}
 			warpUser(user, args[0]);
+			throw new NoChargeException();
 		}
 	}
 
@@ -87,8 +86,7 @@ public class Commandwarp extends EssentialsCommand
 				user.getTeleport().warp(name, charge);
 				return;
 			}
-			user.sendMessage(Util.i18n("warpUsePermission"));
-			return;
+			throw new Exception(Util.i18n("warpUsePermission"));
 		}
 		user.getTeleport().warp(name, charge);
 	}

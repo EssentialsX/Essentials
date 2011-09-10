@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -22,7 +23,7 @@ public interface IEssentials extends Plugin
 
 	World getWorld(String name);
 
-	int broadcastMessage(String name, String message);
+	int broadcastMessage(IUser sender, String message);
 
 	ISettings getSettings();
 
@@ -56,9 +57,7 @@ public interface IEssentials extends Plugin
 
 	TNTExplodeListener getTNTListener();
 
-	IPermissionsHandler getPermissionsHandler();
-
-	void setPermissionsHandler(IPermissionsHandler handler);
+	PermissionsHandler getPermissionsHandler();
 
 	void showError(final CommandSender sender, final Throwable exception, final String commandLabel);
 

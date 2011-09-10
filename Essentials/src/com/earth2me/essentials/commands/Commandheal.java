@@ -25,7 +25,6 @@ public class Commandheal extends EssentialsCommand
 			{
 				user.healCooldown();
 			}
-			charge(user);
 			healOtherPlayers(server, user, args[0]);
 			return;
 		}
@@ -34,7 +33,6 @@ public class Commandheal extends EssentialsCommand
 		{
 			user.healCooldown();
 		}
-		charge(user);
 		user.setHealth(20);
 		user.sendMessage(Util.i18n("heal"));
 	}

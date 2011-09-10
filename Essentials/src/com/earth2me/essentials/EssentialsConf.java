@@ -47,11 +47,6 @@ public class EssentialsConf extends Configuration
 				LOGGER.log(Level.SEVERE, Util.format("failedToCreateConfig", configFile.toString()));
 			}
 		}
-		if (configFile.exists() && configFile.length() == 0 && !configFile.delete())
-		{
-			LOGGER.log(Level.SEVERE, "Could not delete file " + configFile.toString());
-		}
-
 		// This will delete files where the first character is 0. In most cases they are broken.
 		if (configFile.exists() && configFile.length() != 0)
 		{

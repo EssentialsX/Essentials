@@ -26,7 +26,9 @@ import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.commands.IEssentialsCommand;
+import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
+import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
 import com.earth2me.essentials.signs.SignBlockListener;
 import com.earth2me.essentials.signs.SignEntityListener;
@@ -38,7 +40,6 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
-import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.*;
 import org.bukkit.plugin.java.*;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -62,7 +63,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private transient final Methods paymentMethod = new Methods();
 	private transient final static boolean enableErrorLogging = false;
 	private transient final EssentialsErrorHandler errorHandler = new EssentialsErrorHandler();
-	private transient IPermissionsHandler permissionsHandler;
+	private transient PermissionsHandler permissionsHandler;
 	private transient UserMap userMap;
 
 	@Override
@@ -87,7 +88,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		this.initialize(null, server, new PluginDescriptionFile(new FileReader(new File("src" + File.separator + "plugin.yml"))), dataFolder, null, null);
 		settings = new Settings(this);
 		userMap = new UserMap(this);
-		permissionsHandler = new ConfigPermissionsHandler(this);
+		permissionsHandler = new PermissionsHandler(this, false);
 		Economy.setEss(this);
 	}
 
@@ -148,9 +149,11 @@ public class Essentials extends JavaPlugin implements IEssentials
 			LOGGER.log(Level.INFO, Util.i18n("bukkitFormatChanged"));
 		}
 
-		final ServerListener serverListener = new EssentialsPluginListener(this);
+		permissionsHandler = new PermissionsHandler(this, settings.useBukkitPermissions());
+		final EssentialsPluginListener serverListener = new EssentialsPluginListener(this);
 		pm.registerEvent(Type.PLUGIN_ENABLE, serverListener, Priority.Low, this);
 		pm.registerEvent(Type.PLUGIN_DISABLE, serverListener, Priority.Low, this);
+		confList.add(serverListener);
 
 		final EssentialsPlayerListener playerListener = new EssentialsPlayerListener(this);
 		pm.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
@@ -207,12 +210,12 @@ public class Essentials extends JavaPlugin implements IEssentials
 		pm.registerEvent(Type.ENTITY_EXPLODE, tntListener, Priority.High, this);
 
 		final EssentialsTimer timer = new EssentialsTimer(this);
-		getScheduler().scheduleSyncRepeatingTask(this, timer, 1, 50);
+		getScheduler().scheduleSyncRepeatingTask(this, timer, 1, 100);
 		Economy.setEss(this);
 		if (getSettings().isUpdateEnabled())
 		{
 			updateTimer = new EssentialsUpdateTimer(this);
-			getScheduler().scheduleAsyncRepeatingTask(this, updateTimer, 20 * 60, 20 * 3600 * 6);
+			getScheduler().scheduleAsyncRepeatingTask(this, updateTimer, 20 * 60 * 10, 20 * 3600 * 6);
 		}
 		LOGGER.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), Util.joinList(this.getDescription().getAuthors())));
 	}
@@ -448,6 +451,10 @@ public class Essentials extends JavaPlugin implements IEssentials
 				}
 				return true;
 			}
+			catch (NoChargeException ex)
+			{
+				return true;
+			}
 			catch (NotEnoughArgumentsException ex)
 			{
 				sender.sendMessage(command.getDescription());
@@ -561,7 +568,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 		catch (NullPointerException ex)
 		{
-			return null;
+			return new User(base, this);
 		}
 	}
 
@@ -605,14 +612,20 @@ public class Essentials extends JavaPlugin implements IEssentials
 	}
 
 	@Override
-	public int broadcastMessage(final String name, final String message)
+	public int broadcastMessage(final IUser sender, final String message)
 	{
+		if (sender == null) {
+			return getServer().broadcastMessage(message);
+		}
+		if (sender.isHidden()) {
+			return 0;
+		}
 		final Player[] players = getServer().getOnlinePlayers();
 
 		for (Player player : players)
 		{
 			final User user = getUser(player);
-			if (!user.isIgnoredPlayer(name))
+			if (!user.isIgnoredPlayer(sender.getName()))
 			{
 				player.sendMessage(message);
 			}
@@ -657,15 +670,9 @@ public class Essentials extends JavaPlugin implements IEssentials
 	}
 
 	@Override
-	public IPermissionsHandler getPermissionsHandler()
+	public PermissionsHandler getPermissionsHandler()
 	{
 		return permissionsHandler;
-	}
-
-	@Override
-	public void setPermissionsHandler(final IPermissionsHandler handler)
-	{
-		this.permissionsHandler = handler;
 	}
 
 	@Override

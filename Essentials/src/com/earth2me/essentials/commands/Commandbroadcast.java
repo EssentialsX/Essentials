@@ -1,6 +1,5 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.Console;
 import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -15,15 +14,14 @@ public class Commandbroadcast extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
 
-		charge(sender);
-		ess.broadcastMessage(sender instanceof Player ? ((Player)sender).getName() : Console.NAME,
+		ess.broadcastMessage(null,
 							 Util.format("broadcast", getFinalArg(args, 0)));
 	}
 }

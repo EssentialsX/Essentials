@@ -145,11 +145,9 @@ public class Commandsell extends EssentialsCommand
 		{
 			user.sendMessage(Util.i18n("itemNotEnough1"));
 			user.sendMessage(Util.i18n("itemNotEnough2"));
-			user.sendMessage(Util.i18n("itemNotEnough3"));
-			return;
+			throw new Exception(Util.i18n("itemNotEnough3"));
 		}
 
-		charge(user);
 		final ItemStack ris = new ItemStack(is.getType(), amount, is.getDurability());
 		InventoryWorkaround.removeItem(user.getInventory(), true, ris);
 		user.updateInventory();

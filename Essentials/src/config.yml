@@ -230,12 +230,6 @@ remove-god-on-disconnect: false
 # This only works if no other permission plugins are installed
 use-bukkit-permissions: false
 
-# Check for updates
-# We do not recommend to disable this unless you are using CraftbukkitUpToDate or Bukget.
-# If you don't like the notices in game, remove the permission
-# essentials.admin.notices.update from your user.
-update-check: true
-
 # Auto-AFK
 # After this timeout in seconds, the user will be set as afk.
 # Set to -1 for no timeout.

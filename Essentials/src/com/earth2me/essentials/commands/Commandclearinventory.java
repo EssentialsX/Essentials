@@ -27,7 +27,6 @@ public class Commandclearinventory extends EssentialsCommand
 
 				if (!online.isEmpty())
 				{
-					charge(user);
 					for (Player p : online)
 					{
 						p.getInventory().clear();
@@ -42,7 +41,6 @@ public class Commandclearinventory extends EssentialsCommand
 				Player p = server.getPlayer(args[0]);
 				if (p != null)
 				{
-					charge(user);
 					p.getInventory().clear();
 					user.sendMessage(Util.format("inventoryClearedOthers", p.getDisplayName()));
 				}
@@ -54,7 +52,6 @@ public class Commandclearinventory extends EssentialsCommand
 		}
 		else
 		{
-			charge(user);
 			user.getInventory().clear();
 			user.sendMessage(Util.i18n("inventoryCleared"));
 		}

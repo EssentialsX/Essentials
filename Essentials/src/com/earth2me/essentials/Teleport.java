@@ -264,14 +264,7 @@ public class Teleport implements Runnable
 		final Location loc = user.getHome(home);
 		if (loc == null)
 		{
-			if (ess.getSettings().spawnIfNoHome())
-			{
-				respawn(ess.getSpawn(), chargeFor);
-			}
-			else
-			{
-				throw new NotEnoughArgumentsException();
-			}
+			throw new NotEnoughArgumentsException();
 		}
 		teleport(new Target(loc), chargeFor);
 	}

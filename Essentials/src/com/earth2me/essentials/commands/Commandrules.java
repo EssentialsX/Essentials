@@ -15,7 +15,6 @@ public class Commandrules extends EssentialsCommand
 	@Override
 	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
-		charge(sender);
 		for (String m : ess.getLines(sender, "rules", Util.i18n("noRules")))
 		{
 			sender.sendMessage(m);

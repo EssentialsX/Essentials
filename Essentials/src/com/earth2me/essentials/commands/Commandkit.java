@@ -141,7 +141,6 @@ public class Commandkit extends EssentialsCommand
 				}
 				try
 				{
-					charge(user);
 					charge.charge(user);
 				}
 				catch (Exception ex)

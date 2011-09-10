@@ -15,10 +15,9 @@ public class Commandsuicide extends EssentialsCommand
 	@Override
 	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		charge(user);
 		user.setHealth(0);
 		user.sendMessage(Util.i18n("suicideMessage"));
-		ess.broadcastMessage(user.getName(),
+		ess.broadcastMessage(user,
 								Util.format("suicideSuccess",user.getDisplayName()));
 	}
 }

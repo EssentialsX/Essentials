@@ -51,7 +51,6 @@ public class Commandtree extends EssentialsCommand
 		final boolean success = user.getWorld().generateTree(safeLocation, (TreeType)tree);
 		if (success)
 		{
-			charge(user);
 			user.sendMessage(Util.i18n("treeSpawned"));
 		}
 		else

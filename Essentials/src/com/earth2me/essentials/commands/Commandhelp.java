@@ -20,6 +20,9 @@ import java.util.logging.Level;
 
 public class Commandhelp extends EssentialsCommand
 {
+	private static final String DESCRIPTION = "description";
+	private static final String PERMISSION = "permission";
+	private static final String PERMISSIONS = "permissions";
 	public final Yaml yaml = new Yaml(new SafeConstructor());
 
 	public Commandhelp()
@@ -28,7 +31,7 @@ public class Commandhelp extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		int page = 1;
 		String match = "";
@@ -53,34 +56,32 @@ public class Commandhelp extends EssentialsCommand
 			}
 		}
 
-		List<String> lines = getHelpLines(user, match);
-		if (lines.size() > 0)
+		final List<String> lines = getHelpLines(user, match);
+		if (lines.isEmpty())
 		{
-			int start = (page - 1) * 9;
-			int pages = lines.size() / 9 + (lines.size() % 9 > 0 ? 1 : 0);
-
-			user.sendMessage(Util.format("helpPages", page, pages));
-			for (int i = start; i < lines.size() && i < start + 9; i++)
-			{
-				user.sendMessage(lines.get(i));
-			}
+			throw new Exception(Util.i18n("noHelpFound"));
 		}
-		else
+
+		final int start = (page - 1) * 9;
+		final int pages = lines.size() / 9 + (lines.size() % 9 > 0 ? 1 : 0);
+
+		user.sendMessage(Util.format("helpPages", page, pages));
+		for (int i = start; i < lines.size() && i < start + 9; i++)
 		{
-			user.sendMessage(Util.i18n("noHelpFound"));
+			user.sendMessage(lines.get(i));
 		}
 	}
 
 	@Override
-	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		sender.sendMessage(Util.i18n("helpConsole"));
 	}
 
 	@SuppressWarnings("CallToThreadDumpStack")
-	private List<String> getHelpLines(User user, String match) throws Exception
+	private List<String> getHelpLines(final User user, final String match) throws Exception
 	{
-		List<String> retval = new ArrayList<String>();
+		final List<String> retval = new ArrayList<String>();
 		File helpFile = new File(ess.getDataFolder(), "help_" + Util.sanitizeFileName(user.getName()) + ".txt");
 		if (!helpFile.exists())
 		{
@@ -116,15 +117,16 @@ public class Commandhelp extends EssentialsCommand
 			try
 			{
 				final PluginDescriptionFile desc = p.getDescription();
-				final HashMap<String, HashMap<String, String>> cmds = (HashMap<String, HashMap<String, String>>)desc.getCommands();
+				final HashMap<String, HashMap<String, Object>> cmds = (HashMap<String, HashMap<String, Object>>)desc.getCommands();
 				pluginName = p.getDescription().getName().toLowerCase();
-				for (Entry<String, HashMap<String, String>> k : cmds.entrySet())
+				for (Entry<String, HashMap<String, Object>> k : cmds.entrySet())
 				{
 					try
 					{
 						if ((!match.equalsIgnoreCase(""))
 							&& (!k.getKey().toLowerCase().contains(match))
-							&& (!k.getValue().get("description").toLowerCase().contains(match))
+							&& (!(k.getValue().get(DESCRIPTION) instanceof String
+								  && ((String)k.getValue().get(DESCRIPTION)).toLowerCase().contains(match)))
 							&& (!pluginName.contains(match)))
 						{
 							continue;
@@ -135,37 +137,69 @@ public class Commandhelp extends EssentialsCommand
 							final String node = "essentials." + k.getKey();
 							if (!ess.getSettings().isCommandDisabled(k.getKey()) && user.isAuthorized(node))
 							{
-								retval.add("§c" + k.getKey() + "§7: " + k.getValue().get("description"));
+								retval.add("§c" + k.getKey() + "§7: " + k.getValue().get(DESCRIPTION));
 							}
 						}
 						else
 						{
 							if (ess.getSettings().showNonEssCommandsInHelp())
 							{
-								final HashMap<String, String> value = k.getValue();
-								if (value.containsKey("permission") && value.get("permission") != null && !(value.get("permission").equals("")))
+								final HashMap<String, Object> value = k.getValue();
+								if (value.containsKey(PERMISSION) && value.get(PERMISSION) instanceof String && !(value.get(PERMISSION).equals("")))
 								{
-									if (user.isAuthorized(value.get("permission")))
+									if (user.isAuthorized((String)value.get(PERMISSION)))
 									{
-										retval.add("§c" + k.getKey() + "§7: " + value.get("description"));
+										retval.add("§c" + k.getKey() + "§7: " + value.get(DESCRIPTION));
 									}
 								}
-								else if (value.containsKey("permissions") && value.get("permissions") != null && !(value.get("permissions").equals("")))
+								else if (value.containsKey(PERMISSION) && value.get(PERMISSION) instanceof List && !((List<Object>)value.get(PERMISSION)).isEmpty())
 								{
-									if (user.isAuthorized(value.get("permissions")))
+									boolean enabled = false;
+									for (Object o : (List<Object>)value.get(PERMISSION))
 									{
-										retval.add("§c" + k.getKey() + "§7: " + value.get("description"));
+										if (o instanceof String && user.isAuthorized((String)o))
+										{
+											enabled = true;
+											break;
+										}
+									}
+									if (enabled)
+									{
+										retval.add("§c" + k.getKey() + "§7: " + value.get(DESCRIPTION));
+									}
+								}
+								else if (value.containsKey(PERMISSIONS) && value.get(PERMISSIONS) instanceof String && !(value.get(PERMISSIONS).equals("")))
+								{
+									if (user.isAuthorized((String)value.get(PERMISSIONS)))
+									{
+										retval.add("§c" + k.getKey() + "§7: " + value.get(DESCRIPTION));
+									}
+								}
+								else if (value.containsKey(PERMISSIONS) && value.get(PERMISSIONS) instanceof List && !((List<Object>)value.get(PERMISSIONS)).isEmpty())
+								{
+									boolean enabled = false;
+									for (Object o : (List<Object>)value.get(PERMISSIONS))
+									{
+										if (o instanceof String && user.isAuthorized((String)o))
+										{
+											enabled = true;
+											break;
+										}
+									}
+									if (enabled)
+									{
+										retval.add("§c" + k.getKey() + "§7: " + value.get(DESCRIPTION));
 									}
 								}
 								else if (user.isAuthorized("essentials.help." + pluginName))
 								{
-									retval.add("§c" + k.getKey() + "§7: " + value.get("description"));
+									retval.add("§c" + k.getKey() + "§7: " + value.get(DESCRIPTION));
 								}
 								else
 								{
 									if (!ess.getSettings().hidePermissionlessHelp())
 									{
-										retval.add("§c" + k.getKey() + "§7: " + value.get("description"));
+										retval.add("§c" + k.getKey() + "§7: " + value.get(DESCRIPTION));
 									}
 								}
 							}

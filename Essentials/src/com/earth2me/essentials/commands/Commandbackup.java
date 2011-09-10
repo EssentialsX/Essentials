@@ -19,9 +19,8 @@ public class Commandbackup extends EssentialsCommand
 		Backup backup = ess.getBackup();
 		if (backup == null)
 		{
-			return;
+			throw new Exception();
 		}
-		charge(sender);
 		backup.run();
 		sender.sendMessage(Util.i18n("backupStarted"));
 	}

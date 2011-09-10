@@ -47,7 +47,7 @@ public class Commandworld extends EssentialsCommand
 				user.sendMessage(Util.i18n("invalidWorld"));
 				user.sendMessage(Util.format("possibleWorlds", server.getWorlds().size() - 1));
 				user.sendMessage(Util.i18n("typeWorldName"));
-				return;
+				throw new NoChargeException();
 			}
 		}
 
@@ -71,5 +71,6 @@ public class Commandworld extends EssentialsCommand
 		Trade charge = new Trade(this.getName(), ess);
 		charge.isAffordableFor(user);
 		user.getTeleport().teleport(loc, charge);
+		throw new NoChargeException();
 	}
 }

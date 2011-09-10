@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
-import org.bukkit.craftbukkit.block.CraftSign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
@@ -48,7 +47,7 @@ public class SignBlockListener extends BlockListener
 		final int mat = block.getTypeId();
 		if (mat == Material.SIGN_POST.getId() || mat == Material.WALL_SIGN.getId())
 		{
-			final Sign csign = new CraftSign(block);
+			final Sign csign = (Sign)block.getState();
 			for (Signs signs : Signs.values())
 			{
 				final EssentialsSign sign = signs.getSign();

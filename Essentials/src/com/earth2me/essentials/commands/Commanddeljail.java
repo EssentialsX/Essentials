@@ -16,7 +16,6 @@ public class Commanddeljail extends EssentialsCommand {
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		charge(sender);
 		ess.getJail().delJail(args[0]);
 		sender.sendMessage(Util.format("deleteJail", args[0]));
 	}

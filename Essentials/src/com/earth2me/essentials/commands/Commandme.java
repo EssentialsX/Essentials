@@ -17,21 +17,22 @@ public class Commandme extends EssentialsCommand
 	{
 		if (user.isMuted())
 		{
-			user.sendMessage(Util.i18n("voiceSilenced"));
-			return;
+			throw new Exception(Util.i18n("voiceSilenced"));
 		}
 
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		StringBuilder message = new StringBuilder();
+		final StringBuilder message = new StringBuilder();
+		message.append("* ");
+		message.append(user.getDisplayName());
+		message.append(' ');
 		for (int i = 0; i < args.length; i++)
 		{
 			message.append(args[i]);
 			message.append(' ');
 		}
-		charge(user);
-		ess.broadcastMessage(user.getName(), "* " + user.getDisplayName() + " " + message);
+		ess.broadcastMessage(user, message.toString());
 	}
 }

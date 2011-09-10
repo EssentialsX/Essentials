@@ -23,7 +23,6 @@ public class Commandweather extends EssentialsCommand
 
 		boolean isStorm = args[0].equalsIgnoreCase("storm");
 		World world = user.getWorld();
-		charge(user);
 		if (args.length > 1)
 		{
 

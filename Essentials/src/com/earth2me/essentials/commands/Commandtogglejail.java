@@ -44,7 +44,6 @@ public class Commandtogglejail extends EssentialsCommand
 					return;
 				}
 			}
-			charge(sender);
 			if (!(p.getBase() instanceof OfflinePlayer))
 			{
 				ess.getJail().sendToJail(p, args[1]);

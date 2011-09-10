@@ -39,6 +39,9 @@ public class Commandsethome extends EssentialsCommand
 					}
 
 				}
+				else {
+					throw new Exception(Util.format("maxHomes", 1));
+				}
 			}
 			else
 			{
@@ -66,7 +69,6 @@ public class Commandsethome extends EssentialsCommand
 		{
 			user.setHome();
 		}
-		charge(user);
 		user.sendMessage(Util.i18n("homeSet"));
 
 	}

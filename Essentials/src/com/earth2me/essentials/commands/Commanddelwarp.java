@@ -19,7 +19,6 @@ public class Commanddelwarp extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		charge(sender);
 		ess.getWarps().delWarp(args[0]);
 		sender.sendMessage(Util.format("deleteWarp", args[0]));
 	}

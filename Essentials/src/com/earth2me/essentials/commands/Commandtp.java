@@ -33,7 +33,7 @@ public class Commandtp extends EssentialsCommand
 			Trade charge = new Trade(this.getName(), ess);
 			charge.isAffordableFor(user);
 			user.getTeleport().teleport(p, charge);
-			break;
+			throw new NoChargeException();
 
 		case 2:
 			if (!user.isAuthorized("essentials.tpohere"))
@@ -41,13 +41,12 @@ public class Commandtp extends EssentialsCommand
 				throw new Exception("You need access to /tpohere to teleport other players.");
 			}
 			user.sendMessage(Util.i18n("teleporting"));
-			charge(user);
 			User target = getPlayer(server, args, 0);
 			User toPlayer = getPlayer(server, args, 1);
 			target.getTeleport().now(toPlayer, false);
 			target.sendMessage(Util.format("teleportAtoB", user.getDisplayName(), toPlayer.getDisplayName()));
 			break;
-		}
+		}		
 	}
 
 	@Override
@@ -63,5 +62,6 @@ public class Commandtp extends EssentialsCommand
 		User toPlayer = getPlayer(server, args, 1);
 		target.getTeleport().now(toPlayer, false);
 		target.sendMessage(Util.format("teleportAtoB", Console.NAME, toPlayer.getDisplayName()));
+		return;
 	}
 }

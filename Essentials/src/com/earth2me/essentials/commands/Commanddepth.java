@@ -15,7 +15,6 @@ public class Commanddepth extends EssentialsCommand
 	@Override
 	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		charge(user);
 		int y = user.getLocation().getBlockY() - 63;
 		if (y > 0)
 		{

@@ -28,7 +28,6 @@ public class Commandgod extends EssentialsCommand
 	@Override
 	protected void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		charge(user);
 		if (args.length > 0 && user.isAuthorized("essentials.god.others"))
 		{
 			godOtherPlayers(server, user, args[0]);

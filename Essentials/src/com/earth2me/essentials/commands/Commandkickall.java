@@ -16,8 +16,6 @@ public class Commandkickall extends EssentialsCommand
 	@Override
 	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
-		charge(sender);
-
 		for (Player p : server.getOnlinePlayers())
 		{
 			if (sender instanceof Player && p.getName().equalsIgnoreCase(((Player)sender).getName()))

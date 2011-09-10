@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.minecraft.server.ChunkPosition;
 import net.minecraft.server.Packet60Explosion;
 import org.bukkit.Location;
@@ -52,6 +54,7 @@ public class TNTExplodeListener extends EntityListener implements Runnable
 		{
 			return;
 		}
+		try {
 		final Set<ChunkPosition> set = new HashSet<ChunkPosition>(event.blockList().size());
 		final Player[] players = ess.getServer().getOnlinePlayers();
 		final List<ChunkPosition> blocksUnderPlayers = new ArrayList<ChunkPosition>(players.length);
@@ -72,6 +75,9 @@ public class TNTExplodeListener extends EntityListener implements Runnable
 			}
 		}
 		((CraftServer)ess.getServer()).getHandle().sendPacketNearby(loc.getX(), loc.getY(), loc.getZ(), 64.0, ((CraftWorld)loc.getWorld()).getHandle().worldProvider.dimension, new Packet60Explosion(loc.getX(), loc.getY(), loc.getZ(), 3.0F, set));
+		} catch (Throwable ex) {
+			Logger.getLogger("Minecraft").log(Level.SEVERE, null, ex);
+		}
 		event.setCancelled(true);
 	}
 

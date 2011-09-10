@@ -1,5 +1,6 @@
 package com.earth2me.essentials.xmpp;
 
+import com.earth2me.essentials.IUser;
 import java.util.List;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -13,7 +14,7 @@ public interface IEssentialsXMPP extends Plugin
 
 	List<String> getSpyUsers();
 
-	String getUserByAddress(final String address);
+	IUser getUserByAddress(final String address);
 
 	boolean sendMessage(final Player user, final String message);
 
@@ -23,5 +24,5 @@ public interface IEssentialsXMPP extends Plugin
 
 	boolean toggleSpy(final Player user);
 
-	void broadcastMessage(final String name, final String message);
+	void broadcastMessage(final IUser sender, final String message);
 }

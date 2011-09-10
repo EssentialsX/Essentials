@@ -26,7 +26,6 @@ public class Commandbalance extends EssentialsCommand
 	@Override
 	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		charge(user);
 		double bal = (args.length < 1
 					  || !(user.isAuthorized("essentials.balance.others")
 						   || user.isAuthorized("essentials.balance.other"))

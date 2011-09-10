@@ -54,4 +54,6 @@ public interface IUser
 	InetSocketAddress getAddress();
 
 	String getDisplayName();
+
+	boolean isHidden();
 }

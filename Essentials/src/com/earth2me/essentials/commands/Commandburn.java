@@ -21,7 +21,6 @@ public class Commandburn extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		charge(sender);
 		for (Player p : server.matchPlayer(args[0]))
 		{
 			p.setFireTicks(Integer.parseInt(args[1]) * 20);

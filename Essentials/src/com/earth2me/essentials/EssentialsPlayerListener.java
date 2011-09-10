@@ -73,7 +73,7 @@ public class EssentialsPlayerListener extends PlayerListener
 				it.remove();
 			}
 		}
-		user.updateActivity();
+		user.updateActivity(true);
 		if (ess.getSettings().changeDisplayName())
 		{
 			user.setDisplayName(user.getNick());
@@ -107,7 +107,10 @@ public class EssentialsPlayerListener extends PlayerListener
 			return;
 		}
 
-		user.updateActivity();
+		Location afk = user.getAfkPosition();
+		if (afk == null || !event.getTo().getWorld().equals(afk.getWorld()) || afk.distanceSquared(event.getTo()) > 9) {
+			user.updateActivity(true);
+		}
 
 		if (!ess.getSettings().getNetherPortalsEnabled())
 		{
@@ -226,7 +229,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			user.getInventory().setContents(user.getSavedInventory());
 			user.setSavedInventory(null);
 		}
-		user.updateActivity();
+		user.updateActivity(false);
 		user.dispose();
 		if (!ess.getSettings().getReclaimSetting())
 		{
@@ -275,7 +278,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		{
 			user.setDisplayName(user.getNick());
 		}
-		user.setAfk(false);
+		user.updateActivity(false);
 		if (user.isAuthorized("essentials.sleepingignored"))
 		{
 			user.setSleepingIgnored(true);
@@ -310,15 +313,11 @@ public class EssentialsPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerLogin(final PlayerLoginEvent event)
 	{
-		if (event.getResult() != Result.ALLOWED && event.getResult() != Result.KICK_FULL)
+		if (event.getResult() != Result.ALLOWED && event.getResult() != Result.KICK_FULL && event.getResult() != Result.KICK_BANNED)
 		{
 			return;
 		}
 		User user = ess.getUser(event.getPlayer());
-		if (user == null)
-		{
-			user = new User(event.getPlayer(), ess);
-		}
 		user.setNPC(false);
 
 		final long currentTime = System.currentTimeMillis();
@@ -466,7 +465,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			}
 			else
 			{
-				user.getServer().dispatchCommand(user, command);
+				user.getServer().dispatchCommand(event.getPlayer(), command);
 			}
 		}
 	}
@@ -493,7 +492,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 		if (!cmd.equalsIgnoreCase("afk"))
 		{
-			user.updateActivity();
+			user.updateActivity(true);
 		}
 	}
 }
