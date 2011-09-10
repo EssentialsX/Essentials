@@ -240,6 +240,12 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	}
 
+	public void clearAllPowertools() {
+		powertools.clear();
+		config.setProperty("powertools", powertools);
+		config.save();
+	}
+	
 	public List<String> getPowertool(ItemStack stack)
 	{
 		return (List<String>)powertools.get(stack.getTypeId());
