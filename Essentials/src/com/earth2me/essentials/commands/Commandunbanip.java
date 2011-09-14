@@ -20,7 +20,7 @@ public class Commandunbanip extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		ess.getBans().unbanByIp(args[0]);
+		ess.getServer().unbanIP(args[0]);
 		sender.sendMessage(Util.i18n("unbannedIP"));
 	}
 }

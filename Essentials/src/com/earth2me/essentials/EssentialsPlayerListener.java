@@ -266,14 +266,6 @@ public class EssentialsPlayerListener extends PlayerListener
 		ess.getBackup().onPlayerJoin();
 		final User user = ess.getUser(event.getPlayer());
 
-		//we do not know the ip address on playerlogin so we need to do this here.
-		if (user.isIpBanned())
-		{
-			final String banReason = user.getBanReason();
-			user.kickPlayer(banReason != null && !banReason.isEmpty() ? banReason : Util.i18n("defaultBanReason"));
-			return;
-		}
-
 		if (ess.getSettings().changeDisplayName())
 		{
 			user.setDisplayName(user.getNick());

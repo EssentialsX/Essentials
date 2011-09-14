@@ -57,7 +57,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private transient Worth worth;
 	private transient List<IConf> confList;
 	private transient Backup backup;
-	private transient BanWorkaround bans;
 	private transient ItemDb itemDb;
 	private transient EssentialsUpdateTimer updateTimer;
 	private transient final Methods paymentMethod = new Methods();
@@ -119,8 +118,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 		confList.add(warps);
 		worth = new Worth(this.getDataFolder());
 		confList.add(worth);
-		bans = new BanWorkaround(this);
-		confList.add(bans);
 		itemDb = new ItemDb(this);
 		confList.add(itemDb);
 		reload();
@@ -673,12 +670,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 	public PermissionsHandler getPermissionsHandler()
 	{
 		return permissionsHandler;
-	}
-
-	@Override
-	public BanWorkaround getBans()
-	{
-		return bans;
 	}
 
 	@Override

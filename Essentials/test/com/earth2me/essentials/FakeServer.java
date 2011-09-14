@@ -4,6 +4,7 @@ import com.avaje.ebean.config.ServerConfig;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
@@ -375,6 +376,72 @@ public class FakeServer implements Server
 
 	@Override
 	public boolean getAllowFlight()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setWhitelist(boolean bln)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public Set<org.bukkit.OfflinePlayer> getWhitelistedPlayers()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void reloadWhitelist()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public Player getPlayerExact(String string)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void shutdown()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public int broadcast(String string, String string1)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public org.bukkit.OfflinePlayer getOfflinePlayer(String string)
+	{
+		return null;
+	}
+
+	@Override
+	public Set<String> getIPBans()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void banIP(String string)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void unbanIP(String string)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public Set<org.bukkit.OfflinePlayer> getBannedPlayers()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
