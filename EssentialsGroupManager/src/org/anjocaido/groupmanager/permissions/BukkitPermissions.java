@@ -116,7 +116,7 @@ public class BukkitPermissions {
         PermissionAttachment attachment = this.attachments.get(player);
 
         User user =  GroupManager.getWorldsHolder().getWorldData(world).getUser(player.getName());
-        List<String> permissions = user.getPermissionList();
+        List<String> permissions = user.getGroup().getPermissionList();
         
         // clear permissions
         for (String permission : attachment.getPermissions().keySet()) {
@@ -136,7 +136,7 @@ public class BukkitPermissions {
                 permission = permission.substring(1); // cut off -
                 value = false;
             }
-
+            
             if (!attachment.getPermissions().containsKey(permission)) {
                 attachment.setPermission(permission, value);
             }
