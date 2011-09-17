@@ -37,7 +37,7 @@ public class Commandspawnmob extends EssentialsCommand
 		String[] mountparts = args[0].split(",");
 		String[] parts = mountparts[0].split(":");
 		String mobType = parts[0];
-		mobType = mobType.equalsIgnoreCase("PigZombie") ? "PigZombie" : Util.capitalCase(mobType);
+		mobType = mobType.equalsIgnoreCase("CaveSpider") ? "CaveSpider" : mobType.equalsIgnoreCase("PigZombie") ? "PigZombie" : Util.capitalCase(mobType);
 		String mobData = null;
 		if (parts.length == 2)
 		{
@@ -49,7 +49,7 @@ public class Commandspawnmob extends EssentialsCommand
 		{
 			parts = mountparts[1].split(":");
 			mountType = parts[0];
-			mountType = mountType.equalsIgnoreCase("PigZombie") ? "PigZombie" : Util.capitalCase(mountType);
+			mountType = mountType.equalsIgnoreCase("CaveSpider") ? "CaveSpider" : mountType.equalsIgnoreCase("PigZombie") ? "PigZombie" : Util.capitalCase(mountType);
 			if (parts.length == 2)
 			{
 				mountData = parts[1];
@@ -77,7 +77,8 @@ public class Commandspawnmob extends EssentialsCommand
 			8, 9
 		};
 		Block block = (new TargetBlock(user, 300, 0.2, ignore)).getTargetBlock();
-		if(block == null) {
+		if (block == null)
+		{
 			user.sendMessage(Util.i18n("unableToSpawnMob"));
 			return;
 		}
