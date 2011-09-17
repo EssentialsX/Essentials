@@ -19,12 +19,14 @@ import java.util.Set;
  * @author gabrielcouto
  */
 public abstract class Variables implements Cloneable {
+
     private DataUnit owner;
     protected Map<String, Object> variables = new HashMap<String, Object>();
 
-    public Variables(DataUnit owner){
+    public Variables(DataUnit owner) {
         this.owner = owner;
     }
+
     /**
      * Add var to the the INFO node.
      * examples:
@@ -45,7 +47,7 @@ public abstract class Variables implements Cloneable {
     }
 
     /**
-     *  Returns the object inside the var
+     * Returns the object inside the var
      * @param name
      * @return a Object if exists. null if doesn't exists
      */
@@ -112,7 +114,7 @@ public abstract class Variables implements Cloneable {
     }
 
     /**
-     *  All variable keys this is holding
+     * All variable keys this is holding
      * @return
      */
     public Set<String> getVarKeyList() {
@@ -122,7 +124,7 @@ public abstract class Variables implements Cloneable {
     }
 
     /**
-     *  verify is a var exists
+     * verify is a var exists
      * @param name the key name of the var
      * @return true if that var exists
      */
@@ -174,7 +176,7 @@ public abstract class Variables implements Cloneable {
 
     }
 
-    public void clearVars(){
+    public void clearVars() {
         variables.clear();
         owner.flagAsChanged();
     }
@@ -186,7 +188,7 @@ public abstract class Variables implements Cloneable {
         return owner;
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return variables.isEmpty();
     }
 }

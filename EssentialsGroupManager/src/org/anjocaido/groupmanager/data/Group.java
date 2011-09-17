@@ -4,6 +4,7 @@
  */
 package org.anjocaido.groupmanager.data;
 
+import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.dataholder.WorldDataHolder;
 import java.util.ArrayList;
 import java.util.Map;
@@ -30,18 +31,18 @@ public class Group extends DataUnit implements Cloneable {
      * @param name
      */
     public Group(WorldDataHolder source, String name) {
-        super(source,name);
+        super(source, name);
     }
 
     /**
-     *  Clone this group
+     * Clone this group
      * @return a clone of this group
      */
     @Override
     public Group clone() {
         Group clone = new Group(getDataSource(), this.getName());
         clone.inherits = ((ArrayList<String>) this.getInherits().clone());
-        for(String perm: this.getPermissionList()){
+        for (String perm : this.getPermissionList()) {
             clone.addPermission(perm);
         }
         clone.variables = ((GroupVariables) variables).clone(clone);
@@ -52,7 +53,7 @@ public class Group extends DataUnit implements Cloneable {
     /**
      * Use this to deliver a group from a different dataSource to another
      * @param dataSource
-     * @return
+     * @return Null or Clone
      */
     public Group clone(WorldDataHolder dataSource) {
         if (dataSource.groupExists(this.getName())) {
@@ -60,7 +61,7 @@ public class Group extends DataUnit implements Cloneable {
         }
         Group clone = getDataSource().createGroup(this.getName());
         clone.inherits = ((ArrayList<String>) this.getInherits().clone());
-        for(String perm: this.getPermissionList()){
+        for (String perm : this.getPermissionList()) {
             clone.addPermission(perm);
         }
         clone.variables = variables.clone(clone);
@@ -79,7 +80,7 @@ public class Group extends DataUnit implements Cloneable {
     }
 
     /**
-     * @param inherits the inherits to set
+     * @param inherit the inherits to set
      */
     public void addInherits(Group inherit) {
         if (!this.getDataSource().groupExists(inherit.getName())) {
@@ -89,6 +90,8 @@ public class Group extends DataUnit implements Cloneable {
             inherits.add(inherit.getName().toLowerCase());
         }
         flagAsChanged();
+        if (GroupManager.isLoaded)
+        	GroupManager.BukkitPermissions.updateAllPlayers();
     }
 
     public boolean removeInherits(String inherit) {
@@ -108,15 +111,17 @@ public class Group extends DataUnit implements Cloneable {
     }
 
     /**
-     * 
+     *
      * @param varList
      */
     public void setVariables(Map<String, Object> varList) {
         GroupVariables temp = new GroupVariables(this, varList);
         variables.clearVars();
-        for(String key: temp.getVarKeyList()){
+        for (String key : temp.getVarKeyList()) {
             variables.addVar(key, temp.getVarObject(key));
         }
         flagAsChanged();
+        if (GroupManager.isLoaded)
+        	GroupManager.BukkitPermissions.updateAllPlayers();
     }
 }

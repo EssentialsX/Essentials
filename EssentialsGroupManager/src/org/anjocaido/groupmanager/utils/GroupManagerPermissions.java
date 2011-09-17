@@ -9,6 +9,7 @@ package org.anjocaido.groupmanager.utils;
  * @author gabrielcouto
  */
 public enum GroupManagerPermissions {
+
     manuadd,
     manudel,
     manuaddsub,

@@ -4,8 +4,10 @@
  */
 package org.anjocaido.groupmanager.data;
 
-import com.sun.org.apache.bcel.internal.generic.AALOAD;
+//import com.sun.org.apache.bcel.internal.generic.AALOAD;
 import java.util.ArrayList;
+
+import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.dataholder.WorldDataHolder;
 import java.util.Map;
 
@@ -27,13 +29,12 @@ public class User extends DataUnit implements Cloneable {
      */
     private UserVariables variables = new UserVariables(this);
 
-
     /**
      *
      * @param name
      */
     public User(WorldDataHolder source, String name) {
-        super(source,name);
+        super(source, name);
         this.group = source.getDefaultGroup().getName();
     }
 
@@ -45,7 +46,7 @@ public class User extends DataUnit implements Cloneable {
     public User clone() {
         User clone = new User(getDataSource(), this.getName());
         clone.group = this.group;
-        for(String perm: this.getPermissionList()){
+        for (String perm : this.getPermissionList()) {
             clone.addPermission(perm);
         }
         //clone.variables = this.variables.clone();
@@ -68,7 +69,7 @@ public class User extends DataUnit implements Cloneable {
         } else {
             clone.setGroup(this.getGroupName());
         }
-        for(String perm: this.getPermissionList()){
+        for (String perm : this.getPermissionList()) {
             clone.addPermission(perm);
         }
         //clone.variables = this.variables.clone();
@@ -103,6 +104,8 @@ public class User extends DataUnit implements Cloneable {
     public void setGroup(String group) {
         this.group = group;
         flagAsChanged();
+        if ((GroupManager.isLoaded) && (GroupManager.BukkitPermissions.player_join = false))
+        	GroupManager.BukkitPermissions.updateAllPlayers();
     }
 
     /**
@@ -115,45 +118,55 @@ public class User extends DataUnit implements Cloneable {
         group = getDataSource().getGroup(group.getName());
         this.group = group.getName();
         flagAsChanged();
+        if ((GroupManager.isLoaded) && (GroupManager.BukkitPermissions.player_join = false))
+        	GroupManager.BukkitPermissions.updateAllPlayers();
     }
 
-    public void addSubGroup(Group subGroup){
-        if(this.group.equalsIgnoreCase(subGroup.getName())){
+    public void addSubGroup(Group subGroup) {
+        if (this.group.equalsIgnoreCase(subGroup.getName())) {
             return;
         }
         if (!this.getDataSource().groupExists(subGroup.getName())) {
             getDataSource().addGroup(subGroup);
-        }  
+        }
         subGroup = getDataSource().getGroup(subGroup.getName());
         removeSubGroup(subGroup);
         subGroups.add(subGroup.getName());
         flagAsChanged();
+        if ((GroupManager.isLoaded) && (GroupManager.BukkitPermissions.player_join = false))
+        	GroupManager.BukkitPermissions.updateAllPlayers();
     }
-    public int subGroupsSize(){
+
+    public int subGroupsSize() {
         return subGroups.size();
     }
-    public boolean isSubGroupsEmpty(){
+
+    public boolean isSubGroupsEmpty() {
         return subGroups.isEmpty();
     }
-    public boolean containsSubGroup(Group subGroup){
+
+    public boolean containsSubGroup(Group subGroup) {
         return subGroups.contains(subGroup.getName());
     }
-    public boolean removeSubGroup(Group subGroup){
-        try{
-            if(subGroups.remove(subGroup.getName())){
+
+    public boolean removeSubGroup(Group subGroup) {
+        try {
+            if (subGroups.remove(subGroup.getName())) {
                 flagAsChanged();
+                if ((GroupManager.isLoaded) && (GroupManager.BukkitPermissions.player_join = false))
+                	GroupManager.BukkitPermissions.updateAllPlayers();
                 return true;
             }
-        } catch (Exception e){
-
+        } catch (Exception e) {
         }
         return false;
     }
-    public ArrayList<Group> subGroupListCopy(){
+
+    public ArrayList<Group> subGroupListCopy() {
         ArrayList<Group> val = new ArrayList<Group>();
-        for(String gstr: subGroups){
+        for (String gstr : subGroups) {
             Group g = getDataSource().getGroup(gstr);
-            if(g==null){
+            if (g == null) {
                 removeSubGroup(g);
                 continue;
             }
@@ -161,7 +174,8 @@ public class User extends DataUnit implements Cloneable {
         }
         return val;
     }
-    public ArrayList<String> subGroupListStringCopy(){
+
+    public ArrayList<String> subGroupListStringCopy() {
         return (ArrayList<String>) subGroups.clone();
     }
 
@@ -179,9 +193,11 @@ public class User extends DataUnit implements Cloneable {
     public void setVariables(Map<String, Object> varList) {
         UserVariables temp = new UserVariables(this, varList);
         variables.clearVars();
-        for(String key: temp.getVarKeyList()){
+        for (String key : temp.getVarKeyList()) {
             variables.addVar(key, temp.getVarObject(key));
         }
         flagAsChanged();
+        if ((GroupManager.isLoaded) && (GroupManager.BukkitPermissions.player_join = false))
+        	GroupManager.BukkitPermissions.updateAllPlayers();
     }
 }

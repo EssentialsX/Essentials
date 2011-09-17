@@ -42,7 +42,7 @@ public class WorldDataHolder {
      */
     protected String name;
     /**
-     *  The actual groups holder
+     * The actual groups holder
      */
     protected Map<String, Group> groups = new HashMap<String, Group>();
     /**
@@ -50,7 +50,7 @@ public class WorldDataHolder {
      */
     protected Map<String, User> users = new HashMap<String, User>();
     /**
-     *  Points to the default group
+     * Points to the default group
      */
     protected Group defaultGroup = null;
     /**
@@ -81,7 +81,7 @@ public class WorldDataHolder {
     protected boolean haveGroupsChanged = false;
 
     /**
-     *  Prevent direct instantiation
+     * Prevent direct instantiation
      * @param worldName
      */
     protected WorldDataHolder(String worldName) {
@@ -90,7 +90,7 @@ public class WorldDataHolder {
 
     /**
      * The main constructor for a new WorldDataHolder
-     *  Please don't set the default group as null
+     * Please don't set the default group as null
      * @param worldName
      * @param defaultGroup the default group. its good to start with one
      */
@@ -116,7 +116,7 @@ public class WorldDataHolder {
     }
 
     /**
-     *  Add a user to the list. If it already exists, overwrite the old.
+     * Add a user to the list. If it already exists, overwrite the old.
      * @param theUser the user you want to add to the permission list
      */
     public void addUser(User theUser) {
@@ -158,7 +158,7 @@ public class WorldDataHolder {
     }
 
     /**
-     *  Change the default group of the file.
+     * Change the default group of the file.
      * @param group the group you want make default.
      */
     public void setDefaultGroup(Group group) {
@@ -170,7 +170,7 @@ public class WorldDataHolder {
     }
 
     /**
-     *  Returns the default group of the file
+     * Returns the default group of the file
      * @return the default group
      */
     public Group getDefaultGroup() {
@@ -178,7 +178,7 @@ public class WorldDataHolder {
     }
 
     /**
-     *  Returns a group of the given name
+     * Returns a group of the given name
      * @param groupName the name of the group
      * @return a group if it is found. null if not found.
      */
@@ -187,7 +187,7 @@ public class WorldDataHolder {
     }
 
     /**
-     *  Check if a group exists.
+     * Check if a group exists.
      * Its the same of getGroup, but check if it is null.
      * @param groupName the name of the group
      * @return true if exists. false if not.
@@ -210,7 +210,7 @@ public class WorldDataHolder {
     }
 
     /**
-     *  Remove the group to the list
+     * Remove the group to the list
      * @param groupName
      * @return true if had something to remove. false the group was default or non-existant
      */
@@ -277,7 +277,7 @@ public class WorldDataHolder {
     }
 
     /**
-     *  reads the file again
+     * reads the file again
      */
     public void reload() {
         try {
@@ -301,13 +301,14 @@ public class WorldDataHolder {
     }
 
     /**
-     *  Returns a data holder for the given file
+     * Returns a data holder for the given file
      * @param worldName
      * @param file
      * @return
      * @throws Exception
      * @deprecated
      */
+    @SuppressWarnings({"rawtypes", "unchecked"})
     @Deprecated
     public static WorldDataHolder load(String worldName, File file) throws Exception {
         WorldDataHolder ph = new WorldDataHolder(worldName);
@@ -387,7 +388,7 @@ public class WorldDataHolder {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            throw new Exception("Your Permissions config file is invalid.  See console for details.");
+            throw new Exception("Your Permissions config file is invalid. See console for details.");
         }
         if (ph.defaultGroup == null) {
             throw new IllegalArgumentException("There was no Default Group declared.");
@@ -409,7 +410,7 @@ public class WorldDataHolder {
             User thisUser = ph.createUser(usersKey);
             if (thisUser == null) {
                 GroupManager.logger.warning("I think this user was declared more than once: " + usersKey);
-				continue;
+                continue;
             }
             if (thisUserNode.get("permissions") == null) {
                 thisUserNode.put("permissions", new ArrayList<String>());
@@ -436,8 +437,8 @@ public class WorldDataHolder {
                 Group hisGroup = ph.getGroup(thisUserNode.get("group").toString());
                 if (hisGroup == null) {
                     GroupManager.logger.warning("There is no group " + thisUserNode.get("group").toString() + ", as stated for player " + thisUser.getName());
-					thisUser.setGroup(ph.defaultGroup);
-				}
+                    thisUser.setGroup(ph.defaultGroup);
+                }
                 thisUser.setGroup(hisGroup);
             } else {
                 thisUser.setGroup(ph.defaultGroup);
@@ -447,7 +448,7 @@ public class WorldDataHolder {
     }
 
     /**
-     *  Returns a data holder for the given file
+     * Returns a data holder for the given file
      * @param worldName
      * @param groupsFile
      * @param usersFile
@@ -455,6 +456,7 @@ public class WorldDataHolder {
      * @throws FileNotFoundException
      * @throws IOException
      */
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public static WorldDataHolder load(String worldName, File groupsFile, File usersFile) throws FileNotFoundException, IOException {
         WorldDataHolder ph = new WorldDataHolder(worldName);
         ph.groupsFile = groupsFile;
@@ -539,7 +541,7 @@ public class WorldDataHolder {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            throw new IllegalArgumentException("Your Permissions config file is invalid.  See console for details.");
+            throw new IllegalArgumentException("Your Permissions config file is invalid. See console for details.");
         }
         if (ph.defaultGroup == null) {
             throw new IllegalArgumentException("There was no Default Group declared.");
@@ -576,6 +578,11 @@ public class WorldDataHolder {
 
         // PROCESS USERS FILE
         Map<String, Object> allUsersNode = (Map<String, Object>) usersRootDataNode.get("users");
+        
+        // Stop loading if the file is empty
+        if (allUsersNode == null)
+        	return ph;
+
         for (String usersKey : allUsersNode.keySet()) {
             Map<String, Object> thisUserNode = (Map<String, Object>) allUsersNode.get(usersKey);
             User thisUser = ph.createUser(usersKey);
@@ -628,7 +635,9 @@ public class WorldDataHolder {
             if (thisUserNode.get("group") != null) {
                 Group hisGroup = ph.getGroup(thisUserNode.get("group").toString());
                 if (hisGroup == null) {
-                    throw new IllegalArgumentException("There is no group " + thisUserNode.get("group").toString() + ", as stated for player " + thisUser.getName());
+                	GroupManager.logger.warning("There is no group " + thisUserNode.get("group").toString() + ", as stated for player " + thisUser.getName() + ": Set to '" + ph.getDefaultGroup().getName() + "'.");
+                	hisGroup = ph.defaultGroup;
+                    //throw new IllegalArgumentException("There is no group " + thisUserNode.get("group").toString() + ", as stated for player " + thisUser.getName());
                 }
                 thisUser.setGroup(hisGroup);
             } else {
@@ -639,7 +648,7 @@ public class WorldDataHolder {
     }
 
     /**
-     *  Write a dataHolder in a specified file
+     * Write a dataHolder in a specified file
      * @param ph
      * @param file
      * @deprecated
@@ -726,7 +735,7 @@ public class WorldDataHolder {
     }
 
     /**
-     *  Write a dataHolder in a specified file
+     * Write a dataHolder in a specified file
      * @param ph
      * @param groupsFile
      */
@@ -761,28 +770,28 @@ public class WorldDataHolder {
         DumperOptions opt = new DumperOptions();
         opt.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         final Yaml yaml = new Yaml(opt);
-	try {
-		yaml.dump(root, new OutputStreamWriter(new FileOutputStream(groupsFile), "UTF-8"));
-	} catch (UnsupportedEncodingException ex) {
-	} catch (FileNotFoundException ex) {
-	}
+        try {
+            yaml.dump(root, new OutputStreamWriter(new FileOutputStream(groupsFile), "UTF-8"));
+        } catch (UnsupportedEncodingException ex) {
+        } catch (FileNotFoundException ex) {
+        }
 
         /*FileWriter tx = null;
         try {
-            tx = new FileWriter(groupsFile, false);
-            tx.write(yaml.dump(root));
-            tx.flush();
+        tx = new FileWriter(groupsFile, false);
+        tx.write(yaml.dump(root));
+        tx.flush();
         } catch (Exception e) {
         } finally {
-            try {
-                tx.close();
-            } catch (IOException ex) {
-            }
+        try {
+        tx.close();
+        } catch (IOException ex) {
+        }
         }*/
     }
 
     /**
-     *  Write a dataHolder in a specified file
+     * Write a dataHolder in a specified file
      * @param ph
      * @param usersFile
      */
@@ -823,22 +832,22 @@ public class WorldDataHolder {
         DumperOptions opt = new DumperOptions();
         opt.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         final Yaml yaml = new Yaml(opt);
-	try {
-		yaml.dump(root, new OutputStreamWriter(new FileOutputStream(usersFile), "UTF-8"));
-	} catch (UnsupportedEncodingException ex) {
-	} catch (FileNotFoundException ex) {
-	}
+        try {
+            yaml.dump(root, new OutputStreamWriter(new FileOutputStream(usersFile), "UTF-8"));
+        } catch (UnsupportedEncodingException ex) {
+        } catch (FileNotFoundException ex) {
+        }
         /*FileWriter tx = null;
         try {
-            tx = new FileWriter(usersFile, false);
-            tx.write(yaml.dump(root));
-            tx.flush();
+        tx = new FileWriter(usersFile, false);
+        tx.write(yaml.dump(root));
+        tx.flush();
         } catch (Exception e) {
         } finally {
-            try {
-                tx.close();
-            } catch (IOException ex) {
-            }
+        try {
+        tx.close();
+        } catch (IOException ex) {
+        }
         }*/
     }
 

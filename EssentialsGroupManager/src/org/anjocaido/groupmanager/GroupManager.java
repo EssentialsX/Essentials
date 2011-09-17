@@ -5,6 +5,7 @@
 package org.anjocaido.groupmanager;
 
 import org.anjocaido.groupmanager.permissions.AnjoPermissionsHandler;
+import org.anjocaido.groupmanager.permissions.BukkitPermissions;
 import org.anjocaido.groupmanager.utils.GroupManagerPermissions;
 import org.anjocaido.groupmanager.data.Variables;
 import org.anjocaido.groupmanager.data.User;
@@ -32,6 +33,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
+@SuppressWarnings("unused")
 /**
  *
  * @author gabrielcouto
@@ -44,15 +46,23 @@ public class GroupManager extends JavaPlugin {
     private ScheduledThreadPoolExecutor scheduler;
     private Map<String, ArrayList<User>> overloadedUsers = new HashMap<String, ArrayList<User>>();
     private Map<CommandSender, String> selectedWorlds = new HashMap<CommandSender, String>();
-    private WorldsHolder worldsHolder;
+    private static WorldsHolder worldsHolder;
     private boolean validateOnlinePlayer = true;
     private boolean isReady = false;
+    public static boolean isLoaded = false;
     private GMConfiguration config;
-	private GMLoggerHandler ch;
+    private GMLoggerHandler ch;
+    public static BukkitPermissions BukkitPermissions;
     public static final Logger logger = Logger.getLogger(GroupManager.class.getName());
+    
+    //PERMISSIONS FOR COMMAND BEING LOADED
+    OverloadedWorldHolder dataHolder = null;
+    AnjoPermissionsHandler permissionHandler = null;
 
     @Override
     public void onDisable() {
+    	isLoaded = false;
+    	
         if (worldsHolder != null) {
             worldsHolder.saveChanges();
         }
@@ -60,7 +70,7 @@ public class GroupManager extends JavaPlugin {
         // EXAMPLE: Custom code, here we just output some info so we can check all is well
         PluginDescriptionFile pdfFile = this.getDescription();
         System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is disabled!");
-		GroupManager.logger.removeHandler(ch);
+        GroupManager.logger.removeHandler(ch);
     }
 
     @Override
@@ -81,8 +91,11 @@ public class GroupManager extends JavaPlugin {
             this.getServer().getPluginManager().disablePlugin(this);
             throw new IllegalStateException("An error ocurred while loading GroupManager");
         }
+        
+        BukkitPermissions = new BukkitPermissions(this);
 
         enableScheduler();
+        isLoaded = true;
         System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
     }
 
@@ -109,7 +122,7 @@ public class GroupManager extends JavaPlugin {
 
                 @Override
                 public void run() {
-                    GroupManager.this.worldsHolder.saveChanges();
+                    GroupManager.worldsHolder.saveChanges();
                 }
             };
             scheduler = new ScheduledThreadPoolExecutor(1);
@@ -152,7 +165,7 @@ public class GroupManager extends JavaPlugin {
         worldsHolder.reloadAll();
     }
 
-    public WorldsHolder getWorldsHolder() {
+    public static WorldsHolder getWorldsHolder() {
         return worldsHolder;
     }
 
@@ -166,7 +179,7 @@ public class GroupManager extends JavaPlugin {
     }
 
     /**
-     *  A simple interface, for ones that don't want to mess with overloading.
+     * A simple interface, for ones that don't want to mess with overloading.
      * Yet it is affected by overloading. But seamless.
      * @return the dataholder with all information
      */
@@ -176,8 +189,8 @@ public class GroupManager extends JavaPlugin {
     }
 
     /**
-     *  Use this if you want to play with overloading.
-     * @return  a dataholder with overloading interface
+     * Use this if you want to play with overloading.
+     * @return a dataholder with overloading interface
      */
     @Deprecated
     public OverloadedWorldHolder getOverloadedClassData() {
@@ -186,10 +199,11 @@ public class GroupManager extends JavaPlugin {
 
     /**
      * Called when a command registered by this plugin is received.
-     * @param sender 
-     * @param cmd 
+     * @param sender
+     * @param cmd
      * @param args
      */
+    @SuppressWarnings({"null", "deprecation"})
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         boolean playerCanDo = false;
@@ -212,8 +226,8 @@ public class GroupManager extends JavaPlugin {
         }
 
         //PERMISSIONS FOR COMMAND BEING LOADED
-        OverloadedWorldHolder dataHolder = null;
-        AnjoPermissionsHandler permissionHandler = null;
+        dataHolder = null;
+        permissionHandler = null;
 
         if (senderPlayer != null) {
             dataHolder = worldsHolder.getWorldData(senderPlayer);
@@ -246,9 +260,9 @@ public class GroupManager extends JavaPlugin {
         } catch (Exception e) {
             //this error happened once with someone. now im prepared... i think
             GroupManager.logger.severe("===================================================");
-            GroupManager.logger.severe("=              ERROR REPORT START                 =");
+            GroupManager.logger.severe("= ERROR REPORT START =");
             GroupManager.logger.severe("===================================================");
-            GroupManager.logger.severe("=  COPY AND PASTE THIS TO GROUPMANAGER DEVELOPER  =");
+            GroupManager.logger.severe("= COPY AND PASTE THIS TO GROUPMANAGER DEVELOPER =");
             GroupManager.logger.severe("===================================================");
             GroupManager.logger.severe(this.getDescription().getName());
             GroupManager.logger.severe(this.getDescription().getVersion());
@@ -265,7 +279,7 @@ public class GroupManager extends JavaPlugin {
                 GroupManager.logger.severe(val.name());
             }
             GroupManager.logger.severe("===================================================");
-            GroupManager.logger.severe("=              ERROR REPORT ENDED                 =");
+            GroupManager.logger.severe("= ERROR REPORT ENDED =");
             GroupManager.logger.severe("===================================================");
             sender.sendMessage("An error occurred. Ask the admin to take a look at the console.");
         }
@@ -275,13 +289,12 @@ public class GroupManager extends JavaPlugin {
                 case manuadd:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player> <group>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -301,11 +314,29 @@ public class GroupManager extends JavaPlugin {
                         sender.sendMessage(ChatColor.RED + "Group not found!");
                         return false;
                     }
+
                     //VALIDANDO PERMISSAO
                     if (!isConsole && !senderPlayer.isOp() && (senderGroup != null ? permissionHandler.inGroup(auxUser.getName(), senderGroup.getName()) : false)) {
                         sender.sendMessage(ChatColor.RED + "Can't modify player with same permissions than you, or higher.");
                         return false;
                     }
+                    if (!isConsole && !senderPlayer.isOp() && (permissionHandler.hasGroupInInheritance(auxGroup, senderGroup.getName()))) {
+                        sender.sendMessage(ChatColor.RED + "The destination group can't be the same as yours, or higher.");
+                        return false;
+                    }
+                    if (!isConsole && !senderPlayer.isOp() && (!permissionHandler.inGroup(senderUser.getName(), auxUser.getGroupName()) || !permissionHandler.inGroup(senderUser.getName(), auxGroup.getName()))) {
+                        sender.sendMessage(ChatColor.RED + "Can't modify player involving a group that you don't inherit.");
+                        return false;
+                    }
+                    if (!isConsole && !senderPlayer.isOp() && (!permissionHandler.hasGroupInInheritance(auxUser.getGroup(), auxGroup.getName()) && !permissionHandler.hasGroupInInheritance(auxGroup, auxUser.getGroupName()))) {
+                        sender.sendMessage(ChatColor.RED + "Can't modify player using groups with different heritage line.");
+                        return false;
+                    }
+                    if (!isConsole && !senderPlayer.isOp() && (!permissionHandler.hasGroupInInheritance(auxGroup, auxUser.getGroupName()))) {
+                        sender.sendMessage(ChatColor.RED + "The new group must be a higher rank.");
+                        return false;
+                    }
+                    
                     //PARECE OK
                     auxUser.setGroup(auxGroup);
                     sender.sendMessage(ChatColor.YELLOW + "You changed player '" + auxUser.getName() + "' group to '" + auxGroup.getName() + "'.");
@@ -315,13 +346,12 @@ public class GroupManager extends JavaPlugin {
                 case manudel:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 1) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -349,13 +379,15 @@ public class GroupManager extends JavaPlugin {
                 case manuaddsub:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender)) {
+                    		sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
+                    		sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
+                    		return true;
+                    	}
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player> <group>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -388,13 +420,12 @@ public class GroupManager extends JavaPlugin {
                 case manudelsub:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //VALIDANDO ARGUMENTOS
-                    if (args.length != 1) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                    if (args.length != 2) {
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/manudelsub <user> <group>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -422,13 +453,12 @@ public class GroupManager extends JavaPlugin {
                 case mangadd:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 1) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <group>)");
                         return false;
                     }
                     auxGroup = dataHolder.getGroup(args[0]);
@@ -444,13 +474,12 @@ public class GroupManager extends JavaPlugin {
                 case mangdel:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 1) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <group>)");
                         return false;
                     }
                     auxGroup = dataHolder.getGroup(args[0]);
@@ -466,13 +495,12 @@ public class GroupManager extends JavaPlugin {
                 case manuaddp:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player> <permission>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -531,13 +559,12 @@ public class GroupManager extends JavaPlugin {
                 case manudelp:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player> <permission>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -583,13 +610,12 @@ public class GroupManager extends JavaPlugin {
                 case manulistp:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 1) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -638,13 +664,12 @@ public class GroupManager extends JavaPlugin {
                 case manucheckp:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player> <permission>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -686,13 +711,12 @@ public class GroupManager extends JavaPlugin {
                 case mangaddp:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <group> <permission>)");
                         return false;
                     }
                     auxGroup = dataHolder.getGroup(args[0]);
@@ -740,12 +764,12 @@ public class GroupManager extends JavaPlugin {
                 case mangdelp:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
+                    	sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <group> <permission>)");
                         return false;
                     }
                     auxGroup = dataHolder.getGroup(args[0]);
@@ -779,13 +803,12 @@ public class GroupManager extends JavaPlugin {
                 case manglistp:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 1) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <group>)");
                         return false;
                     }
                     auxGroup = dataHolder.getGroup(args[0]);
@@ -828,13 +851,12 @@ public class GroupManager extends JavaPlugin {
                 case mangcheckp:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <group> <permission>)");
                         return false;
                     }
                     auxGroup = dataHolder.getGroup(args[0]);
@@ -863,13 +885,12 @@ public class GroupManager extends JavaPlugin {
                 case mangaddi:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <group1> <group2>)");
                         return false;
                     }
                     auxGroup = dataHolder.getGroup(args[0]);
@@ -889,19 +910,18 @@ public class GroupManager extends JavaPlugin {
                     }
                     //PARECE OK
                     auxGroup.addInherits(auxGroup2);
-                    sender.sendMessage(ChatColor.RED + "Group  " + auxGroup2.getName() + " is now in " + auxGroup.getName() + " inheritance list.");
+                    sender.sendMessage(ChatColor.RED + "Group " + auxGroup2.getName() + " is now in " + auxGroup.getName() + " inheritance list.");
 
                     return true;
                 case mangdeli:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <group1> <group2>)");
                         return false;
                     }
                     auxGroup = dataHolder.getGroup(args[0]);
@@ -925,19 +945,18 @@ public class GroupManager extends JavaPlugin {
                     }
                     //PARECE OK
                     auxGroup.removeInherits(auxGroup2.getName());
-                    sender.sendMessage(ChatColor.RED + "Group  " + auxGroup2.getName() + " was removed from " + auxGroup.getName() + " inheritance list.");
+                    sender.sendMessage(ChatColor.RED + "Group " + auxGroup2.getName() + " was removed from " + auxGroup.getName() + " inheritance list.");
 
                     return true;
                 case manuaddv:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length < 3) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <user> <variable> <value>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -967,13 +986,12 @@ public class GroupManager extends JavaPlugin {
                 case manudelv:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <user> <variable>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -999,13 +1017,12 @@ public class GroupManager extends JavaPlugin {
                 case manulistv:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 1) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <user>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -1037,13 +1054,12 @@ public class GroupManager extends JavaPlugin {
                 case manucheckv:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <user> <variable>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -1080,13 +1096,12 @@ public class GroupManager extends JavaPlugin {
                 case mangaddv:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length < 3) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <group> <variable> <value>)");
                         return false;
                     }
                     auxGroup = dataHolder.getGroup(args[0]);
@@ -1110,13 +1125,12 @@ public class GroupManager extends JavaPlugin {
                 case mangdelv:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <group> <variable>)");
                         return false;
                     }
                     auxGroup = dataHolder.getGroup(args[0]);
@@ -1136,13 +1150,12 @@ public class GroupManager extends JavaPlugin {
                 case manglistv:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 1) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <group>)");
                         return false;
                     }
                     auxGroup = dataHolder.getGroup(args[0]);
@@ -1174,13 +1187,12 @@ public class GroupManager extends JavaPlugin {
                 case mangcheckv:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <group> <variable>)");
                         return false;
                     }
                     auxGroup = dataHolder.getGroup(args[0]);
@@ -1202,13 +1214,12 @@ public class GroupManager extends JavaPlugin {
                 case manwhois:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 1) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -1237,13 +1248,12 @@ public class GroupManager extends JavaPlugin {
                 case tempadd:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 1) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -1276,13 +1286,12 @@ public class GroupManager extends JavaPlugin {
                 case tempdel:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 1) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -1317,9 +1326,8 @@ public class GroupManager extends JavaPlugin {
                 case templist:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //WORKING
                     auxString = "";
@@ -1347,9 +1355,8 @@ public class GroupManager extends JavaPlugin {
                 case tempdelall:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //WORKING
                     removeList = new ArrayList<User>();
@@ -1391,9 +1398,8 @@ public class GroupManager extends JavaPlugin {
                     }
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //WORKING
                     config.load();
@@ -1416,9 +1422,8 @@ public class GroupManager extends JavaPlugin {
                 case listgroups:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //WORKING
                     auxString = "";
@@ -1433,13 +1438,12 @@ public class GroupManager extends JavaPlugin {
                 case manpromote:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player> <group>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -1489,13 +1493,12 @@ public class GroupManager extends JavaPlugin {
                 case mandemote:
                     //VALIDANDO ESTADO DO SENDER
                     if (dataHolder == null || permissionHandler == null) {
-                        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
-                        sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
-                        return true;
+                    	if (!setDefaultWorldHandler(sender))
+                    		return true;
                     }
                     //VALIDANDO ARGUMENTOS
                     if (args.length != 2) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player> <group>)");
                         return false;
                     }
                     if (validateOnlinePlayer) {
@@ -1575,7 +1578,7 @@ public class GroupManager extends JavaPlugin {
                     return true;
                 case manselect:
                     if (args.length < 1) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count!");
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <world>)");
                         sender.sendMessage(ChatColor.YELLOW + "Worlds available: ");
                         ArrayList<OverloadedWorldHolder> worlds = worldsHolder.allWorldsDataList();
                         auxString = "";
@@ -1618,6 +1621,26 @@ public class GroupManager extends JavaPlugin {
         }
         sender.sendMessage(ChatColor.RED + "You are not allowed to use that command.");
         return false;
+    }
+    
+    /**
+     * Sets up the default world for use.
+     */
+    private boolean setDefaultWorldHandler(CommandSender sender) {
+ 
+    	dataHolder = worldsHolder.getWorldData(worldsHolder.getDefaultWorld().getName());
+        permissionHandler = dataHolder.getPermissionsHandler();
+        selectedWorlds.put(sender, dataHolder.getName());
+        
+        if ((dataHolder != null) && (permissionHandler != null)) {
+        	sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. Default world '" + worldsHolder.getDefaultWorld().getName() + "' selected.");
+        	return true;
+        }
+        
+        sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. World selection is needed.");
+		sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
+		return false;
+        
     }
 
     /**
