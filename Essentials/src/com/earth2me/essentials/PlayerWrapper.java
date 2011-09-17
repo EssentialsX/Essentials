@@ -641,4 +641,88 @@ public class PlayerWrapper implements Player
 	{
 		base.setWhitelisted(bln);
 	}
+
+	@Override
+	public GameMode getGameMode()
+	{
+		return base.getGameMode();
+	}
+
+	@Override
+	public void setGameMode(GameMode gm)
+	{
+		base.setGameMode(gm);
+	}
+
+	@Override
+	public int getExperience()
+	{
+		return base.getExperience();
+	}
+
+	@Override
+	public void setExperience(int i)
+	{
+		base.setExperience(i);
+	}
+
+	@Override
+	public int getLevel()
+	{
+		return base.getLevel();
+	}
+
+	@Override
+	public void setLevel(int i)
+	{
+		base.setLevel(i);
+	}
+
+	@Override
+	public int getTotalExperience()
+	{
+		return base.getTotalExperience();
+	}
+
+	@Override
+	public void setTotalExperience(int i)
+	{
+		base.setTotalExperience(i);
+	}
+
+	@Override
+	public float getExhaustion()
+	{
+		return base.getExhaustion();
+	}
+
+	@Override
+	public void setExhaustion(float f)
+	{
+		base.setExhaustion(f);
+	}
+
+	@Override
+	public float getSaturation()
+	{
+		return base.getSaturation();
+	}
+
+	@Override
+	public void setSaturation(float f)
+	{
+		base.setSaturation(f);
+	}
+
+	@Override
+	public int getFoodLevel()
+	{
+		return base.getFoodLevel();
+	}
+
+	@Override
+	public void setFoodLevel(int i)
+	{
+		base.setFoodLevel(i);
+	}
 }

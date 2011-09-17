@@ -9,6 +9,7 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Logger;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -442,6 +443,18 @@ public class FakeServer implements Server
 
 	@Override
 	public Set<org.bukkit.OfflinePlayer> getBannedPlayers()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public GameMode getDefaultGameMode()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setDefaultGameMode(GameMode gm)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
