@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project default="collect">
   <target name="setversion">
-    <replace dir="." includes="**/src/plugin.yml" token="version: TeamCity" value="version: %build.number%"/>
-    <replace dir="." includes="**/src/messages*.properties" token="version: TeamCity" value="version: %build.number%"/>
-    <replace dir="." includes="**/src/items.csv" token="version: TeamCity" value="version: %build.number%"/>
+    <replace dir="." includes="**/src/plugin.yml" token="version: TeamCity" value="version: ${BUILDNUMBER}"/>
+    <replace dir="." includes="**/src/messages*.properties" token="version: TeamCity" value="version: ${BUILDNUMBER}"/>
+    <replace dir="." includes="**/src/items.csv" token="version: TeamCity" value="version: ${BUILDNUMBER}"/>
   </target>
   <target name="buildall" depends="setversion">
     <ant dir="Essentials" antfile="build.xml"/>
