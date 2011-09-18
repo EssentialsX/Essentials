@@ -26,6 +26,12 @@ public class Commandtppos extends EssentialsCommand
 		int y = Integer.parseInt(args[1]);
 		int z = Integer.parseInt(args[2]);
 		Location l = new Location(user.getWorld(), x, y, z);
+		if (args.length > 3) {
+			l.setYaw(Float.parseFloat(args[3]));
+		}
+		if (args.length > 4) {
+			l.setPitch(Float.parseFloat(args[4]));
+		}
 		Trade charge = new Trade(this.getName(), ess);
 		charge.isAffordableFor(user);
 		user.sendMessage(Util.i18n("teleporting"));

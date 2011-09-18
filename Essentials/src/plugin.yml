@@ -330,7 +330,7 @@ commands:
     usage: /<command> <player>
   tppos:
     description: Teleport to coordinates.
-    usage: /<command> <x> <y> <z>
+    usage: /<command> <x> <y> <z> [yaw] [pitch]
   tptoggle:
     description: Blocks all forms of teleportation.
     usage: /<command>
