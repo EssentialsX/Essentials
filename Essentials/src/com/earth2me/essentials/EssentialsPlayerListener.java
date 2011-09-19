@@ -476,7 +476,8 @@ public class EssentialsPlayerListener extends PlayerListener
 		{
 			for (Player player : ess.getServer().getOnlinePlayers())
 			{
-				if (ess.getUser(player).isSocialSpyEnabled())
+				User spyer = ess.getUser(player);
+				if (spyer.isSocialSpyEnabled() && !user.equals(spyer))
 				{
 					player.sendMessage(user.getDisplayName() + " : " + event.getMessage());
 				}
