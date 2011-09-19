@@ -210,6 +210,10 @@ commands:
     description: Assigns a command to the item in hand, {player} will be replaced by the name of the player that you click.
     usage: /<command> [l:|a:|r:][command] <arguments>
     aliases: [pt,epowertool,ept]
+  powertooltoggle:
+    description: Enables or disables all current powertools
+    usage: /<command> 
+    aliases: [ptt,epowertooltoggle,eptt]
   ptime:
     description: Adjust player's client time. Add @ prefix to fix.
     usage: /<command> [list|reset|day|night|dawn|17:30|4pm|4000ticks] <player|*>

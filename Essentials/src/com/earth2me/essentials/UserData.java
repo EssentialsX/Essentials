@@ -57,6 +57,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		geolocation = _getGeoLocation();
 		isSocialSpyEnabled = _isSocialSpyEnabled();
 		isNPC = _isNPC();
+		arePowerToolsEnabled = _arePowerToolsEnabled();
 	}
 	private double money;
 
@@ -264,6 +265,12 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.setProperty("powertools", powertools);
 		config.save();
 	}
+	
+	public boolean hasPowerTools()
+	{
+		return powertools.size() > 0;
+	}
+	
 	private Location lastLocation;
 
 	private Location _getLastLocation()
@@ -772,4 +779,31 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.setProperty("npc", set);
 		config.save();
 	}
+	
+	private boolean arePowerToolsEnabled;
+	
+	public boolean arePowerToolsEnabled()
+	{
+		return arePowerToolsEnabled;
+	}
+	
+	public void setPowerToolsEnabled(boolean set)
+	{
+		arePowerToolsEnabled = set;
+		config.setProperty("powertoolsenabled", set);
+		config.save();
+	}
+	
+	public boolean togglePowerToolsEnabled()
+	{
+		boolean ret = !arePowerToolsEnabled();
+		setPowerToolsEnabled(ret);
+		return ret;
+	}
+	
+	private boolean _arePowerToolsEnabled()
+	{
+		return config.getBoolean("powertoolsenabled", true);
+	}
+	
 }
