@@ -79,6 +79,76 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
     public String getGroup(String userName) {
         return ph.getUser(userName).getGroup().getName();
     }
+    
+    /**
+     * Returns All permissions (including inheritance) of player name.
+     * @param userName
+     * @return
+     */
+    @Override
+    public List<String> getAllPlayersPermissions(String userName) {
+    	
+    	User user = ph.getUser(userName);
+    	List<String> playerPermArray = new ArrayList<String>(user.getPermissionList());
+        List<String> playerMainGroupPermArray = new ArrayList<String>(user.getGroup().getPermissionList());
+        List<String> subGroupsPermArray = new ArrayList<String>();
+        List<String> returnPermArray = new ArrayList<String>();
+        
+        for (String subGroup : user.subGroupListStringCopy()) {
+        	subGroupsPermArray.addAll(ph.getGroup(subGroup).getPermissionList());
+        }
+        
+        for (String permission : subGroupsPermArray) {
+        	/*
+        	 * Add each Negated permission
+        	 * unless it's being overridden by a higher permission
+        	 */
+            if (permission.startsWith("-")
+            		&& !playerMainGroupPermArray.contains(permission.substring(1))
+            		&& !playerPermArray.contains(permission.substring(1))
+            		&& !playerMainGroupPermArray.contains("*")
+        			&& !playerPermArray.contains("*")) {
+            	if (!returnPermArray.contains(permission)) {
+            		returnPermArray.add(permission);
+            	}
+            } else
+            	if (!returnPermArray.contains(permission)
+            			&& !playerMainGroupPermArray.contains("-"+permission)
+                		&& !playerPermArray.contains("-"+permission)) {
+    			returnPermArray.add(permission);
+    		}
+        }
+        
+        for (String permission : playerMainGroupPermArray) {
+        	/*
+        	 * Add each Negated permission
+        	 * unless it's being overridden by a higher permission
+        	 */
+            if (permission.startsWith("-")
+            		&& !playerPermArray.contains(permission.substring(1))
+            		&& !playerMainGroupPermArray.contains("*")
+        			&& !playerPermArray.contains("*")) {
+            	if (!returnPermArray.contains(permission)) {
+            		returnPermArray.add(permission);
+            	}
+            } else
+            	if (!returnPermArray.contains(permission)
+                		&& !playerPermArray.contains("-"+permission)) {
+    			returnPermArray.add(permission);
+    		}
+        }
+        
+        for (String permission : playerPermArray) {
+        	/*
+        	 * Add each permission
+        	 */
+            if (!returnPermArray.contains(permission)) {
+    			returnPermArray.add(permission);
+    		}
+        }
+    	
+        return returnPermArray;
+    }
 
     /**
      * Verify if player is in suck group.

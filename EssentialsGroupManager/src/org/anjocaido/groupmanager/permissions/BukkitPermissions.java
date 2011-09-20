@@ -16,6 +16,7 @@
 
 package org.anjocaido.groupmanager.permissions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -24,6 +25,8 @@ import java.util.Set;
 
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.data.User;
+import org.anjocaido.groupmanager.dataholder.OverloadedWorldHolder;
+import org.anjocaido.groupmanager.utils.PermissionCheckResult;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -40,6 +43,7 @@ import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.ServerListener;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
@@ -113,10 +117,12 @@ public class BukkitPermissions {
             world = player.getWorld().getName();
         }
         
+        // All permissions registered with Bukkit for this player
         PermissionAttachment attachment = this.attachments.get(player);
+        
+        OverloadedWorldHolder worldData = GroupManager.getWorldsHolder().getWorldData(world);
 
-        User user =  GroupManager.getWorldsHolder().getWorldData(world).getUser(player.getName());
-        List<String> permissions = user.getGroup().getPermissionList();
+        User user = worldData.getUser(player.getName());
         
         // clear permissions
         for (String permission : attachment.getPermissions().keySet()) {
@@ -124,25 +130,34 @@ public class BukkitPermissions {
         }      
         
         // find matching permissions
+        PermissionCheckResult permissionResult;
+        Boolean value;
         for (Permission permission : registeredPermissions) {
-            boolean permissionValue = user.getGroup().hasSamePermissionNode(permission.getName());
-            attachment.setPermission(permission, permissionValue);
-        } 
+        	permissionResult = worldData.getPermissionsHandler().checkFullUserPermission(user, permission.getName());
+            if (permissionResult.resultType.equals(PermissionCheckResult.Type.FOUND))
+            	value = true;
+            else
+            	value = false;
+        	
+            attachment.setPermission(permission, value);
+        }
         
-        // all permissions
-        for (String permission : permissions) {
-            Boolean value = true;
+        // Add any missing permissions for this player (non bukkit plugins)
+        List<String> playerPermArray = new ArrayList<String>(worldData.getPermissionsHandler().getAllPlayersPermissions(player.getName()));
+        
+        for (String permission : playerPermArray) {
+        	value = true;
             if (permission.startsWith("-")) {
                 permission = permission.substring(1); // cut off -
                 value = false;
             }
-            
+
             if (!attachment.getPermissions().containsKey(permission)) {
                 attachment.setPermission(permission, value);
             }
         }
-        
         player.recalculatePermissions();
+        
         /*
         // List perms for this player
         GroupManager.logger.info("Attachment Permissions:");

@@ -9,5 +9,5 @@ v 1.1:
 	- Fix for Users.yml containing only 'users:' causing a crash.
 	- GroupManager will now generate a fresh Users and Groups yml if either file is empty.
 	- Fix for an infinite loop bug with the new Bukkit Perms during a new user creation.
-v 1.2:
     - Fixed BukkitPerms population. Wasn't correctly setting superperms.
+    - Push updates to superperms for all valid GM commands.

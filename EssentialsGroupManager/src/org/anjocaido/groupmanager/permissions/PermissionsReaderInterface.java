@@ -3,6 +3,8 @@ package org.anjocaido.groupmanager.permissions;
 //import java.util.Collection;
 //import java.util.Map;
 //import java.util.Set;
+import java.util.List;
+
 import org.anjocaido.groupmanager.data.Group;
 //import org.anjocaido.groupmanager.data.User;
 import org.bukkit.entity.Player;
@@ -229,4 +231,6 @@ public abstract class PermissionsReaderInterface {
 
     public abstract void removeGroupInfo(String name, String path);
 //////////////////////////////
+
+	public abstract List<String> getAllPlayersPermissions(String userName);
 }
