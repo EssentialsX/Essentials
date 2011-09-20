@@ -26,6 +26,10 @@ public class EssentialsTimer implements Runnable
 			onlineUsers.add(user);
 			user.setLastOnlineActivity(currentTime);
 			user.checkActivity();
+			// Food for god mode
+			if (user.isGodModeEnabled() && user.getFoodLevel() < 20) {
+				user.setFoodLevel(20);
+			}
 		}
 
 		final Iterator<User> iterator = onlineUsers.iterator();
