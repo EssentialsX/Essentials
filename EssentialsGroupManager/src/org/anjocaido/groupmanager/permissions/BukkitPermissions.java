@@ -43,7 +43,7 @@ import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.ServerListener;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
-import org.bukkit.permissions.PermissionAttachmentInfo;
+//import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 

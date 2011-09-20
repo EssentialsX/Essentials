@@ -111,4 +111,14 @@ public abstract class Tasks {
         }
         return result;
     }
+    
+    public static String join(String[] arr, String separator) {
+    	if (arr.length == 0)
+            return "";
+    	String out = arr[0].toString();
+    	for (int i = 1; i < arr.length; i++)
+            out += separator + arr[i];
+    return out;
+    }
+
 }

@@ -11,3 +11,4 @@ v 1.1:
 	- Fix for an infinite loop bug with the new Bukkit Perms during a new user creation.
     - Fixed BukkitPerms population. Wasn't correctly setting superperms.
     - Push updates to superperms for all valid GM commands.
+    - All GroupManager commands issued by players are now echoed in the console.

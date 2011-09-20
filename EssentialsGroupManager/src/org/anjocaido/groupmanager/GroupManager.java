@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import org.anjocaido.groupmanager.dataholder.worlds.WorldsHolder;
 import org.anjocaido.groupmanager.utils.GMLoggerHandler;
 import org.anjocaido.groupmanager.utils.PermissionCheckResult;
+import org.anjocaido.groupmanager.utils.Tasks;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -218,6 +219,7 @@ public class GroupManager extends JavaPlugin {
             senderPlayer = (Player) sender;
             senderUser = worldsHolder.getWorldData(senderPlayer).getUser(senderPlayer.getName());
             senderGroup = senderUser.getGroup();
+            System.out.println("[PLAYER_COMMAND] " + senderPlayer.getName() + ": /" + commandLabel + " " + Tasks.join(args, " "));
             if (senderPlayer.isOp() || worldsHolder.getWorldPermissions(senderPlayer).has(senderPlayer, "groupmanager." + cmd.getName())) {
                 playerCanDo = true;
             }
