@@ -16,8 +16,10 @@
 
 package org.anjocaido.groupmanager.permissions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -115,11 +117,12 @@ public class BukkitPermissions {
             world = player.getWorld().getName();
         }
         
+        // All permissions registered with Bukkit for this player
         PermissionAttachment attachment = this.attachments.get(player);
         
         OverloadedWorldHolder worldData = GroupManager.getWorldsHolder().getWorldData(world);
 
-        User user =  worldData.getUser(player.getName());
+        User user = worldData.getUser(player.getName());
         
         // clear permissions
         for (String permission : attachment.getPermissions().keySet()) {
@@ -127,18 +130,32 @@ public class BukkitPermissions {
         }      
         
         // find matching permissions
+        PermissionCheckResult permissionResult;
+        Boolean value;
         for (Permission permission : registeredPermissions) {
-        	PermissionCheckResult permissionResult = worldData.getPermissionsHandler().checkFullUserPermission(user, permission.getName());
-        	Boolean value = false;
-            if (permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION)) {
-                value = false;
-            } else if (permissionResult.resultType.equals(PermissionCheckResult.Type.FOUND))
+        	permissionResult = worldData.getPermissionsHandler().checkFullUserPermission(user, permission.getName());
+            if (permissionResult.resultType.equals(PermissionCheckResult.Type.FOUND))
             	value = true;
-        	
+            else
+            	value = false;
         	
             attachment.setPermission(permission, value);
-        } 
+        }
         
+        // Add any missing permissions for this player (non bukkit plugins)
+        List<String> playerPermArray = new ArrayList<String>(worldData.getPermissionsHandler().getAllPlayersPermissions(player.getName()));
+        
+        for (String permission : playerPermArray) {
+        	value = true;
+            if (permission.startsWith("-")) {
+                permission = permission.substring(1); // cut off -
+                value = false;
+            }
+
+            if (!attachment.getPermissions().containsKey(permission)) {
+                attachment.setPermission(permission, value);
+            }
+        }
         player.recalculatePermissions();
         
         /*
