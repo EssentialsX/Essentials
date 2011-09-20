@@ -183,11 +183,16 @@ public class SignProtection extends EssentialsSign
 		SignProtectionState retstate = SignProtectionState.NOSIGN;
 		for (SignProtectionState state : signs.values())
 		{
-			if (state == SignProtectionState.OWNER || state == SignProtectionState.ALLOWED)
+
+			if (state == SignProtectionState.OWNER)
 			{
 				return state;
 			}
-			if (state == SignProtectionState.NOT_ALLOWED)
+			if (state == SignProtectionState.ALLOWED)
+			{
+				retstate = state;
+			}
+			else if (state == SignProtectionState.NOT_ALLOWED && retstate != SignProtectionState.ALLOWED)
 			{
 				retstate = state;
 			}
