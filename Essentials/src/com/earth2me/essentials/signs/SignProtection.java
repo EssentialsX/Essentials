@@ -194,7 +194,7 @@ public class SignProtection extends EssentialsSign
 			}
 			else if (state == SignProtectionState.NOT_ALLOWED && retstate != SignProtectionState.ALLOWED)
 			{
-				retstate = state
+				retstate = state;
 			}
 		}
 		return retstate;
