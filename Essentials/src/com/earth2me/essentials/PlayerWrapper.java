@@ -725,4 +725,11 @@ public class PlayerWrapper implements Player
 	{
 		base.setFoodLevel(i);
 	}
+	
+	@Override
+	public Location getBedSpawnLocation()
+	{
+		return base.getBedSpawnLocation();
+	}
+	
 }
