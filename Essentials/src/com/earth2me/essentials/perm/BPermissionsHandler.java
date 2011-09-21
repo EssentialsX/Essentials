@@ -3,6 +3,7 @@ package com.earth2me.essentials.perm;
 import de.bananaco.permissions.Permissions;
 import de.bananaco.permissions.interfaces.PermissionSet;
 import de.bananaco.permissions.worlds.WorldPermissionsManager;
+import de.bananaco.permissions.info.InfoReader;
 import java.util.List;
 import org.bukkit.entity.Player;
 
@@ -10,10 +11,12 @@ import org.bukkit.entity.Player;
 public class BPermissionsHandler extends SuperpermsHandler
 {
 	private final transient WorldPermissionsManager wpm;
-
+	private final InfoReader info;
 	public BPermissionsHandler()
 	{
 		wpm = Permissions.getWorldPermissionsManager();
+		info = new InfoReader();
+		info.instantiate();
 	}
 
 	@Override
@@ -48,4 +51,24 @@ public class BPermissionsHandler extends SuperpermsHandler
 		}
 		return groups.contains(group);
 	}
+	
+	@Override
+	public boolean canBuild(final Player base, final String group)
+	{
+		return hasPermission(base, "bPermissions.build");
+	}
+	
+	@Override
+	public String getPrefix(final Player base)
+	{
+		return info.getPrefix(base);
+	}
+
+	@Override
+	public String getSuffix(final Player base)
+	{
+		return info.getSuffix(base);
+	}
+	
+	
 }
