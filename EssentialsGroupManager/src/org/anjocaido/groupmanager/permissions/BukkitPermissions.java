@@ -58,12 +58,12 @@ public class BukkitPermissions {
 
     protected Map<Player, PermissionAttachment> attachments = new HashMap<Player, PermissionAttachment>();
     protected Set<Permission> registeredPermissions = new HashSet<Permission>();
-    protected Plugin plugin;
+    protected GroupManager plugin;
     protected boolean dumpAllPermissions = true;
     protected boolean dumpMatchedPermissions = true;
     public boolean player_join = false;
 
-    public BukkitPermissions(Plugin plugin) {
+    public BukkitPermissions(GroupManager plugin) {
         this.plugin = plugin;
 
         this.collectPermissions();
@@ -120,7 +120,7 @@ public class BukkitPermissions {
         // All permissions registered with Bukkit for this player
         PermissionAttachment attachment = this.attachments.get(player);
         
-        OverloadedWorldHolder worldData = GroupManager.getWorldsHolder().getWorldData(world);
+        OverloadedWorldHolder worldData = plugin.getWorldsHolder().getWorldData(world);
 
         User user = worldData.getUser(player.getName());
         
@@ -185,7 +185,7 @@ public class BukkitPermissions {
         	player_join = true;
         	Player player = event.getPlayer();
         	//force GM to create the player if they are not already listed.
-        	if (GroupManager.getWorldsHolder().getWorldData(player.getWorld().getName()).getUser(player.getName()) != null) {
+        	if (plugin.getWorldsHolder().getWorldData(player.getWorld().getName()).getUser(player.getName()) != null) {
         		player_join = false;
         		updatePermissions(event.getPlayer());
         	} else

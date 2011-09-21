@@ -47,12 +47,12 @@ public class NijikoPermissionsProxy extends PermissionHandler {
 
     @Override
     public void addGroupInfo(String world, String group, String node, Object data) {
-        GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().addGroupInfo(group, node, data);
+        plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().addGroupInfo(group, node, data);
     }
 
     @Override
     public void removeGroupInfo(String world, String group, String node) {
-        GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().removeGroupInfo(group, node);
+    	plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().removeGroupInfo(group, node);
     }
 
     @Override
@@ -67,17 +67,17 @@ public class NijikoPermissionsProxy extends PermissionHandler {
 
     @Override
     public void addUserInfo(String world, String user, String node, Object data) {
-        GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().addUserInfo(user, node, data);
+    	plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().addUserInfo(user, node, data);
     }
 
     @Override
     public void removeUserInfo(String world, String user, String node) {
-    	GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().removeUserInfo(user, node);
+    	plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().removeUserInfo(user, node);
     }
 
     @Deprecated
     public void removeUserInfo(String user, String node) {
-    	GroupManager.getWorldsHolder().getDefaultWorld().getPermissionsHandler().removeUserInfo(user, node);
+    	plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().removeUserInfo(user, node);
     }
 
     @Deprecated
@@ -92,12 +92,12 @@ public class NijikoPermissionsProxy extends PermissionHandler {
 
     @Deprecated
     public void addGroupInfo(String group, String node, Object data) {
-    	GroupManager.getWorldsHolder().getDefaultWorld().getPermissionsHandler().addGroupInfo(group, node, data);
+    	plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().addGroupInfo(group, node, data);
     }
 
     @Deprecated
     public void removeGroupInfo(String group, String node) {
-    	GroupManager.getWorldsHolder().getDefaultWorld().getPermissionsHandler().removeGroupInfo(group, node);
+    	plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().removeGroupInfo(group, node);
     }
 
     @Deprecated
@@ -112,7 +112,7 @@ public class NijikoPermissionsProxy extends PermissionHandler {
 
     @Deprecated
     public void addUserInfo(String user, String node, Object data) {
-    	GroupManager.getWorldsHolder().getDefaultWorld().getPermissionsHandler().addUserInfo(user, node, data);
+    	plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().addUserInfo(user, node, data);
     }
 
     @Override
@@ -147,13 +147,13 @@ public class NijikoPermissionsProxy extends PermissionHandler {
 
     @Override
     public void reload() {
-    	GroupManager.getWorldsHolder().reloadAll();
+    	plugin.getWorldsHolder().reloadAll();
         //throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public boolean reload(String world) {
-    	GroupManager.getWorldsHolder().reloadWorld(world);
+    	plugin.getWorldsHolder().reloadWorld(world);
         return true;
     }
 
@@ -175,214 +175,214 @@ public class NijikoPermissionsProxy extends PermissionHandler {
         }
         if (player.getWorld() == null) {
             GroupManager.logger.warning("The player " + player.getName() + " has a null world? Treating as default world!");
-            return GroupManager.getWorldsHolder().getDefaultWorld().getPermissionsHandler().has(player, permission);
+            return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().has(player, permission);
         }
-        return GroupManager.getWorldsHolder().getWorldData(player.getWorld().getName()).getPermissionsHandler().has(player, permission);
+        return plugin.getWorldsHolder().getWorldData(player.getWorld().getName()).getPermissionsHandler().has(player, permission);
     }
 
     @Override
     public String getGroupRawPrefix(String world, String group) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroupPrefix(group);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroupPrefix(group);
     }
 
     @Override
     public String getGroupRawSuffix(String world, String group) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroupSuffix(group);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroupSuffix(group);
     }
 
     @Override
     public String getUserPrefix(String world, String user) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().getUserPrefix(user);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getUserPrefix(user);
     }
 
     @Override
     public String getUserSuffix(String world, String user) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().getUserSuffix(user);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getUserSuffix(user);
     }
 
     @Override
     public String getGroup(String world, String user) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroup(user);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroup(user);
     }
 
     @Override
     public String getPrimaryGroup(String world, String user) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroup(user);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroup(user);
     }
 
     @Override
     public boolean canUserBuild(String world, String user) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().canUserBuild(user);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().canUserBuild(user);
     }
 
     @Deprecated
     public String getGroup(String name) {
-        return GroupManager.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getGroup(name);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getGroup(name);
     }
 
     @Override
     public String[] getGroups(String world, String name) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroups(name);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroups(name);
     }
 
     @Override
     public boolean inGroup(String world, String name, String group) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().inGroup(name, group);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().inGroup(name, group);
     }
 
     @Deprecated
     public boolean inGroup(String name, String group) {
-        return GroupManager.getWorldsHolder().getDefaultWorld().getPermissionsHandler().inGroup(name, group);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().inGroup(name, group);
     }
 
     @Override
     public String getGroupPrefix(String world, String group) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroupPrefix(group);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroupPrefix(group);
     }
 
     @Deprecated
     public String getGroupPrefix(String group) {
-        return GroupManager.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getGroupPrefix(group);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getGroupPrefix(group);
     }
 
     @Override
     public String getGroupSuffix(String world, String group) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroupSuffix(group);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroupSuffix(group);
     }
 
     @Deprecated
     public String getGroupSuffix(String group) {
-        return GroupManager.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getGroupSuffix(group);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getGroupSuffix(group);
     }
 
     @Override
     public boolean canGroupBuild(String world, String group) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().canGroupBuild(group);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().canGroupBuild(group);
     }
 
     @Deprecated
     public boolean canGroupBuild(String group) {
-        return GroupManager.getWorldsHolder().getDefaultWorld().getPermissionsHandler().canGroupBuild(group);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().canGroupBuild(group);
     }
 
     @Override
     public String getGroupPermissionString(String world, String group, String permission) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroupPermissionString(group, permission);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroupPermissionString(group, permission);
     }
 
     @Deprecated
     public String getGroupPermissionString(String group, String permission) {
-        return GroupManager.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getGroupPermissionString(group, permission);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getGroupPermissionString(group, permission);
     }
 
     @Override
     public int getGroupPermissionInteger(String world, String group, String permission) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroupPermissionInteger(group, permission);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroupPermissionInteger(group, permission);
     }
 
     @Deprecated
     public int getGroupPermissionInteger(String group, String permission) {
-        return GroupManager.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getGroupPermissionInteger(group, permission);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getGroupPermissionInteger(group, permission);
     }
 
     @Override
     public boolean getGroupPermissionBoolean(String world, String group, String permission) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroupPermissionBoolean(group, permission);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroupPermissionBoolean(group, permission);
     }
 
     @Deprecated
     public boolean getGroupPermissionBoolean(String group, String permission) {
-        return GroupManager.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getGroupPermissionBoolean(group, permission);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getGroupPermissionBoolean(group, permission);
     }
 
     @Override
     public double getGroupPermissionDouble(String world, String group, String permission) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroupPermissionDouble(group, permission);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroupPermissionDouble(group, permission);
     }
 
     @Deprecated
     public double getGroupPermissionDouble(String group, String permission) {
-        return GroupManager.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getGroupPermissionDouble(group, permission);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getGroupPermissionDouble(group, permission);
     }
 
     @Override
     public String getUserPermissionString(String world, String name, String permission) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().getUserPermissionString(name, permission);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getUserPermissionString(name, permission);
     }
 
     @Deprecated
     public String getUserPermissionString(String name, String permission) {
-        return GroupManager.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getUserPermissionString(name, permission);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getUserPermissionString(name, permission);
     }
 
     @Override
     public int getUserPermissionInteger(String world, String name, String permission) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().getUserPermissionInteger(name, permission);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getUserPermissionInteger(name, permission);
     }
 
     @Deprecated
     public int getUserPermissionInteger(String name, String permission) {
-        return GroupManager.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getUserPermissionInteger(name, permission);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getUserPermissionInteger(name, permission);
     }
 
     @Override
     public boolean getUserPermissionBoolean(String world, String name, String permission) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().getUserPermissionBoolean(name, permission);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getUserPermissionBoolean(name, permission);
     }
 
     @Deprecated
     public boolean getUserPermissionBoolean(String name, String permission) {
-        return GroupManager.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getUserPermissionBoolean(name, permission);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getUserPermissionBoolean(name, permission);
     }
 
     @Override
     public double getUserPermissionDouble(String world, String name, String permission) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().getUserPermissionDouble(name, permission);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getUserPermissionDouble(name, permission);
     }
 
     @Deprecated
     public double getUserPermissionDouble(String name, String permission) {
-        return GroupManager.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getUserPermissionDouble(name, permission);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getUserPermissionDouble(name, permission);
     }
 
     @Override
     public String getPermissionString(String world, String name, String permission) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().getPermissionString(name, permission);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getPermissionString(name, permission);
     }
 
     @Deprecated
     public String getPermissionString(String name, String permission) {
-        return GroupManager.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getPermissionString(name, permission);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getPermissionString(name, permission);
     }
 
     @Override
     public int getPermissionInteger(String world, String name, String permission) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().getPermissionInteger(name, permission);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getPermissionInteger(name, permission);
     }
 
     @Deprecated
     public int getPermissionInteger(String name, String permission) {
-        return GroupManager.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getPermissionInteger(name, permission);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getPermissionInteger(name, permission);
     }
 
     @Override
     public boolean getPermissionBoolean(String world, String name, String permission) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().getPermissionBoolean(name, permission);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getPermissionBoolean(name, permission);
     }
 
     @Deprecated
     public boolean getPermissionBoolean(String name, String permission) {
-        return GroupManager.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getPermissionBoolean(name, permission);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getPermissionBoolean(name, permission);
     }
 
     @Override
     public double getPermissionDouble(String world, String name, String permission) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().getPermissionDouble(name, permission);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getPermissionDouble(name, permission);
     }
 
     @Deprecated
     public double getPermissionDouble(String name, String permission) {
-        return GroupManager.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getPermissionDouble(name, permission);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getPermissionDouble(name, permission);
     }
 
     public void setGM(Plugin p) {
@@ -391,7 +391,7 @@ public class NijikoPermissionsProxy extends PermissionHandler {
 
     @Override
     public boolean canGroupRawBuild(String world, String group) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().canGroupBuild(group);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().canGroupBuild(group);
     }
 
     @Override
@@ -432,7 +432,7 @@ public class NijikoPermissionsProxy extends PermissionHandler {
     @Override
     public Boolean getInfoBoolean(String world, String entryName, String path,
             boolean isGroup) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().getInfoBoolean(entryName, path, isGroup);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getInfoBoolean(entryName, path, isGroup);
     }
 
     @Override
@@ -443,7 +443,7 @@ public class NijikoPermissionsProxy extends PermissionHandler {
 
     @Override
     public Double getInfoDouble(String world, String entryName, String path, boolean isGroup) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().getInfoDouble(entryName, path, isGroup);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getInfoDouble(entryName, path, isGroup);
     }
 
     @Override
@@ -455,7 +455,7 @@ public class NijikoPermissionsProxy extends PermissionHandler {
     @Override
     public Integer getInfoInteger(String world, String entryName, String path,
             boolean isGroup) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().getInfoInteger(entryName, path, isGroup);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getInfoInteger(entryName, path, isGroup);
     }
 
     @Override
@@ -466,7 +466,7 @@ public class NijikoPermissionsProxy extends PermissionHandler {
 
     @Override
     public String getInfoString(String world, String entryName, String path, boolean isGroup) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().getInfoString(entryName, path, isGroup);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getInfoString(entryName, path, isGroup);
     }
 
     @Override
@@ -530,14 +530,14 @@ public class NijikoPermissionsProxy extends PermissionHandler {
         }
         if (world == null) {
             GroupManager.logger.warning("The player " + playerName + " has a null world? Treating as default world!");
-            return GroupManager.getWorldsHolder().getDefaultWorld().getPermissionsHandler().permission(playerName, permission);
+            return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().permission(playerName, permission);
         }
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().permission(playerName, permission);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().permission(playerName, permission);
     }
 
     @Override
     public boolean inGroup(String world, String user, String groupWorld, String group) {
-        return GroupManager.getWorldsHolder().getWorldData(world).getPermissionsHandler().inGroup(user, group);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().inGroup(user, group);
     }
 
     @Override
