@@ -177,6 +177,11 @@ public class EssentialsSign
 		}
 		return false;
 	}
+	
+	public boolean onBlockBreak(final Block block, final IEssentials ess)
+	{
+		return true;
+	}
 
 	public boolean onBlockExplode(final Block block, final IEssentials ess)
 	{

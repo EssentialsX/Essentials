@@ -182,6 +182,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 
 		final SignEntityListener signEntityListener = new SignEntityListener(this);
 		pm.registerEvent(Type.ENTITY_EXPLODE, signEntityListener, Priority.Low, this);
+		pm.registerEvent(Type.ENDERMAN_PICKUP, signEntityListener, Priority.Low, this);
 
 		final EssentialsEntityListener entityListener = new EssentialsEntityListener(this);
 		pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Priority.Lowest, this);

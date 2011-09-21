@@ -300,6 +300,14 @@ public class SignProtection extends EssentialsSign
 		player.sendMessage(Util.format("noDestroyPermission", block.getType().toString().toLowerCase()));
 		return false;
 	}
+	
+	@Override
+	public boolean onBlockBreak(final Block block, final IEssentials ess)
+	{
+		final SignProtectionState state = isBlockProtected(block, null, null, false);
+
+		return state == SignProtectionState.NOSIGN;
+	}
 
 	@Override
 	public boolean onBlockExplode(final Block block, final IEssentials ess)
