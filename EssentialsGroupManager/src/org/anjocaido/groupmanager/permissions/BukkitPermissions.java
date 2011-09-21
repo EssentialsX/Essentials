@@ -96,7 +96,8 @@ public class BukkitPermissions {
     private void collectPermissions() {
         registeredPermissions.clear();
         for (Plugin bukkitPlugin : Bukkit.getServer().getPluginManager().getPlugins()) {
-            registeredPermissions.addAll(bukkitPlugin.getDescription().getPermissions());
+        	for(Permission permission : bukkitPlugin.getDescription().getPermissions())
+            registeredPermissions.add(permission);
         }
     }
     
