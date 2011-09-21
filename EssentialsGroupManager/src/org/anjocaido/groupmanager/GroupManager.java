@@ -47,7 +47,7 @@ public class GroupManager extends JavaPlugin {
     private ScheduledThreadPoolExecutor scheduler;
     private Map<String, ArrayList<User>> overloadedUsers = new HashMap<String, ArrayList<User>>();
     private Map<CommandSender, String> selectedWorlds = new HashMap<CommandSender, String>();
-    private static WorldsHolder worldsHolder;
+    private WorldsHolder worldsHolder;
     private boolean validateOnlinePlayer = true;
     private boolean isReady = false;
     public static boolean isLoaded = false;
@@ -123,7 +123,7 @@ public class GroupManager extends JavaPlugin {
 
                 @Override
                 public void run() {
-                    GroupManager.worldsHolder.saveChanges();
+                    worldsHolder.saveChanges();
                 }
             };
             scheduler = new ScheduledThreadPoolExecutor(1);
@@ -166,7 +166,7 @@ public class GroupManager extends JavaPlugin {
         worldsHolder.reloadAll();
     }
 
-    public static WorldsHolder getWorldsHolder() {
+    public WorldsHolder getWorldsHolder() {
         return worldsHolder;
     }
 
