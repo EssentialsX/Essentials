@@ -401,6 +401,7 @@ protect:
     creeper-explosion: false
     creeper-playerdamage: false
     creeper-blockdamage: false
+    enderman-pickup: false
     # Monsters won't follow players
     # permission essentials.protect.entitytarget.bypass disables this
     entitytarget: false

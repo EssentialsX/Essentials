@@ -22,6 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EndermanPickupEvent;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -350,6 +351,18 @@ public class EssentialsProtectEntityListener extends EntityListener
 			&& prot.getSettingBool(ProtectConfig.prevent_fireball_fire))
 		{
 			event.setFire(false);
+		}
+	}
+
+	@Override
+	public void onEndermanPickup(EndermanPickupEvent event)
+	{
+		if (event.isCancelled()) {
+			return;
+		}
+		if (prot.getSettingBool(ProtectConfig.prevent_enderman_pickup)) {
+			event.setCancelled(true);
+			return;
 		}
 	}
 }

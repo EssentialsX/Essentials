@@ -39,6 +39,7 @@ public enum ProtectConfig
 	prevent_creeper_explosion("protect.prevent.creeper-explosion", true),
 	prevent_creeper_playerdmg("protect.prevent.creeper-playerdamage", false),
 	prevent_creeper_blockdmg("protect.prevent.creeper-blockdamage", false),
+	prevent_enderman_pickup("protect.prevent.enderman-pickup", false),
 	prevent_entitytarget("protect.prevent.entitytarget", false),
 	protect_rails("protect.protect.rails", true),
 	protect_below_rails("protect.protect.block-below", true),
