@@ -64,6 +64,6 @@ public class Commandmail extends EssentialsCommand
 			user.setMails(null);
 			throw new Exception(Util.i18n("mailCleared"));
 		}
-		throw new NotEnoughArgumentsException();
+		throw new NoChargeException();
 	}
 }
