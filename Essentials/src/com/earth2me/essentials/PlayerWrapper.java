@@ -731,5 +731,17 @@ public class PlayerWrapper implements Player
 	{
 		return base.getBedSpawnLocation();
 	}
+
+	@Override
+	public boolean isSprinting()
+	{
+		return base.isSprinting();
+	}
+
+	@Override
+	public void setSprinting(boolean bln)
+	{
+		base.setSprinting(bln);
+	}
 	
 }
