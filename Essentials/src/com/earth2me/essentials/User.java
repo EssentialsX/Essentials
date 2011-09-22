@@ -464,4 +464,13 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	{
 		return afkPosition;
 	}
+
+	@Override
+	public boolean toggleGodModeEnabled()
+	{
+		if (!isGodModeEnabled()) {
+			setFoodLevel(20);
+		}
+		return super.toggleGodModeEnabled();
+	}	
 }
