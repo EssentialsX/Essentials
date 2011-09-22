@@ -154,6 +154,8 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	public void setHome(String name, Location loc)
 	{
+		//Invalid names will corrupt the yaml
+		name = Util.sanitizeFileName(name);
 		homes.put(name, loc);
 		config.setProperty("homes." + name, loc);
 		config.save();
