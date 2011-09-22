@@ -53,6 +53,10 @@ public class Commandhome extends EssentialsCommand
 			{
 				user.getTeleport().home(u, homes.get(0), charge);
 			}
+			else if (ess.getSettings().spawnIfNoHome())
+			{
+				user.getTeleport().respawn(ess.getSpawn(), charge);				
+			}
 			else
 			{
 				user.sendMessage(Util.format("homes", Util.joinList(homes)));

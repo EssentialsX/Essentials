@@ -57,7 +57,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private transient Worth worth;
 	private transient List<IConf> confList;
 	private transient Backup backup;
-	private transient BanWorkaround bans;
 	private transient ItemDb itemDb;
 	private transient EssentialsUpdateTimer updateTimer;
 	private transient final Methods paymentMethod = new Methods();
@@ -119,8 +118,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 		confList.add(warps);
 		worth = new Worth(this.getDataFolder());
 		confList.add(worth);
-		bans = new BanWorkaround(this);
-		confList.add(bans);
 		itemDb = new ItemDb(this);
 		confList.add(itemDb);
 		reload();
@@ -185,11 +182,13 @@ public class Essentials extends JavaPlugin implements IEssentials
 
 		final SignEntityListener signEntityListener = new SignEntityListener(this);
 		pm.registerEvent(Type.ENTITY_EXPLODE, signEntityListener, Priority.Low, this);
+		pm.registerEvent(Type.ENDERMAN_PICKUP, signEntityListener, Priority.Low, this);
 
 		final EssentialsEntityListener entityListener = new EssentialsEntityListener(this);
 		pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Priority.Lowest, this);
 		pm.registerEvent(Type.ENTITY_COMBUST, entityListener, Priority.Lowest, this);
 		pm.registerEvent(Type.ENTITY_DEATH, entityListener, Priority.Lowest, this);
+		pm.registerEvent(Type.FOOD_LEVEL_CHANGE, entityListener, Priority.Lowest, this);
 
 		jail = new Jail(this);
 		final JailPlayerListener jailPlayerListener = new JailPlayerListener(this);
@@ -673,12 +672,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 	public PermissionsHandler getPermissionsHandler()
 	{
 		return permissionsHandler;
-	}
-
-	@Override
-	public BanWorkaround getBans()
-	{
-		return bans;
 	}
 
 	@Override

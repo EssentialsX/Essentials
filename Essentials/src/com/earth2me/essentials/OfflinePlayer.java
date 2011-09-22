@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.UUID;
 import org.bukkit.Achievement;
 import org.bukkit.Effect;
+import org.bukkit.GameMode;
 import org.bukkit.Instrument;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -39,22 +40,24 @@ public class OfflinePlayer implements Player
 	private Location location = new Location(null, 0, 0, 0, 0, 0);
 	private World world;
 	private UUID uniqueId = UUID.randomUUID();
+	private org.bukkit.OfflinePlayer base;
 
 	public OfflinePlayer(String name, IEssentials ess)
 	{
 		this.name = name;
 		this.ess = ess;
 		this.world = ess.getServer().getWorlds().get(0);
+		this.base = ess.getServer().getOfflinePlayer(name);
 	}
 
 	public boolean isOnline()
 	{
-		return false;
+		return base.isOnline();
 	}
 
 	public boolean isOp()
 	{
-		return false;
+		return base.isOp();
 	}
 
 	public void sendMessage(String string)
@@ -576,6 +579,7 @@ public class OfflinePlayer implements Player
 
 	public void setOp(boolean bln)
 	{
+		base.setOp(bln);
 	}
 
 	@Override
@@ -583,4 +587,131 @@ public class OfflinePlayer implements Player
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
+	@Override
+	public boolean isBanned()
+	{
+		return base.isBanned();
+	}
+
+	@Override
+	public void setBanned(boolean bln)
+	{
+		base.setBanned(bln);
+	}
+
+	@Override
+	public boolean isWhitelisted()
+	{
+		return base.isWhitelisted();
+	}
+
+	@Override
+	public void setWhitelisted(boolean bln)
+	{
+		base.setWhitelisted(bln);
+	}
+
+	@Override
+	public GameMode getGameMode()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setGameMode(GameMode gm)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public int getExperience()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setExperience(int i)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public int getLevel()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setLevel(int i)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public int getTotalExperience()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setTotalExperience(int i)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public float getExhaustion()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setExhaustion(float f)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public float getSaturation()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setSaturation(float f)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public int getFoodLevel()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setFoodLevel(int i)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+	
+	@Override
+	public Location getBedSpawnLocation()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public boolean isSprinting()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setSprinting(boolean bln)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+	
 }

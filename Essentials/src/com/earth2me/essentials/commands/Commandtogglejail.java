@@ -15,7 +15,6 @@ public class Commandtogglejail extends EssentialsCommand
 		super("togglejail");
 	}
 
-	//TODO: move these to messages file
 	@Override
 	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
@@ -73,7 +72,7 @@ public class Commandtogglejail extends EssentialsCommand
 
 		if (args.length >= 2 && p.isJailed() && !args[1].equalsIgnoreCase(p.getJail()))
 		{
-			sender.sendMessage("§cPerson is already in jail " + p.getJail());
+			sender.sendMessage(Util.format("jailAlreadyIncarcerated", p.getJail()));
 			return;
 		}
 
@@ -82,7 +81,7 @@ public class Commandtogglejail extends EssentialsCommand
 			String time = getFinalArg(args, 2);
 			long timeDiff = Util.parseDateDiff(time, true);
 			p.setJailTimeout(timeDiff);
-			sender.sendMessage("Jail time extend to " + Util.formatDateDiff(timeDiff));
+			sender.sendMessage(Util.format("jailSentenceExtended", Util.formatDateDiff(timeDiff)));
 			return;
 		}
 
@@ -94,13 +93,13 @@ public class Commandtogglejail extends EssentialsCommand
 			}
 			p.setJailed(false);
 			p.setJailTimeout(0);
-			p.sendMessage("§7You have been released");
+			p.sendMessage(Util.format("jailReleasedPlayerNotify"));
 			p.setJail(null);
 			if (!(p.getBase() instanceof OfflinePlayer))
 			{
 				p.getTeleport().back();
 			}
-			sender.sendMessage("§7Player " + p.getName() + " unjailed.");
+			sender.sendMessage(Util.format("jailReleased", p.getName()));
 		}
 	}
 }

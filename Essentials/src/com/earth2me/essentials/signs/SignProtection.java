@@ -40,8 +40,7 @@ public class SignProtection extends EssentialsSign
 			sign.setLine(3, "§1" + username);
 			return true;
 		}
-		//TODO: move to messages
-		player.sendMessage("§4You are not allowed to create sign here.");
+		player.sendMessage(Util.i18n("signProtectInvalidLocation"));
 		return false;
 	}
 
@@ -184,11 +183,16 @@ public class SignProtection extends EssentialsSign
 		SignProtectionState retstate = SignProtectionState.NOSIGN;
 		for (SignProtectionState state : signs.values())
 		{
-			if (state == SignProtectionState.OWNER || state == SignProtectionState.ALLOWED)
+
+			if (state == SignProtectionState.OWNER)
 			{
 				return state;
 			}
-			if (state == SignProtectionState.NOT_ALLOWED)
+			if (state == SignProtectionState.ALLOWED)
+			{
+				retstate = state;
+			}
+			else if (state == SignProtectionState.NOT_ALLOWED && retstate != SignProtectionState.ALLOWED)
 			{
 				retstate = state;
 			}
@@ -295,6 +299,14 @@ public class SignProtection extends EssentialsSign
 
 		player.sendMessage(Util.format("noDestroyPermission", block.getType().toString().toLowerCase()));
 		return false;
+	}
+	
+	@Override
+	public boolean onBlockBreak(final Block block, final IEssentials ess)
+	{
+		final SignProtectionState state = isBlockProtected(block, null, null, false);
+
+		return state == SignProtectionState.NOSIGN;
 	}
 
 	@Override

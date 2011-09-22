@@ -1,14 +1,8 @@
 package com.earth2me.essentials;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -17,108 +11,45 @@ public class ItemDb implements IConf
 {
 	private final transient IEssentials ess;
 
-	public ItemDb(IEssentials ess)
+	public ItemDb(final IEssentials ess)
 	{
 		this.ess = ess;
+		file = new ManagedFile("items.csv", ess);
 	}
-	private final static Logger LOGGER = Logger.getLogger("Minecraft");
 	private final transient Map<String, Integer> items = new HashMap<String, Integer>();
 	private final transient Map<String, Short> durabilities = new HashMap<String, Short>();
+	private final transient ManagedFile file;
 
+	@Override
 	public void reloadConfig()
 	{
-		final File file = new File(ess.getDataFolder(), "items.csv");
-
-		if (!file.exists())
-		{
-			final InputStream res = ItemDb.class.getResourceAsStream("/items.csv");
-			FileWriter tx = null;
-			try
-			{
-				tx = new FileWriter(file);
-				for (int i = 0; (i = res.read()) > 0;)
-				{
-					tx.write(i);
-				}
-				tx.flush();
-			}
-			catch (IOException ex)
-			{
-				LOGGER.log(Level.SEVERE, Util.i18n("itemsCsvNotLoaded"), ex);
-				return;
-			}
-			finally
-			{
-				try
-				{
-					res.close();
-				}
-				catch (Exception ex)
-				{
-				}
-				try
-				{
-					if (tx != null)
-					{
-						tx.close();
-					}
-				}
-				catch (Exception ex)
-				{
-				}
-			}
+		final List<String> lines = file.getLines();
+		
+		if (lines.isEmpty()) {
+			return;
 		}
 
-		BufferedReader rx = null;
-		try
-		{
-			rx = new BufferedReader(new FileReader(file));
-			durabilities.clear();
-			items.clear();
+		durabilities.clear();
+		items.clear();
 
-			for (int i = 0; rx.ready(); i++)
+		for (String line : lines)
+		{
+			line = line.trim().toLowerCase();
+			if (line.length() > 0 && line.charAt(0) == '#')
 			{
-				try
-				{
-					final String line = rx.readLine().trim().toLowerCase();
-					if (line.startsWith("#"))
-					{
-						continue;
-					}
-
-					final String[] parts = line.split("[^a-z0-9]");
-					if (parts.length < 2)
-					{
-						continue;
-					}
-
-					final int numeric = Integer.parseInt(parts[1]);
-
-					durabilities.put(parts[0].toLowerCase(), parts.length > 2 && !parts[2].equals("0") ? Short.parseShort(parts[2]) : 0);
-					items.put(parts[0].toLowerCase(), numeric);
-				}
-				catch (Exception ex)
-				{
-					LOGGER.warning(Util.format("parseError", "items.csv", i));
-				}
+				continue;
 			}
-		}
-		catch (IOException ex)
-		{
-			LOGGER.log(Level.SEVERE, Util.i18n("itemsCsvNotLoaded"), ex);
-		}
-		finally
-		{
-			if (rx != null) {
-				try
-				{
-					rx.close();
-				}
-				catch (IOException ex)
-				{
-					LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
-				}
+
+			final String[] parts = line.split("[^a-z0-9]");
+			if (parts.length < 2)
+			{
+				continue;
 			}
+
+			final int numeric = Integer.parseInt(parts[1]);
+
+			durabilities.put(parts[0].toLowerCase(), parts.length > 2 && !parts[2].equals("0") ? Short.parseShort(parts[2]) : 0);
+			items.put(parts[0].toLowerCase(), numeric);
 		}
 	}
 
@@ -163,7 +94,7 @@ public class ItemDb implements IConf
 					metaData = durabilities.get(itemname);
 				}
 			}
-			else if(Material.getMaterial(itemname) != null)
+			else if (Material.getMaterial(itemname) != null)
 			{
 				itemid = Material.getMaterial(itemname).getId();
 				metaData = 0;

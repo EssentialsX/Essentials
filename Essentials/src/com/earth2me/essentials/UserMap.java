@@ -1,11 +1,14 @@
 package com.earth2me.essentials;
 
 import com.google.common.base.Function;
+import com.google.common.collect.ComputationException;
 import com.google.common.collect.MapMaker;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
+import java.util.logging.Level;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 
@@ -46,6 +49,10 @@ public class UserMap implements Function<String, User>, IConf
 					catch (NullPointerException ex)
 					{
 						// Ignore these
+					}
+					catch (ComputationException ex)
+					{
+						Bukkit.getLogger().log(Level.INFO, "Failed to preload user "+name, ex);
 					}
 				}
 			}

@@ -20,10 +20,6 @@ public class EssentialsSign
 {
 	private static final Set<Material> EMPTY_SET = new HashSet<Material>();
 	protected transient final String signName;
-	//TODO: Add these settings to messages
-	private static final String FORMAT_SUCCESS = "§1[%s]";
-	private static final String FORMAT_TEMPLATE = "[%s]";
-	private static final String FORMAT_FAIL = "§4[%s]";
 
 	public EssentialsSign(final String signName)
 	{
@@ -41,7 +37,7 @@ public class EssentialsSign
 			// they won't change it to §1[Signname]
 			return true;
 		}
-		sign.setLine(0, String.format(FORMAT_FAIL, this.signName));
+		sign.setLine(0, Util.format("signFormatFail", this.signName));
 		try
 		{
 			final boolean ret = onSignCreate(sign, user, getUsername(user), ess);
@@ -65,12 +61,12 @@ public class EssentialsSign
 
 	public String getSuccessName()
 	{
-		return String.format(FORMAT_SUCCESS, this.signName);
+		return Util.format("signFormatSuccess", this.signName);
 	}
 
 	public String getTemplateName()
 	{
-		return String.format(FORMAT_TEMPLATE, this.signName);
+		return Util.format("signFormatTemplate", this.signName);
 	}
 
 	private String getUsername(final User user)
@@ -180,6 +176,11 @@ public class EssentialsSign
 			ess.showError(user, ex, signName);
 		}
 		return false;
+	}
+	
+	public boolean onBlockBreak(final Block block, final IEssentials ess)
+	{
+		return true;
 	}
 
 	public boolean onBlockExplode(final Block block, final IEssentials ess)

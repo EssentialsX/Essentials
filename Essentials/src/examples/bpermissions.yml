@@ -100,11 +100,11 @@ groups:
     - essentials.world
     Admin:
     # Since we use essentials.* permission here, we can still disable commands like this
-    # This is only available for essentials permissions
-    - -essentials.backup
-    - -essentials.essentials
-    - -essentials.setspawn
-    - -essentials.reloadall
+    # This can be done with any pemission nodes
+    - ^essentials.backup
+    - ^essentials.essentials
+    - ^essentials.setspawn
+    - ^essentials.reloadall
     - essentials.*
     Owner:
     - essentials.*

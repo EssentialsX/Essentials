@@ -14,10 +14,12 @@ import java.text.MessageFormat;
 import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -217,6 +219,40 @@ public class Util
 		return c.getTimeInMillis();
 	}
 
+	// The player can stand inside these materials 
+	private static final Set<Integer> AIR_MATERIALS = new HashSet<Integer>();
+	
+	static {
+		AIR_MATERIALS.add(Material.AIR.getId());
+		AIR_MATERIALS.add(Material.SAPLING.getId());
+		AIR_MATERIALS.add(Material.POWERED_RAIL.getId());
+		AIR_MATERIALS.add(Material.DETECTOR_RAIL.getId());
+		AIR_MATERIALS.add(Material.DEAD_BUSH.getId());
+		AIR_MATERIALS.add(Material.RAILS.getId());
+		AIR_MATERIALS.add(Material.YELLOW_FLOWER.getId());
+		AIR_MATERIALS.add(Material.RED_ROSE.getId());
+		AIR_MATERIALS.add(Material.RED_MUSHROOM.getId());
+		AIR_MATERIALS.add(Material.BROWN_MUSHROOM.getId());
+		AIR_MATERIALS.add(Material.SEEDS.getId());
+		AIR_MATERIALS.add(Material.SIGN_POST.getId());
+		AIR_MATERIALS.add(Material.WALL_SIGN.getId());
+		AIR_MATERIALS.add(Material.LADDER.getId());
+		AIR_MATERIALS.add(Material.SUGAR_CANE_BLOCK.getId());
+		AIR_MATERIALS.add(Material.REDSTONE_WIRE.getId());
+		AIR_MATERIALS.add(Material.REDSTONE_TORCH_OFF.getId());
+		AIR_MATERIALS.add(Material.REDSTONE_TORCH_ON.getId());
+		AIR_MATERIALS.add(Material.TORCH.getId());
+		AIR_MATERIALS.add(Material.SOIL.getId());
+		AIR_MATERIALS.add(Material.DIODE_BLOCK_OFF.getId());
+		AIR_MATERIALS.add(Material.DIODE_BLOCK_ON.getId());
+		AIR_MATERIALS.add(Material.TRAP_DOOR.getId());
+		AIR_MATERIALS.add(Material.STONE_BUTTON.getId());
+		AIR_MATERIALS.add(Material.STONE_PLATE.getId());
+		AIR_MATERIALS.add(Material.WOOD_PLATE.getId());
+		AIR_MATERIALS.add(Material.IRON_DOOR_BLOCK.getId());
+		AIR_MATERIALS.add(Material.WOODEN_DOOR.getId());
+	}
+	
 	public static Location getSafeDestination(final Location loc) throws Exception
 	{
 		if (loc == null || loc.getWorld() == null)
@@ -224,9 +260,9 @@ public class Util
 			throw new Exception(Util.i18n("destinationNotSet"));
 		}
 		final World world = loc.getWorld();
-		int x = loc.getBlockX();
-		int y = loc.getBlockY();
-		int z = loc.getBlockZ();
+		int x = (int)Math.round(loc.getX());
+		int y = (int)Math.round(loc.getY());
+		int z = (int)Math.round(loc.getZ());
 	
 		while (isBlockAboveAir(world, x, y, z))
 		{
@@ -264,7 +300,7 @@ public class Util
 
 	private static boolean isBlockAboveAir(final World world, final int x, final int y, final int z)
 	{
-		return world.getBlockAt(x, y - 1, z).getType() == Material.AIR;
+		return AIR_MATERIALS.contains(world.getBlockAt(x, y - 1, z).getType().getId());
 	}
 
 	public static boolean isBlockUnsafe(final World world, final int x, final int y, final int z)
@@ -280,8 +316,8 @@ public class Util
 			return true;
 		}
 
-		if ((world.getBlockAt(x, y, z).getType() != Material.AIR)
-			|| (world.getBlockAt(x, y + 1, z).getType() != Material.AIR))
+		if ((!AIR_MATERIALS.contains(world.getBlockAt(x, y, z).getType().getId()))
+			|| (!AIR_MATERIALS.contains(world.getBlockAt(x, y + 1, z).getType().getId())))
 		{
 			return true;
 		}

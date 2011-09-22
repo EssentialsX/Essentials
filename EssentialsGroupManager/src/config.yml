@@ -7,7 +7,8 @@ settings:
   permission:
     world:
       mirror:
-        world1:
+        world:
+          - world_nether
           - world2
           - world3
         world4:

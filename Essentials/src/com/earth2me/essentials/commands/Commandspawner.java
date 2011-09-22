@@ -34,8 +34,8 @@ public class Commandspawner extends EssentialsCommand
 		try
 		{
 			String name = args[0];
-			name = name.equalsIgnoreCase("PigZombie") ? "PigZombie" : Util.capitalCase(name);
-		
+			name = name.equalsIgnoreCase("CaveSpider") ? "CaveSpider" : name.equalsIgnoreCase("PigZombie") ? "PigZombie" : Util.capitalCase(name);
+
 			Mob mob = null;
 			mob = Mob.fromName(name);
 			if (mob == null)

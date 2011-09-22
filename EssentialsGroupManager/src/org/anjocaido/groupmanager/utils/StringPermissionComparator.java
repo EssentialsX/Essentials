@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.anjocaido.groupmanager.utils;
 
 import java.util.Comparator;
@@ -19,32 +18,32 @@ public class StringPermissionComparator implements Comparator<String> {
         boolean bp = permB.startsWith("+");
         boolean am = permA.startsWith("-");
         boolean bm = permB.startsWith("-");
-        if(ap&&bp){
+        if (ap && bp) {
             return 0;
         }
-        if(ap&&!bp){
+        if (ap && !bp) {
             return -1;
         }
-        if(!ap&&bp){
+        if (!ap && bp) {
             return 1;
         }
-        if(am&&bm){
+        if (am && bm) {
             return 0;
         }
-        if(am&&!bm){
+        if (am && !bm) {
             return -1;
         }
-        if(!am&&bm){
+        if (!am && bm) {
             return 1;
         }
         return permA.compareToIgnoreCase(permB);
     }
     private static StringPermissionComparator instance;
-    public static StringPermissionComparator getInstance(){
-        if(instance==null){
+
+    public static StringPermissionComparator getInstance() {
+        if (instance == null) {
             instance = new StringPermissionComparator();
         }
         return instance;
     }
-
 }

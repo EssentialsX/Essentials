@@ -13,10 +13,11 @@ import org.anjocaido.groupmanager.data.Group;
 import org.anjocaido.groupmanager.dataholder.WorldDataHolder;
 import org.anjocaido.groupmanager.data.User;
 import org.anjocaido.groupmanager.utils.PermissionCheckResult;
+import org.anjocaido.groupmanager.utils.PermissionCheckResult.Type;
 import org.bukkit.entity.Player;
 
 /**
- *  Everything here maintains the model created by Nijikokun
+ * Everything here maintains the model created by Nijikokun
  *
  * But implemented to use GroupManager system. Which provides instant changes,
  * without file access.
@@ -49,7 +50,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
     }
 
     /**
-     *  Checks if a player can use that permission node.
+     * Checks if a player can use that permission node.
      * @param player
      * @param permission
      * @return
@@ -57,6 +58,16 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
     @Override
     public boolean permission(Player player, String permission) {
         return checkUserPermission(ph.getUser(player.getName()), permission);
+    }
+
+    /**
+     * Checks if a player can use that permission node.
+     * @param playerName
+     * @param permission
+     * @return
+     */
+    public boolean permission(String playerName, String permission) {
+        return checkUserPermission(ph.getUser(playerName), permission);
     }
 
     /**
@@ -68,9 +79,79 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
     public String getGroup(String userName) {
         return ph.getUser(userName).getGroup().getName();
     }
+    
+    /**
+     * Returns All permissions (including inheritance) of player name.
+     * @param userName
+     * @return
+     */
+    @Override
+    public List<String> getAllPlayersPermissions(String userName) {
+    	
+    	User user = ph.getUser(userName);
+    	List<String> playerPermArray = new ArrayList<String>(user.getPermissionList());
+        List<String> playerMainGroupPermArray = new ArrayList<String>(user.getGroup().getPermissionList());
+        List<String> subGroupsPermArray = new ArrayList<String>();
+        List<String> returnPermArray = new ArrayList<String>();
+        
+        for (String subGroup : user.subGroupListStringCopy()) {
+        	subGroupsPermArray.addAll(ph.getGroup(subGroup).getPermissionList());
+        }
+        
+        for (String permission : subGroupsPermArray) {
+        	/*
+        	 * Add each Negated permission
+        	 * unless it's being overridden by a higher permission
+        	 */
+            if (permission.startsWith("-")
+            		&& !playerMainGroupPermArray.contains(permission.substring(1))
+            		&& !playerPermArray.contains(permission.substring(1))
+            		&& !playerMainGroupPermArray.contains("*")
+        			&& !playerPermArray.contains("*")) {
+            	if (!returnPermArray.contains(permission)) {
+            		returnPermArray.add(permission);
+            	}
+            } else
+            	if (!returnPermArray.contains(permission)
+            			&& !playerMainGroupPermArray.contains("-"+permission)
+                		&& !playerPermArray.contains("-"+permission)) {
+    			returnPermArray.add(permission);
+    		}
+        }
+        
+        for (String permission : playerMainGroupPermArray) {
+        	/*
+        	 * Add each Negated permission
+        	 * unless it's being overridden by a higher permission
+        	 */
+            if (permission.startsWith("-")
+            		&& !playerPermArray.contains(permission.substring(1))
+            		&& !playerMainGroupPermArray.contains("*")
+        			&& !playerPermArray.contains("*")) {
+            	if (!returnPermArray.contains(permission)) {
+            		returnPermArray.add(permission);
+            	}
+            } else
+            	if (!returnPermArray.contains(permission)
+                		&& !playerPermArray.contains("-"+permission)) {
+    			returnPermArray.add(permission);
+    		}
+        }
+        
+        for (String permission : playerPermArray) {
+        	/*
+        	 * Add each permission
+        	 */
+            if (!returnPermArray.contains(permission)) {
+    			returnPermArray.add(permission);
+    		}
+        }
+    	
+        return returnPermArray;
+    }
 
     /**
-     *  Verify if player is in suck group.
+     * Verify if player is in suck group.
      * It will check it's groups inheritance.
      *
      * So if you have a group Admin > Moderator
@@ -99,6 +180,75 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
     }
 
     /**
+     * Gets the appropriate prefix for the user.
+     * This method is a utility method for chat plugins to get the user's prefix
+     * without having to look at every one of the user's ancestors.
+     * Returns an empty string if user has no parent groups.
+     * @param user Player's name
+     * @return Player's prefix
+     */
+    @Override
+    public String getUserPrefix(String user) {
+
+        String prefix = ph.getUser(user).getVariables().getVarString("prefix");
+        if (prefix.length() != 0) {
+            return prefix;
+        }
+
+        return getGroupPrefix(getGroup(user));
+    }
+
+    /**
+     * Gets the appropriate prefix for the user.
+     * This method is a utility method for chat plugins to get the user's prefix
+     * without having to look at every one of the user's ancestors.
+     * Returns an empty string if user has no parent groups.
+     * @param user Player's name
+     * @return Player's prefix
+     */
+    @Override
+    public String getUserSuffix(String user) {
+
+        String suffix = ph.getUser(user).getVariables().getVarString("suffix");
+        if (suffix.length() != 0) {
+            return suffix;
+        }
+
+        return getGroupSuffix(getGroup(user));
+
+    }
+
+    /**
+     * Gets name of the primary group of the user.
+     * Returns the name of the default group if user has no parent groups,
+     * or "Default" if there is no default group for that world.
+     * @param user Player's name
+     * @return Name of player's primary group
+     */
+    public String getPrimaryGroup(String user) {
+
+        return getGroup(user);
+
+    }
+
+    /**
+     * Check if user can build.
+     * @param world Player's world
+     * @param user Player's name
+     * @return Whether the user can build
+     */
+    public boolean canUserBuild(String user) {
+        boolean test = ph.getUser(user).getVariables().getVarBoolean("build");
+
+        if (test) {
+            return test;
+        }
+
+        return canGroupBuild(getGroup(user));
+
+    }
+
+    /**
      * Returns the String prefix for the given group
      * @param groupName
      * @return empty string if found none.
@@ -107,7 +257,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
     public String getGroupPrefix(String groupName) {
         Group g = ph.getGroup(groupName);
         if (g == null) {
-            return null;
+            return "";
         }
         return g.getVariables().getVarString("prefix");
     }
@@ -121,7 +271,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
     public String getGroupSuffix(String groupName) {
         Group g = ph.getGroup(groupName);
         if (g == null) {
-            return null;
+            return "";
         }
         return g.getVariables().getVarString("suffix");
     }
@@ -161,7 +311,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
     }
 
     /**
-     *  It returns a Integer variable value
+     * It returns a Integer variable value
      * It will harvest inheritance for value.
      * @param groupName
      * @param variable
@@ -619,8 +769,8 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
     @Deprecated
     public boolean checkGroupPermissionWithInheritance(Group start, String permission, List<Group> alreadyChecked) {
         PermissionCheckResult result = checkGroupPermissionWithInheritance(start, permission);
-        if (result.resultType.equals(result.resultType.EXCEPTION)
-                || result.resultType.equals(result.resultType.FOUND)) {
+        if (result.resultType.equals(Type.EXCEPTION)
+                || result.resultType.equals(Type.FOUND)) {
             return true;
         }
         return false;
@@ -682,8 +832,8 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
     @Deprecated
     public Group nextGroupWithPermission(Group start, String permission, List<Group> alreadyChecked) {
         PermissionCheckResult result = checkGroupPermissionWithInheritance(start, permission);
-        if (result.resultType.equals(result.resultType.EXCEPTION)
-                || result.resultType.equals(result.resultType.FOUND)) {
+        if (result.resultType.equals(Type.EXCEPTION)
+                || result.resultType.equals(Type.FOUND)) {
             return (Group) checkGroupPermissionWithInheritance(start, permission).owner;
         }
         return null;
@@ -699,7 +849,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
      * @param start
      * @param alreadyChecked
      * @return the group that passed on test. null if no group passed.
-     * @deprecated  use the other method with same name, instead
+     * @deprecated use the other method with same name, instead
      */
     @Deprecated
     public ArrayList<String> listAllGroupsInherited(Group start, ArrayList<String> alreadyChecked) {
@@ -807,9 +957,10 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
      * @param userName
      * @return
      */
+    @Override
     public String[] getGroups(String userName) {
         ArrayList<String> allGroups = listAllGroupsInherited(ph.getUser(userName).getGroup());
-        for(Group subg: ph.getUser(userName).subGroupListCopy()){
+        for (Group subg : ph.getUser(userName).subGroupListCopy()) {
             allGroups.addAll(listAllGroupsInherited(subg));
         }
         String[] arr = new String[allGroups.size()];
@@ -825,6 +976,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
      * @param targerPermission
      * @return
      */
+    @SuppressWarnings("unused")
     private Group breadthFirstSearch(Group start, String targerPermission) {
         if (start == null || targerPermission == null) {
             return null;
@@ -852,5 +1004,103 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
             }
         }
         return null;
+    }
+
+    @Override
+    public Group getDefaultGroup() {
+        return ph.getDefaultGroup();
+    }
+
+    @Override
+    public String getInfoString(String entryName, String path,
+            boolean isGroup) {
+        if (isGroup) {
+            Group data = ph.getGroup(entryName);
+            if (data == null) {
+                return null;
+            }
+            return data.getVariables().getVarString(path);
+        } else {
+            User data = ph.getUser(entryName);
+            if (data == null) {
+                return null;
+            }
+            return data.getVariables().getVarString(path);
+        }
+    }
+
+    @Override
+    public int getInfoInteger(String entryName, String path,
+            boolean isGroup) {
+        if (isGroup) {
+            Group data = ph.getGroup(entryName);
+            if (data == null) {
+                return -1;
+            }
+            return data.getVariables().getVarInteger(path);
+        } else {
+            User data = ph.getUser(entryName);
+            if (data == null) {
+                return -1;
+            }
+            return data.getVariables().getVarInteger(path);
+        }
+    }
+
+    @Override
+    public double getInfoDouble(String entryName, String path,
+            boolean isGroup) {
+        if (isGroup) {
+            Group data = ph.getGroup(entryName);
+            if (data == null) {
+                return -1;
+            }
+            return data.getVariables().getVarDouble(path);
+        } else {
+            User data = ph.getUser(entryName);
+            if (data == null) {
+                return -1;
+            }
+            return data.getVariables().getVarDouble(path);
+        }
+
+    }
+
+    @Override
+    public boolean getInfoBoolean(String entryName, String path,
+            boolean isGroup) {
+        if (isGroup) {
+            Group data = ph.getGroup(entryName);
+            if (data == null) {
+                return false;
+            }
+            return data.getVariables().getVarBoolean(path);
+        } else {
+            User data = ph.getUser(entryName);
+            if (data == null) {
+                return false;
+            }
+            return data.getVariables().getVarBoolean(path);
+        }
+    }
+
+    @Override
+    public void addUserInfo(String name, String path, Object data) {
+        ph.getUser(name).getVariables().addVar(path, data);
+    }
+
+    @Override
+    public void removeUserInfo(String name, String path) {
+        ph.getUser(name).getVariables().removeVar(path);
+    }
+
+    @Override
+    public void addGroupInfo(String name, String path, Object data) {
+        ph.getGroup(name).getVariables().addVar(path, data);
+    }
+
+    @Override
+    public void removeGroupInfo(String name, String path) {
+        ph.getGroup(name).getVariables().removeVar(path);
     }
 }

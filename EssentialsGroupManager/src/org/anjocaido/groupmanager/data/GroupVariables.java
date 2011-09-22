@@ -45,7 +45,7 @@ public class GroupVariables extends Variables implements Cloneable {
     }
 
     /**
-     *  A clone of all vars here.
+     * A clone of all vars here.
      * @return
      */
     protected GroupVariables clone(Group newOwner) {

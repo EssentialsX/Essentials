@@ -19,6 +19,16 @@ public class Commandpowertool extends EssentialsCommand
 	@Override
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
+		String command = getFinalArg(args, 0);
+
+		// check to see if this is a clear all command
+		if(command != null && command.equalsIgnoreCase("clearall"))
+		{
+			user.clearAllPowertools();
+			user.sendMessage(Util.i18n("powerToolClearAll"));
+			return;
+		}
+		
 		final ItemStack itemStack = user.getItemInHand();
 		if (itemStack == null || itemStack.getType() == Material.AIR)
 		{
@@ -26,7 +36,6 @@ public class Commandpowertool extends EssentialsCommand
 		}
 
 		final String itemName = itemStack.getType().toString().toLowerCase().replaceAll("_", " ");
-		String command = getFinalArg(args, 0);
 		List<String> powertools = user.getPowertool(itemStack);
 		if (command != null && !command.isEmpty())
 		{

@@ -4,26 +4,34 @@
  */
 package org.anjocaido.groupmanager.permissions;
 
-import com.nijiko.permissions.Control;
+import com.nijiko.permissions.Group;
+import com.nijiko.permissions.PermissionHandler;
+import com.nijiko.permissions.User;
+
 import java.io.File;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.Map;
+import java.util.Set;
+
 import org.anjocaido.groupmanager.GroupManager;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.util.config.Configuration;
 
 /**
- *  Everything here maintains the model created by Nijikokun
- * 
+ * Everything here maintains the model created by Nijikokun
+ *
  * But implemented to use GroupManager system. Which provides instant changes,
  * without file access.
  *
  * @author gabrielcouto
  */
-public class NijikoPermissionsProxy extends Control {
+public class NijikoPermissionsProxy extends PermissionHandler {
+
     GroupManager plugin;
-    public NijikoPermissionsProxy(GroupManager plugin){
-        super(null);
+
+    public NijikoPermissionsProxy(GroupManager plugin) {
+        super();
         this.plugin = plugin;
     }
 
@@ -39,12 +47,12 @@ public class NijikoPermissionsProxy extends Control {
 
     @Override
     public void addGroupInfo(String world, String group, String node, Object data) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().addGroupInfo(group, node, data);
     }
 
     @Override
     public void removeGroupInfo(String world, String group, String node) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    	plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().removeGroupInfo(group, node);
     }
 
     @Override
@@ -59,62 +67,62 @@ public class NijikoPermissionsProxy extends Control {
 
     @Override
     public void addUserInfo(String world, String user, String node, Object data) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    	plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().addUserInfo(user, node, data);
     }
 
     @Override
     public void removeUserInfo(String world, String user, String node) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    	plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().removeUserInfo(user, node);
     }
 
-    @Override
+    @Deprecated
     public void removeUserInfo(String user, String node) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    	plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().removeUserInfo(user, node);
     }
 
-    @Override
+    @Deprecated
     public void addGroupPermission(String group, String node) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
+    @Deprecated
     public void removeGroupPermission(String group, String node) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
+    @Deprecated
     public void addGroupInfo(String group, String node, Object data) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    	plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().addGroupInfo(group, node, data);
     }
 
-    @Override
+    @Deprecated
     public void removeGroupInfo(String group, String node) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    	plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().removeGroupInfo(group, node);
     }
 
-    @Override
+    @Deprecated
     public void addUserPermission(String user, String node) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
+    @Deprecated
     public void removeUserPermission(String user, String node) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
+    @Deprecated
     public void addUserInfo(String user, String node, Object data) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    	plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().addUserInfo(user, node, data);
     }
 
     @Override
     public void setDefaultWorld(String world) {
-        //throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
+    @Deprecated
     public void setDirectory(File directory) {
-        //throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -124,7 +132,7 @@ public class NijikoPermissionsProxy extends Control {
 
     @Override
     public void forceLoadWorld(String world) {
-        //throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -134,89 +142,19 @@ public class NijikoPermissionsProxy extends Control {
 
     @Override
     public void load() {
-        //throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void load(String world, Configuration config) {
-        //throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void reload() {
-        plugin.getWorldsHolder().reloadAll();
+    	plugin.getWorldsHolder().reloadAll();
         //throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public boolean reload(String world) {
-        plugin.getWorldsHolder().reloadWorld(world);
+    	plugin.getWorldsHolder().reloadWorld(world);
         return true;
-    }
-
-    @Override
-    public void setCache(Map<String, Boolean> Cache) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void setCache(String world, Map<String, Boolean> Cache) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void setCacheItem(String player, String permission, boolean data) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void setCacheItem(String world, String player, String permission, boolean data) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Map<String, Boolean> getCache() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Map<String, Boolean> getCache(String world) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean getCacheItem(String player, String permission) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean getCacheItem(String world, String player, String permission) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void removeCachedItem(String player, String permission) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void removeCachedItem(String world, String player, String permission) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void clearCache() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void clearCache(String world) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void clearAllCache() {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -228,27 +166,56 @@ public class NijikoPermissionsProxy extends Control {
     @Override
     public boolean permission(Player player, String permission) {
         //throw new UnsupportedOperationException("Not supported yet.");
-        if(permission==null || permission.equals("")){
+        if (permission == null || permission.equals("")) {
             return false;
         }
-        if(player==null){
-            GroupManager.logger.severe("A plugin is asking permission '"+permission+"' for a null player... Which plugin does that? Bastards!");
+        if (player == null) {
+            GroupManager.logger.severe("A plugin is asking permission '" + permission + "' for a null player... Which plugin does that? Bastards!");
             return false;
         }
-        if(player.getWorld()==null){
-            GroupManager.logger.warning("The player "+player.getName()+" has a null world? Treating as default world!");
+        if (player.getWorld() == null) {
+            GroupManager.logger.warning("The player " + player.getName() + " has a null world? Treating as default world!");
             return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().has(player, permission);
         }
         return plugin.getWorldsHolder().getWorldData(player.getWorld().getName()).getPermissionsHandler().has(player, permission);
     }
 
     @Override
-    public String getGroup(String world, String name) {
-        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroup(name);
+    public String getGroupRawPrefix(String world, String group) {
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroupPrefix(group);
+    }
+
+    @Override
+    public String getGroupRawSuffix(String world, String group) {
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroupSuffix(group);
+    }
+
+    @Override
+    public String getUserPrefix(String world, String user) {
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getUserPrefix(user);
+    }
+
+    @Override
+    public String getUserSuffix(String world, String user) {
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getUserSuffix(user);
+    }
+
+    @Override
+    public String getGroup(String world, String user) {
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroup(user);
+    }
+
+    @Override
+    public String getPrimaryGroup(String world, String user) {
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroup(user);
+    }
+
+    @Override
+    public boolean canUserBuild(String world, String user) {
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().canUserBuild(user);
     }
 
     @Deprecated
-    @Override
     public String getGroup(String name) {
         return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getGroup(name);
     }
@@ -258,21 +225,14 @@ public class NijikoPermissionsProxy extends Control {
         return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroups(name);
     }
 
-    @Deprecated
-    @Override
-    public String[] getGroups(String name) {
-        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getGroups(name);
-    }
-
     @Override
     public boolean inGroup(String world, String name, String group) {
-        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().inGroup(name,group);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().inGroup(name, group);
     }
 
     @Deprecated
-    @Override
     public boolean inGroup(String name, String group) {
-        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().inGroup(name,group);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().inGroup(name, group);
     }
 
     @Override
@@ -280,7 +240,7 @@ public class NijikoPermissionsProxy extends Control {
         return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroupPrefix(group);
     }
 
-    @Override
+    @Deprecated
     public String getGroupPrefix(String group) {
         return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getGroupPrefix(group);
     }
@@ -290,7 +250,7 @@ public class NijikoPermissionsProxy extends Control {
         return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroupSuffix(group);
     }
 
-    @Override
+    @Deprecated
     public String getGroupSuffix(String group) {
         return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getGroupSuffix(group);
     }
@@ -301,134 +261,328 @@ public class NijikoPermissionsProxy extends Control {
     }
 
     @Deprecated
-    @Override
     public boolean canGroupBuild(String group) {
         return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().canGroupBuild(group);
     }
 
     @Override
     public String getGroupPermissionString(String world, String group, String permission) {
-        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroupPermissionString(group,permission);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroupPermissionString(group, permission);
     }
 
-    @Override
+    @Deprecated
     public String getGroupPermissionString(String group, String permission) {
-        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getGroupPermissionString(group,permission);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getGroupPermissionString(group, permission);
     }
 
     @Override
     public int getGroupPermissionInteger(String world, String group, String permission) {
-        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroupPermissionInteger(group,permission);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroupPermissionInteger(group, permission);
     }
 
-    @Override
+    @Deprecated
     public int getGroupPermissionInteger(String group, String permission) {
-        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getGroupPermissionInteger(group,permission);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getGroupPermissionInteger(group, permission);
     }
 
     @Override
     public boolean getGroupPermissionBoolean(String world, String group, String permission) {
-        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroupPermissionBoolean(group,permission);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroupPermissionBoolean(group, permission);
     }
 
-    @Override
+    @Deprecated
     public boolean getGroupPermissionBoolean(String group, String permission) {
-        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getGroupPermissionBoolean(group,permission);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getGroupPermissionBoolean(group, permission);
     }
 
     @Override
     public double getGroupPermissionDouble(String world, String group, String permission) {
-        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroupPermissionDouble(group,permission);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getGroupPermissionDouble(group, permission);
     }
 
-    @Override
+    @Deprecated
     public double getGroupPermissionDouble(String group, String permission) {
-        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getGroupPermissionDouble(group,permission);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getGroupPermissionDouble(group, permission);
     }
 
     @Override
     public String getUserPermissionString(String world, String name, String permission) {
-        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getUserPermissionString(name,permission);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getUserPermissionString(name, permission);
     }
 
-    @Override
+    @Deprecated
     public String getUserPermissionString(String name, String permission) {
-        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getUserPermissionString(name,permission);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getUserPermissionString(name, permission);
     }
 
     @Override
     public int getUserPermissionInteger(String world, String name, String permission) {
-        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getUserPermissionInteger(name,permission);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getUserPermissionInteger(name, permission);
     }
 
-    @Override
+    @Deprecated
     public int getUserPermissionInteger(String name, String permission) {
-        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getUserPermissionInteger(name,permission);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getUserPermissionInteger(name, permission);
     }
 
     @Override
     public boolean getUserPermissionBoolean(String world, String name, String permission) {
-        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getUserPermissionBoolean(name,permission);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getUserPermissionBoolean(name, permission);
     }
 
-    @Override
+    @Deprecated
     public boolean getUserPermissionBoolean(String name, String permission) {
-        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getUserPermissionBoolean(name,permission);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getUserPermissionBoolean(name, permission);
     }
 
     @Override
     public double getUserPermissionDouble(String world, String name, String permission) {
-        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getUserPermissionDouble(name,permission);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getUserPermissionDouble(name, permission);
     }
 
-    @Override
+    @Deprecated
     public double getUserPermissionDouble(String name, String permission) {
-        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getUserPermissionDouble(name,permission);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getUserPermissionDouble(name, permission);
     }
 
     @Override
     public String getPermissionString(String world, String name, String permission) {
-        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getPermissionString(name,permission);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getPermissionString(name, permission);
     }
 
-    @Override
+    @Deprecated
     public String getPermissionString(String name, String permission) {
-        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getPermissionString(name,permission);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getPermissionString(name, permission);
     }
 
     @Override
     public int getPermissionInteger(String world, String name, String permission) {
-        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getPermissionInteger(name,permission);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getPermissionInteger(name, permission);
     }
 
-    @Override
+    @Deprecated
     public int getPermissionInteger(String name, String permission) {
-        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getPermissionInteger(name,permission);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getPermissionInteger(name, permission);
     }
 
     @Override
     public boolean getPermissionBoolean(String world, String name, String permission) {
-        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getPermissionBoolean(name,permission);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getPermissionBoolean(name, permission);
     }
 
-    @Override
+    @Deprecated
     public boolean getPermissionBoolean(String name, String permission) {
-        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getPermissionBoolean(name,permission);
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getPermissionBoolean(name, permission);
     }
 
     @Override
     public double getPermissionDouble(String world, String name, String permission) {
-        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getPermissionDouble(name,permission);
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getPermissionDouble(name, permission);
+    }
+
+    @Deprecated
+    public double getPermissionDouble(String name, String permission) {
+        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getPermissionDouble(name, permission);
+    }
+
+    public void setGM(Plugin p) {
+        this.plugin = (GroupManager) p;
     }
 
     @Override
-    public double getPermissionDouble(String name, String permission) {
-        return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().getPermissionDouble(name,permission);
+    public boolean canGroupRawBuild(String world, String group) {
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().canGroupBuild(group);
     }
 
-	public void setGM(Plugin p)
-	{
-		this.plugin = (GroupManager)p;
+    @Override
+    public void closeAll() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public int compareWeights(String firstWorld, String first, String secondWorld, String second) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public int compareWeights(String world, String first, String second) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Map<String, Set<String>> getAllGroups(String world, String name) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Group getDefaultGroup(String world) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Group getGroupObject(String world, String group) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public String getGroupProperName(String world, String group) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Boolean getInfoBoolean(String world, String entryName, String path,
+            boolean isGroup) {
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getInfoBoolean(entryName, path, isGroup);
+    }
+
+    @Override
+    public Boolean getInfoBoolean(String world, String entryName, String path,
+            boolean isGroup, Comparator<Boolean> comparator) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Double getInfoDouble(String world, String entryName, String path, boolean isGroup) {
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getInfoDouble(entryName, path, isGroup);
+    }
+
+    @Override
+    public Double getInfoDouble(String world, String entryName, String path,
+            boolean isGroup, Comparator<Double> comparator) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Integer getInfoInteger(String world, String entryName, String path,
+            boolean isGroup) {
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getInfoInteger(entryName, path, isGroup);
+    }
+
+    @Override
+    public Integer getInfoInteger(String world, String entryName, String path,
+            boolean isGroup, Comparator<Integer> comparator) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public String getInfoString(String world, String entryName, String path, boolean isGroup) {
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getInfoString(entryName, path, isGroup);
+    }
+
+    @Override
+    public String getInfoString(String world, String entryName, String path,
+            boolean isGroup, Comparator<String> comparator) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Boolean getRawInfoBoolean(String world, String entryName, String path,
+            boolean isGroup) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Double getRawInfoDouble(String world, String entryName, String path,
+            boolean isGroup) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Integer getRawInfoInteger(String world, String entryName, String path,
+            boolean isGroup) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public String getRawInfoString(String world, String entryName, String path,
+            boolean isGroup) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Set<String> getTracks(String world) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public User getUserObject(String world, String name) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Collection<User> getUsers(String world) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Set<String> getWorlds() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean has(String world, String playerName, String permission) {
+        if (permission == null || permission.equals("")) {
+            return false;
+        }
+        if (playerName == null || playerName == "") {
+            GroupManager.logger.severe("A plugin is asking permission '" + permission + "' for a null player... Which plugin does that? Bastards!");
+            return false;
+        }
+        if (world == null) {
+            GroupManager.logger.warning("The player " + playerName + " has a null world? Treating as default world!");
+            return plugin.getWorldsHolder().getDefaultWorld().getPermissionsHandler().permission(playerName, permission);
+        }
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().permission(playerName, permission);
+    }
+
+    @Override
+    public boolean inGroup(String world, String user, String groupWorld, String group) {
+        return plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().inGroup(user, group);
+    }
+
+    @Override
+    public boolean inSingleGroup(String world, String user, String group) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean inSingleGroup(String world, String user, String groupWorld, String group) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean permission(String world, String name, String node) {
+        return has(world, name, node);
+    }
+
+    @Override
+    public Group safeGetGroup(String world, String name) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public User safeGetUser(String world, String name) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void save(String world) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void saveAll() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Collection<Group> getGroups(String world) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+	//@Override
+	public Group getPrimaryGroupObject(String arg0, String arg1) {
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 }

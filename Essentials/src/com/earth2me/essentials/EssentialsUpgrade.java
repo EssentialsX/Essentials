@@ -1,15 +1,24 @@
 package com.earth2me.essentials;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -280,11 +289,11 @@ public class EssentialsUpgrade
 				{
 					@SuppressWarnings("unchecked")
 					final String defworld = (String)config.getProperty("home.default");
-					final Location defloc = getFakeLocation(config,"home.worlds." + defworld);
+					final Location defloc = getFakeLocation(config, "home.worlds." + defworld);
 					if (defloc != null)
 					{
 						config.setProperty("homes.home", defloc);
-					}			
+					}
 
 					List<String> worlds = config.getKeys("home.worlds");
 					Location loc;
@@ -570,6 +579,7 @@ public class EssentialsUpgrade
 		}
 		return null;
 	}
+
 	public Location getFakeLocation(EssentialsConf config, String path)
 	{
 		String worldName = config.getString((path != null ? path + "." : "") + "world");
@@ -590,6 +600,53 @@ public class EssentialsUpgrade
 							(float)config.getDouble((path != null ? path + "." : "") + "pitch", 0));
 	}
 
+	private void deleteOldItemsCsv()
+	{
+		if (doneFile.getBoolean("deleteOldItemsCsv", false))
+		{
+			return;
+		}
+		final File file = new File(ess.getDataFolder(), "items.csv");
+		if (file.exists())
+		{
+			try
+			{
+				final Set<BigInteger> oldconfigs = new HashSet<BigInteger>();
+				oldconfigs.add(new BigInteger("66ec40b09ac167079f558d1099e39f10", 16)); // sep 1
+				oldconfigs.add(new BigInteger("34284de1ead43b0bee2aae85e75c041d", 16)); // crlf
+				oldconfigs.add(new BigInteger("c33bc9b8ee003861611bbc2f48eb6f4f", 16)); // jul 24
+				oldconfigs.add(new BigInteger("6ff17925430735129fc2a02f830c1daa", 16)); // crlf
+
+				MessageDigest digest = ManagedFile.getDigest();
+				final BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
+				final DigestInputStream dis = new DigestInputStream(bis, digest);
+				final byte[] buffer = new byte[1024];
+				try
+				{
+					while (dis.read(buffer) != -1)
+					{
+					}
+				}
+				finally
+				{
+					dis.close();
+				}
+
+				BigInteger hash = new BigInteger(1, digest.digest());
+				if (oldconfigs.contains(hash) && !file.delete())
+				{
+					throw new IOException("Could not delete file " + file.toString());
+				}
+				doneFile.setProperty("deleteOldItemsCsv", true);
+				doneFile.save();
+			}
+			catch (IOException ex)
+			{
+				Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+			}
+		}
+	}
+
 	public void beforeSettings()
 	{
 		if (!ess.getDataFolder().exists())
@@ -607,5 +664,6 @@ public class EssentialsUpgrade
 		convertWarps();
 		updateUsersPowerToolsFormat();
 		updateUsersHomesFormat();
+		deleteOldItemsCsv();
 	}
 }

@@ -411,10 +411,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 	public void checkBanTimeout(final long currentTime)
 	{
-		if (getBanTimeout() > 0 && getBanTimeout() < currentTime && ess.getBans().isNameBanned(getName()))
+		if (getBanTimeout() > 0 && getBanTimeout() < currentTime && isBanned())
 		{
 			setBanTimeout(0);
-			ess.getBans().unbanByName(getName());
+			setBanned(false);
 		}
 	}
 
@@ -464,4 +464,13 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	{
 		return afkPosition;
 	}
+
+	@Override
+	public boolean toggleGodModeEnabled()
+	{
+		if (!isGodModeEnabled()) {
+			setFoodLevel(20);
+		}
+		return super.toggleGodModeEnabled();
+	}	
 }

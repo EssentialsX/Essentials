@@ -25,6 +25,7 @@ public class OverloadedWorldHolder extends WorldDataHolder {
      *
      * @param ph
      */
+    @SuppressWarnings("deprecation")
     public OverloadedWorldHolder(WorldDataHolder ph) {
         super(ph.getName());
         this.f = ph.f;
@@ -135,7 +136,7 @@ public class OverloadedWorldHolder extends WorldDataHolder {
     }
 
     /**
-     * 
+     *
      * @return
      */
     @Override
@@ -185,7 +186,7 @@ public class OverloadedWorldHolder extends WorldDataHolder {
     }
 
     /**
-     *  Gets the user in normal state. Surpassing the overload state.
+     * Gets the user in normal state. Surpassing the overload state.
      * It doesn't affect permissions. But it enables plugins change the
      * actual user permissions even in overload mode.
      * @param userName

@@ -266,14 +266,6 @@ public class EssentialsPlayerListener extends PlayerListener
 		ess.getBackup().onPlayerJoin();
 		final User user = ess.getUser(event.getPlayer());
 
-		//we do not know the ip address on playerlogin so we need to do this here.
-		if (user.isIpBanned())
-		{
-			final String banReason = user.getBanReason();
-			user.kickPlayer(banReason != null && !banReason.isEmpty() ? banReason : Util.i18n("defaultBanReason"));
-			return;
-		}
-
 		if (ess.getSettings().changeDisplayName())
 		{
 			user.setDisplayName(user.getNick());
@@ -438,7 +430,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 		final User user = ess.getUser(event.getPlayer());
 		final ItemStack is = user.getItemInHand();
-		if (is == null || is.getType() == Material.AIR)
+		if (is == null || is.getType() == Material.AIR || !user.arePowerToolsEnabled())
 		{
 			return;
 		}
@@ -465,7 +457,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			}
 			else
 			{
-				user.getServer().dispatchCommand(user, command);
+				user.getServer().dispatchCommand(event.getPlayer(), command);
 			}
 		}
 	}
@@ -484,7 +476,8 @@ public class EssentialsPlayerListener extends PlayerListener
 		{
 			for (Player player : ess.getServer().getOnlinePlayers())
 			{
-				if (ess.getUser(player).isSocialSpyEnabled())
+				User spyer = ess.getUser(player);
+				if (spyer.isSocialSpyEnabled() && !user.equals(spyer))
 				{
 					player.sendMessage(user.getDisplayName() + " : " + event.getMessage());
 				}

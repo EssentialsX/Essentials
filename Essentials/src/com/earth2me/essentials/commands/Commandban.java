@@ -52,8 +52,8 @@ public class Commandban extends EssentialsCommand
 		{
 			banReason = Util.i18n("defaultBanReason");
 		}
+		player.setBanned(true);
 		player.kickPlayer(banReason);
-		ess.getBans().banByName(player.getName());
 		String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
 		
 		for(Player p : server.getOnlinePlayers())
