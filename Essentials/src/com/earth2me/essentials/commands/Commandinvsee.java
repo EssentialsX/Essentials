@@ -49,5 +49,6 @@ public class Commandinvsee extends EssentialsCommand
 		user.getInventory().setContents(invUserStack);
 		user.sendMessage(Util.format("invSee", invUser.getDisplayName()));
 		user.sendMessage(Util.i18n("invSeeHelp"));
+		throw new NoChargeException();
 	}
 }
