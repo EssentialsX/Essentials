@@ -8,6 +8,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityListener;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -78,6 +79,15 @@ public class EssentialsEntityListener extends EntityListener
 				user.setLastLocation();
 				user.sendMessage(Util.i18n("backAfterDeath"));
 			}
+		}
+	}
+
+	@Override
+	public void onFoodLevelChange(FoodLevelChangeEvent event)
+	{
+		if (event.getEntity() instanceof Player && ess.getUser(event.getEntity()).isGodModeEnabled())
+		{
+			event.setFoodLevel(20);
 		}
 	}
 }
