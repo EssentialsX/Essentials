@@ -422,6 +422,9 @@ protect:
       squid: false
       zombie: false
       wolf: false
+      cave_spider: false
+      enderman: false
+      silverfish: false
   
   # Maximum height the creeper should explode. -1 allows them to explode everywhere.
   # Set prevent.creeper-explosion to true, if you want to disable creeper explosions.
