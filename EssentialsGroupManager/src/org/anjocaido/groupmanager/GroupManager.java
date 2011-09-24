@@ -1465,6 +1465,9 @@ public class GroupManager extends JavaPlugin {
                     }
                     //WORKING
                     config.load();
+                    
+                    isLoaded = false;
+                    
                     if (args.length > 0) {
                         auxString = "";
                         for (int i = 0; i < args.length; i++) {
@@ -1480,6 +1483,8 @@ public class GroupManager extends JavaPlugin {
                         sender.sendMessage(ChatColor.YELLOW + " The current world was reloaded.");
                     }
                     worldsHolder.mirrorSetUp();
+                    
+                    isLoaded = true;
                     
                     BukkitPermissions.updateAllPlayers();
                     
