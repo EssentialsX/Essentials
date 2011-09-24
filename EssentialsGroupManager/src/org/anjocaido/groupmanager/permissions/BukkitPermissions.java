@@ -107,7 +107,7 @@ public class BukkitPermissions {
     }
     
     public void updatePermissions(Player player, String world) {
-        if (player == null || !GroupManager.isLoaded) {
+        if (player == null || !GroupManager.isLoaded()) {
             return;
         }
 
@@ -237,6 +237,9 @@ public class BukkitPermissions {
 
         @Override
         public void onPlayerQuit(PlayerQuitEvent event) {
+        	if (!GroupManager.isLoaded())
+        		return;
+        	
             attachments.remove(event.getPlayer());
         }
 
@@ -250,6 +253,9 @@ public class BukkitPermissions {
 
         @Override
         public void onPluginEnable(PluginEnableEvent event) {
+        	if (!GroupManager.isLoaded())
+        		return;
+        	
             collectPermissions();
             updateAllPlayers();
         }

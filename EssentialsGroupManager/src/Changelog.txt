@@ -19,3 +19,4 @@ v 1.1:
     - manulistp now accepts an additional + to list ALL Superperms effective permissions (/manulistp <name> +).
     - manucheckp also outputs superperms results.
     - Removed superperms update on plugins unloading. Unneeded and created undesired lag on shutdown.
+    - Added a BukkitPermsUpdateTask to only update superperms once on a load/reload.
