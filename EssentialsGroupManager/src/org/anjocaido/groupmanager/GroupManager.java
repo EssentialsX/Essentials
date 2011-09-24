@@ -105,6 +105,8 @@ public class GroupManager extends JavaPlugin {
         
         if (getServer().getScheduler().scheduleSyncDelayedTask(this, new BukkitPermsUpdateTask(),1) == -1)
         	GroupManager.logger.severe("Could not schedule superperms Update.");
+        else
+        	setLoaded(true);
 
         //setLoaded(true);
         System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
