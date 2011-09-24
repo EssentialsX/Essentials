@@ -190,7 +190,8 @@ public class BukkitPermissions {
 
         perms.add("Effective Permissions:");
         for(PermissionAttachmentInfo info : player.getEffectivePermissions()){
-        	perms.add(" " + info.getPermission() + " = " + info.getValue());
+        	if (info.getValue() == true)
+        		perms.add(" " + info.getPermission() + " = " + info.getValue());
         }
         return perms;
     }
