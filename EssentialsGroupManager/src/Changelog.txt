@@ -18,3 +18,4 @@ v 1.1:
     - Fixed wasteful updating of perms on a manload.
     - manulistp now accepts an additional + to list ALL Superperms effective permissions (/manulistp <name> +).
     - manucheckp also outputs superperms results.
+    - Removed superperms update on plugins unloading. Unneeded and created undesired lag on shutdown.
