@@ -7,6 +7,7 @@ package org.anjocaido.groupmanager;
 import org.anjocaido.groupmanager.permissions.AnjoPermissionsHandler;
 import org.anjocaido.groupmanager.permissions.BukkitPermissions;
 import org.anjocaido.groupmanager.utils.GroupManagerPermissions;
+import org.anjocaido.groupmanager.Tasks.BukkitPermsUpdateTask;
 import org.anjocaido.groupmanager.data.Variables;
 import org.anjocaido.groupmanager.data.User;
 import org.anjocaido.groupmanager.data.Group;
@@ -62,7 +63,7 @@ public class GroupManager extends JavaPlugin {
 
     @Override
     public void onDisable() {
-    	isLoaded = false;
+    	setLoaded(false);
     	
         if (worldsHolder != null) {
             worldsHolder.saveChanges();
@@ -96,11 +97,30 @@ public class GroupManager extends JavaPlugin {
         BukkitPermissions = new BukkitPermissions(this);
 
         enableScheduler();
-        isLoaded = true;
+        
+        /*
+         *  Schedule a Bukiit Permissions update for 1 tick later.
+         *  All plugins will be loaded by then
+         */
+        
+        if (getServer().getScheduler().scheduleSyncDelayedTask(this, new BukkitPermsUpdateTask(),1) == -1)
+        	GroupManager.logger.severe("Could not schedule superperms Update.");
+        else
+        	setLoaded(true);
+
+        //setLoaded(true);
         System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
     }
 
-    public InputStream getResourceAsStream(String fileName) {
+    public static boolean isLoaded() {
+		return isLoaded;
+	}
+
+	public static void setLoaded(boolean isLoaded) {
+		GroupManager.isLoaded = isLoaded;
+	}
+
+	public InputStream getResourceAsStream(String fileName) {
         return this.getClassLoader().getResourceAsStream(fileName);
     }
 
