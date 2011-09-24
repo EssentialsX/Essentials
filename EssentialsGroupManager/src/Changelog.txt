@@ -14,3 +14,5 @@ v 1.1:
     - All GroupManager commands issued by players are now echoed in the console.
     - Reverted WorldHolder static change to maintain backward plugin compatibility.
     - Update to handle 'getDescription().getPermissions(') returning a list (CB 1172).
+    - Fix for null in PLAYER_TELEPORT for bukkit perms.
+    - Fixed wasteful updating of perms on a manload.

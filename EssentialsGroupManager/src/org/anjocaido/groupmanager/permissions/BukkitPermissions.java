@@ -195,11 +195,9 @@ public class BukkitPermissions {
 
         @Override
         public void onPlayerPortal(PlayerPortalEvent event) { // will portal into another world
-            if(event.getPlayer().getWorld().equals(event.getTo().getWorld())){ // only if world actually changed
-                return;
+            if(!event.getFrom().getWorld().equals(event.getTo().getWorld())){ // only if world actually changed
+            	updatePermissions(event.getPlayer(), event.getTo().getWorld().getName());
             }
-            
-            updatePermissions(event.getPlayer(), event.getTo().getWorld().getName());
         }
 
         @Override

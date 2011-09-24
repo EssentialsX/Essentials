@@ -1423,8 +1423,13 @@ public class GroupManager extends JavaPlugin {
                                 auxString += " ";
                             }
                         }
+                        
+                        isLoaded = false; // Disable Bukkit Perms update
+                        
                         worldsHolder.loadWorld(auxString);
                         sender.sendMessage("The request to world '" + auxString + "' was sent.");
+                        
+                        isLoaded = true;
                         
                         BukkitPermissions.updateAllPlayers();
                         
