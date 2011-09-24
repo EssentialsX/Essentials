@@ -43,6 +43,7 @@ import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.ServerListener;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 //import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -106,7 +107,7 @@ public class BukkitPermissions {
     }
     
     public void updatePermissions(Player player, String world) {
-        if (player == null || !this.plugin.isEnabled()) {
+        if (player == null || !GroupManager.isLoaded) {
             return;
         }
 
@@ -171,6 +172,28 @@ public class BukkitPermissions {
         	GroupManager.logger.info(" " + info.getPermission() + " = " + info.getValue());
         }
 		*/
+    }
+    
+    public List<String> listPerms(Player player) {
+    	List<String> perms = new ArrayList<String>();
+    	
+    	/*
+    	// All permissions registered with Bukkit for this player
+        PermissionAttachment attachment = this.attachments.get(player);
+    	
+    	// List perms for this player
+    	perms.add("Attachment Permissions:");
+        for(Map.Entry<String, Boolean> entry : attachment.getPermissions().entrySet()){
+        	perms.add(" " + entry.getKey() + " = " + entry.getValue());
+        }
+        */
+
+        perms.add("Effective Permissions:");
+        for(PermissionAttachmentInfo info : player.getEffectivePermissions()){
+        	if (info.getValue() == true)
+        		perms.add(" " + info.getPermission() + " = " + info.getValue());
+        }
+        return perms;
     }
 
     public void updateAllPlayers() {

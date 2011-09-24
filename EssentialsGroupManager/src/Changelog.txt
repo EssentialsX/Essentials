@@ -16,3 +16,5 @@ v 1.1:
     - Update to handle 'getDescription().getPermissions(') returning a list (CB 1172).
     - Fix for null in PLAYER_TELEPORT for bukkit perms.
     - Fixed wasteful updating of perms on a manload.
+    - manulistp now accepts an additional + to list ALL Superperms effective permissions (/manulistp <name> +).
+    - manucheckp also outputs superperms results.
