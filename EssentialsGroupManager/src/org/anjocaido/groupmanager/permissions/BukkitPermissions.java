@@ -256,8 +256,8 @@ public class BukkitPermissions {
 
         @Override
         public void onPluginDisable(PluginDisableEvent event) {
-            collectPermissions();
-            updateAllPlayers();
+            //collectPermissions();
+            //updateAllPlayers();
         }
     }
 
