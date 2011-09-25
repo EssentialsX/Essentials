@@ -16,6 +16,8 @@
 
 package org.anjocaido.groupmanager.permissions;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -255,7 +257,7 @@ public class BukkitPermissions {
         public void onPluginEnable(PluginEnableEvent event) {
         	if (!GroupManager.isLoaded())
         		return;
-        	
+
             collectPermissions();
             updateAllPlayers();
         }

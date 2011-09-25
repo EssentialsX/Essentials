@@ -104,8 +104,9 @@ public class User extends DataUnit implements Cloneable {
     public void setGroup(String group) {
         this.group = group;
         flagAsChanged();
-        if ((GroupManager.isLoaded) && (GroupManager.BukkitPermissions.player_join = false))
-        	GroupManager.BukkitPermissions.updateAllPlayers();
+        if (GroupManager.isLoaded())
+        	if(GroupManager.BukkitPermissions.player_join = false)
+        		GroupManager.BukkitPermissions.updateAllPlayers();
     }
 
     /**
@@ -118,8 +119,9 @@ public class User extends DataUnit implements Cloneable {
         group = getDataSource().getGroup(group.getName());
         this.group = group.getName();
         flagAsChanged();
-        if ((GroupManager.isLoaded) && (GroupManager.BukkitPermissions.player_join = false))
-        	GroupManager.BukkitPermissions.updateAllPlayers();
+        if (GroupManager.isLoaded())
+        	if (GroupManager.BukkitPermissions.player_join = false)
+        		GroupManager.BukkitPermissions.updateAllPlayers();
     }
 
     public void addSubGroup(Group subGroup) {
@@ -133,7 +135,8 @@ public class User extends DataUnit implements Cloneable {
         removeSubGroup(subGroup);
         subGroups.add(subGroup.getName());
         flagAsChanged();
-        if ((GroupManager.isLoaded) && (GroupManager.BukkitPermissions.player_join = false))
+        if (GroupManager.isLoaded())
+        	if (GroupManager.BukkitPermissions.player_join = false)
         	GroupManager.BukkitPermissions.updateAllPlayers();
     }
 
@@ -153,8 +156,9 @@ public class User extends DataUnit implements Cloneable {
         try {
             if (subGroups.remove(subGroup.getName())) {
                 flagAsChanged();
-                if ((GroupManager.isLoaded) && (GroupManager.BukkitPermissions.player_join = false))
-                	GroupManager.BukkitPermissions.updateAllPlayers();
+                if (GroupManager.isLoaded())
+                	if (GroupManager.BukkitPermissions.player_join = false)
+                		GroupManager.BukkitPermissions.updateAllPlayers();
                 return true;
             }
         } catch (Exception e) {
@@ -197,7 +201,8 @@ public class User extends DataUnit implements Cloneable {
             variables.addVar(key, temp.getVarObject(key));
         }
         flagAsChanged();
-        if ((GroupManager.isLoaded) && (GroupManager.BukkitPermissions.player_join = false))
-        	GroupManager.BukkitPermissions.updateAllPlayers();
+        if (GroupManager.isLoaded())
+        	if (GroupManager.BukkitPermissions.player_join = false)
+        		GroupManager.BukkitPermissions.updateAllPlayers();
     }
 }
