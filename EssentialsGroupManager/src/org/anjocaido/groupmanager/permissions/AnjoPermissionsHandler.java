@@ -81,73 +81,24 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
     }
     
     /**
-     * Returns All permissions (including inheritance) of player name.
+     * Returns All permissions (including inheritance and sub groups) for the player.
+     * 
      * @param userName
      * @return
      */
     @Override
     public List<String> getAllPlayersPermissions(String userName) {
     	
-    	User user = ph.getUser(userName);
-    	List<String> playerPermArray = new ArrayList<String>(user.getPermissionList());
-        List<String> playerMainGroupPermArray = new ArrayList<String>(user.getGroup().getPermissionList());
-        List<String> subGroupsPermArray = new ArrayList<String>();
-        List<String> returnPermArray = new ArrayList<String>();
+    	List<String> playerPermArray = new ArrayList<String>(ph.getUser(userName).getPermissionList());
         
-        for (String subGroup : user.subGroupListStringCopy()) {
-        	subGroupsPermArray.addAll(ph.getGroup(subGroup).getPermissionList());
+        for (String group : getGroups(userName)) {        	
+        	for (String perm : ph.getGroup(group).getPermissionList()) {
+        		if ((!playerPermArray.contains(perm)) && (!playerPermArray.contains("-"+perm)))
+        			playerPermArray.add(perm);
+            }	
         }
-        
-        for (String permission : subGroupsPermArray) {
-        	/*
-        	 * Add each Negated permission
-        	 * unless it's being overridden by a higher permission
-        	 */
-            if (permission.startsWith("-")
-            		&& !playerMainGroupPermArray.contains(permission.substring(1))
-            		&& !playerPermArray.contains(permission.substring(1))
-            		&& !playerMainGroupPermArray.contains("*")
-        			&& !playerPermArray.contains("*")) {
-            	if (!returnPermArray.contains(permission)) {
-            		returnPermArray.add(permission);
-            	}
-            } else
-            	if (!returnPermArray.contains(permission)
-            			&& !playerMainGroupPermArray.contains("-"+permission)
-                		&& !playerPermArray.contains("-"+permission)) {
-    			returnPermArray.add(permission);
-    		}
-        }
-        
-        for (String permission : playerMainGroupPermArray) {
-        	/*
-        	 * Add each Negated permission
-        	 * unless it's being overridden by a higher permission
-        	 */
-            if (permission.startsWith("-")
-            		&& !playerPermArray.contains(permission.substring(1))
-            		&& !playerMainGroupPermArray.contains("*")
-        			&& !playerPermArray.contains("*")) {
-            	if (!returnPermArray.contains(permission)) {
-            		returnPermArray.add(permission);
-            	}
-            } else
-            	if (!returnPermArray.contains(permission)
-                		&& !playerPermArray.contains("-"+permission)) {
-    			returnPermArray.add(permission);
-    		}
-        }
-        
-        for (String permission : playerPermArray) {
-        	/*
-        	 * Add each permission
-        	 */
-            if (!returnPermArray.contains(permission)) {
-    			returnPermArray.add(permission);
-    		}
-        }
-    	
-        return returnPermArray;
+
+        return playerPermArray;
     }
 
     /**
@@ -159,7 +110,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
      * And verify the player 'MyAdmin', which is Admin, it will return true for both
      * Admin or Moderator groups.
      *
-     * Mas if you haave a player 'MyModerator', which is Moderator,
+     * Mas if you have a player 'MyModerator', which is Moderator,
      * it will give false if you pass Admin in group parameter.
      *
      * @param name

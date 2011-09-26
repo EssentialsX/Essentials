@@ -21,3 +21,4 @@ v 1.1:
     - Removed superperms update on plugins unloading. Unneeded and created undesired lag on shutdown.
     - Added a BukkitPermsUpdateTask to only update superperms once on a load/reload.
     - Fix for GM not checking inheritance for known superperms nodes.
+    - Optimized getAllPlayersPermissions and fixed pushing unknown perms to superperms.
