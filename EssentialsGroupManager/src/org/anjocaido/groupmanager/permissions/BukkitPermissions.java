@@ -16,8 +16,6 @@
 
 package org.anjocaido.groupmanager.permissions;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,7 +26,6 @@ import java.util.Set;
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.data.User;
 import org.anjocaido.groupmanager.dataholder.OverloadedWorldHolder;
-import org.anjocaido.groupmanager.utils.PermissionCheckResult;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -134,15 +131,10 @@ public class BukkitPermissions {
         }      
         
         // find matching permissions
-        PermissionCheckResult permissionResult;
         Boolean value;
         for (Permission permission : registeredPermissions) {
-        	permissionResult = worldData.getPermissionsHandler().checkFullUserPermission(user, permission.getName());
-            if (permissionResult.resultType.equals(PermissionCheckResult.Type.FOUND))
-            	value = true;
-            else
-            	value = false;
-        	
+        	value = worldData.getPermissionsHandler().checkUserPermission(user, permission.getName());
+
             attachment.setPermission(permission, value);
         }
         
@@ -161,19 +153,6 @@ public class BukkitPermissions {
             }
         }
         player.recalculatePermissions();
-        
-        /*
-        // List perms for this player
-        GroupManager.logger.info("Attachment Permissions:");
-        for(Map.Entry<String, Boolean> entry : attachment.getPermissions().entrySet()){
-        	GroupManager.logger.info(" " + entry.getKey() + " = " + entry.getValue());
-        }
-
-        GroupManager.logger.info("Effective Permissions:");
-        for(PermissionAttachmentInfo info : player.getEffectivePermissions()){
-        	GroupManager.logger.info(" " + info.getPermission() + " = " + info.getValue());
-        }
-		*/
     }
     
     public List<String> listPerms(Player player) {
