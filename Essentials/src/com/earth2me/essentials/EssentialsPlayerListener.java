@@ -307,6 +307,7 @@ public class EssentialsPlayerListener extends PlayerListener
 	{
 		if (event.getResult() != Result.ALLOWED && event.getResult() != Result.KICK_FULL && event.getResult() != Result.KICK_BANNED)
 		{
+			LOGGER.log(Level.INFO, "Disconnecting user " + event.getPlayer().toString() + " due to " + event.getResult().toString());
 			return;
 		}
 		User user = ess.getUser(event.getPlayer());
@@ -316,11 +317,12 @@ public class EssentialsPlayerListener extends PlayerListener
 		user.checkBanTimeout(currentTime);
 		user.checkMuteTimeout(currentTime);
 		user.checkJailTimeout(currentTime);
-
-		if (user.isBanned())
+		
+		if (user.isBanned() || event.getResult() == Result.KICK_BANNED)
 		{
 			final String banReason = user.getBanReason();
-			event.disallow(Result.KICK_BANNED, banReason != null && !banReason.isEmpty() ? banReason : Util.i18n("defaultBanReason"));
+			LOGGER.log(Level.INFO, "Banned for '" + banReason + "'");
+			event.disallow(Result.KICK_BANNED, banReason != null && !banReason.isEmpty() && !banReason.equalsIgnoreCase("ban") ? banReason : Util.i18n("defaultBanReason"));
 			return;
 		}
 
