@@ -25,7 +25,7 @@ public class Commandtime extends EssentialsCommand
 		{
 			worldSelector = args[1];
 		}
-		Set<World> worlds = getWorlds(server, sender, worldSelector);
+		final Set<World> worlds = getWorlds(server, sender, worldSelector);
 
 		// If no arguments we are reading the time
 		if (args.length == 0)
@@ -34,7 +34,7 @@ public class Commandtime extends EssentialsCommand
 			return;
 		}
 
-		User user = ess.getUser(sender);
+		final User user = ess.getUser(sender);
 		if (user != null && !user.isAuthorized("essentials.time.set"))
 		{
 			user.sendMessage(Util.i18n("timeSetPermission"));
