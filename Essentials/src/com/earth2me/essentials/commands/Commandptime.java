@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -97,29 +96,31 @@ public class Commandptime extends EssentialsCommand
 	 */
 	private void getUsersTime(final CommandSender sender, final Collection<User> users)
 	{
-		if (users.size() > 1) 
+		if (users.size() > 1)
 		{
 			sender.sendMessage(Util.format("pTimePlayers"));
 		}
-		
-		for (User user : users) 
+
+		for (User user : users)
 		{
-			if(user.getPlayerTimeOffset() == 0)
+			if (user.getPlayerTimeOffset() == 0)
 			{
 				sender.sendMessage(Util.format("pTimeNormal", user.getName()));
 			}
-			else {
+			else
+			{
 				String time = DescParseTickFormat.format(user.getPlayerTime());
-				if(!user.isPlayerTimeRelative()) 
+				if (!user.isPlayerTimeRelative())
 				{
 					sender.sendMessage(Util.format("pTimeCurrentFixed", user.getName(), time));
 				}
-				else {
+				else
+				{
 					sender.sendMessage(Util.format("pTimeCurrent", user.getName(), time));
 				}
 			}
 		}
-		
+
 		return;
 	}
 
@@ -177,7 +178,8 @@ public class Commandptime extends EssentialsCommand
 			{
 				sender.sendMessage(Util.format("pTimeSetFixed", time, msg.toString()));
 			}
-			else {
+			else
+			{
 				sender.sendMessage(Util.format("pTimeSet", time, msg.toString()));
 			}
 		}

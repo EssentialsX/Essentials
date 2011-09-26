@@ -26,7 +26,6 @@ import java.util.Set;
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.data.User;
 import org.anjocaido.groupmanager.dataholder.OverloadedWorldHolder;
-import org.anjocaido.groupmanager.utils.PermissionCheckResult;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -43,6 +42,7 @@ import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.ServerListener;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 //import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -106,7 +106,7 @@ public class BukkitPermissions {
     }
     
     public void updatePermissions(Player player, String world) {
-        if (player == null || !this.plugin.isEnabled()) {
+        if (player == null || !GroupManager.isLoaded()) {
             return;
         }
 
@@ -131,15 +131,10 @@ public class BukkitPermissions {
         }      
         
         // find matching permissions
-        PermissionCheckResult permissionResult;
         Boolean value;
         for (Permission permission : registeredPermissions) {
-        	permissionResult = worldData.getPermissionsHandler().checkFullUserPermission(user, permission.getName());
-            if (permissionResult.resultType.equals(PermissionCheckResult.Type.FOUND))
-            	value = true;
-            else
-            	value = false;
-        	
+        	value = worldData.getPermissionsHandler().checkUserPermission(user, permission.getName());
+
             attachment.setPermission(permission, value);
         }
         
@@ -158,19 +153,28 @@ public class BukkitPermissions {
             }
         }
         player.recalculatePermissions();
-        
-        /*
-        // List perms for this player
-        GroupManager.logger.info("Attachment Permissions:");
+    }
+    
+    public List<String> listPerms(Player player) {
+    	List<String> perms = new ArrayList<String>();
+    	
+    	/*
+    	// All permissions registered with Bukkit for this player
+        PermissionAttachment attachment = this.attachments.get(player);
+    	
+    	// List perms for this player
+    	perms.add("Attachment Permissions:");
         for(Map.Entry<String, Boolean> entry : attachment.getPermissions().entrySet()){
-        	GroupManager.logger.info(" " + entry.getKey() + " = " + entry.getValue());
+        	perms.add(" " + entry.getKey() + " = " + entry.getValue());
         }
+        */
 
-        GroupManager.logger.info("Effective Permissions:");
+        perms.add("Effective Permissions:");
         for(PermissionAttachmentInfo info : player.getEffectivePermissions()){
-        	GroupManager.logger.info(" " + info.getPermission() + " = " + info.getValue());
+        	if (info.getValue() == true)
+        		perms.add(" " + info.getPermission() + " = " + info.getValue());
         }
-		*/
+        return perms;
     }
 
     public void updateAllPlayers() {
@@ -195,11 +199,9 @@ public class BukkitPermissions {
 
         @Override
         public void onPlayerPortal(PlayerPortalEvent event) { // will portal into another world
-            if(event.getPlayer().getWorld().equals(event.getTo().getWorld())){ // only if world actually changed
-                return;
+            if(!event.getFrom().getWorld().equals(event.getTo().getWorld())){ // only if world actually changed
+            	updatePermissions(event.getPlayer(), event.getTo().getWorld().getName());
             }
-            
-            updatePermissions(event.getPlayer(), event.getTo().getWorld().getName());
         }
 
         @Override
@@ -216,6 +218,9 @@ public class BukkitPermissions {
 
         @Override
         public void onPlayerQuit(PlayerQuitEvent event) {
+        	if (!GroupManager.isLoaded())
+        		return;
+        	
             attachments.remove(event.getPlayer());
         }
 
@@ -229,14 +234,17 @@ public class BukkitPermissions {
 
         @Override
         public void onPluginEnable(PluginEnableEvent event) {
+        	if (!GroupManager.isLoaded())
+        		return;
+
             collectPermissions();
             updateAllPlayers();
         }
 
         @Override
         public void onPluginDisable(PluginDisableEvent event) {
-            collectPermissions();
-            updateAllPlayers();
+            //collectPermissions();
+            //updateAllPlayers();
         }
     }
 

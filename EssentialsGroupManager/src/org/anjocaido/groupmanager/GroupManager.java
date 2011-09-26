@@ -7,6 +7,7 @@ package org.anjocaido.groupmanager;
 import org.anjocaido.groupmanager.permissions.AnjoPermissionsHandler;
 import org.anjocaido.groupmanager.permissions.BukkitPermissions;
 import org.anjocaido.groupmanager.utils.GroupManagerPermissions;
+import org.anjocaido.groupmanager.Tasks.BukkitPermsUpdateTask;
 import org.anjocaido.groupmanager.data.Variables;
 import org.anjocaido.groupmanager.data.User;
 import org.anjocaido.groupmanager.data.Group;
@@ -50,7 +51,7 @@ public class GroupManager extends JavaPlugin {
     private WorldsHolder worldsHolder;
     private boolean validateOnlinePlayer = true;
     private boolean isReady = false;
-    public static boolean isLoaded = false;
+    private static boolean isLoaded = false;
     private GMConfiguration config;
     private GMLoggerHandler ch;
     public static BukkitPermissions BukkitPermissions;
@@ -62,7 +63,7 @@ public class GroupManager extends JavaPlugin {
 
     @Override
     public void onDisable() {
-    	isLoaded = false;
+    	setLoaded(false);
     	
         if (worldsHolder != null) {
             worldsHolder.saveChanges();
@@ -96,11 +97,30 @@ public class GroupManager extends JavaPlugin {
         BukkitPermissions = new BukkitPermissions(this);
 
         enableScheduler();
-        isLoaded = true;
+        
+        /*
+         *  Schedule a Bukiit Permissions update for 1 tick later.
+         *  All plugins will be loaded by then
+         */
+        
+        if (getServer().getScheduler().scheduleSyncDelayedTask(this, new BukkitPermsUpdateTask(),1) == -1) {
+        	GroupManager.logger.severe("Could not schedule superperms Update.");
+        	setLoaded(true);
+        }
+
+        //setLoaded(true);
         System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
     }
 
-    public InputStream getResourceAsStream(String fileName) {
+    public static boolean isLoaded() {
+		return isLoaded;
+	}
+
+	public static void setLoaded(boolean isLoaded) {
+		GroupManager.isLoaded = isLoaded;
+	}
+
+	public InputStream getResourceAsStream(String fileName) {
         return this.getClassLoader().getResourceAsStream(fileName);
     }
 
@@ -637,16 +657,18 @@ public class GroupManager extends JavaPlugin {
                     		return true;
                     }
                     //VALIDANDO ARGUMENTOS
-                    if (args.length != 1) {
-                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player>)");
+                    if ((args.length == 0) || (args.length > 2)) {
+                        sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player> (+))");
                         return false;
                     }
+                    
                     if (validateOnlinePlayer) {
                         match = this.getServer().matchPlayer(args[0]);
                         if (match.size() != 1) {
                             sender.sendMessage(ChatColor.RED + "Player not found!");
                             return false;
-                        }
+                        } else
+                        	targetPlayer = this.getServer().getPlayer(match.get(0).getName());
                     }
                     if (match != null) {
                         auxUser = dataHolder.getUser(match.get(0).getName());
@@ -683,6 +705,18 @@ public class GroupManager extends JavaPlugin {
                             sender.sendMessage(ChatColor.YELLOW + "And all permissions from subgroups: " + auxString);
                         }
                     }
+                    
+                    //bukkit perms
+                    if ((args.length == 2) && (args[1].equalsIgnoreCase("+"))) {
+                    	if (targetPlayer != null) {
+                    		sender.sendMessage(ChatColor.YELLOW + "Superperms reports: ");
+                        	for(String line: BukkitPermissions.listPerms(targetPlayer))
+                        		sender.sendMessage(ChatColor.YELLOW + line);
+                        	
+                        }
+                    }
+                    
+                    
                     return true;
                 case manucheckp:
                     //VALIDANDO ESTADO DO SENDER
@@ -695,12 +729,14 @@ public class GroupManager extends JavaPlugin {
                         sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player> <permission>)");
                         return false;
                     }
+                    
                     if (validateOnlinePlayer) {
                         match = this.getServer().matchPlayer(args[0]);
                         if (match.size() != 1) {
                             sender.sendMessage(ChatColor.RED + "Player not found!");
                             return false;
-                        }
+                        } else
+                        	targetPlayer = this.getServer().getPlayer(match.get(0).getName());
                     }
                     if (match != null) {
                         auxUser = dataHolder.getUser(match.get(0).getName());
@@ -730,6 +766,13 @@ public class GroupManager extends JavaPlugin {
                         }
                         sender.sendMessage(ChatColor.YELLOW + "Permission Node: " + permissionResult.accessLevel);
                     }
+                    
+                    // superperms
+                    if (targetPlayer != null) {
+                    	sender.sendMessage(ChatColor.YELLOW + "SuperPerms reports Node: " + targetPlayer.hasPermission(args[1]));
+                    }
+                    
+                    
                     return true;
                 case mangaddp:
                     //VALIDANDO ESTADO DO SENDER
@@ -1423,8 +1466,13 @@ public class GroupManager extends JavaPlugin {
                                 auxString += " ";
                             }
                         }
+                        
+                        isLoaded = false; // Disable Bukkit Perms update
+                        
                         worldsHolder.loadWorld(auxString);
                         sender.sendMessage("The request to world '" + auxString + "' was sent.");
+                        
+                        isLoaded = true;
                         
                         BukkitPermissions.updateAllPlayers();
                         
@@ -1437,6 +1485,9 @@ public class GroupManager extends JavaPlugin {
                     }
                     //WORKING
                     config.load();
+                    
+                    isLoaded = false;
+                    
                     if (args.length > 0) {
                         auxString = "";
                         for (int i = 0; i < args.length; i++) {
@@ -1452,6 +1503,8 @@ public class GroupManager extends JavaPlugin {
                         sender.sendMessage(ChatColor.YELLOW + " The current world was reloaded.");
                     }
                     worldsHolder.mirrorSetUp();
+                    
+                    isLoaded = true;
                     
                     BukkitPermissions.updateAllPlayers();
                     

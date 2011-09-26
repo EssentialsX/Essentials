@@ -45,17 +45,17 @@ public class Commandhome extends EssentialsCommand
 		catch (NotEnoughArgumentsException e)
 		{
 			List<String> homes = u.getHomes();
-			if (homes.isEmpty())
+			if (homes.isEmpty() && u.equals(user) && ess.getSettings().spawnIfNoHome())
+			{
+				user.getTeleport().respawn(ess.getSpawn(), charge);				
+			}
+			else if (homes.isEmpty())
 			{
 				throw new Exception(u == user ? Util.i18n("noHomeSet") : Util.i18n("noHomeSetPlayer"));
 			}
-			else if ((homes.size() == 1) && u == user)
+			else if (homes.size() == 1 && u.equals(user))
 			{
 				user.getTeleport().home(u, homes.get(0), charge);
-			}
-			else if (ess.getSettings().spawnIfNoHome())
-			{
-				user.getTeleport().respawn(ess.getSpawn(), charge);				
 			}
 			else
 			{

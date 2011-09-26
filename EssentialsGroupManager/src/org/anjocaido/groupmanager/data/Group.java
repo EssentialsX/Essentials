@@ -90,7 +90,7 @@ public class Group extends DataUnit implements Cloneable {
             inherits.add(inherit.getName().toLowerCase());
         }
         flagAsChanged();
-        if (GroupManager.isLoaded)
+        if (GroupManager.isLoaded())
         	GroupManager.BukkitPermissions.updateAllPlayers();
     }
 
@@ -121,7 +121,7 @@ public class Group extends DataUnit implements Cloneable {
             variables.addVar(key, temp.getVarObject(key));
         }
         flagAsChanged();
-        if (GroupManager.isLoaded)
+        if (GroupManager.isLoaded())
         	GroupManager.BukkitPermissions.updateAllPlayers();
     }
 }
