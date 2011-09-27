@@ -381,7 +381,8 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		this.hidden = hidden;
 	}
 
-	public void checkJailTimeout(final long currentTime)
+	//Returns true if status expired during this check
+	public boolean checkJailTimeout(final long currentTime)
 	{
 		if (getJailTimeout() > 0 && getJailTimeout() < currentTime && isJailed())
 		{
@@ -396,26 +397,34 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			catch (Exception ex)
 			{
 			}
+			return true;
 		}
+		return false;
 	}
 
-	public void checkMuteTimeout(final long currentTime)
+	//Returns true if status expired during this check
+	public boolean checkMuteTimeout(final long currentTime)
 	{
 		if (getMuteTimeout() > 0 && getMuteTimeout() < currentTime && isMuted())
 		{
 			setMuteTimeout(0);
 			sendMessage(Util.i18n("canTalkAgain"));
 			setMuted(false);
+			return true;
 		}
+		return false;
 	}
 
-	public void checkBanTimeout(final long currentTime)
+	//Returns true if status expired during this check
+	public boolean checkBanTimeout(final long currentTime)
 	{
 		if (getBanTimeout() > 0 && getBanTimeout() < currentTime && isBanned())
 		{
 			setBanTimeout(0);
 			setBanned(false);
+			return true;
 		}
+		return false;
 	}
 
 	public void updateActivity(final boolean broadcast)

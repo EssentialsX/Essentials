@@ -108,7 +108,8 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 
 		Location afk = user.getAfkPosition();
-		if (afk == null || !event.getTo().getWorld().equals(afk.getWorld()) || afk.distanceSquared(event.getTo()) > 9) {
+		if (afk == null || !event.getTo().getWorld().equals(afk.getWorld()) || afk.distanceSquared(event.getTo()) > 9)
+		{
 			user.updateActivity(true);
 		}
 
@@ -314,14 +315,13 @@ public class EssentialsPlayerListener extends PlayerListener
 		user.setNPC(false);
 
 		final long currentTime = System.currentTimeMillis();
-		user.checkBanTimeout(currentTime);
+		boolean banExpired = user.checkBanTimeout(currentTime);
 		user.checkMuteTimeout(currentTime);
 		user.checkJailTimeout(currentTime);
-		
-		if (user.isBanned() || event.getResult() == Result.KICK_BANNED)
+
+		if (banExpired == false && (user.isBanned() || event.getResult() == Result.KICK_BANNED))
 		{
 			final String banReason = user.getBanReason();
-			LOGGER.log(Level.INFO, "Banned for '" + banReason + "'");
 			event.disallow(Result.KICK_BANNED, banReason != null && !banReason.isEmpty() && !banReason.equalsIgnoreCase("ban") ? banReason : Util.i18n("defaultBanReason"));
 			return;
 		}
