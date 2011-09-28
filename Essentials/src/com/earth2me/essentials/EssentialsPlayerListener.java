@@ -94,16 +94,9 @@ public class EssentialsPlayerListener extends PlayerListener
 			final Location from = event.getFrom();
 			final Location to = event.getTo().clone();
 			to.setX(from.getX());
-			to.setY(from.getY());
+			to.setY(from.getBlock().getTypeId() == 0 ? from.getY() - 1 : from.getY());
 			to.setZ(from.getZ());
-			try
-			{
-				event.setTo(Util.getSafeDestination(to));
-			}
-			catch (Exception ex)
-			{
-				event.setTo(to);
-			}
+			event.setTo(to);
 			return;
 		}
 
