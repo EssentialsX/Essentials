@@ -220,7 +220,7 @@ public class Settings implements ISettings
 	@Override
 	public boolean isNetherEnabled()
 	{
-		return config.getBoolean("nether.enabled", true);
+		return config.getBoolean("nether.enabled", false);
 	}
 
 	@Override
@@ -362,7 +362,7 @@ public class Settings implements ISettings
 		if (config.getBoolean("nether.use-1to1-ratio", false)) {
 			return 1.0;
 		}
-		return config.getDouble("nether.ratio", 16.0);
+		return config.getDouble("nether.ratio", 8.0);
 	}
 	
 	@Override
