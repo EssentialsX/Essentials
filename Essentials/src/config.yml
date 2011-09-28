@@ -79,14 +79,11 @@ reclaim-onlogout: false
 # Should primitive spawn protection be enabled?  For most servers, this should be flase; it is better to use a third-party plugin to protect it.
 spawn-protection: false
 
-# Nether settings (switch between worlds with "/world nether" and "/world normal")
-# Sets whether the nether system is enabled, what folder to save the world in, and whether portals should teleport players between worlds.
+# Nether settings
+# Sets wether you want to change the default behaviour of the nether portals.
 nether:
-  enabled: false
-  folder: nether
   portals-enabled: false
   generate-exit-portals: false
-  ratio: 16
 
 # Mob limit on spawnmob
 spawnmob-limit: 10

@@ -55,7 +55,7 @@ public class BPermissionsHandler implements IPermissionsHandler
 	@Override
 	public boolean canBuild(final Player base, final String group)
 	{
-		return hasPermission(base, "bPermissions.build");
+		return hasPermission(base, "essentials.build") || hasPermission(base, "bPermissions.build");
 	}
 	
 	@Override
