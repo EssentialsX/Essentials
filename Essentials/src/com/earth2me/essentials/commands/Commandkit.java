@@ -15,22 +15,20 @@ import org.bukkit.inventory.ItemStack;
 
 public class Commandkit extends EssentialsCommand
 {
-	static private final Map<User, Map<String, Long>> kitPlayers = new HashMap<User, Map<String, Long>>();
-
 	public Commandkit()
 	{
 		super("kit");
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
 			try
 			{
-				Map<String, Object> kits = ess.getSettings().getKits();
-				StringBuilder list = new StringBuilder();
+				final Map<String, Object> kits = ess.getSettings().getKits();
+				final StringBuilder list = new StringBuilder();
 				for (String k : kits.keySet())
 				{
 					if (user.isAuthorized("essentials.kit." + k.toLowerCase()))
@@ -56,8 +54,8 @@ public class Commandkit extends EssentialsCommand
 		{
 			try
 			{
-				String kitName = args[0].toLowerCase();
-				Object kit = ess.getSettings().getKit(kitName);
+				final String kitName = args[0].toLowerCase();
+				final Object kit = ess.getSettings().getKit(kitName);
 				List<String> items;
 
 				if (!user.isAuthorized("essentials.kit." + kitName))
@@ -70,39 +68,26 @@ public class Commandkit extends EssentialsCommand
 				{
 
 					//System.out.println("Kit is timed");
-					Map<String, Object> els = (Map<String, Object>)kit;
+					final Map<String, Object> els = (Map<String, Object>)kit;
 					items = (List<String>)els.get("items");
-					double delay = els.containsKey("delay") ? ((Number)els.get("delay")).doubleValue() : 0L;
-					Calendar c = new GregorianCalendar();
-					c.add(Calendar.SECOND, (int)delay);
-					c.add(Calendar.MILLISECOND, (int)((delay*1000.0)%1000.0));
+					final double delay = els.containsKey("delay") ? ((Number)els.get("delay")).doubleValue() : 0L;
+					final Calendar c = new GregorianCalendar();
+					c.add(Calendar.SECOND, -(int)delay);
+					c.add(Calendar.MILLISECOND, -(int)((delay*1000.0)%1000.0));
 			
-					long time = c.getTimeInMillis();
-					Calendar now = new GregorianCalendar();
-
-					Map<String, Long> kitTimes;
-					if (!kitPlayers.containsKey(user))
-					{
-						kitTimes = new HashMap<String, Long>();
-						kitTimes.put(kitName, time);
-						kitPlayers.put(user, kitTimes);
-					}
-					else
-					{
-						kitTimes = kitPlayers.get(user);
-						if (!kitTimes.containsKey(kitName))
-						{
-							kitTimes.put(kitName, time);
-						}
-						else if (kitTimes.get(kitName) < now.getTimeInMillis())
-						{
-							kitTimes.put(kitName, time);
-						}
-						else
-						{
-							user.sendMessage(Util.format("kitTimed", Util.formatDateDiff(kitTimes.get(kitName))));
-							return;
-						}
+					final long mintime = c.getTimeInMillis();
+					
+					final Long lastTime = user.getKitTimestamp(kitName);
+					if (lastTime == null || lastTime < mintime) {
+						final Calendar now = new GregorianCalendar();
+						user.setKitTimestamp(kitName, now.getTimeInMillis());
+					} else {
+						final Calendar future = new GregorianCalendar();
+						future.setTimeInMillis(lastTime);
+						future.add(Calendar.SECOND, (int)delay);
+						future.add(Calendar.MILLISECOND, (int)((delay*1000.0)%1000.0));
+						user.sendMessage(Util.format("kitTimed", Util.formatDateDiff(future.getTimeInMillis())));
+						return;
 					}
 				}
 				catch (Exception ex)
@@ -110,7 +95,7 @@ public class Commandkit extends EssentialsCommand
 					items = (List<String>)kit;
 				}
 
-				Trade charge = new Trade("kit-" + kitName, ess);
+				final Trade charge = new Trade("kit-" + kitName, ess);
 				try
 				{
 					charge.isAffordableFor(user);
@@ -124,11 +109,11 @@ public class Commandkit extends EssentialsCommand
 				boolean spew = false;
 				for (String d : items)
 				{
-					String[] parts = d.split("[^0-9]+", 3);
-					int id = Material.getMaterial(Integer.parseInt(parts[0])).getId();
-					int amount = parts.length > 1 ? Integer.parseInt(parts[parts.length > 2 ? 2 : 1]) : 1;
-					short data = parts.length > 2 ? Short.parseShort(parts[1]) : 0;
-					HashMap<Integer,ItemStack> overfilled = user.getInventory().addItem(new ItemStack(id, amount, data));
+					final String[] parts = d.split("[^0-9]+", 3);
+					final int id = Material.getMaterial(Integer.parseInt(parts[0])).getId();
+					final int amount = parts.length > 1 ? Integer.parseInt(parts[parts.length > 2 ? 2 : 1]) : 1;
+					final short data = parts.length > 2 ? Short.parseShort(parts[1]) : 0;
+					final HashMap<Integer,ItemStack> overfilled = user.getInventory().addItem(new ItemStack(id, amount, data));
 					for (ItemStack itemStack : overfilled.values())
 					{
 						user.getWorld().dropItemNaturally(user.getLocation(), itemStack);

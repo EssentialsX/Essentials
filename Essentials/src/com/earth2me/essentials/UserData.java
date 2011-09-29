@@ -58,6 +58,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		isSocialSpyEnabled = _isSocialSpyEnabled();
 		isNPC = _isNPC();
 		arePowerToolsEnabled = _arePowerToolsEnabled();
+		kitTimestamps = _getKitTimestamps();
 	}
 	private double money;
 
@@ -811,6 +812,35 @@ public abstract class UserData extends PlayerExtension implements IConf
 	private boolean _arePowerToolsEnabled()
 	{
 		return config.getBoolean("powertoolsenabled", true);
+	}
+	
+	private Map<String, Object> kitTimestamps;
+
+	private Map<String, Object> _getKitTimestamps()
+	{
+		final Object map = config.getProperty("timestamps.kits");
+
+		if (map instanceof Map)
+		{
+			return (Map<String, Object>)map;
+		}
+		else
+		{
+			return new HashMap<String, Object>();
+		}
+	}
+
+	public Long getKitTimestamp(final String name)
+	{
+		final Number num = (Number)kitTimestamps.get(name.toLowerCase());
+		return num == null ? null : num.longValue();
+	}
+
+	public void setKitTimestamp(final String name, final long time)
+	{
+		kitTimestamps.put(name.toLowerCase(), time);
+		config.setProperty("timestamps.kits", kitTimestamps);
+		config.save();
 	}
 	
 }
