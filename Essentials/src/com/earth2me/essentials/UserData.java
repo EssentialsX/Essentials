@@ -163,7 +163,12 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	public void delHome(String name) throws Exception
 	{
-		if (getHome(name) != null)
+		String search = name;
+		if (!homes.containsKey(search))
+		{
+			search = Util.sanitizeFileName(name);
+		}
+		if (homes.containsKey(search))
 		{
 			homes.remove(name);
 			config.removeProperty("homes." + name);
