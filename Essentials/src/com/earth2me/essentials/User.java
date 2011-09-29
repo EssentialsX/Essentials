@@ -460,7 +460,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			}
 		}
 		final long autoafk = ess.getSettings().getAutoAfk();
-		if (!isAfk() && autoafk > 0 && lastActivity + autoafk * 1000 < System.currentTimeMillis())
+		if (!isAfk() && autoafk > 0 && lastActivity + autoafk * 1000 < System.currentTimeMillis() && isAuthorized("essentials.afk"))
 		{
 			setAfk(true);
 			if (!isHidden()) {
