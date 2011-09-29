@@ -80,8 +80,7 @@ public class Commandspawnmob extends EssentialsCommand
 		Block block = (new TargetBlock(user, 300, 0.2, ignore)).getTargetBlock();
 		if (block == null)
 		{
-			user.sendMessage(Util.i18n("unableToSpawnMob"));
-			return;
+			throw new Exception(Util.i18n("unableToSpawnMob"));
 		}
 		Location loc = block.getLocation();
 		Location sloc = Util.getSafeDestination(loc);
@@ -91,8 +90,7 @@ public class Commandspawnmob extends EssentialsCommand
 		}
 		catch (MobException e)
 		{
-			user.sendMessage(Util.i18n("unableToSpawnMob"));
-			return;
+			throw new Exception(Util.i18n("unableToSpawnMob"));
 		}
 
 		if (mountType != null)
@@ -114,8 +112,7 @@ public class Commandspawnmob extends EssentialsCommand
 			}
 			catch (MobException e)
 			{
-				user.sendMessage(Util.i18n("unableToSpawnMob"));
-				return;
+				throw new Exception(Util.i18n("unableToSpawnMob"));
 			}
 			spawnedMob.setPassenger(spawnedMount);
 		}
@@ -150,8 +147,7 @@ public class Commandspawnmob extends EssentialsCommand
 						}
 						catch (MobException e)
 						{
-							user.sendMessage(Util.i18n("unableToSpawnMob"));
-							return;
+							throw new Exception(Util.i18n("unableToSpawnMob"));
 						}
 						spawnedMob.setPassenger(spawnedMount);
 					}
