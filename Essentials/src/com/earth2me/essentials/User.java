@@ -20,14 +20,12 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	private transient long lastOnlineActivity;
 	private transient long lastActivity = System.currentTimeMillis();
 	private boolean hidden = false;
-	private transient boolean godStateBeforeAfk;
 	private transient Location afkPosition;
 
 	User(final Player base, final IEssentials ess)
 	{
 		super(base, ess);
 		teleport = new Teleport(this, ess);
-		godStateBeforeAfk = isGodModeEnabled();
 		afkPosition = getLocation();
 	}
 
@@ -348,15 +346,6 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public void setAfk(final boolean set)
 	{
 		this.setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") ? true : set);
-		if (set && !isAfk() && ess.getSettings().getFreezeAfkPlayers())
-		{
-			godStateBeforeAfk = isGodModeEnabled();
-			setGodModeEnabled(true);
-		}
-		if (!set && isAfk() && ess.getSettings().getFreezeAfkPlayers())
-		{
-			setGodModeEnabled(godStateBeforeAfk);
-		}
 		if (set && !isAfk()) {
 			afkPosition = getLocation();
 		}
@@ -481,5 +470,11 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			setFoodLevel(20);
 		}
 		return super.toggleGodModeEnabled();
-	}	
+	}
+
+	@Override
+	public boolean isGodModeEnabled()
+	{
+		return super.isGodModeEnabled() || (isAfk() && ess.getSettings().getFreezeAfkPlayers());
+	}
 }
