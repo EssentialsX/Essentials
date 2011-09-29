@@ -56,11 +56,6 @@ public class Commandspawnmob extends EssentialsCommand
 			}
 		}
 
-		if (ess.getSettings().getProtectPreventSpawn(mobType.toLowerCase())
-			|| (mountType != null && ess.getSettings().getProtectPreventSpawn(mountType.toLowerCase())))
-		{
-			throw new Exception(Util.i18n("unableToSpawnMob"));
-		}
 
 		Entity spawnedMob = null;
 		Mob mob = null;
@@ -72,6 +67,12 @@ public class Commandspawnmob extends EssentialsCommand
 		{
 			throw new Exception(Util.i18n("invalidMob"));
 		}
+		
+		if (ess.getSettings().getProtectPreventSpawn(mob.getType().toString().toLowerCase()))
+		{
+			throw new Exception(Util.i18n("unableToSpawnMob"));
+		}
+
 		int[] ignore =
 		{
 			8, 9
@@ -101,6 +102,11 @@ public class Commandspawnmob extends EssentialsCommand
 			{
 				user.sendMessage(Util.i18n("invalidMob"));
 				return;
+			}
+			
+			if (ess.getSettings().getProtectPreventSpawn(mobMount.getType().toString().toLowerCase()))
+			{
+				throw new Exception(Util.i18n("unableToSpawnMob"));
 			}
 			try
 			{
