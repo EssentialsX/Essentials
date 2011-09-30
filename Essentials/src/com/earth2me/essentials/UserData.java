@@ -249,12 +249,13 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	}
 
-	public void clearAllPowertools() {
+	public void clearAllPowertools()
+	{
 		powertools.clear();
 		config.setProperty("powertools", powertools);
 		config.save();
 	}
-	
+
 	public List<String> getPowertool(ItemStack stack)
 	{
 		return (List<String>)powertools.get(stack.getTypeId());
@@ -273,12 +274,11 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.setProperty("powertools", powertools);
 		config.save();
 	}
-	
+
 	public boolean hasPowerTools()
 	{
 		return powertools.size() > 0;
 	}
-	
 	private Location lastLocation;
 
 	private Location _getLastLocation()
@@ -300,6 +300,10 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	public void setLastLocation(Location loc)
 	{
+		if (loc == null || loc.getWorld() == null)
+		{
+			return;
+		}
 		lastLocation = loc;
 		config.setProperty("lastlocation", loc);
 		config.save();
@@ -787,33 +791,31 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.setProperty("npc", set);
 		config.save();
 	}
-	
 	private boolean arePowerToolsEnabled;
-	
+
 	public boolean arePowerToolsEnabled()
 	{
 		return arePowerToolsEnabled;
 	}
-	
+
 	public void setPowerToolsEnabled(boolean set)
 	{
 		arePowerToolsEnabled = set;
 		config.setProperty("powertoolsenabled", set);
 		config.save();
 	}
-	
+
 	public boolean togglePowerToolsEnabled()
 	{
 		boolean ret = !arePowerToolsEnabled();
 		setPowerToolsEnabled(ret);
 		return ret;
 	}
-	
+
 	private boolean _arePowerToolsEnabled()
 	{
 		return config.getBoolean("powertoolsenabled", true);
 	}
-	
 	private Map<String, Object> kitTimestamps;
 
 	private Map<String, Object> _getKitTimestamps()
@@ -842,5 +844,4 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.setProperty("timestamps.kits", kitTimestamps);
 		config.save();
 	}
-	
 }
