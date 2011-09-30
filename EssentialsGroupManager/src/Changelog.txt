@@ -23,3 +23,4 @@ v 1.1:
     - Fix for GM not checking inheritance for known superperms nodes.
     - Optimized getAllPlayersPermissions and fixed pushing unknown perms to superperms.
 v 1.2:
+	- Changed priority if Registered events to lowest.

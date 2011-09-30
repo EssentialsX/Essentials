@@ -79,13 +79,13 @@ public class BukkitPermissions {
 
         PlayerEvents playerEventListener = new PlayerEvents();
 
-        manager.registerEvent(Event.Type.PLAYER_JOIN, playerEventListener, Event.Priority.Normal, plugin);
-        manager.registerEvent(Event.Type.PLAYER_KICK, playerEventListener, Event.Priority.Normal, plugin);
-        manager.registerEvent(Event.Type.PLAYER_QUIT, playerEventListener, Event.Priority.Normal, plugin);
+        manager.registerEvent(Event.Type.PLAYER_JOIN, playerEventListener, Event.Priority.Lowest, plugin);
+        manager.registerEvent(Event.Type.PLAYER_KICK, playerEventListener, Event.Priority.Lowest, plugin);
+        manager.registerEvent(Event.Type.PLAYER_QUIT, playerEventListener, Event.Priority.Lowest, plugin);
 
-        manager.registerEvent(Event.Type.PLAYER_RESPAWN, playerEventListener, Event.Priority.Normal, plugin);
-        manager.registerEvent(Event.Type.PLAYER_TELEPORT, playerEventListener, Event.Priority.Normal, plugin);
-        manager.registerEvent(Event.Type.PLAYER_PORTAL, playerEventListener, Event.Priority.Normal, plugin);
+        manager.registerEvent(Event.Type.PLAYER_RESPAWN, playerEventListener, Event.Priority.Lowest, plugin);
+        manager.registerEvent(Event.Type.PLAYER_TELEPORT, playerEventListener, Event.Priority.Lowest, plugin);
+        manager.registerEvent(Event.Type.PLAYER_PORTAL, playerEventListener, Event.Priority.Lowest, plugin);
 
         ServerListener serverListener = new BukkitEvents();
 
