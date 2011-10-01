@@ -93,7 +93,7 @@ public class BukkitPermissions {
         manager.registerEvent(Event.Type.PLUGIN_DISABLE, serverListener, Event.Priority.Normal, plugin);
     }
 
-    private void collectPermissions() {
+    public void collectPermissions() {
         registeredPermissions.clear();
         for (Plugin bukkitPlugin : Bukkit.getServer().getPluginManager().getPlugins()) {
         	for(Permission permission : bukkitPlugin.getDescription().getPermissions())
@@ -134,8 +134,8 @@ public class BukkitPermissions {
         Boolean value;
         for (Permission permission : registeredPermissions) {
         	value = worldData.getPermissionsHandler().checkUserPermission(user, permission.getName());
-
-            attachment.setPermission(permission, value);
+        	if (value == true)
+        		attachment.setPermission(permission, value);
         }
         
         // Add any missing permissions for this player (non bukkit plugins)
