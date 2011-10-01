@@ -22,6 +22,7 @@ import org.anjocaido.groupmanager.dataholder.OverloadedWorldHolder;
 import org.anjocaido.groupmanager.permissions.AnjoPermissionsHandler;
 import org.anjocaido.groupmanager.utils.Tasks;
 import org.bukkit.entity.Player;
+import org.bukkit.util.config.ConfigurationNode;
 
 /**
  *
@@ -85,6 +86,8 @@ public class WorldsHolder {
         Map<String, Object> mirrorsMap = plugin.getConfig().getMirrorsMap();
         if (mirrorsMap != null) {
             for (String source : mirrorsMap.keySet()) {
+            	// Make sure all non mirrored worlds have a set of data files.
+            	setupWorldFolder(source);
                 if (mirrorsMap.get(source) instanceof ArrayList) {
                     ArrayList mirrorList = (ArrayList) mirrorsMap.get(source);
                     for (Object o : mirrorList) {
@@ -246,17 +249,24 @@ public class WorldsHolder {
     }
 
     private void verifyFirstRun() {
+        
+        Properties server = new Properties();
+        try {
+            server.load(new FileInputStream(new File("server.properties")));
+            serverDefaultWorldName = server.getProperty("level-name").toLowerCase();
+            setupWorldFolder(serverDefaultWorldName);
+        } catch (IOException ex) {
+            GroupManager.logger.log(Level.SEVERE, null, ex);
+        }
+        
+    }
+        
+    private void setupWorldFolder(String worldName) {
         worldsFolder = new File(plugin.getDataFolder(), "worlds");
         if (!worldsFolder.exists()) {
             worldsFolder.mkdirs();
         }
-        Properties server = new Properties();
-        try {
-            server.load(new FileInputStream(new File("server.properties")));
-        } catch (IOException ex) {
-            GroupManager.logger.log(Level.SEVERE, null, ex);
-        }
-        serverDefaultWorldName = server.getProperty("level-name").toLowerCase();
+        
         File defaultWorldFolder = new File(worldsFolder, serverDefaultWorldName);
         if (!defaultWorldFolder.exists()) {
             defaultWorldFolder.mkdirs();

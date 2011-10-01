@@ -25,3 +25,9 @@ v 1.1:
 v 1.2:
 	- Changed priority of Registered events to lowest.
 	- Fixed an issue with superperms where plugins define perms with inheritance after the root perms
+	- Rewrote Config loading to use Bukkits Configuration features
+	- Added an opOverride setting in config.
+	  If present and set to false, op's will not get overriding permissions in GroupManager.
+	  (one op will not be able to alter another op's settings)
+	- GM will now create all relevant world data files for non mirrored worlds.
+	  (for all worlds named in config.yml)
