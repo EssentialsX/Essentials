@@ -53,6 +53,7 @@ public class WorldsHolder {
      */
     public WorldsHolder(GroupManager plugin) {
         this.plugin = plugin;
+        // Setup folders and check files exist for the primary world
         verifyFirstRun();
         initialLoad();
         if (defaultWorld == null) {
@@ -61,17 +62,26 @@ public class WorldsHolder {
     }
 
     private void initialLoad() {
+    	// load the initial world
         initialWorldLoading();
+        // Configure and load any mirrors and additional worlds as defined in config.yml
         mirrorSetUp();
+        // search the worlds folder for any manually created worlds (not listed in config.yml)
+        loadAllSearchedWorlds();
     }
 
     private void initialWorldLoading() {
         //LOAD EVERY WORLD POSSIBLE
         loadWorld(serverDefaultWorldName);
         defaultWorld = worldsData.get(serverDefaultWorldName);
-
+    }
+    
+    private void loadAllSearchedWorlds() {
         for (File folder : worldsFolder.listFiles()) {
-            if (folder.getName().equalsIgnoreCase(serverDefaultWorldName)) {
+        	if (folder.isDirectory())
+        		GroupManager.logger.info("World Found: " + folder.getName());
+        	
+        	if (worldsData.containsKey(folder.getName().toLowerCase())) {
                 continue;
             }
             if (folder.isDirectory()) {
@@ -88,6 +98,10 @@ public class WorldsHolder {
             for (String source : mirrorsMap.keySet()) {
             	// Make sure all non mirrored worlds have a set of data files.
             	setupWorldFolder(source);
+            	// Load the world data
+            	if (!worldsData.containsKey(source.toLowerCase()))
+            		loadWorld(source);
+            	
                 if (mirrorsMap.get(source) instanceof ArrayList) {
                     ArrayList mirrorList = (ArrayList) mirrorsMap.get(source);
                     for (Object o : mirrorList) {
@@ -267,7 +281,7 @@ public class WorldsHolder {
             worldsFolder.mkdirs();
         }
         
-        File defaultWorldFolder = new File(worldsFolder, serverDefaultWorldName);
+        File defaultWorldFolder = new File(worldsFolder, worldName);
         if (!defaultWorldFolder.exists()) {
             defaultWorldFolder.mkdirs();
         }
