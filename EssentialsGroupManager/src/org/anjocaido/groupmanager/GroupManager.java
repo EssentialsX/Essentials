@@ -59,7 +59,7 @@ public class GroupManager extends JavaPlugin {
     private GMConfiguration config;
     private GMLoggerHandler ch;
     public static BukkitPermissions BukkitPermissions;
-    private WorldListener WorldEvents;
+    private static  WorldListener WorldEvents;
     public static final Logger logger = Logger.getLogger(GroupManager.class.getName());
     
     //PERMISSIONS FOR COMMAND BEING LOADED
@@ -74,6 +74,10 @@ public class GroupManager extends JavaPlugin {
             worldsHolder.saveChanges();
         }
         disableScheduler();
+        
+        WorldEvents = null;
+        BukkitPermissions = null;
+        
         // EXAMPLE: Custom code, here we just output some info so we can check all is well
         PluginDescriptionFile pdfFile = this.getDescription();
         System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is disabled!");
@@ -99,11 +103,9 @@ public class GroupManager extends JavaPlugin {
             throw new IllegalStateException("An error ocurred while loading GroupManager");
         }
         
-        // Setup the world listener and bukkit permissions to handle events.
+        // Initialize the world listener and bukkit permissions to handle events.
         WorldEvents = new GMWorldListener(this);
         BukkitPermissions = new BukkitPermissions(this);
-        
-        this.getServer().getPluginManager().registerEvent(Event.Type.WORLD_INIT, WorldEvents, Event.Priority.Lowest, this);
         
         enableScheduler();
         
@@ -117,7 +119,6 @@ public class GroupManager extends JavaPlugin {
         	setLoaded(true);
         }
 
-        //setLoaded(true);
         System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
     }
     

@@ -1,9 +1,9 @@
 package org.anjocaido.groupmanager.events;
 
 import org.anjocaido.groupmanager.GroupManager;
+import org.bukkit.event.Event;
 import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.event.world.WorldListener;
-
 
 
 /**
@@ -18,7 +18,12 @@ public class GMWorldListener extends WorldListener {
 
 	public GMWorldListener(GroupManager instance) {
 		plugin = instance;
+		registerEvents();
 	}
+	
+	private void registerEvents() {
+    	plugin.getServer().getPluginManager().registerEvent(Event.Type.WORLD_INIT, this, Event.Priority.Lowest, plugin);
+    }
 	
 	@Override
 	public void onWorldInit(WorldInitEvent event) {
@@ -29,8 +34,10 @@ public class GMWorldListener extends WorldListener {
 			GroupManager.logger.info("Creating data for: " + worldName);
 			plugin.getWorldsHolder().setupWorldFolder(worldName);
 			plugin.getWorldsHolder().loadWorld(worldName);
-			if (plugin.getWorldsHolder().isInList(worldName))
+			if (plugin.getWorldsHolder().isInList(worldName)) {
 				GroupManager.logger.info("Don't forget to configure/mirror this world in config.yml.");
-		}	
+			} else
+				GroupManager.logger.severe("Failed to configure this world.");
+		}
 	}
 }
