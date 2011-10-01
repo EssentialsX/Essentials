@@ -33,3 +33,5 @@ v 1.2:
 	  (for all worlds named in config.yml)
 	- Attempt to stop GM wiping groups/users yml's on a bad shut down.
 	- Added event handling to manage new world creation at runtime.
+	- Added the ability to handle unknown worlds at server start.
+	  (GM will create the data files for any worlds it finds which are not in the config.yml)
