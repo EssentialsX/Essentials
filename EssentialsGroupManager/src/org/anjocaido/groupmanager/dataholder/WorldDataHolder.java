@@ -767,13 +767,15 @@ public class WorldDataHolder {
             aGroupMap.put("permissions", group.getPermissionList());
         }
 
-        DumperOptions opt = new DumperOptions();
-        opt.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-        final Yaml yaml = new Yaml(opt);
-        try {
-            yaml.dump(root, new OutputStreamWriter(new FileOutputStream(groupsFile), "UTF-8"));
-        } catch (UnsupportedEncodingException ex) {
-        } catch (FileNotFoundException ex) {
+        if (!root.isEmpty()) {
+	        DumperOptions opt = new DumperOptions();
+	        opt.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+	        final Yaml yaml = new Yaml(opt);
+	        try {
+	            yaml.dump(root, new OutputStreamWriter(new FileOutputStream(groupsFile), "UTF-8"));
+	        } catch (UnsupportedEncodingException ex) {
+	        } catch (FileNotFoundException ex) {
+	        }
         }
 
         /*FileWriter tx = null;
@@ -829,13 +831,16 @@ public class WorldDataHolder {
             aUserMap.put("subgroups", user.subGroupListStringCopy());
             //END SUBGROUPS NODE - BETA
         }
-        DumperOptions opt = new DumperOptions();
-        opt.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-        final Yaml yaml = new Yaml(opt);
-        try {
-            yaml.dump(root, new OutputStreamWriter(new FileOutputStream(usersFile), "UTF-8"));
-        } catch (UnsupportedEncodingException ex) {
-        } catch (FileNotFoundException ex) {
+        
+        if (!root.isEmpty()) {
+	        DumperOptions opt = new DumperOptions();
+	        opt.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+	        final Yaml yaml = new Yaml(opt);
+	        try {
+	            yaml.dump(root, new OutputStreamWriter(new FileOutputStream(usersFile), "UTF-8"));
+	        } catch (UnsupportedEncodingException ex) {
+	        } catch (FileNotFoundException ex) {
+	        }
         }
         /*FileWriter tx = null;
         try {

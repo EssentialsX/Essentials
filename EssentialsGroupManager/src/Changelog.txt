@@ -31,3 +31,4 @@ v 1.2:
 	  (one op will not be able to alter another op's settings)
 	- GM will now create all relevant world data files for non mirrored worlds.
 	  (for all worlds named in config.yml)
+	- Attempt to stop GM wiping groups/users yml's on a bad shut down.
