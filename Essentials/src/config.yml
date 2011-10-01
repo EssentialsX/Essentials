@@ -92,6 +92,7 @@ spawnmob-limit: 10
 warn-on-smite: true
 
 # The message of the day, displayed on connect and by typing /motd.
+# Valid tags are: {PLAYER}, {IP}, {BALANCE}, {MAILS}, {WORLD}, {ONLINE}, {UNIQUE}, {PLAYERLIST}
 motd:
   - '&cWelcome, {PLAYER}&c!'
   - '&fType &c/help&f for a list of commands.'
@@ -485,7 +486,7 @@ protect:
     use: true
 
     # Should we tell people they are not allowed to build
-    warn-on-build-disallow: false
+    warn-on-build-disallow: true
 
 
     # Disable weather options
