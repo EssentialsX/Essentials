@@ -22,7 +22,6 @@ import org.anjocaido.groupmanager.dataholder.OverloadedWorldHolder;
 import org.anjocaido.groupmanager.permissions.AnjoPermissionsHandler;
 import org.anjocaido.groupmanager.utils.Tasks;
 import org.bukkit.entity.Player;
-import org.bukkit.util.config.ConfigurationNode;
 
 /**
  *
@@ -275,7 +274,7 @@ public class WorldsHolder {
         
     }
         
-    private void setupWorldFolder(String worldName) {
+    public void setupWorldFolder(String worldName) {
         worldsFolder = new File(plugin.getDataFolder(), "worlds");
         if (!worldsFolder.exists()) {
             worldsFolder.mkdirs();

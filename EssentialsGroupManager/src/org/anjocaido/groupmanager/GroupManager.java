@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.anjocaido.groupmanager.dataholder.worlds.WorldsHolder;
+import org.anjocaido.groupmanager.events.GMWorldListener;
 import org.anjocaido.groupmanager.utils.GMLoggerHandler;
 import org.anjocaido.groupmanager.utils.PermissionCheckResult;
 import org.anjocaido.groupmanager.utils.Tasks;
@@ -32,8 +33,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.world.WorldListener;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+
 
 @SuppressWarnings("unused")
 /**
@@ -55,6 +59,7 @@ public class GroupManager extends JavaPlugin {
     private GMConfiguration config;
     private GMLoggerHandler ch;
     public static BukkitPermissions BukkitPermissions;
+    private WorldListener WorldEvents;
     public static final Logger logger = Logger.getLogger(GroupManager.class.getName());
     
     //PERMISSIONS FOR COMMAND BEING LOADED
@@ -94,8 +99,12 @@ public class GroupManager extends JavaPlugin {
             throw new IllegalStateException("An error ocurred while loading GroupManager");
         }
         
+        // Setup the world listener and bukkit permissions to handle events.
+        WorldEvents = new GMWorldListener(this);
         BukkitPermissions = new BukkitPermissions(this);
-
+        
+        this.getServer().getPluginManager().registerEvent(Event.Type.WORLD_INIT, WorldEvents, Event.Priority.Lowest, this);
+        
         enableScheduler();
         
         /*
@@ -111,6 +120,8 @@ public class GroupManager extends JavaPlugin {
         //setLoaded(true);
         System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
     }
+    
+    
 
     public static boolean isLoaded() {
 		return isLoaded;
