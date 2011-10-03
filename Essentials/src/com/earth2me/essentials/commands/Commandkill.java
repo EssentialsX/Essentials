@@ -23,6 +23,10 @@ public class Commandkill extends EssentialsCommand
 
 		for (Player p : server.matchPlayer(args[0]))
 		{
+			EntityDamageEvent ede = new EntityDamageEvent(p, EntityDamageEvent.DamageCause.CUSTOM, 1000);
+            		server.getPluginManager().callEvent(ede);
+            		//if (ede.isCancelled()) return;
+            		
 			p.setHealth(0);
 			sender.sendMessage(Util.format("kill", p.getDisplayName()));
 		}
