@@ -266,9 +266,9 @@ public class Util
 			throw new Exception(Util.i18n("destinationNotSet"));
 		}
 		final World world = loc.getWorld();
-		int x = (int)Math.round(loc.getX());
+		int x = loc.getBlockX();
 		int y = (int)Math.round(loc.getY());
-		int z = (int)Math.round(loc.getZ());
+		int z = loc.getBlockZ();
 	
 		while (isBlockAboveAir(world, x, y, z))
 		{
