@@ -223,7 +223,7 @@ public class EssentialsSign
 			if (signblock.getType() == Material.WALL_SIGN)
 			{
 				final org.bukkit.material.Sign signMat = (org.bukkit.material.Sign)signblock.getState().getData();
-				if (signMat.getFacing() == blockFace && isValidSign(new BlockSign(signblock)))
+				if (signMat != null && signMat.getFacing() == blockFace && isValidSign(new BlockSign(signblock)))
 				{
 					return true;
 				}
