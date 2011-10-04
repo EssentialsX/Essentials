@@ -100,114 +100,11 @@ public class EssentialsPlayerListener extends PlayerListener
 			return;
 		}
 
-		Location afk = user.getAfkPosition();
+		final Location afk = user.getAfkPosition();
 		if (afk == null || !event.getTo().getWorld().equals(afk.getWorld()) || afk.distanceSquared(event.getTo()) > 9)
 		{
 			user.updateActivity(true);
 		}
-
-		if (!ess.getSettings().getNetherPortalsEnabled())
-		{
-			return;
-		}
-
-		final Block block = event.getPlayer().getWorld().getBlockAt(event.getTo().getBlockX(), event.getTo().getBlockY(), event.getTo().getBlockZ());
-		final List<World> worlds = server.getWorlds();
-
-		if (block.getType() == Material.PORTAL && worlds.size() > 1 && user.isAuthorized("essentials.portal"))
-		{
-			if (user.getJustPortaled())
-			{
-				return;
-			}
-
-			World nether = server.getWorld(ess.getSettings().getNetherName());
-			if (nether == null)
-			{
-				for (World world : worlds)
-				{
-					if (world.getEnvironment() == World.Environment.NETHER)
-					{
-						nether = world;
-						break;
-					}
-				}
-				if (nether == null)
-				{
-					return;
-				}
-			}
-			final World world = user.getWorld() == nether ? worlds.get(0) : nether;
-
-			double factor;
-			if (user.getWorld().getEnvironment() == World.Environment.NETHER && world.getEnvironment() == World.Environment.NORMAL)
-			{
-				factor = ess.getSettings().getNetherRatio();
-			}
-			else if (user.getWorld().getEnvironment() == World.Environment.NORMAL && world.getEnvironment() == World.Environment.NETHER)
-			{
-				factor = 1.0 / ess.getSettings().getNetherRatio();
-			}
-			else
-			{
-				factor = 1.0;
-			}
-
-			Location loc = event.getTo();
-			int x = loc.getBlockX();
-			int y = loc.getBlockY();
-			int z = loc.getBlockZ();
-
-			if (user.getWorld().getBlockAt(x, y, z - 1).getType() == Material.PORTAL)
-			{
-				z--;
-			}
-			if (user.getWorld().getBlockAt(x - 1, y, z).getType() == Material.PORTAL)
-			{
-				x--;
-			}
-
-			x = (int)(x * factor);
-			z = (int)(z * factor);
-			loc = new Location(world, x + .5, y, z + .5);
-
-			Block dest = world.getBlockAt(x, y, z);
-			NetherPortal portal = NetherPortal.findPortal(dest);
-			if (portal == null)
-			{
-				if (world.getEnvironment() == World.Environment.NETHER || ess.getSettings().getGenerateExitPortals())
-				{
-					portal = NetherPortal.createPortal(dest);
-					LOGGER.info(Util.format("userCreatedPortal", event.getPlayer().getName()));
-					user.sendMessage(Util.i18n("generatingPortal"));
-					loc = portal.getSpawn();
-				}
-			}
-			else
-			{
-				LOGGER.info(Util.format("userUsedPortal", event.getPlayer().getName()));
-				user.sendMessage(Util.i18n("usingPortal"));
-				loc = portal.getSpawn();
-			}
-
-			event.setFrom(loc);
-			event.setTo(loc);
-			try
-			{
-				user.getTeleport().now(loc, new Trade("portal", ess));
-			}
-			catch (Exception ex)
-			{
-				user.sendMessage(ex.getMessage());
-			}
-			user.setJustPortaled(true);
-			user.sendMessage(Util.i18n("teleportingPortal"));
-
-			event.setCancelled(true);
-			return;
-		}
-
-		user.setJustPortaled(false);
 	}
 
 	@Override

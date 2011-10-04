@@ -17,25 +17,27 @@ public class Commandworld extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		World world;
-		List<World> worlds = server.getWorlds();
 
 		if (args.length < 1)
 		{
-			World nether = server.getWorld(ess.getSettings().getNetherName());
-			if (nether == null) {
-				for (World world2 : worlds)
+			World nether = null;
+			
+			final List<World> worlds = server.getWorlds();
+
+			for (World world2 : worlds)
+			{
+				if (world2.getEnvironment() == World.Environment.NETHER)
 				{
-					if (world2.getEnvironment() == World.Environment.NETHER) {
-						nether = world2;
-						break;
-					}
+					nether = world2;
+					break;
 				}
-				if (nether == null) {
-					return;
-				}
+			}
+			if (nether == null)
+			{
+				return;
 			}
 			world = user.getWorld() == nether ? worlds.get(0) : nether;
 		}
@@ -54,23 +56,22 @@ public class Commandworld extends EssentialsCommand
 		double factor;
 		if (user.getWorld().getEnvironment() == World.Environment.NETHER && world.getEnvironment() == World.Environment.NORMAL)
 		{
-			factor = ess.getSettings().getNetherRatio();
+			factor = 8.0;
 		}
-		else if (user.getWorld().getEnvironment() != world.getEnvironment())
+		else if (user.getWorld().getEnvironment() == World.Environment.NORMAL && world.getEnvironment() == World.Environment.NETHER)
 		{
-			factor = 1.0 / ess.getSettings().getNetherRatio();
+			factor = 1.0 / 8.0;
 		}
-		else
-		{
+		else {
 			factor = 1.0;
 		}
 
-		Location loc = user.getLocation();
-		loc = new Location(world, loc.getBlockX() * factor + .5, loc.getBlockY(), loc.getBlockZ() * factor + .5);
+		final Location loc = user.getLocation();
+		final Location target = new Location(world, loc.getBlockX() * factor + .5, loc.getBlockY(), loc.getBlockZ() * factor + .5);
 
-		Trade charge = new Trade(this.getName(), ess);
+		final Trade charge = new Trade(this.getName(), ess);
 		charge.isAffordableFor(user);
-		user.getTeleport().teleport(loc, charge);
+		user.getTeleport().teleport(target, charge);
 		throw new NoChargeException();
 	}
 }
