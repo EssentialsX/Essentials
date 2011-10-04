@@ -744,4 +744,16 @@ public class PlayerWrapper implements Player
 		base.setSprinting(bln);
 	}
 	
+	@Override
+	public void setPlayerListName(String name)
+	{
+		base.setPlayerListName(name);
+	}
+
+	@Override
+	public String getPlayerListName()
+	{
+		return base.getPlayerListName();
+	}
+	
 }
