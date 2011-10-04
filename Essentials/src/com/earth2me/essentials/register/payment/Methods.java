@@ -2,6 +2,7 @@ package com.earth2me.essentials.register.payment;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
@@ -168,7 +169,7 @@ public class Methods
 			}
 
 			plugin = manager.getPlugin(name);
-			if (plugin == null)
+			if (plugin == null || !plugin.isEnabled())
 			{
 				continue;
 			}
