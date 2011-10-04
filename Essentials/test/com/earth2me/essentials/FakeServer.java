@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.avaje.ebean.config.ServerConfig;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,9 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
+import org.bukkit.WorldCreator;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
@@ -43,41 +46,48 @@ public class FakeServer implements Server
 		return "1.0";
 	}
 
+	@Override
 	public Player[] getOnlinePlayers()
 	{
 		return players.toArray(new Player[0]);
 	}
-	
+
 	public void setOnlinePlayers(List<Player> players)
 	{
 		this.players = players;
 	}
 
+	@Override
 	public int getMaxPlayers()
 	{
 		return 100;
 	}
 
+	@Override
 	public int getPort()
 	{
 		return 25565;
 	}
 
+	@Override
 	public String getIp()
 	{
 		return "127.0.0.1";
 	}
 
+	@Override
 	public String getServerName()
 	{
 		return "Test Server";
 	}
 
+	@Override
 	public String getServerId()
 	{
 		return "Test Server";
 	}
 
+	@Override
 	public int broadcastMessage(String string)
 	{
 		int i = 0;
@@ -89,11 +99,19 @@ public class FakeServer implements Server
 		return i;
 	}
 
+	@Override
 	public String getUpdateFolder()
 	{
 		return "update";
 	}
 
+	@Override
+	public File getUpdateFolderFile()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
 	public Player getPlayer(String string)
 	{
 		for (Player player : players)
@@ -106,6 +124,7 @@ public class FakeServer implements Server
 		return null;
 	}
 
+	@Override
 	public List<Player> matchPlayer(String string)
 	{
 		List<Player> matches = new ArrayList<Player>();
@@ -119,15 +138,17 @@ public class FakeServer implements Server
 		return matches;
 	}
 
+	@Override
 	public PluginManager getPluginManager()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public BukkitScheduler getScheduler()
 	{
-		return new BukkitScheduler() {
-
+		return new BukkitScheduler()
+		{
 			@Override
 			public int scheduleSyncDelayedTask(Plugin plugin, Runnable r, long l)
 			{
@@ -215,16 +236,19 @@ public class FakeServer implements Server
 		};
 	}
 
+	@Override
 	public ServicesManager getServicesManager()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public List<World> getWorlds()
 	{
 		return worlds;
 	}
 
+	@Override
 	public World createWorld(String string, Environment e)
 	{
 		World w = new FakeWorld(string, e);
@@ -232,6 +256,7 @@ public class FakeServer implements Server
 		return w;
 	}
 
+	@Override
 	public World createWorld(String string, Environment e, long l)
 	{
 		World w = new FakeWorld(string, e);
@@ -239,45 +264,54 @@ public class FakeServer implements Server
 		return w;
 	}
 
+	@Override
 	public World getWorld(String string)
 	{
 		for (World world : worlds)
 		{
-			if (world.getName().equalsIgnoreCase(string)) {
+			if (world.getName().equalsIgnoreCase(string))
+			{
 				return world;
 			}
 		}
 		return null;
 	}
 
+	@Override
 	public void reload()
 	{
 	}
 
+	@Override
 	public Logger getLogger()
 	{
 		return Logger.getLogger("Minecraft");
 	}
 
+	@Override
 	public PluginCommand getPluginCommand(String string)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public void savePlayers()
 	{
 	}
 
+	@Override
 	public boolean dispatchCommand(CommandSender cs, String string)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public void configureDbConfig(ServerConfig sc)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public boolean addRecipe(Recipe recipe)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
@@ -287,7 +321,7 @@ public class FakeServer implements Server
 	{
 		players.add(base1);
 	}
-	
+
 	public OfflinePlayer createPlayer(String name, IEssentials ess)
 	{
 		OfflinePlayer player = new OfflinePlayer(name, ess);
@@ -295,41 +329,55 @@ public class FakeServer implements Server
 		return player;
 	}
 
+	@Override
 	public World createWorld(String string, Environment e, ChunkGenerator cg)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public World createWorld(String string, Environment e, long l, ChunkGenerator cg)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
+	public World createWorld(WorldCreator creator)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
 	public boolean unloadWorld(String string, boolean bln)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public boolean unloadWorld(World world, boolean bln)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public Map<String, String[]> getCommandAliases()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public int getSpawnRadius()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public void setSpawnRadius(int i)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public boolean getOnlineMode()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
@@ -340,6 +388,7 @@ public class FakeServer implements Server
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public World getWorld(UUID uuid)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
@@ -454,7 +503,19 @@ public class FakeServer implements Server
 	}
 
 	@Override
-	public void setDefaultGameMode(GameMode gm)
+	public void setDefaultGameMode(GameMode gamemode)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public ConsoleCommandSender getConsoleSender()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public Set getOperators()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}

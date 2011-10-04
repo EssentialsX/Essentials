@@ -34,6 +34,7 @@ public class Commandheal extends EssentialsCommand
 			user.healCooldown();
 		}
 		user.setHealth(20);
+		user.setFoodLevel(20);
 		user.sendMessage(Util.i18n("heal"));
 	}
 

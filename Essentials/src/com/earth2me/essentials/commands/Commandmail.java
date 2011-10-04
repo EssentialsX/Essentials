@@ -23,13 +23,15 @@ public class Commandmail extends EssentialsCommand
 			List<String> mail = user.getMails();
 			if (mail.isEmpty())
 			{
-				throw new Exception(Util.i18n("noMail"));
+				user.sendMessage(Util.i18n("noMail"));
+				throw new NoChargeException();
 			}
 			for (String s : mail)
 			{
 				user.sendMessage(s);
 			}
-			throw new Exception(Util.i18n("mailClear"));
+			user.sendMessage(Util.i18n("mailClear"));
+			return;
 		}
 		if (args.length >= 3 && "send".equalsIgnoreCase(args[0]))
 		{
@@ -62,7 +64,8 @@ public class Commandmail extends EssentialsCommand
 		if (args.length >= 1 && "clear".equalsIgnoreCase(args[0]))
 		{
 			user.setMails(null);
-			throw new Exception(Util.i18n("mailCleared"));
+			user.sendMessage(Util.i18n("mailCleared"));
+			return;
 		}
 		throw new NotEnoughArgumentsException();
 	}

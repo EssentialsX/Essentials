@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 /**
  * Original authors: toi & Raphfrk
  */
+@Deprecated
 public class TargetBlock
 {
 	private transient final Location location;

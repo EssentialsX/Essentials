@@ -4,7 +4,7 @@ import org.bukkit.plugin.Plugin;
 
 
 /**
- * Method.java
+ * Interface to be implemented by a payment method.
  *
  * @author Nijikokun <nijikokun@shortmail.com> (@nijikokun)
  * @copyright Copyright (C) 2011
@@ -40,6 +40,14 @@ public interface Method
 	 * @return <code>String</code> Plugin version.
 	 */
 	public String getVersion();
+
+	/**
+	 * Returns the amount of decimal places that get stored
+	 * NOTE: it will return -1 if there is no rounding
+	 * 
+	 * @return <code>int</code> for each decimal place
+	 */
+	public int fractionalDigits();
 
 	/**
 	 * Formats amounts into this payment methods style of currency display.

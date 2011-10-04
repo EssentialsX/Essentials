@@ -20,14 +20,12 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	private transient long lastOnlineActivity;
 	private transient long lastActivity = System.currentTimeMillis();
 	private boolean hidden = false;
-	private transient boolean godStateBeforeAfk;
 	private transient Location afkPosition;
 
 	User(final Player base, final IEssentials ess)
 	{
 		super(base, ess);
 		teleport = new Teleport(this, ess);
-		godStateBeforeAfk = isGodModeEnabled();
 		afkPosition = getLocation();
 	}
 
@@ -284,6 +282,12 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 		return nickname.toString();
 	}
+	
+	public void setDisplayNick(String name)
+	{
+		setDisplayName(name);
+		setPlayerListName(name);
+	}
 
 	public Teleport getTeleport()
 	{
@@ -348,15 +352,6 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public void setAfk(final boolean set)
 	{
 		this.setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") ? true : set);
-		if (set && !isAfk() && ess.getSettings().getFreezeAfkPlayers())
-		{
-			godStateBeforeAfk = isGodModeEnabled();
-			setGodModeEnabled(true);
-		}
-		if (!set && isAfk() && ess.getSettings().getFreezeAfkPlayers())
-		{
-			setGodModeEnabled(godStateBeforeAfk);
-		}
 		if (set && !isAfk()) {
 			afkPosition = getLocation();
 		}
@@ -381,7 +376,8 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		this.hidden = hidden;
 	}
 
-	public void checkJailTimeout(final long currentTime)
+	//Returns true if status expired during this check
+	public boolean checkJailTimeout(final long currentTime)
 	{
 		if (getJailTimeout() > 0 && getJailTimeout() < currentTime && isJailed())
 		{
@@ -396,26 +392,34 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			catch (Exception ex)
 			{
 			}
+			return true;
 		}
+		return false;
 	}
 
-	public void checkMuteTimeout(final long currentTime)
+	//Returns true if status expired during this check
+	public boolean checkMuteTimeout(final long currentTime)
 	{
 		if (getMuteTimeout() > 0 && getMuteTimeout() < currentTime && isMuted())
 		{
 			setMuteTimeout(0);
 			sendMessage(Util.i18n("canTalkAgain"));
 			setMuted(false);
+			return true;
 		}
+		return false;
 	}
 
-	public void checkBanTimeout(final long currentTime)
+	//Returns true if status expired during this check
+	public boolean checkBanTimeout(final long currentTime)
 	{
 		if (getBanTimeout() > 0 && getBanTimeout() < currentTime && isBanned())
 		{
 			setBanTimeout(0);
 			setBanned(false);
+			return true;
 		}
+		return false;
 	}
 
 	public void updateActivity(final boolean broadcast)
@@ -451,7 +455,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			}
 		}
 		final long autoafk = ess.getSettings().getAutoAfk();
-		if (!isAfk() && autoafk > 0 && lastActivity + autoafk * 1000 < System.currentTimeMillis())
+		if (!isAfk() && autoafk > 0 && lastActivity + autoafk * 1000 < System.currentTimeMillis() && isAuthorized("essentials.afk"))
 		{
 			setAfk(true);
 			if (!isHidden()) {
@@ -463,5 +467,20 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public Location getAfkPosition()
 	{
 		return afkPosition;
+	}
+
+	@Override
+	public boolean toggleGodModeEnabled()
+	{
+		if (!isGodModeEnabled()) {
+			setFoodLevel(20);
+		}
+		return super.toggleGodModeEnabled();
+	}
+
+	@Override
+	public boolean isGodModeEnabled()
+	{
+		return super.isGodModeEnabled() || (isAfk() && ess.getSettings().getFreezeAfkPlayers());
 	}
 }

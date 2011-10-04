@@ -26,11 +26,10 @@ public enum Mob
 	SPIDER("Spider", Enemies.ENEMY, CreatureType.SPIDER),
 	SQUID("Squid", Enemies.FRIENDLY, CreatureType.SQUID),
 	ZOMBIE("Zombie", Enemies.ENEMY, CreatureType.ZOMBIE),
-	MONSTER("Monster", Enemies.ENEMY, CreatureType.MONSTER),
 	WOLF("Wolf", Enemies.NEUTRAL, CreatureType.WOLF),
 	CAVESPIDER("CaveSpider", Enemies.ENEMY, CreatureType.CAVE_SPIDER),
-	ENDERMAN("Enderman", Enemies.ENEMY, CreatureType.ENDERMAN),
-	SILVERFISH("Silverfish", Enemies.ENEMY, CreatureType.SILVERFISH);
+	ENDERMAN("Enderman", Enemies.ENEMY, "", CreatureType.ENDERMAN),
+	SILVERFISH("Silverfish", Enemies.ENEMY, "", CreatureType.SILVERFISH);
 
 	public static final Logger logger = Logger.getLogger("Minecraft");
 

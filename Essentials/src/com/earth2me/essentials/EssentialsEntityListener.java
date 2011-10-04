@@ -8,6 +8,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityListener;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -78,6 +79,17 @@ public class EssentialsEntityListener extends EntityListener
 				user.setLastLocation();
 				user.sendMessage(Util.i18n("backAfterDeath"));
 			}
+		}
+	}
+
+	@Override
+	public void onFoodLevelChange(FoodLevelChangeEvent event)
+	{		
+		if (event.getEntity() instanceof Player && ess.getUser(event.getEntity()).isGodModeEnabled())
+		{		
+			//TODO: Remove the following line, when we're happy to remove backwards compatability with 1185.
+			event.setFoodLevel(20);
+			event.setCancelled(true);
 		}
 	}
 }

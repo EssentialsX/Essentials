@@ -79,14 +79,11 @@ reclaim-onlogout: false
 # Should primitive spawn protection be enabled?  For most servers, this should be flase; it is better to use a third-party plugin to protect it.
 spawn-protection: false
 
-# Nether settings (switch between worlds with "/world nether" and "/world normal")
-# Sets whether the nether system is enabled, what folder to save the world in, and whether portals should teleport players between worlds.
+# Nether settings
+# Sets wether you want to change the default behaviour of the nether portals.
 nether:
-  enabled: false
-  folder: nether
   portals-enabled: false
   generate-exit-portals: false
-  ratio: 16
 
 # Mob limit on spawnmob
 spawnmob-limit: 10
@@ -95,6 +92,7 @@ spawnmob-limit: 10
 warn-on-smite: true
 
 # The message of the day, displayed on connect and by typing /motd.
+# Valid tags are: {PLAYER}, {IP}, {BALANCE}, {MAILS}, {WORLD}, {ONLINE}, {UNIQUE}, {PLAYERLIST}
 motd:
   - '&cWelcome, {PLAYER}&c!'
   - '&fType &c/help&f for a list of commands.'
@@ -262,10 +260,16 @@ bed-sethome: false
 # If no home is set send you to spawn when /home is used
 spawn-if-no-home: false
 
-# If users have essentials.sethome.multiple how many homes can they have
-# People with essentials.sethome.multiple.unlimited are not limited by this number
-multiple-homes: 5
-
+# Allow players to have multiple homes.
+# Define different amounts of multiple homes for different permissions, e.g. essentials.sethome.multiple.vip
+# People with essentials.sethome.multiple.unlimited are not limited by these numbers.
+sethome-multiple:  
+  # essentials.sethome.multiple
+  default: 3
+  # essentials.sethome.multiple.vip
+  vip: 5
+  # essentials.sethome.multiple.staff
+  staff: 10
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -422,6 +426,9 @@ protect:
       squid: false
       zombie: false
       wolf: false
+      cave_spider: false
+      enderman: false
+      silverfish: false
   
   # Maximum height the creeper should explode. -1 allows them to explode everywhere.
   # Set prevent.creeper-explosion to true, if you want to disable creeper explosions.
@@ -485,7 +492,7 @@ protect:
     use: true
 
     # Should we tell people they are not allowed to build
-    warn-on-build-disallow: false
+    warn-on-build-disallow: true
 
 
     # Disable weather options

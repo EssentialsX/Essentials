@@ -73,7 +73,11 @@ public interface ISettings extends IConf
 
 	boolean getRespawnAtHome();
 	
-	int getMultipleHomes();
+	List getMultipleHomes();
+	
+	int getHomeLimit(String set);
+	
+	int getHomeLimit(User user);
 
 	boolean getSortListByGroups();
 

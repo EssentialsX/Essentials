@@ -695,11 +695,34 @@ public class OfflinePlayer implements Player
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
-	
+
 	@Override
 	public Location getBedSpawnLocation()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
-	
+
+	@Override
+	public boolean isSprinting()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setSprinting(boolean bln)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setPlayerListName(String name)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public String getPlayerListName()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }

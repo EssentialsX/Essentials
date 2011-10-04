@@ -46,11 +46,11 @@ public class EssentialsPlayerListener extends PlayerListener
 	public void onPlayerRespawn(final PlayerRespawnEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
-		user.setDisplayName(user.getNick());
+		user.setDisplayNick(user.getNick());
 		updateCompass(user);
 		if (ess.getSettings().changeDisplayName())
 		{
-			user.setDisplayName(user.getNick());
+			user.setDisplayNick(user.getNick());
 		}
 	}
 
@@ -76,7 +76,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		user.updateActivity(true);
 		if (ess.getSettings().changeDisplayName())
 		{
-			user.setDisplayName(user.getNick());
+			user.setDisplayNick(user.getNick());
 		}
 	}
 
@@ -94,21 +94,15 @@ public class EssentialsPlayerListener extends PlayerListener
 			final Location from = event.getFrom();
 			final Location to = event.getTo().clone();
 			to.setX(from.getX());
-			to.setY(from.getY());
+			to.setY(from.getBlock().getTypeId() == 0 ? from.getY() - 1 : from.getY());
 			to.setZ(from.getZ());
-			try
-			{
-				event.setTo(Util.getSafeDestination(to));
-			}
-			catch (Exception ex)
-			{
-				event.setTo(to);
-			}
+			event.setTo(to);
 			return;
 		}
 
 		Location afk = user.getAfkPosition();
-		if (afk == null || !event.getTo().getWorld().equals(afk.getWorld()) || afk.distanceSquared(event.getTo()) > 9) {
+		if (afk == null || !event.getTo().getWorld().equals(afk.getWorld()) || afk.distanceSquared(event.getTo()) > 9)
+		{
 			user.updateActivity(true);
 		}
 
@@ -268,7 +262,7 @@ public class EssentialsPlayerListener extends PlayerListener
 
 		if (ess.getSettings().changeDisplayName())
 		{
-			user.setDisplayName(user.getNick());
+			user.setDisplayNick(user.getNick());
 		}
 		user.updateActivity(false);
 		if (user.isAuthorized("essentials.sleepingignored"))
@@ -307,20 +301,21 @@ public class EssentialsPlayerListener extends PlayerListener
 	{
 		if (event.getResult() != Result.ALLOWED && event.getResult() != Result.KICK_FULL && event.getResult() != Result.KICK_BANNED)
 		{
+			LOGGER.log(Level.INFO, "Disconnecting user " + event.getPlayer().toString() + " due to " + event.getResult().toString());
 			return;
 		}
 		User user = ess.getUser(event.getPlayer());
 		user.setNPC(false);
 
 		final long currentTime = System.currentTimeMillis();
-		user.checkBanTimeout(currentTime);
+		boolean banExpired = user.checkBanTimeout(currentTime);
 		user.checkMuteTimeout(currentTime);
 		user.checkJailTimeout(currentTime);
 
-		if (user.isBanned())
+		if (banExpired == false && (user.isBanned() || event.getResult() == Result.KICK_BANNED))
 		{
 			final String banReason = user.getBanReason();
-			event.disallow(Result.KICK_BANNED, banReason != null && !banReason.isEmpty() ? banReason : Util.i18n("defaultBanReason"));
+			event.disallow(Result.KICK_BANNED, banReason != null && !banReason.isEmpty() && !banReason.equalsIgnoreCase("ban") ? banReason : Util.i18n("defaultBanReason"));
 			return;
 		}
 
@@ -356,7 +351,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		final User user = ess.getUser(event.getPlayer());
 		if (ess.getSettings().changeDisplayName())
 		{
-			user.setDisplayName(user.getNick());
+			user.setDisplayNick(user.getNick());
 		}
 		updateCompass(user);
 	}

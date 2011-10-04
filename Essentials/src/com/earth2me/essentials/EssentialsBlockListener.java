@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import java.util.logging.Logger;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -93,7 +94,7 @@ public class EssentialsBlockListener extends BlockListener
 			return;
 		}
 		boolean unlimitedForUser = user.hasUnlimited(is);
-		if (unlimitedForUser)
+		if (unlimitedForUser && user.getGameMode() == GameMode.SURVIVAL)
 		{
 			ess.scheduleSyncDelayedTask(
 					new Runnable()

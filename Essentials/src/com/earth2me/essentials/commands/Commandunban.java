@@ -21,11 +21,9 @@ public class Commandunban extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 		
-		String name;
 		try
 		{
-			User u = getPlayer(server, args, 0, true);
-			name = u.getName();
+			final User u = getPlayer(server, args, 0, true);
 			u.setBanned(false);
 			sender.sendMessage(Util.i18n("unbannedPlayer"));
 		}

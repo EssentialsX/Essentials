@@ -227,30 +227,36 @@ public class Util
 		AIR_MATERIALS.add(Material.SAPLING.getId());
 		AIR_MATERIALS.add(Material.POWERED_RAIL.getId());
 		AIR_MATERIALS.add(Material.DETECTOR_RAIL.getId());
+		AIR_MATERIALS.add(Material.LONG_GRASS.getId());
 		AIR_MATERIALS.add(Material.DEAD_BUSH.getId());
-		AIR_MATERIALS.add(Material.RAILS.getId());
 		AIR_MATERIALS.add(Material.YELLOW_FLOWER.getId());
 		AIR_MATERIALS.add(Material.RED_ROSE.getId());
-		AIR_MATERIALS.add(Material.RED_MUSHROOM.getId());
 		AIR_MATERIALS.add(Material.BROWN_MUSHROOM.getId());
+		AIR_MATERIALS.add(Material.RED_MUSHROOM.getId());	
+		AIR_MATERIALS.add(Material.TORCH.getId());
+		AIR_MATERIALS.add(Material.REDSTONE_WIRE.getId());
 		AIR_MATERIALS.add(Material.SEEDS.getId());
 		AIR_MATERIALS.add(Material.SIGN_POST.getId());
-		AIR_MATERIALS.add(Material.WALL_SIGN.getId());
+		AIR_MATERIALS.add(Material.WOODEN_DOOR.getId());
 		AIR_MATERIALS.add(Material.LADDER.getId());
-		AIR_MATERIALS.add(Material.SUGAR_CANE_BLOCK.getId());
-		AIR_MATERIALS.add(Material.REDSTONE_WIRE.getId());
+		AIR_MATERIALS.add(Material.RAILS.getId());
+		AIR_MATERIALS.add(Material.WALL_SIGN.getId());
+		AIR_MATERIALS.add(Material.LEVER.getId());
+		AIR_MATERIALS.add(Material.STONE_PLATE.getId());
+		AIR_MATERIALS.add(Material.IRON_DOOR_BLOCK.getId());
+		AIR_MATERIALS.add(Material.WOOD_PLATE.getId());	
 		AIR_MATERIALS.add(Material.REDSTONE_TORCH_OFF.getId());
 		AIR_MATERIALS.add(Material.REDSTONE_TORCH_ON.getId());
-		AIR_MATERIALS.add(Material.TORCH.getId());
-		AIR_MATERIALS.add(Material.SOIL.getId());
-		AIR_MATERIALS.add(Material.DIODE_BLOCK_OFF.getId());
-		AIR_MATERIALS.add(Material.DIODE_BLOCK_ON.getId());
-		AIR_MATERIALS.add(Material.TRAP_DOOR.getId());
 		AIR_MATERIALS.add(Material.STONE_BUTTON.getId());
-		AIR_MATERIALS.add(Material.STONE_PLATE.getId());
-		AIR_MATERIALS.add(Material.WOOD_PLATE.getId());
-		AIR_MATERIALS.add(Material.IRON_DOOR_BLOCK.getId());
-		AIR_MATERIALS.add(Material.WOODEN_DOOR.getId());
+		AIR_MATERIALS.add(Material.SUGAR_CANE_BLOCK.getId());		
+		AIR_MATERIALS.add(Material.DIODE_BLOCK_OFF.getId());
+		AIR_MATERIALS.add(Material.DIODE_BLOCK_ON.getId());		
+		AIR_MATERIALS.add(Material.TRAP_DOOR.getId());
+		AIR_MATERIALS.add(Material.PUMPKIN_STEM.getId());
+		AIR_MATERIALS.add(Material.MELON_STEM.getId());
+		AIR_MATERIALS.add(Material.VINE.getId());
+		//TODO: Add 1.9 materials
+				
 	}
 	
 	public static Location getSafeDestination(final Location loc) throws Exception
@@ -260,9 +266,9 @@ public class Util
 			throw new Exception(Util.i18n("destinationNotSet"));
 		}
 		final World world = loc.getWorld();
-		int x = (int)Math.round(loc.getX());
+		int x = loc.getBlockX();
 		int y = (int)Math.round(loc.getY());
-		int z = (int)Math.round(loc.getZ());
+		int z = loc.getBlockZ();
 	
 		while (isBlockAboveAir(world, x, y, z))
 		{
