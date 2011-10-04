@@ -365,15 +365,7 @@ public class GroupManager extends JavaPlugin {
                         sender.sendMessage(ChatColor.RED + "Can't modify player involving a group that you don't inherit.");
                         return false;
                     }
-                    if (!isConsole && !isOpOverride && (!permissionHandler.hasGroupInInheritance(auxUser.getGroup(), auxGroup.getName()) && !permissionHandler.hasGroupInInheritance(auxGroup, auxUser.getGroupName()))) {
-                        sender.sendMessage(ChatColor.RED + "Can't modify player using groups with different heritage line.");
-                        return false;
-                    }
-                    if (!isConsole && !isOpOverride && (!permissionHandler.hasGroupInInheritance(auxGroup, auxUser.getGroupName()))) {
-                        sender.sendMessage(ChatColor.RED + "The new group must be a higher rank.");
-                        return false;
-                    }
-                    
+                                        
                     //PARECE OK
                     auxUser.setGroup(auxGroup);
                     sender.sendMessage(ChatColor.YELLOW + "You changed player '" + auxUser.getName() + "' group to '" + auxGroup.getName() + "'.");
