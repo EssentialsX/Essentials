@@ -71,6 +71,29 @@ public class BOSE6 implements Method
 			   || this.BOSEconomy.isBankMember(bank, name);
 	}
 
+	public boolean createAccount(String name)
+	{
+		if (hasAccount(name))
+		{
+			return false;
+		}
+
+		this.BOSEconomy.registerPlayer(name);
+		return true;
+	}
+
+	public boolean createAccount(String name, Double balance)
+	{
+		if (hasAccount(name))
+		{
+			return false;
+		}
+
+		this.BOSEconomy.registerPlayer(name);
+		this.BOSEconomy.setPlayerMoney(name, balance, false);
+		return true;
+	}
+
 	public MethodAccount getAccount(String name)
 	{
 		if (!hasAccount(name))

@@ -67,6 +67,33 @@ public class iCo5 implements Method
 		return (hasBank(bank)) && com.iConomy.iConomy.getBank(bank).hasAccount(name);
 	}
 
+	public boolean createAccount(String name)
+	{
+		if (hasAccount(name))
+		{
+			return false;
+		}
+
+		return com.iConomy.iConomy.Accounts.create(name);
+	}
+
+	public boolean createAccount(String name, Double balance)
+	{
+		if (hasAccount(name))
+		{
+			return false;
+		}
+
+		if (!com.iConomy.iConomy.Accounts.create(name))
+		{
+			return false;
+		}
+
+		getAccount(name).set(balance);
+
+		return true;
+	}
+
 	public MethodAccount getAccount(String name)
 	{
 		return new iCoAccount(com.iConomy.iConomy.getAccount(name));
