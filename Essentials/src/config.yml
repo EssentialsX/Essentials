@@ -79,12 +79,6 @@ reclaim-onlogout: false
 # Should primitive spawn protection be enabled?  For most servers, this should be flase; it is better to use a third-party plugin to protect it.
 spawn-protection: false
 
-# Nether settings
-# Sets wether you want to change the default behaviour of the nether portals.
-nether:
-  portals-enabled: false
-  generate-exit-portals: false
-
 # Mob limit on spawnmob
 spawnmob-limit: 10
 
