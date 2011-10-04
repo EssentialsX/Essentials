@@ -286,7 +286,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public void setDisplayNick(String name)
 	{
 		setDisplayName(name);
-		setPlayerListName(name);
+		//TODO: Maybe we need to limit nick length, or try use a string trim.
+		if (name.length() <= 16) {
+			setPlayerListName(name);
+		}
 	}
 
 	public Teleport getTeleport()
