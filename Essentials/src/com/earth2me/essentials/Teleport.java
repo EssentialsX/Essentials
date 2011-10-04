@@ -256,7 +256,7 @@ public class Teleport implements Runnable
 
 	public void back() throws Exception
 	{
-		back(null);
+		now(new Target(user.getLastLocation()));
 	}
 
 	public void home(IUser user, String home, Trade chargeFor) throws Exception
