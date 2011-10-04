@@ -282,6 +282,12 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 		return nickname.toString();
 	}
+	
+	public void setDisplayNick(String name)
+	{
+		setDisplayName(name);
+		setPlayerListName(name);
+	}
 
 	public Teleport getTeleport()
 	{

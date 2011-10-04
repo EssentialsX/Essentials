@@ -46,11 +46,11 @@ public class EssentialsPlayerListener extends PlayerListener
 	public void onPlayerRespawn(final PlayerRespawnEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
-		user.setDisplayName(user.getNick());
+		user.setDisplayNick(user.getNick());
 		updateCompass(user);
 		if (ess.getSettings().changeDisplayName())
 		{
-			user.setDisplayName(user.getNick());
+			user.setDisplayNick(user.getNick());
 		}
 	}
 
@@ -76,7 +76,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		user.updateActivity(true);
 		if (ess.getSettings().changeDisplayName())
 		{
-			user.setDisplayName(user.getNick());
+			user.setDisplayNick(user.getNick());
 		}
 	}
 
@@ -262,7 +262,7 @@ public class EssentialsPlayerListener extends PlayerListener
 
 		if (ess.getSettings().changeDisplayName())
 		{
-			user.setDisplayName(user.getNick());
+			user.setDisplayNick(user.getNick());
 		}
 		user.updateActivity(false);
 		if (user.isAuthorized("essentials.sleepingignored"))
@@ -351,7 +351,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		final User user = ess.getUser(event.getPlayer());
 		if (ess.getSettings().changeDisplayName())
 		{
-			user.setDisplayName(user.getNick());
+			user.setDisplayNick(user.getNick());
 		}
 		updateCompass(user);
 	}
