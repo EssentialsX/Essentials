@@ -21,6 +21,7 @@ import org.anjocaido.groupmanager.dataholder.WorldDataHolder;
 import org.anjocaido.groupmanager.dataholder.OverloadedWorldHolder;
 import org.anjocaido.groupmanager.permissions.AnjoPermissionsHandler;
 import org.anjocaido.groupmanager.utils.Tasks;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 /**
@@ -52,6 +53,7 @@ public class WorldsHolder {
      */
     public WorldsHolder(GroupManager plugin) {
         this.plugin = plugin;
+        // Setup folders and check files exist for the primary world
         verifyFirstRun();
         initialLoad();
         if (defaultWorld == null) {
@@ -60,21 +62,48 @@ public class WorldsHolder {
     }
 
     private void initialLoad() {
+    	// load the initial world
         initialWorldLoading();
+        // Configure and load any mirrors and additional worlds as defined in config.yml
         mirrorSetUp();
+        // search the worlds folder for any manually created worlds (not listed in config.yml)
+        loadAllSearchedWorlds();
     }
 
     private void initialWorldLoading() {
-        //LOAD EVERY WORLD POSSIBLE
+        //Load the default world
         loadWorld(serverDefaultWorldName);
         defaultWorld = worldsData.get(serverDefaultWorldName);
-
+    }
+    
+    private void loadAllSearchedWorlds() {
+    	
+    	/*
+    	 *  Read all known worlds from Bukkit
+    	 *  Create the data files if they don't already exist,
+    	 *  and they are not mirrored.
+    	 */
+    	for (World world: plugin.getServer().getWorlds())
+    		if ((!worldsData.containsKey(world.getName().toLowerCase()))
+    				&& (!mirrors.containsKey(world.getName().toLowerCase())))
+    			setupWorldFolder(world.getName());
+    	/*
+    	 * Loop over all folders within the worlds folder
+    	 * and attempt to load the world data
+    	 */
         for (File folder : worldsFolder.listFiles()) {
-            if (folder.getName().equalsIgnoreCase(serverDefaultWorldName)) {
-                continue;
-            }
-            if (folder.isDirectory()) {
-                loadWorld(folder.getName());
+        	if (folder.isDirectory()) {
+        		GroupManager.logger.info("World Found: " + folder.getName());
+        	
+        		/*
+        		 * don't load any worlds which are already loaded
+        		 * or mirrored worlds that don't need data.
+        		 */
+	        	if (worldsData.containsKey(folder.getName().toLowerCase())
+	        			|| mirrors.containsKey(folder.getName().toLowerCase())) {
+	                continue;
+	            }
+	            loadWorld(folder.getName());
             }
         }
     }
@@ -85,6 +114,12 @@ public class WorldsHolder {
         Map<String, Object> mirrorsMap = plugin.getConfig().getMirrorsMap();
         if (mirrorsMap != null) {
             for (String source : mirrorsMap.keySet()) {
+            	// Make sure all non mirrored worlds have a set of data files.
+            	setupWorldFolder(source);
+            	// Load the world data
+            	if (!worldsData.containsKey(source.toLowerCase()))
+            		loadWorld(source);
+            	
                 if (mirrorsMap.get(source) instanceof ArrayList) {
                     ArrayList mirrorList = (ArrayList) mirrorsMap.get(source);
                     for (Object o : mirrorList) {
@@ -246,18 +281,25 @@ public class WorldsHolder {
     }
 
     private void verifyFirstRun() {
+        
+        Properties server = new Properties();
+        try {
+            server.load(new FileInputStream(new File("server.properties")));
+            serverDefaultWorldName = server.getProperty("level-name").toLowerCase();
+            setupWorldFolder(serverDefaultWorldName);
+        } catch (IOException ex) {
+            GroupManager.logger.log(Level.SEVERE, null, ex);
+        }
+        
+    }
+        
+    public void setupWorldFolder(String worldName) {
         worldsFolder = new File(plugin.getDataFolder(), "worlds");
         if (!worldsFolder.exists()) {
             worldsFolder.mkdirs();
         }
-        Properties server = new Properties();
-        try {
-            server.load(new FileInputStream(new File("server.properties")));
-        } catch (IOException ex) {
-            GroupManager.logger.log(Level.SEVERE, null, ex);
-        }
-        serverDefaultWorldName = server.getProperty("level-name").toLowerCase();
-        File defaultWorldFolder = new File(worldsFolder, serverDefaultWorldName);
+        
+        File defaultWorldFolder = new File(worldsFolder, worldName);
         if (!defaultWorldFolder.exists()) {
             defaultWorldFolder.mkdirs();
         }

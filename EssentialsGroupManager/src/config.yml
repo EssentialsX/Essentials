@@ -1,12 +1,19 @@
 settings:
+  config:
+    # With this enabled anyone set as op has full permissions when managing GroupManager
+    opOverrides: true
   data:
     save:
+      # How often GroupManager will save it's data back to groups and users.yml
       minutes: 10
   logging:
+    # level of detail GroupManager will use when logging.
+    # Acceptable entries are - ALL,CONFIG,FINE,FINER,FINEST,INFO,OFF,SEVERE,WARNING
     level: INFO
   permission:
     world:
       mirror:
+        # Worlds listed here have their permissions mirrored in their children.
         world:
           - world_nether
           - world2

@@ -84,10 +84,12 @@ public class EssentialsEntityListener extends EntityListener
 
 	@Override
 	public void onFoodLevelChange(FoodLevelChangeEvent event)
-	{
+	{		
 		if (event.getEntity() instanceof Player && ess.getUser(event.getEntity()).isGodModeEnabled())
-		{
+		{		
+			//TODO: Remove the following line, when we're happy to remove backwards compatability with 1185.
 			event.setFoodLevel(20);
+			event.setCancelled(true);
 		}
 	}
 }

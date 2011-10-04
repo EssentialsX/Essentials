@@ -293,7 +293,7 @@ commands:
   togglejail:
     description: Prevents a player from interacting with the world and teleports him/her to the the jail specified
     usage: /<command> [player] [jailname] <datediff>
-    aliases: [tjail,etogglejail]
+    aliases: [tjail,unjail,eunjail,etogglejail]
   top:
     description: Teleport to the highest block at your current position.
     usage: /<command>

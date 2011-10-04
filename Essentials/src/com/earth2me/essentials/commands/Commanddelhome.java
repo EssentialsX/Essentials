@@ -31,7 +31,7 @@ public class Commanddelhome extends EssentialsCommand
 		}
 		else if (args.length > 1 && (user == null || user.isAuthorized("essentials.delhome.others")))
 		{
-			user = getPlayer(server, args, 0);
+			user = getPlayer(server, args, 0, true);
 			name = args[1];
 		}
 		else

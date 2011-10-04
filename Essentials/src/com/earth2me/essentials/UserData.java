@@ -58,6 +58,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		isSocialSpyEnabled = _isSocialSpyEnabled();
 		isNPC = _isNPC();
 		arePowerToolsEnabled = _arePowerToolsEnabled();
+		kitTimestamps = _getKitTimestamps();
 	}
 	private double money;
 
@@ -163,7 +164,12 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	public void delHome(String name) throws Exception
 	{
-		if (getHome(name) != null)
+		String search = name;
+		if (!homes.containsKey(search))
+		{
+			search = Util.sanitizeFileName(name);
+		}
+		if (homes.containsKey(search))
 		{
 			homes.remove(name);
 			config.removeProperty("homes." + name);
@@ -243,12 +249,13 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	}
 
-	public void clearAllPowertools() {
+	public void clearAllPowertools()
+	{
 		powertools.clear();
 		config.setProperty("powertools", powertools);
 		config.save();
 	}
-	
+
 	public List<String> getPowertool(ItemStack stack)
 	{
 		return (List<String>)powertools.get(stack.getTypeId());
@@ -267,12 +274,11 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.setProperty("powertools", powertools);
 		config.save();
 	}
-	
+
 	public boolean hasPowerTools()
 	{
 		return powertools.size() > 0;
 	}
-	
 	private Location lastLocation;
 
 	private Location _getLastLocation()
@@ -294,6 +300,10 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	public void setLastLocation(Location loc)
 	{
+		if (loc == null || loc.getWorld() == null)
+		{
+			return;
+		}
 		lastLocation = loc;
 		config.setProperty("lastlocation", loc);
 		config.save();
@@ -781,31 +791,57 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.setProperty("npc", set);
 		config.save();
 	}
-	
 	private boolean arePowerToolsEnabled;
-	
+
 	public boolean arePowerToolsEnabled()
 	{
 		return arePowerToolsEnabled;
 	}
-	
+
 	public void setPowerToolsEnabled(boolean set)
 	{
 		arePowerToolsEnabled = set;
 		config.setProperty("powertoolsenabled", set);
 		config.save();
 	}
-	
+
 	public boolean togglePowerToolsEnabled()
 	{
 		boolean ret = !arePowerToolsEnabled();
 		setPowerToolsEnabled(ret);
 		return ret;
 	}
-	
+
 	private boolean _arePowerToolsEnabled()
 	{
 		return config.getBoolean("powertoolsenabled", true);
 	}
-	
+	private Map<String, Object> kitTimestamps;
+
+	private Map<String, Object> _getKitTimestamps()
+	{
+		final Object map = config.getProperty("timestamps.kits");
+
+		if (map instanceof Map)
+		{
+			return (Map<String, Object>)map;
+		}
+		else
+		{
+			return new HashMap<String, Object>();
+		}
+	}
+
+	public Long getKitTimestamp(final String name)
+	{
+		final Number num = (Number)kitTimestamps.get(name.toLowerCase());
+		return num == null ? null : num.longValue();
+	}
+
+	public void setKitTimestamp(final String name, final long time)
+	{
+		kitTimestamps.put(name.toLowerCase(), time);
+		config.setProperty("timestamps.kits", kitTimestamps);
+		config.save();
+	}
 }

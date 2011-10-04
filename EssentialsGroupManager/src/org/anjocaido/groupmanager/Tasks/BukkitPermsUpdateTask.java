@@ -18,6 +18,7 @@ public class BukkitPermsUpdateTask implements Runnable {
 	public void run() {
 		// Signal loaded and update BukkitPermissions.
 		GroupManager.setLoaded(true);
+		GroupManager.BukkitPermissions.collectPermissions();
 		GroupManager.BukkitPermissions.updateAllPlayers();
 		
 		GroupManager.logger.info("Bukkit Permissions Updated!");

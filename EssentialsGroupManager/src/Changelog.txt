@@ -23,3 +23,16 @@ v 1.1:
     - Fix for GM not checking inheritance for known superperms nodes.
     - Optimized getAllPlayersPermissions and fixed pushing unknown perms to superperms.
 v 1.2:
+	- Changed priority of Registered events to lowest.
+	- Fixed an issue with superperms where plugins define perms with inheritance after the root perms
+	- Rewrote Config loading to use Bukkits Configuration features
+	- Added an opOverride setting in config.
+	  If present and set to false, op's will not get overriding permissions in GroupManager.
+	  (one op will not be able to alter another op's settings)
+	- GM will now create all relevant world data files for non mirrored worlds.
+	  (for all worlds named in config.yml)
+	- Attempt to stop GM wiping groups/users yml's on a bad shut down.
+	- Added event handling to manage new world creation at runtime.
+	- Added the ability to handle unknown worlds at server start.
+	  (GM will create the data files for any worlds it finds which are not in the config.yml)
+	- Fix for Bukkit passing a null To location on a player Portaling

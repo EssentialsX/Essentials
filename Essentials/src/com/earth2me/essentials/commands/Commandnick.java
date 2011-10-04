@@ -41,7 +41,7 @@ public class Commandnick extends EssentialsCommand
 		String nick = args[0];
 		if ("off".equalsIgnoreCase(nick) || user.getName().equalsIgnoreCase(nick))
 		{
-			user.setDisplayName(user.getName());
+			user.setDisplayNick(user.getName());
 			user.setNickname(null);
 			user.sendMessage(Util.i18n("nickNoMore"));
 			return;
@@ -67,7 +67,7 @@ public class Commandnick extends EssentialsCommand
 			}
 		}
 
-		user.setDisplayName(ess.getSettings().getNicknamePrefix() + nick);
+		user.setDisplayNick(ess.getSettings().getNicknamePrefix() + nick);
 		user.setNickname(nick);
 		user.sendMessage(Util.format("nickSet", user.getDisplayName() + "§7."));
 	}
@@ -95,13 +95,13 @@ public class Commandnick extends EssentialsCommand
 		String nick = args[1];
 		if ("off".equalsIgnoreCase(nick) || target.getName().equalsIgnoreCase(nick))
 		{
-			target.setDisplayName(target.getName());
+			target.setDisplayNick(target.getName());
 			target.setNickname(null);
 			target.sendMessage(Util.i18n("nickNoMore"));
 		}
 		else
 		{
-			target.setDisplayName(ess.getSettings().getNicknamePrefix() + nick);
+			target.setDisplayNick(ess.getSettings().getNicknamePrefix() + nick);
 			target.setNickname(nick);
 			target.sendMessage(Util.format("nickSet", target.getDisplayName() + "§7."));
 		}

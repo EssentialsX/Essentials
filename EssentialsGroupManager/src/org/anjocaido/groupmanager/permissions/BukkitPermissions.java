@@ -43,7 +43,6 @@ import org.bukkit.event.server.ServerListener;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
-//import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
@@ -79,13 +78,13 @@ public class BukkitPermissions {
 
         PlayerEvents playerEventListener = new PlayerEvents();
 
-        manager.registerEvent(Event.Type.PLAYER_JOIN, playerEventListener, Event.Priority.Normal, plugin);
-        manager.registerEvent(Event.Type.PLAYER_KICK, playerEventListener, Event.Priority.Normal, plugin);
-        manager.registerEvent(Event.Type.PLAYER_QUIT, playerEventListener, Event.Priority.Normal, plugin);
+        manager.registerEvent(Event.Type.PLAYER_JOIN, playerEventListener, Event.Priority.Lowest, plugin);
+        manager.registerEvent(Event.Type.PLAYER_KICK, playerEventListener, Event.Priority.Lowest, plugin);
+        manager.registerEvent(Event.Type.PLAYER_QUIT, playerEventListener, Event.Priority.Lowest, plugin);
 
-        manager.registerEvent(Event.Type.PLAYER_RESPAWN, playerEventListener, Event.Priority.Normal, plugin);
-        manager.registerEvent(Event.Type.PLAYER_TELEPORT, playerEventListener, Event.Priority.Normal, plugin);
-        manager.registerEvent(Event.Type.PLAYER_PORTAL, playerEventListener, Event.Priority.Normal, plugin);
+        manager.registerEvent(Event.Type.PLAYER_RESPAWN, playerEventListener, Event.Priority.Lowest, plugin);
+        manager.registerEvent(Event.Type.PLAYER_TELEPORT, playerEventListener, Event.Priority.Lowest, plugin);
+        manager.registerEvent(Event.Type.PLAYER_PORTAL, playerEventListener, Event.Priority.Lowest, plugin);
 
         ServerListener serverListener = new BukkitEvents();
 
@@ -93,7 +92,7 @@ public class BukkitPermissions {
         manager.registerEvent(Event.Type.PLUGIN_DISABLE, serverListener, Event.Priority.Normal, plugin);
     }
 
-    private void collectPermissions() {
+    public void collectPermissions() {
         registeredPermissions.clear();
         for (Plugin bukkitPlugin : Bukkit.getServer().getPluginManager().getPlugins()) {
         	for(Permission permission : bukkitPlugin.getDescription().getPermissions())
@@ -134,8 +133,8 @@ public class BukkitPermissions {
         Boolean value;
         for (Permission permission : registeredPermissions) {
         	value = worldData.getPermissionsHandler().checkUserPermission(user, permission.getName());
-
-            attachment.setPermission(permission, value);
+        	if (value == true)
+        		attachment.setPermission(permission, value);
         }
         
         // Add any missing permissions for this player (non bukkit plugins)
@@ -199,7 +198,7 @@ public class BukkitPermissions {
 
         @Override
         public void onPlayerPortal(PlayerPortalEvent event) { // will portal into another world
-            if(!event.getFrom().getWorld().equals(event.getTo().getWorld())){ // only if world actually changed
+            if(event.getTo() != null && !event.getFrom().getWorld().equals(event.getTo().getWorld())){ // only if world actually changed
             	updatePermissions(event.getPlayer(), event.getTo().getWorld().getName());
             }
         }
@@ -211,7 +210,7 @@ public class BukkitPermissions {
 
         @Override
         public void onPlayerTeleport(PlayerTeleportEvent event) { // can be teleported into another world
-            if (!event.getFrom().getWorld().equals(event.getTo().getWorld())) { // only if world actually changed
+            if (event.getTo() != null &&  !event.getFrom().getWorld().equals(event.getTo().getWorld())) { // only if world actually changed
                 updatePermissions(event.getPlayer(), event.getTo().getWorld().getName());
             }
         }

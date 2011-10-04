@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.bukkit.BlockChangeDelegate;
 import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;
+import org.bukkit.Difficulty;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.TreeType;
@@ -437,4 +438,21 @@ public class FakeWorld implements World
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 	
+	@Override
+	public Difficulty getDifficulty()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+	
+	@Override
+	public void setDifficulty(Difficulty difficulty)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+	
+	@Override
+	public int getSeaLevel()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}	
 }
