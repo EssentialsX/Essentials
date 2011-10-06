@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.CraftServer;
 
@@ -12,7 +13,7 @@ import org.bukkit.craftbukkit.CraftServer;
 public class Backup implements Runnable
 {
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
-	private transient final CraftServer server;
+	private transient final Server server;
 	private transient final IEssentials ess;
 	private transient boolean running = false;
 	private transient int taskId = -1;
@@ -21,7 +22,7 @@ public class Backup implements Runnable
 	public Backup(final IEssentials ess)
 	{
 		this.ess = ess;
-		server = (CraftServer)ess.getServer();
+		server = ess.getServer();
 		if (server.getOnlinePlayers().length > 0)
 		{
 			startTask();
@@ -60,7 +61,7 @@ public class Backup implements Runnable
 			return;
 		}
 		LOGGER.log(Level.INFO, Util.i18n("backupStarted"));
-		final CommandSender cs = server.getServer().console;
+		final CommandSender cs = server.getConsoleSender();
 		server.dispatchCommand(cs, "save-all");
 		server.dispatchCommand(cs, "save-off");
 
