@@ -30,6 +30,10 @@ public class Commandrepair extends EssentialsCommand
 		if (args[0].equalsIgnoreCase("hand"))
 		{
 			final ItemStack item = user.getItemInHand();
+			if (item == null)
+			{
+				throw new Exception(Util.i18n("repairInvalidType"));
+			}
 			final String itemName = item.getType().toString().toLowerCase();
 			final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), ess);
 
@@ -84,6 +88,10 @@ public class Commandrepair extends EssentialsCommand
 	{
 		for (ItemStack item : items)
 		{
+			if (item == null)
+			{
+				continue;
+			}
 			final String itemName = item.getType().toString().toLowerCase();
 			final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), ess);
 			try
