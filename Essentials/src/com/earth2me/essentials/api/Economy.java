@@ -21,6 +21,7 @@ public final class Economy
 	}
 	private static final Logger logger = Logger.getLogger("Minecraft");
 	private static IEssentials ess;
+	private static final String noCallBeforeLoad = "Essentials API is called before Essentials is loaded.";
 
 	/**
 	 * @param aEss the ess to set
@@ -66,6 +67,10 @@ public final class Economy
 
 	private static User getUserByName(String name)
 	{
+		if (ess == null)
+		{
+			throw new RuntimeException(noCallBeforeLoad);
+		}
 		User user;
 		Player player = ess.getServer().getPlayer(name);
 		if (player != null)
@@ -176,6 +181,10 @@ public final class Economy
 	 */
 	public static void resetBalance(String name) throws UserDoesNotExistException, NoLoanPermittedException
 	{
+		if (ess == null)
+		{
+			throw new RuntimeException(noCallBeforeLoad);
+		}
 		setMoney(name, ess.getSettings().getStartingBalance());
 	}
 
@@ -231,6 +240,10 @@ public final class Economy
 	 */
 	public static String format(double amount)
 	{
+		if (ess == null)
+		{
+			throw new RuntimeException(noCallBeforeLoad);
+		}
 		return Util.formatCurrency(amount, ess);
 	}
 
