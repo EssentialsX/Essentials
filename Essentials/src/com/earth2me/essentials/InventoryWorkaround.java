@@ -64,6 +64,20 @@ public final class InventoryWorkaround
 		return -1;
 	}
 
+	public static boolean addAllItems(final Inventory cinventory, final boolean forceDurability, final ItemStack... items)
+	{
+		final Inventory fake = new FakeInventory(cinventory.getContents());
+		if (addItem(fake, forceDurability, items).isEmpty())
+		{
+			addItem(cinventory, forceDurability, items);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 	public static Map<Integer, ItemStack> addItem(final Inventory cinventory, final boolean forceDurability, final ItemStack... items)
 	{
 		final Map<Integer, ItemStack> leftover = new HashMap<Integer, ItemStack>();
@@ -106,7 +120,7 @@ public final class InventoryWorkaround
 			{
 				continue;
 			}
-			
+
 			while (true)
 			{
 				// Do we already have a stack of it?
