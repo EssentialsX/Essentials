@@ -132,4 +132,6 @@ public interface ISettings extends IConf
 	long getAutoAfkKick();
 
 	boolean getFreezeAfkPlayers();
+	
+	boolean areDeathMessagesEnabled();
 }

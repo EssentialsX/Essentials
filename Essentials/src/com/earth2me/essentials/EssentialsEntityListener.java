@@ -9,6 +9,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityListener;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -69,24 +70,29 @@ public class EssentialsEntityListener extends EntityListener
 	}
 
 	@Override
-	public void onEntityDeath(EntityDeathEvent event)
+	public void onEntityDeath(final EntityDeathEvent event)
 	{
-		if (event.getEntity() instanceof Player)
+		if (event instanceof PlayerDeathEvent)
 		{
-			User user = ess.getUser(event.getEntity());
+			final PlayerDeathEvent pdevent = (PlayerDeathEvent)event;
+			final User user = ess.getUser(pdevent.getEntity());
 			if (user.isAuthorized("essentials.back.ondeath") && !ess.getSettings().isCommandDisabled("back"))
 			{
 				user.setLastLocation();
 				user.sendMessage(Util.i18n("backAfterDeath"));
+			}
+			if (!ess.getSettings().areDeathMessagesEnabled())
+			{
+				pdevent.setDeathMessage("");
 			}
 		}
 	}
 
 	@Override
 	public void onFoodLevelChange(FoodLevelChangeEvent event)
-	{		
+	{
 		if (event.getEntity() instanceof Player && ess.getUser(event.getEntity()).isGodModeEnabled())
-		{		
+		{
 			//TODO: Remove the following line, when we're happy to remove backwards compatability with 1185.
 			event.setFoodLevel(20);
 			event.setCancelled(true);
