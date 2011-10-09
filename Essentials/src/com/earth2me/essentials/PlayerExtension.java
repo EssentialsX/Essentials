@@ -16,15 +16,6 @@ public class PlayerExtension extends PlayerWrapper
 		super(base);
 		this.ess = ess;
 	}
-
-	public float getCorrectedYaw()
-	{
-		float angle = (getLocation().getYaw() - 90.0f) % 360.0f;
-		if (angle < 0) {
-			angle += 360.0f;
-		}
-		return angle;
-	}
 	
 	public void showInventory(IInventory inventory)
 	{
