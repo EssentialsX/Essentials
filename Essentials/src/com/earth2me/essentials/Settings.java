@@ -523,4 +523,10 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("freeze-afk-players", false);
 	}
+
+	@Override
+	public boolean areDeathMessagesEnabled()
+	{
+		return config.getBoolean("death-messages", true);
+	}
 }

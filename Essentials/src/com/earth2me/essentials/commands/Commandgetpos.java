@@ -19,7 +19,7 @@ public class Commandgetpos extends EssentialsCommand
 		user.sendMessage("§7X: " + coords.getBlockX() + " (-North <-> +South)");
 		user.sendMessage("§7Y: " + coords.getBlockY() + " (+Up <-> -Down)");
 		user.sendMessage("§7Z: " + coords.getBlockZ() + " (+East <-> -West)");
-		user.sendMessage("§7Yaw: " + user.getCorrectedYaw() + " (Rotation)");
+		user.sendMessage("§7Yaw: " + coords.getYaw() + " (Rotation)");
 		user.sendMessage("§7Pitch: " + coords.getPitch() + " (Head angle)");
 	}
 }
