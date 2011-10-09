@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerAnimationType;
+import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -378,6 +379,18 @@ public class EssentialsPlayerListener extends PlayerListener
 		if (!cmd.equalsIgnoreCase("afk"))
 		{
 			user.updateActivity(true);
+		}
+	}
+
+	@Override
+	public void onPlayerBedEnter(PlayerBedEnterEvent event)
+	{
+		if (event.isCancelled()) {
+			return;
+		}
+		if (event.getPlayer().isSleepingIgnored()) {
+			event.setCancelled(true);
+			event.getPlayer().sendMessage("You can't go to bed, your sleep is ignored.");
 		}
 	}
 }
