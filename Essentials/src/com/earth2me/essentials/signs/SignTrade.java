@@ -38,7 +38,8 @@ public class SignTrade extends EssentialsSign
 				final Trade stored = getTrade(sign, 1, true, true, ess);
 				substractAmount(sign, 1, stored, ess);
 				stored.pay(player);
-				Trade.log("Sign", "Trade", "OwnerInteract", username, null, username, stored, sign.getBlock().getLocation(), ess);
+				final Trade store = rechargeSign(sign, ess, player);
+				Trade.log("Sign", "Trade", "OwnerInteract", username, store, username, stored, sign.getBlock().getLocation(), ess);
 			}
 			catch (SignException e)
 			{
@@ -50,14 +51,36 @@ public class SignTrade extends EssentialsSign
 			final Trade charge = getTrade(sign, 1, false, false, ess);
 			final Trade trade = getTrade(sign, 2, false, true, ess);
 			charge.isAffordableFor(player);
+			if (!trade.pay(player, false))
+			{
+				throw new ChargeException("Full inventory");
+			}
 			substractAmount(sign, 2, trade, ess);
-			trade.pay(player);
 			addAmount(sign, 1, charge, ess);
 			charge.charge(player);
 			Trade.log("Sign", "Trade", "Interact", sign.getLine(3), charge, username, trade, sign.getBlock().getLocation(), ess);
 		}
 		sign.updateSign();
 		return true;
+	}
+
+	private Trade rechargeSign(final ISign sign, final IEssentials ess, final User player) throws SignException, ChargeException
+	{
+		final Trade trade = getTrade(sign, 2, false, false, ess);
+		if (trade.getItemStack() != null && player.getItemInHand() != null && 
+			trade.getItemStack().getTypeId() == player.getItemInHand().getTypeId() &&
+			trade.getItemStack().getDurability() == player.getItemInHand().getDurability())
+		{
+			int amount = player.getItemInHand().getAmount();
+			amount -= amount % trade.getItemStack().getAmount();
+			if (amount > 0) {
+				final Trade store = new Trade(new ItemStack(player.getItemInHand().getTypeId(), amount, player.getItemInHand().getDurability()), ess);
+				addAmount(sign, 2, store, ess);
+				store.charge(player);
+				return store;
+			}
+		}
+		return null;
 	}
 
 	@Override
