@@ -4,6 +4,7 @@ import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 
 
 public class Commandkill extends EssentialsCommand
@@ -23,10 +24,13 @@ public class Commandkill extends EssentialsCommand
 
 		for (Player p : server.matchPlayer(args[0]))
 		{
-			EntityDamageEvent ede = new EntityDamageEvent(p, EntityDamageEvent.DamageCause.CUSTOM, 1000);
-            		server.getPluginManager().callEvent(ede);
-            		//if (ede.isCancelled()) return;
-            		
+			final EntityDamageEvent ede = new EntityDamageEvent(p, sender instanceof Player && ((Player)sender).getName().equals(p.getName()) ? EntityDamageEvent.DamageCause.SUICIDE : EntityDamageEvent.DamageCause.CUSTOM, 1000);
+			server.getPluginManager().callEvent(ede);
+			if (ede.isCancelled() && !sender.hasPermission("essentials.kill.force"))
+			{
+				continue;
+			}
+
 			p.setHealth(0);
 			sender.sendMessage(Util.format("kill", p.getDisplayName()));
 		}
