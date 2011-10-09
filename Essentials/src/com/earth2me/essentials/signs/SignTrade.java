@@ -33,18 +33,22 @@ public class SignTrade extends EssentialsSign
 	{
 		if (sign.getLine(3).substring(2).equalsIgnoreCase(username))
 		{
+			final Trade store = rechargeSign(sign, ess, player);
+			Trade stored = null;
 			try
 			{
-				final Trade store = rechargeSign(sign, ess, player);
-				final Trade stored = getTrade(sign, 1, true, true, ess);
+				stored = getTrade(sign, 1, true, true, ess);
 				substractAmount(sign, 1, stored, ess);
 				stored.pay(player);
-				Trade.log("Sign", "Trade", "OwnerInteract", username, store, username, stored, sign.getBlock().getLocation(), ess);
 			}
 			catch (SignException e)
 			{
-				throw new SignException(Util.i18n("tradeSignEmptyOwner"), e);
+				if (store == null)
+				{
+					throw new SignException(Util.i18n("tradeSignEmptyOwner"), e);
+				}
 			}
+			Trade.log("Sign", "Trade", "OwnerInteract", username, store, username, stored, sign.getBlock().getLocation(), ess);
 		}
 		else
 		{
@@ -162,7 +166,7 @@ public class SignTrade extends EssentialsSign
 				throw new SignException(Util.i18n("moreThanZero"));
 			}
 			String newline = amount + " " + split[1] + ":0";
-			if ((newline + amount).length() > 16)
+			if ((newline + amount).length() > 15)
 			{
 				throw new SignException("Line can be too long!");
 			}
@@ -272,7 +276,7 @@ public class SignTrade extends EssentialsSign
 			if (money != null && amount != null)
 			{
 				final String newline = Util.formatCurrency(money, ess) + ":" + Util.formatCurrency(amount + value, ess).substring(1);
-				if (newline.length() > 16)
+				if (newline.length() > 15)
 				{
 					throw new SignException("Line too long!");
 				}
@@ -287,7 +291,7 @@ public class SignTrade extends EssentialsSign
 			final ItemStack item = getItemStack(split[1], stackamount, ess);
 			final int amount = getInteger(split[2]);
 			final String newline = stackamount + " " + split[1] + ":" + (amount + Math.round(value));
-			if (newline.length() > 16)
+			if (newline.length() > 15)
 			{
 				throw new SignException("Line too long!");
 			}
