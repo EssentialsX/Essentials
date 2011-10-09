@@ -10,7 +10,6 @@ import org.bukkit.inventory.ItemStack;
 
 public class SignTrade extends EssentialsSign
 {
-
 	public SignTrade()
 	{
 		super("Trade");
@@ -40,11 +39,11 @@ public class SignTrade extends EssentialsSign
 				substractAmount(sign, 1, stored, ess);
 				stored.pay(player);
 				Trade.log("Sign", "Trade", "OwnerInteract", username, null, username, stored, sign.getBlock().getLocation(), ess);
-			}			
+			}
 			catch (SignException e)
 			{
 				throw new SignException(Util.i18n("tradeSignEmptyOwner"));
-			}			
+			}
 		}
 		else
 		{
@@ -67,11 +66,22 @@ public class SignTrade extends EssentialsSign
 		if ((sign.getLine(3).length() > 3 && sign.getLine(3).substring(2).equalsIgnoreCase(username))
 			|| player.isAuthorized("essentials.signs.trade.override"))
 		{
-			final Trade stored1 = getTrade(sign, 1, true, false, ess);
-			final Trade stored2 = getTrade(sign, 2, true, false, ess);
-			stored1.pay(player);
-			stored2.pay(player);
-			Trade.log("Sign", "Trade", "Break", username, stored2, username, stored1, sign.getBlock().getLocation(), ess);
+			try
+			{
+				final Trade stored1 = getTrade(sign, 1, true, false, ess);
+				final Trade stored2 = getTrade(sign, 2, true, false, ess);
+				stored1.pay(player);
+				stored2.pay(player);
+				Trade.log("Sign", "Trade", "Break", username, stored2, username, stored1, sign.getBlock().getLocation(), ess);
+			}
+			catch (SignException e)
+			{
+				if (player.isAuthorized("essentials.signs.trade.override"))
+				{
+					return true;
+				}
+				throw e;
+			}
 			return true;
 		}
 		else
