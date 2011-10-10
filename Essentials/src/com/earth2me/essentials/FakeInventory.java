@@ -15,6 +15,10 @@ public class FakeInventory implements Inventory
 		this.items = new ItemStack[items.length];
 		for (int i = 0; i < items.length; i++)
 		{
+			if (items[i] == null)
+			{
+				continue;
+			}
 			this.items[i] = new ItemStack(items[i].getTypeId(), items[i].getAmount(), items[i].getDurability());
 		}
 	}
