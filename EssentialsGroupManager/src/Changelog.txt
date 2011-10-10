@@ -36,3 +36,4 @@ v 1.2:
 	- Added the ability to handle unknown worlds at server start.
 	  (GM will create the data files for any worlds it finds which are not in the config.yml)
 	- Fix for Bukkit passing a null To location on a player Portaling
+	- Fixed manudelsub not correctly selecting the group to remove.

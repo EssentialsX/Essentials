@@ -478,6 +478,12 @@ public class GroupManager extends JavaPlugin {
                     } else {
                         auxUser = dataHolder.getUser(args[0]);
                     }
+                    auxGroup = dataHolder.getGroup(args[1]);
+                    if (auxGroup == null) {
+                        sender.sendMessage(ChatColor.RED + "Group not found!");
+                        return false;
+                    }
+                    
                     //VALIDANDO PERMISSAO
                     if (!isConsole && !isOpOverride && (senderGroup != null ? permissionHandler.inGroup(auxUser.getName(), senderGroup.getName()) : false)) {
                         sender.sendMessage(ChatColor.RED + "Can't modify player with same permissions than you, or higher.");
