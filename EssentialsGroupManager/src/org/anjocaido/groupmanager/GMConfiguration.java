@@ -52,6 +52,9 @@ public class GMConfiguration {
     }
     
     public boolean isOpOverride() {
+    	return GMconfig.getBoolean("settings.config.bukkit_perms_override", true);
+    }
+    public boolean isBukkitPermsOverride() {
     	return GMconfig.getBoolean("settings.config.opOverrides", true);
     }
 

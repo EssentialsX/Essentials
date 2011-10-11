@@ -43,6 +43,7 @@ import org.bukkit.event.server.ServerListener;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
@@ -124,15 +125,31 @@ public class BukkitPermissions {
 
         User user = worldData.getUser(player.getName());
         
-        // clear permissions
-        for (String permission : attachment.getPermissions().keySet()) {
-            attachment.unsetPermission(permission);
-        }      
+        //  clear permissions
+        for (String permission : attachment.getPermissions().keySet())
+            attachment.unsetPermission(permission);     
         
-        // find matching permissions
+        /*
+         *  find matching permissions
+         *  
+         *  and base bukkit perms if we are set to allow bukkit permissions to override.
+         */
         Boolean value;
         for (Permission permission : registeredPermissions) {
-        	value = worldData.getPermissionsHandler().checkUserPermission(user, permission.getName());
+        	
+        	value =  worldData.getPermissionsHandler().checkUserPermission(user, permission.getName());
+        	
+        	// Only check bukkit override IF we don't have the permission directly.
+        	if (value = false) {
+	        	PermissionDefault permDefault = permission.getDefault();
+	        	
+	        	if ((plugin.getGMConfig().isBukkitPermsOverride())
+	        	&& ((permDefault == PermissionDefault.TRUE)
+	        		|| ((permDefault == PermissionDefault.NOT_OP) && !player.isOp())
+	        		|| ((permDefault == PermissionDefault.OP) && player.isOp())))
+	        		value = true;
+        	}
+        	
         	if (value == true)
         		attachment.setPermission(permission, value);
         }
