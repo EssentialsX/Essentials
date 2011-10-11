@@ -19,3 +19,5 @@ The default line ending is LF.
 To build all jars, select the BuildAll project and build that. You'll find all jars inside the dist/lib folder of the BuildAll project.
 
 If you create pull requests, always make them for the master branch.
+
+The essentials bug tracker can be found at http://www.assembla.com/spaces/essentials/tickets

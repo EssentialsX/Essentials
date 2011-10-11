@@ -28,6 +28,7 @@ import org.anjocaido.groupmanager.events.GMWorldListener;
 import org.anjocaido.groupmanager.utils.GMLoggerHandler;
 import org.anjocaido.groupmanager.utils.PermissionCheckResult;
 import org.anjocaido.groupmanager.utils.Tasks;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -159,7 +160,7 @@ public class GroupManager extends JavaPlugin {
                 }
             };
             scheduler = new ScheduledThreadPoolExecutor(1);
-            int minutes = getConfig().getSaveInterval();
+            int minutes = getGMConfig().getSaveInterval();
             scheduler.scheduleAtFixedRate(commiter, minutes, minutes, TimeUnit.MINUTES);
             GroupManager.logger.info("Scheduled Data Saving is set for every " + minutes + " minutes!");
         }
@@ -236,7 +237,7 @@ public class GroupManager extends JavaPlugin {
      * @param cmd
      * @param args
      */
-    @SuppressWarnings({"null", "deprecation"})
+    @SuppressWarnings({"deprecation"})
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         boolean playerCanDo = false;
@@ -478,6 +479,12 @@ public class GroupManager extends JavaPlugin {
                     } else {
                         auxUser = dataHolder.getUser(args[0]);
                     }
+                    auxGroup = dataHolder.getGroup(args[1]);
+                    if (auxGroup == null) {
+                        sender.sendMessage(ChatColor.RED + "Group not found!");
+                        return false;
+                    }
+                    
                     //VALIDANDO PERMISSAO
                     if (!isConsole && !isOpOverride && (senderGroup != null ? permissionHandler.inGroup(auxUser.getName(), senderGroup.getName()) : false)) {
                         sender.sendMessage(ChatColor.RED + "Can't modify player with same permissions than you, or higher.");
@@ -1745,11 +1752,36 @@ public class GroupManager extends JavaPlugin {
 		return false;
         
     }
+    
+    /**
+     * Send confirmation of a group change.
+     * using permission nodes...
+     * 
+     * groupmanager.notify.self
+     * groupmanager.notify.other
+     * 
+     * @param name
+     * @param msg
+     */
+    public static void notify(String name, String msg) {
+    	
+    	Player player = Bukkit.getServer().getPlayerExact(name);
+        
+        for(Player test: Bukkit.getServer().getOnlinePlayers()) {
+        	if (!test.equals(player)){
+        		if (test.hasPermission("groupmanager.notify.other"))
+        			test.sendMessage(ChatColor.YELLOW + name +" was " + msg);
+        	} else
+        		if ((player != null) && ((player.hasPermission("groupmanager.notify.self")) || (player.hasPermission("groupmanager.notify.other"))))
+                    player.sendMessage(ChatColor.YELLOW + "You we're " + msg);
+        }
+    		
+    }
 
     /**
      * @return the config
      */
-    public GMConfiguration getConfig() {
+    public GMConfiguration getGMConfig() {
         return config;
     }
 

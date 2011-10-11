@@ -755,5 +755,23 @@ public class PlayerWrapper implements Player
 	{
 		return base.getPlayerListName();
 	}
+
+	@Override
+	public int getTicksLived()
+	{
+		return base.getTicksLived();
+	}
+
+	@Override
+	public void setTicksLived(int i)
+	{
+		base.setTicksLived(i);
+	}
+
+	@Override
+	public Map<String, Object> serialize()
+	{
+		return base.serialize();
+	}
 	
 }

@@ -36,4 +36,7 @@ v 1.3:
 	- Added event handling to manage new world creation at runtime.
 	- Added the ability to handle unknown worlds at server start.
 	  (GM will create the data files for any worlds it finds which are not in the config.yml)
-	- Fix for Bukkit passing a null To location on a player portaling.
+	- Fix for Bukkit passing a null To location on a player Portaling
+	- Fixed manudelsub not correctly selecting the group to remove.
+	- Added two new permission nodes - groupmanager.notify.self & groupmanager.notify.other
+	  These allow players/admins to be notified when players are moved between groups.

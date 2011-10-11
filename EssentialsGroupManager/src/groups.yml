@@ -8,6 +8,7 @@ groups:
     - essentials.motd
     - essentials.rules
     - essentials.spawn
+    - groupmanager.notify.self
     inheritance: []
     info:
       prefix: '&e'
@@ -119,6 +120,7 @@ groups:
     - groupmanager.manuadd
     - groupmanager.manudel
     - groupmanager.manwhois
+    - groupmanager.notify.other
     inheritance:
     - builder
     info:
