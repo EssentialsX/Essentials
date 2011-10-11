@@ -35,8 +35,6 @@ public interface ISettings extends IConf
 
 	int getDefaultStackSize();
 
-	boolean getGenerateExitPortals();
-
 	double getHealCooldown();
 
 	Object getKit(String name);
@@ -44,12 +42,6 @@ public interface ISettings extends IConf
 	Map<String, Object> getKits();
 
 	String getLocale();
-
-	String getNetherName();
-
-	boolean getNetherPortalsEnabled();
-
-	double getNetherRatio();
 
 	String getNewbieSpawn();
 
@@ -105,8 +97,6 @@ public interface ISettings extends IConf
 
 	boolean isEcoDisabled();
 
-	boolean isNetherEnabled();
-
 	boolean isTradeInStacks(int id);
 
 	List<Integer> itemSpawnBlacklist();
@@ -116,8 +106,6 @@ public interface ISettings extends IConf
 	boolean showNonEssCommandsInHelp();
 
 	boolean spawnIfNoHome();
-
-	boolean use1to1RatioInNether();
 
 	boolean warnOnBuildDisallow();
 

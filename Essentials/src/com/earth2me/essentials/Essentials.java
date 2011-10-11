@@ -201,11 +201,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 		pm.registerEvent(Type.PLAYER_TELEPORT, jailPlayerListener, Priority.High, this);
 		pm.registerEvent(Type.PLAYER_JOIN, jailPlayerListener, Priority.High, this);
 
-		if (settings.isNetherEnabled() && getServer().getWorlds().size() < 2)
-		{
-			getServer().createWorld(settings.getNetherName(), World.Environment.NETHER);
-		}
-
 		pm.registerEvent(Type.ENTITY_EXPLODE, tntListener, Priority.High, this);
 
 		final EssentialsTimer timer = new EssentialsTimer(this);

@@ -96,12 +96,6 @@ public class Settings implements ISettings
 	}
 
 	@Override
-	public boolean getNetherPortalsEnabled()
-	{
-		return isNetherEnabled() && config.getBoolean("nether.portals-enabled", false);
-	}
-
-	@Override
 	public boolean isCommandDisabled(final IEssentialsCommand cmd)
 	{
 		return isCommandDisabled(cmd.getName());
@@ -258,18 +252,6 @@ public class Settings implements ISettings
 	}
 
 	@Override
-	public String getNetherName()
-	{
-		return config.getString("nether.folder", "nether");
-	}
-
-	@Override
-	public boolean isNetherEnabled()
-	{
-		return config.getBoolean("nether.enabled", false);
-	}
-
-	@Override
 	public int getSpawnMobLimit()
 	{
 		return config.getInt("spawnmob-limit", 10);
@@ -316,12 +298,6 @@ public class Settings implements ISettings
 	{
 		return config.getString("chat.group-formats." + (group == null ? "Default" : group),
 								config.getString("chat.format", "&7[{GROUP}]&f {DISPLAYNAME}&7:&f {MESSAGE}"));
-	}
-
-	@Override
-	public boolean getGenerateExitPortals()
-	{
-		return config.getBoolean("nether.generate-exit-portals", true);
 	}
 
 	@Override
@@ -401,22 +377,6 @@ public class Settings implements ISettings
 	public boolean warnOnBuildDisallow()
 	{
 		return config.getBoolean("protect.disable.warn-on-build-disallow", false);
-	}
-
-	@Override
-	public boolean use1to1RatioInNether()
-	{
-		return config.getBoolean("nether.use-1to1-ratio", false);
-	}
-
-	@Override
-	public double getNetherRatio()
-	{
-		if (config.getBoolean("nether.use-1to1-ratio", false))
-		{
-			return 1.0;
-		}
-		return config.getDouble("nether.ratio", 8.0);
 	}
 
 	@Override
