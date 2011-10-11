@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import java.net.InetSocketAddress;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import org.bukkit.Achievement;
@@ -722,6 +723,24 @@ public class OfflinePlayer implements Player
 
 	@Override
 	public String getPlayerListName()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public int getTicksLived()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setTicksLived(int i)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public Map<String, Object> serialize()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}

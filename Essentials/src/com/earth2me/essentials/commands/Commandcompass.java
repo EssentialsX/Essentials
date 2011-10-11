@@ -15,7 +15,7 @@ public class Commandcompass extends EssentialsCommand
 	@Override
 	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		int r = (int)user.getCorrectedYaw();
+		int r = (int)user.getLocation().getYaw();
 		String dir;
 		if (r < 23) dir = "N";
 		else if (r < 68) dir = "NE";

@@ -64,6 +64,44 @@ public class iCo4 implements Method
 		return false;
 	}
 
+	public boolean createAccount(String name)
+	{
+		if (hasAccount(name))
+		{
+			return false;
+		}
+
+		try
+		{
+			com.nijiko.coelho.iConomy.iConomy.getBank().addAccount(name);
+		}
+		catch (Exception E)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	public boolean createAccount(String name, Double balance)
+	{
+		if (hasAccount(name))
+		{
+			return false;
+		}
+
+		try
+		{
+			com.nijiko.coelho.iConomy.iConomy.getBank().addAccount(name, balance);
+		}
+		catch (Exception E)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
 	public MethodAccount getAccount(String name)
 	{
 		return new iCoAccount(com.nijiko.coelho.iConomy.iConomy.getBank().getAccount(name));

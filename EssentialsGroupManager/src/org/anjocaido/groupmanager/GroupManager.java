@@ -159,7 +159,7 @@ public class GroupManager extends JavaPlugin {
                 }
             };
             scheduler = new ScheduledThreadPoolExecutor(1);
-            int minutes = getConfig().getSaveInterval();
+            int minutes = getGMConfig().getSaveInterval();
             scheduler.scheduleAtFixedRate(commiter, minutes, minutes, TimeUnit.MINUTES);
             GroupManager.logger.info("Scheduled Data Saving is set for every " + minutes + " minutes!");
         }
@@ -1755,7 +1755,7 @@ public class GroupManager extends JavaPlugin {
     /**
      * @return the config
      */
-    public GMConfiguration getConfig() {
+    public GMConfiguration getGMConfig() {
         return config;
     }
 

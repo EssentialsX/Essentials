@@ -91,6 +91,23 @@ public interface Method
 	public boolean hasBankAccount(String bank, String name);
 
 	/**
+	 * Forces an account creation
+	 *
+	 * @param name Account name
+	 * @return <code>boolean</code>
+	 */
+	public boolean createAccount(String name);
+
+	/**
+	 * Forces an account creation
+	 *
+	 * @param name Account name
+	 * @param balance Initial account balance
+	 * @return <code>boolean</code>
+	 */
+	public boolean createAccount(String name, Double balance);
+
+	/**
 	 * Returns a <code>MethodAccount</code> class for an account <code>name</code>.
 	 *
 	 * @param name Account name

@@ -238,6 +238,9 @@ auto-afk-kick: -1
 # The player has to use the command /afk to leave the afk mode.
 freeze-afk-players: false
 
+# You can disable the death messages of minecraft here
+death-messages: true
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #
