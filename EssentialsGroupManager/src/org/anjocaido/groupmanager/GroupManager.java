@@ -28,6 +28,7 @@ import org.anjocaido.groupmanager.events.GMWorldListener;
 import org.anjocaido.groupmanager.utils.GMLoggerHandler;
 import org.anjocaido.groupmanager.utils.PermissionCheckResult;
 import org.anjocaido.groupmanager.utils.Tasks;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -1750,6 +1751,31 @@ public class GroupManager extends JavaPlugin {
 		sender.sendMessage(ChatColor.RED + "Use /manselect <world>");
 		return false;
         
+    }
+    
+    /**
+     * Send confirmation of a group change.
+     * using permission nodes...
+     * 
+     * groupmanager.notify.self
+     * groupmanager.notify.other
+     * 
+     * @param name
+     * @param msg
+     */
+    public static void notify(String name, String msg) {
+    	
+    	Player player = Bukkit.getServer().getPlayerExact(name);
+        
+        for(Player test: Bukkit.getServer().getOnlinePlayers()) {
+        	if (!test.equals(player)){
+        		if (test.hasPermission("groupmanager.notify.other"))
+        			test.sendMessage(ChatColor.YELLOW + name +" was " + msg);
+        	} else
+        		if ((player != null) && ((player.hasPermission("groupmanager.notify.self")) || (player.hasPermission("groupmanager.notify.other"))))
+                    player.sendMessage(ChatColor.YELLOW + "You we're " + msg);
+        }
+    		
     }
 
     /**

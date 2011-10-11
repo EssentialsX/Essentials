@@ -119,9 +119,12 @@ public class User extends DataUnit implements Cloneable {
         group = getDataSource().getGroup(group.getName());
         this.group = group.getName();
         flagAsChanged();
-        if (GroupManager.isLoaded())
+        if (GroupManager.isLoaded()) {
         	if (GroupManager.BukkitPermissions.player_join = false)
         		GroupManager.BukkitPermissions.updateAllPlayers();
+        
+        	GroupManager.notify(this.getName(), String.format(" moved to the group %s.", group.getName()));
+        }
     }
 
     public void addSubGroup(Group subGroup) {
