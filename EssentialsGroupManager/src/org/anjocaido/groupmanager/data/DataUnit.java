@@ -102,7 +102,7 @@ public abstract class DataUnit {
      * @return a copy of the permission list
      */
     public ArrayList<String> getPermissionList() {
-        return (ArrayList<String>) permissions.clone();
+        return new ArrayList<String>(permissions);
     }
 
     public void sortPermissions() {

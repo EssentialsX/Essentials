@@ -1770,10 +1770,10 @@ public class GroupManager extends JavaPlugin {
         for(Player test: Bukkit.getServer().getOnlinePlayers()) {
         	if (!test.equals(player)){
         		if (test.hasPermission("groupmanager.notify.other"))
-        			test.sendMessage(ChatColor.YELLOW + name +" was " + msg);
+        			test.sendMessage(ChatColor.YELLOW + name +" was" + msg);
         	} else
         		if ((player != null) && ((player.hasPermission("groupmanager.notify.self")) || (player.hasPermission("groupmanager.notify.other"))))
-                    player.sendMessage(ChatColor.YELLOW + "You we're " + msg);
+                    player.sendMessage(ChatColor.YELLOW + "You we're" + msg);
         }
     		
     }
