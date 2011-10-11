@@ -1773,7 +1773,7 @@ public class GroupManager extends JavaPlugin {
         			test.sendMessage(ChatColor.YELLOW + name +" was " + msg);
         	} else
         		if ((player != null) && ((player.hasPermission("groupmanager.notify.self")) || (player.hasPermission("groupmanager.notify.other"))))
-                    player.sendMessage(ChatColor.YELLOW + "You we're " + msg);
+                    player.sendMessage(ChatColor.YELLOW + "You were " + msg);
         }
     		
     }
