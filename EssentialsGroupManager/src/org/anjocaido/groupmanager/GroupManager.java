@@ -236,7 +236,7 @@ public class GroupManager extends JavaPlugin {
      * @param cmd
      * @param args
      */
-    @SuppressWarnings({"null", "deprecation"})
+    @SuppressWarnings({"deprecation"})
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         boolean playerCanDo = false;
