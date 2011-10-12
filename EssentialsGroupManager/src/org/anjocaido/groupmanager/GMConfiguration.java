@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import org.anjocaido.groupmanager.utils.Tasks;
-import org.bukkit.util.config.Configuration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
  *
@@ -20,7 +20,7 @@ public class GMConfiguration {
 
     private GroupManager plugin;
     private File configFile;
-    private Configuration GMconfig;
+    private YamlConfiguration GMconfig;
     
     public GMConfiguration(GroupManager plugin) {
         this.plugin = plugin;
@@ -41,10 +41,10 @@ public class GMConfiguration {
             }
         }
 
-        GMconfig = new Configuration(configFile);
+        GMconfig = new YamlConfiguration();
         
         try {
-        	GMconfig.load();
+        	GMconfig.load(configFile);
         } catch (Exception ex) {
             throw new IllegalArgumentException("The following file couldn't pass on Parser.\n" + configFile.getPath(), ex);
         }
@@ -52,12 +52,15 @@ public class GMConfiguration {
     }
     
     public boolean isOpOverride() {
+    	return GMconfig.getBoolean("settings.config.bukkit_perms_override", true);
+    }
+    public boolean isBukkitPermsOverride() {
     	return GMconfig.getBoolean("settings.config.opOverrides", true);
     }
 
     @SuppressWarnings("unchecked")
 	public Map<String, Object> getMirrorsMap() {    	
-    	return (Map<String, Object>) GMconfig.getProperty("settings.permission.world.mirror");
+    	return (Map<String, Object>) GMconfig.getList("settings.permission.world.mirror");
     }
 
     public Integer getSaveInterval() {   	

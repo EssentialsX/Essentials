@@ -57,7 +57,7 @@ public class GroupManager extends JavaPlugin {
     private boolean validateOnlinePlayer = true;
     private boolean isReady = false;
     private static boolean isLoaded = false;
-    private GMConfiguration config;
+    protected GMConfiguration config;
     private GMLoggerHandler ch;
     public static BukkitPermissions BukkitPermissions;
     private static  WorldListener WorldEvents;
@@ -369,7 +369,8 @@ public class GroupManager extends JavaPlugin {
                                         
                     //PARECE OK
                     auxUser.setGroup(auxGroup);
-                    sender.sendMessage(ChatColor.YELLOW + "You changed player '" + auxUser.getName() + "' group to '" + auxGroup.getName() + "'.");
+                    if (!sender.hasPermission("groupmanager.notify.other"))
+                    	sender.sendMessage(ChatColor.YELLOW + "You changed player '" + auxUser.getName() + "' group to '" + auxGroup.getName() + "'.");
                     
                     targetPlayer = this.getServer().getPlayer(auxUser.getName());
                     if (targetPlayer != null) BukkitPermissions.updatePermissions(targetPlayer);
@@ -1590,7 +1591,8 @@ public class GroupManager extends JavaPlugin {
                     }
                     //PARECE OK
                     auxUser.setGroup(auxGroup);
-                    sender.sendMessage(ChatColor.YELLOW + "You changed " + auxUser.getName() + " group to " + auxGroup.getName() + ".");
+                    if (!sender.hasPermission("groupmanager.notify.other"))
+                    	sender.sendMessage(ChatColor.YELLOW + "You changed " + auxUser.getName() + " group to " + auxGroup.getName() + ".");
                     
                     targetPlayer = this.getServer().getPlayer(auxUser.getName());
                     if (targetPlayer != null) BukkitPermissions.updatePermissions(targetPlayer);
@@ -1648,7 +1650,8 @@ public class GroupManager extends JavaPlugin {
                     }
                     //PARECE OK
                     auxUser.setGroup(auxGroup);
-                    sender.sendMessage(ChatColor.YELLOW + "You changed " + auxUser.getName() + " group to " + auxGroup.getName() + ".");
+                    if (!sender.hasPermission("groupmanager.notify.other"))
+                    	sender.sendMessage(ChatColor.YELLOW + "You changed " + auxUser.getName() + " group to " + auxGroup.getName() + ".");
                     
                     targetPlayer = this.getServer().getPlayer(auxUser.getName());
                     if (targetPlayer != null) BukkitPermissions.updatePermissions(targetPlayer);
@@ -1770,10 +1773,10 @@ public class GroupManager extends JavaPlugin {
         for(Player test: Bukkit.getServer().getOnlinePlayers()) {
         	if (!test.equals(player)){
         		if (test.hasPermission("groupmanager.notify.other"))
-        			test.sendMessage(ChatColor.YELLOW + name +" was " + msg);
+        			test.sendMessage(ChatColor.YELLOW + name +" was" + msg);
         	} else
         		if ((player != null) && ((player.hasPermission("groupmanager.notify.self")) || (player.hasPermission("groupmanager.notify.other"))))
-                    player.sendMessage(ChatColor.YELLOW + "You we're " + msg);
+                    player.sendMessage(ChatColor.YELLOW + "You were" + msg);
         }
     		
     }
