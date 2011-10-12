@@ -32,8 +32,9 @@ public class EssentialsHelp extends PlayerListener
 	private final static Charset UTF8 = Charset.forName("utf-8");
 	private transient IrcBot ircBot;
 
-	public EssentialsHelp(Plugin plugin)
+	public EssentialsHelp(final Plugin plugin)
 	{
+		super();
 		this.plugin = plugin;
 		this.server = plugin.getServer();
 	}

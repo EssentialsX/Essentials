@@ -1,7 +1,6 @@
 package com.earth2me.essentials.update;
 
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -13,28 +12,29 @@ import org.jibble.pircbot.User;
 
 public class IrcBot extends PircBot
 {
-	private static final String channel = "#essentials";
-	private static final int port = 6667;
-	private static final String server = "irc.esper.net";
+	private static final String CHANNEL = "#essentials";
+	private static final int PORT = 6667;
+	private static final String SERVER = "irc.esper.net";
 	private transient boolean reconnect = true;
-	private transient Player player;
+	private final transient Player player;
 	private transient boolean kicked = false;
 
-	public IrcBot(Player player, final String nickName, final String versionString)
+	public IrcBot(final Player player, final String nickName, final String versionString)
 	{
+		super();
 		this.player = player;
 		setName(nickName);
 		setLogin("esshelp");
 		setVersion(versionString);
 		connect();
-		joinChannel(channel);
+		joinChannel(CHANNEL);
 	}
 
 	private void connect()
 	{
 		try
 		{
-			connect(server, port);
+			connect(SERVER, PORT);
 			return;
 		}
 		catch (IOException ex)
@@ -45,7 +45,6 @@ public class IrcBot extends PircBot
 		{
 			Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
 		}
-
 	}
 
 	public void quit()
@@ -63,10 +62,35 @@ public class IrcBot extends PircBot
 	@Override
 	protected void onDisconnect()
 	{
-		super.onDisconnect();
 		if (reconnect)
 		{
-			connect();
+			int tries = 10;
+			while (!isConnected())
+			{
+				try
+				{
+					tries--;
+					reconnect();
+				}
+				catch (Exception e)
+				{
+					Bukkit.getLogger().log(Level.WARNING, e.getMessage(), e);
+					try
+					{
+						Thread.sleep(10000);
+					}
+					catch (InterruptedException ex)
+					{
+						Bukkit.getLogger().log(Level.WARNING, e.getMessage(), e);
+					}
+				}
+				if (tries <= 0)
+				{
+					player.sendMessage("Connection lost to server.");
+					kicked = true;
+					break;
+				}
+			}
 		}
 	}
 
@@ -110,25 +134,25 @@ public class IrcBot extends PircBot
 		player.sendMessage(formatChatMessage(channel, topic, false));
 	}
 
-	public String formatChatMessage(String nick, String message, boolean action)
+	public String formatChatMessage(final String nick, final String message, final boolean action)
 	{
-		final StringBuilder sb = new StringBuilder();
-		sb.append("§6");
+		final StringBuilder builder = new StringBuilder();
+		builder.append("§6");
 		if (action)
 		{
-			sb.append('*');
+			builder.append('*');
 		}
-		sb.append(nick);
+		builder.append(nick);
 		if (!action)
 		{
-			sb.append(':');
+			builder.append(':');
 		}
-		sb.append(" §7");
-		sb.append(replaceColors(message));
-		return sb.toString();
+		builder.append(" §7");
+		builder.append(replaceColors(message));
+		return builder.toString();
 	}
 
-	private String replaceColors(String message)
+	private String replaceColors(final String message)
 	{
 		String m = Colors.removeFormatting(message);
 		m = m.replaceAll("\u000310(,(0?[0-9]|1[0-5]))?", "§b");
@@ -147,17 +171,18 @@ public class IrcBot extends PircBot
 		m = m.replaceAll("\u00030?8(,(0?[0-9]|1[0-5]))?", "§e");
 		m = m.replaceAll("\u00030?9(,(0?[0-9]|1[0-5]))?", "§a");
 		m = m.replaceAll("\u00030?0(,(0?[0-9]|1[0-5]))?", "§f");
+		m = m.replace("\u000f", "§7");
 		m = Colors.removeColors(m);
 		return m;
 	}
 
-	public void sendMessage(String message)
+	public void sendMessage(final String message)
 	{
-		sendMessage(channel, message);
+		sendMessage(CHANNEL, message);
 	}
 
 	public User[] getUsers()
 	{
-		return getUsers(channel);
+		return getUsers(CHANNEL);
 	}
 }
