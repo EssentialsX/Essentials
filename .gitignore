@@ -32,4 +32,5 @@
 /YamlAnnotations/
 /EssentialsUpdate/nbproject/private/
 /EssentialsRelease/
-/EssentialsUpdate/
+/EssentialsUpdate/dist/
+/EssentialsUpdate/build/

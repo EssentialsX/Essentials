@@ -1,0 +1,8 @@
+This directory contains modes.  Unlike commands, errors, and replies,
+these modes do NOT contain any information about the mode other than
+what it is.  The Mode objects know if the mode takes a parameter, what
+character represents the mode, and contain a method to create a new
+instance of itself.
+
+You can get and set parameters using the Mode related commands.
+
