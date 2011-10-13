@@ -9,7 +9,9 @@ function uploadit($build, $branch, $file, $version, $changes)
   $url = "http://ci.earth2me.net/guestAuth/repository/download/$branch/$build:id/$file";
   $filename = explode('.', $file);
   $request_url = "http://dev.bukkit.org/server-mods/$slug/upload-file.json";
-  $params['api-key'] = "c73c331c7e44c156c852f7d08de3f22bb7a6e948";
+  
+  include ('apikey.php');
+  
   $params['name'] = $filename[0] . '-' . $version;
   $params['game_versions'] = 176;
   $params['change_log'] = $changes;
@@ -84,7 +86,7 @@ function getChanges($job, $project)
       }
       if ($text != "")
       {
-        $output .= "<li>$text</li>";
+        $output .= "<li>$text</li>\n";
       }
     }
   }
