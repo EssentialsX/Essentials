@@ -4,6 +4,7 @@ import com.earth2me.essentials.storage.Comment;
 import com.earth2me.essentials.storage.MapType;
 import com.earth2me.essentials.storage.StorageObject;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,6 +18,9 @@ public class General extends StorageObject
 	{
 		super();
 		locations.put("Test", new Location());
+		locations.put("Test5", new Location());
+		locations.put("Test4", new Location());
+		locations.put("Test3", new Location());
 		locations.put("Test2", new Location());
 	}
 	private boolean debug = false;
@@ -33,5 +37,5 @@ public class General extends StorageObject
 	})
 	private String locale;
 	@MapType(Location.class)
-	private Map<String, Location> locations = new HashMap<String, Location>();
+	private LinkedHashMap<String, Location> locations = new LinkedHashMap<String, Location>();
 }
