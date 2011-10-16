@@ -47,3 +47,4 @@ v 1.4:
 	- Added a config setting - bukkit_perms_override: false
 	  Enable to allow default Bukkit based permissions to remain enabled, unless directly negated within GroupManager.
 	- Fixed reading world mirrors from the config.
+	- Simplified config.yml while retaining backwards compatibility.

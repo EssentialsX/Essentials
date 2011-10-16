@@ -59,8 +59,12 @@ public class GMConfiguration {
     }
 
 	public Map<String, Object> getMirrorsMap() {   
-    	
-    	return (Map<String, Object>) GMconfig.getConfigurationSection("settings.permission.world.mirror").getValues(false);
+    	// Try to fetch the old mirror path first		
+		if (GMconfig.isConfigurationSection("settings.permission.world.mirror"))
+			return (Map<String, Object>) GMconfig.getConfigurationSection("settings.permission.world.mirror").getValues(false);
+		else
+			return (Map<String, Object>) GMconfig.getConfigurationSection("settings.mirrors").getValues(false);
+		
     }
 
     public Integer getSaveInterval() {   	
