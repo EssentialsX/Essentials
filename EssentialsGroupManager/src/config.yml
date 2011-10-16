@@ -11,6 +11,8 @@ settings:
     save:
       # How often GroupManager will save it's data back to groups and users.yml
       minutes: 10
+      # Number of hours to retain backups (plugins/GroupManager/backup)
+      hours: 24
       
   logging:
     # level of detail GroupManager will use when logging.

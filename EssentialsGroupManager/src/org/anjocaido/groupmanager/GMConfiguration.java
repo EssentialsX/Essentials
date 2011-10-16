@@ -70,6 +70,10 @@ public class GMConfiguration {
     public Integer getSaveInterval() {   	
     	return GMconfig.getInt("settings.data.save.minutes", 10);
     }
+    
+    public Integer getBackupDuration() {   	
+    	return GMconfig.getInt("settings.data.save.hours", 24);
+    }
 
     public void adjustLoggerLevel() {
     	

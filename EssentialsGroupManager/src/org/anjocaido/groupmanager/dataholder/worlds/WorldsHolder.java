@@ -168,7 +168,7 @@ public class WorldsHolder {
             if (alreadyDone.contains(w)) {
                 continue;
             }
-            Tasks.removeOldFiles(plugin.getBackupFolder());
+            Tasks.removeOldFiles(plugin, plugin.getBackupFolder());
             if (w == null) {
                 GroupManager.logger.severe("WHAT HAPPENED?");
                 continue;
