@@ -57,10 +57,12 @@ public class Settings implements ISettings
 		for (String set : homeList)
 		{
 			logger.log(Level.INFO, "Found home set: " + set);
-			if (user.hasPermission("essentials.sethome.multiple." + set) && limit < getHomeLimit(set))
+			if (user.hasPermission("essentials.sethome.multiple." + set))
 			{
 				logger.log(Level.INFO, "Found permission for set: " + set);
-				limit = getHomeLimit(set);
+				if (limit < getHomeLimit(set)) {
+					limit = getHomeLimit(set);
+				}
 			}
 		}
 		return limit;
@@ -69,6 +71,7 @@ public class Settings implements ISettings
 	@Override
 	public int getHomeLimit(final String set)
 	{		
+		logger.log(Level.INFO, "Checking limit for: " + set);
 		return config.getInt("sethome-multiple." + set, config.getInt("sethome-multiple.default", 3));
 	}
 
