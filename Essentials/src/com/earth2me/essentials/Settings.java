@@ -59,6 +59,7 @@ public class Settings implements ISettings
 			logger.log(Level.INFO, "Found home set: " + set);
 			if (user.hasPermission("essentials.sethome.multiple." + set) && limit < getHomeLimit(set))
 			{
+				logger.log(Level.INFO, "Found permission for set: " + set);
 				limit = getHomeLimit(set);
 			}
 		}
