@@ -46,7 +46,7 @@ public class Settings implements ISettings
 	@Override
 	public int getHomeLimit(final User user)
 	{
-		final List<String> homeList = getMultipleHomes();	
+		final List<String> homeList = getMultipleHomes();
 		if (homeList == null)
 		{
 			//TODO: Replace this code to remove backwards compat, after settings are automatically updated
@@ -56,13 +56,9 @@ public class Settings implements ISettings
 		int limit = getHomeLimit("default");
 		for (String set : homeList)
 		{
-			logger.log(Level.INFO, "Found home set: " + set);
-			if (user.hasPermission("essentials.sethome.multiple." + set))
+			if (user.isAuthorized("essentials.sethome.multiple." + set) && (limit < getHomeLimit(set)))
 			{
-				logger.log(Level.INFO, "Found permission for set: " + set);
-				if (limit < getHomeLimit(set)) {
-					limit = getHomeLimit(set);
-				}
+				limit = getHomeLimit(set);
 			}
 		}
 		return limit;
@@ -70,8 +66,7 @@ public class Settings implements ISettings
 
 	@Override
 	public int getHomeLimit(final String set)
-	{		
-		logger.log(Level.INFO, "Checking limit for: " + set);
+	{
 		return config.getInt("sethome-multiple." + set, config.getInt("sethome-multiple.default", 3));
 	}
 
