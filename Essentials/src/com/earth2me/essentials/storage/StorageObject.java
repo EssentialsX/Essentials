@@ -16,7 +16,9 @@ import java.util.logging.Logger;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.composer.Composer;
 import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.introspector.PropertyUtils;
 
 
 public class StorageObject
@@ -130,7 +132,7 @@ public class StorageObject
 		for (Field field : clazz.getDeclaredFields())
 		{
 			final int modifier = field.getModifiers();
-			if (Modifier.isPrivate(modifier) && !Modifier.isTransient(depth) && !Modifier.isStatic(depth))
+			if (Modifier.isPrivate(modifier) && !Modifier.isTransient(modifier) && !Modifier.isStatic(modifier))
 			{
 				field.setAccessible(true);
 				final boolean commentPresent = field.isAnnotationPresent(Comment.class);
@@ -167,6 +169,7 @@ public class StorageObject
 				if (data == null && commentPresent)
 				{
 					writer.println();
+					writer.println();
 					continue;
 				}
 				if (data instanceof StorageObject)
@@ -193,6 +196,7 @@ public class StorageObject
 							else if (value instanceof String || value instanceof Boolean || value instanceof Number)
 							{
 								yaml.dumpAll(Collections.singletonList(value).iterator(), writer);
+								writer.println();
 							}
 							else
 							{
@@ -221,10 +225,12 @@ public class StorageObject
 							}
 						}
 					}
+					writer.println();
 				}
 				else if (data instanceof String || data instanceof Boolean || data instanceof Number)
 				{
 					yaml.dumpAll(Collections.singletonList(data).iterator(), writer);
+					writer.println();
 				}
 				else
 				{

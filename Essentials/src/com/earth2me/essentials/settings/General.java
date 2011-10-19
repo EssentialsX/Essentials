@@ -1,11 +1,7 @@
 package com.earth2me.essentials.settings;
 
 import com.earth2me.essentials.storage.Comment;
-import com.earth2me.essentials.storage.MapType;
 import com.earth2me.essentials.storage.StorageObject;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -14,21 +10,12 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class General extends StorageObject
 {
-	public General()
-	{
-		super();
-		locations.put("Test", new Location());
-		locations.put("Test5", new Location());
-		locations.put("Test4", new Location());
-		locations.put("Test3", new Location());
-		locations.put("Test2", new Location());
-	}
-	private boolean debug = false;
-	private boolean signsDisabled = false;
-	private int test = 1;
-	private String test2 = "\tline1\nline2\nline3";
 	@Comment("Backup runs a command while saving is disabled")
 	private Backup backup = new Backup();
+	@Comment("You can disable the death messages of minecraft.")
+	private boolean deathMessages = true;
+	@Comment("Turn this on, if you want to see more error messages, if something goes wrong.")
+	private boolean debug = false;
 	@Comment(
 	{
 		"Set the locale here, if you want to change the language of Essentials.",
@@ -36,6 +23,11 @@ public class General extends StorageObject
 		"Available locales: da, de, en, fr, nl"
 	})
 	private String locale;
-	@MapType(Location.class)
-	private LinkedHashMap<String, Location> locations = new LinkedHashMap<String, Location>();
+	@Comment(
+	{
+		"Should we announce to the server when someone logs in for the first time?",
+		"If so, use this format, replacing {DISPLAYNAME} with the player name.",
+		"If not, set to ''"
+	})
+	private String newPlayerAnnouncement = "&dWelcome {DISPLAYNAME} to the server!";
 }
