@@ -14,9 +14,10 @@ public class Commandrealname extends EssentialsCommand
 	{
 		super("realname");
 	}
-	
-	@Override 
-	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception {
+
+	@Override
+	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();

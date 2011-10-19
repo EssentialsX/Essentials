@@ -35,7 +35,7 @@ public class Commandworth extends EssentialsCommand
 		}
 		catch (NumberFormatException ex)
 		{
-			amount = 64;
+			amount = is.getType().getMaxStackSize();
 		}
 
 		is.setAmount(amount);
@@ -58,14 +58,16 @@ public class Commandworth extends EssentialsCommand
 									   amount,
 									   Util.formatCurrency(worth, ess)));
 	}
-	
-	@Override protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception {
+
+	@Override
+	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		
-		ItemStack is = ess.getItemDb().get(args[0]);// = user.getInventory().getItemInHand();
+
+		ItemStack is = ess.getItemDb().get(args[0]);
 		int amount = is.getAmount();
 
 		try
@@ -77,7 +79,7 @@ public class Commandworth extends EssentialsCommand
 		}
 		catch (NumberFormatException ex)
 		{
-			amount = 64;
+			amount = is.getType().getMaxStackSize();
 		}
 
 		is.setAmount(amount);
@@ -88,17 +90,17 @@ public class Commandworth extends EssentialsCommand
 		}
 
 		sender.sendMessage(is.getDurability() != 0
-						 ? Util.format("worthMeta",
-									   is.getType().toString().toLowerCase().replace("_", ""),
-									   is.getDurability(),
-									   Util.formatCurrency(worth * amount, ess),
-									   amount,
-									   Util.formatCurrency(worth, ess))
-						 : Util.format("worth",
-									   is.getType().toString().toLowerCase().replace("_", ""),
-									   Util.formatCurrency(worth * amount, ess),
-									   amount,
-									   Util.formatCurrency(worth, ess)));
+						   ? Util.format("worthMeta",
+										 is.getType().toString().toLowerCase().replace("_", ""),
+										 is.getDurability(),
+										 Util.formatCurrency(worth * amount, ess),
+										 amount,
+										 Util.formatCurrency(worth, ess))
+						   : Util.format("worth",
+										 is.getType().toString().toLowerCase().replace("_", ""),
+										 Util.formatCurrency(worth * amount, ess),
+										 amount,
+										 Util.formatCurrency(worth, ess)));
 
 	}
 }
