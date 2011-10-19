@@ -76,7 +76,11 @@ public class Commandmail extends EssentialsCommand
 		{
 			throw new Exception(Util.format("onlyPlayers", commandLabel+" read"));
 		}
-		if (args.length >= 3 && "send".equalsIgnoreCase(args[0]))
+		else if (args.length >= 1 && "clear".equalsIgnoreCase(args[0]))
+		{
+			throw new Exception(Util.format("onlyPlayers", commandLabel+" clear"));	
+		}
+		else if (args.length >= 3 && "send".equalsIgnoreCase(args[0]))
 		{
 			Player player = server.getPlayer(args[1]);
 			User u;
@@ -95,10 +99,26 @@ public class Commandmail extends EssentialsCommand
 			u.addMail("Server: " + getFinalArg(args, 2));
 			sender.sendMessage(Util.i18n("mailSent"));
 			return;
-		}
-		if (args.length >= 1 && "clear".equalsIgnoreCase(args[0]))
-		{
-			throw new Exception(Util.format("onlyPlayers", commandLabel+" clear"));	
+		} 
+		else if (args.length >= 2) 
+		{ //allow sending from console without "send" argument, since it's the only thing the console can do
+			Player player = server.getPlayer(args[0]);
+			User u;
+			if (player != null)
+			{
+				u = ess.getUser(player);
+			}
+			else
+			{
+				u = ess.getOfflineUser(args[0]);
+			}
+			if (u == null)
+			{
+				throw new Exception(Util.format("playerNeverOnServer", args[0]));
+			}
+			u.addMail("Server: " + getFinalArg(args, 1));
+			sender.sendMessage(Util.i18n("mailSent"));
+			return;
 		}
 		throw new NotEnoughArgumentsException();
 	}

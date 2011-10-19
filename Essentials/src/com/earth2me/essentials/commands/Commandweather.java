@@ -47,7 +47,7 @@ public class Commandweather extends EssentialsCommand
 	@Override protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception {
 		if (args.length < 2) //running from console means inserting a world arg before other args
 		{
-			throw new NotEnoughArgumentsException();
+			throw new Exception("When running from console, usage is: /"+commandLabel+" <world> <storm/sun> [duration]");
 		}
 
 		boolean isStorm = args[1].equalsIgnoreCase("storm");
