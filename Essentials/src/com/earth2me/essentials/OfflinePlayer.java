@@ -3,9 +3,9 @@ package com.earth2me.essentials;
 import java.net.InetSocketAddress;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import lombok.Delegate;
 import org.bukkit.Achievement;
 import org.bukkit.Effect;
 import org.bukkit.GameMode;
@@ -36,40 +36,32 @@ import org.bukkit.util.Vector;
 
 public class OfflinePlayer implements Player
 {
-	private final String name;
-	final transient IEssentials ess;
+	private final transient IEssentials ess;
 	private Location location = new Location(null, 0, 0, 0, 0, 0);
 	private World world;
 	private UUID uniqueId = UUID.randomUUID();
-	private org.bukkit.OfflinePlayer base;
+	@Delegate(types=org.bukkit.OfflinePlayer.class)
+	private final org.bukkit.OfflinePlayer base;
 
-	public OfflinePlayer(String name, IEssentials ess)
+	public OfflinePlayer(final String name, final IEssentials ess)
 	{
-		this.name = name;
 		this.ess = ess;
 		this.world = ess.getServer().getWorlds().get(0);
 		this.base = ess.getServer().getOfflinePlayer(name);
 	}
 
-	public boolean isOnline()
-	{
-		return base.isOnline();
-	}
-
-	public boolean isOp()
-	{
-		return base.isOp();
-	}
-
-	public void sendMessage(String string)
+	@Override
+	public void sendMessage(final String string)
 	{
 	}
 
+	@Override
 	public String getDisplayName()
 	{
-		return name;
+		return base.getName();
 	}
 
+	@Override
 	public void setDisplayName(String string)
 	{
 	}
@@ -85,11 +77,6 @@ public class OfflinePlayer implements Player
 
 	public void kickPlayer(String string)
 	{
-	}
-
-	public String getName()
-	{
-		return name;
 	}
 
 	public PlayerInventory getInventory()
@@ -577,40 +564,11 @@ public class OfflinePlayer implements Player
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
-
-	public void setOp(boolean bln)
-	{
-		base.setOp(bln);
-	}
-
+	
 	@Override
 	public void sendMap(MapView mv)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
-	}
-
-	@Override
-	public boolean isBanned()
-	{
-		return base.isBanned();
-	}
-
-	@Override
-	public void setBanned(boolean bln)
-	{
-		base.setBanned(bln);
-	}
-
-	@Override
-	public boolean isWhitelisted()
-	{
-		return base.isWhitelisted();
-	}
-
-	@Override
-	public void setWhitelisted(boolean bln)
-	{
-		base.setWhitelisted(bln);
 	}
 
 	@Override
@@ -735,12 +693,6 @@ public class OfflinePlayer implements Player
 
 	@Override
 	public void setTicksLived(int i)
-	{
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
-
-	@Override
-	public Map<String, Object> serialize()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
