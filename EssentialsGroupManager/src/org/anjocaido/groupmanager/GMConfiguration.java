@@ -58,13 +58,21 @@ public class GMConfiguration {
     	return GMconfig.getBoolean("settings.config.opOverrides", true);
     }
 
-    @SuppressWarnings("unchecked")
-	public Map<String, Object> getMirrorsMap() {    	
-    	return (Map<String, Object>) GMconfig.getList("settings.permission.world.mirror");
+	public Map<String, Object> getMirrorsMap() {   
+    	// Try to fetch the old mirror path first		
+		if (GMconfig.isConfigurationSection("settings.permission.world.mirror"))
+			return (Map<String, Object>) GMconfig.getConfigurationSection("settings.permission.world.mirror").getValues(false);
+		else
+			return (Map<String, Object>) GMconfig.getConfigurationSection("settings.mirrors").getValues(false);
+		
     }
 
     public Integer getSaveInterval() {   	
     	return GMconfig.getInt("settings.data.save.minutes", 10);
+    }
+    
+    public Integer getBackupDuration() {   	
+    	return GMconfig.getInt("settings.data.save.hours", 24);
     }
 
     public void adjustLoggerLevel() {

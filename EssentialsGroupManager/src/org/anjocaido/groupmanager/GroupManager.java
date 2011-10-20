@@ -163,6 +163,7 @@ public class GroupManager extends JavaPlugin {
             int minutes = getGMConfig().getSaveInterval();
             scheduler.scheduleAtFixedRate(commiter, minutes, minutes, TimeUnit.MINUTES);
             GroupManager.logger.info("Scheduled Data Saving is set for every " + minutes + " minutes!");
+            GroupManager.logger.info("Backups will be retained for " + getGMConfig().getBackupDuration() + " hours!");
         }
     }
 
