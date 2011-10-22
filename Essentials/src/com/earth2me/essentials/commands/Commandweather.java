@@ -4,6 +4,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 
 
 public class Commandweather extends EssentialsCommand
@@ -29,16 +30,50 @@ public class Commandweather extends EssentialsCommand
 			world.setStorm(isStorm ? true : false);
 			world.setWeatherDuration(Integer.parseInt(args[1]) * 20);
 			user.sendMessage(isStorm
-							 ? Util.format("weatherStormFor", args[1])
-							 : Util.format("weatherSunFor", args[1]));
+							 ? Util.format("weatherStormFor", world.getName(), args[1])
+							 : Util.format("weatherSunFor", world.getName(), args[1]));
 			return;
 		}
 		else
 		{
 			world.setStorm(isStorm ? true : false);
 			user.sendMessage(isStorm
-							 ? Util.i18n("weatherStorm")
-							 : Util.i18n("weatherSun"));
+							 ? Util.format("weatherStorm", world.getName())
+							 : Util.format("weatherSun", world.getName()));
+			return;
+		}
+	}
+
+	@Override
+	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	{
+		if (args.length < 2) //running from console means inserting a world arg before other args
+		{
+			throw new Exception("When running from console, usage is: /" + commandLabel + " <world> <storm/sun> [duration]");
+		}
+
+		boolean isStorm = args[1].equalsIgnoreCase("storm");
+		World world = server.getWorld(args[0]);
+		if (world == null)
+		{
+			throw new Exception("World named " + args[0] + " not found!");
+		}
+		if (args.length > 2)
+		{
+
+			world.setStorm(isStorm ? true : false);
+			world.setWeatherDuration(Integer.parseInt(args[2]) * 20);
+			sender.sendMessage(isStorm
+							   ? Util.format("weatherStormFor", world.getName(), args[2])
+							   : Util.format("weatherSunFor", world.getName(), args[2]));
+			return;
+		}
+		else
+		{
+			world.setStorm(isStorm ? true : false);
+			sender.sendMessage(isStorm
+							   ? Util.format("weatherStorm", world.getName())
+							   : Util.format("weatherSun", world.getName()));
 			return;
 		}
 	}

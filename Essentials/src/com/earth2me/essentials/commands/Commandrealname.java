@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
@@ -15,7 +16,7 @@ public class Commandrealname extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -36,7 +37,7 @@ public class Commandrealname extends EssentialsCommand
 			{
 				continue;
 			}
-			user.sendMessage(u.getDisplayName() + " " + Util.i18n("is") + " " + u.getName());
+			sender.sendMessage(u.getDisplayName() + " " + Util.i18n("is") + " " + u.getName());
 		}
 	}
 }

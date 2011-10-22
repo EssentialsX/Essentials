@@ -388,16 +388,4 @@ public class EssentialsPlayerListener extends PlayerListener
 			user.updateActivity(true);
 		}
 	}
-
-	@Override
-	public void onPlayerBedEnter(PlayerBedEnterEvent event)
-	{
-		if (event.isCancelled()) {
-			return;
-		}
-		if (event.getPlayer().isSleepingIgnored()) {
-			event.setCancelled(true);
-			event.getPlayer().sendMessage("You can't go to bed, your sleep is ignored.");
-		}
-	}
 }

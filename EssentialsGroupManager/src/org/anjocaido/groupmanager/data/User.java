@@ -183,7 +183,7 @@ public class User extends DataUnit implements Cloneable {
     }
 
     public ArrayList<String> subGroupListStringCopy() {
-        return (ArrayList<String>) subGroups.clone();
+        return new ArrayList<String>(subGroups);
     }
 
     /**

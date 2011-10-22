@@ -40,3 +40,12 @@ v 1.3:
 	- Fixed manudelsub not correctly selecting the group to remove.
 	- Added two new permission nodes - groupmanager.notify.self & groupmanager.notify.other
 	  These allow players/admins to be notified when players are moved between groups.
+v 1.4:
+	- Updated for Bukkits new YamlConfiguration.
+	- Cleared remaining Cast errors cause by object cloning.
+	- Removed extra notification messages for the player issuing the group move command.
+	- Added a config setting - bukkit_perms_override: false
+	  Enable to allow default Bukkit based permissions to remain enabled, unless directly negated within GroupManager.
+	- Fixed reading world mirrors from the config.
+	- Simplified config.yml while retaining backwards compatibility.
+	- Added data.save.hours setting to config. This allow control over how long backups are retained.

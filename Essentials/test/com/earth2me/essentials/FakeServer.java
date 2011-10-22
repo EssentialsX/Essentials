@@ -467,9 +467,70 @@ public class FakeServer implements Server
 	}
 
 	@Override
-	public org.bukkit.OfflinePlayer getOfflinePlayer(String string)
+	public org.bukkit.OfflinePlayer getOfflinePlayer(final String string)
 	{
-		return null;
+		return new org.bukkit.OfflinePlayer() {
+
+			@Override
+			public boolean isOnline()
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public String getName()
+			{
+				return string;
+			}
+
+			@Override
+			public boolean isBanned()
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public void setBanned(boolean bln)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public boolean isWhitelisted()
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public void setWhitelisted(boolean bln)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public Player getPlayer()
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public boolean isOp()
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public void setOp(boolean bln)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public Map<String, Object> serialize()
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+		};
 	}
 
 	@Override

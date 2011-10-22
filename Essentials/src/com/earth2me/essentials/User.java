@@ -282,14 +282,21 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 		return nickname.toString();
 	}
-	
+
 	public void setDisplayNick(String name)
 	{
 		setDisplayName(name);
 		//TODO: Maybe we need to limit nick length, or try use a string trim.
-		if (name.length() <= 16) {
+		if (name.length() <= 16)
+		{
 			setPlayerListName(name);
 		}
+	}
+
+	@Override
+	public String getDisplayName()
+	{
+		return super.getDisplayName() == null ? super.getName() : super.getDisplayName();
 	}
 
 	public Teleport getTeleport()
@@ -355,7 +362,8 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public void setAfk(final boolean set)
 	{
 		this.setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") ? true : set);
-		if (set && !isAfk()) {
+		if (set && !isAfk())
+		{
 			afkPosition = getLocation();
 		}
 		super.setAfk(set);
@@ -461,7 +469,8 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		if (!isAfk() && autoafk > 0 && lastActivity + autoafk * 1000 < System.currentTimeMillis() && isAuthorized("essentials.afk"))
 		{
 			setAfk(true);
-			if (!isHidden()) {
+			if (!isHidden())
+			{
 				ess.broadcastMessage(this, Util.format("userIsAway", getDisplayName()));
 			}
 		}
@@ -475,7 +484,8 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	@Override
 	public boolean toggleGodModeEnabled()
 	{
-		if (!isGodModeEnabled()) {
+		if (!isGodModeEnabled())
+		{
 			setFoodLevel(20);
 		}
 		return super.toggleGodModeEnabled();

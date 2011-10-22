@@ -99,11 +99,11 @@ public class WorldsHolder {
         		 * don't load any worlds which are already loaded
         		 * or mirrored worlds that don't need data.
         		 */
-	        	if (worldsData.containsKey(folder.getName().toLowerCase())
-	        			|| mirrors.containsKey(folder.getName().toLowerCase())) {
-	                continue;
+	        	if (!worldsData.containsKey(folder.getName().toLowerCase())
+	        			|| !mirrors.containsKey(folder.getName().toLowerCase())) {
+	        		loadWorld(folder.getName());
 	            }
-	            loadWorld(folder.getName());
+	            
             }
         }
     }
@@ -168,7 +168,7 @@ public class WorldsHolder {
             if (alreadyDone.contains(w)) {
                 continue;
             }
-            Tasks.removeOldFiles(plugin.getBackupFolder());
+            Tasks.removeOldFiles(plugin, plugin.getBackupFolder());
             if (w == null) {
                 GroupManager.logger.severe("WHAT HAPPENED?");
                 continue;

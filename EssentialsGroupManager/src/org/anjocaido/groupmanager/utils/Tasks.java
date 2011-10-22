@@ -13,6 +13,8 @@ import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+
+import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.data.Group;
 
 /**
@@ -43,9 +45,9 @@ public abstract class Tasks {
         copy(in, dst);
     }
 
-    public static void removeOldFiles(File folder) {
+    public static void removeOldFiles(GroupManager gm, File folder) {
         if (folder.isDirectory()) {
-            long oldTime = System.currentTimeMillis() - 86400000L;
+            long oldTime = System.currentTimeMillis() - (((long)gm.getGMConfig().getBackupDuration()*60*60)*1000);
             for (File olds : folder.listFiles()) {
                 if (olds.isFile()) {
                     if (olds.lastModified() < oldTime) {

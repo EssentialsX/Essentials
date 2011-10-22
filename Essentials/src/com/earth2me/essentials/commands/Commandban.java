@@ -46,7 +46,7 @@ public class Commandban extends EssentialsCommand
 		if (args.length > 1)
 		{
 			banReason = getFinalArg(args, 1);
-			player.setBanReason(commandLabel);
+			player.setBanReason(banReason);
 		}
 		else
 		{
