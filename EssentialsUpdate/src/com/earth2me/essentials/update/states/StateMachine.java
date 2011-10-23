@@ -23,6 +23,7 @@ public class StateMachine extends WorkListener
 		this.player = player;
 		states.clear();
 		states.add(new EssentialsChat(states));
+		states.add(new EssentialsProtect(states));
 		current = states.get(0);
 	}
 
