@@ -22,7 +22,11 @@ public class GetFile
 
 	public GetFile(final String urlString) throws MalformedURLException, IOException
 	{
-		final URL url = new URL(urlString);
+		this(new URL(urlString));
+	}
+
+	public GetFile(final URL url) throws IOException
+	{
 		this.connection = url.openConnection();
 		this.connection.setConnectTimeout(1000);
 		this.connection.setReadTimeout(5000);

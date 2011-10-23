@@ -1,19 +1,28 @@
 package com.earth2me.essentials.update;
 
-import java.io.File;
+import org.bukkit.plugin.Plugin;
 
 
-public class UpdatesDownloader
+public class UpdatesDownloader extends WorkListener
 {
-
-	UpdatesDownloader()
+	public UpdatesDownloader(final Plugin plugin, final VersionInfo newVersionInfo)
 	{
-		
+		super(plugin, newVersionInfo);
 	}
 
-	void start(File updateFolderFile, VersionInfo newVersion)
+	public void start()
 	{
-		
 	}
-	
+
+	@Override
+	public void onWorkAbort(String message)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void onWorkDone(String message)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }
