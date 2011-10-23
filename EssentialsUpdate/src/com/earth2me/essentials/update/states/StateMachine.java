@@ -2,7 +2,6 @@ package com.earth2me.essentials.update.states;
 
 import com.earth2me.essentials.update.WorkListener;
 import com.earth2me.essentials.update.VersionInfo;
-import java.util.Collections;
 import java.util.Iterator;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
