@@ -34,6 +34,7 @@ public class EssentialsEntityListener extends EntityListener
 			{
 				User defender = ess.getUser(eDefend);
 				User attacker = ess.getUser(eAttack);
+				attacker.updateActivity(true);
 				ItemStack is = attacker.getItemInHand();
 				List<String> commandList = attacker.getPowertool(is);
 				if (commandList != null && !commandList.isEmpty())

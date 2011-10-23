@@ -319,6 +319,8 @@ public class EssentialsPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerAnimation(final PlayerAnimationEvent event)
 	{
+		final User user = ess.getUser(event.getPlayer());
+		user.updateActivity(true);
 		usePowertools(event);
 	}
 
