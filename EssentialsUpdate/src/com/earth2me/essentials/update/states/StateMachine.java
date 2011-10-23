@@ -2,8 +2,6 @@ package com.earth2me.essentials.update.states;
 
 import com.earth2me.essentials.update.WorkListener;
 import com.earth2me.essentials.update.VersionInfo;
-import java.util.ArrayList;
-import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -15,7 +13,7 @@ public class StateMachine extends WorkListener
 	{
 		ABORT, WAIT, DONE
 	}
-	private final transient List<AbstractState> states = new ArrayList<AbstractState>();
+	private final transient StateMap states = new StateMap();
 	private transient AbstractState current;
 	private final transient Player player;
 
@@ -24,9 +22,8 @@ public class StateMachine extends WorkListener
 		super(plugin, newVersionInfo);
 		this.player = player;
 		states.clear();
-		final AbstractState state = new EssentialsChat(null);
-		states.add(state);
-		current = state;
+		states.put(EssentialsChat.class, new EssentialsChat(states));
+		current = states.get(0);
 	}
 
 	public MachineResult askQuestion()

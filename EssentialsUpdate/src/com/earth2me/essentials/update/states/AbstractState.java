@@ -7,6 +7,17 @@ import org.bukkit.entity.Player;
 public abstract class AbstractState
 {
 	private transient boolean abortion = false;
+	private final transient StateMap stateMap;
+
+	public AbstractState(final StateMap stateMap)
+	{
+		this.stateMap = stateMap;
+	}
+
+	public AbstractState getState(final Class<? extends AbstractState> stateClass)
+	{
+		return stateMap.get(stateClass);
+	}
 
 	public abstract AbstractState getNextState();
 
@@ -40,7 +51,7 @@ public abstract class AbstractState
 			|| trimmedAnswer.equalsIgnoreCase("bye")
 			|| trimmedAnswer.equalsIgnoreCase("abort"))
 		{
-			abortion = true;
+			abort();
 			return null;
 		}
 		final boolean found = reactOnAnswer(trimmedAnswer);
@@ -63,5 +74,10 @@ public abstract class AbstractState
 	public boolean isAbortion()
 	{
 		return abortion;
+	}
+
+	protected void abort()
+	{
+		abortion = true;
 	}
 }
