@@ -9,4 +9,9 @@ public class StateMap extends LinkedHashMap<Class<? extends AbstractState>, Abst
 	{
 		super();
 	}
+	
+	public AbstractState add(AbstractState state)
+	{
+		return put(state.getClass(), state);
+	}
 }

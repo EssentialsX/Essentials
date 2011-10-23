@@ -22,7 +22,7 @@ public class StateMachine extends WorkListener
 		super(plugin, newVersionInfo);
 		this.player = player;
 		states.clear();
-		states.put(EssentialsChat.class, new EssentialsChat(states));
+		states.add(new EssentialsChat(states));
 		current = states.get(0);
 	}
 
