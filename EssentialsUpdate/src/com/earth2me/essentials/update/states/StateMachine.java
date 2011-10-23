@@ -2,6 +2,8 @@ package com.earth2me.essentials.update.states;
 
 import com.earth2me.essentials.update.WorkListener;
 import com.earth2me.essentials.update.VersionInfo;
+import java.util.Collections;
+import java.util.Iterator;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -24,7 +26,7 @@ public class StateMachine extends WorkListener
 		states.clear();
 		states.add(new EssentialsChat(states));
 		states.add(new EssentialsProtect(states));
-		current = states.get(0);
+		current = states.values().iterator().next();
 	}
 
 	public MachineResult askQuestion()
@@ -58,16 +60,17 @@ public class StateMachine extends WorkListener
 		current = next;
 		return askQuestion();
 	}
-	private int position = 0;
+	private transient Iterator<AbstractState> iterator;
 
 	public void startWork()
 	{
+		iterator = states.values().iterator();
 		callStateWork();
 	}
 
 	private void callStateWork()
 	{
-		if (position > states.size())
+		if (!iterator.hasNext())
 		{
 			if (player.isOnline())
 			{
@@ -75,14 +78,13 @@ public class StateMachine extends WorkListener
 			}
 			return;
 		}
-		final AbstractState state = states.get(position);
+		final AbstractState state = iterator.next();
 		state.doWork(this);
 	}
 
 	@Override
 	public void onWorkAbort(final String message)
 	{
-		position = 0;
 		Bukkit.getScheduler().scheduleSyncDelayedTask(getPlugin(), new Runnable()
 		{
 			@Override
@@ -99,7 +101,6 @@ public class StateMachine extends WorkListener
 	@Override
 	public void onWorkDone(final String message)
 	{
-		position++;
 		Bukkit.getScheduler().scheduleSyncDelayedTask(getPlugin(), new Runnable()
 		{
 			@Override
