@@ -7,17 +7,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 
-public class EssentialsChat extends AbstractYesNoState
+public class EssentialsProtect extends AbstractYesNoState
 {
-	public EssentialsChat(final StateMap states)
+	public EssentialsProtect(final StateMap states)
 	{
-		super(states, EssentialsProtect.class);
+		super(states, null);
 	}
 
 	@Override
 	public boolean guessAnswer()
 	{
-		final Plugin plugin = Bukkit.getPluginManager().getPlugin("EssentialsChat");
+		final Plugin plugin = Bukkit.getPluginManager().getPlugin("EssentialsProtect");
 		if (plugin != null)
 		{
 			setAnswer(true);
@@ -29,8 +29,8 @@ public class EssentialsChat extends AbstractYesNoState
 	@Override
 	public void askQuestion(final Player sender)
 	{
-		sender.sendMessage("Do you want to install EssentialsChat? (yes/no)");
-		sender.sendMessage("Short descriptive text about what EssentialsChat does.");
+		sender.sendMessage("Do you want to install EssentialsProtect? (yes/no)");
+		sender.sendMessage("Short descriptive text about what EssentialsProtect does.");
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class EssentialsChat extends AbstractYesNoState
 	{
 		if (getAnswer())
 		{
-			new InstallModule(listener, "EssentialsChat").start();
+			new InstallModule(listener, "EssentialsProtect").start();
 			return;
 		}
 		listener.onWorkDone();
