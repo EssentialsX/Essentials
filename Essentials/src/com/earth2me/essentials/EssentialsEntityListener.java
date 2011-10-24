@@ -100,7 +100,8 @@ public class EssentialsEntityListener extends EntityListener
 		}
 	}
 
-	public void onRegainHealth(EntityRegainHealthEvent event)
+	@Override
+	public void onEntityRegainHealth(EntityRegainHealthEvent event)
 	{
 		if (event.getEntity() instanceof Player && ess.getUser(event.getEntity()).isAfk())
 		{
