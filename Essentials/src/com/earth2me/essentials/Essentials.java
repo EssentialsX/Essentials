@@ -188,6 +188,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Priority.Lowest, this);
 		pm.registerEvent(Type.ENTITY_COMBUST, entityListener, Priority.Lowest, this);
 		pm.registerEvent(Type.ENTITY_DEATH, entityListener, Priority.Lowest, this);
+		pm.registerEvent(Type.ENTITY_REGAIN_HEALTH, entityListener, Priority.Lowest, this);
 		pm.registerEvent(Type.FOOD_LEVEL_CHANGE, entityListener, Priority.Lowest, this);
 
 		jail = new Jail(this);

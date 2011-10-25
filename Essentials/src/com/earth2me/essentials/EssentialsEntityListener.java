@@ -1,6 +1,8 @@
 package com.earth2me.essentials;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityCombustEvent;
@@ -17,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class EssentialsEntityListener extends EntityListener
 {
+	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private final IEssentials ess;
 
 	public EssentialsEntityListener(IEssentials ess)
@@ -94,6 +97,7 @@ public class EssentialsEntityListener extends EntityListener
 	@Override
 	public void onFoodLevelChange(FoodLevelChangeEvent event)
 	{
+		LOGGER.log(Level.INFO, "Getting hungry...");
 		if (event.getEntity() instanceof Player && ess.getUser(event.getEntity()).isGodModeEnabled())
 		{
 			event.setCancelled(true);
@@ -103,12 +107,10 @@ public class EssentialsEntityListener extends EntityListener
 	@Override
 	public void onEntityRegainHealth(EntityRegainHealthEvent event)
 	{
-		if (event.getEntity() instanceof Player && ess.getUser(event.getEntity()).isAfk())
+		if (event.getRegainReason() == RegainReason.SATIATED && event.getEntity() instanceof Player
+			&& ess.getUser(event.getEntity()).isAfk() && ess.getSettings().getFreezeAfkPlayers())
 		{
-			if (event.getRegainReason() == RegainReason.SATIATED)
-			{
-				event.setCancelled(true);
-			}
+			event.setCancelled(true);
 		}
 	}
 }
