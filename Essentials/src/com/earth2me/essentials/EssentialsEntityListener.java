@@ -97,7 +97,6 @@ public class EssentialsEntityListener extends EntityListener
 	@Override
 	public void onFoodLevelChange(FoodLevelChangeEvent event)
 	{
-		LOGGER.log(Level.INFO, "Getting hungry...");
 		if (event.getEntity() instanceof Player && ess.getUser(event.getEntity()).isGodModeEnabled())
 		{
 			event.setCancelled(true);

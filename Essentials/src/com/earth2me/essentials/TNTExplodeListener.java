@@ -37,7 +37,8 @@ public class TNTExplodeListener extends EntityListener implements Runnable
 			timer = ess.scheduleSyncDelayedTask(this, 1000);
 			return;
 		}
-		if (timer != -1) {
+		if (timer != -1)
+		{
 			ess.getScheduler().cancelTask(timer);
 			timer = ess.scheduleSyncDelayedTask(this, 1000);
 		}
@@ -54,28 +55,31 @@ public class TNTExplodeListener extends EntityListener implements Runnable
 		{
 			return;
 		}
-		try {
-		final Set<ChunkPosition> set = new HashSet<ChunkPosition>(event.blockList().size());
-		final Player[] players = ess.getServer().getOnlinePlayers();
-		final List<ChunkPosition> blocksUnderPlayers = new ArrayList<ChunkPosition>(players.length);
-		final Location loc = event.getLocation();
-		for (Player player : players)
+		try
 		{
-			if (player.getWorld().equals(loc.getWorld()))
+			final Set<ChunkPosition> set = new HashSet<ChunkPosition>(event.blockList().size());
+			final Player[] players = ess.getServer().getOnlinePlayers();
+			final List<ChunkPosition> blocksUnderPlayers = new ArrayList<ChunkPosition>(players.length);
+			final Location loc = event.getLocation();
+			for (Player player : players)
 			{
-				blocksUnderPlayers.add(new ChunkPosition(player.getLocation().getBlockX(), player.getLocation().getBlockY() - 1, player.getLocation().getBlockZ()));
+				if (player.getWorld().equals(loc.getWorld()))
+				{
+					blocksUnderPlayers.add(new ChunkPosition(player.getLocation().getBlockX(), player.getLocation().getBlockY() - 1, player.getLocation().getBlockZ()));
+				}
 			}
+			for (Block block : event.blockList())
+			{
+				final ChunkPosition cp = new ChunkPosition(block.getX(), block.getY(), block.getZ());
+				if (!blocksUnderPlayers.contains(cp))
+				{
+					set.add(cp);
+				}
+			}
+			((CraftServer)ess.getServer()).getHandle().sendPacketNearby(loc.getX(), loc.getY(), loc.getZ(), 64.0, ((CraftWorld)loc.getWorld()).getHandle().worldProvider.dimension, new Packet60Explosion(loc.getX(), loc.getY(), loc.getZ(), 3.0F, set));
 		}
-		for (Block block : event.blockList())
+		catch (Throwable ex)
 		{
-			final ChunkPosition cp = new ChunkPosition(block.getX(), block.getY(), block.getZ());
-			if (!blocksUnderPlayers.contains(cp))
-			{
-				set.add(cp);
-			}
-		}
-		((CraftServer)ess.getServer()).getHandle().sendPacketNearby(loc.getX(), loc.getY(), loc.getZ(), 64.0, ((CraftWorld)loc.getWorld()).getHandle().worldProvider.dimension, new Packet60Explosion(loc.getX(), loc.getY(), loc.getZ(), 3.0F, set));
-		} catch (Throwable ex) {
 			Logger.getLogger("Minecraft").log(Level.SEVERE, null, ex);
 		}
 		event.setCancelled(true);

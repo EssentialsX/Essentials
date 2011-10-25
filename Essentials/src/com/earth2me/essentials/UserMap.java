@@ -52,7 +52,7 @@ public class UserMap implements Function<String, User>, IConf
 					}
 					catch (ComputationException ex)
 					{
-						Bukkit.getLogger().log(Level.INFO, "Failed to preload user "+name, ex);
+						Bukkit.getLogger().log(Level.INFO, "Failed to preload user " + name, ex);
 					}
 				}
 			}
