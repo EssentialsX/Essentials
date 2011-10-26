@@ -65,13 +65,33 @@ public class UpdateProcess extends PlayerListener
 				@Override
 				public void onWorkAbort(final String message)
 				{
-					Bukkit.getLogger().log(Level.SEVERE, message);
+					if (message != null && !message.isEmpty()
+						&& UpdateProcess.this.currentPlayer != null
+						&& UpdateProcess.this.currentPlayer.isOnline())
+					{
+						UpdateProcess.this.currentPlayer.sendMessage(message);
+					}
+					if (message != null && !message.isEmpty())
+					{
+						Bukkit.getLogger().log(Level.SEVERE, message);
+					}
+					UpdateProcess.this.currentPlayer = null;
 				}
 
 				@Override
 				public void onWorkDone(final String message)
 				{
-					Bukkit.getLogger().log(Level.INFO, message);
+					if (message != null && !message.isEmpty()
+						&& UpdateProcess.this.currentPlayer != null
+						&& UpdateProcess.this.currentPlayer.isOnline())
+					{
+						UpdateProcess.this.currentPlayer.sendMessage(message);
+					}
+					if (message != null && !message.isEmpty())
+					{
+						Bukkit.getLogger().log(Level.INFO, message);
+					}
+					UpdateProcess.this.currentPlayer = null;
 				}
 			}).start();
 			return true;
@@ -84,6 +104,7 @@ public class UpdateProcess extends PlayerListener
 				currentPlayer.sendMessage(message);
 			}
 			Bukkit.getLogger().log(Level.INFO, message);
+			currentPlayer = null;
 			return true;
 		}
 		return false;
