@@ -11,7 +11,7 @@ public class EssentialsChat extends AbstractYesNoState
 {
 	public EssentialsChat(final StateMap states)
 	{
-		super(states, EssentialsProtect.class);
+		super(states, EssentialsChatSettings.class, EssentialsSpawn.class);
 	}
 
 	@Override
@@ -30,7 +30,8 @@ public class EssentialsChat extends AbstractYesNoState
 	public void askQuestion(final Player sender)
 	{
 		sender.sendMessage("Do you want to install EssentialsChat? (yes/no)");
-		sender.sendMessage("Short descriptive text about what EssentialsChat does.");
+		sender.sendMessage("EssentialsChat is a simple chat formatting plugin");
+		sender.sendMessage("It allows you to make user prefixes and coloured text.");
 	}
 
 	@Override

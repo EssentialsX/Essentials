@@ -24,7 +24,9 @@ public class StateMachine extends WorkListener
 		this.player = player;
 		states.clear();
 		states.add(new EssentialsChat(states));
+		states.add(new EssentialsSpawn(states));
 		states.add(new EssentialsProtect(states));
+		states.add(new EssentialsGeoIP(states));
 		current = states.values().iterator().next();
 	}
 

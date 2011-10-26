@@ -7,9 +7,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 
-public class EssentialsProtect extends AbstractYesNoState
+public class EssentialsSpawn extends AbstractYesNoState
 {
-	public EssentialsProtect(final StateMap states)
+	public EssentialsSpawn(final StateMap states)
 	{
 		super(states, null);
 	}
@@ -17,7 +17,7 @@ public class EssentialsProtect extends AbstractYesNoState
 	@Override
 	public boolean guessAnswer()
 	{
-		final Plugin plugin = Bukkit.getPluginManager().getPlugin("EssentialsProtect");
+		final Plugin plugin = Bukkit.getPluginManager().getPlugin("EssentialsSpawn");
 		if (plugin != null)
 		{
 			setAnswer(true);
@@ -29,9 +29,9 @@ public class EssentialsProtect extends AbstractYesNoState
 	@Override
 	public void askQuestion(final Player sender)
 	{
-		sender.sendMessage("Do you want to install EssentialsProtect? (yes/no)");
-		sender.sendMessage("EssentialsProtect is a basic world protection system");
-		sender.sendMessage("It allows you to set server wide rules, such as disabling creeper explosions, and preventing fire spread.");
+		sender.sendMessage("Do you want to install EssentialsSpawn? (yes/no)");
+		sender.sendMessage("EssentialsSpawn lets you control player spawning");
+		sender.sendMessage("It allows you to set different places where players spawn on death, new players join and allows players to return to spawn.");
 	}
 
 	@Override
@@ -39,7 +39,7 @@ public class EssentialsProtect extends AbstractYesNoState
 	{
 		if (getAnswer())
 		{
-			new InstallModule(listener, "EssentialsProtect").start();
+			new InstallModule(listener, "EssentialsSpawn").start();
 			return;
 		}
 		listener.onWorkDone();
