@@ -33,29 +33,37 @@ public abstract class AbstractFileCommand implements Command
 			throw new IOException("Server log not found.");
 		}
 		final FileInputStream fis = new FileInputStream(logFile);
-		if (logFile.length() > 1000000)
+		try
 		{
-			fis.skip(logFile.length() - 1000000);
+			if (logFile.length() > 1000000)
+			{
+				fis.skip(logFile.length() - 1000000);
+			}
+			return new BufferedReader(new InputStreamReader(fis));
 		}
-		return new BufferedReader(new InputStreamReader(fis));	
+		catch (IOException ex)
+		{
+			fis.close();
+			throw ex;
+		}
 	}
-	
+
 	protected BufferedReader getPluginConfig(final String pluginName, final String fileName) throws IOException
 	{
 		final File configFolder = new File(plugin.getDataFolder().getAbsoluteFile().getParentFile(), pluginName);
-			if (!configFolder.exists())
-			{
-				throw new IOException(pluginName+" plugin folder not found.");
-			}
-			final File configFile = new File(configFolder, fileName);
-			if (!configFile.exists())
-			{
-				throw new IOException(pluginName+" plugin file "+fileName+" not found.");
-			}
-			return new BufferedReader(new InputStreamReader(new FileInputStream(configFile), UTF8));
-			
+		if (!configFolder.exists())
+		{
+			throw new IOException(pluginName + " plugin folder not found.");
+		}
+		final File configFile = new File(configFolder, fileName);
+		if (!configFile.exists())
+		{
+			throw new IOException(pluginName + " plugin file " + fileName + " not found.");
+		}
+		return new BufferedReader(new InputStreamReader(new FileInputStream(configFile), UTF8));
+
 	}
-	
+
 	protected String uploadToPastie(final StringBuilder input) throws IOException
 	{
 		if (input.length() > 15000)
