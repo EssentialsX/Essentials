@@ -24,7 +24,7 @@ public class StateMachine extends WorkListener implements Runnable
 		super(plugin, updateCheck.getNewVersionInfo());
 		this.player = player;
 		states.clear();
-		UpdateOrInstallation state = new UpdateOrInstallation(states, updateCheck);
+		final UpdateOrInstallation state = new UpdateOrInstallation(states, updateCheck);
 		current = states.put(UpdateOrInstallation.class, state);
 	}
 
@@ -102,9 +102,10 @@ public class StateMachine extends WorkListener implements Runnable
 				{
 					if (StateMachine.this.player.isOnline())
 					{
-						StateMachine.this.player.sendMessage("Installation done.");
+						StateMachine.this.player.sendMessage("Installation done. Reloading server.");
 					}
 					finish();
+					Bukkit.getServer().reload();
 				}
 			});
 			return;
@@ -155,19 +156,16 @@ public class StateMachine extends WorkListener implements Runnable
 		getPlugin().getServer().getPluginManager().callEvent(new InstallationFinishedEvent());
 	}
 
-	public void resumeInstallation(Player player)
+	public void resumeInstallation(final Player player)
 	{
 		this.player = player;
 		if (result == MachineResult.WAIT)
 		{
-			if (current != null)
-			{
-				current.askQuestion(player);
-			}
-			else
+			if (current == null)
 			{
 				throw new RuntimeException("State is WAIT, but current state is null!");
 			}
+			current.askQuestion(player);
 		}
 		if (result == MachineResult.DONE && iterator != null)
 		{
@@ -175,7 +173,7 @@ public class StateMachine extends WorkListener implements Runnable
 		}
 		if (result == MachineResult.ABORT)
 		{
-			throw new RuntimeException("Player should not be able to resume a aborted installation.");
+			throw new RuntimeException("Player should not be able to resume an aborted installation.");
 		}
 		if (result == MachineResult.NONE)
 		{
