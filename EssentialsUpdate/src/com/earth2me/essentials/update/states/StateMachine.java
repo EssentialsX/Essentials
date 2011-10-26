@@ -33,22 +33,33 @@ public class StateMachine extends WorkListener
 
 	public MachineResult askQuestion()
 	{
-		while (current.guessAnswer())
+		try
 		{
-			current = current.getNextState();
-			if (current == null)
+			while (current.guessAnswer())
 			{
-				result = MachineResult.DONE;
-				break;
+
+				current = current.getNextState();
+				if (current == null)
+				{
+					result = MachineResult.DONE;
+					break;
+				}
+
+			}
+			if (current != null)
+			{
+				if (player.isOnline())
+				{
+					current.askQuestion(player);
+				}
+				result = MachineResult.WAIT;
 			}
 		}
-		if (current != null)
+		catch (RuntimeException ex)
 		{
-			if (player.isOnline())
-			{
-				current.askQuestion(player);
-			}
-			result = MachineResult.WAIT;
+			player.sendMessage(ex.getMessage());
+			finish();
+			result = MachineResult.ABORT;
 		}
 		return result;
 	}
@@ -135,6 +146,7 @@ public class StateMachine extends WorkListener
 
 	private void finish()
 	{
+		current = null;
 		iterator = null;
 		states.clear();
 		getPlugin().getServer().getPluginManager().callEvent(new InstallationFinishedEvent());

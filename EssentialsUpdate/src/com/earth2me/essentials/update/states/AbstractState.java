@@ -8,12 +8,12 @@ public abstract class AbstractState
 {
 	private transient boolean abortion = false;
 	private final transient StateMap stateMap;
-
+	
 	public AbstractState(final StateMap stateMap)
 	{
 		this.stateMap = stateMap;
 	}
-
+	
 	public <T extends AbstractState> T getState(final Class<? extends T> stateClass)
 	{
 		if (!stateMap.containsKey(stateClass))
@@ -35,7 +35,7 @@ public abstract class AbstractState
 		}
 		return (T)stateMap.get(stateClass);
 	}
-
+	
 	public abstract AbstractState getNextState();
 
 	/**
@@ -60,7 +60,7 @@ public abstract class AbstractState
 	 * @return true, if the answer could be recognized as a valid answer
 	 */
 	public abstract boolean reactOnAnswer(String answer);
-
+	
 	public final AbstractState reactOnAnswer(final Player sender, final String answer)
 	{
 		final String trimmedAnswer = answer.trim();
@@ -71,16 +71,24 @@ public abstract class AbstractState
 			abort();
 			return null;
 		}
-		final boolean found = reactOnAnswer(trimmedAnswer);
-		if (found)
+		try
 		{
-			return getNextState();
+			final boolean found = reactOnAnswer(trimmedAnswer);
+			if (found)
+			{
+				return getNextState();
+			}
+			else
+			{
+				sender.sendMessage("Answer not recognized.");
+				return this;
+			}
 		}
-		else
+		catch (RuntimeException ex)
 		{
-			sender.sendMessage("Answer not recognized.");
+			sender.sendMessage(ex.toString());
 			return this;
-		}
+		}	
 	}
 
 	/**
@@ -90,12 +98,12 @@ public abstract class AbstractState
 	{
 		listener.onWorkDone();
 	}
-
+	
 	public boolean isAbortion()
 	{
 		return abortion;
 	}
-
+	
 	protected void abort()
 	{
 		abortion = true;
