@@ -16,6 +16,23 @@ public abstract class AbstractState
 
 	public AbstractState getState(final Class<? extends AbstractState> stateClass)
 	{
+		if (!stateMap.containsKey(stateClass))
+		{
+			try
+			{
+				final AbstractState state = stateClass.getConstructor(StateMap.class).newInstance(stateMap);
+				stateMap.put(stateClass, state);
+			}
+			catch (Exception ex)
+			{
+				/*
+				 * This should never happen.
+				 * All states that are added to the map automatically,
+				 * have to have a Constructor that accepts the StateMap.
+				 */
+				throw new RuntimeException(ex);
+			}
+		}
 		return stateMap.get(stateClass);
 	}
 
