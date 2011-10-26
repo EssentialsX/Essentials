@@ -71,12 +71,12 @@ public class UpdateCheck
 		return result;
 	}
 
-	int getNewBukkitVersion()
+	public int getNewBukkitVersion()
 	{
 		return bukkitResult;
 	}
 
-	VersionInfo getNewVersionInfo()
+	public VersionInfo getNewVersionInfo()
 	{
 		return updateFile.getVersions().get(newVersion);
 	}

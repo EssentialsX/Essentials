@@ -1,7 +1,11 @@
 package com.earth2me.essentials.update;
 
+import com.earth2me.essentials.update.states.Changelog;
+import com.earth2me.essentials.update.states.EssentialsChat;
 import com.earth2me.essentials.update.states.InstallationFinishedEvent;
 import com.earth2me.essentials.update.states.StateMachine;
+import com.earth2me.essentials.update.states.UpdateOrInstallation;
+import com.earth2me.essentials.update.tasks.SelfUpdate;
 import java.util.List;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
@@ -49,6 +53,34 @@ public class UpdateProcess extends PlayerListener
 				}
 			}
 		}, Priority.Normal, plugin);
+	}
+
+	public boolean selfUpdate()
+	{
+		if (new Version(plugin.getDescription().getVersion()).compareTo(updateCheck.getNewVersion()) < 0)
+		{
+			if (currentPlayer != null)
+			{
+				currentPlayer.sendMessage("A newer version of EssentialsUpdate is found. Downloading new file and reloading server.");
+			}
+			Bukkit.getLogger().log(Level.INFO, "A newer version of EssentialsUpdate is found. Downloading new file and reloading server.");
+			new SelfUpdate(new WorkListener(plugin, updateCheck.getNewVersionInfo())
+			{
+				@Override
+				public void onWorkAbort(final String message)
+				{
+					Bukkit.getLogger().log(Level.SEVERE, message);
+				}
+
+				@Override
+				public void onWorkDone(final String message)
+				{
+					Bukkit.getLogger().log(Level.INFO, message);
+				}
+			}).start();
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -109,7 +141,6 @@ public class UpdateProcess extends PlayerListener
 
 	public void doAutomaticUpdate()
 	{
-
 		final VersionInfo info = updateCheck.getNewVersionInfo();
 		final List<String> changelog = info.getChangelog();
 		Bukkit.getLogger().log(Level.INFO, "Essentials changelog {0}", updateCheck.getNewVersion().toString());
@@ -121,34 +152,22 @@ public class UpdateProcess extends PlayerListener
 		downloader.start();
 	}
 
-	public void doManualUpdate()
-	{
-	}
-
 	public void onCommand(final CommandSender sender)
 	{
-		if (sender instanceof Player && sender.hasPermission("essentials.install"))
+		if (sender instanceof Player && sender.hasPermission("essentials.update"))
 		{
 			if (currentPlayer == null)
 			{
 				currentPlayer = (Player)sender;
-				if (updateCheck.isEssentialsInstalled())
+				if (selfUpdate())
 				{
-					doManualUpdate();
+					return;
 				}
-				else
+				stateMachine = new StateMachine(plugin, currentPlayer, updateCheck);
+				final StateMachine.MachineResult result = stateMachine.askQuestion();
+				if (result == StateMachine.MachineResult.DONE)
 				{
-					sender.sendMessage("Thank you for choosing Essentials.");
-					sender.sendMessage("The following installation wizard will guide you through the installation of Essentials.");
-					sender.sendMessage("Your answers will be saved for a later update.");
-					sender.sendMessage("Please answer the messages with yes or no, if not otherwise stated.");
-					sender.sendMessage("Write bye/exit/quit if you want to exit the wizard at anytime.");
-					stateMachine = new StateMachine(plugin, currentPlayer, updateCheck.getNewVersionInfo());
-					final StateMachine.MachineResult result = stateMachine.askQuestion();
-					if (result == StateMachine.MachineResult.DONE)
-					{
-						startWork();
-					}
+					startWork();
 				}
 			}
 			if (!currentPlayer.equals(sender))

@@ -1,6 +1,7 @@
 package com.earth2me.essentials.update;
 
 import com.earth2me.essentials.update.UpdateCheck.CheckResult;
+import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -16,20 +17,20 @@ public class EssentialsUpdate extends JavaPlugin
 	public void onEnable()
 	{
 		if (!getDataFolder().exists() && !getDataFolder().mkdirs() ) {
-			Bukkit.getLogger().severe("Could not create data folder:"+getDataFolder().getPath());
+			Bukkit.getLogger().log(Level.SEVERE, "Could not create data folder: {0}", getDataFolder().getPath());
 		}
 		essentialsHelp = new EssentialsHelp(this);
 		essentialsHelp.registerEvents();
 
 		final UpdateCheck updateCheck = new UpdateCheck(this);
+		updateCheck.checkForUpdates();
 		updateProcess = new UpdateProcess(this, updateCheck);
 		updateProcess.registerEvents();
 
-		Bukkit.getLogger().info("EssentialsUpdate " + getDescription().getVersion() + " loaded.");
+		Bukkit.getLogger().log(Level.INFO, "EssentialsUpdate {0} loaded.", getDescription().getVersion());
 
 		if (updateCheck.isEssentialsInstalled())
 		{
-			updateCheck.checkForUpdates();
 			final Version myVersion = new Version(getDescription().getVersion());
 			if (updateCheck.getResult() == CheckResult.NEW_ESS && myVersion.equals(updateCheck.getNewVersion()))
 			{

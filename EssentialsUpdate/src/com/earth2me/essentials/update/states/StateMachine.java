@@ -1,7 +1,7 @@
 package com.earth2me.essentials.update.states;
 
+import com.earth2me.essentials.update.UpdateCheck;
 import com.earth2me.essentials.update.WorkListener;
-import com.earth2me.essentials.update.VersionInfo;
 import java.util.Iterator;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -19,16 +19,13 @@ public class StateMachine extends WorkListener implements Runnable
 	private transient Player player;
 	private transient MachineResult result = MachineResult.NONE;
 
-	public StateMachine(final Plugin plugin, final Player player, final VersionInfo newVersionInfo)
+	public StateMachine(final Plugin plugin, final Player player, final UpdateCheck updateCheck)
 	{
-		super(plugin, newVersionInfo);
+		super(plugin, updateCheck.getNewVersionInfo());
 		this.player = player;
 		states.clear();
-		states.add(new EssentialsChat(states));
-		states.add(new EssentialsSpawn(states));
-		states.add(new EssentialsProtect(states));
-		states.add(new EssentialsGeoIP(states));
-		current = states.values().iterator().next();
+		UpdateOrInstallation state = new UpdateOrInstallation(states, updateCheck);
+		current = states.put(UpdateOrInstallation.class, state);
 	}
 
 	public MachineResult askQuestion()

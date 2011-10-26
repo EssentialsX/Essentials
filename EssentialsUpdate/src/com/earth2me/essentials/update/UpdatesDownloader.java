@@ -28,7 +28,8 @@ public class UpdatesDownloader extends WorkListener implements Runnable
 		if (iterator.hasNext())
 		{
 			final Entry<String, ModuleInfo> entry = iterator.next();
-			if (Bukkit.getPluginManager().getPlugin(entry.getKey()) == null)
+			final Plugin plugin = Bukkit.getPluginManager().getPlugin(entry.getKey());
+			if (plugin == null)
 			{
 				run();
 			}
