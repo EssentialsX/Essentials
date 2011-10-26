@@ -1,6 +1,6 @@
 package com.earth2me.essentials.update.states;
 
-import com.earth2me.essentials.update.WorkListener;
+import com.earth2me.essentials.update.AbstractWorkListener;
 import org.bukkit.entity.Player;
 
 
@@ -96,7 +96,7 @@ public abstract class AbstractState
 	/**
 	 * Do something based on the answer, that the user gave.
 	 */
-	public void doWork(final WorkListener listener)
+	public void doWork(final AbstractWorkListener listener)
 	{
 		listener.onWorkDone();
 	}

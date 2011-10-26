@@ -1,14 +1,14 @@
 package com.earth2me.essentials.update.tasks;
 
-import com.earth2me.essentials.update.WorkListener;
+import com.earth2me.essentials.update.AbstractWorkListener;
 import org.bukkit.Bukkit;
 
 
-public class SelfUpdate extends WorkListener implements Task, Runnable
+public class SelfUpdate extends AbstractWorkListener implements Task, Runnable
 {
-	private final transient WorkListener listener;
+	private final transient AbstractWorkListener listener;
 
-	public SelfUpdate(final WorkListener listener)
+	public SelfUpdate(final AbstractWorkListener listener)
 	{
 		super(listener.getPlugin(), listener.getNewVersionInfo());
 		this.listener = listener;

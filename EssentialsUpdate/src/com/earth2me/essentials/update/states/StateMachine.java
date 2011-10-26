@@ -1,14 +1,14 @@
 package com.earth2me.essentials.update.states;
 
 import com.earth2me.essentials.update.UpdateCheck;
-import com.earth2me.essentials.update.WorkListener;
+import com.earth2me.essentials.update.AbstractWorkListener;
 import java.util.Iterator;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 
-public class StateMachine extends WorkListener implements Runnable
+public class StateMachine extends AbstractWorkListener implements Runnable
 {
 	public enum MachineResult
 	{

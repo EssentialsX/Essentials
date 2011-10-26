@@ -60,7 +60,7 @@ public class UpdateProcess extends PlayerListener
 				currentPlayer.sendMessage("A newer version of EssentialsUpdate is found. Downloading new file and reloading server.");
 			}
 			Bukkit.getLogger().log(Level.INFO, "A newer version of EssentialsUpdate is found. Downloading new file and reloading server.");
-			new SelfUpdate(new WorkListener(plugin, updateCheck.getNewVersionInfo())
+			new SelfUpdate(new AbstractWorkListener(plugin, updateCheck.getNewVersionInfo())
 			{
 				@Override
 				public void onWorkAbort(final String message)
