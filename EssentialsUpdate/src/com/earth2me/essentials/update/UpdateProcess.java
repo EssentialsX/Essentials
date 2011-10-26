@@ -3,6 +3,7 @@ package com.earth2me.essentials.update;
 import com.earth2me.essentials.update.states.InstallationFinishedEvent;
 import com.earth2me.essentials.update.states.StateMachine;
 import java.util.List;
+import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -26,6 +27,7 @@ public class UpdateProcess extends PlayerListener
 
 	public UpdateProcess(final Plugin plugin, final UpdateCheck updateCheck)
 	{
+		super();
 		this.plugin = plugin;
 		this.updateCheck = updateCheck;
 	}
@@ -36,16 +38,16 @@ public class UpdateProcess extends PlayerListener
 		pluginManager.registerEvent(Type.PLAYER_QUIT, this, Priority.Low, plugin);
 		pluginManager.registerEvent(Type.PLAYER_CHAT, this, Priority.Lowest, plugin);
 		pluginManager.registerEvent(Type.PLAYER_JOIN, this, Priority.Normal, plugin);
-		pluginManager.registerEvent(Type.CUSTOM_EVENT, new CustomEventListener(){
-
+		pluginManager.registerEvent(Type.CUSTOM_EVENT, new CustomEventListener()
+		{
 			@Override
 			public void onCustomEvent(final Event event)
 			{
-				if(event instanceof InstallationFinishedEvent) {
+				if (event instanceof InstallationFinishedEvent)
+				{
 					UpdateProcess.this.currentPlayer = null;
 				}
 			}
-			
 		}, Priority.Normal, plugin);
 	}
 
@@ -73,7 +75,8 @@ public class UpdateProcess extends PlayerListener
 	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
 		final Player player = event.getPlayer();
-		if (currentPlayer.getName().equals(player.getName())) {
+		if (currentPlayer.getName().equals(player.getName()))
+		{
 			currentPlayer = player;
 			player.sendMessage("You quit the game, while the installion wizard was running.");
 			player.sendMessage("The installation wizard will now resume.");
@@ -109,10 +112,10 @@ public class UpdateProcess extends PlayerListener
 
 		final VersionInfo info = updateCheck.getNewVersionInfo();
 		final List<String> changelog = info.getChangelog();
-		Bukkit.getLogger().info("Essentials changelog " + updateCheck.getNewVersion().toString());
+		Bukkit.getLogger().log(Level.INFO, "Essentials changelog {0}", updateCheck.getNewVersion().toString());
 		for (String line : changelog)
 		{
-			Bukkit.getLogger().info(" - " + line);
+			Bukkit.getLogger().log(Level.INFO, " - {0}", line);
 		}
 		final UpdatesDownloader downloader = new UpdatesDownloader(plugin, info);
 		downloader.start();
