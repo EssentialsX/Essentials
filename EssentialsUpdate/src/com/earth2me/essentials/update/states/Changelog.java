@@ -61,11 +61,11 @@ public class Changelog extends AbstractState
 		}
 		if (pages > 1)
 		{
-			sender.sendMessage("Select a page by typing the numbers 1 to " + pages + " to view all changes and then type confirm to update Essentials.");
+			sender.sendMessage("Select a page by typing the numbers 1 to " + pages + " to view all changes and then type confirm or abort.");
 		}
 		else
 		{
-			sender.sendMessage("Type confirm to update Essentials.");
+			sender.sendMessage("Type confirm to update Essentials or abort to cancel the update.");
 		}
 	}
 
