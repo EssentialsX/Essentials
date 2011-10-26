@@ -1,12 +1,8 @@
 package com.earth2me.essentials.update;
 
-import com.earth2me.essentials.update.states.Changelog;
-import com.earth2me.essentials.update.states.EssentialsChat;
 import com.earth2me.essentials.update.states.InstallationFinishedEvent;
 import com.earth2me.essentials.update.states.StateMachine;
-import com.earth2me.essentials.update.states.UpdateOrInstallation;
 import com.earth2me.essentials.update.tasks.SelfUpdate;
-import java.util.List;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -137,19 +133,6 @@ public class UpdateProcess extends PlayerListener
 			default:
 			}
 		}
-	}
-
-	public void doAutomaticUpdate()
-	{
-		final VersionInfo info = updateCheck.getNewVersionInfo();
-		final List<String> changelog = info.getChangelog();
-		Bukkit.getLogger().log(Level.INFO, "Essentials changelog {0}", updateCheck.getNewVersion().toString());
-		for (String line : changelog)
-		{
-			Bukkit.getLogger().log(Level.INFO, " - {0}", line);
-		}
-		final UpdatesDownloader downloader = new UpdatesDownloader(plugin, info);
-		downloader.start();
 	}
 
 	public void onCommand(final CommandSender sender)

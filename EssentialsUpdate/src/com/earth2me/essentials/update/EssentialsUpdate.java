@@ -31,12 +31,6 @@ public class EssentialsUpdate extends JavaPlugin
 
 		if (updateCheck.isEssentialsInstalled())
 		{
-			final Version myVersion = new Version(getDescription().getVersion());
-			if (updateCheck.getResult() == CheckResult.NEW_ESS && myVersion.equals(updateCheck.getNewVersion()))
-			{
-				Bukkit.getLogger().info("Versions of EssentialsUpdate and Essentials do not match. Starting automatic update.");
-				updateProcess.doAutomaticUpdate();
-			}
 			updateCheck.scheduleUpdateTask();
 		}
 		else
