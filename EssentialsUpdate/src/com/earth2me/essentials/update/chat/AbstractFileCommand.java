@@ -58,9 +58,10 @@ public abstract class AbstractFileCommand implements Command
 	
 	protected String uploadToPastie(final StringBuilder input) throws IOException
 	{
-		if (input.length() > 10000)
+		if (input.length() > 15000)
 		{
-			input.delete(0, input.length() - 10000);
+			input.delete(0, input.length() - 15000);
+			input.append("## Cropped after 15000 bytes");
 		}
 		final PastieUpload pastie = new PastieUpload();
 		return pastie.send(input.toString());
