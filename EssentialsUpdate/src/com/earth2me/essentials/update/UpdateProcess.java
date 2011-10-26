@@ -76,6 +76,16 @@ public class UpdateProcess extends PlayerListener
 			}).start();
 			return true;
 		}
+		if (updateCheck.getResult() == UpdateCheck.CheckResult.NEW_ESS_BUKKIT)
+		{
+			final String message = "Please update bukkit to version " + updateCheck.getNewBukkitVersion() + " before updating Essentials.";
+			if (currentPlayer != null)
+			{
+				currentPlayer.sendMessage(message);
+			}
+			Bukkit.getLogger().log(Level.INFO, message);
+			return true;
+		}
 		return false;
 	}
 
@@ -106,7 +116,7 @@ public class UpdateProcess extends PlayerListener
 		if (currentPlayer.getName().equals(player.getName()))
 		{
 			currentPlayer = player;
-			player.sendMessage("You quit the game, while the installion wizard was running.");
+			player.sendMessage("You quit the game, while the installation wizard was running.");
 			player.sendMessage("The installation wizard will now resume.");
 			player.sendMessage("You can exit the wizard by typing quit into the chat.");
 			stateMachine.resumeInstallation(player);
