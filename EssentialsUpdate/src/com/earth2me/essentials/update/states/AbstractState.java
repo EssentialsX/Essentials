@@ -14,7 +14,7 @@ public abstract class AbstractState
 		this.stateMap = stateMap;
 	}
 
-	public AbstractState getState(final Class<? extends AbstractState> stateClass)
+	public <T extends AbstractState> T getState(final Class<? extends T> stateClass)
 	{
 		if (!stateMap.containsKey(stateClass))
 		{
@@ -33,7 +33,7 @@ public abstract class AbstractState
 				throw new RuntimeException(ex);
 			}
 		}
-		return stateMap.get(stateClass);
+		return (T)stateMap.get(stateClass);
 	}
 
 	public abstract AbstractState getNextState();
@@ -86,7 +86,10 @@ public abstract class AbstractState
 	/**
 	 * Do something based on the answer, that the user gave.
 	 */
-	public abstract void doWork(WorkListener workListener);
+	public void doWork(final WorkListener listener)
+	{
+		listener.onWorkDone();
+	}
 
 	public boolean isAbortion()
 	{

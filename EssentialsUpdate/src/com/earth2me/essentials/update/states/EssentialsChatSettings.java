@@ -1,10 +1,6 @@
 package com.earth2me.essentials.update.states;
 
-import com.earth2me.essentials.update.WorkListener;
-import com.earth2me.essentials.update.tasks.InstallModule;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 
 public class EssentialsChatSettings extends AbstractYesNoState
@@ -15,20 +11,19 @@ public class EssentialsChatSettings extends AbstractYesNoState
 	}
 
 	@Override
-	public void askQuestion(final Player sender)
+	public boolean guessAnswer()
 	{
-		sender.sendMessage("Would you like to configure EssentialsChat to prefix ingame messages with their group?");
+		if (getState(AdvancedMode.class).getAnswer())
+		{
+			setAnswer(false);
+			return true;
+		}
+		return false;
 	}
 
 	@Override
-	public void doWork(final WorkListener listener)
+	public void askQuestion(final Player sender)
 	{
-		if (getAnswer())
-		{
-			//TODO: Configure plugin
-			
-			return;
-		}
-		listener.onWorkDone();
+		sender.sendMessage("Would you like to configure EssentialsChat to prefix ingame messages with their group?");
 	}
 }
