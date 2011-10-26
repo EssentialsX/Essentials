@@ -52,10 +52,10 @@ public class GMConfiguration {
     }
     
     public boolean isOpOverride() {
-    	return GMconfig.getBoolean("settings.config.bukkit_perms_override", true);
+    	return GMconfig.getBoolean("settings.config.opOverrides", true);
     }
     public boolean isBukkitPermsOverride() {
-    	return GMconfig.getBoolean("settings.config.opOverrides", true);
+    	return GMconfig.getBoolean("settings.config.bukkit_perms_override", false);
     }
 
 	public Map<String, Object> getMirrorsMap() {   

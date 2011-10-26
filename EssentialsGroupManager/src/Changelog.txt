@@ -49,3 +49,6 @@ v 1.4:
 	- Fixed reading world mirrors from the config.
 	- Simplified config.yml while retaining backwards compatibility.
 	- Added data.save.hours setting to config. This allow control over how long backups are retained.
+v 1.5:
+	- Fixed opOverrides and bukkit_perms_override to read the correct entries.
+	- Better commenting in config.yml
