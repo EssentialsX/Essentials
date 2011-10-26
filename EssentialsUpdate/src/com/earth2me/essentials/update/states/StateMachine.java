@@ -37,14 +37,12 @@ public class StateMachine extends WorkListener implements Runnable
 		{
 			while (current.guessAnswer())
 			{
-
 				current = current.getNextState();
 				if (current == null)
 				{
 					result = MachineResult.DONE;
 					break;
 				}
-
 			}
 			if (current != null)
 			{
