@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 
-public class StateMachine extends WorkListener
+public class StateMachine extends WorkListener implements Runnable
 {
 	public enum MachineResult
 	{
@@ -92,18 +92,26 @@ public class StateMachine extends WorkListener
 	public void startWork()
 	{
 		iterator = states.values().iterator();
-		callStateWork();
+		Bukkit.getScheduler().scheduleAsyncDelayedTask(getPlugin(), this);
 	}
 
-	private void callStateWork()
+	@Override
+	public void run()
 	{
 		if (!iterator.hasNext())
 		{
-			if (player.isOnline())
+			Bukkit.getScheduler().scheduleSyncDelayedTask(getPlugin(), new Runnable()
 			{
-				player.sendMessage("Installation done.");
-			}
-			finish();
+				@Override
+				public void run()
+				{
+					if (StateMachine.this.player.isOnline())
+					{
+						StateMachine.this.player.sendMessage("Installation done.");
+					}
+					finish();
+				}
+			});
 			return;
 		}
 		final AbstractState state = iterator.next();
@@ -139,7 +147,7 @@ public class StateMachine extends WorkListener
 				{
 					StateMachine.this.player.sendMessage(message);
 				}
-				StateMachine.this.callStateWork();
+				Bukkit.getScheduler().scheduleAsyncDelayedTask(getPlugin(), StateMachine.this);
 			}
 		});
 	}
