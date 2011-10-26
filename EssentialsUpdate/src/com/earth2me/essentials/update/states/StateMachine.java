@@ -12,11 +12,12 @@ public class StateMachine extends WorkListener
 {
 	public enum MachineResult
 	{
-		ABORT, WAIT, DONE
+		ABORT, WAIT, DONE, NONE
 	}
 	private final transient StateMap states = new StateMap();
 	private transient AbstractState current;
-	private final transient Player player;
+	private transient Player player;
+	private transient MachineResult result = MachineResult.NONE;
 
 	public StateMachine(final Plugin plugin, final Player player, final VersionInfo newVersionInfo)
 	{
@@ -37,29 +38,43 @@ public class StateMachine extends WorkListener
 			current = current.getNextState();
 			if (current == null)
 			{
-				return MachineResult.DONE;
+				result = MachineResult.DONE;
+				break;
 			}
 		}
-		current.askQuestion(player);
-		return MachineResult.WAIT;
+		if (current != null)
+		{
+			if (player.isOnline())
+			{
+				current.askQuestion(player);
+			}
+			result = MachineResult.WAIT;
+		}
+		return result;
 	}
 
 	public MachineResult reactOnMessage(final String message)
 	{
+		result = MachineResult.NONE;
 		final AbstractState next = current.reactOnAnswer(player, message);
 		if (next == null)
 		{
 			if (current.isAbortion())
 			{
-				return MachineResult.ABORT;
+				finish();
+				result = MachineResult.ABORT;
 			}
 			else
 			{
-				return MachineResult.DONE;
+				result = MachineResult.DONE;
 			}
 		}
-		current = next;
-		return askQuestion();
+		else
+		{
+			current = next;
+			askQuestion();
+		}
+		return result;
 	}
 	private transient Iterator<AbstractState> iterator;
 
@@ -77,6 +92,7 @@ public class StateMachine extends WorkListener
 			{
 				player.sendMessage("Installation done.");
 			}
+			finish();
 			return;
 		}
 		final AbstractState state = iterator.next();
@@ -86,6 +102,7 @@ public class StateMachine extends WorkListener
 	@Override
 	public void onWorkAbort(final String message)
 	{
+		finish();
 		Bukkit.getScheduler().scheduleSyncDelayedTask(getPlugin(), new Runnable()
 		{
 			@Override
@@ -114,5 +131,40 @@ public class StateMachine extends WorkListener
 				StateMachine.this.callStateWork();
 			}
 		});
+	}
+
+	private void finish()
+	{
+		iterator = null;
+		states.clear();
+		getPlugin().getServer().getPluginManager().callEvent(new InstallationFinishedEvent());
+	}
+
+	public void resumeInstallation(Player player)
+	{
+		this.player = player;
+		if (result == MachineResult.WAIT)
+		{
+			if (current != null)
+			{
+				current.askQuestion(player);
+			}
+			else
+			{
+				throw new RuntimeException("State is WAIT, but current state is null!");
+			}
+		}
+		if (result == MachineResult.DONE && iterator != null)
+		{
+			player.sendMessage("Installation is still running.");
+		}
+		if (result == MachineResult.ABORT)
+		{
+			throw new RuntimeException("Player should not be able to resume a aborted installation.");
+		}
+		if (result == MachineResult.NONE)
+		{
+			throw new RuntimeException("State machine in an undefined state.");
+		}
 	}
 }

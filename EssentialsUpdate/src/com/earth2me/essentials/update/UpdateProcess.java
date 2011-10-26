@@ -1,10 +1,13 @@
 package com.earth2me.essentials.update;
 
+import com.earth2me.essentials.update.states.InstallationFinishedEvent;
 import com.earth2me.essentials.update.states.StateMachine;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.CustomEventListener;
+import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
 import org.bukkit.event.player.PlayerChatEvent;
@@ -32,6 +35,18 @@ public class UpdateProcess extends PlayerListener
 		final PluginManager pluginManager = plugin.getServer().getPluginManager();
 		pluginManager.registerEvent(Type.PLAYER_QUIT, this, Priority.Low, plugin);
 		pluginManager.registerEvent(Type.PLAYER_CHAT, this, Priority.Lowest, plugin);
+		pluginManager.registerEvent(Type.PLAYER_JOIN, this, Priority.Normal, plugin);
+		pluginManager.registerEvent(Type.CUSTOM_EVENT, new CustomEventListener(){
+
+			@Override
+			public void onCustomEvent(final Event event)
+			{
+				if(event instanceof InstallationFinishedEvent) {
+					UpdateProcess.this.currentPlayer = null;
+				}
+			}
+			
+		}, Priority.Normal, plugin);
 	}
 
 	@Override
@@ -58,6 +73,13 @@ public class UpdateProcess extends PlayerListener
 	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
 		final Player player = event.getPlayer();
+		if (currentPlayer.getName().equals(player.getName())) {
+			currentPlayer = player;
+			player.sendMessage("You quit the game, while the installion wizard was running.");
+			player.sendMessage("The installation wizard will now resume.");
+			player.sendMessage("You can exit the wizard by typing quit into the chat.");
+			stateMachine.resumeInstallation(player);
+		}
 		if (player.hasPermission("essentials.update") && !updateCheck.isEssentialsInstalled())
 		{
 			player.sendMessage("Hello " + player.getDisplayName());
