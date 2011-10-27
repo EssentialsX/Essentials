@@ -3,7 +3,6 @@ package com.earth2me.essentials.update;
 import java.io.File;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.bukkit.Bukkit;
@@ -22,7 +21,7 @@ public class UpdateCheck
 	private final transient Plugin plugin;
 	private transient boolean essentialsInstalled;
 
-	public UpdateCheck(Plugin plugin)
+	public UpdateCheck(final Plugin plugin)
 	{
 		this.plugin = plugin;
 		updateFile = new UpdateFile(plugin);
@@ -31,20 +30,19 @@ public class UpdateCheck
 
 	private void checkForEssentials()
 	{
-		PluginManager pm = plugin.getServer().getPluginManager();
-		Plugin essentials = pm.getPlugin("Essentials");
-		if (essentials == null)
+		final PluginManager pluginManager = plugin.getServer().getPluginManager();
+		final Plugin essentials = pluginManager.getPlugin("Essentials");
+		essentialsInstalled = essentials != null;
+		if (essentialsInstalled)
 		{
-			essentialsInstalled = false;
+			currentVersion = new Version(essentials.getDescription().getVersion());
+		}
+		else
+		{
 			if (new File(plugin.getDataFolder().getParentFile(), "Essentials.jar").exists())
 			{
 				Bukkit.getLogger().severe("Essentials.jar found, but not recognized by Bukkit. Broken download?");
 			}
-		}
-		else
-		{
-			essentialsInstalled = true;
-			currentVersion = new Version(essentials.getDescription().getVersion());
 		}
 	}
 
@@ -71,15 +69,16 @@ public class UpdateCheck
 		return result;
 	}
 
-	int getNewBukkitVersion()
+	public int getNewBukkitVersion()
 	{
 		return bukkitResult;
 	}
 
-	VersionInfo getNewVersionInfo()
+	public VersionInfo getNewVersionInfo()
 	{
 		return updateFile.getVersions().get(newVersion);
 	}
+
 
 	public enum CheckResult
 	{

@@ -1,6 +1,6 @@
 package com.earth2me.essentials.update.states;
 
-import com.earth2me.essentials.update.WorkListener;
+import com.earth2me.essentials.update.AbstractWorkListener;
 import org.bukkit.entity.Player;
 
 
@@ -14,9 +14,26 @@ public abstract class AbstractState
 		this.stateMap = stateMap;
 	}
 
-	public AbstractState getState(final Class<? extends AbstractState> stateClass)
+	public <T extends AbstractState> T getState(final Class<? extends T> stateClass)
 	{
-		return stateMap.get(stateClass);
+		if (!stateMap.containsKey(stateClass))
+		{
+			try
+			{
+				final AbstractState state = stateClass.getConstructor(StateMap.class).newInstance(stateMap);
+				stateMap.put(stateClass, state);
+			}
+			catch (Exception ex)
+			{
+				/*
+				 * This should never happen.
+				 * All states that are added to the map automatically,
+				 * have to have a Constructor that accepts the StateMap.
+				 */
+				throw new RuntimeException(ex);
+			}
+		}
+		return (T)stateMap.get(stateClass);
 	}
 
 	public abstract AbstractState getNextState();
@@ -49,19 +66,29 @@ public abstract class AbstractState
 		final String trimmedAnswer = answer.trim();
 		if (trimmedAnswer.equalsIgnoreCase("quit")
 			|| trimmedAnswer.equalsIgnoreCase("bye")
-			|| trimmedAnswer.equalsIgnoreCase("abort"))
+			|| trimmedAnswer.equalsIgnoreCase("abort")
+			|| trimmedAnswer.equalsIgnoreCase("cancel")
+			|| trimmedAnswer.equalsIgnoreCase("exit"))
 		{
 			abort();
 			return null;
 		}
-		final boolean found = reactOnAnswer(trimmedAnswer);
-		if (found)
+		try
 		{
-			return getNextState();
+			final boolean found = reactOnAnswer(trimmedAnswer);
+			if (found)
+			{
+				return getNextState();
+			}
+			else
+			{
+				sender.sendMessage("Answer not recognized.");
+				return this;
+			}
 		}
-		else
+		catch (RuntimeException ex)
 		{
-			sender.sendMessage("Answer not recognized.");
+			sender.sendMessage(ex.toString());
 			return this;
 		}
 	}
@@ -69,7 +96,10 @@ public abstract class AbstractState
 	/**
 	 * Do something based on the answer, that the user gave.
 	 */
-	public abstract void doWork(WorkListener workListener);
+	public void doWork(final AbstractWorkListener listener)
+	{
+		listener.onWorkDone();
+	}
 
 	public boolean isAbortion()
 	{
