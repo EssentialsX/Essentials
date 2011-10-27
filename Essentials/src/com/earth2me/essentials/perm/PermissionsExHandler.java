@@ -77,7 +77,7 @@ public class PermissionsExHandler implements IPermissionsHandler
 		{
 			return null;
 		}
-		return user.getPrefix();
+		return user.getPrefix(base.getWorld().getName());
 	}
 
 	@Override
@@ -88,6 +88,7 @@ public class PermissionsExHandler implements IPermissionsHandler
 		{
 			return null;
 		}
-		return user.getSuffix();
+		
+		return user.getSuffix(base.getWorld().getName());
 	}
 }
