@@ -33,7 +33,6 @@ import com.earth2me.essentials.register.payment.Methods;
 import com.earth2me.essentials.signs.SignBlockListener;
 import com.earth2me.essentials.signs.SignEntityListener;
 import com.earth2me.essentials.signs.SignPlayerListener;
-import java.math.BigInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.bukkit.command.PluginCommand;
@@ -58,10 +57,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private transient List<IConf> confList;
 	private transient Backup backup;
 	private transient ItemDb itemDb;
-	private transient EssentialsUpdateTimer updateTimer;
 	private transient final Methods paymentMethod = new Methods();
-	private transient final static boolean enableErrorLogging = false;
-	private transient final EssentialsErrorHandler errorHandler = new EssentialsErrorHandler();
 	private transient PermissionsHandler permissionsHandler;
 	private transient UserMap userMap;
 
@@ -98,10 +94,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 		if (javaversion == null || javaversion.length < 2 || Integer.parseInt(javaversion[1]) < 6)
 		{
 			LOGGER.log(Level.SEVERE, "Java version not supported! Please install Java 1.6. You have " + System.getProperty("java.version"));
-		}
-		if (enableErrorLogging)
-		{
-			LOGGER.addHandler(errorHandler);
 		}
 		final EssentialsUpgrade upgrade = new EssentialsUpgrade(this);
 		upgrade.beforeSettings();
@@ -207,11 +199,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 		final EssentialsTimer timer = new EssentialsTimer(this);
 		getScheduler().scheduleSyncRepeatingTask(this, timer, 1, 100);
 		Economy.setEss(this);
-		if (getSettings().isUpdateEnabled())
-		{
-			updateTimer = new EssentialsUpdateTimer(this);
-			getScheduler().scheduleAsyncRepeatingTask(this, updateTimer, 20 * 60 * 10, 20 * 3600 * 6);
-		}
 		LOGGER.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), Util.joinList(this.getDescription().getAuthors())));
 	}
 
@@ -219,7 +206,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 	public void onDisable()
 	{
 		Trade.closeLog();
-		LOGGER.removeHandler(errorHandler);
 	}
 
 	@Override
@@ -479,14 +465,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 		{
 			LOGGER.log(logRecord);
 		}
-		else
-		{
-			if (enableErrorLogging)
-			{
-				errorHandler.publish(logRecord);
-				errorHandler.flush();
-			}
-		}
 	}
 
 	@Override
@@ -627,11 +605,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 
 		return players.length;
-	}
-
-	public Map<BigInteger, String> getErrors()
-	{
-		return errorHandler.getErrors();
 	}
 
 	@Override

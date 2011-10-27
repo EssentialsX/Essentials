@@ -510,12 +510,6 @@ public class Settings implements ISettings
 	}
 
 	@Override
-	public boolean isUpdateEnabled()
-	{
-		return config.getBoolean("update-check", false);
-	}
-
-	@Override
 	public long getAutoAfk()
 	{
 		return config.getLong("auto-afk", 300);

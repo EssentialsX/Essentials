@@ -129,8 +129,6 @@ public interface ISettings extends IConf
 	
 	boolean disableSuffix();
 
-	boolean isUpdateEnabled();
-
 	long getAutoAfk();
 
 	long getAutoAfkKick();
