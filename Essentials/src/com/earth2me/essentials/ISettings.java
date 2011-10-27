@@ -124,6 +124,10 @@ public interface ISettings extends IConf
 	boolean useBukkitPermissions();
 
 	boolean addPrefixSuffix();
+	
+	boolean disablePrefix();
+	
+	boolean disableSuffix();
 
 	boolean isUpdateEnabled();
 

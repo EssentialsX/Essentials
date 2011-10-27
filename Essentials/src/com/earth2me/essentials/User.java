@@ -269,12 +269,22 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 		if (ess.getSettings().addPrefixSuffix())
 		{
-			final String prefix = ess.getPermissionsHandler().getPrefix(base).replace('&', '§').replace("{WORLDNAME}", this.getWorld().getName());
-			final String suffix = ess.getPermissionsHandler().getSuffix(base).replace('&', '§').replace("{WORLDNAME}", this.getWorld().getName());
 
-			nickname.insert(0, prefix);
-			nickname.append(suffix);
-			if (suffix.length() < 2 || !suffix.substring(suffix.length() - 2, suffix.length() - 1).equals("§"))
+			if (!ess.getSettings().disablePrefix())
+			{
+				final String prefix = ess.getPermissionsHandler().getPrefix(base).replace('&', '§').replace("{WORLDNAME}", this.getWorld().getName());
+				nickname.insert(0, prefix);
+			}
+			if (!ess.getSettings().disableSuffix())
+			{
+				final String suffix = ess.getPermissionsHandler().getSuffix(base).replace('&', '§').replace("{WORLDNAME}", this.getWorld().getName());
+				nickname.append(suffix);
+				if (suffix.length() < 2 || !suffix.substring(suffix.length() - 2, suffix.length() - 1).equals("§"))
+				{
+					nickname.append("§f");
+				}
+			}
+			else
 			{
 				nickname.append("§f");
 			}
