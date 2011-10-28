@@ -763,6 +763,7 @@ public class GroupManager extends JavaPlugin {
                     permissionResult = permissionHandler.checkFullUserPermission(auxUser, args[1]);
                     if (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND)) {
                         sender.sendMessage(ChatColor.RED + "The player doesn't have access to that permission");
+                        sender.sendMessage(ChatColor.YELLOW + "SuperPerms reports Node: " + targetPlayer.hasPermission(args[1]));
                         return false;
                     }
                     //PARECE OK
