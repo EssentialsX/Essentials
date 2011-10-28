@@ -7,6 +7,7 @@ package org.anjocaido.groupmanager.permissions;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.data.Group;
@@ -14,6 +15,7 @@ import org.anjocaido.groupmanager.dataholder.WorldDataHolder;
 import org.anjocaido.groupmanager.data.User;
 import org.anjocaido.groupmanager.utils.PermissionCheckResult;
 import org.anjocaido.groupmanager.utils.PermissionCheckResult.Type;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
@@ -93,8 +95,19 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
         
         for (String group : getGroups(userName)) {        	
         	for (String perm : ph.getGroup(group).getPermissionList()) {
-        		if ((!playerPermArray.contains(perm)) && (!playerPermArray.contains("-"+perm)))
+        		if ((!playerPermArray.contains(perm)) && (!playerPermArray.contains("-"+perm))) {
         			playerPermArray.add(perm);
+        			
+        			Map<String, Boolean> children = GroupManager.BukkitPermissions.getChildren(perm);
+        			if (children != null) {
+                        for (String child : children.keySet()) {
+                        	if (children.get(child))
+                        		if ((!playerPermArray.contains(perm)) && (!playerPermArray.contains("-"+perm)))
+                        			playerPermArray.add(child);
+                        }
+                    }
+        			
+        		}
             }	
         }
 
@@ -566,6 +579,9 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
                 || result.resultType.equals(PermissionCheckResult.Type.FOUND)) {
             return true;
         }
+        if (Bukkit.getPlayer(user.getName()).hasPermission(permission))
+        	return true;
+        
         return false;
     }
 
@@ -587,7 +603,6 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
         PermissionCheckResult resultUser = checkUserOnlyPermission(user, targetPermission);
         if (!resultUser.resultType.equals(PermissionCheckResult.Type.NOTFOUND)) {
             return resultUser;
-
         }
 
         //IT ONLY CHECKS GROUPS PERMISSIONS IF RESULT FOR USER IS NOT FOUND
@@ -602,6 +617,12 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
             if (!resultSubGroup.resultType.equals(PermissionCheckResult.Type.NOTFOUND)) {
                 return resultSubGroup;
             }
+        }
+        
+        if (Bukkit.getPlayer(user.getName()).hasPermission(targetPermission)) {
+        	result.resultType = PermissionCheckResult.Type.FOUND;
+        	result.owner = user;
+        	return result;
         }
 
         //THEN IT RETURNS A NOT FOUND

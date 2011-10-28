@@ -52,3 +52,5 @@ v 1.4:
 v 1.5:
 	- Fixed opOverrides and bukkit_perms_override to read the correct entries.
 	- Better commenting in config.yml
+	- Fixed GM to recognize Superperm child nodes.
+	  If you add a node like Towny.admin GM will now correctly report on all child nodes.
