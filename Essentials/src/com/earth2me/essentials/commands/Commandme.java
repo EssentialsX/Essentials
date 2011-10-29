@@ -25,7 +25,7 @@ public class Commandme extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		String message = getFinalArg(args, 1);
+		String message = getFinalArg(args, 0);
 		if (user.isAuthorized("essentials.chat.color"))
 		{
 			message = message.replaceAll("&([0-9a-f])", "§$1");
