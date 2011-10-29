@@ -11,20 +11,22 @@
   </target>
   <target name="buildEss" depends="buildGM">
     <ant dir="Essentials" antfile="build.xml"/>
+  </target>  
+  <target name="buildRest" depends="buildEss">
     <ant dir="EssentialsChat" antfile="build.xml"/>
     <ant dir="EssentialsSpawn" antfile="build.xml"/>
     <ant dir="EssentialsProtect" antfile="build.xml"/>
     <ant dir="EssentialsGeoIP" antfile="build.xml"/>
     <ant dir="EssentialsXMPP" antfile="build.xml"/>
   </target>
-  <target name="collect" depends="buildEss">
+  <target name="collect" depends="buildRest">
     <mkdir dir="jars"/>
     <copy todir="jars">
       <fileset dir=".">
         <include name="**/dist/Essentials*.jar"/>
-		<include name="**/Essentials/src/config.yml" />
-		<include name="**/src/messages*.properties" />
-		<include name="**/src/items.csv" />
+        <include name="**/Essentials/src/config.yml" />
+        <include name="**/src/messages*.properties" />
+        <include name="**/src/items.csv" />
       </fileset>
       <flattenmapper/>
     </copy>
