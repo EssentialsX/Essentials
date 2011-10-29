@@ -5,17 +5,19 @@
     <replace dir="." includes="**/src/messages*.properties" token="version: TeamCity" value="version: ${build.number}"/>
     <replace dir="." includes="**/src/items.csv" token="version: TeamCity" value="version: ${build.number}"/>
   </target>
-  <target name="buildall" depends="setversion">
+  <target name="buildGM" depends="setversion">
+    <ant dir="EssentialsGroupManager" antfile="build.xml"/>
+    <ant dir="EssentialsGroupBridge" antfile="build.xml"/>
+  </target>
+  <target name="buildEss" depends="buildGM">
     <ant dir="Essentials" antfile="build.xml"/>
     <ant dir="EssentialsChat" antfile="build.xml"/>
     <ant dir="EssentialsSpawn" antfile="build.xml"/>
     <ant dir="EssentialsProtect" antfile="build.xml"/>
-    <ant dir="EssentialsGroupManager" antfile="build.xml"/>
-    <ant dir="EssentialsGroupBridge" antfile="build.xml"/>
     <ant dir="EssentialsGeoIP" antfile="build.xml"/>
     <ant dir="EssentialsXMPP" antfile="build.xml"/>
   </target>
-  <target name="collect" depends="buildall">
+  <target name="collect" depends="buildEss">
     <mkdir dir="jars"/>
     <copy todir="jars">
       <fileset dir=".">
