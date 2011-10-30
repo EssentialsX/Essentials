@@ -60,6 +60,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private transient final Methods paymentMethod = new Methods();
 	private transient PermissionsHandler permissionsHandler;
 	private transient UserMap userMap;
+	private transient ExecuteTimer execTimer;
 
 	@Override
 	public ISettings getSettings()
@@ -90,6 +91,8 @@ public class Essentials extends JavaPlugin implements IEssentials
 	@Override
 	public void onEnable()
 	{
+		execTimer = new ExecuteTimer();
+		execTimer.start();
 		final String[] javaversion = System.getProperty("java.version").split("\\.", 3);
 		if (javaversion == null || javaversion.length < 2 || Integer.parseInt(javaversion[1]) < 6)
 		{
@@ -97,21 +100,27 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 		final EssentialsUpgrade upgrade = new EssentialsUpgrade(this);
 		upgrade.beforeSettings();
+		execTimer.mark("Upgrade");
 		confList = new ArrayList<IConf>();
 		settings = new Settings(this);
 		confList.add(settings);
+		execTimer.mark("Settings");
 		upgrade.afterSettings();
+		execTimer.mark("Upgrade2");
 		Util.updateLocale(settings.getLocale(), this);
 		userMap = new UserMap(this);
 		confList.add(userMap);
+		execTimer.mark("Init(Usermap)");
 		spawn = new Spawn(getServer(), this.getDataFolder());
 		confList.add(spawn);
 		warps = new Warps(getServer(), this.getDataFolder());
 		confList.add(warps);
+		execTimer.mark("Init(Spawn/Warp)");
 		worth = new Worth(this.getDataFolder());
 		confList.add(worth);
 		itemDb = new ItemDb(this);
 		confList.add(itemDb);
+		execTimer.mark("Init(Worth/ItemDB)");
 		reload();
 		backup = new Backup(this);
 
@@ -183,6 +192,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		pm.registerEvent(Type.ENTITY_REGAIN_HEALTH, entityListener, Priority.Lowest, this);
 		pm.registerEvent(Type.FOOD_LEVEL_CHANGE, entityListener, Priority.Lowest, this);
 
+		//TODO: Check if this should be here, and not above before reload()
 		jail = new Jail(this);
 		final JailPlayerListener jailPlayerListener = new JailPlayerListener(this);
 		confList.add(jail);
@@ -199,7 +209,13 @@ public class Essentials extends JavaPlugin implements IEssentials
 		final EssentialsTimer timer = new EssentialsTimer(this);
 		getScheduler().scheduleSyncRepeatingTask(this, timer, 1, 100);
 		Economy.setEss(this);
+		execTimer.mark("RegListeners");
 		LOGGER.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), Util.joinList(this.getDescription().getAuthors())));
+		final String timeroutput = execTimer.end();
+		if (getSettings().isDebug())
+		{
+			LOGGER.log(Level.INFO, "Essentials load " + timeroutput);
+		}
 	}
 
 	@Override
@@ -216,6 +232,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		for (IConf iConf : confList)
 		{
 			iConf.reloadConfig();
+			execTimer.mark("Reload(" + iConf.getClass().getSimpleName() + ")");
 		}
 
 		Util.updateLocale(settings.getLocale(), this);
@@ -587,10 +604,12 @@ public class Essentials extends JavaPlugin implements IEssentials
 	@Override
 	public int broadcastMessage(final IUser sender, final String message)
 	{
-		if (sender == null) {
+		if (sender == null)
+		{
 			return getServer().broadcastMessage(message);
 		}
-		if (sender.isHidden()) {
+		if (sender.isHidden())
+		{
 			return 0;
 		}
 		final Player[] players = getServer().getOnlinePlayers();
