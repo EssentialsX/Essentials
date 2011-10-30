@@ -24,8 +24,12 @@ public class EssentialsChat extends JavaPlugin
 
 		chatListener = new HashMap<String, IEssentialsChatListener>();
 
-		final EssentialsChatPlayerListener playerListener = new EssentialsChatPlayerListener(getServer(), ess, chatListener);
-		pluginManager.registerEvent(Type.PLAYER_CHAT, playerListener, Priority.High, this);
+		final EssentialsChatPlayerListenerLowest playerListenerLowest = new EssentialsChatPlayerListenerLowest(getServer(), ess, chatListener);
+		final EssentialsChatPlayerListenerNormal playerListenerNormal = new EssentialsChatPlayerListenerNormal(getServer(), ess, chatListener);
+		final EssentialsChatPlayerListenerHighest playerListenerHighest = new EssentialsChatPlayerListenerHighest(getServer(), ess, chatListener);
+		pluginManager.registerEvent(Type.PLAYER_CHAT, playerListenerLowest, Priority.Lowest, this);
+		pluginManager.registerEvent(Type.PLAYER_CHAT, playerListenerNormal, Priority.Normal, this);
+		pluginManager.registerEvent(Type.PLAYER_CHAT, playerListenerHighest, Priority.Highest, this);
 		if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion()))
 		{
 			LOGGER.log(Level.WARNING, Util.i18n("versionMismatchAll"));
