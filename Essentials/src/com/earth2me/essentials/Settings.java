@@ -498,11 +498,15 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("add-prefix-suffix", ess.getServer().getPluginManager().isPluginEnabled("EssentialsChat"));
 	}
-
-	@Override
-	public boolean isUpdateEnabled()
+	
+	public boolean disablePrefix()
 	{
-		return config.getBoolean("update-check", false);
+		return config.getBoolean("disablePrefix", false);
+	}
+	
+	public boolean disableSuffix()
+	{
+		return config.getBoolean("disableSuffix", false);
 	}
 
 	@Override

@@ -1,12 +1,11 @@
 package com.earth2me.essentials.update;
 
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 
-public abstract class WorkListener
+public abstract class AbstractWorkListener
 {
-	public WorkListener(final Plugin plugin, final VersionInfo newVersionInfo)
+	public AbstractWorkListener(final Plugin plugin, final VersionInfo newVersionInfo)
 	{
 		this.plugin = plugin;
 		this.newVersionInfo = newVersionInfo;

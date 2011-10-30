@@ -38,8 +38,7 @@ groups:
             essentials.msg: true
             essentials.nick: true
             essentials.pay: true
-            essentials.ping: true
-            essentials.portal: true
+            essentials.ping: true            
             essentials.powertool: true
             essentials.protect: true
             essentials.sethome: true

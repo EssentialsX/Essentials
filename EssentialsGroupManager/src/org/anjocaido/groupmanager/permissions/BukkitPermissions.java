@@ -150,8 +150,19 @@ public class BukkitPermissions {
 	        		value = true;
         	}
         	
-        	if (value == true)
+        	if (value == true){
+        		// Set the root permission
         		attachment.setPermission(permission, value);
+        		// fetch and set all children of this permission node
+        		Map<String, Boolean> children = permission.getChildren();
+                if (children != null) {
+                    for (String child : children.keySet()) {
+                    	if (children.get(child))
+                    		attachment.setPermission(child, true);
+                    }
+                }
+        		
+        	}
         }
         
         // Add any missing permissions for this player (non bukkit plugins)
@@ -169,6 +180,22 @@ public class BukkitPermissions {
             }
         }
         player.recalculatePermissions();
+    }
+    
+    /**
+     * Returns a map of the child permissions as defined by the supplying plugin
+     * null is empty
+     * 
+     * @param node
+     * @return
+     */
+    public Map<String, Boolean> getChildren(String node) {
+    	for (Permission permission : registeredPermissions) {
+    		if (permission.getName() == node) {
+    			return permission.getChildren();
+    		}
+    	}
+    	return null;
     }
     
     public List<String> listPerms(Player player) {

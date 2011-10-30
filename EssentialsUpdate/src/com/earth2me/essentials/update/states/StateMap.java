@@ -7,11 +7,6 @@ public class StateMap extends LinkedHashMap<Class<? extends AbstractState>, Abst
 {
 	public StateMap()
 	{
-		super();
-	}
-	
-	public AbstractState add(AbstractState state)
-	{
-		return put(state.getClass(), state);
+		super(50);
 	}
 }

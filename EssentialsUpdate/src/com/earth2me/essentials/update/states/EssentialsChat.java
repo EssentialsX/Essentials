@@ -1,6 +1,6 @@
 package com.earth2me.essentials.update.states;
 
-import com.earth2me.essentials.update.WorkListener;
+import com.earth2me.essentials.update.AbstractWorkListener;
 import com.earth2me.essentials.update.tasks.InstallModule;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -35,7 +35,7 @@ public class EssentialsChat extends AbstractYesNoState
 	}
 
 	@Override
-	public void doWork(final WorkListener listener)
+	public void doWork(final AbstractWorkListener listener)
 	{
 		if (getAnswer())
 		{

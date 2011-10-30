@@ -3,7 +3,7 @@ package com.earth2me.essentials.update.tasks;
 import com.earth2me.essentials.update.GetFile;
 import com.earth2me.essentials.update.ModuleInfo;
 import com.earth2me.essentials.update.VersionInfo;
-import com.earth2me.essentials.update.WorkListener;
+import com.earth2me.essentials.update.AbstractWorkListener;
 import java.io.File;
 import java.net.URL;
 import java.util.logging.Level;
@@ -12,16 +12,16 @@ import org.bukkit.Bukkit;
 
 public class InstallModule implements Runnable, Task
 {
-	protected final transient WorkListener listener;
+	protected final transient AbstractWorkListener listener;
 	private final transient String moduleName;
 	private final transient String fileName;
 
-	public InstallModule(final WorkListener listener, final String moduleName)
+	public InstallModule(final AbstractWorkListener listener, final String moduleName)
 	{
 		this(listener, moduleName, moduleName + ".jar");
 	}
 
-	public InstallModule(final WorkListener listener, final String moduleName, final String fileName)
+	public InstallModule(final AbstractWorkListener listener, final String moduleName, final String fileName)
 	{
 		this.listener = listener;
 		this.moduleName = moduleName;

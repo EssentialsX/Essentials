@@ -1,6 +1,6 @@
 package com.earth2me.essentials.update.states;
 
-import com.earth2me.essentials.update.WorkListener;
+import com.earth2me.essentials.update.AbstractWorkListener;
 import org.bukkit.entity.Player;
 
 
@@ -66,19 +66,29 @@ public abstract class AbstractState
 		final String trimmedAnswer = answer.trim();
 		if (trimmedAnswer.equalsIgnoreCase("quit")
 			|| trimmedAnswer.equalsIgnoreCase("bye")
-			|| trimmedAnswer.equalsIgnoreCase("abort"))
+			|| trimmedAnswer.equalsIgnoreCase("abort")
+			|| trimmedAnswer.equalsIgnoreCase("cancel")
+			|| trimmedAnswer.equalsIgnoreCase("exit"))
 		{
 			abort();
 			return null;
 		}
-		final boolean found = reactOnAnswer(trimmedAnswer);
-		if (found)
+		try
 		{
-			return getNextState();
+			final boolean found = reactOnAnswer(trimmedAnswer);
+			if (found)
+			{
+				return getNextState();
+			}
+			else
+			{
+				sender.sendMessage("Answer not recognized.");
+				return this;
+			}
 		}
-		else
+		catch (RuntimeException ex)
 		{
-			sender.sendMessage("Answer not recognized.");
+			sender.sendMessage(ex.toString());
 			return this;
 		}
 	}
@@ -86,7 +96,7 @@ public abstract class AbstractState
 	/**
 	 * Do something based on the answer, that the user gave.
 	 */
-	public void doWork(final WorkListener listener)
+	public void doWork(final AbstractWorkListener listener)
 	{
 		listener.onWorkDone();
 	}
