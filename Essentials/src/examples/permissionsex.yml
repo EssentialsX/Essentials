@@ -37,7 +37,6 @@ groups:
         - essentials.nick
         - essentials.pay
         - essentials.ping
-        - essentials.portal
         - essentials.powertool
         - essentials.protect
         - essentials.sethome

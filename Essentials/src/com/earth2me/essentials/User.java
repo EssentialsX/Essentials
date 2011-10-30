@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 
 public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 {
-	private boolean justPortaled = false;
 	private CommandSender replyTo = null;
 	private transient User teleportRequester;
 	private transient boolean teleportRequestHere;
@@ -154,16 +153,6 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public void dispose()
 	{
 		this.base = new OfflinePlayer(getName(), ess);
-	}
-
-	public boolean getJustPortaled()
-	{
-		return justPortaled;
-	}
-
-	public void setJustPortaled(final boolean value)
-	{
-		justPortaled = value;
 	}
 
 	@Override
