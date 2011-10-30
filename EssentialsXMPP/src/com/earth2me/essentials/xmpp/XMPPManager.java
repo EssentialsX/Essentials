@@ -103,7 +103,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 				break;
 			default:
 				final IUser sender = parent.getUserByAddress(StringUtils.parseBareAddress(chat.getParticipant()));
-				parent.broadcastMessage(sender, "="+sender.getDisplayName()+": "+ message);
+				parent.broadcastMessage(sender, "="+sender.getDisplayName()+": "+ message, StringUtils.parseBareAddress(chat.getParticipant()));
 			}
 		}
 	}

@@ -24,5 +24,5 @@ public interface IEssentialsXMPP extends Plugin
 
 	boolean toggleSpy(final Player user);
 
-	void broadcastMessage(final IUser sender, final String message);
+	void broadcastMessage(final IUser sender, final String message, final String xmppAddress);
 }

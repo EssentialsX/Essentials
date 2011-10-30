@@ -124,14 +124,17 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 	}
 
 	@Override
-	public void broadcastMessage(final IUser sender, final String message)
+	public void broadcastMessage(final IUser sender, final String message, final String xmppAddress)
 	{
 		ess.broadcastMessage(sender, message);
 		try
 		{
 			for (String address : getSpyUsers())
 			{
-				sendMessage(address, message);
+				if (!address.equalsIgnoreCase(xmppAddress))
+				{
+					sendMessage(address, message);
+				}
 			}
 		}
 		catch (Exception ex)
