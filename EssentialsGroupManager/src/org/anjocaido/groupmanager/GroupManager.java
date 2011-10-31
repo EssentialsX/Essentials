@@ -1183,6 +1183,7 @@ public class GroupManager extends JavaPlugin {
 					if (!auxUser.isSubGroupsEmpty() && auxGroup2 == null)
 						for (Group subGroup : auxUser.subGroupListCopy()) {
 							auxGroup2 = permissionHandler.nextGroupWithVariable(subGroup, args[1]);
+							if (auxGroup2 != null) continue;
 						}
 					if (auxGroup2 == null) {
 						sender.sendMessage(ChatColor.RED + "The user doesn't have access to that variable!");

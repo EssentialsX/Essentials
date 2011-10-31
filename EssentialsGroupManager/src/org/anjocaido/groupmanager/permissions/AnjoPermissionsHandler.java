@@ -225,7 +225,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	}
 
 	/**
-	 * Check if user can build.
+	 * Check if user can build. Checks inheritance and subgroups.
 	 * 
 	 * @param world
 	 *            Player's world
@@ -233,14 +233,9 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	 *            Player's name
 	 * @return Whether the user can build
 	 */
-	public boolean canUserBuild(String user) {
-		boolean test = ph.getUser(user).getVariables().getVarBoolean("build");
+	public boolean canUserBuild(String userName) {
 
-		if (test) {
-			return test;
-		}
-
-		return canGroupBuild(getGroup(user));
+		return getPermissionBoolean(userName, "build");
 
 	}
 
@@ -438,8 +433,8 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 
 	/**
 	 * Returns the variable value of the user, in INFO node. If not found, it
-	 * will search for his Group variables. It will harvest the inheritance
-	 * and subgroups.
+	 * will search for his Group variables. It will harvest the inheritance and
+	 * subgroups.
 	 * 
 	 * @param user
 	 * @param variable
@@ -465,9 +460,11 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 				for (Group subGroup : auser.subGroupListCopy()) {
 					result = nextGroupWithVariable(subGroup, variable);
 					// Found value?
-					if (result != null) continue;
+					if (result != null)
+						continue;
 				}
-			if (result == null) return "";
+			if (result == null)
+				return "";
 		}
 		return result.getVariables().getVarString(variable);
 		// return getUserPermissionString(user, variable);
@@ -475,8 +472,8 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 
 	/**
 	 * Returns the variable value of the user, in INFO node. If not found, it
-	 * will search for his Group variables. It will harvest the inheritance
-	 * and subgroups.
+	 * will search for his Group variables. It will harvest the inheritance and
+	 * subgroups.
 	 * 
 	 * @param user
 	 * @param variable
@@ -502,9 +499,11 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 				for (Group subGroup : auser.subGroupListCopy()) {
 					result = nextGroupWithVariable(subGroup, variable);
 					// Found value?
-					if (result != null) continue;
+					if (result != null)
+						continue;
 				}
-			if (result == null) return -1;
+			if (result == null)
+				return -1;
 		}
 		return result.getVariables().getVarInteger(variable);
 		// return getUserPermissionInteger(string, string1);
@@ -512,8 +511,8 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 
 	/**
 	 * Returns the variable value of the user, in INFO node. If not found, it
-	 * will search for his Group variables. It will harvest the inheritance
-	 * and subgroups.
+	 * will search for his Group variables. It will harvest the inheritance and
+	 * subgroups.
 	 * 
 	 * @param user
 	 * @param variable
@@ -539,9 +538,11 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 				for (Group subGroup : auser.subGroupListCopy()) {
 					result = nextGroupWithVariable(subGroup, variable);
 					// Found value?
-					if (result != null) continue;
+					if (result != null)
+						continue;
 				}
-			if (result == null) return false;
+			if (result == null)
+				return false;
 		}
 		return result.getVariables().getVarBoolean(variable);
 		// return getUserPermissionBoolean(user, string1);
@@ -549,8 +550,8 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 
 	/**
 	 * Returns the variable value of the user, in INFO node. If not found, it
-	 * will search for his Group variables. It will harvest the inheritance
-	 * and subgroups.
+	 * will search for his Group variables. It will harvest the inheritance and
+	 * subgroups.
 	 * 
 	 * @param user
 	 * @param variable
@@ -576,9 +577,11 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 				for (Group subGroup : auser.subGroupListCopy()) {
 					result = nextGroupWithVariable(subGroup, variable);
 					// Found value?
-					if (result != null) continue;
+					if (result != null)
+						continue;
 				}
-			if (result == null) return -1.0D;
+			if (result == null)
+				return -1.0D;
 		}
 		return result.getVariables().getVarDouble(variable);
 		// return getUserPermissionDouble(string, string1);
