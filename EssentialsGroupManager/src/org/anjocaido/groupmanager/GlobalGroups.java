@@ -35,7 +35,7 @@ public class GlobalGroups {
 	/**
     *
     */
-   protected boolean haveGroupsChanged = false;
+	protected boolean haveGroupsChanged = false;
 
 	public GlobalGroups(GroupManager plugin) {
 		this.plugin = plugin;
@@ -46,19 +46,20 @@ public class GlobalGroups {
 	 * @return the haveGroupsChanged
 	 */
 	public boolean haveGroupsChanged() {
-        if (this.haveGroupsChanged) {
-            return true;
-        }
-        for (Group g : groups.values()) {
-            if (g.isChanged()) {
-                return true;
-            }
-        }
-        return false;
-    }
+		if (this.haveGroupsChanged) {
+			return true;
+		}
+		for (Group g : groups.values()) {
+			if (g.isChanged()) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	/**
-	 * @param haveGroupsChanged the haveGroupsChanged to set
+	 * @param haveGroupsChanged
+	 *            the haveGroupsChanged to set
 	 */
 	public void setGroupsChanged(boolean haveGroupsChanged) {
 		this.haveGroupsChanged = haveGroupsChanged;
@@ -66,19 +67,17 @@ public class GlobalGroups {
 
 	@SuppressWarnings("unchecked")
 	public void load() {
-		
+
 		GGroups = new YamlConfiguration();
 		groups = new HashMap<String, Group>();
 
 		// READ globalGroups FILE
-		File GlobalGroupsFile = new File(plugin.getDataFolder(),
-				"globalgroups.yml");
+		File GlobalGroupsFile = new File(plugin.getDataFolder(), "globalgroups.yml");
 
 		if (!GlobalGroupsFile.exists()) {
 			try {
 				// Create a new file if it doesn't exist.
-				Tasks.copy(plugin.getResourceAsStream("globalgroups.yml"),
-						GlobalGroupsFile);
+				Tasks.copy(plugin.getResourceAsStream("globalgroups.yml"), GlobalGroupsFile);
 			} catch (IOException ex) {
 				GroupManager.logger.log(Level.SEVERE, null, ex);
 			}
@@ -87,21 +86,17 @@ public class GlobalGroups {
 		try {
 			GGroups.load(GlobalGroupsFile);
 		} catch (Exception ex) {
-			throw new IllegalArgumentException(
-					"The following file couldn't pass on Parser.\n"
-							+ GlobalGroupsFile.getPath(), ex);
+			throw new IllegalArgumentException("The following file couldn't pass on Parser.\n" + GlobalGroupsFile.getPath(), ex);
 		}
 
 		// Read all global groups
-		Map<String, Object> allGroups = (Map<String, Object>) GGroups
-				.getConfigurationSection("groups").getValues(false);
+		Map<String, Object> allGroups = (Map<String, Object>) GGroups.getConfigurationSection("groups").getValues(false);
 
 		// Load each groups permissions list.
 		if (allGroups != null)
 			for (String groupName : allGroups.keySet()) {
 				Group newGroup = new Group(groupName.toLowerCase());
-				Object permissions = GGroups.get("groups." + groupName
-						+ ".permissions");
+				Object permissions = GGroups.get("groups." + groupName + ".permissions");
 
 				if (permissions instanceof List) {
 					for (String permission : (List<String>) permissions) {
@@ -114,78 +109,74 @@ public class GlobalGroups {
 				// Push a new group
 				addGroup(newGroup);
 			}
-		
+
 		GlobalGroupsFile = null;
 
 	}
-	
+
 	/**
-     * Write a dataHolder in a specified file
-     * @param ph
-     * @param groupsFile
-     */
-	
-    public void writeGroups() {
-    	
-    	File GlobalGroupsFile = new File(plugin.getDataFolder(),
-				"globalgroups.yml");
-    	
-        Map<String, Object> root = new HashMap<String, Object>();
+	 * Write the globalgroups.yml file
+	 */
 
-        Map<String, Object> groupsMap = new HashMap<String, Object>();
-        root.put("groups", groupsMap);
-        for (String groupKey : groups.keySet()) {
-            Group group = groups.get(groupKey);
+	public void writeGroups() {
 
-            Map<String, Object> aGroupMap = new HashMap<String, Object>();
-            groupsMap.put(group.getName(), aGroupMap);
+		File GlobalGroupsFile = new File(plugin.getDataFolder(), "globalgroups.yml");
 
-            aGroupMap.put("permissions", group.getPermissionList());
-        }
+		Map<String, Object> root = new HashMap<String, Object>();
 
-        if (!root.isEmpty()) {
-	        DumperOptions opt = new DumperOptions();
-	        opt.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-	        final Yaml yaml = new Yaml(opt);
-	        try {
-	            yaml.dump(root, new OutputStreamWriter(new FileOutputStream(GlobalGroupsFile), "UTF-8"));
-	        } catch (UnsupportedEncodingException ex) {
-	        } catch (FileNotFoundException ex) {
-	        }
-        }
+		Map<String, Object> groupsMap = new HashMap<String, Object>();
+		root.put("groups", groupsMap);
+		for (String groupKey : groups.keySet()) {
+			Group group = groups.get(groupKey);
 
-    }
-    
-    /**
-     * Add a new group if it doesn't already exist.
-     * 
-     * @param newGroup
-     */
-    public Group addGroup(Group newGroup) {
-    	// Push a new group
+			Map<String, Object> aGroupMap = new HashMap<String, Object>();
+			groupsMap.put(group.getName(), aGroupMap);
+
+			aGroupMap.put("permissions", group.getPermissionList());
+		}
+
+		if (!root.isEmpty()) {
+			DumperOptions opt = new DumperOptions();
+			opt.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+			final Yaml yaml = new Yaml(opt);
+			try {
+				yaml.dump(root, new OutputStreamWriter(new FileOutputStream(GlobalGroupsFile), "UTF-8"));
+			} catch (UnsupportedEncodingException ex) {
+			} catch (FileNotFoundException ex) {
+			}
+		}
+
+	}
+
+	/**
+	 * Add a new group if it doesn't already exist.
+	 * 
+	 * @param newGroup
+	 */
+	public Group addGroup(Group newGroup) {
+		// Push a new group
 		if (!groups.containsKey(newGroup.getName().toLowerCase())) {
 			groups.put(newGroup.getName().toLowerCase(), newGroup);
 			this.setGroupsChanged(true);
 			return newGroup;
 		}
 		return null;
-    }
-    
-    /**
-     * Delete a group if it exist.
-     * 
-     * @param newGroup
-     */
-    public boolean removeGroup(String groupName) {
-    	// Push a new group
+	}
+
+	/**
+	 * Delete a group if it exist.
+	 * 
+	 * @param newGroup
+	 */
+	public boolean removeGroup(String groupName) {
+		// Push a new group
 		if (groups.containsKey(groupName.toLowerCase())) {
 			groups.remove(groupName.toLowerCase());
 			this.setGroupsChanged(true);
 			return true;
 		}
 		return false;
-    }
-    
+	}
 
 	/**
 	 * Returns true if the Global Group exists in the globalgroups.yml
@@ -209,8 +200,7 @@ public class GlobalGroups {
 		if (!hasGroup(groupName.toLowerCase()))
 			return false;
 
-		return groups.get(groupName.toLowerCase()).hasSamePermissionNode(
-				permissionNode);
+		return groups.get(groupName.toLowerCase()).hasSamePermissionNode(permissionNode);
 
 	}
 
@@ -222,8 +212,7 @@ public class GlobalGroups {
 	 * @param permissionNode
 	 * @return
 	 */
-	public PermissionCheckResult checkPermission(String groupName,
-			String permissionNode) {
+	public PermissionCheckResult checkPermission(String groupName, String permissionNode) {
 
 		PermissionCheckResult result = new PermissionCheckResult();
 		result.askedPermission = permissionNode;
