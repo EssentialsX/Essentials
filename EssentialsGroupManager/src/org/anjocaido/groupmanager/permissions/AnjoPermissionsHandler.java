@@ -93,22 +93,40 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
     	
     	List<String> playerPermArray = new ArrayList<String>(ph.getUser(userName).getPermissionList());
         
-        for (String group : getGroups(userName)) {        	
-        	for (String perm : ph.getGroup(group).getPermissionList()) {
-        		if ((!playerPermArray.contains(perm)) && (!playerPermArray.contains("-"+perm))) {
-        			playerPermArray.add(perm);
-        			
-        			Map<String, Boolean> children = GroupManager.BukkitPermissions.getChildren(perm);
-        			if (children != null) {
-                        for (String child : children.keySet()) {
-                        	if (children.get(child))
-                        		if ((!playerPermArray.contains(perm)) && (!playerPermArray.contains("-"+perm)))
-                        			playerPermArray.add(child);
-                        }
-                    }
-        			
+        for (String group : getGroups(userName)) {
+        	if (group.startsWith("g:") && GroupManager.getGlobalGroups().hasGroup(group)) {
+        		for (String perm : GroupManager.getGlobalGroups().getGroupsPermissions(group)) {
+        			if ((!playerPermArray.contains(perm)) && (!playerPermArray.contains("-"+perm))) {
+	        			playerPermArray.add(perm);
+	        			
+	        			Map<String, Boolean> children = GroupManager.BukkitPermissions.getChildren(perm);
+	        			if (children != null) {
+	                        for (String child : children.keySet()) {
+	                        	if (children.get(child))
+	                        		if ((!playerPermArray.contains(perm)) && (!playerPermArray.contains("-"+perm)))
+	                        			playerPermArray.add(child);
+	                        }
+	                    }
+        			}
         		}
-            }	
+        		
+        	} else {
+	        	for (String perm : ph.getGroup(group).getPermissionList()) {
+	        		if ((!playerPermArray.contains(perm)) && (!playerPermArray.contains("-"+perm))) {
+	        			playerPermArray.add(perm);
+	        			
+	        			Map<String, Boolean> children = GroupManager.BukkitPermissions.getChildren(perm);
+	        			if (children != null) {
+	                        for (String child : children.keySet()) {
+	                        	if (children.get(child))
+	                        		if ((!playerPermArray.contains(perm)) && (!playerPermArray.contains("-"+perm)))
+	                        			playerPermArray.add(child);
+	                        }
+	                    }
+	        			
+	        		}
+	            }
+        	}
         }
 
         return playerPermArray;
@@ -935,6 +953,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
         for (Group subg : ph.getUser(userName).subGroupListCopy()) {
             allGroups.addAll(listAllGroupsInherited(subg));
         }
+        
         String[] arr = new String[allGroups.size()];
         return allGroups.toArray(arr);
     }

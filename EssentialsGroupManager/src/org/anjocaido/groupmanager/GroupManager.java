@@ -47,7 +47,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class GroupManager extends JavaPlugin {
 
-    private File configFile;
+    //private File configFile;
     private File backupFolder;
     private Runnable commiter;
     private ScheduledThreadPoolExecutor scheduler;
@@ -58,6 +58,9 @@ public class GroupManager extends JavaPlugin {
     private boolean isReady = false;
     private static boolean isLoaded = false;
     protected GMConfiguration config;
+    
+    protected static GlobalGroups globalGroups;
+    
     private GMLoggerHandler ch;
     public static BukkitPermissions BukkitPermissions;
     private static  WorldListener WorldEvents;
@@ -92,8 +95,12 @@ public class GroupManager extends JavaPlugin {
         GroupManager.logger.addHandler(ch);
         logger.setLevel(Level.ALL);
         if (worldsHolder == null) {
+        	// Create the backup folder, if it doesn't exist.
             prepareFileFields();
+            // Load the config.yml
             prepareConfig();
+            // Load the global groups
+            globalGroups = new GlobalGroups(this);
             worldsHolder = new WorldsHolder(this);
         }
 
@@ -138,7 +145,7 @@ public class GroupManager extends JavaPlugin {
     }
 
     private void prepareFileFields() {
-        configFile = new File(this.getDataFolder(), "config.yml");
+        //configFile = new File(this.getDataFolder(), "config.yml");
         backupFolder = new File(this.getDataFolder(), "backup");
         if (!backupFolder.exists()) {
             getBackupFolder().mkdirs();
@@ -1537,6 +1544,9 @@ public class GroupManager extends JavaPlugin {
                     for (Group g : dataHolder.getGroupList()) {
                         auxString += g.getName() + ", ";
                     }
+                    for (Group g : getGlobalGroups().getGroupList()) {
+                        auxString += g.getName() + ", ";
+                    }
                     if (auxString.lastIndexOf(",") > 0) {
                         auxString = auxString.substring(0, auxString.lastIndexOf(","));
                     }
@@ -1795,5 +1805,10 @@ public class GroupManager extends JavaPlugin {
      */
     public File getBackupFolder() {
         return backupFolder;
+    }
+    
+    public static GlobalGroups getGlobalGroups() {
+    	return globalGroups;    	
+    	
     }
 }

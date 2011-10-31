@@ -149,6 +149,8 @@ public class WorldsHolder {
             w.reload();
             alreadyDone.add(w);
         }
+        // Load global groups
+        GroupManager.getGlobalGroups().load();
     }
 
     /**
@@ -195,6 +197,10 @@ public class WorldsHolder {
                 w.removeUsersChangedFlag();
             }
             alreadyDone.add(w);
+        }
+        // Write Global Groups
+        if (GroupManager.getGlobalGroups().haveGroupsChanged()) {
+        	GroupManager.getGlobalGroups().writeGroups();
         }
     }
 

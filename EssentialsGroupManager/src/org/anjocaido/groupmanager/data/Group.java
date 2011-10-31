@@ -27,11 +27,21 @@ public class Group extends DataUnit implements Cloneable {
     private GroupVariables variables = new GroupVariables(this);
 
     /**
+     * Constructor for individual World Groups.
      *
      * @param name
      */
     public Group(WorldDataHolder source, String name) {
         super(source, name);
+    }
+    
+    /**
+     *  Constructor for Global Groups.
+     *  
+     * @param name
+     */
+    public Group(String name) {
+        super(name);
     }
 
     /**

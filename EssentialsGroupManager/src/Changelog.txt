@@ -56,3 +56,6 @@ v 1.5:
 	  If you add a node like Towny.admin GM will now correctly report on all child nodes.
 	- Fixed GM loading world data files twice at startup.
 	- Improved error reporting for invalid groups.yml
+	- Added Global Groups
+	  Defined in groupmanager/globalgroups.yml.
+	  Create groups in the yml with a g: prefix, then inherit in the worlds groups files.
