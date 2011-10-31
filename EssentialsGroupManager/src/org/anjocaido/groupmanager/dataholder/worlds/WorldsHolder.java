@@ -100,7 +100,7 @@ public class WorldsHolder {
         		 * or mirrored worlds that don't need data.
         		 */
 	        	if (!worldsData.containsKey(folder.getName().toLowerCase())
-	        			|| !mirrors.containsKey(folder.getName().toLowerCase())) {
+	        			&& !mirrors.containsKey(folder.getName().toLowerCase())) {
 	        		loadWorld(folder.getName());
 	            }
 	            

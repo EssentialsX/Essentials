@@ -483,7 +483,7 @@ public class WorldDataHolder {
 
         //PROCESS GROUPS FILE
         Map<String, List<String>> inheritance = new HashMap<String, List<String>>();
-        try {
+        //try {
             Map<String, Object> allGroupsNode = (Map<String, Object>) groupsRootDataNode.get("groups");
             for (String groupKey : allGroupsNode.keySet()) {
                 Map<String, Object> thisGroupNode = (Map<String, Object>) allGroupsNode.get(groupKey);
@@ -513,36 +513,43 @@ public class WorldDataHolder {
                 } else if (thisGroupNode.get("permissions") instanceof String) {
                     thisGrp.addPermission((String) thisGroupNode.get("permissions"));
                 } else {
-                    throw new IllegalArgumentException("Unknown type of permissions node(Should be String or List<String>): " + thisGroupNode.get("permissions").getClass().getName());
+                    throw new IllegalArgumentException("Unknown type of permissions node(Should be String or List<String>) for group:  " + thisGrp.getName());
                 }
 
                 //INFO NODE
-                Map<String, Object> infoNode = (Map<String, Object>) thisGroupNode.get("info");
-                if (infoNode != null) {
-                    thisGrp.setVariables(infoNode);
-                }
+                if (thisGroupNode.get("info") instanceof Map) {
+	                Map<String, Object> infoNode = (Map<String, Object>) thisGroupNode.get("info");
+	                if (infoNode != null) {
+	                    thisGrp.setVariables(infoNode);
+	                }
+                } else
+                	throw new IllegalArgumentException("Unknown entry found in Info section for group: " + thisGrp.getName());
+                	
 
                 //END INFO NODE
 
-                Object inheritNode = thisGroupNode.get("inheritance");
-                if (inheritNode == null) {
-                    thisGroupNode.put("inheritance", new ArrayList<String>());
-                } else if (inheritNode instanceof List) {
-                    List<String> groupsInh = (List<String>) inheritNode;
-                    for (String grp : groupsInh) {
-                        if (inheritance.get(groupKey) == null) {
-                            List<String> thisInherits = new ArrayList<String>();
-                            inheritance.put(groupKey, thisInherits);
-                        }
-                        inheritance.get(groupKey).add(grp);
-
-                    }
-                }
+                if (thisGroupNode.get("inheritance") == null || thisGroupNode.get("inheritance") instanceof List) {
+	                Object inheritNode = thisGroupNode.get("inheritance");
+	                if (inheritNode == null) {
+	                    thisGroupNode.put("inheritance", new ArrayList<String>());
+	                } else if (inheritNode instanceof List) {
+	                    List<String> groupsInh = (List<String>) inheritNode;
+	                    for (String grp : groupsInh) {
+	                        if (inheritance.get(groupKey) == null) {
+	                            List<String> thisInherits = new ArrayList<String>();
+	                            inheritance.put(groupKey, thisInherits);
+	                        }
+	                        inheritance.get(groupKey).add(grp);
+	
+	                    }
+	                }
+                }else
+                	throw new IllegalArgumentException("Unknown entry found in inheritance section for group: " + thisGrp.getName());
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            throw new IllegalArgumentException("Your Permissions config file is invalid. See console for details.");
-        }
+        //} catch (Exception ex) {
+        //    ex.printStackTrace();
+        //    throw new IllegalArgumentException("Your Permissions config file is invalid. See console for details.");
+        //}
         if (ph.defaultGroup == null) {
             throw new IllegalArgumentException("There was no Default Group declared.");
         }
