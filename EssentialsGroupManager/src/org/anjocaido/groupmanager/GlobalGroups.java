@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import org.anjocaido.groupmanager.data.Group;
 import org.anjocaido.groupmanager.utils.PermissionCheckResult;
 import org.anjocaido.groupmanager.utils.Tasks;
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
@@ -96,15 +97,33 @@ public class GlobalGroups {
 		if (allGroups != null)
 			for (String groupName : allGroups.keySet()) {
 				Group newGroup = new Group(groupName.toLowerCase());
-				Object permissions = GGroups.get("groups." + groupName + ".permissions");
+				Object element;
+				
+				// Permission nodes
+				element = GGroups.get("groups." + groupName + ".permissions");
 
-				if (permissions instanceof List) {
-					for (String permission : (List<String>) permissions) {
-						newGroup.addPermission(permission);
-					}
-				} else if (permissions instanceof String) {
-					newGroup.addPermission((String) permissions);
-				}
+				if (element != null)
+					if (element instanceof List) {
+						for (String node : (List<String>) element) {
+							newGroup.addPermission(node);
+						}
+					} else if (element instanceof String) {
+						newGroup.addPermission((String) element);
+					} else
+						throw new IllegalArgumentException("Unknown type of permission node for global group:  " + groupName);
+				
+				// Info nodes
+				element = GGroups.get("groups." + groupName + ".info");
+				
+				if (element != null)
+					if (element instanceof MemorySection) {
+						Map<String, Object> vars = new HashMap<String, Object>();
+						for (String key : ((MemorySection) element).getKeys(false)) {
+				            vars.put(key, ((MemorySection) element).get(key));
+				        }
+						newGroup.setVariables(vars);
+					} else
+						throw new IllegalArgumentException("Unknown type of info node for global group:  " + groupName);
 
 				// Push a new group
 				addGroup(newGroup);
@@ -129,9 +148,19 @@ public class GlobalGroups {
 		for (String groupKey : groups.keySet()) {
 			Group group = groups.get(groupKey);
 
+			// Group header
 			Map<String, Object> aGroupMap = new HashMap<String, Object>();
 			groupsMap.put(group.getName(), aGroupMap);
+			
+			// Info nodes
+			Map<String, Object> infoMap = new HashMap<String, Object>();
+            aGroupMap.put("info", infoMap);
 
+            for (String infoKey : group.getVariables().getVarKeyList()) {
+                infoMap.put(infoKey, group.getVariables().getVarObject(infoKey));
+            }
+
+            // Permission nodes
 			aGroupMap.put("permissions", group.getPermissionList());
 		}
 
@@ -147,13 +176,29 @@ public class GlobalGroups {
 		}
 
 	}
+	
+	/**
+	 * Adds a group, or replaces an existing one.
+	 * 
+	 * @param groupToAdd
+	 */
+	public void addGroup(Group groupToAdd) {
+		// Create a new group if it already exists
+		if (hasGroup(groupToAdd.getName())) {
+			groupToAdd = groupToAdd.clone();
+			removeGroup(groupToAdd.getName());
+		}
+        
+		newGroup(groupToAdd);
+        haveGroupsChanged = true;
+	}
 
 	/**
-	 * Add a new group if it doesn't already exist.
+	 * Creates a new group if it doesn't already exist.
 	 * 
 	 * @param newGroup
 	 */
-	public Group addGroup(Group newGroup) {
+	public Group newGroup(Group newGroup) {
 		// Push a new group
 		if (!groups.containsKey(newGroup.getName().toLowerCase())) {
 			groups.put(newGroup.getName().toLowerCase(), newGroup);

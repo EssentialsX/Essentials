@@ -207,6 +207,11 @@ public class WorldDataHolder {
      * @param groupToAdd
      */
     public void addGroup(Group groupToAdd) {
+    	if (groupToAdd.getName().startsWith("g:")) {
+    		GroupManager.getGlobalGroups().addGroup(groupToAdd);
+        	return;
+        }
+    	
         if (groupToAdd.getDataSource() != this) {
             groupToAdd = groupToAdd.clone(this);
         }
@@ -263,7 +268,7 @@ public class WorldDataHolder {
     public Group createGroup(String groupName) {
     	if (groupName.startsWith("g:")) {
         	Group newGroup = new Group(groupName);
-        	return GroupManager.getGlobalGroups().addGroup(newGroup);
+        	return GroupManager.getGlobalGroups().newGroup(newGroup);
         }
     	
     	if (this.groups.containsKey(groupName.toLowerCase())) {

@@ -59,3 +59,4 @@ v 1.5:
 	- Added Global Groups
 	  Defined in groupmanager/globalgroups.yml.
 	  Create groups in the yml with a g: prefix, then inherit in the worlds groups files.
+	- Added Info node support to Global Groups.

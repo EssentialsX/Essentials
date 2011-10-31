@@ -50,8 +50,15 @@ public class Group extends DataUnit implements Cloneable {
      */
     @Override
     public Group clone() {
-        Group clone = new Group(getDataSource(), this.getName());
-        clone.inherits = new ArrayList<String>(this.getInherits());
+    	Group clone;
+    	
+    	if (getDataSource() == null) {
+    		clone = new Group(this.getName());
+    	} else {
+    		clone = new Group(getDataSource(), this.getName());
+    		clone.inherits = new ArrayList<String>(this.getInherits());
+    	}
+    	
         for (String perm : this.getPermissionList()) {
             clone.addPermission(perm);
         }
