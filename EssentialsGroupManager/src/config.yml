@@ -8,6 +8,10 @@ settings:
     # If the player is op any permissions set to Op will follow suit.
     bukkit_perms_override: false
     
+    # Default setting for 'mantoglevalidate'
+    # true will cause GroupManager to attempt name matching by default.
+    validate_toggle: true
+    
   data:
     save:
       # How often GroupManager will save it's data back to groups and users.yml

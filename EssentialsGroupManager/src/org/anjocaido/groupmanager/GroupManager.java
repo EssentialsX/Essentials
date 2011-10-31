@@ -55,6 +55,20 @@ public class GroupManager extends JavaPlugin {
 	private Map<CommandSender, String> selectedWorlds = new HashMap<CommandSender, String>();
 	private WorldsHolder worldsHolder;
 	private boolean validateOnlinePlayer = true;
+	/**
+	 * @return the validateOnlinePlayer
+	 */
+	public boolean isValidateOnlinePlayer() {
+		return validateOnlinePlayer;
+	}
+
+	/**
+	 * @param validateOnlinePlayer the validateOnlinePlayer to set
+	 */
+	public void setValidateOnlinePlayer(boolean validateOnlinePlayer) {
+		this.validateOnlinePlayer = validateOnlinePlayer;
+	}
+
 	private boolean isReady = false;
 	private static boolean isLoaded = false;
 	protected GMConfiguration config;
