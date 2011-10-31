@@ -1176,11 +1176,17 @@ public class GroupManager extends JavaPlugin {
 				}
 				// VALIDANDO PERMISSAO
 				auxGroup = auxUser.getGroup();
-				auxGroup2 = permissionHandler.nextGroupWithVariable(auxGroup, args[1], null);
+				auxGroup2 = permissionHandler.nextGroupWithVariable(auxGroup, args[1]);
 
 				if (!auxUser.getVariables().hasVar(args[1])) {
+					// Check sub groups
+					if (!auxUser.isSubGroupsEmpty() && auxGroup2 == null)
+						for (Group subGroup : auxUser.subGroupListCopy()) {
+							auxGroup2 = permissionHandler.nextGroupWithVariable(subGroup, args[1]);
+						}
 					if (auxGroup2 == null) {
 						sender.sendMessage(ChatColor.RED + "The user doesn't have access to that variable!");
+						return false;
 					}
 				}
 				// PARECE OK

@@ -60,3 +60,5 @@ v 1.5:
 	  Defined in groupmanager/globalgroups.yml.
 	  Create groups in the yml with a g: prefix, then inherit in the worlds groups files.
 	- Added Info node support to Global Groups.
+	- Fixed an error on 'manucheckv'. If the users doesn't have the variable it fell through causing an exception.
+	- Added checking of subgroups for Info nodes.
