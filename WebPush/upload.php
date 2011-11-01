@@ -1,35 +1,32 @@
 <?php
+
 include_once('simple_html_dom.php');
 
-function uploadit($build, $branch, $file, $version, $changes)
-{
+function uploadit($build, $branch, $file, $version, $changes) {
   file_put_contents('status.log', "\nUploading file $file to devbukkit! ", FILE_APPEND);
   $slug = "essentials";
   $plugin = "Essentials";
   $url = "http://ci.earth2me.net/guestAuth/repository/download/$branch/$build:id/$file";
   $filename = explode('.', $file);
   $request_url = "http://dev.bukkit.org/server-mods/$slug/upload-file.json";
-  
+
   include ('apikey.php');
-  
+
   $params['name'] = $filename[0] . '-' . $version;
   $params['game_versions'] = 176;
   $params['change_log'] = $changes;
   $params['change_markup_type'] = "html";
   $params['fileurl'] = $url;
-  
-  if (stripos($version, 'Dev') !== false)
-  {
+
+  if (stripos($version, 'Dev') !== false) {
     $params['file_type'] = "a";
   }
-  elseif (stripos($version, 'Pre') !== false)
-  {
+  elseif (stripos($version, 'Pre') !== false) {
     $params['file_type'] = "b";
   }
-  else
-  {
+  else {
     $params['file_type'] = "r";
-  } 
+  }
 
   $content = file_get_contents($url);
   file_put_contents($file, $content);
@@ -42,13 +39,11 @@ function uploadit($build, $branch, $file, $version, $changes)
   curl_setopt($ch, CURLOPT_POST, true);
   curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
   $result = curl_exec($ch);
-  
-  if ($result === false)
-  {
+
+  if ($result === false) {
     $result = curl_error($ch);
   }
-  elseif ($result == "")
-  {
+  elseif ($result == "") {
     $result = "Success uploading $file - $version";
   }
   curl_close($ch);
@@ -57,8 +52,7 @@ function uploadit($build, $branch, $file, $version, $changes)
   return true;
 }
 
-function getChanges($job, $project)
-{
+function getChanges($job, $project) {
   $commitblacklist = array(
       'Merge branch',
       'Merge pull',
@@ -72,20 +66,15 @@ function getChanges($job, $project)
   $html->load_file($url);
 
   $output = "Change Log:<ul>";
-  foreach ($html->find('.changelist') as $list)
-  {
-    foreach ($list->find('.comment') as $comment)
-    {
+  foreach ($html->find('.changelist') as $list) {
+    foreach ($list->find('.comment') as $comment) {
       $text = $comment->innertext;
-      foreach ($commitblacklist as $matchtext)
-      {
-        if (stripos($text, $matchtext) !== FALSE)
-        {
+      foreach ($commitblacklist as $matchtext) {
+        if (stripos($text, $matchtext) !== FALSE) {
           $text = "";
         }
       }
-      if ($text != "")
-      {
+      if ($text != "") {
         $output .= "<li>$text</li>\n";
       }
     }
