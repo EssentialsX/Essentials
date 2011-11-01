@@ -64,3 +64,4 @@ v 1.5:
 	- Added checking of subgroups for Info nodes.
 	- Expanded 'canUserBuild()' to include inheritance and subgroups.
 	- Added a config.yml setting of 'validate_toggle' for those who prefer 'mantogglevalidate' to always be off.
+	- Prevent setting 'minutes' in the config to zero causing an error.

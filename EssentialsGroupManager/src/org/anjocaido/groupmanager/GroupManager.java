@@ -88,10 +88,10 @@ public class GroupManager extends JavaPlugin {
 	public void onDisable() {
 		setLoaded(false);
 
+		disableScheduler(); // Shutdown before we save, so it doesn't interfere.
 		if (worldsHolder != null) {
 			worldsHolder.saveChanges();
 		}
-		disableScheduler();
 
 		WorldEvents = null;
 		BukkitPermissions = null;
@@ -181,9 +181,13 @@ public class GroupManager extends JavaPlugin {
 				}
 			};
 			scheduler = new ScheduledThreadPoolExecutor(1);
-			int minutes = getGMConfig().getSaveInterval();
+			long minutes = (long)getGMConfig().getSaveInterval();
+			if (minutes > 0) {
 			scheduler.scheduleAtFixedRate(commiter, minutes, minutes, TimeUnit.MINUTES);
-			GroupManager.logger.info("Scheduled Data Saving is set for every " + minutes + " minutes!");
+				GroupManager.logger.info("Scheduled Data Saving is set for every " + minutes + " minutes!");
+			} else
+				GroupManager.logger.info("Scheduled Data Saving is Disabled!");
+			
 			GroupManager.logger.info("Backups will be retained for " + getGMConfig().getBackupDuration() + " hours!");
 		}
 	}
