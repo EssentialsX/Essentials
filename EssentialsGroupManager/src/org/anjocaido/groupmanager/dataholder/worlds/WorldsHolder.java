@@ -160,47 +160,97 @@ public class WorldsHolder {
     public void reloadWorld(String worldName) {
         getWorldData(worldName).reload();
     }
+    
+    /**
+     * Wrapper to retain backwards compatibility
+     * (call this function to auto overwrite files)
+     */
+    public void saveChanges() {
+    	saveChanges(true);
+    }
 
     /**
      *
      */
-    public void saveChanges() {
+    public void saveChanges(boolean overwrite) {
         ArrayList<WorldDataHolder> alreadyDone = new ArrayList<WorldDataHolder>();
+        Tasks.removeOldFiles(plugin, plugin.getBackupFolder());
+        
         for (OverloadedWorldHolder w : worldsData.values()) {
             if (alreadyDone.contains(w)) {
                 continue;
             }
-            Tasks.removeOldFiles(plugin, plugin.getBackupFolder());
             if (w == null) {
                 GroupManager.logger.severe("WHAT HAPPENED?");
                 continue;
             }
             if (w.haveGroupsChanged()) {
-                //String groupsFolderName = w.getGroupsFile().getParentFile().getName();
-                File backupGroups = new File(plugin.getBackupFolder(), "bkp_" + w.getName() + "_g_" + Tasks.getDateString() + ".yml");
-                try {
-                    Tasks.copy(w.getGroupsFile(), backupGroups);
-                } catch (IOException ex) {
-                    GroupManager.logger.log(Level.SEVERE, null, ex);
-                }
-                WorldDataHolder.writeGroups(w, w.getGroupsFile());
-                w.removeGroupsChangedFlag();
+            	if (overwrite || (!overwrite && (w.getTimeStampGroups() >= w.getGroupsFile().lastModified()))) {
+	                // Backup Groups file
+            		backupFile(w,true);
+            		
+	                WorldDataHolder.writeGroups(w, w.getGroupsFile());
+	                //w.removeGroupsChangedFlag();
+            	} else {
+            		// Newer file found.
+            		GroupManager.logger.log(Level.WARNING, "Newer Groups file found for " + w.getName() + ", but we have local changes!");
+            		throw new IllegalStateException("Unable to save unless you issue a '/mansave force'");
+            	}
+            } else {
+            	//Check for newer file as no local changes.
+            	if (w.getTimeStampGroups() < w.getGroupsFile().lastModified()) {
+            		System.out.print("Newer Groups file found (Loading changes)!");
+            		// Backup Users file
+	            	backupFile(w,false);
+            		w.reloadGroups();
+            	}
             }
             if (w.haveUsersChanged()) {
-                File backupUsers = new File(plugin.getBackupFolder(), "bkp_" + w.getName() + "_u_" + Tasks.getDateString() + ".yml");
-                try {
-                    Tasks.copy(w.getUsersFile(), backupUsers);
-                } catch (IOException ex) {
-                    GroupManager.logger.log(Level.SEVERE, null, ex);
-                }
-                WorldDataHolder.writeUsers(w, w.getUsersFile());
-                w.removeUsersChangedFlag();
+            	if (overwrite || (!overwrite && (w.getTimeStampUsers() >= w.getUsersFile().lastModified()))) {
+	            	// Backup Users file
+	            	backupFile(w,false);
+	            	
+	                WorldDataHolder.writeUsers(w, w.getUsersFile());
+	                //w.removeUsersChangedFlag();
+            	} else {
+            		// Newer file found.
+            		GroupManager.logger.log(Level.WARNING, "Newer Users file found for " + w.getName() + ", but we have local changes!");
+            		throw new IllegalStateException("Unable to save unless you issue a '/mansave force'");
+            	}
+            } else {
+            	//Check for newer file as no local changes.
+            	if (w.getTimeStampUsers() < w.getUsersFile().lastModified()) {
+            		System.out.print("Newer Users file found (Loading changes)!");
+            		// Backup Users file
+	            	backupFile(w,false);
+            		w.reloadUsers();
+            	}
             }
             alreadyDone.add(w);
         }
         // Write Global Groups
         if (GroupManager.getGlobalGroups().haveGroupsChanged()) {
-        	GroupManager.getGlobalGroups().writeGroups();
+        	GroupManager.getGlobalGroups().writeGroups(overwrite);
+        } else {
+        	if (GroupManager.getGlobalGroups().getTimeStampGroups() < GroupManager.getGlobalGroups().getGlobalGroupsFile().lastModified()) {
+        		System.out.print("Newer GlobalGroups file found (Loading changes)!");
+        		GroupManager.getGlobalGroups().load();
+        	}
+        }
+    }
+    
+    /**
+     * Backup the Groups/Users file
+     * @param w
+     * @param groups
+     */
+    private void backupFile(OverloadedWorldHolder w, Boolean groups) {
+    	
+    	File backupFile = new File(plugin.getBackupFolder(), "bkp_" + w.getName() + (groups ? "_g_" : "_u_") + Tasks.getDateString() + ".yml");
+        try {
+            Tasks.copy((groups ? w.getGroupsFile() : w.getUsersFile()), backupFile);
+        } catch (IOException ex) {
+            GroupManager.logger.log(Level.SEVERE, null, ex);
         }
     }
 
@@ -407,6 +457,10 @@ public class WorldsHolder {
             }
             try {
                 OverloadedWorldHolder thisWorldData = new OverloadedWorldHolder(WorldDataHolder.load(worldName, groupsFile, usersFile));
+                
+                // Set the file TimeStamps as it will be default from the initial load.
+                thisWorldData.setTimeStamps();
+                
                 if (thisWorldData != null) {
                     GroupManager.logger.finest("Successful load of world " + worldName + "...");
                     worldsData.put(worldName.toLowerCase(), thisWorldData);

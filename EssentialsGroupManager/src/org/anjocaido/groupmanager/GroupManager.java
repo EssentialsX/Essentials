@@ -90,7 +90,11 @@ public class GroupManager extends JavaPlugin {
 
 		disableScheduler(); // Shutdown before we save, so it doesn't interfere.
 		if (worldsHolder != null) {
-			worldsHolder.saveChanges();
+			try {
+				worldsHolder.saveChanges(false);
+			} catch (IllegalStateException ex) {
+				GroupManager.logger.log(Level.WARNING, ex.getMessage());
+			}
 		}
 
 		WorldEvents = null;
@@ -177,7 +181,12 @@ public class GroupManager extends JavaPlugin {
 
 				@Override
 				public void run() {
-					worldsHolder.saveChanges();
+					try {
+						worldsHolder.saveChanges(false);
+						GroupManager.logger.log(Level.INFO, " Data files refreshed.");
+					} catch (IllegalStateException ex) {
+						GroupManager.logger.log(Level.WARNING, ex.getMessage());
+					}
 				}
 			};
 			scheduler = new ScheduledThreadPoolExecutor(1);
@@ -1504,9 +1513,20 @@ public class GroupManager extends JavaPlugin {
 
 				return true;
 			case mansave:
-				worldsHolder.saveChanges();
-				sender.sendMessage(ChatColor.YELLOW + " The changes were saved.");
+				
+				boolean forced = false;
+				
+				if ((args.length == 1) && (args[0].equalsIgnoreCase("force")))
+					forced = true;
+				
+				try {
+					worldsHolder.saveChanges(forced);
+					sender.sendMessage(ChatColor.YELLOW + " The changes were saved.");
+				} catch (IllegalStateException ex) {
+					sender.sendMessage(ChatColor.RED + ex.getMessage());
+				}
 				return true;
+
 			case manload:
 				// THIS CASE DONT NEED SENDER
 				if (args.length > 0) {

@@ -33,10 +33,10 @@ public class GlobalGroups {
 	private YamlConfiguration GGroups;
 
 	private Map<String, Group> groups;
-	/**
-    *
-    */
+
+	protected long timeStampGroups = 0;
 	protected boolean haveGroupsChanged = false;
+	protected File GlobalGroupsFile = null;
 
 	public GlobalGroups(GroupManager plugin) {
 		this.plugin = plugin;
@@ -59,6 +59,19 @@ public class GlobalGroups {
 	}
 
 	/**
+	 * @return the timeStampGroups
+	 */
+	public long getTimeStampGroups() {
+		return timeStampGroups;
+	}
+	/**
+	 * @param timeStampGroups the timeStampGroups to set
+	 */
+	protected void setTimeStampGroups(long timeStampGroups) {
+		this.timeStampGroups = timeStampGroups;
+	}
+	
+	/**
 	 * @param haveGroupsChanged
 	 *            the haveGroupsChanged to set
 	 */
@@ -71,9 +84,12 @@ public class GlobalGroups {
 
 		GGroups = new YamlConfiguration();
 		groups = new HashMap<String, Group>();
+		
+		GroupManager.setLoaded(false);
 
 		// READ globalGroups FILE
-		File GlobalGroupsFile = new File(plugin.getDataFolder(), "globalgroups.yml");
+		if (GlobalGroupsFile == null)
+			GlobalGroupsFile = new File(plugin.getDataFolder(), "globalgroups.yml");
 
 		if (!GlobalGroupsFile.exists()) {
 			try {
@@ -129,7 +145,10 @@ public class GlobalGroups {
 				addGroup(newGroup);
 			}
 
-		GlobalGroupsFile = null;
+		removeGroupsChangedFlag();
+		setTimeStampGroups(GlobalGroupsFile.lastModified());
+		GroupManager.setLoaded(true);
+		//GlobalGroupsFile = null;
 
 	}
 
@@ -137,45 +156,77 @@ public class GlobalGroups {
 	 * Write the globalgroups.yml file
 	 */
 
-	public void writeGroups() {
+	public void writeGroups(boolean overwrite) {
 
-		File GlobalGroupsFile = new File(plugin.getDataFolder(), "globalgroups.yml");
+		//File GlobalGroupsFile = new File(plugin.getDataFolder(), "globalgroups.yml");
 
-		Map<String, Object> root = new HashMap<String, Object>();
-
-		Map<String, Object> groupsMap = new HashMap<String, Object>();
-		root.put("groups", groupsMap);
-		for (String groupKey : groups.keySet()) {
-			Group group = groups.get(groupKey);
-
-			// Group header
-			Map<String, Object> aGroupMap = new HashMap<String, Object>();
-			groupsMap.put(group.getName(), aGroupMap);
-			
-			// Info nodes
-			Map<String, Object> infoMap = new HashMap<String, Object>();
-            aGroupMap.put("info", infoMap);
-
-            for (String infoKey : group.getVariables().getVarKeyList()) {
-                infoMap.put(infoKey, group.getVariables().getVarObject(infoKey));
-            }
-
-            // Permission nodes
-			aGroupMap.put("permissions", group.getPermissionList());
-		}
-
-		if (!root.isEmpty()) {
-			DumperOptions opt = new DumperOptions();
-			opt.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-			final Yaml yaml = new Yaml(opt);
-			try {
-				yaml.dump(root, new OutputStreamWriter(new FileOutputStream(GlobalGroupsFile), "UTF-8"));
-			} catch (UnsupportedEncodingException ex) {
-			} catch (FileNotFoundException ex) {
-			}
-		}
+		if (haveGroupsChanged()) {
+			if (overwrite || (!overwrite && (getTimeStampGroups() >= GlobalGroupsFile.lastModified()))) {
+				Map<String, Object> root = new HashMap<String, Object>();
+		
+				Map<String, Object> groupsMap = new HashMap<String, Object>();
+				root.put("groups", groupsMap);
+				for (String groupKey : groups.keySet()) {
+					Group group = groups.get(groupKey);
+		
+					// Group header
+					Map<String, Object> aGroupMap = new HashMap<String, Object>();
+					groupsMap.put(group.getName(), aGroupMap);
+					
+					// Info nodes
+					Map<String, Object> infoMap = new HashMap<String, Object>();
+		            aGroupMap.put("info", infoMap);
+		
+		            for (String infoKey : group.getVariables().getVarKeyList()) {
+		                infoMap.put(infoKey, group.getVariables().getVarObject(infoKey));
+		            }
+		
+		            // Permission nodes
+					aGroupMap.put("permissions", group.getPermissionList());
+				}
+		
+				if (!root.isEmpty()) {
+					DumperOptions opt = new DumperOptions();
+					opt.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+					final Yaml yaml = new Yaml(opt);
+					try {
+						yaml.dump(root, new OutputStreamWriter(new FileOutputStream(GlobalGroupsFile), "UTF-8"));
+					} catch (UnsupportedEncodingException ex) {
+					} catch (FileNotFoundException ex) {
+					}
+				}
+				setTimeStampGroups(GlobalGroupsFile.lastModified());
+			} else {
+         		// Newer file found.
+         		GroupManager.logger.log(Level.WARNING, "Newer GlobalGroups file found, but we have local changes!");
+         		throw new IllegalStateException("Unable to save unless you issue a '/mansave force'");
+         	}
+			removeGroupsChangedFlag();
+		} else {
+        	//Check for newer file as no local changes.
+        	if (getTimeStampGroups() < GlobalGroupsFile.lastModified()) {
+        		System.out.print("Newer GlobalGroups file found (Loading changes)!");
+        		// Backup GlobalGroups file
+            	backupFile();
+        		load();
+        	}
+        }
 
 	}
+	
+	/**
+     * Backup the BlobalGroups file
+     * @param w
+     */
+    private void backupFile() {
+    	
+    	File backupFile = new File(plugin.getBackupFolder(), "bkp_ggroups_" + Tasks.getDateString() + ".yml");
+        try {
+            Tasks.copy(GlobalGroupsFile, backupFile);
+        } catch (IOException ex) {
+            GroupManager.logger.log(Level.SEVERE, null, ex);
+        }
+    }
 	
 	/**
 	 * Adds a group, or replaces an existing one.
@@ -321,5 +372,22 @@ public class GlobalGroups {
 		return groups.get(groupName.toLowerCase());
 
 	}
+
+	/**
+	 * @return the globalGroupsFile
+	 */
+	public File getGlobalGroupsFile() {
+		return GlobalGroupsFile;
+	}
+	
+	/**
+    *
+    */
+   public void removeGroupsChangedFlag() {
+	   setGroupsChanged(false);
+       for (Group g : groups.values()) {
+           g.flagAsSaved();
+       }
+   }
 
 }

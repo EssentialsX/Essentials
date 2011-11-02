@@ -45,20 +45,23 @@ public class WorldDataHolder {
      * The actual groups holder
      */
     protected Map<String, Group> groups = new HashMap<String, Group>();
-    /**
+	/**
      * The actual users holder
      */
     protected Map<String, User> users = new HashMap<String, User>();
-    /**
+    
+	/**
      * Points to the default group
      */
     protected Group defaultGroup = null;
+    
     /**
      * The file, which this class loads/save data from/to
      * @deprecated
      */
     @Deprecated
     protected File f;
+    
     /**
      *
      */
@@ -79,8 +82,17 @@ public class WorldDataHolder {
      *
      */
     protected boolean haveGroupsChanged = false;
-
     /**
+    *
+    */
+    protected long timeStampGroups = 0;
+	/**
+    *
+    */
+    protected long timeStampUsers = 0;
+
+    
+	/**
      * Prevent direct instantiation
      * @param worldName
      */
@@ -302,13 +314,33 @@ public class WorldDataHolder {
      */
     public void reload() {
         try {
-            WorldDataHolder ph = load(this.getName(), getGroupsFile(), getUsersFile());
-            this.defaultGroup = ph.defaultGroup;
-            this.groups = ph.groups;
-            this.users = ph.users;
+        	reloadGroups();
+        	reloadUsers();
         } catch (Exception ex) {
             Logger.getLogger(WorldDataHolder.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void reloadGroups() {
+    	GroupManager.setLoaded(false);
+    	try {
+        	resetGroups();
+    		loadGroups(this, getGroupsFile());
+    	} catch (Exception ex) {
+            Logger.getLogger(WorldDataHolder.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    	GroupManager.setLoaded(true);
+    }
+    
+    public void reloadUsers() {
+    	GroupManager.setLoaded(false);
+    	try {
+        	resetUsers();
+    		loadUsers(this, getUsersFile());
+    	} catch (Exception ex) {
+            Logger.getLogger(WorldDataHolder.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+    	GroupManager.setLoaded(true);
     }
 
     /**
@@ -469,7 +501,8 @@ public class WorldDataHolder {
     }
 
     /**
-     * Returns a data holder for the given file
+     * Returns a NEW data holder containing data read from the files
+     * 
      * @param worldName
      * @param groupsFile
      * @param usersFile
@@ -477,18 +510,57 @@ public class WorldDataHolder {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    @SuppressWarnings({"rawtypes", "unchecked"})
     public static WorldDataHolder load(String worldName, File groupsFile, File usersFile) throws FileNotFoundException, IOException {
-        WorldDataHolder ph = new WorldDataHolder(worldName);
-        ph.groupsFile = groupsFile;
-        ph.usersFile = usersFile;
+    	WorldDataHolder ph = new WorldDataHolder(worldName);
+    	
+    	GroupManager.setLoaded(false);
+    	loadGroups(ph, groupsFile);
+    	loadUsers(ph, usersFile);
+    	GroupManager.setLoaded(true);
+    	
+    	return ph;
+    }
+    
+    /**
+     * Updates the WorldDataHolder from the files
+     * 
+     * @param ph
+     * @param groupsFile
+     * @param usersFile
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    public static WorldDataHolder Update(WorldDataHolder ph, File groupsFile, File usersFile) throws FileNotFoundException, IOException {
 
+    	GroupManager.setLoaded(false);
+    	ph.resetGroups();
+    	loadGroups(ph, groupsFile);
+
+    	ph.resetUsers();
+    	loadUsers(ph, usersFile);
+    	GroupManager.setLoaded(true);
+
+    	return ph;
+    }
+    
+    /**
+     * Updates the WorldDataHolder from the Groups file
+     * 
+     * @param worldName
+     * @param groupsFile
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    protected static void loadGroups(WorldDataHolder ph, File groupsFile) throws FileNotFoundException, IOException {
 
         //READ GROUPS FILE
         Yaml yamlGroups = new Yaml(new SafeConstructor());
         Map<String, Object> groupsRootDataNode;
         if (!groupsFile.exists()) {
-            throw new IllegalArgumentException("The file which should contain permissions does not exist!\n" + groupsFile.getPath());
+            throw new IllegalArgumentException("The file which should contain groups does not exist!\n" + groupsFile.getPath());
         }
         FileInputStream groupsInputStream = new FileInputStream(groupsFile);
         try {
@@ -584,13 +656,32 @@ public class WorldDataHolder {
                 }
             }
         }
+        
+        ph.removeGroupsChangedFlag();
+        // Update the LastModified time.
+        ph.groupsFile = groupsFile;
+        ph.setTimeStamps();
 
-
+        //return ph;
+    }
+    
+    /**
+     * Updates the WorldDataHolder from the Users file
+     * 
+     * @param worldName
+     * @param usersFile
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    protected static void loadUsers(WorldDataHolder ph, File usersFile) throws FileNotFoundException, IOException {
+    	
         //READ USERS FILE
         Yaml yamlUsers = new Yaml(new SafeConstructor());
         Map<String, Object> usersRootDataNode;
-        if (!groupsFile.exists()) {
-            throw new IllegalArgumentException("The file which should contain permissions does not exist!\n" + usersFile.getPath());
+        if (!usersFile.exists()) {
+            throw new IllegalArgumentException("The file which should contain users does not exist!\n" + usersFile.getPath());
         }
         FileInputStream usersInputStream = new FileInputStream(usersFile);
         try {
@@ -609,7 +700,7 @@ public class WorldDataHolder {
         
         // Stop loading if the file is empty
         if (allUsersNode == null)
-        	return ph;
+        	return ;
 
         for (String usersKey : allUsersNode.keySet()) {
             Map<String, Object> thisUserNode = (Map<String, Object>) allUsersNode.get(usersKey);
@@ -672,7 +763,13 @@ public class WorldDataHolder {
                 thisUser.setGroup(ph.defaultGroup);
             }
         }
-        return ph;
+        
+        ph.removeUsersChangedFlag();
+        // Update the LastModified time.
+        ph.usersFile = usersFile;
+        ph.setTimeStamps();
+        
+        //return ph;
     }
 
     /**
@@ -805,6 +902,11 @@ public class WorldDataHolder {
 	        } catch (FileNotFoundException ex) {
 	        }
         }
+        
+        // Update the LastModified time.
+        ph.groupsFile = groupsFile;
+        ph.setTimeStampGroups(groupsFile.lastModified());
+        ph.removeGroupsChangedFlag();
 
         /*FileWriter tx = null;
         try {
@@ -870,6 +972,12 @@ public class WorldDataHolder {
 	        } catch (FileNotFoundException ex) {
 	        }
         }
+        
+        // Update the LastModified time.
+        ph.usersFile = usersFile;
+        ph.setTimeStampUsers(usersFile.lastModified());
+        ph.removeUsersChangedFlag();
+        
         /*FileWriter tx = null;
         try {
         tx = new FileWriter(usersFile, false);
@@ -992,4 +1100,64 @@ public class WorldDataHolder {
     public String getName() {
         return name;
     }
+    
+    /**
+	 * Resets Groups.
+	 */
+	public void resetGroups() {
+		this.defaultGroup = null;
+		this.groups = new HashMap<String, Group>();
+	}
+    /**
+	 * Resets Users
+	 */
+	public void resetUsers() {
+		this.users = new HashMap<String, User>();
+	}
+    
+    /**
+	 * @return the groups
+	 */
+	public Map<String, Group> getGroups() {
+		return groups;
+	}
+    /**
+	 * @return the users
+	 */
+	public Map<String, User> getUsers() {
+		return users;
+	}
+    
+    /**
+	 * @return the timeStampGroups
+	 */
+	public long getTimeStampGroups() {
+		return timeStampGroups;
+	}
+    /**
+	 * @return the timeStampUsers
+	 */
+	public long getTimeStampUsers() {
+		return timeStampUsers;
+	}
+
+	/**
+	 * @param timeStampGroups the timeStampGroups to set
+	 */
+	protected void setTimeStampGroups(long timeStampGroups) {
+		this.timeStampGroups = timeStampGroups;
+	}
+    /**
+	 * @param timeStampUsers the timeStampUsers to set
+	 */
+	protected void setTimeStampUsers(long timeStampUsers) {
+		this.timeStampUsers = timeStampUsers;
+	}
+	
+	public void setTimeStamps() {
+		if (groupsFile != null)
+			setTimeStampGroups(groupsFile.lastModified());
+		if (usersFile != null)
+			setTimeStampUsers(usersFile.lastModified());
+	}
 }

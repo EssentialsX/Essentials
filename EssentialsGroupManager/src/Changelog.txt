@@ -65,3 +65,7 @@ v 1.5:
 	- Expanded 'canUserBuild()' to include inheritance and subgroups.
 	- Added a config.yml setting of 'validate_toggle' for those who prefer 'mantogglevalidate' to always be off.
 	- Prevent setting 'minutes' in the config to zero causing an error.
+	- GM will now check to see if it's data files have been changed at each scheduled save.
+	  If the files have been altered (on disc) it will reload, so long as the in-memory data hasn't changed.
+	  If the files on Disc have changed AND there have been changes to it's in-memory data it will show a warning.
+	  You then MUST issue a '/mansave force' to overwrite the disc files, or a '/manload' to overwrite the memory data.
