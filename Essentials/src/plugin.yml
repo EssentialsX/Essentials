@@ -78,7 +78,7 @@ commands:
   eco:
     description: Manages the server economy.
     usage: /<command> [give|take|reset] [player] [amount]
-    aliases: [economy,emoney]
+    aliases: [economy,eeco,eeconomy]
   essentials:
     description: Reloads essentials.
     usage: /<command>
@@ -90,6 +90,10 @@ commands:
     description: Throw a fireball.
     usage: /<command>
     aliases: [efireball]
+  gamemode:
+    description: Change player gamemode.
+    usage: /<command> [player]
+    aliases: [gm,creative,creativemode,egamemode,ecreative,ecreativemode,egm]
   getpos:
     description: Get your current coordinates.
     usage: /<command>
@@ -104,8 +108,8 @@ commands:
     aliases: [egive]
   god:
     description: Enables your godly powers.
-    usage: /<command>
-    aliases: [tgm,godmode,egod,egodmode,etgm]
+    usage: /<command> [player]
+    aliases: [tgm,godmode,egod,etgm,egodmode]
   heal:
     description: Heals you or the given player.
     usage: /<command> <player>
@@ -177,7 +181,7 @@ commands:
   me:
     description: Describes an action in the context of the player.
     usage: /<command> [description]
-    aliases: [eme]
+    aliases: [action,describe,eme,eaction,edescribe]
   motd:
     description: Views the Message Of The Day.
     usage: /<command>
@@ -212,7 +216,7 @@ commands:
     aliases: [pt,epowertool,ept]
   powertooltoggle:
     description: Enables or disables all current powertools
-    usage: /<command> 
+    usage: /<command>
     aliases: [ptt,epowertooltoggle,eptt]
   ptime:
     description: Adjust player's client time. Add @ prefix to fix.
