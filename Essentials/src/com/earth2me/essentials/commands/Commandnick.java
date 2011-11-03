@@ -15,85 +15,51 @@ public class Commandnick extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		
-		if (!ess.getSettings().changeDisplayName()) {
+		if (!ess.getSettings().changeDisplayName())
+		{
 			throw new Exception(Util.i18n("nickDisplayName"));
 		}
-
 		if (args.length > 1)
 		{
 			if (!user.isAuthorized("essentials.nick.others"))
 			{
 				throw new Exception(Util.i18n("nickOthersPermission"));
 			}
-
-			setOthersNickname(server, user, args);
+			setNickname(server, getPlayer(server, args, 0), args[1]);
+			user.sendMessage(Util.i18n("nickChanged"));
 			return;
 		}
-
-		
-		String nick = args[0];
-		if ("off".equalsIgnoreCase(nick) || user.getName().equalsIgnoreCase(nick))
-		{
-			user.setDisplayNick(user.getName());
-			user.setNickname(null);
-			user.sendMessage(Util.i18n("nickNoMore"));
-			return;
-		}
-
-		if (nick.matches("[^a-zA-Z_0-9]"))
-		{
-			throw new Exception(Util.i18n("nickNamesAlpha"));
-		}
-
-		for (Player p : server.getOnlinePlayers())
-		{
-			if (user == p)
-			{
-				continue;
-			}
-			String dn = p.getDisplayName().toLowerCase();
-			String n = p.getName().toLowerCase();
-			String nk = nick.toLowerCase();
-			if (nk.equals(dn) || nk.equals(n))
-			{
-				throw new Exception(Util.i18n("nickInUse"));
-			}
-		}
-
-		user.setDisplayNick(ess.getSettings().getNicknamePrefix() + nick);
-		user.setNickname(nick);
-		user.sendMessage(Util.format("nickSet", user.getDisplayName() + "§7."));
+		setNickname(server, user, args[0]);
 	}
 
 	@Override
-	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 2)
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		
-		if (!ess.getSettings().changeDisplayName()) {
-			sender.sendMessage(Util.i18n("nickDisplayName"));
-			return;
+		if (!ess.getSettings().changeDisplayName())
+		{
+			throw new Exception(Util.i18n("nickDisplayName"));
 		}
-		
-		setOthersNickname(server, sender, args);
-		
+		setNickname(server, getPlayer(server, args, 0), args[1]);
+		sender.sendMessage(Util.i18n("nickChanged"));
 	}
 
-	private void setOthersNickname(Server server, CommandSender sender, String[] args) throws Exception
+	private void setNickname(final Server server, final User target, final String nick) throws Exception
 	{
-		User target = getPlayer(server, args, 0);
-		String nick = args[1];
-		if ("off".equalsIgnoreCase(nick) || target.getName().equalsIgnoreCase(nick))
+		if (nick.matches("[^a-zA-Z_0-9]"))
+		{
+			throw new Exception(Util.i18n("nickNamesAlpha"));
+		}
+		else if ("off".equalsIgnoreCase(nick) || target.getName().equalsIgnoreCase(nick))
 		{
 			target.setDisplayNick(target.getName());
 			target.setNickname(null);
@@ -101,10 +67,25 @@ public class Commandnick extends EssentialsCommand
 		}
 		else
 		{
-			target.setDisplayNick(ess.getSettings().getNicknamePrefix() + nick);
-			target.setNickname(nick);
+			final String formattedNick = nick.replace('&', '§').replace('§§', '&');
+			for (Player p : server.getOnlinePlayers())
+			{
+				if (target.getBase() == p)
+				{
+					continue;
+				}
+				String dn = p.getDisplayName().toLowerCase();
+				String n = p.getName().toLowerCase();
+				String nk = formattedNick.toLowerCase();
+				if (nk.equals(dn) || nk.equals(n))
+				{
+					throw new Exception(Util.i18n("nickInUse"));
+				}
+			}
+
+			target.setDisplayNick(ess.getSettings().getNicknamePrefix() + formattedNick);
+			target.setNickname(formattedNick);
 			target.sendMessage(Util.format("nickSet", target.getDisplayName() + "§7."));
 		}
-		sender.sendMessage(Util.i18n("nickChanged"));
 	}
 }
