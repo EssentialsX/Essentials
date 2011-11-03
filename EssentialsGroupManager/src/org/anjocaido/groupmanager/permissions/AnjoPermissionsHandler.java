@@ -677,7 +677,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 		result.askedPermission = targetPermission;
 		result.resultType = PermissionCheckResult.Type.NOTFOUND;
 
-		if (user == null || targetPermission == null) {
+		if (user == null || targetPermission == null || targetPermission.isEmpty()) {
 			return result;
 		}
 
