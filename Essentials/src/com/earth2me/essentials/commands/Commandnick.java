@@ -67,7 +67,7 @@ public class Commandnick extends EssentialsCommand
 		}
 		else
 		{
-			final String formattedNick = nick.replace('&', '§').replace('§§', '&');
+			final String formattedNick = nick.replace('&', '\u00a7').replace("\u00a7\u00a7", "&");
 			for (Player p : server.getOnlinePlayers())
 			{
 				if (target.getBase() == p)
