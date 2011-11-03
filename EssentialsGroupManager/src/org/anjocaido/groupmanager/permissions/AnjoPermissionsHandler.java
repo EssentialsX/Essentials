@@ -658,7 +658,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 		if (result.resultType.equals(PermissionCheckResult.Type.EXCEPTION) || result.resultType.equals(PermissionCheckResult.Type.FOUND)) {
 			return true;
 		}
-		if (Bukkit.getPlayer(user.getName()).hasPermission(permission))
+		if ((Bukkit.getPlayer(user.getName()) != null) && (Bukkit.getPlayer(user.getName()).hasPermission(permission)))
 			return true;
 
 		return false;
@@ -700,7 +700,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 			}
 		}
 
-		if (Bukkit.getPlayer(user.getName()).hasPermission(targetPermission)) {
+		if ((Bukkit.getPlayer(user.getName()) != null) && (Bukkit.getPlayer(user.getName()).hasPermission(targetPermission))) {
 			result.resultType = PermissionCheckResult.Type.FOUND;
 			result.owner = user;
 			return result;
