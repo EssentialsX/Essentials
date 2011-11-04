@@ -39,7 +39,7 @@ public class OverloadedWorldHolder extends WorldDataHolder {
     /**
      *
      * @param userName
-     * @return
+     * @return user object or a new user if none exists.
      */
     @Override
     public User getUser(String userName) {
@@ -86,7 +86,7 @@ public class OverloadedWorldHolder extends WorldDataHolder {
     /**
      *
      * @param userName
-     * @return
+     * @return true if removed/false if not found.
      */
     @Override
     public boolean removeUser(String userName) {
@@ -137,7 +137,7 @@ public class OverloadedWorldHolder extends WorldDataHolder {
 
     /**
      *
-     * @return
+     * @return Collection of all users
      */
     @Override
     public Collection<User> getUserList() {
@@ -156,7 +156,7 @@ public class OverloadedWorldHolder extends WorldDataHolder {
     /**
      *
      * @param userName
-     * @return
+     * @return true if user is overloaded.
      */
     public boolean isOverloaded(String userName) {
         return overloadedUsers.containsKey(userName.toLowerCase());
@@ -189,8 +189,9 @@ public class OverloadedWorldHolder extends WorldDataHolder {
      * Gets the user in normal state. Surpassing the overload state.
      * It doesn't affect permissions. But it enables plugins change the
      * actual user permissions even in overload mode.
+     * 
      * @param userName
-     * @return
+     * @return user object
      */
     public User surpassOverload(String userName) {
         if (!isOverloaded(userName)) {

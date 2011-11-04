@@ -163,7 +163,7 @@ public class WorldDataHolder {
     /**
      *
      * @param userName
-     * @return
+     * @return true if we have data for this player.
      */
     public boolean isUserDeclared(String userName) {
         return users.containsKey(userName.toLowerCase());
@@ -355,9 +355,11 @@ public class WorldDataHolder {
 
     /**
      * Returns a data holder for the given file
+     * 
      * @param worldName
      * @param file
-     * @return
+     * @return a new WorldDataHolder
+     * 
      * @throws Exception
      * @deprecated
      */
@@ -506,7 +508,7 @@ public class WorldDataHolder {
      * @param worldName
      * @param groupsFile
      * @param usersFile
-     * @return
+     * 
      * @throws FileNotFoundException
      * @throws IOException
      */
@@ -527,7 +529,7 @@ public class WorldDataHolder {
      * @param ph
      * @param groupsFile
      * @param usersFile
-     * @return
+     * 
      * @throws FileNotFoundException
      * @throws IOException
      */
@@ -547,9 +549,9 @@ public class WorldDataHolder {
     /**
      * Updates the WorldDataHolder from the Groups file
      * 
-     * @param worldName
+     * @param ph
      * @param groupsFile
-     * @return
+     * 
      * @throws FileNotFoundException
      * @throws IOException
      */
@@ -668,9 +670,9 @@ public class WorldDataHolder {
     /**
      * Updates the WorldDataHolder from the Users file
      * 
-     * @param worldName
+     * @param ph
      * @param usersFile
-     * @return
+     * 
      * @throws FileNotFoundException
      * @throws IOException
      */
@@ -1030,7 +1032,7 @@ public class WorldDataHolder {
 
     /**
      *
-     * @return
+     * @return true if any user data has changed
      */
     public boolean haveUsersChanged() {
         if (haveUsersChanged) {
@@ -1046,7 +1048,7 @@ public class WorldDataHolder {
 
     /**
      *
-     * @return
+     * @return true if any group data has changed.
      */
     public boolean haveGroupsChanged() {
         if (haveGroupsChanged) {

@@ -262,7 +262,7 @@ public class GlobalGroups {
 	/**
 	 * Delete a group if it exist.
 	 * 
-	 * @param newGroup
+	 * @param groupName
 	 */
 	public boolean removeGroup(String groupName) {
 		// Push a new group
@@ -278,7 +278,7 @@ public class GlobalGroups {
 	 * Returns true if the Global Group exists in the globalgroups.yml
 	 * 
 	 * @param groupName
-	 * @return
+	 * @return true if the group exists
 	 */
 	public boolean hasGroup(String groupName) {
 		return groups.containsKey(groupName.toLowerCase());
@@ -289,7 +289,7 @@ public class GlobalGroups {
 	 * 
 	 * @param groupName
 	 * @param permissionNode
-	 * @return
+	 * @return true if node exists
 	 */
 	public boolean hasPermission(String groupName, String permissionNode) {
 
@@ -306,7 +306,7 @@ public class GlobalGroups {
 	 * 
 	 * @param groupName
 	 * @param permissionNode
-	 * @return
+	 * @return PermissionCheckResult object
 	 */
 	public PermissionCheckResult checkPermission(String groupName, String permissionNode) {
 
@@ -333,7 +333,7 @@ public class GlobalGroups {
 	 * Returns a List of all permission nodes for this group null if none
 	 * 
 	 * @param groupName
-	 * @return
+	 * @return List of all group names
 	 */
 	public List<String> getGroupsPermissions(String groupName) {
 		if (!hasGroup(groupName.toLowerCase()))
@@ -345,7 +345,7 @@ public class GlobalGroups {
 	/**
 	 * Returns a Set of all global group names.
 	 * 
-	 * @return
+	 * @return Set containing all group names.
 	 */
 	public Set<String> getGlobalGroups() {
 		return groups.keySet();
@@ -363,7 +363,7 @@ public class GlobalGroups {
 	 * Returns the Global Group or null if it doesn't exist.
 	 * 
 	 * @param groupName
-	 * @return
+	 * @return Group object
 	 */
 	public Group getGroup(String groupName) {
 		if (!hasGroup(groupName.toLowerCase()))

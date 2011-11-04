@@ -46,7 +46,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	 * 
 	 * @param player
 	 * @param permission
-	 * @return
+	 * @return true if the player has the permission
 	 */
 	@Override
 	public boolean has(Player player, String permission) {
@@ -58,7 +58,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	 * 
 	 * @param player
 	 * @param permission
-	 * @return
+	 * @return true if the player has the permission
 	 */
 	@Override
 	public boolean permission(Player player, String permission) {
@@ -70,7 +70,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	 * 
 	 * @param playerName
 	 * @param permission
-	 * @return
+	 * @return true if the player has the permission
 	 */
 	public boolean permission(String playerName, String permission) {
 		return checkUserPermission(ph.getUser(playerName), permission);
@@ -80,7 +80,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	 * Returns the name of the group of that player name.
 	 * 
 	 * @param userName
-	 * @return
+	 * @return String of players group name.
 	 */
 	@Override
 	public String getGroup(String userName) {
@@ -92,7 +92,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	 * player.
 	 * 
 	 * @param userName
-	 * @return
+	 * @return List<String> of all players permissions.
 	 */
 	@Override
 	public List<String> getAllPlayersPermissions(String userName) {
@@ -139,19 +139,19 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	}
 
 	/**
-	 * Verify if player is in suck group. It will check it's groups inheritance.
+	 * Verify if player is in such group. It will check it's groups inheritance.
 	 * 
 	 * So if you have a group Admin > Moderator
 	 * 
 	 * And verify the player 'MyAdmin', which is Admin, it will return true for
 	 * both Admin or Moderator groups.
 	 * 
-	 * Mas if you have a player 'MyModerator', which is Moderator, it will give
+	 * If you have a player 'MyModerator', which is Moderator, it will give
 	 * false if you pass Admin in group parameter.
 	 * 
 	 * @param name
 	 * @param group
-	 * @return
+	 * @return true if in group (with inheritance)
 	 */
 	@Override
 	public boolean inGroup(String name, String group) {
@@ -227,11 +227,8 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	/**
 	 * Check if user can build. Checks inheritance and subgroups.
 	 * 
-	 * @param world
-	 *            Player's world
-	 * @param user
-	 *            Player's name
-	 * @return Whether the user can build
+	 * @param userName Player's name    
+	 * @return true if the user can build
 	 */
 	public boolean canUserBuild(String userName) {
 
@@ -258,7 +255,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	 * Return the suffix for the given group name
 	 * 
 	 * @param groupName
-	 * @return
+	 * @return empty string if not found.
 	 */
 	@Override
 	public String getGroupSuffix(String groupName) {
@@ -270,9 +267,11 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	}
 
 	/**
+	 * Checks the specified group for the Info Build node.
+	 * Does NOT check inheritance
 	 * 
 	 * @param groupName
-	 * @return
+	 * @return true if can build
 	 */
 	@Override
 	public boolean canGroupBuild(String groupName) {
@@ -372,7 +371,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	 * 
 	 * @param user
 	 * @param variable
-	 * @return
+	 * @return empty string if not found
 	 */
 	@Override
 	public String getUserPermissionString(String user, String variable) {
@@ -388,7 +387,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	 * 
 	 * @param user
 	 * @param variable
-	 * @return
+	 * @return -1 if not found
 	 */
 	@Override
 	public int getUserPermissionInteger(String user, String variable) {
@@ -404,7 +403,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	 * 
 	 * @param user
 	 * @param variable
-	 * @return
+	 * @return boolean value
 	 */
 	@Override
 	public boolean getUserPermissionBoolean(String user, String variable) {
@@ -420,7 +419,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	 * 
 	 * @param user
 	 * @param variable
-	 * @return
+	 * @return -1 if not found
 	 */
 	@Override
 	public double getUserPermissionDouble(String user, String variable) {
@@ -592,7 +591,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	 * 
 	 * @param user
 	 * @param permission
-	 * @return
+	 * @return PermissionCheckResult
 	 */
 	public PermissionCheckResult checkUserOnlyPermission(User user, String permission) {
 		user.sortPermissions();
@@ -670,7 +669,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	 * 
 	 * @param user
 	 * @param targetPermission
-	 * @return
+	 * @return PermissionCheckResult
 	 */
 	public PermissionCheckResult checkFullUserPermission(User user, String targetPermission) {
 		PermissionCheckResult result = new PermissionCheckResult();
@@ -851,7 +850,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	 * 
 	 * @param start
 	 * @param targetPermission
-	 * @return
+	 * @return PermissionCheckResult
 	 */
 	public PermissionCheckResult checkGroupPermissionWithInheritance(Group start, String targetPermission) {
 		if (start == null || targetPermission == null) {
@@ -1016,7 +1015,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	 * Including subgroups.
 	 * 
 	 * @param userName
-	 * @return
+	 * @return String[] of all group names.
 	 */
 	@Override
 	public String[] getGroups(String userName) {

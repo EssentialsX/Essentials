@@ -265,7 +265,7 @@ public class WorldsHolder {
      * Mirrors prevails original data.
      *
      * @param worldName
-     * @return
+     * @return OverloadedWorldHolder
      */
     public OverloadedWorldHolder getWorldData(String worldName) {
         OverloadedWorldHolder data = worldsData.get(worldName.toLowerCase());
@@ -295,31 +295,31 @@ public class WorldsHolder {
     }
 
     /**
-     * Retrieves the field p.getWorld().getName() and do
+     * Retrieves the field player.getWorld().getName() and do
      * getWorld(worldName)
-     * @param p
-     * @return
+     * @param player
+     * @return OverloadedWorldHolder
      */
-    public OverloadedWorldHolder getWorldData(Player p) {
-        return getWorldData(p.getWorld().getName());
+    public OverloadedWorldHolder getWorldData(Player player) {
+        return getWorldData(player.getWorld().getName());
     }
 
     /**
      * It does getWorld(worldName).getPermissionsHandler()
      * @param worldName
-     * @return
+     * @return AnjoPermissionsHandler
      */
     public AnjoPermissionsHandler getWorldPermissions(String worldName) {
         return getWorldData(worldName).getPermissionsHandler();
     }
 
     /**
-     *It does getWorldData(p).getPermission
-     * @param p
-     * @return
+     * Returns the PermissionsHandler for this player data
+     * @param player
+     * @return AnjoPermissionsHandler
      */
-    public AnjoPermissionsHandler getWorldPermissions(Player p) {
-        return getWorldData(p).getPermissionsHandler();
+    public AnjoPermissionsHandler getWorldPermissions(Player player) {
+        return getWorldData(player).getPermissionsHandler();
     }
 
     /**
@@ -408,7 +408,7 @@ public class WorldsHolder {
      * Copies the specified world data to another world
      * @param fromWorld
      * @param toWorld
-     * @return
+     * @return true if successfully copied.
      */
     public boolean cloneWorld(String fromWorld, String toWorld) {
         File fromWorldFolder = new File(worldsFolder, fromWorld);
@@ -514,7 +514,7 @@ public class WorldsHolder {
 
     /**
      * Returns all physically loaded worlds.
-     * @return
+     * @return ArrayList<OverloadedWorldHolder> of all loaded worlds
      */
     public ArrayList<OverloadedWorldHolder> allWorldsDataList() {
         ArrayList<OverloadedWorldHolder> list = new ArrayList<OverloadedWorldHolder>();

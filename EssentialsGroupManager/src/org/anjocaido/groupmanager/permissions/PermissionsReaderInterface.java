@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
  *
  * @author Nijikokun
  * @author Gabriel Couto
+ * @author ElgarL
  */
 public abstract class PermissionsReaderInterface {
 
@@ -23,7 +24,7 @@ public abstract class PermissionsReaderInterface {
      *
      * @param player
      * @param string
-     * @return
+     * @return true if has permission
      */
     public abstract boolean has(Player player, String string);
 
@@ -31,141 +32,141 @@ public abstract class PermissionsReaderInterface {
      *
      * @param player
      * @param string
-     * @return
+     * @return true if has permission
      */
     public abstract boolean permission(Player player, String string);
 
     /**
      *
-     * @param string
-     * @return
+     * @param userName
+     * @return group name for this player.
      */
-    public abstract String getGroup(String string);
+    public abstract String getGroup(String userName);
 
     /**
      *
-     * @param string
-     * @param string1
-     * @return
+     * @param userName
+     * @param groupName
+     * @return true if in group
      */
-    public abstract boolean inGroup(String string, String string1);
+    public abstract boolean inGroup(String userName, String groupName);
 
     /**
      *
-     * @param string
-     * @return
+     * @param groupName
+     * @return String of prefix
      */
-    public abstract String getGroupPrefix(String string);
+    public abstract String getGroupPrefix(String groupName);
 
     /**
      *
-     * @param string
-     * @return
+     * @param groupName
+     * @return String of suffix
      */
-    public abstract String getGroupSuffix(String string);
+    public abstract String getGroupSuffix(String groupName);
 
     /**
      *
-     * @param string
-     * @return
+     * @param groupName
+     * @return true if can build
      */
-    public abstract boolean canGroupBuild(String string);
+    public abstract boolean canGroupBuild(String groupName);
 
     /**
      *
-     * @param string
-     * @param string1
-     * @return
+     * @param groupName
+     * @param node
+     * @return String value
      */
-    public abstract String getGroupPermissionString(String string, String string1);
+    public abstract String getGroupPermissionString(String groupName, String node);
 
     /**
      *
-     * @param string
-     * @param string1
-     * @return
+     * @param groupName
+     * @param node
+     * @return integer value
      */
-    public abstract int getGroupPermissionInteger(String string, String string1);
+    public abstract int getGroupPermissionInteger(String groupName, String node);
 
     /**
      *
-     * @param string
-     * @param string1
-     * @return
+     * @param groupName
+     * @param node
+     * @return boolean value
      */
-    public abstract boolean getGroupPermissionBoolean(String string, String string1);
+    public abstract boolean getGroupPermissionBoolean(String groupName, String node);
 
     /**
      *
-     * @param string
-     * @param string1
-     * @return
+     * @param groupName
+     * @param node
+     * @return double value
      */
-    public abstract double getGroupPermissionDouble(String string, String string1);
+    public abstract double getGroupPermissionDouble(String groupName, String node);
 
     /**
      *
-     * @param string
-     * @param string1
-     * @return
+     * @param userName
+     * @param node
+     * @return String value
      */
-    public abstract String getUserPermissionString(String string, String string1);
+    public abstract String getUserPermissionString(String userName, String node);
 
     /**
      *
-     * @param string
-     * @param string1
-     * @return
+     * @param userName
+     * @param node
+     * @return integer value
      */
-    public abstract int getUserPermissionInteger(String string, String string1);
+    public abstract int getUserPermissionInteger(String userName, String node);
 
     /**
      *
-     * @param string
-     * @param string1
-     * @return
+     * @param userName
+     * @param node
+     * @return boolean value
      */
-    public abstract boolean getUserPermissionBoolean(String string, String string1);
+    public abstract boolean getUserPermissionBoolean(String userName, String node);
 
     /**
      *
-     * @param string
-     * @param string1
-     * @return
+     * @param userName
+     * @param node
+     * @return double value
      */
-    public abstract double getUserPermissionDouble(String string, String string1);
+    public abstract double getUserPermissionDouble(String userName, String node);
 
     /**
      *
-     * @param string
-     * @param string1
-     * @return
+     * @param userName
+     * @param node
+     * @return String value
      */
-    public abstract String getPermissionString(String string, String string1);
+    public abstract String getPermissionString(String userName, String node);
 
     /**
      *
-     * @param string
-     * @param string1
-     * @return
+     * @param userName
+     * @param node
+     * @return integer value
      */
-    public abstract int getPermissionInteger(String string, String string1);
+    public abstract int getPermissionInteger(String userName, String node);
 
     /**
      *
-     * @param string
-     * @param string1
-     * @return
+     * @param userName
+     * @param node
+     * @return boolean value
      */
-    public abstract boolean getPermissionBoolean(String string, String string1);
+    public abstract boolean getPermissionBoolean(String userName, String node);
 
     /**
      *
-     * @param string
-     * @param string1
-     * @return
+     * @param userName
+     * @param node
+     * @return double value
      */
-    public abstract double getPermissionDouble(String string, String string1);
+    public abstract double getPermissionDouble(String userName, String node);
 
 /////////////////////////////
     /**
@@ -173,7 +174,7 @@ public abstract class PermissionsReaderInterface {
      * This method is a utility method for chat plugins to get the user's prefix
      * without having to look at every one of the user's ancestors.
      * Returns an empty string if user has no parent groups.
-     * @param world Player's world
+     * 
      * @param user Player's name
      * @return Player's prefix
      */
@@ -184,7 +185,7 @@ public abstract class PermissionsReaderInterface {
      * This method is a utility method for chat plugins to get the user's suffix
      * without having to look at every one of the user's ancestors.
      * Returns an empty string if user has no parent groups.
-     * @param world Player's world
+     * 
      * @param user Player's name
      * @return Player's suffix
      */
@@ -215,7 +216,7 @@ public abstract class PermissionsReaderInterface {
      * @param entryName
      * @param path
      * @param isGroup
-     * @return
+     * @return -1 if not found
      */
     public abstract double getInfoDouble(String entryName, String path, boolean isGroup);
     //public abstract double getInfoDouble(String entryName, String path, boolean isGroup, Comparator<Double> comparator);

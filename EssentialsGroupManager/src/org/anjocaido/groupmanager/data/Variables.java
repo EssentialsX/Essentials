@@ -115,7 +115,7 @@ public abstract class Variables implements Cloneable {
 
     /**
      * All variable keys this is holding
-     * @return
+     * @return Set of all variable names.
      */
     public Set<String> getVarKeyList() {
         return variables.keySet();

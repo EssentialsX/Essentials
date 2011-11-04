@@ -239,7 +239,7 @@ public class GroupManager extends JavaPlugin {
 	/**
 	 * The handler in the interface created by AnjoCaido
 	 * 
-	 * @return
+	 * @return AnjoPermissionsHandler
 	 */
 	@Deprecated
 	public AnjoPermissionsHandler getPermissionHandler() {
