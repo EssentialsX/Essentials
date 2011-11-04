@@ -18,7 +18,7 @@ commands:
   back:
     description: Teleports you to your location prior to tp/spawn/warp.
     usage: /<command>
-    aliases: [eback]
+    aliases: [eback,return,ereturn]
   backup:
     description: Runs the backup if configured.
     usage: /<command>
@@ -97,7 +97,7 @@ commands:
   getpos:
     description: Get your current coordinates.
     usage: /<command>
-    aliases: [coords,egetpos]
+    aliases: [coords,egetpos,whereami,ewhereami]
   gc:
     description: Reports garbage collection info; useful to developers.
     usage: /<command>
@@ -173,7 +173,7 @@ commands:
   lightning:
     description: The power of Thor. Strike at cursor or player.
     usage: /<command> [player]
-    aliases: [strike,smite,elightning,estrike,esmite]
+    aliases: [strike,smite,thor,shock,elightning,estrike,esmite,ethor,eshock]
   mail:
     description: Manages inter-player, intra-server mail.
     usage: /<command> [read|clear|send [to] [message]]
@@ -309,39 +309,47 @@ commands:
   tpa:
     description: Request to teleport to the specified player.
     usage: /<command> <player>
+    aliases: [call,etpa,ecal]
   tpaall:
     description: Requests all players online to teleport to you.
     usage: /<command> <player>
+    aliases: [etpaall]
   tpaccept:
     description: Accepts a teleport request.
     usage: /<command>
-    aliases: [tpyes]
+    aliases: [tpyes,etpaccept,etpyes]
   tpahere:
     description: Request that the specified player teleport to you.
     usage: /<command> <player>
+    aliases: [etpahere]
   tpall:
     description: Teleport all online players to another player.
     usage: /<command> <player>
+    aliases: [etpall]
   tpdeny:
     description: Reject a teleport request.
     usage: /<command>
-    aliases: [tpno]
+    aliases: [tpno,etpdeny,etpno]
   tphere:
     description: Teleport a player to you.
     usage: /<command> [player]
-    aliases: [s]
+    aliases: [s,etphere]
   tpo:
     description: Teleport override for tptoggle.
     usage: /<command> <player>
+    aliases: [etpo]
   tpohere:
     description: Teleport here override for tptoggle.
     usage: /<command> <player>
+    aliases: [etpohere]
   tppos:
     description: Teleport to coordinates.
     usage: /<command> <x> <y> <z> [yaw] [pitch]
+    aliases: [etppos]
   tptoggle:
     description: Blocks all forms of teleportation.
     usage: /<command>
+    aliases: [etptoggle]
   tree:
     description: Spawn a tree where you are looking.
     usage: /<command> [tree|birch|redwood]
