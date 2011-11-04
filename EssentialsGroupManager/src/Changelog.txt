@@ -70,3 +70,4 @@ v 1.5:
 	  If the files on Disc have changed AND there have been changes to it's in-memory data it will show a warning.
 	  You then MUST issue a '/mansave force' to overwrite the disc files, or a '/manload' to overwrite the memory data.
 	- Fix for an error in checkFullUserPermission caused by players disconnecting mid perms update.
+	- Notification of being moved to the default group only happens if it's a demotion/promotion (not on join).
