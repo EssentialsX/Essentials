@@ -324,8 +324,12 @@ public class WorldDataHolder {
     public void reloadGroups() {
     	GroupManager.setLoaded(false);
     	try {
-        	resetGroups();
-    		loadGroups(this, getGroupsFile());
+    		// temporary holder in case the load fails.
+    		WorldDataHolder ph = new WorldDataHolder(this.getName());
+    		loadGroups(ph, getGroupsFile());
+    		this.groups = ph.getGroups();
+    		this.removeGroupsChangedFlag();
+    		this.timeStampGroups = ph.getTimeStampGroups();
     	} catch (Exception ex) {
             Logger.getLogger(WorldDataHolder.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -335,8 +339,12 @@ public class WorldDataHolder {
     public void reloadUsers() {
     	GroupManager.setLoaded(false);
     	try {
-        	resetUsers();
-    		loadUsers(this, getUsersFile());
+    		// temporary holder in case the load fails.
+    		WorldDataHolder ph = new WorldDataHolder(this.getName());
+    		loadUsers(ph, getUsersFile());
+    		this.users = ph.getUsers();
+    		this.removeUsersChangedFlag();
+    		this.timeStampUsers = ph.getTimeStampUsers();
     	} catch (Exception ex) {
             Logger.getLogger(WorldDataHolder.class.getName()).log(Level.SEVERE, null, ex);
         } 
@@ -520,29 +528,6 @@ public class WorldDataHolder {
     	loadUsers(ph, usersFile);
     	GroupManager.setLoaded(true);
     	
-    	return ph;
-    }
-    
-    /**
-     * Updates the WorldDataHolder from the files
-     * 
-     * @param ph
-     * @param groupsFile
-     * @param usersFile
-     * 
-     * @throws FileNotFoundException
-     * @throws IOException
-     */
-    public static WorldDataHolder Update(WorldDataHolder ph, File groupsFile, File usersFile) throws FileNotFoundException, IOException {
-
-    	GroupManager.setLoaded(false);
-    	ph.resetGroups();
-    	loadGroups(ph, groupsFile);
-
-    	ph.resetUsers();
-    	loadUsers(ph, usersFile);
-    	GroupManager.setLoaded(true);
-
     	return ph;
     }
     
