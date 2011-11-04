@@ -47,7 +47,6 @@ public class EssentialsPlayerListener extends PlayerListener
 	public void onPlayerRespawn(final PlayerRespawnEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
-		user.setDisplayNick(user.getNick());
 		updateCompass(user);
 		if (ess.getSettings().changeDisplayName())
 		{

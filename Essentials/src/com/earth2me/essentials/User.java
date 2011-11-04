@@ -258,7 +258,6 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 		if (ess.getSettings().addPrefixSuffix())
 		{
-
 			if (!ess.getSettings().disablePrefix())
 			{
 				final String prefix = ess.getPermissionsHandler().getPrefix(base).replace('&', '§').replace("{WORLDNAME}", this.getWorld().getName());
@@ -291,6 +290,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	@Override
 	public String getDisplayName()
 	{
+		if (ess.getSettings().changeDisplayName())
+		{
+			setDisplayNick(getNick());
+		}
 		return super.getDisplayName() == null ? super.getName() : super.getDisplayName();
 	}
 
