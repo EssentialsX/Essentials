@@ -93,12 +93,18 @@ public class Commandwarp extends EssentialsCommand
 		{
 			page = Integer.parseInt(args[0]);
 		}
+
+		final int warpPage = (page - 1) * WARPS_PER_PAGE;
+		final String warpList = Util.joinList(warpNameList.subList(warpPage, warpPage + Math.min(warpNameList.size() - warpPage, WARPS_PER_PAGE)));
+
 		if (warpNameList.size() > WARPS_PER_PAGE)
 		{
 			user.sendMessage(Util.format("warpsCount", warpNameList.size(), page, (int)Math.ceil(warpNameList.size() / (double)WARPS_PER_PAGE)));
+			user.sendMessage(warpList);
 		}
-		final int warpPage = (page - 1) * WARPS_PER_PAGE;
-		user.sendMessage(Util.joinList(warpNameList.subList(warpPage, warpPage + Math.min(warpNameList.size() - warpPage, WARPS_PER_PAGE))));
+		else {
+			user.sendMessage(Util.format("warps", warpList));
+		}
 	}
 
 	private void warpUser(User user, String name) throws Exception
