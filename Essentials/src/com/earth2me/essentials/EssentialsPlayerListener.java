@@ -213,7 +213,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		user.setNPC(false);
 
 		final long currentTime = System.currentTimeMillis();
-		boolean banExpired = user.checkBanTimeout(currentTime);
+		final boolean banExpired = user.checkBanTimeout(currentTime);
 		user.checkMuteTimeout(currentTime);
 		user.checkJailTimeout(currentTime);
 
@@ -232,6 +232,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		event.allow();
 
 		user.setLastLogin(System.currentTimeMillis());
+		user.setLastLoginAddress(user.getAddress().getAddress().getHostAddress());
 		updateCompass(user);
 	}
 
