@@ -35,7 +35,7 @@ public class SignWarp extends EssentialsSign
 				throw new SignException(ex.getMessage(), ex);
 			}
 			final String group = sign.getLine(2);
-			if ("Everyone".equalsIgnoreCase(group))
+			if ("Everyone".equalsIgnoreCase(group) || "Everybody".equalsIgnoreCase(group))
 			{
 				sign.setLine(2, "§2Everyone");
 			}
