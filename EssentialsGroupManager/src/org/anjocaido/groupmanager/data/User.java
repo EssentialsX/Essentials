@@ -121,7 +121,7 @@ public class User extends DataUnit implements Cloneable {
         String defaultGroupName = getDataSource().getDefaultGroup().getName();
         // if we are not in the default group
         // or we are in the default group and the move is to a different group.
-        boolean notify = (this.group != defaultGroupName) || ((this.group == defaultGroupName) && (group.getName() != defaultGroupName)) ;
+        boolean notify = (!this.group.equalsIgnoreCase(defaultGroupName)) || ((this.group.equalsIgnoreCase(defaultGroupName)) && (!group.getName().equalsIgnoreCase(defaultGroupName))) ;
         this.group = group.getName();
         flagAsChanged();
         if (GroupManager.isLoaded()) {
