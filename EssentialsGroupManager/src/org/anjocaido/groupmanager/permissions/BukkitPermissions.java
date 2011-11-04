@@ -187,7 +187,7 @@ public class BukkitPermissions {
      * null is empty
      * 
      * @param node
-     * @return
+     * @return Map of child permissions
      */
     public Map<String, Boolean> getChildren(String node) {
     	for (Permission permission : registeredPermissions) {

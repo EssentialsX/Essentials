@@ -40,7 +40,7 @@ public class User extends DataUnit implements Cloneable {
 
     /**
      *
-     * @return
+     * @return User clone
      */
     @Override
     public User clone() {
