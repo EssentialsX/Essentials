@@ -136,4 +136,6 @@ public interface ISettings extends IConf
 	boolean getFreezeAfkPlayers();
 	
 	boolean areDeathMessagesEnabled();
+
+	public void setDebug(boolean debug);
 }
