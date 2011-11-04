@@ -290,7 +290,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	@Override
 	public String getDisplayName()
 	{
-		if (ess.getSettings().changeDisplayName())
+		if (!(base instanceof OfflinePlayer) && ess.getSettings().changeDisplayName())
 		{
 			setDisplayNick(getNick());
 		}

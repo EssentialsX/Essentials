@@ -168,6 +168,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		{
 			user.setDisplayNick(user.getNick());
 		}
+		user.setLastLoginAddress(user.getAddress().getAddress().getHostAddress());
 		user.updateActivity(false);
 		if (user.isAuthorized("essentials.sleepingignored"))
 		{
@@ -231,7 +232,6 @@ public class EssentialsPlayerListener extends PlayerListener
 		event.allow();
 
 		user.setLastLogin(System.currentTimeMillis());
-		user.setLastLoginAddress(user.getAddress().getAddress().getHostAddress());
 		updateCompass(user);
 	}
 
