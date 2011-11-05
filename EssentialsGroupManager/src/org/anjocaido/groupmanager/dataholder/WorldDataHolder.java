@@ -38,7 +38,7 @@ import org.yaml.snakeyaml.reader.UnicodeReader;
 public class WorldDataHolder {
 
     /**
-     *
+     * World name
      */
     protected String name;
     /**
@@ -321,32 +321,54 @@ public class WorldDataHolder {
         }
     }
     
+    /**
+     * Refresh Group data from file
+     */
     public void reloadGroups() {
     	GroupManager.setLoaded(false);
     	try {
     		// temporary holder in case the load fails.
     		WorldDataHolder ph = new WorldDataHolder(this.getName());
+
     		loadGroups(ph, getGroupsFile());
-    		this.groups = ph.getGroups();
+    		// transfer new data
+    		resetGroups();
+    		for (Group tempGroup : ph.getGroupList()) {
+    			if (tempGroup.getDataSource() != null)  tempGroup.clone(this);
+    		}
+    		this.setDefaultGroup(this.getGroup(ph.getDefaultGroup().getName()));
     		this.removeGroupsChangedFlag();
     		this.timeStampGroups = ph.getTimeStampGroups();
     	} catch (Exception ex) {
-            Logger.getLogger(WorldDataHolder.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(WorldDataHolder.class.getName()).log(Level.WARNING, null, ex);
         }
     	GroupManager.setLoaded(true);
     }
     
+    /**
+     * Refresh Users data from file
+     */
     public void reloadUsers() {
     	GroupManager.setLoaded(false);
     	try {
     		// temporary holder in case the load fails.
     		WorldDataHolder ph = new WorldDataHolder(this.getName());
+    		// copy groups for reference
+    		for (Group tempGroup : this.getGroupList()) {
+    			if (tempGroup.getDataSource() != null) tempGroup.clone(ph);
+    		}
+    		// setup the default group before loading user data.
+    		ph.setDefaultGroup(ph.getGroup(this.getDefaultGroup().getName()));
     		loadUsers(ph, getUsersFile());
-    		this.users = ph.getUsers();
+    		// transfer new data
+    		resetUsers();
+    		for (User tempUser : ph.getUserList()) {
+    			tempUser.clone(this);
+    		}
     		this.removeUsersChangedFlag();
     		this.timeStampUsers = ph.getTimeStampUsers();
     	} catch (Exception ex) {
-            Logger.getLogger(WorldDataHolder.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(WorldDataHolder.class.getName()).log(Level.WARNING, null, ex);
         } 
     	GroupManager.setLoaded(true);
     }
@@ -576,7 +598,7 @@ public class WorldDataHolder {
                 }
                 if ((Boolean.parseBoolean(thisGroupNode.get("default").toString()))) {
                     if (ph.getDefaultGroup() != null) {
-                        GroupManager.logger.warning("The group " + thisGrp.getName() + " is declaring be default where" + ph.getDefaultGroup().getName() + " already was.");
+                        GroupManager.logger.warning("The group " + thisGrp.getName() + " is claiming to be default where" + ph.getDefaultGroup().getName() + " already was.");
                         GroupManager.logger.warning("Overriding first request.");
                     }
                     ph.setDefaultGroup(thisGrp);

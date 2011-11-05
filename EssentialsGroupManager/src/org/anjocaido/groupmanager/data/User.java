@@ -67,7 +67,7 @@ public class User extends DataUnit implements Cloneable {
         if (dataSource.getGroup(group) == null) {
             clone.setGroup(dataSource.getDefaultGroup());
         } else {
-            clone.setGroup(this.getGroupName());
+            clone.setGroup(dataSource.getGroup(this.getGroupName()));
         }
         for (String perm : this.getPermissionList()) {
             clone.addPermission(perm);
