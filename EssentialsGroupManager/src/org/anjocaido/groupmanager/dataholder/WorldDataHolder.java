@@ -669,7 +669,7 @@ public class WorldDataHolder {
         ph.removeGroupsChangedFlag();
         // Update the LastModified time.
         ph.groupsFile = groupsFile;
-        ph.setTimeStamps();
+        ph.setTimeStampGroups(groupsFile.lastModified());
 
         //return ph;
     }
@@ -776,7 +776,7 @@ public class WorldDataHolder {
         ph.removeUsersChangedFlag();
         // Update the LastModified time.
         ph.usersFile = usersFile;
-        ph.setTimeStamps();
+        ph.setTimeStampUsers(usersFile.lastModified());
         
         //return ph;
     }
