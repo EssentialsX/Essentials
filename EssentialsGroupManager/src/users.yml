@@ -4,12 +4,12 @@ users:
     subgroups: []
     permissions: []
     group: Admin
-  mudzereli:
+  KHobbits:
     subgroups: []
     permissions: []
-    group: Builder
+    group: Moderator
   ElgarL:
     subgroups: []
     permissions: []
-    group: Admin
+    group: Owner
 
