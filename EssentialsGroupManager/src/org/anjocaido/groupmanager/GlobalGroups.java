@@ -83,7 +83,6 @@ public class GlobalGroups {
 	public void load() {
 
 		GGroups = new YamlConfiguration();
-		groups = new HashMap<String, Group>();
 		
 		GroupManager.setLoaded(false);
 
@@ -110,7 +109,9 @@ public class GlobalGroups {
 		Map<String, Object> allGroups = (Map<String, Object>) GGroups.getConfigurationSection("groups").getValues(false);
 
 		// Load each groups permissions list.
-		if (allGroups != null)
+		if (allGroups != null) {
+			// Clear out old groups
+			resetGlobalGroups();
 			for (String groupName : allGroups.keySet()) {
 				Group newGroup = new Group(groupName.toLowerCase());
 				Object element;
@@ -144,12 +145,12 @@ public class GlobalGroups {
 				// Push a new group
 				addGroup(newGroup);
 			}
+		}
 
 		removeGroupsChangedFlag();
 		setTimeStampGroups(GlobalGroupsFile.lastModified());
 		GroupManager.setLoaded(true);
 		//GlobalGroupsFile = null;
-
 	}
 
 	/**
@@ -351,6 +352,13 @@ public class GlobalGroups {
 		return groups.keySet();
 	}
 
+	/**
+	 * Resets GlobalGroups.
+	 */
+	public void resetGlobalGroups() {
+		this.groups = new HashMap<String, Group>();
+	}
+	
 	/**
 	 * 
 	 * @return a collection of the groups

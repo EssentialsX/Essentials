@@ -334,11 +334,13 @@ public class WorldDataHolder {
     		// transfer new data
     		resetGroups();
     		for (Group tempGroup : ph.getGroupList()) {
-    			if (tempGroup.getDataSource() != null)  tempGroup.clone(this);
+    			tempGroup.clone(this);
     		}
     		this.setDefaultGroup(this.getGroup(ph.getDefaultGroup().getName()));
     		this.removeGroupsChangedFlag();
     		this.timeStampGroups = ph.getTimeStampGroups();
+    		
+    		ph = null;
     	} catch (Exception ex) {
             Logger.getLogger(WorldDataHolder.class.getName()).log(Level.WARNING, null, ex);
         }
@@ -355,7 +357,7 @@ public class WorldDataHolder {
     		WorldDataHolder ph = new WorldDataHolder(this.getName());
     		// copy groups for reference
     		for (Group tempGroup : this.getGroupList()) {
-    			if (tempGroup.getDataSource() != null) tempGroup.clone(ph);
+    			tempGroup.clone(ph);
     		}
     		// setup the default group before loading user data.
     		ph.setDefaultGroup(ph.getGroup(this.getDefaultGroup().getName()));
@@ -367,6 +369,8 @@ public class WorldDataHolder {
     		}
     		this.removeUsersChangedFlag();
     		this.timeStampUsers = ph.getTimeStampUsers();
+    		
+    		ph = null;
     	} catch (Exception ex) {
             Logger.getLogger(WorldDataHolder.class.getName()).log(Level.WARNING, null, ex);
         } 
