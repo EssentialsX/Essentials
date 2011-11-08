@@ -76,8 +76,13 @@ public class Group extends DataUnit implements Cloneable {
         if (dataSource.groupExists(this.getName())) {
             return null;
         }
-        Group clone = getDataSource().createGroup(this.getName());
-        clone.inherits = new ArrayList<String>(this.getInherits());
+        
+        Group clone = dataSource.createGroup(this.getName());
+        
+        // Don't add inheritance for GlobalGroups
+        if (getDataSource() != null) {
+    		clone.inherits = new ArrayList<String>(this.getInherits());
+    	}
         for (String perm : this.getPermissionList()) {
             clone.addPermission(perm);
         }

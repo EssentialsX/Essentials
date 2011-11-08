@@ -38,7 +38,7 @@ import org.yaml.snakeyaml.reader.UnicodeReader;
 public class WorldDataHolder {
 
     /**
-     *
+     * World name
      */
     protected String name;
     /**
@@ -321,24 +321,58 @@ public class WorldDataHolder {
         }
     }
     
+    /**
+     * Refresh Group data from file
+     */
     public void reloadGroups() {
     	GroupManager.setLoaded(false);
     	try {
-        	resetGroups();
-    		loadGroups(this, getGroupsFile());
+    		// temporary holder in case the load fails.
+    		WorldDataHolder ph = new WorldDataHolder(this.getName());
+
+    		loadGroups(ph, getGroupsFile());
+    		// transfer new data
+    		resetGroups();
+    		for (Group tempGroup : ph.getGroupList()) {
+    			tempGroup.clone(this);
+    		}
+    		this.setDefaultGroup(this.getGroup(ph.getDefaultGroup().getName()));
+    		this.removeGroupsChangedFlag();
+    		this.timeStampGroups = ph.getTimeStampGroups();
+    		
+    		ph = null;
     	} catch (Exception ex) {
-            Logger.getLogger(WorldDataHolder.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(WorldDataHolder.class.getName()).log(Level.WARNING, null, ex);
         }
     	GroupManager.setLoaded(true);
     }
     
+    /**
+     * Refresh Users data from file
+     */
     public void reloadUsers() {
     	GroupManager.setLoaded(false);
     	try {
-        	resetUsers();
-    		loadUsers(this, getUsersFile());
+    		// temporary holder in case the load fails.
+    		WorldDataHolder ph = new WorldDataHolder(this.getName());
+    		// copy groups for reference
+    		for (Group tempGroup : this.getGroupList()) {
+    			tempGroup.clone(ph);
+    		}
+    		// setup the default group before loading user data.
+    		ph.setDefaultGroup(ph.getGroup(this.getDefaultGroup().getName()));
+    		loadUsers(ph, getUsersFile());
+    		// transfer new data
+    		resetUsers();
+    		for (User tempUser : ph.getUserList()) {
+    			tempUser.clone(this);
+    		}
+    		this.removeUsersChangedFlag();
+    		this.timeStampUsers = ph.getTimeStampUsers();
+    		
+    		ph = null;
     	} catch (Exception ex) {
-            Logger.getLogger(WorldDataHolder.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(WorldDataHolder.class.getName()).log(Level.WARNING, null, ex);
         } 
     	GroupManager.setLoaded(true);
     }
@@ -524,29 +558,6 @@ public class WorldDataHolder {
     }
     
     /**
-     * Updates the WorldDataHolder from the files
-     * 
-     * @param ph
-     * @param groupsFile
-     * @param usersFile
-     * 
-     * @throws FileNotFoundException
-     * @throws IOException
-     */
-    public static WorldDataHolder Update(WorldDataHolder ph, File groupsFile, File usersFile) throws FileNotFoundException, IOException {
-
-    	GroupManager.setLoaded(false);
-    	ph.resetGroups();
-    	loadGroups(ph, groupsFile);
-
-    	ph.resetUsers();
-    	loadUsers(ph, usersFile);
-    	GroupManager.setLoaded(true);
-
-    	return ph;
-    }
-    
-    /**
      * Updates the WorldDataHolder from the Groups file
      * 
      * @param ph
@@ -591,7 +602,7 @@ public class WorldDataHolder {
                 }
                 if ((Boolean.parseBoolean(thisGroupNode.get("default").toString()))) {
                     if (ph.getDefaultGroup() != null) {
-                        GroupManager.logger.warning("The group " + thisGrp.getName() + " is declaring be default where" + ph.getDefaultGroup().getName() + " already was.");
+                        GroupManager.logger.warning("The group " + thisGrp.getName() + " is claiming to be default where" + ph.getDefaultGroup().getName() + " already was.");
                         GroupManager.logger.warning("Overriding first request.");
                     }
                     ph.setDefaultGroup(thisGrp);
@@ -662,7 +673,7 @@ public class WorldDataHolder {
         ph.removeGroupsChangedFlag();
         // Update the LastModified time.
         ph.groupsFile = groupsFile;
-        ph.setTimeStamps();
+        ph.setTimeStampGroups(groupsFile.lastModified());
 
         //return ph;
     }
@@ -769,7 +780,7 @@ public class WorldDataHolder {
         ph.removeUsersChangedFlag();
         // Update the LastModified time.
         ph.usersFile = usersFile;
-        ph.setTimeStamps();
+        ph.setTimeStampUsers(usersFile.lastModified());
         
         //return ph;
     }

@@ -67,7 +67,7 @@ public class User extends DataUnit implements Cloneable {
         if (dataSource.getGroup(group) == null) {
             clone.setGroup(dataSource.getDefaultGroup());
         } else {
-            clone.setGroup(this.getGroupName());
+            clone.setGroup(dataSource.getGroup(this.getGroupName()));
         }
         for (String perm : this.getPermissionList()) {
             clone.addPermission(perm);
@@ -117,13 +117,20 @@ public class User extends DataUnit implements Cloneable {
             getDataSource().addGroup(group);
         }
         group = getDataSource().getGroup(group.getName());
+        String oldGroup = this.group;
         this.group = group.getName();
         flagAsChanged();
         if (GroupManager.isLoaded()) {
         	if (GroupManager.BukkitPermissions.player_join = false)
         		GroupManager.BukkitPermissions.updateAllPlayers();
+        	
+        	// Do we notify of the group change?
+            String defaultGroupName = getDataSource().getDefaultGroup().getName();
+            // if we were not in the default group
+            // or we were in the default group and the move is to a different group.
+            boolean notify = (!oldGroup.equalsIgnoreCase(defaultGroupName)) || ((oldGroup.equalsIgnoreCase(defaultGroupName)) && (!this.group.equalsIgnoreCase(defaultGroupName))) ;
         
-        	GroupManager.notify(this.getName(), String.format(" moved to the group %s.", group.getName()));
+        	if (notify) GroupManager.notify(this.getName(), String.format(" moved to the group %s.", group.getName()));
         }
     }
 
