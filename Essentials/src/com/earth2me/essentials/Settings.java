@@ -378,10 +378,12 @@ public class Settings implements ISettings
 		return config.getBoolean("protect.disable.warn-on-build-disallow", false);
 	}
 
+	private boolean debug = false;
+	
 	@Override
 	public boolean isDebug()
 	{
-		return config.getBoolean("debug", false);
+		return debug || config.getBoolean("debug", false);
 	}
 
 	@Override
@@ -498,11 +500,15 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("add-prefix-suffix", ess.getServer().getPluginManager().isPluginEnabled("EssentialsChat"));
 	}
-
-	@Override
-	public boolean isUpdateEnabled()
+	
+	public boolean disablePrefix()
 	{
-		return config.getBoolean("update-check", false);
+		return config.getBoolean("disablePrefix", false);
+	}
+	
+	public boolean disableSuffix()
+	{
+		return config.getBoolean("disableSuffix", false);
 	}
 
 	@Override
@@ -527,5 +533,11 @@ public class Settings implements ISettings
 	public boolean areDeathMessagesEnabled()
 	{
 		return config.getBoolean("death-messages", true);
+	}
+
+	@Override
+	public void setDebug(final boolean debug)
+	{
+		this.debug = debug;
 	}
 }

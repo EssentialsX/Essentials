@@ -53,17 +53,20 @@ public class Commandwhois extends EssentialsCommand
 			sender.sendMessage("");
 			sender.sendMessage(Util.format("whoisIs", u.getDisplayName(), u.getName()));
 			sender.sendMessage(Util.format("whoisHealth", u.getHealth()));
+			sender.sendMessage(Util.format("whoisOP", (u.isOp() ? Util.i18n("true") : Util.i18n("false"))));
+			sender.sendMessage(Util.format("whoisGod", (u.isGodModeEnabled() ? Util.i18n("true") : Util.i18n("false"))));
+			sender.sendMessage(Util.format("whoisGamemode", Util.i18n(u.getGameMode().toString().toLowerCase())));
 			sender.sendMessage(Util.format("whoisLocation", u.getLocation().getWorld().getName(), u.getLocation().getBlockX(), u.getLocation().getBlockY(), u.getLocation().getBlockZ()));
 			if (!ess.getSettings().isEcoDisabled())
 			{
 				sender.sendMessage(Util.format("whoisMoney", Util.formatCurrency(u.getMoney(), ess)));
 			}
-			sender.sendMessage(u.isAfk() 
-					? Util.i18n("whoisStatusAway") 
+			sender.sendMessage(u.isAfk()
+					? Util.i18n("whoisStatusAway")
 					: Util.i18n("whoisStatusAvailable"));
 			sender.sendMessage(Util.format("whoisIPAddress", u.getAddress().getAddress().toString()));
 			final String location = u.getGeoLocation();
-			if (location != null 
+			if (location != null
 				&& (sender instanceof Player ? ess.getUser(sender).isAuthorized("essentials.geoip.show") : true))
 			{
 				sender.sendMessage(Util.format("whoisGeoLocation", location));

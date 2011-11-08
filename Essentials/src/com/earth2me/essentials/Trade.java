@@ -18,22 +18,22 @@ public class Trade
 	private final transient Double money;
 	private final transient ItemStack itemStack;
 	private final transient IEssentials ess;
-	
+
 	public Trade(final String command, final IEssentials ess)
 	{
 		this(command, null, null, ess);
 	}
-	
+
 	public Trade(final double money, final IEssentials ess)
 	{
 		this(null, money, null, ess);
 	}
-	
+
 	public Trade(final ItemStack items, final IEssentials ess)
 	{
 		this(null, null, items, ess);
 	}
-	
+
 	private Trade(final String command, final Double money, final ItemStack item, final IEssentials ess)
 	{
 		this.command = command;
@@ -41,7 +41,7 @@ public class Trade
 		this.itemStack = item;
 		this.ess = ess;
 	}
-	
+
 	public void isAffordableFor(final IUser user) throws ChargeException
 	{
 		final double mon = user.getMoney();
@@ -52,13 +52,13 @@ public class Trade
 		{
 			throw new ChargeException(Util.i18n("notEnoughMoney"));
 		}
-		
+
 		if (getItemStack() != null
 			&& !InventoryWorkaround.containsItem(user.getInventory(), true, itemStack))
 		{
 			throw new ChargeException(Util.format("missingItems", getItemStack().getAmount(), getItemStack().getType().toString().toLowerCase().replace("_", " ")));
 		}
-		
+
 		if (command != null && !command.isEmpty()
 			&& !user.isAuthorized("essentials.nocommandcost.all")
 			&& !user.isAuthorized("essentials.nocommandcost." + command)
@@ -69,12 +69,12 @@ public class Trade
 			throw new ChargeException(Util.i18n("notEnoughMoney"));
 		}
 	}
-	
+
 	public void pay(final IUser user)
 	{
 		pay(user, true);
 	}
-	
+
 	public boolean pay(final IUser user, final boolean dropItems)
 	{
 		boolean success = true;
@@ -100,7 +100,7 @@ public class Trade
 		}
 		return success;
 	}
-	
+
 	public void charge(final IUser user) throws ChargeException
 	{
 		if (getMoney() != null)
@@ -134,18 +134,18 @@ public class Trade
 			user.takeMoney(cost);
 		}
 	}
-	
+
 	public Double getMoney()
 	{
 		return money;
 	}
-	
+
 	public ItemStack getItemStack()
 	{
 		return itemStack;
 	}
 	private static FileWriter fw = null;
-	
+
 	public static void log(String type, String subtype, String event, String sender, Trade charge, String receiver, Trade pay, Location loc, IEssentials ess)
 	{
 		if (!ess.getSettings().isEcoLogEnabled())
@@ -239,7 +239,7 @@ public class Trade
 			Logger.getLogger("Minecraft").log(Level.SEVERE, null, ex);
 		}
 	}
-	
+
 	public static void closeLog()
 	{
 		if (fw != null)

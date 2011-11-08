@@ -1,9 +1,14 @@
 package com.earth2me.essentials.update;
 
-import java.util.List;
+import com.earth2me.essentials.update.states.InstallationFinishedEvent;
+import com.earth2me.essentials.update.states.StateMachine;
+import com.earth2me.essentials.update.tasks.SelfUpdate;
+import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.CustomEventListener;
+import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
 import org.bukkit.event.player.PlayerChatEvent;
@@ -18,35 +23,125 @@ public class UpdateProcess extends PlayerListener
 	private transient Player currentPlayer;
 	private final transient Plugin plugin;
 	private final transient UpdateCheck updateCheck;
-	
+	private transient StateMachine stateMachine;
+
 	public UpdateProcess(final Plugin plugin, final UpdateCheck updateCheck)
 	{
+		super();
 		this.plugin = plugin;
 		this.updateCheck = updateCheck;
 	}
-	
+
 	public void registerEvents()
 	{
 		final PluginManager pluginManager = plugin.getServer().getPluginManager();
 		pluginManager.registerEvent(Type.PLAYER_QUIT, this, Priority.Low, plugin);
 		pluginManager.registerEvent(Type.PLAYER_CHAT, this, Priority.Lowest, plugin);
+		pluginManager.registerEvent(Type.PLAYER_JOIN, this, Priority.Normal, plugin);
+		pluginManager.registerEvent(Type.CUSTOM_EVENT, new CustomEventListener()
+		{
+			@Override
+			public void onCustomEvent(final Event event)
+			{
+				if (event instanceof InstallationFinishedEvent)
+				{
+					UpdateProcess.this.currentPlayer = null;
+				}
+			}
+		}, Priority.Normal, plugin);
 	}
-	
+
+	public boolean selfUpdate()
+	{
+		if (new Version(plugin.getDescription().getVersion()).compareTo(updateCheck.getNewVersion()) < 0)
+		{
+			if (currentPlayer != null)
+			{
+				currentPlayer.sendMessage("A newer version of EssentialsUpdate is found. Downloading new file and reloading server.");
+			}
+			Bukkit.getLogger().log(Level.INFO, "A newer version of EssentialsUpdate is found. Downloading new file and reloading server.");
+			new SelfUpdate(new AbstractWorkListener(plugin, updateCheck.getNewVersionInfo())
+			{
+				@Override
+				public void onWorkAbort(final String message)
+				{
+					if (message != null && !message.isEmpty()
+						&& UpdateProcess.this.currentPlayer != null
+						&& UpdateProcess.this.currentPlayer.isOnline())
+					{
+						UpdateProcess.this.currentPlayer.sendMessage(message);
+					}
+					if (message != null && !message.isEmpty())
+					{
+						Bukkit.getLogger().log(Level.SEVERE, message);
+					}
+					UpdateProcess.this.currentPlayer = null;
+				}
+
+				@Override
+				public void onWorkDone(final String message)
+				{
+					if (message != null && !message.isEmpty()
+						&& UpdateProcess.this.currentPlayer != null
+						&& UpdateProcess.this.currentPlayer.isOnline())
+					{
+						UpdateProcess.this.currentPlayer.sendMessage(message);
+					}
+					if (message != null && !message.isEmpty())
+					{
+						Bukkit.getLogger().log(Level.INFO, message);
+					}
+					UpdateProcess.this.currentPlayer = null;
+				}
+			}).start();
+			return true;
+		}
+		if (updateCheck.getResult() == UpdateCheck.CheckResult.NEW_ESS_BUKKIT)
+		{
+			final String message = "Please update bukkit to version " + updateCheck.getNewBukkitVersion() + " before updating Essentials.";
+			if (currentPlayer != null)
+			{
+				currentPlayer.sendMessage(message);
+			}
+			Bukkit.getLogger().log(Level.INFO, message);
+			currentPlayer = null;
+			return true;
+		}
+		return false;
+	}
+
 	@Override
 	public void onPlayerChat(final PlayerChatEvent event)
 	{
 		if (event.getPlayer() == currentPlayer)
 		{
-			reactOnMessage(event.getMessage());
+			final StateMachine.MachineResult result = stateMachine.reactOnMessage(event.getMessage());
+			if (result == StateMachine.MachineResult.ABORT)
+			{
+				currentPlayer.sendMessage("Installation wizard aborted. You can restart it using /essentialsupdate.");
+				currentPlayer = null;
+			}
+			if (result == StateMachine.MachineResult.DONE)
+			{
+				startWork();
+			}
 			event.setCancelled(true);
 			return;
 		}
 	}
-	
+
 	@Override
 	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
 		final Player player = event.getPlayer();
+		if (currentPlayer.getName().equals(player.getName()))
+		{
+			currentPlayer = player;
+			player.sendMessage("You quit the game, while the installation wizard was running.");
+			player.sendMessage("The installation wizard will now resume.");
+			player.sendMessage("You can exit the wizard by typing quit into the chat.");
+			stateMachine.resumeInstallation(player);
+		}
 		if (player.hasPermission("essentials.update") && !updateCheck.isEssentialsInstalled())
 		{
 			player.sendMessage("Hello " + player.getDisplayName());
@@ -70,44 +165,23 @@ public class UpdateProcess extends PlayerListener
 			}
 		}
 	}
-	
-	void doAutomaticUpdate()
+
+	public void onCommand(final CommandSender sender)
 	{
-		final UpdatesDownloader downloader = new UpdatesDownloader();
-		final VersionInfo info = updateCheck.getNewVersionInfo();
-		final List<String> changelog = info.getChangelog();
-		Bukkit.getLogger().info("Essentials changelog " + updateCheck.getNewVersion().toString());
-		for (String line : changelog)
-		{
-			Bukkit.getLogger().info(" - "+line);
-		}
-		downloader.start(plugin.getServer().getUpdateFolderFile(), info);
-	}
-	
-	void doManualUpdate()
-	{
-		
-	}
-	
-	void onCommand(CommandSender sender)
-	{
-		if (sender instanceof Player && sender.hasPermission("essentials.install"))
+		if (sender instanceof Player && sender.hasPermission("essentials.update"))
 		{
 			if (currentPlayer == null)
 			{
 				currentPlayer = (Player)sender;
-				if (updateCheck.isEssentialsInstalled())
+				if (selfUpdate())
 				{
-					doManualUpdate();
+					return;
 				}
-				else
+				stateMachine = new StateMachine(plugin, currentPlayer, updateCheck);
+				final StateMachine.MachineResult result = stateMachine.askQuestion();
+				if (result == StateMachine.MachineResult.DONE)
 				{
-					sender.sendMessage("Thank you for choosing Essentials.");
-					sender.sendMessage("The following installation wizard will guide you through the installation of Essentials.");
-					sender.sendMessage("Your answers will be saved for a later update.");
-					sender.sendMessage("Please answer the messages with yes or no, if not otherwise stated.");
-					sender.sendMessage("Write bye/exit/quit if you want to exit the wizard at anytime.");
-					
+					startWork();
 				}
 			}
 			if (!currentPlayer.equals(sender))
@@ -120,9 +194,17 @@ public class UpdateProcess extends PlayerListener
 			sender.sendMessage("Please run the command as op from in game.");
 		}
 	}
-	
-	private void reactOnMessage(String message)
+
+	private void startWork()
 	{
-		throw new UnsupportedOperationException("Not yet implemented");
+		currentPlayer.sendMessage("Installation wizard done. Starting installation.");
+		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				stateMachine.startWork();
+			}
+		});
 	}
 }

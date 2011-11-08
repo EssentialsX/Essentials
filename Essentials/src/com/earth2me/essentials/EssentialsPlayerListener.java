@@ -47,7 +47,6 @@ public class EssentialsPlayerListener extends PlayerListener
 	public void onPlayerRespawn(final PlayerRespawnEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
-		user.setDisplayNick(user.getNick());
 		updateCompass(user);
 		if (ess.getSettings().changeDisplayName())
 		{
@@ -169,6 +168,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		{
 			user.setDisplayNick(user.getNick());
 		}
+		user.setLastLoginAddress(user.getAddress().getAddress().getHostAddress());
 		user.updateActivity(false);
 		if (user.isAuthorized("essentials.sleepingignored"))
 		{
@@ -213,7 +213,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		user.setNPC(false);
 
 		final long currentTime = System.currentTimeMillis();
-		boolean banExpired = user.checkBanTimeout(currentTime);
+		final boolean banExpired = user.checkBanTimeout(currentTime);
 		user.checkMuteTimeout(currentTime);
 		user.checkJailTimeout(currentTime);
 
@@ -319,6 +319,8 @@ public class EssentialsPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerAnimation(final PlayerAnimationEvent event)
 	{
+		final User user = ess.getUser(event.getPlayer());
+		user.updateActivity(true);
 		usePowertools(event);
 	}
 

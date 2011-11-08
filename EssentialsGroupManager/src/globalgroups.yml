@@ -1,0 +1,181 @@
+groups:
+
+  g:bukkit_default:
+    permissions:
+    - bukkit.broadcast.user
+
+  g:essentials_default:
+    permissions:
+    - essentials.help
+    - essentials.helpop
+    - essentials.list
+    - essentials.motd
+    - essentials.rules
+    - essentials.spawn
+    - groupmanager.notify.self
+    
+  g:essentials_builder:
+    permissions:
+    - essentials.afk
+    - essentials.back
+    - essentials.back.ondeath
+    - essentials.balance
+    - essentials.balance.others
+    - essentials.balancetop
+    - essentials.chat.color
+    - essentials.chat.shout
+    - essentials.chat.question
+    - essentials.compass
+    - essentials.depth
+    - essentials.home
+    - essentials.ignore
+    - essentials.kit
+    - essentials.kit.tools
+    - essentials.mail
+    - essentials.mail.send
+    - essentials.me
+    - essentials.msg
+    - essentials.nick
+    - essentials.pay
+    - essentials.ping
+    - essentials.powertool
+    - essentials.protect
+    - essentials.sethome
+    - essentials.signs.use.*
+    - essentials.signs.create.disposal
+    - essentials.signs.create.mail
+    - essentials.signs.create.protection
+    - essentials.signs.create.trade
+    - essentials.signs.break.disposal
+    - essentials.signs.break.mail
+    - essentials.signs.break.protection
+    - essentials.signs.break.trade
+    - essentials.suicide
+    - essentials.time
+    - essentials.tpa
+    - essentials.tpaccept
+    - essentials.tpahere
+    - essentials.tpdeny
+    - essentials.warp
+    - essentials.warp.list
+    - essentials.worth
+    
+  g:essentials_moderator:
+    permissions:
+    - essentials.ban
+    - essentials.ban.notify
+    - essentials.banip
+    - essentials.broadcast
+    - essentials.clearinventory
+    - essentials.delwarp
+    - essentials.eco.loan
+    - essentials.ext
+    - essentials.getpos
+    - essentials.helpop.recieve
+    - essentials.home.others
+    - essentials.invsee
+    - essentials.jails
+    - essentials.jump
+    - essentials.kick
+    - essentials.kick.notify
+    - essentials.kill
+    - essentials.mute
+    - essentials.nick.others
+    - essentials.realname
+    - essentials.setwarp
+    - essentials.signs.create.*
+    - essentials.signs.break.*
+    - essentials.spawner
+    - essentials.thunder
+    - essentials.time
+    - essentials.time.set
+    - essentials.protect.alerts
+    - essentials.protect.admin
+    - essentials.protect.ownerinfo
+    - essentials.ptime
+    - essentials.ptime.others
+    - essentials.togglejail
+    - essentials.top
+    - essentials.tp
+    - essentials.tphere
+    - essentials.tppos
+    - essentials.tptoggle
+    - essentials.unban
+    - essentials.unbanip
+    - essentials.weather
+    - essentials.whois
+    - essentials.world
+    - groupmanager.listgroups
+    - groupmanager.mandemote
+    - groupmanager.manpromote
+    - groupmanager.manselect
+    - groupmanager.manuadd
+    - groupmanager.manudel
+    - groupmanager.manwhois
+    - groupmanager.notify.other
+    
+  g:essentials_admin:
+    permissions:
+    - -essentials.backup
+    - -essentials.essentials
+    - -essentials.setspawn
+    - -essentials.reloadall
+    - -essentials.plugin
+    - essentials.*
+    - groupmanager.mantogglevalidate
+    - groupmanager.mansave
+    - groupmanager.mangcheckp
+    - groupmanager.manglistp
+    - groupmanager.manucheckp
+    - groupmanager.manulistp
+    
+  g:bukkit_moderator:
+    permissions:
+    - bukkit.command.ban
+    - bukkit.command.ban.ip
+    - bukkit.command.ban.player
+    - bukkit.command.gamemode
+    - bukkit.command.kick
+    - bukkit.command.unban
+    - bukkit.command.unban.ip
+    - bukkit.command.unban.player
+
+  g:bukkit_admin:
+    permissions:
+    - bPermissions.admin
+    - bPermissions.demote.admin
+    - bPermissions.gui
+    - bPermissions.iplock.lock
+    - bPermissions.promote.admin
+    - bukkit.broadcast
+    - bukkit.broadcast.admin
+    - bukkit.command
+    - bukkit.command.give
+    - bukkit.command.help
+    - bukkit.command.kill
+    - bukkit.command.list
+    - bukkit.command.me
+    - bukkit.command.op
+    - bukkit.command.op.give
+    - bukkit.command.op.take
+    - bukkit.command.plugins
+    - bukkit.command.reload
+    - bukkit.command.save
+    - bukkit.command.save.disable
+    - bukkit.command.save.enable
+    - bukkit.command.save.perform
+    - bukkit.command.say
+    - bukkit.command.stop
+    - bukkit.command.teleport
+    - bukkit.command.tell
+    - bukkit.command.time
+    - bukkit.command.time.add
+    - bukkit.command.time.set
+    - bukkit.command.version
+    - bukkit.command.whitelist
+    - bukkit.command.whitelist.add
+    - bukkit.command.whitelist.disable
+    - bukkit.command.whitelist.enable
+    - bukkit.command.whitelist.list
+    - bukkit.command.whitelist.reload
+    - bukkit.command.whitelist.remove

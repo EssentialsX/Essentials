@@ -24,15 +24,13 @@ public class Commandme extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		final StringBuilder message = new StringBuilder();
-		message.append("* ");
-		message.append(user.getDisplayName());
-		message.append(' ');
-		for (int i = 0; i < args.length; i++)
+
+		String message = getFinalArg(args, 0);
+		if (user.isAuthorized("essentials.chat.color"))
 		{
-			message.append(args[i]);
-			message.append(' ');
+			message = message.replaceAll("&([0-9a-f])", "§$1");
 		}
-		ess.broadcastMessage(user, message.toString());
+
+		ess.broadcastMessage(user, Util.format("action", user.getDisplayName(), message));
 	}
 }

@@ -111,17 +111,6 @@ public class PermissionsHandler implements IPermissionsHandler
 			return;
 		}
 
-		final Plugin permBukkitPlugin = pluginManager.getPlugin("PermissionsBukkit");
-		if (permBukkitPlugin != null && permBukkitPlugin.isEnabled())
-		{
-			if (!(handler instanceof PermissionsBukkitHandler))
-			{
-				LOGGER.log(Level.INFO, "Essentials: Using PermissionsBukkit based permissions.");
-				handler = new PermissionsBukkitHandler(permBukkitPlugin);
-			}
-			return;
-		}
-
 		final Plugin bPermPlugin = pluginManager.getPlugin("bPermissions");
 		if (bPermPlugin != null && bPermPlugin.isEnabled())
 		{
@@ -129,6 +118,28 @@ public class PermissionsHandler implements IPermissionsHandler
 			{
 				LOGGER.log(Level.INFO, "Essentials: Using bPermissions based permissions.");
 				handler = new BPermissionsHandler();
+			}
+			return;
+		}
+		
+		final Plugin GMplugin = pluginManager.getPlugin("GroupManager");
+		if (GMplugin != null && GMplugin.isEnabled())
+		{
+			if (!(handler instanceof GroupManagerHandler))
+			{
+				LOGGER.log(Level.INFO, "Essentials: Using GroupManager based permissions.");
+				handler = new GroupManagerHandler(GMplugin);
+			}
+			return;
+		}
+		
+		final Plugin permBukkitPlugin = pluginManager.getPlugin("PermissionsBukkit");
+		if (permBukkitPlugin != null && permBukkitPlugin.isEnabled())
+		{
+			if (!(handler instanceof PermissionsBukkitHandler))
+			{
+				LOGGER.log(Level.INFO, "Essentials: Using PermissionsBukkit based permissions.");
+				handler = new PermissionsBukkitHandler(permBukkitPlugin);
 			}
 			return;
 		}

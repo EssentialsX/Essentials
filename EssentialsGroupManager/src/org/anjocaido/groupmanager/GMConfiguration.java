@@ -48,14 +48,20 @@ public class GMConfiguration {
         } catch (Exception ex) {
             throw new IllegalArgumentException("The following file couldn't pass on Parser.\n" + configFile.getPath(), ex);
         }
+        
+        // Setup defaults
         adjustLoggerLevel();
+        plugin.setValidateOnlinePlayer(isToggleValidate());
     }
     
     public boolean isOpOverride() {
-    	return GMconfig.getBoolean("settings.config.bukkit_perms_override", true);
+    	return GMconfig.getBoolean("settings.config.opOverrides", true);
     }
     public boolean isBukkitPermsOverride() {
-    	return GMconfig.getBoolean("settings.config.opOverrides", true);
+    	return GMconfig.getBoolean("settings.config.bukkit_perms_override", false);
+    }
+    public boolean isToggleValidate() {
+    	return GMconfig.getBoolean("settings.config.validate_toggle", true);
     }
 
 	public Map<String, Object> getMirrorsMap() {   

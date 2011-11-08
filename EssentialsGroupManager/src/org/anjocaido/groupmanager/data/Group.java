@@ -27,11 +27,21 @@ public class Group extends DataUnit implements Cloneable {
     private GroupVariables variables = new GroupVariables(this);
 
     /**
+     * Constructor for individual World Groups.
      *
      * @param name
      */
     public Group(WorldDataHolder source, String name) {
         super(source, name);
+    }
+    
+    /**
+     *  Constructor for Global Groups.
+     *  
+     * @param name
+     */
+    public Group(String name) {
+        super(name);
     }
 
     /**
@@ -40,8 +50,15 @@ public class Group extends DataUnit implements Cloneable {
      */
     @Override
     public Group clone() {
-        Group clone = new Group(getDataSource(), this.getName());
-        clone.inherits = new ArrayList<String>(this.getInherits());
+    	Group clone;
+    	
+    	if (getDataSource() == null) {
+    		clone = new Group(this.getName());
+    	} else {
+    		clone = new Group(getDataSource(), this.getName());
+    		clone.inherits = new ArrayList<String>(this.getInherits());
+    	}
+    	
         for (String perm : this.getPermissionList()) {
             clone.addPermission(perm);
         }
@@ -59,8 +76,13 @@ public class Group extends DataUnit implements Cloneable {
         if (dataSource.groupExists(this.getName())) {
             return null;
         }
-        Group clone = getDataSource().createGroup(this.getName());
-        clone.inherits = new ArrayList<String>(this.getInherits());
+        
+        Group clone = dataSource.createGroup(this.getName());
+        
+        // Don't add inheritance for GlobalGroups
+        if (getDataSource() != null) {
+    		clone.inherits = new ArrayList<String>(this.getInherits());
+    	}
         for (String perm : this.getPermissionList()) {
             clone.addPermission(perm);
         }

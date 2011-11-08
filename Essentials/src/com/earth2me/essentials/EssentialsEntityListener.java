@@ -1,6 +1,8 @@
 package com.earth2me.essentials;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityCombustEvent;
@@ -8,6 +10,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityListener;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
@@ -15,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class EssentialsEntityListener extends EntityListener
 {
+	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private final IEssentials ess;
 
 	public EssentialsEntityListener(IEssentials ess)
@@ -34,6 +39,7 @@ public class EssentialsEntityListener extends EntityListener
 			{
 				User defender = ess.getUser(eDefend);
 				User attacker = ess.getUser(eAttack);
+				attacker.updateActivity(true);
 				ItemStack is = attacker.getItemInHand();
 				List<String> commandList = attacker.getPowertool(is);
 				if (commandList != null && !commandList.isEmpty())
@@ -93,8 +99,16 @@ public class EssentialsEntityListener extends EntityListener
 	{
 		if (event.getEntity() instanceof Player && ess.getUser(event.getEntity()).isGodModeEnabled())
 		{
-			//TODO: Remove the following line, when we're happy to remove backwards compatability with 1185.
-			event.setFoodLevel(20);
+			event.setCancelled(true);
+		}
+	}
+
+	@Override
+	public void onEntityRegainHealth(EntityRegainHealthEvent event)
+	{
+		if (event.getRegainReason() == RegainReason.SATIATED && event.getEntity() instanceof Player
+			&& ess.getUser(event.getEntity()).isAfk() && ess.getSettings().getFreezeAfkPlayers())
+		{
 			event.setCancelled(true);
 		}
 	}

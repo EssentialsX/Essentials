@@ -49,3 +49,25 @@ v 1.4:
 	- Fixed reading world mirrors from the config.
 	- Simplified config.yml while retaining backwards compatibility.
 	- Added data.save.hours setting to config. This allow control over how long backups are retained.
+v 1.5:
+	- Fixed opOverrides and bukkit_perms_override to read the correct entries.
+	- Better commenting in config.yml
+	- Fixed GM to recognize Superperm child nodes.
+	  If you add a node like Towny.admin GM will now correctly report on all child nodes.
+	- Fixed GM loading world data files twice at startup.
+	- Improved error reporting for invalid groups.yml
+	- Added Global Groups
+	  Defined in groupmanager/globalgroups.yml.
+	  Create groups in the yml with a g: prefix, then inherit in the worlds groups files.
+	- Added Info node support to Global Groups.
+	- Fixed an error on 'manucheckv'. If the users doesn't have the variable it fell through causing an exception.
+	- Added checking of subgroups for Info nodes.
+	- Expanded 'canUserBuild()' to include inheritance and subgroups.
+	- Added a config.yml setting of 'validate_toggle' for those who prefer 'mantogglevalidate' to always be off.
+	- Prevent setting 'minutes' in the config to zero causing an error.
+	- GM will now check to see if it's data files have been changed at each scheduled save.
+	  If the files have been altered (on disc) it will reload, so long as the in-memory data hasn't changed.
+	  If the files on Disc have changed AND there have been changes to it's in-memory data it will show a warning.
+	  You then MUST issue a '/mansave force' to overwrite the disc files, or a '/manload' to overwrite the memory data.
+	- Fix for an error in checkFullUserPermission caused by players disconnecting mid perms update.
+	- Notification of being moved to the default group only happens if it's a demotion/promotion (not on join).

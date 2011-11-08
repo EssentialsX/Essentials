@@ -22,14 +22,15 @@ $build = $_GET['buildid'];
 $branch = $_GET['branch'];
 $version = $_GET['version'];
 
-if ($build == "" || $branch == "" || $version == "")
-{
-  die();
+include('../build/function.php');
+updateval($branch);
+
+if ($build == "" || $branch == "" || $version == "") {
+  die('Invalid');
 }
 
 //Don't upload dev builds atm.
-if ($branch == "bt2")
-{
+if ($branch == "bt2") {
   die();
 }
 

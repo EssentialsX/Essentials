@@ -22,13 +22,13 @@ public class Commandpowertool extends EssentialsCommand
 		String command = getFinalArg(args, 0);
 
 		// check to see if this is a clear all command
-		if(command != null && command.equalsIgnoreCase("clearall"))
+		if(command != null && command.equalsIgnoreCase("c:"))
 		{
 			user.clearAllPowertools();
 			user.sendMessage(Util.i18n("powerToolClearAll"));
 			return;
 		}
-		
+
 		final ItemStack itemStack = user.getItemInHand();
 		if (itemStack == null || itemStack.getType() == Material.AIR)
 		{

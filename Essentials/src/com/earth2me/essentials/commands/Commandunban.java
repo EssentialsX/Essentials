@@ -20,7 +20,7 @@ public class Commandunban extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		
+
 		try
 		{
 			final User u = getPlayer(server, args, 0, true);
@@ -29,7 +29,7 @@ public class Commandunban extends EssentialsCommand
 		}
 		catch (NoSuchFieldException e)
 		{
-			sender.sendMessage(Util.i18n("playerNotFound"));
+			throw new Exception(Util.i18n("playerNotFound"));
 		}
 	}
 }

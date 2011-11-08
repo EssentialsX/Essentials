@@ -147,7 +147,7 @@ public class Version implements Comparable<Version>
 		hash = 71 * hash + this.major;
 		hash = 71 * hash + this.minor;
 		hash = 71 * hash + this.build;
-		hash = 71 * hash + (this.type != null ? this.type.hashCode() : 0);
+		hash = 71 * hash + (this.type == null ? 0 : this.type.hashCode());
 		return hash;
 	}
 

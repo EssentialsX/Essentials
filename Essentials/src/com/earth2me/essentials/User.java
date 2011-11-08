@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 
 public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 {
-	private boolean justPortaled = false;
 	private CommandSender replyTo = null;
 	private transient User teleportRequester;
 	private transient boolean teleportRequestHere;
@@ -156,16 +155,6 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		this.base = new OfflinePlayer(getName(), ess);
 	}
 
-	public boolean getJustPortaled()
-	{
-		return justPortaled;
-	}
-
-	public void setJustPortaled(final boolean value)
-	{
-		justPortaled = value;
-	}
-
 	@Override
 	public void setReplyTo(final CommandSender user)
 	{
@@ -269,12 +258,21 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 		if (ess.getSettings().addPrefixSuffix())
 		{
-			final String prefix = ess.getPermissionsHandler().getPrefix(base).replace('&', '§').replace("{WORLDNAME}", this.getWorld().getName());
-			final String suffix = ess.getPermissionsHandler().getSuffix(base).replace('&', '§').replace("{WORLDNAME}", this.getWorld().getName());
-
-			nickname.insert(0, prefix);
-			nickname.append(suffix);
-			if (suffix.length() < 2 || !suffix.substring(suffix.length() - 2, suffix.length() - 1).equals("§"))
+			if (!ess.getSettings().disablePrefix())
+			{
+				final String prefix = ess.getPermissionsHandler().getPrefix(base).replace('&', '§').replace("{WORLDNAME}", this.getWorld().getName());
+				nickname.insert(0, prefix);
+			}
+			if (!ess.getSettings().disableSuffix())
+			{
+				final String suffix = ess.getPermissionsHandler().getSuffix(base).replace('&', '§').replace("{WORLDNAME}", this.getWorld().getName());
+				nickname.append(suffix);
+				if (suffix.length() < 2 || !suffix.substring(suffix.length() - 2, suffix.length() - 1).equals("§"))
+				{
+					nickname.append("§f");
+				}
+			}
+			else
 			{
 				nickname.append("§f");
 			}
@@ -286,16 +284,16 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public void setDisplayNick(String name)
 	{
 		setDisplayName(name);
-		//TODO: Maybe we need to limit nick length, or try use a string trim.
-		if (name.length() <= 16)
-		{
-			setPlayerListName(name);
-		}
+		setPlayerListName(name.length() > 16 ? name.substring(0, 16) : name);
 	}
 
 	@Override
 	public String getDisplayName()
 	{
+		if (!(base instanceof OfflinePlayer) && ess.getSettings().changeDisplayName())
+		{
+			setDisplayNick(getNick());
+		}
 		return super.getDisplayName() == null ? super.getName() : super.getDisplayName();
 	}
 

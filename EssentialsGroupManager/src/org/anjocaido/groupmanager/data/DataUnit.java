@@ -26,7 +26,11 @@ public abstract class DataUnit {
         this.name = name;
     }
 
-    /**
+    public DataUnit(String name) {
+    	this.name = name;
+	}
+
+	/**
      * Every group is matched only by their names and DataSources names.
      * @param o
      * @return true if they are equal. false if not.
@@ -64,7 +68,15 @@ public abstract class DataUnit {
     }
 
     public void flagAsChanged() {
-        GroupManager.logger.finest("DataSource: " + getDataSource().getName() + " - DataUnit: " + getName() + " flagged as changed!");
+    	WorldDataHolder testSource = getDataSource();
+    	String source = "";
+    	
+    	if (testSource == null)
+    		source = "GlobalGroups";
+    	else
+    		source = testSource.getName();
+    	
+        GroupManager.logger.finest("DataSource: " + source + " - DataUnit: " + getName() + " flagged as changed!");
 // for(StackTraceElement st: Thread.currentThread().getStackTrace()){
 // GroupManager.logger.finest(st.toString());
 // }
@@ -76,7 +88,15 @@ public abstract class DataUnit {
     }
 
     public void flagAsSaved() {
-        GroupManager.logger.finest("DataSource: " + getDataSource().getName() + " - DataUnit: " + getName() + " flagged as saved!");
+    	WorldDataHolder testSource = getDataSource();
+    	String source = "";
+    	
+    	if (testSource == null)
+    		source = "GlobalGroups";
+    	else
+    		source = testSource.getName();
+    	
+        GroupManager.logger.finest("DataSource: " + source + " - DataUnit: " + getName() + " flagged as saved!");
         changed = false;
     }
 

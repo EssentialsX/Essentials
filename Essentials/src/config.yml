@@ -144,7 +144,6 @@ player-commands:
   - nick
   - pay
   - ping
-  - portal
   - powertool
   - protect
   - r

@@ -29,7 +29,7 @@ public class Commandsell extends EssentialsCommand
 		{
 			is = user.getItemInHand();
 		}
-		else if (args[0].equalsIgnoreCase("inventory"))
+		else if (args[0].equalsIgnoreCase("inventory") || args[0].equalsIgnoreCase("invent") || args[0].equalsIgnoreCase("all"))
 		{
 			for (ItemStack stack : user.getInventory().getContents())
 			{
@@ -103,28 +103,21 @@ public class Commandsell extends EssentialsCommand
 
 
 		int max = 0;
-		if (!isBulkSell)
+		for (ItemStack s : user.getInventory().getContents())
 		{
-			for (ItemStack s : user.getInventory().getContents())
+			if (s == null)
 			{
-				if (s == null)
-				{
-					continue;
-				}
-				if (s.getTypeId() != is.getTypeId())
-				{
-					continue;
-				}
-				if (s.getDurability() != is.getDurability())
-				{
-					continue;
-				}
-				max += s.getAmount();
+				continue;
 			}
-		}
-		else
-		{
-			max += is.getAmount();
+			if (s.getTypeId() != is.getTypeId())
+			{
+				continue;
+			}
+			if (s.getDurability() != is.getDurability())
+			{
+				continue;
+			}
+			max += s.getAmount();
 		}
 
 		if (stack)
@@ -140,20 +133,26 @@ public class Commandsell extends EssentialsCommand
 		{
 			amount -= amount % 64;
 		}
-
 		if (amount > max || amount < 1)
 		{
-			user.sendMessage(Util.i18n("itemNotEnough1"));
-			user.sendMessage(Util.i18n("itemNotEnough2"));
-			throw new Exception(Util.i18n("itemNotEnough3"));
+			if (!isBulkSell)
+			{
+				user.sendMessage(Util.i18n("itemNotEnough1"));
+				user.sendMessage(Util.i18n("itemNotEnough2"));
+				throw new Exception(Util.i18n("itemNotEnough3"));
+			}
+			else
+			{
+				return;
+			}
 		}
 
 		final ItemStack ris = new ItemStack(is.getType(), amount, is.getDurability());
 		InventoryWorkaround.removeItem(user.getInventory(), true, ris);
 		user.updateInventory();
-		Trade.log("Command", "Sell", "Item", user.getName(), new Trade(ris, ess), user.getName(), new Trade(worth*amount, ess), user.getLocation(), ess);
+		Trade.log("Command", "Sell", "Item", user.getName(), new Trade(ris, ess), user.getName(), new Trade(worth * amount, ess), user.getLocation(), ess);
 		user.giveMoney(worth * amount);
-		user.sendMessage(Util.format("itemSold", Util.formatCurrency(worth * amount, ess), amount, Util.formatCurrency(worth, ess)));
+		user.sendMessage(Util.format("itemSold", Util.formatCurrency(worth * amount, ess), amount, is.getType().toString().toLowerCase(), Util.formatCurrency(worth, ess)));
 		logger.log(Level.INFO, Util.format("itemSoldConsole", user.getDisplayName(), is.getType().toString().toLowerCase(), Util.formatCurrency(worth * amount, ess), amount, Util.formatCurrency(worth, ess)));
 
 	}

@@ -12,7 +12,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.logging.Logger;
+import java.util.logging.Level;
+import org.bukkit.Bukkit;
 
 
 public class GetFile
@@ -22,7 +23,11 @@ public class GetFile
 
 	public GetFile(final String urlString) throws MalformedURLException, IOException
 	{
-		final URL url = new URL(urlString);
+		this(new URL(urlString));
+	}
+
+	public GetFile(final URL url) throws IOException
+	{
 		this.connection = url.openConnection();
 		this.connection.setConnectTimeout(1000);
 		this.connection.setReadTimeout(5000);
@@ -49,7 +54,7 @@ public class GetFile
 		}
 		catch (NoSuchAlgorithmException ex)
 		{
-			// Ignore because the code is never called
+			throw new RuntimeException(ex);
 		}
 	}
 
@@ -97,7 +102,7 @@ public class GetFile
 			}
 			if (brokenFile && !file.delete())
 			{
-				Logger.getLogger("Minecraft").severe("Could not delete file " + file.getPath());
+				Bukkit.getLogger().log(Level.SEVERE, "Could not delete file {0}", file.getPath());
 			}
 		}
 		finally

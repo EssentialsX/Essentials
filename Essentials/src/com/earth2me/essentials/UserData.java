@@ -52,6 +52,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		jailTimeout = _getJailTimeout();
 		lastLogin = _getLastLogin();
 		lastLogout = _getLastLogout();
+		lastLoginAddress = _getLastLoginAddress();
 		afk = getAfk();
 		newplayer = getNew();
 		geolocation = _getGeoLocation();
@@ -668,6 +669,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.setProperty("timestamps.login", time);
 		config.save();
 	}
+
 	private long lastLogout;
 
 	private long _getLastLogout()
@@ -686,6 +688,26 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.setProperty("timestamps.logout", time);
 		config.save();
 	}
+
+	private String lastLoginAddress;
+
+	private String _getLastLoginAddress()
+	{
+		return config.getString("ipAddress", "");
+	}
+
+	public String getLastLoginAddress()
+	{
+		return lastLoginAddress;
+	}
+
+	public void setLastLoginAddress(String address)
+	{
+		lastLoginAddress = address;
+		config.setProperty("ipAddress", address);
+		config.save();
+	}
+
 	private boolean afk;
 
 	private boolean getAfk()

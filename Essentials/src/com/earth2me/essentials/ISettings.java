@@ -124,8 +124,10 @@ public interface ISettings extends IConf
 	boolean useBukkitPermissions();
 
 	boolean addPrefixSuffix();
-
-	boolean isUpdateEnabled();
+	
+	boolean disablePrefix();
+	
+	boolean disableSuffix();
 
 	long getAutoAfk();
 
@@ -134,4 +136,6 @@ public interface ISettings extends IConf
 	boolean getFreezeAfkPlayers();
 	
 	boolean areDeathMessagesEnabled();
+
+	public void setDebug(boolean debug);
 }

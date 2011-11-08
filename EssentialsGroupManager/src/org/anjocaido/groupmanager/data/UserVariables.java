@@ -27,7 +27,7 @@ public class UserVariables extends Variables {
 
     /**
      * A clone of all vars here.
-     * @return
+     * @return UserVariables clone
      */
     protected UserVariables clone(User newOwner) {
         UserVariables clone = new UserVariables(newOwner);

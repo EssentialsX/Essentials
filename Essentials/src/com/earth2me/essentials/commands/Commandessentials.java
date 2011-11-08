@@ -23,6 +23,12 @@ public class Commandessentials extends EssentialsCommand
 	@Override
 	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
+		if (args.length > 0 && args[0].equalsIgnoreCase("debug"))
+		{
+			ess.getSettings().setDebug(!ess.getSettings().isDebug());
+			sender.sendMessage("Essentials " + ess.getDescription().getVersion() + " debug mode " + (ess.getSettings().isDebug() ? "enabled" : "disabled"));
+			return;
+		}
 		final Map<String, Byte> noteMap = new HashMap<String, Byte>();
 		noteMap.put("1F#", (byte)0x0);
 		noteMap.put("1G", (byte)0x1);

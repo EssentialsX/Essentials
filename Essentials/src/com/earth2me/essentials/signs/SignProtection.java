@@ -35,10 +35,15 @@ public class SignProtection extends EssentialsSign
 	protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException
 	{
 		sign.setLine(3, "§4" + username);
-		if (hasAdjacentBlock(sign.getBlock()) && isBlockProtected(sign.getBlock(), player, username, true) != SignProtectionState.NOT_ALLOWED)
+		if (hasAdjacentBlock(sign.getBlock()))
 		{
-			sign.setLine(3, "§1" + username);
-			return true;
+			final SignProtectionState state = isBlockProtected(sign.getBlock(), player, username, true);
+			if (state == SignProtectionState.NOSIGN || state == SignProtectionState.OWNER
+				|| player.isAuthorized("essentials.signs.protection.override"))
+			{
+				sign.setLine(3, "§1" + username);
+				return true;
+			}
 		}
 		player.sendMessage(Util.i18n("signProtectInvalidLocation"));
 		return false;
@@ -183,11 +188,6 @@ public class SignProtection extends EssentialsSign
 		SignProtectionState retstate = SignProtectionState.NOSIGN;
 		for (SignProtectionState state : signs.values())
 		{
-
-			if (state == SignProtectionState.OWNER)
-			{
-				return state;
-			}
 			if (state == SignProtectionState.ALLOWED)
 			{
 				retstate = state;
@@ -195,6 +195,16 @@ public class SignProtection extends EssentialsSign
 			else if (state == SignProtectionState.NOT_ALLOWED && retstate != SignProtectionState.ALLOWED)
 			{
 				retstate = state;
+			}
+		}
+		if (!secure || retstate == SignProtectionState.NOSIGN)
+		{
+			for (SignProtectionState state : signs.values())
+			{
+				if (state == SignProtectionState.OWNER)
+				{
+					return state;
+				}
 			}
 		}
 		return retstate;
@@ -300,7 +310,7 @@ public class SignProtection extends EssentialsSign
 		player.sendMessage(Util.format("noDestroyPermission", block.getType().toString().toLowerCase()));
 		return false;
 	}
-	
+
 	@Override
 	public boolean onBlockBreak(final Block block, final IEssentials ess)
 	{
@@ -324,7 +334,7 @@ public class SignProtection extends EssentialsSign
 
 		return state == SignProtectionState.NOSIGN;
 	}
-	
+
 	@Override
 	public boolean onBlockIgnite(final Block block, final IEssentials ess)
 	{

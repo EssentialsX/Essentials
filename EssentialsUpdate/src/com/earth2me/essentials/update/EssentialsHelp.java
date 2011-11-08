@@ -1,16 +1,16 @@
 package com.earth2me.essentials.update;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import org.bukkit.Bukkit;
+import com.earth2me.essentials.update.chat.Command;
+import com.earth2me.essentials.update.chat.ConfigCommand;
+import com.earth2me.essentials.update.chat.ErrorsCommand;
+import com.earth2me.essentials.update.chat.HelpCommand;
+import com.earth2me.essentials.update.chat.IrcBot;
+import com.earth2me.essentials.update.chat.ListCommand;
+import com.earth2me.essentials.update.chat.StartupCommand;
+import com.earth2me.essentials.update.chat.UsernameUtil;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,7 +21,6 @@ import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
-import org.jibble.pircbot.User;
 
 
 public class EssentialsHelp extends PlayerListener
@@ -29,14 +28,19 @@ public class EssentialsHelp extends PlayerListener
 	private transient Player chatUser;
 	private final transient Server server;
 	private final transient Plugin plugin;
-	private final static Charset UTF8 = Charset.forName("utf-8");
 	private transient IrcBot ircBot;
+	private final transient Map<String, Command> commands = new HashMap<String, Command>();
 
 	public EssentialsHelp(final Plugin plugin)
 	{
 		super();
 		this.plugin = plugin;
 		this.server = plugin.getServer();
+		commands.put("!help", new HelpCommand());
+		commands.put("!list", new ListCommand());
+		commands.put("!startup", new StartupCommand(plugin));
+		commands.put("!errors", new ErrorsCommand(plugin));
+		commands.put("!config", new ConfigCommand(plugin));
 	}
 
 	public void registerEvents()
@@ -46,7 +50,7 @@ public class EssentialsHelp extends PlayerListener
 		pluginManager.registerEvent(Type.PLAYER_CHAT, this, Priority.Low, plugin);
 	}
 
-	public void onCommand(CommandSender sender)
+	public void onCommand(final CommandSender sender)
 	{
 		if (sender instanceof Player && sender.hasPermission("essentials.helpchat"))
 		{
@@ -74,11 +78,7 @@ public class EssentialsHelp extends PlayerListener
 
 	public void onDisable()
 	{
-		if ( ircBot != null)
-		{
-			ircBot.quit();
-			ircBot = null;
-		}
+		closeConnection();
 	}
 
 	private boolean sendChatMessage(final Player player, final String message)
@@ -90,35 +90,19 @@ public class EssentialsHelp extends PlayerListener
 		}
 		if (ircBot == null)
 		{
-			if (messageCleaned.equalsIgnoreCase("yes"))
-			{
-				player.sendMessage("Connecting...");
-				connectToIRC(player);
-				return true;
-			}
-			if (messageCleaned.equalsIgnoreCase("no") || message.equalsIgnoreCase("!quit"))
-			{
-				chatUser = null;
-				return true;
-			}
-			return false;
+			return handleAnswer(messageCleaned, player);
 		}
 		else
 		{
-			if (ircBot.isKicked()) {
-				chatUser = null;
-				ircBot.quit();
-				ircBot = null;
+			if (ircBot.isKicked())
+			{
+				closeConnection();
 				return false;
 			}
-			final String lowMessage = messageCleaned.toLowerCase();
+			final String lowMessage = messageCleaned.toLowerCase(Locale.ENGLISH);
 			if (lowMessage.startsWith("!quit"))
 			{
-				chatUser = null;
-				if (ircBot != null) {
-					ircBot.quit();
-					ircBot = null;
-				}
+				closeConnection();
 				player.sendMessage("Connection closed.");
 				return true;
 			}
@@ -126,52 +110,8 @@ public class EssentialsHelp extends PlayerListener
 			{
 				return false;
 			}
-			if (lowMessage.startsWith("!list"))
+			if (handleCommands(lowMessage, player))
 			{
-				final User[] members = ircBot.getUsers();
-				final StringBuilder sb = new StringBuilder();
-				for (User user : members)
-				{
-					if (sb.length() > 0)
-					{
-						sb.append("§f, ");
-					}
-					if (user.isOp() || user.hasVoice())
-					{
-						sb.append("§6");
-					}
-					else
-					{
-						sb.append("§7");
-					}
-					sb.append(user.getPrefix()).append(user.getNick());
-				}
-				player.sendMessage(sb.toString());
-				return true;
-			}
-			if (lowMessage.startsWith("!help"))
-			{
-				player.sendMessage("Commands: (Note: Files send to the chat will be public viewable.)");
-				player.sendMessage("!errors - Send the last server errors to the chat.");
-				player.sendMessage("!startup - Send the last startup messages to the chat.");
-				player.sendMessage("!config - Sends your Essentials config to the chat.");
-				player.sendMessage("!list - List all players in chat.");
-				player.sendMessage("!quit - Leave chat.");
-				return true;
-			}
-			if (lowMessage.startsWith("!errors"))
-			{
-				sendErrors();
-				return true;
-			}
-			if (lowMessage.startsWith("!startup"))
-			{
-				sendStartup();
-				return true;
-			}
-			if (lowMessage.startsWith("!config"))
-			{
-				sendConfig();
 				return true;
 			}
 			ircBot.sendMessage(messageCleaned);
@@ -180,300 +120,62 @@ public class EssentialsHelp extends PlayerListener
 		}
 	}
 
-	private String buildIrcName()
+	private void closeConnection()
 	{
-		final StringBuilder nameBuilder = new StringBuilder();
-		nameBuilder.append(chatUser.getName());
-
-		final Matcher versionMatch = Pattern.compile("git-Bukkit-([0-9]+).([0-9]+).([0-9]+)-[0-9]+-[0-9a-z]+-b([0-9]+)jnks.*").matcher(server.getVersion());
-		if (versionMatch.matches())
+		chatUser = null;
+		if (ircBot != null)
 		{
-			nameBuilder.append(" CB");
-			nameBuilder.append(versionMatch.group(4));
+			ircBot.quit();
+			ircBot = null;
 		}
+	}
 
-		final Plugin essentials = server.getPluginManager().getPlugin("Essentials");
-		if (essentials != null)
+	private boolean handleAnswer(final String message, final Player player)
+	{
+		if (message.equalsIgnoreCase("yes"))
 		{
-			nameBuilder.append(" ESS");
-			nameBuilder.append(essentials.getDescription().getVersion());
+			player.sendMessage("Connecting...");
+			connectToIRC(player);
+			return true;
 		}
-
-		final Plugin groupManager = server.getPluginManager().getPlugin("GroupManager");
-		if (groupManager != null)
+		if (message.equalsIgnoreCase("no") || message.equalsIgnoreCase("!quit"))
 		{
-			nameBuilder.append(" GM");
-			if (!groupManager.isEnabled())
-			{
-				nameBuilder.append('!');
-			}
+			chatUser = null;
+			return true;
 		}
+		return false;
+	}
 
-		final Plugin pex = server.getPluginManager().getPlugin("PermissionsEx");
-		if (pex != null)
+	private boolean handleCommands(final String lowMessage, final Player player)
+	{
+		final String[] parts = lowMessage.split(" ");
+		if (commands.containsKey(parts[0]))
 		{
-			nameBuilder.append(" PEX");
-			if (!pex.isEnabled())
-			{
-				nameBuilder.append('!');
-			}
-			nameBuilder.append(pex.getDescription().getVersion());
+			commands.get(parts[0]).run(ircBot, player);
+			return true;
 		}
-
-		final Plugin pb = server.getPluginManager().getPlugin("PermissionsBukkit");
-		if (pb != null)
-		{
-			nameBuilder.append(" PB");
-			if (!pb.isEnabled())
-			{
-				nameBuilder.append('!');
-			}
-			nameBuilder.append(pb.getDescription().getVersion());
-		}
-
-		final Plugin bp = server.getPluginManager().getPlugin("bPermissions");
-		if (bp != null)
-		{
-			nameBuilder.append(" BP");
-			if (!bp.isEnabled())
-			{
-				nameBuilder.append('!');
-			}
-			nameBuilder.append(bp.getDescription().getVersion());
-		}
-
-		final Plugin perm = server.getPluginManager().getPlugin("Permissions");
-		if (perm != null)
-		{
-			nameBuilder.append(" P");
-			if (!perm.isEnabled())
-			{
-				nameBuilder.append('!');
-			}
-			nameBuilder.append(perm.getDescription().getVersion());
-		}
-
-		return nameBuilder.toString();
+		return false;
 	}
 
 	private void connectToIRC(final Player player)
 	{
-		ircBot = new IrcBot(player, "Ess_" + player.getName(), buildIrcName());
-	}
-
-	private void sendErrors()
-	{
-		BufferedReader page = null;
-		try
-		{
-			File bukkitFolder = plugin.getDataFolder().getAbsoluteFile().getParentFile().getParentFile();
-			if (bukkitFolder == null || !bukkitFolder.exists())
-			{
-				chatUser.sendMessage("Bukkit folder not found.");
-				return;
-			}
-			File logFile = new File(bukkitFolder, "server.log");
-			if (!logFile.exists())
-			{
-				chatUser.sendMessage("Server log not found.");
-				return;
-			}
-			FileInputStream fis = new FileInputStream(logFile);
-			if (logFile.length() > 1000000)
-			{
-				fis.skip(logFile.length() - 1000000);
-			}
-			page = new BufferedReader(new InputStreamReader(fis));
-			final StringBuilder input = new StringBuilder();
-			String line;
-			Pattern pattern = Pattern.compile("^[0-9 :-]+\\[INFO\\].*");
-			while ((line = page.readLine()) != null)
-			{
-				if (!pattern.matcher(line).matches())
-				{
-					input.append(line).append("\n");
-				}
-			}
-			if (input.length() > 10000)
-			{
-				input.delete(0, input.length() - 10000);
-			}
-			final PastieUpload pastie = new PastieUpload();
-			final String url = pastie.send(input.toString());
-			String message = "Errors: " + url;
-			chatUser.sendMessage("§6" + ircBot.getNick() + ": §7" + message);
-			ircBot.sendMessage(message);
-		}
-		catch (IOException ex)
-		{
-			Bukkit.getLogger().log(Level.SEVERE, null, ex);
-			chatUser.sendMessage(ex.getMessage());
-		}
-		finally
-		{
-			try
-			{
-				if (page != null)
-				{
-					page.close();
-				}
-			}
-			catch (IOException ex)
-			{
-				Logger.getLogger(EssentialsHelp.class.getName()).log(Level.SEVERE, null, ex);
-			}
-		}
-	}
-
-	private void sendStartup()
-	{
-		BufferedReader page = null;
-		try
-		{
-			File bukkitFolder = plugin.getDataFolder().getAbsoluteFile().getParentFile().getParentFile();
-			if (bukkitFolder == null || !bukkitFolder.exists())
-			{
-				chatUser.sendMessage("Bukkit folder not found.");
-				return;
-			}
-			File logFile = new File(bukkitFolder, "server.log");
-			if (!logFile.exists())
-			{
-				chatUser.sendMessage("Server log not found.");
-				return;
-			}
-			FileInputStream fis = new FileInputStream(logFile);
-			if (logFile.length() > 1000000)
-			{
-				fis.skip(logFile.length() - 1000000);
-			}
-			page = new BufferedReader(new InputStreamReader(fis));
-			final StringBuilder input = new StringBuilder();
-			String line;
-			Pattern patternStart = Pattern.compile("^[0-9 :-]+\\[INFO\\] Starting minecraft server version.*");
-			Pattern patternEnd = Pattern.compile("^[0-9 :-]+\\[INFO\\] Done \\([0-9.,]+s\\)! For help, type \"help\".*");
-			boolean log = false;
-			while ((line = page.readLine()) != null)
-			{
-				if (patternStart.matcher(line).matches())
-				{
-					if (input.length() > 0)
-					{
-						input.delete(0, input.length());
-					}
-					log = true;
-				}
-				if (log)
-				{
-					input.append(line).append("\n");
-				}
-				if (patternEnd.matcher(line).matches())
-				{
-					log = false;
-				}
-			}
-			if (input.length() > 10000)
-			{
-				input.delete(0, input.length() - 10000);
-			}
-			final PastieUpload pastie = new PastieUpload();
-			final String url = pastie.send(input.toString());
-			String message = "Startup: " + url;
-			chatUser.sendMessage("§6" + ircBot.getNick() + ": §7" + message);
-			ircBot.sendMessage(message);
-		}
-		catch (IOException ex)
-		{
-			Bukkit.getLogger().log(Level.SEVERE, null, ex);
-			chatUser.sendMessage(ex.getMessage());
-		}
-		finally
-		{
-			try
-			{
-				if (page != null)
-				{
-					page.close();
-				}
-			}
-			catch (IOException ex)
-			{
-				Logger.getLogger(EssentialsHelp.class.getName()).log(Level.SEVERE, null, ex);
-			}
-		}
-	}
-
-	private void sendConfig()
-	{
-		BufferedReader page = null;
-		try
-		{
-			File configFolder = new File(plugin.getDataFolder().getParentFile(), "Essentials");
-			if (!configFolder.exists())
-			{
-				chatUser.sendMessage("Essentials plugin folder not found.");
-				return;
-			}
-			File configFile = new File(configFolder, "config.yml");
-			if (!configFile.exists())
-			{
-				chatUser.sendMessage("Essentials config file not found.");
-				return;
-			}
-			page = new BufferedReader(new InputStreamReader(new FileInputStream(configFile), UTF8));
-			final StringBuilder input = new StringBuilder();
-			String line;
-			while ((line = page.readLine()) != null)
-			{
-				input.append(line).append("\n");
-			}
-			final PastieUpload pastie = new PastieUpload();
-			final String url = pastie.send(input.toString());
-			String message = "Essentials config.yml: " + url;
-			chatUser.sendMessage("§6" + ircBot.getNick() + ": §7" + message);
-			ircBot.sendMessage(message);
-
-		}
-		catch (IOException ex)
-		{
-			Bukkit.getLogger().log(Level.SEVERE, null, ex);
-			chatUser.sendMessage(ex.getMessage());
-		}
-		finally
-		{
-			try
-			{
-				if (page != null)
-				{
-					page.close();
-				}
-			}
-			catch (IOException ex)
-			{
-				Logger.getLogger(EssentialsHelp.class.getName()).log(Level.SEVERE, null, ex);
-			}
-		}
+		ircBot = new IrcBot(player, "Ess_" + player.getName(), UsernameUtil.createUsername(player));
 	}
 
 	@Override
-	public void onPlayerChat(PlayerChatEvent event)
+	public void onPlayerChat(final PlayerChatEvent event)
 	{
 		if (event.getPlayer() == chatUser)
 		{
-			boolean success = sendChatMessage(event.getPlayer(), event.getMessage());
+			final boolean success = sendChatMessage(event.getPlayer(), event.getMessage());
 			event.setCancelled(success);
 			return;
 		}
 	}
 
 	@Override
-	public void onPlayerQuit(PlayerQuitEvent event)
+	public void onPlayerQuit(final PlayerQuitEvent event)
 	{
-		chatUser = null;
-		if (ircBot != null) {
-			ircBot.quit();
-			ircBot = null;
-		}
-		return;
+		closeConnection();
 	}
 }

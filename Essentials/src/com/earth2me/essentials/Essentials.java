@@ -33,7 +33,6 @@ import com.earth2me.essentials.register.payment.Methods;
 import com.earth2me.essentials.signs.SignBlockListener;
 import com.earth2me.essentials.signs.SignEntityListener;
 import com.earth2me.essentials.signs.SignPlayerListener;
-import java.math.BigInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.bukkit.command.PluginCommand;
@@ -58,12 +57,10 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private transient List<IConf> confList;
 	private transient Backup backup;
 	private transient ItemDb itemDb;
-	private transient EssentialsUpdateTimer updateTimer;
 	private transient final Methods paymentMethod = new Methods();
-	private transient final static boolean enableErrorLogging = false;
-	private transient final EssentialsErrorHandler errorHandler = new EssentialsErrorHandler();
 	private transient PermissionsHandler permissionsHandler;
 	private transient UserMap userMap;
+	private transient ExecuteTimer execTimer;
 
 	@Override
 	public ISettings getSettings()
@@ -94,32 +91,36 @@ public class Essentials extends JavaPlugin implements IEssentials
 	@Override
 	public void onEnable()
 	{
+		execTimer = new ExecuteTimer();
+		execTimer.start();
 		final String[] javaversion = System.getProperty("java.version").split("\\.", 3);
 		if (javaversion == null || javaversion.length < 2 || Integer.parseInt(javaversion[1]) < 6)
 		{
 			LOGGER.log(Level.SEVERE, "Java version not supported! Please install Java 1.6. You have " + System.getProperty("java.version"));
 		}
-		if (enableErrorLogging)
-		{
-			LOGGER.addHandler(errorHandler);
-		}
 		final EssentialsUpgrade upgrade = new EssentialsUpgrade(this);
 		upgrade.beforeSettings();
+		execTimer.mark("Upgrade");
 		confList = new ArrayList<IConf>();
 		settings = new Settings(this);
 		confList.add(settings);
+		execTimer.mark("Settings");
 		upgrade.afterSettings();
+		execTimer.mark("Upgrade2");
 		Util.updateLocale(settings.getLocale(), this);
 		userMap = new UserMap(this);
 		confList.add(userMap);
+		execTimer.mark("Init(Usermap)");
 		spawn = new Spawn(getServer(), this.getDataFolder());
 		confList.add(spawn);
 		warps = new Warps(getServer(), this.getDataFolder());
 		confList.add(warps);
+		execTimer.mark("Init(Spawn/Warp)");
 		worth = new Worth(this.getDataFolder());
 		confList.add(worth);
 		itemDb = new ItemDb(this);
 		confList.add(itemDb);
+		execTimer.mark("Init(Worth/ItemDB)");
 		reload();
 		backup = new Backup(this);
 
@@ -188,8 +189,10 @@ public class Essentials extends JavaPlugin implements IEssentials
 		pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Priority.Lowest, this);
 		pm.registerEvent(Type.ENTITY_COMBUST, entityListener, Priority.Lowest, this);
 		pm.registerEvent(Type.ENTITY_DEATH, entityListener, Priority.Lowest, this);
+		pm.registerEvent(Type.ENTITY_REGAIN_HEALTH, entityListener, Priority.Lowest, this);
 		pm.registerEvent(Type.FOOD_LEVEL_CHANGE, entityListener, Priority.Lowest, this);
 
+		//TODO: Check if this should be here, and not above before reload()
 		jail = new Jail(this);
 		final JailPlayerListener jailPlayerListener = new JailPlayerListener(this);
 		confList.add(jail);
@@ -206,19 +209,19 @@ public class Essentials extends JavaPlugin implements IEssentials
 		final EssentialsTimer timer = new EssentialsTimer(this);
 		getScheduler().scheduleSyncRepeatingTask(this, timer, 1, 100);
 		Economy.setEss(this);
-		if (getSettings().isUpdateEnabled())
-		{
-			updateTimer = new EssentialsUpdateTimer(this);
-			getScheduler().scheduleAsyncRepeatingTask(this, updateTimer, 20 * 60 * 10, 20 * 3600 * 6);
-		}
+		execTimer.mark("RegListeners");
 		LOGGER.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), Util.joinList(this.getDescription().getAuthors())));
+		final String timeroutput = execTimer.end();
+		if (getSettings().isDebug())
+		{
+			LOGGER.log(Level.INFO, "Essentials load " + timeroutput);
+		}
 	}
 
 	@Override
 	public void onDisable()
 	{
 		Trade.closeLog();
-		LOGGER.removeHandler(errorHandler);
 	}
 
 	@Override
@@ -229,6 +232,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		for (IConf iConf : confList)
 		{
 			iConf.reloadConfig();
+			execTimer.mark("Reload(" + iConf.getClass().getSimpleName() + ")");
 		}
 
 		Util.updateLocale(settings.getLocale(), this);
@@ -478,14 +482,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 		{
 			LOGGER.log(logRecord);
 		}
-		else
-		{
-			if (enableErrorLogging)
-			{
-				errorHandler.publish(logRecord);
-				errorHandler.flush();
-			}
-		}
 	}
 
 	@Override
@@ -608,10 +604,12 @@ public class Essentials extends JavaPlugin implements IEssentials
 	@Override
 	public int broadcastMessage(final IUser sender, final String message)
 	{
-		if (sender == null) {
+		if (sender == null)
+		{
 			return getServer().broadcastMessage(message);
 		}
-		if (sender.isHidden()) {
+		if (sender.isHidden())
+		{
 			return 0;
 		}
 		final Player[] players = getServer().getOnlinePlayers();
@@ -626,11 +624,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 
 		return players.length;
-	}
-
-	public Map<BigInteger, String> getErrors()
-	{
-		return errorHandler.getErrors();
 	}
 
 	@Override
