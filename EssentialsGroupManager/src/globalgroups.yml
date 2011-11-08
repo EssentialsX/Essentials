@@ -142,11 +142,6 @@ groups:
 
   g:bukkit_admin:
     permissions:
-    - bPermissions.admin
-    - bPermissions.demote.admin
-    - bPermissions.gui
-    - bPermissions.iplock.lock
-    - bPermissions.promote.admin
     - bukkit.broadcast
     - bukkit.broadcast.admin
     - bukkit.command
