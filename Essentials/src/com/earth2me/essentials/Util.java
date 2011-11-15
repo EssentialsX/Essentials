@@ -28,6 +28,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 
 
 public class Util
@@ -221,6 +223,7 @@ public class Util
 
 	// The player can stand inside these materials 
 	private static final Set<Integer> AIR_MATERIALS = new HashSet<Integer>();
+	private static final HashSet<Byte> AIR_MATERIALS_TARGET = new HashSet<Byte>();
 	
 	static {
 		AIR_MATERIALS.add(Material.AIR.getId());
@@ -256,7 +259,21 @@ public class Util
 		AIR_MATERIALS.add(Material.MELON_STEM.getId());
 		AIR_MATERIALS.add(Material.VINE.getId());
 		//TODO: Add 1.9 materials
-				
+		
+		for (Integer integer : AIR_MATERIALS)
+		{
+			AIR_MATERIALS_TARGET.add(integer.byteValue());
+		}
+		AIR_MATERIALS_TARGET.add((byte)Material.WATER.getId());
+		AIR_MATERIALS_TARGET.add((byte)Material.STATIONARY_WATER.getId());
+	}
+	
+	public static Location getTarget(final LivingEntity entity) throws Exception {
+		final Block block = entity.getTargetBlock(AIR_MATERIALS_TARGET, 300);
+		if (block == null) {
+			throw new Exception("Not targeting a block");
+		}
+		return block.getLocation();
 	}
 	
 	public static Location getSafeDestination(final Location loc) throws Exception

@@ -1,13 +1,10 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.TargetBlock;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.TreeType;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
 
 
 public class Commandtree extends EssentialsCommand
@@ -20,7 +17,7 @@ public class Commandtree extends EssentialsCommand
 	@Override
 	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		Object tree = new Object();
+		TreeType tree;
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
@@ -46,9 +43,9 @@ public class Commandtree extends EssentialsCommand
 		{
 			8, 9
 		};		
-		final Location loc = (new TargetBlock(user, 300, 0.2, ignore)).getTargetBlock().getLocation();
+		final Location loc = Util.getTarget(user);
 		final Location safeLocation = Util.getSafeDestination(loc);
-		final boolean success = user.getWorld().generateTree(safeLocation, (TreeType)tree);
+		final boolean success = user.getWorld().generateTree(safeLocation, tree);
 		if (success)
 		{
 			user.sendMessage(Util.i18n("treeSpawned"));
