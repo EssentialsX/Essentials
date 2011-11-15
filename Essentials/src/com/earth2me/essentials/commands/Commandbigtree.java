@@ -1,6 +1,5 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.TargetBlock;
 import org.bukkit.Server;
 import org.bukkit.TreeType;
 import com.earth2me.essentials.User;
@@ -31,14 +30,10 @@ public class Commandbigtree extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-
-		final int[] ignore =
-		{
-			8, 9
-		};		
-		final Location loc = (new TargetBlock(user, 300, 0.2, ignore)).getTargetBlock().getLocation();
+		
+		final Location loc = Util.getTarget(user);
 		final Location safeLocation = Util.getSafeDestination(loc);
-		final boolean success = user.getWorld().generateTree(safeLocation, (TreeType)tree);
+		final boolean success = user.getWorld().generateTree(safeLocation, tree);
 		if (success)
 		{
 			user.sendMessage(Util.i18n("bigTreeSuccess"));

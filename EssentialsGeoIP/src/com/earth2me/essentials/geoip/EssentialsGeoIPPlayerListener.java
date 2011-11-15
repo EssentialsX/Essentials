@@ -79,7 +79,7 @@ public class EssentialsGeoIPPlayerListener extends PlayerListener implements ICo
 		{
 			u.setGeoLocation(sb.toString());
 		}
-		if (config.getBoolean("show-on-login", true))
+		if (config.getBoolean("show-on-login", true) && !u.isHidden())
 		{
 			for (Player player : event.getPlayer().getServer().getOnlinePlayers())
 			{

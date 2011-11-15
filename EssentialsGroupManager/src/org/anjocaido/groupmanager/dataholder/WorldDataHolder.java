@@ -881,6 +881,7 @@ public class WorldDataHolder {
         Map<String, Object> root = new HashMap<String, Object>();
 
         Map<String, Object> groupsMap = new HashMap<String, Object>();
+
         root.put("groups", groupsMap);
         for (String groupKey : ph.groups.keySet()) {
             Group group = ph.groups.get(groupKey);
@@ -910,10 +911,24 @@ public class WorldDataHolder {
 	        opt.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
 	        final Yaml yaml = new Yaml(opt);
 	        try {
-	            yaml.dump(root, new OutputStreamWriter(new FileOutputStream(groupsFile), "UTF-8"));
+	        	OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(groupsFile), "UTF-8");
+	        	
+	        	String newLine = System.getProperty("line.separator");
+	        	
+	        	out.write("# Group inheritance" + newLine);
+	        	out.write("# any inherited groups prefixed with a g: are global groups" + newLine);
+	        	out.write("# These groups are defined in the globalgroups.yml" + newLine);
+	        	out.write("# and can be inherited in any worlds groups/users.yml." + newLine);
+	        	out.write("#" + newLine);
+	        	out.write("# Groups without the g: prefix are groups local to this world" + newLine);
+	        	out.write("# and defined in the this groups.yml file." + newLine);
+	        	out.write(newLine);
+	        	
+	            yaml.dump(root, out);
 	        } catch (UnsupportedEncodingException ex) {
 	        } catch (FileNotFoundException ex) {
-	        }
+	        } catch (IOException e) {
+			}
         }
         
         // Update the LastModified time.
