@@ -31,7 +31,8 @@ public class Commandbanip extends EssentialsCommand
 		else
 		{
 			final String ipAddress = u.getLastLoginAddress();
-			if (ipAddress.length() == 0) {
+			if (ipAddress.length() == 0)
+			{
 				throw new Exception(Util.i18n("playerNotFound"));
 			}
 			ess.getServer().banIP(u.getLastLoginAddress());
