@@ -1,3 +1,11 @@
+# Group inheritance
+# any inherited groups prefixed with a g: are global groups
+# These groups are defined in the globalgroups.yml
+# and can be inherited in any worlds groups/users.yml.
+#
+# Groups without the g: prefix are groups local to this world
+# and defined in the this groups.yml file.
+
 groups:
   Default:
     default: true
