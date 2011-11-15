@@ -221,6 +221,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	@Override
 	public void onDisable()
 	{
+		Economy.setEss(null);
 		Trade.closeLog();
 	}
 
