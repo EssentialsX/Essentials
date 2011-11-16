@@ -21,10 +21,12 @@ public class Commandsudo extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		final User user = getPlayer(server, args, 0, true);
+		final User user = getPlayer(server, args, 0, false);
 		final String command = args[1];
-		String[] arguments = new String[args.length - 2];
-		System.arraycopy(args, 2, arguments, 0, args.length - 2);
+		final String[] arguments = new String[args.length - 2];
+		if (arguments.length > 0) {
+			System.arraycopy(args, 2, arguments, 0, args.length - 2);
+		}
 
 		//TODO: Translate this.
 		sender.sendMessage("Running the command as " + user.getDisplayName());
@@ -32,7 +34,7 @@ public class Commandsudo extends EssentialsCommand
 		final PluginCommand pc = ess.getServer().getPluginCommand(command);
 		if (pc != null)
 		{
-			pc.execute(user, command, arguments);
+			pc.execute(user.getBase(), command, arguments);
 		}
 
 	}
