@@ -38,7 +38,6 @@ public class Commandgamemode extends EssentialsCommand
 			}
 		}
 		player.setGameMode(player.getGameMode() == GameMode.SURVIVAL ? GameMode.CREATIVE : GameMode.SURVIVAL);
-		//TODO: add this to messages?
 		sender.sendMessage(Util.format("gameMode", Util.i18n(player.getGameMode().toString().toLowerCase()), player.getDisplayName()));
 	}
 }
