@@ -338,7 +338,7 @@ public class WorldDataHolder {
     		}
     		this.setDefaultGroup(this.getGroup(ph.getDefaultGroup().getName()));
     		this.removeGroupsChangedFlag();
-    		this.timeStampGroups = ph.getTimeStampGroups();
+    		this.timeStampGroups = getGroupsFile().lastModified();
     		
     		ph = null;
     	} catch (Exception ex) {
@@ -368,7 +368,7 @@ public class WorldDataHolder {
     			tempUser.clone(this);
     		}
     		this.removeUsersChangedFlag();
-    		this.timeStampUsers = ph.getTimeStampUsers();
+    		this.timeStampUsers = getUsersFile().lastModified();
     		
     		ph = null;
     	} catch (Exception ex) {
@@ -925,6 +925,7 @@ public class WorldDataHolder {
 	        	out.write(newLine);
 	        	
 	            yaml.dump(root, out);
+	            out.close();
 	        } catch (UnsupportedEncodingException ex) {
 	        } catch (FileNotFoundException ex) {
 	        } catch (IOException e) {
@@ -995,10 +996,13 @@ public class WorldDataHolder {
 	        opt.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
 	        final Yaml yaml = new Yaml(opt);
 	        try {
-	            yaml.dump(root, new OutputStreamWriter(new FileOutputStream(usersFile), "UTF-8"));
+	        	OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(usersFile), "UTF-8");
+	            yaml.dump(root, out);
+	            out.close();
 	        } catch (UnsupportedEncodingException ex) {
 	        } catch (FileNotFoundException ex) {
-	        }
+	        } catch (IOException e) {
+			}
         }
         
         // Update the LastModified time.
