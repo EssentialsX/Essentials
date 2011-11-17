@@ -85,7 +85,9 @@ public class EssentialsProtectBlockListener extends BlockListener
 			&& user.isAuthorized("essentials.protect"))
 		{
 			protect.add(blockPlaced);
-			if (prot.getSettingBool(ProtectConfig.protect_against_signs))
+			if (prot.getSettingBool(ProtectConfig.protect_against_signs)
+				&& event.getBlockAgainst().getType() != Material.SIGN_POST
+				&& event.getBlockAgainst().getType() != Material.WALL_SIGN)
 			{
 				protect.add(event.getBlockAgainst());
 			}
