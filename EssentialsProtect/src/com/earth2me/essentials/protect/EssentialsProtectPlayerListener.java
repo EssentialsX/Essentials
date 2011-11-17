@@ -25,10 +25,11 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerInteract(final PlayerInteractEvent event)
 	{
-		if (event.isCancelled())
+		// Do not return if cancelled, because the interact event has 2 cancelled states.
+		/*if (event.isCancelled())
 		{
 			return;
-		}
+		}*/
 		final User user = ess.getUser(event.getPlayer());
 
 		if (event.hasItem()
