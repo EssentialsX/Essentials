@@ -72,3 +72,4 @@ v 1.5:
 	- Fix for an error in checkFullUserPermission caused by players disconnecting mid perms update.
 	- Notification of being moved to the default group only happens if it's a demotion/promotion (not on join).
 	- Fixed GM holding files open and causing the time stamp to be incorrect. This caused GM to require a '/mansave force' when it shouldn't be needed.
+	- Fixed a crash on reload due to bukkit not unloading plugins before reloading.
