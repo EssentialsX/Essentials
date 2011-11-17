@@ -75,7 +75,8 @@ public class EssentialsProtectBlockListener extends BlockListener
 			&& user.isAuthorized("essentials.protect"))
 		{
 			protect.add(blockPlaced);
-			if (prot.getSettingBool(ProtectConfig.protect_below_rails))
+			if (prot.getSettingBool(ProtectConfig.protect_below_rails)
+				&& !prot.getStorage().isProtected(blockPlaced.getRelative(BlockFace.DOWN), user.getName()))
 			{
 				protect.add(blockPlaced.getRelative(BlockFace.DOWN));
 			}
@@ -87,7 +88,8 @@ public class EssentialsProtectBlockListener extends BlockListener
 			protect.add(blockPlaced);
 			if (prot.getSettingBool(ProtectConfig.protect_against_signs)
 				&& event.getBlockAgainst().getType() != Material.SIGN_POST
-				&& event.getBlockAgainst().getType() != Material.WALL_SIGN)
+				&& event.getBlockAgainst().getType() != Material.WALL_SIGN
+				&& !prot.getStorage().isProtected(event.getBlockAgainst(), user.getName()))
 			{
 				protect.add(event.getBlockAgainst());
 			}
