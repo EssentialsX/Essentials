@@ -274,6 +274,10 @@ commands:
     description: Spawns a mob.
     usage: /<command> <mob>[:data][,<mount>[:data]] [amount]
     aliases: [espawnmob]
+  sudo:
+    description: Make another user do something.
+    usage: /<command> <player> <command [args]>
+    aliases: [esudo]
   suicide:
     description: Causes you to perish.
     usage: /<command>

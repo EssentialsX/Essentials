@@ -130,6 +130,9 @@ public class GroupManager extends JavaPlugin {
 			throw new IllegalStateException("An error ocurred while loading GroupManager");
 		}
 
+		// Set a few defaults (reloads)
+		setLoaded(false);
+		
 		// Initialize the world listener and bukkit permissions to handle
 		// events.
 		WorldEvents = new GMWorldListener(this);
