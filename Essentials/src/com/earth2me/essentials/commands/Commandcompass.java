@@ -13,39 +13,39 @@ public class Commandcompass extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		int r = (int)(user.getLocation().getYaw() + 180 + 360) % 360;
+		final int bearing = (int)(user.getLocation().getYaw() + 180 + 360) % 360;
 		String dir;
-		if (r < 23)
+		if (bearing < 23)
 		{
 			dir = "N";
 		}
-		else if (r < 68)
+		else if (bearing < 68)
 		{
 			dir = "NE";
 		}
-		else if (r < 113)
+		else if (bearing < 113)
 		{
 			dir = "E";
 		}
-		else if (r < 158)
+		else if (bearing < 158)
 		{
 			dir = "SE";
 		}
-		else if (r < 203)
+		else if (bearing < 203)
 		{
 			dir = "S";
 		}
-		else if (r < 248)
+		else if (bearing < 248)
 		{
 			dir = "SW";
 		}
-		else if (r < 293)
+		else if (bearing < 293)
 		{
 			dir = "W";
 		}
-		else if (r < 338)
+		else if (bearing < 338)
 		{
 			dir = "NW";
 		}
@@ -53,6 +53,6 @@ public class Commandcompass extends EssentialsCommand
 		{
 			dir = "N";
 		}
-		user.sendMessage(Util.format("compassBearing", dir, r));
+		user.sendMessage(Util.format("compassBearing", dir, bearing));
 	}
 }

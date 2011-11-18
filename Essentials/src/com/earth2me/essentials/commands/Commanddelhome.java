@@ -14,25 +14,21 @@ public class Commanddelhome extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		//Allowing both formats /delhome khobbits house | /delhome khobbits:house
-		final String[] nameParts = args[0].split(":");
-		if (nameParts[0].length() != args[0].length())
-		{
-			args = nameParts;
-		}
+		final String[] expandedArgs = args[0].split(":");
 
 		User user = ess.getUser(sender);
 		String name;
-		if (args.length < 1)
+		if (expandedArgs.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		else if (args.length > 1 && (user == null || user.isAuthorized("essentials.delhome.others")))
+		else if (expandedArgs.length > 1 && (user == null || user.isAuthorized("essentials.delhome.others")))
 		{
-			user = getPlayer(server, args, 0, true);
-			name = args[1];
+			user = getPlayer(server, expandedArgs, 0, true);
+			name = expandedArgs[1];
 		}
 		else
 		{
@@ -40,7 +36,7 @@ public class Commanddelhome extends EssentialsCommand
 			{
 				throw new NotEnoughArgumentsException();
 			}
-			name = args[0];
+			name = expandedArgs[0];
 		}
 		user.delHome(name.toLowerCase());
 		sender.sendMessage(Util.format("deleteHome", name));

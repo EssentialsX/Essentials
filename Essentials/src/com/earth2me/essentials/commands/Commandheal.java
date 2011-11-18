@@ -16,7 +16,7 @@ public class Commandheal extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 
 		if (args.length > 0 && user.isAuthorized("essentials.heal.others"))
@@ -39,7 +39,7 @@ public class Commandheal extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -49,9 +49,9 @@ public class Commandheal extends EssentialsCommand
 		healOtherPlayers(server, sender, args[0]);
 	}
 
-	private void healOtherPlayers(Server server, CommandSender sender, String name)
+	private void healOtherPlayers(final Server server, final CommandSender sender, final String name)
 	{
-		List<Player> players = server.matchPlayer(name);
+		final List<Player> players = server.matchPlayer(name);
 		if (players.isEmpty())
 		{
 			sender.sendMessage(Util.i18n("playerNotFound"));

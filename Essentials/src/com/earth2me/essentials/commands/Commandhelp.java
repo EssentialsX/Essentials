@@ -30,6 +30,7 @@ public class Commandhelp extends EssentialsCommand
 		super("help");
 	}
 
+	//TODO: Update to use new text file and command parser classes
 	@Override
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{

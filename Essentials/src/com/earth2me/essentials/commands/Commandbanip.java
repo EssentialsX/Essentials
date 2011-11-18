@@ -21,21 +21,21 @@ public class Commandbanip extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		final User u = ess.getUser(args[0]);
+		final User player = ess.getUser(args[0]);
 
-		if (u == null)
+		if (player == null)
 		{
 			ess.getServer().banIP(args[0]);
 			sender.sendMessage(Util.i18n("banIpAddress"));
 		}
 		else
 		{
-			final String ipAddress = u.getLastLoginAddress();
+			final String ipAddress = player.getLastLoginAddress();
 			if (ipAddress.length() == 0)
 			{
 				throw new Exception(Util.i18n("playerNotFound"));
 			}
-			ess.getServer().banIP(u.getLastLoginAddress());
+			ess.getServer().banIP(player.getLastLoginAddress());
 			sender.sendMessage(Util.i18n("banIpAddress"));
 		}
 	}

@@ -13,9 +13,9 @@ public class Commandgetpos extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		Location coords = user.getLocation();
+		final Location coords = user.getLocation();
 		user.sendMessage("§7X: " + coords.getBlockX() + " (+East <-> -West)");
 		user.sendMessage("§7Y: " + coords.getBlockY() + " (+Up <-> -Down)");
 		user.sendMessage("§7Z: " + coords.getBlockZ() + " (+South <-> -North)");

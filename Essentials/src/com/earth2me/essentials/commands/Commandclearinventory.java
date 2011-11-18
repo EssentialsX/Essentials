@@ -15,6 +15,7 @@ public class Commandclearinventory extends EssentialsCommand
 		super("clearinventory");
 	}
 
+	//TODO: Cleanup
 	@Override
 	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
