@@ -36,7 +36,6 @@ import com.earth2me.essentials.signs.SignPlayerListener;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.command.PluginCommandYamlParser;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
@@ -240,120 +239,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 
 		Util.updateLocale(settings.getLocale(), this);
-
-		// for motd
-		getConfiguration().load();
-	}
-
-	@Override
-	public String[] getMotd(final CommandSender sender, final String def)
-	{
-		return getLines(sender, "motd", def);
-	}
-
-	@Override
-	public String[] getLines(final CommandSender sender, final String node, final String def)
-	{
-		List<String> lines = (List<String>)getConfiguration().getProperty(node);
-		if (lines == null)
-		{
-			return new String[0];
-		}
-		String[] retval = new String[lines.size()];
-
-		if (lines.isEmpty() || lines.get(0) == null)
-		{
-			try
-			{
-				lines = new ArrayList<String>();
-				// "[]" in YaML indicates empty array, so respect that
-				if (!getConfiguration().getString(node, def).equals("[]"))
-				{
-					lines.add(getConfiguration().getString(node, def));
-					retval = new String[lines.size()];
-				}
-			}
-			catch (Throwable ex2)
-			{
-				LOGGER.log(Level.WARNING, Util.format("corruptNodeInConfig", node));
-				return new String[0];
-			}
-		}
-
-		// if still empty, call it a day
-		if (lines == null || lines.isEmpty() || lines.get(0) == null)
-		{
-			return new String[0];
-		}
-
-		for (int i = 0; i < lines.size(); i++)
-		{
-			String m = lines.get(i);
-			if (m == null)
-			{
-				continue;
-			}
-			m = m.replace('&', '§').replace("§§", "&");
-
-			if (sender instanceof User || sender instanceof Player)
-			{
-				User user = getUser(sender);
-				m = m.replace("{PLAYER}", user.getDisplayName());
-				m = m.replace("{IP}", user.getAddress().toString());
-				m = m.replace("{BALANCE}", Double.toString(user.getMoney()));
-				m = m.replace("{MAILS}", Integer.toString(user.getMails().size()));
-				m = m.replace("{WORLD}", user.getLocation().getWorld().getName());
-			}
-			int playerHidden = 0;
-			for (Player p : getServer().getOnlinePlayers())
-			{
-				if (getUser(p).isHidden())
-				{
-					playerHidden++;
-				}
-			}
-			m = m.replace("{ONLINE}", Integer.toString(getServer().getOnlinePlayers().length - playerHidden));
-			m = m.replace("{UNIQUE}", Integer.toString(userMap.getUniqueUsers()));
-
-			if (m.matches(".*\\{PLAYERLIST\\}.*"))
-			{
-				StringBuilder online = new StringBuilder();
-				for (Player p : getServer().getOnlinePlayers())
-				{
-					if (getUser(p).isHidden())
-					{
-						continue;
-					}
-					if (online.length() > 0)
-					{
-						online.append(", ");
-					}
-					online.append(p.getDisplayName());
-				}
-				m = m.replace("{PLAYERLIST}", online.toString());
-			}
-
-			if (sender instanceof Player)
-			{
-				try
-				{
-					Class User = getClassLoader().loadClass("bukkit.Vandolis.User");
-					Object vuser = User.getConstructor(User.class).newInstance((Player)sender);
-					m = m.replace("{RED:BALANCE}", User.getMethod("getMoney").invoke(vuser).toString());
-					m = m.replace("{RED:BUYS}", User.getMethod("getNumTransactionsBuy").invoke(vuser).toString());
-					m = m.replace("{RED:SELLS}", User.getMethod("getNumTransactionsSell").invoke(vuser).toString());
-				}
-				catch (Throwable ex)
-				{
-					m = m.replace("{RED:BALANCE}", "N/A");
-					m = m.replace("{RED:BUYS}", "N/A");
-					m = m.replace("{RED:SELLS}", "N/A");
-				}
-			}
-
-			retval[i] = m + " ";
-		}
-		return retval;
 	}
 
 	@Override

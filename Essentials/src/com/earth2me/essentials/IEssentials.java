@@ -29,10 +29,6 @@ public interface IEssentials extends Plugin
 
 	BukkitScheduler getScheduler();
 
-	String[] getMotd(CommandSender sender, String def);
-
-	String[] getLines(CommandSender sender, String node, String def);
-
 	Jail getJail();
 
 	Warps getWarps();

@@ -1,0 +1,3 @@
+&cWelcome, {PLAYER}&c!
+&fType &c/help&f for a list of commands.
+Currently online: {PLAYERLIST}

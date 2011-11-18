@@ -85,19 +85,8 @@ spawnmob-limit: 10
 # Shall we notify users when using /lightning
 warn-on-smite: true
 
-# The message of the day, displayed on connect and by typing /motd.
-# Valid tags are: {PLAYER}, {IP}, {BALANCE}, {MAILS}, {WORLD}, {ONLINE}, {UNIQUE}, {PLAYERLIST}
-motd:
-  - '&cWelcome, {PLAYER}&c!'
-  - '&fType &c/help&f for a list of commands.'
-  - 'Currently online: {PLAYERLIST}'
+# motd and rules are now configured in the files motd.txt and rules.txt
 
-# The server rules, available by typing /rules
-rules:
-  - '[1] Be respectful'
-  - '[2] Be ethical'
-  - '[3] Use common sense'
-  
 # When a command conflicts with another plugin, by default, Essentials will try to force the OTHER plugin to take
 # priority.  If a command is in this list, Essentials will try to give ITSELF priority.  This does not always work:
 # usually whichever plugin was updated most recently wins out.  However, the full name of the command will always work.

@@ -1,0 +1,35 @@
+This is the info file.
+
+This file format works for the info.txt, motd.txt and rules.txt
+
+You can create a specific file for a user or a group:
+Name it info_username.txt or info_groupname.txt
+
+This also works with motd and rules.
+
+It can contain chapters like the Chapter1 below:
+
+#Chapter1
+Lines starting with # begin a new chapter
+The user has to type /info Chapter1 to read this chapter
+
+If the file starts with a # then the user is shown a chapter selection, 
+when he does not select a chapter.
+
+#Colors
+Minecraft colors:
+&0 &&0 &1 &&1 &2 &&2 &3 &&3
+&4 &&4 &5 &&5 &6 &&6 &7 &&7
+&8 &&8 &9 &&9 &a &&a &b &&b
+&c &&c &d &&d &e &&e &f &&f 
+
+#Tags
+PLAYER: {PLAYER}
+IP: {IP}
+BALANCE: {BALANCE}
+MAILS: {MAILS}
+WORLD: {WORLD}
+WORLDS: {WORLDS}
+ONLINE: {ONLINE}
+UNIQUE: {UNIQUE}
+PLAYERLIST: {PLAYERLIST}

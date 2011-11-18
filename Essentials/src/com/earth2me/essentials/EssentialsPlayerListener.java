@@ -1,5 +1,10 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.textreader.IText;
+import com.earth2me.essentials.textreader.KeywordReplacer;
+import com.earth2me.essentials.textreader.TextInput;
+import com.earth2me.essentials.textreader.TextPager;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -8,13 +13,10 @@ import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
-import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerAnimationType;
-import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -177,13 +179,16 @@ public class EssentialsPlayerListener extends PlayerListener
 
 		if (!ess.getSettings().isCommandDisabled("motd") && user.isAuthorized("essentials.motd"))
 		{
-			for (String m : ess.getMotd(user, null))
+			try
 			{
-				if (m == null)
-				{
-					continue;
-				}
-				user.sendMessage(m);
+				final IText input = new TextInput(user, "motd", true, ess);
+				final IText output = new KeywordReplacer(input, user, ess);
+				final TextPager pager = new TextPager(output, false);
+				pager.showPage("1", null, user);
+			}
+			catch (IOException ex)
+			{
+				LOGGER.log(Level.WARNING, ex.getMessage(), ex);
 			}
 		}
 

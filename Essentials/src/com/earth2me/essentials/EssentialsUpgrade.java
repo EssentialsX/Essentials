@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
@@ -74,6 +75,50 @@ public class EssentialsUpgrade
 				removeLinesFromConfig(configFile, "\\s*#?\\s*worth-[0-9]+.*", "# Worth values have been moved to worth.yml");
 			}
 			doneFile.setProperty("moveWorthValuesToWorthYml", true);
+			doneFile.save();
+		}
+		catch (Throwable e)
+		{
+			LOGGER.log(Level.SEVERE, Util.i18n("upgradingFilesError"), e);
+		}
+	}
+
+	private void moveMotdRulesToFile(String name)
+	{
+		if (doneFile.getBoolean("move"+name+"ToFile", false))
+		{
+			return;
+		}
+		try
+		{
+			final File file = new File(ess.getDataFolder(), name+".txt");
+			if (file.exists())
+			{
+				return;
+			}
+			final File configFile = new File(ess.getDataFolder(), "config.yml");
+			if (!configFile.exists())
+			{
+				return;
+			}
+			final EssentialsConf conf = new EssentialsConf(configFile);
+			conf.load();
+			List<String> lines = conf.getStringList(name, null);
+			if (lines != null && !lines.isEmpty())
+			{
+				if (!file.createNewFile())
+				{
+					throw new IOException("Failed to create file " + file);
+				}
+				PrintWriter writer = new PrintWriter(file);
+
+				for (String line : lines)
+				{
+					writer.println(line);
+				}
+				writer.close();
+			}
+			doneFile.setProperty("move"+name+"ToFile", true);
 			doneFile.save();
 		}
 		catch (Throwable e)
@@ -654,6 +699,8 @@ public class EssentialsUpgrade
 			ess.getDataFolder().mkdirs();
 		}
 		moveWorthValuesToWorthYml();
+		moveMotdRulesToFile("motd");
+		moveMotdRulesToFile("rules");
 	}
 
 	public void afterSettings()
