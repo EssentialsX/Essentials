@@ -94,11 +94,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 	{
 		execTimer = new ExecuteTimer();
 		execTimer.start();
-		final String[] javaversion = System.getProperty("java.version").split("\\.", 3);
-		if (javaversion == null || javaversion.length < 2 || Integer.parseInt(javaversion[1]) < 6)
-		{
-			LOGGER.log(Level.SEVERE, "Java version not supported! Please install Java 1.6. You have " + System.getProperty("java.version"));
-		}
 		final EssentialsUpgrade upgrade = new EssentialsUpgrade(this);
 		upgrade.beforeSettings();
 		execTimer.mark("Upgrade");
