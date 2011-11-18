@@ -60,6 +60,7 @@ public class Jail extends BlockListener implements IConf
 		return config.getKeys(null);
 	}
 
+	@Override
 	public void reloadConfig()
 	{
 		config.load();

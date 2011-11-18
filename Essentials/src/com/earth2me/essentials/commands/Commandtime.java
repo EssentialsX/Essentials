@@ -71,7 +71,6 @@ public class Commandtime extends EssentialsCommand
 		{
 			sender.sendMessage(Util.format("timeCurrentWorld", world.getName(), DescParseTickFormat.format(world.getTime())));
 		}
-		return;
 	}
 
 	/**
@@ -151,6 +150,7 @@ public class Commandtime extends EssentialsCommand
 
 class WorldNameComparator implements Comparator<World>
 {
+	@Override
 	public int compare(World a, World b)
 	{
 		return a.getName().compareTo(b.getName());

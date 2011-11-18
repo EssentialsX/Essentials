@@ -29,7 +29,7 @@ public class Commandafk extends EssentialsCommand
 		}
 	}
 
-	private final void toggleAfk(User user)
+	private void toggleAfk(User user)
 	{
 		if (!user.toggleAfk())
 		{

@@ -20,11 +20,13 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 		this.name = name;
 	}
 
+	@Override
 	public void setEssentials(final IEssentials ess)
 	{
 		this.ess = ess;
 	}
 
+	@Override
 	public String getName()
 	{
 		return name;

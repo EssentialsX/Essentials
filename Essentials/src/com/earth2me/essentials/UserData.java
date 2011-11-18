@@ -29,6 +29,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		reloadConfig();
 	}
 
+	@Override
 	public final void reloadConfig()
 	{
 		config.load();

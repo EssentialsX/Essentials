@@ -42,6 +42,7 @@ public class Commandbalancetop extends EssentialsCommand
 		final List<Map.Entry<User, Double>> sortedEntries = new ArrayList<Map.Entry<User, Double>>(balances.entrySet());
 		Collections.sort(sortedEntries, new Comparator<Map.Entry<User, Double>>()
 		{
+			@Override
 			public int compare(final Entry<User, Double> entry1, final Entry<User, Double> entry2)
 			{
 				return -entry1.getValue().compareTo(entry2.getValue());

@@ -99,6 +99,7 @@ public class EssentialsBlockListener extends BlockListener
 			ess.scheduleSyncDelayedTask(
 					new Runnable()
 					{
+				@Override
 						public void run()
 						{
 							user.getInventory().addItem(is);

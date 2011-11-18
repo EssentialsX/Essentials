@@ -375,6 +375,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		return now;
 	}
 
+	@Override
 	public boolean isHidden()
 	{
 		return hidden;

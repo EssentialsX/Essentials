@@ -95,6 +95,7 @@ public class Spawn implements IConf
 		return retval;
 	}
 
+	@Override
 	public void reloadConfig()
 	{
 		config.load();

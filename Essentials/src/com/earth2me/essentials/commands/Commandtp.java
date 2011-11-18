@@ -62,6 +62,5 @@ public class Commandtp extends EssentialsCommand
 		User toPlayer = getPlayer(server, args, 1);
 		target.getTeleport().now(toPlayer, false);
 		target.sendMessage(Util.format("teleportAtoB", Console.NAME, toPlayer.getDisplayName()));
-		return;
 	}
 }

@@ -32,7 +32,6 @@ public class Commandweather extends EssentialsCommand
 			user.sendMessage(isStorm
 							 ? Util.format("weatherStormFor", world.getName(), args[1])
 							 : Util.format("weatherSunFor", world.getName(), args[1]));
-			return;
 		}
 		else
 		{
@@ -40,7 +39,6 @@ public class Commandweather extends EssentialsCommand
 			user.sendMessage(isStorm
 							 ? Util.format("weatherStorm", world.getName())
 							 : Util.format("weatherSun", world.getName()));
-			return;
 		}
 	}
 
@@ -66,7 +64,6 @@ public class Commandweather extends EssentialsCommand
 			sender.sendMessage(isStorm
 							   ? Util.format("weatherStormFor", world.getName(), args[2])
 							   : Util.format("weatherSunFor", world.getName(), args[2]));
-			return;
 		}
 		else
 		{
@@ -74,7 +71,6 @@ public class Commandweather extends EssentialsCommand
 			sender.sendMessage(isStorm
 							   ? Util.format("weatherStorm", world.getName())
 							   : Util.format("weatherSun", world.getName()));
-			return;
 		}
 	}
 }

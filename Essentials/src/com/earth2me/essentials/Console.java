@@ -19,11 +19,13 @@ public final class Console implements IReplyTo
 		return server.getConsoleSender();
 	}
 
+	@Override
 	public void setReplyTo(CommandSender user)
 	{
 		replyTo = user;
 	}
 
+	@Override
 	public CommandSender getReplyTo()
 	{
 		return replyTo;

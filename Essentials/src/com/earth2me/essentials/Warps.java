@@ -85,6 +85,7 @@ public class Warps implements IConf
 		warpPoints.remove(new StringIgnoreCase(name));
 	}
 
+	@Override
 	public final void reloadConfig()
 	{
 		warpPoints.clear();

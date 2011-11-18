@@ -142,7 +142,6 @@ public class EssentialsConf extends Configuration
 		catch (IOException ex)
 		{
 			LOGGER.log(Level.SEVERE, Util.format("failedToWriteConfig", configFile.toString()), ex);
-			return;
 		}
 		finally
 		{

@@ -124,6 +124,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 		final Thread thread = new Thread(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				try
@@ -139,7 +140,6 @@ public class EssentialsPlayerListener extends PlayerListener
 				}
 				catch (InterruptedException ex)
 				{
-					return;
 				}
 			}
 		});
@@ -300,6 +300,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			event.getItemStack().setType(event.getBucket());
 			ess.scheduleSyncDelayedTask(new Runnable()
 			{
+				@Override
 				public void run()
 				{
 					user.updateInventory();

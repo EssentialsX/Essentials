@@ -52,6 +52,7 @@ public class Worth implements IConf
 		config.save();
 	}
 
+	@Override
 	public void reloadConfig()
 	{
 		config.load();
