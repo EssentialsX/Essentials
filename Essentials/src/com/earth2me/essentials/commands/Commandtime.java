@@ -86,11 +86,7 @@ public class Commandtime extends EssentialsCommand
 			world.setTime(time + 24000 + ticks);
 		}
 
-		// Inform the sender of the change
-		//sender.sendMessage("");
-
 		StringBuilder msg = new StringBuilder();
-		boolean first = true;
 		for (World world : worlds)
 		{
 			if (msg.length() > 0)

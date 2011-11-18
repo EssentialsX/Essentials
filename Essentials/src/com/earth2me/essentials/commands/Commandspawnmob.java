@@ -2,7 +2,6 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.Mob.MobException;
-import com.earth2me.essentials.TargetBlock;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.util.Random;
@@ -73,8 +72,9 @@ public class Commandspawnmob extends EssentialsCommand
 		{
 			8, 9
 		};
-		Block block = (new TargetBlock(user, 300, 0.2, ignore)).getTargetBlock();
-		if (block == null)
+		
+		final Block block = Util.getTarget(user).getBlock();
+				if (block == null)
 		{
 			throw new Exception(Util.i18n("unableToSpawnMob"));
 		}

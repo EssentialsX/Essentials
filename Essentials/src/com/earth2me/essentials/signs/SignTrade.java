@@ -284,6 +284,7 @@ public class SignTrade extends EssentialsSign
 		if (split.length == 3)
 		{
 			final int stackamount = getIntegerPositive(split[0]);
+			//TODO: Unused local variable
 			final ItemStack item = getItemStack(split[1], stackamount, ess);
 			final int amount = getInteger(split[2]);
 			final String newline = stackamount + " " + split[1] + ":" + (amount + Math.round(value));
