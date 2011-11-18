@@ -4,6 +4,8 @@ import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.register.payment.Method;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -20,6 +22,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	private transient long lastActivity = System.currentTimeMillis();
 	private boolean hidden = false;
 	private transient Location afkPosition;
+	private static final Logger logger = Logger.getLogger("Minecraft");
 
 	User(final Player base, final IEssentials ess)
 	{
@@ -284,7 +287,18 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public void setDisplayNick(String name)
 	{
 		setDisplayName(name);
-		setPlayerListName(name.length() > 16 ? name.substring(0, 16) : name);
+		if (name.length() > 16)
+		{
+			name = name.substring(0, name.charAt(15) == '§' ? 15 : 16);
+		}
+		try
+		{
+			setPlayerListName(name);
+		}
+		catch (IllegalArgumentException e)
+		{
+			logger.log(Level.INFO, "Playerlist for " + name + " was not updated. Use a shorter displayname prefix.");
+		}
 	}
 
 	@Override
