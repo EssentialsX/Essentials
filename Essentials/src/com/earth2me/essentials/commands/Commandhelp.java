@@ -101,6 +101,9 @@ public class Commandhelp extends EssentialsCommand
 				while (bufferedReader.ready())
 				{
 					final String line = bufferedReader.readLine();
+					if (line == null) {
+						break;
+					}
 					retval.add(line.replace('&', '§'));
 				}
 			}
