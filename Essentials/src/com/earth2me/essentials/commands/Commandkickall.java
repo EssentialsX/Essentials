@@ -16,15 +16,15 @@ public class Commandkickall extends EssentialsCommand
 	@Override
 	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
-		for (Player onlinePlaer : server.getOnlinePlayers())
+		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
-			if (sender instanceof Player && onlinePlaer.getName().equalsIgnoreCase(((Player)sender).getName()))
+			if (sender instanceof Player && onlinePlayer.getName().equalsIgnoreCase(((Player)sender).getName()))
 			{
 				continue;
 			}
 			else
 			{
-				onlinePlaer.kickPlayer(args.length > 0 ? getFinalArg(args, 0) : Util.i18n("kickDefault"));
+				onlinePlayer.kickPlayer(args.length > 0 ? getFinalArg(args, 0) : Util.i18n("kickDefault"));
 			}
 		}
 	}

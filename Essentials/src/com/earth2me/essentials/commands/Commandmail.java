@@ -16,20 +16,21 @@ public class Commandmail extends EssentialsCommand
 		super("mail");
 	}
 
+	//TODO: Tidy this up
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length >= 1 && "read".equalsIgnoreCase(args[0]))
 		{
-			List<String> mail = user.getMails();
+			final List<String> mail = user.getMails();
 			if (mail.isEmpty())
 			{
 				user.sendMessage(Util.i18n("noMail"));
 				throw new NoChargeException();
 			}
-			for (String s : mail)
+			for (String messages : mail)
 			{
-				user.sendMessage(s);
+				user.sendMessage(messages);
 			}
 			user.sendMessage(Util.i18n("mailClear"));
 			return;
