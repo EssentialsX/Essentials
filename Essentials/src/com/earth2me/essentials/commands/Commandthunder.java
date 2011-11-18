@@ -14,15 +14,15 @@ public class Commandthunder extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
 
-		World world = user.getWorld();
-		boolean setThunder = args[0].equalsIgnoreCase("true");
+		final World world = user.getWorld();
+		final boolean setThunder = args[0].equalsIgnoreCase("true");
 		if (args.length > 1)
 		{
 

@@ -13,7 +13,7 @@ public class Commandtptoggle extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		user.sendMessage(user.toggleTeleportEnabled()
 						 ? Util.i18n("teleportationEnabled")

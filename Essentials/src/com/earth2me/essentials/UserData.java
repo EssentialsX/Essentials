@@ -278,7 +278,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	public boolean hasPowerTools()
 	{
-		return powertools.size() > 0;
+		return !powertools.isEmpty();
 	}
 	private Location lastLocation;
 

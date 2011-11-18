@@ -15,27 +15,27 @@ public class Commandtppos extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 3)
 		{
 			throw new NotEnoughArgumentsException();
 		}
 
-		int x = Integer.parseInt(args[0]);
-		int y = Integer.parseInt(args[1]);
-		int z = Integer.parseInt(args[2]);
-		Location l = new Location(user.getWorld(), x, y, z);
+		final int x = Integer.parseInt(args[0]);
+		final int y = Integer.parseInt(args[1]);
+		final int z = Integer.parseInt(args[2]);
+		final Location location = new Location(user.getWorld(), x, y, z);
 		if (args.length > 3) {
-			l.setYaw(Float.parseFloat(args[3]));
+			location.setYaw(Float.parseFloat(args[3]));
 		}
 		if (args.length > 4) {
-			l.setPitch(Float.parseFloat(args[4]));
+			location.setPitch(Float.parseFloat(args[4]));
 		}
-		Trade charge = new Trade(this.getName(), ess);
+		final Trade charge = new Trade(this.getName(), ess);
 		charge.isAffordableFor(user);
 		user.sendMessage(Util.i18n("teleporting"));
-		user.getTeleport().teleport(l, charge);
+		user.getTeleport().teleport(location, charge);
 		throw new NoChargeException();
 	}
 }

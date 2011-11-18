@@ -67,12 +67,7 @@ public class Commandspawnmob extends EssentialsCommand
 		{
 			throw new Exception(Util.i18n("unableToSpawnMob"));
 		}
-
-		int[] ignore =
-		{
-			8, 9
-		};
-		
+	
 		final Block block = Util.getTarget(user).getBlock();
 				if (block == null)
 		{
@@ -211,7 +206,7 @@ public class Commandspawnmob extends EssentialsCommand
 		}
 		if ("Wolf".equalsIgnoreCase(type) && data.equalsIgnoreCase("tamed"))
 		{
-			Wolf wolf = ((Wolf)spawned);
+			final Wolf wolf = ((Wolf)spawned);
 			wolf.setTamed(true);
 			wolf.setOwner(user);
 			wolf.setSitting(true);

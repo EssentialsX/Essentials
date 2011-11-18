@@ -15,11 +15,11 @@ public class Commandtop extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		int topX = user.getLocation().getBlockX();
-		int topZ = user.getLocation().getBlockZ();
-		int topY = user.getWorld().getHighestBlockYAt(topX, topZ);
+		final int topX = user.getLocation().getBlockX();
+		final int topZ = user.getLocation().getBlockZ();
+		final int topY = user.getWorld().getHighestBlockYAt(topX, topZ);
 		user.getTeleport().teleport(new Location(user.getWorld(), user.getLocation().getX(), topY + 1, user.getLocation().getZ()), new Trade(this.getName(), ess));
 		user.sendMessage(Util.i18n("teleportTop"));
 	}

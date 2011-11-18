@@ -16,7 +16,7 @@ public class Commandtp extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		switch (args.length)
 		{
@@ -24,25 +24,25 @@ public class Commandtp extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 
 		case 1:
-			User p = getPlayer(server, args, 0);
-			if (!p.isTeleportEnabled())
+			final User player = getPlayer(server, args, 0);
+			if (!player.isTeleportEnabled())
 			{
-				throw new Exception(Util.format("teleportDisabled", p.getDisplayName()));
+				throw new Exception(Util.format("teleportDisabled", player.getDisplayName()));
 			}
 			user.sendMessage(Util.i18n("teleporting"));
-			Trade charge = new Trade(this.getName(), ess);
+			final Trade charge = new Trade(this.getName(), ess);
 			charge.isAffordableFor(user);
-			user.getTeleport().teleport(p, charge);
+			user.getTeleport().teleport(player, charge);
 			throw new NoChargeException();
 
-		case 2:
+		default:
 			if (!user.isAuthorized("essentials.tpohere"))
 			{
 				throw new Exception("You need access to /tpohere to teleport other players.");
 			}
 			user.sendMessage(Util.i18n("teleporting"));
-			User target = getPlayer(server, args, 0);
-			User toPlayer = getPlayer(server, args, 1);
+			final User target = getPlayer(server, args, 0);
+			final User toPlayer = getPlayer(server, args, 1);
 			target.getTeleport().now(toPlayer, false);
 			target.sendMessage(Util.format("teleportAtoB", user.getDisplayName(), toPlayer.getDisplayName()));
 			break;
@@ -50,7 +50,7 @@ public class Commandtp extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 2)
 		{
@@ -58,8 +58,8 @@ public class Commandtp extends EssentialsCommand
 		}
 
 		sender.sendMessage(Util.i18n("teleporting"));
-		User target = getPlayer(server, args, 0);
-		User toPlayer = getPlayer(server, args, 1);
+		final User target = getPlayer(server, args, 0);
+		final User toPlayer = getPlayer(server, args, 1);
 		target.getTeleport().now(toPlayer, false);
 		target.sendMessage(Util.format("teleportAtoB", Console.NAME, toPlayer.getDisplayName()));
 	}

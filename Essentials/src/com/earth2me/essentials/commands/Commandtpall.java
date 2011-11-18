@@ -15,7 +15,7 @@ public class Commandtpall extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -27,23 +27,23 @@ public class Commandtpall extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		User p = getPlayer(server, args, 0);
-		teleportAllPlayers(server, sender, p);
+		final User player = getPlayer(server, args, 0);
+		teleportAllPlayers(server, sender, player);
 	}
 
-	private void teleportAllPlayers(Server server, CommandSender sender, User p)
+	private void teleportAllPlayers(Server server, CommandSender sender, User user)
 	{
 		sender.sendMessage(Util.i18n("teleportAll"));
-		for (Player player : server.getOnlinePlayers())
+		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
-			User u = ess.getUser(player);
-			if (p == u)
+			final User player = ess.getUser(onlinePlayer);
+			if (user == player)
 			{
 				continue;
 			}
 			try
 			{
-				u.getTeleport().now(p, false);
+				player.getTeleport().now(user, false);
 			}
 			catch (Exception ex)
 			{

@@ -23,8 +23,8 @@ public class Commandtempban extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		final User player = getPlayer(server, args, 0, true);
-		if (player.getBase() instanceof OfflinePlayer)
+		final User user = getPlayer(server, args, 0, true);
+		if (user.getBase() instanceof OfflinePlayer)
 		{
 			if (sender instanceof Player
 				&& !ess.getUser(sender).isAuthorized("essentials.tempban.offline"))
@@ -35,7 +35,7 @@ public class Commandtempban extends EssentialsCommand
 		}
 		else
 		{
-			if (player.isAuthorized("essentials.tempban.exempt"))
+			if (user.isAuthorized("essentials.tempban.exempt"))
 			{
 				sender.sendMessage(Util.i18n("tempbanExempt"));
 				return;
@@ -45,18 +45,18 @@ public class Commandtempban extends EssentialsCommand
 		final long banTimestamp = Util.parseDateDiff(time, true);
 
 		final String banReason = Util.format("tempBanned", Util.formatDateDiff(banTimestamp));
-		player.setBanReason(banReason);
-		player.setBanTimeout(banTimestamp);
-		player.setBanned(true);
-		player.kickPlayer(banReason);
-		String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
+		user.setBanReason(banReason);
+		user.setBanTimeout(banTimestamp);
+		user.setBanned(true);
+		user.kickPlayer(banReason);
+		final String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
 		
-		for(Player p : server.getOnlinePlayers())
+		for(Player onlinePlayer : server.getOnlinePlayers())
 		{
-			User u = ess.getUser(p);
-			if(u.isAuthorized("essentials.ban.notify"))
+			final User player = ess.getUser(onlinePlayer);
+			if(player.isAuthorized("essentials.ban.notify"))
 			{
-			p.sendMessage(Util.format("playerBanned", senderName, player.getName(), banReason));
+			onlinePlayer.sendMessage(Util.format("playerBanned", senderName, user.getName(), banReason));
 			}
 		}
 	}

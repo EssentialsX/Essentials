@@ -21,7 +21,7 @@ public class Commandwarp extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length == 0 || args[0].matches("[0-9]+"))
 		{
@@ -51,7 +51,7 @@ public class Commandwarp extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 2 || args[0].matches("[0-9]+"))
 		{
@@ -68,9 +68,9 @@ public class Commandwarp extends EssentialsCommand
 
 	}
 
-	private void warpList(CommandSender sender, String[] args) throws Exception
+	private void warpList(final CommandSender sender, final String[] args) throws Exception
 	{
-		Warps warps = ess.getWarps();
+		final Warps warps = ess.getWarps();
 		if (warps.isEmpty())
 		{
 			throw new Exception(Util.i18n("noWarpsDefined"));
@@ -108,9 +108,9 @@ public class Commandwarp extends EssentialsCommand
 		}
 	}
 
-	private void warpUser(User user, String name) throws Exception
+	private void warpUser(final User user, final String name) throws Exception
 	{
-		Trade charge = new Trade(this.getName(), ess);
+		final Trade charge = new Trade(this.getName(), ess);
 		charge.isAffordableFor(user);
 		if (ess.getSettings().getPerWarpPermission())
 		{

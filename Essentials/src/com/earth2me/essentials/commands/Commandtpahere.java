@@ -13,21 +13,21 @@ public class Commandtpahere extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
 
-		User p = getPlayer(server, args, 0);
-		if (!p.isTeleportEnabled())
+		final User player = getPlayer(server, args, 0);
+		if (!player.isTeleportEnabled())
 		{
-			throw new Exception(Util.format("teleportDisabled", p.getDisplayName()));
+			throw new Exception(Util.format("teleportDisabled", player.getDisplayName()));
 		}
-		p.requestTeleport(user, true);
-		p.sendMessage(Util.format("teleportHereRequest", user.getDisplayName()));
-		p.sendMessage(Util.i18n("typeTpaccept"));
-		user.sendMessage(Util.format("requestSent", p.getDisplayName()));
+		player.requestTeleport(user, true);
+		player.sendMessage(Util.format("teleportHereRequest", user.getDisplayName()));
+		player.sendMessage(Util.i18n("typeTpaccept"));
+		user.sendMessage(Util.format("requestSent", player.getDisplayName()));
 	}
 }

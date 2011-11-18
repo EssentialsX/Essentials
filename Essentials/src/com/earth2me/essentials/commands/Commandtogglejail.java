@@ -16,18 +16,18 @@ public class Commandtogglejail extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
 
-		User p = getPlayer(server, args, 0, true);
+		final User player = getPlayer(server, args, 0, true);
 
-		if (args.length >= 2 && !p.isJailed())
+		if (args.length >= 2 && !player.isJailed())
 		{
-			if (p.getBase() instanceof OfflinePlayer)
+			if (player.getBase() instanceof OfflinePlayer)
 			{
 				if (sender instanceof Player
 					&& !ess.getUser(sender).isAuthorized("essentials.togglejail.offline"))
@@ -38,68 +38,68 @@ public class Commandtogglejail extends EssentialsCommand
 			}
 			else
 			{
-				if (p.isAuthorized("essentials.jail.exempt"))
+				if (player.isAuthorized("essentials.jail.exempt"))
 				{
 					sender.sendMessage(Util.i18n("mayNotJail"));
 					return;
 				}
 			}
-			if (!(p.getBase() instanceof OfflinePlayer))
+			if (!(player.getBase() instanceof OfflinePlayer))
 			{
-				ess.getJail().sendToJail(p, args[1]);
+				ess.getJail().sendToJail(player, args[1]);
 			}
 			else
 			{
 				// Check if jail exists
 				ess.getJail().getJail(args[1]);
 			}
-			p.setJailed(true);
-			p.sendMessage(Util.i18n("userJailed"));
-			p.setJail(null);
-			p.setJail(args[1]);
+			player.setJailed(true);
+			player.sendMessage(Util.i18n("userJailed"));
+			player.setJail(null);
+			player.setJail(args[1]);
 			long timeDiff = 0;
 			if (args.length > 2)
 			{
-				String time = getFinalArg(args, 2);
+				final String time = getFinalArg(args, 2);
 				timeDiff = Util.parseDateDiff(time, true);
-				p.setJailTimeout(timeDiff);
+				player.setJailTimeout(timeDiff);
 			}
 			sender.sendMessage((timeDiff > 0
-								? Util.format("playerJailedFor", p.getName(), Util.formatDateDiff(timeDiff))
-								: Util.format("playerJailed", p.getName())));
+								? Util.format("playerJailedFor", player.getName(), Util.formatDateDiff(timeDiff))
+								: Util.format("playerJailed", player.getName())));
 			return;
 		}
 
-		if (args.length >= 2 && p.isJailed() && !args[1].equalsIgnoreCase(p.getJail()))
+		if (args.length >= 2 && player.isJailed() && !args[1].equalsIgnoreCase(player.getJail()))
 		{
-			sender.sendMessage(Util.format("jailAlreadyIncarcerated", p.getJail()));
+			sender.sendMessage(Util.format("jailAlreadyIncarcerated", player.getJail()));
 			return;
 		}
 
-		if (args.length >= 2 && p.isJailed() && args[1].equalsIgnoreCase(p.getJail()))
+		if (args.length >= 2 && player.isJailed() && args[1].equalsIgnoreCase(player.getJail()))
 		{
-			String time = getFinalArg(args, 2);
-			long timeDiff = Util.parseDateDiff(time, true);
-			p.setJailTimeout(timeDiff);
+			final String time = getFinalArg(args, 2);
+			final long timeDiff = Util.parseDateDiff(time, true);
+			player.setJailTimeout(timeDiff);
 			sender.sendMessage(Util.format("jailSentenceExtended", Util.formatDateDiff(timeDiff)));
 			return;
 		}
 
-		if (args.length == 1 || (args.length == 2 && args[1].equalsIgnoreCase(p.getJail())))
+		if (args.length == 1 || (args.length == 2 && args[1].equalsIgnoreCase(player.getJail())))
 		{
-			if (!p.isJailed())
+			if (!player.isJailed())
 			{
 				throw new NotEnoughArgumentsException();
 			}
-			p.setJailed(false);
-			p.setJailTimeout(0);
-			p.sendMessage(Util.format("jailReleasedPlayerNotify"));
-			p.setJail(null);
-			if (!(p.getBase() instanceof OfflinePlayer))
+			player.setJailed(false);
+			player.setJailTimeout(0);
+			player.sendMessage(Util.format("jailReleasedPlayerNotify"));
+			player.setJail(null);
+			if (!(player.getBase() instanceof OfflinePlayer))
 			{
-				p.getTeleport().back();
+				player.getTeleport().back();
 			}
-			sender.sendMessage(Util.format("jailReleased", p.getName()));
+			sender.sendMessage(Util.format("jailReleased", player.getName()));
 		}
 	}
 }

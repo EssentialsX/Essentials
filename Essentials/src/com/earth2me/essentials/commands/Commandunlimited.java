@@ -17,7 +17,7 @@ public class Commandunlimited extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -33,17 +33,17 @@ public class Commandunlimited extends EssentialsCommand
 
 		if (args[0].equalsIgnoreCase("list"))
 		{
-			String list = getList(target);
+			final String list = getList(target);
 			user.sendMessage(list);
 		}
 		else if (args[0].equalsIgnoreCase("clear"))
 		{
-			List<Integer> itemList = target.getUnlimited();
+			final List<Integer> itemList = target.getUnlimited();
 
 			int index = 0;
 			while (itemList.size() > index)
 			{
-				Integer item = itemList.get(index);
+				final Integer item = itemList.get(index);
 				if (toggleUnlimited(user, target, item.toString()) == false)
 				{
 					index++;
@@ -56,36 +56,36 @@ public class Commandunlimited extends EssentialsCommand
 		}
 	}
 
-	private String getList(User target)
+	private String getList(final User target)
 	{
-		StringBuilder sb = new StringBuilder();
-		sb.append(Util.i18n("unlimitedItems")).append(" ");
+		final StringBuilder output = new StringBuilder();
+		output.append(Util.i18n("unlimitedItems")).append(" ");
 		boolean first = true;
-		List<Integer> items = target.getUnlimited();
+		final List<Integer> items = target.getUnlimited();
 		if (items.isEmpty())
 		{
-			sb.append(Util.i18n("none"));
+			output.append(Util.i18n("none"));
 		}
 		for (Integer integer : items)
 		{
 			if (!first)
 			{
-				sb.append(", ");
+				output.append(", ");
 			}
 			first = false;
-			String matname = Material.getMaterial(integer).toString().toLowerCase().replace("_", "");
-			sb.append(matname);
+			final String matname = Material.getMaterial(integer).toString().toLowerCase().replace("_", "");
+			output.append(matname);
 		}
 
-		return sb.toString();
+		return output.toString();
 	}
 
-	private Boolean toggleUnlimited(User user, User target, String item) throws Exception
+	private Boolean toggleUnlimited(final User user, final User target, final String item) throws Exception
 	{
-		ItemStack stack = ess.getItemDb().get(item, 1);
+		final ItemStack stack = ess.getItemDb().get(item, 1);
 		stack.setAmount(Math.min(stack.getType().getMaxStackSize(), 2));
 
-		String itemname = stack.getType().toString().toLowerCase().replace("_", "");
+		final String itemname = stack.getType().toString().toLowerCase().replace("_", "");
 		if (ess.getSettings().permissionBasedItemSpawn()
 			&& (!user.isAuthorized("essentials.unlimited.item-all")
 				&& !user.isAuthorized("essentials.unlimited.item-" + itemname)
