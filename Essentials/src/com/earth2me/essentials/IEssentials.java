@@ -56,6 +56,8 @@ public interface IEssentials extends Plugin
 	TNTExplodeListener getTNTListener();
 
 	PermissionsHandler getPermissionsHandler();
+	
+	AlternativeCommandsHandler getAlternativeCommandsHandler();
 
 	void showError(final CommandSender sender, final Throwable exception, final String commandLabel);
 

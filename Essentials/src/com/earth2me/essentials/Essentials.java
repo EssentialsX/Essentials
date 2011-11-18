@@ -60,6 +60,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private transient ItemDb itemDb;
 	private transient final Methods paymentMethod = new Methods();
 	private transient PermissionsHandler permissionsHandler;
+	private transient AlternativeCommandsHandler alternativeCommandsHandler;
 	private transient UserMap userMap;
 	private transient ExecuteTimer execTimer;
 
@@ -149,6 +150,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 
 		permissionsHandler = new PermissionsHandler(this, settings.useBukkitPermissions());
+		alternativeCommandsHandler = new AlternativeCommandsHandler(this);
 		final EssentialsPluginListener serverListener = new EssentialsPluginListener(this);
 		pm.registerEvent(Type.PLUGIN_ENABLE, serverListener, Priority.Low, this);
 		pm.registerEvent(Type.PLUGIN_DISABLE, serverListener, Priority.Low, this);
@@ -366,68 +368,11 @@ public class Essentials extends JavaPlugin implements IEssentials
 		// Allow plugins to override the command via onCommand
 		if (!getSettings().isCommandOverridden(command.getName()) && !commandLabel.startsWith("e"))
 		{
-			for (Plugin p : getServer().getPluginManager().getPlugins())
+			final PluginCommand pc = alternativeCommandsHandler.getAlternative(commandLabel);
+			if (pc != null)
 			{
-				if (p.getDescription().getMain().contains("com.earth2me.essentials"))
-				{
-					continue;
-				}
-
-				final PluginDescriptionFile desc = p.getDescription();
-				if (desc == null)
-				{
-					continue;
-				}
-
-				if (desc.getName() == null)
-				{
-					continue;
-				}
-
-				final PluginCommand pc = getServer().getPluginCommand(desc.getName().toLowerCase() + ":" + commandLabel);
-				if (pc != null)
-				{
-					LOGGER.info("Essentials: Alternative command " + commandLabel + " found, using " + desc.getName().toLowerCase() + ":" + commandLabel);
-					return pc.execute(sender, commandLabel, args);
-				}
-			}
-			for (Plugin p : getServer().getPluginManager().getPlugins())
-			{
-				if (p.getDescription().getMain().contains("com.earth2me.essentials"))
-				{
-					continue;
-				}
-				final List<Command> commands = PluginCommandYamlParser.parse(p);
-				for (Command c : commands)
-				{
-					if (c.getAliases().contains(commandLabel))
-					{
-						final PluginDescriptionFile desc = p.getDescription();
-						if (desc == null)
-						{
-							continue;
-						}
-
-						if (desc.getName() == null)
-						{
-							continue;
-						}
-
-						final PluginCommand pc = getServer().getPluginCommand(desc.getName().toLowerCase() + ":" + c.getName().toLowerCase());
-						if (pc != null)
-						{
-							LOGGER.info("Essentials: Alternative alias " + commandLabel + " found, using " + desc.getName().toLowerCase() + ":" + c.getName().toLowerCase());
-							return pc.execute(sender, commandLabel, args);
-						}
-
-						final PluginCommand pc2 = getServer().getPluginCommand(c.getName().toLowerCase());
-						if (pc2 != null)
-						{
-							LOGGER.info("Essentials: Alternative alias " + commandLabel + " found, using " + c.getName().toLowerCase());
-							return pc2.execute(sender, commandLabel, args);
-						}
-					}
-				}
+				LOGGER.info("Essentials: Alternative command " + commandLabel + " found, using " + pc.getLabel());
+				return pc.execute(sender, commandLabel, args);
 			}
 		}
 
@@ -701,6 +646,12 @@ public class Essentials extends JavaPlugin implements IEssentials
 	public PermissionsHandler getPermissionsHandler()
 	{
 		return permissionsHandler;
+	}
+
+	@Override
+	public AlternativeCommandsHandler getAlternativeCommandsHandler()
+	{
+		return alternativeCommandsHandler;
 	}
 
 	@Override
