@@ -1,24 +1,27 @@
 package com.earth2me.essentials;
 
-import com.google.common.base.Function;
-import com.google.common.collect.ComputationException;
-import com.google.common.collect.MapMaker;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.collect.ConcurrentHashMultiset;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 
-public class UserMap implements Function<String, User>, IConf
+public class UserMap extends CacheLoader<String, User> implements IConf
 {
 	private final transient IEssentials ess;
-	private final transient ConcurrentMap<String, User> users = new MapMaker().softValues().makeComputingMap(this);
+	private final transient Cache<String, User> users = CacheBuilder.newBuilder().softValues().build(this);
+	private final transient ConcurrentHashMultiset<String> keys = ConcurrentHashMultiset.create();
 
 	public UserMap(final IEssentials ess)
 	{
+		super();
 		this.ess = ess;
 		loadAllUsersAsync(ess);
 	}
@@ -35,6 +38,8 @@ public class UserMap implements Function<String, User>, IConf
 				{
 					return;
 				}
+				keys.clear();
+				users.invalidateAll();
 				for (String string : userdir.list())
 				{
 					if (!string.endsWith(".yml"))
@@ -42,18 +47,7 @@ public class UserMap implements Function<String, User>, IConf
 						continue;
 					}
 					final String name = string.substring(0, string.length() - 4);
-					try
-					{
-						users.get(name.toLowerCase());
-					}
-					catch (NullPointerException ex)
-					{
-						// Ignore these
-					}
-					catch (ComputationException ex)
-					{
-						Bukkit.getLogger().log(Level.INFO, "Failed to preload user " + name, ex);
-					}
+					keys.add(name.toLowerCase());
 				}
 			}
 		});
@@ -61,21 +55,29 @@ public class UserMap implements Function<String, User>, IConf
 
 	public boolean userExists(final String name)
 	{
-		return users.containsKey(name.toLowerCase());
+		return keys.contains(name.toLowerCase());
 	}
 
 	public User getUser(final String name) throws NullPointerException
 	{
-		return users.get(name.toLowerCase());
+		try
+		{
+			return users.get(name.toLowerCase());
+		}
+		catch (ExecutionException ex)
+		{
+			throw new NullPointerException();
+		}
 	}
 
 	@Override
-	public User apply(final String name)
+	public User load(final String name) throws Exception
 	{
 		for (Player player : ess.getServer().getOnlinePlayers())
 		{
 			if (player.getName().equalsIgnoreCase(name))
 			{
+				keys.add(name.toLowerCase());
 				return new User(player, ess);
 			}
 		}
@@ -83,37 +85,43 @@ public class UserMap implements Function<String, User>, IConf
 		final File userFile = new File(userFolder, Util.sanitizeFileName(name) + ".yml");
 		if (userFile.exists())
 		{
+			keys.add(name.toLowerCase());
 			return new User(new OfflinePlayer(name, ess), ess);
 		}
-		return null;
+		throw new Exception("User not found!");
 	}
 
 	@Override
 	public void reloadConfig()
 	{
-		for (User user : users.values())
-		{
-			user.reloadConfig();
-		}
+		loadAllUsersAsync(ess);
 	}
 
 	public void removeUser(final String name)
 	{
-		users.remove(name.toLowerCase());
+		keys.remove(name.toLowerCase());
+		users.invalidate(name.toLowerCase());
 	}
 
 	public Set<User> getAllUsers()
 	{
 		final Set<User> userSet = new HashSet<User>();
-		for (String name : users.keySet())
+		for (String name : keys)
 		{
-			userSet.add(users.get(name));
+			try
+			{
+				userSet.add(users.get(name));
+			}
+			catch (ExecutionException ex)
+			{
+				Bukkit.getLogger().log(Level.INFO, "Failed to load user " + name, ex);
+			}
 		}
 		return userSet;
 	}
 
 	public int getUniqueUsers()
 	{
-		return users.size();
+		return keys.size();
 	}
 }
