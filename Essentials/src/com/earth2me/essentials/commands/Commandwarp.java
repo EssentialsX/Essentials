@@ -55,7 +55,7 @@ public class Commandwarp extends EssentialsCommand
 	{
 		if (args.length < 2 || args[0].matches("[0-9]+"))
 		{
-			warpList(null, args);
+			warpList(sender, args);
 			throw new NoChargeException();
 		}
 		User otherUser = ess.getUser(server.getPlayer(args[1]));
@@ -68,7 +68,7 @@ public class Commandwarp extends EssentialsCommand
 
 	}
 
-	private void warpList(User user, String[] args) throws Exception
+	private void warpList(CommandSender sender, String[] args) throws Exception
 	{
 		Warps warps = ess.getWarps();
 		if (warps.isEmpty())
@@ -77,13 +77,13 @@ public class Commandwarp extends EssentialsCommand
 		}
 		final List<String> warpNameList = new ArrayList<String>(warps.getWarpNames());
 
-		if (user != null)
+		if (sender instanceof User)
 		{
 			final Iterator<String> iterator = warpNameList.iterator();
 			while (iterator.hasNext())
 			{
 				final String warpName = iterator.next();
-				if (ess.getSettings().getPerWarpPermission() && !user.isAuthorized("essentials.warp." + warpName))
+				if (ess.getSettings().getPerWarpPermission() && !((User)sender).isAuthorized("essentials.warp." + warpName))
 				{
 					iterator.remove();
 				}
@@ -100,11 +100,11 @@ public class Commandwarp extends EssentialsCommand
 
 		if (warpNameList.size() > WARPS_PER_PAGE)
 		{
-			user.sendMessage(Util.format("warpsCount", warpNameList.size(), page, (int)Math.ceil(warpNameList.size() / (double)WARPS_PER_PAGE)));
-			user.sendMessage(warpList);
+			sender.sendMessage(Util.format("warpsCount", warpNameList.size(), page, (int)Math.ceil(warpNameList.size() / (double)WARPS_PER_PAGE)));
+			sender.sendMessage(warpList);
 		}
 		else {
-			user.sendMessage(Util.format("warps", warpList));
+			sender.sendMessage(Util.format("warps", warpList));
 		}
 	}
 
