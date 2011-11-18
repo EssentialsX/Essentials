@@ -36,6 +36,7 @@ import com.earth2me.essentials.signs.SignPlayerListener;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.command.PluginCommandYamlParser;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
@@ -383,10 +384,49 @@ public class Essentials extends JavaPlugin implements IEssentials
 					continue;
 				}
 
-				final PluginCommand pc = getServer().getPluginCommand(desc.getName() + ":" + commandLabel);
+				final PluginCommand pc = getServer().getPluginCommand(desc.getName().toLowerCase() + ":" + commandLabel);
 				if (pc != null)
 				{
+					LOGGER.info("Essentials: Alternative command " + commandLabel + " found, using " + desc.getName().toLowerCase() + ":" + commandLabel);
 					return pc.execute(sender, commandLabel, args);
+				}
+			}
+			for (Plugin p : getServer().getPluginManager().getPlugins())
+			{
+				if (p.getDescription().getMain().contains("com.earth2me.essentials"))
+				{
+					continue;
+				}
+				final List<Command> commands = PluginCommandYamlParser.parse(p);
+				for (Command c : commands)
+				{
+					if (c.getAliases().contains(commandLabel))
+					{
+						final PluginDescriptionFile desc = p.getDescription();
+						if (desc == null)
+						{
+							continue;
+						}
+
+						if (desc.getName() == null)
+						{
+							continue;
+						}
+
+						final PluginCommand pc = getServer().getPluginCommand(desc.getName().toLowerCase() + ":" + c.getName().toLowerCase());
+						if (pc != null)
+						{
+							LOGGER.info("Essentials: Alternative alias " + commandLabel + " found, using " + desc.getName().toLowerCase() + ":" + c.getName().toLowerCase());
+							return pc.execute(sender, commandLabel, args);
+						}
+
+						final PluginCommand pc2 = getServer().getPluginCommand(c.getName().toLowerCase());
+						if (pc2 != null)
+						{
+							LOGGER.info("Essentials: Alternative alias " + commandLabel + " found, using " + c.getName().toLowerCase());
+							return pc2.execute(sender, commandLabel, args);
+						}
+					}
 				}
 			}
 		}
