@@ -1,12 +1,17 @@
 package com.earth2me.essentials;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 public class ExecuteTimer
 {
-	private final List<ExecuteRecord> times;
+	private final transient List<ExecuteRecord> times;
+	private final transient DecimalFormat decimalFormat = new DecimalFormat("#0.000", DecimalFormatSymbols.getInstance(Locale.US));
+
 
 	public ExecuteTimer()
 	{
@@ -24,7 +29,7 @@ public class ExecuteTimer
 	{
 		if (!times.isEmpty() || "start".equals(label))
 		{
-			times.add(new ExecuteRecord(label, System.currentTimeMillis()));
+			times.add(new ExecuteRecord(label, System.nanoTime()));
 		}
 	}
 
@@ -36,7 +41,7 @@ public class ExecuteTimer
 		long time0 = 0;
 		long time1 = 0;
 		long time2 = 0;
-		long duration;
+		double duration;
 
 		for (ExecuteRecord pair : times)
 		{
@@ -44,8 +49,8 @@ public class ExecuteTimer
 			time2 = (Long)pair.getTime();
 			if (time1 > 0)
 			{
-				duration = time2 - time1;
-				output.append(mark).append(": ").append(duration).append("ms - ");
+				duration = (time2 - time1)/1000000.0;
+				output.append(mark).append(": ").append(decimalFormat.format(duration)).append("ms - ");
 			}
 			else
 			{
@@ -53,8 +58,8 @@ public class ExecuteTimer
 			}
 			time1 = time2;
 		}
-		duration = time1 - time0;
-		output.append("Total: ").append(duration).append("ms");
+		duration = (time1 - time0)/1000000.0;
+		output.append("Total: ").append(decimalFormat.format(duration)).append("ms");
 		times.clear();
 		return output.toString();
 	}
