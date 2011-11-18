@@ -1,7 +1,7 @@
 package com.earth2me.essentials.register.payment.methods;
 
-import com.earth2me.essentials.register.payment.Method;
 
+import com.earth2me.essentials.register.payment.Method;
 import cosine.boseconomy.BOSEconomy;
 import org.bukkit.plugin.Plugin;
 

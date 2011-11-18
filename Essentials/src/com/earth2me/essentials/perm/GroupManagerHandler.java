@@ -1,12 +1,12 @@
 package com.earth2me.essentials.perm;
 
+
 import java.util.Arrays;
 import java.util.List;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.permissions.AnjoPermissionsHandler;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 
 public class GroupManagerHandler implements IPermissionsHandler

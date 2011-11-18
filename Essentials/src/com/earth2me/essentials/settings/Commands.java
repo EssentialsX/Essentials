@@ -1,12 +1,6 @@
 package com.earth2me.essentials.settings;
 
-import com.earth2me.essentials.settings.commands.Afk;
-import com.earth2me.essentials.settings.commands.God;
-import com.earth2me.essentials.settings.commands.Help;
-import com.earth2me.essentials.settings.commands.Home;
-import com.earth2me.essentials.settings.commands.Kit;
-import com.earth2me.essentials.settings.commands.Lightning;
-import com.earth2me.essentials.settings.commands.Spawnmob;
+import com.earth2me.essentials.settings.commands.*;
 import com.earth2me.essentials.storage.Comment;
 import com.earth2me.essentials.storage.ListType;
 import com.earth2me.essentials.storage.StorageObject;

@@ -1,17 +1,12 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
+import java.util.*;
+import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import org.bukkit.ChatColor;
 
 
 public class Commandlist extends EssentialsCommand

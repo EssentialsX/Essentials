@@ -1,6 +1,5 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;

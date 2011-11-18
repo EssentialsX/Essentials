@@ -1,10 +1,10 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.TreeType;
-import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 
 
 public class Commandtree extends EssentialsCommand

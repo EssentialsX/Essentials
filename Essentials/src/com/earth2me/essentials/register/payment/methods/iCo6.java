@@ -1,12 +1,12 @@
 package com.earth2me.essentials.register.payment.methods;
 
+
+
 import com.earth2me.essentials.register.payment.Method;
 import com.iCo6.iConomy;
 import com.iCo6.system.Account;
 import com.iCo6.system.Accounts;
 import com.iCo6.system.Holdings;
-
-
 import org.bukkit.plugin.Plugin;
 
 

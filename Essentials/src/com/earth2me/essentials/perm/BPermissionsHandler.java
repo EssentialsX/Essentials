@@ -1,9 +1,9 @@
 package com.earth2me.essentials.perm;
 
 import de.bananaco.permissions.Permissions;
+import de.bananaco.permissions.info.InfoReader;
 import de.bananaco.permissions.interfaces.PermissionSet;
 import de.bananaco.permissions.worlds.WorldPermissionsManager;
-import de.bananaco.permissions.info.InfoReader;
 import java.util.List;
 import org.bukkit.entity.Player;
 

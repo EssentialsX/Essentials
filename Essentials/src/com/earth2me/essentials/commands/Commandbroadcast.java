@@ -3,7 +3,6 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 
 public class Commandbroadcast extends EssentialsCommand

@@ -1,9 +1,9 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Trade;
-import org.bukkit.Server;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import org.bukkit.Server;
 
 
 public class Commandtphere extends EssentialsCommand

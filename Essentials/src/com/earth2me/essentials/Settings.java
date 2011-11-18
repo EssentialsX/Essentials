@@ -1,13 +1,13 @@
 package com.earth2me.essentials;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.bukkit.ChatColor;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
 

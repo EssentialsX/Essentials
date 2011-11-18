@@ -7,7 +7,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.CraftServer;
 
 
 public class Backup implements Runnable

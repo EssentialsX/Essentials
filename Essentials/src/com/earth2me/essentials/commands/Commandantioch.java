@@ -1,10 +1,9 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import org.bukkit.Location;
 import org.bukkit.Server;
-import com.earth2me.essentials.User;
-import com.earth2me.essentials.TargetBlock;
-import com.earth2me.essentials.Util;
 import org.bukkit.entity.TNTPrimed;
 
 

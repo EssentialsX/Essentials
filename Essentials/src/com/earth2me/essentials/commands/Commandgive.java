@@ -1,10 +1,10 @@
 package com.earth2me.essentials.commands;
 
-import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.User;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 

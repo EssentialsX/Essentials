@@ -1,6 +1,5 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.Util;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.TextInput;

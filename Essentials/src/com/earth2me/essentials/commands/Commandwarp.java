@@ -1,13 +1,13 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Trade;
-import org.bukkit.Server;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.Warps;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
 

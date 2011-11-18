@@ -1,15 +1,6 @@
 package com.earth2me.essentials;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.math.BigInteger;
 import java.security.DigestInputStream;
 import java.security.DigestOutputStream;

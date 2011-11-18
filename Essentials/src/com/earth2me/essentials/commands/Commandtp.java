@@ -1,10 +1,10 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.Console;
-import org.bukkit.Server;
+import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
 

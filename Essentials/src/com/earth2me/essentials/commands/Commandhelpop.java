@@ -1,10 +1,10 @@
 package com.earth2me.essentials.commands;
 
-import org.bukkit.Server;
-import org.bukkit.entity.Player;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.util.logging.Level;
+import org.bukkit.Server;
+import org.bukkit.entity.Player;
 
 
 public class Commandhelpop extends EssentialsCommand

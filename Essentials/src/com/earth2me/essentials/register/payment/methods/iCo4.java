@@ -1,10 +1,10 @@
 package com.earth2me.essentials.register.payment.methods;
 
+
+
 import com.earth2me.essentials.register.payment.Method;
 import com.nijiko.coelho.iConomy.iConomy;
 import com.nijiko.coelho.iConomy.system.Account;
-
-
 import org.bukkit.plugin.Plugin;
 
 

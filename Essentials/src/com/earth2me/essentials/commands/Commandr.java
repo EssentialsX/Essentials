@@ -4,7 +4,7 @@ import com.earth2me.essentials.Console;
 import com.earth2me.essentials.IReplyTo;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
-import org.bukkit.*;
+import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
