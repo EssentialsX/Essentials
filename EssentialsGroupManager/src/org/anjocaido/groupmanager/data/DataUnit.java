@@ -39,7 +39,9 @@ public abstract class DataUnit {
     public boolean equals(Object o) {
         if (o instanceof DataUnit) {
             DataUnit go = (DataUnit) o;
-            if (this.getName().equalsIgnoreCase(go.getName()) && this.dataSource.getName().equalsIgnoreCase(go.getDataSource().getName())) {
+            if (this.getName().equalsIgnoreCase(go.getName())
+            		&& ((this.dataSource == null && go.getDataSource() == null)
+            		|| (this.dataSource.getName().equalsIgnoreCase(go.getDataSource().getName())))) {
                 return true;
             }
         }
