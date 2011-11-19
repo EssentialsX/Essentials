@@ -1,10 +1,10 @@
 package com.earth2me.essentials.commands;
 
-import org.bukkit.Server;
-import org.bukkit.TreeType;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import org.bukkit.Location;
+import org.bukkit.Server;
+import org.bukkit.TreeType;
 
 
 public class Commandbigtree extends EssentialsCommand
@@ -15,7 +15,7 @@ public class Commandbigtree extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		TreeType tree;
 		if (args.length > 0 && args[0].equalsIgnoreCase("redwood"))
@@ -30,7 +30,7 @@ public class Commandbigtree extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		
+
 		final Location loc = Util.getTarget(user);
 		final Location safeLocation = Util.getSafeDestination(loc);
 		final boolean success = user.getWorld().generateTree(safeLocation, tree);

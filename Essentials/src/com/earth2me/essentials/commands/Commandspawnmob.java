@@ -1,20 +1,15 @@
 package com.earth2me.essentials.commands;
 
-import org.bukkit.Location;
-import org.bukkit.Server;
-import com.earth2me.essentials.User;
 import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.Mob.MobException;
-import com.earth2me.essentials.TargetBlock;
+import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.util.Random;
 import org.bukkit.DyeColor;
+import org.bukkit.Location;
+import org.bukkit.Server;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Creeper;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Sheep;
-import org.bukkit.entity.Slime;
-import org.bukkit.entity.Wolf;
+import org.bukkit.entity.*;
 
 
 public class Commandspawnmob extends EssentialsCommand
@@ -72,13 +67,9 @@ public class Commandspawnmob extends EssentialsCommand
 		{
 			throw new Exception(Util.i18n("unableToSpawnMob"));
 		}
-
-		int[] ignore =
-		{
-			8, 9
-		};
-		Block block = (new TargetBlock(user, 300, 0.2, ignore)).getTargetBlock();
-		if (block == null)
+	
+		final Block block = Util.getTarget(user).getBlock();
+				if (block == null)
 		{
 			throw new Exception(Util.i18n("unableToSpawnMob"));
 		}
@@ -215,7 +206,7 @@ public class Commandspawnmob extends EssentialsCommand
 		}
 		if ("Wolf".equalsIgnoreCase(type) && data.equalsIgnoreCase("tamed"))
 		{
-			Wolf wolf = ((Wolf)spawned);
+			final Wolf wolf = ((Wolf)spawned);
 			wolf.setTamed(true);
 			wolf.setOwner(user);
 			wolf.setSitting(true);

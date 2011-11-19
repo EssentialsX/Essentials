@@ -1,8 +1,8 @@
 package com.earth2me.essentials.commands;
 
-import org.bukkit.Server;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -15,7 +15,7 @@ public class Commandext extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -26,7 +26,7 @@ public class Commandext extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -38,12 +38,12 @@ public class Commandext extends EssentialsCommand
 		extinguishPlayers(server, user, commandLabel);
 	}
 
-	private void extinguishPlayers(Server server, CommandSender sender, String name) throws Exception
+	private void extinguishPlayers(final Server server, final CommandSender sender, final String name) throws Exception
 	{
-		for (Player p : server.matchPlayer(name))
+		for (Player matchPlayer : server.matchPlayer(name))
 		{
-			p.setFireTicks(0);
-			sender.sendMessage(Util.format("extinguishOthers", p.getDisplayName()));
+			matchPlayer.setFireTicks(0);
+			sender.sendMessage(Util.format("extinguishOthers", matchPlayer.getDisplayName()));
 		}
 	}
 }

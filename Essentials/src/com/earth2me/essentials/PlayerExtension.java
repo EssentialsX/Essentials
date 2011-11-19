@@ -1,11 +1,11 @@
 package com.earth2me.essentials;
 
 import lombok.Delegate;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import net.minecraft.server.EntityPlayer;
 import net.minecraft.server.IInventory;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.inventory.CraftInventoryPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;

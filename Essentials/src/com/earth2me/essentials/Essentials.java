@@ -19,12 +19,6 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.api.Economy;
 import com.earth2me.essentials.commands.EssentialsCommand;
-import java.io.*;
-import java.util.*;
-import java.util.logging.*;
-import org.bukkit.*;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
@@ -33,14 +27,29 @@ import com.earth2me.essentials.register.payment.Methods;
 import com.earth2me.essentials.signs.SignBlockListener;
 import com.earth2me.essentials.signs.SignEntityListener;
 import com.earth2me.essentials.signs.SignPlayerListener;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.bukkit.Server;
+import org.bukkit.World;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
-import org.bukkit.plugin.*;
-import org.bukkit.plugin.java.*;
+import org.bukkit.plugin.InvalidDescriptionException;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
 
@@ -59,6 +68,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private transient ItemDb itemDb;
 	private transient final Methods paymentMethod = new Methods();
 	private transient PermissionsHandler permissionsHandler;
+	private transient AlternativeCommandsHandler alternativeCommandsHandler;
 	private transient UserMap userMap;
 	private transient ExecuteTimer execTimer;
 
@@ -93,11 +103,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 	{
 		execTimer = new ExecuteTimer();
 		execTimer.start();
-		final String[] javaversion = System.getProperty("java.version").split("\\.", 3);
-		if (javaversion == null || javaversion.length < 2 || Integer.parseInt(javaversion[1]) < 6)
-		{
-			LOGGER.log(Level.SEVERE, "Java version not supported! Please install Java 1.6. You have " + System.getProperty("java.version"));
-		}
 		final EssentialsUpgrade upgrade = new EssentialsUpgrade(this);
 		upgrade.beforeSettings();
 		execTimer.mark("Upgrade");
@@ -148,6 +153,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 
 		permissionsHandler = new PermissionsHandler(this, settings.useBukkitPermissions());
+		alternativeCommandsHandler = new AlternativeCommandsHandler(this);
 		final EssentialsPluginListener serverListener = new EssentialsPluginListener(this);
 		pm.registerEvent(Type.PLUGIN_ENABLE, serverListener, Priority.Low, this);
 		pm.registerEvent(Type.PLUGIN_DISABLE, serverListener, Priority.Low, this);
@@ -237,120 +243,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 
 		Util.updateLocale(settings.getLocale(), this);
-
-		// for motd
-		getConfiguration().load();
-	}
-
-	@Override
-	public String[] getMotd(final CommandSender sender, final String def)
-	{
-		return getLines(sender, "motd", def);
-	}
-
-	@Override
-	public String[] getLines(final CommandSender sender, final String node, final String def)
-	{
-		List<String> lines = (List<String>)getConfiguration().getProperty(node);
-		if (lines == null)
-		{
-			return new String[0];
-		}
-		String[] retval = new String[lines.size()];
-
-		if (lines.isEmpty() || lines.get(0) == null)
-		{
-			try
-			{
-				lines = new ArrayList<String>();
-				// "[]" in YaML indicates empty array, so respect that
-				if (!getConfiguration().getString(node, def).equals("[]"))
-				{
-					lines.add(getConfiguration().getString(node, def));
-					retval = new String[lines.size()];
-				}
-			}
-			catch (Throwable ex2)
-			{
-				LOGGER.log(Level.WARNING, Util.format("corruptNodeInConfig", node));
-				return new String[0];
-			}
-		}
-
-		// if still empty, call it a day
-		if (lines == null || lines.isEmpty() || lines.get(0) == null)
-		{
-			return new String[0];
-		}
-
-		for (int i = 0; i < lines.size(); i++)
-		{
-			String m = lines.get(i);
-			if (m == null)
-			{
-				continue;
-			}
-			m = m.replace('&', '§').replace("§§", "&");
-
-			if (sender instanceof User || sender instanceof Player)
-			{
-				User user = getUser(sender);
-				m = m.replace("{PLAYER}", user.getDisplayName());
-				m = m.replace("{IP}", user.getAddress().toString());
-				m = m.replace("{BALANCE}", Double.toString(user.getMoney()));
-				m = m.replace("{MAILS}", Integer.toString(user.getMails().size()));
-				m = m.replace("{WORLD}", user.getLocation().getWorld().getName());
-			}
-			int playerHidden = 0;
-			for (Player p : getServer().getOnlinePlayers())
-			{
-				if (getUser(p).isHidden())
-				{
-					playerHidden++;
-				}
-			}
-			m = m.replace("{ONLINE}", Integer.toString(getServer().getOnlinePlayers().length - playerHidden));
-			m = m.replace("{UNIQUE}", Integer.toString(userMap.getUniqueUsers()));
-
-			if (m.matches(".*\\{PLAYERLIST\\}.*"))
-			{
-				StringBuilder online = new StringBuilder();
-				for (Player p : getServer().getOnlinePlayers())
-				{
-					if (getUser(p).isHidden())
-					{
-						continue;
-					}
-					if (online.length() > 0)
-					{
-						online.append(", ");
-					}
-					online.append(p.getDisplayName());
-				}
-				m = m.replace("{PLAYERLIST}", online.toString());
-			}
-
-			if (sender instanceof Player)
-			{
-				try
-				{
-					Class User = getClassLoader().loadClass("bukkit.Vandolis.User");
-					Object vuser = User.getConstructor(User.class).newInstance((Player)sender);
-					m = m.replace("{RED:BALANCE}", User.getMethod("getMoney").invoke(vuser).toString());
-					m = m.replace("{RED:BUYS}", User.getMethod("getNumTransactionsBuy").invoke(vuser).toString());
-					m = m.replace("{RED:SELLS}", User.getMethod("getNumTransactionsSell").invoke(vuser).toString());
-				}
-				catch (Throwable ex)
-				{
-					m = m.replace("{RED:BALANCE}", "N/A");
-					m = m.replace("{RED:BUYS}", "N/A");
-					m = m.replace("{RED:SELLS}", "N/A");
-				}
-			}
-
-			retval[i] = m + " ";
-		}
-		return retval;
 	}
 
 	@Override
@@ -365,29 +257,11 @@ public class Essentials extends JavaPlugin implements IEssentials
 		// Allow plugins to override the command via onCommand
 		if (!getSettings().isCommandOverridden(command.getName()) && !commandLabel.startsWith("e"))
 		{
-			for (Plugin p : getServer().getPluginManager().getPlugins())
+			final PluginCommand pc = alternativeCommandsHandler.getAlternative(commandLabel);
+			if (pc != null)
 			{
-				if (p.getDescription().getMain().contains("com.earth2me.essentials"))
-				{
-					continue;
-				}
-
-				final PluginDescriptionFile desc = p.getDescription();
-				if (desc == null)
-				{
-					continue;
-				}
-
-				if (desc.getName() == null)
-				{
-					continue;
-				}
-
-				final PluginCommand pc = getServer().getPluginCommand(desc.getName() + ":" + commandLabel);
-				if (pc != null)
-				{
-					return pc.execute(sender, commandLabel, args);
-				}
+				LOGGER.info("Essentials: Alternative command " + commandLabel + " found, using " + pc.getLabel());
+				return pc.execute(sender, commandLabel, args);
 			}
 		}
 
@@ -661,6 +535,12 @@ public class Essentials extends JavaPlugin implements IEssentials
 	public PermissionsHandler getPermissionsHandler()
 	{
 		return permissionsHandler;
+	}
+
+	@Override
+	public AlternativeCommandsHandler getAlternativeCommandsHandler()
+	{
+		return alternativeCommandsHandler;
 	}
 
 	@Override

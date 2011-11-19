@@ -1,9 +1,9 @@
 package com.earth2me.essentials.commands;
 
-import org.bukkit.Server;
+
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
-
+import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
@@ -15,15 +15,16 @@ public class Commandworth extends EssentialsCommand
 		super("worth");
 	}
 
+	//TODO: Remove duplication
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		ItemStack is = user.getInventory().getItemInHand();
-		int amount = is.getAmount();
+		ItemStack iStack = user.getInventory().getItemInHand();
+		int amount = iStack.getAmount();
 
 		if (args.length > 0)
 		{
-			is = ess.getItemDb().get(args[0]);
+			iStack = ess.getItemDb().get(args[0]);
 		}
 
 		try
@@ -35,40 +36,40 @@ public class Commandworth extends EssentialsCommand
 		}
 		catch (NumberFormatException ex)
 		{
-			amount = is.getType().getMaxStackSize();
+			amount = iStack.getType().getMaxStackSize();
 		}
 
-		is.setAmount(amount);
-		double worth = ess.getWorth().getPrice(is);
+		iStack.setAmount(amount);
+		final double worth = ess.getWorth().getPrice(iStack);
 		if (Double.isNaN(worth))
 		{
 			throw new Exception(Util.i18n("itemCannotBeSold"));
 		}
 
-		user.sendMessage(is.getDurability() != 0
+		user.sendMessage(iStack.getDurability() != 0
 						 ? Util.format("worthMeta",
-									   is.getType().toString().toLowerCase().replace("_", ""),
-									   is.getDurability(),
+									   iStack.getType().toString().toLowerCase().replace("_", ""),
+									   iStack.getDurability(),
 									   Util.formatCurrency(worth * amount, ess),
 									   amount,
 									   Util.formatCurrency(worth, ess))
 						 : Util.format("worth",
-									   is.getType().toString().toLowerCase().replace("_", ""),
+									   iStack.getType().toString().toLowerCase().replace("_", ""),
 									   Util.formatCurrency(worth * amount, ess),
 									   amount,
 									   Util.formatCurrency(worth, ess)));
 	}
 
 	@Override
-	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
 
-		ItemStack is = ess.getItemDb().get(args[0]);
-		int amount = is.getAmount();
+		ItemStack iStack = ess.getItemDb().get(args[0]);
+		int amount = iStack.getAmount();
 
 		try
 		{
@@ -79,25 +80,25 @@ public class Commandworth extends EssentialsCommand
 		}
 		catch (NumberFormatException ex)
 		{
-			amount = is.getType().getMaxStackSize();
+			amount = iStack.getType().getMaxStackSize();
 		}
 
-		is.setAmount(amount);
-		double worth = ess.getWorth().getPrice(is);
+		iStack.setAmount(amount);
+		final double worth = ess.getWorth().getPrice(iStack);
 		if (Double.isNaN(worth))
 		{
 			throw new Exception(Util.i18n("itemCannotBeSold"));
 		}
 
-		sender.sendMessage(is.getDurability() != 0
+		sender.sendMessage(iStack.getDurability() != 0
 						   ? Util.format("worthMeta",
-										 is.getType().toString().toLowerCase().replace("_", ""),
-										 is.getDurability(),
+										 iStack.getType().toString().toLowerCase().replace("_", ""),
+										 iStack.getDurability(),
 										 Util.formatCurrency(worth * amount, ess),
 										 amount,
 										 Util.formatCurrency(worth, ess))
 						   : Util.format("worth",
-										 is.getType().toString().toLowerCase().replace("_", ""),
+										 iStack.getType().toString().toLowerCase().replace("_", ""),
 										 Util.formatCurrency(worth * amount, ess),
 										 amount,
 										 Util.formatCurrency(worth, ess)));

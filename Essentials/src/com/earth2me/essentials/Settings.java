@@ -1,13 +1,13 @@
 package com.earth2me.essentials;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.bukkit.ChatColor;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -466,6 +466,7 @@ public class Settings implements ISettings
 	}
 	private final static double MAXMONEY = 10000000000000.0;
 
+	@Override
 	public double getMaxMoney()
 	{
 		double max = config.getDouble("max-money", MAXMONEY);
@@ -476,36 +477,43 @@ public class Settings implements ISettings
 		return max;
 	}
 
+	@Override
 	public boolean isEcoLogEnabled()
 	{
 		return config.getBoolean("economy-log-enabled", false);
 	}
 
+	@Override
 	public boolean removeGodOnDisconnect()
 	{
 		return config.getBoolean("remove-god-on-disconnect", false);
 	}
 
+	@Override
 	public boolean changeDisplayName()
 	{
 		return config.getBoolean("change-displayname", true);
 	}
 
+	@Override
 	public boolean useBukkitPermissions()
 	{
 		return config.getBoolean("use-bukkit-permissions", false);
 	}
 
+	@Override
 	public boolean addPrefixSuffix()
 	{
 		return config.getBoolean("add-prefix-suffix", ess.getServer().getPluginManager().isPluginEnabled("EssentialsChat"));
 	}
 	
+	@Override
 	public boolean disablePrefix()
 	{
 		return config.getBoolean("disablePrefix", false);
 	}
 	
+	@Override
 	public boolean disableSuffix()
 	{
 		return config.getBoolean("disableSuffix", false);

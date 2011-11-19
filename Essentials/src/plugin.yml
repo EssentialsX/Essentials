@@ -275,7 +275,7 @@ commands:
     usage: /<command> <mob>[:data][,<mount>[:data]] [amount]
     aliases: [espawnmob]
   sudo:
-    description: Make another user do something.
+    description: Make another user perform a command.
     usage: /<command> <player> <command [args]>
     aliases: [esudo]
   suicide:
@@ -309,7 +309,7 @@ commands:
   tpa:
     description: Request to teleport to the specified player.
     usage: /<command> <player>
-    aliases: [call,etpa,ecal]
+    aliases: [call,etpa,ecall]
   tpaall:
     description: Requests all players online to teleport to you.
     usage: /<command> <player>

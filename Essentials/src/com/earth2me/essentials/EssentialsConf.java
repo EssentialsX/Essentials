@@ -1,12 +1,6 @@
 package com.earth2me.essentials;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -148,7 +142,6 @@ public class EssentialsConf extends Configuration
 		catch (IOException ex)
 		{
 			LOGGER.log(Level.SEVERE, Util.format("failedToWriteConfig", configFile.toString()), ex);
-			return;
 		}
 		finally
 		{

@@ -80,6 +80,7 @@ public class Commandessentials extends EssentialsCommand
 			{
 				int i = 0;
 
+				@Override
 				public void run()
 				{
 					final String note = tune[i];
@@ -93,14 +94,14 @@ public class Commandessentials extends EssentialsCommand
 						return;
 					}
 					Map<Player, Block> noteBlocks = Commandessentials.this.noteBlocks;
-					for (Player player : server.getOnlinePlayers())
+					for (Player onlinePlayer : server.getOnlinePlayers())
 					{
-						Block block = noteBlocks.get(player);
+						final Block block = noteBlocks.get(onlinePlayer);
 						if (block == null || block.getType() != Material.NOTE_BLOCK)
 						{
 							continue;
 						}
-						player.playNote(block.getLocation(), (byte)0, noteMap.get(note));
+						onlinePlayer.playNote(block.getLocation(), (byte)0, noteMap.get(note));
 					}
 				}
 			}, 20, 2);

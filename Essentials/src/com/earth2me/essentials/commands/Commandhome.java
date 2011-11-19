@@ -1,10 +1,10 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Trade;
-import org.bukkit.Server;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.util.List;
+import org.bukkit.Server;
 
 
 public class Commandhome extends EssentialsCommand
@@ -15,11 +15,11 @@ public class Commandhome extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		Trade charge = new Trade(this.getName(), ess);
+		final Trade charge = new Trade(this.getName(), ess);
 		charge.isAffordableFor(user);
-		User u = user;
+		User player = user;
 		String homeName = "";
 		String[] nameParts;
 		if (args.length > 0)
@@ -31,7 +31,7 @@ public class Commandhome extends EssentialsCommand
 			}
 			else
 			{
-				u = getPlayer(server, nameParts[0].split(" "), 0, true);
+				player = getPlayer(server, nameParts[0].split(" "), 0, true);
 				if (nameParts.length > 1)
 				{
 					homeName = nameParts[1];
@@ -40,22 +40,22 @@ public class Commandhome extends EssentialsCommand
 		}
 		try
 		{
-			user.getTeleport().home(u, homeName.toLowerCase(), charge);
+			user.getTeleport().home(player, homeName.toLowerCase(), charge);
 		}
 		catch (NotEnoughArgumentsException e)
 		{
-			List<String> homes = u.getHomes();
-			if (homes.isEmpty() && u.equals(user) && ess.getSettings().spawnIfNoHome())
+			final List<String> homes = player.getHomes();
+			if (homes.isEmpty() && player.equals(user) && ess.getSettings().spawnIfNoHome())
 			{
-				user.getTeleport().respawn(ess.getSpawn(), charge);				
+				user.getTeleport().respawn(ess.getSpawn(), charge);
 			}
 			else if (homes.isEmpty())
 			{
-				throw new Exception(u == user ? Util.i18n("noHomeSet") : Util.i18n("noHomeSetPlayer"));
+				throw new Exception(player == user ? Util.i18n("noHomeSet") : Util.i18n("noHomeSetPlayer"));
 			}
-			else if (homes.size() == 1 && u.equals(user))
+			else if (homes.size() == 1 && player.equals(user))
 			{
-				user.getTeleport().home(u, homes.get(0), charge);
+				user.getTeleport().home(player, homes.get(0), charge);
 			}
 			else
 			{

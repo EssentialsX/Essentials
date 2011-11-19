@@ -1,10 +1,10 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Console;
-import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
@@ -14,30 +14,30 @@ public class Commandkick extends EssentialsCommand
 	{
 		super("kick");
 	}
-	
+
 	@Override
-	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		
-		User player = getPlayer(server, args, 0);
-		if (player.isAuthorized("essentials.kick.exempt"))
+
+		final User user = getPlayer(server, args, 0);
+		if (user.isAuthorized("essentials.kick.exempt"))
 		{
 			throw new Exception(Util.i18n("kickExempt"));
 		}
 		final String kickReason = args.length > 1 ? getFinalArg(args, 1) : Util.i18n("kickDefault");
-		player.kickPlayer(kickReason);
-		String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
-		
-		for(Player p : server.getOnlinePlayers())
+		user.kickPlayer(kickReason);
+		final String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
+
+		for(Player onlinePlayer : server.getOnlinePlayers())
 		{
-			User u = ess.getUser(p);
-			if(u.isAuthorized("essentials.kick.notify"))
+			User player = ess.getUser(onlinePlayer);
+			if(player.isAuthorized("essentials.kick.notify"))
 			{
-			p.sendMessage(Util.format("playerKicked", senderName, player.getName(), kickReason));
+			onlinePlayer.sendMessage(Util.format("playerKicked", senderName, user.getName(), kickReason));
 			}
 		}
 	}

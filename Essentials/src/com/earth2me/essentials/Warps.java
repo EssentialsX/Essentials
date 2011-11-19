@@ -1,12 +1,7 @@
 package com.earth2me.essentials;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Location;
@@ -90,6 +85,7 @@ public class Warps implements IConf
 		warpPoints.remove(new StringIgnoreCase(name));
 	}
 
+	@Override
 	public final void reloadConfig()
 	{
 		warpPoints.clear();

@@ -1,8 +1,8 @@
 package com.earth2me.essentials.commands;
 
-import org.bukkit.Server;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import org.bukkit.Server;
 
 
 public class Commanddepth extends EssentialsCommand
@@ -13,16 +13,16 @@ public class Commanddepth extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		int y = user.getLocation().getBlockY() - 63;
-		if (y > 0)
+		final int depth = user.getLocation().getBlockY() - 63;
+		if (depth > 0)
 		{
-			user.sendMessage(Util.format("depthAboveSea", y));
+			user.sendMessage(Util.format("depthAboveSea", depth));
 		}
-		else if (y < 0)
+		else if (depth < 0)
 		{
-			user.sendMessage(Util.format("depthBelowSea", (-y)));
+			user.sendMessage(Util.format("depthBelowSea", (-depth)));
 		}
 		else
 		{

@@ -1,10 +1,10 @@
 package com.earth2me.essentials.commands;
 
-import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.User;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -18,16 +18,16 @@ public class Commandgive extends EssentialsCommand
 
 	//TODO: move these messages to message file
 	@Override
-	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 2)
 		{
 			throw new NotEnoughArgumentsException();
 		}
 
-		ItemStack stack = ess.getItemDb().get(args[1]);
+		final ItemStack stack = ess.getItemDb().get(args[1]);
 
-		String itemname = stack.getType().toString().toLowerCase().replace("_", "");
+		final String itemname = stack.getType().toString().toLowerCase().replace("_", "");
 		if (sender instanceof Player
 			&& (ess.getSettings().permissionBasedItemSpawn()
 				? (!ess.getUser(sender).isAuthorized("essentials.give.item-all")
@@ -48,8 +48,8 @@ public class Commandgive extends EssentialsCommand
 			throw new Exception(ChatColor.RED + "You can't give air.");
 		}
 
-		User giveTo = getPlayer(server, args, 0);
-		String itemName = stack.getType().toString().toLowerCase().replace('_', ' ');
+		final User giveTo = getPlayer(server, args, 0);
+		final String itemName = stack.getType().toString().toLowerCase().replace('_', ' ');
 		sender.sendMessage(ChatColor.BLUE + "Giving " + stack.getAmount() + " of " + itemName + " to " + giveTo.getDisplayName() + ".");
 		giveTo.getInventory().addItem(stack);
 		giveTo.updateInventory();

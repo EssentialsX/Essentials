@@ -1,9 +1,9 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Trade;
-import org.bukkit.Server;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import org.bukkit.Server;
 
 
 public class Commandtphere extends EssentialsCommand
@@ -14,16 +14,16 @@ public class Commandtphere extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		User p = getPlayer(server, args, 0);
-		if (!p.isTeleportEnabled())
+		final User player = getPlayer(server, args, 0);
+		if (!player.isTeleportEnabled())
 		{
-			throw new Exception(Util.format("teleportDisabled", p.getDisplayName()));
+			throw new Exception(Util.format("teleportDisabled", player.getDisplayName()));
 		}
-		p.getTeleport().teleport(user, new Trade(this.getName(), ess));
+		player.getTeleport().teleport(user, new Trade(this.getName(), ess));
 		user.sendMessage(Util.i18n("teleporting"));
-		p.sendMessage(Util.i18n("teleporting"));
+		player.sendMessage(Util.i18n("teleporting"));
 		throw new NoChargeException();
 	}
 }

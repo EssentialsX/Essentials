@@ -1,10 +1,6 @@
 package com.earth2me.essentials.signs;
 
-import com.earth2me.essentials.Trade;
-import com.earth2me.essentials.ChargeException;
-import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.*;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.Material;
@@ -426,24 +422,27 @@ public class EssentialsSign
 			this.block = event.getBlock();
 		}
 
+		@Override
 		public final String getLine(final int index)
 		{
 			return event.getLine(index);
 		}
 
+		@Override
 		public final void setLine(final int index, final String text)
 		{
 			event.setLine(index, text);
 		}
 
+		@Override
 		public Block getBlock()
 		{
 			return block;
 		}
 
+		@Override
 		public void updateSign()
 		{
-			return;
 		}
 	}
 
@@ -459,21 +458,25 @@ public class EssentialsSign
 			this.sign = (Sign)block.getState();
 		}
 
+		@Override
 		public final String getLine(final int index)
 		{
 			return sign.getLine(index);
 		}
 
+		@Override
 		public final void setLine(final int index, final String text)
 		{
 			sign.setLine(index, text);
 		}
 
+		@Override
 		public final Block getBlock()
 		{
 			return block;
 		}
 
+		@Override
 		public final void updateSign()
 		{
 			sign.update();

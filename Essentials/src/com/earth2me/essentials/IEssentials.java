@@ -29,10 +29,6 @@ public interface IEssentials extends Plugin
 
 	BukkitScheduler getScheduler();
 
-	String[] getMotd(CommandSender sender, String def);
-
-	String[] getLines(CommandSender sender, String node, String def);
-
 	Jail getJail();
 
 	Warps getWarps();
@@ -56,6 +52,8 @@ public interface IEssentials extends Plugin
 	TNTExplodeListener getTNTListener();
 
 	PermissionsHandler getPermissionsHandler();
+	
+	AlternativeCommandsHandler getAlternativeCommandsHandler();
 
 	void showError(final CommandSender sender, final Throwable exception, final String commandLabel);
 

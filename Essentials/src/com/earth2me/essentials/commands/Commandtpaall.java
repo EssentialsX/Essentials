@@ -1,8 +1,8 @@
 package com.earth2me.essentials.commands;
 
-import org.bukkit.Server;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -15,7 +15,7 @@ public class Commandtpaall extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -27,29 +27,29 @@ public class Commandtpaall extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		User p = getPlayer(server, args, 0);
-		teleportAAllPlayers(server, sender, p);
+		final User player = getPlayer(server, args, 0);
+		teleportAAllPlayers(server, sender, player);
 	}
 
-	private void teleportAAllPlayers(Server server, CommandSender sender, User p)
+	private void teleportAAllPlayers(final Server server, final CommandSender sender, final User user)
 	{
 		sender.sendMessage(Util.i18n("teleportAAll"));
-		for (Player player : server.getOnlinePlayers())
+		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
-			User u = ess.getUser(player);
-			if (p == u)
+			final User player = ess.getUser(onlinePlayer);
+			if (user == player)
 			{
 				continue;
 			}
-			if (!u.isTeleportEnabled())
+			if (!player.isTeleportEnabled())
 			{
 				continue;
 			}
 			try
 			{
-				u.requestTeleport(p, true);
-				u.sendMessage(Util.format("teleportHereRequest", p.getDisplayName()));
-				u.sendMessage(Util.i18n("typeTpaccept"));
+				player.requestTeleport(user, true);
+				player.sendMessage(Util.format("teleportHereRequest", user.getDisplayName()));
+				player.sendMessage(Util.i18n("typeTpaccept"));
 			}
 			catch (Exception ex)
 			{

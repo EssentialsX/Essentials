@@ -1,6 +1,5 @@
 package com.earth2me.essentials.geoip;
 
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.Util;
 import java.util.logging.Level;

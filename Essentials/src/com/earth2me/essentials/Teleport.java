@@ -67,6 +67,7 @@ public class Teleport implements Runnable
 		this.chargeFor = chargeFor;
 	}
 
+	@Override
 	public void run()
 	{
 
@@ -106,7 +107,6 @@ public class Teleport implements Runnable
 				{
 					ess.showError(user.getBase(), ex, "teleport");
 				}
-				return;
 			}
 			catch (Exception ex)
 			{

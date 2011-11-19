@@ -1,6 +1,5 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +29,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		reloadConfig();
 	}
 
+	@Override
 	public final void reloadConfig()
 	{
 		config.load();
@@ -278,7 +278,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	public boolean hasPowerTools()
 	{
-		return powertools.size() > 0;
+		return !powertools.isEmpty();
 	}
 	private Location lastLocation;
 

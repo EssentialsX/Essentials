@@ -1,9 +1,9 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.OfflinePlayer;
-import org.bukkit.Server;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import org.bukkit.Server;
 
 
 public class Commandtpohere extends EssentialsCommand
@@ -14,7 +14,7 @@ public class Commandtpohere extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -22,18 +22,18 @@ public class Commandtpohere extends EssentialsCommand
 		}
 
 		//Just basically the old tphere command
-		User p = getPlayer(server, args, 0, true);
+		final User player = getPlayer(server, args, 0, true);
 
 		// Check if user is offline
-		if (p.getBase() instanceof OfflinePlayer)
+		if (player.getBase() instanceof OfflinePlayer)
 		{
 			throw new NoSuchFieldException(Util.i18n("playerNotFound"));
 		}
 
 		// Verify permission
-		if (!p.isHidden() || user.isAuthorized("essentials.teleport.hidden"))
+		if (!player.isHidden() || user.isAuthorized("essentials.teleport.hidden"))
 		{
-			p.getTeleport().now(user, false);
+			player.getTeleport().now(user, false);
 			user.sendMessage(Util.i18n("teleporting"));
 		}
 		else

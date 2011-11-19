@@ -1,10 +1,6 @@
 package com.earth2me.essentials.signs;
 
-import com.earth2me.essentials.ChargeException;
-import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.Trade;
-import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.*;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -288,6 +284,7 @@ public class SignTrade extends EssentialsSign
 		if (split.length == 3)
 		{
 			final int stackamount = getIntegerPositive(split[0]);
+			//TODO: Unused local variable
 			final ItemStack item = getItemStack(split[1], stackamount, ess);
 			final int amount = getInteger(split[2]);
 			final String newline = stackamount + " " + split[1] + ":" + (amount + Math.round(value));

@@ -1,12 +1,12 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Trade;
+import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
-import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 
 
 public class Commandworld extends EssentialsCommand

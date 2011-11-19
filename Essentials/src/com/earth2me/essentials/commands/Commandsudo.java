@@ -31,10 +31,10 @@ public class Commandsudo extends EssentialsCommand
 		//TODO: Translate this.
 		sender.sendMessage("Running the command as " + user.getDisplayName());
 
-		final PluginCommand pc = ess.getServer().getPluginCommand(command);
-		if (pc != null)
+		final PluginCommand execCommand = ess.getServer().getPluginCommand(command);
+		if (execCommand != null)
 		{
-			pc.execute(user.getBase(), command, arguments);
+			execCommand.execute(user.getBase(), command, arguments);
 		}
 
 	}

@@ -1,8 +1,8 @@
 package com.earth2me.essentials.commands;
 
-import org.bukkit.Server;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
 
@@ -14,7 +14,7 @@ public class Commandbalance extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -24,13 +24,13 @@ public class Commandbalance extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		double bal = (args.length < 1
-					  || !(user.isAuthorized("essentials.balance.others")
-						   || user.isAuthorized("essentials.balance.other"))
-					  ? user
-					  : getPlayer(server, args, 0, true)).getMoney();
+		final double bal = (args.length < 1
+							|| !(user.isAuthorized("essentials.balance.others")
+								 || user.isAuthorized("essentials.balance.other"))
+							? user
+							: getPlayer(server, args, 0, true)).getMoney();
 		user.sendMessage(Util.format("balance", Util.formatCurrency(bal, ess)));
 	}
 }

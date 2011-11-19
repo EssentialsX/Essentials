@@ -2,11 +2,7 @@ package com.earth2me.essentials;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerListener;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.*;
 
 
 public class JailPlayerListener extends PlayerListener

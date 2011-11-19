@@ -1,12 +1,12 @@
 package com.earth2me.essentials.commands;
 
-import org.bukkit.Server;
 import com.earth2me.essentials.InventoryWorkaround;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.util.logging.Level;
 import org.bukkit.Material;
+import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 
 

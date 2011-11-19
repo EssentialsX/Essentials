@@ -1,15 +1,10 @@
 package com.earth2me.essentials.commands;
 
-import java.util.Map.Entry;
-import org.bukkit.Server;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.Map.Entry;
+import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
 
@@ -21,7 +16,7 @@ public class Commandbalancetop extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		int max = 10;
 		if (args.length > 0)
@@ -47,6 +42,7 @@ public class Commandbalancetop extends EssentialsCommand
 		final List<Map.Entry<User, Double>> sortedEntries = new ArrayList<Map.Entry<User, Double>>(balances.entrySet());
 		Collections.sort(sortedEntries, new Comparator<Map.Entry<User, Double>>()
 		{
+			@Override
 			public int compare(final Entry<User, Double> entry1, final Entry<User, Double> entry2)
 			{
 				return -entry1.getValue().compareTo(entry2.getValue());

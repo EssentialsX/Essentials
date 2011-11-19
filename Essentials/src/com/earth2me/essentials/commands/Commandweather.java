@@ -13,17 +13,19 @@ public class Commandweather extends EssentialsCommand
 	{
 		super("weather");
 	}
+	
+	//TODO: Remove duplication
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
 
-		boolean isStorm = args[0].equalsIgnoreCase("storm");
-		World world = user.getWorld();
+		final boolean isStorm = args[0].equalsIgnoreCase("storm");
+		final World world = user.getWorld();
 		if (args.length > 1)
 		{
 
@@ -32,7 +34,6 @@ public class Commandweather extends EssentialsCommand
 			user.sendMessage(isStorm
 							 ? Util.format("weatherStormFor", world.getName(), args[1])
 							 : Util.format("weatherSunFor", world.getName(), args[1]));
-			return;
 		}
 		else
 		{
@@ -40,20 +41,19 @@ public class Commandweather extends EssentialsCommand
 			user.sendMessage(isStorm
 							 ? Util.format("weatherStorm", world.getName())
 							 : Util.format("weatherSun", world.getName()));
-			return;
 		}
 	}
 
 	@Override
-	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 2) //running from console means inserting a world arg before other args
 		{
 			throw new Exception("When running from console, usage is: /" + commandLabel + " <world> <storm/sun> [duration]");
 		}
 
-		boolean isStorm = args[1].equalsIgnoreCase("storm");
-		World world = server.getWorld(args[0]);
+		final boolean isStorm = args[1].equalsIgnoreCase("storm");
+		final World world = server.getWorld(args[0]);
 		if (world == null)
 		{
 			throw new Exception("World named " + args[0] + " not found!");
@@ -66,7 +66,6 @@ public class Commandweather extends EssentialsCommand
 			sender.sendMessage(isStorm
 							   ? Util.format("weatherStormFor", world.getName(), args[2])
 							   : Util.format("weatherSunFor", world.getName(), args[2]));
-			return;
 		}
 		else
 		{
@@ -74,7 +73,6 @@ public class Commandweather extends EssentialsCommand
 			sender.sendMessage(isStorm
 							   ? Util.format("weatherStorm", world.getName())
 							   : Util.format("weatherSun", world.getName()));
-			return;
 		}
 	}
 }

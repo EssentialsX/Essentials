@@ -1,11 +1,11 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.Trade;
-import org.bukkit.Location;
-import org.bukkit.Server;
 import com.earth2me.essentials.TargetBlock;
+import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import org.bukkit.Location;
+import org.bukkit.Server;
 
 
 public class Commandjump extends EssentialsCommand
@@ -15,11 +15,12 @@ public class Commandjump extends EssentialsCommand
 		super("jump");
 	}
 
+	//TODO: Update to use new target methods
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		Location loc;
-		Location cloc = user.getLocation();
+		final Location cloc = user.getLocation();
 
 		try
 		{
@@ -36,7 +37,7 @@ public class Commandjump extends EssentialsCommand
 			throw new Exception(Util.i18n("jumpError"), ex);
 		}
 
-		Trade charge = new Trade(this.getName(), ess);
+		final Trade charge = new Trade(this.getName(), ess);
 		charge.isAffordableFor(user);
 		user.getTeleport().teleport(loc, charge);
 	}

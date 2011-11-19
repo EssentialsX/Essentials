@@ -1,9 +1,9 @@
 package com.earth2me.essentials.commands;
 
-import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
 
 
 public class Commandmute extends EssentialsCommand
@@ -14,15 +14,15 @@ public class Commandmute extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
 
-		User p = getPlayer(server, args, 0, true);
-		if (!p.isMuted() && p.isAuthorized("essentials.mute.exempt"))
+		final User player = getPlayer(server, args, 0, true);
+		if (!player.isMuted() && player.isAuthorized("essentials.mute.exempt"))
 		{
 			throw new Exception(Util.i18n("muteExempt"));
 		}
@@ -32,15 +32,15 @@ public class Commandmute extends EssentialsCommand
 			String time = getFinalArg(args, 1);
 			muteTimestamp = Util.parseDateDiff(time, true);
 		}
-		p.setMuteTimeout(muteTimestamp);
-		boolean muted = p.toggleMuted();
+		player.setMuteTimeout(muteTimestamp);
+		final boolean muted = player.toggleMuted();
 		sender.sendMessage(
 				muted
 				? (muteTimestamp > 0
-				   ? Util.format("mutedPlayerFor", p.getDisplayName(), Util.formatDateDiff(muteTimestamp))
-				   : Util.format("mutedPlayer", p.getDisplayName()))
-				: Util.format("unmutedPlayer", p.getDisplayName()));
-		p.sendMessage(
+				   ? Util.format("mutedPlayerFor", player.getDisplayName(), Util.formatDateDiff(muteTimestamp))
+				   : Util.format("mutedPlayer", player.getDisplayName()))
+				: Util.format("unmutedPlayer", player.getDisplayName()));
+		player.sendMessage(
 				muted
 				? (muteTimestamp > 0
 				   ? Util.format("playerMutedFor", Util.formatDateDiff(muteTimestamp))

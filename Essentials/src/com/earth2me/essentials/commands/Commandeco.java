@@ -1,9 +1,9 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.User;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import com.earth2me.essentials.User;
 
 
 public class Commandeco extends EssentialsCommand
@@ -14,7 +14,7 @@ public class Commandeco extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 2)
 		{
@@ -34,44 +34,45 @@ public class Commandeco extends EssentialsCommand
 
 		if (args[1].contentEquals("*"))
 		{
-			for (Player p : server.getOnlinePlayers())
+			for (Player onlinePlayer : server.getOnlinePlayers())
 			{
-				User u = ess.getUser(p);
+				final User player = ess.getUser(onlinePlayer);
 				switch (cmd)
 				{
 				case GIVE:
-					u.giveMoney(amount);
+					player.giveMoney(amount);
 					break;
 
 				case TAKE:
-					u.takeMoney(amount);
+					player.takeMoney(amount);
 					break;
 
 				case RESET:
-					u.setMoney(amount == 0 ? ess.getSettings().getStartingBalance() : amount);
+					player.setMoney(amount == 0 ? ess.getSettings().getStartingBalance() : amount);
 					break;
 				}
 			}
 		}
 		else
 		{
-			User u = getPlayer(server, args, 1, true);
+			final User player = getPlayer(server, args, 1, true);
 			switch (cmd)
 			{
 			case GIVE:
-				u.giveMoney(amount, sender);
+				player.giveMoney(amount, sender);
 				break;
 
 			case TAKE:
-				u.takeMoney(amount, sender);
+				player.takeMoney(amount, sender);
 				break;
 
 			case RESET:
-				u.setMoney(amount == 0 ? ess.getSettings().getStartingBalance() : amount);
+				player.setMoney(amount == 0 ? ess.getSettings().getStartingBalance() : amount);
 				break;
 			}
 		}
 	}
+
 
 	private enum EcoCommands
 	{

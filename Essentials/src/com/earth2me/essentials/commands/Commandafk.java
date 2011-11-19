@@ -1,8 +1,8 @@
 package com.earth2me.essentials.commands;
 
-import org.bukkit.Server;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import org.bukkit.Server;
 
 
 public class Commandafk extends EssentialsCommand
@@ -29,7 +29,7 @@ public class Commandafk extends EssentialsCommand
 		}
 	}
 
-	private final void toggleAfk(User user)
+	private void toggleAfk(User user)
 	{
 		if (!user.toggleAfk())
 		{

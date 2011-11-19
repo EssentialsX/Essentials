@@ -38,16 +38,22 @@ sleep(60);
 
 $changes = getChanges($build, $branch);
 
-uploadit($build, $branch, 'Essentials.jar', $version, $changes);
+//uploadit($build, $branch, 'Essentials.jar', $version, $changes);
+//sleep(1);
+//uploadit($build, $branch, 'EssentialsChat.jar', $version, $changes);
+//sleep(1);
+//uploadit($build, $branch, 'EssentialsSpawn.jar', $version, $changes);
+//sleep(1);
+//uploadit($build, $branch, 'EssentialsProtect.jar', $version, $changes);
+//sleep(1);
+//uploadit($build, $branch, 'EssentialsXMPP.jar', $version, $changes);
+//sleep(1);
+//uploadit($build, $branch, 'EssentialsGeoIP.jar', $version, $changes);
+
+uploadit($build, $branch, 'Essentials.zip', $version, $changes);
 sleep(1);
-uploadit($build, $branch, 'EssentialsChat.jar', $version, $changes);
-sleep(1);
-uploadit($build, $branch, 'EssentialsSpawn.jar', $version, $changes);
-sleep(1);
-uploadit($build, $branch, 'EssentialsProtect.jar', $version, $changes);
-sleep(1);
-uploadit($build, $branch, 'EssentialsXMPP.jar', $version, $changes);
-sleep(1);
-uploadit($build, $branch, 'EssentialsGeoIP.jar', $version, $changes);
+uploadit($build, $branch, 'Essentials-extra.zip', $version, $changes);
+
+
 ?>
 

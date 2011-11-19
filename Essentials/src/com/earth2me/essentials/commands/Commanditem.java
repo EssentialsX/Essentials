@@ -1,9 +1,9 @@
 package com.earth2me.essentials.commands;
 
-import org.bukkit.Server;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import org.bukkit.Material;
+import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -15,15 +15,15 @@ public class Commanditem extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		ItemStack stack = ess.getItemDb().get(args[0]);
+		final ItemStack stack = ess.getItemDb().get(args[0]);
 
-		String itemname = stack.getType().toString().toLowerCase().replace("_", "");
+		final String itemname = stack.getType().toString().toLowerCase().replace("_", "");
 		if (ess.getSettings().permissionBasedItemSpawn()
 			? (!user.isAuthorized("essentials.itemspawn.item-all")
 			   && !user.isAuthorized("essentials.itemspawn.item-" + itemname)
@@ -44,8 +44,8 @@ public class Commanditem extends EssentialsCommand
 			throw new Exception(Util.format("cantSpawnItem", "Air"));
 		}
 
-		String itemName = stack.getType().toString().toLowerCase().replace('_', ' ');
-		user.sendMessage(Util.format("itemSpawn", stack.getAmount(), itemName));
+		final String displayName = stack.getType().toString().toLowerCase().replace('_', ' ');
+		user.sendMessage(Util.format("itemSpawn", stack.getAmount(), displayName));
 		user.getInventory().addItem(stack);
 		user.updateInventory();
 	}

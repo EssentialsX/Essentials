@@ -15,7 +15,7 @@ public class Commandlightning extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 
 		User user = null;
@@ -34,16 +34,16 @@ public class Commandlightning extends EssentialsCommand
 			throw new Exception(Util.i18n("playerNotFound"));
 		}
 
-		for (Player p : server.matchPlayer(args[0]))
+		for (Player matchPlayer : server.matchPlayer(args[0]))
 		{
-			sender.sendMessage(Util.format("lightningUse", p.getDisplayName()));
-			p.getWorld().strikeLightning(p.getLocation());
-			if (!ess.getUser(p).isGodModeEnabled()) {
-				p.setHealth(p.getHealth() < 5 ? 0 : p.getHealth() - 5);
+			sender.sendMessage(Util.format("lightningUse", matchPlayer.getDisplayName()));
+			matchPlayer.getWorld().strikeLightning(matchPlayer.getLocation());
+			if (!ess.getUser(matchPlayer).isGodModeEnabled()) {
+				matchPlayer.setHealth(matchPlayer.getHealth() < 5 ? 0 : matchPlayer.getHealth() - 5);
 			}
 			if (ess.getSettings().warnOnSmite())
 			{
-				p.sendMessage(Util.i18n("lightningSmited"));
+				matchPlayer.sendMessage(Util.i18n("lightningSmited"));
 			}
 		}
 	}

@@ -4,14 +4,17 @@ import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
-public class Commanddeljail extends EssentialsCommand {
 
-	public Commanddeljail() {
+public class Commanddeljail extends EssentialsCommand
+{
+	public Commanddeljail()
+	{
 		super("deljail");
 	}
 
 	@Override
-	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception {
+	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();

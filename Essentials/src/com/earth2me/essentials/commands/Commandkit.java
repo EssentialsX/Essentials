@@ -1,15 +1,11 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Trade;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import org.bukkit.Server;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
-import java.util.GregorianCalendar;
+import java.util.*;
 import org.bukkit.Material;
+import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -29,11 +25,11 @@ public class Commandkit extends EssentialsCommand
 			{
 				final Map<String, Object> kits = ess.getSettings().getKits();
 				final StringBuilder list = new StringBuilder();
-				for (String k : kits.keySet())
+				for (String kiteItem : kits.keySet())
 				{
-					if (user.isAuthorized("essentials.kit." + k.toLowerCase()))
+					if (user.isAuthorized("essentials.kit." + kiteItem.toLowerCase()))
 					{
-						list.append(" ").append(k);
+						list.append(" ").append(kiteItem);
 					}
 				}
 				if (list.length() > 0)
@@ -74,9 +70,9 @@ public class Commandkit extends EssentialsCommand
 					final Calendar c = new GregorianCalendar();
 					c.add(Calendar.SECOND, -(int)delay);
 					c.add(Calendar.MILLISECOND, -(int)((delay*1000.0)%1000.0));
-			
+
 					final long mintime = c.getTimeInMillis();
-					
+
 					final Long lastTime = user.getKitTimestamp(kitName);
 					if (lastTime == null || lastTime < mintime) {
 						final Calendar now = new GregorianCalendar();

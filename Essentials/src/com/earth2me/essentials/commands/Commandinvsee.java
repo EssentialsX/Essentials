@@ -15,7 +15,7 @@ public class Commandinvsee extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 
 		if (args.length < 1 && user.getSavedInventory() == null)
@@ -40,7 +40,7 @@ public class Commandinvsee extends EssentialsCommand
 			user.setSavedInventory(user.getInventory().getContents());
 		}
 		ItemStack[] invUserStack = invUser.getInventory().getContents();
-		int userStackLength = user.getInventory().getContents().length;
+		final int userStackLength = user.getInventory().getContents().length;
 		if (invUserStack.length < userStackLength) {
 			invUserStack = Arrays.copyOf(invUserStack, userStackLength);
 		}

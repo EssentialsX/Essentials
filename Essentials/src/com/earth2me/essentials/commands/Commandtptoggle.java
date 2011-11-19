@@ -1,8 +1,8 @@
 package com.earth2me.essentials.commands;
 
-import org.bukkit.Server;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import org.bukkit.Server;
 
 
 public class Commandtptoggle extends EssentialsCommand
@@ -13,7 +13,7 @@ public class Commandtptoggle extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		user.sendMessage(user.toggleTeleportEnabled()
 						 ? Util.i18n("teleportationEnabled")

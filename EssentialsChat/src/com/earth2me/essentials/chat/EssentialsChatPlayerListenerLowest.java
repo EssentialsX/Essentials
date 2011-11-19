@@ -1,9 +1,7 @@
 package com.earth2me.essentials.chat;
 
-import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import java.util.Map;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerChatEvent;

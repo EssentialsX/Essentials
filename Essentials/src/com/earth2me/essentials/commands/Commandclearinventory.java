@@ -1,11 +1,11 @@
 package com.earth2me.essentials.commands;
 
-import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.util.List;
+import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 
 public class Commandclearinventory extends EssentialsCommand
@@ -15,6 +15,7 @@ public class Commandclearinventory extends EssentialsCommand
 		super("clearinventory");
 	}
 
+	//TODO: Cleanup
 	@Override
 	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{

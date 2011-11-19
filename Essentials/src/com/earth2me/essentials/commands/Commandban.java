@@ -2,10 +2,10 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.OfflinePlayer;
-import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
@@ -23,8 +23,8 @@ public class Commandban extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		final User player = getPlayer(server, args, 0, true);
-		if (player.getBase() instanceof OfflinePlayer)
+		final User user = getPlayer(server, args, 0, true);
+		if (user.getBase() instanceof OfflinePlayer)
 		{
 			if (sender instanceof Player
 				&& !ess.getUser(sender).isAuthorized("essentials.ban.offline"))
@@ -35,7 +35,7 @@ public class Commandban extends EssentialsCommand
 		}
 		else
 		{
-			if (player.isAuthorized("essentials.ban.exempt"))
+			if (user.isAuthorized("essentials.ban.exempt"))
 			{
 				sender.sendMessage(Util.i18n("banExempt"));
 				return;
@@ -46,22 +46,22 @@ public class Commandban extends EssentialsCommand
 		if (args.length > 1)
 		{
 			banReason = getFinalArg(args, 1);
-			player.setBanReason(banReason);
+			user.setBanReason(banReason);
 		}
 		else
 		{
 			banReason = Util.i18n("defaultBanReason");
 		}
-		player.setBanned(true);
-		player.kickPlayer(banReason);
-		String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
-		
-		for(Player p : server.getOnlinePlayers())
+		user.setBanned(true);
+		user.kickPlayer(banReason);
+		final String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
+
+		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
-			User u = ess.getUser(p);
-			if(u.isAuthorized("essentials.ban.notify"))
+			final User player = ess.getUser(onlinePlayer);
+			if (player.isAuthorized("essentials.ban.notify"))
 			{
-			p.sendMessage(Util.format("playerBanned", senderName, player.getName(), banReason));
+				onlinePlayer.sendMessage(Util.format("playerBanned", senderName, user.getName(), banReason));
 			}
 		}
 	}

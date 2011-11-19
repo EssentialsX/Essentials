@@ -1,15 +1,6 @@
 package com.earth2me.essentials;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.math.BigInteger;
 import java.security.DigestInputStream;
 import java.security.DigestOutputStream;
@@ -138,12 +129,12 @@ public class ManagedFile
 			try
 			{
 				String hash = reader.readLine();
-				if (hash.matches("#[a-f0-9]{32}"))
+				if (hash != null && hash.matches("#[a-f0-9]{32}"))
 				{
 					hash = hash.substring(1);
 					bais.reset();
 					final String versionline = reader.readLine();
-					if (versionline.matches("#version: .+"))
+					if (versionline != null && versionline.matches("#version: .+"))
 					{
 						final String versioncheck = versionline.substring(10);
 						if (!versioncheck.equalsIgnoreCase(version))
