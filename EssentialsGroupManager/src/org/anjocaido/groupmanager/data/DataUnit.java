@@ -39,10 +39,19 @@ public abstract class DataUnit {
     public boolean equals(Object o) {
         if (o instanceof DataUnit) {
             DataUnit go = (DataUnit) o;
-            if (this.getName().equalsIgnoreCase(go.getName())
-            		&& ((this.dataSource == null && go.getDataSource() == null)
-            		|| (this.dataSource.getName().equalsIgnoreCase(go.getDataSource().getName())))) {
-                return true;
+            if (this.getName().equalsIgnoreCase(go.getName())) {
+            	// Global Group match.
+            	if (this.dataSource == null && go.getDataSource() == null)
+            		return true;
+            	// This is a global group, the object to test isn't.
+            	if (this.dataSource == null && go.getDataSource() != null)
+            		return false;
+            	// This is not a global group, but the object to test is.
+            	if (this.dataSource != null && go.getDataSource() == null)
+            		return false;
+            	// Match on group name and world name.
+            	if (this.dataSource.getName().equalsIgnoreCase(go.getDataSource().getName()))
+            		return true;
             }
         }
         return false;
