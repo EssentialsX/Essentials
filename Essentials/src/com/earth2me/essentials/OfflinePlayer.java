@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import java.net.InetSocketAddress;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import lombok.Delegate;
@@ -774,6 +775,12 @@ public class OfflinePlayer implements Player
 
 	@Override
 	public void setTicksLived(int i)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public int getMaxHealth()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}

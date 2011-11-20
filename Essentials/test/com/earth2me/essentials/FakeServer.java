@@ -580,4 +580,10 @@ public class FakeServer implements Server
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
+	@Override
+	public String getBukkitVersion()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }
