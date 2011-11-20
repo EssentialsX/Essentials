@@ -14,6 +14,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
@@ -309,7 +310,12 @@ public class EssentialsProtectEntityListener extends EntityListener
 		{
 			return;
 		}
-		final String creatureName = event.getCreatureType().toString().toLowerCase();
+		final CreatureType creature = event.getCreatureType();
+		if (creature == null)
+		{
+			return;
+		}
+		final String creatureName = creature.toString().toLowerCase();
 		if (creatureName == null || creatureName.isEmpty())
 		{
 			return;
