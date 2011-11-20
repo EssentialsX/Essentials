@@ -32,7 +32,6 @@ public class Commandspawnmob extends EssentialsCommand
 		String[] mountparts = args[0].split(",");
 		String[] parts = mountparts[0].split(":");
 		String mobType = parts[0];
-		mobType = mobType.equalsIgnoreCase("CaveSpider") ? "CaveSpider" : mobType.equalsIgnoreCase("PigZombie") ? "PigZombie" : Util.capitalCase(mobType);
 		String mobData = null;
 		if (parts.length == 2)
 		{
@@ -44,7 +43,6 @@ public class Commandspawnmob extends EssentialsCommand
 		{
 			parts = mountparts[1].split(":");
 			mountType = parts[0];
-			mountType = mountType.equalsIgnoreCase("CaveSpider") ? "CaveSpider" : mountType.equalsIgnoreCase("PigZombie") ? "PigZombie" : Util.capitalCase(mountType);
 			if (parts.length == 2)
 			{
 				mountData = parts[1];
@@ -62,14 +60,14 @@ public class Commandspawnmob extends EssentialsCommand
 		{
 			throw new Exception(Util.i18n("invalidMob"));
 		}
-		
+
 		if (ess.getSettings().getProtectPreventSpawn(mob.getType().toString().toLowerCase()))
 		{
 			throw new Exception(Util.i18n("unableToSpawnMob"));
 		}
-	
+
 		final Block block = Util.getTarget(user).getBlock();
-				if (block == null)
+		if (block == null)
 		{
 			throw new Exception(Util.i18n("unableToSpawnMob"));
 		}
@@ -92,7 +90,7 @@ public class Commandspawnmob extends EssentialsCommand
 				user.sendMessage(Util.i18n("invalidMob"));
 				return;
 			}
-			
+
 			if (ess.getSettings().getProtectPreventSpawn(mobMount.getType().toString().toLowerCase()))
 			{
 				throw new Exception(Util.i18n("unableToSpawnMob"));

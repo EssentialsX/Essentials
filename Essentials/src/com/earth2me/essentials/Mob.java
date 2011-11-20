@@ -29,8 +29,12 @@ public enum Mob
 	WOLF("Wolf", Enemies.NEUTRAL, CreatureType.WOLF),
 	CAVESPIDER("CaveSpider", Enemies.ENEMY, CreatureType.CAVE_SPIDER),
 	ENDERMAN("Enderman", Enemies.ENEMY, "", CreatureType.ENDERMAN),
-	SILVERFISH("Silverfish", Enemies.ENEMY, "", CreatureType.SILVERFISH);
-
+	SILVERFISH("Silverfish", Enemies.ENEMY, "", CreatureType.SILVERFISH),
+	ENDERDRAGON("EnderDragon", Enemies.ENEMY, CreatureType.ENDER_DRAGON),
+	VILLAGER("Villager", Enemies.FRIENDLY, CreatureType.VILLAGER),
+	BLAZE("Blaze", Enemies.ENEMY, CreatureType.BLAZE),
+	MUSHROOMCOW("MushroomCow", Enemies.FRIENDLY, CreatureType.MUSHROOM_COW);
+	//TODO: Snowman
 	public static final Logger logger = Logger.getLogger("Minecraft");
 
 	private Mob(String n, Enemies en, String s, CreatureType type)
@@ -47,7 +51,6 @@ public enum Mob
 		this.type = en;
 		this.bukkitType = type;
 	}
-
 	public String suffix = "s";
 	final public String name;
 	final public Enemies type;
@@ -58,7 +61,7 @@ public enum Mob
 	{
 		for (Mob mob : Mob.values())
 		{
-			hashMap.put(mob.name, mob);
+			hashMap.put(mob.name.toLowerCase(), mob);
 		}
 	}
 
@@ -81,24 +84,26 @@ public enum Mob
 		NEUTRAL("neutral"),
 		ENEMY("enemy");
 
-		private Enemies(final String t)
+		private Enemies(final String type)
 		{
-			this.type = t;
+			this.type = type;
 		}
 		final protected String type;
 	}
 
-	public CreatureType getType () {	
+	public CreatureType getType()
+	{
 		return bukkitType;
 	}
+
+	public static Mob fromName(final String name)
+	{
+		return hashMap.get(name.toLowerCase());
+	}
+
 
 	public static class MobException extends Exception
 	{
 		private static final long serialVersionUID = 1L;
-	}
-
-	public static Mob fromName(String n)
-	{
-		return hashMap.get(n);
 	}
 }
