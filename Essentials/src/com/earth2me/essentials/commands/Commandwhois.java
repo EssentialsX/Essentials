@@ -43,9 +43,9 @@ public class Commandwhois extends EssentialsCommand
 			{
 				continue;
 			}
-			final String displayName = ChatColor.stripColor(user.getNick());
-			if (!whois.equalsIgnoreCase(displayName)
-				&& !whois.equalsIgnoreCase(displayName.substring(prefixLength))
+			final String nickName = ChatColor.stripColor(user.getNickname());
+			if (!whois.equalsIgnoreCase(nickName)
+				&& !whois.substring(prefixLength).equalsIgnoreCase(nickName)
 				&& !whois.equalsIgnoreCase(user.getName()))
 			{
 				continue;

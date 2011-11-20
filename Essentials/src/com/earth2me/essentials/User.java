@@ -235,7 +235,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		return teleportRequestHere;
 	}
 
-	public String getNick()
+	public String getNick(boolean addprefixsuffix)
 	{
 		final StringBuilder nickname = new StringBuilder();
 		final String nick = getNickname();
@@ -259,7 +259,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			}
 		}
 
-		if (ess.getSettings().addPrefixSuffix())
+		if (addprefixsuffix && ess.getSettings().addPrefixSuffix())
 		{
 			if (!ess.getSettings().disablePrefix())
 			{
@@ -284,9 +284,14 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		return nickname.toString();
 	}
 
-	public void setDisplayNick(String name)
+	public void setDisplayNick()
 	{
+		String name = getNick(true);
 		setDisplayName(name);
+		if (name.length() > 16)
+		{
+			name = getNick(false);
+		}
 		if (name.length() > 16)
 		{
 			name = name.substring(0, name.charAt(15) == '§' ? 15 : 16);
@@ -306,7 +311,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	{
 		if (!(base instanceof OfflinePlayer) && ess.getSettings().changeDisplayName())
 		{
-			setDisplayNick(getNick());
+			setDisplayNick();
 		}
 		return super.getDisplayName() == null ? super.getName() : super.getDisplayName();
 	}

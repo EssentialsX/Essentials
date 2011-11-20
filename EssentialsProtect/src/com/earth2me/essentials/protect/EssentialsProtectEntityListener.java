@@ -14,12 +14,14 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.SmallFireball;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EndermanPickupEvent;
@@ -38,13 +40,13 @@ public class EssentialsProtectEntityListener extends EntityListener
 {
 	private final transient IProtect prot;
 	private final transient IEssentials ess;
-	
+
 	public EssentialsProtectEntityListener(final IProtect prot)
 	{
 		this.prot = prot;
 		this.ess = prot.getEssentials();
 	}
-	
+
 	@Override
 	public void onEntityDamage(final EntityDamageEvent event)
 	{
@@ -57,7 +59,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 		if (event instanceof EntityDamageByBlockEvent)
 		{
 			final DamageCause cause = event.getCause();
-			
+
 			if (prot.getSettingBool(ProtectConfig.disable_contactdmg)
 				&& cause == DamageCause.CONTACT
 				&& !(target instanceof Player
@@ -86,7 +88,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 				return;
 			}
 		}
-		
+
 		if (event instanceof EntityDamageByEntityEvent)
 		{
 			final EntityDamageByEntityEvent edEvent = (EntityDamageByEntityEvent)event;
@@ -111,7 +113,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 				event.setCancelled(true);
 				return;
 			}
-			
+
 			if (eAttack instanceof Creeper && prot.getSettingBool(ProtectConfig.prevent_creeper_playerdmg)
 				&& !(target instanceof Player
 					 && user.isAuthorized("essentials.protect.damage.creeper")
@@ -120,8 +122,9 @@ public class EssentialsProtectEntityListener extends EntityListener
 				event.setCancelled(true);
 				return;
 			}
-			
-			if (eAttack instanceof Fireball && prot.getSettingBool(ProtectConfig.prevent_fireball_playerdmg)
+
+			if ((event.getEntity() instanceof Fireball || event.getEntity() instanceof SmallFireball)
+				&& prot.getSettingBool(ProtectConfig.prevent_fireball_playerdmg)
 				&& !(target instanceof Player
 					 && user.isAuthorized("essentials.protect.damage.fireball")
 					 && !user.isAuthorized("essentials.protect.damage.disable")))
@@ -129,7 +132,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 				event.setCancelled(true);
 				return;
 			}
-			
+
 			if (eAttack instanceof TNTPrimed && prot.getSettingBool(ProtectConfig.prevent_tnt_playerdmg)
 				&& !(target instanceof Player
 					 && user.isAuthorized("essentials.protect.damage.tnt")
@@ -138,7 +141,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 				event.setCancelled(true);
 				return;
 			}
-			
+
 			if (edEvent.getDamager() instanceof Projectile
 				&& target instanceof Player
 				&& ((prot.getSettingBool(ProtectConfig.disable_projectiles)
@@ -153,7 +156,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 				return;
 			}
 		}
-		
+
 		final DamageCause cause = event.getCause();
 		if (target instanceof Player)
 		{
@@ -165,7 +168,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 				event.setCancelled(true);
 				return;
 			}
-			
+
 			if (cause == DamageCause.SUFFOCATION
 				&& prot.getSettingBool(ProtectConfig.disable_suffocate)
 				&& !(user.isAuthorized("essentials.protect.damage.suffocation")
@@ -201,7 +204,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 			}
 		}
 	}
-	
+
 	@Override
 	public void onEntityExplode(final EntityExplodeEvent event)
 	{
@@ -242,7 +245,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 						set.add(cp);
 					}
 				}
-				
+
 				((CraftServer)ess.getServer()).getHandle().sendPacketNearby(loc.getX(), loc.getY(), loc.getZ(), 64.0D, ((CraftWorld)loc.getWorld()).getHandle().worldProvider.dimension,
 																			new Packet60Explosion(loc.getX(), loc.getY(), loc.getZ(), 3.0f, set));
 			}
@@ -259,7 +262,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 			event.setCancelled(true);
 			return;
 		}
-		else if (event.getEntity() instanceof Fireball
+		else if ((event.getEntity() instanceof Fireball || event.getEntity() instanceof SmallFireball)
 				 && prot.getSettingBool(ProtectConfig.prevent_fireball_explosion))
 		{
 			event.setCancelled(true);
@@ -295,7 +298,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 			}
 		}
 	}
-	
+
 	@Override
 	public void onCreatureSpawn(final CreatureSpawnEvent event)
 	{
@@ -307,7 +310,12 @@ public class EssentialsProtectEntityListener extends EntityListener
 		{
 			return;
 		}
-		final String creatureName = event.getCreatureType().toString().toLowerCase();
+		final CreatureType creature = event.getCreatureType();
+		if (creature == null)
+		{
+			return;
+		}
+		final String creatureName = creature.toString().toLowerCase();
 		if (creatureName == null || creatureName.isEmpty())
 		{
 			return;
@@ -317,7 +325,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 			event.setCancelled(true);
 		}
 	}
-	
+
 	@Override
 	public void onEntityTarget(final EntityTargetEvent event)
 	{
@@ -343,11 +351,11 @@ public class EssentialsProtectEntityListener extends EntityListener
 			return;
 		}
 	}
-	
+
 	@Override
 	public void onExplosionPrime(ExplosionPrimeEvent event)
 	{
-		if (event.getEntity() instanceof Fireball
+		if ((event.getEntity() instanceof Fireball || event.getEntity() instanceof SmallFireball)
 			&& prot.getSettingBool(ProtectConfig.prevent_fireball_fire))
 		{
 			event.setFire(false);
@@ -357,10 +365,12 @@ public class EssentialsProtectEntityListener extends EntityListener
 	@Override
 	public void onEndermanPickup(EndermanPickupEvent event)
 	{
-		if (event.isCancelled()) {
+		if (event.isCancelled())
+		{
 			return;
 		}
-		if (prot.getSettingBool(ProtectConfig.prevent_enderman_pickup)) {
+		if (prot.getSettingBool(ProtectConfig.prevent_enderman_pickup))
+		{
 			event.setCancelled(true);
 			return;
 		}
