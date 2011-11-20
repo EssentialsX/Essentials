@@ -69,7 +69,7 @@ public class Commandtime extends EssentialsCommand
 
 		for (World world : worlds)
 		{
-			sender.sendMessage(Util.format("timeCurrentWorld", world.getName(), DescParseTickFormat.format(world.getTime())));
+			sender.sendMessage(Util.format("timeWorldCurrent", world.getName(), DescParseTickFormat.format(world.getTime())));
 		}
 	}
 
