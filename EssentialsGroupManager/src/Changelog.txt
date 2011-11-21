@@ -75,3 +75,4 @@ v 1.5:
 	- Fixed a crash on reload due to bukkit not unloading plugins before reloading.
 v 1.6:
 	- Prevent Group.equals tests throwing a NullPointerException for GlobalGroups.
+	- Stop throwing errors on an empty users file.
