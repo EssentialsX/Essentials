@@ -9,6 +9,7 @@ import java.net.URL;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 
 
@@ -62,7 +63,7 @@ public class I18n
 		}
 		catch (MissingResourceException ex)
 		{
-			Bukkit.getLogger().log(Level.WARNING, String.format("Missing translation key \"%s\" in translation file %s", ex.getKey(), localeBundle.getLocale().toString()), ex);
+			Logger.getLogger("Minecraft").log(Level.WARNING, String.format("Missing translation key \"%s\" in translation file %s", ex.getKey(), localeBundle.getLocale().toString()), ex);
 			return defaultBundle.getString(string);
 		}
 	}
@@ -110,7 +111,7 @@ public class I18n
 		{
 			currentLocale = new Locale(parts[0], parts[1], parts[2]);
 		}
-		Bukkit.getLogger().log(Level.INFO, String.format("Using locale %s", currentLocale.toString()));
+		Logger.getLogger("Minecraft").log(Level.INFO, String.format("Using locale %s", currentLocale.toString()));
 		customBundle = ResourceBundle.getBundle(MESSAGES, currentLocale, new FileResClassLoader(I18n.class.getClassLoader(), ess));
 		localeBundle = ResourceBundle.getBundle(MESSAGES, currentLocale);
 	}
