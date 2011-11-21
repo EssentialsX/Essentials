@@ -399,14 +399,14 @@ protect:
       chicken: false
       cow: false
       creeper: false
-      ghast: true
+      ghast: false
       giant: false
       monster: false
       pig: false
       pig_zombie: false
       sheep: false
       skeleton: false
-      slime: true
+      slime: false
       spider: false
       squid: false
       zombie: false
@@ -414,6 +414,10 @@ protect:
       cave_spider: false
       enderman: false
       silverfish: false
+      ender_dragon: false
+      villager: false
+      blaze: false
+      mushroom_cow: false
   
   # Maximum height the creeper should explode. -1 allows them to explode everywhere.
   # Set prevent.creeper-explosion to true, if you want to disable creeper explosions.
