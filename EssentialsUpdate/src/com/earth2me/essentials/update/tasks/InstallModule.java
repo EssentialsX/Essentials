@@ -1,9 +1,9 @@
 package com.earth2me.essentials.update.tasks;
 
+import com.earth2me.essentials.update.AbstractWorkListener;
 import com.earth2me.essentials.update.GetFile;
 import com.earth2me.essentials.update.ModuleInfo;
 import com.earth2me.essentials.update.VersionInfo;
-import com.earth2me.essentials.update.AbstractWorkListener;
 import java.io.File;
 import java.net.URL;
 import java.util.logging.Level;

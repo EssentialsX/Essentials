@@ -1,13 +1,12 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 
 
 public class Commandignore extends EssentialsCommand
 {
-
 	public Commandignore()
 	{
 		super("ignore");
@@ -25,25 +24,24 @@ public class Commandignore extends EssentialsCommand
 		{
 			player = getPlayer(server, args, 0);
 		}
-		catch(NoSuchFieldException ex)
+		catch (NoSuchFieldException ex)
 		{
 			player = ess.getOfflineUser(args[0]);
 		}
 		if (player == null)
 		{
-			throw new Exception(Util.i18n("playerNotFound"));
+			throw new Exception(_("playerNotFound"));
 		}
 		final String name = player.getName();
-		if (user.isIgnoredPlayer(name)) {
+		if (user.isIgnoredPlayer(name))
+		{
 			user.setIgnoredPlayer(name, false);
-			user.sendMessage(Util.format("unignorePlayer", player.getName()));
+			user.sendMessage(_("unignorePlayer", player.getName()));
 		}
 		else
 		{
 			user.setIgnoredPlayer(name, true);
-			user.sendMessage(Util.format("ignorePlayer", player.getName()));
+			user.sendMessage(_("ignorePlayer", player.getName()));
 		}
 	}
-
-
 }

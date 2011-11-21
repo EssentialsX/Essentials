@@ -1,10 +1,7 @@
 package com.earth2me.essentials;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -503,18 +500,18 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	public boolean isIgnoredPlayer(String name)
 	{
-		return ignoredPlayers.contains(name.toLowerCase());
+		return ignoredPlayers.contains(name.toLowerCase(Locale.ENGLISH));
 	}
 
 	public void setIgnoredPlayer(String name, boolean set)
 	{
 		if (set)
 		{
-			ignoredPlayers.add(name.toLowerCase());
+			ignoredPlayers.add(name.toLowerCase(Locale.ENGLISH));
 		}
 		else
 		{
-			ignoredPlayers.remove(name.toLowerCase());
+			ignoredPlayers.remove(name.toLowerCase(Locale.ENGLISH));
 		}
 		setIgnoredPlayers(ignoredPlayers);
 	}
@@ -669,7 +666,6 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.setProperty("timestamps.login", time);
 		config.save();
 	}
-
 	private long lastLogout;
 
 	private long _getLastLogout()
@@ -688,7 +684,6 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.setProperty("timestamps.logout", time);
 		config.save();
 	}
-
 	private String lastLoginAddress;
 
 	private String _getLastLoginAddress()
@@ -707,7 +702,6 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.setProperty("ipAddress", address);
 		config.save();
 	}
-
 	private boolean afk;
 
 	private boolean getAfk()
@@ -856,13 +850,13 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	public Long getKitTimestamp(final String name)
 	{
-		final Number num = (Number)kitTimestamps.get(name.toLowerCase());
+		final Number num = (Number)kitTimestamps.get(name.toLowerCase(Locale.ENGLISH));
 		return num == null ? null : num.longValue();
 	}
 
 	public void setKitTimestamp(final String name, final long time)
 	{
-		kitTimestamps.put(name.toLowerCase(), time);
+		kitTimestamps.put(name.toLowerCase(Locale.ENGLISH), time);
 		config.setProperty("timestamps.kits", kitTimestamps);
 		config.save();
 	}

@@ -1,7 +1,9 @@
 package com.earth2me.essentials;
 
+import static com.earth2me.essentials.I18n._;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -24,8 +26,9 @@ public class ItemDb implements IConf
 	public void reloadConfig()
 	{
 		final List<String> lines = file.getLines();
-		
-		if (lines.isEmpty()) {
+
+		if (lines.isEmpty())
+		{
 			return;
 		}
 
@@ -34,7 +37,7 @@ public class ItemDb implements IConf
 
 		for (String line : lines)
 		{
-			line = line.trim().toLowerCase();
+			line = line.trim().toLowerCase(Locale.ENGLISH);
 			if (line.length() > 0 && line.charAt(0) == '#')
 			{
 				continue;
@@ -48,14 +51,14 @@ public class ItemDb implements IConf
 
 			final int numeric = Integer.parseInt(parts[1]);
 
-			durabilities.put(parts[0].toLowerCase(), parts.length > 2 && !parts[2].equals("0") ? Short.parseShort(parts[2]) : 0);
-			items.put(parts[0].toLowerCase(), numeric);
+			durabilities.put(parts[0].toLowerCase(Locale.ENGLISH), parts.length > 2 && !parts[2].equals("0") ? Short.parseShort(parts[2]) : 0);
+			items.put(parts[0].toLowerCase(Locale.ENGLISH), numeric);
 		}
 	}
 
 	public ItemStack get(final String id, final int quantity) throws Exception
 	{
-		final ItemStack retval = get(id.toLowerCase());
+		final ItemStack retval = get(id.toLowerCase(Locale.ENGLISH));
 		retval.setAmount(quantity);
 		return retval;
 	}
@@ -76,12 +79,12 @@ public class ItemDb implements IConf
 		}
 		else if (id.matches("^[^:+',;.]+[:+',;.]\\d+$"))
 		{
-			itemname = id.split("[:+',;.]")[0].toLowerCase();
+			itemname = id.split("[:+',;.]")[0].toLowerCase(Locale.ENGLISH);
 			metaData = Short.parseShort(id.split("[:+',;.]")[1]);
 		}
 		else
 		{
-			itemname = id.toLowerCase();
+			itemname = id.toLowerCase(Locale.ENGLISH);
 		}
 
 		if (itemname != null)
@@ -101,14 +104,14 @@ public class ItemDb implements IConf
 			}
 			else
 			{
-				throw new Exception(Util.format("unknownItemName", id));
+				throw new Exception(_("unknownItemName", id));
 			}
 		}
 
 		final Material mat = Material.getMaterial(itemid);
 		if (mat == null)
 		{
-			throw new Exception(Util.format("unknownItemId", itemid));
+			throw new Exception(_("unknownItemId", itemid));
 		}
 		final ItemStack retval = new ItemStack(mat);
 		retval.setAmount(ess.getSettings().getDefaultStackSize());

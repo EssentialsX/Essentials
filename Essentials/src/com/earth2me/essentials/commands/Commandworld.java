@@ -1,8 +1,8 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -24,7 +24,7 @@ public class Commandworld extends EssentialsCommand
 		if (args.length < 1)
 		{
 			World nether = null;
-			
+
 			final List<World> worlds = server.getWorlds();
 
 			for (World world2 : worlds)
@@ -46,9 +46,9 @@ public class Commandworld extends EssentialsCommand
 			world = ess.getWorld(getFinalArg(args, 0));
 			if (world == null)
 			{
-				user.sendMessage(Util.i18n("invalidWorld"));
-				user.sendMessage(Util.format("possibleWorlds", server.getWorlds().size() - 1));
-				user.sendMessage(Util.i18n("typeWorldName"));
+				user.sendMessage(_("invalidWorld"));
+				user.sendMessage(_("possibleWorlds", server.getWorlds().size() - 1));
+				user.sendMessage(_("typeWorldName"));
 				throw new NoChargeException();
 			}
 		}
@@ -62,7 +62,8 @@ public class Commandworld extends EssentialsCommand
 		{
 			factor = 1.0 / 8.0;
 		}
-		else {
+		else
+		{
 			factor = 1.0;
 		}
 

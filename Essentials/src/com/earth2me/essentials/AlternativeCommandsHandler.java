@@ -31,7 +31,7 @@ public class AlternativeCommandsHandler
 			return;
 		}
 		final List<Command> commands = PluginCommandYamlParser.parse(plugin);
-		final String pluginName = plugin.getDescription().getName().toLowerCase();
+		final String pluginName = plugin.getDescription().getName().toLowerCase(Locale.ENGLISH);
 
 		for (Command command : commands)
 		{
@@ -39,18 +39,18 @@ public class AlternativeCommandsHandler
 			final List<String> labels = new ArrayList<String>(pc.getAliases());
 			labels.add(pc.getName());
 
-			PluginCommand reg = ess.getServer().getPluginCommand(pluginName + ":" + pc.getName().toLowerCase());
+			PluginCommand reg = ess.getServer().getPluginCommand(pluginName + ":" + pc.getName().toLowerCase(Locale.ENGLISH));
 			if (reg == null)
 			{
-				reg = Bukkit.getServer().getPluginCommand(pc.getName().toLowerCase());
+				reg = Bukkit.getServer().getPluginCommand(pc.getName().toLowerCase(Locale.ENGLISH));
 			}
 			for (String label : labels)
 			{
-				List<PluginCommand> plugincommands = altcommands.get(label.toLowerCase());
+				List<PluginCommand> plugincommands = altcommands.get(label.toLowerCase(Locale.ENGLISH));
 				if (plugincommands == null)
 				{
 					plugincommands = new ArrayList<PluginCommand>();
-					altcommands.put(label.toLowerCase(), plugincommands);
+					altcommands.put(label.toLowerCase(Locale.ENGLISH), plugincommands);
 				}
 				boolean found = false;
 				for (PluginCommand pc2 : plugincommands)

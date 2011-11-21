@@ -1,9 +1,9 @@
 package com.earth2me.essentials.protect;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import com.earth2me.essentials.protect.data.IProtectedBlock;
 import com.earth2me.essentials.protect.data.ProtectedBlockMemory;
 import com.earth2me.essentials.protect.data.ProtectedBlockMySQL;
@@ -81,9 +81,9 @@ public class EssentialsProtect extends JavaPlugin implements IConf, IProtect
 		ess.addReloadListener(this);
 		if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion()))
 		{
-			LOGGER.log(Level.WARNING, Util.i18n("versionMismatchAll"));
+			LOGGER.log(Level.WARNING, _("versionMismatchAll"));
 		}
-		LOGGER.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
+		LOGGER.info(_("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
 	}
 
 	@Override
@@ -97,9 +97,9 @@ public class EssentialsProtect extends JavaPlugin implements IConf, IProtect
 	public void alert(final User user, final String item, final String type)
 	{
 		final Location loc = user.getLocation();
-		final String warnMessage = Util.format("alertFormat", user.getName(), type, item,
-											   loc.getWorld().getName() + "," + loc.getBlockX() + ","
-											   + loc.getBlockY() + "," + loc.getBlockZ());
+		final String warnMessage = _("alertFormat", user.getName(), type, item,
+									 loc.getWorld().getName() + "," + loc.getBlockX() + ","
+									 + loc.getBlockY() + "," + loc.getBlockZ());
 		LOGGER.log(Level.WARNING, warnMessage);
 		for (Player p : this.getServer().getOnlinePlayers())
 		{

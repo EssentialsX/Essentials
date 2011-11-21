@@ -1,9 +1,9 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.TargetBlock;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import org.bukkit.Location;
 import org.bukkit.Server;
 
@@ -34,7 +34,7 @@ public class Commandjump extends EssentialsCommand
 		}
 		catch (NullPointerException ex)
 		{
-			throw new Exception(Util.i18n("jumpError"), ex);
+			throw new Exception(_("jumpError"), ex);
 		}
 
 		final Trade charge = new Trade(this.getName(), ess);

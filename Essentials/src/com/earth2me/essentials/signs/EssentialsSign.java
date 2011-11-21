@@ -1,7 +1,9 @@
 package com.earth2me.essentials.signs;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.*;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -26,14 +28,14 @@ public class EssentialsSign
 	{
 		final ISign sign = new EventSign(event);
 		final User user = ess.getUser(event.getPlayer());
-		if (!(user.isAuthorized("essentials.signs." + signName.toLowerCase() + ".create")
-			  || user.isAuthorized("essentials.signs.create." + signName.toLowerCase())))
+		if (!(user.isAuthorized("essentials.signs." + signName.toLowerCase(Locale.ENGLISH) + ".create")
+			  || user.isAuthorized("essentials.signs.create." + signName.toLowerCase(Locale.ENGLISH))))
 		{
 			// Return true, so other plugins can use the same sign title, just hope
 			// they won't change it to §1[Signname]
 			return true;
 		}
-		sign.setLine(0, Util.format("signFormatFail", this.signName));
+		sign.setLine(0, _("signFormatFail", this.signName));
 		try
 		{
 			final boolean ret = onSignCreate(sign, user, getUsername(user), ess);
@@ -57,12 +59,12 @@ public class EssentialsSign
 
 	public String getSuccessName()
 	{
-		return Util.format("signFormatSuccess", this.signName);
+		return _("signFormatSuccess", this.signName);
 	}
 
 	public String getTemplateName()
 	{
-		return Util.format("signFormatTemplate", this.signName);
+		return _("signFormatTemplate", this.signName);
 	}
 
 	private String getUsername(final User user)
@@ -76,8 +78,8 @@ public class EssentialsSign
 		final User user = ess.getUser(player);
 		try
 		{
-			return (user.isAuthorized("essentials.signs." + signName.toLowerCase() + ".use")
-					|| user.isAuthorized("essentials.signs.use." + signName.toLowerCase()))
+			return (user.isAuthorized("essentials.signs." + signName.toLowerCase(Locale.ENGLISH) + ".use")
+					|| user.isAuthorized("essentials.signs.use." + signName.toLowerCase(Locale.ENGLISH)))
 				   && onSignInteract(sign, user, getUsername(user), ess);
 		}
 		catch (ChargeException ex)
@@ -98,8 +100,8 @@ public class EssentialsSign
 		final User user = ess.getUser(player);
 		try
 		{
-			return (user.isAuthorized("essentials.signs." + signName.toLowerCase() + ".break")
-					|| user.isAuthorized("essentials.signs.break." + signName.toLowerCase()))
+			return (user.isAuthorized("essentials.signs." + signName.toLowerCase(Locale.ENGLISH) + ".break")
+					|| user.isAuthorized("essentials.signs.break." + signName.toLowerCase(Locale.ENGLISH)))
 				   && onSignBreak(sign, user, getUsername(user), ess);
 		}
 		catch (SignException ex)
@@ -173,7 +175,7 @@ public class EssentialsSign
 		}
 		return false;
 	}
-	
+
 	public boolean onBlockBreak(final Block block, final IEssentials ess)
 	{
 		return true;
@@ -188,7 +190,7 @@ public class EssentialsSign
 	{
 		return true;
 	}
-	
+
 	public boolean onBlockIgnite(final Block block, final IEssentials ess)
 	{
 		return true;
@@ -285,7 +287,7 @@ public class EssentialsSign
 		final int amount = Math.min(getIntegerPositive(sign.getLine(amountIndex)), item.getType().getMaxStackSize() * player.getInventory().getSize());
 		if (item.getTypeId() == 0 || amount < 1)
 		{
-			throw new SignException(Util.i18n("moreThanZero"));
+			throw new SignException(_("moreThanZero"));
 		}
 		item.setAmount(amount);
 		return new Trade(item, ess);
@@ -307,7 +309,7 @@ public class EssentialsSign
 		final int quantity = getInteger(line);
 		if (quantity < 1)
 		{
-			throw new SignException(Util.i18n("moreThanZero"));
+			throw new SignException(_("moreThanZero"));
 		}
 		return quantity;
 	}
@@ -351,7 +353,7 @@ public class EssentialsSign
 		final double quantity = getDouble(line);
 		if (Math.round(quantity * 100.0) < 1.0)
 		{
-			throw new SignException(Util.i18n("moreThanZero"));
+			throw new SignException(_("moreThanZero"));
 		}
 		return quantity;
 	}
@@ -378,7 +380,7 @@ public class EssentialsSign
 		final String line = sign.getLine(index).trim();
 		if (line.isEmpty())
 		{
-			return new Trade(signName.toLowerCase() + "sign", ess);
+			return new Trade(signName.toLowerCase(Locale.ENGLISH) + "sign", ess);
 		}
 
 		final Double money = getMoney(line);
@@ -387,15 +389,15 @@ public class EssentialsSign
 			final String[] split = line.split("[ :]+", 2);
 			if (split.length != 2)
 			{
-				throw new SignException(Util.i18n("invalidCharge"));
+				throw new SignException(_("invalidCharge"));
 			}
 			final int quantity = getIntegerPositive(split[0]);
 
-			final String item = split[1].toLowerCase();
+			final String item = split[1].toLowerCase(Locale.ENGLISH);
 			if (item.equalsIgnoreCase("times"))
 			{
 				sign.setLine(index, (quantity - decrement) + " times");
-				return new Trade(signName.toLowerCase() + "sign", ess);
+				return new Trade(signName.toLowerCase(Locale.ENGLISH) + "sign", ess);
 			}
 			else
 			{

@@ -15,8 +15,8 @@ found at http://www.jibble.org/licenses/
 package org.jibble.pircbot;
 
 import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.net.Socket;
+import java.util.StringTokenizer;
 
 /**
  * A Thread which reads lines from the IRC server.  It then

@@ -1,6 +1,8 @@
 package com.earth2me.essentials.protect.data;
 
-public class OwnedBlock {
+
+public class OwnedBlock
+{
 	final int x;
 	final int y;
 	final int z;

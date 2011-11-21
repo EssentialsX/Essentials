@@ -1,7 +1,5 @@
 package com.earth2me.essentials.register.payment.methods;
 
-
-
 import com.earth2me.essentials.register.payment.Method;
 import com.iConomy.iConomy;
 import com.iConomy.system.Account;

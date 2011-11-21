@@ -1,7 +1,7 @@
 package com.earth2me.essentials.chat;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.Util;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -32,21 +32,21 @@ public class EssentialsChat extends JavaPlugin
 		pluginManager.registerEvent(Type.PLAYER_CHAT, playerListenerHighest, Priority.Highest, this);
 		if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion()))
 		{
-			LOGGER.log(Level.WARNING, Util.i18n("versionMismatchAll"));
+			LOGGER.log(Level.WARNING, _("versionMismatchAll"));
 		}
-		LOGGER.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
+		LOGGER.info(_("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
 	}
 
 	public void onDisable()
 	{
 		chatListener.clear();
 	}
-	
+
 	public void addEssentialsChatListener(final String plugin, final IEssentialsChatListener listener)
 	{
 		chatListener.put(plugin, listener);
 	}
-	
+
 	public IEssentialsChatListener removeEssentialsChatListener(final String plugin)
 	{
 		return chatListener.remove(plugin);

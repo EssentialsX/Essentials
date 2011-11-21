@@ -3,6 +3,7 @@ package com.earth2me.essentials.protect;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,26 +15,10 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.CraftWorld;
-import org.bukkit.entity.CreatureType;
-import org.bukkit.entity.Creeper;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Fireball;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
-import org.bukkit.entity.SmallFireball;
-import org.bukkit.entity.TNTPrimed;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.EndermanPickupEvent;
-import org.bukkit.event.entity.EntityDamageByBlockEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.EntityListener;
-import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTargetEvent.TargetReason;
-import org.bukkit.event.entity.ExplosionPrimeEvent;
+import org.bukkit.event.entity.*;
 
 
 public class EssentialsProtectEntityListener extends EntityListener
@@ -315,7 +300,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 		{
 			return;
 		}
-		final String creatureName = creature.toString().toLowerCase();
+		final String creatureName = creature.toString().toLowerCase(Locale.ENGLISH);
 		if (creatureName == null || creatureName.isEmpty())
 		{
 			return;

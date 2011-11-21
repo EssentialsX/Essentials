@@ -1,7 +1,8 @@
 package com.earth2me.essentials.textreader;
 
-import com.earth2me.essentials.Util;
+import static com.earth2me.essentials.I18n._;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import org.bukkit.command.CommandSender;
 
@@ -44,7 +45,7 @@ public class TextPager
 			if (showHeader)
 			{
 				int pages = lines.size() / 9 + (lines.size() % 9 > 0 ? 1 : 0);
-				sender.sendMessage(Util.format("infoPages", page, pages));
+				sender.sendMessage(_("infoPages", page, pages));
 			}
 			for (int i = start; i < lines.size() && i < start + 9; i++)
 			{
@@ -61,7 +62,7 @@ public class TextPager
 				{
 					return;
 				}
-				sender.sendMessage(Util.i18n("infoChapter"));
+				sender.sendMessage(_("infoChapter"));
 				final StringBuilder sb = new StringBuilder();
 				boolean first = true;
 				for (String string : chapters)
@@ -102,7 +103,7 @@ public class TextPager
 				if (showHeader)
 				{
 					int pages = end / 9 + (end % 9 > 0 ? 1 : 0);
-					sender.sendMessage(Util.format("infoPages", page, pages));
+					sender.sendMessage(_("infoPages", page, pages));
 				}
 				for (int i = start; i < end && i < start + 9; i++)
 				{
@@ -125,12 +126,12 @@ public class TextPager
 			}
 		}
 
-		if (!bookmarks.containsKey(pageStr.toLowerCase()))
+		if (!bookmarks.containsKey(pageStr.toLowerCase(Locale.ENGLISH)))
 		{
-			sender.sendMessage(Util.i18n("infoUnknownChapter"));
+			sender.sendMessage(_("infoUnknownChapter"));
 			return;
 		}
-		final int chapterstart = bookmarks.get(pageStr.toLowerCase()) + 1;
+		final int chapterstart = bookmarks.get(pageStr.toLowerCase(Locale.ENGLISH)) + 1;
 		int chapterend;
 		for (chapterend = chapterstart; chapterend < lines.size(); chapterend++)
 		{
@@ -146,7 +147,7 @@ public class TextPager
 		{
 			final int page = chapterpage + 1;
 			final int pages = (chapterend - chapterstart) / 9 + ((chapterend - chapterstart) % 9 > 0 ? 1 : 0);
-			sender.sendMessage(Util.format("infoChapterPages", pageStr, page, pages));
+			sender.sendMessage(_("infoChapterPages", pageStr, page, pages));
 		}
 		for (int i = start; i < chapterend && i < start + 9; i++)
 		{

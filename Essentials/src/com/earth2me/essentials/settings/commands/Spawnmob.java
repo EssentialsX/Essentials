@@ -5,6 +5,7 @@ import com.earth2me.essentials.storage.StorageObject;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class Spawnmob extends StorageObject

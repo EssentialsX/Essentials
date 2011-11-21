@@ -1,9 +1,11 @@
 package com.earth2me.essentials;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -111,7 +113,7 @@ public class Settings implements ISettings
 			}
 			return true;
 		}
-		return config.getBoolean("disable-" + label.toLowerCase(), false);
+		return config.getBoolean("disable-" + label.toLowerCase(Locale.ENGLISH), false);
 	}
 
 	@Override
@@ -131,7 +133,7 @@ public class Settings implements ISettings
 			}
 			return true;
 		}
-		return config.getBoolean("restrict-" + label.toLowerCase(), false);
+		return config.getBoolean("restrict-" + label.toLowerCase(Locale.ENGLISH), false);
 	}
 
 	@Override
@@ -161,7 +163,7 @@ public class Settings implements ISettings
 			}
 			return true;
 		}
-		return config.getBoolean("override-" + name.toLowerCase(), false);
+		return config.getBoolean("override-" + name.toLowerCase(Locale.ENGLISH), false);
 	}
 
 	@Override
@@ -360,7 +362,7 @@ public class Settings implements ISettings
 			}
 			catch (Exception ex)
 			{
-				logger.log(Level.SEVERE, Util.format("unknownItemInList", itemName, "item-spawn-blacklist"));
+				logger.log(Level.SEVERE, _("unknownItemInList", itemName, "item-spawn-blacklist"));
 			}
 		}
 		return epItemSpwn;
@@ -377,9 +379,8 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("protect.disable.warn-on-build-disallow", false);
 	}
-
 	private boolean debug = false;
-	
+
 	@Override
 	public boolean isDebug()
 	{
@@ -447,7 +448,7 @@ public class Settings implements ISettings
 			}
 			catch (Exception ex)
 			{
-				logger.log(Level.SEVERE, Util.format("unknownItemInList", itemName, configName));
+				logger.log(Level.SEVERE, _("unknownItemInList", itemName, configName));
 			}
 		}
 		return list;
@@ -506,13 +507,13 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("add-prefix-suffix", ess.getServer().getPluginManager().isPluginEnabled("EssentialsChat"));
 	}
-	
+
 	@Override
 	public boolean disablePrefix()
 	{
 		return config.getBoolean("disablePrefix", false);
 	}
-	
+
 	@Override
 	public boolean disableSuffix()
 	{

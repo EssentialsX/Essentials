@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import java.util.Arrays;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
@@ -31,7 +31,7 @@ public class Commandinvsee extends EssentialsCommand
 		{
 			invUser.getInventory().setContents(user.getSavedInventory());
 			user.setSavedInventory(null);
-			user.sendMessage(Util.i18n("invRestored"));
+			user.sendMessage(_("invRestored"));
 			throw new NoChargeException();
 		}
 
@@ -41,15 +41,17 @@ public class Commandinvsee extends EssentialsCommand
 		}
 		ItemStack[] invUserStack = invUser.getInventory().getContents();
 		final int userStackLength = user.getInventory().getContents().length;
-		if (invUserStack.length < userStackLength) {
+		if (invUserStack.length < userStackLength)
+		{
 			invUserStack = Arrays.copyOf(invUserStack, userStackLength);
 		}
-		if (invUserStack.length > userStackLength) {
-			throw new Exception(Util.i18n("invBigger"));
+		if (invUserStack.length > userStackLength)
+		{
+			throw new Exception(_("invBigger"));
 		}
 		user.getInventory().setContents(invUserStack);
-		user.sendMessage(Util.format("invSee", invUser.getDisplayName()));
-		user.sendMessage(Util.i18n("invSeeHelp"));
+		user.sendMessage(_("invSee", invUser.getDisplayName()));
+		user.sendMessage(_("invSeeHelp"));
 		throw new NoChargeException();
 	}
 }

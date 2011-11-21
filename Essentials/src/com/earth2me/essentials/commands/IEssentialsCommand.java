@@ -16,6 +16,6 @@ public interface IEssentialsCommand
 
 	void run(Server server, CommandSender sender, String commandLabel, Command cmd, String[] args)
 			throws Exception;
-	
+
 	void setEssentials(IEssentials ess);
 }

@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import static com.earth2me.essentials.I18n._;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -71,7 +72,7 @@ public final class DescParseTickFormat
 	public static long parse(String desc) throws NumberFormatException
 	{
 		// Only look at alphanumeric and lowercase and : for 24:00
-		desc = desc.toLowerCase().replaceAll("[^A-Za-z0-9:]", "");
+		desc = desc.toLowerCase(Locale.ENGLISH).replaceAll("[^A-Za-z0-9:]", "");
 
 		// Detect ticks format
 		try
@@ -132,7 +133,7 @@ public final class DescParseTickFormat
 			throw new NumberFormatException();
 		}
 
-		desc = desc.toLowerCase().replaceAll("[^0-9]", "");
+		desc = desc.toLowerCase(Locale.ENGLISH).replaceAll("[^0-9]", "");
 
 		if (desc.length() != 4)
 		{
@@ -155,7 +156,7 @@ public final class DescParseTickFormat
 		int hours = 0;
 		int minutes = 0;
 
-		desc = desc.toLowerCase().replaceAll("[^0-9]", "");
+		desc = desc.toLowerCase(Locale.ENGLISH).replaceAll("[^0-9]", "");
 
 		if (desc.length() > 4)
 		{
@@ -184,12 +185,12 @@ public final class DescParseTickFormat
 		{
 			throw new NumberFormatException();
 		}
-		
+
 		if (desc.endsWith("pm") && hours != 12)
 		{
 			hours += 12;
 		}
-		
+
 		if (desc.endsWith("am") && hours == 12)
 		{
 			hours -= 12;
@@ -230,7 +231,7 @@ public final class DescParseTickFormat
 	// --------------------------------------------
 	public static String format(final long ticks)
 	{
-		return Util.format("timeFormat", format24(ticks), format12(ticks), formatTicks(ticks));
+		return _("timeFormat", format24(ticks), format12(ticks), formatTicks(ticks));
 	}
 
 	public static String formatTicks(final long ticks)

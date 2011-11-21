@@ -11,8 +11,9 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class Groups extends StorageObject
-{	
-	public Groups() {
+{
+	public Groups()
+	{
 		GroupOptions defaultOptions = new GroupOptions();
 		groups.put("default", defaultOptions);
 	}

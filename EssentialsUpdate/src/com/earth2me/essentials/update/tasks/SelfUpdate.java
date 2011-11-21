@@ -43,8 +43,8 @@ public class SelfUpdate extends AbstractWorkListener implements Task, Runnable
 	@Override
 	public void run()
 	{
-		Bukkit.getScheduler().scheduleAsyncDelayedTask(getPlugin(), new Runnable() {
-
+		Bukkit.getScheduler().scheduleAsyncDelayedTask(getPlugin(), new Runnable()
+		{
 			@Override
 			public void run()
 			{
@@ -52,6 +52,4 @@ public class SelfUpdate extends AbstractWorkListener implements Task, Runnable
 			}
 		});
 	}
-	
-	
 }

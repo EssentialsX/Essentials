@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
@@ -26,17 +26,17 @@ public class Commandbanip extends EssentialsCommand
 		if (player == null)
 		{
 			ess.getServer().banIP(args[0]);
-			sender.sendMessage(Util.i18n("banIpAddress"));
+			sender.sendMessage(_("banIpAddress"));
 		}
 		else
 		{
 			final String ipAddress = player.getLastLoginAddress();
 			if (ipAddress.length() == 0)
 			{
-				throw new Exception(Util.i18n("playerNotFound"));
+				throw new Exception(_("playerNotFound"));
 			}
 			ess.getServer().banIP(player.getLastLoginAddress());
-			sender.sendMessage(Util.i18n("banIpAddress"));
+			sender.sendMessage(_("banIpAddress"));
 		}
 	}
 }

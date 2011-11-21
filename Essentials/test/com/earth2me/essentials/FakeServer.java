@@ -2,20 +2,12 @@ package com.earth2me.essentials;
 
 import com.avaje.ebean.config.ServerConfig;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Logger;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Server;
-import org.bukkit.World;
 import org.bukkit.World.Environment;
-import org.bukkit.WorldCreator;
+import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
@@ -469,8 +461,8 @@ public class FakeServer implements Server
 	@Override
 	public org.bukkit.OfflinePlayer getOfflinePlayer(final String string)
 	{
-		return new org.bukkit.OfflinePlayer() {
-
+		return new org.bukkit.OfflinePlayer()
+		{
 			@Override
 			public boolean isOnline()
 			{

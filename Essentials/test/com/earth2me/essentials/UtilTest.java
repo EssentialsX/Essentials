@@ -30,16 +30,17 @@ public class UtilTest extends TestCase
 		{
 			fail("IOException");
 		}
-		Util.updateLocale("en_US", ess);
-	}	
-	
-	public void testFDDnow() {
+	}
+
+	public void testFDDnow()
+	{
 		Calendar c = new GregorianCalendar();
 		String resp = Util.formatDateDiff(c, c);
 		assertEquals(resp, "now");
 	}
-	
-	public void testFDDfuture() {
+
+	public void testFDDfuture()
+	{
 		Calendar a, b;
 		a = new GregorianCalendar(2010, 1, 1, 10, 0, 0);
 		b = new GregorianCalendar(2010, 1, 1, 10, 0, 1);
@@ -105,8 +106,9 @@ public class UtilTest extends TestCase
 		b = new GregorianCalendar(2011, 4, 31, 10, 5, 0);
 		assertEquals(" 5 minutes", Util.formatDateDiff(a, b));
 	}
-	
-	public void testFDDpast() {
+
+	public void testFDDpast()
+	{
 		Calendar a, b;
 		a = new GregorianCalendar(2010, 1, 1, 10, 0, 0);
 		b = new GregorianCalendar(2010, 1, 1, 9, 59, 59);

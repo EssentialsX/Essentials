@@ -15,8 +15,8 @@ import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
 
 
 public class UpdateFile
@@ -66,7 +66,7 @@ public class UpdateFile
 			getFile = new GetFile(UPDATE_URL);
 			getFile.saveTo(file);
 			plugin.getConfig().set("lastupdate", System.currentTimeMillis());
-			plugin.getConfig().save(new File(plugin.getDataFolder(),"config.yml"));
+			plugin.getConfig().save(new File(plugin.getDataFolder(), "config.yml"));
 			return true;
 		}
 		catch (IOException ex)

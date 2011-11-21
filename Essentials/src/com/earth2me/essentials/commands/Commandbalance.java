@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import org.bukkit.Server;
@@ -20,7 +21,7 @@ public class Commandbalance extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		sender.sendMessage(Util.format("balance", Util.formatCurrency(getPlayer(server, args, 0, true).getMoney(), ess)));
+		sender.sendMessage(_("balance", Util.formatCurrency(getPlayer(server, args, 0, true).getMoney(), ess)));
 	}
 
 	@Override
@@ -31,6 +32,6 @@ public class Commandbalance extends EssentialsCommand
 								 || user.isAuthorized("essentials.balance.other"))
 							? user
 							: getPlayer(server, args, 0, true)).getMoney();
-		user.sendMessage(Util.format("balance", Util.formatCurrency(bal, ess)));
+		user.sendMessage(_("balance", Util.formatCurrency(bal, ess)));
 	}
 }

@@ -1,8 +1,8 @@
 package com.earth2me.essentials.spawn;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Location;
@@ -71,7 +71,7 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 					}
 					catch (Exception ex)
 					{
-						Logger.getLogger("Minecraft").log(Level.WARNING, Util.i18n("teleportNewPlayerError"), ex);
+						Logger.getLogger("Minecraft").log(Level.WARNING, _("teleportNewPlayerError"), ex);
 					}
 				}
 			});

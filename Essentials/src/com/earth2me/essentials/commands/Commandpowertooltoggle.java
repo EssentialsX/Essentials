@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 
 
@@ -15,15 +15,13 @@ public class Commandpowertooltoggle extends EssentialsCommand
 	@Override
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		if(!user.hasPowerTools())
+		if (!user.hasPowerTools())
 		{
-			user.sendMessage(Util.i18n("noPowerTools"));
+			user.sendMessage(_("noPowerTools"));
 			return;
-		}		
+		}
 		user.sendMessage(user.togglePowerToolsEnabled()
-						 ? Util.i18n("powerToolsEnabled")
-						 : Util.i18n("powerToolsDisabled"));		
+						 ? _("powerToolsEnabled")
+						 : _("powerToolsDisabled"));
 	}
-		
-		
 }

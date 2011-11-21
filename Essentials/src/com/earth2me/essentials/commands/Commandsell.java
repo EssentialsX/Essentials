@@ -1,9 +1,11 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.InventoryWorkaround;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import java.util.Locale;
 import java.util.logging.Level;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -76,7 +78,7 @@ public class Commandsell extends EssentialsCommand
 	{
 		if (is == null || is.getType() == Material.AIR)
 		{
-			throw new Exception(Util.i18n("itemSellAir"));
+			throw new Exception(_("itemSellAir"));
 		}
 		int id = is.getTypeId();
 		int amount = 0;
@@ -94,11 +96,11 @@ public class Commandsell extends EssentialsCommand
 
 		if (Double.isNaN(worth))
 		{
-			throw new Exception(Util.i18n("itemCannotBeSold"));
+			throw new Exception(_("itemCannotBeSold"));
 		}
 		if (requireStack && !stack)
 		{
-			throw new Exception(Util.i18n("itemMustBeStacked"));
+			throw new Exception(_("itemMustBeStacked"));
 		}
 
 
@@ -137,9 +139,9 @@ public class Commandsell extends EssentialsCommand
 		{
 			if (!isBulkSell)
 			{
-				user.sendMessage(Util.i18n("itemNotEnough1"));
-				user.sendMessage(Util.i18n("itemNotEnough2"));
-				throw new Exception(Util.i18n("itemNotEnough3"));
+				user.sendMessage(_("itemNotEnough1"));
+				user.sendMessage(_("itemNotEnough2"));
+				throw new Exception(_("itemNotEnough3"));
 			}
 			else
 			{
@@ -152,8 +154,8 @@ public class Commandsell extends EssentialsCommand
 		user.updateInventory();
 		Trade.log("Command", "Sell", "Item", user.getName(), new Trade(ris, ess), user.getName(), new Trade(worth * amount, ess), user.getLocation(), ess);
 		user.giveMoney(worth * amount);
-		user.sendMessage(Util.format("itemSold", Util.formatCurrency(worth * amount, ess), amount, is.getType().toString().toLowerCase(), Util.formatCurrency(worth, ess)));
-		logger.log(Level.INFO, Util.format("itemSoldConsole", user.getDisplayName(), is.getType().toString().toLowerCase(), Util.formatCurrency(worth * amount, ess), amount, Util.formatCurrency(worth, ess)));
+		user.sendMessage(_("itemSold", Util.formatCurrency(worth * amount, ess), amount, is.getType().toString().toLowerCase(Locale.ENGLISH), Util.formatCurrency(worth, ess)));
+		logger.log(Level.INFO, _("itemSoldConsole", user.getDisplayName(), is.getType().toString().toLowerCase(Locale.ENGLISH), Util.formatCurrency(worth * amount, ess), amount, Util.formatCurrency(worth, ess)));
 
 	}
 }

@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import org.bukkit.Server;
@@ -24,7 +25,7 @@ public class Commandmute extends EssentialsCommand
 		final User player = getPlayer(server, args, 0, true);
 		if (!player.isMuted() && player.isAuthorized("essentials.mute.exempt"))
 		{
-			throw new Exception(Util.i18n("muteExempt"));
+			throw new Exception(_("muteExempt"));
 		}
 		long muteTimestamp = 0;
 		if (args.length > 1)
@@ -37,14 +38,14 @@ public class Commandmute extends EssentialsCommand
 		sender.sendMessage(
 				muted
 				? (muteTimestamp > 0
-				   ? Util.format("mutedPlayerFor", player.getDisplayName(), Util.formatDateDiff(muteTimestamp))
-				   : Util.format("mutedPlayer", player.getDisplayName()))
-				: Util.format("unmutedPlayer", player.getDisplayName()));
+				   ? _("mutedPlayerFor", player.getDisplayName(), Util.formatDateDiff(muteTimestamp))
+				   : _("mutedPlayer", player.getDisplayName()))
+				: _("unmutedPlayer", player.getDisplayName()));
 		player.sendMessage(
 				muted
 				? (muteTimestamp > 0
-				   ? Util.format("playerMutedFor", Util.formatDateDiff(muteTimestamp))
-				   : Util.i18n("playerMuted"))
-				: Util.i18n("playerUnmuted"));
+				   ? _("playerMutedFor", Util.formatDateDiff(muteTimestamp))
+				   : _("playerMuted"))
+				: _("playerUnmuted"));
 	}
 }

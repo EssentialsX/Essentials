@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.io.BufferedReader;
@@ -8,6 +9,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import org.bukkit.Server;
@@ -40,7 +42,7 @@ public class Commandhelp extends EssentialsCommand
 		{
 			if (args.length > 0)
 			{
-				match = args[0].toLowerCase();
+				match = args[0].toLowerCase(Locale.ENGLISH);
 				page = Integer.parseInt(args[args.length - 1]);
 				if (args.length == 1)
 				{
@@ -53,20 +55,20 @@ public class Commandhelp extends EssentialsCommand
 		{
 			if (args.length == 1)
 			{
-				match = args[0].toLowerCase();
+				match = args[0].toLowerCase(Locale.ENGLISH);
 			}
 		}
 
 		final List<String> lines = getHelpLines(user, match);
 		if (lines.isEmpty())
 		{
-			throw new Exception(Util.i18n("noHelpFound"));
+			throw new Exception(_("noHelpFound"));
 		}
 
 		final int start = (page - 1) * 9;
 		final int pages = lines.size() / 9 + (lines.size() % 9 > 0 ? 1 : 0);
 
-		user.sendMessage(Util.format("helpPages", page, pages));
+		user.sendMessage(_("helpPages", page, pages));
 		for (int i = start; i < lines.size() && i < start + 9; i++)
 		{
 			user.sendMessage(lines.get(i));
@@ -76,7 +78,7 @@ public class Commandhelp extends EssentialsCommand
 	@Override
 	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
-		sender.sendMessage(Util.i18n("helpConsole"));
+		sender.sendMessage(_("helpConsole"));
 	}
 
 	@SuppressWarnings("CallToThreadDumpStack")
@@ -101,7 +103,8 @@ public class Commandhelp extends EssentialsCommand
 				while (bufferedReader.ready())
 				{
 					final String line = bufferedReader.readLine();
-					if (line == null) {
+					if (line == null)
+					{
 						break;
 					}
 					retval.add(line.replace('&', '§'));
@@ -122,15 +125,15 @@ public class Commandhelp extends EssentialsCommand
 			{
 				final PluginDescriptionFile desc = p.getDescription();
 				final HashMap<String, HashMap<String, Object>> cmds = (HashMap<String, HashMap<String, Object>>)desc.getCommands();
-				pluginName = p.getDescription().getName().toLowerCase();
+				pluginName = p.getDescription().getName().toLowerCase(Locale.ENGLISH);
 				for (Entry<String, HashMap<String, Object>> k : cmds.entrySet())
 				{
 					try
 					{
 						if ((!match.equalsIgnoreCase(""))
-							&& (!k.getKey().toLowerCase().contains(match))
+							&& (!k.getKey().toLowerCase(Locale.ENGLISH).contains(match))
 							&& (!(k.getValue().get(DESCRIPTION) instanceof String
-								  && ((String)k.getValue().get(DESCRIPTION)).toLowerCase().contains(match)))
+								  && ((String)k.getValue().get(DESCRIPTION)).toLowerCase(Locale.ENGLISH).contains(match)))
 							&& (!pluginName.contains(match)))
 						{
 							continue;
@@ -223,7 +226,7 @@ public class Commandhelp extends EssentialsCommand
 			{
 				if (!reported)
 				{
-					logger.log(Level.WARNING, Util.format("commandHelpFailedForPlugin", pluginName), ex);
+					logger.log(Level.WARNING, _("commandHelpFailedForPlugin", pluginName), ex);
 				}
 				reported = true;
 				continue;

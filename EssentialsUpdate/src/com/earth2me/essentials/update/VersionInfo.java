@@ -1,10 +1,10 @@
 package com.earth2me.essentials.update;
 
-import org.bukkit.configuration.Configuration;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.bukkit.configuration.Configuration;
 
 
 public class VersionInfo

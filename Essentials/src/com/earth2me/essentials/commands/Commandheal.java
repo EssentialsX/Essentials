@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import java.util.List;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -35,7 +35,7 @@ public class Commandheal extends EssentialsCommand
 		}
 		user.setHealth(20);
 		user.setFoodLevel(20);
-		user.sendMessage(Util.i18n("heal"));
+		user.sendMessage(_("heal"));
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class Commandheal extends EssentialsCommand
 		final List<Player> players = server.matchPlayer(name);
 		if (players.isEmpty())
 		{
-			sender.sendMessage(Util.i18n("playerNotFound"));
+			sender.sendMessage(_("playerNotFound"));
 			return;
 		}
 		for (Player p : players)
@@ -64,7 +64,7 @@ public class Commandheal extends EssentialsCommand
 				continue;
 			}
 			p.setHealth(20);
-			sender.sendMessage(Util.format("healOther", p.getDisplayName()));
+			sender.sendMessage(_("healOther", p.getDisplayName()));
 		}
 	}
 }

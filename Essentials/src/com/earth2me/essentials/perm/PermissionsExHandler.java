@@ -88,7 +88,7 @@ public class PermissionsExHandler implements IPermissionsHandler
 		{
 			return null;
 		}
-		
+
 		return user.getSuffix(base.getWorld().getName());
 	}
 }

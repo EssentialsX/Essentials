@@ -1,7 +1,9 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import java.util.Locale;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -34,7 +36,7 @@ public class Commandwhois extends EssentialsCommand
 		{
 			showhidden = true;
 		}
-		final String whois = args[0].toLowerCase();
+		final String whois = args[0].toLowerCase(Locale.ENGLISH);
 		final int prefixLength = ChatColor.stripColor(ess.getSettings().getNicknamePrefix()).length();
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
@@ -51,25 +53,25 @@ public class Commandwhois extends EssentialsCommand
 				continue;
 			}
 			sender.sendMessage("");
-			sender.sendMessage(Util.format("whoisIs", user.getDisplayName(), user.getName()));
-			sender.sendMessage(Util.format("whoisHealth", user.getHealth()));
-			sender.sendMessage(Util.format("whoisOP", (user.isOp() ? Util.i18n("true") : Util.i18n("false"))));
-			sender.sendMessage(Util.format("whoisGod", (user.isGodModeEnabled() ? Util.i18n("true") : Util.i18n("false"))));
-			sender.sendMessage(Util.format("whoisGamemode", Util.i18n(user.getGameMode().toString().toLowerCase())));
-			sender.sendMessage(Util.format("whoisLocation", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ()));
+			sender.sendMessage(_("whoisIs", user.getDisplayName(), user.getName()));
+			sender.sendMessage(_("whoisHealth", user.getHealth()));
+			sender.sendMessage(_("whoisOP", (user.isOp() ? _("true") : _("false"))));
+			sender.sendMessage(_("whoisGod", (user.isGodModeEnabled() ? _("true") : _("false"))));
+			sender.sendMessage(_("whoisGamemode", _(user.getGameMode().toString().toLowerCase(Locale.ENGLISH))));
+			sender.sendMessage(_("whoisLocation", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ()));
 			if (!ess.getSettings().isEcoDisabled())
 			{
-				sender.sendMessage(Util.format("whoisMoney", Util.formatCurrency(user.getMoney(), ess)));
+				sender.sendMessage(_("whoisMoney", Util.formatCurrency(user.getMoney(), ess)));
 			}
 			sender.sendMessage(user.isAfk()
-					? Util.i18n("whoisStatusAway")
-					: Util.i18n("whoisStatusAvailable"));
-			sender.sendMessage(Util.format("whoisIPAddress", user.getAddress().getAddress().toString()));
+							   ? _("whoisStatusAway")
+							   : _("whoisStatusAvailable"));
+			sender.sendMessage(_("whoisIPAddress", user.getAddress().getAddress().toString()));
 			final String location = user.getGeoLocation();
 			if (location != null
 				&& (sender instanceof Player ? ess.getUser(sender).isAuthorized("essentials.geoip.show") : true))
 			{
-				sender.sendMessage(Util.format("whoisGeoLocation", location));
+				sender.sendMessage(_("whoisGeoLocation", location));
 			}
 		}
 	}

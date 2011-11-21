@@ -1,14 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.earth2me.essentials.chat;
 
 import com.earth2me.essentials.ChargeException;
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import java.util.Map;
 import java.util.logging.Logger;
 import org.bukkit.Location;
@@ -20,10 +16,6 @@ import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerListener;
 
 
-/**
- *
- * @author Seiji
- */
 public abstract class EssentialsChatPlayer extends PlayerListener
 {
 	protected transient IEssentials ess;
@@ -117,7 +109,7 @@ public abstract class EssentialsChatPlayer extends PlayerListener
 	protected void sendLocalChat(final User sender, final long radius, final PlayerChatEvent event)
 	{
 		event.setCancelled(true);
-		logger.info(Util.format("localFormat", sender.getName(), event.getMessage()));
+		logger.info(_("localFormat", sender.getName(), event.getMessage()));
 		final Location loc = sender.getLocation();
 		final World world = loc.getWorld();
 		final int x = loc.getBlockX();

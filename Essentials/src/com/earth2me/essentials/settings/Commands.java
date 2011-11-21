@@ -34,7 +34,6 @@ public class Commands extends StorageObject
 		"If god is set using WorldGuard, use /ungod to remove then use whichever you see fit."
 	})
 	private List<String> overwritten = new ArrayList<String>();
-	
 	@ListType
 	@Comment("Disabled commands will be completelly unavailable on the server.")
 	private List<String> disabled = new ArrayList<String>();

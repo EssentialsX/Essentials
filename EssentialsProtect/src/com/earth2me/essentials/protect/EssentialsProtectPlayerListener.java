@@ -1,14 +1,14 @@
 package com.earth2me.essentials.protect;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.User;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.inventory.ItemStack;
-import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
-import org.bukkit.Material;
-import org.bukkit.event.block.Action;
 
 
 public class EssentialsProtectPlayerListener extends PlayerListener
@@ -26,10 +26,6 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 	public void onPlayerInteract(final PlayerInteractEvent event)
 	{
 		// Do not return if cancelled, because the interact event has 2 cancelled states.
-		/*if (event.isCancelled())
-		{
-			return;
-		}*/
 		final User user = ess.getUser(event.getPlayer());
 
 		if (event.hasItem()
@@ -39,7 +35,7 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 		{
 			if (ess.getSettings().warnOnBuildDisallow())
 			{
-				user.sendMessage(Util.i18n("buildAlert"));
+				user.sendMessage(_("buildAlert"));
 			}
 			event.setCancelled(true);
 			return;
@@ -49,7 +45,7 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 		{
 			if (ess.getSettings().warnOnBuildDisallow())
 			{
-				user.sendMessage(Util.i18n("buildAlert"));
+				user.sendMessage(_("buildAlert"));
 			}
 			event.setCancelled(true);
 			return;
@@ -81,13 +77,13 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 			final String ownerNames = stringBuilder.toString();
 			if (ownerNames != null && !ownerNames.isEmpty())
 			{
-				user.sendMessage(Util.format("protectionOwner", ownerNames));
+				user.sendMessage(_("protectionOwner", ownerNames));
 			}
 		}
 		if (item != null
 			&& prot.checkProtectionItems(ProtectConfig.alert_on_use, item.getTypeId()))
 		{
-			prot.alert(user, item.getType().toString(), Util.i18n("alertUsed"));
+			prot.alert(user, item.getType().toString(), _("alertUsed"));
 		}
 	}
 }

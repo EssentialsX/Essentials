@@ -1,9 +1,9 @@
 package com.earth2me.essentials.chat;
 
 import com.earth2me.essentials.ChargeException;
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import java.util.Map;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerChatEvent;
@@ -25,8 +25,8 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer
 		}
 
 		/**
-		 * This file should handle detection of the local chat features...
-		 * if local chat is enabled, we need to handle it here
+		 * This file should handle detection of the local chat features... if local chat is enabled, we need to handle
+		 * it here
 		 */
 		final User user = ess.getUser(event.getPlayer());
 		final String chatType = getChatType(event.getMessage());
@@ -56,11 +56,11 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer
 				{
 					charge(user, command.toString());
 					event.setMessage(event.getMessage().substring(1));
-					event.setFormat(Util.format(format.toString(), event.getFormat()));
+					event.setFormat(_(format.toString(), event.getFormat()));
 					return;
 				}
 
-				user.sendMessage(Util.i18n(errorMsg.toString()));
+				user.sendMessage(_(errorMsg.toString()));
 				event.setCancelled(true);
 				return;
 			}

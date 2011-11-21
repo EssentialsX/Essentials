@@ -1,6 +1,5 @@
 package com.earth2me.essentials.perm;
 
-
 import java.util.Arrays;
 import java.util.List;
 import org.anjocaido.groupmanager.GroupManager;

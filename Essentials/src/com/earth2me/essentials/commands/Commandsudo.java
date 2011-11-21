@@ -24,7 +24,8 @@ public class Commandsudo extends EssentialsCommand
 		final User user = getPlayer(server, args, 0, false);
 		final String command = args[1];
 		final String[] arguments = new String[args.length - 2];
-		if (arguments.length > 0) {
+		if (arguments.length > 0)
+		{
 			System.arraycopy(args, 2, arguments, 0, args.length - 2);
 		}
 

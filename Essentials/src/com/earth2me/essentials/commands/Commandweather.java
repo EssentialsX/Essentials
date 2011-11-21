@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -13,9 +13,8 @@ public class Commandweather extends EssentialsCommand
 	{
 		super("weather");
 	}
-	
-	//TODO: Remove duplication
 
+	//TODO: Remove duplication
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
@@ -32,15 +31,15 @@ public class Commandweather extends EssentialsCommand
 			world.setStorm(isStorm ? true : false);
 			world.setWeatherDuration(Integer.parseInt(args[1]) * 20);
 			user.sendMessage(isStorm
-							 ? Util.format("weatherStormFor", world.getName(), args[1])
-							 : Util.format("weatherSunFor", world.getName(), args[1]));
+							 ? _("weatherStormFor", world.getName(), args[1])
+							 : _("weatherSunFor", world.getName(), args[1]));
 		}
 		else
 		{
 			world.setStorm(isStorm ? true : false);
 			user.sendMessage(isStorm
-							 ? Util.format("weatherStorm", world.getName())
-							 : Util.format("weatherSun", world.getName()));
+							 ? _("weatherStorm", world.getName())
+							 : _("weatherSun", world.getName()));
 		}
 	}
 
@@ -64,15 +63,15 @@ public class Commandweather extends EssentialsCommand
 			world.setStorm(isStorm ? true : false);
 			world.setWeatherDuration(Integer.parseInt(args[2]) * 20);
 			sender.sendMessage(isStorm
-							   ? Util.format("weatherStormFor", world.getName(), args[2])
-							   : Util.format("weatherSunFor", world.getName(), args[2]));
+							   ? _("weatherStormFor", world.getName(), args[2])
+							   : _("weatherSunFor", world.getName(), args[2]));
 		}
 		else
 		{
 			world.setStorm(isStorm ? true : false);
 			sender.sendMessage(isStorm
-							   ? Util.format("weatherStorm", world.getName())
-							   : Util.format("weatherSun", world.getName()));
+							   ? _("weatherStorm", world.getName())
+							   : _("weatherSun", world.getName()));
 		}
 	}
 }

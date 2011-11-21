@@ -1,12 +1,7 @@
 package com.earth2me.essentials.protect.data;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
+import java.util.*;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.plugin.Plugin;
@@ -249,5 +244,5 @@ public class ProtectedBlockMemory implements IProtectedBlock
 	public void onPluginDeactivation()
 	{
 		storage.onPluginDeactivation();
-	}	
+	}
 }

@@ -1,7 +1,9 @@
 package com.earth2me.essentials;
 
+import static com.earth2me.essentials.I18n._;
 import java.io.File;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -25,18 +27,18 @@ public class Jail extends BlockListener implements IConf
 
 	public void setJail(Location loc, String jailName) throws Exception
 	{
-		config.setProperty(jailName.toLowerCase(), loc);
+		config.setProperty(jailName.toLowerCase(Locale.ENGLISH), loc);
 		config.save();
 	}
 
 	public Location getJail(String jailName) throws Exception
 	{
-		if (jailName == null || config.getProperty(jailName.toLowerCase()) == null)
+		if (jailName == null || config.getProperty(jailName.toLowerCase(Locale.ENGLISH)) == null)
 		{
-			throw new Exception(Util.i18n("jailNotExist"));
+			throw new Exception(_("jailNotExist"));
 		}
 
-		Location loc = config.getLocation(jailName.toLowerCase(), ess.getServer());
+		Location loc = config.getLocation(jailName.toLowerCase(Locale.ENGLISH), ess.getServer());
 		return loc;
 	}
 
@@ -51,7 +53,7 @@ public class Jail extends BlockListener implements IConf
 
 	public void delJail(String jail) throws Exception
 	{
-		config.removeProperty(jail.toLowerCase());
+		config.removeProperty(jail.toLowerCase(Locale.ENGLISH));
 		config.save();
 	}
 

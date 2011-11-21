@@ -1,10 +1,12 @@
 package com.earth2me.essentials;
 
+import static com.earth2me.essentials.I18n._;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,13 +52,13 @@ public class Trade
 			&& getMoney() > 0
 			&& !user.isAuthorized("essentials.eco.loan"))
 		{
-			throw new ChargeException(Util.i18n("notEnoughMoney"));
+			throw new ChargeException(_("notEnoughMoney"));
 		}
 
 		if (getItemStack() != null
 			&& !InventoryWorkaround.containsItem(user.getInventory(), true, itemStack))
 		{
-			throw new ChargeException(Util.format("missingItems", getItemStack().getAmount(), getItemStack().getType().toString().toLowerCase().replace("_", " ")));
+			throw new ChargeException(_("missingItems", getItemStack().getAmount(), getItemStack().getType().toString().toLowerCase(Locale.ENGLISH).replace("_", " ")));
 		}
 
 		if (command != null && !command.isEmpty()
@@ -66,7 +68,7 @@ public class Trade
 			&& 0 < ess.getSettings().getCommandCost(command.charAt(0) == '/' ? command.substring(1) : command)
 			&& !user.isAuthorized("essentials.eco.loan"))
 		{
-			throw new ChargeException(Util.i18n("notEnoughMoney"));
+			throw new ChargeException(_("notEnoughMoney"));
 		}
 	}
 
@@ -108,7 +110,7 @@ public class Trade
 			final double mon = user.getMoney();
 			if (mon < getMoney() && getMoney() > 0 && !user.isAuthorized("essentials.eco.loan"))
 			{
-				throw new ChargeException(Util.i18n("notEnoughMoney"));
+				throw new ChargeException(_("notEnoughMoney"));
 			}
 			user.takeMoney(getMoney());
 		}
@@ -116,7 +118,7 @@ public class Trade
 		{
 			if (!InventoryWorkaround.containsItem(user.getInventory(), true, itemStack))
 			{
-				throw new ChargeException(Util.format("missingItems", getItemStack().getAmount(), getItemStack().getType().toString().toLowerCase().replace("_", " ")));
+				throw new ChargeException(_("missingItems", getItemStack().getAmount(), getItemStack().getType().toString().toLowerCase(Locale.ENGLISH).replace("_", " ")));
 			}
 			InventoryWorkaround.removeItem(user.getInventory(), true, getItemStack());
 			user.updateInventory();
@@ -129,7 +131,7 @@ public class Trade
 			final double cost = ess.getSettings().getCommandCost(command.charAt(0) == '/' ? command.substring(1) : command);
 			if (mon < cost && cost > 0 && !user.isAuthorized("essentials.eco.loan"))
 			{
-				throw new ChargeException(Util.i18n("notEnoughMoney"));
+				throw new ChargeException(_("notEnoughMoney"));
 			}
 			user.takeMoney(cost);
 		}

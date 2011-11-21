@@ -1,9 +1,10 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.InventoryWorkaround;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import java.util.List;
+import java.util.Locale;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
@@ -59,12 +60,12 @@ public class Commandunlimited extends EssentialsCommand
 	private String getList(final User target)
 	{
 		final StringBuilder output = new StringBuilder();
-		output.append(Util.i18n("unlimitedItems")).append(" ");
+		output.append(_("unlimitedItems")).append(" ");
 		boolean first = true;
 		final List<Integer> items = target.getUnlimited();
 		if (items.isEmpty())
 		{
-			output.append(Util.i18n("none"));
+			output.append(_("none"));
 		}
 		for (Integer integer : items)
 		{
@@ -73,7 +74,7 @@ public class Commandunlimited extends EssentialsCommand
 				output.append(", ");
 			}
 			first = false;
-			final String matname = Material.getMaterial(integer).toString().toLowerCase().replace("_", "");
+			final String matname = Material.getMaterial(integer).toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 			output.append(matname);
 		}
 
@@ -85,7 +86,7 @@ public class Commandunlimited extends EssentialsCommand
 		final ItemStack stack = ess.getItemDb().get(item, 1);
 		stack.setAmount(Math.min(stack.getType().getMaxStackSize(), 2));
 
-		final String itemname = stack.getType().toString().toLowerCase().replace("_", "");
+		final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 		if (ess.getSettings().permissionBasedItemSpawn()
 			&& (!user.isAuthorized("essentials.unlimited.item-all")
 				&& !user.isAuthorized("essentials.unlimited.item-" + itemname)
@@ -93,7 +94,7 @@ public class Commandunlimited extends EssentialsCommand
 				&& !((stack.getType() == Material.WATER_BUCKET || stack.getType() == Material.LAVA_BUCKET)
 					 && user.isAuthorized("essentials.unlimited.item-bucket"))))
 		{
-			throw new Exception(Util.format("unlimitedItemPermission", itemname));
+			throw new Exception(_("unlimitedItemPermission", itemname));
 		}
 
 		String message = "disableUnlimited";
@@ -110,9 +111,9 @@ public class Commandunlimited extends EssentialsCommand
 
 		if (user != target)
 		{
-			user.sendMessage(Util.format(message, itemname, target.getDisplayName()));
+			user.sendMessage(_(message, itemname, target.getDisplayName()));
 		}
-		target.sendMessage(Util.format(message, itemname, target.getDisplayName()));
+		target.sendMessage(_(message, itemname, target.getDisplayName()));
 		target.setUnlimited(stack, enableUnlimited);
 
 		return true;

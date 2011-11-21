@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 
 
@@ -17,7 +17,7 @@ public class Commandme extends EssentialsCommand
 	{
 		if (user.isMuted())
 		{
-			throw new Exception(Util.i18n("voiceSilenced"));
+			throw new Exception(_("voiceSilenced"));
 		}
 
 		if (args.length < 1)
@@ -31,6 +31,6 @@ public class Commandme extends EssentialsCommand
 			message = message.replaceAll("&([0-9a-f])", "§$1");
 		}
 
-		ess.broadcastMessage(user, Util.format("action", user.getDisplayName(), message));
+		ess.broadcastMessage(user, _("action", user.getDisplayName(), message));
 	}
 }

@@ -1,9 +1,10 @@
 package com.earth2me.essentials.xmpp;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.IUser;
-import com.earth2me.essentials.Util;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.command.Command;
@@ -22,7 +23,7 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 	private transient UserManager users;
 	private transient XMPPManager xmpp;
 	private transient IEssentials ess;
-	
+
 	public static IEssentialsXMPP getInstance()
 	{
 		return instance;
@@ -39,7 +40,7 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 		{
 			LOGGER.log(Level.SEVERE, "Failed to load Essentials before EssentialsXMPP");
 		}
-		
+
 		final EssentialsXMPPPlayerListener playerListener = new EssentialsXMPPPlayerListener(ess);
 		pluginManager.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
 		pluginManager.registerEvent(Type.PLAYER_CHAT, playerListener, Priority.Monitor, this);
@@ -53,9 +54,9 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 
 		if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion()))
 		{
-			LOGGER.log(Level.WARNING, Util.i18n("versionMismatchAll"));
+			LOGGER.log(Level.WARNING, _("versionMismatchAll"));
 		}
-		LOGGER.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
+		LOGGER.info(_("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
 	}
 
 	@Override
@@ -73,7 +74,7 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 	@Override
 	public void setAddress(final Player user, final String address)
 	{
-		final String username = user.getName().toLowerCase();
+		final String username = user.getName().toLowerCase(Locale.ENGLISH);
 		instance.users.setAddress(username, address);
 	}
 
@@ -93,7 +94,7 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 	@Override
 	public boolean toggleSpy(final Player user)
 	{
-		final String username = user.getName().toLowerCase();
+		final String username = user.getName().toLowerCase(Locale.ENGLISH);
 		final boolean spy = !instance.users.isSpy(username);
 		instance.users.setSpy(username, spy);
 		return spy;

@@ -12,6 +12,7 @@ public class BPermissionsHandler implements IPermissionsHandler
 {
 	private final transient WorldPermissionsManager wpm;
 	private final transient InfoReader info;
+
 	public BPermissionsHandler()
 	{
 		wpm = Permissions.getWorldPermissionsManager();
@@ -51,13 +52,13 @@ public class BPermissionsHandler implements IPermissionsHandler
 		}
 		return groups.contains(group);
 	}
-	
+
 	@Override
 	public boolean canBuild(final Player base, final String group)
 	{
 		return hasPermission(base, "essentials.build") || hasPermission(base, "bPermissions.build");
 	}
-	
+
 	@Override
 	public String getPrefix(final Player base)
 	{

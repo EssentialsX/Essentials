@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import static com.earth2me.essentials.I18n._;
 import java.io.File;
 import java.util.*;
 import java.util.logging.Level;
@@ -47,7 +48,7 @@ public class Warps implements IConf
 		EssentialsConf conf = warpPoints.get(new StringIgnoreCase(warp));
 		if (conf == null)
 		{
-			throw new Exception(Util.i18n("warpNotExist"));
+			throw new Exception(_("warpNotExist"));
 		}
 		return conf.getLocation(null, server);
 	}
@@ -61,7 +62,7 @@ public class Warps implements IConf
 			File confFile = new File(warpsFolder, filename + ".yml");
 			if (confFile.exists())
 			{
-				throw new Exception(Util.i18n("similarWarpExist"));
+				throw new Exception(_("similarWarpExist"));
 			}
 			conf = new EssentialsConf(confFile);
 			warpPoints.put(new StringIgnoreCase(name), conf);
@@ -76,11 +77,11 @@ public class Warps implements IConf
 		EssentialsConf conf = warpPoints.get(new StringIgnoreCase(name));
 		if (conf == null)
 		{
-			throw new Exception(Util.i18n("warpNotExist"));
+			throw new Exception(_("warpNotExist"));
 		}
 		if (!conf.getFile().delete())
 		{
-			throw new Exception(Util.i18n("warpDeleteError"));
+			throw new Exception(_("warpDeleteError"));
 		}
 		warpPoints.remove(new StringIgnoreCase(name));
 	}
@@ -109,7 +110,7 @@ public class Warps implements IConf
 					}
 					catch (Exception ex)
 					{
-						logger.log(Level.WARNING, Util.format("loadWarpError", filename), ex);
+						logger.log(Level.WARNING, _("loadWarpError", filename), ex);
 					}
 				}
 			}
@@ -129,7 +130,7 @@ public class Warps implements IConf
 		@Override
 		public int hashCode()
 		{
-			return getString().toLowerCase().hashCode();
+			return getString().toLowerCase(Locale.ENGLISH).hashCode();
 		}
 
 		@Override

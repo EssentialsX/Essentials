@@ -1,9 +1,11 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.Mob.MobException;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import java.util.Locale;
 import java.util.Random;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
@@ -58,18 +60,18 @@ public class Commandspawnmob extends EssentialsCommand
 		mob = Mob.fromName(mobType);
 		if (mob == null)
 		{
-			throw new Exception(Util.i18n("invalidMob"));
+			throw new Exception(_("invalidMob"));
 		}
 
-		if (ess.getSettings().getProtectPreventSpawn(mob.getType().toString().toLowerCase()))
+		if (ess.getSettings().getProtectPreventSpawn(mob.getType().toString().toLowerCase(Locale.ENGLISH)))
 		{
-			throw new Exception(Util.i18n("unableToSpawnMob"));
+			throw new Exception(_("unableToSpawnMob"));
 		}
 
 		final Block block = Util.getTarget(user).getBlock();
 		if (block == null)
 		{
-			throw new Exception(Util.i18n("unableToSpawnMob"));
+			throw new Exception(_("unableToSpawnMob"));
 		}
 		Location loc = block.getLocation();
 		Location sloc = Util.getSafeDestination(loc);
@@ -79,7 +81,7 @@ public class Commandspawnmob extends EssentialsCommand
 		}
 		catch (MobException e)
 		{
-			throw new Exception(Util.i18n("unableToSpawnMob"));
+			throw new Exception(_("unableToSpawnMob"));
 		}
 
 		if (mountType != null)
@@ -87,13 +89,13 @@ public class Commandspawnmob extends EssentialsCommand
 			mobMount = Mob.fromName(mountType);
 			if (mobMount == null)
 			{
-				user.sendMessage(Util.i18n("invalidMob"));
+				user.sendMessage(_("invalidMob"));
 				return;
 			}
 
-			if (ess.getSettings().getProtectPreventSpawn(mobMount.getType().toString().toLowerCase()))
+			if (ess.getSettings().getProtectPreventSpawn(mobMount.getType().toString().toLowerCase(Locale.ENGLISH)))
 			{
-				throw new Exception(Util.i18n("unableToSpawnMob"));
+				throw new Exception(_("unableToSpawnMob"));
 			}
 			try
 			{
@@ -101,7 +103,7 @@ public class Commandspawnmob extends EssentialsCommand
 			}
 			catch (MobException e)
 			{
-				throw new Exception(Util.i18n("unableToSpawnMob"));
+				throw new Exception(_("unableToSpawnMob"));
 			}
 			spawnedMob.setPassenger(spawnedMount);
 		}
@@ -120,7 +122,7 @@ public class Commandspawnmob extends EssentialsCommand
 			if (mobCount > serverLimit)
 			{
 				mobCount = serverLimit;
-				user.sendMessage(Util.i18n("mobSpawnLimit"));
+				user.sendMessage(_("mobSpawnLimit"));
 			}
 
 			try
@@ -136,7 +138,7 @@ public class Commandspawnmob extends EssentialsCommand
 						}
 						catch (MobException e)
 						{
-							throw new Exception(Util.i18n("unableToSpawnMob"));
+							throw new Exception(_("unableToSpawnMob"));
 						}
 						spawnedMob.setPassenger(spawnedMount);
 					}
@@ -149,24 +151,24 @@ public class Commandspawnmob extends EssentialsCommand
 						changeMobData(mobMount.name, spawnedMount, mountData, user);
 					}
 				}
-				user.sendMessage(args[1] + " " + mob.name.toLowerCase() + mob.suffix + " " + Util.i18n("spawned"));
+				user.sendMessage(args[1] + " " + mob.name.toLowerCase(Locale.ENGLISH) + mob.suffix + " " + _("spawned"));
 			}
 			catch (MobException e1)
 			{
-				throw new Exception(Util.i18n("unableToSpawnMob"), e1);
+				throw new Exception(_("unableToSpawnMob"), e1);
 			}
 			catch (NumberFormatException e2)
 			{
-				throw new Exception(Util.i18n("numberRequired"), e2);
+				throw new Exception(_("numberRequired"), e2);
 			}
 			catch (NullPointerException np)
 			{
-				throw new Exception(Util.i18n("soloMob"), np);
+				throw new Exception(_("soloMob"), np);
 			}
 		}
 		else
 		{
-			user.sendMessage(mob.name + " " + Util.i18n("spawned"));
+			user.sendMessage(mob.name + " " + _("spawned"));
 		}
 	}
 
@@ -180,7 +182,7 @@ public class Commandspawnmob extends EssentialsCommand
 			}
 			catch (Exception e)
 			{
-				throw new Exception(Util.i18n("slimeMalformedSize"), e);
+				throw new Exception(_("slimeMalformedSize"), e);
 			}
 		}
 		if ("Sheep".equalsIgnoreCase(type))
@@ -199,7 +201,7 @@ public class Commandspawnmob extends EssentialsCommand
 			}
 			catch (Exception e)
 			{
-				throw new Exception(Util.i18n("sheepMalformedColor"), e);
+				throw new Exception(_("sheepMalformedColor"), e);
 			}
 		}
 		if ("Wolf".equalsIgnoreCase(type) && data.equalsIgnoreCase("tamed"))

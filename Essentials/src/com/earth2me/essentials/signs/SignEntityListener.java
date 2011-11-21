@@ -69,5 +69,5 @@ public class SignEntityListener extends EntityListener
 				return;
 			}
 		}
-	}	
+	}
 }

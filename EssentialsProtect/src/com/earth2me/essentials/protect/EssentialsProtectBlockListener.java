@@ -1,22 +1,15 @@
 package com.earth2me.essentials.protect;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import com.earth2me.essentials.protect.data.IProtectedBlock;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockBurnEvent;
-import org.bukkit.event.block.BlockFromToEvent;
-import org.bukkit.event.block.BlockIgniteEvent;
-import org.bukkit.event.block.BlockListener;
-import org.bukkit.event.block.BlockPistonExtendEvent;
-import org.bukkit.event.block.BlockPistonRetractEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.*;
 
 
 public class EssentialsProtectBlockListener extends BlockListener
@@ -57,7 +50,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 
 		if (prot.checkProtectionItems(ProtectConfig.alert_on_placement, id))
 		{
-			prot.alert(user, blockPlaced.getType().toString(), Util.i18n("alertPlaced"));
+			prot.alert(user, blockPlaced.getType().toString(), _("alertPlaced"));
 		}
 
 		final Block below = blockPlaced.getRelative(BlockFace.DOWN);
@@ -255,7 +248,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 
 		if (prot.checkProtectionItems(ProtectConfig.alert_on_break, typeId))
 		{
-			prot.alert(user, type.toString(), Util.i18n("alertBroke"));
+			prot.alert(user, type.toString(), _("alertBroke"));
 		}
 		final IProtectedBlock storage = prot.getStorage();
 

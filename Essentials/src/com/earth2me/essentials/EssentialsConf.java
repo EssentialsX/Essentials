@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import static com.earth2me.essentials.I18n._;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +39,7 @@ public class EssentialsConf extends Configuration
 		{
 			if (!configFile.getParentFile().mkdirs())
 			{
-				LOGGER.log(Level.SEVERE, Util.format("failedToCreateConfig", configFile.toString()));
+				LOGGER.log(Level.SEVERE, _("failedToCreateConfig", configFile.toString()));
 			}
 		}
 		// This will delete files where the first character is 0. In most cases they are broken.
@@ -81,22 +82,22 @@ public class EssentialsConf extends Configuration
 		{
 			if (templateName != null)
 			{
-				LOGGER.log(Level.INFO, Util.format("creatingConfigFromTemplate", configFile.toString()));
+				LOGGER.log(Level.INFO, _("creatingConfigFromTemplate", configFile.toString()));
 				createFromTemplate();
 			}
 			else
 			{
 				try
 				{
-					LOGGER.log(Level.INFO, Util.format("creatingEmptyConfig", configFile.toString()));
+					LOGGER.log(Level.INFO, _("creatingEmptyConfig", configFile.toString()));
 					if (!configFile.createNewFile())
 					{
-						LOGGER.log(Level.SEVERE, Util.format("failedToCreateConfig", configFile.toString()));
+						LOGGER.log(Level.SEVERE, _("failedToCreateConfig", configFile.toString()));
 					}
 				}
 				catch (IOException ex)
 				{
-					LOGGER.log(Level.SEVERE, Util.format("failedToCreateConfig", configFile.toString()), ex);
+					LOGGER.log(Level.SEVERE, _("failedToCreateConfig", configFile.toString()), ex);
 				}
 			}
 		}
@@ -126,7 +127,7 @@ public class EssentialsConf extends Configuration
 			istr = resourceClass.getResourceAsStream(templateName);
 			if (istr == null)
 			{
-				LOGGER.log(Level.SEVERE, Util.format("couldNotFindTemplate", templateName));
+				LOGGER.log(Level.SEVERE, _("couldNotFindTemplate", templateName));
 				return;
 			}
 			ostr = new FileOutputStream(configFile);
@@ -141,7 +142,7 @@ public class EssentialsConf extends Configuration
 		}
 		catch (IOException ex)
 		{
-			LOGGER.log(Level.SEVERE, Util.format("failedToWriteConfig", configFile.toString()), ex);
+			LOGGER.log(Level.SEVERE, _("failedToWriteConfig", configFile.toString()), ex);
 		}
 		finally
 		{
@@ -165,7 +166,7 @@ public class EssentialsConf extends Configuration
 			}
 			catch (IOException ex)
 			{
-				LOGGER.log(Level.SEVERE, Util.format("failedToCloseConfig", configFile.toString()), ex);
+				LOGGER.log(Level.SEVERE, _("failedToCloseConfig", configFile.toString()), ex);
 			}
 		}
 	}
@@ -201,7 +202,7 @@ public class EssentialsConf extends Configuration
 		final World world = server.getWorld(worldName);
 		if (world == null)
 		{
-			throw new Exception(Util.i18n("invalidWorld"));
+			throw new Exception(_("invalidWorld"));
 		}
 		return new Location(world,
 							getDouble((path == null ? "" : path + ".") + "x", 0),
@@ -226,8 +227,10 @@ public class EssentialsConf extends Configuration
 		return new ItemStack(
 				Material.valueOf(getString(path + ".type", "AIR")),
 				getInt(path + ".amount", 1),
-				(short)getInt(path + ".damage", 0)/*,
-				(byte)getInt(path + ".data", 0)*/);
+				(short)getInt(path + ".damage", 0)/*
+				 * ,
+				 * (byte)getInt(path + ".data", 0)
+				 */);
 	}
 
 	public void setProperty(final String path, final ItemStack stack)

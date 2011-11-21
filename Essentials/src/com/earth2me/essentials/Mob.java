@@ -1,6 +1,8 @@
 package com.earth2me.essentials;
 
+import static com.earth2me.essentials.I18n._;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,7 +63,7 @@ public enum Mob
 	{
 		for (Mob mob : Mob.values())
 		{
-			hashMap.put(mob.name.toLowerCase(), mob);
+			hashMap.put(mob.name.toLowerCase(Locale.ENGLISH), mob);
 		}
 	}
 
@@ -71,7 +73,7 @@ public enum Mob
 		final LivingEntity entity = player.getWorld().spawnCreature(loc, this.bukkitType);
 		if (entity == null)
 		{
-			logger.log(Level.WARNING, Util.i18n("unableToSpawnMob"));
+			logger.log(Level.WARNING, _("unableToSpawnMob"));
 			throw new MobException();
 		}
 		return entity;
@@ -98,7 +100,7 @@ public enum Mob
 
 	public static Mob fromName(final String name)
 	{
-		return hashMap.get(name.toLowerCase());
+		return hashMap.get(name.toLowerCase(Locale.ENGLISH));
 	}
 
 

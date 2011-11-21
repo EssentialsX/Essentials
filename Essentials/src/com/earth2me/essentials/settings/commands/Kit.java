@@ -13,7 +13,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class Kit extends StorageObject
 {
-
 	public Kit()
 	{
 		final KitObject kit = new KitObject();
@@ -21,8 +20,6 @@ public class Kit extends StorageObject
 		kit.setItems(Arrays.asList("277 1,278 1,279 1".split(",")));
 		kits.put("tools", kit);
 	}
-	
-	
 	@MapType(KitObject.class)
-	private Map<String,KitObject> kits = new HashMap<String, KitObject>();
+	private Map<String, KitObject> kits = new HashMap<String, KitObject>();
 }

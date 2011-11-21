@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import java.util.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
@@ -117,7 +117,7 @@ public class Commandlist extends EssentialsCommand
 			Collections.sort(users);
 
 			final StringBuilder onlineUsers = new StringBuilder();
-			onlineUsers.append(Util.i18n("connectedPlayers"));
+			onlineUsers.append(_("connectedPlayers"));
 			boolean first = true;
 			for (User user : users)
 			{

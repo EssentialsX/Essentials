@@ -20,9 +20,9 @@
 
 package com.maxmind.geoip;
 
-import java.util.Date;
-import java.text.SimpleDateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Encapsulates metadata about the GeoIP database. The database has a date, is a premium or

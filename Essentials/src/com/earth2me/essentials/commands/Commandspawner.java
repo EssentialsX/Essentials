@@ -1,8 +1,8 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
@@ -28,7 +28,7 @@ public class Commandspawner extends EssentialsCommand
 		final Block target = user.getTarget().getTargetBlock();
 		if (target.getType() != Material.MOB_SPAWNER)
 		{
-			throw new Exception(Util.i18n("mobSpawnTarget"));
+			throw new Exception(_("mobSpawnTarget"));
 		}
 
 		try
@@ -39,15 +39,15 @@ public class Commandspawner extends EssentialsCommand
 			mob = Mob.fromName(name);
 			if (mob == null)
 			{
-				user.sendMessage(Util.i18n("invalidMob"));
+				user.sendMessage(_("invalidMob"));
 				return;
 			}
 			((CreatureSpawner)target.getState()).setCreatureType(mob.getType());
-			user.sendMessage(Util.format("setSpawner", mob.name));
+			user.sendMessage(_("setSpawner", mob.name));
 		}
 		catch (Throwable ex)
 		{
-			throw new Exception(Util.i18n("mobSpawnError"), ex);
+			throw new Exception(_("mobSpawnError"), ex);
 		}
 	}
 }

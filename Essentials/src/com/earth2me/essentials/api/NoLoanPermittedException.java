@@ -1,13 +1,12 @@
 package com.earth2me.essentials.api;
 
-import com.earth2me.essentials.Util;
+import static com.earth2me.essentials.I18n._;
+
 
 public class NoLoanPermittedException extends Exception
 {
-
 	public NoLoanPermittedException()
 	{
-		super(Util.i18n("negativeBalanceError"));
+		super(_("negativeBalanceError"));
 	}
-	
 }

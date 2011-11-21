@@ -1,13 +1,9 @@
 package com.earth2me.essentials;
 
-import junit.framework.TestCase;
 import com.earth2me.essentials.settings.Settings;
 import com.earth2me.essentials.storage.StorageObject;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.io.Reader;
+import java.io.*;
+import junit.framework.TestCase;
 import org.junit.Test;
 
 
