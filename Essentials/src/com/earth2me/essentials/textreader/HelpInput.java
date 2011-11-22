@@ -67,19 +67,16 @@ public class HelpInput implements IText
 								{
 									permissions = value.get(PERMISSIONS);
 								}
-								if (permissions instanceof String && !permissions.equals(""))
+								if (user.isAuthorized("essentials.help." + pluginName))
 								{
-									if (user.isAuthorized((String)permissions))
-									{
-										lines.add("§c" + k.getKey() + "§7: " + value.get(DESCRIPTION));
-									}
+									lines.add("§c" + k.getKey() + "§7: " + value.get(DESCRIPTION));
 								}
 								else if (permissions instanceof List && !((List<Object>)permissions).isEmpty())
 								{
 									boolean enabled = false;
 									for (Object o : (List<Object>)permissions)
 									{
-										if (o instanceof String && user.isAuthorized((String)o))
+										if (o instanceof String && user.isAuthorized(o.toString()))
 										{
 											enabled = true;
 											break;
@@ -90,9 +87,12 @@ public class HelpInput implements IText
 										lines.add("§c" + k.getKey() + "§7: " + value.get(DESCRIPTION));
 									}
 								}
-								else if (user.isAuthorized("essentials.help." + pluginName))
+								else if (permissions instanceof String && !"".equals(permissions))
 								{
-									lines.add("§c" + k.getKey() + "§7: " + value.get(DESCRIPTION));
+									if (user.isAuthorized(permissions.toString()))
+									{
+										lines.add("§c" + k.getKey() + "§7: " + value.get(DESCRIPTION));
+									}
 								}
 								else
 								{
