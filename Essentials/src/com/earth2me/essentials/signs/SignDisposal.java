@@ -2,8 +2,7 @@ package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
-import net.minecraft.server.InventoryPlayer;
-import org.bukkit.craftbukkit.inventory.CraftInventoryPlayer;
+import com.earth2me.essentials.craftbukkit.ShowInventory;
 
 
 public class SignDisposal extends EssentialsSign
@@ -16,9 +15,7 @@ public class SignDisposal extends EssentialsSign
 	@Override
 	protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess)
 	{
-		final CraftInventoryPlayer inv = new CraftInventoryPlayer(new InventoryPlayer(player.getHandle()));
-		inv.clear();
-		player.showInventory(inv);
+		ShowInventory.showEmptyInventory(player);
 		return true;
 	}
 }
