@@ -347,6 +347,19 @@ public class Util
 		return Math.round(d * 100.0) / 100.0;
 	}
 
+	public static boolean isInt(final String sInt)
+	{
+		try
+		{
+			Integer.parseInt(sInt);
+		}
+		catch (NumberFormatException e)
+		{
+			return false;
+		}
+		return true;
+	}
+
 	public static String joinList(Object... list)
 	{
 		return joinList(", ", list);

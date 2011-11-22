@@ -40,6 +40,9 @@ public class TextPager
 			{
 				page = 1;
 			}
+			if (page < 1) {
+				page = 1;
+			}
 
 			int start = (page - 1) * 9;
 			if (showHeader)
