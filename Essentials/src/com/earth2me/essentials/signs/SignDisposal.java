@@ -15,7 +15,7 @@ public class SignDisposal extends EssentialsSign
 	@Override
 	protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess)
 	{
-		ShowInventory.showEmptyInventory(player);
+		ShowInventory.showEmptyInventory(player.getBase());
 		return true;
 	}
 }

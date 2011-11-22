@@ -33,7 +33,7 @@ public class SignFree extends EssentialsSign
 		}
 
 		item.setAmount(item.getType().getMaxStackSize() * 9 * 4);
-		ShowInventory.showFilledInventory(player, item);
+		ShowInventory.showFilledInventory(player.getBase(), item);
 		Trade.log("Sign", "Free", "Interact", username, null, username, new Trade(item, ess), sign.getBlock().getLocation(), ess);
 		return true;
 	}
