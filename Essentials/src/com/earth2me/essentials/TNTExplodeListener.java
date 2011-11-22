@@ -1,31 +1,20 @@
 package com.earth2me.essentials;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import net.minecraft.server.ChunkPosition;
-import net.minecraft.server.Packet60Explosion;
-import org.bukkit.Location;
-import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.CraftServer;
-import org.bukkit.craftbukkit.CraftWorld;
+import com.earth2me.essentials.craftbukkit.FakeExplosion;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityListener;
 
 
 public class TNTExplodeListener extends EntityListener implements Runnable
 {
-	private final IEssentials ess;
-	private boolean enabled = false;
-	private int timer = -1;
+	private final transient IEssentials ess;
+	private transient boolean enabled = false;
+	private transient int timer = -1;
 
-	public TNTExplodeListener(IEssentials ess)
+	public TNTExplodeListener(final IEssentials ess)
 	{
+		super();
 		this.ess = ess;
 	}
 
@@ -55,33 +44,7 @@ public class TNTExplodeListener extends EntityListener implements Runnable
 		{
 			return;
 		}
-		try
-		{
-			final Set<ChunkPosition> set = new HashSet<ChunkPosition>(event.blockList().size());
-			final Player[] players = ess.getServer().getOnlinePlayers();
-			final List<ChunkPosition> blocksUnderPlayers = new ArrayList<ChunkPosition>(players.length);
-			final Location loc = event.getLocation();
-			for (Player player : players)
-			{
-				if (player.getWorld().equals(loc.getWorld()))
-				{
-					blocksUnderPlayers.add(new ChunkPosition(player.getLocation().getBlockX(), player.getLocation().getBlockY() - 1, player.getLocation().getBlockZ()));
-				}
-			}
-			for (Block block : event.blockList())
-			{
-				final ChunkPosition cp = new ChunkPosition(block.getX(), block.getY(), block.getZ());
-				if (!blocksUnderPlayers.contains(cp))
-				{
-					set.add(cp);
-				}
-			}
-			((CraftServer)ess.getServer()).getHandle().sendPacketNearby(loc.getX(), loc.getY(), loc.getZ(), 64.0, ((CraftWorld)loc.getWorld()).getHandle().worldProvider.dimension, new Packet60Explosion(loc.getX(), loc.getY(), loc.getZ(), 3.0F, set));
-		}
-		catch (Throwable ex)
-		{
-			Logger.getLogger("Minecraft").log(Level.SEVERE, null, ex);
-		}
+		FakeExplosion.createExplosion(event, ess.getServer(), ess.getServer().getOnlinePlayers());
 		event.setCancelled(true);
 	}
 

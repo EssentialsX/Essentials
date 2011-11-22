@@ -11,12 +11,14 @@ import org.bukkit.inventory.ItemStack;
 
 public abstract class UserData extends PlayerExtension implements IConf
 {
+	protected final transient IEssentials ess;
 	private final EssentialsConf config;
 	private static final Logger logger = Logger.getLogger("Minecraft");
 
 	protected UserData(Player base, IEssentials ess)
 	{
-		super(base, ess);
+		super(base);
+		this.ess = ess;
 		File folder = new File(ess.getDataFolder(), "userdata");
 		if (!folder.exists())
 		{
