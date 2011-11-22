@@ -73,3 +73,6 @@ v 1.5:
 	- Notification of being moved to the default group only happens if it's a demotion/promotion (not on join).
 	- Fixed GM holding files open and causing the time stamp to be incorrect. This caused GM to require a '/mansave force' when it shouldn't be needed.
 	- Fixed a crash on reload due to bukkit not unloading plugins before reloading.
+v 1.6:
+	- Prevent Group.equals tests throwing a NullPointerException for GlobalGroups.
+	- Stop throwing errors on an empty users file.

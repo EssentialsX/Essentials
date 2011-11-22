@@ -711,78 +711,74 @@ public class WorldDataHolder {
         // PROCESS USERS FILE
         Map<String, Object> allUsersNode = (Map<String, Object>) usersRootDataNode.get("users");
         
-        // Stop loading if the file is empty
-        if (allUsersNode == null)
-        	return ;
-
-        for (String usersKey : allUsersNode.keySet()) {
-            Map<String, Object> thisUserNode = (Map<String, Object>) allUsersNode.get(usersKey);
-            User thisUser = ph.createUser(usersKey);
-            if (thisUser == null) {
-                throw new IllegalArgumentException("I think this user was declared more than once: " + usersKey);
-            }
-            if (thisUserNode.get("permissions") == null) {
-                thisUserNode.put("permissions", new ArrayList<String>());
-            }
-            if (thisUserNode.get("permissions") instanceof List) {
-                for (Object o : ((List) thisUserNode.get("permissions"))) {
-                    thisUser.addPermission(o.toString());
-                }
-            } else if (thisUserNode.get("permissions") instanceof String) {
-                thisUser.addPermission(thisUserNode.get("permissions").toString());
-            }
-
-            //SUBGROUPS LOADING
-            if (thisUserNode.get("subgroups") == null) {
-                thisUserNode.put("subgroups", new ArrayList<String>());
-            }
-            if (thisUserNode.get("subgroups") instanceof List) {
-                for (Object o : ((List) thisUserNode.get("subgroups"))) {
-                    Group subGrp = ph.getGroup(o.toString());
-                    if (subGrp != null) {
-                        thisUser.addSubGroup(subGrp);
-                    } else {
-                        GroupManager.logger.warning("Subgroup " + o.toString() + " not found for user " + thisUser.getName() + ". Ignoring entry.");
-                    }
-                }
-            } else if (thisUserNode.get("subgroups") instanceof String) {
-                Group subGrp = ph.getGroup(thisUserNode.get("subgroups").toString());
-                if (subGrp != null) {
-                    thisUser.addSubGroup(subGrp);
-                } else {
-                    GroupManager.logger.warning("Subgroup " + thisUserNode.get("subgroups").toString() + " not found for user " + thisUser.getName() + ". Ignoring entry.");
-                }
-            }
-
-
-            //USER INFO NODE - BETA
-
-            //INFO NODE
-            Map<String, Object> infoNode = (Map<String, Object>) thisUserNode.get("info");
-            if (infoNode != null) {
-                thisUser.setVariables(infoNode);
-            }
-            //END INFO NODE - BETA
-
-            if (thisUserNode.get("group") != null) {
-                Group hisGroup = ph.getGroup(thisUserNode.get("group").toString());
-                if (hisGroup == null) {
-                	GroupManager.logger.warning("There is no group " + thisUserNode.get("group").toString() + ", as stated for player " + thisUser.getName() + ": Set to '" + ph.getDefaultGroup().getName() + "'.");
-                	hisGroup = ph.defaultGroup;
-                    //throw new IllegalArgumentException("There is no group " + thisUserNode.get("group").toString() + ", as stated for player " + thisUser.getName());
-                }
-                thisUser.setGroup(hisGroup);
-            } else {
-                thisUser.setGroup(ph.defaultGroup);
-            }
-        }
+        // Load users if the file is NOT empty
+        if (allUsersNode != null)
+	        for (String usersKey : allUsersNode.keySet()) {
+	            Map<String, Object> thisUserNode = (Map<String, Object>) allUsersNode.get(usersKey);
+	            User thisUser = ph.createUser(usersKey);
+	            if (thisUser == null) {
+	                throw new IllegalArgumentException("I think this user was declared more than once: " + usersKey);
+	            }
+	            if (thisUserNode.get("permissions") == null) {
+	                thisUserNode.put("permissions", new ArrayList<String>());
+	            }
+	            if (thisUserNode.get("permissions") instanceof List) {
+	                for (Object o : ((List) thisUserNode.get("permissions"))) {
+	                    thisUser.addPermission(o.toString());
+	                }
+	            } else if (thisUserNode.get("permissions") instanceof String) {
+	                thisUser.addPermission(thisUserNode.get("permissions").toString());
+	            }
+	
+	            //SUBGROUPS LOADING
+	            if (thisUserNode.get("subgroups") == null) {
+	                thisUserNode.put("subgroups", new ArrayList<String>());
+	            }
+	            if (thisUserNode.get("subgroups") instanceof List) {
+	                for (Object o : ((List) thisUserNode.get("subgroups"))) {
+	                    Group subGrp = ph.getGroup(o.toString());
+	                    if (subGrp != null) {
+	                        thisUser.addSubGroup(subGrp);
+	                    } else {
+	                        GroupManager.logger.warning("Subgroup " + o.toString() + " not found for user " + thisUser.getName() + ". Ignoring entry.");
+	                    }
+	                }
+	            } else if (thisUserNode.get("subgroups") instanceof String) {
+	                Group subGrp = ph.getGroup(thisUserNode.get("subgroups").toString());
+	                if (subGrp != null) {
+	                    thisUser.addSubGroup(subGrp);
+	                } else {
+	                    GroupManager.logger.warning("Subgroup " + thisUserNode.get("subgroups").toString() + " not found for user " + thisUser.getName() + ". Ignoring entry.");
+	                }
+	            }
+	
+	
+	            //USER INFO NODE - BETA
+	
+	            //INFO NODE
+	            Map<String, Object> infoNode = (Map<String, Object>) thisUserNode.get("info");
+	            if (infoNode != null) {
+	                thisUser.setVariables(infoNode);
+	            }
+	            //END INFO NODE - BETA
+	
+	            if (thisUserNode.get("group") != null) {
+	                Group hisGroup = ph.getGroup(thisUserNode.get("group").toString());
+	                if (hisGroup == null) {
+	                	GroupManager.logger.warning("There is no group " + thisUserNode.get("group").toString() + ", as stated for player " + thisUser.getName() + ": Set to '" + ph.getDefaultGroup().getName() + "'.");
+	                	hisGroup = ph.defaultGroup;
+	                    //throw new IllegalArgumentException("There is no group " + thisUserNode.get("group").toString() + ", as stated for player " + thisUser.getName());
+	                }
+	                thisUser.setGroup(hisGroup);
+	            } else {
+	                thisUser.setGroup(ph.defaultGroup);
+	            }
+	        }
         
         ph.removeUsersChangedFlag();
         // Update the LastModified time.
         ph.usersFile = usersFile;
         ph.setTimeStampUsers(usersFile.lastModified());
-        
-        //return ph;
     }
 
     /**
