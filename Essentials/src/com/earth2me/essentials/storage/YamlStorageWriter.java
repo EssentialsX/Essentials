@@ -19,7 +19,7 @@ import org.yaml.snakeyaml.Yaml;
 
 public class YamlStorageWriter implements IStorageWriter
 {
-	private transient static Pattern pattern = Pattern.compile("\\w");
+	private transient static final Pattern NON_WORD_PATTERN = Pattern.compile("\\W");
 	private transient final PrintWriter writer;
 	private transient static final Yaml YAML = new Yaml();
 
@@ -243,7 +243,7 @@ public class YamlStorageWriter implements IStorageWriter
 		if (data instanceof String || data instanceof Boolean || data instanceof Number)
 		{
 			String output = data.toString();
-			if (pattern.matcher(output).find())
+			if (NON_WORD_PATTERN.matcher(output).find())
 			{
 				writer.print('"');
 				writer.print(output.replace("\"", "\\\""));
