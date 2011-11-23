@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Settings extends StorageObject
+public class Settings implements StorageObject
 {
 	@Comment(
 	{

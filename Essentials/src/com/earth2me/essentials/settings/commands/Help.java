@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Help extends StorageObject
+public class Help implements StorageObject
 {
 	@Comment("Show other plugins commands in help")
 	private boolean showNonEssCommandsInHelp = true;

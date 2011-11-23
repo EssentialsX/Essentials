@@ -28,9 +28,17 @@ public class FakeServer implements Server
 	private List<Player> players = new ArrayList<Player>();
 	private final List<World> worlds = new ArrayList<World>();
 
+	public FakeServer()
+	{
+		if (Bukkit.getServer() == null)
+		{
+			Bukkit.setServer(this);
+		}
+	}
+
 	public String getName()
 	{
-		return "Test Server";
+		return "Essentials Fake Server";
 	}
 
 	public String getVersion()
@@ -576,6 +584,6 @@ public class FakeServer implements Server
 	@Override
 	public String getBukkitVersion()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		return "Essentials Fake-Server";
 	}
 }

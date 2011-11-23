@@ -862,4 +862,9 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.setProperty("timestamps.kits", kitTimestamps);
 		config.save();
 	}
+
+	public void save()
+	{
+		config.save();
+	}
 }

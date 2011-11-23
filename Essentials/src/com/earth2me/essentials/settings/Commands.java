@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Commands extends StorageObject
+public class Commands implements StorageObject
 {
 	private Afk afk = new Afk();
 	private God god = new God();

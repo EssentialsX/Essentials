@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class God extends StorageObject
+public class God implements StorageObject
 {
 	@Comment("Turn off god mode when people exit")
 	private boolean removeOnDisconnect = false;

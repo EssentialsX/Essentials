@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Chat extends StorageObject
+public class Chat implements StorageObject
 {
 	@Comment("The character(s) to prefix all nicknames, so that you know they are not true usernames.")
 	private String nicknamePrefix = "~";

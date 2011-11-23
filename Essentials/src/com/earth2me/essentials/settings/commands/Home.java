@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Home extends StorageObject
+public class Home implements StorageObject
 {
 	@Comment("When players die, should they respawn at their homes, instead of the spawnpoint?")
 	private boolean respawnAtHome = false;
