@@ -9,6 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.data.Group;
 import org.anjocaido.groupmanager.dataholder.WorldDataHolder;
@@ -698,7 +700,8 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 		}
 
 		// Check Bukkit perms to support plugins which add perms via code (Heroes).
-		if ((Bukkit.getPlayer(user.getName()) != null) && (Bukkit.getPlayer(user.getName()).hasPermission(targetPermission))) {
+		final Player player = Bukkit.getPlayer(user.getName());
+		if ((player != null) && (player.hasPermission(targetPermission))) {
 			result.resultType = PermissionCheckResult.Type.FOUND;
 			result.owner = user;
 			return result;
@@ -967,7 +970,10 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 		if (userAcessLevel == null || fullPermissionName == null) {
 			return false;
 		}
-		GroupManager.logger.finest("COMPARING " + userAcessLevel + " WITH " + fullPermissionName);
+		boolean logFinest = (GroupManager.logger.getLevel() == Level.FINEST);
+		
+		if (logFinest)
+			GroupManager.logger.finest("COMPARING " + userAcessLevel + " WITH " + fullPermissionName);
 
 		if (userAcessLevel.startsWith("+")) {
 			userAcessLevel = userAcessLevel.substring(1);
@@ -986,25 +992,31 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 		while (levelATokenizer.hasMoreTokens() && levelBTokenizer.hasMoreTokens()) {
 			String levelA = levelATokenizer.nextToken();
 			String levelB = levelBTokenizer.nextToken();
-			GroupManager.logger.finest("ROUND " + levelA + " AGAINST " + levelB);
+			if (logFinest)
+				GroupManager.logger.finest("ROUND " + levelA + " AGAINST " + levelB);
 			if (levelA.contains("*")) {
-				GroupManager.logger.finest("WIN");
+				if (logFinest)
+					GroupManager.logger.finest("WIN");
 				return true;
 			}
 			if (levelA.equalsIgnoreCase(levelB)) {
 				if (!levelATokenizer.hasMoreTokens() && !levelBTokenizer.hasMoreTokens()) {
-					GroupManager.logger.finest("WIN");
+					if (logFinest)
+						GroupManager.logger.finest("WIN");
 					return true;
 				}
-				GroupManager.logger.finest("NEXT");
+				if (logFinest)
+					GroupManager.logger.finest("NEXT");
 				continue;
 			} else {
-				GroupManager.logger.finest("FAIL");
+				if (logFinest)
+					GroupManager.logger.finest("FAIL");
 				return false;
 			}
 
 		}
-		GroupManager.logger.finest("FAIL");
+		if (logFinest)
+			GroupManager.logger.finest("FAIL");
 		return false;
 	}
 
