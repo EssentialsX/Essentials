@@ -601,9 +601,9 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 		for (String access : user.getPermissionList()) {
 			if (comparePermissionString(access, permission)) {
 				result.accessLevel = access;
-				if (access.startsWith("-")) {
+				if (access.charAt(0) == '-') {
 					result.resultType = PermissionCheckResult.Type.NEGATION;
-				} else if (access.startsWith("+")) {
+				} else if (access.charAt(0) == '+') {
 					result.resultType = PermissionCheckResult.Type.EXCEPTION;
 				} else {
 					result.resultType = PermissionCheckResult.Type.FOUND;
@@ -631,9 +631,9 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 		for (String access : group.getPermissionList()) {
 			if (comparePermissionString(access, permission)) {
 				result.accessLevel = access;
-				if (access.startsWith("-")) {
+				if (access.charAt(0) == '-') {
 					result.resultType = PermissionCheckResult.Type.NEGATION;
-				} else if (access.startsWith("+")) {
+				} else if (access.charAt(0) == '+') {
 					result.resultType = PermissionCheckResult.Type.EXCEPTION;
 				} else {
 					result.resultType = PermissionCheckResult.Type.FOUND;
