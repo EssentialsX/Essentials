@@ -10,17 +10,17 @@ import org.bukkit.command.CommandSender;
 public class TextPager
 {
 	private final transient IText text;
-	private final transient boolean showHeader;
+	private final transient boolean onePage;
 
 	public TextPager(final IText text)
 	{
-		this(text, true);
+		this(text, false);
 	}
 
-	public TextPager(final IText text, final boolean showHeader)
+	public TextPager(final IText text, final boolean onePage)
 	{
 		this.text = text;
-		this.showHeader = showHeader;
+		this.onePage = onePage;
 	}
 
 	public void showPage(final String pageStr, final String chapterPageStr, final CommandSender sender)
@@ -40,17 +40,18 @@ public class TextPager
 			{
 				page = 1;
 			}
-			if (page < 1) {
+			if (page < 1)
+			{
 				page = 1;
 			}
 
-			int start = (page - 1) * 9;
-			if (showHeader)
+			int start = onePage ? 0 : (page - 1) * 9;
+			if (!onePage)
 			{
 				int pages = lines.size() / 9 + (lines.size() % 9 > 0 ? 1 : 0);
 				sender.sendMessage(_("infoPages", page, pages));
 			}
-			for (int i = start; i < lines.size() && i < start + 9; i++)
+			for (int i = start; i < lines.size() && i < start + (onePage ? 20 : 9); i++)
 			{
 				sender.sendMessage(lines.get(i));
 			}
@@ -61,7 +62,7 @@ public class TextPager
 		{
 			if (lines.get(0).startsWith("#"))
 			{
-				if (!showHeader)
+				if (onePage)
 				{
 					return;
 				}
@@ -91,8 +92,12 @@ public class TextPager
 				{
 					page = 1;
 				}
+				if (page < 1)
+				{
+					page = 1;
+				}
 
-				int start = (page - 1) * 9;
+				int start = onePage ? 0 : (page - 1) * 9;
 				int end;
 				for (end = 0; end < lines.size(); end++)
 				{
@@ -103,12 +108,12 @@ public class TextPager
 					}
 				}
 
-				if (showHeader)
+				if (!onePage)
 				{
 					int pages = end / 9 + (end % 9 > 0 ? 1 : 0);
 					sender.sendMessage(_("infoPages", page, pages));
 				}
-				for (int i = start; i < end && i < start + 9; i++)
+				for (int i = start; i < end && i < start + (onePage ? 20 : 9); i++)
 				{
 					sender.sendMessage(lines.get(i));
 				}
@@ -124,6 +129,10 @@ public class TextPager
 				chapterpage = Integer.parseInt(chapterPageStr) - 1;
 			}
 			catch (Exception ex)
+			{
+				chapterpage = 0;
+			}
+			if (chapterpage < 0)
 			{
 				chapterpage = 0;
 			}
@@ -144,15 +153,15 @@ public class TextPager
 				break;
 			}
 		}
-		final int start = chapterstart + chapterpage * 9;
+		final int start = chapterstart + (onePage ? 0 : chapterpage * 9);
 
-		if (showHeader)
+		if (!onePage)
 		{
 			final int page = chapterpage + 1;
 			final int pages = (chapterend - chapterstart) / 9 + ((chapterend - chapterstart) % 9 > 0 ? 1 : 0);
 			sender.sendMessage(_("infoChapterPages", pageStr, page, pages));
 		}
-		for (int i = start; i < chapterend && i < start + 9; i++)
+		for (int i = start; i < chapterend && i < start + (onePage ? 20 : 9); i++)
 		{
 			sender.sendMessage(lines.get(i));
 		}

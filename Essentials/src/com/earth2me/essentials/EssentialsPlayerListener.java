@@ -172,7 +172,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			{
 				final IText input = new TextInput(user, "motd", true, ess);
 				final IText output = new KeywordReplacer(input, user, ess);
-				final TextPager pager = new TextPager(output, false);
+				final TextPager pager = new TextPager(output, true);
 				pager.showPage("1", null, user);
 			}
 			catch (IOException ex)
