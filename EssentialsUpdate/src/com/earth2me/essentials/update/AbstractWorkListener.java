@@ -13,13 +13,15 @@ public abstract class AbstractWorkListener
 	private final transient Plugin plugin;
 	private final transient VersionInfo newVersionInfo;
 
-	public final void onWorkAbort() {
+	public final void onWorkAbort()
+	{
 		onWorkAbort(null);
 	}
-	
+
 	public abstract void onWorkAbort(String message);
-	
-	public final void onWorkDone() {
+
+	public final void onWorkDone()
+	{
 		onWorkDone(null);
 	}
 

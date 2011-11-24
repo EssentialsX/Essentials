@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -93,7 +94,7 @@ public class Teleport implements Runnable
 			try
 			{
 				cooldown(false);
-				user.sendMessage(Util.i18n("teleportationCommencing"));
+				user.sendMessage(_("teleportationCommencing"));
 				try
 				{
 
@@ -110,7 +111,7 @@ public class Teleport implements Runnable
 			}
 			catch (Exception ex)
 			{
-				user.sendMessage(Util.format("cooldownWithMessage", ex.getMessage()));
+				user.sendMessage(_("cooldownWithMessage", ex.getMessage()));
 			}
 		}
 	}
@@ -130,7 +131,7 @@ public class Teleport implements Runnable
 	{
 		Location loc = ess.getWarps().getWarp(warp);
 		teleport(new Target(loc), chargeFor);
-		user.sendMessage(Util.format("warpingTo", warp));
+		user.sendMessage(_("warpingTo", warp));
 	}
 
 	public void cooldown(boolean check) throws Exception
@@ -145,7 +146,7 @@ public class Teleport implements Runnable
 			cooldownTime.add(Calendar.MILLISECOND, (int)((cooldown * 1000.0) % 1000.0));
 			if (cooldownTime.after(now) && !user.isAuthorized("essentials.teleport.cooldown.bypass"))
 			{
-				throw new Exception(Util.format("timeBeforeTeleport", Util.formatDateDiff(cooldownTime.getTimeInMillis())));
+				throw new Exception(_("timeBeforeTeleport", Util.formatDateDiff(cooldownTime.getTimeInMillis())));
 			}
 		}
 		// if justCheck is set, don't update lastTeleport; we're just checking
@@ -166,7 +167,7 @@ public class Teleport implements Runnable
 			ess.getServer().getScheduler().cancelTask(teleTimer);
 			if (notifyUser)
 			{
-				user.sendMessage(Util.i18n("pendingTeleportCancelled"));
+				user.sendMessage(_("pendingTeleportCancelled"));
 			}
 		}
 		finally
@@ -214,7 +215,7 @@ public class Teleport implements Runnable
 		Calendar c = new GregorianCalendar();
 		c.add(Calendar.SECOND, (int)delay);
 		c.add(Calendar.MILLISECOND, (int)((delay * 1000.0) % 1000.0));
-		user.sendMessage(Util.format("dontMoveMessage", Util.formatDateDiff(c.getTimeInMillis())));
+		user.sendMessage(_("dontMoveMessage", Util.formatDateDiff(c.getTimeInMillis())));
 		initTimer((long)(delay * 1000.0), target, chargeFor);
 
 		teleTimer = ess.scheduleSyncRepeatingTask(this, 10, 10);

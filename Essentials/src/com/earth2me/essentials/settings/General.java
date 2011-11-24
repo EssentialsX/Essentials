@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class General extends StorageObject
+public class General implements StorageObject
 {
 	@Comment("Backup runs a command while saving is disabled")
 	private Backup backup = new Backup();

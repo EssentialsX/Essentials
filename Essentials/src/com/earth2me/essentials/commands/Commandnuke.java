@@ -22,7 +22,7 @@ public class Commandnuke extends EssentialsCommand
 	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws NoSuchFieldException, NotEnoughArgumentsException
 	{
 		List<Player> targets;
-		if (args.length > 0) 
+		if (args.length > 0)
 		{
 			targets = new ArrayList<Player>();
 			int pos = 0;
@@ -34,14 +34,15 @@ public class Commandnuke extends EssentialsCommand
 		}
 		else
 		{
-			 targets = Arrays.asList(server.getOnlinePlayers());
+			targets = Arrays.asList(server.getOnlinePlayers());
 		}
 		ess.getTNTListener().enable();
 		for (Player player : targets)
 		{
-			if (player == null) {
+			if (player == null)
+			{
 				continue;
-			} 
+			}
 			player.sendMessage("May death rain upon them");
 			final Location loc = player.getLocation();
 			final World world = loc.getWorld();

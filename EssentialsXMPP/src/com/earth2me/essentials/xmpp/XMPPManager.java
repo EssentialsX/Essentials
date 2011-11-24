@@ -56,7 +56,8 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 				}
 				if (chat != null)
 				{
-					if (!connection.isConnected()) {
+					if (!connection.isConnected())
+					{
 						disconnect();
 						connect();
 					}
@@ -90,7 +91,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 				break;
 			default:
 				final IUser sender = parent.getUserByAddress(StringUtils.parseBareAddress(chat.getParticipant()));
-				parent.broadcastMessage(sender, "="+sender.getDisplayName()+": "+ message, StringUtils.parseBareAddress(chat.getParticipant()));
+				parent.broadcastMessage(sender, "=" + sender.getDisplayName() + ": " + message, StringUtils.parseBareAddress(chat.getParticipant()));
 			}
 		}
 	}

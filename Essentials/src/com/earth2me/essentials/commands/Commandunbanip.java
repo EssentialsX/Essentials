@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.Util;
+import static com.earth2me.essentials.I18n._;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
@@ -21,6 +21,6 @@ public class Commandunbanip extends EssentialsCommand
 		}
 
 		ess.getServer().unbanIP(args[0]);
-		sender.sendMessage(Util.i18n("unbannedIP"));
+		sender.sendMessage(_("unbannedIP"));
 	}
 }

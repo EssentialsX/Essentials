@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.logging.Logger;
 import org.bukkit.inventory.ItemStack;
 
@@ -19,7 +20,7 @@ public class Worth implements IConf
 
 	public double getPrice(ItemStack itemStack)
 	{
-		String itemname = itemStack.getType().toString().toLowerCase().replace("_", "");
+		String itemname = itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 		double result;
 		result = config.getDouble("worth." + itemname + "." + itemStack.getDurability(), Double.NaN);
 		if (Double.isNaN(result))
@@ -41,12 +42,12 @@ public class Worth implements IConf
 	{
 		if (itemStack.getType().getData() == null)
 		{
-			config.setProperty("worth." + itemStack.getType().toString().toLowerCase().replace("_", ""), price);
+			config.setProperty("worth." + itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""), price);
 		}
 		else
 		{
 			// Bukkit-bug: getDurability still contains the correct value, while getData().getData() is 0.
-			config.setProperty("worth." + itemStack.getType().toString().toLowerCase().replace("_", "") + "." + itemStack.getDurability(), price);
+			config.setProperty("worth." + itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "") + "." + itemStack.getDurability(), price);
 		}
 		config.removeProperty("worth-" + itemStack.getTypeId());
 		config.save();

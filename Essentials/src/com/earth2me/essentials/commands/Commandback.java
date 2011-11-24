@@ -1,8 +1,8 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 
 
@@ -18,7 +18,7 @@ public class Commandback extends EssentialsCommand
 	{
 		final Trade charge = new Trade(this.getName(), ess);
 		charge.isAffordableFor(user);
-		user.sendMessage(Util.i18n("backUsageMsg"));
+		user.sendMessage(_("backUsageMsg"));
 		user.getTeleport().back(charge);
 	}
 }

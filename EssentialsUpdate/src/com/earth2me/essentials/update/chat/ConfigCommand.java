@@ -26,12 +26,16 @@ public class ConfigCommand extends AbstractFileCommand implements Command
 			do
 			{
 				final String line = page.readLine();
-				if (line == null) {
+				if (line == null)
+				{
 					break;
-				} else {
+				}
+				else
+				{
 					input.append(line).append("\n");
 				}
-			} while (true);
+			}
+			while (true);
 			page.close();
 			final String message = "Essentials config.yml: " + uploadToPastie(input);
 			player.sendMessage("§6" + ircBot.getNick() + ": §7" + message);

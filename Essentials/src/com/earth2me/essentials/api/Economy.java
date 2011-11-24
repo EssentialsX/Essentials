@@ -1,6 +1,7 @@
 package com.earth2me.essentials.api;
 
 import com.earth2me.essentials.EssentialsConf;
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
@@ -59,7 +60,7 @@ public final class Economy
 		{
 			if (!config.delete())
 			{
-				logger.log(Level.WARNING, Util.format("deleteFileError", config));
+				logger.log(Level.WARNING, _("deleteFileError", config));
 			}
 			ess.getUserMap().removeUser(name);
 		}

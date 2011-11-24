@@ -23,8 +23,7 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer
 		}
 
 		/**
-		 * This listener should apply the general chat formatting only...then return control back
-		 * the event handler
+		 * This listener should apply the general chat formatting only...then return control back the event handler
 		 */
 		final User user = ess.getUser(event.getPlayer());
 		if (user.isAuthorized("essentials.chat.color"))

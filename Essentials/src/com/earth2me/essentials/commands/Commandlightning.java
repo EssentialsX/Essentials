@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -31,19 +31,20 @@ public class Commandlightning extends EssentialsCommand
 
 		if (server.matchPlayer(args[0]).isEmpty())
 		{
-			throw new Exception(Util.i18n("playerNotFound"));
+			throw new Exception(_("playerNotFound"));
 		}
 
 		for (Player matchPlayer : server.matchPlayer(args[0]))
 		{
-			sender.sendMessage(Util.format("lightningUse", matchPlayer.getDisplayName()));
+			sender.sendMessage(_("lightningUse", matchPlayer.getDisplayName()));
 			matchPlayer.getWorld().strikeLightning(matchPlayer.getLocation());
-			if (!ess.getUser(matchPlayer).isGodModeEnabled()) {
+			if (!ess.getUser(matchPlayer).isGodModeEnabled())
+			{
 				matchPlayer.setHealth(matchPlayer.getHealth() < 5 ? 0 : matchPlayer.getHealth() - 5);
 			}
 			if (ess.getSettings().warnOnSmite())
 			{
-				matchPlayer.sendMessage(Util.i18n("lightningSmited"));
+				matchPlayer.sendMessage(_("lightningSmited"));
 			}
 		}
 	}

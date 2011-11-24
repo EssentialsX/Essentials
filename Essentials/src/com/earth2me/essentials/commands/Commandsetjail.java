@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 
 
@@ -11,7 +11,7 @@ public class Commandsetjail extends EssentialsCommand
 	{
 		super("setjail");
 	}
-	
+
 	@Override
 	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
@@ -20,7 +20,7 @@ public class Commandsetjail extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 		ess.getJail().setJail(user.getLocation(), args[0]);
-		user.sendMessage(Util.format("jailSet",args[0]));
-		
+		user.sendMessage(_("jailSet", args[0]));
+
 	}
 }

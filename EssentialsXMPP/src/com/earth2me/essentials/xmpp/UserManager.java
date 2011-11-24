@@ -3,10 +3,7 @@ package com.earth2me.essentials.xmpp;
 import com.earth2me.essentials.EssentialsConf;
 import com.earth2me.essentials.IConf;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class UserManager implements IConf
@@ -24,26 +21,27 @@ public class UserManager implements IConf
 
 	public final boolean isSpy(final String username)
 	{
-		return users.getBoolean(username.toLowerCase() + "." + SPY, false);
+		return users.getBoolean(username.toLowerCase(Locale.ENGLISH) + "." + SPY, false);
 	}
 
 	public void setSpy(final String username, final boolean spy)
 	{
-		setUser(username.toLowerCase(), getAddress(username), spy);
+		setUser(username.toLowerCase(Locale.ENGLISH), getAddress(username), spy);
 	}
 
 	public final String getAddress(final String username)
 	{
-		return users.getString(username.toLowerCase() + "." + ADDRESS, null);
+		return users.getString(username.toLowerCase(Locale.ENGLISH) + "." + ADDRESS, null);
 	}
-	
+
 	public final String getUserByAddress(final String search)
 	{
 		final List<String> usernames = users.getKeys(null);
 		for (String username : usernames)
 		{
 			final String address = users.getString(username + "." + ADDRESS, null);
-			if (address != null && search.equalsIgnoreCase(address)) {
+			if (address != null && search.equalsIgnoreCase(address))
+			{
 				return username;
 			}
 		}
@@ -52,7 +50,7 @@ public class UserManager implements IConf
 
 	public void setAddress(final String username, final String address)
 	{
-		setUser(username.toLowerCase(), address, isSpy(username));
+		setUser(username.toLowerCase(Locale.ENGLISH), address, isSpy(username));
 	}
 
 	public List<String> getSpyUsers()

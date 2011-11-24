@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.register.payment.Method;
 import java.util.Calendar;
@@ -82,7 +83,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			cooldownTime.add(Calendar.MILLISECOND, (int)((cooldown * 1000.0) % 1000.0));
 			if (cooldownTime.after(now) && !isAuthorized("essentials.heal.cooldown.bypass"))
 			{
-				throw new Exception(Util.format("timeBeforeHeal", Util.formatDateDiff(cooldownTime.getTimeInMillis())));
+				throw new Exception(_("timeBeforeHeal", Util.formatDateDiff(cooldownTime.getTimeInMillis())));
 			}
 		}
 		setLastHealTimestamp(now.getTimeInMillis());
@@ -101,10 +102,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			return;
 		}
 		setMoney(getMoney() + value);
-		sendMessage(Util.format("addedToAccount", Util.formatCurrency(value, ess)));
+		sendMessage(_("addedToAccount", Util.formatCurrency(value, ess)));
 		if (initiator != null)
 		{
-			initiator.sendMessage(Util.format("addedToOthersAccount", Util.formatCurrency(value, ess), this.getDisplayName()));
+			initiator.sendMessage(_("addedToOthersAccount", Util.formatCurrency(value, ess), this.getDisplayName()));
 		}
 	}
 
@@ -118,12 +119,12 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		{
 			setMoney(getMoney() - value);
 			reciever.setMoney(reciever.getMoney() + value);
-			sendMessage(Util.format("moneySentTo", Util.formatCurrency(value, ess), reciever.getDisplayName()));
-			reciever.sendMessage(Util.format("moneyRecievedFrom", Util.formatCurrency(value, ess), getDisplayName()));
+			sendMessage(_("moneySentTo", Util.formatCurrency(value, ess), reciever.getDisplayName()));
+			reciever.sendMessage(_("moneyRecievedFrom", Util.formatCurrency(value, ess), getDisplayName()));
 		}
 		else
 		{
-			throw new Exception(Util.i18n("notEnoughMoney"));
+			throw new Exception(_("notEnoughMoney"));
 		}
 	}
 
@@ -140,10 +141,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			return;
 		}
 		setMoney(getMoney() - value);
-		sendMessage(Util.format("takenFromAccount", Util.formatCurrency(value, ess)));
+		sendMessage(_("takenFromAccount", Util.formatCurrency(value, ess)));
 		if (initiator != null)
 		{
-			initiator.sendMessage(Util.format("takenFromOthersAccount", Util.formatCurrency(value, ess), this.getDisplayName()));
+			initiator.sendMessage(_("takenFromOthersAccount", Util.formatCurrency(value, ess), this.getDisplayName()));
 		}
 	}
 
@@ -412,7 +413,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		{
 			setJailTimeout(0);
 			setJailed(false);
-			sendMessage(Util.i18n("haveBeenReleased"));
+			sendMessage(_("haveBeenReleased"));
 			setJail(null);
 			try
 			{
@@ -432,7 +433,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		if (getMuteTimeout() > 0 && getMuteTimeout() < currentTime && isMuted())
 		{
 			setMuteTimeout(0);
-			sendMessage(Util.i18n("canTalkAgain"));
+			sendMessage(_("canTalkAgain"));
 			setMuted(false);
 			return true;
 		}
@@ -458,7 +459,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			setAfk(false);
 			if (broadcast && !isHidden())
 			{
-				ess.broadcastMessage(this, Util.format("userIsNotAway", getDisplayName()));
+				ess.broadcastMessage(this, _("userIsNotAway", getDisplayName()));
 			}
 		}
 		lastActivity = System.currentTimeMillis();
@@ -470,7 +471,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		if (autoafkkick > 0 && lastActivity + autoafkkick * 1000 < System.currentTimeMillis()
 			&& !isHidden() && !isAuthorized("essentials.kick.exempt") && !isAuthorized("essentials.afk.kickexempt"))
 		{
-			final String kickReason = Util.format("autoAfkKickReason", autoafkkick / 60.0);
+			final String kickReason = _("autoAfkKickReason", autoafkkick / 60.0);
 			kickPlayer(kickReason);
 
 
@@ -479,7 +480,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 				final User user = ess.getUser(player);
 				if (user.isAuthorized("essentials.kick.notify"))
 				{
-					player.sendMessage(Util.format("playerKicked", Console.NAME, getName(), kickReason));
+					player.sendMessage(_("playerKicked", Console.NAME, getName(), kickReason));
 				}
 			}
 		}
@@ -489,7 +490,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			setAfk(true);
 			if (!isHidden())
 			{
-				ess.broadcastMessage(this, Util.format("userIsAway", getDisplayName()));
+				ess.broadcastMessage(this, _("userIsAway", getDisplayName()));
 			}
 		}
 	}
@@ -513,5 +514,20 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public boolean isGodModeEnabled()
 	{
 		return super.isGodModeEnabled() || (isAfk() && ess.getSettings().getFreezeAfkPlayers());
+	}
+	
+	public String getGroup()
+	{
+		return ess.getPermissionsHandler().getGroup(base);
+	}
+	
+	public boolean inGroup(final String group)
+	{
+		return ess.getPermissionsHandler().inGroup(base, group);
+	}
+
+	public boolean canBuild()
+	{
+		return ess.getPermissionsHandler().canBuild(base, getGroup());
 	}
 }

@@ -8,17 +8,18 @@ public class UpdateOrInstallation extends AbstractState
 {
 	private final transient UpdateCheck updateCheck;
 	private transient boolean update = false;
-	
+
 	public UpdateOrInstallation(final StateMap stateMap, final UpdateCheck updateCheck)
 	{
 		super(stateMap);
 		this.updateCheck = updateCheck;
 	}
-	
+
 	@Override
 	public boolean guessAnswer()
 	{
-		if (getUpdateCheck().isEssentialsInstalled()) {
+		if (getUpdateCheck().isEssentialsInstalled())
+		{
 			update = true;
 		}
 		return update;

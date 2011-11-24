@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import org.bukkit.Location;
 import org.bukkit.Server;
 
@@ -23,6 +23,6 @@ public class Commandsetwarp extends EssentialsCommand
 
 		Location loc = user.getLocation();
 		ess.getWarps().setWarp(args[0], loc);
-		user.sendMessage(Util.format("warpSet", args[0]));
+		user.sendMessage(_("warpSet", args[0]));
 	}
 }

@@ -1,8 +1,8 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.DescParseTickFormat;
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import java.util.*;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -48,7 +48,7 @@ public class Commandptime extends EssentialsCommand
 		User user = ess.getUser(sender);
 		if ((!users.contains(user) || users.size() > 1) && user != null && !user.isAuthorized("essentials.ptime.others"))
 		{
-			user.sendMessage(Util.i18n("pTimeOthersPermission"));
+			user.sendMessage(_("pTimeOthersPermission"));
 			return;
 		}
 
@@ -93,25 +93,25 @@ public class Commandptime extends EssentialsCommand
 	{
 		if (users.size() > 1)
 		{
-			sender.sendMessage(Util.format("pTimePlayers"));
+			sender.sendMessage(_("pTimePlayers"));
 		}
 
 		for (User user : users)
 		{
 			if (user.getPlayerTimeOffset() == 0)
 			{
-				sender.sendMessage(Util.format("pTimeNormal", user.getName()));
+				sender.sendMessage(_("pTimeNormal", user.getName()));
 			}
 			else
 			{
 				String time = DescParseTickFormat.format(user.getPlayerTime());
 				if (!user.isPlayerTimeRelative())
 				{
-					sender.sendMessage(Util.format("pTimeCurrentFixed", user.getName(), time));
+					sender.sendMessage(_("pTimeCurrentFixed", user.getName(), time));
 				}
 				else
 				{
-					sender.sendMessage(Util.format("pTimeCurrent", user.getName(), time));
+					sender.sendMessage(_("pTimeCurrent", user.getName(), time));
 				}
 			}
 		}
@@ -162,18 +162,18 @@ public class Commandptime extends EssentialsCommand
 		// Inform the sender of the change
 		if (ticks == null)
 		{
-			sender.sendMessage(Util.format("pTimeReset", msg.toString()));
+			sender.sendMessage(_("pTimeReset", msg.toString()));
 		}
 		else
 		{
 			String time = DescParseTickFormat.format(ticks);
 			if (!relative)
 			{
-				sender.sendMessage(Util.format("pTimeSetFixed", time, msg.toString()));
+				sender.sendMessage(_("pTimeSetFixed", time, msg.toString()));
 			}
 			else
 			{
-				sender.sendMessage(Util.format("pTimeSet", time, msg.toString()));
+				sender.sendMessage(_("pTimeSet", time, msg.toString()));
 			}
 		}
 	}
@@ -225,7 +225,7 @@ public class Commandptime extends EssentialsCommand
 		// We failed to understand the world target...
 		else
 		{
-			throw new Exception(Util.i18n("playerNotFound"));
+			throw new Exception(_("playerNotFound"));
 		}
 
 		return users;

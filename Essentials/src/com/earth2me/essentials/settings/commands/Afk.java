@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Afk extends StorageObject
+public class Afk implements StorageObject
 {
 	@Comment(
 	{

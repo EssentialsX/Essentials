@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import static com.earth2me.essentials.I18n._;
 import java.io.*;
 import java.math.BigInteger;
 import java.security.DigestInputStream;
@@ -67,19 +68,19 @@ public class EssentialsUpgrade
 		}
 		catch (Throwable e)
 		{
-			LOGGER.log(Level.SEVERE, Util.i18n("upgradingFilesError"), e);
+			LOGGER.log(Level.SEVERE, _("upgradingFilesError"), e);
 		}
 	}
 
 	private void moveMotdRulesToFile(String name)
 	{
-		if (doneFile.getBoolean("move"+name+"ToFile", false))
+		if (doneFile.getBoolean("move" + name + "ToFile", false))
 		{
 			return;
 		}
 		try
 		{
-			final File file = new File(ess.getDataFolder(), name+".txt");
+			final File file = new File(ess.getDataFolder(), name + ".txt");
 			if (file.exists())
 			{
 				return;
@@ -106,12 +107,12 @@ public class EssentialsUpgrade
 				}
 				writer.close();
 			}
-			doneFile.setProperty("move"+name+"ToFile", true);
+			doneFile.setProperty("move" + name + "ToFile", true);
 			doneFile.save();
 		}
 		catch (Throwable e)
 		{
-			LOGGER.log(Level.SEVERE, Util.i18n("upgradingFilesError"), e);
+			LOGGER.log(Level.SEVERE, _("upgradingFilesError"), e);
 		}
 	}
 
@@ -161,11 +162,11 @@ public class EssentialsUpgrade
 		{
 			if (!file.renameTo(new File(file.getParentFile(), file.getName().concat("." + System.currentTimeMillis() + ".upgradebackup"))))
 			{
-				throw new Exception(Util.i18n("configFileMoveError"));
+				throw new Exception(_("configFileMoveError"));
 			}
 			if (!tempFile.renameTo(file))
 			{
-				throw new Exception(Util.i18n("configFileRenameError"));
+				throw new Exception(_("configFileRenameError"));
 			}
 		}
 		else
@@ -220,7 +221,7 @@ public class EssentialsUpgrade
 								((Number)vals.get(3)).floatValue(),
 								((Number)vals.get(4)).floatValue());
 
-						final String worldName = world.getName().toLowerCase();
+						final String worldName = world.getName().toLowerCase(Locale.ENGLISH);
 						if (worldName != null && !worldName.isEmpty())
 						{
 							config.removeProperty("home");
@@ -347,7 +348,7 @@ public class EssentialsUpgrade
 						{
 							continue;
 						}
-						worldName = loc.getWorld().getName().toLowerCase();
+						worldName = loc.getWorld().getName().toLowerCase(Locale.ENGLISH);
 						if (worldName != null && !worldName.isEmpty())
 						{
 							config.setProperty("homes." + worldName, loc);
@@ -493,7 +494,7 @@ public class EssentialsUpgrade
 						ess.getWarps().setWarp(filename.substring(0, filename.length() - 4), loc);
 						if (!listOfFiles[i].renameTo(new File(warpsFolder, filename + ".old")))
 						{
-							throw new Exception(Util.format("fileRenameError", filename));
+							throw new Exception(_("fileRenameError", filename));
 						}
 					}
 					catch (Exception ex)
@@ -541,7 +542,7 @@ public class EssentialsUpgrade
 						ess.getWarps().setWarp(name, loc);
 						if (!warpFile.renameTo(new File(ess.getDataFolder(), "warps.txt.old")))
 						{
-							throw new Exception(Util.format("fileRenameError", "warps.txt"));
+							throw new Exception(_("fileRenameError", "warps.txt"));
 						}
 					}
 				}
@@ -585,17 +586,17 @@ public class EssentialsUpgrade
 			final File newFile = new File(listOfFiles[i].getParentFile(), sanitizedFilename);
 			if (!listOfFiles[i].renameTo(tmpFile))
 			{
-				LOGGER.log(Level.WARNING, Util.format("userdataMoveError", filename, sanitizedFilename));
+				LOGGER.log(Level.WARNING, _("userdataMoveError", filename, sanitizedFilename));
 				continue;
 			}
 			if (newFile.exists())
 			{
-				LOGGER.log(Level.WARNING, Util.format("duplicatedUserdata", filename, sanitizedFilename));
+				LOGGER.log(Level.WARNING, _("duplicatedUserdata", filename, sanitizedFilename));
 				continue;
 			}
 			if (!tmpFile.renameTo(newFile))
 			{
-				LOGGER.log(Level.WARNING, Util.format("userdataMoveBackError", sanitizedFilename, sanitizedFilename));
+				LOGGER.log(Level.WARNING, _("userdataMoveBackError", sanitizedFilename, sanitizedFilename));
 			}
 		}
 		doneFile.setProperty("sanitizeAllUserFilenames", true);

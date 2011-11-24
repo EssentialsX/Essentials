@@ -1,8 +1,8 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 
 
@@ -26,18 +26,18 @@ public class Commandtpo extends EssentialsCommand
 		// Check if user is offline
 		if (player.getBase() instanceof OfflinePlayer)
 		{
-			throw new NoSuchFieldException(Util.i18n("playerNotFound"));
+			throw new NoSuchFieldException(_("playerNotFound"));
 		}
 
 		// Verify permission
 		if (!player.isHidden() || user.isAuthorized("essentials.teleport.hidden"))
 		{
 			user.getTeleport().now(player, false);
-			user.sendMessage(Util.i18n("teleporting"));
+			user.sendMessage(_("teleporting"));
 		}
 		else
 		{
-			throw new NoSuchFieldException(Util.i18n("playerNotFound"));
+			throw new NoSuchFieldException(_("playerNotFound"));
 		}
 	}
 }

@@ -15,7 +15,8 @@ found at http://www.jibble.org/licenses/
 package org.jibble.pircbot;
 
 import java.io.*;
-import java.net.*;
+import java.net.InetAddress;
+import java.net.Socket;
 import java.util.*;
 
 /**
@@ -2558,7 +2559,7 @@ public abstract class PircBot implements ReplyConstants {
      * @see #onUserList(String,User[]) onUserList
      */
     public final User[] getUsers(String channel) {
-        channel = channel.toLowerCase();
+        channel = channel.toLowerCase(Locale.ENGLISH);
         User[] userArray = new User[0];
         synchronized (_channels) {
             Hashtable users = (Hashtable) _channels.get(channel);
@@ -2631,7 +2632,7 @@ public abstract class PircBot implements ReplyConstants {
      * Overwrite the existing entry if it exists.
      */
     private final void addUser(String channel, User user) {
-        channel = channel.toLowerCase();
+        channel = channel.toLowerCase(Locale.ENGLISH);
         synchronized (_channels) {
             Hashtable users = (Hashtable) _channels.get(channel);
             if (users == null) {
@@ -2647,7 +2648,7 @@ public abstract class PircBot implements ReplyConstants {
      * Remove a user from the specified channel in our memory.
      */
     private final User removeUser(String channel, String nick) {
-        channel = channel.toLowerCase();
+        channel = channel.toLowerCase(Locale.ENGLISH);
         User user = new User("", nick);
         synchronized (_channels) {
             Hashtable users = (Hashtable) _channels.get(channel);
@@ -2695,7 +2696,7 @@ public abstract class PircBot implements ReplyConstants {
      * Removes an entire channel from our memory of users.
      */
     private final void removeChannel(String channel) {
-        channel = channel.toLowerCase();
+        channel = channel.toLowerCase(Locale.ENGLISH);
         synchronized (_channels) {
             _channels.remove(channel);
         }
@@ -2713,7 +2714,7 @@ public abstract class PircBot implements ReplyConstants {
 
 
     private final void updateUser(String channel, int userMode, String nick) {
-        channel = channel.toLowerCase();
+        channel = channel.toLowerCase(Locale.ENGLISH);
         synchronized (_channels) {
             Hashtable users = (Hashtable) _channels.get(channel);
             User newUser = null;

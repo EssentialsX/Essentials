@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import org.bukkit.Server;
@@ -23,16 +24,16 @@ public class Commandseen extends EssentialsCommand
 		try
 		{
 			User u = getPlayer(server, args, 0);
-			sender.sendMessage(Util.format("seenOnline",u.getDisplayName(), Util.formatDateDiff(u.getLastLogin())));
+			sender.sendMessage(_("seenOnline", u.getDisplayName(), Util.formatDateDiff(u.getLastLogin())));
 		}
 		catch (NoSuchFieldException e)
 		{
 			User u = ess.getOfflineUser(args[0]);
 			if (u == null)
 			{
-				throw new Exception(Util.i18n("playerNotFound"));
+				throw new Exception(_("playerNotFound"));
 			}
-			sender.sendMessage(Util.format("seenOffline", u.getDisplayName(), Util.formatDateDiff(u.getLastLogout())));
+			sender.sendMessage(_("seenOffline", u.getDisplayName(), Util.formatDateDiff(u.getLastLogout())));
 		}
 	}
 }

@@ -1,13 +1,6 @@
 package com.earth2me.essentials.update;
 
-import com.earth2me.essentials.update.chat.Command;
-import com.earth2me.essentials.update.chat.ConfigCommand;
-import com.earth2me.essentials.update.chat.ErrorsCommand;
-import com.earth2me.essentials.update.chat.HelpCommand;
-import com.earth2me.essentials.update.chat.IrcBot;
-import com.earth2me.essentials.update.chat.ListCommand;
-import com.earth2me.essentials.update.chat.StartupCommand;
-import com.earth2me.essentials.update.chat.UsernameUtil;
+import com.earth2me.essentials.update.chat.*;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;

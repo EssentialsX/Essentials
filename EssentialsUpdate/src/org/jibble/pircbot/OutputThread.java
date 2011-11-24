@@ -14,8 +14,7 @@ found at http://www.jibble.org/licenses/
 
 package org.jibble.pircbot;
 
-import java.io.*;
-import java.net.*;
+import java.io.BufferedWriter;
 
 /**
  * A Thread which is responsible for sending messages to the IRC server.

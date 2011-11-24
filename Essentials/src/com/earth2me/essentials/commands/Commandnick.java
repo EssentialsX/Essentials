@@ -1,7 +1,8 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import java.util.Locale;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -23,19 +24,19 @@ public class Commandnick extends EssentialsCommand
 		}
 		if (!ess.getSettings().changeDisplayName())
 		{
-			throw new Exception(Util.i18n("nickDisplayName"));
+			throw new Exception(_("nickDisplayName"));
 		}
 		if (args.length > 1)
 		{
 			if (!user.isAuthorized("essentials.nick.others"))
 			{
-				throw new Exception(Util.i18n("nickOthersPermission"));
+				throw new Exception(_("nickOthersPermission"));
 			}
-			setNickname(server, getPlayer(server, args, 0), args[1]);
-			user.sendMessage(Util.i18n("nickChanged"));
+			setNickname(server, getPlayer(server, args, 0), formatNickname(user, args[1]));
+			user.sendMessage(_("nickChanged"));
 			return;
 		}
-		setNickname(server, user, args[0]);
+		setNickname(server, user, formatNickname(user, args[0]));
 	}
 
 	@Override
@@ -47,45 +48,53 @@ public class Commandnick extends EssentialsCommand
 		}
 		if (!ess.getSettings().changeDisplayName())
 		{
-			throw new Exception(Util.i18n("nickDisplayName"));
+			throw new Exception(_("nickDisplayName"));
 		}
-		setNickname(server, getPlayer(server, args, 0), args[1]);
-		sender.sendMessage(Util.i18n("nickChanged"));
+		setNickname(server, getPlayer(server, args, 0), formatNickname(null, args[1]));
+		sender.sendMessage(_("nickChanged"));
+	}
+
+	private String formatNickname(final User user, final String nick)
+	{
+		if (user == null || user.isAuthorized("essentials.nick.color"))
+		{
+			return nick.replace('&', '\u00a7').replace("\u00a7\u00a7", "&");
+		}
+		return nick;
 	}
 
 	private void setNickname(final Server server, final User target, final String nick) throws Exception
 	{
 		if (nick.matches("[^a-zA-Z_0-9]"))
 		{
-			throw new Exception(Util.i18n("nickNamesAlpha"));
+			throw new Exception(_("nickNamesAlpha"));
 		}
 		else if ("off".equalsIgnoreCase(nick) || target.getName().equalsIgnoreCase(nick))
 		{
 			target.setNickname(null);
 			target.setDisplayNick();
-			target.sendMessage(Util.i18n("nickNoMore"));
+			target.sendMessage(_("nickNoMore"));
 		}
 		else
 		{
-			final String formattedNick = nick.replace('&', '\u00a7').replace("\u00a7\u00a7", "&");
 			for (Player p : server.getOnlinePlayers())
 			{
 				if (target.getBase() == p)
 				{
 					continue;
 				}
-				String dn = p.getDisplayName().toLowerCase();
-				String n = p.getName().toLowerCase();
-				String nk = formattedNick.toLowerCase();
+				String dn = p.getDisplayName().toLowerCase(Locale.ENGLISH);
+				String n = p.getName().toLowerCase(Locale.ENGLISH);
+				String nk = nick.toLowerCase(Locale.ENGLISH);
 				if (nk.equals(dn) || nk.equals(n))
 				{
-					throw new Exception(Util.i18n("nickInUse"));
+					throw new Exception(_("nickInUse"));
 				}
 			}
 
-			target.setNickname(formattedNick);
+			target.setNickname(nick);
 			target.setDisplayNick();
-			target.sendMessage(Util.format("nickSet", target.getDisplayName() + "§7."));
+			target.sendMessage(_("nickSet", target.getDisplayName() + "§7."));
 		}
 	}
 }

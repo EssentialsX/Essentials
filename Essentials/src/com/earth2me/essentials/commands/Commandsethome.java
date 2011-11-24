@@ -1,7 +1,8 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import java.util.Locale;
 import org.bukkit.Server;
 
 
@@ -29,18 +30,19 @@ public class Commandsethome extends EssentialsCommand
 				if (user.isAuthorized("essentials.sethome.multiple"))
 				{
 					if ((user.isAuthorized("essentials.sethome.multiple.unlimited")) || (user.getHomes().size() < ess.getSettings().getHomeLimit(user))
-						|| (user.getHomes().contains(args[0].toLowerCase())))
+						|| (user.getHomes().contains(args[0].toLowerCase(Locale.ENGLISH))))
 					{
-						user.setHome(args[0].toLowerCase());
+						user.setHome(args[0].toLowerCase(Locale.ENGLISH));
 					}
 					else
 					{
-						throw new Exception(Util.format("maxHomes", ess.getSettings().getHomeLimit(user)));
+						throw new Exception(_("maxHomes", ess.getSettings().getHomeLimit(user)));
 					}
 
 				}
-				else {
-					throw new Exception(Util.format("maxHomes", 1));
+				else
+				{
+					throw new Exception(_("maxHomes", 1));
 				}
 			}
 			else
@@ -54,9 +56,9 @@ public class Commandsethome extends EssentialsCommand
 					}
 					if (usersHome == null)
 					{
-						throw new Exception(Util.i18n("playerNotFound"));
+						throw new Exception(_("playerNotFound"));
 					}
-					String name = args[1].toLowerCase();
+					String name = args[1].toLowerCase(Locale.ENGLISH);
 					if (!user.isAuthorized("essentials.sethome.multiple"))
 					{
 						name = "home";
@@ -69,7 +71,7 @@ public class Commandsethome extends EssentialsCommand
 		{
 			user.setHome();
 		}
-		user.sendMessage(Util.i18n("homeSet"));
+		user.sendMessage(_("homeSet"));
 
 	}
 }

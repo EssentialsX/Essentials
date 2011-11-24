@@ -13,15 +13,15 @@ import org.bukkit.plugin.Plugin;
 public interface Method
 {
 	/**
-	 * Encodes the Plugin into an Object disguised as the Plugin.
-	 * If you want the original Plugin Class you must cast it to the correct
-	 * Plugin, to do so you have to verify the name and or version then cast.
+	 * Encodes the Plugin into an Object disguised as the Plugin. If you want the original Plugin Class you must cast it
+	 * to the correct Plugin, to do so you have to verify the name and or version then cast.
 	 *
 	 * <pre>
 	 *  if(method.getName().equalsIgnoreCase("iConomy"))
 	 *   iConomy plugin = ((iConomy)method.getPlugin());</pre>
-	 * 
-	 * @return <code>Object</code>
+	 *
+	 * @return
+	 * <code>Object</code>
 	 * @see #getName()
 	 * @see #getVersion()
 	 */

@@ -1,7 +1,8 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import java.util.Locale;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -22,7 +23,7 @@ public class Commandrealname extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		final String whois = args[0].toLowerCase();
+		final String whois = args[0].toLowerCase(Locale.ENGLISH);
 		for (Player p : server.getOnlinePlayers())
 		{
 			final User u = ess.getUser(p);
@@ -30,14 +31,14 @@ public class Commandrealname extends EssentialsCommand
 			{
 				continue;
 			}
-			final String displayName = ChatColor.stripColor(u.getDisplayName()).toLowerCase();
+			final String displayName = ChatColor.stripColor(u.getDisplayName()).toLowerCase(Locale.ENGLISH);
 			if (!whois.equals(displayName)
 				&& !displayName.equals(ChatColor.stripColor(ess.getSettings().getNicknamePrefix()) + whois)
 				&& !whois.equalsIgnoreCase(u.getName()))
 			{
 				continue;
 			}
-			sender.sendMessage(u.getDisplayName() + " " + Util.i18n("is") + " " + u.getName());
+			sender.sendMessage(u.getDisplayName() + " " + _("is") + " " + u.getName());
 		}
 	}
 }

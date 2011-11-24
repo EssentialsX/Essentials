@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
@@ -34,9 +34,10 @@ public class Commandpay extends EssentialsCommand
 			user.payUser(u, amount);
 			foundUser = true;
 		}
-		
-		if(foundUser == false) {
-			throw new NoSuchFieldException(Util.i18n("playerNotFound"));
+
+		if (foundUser == false)
+		{
+			throw new NoSuchFieldException(_("playerNotFound"));
 		}
 	}
 }

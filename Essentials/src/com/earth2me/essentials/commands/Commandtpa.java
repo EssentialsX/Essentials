@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 
 
@@ -23,15 +23,15 @@ public class Commandtpa extends EssentialsCommand
 		User player = getPlayer(server, args, 0);
 		if (!player.isTeleportEnabled())
 		{
-			throw new Exception(Util.format("teleportDisabled", player.getDisplayName()));
+			throw new Exception(_("teleportDisabled", player.getDisplayName()));
 		}
 		if (!player.isIgnoredPlayer(user.getName()))
 		{
 			player.requestTeleport(user, false);
-			player.sendMessage(Util.format("teleportRequest", user.getDisplayName()));
-			player.sendMessage(Util.i18n("typeTpaccept"));
-			player.sendMessage(Util.i18n("typeTpdeny"));
+			player.sendMessage(_("teleportRequest", user.getDisplayName()));
+			player.sendMessage(_("typeTpaccept"));
+			player.sendMessage(_("typeTpdeny"));
 		}
-		user.sendMessage(Util.format("requestSent", player.getDisplayName()));
+		user.sendMessage(_("requestSent", player.getDisplayName()));
 	}
 }

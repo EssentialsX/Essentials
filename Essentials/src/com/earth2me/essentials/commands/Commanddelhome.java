@@ -1,7 +1,8 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import java.util.Locale;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
@@ -38,7 +39,7 @@ public class Commanddelhome extends EssentialsCommand
 			}
 			name = expandedArgs[0];
 		}
-		user.delHome(name.toLowerCase());
-		sender.sendMessage(Util.format("deleteHome", name));
+		user.delHome(name.toLowerCase(Locale.ENGLISH));
+		sender.sendMessage(_("deleteHome", name));
 	}
 }

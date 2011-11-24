@@ -33,7 +33,8 @@ public class Commandxmpp extends EssentialsCommand
 			final String message = getFinalArg(args, 1);
 			final String senderName = sender instanceof Player ? ess.getUser(sender).getDisplayName() : Console.NAME;
 			sender.sendMessage("[" + senderName + ">" + address + "] " + message);
-			if (!EssentialsXMPP.getInstance().sendMessage(address, "[" + senderName + "] " + message)) {
+			if (!EssentialsXMPP.getInstance().sendMessage(address, "[" + senderName + "] " + message))
+			{
 				sender.sendMessage("§cError sending message.");
 			}
 		}

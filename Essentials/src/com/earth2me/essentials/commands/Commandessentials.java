@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.Util;
+import static com.earth2me.essentials.I18n._;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.Location;
@@ -108,7 +108,7 @@ public class Commandessentials extends EssentialsCommand
 			return;
 		}
 		ess.reload();
-		sender.sendMessage(Util.format("essentialsReload", ess.getDescription().getVersion()));
+		sender.sendMessage(_("essentialsReload", ess.getDescription().getVersion()));
 	}
 
 	private void stopTune()

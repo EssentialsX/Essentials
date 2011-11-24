@@ -2,38 +2,15 @@ package com.earth2me.essentials.protect;
 
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import net.minecraft.server.ChunkPosition;
-import net.minecraft.server.Packet60Explosion;
-import org.bukkit.Location;
+import com.earth2me.essentials.craftbukkit.FakeExplosion;
+import java.util.Locale;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.craftbukkit.CraftServer;
-import org.bukkit.craftbukkit.CraftWorld;
-import org.bukkit.entity.CreatureType;
-import org.bukkit.entity.Creeper;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Fireball;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
-import org.bukkit.entity.SmallFireball;
-import org.bukkit.entity.TNTPrimed;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.EndermanPickupEvent;
-import org.bukkit.event.entity.EntityDamageByBlockEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.EntityListener;
-import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTargetEvent.TargetReason;
-import org.bukkit.event.entity.ExplosionPrimeEvent;
+import org.bukkit.event.entity.*;
 
 
 public class EssentialsProtectEntityListener extends EntityListener
@@ -219,40 +196,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 				|| prot.getSettingBool(ProtectConfig.prevent_creeper_blockdmg)
 				|| (maxHeight >= 0 && event.getLocation().getBlockY() > maxHeight)))
 		{
-			try
-			{
-				final Set<ChunkPosition> set = new HashSet<ChunkPosition>(event.blockList().size());
-				final Player[] players = ess.getServer().getOnlinePlayers();
-				final Set<ChunkPosition> blocksUnderPlayers = new HashSet<ChunkPosition>(players.length);
-				final Location loc = event.getLocation();
-				for (Player player : players)
-				{
-					if (player.getWorld().equals(loc.getWorld()))
-					{
-						blocksUnderPlayers.add(
-								new ChunkPosition(
-								player.getLocation().getBlockX(),
-								player.getLocation().getBlockY() - 1,
-								player.getLocation().getBlockZ()));
-					}
-				}
-				ChunkPosition cp;
-				for (Block block : event.blockList())
-				{
-					cp = new ChunkPosition(block.getX(), block.getY(), block.getZ());
-					if (!blocksUnderPlayers.contains(cp))
-					{
-						set.add(cp);
-					}
-				}
-
-				((CraftServer)ess.getServer()).getHandle().sendPacketNearby(loc.getX(), loc.getY(), loc.getZ(), 64.0D, ((CraftWorld)loc.getWorld()).getHandle().worldProvider.dimension,
-																			new Packet60Explosion(loc.getX(), loc.getY(), loc.getZ(), 3.0f, set));
-			}
-			catch (Throwable ex)
-			{
-				Logger.getLogger("Minecraft").log(Level.SEVERE, null, ex);
-			}
+			FakeExplosion.createExplosion(event, ess.getServer(), ess.getServer().getOnlinePlayers());
 			event.setCancelled(true);
 			return;
 		}
@@ -315,7 +259,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 		{
 			return;
 		}
-		final String creatureName = creature.toString().toLowerCase();
+		final String creatureName = creature.toString().toLowerCase(Locale.ENGLISH);
 		if (creatureName == null || creatureName.isEmpty())
 		{
 			return;

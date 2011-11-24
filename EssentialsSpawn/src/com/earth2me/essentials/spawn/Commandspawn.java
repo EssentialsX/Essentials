@@ -1,9 +1,9 @@
 package com.earth2me.essentials.spawn;
 
 import com.earth2me.essentials.Trade;
-import org.bukkit.Server;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.commands.EssentialsCommand;
+import org.bukkit.Server;
 
 
 public class Commandspawn extends EssentialsCommand

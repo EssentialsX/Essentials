@@ -1,9 +1,11 @@
 package com.earth2me.essentials.signs;
 
-import com.earth2me.essentials.*;
-import net.minecraft.server.InventoryPlayer;
+import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.Trade;
+import com.earth2me.essentials.User;
+import com.earth2me.essentials.craftbukkit.ShowInventory;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.inventory.CraftInventoryPlayer;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -27,14 +29,11 @@ public class SignFree extends EssentialsSign
 		final ItemStack item = getItemStack(sign.getLine(1), 1, ess);
 		if (item.getType() == Material.AIR)
 		{
-			throw new SignException(Util.format("cantSpawnItem", "Air"));
+			throw new SignException(_("cantSpawnItem", "Air"));
 		}
 
-		item.setAmount(item.getType().getMaxStackSize()*9*4);
-		final CraftInventoryPlayer inv = new CraftInventoryPlayer(new InventoryPlayer(player.getHandle()));
-		inv.clear();
-		InventoryWorkaround.addItem(inv, true, item);
-		player.showInventory(inv);
+		item.setAmount(item.getType().getMaxStackSize() * 9 * 4);
+		ShowInventory.showFilledInventory(player.getBase(), item);
 		Trade.log("Sign", "Free", "Interact", username, null, username, new Trade(item, ess), sign.getBlock().getLocation(), ess);
 		return true;
 	}

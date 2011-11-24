@@ -26,9 +26,8 @@ public abstract class AbstractState
 			catch (Exception ex)
 			{
 				/*
-				 * This should never happen.
-				 * All states that are added to the map automatically,
-				 * have to have a Constructor that accepts the StateMap.
+				 * This should never happen. All states, that are added to the map automatically, have to have a
+				 * Constructor that accepts the StateMap.
 				 */
 				throw new RuntimeException(ex);
 			}

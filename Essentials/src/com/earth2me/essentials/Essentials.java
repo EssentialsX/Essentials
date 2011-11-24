@@ -1,22 +1,23 @@
 /*
  * Essentials - a bukkit plugin
  * Copyright (C) 2011  Essentials Team
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.earth2me.essentials;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.Economy;
 import com.earth2me.essentials.commands.EssentialsCommand;
 import com.earth2me.essentials.commands.IEssentialsCommand;
@@ -71,6 +72,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private transient AlternativeCommandsHandler alternativeCommandsHandler;
 	private transient UserMap userMap;
 	private transient ExecuteTimer execTimer;
+	private transient I18n i18n;
 
 	@Override
 	public ISettings getSettings()
@@ -89,10 +91,13 @@ public class Essentials extends JavaPlugin implements IEssentials
 		{
 			throw new IOException();
 		}
-		LOGGER.log(Level.INFO, Util.i18n("usingTempFolderForTesting"));
+		i18n = new I18n(this);
+		i18n.onEnable();
+		LOGGER.log(Level.INFO, _("usingTempFolderForTesting"));
 		LOGGER.log(Level.INFO, dataFolder.toString());
 		this.initialize(null, server, new PluginDescriptionFile(new FileReader(new File("src" + File.separator + "plugin.yml"))), dataFolder, null, null);
 		settings = new Settings(this);
+		i18n.updateLocale("en");
 		userMap = new UserMap(this);
 		permissionsHandler = new PermissionsHandler(this, false);
 		Economy.setEss(this);
@@ -103,6 +108,9 @@ public class Essentials extends JavaPlugin implements IEssentials
 	{
 		execTimer = new ExecuteTimer();
 		execTimer.start();
+		i18n = new I18n(this);
+		i18n.onEnable();
+		execTimer.mark("I18n1");
 		final EssentialsUpgrade upgrade = new EssentialsUpgrade(this);
 		upgrade.beforeSettings();
 		execTimer.mark("Upgrade");
@@ -112,7 +120,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		execTimer.mark("Settings");
 		upgrade.afterSettings();
 		execTimer.mark("Upgrade2");
-		Util.updateLocale(settings.getLocale(), this);
+		i18n.updateLocale(settings.getLocale());
 		userMap = new UserMap(this);
 		confList.add(userMap);
 		execTimer.mark("Init(Usermap)");
@@ -135,7 +143,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 			if (plugin.getDescription().getName().startsWith("Essentials")
 				&& !plugin.getDescription().getVersion().equals(this.getDescription().getVersion()))
 			{
-				LOGGER.log(Level.WARNING, Util.format("versionMismatch", plugin.getDescription().getName()));
+				LOGGER.log(Level.WARNING, _("versionMismatch", plugin.getDescription().getName()));
 			}
 		}
 		final Matcher versionMatch = Pattern.compile("git-Bukkit-([0-9]+).([0-9]+).([0-9]+)-R[0-9]+-[0-9]+-[0-9a-z]+-b([0-9]+)jnks.*").matcher(getServer().getVersion());
@@ -144,12 +152,12 @@ public class Essentials extends JavaPlugin implements IEssentials
 			final int versionNumber = Integer.parseInt(versionMatch.group(4));
 			if (versionNumber < BUKKIT_VERSION)
 			{
-				LOGGER.log(Level.WARNING, Util.i18n("notRecommendedBukkit"));
+				LOGGER.log(Level.WARNING, _("notRecommendedBukkit"));
 			}
 		}
 		else
 		{
-			LOGGER.log(Level.INFO, Util.i18n("bukkitFormatChanged"));
+			LOGGER.log(Level.INFO, _("bukkitFormatChanged"));
 			LOGGER.log(Level.INFO, getServer().getVersion());
 			LOGGER.log(Level.INFO, getServer().getBukkitVersion());
 		}
@@ -218,7 +226,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		getScheduler().scheduleSyncRepeatingTask(this, timer, 1, 100);
 		Economy.setEss(this);
 		execTimer.mark("RegListeners");
-		LOGGER.info(Util.format("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), Util.joinList(this.getDescription().getAuthors())));
+		LOGGER.info(_("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), Util.joinList(this.getDescription().getAuthors())));
 		final String timeroutput = execTimer.end();
 		if (getSettings().isDebug())
 		{
@@ -229,6 +237,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	@Override
 	public void onDisable()
 	{
+		i18n.onDisable();
 		Economy.setEss(null);
 		Trade.closeLog();
 	}
@@ -244,7 +253,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 			execTimer.mark("Reload(" + iConf.getClass().getSimpleName() + ")");
 		}
 
-		Util.updateLocale(settings.getLocale(), this);
+		i18n.updateLocale(settings.getLocale());
 	}
 
 	@Override
@@ -282,7 +291,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 				final List<String> mail = user.getMails();
 				if (mail != null && !mail.isEmpty())
 				{
-					user.sendMessage(Util.format("youHaveNewMail", mail.size()));
+					user.sendMessage(_("youHaveNewMail", mail.size()));
 				}
 			}
 
@@ -300,16 +309,16 @@ public class Essentials extends JavaPlugin implements IEssentials
 			}
 			catch (Exception ex)
 			{
-				sender.sendMessage(Util.format("commandNotLoaded", commandLabel));
-				LOGGER.log(Level.SEVERE, Util.format("commandNotLoaded", commandLabel), ex);
+				sender.sendMessage(_("commandNotLoaded", commandLabel));
+				LOGGER.log(Level.SEVERE, _("commandNotLoaded", commandLabel), ex);
 				return true;
 			}
 
 			// Check authorization
 			if (user != null && !user.isAuthorized(cmd, permissionPrefix))
 			{
-				LOGGER.log(Level.WARNING, Util.format("deniedAccessCommand", user.getName()));
-				user.sendMessage(Util.i18n("noAccessCommand"));
+				LOGGER.log(Level.WARNING, _("deniedAccessCommand", user.getName()));
+				user.sendMessage(_("noAccessCommand"));
 				return true;
 			}
 
@@ -344,7 +353,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 		catch (Throwable ex)
 		{
-			LOGGER.log(Level.SEVERE, Util.format("commandFailed", commandLabel), ex);
+			LOGGER.log(Level.SEVERE, _("commandFailed", commandLabel), ex);
 			return true;
 		}
 	}
@@ -352,8 +361,8 @@ public class Essentials extends JavaPlugin implements IEssentials
 	@Override
 	public void showError(final CommandSender sender, final Throwable exception, final String commandLabel)
 	{
-		sender.sendMessage(Util.format("errorWithMessage", exception.getMessage()));
-		final LogRecord logRecord = new LogRecord(Level.WARNING, Util.format("errorCallingCommand", commandLabel));
+		sender.sendMessage(_("errorWithMessage", exception.getMessage()));
+		final LogRecord logRecord = new LogRecord(Level.WARNING, _("errorCallingCommand", commandLabel));
 		logRecord.setThrown(exception);
 		if (getSettings().isDebug())
 		{

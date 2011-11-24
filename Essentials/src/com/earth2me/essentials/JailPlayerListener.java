@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import static com.earth2me.essentials.I18n._;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.event.player.*;
@@ -55,9 +56,9 @@ public class JailPlayerListener extends PlayerListener
 		}
 		catch (Exception ex)
 		{
-			LOGGER.log(Level.WARNING, Util.i18n("returnPlayerToJailError"), ex);
+			LOGGER.log(Level.WARNING, _("returnPlayerToJailError"), ex);
 		}
-		user.sendMessage(Util.i18n("jailMessage"));
+		user.sendMessage(_("jailMessage"));
 	}
 
 	@Override
@@ -72,9 +73,9 @@ public class JailPlayerListener extends PlayerListener
 			}
 			catch (Exception ex)
 			{
-				LOGGER.log(Level.WARNING, Util.i18n("returnPlayerToJailError"), ex);
+				LOGGER.log(Level.WARNING, _("returnPlayerToJailError"), ex);
 			}
-			u.sendMessage(Util.i18n("jailMessage"));
+			u.sendMessage(_("jailMessage"));
 		}
 	}
 }

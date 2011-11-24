@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.util.*;
@@ -49,7 +50,7 @@ public class Commandbalancetop extends EssentialsCommand
 			}
 		});
 		int count = 0;
-		sender.sendMessage(Util.format("balanceTop", max));
+		sender.sendMessage(_("balanceTop", max));
 		for (Map.Entry<User, Double> entry : sortedEntries)
 		{
 			if (count == max)

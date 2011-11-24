@@ -6,6 +6,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.collect.ConcurrentHashMultiset;
 import java.io.File;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
@@ -47,7 +48,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 						continue;
 					}
 					final String name = string.substring(0, string.length() - 4);
-					keys.add(name.toLowerCase());
+					keys.add(name.toLowerCase(Locale.ENGLISH));
 				}
 			}
 		});
@@ -55,14 +56,14 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 
 	public boolean userExists(final String name)
 	{
-		return keys.contains(name.toLowerCase());
+		return keys.contains(name.toLowerCase(Locale.ENGLISH));
 	}
 
 	public User getUser(final String name) throws NullPointerException
 	{
 		try
 		{
-			return users.get(name.toLowerCase());
+			return users.get(name.toLowerCase(Locale.ENGLISH));
 		}
 		catch (ExecutionException ex)
 		{
@@ -77,7 +78,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 		{
 			if (player.getName().equalsIgnoreCase(name))
 			{
-				keys.add(name.toLowerCase());
+				keys.add(name.toLowerCase(Locale.ENGLISH));
 				return new User(player, ess);
 			}
 		}
@@ -85,7 +86,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 		final File userFile = new File(userFolder, Util.sanitizeFileName(name) + ".yml");
 		if (userFile.exists())
 		{
-			keys.add(name.toLowerCase());
+			keys.add(name.toLowerCase(Locale.ENGLISH));
 			return new User(new OfflinePlayer(name, ess), ess);
 		}
 		throw new Exception("User not found!");
@@ -99,8 +100,8 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 
 	public void removeUser(final String name)
 	{
-		keys.remove(name.toLowerCase());
-		users.invalidate(name.toLowerCase());
+		keys.remove(name.toLowerCase(Locale.ENGLISH));
+		users.invalidate(name.toLowerCase(Locale.ENGLISH));
 	}
 
 	public Set<User> getAllUsers()

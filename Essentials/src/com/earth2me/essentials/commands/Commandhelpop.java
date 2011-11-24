@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import java.util.logging.Level;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -22,7 +22,7 @@ public class Commandhelpop extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		final String message = Util.format("helpOp", user.getDisplayName(), getFinalArg(args, 0));
+		final String message = _("helpOp", user.getDisplayName(), getFinalArg(args, 0));
 		logger.log(Level.INFO, message);
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{

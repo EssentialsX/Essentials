@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Console;
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
@@ -29,7 +30,7 @@ public class Commandtempban extends EssentialsCommand
 			if (sender instanceof Player
 				&& !ess.getUser(sender).isAuthorized("essentials.tempban.offline"))
 			{
-				sender.sendMessage(Util.i18n("tempbanExempt"));
+				sender.sendMessage(_("tempbanExempt"));
 				return;
 			}
 		}
@@ -37,26 +38,26 @@ public class Commandtempban extends EssentialsCommand
 		{
 			if (user.isAuthorized("essentials.tempban.exempt"))
 			{
-				sender.sendMessage(Util.i18n("tempbanExempt"));
+				sender.sendMessage(_("tempbanExempt"));
 				return;
 			}
 		}
 		final String time = getFinalArg(args, 1);
 		final long banTimestamp = Util.parseDateDiff(time, true);
 
-		final String banReason = Util.format("tempBanned", Util.formatDateDiff(banTimestamp));
+		final String banReason = _("tempBanned", Util.formatDateDiff(banTimestamp));
 		user.setBanReason(banReason);
 		user.setBanTimeout(banTimestamp);
 		user.setBanned(true);
 		user.kickPlayer(banReason);
 		final String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
-		
-		for(Player onlinePlayer : server.getOnlinePlayers())
+
+		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
 			final User player = ess.getUser(onlinePlayer);
-			if(player.isAuthorized("essentials.ban.notify"))
+			if (player.isAuthorized("essentials.ban.notify"))
 			{
-			onlinePlayer.sendMessage(Util.format("playerBanned", senderName, user.getName(), banReason));
+				onlinePlayer.sendMessage(_("playerBanned", senderName, user.getName(), banReason));
 			}
 		}
 	}

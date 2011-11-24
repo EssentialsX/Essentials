@@ -1,6 +1,10 @@
 package com.earth2me.essentials.signs;
 
-import com.earth2me.essentials.*;
+import com.earth2me.essentials.ChargeException;
+import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.Trade;
+import com.earth2me.essentials.User;
 
 
 public class SignWeather extends EssentialsSign
@@ -25,7 +29,7 @@ public class SignWeather extends EssentialsSign
 			sign.setLine(1, "§2Storm");
 			return true;
 		}
-		throw new SignException(Util.i18n("onlySunStorm"));
+		throw new SignException(_("onlySunStorm"));
 	}
 
 	@Override
@@ -46,7 +50,6 @@ public class SignWeather extends EssentialsSign
 			charge.charge(player);
 			return true;
 		}
-		throw new SignException(Util.i18n("onlySunStorm"));
+		throw new SignException(_("onlySunStorm"));
 	}
 }
-

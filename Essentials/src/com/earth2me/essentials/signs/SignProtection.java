@@ -1,10 +1,11 @@
 package com.earth2me.essentials.signs;
 
-import com.earth2me.essentials.*;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import com.earth2me.essentials.ChargeException;
+import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.Trade;
+import com.earth2me.essentials.User;
+import java.util.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -41,7 +42,7 @@ public class SignProtection extends EssentialsSign
 				return true;
 			}
 		}
-		player.sendMessage(Util.i18n("signProtectInvalidLocation"));
+		player.sendMessage(_("signProtectInvalidLocation"));
 		return false;
 	}
 
@@ -255,7 +256,7 @@ public class SignProtection extends EssentialsSign
 			if ((state == SignProtectionState.ALLOWED || state == SignProtectionState.NOT_ALLOWED)
 				&& !player.isAuthorized("essentials.signs.protection.override"))
 			{
-				player.sendMessage(Util.format("noPlacePermission", block.getType().toString().toLowerCase()));
+				player.sendMessage(_("noPlacePermission", block.getType().toString().toLowerCase(Locale.ENGLISH)));
 				return false;
 			}
 		}
@@ -280,7 +281,7 @@ public class SignProtection extends EssentialsSign
 		}
 
 
-		player.sendMessage(Util.format("noAccessPermission", block.getType().toString().toLowerCase()));
+		player.sendMessage(_("noAccessPermission", block.getType().toString().toLowerCase(Locale.ENGLISH)));
 		return false;
 	}
 
@@ -303,7 +304,7 @@ public class SignProtection extends EssentialsSign
 		}
 
 
-		player.sendMessage(Util.format("noDestroyPermission", block.getType().toString().toLowerCase()));
+		player.sendMessage(_("noDestroyPermission", block.getType().toString().toLowerCase(Locale.ENGLISH)));
 		return false;
 	}
 

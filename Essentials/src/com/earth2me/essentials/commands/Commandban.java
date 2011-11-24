@@ -1,9 +1,9 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Console;
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -29,7 +29,7 @@ public class Commandban extends EssentialsCommand
 			if (sender instanceof Player
 				&& !ess.getUser(sender).isAuthorized("essentials.ban.offline"))
 			{
-				sender.sendMessage(Util.i18n("banExempt"));
+				sender.sendMessage(_("banExempt"));
 				return;
 			}
 		}
@@ -37,7 +37,7 @@ public class Commandban extends EssentialsCommand
 		{
 			if (user.isAuthorized("essentials.ban.exempt"))
 			{
-				sender.sendMessage(Util.i18n("banExempt"));
+				sender.sendMessage(_("banExempt"));
 				return;
 			}
 		}
@@ -50,7 +50,7 @@ public class Commandban extends EssentialsCommand
 		}
 		else
 		{
-			banReason = Util.i18n("defaultBanReason");
+			banReason = _("defaultBanReason");
 		}
 		user.setBanned(true);
 		user.kickPlayer(banReason);
@@ -61,7 +61,7 @@ public class Commandban extends EssentialsCommand
 			final User player = ess.getUser(onlinePlayer);
 			if (player.isAuthorized("essentials.ban.notify"))
 			{
-				onlinePlayer.sendMessage(Util.format("playerBanned", senderName, user.getName(), banReason));
+				onlinePlayer.sendMessage(_("playerBanned", senderName, user.getName(), banReason));
 			}
 		}
 	}

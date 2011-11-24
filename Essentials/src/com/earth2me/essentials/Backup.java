@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import static com.earth2me.essentials.I18n._;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -60,7 +61,7 @@ public class Backup implements Runnable
 		{
 			return;
 		}
-		LOGGER.log(Level.INFO, Util.i18n("backupStarted"));
+		LOGGER.log(Level.INFO, _("backupStarted"));
 		final CommandSender cs = server.getConsoleSender();
 		server.dispatchCommand(cs, "save-all");
 		server.dispatchCommand(cs, "save-off");
@@ -68,7 +69,7 @@ public class Backup implements Runnable
 		ess.scheduleAsyncDelayedTask(
 				new Runnable()
 				{
-			@Override
+					@Override
 					public void run()
 					{
 						try
@@ -110,7 +111,7 @@ public class Backup implements Runnable
 							ess.scheduleSyncDelayedTask(
 									new Runnable()
 									{
-						@Override
+										@Override
 										public void run()
 										{
 											server.dispatchCommand(cs, "save-on");
@@ -123,7 +124,7 @@ public class Backup implements Runnable
 												}
 											}
 											active = false;
-											LOGGER.log(Level.INFO, Util.i18n("backupFinished"));
+											LOGGER.log(Level.INFO, _("backupFinished"));
 										}
 									});
 						}

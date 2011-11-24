@@ -1,9 +1,11 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.util.List;
+import java.util.Locale;
 import org.bukkit.Server;
 
 
@@ -40,7 +42,7 @@ public class Commandhome extends EssentialsCommand
 		}
 		try
 		{
-			user.getTeleport().home(player, homeName.toLowerCase(), charge);
+			user.getTeleport().home(player, homeName.toLowerCase(Locale.ENGLISH), charge);
 		}
 		catch (NotEnoughArgumentsException e)
 		{
@@ -51,7 +53,7 @@ public class Commandhome extends EssentialsCommand
 			}
 			else if (homes.isEmpty())
 			{
-				throw new Exception(player == user ? Util.i18n("noHomeSet") : Util.i18n("noHomeSetPlayer"));
+				throw new Exception(player == user ? _("noHomeSet") : _("noHomeSetPlayer"));
 			}
 			else if (homes.size() == 1 && player.equals(user))
 			{
@@ -59,7 +61,7 @@ public class Commandhome extends EssentialsCommand
 			}
 			else
 			{
-				user.sendMessage(Util.format("homes", Util.joinList(homes)));
+				user.sendMessage(_("homes", Util.joinList(homes)));
 			}
 		}
 		throw new NoChargeException();

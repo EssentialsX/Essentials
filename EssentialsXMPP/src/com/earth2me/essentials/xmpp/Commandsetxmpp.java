@@ -22,6 +22,6 @@ public class Commandsetxmpp extends EssentialsCommand
 		}
 
 		EssentialsXMPP.getInstance().setAddress(user, args[0]);
-		user.sendMessage("XMPP address set to "+args[0]);
+		user.sendMessage("XMPP address set to " + args[0]);
 	}
 }

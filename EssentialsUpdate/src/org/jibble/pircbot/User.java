@@ -13,6 +13,8 @@ found at http://www.jibble.org/licenses/
 
 package org.jibble.pircbot;
 
+import java.util.Locale;
+
 /**
  * This class is used to represent a user on an IRC server.
  * Instances of this class are returned by the getUsers method
@@ -38,7 +40,7 @@ public class User {
     User(String prefix, String nick) {
         _prefix = prefix;
         _nick = nick;
-        _lowerNick = nick.toLowerCase();
+        _lowerNick = nick.toLowerCase(Locale.ENGLISH);
     }
     
     
@@ -109,7 +111,7 @@ public class User {
      * @return true if the nicks are identical (case insensitive).
      */
     public boolean equals(String nick) {
-        return nick.toLowerCase().equals(_lowerNick);
+        return nick.toLowerCase(Locale.ENGLISH).equals(_lowerNick);
     }
     
     

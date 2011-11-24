@@ -9,7 +9,6 @@ import com.earth2me.essentials.commands.Commandspawnmob;
 
 public class SignSpawnmob extends EssentialsSign
 {
-
 	public SignSpawnmob()
 	{
 		super("Spawnmob");
@@ -30,7 +29,8 @@ public class SignSpawnmob extends EssentialsSign
 		charge.isAffordableFor(player);
 		Commandspawnmob command = new Commandspawnmob();
 		command.setEssentials(ess);
-		String[] args = new String[] {
+		String[] args = new String[]
+		{
 			sign.getLine(2), sign.getLine(1)
 		};
 		try

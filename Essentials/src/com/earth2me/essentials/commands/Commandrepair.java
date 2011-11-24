@@ -1,8 +1,10 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
@@ -28,9 +30,9 @@ public class Commandrepair extends EssentialsCommand
 			final ItemStack item = user.getItemInHand();
 			if (item == null)
 			{
-				throw new Exception(Util.i18n("repairInvalidType"));
+				throw new Exception(_("repairInvalidType"));
 			}
-			final String itemName = item.getType().toString().toLowerCase();
+			final String itemName = item.getType().toString().toLowerCase(Locale.ENGLISH);
 			final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), ess);
 
 			charge.isAffordableFor(user);
@@ -39,24 +41,25 @@ public class Commandrepair extends EssentialsCommand
 
 			charge.charge(user);
 
-			user.sendMessage(Util.format("repair", itemName.replace('_', ' ')));
+			user.sendMessage(_("repair", itemName.replace('_', ' ')));
 		}
 		else if (args[0].equalsIgnoreCase("all"))
 		{
 			final List<String> repaired = new ArrayList<String>();
 			repairItems(user.getInventory().getContents(), user, repaired);
 
-			if (user.isAuthorized("essentials.repair.armor")) {
+			if (user.isAuthorized("essentials.repair.armor"))
+			{
 				repairItems(user.getInventory().getArmorContents(), user, repaired);
 			}
 
 			if (repaired.isEmpty())
 			{
-				throw new Exception(Util.format("repairNone"));
+				throw new Exception(_("repairNone"));
 			}
 			else
 			{
-				user.sendMessage(Util.format("repair", Util.joinList(repaired)));
+				user.sendMessage(_("repair", Util.joinList(repaired)));
 			}
 
 		}
@@ -71,12 +74,12 @@ public class Commandrepair extends EssentialsCommand
 		final Material material = Material.getMaterial(item.getTypeId());
 		if (material.isBlock() || material.getMaxDurability() < 0)
 		{
-			throw new Exception(Util.i18n("repairInvalidType"));
+			throw new Exception(_("repairInvalidType"));
 		}
 
 		if (item.getDurability() == 0)
 		{
-			throw new Exception(Util.i18n("repairAlreadyFixed"));
+			throw new Exception(_("repairAlreadyFixed"));
 		}
 
 		item.setDurability((short)0);
@@ -90,7 +93,7 @@ public class Commandrepair extends EssentialsCommand
 			{
 				continue;
 			}
-			final String itemName = item.getType().toString().toLowerCase();
+			final String itemName = item.getType().toString().toLowerCase(Locale.ENGLISH);
 			final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), ess);
 			try
 			{

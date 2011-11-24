@@ -8,50 +8,59 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ProtectedBlockMySQL extends ProtectedBlockJDBC {
 
-	public ProtectedBlockMySQL(String url, String username, String password) throws PropertyVetoException {
+public class ProtectedBlockMySQL extends ProtectedBlockJDBC
+{
+	public ProtectedBlockMySQL(String url, String username, String password) throws PropertyVetoException
+	{
 		super("com.mysql.jdbc.Driver", url, username, password);
 	}
-
 	private static final String QueryCreateTable =
-		"CREATE TABLE IF NOT EXISTS `EssentialsProtect` ("
-		+ "`worldName` varchar(60) NOT NULL,"
-		+ "`x` int(11) NOT NULL, `y` int(11) NOT NULL, `z` int(11) NOT NULL,"
-		+ "`playerName` varchar(150) DEFAULT NULL,"
-		+ "KEY `pos` (`worldName`,`x`,`z`,`y`)"
-		+ ") ENGINE=MyISAM DEFAULT CHARSET=utf8";
+								"CREATE TABLE IF NOT EXISTS `EssentialsProtect` ("
+								+ "`worldName` varchar(60) NOT NULL,"
+								+ "`x` int(11) NOT NULL, `y` int(11) NOT NULL, `z` int(11) NOT NULL,"
+								+ "`playerName` varchar(150) DEFAULT NULL,"
+								+ "KEY `pos` (`worldName`,`x`,`z`,`y`)"
+								+ ") ENGINE=MyISAM DEFAULT CHARSET=utf8";
 
 	@Override
-	protected PreparedStatement getStatementCreateTable(Connection conn) throws SQLException {
+	protected PreparedStatement getStatementCreateTable(Connection conn) throws SQLException
+	{
 		return conn.prepareStatement(QueryCreateTable);
 	}
-	
 	private static final String QueryUpdateFrom2_0TableCheck =
-		"SHOW COLUMNS FROM `EssentialsProtect` LIKE 'id';";
+								"SHOW COLUMNS FROM `EssentialsProtect` LIKE 'id';";
 	private static final String QueryUpdateFrom2_0Table =
-		"ALTER TABLE `EssentialsProtect` "
-		+ "CHARACTER SET = utf8, ENGINE = MyISAM,"
-		+ "DROP COLUMN `id`,"
-		+ "CHANGE COLUMN `playerName` `playerName` VARCHAR(150) NULL AFTER `z`,"
-		+ "CHANGE COLUMN `worldName` `worldName` VARCHAR(60) NOT NULL,"
-		+ "ADD INDEX `position` (`worldName` ASC, `x` ASC, `z` ASC, `y` ASC),"
-		+ "DROP PRIMARY KEY ;";
+								"ALTER TABLE `EssentialsProtect` "
+								+ "CHARACTER SET = utf8, ENGINE = MyISAM,"
+								+ "DROP COLUMN `id`,"
+								+ "CHANGE COLUMN `playerName` `playerName` VARCHAR(150) NULL AFTER `z`,"
+								+ "CHANGE COLUMN `worldName` `worldName` VARCHAR(60) NOT NULL,"
+								+ "ADD INDEX `position` (`worldName` ASC, `x` ASC, `z` ASC, `y` ASC),"
+								+ "DROP PRIMARY KEY ;";
 
 	@Override
-	protected PreparedStatement getStatementUpdateFrom2_0Table(Connection conn) throws SQLException {
+	protected PreparedStatement getStatementUpdateFrom2_0Table(Connection conn) throws SQLException
+	{
 		PreparedStatement testPS = null;
 		ResultSet testRS = null;
-		try {
+		try
+		{
 			testPS = conn.prepareStatement(QueryUpdateFrom2_0TableCheck);
 			testRS = testPS.executeQuery();
-			if (testRS.first()) {
+			if (testRS.first())
+			{
 				return conn.prepareStatement(QueryUpdateFrom2_0Table);
-			} else {
+			}
+			else
+			{
 				return conn.prepareStatement("SELECT 1;");
 			}
-		} finally {
-			if (testRS != null) {
+		}
+		finally
+		{
+			if (testRS != null)
+			{
 				try
 				{
 					testRS.close();
@@ -61,7 +70,8 @@ public class ProtectedBlockMySQL extends ProtectedBlockJDBC {
 					Logger.getLogger(ProtectedBlockMySQL.class.getName()).log(Level.SEVERE, null, ex);
 				}
 			}
-			if (testPS != null) {
+			if (testPS != null)
+			{
 				try
 				{
 					testPS.close();
@@ -74,16 +84,18 @@ public class ProtectedBlockMySQL extends ProtectedBlockJDBC {
 		}
 	}
 	private static final String QueryDeleteAll = "DELETE FROM EssentialsProtect;";
-	
+
 	@Override
-	protected PreparedStatement getStatementDeleteAll(Connection conn) throws SQLException {
+	protected PreparedStatement getStatementDeleteAll(Connection conn) throws SQLException
+	{
 		return conn.prepareStatement(QueryDeleteAll);
 	}
 	private static final String QueryInsert =
-		"INSERT INTO EssentialsProtect (worldName, x, y, z, playerName) VALUES (?, ?, ?, ?, ?);";
+								"INSERT INTO EssentialsProtect (worldName, x, y, z, playerName) VALUES (?, ?, ?, ?, ?);";
 
 	@Override
-	protected PreparedStatement getStatementInsert(Connection conn, String world, int x, int y, int z, String playerName) throws SQLException {
+	protected PreparedStatement getStatementInsert(Connection conn, String world, int x, int y, int z, String playerName) throws SQLException
+	{
 		PreparedStatement ps = conn.prepareStatement(QueryInsert);
 		ps.setString(1, world);
 		ps.setInt(2, x);
@@ -93,11 +105,12 @@ public class ProtectedBlockMySQL extends ProtectedBlockJDBC {
 		return ps;
 	}
 	private static final String QueryCountByPlayer =
-		"SELECT COUNT(playerName), SUM(playerName = ?) FROM EssentialsProtect "
-		+ "WHERE worldName = ? AND x = ? AND y = ? AND z = ? GROUP BY x;";
+								"SELECT COUNT(playerName), SUM(playerName = ?) FROM EssentialsProtect "
+								+ "WHERE worldName = ? AND x = ? AND y = ? AND z = ? GROUP BY x;";
 
 	@Override
-	protected PreparedStatement getStatementPlayerCountByLocation(Connection conn, String world, int x, int y, int z, String playerName) throws SQLException {
+	protected PreparedStatement getStatementPlayerCountByLocation(Connection conn, String world, int x, int y, int z, String playerName) throws SQLException
+	{
 		PreparedStatement ps = conn.prepareStatement(QueryCountByPlayer);
 		ps.setString(1, playerName);
 		ps.setString(2, world);
@@ -107,10 +120,11 @@ public class ProtectedBlockMySQL extends ProtectedBlockJDBC {
 		return ps;
 	}
 	private static final String QueryPlayersByLocation =
-		"SELECT playerName FROM EssentialsProtect WHERE worldname = ? AND x = ? AND y = ? AND z = ?;";
+								"SELECT playerName FROM EssentialsProtect WHERE worldname = ? AND x = ? AND y = ? AND z = ?;";
 
 	@Override
-	protected PreparedStatement getStatementPlayersByLocation(Connection conn, String world, int x, int y, int z) throws SQLException {
+	protected PreparedStatement getStatementPlayersByLocation(Connection conn, String world, int x, int y, int z) throws SQLException
+	{
 		PreparedStatement ps = conn.prepareStatement(QueryPlayersByLocation);
 		ps.setString(1, world);
 		ps.setInt(2, x);
@@ -119,10 +133,11 @@ public class ProtectedBlockMySQL extends ProtectedBlockJDBC {
 		return ps;
 	}
 	private static final String QueryDeleteByLocation =
-		"DELETE FROM EssentialsProtect WHERE worldName = ? AND x = ? AND y = ? AND z = ?;";
+								"DELETE FROM EssentialsProtect WHERE worldName = ? AND x = ? AND y = ? AND z = ?;";
 
 	@Override
-	protected PreparedStatement getStatementDeleteByLocation(Connection conn, String world, int x, int y, int z) throws SQLException {
+	protected PreparedStatement getStatementDeleteByLocation(Connection conn, String world, int x, int y, int z) throws SQLException
+	{
 		PreparedStatement ps = conn.prepareStatement(QueryDeleteByLocation);
 		ps.setString(1, world);
 		ps.setInt(2, x);
@@ -131,10 +146,11 @@ public class ProtectedBlockMySQL extends ProtectedBlockJDBC {
 		return ps;
 	}
 	private static final String QueryAllBlocks =
-		"SELECT worldName, x, y, z, playerName FROM EssentialsProtect;";
+								"SELECT worldName, x, y, z, playerName FROM EssentialsProtect;";
 
 	@Override
-	protected PreparedStatement getStatementAllBlocks(Connection conn) throws SQLException {
+	protected PreparedStatement getStatementAllBlocks(Connection conn) throws SQLException
+	{
 		return conn.prepareStatement(QueryAllBlocks);
 	}
 }

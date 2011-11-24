@@ -1,6 +1,10 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.*;
+import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.OfflinePlayer;
+import com.earth2me.essentials.Trade;
+import com.earth2me.essentials.User;
 import java.util.List;
 import java.util.logging.Logger;
 import org.bukkit.Server;
@@ -48,7 +52,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 		{
 			if (!getOffline && (user.getBase() instanceof OfflinePlayer || user.isHidden()))
 			{
-				throw new NoSuchFieldException(Util.i18n("playerNotFound"));
+				throw new NoSuchFieldException(_("playerNotFound"));
 			}
 			return user;
 		}
@@ -70,7 +74,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 				return userMatch;
 			}
 		}
-		throw new NoSuchFieldException(Util.i18n("playerNotFound"));
+		throw new NoSuchFieldException(_("playerNotFound"));
 	}
 
 	@Override
@@ -95,7 +99,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 
 	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
-		throw new Exception(Util.format("onlyPlayers", commandLabel));
+		throw new Exception(_("onlyPlayers", commandLabel));
 	}
 
 	public static String getFinalArg(final String[] args, final int start)

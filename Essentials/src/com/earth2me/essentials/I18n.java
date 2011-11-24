@@ -9,7 +9,7 @@ import java.net.URL;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.logging.Level;
-import org.bukkit.Bukkit;
+import java.util.logging.Logger;
 
 
 public class I18n
@@ -18,14 +18,28 @@ public class I18n
 	private static final String MESSAGES = "messages";
 	private final transient Locale defaultLocale = Locale.getDefault();
 	private transient Locale currentLocale = defaultLocale;
-	private transient ResourceBundle customBundle = ResourceBundle.getBundle(MESSAGES, defaultLocale);
-	private transient ResourceBundle localeBundle = ResourceBundle.getBundle(MESSAGES, defaultLocale);
-	private final transient ResourceBundle defaultBundle = ResourceBundle.getBundle(MESSAGES, Locale.ENGLISH);
+	private transient ResourceBundle customBundle;
+	private transient ResourceBundle localeBundle;
+	private final transient ResourceBundle defaultBundle;
 	private final transient Map<String, MessageFormat> messageFormatCache = new HashMap<String, MessageFormat>();
+	private final transient IEssentials ess;
 
-	public I18n()
+	public I18n(final IEssentials ess)
+	{
+		this.ess = ess;
+		customBundle = ResourceBundle.getBundle(MESSAGES, defaultLocale);
+		localeBundle = ResourceBundle.getBundle(MESSAGES, defaultLocale);
+		defaultBundle = ResourceBundle.getBundle(MESSAGES, Locale.ENGLISH);
+	}
+
+	public void onEnable()
 	{
 		instance = this;
+	}
+
+	public void onDisable()
+	{
+		instance = null;
 	}
 
 	public Locale getCurrentLocale()
@@ -48,7 +62,7 @@ public class I18n
 		}
 		catch (MissingResourceException ex)
 		{
-			Bukkit.getLogger().log(Level.WARNING, String.format("Missing translation key \"%s\" in translation file %s", ex.getKey(), localeBundle.getLocale().toString()), ex);
+			Logger.getLogger("Minecraft").log(Level.WARNING, String.format("Missing translation key \"%s\" in translation file %s", ex.getKey(), localeBundle.getLocale().toString()), ex);
 			return defaultBundle.getString(string);
 		}
 	}
@@ -77,7 +91,7 @@ public class I18n
 		return messageFormat.format(objects);
 	}
 
-	public void updateLocale(final String loc, final IEssentials ess)
+	public void updateLocale(final String loc)
 	{
 		if (loc == null || loc.isEmpty())
 		{
@@ -96,19 +110,14 @@ public class I18n
 		{
 			currentLocale = new Locale(parts[0], parts[1], parts[2]);
 		}
-		Bukkit.getLogger().log(Level.INFO, String.format("Using locale %s", currentLocale.toString()));
+		Logger.getLogger("Minecraft").log(Level.INFO, String.format("Using locale %s", currentLocale.toString()));
 		customBundle = ResourceBundle.getBundle(MESSAGES, currentLocale, new FileResClassLoader(I18n.class.getClassLoader(), ess));
 		localeBundle = ResourceBundle.getBundle(MESSAGES, currentLocale);
 	}
 
-	public static String lowerCase(final String input)
-	{
-		return input == null ? null : input.toLowerCase(Locale.ENGLISH);
-	}
-
 	public static String capitalCase(final String input)
 	{
-		return input == null || input.length() == 0 
+		return input == null || input.length() == 0
 			   ? input
 			   : input.toUpperCase(Locale.ENGLISH).charAt(0)
 				 + input.toLowerCase(Locale.ENGLISH).substring(1);

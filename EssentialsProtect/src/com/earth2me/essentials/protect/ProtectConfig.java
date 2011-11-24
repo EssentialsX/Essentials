@@ -62,7 +62,7 @@ public enum ProtectConfig
 	{
 		this(configName, null, false, true, false);
 	}
-	
+
 	private ProtectConfig(final String configName, final String defValueString)
 	{
 		this(configName, defValueString, false, false, true);
@@ -110,7 +110,7 @@ public enum ProtectConfig
 	{
 		return isString;
 	}
-	
+
 	public boolean isList()
 	{
 		return isList;

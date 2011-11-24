@@ -1,9 +1,9 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Console;
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IReplyTo;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -32,10 +32,10 @@ public class Commandr extends EssentialsCommand
 
 		if (target == null)
 		{
-			throw new Exception(Util.i18n("foreverAlone"));
+			throw new Exception(_("foreverAlone"));
 		}
 
-		sender.sendMessage(Util.format("msgFormat", Util.i18n("me"), targetName, message));
+		sender.sendMessage(_("msgFormat", _("me"), targetName, message));
 		if (target instanceof Player)
 		{
 			User u = ess.getUser(target);
@@ -44,7 +44,7 @@ public class Commandr extends EssentialsCommand
 				return;
 			}
 		}
-		target.sendMessage(Util.format("msgFormat", senderName, Util.i18n("me"), message));
+		target.sendMessage(_("msgFormat", senderName, _("me"), message));
 		replyTo.setReplyTo(target);
 		if (target != sender)
 		{

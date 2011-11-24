@@ -4,10 +4,7 @@ import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -50,7 +47,7 @@ public class TextInput implements IText
 					}
 					if (line.length() > 0 && line.charAt(0) == '#')
 					{
-						bookmarks.put(line.substring(1).toLowerCase().replaceAll("&[0-9a-f]", ""), lineNumber);
+						bookmarks.put(line.substring(1).toLowerCase(Locale.ENGLISH).replaceAll("&[0-9a-f]", ""), lineNumber);
 						chapters.add(line.substring(1).replace('&', '§').replace("§§", "&"));
 					}
 					lines.add(line.replace('&', '§').replace("§§", "&"));

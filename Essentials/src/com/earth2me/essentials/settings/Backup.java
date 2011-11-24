@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Backup extends StorageObject
+public class Backup implements StorageObject
 {
 	@Comment("Interval in minutes")
 	private long interval = 60;

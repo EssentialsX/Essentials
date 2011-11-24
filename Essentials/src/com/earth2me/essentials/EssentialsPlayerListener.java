@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.TextInput;
@@ -8,6 +9,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Location;
@@ -50,8 +52,8 @@ public class EssentialsPlayerListener extends PlayerListener
 		if (user.isMuted())
 		{
 			event.setCancelled(true);
-			user.sendMessage(Util.i18n("playerMuted"));
-			LOGGER.info(Util.format("mutedUserSpeaks", user.getName()));
+			user.sendMessage(_("playerMuted"));
+			LOGGER.info(_("mutedUserSpeaks", user.getName()));
 		}
 		final Iterator<Player> it = event.getRecipients().iterator();
 		while (it.hasNext())
@@ -136,7 +138,7 @@ public class EssentialsPlayerListener extends PlayerListener
 					rt.gc();
 					mem = rt.freeMemory() - mem;
 					mem /= 1024 * 1024;
-					LOGGER.log(Level.INFO, Util.format("freedMemory", mem));
+					LOGGER.log(Level.INFO, _("freedMemory", mem));
 				}
 				catch (InterruptedException ex)
 				{
@@ -184,11 +186,11 @@ public class EssentialsPlayerListener extends PlayerListener
 			final List<String> mail = user.getMails();
 			if (mail.isEmpty())
 			{
-				user.sendMessage(Util.i18n("noNewMail"));
+				user.sendMessage(_("noNewMail"));
 			}
 			else
 			{
-				user.sendMessage(Util.format("youHaveNewMail", mail.size()));
+				user.sendMessage(_("youHaveNewMail", mail.size()));
 			}
 		}
 	}
@@ -212,13 +214,13 @@ public class EssentialsPlayerListener extends PlayerListener
 		if (banExpired == false && (user.isBanned() || event.getResult() == Result.KICK_BANNED))
 		{
 			final String banReason = user.getBanReason();
-			event.disallow(Result.KICK_BANNED, banReason != null && !banReason.isEmpty() && !banReason.equalsIgnoreCase("ban") ? banReason : Util.i18n("defaultBanReason"));
+			event.disallow(Result.KICK_BANNED, banReason != null && !banReason.isEmpty() && !banReason.equalsIgnoreCase("ban") ? banReason : _("defaultBanReason"));
 			return;
 		}
 
 		if (server.getOnlinePlayers().length >= server.getMaxPlayers() && !user.isAuthorized("essentials.joinfullserver"))
 		{
-			event.disallow(Result.KICK_FULL, Util.i18n("serverFull"));
+			event.disallow(Result.KICK_FULL, _("serverFull"));
 			return;
 		}
 		event.allow();
@@ -271,7 +273,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			{
 				final User user = ess.getUser(event.getPlayer());
 				user.setHome();
-				user.sendMessage(Util.i18n("homeSetToBed"));
+				user.sendMessage(_("homeSetToBed"));
 			}
 			catch (Throwable ex)
 			{
@@ -365,7 +367,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			return;
 		}
 		final User user = ess.getUser(event.getPlayer());
-		final String cmd = event.getMessage().toLowerCase().split(" ")[0].replace("/", "").toLowerCase();
+		final String cmd = event.getMessage().toLowerCase(Locale.ENGLISH).split(" ")[0].replace("/", "").toLowerCase(Locale.ENGLISH);
 		final List<String> commands = Arrays.asList("msg", "r", "mail", "m", "t", "emsg", "tell", "er", "reply", "ereply", "email");
 		if (commands.contains(cmd))
 		{

@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
@@ -27,36 +28,36 @@ public class Commandkit extends EssentialsCommand
 				final StringBuilder list = new StringBuilder();
 				for (String kiteItem : kits.keySet())
 				{
-					if (user.isAuthorized("essentials.kit." + kiteItem.toLowerCase()))
+					if (user.isAuthorized("essentials.kit." + kiteItem.toLowerCase(Locale.ENGLISH)))
 					{
 						list.append(" ").append(kiteItem);
 					}
 				}
 				if (list.length() > 0)
 				{
-					user.sendMessage(Util.format("kits", list.toString()));
+					user.sendMessage(_("kits", list.toString()));
 				}
 				else
 				{
-					user.sendMessage(Util.i18n("noKits"));
+					user.sendMessage(_("noKits"));
 				}
 			}
 			catch (Exception ex)
 			{
-				user.sendMessage(Util.i18n("kitError"));
+				user.sendMessage(_("kitError"));
 			}
 		}
 		else
 		{
 			try
 			{
-				final String kitName = args[0].toLowerCase();
+				final String kitName = args[0].toLowerCase(Locale.ENGLISH);
 				final Object kit = ess.getSettings().getKit(kitName);
 				List<String> items;
 
 				if (!user.isAuthorized("essentials.kit." + kitName))
 				{
-					user.sendMessage(Util.format("noKitPermission", "essentials.kit." + kitName));
+					user.sendMessage(_("noKitPermission", "essentials.kit." + kitName));
 					return;
 				}
 
@@ -69,20 +70,23 @@ public class Commandkit extends EssentialsCommand
 					final double delay = els.containsKey("delay") ? ((Number)els.get("delay")).doubleValue() : 0L;
 					final Calendar c = new GregorianCalendar();
 					c.add(Calendar.SECOND, -(int)delay);
-					c.add(Calendar.MILLISECOND, -(int)((delay*1000.0)%1000.0));
+					c.add(Calendar.MILLISECOND, -(int)((delay * 1000.0) % 1000.0));
 
 					final long mintime = c.getTimeInMillis();
 
 					final Long lastTime = user.getKitTimestamp(kitName);
-					if (lastTime == null || lastTime < mintime) {
+					if (lastTime == null || lastTime < mintime)
+					{
 						final Calendar now = new GregorianCalendar();
 						user.setKitTimestamp(kitName, now.getTimeInMillis());
-					} else {
+					}
+					else
+					{
 						final Calendar future = new GregorianCalendar();
 						future.setTimeInMillis(lastTime);
 						future.add(Calendar.SECOND, (int)delay);
-						future.add(Calendar.MILLISECOND, (int)((delay*1000.0)%1000.0));
-						user.sendMessage(Util.format("kitTimed", Util.formatDateDiff(future.getTimeInMillis())));
+						future.add(Calendar.MILLISECOND, (int)((delay * 1000.0) % 1000.0));
+						user.sendMessage(_("kitTimed", Util.formatDateDiff(future.getTimeInMillis())));
 						return;
 					}
 				}
@@ -109,7 +113,7 @@ public class Commandkit extends EssentialsCommand
 					final int id = Material.getMaterial(Integer.parseInt(parts[0])).getId();
 					final int amount = parts.length > 1 ? Integer.parseInt(parts[parts.length > 2 ? 2 : 1]) : 1;
 					final short data = parts.length > 2 ? Short.parseShort(parts[1]) : 0;
-					final HashMap<Integer,ItemStack> overfilled = user.getInventory().addItem(new ItemStack(id, amount, data));
+					final HashMap<Integer, ItemStack> overfilled = user.getInventory().addItem(new ItemStack(id, amount, data));
 					for (ItemStack itemStack : overfilled.values())
 					{
 						user.getWorld().dropItemNaturally(user.getLocation(), itemStack);
@@ -118,7 +122,7 @@ public class Commandkit extends EssentialsCommand
 				}
 				if (spew)
 				{
-					user.sendMessage(Util.i18n("kitInvFull"));
+					user.sendMessage(_("kitInvFull"));
 				}
 				try
 				{
@@ -128,12 +132,12 @@ public class Commandkit extends EssentialsCommand
 				{
 					user.sendMessage(ex.getMessage());
 				}
-				user.sendMessage(Util.format("kitGive", kitName));
+				user.sendMessage(_("kitGive", kitName));
 			}
 			catch (Exception ex)
 			{
-				user.sendMessage(Util.i18n("kitError2"));
-				user.sendMessage(Util.i18n("kitErrorHelp"));
+				user.sendMessage(_("kitError2"));
+				user.sendMessage(_("kitErrorHelp"));
 			}
 		}
 	}

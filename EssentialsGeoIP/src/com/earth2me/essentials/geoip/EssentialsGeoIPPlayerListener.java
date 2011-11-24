@@ -1,18 +1,14 @@
 package com.earth2me.essentials.geoip;
 
 import com.earth2me.essentials.EssentialsConf;
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import com.maxmind.geoip.Location;
 import com.maxmind.geoip.LookupService;
 import com.maxmind.geoip.regionName;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -84,8 +80,9 @@ public class EssentialsGeoIPPlayerListener extends PlayerListener implements ICo
 			for (Player player : event.getPlayer().getServer().getOnlinePlayers())
 			{
 				User user = ess.getUser(player);
-				if (user.isAuthorized("essentials.geoip.show")) {
-					user.sendMessage(Util.format("geoipJoinFormat", u.getDisplayName(), sb.toString()));
+				if (user.isAuthorized("essentials.geoip.show"))
+				{
+					user.sendMessage(_("geoipJoinFormat", u.getDisplayName(), sb.toString()));
 				}
 			}
 		}
@@ -112,7 +109,7 @@ public class EssentialsGeoIPPlayerListener extends PlayerListener implements ICo
 			}
 			else
 			{
-				logger.log(Level.SEVERE, Util.i18n("cantFindGeoIpDB"));
+				logger.log(Level.SEVERE, _("cantFindGeoIpDB"));
 				return;
 			}
 		}
@@ -122,7 +119,7 @@ public class EssentialsGeoIPPlayerListener extends PlayerListener implements ICo
 		}
 		catch (IOException ex)
 		{
-			logger.log(Level.SEVERE, Util.i18n("cantReadGeoIpDB"), ex);
+			logger.log(Level.SEVERE, _("cantReadGeoIpDB"), ex);
 		}
 	}
 
@@ -141,10 +138,10 @@ public class EssentialsGeoIPPlayerListener extends PlayerListener implements ICo
 			}
 			if (url == null || url.isEmpty())
 			{
-				logger.log(Level.SEVERE, Util.i18n("geoIpUrlEmpty"));
+				logger.log(Level.SEVERE, _("geoIpUrlEmpty"));
 				return;
 			}
-			logger.log(Level.INFO, Util.i18n("downloadingGeoIp"));
+			logger.log(Level.INFO, _("downloadingGeoIp"));
 			URL downloadUrl = new URL(url);
 			URLConnection conn = downloadUrl.openConnection();
 			conn.setConnectTimeout(10000);
@@ -167,12 +164,12 @@ public class EssentialsGeoIPPlayerListener extends PlayerListener implements ICo
 		}
 		catch (MalformedURLException ex)
 		{
-			logger.log(Level.SEVERE, Util.i18n("geoIpUrlInvalid"), ex);
+			logger.log(Level.SEVERE, _("geoIpUrlInvalid"), ex);
 			return;
 		}
 		catch (IOException ex)
 		{
-			logger.log(Level.SEVERE, Util.i18n("connectionFailed"), ex);
+			logger.log(Level.SEVERE, _("connectionFailed"), ex);
 		}
 	}
 }

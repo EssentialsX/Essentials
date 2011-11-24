@@ -1,9 +1,9 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Console;
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
@@ -27,9 +27,9 @@ public class Commandtp extends EssentialsCommand
 			final User player = getPlayer(server, args, 0);
 			if (!player.isTeleportEnabled())
 			{
-				throw new Exception(Util.format("teleportDisabled", player.getDisplayName()));
+				throw new Exception(_("teleportDisabled", player.getDisplayName()));
 			}
-			user.sendMessage(Util.i18n("teleporting"));
+			user.sendMessage(_("teleporting"));
 			final Trade charge = new Trade(this.getName(), ess);
 			charge.isAffordableFor(user);
 			user.getTeleport().teleport(player, charge);
@@ -40,13 +40,13 @@ public class Commandtp extends EssentialsCommand
 			{
 				throw new Exception("You need access to /tpohere to teleport other players.");
 			}
-			user.sendMessage(Util.i18n("teleporting"));
+			user.sendMessage(_("teleporting"));
 			final User target = getPlayer(server, args, 0);
 			final User toPlayer = getPlayer(server, args, 1);
 			target.getTeleport().now(toPlayer, false);
-			target.sendMessage(Util.format("teleportAtoB", user.getDisplayName(), toPlayer.getDisplayName()));
+			target.sendMessage(_("teleportAtoB", user.getDisplayName(), toPlayer.getDisplayName()));
 			break;
-		}		
+		}
 	}
 
 	@Override
@@ -57,10 +57,10 @@ public class Commandtp extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		sender.sendMessage(Util.i18n("teleporting"));
+		sender.sendMessage(_("teleporting"));
 		final User target = getPlayer(server, args, 0);
 		final User toPlayer = getPlayer(server, args, 1);
 		target.getTeleport().now(toPlayer, false);
-		target.sendMessage(Util.format("teleportAtoB", Console.NAME, toPlayer.getDisplayName()));
+		target.sendMessage(_("teleportAtoB", Console.NAME, toPlayer.getDisplayName()));
 	}
 }

@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class GroupOptions extends StorageObject
+public class GroupOptions implements StorageObject
 {
 	@Comment("Message format of chat messages")
 	private String messageFormat;

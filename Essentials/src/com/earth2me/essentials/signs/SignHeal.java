@@ -1,6 +1,10 @@
 package com.earth2me.essentials.signs;
 
-import com.earth2me.essentials.*;
+import com.earth2me.essentials.ChargeException;
+import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.Trade;
+import com.earth2me.essentials.User;
 
 
 public class SignHeal extends EssentialsSign
@@ -25,7 +29,7 @@ public class SignHeal extends EssentialsSign
 		player.setHealth(20);
 		player.setFoodLevel(20);
 		player.setFireTicks(0);
-		player.sendMessage(Util.i18n("youAreHealed"));
+		player.sendMessage(_("youAreHealed"));
 		charge.charge(player);
 		return true;
 	}

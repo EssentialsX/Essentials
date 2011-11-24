@@ -99,7 +99,7 @@ public class PermissionsHandler implements IPermissionsHandler
 	public void checkPermissions()
 	{
 		final PluginManager pluginManager = plugin.getServer().getPluginManager();
-		
+
 		final Plugin permExPlugin = pluginManager.getPlugin("PermissionsEx");
 		if (permExPlugin != null && permExPlugin.isEnabled())
 		{
@@ -121,7 +121,7 @@ public class PermissionsHandler implements IPermissionsHandler
 			}
 			return;
 		}
-		
+
 		final Plugin GMplugin = pluginManager.getPlugin("GroupManager");
 		if (GMplugin != null && GMplugin.isEnabled())
 		{
@@ -132,7 +132,7 @@ public class PermissionsHandler implements IPermissionsHandler
 			}
 			return;
 		}
-		
+
 		final Plugin permBukkitPlugin = pluginManager.getPlugin("PermissionsBukkit");
 		if (permBukkitPlugin != null && permBukkitPlugin.isEnabled())
 		{

@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import java.util.Locale;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -27,7 +28,7 @@ public class Commandgive extends EssentialsCommand
 
 		final ItemStack stack = ess.getItemDb().get(args[1]);
 
-		final String itemname = stack.getType().toString().toLowerCase().replace("_", "");
+		final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 		if (sender instanceof Player
 			&& (ess.getSettings().permissionBasedItemSpawn()
 				? (!ess.getUser(sender).isAuthorized("essentials.give.item-all")
@@ -49,7 +50,7 @@ public class Commandgive extends EssentialsCommand
 		}
 
 		final User giveTo = getPlayer(server, args, 0);
-		final String itemName = stack.getType().toString().toLowerCase().replace('_', ' ');
+		final String itemName = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ');
 		sender.sendMessage(ChatColor.BLUE + "Giving " + stack.getAmount() + " of " + itemName + " to " + giveTo.getDisplayName() + ".");
 		giveTo.getInventory().addItem(stack);
 		giveTo.updateInventory();

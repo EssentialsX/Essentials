@@ -1,7 +1,8 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import java.util.Locale;
 import org.bukkit.GameMode;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -36,7 +37,7 @@ public class Commandgamemode extends EssentialsCommand
 		}
 
 		user.setGameMode(user.getGameMode() == GameMode.SURVIVAL ? GameMode.CREATIVE : GameMode.SURVIVAL);
-		user.sendMessage(Util.format("gameMode", Util.i18n(user.getGameMode().toString().toLowerCase()), user.getDisplayName()));
+		user.sendMessage(_("gameMode", _(user.getGameMode().toString().toLowerCase(Locale.ENGLISH)), user.getDisplayName()));
 	}
 
 	private void gamemodeOtherPlayers(final Server server, final CommandSender sender, final String name)
@@ -50,9 +51,7 @@ public class Commandgamemode extends EssentialsCommand
 			}
 
 			player.setGameMode(player.getGameMode() == GameMode.SURVIVAL ? GameMode.CREATIVE : GameMode.SURVIVAL);
-		    sender.sendMessage(Util.format("gameMode", Util.i18n(player.getGameMode().toString().toLowerCase()), player.getDisplayName()));
+			sender.sendMessage(_("gameMode", _(player.getGameMode().toString().toLowerCase(Locale.ENGLISH)), player.getDisplayName()));
 		}
 	}
-
-
 }

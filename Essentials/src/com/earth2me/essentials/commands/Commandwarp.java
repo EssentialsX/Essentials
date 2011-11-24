@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
@@ -27,7 +28,7 @@ public class Commandwarp extends EssentialsCommand
 		{
 			if (!user.isAuthorized("essentials.warp.list"))
 			{
-				throw new Exception(Util.i18n("warpListPermission"));
+				throw new Exception(_("warpListPermission"));
 			}
 			warpList(user, args);
 			throw new NoChargeException();
@@ -40,7 +41,7 @@ public class Commandwarp extends EssentialsCommand
 				otherUser = ess.getUser(server.getPlayer(args[1]));
 				if (otherUser == null)
 				{
-					throw new Exception(Util.i18n("playerNotFound"));
+					throw new Exception(_("playerNotFound"));
 				}
 				warpUser(otherUser, args[0]);
 				throw new NoChargeException();
@@ -61,7 +62,7 @@ public class Commandwarp extends EssentialsCommand
 		User otherUser = ess.getUser(server.getPlayer(args[1]));
 		if (otherUser == null)
 		{
-			throw new Exception(Util.i18n("playerNotFound"));
+			throw new Exception(_("playerNotFound"));
 		}
 		warpUser(otherUser, args[0]);
 		throw new NoChargeException();
@@ -73,7 +74,7 @@ public class Commandwarp extends EssentialsCommand
 		final Warps warps = ess.getWarps();
 		if (warps.isEmpty())
 		{
-			throw new Exception(Util.i18n("noWarpsDefined"));
+			throw new Exception(_("noWarpsDefined"));
 		}
 		final List<String> warpNameList = new ArrayList<String>(warps.getWarpNames());
 
@@ -100,11 +101,12 @@ public class Commandwarp extends EssentialsCommand
 
 		if (warpNameList.size() > WARPS_PER_PAGE)
 		{
-			sender.sendMessage(Util.format("warpsCount", warpNameList.size(), page, (int)Math.ceil(warpNameList.size() / (double)WARPS_PER_PAGE)));
+			sender.sendMessage(_("warpsCount", warpNameList.size(), page, (int)Math.ceil(warpNameList.size() / (double)WARPS_PER_PAGE)));
 			sender.sendMessage(warpList);
 		}
-		else {
-			sender.sendMessage(Util.format("warps", warpList));
+		else
+		{
+			sender.sendMessage(_("warps", warpList));
 		}
 	}
 
@@ -119,7 +121,7 @@ public class Commandwarp extends EssentialsCommand
 				user.getTeleport().warp(name, charge);
 				return;
 			}
-			throw new Exception(Util.i18n("warpUsePermission"));
+			throw new Exception(_("warpUsePermission"));
 		}
 		user.getTeleport().warp(name, charge);
 	}

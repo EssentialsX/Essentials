@@ -4,7 +4,6 @@ import com.earth2me.essentials.update.Version.Type;
 import java.util.TreeSet;
 import junit.framework.TestCase;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 
 public class VersionTest extends TestCase

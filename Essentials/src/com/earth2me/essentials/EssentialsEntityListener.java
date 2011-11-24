@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import static com.earth2me.essentials.I18n._;
 import java.util.List;
 import java.util.logging.Logger;
 import org.bukkit.entity.Entity;
@@ -77,7 +78,7 @@ public class EssentialsEntityListener extends EntityListener
 			if (user.isAuthorized("essentials.back.ondeath") && !ess.getSettings().isCommandDisabled("back"))
 			{
 				user.setLastLocation();
-				user.sendMessage(Util.i18n("backAfterDeath"));
+				user.sendMessage(_("backAfterDeath"));
 			}
 			if (!ess.getSettings().areDeathMessagesEnabled())
 			{

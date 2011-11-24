@@ -5,9 +5,10 @@ import com.earth2me.essentials.storage.StorageObject;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Spawnmob extends StorageObject
+public class Spawnmob implements StorageObject
 {
 	@Comment("The maximum amount of monsters, a player can spawn with a call of /spawnmob.")
 	private int limit = 10;

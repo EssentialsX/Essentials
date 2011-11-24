@@ -1,6 +1,5 @@
 package com.earth2me.essentials.update;
 
-import com.earth2me.essentials.update.UpdateCheck.CheckResult;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -16,7 +15,8 @@ public class EssentialsUpdate extends JavaPlugin
 	@Override
 	public void onEnable()
 	{
-		if (!getDataFolder().exists() && !getDataFolder().mkdirs() ) {
+		if (!getDataFolder().exists() && !getDataFolder().mkdirs())
+		{
 			Bukkit.getLogger().log(Level.SEVERE, "Could not create data folder: {0}", getDataFolder().getPath());
 		}
 		essentialsHelp = new EssentialsHelp(this);

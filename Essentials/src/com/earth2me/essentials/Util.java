@@ -1,13 +1,9 @@
 package com.earth2me.essentials;
 
-import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
+import static com.earth2me.essentials.I18n._;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.MessageFormat;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,7 +23,7 @@ public class Util
 
 	public static String sanitizeFileName(String name)
 	{
-		return name.toLowerCase().replaceAll("[^a-z0-9]", "_");
+		return name.toLowerCase(Locale.ENGLISH).replaceAll("[^a-z0-9]", "_");
 	}
 
 	public static String formatDateDiff(long date)
@@ -43,7 +39,7 @@ public class Util
 		boolean future = false;
 		if (toDate.equals(fromDate))
 		{
-			return Util.i18n("now");
+			return _("now");
 		}
 		if (toDate.after(fromDate))
 		{
@@ -62,18 +58,18 @@ public class Util
 		};
 		String[] names = new String[]
 		{
-			Util.i18n("year"),
-			Util.i18n("years"),
-			Util.i18n("month"),
-			Util.i18n("months"),
-			Util.i18n("day"),
-			Util.i18n("days"),
-			Util.i18n("hour"),
-			Util.i18n("hours"),
-			Util.i18n("minute"),
-			Util.i18n("minutes"),
-			Util.i18n("second"),
-			Util.i18n("seconds")
+			_("year"),
+			_("years"),
+			_("month"),
+			_("months"),
+			_("day"),
+			_("days"),
+			_("hour"),
+			_("hours"),
+			_("minute"),
+			_("minutes"),
+			_("second"),
+			_("seconds")
 		};
 		for (int i = 0; i < types.length; i++)
 		{
@@ -173,7 +169,7 @@ public class Util
 		}
 		if (!found)
 		{
-			throw new Exception(Util.i18n("illegalDate"));
+			throw new Exception(_("illegalDate"));
 		}
 		Calendar c = new GregorianCalendar();
 		if (years > 0)
@@ -206,12 +202,12 @@ public class Util
 		}
 		return c.getTimeInMillis();
 	}
-
 	// The player can stand inside these materials 
 	private static final Set<Integer> AIR_MATERIALS = new HashSet<Integer>();
 	private static final HashSet<Byte> AIR_MATERIALS_TARGET = new HashSet<Byte>();
-	
-	static {
+
+	static
+	{
 		AIR_MATERIALS.add(Material.AIR.getId());
 		AIR_MATERIALS.add(Material.SAPLING.getId());
 		AIR_MATERIALS.add(Material.POWERED_RAIL.getId());
@@ -221,7 +217,7 @@ public class Util
 		AIR_MATERIALS.add(Material.YELLOW_FLOWER.getId());
 		AIR_MATERIALS.add(Material.RED_ROSE.getId());
 		AIR_MATERIALS.add(Material.BROWN_MUSHROOM.getId());
-		AIR_MATERIALS.add(Material.RED_MUSHROOM.getId());	
+		AIR_MATERIALS.add(Material.RED_MUSHROOM.getId());
 		AIR_MATERIALS.add(Material.TORCH.getId());
 		AIR_MATERIALS.add(Material.REDSTONE_WIRE.getId());
 		AIR_MATERIALS.add(Material.SEEDS.getId());
@@ -233,19 +229,19 @@ public class Util
 		AIR_MATERIALS.add(Material.LEVER.getId());
 		AIR_MATERIALS.add(Material.STONE_PLATE.getId());
 		AIR_MATERIALS.add(Material.IRON_DOOR_BLOCK.getId());
-		AIR_MATERIALS.add(Material.WOOD_PLATE.getId());	
+		AIR_MATERIALS.add(Material.WOOD_PLATE.getId());
 		AIR_MATERIALS.add(Material.REDSTONE_TORCH_OFF.getId());
 		AIR_MATERIALS.add(Material.REDSTONE_TORCH_ON.getId());
 		AIR_MATERIALS.add(Material.STONE_BUTTON.getId());
-		AIR_MATERIALS.add(Material.SUGAR_CANE_BLOCK.getId());		
+		AIR_MATERIALS.add(Material.SUGAR_CANE_BLOCK.getId());
 		AIR_MATERIALS.add(Material.DIODE_BLOCK_OFF.getId());
-		AIR_MATERIALS.add(Material.DIODE_BLOCK_ON.getId());		
+		AIR_MATERIALS.add(Material.DIODE_BLOCK_ON.getId());
 		AIR_MATERIALS.add(Material.TRAP_DOOR.getId());
 		AIR_MATERIALS.add(Material.PUMPKIN_STEM.getId());
 		AIR_MATERIALS.add(Material.MELON_STEM.getId());
 		AIR_MATERIALS.add(Material.VINE.getId());
 		//TODO: Add 1.9 materials
-		
+
 		for (Integer integer : AIR_MATERIALS)
 		{
 			AIR_MATERIALS_TARGET.add(integer.byteValue());
@@ -253,26 +249,28 @@ public class Util
 		AIR_MATERIALS_TARGET.add((byte)Material.WATER.getId());
 		AIR_MATERIALS_TARGET.add((byte)Material.STATIONARY_WATER.getId());
 	}
-	
-	public static Location getTarget(final LivingEntity entity) throws Exception {
+
+	public static Location getTarget(final LivingEntity entity) throws Exception
+	{
 		final Block block = entity.getTargetBlock(AIR_MATERIALS_TARGET, 300);
-		if (block == null) {
+		if (block == null)
+		{
 			throw new Exception("Not targeting a block");
 		}
 		return block.getLocation();
 	}
-	
+
 	public static Location getSafeDestination(final Location loc) throws Exception
 	{
 		if (loc == null || loc.getWorld() == null)
 		{
-			throw new Exception(Util.i18n("destinationNotSet"));
+			throw new Exception(_("destinationNotSet"));
 		}
 		final World world = loc.getWorld();
 		int x = loc.getBlockX();
 		int y = (int)Math.round(loc.getY());
 		int z = loc.getBlockZ();
-	
+
 		while (isBlockAboveAir(world, x, y, z))
 		{
 			y -= 1;
@@ -300,7 +298,7 @@ public class Util
 				x += 1;
 				if (x - 32 > loc.getBlockX())
 				{
-					throw new Exception(Util.i18n("holeInFloor"));
+					throw new Exception(_("holeInFloor"));
 				}
 			}
 		}
@@ -349,175 +347,24 @@ public class Util
 		return Math.round(d * 100.0) / 100.0;
 	}
 
-	public static Locale getCurrentLocale()
-	{
-		return currentLocale;
-	}
-
-
-	private static class ConfigClassLoader extends ClassLoader
-	{
-		private final transient File dataFolder;
-		private final transient ClassLoader cl;
-		private final transient IEssentials ess;
-
-		public ConfigClassLoader(final ClassLoader cl, final IEssentials ess)
-		{
-			this.ess = ess;
-			this.dataFolder = ess.getDataFolder();
-			this.cl = cl;
-		}
-
-		@Override
-		public URL getResource(final String string)
-		{
-			final File file = new File(dataFolder, string);
-			if (file.exists())
-			{
-				try
-				{
-					return file.toURI().toURL();
-				}
-				catch (MalformedURLException ex)
-				{
-					return cl.getResource(string);
-				}
-			}
-			return cl.getResource(string);
-		}
-
-		@Override
-		public synchronized void clearAssertionStatus()
-		{
-			cl.clearAssertionStatus();
-		}
-
-		@Override
-		public InputStream getResourceAsStream(final String string)
-		{
-			final File file = new File(dataFolder, string);
-			if (file.exists())
-			{
-				BufferedReader br = null;
-				try
-				{
-					br = new BufferedReader(new FileReader(file));
-					final String version = br.readLine();
-
-					if (version == null || !version.equals("#version: " + ess.getDescription().getVersion()))
-					{
-						logger.log(Level.WARNING, String.format("Translation file %s is not updated for Essentials version. Will use default.", file));
-						return cl.getResourceAsStream(string);
-					}
-					return new FileInputStream(file);
-				}
-				catch (IOException ex)
-				{
-					return cl.getResourceAsStream(string);
-				}
-				finally
-				{
-					if (br != null)
-					{
-						try
-						{
-							br.close();
-						}
-						catch (IOException ex)
-						{
-						}
-					}
-				}
-			}
-			return cl.getResourceAsStream(string);
-		}
-
-		@Override
-		public Enumeration<URL> getResources(final String string) throws IOException
-		{
-			return cl.getResources(string);
-		}
-
-		@Override
-		public Class<?> loadClass(final String string) throws ClassNotFoundException
-		{
-			return cl.loadClass(string);
-		}
-
-		@Override
-		public synchronized void setClassAssertionStatus(final String string, final boolean bln)
-		{
-			cl.setClassAssertionStatus(string, bln);
-		}
-
-		@Override
-		public synchronized void setDefaultAssertionStatus(final boolean bln)
-		{
-			cl.setDefaultAssertionStatus(bln);
-		}
-
-		@Override
-		public synchronized void setPackageAssertionStatus(final String string, final boolean bln)
-		{
-			cl.setPackageAssertionStatus(string, bln);
-		}
-	}
-	private static final Locale defaultLocale = Locale.getDefault();
-	private static Locale currentLocale = defaultLocale;
-	private static ResourceBundle bundle = ResourceBundle.getBundle("messages", defaultLocale);
-	private static ResourceBundle defaultBundle = ResourceBundle.getBundle("messages", Locale.US);
-
-	public static String i18n(String string)
+	public static boolean isInt(final String sInt)
 	{
 		try
 		{
-			return bundle.getString(string);
+			Integer.parseInt(sInt);
 		}
-		catch (MissingResourceException ex)
+		catch (NumberFormatException e)
 		{
-			logger.log(Level.WARNING, String.format("Missing translation key \"%s\" in translation file %s", ex.getKey(), bundle.getLocale().toString()), ex);
-			return defaultBundle.getString(string);
+			return false;
 		}
-	}
-
-	public static String format(String string, Object... objects)
-	{
-		MessageFormat mf = new MessageFormat(i18n(string));
-		return mf.format(objects);
-	}
-
-	public static void updateLocale(String loc, IEssentials ess)
-	{
-		if (loc == null || loc.isEmpty())
-		{
-			return;
-		}
-		String[] parts = loc.split("[_\\.]");
-		if (parts.length == 1)
-		{
-			currentLocale = new Locale(parts[0]);
-		}
-		if (parts.length == 2)
-		{
-			currentLocale = new Locale(parts[0], parts[1]);
-		}
-		if (parts.length == 3)
-		{
-			currentLocale = new Locale(parts[0], parts[1], parts[2]);
-		}
-		logger.log(Level.INFO, String.format("Using locale %s", currentLocale.toString()));
-		bundle = ResourceBundle.getBundle("messages", currentLocale, new ConfigClassLoader(Util.class.getClassLoader(), ess));
-		if (!bundle.keySet().containsAll(defaultBundle.keySet()))
-		{
-			logger.log(Level.WARNING, String.format("Translation file %s does not contain all translation keys.", currentLocale.toString()));
-		}
+		return true;
 	}
 
 	public static String joinList(Object... list)
 	{
 		return joinList(", ", list);
 	}
-	
+
 	public static String joinList(String seperator, Object... list)
 	{
 		StringBuilder buf = new StringBuilder();
@@ -527,14 +374,14 @@ public class Util
 			{
 				buf.append(seperator);
 			}
-			
-			if(each instanceof List)
+
+			if (each instanceof List)
 			{
 				buf.append(joinList(seperator, ((List)each).toArray()));
 			}
 			else
 			{
-				try 
+				try
 				{
 					buf.append(each.toString());
 				}
@@ -546,9 +393,4 @@ public class Util
 		}
 		return buf.toString();
 	}
-	
-	public static String capitalCase(String s)
-	{
-		return s.toUpperCase().charAt(0) + s.toLowerCase().substring(1);
-	}	
 }

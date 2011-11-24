@@ -1,8 +1,8 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.DescParseTickFormat;
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import java.util.*;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -37,7 +37,7 @@ public class Commandtime extends EssentialsCommand
 		final User user = ess.getUser(sender);
 		if (user != null && !user.isAuthorized("essentials.time.set"))
 		{
-			user.sendMessage(Util.i18n("timeSetPermission"));
+			user.sendMessage(_("timeSetPermission"));
 			return;
 		}
 
@@ -69,7 +69,7 @@ public class Commandtime extends EssentialsCommand
 
 		for (World world : worlds)
 		{
-			sender.sendMessage(Util.format("timeWorldCurrent", world.getName(), DescParseTickFormat.format(world.getTime())));
+			sender.sendMessage(_("timeWorldCurrent", world.getName(), DescParseTickFormat.format(world.getTime())));
 		}
 	}
 
@@ -97,7 +97,7 @@ public class Commandtime extends EssentialsCommand
 			output.append(world.getName());
 		}
 
-		sender.sendMessage(Util.format("timeWorldSet", DescParseTickFormat.format(ticks), output.toString()));
+		sender.sendMessage(_("timeWorldSet", DescParseTickFormat.format(ticks), output.toString()));
 	}
 
 	/**
@@ -136,7 +136,7 @@ public class Commandtime extends EssentialsCommand
 		// We failed to understand the world target...
 		else
 		{
-			throw new Exception(Util.i18n("invalidWorld"));
+			throw new Exception(_("invalidWorld"));
 		}
 
 		return worlds;
