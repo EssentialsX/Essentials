@@ -966,59 +966,35 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	 * @param fullPermissionName
 	 * @return true if found a matching token. false if not.
 	 */
-	public boolean comparePermissionString(String userAcessLevel, String fullPermissionName) {
-		if (userAcessLevel == null || fullPermissionName == null) {
-			return false;
-		}
-		boolean logFinest = (GroupManager.logger.getLevel() == Level.FINEST);
-		
-		if (logFinest)
-			GroupManager.logger.finest("COMPARING " + userAcessLevel + " WITH " + fullPermissionName);
+	public boolean comparePermissionString(String userAccessLevel, String fullPermissionName) {
+        int userAccessLevelLength;
+        if (userAccessLevel == null || fullPermissionName == null
+                || (userAccessLevelLength = userAccessLevel.length()) == 0 || fullPermissionName.length() == 0) {
+            return false;
+        }
 
-		if (userAcessLevel.startsWith("+")) {
-			userAcessLevel = userAcessLevel.substring(1);
-		} else if (userAcessLevel.startsWith("-")) {
-			userAcessLevel = userAcessLevel.substring(1);
-		}
+        int userAccessLevelOffset;
+        if (userAccessLevel.charAt(0) == '+' || userAccessLevel.charAt(0) == '-') {
+            userAccessLevelOffset = 1;
+        } else {
+            userAccessLevelOffset = 0;
+        }
+        if ("*".regionMatches(0, userAccessLevel, userAccessLevelOffset, userAccessLevelLength - userAccessLevelOffset)) {
+            return true;
+        }
+        int fullPermissionNameOffset;
+        if (fullPermissionName.charAt(0) == '+' || fullPermissionName.charAt(0) == '-') {
+            fullPermissionNameOffset = 1;
+        } else {
+            fullPermissionNameOffset = 0;
+        }
 
-		if (fullPermissionName.startsWith("+")) {
-			fullPermissionName = fullPermissionName.substring(1);
-		} else if (fullPermissionName.startsWith("-")) {
-			fullPermissionName = fullPermissionName.substring(1);
-		}
+        if (userAccessLevel.charAt(userAccessLevel.length() - 1) == '*') {
+            userAccessLevelLength--;
+        }
+        return userAccessLevel.regionMatches(true, userAccessLevelOffset, fullPermissionName, fullPermissionNameOffset, userAccessLevelLength - userAccessLevelOffset);
+    }
 
-		StringTokenizer levelATokenizer = new StringTokenizer(userAcessLevel, ".");
-		StringTokenizer levelBTokenizer = new StringTokenizer(fullPermissionName, ".");
-		while (levelATokenizer.hasMoreTokens() && levelBTokenizer.hasMoreTokens()) {
-			String levelA = levelATokenizer.nextToken();
-			String levelB = levelBTokenizer.nextToken();
-			if (logFinest)
-				GroupManager.logger.finest("ROUND " + levelA + " AGAINST " + levelB);
-			if (levelA.contains("*")) {
-				if (logFinest)
-					GroupManager.logger.finest("WIN");
-				return true;
-			}
-			if (levelA.equalsIgnoreCase(levelB)) {
-				if (!levelATokenizer.hasMoreTokens() && !levelBTokenizer.hasMoreTokens()) {
-					if (logFinest)
-						GroupManager.logger.finest("WIN");
-					return true;
-				}
-				if (logFinest)
-					GroupManager.logger.finest("NEXT");
-				continue;
-			} else {
-				if (logFinest)
-					GroupManager.logger.finest("FAIL");
-				return false;
-			}
-
-		}
-		if (logFinest)
-			GroupManager.logger.finest("FAIL");
-		return false;
-	}
 
 	/**
 	 * Returns a list of all groups.
