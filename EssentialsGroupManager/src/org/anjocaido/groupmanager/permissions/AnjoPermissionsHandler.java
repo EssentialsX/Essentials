@@ -967,15 +967,13 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	public boolean comparePermissionString(String userAccessLevel, String fullPermissionName) {
         int userAccessLevelLength;
         if (userAccessLevel == null || fullPermissionName == null
-                || (userAccessLevelLength = userAccessLevel.length()) == 0 || fullPermissionName.length() == 0) {
+                || fullPermissionName.length() == 0 || (userAccessLevelLength = userAccessLevel.length()) == 0) {
             return false;
         }
 
-        int userAccessLevelOffset;
+        int userAccessLevelOffset = 0;
         if (userAccessLevel.charAt(0) == '+' || userAccessLevel.charAt(0) == '-') {
             userAccessLevelOffset = 1;
-        } else {
-            userAccessLevelOffset = 0;
         }
         if ("*".regionMatches(0, userAccessLevel, userAccessLevelOffset, userAccessLevelLength - userAccessLevelOffset)) {
             return true;
