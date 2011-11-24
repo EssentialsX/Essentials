@@ -18,7 +18,7 @@ public abstract class DataUnit {
 
     private WorldDataHolder dataSource;
     private String name;
-    private boolean changed;
+    private boolean changed, sorted = false;
     private ArrayList<String> permissions = new ArrayList<String>();
 
     public DataUnit(WorldDataHolder dataSource, String name) {
@@ -91,6 +91,7 @@ public abstract class DataUnit {
 // for(StackTraceElement st: Thread.currentThread().getStackTrace()){
 // GroupManager.logger.finest(st.toString());
 // }
+        sorted = false;
         changed = true;
     }
 
@@ -135,8 +136,15 @@ public abstract class DataUnit {
     public ArrayList<String> getPermissionList() {
         return new ArrayList<String>(permissions);
     }
+    
+    public boolean isSorted() {
+    	return this.sorted;
+    }
 
     public void sortPermissions() {
-        Collections.sort(permissions, StringPermissionComparator.getInstance());
+        if (!isSorted()) {
+        	Collections.sort(permissions, StringPermissionComparator.getInstance());
+        	sorted = true;
+        }
     }
 }
