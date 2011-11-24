@@ -78,7 +78,7 @@ public class AlternativeCommandsHandler
 			while (pcIterator.hasNext())
 			{
 				final PluginCommand pc = pcIterator.next();
-				if (pc.getPlugin().equals(plugin))
+				if (pc.getPlugin() == null || pc.getPlugin().equals(plugin))
 				{
 					pcIterator.remove();
 				}
