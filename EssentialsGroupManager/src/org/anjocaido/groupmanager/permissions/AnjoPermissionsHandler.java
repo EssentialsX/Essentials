@@ -657,8 +657,6 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 		if (result.resultType.equals(PermissionCheckResult.Type.EXCEPTION) || result.resultType.equals(PermissionCheckResult.Type.FOUND)) {
 			return true;
 		}
-		if ((Bukkit.getPlayer(user.getName()) != null) && (Bukkit.getPlayer(user.getName()).hasPermission(permission)))
-			return true;
 
 		return false;
 	}
@@ -699,6 +697,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 			}
 		}
 
+		// Check Bukkit perms to support plugins which add perms via code (Heroes).
 		if ((Bukkit.getPlayer(user.getName()) != null) && (Bukkit.getPlayer(user.getName()).hasPermission(targetPermission))) {
 			result.resultType = PermissionCheckResult.Type.FOUND;
 			result.owner = user;
