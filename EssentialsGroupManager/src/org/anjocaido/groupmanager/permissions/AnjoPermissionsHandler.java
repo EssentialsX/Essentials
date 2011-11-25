@@ -97,43 +97,59 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	@Override
 	public List<String> getAllPlayersPermissions(String userName) {
 
-		List<String> playerPermArray = new ArrayList<String>(ph.getUser(userName).getPermissionList());
-
+		List<String> playerPermArray = new ArrayList<String>();
+		
+		for (String perm : ph.getUser(userName).getPermissionList()) {
+			if ((!playerPermArray.contains(perm)) && (!playerPermArray.contains("-" + perm))) {
+				playerPermArray.add(perm);
+				
+				Map<String, Boolean> children = GroupManager.BukkitPermissions.getAllChildren(perm, playerPermArray);
+				
+				if (children != null) {
+					for (String child : children.keySet()) {
+						if (children.get(child))
+							if ((!playerPermArray.contains(child)) && (!playerPermArray.contains("-" + child))) {
+								playerPermArray.add(child);
+							}
+					}
+				}
+			}
+		}
 		for (String group : getGroups(userName)) {
 			if (group.startsWith("g:") && GroupManager.getGlobalGroups().hasGroup(group)) {
 				for (String perm : GroupManager.getGlobalGroups().getGroupsPermissions(group)) {
 					if ((!playerPermArray.contains(perm)) && (!playerPermArray.contains("-" + perm))) {
 						playerPermArray.add(perm);
 
-						Map<String, Boolean> children = GroupManager.BukkitPermissions.getChildren(perm);
+						Map<String, Boolean> children = GroupManager.BukkitPermissions.getAllChildren(perm, playerPermArray);
 						if (children != null) {
 							for (String child : children.keySet()) {
 								if (children.get(child))
-									if ((!playerPermArray.contains(perm)) && (!playerPermArray.contains("-" + perm)))
+									if ((!playerPermArray.contains(child)) && (!playerPermArray.contains("-" + child)))
 										playerPermArray.add(child);
 							}
 						}
 					}
 				}
-
 			} else {
 				for (String perm : ph.getGroup(group).getPermissionList()) {
 					if ((!playerPermArray.contains(perm)) && (!playerPermArray.contains("-" + perm))) {
 						playerPermArray.add(perm);
-
-						Map<String, Boolean> children = GroupManager.BukkitPermissions.getChildren(perm);
+						
+						Map<String, Boolean> children = GroupManager.BukkitPermissions.getAllChildren(perm, playerPermArray);
 						if (children != null) {
 							for (String child : children.keySet()) {
 								if (children.get(child))
-									if ((!playerPermArray.contains(perm)) && (!playerPermArray.contains("-" + perm)))
+									if ((!playerPermArray.contains(child)) && (!playerPermArray.contains("-" + child))) {
 										playerPermArray.add(child);
+									}
 							}
 						}
-
 					}
 				}
 			}
 		}
+		//Collections.sort(playerPermArray, StringPermissionComparator.getInstance());
 
 		return playerPermArray;
 	}
@@ -670,8 +686,22 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	 * @return PermissionCheckResult
 	 */
 	public PermissionCheckResult checkFullUserPermission(User user, String targetPermission) {
+		
+		return checkFullGMPermission(user, targetPermission, true);
+	}
+	
+	/**
+	 * Check user and groups with inheritance and Bukkit if bukkit = true
+	 * return a PermissionCheckResult.
+	 * 
+	 * @param user
+	 * @param targetPermission
+	 * @param checkBukkit
+	 * @return PermissionCheckResult
+	 */
+	public PermissionCheckResult checkFullGMPermission(User user, String targetPermission, Boolean checkBukkit) {
 		PermissionCheckResult result = new PermissionCheckResult();
-		result.askedPermission = targetPermission;
+		result.accessLevel = targetPermission;
 		result.resultType = PermissionCheckResult.Type.NOTFOUND;
 
 		if (user == null || targetPermission == null || targetPermission.isEmpty()) {
@@ -697,12 +727,14 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 			}
 		}
 
-		// Check Bukkit perms to support plugins which add perms via code (Heroes).
-		final Player player = Bukkit.getPlayer(user.getName());
-		if ((player != null) && (player.hasPermission(targetPermission))) {
-			result.resultType = PermissionCheckResult.Type.FOUND;
-			result.owner = user;
-			return result;
+		if (checkBukkit == true) {
+			// Check Bukkit perms to support plugins which add perms via code (Heroes).
+			final Player player = Bukkit.getPlayer(user.getName());
+			if ((player != null) && (player.hasPermission(targetPermission))) {
+				result.resultType = PermissionCheckResult.Type.FOUND;
+				result.owner = user;
+				return result;
+			}
 		}
 
 		// THEN IT RETURNS A NOT FOUND
@@ -960,7 +992,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	 * Every '-' or '+' in the beginning is ignored. It will match only node
 	 * names.
 	 * 
-	 * @param userAcessLevel
+	 * @param userAccessLevel
 	 * @param fullPermissionName
 	 * @return true if found a matching token. false if not.
 	 */
@@ -986,9 +1018,11 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
         }
 
         if (userAccessLevel.charAt(userAccessLevel.length() - 1) == '*') {
-            userAccessLevelLength--;
-        }
-        return userAccessLevel.regionMatches(true, userAccessLevelOffset, fullPermissionName, fullPermissionNameOffset, userAccessLevelLength - userAccessLevelOffset);
+        	return userAccessLevel.regionMatches(true, userAccessLevelOffset, fullPermissionName, fullPermissionNameOffset, userAccessLevelLength - userAccessLevelOffset - 1);
+        } else {
+            return userAccessLevel.regionMatches(true, userAccessLevelOffset, fullPermissionName, fullPermissionNameOffset, 
+                     Math.max(userAccessLevelLength - userAccessLevelOffset, fullPermissionName.length() - fullPermissionNameOffset));
+         }
     }
 
 
