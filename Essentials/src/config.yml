@@ -76,9 +76,6 @@ permission-based-item-spawn: false
 # HOWEVER, it is known to cause lag upon users logging OUT, so beware!
 reclaim-onlogout: false
 
-# Should primitive spawn protection be enabled?  For most servers, this should be flase; it is better to use a third-party plugin to protect it.
-spawn-protection: false
-
 # Mob limit on spawnmob
 spawnmob-limit: 10
 
