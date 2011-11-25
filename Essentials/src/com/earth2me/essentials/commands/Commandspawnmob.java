@@ -214,16 +214,26 @@ public class Commandspawnmob extends EssentialsCommand
 				throw new Exception(_("sheepMalformedColor"), e);
 			}
 		}
-		if ("Wolf".equalsIgnoreCase(type) && data.equalsIgnoreCase("tamed"))
+		if ("Wolf".equalsIgnoreCase(type)
+			&& data.toLowerCase(Locale.ENGLISH).startsWith("tamed"))
 		{
 			final Wolf wolf = ((Wolf)spawned);
 			wolf.setTamed(true);
 			wolf.setOwner(user);
 			wolf.setSitting(true);
+			if (data.equalsIgnoreCase("tamedbaby"))
+			{
+				((Animals)spawned).setAge(-24000);
+			}
 		}
-		if ("Wolf".equalsIgnoreCase(type) && data.equalsIgnoreCase("angry"))
+		if ("Wolf".equalsIgnoreCase(type)
+			&& data.toLowerCase(Locale.ENGLISH).startsWith("angry"))
 		{
 			((Wolf)spawned).setAngry(true);
+			if (data.equalsIgnoreCase("angrybaby"))
+			{
+				((Animals)spawned).setAge(-24000);
+			}
 		}
 		if ("Creeper".equalsIgnoreCase(type) && data.equalsIgnoreCase("powered"))
 		{
