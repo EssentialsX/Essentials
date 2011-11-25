@@ -44,7 +44,7 @@ public class AlternativeCommandsHandler
 			{
 				reg = ess.getServer().getPluginCommand(pc.getName().toLowerCase(Locale.ENGLISH));
 			}
-			if (reg == null)
+			if (reg == null || !reg.getPlugin().equals(plugin))
 			{
 				continue;
 			}
