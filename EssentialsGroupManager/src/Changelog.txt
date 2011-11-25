@@ -76,3 +76,6 @@ v 1.5:
 v 1.6:
 	- Prevent Group.equals tests throwing a NullPointerException for GlobalGroups.
 	- Stop throwing errors on an empty users file.
+	- Optimize sorting to speedup permission tests.
+	- Fix superperms to pass all tests http://dev.bukkit.org/server-mods/superpermstest/
+	- Optimizations include changing the return of comparePermissionString.

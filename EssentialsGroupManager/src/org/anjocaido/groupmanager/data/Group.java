@@ -7,6 +7,8 @@ package org.anjocaido.groupmanager.data;
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.dataholder.WorldDataHolder;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -92,13 +94,13 @@ public class Group extends DataUnit implements Cloneable {
     }
 
     /**
-     * a COPY of inherits list
+     * an unmodifiable list of inherits list
      * You can't manage the list by here
      * Lol... version 0.6 had a problem because this.
      * @return the inherits
      */
-    public ArrayList<String> getInherits() {
-        return new ArrayList<String>(inherits);
+    public List<String> getInherits() {
+        return Collections.unmodifiableList(inherits);
     }
 
     /**
