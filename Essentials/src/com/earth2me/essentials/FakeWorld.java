@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import java.io.File;
 import java.util.List;
 import java.util.UUID;
 import org.bukkit.*;
@@ -514,5 +515,11 @@ public class FakeWorld implements World
 	public int getSeaLevel()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
-	}	
+	}
+
+	@Override
+	public File getWorldFolder()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }

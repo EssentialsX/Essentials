@@ -3,6 +3,8 @@ package com.earth2me.essentials;
 import static com.earth2me.essentials.I18n._;
 import java.util.List;
 import java.util.logging.Logger;
+import org.bukkit.Material;
+import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
@@ -47,6 +49,17 @@ public class EssentialsEntityListener extends EntityListener
 							return;
 						}
 					}
+				}
+			}
+			if (eDefend instanceof Animals && eAttack instanceof Player)
+			{
+				User player = ess.getUser(eAttack);
+				ItemStack hand = player.getItemInHand();
+				if (hand != null && hand.getType() == Material.MILK_BUCKET) {
+					((Animals)eDefend).setAge(-24000);
+					player.setItemInHand(new ItemStack(Material.BUCKET, hand.getAmount()));
+					player.updateInventory();
+					event.setCancelled(true);
 				}
 			}
 		}
