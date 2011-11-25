@@ -20,7 +20,7 @@ public class Commandspawnmob extends EssentialsCommand
 	{
 		super("spawnmob");
 	}
-	
+
 	@Override
 	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
@@ -29,8 +29,8 @@ public class Commandspawnmob extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 			//TODO: user.sendMessage("§7Mobs: Zombie PigZombie Skeleton Slime Chicken Pig Monster Spider Creeper Ghast Squid Giant Cow Sheep Wolf");
 		}
-		
-		
+
+
 		String[] mountparts = args[0].split(",");
 		String[] parts = mountparts[0].split(":");
 		String mobType = parts[0];
@@ -50,24 +50,24 @@ public class Commandspawnmob extends EssentialsCommand
 				mountData = parts[1];
 			}
 		}
-		
-		
+
+
 		Entity spawnedMob = null;
 		Mob mob = null;
 		Entity spawnedMount = null;
 		Mob mobMount = null;
-		
+
 		mob = Mob.fromName(mobType);
 		if (mob == null)
 		{
 			throw new Exception(_("invalidMob"));
 		}
-		
+
 		if (ess.getSettings().getProtectPreventSpawn(mob.getType().toString().toLowerCase(Locale.ENGLISH)))
 		{
 			throw new Exception(_("unableToSpawnMob"));
 		}
-		
+
 		final Block block = Util.getTarget(user).getBlock();
 		if (block == null)
 		{
@@ -83,7 +83,7 @@ public class Commandspawnmob extends EssentialsCommand
 		{
 			throw new Exception(_("unableToSpawnMob"));
 		}
-		
+
 		if (mountType != null)
 		{
 			mobMount = Mob.fromName(mountType);
@@ -92,7 +92,7 @@ public class Commandspawnmob extends EssentialsCommand
 				user.sendMessage(_("invalidMob"));
 				return;
 			}
-			
+
 			if (ess.getSettings().getProtectPreventSpawn(mobMount.getType().toString().toLowerCase(Locale.ENGLISH)))
 			{
 				throw new Exception(_("unableToSpawnMob"));
@@ -124,7 +124,7 @@ public class Commandspawnmob extends EssentialsCommand
 				mobCount = serverLimit;
 				user.sendMessage(_("mobSpawnLimit"));
 			}
-			
+
 			try
 			{
 				for (int i = 1; i < mobCount; i++)
@@ -171,7 +171,7 @@ public class Commandspawnmob extends EssentialsCommand
 			user.sendMessage(mob.name + " " + _("spawned"));
 		}
 	}
-	
+
 	private void changeMobData(String type, Entity spawned, String data, User user) throws Exception
 	{
 		if ("Slime".equalsIgnoreCase(type))
@@ -188,7 +188,8 @@ public class Commandspawnmob extends EssentialsCommand
 		if (("Sheep".equalsIgnoreCase(type)
 			 || "Cow".equalsIgnoreCase(type)
 			 || "Chicken".equalsIgnoreCase(type)
-			 || "Pig".equalsIgnoreCase(type))
+			 || "Pig".equalsIgnoreCase(type)
+			 || "Wolf".equalsIgnoreCase(type))
 			&& data.equalsIgnoreCase("baby"))
 		{
 			((Animals)spawned).setAge(-24000);
