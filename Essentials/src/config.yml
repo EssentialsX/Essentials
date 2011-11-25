@@ -229,6 +229,10 @@ freeze-afk-players: false
 # You can disable the death messages of minecraft here
 death-messages: true
 
+# Add worlds to this list, if you want to automatically disable god mode there
+no-god-in-worlds:
+#  - world_nether
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #

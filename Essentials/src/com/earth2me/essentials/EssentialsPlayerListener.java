@@ -385,4 +385,15 @@ public class EssentialsPlayerListener extends PlayerListener
 			user.updateActivity(true);
 		}
 	}
+
+	@Override
+	public void onPlayerChangedWorld(PlayerChangedWorldEvent event)
+	{
+		if (ess.getSettings().getNoGodWorlds().contains(event.getPlayer().getLocation().getWorld().getName())) {
+			User user = ess.getUser(event.getPlayer());
+			if (user.isGodModeEnabledRaw()) {
+				user.sendMessage(_("noGodWorldWarning"));
+			}
+		}
+	}
 }
