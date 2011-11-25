@@ -33,7 +33,7 @@ public class Commandhome extends EssentialsCommand
 			}
 			else
 			{
-				player = getPlayer(server, nameParts[0].split(" "), 0, true);
+				player = getPlayer(server, nameParts, 0, true);
 				if (nameParts.length > 1)
 				{
 					homeName = nameParts[1];
