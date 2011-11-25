@@ -78,3 +78,4 @@ v 1.6:
 	- Stop throwing errors on an empty users file.
 	- Optimize sorting to speedup permission tests.
 	- Fix superperms to pass all tests http://dev.bukkit.org/server-mods/superpermstest/
+	- Optimizations include changing the return of comparePermissionString.

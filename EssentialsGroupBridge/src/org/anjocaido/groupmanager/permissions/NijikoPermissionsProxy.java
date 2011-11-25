@@ -521,10 +521,10 @@ public class NijikoPermissionsProxy extends PermissionHandler {
 
     @Override
     public boolean has(String world, String playerName, String permission) {
-        if (permission == null || permission.equals("")) {
+    	if (permission == null || permission.isEmpty()) {
             return false;
         }
-        if (playerName == null || playerName == "") {
+    	if (playerName == null || playerName.isEmpty()) {
             GroupManager.logger.severe("A plugin is asking permission '" + permission + "' for a null player... Which plugin does that? Bastards!");
             return false;
         }

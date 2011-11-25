@@ -44,12 +44,13 @@ public class OverloadedWorldHolder extends WorldDataHolder {
     @Override
     public User getUser(String userName) {
         //OVERLOADED CODE
-        if (overloadedUsers.containsKey(userName.toLowerCase())) {
-            return overloadedUsers.get(userName.toLowerCase());
+    	String userNameLowered = userName.toLowerCase();
+    	if (overloadedUsers.containsKey(userNameLowered)) {
+    		return overloadedUsers.get(userNameLowered);
         }
         //END CODE
-        if (users.containsKey(userName.toLowerCase())) {
-            return users.get(userName.toLowerCase());
+        if (users.containsKey(userNameLowered)) {
+            return users.get(userNameLowered);
         }
         User newUser = createUser(userName);
         haveUsersChanged = true;
