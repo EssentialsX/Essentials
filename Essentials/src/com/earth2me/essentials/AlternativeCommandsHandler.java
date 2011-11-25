@@ -42,7 +42,11 @@ public class AlternativeCommandsHandler
 			PluginCommand reg = ess.getServer().getPluginCommand(pluginName + ":" + pc.getName().toLowerCase(Locale.ENGLISH));
 			if (reg == null)
 			{
-				reg = Bukkit.getServer().getPluginCommand(pc.getName().toLowerCase(Locale.ENGLISH));
+				reg = ess.getServer().getPluginCommand(pc.getName().toLowerCase(Locale.ENGLISH));
+			}
+			if (reg == null)
+			{
+				continue;
 			}
 			for (String label : labels)
 			{
