@@ -47,7 +47,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		if (args[0].isEmpty())
+		if (args[pos].isEmpty())
 		{
 			throw new NoSuchFieldException(_("playerNotFound"));
 		}
