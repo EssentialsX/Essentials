@@ -130,27 +130,32 @@ public abstract class UserData extends PlayerExtension implements IConf
 		return loc;
 	}
 
-	public Location getHome(Location world) throws Exception
+	public Location getHome(final Location world)
 	{
-		Location loc;
-		for (String home : getHomes())
+		try
 		{
-			loc = config.getLocation("homes." + home, getServer());
-			if (world.getWorld() == loc.getWorld())
+			Location loc;
+			for (String home : getHomes())
 			{
-				return loc;
-			}
+				loc = config.getLocation("homes." + home, getServer());
+				if (world.getWorld() == loc.getWorld())
+				{
+					return loc;
+				}
 
+			}
+			loc = config.getLocation("homes." + getHomes().get(0), getServer());
+			return loc;
 		}
-		loc = config.getLocation("homes." + getHomes().get(0), getServer());
-		return loc;
+		catch (Exception ex)
+		{
+			return null;
+		}
 	}
 
 	public List<String> getHomes()
 	{
-		List<String> list = new ArrayList(homes.keySet());
-		return list;
-
+		return new ArrayList(homes.keySet());
 	}
 
 	public void setHome(String name, Location loc)
