@@ -176,7 +176,14 @@ public class EssentialsPlayerListener extends PlayerListener
 			}
 			catch (IOException ex)
 			{
-				LOGGER.log(Level.WARNING, ex.getMessage(), ex);
+				if (ess.getSettings().isDebug())
+				{
+					LOGGER.log(Level.WARNING, ex.getMessage(), ex);
+				}
+				else
+				{
+					LOGGER.log(Level.WARNING, ex.getMessage());
+				}
 			}
 		}
 
@@ -231,10 +238,12 @@ public class EssentialsPlayerListener extends PlayerListener
 	private void updateCompass(final User user)
 	{
 		Location loc = user.getHome(user.getLocation());
-		if (loc == null) {
+		if (loc == null)
+		{
 			loc = user.getBedSpawnLocation();
 		}
-		if (loc != null) {
+		if (loc != null)
+		{
 			user.setCompassTarget(loc);
 		}
 	}
@@ -362,11 +371,13 @@ public class EssentialsPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerChangedWorld(final PlayerChangedWorldEvent event)
 	{
-		if (ess.getSettings().getNoGodWorlds().contains(event.getPlayer().getLocation().getWorld().getName())) {
+		if (ess.getSettings().getNoGodWorlds().contains(event.getPlayer().getLocation().getWorld().getName()))
+		{
 			User user = ess.getUser(event.getPlayer());
-			if (user.isGodModeEnabledRaw()) {
+			if (user.isGodModeEnabledRaw())
+			{
 				user.sendMessage(_("noGodWorldWarning"));
 			}
 		}
-	}	
+	}
 }
