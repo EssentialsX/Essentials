@@ -4,6 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import com.earth2me.essentials.craftbukkit.BedLocationFix;
 import java.util.List;
 import java.util.Locale;
 import org.bukkit.Location;
@@ -44,7 +45,7 @@ public class Commandhome extends EssentialsCommand
 		try
 		{
 			if ("bed".equalsIgnoreCase(homeName)) {
-				final Location bed = player.getBedSpawnLocation();
+				final Location bed = BedLocationFix.getBedSpawnLocation(player);
 				if (bed != null)
 				{
 					user.getTeleport().teleport(bed, charge);
@@ -57,7 +58,7 @@ public class Commandhome extends EssentialsCommand
 			final List<String> homes = player.getHomes();
 			if (homes.isEmpty() && player.equals(user))
 			{
-				final Location loc = player.getBedSpawnLocation();
+				final Location loc = BedLocationFix.getBedSpawnLocation(player);
 				if (loc == null)
 				{
 					if (ess.getSettings().spawnIfNoHome())

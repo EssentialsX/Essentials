@@ -3,6 +3,7 @@ package com.earth2me.essentials.spawn;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.craftbukkit.BedLocationFix;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Location;
@@ -31,7 +32,7 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 			Location home = user.getHome(user.getLocation());
 			if (home == null)
 			{
-				home = user.getBedSpawnLocation();
+				home = BedLocationFix.getBedSpawnLocation(user);
 			}
 			if (home != null)
 			{
@@ -51,7 +52,7 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 	{
 		final User user = ess.getUser(event.getPlayer());
 
-		if (!user.isNew() || user.getBedSpawnLocation() != null)
+		if (!user.isNew() || BedLocationFix.getBedSpawnLocation(user) != null)
 		{
 			return;
 		}
