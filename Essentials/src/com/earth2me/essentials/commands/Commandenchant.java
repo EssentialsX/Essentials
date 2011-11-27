@@ -77,7 +77,7 @@ public class Commandenchant extends EssentialsCommand
 					enchantmentslist.add(enchantmentName);
 				}
 			}
-			throw new NotEnoughArgumentsException(_("entchantments", Util.joinList(enchantmentslist.toArray())));
+			throw new NotEnoughArgumentsException(_("enchantments", Util.joinList(enchantmentslist.toArray())));
 		}
 		int level = -1;
 		if (args.length > 1)
