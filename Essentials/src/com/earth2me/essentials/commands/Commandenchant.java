@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import com.earth2me.essentials.craftbukkit.EnchantmentFix;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -97,7 +98,7 @@ public class Commandenchant extends EssentialsCommand
 			level = enchantment.getMaxLevel();
 		}
 		stack.addEnchantment(enchantment, level);
-		user.setItemInHand(stack);
+		EnchantmentFix.setItemInHand(user.getInventory(), stack);
 		user.updateInventory();
 		final String enchantmentName = enchantment.getName().toLowerCase(Locale.ENGLISH);
 		user.sendMessage(_("enchantmentApplied", enchantmentName.replace('_', ' ')));

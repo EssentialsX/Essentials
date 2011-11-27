@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.InventoryWorkaround;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import java.util.Locale;
@@ -71,7 +72,7 @@ public class Commanditem extends EssentialsCommand
 
 		final String displayName = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ');
 		user.sendMessage(_("itemSpawn", stack.getAmount(), displayName));
-		user.getInventory().addItem(stack);
+		InventoryWorkaround.addItem(user.getInventory(), true, stack);
 		user.updateInventory();
 	}
 }

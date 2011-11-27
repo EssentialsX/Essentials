@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.InventoryWorkaround;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
@@ -113,7 +114,7 @@ public class Commandkit extends EssentialsCommand
 					final int id = Material.getMaterial(Integer.parseInt(parts[0])).getId();
 					final int amount = parts.length > 1 ? Integer.parseInt(parts[parts.length > 2 ? 2 : 1]) : 1;
 					final short data = parts.length > 2 ? Short.parseShort(parts[1]) : 0;
-					final HashMap<Integer, ItemStack> overfilled = user.getInventory().addItem(new ItemStack(id, amount, data));
+					final Map<Integer, ItemStack> overfilled = InventoryWorkaround.addItem(user.getInventory(), true, new ItemStack(id, amount, data));
 					for (ItemStack itemStack : overfilled.values())
 					{
 						user.getWorld().dropItemNaturally(user.getLocation(), itemStack);

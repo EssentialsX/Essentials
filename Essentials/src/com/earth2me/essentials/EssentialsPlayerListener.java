@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.craftbukkit.EnchantmentFix;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
@@ -114,7 +115,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 		if (user.getSavedInventory() != null)
 		{
-			user.getInventory().setContents(user.getSavedInventory());
+			EnchantmentFix.setContents(user.getInventory(), user.getSavedInventory());
 			user.setSavedInventory(null);
 		}
 		user.updateActivity(false);
