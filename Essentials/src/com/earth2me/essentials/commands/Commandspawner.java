@@ -4,6 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import java.util.Locale;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -23,8 +24,7 @@ public class Commandspawner extends EssentialsCommand
 	{
 		if (args.length < 1 || args[0].length() < 2)
 		{
-			throw new NotEnoughArgumentsException();
-			//TODO: user.sendMessage("§7Mobs: Zombie PigZombie Skeleton Slime Chicken Pig Monster Spider Creeper Ghast Squid Giant Cow Sheep Wolf");
+			throw new NotEnoughArgumentsException(_("mobsAvailable", Util.joinList(Mob.getMobList())));
 		}
 
 		final Location target = Util.getTarget(user);
@@ -43,6 +43,14 @@ public class Commandspawner extends EssentialsCommand
 			{
 				user.sendMessage(_("invalidMob"));
 				return;
+			}
+			if (ess.getSettings().getProtectPreventSpawn(mob.getType().toString().toLowerCase(Locale.ENGLISH)))
+			{
+				throw new Exception(_("unableToSpawnMob"));
+			}
+			if (!user.isAuthorized("essentials.spawner." + mob.name.toLowerCase()))
+			{
+				throw new Exception(_("unableToSpawnMob"));
 			}
 			((CreatureSpawner)target.getBlock().getState()).setCreatureType(mob.getType());
 			user.sendMessage(_("setSpawner", mob.name));

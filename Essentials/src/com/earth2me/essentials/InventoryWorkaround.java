@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.craftbukkit.EnchantmentFix;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.Location;
@@ -34,7 +35,7 @@ public final class InventoryWorkaround
 			{
 				continue;
 			}
-			if (item.getTypeId() == cItem.getTypeId() && (!forceAmount || item.getAmount() == cItem.getAmount()) && (!forceDurability || cItem.getDurability() == item.getDurability()))
+			if (item.getTypeId() == cItem.getTypeId() && (!forceAmount || item.getAmount() == cItem.getAmount()) && (!forceDurability || cItem.getDurability() == item.getDurability()) && cItem.getEnchantments().equals(item.getEnchantments()))
 			{
 				return i;
 			}
@@ -56,7 +57,7 @@ public final class InventoryWorkaround
 			{
 				continue;
 			}
-			if (item.getTypeId() == cItem.getTypeId() && cItem.getAmount() < cItem.getType().getMaxStackSize() && (!forceDurability || cItem.getDurability() == item.getDurability()))
+			if (item.getTypeId() == cItem.getTypeId() && cItem.getAmount() < cItem.getType().getMaxStackSize() && (!forceDurability || cItem.getDurability() == item.getDurability()) && cItem.getEnchantments().equals(item.getEnchantments()))
 			{
 				return i;
 			}
@@ -80,6 +81,11 @@ public final class InventoryWorkaround
 
 	public static Map<Integer, ItemStack> addItem(final Inventory cinventory, final boolean forceDurability, final ItemStack... items)
 	{
+		return addItem(cinventory, forceDurability, false, null, items);
+	}
+
+	public static Map<Integer, ItemStack> addItem(final Inventory cinventory, final boolean forceDurability, final boolean dontBreakStacks, final IEssentials ess, final ItemStack... items)
+	{
 		final Map<Integer, ItemStack> leftover = new HashMap<Integer, ItemStack>();
 
 		/* TODO: some optimization
@@ -101,10 +107,10 @@ public final class InventoryWorkaround
 			{
 				if (combined[j] == null)
 				{
-					combined[j] = new ItemStack(items[i].getType(), items[i].getAmount(), items[i].getDurability());
+					combined[j] = items[i].clone();
 					break;
 				}
-				if (combined[j].getTypeId() == items[i].getTypeId() && (!forceDurability || combined[j].getDurability() == items[i].getDurability()))
+				if (combined[j].getTypeId() == items[i].getTypeId() && (!forceDurability || combined[j].getDurability() == items[i].getDurability()) && combined[j].getEnchantments().equals(items[i].getEnchantments()))
 				{
 					combined[j].setAmount(combined[j].getAmount() + items[i].getAmount());
 					break;
@@ -141,15 +147,17 @@ public final class InventoryWorkaround
 					else
 					{
 						// More than a single stack!
-						if (item.getAmount() > item.getType().getMaxStackSize())
+						if (item.getAmount() > (dontBreakStacks ? ess.getSettings().getDefaultStackSize() : item.getType().getMaxStackSize()))
 						{
-							cinventory.setItem(firstFree, new ItemStack(item.getTypeId(), item.getType().getMaxStackSize(), item.getDurability()));
+							ItemStack stack = item.clone();
+							stack.setAmount(dontBreakStacks ? ess.getSettings().getDefaultStackSize() : item.getType().getMaxStackSize());
+							EnchantmentFix.setItem(cinventory, firstFree, stack);
 							item.setAmount(item.getAmount() - item.getType().getMaxStackSize());
 						}
 						else
 						{
 							// Just store it
-							cinventory.setItem(firstFree, item);
+							EnchantmentFix.setItem(cinventory, firstFree, item);
 							break;
 						}
 					}
@@ -161,7 +169,7 @@ public final class InventoryWorkaround
 
 					final int amount = item.getAmount();
 					final int partialAmount = partialItem.getAmount();
-					final int maxAmount = partialItem.getType().getMaxStackSize();
+					final int maxAmount = dontBreakStacks ? ess.getSettings().getDefaultStackSize() : partialItem.getType().getMaxStackSize();
 
 					// Check if it fully fits
 					if (amount + partialAmount <= maxAmount)
@@ -228,7 +236,7 @@ public final class InventoryWorkaround
 					{
 						// split the stack and store
 						itemStack.setAmount(amount - toDelete);
-						cinventory.setItem(first, itemStack);
+						EnchantmentFix.setItem(cinventory, first, itemStack);
 						toDelete = 0;
 					}
 				}
@@ -256,10 +264,10 @@ public final class InventoryWorkaround
 			{
 				if (combined[j] == null)
 				{
-					combined[j] = new ItemStack(items[i].getType(), items[i].getAmount(), items[i].getDurability());
+					combined[j] = items[i].clone();
 					break;
 				}
-				if (combined[j].getTypeId() == items[i].getTypeId() && (!forceDurability || combined[j].getDurability() == items[i].getDurability()))
+				if (combined[j].getTypeId() == items[i].getTypeId() && (!forceDurability || combined[j].getDurability() == items[i].getDurability()) && combined[j].getEnchantments().equals(items[i].getEnchantments()))
 				{
 					combined[j].setAmount(combined[j].getAmount() + items[i].getAmount());
 					break;
@@ -318,14 +326,18 @@ public final class InventoryWorkaround
 		final int maxStackSize = itm.getType().getMaxStackSize();
 		final int stacks = itm.getAmount() / maxStackSize;
 		final int leftover = itm.getAmount() % maxStackSize;
-		Item[] itemStacks = new Item[stacks + (leftover > 0 ? 1 : 0)];
+		final Item[] itemStacks = new Item[stacks + (leftover > 0 ? 1 : 0)];
 		for (int i = 0; i < stacks; i++)
 		{
-			itemStacks[i] = loc.getWorld().dropItem(loc, new ItemStack(itm.getType(), maxStackSize, itm.getDurability()));
+			final ItemStack stack = itm.clone();
+			stack.setAmount(maxStackSize);
+			itemStacks[i] = loc.getWorld().dropItem(loc, stack);
 		}
 		if (leftover > 0)
 		{
-			itemStacks[stacks] = loc.getWorld().dropItem(loc, new ItemStack(itm.getType(), leftover, itm.getDurability()));
+			final ItemStack stack = itm.clone();
+			stack.setAmount(leftover);
+			itemStacks[stacks] = loc.getWorld().dropItem(loc, stack);
 		}
 		return itemStacks;
 	}

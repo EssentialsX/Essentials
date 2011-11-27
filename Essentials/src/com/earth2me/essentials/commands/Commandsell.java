@@ -149,6 +149,7 @@ public class Commandsell extends EssentialsCommand
 			}
 		}
 
+		//TODO: Prices for Enchantments
 		final ItemStack ris = new ItemStack(is.getType(), amount, is.getDurability());
 		InventoryWorkaround.removeItem(user.getInventory(), true, ris);
 		user.updateInventory();

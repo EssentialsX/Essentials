@@ -76,9 +76,6 @@ permission-based-item-spawn: false
 # HOWEVER, it is known to cause lag upon users logging OUT, so beware!
 reclaim-onlogout: false
 
-# Should primitive spawn protection be enabled?  For most servers, this should be flase; it is better to use a third-party plugin to protect it.
-spawn-protection: false
-
 # Mob limit on spawnmob
 spawnmob-limit: 10
 
@@ -229,21 +226,21 @@ freeze-afk-players: false
 # You can disable the death messages of minecraft here
 death-messages: true
 
+# Add worlds to this list, if you want to automatically disable god mode there
+no-god-in-worlds:
+#  - world_nether
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #
 # +------------------------------------------------------+ #
 ############################################################
 
-# When users die, should they respawn at their homes, instead of the spawnpoint?
+# When users die, should they respawn at their first home, instead of the spawnpoint or bed?
 respawn-at-home: false
 
-# When a user interacts with a bed, should their home be set to that location?
-# If you enable this and remove default user access to the /sethome command, you can make beds the only way for players to set their home location.
-bed-sethome: false
-
-# If no home is set send you to spawn when /home is used
-spawn-if-no-home: false
+# If no home is set send you to bed or spawn when /home is used
+spawn-if-no-home: true
 
 # Allow players to have multiple homes.
 # Define different amounts of multiple homes for different permissions, e.g. essentials.sethome.multiple.vip
@@ -336,7 +333,7 @@ chat:
 protect:
   # Database settings for sign/rail protection
   # get mysql.jar and sqlite and place it in your serverroot/lib directory from here:
-  # http://java.net/projects/essentials/sources/svn/show/lib?rev=435
+  # https://github.com/essentials/Essentials/blob/master/lib/mysql.jar
 
   # mysql, sqlite or none
   datatype: 'sqlite'

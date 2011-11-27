@@ -268,9 +268,10 @@ public class WorldsHolder {
      * @return OverloadedWorldHolder
      */
     public OverloadedWorldHolder getWorldData(String worldName) {
-        OverloadedWorldHolder data = worldsData.get(worldName.toLowerCase());
-        if (mirrors.containsKey(worldName.toLowerCase())) {
-            String realOne = mirrors.get(worldName.toLowerCase());
+    	String worldNameLowered = worldName.toLowerCase();
+    	OverloadedWorldHolder data = worldsData.get(worldNameLowered);
+    	if (mirrors.containsKey(worldNameLowered)) {
+    		String realOne = mirrors.get(worldNameLowered);
             data = worldsData.get(realOne.toLowerCase());
         }
         if (data == null) {

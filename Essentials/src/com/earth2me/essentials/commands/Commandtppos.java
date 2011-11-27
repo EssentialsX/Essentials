@@ -28,7 +28,7 @@ public class Commandtppos extends EssentialsCommand
 		final Location location = new Location(user.getWorld(), x, y, z);
 		if (args.length > 3)
 		{
-			location.setYaw(Float.parseFloat(args[3]));
+			location.setYaw((Float.parseFloat(args[3]) + 180 + 360) % 360);
 		}
 		if (args.length > 4)
 		{

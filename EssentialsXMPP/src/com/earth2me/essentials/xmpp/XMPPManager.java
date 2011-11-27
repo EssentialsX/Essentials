@@ -187,7 +187,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 			final String level = config.getString("log-level", "info");
 			try
 			{
-				logLevel = Level.parse(level.toUpperCase());
+				logLevel = Level.parse(level.toUpperCase(Locale.ENGLISH));
 			}
 			catch (IllegalArgumentException e)
 			{

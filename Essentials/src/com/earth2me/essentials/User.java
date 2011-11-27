@@ -513,14 +513,20 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	@Override
 	public boolean isGodModeEnabled()
 	{
-		return super.isGodModeEnabled() || (isAfk() && ess.getSettings().getFreezeAfkPlayers());
+		return (super.isGodModeEnabled() && !ess.getSettings().getNoGodWorlds().contains(getLocation().getWorld().getName()))
+			   || (isAfk() && ess.getSettings().getFreezeAfkPlayers());
 	}
 	
+	public boolean isGodModeEnabledRaw()
+	{
+		return super.isGodModeEnabled();
+	}
+
 	public String getGroup()
 	{
 		return ess.getPermissionsHandler().getGroup(base);
 	}
-	
+
 	public boolean inGroup(final String group)
 	{
 		return ess.getPermissionsHandler().inGroup(base, group);

@@ -4,9 +4,12 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.ChatColor;
@@ -31,12 +34,6 @@ public class Settings implements ISettings
 	public boolean getRespawnAtHome()
 	{
 		return config.getBoolean("respawn-at-home", false);
-	}
-
-	@Override
-	public boolean getBedSetsHome()
-	{
-		return config.getBoolean("bed-sethome", false);
 	}
 
 	@Override
@@ -237,7 +234,7 @@ public class Settings implements ISettings
 
 		try
 		{
-			return ChatColor.valueOf(colorName.toUpperCase());
+			return ChatColor.valueOf(colorName.toUpperCase(Locale.ENGLISH));
 		}
 		catch (IllegalArgumentException ex)
 		{
@@ -341,6 +338,7 @@ public class Settings implements ISettings
 	public void reloadConfig()
 	{
 		config.load();
+		noGodWorlds = new HashSet<String>(config.getStringList("no-god-in-worlds",Collections.<String>emptyList()));
 	}
 
 	@Override
@@ -542,6 +540,14 @@ public class Settings implements ISettings
 	public boolean areDeathMessagesEnabled()
 	{
 		return config.getBoolean("death-messages", true);
+	}
+	
+	Set <String> noGodWorlds = new HashSet<String>();
+	@Override
+	public Set<String> getNoGodWorlds()
+	{
+		return noGodWorlds;
+		
 	}
 
 	@Override

@@ -240,7 +240,8 @@ public class Util
 		AIR_MATERIALS.add(Material.PUMPKIN_STEM.getId());
 		AIR_MATERIALS.add(Material.MELON_STEM.getId());
 		AIR_MATERIALS.add(Material.VINE.getId());
-		//TODO: Add 1.9 materials
+		AIR_MATERIALS.add(Material.NETHER_WARTS.getId());
+		AIR_MATERIALS.add(Material.WATER_LILY.getId());
 
 		for (Integer integer : AIR_MATERIALS)
 		{

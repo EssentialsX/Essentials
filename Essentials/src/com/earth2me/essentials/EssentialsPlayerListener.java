@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.craftbukkit.EnchantmentFix;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
@@ -16,7 +17,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
@@ -115,7 +115,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 		if (user.getSavedInventory() != null)
 		{
-			user.getInventory().setContents(user.getSavedInventory());
+			EnchantmentFix.setContents(user.getInventory(), user.getSavedInventory());
 			user.setSavedInventory(null);
 		}
 		user.updateActivity(false);
@@ -172,12 +172,19 @@ public class EssentialsPlayerListener extends PlayerListener
 			{
 				final IText input = new TextInput(user, "motd", true, ess);
 				final IText output = new KeywordReplacer(input, user, ess);
-				final TextPager pager = new TextPager(output, false);
+				final TextPager pager = new TextPager(output, true);
 				pager.showPage("1", null, user);
 			}
 			catch (IOException ex)
 			{
-				LOGGER.log(Level.WARNING, ex.getMessage(), ex);
+				if (ess.getSettings().isDebug())
+				{
+					LOGGER.log(Level.WARNING, ex.getMessage(), ex);
+				}
+				else
+				{
+					LOGGER.log(Level.WARNING, ex.getMessage());
+				}
 			}
 		}
 
@@ -231,12 +238,14 @@ public class EssentialsPlayerListener extends PlayerListener
 
 	private void updateCompass(final User user)
 	{
-		try
+		Location loc = user.getHome(user.getLocation());
+		if (loc == null)
 		{
-			user.setCompassTarget(user.getHome(user.getLocation()));
+			loc = user.getBedSpawnLocation();
 		}
-		catch (Exception ex)
+		if (loc != null)
 		{
+			user.setCompassTarget(loc);
 		}
 	}
 
@@ -253,32 +262,6 @@ public class EssentialsPlayerListener extends PlayerListener
 			user.setDisplayNick();
 		}
 		updateCompass(user);
-	}
-
-	@Override
-	public void onPlayerInteract(final PlayerInteractEvent event)
-	{
-		if (event.isCancelled())
-		{
-			return;
-		}
-		if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
-		{
-			return;
-		}
-
-		if (ess.getSettings().getBedSetsHome() && event.getClickedBlock().getType() == Material.BED_BLOCK)
-		{
-			try
-			{
-				final User user = ess.getUser(event.getPlayer());
-				user.setHome();
-				user.sendMessage(_("homeSetToBed"));
-			}
-			catch (Throwable ex)
-			{
-			}
-		}
 	}
 
 	@Override
@@ -383,6 +366,19 @@ public class EssentialsPlayerListener extends PlayerListener
 		if (!cmd.equalsIgnoreCase("afk"))
 		{
 			user.updateActivity(true);
+		}
+	}
+
+	@Override
+	public void onPlayerChangedWorld(final PlayerChangedWorldEvent event)
+	{
+		if (ess.getSettings().getNoGodWorlds().contains(event.getPlayer().getLocation().getWorld().getName()))
+		{
+			User user = ess.getUser(event.getPlayer());
+			if (user.isGodModeEnabledRaw())
+			{
+				user.sendMessage(_("noGodWorldWarning"));
+			}
 		}
 	}
 }

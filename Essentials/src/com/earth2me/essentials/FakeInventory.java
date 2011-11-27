@@ -19,7 +19,7 @@ public class FakeInventory implements Inventory
 			{
 				continue;
 			}
-			this.items[i] = new ItemStack(items[i].getTypeId(), items[i].getAmount(), items[i].getDurability());
+			this.items[i] = items[i].clone();
 		}
 	}
 

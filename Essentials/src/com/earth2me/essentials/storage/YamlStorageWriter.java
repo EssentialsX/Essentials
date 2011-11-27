@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
@@ -12,6 +13,7 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 import org.yaml.snakeyaml.Yaml;
@@ -217,20 +219,23 @@ public class YamlStorageWriter implements IStorageWriter
 		}
 		else if (data instanceof Material)
 		{
-			writer.println(data.toString().toLowerCase());
+			writeMaterial(data);
+			writer.println();
 		}
 		else if (data instanceof MaterialData)
 		{
-			final MaterialData matData = (MaterialData)data;
-			writer.println(matData.getItemType().toString().toLowerCase()
-						   + (matData.getData() > 0 ? ":" + matData.getData() : ""));
+			writeMaterialData(data);
+			writer.println();
 		}
 		else if (data instanceof ItemStack)
 		{
-			final ItemStack itemStack = (ItemStack)data;
-			writer.println(itemStack.getType().toString().toLowerCase()
-						   + (itemStack.getDurability() > 0 ? ":" + itemStack.getDurability() : "")
-						   + " " + itemStack.getAmount());
+			writeItemStack(data);
+			writer.println();
+		}
+		else if (data instanceof EnchantmentLevel)
+		{
+			writeEnchantmentLevel(data);
+			writer.println();
 		}
 		else
 		{
@@ -256,18 +261,57 @@ public class YamlStorageWriter implements IStorageWriter
 		}
 		else if (data instanceof Material)
 		{
-			writer.print(data.toString().toLowerCase());
+			writeMaterial(data);
 		}
 		else if (data instanceof MaterialData)
 		{
-			final MaterialData matData = (MaterialData)data;
-			writer.print(matData.getItemType().toString().toLowerCase()
-						 + (matData.getData() > 0 ? ":" + matData.getData() : ""));
+			writeMaterialData(data);
+		}
+		else if (data instanceof EnchantmentLevel)
+		{
+			writeEnchantmentLevel(data);
 		}
 		else
 		{
 			throw new UnsupportedOperationException();
 		}
+	}
+
+	private void writeMaterial(final Object data)
+	{
+		writer.print(data.toString().toLowerCase(Locale.ENGLISH));
+	}
+
+	private void writeMaterialData(final Object data)
+	{
+		final MaterialData matData = (MaterialData)data;
+		writeMaterial(matData.getItemType());
+		if (matData.getData() > 0)
+		{
+			writer.print(':');
+			writer.print(matData.getData());
+		}
+	}
+
+	private void writeItemStack(final Object data)
+	{
+		final ItemStack itemStack = (ItemStack)data;
+		writeMaterialData(itemStack.getData());
+		writer.print(' ');
+		writer.print(itemStack.getAmount());
+		for (Entry<Enchantment, Integer> entry : itemStack.getEnchantments().entrySet())
+		{
+			writer.print(' ');
+			writeEnchantmentLevel(entry);
+		}
+	}
+
+	private void writeEnchantmentLevel(Object data)
+	{
+		final Entry<Enchantment, Integer> enchLevel = (Entry<Enchantment, Integer>)data;
+		writer.print(enchLevel.getKey().getName().toLowerCase(Locale.ENGLISH));
+		writer.print(':');
+		writer.print(enchLevel.getValue());
 	}
 
 	private void writeLocation(final Location entry, final int depth)

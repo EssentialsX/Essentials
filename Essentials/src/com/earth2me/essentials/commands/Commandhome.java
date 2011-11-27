@@ -6,6 +6,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.util.List;
 import java.util.Locale;
+import org.bukkit.Location;
 import org.bukkit.Server;
 
 
@@ -33,7 +34,7 @@ public class Commandhome extends EssentialsCommand
 			}
 			else
 			{
-				player = getPlayer(server, nameParts[0].split(" "), 0, true);
+				player = getPlayer(server, nameParts, 0, true);
 				if (nameParts.length > 1)
 				{
 					homeName = nameParts[1];
@@ -42,14 +43,32 @@ public class Commandhome extends EssentialsCommand
 		}
 		try
 		{
+			if ("bed".equalsIgnoreCase(homeName)) {
+				final Location bed = player.getBedSpawnLocation();
+				if (bed != null)
+				{
+					user.getTeleport().teleport(bed, charge);
+				}
+			}
 			user.getTeleport().home(player, homeName.toLowerCase(Locale.ENGLISH), charge);
 		}
 		catch (NotEnoughArgumentsException e)
 		{
 			final List<String> homes = player.getHomes();
-			if (homes.isEmpty() && player.equals(user) && ess.getSettings().spawnIfNoHome())
+			if (homes.isEmpty() && player.equals(user))
 			{
-				user.getTeleport().respawn(ess.getSpawn(), charge);
+				final Location loc = player.getBedSpawnLocation();
+				if (loc == null)
+				{
+					if (ess.getSettings().spawnIfNoHome())
+					{
+						user.getTeleport().respawn(ess.getSpawn(), charge);
+					}
+				}
+				else
+				{
+					user.getTeleport().teleport(loc, charge);
+				}
 			}
 			else if (homes.isEmpty())
 			{
@@ -61,6 +80,7 @@ public class Commandhome extends EssentialsCommand
 			}
 			else
 			{
+				homes.add("bed");
 				user.sendMessage(_("homes", Util.joinList(homes)));
 			}
 		}

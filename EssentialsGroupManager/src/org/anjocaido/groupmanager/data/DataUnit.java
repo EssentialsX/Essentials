@@ -6,6 +6,8 @@ package org.anjocaido.groupmanager.data;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.dataholder.WorldDataHolder;
 import org.anjocaido.groupmanager.utils.StringPermissionComparator;
@@ -18,7 +20,7 @@ public abstract class DataUnit {
 
     private WorldDataHolder dataSource;
     private String name;
-    private boolean changed;
+    private boolean changed, sorted = false;
     private ArrayList<String> permissions = new ArrayList<String>();
 
     public DataUnit(WorldDataHolder dataSource, String name) {
@@ -91,6 +93,7 @@ public abstract class DataUnit {
 // for(StackTraceElement st: Thread.currentThread().getStackTrace()){
 // GroupManager.logger.finest(st.toString());
 // }
+        sorted = false;
         changed = true;
     }
 
@@ -132,11 +135,18 @@ public abstract class DataUnit {
      * You can't edit the permissions using the returned ArrayList instance
      * @return a copy of the permission list
      */
-    public ArrayList<String> getPermissionList() {
-        return new ArrayList<String>(permissions);
+    public List<String> getPermissionList() {
+        return Collections.unmodifiableList(permissions);
+    }
+    
+    public boolean isSorted() {
+    	return this.sorted;
     }
 
     public void sortPermissions() {
-        Collections.sort(permissions, StringPermissionComparator.getInstance());
+        if (!isSorted()) {
+        	Collections.sort(permissions, StringPermissionComparator.getInstance());
+        	sorted = true;
+        }
     }
 }

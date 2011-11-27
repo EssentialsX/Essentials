@@ -79,6 +79,10 @@ commands:
     description: Manages the server economy.
     usage: /<command> <give|take|reset> <player> <amount>
     aliases: [economy,eeco,eeconomy]
+  enchant:
+    description: Enchants the item the user is holding.
+    usage: /<command> <enchantmentname> [level]
+    aliases: [enchantment]
   essentials:
     description: Reloads essentials.
     usage: /<command>
@@ -104,7 +108,7 @@ commands:
     aliases: [mem,memory,egc,emem,ememory]
   give:
     description: Give a player an item.
-    usage: /<command> <player> <item|numeric> [amount]
+    usage: /<command> <player> <item|numeric> [amount <enchantmentname[:level]> ...]  
     aliases: [egive]
   god:
     description: Enables your godly powers.
@@ -140,7 +144,7 @@ commands:
     aliases: [einvsee]
   item:
     description: Spawn an item.
-    usage: /<command> <item|numeric> [amount]
+    usage: /<command> <item|numeric> [amount <enchantmentname[:level]> ...]
     aliases: [i,eitem]
   jails:
     description: List all jails.

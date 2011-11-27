@@ -1,11 +1,13 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.InventoryWorkaround;
 import com.earth2me.essentials.User;
 import java.util.Locale;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -44,6 +46,29 @@ public class Commandgive extends EssentialsCommand
 			stack.setAmount(Integer.parseInt(args[2]));
 		}
 
+		if (args.length > 3)
+		{
+			for (int i = 3; i < args.length; i++)
+			{
+				final String[] split = args[i].split("[:+',;.]", 2);
+				if (split.length < 1)
+				{
+					continue;
+				}
+				final Enchantment enchantment = Commandenchant.getEnchantment(split[0], sender instanceof Player ? ess.getUser(sender) : null);
+				int level;
+				if (split.length > 1)
+				{
+					level = Integer.parseInt(split[1]);
+				}
+				else
+				{
+					level = enchantment.getMaxLevel();
+				}
+				stack.addEnchantment(enchantment, level);
+			}
+		}
+
 		if (stack.getType() == Material.AIR)
 		{
 			throw new Exception(ChatColor.RED + "You can't give air.");
@@ -52,7 +77,7 @@ public class Commandgive extends EssentialsCommand
 		final User giveTo = getPlayer(server, args, 0);
 		final String itemName = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ');
 		sender.sendMessage(ChatColor.BLUE + "Giving " + stack.getAmount() + " of " + itemName + " to " + giveTo.getDisplayName() + ".");
-		giveTo.getInventory().addItem(stack);
+		InventoryWorkaround.addItem(giveTo.getInventory(), true, true, ess, stack);
 		giveTo.updateInventory();
 	}
 }

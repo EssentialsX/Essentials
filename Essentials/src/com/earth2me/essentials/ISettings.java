@@ -3,12 +3,12 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.bukkit.ChatColor;
 
 
 public interface ISettings extends IConf
 {
-
 	boolean areSignsDisabled();
 
 	String format(String format, IUser user);
@@ -20,8 +20,6 @@ public interface ISettings extends IConf
 	String getBackupCommand();
 
 	long getBackupInterval();
-
-	boolean getBedSetsHome();
 
 	String getChatFormat(String group);
 
@@ -64,11 +62,11 @@ public interface ISettings extends IConf
 	boolean getReclaimSetting();
 
 	boolean getRespawnAtHome();
-	
+
 	List getMultipleHomes();
-	
+
 	int getHomeLimit(String set);
-	
+
 	int getHomeLimit(User user);
 
 	boolean getSortListByGroups();
@@ -110,11 +108,11 @@ public interface ISettings extends IConf
 	boolean warnOnBuildDisallow();
 
 	boolean warnOnSmite();
-	
+
 	double getMaxMoney();
 
 	boolean isEcoLogEnabled();
-	
+
 	boolean removeGodOnDisconnect();
 
 	boolean changeDisplayName();
@@ -124,9 +122,9 @@ public interface ISettings extends IConf
 	boolean useBukkitPermissions();
 
 	boolean addPrefixSuffix();
-	
+
 	boolean disablePrefix();
-	
+
 	boolean disableSuffix();
 
 	long getAutoAfk();
@@ -134,8 +132,10 @@ public interface ISettings extends IConf
 	long getAutoAfkKick();
 
 	boolean getFreezeAfkPlayers();
-	
+
 	boolean areDeathMessagesEnabled();
 
 	public void setDebug(boolean debug);
+
+	Set<String> getNoGodWorlds();
 }

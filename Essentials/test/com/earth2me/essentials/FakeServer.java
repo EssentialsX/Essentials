@@ -586,4 +586,10 @@ public class FakeServer implements Server
 	{
 		return "Essentials Fake-Server";
 	}
+
+	@Override
+	public File getWorldContainer()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }

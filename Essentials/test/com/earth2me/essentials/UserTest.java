@@ -54,21 +54,15 @@ public class UserTest extends TestCase
 		user.setHome();
 		OfflinePlayer base2 = server.createPlayer(base1.getName(), ess);
 		User user2 = ess.getUser(base2);
-		try
-		{
-			Location home = user2.getHome(loc);
-			assertEquals(loc.getWorld().getName(), home.getWorld().getName());
-			assertEquals(loc.getX(), home.getX());
-			assertEquals(loc.getY(), home.getY());
-			assertEquals(loc.getZ(), home.getZ());
-			assertEquals(loc.getYaw(), home.getYaw());
-			assertEquals(loc.getPitch(), home.getPitch());
-		}
-		catch (Exception ex)
-		{
-			fail("Exception");
-		}
 
+		Location home = user2.getHome(loc);
+		assertNotNull(home);
+		assertEquals(loc.getWorld().getName(), home.getWorld().getName());
+		assertEquals(loc.getX(), home.getX());
+		assertEquals(loc.getY(), home.getY());
+		assertEquals(loc.getZ(), home.getZ());
+		assertEquals(loc.getYaw(), home.getYaw());
+		assertEquals(loc.getPitch(), home.getPitch());
 	}
 
 	public void testMoney()

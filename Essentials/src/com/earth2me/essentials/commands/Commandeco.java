@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import java.util.Locale;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -24,7 +25,7 @@ public class Commandeco extends EssentialsCommand
 		double amount;
 		try
 		{
-			cmd = EcoCommands.valueOf(args[0].toUpperCase());
+			cmd = EcoCommands.valueOf(args[0].toUpperCase(Locale.ENGLISH));
 			amount = Double.parseDouble(args[2].replaceAll("[^0-9\\.]", ""));
 		}
 		catch (Exception ex)

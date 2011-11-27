@@ -26,8 +26,7 @@ public class Commandspawnmob extends EssentialsCommand
 	{
 		if (args.length < 1)
 		{
-			throw new NotEnoughArgumentsException();
-			//TODO: user.sendMessage("§7Mobs: Zombie PigZombie Skeleton Slime Chicken Pig Monster Spider Creeper Ghast Squid Giant Cow Sheep Wolf");
+			throw new NotEnoughArgumentsException(_("mobsAvailable", Util.joinList(Mob.getMobList())));
 		}
 
 
@@ -67,6 +66,10 @@ public class Commandspawnmob extends EssentialsCommand
 		{
 			throw new Exception(_("unableToSpawnMob"));
 		}
+		if (!user.isAuthorized("essentials.spawnmob." + mob.name.toLowerCase()))
+		{
+			throw new Exception(_("unableToSpawnMob"));
+		}
 
 		final Block block = Util.getTarget(user).getBlock();
 		if (block == null)
@@ -94,6 +97,10 @@ public class Commandspawnmob extends EssentialsCommand
 			}
 
 			if (ess.getSettings().getProtectPreventSpawn(mobMount.getType().toString().toLowerCase(Locale.ENGLISH)))
+			{
+				throw new Exception(_("unableToSpawnMob"));
+			}
+			if (!user.isAuthorized("essentials.spawnmob." + mobMount.name.toLowerCase()))
 			{
 				throw new Exception(_("unableToSpawnMob"));
 			}
@@ -185,6 +192,16 @@ public class Commandspawnmob extends EssentialsCommand
 				throw new Exception(_("slimeMalformedSize"), e);
 			}
 		}
+		if (("Sheep".equalsIgnoreCase(type)
+			 || "Cow".equalsIgnoreCase(type)
+			 || "Chicken".equalsIgnoreCase(type)
+			 || "Pig".equalsIgnoreCase(type)
+			 || "Wolf".equalsIgnoreCase(type))
+			&& data.equalsIgnoreCase("baby"))
+		{
+			((Animals)spawned).setAge(-24000);
+			return;
+		}
 		if ("Sheep".equalsIgnoreCase(type))
 		{
 			try
@@ -196,7 +213,7 @@ public class Commandspawnmob extends EssentialsCommand
 				}
 				else
 				{
-					((Sheep)spawned).setColor(DyeColor.valueOf(data.toUpperCase()));
+					((Sheep)spawned).setColor(DyeColor.valueOf(data.toUpperCase(Locale.ENGLISH)));
 				}
 			}
 			catch (Exception e)
@@ -204,16 +221,26 @@ public class Commandspawnmob extends EssentialsCommand
 				throw new Exception(_("sheepMalformedColor"), e);
 			}
 		}
-		if ("Wolf".equalsIgnoreCase(type) && data.equalsIgnoreCase("tamed"))
+		if ("Wolf".equalsIgnoreCase(type)
+			&& data.toLowerCase(Locale.ENGLISH).startsWith("tamed"))
 		{
 			final Wolf wolf = ((Wolf)spawned);
 			wolf.setTamed(true);
 			wolf.setOwner(user);
 			wolf.setSitting(true);
+			if (data.equalsIgnoreCase("tamedbaby"))
+			{
+				((Animals)spawned).setAge(-24000);
+			}
 		}
-		if ("Wolf".equalsIgnoreCase(type) && data.equalsIgnoreCase("angry"))
+		if ("Wolf".equalsIgnoreCase(type)
+			&& data.toLowerCase(Locale.ENGLISH).startsWith("angry"))
 		{
 			((Wolf)spawned).setAngry(true);
+			if (data.equalsIgnoreCase("angrybaby"))
+			{
+				((Animals)spawned).setAge(-24000);
+			}
 		}
 		if ("Creeper".equalsIgnoreCase(type) && data.equalsIgnoreCase("powered"))
 		{

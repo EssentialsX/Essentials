@@ -3,7 +3,6 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import java.util.*;
-import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -39,16 +38,15 @@ public class Commandlist extends EssentialsCommand
 				playerHidden++;
 			}
 		}
-		//TODO: move these to messages file
-		final StringBuilder online = new StringBuilder();
-		online.append(ChatColor.BLUE).append("There are ").append(ChatColor.RED).append(server.getOnlinePlayers().length - playerHidden);
+
+		String online;
 		if (showhidden && playerHidden > 0)
 		{
-			online.append(ChatColor.GRAY).append("/").append(playerHidden);
+			online = _("listAmountHidden", server.getOnlinePlayers().length - playerHidden, playerHidden, server.getMaxPlayers());
+		} else {
+			online = _("listAmount",server.getOnlinePlayers().length - playerHidden, server.getMaxPlayers());
 		}
-		online.append(ChatColor.BLUE).append(" out of a maximum ").append(ChatColor.RED).append(server.getMaxPlayers());
-		online.append(ChatColor.BLUE).append(" players online.");
-		sender.sendMessage(online.toString());
+		sender.sendMessage(online);
 
 		if (ess.getSettings().getSortListByGroups())
 		{
@@ -90,11 +88,11 @@ public class Commandlist extends EssentialsCommand
 					}
 					if (user.isAfk())
 					{
-						groupString.append("§7[AFK]§f");
+						groupString.append(_("listAfkTag"));
 					}
 					if (user.isHidden())
 					{
-						groupString.append("§7[HIDDEN]§f");
+						groupString.append(_("listHiddenTag"));
 					}
 					groupString.append(user.getDisplayName());
 					groupString.append("§f");
@@ -131,11 +129,11 @@ public class Commandlist extends EssentialsCommand
 				}
 				if (user.isAfk())
 				{
-					onlineUsers.append("§7[AFK]§f");
+					onlineUsers.append(_("listAfkTag"));
 				}
 				if (user.isHidden())
 				{
-					onlineUsers.append("§7[HIDDEN]§f");
+					onlineUsers.append(_("listHiddenTag"));
 				}
 				onlineUsers.append(user.getDisplayName());
 				onlineUsers.append("§f");
