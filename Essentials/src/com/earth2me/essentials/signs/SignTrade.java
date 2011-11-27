@@ -4,7 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.*;
 import org.bukkit.inventory.ItemStack;
 
-
+//TODO: Sell Enchantment on Trade signs?
 public class SignTrade extends EssentialsSign
 {
 	public SignTrade()
@@ -70,7 +70,8 @@ public class SignTrade extends EssentialsSign
 		final Trade trade = getTrade(sign, 2, false, false, ess);
 		if (trade.getItemStack() != null && player.getItemInHand() != null
 			&& trade.getItemStack().getTypeId() == player.getItemInHand().getTypeId()
-			&& trade.getItemStack().getDurability() == player.getItemInHand().getDurability())
+			&& trade.getItemStack().getDurability() == player.getItemInHand().getDurability()
+			&& trade.getItemStack().getEnchantments().equals(player.getItemInHand().getEnchantments()))
 		{
 			int amount = player.getItemInHand().getAmount();
 			amount -= amount % trade.getItemStack().getAmount();
