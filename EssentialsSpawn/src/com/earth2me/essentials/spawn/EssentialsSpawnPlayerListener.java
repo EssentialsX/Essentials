@@ -15,8 +15,9 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 {
 	private final transient IEssentials ess;
 
-	public EssentialsSpawnPlayerListener(IEssentials ess)
+	public EssentialsSpawnPlayerListener(final IEssentials ess)
 	{
+		super();
 		this.ess = ess;
 	}
 
@@ -25,28 +26,24 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 	{
 		final User user = ess.getUser(event.getPlayer());
 
-		try
+		if (ess.getSettings().getRespawnAtHome())
 		{
-			if (ess.getSettings().getRespawnAtHome())
+			Location home = user.getHome(user.getLocation());
+			if (home == null)
 			{
-				Location home = user.getHome(user.getLocation());
-				if (home == null)
-				{
-					throw new Exception();
-				}
+				home = user.getBedSpawnLocation();
+			}
+			if (home != null)
+			{
 				event.setRespawnLocation(home);
 				return;
 			}
 		}
-		catch (Throwable ex)
+		final Location spawn = ess.getSpawn().getSpawn(user.getGroup());
+		if (spawn != null)
 		{
+			event.setRespawnLocation(spawn);
 		}
-		Location spawn = ess.getSpawn().getSpawn(user.getGroup());
-		if (spawn == null)
-		{
-			return;
-		}
-		event.setRespawnLocation(spawn);
 	}
 
 	@Override
@@ -54,7 +51,7 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 	{
 		final User user = ess.getUser(event.getPlayer());
 
-		if (!user.isNew())
+		if (!user.isNew() || user.getBedSpawnLocation() != null)
 		{
 			return;
 		}

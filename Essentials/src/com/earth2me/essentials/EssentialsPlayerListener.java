@@ -231,12 +231,12 @@ public class EssentialsPlayerListener extends PlayerListener
 
 	private void updateCompass(final User user)
 	{
-		try
-		{
-			user.setCompassTarget(user.getHome(user.getLocation()));
+		Location loc = user.getHome(user.getLocation());
+		if (loc == null) {
+			loc = user.getBedSpawnLocation();
 		}
-		catch (Exception ex)
-		{
+		if (loc != null) {
+			user.setCompassTarget(loc);
 		}
 	}
 
@@ -253,32 +253,6 @@ public class EssentialsPlayerListener extends PlayerListener
 			user.setDisplayNick();
 		}
 		updateCompass(user);
-	}
-
-	@Override
-	public void onPlayerInteract(final PlayerInteractEvent event)
-	{
-		if (event.isCancelled())
-		{
-			return;
-		}
-		if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
-		{
-			return;
-		}
-
-		if (ess.getSettings().getBedSetsHome() && event.getClickedBlock().getType() == Material.BED_BLOCK)
-		{
-			try
-			{
-				final User user = ess.getUser(event.getPlayer());
-				user.setHome();
-				user.sendMessage(_("homeSetToBed"));
-			}
-			catch (Throwable ex)
-			{
-			}
-		}
 	}
 
 	@Override
@@ -387,7 +361,7 @@ public class EssentialsPlayerListener extends PlayerListener
 	}
 
 	@Override
-	public void onPlayerChangedWorld(PlayerChangedWorldEvent event)
+	public void onPlayerChangedWorld(final PlayerChangedWorldEvent event)
 	{
 		if (ess.getSettings().getNoGodWorlds().contains(event.getPlayer().getLocation().getWorld().getName())) {
 			User user = ess.getUser(event.getPlayer());
@@ -395,5 +369,5 @@ public class EssentialsPlayerListener extends PlayerListener
 				user.sendMessage(_("noGodWorldWarning"));
 			}
 		}
-	}
+	}	
 }

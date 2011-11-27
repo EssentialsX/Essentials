@@ -21,8 +21,6 @@ public interface ISettings extends IConf
 
 	long getBackupInterval();
 
-	boolean getBedSetsHome();
-
 	String getChatFormat(String group);
 
 	int getChatRadius();

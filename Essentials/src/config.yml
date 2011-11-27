@@ -236,15 +236,11 @@ no-god-in-worlds:
 # +------------------------------------------------------+ #
 ############################################################
 
-# When users die, should they respawn at their homes, instead of the spawnpoint?
+# When users die, should they respawn at their first home, instead of the spawnpoint or bed?
 respawn-at-home: false
 
-# When a user interacts with a bed, should their home be set to that location?
-# If you enable this and remove default user access to the /sethome command, you can make beds the only way for players to set their home location.
-bed-sethome: false
-
-# If no home is set send you to spawn when /home is used
-spawn-if-no-home: false
+# If no home is set send you to bed or spawn when /home is used
+spawn-if-no-home: true
 
 # Allow players to have multiple homes.
 # Define different amounts of multiple homes for different permissions, e.g. essentials.sethome.multiple.vip

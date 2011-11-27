@@ -37,12 +37,6 @@ public class Settings implements ISettings
 	}
 
 	@Override
-	public boolean getBedSetsHome()
-	{
-		return config.getBoolean("bed-sethome", false);
-	}
-
-	@Override
 	public List<String> getMultipleHomes()
 	{
 		return config.getKeys("sethome-multiple");
