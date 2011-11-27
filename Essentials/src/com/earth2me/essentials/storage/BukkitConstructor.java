@@ -71,6 +71,10 @@ public class BukkitConstructor extends Constructor
 				{
 					mat = Material.matchMaterial(split[0]);
 				}
+				if (mat == null)
+				{
+					return null;
+				}
 				byte data = 0;
 				if (split.length == 2 && NUMPATTERN.matcher(split[1]).matches())
 				{
@@ -105,6 +109,10 @@ public class BukkitConstructor extends Constructor
 				{
 					mat = Material.matchMaterial(split2[0]);
 				}
+				if (mat == null)
+				{
+					return null;
+				}
 				short data = 0;
 				if (split2.length == 2 && NUMPATTERN.matcher(split2[1]).matches())
 				{
@@ -135,7 +143,8 @@ public class BukkitConstructor extends Constructor
 						{
 							enchantment = Enchantment.getByName(split3[0].toUpperCase(Locale.ENGLISH));
 						}
-						if (enchantment == null) {
+						if (enchantment == null)
+						{
 							continue;
 						}
 						int level = enchantment.getStartLevel();
@@ -143,10 +152,59 @@ public class BukkitConstructor extends Constructor
 						{
 							level = Integer.parseInt(split3[1]);
 						}
+						if (level < enchantment.getStartLevel())
+						{
+							level = enchantment.getStartLevel();
+						}
+						if (level > enchantment.getMaxLevel())
+						{
+							level = enchantment.getMaxLevel();
+						}
 						stack.addUnsafeEnchantment(enchantment, level);
 					}
 				}
 				return stack;
+			}
+			if (node.getType().equals(EnchantmentLevel.class))
+			{
+				final String val = (String)constructScalar((ScalarNode)node);
+				if (val.isEmpty())
+				{
+					return null;
+				}
+				final String[] split = val.split("[:+',;.]", 2);
+				if (split.length == 0)
+				{
+					return null;
+				}
+				Enchantment enchant;
+				if (NUMPATTERN.matcher(split[0]).matches())
+				{
+					final int typeId = Integer.parseInt(split[0]);
+					enchant = Enchantment.getById(typeId);
+				}
+				else
+				{
+					enchant = Enchantment.getByName(split[0].toUpperCase(Locale.ENGLISH));
+				}
+				if (enchant == null)
+				{
+					return null;
+				}
+				int level = enchant.getStartLevel();
+				if (split.length == 2 && NUMPATTERN.matcher(split[1]).matches())
+				{
+					level = Integer.parseInt(split[1]);
+				}
+				if (level < enchant.getStartLevel())
+				{
+					level = enchant.getStartLevel();
+				}
+				if (level > enchant.getMaxLevel())
+				{
+					level = enchant.getMaxLevel();
+				}
+				return new EnchantmentLevel(enchant, level);
 			}
 			return super.construct(node);
 		}
