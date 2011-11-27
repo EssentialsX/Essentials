@@ -79,3 +79,4 @@ v 1.6:
 	- Optimize sorting to speedup permission tests.
 	- Fix superperms to pass all tests http://dev.bukkit.org/server-mods/superpermstest/
 	- Optimizations include changing the return of comparePermissionString.
+	- Added file details in error messages for loading groups/users.

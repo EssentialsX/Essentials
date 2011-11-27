@@ -595,7 +595,7 @@ public class WorldDataHolder {
                 Map<String, Object> thisGroupNode = (Map<String, Object>) allGroupsNode.get(groupKey);
                 Group thisGrp = ph.createGroup(groupKey);
                 if (thisGrp == null) {
-                    throw new IllegalArgumentException("I think this user was declared more than once: " + groupKey);
+                    throw new IllegalArgumentException("I think this user was declared more than once: " + groupKey + " in file: " + groupsFile.getPath());
                 }
                 if (thisGroupNode.get("default") == null) {
                     thisGroupNode.put("default", false);
@@ -603,7 +603,7 @@ public class WorldDataHolder {
                 if ((Boolean.parseBoolean(thisGroupNode.get("default").toString()))) {
                     if (ph.getDefaultGroup() != null) {
                         GroupManager.logger.warning("The group " + thisGrp.getName() + " is claiming to be default where" + ph.getDefaultGroup().getName() + " already was.");
-                        GroupManager.logger.warning("Overriding first request.");
+                        GroupManager.logger.warning("Overriding first request for file: " + groupsFile.getPath());
                     }
                     ph.setDefaultGroup(thisGrp);
                 }
@@ -619,7 +619,7 @@ public class WorldDataHolder {
                 } else if (thisGroupNode.get("permissions") instanceof String) {
                     thisGrp.addPermission((String) thisGroupNode.get("permissions"));
                 } else {
-                    throw new IllegalArgumentException("Unknown type of permissions node(Should be String or List<String>) for group:  " + thisGrp.getName());
+                    throw new IllegalArgumentException("Unknown type of permissions node(Should be String or List<String>) for group:  " + thisGrp.getName() + " in file: " + groupsFile.getPath());
                 }
 
                 //INFO NODE
@@ -629,7 +629,7 @@ public class WorldDataHolder {
 	                    thisGrp.setVariables(infoNode);
 	                }
                 } else
-                	throw new IllegalArgumentException("Unknown entry found in Info section for group: " + thisGrp.getName());
+                	throw new IllegalArgumentException("Unknown entry found in Info section for group: " + thisGrp.getName() + " in file: " + groupsFile.getPath());
                 	
 
                 //END INFO NODE
@@ -650,14 +650,14 @@ public class WorldDataHolder {
 	                    }
 	                }
                 }else
-                	throw new IllegalArgumentException("Unknown entry found in inheritance section for group: " + thisGrp.getName());
+                	throw new IllegalArgumentException("Unknown entry found in inheritance section for group: " + thisGrp.getName() + " in file: " + groupsFile.getPath());
             }
         //} catch (Exception ex) {
         //    ex.printStackTrace();
         //    throw new IllegalArgumentException("Your Permissions config file is invalid. See console for details.");
         //}
         if (ph.defaultGroup == null) {
-            throw new IllegalArgumentException("There was no Default Group declared.");
+            throw new IllegalArgumentException("There was no Default Group declared in file: " + groupsFile.getPath());
         }
         for (String groupKey : inheritance.keySet()) {
             List<String> inheritedList = inheritance.get(groupKey);
@@ -717,7 +717,7 @@ public class WorldDataHolder {
 	            Map<String, Object> thisUserNode = (Map<String, Object>) allUsersNode.get(usersKey);
 	            User thisUser = ph.createUser(usersKey);
 	            if (thisUser == null) {
-	                throw new IllegalArgumentException("I think this user was declared more than once: " + usersKey);
+	                throw new IllegalArgumentException("I think this user was declared more than once: " + usersKey + " in file: " + usersFile.getPath());
 	            }
 	            if (thisUserNode.get("permissions") == null) {
 	                thisUserNode.put("permissions", new ArrayList<String>());
@@ -740,7 +740,7 @@ public class WorldDataHolder {
 	                    if (subGrp != null) {
 	                        thisUser.addSubGroup(subGrp);
 	                    } else {
-	                        GroupManager.logger.warning("Subgroup " + o.toString() + " not found for user " + thisUser.getName() + ". Ignoring entry.");
+	                        GroupManager.logger.warning("Subgroup " + o.toString() + " not found for user " + thisUser.getName() + ". Ignoring entry in file: " + usersFile.getPath());
 	                    }
 	                }
 	            } else if (thisUserNode.get("subgroups") instanceof String) {
@@ -748,7 +748,7 @@ public class WorldDataHolder {
 	                if (subGrp != null) {
 	                    thisUser.addSubGroup(subGrp);
 	                } else {
-	                    GroupManager.logger.warning("Subgroup " + thisUserNode.get("subgroups").toString() + " not found for user " + thisUser.getName() + ". Ignoring entry.");
+	                    GroupManager.logger.warning("Subgroup " + thisUserNode.get("subgroups").toString() + " not found for user " + thisUser.getName() + ". Ignoring entry in file: " + usersFile.getPath());
 	                }
 	            }
 	
@@ -765,7 +765,7 @@ public class WorldDataHolder {
 	            if (thisUserNode.get("group") != null) {
 	                Group hisGroup = ph.getGroup(thisUserNode.get("group").toString());
 	                if (hisGroup == null) {
-	                	GroupManager.logger.warning("There is no group " + thisUserNode.get("group").toString() + ", as stated for player " + thisUser.getName() + ": Set to '" + ph.getDefaultGroup().getName() + "'.");
+	                	GroupManager.logger.warning("There is no group " + thisUserNode.get("group").toString() + ", as stated for player " + thisUser.getName() + ": Set to '" + ph.getDefaultGroup().getName() + "' for file: " + usersFile.getPath());
 	                	hisGroup = ph.defaultGroup;
 	                    //throw new IllegalArgumentException("There is no group " + thisUserNode.get("group").toString() + ", as stated for player " + thisUser.getName());
 	                }
