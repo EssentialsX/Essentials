@@ -129,7 +129,7 @@ public class BukkitConstructor extends Constructor
 					for (int i = 2; i < split1.length; i++)
 					{
 						final String[] split3 = split1[0].split("[:+',;.]", 2);
-						if (split3.length != 2)
+						if (split3.length < 1)
 						{
 							continue;
 						}
@@ -148,7 +148,7 @@ public class BukkitConstructor extends Constructor
 							continue;
 						}
 						int level = enchantment.getStartLevel();
-						if (NUMPATTERN.matcher(split3[1]).matches())
+						if (split3.length == 2 && NUMPATTERN.matcher(split3[1]).matches())
 						{
 							level = Integer.parseInt(split3[1]);
 						}

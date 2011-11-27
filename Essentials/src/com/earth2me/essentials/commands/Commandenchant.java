@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 import org.bukkit.Server;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -16,6 +17,7 @@ import static com.earth2me.essentials.I18n._;
 public class Commandenchant extends EssentialsCommand
 {
 	private static final Map<String, Enchantment> ENCHANTMENTS = new HashMap<String, Enchantment>();
+	private static final transient Pattern NUMPATTERN = Pattern.compile("\\d+");
 
 	static
 	{
@@ -89,20 +91,7 @@ public class Commandenchant extends EssentialsCommand
 				level = -1;
 			}
 		}
-		Enchantment enchantment = Enchantment.getByName(args[0].toUpperCase(Locale.ENGLISH));
-		if (enchantment == null)
-		{
-			enchantment = ENCHANTMENTS.get(args[0].toLowerCase(Locale.ENGLISH));
-		}
-		if (enchantment == null)
-		{
-			throw new Exception(_("enchantmentNotFound"));
-		}
-		final String enchantmentName = enchantment.getName().toLowerCase(Locale.ENGLISH);
-		if (!user.isAuthorized("essentials.enchant." + enchantmentName))
-		{
-			throw new Exception(_("enchantmentPerm", enchantmentName));
-		}
+		Enchantment enchantment = getEnchantment(args[0], user);
 		if (level < enchantment.getStartLevel() || level > enchantment.getMaxLevel())
 		{
 			level = enchantment.getMaxLevel();
@@ -110,6 +99,32 @@ public class Commandenchant extends EssentialsCommand
 		stack.addEnchantment(enchantment, level);
 		user.setItemInHand(stack);
 		user.updateInventory();
+		final String enchantmentName = enchantment.getName().toLowerCase(Locale.ENGLISH);
 		user.sendMessage(_("enchantmentApplied", enchantmentName.replace('_', ' ')));
+	}
+
+	public static Enchantment getEnchantment(final String name, final User user) throws Exception
+	{
+		
+		Enchantment enchantment;
+		if (NUMPATTERN.matcher(name).matches()) {
+			enchantment = Enchantment.getById(Integer.parseInt(name));
+		} else {
+			enchantment = Enchantment.getByName(name.toUpperCase(Locale.ENGLISH));
+		}
+		if (enchantment == null)
+		{
+			enchantment = ENCHANTMENTS.get(name.toLowerCase(Locale.ENGLISH));
+		}
+		if (enchantment == null)
+		{
+			throw new Exception(_("enchantmentNotFound"));
+		}
+		final String enchantmentName = enchantment.getName().toLowerCase(Locale.ENGLISH);
+		if (user != null && !user.isAuthorized("essentials.enchant." + enchantmentName))
+		{
+			throw new Exception(_("enchantmentPerm", enchantmentName));
+		}
+		return enchantment;
 	}
 }

@@ -5,6 +5,7 @@ import com.earth2me.essentials.User;
 import java.util.Locale;
 import org.bukkit.Material;
 import org.bukkit.Server;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -38,6 +39,29 @@ public class Commanditem extends EssentialsCommand
 		if (args.length > 1 && Integer.parseInt(args[1]) > 0)
 		{
 			stack.setAmount(Integer.parseInt(args[1]));
+		}
+
+		if (args.length > 2)
+		{
+			for (int i = 2; i < args.length; i++)
+			{
+				final String[] split = args[i].split("[:+',;.]", 2);
+				if (split.length < 1)
+				{
+					continue;
+				}
+				final Enchantment enchantment = Commandenchant.getEnchantment(split[0], user);
+				int level;
+				if (split.length > 1)
+				{
+					level = Integer.parseInt(split[1]);
+				}
+				else
+				{
+					level = enchantment.getMaxLevel();
+				}
+				stack.addEnchantment(enchantment, level);
+			}
 		}
 
 		if (stack.getType() == Material.AIR)
