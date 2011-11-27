@@ -66,6 +66,10 @@ public class Commandspawnmob extends EssentialsCommand
 		{
 			throw new Exception(_("unableToSpawnMob"));
 		}
+		if (!user.isAuthorized("essentials.spawnmob." + mob.name.toLowerCase()))
+		{
+			throw new Exception(_("unableToSpawnMob"));
+		}
 
 		final Block block = Util.getTarget(user).getBlock();
 		if (block == null)
@@ -93,6 +97,10 @@ public class Commandspawnmob extends EssentialsCommand
 			}
 
 			if (ess.getSettings().getProtectPreventSpawn(mobMount.getType().toString().toLowerCase(Locale.ENGLISH)))
+			{
+				throw new Exception(_("unableToSpawnMob"));
+			}
+			if (!user.isAuthorized("essentials.spawnmob." + mobMount.name.toLowerCase()))
 			{
 				throw new Exception(_("unableToSpawnMob"));
 			}

@@ -4,6 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import java.util.Locale;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -42,6 +43,14 @@ public class Commandspawner extends EssentialsCommand
 			{
 				user.sendMessage(_("invalidMob"));
 				return;
+			}
+			if (ess.getSettings().getProtectPreventSpawn(mob.getType().toString().toLowerCase(Locale.ENGLISH)))
+			{
+				throw new Exception(_("unableToSpawnMob"));
+			}
+			if (!user.isAuthorized("essentials.spawner." + mob.name.toLowerCase()))
+			{
+				throw new Exception(_("unableToSpawnMob"));
 			}
 			((CreatureSpawner)target.getBlock().getState()).setCreatureType(mob.getType());
 			user.sendMessage(_("setSpawner", mob.name));
