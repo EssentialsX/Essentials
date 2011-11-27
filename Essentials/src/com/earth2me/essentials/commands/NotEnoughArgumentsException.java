@@ -5,11 +5,16 @@ public class NotEnoughArgumentsException extends Exception
 {
 	public NotEnoughArgumentsException()
 	{
-		super();
+		super("");
+	}
+
+	public NotEnoughArgumentsException(final String string)
+	{
+		super(string);
 	}
 
 	public NotEnoughArgumentsException(final Throwable ex)
 	{
-		super(ex);
+		super("", ex);
 	}
 }

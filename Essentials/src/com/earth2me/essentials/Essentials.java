@@ -57,7 +57,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 public class Essentials extends JavaPlugin implements IEssentials
 {
-	public static final int BUKKIT_VERSION = 1501;
+	public static final int BUKKIT_VERSION = 1512;
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private transient ISettings settings;
 	private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
@@ -345,6 +345,9 @@ public class Essentials extends JavaPlugin implements IEssentials
 			{
 				sender.sendMessage(command.getDescription());
 				sender.sendMessage(command.getUsage().replaceAll("<command>", commandLabel));
+				if (!ex.getMessage().isEmpty()) {
+					sender.sendMessage(ex.getMessage());
+				}
 				return true;
 			}
 			catch (Throwable ex)

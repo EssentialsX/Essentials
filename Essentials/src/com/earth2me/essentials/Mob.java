@@ -4,6 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Location;
@@ -65,6 +66,10 @@ public enum Mob
 		{
 			hashMap.put(mob.name.toLowerCase(Locale.ENGLISH), mob);
 		}
+	}
+	
+	public static Set<String> getMobList() {
+		return hashMap.keySet();
 	}
 
 	public LivingEntity spawn(final Player player, final Server server, final Location loc) throws MobException
