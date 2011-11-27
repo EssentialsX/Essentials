@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
@@ -12,6 +13,7 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 import org.yaml.snakeyaml.Yaml;
@@ -22,12 +24,12 @@ public class YamlStorageWriter implements IStorageWriter
 	private transient static final Pattern NON_WORD_PATTERN = Pattern.compile("\\W");
 	private transient final PrintWriter writer;
 	private transient static final Yaml YAML = new Yaml();
-
+	
 	public YamlStorageWriter(final PrintWriter writer)
 	{
 		this.writer = writer;
 	}
-
+	
 	public void save(final StorageObject object)
 	{
 		try
@@ -43,7 +45,7 @@ public class YamlStorageWriter implements IStorageWriter
 			Logger.getLogger(YamlStorageWriter.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
-
+	
 	private void writeToFile(final Object object, final int depth, final Class clazz) throws IllegalAccessException
 	{
 		for (Field field : clazz.getDeclaredFields())
@@ -52,7 +54,7 @@ public class YamlStorageWriter implements IStorageWriter
 			if (Modifier.isPrivate(modifier) && !Modifier.isTransient(modifier) && !Modifier.isStatic(modifier))
 			{
 				field.setAccessible(true);
-
+				
 				final Object data = field.get(object);
 				if (writeKey(field, depth, data))
 				{
@@ -83,7 +85,7 @@ public class YamlStorageWriter implements IStorageWriter
 			}
 		}
 	}
-
+	
 	private boolean writeKey(final Field field, final int depth, final Object data)
 	{
 		final boolean commentPresent = writeComment(field, depth);
@@ -107,7 +109,7 @@ public class YamlStorageWriter implements IStorageWriter
 		}
 		return false;
 	}
-
+	
 	private boolean writeComment(final Field field, final int depth)
 	{
 		final boolean commentPresent = field.isAnnotationPresent(Comment.class);
@@ -129,7 +131,7 @@ public class YamlStorageWriter implements IStorageWriter
 		}
 		return commentPresent;
 	}
-
+	
 	private void writeCollection(final Collection<Object> data, final int depth) throws IllegalAccessException
 	{
 		writer.println();
@@ -160,7 +162,7 @@ public class YamlStorageWriter implements IStorageWriter
 		}
 		writer.println();
 	}
-
+	
 	private void writeMap(final Map<Object, Object> data, final int depth) throws IllegalArgumentException, IllegalAccessException
 	{
 		writer.println();
@@ -197,7 +199,7 @@ public class YamlStorageWriter implements IStorageWriter
 			}
 		}
 	}
-
+	
 	private void writeIndention(final int depth)
 	{
 		for (int i = 0; i < depth; i++)
@@ -205,7 +207,7 @@ public class YamlStorageWriter implements IStorageWriter
 			writer.print("  ");
 		}
 	}
-
+	
 	private void writeScalar(final Object data)
 	{
 		if (data instanceof String || data instanceof Boolean || data instanceof Number)
@@ -228,16 +230,29 @@ public class YamlStorageWriter implements IStorageWriter
 		else if (data instanceof ItemStack)
 		{
 			final ItemStack itemStack = (ItemStack)data;
-			writer.println(itemStack.getType().toString().toLowerCase()
-						   + (itemStack.getDurability() > 0 ? ":" + itemStack.getDurability() : "")
-						   + " " + itemStack.getAmount());
+			writer.print(itemStack.getType().toString().toLowerCase(Locale.ENGLISH));
+			
+			if (itemStack.getDurability() > 0)
+			{
+				writer.print(':');
+				writer.print(itemStack.getDurability());
+			}
+			writer.print(' ');
+			writer.print(itemStack.getAmount());
+			for (Entry<Enchantment, Integer> entry : itemStack.getEnchantments().entrySet())
+			{
+				writer.print(' ');
+				writer.print(entry.getKey().getName().toLowerCase(Locale.ENGLISH));
+				writer.print(':');
+				writer.print(entry.getValue());
+			}
 		}
 		else
 		{
 			throw new UnsupportedOperationException();
 		}
 	}
-
+	
 	private void writeKey(final Object data)
 	{
 		if (data instanceof String || data instanceof Boolean || data instanceof Number)
@@ -269,7 +284,7 @@ public class YamlStorageWriter implements IStorageWriter
 			throw new UnsupportedOperationException();
 		}
 	}
-
+	
 	private void writeLocation(final Location entry, final int depth)
 	{
 		writer.println();

@@ -57,7 +57,8 @@ public class EssentialsEntityListener extends EntityListener
 				ItemStack hand = player.getItemInHand();
 				if (hand != null && hand.getType() == Material.MILK_BUCKET) {
 					((Animals)eDefend).setAge(-24000);
-					player.setItemInHand(new ItemStack(Material.BUCKET, hand.getAmount()));
+					hand.setType(Material.BUCKET);
+					player.setItemInHand(hand);
 					player.updateInventory();
 					event.setCancelled(true);
 				}

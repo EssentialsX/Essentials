@@ -76,7 +76,9 @@ public class SignTrade extends EssentialsSign
 			amount -= amount % trade.getItemStack().getAmount();
 			if (amount > 0)
 			{
-				final Trade store = new Trade(new ItemStack(player.getItemInHand().getTypeId(), amount, player.getItemInHand().getDurability()), ess);
+				final ItemStack stack = new ItemStack(player.getItemInHand().getTypeId(), amount, player.getItemInHand().getDurability());
+				stack.addEnchantments(player.getItemInHand().getEnchantments());
+				final Trade store = new Trade(stack, ess);
 				addAmount(sign, 2, store, ess);
 				store.charge(player);
 				return store;

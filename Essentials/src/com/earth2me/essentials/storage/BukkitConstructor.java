@@ -1,10 +1,12 @@
 package com.earth2me.essentials.storage;
 
+import java.util.Locale;
 import java.util.regex.Pattern;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 import org.yaml.snakeyaml.constructor.Constructor;
@@ -83,7 +85,7 @@ public class BukkitConstructor extends Constructor
 				{
 					return null;
 				}
-				final String[] split1 = val.split("\\W", 2);
+				final String[] split1 = val.split("\\W");
 				if (split1.length == 0)
 				{
 					return null;
@@ -109,11 +111,42 @@ public class BukkitConstructor extends Constructor
 					data = Short.parseShort(split2[1]);
 				}
 				int size = mat.getMaxStackSize();
-				if (split1.length == 2 && NUMPATTERN.matcher(split1[1]).matches())
+				if (split1.length > 1 && NUMPATTERN.matcher(split1[1]).matches())
 				{
 					size = Integer.parseInt(split1[1]);
 				}
-				return new ItemStack(mat, size, data);
+				final ItemStack stack = new ItemStack(mat, size, data);
+				if (split1.length > 2)
+				{
+					for (int i = 2; i < split1.length; i++)
+					{
+						final String[] split3 = split1[0].split("[:+',;.]", 2);
+						if (split3.length != 2)
+						{
+							continue;
+						}
+						Enchantment enchantment;
+						if (NUMPATTERN.matcher(split3[0]).matches())
+						{
+							final int enchantId = Integer.parseInt(split3[0]);
+							enchantment = Enchantment.getById(enchantId);
+						}
+						else
+						{
+							enchantment = Enchantment.getByName(split3[0].toUpperCase(Locale.ENGLISH));
+						}
+						if (enchantment == null) {
+							continue;
+						}
+						int level = enchantment.getStartLevel();
+						if (NUMPATTERN.matcher(split3[1]).matches())
+						{
+							level = Integer.parseInt(split3[1]);
+						}
+						stack.addUnsafeEnchantment(enchantment, level);
+					}
+				}
+				return stack;
 			}
 			return super.construct(node);
 		}

@@ -1,6 +1,5 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.craftbukkit.BedLocationFix;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
@@ -17,7 +16,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
@@ -234,7 +232,7 @@ public class EssentialsPlayerListener extends PlayerListener
 	{
 		Location loc = user.getHome(user.getLocation());
 		if (loc == null) {
-			loc = BedLocationFix.getBedSpawnLocation(user);
+			loc = user.getBedSpawnLocation();
 		}
 		if (loc != null) {
 			user.setCompassTarget(loc);

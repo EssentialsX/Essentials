@@ -34,7 +34,7 @@ public final class InventoryWorkaround
 			{
 				continue;
 			}
-			if (item.getTypeId() == cItem.getTypeId() && (!forceAmount || item.getAmount() == cItem.getAmount()) && (!forceDurability || cItem.getDurability() == item.getDurability()))
+			if (item.getTypeId() == cItem.getTypeId() && (!forceAmount || item.getAmount() == cItem.getAmount()) && (!forceDurability || cItem.getDurability() == item.getDurability()) && cItem.getEnchantments().equals(item.getEnchantments()))
 			{
 				return i;
 			}
@@ -56,7 +56,7 @@ public final class InventoryWorkaround
 			{
 				continue;
 			}
-			if (item.getTypeId() == cItem.getTypeId() && cItem.getAmount() < cItem.getType().getMaxStackSize() && (!forceDurability || cItem.getDurability() == item.getDurability()))
+			if (item.getTypeId() == cItem.getTypeId() && cItem.getAmount() < cItem.getType().getMaxStackSize() && (!forceDurability || cItem.getDurability() == item.getDurability()) && cItem.getEnchantments().equals(item.getEnchantments()))
 			{
 				return i;
 			}
@@ -102,9 +102,10 @@ public final class InventoryWorkaround
 				if (combined[j] == null)
 				{
 					combined[j] = new ItemStack(items[i].getType(), items[i].getAmount(), items[i].getDurability());
+					combined[j].addEnchantments(items[i].getEnchantments());
 					break;
 				}
-				if (combined[j].getTypeId() == items[i].getTypeId() && (!forceDurability || combined[j].getDurability() == items[i].getDurability()))
+				if (combined[j].getTypeId() == items[i].getTypeId() && (!forceDurability || combined[j].getDurability() == items[i].getDurability()) && combined[j].getEnchantments().equals(items[i].getEnchantments()))
 				{
 					combined[j].setAmount(combined[j].getAmount() + items[i].getAmount());
 					break;
@@ -143,7 +144,9 @@ public final class InventoryWorkaround
 						// More than a single stack!
 						if (item.getAmount() > item.getType().getMaxStackSize())
 						{
-							cinventory.setItem(firstFree, new ItemStack(item.getTypeId(), item.getType().getMaxStackSize(), item.getDurability()));
+							ItemStack stack = new ItemStack(item.getTypeId(), item.getType().getMaxStackSize(), item.getDurability());
+							stack.addEnchantments(item.getEnchantments());
+							cinventory.setItem(firstFree, stack);
 							item.setAmount(item.getAmount() - item.getType().getMaxStackSize());
 						}
 						else
@@ -257,9 +260,10 @@ public final class InventoryWorkaround
 				if (combined[j] == null)
 				{
 					combined[j] = new ItemStack(items[i].getType(), items[i].getAmount(), items[i].getDurability());
+					combined[j].addEnchantments(items[i].getEnchantments());
 					break;
 				}
-				if (combined[j].getTypeId() == items[i].getTypeId() && (!forceDurability || combined[j].getDurability() == items[i].getDurability()))
+				if (combined[j].getTypeId() == items[i].getTypeId() && (!forceDurability || combined[j].getDurability() == items[i].getDurability()) && combined[j].getEnchantments().equals(items[i].getEnchantments()))
 				{
 					combined[j].setAmount(combined[j].getAmount() + items[i].getAmount());
 					break;
@@ -318,14 +322,18 @@ public final class InventoryWorkaround
 		final int maxStackSize = itm.getType().getMaxStackSize();
 		final int stacks = itm.getAmount() / maxStackSize;
 		final int leftover = itm.getAmount() % maxStackSize;
-		Item[] itemStacks = new Item[stacks + (leftover > 0 ? 1 : 0)];
+		final Item[] itemStacks = new Item[stacks + (leftover > 0 ? 1 : 0)];
 		for (int i = 0; i < stacks; i++)
 		{
-			itemStacks[i] = loc.getWorld().dropItem(loc, new ItemStack(itm.getType(), maxStackSize, itm.getDurability()));
+			final ItemStack stack = new ItemStack(itm.getType(), maxStackSize, itm.getDurability());
+			stack.addEnchantments(itm.getEnchantments());
+			itemStacks[i] = loc.getWorld().dropItem(loc, stack);
 		}
 		if (leftover > 0)
 		{
-			itemStacks[stacks] = loc.getWorld().dropItem(loc, new ItemStack(itm.getType(), leftover, itm.getDurability()));
+			final ItemStack stack = new ItemStack(itm.getType(), leftover, itm.getDurability());
+			stack.addEnchantments(itm.getEnchantments());
+			itemStacks[stacks] = loc.getWorld().dropItem(loc, stack);
 		}
 		return itemStacks;
 	}

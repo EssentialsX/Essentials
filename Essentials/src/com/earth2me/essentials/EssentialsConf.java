@@ -2,7 +2,9 @@ package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
 import java.io.*;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -10,6 +12,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.config.Configuration;
 
@@ -224,13 +227,25 @@ public class EssentialsConf extends Configuration
 
 	public ItemStack getItemStack(final String path)
 	{
-		return new ItemStack(
+		final ItemStack stack = new ItemStack(
 				Material.valueOf(getString(path + ".type", "AIR")),
 				getInt(path + ".amount", 1),
-				(short)getInt(path + ".damage", 0)/*
+				(short)getInt(path + ".damage", 0));
+		List<String> enchants = getKeys(path + ".enchant");
+		for (String enchant : enchants)
+		{
+			Enchantment enchantment = Enchantment.getByName(enchant);
+			if (enchantment == null) {
+				continue;
+			}
+			int level = getInt(path+ ".enchant."+enchant, enchantment.getStartLevel());
+			stack.addUnsafeEnchantment(enchantment, level);
+		}
+		return stack;
+		/*
 				 * ,
 				 * (byte)getInt(path + ".data", 0)
-				 */);
+				 */
 	}
 
 	public void setProperty(final String path, final ItemStack stack)
@@ -239,6 +254,16 @@ public class EssentialsConf extends Configuration
 		map.put("type", stack.getType().toString());
 		map.put("amount", stack.getAmount());
 		map.put("damage", stack.getDurability());
+		Map<Enchantment, Integer> enchantments = stack.getEnchantments();
+		if (!enchantments.isEmpty())
+		{
+			Map<String, Integer> enchant = new HashMap<String, Integer>();
+			for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet())
+			{
+				enchant.put(entry.getKey().getName(), entry.getValue());
+			}
+			map.put("enchant", enchant);
+		}
 		// getData().getData() is broken
 		//map.put("data", stack.getDurability());
 		setProperty(path, map);
