@@ -7,9 +7,9 @@ import org.bukkit.enchantments.Enchantment;
 public class EnchantmentLevel implements Entry<Enchantment, Integer>
 {
 	private Enchantment enchantment;
-	private  int level;
+	private int level;
 
-	public EnchantmentLevel(Enchantment enchantment, int level)
+	public EnchantmentLevel(final Enchantment enchantment, final int level)
 	{
 		this.enchantment = enchantment;
 		this.level = level;
@@ -20,7 +20,7 @@ public class EnchantmentLevel implements Entry<Enchantment, Integer>
 		return enchantment;
 	}
 
-	public void setEnchantment(Enchantment enchantment)
+	public void setEnchantment(final Enchantment enchantment)
 	{
 		this.enchantment = enchantment;
 	}
@@ -30,7 +30,7 @@ public class EnchantmentLevel implements Entry<Enchantment, Integer>
 		return level;
 	}
 
-	public void setLevel(int level)
+	public void setLevel(final int level)
 	{
 		this.level = level;
 	}
@@ -48,10 +48,33 @@ public class EnchantmentLevel implements Entry<Enchantment, Integer>
 	}
 
 	@Override
-	public Integer setValue(Integer v)
+	public Integer setValue(final Integer v)
 	{
 		int t = level;
 		level = v;
 		return t;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return enchantment.hashCode() ^ level;
+	}
+
+	@Override
+	public boolean equals(final Object obj)
+	{
+		if (obj instanceof Entry)
+		{
+			final Entry entry = (Entry)obj;
+			if (entry.getKey() instanceof Enchantment
+				&& entry.getValue() instanceof Integer)
+			{
+				final Enchantment enchantment = (Enchantment)entry.getKey();
+				final Integer level = (Integer)entry.getValue();
+				return this.enchantment.equals(enchantment) && this.level == level.intValue();
+			}
+		}
+		return false;
 	}
 }
