@@ -333,7 +333,7 @@ chat:
 protect:
   # Database settings for sign/rail protection
   # get mysql.jar and sqlite and place it in your serverroot/lib directory from here:
-  # http://java.net/projects/essentials/sources/svn/show/lib?rev=435
+  # https://github.com/essentials/Essentials/blob/master/lib/mysql.jar
 
   # mysql, sqlite or none
   datatype: 'sqlite'
