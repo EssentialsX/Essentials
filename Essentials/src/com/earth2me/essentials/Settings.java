@@ -234,7 +234,7 @@ public class Settings implements ISettings
 
 		try
 		{
-			return ChatColor.valueOf(colorName.toUpperCase());
+			return ChatColor.valueOf(colorName.toUpperCase(Locale.ENGLISH));
 		}
 		catch (IllegalArgumentException ex)
 		{

@@ -4,6 +4,7 @@ import com.earth2me.essentials.ChargeException;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
+import java.util.Locale;
 import java.util.Map;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerChatEvent;
@@ -50,7 +51,7 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer
 				format.append(chatType).append("Format");
 
 				StringBuilder errorMsg = new StringBuilder();
-				errorMsg.append("notAllowedTo").append(chatType.substring(0, 1).toUpperCase()).append(chatType.substring(1));
+				errorMsg.append("notAllowedTo").append(chatType.substring(0, 1).toUpperCase(Locale.ENGLISH)).append(chatType.substring(1));
 
 				if (user.isAuthorized(permission.toString()))
 				{

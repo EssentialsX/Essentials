@@ -5,6 +5,7 @@ import java.io.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -234,7 +235,7 @@ public class EssentialsConf extends Configuration
 		List<String> enchants = getKeys(path + ".enchant");
 		for (String enchant : enchants)
 		{
-			Enchantment enchantment = Enchantment.getByName(enchant);
+			Enchantment enchantment = Enchantment.getByName(enchant.toUpperCase(Locale.ENGLISH));
 			if (enchantment == null) {
 				continue;
 			}
@@ -260,7 +261,7 @@ public class EssentialsConf extends Configuration
 			Map<String, Integer> enchant = new HashMap<String, Integer>();
 			for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet())
 			{
-				enchant.put(entry.getKey().getName(), entry.getValue());
+				enchant.put(entry.getKey().getName().toLowerCase(Locale.ENGLISH), entry.getValue());
 			}
 			map.put("enchant", enchant);
 		}

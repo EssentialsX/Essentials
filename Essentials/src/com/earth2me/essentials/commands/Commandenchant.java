@@ -68,7 +68,7 @@ public class Commandenchant extends EssentialsCommand
 			final Set<String> enchantmentslist = new TreeSet<String>();
 			for (Map.Entry<String, Enchantment> entry : ENCHANTMENTS.entrySet())
 			{
-				final String enchantmentName = entry.getValue().getName().toLowerCase();
+				final String enchantmentName = entry.getValue().getName().toLowerCase(Locale.ENGLISH);
 				if (enchantmentslist.contains(enchantmentName) || user.isAuthorized("essentials.enchant." + enchantmentName))
 				{
 					enchantmentslist.add(entry.getKey());
@@ -98,7 +98,7 @@ public class Commandenchant extends EssentialsCommand
 		{
 			throw new Exception(_("enchantmentNotFound"));
 		}
-		final String enchantmentName = enchantment.getName().toLowerCase();
+		final String enchantmentName = enchantment.getName().toLowerCase(Locale.ENGLISH);
 		if (!user.isAuthorized("essentials.enchant." + enchantmentName))
 		{
 			throw new Exception(_("enchantmentPerm", enchantmentName));

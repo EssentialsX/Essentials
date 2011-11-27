@@ -205,7 +205,7 @@ public class Commandspawnmob extends EssentialsCommand
 				}
 				else
 				{
-					((Sheep)spawned).setColor(DyeColor.valueOf(data.toUpperCase()));
+					((Sheep)spawned).setColor(DyeColor.valueOf(data.toUpperCase(Locale.ENGLISH)));
 				}
 			}
 			catch (Exception e)

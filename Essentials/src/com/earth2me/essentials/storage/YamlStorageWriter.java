@@ -219,12 +219,12 @@ public class YamlStorageWriter implements IStorageWriter
 		}
 		else if (data instanceof Material)
 		{
-			writer.println(data.toString().toLowerCase());
+			writer.println(data.toString().toLowerCase(Locale.ENGLISH));
 		}
 		else if (data instanceof MaterialData)
 		{
 			final MaterialData matData = (MaterialData)data;
-			writer.println(matData.getItemType().toString().toLowerCase()
+			writer.println(matData.getItemType().toString().toLowerCase(Locale.ENGLISH)
 						   + (matData.getData() > 0 ? ":" + matData.getData() : ""));
 		}
 		else if (data instanceof ItemStack)
@@ -271,12 +271,12 @@ public class YamlStorageWriter implements IStorageWriter
 		}
 		else if (data instanceof Material)
 		{
-			writer.print(data.toString().toLowerCase());
+			writer.print(data.toString().toLowerCase(Locale.ENGLISH));
 		}
 		else if (data instanceof MaterialData)
 		{
 			final MaterialData matData = (MaterialData)data;
-			writer.print(matData.getItemType().toString().toLowerCase()
+			writer.print(matData.getItemType().toString().toLowerCase(Locale.ENGLISH)
 						 + (matData.getData() > 0 ? ":" + matData.getData() : ""));
 		}
 		else
