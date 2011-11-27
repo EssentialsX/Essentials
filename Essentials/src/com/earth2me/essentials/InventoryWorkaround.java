@@ -81,6 +81,11 @@ public final class InventoryWorkaround
 
 	public static Map<Integer, ItemStack> addItem(final Inventory cinventory, final boolean forceDurability, final ItemStack... items)
 	{
+		return addItem(cinventory, forceDurability, false, null, items);
+	}
+
+	public static Map<Integer, ItemStack> addItem(final Inventory cinventory, final boolean forceDurability, final boolean dontBreakStacks, final IEssentials ess, final ItemStack... items)
+	{
 		final Map<Integer, ItemStack> leftover = new HashMap<Integer, ItemStack>();
 
 		/* TODO: some optimization
@@ -142,10 +147,10 @@ public final class InventoryWorkaround
 					else
 					{
 						// More than a single stack!
-						if (item.getAmount() > item.getType().getMaxStackSize())
+						if (item.getAmount() > (dontBreakStacks ? ess.getSettings().getDefaultStackSize() : item.getType().getMaxStackSize()))
 						{
 							ItemStack stack = item.clone();
-							stack.setAmount(item.getType().getMaxStackSize());
+							stack.setAmount(dontBreakStacks ? ess.getSettings().getDefaultStackSize() : item.getType().getMaxStackSize());
 							EnchantmentFix.setItem(cinventory, firstFree, stack);
 							item.setAmount(item.getAmount() - item.getType().getMaxStackSize());
 						}
@@ -164,7 +169,7 @@ public final class InventoryWorkaround
 
 					final int amount = item.getAmount();
 					final int partialAmount = partialItem.getAmount();
-					final int maxAmount = partialItem.getType().getMaxStackSize();
+					final int maxAmount = dontBreakStacks ? ess.getSettings().getDefaultStackSize() : partialItem.getType().getMaxStackSize();
 
 					// Check if it fully fits
 					if (amount + partialAmount <= maxAmount)
