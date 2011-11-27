@@ -102,15 +102,23 @@ public class Commandenchant extends EssentialsCommand
 			}
 		}
 		Enchantment enchantment = getEnchantment(args[0], user);
-		if (level < enchantment.getStartLevel() || level > enchantment.getMaxLevel())
+		if (level < 0 || level > enchantment.getMaxLevel())
 		{
 			level = enchantment.getMaxLevel();
 		}
-		stack.addEnchantment(enchantment, level);
+		if (level == 0) {
+			stack.removeEnchantment(enchantment);
+		} else {
+			stack.addEnchantment(enchantment, level);
+		}
 		EnchantmentFix.setItemInHand(user.getInventory(), stack);
 		user.updateInventory();
 		final String enchantmentName = enchantment.getName().toLowerCase(Locale.ENGLISH);
-		user.sendMessage(_("enchantmentApplied", enchantmentName.replace('_', ' ')));
+		if (level == 0) {
+			user.sendMessage(_("enchantmentRemoved", enchantmentName.replace('_', ' ')));
+		} else {
+			user.sendMessage(_("enchantmentApplied", enchantmentName.replace('_', ' ')));
+		}
 	}
 
 	public static Enchantment getEnchantment(final String name, final User user) throws Exception
