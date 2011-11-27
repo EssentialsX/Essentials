@@ -20,9 +20,13 @@ public class Commandunbanip extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		User user = getPlayer(server, args, 0, true);
-		if (user != null) {
+		try
+		{
+			final User user = getPlayer(server, args, 0, true);
 			ess.getServer().unbanIP(user.getLastLoginAddress());
+		}
+		catch (Exception ex)
+		{
 		}
 		ess.getServer().unbanIP(args[0]);
 		sender.sendMessage(_("unbannedIP"));
