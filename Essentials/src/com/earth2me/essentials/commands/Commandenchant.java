@@ -84,7 +84,7 @@ public class Commandenchant extends EssentialsCommand
 				if (enchantmentslist.contains(enchantmentName) || user.isAuthorized("essentials.enchant." + enchantmentName))
 				{
 					enchantmentslist.add(entry.getKey());
-					enchantmentslist.add(enchantmentName);
+					//enchantmentslist.add(enchantmentName);
 				}
 			}
 			throw new NotEnoughArgumentsException(_("enchantments", Util.joinList(enchantmentslist.toArray())));
