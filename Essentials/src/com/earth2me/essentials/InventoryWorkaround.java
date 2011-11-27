@@ -101,8 +101,7 @@ public final class InventoryWorkaround
 			{
 				if (combined[j] == null)
 				{
-					combined[j] = new ItemStack(items[i].getType(), items[i].getAmount(), items[i].getDurability());
-					combined[j].addEnchantments(items[i].getEnchantments());
+					combined[j] = items[i].clone();
 					break;
 				}
 				if (combined[j].getTypeId() == items[i].getTypeId() && (!forceDurability || combined[j].getDurability() == items[i].getDurability()) && combined[j].getEnchantments().equals(items[i].getEnchantments()))
@@ -144,8 +143,8 @@ public final class InventoryWorkaround
 						// More than a single stack!
 						if (item.getAmount() > item.getType().getMaxStackSize())
 						{
-							ItemStack stack = new ItemStack(item.getTypeId(), item.getType().getMaxStackSize(), item.getDurability());
-							stack.addEnchantments(item.getEnchantments());
+							ItemStack stack = item.clone();
+							stack.setAmount(item.getType().getMaxStackSize());
 							cinventory.setItem(firstFree, stack);
 							item.setAmount(item.getAmount() - item.getType().getMaxStackSize());
 						}
@@ -259,8 +258,7 @@ public final class InventoryWorkaround
 			{
 				if (combined[j] == null)
 				{
-					combined[j] = new ItemStack(items[i].getType(), items[i].getAmount(), items[i].getDurability());
-					combined[j].addEnchantments(items[i].getEnchantments());
+					combined[j] = items[i].clone();
 					break;
 				}
 				if (combined[j].getTypeId() == items[i].getTypeId() && (!forceDurability || combined[j].getDurability() == items[i].getDurability()) && combined[j].getEnchantments().equals(items[i].getEnchantments()))
@@ -325,14 +323,14 @@ public final class InventoryWorkaround
 		final Item[] itemStacks = new Item[stacks + (leftover > 0 ? 1 : 0)];
 		for (int i = 0; i < stacks; i++)
 		{
-			final ItemStack stack = new ItemStack(itm.getType(), maxStackSize, itm.getDurability());
-			stack.addEnchantments(itm.getEnchantments());
+			final ItemStack stack = itm.clone();
+			stack.setAmount(maxStackSize);
 			itemStacks[i] = loc.getWorld().dropItem(loc, stack);
 		}
 		if (leftover > 0)
 		{
-			final ItemStack stack = new ItemStack(itm.getType(), leftover, itm.getDurability());
-			stack.addEnchantments(itm.getEnchantments());
+			final ItemStack stack = itm.clone();
+			stack.setAmount(leftover);
 			itemStacks[stacks] = loc.getWorld().dropItem(loc, stack);
 		}
 		return itemStacks;
