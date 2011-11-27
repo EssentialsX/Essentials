@@ -23,8 +23,7 @@ public class Commandspawner extends EssentialsCommand
 	{
 		if (args.length < 1 || args[0].length() < 2)
 		{
-			throw new NotEnoughArgumentsException();
-			//TODO: user.sendMessage("§7Mobs: Zombie PigZombie Skeleton Slime Chicken Pig Monster Spider Creeper Ghast Squid Giant Cow Sheep Wolf");
+			throw new NotEnoughArgumentsException(_("mobsAvailable", Util.joinList(Mob.getMobList())));
 		}
 
 		final Location target = Util.getTarget(user);
