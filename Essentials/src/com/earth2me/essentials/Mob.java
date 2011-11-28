@@ -36,8 +36,10 @@ public enum Mob
 	ENDERDRAGON("EnderDragon", Enemies.ENEMY, CreatureType.ENDER_DRAGON),
 	VILLAGER("Villager", Enemies.FRIENDLY, CreatureType.VILLAGER),
 	BLAZE("Blaze", Enemies.ENEMY, CreatureType.BLAZE),
-	MUSHROOMCOW("MushroomCow", Enemies.FRIENDLY, CreatureType.MUSHROOM_COW);
-	//TODO: Snowman
+	MUSHROOMCOW("MushroomCow", Enemies.FRIENDLY, CreatureType.MUSHROOM_COW),
+	MAGMACUBE("MagmaCube", Enemies.ENEMY, CreatureType.MAGMA_CUBE),
+	SNOWMAN("Snowman", Enemies.FRIENDLY, CreatureType.SNOWMAN);
+	
 	public static final Logger logger = Logger.getLogger("Minecraft");
 
 	private Mob(String n, Enemies en, String s, CreatureType type)
