@@ -52,7 +52,7 @@ public class Commandbalancetop extends EssentialsCommand
 				}
 				if (ess.getUserMap().getUniqueUsers() > MINUSERS)
 				{
-					sender.sendMessage("Calculating results");
+					sender.sendMessage(_("orderBalances", ess.getUserMap().getUniqueUsers()));
 				}
 			}
 			finally
@@ -65,7 +65,7 @@ public class Commandbalancetop extends EssentialsCommand
 		{
 			if (ess.getUserMap().getUniqueUsers() > MINUSERS)
 			{
-				sender.sendMessage("Calculating results");
+				sender.sendMessage(_("orderBalances", ess.getUserMap().getUniqueUsers()));
 			}
 			ess.scheduleAsyncDelayedTask(new Viewer(sender, max));
 		}
