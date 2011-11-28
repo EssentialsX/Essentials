@@ -21,6 +21,6 @@ public class Commandrules extends EssentialsCommand
 		final IText input = new TextInput(sender, "rules", true, ess);
 		final IText output = new KeywordReplacer(input, sender, ess);
 		final TextPager pager = new TextPager(output);
-		pager.showPage(args.length > 0 ? args[0] : null, args.length > 1 ? args[1] : null, sender);
+		pager.showPage(args.length > 0 ? args[0] : null, args.length > 1 ? args[1] : null, "rules", sender);
 	}
 }
