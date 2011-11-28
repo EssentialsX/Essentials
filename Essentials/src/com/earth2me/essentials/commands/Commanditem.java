@@ -72,7 +72,11 @@ public class Commanditem extends EssentialsCommand
 
 		final String displayName = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ');
 		user.sendMessage(_("itemSpawn", stack.getAmount(), displayName));
-		InventoryWorkaround.addItem(user.getInventory(), true, true, stack);
+		if (user.isAuthorized("essentials.oversizedstacks")) {
+			InventoryWorkaround.addItem(user.getInventory(), true, ess.getSettings().getOversizedStackSize(), stack);
+		} else {
+			InventoryWorkaround.addItem(user.getInventory(), true, stack);
+		}
 		user.updateInventory();
 	}
 }

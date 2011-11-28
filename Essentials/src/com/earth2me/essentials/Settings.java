@@ -82,9 +82,9 @@ public class Settings implements ISettings
 	}
 
 	@Override
-	public int getDefaultStackSize()
+	public int getOversizedStackSize()
 	{
-		return config.getInt("default-stack-size", 64);
+		return config.getInt("oversized-stacksize", 64);
 	}
 
 	@Override

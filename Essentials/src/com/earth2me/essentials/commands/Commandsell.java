@@ -119,12 +119,16 @@ public class Commandsell extends EssentialsCommand
 			{
 				continue;
 			}
+			if (!s.getEnchantments().equals(is.getEnchantments()))
+			{
+				continue;
+			}
 			max += s.getAmount();
 		}
 
 		if (stack)
 		{
-			amount *= 64;
+			amount *= is.getType().getMaxStackSize();
 		}
 		if (amount < 1)
 		{
@@ -133,7 +137,7 @@ public class Commandsell extends EssentialsCommand
 
 		if (requireStack)
 		{
-			amount -= amount % 64;
+			amount -= amount % is.getType().getMaxStackSize();
 		}
 		if (amount > max || amount < 1)
 		{

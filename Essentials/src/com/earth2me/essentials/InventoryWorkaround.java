@@ -81,10 +81,10 @@ public final class InventoryWorkaround
 
 	public static Map<Integer, ItemStack> addItem(final Inventory cinventory, final boolean forceDurability, final ItemStack... items)
 	{
-		return addItem(cinventory, forceDurability, false, items);
+		return addItem(cinventory, forceDurability, 0, items);
 	}
 
-	public static Map<Integer, ItemStack> addItem(final Inventory cinventory, final boolean forceDurability, final boolean dontBreakStacks, final ItemStack... items)
+	public static Map<Integer, ItemStack> addItem(final Inventory cinventory, final boolean forceDurability, final int oversizedStacks, final ItemStack... items)
 	{
 		final Map<Integer, ItemStack> leftover = new HashMap<Integer, ItemStack>();
 
@@ -146,11 +146,12 @@ public final class InventoryWorkaround
 					}
 					else
 					{
+						final int maxAmount = oversizedStacks > 0 ? oversizedStacks : item.getType().getMaxStackSize();
 						// More than a single stack!
-						if (item.getAmount() > (dontBreakStacks ? 64 : item.getType().getMaxStackSize()))
+						if (item.getAmount() > maxAmount)
 						{
-							ItemStack stack = item.clone();
-							stack.setAmount(dontBreakStacks ? 64 : item.getType().getMaxStackSize());
+							final ItemStack stack = item.clone();
+							stack.setAmount(maxAmount);
 							if (cinventory instanceof FakeInventory)
 							{
 								cinventory.setItem(firstFree, stack);
@@ -159,7 +160,7 @@ public final class InventoryWorkaround
 							{
 								EnchantmentFix.setItem(cinventory, firstFree, stack);
 							}
-							item.setAmount(item.getAmount() - item.getType().getMaxStackSize());
+							item.setAmount(item.getAmount() - maxAmount);
 						}
 						else
 						{
@@ -183,7 +184,7 @@ public final class InventoryWorkaround
 
 					final int amount = item.getAmount();
 					final int partialAmount = partialItem.getAmount();
-					final int maxAmount = dontBreakStacks ? 64 : partialItem.getType().getMaxStackSize();
+					final int maxAmount = oversizedStacks > 0 ? oversizedStacks : partialItem.getType().getMaxStackSize();
 
 					// Check if it fully fits
 					if (amount + partialAmount <= maxAmount)
