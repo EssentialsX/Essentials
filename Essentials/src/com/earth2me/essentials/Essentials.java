@@ -345,7 +345,8 @@ public class Essentials extends JavaPlugin implements IEssentials
 			{
 				sender.sendMessage(command.getDescription());
 				sender.sendMessage(command.getUsage().replaceAll("<command>", commandLabel));
-				if (!ex.getMessage().isEmpty()) {
+				if (!ex.getMessage().isEmpty())
+				{
 					sender.sendMessage(ex.getMessage());
 				}
 				return true;
@@ -420,14 +421,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 		if (base instanceof String)
 		{
-			try
-			{
-				return userMap.getUser((String)base);
-			}
-			catch (NullPointerException ex)
-			{
-				return null;
-			}
+			return userMap.getUser((String)base);
 		}
 		return null;
 	}
@@ -443,27 +437,19 @@ public class Essentials extends JavaPlugin implements IEssentials
 		{
 			return (User)base;
 		}
-		try
+		User user = userMap.getUser(base.getName()).update(base);
+
+		if (user == null)
 		{
-			return userMap.getUser(base.getName()).update(base);
+			user = new User(base, this);
 		}
-		catch (NullPointerException ex)
-		{
-			return new User(base, this);
-		}
+		return user;
 	}
 
 	@Override
 	public User getOfflineUser(final String name)
 	{
-		try
-		{
-			return userMap.getUser(name);
-		}
-		catch (NullPointerException ex)
-		{
-			return null;
-		}
+		return userMap.getUser(name);
 	}
 
 	@Override

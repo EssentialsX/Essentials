@@ -60,7 +60,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 		return keys.contains(name.toLowerCase(Locale.ENGLISH));
 	}
 
-	public User getUser(final String name) throws NullPointerException
+	public User getUser(final String name)
 	{
 		try
 		{
@@ -68,11 +68,11 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 		}
 		catch (ExecutionException ex)
 		{
-			throw new NullPointerException();
+			return null;
 		}
 		catch (UncheckedExecutionException ex)
 		{
-			throw new NullPointerException();
+			return null;
 		}
 	}
 

@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.User;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Util;
 import java.util.*;
@@ -15,7 +16,6 @@ public class Commandbalancetop extends EssentialsCommand
 	{
 		super("balancetop");
 	}
-	
 	private static final int CACHETIME = 5 * 60 * 1000;
 	public static final int MINUSERS = 50;
 	private static List<String> cache = new ArrayList<String>();
@@ -107,12 +107,10 @@ public class Commandbalancetop extends EssentialsCommand
 					final Map<String, Double> balances = new HashMap<String, Double>();
 					for (String u : ess.getUserMap().getAllUniqueUsers())
 					{
-						try
+						final User user = ess.getUserMap().getUser(u);
+						if (user != null)
 						{
-							balances.put(u, ess.getUserMap().getUser(u).getMoney());
-						}
-						catch (NullPointerException ex)
-						{
+							balances.put(u, user.getMoney());
 						}
 					}
 
