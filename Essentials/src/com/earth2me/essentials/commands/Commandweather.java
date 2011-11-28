@@ -43,6 +43,7 @@ public class Commandweather extends EssentialsCommand
 		}
 	}
 
+	//TODO: Translate these
 	@Override
 	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{

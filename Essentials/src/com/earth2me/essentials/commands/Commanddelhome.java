@@ -17,28 +17,34 @@ public class Commanddelhome extends EssentialsCommand
 	@Override
 	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
-		//Allowing both formats /delhome khobbits house | /delhome khobbits:house
-		final String[] expandedArgs = args[0].split(":");
-
-		User user = ess.getUser(sender);
-		String name;
-		if (expandedArgs.length < 1)
+		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		else if (expandedArgs.length > 1 && (user == null || user.isAuthorized("essentials.delhome.others")))
+
+		User user = ess.getUser(sender);
+		String name;
+		final String[] expandedArg = args[0].split(":");
+
+		if (expandedArg.length > 1 && (user == null || user.isAuthorized("essentials.delhome.others")))
 		{
-			user = getPlayer(server, expandedArgs, 0, true);
-			name = expandedArgs[1];
+			user = getPlayer(server, expandedArg, 0, true);
+			name = expandedArg[1];
+		}
+		else if (user == null)
+		{
+			throw new NotEnoughArgumentsException();
 		}
 		else
 		{
-			if (user == null)
-			{
-				throw new NotEnoughArgumentsException();
-			}
-			name = expandedArgs[0];
+			name = expandedArg[0];
 		}
+		//TODO: Think up a nice error message
+		/*
+		 * if (name.equalsIgnoreCase("bed")) {
+		 *   throw new Exception("You cannot remove the vanilla home point");
+		 * }
+		 */
 		user.delHome(name.toLowerCase(Locale.ENGLISH));
 		sender.sendMessage(_("deleteHome", name));
 	}
