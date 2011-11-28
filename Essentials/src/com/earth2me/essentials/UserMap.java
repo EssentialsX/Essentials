@@ -4,11 +4,14 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.collect.ConcurrentHashMultiset;
+import com.google.common.util.concurrent.UncheckedExecutionException;
 import java.io.File;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.entity.Player;
 
 
@@ -64,6 +67,10 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 			return users.get(name.toLowerCase(Locale.ENGLISH));
 		}
 		catch (ExecutionException ex)
+		{
+			throw new NullPointerException();
+		}
+		catch (UncheckedExecutionException ex)
 		{
 			throw new NullPointerException();
 		}
