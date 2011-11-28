@@ -388,6 +388,7 @@ protect:
     creeper-playerdamage: false
     creeper-blockdamage: false
     enderman-pickup: false
+    villager-death: false
     # Monsters won't follow players
     # permission essentials.protect.entitytarget.bypass disables this
     entitytarget: false
