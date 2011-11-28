@@ -151,13 +151,27 @@ public final class InventoryWorkaround
 						{
 							ItemStack stack = item.clone();
 							stack.setAmount(dontBreakStacks ? ess.getSettings().getDefaultStackSize() : item.getType().getMaxStackSize());
-							EnchantmentFix.setItem(cinventory, firstFree, stack);
+							if (cinventory instanceof FakeInventory)
+							{
+								cinventory.setItem(firstFree, stack);
+							}
+							else
+							{
+								EnchantmentFix.setItem(cinventory, firstFree, stack);
+							}
 							item.setAmount(item.getAmount() - item.getType().getMaxStackSize());
 						}
 						else
 						{
 							// Just store it
-							EnchantmentFix.setItem(cinventory, firstFree, item);
+							if (cinventory instanceof FakeInventory)
+							{
+								cinventory.setItem(firstFree, item);
+							}
+							else
+							{
+								EnchantmentFix.setItem(cinventory, firstFree, item);
+							}
 							break;
 						}
 					}
