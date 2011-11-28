@@ -5,12 +5,10 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.collect.ConcurrentHashMultiset;
 import java.io.File;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 
@@ -104,21 +102,9 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 		users.invalidate(name.toLowerCase(Locale.ENGLISH));
 	}
 
-	public Set<User> getAllUsers()
+	public Set<String> getAllUniqueUsers()
 	{
-		final Set<User> userSet = new HashSet<User>();
-		for (String name : keys)
-		{
-			try
-			{
-				userSet.add(users.get(name));
-			}
-			catch (ExecutionException ex)
-			{
-				Bukkit.getLogger().log(Level.INFO, "Failed to load user " + name, ex);
-			}
-		}
-		return userSet;
+		return Collections.unmodifiableSet(keys.elementSet());
 	}
 
 	public int getUniqueUsers()
