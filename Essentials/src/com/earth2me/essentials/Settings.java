@@ -82,9 +82,9 @@ public class Settings implements ISettings
 	}
 
 	@Override
-	public int getDefaultStackSize()
+	public int getOversizedStackSize()
 	{
-		return config.getInt("default-stack-size", 64);
+		return config.getInt("oversized-stacksize", 64);
 	}
 
 	@Override
@@ -189,13 +189,13 @@ public class Settings implements ISettings
 	@Override
 	public double getTeleportCooldown()
 	{
-		return config.getDouble("teleport-cooldown", 60);
+		return config.getDouble("teleport-cooldown", 0);
 	}
 
 	@Override
 	public double getHealCooldown()
 	{
-		return config.getDouble("heal-cooldown", 60);
+		return config.getDouble("heal-cooldown", 0);
 	}
 
 	@Override
@@ -246,7 +246,7 @@ public class Settings implements ISettings
 	@Override
 	public boolean getReclaimSetting()
 	{
-		return config.getBoolean("reclaim-onlogout", true);
+		return config.getBoolean("reclaim-onlogout", false);
 	}
 
 	@Override

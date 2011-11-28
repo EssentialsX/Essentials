@@ -32,6 +32,13 @@ public class EssentialsProtectEntityListener extends EntityListener
 			return;
 		}
 		final Entity target = event.getEntity();
+		
+		if (target instanceof Villager && prot.getSettingBool(ProtectConfig.prevent_villager_death))
+		{
+			event.setCancelled(true);
+			return;
+		}
+		
 		final User user = ess.getUser(target);
 		if (event instanceof EntityDamageByBlockEvent)
 		{

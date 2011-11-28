@@ -114,7 +114,7 @@ public class ItemDb implements IConf
 			throw new Exception(_("unknownItemId", itemid));
 		}
 		final ItemStack retval = new ItemStack(mat);
-		retval.setAmount(ess.getSettings().getDefaultStackSize());
+		retval.setAmount(mat.getMaxStackSize());
 		retval.setDurability(metaData);
 		return retval;
 	}

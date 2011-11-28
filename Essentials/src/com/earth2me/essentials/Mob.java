@@ -38,7 +38,7 @@ public enum Mob
 	BLAZE("Blaze", Enemies.ENEMY, CreatureType.BLAZE),
 	MUSHROOMCOW("MushroomCow", Enemies.FRIENDLY, CreatureType.MUSHROOM_COW),
 	MAGMACUBE("MagmaCube", Enemies.ENEMY, CreatureType.MAGMA_CUBE),
-	SNOWMAN("Snowman", Enemies.FRIENDLY, CreatureType.SNOWMAN);
+	SNOWMAN("Snowman", Enemies.FRIENDLY, "", CreatureType.SNOWMAN);
 	
 	public static final Logger logger = Logger.getLogger("Minecraft");
 

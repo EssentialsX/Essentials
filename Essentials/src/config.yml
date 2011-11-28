@@ -53,9 +53,6 @@ teleport-delay: 0
 # The delay, in seconds, required between /heal attempts
 heal-cooldown: 60
 
-# The number of items given if the quantity parameter is left out in /item or /give.
-default-stack-size: 64
-
 # What to prevent from /i /give
 # e.g item-spawn-blacklist: 46,11,10
 item-spawn-blacklist:
@@ -230,6 +227,11 @@ death-messages: true
 no-god-in-worlds:
 #  - world_nether
 
+# Oversized stacks are stacks that ignore the normal max stacksize.
+# They can be obtained using /give and /item, if the player has essentials.oversizedstacks permission.
+# How many items should be in a oversized stack?
+oversized-stacksize: 64
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #
@@ -388,6 +390,7 @@ protect:
     creeper-playerdamage: false
     creeper-blockdamage: false
     enderman-pickup: false
+    villager-death: false
     # Monsters won't follow players
     # permission essentials.protect.entitytarget.bypass disables this
     entitytarget: false
@@ -415,6 +418,8 @@ protect:
       villager: false
       blaze: false
       mushroom_cow: false
+      magma_cube: false
+      snowman: false
   
   # Maximum height the creeper should explode. -1 allows them to explode everywhere.
   # Set prevent.creeper-explosion to true, if you want to disable creeper explosions.

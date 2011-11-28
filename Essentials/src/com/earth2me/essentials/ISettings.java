@@ -31,7 +31,7 @@ public interface ISettings extends IConf
 
 	String getCurrencySymbol();
 
-	int getDefaultStackSize();
+	int getOversizedStackSize();
 
 	double getHealCooldown();
 
