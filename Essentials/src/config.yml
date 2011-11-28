@@ -415,6 +415,8 @@ protect:
       villager: false
       blaze: false
       mushroom_cow: false
+      magma_cube: false
+      snowman: false
   
   # Maximum height the creeper should explode. -1 allows them to explode everywhere.
   # Set prevent.creeper-explosion to true, if you want to disable creeper explosions.
