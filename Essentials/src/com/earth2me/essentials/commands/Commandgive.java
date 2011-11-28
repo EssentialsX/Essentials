@@ -77,7 +77,7 @@ public class Commandgive extends EssentialsCommand
 		final User giveTo = getPlayer(server, args, 0);
 		final String itemName = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ');
 		sender.sendMessage(ChatColor.BLUE + "Giving " + stack.getAmount() + " of " + itemName + " to " + giveTo.getDisplayName() + ".");
-		InventoryWorkaround.addItem(giveTo.getInventory(), true, true, ess, stack);
+		InventoryWorkaround.addItem(giveTo.getInventory(), true, true, stack);
 		giveTo.updateInventory();
 	}
 }

@@ -81,10 +81,10 @@ public final class InventoryWorkaround
 
 	public static Map<Integer, ItemStack> addItem(final Inventory cinventory, final boolean forceDurability, final ItemStack... items)
 	{
-		return addItem(cinventory, forceDurability, false, null, items);
+		return addItem(cinventory, forceDurability, false, items);
 	}
 
-	public static Map<Integer, ItemStack> addItem(final Inventory cinventory, final boolean forceDurability, final boolean dontBreakStacks, final IEssentials ess, final ItemStack... items)
+	public static Map<Integer, ItemStack> addItem(final Inventory cinventory, final boolean forceDurability, final boolean dontBreakStacks, final ItemStack... items)
 	{
 		final Map<Integer, ItemStack> leftover = new HashMap<Integer, ItemStack>();
 
@@ -147,10 +147,10 @@ public final class InventoryWorkaround
 					else
 					{
 						// More than a single stack!
-						if (item.getAmount() > (dontBreakStacks ? ess.getSettings().getDefaultStackSize() : item.getType().getMaxStackSize()))
+						if (item.getAmount() > (dontBreakStacks ? 64 : item.getType().getMaxStackSize()))
 						{
 							ItemStack stack = item.clone();
-							stack.setAmount(dontBreakStacks ? ess.getSettings().getDefaultStackSize() : item.getType().getMaxStackSize());
+							stack.setAmount(dontBreakStacks ? 64 : item.getType().getMaxStackSize());
 							if (cinventory instanceof FakeInventory)
 							{
 								cinventory.setItem(firstFree, stack);
@@ -183,7 +183,7 @@ public final class InventoryWorkaround
 
 					final int amount = item.getAmount();
 					final int partialAmount = partialItem.getAmount();
-					final int maxAmount = dontBreakStacks ? ess.getSettings().getDefaultStackSize() : partialItem.getType().getMaxStackSize();
+					final int maxAmount = dontBreakStacks ? 64 : partialItem.getType().getMaxStackSize();
 
 					// Check if it fully fits
 					if (amount + partialAmount <= maxAmount)
