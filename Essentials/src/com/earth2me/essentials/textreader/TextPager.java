@@ -23,7 +23,7 @@ public class TextPager
 		this.onePage = onePage;
 	}
 
-	public void showPage(final String pageStr, final String chapterPageStr, final CommandSender sender)
+	public void showPage(final String pageStr, final String chapterPageStr, final String commandName, final CommandSender sender)
 	{
 		List<String> lines = text.getLines();
 		List<String> chapters = text.getChapters();
@@ -45,15 +45,19 @@ public class TextPager
 				page = 1;
 			}
 
-			int start = onePage ? 0 : (page - 1) * 9;
+			final int start = onePage ? 0 : (page - 1) * 9;
+			final int pages = lines.size() / 9 + (lines.size() % 9 > 0 ? 1 : 0);
 			if (!onePage)
 			{
-				int pages = lines.size() / 9 + (lines.size() % 9 > 0 ? 1 : 0);
 				sender.sendMessage(_("infoPages", page, pages));
 			}
 			for (int i = start; i < lines.size() && i < start + (onePage ? 20 : 9); i++)
 			{
 				sender.sendMessage(lines.get(i));
+			}
+			if (!onePage && page < pages)
+			{
+				sender.sendMessage(_("readNextPage", commandName, page + 1));
 			}
 			return;
 		}
@@ -108,14 +112,19 @@ public class TextPager
 					}
 				}
 
+				int pages = end / 9 + (end % 9 > 0 ? 1 : 0);
 				if (!onePage)
 				{
-					int pages = end / 9 + (end % 9 > 0 ? 1 : 0);
+
 					sender.sendMessage(_("infoPages", page, pages));
 				}
 				for (int i = start; i < end && i < start + (onePage ? 20 : 9); i++)
 				{
 					sender.sendMessage(lines.get(i));
+				}
+				if (!onePage && page < pages)
+				{
+					sender.sendMessage(_("readNextPage", commandName, page + 1));
 				}
 				return;
 			}
@@ -155,15 +164,19 @@ public class TextPager
 		}
 		final int start = chapterstart + (onePage ? 0 : chapterpage * 9);
 
+		final int page = chapterpage + 1;
+		final int pages = (chapterend - chapterstart) / 9 + ((chapterend - chapterstart) % 9 > 0 ? 1 : 0);
 		if (!onePage)
 		{
-			final int page = chapterpage + 1;
-			final int pages = (chapterend - chapterstart) / 9 + ((chapterend - chapterstart) % 9 > 0 ? 1 : 0);
 			sender.sendMessage(_("infoChapterPages", pageStr, page, pages));
 		}
 		for (int i = start; i < chapterend && i < start + (onePage ? 20 : 9); i++)
 		{
 			sender.sendMessage(lines.get(i));
+		}
+		if (!onePage && page < pages)
+		{
+			sender.sendMessage(_("readNextPage", commandName, pageStr + " " + (page + 1)));
 		}
 	}
 }

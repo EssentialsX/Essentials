@@ -116,11 +116,11 @@ public class Commandspawnmob extends EssentialsCommand
 		}
 		if (mobData != null)
 		{
-			changeMobData(mob.name, spawnedMob, mobData, user);
+			changeMobData(mob.getType(), spawnedMob, mobData, user);
 		}
 		if (spawnedMount != null && mountData != null)
 		{
-			changeMobData(mobMount.name, spawnedMount, mountData, user);
+			changeMobData(mobMount.getType(), spawnedMount, mountData, user);
 		}
 		if (args.length == 2)
 		{
@@ -151,11 +151,11 @@ public class Commandspawnmob extends EssentialsCommand
 					}
 					if (mobData != null)
 					{
-						changeMobData(mob.name, spawnedMob, mobData, user);
+						changeMobData(mob.getType(), spawnedMob, mobData, user);
 					}
 					if (spawnedMount != null && mountData != null)
 					{
-						changeMobData(mobMount.name, spawnedMount, mountData, user);
+						changeMobData(mobMount.getType(), spawnedMount, mountData, user);
 					}
 				}
 				user.sendMessage(args[1] + " " + mob.name.toLowerCase(Locale.ENGLISH) + mob.suffix + " " + _("spawned"));
@@ -179,9 +179,9 @@ public class Commandspawnmob extends EssentialsCommand
 		}
 	}
 
-	private void changeMobData(String type, Entity spawned, String data, User user) throws Exception
+	private void changeMobData(CreatureType type, Entity spawned, String data, User user) throws Exception
 	{
-		if ("Slime".equalsIgnoreCase(type))
+		if (type == CreatureType.SLIME || type == CreatureType.MAGMA_CUBE)
 		{
 			try
 			{
@@ -192,17 +192,17 @@ public class Commandspawnmob extends EssentialsCommand
 				throw new Exception(_("slimeMalformedSize"), e);
 			}
 		}
-		if (("Sheep".equalsIgnoreCase(type)
-			 || "Cow".equalsIgnoreCase(type)
-			 || "Chicken".equalsIgnoreCase(type)
-			 || "Pig".equalsIgnoreCase(type)
-			 || "Wolf".equalsIgnoreCase(type))
+		if ((type == CreatureType.SHEEP
+			 || type == CreatureType.COW
+			 || type == CreatureType.CHICKEN
+			 || type == CreatureType.PIG
+			 || type == CreatureType.WOLF)
 			&& data.equalsIgnoreCase("baby"))
 		{
 			((Animals)spawned).setAge(-24000);
 			return;
 		}
-		if ("Sheep".equalsIgnoreCase(type))
+		if (type == CreatureType.SHEEP)
 		{
 			try
 			{
@@ -221,7 +221,7 @@ public class Commandspawnmob extends EssentialsCommand
 				throw new Exception(_("sheepMalformedColor"), e);
 			}
 		}
-		if ("Wolf".equalsIgnoreCase(type)
+		if (type == CreatureType.WOLF
 			&& data.toLowerCase(Locale.ENGLISH).startsWith("tamed"))
 		{
 			final Wolf wolf = ((Wolf)spawned);
@@ -233,7 +233,7 @@ public class Commandspawnmob extends EssentialsCommand
 				((Animals)spawned).setAge(-24000);
 			}
 		}
-		if ("Wolf".equalsIgnoreCase(type)
+		if (type == CreatureType.WOLF
 			&& data.toLowerCase(Locale.ENGLISH).startsWith("angry"))
 		{
 			((Wolf)spawned).setAngry(true);
@@ -242,7 +242,7 @@ public class Commandspawnmob extends EssentialsCommand
 				((Animals)spawned).setAge(-24000);
 			}
 		}
-		if ("Creeper".equalsIgnoreCase(type) && data.equalsIgnoreCase("powered"))
+		if (type == CreatureType.CREEPER && data.equalsIgnoreCase("powered"))
 		{
 			((Creeper)spawned).setPowered(true);
 		}
