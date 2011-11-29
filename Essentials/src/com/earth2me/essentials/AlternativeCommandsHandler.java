@@ -11,6 +11,7 @@ import org.bukkit.plugin.Plugin;
 public class AlternativeCommandsHandler
 {
 	private final transient Map<String, List<PluginCommand>> altcommands = new HashMap<String, List<PluginCommand>>();
+	private final transient Set<String> executed = new HashSet<String>();
 	private final transient IEssentials ess;
 	
 	public AlternativeCommandsHandler(final IEssentials ess)
@@ -100,7 +101,7 @@ public class AlternativeCommandsHandler
 		if (commands == null || commands.isEmpty())
 		{
 			return null;
-		}
+		}		
 		if (commands.size() == 1)
 		{
 			return commands.get(0);
@@ -114,4 +115,14 @@ public class AlternativeCommandsHandler
 		// return the first alias
 		return commands.get(0);
 	}
+	
+	public void executed(final String label) 
+	{
+      executed.add(label);
+	}	
+	
+	public List<String> disabledCommands()
+	{
+      return new ArrayList<String>(executed);
+	}	
 }

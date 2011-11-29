@@ -273,7 +273,8 @@ public class Essentials extends JavaPlugin implements IEssentials
 			final PluginCommand pc = alternativeCommandsHandler.getAlternative(commandLabel);
 			if (pc != null)
 			{
-				LOGGER.info("Essentials: Alternative command " + commandLabel + " found, using " + pc.getLabel());
+				alternativeCommandsHandler.executed(commandLabel);
+				LOGGER.log(Level.FINE,"Essentials: Alternative command " + commandLabel + " found, using " + pc.getLabel());
 				return pc.execute(sender, commandLabel, args);
 			}
 		}
