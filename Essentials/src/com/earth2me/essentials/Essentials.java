@@ -437,11 +437,13 @@ public class Essentials extends JavaPlugin implements IEssentials
 		{
 			return (User)base;
 		}
-		User user = userMap.getUser(base.getName()).update(base);
+		User user = userMap.getUser(base.getName());
 
 		if (user == null)
 		{
 			user = new User(base, this);
+		} else {
+			user.update(base);
 		}
 		return user;
 	}
