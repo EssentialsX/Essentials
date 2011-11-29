@@ -120,33 +120,6 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 		user.updateActivity(false);
 		user.dispose();
-		if (!ess.getSettings().getReclaimSetting())
-		{
-			return;
-		}
-		final Thread thread = new Thread(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				try
-				{
-					Thread.sleep(1000);
-					Runtime rt = Runtime.getRuntime();
-					double mem = rt.freeMemory();
-					rt.runFinalization();
-					rt.gc();
-					mem = rt.freeMemory() - mem;
-					mem /= 1024 * 1024;
-					LOGGER.log(Level.INFO, _("freedMemory", mem));
-				}
-				catch (InterruptedException ex)
-				{
-				}
-			}
-		});
-		thread.setPriority(Thread.MIN_PRIORITY);
-		thread.start();
 	}
 
 	@Override
