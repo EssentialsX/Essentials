@@ -273,7 +273,8 @@ public class Essentials extends JavaPlugin implements IEssentials
 			final PluginCommand pc = alternativeCommandsHandler.getAlternative(commandLabel);
 			if (pc != null)
 			{
-				LOGGER.info("Essentials: Alternative command " + commandLabel + " found, using " + pc.getLabel());
+				alternativeCommandsHandler.executed(commandLabel, pc.getLabel());
+				LOGGER.log(Level.FINE,"Essentials: Alternative command " + commandLabel + " found, using " + pc.getLabel());
 				return pc.execute(sender, commandLabel, args);
 			}
 		}
@@ -345,7 +346,8 @@ public class Essentials extends JavaPlugin implements IEssentials
 			{
 				sender.sendMessage(command.getDescription());
 				sender.sendMessage(command.getUsage().replaceAll("<command>", commandLabel));
-				if (!ex.getMessage().isEmpty()) {
+				if (!ex.getMessage().isEmpty())
+				{
 					sender.sendMessage(ex.getMessage());
 				}
 				return true;
@@ -420,14 +422,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 		if (base instanceof String)
 		{
-			try
-			{
-				return userMap.getUser((String)base);
-			}
-			catch (NullPointerException ex)
-			{
-				return null;
-			}
+			return userMap.getUser((String)base);
 		}
 		return null;
 	}
@@ -443,27 +438,21 @@ public class Essentials extends JavaPlugin implements IEssentials
 		{
 			return (User)base;
 		}
-		try
+		User user = userMap.getUser(base.getName());
+
+		if (user == null)
 		{
-			return userMap.getUser(base.getName()).update(base);
+			user = new User(base, this);
+		} else {
+			user.update(base);
 		}
-		catch (NullPointerException ex)
-		{
-			return new User(base, this);
-		}
+		return user;
 	}
 
 	@Override
 	public User getOfflineUser(final String name)
 	{
-		try
-		{
-			return userMap.getUser(name);
-		}
-		catch (NullPointerException ex)
-		{
-			return null;
-		}
+		return userMap.getUser(name);
 	}
 
 	@Override

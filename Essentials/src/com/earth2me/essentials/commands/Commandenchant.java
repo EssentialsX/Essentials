@@ -67,6 +67,8 @@ public class Commandenchant extends EssentialsCommand
 		super("enchant");
 	}
 
+	
+	//TODO: Implement charge costs: final Trade charge = new Trade("enchant-" + enchantmentName, ess);
 	@Override
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{

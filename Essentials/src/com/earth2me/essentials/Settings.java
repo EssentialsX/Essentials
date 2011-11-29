@@ -244,12 +244,6 @@ public class Settings implements ISettings
 	}
 
 	@Override
-	public boolean getReclaimSetting()
-	{
-		return config.getBoolean("reclaim-onlogout", false);
-	}
-
-	@Override
 	public int getSpawnMobLimit()
 	{
 		return config.getInt("spawnmob-limit", 10);

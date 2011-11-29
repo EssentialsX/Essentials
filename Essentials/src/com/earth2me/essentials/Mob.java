@@ -76,8 +76,7 @@ public enum Mob
 
 	public LivingEntity spawn(final Player player, final Server server, final Location loc) throws MobException
 	{
-
-		final LivingEntity entity = player.getWorld().spawnCreature(loc, this.bukkitType);
+		final LivingEntity entity = player.getWorld().spawn(loc, (Class<? extends LivingEntity>)this.bukkitType.getEntityClass());
 		if (entity == null)
 		{
 			logger.log(Level.WARNING, _("unableToSpawnMob"));

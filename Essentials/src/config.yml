@@ -68,11 +68,6 @@ item-spawn-blacklist:
 #  - essentials.give.item-[itemid]
 permission-based-item-spawn: false
 
-# Whether or not to reclaim memory on player logout; this is technical, and should only be changed under special circumstances.
-# This generally increases server stability unless very specific runtime configurations are used.
-# HOWEVER, it is known to cause lag upon users logging OUT, so beware!
-reclaim-onlogout: false
-
 # Mob limit on spawnmob
 spawnmob-limit: 10
 

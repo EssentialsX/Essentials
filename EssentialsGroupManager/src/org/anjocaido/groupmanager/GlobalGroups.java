@@ -294,7 +294,7 @@ public class GlobalGroups {
 	 */
 	public boolean hasPermission(String groupName, String permissionNode) {
 
-		if (!hasGroup(groupName.toLowerCase()))
+		if (!hasGroup(groupName))
 			return false;
 
 		return groups.get(groupName.toLowerCase()).hasSamePermissionNode(permissionNode);
@@ -315,7 +315,7 @@ public class GlobalGroups {
 		result.askedPermission = permissionNode;
 		result.resultType = PermissionCheckResult.Type.NOTFOUND;
 
-		if (!hasGroup(groupName.toLowerCase()))
+		if (!hasGroup(groupName))
 			return result;
 
 		Group tempGroup = groups.get(groupName.toLowerCase());
@@ -337,7 +337,7 @@ public class GlobalGroups {
 	 * @return List of all group names
 	 */
 	public List<String> getGroupsPermissions(String groupName) {
-		if (!hasGroup(groupName.toLowerCase()))
+		if (!hasGroup(groupName))
 			return null;
 
 		return groups.get(groupName.toLowerCase()).getPermissionList();
@@ -374,7 +374,7 @@ public class GlobalGroups {
 	 * @return Group object
 	 */
 	public Group getGroup(String groupName) {
-		if (!hasGroup(groupName.toLowerCase()))
+		if (!hasGroup(groupName))
 			return null;
 
 		return groups.get(groupName.toLowerCase());

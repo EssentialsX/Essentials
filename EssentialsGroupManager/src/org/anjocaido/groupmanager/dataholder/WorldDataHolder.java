@@ -195,7 +195,7 @@ public class WorldDataHolder {
      * @return a group if it is found. null if not found.
      */
     public Group getGroup(String groupName) {
-    	if (groupName.startsWith("g:"))
+    	if (groupName.toLowerCase().startsWith("g:"))
     		return GroupManager.getGlobalGroups().getGroup(groupName);
     	else
     		return groups.get(groupName.toLowerCase());
@@ -208,7 +208,7 @@ public class WorldDataHolder {
      * @return true if exists. false if not.
      */
     public boolean groupExists(String groupName) {
-    	if (groupName.startsWith("g:"))
+    	if (groupName.toLowerCase().startsWith("g:"))
     		return GroupManager.getGlobalGroups().hasGroup(groupName);
     	else
     		return groups.containsKey(groupName.toLowerCase());
@@ -219,7 +219,7 @@ public class WorldDataHolder {
      * @param groupToAdd
      */
     public void addGroup(Group groupToAdd) {
-    	if (groupToAdd.getName().startsWith("g:")) {
+    	if (groupToAdd.getName().toLowerCase().startsWith("g:")) {
     		GroupManager.getGlobalGroups().addGroup(groupToAdd);
         	return;
         }
@@ -238,7 +238,7 @@ public class WorldDataHolder {
      * @return true if had something to remove. false the group was default or non-existant
      */
     public boolean removeGroup(String groupName) {
-    	if (groupName.startsWith("g:")) {
+    	if (groupName.toLowerCase().startsWith("g:")) {
         	return GroupManager.getGlobalGroups().removeGroup(groupName);
         }
     	
@@ -278,7 +278,7 @@ public class WorldDataHolder {
      * @return null if group already exists. or new Group
      */
     public Group createGroup(String groupName) {
-    	if (groupName.startsWith("g:")) {
+    	if (groupName.toLowerCase().startsWith("g:")) {
         	Group newGroup = new Group(groupName);
         	return GroupManager.getGlobalGroups().newGroup(newGroup);
         }

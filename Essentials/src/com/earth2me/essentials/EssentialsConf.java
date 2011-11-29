@@ -232,21 +232,25 @@ public class EssentialsConf extends Configuration
 				Material.valueOf(getString(path + ".type", "AIR")),
 				getInt(path + ".amount", 1),
 				(short)getInt(path + ".damage", 0));
-		List<String> enchants = getKeys(path + ".enchant");
-		for (String enchant : enchants)
+		final List<String> enchants = getKeys(path + ".enchant");
+		if (enchants != null)
 		{
-			Enchantment enchantment = Enchantment.getByName(enchant.toUpperCase(Locale.ENGLISH));
-			if (enchantment == null) {
-				continue;
+			for (String enchant : enchants)
+			{
+				final Enchantment enchantment = Enchantment.getByName(enchant.toUpperCase(Locale.ENGLISH));
+				if (enchantment == null)
+				{
+					continue;
+				}
+				final int level = getInt(path + ".enchant." + enchant, enchantment.getStartLevel());
+				stack.addUnsafeEnchantment(enchantment, level);
 			}
-			int level = getInt(path+ ".enchant."+enchant, enchantment.getStartLevel());
-			stack.addUnsafeEnchantment(enchantment, level);
 		}
 		return stack;
 		/*
-				 * ,
-				 * (byte)getInt(path + ".data", 0)
-				 */
+		 * ,
+		 * (byte)getInt(path + ".data", 0)
+		 */
 	}
 
 	public void setProperty(final String path, final ItemStack stack)

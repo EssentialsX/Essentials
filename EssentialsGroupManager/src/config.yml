@@ -31,6 +31,7 @@ settings:
         # user/groups permissions as the parent.
         world:
           - world_nether
+          - world_the_end
           - world2
           - world3
       #  world4:

@@ -376,9 +376,9 @@ public class Util
 				buf.append(seperator);
 			}
 
-			if (each instanceof List)
+			if (each instanceof Collection)
 			{
-				buf.append(joinList(seperator, ((List)each).toArray()));
+				buf.append(joinList(seperator, ((Collection)each).toArray()));
 			}
 			else
 			{

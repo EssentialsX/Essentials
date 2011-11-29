@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.Util;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.Location;
@@ -23,12 +24,52 @@ public class Commandessentials extends EssentialsCommand
 	@Override
 	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
-		if (args.length > 0 && args[0].equalsIgnoreCase("debug"))
-		{
-			ess.getSettings().setDebug(!ess.getSettings().isDebug());
-			sender.sendMessage("Essentials " + ess.getDescription().getVersion() + " debug mode " + (ess.getSettings().isDebug() ? "enabled" : "disabled"));
-			return;
+		if (args.length == 0) {
+			run_disabled(server, sender, commandLabel, args);
 		}
+		else if (args[0].equalsIgnoreCase("debug"))
+		{
+			run_debug(server, sender, commandLabel, args);
+		}
+		else if (args[0].equalsIgnoreCase("nya"))
+		{
+			run_nya(server, sender, commandLabel, args);
+		}
+		else {
+			run_reload(server, sender, commandLabel, args);
+		}
+	}
+	
+	private void run_disabled(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	{
+		sender.sendMessage("Essentials " + ess.getDescription().getVersion());
+		sender.sendMessage("/<command> <reload/debug>");
+		sender.sendMessage("Essentials blocked the following commands, due to command conflicts:");
+		final StringBuilder disabledCommands = new StringBuilder();
+		for (Map.Entry<String, String> entry : ess.getAlternativeCommandsHandler().disabledCommands().entrySet())
+		{
+			if (disabledCommands.length() > 0) {
+				disabledCommands.append(", ");
+			}
+			disabledCommands.append(entry.getKey()).append(" => ").append(entry.getValue());
+		}
+		sender.sendMessage(disabledCommands.toString());
+	}
+	
+	private void run_debug(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	{
+		ess.getSettings().setDebug(!ess.getSettings().isDebug());
+		sender.sendMessage("Essentials " + ess.getDescription().getVersion() + " debug mode " + (ess.getSettings().isDebug() ? "enabled" : "disabled"));
+	}
+	
+	private void run_reload(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	{
+		ess.reload();
+		sender.sendMessage(_("essentialsReload", ess.getDescription().getVersion()));
+	}
+	
+	private void run_nya(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	{
 		final Map<String, Byte> noteMap = new HashMap<String, Byte>();
 		noteMap.put("1F#", (byte)0x0);
 		noteMap.put("1G", (byte)0x1);
@@ -54,8 +95,6 @@ public class Commandessentials extends EssentialsCommand
 		noteMap.put("2D#", (byte)(0x9 + 0xC));
 		noteMap.put("2E", (byte)(0xA + 0xC));
 		noteMap.put("2F", (byte)(0xB + 0xC));
-		if (args.length > 0 && args[0].equalsIgnoreCase("nya"))
-		{
 			if (!noteBlocks.isEmpty())
 			{
 				return;
@@ -106,9 +145,6 @@ public class Commandessentials extends EssentialsCommand
 				}
 			}, 20, 2);
 			return;
-		}
-		ess.reload();
-		sender.sendMessage(_("essentialsReload", ess.getDescription().getVersion()));
 	}
 
 	private void stopTune()

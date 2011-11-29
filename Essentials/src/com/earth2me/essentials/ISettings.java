@@ -59,8 +59,6 @@ public interface ISettings extends IConf
 
 	String getProtectString(final String configName);
 
-	boolean getReclaimSetting();
-
 	boolean getRespawnAtHome();
 
 	List getMultipleHomes();
