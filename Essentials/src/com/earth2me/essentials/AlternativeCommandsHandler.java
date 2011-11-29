@@ -121,8 +121,8 @@ public class AlternativeCommandsHandler
       executed.add(label);
 	}	
 	
-	public List<String> disabledCommands()
+	public Set<String> disabledCommands()
 	{
-      return new ArrayList<String>(executed);
+      return executed;
 	}	
 }
