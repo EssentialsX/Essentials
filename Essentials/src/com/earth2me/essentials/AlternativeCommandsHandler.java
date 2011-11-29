@@ -1,7 +1,6 @@
 package com.earth2me.essentials;
 
 import java.util.*;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.PluginCommandYamlParser;
@@ -11,20 +10,21 @@ import org.bukkit.plugin.Plugin;
 public class AlternativeCommandsHandler
 {
 	private final transient Map<String, List<PluginCommand>> altcommands = new HashMap<String, List<PluginCommand>>();
-	private final transient Set<String> executed = new HashSet<String>();
+	private final transient Map<String, String> executed = new HashMap<String, String>();
 	private final transient IEssentials ess;
-	
+
 	public AlternativeCommandsHandler(final IEssentials ess)
 	{
 		this.ess = ess;
 		for (Plugin plugin : ess.getServer().getPluginManager().getPlugins())
 		{
-			if (plugin.isEnabled()) {
+			if (plugin.isEnabled())
+			{
 				addPlugin(plugin);
 			}
 		}
 	}
-	
+
 	public final void addPlugin(final Plugin plugin)
 	{
 		if (plugin.getDescription().getMain().contains("com.earth2me.essentials"))
@@ -101,28 +101,30 @@ public class AlternativeCommandsHandler
 		if (commands == null || commands.isEmpty())
 		{
 			return null;
-		}		
+		}
 		if (commands.size() == 1)
 		{
 			return commands.get(0);
 		}
 		// return the first command that is not an alias
-		for (PluginCommand command : commands) {
-			if (command.getName().equalsIgnoreCase(label)) {
+		for (PluginCommand command : commands)
+		{
+			if (command.getName().equalsIgnoreCase(label))
+			{
 				return command;
 			}
 		}
 		// return the first alias
 		return commands.get(0);
 	}
-	
-	public void executed(final String label) 
+
+	public void executed(final String label, final String otherlabel)
 	{
-      executed.add(label);
-	}	
-	
-	public Set<String> disabledCommands()
+		executed.put(label, otherlabel);
+	}
+
+	public Map<String, String> disabledCommands()
 	{
-      return executed;
-	}	
+		return executed;
+	}
 }

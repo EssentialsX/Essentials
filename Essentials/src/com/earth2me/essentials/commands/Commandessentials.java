@@ -45,7 +45,15 @@ public class Commandessentials extends EssentialsCommand
 		sender.sendMessage("Essentials " + ess.getDescription().getVersion());
 		sender.sendMessage("/<command> <reload/debug>");
 		sender.sendMessage("Essentials blocked the following commands, due to command conflicts:");
-		sender.sendMessage(Util.joinList(ess.getAlternativeCommandsHandler().disabledCommands()));
+		final StringBuilder disabledCommands = new StringBuilder();
+		for (Map.Entry<String, String> entry : ess.getAlternativeCommandsHandler().disabledCommands().entrySet())
+		{
+			if (disabledCommands.length() > 0) {
+				disabledCommands.append(", ");
+			}
+			disabledCommands.append(entry.getKey()).append(" => ").append(entry.getValue());
+		}
+		sender.sendMessage(disabledCommands.toString());
 	}
 	
 	private void run_debug(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
