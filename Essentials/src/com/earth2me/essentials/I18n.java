@@ -69,6 +69,9 @@ public class I18n
 
 	public static String _(final String string, final Object... objects)
 	{
+		if (instance == null) {
+			return "";
+		}
 		if (objects.length == 0)
 		{
 			return instance.translate(string);
