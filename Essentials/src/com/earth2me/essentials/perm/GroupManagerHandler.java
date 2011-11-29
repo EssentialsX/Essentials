@@ -21,6 +21,10 @@ public class GroupManagerHandler implements IPermissionsHandler
 	public String getGroup(final Player base)
 	{
 		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(base);
+		if (handler == null)
+		{
+			return null;
+		}
 		return handler.getGroup(base.getName());
 	}
 
@@ -28,6 +32,10 @@ public class GroupManagerHandler implements IPermissionsHandler
 	public List<String> getGroups(final Player base)
 	{
 		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(base);
+		if (handler == null)
+		{
+			return null;
+		}
 		return Arrays.asList(handler.getGroups(base.getName()));
 	}
 
@@ -35,6 +43,10 @@ public class GroupManagerHandler implements IPermissionsHandler
 	public boolean canBuild(final Player base, final String group)
 	{
 		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(base);
+		if (handler == null)
+		{
+			return false;
+		}
 		return handler.canUserBuild(base.getName());
 	}
 
@@ -42,6 +54,10 @@ public class GroupManagerHandler implements IPermissionsHandler
 	public boolean inGroup(final Player base, final String group)
 	{
 		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(base);
+		if (handler == null)
+		{
+			return false;
+		}
 		return handler.inGroup(base.getName(), group);
 	}
 
@@ -49,6 +65,10 @@ public class GroupManagerHandler implements IPermissionsHandler
 	public boolean hasPermission(final Player base, final String node)
 	{
 		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(base);
+		if (handler == null)
+		{
+			return false;
+		}
 		return handler.has(base, node);
 	}
 
@@ -56,6 +76,10 @@ public class GroupManagerHandler implements IPermissionsHandler
 	public String getPrefix(final Player base)
 	{
 		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(base);
+		if (handler == null)
+		{
+			return null;
+		}
 		return handler.getUserPrefix(base.getName());
 	}
 
@@ -63,6 +87,10 @@ public class GroupManagerHandler implements IPermissionsHandler
 	public String getSuffix(final Player base)
 	{
 		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(base);
+		if (handler == null)
+		{
+			return null;
+		}
 		return handler.getUserSuffix(base.getName());
 	}
 }
