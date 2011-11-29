@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.User;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Util;
+import java.text.DateFormat;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -16,7 +17,7 @@ public class Commandbalancetop extends EssentialsCommand
 	{
 		super("balancetop");
 	}
-	private static final int CACHETIME = 5 * 60 * 1000;
+	private static final int CACHETIME = 2 * 60 * 1000;
 	public static final int MINUSERS = 50;
 	private static List<String> cache = new ArrayList<String>();
 	private static long cacheage = 0;
@@ -26,6 +27,7 @@ public class Commandbalancetop extends EssentialsCommand
 	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		int max = 10;
+		boolean force = false;
 		if (args.length > 0)
 		{
 			try
@@ -37,11 +39,13 @@ public class Commandbalancetop extends EssentialsCommand
 			}
 			catch (NumberFormatException ex)
 			{
-				//catch it because they tried to enter a string not number.
+				if (args[0].equalsIgnoreCase("force") && sender.isOp()) {
+					force = true;
+				}
 			}
 		}
 
-		if (lock.readLock().tryLock())
+		if (!force && lock.readLock().tryLock())
 		{
 			try
 			{
@@ -59,7 +63,7 @@ public class Commandbalancetop extends EssentialsCommand
 			{
 				lock.readLock().unlock();
 			}
-			ess.scheduleAsyncDelayedTask(new Viewer(sender, max));
+			ess.scheduleAsyncDelayedTask(new Viewer(sender, max, force));
 		}
 		else
 		{
@@ -67,14 +71,17 @@ public class Commandbalancetop extends EssentialsCommand
 			{
 				sender.sendMessage(_("orderBalances", ess.getUserMap().getUniqueUsers()));
 			}
-			ess.scheduleAsyncDelayedTask(new Viewer(sender, max));
+			ess.scheduleAsyncDelayedTask(new Viewer(sender, max, force));
 		}
 
 	}
 
 	private static void outputCache(final CommandSender sender, int max)
 	{
-		sender.sendMessage(_("balanceTop", max));
+		final Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(cacheage);
+		final DateFormat format = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+		sender.sendMessage(_("balanceTop", max, format.format(cal.getTime())));
 		for (String line : cache)
 		{
 			if (max == 0)
@@ -90,10 +97,12 @@ public class Commandbalancetop extends EssentialsCommand
 	private class Calculator implements Runnable
 	{
 		private final transient Viewer viewer;
+		private final boolean force;
 
-		public Calculator(final Viewer viewer)
+		public Calculator(final Viewer viewer, final boolean force)
 		{
 			this.viewer = viewer;
+			this.force = force;
 		}
 
 		@Override
@@ -102,8 +111,9 @@ public class Commandbalancetop extends EssentialsCommand
 			lock.writeLock().lock();
 			try
 			{
-				if (cacheage < System.currentTimeMillis() - 5 * 60 * 1000)
+				if (force || cacheage <= System.currentTimeMillis() - CACHETIME)
 				{
+					cache.clear();
 					final Map<String, Double> balances = new HashMap<String, Double>();
 					for (String u : ess.getUserMap().getAllUniqueUsers())
 					{
@@ -149,11 +159,13 @@ public class Commandbalancetop extends EssentialsCommand
 	{
 		private final transient CommandSender sender;
 		private final transient int max;
+		private final transient boolean force;
 
-		public Viewer(final CommandSender sender, final int max)
+		public Viewer(final CommandSender sender, final int max, final boolean force)
 		{
 			this.sender = sender;
 			this.max = max;
+			this.force = force;
 		}
 
 		@Override
@@ -162,7 +174,7 @@ public class Commandbalancetop extends EssentialsCommand
 			lock.readLock().lock();
 			try
 			{
-				if (cacheage > System.currentTimeMillis() - 5 * 60 * 1000)
+				if (!force && cacheage > System.currentTimeMillis() - CACHETIME)
 				{
 					outputCache(sender, max);
 					return;
@@ -172,7 +184,7 @@ public class Commandbalancetop extends EssentialsCommand
 			{
 				lock.readLock().unlock();
 			}
-			ess.scheduleAsyncDelayedTask(new Calculator(new Viewer(sender, max)));
+			ess.scheduleAsyncDelayedTask(new Calculator(new Viewer(sender, max, force), force));
 		}
 	}
 }
