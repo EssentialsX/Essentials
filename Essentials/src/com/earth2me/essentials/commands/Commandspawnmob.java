@@ -194,6 +194,7 @@ public class Commandspawnmob extends EssentialsCommand
 		}
 		if ((type == CreatureType.SHEEP
 			 || type == CreatureType.COW
+			 || type == CreatureType.MUSHROOM_COW
 			 || type == CreatureType.CHICKEN
 			 || type == CreatureType.PIG
 			 || type == CreatureType.WOLF)
