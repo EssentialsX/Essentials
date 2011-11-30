@@ -205,16 +205,21 @@ public class Commandspawnmob extends EssentialsCommand
 		}
 		if (type == CreatureType.SHEEP)
 		{
+			if (data.toLowerCase(Locale.ENGLISH).contains("baby")) {				
+				((Sheep)spawned).setAge(-24000);
+			}
+			final String color = data.toUpperCase(Locale.ENGLISH).replace("BABY", "");
 			try
-			{
-				if (data.equalsIgnoreCase("random"))
+			{			
+				
+				if (color.equalsIgnoreCase("random"))
 				{
 					Random rand = new Random();
 					((Sheep)spawned).setColor(DyeColor.values()[rand.nextInt(DyeColor.values().length)]);
 				}
 				else
 				{
-					((Sheep)spawned).setColor(DyeColor.valueOf(data.toUpperCase(Locale.ENGLISH)));
+					((Sheep)spawned).setColor(DyeColor.valueOf(color));
 				}
 			}
 			catch (Exception e)
