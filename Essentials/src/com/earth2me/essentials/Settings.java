@@ -35,6 +35,12 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("respawn-at-home", false);
 	}
+	
+	@Override
+	public boolean getUpdateBedAtDaytime()
+	{
+		return config.getBoolean("update-bed-at-daytime", true);
+	}
 
 	@Override
 	public List<String> getMultipleHomes()

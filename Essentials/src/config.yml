@@ -239,6 +239,9 @@ respawn-at-home: false
 # If no home is set send you to bed or spawn when /home is used
 spawn-if-no-home: true
 
+# Allows people to set their bed at daytime
+update-bed-at-daytime: true
+
 # Allow players to have multiple homes.
 # Define different amounts of multiple homes for different permissions, e.g. essentials.sethome.multiple.vip
 # People with essentials.sethome.multiple.unlimited are not limited by these numbers.

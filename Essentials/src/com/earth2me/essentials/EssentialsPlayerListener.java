@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.craftbukkit.EnchantmentFix;
+import com.earth2me.essentials.craftbukkit.SetBed;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
@@ -17,6 +18,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
@@ -352,6 +354,24 @@ public class EssentialsPlayerListener extends PlayerListener
 			{
 				user.sendMessage(_("noGodWorldWarning"));
 			}
+		}
+	}
+
+	@Override
+	public void onPlayerInteract(final PlayerInteractEvent event)
+	{
+		if (event.isCancelled())
+		{
+			return;
+		}
+		if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
+		{
+			return;
+		}
+
+		if (ess.getSettings().getUpdateBedAtDaytime() && event.getClickedBlock().getType() == Material.BED_BLOCK)
+		{
+			SetBed.setBed(event.getPlayer(), event.getClickedBlock());
 		}
 	}
 }

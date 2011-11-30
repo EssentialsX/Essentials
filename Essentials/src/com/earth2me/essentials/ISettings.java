@@ -136,4 +136,6 @@ public interface ISettings extends IConf
 	public void setDebug(boolean debug);
 
 	Set<String> getNoGodWorlds();
+	
+	boolean getUpdateBedAtDaytime();
 }
