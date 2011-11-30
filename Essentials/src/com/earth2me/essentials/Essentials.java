@@ -182,14 +182,13 @@ public class Essentials extends JavaPlugin implements IEssentials
 				LOGGER.log(Level.SEVERE, _("essentialsHelp1"));
 			}
 			LOGGER.log(Level.SEVERE, exception.toString());
-			pm.registerEvent(Type.PLAYER_JOIN, new PlayerListener() {
-
+			pm.registerEvent(Type.PLAYER_JOIN, new PlayerListener()
+			{
 				@Override
 				public void onPlayerJoin(PlayerJoinEvent event)
 				{
 					event.getPlayer().sendMessage("Essentials failed to load, read the log file.");
 				}
-				
 			}, Priority.Low, this);
 			for (Player player : getServer().getOnlinePlayers())
 			{
