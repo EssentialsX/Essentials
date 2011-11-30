@@ -21,15 +21,18 @@ public class EssentialsSpawn extends JavaPlugin
 	{
 		final PluginManager pluginManager = getServer().getPluginManager();
 		ess = (IEssentials)pluginManager.getPlugin("Essentials");
-		final EssentialsSpawnPlayerListener playerListener = new EssentialsSpawnPlayerListener(ess);
-		pluginManager.registerEvent(Type.PLAYER_RESPAWN, playerListener, Priority.Low, this);
-		pluginManager.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Low, this);
-
-
 		if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion()))
 		{
 			LOGGER.log(Level.WARNING, _("versionMismatchAll"));
 		}
+		if (!ess.isEnabled()) {
+			this.setEnabled(false);
+			return;
+		}
+		final EssentialsSpawnPlayerListener playerListener = new EssentialsSpawnPlayerListener(ess);
+		pluginManager.registerEvent(Type.PLAYER_RESPAWN, playerListener, Priority.Low, this);
+		pluginManager.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Low, this);
+
 		LOGGER.info(_("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
 	}
 

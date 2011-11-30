@@ -51,6 +51,14 @@ public class EssentialsProtect extends JavaPlugin implements IConf, IProtect
 	{
 		final PluginManager pm = this.getServer().getPluginManager();
 		ess = (IEssentials)pm.getPlugin("Essentials");
+		if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion()))
+		{
+			LOGGER.log(Level.WARNING, _("versionMismatchAll"));
+		}
+		if (!ess.isEnabled()) {
+			enableEmergencyMode(pm);
+			return;
+		}
 
 		final EssentialsProtectPlayerListener playerListener = new EssentialsProtectPlayerListener(this);
 		pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Priority.Low, this);
@@ -79,11 +87,26 @@ public class EssentialsProtect extends JavaPlugin implements IConf, IProtect
 
 		reloadConfig();
 		ess.addReloadListener(this);
-		if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion()))
-		{
-			LOGGER.log(Level.WARNING, _("versionMismatchAll"));
-		}
 		LOGGER.info(_("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
+	}
+
+	private void enableEmergencyMode(final PluginManager pm)
+	{
+		final EmergencyBlockListener emBlockListener = new EmergencyBlockListener();
+		final EmergencyEntityListener emEntityListener = new EmergencyEntityListener();
+		final EmergencyPlayerListener emPlayerListener = new EmergencyPlayerListener();
+		pm.registerEvent(Type.PLAYER_JOIN, emPlayerListener, Priority.Low, this);
+		pm.registerEvent(Type.BLOCK_BURN, emBlockListener, Priority.Low, this);
+		pm.registerEvent(Type.BLOCK_IGNITE, emBlockListener, Priority.Low, this);
+		pm.registerEvent(Type.BLOCK_FROMTO, emBlockListener, Priority.Low, this);
+		pm.registerEvent(Type.BLOCK_BREAK, emBlockListener, Priority.Low, this);
+		pm.registerEvent(Type.ENTITY_DAMAGE, emEntityListener, Priority.Low, this);
+		pm.registerEvent(Type.ENTITY_EXPLODE, emEntityListener, Priority.Low, this);
+		for (Player player : getServer().getOnlinePlayers())
+		{
+			player.sendMessage("Essentials Protect is in emergency mode. Check your log for errors.");
+		}
+		LOGGER.log(Level.SEVERE, "Essentials not installed or failed to load. Essenials Protect is in emergency mode now.");
 	}
 
 	@Override

@@ -47,17 +47,21 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerListener;
 import org.bukkit.plugin.InvalidDescriptionException;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.error.YAMLException;
 
 
 public class Essentials extends JavaPlugin implements IEssentials
 {
-	public static final int BUKKIT_VERSION = 1522;
+	public static final int BUKKIT_VERSION = 1526;
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private transient ISettings settings;
 	private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
@@ -112,32 +116,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 		i18n = new I18n(this);
 		i18n.onEnable();
 		execTimer.mark("I18n1");
-		final EssentialsUpgrade upgrade = new EssentialsUpgrade(this);
-		upgrade.beforeSettings();
-		execTimer.mark("Upgrade");
-		confList = new ArrayList<IConf>();
-		settings = new Settings(this);
-		confList.add(settings);
-		execTimer.mark("Settings");
-		upgrade.afterSettings();
-		execTimer.mark("Upgrade2");
-		i18n.updateLocale(settings.getLocale());
-		userMap = new UserMap(this);
-		confList.add(userMap);
-		execTimer.mark("Init(Usermap)");
-		spawn = new Spawn(getServer(), this.getDataFolder());
-		confList.add(spawn);
-		warps = new Warps(getServer(), this.getDataFolder());
-		confList.add(warps);
-		execTimer.mark("Init(Spawn/Warp)");
-		worth = new Worth(this.getDataFolder());
-		confList.add(worth);
-		itemDb = new ItemDb(this);
-		confList.add(itemDb);
-		execTimer.mark("Init(Worth/ItemDB)");
-		reload();
-		backup = new Backup(this);
-
 		final PluginManager pm = getServer().getPluginManager();
 		for (Plugin plugin : pm.getPlugins())
 		{
@@ -153,7 +131,10 @@ public class Essentials extends JavaPlugin implements IEssentials
 			final int versionNumber = Integer.parseInt(versionMatch.group(4));
 			if (versionNumber < BUKKIT_VERSION)
 			{
-				LOGGER.log(Level.WARNING, _("notRecommendedBukkit"));
+				LOGGER.log(Level.SEVERE, _("notRecommendedBukkit"));
+				LOGGER.log(Level.SEVERE, _("requiredBukkit", Integer.toString(BUKKIT_VERSION)));
+				this.setEnabled(false);
+				return;
 			}
 		}
 		else
@@ -162,7 +143,62 @@ public class Essentials extends JavaPlugin implements IEssentials
 			LOGGER.log(Level.INFO, getServer().getVersion());
 			LOGGER.log(Level.INFO, getServer().getBukkitVersion());
 		}
+		execTimer.mark("BukkitCheck");
+		try
+		{
+			final EssentialsUpgrade upgrade = new EssentialsUpgrade(this);
+			upgrade.beforeSettings();
+			execTimer.mark("Upgrade");
+			confList = new ArrayList<IConf>();
+			settings = new Settings(this);
+			confList.add(settings);
+			execTimer.mark("Settings");
+			upgrade.afterSettings();
+			execTimer.mark("Upgrade2");
+			i18n.updateLocale(settings.getLocale());
+			userMap = new UserMap(this);
+			confList.add(userMap);
+			execTimer.mark("Init(Usermap)");
+			spawn = new Spawn(getServer(), this.getDataFolder());
+			confList.add(spawn);
+			warps = new Warps(getServer(), this.getDataFolder());
+			confList.add(warps);
+			execTimer.mark("Init(Spawn/Warp)");
+			worth = new Worth(this.getDataFolder());
+			confList.add(worth);
+			itemDb = new ItemDb(this);
+			confList.add(itemDb);
+			execTimer.mark("Init(Worth/ItemDB)");
+			reload();
+		}
+		catch (YAMLException exception)
+		{
+			if (pm.getPlugin("EssentialsUpdate") != null)
+			{
+				LOGGER.log(Level.SEVERE, _("essentialsHelp2"));
+			}
+			else
+			{
+				LOGGER.log(Level.SEVERE, _("essentialsHelp1"));
+			}
+			LOGGER.log(Level.SEVERE, exception.toString());
+			pm.registerEvent(Type.PLAYER_JOIN, new PlayerListener() {
 
+				@Override
+				public void onPlayerJoin(PlayerJoinEvent event)
+				{
+					event.getPlayer().sendMessage("Essentials failed to load, read the log file.");
+				}
+				
+			}, Priority.Low, this);
+			for (Player player : getServer().getOnlinePlayers())
+			{
+				player.sendMessage("Essentials failed to load, read the log file.");
+			}
+			this.setEnabled(false);
+			return;
+		}
+		backup = new Backup(this);
 		permissionsHandler = new PermissionsHandler(this, settings.useBukkitPermissions());
 		alternativeCommandsHandler = new AlternativeCommandsHandler(this);
 		final EssentialsPluginListener serverListener = new EssentialsPluginListener(this);
@@ -275,7 +311,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 			if (pc != null)
 			{
 				alternativeCommandsHandler.executed(commandLabel, pc.getLabel());
-				LOGGER.log(Level.FINE,"Essentials: Alternative command " + commandLabel + " found, using " + pc.getLabel());
+				LOGGER.log(Level.FINE, "Essentials: Alternative command " + commandLabel + " found, using " + pc.getLabel());
 				return pc.execute(sender, commandLabel, args);
 			}
 		}
@@ -444,7 +480,9 @@ public class Essentials extends JavaPlugin implements IEssentials
 		if (user == null)
 		{
 			user = new User(base, this);
-		} else {
+		}
+		else
+		{
 			user.update(base);
 		}
 		return user;
