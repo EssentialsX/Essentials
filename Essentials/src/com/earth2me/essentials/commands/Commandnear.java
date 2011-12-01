@@ -49,13 +49,13 @@ public class Commandnear extends EssentialsCommand
 				if (playerLoc.getWorld() != world) { continue; }
 				
 				final double delta = playerLoc.distanceSquared(loc);				
-				if (delta > radius)
+				if (delta < radius)
 				{
 					if (output.length() > 0)
 					{
 						output.append(", ");
 					}
-					output.append(user.getDisplayName()).append("&f(&4").append(delta).append("m&f)");
+					output.append(player.getDisplayName()).append("&f(&4").append(delta).append("m&f)");
 				}
 			}
 		}
