@@ -14,14 +14,14 @@ public class Commandsetwarp extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
 
-		Location loc = user.getLocation();
+		final Location loc = user.getLocation();
 		ess.getWarps().setWarp(args[0], loc);
 		user.sendMessage(_("warpSet", args[0]));
 	}

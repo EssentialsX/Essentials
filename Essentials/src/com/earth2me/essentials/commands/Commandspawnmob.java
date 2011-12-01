@@ -22,7 +22,7 @@ public class Commandspawnmob extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -30,7 +30,7 @@ public class Commandspawnmob extends EssentialsCommand
 		}
 
 
-		String[] mountparts = args[0].split(",");
+		final String[] mountparts = args[0].split(",");
 		String[] parts = mountparts[0].split(":");
 		String mobType = parts[0];
 		String mobData = null;
@@ -76,8 +76,8 @@ public class Commandspawnmob extends EssentialsCommand
 		{
 			throw new Exception(_("unableToSpawnMob"));
 		}
-		Location loc = block.getLocation();
-		Location sloc = Util.getSafeDestination(loc);
+		final Location loc = block.getLocation();
+		final Location sloc = Util.getSafeDestination(loc);
 		try
 		{
 			spawnedMob = mob.spawn(user, server, sloc);
@@ -179,7 +179,7 @@ public class Commandspawnmob extends EssentialsCommand
 		}
 	}
 
-	private void changeMobData(CreatureType type, Entity spawned, String data, User user) throws Exception
+	private void changeMobData(final CreatureType type, final Entity spawned, final String data, final User user) throws Exception
 	{
 		if (type == CreatureType.SLIME || type == CreatureType.MAGMA_CUBE)
 		{

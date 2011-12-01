@@ -17,18 +17,18 @@ public class Commandr extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
 
-		String message = getFinalArg(args, 0);
-		IReplyTo replyTo = sender instanceof Player ? ess.getUser((Player)sender) : Console.getConsoleReplyTo();
-		String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
-		CommandSender target = replyTo.getReplyTo();
-		String targetName = target instanceof Player ? ((Player)target).getDisplayName() : Console.NAME;
+		final String message = getFinalArg(args, 0);
+		final IReplyTo replyTo = sender instanceof Player ? ess.getUser((Player)sender) : Console.getConsoleReplyTo();
+		final String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
+		final CommandSender target = replyTo.getReplyTo();
+		final String targetName = target instanceof Player ? ((Player)target).getDisplayName() : Console.NAME;
 
 		if (target == null)
 		{
@@ -38,8 +38,8 @@ public class Commandr extends EssentialsCommand
 		sender.sendMessage(_("msgFormat", _("me"), targetName, message));
 		if (target instanceof Player)
 		{
-			User u = ess.getUser(target);
-			if (u.isIgnoredPlayer(sender instanceof Player ? ((Player)sender).getName() : Console.NAME))
+			User player = ess.getUser(target);
+			if (player.isIgnoredPlayer(sender instanceof Player ? ((Player)sender).getName() : Console.NAME))
 			{
 				return;
 			}

@@ -22,6 +22,7 @@ public class YamlStorageReader implements IStorageReader
 		this.reader = reader;
 	}
 
+	@Override
 	public <T extends StorageObject> T load(final Class<? extends T> clazz)
 	{
 		Yaml yaml = preparedYamls.get(clazz);
