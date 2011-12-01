@@ -1,2 +1,1 @@
 Manifest-Version: 1.0
-Class-Path: ../lib/mysql.jar ../lib/sqlite.jar
