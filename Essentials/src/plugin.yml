@@ -198,6 +198,10 @@ commands:
     description: Mutes or unmutes a player.
     usage: /<command> <player> [datediff]
     aliases: [emute]
+  near:
+    description: Lists the players near by.
+    usage: /<command> [radius]
+    aliases: [nearby,enear,enearby]
   nick:
     description: Change your nickname or that of another player.
     usage: /<command> [player] <nickname|off>

@@ -1,6 +1,5 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.craftbukkit.EnchantmentFix;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.Location;
@@ -152,27 +151,13 @@ public final class InventoryWorkaround
 						{
 							final ItemStack stack = item.clone();
 							stack.setAmount(maxAmount);
-							if (cinventory instanceof FakeInventory)
-							{
-								cinventory.setItem(firstFree, stack);
-							}
-							else
-							{
-								EnchantmentFix.setItem(cinventory, firstFree, stack);
-							}
+							cinventory.setItem(firstFree, stack);
 							item.setAmount(item.getAmount() - maxAmount);
 						}
 						else
 						{
 							// Just store it
-							if (cinventory instanceof FakeInventory)
-							{
-								cinventory.setItem(firstFree, item);
-							}
-							else
-							{
-								EnchantmentFix.setItem(cinventory, firstFree, item);
-							}
+							cinventory.setItem(firstFree, item);
 							break;
 						}
 					}
@@ -251,7 +236,7 @@ public final class InventoryWorkaround
 					{
 						// split the stack and store
 						itemStack.setAmount(amount - toDelete);
-						EnchantmentFix.setItem(cinventory, first, itemStack);
+						cinventory.setItem(first, itemStack);
 						toDelete = 0;
 					}
 				}

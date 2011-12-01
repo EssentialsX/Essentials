@@ -1,14 +1,6 @@
 package com.earth2me.essentials.protect;
 
-import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.IConf;
-import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.User;
 import com.earth2me.essentials.protect.data.IProtectedBlock;
-import com.earth2me.essentials.protect.data.ProtectedBlockMemory;
-import com.earth2me.essentials.protect.data.ProtectedBlockMySQL;
-import com.earth2me.essentials.protect.data.ProtectedBlockSQLite;
-import java.beans.PropertyVetoException;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -16,15 +8,15 @@ import java.util.logging.Filter;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
-public class EssentialsProtect extends JavaPlugin implements IConf, IProtect
+public class EssentialsProtect extends JavaPlugin implements IProtect
 {
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private static com.mchange.v2.log.MLogger C3P0logger;
@@ -32,7 +24,7 @@ public class EssentialsProtect extends JavaPlugin implements IConf, IProtect
 	private final transient Map<ProtectConfig, String> settingsString = new EnumMap<ProtectConfig, String>(ProtectConfig.class);
 	private final transient Map<ProtectConfig, List<Integer>> settingsList = new EnumMap<ProtectConfig, List<Integer>>(ProtectConfig.class);
 	private transient IProtectedBlock storage = null;
-	public transient IEssentials ess = null;
+	private transient EssentialsConnect ess = null;
 
 	@Override
 	public void onLoad()
@@ -50,7 +42,13 @@ public class EssentialsProtect extends JavaPlugin implements IConf, IProtect
 	public void onEnable()
 	{
 		final PluginManager pm = this.getServer().getPluginManager();
-		ess = (IEssentials)pm.getPlugin("Essentials");
+		final Plugin essPlugin = pm.getPlugin("Essentials");
+		if (essPlugin == null || !essPlugin.isEnabled())
+		{
+			enableEmergencyMode(pm);
+			return;
+		}
+		ess = new EssentialsConnect(essPlugin, this);
 
 		final EssentialsProtectPlayerListener playerListener = new EssentialsProtectPlayerListener(this);
 		pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Priority.Low, this);
@@ -76,14 +74,25 @@ public class EssentialsProtect extends JavaPlugin implements IConf, IProtect
 		pm.registerEvent(Type.LIGHTNING_STRIKE, weatherListener, Priority.Highest, this);
 		pm.registerEvent(Type.THUNDER_CHANGE, weatherListener, Priority.Highest, this);
 		pm.registerEvent(Type.WEATHER_CHANGE, weatherListener, Priority.Highest, this);
+	}
 
-		reloadConfig();
-		ess.addReloadListener(this);
-		if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion()))
+	private void enableEmergencyMode(final PluginManager pm)
+	{
+		final EmergencyBlockListener emBlockListener = new EmergencyBlockListener();
+		final EmergencyEntityListener emEntityListener = new EmergencyEntityListener();
+		final EmergencyPlayerListener emPlayerListener = new EmergencyPlayerListener();
+		pm.registerEvent(Type.PLAYER_JOIN, emPlayerListener, Priority.Low, this);
+		pm.registerEvent(Type.BLOCK_BURN, emBlockListener, Priority.Low, this);
+		pm.registerEvent(Type.BLOCK_IGNITE, emBlockListener, Priority.Low, this);
+		pm.registerEvent(Type.BLOCK_FROMTO, emBlockListener, Priority.Low, this);
+		pm.registerEvent(Type.BLOCK_BREAK, emBlockListener, Priority.Low, this);
+		pm.registerEvent(Type.ENTITY_DAMAGE, emEntityListener, Priority.Low, this);
+		pm.registerEvent(Type.ENTITY_EXPLODE, emEntityListener, Priority.Low, this);
+		for (Player player : getServer().getOnlinePlayers())
 		{
-			LOGGER.log(Level.WARNING, _("versionMismatchAll"));
+			player.sendMessage("Essentials Protect is in emergency mode. Check your log for errors.");
 		}
-		LOGGER.info(_("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
+		LOGGER.log(Level.SEVERE, "Essentials not installed or failed to load. Essenials Protect is in emergency mode now.");
 	}
 
 	@Override
@@ -94,81 +103,35 @@ public class EssentialsProtect extends JavaPlugin implements IConf, IProtect
 	}
 
 	@Override
-	public void alert(final User user, final String item, final String type)
-	{
-		final Location loc = user.getLocation();
-		final String warnMessage = _("alertFormat", user.getName(), type, item,
-									 loc.getWorld().getName() + "," + loc.getBlockX() + ","
-									 + loc.getBlockY() + "," + loc.getBlockZ());
-		LOGGER.log(Level.WARNING, warnMessage);
-		for (Player p : this.getServer().getOnlinePlayers())
-		{
-			final User alertUser = ess.getUser(p);
-			if (alertUser.isAuthorized("essentials.protect.alerts"))
-			{
-				alertUser.sendMessage(warnMessage);
-			}
-		}
-	}
-
-	public void reloadConfig()
-	{
-		if (storage != null)
-		{
-			storage.onPluginDeactivation();
-		}
-		for (ProtectConfig protectConfig : ProtectConfig.values())
-		{
-			if (protectConfig.isList())
-			{
-				settingsList.put(protectConfig, ess.getSettings().getProtectList(protectConfig.getConfigName()));
-			}
-			else if (protectConfig.isString())
-			{
-				settingsString.put(protectConfig, ess.getSettings().getProtectString(protectConfig.getConfigName()));
-			}
-			else
-			{
-				settingsBoolean.put(protectConfig, ess.getSettings().getProtectBoolean(protectConfig.getConfigName(), protectConfig.getDefaultValueBoolean()));
-			}
-
-		}
-
-		if (getSettingString(ProtectConfig.datatype).equalsIgnoreCase("mysql"))
-		{
-			try
-			{
-				storage = new ProtectedBlockMySQL(
-						getSettingString(ProtectConfig.mysqlDB),
-						getSettingString(ProtectConfig.dbUsername),
-						getSettingString(ProtectConfig.dbPassword));
-			}
-			catch (PropertyVetoException ex)
-			{
-				LOGGER.log(Level.SEVERE, null, ex);
-			}
-		}
-		else
-		{
-			try
-			{
-				storage = new ProtectedBlockSQLite("jdbc:sqlite:plugins/Essentials/EssentialsProtect.db");
-			}
-			catch (PropertyVetoException ex)
-			{
-				LOGGER.log(Level.SEVERE, null, ex);
-			}
-		}
-		if (getSettingBool(ProtectConfig.memstore))
-		{
-			storage = new ProtectedBlockMemory(storage, this);
-		}
-	}
-
-	@Override
 	public IProtectedBlock getStorage()
 	{
 		return storage;
+	}
+
+	@Override
+	public void setStorage(IProtectedBlock pb)
+	{
+		storage = pb;
+	}
+
+	public EssentialsConnect getEssentialsConnect()
+	{
+		return ess;
+	}
+	
+	public Map<ProtectConfig, Boolean> getSettingsBoolean()
+	{
+		return settingsBoolean;
+	}
+
+	public Map<ProtectConfig, String> getSettingsString()
+	{
+		return settingsString;
+	}
+
+	public Map<ProtectConfig, List<Integer>> getSettingsList()
+	{
+		return settingsList;
 	}
 
 	@Override
@@ -199,10 +162,5 @@ public class EssentialsProtect extends JavaPlugin implements IConf, IProtect
 		catch (InterruptedException ex)
 		{
 		}
-	}
-
-	public IEssentials getEssentials()
-	{
-		return ess;
 	}
 }

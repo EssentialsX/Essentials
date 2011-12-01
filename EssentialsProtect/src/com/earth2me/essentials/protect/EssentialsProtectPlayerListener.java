@@ -19,7 +19,7 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 	public EssentialsProtectPlayerListener(final IProtect prot)
 	{
 		this.prot = prot;
-		this.ess = prot.getEssentials();
+		this.ess = prot.getEssentialsConnect().getEssentials();
 	}
 
 	@Override
@@ -83,7 +83,7 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 		if (item != null
 			&& prot.checkProtectionItems(ProtectConfig.alert_on_use, item.getTypeId()))
 		{
-			prot.alert(user, item.getType().toString(), _("alertUsed"));
+			prot.getEssentialsConnect().alert(user, item.getType().toString(), _("alertUsed"));
 		}
 	}
 }

@@ -111,7 +111,7 @@ public class EssentialsConf extends Configuration
 		}
 		catch (RuntimeException e)
 		{
-			LOGGER.log(Level.INFO, "File: " + configFile.toString());
+			LOGGER.log(Level.SEVERE, "File broken: " + configFile.toString());
 			throw e;
 		}
 

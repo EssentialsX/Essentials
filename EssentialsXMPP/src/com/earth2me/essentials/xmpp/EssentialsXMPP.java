@@ -36,9 +36,14 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 
 		final PluginManager pluginManager = getServer().getPluginManager();
 		ess = (IEssentials)pluginManager.getPlugin("Essentials");
-		if (ess == null)
+		if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion()))
 		{
-			LOGGER.log(Level.SEVERE, "Failed to load Essentials before EssentialsXMPP");
+			LOGGER.log(Level.WARNING, _("versionMismatchAll"));
+		}
+		if (!ess.isEnabled())
+		{
+			this.setEnabled(false);
+			return;
 		}
 
 		final EssentialsXMPPPlayerListener playerListener = new EssentialsXMPPPlayerListener(ess);
@@ -52,17 +57,16 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 		ess.addReloadListener(users);
 		ess.addReloadListener(xmpp);
 
-		if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion()))
-		{
-			LOGGER.log(Level.WARNING, _("versionMismatchAll"));
-		}
 		LOGGER.info(_("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
 	}
 
 	@Override
 	public void onDisable()
 	{
-		xmpp.disconnect();
+		if (xmpp != null)
+		{
+			xmpp.disconnect();
+		}
 	}
 
 	@Override

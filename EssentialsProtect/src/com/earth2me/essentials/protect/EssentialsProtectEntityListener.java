@@ -21,7 +21,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 	public EssentialsProtectEntityListener(final IProtect prot)
 	{
 		this.prot = prot;
-		this.ess = prot.getEssentials();
+		this.ess = prot.getEssentialsConnect().getEssentials();
 	}
 
 	@Override

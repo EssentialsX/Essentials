@@ -20,7 +20,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 	public EssentialsProtectBlockListener(final IProtect parent)
 	{
 		this.prot = parent;
-		this.ess = prot.getEssentials();
+		this.ess = prot.getEssentialsConnect().getEssentials();
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 
 		if (prot.checkProtectionItems(ProtectConfig.alert_on_placement, id))
 		{
-			prot.alert(user, blockPlaced.getType().toString(), _("alertPlaced"));
+			prot.getEssentialsConnect().alert(user, blockPlaced.getType().toString(), _("alertPlaced"));
 		}
 
 		final Block below = blockPlaced.getRelative(BlockFace.DOWN);
@@ -248,7 +248,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 
 		if (prot.checkProtectionItems(ProtectConfig.alert_on_break, typeId))
 		{
-			prot.alert(user, type.toString(), _("alertBroke"));
+			prot.getEssentialsConnect().alert(user, type.toString(), _("alertBroke"));
 		}
 		final IProtectedBlock storage = prot.getStorage();
 

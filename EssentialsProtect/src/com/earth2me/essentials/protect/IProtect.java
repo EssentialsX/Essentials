@@ -1,14 +1,13 @@
 package com.earth2me.essentials.protect;
 
-import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.User;
 import com.earth2me.essentials.protect.data.IProtectedBlock;
+import java.util.List;
+import java.util.Map;
+import org.bukkit.plugin.Plugin;
 
 
-public interface IProtect
+public interface IProtect extends Plugin
 {
-	void alert(final User user, final String item, final String type);
-
 	boolean checkProtectionItems(final ProtectConfig list, final int id);
 
 	boolean getSettingBool(final ProtectConfig protectConfig);
@@ -17,5 +16,13 @@ public interface IProtect
 
 	IProtectedBlock getStorage();
 
-	IEssentials getEssentials();
+	void setStorage(IProtectedBlock pb);
+
+	EssentialsConnect getEssentialsConnect();
+
+	Map<ProtectConfig, Boolean> getSettingsBoolean();
+
+	Map<ProtectConfig, String> getSettingsString();
+
+	Map<ProtectConfig, List<Integer>> getSettingsList();
 }
