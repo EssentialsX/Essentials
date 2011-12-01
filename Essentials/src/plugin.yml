@@ -313,7 +313,7 @@ commands:
   tp:
     description: Teleport to a player.
     usage: /<command> <player> [otherplayer]
-    aliases: [etp]
+    aliases: [tele,etele,etp,tp2p,etp2p]
   tpa:
     description: Request to teleport to the specified player.
     usage: /<command> <player>
