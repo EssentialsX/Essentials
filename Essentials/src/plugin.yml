@@ -82,7 +82,7 @@ commands:
   enchant:
     description: Enchants the item the user is holding.
     usage: /<command> <enchantmentname> [level]
-    aliases: [enchantment]
+    aliases: [enchantment,eenchant,eenchantment]
   essentials:
     description: Reloads essentials.
     usage: /<command>
