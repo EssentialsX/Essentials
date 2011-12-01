@@ -2,6 +2,8 @@ package com.earth2me.essentials.textreader;
 
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.bukkit.World;
@@ -24,7 +26,7 @@ public class KeywordReplacer implements IText
 	private void replaceKeywords(final CommandSender sender)
 	{
 		String displayName, ipAddress, balance, mails, world;
-		String worlds, online, unique, playerlist;
+		String worlds, online, unique, playerlist, date, time;
 		if (sender instanceof Player)
 		{
 			final User user = ess.getUser(sender);
@@ -75,6 +77,9 @@ public class KeywordReplacer implements IText
 			playerlistBuilder.append(p.getDisplayName());
 		}
 		playerlist = playerlistBuilder.toString();
+		
+		date = new SimpleDateFormat("MMMM/dd/yyyy").format(new Date());
+		time = new SimpleDateFormat("hh:mm:ss").format(new Date());
 
 		for (int i = 0; i < input.getLines().size(); i++)
 		{
@@ -88,6 +93,8 @@ public class KeywordReplacer implements IText
 			line = line.replace("{UNIQUE}", unique);
 			line = line.replace("{WORLDS}", worlds);
 			line = line.replace("{PLAYERLIST}", playerlist);
+			line = line.replace("{TIME}", time);
+			line = line.replace("{DATE}", date);
 			input.getLines().set(i, line);
 		}
 	}
