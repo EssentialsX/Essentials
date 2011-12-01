@@ -16,7 +16,6 @@ public class Commandnear extends EssentialsCommand
 		super("near");
 	}
 
-	//Todo Translate
 	@Override
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
@@ -34,26 +33,23 @@ public class Commandnear extends EssentialsCommand
 		user.sendMessage(_("nearbyPlayers", getLocal(server, user, radius)));
 	}
 
-	private String getLocal(final Server server, final User user, final long radius)
+	private String getLocal(final Server server, final User user, long radius)
 	{
 		final Location loc = user.getLocation();
-		final World world = loc.getWorld();
-		final int x = loc.getBlockX();
-		final int y = loc.getBlockY();
-		final int z = loc.getBlockZ();
+		final World world = loc.getWorld();		
 		final StringBuilder output = new StringBuilder();
+		radius *= radius;
 
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
 			final User player = ess.getUser(onlinePlayer);
 			if (!player.equals(user) && !player.isHidden())
 			{
-				final Location l = player.getLocation();
-				final int dx = x - l.getBlockX();
-				final int dy = y - l.getBlockY();
-				final int dz = z - l.getBlockZ();
-				final long delta = dx * dx + dy * dy + dz * dz;
-				if (delta > radius || world != l.getWorld())
+				final Location playerLoc = player.getLocation();
+				if (playerLoc.getWorld() != world) { continue; }
+				
+				final double delta = playerLoc.distanceSquared(loc);				
+				if (delta > radius)
 				{
 					if (output.length() > 0)
 					{
