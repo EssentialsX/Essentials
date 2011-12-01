@@ -1410,7 +1410,6 @@ potionbrewer,117,0
 pstand,117,0
 bstand,117,0
 pbrewer,117,0
-bbrewer,117,0
 cauldron,118,0
 steelcauldron,118,0
 ironcauldron,118,0
@@ -2311,6 +2310,7 @@ epearl,368,0
 bluepearl,368,0
 endergem,368,0
 blazerod,369,0
+goldenrod,369,0
 goldrod,369,0
 blazestick,369,0
 goldstick,369,0
