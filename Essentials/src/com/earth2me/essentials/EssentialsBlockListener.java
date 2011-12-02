@@ -29,13 +29,17 @@ public class EssentialsBlockListener extends BlockListener
 		// Do not rely on getItemInHand();
 		// http://leaky.bukkit.org/issues/663
 		final ItemStack is = Util.convertBlockToItem(event.getBlockPlaced());
+		if (is == null)
+		{
+			return;
+		}
 		boolean unlimitedForUser = user.hasUnlimited(is);
 		if (unlimitedForUser && user.getGameMode() == GameMode.SURVIVAL)
 		{
 			ess.scheduleSyncDelayedTask(
 					new Runnable()
 					{
-				@Override
+						@Override
 						public void run()
 						{
 							user.getInventory().addItem(is);
