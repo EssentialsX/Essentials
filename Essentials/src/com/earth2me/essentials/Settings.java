@@ -549,4 +549,8 @@ public class Settings implements ISettings
 	{
 		this.debug = debug;
 	}
+	
+	public boolean getRepairEnchanted() {
+		return config.getBoolean("repair-enchanted", true);
+	}
 }

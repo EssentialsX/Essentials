@@ -227,6 +227,11 @@ no-god-in-worlds:
 # How many items should be in a oversized stack?
 oversized-stacksize: 64
 
+# Do you allow to repair enchanted weapons and armor?
+# If you set this to false, you can still allow it for certain players using the permission
+# essentials.repair.enchanted
+repair-enchanted: true
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #
