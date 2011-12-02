@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.craftbukkit.OfflineBedLocation;
 import static com.earth2me.essentials.I18n._;
 import java.net.InetSocketAddress;
 import java.util.HashSet;
@@ -740,7 +741,7 @@ public class OfflinePlayer implements Player
 	@Override
 	public Location getBedSpawnLocation()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		return OfflineBedLocation.getBedLocation(base.getName(), ess);
 	}
 
 	@Override
