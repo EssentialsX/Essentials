@@ -18,6 +18,8 @@ public interface IEssentials extends Plugin
 	boolean onCommandEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath, String permissionPrefix);
 
 	User getUser(Object base);
+	
+	I18n getI18n();
 
 	User getOfflineUser(String name);
 
