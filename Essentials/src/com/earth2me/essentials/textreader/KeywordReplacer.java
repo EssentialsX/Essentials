@@ -44,7 +44,7 @@ public class KeywordReplacer implements IText
 		}
 		else
 		{
-			displayName = ipAddress = balance = mails = world = worldTime12 = worldTime24= worldDate = "";
+			displayName = ipAddress = balance = mails = world = worldTime12 = worldTime24 = worldDate = "";
 		}
 
 		int playerHidden = 0;
