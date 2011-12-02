@@ -597,4 +597,10 @@ public class Essentials extends JavaPlugin implements IEssentials
 	{
 		return userMap;
 	}
+
+	@Override
+	public I18n getI18n()
+	{
+		return i18n;
+	}
 }
