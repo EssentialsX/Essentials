@@ -20,8 +20,6 @@
 
 
 
-
-
 ############################################################
 # +------------------------------------------------------+ #
 # |                 Essentials (Global)                  | #
@@ -308,24 +306,28 @@ hide-permissionless-help: true
 # +------------------------------------------------------+ #
 ############################################################
 
-# If EssentialsChat is installed, this will define how far a player's voice travels, in blocks.  Set to 0 to make all chat global.
-# Note that users with the "essentials.chat.spy" permission will hear everything, regardless of this setting.
-# Users with essentials.chat.shout can override this by prefixing text with an exclamation mark (!)
-# Or with essentials.chat.question can override this by prefixing text with a question mark (?)
-# You can add command costs for shout/question by adding chat-shout and chat-question to the command costs section."
 chat:
+  
+  # If EssentialsChat is installed, this will define how far a player's voice travels, in blocks.  Set to 0 to make all chat global.
+  # Note that users with the "essentials.chat.spy" permission will hear everything, regardless of this setting.
+  # Users with essentials.chat.shout can override this by prefixing text with an exclamation mark (!)
+  # Or with essentials.chat.question can override this by prefixing text with a question mark (?)
+  # You can add command costs for shout/question by adding chat-shout and chat-question to the command costs section."
   radius: 0
   
+  # Chat formatting can be done in two ways, you can either define a standard format for all chat
+  # Or you can give a group specific chat format, to give some extra variation.
   # If set to the default chat format which "should" be compatible with ichat.
+  # For more information of chat formatting, check out the wiki: http://ess.khhq.net/wiki/Chat_Formatting  
+  
   format: '<{DISPLAYNAME}> {MESSAGE}'
   #format: '&7[{GROUP}]&f {DISPLAYNAME}&7:&f {MESSAGE}'
-  
-  # You can also have group-specific formats, uncomment to enable:
+    
   group-formats:
   #  Default: '{WORLDNAME} {DISPLAYNAME}&7:&f {MESSAGE}'
   #  Admins: '{WORLDNAME} &c[{GROUP}]&f {DISPLAYNAME}&7:&c {MESSAGE}'
 
-
+  # If your using group formats make sure to remove the '#' to allow the setting to be read.
 
 
 
