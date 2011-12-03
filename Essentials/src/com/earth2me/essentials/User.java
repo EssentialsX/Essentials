@@ -468,10 +468,11 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public void checkActivity()
 	{
 		final long autoafkkick = ess.getSettings().getAutoAfkKick();
-		if (autoafkkick > 0 && lastActivity + autoafkkick * 1000 < System.currentTimeMillis()
+		if (autoafkkick > 0 && lastActivity > 0 && (lastActivity + (autoafkkick * 1000)) < System.currentTimeMillis()
 			&& !isHidden() && !isAuthorized("essentials.kick.exempt") && !isAuthorized("essentials.afk.kickexempt"))
 		{
 			final String kickReason = _("autoAfkKickReason", autoafkkick / 60.0);
+			lastActivity = 0;
 			kickPlayer(kickReason);
 
 
