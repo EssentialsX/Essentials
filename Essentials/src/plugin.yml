@@ -99,8 +99,8 @@ commands:
     usage: /<command> [player]
     aliases: [extinguish,eext,eextinguish]
   feed:
-    description: Shove food down someone's throat.
-    usage: /<command> <player>
+    description: Satisfy the hunger.
+    usage: /<command> [player]
     aliases: [efeed]
   fireball:
     description: Throw a fireball.
