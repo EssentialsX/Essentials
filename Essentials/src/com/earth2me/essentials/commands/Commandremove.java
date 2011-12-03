@@ -1,19 +1,13 @@
 package com.earth2me.essentials.commands;
 
-import java.util.Locale;
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.User;
+import java.util.Locale;
 import org.bukkit.Chunk;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Boat;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.ExperienceOrb;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Minecart;
-import org.bukkit.entity.Painting;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
+import org.bukkit.entity.*;
 
 
 public class Commandremove extends EssentialsCommand
@@ -22,6 +16,7 @@ public class Commandremove extends EssentialsCommand
 	{
 		super("remove");
 	}
+
 
 	private enum ToRemove
 	{
@@ -34,17 +29,18 @@ public class Commandremove extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		if (args.length < 2)
+		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		World world;
-		int radius = -1;
-		if (sender instanceof Player)
+		ToRemove toRemove;
+		final World world = user.getWorld();
+		int radius = 0;
+
+		if (args.length < 2)
 		{
-			world = ((Player)sender).getWorld();
 			try
 			{
 				radius = Integer.parseInt(args[1]);
@@ -54,10 +50,29 @@ public class Commandremove extends EssentialsCommand
 				throw new Exception(_("numberRequired"));
 			}
 		}
-		else
+
+		try
 		{
-			world = ess.getWorld(args[1]);
+			toRemove = ToRemove.valueOf(args[0].toUpperCase(Locale.ENGLISH));
 		}
+		catch (IllegalArgumentException e)
+		{
+			throw new NotEnoughArgumentsException(); //TODO: translate and list types
+		}
+
+		removeEntities(user, world, toRemove, radius);
+	}
+
+	@Override
+	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	{
+		if (args.length < 2)
+		{
+			throw new NotEnoughArgumentsException();
+		}
+		World world;
+		world = ess.getWorld(args[1]);
+
 		if (world == null)
 		{
 			throw new Exception(_("invalidWorld"));
@@ -71,14 +86,19 @@ public class Commandremove extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException(); //TODO: translate and list types
 		}
+		removeEntities(sender, world, toRemove, 0);
+	}
+
+	protected void removeEntities(final CommandSender sender, final World world, final ToRemove toRemove, final int radius) throws Exception
+	{
 		int removed = 0;
 		for (Chunk chunk : world.getLoadedChunks())
 		{
 			for (Entity e : chunk.getEntities())
 			{
-				if (sender instanceof Player)
+				if (radius > 0)
 				{
-					if (((Player)sender).getLocation().distance(e.getLocation()) > radius && radius >= 0)
+					if (((Player)sender).getLocation().distance(e.getLocation()) > radius)
 					{
 						continue;
 					}
@@ -133,6 +153,6 @@ public class Commandremove extends EssentialsCommand
 				}
 			}
 		}
-		sender.sendMessage(_("kill", removed));
+		sender.sendMessage(_("removed", removed));
 	}
 }

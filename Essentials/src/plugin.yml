@@ -256,7 +256,7 @@ commands:
     aliases: [erealname]
   remove:
     description: Removes entities in your world
-    usage: /<command> <drops|arrows|boats|minecarts|xp|paintings> <radius>
+    usage: /<command> <drops|arrows|boats|minecarts|xp|paintings> [radius]
     aliases: [eremove]
   repair:
     description: Repairs the durability of all or one item.
