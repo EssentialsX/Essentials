@@ -140,4 +140,6 @@ public interface ISettings extends IConf
 	boolean getUpdateBedAtDaytime();
 	
 	boolean getRepairEnchanted();
+	
+	boolean getIsWorldTeleportPermissions();
 }

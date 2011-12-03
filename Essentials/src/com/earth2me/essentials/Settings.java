@@ -29,7 +29,7 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("respawn-at-home", false);
 	}
-	
+
 	@Override
 	public boolean getUpdateBedAtDaytime()
 	{
@@ -332,7 +332,7 @@ public class Settings implements ISettings
 	public void reloadConfig()
 	{
 		config.load();
-		noGodWorlds = new HashSet<String>(config.getStringList("no-god-in-worlds",Collections.<String>emptyList()));
+		noGodWorlds = new HashSet<String>(config.getStringList("no-god-in-worlds", Collections.<String>emptyList()));
 	}
 
 	@Override
@@ -535,13 +535,12 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("death-messages", true);
 	}
-	
-	Set <String> noGodWorlds = new HashSet<String>();
+	Set<String> noGodWorlds = new HashSet<String>();
+
 	@Override
 	public Set<String> getNoGodWorlds()
 	{
 		return noGodWorlds;
-		
 	}
 
 	@Override
@@ -549,8 +548,16 @@ public class Settings implements ISettings
 	{
 		this.debug = debug;
 	}
-	
-	public boolean getRepairEnchanted() {
+
+	@Override
+	public boolean getRepairEnchanted()
+	{
 		return config.getBoolean("repair-enchanted", true);
+	}
+
+	@Override
+	public boolean getIsWorldTeleportPermissions()
+	{
+		return config.getBoolean("world-teleport-permissions", false);
 	}
 }
