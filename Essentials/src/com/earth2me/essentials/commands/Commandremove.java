@@ -83,7 +83,7 @@ public class Commandremove extends EssentialsCommand
 						continue;
 					}
 				}
-				else if (toRemove == ToRemove.DROPS)
+				if (toRemove == ToRemove.DROPS)
 				{
 					if (e instanceof Item)
 					{
