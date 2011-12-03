@@ -32,6 +32,14 @@ public class Commandrepair extends EssentialsCommand
 			{
 				throw new Exception(_("repairInvalidType"));
 			}
+
+			if (!item.getEnchantments().isEmpty()
+				&& !ess.getSettings().getRepairEnchanted()
+				&& !user.isAuthorized("essentials.repair.enchanted"))
+			{
+				throw new Exception(_("repairEnchanted"));
+			}
+
 			final String itemName = item.getType().toString().toLowerCase(Locale.ENGLISH);
 			final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), ess);
 
@@ -102,6 +110,12 @@ public class Commandrepair extends EssentialsCommand
 			catch (ChargeException ex)
 			{
 				user.sendMessage(ex.getMessage());
+				continue;
+			}
+			if (!item.getEnchantments().isEmpty()
+				&& !ess.getSettings().getRepairEnchanted()
+				&& !user.isAuthorized("essentials.repair.enchanted"))
+			{
 				continue;
 			}
 

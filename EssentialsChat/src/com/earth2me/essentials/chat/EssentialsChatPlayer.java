@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerListener;
 
-
+//TODO: Translate the local/spy tags
 public abstract class EssentialsChatPlayer extends PlayerListener
 {
 	protected transient IEssentials ess;
@@ -112,34 +112,31 @@ public abstract class EssentialsChatPlayer extends PlayerListener
 		logger.info(_("localFormat", sender.getName(), event.getMessage()));
 		final Location loc = sender.getLocation();
 		final World world = loc.getWorld();
-		final int x = loc.getBlockX();
-		final int y = loc.getBlockY();
-		final int z = loc.getBlockZ();
-		for (Player p : server.getOnlinePlayers())
+		
+		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
 			String type = "[L]";
-			final User u = ess.getUser(p);
+			final User user = ess.getUser(onlinePlayer);
 			//TODO: remove reference to op 
-			if (u.isIgnoredPlayer(sender.getName()) && !sender.isOp())
+			if (user.isIgnoredPlayer(sender.getName()) && !sender.isOp())
 			{
 				continue;
 			}
-			if (!u.equals(sender))
-			{
-				final Location l = u.getLocation();
-				final int dx = x - l.getBlockX();
-				final int dy = y - l.getBlockY();
-				final int dz = z - l.getBlockZ();
-				final long delta = dx * dx + dy * dy + dz * dz;
-				if (delta > radius || world != l.getWorld())
+			if (!user.equals(sender))
+			{				
+				final Location playerLoc = user.getLocation();
+				if (playerLoc.getWorld() != world) { continue; }
+				final double delta = playerLoc.distanceSquared(loc);
+				
+				if (delta > radius)
 				{
-					if (!u.isAuthorized("essentials.chat.spy"))
+					if (user.isAuthorized("essentials.chat.spy"))
 					{
-						continue;
+						type = type.concat("[Spy]");
 					}
 					else
 					{
-						type = type.concat("[Spy]");
+						continue;
 					}
 				}
 			}
@@ -147,9 +144,9 @@ public abstract class EssentialsChatPlayer extends PlayerListener
 			String message = String.format(event.getFormat(), type.concat(sender.getDisplayName()), event.getMessage());
 			for (IEssentialsChatListener listener : listeners.values())
 			{
-				message = listener.modifyMessage(event, p, message);
+				message = listener.modifyMessage(event, onlinePlayer, message);
 			}
-			u.sendMessage(message);
+			user.sendMessage(message);
 		}
 	}
 }

@@ -8,7 +8,6 @@ import java.util.Locale;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
-import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 
 
@@ -20,7 +19,7 @@ public class Commandspawner extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1 || args[0].length() < 2)
 		{

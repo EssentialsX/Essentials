@@ -39,6 +39,10 @@ commands:
     description: Bans an IP address.
     usage: /<command> <address>
     aliases: [ebanip]
+  break:
+    description: Breaks the block you are looking at.
+    usage: /<command>
+    aliases: [ebreak]
   broadcast:
     description: Broadcasts a message to the entire server.
     usage: /<command> <msg>
@@ -51,6 +55,10 @@ commands:
     description: Set a player on fire.
     usage: /<command> <player> <seconds>
     aliases: [eburn]
+  butcher:
+    description: Kill all mobs in a world.
+    usage: /<command> <mobType> <radius>
+    aliases: [ebutcher]
   clearinventory:
     description: Clear all items in your inventory.
     usage: /<command>
@@ -82,7 +90,7 @@ commands:
   enchant:
     description: Enchants the item the user is holding.
     usage: /<command> <enchantmentname> [level]
-    aliases: [enchantment]
+    aliases: [enchantment,eenchant,eenchantment]
   essentials:
     description: Reloads essentials.
     usage: /<command>
@@ -90,6 +98,10 @@ commands:
     description: Extinguish players.
     usage: /<command> [player]
     aliases: [extinguish,eext,eextinguish]
+  feed:
+    description: Shove food down someone's throat.
+    usage: /<command> <player>
+    aliases: [efeed]
   fireball:
     description: Throw a fireball.
     usage: /<command> [small]
@@ -186,6 +198,10 @@ commands:
     description: Describes an action in the context of the player.
     usage: /<command> <description>
     aliases: [action,describe,eme,eaction,edescribe]
+  more:
+    description: Fills the item stack in hand to maximum size.
+    usage: /<command>
+    aliases: [emore]
   motd:
     description: Views the Message Of The Day.
     usage: /<command>
@@ -198,6 +214,10 @@ commands:
     description: Mutes or unmutes a player.
     usage: /<command> <player> [datediff]
     aliases: [emute]
+  near:
+    description: Lists the players near by.
+    usage: /<command> [radius]
+    aliases: [nearby,enear,enearby]
   nick:
     description: Change your nickname or that of another player.
     usage: /<command> [player] <nickname|off>
@@ -234,6 +254,10 @@ commands:
     description: Displays the username of a user based on nickname.
     usage: /<command> <nickname>
     aliases: [erealname]
+  remove:
+    description: Removes entities in your world
+    usage: /<command> <drops|arrows|boats|minecarts|xp|paintings> <radius>
+    aliases: [eremove]
   repair:
     description: Repairs the durability of all or one item.
     usage: /<command> <hand|all>
@@ -309,7 +333,7 @@ commands:
   tp:
     description: Teleport to a player.
     usage: /<command> <player> [otherplayer]
-    aliases: [etp]
+    aliases: [tele,etele,etp,tp2p,etp2p]
   tpa:
     description: Request to teleport to the specified player.
     usage: /<command> <player>

@@ -30,6 +30,7 @@ public class YamlStorageWriter implements IStorageWriter
 		this.writer = writer;
 	}
 
+	@Override
 	public void save(final StorageObject object)
 	{
 		try

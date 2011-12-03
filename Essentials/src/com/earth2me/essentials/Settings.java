@@ -3,13 +3,7 @@ package com.earth2me.essentials;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.ChatColor;
@@ -554,5 +548,9 @@ public class Settings implements ISettings
 	public void setDebug(final boolean debug)
 	{
 		this.debug = debug;
+	}
+	
+	public boolean getRepairEnchanted() {
+		return config.getBoolean("repair-enchanted", true);
 	}
 }

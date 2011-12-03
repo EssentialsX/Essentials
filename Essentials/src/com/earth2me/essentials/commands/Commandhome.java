@@ -48,6 +48,7 @@ public class Commandhome extends EssentialsCommand
 				if (bed != null)
 				{
 					user.getTeleport().teleport(bed, charge);
+					return;
 				}
 			}
 			user.getTeleport().home(player, homeName.toLowerCase(Locale.ENGLISH), charge);
