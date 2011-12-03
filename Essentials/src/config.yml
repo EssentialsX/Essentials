@@ -220,6 +220,10 @@ death-messages: true
 no-god-in-worlds:
 #  - world_nether
 
+# Set to true to enable per-world permissions for teleporting with /world
+# Give someone permission to teleport to a world with essentials.world.<worldname>
+world-teleport-permissions: false
+
 # Oversized stacks are stacks that ignore the normal max stacksize.
 # They can be obtained using /give and /item, if the player has essentials.oversizedstacks permission.
 # How many items should be in a oversized stack?
