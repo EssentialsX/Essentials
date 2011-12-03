@@ -15,9 +15,9 @@ public class Commandbreak extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		Block block = user.getTargetBlock(null, 20);
+		final Block block = user.getTargetBlock(null, 20);
 		if (block.getType() == Material.AIR)
 		{
 			throw new NoChargeException();
@@ -26,7 +26,7 @@ public class Commandbreak extends EssentialsCommand
 		{
 			throw new NoChargeException();
 		}
-		BlockBreakEvent event = new BlockBreakEvent(block, user);
+		final BlockBreakEvent event = new BlockBreakEvent(block, user);
 		server.getPluginManager().callEvent(event);
 		if (event.isCancelled())
 		{
