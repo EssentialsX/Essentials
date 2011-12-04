@@ -41,6 +41,14 @@ public class Commanditem extends EssentialsCommand
 		{
 			stack.setAmount(Integer.parseInt(args[1]));
 		}
+		else if (ess.getSettings().getDefaultStackSize() > 0)
+		{
+			stack.setAmount(ess.getSettings().getDefaultStackSize());
+		}
+		else if (ess.getSettings().getOversizedStackSize() > 0 && user.isAuthorized("essentials.oversizedstacks"))
+		{
+			stack.setAmount(ess.getSettings().getOversizedStackSize());
+		}
 
 		if (args.length > 2)
 		{
@@ -72,9 +80,12 @@ public class Commanditem extends EssentialsCommand
 
 		final String displayName = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ');
 		user.sendMessage(_("itemSpawn", stack.getAmount(), displayName));
-		if (user.isAuthorized("essentials.oversizedstacks")) {
+		if (user.isAuthorized("essentials.oversizedstacks"))
+		{
 			InventoryWorkaround.addItem(user.getInventory(), true, ess.getSettings().getOversizedStackSize(), stack);
-		} else {
+		}
+		else
+		{
 			InventoryWorkaround.addItem(user.getInventory(), true, stack);
 		}
 		user.updateInventory();

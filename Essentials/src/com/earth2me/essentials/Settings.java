@@ -86,6 +86,12 @@ public class Settings implements ISettings
 	{
 		return config.getInt("oversized-stacksize", 64);
 	}
+	
+	@Override
+	public int getDefaultStackSize()
+	{
+		return config.getInt("default-stack-size", -1);
+	}
 
 	@Override
 	public int getStartingBalance()

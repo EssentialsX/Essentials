@@ -224,6 +224,11 @@ no-god-in-worlds:
 # Give someone permission to teleport to a world with essentials.world.<worldname>
 world-teleport-permissions: false
 
+# The number of items given if the quantity parameter is left out in /item or /give.
+# If this number is below 1, the maximum stack size size is given. If oversized stacks
+# is not enabled, any number higher then the maximum stack size results in more than one stack.
+default-stack-size: -1
+
 # Oversized stacks are stacks that ignore the normal max stacksize.
 # They can be obtained using /give and /item, if the player has essentials.oversizedstacks permission.
 # How many items should be in a oversized stack?
