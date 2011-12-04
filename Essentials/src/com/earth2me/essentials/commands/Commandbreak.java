@@ -18,13 +18,17 @@ public class Commandbreak extends EssentialsCommand
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		final Block block = user.getTargetBlock(null, 20);
+		if (block == null)
+		{
+			throw new NoChargeException();
+		}
 		if (block.getType() == Material.AIR)
 		{
 			throw new NoChargeException();
 		}
 		if (block.getType() == Material.BEDROCK && !user.isAuthorized("essentials.break.bedrock"))
 		{
-			throw new NoChargeException();
+			throw new Exception("You are not allowed to destroy bedrock."); //TODO: Translation
 		}
 		final BlockBreakEvent event = new BlockBreakEvent(block, user);
 		server.getPluginManager().callEvent(event);
