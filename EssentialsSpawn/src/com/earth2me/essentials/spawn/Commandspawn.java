@@ -21,11 +21,11 @@ public class Commandspawn extends EssentialsCommand
 	{
 		final Trade charge = new Trade(this.getName(), ess);
 		charge.isAffordableFor(user);
-		if (args.length > 0 && user.isAuthorized("essentials.spawn.other"))
+		if (args.length > 0 && user.isAuthorized("essentials.spawn.others"))
 		{
-			User otherUser = getPlayer(server, args, 0);
+			final User otherUser = getPlayer(server, args, 0);
 			otherUser.getTeleport().respawn(ess.getSpawn(), charge);
-			if (otherUser != user)
+			if (!otherUser.equals(user))
 			{
 				otherUser.sendMessage(_("teleportAtoB", user.getDisplayName(), "spawn"));
 				user.sendMessage(_("teleporting"));
@@ -44,7 +44,7 @@ public class Commandspawn extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		User user = getPlayer(server, args, 0);
+		final User user = getPlayer(server, args, 0);
 		user.getTeleport().respawn(ess.getSpawn(), null);
 		user.sendMessage(_("teleportAtoB", user.getDisplayName(), "spawn"));
 		sender.sendMessage(_("teleporting"));
