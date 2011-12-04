@@ -13,4 +13,4 @@ commands:
     usage: /<command> <group>
   spawn:
     description: Teleport to the spawnpoint.
-    usage: /<command>
+    usage: /<command> [player]
