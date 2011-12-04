@@ -30,6 +30,7 @@ public class KeywordReplacer implements IText
 		String displayName, ipAddress, balance, mails, world;
 		String worlds, online, unique, playerlist, date, time;
 		String worldTime12, worldTime24, worldDate, plugins;
+		String version;
 		if (sender instanceof Player)
 		{
 			final User user = ess.getUser(sender);
@@ -97,6 +98,8 @@ public class KeywordReplacer implements IText
 
 		date = DateFormat.getDateInstance(DateFormat.MEDIUM, ess.getI18n().getCurrentLocale()).format(new Date());
 		time = DateFormat.getTimeInstance(DateFormat.MEDIUM, ess.getI18n().getCurrentLocale()).format(new Date());
+		
+		version = ess.getServer().getVersion();
 
 		for (int i = 0; i < input.getLines().size(); i++)
 		{
@@ -116,6 +119,7 @@ public class KeywordReplacer implements IText
 			line = line.replace("{WORLDTIME24}", worldTime24);
 			line = line.replace("{WORLDDATE}", worldDate);
 			line = line.replace("{PLUGINS}", plugins);
+			line = line.replace("{VERSION}", version);
 			input.getLines().set(i, line);
 		}
 	}
