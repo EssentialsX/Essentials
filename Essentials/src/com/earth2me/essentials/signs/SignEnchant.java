@@ -21,7 +21,7 @@ public class SignEnchant extends EssentialsSign
 	@Override
 	protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException
 	{
-		getItemStack(sign.getLine(1), 1, ess);
+		final ItemStack stack = getItemStack(sign.getLine(1), 1, ess);
 		final String[] enchantLevel = sign.getLine(2).split(":");
 		if (enchantLevel.length != 2)
 		{
@@ -43,7 +43,16 @@ public class SignEnchant extends EssentialsSign
 		}
 		if (level < 1 || level > enchantment.getMaxLevel())
 		{
-			sign.setLine(2, enchantLevel[0] + ":" + enchantment.getMaxLevel());
+			level = enchantment.getMaxLevel();
+			sign.setLine(2, enchantLevel[0] + ":" + level);
+		}
+		try
+		{
+			stack.addEnchantment(enchantment, level);
+		}
+		catch (Throwable ex)
+		{
+			throw new SignException(ex.getMessage());
 		}
 		getTrade(sign, 3, ess);
 		return true;
@@ -77,7 +86,7 @@ public class SignEnchant extends EssentialsSign
 			player.sendMessage(_("enchantmentNotFound"));
 			return true;
 		}
-		
+
 		final ItemStack toEnchant = player.getInventory().getItem(slot);
 		try
 		{
