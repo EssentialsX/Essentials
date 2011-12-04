@@ -89,16 +89,19 @@ public class Commandremove extends EssentialsCommand
 		removeEntities(sender, world, toRemove, 0);
 	}
 
-	protected void removeEntities(final CommandSender sender, final World world, final ToRemove toRemove, final int radius) throws Exception
+	protected void removeEntities(final CommandSender sender, final World world, final ToRemove toRemove, int radius) throws Exception
 	{
 		int removed = 0;
+		if (radius > 0) {
+			radius*=radius;
+		}
 		for (Chunk chunk : world.getLoadedChunks())
 		{
 			for (Entity e : chunk.getEntities())
 			{
 				if (radius > 0)
 				{
-					if (((Player)sender).getLocation().distance(e.getLocation()) > radius)
+					if (((Player)sender).getLocation().distanceSquared(e.getLocation()) > radius)
 					{
 						continue;
 					}

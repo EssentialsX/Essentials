@@ -78,6 +78,9 @@ public class Commandbutcher extends EssentialsCommand
 				world = ess.getWorld(args[1]);
 			}
 		}
+		if (radius >=0) {
+			radius *= radius;
+		}
 		String killType = type.toLowerCase();
 		int numKills = 0;
 		for (Chunk chunk : world.getLoadedChunks())
@@ -86,7 +89,7 @@ public class Commandbutcher extends EssentialsCommand
 			{
 				if (sender instanceof Player)
 				{
-					if (((Player)sender).getLocation().distance(entity.getLocation()) > radius && radius >= 0)
+					if (((Player)sender).getLocation().distanceSquared(entity.getLocation()) > radius && radius >= 0)
 					{
 						continue;
 					}
