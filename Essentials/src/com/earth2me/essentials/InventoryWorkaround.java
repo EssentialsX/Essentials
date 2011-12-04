@@ -44,6 +44,11 @@ public final class InventoryWorkaround
 
 	public static int firstPartial(final Inventory cinventory, final ItemStack item, final boolean forceDurability)
 	{
+		return firstPartial(cinventory, item, forceDurability, item.getType().getMaxStackSize());
+	}
+	
+	public static int firstPartial(final Inventory cinventory, final ItemStack item, final boolean forceDurability, final int maxAmount)
+	{
 		if (item == null)
 		{
 			return -1;
@@ -56,7 +61,7 @@ public final class InventoryWorkaround
 			{
 				continue;
 			}
-			if (item.getTypeId() == cItem.getTypeId() && cItem.getAmount() < cItem.getType().getMaxStackSize() && (!forceDurability || cItem.getDurability() == item.getDurability()) && cItem.getEnchantments().equals(item.getEnchantments()))
+			if (item.getTypeId() == cItem.getTypeId() && cItem.getAmount() < maxAmount && (!forceDurability || cItem.getDurability() == item.getDurability()) && cItem.getEnchantments().equals(item.getEnchantments()))
 			{
 				return i;
 			}
@@ -129,7 +134,8 @@ public final class InventoryWorkaround
 			while (true)
 			{
 				// Do we already have a stack of it?
-				final int firstPartial = firstPartial(cinventory, item, forceDurability);
+				final int maxAmount = oversizedStacks > item.getType().getMaxStackSize() ? oversizedStacks : item.getType().getMaxStackSize();
+				final int firstPartial = firstPartial(cinventory, item, forceDurability, maxAmount);
 
 				// Drat! no partial stack
 				if (firstPartial == -1)
@@ -145,7 +151,6 @@ public final class InventoryWorkaround
 					}
 					else
 					{
-						final int maxAmount = oversizedStacks > 0 ? oversizedStacks : item.getType().getMaxStackSize();
 						// More than a single stack!
 						if (item.getAmount() > maxAmount)
 						{
@@ -169,8 +174,7 @@ public final class InventoryWorkaround
 
 					final int amount = item.getAmount();
 					final int partialAmount = partialItem.getAmount();
-					final int maxAmount = oversizedStacks > 0 ? oversizedStacks : partialItem.getType().getMaxStackSize();
-
+					
 					// Check if it fully fits
 					if (amount + partialAmount <= maxAmount)
 					{
