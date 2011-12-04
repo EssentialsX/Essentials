@@ -6,6 +6,7 @@ public enum Signs
 	BALANCE(new SignBalance()),
 	BUY(new SignBuy()),
 	DISPOSAL(new SignDisposal()),
+	ENCHANT(new SignEnchant()),
 	FREE(new SignFree()),
 	GAMEMODE(new SignGameMode()),
 	HEAL(new SignHeal()),
