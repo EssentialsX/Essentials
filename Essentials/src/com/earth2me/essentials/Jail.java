@@ -46,7 +46,7 @@ public class Jail extends BlockListener implements IConf
 	{
 		if (!(user.getBase() instanceof OfflinePlayer))
 		{
-			user.getTeleport().now(getJail(jail));
+			user.getTeleport().now(getJail(jail), false);
 		}
 		user.setJail(jail);
 	}

@@ -228,9 +228,12 @@ public class Teleport implements Runnable
 		user.getBase().teleport(Util.getSafeDestination(target.getLocation()));
 	}
 
-	public void now(Location loc) throws Exception
+	public void now(Location loc, boolean cooldown) throws Exception
 	{
-		cooldown(false);
+		if (cooldown)
+		{
+			cooldown(false);
+		}
 		now(new Target(loc));
 	}
 
