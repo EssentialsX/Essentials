@@ -18,7 +18,7 @@ import org.bukkit.permissions.ServerOperator;
 import org.bukkit.OfflinePlayer;
 
 
-public class UserBase extends AsyncStorageObjectHolder<UserData> implements Player, IOfflineUser
+public abstract class UserBase extends AsyncStorageObjectHolder<UserData> implements Player, IOfflineUser
 {
 	
 	@Delegate(types =
