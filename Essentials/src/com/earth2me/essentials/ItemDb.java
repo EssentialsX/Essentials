@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.api.IItemDb;
 import static com.earth2me.essentials.I18n._;
 import java.util.HashMap;
 import java.util.List;
@@ -9,7 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 
-public class ItemDb implements IConf
+public class ItemDb implements IConf, IItemDb
 {
 	private final transient IEssentials ess;
 

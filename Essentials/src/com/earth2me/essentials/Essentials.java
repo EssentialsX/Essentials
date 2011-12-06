@@ -402,11 +402,9 @@ public class Essentials extends JavaPlugin implements IEssentials
 	public void showError(final CommandSender sender, final Throwable exception, final String commandLabel)
 	{
 		sender.sendMessage(_("errorWithMessage", exception.getMessage()));
-		final LogRecord logRecord = new LogRecord(Level.WARNING, _("errorCallingCommand", commandLabel));
-		logRecord.setThrown(exception);
 		if (getSettings().isDebug())
 		{
-			LOGGER.log(logRecord);
+			LOGGER.log(Level.WARNING, _("errorCallingCommand", commandLabel), exception);
 		}
 	}
 

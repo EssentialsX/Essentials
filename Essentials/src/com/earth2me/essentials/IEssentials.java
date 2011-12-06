@@ -8,7 +8,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
-
+/**
+ * @deprecated This will be moved to the api package soon
+ */
+@Deprecated
 public interface IEssentials extends Plugin
 {
 	void addReloadListener(IConf listener);
