@@ -102,10 +102,10 @@ commands:
     description: Satisfy the hunger.
     usage: /<command> [player]
     aliases: [efeed]
-  find:
+  itemdb:
     description: Searches for an item.
     usage: /<command> <item>
-    aliases: [efind]
+    aliases: [eitemdb]
   fireball:
     description: Throw a fireball.
     usage: /<command> [small]
