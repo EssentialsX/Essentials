@@ -3,12 +3,12 @@ package com.earth2me.essentials;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
-import com.google.common.collect.ConcurrentHashMultiset;
 import com.google.common.util.concurrent.UncheckedExecutionException;
 import java.io.File;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutionException;
 import org.bukkit.entity.Player;
 
@@ -17,7 +17,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 {
 	private final transient IEssentials ess;
 	private final transient Cache<String, User> users = CacheBuilder.newBuilder().softValues().build(this);
-	private final transient ConcurrentHashMultiset<String> keys = ConcurrentHashMultiset.create();
+	private final transient ConcurrentSkipListSet<String> keys = new ConcurrentSkipListSet<String>();
 
 	public UserMap(final IEssentials ess)
 	{
@@ -109,7 +109,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 
 	public Set<String> getAllUniqueUsers()
 	{
-		return Collections.unmodifiableSet(keys.elementSet());
+		return Collections.unmodifiableSet(keys);
 	}
 
 	public int getUniqueUsers()
