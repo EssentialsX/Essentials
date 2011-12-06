@@ -14,5 +14,5 @@ public interface IJail extends IReload
 
 	void sendToJail(IUser user, String jail) throws Exception;
 
-	void setJail(Location loc, String jailName) throws Exception;
+	void setJail(String jailName, Location loc) throws Exception;
 }
