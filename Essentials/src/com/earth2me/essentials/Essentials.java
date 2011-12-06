@@ -19,6 +19,7 @@ package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.Economy;
+import com.earth2me.essentials.api.IJails;
 import com.earth2me.essentials.commands.EssentialsCommand;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
@@ -65,7 +66,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private transient ISettings settings;
 	private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
-	private transient Jail jail;
+	private transient Jails jails;
 	private transient Warps warps;
 	private transient Worth worth;
 	private transient List<IConf> confList;
@@ -244,16 +245,8 @@ public class Essentials extends JavaPlugin implements IEssentials
 		pm.registerEvent(Type.FOOD_LEVEL_CHANGE, entityListener, Priority.Lowest, this);
 
 		//TODO: Check if this should be here, and not above before reload()
-		jail = new Jail(this);
-		final JailPlayerListener jailPlayerListener = new JailPlayerListener(this);
-		confList.add(jail);
-		pm.registerEvent(Type.BLOCK_BREAK, jail, Priority.Low, this);
-		pm.registerEvent(Type.BLOCK_DAMAGE, jail, Priority.Low, this);
-		pm.registerEvent(Type.BLOCK_PLACE, jail, Priority.Low, this);
-		pm.registerEvent(Type.PLAYER_INTERACT, jailPlayerListener, Priority.Low, this);
-		pm.registerEvent(Type.PLAYER_RESPAWN, jailPlayerListener, Priority.High, this);
-		pm.registerEvent(Type.PLAYER_TELEPORT, jailPlayerListener, Priority.High, this);
-		pm.registerEvent(Type.PLAYER_JOIN, jailPlayerListener, Priority.High, this);
+		jails = new Jails(this);
+		confList.add(jails);
 
 		pm.registerEvent(Type.ENTITY_EXPLODE, tntListener, Priority.High, this);
 
@@ -415,9 +408,9 @@ public class Essentials extends JavaPlugin implements IEssentials
 	}
 
 	@Override
-	public Jail getJail()
+	public IJails getJails()
 	{
-		return jail;
+		return jails;
 	}
 
 	@Override

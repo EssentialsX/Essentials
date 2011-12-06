@@ -19,7 +19,7 @@ public interface IEssentials extends Plugin, IReload
 
 	ISettings getSettings();
 
-	IJail getJail();
+	IJails getJail();
 
 	IWarps getWarps();
 

@@ -729,6 +729,53 @@ public class EssentialsUpgrade
 		doneFile.setProperty("updateSpawnsToNewSpawnsConfig", true);
 		doneFile.save();
 	}
+	
+	private void updateJailsToNewJailsConfig()
+	{
+		if (doneFile.getBoolean("updateJailsToNewJailsConfig", false))
+		{
+			return;
+		}
+		final File configFile = new File(ess.getDataFolder(), "jail.yml");
+		if (configFile.exists())
+		{
+
+			final EssentialsConf config = new EssentialsConf(configFile);
+			try
+			{
+				config.load();
+				if (!config.hasProperty("jails"))
+				{
+					final com.earth2me.essentials.settings.Jails jails = new com.earth2me.essentials.settings.Jails();
+					List<String> keys = config.getKeys();
+					for (String jailName : keys)
+					{
+						Location loc = getFakeLocation(config, jailName);
+						jails.getJails().put(jailName.toLowerCase(Locale.ENGLISH), loc);
+					}
+					if (!configFile.renameTo(new File(ess.getDataFolder(), "jail.yml.old")))
+					{
+						throw new Exception(_("fileRenameError", "jail.yml"));
+					}
+					PrintWriter writer = new PrintWriter(configFile);
+					try
+					{
+						new YamlStorageWriter(writer).save(jails);
+					}
+					finally
+					{
+						writer.close();
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+			}
+		}
+		doneFile.setProperty("updateJailsToNewJailsConfig", true);
+		doneFile.save();
+	}
 
 	public void beforeSettings()
 	{
@@ -751,5 +798,6 @@ public class EssentialsUpgrade
 		updateUsersHomesFormat();
 		deleteOldItemsCsv();
 		updateSpawnsToNewSpawnsConfig();
+		updateJailsToNewJailsConfig();
 	}
 }

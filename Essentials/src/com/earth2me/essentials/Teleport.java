@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.api.ITeleport;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import java.util.Calendar;
@@ -11,7 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 
-public class Teleport implements Runnable
+public class Teleport implements Runnable, ITeleport
 {
 	private static final double MOVE_CONSTANT = 0.3;
 

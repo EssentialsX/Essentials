@@ -2,13 +2,14 @@ package com.earth2me.essentials.storage;
 
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.api.IReload;
 import java.io.File;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 
 
-public abstract class AsyncStorageObjectHolder<T extends StorageObject> implements IConf, IStorageObjectHolder<T>
+public abstract class AsyncStorageObjectHolder<T extends StorageObject> implements IConf, IStorageObjectHolder<T>, IReload
 {
 	private transient T data;
 	private final transient ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
@@ -53,7 +54,7 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
 	{
 		unlock();
 	}
-	
+
 	public void unlock()
 	{
 		if (rwl.isWriteLockedByCurrentThread())
@@ -69,6 +70,12 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
 
 	@Override
 	public void reloadConfig()
+	{
+		new StorageObjectDataReader();
+	}
+
+	@Override
+	public void onReload()
 	{
 		new StorageObjectDataReader();
 	}

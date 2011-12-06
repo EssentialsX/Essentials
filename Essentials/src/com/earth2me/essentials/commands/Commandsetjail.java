@@ -19,7 +19,7 @@ public class Commandsetjail extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		ess.getJail().setJail(user.getLocation(), args[0]);
+		ess.getJails().setJail(args[0], user.getLocation());
 		user.sendMessage(_("jailSet", args[0]));
 
 	}

@@ -36,4 +36,8 @@ public interface IUser extends Player, IReload
 	Location getHome(Location loc) throws Exception;
 
 	boolean isHidden();
+	
+	ITeleport getTeleport();
+	
+	void setJail(String jail);
 }

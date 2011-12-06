@@ -5,6 +5,8 @@ import java.net.InetSocketAddress;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
+
+
 /**
  * @deprecated This will be moved to the api package soon
  */
@@ -58,4 +60,8 @@ public interface IUser
 	String getDisplayName();
 
 	boolean isHidden();
+
+	Teleport getTeleport();
+
+	void setJail(String jail);
 }

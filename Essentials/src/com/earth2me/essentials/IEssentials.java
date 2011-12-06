@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.api.IJails;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
 import org.bukkit.World;
@@ -34,7 +35,7 @@ public interface IEssentials extends Plugin
 
 	BukkitScheduler getScheduler();
 
-	Jail getJail();
+	IJails getJails();
 
 	Warps getWarps();
 

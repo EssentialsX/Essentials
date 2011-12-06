@@ -2,6 +2,7 @@ package com.earth2me.essentials.user;
 
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.IUser;
+import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import lombok.Cleanup;
 import org.bukkit.Location;
@@ -174,5 +175,25 @@ public class User extends UserBase implements IUser
 	public boolean isHidden()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public Teleport getTeleport()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setJail(final String jail)
+	{
+		acquireWriteLock();
+		try
+		{
+			getData().setJail(jail);
+		}
+		finally
+		{
+			unlock();
+		}
 	}
 }
