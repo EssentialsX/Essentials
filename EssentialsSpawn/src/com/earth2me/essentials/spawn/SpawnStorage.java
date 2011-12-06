@@ -6,12 +6,14 @@ import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.settings.Spawns;
 import com.earth2me.essentials.storage.AbstractDelayedYamlFileReader;
 import com.earth2me.essentials.storage.AbstractDelayedYamlFileWriter;
+import com.earth2me.essentials.storage.ObjectLoadException;
 import com.earth2me.essentials.storage.StorageObject;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -35,6 +37,10 @@ public class SpawnStorage implements IConf, IEssentialsModule
 		rwl.writeLock().lock();
 		try
 		{
+			if (spawns == null)
+			{
+				spawns = new Spawns();
+			}
 			if (spawns.getSpawns() == null)
 			{
 				spawns.setSpawns(new HashMap<String, Location>());
@@ -136,9 +142,21 @@ public class SpawnStorage implements IConf, IEssentialsModule
 		}
 
 		@Override
-		public void onFinish(final Spawns object)
+		public void onSuccess(final Spawns object)
 		{
-			spawns = object;
+			if (object != null)
+			{
+				spawns = object;
+			}
+			rwl.writeLock().unlock();
+		}
+
+		@Override
+		public void onException()
+		{
+			if (spawns == null) {
+				spawns = new Spawns();
+			}
 			rwl.writeLock().unlock();
 		}
 	}

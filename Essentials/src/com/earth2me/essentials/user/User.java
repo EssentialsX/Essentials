@@ -81,7 +81,6 @@ public class User extends UserBase implements IOfflineUser
 		new UserDataWriter();
 	}
 
-
 	private class UserDataWriter extends AbstractDelayedYamlFileWriter
 	{
 		public UserDataWriter()

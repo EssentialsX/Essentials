@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
+import org.yaml.snakeyaml.error.YAMLException;
 
 
 public abstract class AbstractDelayedYamlFileReader<T extends StorageObject> implements Runnable
@@ -33,9 +34,17 @@ public abstract class AbstractDelayedYamlFileReader<T extends StorageObject> imp
 		try
 		{
 			onStart();
-			reader = new FileReader(file);
-			final T object = new YamlStorageReader(reader, plugin).load(clazz);
-			onFinish(object);
+			try
+			{
+				reader = new FileReader(file);
+				T object = new YamlStorageReader(reader, plugin).load(clazz);
+				onSuccess(object);
+			}
+			catch (ObjectLoadException ex)
+			{
+				onException();
+				Bukkit.getLogger().log(Level.SEVERE, "File broken: " + file.toString(), ex.getCause());
+			}
 		}
 		catch (FileNotFoundException ex)
 		{
@@ -57,5 +66,7 @@ public abstract class AbstractDelayedYamlFileReader<T extends StorageObject> imp
 		}
 	}
 
-	public abstract void onFinish(T object);
+	public abstract void onSuccess(T object);
+
+	public abstract void onException();
 }

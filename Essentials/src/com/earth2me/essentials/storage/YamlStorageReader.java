@@ -4,8 +4,6 @@ import java.io.Reader;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.bukkit.plugin.Plugin;
 import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.Yaml;
@@ -14,8 +12,8 @@ import org.yaml.snakeyaml.constructor.Constructor;
 
 public class YamlStorageReader implements IStorageReader
 {
-	private transient static Map<Class, Yaml> preparedYamls = Collections.synchronizedMap(new HashMap<Class, Yaml>());
-	private transient static Map<Class, ReentrantLock> locks = new HashMap<Class, ReentrantLock>();
+	private transient static final Map<Class, Yaml> PREPARED_YAMLS = Collections.synchronizedMap(new HashMap<Class, Yaml>());
+	private transient static final Map<Class, ReentrantLock> LOCKS = new HashMap<Class, ReentrantLock>();
 	private transient final Reader reader;
 	private transient final Plugin plugin;
 
@@ -26,49 +24,40 @@ public class YamlStorageReader implements IStorageReader
 	}
 
 	@Override
-	public <T extends StorageObject> T load(final Class<? extends T> clazz)
+	public <T extends StorageObject> T load(final Class<? extends T> clazz) throws ObjectLoadException
 	{
-		Yaml yaml = preparedYamls.get(clazz);
+		Yaml yaml = PREPARED_YAMLS.get(clazz);
 		if (yaml == null)
 		{
 			yaml = new Yaml(prepareConstructor(clazz));
-			preparedYamls.put(clazz, yaml);
+			PREPARED_YAMLS.put(clazz, yaml);
 		}
 		ReentrantLock lock;
-		synchronized (locks)
+		synchronized (LOCKS)
 		{
-			lock = locks.get(clazz);
+			lock = LOCKS.get(clazz);
 			if (lock == null)
 			{
 				lock = new ReentrantLock();
 			}
 		}
-		T ret;
 		lock.lock();
 		try
 		{
-			ret = (T)yaml.load(reader);
+			T object = (T)yaml.load(reader);
+			if (object == null) {
+				object = clazz.newInstance();
+			}
+			return object;
+		}
+		catch (Exception ex)
+		{
+			throw new ObjectLoadException(ex);
 		}
 		finally
 		{
 			lock.unlock();
 		}
-		if (ret == null)
-		{
-			try
-			{
-				ret = (T)clazz.newInstance();
-			}
-			catch (InstantiationException ex)
-			{
-				Logger.getLogger(StorageObject.class.getName()).log(Level.SEVERE, null, ex);
-			}
-			catch (IllegalAccessException ex)
-			{
-				Logger.getLogger(StorageObject.class.getName()).log(Level.SEVERE, null, ex);
-			}
-		}
-		return ret;
 	}
 
 	private Constructor prepareConstructor(final Class<?> clazz)
