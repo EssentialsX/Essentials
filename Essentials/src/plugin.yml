@@ -323,9 +323,9 @@ commands:
     usage: /<command> [day|night|dawn|17:30|4pm|4000ticks] [worldname|all]
     aliases: [etime, day, night]
   togglejail:
-    description: Prevents a player from interacting with the world and teleports him/her to the the jail specified
+    description: Prevents a player from interacting with the world and teleports him/her to the jail specified
     usage: /<command> <player> <jailname> [datediff]
-    aliases: [tjail,unjail,eunjail,etogglejail]
+    aliases: [tjail,jail,ejail,unjail,eunjail,etogglejail]
   top:
     description: Teleport to the highest block at your current position.
     usage: /<command>
