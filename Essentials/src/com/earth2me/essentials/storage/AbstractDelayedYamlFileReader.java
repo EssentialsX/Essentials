@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.yaml.snakeyaml.error.YAMLException;
@@ -30,39 +31,37 @@ public abstract class AbstractDelayedYamlFileReader<T extends StorageObject> imp
 	@Override
 	public void run()
 	{
-		FileReader reader = null;
+		onStart();
 		try
 		{
-			onStart();
+			final FileReader reader = new FileReader(file);
 			try
 			{
-				reader = new FileReader(file);
-				T object = new YamlStorageReader(reader, plugin).load(clazz);
+				final T object = new YamlStorageReader(reader, plugin).load(clazz);
 				onSuccess(object);
 			}
-			catch (ObjectLoadException ex)
+			finally
 			{
-				onException();
-				Bukkit.getLogger().log(Level.SEVERE, "File broken: " + file.toString(), ex.getCause());
-			}
-		}
-		catch (FileNotFoundException ex)
-		{
-			Bukkit.getLogger().log(Level.SEVERE, file.toString(), ex);
-		}
-		finally
-		{
-			try
-			{
-				if (reader != null)
+				try
 				{
 					reader.close();
 				}
+				catch (IOException ex)
+				{
+					Bukkit.getLogger().log(Level.SEVERE, "File can't be closed: " + file.toString(), ex);
+				}
 			}
-			catch (IOException ex)
-			{
-				Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
-			}
+
+		}
+		catch (FileNotFoundException ex)
+		{
+			onException();
+			Bukkit.getLogger().log(Level.WARNING, "File not found: " + file.toString());
+		}
+		catch (ObjectLoadException ex)
+		{
+			onException();
+			Bukkit.getLogger().log(Level.SEVERE, "File broken: " + file.toString(), ex.getCause());
 		}
 	}
 
