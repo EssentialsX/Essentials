@@ -566,4 +566,10 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("world-teleport-permissions", false);
 	}
+	
+	@Override
+	public boolean registerBackInListener()
+	{
+		return config.getBoolean("register-back-in-listener", false);
+	}
 }

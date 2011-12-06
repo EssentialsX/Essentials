@@ -20,6 +20,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -225,12 +227,19 @@ public class EssentialsPlayerListener extends PlayerListener
 
 	@Override
 	public void onPlayerTeleport(PlayerTeleportEvent event)
-	{
+	{			
 		if (event.isCancelled())
 		{
 			return;
 		}
-		final User user = ess.getUser(event.getPlayer());
+		
+		final User user = ess.getUser(event.getPlayer());			
+		//There is TeleportCause.COMMMAND but plugins have to actively pass the cause in on their teleports.
+		if(event.getCause() == TeleportCause.PLUGIN && ess.getSettings().registerBackInListener())
+		{
+			user.setLastLocation();
+		}
+		
 		if (ess.getSettings().changeDisplayName())
 		{
 			user.setDisplayNick();

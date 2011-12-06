@@ -12,6 +12,7 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.map.MapView;
@@ -800,6 +801,18 @@ public class OfflinePlayer implements Player
 
 	@Override
 	public void setExp(float f)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public boolean teleport(Location lctn, TeleportCause tc)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public boolean teleport(Entity entity, TeleportCause tc)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}

@@ -593,4 +593,10 @@ public class FakeServer implements Server
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
+	@Override
+	public OfflinePlayer[] getOfflinePlayers()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }
