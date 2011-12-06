@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.craftbukkit.FakeWorld;
 import com.avaje.ebean.config.ServerConfig;
 import java.io.File;
 import java.util.*;

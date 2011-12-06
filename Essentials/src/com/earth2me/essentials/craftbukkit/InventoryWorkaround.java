@@ -1,5 +1,6 @@
-package com.earth2me.essentials;
+package com.earth2me.essentials.craftbukkit;
 
+import com.earth2me.essentials.craftbukkit.FakeInventory;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.Location;

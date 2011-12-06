@@ -1,9 +1,9 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.TargetBlock;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import org.bukkit.Location;
 import org.bukkit.Server;
 
@@ -15,7 +15,6 @@ public class Commandjump extends EssentialsCommand
 		super("jump");
 	}
 
-	//TODO: Update to use new target methods
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
@@ -24,10 +23,7 @@ public class Commandjump extends EssentialsCommand
 
 		try
 		{
-			loc = new TargetBlock(user, 100, 2.65).getTargetBlock().getLocation();
-			loc.setYaw(cloc.getYaw());
-			loc.setPitch(cloc.getPitch());
-			loc = new TargetBlock(loc).getPreviousBlock().getLocation();
+			loc = Util.getTarget(user);
 			loc.setYaw(cloc.getYaw());
 			loc.setPitch(cloc.getPitch());
 			loc.setY(loc.getY() + 1);

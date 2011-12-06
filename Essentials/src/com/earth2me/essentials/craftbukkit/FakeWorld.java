@@ -1,4 +1,4 @@
-package com.earth2me.essentials;
+package com.earth2me.essentials.craftbukkit;
 
 import java.io.File;
 import java.util.List;
@@ -15,10 +15,10 @@ import org.bukkit.util.Vector;
 
 public class FakeWorld implements World
 {
-
 	private final String name;
 	private final Environment env;
-	FakeWorld(String string, Environment environment)
+
+	public FakeWorld(String string, Environment environment)
 	{
 		this.name = string;
 		this.env = environment;
@@ -444,7 +444,6 @@ public class FakeWorld implements World
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
-
 	@Override
 	public Biome getBiome(int i, int i1)
 	{
@@ -498,19 +497,19 @@ public class FakeWorld implements World
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
-	
+
 	@Override
 	public Difficulty getDifficulty()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
-	
+
 	@Override
 	public void setDifficulty(Difficulty difficulty)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
-	
+
 	@Override
 	public int getSeaLevel()
 	{

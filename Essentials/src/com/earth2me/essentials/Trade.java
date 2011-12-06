@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import static com.earth2me.essentials.I18n._;
 import java.io.File;
 import java.io.FileWriter;

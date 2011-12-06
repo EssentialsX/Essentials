@@ -1,4 +1,4 @@
-package com.earth2me.essentials;
+package com.earth2me.essentials.craftbukkit;
 
 import java.util.HashMap;
 import org.bukkit.Material;
