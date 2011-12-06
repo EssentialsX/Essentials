@@ -1,57 +1,46 @@
 package com.earth2me.essentials.spawn;
 
-import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.settings.Spawns;
-import com.earth2me.essentials.storage.AbstractDelayedYamlFileReader;
-import com.earth2me.essentials.storage.AbstractDelayedYamlFileWriter;
-import com.earth2me.essentials.storage.ObjectLoadException;
-import com.earth2me.essentials.storage.StorageObject;
+import com.earth2me.essentials.storage.AsyncStorageObjectHolder;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
 
-public class SpawnStorage implements IConf, IEssentialsModule
+public class SpawnStorage extends AsyncStorageObjectHolder<Spawns> implements IEssentialsModule
 {
-	private transient Spawns spawns;
-	private final transient IEssentials ess;
-	private final transient File spawnfile;
-	private final transient ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
-
 	public SpawnStorage(final IEssentials ess)
 	{
-		this.ess = ess;
-		spawnfile = new File(ess.getDataFolder(), "spawn.yml");
-		new SpawnReader();
+		super(ess, Spawns.class);
+		reloadConfig();
+	}
+
+	@Override
+	public File getStorageFile()
+	{
+		return new File(ess.getDataFolder(), "spawn.yml");
 	}
 
 	public void setSpawn(final Location loc, final String group)
 	{
-		rwl.writeLock().lock();
+		acquireWriteLock();
 		try
 		{
-			if (spawns == null)
+			if (getData().getSpawns() == null)
 			{
-				spawns = new Spawns();
+				getData().setSpawns(new HashMap<String, Location>());
 			}
-			if (spawns.getSpawns() == null)
-			{
-				spawns.setSpawns(new HashMap<String, Location>());
-			}
-			spawns.getSpawns().put(group.toLowerCase(Locale.ENGLISH), loc);
+			getData().getSpawns().put(group.toLowerCase(Locale.ENGLISH), loc);
 		}
 		finally
 		{
-			rwl.writeLock().unlock();
+			unlock();
 		}
-		new SpawnWriter();
 
 		if ("default".equalsIgnoreCase(group))
 		{
@@ -61,14 +50,14 @@ public class SpawnStorage implements IConf, IEssentialsModule
 
 	public Location getSpawn(final String group)
 	{
-		rwl.readLock().lock();
+		acquireReadLock();
 		try
 		{
-			if (spawns == null || spawns.getSpawns() == null || group == null)
+			if (getData().getSpawns() == null || group == null)
 			{
 				return getWorldSpawn();
 			}
-			final Map<String, Location> spawnMap = spawns.getSpawns();
+			final Map<String, Location> spawnMap = getData().getSpawns();
 			String groupName = group.toLowerCase(Locale.ENGLISH);
 			if (!spawnMap.containsKey(groupName))
 			{
@@ -82,7 +71,7 @@ public class SpawnStorage implements IConf, IEssentialsModule
 		}
 		finally
 		{
-			rwl.readLock().unlock();
+			unlock();
 		}
 	}
 
@@ -97,67 +86,5 @@ public class SpawnStorage implements IConf, IEssentialsModule
 			return world.getSpawnLocation();
 		}
 		return ess.getServer().getWorlds().get(0).getSpawnLocation();
-	}
-
-	@Override
-	public void reloadConfig()
-	{
-		new SpawnReader();
-	}
-
-
-	private class SpawnWriter extends AbstractDelayedYamlFileWriter
-	{
-		public SpawnWriter()
-		{
-			super(ess, spawnfile);
-		}
-
-		@Override
-		public StorageObject getObject()
-		{
-			rwl.readLock().lock();
-			return spawns;
-		}
-
-		@Override
-		public void onFinish()
-		{
-			rwl.readLock().unlock();
-		}
-	}
-
-
-	private class SpawnReader extends AbstractDelayedYamlFileReader<Spawns>
-	{
-		public SpawnReader()
-		{
-			super(ess, spawnfile, Spawns.class);
-		}
-
-		@Override
-		public void onStart()
-		{
-			rwl.writeLock().lock();
-		}
-
-		@Override
-		public void onSuccess(final Spawns object)
-		{
-			if (object != null)
-			{
-				spawns = object;
-			}
-			rwl.writeLock().unlock();
-		}
-
-		@Override
-		public void onException()
-		{
-			if (spawns == null) {
-				spawns = new Spawns();
-			}
-			rwl.writeLock().unlock();
-		}
 	}
 }

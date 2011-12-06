@@ -2,6 +2,8 @@ package com.earth2me.essentials.user;
 
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.craftbukkit.OfflineBedLocation;
+import com.earth2me.essentials.storage.AsyncStorageObjectHolder;
+import java.io.File;
 import lombok.Delegate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -16,7 +18,7 @@ import org.bukkit.permissions.ServerOperator;
 import org.bukkit.OfflinePlayer;
 
 
-public class UserBase implements Player, IOfflinePlayer
+public class UserBase extends AsyncStorageObjectHolder<UserData> implements Player, IOfflineUser
 {
 	
 	@Delegate(types =
@@ -27,18 +29,19 @@ public class UserBase implements Player, IOfflinePlayer
 	},excludes=IOfflinePlayer.class)
 	protected Player base;
 	protected transient OfflinePlayer offlinePlayer;
-	protected final transient IEssentials ess;
 
 	public UserBase(final Player base, final IEssentials ess)
 	{
+		super(ess, UserData.class);
 		this.base = base;
-		this.ess = ess;
+		reloadConfig();
 	}
 	
 	public UserBase(final OfflinePlayer offlinePlayer, final IEssentials ess)
 	{
+		super(ess, UserData.class);
 		this.offlinePlayer = offlinePlayer;
-		this.ess = ess;
+		reloadConfig();
 	}
 
 	public final Player getBase()
@@ -110,6 +113,10 @@ public class UserBase implements Player, IOfflinePlayer
 			offlinePlayer.setBanned(bln);
 		}
 	}
-	
-	
+
+	@Override
+	public File getStorageFile()
+	{
+		return ess.getUserMap().getUserFile(getName());
+	}
 }
