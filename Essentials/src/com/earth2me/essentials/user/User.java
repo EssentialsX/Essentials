@@ -3,7 +3,6 @@ package com.earth2me.essentials.user;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.storage.AbstractDelayedYamlFileWriter;
 import com.earth2me.essentials.storage.StorageObject;
-import com.earth2me.essentials.storage.YamlStorageReader;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import lombok.Cleanup;
 import org.bukkit.OfflinePlayer;
@@ -23,11 +22,6 @@ public class User extends UserBase implements IOfflineUser
 	public User(final OfflinePlayer offlinePlayer, final IEssentials ess)
 	{
 		super(offlinePlayer, ess);
-	}
-
-	public void loadUserData()
-	{
-		data = new YamlStorageReader(null).load(UserData.class);
 	}
 
 	@Override

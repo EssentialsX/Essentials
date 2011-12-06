@@ -24,7 +24,7 @@ public class Commandspawn extends EssentialsCommand
 		if (args.length > 0 && user.isAuthorized("essentials.spawn.others"))
 		{
 			final User otherUser = getPlayer(server, args, 0);
-			otherUser.getTeleport().respawn(ess.getSpawn(), charge);
+			otherUser.getTeleport().respawn(charge);
 			if (!otherUser.equals(user))
 			{
 				otherUser.sendMessage(_("teleportAtoB", user.getDisplayName(), "spawn"));
@@ -33,7 +33,7 @@ public class Commandspawn extends EssentialsCommand
 		}
 		else
 		{
-			user.getTeleport().respawn(ess.getSpawn(), charge);
+			user.getTeleport().respawn(charge);
 		}
 	}
 
@@ -45,7 +45,7 @@ public class Commandspawn extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 		final User user = getPlayer(server, args, 0);
-		user.getTeleport().respawn(ess.getSpawn(), null);
+		user.getTeleport().respawn(null);
 		user.sendMessage(_("teleportAtoB", user.getDisplayName(), "spawn"));
 		sender.sendMessage(_("teleporting"));
 	}

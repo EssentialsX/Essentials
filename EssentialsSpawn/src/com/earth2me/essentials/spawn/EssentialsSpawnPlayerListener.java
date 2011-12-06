@@ -4,7 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
@@ -14,11 +14,13 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 public class EssentialsSpawnPlayerListener extends PlayerListener
 {
 	private final transient IEssentials ess;
+	private final transient SpawnStorage spawns;
 
-	public EssentialsSpawnPlayerListener(final IEssentials ess)
+	public EssentialsSpawnPlayerListener(final IEssentials ess, final SpawnStorage spawns)
 	{
 		super();
 		this.ess = ess;
+		this.spawns = spawns;
 	}
 
 	@Override
@@ -39,7 +41,7 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 				return;
 			}
 		}
-		final Location spawn = ess.getSpawn().getSpawn(user.getGroup());
+		final Location spawn = spawns.getSpawn(user.getGroup());
 		if (spawn != null)
 		{
 			event.setRespawnLocation(spawn);
@@ -58,25 +60,36 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 		user.setNew(false);
 		if (!"none".equalsIgnoreCase(ess.getSettings().getNewbieSpawn()))
 		{
-			ess.scheduleSyncDelayedTask(new Runnable()
-			{
-				public void run()
-				{
-					try
-					{
-						user.getTeleport().now(ess.getSpawn().getSpawn(ess.getSettings().getNewbieSpawn()), false);
-					}
-					catch (Exception ex)
-					{
-						Logger.getLogger("Minecraft").log(Level.WARNING, _("teleportNewPlayerError"), ex);
-					}
-				}
-			});
+			ess.scheduleSyncDelayedTask(new NewPlayerTeleport(user));
 		}
 
 		if (ess.getSettings().getAnnounceNewPlayers())
 		{
 			ess.broadcastMessage(user, ess.getSettings().getAnnounceNewPlayerFormat(user));
+		}
+	}
+
+
+	private class NewPlayerTeleport implements Runnable
+	{
+		private final transient User user;
+
+		public NewPlayerTeleport(final User user)
+		{
+			this.user = user;
+		}
+
+		@Override
+		public void run()
+		{
+			try
+			{
+				user.getTeleport().now(spawns.getSpawn(ess.getSettings().getNewbieSpawn()), false);
+			}
+			catch (Exception ex)
+			{
+				Bukkit.getLogger().log(Level.WARNING, _("teleportNewPlayerError"), ex);
+			}
 		}
 	}
 }

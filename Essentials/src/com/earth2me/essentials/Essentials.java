@@ -65,7 +65,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private transient ISettings settings;
 	private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
-	private transient Spawn spawn;
 	private transient Jail jail;
 	private transient Warps warps;
 	private transient Worth worth;
@@ -159,8 +158,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 			userMap = new UserMap(this);
 			confList.add(userMap);
 			execTimer.mark("Init(Usermap)");
-			spawn = new Spawn(getServer(), this.getDataFolder());
-			confList.add(spawn);
 			warps = new Warps(getServer(), this.getDataFolder());
 			confList.add(warps);
 			execTimer.mark("Init(Spawn/Warp)");
@@ -297,11 +294,11 @@ public class Essentials extends JavaPlugin implements IEssentials
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args)
 	{
-		return onCommandEssentials(sender, command, commandLabel, args, Essentials.class.getClassLoader(), "com.earth2me.essentials.commands.Command", "essentials.");
+		return onCommandEssentials(sender, command, commandLabel, args, Essentials.class.getClassLoader(), "com.earth2me.essentials.commands.Command", "essentials.", null);
 	}
 
 	@Override
-	public boolean onCommandEssentials(final CommandSender sender, final Command command, final String commandLabel, final String[] args, final ClassLoader classLoader, final String commandPath, final String permissionPrefix)
+	public boolean onCommandEssentials(final CommandSender sender, final Command command, final String commandLabel, final String[] args, final ClassLoader classLoader, final String commandPath, final String permissionPrefix, final IEssentialsModule module)
 	{
 		// Allow plugins to override the command via onCommand
 		if (!getSettings().isCommandOverridden(command.getName()) && !commandLabel.startsWith("e"))
@@ -344,6 +341,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 			{
 				cmd = (IEssentialsCommand)classLoader.loadClass(commandPath + command.getName()).newInstance();
 				cmd.setEssentials(this);
+				cmd.setEssentialsModule(module);
 			}
 			catch (Exception ex)
 			{
@@ -440,12 +438,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 	public Backup getBackup()
 	{
 		return backup;
-	}
-
-	@Override
-	public Spawn getSpawn()
-	{
-		return spawn;
 	}
 
 	@Override

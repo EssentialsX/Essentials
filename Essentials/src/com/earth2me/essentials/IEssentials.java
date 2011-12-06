@@ -15,10 +15,10 @@ public interface IEssentials extends Plugin
 
 	void reload();
 
-	boolean onCommandEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath, String permissionPrefix);
+	boolean onCommandEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath, String permissionPrefix, IEssentialsModule module);
 
 	User getUser(Object base);
-	
+
 	I18n getI18n();
 
 	User getOfflineUser(String name);
@@ -39,8 +39,6 @@ public interface IEssentials extends Plugin
 
 	Backup getBackup();
 
-	Spawn getSpawn();
-
 	Methods getPaymentMethod();
 
 	int scheduleAsyncDelayedTask(Runnable run);
@@ -54,7 +52,7 @@ public interface IEssentials extends Plugin
 	TNTExplodeListener getTNTListener();
 
 	PermissionsHandler getPermissionsHandler();
-	
+
 	AlternativeCommandsHandler getAlternativeCommandsHandler();
 
 	void showError(final CommandSender sender, final Throwable exception, final String commandLabel);

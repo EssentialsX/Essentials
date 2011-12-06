@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
@@ -18,4 +19,6 @@ public interface IEssentialsCommand
 			throws Exception;
 
 	void setEssentials(IEssentials ess);
+
+	void setEssentialsModule(IEssentialsModule module);
 }

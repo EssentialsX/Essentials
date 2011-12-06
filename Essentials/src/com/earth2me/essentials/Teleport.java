@@ -7,6 +7,8 @@ import java.util.GregorianCalendar;
 import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
 
 public class Teleport implements Runnable
@@ -122,9 +124,13 @@ public class Teleport implements Runnable
 		this.ess = ess;
 	}
 
-	public void respawn(Spawn spawn, Trade chargeFor) throws Exception
+	public void respawn(final Trade chargeFor) throws Exception
 	{
-		teleport(new Target(spawn.getSpawn(user.getGroup())), chargeFor);
+		final Player player = user.getBase();
+		final Location bed = player.getBedSpawnLocation();
+		final PlayerRespawnEvent pre = new PlayerRespawnEvent(player, bed == null ? player.getWorld().getSpawnLocation() : bed, bed != null);
+		ess.getServer().getPluginManager().callEvent(pre);
+		teleport(new Target(pre.getRespawnLocation()), chargeFor);
 	}
 
 	public void warp(String warp, Trade chargeFor) throws Exception

@@ -2,8 +2,10 @@ package com.earth2me.essentials.spawn;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.IEssentialsModule;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Event.Priority;
@@ -14,8 +16,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class EssentialsSpawn extends JavaPlugin
 {
-	private static final Logger LOGGER = Logger.getLogger("Minecraft");
+	private static final Logger LOGGER = Bukkit.getLogger();
 	private transient IEssentials ess;
+	private transient SpawnStorage spawns;
 
 	public void onEnable()
 	{
@@ -25,11 +28,15 @@ public class EssentialsSpawn extends JavaPlugin
 		{
 			LOGGER.log(Level.WARNING, _("versionMismatchAll"));
 		}
-		if (!ess.isEnabled()) {
+		if (!ess.isEnabled())
+		{
 			this.setEnabled(false);
 			return;
 		}
-		final EssentialsSpawnPlayerListener playerListener = new EssentialsSpawnPlayerListener(ess);
+
+		spawns = new SpawnStorage(ess);
+
+		final EssentialsSpawnPlayerListener playerListener = new EssentialsSpawnPlayerListener(ess, spawns);
 		pluginManager.registerEvent(Type.PLAYER_RESPAWN, playerListener, Priority.Low, this);
 		pluginManager.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Low, this);
 
@@ -41,8 +48,9 @@ public class EssentialsSpawn extends JavaPlugin
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args)
+	public boolean onCommand(final CommandSender sender, final Command command,
+							 final String commandLabel, final String[] args)
 	{
-		return ess.onCommandEssentials(sender, command, commandLabel, args, EssentialsSpawn.class.getClassLoader(), "com.earth2me.essentials.spawn.Command", "essentials.");
+		return ess.onCommandEssentials(sender, command, commandLabel, args, EssentialsSpawn.class.getClassLoader(), "com.earth2me.essentials.spawn.Command", "essentials.", spawns);
 	}
 }

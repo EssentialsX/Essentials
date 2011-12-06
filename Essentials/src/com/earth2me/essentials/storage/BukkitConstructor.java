@@ -9,17 +9,22 @@ import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPluginLoader;
 import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.nodes.*;
 
 
 public class BukkitConstructor extends Constructor
 {
 	private final transient Pattern NUMPATTERN = Pattern.compile("\\d+");
+	private final transient Plugin plugin;
 
-	public BukkitConstructor(Class clazz)
+	public BukkitConstructor(final Class clazz, final Plugin plugin)
 	{
 		super(clazz);
+		this.plugin = plugin;
 		yamlClassConstructors.put(NodeId.scalar, new ConstructBukkitScalar());
 		yamlClassConstructors.put(NodeId.mapping, new ConstructBukkitMapping());
 	}
@@ -264,6 +269,31 @@ public class BukkitConstructor extends Constructor
 				return new Location(world, x, y, z, yaw, pitch);
 			}
 			return super.construct(node);
+		}
+	}
+
+	@Override
+	protected Class<?> getClassForNode(final Node node)
+	{
+		Class<?> clazz;
+		final String name = node.getTag().getClassName();
+		if (plugin == null)
+		{
+			clazz = super.getClassForNode(node);
+		}
+		else
+		{
+			final JavaPluginLoader jpl = (JavaPluginLoader)plugin.getPluginLoader();
+			clazz = jpl.getClassByName(name);
+		}
+
+		if (clazz == null)
+		{
+			throw new YAMLException("Class not found: " + name);
+		}
+		else
+		{
+			return clazz;
 		}
 	}
 }

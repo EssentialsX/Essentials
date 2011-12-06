@@ -1,5 +1,7 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.settings.Spawns;
+import com.earth2me.essentials.storage.YamlStorageWriter;
 import static com.earth2me.essentials.I18n._;
 import java.io.*;
 import java.math.BigInteger;
@@ -681,6 +683,53 @@ public class EssentialsUpgrade
 		}
 	}
 
+	private void updateSpawnsToNewSpawnsConfig()
+	{
+		if (doneFile.getBoolean("updateSpawnsToNewSpawnsConfig", false))
+		{
+			return;
+		}
+		final File configFile = new File(ess.getDataFolder(), "spawn.yml");
+		if (configFile.exists())
+		{
+
+			final EssentialsConf config = new EssentialsConf(configFile);
+			try
+			{
+				config.load();
+				if (!config.hasProperty("spawns"))
+				{
+					final Spawns spawns = new Spawns();
+					List<String> keys = config.getKeys();
+					for (String group : keys)
+					{
+						Location loc = getFakeLocation(config, group);
+						spawns.getSpawns().put(group.toLowerCase(Locale.ENGLISH), loc);
+					}
+					if (!configFile.renameTo(new File(ess.getDataFolder(), "spawn.yml.old")))
+					{
+						throw new Exception(_("fileRenameError", "spawn.yml"));
+					}
+					PrintWriter writer = new PrintWriter(configFile);
+					try
+					{
+						new YamlStorageWriter(writer).save(spawns);
+					}
+					finally
+					{
+						writer.close();
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+			}
+		}
+		doneFile.setProperty("updateSpawnsToNewSpawnsConfig", true);
+		doneFile.save();
+	}
+
 	public void beforeSettings()
 	{
 		if (!ess.getDataFolder().exists())
@@ -701,5 +750,6 @@ public class EssentialsUpgrade
 		updateUsersPowerToolsFormat();
 		updateUsersHomesFormat();
 		deleteOldItemsCsv();
+		updateSpawnsToNewSpawnsConfig();
 	}
 }

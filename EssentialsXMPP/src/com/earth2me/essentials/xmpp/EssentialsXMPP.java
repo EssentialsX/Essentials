@@ -67,12 +67,13 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 		{
 			xmpp.disconnect();
 		}
+		instance = null;
 	}
 
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args)
 	{
-		return ess.onCommandEssentials(sender, command, commandLabel, args, EssentialsXMPP.class.getClassLoader(), "com.earth2me.essentials.xmpp.Command", "essentials.");
+		return ess.onCommandEssentials(sender, command, commandLabel, args, EssentialsXMPP.class.getClassLoader(), "com.earth2me.essentials.xmpp.Command", "essentials.", null);
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bukkit.plugin.Plugin;
 import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
@@ -16,10 +17,12 @@ public class YamlStorageReader implements IStorageReader
 	private transient static Map<Class, Yaml> preparedYamls = Collections.synchronizedMap(new HashMap<Class, Yaml>());
 	private transient static Map<Class, ReentrantLock> locks = new HashMap<Class, ReentrantLock>();
 	private transient final Reader reader;
+	private transient final Plugin plugin;
 
-	public YamlStorageReader(final Reader reader)
+	public YamlStorageReader(final Reader reader, final Plugin plugin)
 	{
 		this.reader = reader;
+		this.plugin = plugin;
 	}
 
 	@Override
@@ -68,16 +71,16 @@ public class YamlStorageReader implements IStorageReader
 		return ret;
 	}
 
-	private static Constructor prepareConstructor(final Class<?> clazz)
+	private Constructor prepareConstructor(final Class<?> clazz)
 	{
-		final Constructor constructor = new BukkitConstructor(clazz);
+		final Constructor constructor = new BukkitConstructor(clazz, plugin);
 		final Set<Class> classes = new HashSet<Class>();
 
 		prepareConstructor(constructor, classes, clazz);
 		return constructor;
 	}
 
-	private static void prepareConstructor(final Constructor constructor, final Set<Class> classes, final Class clazz)
+	private void prepareConstructor(final Constructor constructor, final Set<Class> classes, final Class clazz)
 	{
 		classes.add(clazz);
 		final TypeDescription description = new TypeDescription(clazz);
@@ -94,7 +97,7 @@ public class YamlStorageReader implements IStorageReader
 		constructor.addTypeDescription(description);
 	}
 
-	private static void prepareList(final Field field, final TypeDescription description, final Set<Class> classes, final Constructor constructor)
+	private void prepareList(final Field field, final TypeDescription description, final Set<Class> classes, final Constructor constructor)
 	{
 		final ListType listType = field.getAnnotation(ListType.class);
 		if (listType != null)
@@ -108,7 +111,7 @@ public class YamlStorageReader implements IStorageReader
 		}
 	}
 
-	private static void prepareMap(final Field field, final TypeDescription description, final Set<Class> classes, final Constructor constructor)
+	private void prepareMap(final Field field, final TypeDescription description, final Set<Class> classes, final Constructor constructor)
 	{
 		final MapValueType mapType = field.getAnnotation(MapValueType.class);
 		if (mapType != null)
