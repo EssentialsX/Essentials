@@ -1,4 +1,4 @@
-package com.earth2me.essentials.userdata;
+package com.earth2me.essentials.user;
 
 import com.earth2me.essentials.storage.MapKeyType;
 import com.earth2me.essentials.storage.MapValueType;

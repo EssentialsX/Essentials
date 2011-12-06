@@ -1,5 +1,8 @@
-package com.earth2me.essentials;
+package com.earth2me.essentials.user;
 
+import com.earth2me.essentials.IConf;
+import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.Util;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -10,6 +13,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutionException;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 
@@ -89,7 +93,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 		if (userFile.exists())
 		{
 			keys.add(name.toLowerCase(Locale.ENGLISH));
-			return new User(new OfflinePlayer(name, ess), ess);
+			return new User(Bukkit.getOfflinePlayer(name), ess);
 		}
 		throw new Exception("User not found!");
 	}
@@ -115,7 +119,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 	{
 		return keys.size();
 	}
-	
+
 	public File getUserFile(final String name)
 	{
 		final File userFolder = new File(ess.getDataFolder(), "userdata");
