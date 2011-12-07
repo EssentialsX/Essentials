@@ -28,8 +28,8 @@ commands:
     usage: /<command> [player]
     aliases: [bal,emoney,ebalance,ebal]
   balancetop:
-    description: Gets the top x balance values. (max 10)
-    usage: /<command> <max>
+    description: Gets the top balance values.
+    usage: /<command> <page>
     aliases: [baltop,ebaltop,ebalancetop]
   ban:
     description: Bans a player.
