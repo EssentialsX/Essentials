@@ -6,6 +6,7 @@ import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
+import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -61,30 +62,27 @@ public class SignEnchant extends EssentialsSign
 	@Override
 	protected boolean onSignInteract(ISign sign, User player, String username, IEssentials ess) throws SignException, ChargeException
 	{
-		final Material search = getItemStack(sign.getLine(1), 1, ess).getType();
-		int slot;
+		final ItemStack search = getItemStack(sign.getLine(1), 1, ess);
+		int slot = -1;
 		final Trade charge = getTrade(sign, 3, ess);
 		charge.isAffordableFor(player);
-		if (player.getInventory().contains(search))
+		if (InventoryWorkaround.containsItem(player.getInventory(), false, search))
 		{
-			slot = player.getInventory().first(search);
+			slot = InventoryWorkaround.first(player.getInventory(), search, false, true);
 		}
-		else
+		if (slot == -1)
 		{
-			player.sendMessage(_("missingItems", 1, search.toString()));
-			return true;
+			throw new SignException(_("missingItems", 1, search.toString()));
 		}
 		final String[] enchantLevel = sign.getLine(2).split(":");
 		if (enchantLevel.length != 2)
 		{
-			player.sendMessage(_("invalidSignLine", 2));
-			return true;
+			throw new SignException(_("invalidSignLine", 2));
 		}
 		final Enchantment enchantment = Enchantments.getByName(enchantLevel[0]);
 		if (enchantment == null)
 		{
-			player.sendMessage(_("enchantmentNotFound"));
-			return true;
+			throw new SignException(_("enchantmentNotFound"));
 		}
 
 		final ItemStack toEnchant = player.getInventory().getItem(slot);
