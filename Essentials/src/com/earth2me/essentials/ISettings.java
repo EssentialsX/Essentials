@@ -146,4 +146,6 @@ public interface ISettings extends IConf
 	boolean getIsWorldTeleportPermissions();
 	
 	boolean registerBackInListener();
+
+	public boolean getDisableItemPickupWhileAfk();
 }

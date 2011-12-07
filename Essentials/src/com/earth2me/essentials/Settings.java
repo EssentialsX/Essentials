@@ -572,4 +572,10 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("register-back-in-listener", false);
 	}
+
+	@Override
+	public boolean getDisableItemPickupWhileAfk()
+	{
+		return config.getBoolean("disable-item-pickup-while-afk", true);
+	}
 }

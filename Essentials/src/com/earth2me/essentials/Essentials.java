@@ -215,6 +215,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		pm.registerEvent(Type.PLAYER_ANIMATION, playerListener, Priority.High, this);
 		pm.registerEvent(Type.PLAYER_CHANGED_WORLD, playerListener, Priority.Normal, this);
 		pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Priority.Monitor, this);
+		pm.registerEvent(Type.PLAYER_PICKUP_ITEM, playerListener, Priority.Low, this);
 		pm.registerEvent(Type.PLAYER_TELEPORT, new ItemDupeFix(), Priority.Monitor, this);
 
 		final EssentialsBlockListener blockListener = new EssentialsBlockListener(this);
@@ -298,7 +299,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 			final PluginCommand pc = alternativeCommandsHandler.getAlternative(commandLabel);
 			if (pc != null)
 			{
-				alternativeCommandsHandler.executed(commandLabel, pc.getLabel());				
+				alternativeCommandsHandler.executed(commandLabel, pc.getLabel());
 				return pc.execute(sender, commandLabel, args);
 			}
 		}

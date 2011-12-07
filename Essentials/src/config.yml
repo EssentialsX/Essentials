@@ -213,6 +213,10 @@ auto-afk-kick: -1
 # The player has to use the command /afk to leave the afk mode.
 freeze-afk-players: false
 
+# When the player is afk, should he be able to pickup items?
+# Enable this, when you don't want people idling in mob traps.
+disable-item-pickup-while-afk: true
+
 # You can disable the death messages of minecraft here
 death-messages: true
 

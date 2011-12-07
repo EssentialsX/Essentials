@@ -227,19 +227,19 @@ public class EssentialsPlayerListener extends PlayerListener
 
 	@Override
 	public void onPlayerTeleport(PlayerTeleportEvent event)
-	{			
+	{
 		if (event.isCancelled())
 		{
 			return;
 		}
-		
-		final User user = ess.getUser(event.getPlayer());			
+
+		final User user = ess.getUser(event.getPlayer());
 		//There is TeleportCause.COMMMAND but plugins have to actively pass the cause in on their teleports.
-		if((event.getCause() == TeleportCause.PLUGIN || event.getCause() == TeleportCause.COMMAND)&& ess.getSettings().registerBackInListener())
+		if ((event.getCause() == TeleportCause.PLUGIN || event.getCause() == TeleportCause.COMMAND) && ess.getSettings().registerBackInListener())
 		{
 			user.setLastLocation();
 		}
-		
+
 		if (ess.getSettings().changeDisplayName())
 		{
 			user.setDisplayNick();
@@ -380,6 +380,20 @@ public class EssentialsPlayerListener extends PlayerListener
 		if (ess.getSettings().getUpdateBedAtDaytime() && event.getClickedBlock().getType() == Material.BED_BLOCK)
 		{
 			SetBed.setBed(event.getPlayer(), event.getClickedBlock());
+		}
+	}
+
+	@Override
+	public void onPlayerPickupItem(PlayerPickupItemEvent event)
+	{
+		if (event.isCancelled() || !ess.getSettings().getDisableItemPickupWhileAfk())
+		{
+			return;
+		}
+		final User user = ess.getUser(event.getPlayer());
+		if (user.isAfk())
+		{
+			event.setCancelled(true);
 		}
 	}
 }
