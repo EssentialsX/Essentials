@@ -115,8 +115,8 @@ commands:
     usage: /<command> [player]
     aliases: [gm,creative,creativemode,egamemode,ecreative,ecreativemode,egm]
   getpos:
-    description: Get your current coordinates.
-    usage: /<command>
+    description: Get your current coordinates or those of a player.
+    usage: /<command> [player]
     aliases: [coords,egetpos,whereami,ewhereami]
   gc:
     description: Reports garbage collection info; useful to developers.
@@ -219,8 +219,8 @@ commands:
     usage: /<command> <player> [datediff]
     aliases: [emute]
   near:
-    description: Lists the players near by.
-    usage: /<command> [radius]
+    description: Lists the players near by or around a player
+    usage: /<command> [playername] [radius] 
     aliases: [nearby,enear,enearby]
   nick:
     description: Change your nickname or that of another player.
