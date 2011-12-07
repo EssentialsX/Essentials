@@ -6,6 +6,7 @@ import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 
 public class Commandtp extends EssentialsCommand
@@ -32,7 +33,7 @@ public class Commandtp extends EssentialsCommand
 			user.sendMessage(_("teleporting"));
 			final Trade charge = new Trade(this.getName(), ess);
 			charge.isAffordableFor(user);
-			user.getTeleport().teleport(player, charge);
+			user.getTeleport().teleport(player, charge, TeleportCause.COMMAND);
 			throw new NoChargeException();
 
 		default:
@@ -44,7 +45,7 @@ public class Commandtp extends EssentialsCommand
 			user.sendMessage(_("teleporting"));
 			final User target = getPlayer(server, args, 0);
 			final User toPlayer = getPlayer(server, args, 1);
-			target.getTeleport().now(toPlayer, false);
+			target.getTeleport().now(toPlayer, false, TeleportCause.COMMAND);
 			target.sendMessage(_("teleportAtoB", user.getDisplayName(), toPlayer.getDisplayName()));
 			break;
 		}
@@ -61,7 +62,7 @@ public class Commandtp extends EssentialsCommand
 		sender.sendMessage(_("teleporting"));
 		final User target = getPlayer(server, args, 0);
 		final User toPlayer = getPlayer(server, args, 1);
-		target.getTeleport().now(toPlayer, false);
+		target.getTeleport().now(toPlayer, false, TeleportCause.COMMAND);
 		target.sendMessage(_("teleportAtoB", Console.NAME, toPlayer.getDisplayName()));
 	}
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 
 public class Commandworld extends EssentialsCommand
@@ -81,7 +82,7 @@ public class Commandworld extends EssentialsCommand
 
 		final Trade charge = new Trade(this.getName(), ess);
 		charge.isAffordableFor(user);
-		user.getTeleport().teleport(target, charge);
+		user.getTeleport().teleport(target, charge, TeleportCause.COMMAND);
 		throw new NoChargeException();
 	}
 }

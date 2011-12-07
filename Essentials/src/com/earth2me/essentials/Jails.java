@@ -13,6 +13,7 @@ import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
 import org.bukkit.event.block.*;
 import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.plugin.PluginManager;
 
 
@@ -109,7 +110,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 		{
 			if (!(user.getBase() instanceof OfflinePlayer))
 			{
-				user.getTeleport().now(getJail(jail), false);
+				user.getTeleport().now(getJail(jail), false, TeleportCause.COMMAND);
 			}
 			user.setJail(jail);
 		}

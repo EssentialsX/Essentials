@@ -7,6 +7,7 @@ import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import static com.earth2me.essentials.I18n._;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 
 public class Commandspawn extends EssentialsCommand
@@ -24,7 +25,7 @@ public class Commandspawn extends EssentialsCommand
 		if (args.length > 0 && user.isAuthorized("essentials.spawn.others"))
 		{
 			final User otherUser = getPlayer(server, args, 0);
-			otherUser.getTeleport().respawn(charge);
+			otherUser.getTeleport().respawn(charge, TeleportCause.COMMAND);
 			if (!otherUser.equals(user))
 			{
 				otherUser.sendMessage(_("teleportAtoB", user.getDisplayName(), "spawn"));
@@ -33,7 +34,7 @@ public class Commandspawn extends EssentialsCommand
 		}
 		else
 		{
-			user.getTeleport().respawn(charge);
+			user.getTeleport().respawn(charge, TeleportCause.COMMAND);
 		}
 	}
 
@@ -45,7 +46,7 @@ public class Commandspawn extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 		final User user = getPlayer(server, args, 0);
-		user.getTeleport().respawn(null);
+		user.getTeleport().respawn(null, TeleportCause.COMMAND);
 		user.sendMessage(_("teleportAtoB", user.getDisplayName(), "spawn"));
 		sender.sendMessage(_("teleporting"));
 	}

@@ -6,6 +6,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import org.bukkit.Location;
 import org.bukkit.Server;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 
 public class Commandjump extends EssentialsCommand
@@ -35,6 +36,6 @@ public class Commandjump extends EssentialsCommand
 
 		final Trade charge = new Trade(this.getName(), ess);
 		charge.isAffordableFor(user);
-		user.getTeleport().teleport(loc, charge);
+		user.getTeleport().teleport(loc, charge, TeleportCause.COMMAND);
 	}
 }

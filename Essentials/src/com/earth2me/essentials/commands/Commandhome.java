@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 import org.bukkit.Location;
 import org.bukkit.Server;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 
 public class Commandhome extends EssentialsCommand
@@ -48,7 +49,7 @@ public class Commandhome extends EssentialsCommand
 				final Location bed = player.getBedSpawnLocation();
 				if (bed != null)
 				{
-					user.getTeleport().teleport(bed, charge);
+					user.getTeleport().teleport(bed, charge, TeleportCause.COMMAND);
 					return;
 				}
 			}
@@ -59,7 +60,7 @@ public class Commandhome extends EssentialsCommand
 			final List<String> homes = player.getHomes();
 			if (homes.isEmpty() && player.equals(user))
 			{
-				user.getTeleport().respawn(charge);
+				user.getTeleport().respawn(charge, TeleportCause.COMMAND);
 			}
 			else if (homes.isEmpty())
 			{

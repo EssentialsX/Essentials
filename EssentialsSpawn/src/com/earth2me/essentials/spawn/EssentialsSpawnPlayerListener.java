@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 
 public class EssentialsSpawnPlayerListener extends PlayerListener
@@ -84,7 +85,7 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 		{
 			try
 			{
-				user.getTeleport().now(spawns.getSpawn(ess.getSettings().getNewbieSpawn()), false);
+				user.getTeleport().now(spawns.getSpawn(ess.getSettings().getNewbieSpawn()), false, TeleportCause.PLUGIN);
 			}
 			catch (Exception ex)
 			{
