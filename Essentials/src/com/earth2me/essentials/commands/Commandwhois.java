@@ -56,7 +56,6 @@ public class Commandwhois extends EssentialsCommand
 			sender.sendMessage(_("whoisIs", user.getDisplayName(), user.getName()));
 			sender.sendMessage(_("whoisHealth", user.getHealth()));
 			sender.sendMessage(_("whoisOP", (user.isOp() ? _("true") : _("false"))));
-			sender.sendMessage(_("whoisBanned", (user.isBanned() ? _("true") : _("false"))));
 			sender.sendMessage(_("whoisGod", (user.isGodModeEnabled() ? _("true") : _("false"))));
 			sender.sendMessage(_("whoisGamemode", _(user.getGameMode().toString().toLowerCase(Locale.ENGLISH))));
 			sender.sendMessage(_("whoisLocation", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ()));
