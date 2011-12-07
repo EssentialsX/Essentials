@@ -85,7 +85,11 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 		{
 			try
 			{
-				user.getTeleport().now(spawns.getSpawn(ess.getSettings().getNewbieSpawn()), false, TeleportCause.PLUGIN);
+				Location spawn = spawns.getSpawn(ess.getSettings().getNewbieSpawn());
+				if (spawn != null)
+				{
+					user.getTeleport().now(spawn, false, TeleportCause.PLUGIN);
+				}
 			}
 			catch (Exception ex)
 			{
