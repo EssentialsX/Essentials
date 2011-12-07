@@ -50,7 +50,14 @@ public class Commandnick extends EssentialsCommand
 		{
 			throw new Exception(_("nickDisplayName"));
 		}
-		setNickname(server, getPlayer(server, args, 0), formatNickname(null, args[1]));
+		if ((args[0].equalsIgnoreCase("*") || args[0].equalsIgnoreCase("all")) && args[1].equalsIgnoreCase("off"))
+		{
+			resetAllNicknames(server);
+		}
+		else
+		{
+			setNickname(server, getPlayer(server, args, 0), formatNickname(null, args[1]));
+		}
 		sender.sendMessage(_("nickChanged"));
 	}
 
@@ -61,6 +68,20 @@ public class Commandnick extends EssentialsCommand
 			return nick.replace('&', '\u00a7').replace("\u00a7\u00a7", "&");
 		}
 		return nick;
+	}
+
+	private void resetAllNicknames(final Server server)
+	{
+		for (Player player : server.getOnlinePlayers())
+		{
+			try
+			{
+				setNickname(server, ess.getUser(player), "off");
+			}
+			catch (Exception ex)
+			{
+			}
+		}
 	}
 
 	private void setNickname(final Server server, final User target, final String nick) throws Exception

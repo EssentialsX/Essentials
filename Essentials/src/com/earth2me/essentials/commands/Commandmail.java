@@ -63,6 +63,14 @@ public class Commandmail extends EssentialsCommand
 			user.sendMessage(_("mailSent"));
 			return;
 		}
+		if (args.length >= 1 && "sendall".equalsIgnoreCase(args[0]))
+		{
+			if (!user.isAuthorized("essentials.mail.sendall"))
+			{
+				throw new Exception(_("noMailSendPerm"));
+			}
+			ess.scheduleAsyncDelayedTask(new SendAll(ChatColor.stripColor(user.getDisplayName()) + ": " + getFinalArg(args, 2)));
+		}
 		if (args.length >= 1 && "clear".equalsIgnoreCase(args[0]))
 		{
 			user.setMails(null);
@@ -103,6 +111,10 @@ public class Commandmail extends EssentialsCommand
 			sender.sendMessage(_("mailSent"));
 			return;
 		}
+		else if (args.length >= 1 && "sendall".equalsIgnoreCase(args[0]))
+		{
+			ess.scheduleAsyncDelayedTask(new SendAll("Server: " + getFinalArg(args, 2)));
+		}
 		else if (args.length >= 2)
 		{
 			//allow sending from console without "send" argument, since it's the only thing the console can do
@@ -125,5 +137,29 @@ public class Commandmail extends EssentialsCommand
 			return;
 		}
 		throw new NotEnoughArgumentsException();
+	}
+
+
+	private class SendAll implements Runnable
+	{
+		String message;
+
+		public SendAll(String message)
+		{
+			this.message = message;
+		}
+
+		@Override
+		public void run()
+		{
+			for (String username : ess.getUserMap().getAllUniqueUsers())
+			{
+				User user = ess.getUserMap().getUser(username);
+				if (user != null)
+				{
+					user.addMail(message);
+				}
+			}
+		}
 	}
 }

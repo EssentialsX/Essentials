@@ -102,6 +102,10 @@ commands:
     description: Satisfy the hunger.
     usage: /<command> [player]
     aliases: [efeed]
+  itemdb:
+    description: Searches for an item.
+    usage: /<command> <item>
+    aliases: [eitemdb]
   fireball:
     description: Throw a fireball.
     usage: /<command> [small]
@@ -188,7 +192,7 @@ commands:
     aliases: [playerlist,who,online,elist,ewho,eplayerlist,eonline]
   lightning:
     description: The power of Thor. Strike at cursor or player.
-    usage: /<command> [player]
+    usage: /<command> [player] [power]
     aliases: [strike,smite,thor,shock,elightning,estrike,esmite,ethor,eshock]
   mail:
     description: Manages inter-player, intra-server mail.
