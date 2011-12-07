@@ -76,7 +76,12 @@ public class Commandspawnmob extends EssentialsCommand
 		{
 			throw new Exception(_("unableToSpawnMob"));
 		}
-		final Location loc = block.getLocation();
+		User otherUser = null;
+		if (args.length >= 3)
+		{
+			 otherUser = getPlayer(ess.getServer(), args, 2);
+		}
+		final Location loc = (otherUser == null) ? block.getLocation() : otherUser.getLocation();
 		final Location sloc = Util.getSafeDestination(loc);
 		try
 		{
@@ -122,7 +127,7 @@ public class Commandspawnmob extends EssentialsCommand
 		{
 			changeMobData(mobMount.getType(), spawnedMount, mountData, user);
 		}
-		if (args.length == 2)
+		if (args.length >= 2)
 		{
 			int mobCount = Integer.parseInt(args[1]);
 			int serverLimit = ess.getSettings().getSpawnMobLimit();
@@ -205,13 +210,14 @@ public class Commandspawnmob extends EssentialsCommand
 		}
 		if (type == CreatureType.SHEEP)
 		{
-			if (data.toLowerCase(Locale.ENGLISH).contains("baby")) {				
+			if (data.toLowerCase(Locale.ENGLISH).contains("baby"))
+			{
 				((Sheep)spawned).setAge(-24000);
 			}
 			final String color = data.toUpperCase(Locale.ENGLISH).replace("BABY", "");
 			try
-			{			
-				
+			{
+
 				if (color.equalsIgnoreCase("random"))
 				{
 					Random rand = new Random();

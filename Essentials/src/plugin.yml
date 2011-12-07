@@ -304,7 +304,7 @@ commands:
     aliases: [espawner]
   spawnmob:
     description: Spawns a mob.
-    usage: /<command> <mob>[:data][,<mount>[:data]] [amount]
+    usage: /<command> <mob>[:data][,<mount>[:data]] [amount] [player]
     aliases: [espawnmob]
   sudo:
     description: Make another user perform a command.
