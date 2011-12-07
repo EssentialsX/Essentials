@@ -39,7 +39,7 @@ public class Commandmail extends EssentialsCommand
 		{
 			if (!user.isAuthorized("essentials.mail.send"))
 			{
-				throw new Exception(_("noMailSendPerm"));
+				throw new Exception(_("noPerm","essentials.mail.send"));
 			}
 
 			Player player = server.getPlayer(args[1]);
@@ -63,13 +63,15 @@ public class Commandmail extends EssentialsCommand
 			user.sendMessage(_("mailSent"));
 			return;
 		}
-		if (args.length >= 1 && "sendall".equalsIgnoreCase(args[0]))
+		if (args.length > 1 && "sendall".equalsIgnoreCase(args[0]))
 		{
 			if (!user.isAuthorized("essentials.mail.sendall"))
 			{
-				throw new Exception(_("noMailSendPerm"));
+				throw new Exception(_("noPerm","essentials.mail.sendall"));
 			}
-			ess.scheduleAsyncDelayedTask(new SendAll(ChatColor.stripColor(user.getDisplayName()) + ": " + getFinalArg(args, 2)));
+			ess.scheduleAsyncDelayedTask(new SendAll(ChatColor.stripColor(user.getDisplayName()) + ": " + getFinalArg(args, 1)));
+			user.sendMessage(_("mailSent"));
+			return;
 		}
 		if (args.length >= 1 && "clear".equalsIgnoreCase(args[0]))
 		{
