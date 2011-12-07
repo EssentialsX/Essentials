@@ -156,7 +156,7 @@ public class Commandsell extends EssentialsCommand
 		//TODO: Prices for Enchantments
 		final ItemStack ris = is.clone();
 		ris.setAmount(amount);
-		InventoryWorkaround.removeItem(user.getInventory(), true, ris);
+		InventoryWorkaround.removeItem(user.getInventory(), true, true, ris);
 		user.updateInventory();
 		Trade.log("Command", "Sell", "Item", user.getName(), new Trade(ris, ess), user.getName(), new Trade(worth * amount, ess), user.getLocation(), ess);
 		user.giveMoney(worth * amount);

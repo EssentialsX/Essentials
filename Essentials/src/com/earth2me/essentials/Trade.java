@@ -64,7 +64,7 @@ public class Trade
 		}
 
 		if (getItemStack() != null
-			&& !InventoryWorkaround.containsItem(user.getInventory(), true, itemStack))
+			&& !InventoryWorkaround.containsItem(user.getInventory(), true, true, itemStack))
 		{
 			throw new ChargeException(_("missingItems", getItemStack().getAmount(), getItemStack().getType().toString().toLowerCase(Locale.ENGLISH).replace("_", " ")));
 		}
@@ -133,11 +133,11 @@ public class Trade
 		}
 		if (getItemStack() != null)
 		{
-			if (!InventoryWorkaround.containsItem(user.getInventory(), true, itemStack))
+			if (!InventoryWorkaround.containsItem(user.getInventory(), true, true, itemStack))
 			{
 				throw new ChargeException(_("missingItems", getItemStack().getAmount(), getItemStack().getType().toString().toLowerCase(Locale.ENGLISH).replace("_", " ")));
 			}
-			InventoryWorkaround.removeItem(user.getInventory(), true, getItemStack());
+			InventoryWorkaround.removeItem(user.getInventory(), true, true, getItemStack());
 			user.updateInventory();
 		}
 		if (command != null && !command.isEmpty()

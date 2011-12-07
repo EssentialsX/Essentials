@@ -103,7 +103,7 @@ public class Commandunlimited extends EssentialsCommand
 		{
 			message = "enableUnlimited";
 			enableUnlimited = true;
-			if (!InventoryWorkaround.containsItem(target.getInventory(), true, stack))
+			if (!InventoryWorkaround.containsItem(target.getInventory(), true, true, stack))
 			{
 				target.getInventory().addItem(stack);
 			}

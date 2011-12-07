@@ -7,6 +7,7 @@ import com.earth2me.essentials.User;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
+import java.util.Locale;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -22,11 +23,11 @@ public class SignEnchant extends EssentialsSign
 	@Override
 	protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException
 	{
-		final ItemStack stack = getItemStack(sign.getLine(1), 1, ess);
+		final ItemStack stack = sign.getLine(1).equals("*") || sign.getLine(1).equalsIgnoreCase("any") ? null : getItemStack(sign.getLine(1), 1, ess);
 		final String[] enchantLevel = sign.getLine(2).split(":");
 		if (enchantLevel.length != 2)
 		{
-			throw new SignException(_("invalidSignLine", 2));
+			throw new SignException(_("invalidSignLine", 3));
 		}
 		final Enchantment enchantment = Enchantments.getByName(enchantLevel[0]);
 		if (enchantment == null)
@@ -49,7 +50,10 @@ public class SignEnchant extends EssentialsSign
 		}
 		try
 		{
-			stack.addEnchantment(enchantment, level);
+			if (stack != null)
+			{
+				stack.addEnchantment(enchantment, level);
+			}
 		}
 		catch (Throwable ex)
 		{
@@ -62,42 +66,55 @@ public class SignEnchant extends EssentialsSign
 	@Override
 	protected boolean onSignInteract(ISign sign, User player, String username, IEssentials ess) throws SignException, ChargeException
 	{
-		final ItemStack search = getItemStack(sign.getLine(1), 1, ess);
+		final ItemStack search = sign.getLine(1).equals("*") || sign.getLine(1).equalsIgnoreCase("any") ? null : getItemStack(sign.getLine(1), 1, ess);
 		int slot = -1;
 		final Trade charge = getTrade(sign, 3, ess);
 		charge.isAffordableFor(player);
-		if (InventoryWorkaround.containsItem(player.getInventory(), false, search))
-		{
-			slot = InventoryWorkaround.first(player.getInventory(), search, false, true);
-		}
-		if (slot == -1)
-		{
-			throw new SignException(_("missingItems", 1, search.toString()));
-		}
 		final String[] enchantLevel = sign.getLine(2).split(":");
 		if (enchantLevel.length != 2)
 		{
-			throw new SignException(_("invalidSignLine", 2));
+			throw new SignException(_("invalidSignLine", 3));
 		}
 		final Enchantment enchantment = Enchantments.getByName(enchantLevel[0]);
 		if (enchantment == null)
 		{
 			throw new SignException(_("enchantmentNotFound"));
 		}
-
-		final ItemStack toEnchant = player.getInventory().getItem(slot);
+		int level;
 		try
 		{
-			toEnchant.addEnchantment(enchantment, Integer.parseInt(enchantLevel[1]));
+			level = Integer.parseInt(enchantLevel[1]);
 		}
 		catch (NumberFormatException ex)
 		{
-			toEnchant.addEnchantment(enchantment, enchantment.getMaxLevel());
+			level = enchantment.getMaxLevel();
+		}
+
+		final ItemStack playerHand = player.getItemInHand();
+		if (playerHand == null
+			|| playerHand.getAmount() != 1
+			|| (playerHand.containsEnchantment(enchantment)
+				&& playerHand.getEnchantmentLevel(enchantment) == level))
+		{
+			throw new SignException(_("missingItems", 1, sign.getLine(1)));
+		}
+		if (search != null && playerHand.getType() != search.getType())
+		{
+			throw new SignException(_("missingItems", 1, search.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ')));
+		}
+
+		final ItemStack toEnchant = playerHand;
+		try
+		{
+			toEnchant.addEnchantment(enchantment, level);
+		}
+		catch (Exception ex)
+		{
+			throw new SignException(ex.getMessage(), ex);
 		}
 
 		charge.charge(player);
 		Trade.log("Sign", "Enchant", "Interact", username, charge, username, charge, sign.getBlock().getLocation(), ess);
-		player.getInventory().setItem(slot, toEnchant);
 		player.updateInventory();
 		return true;
 	}

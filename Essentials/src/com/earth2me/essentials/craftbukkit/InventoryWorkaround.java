@@ -20,12 +20,12 @@ public final class InventoryWorkaround
 	{
 	}
 
-	public static int first(final Inventory inventory, final ItemStack item, final boolean forceDurability, final boolean forceAmount)
+	public static int first(final Inventory inventory, final ItemStack item, final boolean forceDurability, final boolean forceAmount, final boolean forceEnchantments)
 	{
-		return next(inventory, item, 0, forceDurability, forceAmount);
+		return next(inventory, item, 0, forceDurability, forceAmount, forceEnchantments);
 	}
 
-	public static int next(final Inventory cinventory, final ItemStack item, final int start, final boolean forceDurability, final boolean forceAmount)
+	public static int next(final Inventory cinventory, final ItemStack item, final int start, final boolean forceDurability, final boolean forceAmount, final boolean forceEnchantments)
 	{
 		final ItemStack[] inventory = cinventory.getContents();
 		for (int i = start; i < inventory.length; i++)
@@ -35,7 +35,7 @@ public final class InventoryWorkaround
 			{
 				continue;
 			}
-			if (item.getTypeId() == cItem.getTypeId() && (!forceAmount || item.getAmount() == cItem.getAmount()) && (!forceDurability || cItem.getDurability() == item.getDurability()) && cItem.getEnchantments().equals(item.getEnchantments()))
+			if (item.getTypeId() == cItem.getTypeId() && (!forceAmount || item.getAmount() == cItem.getAmount()) && (!forceDurability || cItem.getDurability() == item.getDurability()) && (!forceEnchantments || cItem.getEnchantments().equals(item.getEnchantments())))
 			{
 				return i;
 			}
@@ -192,7 +192,7 @@ public final class InventoryWorkaround
 		return leftover;
 	}
 
-	public static Map<Integer, ItemStack> removeItem(final Inventory cinventory, final boolean forceDurability, final ItemStack... items)
+	public static Map<Integer, ItemStack> removeItem(final Inventory cinventory, final boolean forceDurability, final boolean forceEnchantments, final ItemStack... items)
 	{
 		final Map<Integer, ItemStack> leftover = new HashMap<Integer, ItemStack>();
 
@@ -217,7 +217,7 @@ public final class InventoryWorkaround
 				}
 
 				// get first Item, ignore the amount
-				final int first = first(cinventory, item, forceDurability, false);
+				final int first = first(cinventory, item, forceDurability, false, forceEnchantments);
 
 				// Drat! we don't have this type in the inventory
 				if (first == -1)
@@ -250,7 +250,7 @@ public final class InventoryWorkaround
 		return leftover;
 	}
 
-	public static boolean containsItem(final Inventory cinventory, final boolean forceDurability, final ItemStack... items)
+	public static boolean containsItem(final Inventory cinventory, final boolean forceDurability, final boolean forceEnchantments, final ItemStack... items)
 	{
 		final Map<Integer, ItemStack> leftover = new HashMap<Integer, ItemStack>();
 
@@ -272,7 +272,7 @@ public final class InventoryWorkaround
 					combined[j] = items[i].clone();
 					break;
 				}
-				if (combined[j].getTypeId() == items[i].getTypeId() && (!forceDurability || combined[j].getDurability() == items[i].getDurability()) && combined[j].getEnchantments().equals(items[i].getEnchantments()))
+				if (combined[j].getTypeId() == items[i].getTypeId() && (!forceDurability || combined[j].getDurability() == items[i].getDurability()) && (!forceEnchantments || combined[j].getEnchantments().equals(items[i].getEnchantments())))
 				{
 					combined[j].setAmount(combined[j].getAmount() + items[i].getAmount());
 					break;
@@ -298,7 +298,7 @@ public final class InventoryWorkaround
 					break;
 				}
 
-				final int slot = next(cinventory, item, position, forceDurability, false);
+				final int slot = next(cinventory, item, position, forceDurability, false, forceEnchantments);
 
 				// Drat! we don't have this type in the inventory
 				if (slot == -1)
