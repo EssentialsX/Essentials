@@ -20,28 +20,35 @@ public class Trade
 	private final transient String command;
 	private final transient Double money;
 	private final transient ItemStack itemStack;
+	private final transient Integer exp;
 	private final transient IEssentials ess;
 
 	public Trade(final String command, final IEssentials ess)
 	{
-		this(command, null, null, ess);
+		this(command, null, null, null, ess);
 	}
 
 	public Trade(final double money, final IEssentials ess)
 	{
-		this(null, money, null, ess);
+		this(null, money, null, null, ess);
 	}
 
 	public Trade(final ItemStack items, final IEssentials ess)
 	{
-		this(null, null, items, ess);
+		this(null, null, items, null, ess);
+	}
+	
+	public Trade(final int exp, final IEssentials ess)
+	{
+		this(null, null, null, exp, ess);
 	}
 
-	private Trade(final String command, final Double money, final ItemStack item, final IEssentials ess)
+	private Trade(final String command, final Double money, final ItemStack item, final Integer exp, final IEssentials ess)
 	{
 		this.command = command;
 		this.money = money;
 		this.itemStack = item;
+		this.exp = exp;
 		this.ess = ess;
 	}
 
@@ -70,6 +77,11 @@ public class Trade
 			&& !user.isAuthorized("essentials.eco.loan"))
 		{
 			throw new ChargeException(_("notEnoughMoney"));
+		}
+		
+		if (exp != null && exp > 0 
+			&& user.getTotalExperience() < exp) {
+			throw new ChargeException(_("notEnoughExperience"));
 		}
 	}
 
@@ -100,6 +112,10 @@ public class Trade
 				success = InventoryWorkaround.addAllItems(user.getInventory(), true, getItemStack());
 			}
 			user.updateInventory();
+		}
+		if (getExperience() != null)
+		{
+			user.setTotalExperience(user.getTotalExperience() + getExperience());
 		}
 		return success;
 	}
@@ -136,6 +152,15 @@ public class Trade
 			}
 			user.takeMoney(cost);
 		}
+		if (getExperience() != null)
+		{
+			final int experience = user.getTotalExperience();
+			if (experience < getExperience() && getExperience() > 0)
+			{
+				throw new ChargeException(_("notEnoughExperience"));
+			}
+			user.setTotalExperience(experience - getExperience());
+		}
 	}
 
 	public Double getMoney()
@@ -146,6 +171,11 @@ public class Trade
 	public ItemStack getItemStack()
 	{
 		return itemStack;
+	}
+	
+	public Integer getExperience()
+	{
+		return exp;
 	}
 	private static FileWriter fw = null;
 
@@ -193,6 +223,12 @@ public class Trade
 				sb.append("money").append(",");
 				sb.append(ess.getSettings().getCurrencySymbol());
 			}
+			if (charge.getExperience() != null)
+			{
+				sb.append(charge.getExperience()).append(",");
+				sb.append("exp").append(",");
+				sb.append("\"\"");
+			}
 		}
 		sb.append(",\"");
 		if (receiver != null)
@@ -217,6 +253,12 @@ public class Trade
 				sb.append(pay.getMoney()).append(",");
 				sb.append("money").append(",");
 				sb.append(ess.getSettings().getCurrencySymbol());
+			}
+			if (pay.getExperience() != null)
+			{
+				sb.append(pay.getExperience()).append(",");
+				sb.append("exp").append(",");
+				sb.append("\"\"");
 			}
 		}
 		if (loc == null)

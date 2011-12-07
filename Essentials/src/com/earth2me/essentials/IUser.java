@@ -64,4 +64,8 @@ public interface IUser
 	Teleport getTeleport();
 
 	void setJail(String jail);
+
+	public int getTotalExperience();
+
+	public void setTotalExperience(int l);
 }
