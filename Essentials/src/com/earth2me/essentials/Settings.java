@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.ChatColor;
+import org.bukkit.event.Event.Priority;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -86,7 +87,7 @@ public class Settings implements ISettings
 	{
 		return config.getInt("oversized-stacksize", 64);
 	}
-	
+
 	@Override
 	public int getDefaultStackSize()
 	{
@@ -566,7 +567,7 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("world-teleport-permissions", false);
 	}
-	
+
 	@Override
 	public boolean registerBackInListener()
 	{
@@ -577,5 +578,32 @@ public class Settings implements ISettings
 	public boolean getDisableItemPickupWhileAfk()
 	{
 		return config.getBoolean("disable-item-pickup-while-afk", true);
+	}
+
+	@Override
+	public Priority getRespawnPriority()
+	{
+		String priority = config.getString("respawn-listener-priority", "normal").toLowerCase(Locale.ENGLISH);
+		if ("lowest".equals(priority))
+		{
+			return Priority.Lowest;
+		}
+		if ("low".equals(priority))
+		{
+			return Priority.Low;
+		}
+		if ("normal".equals(priority))
+		{
+			return Priority.Normal;
+		}
+		if ("high".equals(priority))
+		{
+			return Priority.High;
+		}
+		if ("highest".equals(priority))
+		{
+			return Priority.Highest;
+		}
+		return Priority.Normal;
 	}
 }

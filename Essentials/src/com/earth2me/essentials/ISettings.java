@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.bukkit.ChatColor;
+import org.bukkit.event.Event.Priority;
 
 
 public interface ISettings extends IConf
@@ -148,4 +149,6 @@ public interface ISettings extends IConf
 	boolean registerBackInListener();
 
 	public boolean getDisableItemPickupWhileAfk();
+
+	public Priority getRespawnPriority();
 }

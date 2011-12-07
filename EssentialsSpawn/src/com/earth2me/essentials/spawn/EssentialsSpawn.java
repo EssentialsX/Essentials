@@ -38,7 +38,7 @@ public class EssentialsSpawn extends JavaPlugin
 		ess.addReloadListener(spawns);
 
 		final EssentialsSpawnPlayerListener playerListener = new EssentialsSpawnPlayerListener(ess, spawns);
-		pluginManager.registerEvent(Type.PLAYER_RESPAWN, playerListener, Priority.Low, this);
+		pluginManager.registerEvent(Type.PLAYER_RESPAWN, playerListener, ess.getSettings().getRespawnPriority(), this);
 		pluginManager.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Low, this);
 
 		LOGGER.info(_("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));

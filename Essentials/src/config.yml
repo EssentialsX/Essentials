@@ -514,7 +514,7 @@ protect:
 
 ############################################################
 # +------------------------------------------------------+ #
-# |                    New Players                       | #
+# |            Essentials Spawn / New Players            | #
 # +------------------------------------------------------+ #
 ############################################################
 
@@ -528,5 +528,10 @@ newbies:
   # When we spawn for the first time, which spawnpoint do we use?
   # Set to "none" if you want to use the spawn point of the world.
   spawnpoint: newbies
+
+# Set this to lowest, if you want Multiverse to handle the respawning
+# Set this to normal, if you want EssentialsSpawn to handle the respawning
+# Set this to highest, if you want to force EssentialsSpawn to handle the respawning
+respawn-listener-priority: normal
 
 # End of File <-- No seriously, you're done with configuration.
