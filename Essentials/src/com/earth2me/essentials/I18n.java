@@ -28,7 +28,7 @@ public class I18n implements II18n
 	public I18n(final IEssentials ess)
 	{
 		this.ess = ess;
-		customBundle = ResourceBundle.getBundle(MESSAGES, defaultLocale);
+		customBundle = ResourceBundle.getBundle(MESSAGES, defaultLocale, new FileResClassLoader(I18n.class.getClassLoader(), ess));
 		localeBundle = ResourceBundle.getBundle(MESSAGES, defaultLocale);
 		defaultBundle = ResourceBundle.getBundle(MESSAGES, Locale.ENGLISH);
 	}
