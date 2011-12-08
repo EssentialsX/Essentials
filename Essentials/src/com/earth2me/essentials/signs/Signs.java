@@ -10,6 +10,7 @@ public enum Signs
 	FREE(new SignFree()),
 	GAMEMODE(new SignGameMode()),
 	HEAL(new SignHeal()),
+	KIT(new SignKit()),
 	MAIL(new SignMail()),
 	PROTECTION(new SignProtection()),
 	SELL(new SignSell()),
