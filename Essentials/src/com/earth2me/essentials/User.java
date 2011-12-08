@@ -19,6 +19,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	private transient User teleportRequester;
 	private transient boolean teleportRequestHere;
 	private transient final Teleport teleport;
+	private transient long teleportRequestTime;
 	private transient long lastOnlineActivity;
 	private transient long lastActivity = System.currentTimeMillis();
 	private boolean hidden = false;
@@ -222,6 +223,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 	public void requestTeleport(final User player, final boolean here)
 	{
+		teleportRequestTime = System.currentTimeMillis();
 		teleportRequester = player;
 		teleportRequestHere = here;
 	}
@@ -536,5 +538,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public boolean canBuild()
 	{
 		return ess.getPermissionsHandler().canBuild(base, getGroup());
+	}
+	
+	public long getTeleportRequestTime()
+	{
+		return teleportRequestTime;
 	}
 }

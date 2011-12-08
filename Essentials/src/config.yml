@@ -273,6 +273,10 @@ sethome-multiple:
   # essentials.sethome.multiple.staff
   staff: 10
 
+#Set timeout in seconds for players to accept tpa before request is cancelled.
+#Set to 0 for no timeout
+tpa-accept-cancellation: 0
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsEco                      | #

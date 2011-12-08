@@ -27,6 +27,13 @@ public class Commandtpaccept extends EssentialsCommand
 			throw new Exception(_("noPendingRequest"));
 		}
 
+		long timeout = ess.getSettings().getTpaAcceptCancellation();
+		if (timeout != 0 && (System.currentTimeMillis() - user.getTeleportRequestTime()) / 1000 > timeout)
+		{
+			user.requestTeleport(null, false);
+			throw new Exception(_("requestTimedOut"));
+		}
+
 		final Trade charge = new Trade(this.getName(), ess);
 		if (user.isTeleportRequestHere())
 		{

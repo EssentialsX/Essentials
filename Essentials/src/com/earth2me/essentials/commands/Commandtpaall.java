@@ -50,6 +50,10 @@ public class Commandtpaall extends EssentialsCommand
 				player.requestTeleport(user, true);
 				player.sendMessage(_("teleportHereRequest", user.getDisplayName()));
 				player.sendMessage(_("typeTpaccept"));
+				if (ess.getSettings().getTpaAcceptCancellation() != 0)
+				{
+					player.sendMessage(_("teleportRequestTimeoutInfo", ess.getSettings().getTpaAcceptCancellation()));
+				}
 			}
 			catch (Exception ex)
 			{

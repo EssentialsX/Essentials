@@ -151,4 +151,6 @@ public interface ISettings extends IConf
 	public boolean getDisableItemPickupWhileAfk();
 
 	public Priority getRespawnPriority();
+	
+	long getTpaAcceptCancellation();
 }
