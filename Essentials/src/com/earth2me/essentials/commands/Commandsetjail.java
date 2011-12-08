@@ -13,13 +13,13 @@ public class Commandsetjail extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		ess.getJail().setJail(user.getLocation(), args[0]);
+		ess.getJails().setJail(args[0], user.getLocation());
 		user.sendMessage(_("jailSet", args[0]));
 
 	}

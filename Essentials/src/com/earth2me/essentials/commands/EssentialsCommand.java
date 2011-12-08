@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
@@ -17,6 +18,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 {
 	private final transient String name;
 	protected transient IEssentials ess;
+	protected transient IEssentialsModule module;
 	protected final static Logger logger = Logger.getLogger("Minecraft");
 
 	protected EssentialsCommand(final String name)
@@ -28,6 +30,12 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 	public void setEssentials(final IEssentials ess)
 	{
 		this.ess = ess;
+	}
+	
+	@Override
+	public void setEssentialsModule(final IEssentialsModule module)
+	{
+		this.module = module;
 	}
 
 	@Override

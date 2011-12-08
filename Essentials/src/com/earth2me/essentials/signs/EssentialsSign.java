@@ -399,6 +399,11 @@ public class EssentialsSign
 				sign.setLine(index, (quantity - decrement) + " times");
 				return new Trade(signName.toLowerCase(Locale.ENGLISH) + "sign", ess);
 			}
+			else if (item.equalsIgnoreCase("exp") || item.equalsIgnoreCase("xp"))
+			{
+				sign.setLine(index, quantity + " exp");
+				return new Trade(quantity, ess);
+			}
 			else
 			{
 				final ItemStack stack = getItemStack(item, quantity, ess);

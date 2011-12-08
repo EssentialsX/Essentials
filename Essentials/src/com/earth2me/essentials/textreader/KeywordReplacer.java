@@ -1,12 +1,16 @@
 package com.earth2me.essentials.textreader;
 
+import com.earth2me.essentials.DescParseTickFormat;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 
 public class KeywordReplacer implements IText
@@ -24,7 +28,9 @@ public class KeywordReplacer implements IText
 	private void replaceKeywords(final CommandSender sender)
 	{
 		String displayName, ipAddress, balance, mails, world;
-		String worlds, online, unique, playerlist;
+		String worlds, online, unique, playerlist, date, time;
+		String worldTime12, worldTime24, worldDate, plugins;
+		String version;
 		if (sender instanceof Player)
 		{
 			final User user = ess.getUser(sender);
@@ -33,10 +39,13 @@ public class KeywordReplacer implements IText
 			balance = Double.toString(user.getMoney());
 			mails = Integer.toString(user.getMails().size());
 			world = user.getLocation().getWorld().getName();
+			worldTime12 = DescParseTickFormat.format12(user.getWorld().getTime());
+			worldTime24 = DescParseTickFormat.format24(user.getWorld().getTime());
+			worldDate = DateFormat.getDateInstance(DateFormat.MEDIUM, ess.getI18n().getCurrentLocale()).format(DescParseTickFormat.ticksToDate(user.getWorld().getTime()));
 		}
 		else
 		{
-			displayName = ipAddress = balance = mails = world = "";
+			displayName = ipAddress = balance = mails = world = worldTime12 = worldTime24 = worldDate = "";
 		}
 
 		int playerHidden = 0;
@@ -76,6 +85,22 @@ public class KeywordReplacer implements IText
 		}
 		playerlist = playerlistBuilder.toString();
 
+		final StringBuilder pluginlistBuilder = new StringBuilder();
+		for (Plugin p : ess.getServer().getPluginManager().getPlugins())
+		{
+			if (pluginlistBuilder.length() > 0)
+			{
+				pluginlistBuilder.append(", ");
+			}
+			pluginlistBuilder.append(p.getDescription().getName());
+		}
+		plugins = pluginlistBuilder.toString();
+
+		date = DateFormat.getDateInstance(DateFormat.MEDIUM, ess.getI18n().getCurrentLocale()).format(new Date());
+		time = DateFormat.getTimeInstance(DateFormat.MEDIUM, ess.getI18n().getCurrentLocale()).format(new Date());
+		
+		version = ess.getServer().getVersion();
+
 		for (int i = 0; i < input.getLines().size(); i++)
 		{
 			String line = input.getLines().get(i);
@@ -88,6 +113,13 @@ public class KeywordReplacer implements IText
 			line = line.replace("{UNIQUE}", unique);
 			line = line.replace("{WORLDS}", worlds);
 			line = line.replace("{PLAYERLIST}", playerlist);
+			line = line.replace("{TIME}", time);
+			line = line.replace("{DATE}", date);
+			line = line.replace("{WORLDTIME12}", worldTime12);
+			line = line.replace("{WORLDTIME24}", worldTime24);
+			line = line.replace("{WORLDDATE}", worldDate);
+			line = line.replace("{PLUGINS}", plugins);
+			line = line.replace("{VERSION}", version);
 			input.getLines().set(i, line);
 		}
 	}

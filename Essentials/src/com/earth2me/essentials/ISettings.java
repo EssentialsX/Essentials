@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.bukkit.ChatColor;
+import org.bukkit.event.Event.Priority;
 
 
 public interface ISettings extends IConf
@@ -32,6 +33,8 @@ public interface ISettings extends IConf
 	String getCurrencySymbol();
 
 	int getOversizedStackSize();
+	
+	int getDefaultStackSize();
 
 	double getHealCooldown();
 
@@ -136,4 +139,16 @@ public interface ISettings extends IConf
 	public void setDebug(boolean debug);
 
 	Set<String> getNoGodWorlds();
+	
+	boolean getUpdateBedAtDaytime();
+	
+	boolean getRepairEnchanted();
+	
+	boolean getIsWorldTeleportPermissions();
+	
+	boolean registerBackInListener();
+
+	public boolean getDisableItemPickupWhileAfk();
+
+	public Priority getRespawnPriority();
 }

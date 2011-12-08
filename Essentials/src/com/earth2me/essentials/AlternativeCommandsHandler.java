@@ -1,6 +1,8 @@
 package com.earth2me.essentials;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.command.Command;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.PluginCommandYamlParser;
@@ -9,8 +11,9 @@ import org.bukkit.plugin.Plugin;
 
 public class AlternativeCommandsHandler
 {
+	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private final transient Map<String, List<PluginCommand>> altcommands = new HashMap<String, List<PluginCommand>>();
-	private final transient Map<String, String> executed = new HashMap<String, String>();
+	private final transient Map<String, String> disabledList = new HashMap<String, String>();
 	private final transient IEssentials ess;
 
 	public AlternativeCommandsHandler(final IEssentials ess)
@@ -118,13 +121,17 @@ public class AlternativeCommandsHandler
 		return commands.get(0);
 	}
 
-	public void executed(final String label, final String otherlabel)
+	public void executed(final String label, final String otherLabel)
 	{
-		executed.put(label, otherlabel);
+		if (ess.getSettings().isDebug())
+		{
+			LOGGER.log(Level.INFO, "Essentials: Alternative command " + label + " found, using " + otherLabel);
+		}
+		disabledList.put(label, otherLabel);
 	}
 
 	public Map<String, String> disabledCommands()
 	{
-		return executed;
+		return disabledList;
 	}
 }

@@ -21,7 +21,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 	public EssentialsProtectEntityListener(final IProtect prot)
 	{
 		this.prot = prot;
-		this.ess = prot.getEssentials();
+		this.ess = prot.getEssentialsConnect().getEssentials();
 	}
 
 	@Override
@@ -32,13 +32,13 @@ public class EssentialsProtectEntityListener extends EntityListener
 			return;
 		}
 		final Entity target = event.getEntity();
-		
+
 		if (target instanceof Villager && prot.getSettingBool(ProtectConfig.prevent_villager_death))
 		{
 			event.setCancelled(true);
 			return;
 		}
-		
+
 		final User user = ess.getUser(target);
 		if (event instanceof EntityDamageByBlockEvent)
 		{
@@ -197,12 +197,23 @@ public class EssentialsProtectEntityListener extends EntityListener
 			return;
 		}
 		final int maxHeight = ess.getSettings().getProtectCreeperMaxHeight();
-		//Nicccccccccce plaaacccccccccce..
-		if (event.getEntity() instanceof LivingEntity
-			&& (prot.getSettingBool(ProtectConfig.prevent_creeper_explosion)
-				|| prot.getSettingBool(ProtectConfig.prevent_creeper_blockdmg)
-				|| (maxHeight >= 0 && event.getLocation().getBlockY() > maxHeight)))
+
+		if (event.getEntity() instanceof EnderDragon
+			&& prot.getSettingBool(ProtectConfig.prevent_enderdragon_blockdmg))
 		{
+			if (prot.getSettingBool(ProtectConfig.enderdragon_fakeexplosions))
+			{
+				FakeExplosion.createExplosion(event, ess.getServer(), ess.getServer().getOnlinePlayers());
+			}
+			event.setCancelled(true);
+			return;
+		}
+		else if (event.getEntity() instanceof Creeper
+				 && (prot.getSettingBool(ProtectConfig.prevent_creeper_explosion)
+					 || prot.getSettingBool(ProtectConfig.prevent_creeper_blockdmg)
+					 || (maxHeight >= 0 && event.getLocation().getBlockY() > maxHeight)))
+		{
+			//Nicccccccccce plaaacccccccccce..
 			FakeExplosion.createExplosion(event, ess.getServer(), ess.getServer().getOnlinePlayers());
 			event.setCancelled(true);
 			return;

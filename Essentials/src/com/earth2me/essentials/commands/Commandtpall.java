@@ -5,6 +5,7 @@ import com.earth2me.essentials.User;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 
 public class Commandtpall extends EssentialsCommand
@@ -43,7 +44,7 @@ public class Commandtpall extends EssentialsCommand
 			}
 			try
 			{
-				player.getTeleport().now(user, false);
+				player.getTeleport().now(user, false, TeleportCause.COMMAND);
 			}
 			catch (Exception ex)
 			{

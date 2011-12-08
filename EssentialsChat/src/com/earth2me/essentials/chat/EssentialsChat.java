@@ -21,6 +21,15 @@ public class EssentialsChat extends JavaPlugin
 	{
 		final PluginManager pluginManager = getServer().getPluginManager();
 		final IEssentials ess = (IEssentials)pluginManager.getPlugin("Essentials");
+		if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion()))
+		{
+			LOGGER.log(Level.WARNING, _("versionMismatchAll"));
+		}
+		if (!ess.isEnabled())
+		{
+			this.setEnabled(false);
+			return;
+		}
 
 		chatListener = new HashMap<String, IEssentialsChatListener>();
 
@@ -30,16 +39,16 @@ public class EssentialsChat extends JavaPlugin
 		pluginManager.registerEvent(Type.PLAYER_CHAT, playerListenerLowest, Priority.Lowest, this);
 		pluginManager.registerEvent(Type.PLAYER_CHAT, playerListenerNormal, Priority.Normal, this);
 		pluginManager.registerEvent(Type.PLAYER_CHAT, playerListenerHighest, Priority.Highest, this);
-		if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion()))
-		{
-			LOGGER.log(Level.WARNING, _("versionMismatchAll"));
-		}
+
 		LOGGER.info(_("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
 	}
 
 	public void onDisable()
 	{
-		chatListener.clear();
+		if (chatListener != null)
+		{
+			chatListener.clear();
+		}
 	}
 
 	public void addEssentialsChatListener(final String plugin, final IEssentialsChatListener listener)

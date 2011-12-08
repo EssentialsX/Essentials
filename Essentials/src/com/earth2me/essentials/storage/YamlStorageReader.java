@@ -4,8 +4,7 @@ import java.io.Reader;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.bukkit.plugin.Plugin;
 import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
@@ -13,70 +12,64 @@ import org.yaml.snakeyaml.constructor.Constructor;
 
 public class YamlStorageReader implements IStorageReader
 {
-	private transient static Map<Class, Yaml> preparedYamls = Collections.synchronizedMap(new HashMap<Class, Yaml>());
-	private transient static Map<Class, ReentrantLock> locks = new HashMap<Class, ReentrantLock>();
+	private transient static final Map<Class, Yaml> PREPARED_YAMLS = Collections.synchronizedMap(new HashMap<Class, Yaml>());
+	private transient static final Map<Class, ReentrantLock> LOCKS = new HashMap<Class, ReentrantLock>();
 	private transient final Reader reader;
+	private transient final Plugin plugin;
 
-	public YamlStorageReader(final Reader reader)
+	public YamlStorageReader(final Reader reader, final Plugin plugin)
 	{
 		this.reader = reader;
+		this.plugin = plugin;
 	}
 
-	public <T extends StorageObject> T load(final Class<? extends T> clazz)
+	@Override
+	public <T extends StorageObject> T load(final Class<? extends T> clazz) throws ObjectLoadException
 	{
-		Yaml yaml = preparedYamls.get(clazz);
+		Yaml yaml = PREPARED_YAMLS.get(clazz);
 		if (yaml == null)
 		{
 			yaml = new Yaml(prepareConstructor(clazz));
-			preparedYamls.put(clazz, yaml);
+			PREPARED_YAMLS.put(clazz, yaml);
 		}
 		ReentrantLock lock;
-		synchronized (locks)
+		synchronized (LOCKS)
 		{
-			lock = locks.get(clazz);
+			lock = LOCKS.get(clazz);
 			if (lock == null)
 			{
 				lock = new ReentrantLock();
 			}
 		}
-		T ret;
 		lock.lock();
 		try
 		{
-			ret = (T)yaml.load(reader);
+			T object = (T)yaml.load(reader);
+			if (object == null) {
+				object = clazz.newInstance();
+			}
+			return object;
+		}
+		catch (Exception ex)
+		{
+			throw new ObjectLoadException(ex);
 		}
 		finally
 		{
 			lock.unlock();
 		}
-		if (ret == null)
-		{
-			try
-			{
-				ret = (T)clazz.newInstance();
-			}
-			catch (InstantiationException ex)
-			{
-				Logger.getLogger(StorageObject.class.getName()).log(Level.SEVERE, null, ex);
-			}
-			catch (IllegalAccessException ex)
-			{
-				Logger.getLogger(StorageObject.class.getName()).log(Level.SEVERE, null, ex);
-			}
-		}
-		return ret;
 	}
 
-	private static Constructor prepareConstructor(final Class<?> clazz)
+	private Constructor prepareConstructor(final Class<?> clazz)
 	{
-		final Constructor constructor = new BukkitConstructor(clazz);
+		final Constructor constructor = new BukkitConstructor(clazz, plugin);
 		final Set<Class> classes = new HashSet<Class>();
 
 		prepareConstructor(constructor, classes, clazz);
 		return constructor;
 	}
 
-	private static void prepareConstructor(final Constructor constructor, final Set<Class> classes, final Class clazz)
+	private void prepareConstructor(final Constructor constructor, final Set<Class> classes, final Class clazz)
 	{
 		classes.add(clazz);
 		final TypeDescription description = new TypeDescription(clazz);
@@ -93,7 +86,7 @@ public class YamlStorageReader implements IStorageReader
 		constructor.addTypeDescription(description);
 	}
 
-	private static void prepareList(final Field field, final TypeDescription description, final Set<Class> classes, final Constructor constructor)
+	private void prepareList(final Field field, final TypeDescription description, final Set<Class> classes, final Constructor constructor)
 	{
 		final ListType listType = field.getAnnotation(ListType.class);
 		if (listType != null)
@@ -107,7 +100,7 @@ public class YamlStorageReader implements IStorageReader
 		}
 	}
 
-	private static void prepareMap(final Field field, final TypeDescription description, final Set<Class> classes, final Constructor constructor)
+	private void prepareMap(final Field field, final TypeDescription description, final Set<Class> classes, final Constructor constructor)
 	{
 		final MapValueType mapType = field.getAnnotation(MapValueType.class);
 		if (mapType != null)

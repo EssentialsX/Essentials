@@ -4,6 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 
 public class Commandtpohere extends EssentialsCommand
@@ -33,7 +34,7 @@ public class Commandtpohere extends EssentialsCommand
 		// Verify permission
 		if (!player.isHidden() || user.isAuthorized("essentials.teleport.hidden"))
 		{
-			player.getTeleport().now(user, false);
+			player.getTeleport().now(user, false, TeleportCause.COMMAND);
 			user.sendMessage(_("teleporting"));
 		}
 		else

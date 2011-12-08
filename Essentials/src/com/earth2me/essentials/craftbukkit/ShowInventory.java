@@ -1,11 +1,10 @@
 package com.earth2me.essentials.craftbukkit;
 
-import com.earth2me.essentials.InventoryWorkaround;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.minecraft.server.EntityPlayer;
 import net.minecraft.server.IInventory;
-import net.minecraft.server.InventoryPlayer;
+import net.minecraft.server.PlayerInventory;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.inventory.CraftInventoryPlayer;
 import org.bukkit.entity.Player;
@@ -19,7 +18,7 @@ public class ShowInventory
 		try
 		{
 			final EntityPlayer entityPlayer = ((CraftPlayer)player).getHandle();
-			final CraftInventoryPlayer inv = new CraftInventoryPlayer(new InventoryPlayer(((CraftPlayer)player).getHandle()));
+			final CraftInventoryPlayer inv = new CraftInventoryPlayer(new PlayerInventory(((CraftPlayer)player).getHandle()));
 			inv.clear();
 			entityPlayer.a((IInventory)inv.getInventory());
 		}
@@ -34,7 +33,7 @@ public class ShowInventory
 		try
 		{
 			final EntityPlayer entityPlayer = ((CraftPlayer)player).getHandle();
-			final CraftInventoryPlayer inv = new CraftInventoryPlayer(new InventoryPlayer(((CraftPlayer)player).getHandle()));
+			final CraftInventoryPlayer inv = new CraftInventoryPlayer(new PlayerInventory(((CraftPlayer)player).getHandle()));
 			inv.clear();
 			InventoryWorkaround.addItem(inv, true, stack);
 			entityPlayer.a((IInventory)inv.getInventory());

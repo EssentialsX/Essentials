@@ -22,7 +22,7 @@ public class Commandspawnmob extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -30,7 +30,7 @@ public class Commandspawnmob extends EssentialsCommand
 		}
 
 
-		String[] mountparts = args[0].split(",");
+		final String[] mountparts = args[0].split(",");
 		String[] parts = mountparts[0].split(":");
 		String mobType = parts[0];
 		String mobData = null;
@@ -64,11 +64,11 @@ public class Commandspawnmob extends EssentialsCommand
 
 		if (ess.getSettings().getProtectPreventSpawn(mob.getType().toString().toLowerCase(Locale.ENGLISH)))
 		{
-			throw new Exception(_("unableToSpawnMob"));
+			throw new Exception(_("disabledToSpawnMob"));
 		}
 		if (!user.isAuthorized("essentials.spawnmob." + mob.name.toLowerCase()))
 		{
-			throw new Exception(_("unableToSpawnMob"));
+			throw new Exception(_("noPermToSpawnMob"));
 		}
 
 		final Block block = Util.getTarget(user).getBlock();
@@ -76,8 +76,13 @@ public class Commandspawnmob extends EssentialsCommand
 		{
 			throw new Exception(_("unableToSpawnMob"));
 		}
-		Location loc = block.getLocation();
-		Location sloc = Util.getSafeDestination(loc);
+		User otherUser = null;
+		if (args.length >= 3)
+		{
+			 otherUser = getPlayer(ess.getServer(), args, 2);
+		}
+		final Location loc = (otherUser == null) ? block.getLocation() : otherUser.getLocation();
+		final Location sloc = Util.getSafeDestination(loc);
 		try
 		{
 			spawnedMob = mob.spawn(user, server, sloc);
@@ -98,11 +103,11 @@ public class Commandspawnmob extends EssentialsCommand
 
 			if (ess.getSettings().getProtectPreventSpawn(mobMount.getType().toString().toLowerCase(Locale.ENGLISH)))
 			{
-				throw new Exception(_("unableToSpawnMob"));
+				throw new Exception(_("disabledToSpawnMob"));
 			}
 			if (!user.isAuthorized("essentials.spawnmob." + mobMount.name.toLowerCase()))
 			{
-				throw new Exception(_("unableToSpawnMob"));
+				throw new Exception(_("noPermToSpawnMob"));
 			}
 			try
 			{
@@ -122,7 +127,7 @@ public class Commandspawnmob extends EssentialsCommand
 		{
 			changeMobData(mobMount.getType(), spawnedMount, mountData, user);
 		}
-		if (args.length == 2)
+		if (args.length >= 2)
 		{
 			int mobCount = Integer.parseInt(args[1]);
 			int serverLimit = ess.getSettings().getSpawnMobLimit();
@@ -179,7 +184,7 @@ public class Commandspawnmob extends EssentialsCommand
 		}
 	}
 
-	private void changeMobData(CreatureType type, Entity spawned, String data, User user) throws Exception
+	private void changeMobData(final CreatureType type, final Entity spawned, final String data, final User user) throws Exception
 	{
 		if (type == CreatureType.SLIME || type == CreatureType.MAGMA_CUBE)
 		{
@@ -194,6 +199,7 @@ public class Commandspawnmob extends EssentialsCommand
 		}
 		if ((type == CreatureType.SHEEP
 			 || type == CreatureType.COW
+			 || type == CreatureType.MUSHROOM_COW
 			 || type == CreatureType.CHICKEN
 			 || type == CreatureType.PIG
 			 || type == CreatureType.WOLF)
@@ -204,16 +210,22 @@ public class Commandspawnmob extends EssentialsCommand
 		}
 		if (type == CreatureType.SHEEP)
 		{
+			if (data.toLowerCase(Locale.ENGLISH).contains("baby"))
+			{
+				((Sheep)spawned).setAge(-24000);
+			}
+			final String color = data.toUpperCase(Locale.ENGLISH).replace("BABY", "");
 			try
 			{
-				if (data.equalsIgnoreCase("random"))
+
+				if (color.equalsIgnoreCase("random"))
 				{
 					Random rand = new Random();
 					((Sheep)spawned).setColor(DyeColor.values()[rand.nextInt(DyeColor.values().length)]);
 				}
 				else
 				{
-					((Sheep)spawned).setColor(DyeColor.valueOf(data.toUpperCase(Locale.ENGLISH)));
+					((Sheep)spawned).setColor(DyeColor.valueOf(color));
 				}
 			}
 			catch (Exception e)

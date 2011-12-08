@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.InventoryWorkaround;
+import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
@@ -20,7 +20,7 @@ public class Commandsell extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -156,7 +156,7 @@ public class Commandsell extends EssentialsCommand
 		//TODO: Prices for Enchantments
 		final ItemStack ris = is.clone();
 		ris.setAmount(amount);
-		InventoryWorkaround.removeItem(user.getInventory(), true, ris);
+		InventoryWorkaround.removeItem(user.getInventory(), true, true, ris);
 		user.updateInventory();
 		Trade.log("Command", "Sell", "Item", user.getName(), new Trade(ris, ess), user.getName(), new Trade(worth * amount, ess), user.getLocation(), ess);
 		user.giveMoney(worth * amount);

@@ -11,7 +11,7 @@ Recommended NetBeans plugins:
 * Git
 * PMD & FindBugs ( http://kenai.com/projects/sqe/pages/Home )
 
-You don't need to import settings.zip anymore, since the format guidelines have been added to the project properties.
+Please follow the format guidelines that are saved in the project properties.
 
 Windows users, please read this: http://help.github.com/line-endings/
 The default line ending is LF.

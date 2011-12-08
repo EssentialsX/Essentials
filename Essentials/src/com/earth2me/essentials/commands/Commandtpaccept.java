@@ -5,6 +5,7 @@ import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 
 public class Commandtpaccept extends EssentialsCommand
@@ -40,11 +41,11 @@ public class Commandtpaccept extends EssentialsCommand
 
 		if (user.isTeleportRequestHere())
 		{
-			user.getTeleport().teleport(target, charge);
+			user.getTeleport().teleport(target, charge, TeleportCause.COMMAND);
 		}
 		else
 		{
-			target.getTeleport().teleport(user, charge);
+			target.getTeleport().teleport(user, charge, TeleportCause.COMMAND);
 		}
 		user.requestTeleport(null, false);
 	}

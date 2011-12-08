@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 import org.bukkit.Location;
 import org.bukkit.Server;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 
 public class Commandhome extends EssentialsCommand
@@ -43,11 +44,13 @@ public class Commandhome extends EssentialsCommand
 		}
 		try
 		{
-			if ("bed".equalsIgnoreCase(homeName)) {
+			if ("bed".equalsIgnoreCase(homeName))
+			{
 				final Location bed = player.getBedSpawnLocation();
 				if (bed != null)
 				{
-					user.getTeleport().teleport(bed, charge);
+					user.getTeleport().teleport(bed, charge, TeleportCause.COMMAND);
+					return;
 				}
 			}
 			user.getTeleport().home(player, homeName.toLowerCase(Locale.ENGLISH), charge);
@@ -57,18 +60,14 @@ public class Commandhome extends EssentialsCommand
 			final List<String> homes = player.getHomes();
 			if (homes.isEmpty() && player.equals(user))
 			{
-				final Location loc = player.getBedSpawnLocation();
-				if (loc == null)
+				final Location bed = player.getBedSpawnLocation();
+				if (bed != null)
 				{
-					if (ess.getSettings().spawnIfNoHome())
-					{
-						user.getTeleport().respawn(ess.getSpawn(), charge);
-					}
+					user.getTeleport().teleport(bed, charge, TeleportCause.COMMAND);
+					return;
 				}
-				else
-				{
-					user.getTeleport().teleport(loc, charge);
-				}
+				user.getTeleport().respawn(charge, TeleportCause.COMMAND);
+				return;
 			}
 			else if (homes.isEmpty())
 			{
@@ -77,6 +76,7 @@ public class Commandhome extends EssentialsCommand
 			else if (homes.size() == 1 && player.equals(user))
 			{
 				user.getTeleport().home(player, homes.get(0), charge);
+				return;
 			}
 			else
 			{

@@ -7,6 +7,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 
 
+/**
+ * @deprecated This will be moved to the api package soon
+ */
+@Deprecated
 public interface IUser
 {
 	int getHealth();
@@ -56,4 +60,12 @@ public interface IUser
 	String getDisplayName();
 
 	boolean isHidden();
+
+	Teleport getTeleport();
+
+	void setJail(String jail);
+
+	public int getTotalExperience();
+
+	public void setTotalExperience(int l);
 }

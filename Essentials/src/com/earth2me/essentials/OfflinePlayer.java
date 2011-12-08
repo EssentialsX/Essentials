@@ -1,10 +1,10 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.craftbukkit.OfflineBedLocation;
 import static com.earth2me.essentials.I18n._;
 import java.net.InetSocketAddress;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import lombok.Delegate;
@@ -12,6 +12,7 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.map.MapView;
@@ -741,7 +742,7 @@ public class OfflinePlayer implements Player
 	@Override
 	public Location getBedSpawnLocation()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		return OfflineBedLocation.getBedLocation(base.getName(), ess);
 	}
 
 	@Override
@@ -782,6 +783,36 @@ public class OfflinePlayer implements Player
 
 	@Override
 	public int getMaxHealth()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void giveExp(int i)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public float getExp()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setExp(float f)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public boolean teleport(Location lctn, TeleportCause tc)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public boolean teleport(Entity entity, TeleportCause tc)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}

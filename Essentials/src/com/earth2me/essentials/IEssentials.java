@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.api.IJails;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
 import org.bukkit.World;
@@ -8,16 +9,21 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
-
+/**
+ * @deprecated This will be moved to the api package soon
+ */
+@Deprecated
 public interface IEssentials extends Plugin
 {
 	void addReloadListener(IConf listener);
 
 	void reload();
 
-	boolean onCommandEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath, String permissionPrefix);
+	boolean onCommandEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath, String permissionPrefix, IEssentialsModule module);
 
 	User getUser(Object base);
+
+	I18n getI18n();
 
 	User getOfflineUser(String name);
 
@@ -29,15 +35,13 @@ public interface IEssentials extends Plugin
 
 	BukkitScheduler getScheduler();
 
-	Jail getJail();
+	IJails getJails();
 
 	Warps getWarps();
 
 	Worth getWorth();
 
 	Backup getBackup();
-
-	Spawn getSpawn();
 
 	Methods getPaymentMethod();
 
@@ -52,7 +56,7 @@ public interface IEssentials extends Plugin
 	TNTExplodeListener getTNTListener();
 
 	PermissionsHandler getPermissionsHandler();
-	
+
 	AlternativeCommandsHandler getAlternativeCommandsHandler();
 
 	void showError(final CommandSender sender, final Throwable exception, final String commandLabel);

@@ -20,8 +20,6 @@
 
 
 
-
-
 ############################################################
 # +------------------------------------------------------+ #
 # |                 Essentials (Global)                  | #
@@ -215,6 +213,10 @@ auto-afk-kick: -1
 # The player has to use the command /afk to leave the afk mode.
 freeze-afk-players: false
 
+# When the player is afk, should he be able to pickup items?
+# Enable this, when you don't want people idling in mob traps.
+disable-item-pickup-while-afk: true
+
 # You can disable the death messages of minecraft here
 death-messages: true
 
@@ -222,10 +224,28 @@ death-messages: true
 no-god-in-worlds:
 #  - world_nether
 
+# Set to true to enable per-world permissions for teleporting with /world
+# Give someone permission to teleport to a world with essentials.world.<worldname>
+world-teleport-permissions: false
+
+# The number of items given if the quantity parameter is left out in /item or /give.
+# If this number is below 1, the maximum stack size size is given. If oversized stacks
+# is not enabled, any number higher then the maximum stack size results in more than one stack.
+default-stack-size: -1
+
 # Oversized stacks are stacks that ignore the normal max stacksize.
 # They can be obtained using /give and /item, if the player has essentials.oversizedstacks permission.
 # How many items should be in a oversized stack?
 oversized-stacksize: 64
+
+# Do you allow to repair enchanted weapons and armor?
+# If you set this to false, you can still allow it for certain players using the permission
+# essentials.repair.enchanted
+repair-enchanted: true
+
+#Do you want essentials to keep track of previous location for /back in the teleport listener?
+#If you set this to true any plugin that uses teleport will have the previous location registered.
+register-back-in-listener: false
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -238,6 +258,9 @@ respawn-at-home: false
 
 # If no home is set send you to bed or spawn when /home is used
 spawn-if-no-home: true
+
+# Allows people to set their bed at daytime
+update-bed-at-daytime: true
 
 # Allow players to have multiple homes.
 # Define different amounts of multiple homes for different permissions, e.g. essentials.sethome.multiple.vip
@@ -300,24 +323,28 @@ hide-permissionless-help: true
 # +------------------------------------------------------+ #
 ############################################################
 
-# If EssentialsChat is installed, this will define how far a player's voice travels, in blocks.  Set to 0 to make all chat global.
-# Note that users with the "essentials.chat.spy" permission will hear everything, regardless of this setting.
-# Users with essentials.chat.shout can override this by prefixing text with an exclamation mark (!)
-# Or with essentials.chat.question can override this by prefixing text with a question mark (?)
-# You can add command costs for shout/question by adding chat-shout and chat-question to the command costs section."
 chat:
+  
+  # If EssentialsChat is installed, this will define how far a player's voice travels, in blocks.  Set to 0 to make all chat global.
+  # Note that users with the "essentials.chat.spy" permission will hear everything, regardless of this setting.
+  # Users with essentials.chat.shout can override this by prefixing text with an exclamation mark (!)
+  # Or with essentials.chat.question can override this by prefixing text with a question mark (?)
+  # You can add command costs for shout/question by adding chat-shout and chat-question to the command costs section."
   radius: 0
   
+  # Chat formatting can be done in two ways, you can either define a standard format for all chat
+  # Or you can give a group specific chat format, to give some extra variation.
   # If set to the default chat format which "should" be compatible with ichat.
+  # For more information of chat formatting, check out the wiki: http://ess.khhq.net/wiki/Chat_Formatting  
+  
   format: '<{DISPLAYNAME}> {MESSAGE}'
   #format: '&7[{GROUP}]&f {DISPLAYNAME}&7:&f {MESSAGE}'
-  
-  # You can also have group-specific formats, uncomment to enable:
+    
   group-formats:
   #  Default: '{WORLDNAME} {DISPLAYNAME}&7:&f {MESSAGE}'
   #  Admins: '{WORLDNAME} &c[{GROUP}]&f {DISPLAYNAME}&7:&c {MESSAGE}'
 
-
+  # If your using group formats make sure to remove the '#' to allow the setting to be read.
 
 
 
@@ -329,10 +356,8 @@ chat:
 
 protect:
   # Database settings for sign/rail protection
-  # get mysql.jar and sqlite and place it in your serverroot/lib directory from here:
-  # https://github.com/essentials/Essentials/blob/master/lib/mysql.jar
 
-  # mysql, sqlite or none
+  # mysql or sqlite
   datatype: 'sqlite'
 
   # If you specified MySQL above, you MUST enter the appropriate details here.
@@ -384,6 +409,7 @@ protect:
     creeper-explosion: false
     creeper-playerdamage: false
     creeper-blockdamage: false
+    enderdragon-blockdamage: true
     enderman-pickup: false
     villager-death: false
     # Monsters won't follow players
@@ -489,7 +515,7 @@ protect:
 
 ############################################################
 # +------------------------------------------------------+ #
-# |                    New Players                       | #
+# |            Essentials Spawn / New Players            | #
 # +------------------------------------------------------+ #
 ############################################################
 
@@ -498,10 +524,15 @@ newbies:
   # If so, use this format, replacing {DISPLAYNAME} with the player name.
   # If not, set to ''
   #announce-format: ''
-  announce-format: '&dWelcome {DISPLAYNAME} to the server!'
+  announce-format: '&dWelcome {DISPLAYNAME}&d to the server!'
   
   # When we spawn for the first time, which spawnpoint do we use?
   # Set to "none" if you want to use the spawn point of the world.
   spawnpoint: newbies
+
+# Set this to lowest, if you want Multiverse to handle the respawning
+# Set this to normal, if you want EssentialsSpawn to handle the respawning
+# Set this to highest, if you want to force EssentialsSpawn to handle the respawning
+respawn-listener-priority: normal
 
 # End of File <-- No seriously, you're done with configuration.

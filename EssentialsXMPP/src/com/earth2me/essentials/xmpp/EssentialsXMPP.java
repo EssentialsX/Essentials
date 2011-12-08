@@ -36,9 +36,14 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 
 		final PluginManager pluginManager = getServer().getPluginManager();
 		ess = (IEssentials)pluginManager.getPlugin("Essentials");
-		if (ess == null)
+		if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion()))
 		{
-			LOGGER.log(Level.SEVERE, "Failed to load Essentials before EssentialsXMPP");
+			LOGGER.log(Level.WARNING, _("versionMismatchAll"));
+		}
+		if (!ess.isEnabled())
+		{
+			this.setEnabled(false);
+			return;
 		}
 
 		final EssentialsXMPPPlayerListener playerListener = new EssentialsXMPPPlayerListener(ess);
@@ -52,23 +57,23 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 		ess.addReloadListener(users);
 		ess.addReloadListener(xmpp);
 
-		if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion()))
-		{
-			LOGGER.log(Level.WARNING, _("versionMismatchAll"));
-		}
 		LOGGER.info(_("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
 	}
 
 	@Override
 	public void onDisable()
 	{
-		xmpp.disconnect();
+		if (xmpp != null)
+		{
+			xmpp.disconnect();
+		}
+		instance = null;
 	}
 
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args)
 	{
-		return ess.onCommandEssentials(sender, command, commandLabel, args, EssentialsXMPP.class.getClassLoader(), "com.earth2me.essentials.xmpp.Command", "essentials.");
+		return ess.onCommandEssentials(sender, command, commandLabel, args, EssentialsXMPP.class.getClassLoader(), "com.earth2me.essentials.xmpp.Command", "essentials.", null);
 	}
 
 	@Override

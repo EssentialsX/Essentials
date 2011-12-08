@@ -3,15 +3,13 @@ package com.earth2me.essentials;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
-import com.google.common.collect.ConcurrentHashMultiset;
 import com.google.common.util.concurrent.UncheckedExecutionException;
 import java.io.File;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.bukkit.entity.Player;
 
 
@@ -19,7 +17,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 {
 	private final transient IEssentials ess;
 	private final transient Cache<String, User> users = CacheBuilder.newBuilder().softValues().build(this);
-	private final transient ConcurrentHashMultiset<String> keys = ConcurrentHashMultiset.create();
+	private final transient ConcurrentSkipListSet<String> keys = new ConcurrentSkipListSet<String>();
 
 	public UserMap(final IEssentials ess)
 	{
@@ -87,8 +85,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 				return new User(player, ess);
 			}
 		}
-		final File userFolder = new File(ess.getDataFolder(), "userdata");
-		final File userFile = new File(userFolder, Util.sanitizeFileName(name) + ".yml");
+		final File userFile = getUserFile(name);
 		if (userFile.exists())
 		{
 			keys.add(name.toLowerCase(Locale.ENGLISH));
@@ -111,11 +108,17 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 
 	public Set<String> getAllUniqueUsers()
 	{
-		return Collections.unmodifiableSet(keys.elementSet());
+		return Collections.unmodifiableSet(keys);
 	}
 
 	public int getUniqueUsers()
 	{
 		return keys.size();
+	}
+	
+	public File getUserFile(final String name)
+	{
+		final File userFolder = new File(ess.getDataFolder(), "userdata");
+		return new File(userFolder, Util.sanitizeFileName(name) + ".yml");
 	}
 }

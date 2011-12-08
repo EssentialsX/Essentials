@@ -28,8 +28,8 @@ commands:
     usage: /<command> [player]
     aliases: [bal,emoney,ebalance,ebal]
   balancetop:
-    description: Gets the top x balance values. (max 10)
-    usage: /<command> <max>
+    description: Gets the top balance values.
+    usage: /<command> <page>
     aliases: [baltop,ebaltop,ebalancetop]
   ban:
     description: Bans a player.
@@ -39,6 +39,10 @@ commands:
     description: Bans an IP address.
     usage: /<command> <address>
     aliases: [ebanip]
+  break:
+    description: Breaks the block you are looking at.
+    usage: /<command>
+    aliases: [ebreak]
   broadcast:
     description: Broadcasts a message to the entire server.
     usage: /<command> <msg>
@@ -51,6 +55,10 @@ commands:
     description: Set a player on fire.
     usage: /<command> <player> <seconds>
     aliases: [eburn]
+  butcher:
+    description: Kill all mobs in a world.
+    usage: /<command> <mobType> <radius>
+    aliases: [ebutcher]
   clearinventory:
     description: Clear all items in your inventory.
     usage: /<command>
@@ -82,7 +90,7 @@ commands:
   enchant:
     description: Enchants the item the user is holding.
     usage: /<command> <enchantmentname> [level]
-    aliases: [enchantment]
+    aliases: [enchantment,eenchant,eenchantment]
   essentials:
     description: Reloads essentials.
     usage: /<command>
@@ -90,6 +98,14 @@ commands:
     description: Extinguish players.
     usage: /<command> [player]
     aliases: [extinguish,eext,eextinguish]
+  feed:
+    description: Satisfy the hunger.
+    usage: /<command> [player]
+    aliases: [efeed]
+  itemdb:
+    description: Searches for an item.
+    usage: /<command> <item>
+    aliases: [eitemdb]
   fireball:
     description: Throw a fireball.
     usage: /<command> [small]
@@ -99,8 +115,8 @@ commands:
     usage: /<command> [player]
     aliases: [gm,creative,creativemode,egamemode,ecreative,ecreativemode,egm]
   getpos:
-    description: Get your current coordinates.
-    usage: /<command>
+    description: Get your current coordinates or those of a player.
+    usage: /<command> [player]
     aliases: [coords,egetpos,whereami,ewhereami]
   gc:
     description: Reports garbage collection info; useful to developers.
@@ -176,7 +192,7 @@ commands:
     aliases: [playerlist,who,online,elist,ewho,eplayerlist,eonline]
   lightning:
     description: The power of Thor. Strike at cursor or player.
-    usage: /<command> [player]
+    usage: /<command> [player] [power]
     aliases: [strike,smite,thor,shock,elightning,estrike,esmite,ethor,eshock]
   mail:
     description: Manages inter-player, intra-server mail.
@@ -186,6 +202,10 @@ commands:
     description: Describes an action in the context of the player.
     usage: /<command> <description>
     aliases: [action,describe,eme,eaction,edescribe]
+  more:
+    description: Fills the item stack in hand to maximum size.
+    usage: /<command>
+    aliases: [emore]
   motd:
     description: Views the Message Of The Day.
     usage: /<command>
@@ -198,6 +218,10 @@ commands:
     description: Mutes or unmutes a player.
     usage: /<command> <player> [datediff]
     aliases: [emute]
+  near:
+    description: Lists the players near by or around a player
+    usage: /<command> [playername] [radius] 
+    aliases: [nearby,enear,enearby]
   nick:
     description: Change your nickname or that of another player.
     usage: /<command> [player] <nickname|off>
@@ -234,6 +258,10 @@ commands:
     description: Displays the username of a user based on nickname.
     usage: /<command> <nickname>
     aliases: [erealname]
+  remove:
+    description: Removes entities in your world
+    usage: /<command> <drops|arrows|boats|minecarts|xp|paintings> [radius]
+    aliases: [eremove]
   repair:
     description: Repairs the durability of all or one item.
     usage: /<command> <hand|all>
@@ -276,7 +304,7 @@ commands:
     aliases: [espawner]
   spawnmob:
     description: Spawns a mob.
-    usage: /<command> <mob>[:data][,<mount>[:data]] [amount]
+    usage: /<command> <mob>[:data][,<mount>[:data]] [amount] [player]
     aliases: [espawnmob]
   sudo:
     description: Make another user perform a command.
@@ -299,9 +327,9 @@ commands:
     usage: /<command> [day|night|dawn|17:30|4pm|4000ticks] [worldname|all]
     aliases: [etime, day, night]
   togglejail:
-    description: Prevents a player from interacting with the world and teleports him/her to the the jail specified
+    description: Prevents a player from interacting with the world and teleports him/her to the jail specified
     usage: /<command> <player> <jailname> [datediff]
-    aliases: [tjail,unjail,eunjail,etogglejail]
+    aliases: [tjail,jail,ejail,unjail,eunjail,etogglejail]
   top:
     description: Teleport to the highest block at your current position.
     usage: /<command>
@@ -309,7 +337,7 @@ commands:
   tp:
     description: Teleport to a player.
     usage: /<command> <player> [otherplayer]
-    aliases: [etp]
+    aliases: [tele,etele,etp,tp2p,etp2p]
   tpa:
     description: Request to teleport to the specified player.
     usage: /<command> <player>

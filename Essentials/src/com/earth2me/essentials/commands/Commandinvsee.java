@@ -2,7 +2,6 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.craftbukkit.EnchantmentFix;
 import java.util.Arrays;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
@@ -30,7 +29,7 @@ public class Commandinvsee extends EssentialsCommand
 		}
 		if (invUser == user && user.getSavedInventory() != null)
 		{
-			EnchantmentFix.setContents(invUser.getInventory(), user.getSavedInventory());
+			invUser.getInventory().setContents(user.getSavedInventory());
 			user.setSavedInventory(null);
 			user.sendMessage(_("invRestored"));
 			throw new NoChargeException();
@@ -50,7 +49,7 @@ public class Commandinvsee extends EssentialsCommand
 		{
 			throw new Exception(_("invBigger"));
 		}
-		EnchantmentFix.setContents(user.getInventory(), invUserStack);
+		user.getInventory().setContents(invUserStack);
 		user.sendMessage(_("invSee", invUser.getDisplayName()));
 		user.sendMessage(_("invSeeHelp"));
 		throw new NoChargeException();

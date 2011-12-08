@@ -3,16 +3,11 @@ package com.earth2me.essentials;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.ChatColor;
+import org.bukkit.event.Event.Priority;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -34,6 +29,12 @@ public class Settings implements ISettings
 	public boolean getRespawnAtHome()
 	{
 		return config.getBoolean("respawn-at-home", false);
+	}
+
+	@Override
+	public boolean getUpdateBedAtDaytime()
+	{
+		return config.getBoolean("update-bed-at-daytime", true);
 	}
 
 	@Override
@@ -85,6 +86,12 @@ public class Settings implements ISettings
 	public int getOversizedStackSize()
 	{
 		return config.getInt("oversized-stacksize", 64);
+	}
+
+	@Override
+	public int getDefaultStackSize()
+	{
+		return config.getInt("default-stack-size", -1);
 	}
 
 	@Override
@@ -332,7 +339,7 @@ public class Settings implements ISettings
 	public void reloadConfig()
 	{
 		config.load();
-		noGodWorlds = new HashSet<String>(config.getStringList("no-god-in-worlds",Collections.<String>emptyList()));
+		noGodWorlds = new HashSet<String>(config.getStringList("no-god-in-worlds", Collections.<String>emptyList()));
 	}
 
 	@Override
@@ -535,18 +542,68 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("death-messages", true);
 	}
-	
-	Set <String> noGodWorlds = new HashSet<String>();
+	Set<String> noGodWorlds = new HashSet<String>();
+
 	@Override
 	public Set<String> getNoGodWorlds()
 	{
 		return noGodWorlds;
-		
 	}
 
 	@Override
 	public void setDebug(final boolean debug)
 	{
 		this.debug = debug;
+	}
+
+	@Override
+	public boolean getRepairEnchanted()
+	{
+		return config.getBoolean("repair-enchanted", true);
+	}
+
+	@Override
+	public boolean getIsWorldTeleportPermissions()
+	{
+		return config.getBoolean("world-teleport-permissions", false);
+	}
+
+	@Override
+	public boolean registerBackInListener()
+	{
+		return config.getBoolean("register-back-in-listener", false);
+	}
+
+	@Override
+	public boolean getDisableItemPickupWhileAfk()
+	{
+		return config.getBoolean("disable-item-pickup-while-afk", true);
+	}
+
+	@Override
+	public Priority getRespawnPriority()
+	{
+		String priority = config.getString("respawn-listener-priority", "normal").toLowerCase(Locale.ENGLISH);
+		if ("lowest".equals(priority))
+		{
+			return Priority.Lowest;
+		}
+		if ("low".equals(priority))
+		{
+			return Priority.Low;
+		}
+		if ("normal".equals(priority))
+		{
+			return Priority.Normal;
+		}
+		if ("high".equals(priority))
+		{
+			return Priority.High;
+		}
+		if ("highest".equals(priority))
+		{
+			return Priority.Highest;
+		}
+		return Priority.Normal;
 	}
 }

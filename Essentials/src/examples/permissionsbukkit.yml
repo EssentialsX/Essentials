@@ -5,8 +5,7 @@ users:
 groups:
     Default:
         permissions:
-            permissions.build: true
-            essentials.build: false
+            permissions.build: false
             essentials.spawn: true
             essentials.rules: true
             essentials.motd: true
@@ -16,7 +15,6 @@ groups:
     Builder:
         permissions:
             permissions.build: true
-            essentials.build: true
             essentials.afk: true
             essentials.back: true
             essentials.back.ondeath: true
