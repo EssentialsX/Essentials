@@ -190,6 +190,11 @@ public class Teleport implements Runnable, ITeleport
 	{
 		cancel(false);
 	}
+	
+	public void teleport(Location loc, Trade chargeFor) throws Exception
+	{
+		teleport(new Target(loc), chargeFor, TeleportCause.PLUGIN);
+	}
 
 	public void teleport(Location loc, Trade chargeFor, TeleportCause cause) throws Exception
 	{
