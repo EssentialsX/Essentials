@@ -108,8 +108,6 @@ public abstract class Variables implements Cloneable {
             return o == null ? -1.0D : Double.parseDouble(o.toString());
         } catch (Exception e) {
             return -1.0D;
-
-
         }
     }
 
@@ -119,8 +117,6 @@ public abstract class Variables implements Cloneable {
      */
     public Set<String> getVarKeyList() {
         return variables.keySet();
-
-
     }
 
     /**
@@ -130,8 +126,6 @@ public abstract class Variables implements Cloneable {
      */
     public boolean hasVar(String name) {
         return variables.containsKey(name);
-
-
     }
 
     /**
@@ -140,8 +134,6 @@ public abstract class Variables implements Cloneable {
      */
     public int getSize() {
         return variables.size();
-
-
     }
 
     /**

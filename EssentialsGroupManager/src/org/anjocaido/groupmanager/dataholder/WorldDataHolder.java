@@ -631,7 +631,6 @@ public class WorldDataHolder {
                 } else
                 	throw new IllegalArgumentException("Unknown entry found in Info section for group: " + thisGrp.getName() + " in file: " + groupsFile.getPath());
                 	
-
                 //END INFO NODE
 
                 if (thisGroupNode.get("inheritance") == null || thisGroupNode.get("inheritance") instanceof List) {
@@ -753,14 +752,19 @@ public class WorldDataHolder {
 	            }
 	
 	
-	            //USER INFO NODE - BETA
-	
+	            //USER INFO NODE
+	            
 	            //INFO NODE
-	            Map<String, Object> infoNode = (Map<String, Object>) thisUserNode.get("info");
-	            if (infoNode != null) {
-	                thisUser.setVariables(infoNode);
-	            }
-	            //END INFO NODE - BETA
+                if (thisUserNode.get("info") instanceof Map) {
+	                Map<String, Object> infoNode = (Map<String, Object>) thisUserNode.get("info");
+	                if (infoNode != null) {
+	                	thisUser.setVariables(infoNode);
+	                }
+                } else if (thisUserNode.get("info") != null)
+                	throw new IllegalArgumentException("Unknown entry found in Info section for user: " + thisUser.getName() + " in file: " + usersFile.getPath());
+                	
+                //END INFO NODE
+	
 	
 	            if (thisUserNode.get("group") != null) {
 	                Group hisGroup = ph.getGroup(thisUserNode.get("group").toString());

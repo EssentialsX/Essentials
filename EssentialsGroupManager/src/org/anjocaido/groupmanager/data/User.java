@@ -76,7 +76,7 @@ public class User extends DataUnit implements Cloneable {
 		for (String perm : this.getPermissionList()) {
 			clone.addPermission(perm);
 		}
-		// clone.variables = this.variables.clone();
+		clone.variables = this.variables.clone(this);
 		clone.flagAsChanged();
 		return clone;
 	}
@@ -213,10 +213,11 @@ public class User extends DataUnit implements Cloneable {
 	 * @param varList
 	 */
 	public void setVariables(Map<String, Object> varList) {
-		UserVariables temp = new UserVariables(this, varList);
+		//UserVariables temp = new UserVariables(this, varList);
 		variables.clearVars();
-		for (String key : temp.getVarKeyList()) {
-			variables.addVar(key, temp.getVarObject(key));
+		for (String key : varList.keySet()) {
+			System.out.print("Adding variable - " + key);
+			variables.addVar(key, varList.get(key));
 		}
 		flagAsChanged();
 		if (GroupManager.isLoaded())
