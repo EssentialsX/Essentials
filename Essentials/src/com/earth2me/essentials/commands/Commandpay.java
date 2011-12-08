@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -32,6 +33,7 @@ public class Commandpay extends EssentialsCommand
 				continue;
 			}
 			user.payUser(u, amount);
+			Trade.log("Command", "Pay", "Player", user.getName(), new Trade(amount, ess), u.getName(), new Trade(amount, ess), user.getLocation(), ess);
 			foundUser = true;
 		}
 
