@@ -5,7 +5,7 @@ main: com.earth2me.essentials.spawn.EssentialsSpawn
 version: TeamCity
 website: http://www.earth2me.net:8001/
 description: Provides spawn control commands, utilizing Essentials.
-authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology]
+authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits]
 depend: [Essentials]
 commands:
   setspawn:
