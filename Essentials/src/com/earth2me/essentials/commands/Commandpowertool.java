@@ -24,7 +24,7 @@ public class Commandpowertool extends EssentialsCommand
 		String command = getFinalArg(args, 0);
 
 		// check to see if this is a clear all command
-		if (command != null && command.equalsIgnoreCase("c:"))
+		if (command != null && command.equalsIgnoreCase("d:"))
 		{
 			user.clearAllPowertools();
 			user.sendMessage(_("powerToolClearAll"));
@@ -76,11 +76,16 @@ public class Commandpowertool extends EssentialsCommand
 			{
 				if (command.startsWith("a:"))
 				{
+					if (!user.isAuthorized("essentials.powertool.append"))
+					{
+						throw new Exception(_("noPerm", "essentials.powertool.append"));
+					}
 					command = command.substring(2);
 					if (powertools.contains(command))
 					{
 						throw new Exception(_("powerToolAlreadySet", command, itemName));
 					}
+
 				}
 				else if (powertools != null && !powertools.isEmpty())
 				{

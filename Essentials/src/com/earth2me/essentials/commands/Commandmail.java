@@ -58,7 +58,7 @@ public class Commandmail extends EssentialsCommand
 			}
 			if (!u.isIgnoredPlayer(user.getName()))
 			{
-				u.addMail(ChatColor.stripColor(user.getDisplayName()) + ": " + getFinalArg(args, 2));
+				u.addMail(user.getName() + ": " + getFinalArg(args, 2));
 			}
 			user.sendMessage(_("mailSent"));
 			return;
@@ -69,7 +69,7 @@ public class Commandmail extends EssentialsCommand
 			{
 				throw new Exception(_("noPerm","essentials.mail.sendall"));
 			}
-			ess.scheduleAsyncDelayedTask(new SendAll(ChatColor.stripColor(user.getDisplayName()) + ": " + getFinalArg(args, 1)));
+			ess.scheduleAsyncDelayedTask(new SendAll(user.getName() + ": " + getFinalArg(args, 1)));
 			user.sendMessage(_("mailSent"));
 			return;
 		}
