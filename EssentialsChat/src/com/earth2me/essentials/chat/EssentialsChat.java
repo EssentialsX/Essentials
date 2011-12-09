@@ -4,10 +4,12 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IEssentials;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
+import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -15,8 +17,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class EssentialsChat extends JavaPlugin
 {
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
-	private Map<String, IEssentialsChatListener> chatListener;
+	private transient Map<String, IEssentialsChatListener> chatListener;
+	
 
+	@Override
 	public void onEnable()
 	{
 		final PluginManager pluginManager = getServer().getPluginManager();
@@ -31,11 +35,13 @@ public class EssentialsChat extends JavaPlugin
 			return;
 		}
 
-		chatListener = new HashMap<String, IEssentialsChatListener>();
+		chatListener = new ConcurrentSkipListMap<String, IEssentialsChatListener>();
+		final Map<PlayerChatEvent, String> charges = new HashMap<PlayerChatEvent, String>();
+		
 
 		final EssentialsChatPlayerListenerLowest playerListenerLowest = new EssentialsChatPlayerListenerLowest(getServer(), ess, chatListener);
-		final EssentialsChatPlayerListenerNormal playerListenerNormal = new EssentialsChatPlayerListenerNormal(getServer(), ess, chatListener);
-		final EssentialsChatPlayerListenerHighest playerListenerHighest = new EssentialsChatPlayerListenerHighest(getServer(), ess, chatListener);
+		final EssentialsChatPlayerListenerNormal playerListenerNormal = new EssentialsChatPlayerListenerNormal(getServer(), ess, chatListener, charges);
+		final EssentialsChatPlayerListenerHighest playerListenerHighest = new EssentialsChatPlayerListenerHighest(getServer(), ess, chatListener, charges);
 		pluginManager.registerEvent(Type.PLAYER_CHAT, playerListenerLowest, Priority.Lowest, this);
 		pluginManager.registerEvent(Type.PLAYER_CHAT, playerListenerNormal, Priority.Normal, this);
 		pluginManager.registerEvent(Type.PLAYER_CHAT, playerListenerHighest, Priority.Highest, this);
@@ -43,6 +49,7 @@ public class EssentialsChat extends JavaPlugin
 		LOGGER.info(_("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
 	}
 
+	@Override
 	public void onDisable()
 	{
 		if (chatListener != null)

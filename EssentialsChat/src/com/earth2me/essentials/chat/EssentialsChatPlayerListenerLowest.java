@@ -10,7 +10,9 @@ import org.bukkit.event.player.PlayerChatEvent;
 
 public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer
 {
-	public EssentialsChatPlayerListenerLowest(Server server, IEssentials ess, Map<String, IEssentialsChatListener> listeners)
+	public EssentialsChatPlayerListenerLowest(final Server server,
+											  final IEssentials ess,
+											  final Map<String, IEssentialsChatListener> listeners)
 	{
 		super(server, ess, listeners);
 	}

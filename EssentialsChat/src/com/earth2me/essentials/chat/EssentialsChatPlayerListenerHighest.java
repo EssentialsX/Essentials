@@ -10,14 +10,25 @@ import org.bukkit.event.player.PlayerChatEvent;
 
 public class EssentialsChatPlayerListenerHighest extends EssentialsChatPlayer
 {
-	public EssentialsChatPlayerListenerHighest(Server server, IEssentials ess, Map<String, IEssentialsChatListener> listeners)
+	private final transient Map<PlayerChatEvent, String> charges;
+
+	public EssentialsChatPlayerListenerHighest(final Server server,
+											   final IEssentials ess,
+											   final Map<String, IEssentialsChatListener> listeners,
+											   final Map<PlayerChatEvent, String> charges)
 	{
 		super(server, ess, listeners);
+		this.charges = charges;
 	}
 
 	@Override
 	public void onPlayerChat(final PlayerChatEvent event)
 	{
+		String charge = charges.remove(event);
+		if (charge == null)
+		{
+			charge = "chat";
+		}
 		if (isAborted(event))
 		{
 			return;
@@ -27,22 +38,14 @@ public class EssentialsChatPlayerListenerHighest extends EssentialsChatPlayer
 		 * This file should handle charging the user for the action before returning control back
 		 */
 		final User user = ess.getUser(event.getPlayer());
-		final String chatType = getChatType(event.getMessage());
-		final StringBuilder command = new StringBuilder();
-		command.append("chat");
-
-		if (chatType.length() > 0)
-		{
-			command.append("-").append(chatType);
-		}
 
 		try
 		{
-			charge(user, command.toString());
+			charge(user, charge);
 		}
 		catch (ChargeException e)
 		{
-			ess.showError(user, e, command.toString());
+			ess.showError(user, e, charge);
 			event.setCancelled(true);
 			return;
 		}
