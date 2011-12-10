@@ -19,7 +19,7 @@ public class Commandnear extends EssentialsCommand
 	@Override
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		long radius = 100;
+		long radius = 200;
 		User otherUser = null;
 		
 		if (args.length > 0)
@@ -72,7 +72,7 @@ public class Commandnear extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		long radius = 100;
+		long radius = 200;
 		if (args.length > 1)
 		{
 			try
@@ -111,7 +111,7 @@ public class Commandnear extends EssentialsCommand
 					{
 						output.append(", ");
 					}
-					output.append(player.getDisplayName()).append("§f(§4").append(Math.sqrt(delta)).append("m§f)");
+					output.append(player.getDisplayName()).append("§f(§4").append((long)Math.sqrt(delta)).append("m§f)");
 				}
 			}
 		}
