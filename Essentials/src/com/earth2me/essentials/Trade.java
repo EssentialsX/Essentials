@@ -1,6 +1,9 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
+import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.ISettings;
 import static com.earth2me.essentials.I18n._;
 import java.io.File;
 import java.io.FileWriter;
@@ -11,6 +14,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import lombok.Cleanup;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
@@ -37,7 +41,7 @@ public class Trade
 	{
 		this(null, null, items, null, ess);
 	}
-	
+
 	public Trade(final int exp, final IEssentials ess)
 	{
 		this(null, null, null, exp, ess);
@@ -69,18 +73,23 @@ public class Trade
 			throw new ChargeException(_("missingItems", getItemStack().getAmount(), getItemStack().getType().toString().toLowerCase(Locale.ENGLISH).replace("_", " ")));
 		}
 
+		@Cleanup
+		final ISettings settings = ess.getSettings();
+		settings.acquireReadLock();
+
 		if (command != null && !command.isEmpty()
 			&& !user.isAuthorized("essentials.nocommandcost.all")
 			&& !user.isAuthorized("essentials.nocommandcost." + command)
-			&& mon < ess.getSettings().getCommandCost(command.charAt(0) == '/' ? command.substring(1) : command)
-			&& 0 < ess.getSettings().getCommandCost(command.charAt(0) == '/' ? command.substring(1) : command)
+			&& mon < settings.getData().getEconomy().getCommandCost(command.charAt(0) == '/' ? command.substring(1) : command)
+			&& 0 < settings.getData().getEconomy().getCommandCost(command.charAt(0) == '/' ? command.substring(1) : command)
 			&& !user.isAuthorized("essentials.eco.loan"))
 		{
 			throw new ChargeException(_("notEnoughMoney"));
 		}
-		
-		if (exp != null && exp > 0 
-			&& user.getTotalExperience() < exp) {
+
+		if (exp != null && exp > 0
+			&& user.getTotalExperience() < exp)
+		{
 			throw new ChargeException(_("notEnoughExperience"));
 		}
 	}
@@ -144,8 +153,11 @@ public class Trade
 			&& !user.isAuthorized("essentials.nocommandcost.all")
 			&& !user.isAuthorized("essentials.nocommandcost." + command))
 		{
+			@Cleanup
+		final ISettings settings = ess.getSettings();
+		settings.acquireReadLock();
 			final double mon = user.getMoney();
-			final double cost = ess.getSettings().getCommandCost(command.charAt(0) == '/' ? command.substring(1) : command);
+			final double cost = settings.getData().getEconomy().getCommandCost(command.charAt(0) == '/' ? command.substring(1) : command);
 			if (mon < cost && cost > 0 && !user.isAuthorized("essentials.eco.loan"))
 			{
 				throw new ChargeException(_("notEnoughMoney"));
@@ -172,7 +184,7 @@ public class Trade
 	{
 		return itemStack;
 	}
-	
+
 	public Integer getExperience()
 	{
 		return exp;
@@ -181,7 +193,10 @@ public class Trade
 
 	public static void log(String type, String subtype, String event, String sender, Trade charge, String receiver, Trade pay, Location loc, IEssentials ess)
 	{
-		if (!ess.getSettings().isEcoLogEnabled())
+		@Cleanup
+		final ISettings settings = ess.getSettings();
+		settings.acquireReadLock();
+		if (!settings.getData().getEconomy().isLogEnabled())
 		{
 			return;
 		}
@@ -221,7 +236,7 @@ public class Trade
 			{
 				sb.append(charge.getMoney()).append(",");
 				sb.append("money").append(",");
-				sb.append(ess.getSettings().getCurrencySymbol());
+				sb.append(settings.getData().getEconomy().getCurrencySymbol());
 			}
 			if (charge.getExperience() != null)
 			{
@@ -252,7 +267,7 @@ public class Trade
 			{
 				sb.append(pay.getMoney()).append(",");
 				sb.append("money").append(",");
-				sb.append(ess.getSettings().getCurrencySymbol());
+				sb.append(settings.getData().getEconomy().getCurrencySymbol());
 			}
 			if (pay.getExperience() != null)
 			{

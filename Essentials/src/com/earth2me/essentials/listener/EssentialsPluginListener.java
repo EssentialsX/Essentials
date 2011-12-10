@@ -1,5 +1,7 @@
-package com.earth2me.essentials;
+package com.earth2me.essentials.listener;
 
+import com.earth2me.essentials.IConf;
+import com.earth2me.essentials.IEssentials;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.event.server.PluginDisableEvent;

@@ -1,8 +1,11 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.api.ITeleport;
+import com.earth2me.essentials.api.IUser;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
+import com.earth2me.essentials.user.CooldownException;
+import com.earth2me.essentials.user.UserData.TimestampType;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Logger;
@@ -146,23 +149,14 @@ public class Teleport implements Runnable, ITeleport
 
 	public void cooldown(boolean check) throws Exception
 	{
-		Calendar now = new GregorianCalendar();
-		if (user.getLastTeleportTimestamp() > 0)
+		try
 		{
-			double cooldown = ess.getSettings().getTeleportCooldown();
-			Calendar cooldownTime = new GregorianCalendar();
-			cooldownTime.setTimeInMillis(user.getLastTeleportTimestamp());
-			cooldownTime.add(Calendar.SECOND, (int)cooldown);
-			cooldownTime.add(Calendar.MILLISECOND, (int)((cooldown * 1000.0) % 1000.0));
-			if (cooldownTime.after(now) && !user.isAuthorized("essentials.teleport.cooldown.bypass"))
-			{
-				throw new Exception(_("timeBeforeTeleport", Util.formatDateDiff(cooldownTime.getTimeInMillis())));
-			}
+			user.checkCooldown(TimestampType.LASTTELEPORT, ess.getGroups().getTeleportCooldown(user), !check, "essentials.teleport.cooldown.bypass");
 		}
-		// if justCheck is set, don't update lastTeleport; we're just checking
-		if (!check)
+		catch (CooldownException ex)
 		{
-			user.setLastTeleportTimestamp(now.getTimeInMillis());
+			throw new Exception(_("timeBeforeTeleport", ex.getMessage()));
+
 		}
 	}
 
@@ -190,7 +184,7 @@ public class Teleport implements Runnable, ITeleport
 	{
 		cancel(false);
 	}
-	
+
 	public void teleport(Location loc, Trade chargeFor) throws Exception
 	{
 		teleport(new Target(loc), chargeFor, TeleportCause.PLUGIN);
@@ -270,12 +264,28 @@ public class Teleport implements Runnable, ITeleport
 
 	public void back(Trade chargeFor) throws Exception
 	{
-		teleport(new Target(user.getLastLocation()), chargeFor, TeleportCause.COMMAND);
+		user.acquireReadLock();
+		try
+		{
+			teleport(new Target(user.getData().getLastLocation()), chargeFor, TeleportCause.COMMAND);
+		}
+		finally
+		{
+			user.unlock();
+		}
 	}
 
 	public void back() throws Exception
 	{
-		now(new Target(user.getLastLocation()), TeleportCause.COMMAND);
+		user.acquireReadLock();
+		try
+		{
+			now(new Target(user.getData().getLastLocation()), TeleportCause.COMMAND);
+		}
+		finally
+		{
+			user.unlock();
+		}
 	}
 
 	public void home(IUser user, String home, Trade chargeFor) throws Exception

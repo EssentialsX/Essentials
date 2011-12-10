@@ -1,12 +1,13 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.api.IWorth;
 import java.io.File;
 import java.util.Locale;
 import java.util.logging.Logger;
 import org.bukkit.inventory.ItemStack;
 
 
-public class Worth implements IConf
+public class Worth implements IConf, IWorth
 {
 	private static final Logger logger = Logger.getLogger("Minecraft");
 	private final EssentialsConf config;
@@ -57,5 +58,11 @@ public class Worth implements IConf
 	public void reloadConfig()
 	{
 		config.load();
+	}
+
+	@Override
+	public void onReload()
+	{
+		reloadConfig();
 	}
 }

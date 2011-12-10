@@ -15,8 +15,12 @@ import org.bukkit.Material;
 @EqualsAndHashCode(callSuper = false)
 public class UserData implements StorageObject
 {
+	public enum TimestampType
+	{
+		JAIL, MUTE, LASTHEAL, LASTTELEPORT, LOGIN
+	}
 	private String nickname;
-	private double money;
+	private Double money;
 	@MapValueType(Location.class)
 	private Map<String, Location> homes = new HashMap<String, Location>();
 	@ListType(Material.class)
@@ -25,8 +29,9 @@ public class UserData implements StorageObject
 	@MapKeyType(Material.class)
 	private Map<Material, List<String>> powerTools = new HashMap<Material, List<String>>();
 	private Location lastLocation;
+	@MapKeyType(TimestampType.class)
 	@MapValueType(Long.class)
-	private Map<String, Long> timestamps;
+	private Map<TimestampType, Long> timestamps = new HashMap<TimestampType, Long>();
 	private String jail;
 	@ListType
 	private List<String> mails;
@@ -52,5 +57,16 @@ public class UserData implements StorageObject
 		unlimited.add(Material.ARROW);
 		unlimited.add(Material.APPLE);
 		powerTools.put(Material.DEAD_BUSH, Collections.singletonList("test"));
+		timestamps.put(TimestampType.JAIL, Long.MIN_VALUE);
+	}
+
+	public boolean hasUnlimited(Material mat)
+	{
+		return unlimited != null && unlimited.contains(mat);
+	}
+
+	public List<String> getPowertool(Material mat)
+	{
+		return powerTools == null ? Collections.<String>emptyList() : powerTools.get(mat);
 	}
 }

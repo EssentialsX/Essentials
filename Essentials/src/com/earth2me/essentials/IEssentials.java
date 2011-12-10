@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.listener.TNTExplodeListener;
 import com.earth2me.essentials.api.IJails;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
@@ -13,7 +14,7 @@ import org.bukkit.scheduler.BukkitScheduler;
  * @deprecated This will be moved to the api package soon
  */
 @Deprecated
-public interface IEssentials extends Plugin
+public interface IEssentials extends Plugin, com.earth2me.essentials.api.IEssentials
 {
 	void addReloadListener(IConf listener);
 

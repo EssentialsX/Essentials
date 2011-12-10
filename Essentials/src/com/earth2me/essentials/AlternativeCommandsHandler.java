@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.api.IAlternativeCommandsHandler;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -9,7 +10,7 @@ import org.bukkit.command.PluginCommandYamlParser;
 import org.bukkit.plugin.Plugin;
 
 
-public class AlternativeCommandsHandler
+public class AlternativeCommandsHandler implements IAlternativeCommandsHandler
 {
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private final transient Map<String, List<PluginCommand>> altcommands = new HashMap<String, List<PluginCommand>>();

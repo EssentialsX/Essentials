@@ -12,8 +12,12 @@ public class Chat implements StorageObject
 {
 	@Comment("The character(s) to prefix all nicknames, so that you know they are not true usernames.")
 	private String nicknamePrefix = "~";
-	@Comment("Disable this if you have any other plugin, that modifies the displayname of a user.")
-	private boolean changeDisplayname = true;
+	@Comment(
+	{
+		"Disable this if you have any other plugin, that modifies the displayname of a user.",
+		"If it is not set, it will be enabled if EssentialsChat is installed, otherwise not."
+	})
+	private Boolean changeDisplayname;
 	private String displaynameFormat = "{PREFIX}{NICKNAMEPREFIX}{NAME}{SUFFIX}";
 	@Comment(
 	{

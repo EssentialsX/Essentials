@@ -218,6 +218,11 @@ public class YamlStorageWriter implements IStorageWriter
 				YAML.dumpAll(Collections.singletonList(data).iterator(), writer);
 			}
 		}
+		else if (data instanceof Enum)
+		{
+			writeMaterial(data.toString());
+			writer.println();
+		}
 		else if (data instanceof Material)
 		{
 			writeMaterial(data);
@@ -259,6 +264,10 @@ public class YamlStorageWriter implements IStorageWriter
 			{
 				writer.print(output);
 			}
+		}
+		else if (data instanceof Enum)
+		{
+			writeMaterial(data.toString());
 		}
 		else if (data instanceof Material)
 		{

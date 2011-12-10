@@ -40,4 +40,14 @@ public class Economy implements StorageObject
 	@Comment("Enable this to log all interactions with trade/buy/sell signs and sell command")
 	private boolean logEnabled = false;
 	private Worth worth = new Worth();
+
+	public double getCommandCost(String command)
+	{
+		if (commandCosts == null)
+		{
+			return 0;
+		}
+		Double price = commandCosts.get(command);
+		return price == null || Double.isNaN(price) || Double.isInfinite(price) ? 0 : price;
+	}
 }

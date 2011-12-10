@@ -2,6 +2,7 @@ package com.earth2me.essentials;
 
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
+import com.earth2me.essentials.api.IReplyTo;
 
 
 public final class Console implements IReplyTo
@@ -14,13 +15,13 @@ public final class Console implements IReplyTo
 	{
 	}
 
-	public static CommandSender getCommandSender(Server server) throws Exception
+	public static CommandSender getCommandSender(final Server server) throws Exception
 	{
 		return server.getConsoleSender();
 	}
 
 	@Override
-	public void setReplyTo(CommandSender user)
+	public void setReplyTo(final CommandSender user)
 	{
 		replyTo = user;
 	}

@@ -215,6 +215,20 @@ public class BukkitConstructor extends Constructor
 				}
 				return new EnchantmentLevel(enchant, level);
 			}
+			if (node.getType().isEnum()) {
+				final String val = (String)constructScalar((ScalarNode)node);
+				if (val.isEmpty())
+				{
+					return null;
+				}
+				for (Object object : node.getType().getEnumConstants())
+				{
+					if (object.toString().equalsIgnoreCase(val)) {
+						return object;
+					}
+				}
+				return null;
+			}
 			return super.construct(node);
 		}
 	}

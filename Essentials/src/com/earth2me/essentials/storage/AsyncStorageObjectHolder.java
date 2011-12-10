@@ -1,7 +1,7 @@
 package com.earth2me.essentials.storage;
 
 import com.earth2me.essentials.IConf;
-import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.IReload;
 import java.io.File;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -30,6 +30,12 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
 		}
 	}
 
+	/**
+	 * Warning: If you access this method, you have to acquire a read or write lock first
+	 * 
+	 * 
+	 * @return Object storing all the data
+	 */
 	public T getData()
 	{
 		return data;

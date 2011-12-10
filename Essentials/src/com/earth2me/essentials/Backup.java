@@ -1,23 +1,29 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.api.IBackup;
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.ISettings;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import lombok.Cleanup;
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
 
-public class Backup implements Runnable
+public class Backup implements Runnable, IBackup
 {
-	private static final Logger LOGGER = Logger.getLogger("Minecraft");
+	private static final Logger LOGGER = Bukkit.getLogger();
 	private transient final Server server;
 	private transient final IEssentials ess;
-	private transient boolean running = false;
+	private transient final AtomicBoolean running = new AtomicBoolean(false);
 	private transient int taskId = -1;
-	private transient boolean active = false;
+	private transient final AtomicBoolean active = new AtomicBoolean(false);
 
 	public Backup(final IEssentials ess)
 	{
@@ -29,34 +35,34 @@ public class Backup implements Runnable
 		}
 	}
 
-	void onPlayerJoin()
+	public void startTask()
 	{
-		startTask();
-	}
-
-	private void startTask()
-	{
-		if (!running)
+		if (running.compareAndSet(false, true))
 		{
-			final long interval = ess.getSettings().getBackupInterval() * 1200; // minutes -> ticks
+			@Cleanup
+			final ISettings settings = ess.getSettings();
+			settings.acquireReadLock();
+			final long interval = settings.getData().getGeneral().getBackup().getInterval() * 1200; // minutes -> ticks
 			if (interval < 1200)
 			{
+				running.set(false);
 				return;
 			}
 			taskId = ess.scheduleSyncRepeatingTask(this, interval, interval);
-			running = true;
 		}
 	}
 
 	@Override
 	public void run()
 	{
-		if (active)
+		if (!active.compareAndSet(false, true))
 		{
 			return;
 		}
-		active = true;
-		final String command = ess.getSettings().getBackupCommand();
+		@Cleanup
+		final ISettings settings = ess.getSettings();
+		settings.acquireReadLock();
+		final String command = settings.getData().getGeneral().getBackup().getCommand();
 		if (command == null || "".equals(command))
 		{
 			return;
@@ -117,13 +123,13 @@ public class Backup implements Runnable
 											server.dispatchCommand(cs, "save-on");
 											if (server.getOnlinePlayers().length == 0)
 											{
-												running = false;
+												running.set(false);
 												if (taskId != -1)
 												{
 													server.getScheduler().cancelTask(taskId);
 												}
 											}
-											active = false;
+											active.set(false);
 											LOGGER.log(Level.INFO, _("backupFinished"));
 										}
 									});

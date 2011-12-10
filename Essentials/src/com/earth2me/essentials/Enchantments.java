@@ -9,8 +9,13 @@ import java.util.regex.Pattern;
 import org.bukkit.enchantments.Enchantment;
 
 
-public class Enchantments
+public final class Enchantments
 {
+
+	private Enchantments()
+	{
+	}
+	
 	private static final transient Pattern NUMPATTERN = Pattern.compile("\\d+");
 	private static final Map<String, Enchantment> ENCHANTMENTS = new HashMap<String, Enchantment>();
 
@@ -56,7 +61,7 @@ public class Enchantments
 		ENCHANTMENTS.put("aquaaffinity", Enchantment.WATER_WORKER);
 	}
 	
-	public static Enchantment getByName(String name) {
+	public static Enchantment getByName(final String name) {
 		Enchantment enchantment;
 		if (NUMPATTERN.matcher(name).matches()) {
 			enchantment = Enchantment.getById(Integer.parseInt(name));

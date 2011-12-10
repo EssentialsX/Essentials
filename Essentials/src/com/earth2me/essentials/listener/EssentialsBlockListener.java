@@ -1,8 +1,10 @@
-package com.earth2me.essentials;
+package com.earth2me.essentials.listener;
 
+import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import java.util.logging.Logger;
 import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;

@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
 import org.bukkit.Server;
 
 
@@ -13,11 +14,11 @@ public class Commandafk extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(Server server, IUser user, String commandLabel, String[] args) throws Exception
 	{
 		if (args.length > 0 && user.isAuthorized("essentials.afk.others"))
 		{
-			User afkUser = ess.getUser(ess.getServer().matchPlayer(args[0]));
+			IUser afkUser = ess.getUser(ess.getServer().matchPlayer(args[0]));
 			if (afkUser != null)
 			{
 				toggleAfk(afkUser);
@@ -29,7 +30,7 @@ public class Commandafk extends EssentialsCommand
 		}
 	}
 
-	private void toggleAfk(User user)
+	private void toggleAfk(IUser user)
 	{
 		if (!user.toggleAfk())
 		{

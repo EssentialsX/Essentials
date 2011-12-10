@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.api.IUserMap;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -12,8 +13,8 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutionException;
 import org.bukkit.entity.Player;
 
-
-public class UserMap extends CacheLoader<String, User> implements IConf
+@Deprecated
+public class UserMap extends CacheLoader<String, User> implements IConf, IUserMap
 {
 	private final transient IEssentials ess;
 	private final transient Cache<String, User> users = CacheBuilder.newBuilder().softValues().build(this);
@@ -120,5 +121,11 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 	{
 		final File userFolder = new File(ess.getDataFolder(), "userdata");
 		return new File(userFolder, Util.sanitizeFileName(name) + ".yml");
+	}
+
+	@Override
+	public void onReload()
+	{
+		loadAllUsersAsync(ess);
 	}
 }

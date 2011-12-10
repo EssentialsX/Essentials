@@ -11,7 +11,7 @@ import org.bukkit.inventory.PlayerInventory;
  * @deprecated This will be moved to the api package soon
  */
 @Deprecated
-public interface IUser
+public interface IUser extends com.earth2me.essentials.api.IUser
 {
 	int getHealth();
 

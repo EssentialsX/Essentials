@@ -18,16 +18,20 @@ public interface IEssentials extends Plugin, IReload
 	II18n getI18n();
 
 	ISettings getSettings();
+	
+	IGroups getGroups();
 
-	IJails getJail();
+	IJails getJails();
 
-	IWarps getWarps();
+	IWarps getWarps2();
 
 	IWorth getWorth();
 
 	IItemDb getItemDb();
 
 	IUserMap getUserMap();
+	
+	IBackup getBackup();
 
 	IEssentialsEconomy getEconomy();
 

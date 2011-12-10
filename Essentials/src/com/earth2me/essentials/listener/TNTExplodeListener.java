@@ -1,5 +1,6 @@
-package com.earth2me.essentials;
+package com.earth2me.essentials.listener;
 
+import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.craftbukkit.FakeExplosion;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityExplodeEvent;

@@ -13,18 +13,30 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.plugin.PluginManager;
 
 
 public class Util
 {
+
+	
 	private Util()
 	{
 	}
 	private final static Logger logger = Logger.getLogger("Minecraft");
+	
+	private static Pattern unsafeChars = Pattern.compile("[^a-z0-9]");
 
 	public static String sanitizeFileName(String name)
 	{
-		return name.toLowerCase(Locale.ENGLISH).replaceAll("[^a-z0-9]", "_");
+		return unsafeChars.matcher(name.toLowerCase(Locale.ENGLISH)).replaceAll("_");
+	}
+	
+	public static String sanitizeKey(String name)
+	{
+		return unsafeChars.matcher(name.toLowerCase(Locale.ENGLISH)).replaceAll("_");
 	}
 
 	public static String formatDateDiff(long date)
@@ -476,5 +488,45 @@ public class Util
 			}
 		}
 		return buf.toString();
+	}
+
+	public static void registerPermissions(String path, Collection<String> nodes, boolean hasDefault, IEssentials ess)
+	{
+		if (nodes == null || nodes.isEmpty())
+		{
+			return;
+		}
+		final PluginManager pluginManager = ess.getServer().getPluginManager();
+		Permission basePerm = pluginManager.getPermission(path +".*");
+		if (basePerm != null && !basePerm.getChildren().isEmpty())
+		{
+			basePerm.getChildren().clear();
+		}
+		if (basePerm == null)
+		{
+			basePerm = new Permission(path + ".*", PermissionDefault.OP);
+			pluginManager.addPermission(basePerm);
+			Permission mainPerm = pluginManager.getPermission("essentials.*");
+			if (mainPerm == null)
+			{
+				mainPerm = new Permission("essentials.*", PermissionDefault.OP);
+				pluginManager.addPermission(mainPerm);
+			}
+			mainPerm.getChildren().put(basePerm.getName(), Boolean.TRUE);
+		}
+
+		for (String nodeName : nodes)
+		{
+			final String permissionName = path + "." + nodeName;
+			Permission perm = pluginManager.getPermission(permissionName);
+			if (perm == null)
+			{
+				final PermissionDefault defaultPerm = hasDefault && nodeName.equalsIgnoreCase("default") ? PermissionDefault.TRUE : PermissionDefault.OP;
+				perm = new Permission(permissionName, defaultPerm);
+				pluginManager.addPermission(perm);
+			}
+			basePerm.getChildren().put(permissionName, Boolean.TRUE);
+		}
+		basePerm.recalculatePermissibles();
 	}
 }

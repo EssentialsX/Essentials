@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.Set;
 
 
-public interface IUserMap
+public interface IUserMap extends IReload
 {
 	boolean userExists(final String name);
 

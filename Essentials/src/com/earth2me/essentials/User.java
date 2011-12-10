@@ -3,6 +3,8 @@ package com.earth2me.essentials;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.register.payment.Method;
+import com.earth2me.essentials.user.CooldownException;
+import com.earth2me.essentials.user.UserData.TimestampType;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
@@ -12,7 +14,7 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-
+@Deprecated
 public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 {
 	private CommandSender replyTo = null;
@@ -543,5 +545,53 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public long getTeleportRequestTime()
 	{
 		return teleportRequestTime;
+	}
+
+	@Override
+	public void onReload()
+	{
+		reloadConfig();
+	}
+
+	@Override
+	public void checkCooldown(TimestampType cooldownType, double cooldown, boolean set, String bypassPermission) throws CooldownException
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public com.earth2me.essentials.user.UserData getData()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void acquireReadLock()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void acquireWriteLock()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void close()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void unlock()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void updateDisplayName()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }

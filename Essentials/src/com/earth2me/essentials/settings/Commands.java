@@ -15,6 +15,7 @@ import lombok.EqualsAndHashCode;
 public class Commands implements StorageObject
 {
 	private Afk afk = new Afk();
+	private Back back = new Back();
 	private God god = new God();
 	private Help help = new Help();
 	private Home home = new Home();
@@ -37,4 +38,20 @@ public class Commands implements StorageObject
 	@ListType
 	@Comment("Disabled commands will be completelly unavailable on the server.")
 	private List<String> disabled = new ArrayList<String>();
+
+	public boolean isDisabled(final String commandName)
+	{
+		if (disabled == null)
+		{
+			return false;
+		}
+		for (String disabledCommand : disabled)
+		{
+			if (commandName.equalsIgnoreCase(disabledCommand))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 }

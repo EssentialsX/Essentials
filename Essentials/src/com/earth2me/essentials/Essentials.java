@@ -19,7 +19,11 @@ package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.Economy;
+import com.earth2me.essentials.api.IEssentialsEconomy;
+import com.earth2me.essentials.api.IGroups;
 import com.earth2me.essentials.api.IJails;
+import com.earth2me.essentials.api.IReload;
+import com.earth2me.essentials.api.IWarps;
 import com.earth2me.essentials.commands.EssentialsCommand;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
@@ -360,7 +364,15 @@ public class Essentials extends JavaPlugin implements IEssentials
 				}
 				else
 				{
-					cmd.run(getServer(), user, commandLabel, command, args);
+					user.acquireReadLock();
+					try
+					{
+						cmd.run(getServer(), user, commandLabel, command, args);
+					}
+					finally
+					{
+						user.unlock();
+					}
 				}
 				return true;
 			}
@@ -584,5 +596,47 @@ public class Essentials extends JavaPlugin implements IEssentials
 	public I18n getI18n()
 	{
 		return i18n;
+	}
+
+	@Override
+	public void addReloadListener(IReload listener)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public int broadcastMessage(com.earth2me.essentials.api.IUser sender, String message)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public IGroups getGroups()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public IWarps getWarps2()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public IEssentialsEconomy getEconomy()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void showCommandError(CommandSender sender, String commandLabel, Throwable exception)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void onReload()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }

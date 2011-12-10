@@ -8,7 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-
+@Deprecated
 public abstract class UserData extends PlayerExtension implements IConf
 {
 	protected final transient IEssentials ess;

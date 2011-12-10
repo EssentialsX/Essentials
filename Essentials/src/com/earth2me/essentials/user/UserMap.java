@@ -1,8 +1,8 @@
 package com.earth2me.essentials.user;
 
-import com.earth2me.essentials.IConf;
-import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.Util;
+import com.earth2me.essentials.api.IUserMap;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -17,7 +17,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 
-public class UserMap extends CacheLoader<String, User> implements IConf
+public class UserMap extends CacheLoader<String, User> implements IUserMap
 {
 	private final transient IEssentials ess;
 	private final transient Cache<String, User> users = CacheBuilder.newBuilder().softValues().build(this);
@@ -27,10 +27,10 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 	{
 		super();
 		this.ess = ess;
-		loadAllUsersAsync(ess);
+		loadAllUsersAsync();
 	}
 
-	private void loadAllUsersAsync(final IEssentials ess)
+	private void loadAllUsersAsync()
 	{
 		ess.scheduleAsyncDelayedTask(new Runnable()
 		{
@@ -98,12 +98,6 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 		throw new Exception("User not found!");
 	}
 
-	@Override
-	public void reloadConfig()
-	{
-		loadAllUsersAsync(ess);
-	}
-
 	public void removeUser(final String name)
 	{
 		keys.remove(name.toLowerCase(Locale.ENGLISH));
@@ -124,5 +118,11 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 	{
 		final File userFolder = new File(ess.getDataFolder(), "userdata");
 		return new File(userFolder, Util.sanitizeFileName(name) + ".yml");
+	}
+
+	@Override
+	public void onReload()
+	{
+		loadAllUsersAsync();
 	}
 }

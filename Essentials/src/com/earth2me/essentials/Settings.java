@@ -612,4 +612,34 @@ public class Settings implements ISettings
 	{
 		return config.getLong("tpa-accept-cancellation", 0);		
 	}
+
+	@Override
+	public com.earth2me.essentials.settings.Settings getData()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void acquireReadLock()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void acquireWriteLock()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void close()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void unlock()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }

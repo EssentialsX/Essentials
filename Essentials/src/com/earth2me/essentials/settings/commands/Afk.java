@@ -15,14 +15,14 @@ public class Afk implements StorageObject
 		"After this timeout in seconds, the user will be set as afk.",
 		"Set to -1 for no timeout."
 	})
-	private int autoAFK = 300;
+	private long autoAFK = 300;
 	@Comment(
 	{
 		"Auto-AFK Kick",
 		"After this timeout in seconds, the user will be kicked from the server.",
 		"Set to -1 for no timeout."
 	})
-	private int autoAFKKick = -1;
+	private long autoAFKKick = -1;
 	@Comment(
 	{
 		"Set this to true, if you want to freeze the player, if he is afk.",
