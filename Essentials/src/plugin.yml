@@ -240,7 +240,7 @@ commands:
     aliases: [pong,eping,epong]
   powertool:
     description: Assigns a command to the item in hand, {player} will be replaced by the name of the player that you click.
-    usage: /<command> [l:|a:|r:|c:][command] [arguments]
+    usage: /<command> [l:|a:|r:|c:|d:][command] [arguments]
     aliases: [pt,epowertool,ept]
   powertooltoggle:
     description: Enables or disables all current powertools

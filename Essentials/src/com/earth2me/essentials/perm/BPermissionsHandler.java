@@ -8,7 +8,7 @@ import java.util.List;
 import org.bukkit.entity.Player;
 
 
-public class BPermissionsHandler implements IPermissionsHandler
+public class BPermissionsHandler extends SuperpermsHandler
 {
 	private final transient WorldPermissionsManager wpm;
 	private final transient InfoReader info;
@@ -71,9 +71,4 @@ public class BPermissionsHandler implements IPermissionsHandler
 		return info.getSuffix(base);
 	}
 
-	@Override
-	public boolean hasPermission(final Player base, final String node)
-	{
-		return base.hasPermission(node);
-	}
 }

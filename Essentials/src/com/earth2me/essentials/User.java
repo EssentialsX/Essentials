@@ -177,7 +177,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	@Override
 	public int compareTo(final User other)
 	{
-		return ChatColor.stripColor(this.getDisplayName()).compareToIgnoreCase(ChatColor.stripColor(other.getDisplayName()));
+		return this.getName().compareToIgnoreCase(other.getName());
 	}
 
 	@Override
@@ -187,14 +187,14 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		{
 			return false;
 		}
-		return ChatColor.stripColor(this.getDisplayName()).equalsIgnoreCase(ChatColor.stripColor(((User)object).getDisplayName()));
+		return this.getName().equalsIgnoreCase(((User)object).getName());
 
 	}
 
 	@Override
 	public int hashCode()
 	{
-		return ChatColor.stripColor(this.getDisplayName()).hashCode();
+		return this.getName().hashCode();		
 	}
 
 	public Boolean canSpawnItem(final int itemId)

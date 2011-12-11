@@ -29,6 +29,7 @@ public class Commandbutcher extends EssentialsCommand
 		super("butcher");
 	}
 
+	//TODO: Tidy - missed this during command cleanup
 	@Override
 	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
