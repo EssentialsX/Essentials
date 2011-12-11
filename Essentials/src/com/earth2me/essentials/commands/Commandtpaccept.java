@@ -3,7 +3,8 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.Trade;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
+import lombok.Cleanup;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
@@ -16,12 +17,15 @@ public class Commandtpaccept extends EssentialsCommand
 	}
 
 	@Override
-	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
+	public void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
-
-		final User target = user.getTeleportRequest();
-		if (target == null
-			|| target.getBase() instanceof OfflinePlayer
+		if (user.getTeleportRequester() == null)
+		{
+			throw new Exception(_("noPendingRequest"));
+		}
+		
+		final IUser target = user.getTeleportRequester();
+		if (target.getBase() instanceof OfflinePlayer
 			|| (user.isTeleportRequestHere() && !target.isAuthorized("essentials.tpahere")))
 		{
 			throw new Exception(_("noPendingRequest"));

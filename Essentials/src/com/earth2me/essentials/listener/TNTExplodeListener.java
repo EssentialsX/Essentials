@@ -1,7 +1,8 @@
 package com.earth2me.essentials.listener;
 
-import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.craftbukkit.FakeExplosion;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityListener;
@@ -10,7 +11,7 @@ import org.bukkit.event.entity.EntityListener;
 public class TNTExplodeListener extends EntityListener implements Runnable
 {
 	private final transient IEssentials ess;
-	private transient boolean enabled = false;
+	private transient AtomicBoolean enabled = new AtomicBoolean(false);
 	private transient int timer = -1;
 
 	public TNTExplodeListener(final IEssentials ess)
@@ -21,15 +22,14 @@ public class TNTExplodeListener extends EntityListener implements Runnable
 
 	public void enable()
 	{
-		if (!enabled)
+		if (enabled.compareAndSet(false, true))
 		{
-			enabled = true;
 			timer = ess.scheduleSyncDelayedTask(this, 1000);
 			return;
 		}
 		if (timer != -1)
 		{
-			ess.getScheduler().cancelTask(timer);
+			ess.getServer().getScheduler().cancelTask(timer);
 			timer = ess.scheduleSyncDelayedTask(this, 1000);
 		}
 	}
@@ -37,7 +37,7 @@ public class TNTExplodeListener extends EntityListener implements Runnable
 	@Override
 	public void onEntityExplode(final EntityExplodeEvent event)
 	{
-		if (!enabled)
+		if (!enabled.get())
 		{
 			return;
 		}
@@ -52,6 +52,6 @@ public class TNTExplodeListener extends EntityListener implements Runnable
 	@Override
 	public void run()
 	{
-		enabled = false;
+		enabled.set(false);
 	}
 }

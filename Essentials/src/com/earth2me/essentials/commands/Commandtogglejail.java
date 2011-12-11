@@ -2,8 +2,10 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.OfflinePlayer;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.Util;
+import com.earth2me.essentials.user.UserData.TimestampType;
+import lombok.Cleanup;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -24,9 +26,11 @@ public class Commandtogglejail extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		final User player = getPlayer(server, args, 0, true);
+		@Cleanup
+		final IUser player = getPlayer(server, args, 0, true);
+		player.acquireReadLock();
 
-		if (args.length >= 2 && !player.isJailed())
+		if (args.length >= 2 && !player.getData().isJailed())
 		{
 			if (player.getBase() instanceof OfflinePlayer)
 			{
@@ -54,16 +58,16 @@ public class Commandtogglejail extends EssentialsCommand
 				// Check if jail exists
 				ess.getJails().getJail(args[1]);
 			}
-			player.setJailed(true);
+			player.acquireWriteLock();
+			player.getData().setJailed(true);
 			player.sendMessage(_("userJailed"));
-			player.setJail(null);
-			player.setJail(args[1]);
+			player.getData().setJail(args[1]);
 			long timeDiff = 0;
 			if (args.length > 2)
 			{
 				final String time = getFinalArg(args, 2);
 				timeDiff = Util.parseDateDiff(time, true);
-				player.setJailTimeout(timeDiff);
+				player.setTimestamp(TimestampType.JAIL, timeDiff);
 			}
 			sender.sendMessage((timeDiff > 0
 								? _("playerJailedFor", player.getName(), Util.formatDateDiff(timeDiff))
@@ -71,31 +75,33 @@ public class Commandtogglejail extends EssentialsCommand
 			return;
 		}
 
-		if (args.length >= 2 && player.isJailed() && !args[1].equalsIgnoreCase(player.getJail()))
+		if (args.length >= 2 && player.getData().isJailed() && !args[1].equalsIgnoreCase(player.getData().getJail()))
 		{
-			sender.sendMessage(_("jailAlreadyIncarcerated", player.getJail()));
+			sender.sendMessage(_("jailAlreadyIncarcerated", player.getData().getJail()));
 			return;
 		}
 
-		if (args.length >= 2 && player.isJailed() && args[1].equalsIgnoreCase(player.getJail()))
+		if (args.length >= 2 && player.getData().isJailed() && args[1].equalsIgnoreCase(player.getData().getJail()))
 		{
 			final String time = getFinalArg(args, 2);
 			final long timeDiff = Util.parseDateDiff(time, true);
-			player.setJailTimeout(timeDiff);
+			player.acquireWriteLock();
+			player.setTimestamp(TimestampType.JAIL, timeDiff);
 			sender.sendMessage(_("jailSentenceExtended", Util.formatDateDiff(timeDiff)));
 			return;
 		}
 
-		if (args.length == 1 || (args.length == 2 && args[1].equalsIgnoreCase(player.getJail())))
+		if (args.length == 1 || (args.length == 2 && args[1].equalsIgnoreCase(player.getData().getJail())))
 		{
-			if (!player.isJailed())
+			if (!player.getData().isJailed())
 			{
 				throw new NotEnoughArgumentsException();
 			}
-			player.setJailed(false);
-			player.setJailTimeout(0);
+			player.acquireWriteLock();
+			player.getData().setJailed(false);
+			player.setTimestamp(TimestampType.JAIL, 0);
 			player.sendMessage(_("jailReleasedPlayerNotify"));
-			player.setJail(null);
+			player.getData().setJail(null);
 			if (!(player.getBase() instanceof OfflinePlayer))
 			{
 				player.getTeleport().back();

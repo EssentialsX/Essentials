@@ -1,5 +1,6 @@
 package com.earth2me.essentials.api;
 
+import com.earth2me.essentials.listener.TNTExplodeListener;
 import com.earth2me.essentials.perm.IPermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
 import org.bukkit.World;
@@ -18,7 +19,7 @@ public interface IEssentials extends Plugin, IReload
 	II18n getI18n();
 
 	ISettings getSettings();
-	
+
 	IGroups getGroups();
 
 	IJails getJails();
@@ -30,7 +31,7 @@ public interface IEssentials extends Plugin, IReload
 	IItemDb getItemDb();
 
 	IUserMap getUserMap();
-	
+
 	IBackup getBackup();
 
 	IEssentialsEconomy getEconomy();
@@ -52,4 +53,10 @@ public interface IEssentials extends Plugin, IReload
 	IAlternativeCommandsHandler getAlternativeCommandsHandler();
 
 	void showCommandError(CommandSender sender, String commandLabel, Throwable exception);
+
+	public void reload();
+
+	public IUser getOfflineUser(String string);
+
+	public TNTExplodeListener getTNTListener();
 }

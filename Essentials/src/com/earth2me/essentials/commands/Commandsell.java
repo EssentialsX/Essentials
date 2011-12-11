@@ -3,7 +3,7 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.Trade;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.Util;
 import java.util.Locale;
 import java.util.logging.Level;
@@ -20,7 +20,7 @@ public class Commandsell extends EssentialsCommand
 	}
 
 	@Override
-	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
+	public void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -74,7 +74,7 @@ public class Commandsell extends EssentialsCommand
 		sellItem(user, is, args, false);
 	}
 
-	private void sellItem(User user, ItemStack is, String[] args, boolean isBulkSell) throws Exception
+	private void sellItem(IUser user, ItemStack is, String[] args, boolean isBulkSell) throws Exception
 	{
 		if (is == null || is.getType() == Material.AIR)
 		{

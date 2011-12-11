@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
 import org.bukkit.Server;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.SmallFireball;
@@ -15,7 +15,7 @@ public class Commandfireball extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
+	protected void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		boolean small = false;
 		if (args.length > 0 && args[0].equalsIgnoreCase("small"))
@@ -23,7 +23,7 @@ public class Commandfireball extends EssentialsCommand
 			small = true;
 		}
 		final Vector direction = user.getEyeLocation().getDirection().multiply(2);
-		Fireball fireball = user.getWorld().spawn(user.getEyeLocation().add(direction.getX(), direction.getY(), direction.getZ()), small ? SmallFireball.class : Fireball.class);
+		final Fireball fireball = user.getWorld().spawn(user.getEyeLocation().add(direction.getX(), direction.getY(), direction.getZ()), small ? SmallFireball.class : Fireball.class);
 		fireball.setShooter(user.getBase());
 	}
 }

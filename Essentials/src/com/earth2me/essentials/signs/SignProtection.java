@@ -2,9 +2,9 @@ package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.ChargeException;
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.Trade;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.Util;
 import java.util.*;
 import org.bukkit.Location;
@@ -29,7 +29,7 @@ public class SignProtection extends EssentialsSign
 	}
 
 	@Override
-	protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException
+	protected boolean onSignCreate(final ISign sign, final IUser player, final String username, final IEssentials ess) throws SignException, ChargeException
 	{
 		sign.setLine(3, "§4" + username);
 		if (hasAdjacentBlock(sign.getBlock()))
@@ -47,7 +47,7 @@ public class SignProtection extends EssentialsSign
 	}
 
 	@Override
-	protected boolean onSignBreak(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException
+	protected boolean onSignBreak(final ISign sign, final IUser player, final String username, final IEssentials ess) throws SignException
 	{
 		final SignProtectionState state = checkProtectionSign(sign, player, username);
 		return state == SignProtectionState.OWNER;
@@ -73,7 +73,7 @@ public class SignProtection extends EssentialsSign
 		return false;
 	}
 
-	private void checkIfSignsAreBroken(final Block block, final User player, final String username, final IEssentials ess)
+	private void checkIfSignsAreBroken(final Block block, final IUser player, final String username, final IEssentials ess)
 	{
 		final Map<Location, SignProtectionState> signs = getConnectedSigns(block, player, username, false);
 		for (Map.Entry<Location, SignProtectionState> entry : signs.entrySet())
@@ -91,14 +91,14 @@ public class SignProtection extends EssentialsSign
 		}
 	}
 
-	private Map<Location, SignProtectionState> getConnectedSigns(final Block block, final User user, final String username, boolean secure)
+	private Map<Location, SignProtectionState> getConnectedSigns(final Block block, final IUser user, final String username, boolean secure)
 	{
 		final Map<Location, SignProtectionState> signs = new HashMap<Location, SignProtectionState>();
 		getConnectedSigns(block, signs, user, username, secure ? 4 : 2);
 		return signs;
 	}
 
-	private void getConnectedSigns(final Block block, final Map<Location, SignProtectionState> signs, final User user, final String username, final int depth)
+	private void getConnectedSigns(final Block block, final Map<Location, SignProtectionState> signs, final IUser user, final String username, final int depth)
 	{
 		final Block[] faces = getAdjacentBlocks(block);
 		for (Block b : faces)
@@ -124,7 +124,7 @@ public class SignProtection extends EssentialsSign
 		NOT_ALLOWED, ALLOWED, NOSIGN, OWNER
 	}
 
-	private SignProtectionState checkProtectionSign(final Block block, final User user, final String username)
+	private SignProtectionState checkProtectionSign(final Block block, final IUser user, final String username)
 	{
 		if (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN)
 		{
@@ -137,7 +137,7 @@ public class SignProtection extends EssentialsSign
 		return SignProtectionState.NOSIGN;
 	}
 
-	private SignProtectionState checkProtectionSign(final ISign sign, final User user, final String username)
+	private SignProtectionState checkProtectionSign(final ISign sign, final IUser user, final String username)
 	{
 		if (user == null || username == null)
 		{
@@ -179,7 +179,7 @@ public class SignProtection extends EssentialsSign
 				};
 	}
 
-	public SignProtectionState isBlockProtected(final Block block, final User user, final String username, boolean secure)
+	public SignProtectionState isBlockProtected(final Block block, final IUser user, final String username, boolean secure)
 	{
 		final Map<Location, SignProtectionState> signs = getConnectedSigns(block, user, username, secure);
 		SignProtectionState retstate = SignProtectionState.NOSIGN;
@@ -247,7 +247,7 @@ public class SignProtection extends EssentialsSign
 	}
 
 	@Override
-	protected boolean onBlockPlace(final Block block, final User player, final String username, final IEssentials ess) throws SignException
+	protected boolean onBlockPlace(final Block block, final IUser player, final String username, final IEssentials ess) throws SignException
 	{
 		for (Block adjBlock : getAdjacentBlocks(block))
 		{
@@ -265,7 +265,7 @@ public class SignProtection extends EssentialsSign
 	}
 
 	@Override
-	protected boolean onBlockInteract(final Block block, final User player, final String username, final IEssentials ess) throws SignException
+	protected boolean onBlockInteract(final Block block, final IUser player, final String username, final IEssentials ess) throws SignException
 	{
 		final SignProtectionState state = isBlockProtected(block, player, username, false);
 
@@ -286,7 +286,7 @@ public class SignProtection extends EssentialsSign
 	}
 
 	@Override
-	protected boolean onBlockBreak(final Block block, final User player, final String username, final IEssentials ess) throws SignException
+	protected boolean onBlockBreak(final Block block, final IUser player, final String username, final IEssentials ess) throws SignException
 	{
 		final SignProtectionState state = isBlockProtected(block, player, username, false);
 

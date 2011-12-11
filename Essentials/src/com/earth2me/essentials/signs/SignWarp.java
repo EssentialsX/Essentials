@@ -1,9 +1,9 @@
 package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.ChargeException;
-import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.Trade;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 
@@ -15,7 +15,7 @@ public class SignWarp extends EssentialsSign
 	}
 
 	@Override
-	protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException
+	protected boolean onSignCreate(final ISign sign, final IUser player, final String username, final IEssentials ess) throws SignException
 	{
 		validateTrade(sign, 3, ess);
 		final String warpName = sign.getLine(1);
@@ -29,7 +29,7 @@ public class SignWarp extends EssentialsSign
 		{
 			try
 			{
-				ess.getWarps().getWarp(warpName);
+				ess.getWarps2().getWarp(warpName);
 			}
 			catch (Exception ex)
 			{
@@ -45,7 +45,7 @@ public class SignWarp extends EssentialsSign
 	}
 
 	@Override
-	protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException
+	protected boolean onSignInteract(final ISign sign, final IUser player, final String username, final IEssentials ess) throws SignException, ChargeException
 	{
 		final String warpName = sign.getLine(1);
 		final String group = sign.getLine(2);

@@ -33,4 +33,6 @@ public class Afk implements StorageObject
 		"since the player will not get a message, if he tries to move."
 	})
 	private boolean freezeAFKPlayers = false;
+	
+	private boolean disableItemPickupWhileAfk = true;
 }

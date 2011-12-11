@@ -39,6 +39,7 @@ public class EssentialsPlayerListener extends PlayerListener
 
 	public EssentialsPlayerListener(final IEssentials parent)
 	{
+		super();
 		this.ess = parent;
 		this.server = parent.getServer();
 	}
@@ -47,18 +48,17 @@ public class EssentialsPlayerListener extends PlayerListener
 	public void onPlayerRespawn(final PlayerRespawnEvent event)
 	{
 		final IUser user = ess.getUser(event.getPlayer());
-		updateCompass(user);
-		if (ess.getSettings().changeDisplayName())
-		{
-			user.setDisplayNick();
-		}
+		user.updateCompass();
+		user.updateDisplayName();
 	}
 
 	@Override
 	public void onPlayerChat(final PlayerChatEvent event)
 	{
-		final User user = ess.getUser(event.getPlayer());
-		if (user.isMuted())
+		@Cleanup
+		final IUser user = ess.getUser(event.getPlayer());
+		user.acquireReadLock();
+		if (user.getData().isMuted())
 		{
 			event.setCancelled(true);
 			user.sendMessage(_("playerMuted"));
@@ -67,17 +67,14 @@ public class EssentialsPlayerListener extends PlayerListener
 		final Iterator<Player> it = event.getRecipients().iterator();
 		while (it.hasNext())
 		{
-			final User u = ess.getUser(it.next());
-			if (u.isIgnoredPlayer(user.getName()))
+			final IUser player = ess.getUser(it.next());
+			if (player.isIgnoringPlayer(user.getName()))
 			{
 				it.remove();
 			}
 		}
 		user.updateActivity(true);
-		if (ess.getSettings().changeDisplayName())
-		{
-			user.setDisplayNick();
-		}
+		user.updateDisplayName();
 	}
 
 	@Override
@@ -87,9 +84,14 @@ public class EssentialsPlayerListener extends PlayerListener
 		{
 			return;
 		}
-		final User user = ess.getUser(event.getPlayer());
+		@Cleanup
+		final IUser user = ess.getUser(event.getPlayer());
+		user.acquireReadLock();
+		@Cleanup
+		final ISettings settings = ess.getSettings();
+		settings.acquireReadLock();
 
-		if (user.isAfk() && ess.getSettings().getFreezeAfkPlayers())
+		if (user.getData().isAfk() && settings.getData().getCommands().getAfk().isFreezeAFKPlayers())
 		{
 			final Location from = event.getFrom();
 			final Location to = event.getTo().clone();
@@ -117,15 +119,20 @@ public class EssentialsPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerQuit(final PlayerQuitEvent event)
 	{
-		final User user = ess.getUser(event.getPlayer());
-		if (ess.getSettings().removeGodOnDisconnect() && user.isGodModeEnabled())
+		@Cleanup
+		final IUser user = ess.getUser(event.getPlayer());
+		user.acquireReadLock();
+		@Cleanup
+		final ISettings settings = ess.getSettings();
+		settings.acquireReadLock();
+		if (settings.getData().getCommands().getGod().isRemoveOnDisconnect() && user.isGodModeEnabled())
 		{
 			user.toggleGodModeEnabled();
 		}
-		if (user.getSavedInventory() != null)
+		if (user.getData().getInventory() != null)
 		{
-			user.getInventory().setContents(user.getSavedInventory());
-			user.setSavedInventory(null);
+			user.getInventory().setContents(user.getData().getInventory().getBukkitInventory());
+			user.getData().setInventory(null);
 		}
 		user.updateActivity(false);
 		user.dispose();
@@ -192,7 +199,7 @@ public class EssentialsPlayerListener extends PlayerListener
 	{
 		if (event.getResult() != Result.ALLOWED && event.getResult() != Result.KICK_FULL && event.getResult() != Result.KICK_BANNED)
 		{
-			LOGGER.log(Level.INFO, "Disconnecting user " + event.getPlayer().toString() + " due to " + event.getResult().toString());
+			LOGGER.log(Level.INFO, "Disconnecting user {0} due to {1}", new Object[]{event.getPlayer().toString(), event.getResult().toString()});
 			return;
 		}
 		@Cleanup
@@ -208,7 +215,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		if (!banExpired && (user.isBanned() || event.getResult() == Result.KICK_BANNED))
 		{
 			final String banReason = user.getData().getBan() == null ? "" : user.getData().getBan().getReason();
-			event.disallow(Result.KICK_BANNED, banReason != null && !banReason.isEmpty() && !banReason.equalsIgnoreCase("ban") ? banReason : _("defaultBanReason"));
+			event.disallow(Result.KICK_BANNED, banReason == null || banReason.isEmpty() || banReason.equalsIgnoreCase("ban") ? _("defaultBanReason") : banReason);
 			return;
 		}
 
@@ -220,24 +227,11 @@ public class EssentialsPlayerListener extends PlayerListener
 		event.allow();
 
 		user.setTimestamp(TimestampType.LOGIN, System.currentTimeMillis());
-		updateCompass(user);
-	}
-
-	private void updateCompass(final IUser user)
-	{
-		Location loc = user.getHome(user.getLocation());
-		if (loc == null)
-		{
-			loc = user.getBedSpawnLocation();
-		}
-		if (loc != null)
-		{
-			user.setCompassTarget(loc);
-		}
+		user.updateCompass();
 	}
 
 	@Override
-	public void onPlayerTeleport(PlayerTeleportEvent event)
+	public void onPlayerTeleport(final PlayerTeleportEvent event)
 	{
 		if (event.isCancelled())
 		{
@@ -255,7 +249,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 
 		user.updateDisplayName();
-		updateCompass(user);
+		user.updateCompass();
 	}
 
 	@Override
@@ -264,10 +258,10 @@ public class EssentialsPlayerListener extends PlayerListener
 		@Cleanup
 		final IUser user = ess.getUser(event.getPlayer());
 		user.acquireReadLock();
-		final ItemStack is = new ItemStack(Material.EGG, 1);
-		if (user.getData().hasUnlimited(is.getType()))
+		final ItemStack hand = new ItemStack(Material.EGG, 1);
+		if (user.getData().hasUnlimited(hand.getType()))
 		{
-			user.getInventory().addItem(is);
+			user.getInventory().addItem(hand);
 			user.updateInventory();
 		}
 	}
@@ -309,12 +303,12 @@ public class EssentialsPlayerListener extends PlayerListener
 		@Cleanup
 		final IUser user = ess.getUser(event.getPlayer());
 		user.acquireReadLock();
-		final ItemStack is = user.getItemInHand();
-		if (is == null || is.getType() == Material.AIR || !user.getData().isPowertoolsenabled())
+		final ItemStack hand = user.getItemInHand();
+		if (hand == null || hand.getType() == Material.AIR || !user.getData().isPowertoolsenabled())
 		{
 			return;
 		}
-		final List<String> commandList = user.getData().getPowertool(is.getType());
+		final List<String> commandList = user.getData().getPowertool(hand.getType());
 		if (commandList == null || commandList.isEmpty())
 		{
 			return;
@@ -382,7 +376,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			@Cleanup
 			final IUser user = ess.getUser(event.getPlayer());
 			user.acquireReadLock();
-			if (user.isGodModeEnabledRaw())
+			if (user.getData().isGodmode())
 			{
 				user.sendMessage(_("noGodWorldWarning"));
 			}
@@ -401,21 +395,33 @@ public class EssentialsPlayerListener extends PlayerListener
 			return;
 		}
 
-		if (ess.getSettings().getUpdateBedAtDaytime() && event.getClickedBlock().getType() == Material.BED_BLOCK)
+		@Cleanup
+		final ISettings settings = ess.getSettings();
+		settings.acquireReadLock();
+		if (settings.getData().getCommands().getHome().isUpdateBedAtDaytime() && event.getClickedBlock().getType() == Material.BED_BLOCK)
 		{
 			SetBed.setBed(event.getPlayer(), event.getClickedBlock());
 		}
 	}
 
 	@Override
-	public void onPlayerPickupItem(PlayerPickupItemEvent event)
+	public void onPlayerPickupItem(final PlayerPickupItemEvent event)
 	{
-		if (event.isCancelled() || !ess.getSettings().getDisableItemPickupWhileAfk())
+		if (event.isCancelled())
 		{
 			return;
 		}
-		final User user = ess.getUser(event.getPlayer());
-		if (user.isAfk())
+		@Cleanup
+		final ISettings settings = ess.getSettings();
+		settings.acquireReadLock();
+		if (!settings.getData().getCommands().getAfk().isDisableItemPickupWhileAfk())
+		{
+			return;
+		}
+		@Cleanup
+		final IUser user = ess.getUser(event.getPlayer());
+		user.acquireReadLock();
+		if (user.getData().isAfk())
 		{
 			event.setCancelled(true);
 		}

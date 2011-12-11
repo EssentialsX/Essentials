@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.*;
+import com.earth2me.essentials.api.IUser;
 import static com.earth2me.essentials.I18n._;
 import java.util.*;
 import org.bukkit.Server;
@@ -14,7 +15,7 @@ public class Commandkit extends EssentialsCommand
 	}
 
 	@Override
-	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
+	public void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{

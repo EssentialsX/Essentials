@@ -6,7 +6,10 @@ import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.craftbukkit.OfflineBedLocation;
 import com.earth2me.essentials.storage.AsyncStorageObjectHolder;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import lombok.Cleanup;
 import lombok.Delegate;
@@ -265,6 +268,101 @@ public abstract class UserBase extends AsyncStorageObjectHolder<UserData> implem
 		}
 		finally
 		{
+			unlock();
+		}
+	}
+	
+	public boolean toggleMuted()
+	{
+		acquireWriteLock();
+		try
+		{
+			boolean ret = !getData().isMuted();
+			getData().setMuted(ret);
+			return ret;
+		}
+		finally
+		{
+			unlock();
+		}
+	}
+	
+	public boolean toggleSocialSpy()
+	{
+		acquireWriteLock();
+		try
+		{
+			boolean ret = !getData().isSocialspy();
+			getData().setSocialspy(ret);
+			return ret;
+		}
+		finally
+		{
+			unlock();
+		}
+	}
+	
+	public boolean toggleTeleportEnabled()
+	{
+		acquireWriteLock();
+		try
+		{
+			boolean ret = !getData().isTeleportEnabled();
+			getData().setTeleportEnabled(ret);
+			return ret;
+		}
+		finally
+		{
+			unlock();
+		}
+	}
+
+	public boolean isIgnoringPlayer(final String name)
+	{
+		acquireReadLock();
+		try
+		{
+			return getData().getIgnore() == null ? false : getData().getIgnore().contains(name.toLowerCase(Locale.ENGLISH));
+		}
+		finally
+		{
+			unlock();
+		}
+	}
+
+	public void setIgnoredPlayer(final String name, final boolean set)
+	{
+		acquireWriteLock();
+		try
+		{
+			if (getData().getIgnore() == null)
+			{
+				getData().setIgnore(new HashSet<String>());
+			}
+			if (set)
+			{
+				getData().getIgnore().add(name.toLowerCase(Locale.ENGLISH));
+			}
+			else
+			{
+				getData().getIgnore().remove(name.toLowerCase(Locale.ENGLISH));
+			}
+		}
+		finally
+		{
+			unlock();
+		}
+	}
+	
+	public void addMail(String string)
+	{
+		acquireWriteLock();
+		try {
+			if (getData().getMails() == null) {
+				getData().setMails(new ArrayList<String>());
+			}
+			getData().getMails().add(string);
+		} finally {
 			unlock();
 		}
 	}

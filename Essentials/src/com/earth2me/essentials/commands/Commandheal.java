@@ -1,7 +1,8 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.user.UserData.TimestampType;
 import java.util.List;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -16,23 +17,19 @@ public class Commandheal extends EssentialsCommand
 	}
 
 	@Override
-	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
+	public void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
-
+		
 		if (args.length > 0 && user.isAuthorized("essentials.heal.others"))
 		{
-			if (!user.isAuthorized("essentials.heal.cooldown.bypass"))
-			{
-				user.healCooldown();
-			}
+			user.checkCooldown(TimestampType.LASTHEAL, ess.getGroups().getHealCooldown(user), true, "essentials.heal.cooldown.bypass");
+
 			healOtherPlayers(server, user, args[0]);
 			return;
 		}
 
-		if (!user.isAuthorized("essentials.heal.cooldown.bypass"))
-		{
-			user.healCooldown();
-		}
+		user.checkCooldown(TimestampType.LASTHEAL, ess.getGroups().getHealCooldown(user), true, "essentials.heal.cooldown.bypass");
+
 		user.setHealth(20);
 		user.setFoodLevel(20);
 		user.sendMessage(_("heal"));

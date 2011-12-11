@@ -1,9 +1,8 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
 import java.util.List;
-import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -18,12 +17,12 @@ public class Commandmail extends EssentialsCommand
 
 	//TODO: Tidy this up
 	@Override
-	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
+	public void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length >= 1 && "read".equalsIgnoreCase(args[0]))
 		{
-			final List<String> mail = user.getMails();
-			if (mail.isEmpty())
+			final List<String> mail = user.getData().getMails();
+			if (mail == null || mail.isEmpty())
 			{
 				user.sendMessage(_("noMail"));
 				throw new NoChargeException();
@@ -43,7 +42,7 @@ public class Commandmail extends EssentialsCommand
 			}
 
 			Player player = server.getPlayer(args[1]);
-			User u;
+			IUser u;
 			if (player != null)
 			{
 				u = ess.getUser(player);
@@ -56,7 +55,7 @@ public class Commandmail extends EssentialsCommand
 			{
 				throw new Exception(_("playerNeverOnServer", args[1]));
 			}
-			if (!u.isIgnoredPlayer(user.getName()))
+			if (!u.isIgnoringPlayer(user.getName()))
 			{
 				u.addMail(user.getName() + ": " + getFinalArg(args, 2));
 			}
@@ -75,7 +74,8 @@ public class Commandmail extends EssentialsCommand
 		}
 		if (args.length >= 1 && "clear".equalsIgnoreCase(args[0]))
 		{
-			user.setMails(null);
+			user.acquireWriteLock();
+			user.getData().setMails(null);
 			user.sendMessage(_("mailCleared"));
 			return;
 		}
@@ -96,7 +96,7 @@ public class Commandmail extends EssentialsCommand
 		else if (args.length >= 3 && "send".equalsIgnoreCase(args[0]))
 		{
 			Player player = server.getPlayer(args[1]);
-			User u;
+			IUser u;
 			if (player != null)
 			{
 				u = ess.getUser(player);
@@ -121,7 +121,7 @@ public class Commandmail extends EssentialsCommand
 		{
 			//allow sending from console without "send" argument, since it's the only thing the console can do
 			Player player = server.getPlayer(args[0]);
-			User u;
+			IUser u;
 			if (player != null)
 			{
 				u = ess.getUser(player);
@@ -156,7 +156,7 @@ public class Commandmail extends EssentialsCommand
 		{
 			for (String username : ess.getUserMap().getAllUniqueUsers())
 			{
-				User user = ess.getUserMap().getUser(username);
+				IUser user = ess.getUserMap().getUser(username);
 				if (user != null)
 				{
 					user.addMail(message);

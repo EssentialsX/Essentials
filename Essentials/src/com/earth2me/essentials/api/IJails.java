@@ -12,7 +12,7 @@ public interface IJails extends IReload
 
 	void removeJail(String jail) throws Exception;
 
-	void sendToJail(com.earth2me.essentials.IUser user, String jail) throws Exception;
+	void sendToJail(IUser user, String jail) throws Exception;
 
 	void setJail(String jailName, Location loc) throws Exception;
 }

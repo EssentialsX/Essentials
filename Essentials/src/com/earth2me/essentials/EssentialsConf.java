@@ -16,7 +16,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.config.Configuration;
 
-
+@Deprecated
 public class EssentialsConf extends Configuration
 {
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");

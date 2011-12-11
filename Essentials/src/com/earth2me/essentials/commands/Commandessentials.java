@@ -1,9 +1,10 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.api.ISettings;
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.Util;
 import java.util.HashMap;
 import java.util.Map;
+import lombok.Cleanup;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -58,8 +59,11 @@ public class Commandessentials extends EssentialsCommand
 	
 	private void run_debug(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
-		ess.getSettings().setDebug(!ess.getSettings().isDebug());
-		sender.sendMessage("Essentials " + ess.getDescription().getVersion() + " debug mode " + (ess.getSettings().isDebug() ? "enabled" : "disabled"));
+		@Cleanup
+		ISettings settings = ess.getSettings();
+		settings.acquireWriteLock();
+		settings.getData().getGeneral().setDebug(!settings.getData().getGeneral().isDebug());
+		sender.sendMessage("Essentials " + ess.getDescription().getVersion() + " debug mode " + (settings.getData().getGeneral().isDebug() ? "enabled" : "disabled"));
 	}
 	
 	private void run_reload(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
@@ -149,7 +153,7 @@ public class Commandessentials extends EssentialsCommand
 
 	private void stopTune()
 	{
-		ess.getScheduler().cancelTask(taskid);
+		ess.getServer().getScheduler().cancelTask(taskid);
 		for (Block block : noteBlocks.values())
 		{
 			if (block.getType() == Material.NOTE_BLOCK)

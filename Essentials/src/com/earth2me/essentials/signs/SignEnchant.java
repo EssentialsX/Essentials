@@ -2,8 +2,8 @@ package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.Enchantments;
-import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.IUser;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
@@ -21,7 +21,7 @@ public class SignEnchant extends EssentialsSign
 	}
 
 	@Override
-	protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException
+	protected boolean onSignCreate(final ISign sign, final IUser player, final String username, final IEssentials ess) throws SignException, ChargeException
 	{
 		final ItemStack stack = sign.getLine(1).equals("*") || sign.getLine(1).equalsIgnoreCase("any") ? null : getItemStack(sign.getLine(1), 1, ess);
 		final String[] enchantLevel = sign.getLine(2).split(":");
@@ -64,7 +64,7 @@ public class SignEnchant extends EssentialsSign
 	}
 
 	@Override
-	protected boolean onSignInteract(ISign sign, User player, String username, IEssentials ess) throws SignException, ChargeException
+	protected boolean onSignInteract(ISign sign, IUser player, String username, IEssentials ess) throws SignException, ChargeException
 	{
 		final ItemStack search = sign.getLine(1).equals("*") || sign.getLine(1).equalsIgnoreCase("any") ? null : getItemStack(sign.getLine(1), 1, ess);
 		int slot = -1;

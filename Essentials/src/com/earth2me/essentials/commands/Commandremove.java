@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
 import java.util.Locale;
 import org.bukkit.Chunk;
 import org.bukkit.Server;
@@ -29,7 +29,7 @@ public class Commandremove extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
+	protected void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{

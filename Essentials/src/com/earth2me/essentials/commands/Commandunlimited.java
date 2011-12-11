@@ -2,9 +2,10 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
 import java.util.List;
 import java.util.Locale;
+import lombok.Cleanup;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
@@ -18,19 +19,21 @@ public class Commandunlimited extends EssentialsCommand
 	}
 
 	@Override
-	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
+	public void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
 
-		User target = user;
+		@Cleanup
+		IUser target = user;
 
 		if (args.length > 1 && user.isAuthorized("essentials.unlimited.others"))
 		{
 			target = getPlayer(server, args, 1);
-		}
+			target.acquireReadLock();
+		}		
 
 		if (args[0].equalsIgnoreCase("list"))
 		{
@@ -39,7 +42,8 @@ public class Commandunlimited extends EssentialsCommand
 		}
 		else if (args[0].equalsIgnoreCase("clear"))
 		{
-			final List<Integer> itemList = target.getUnlimited();
+			//TODO: Fix this, the clear should always work, even when the player does not have permission.
+			final List<Integer> itemList = target.getData().getUnlimited();
 
 			int index = 0;
 			while (itemList.size() > index)
@@ -57,7 +61,7 @@ public class Commandunlimited extends EssentialsCommand
 		}
 	}
 
-	private String getList(final User target)
+	private String getList(final IUser target)
 	{
 		final StringBuilder output = new StringBuilder();
 		output.append(_("unlimitedItems")).append(" ");
@@ -81,7 +85,7 @@ public class Commandunlimited extends EssentialsCommand
 		return output.toString();
 	}
 
-	private Boolean toggleUnlimited(final User user, final User target, final String item) throws Exception
+	private Boolean toggleUnlimited(final IUser user, final IUser target, final String item) throws Exception
 	{
 		final ItemStack stack = ess.getItemDb().get(item, 1);
 		stack.setAmount(Math.min(stack.getType().getMaxStackSize(), 2));

@@ -21,4 +21,6 @@ public class Home implements StorageObject
 	private boolean bedSetsHome = false;
 	@Comment("If no home is set, should the player be send to spawn, when /home is used.")
 	private boolean spawnIfNoHome = false;
+	@Comment("Allows people to set their bed at daytime")
+	private boolean updateBedAtDaytime = true;
 }

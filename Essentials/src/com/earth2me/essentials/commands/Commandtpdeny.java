@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
 import org.bukkit.Server;
 
 
@@ -13,9 +13,9 @@ public class Commandtpdeny extends EssentialsCommand
 	}
 
 	@Override
-	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
+	public void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
-		final User player = user.getTeleportRequest();
+		final IUser player = user.getTeleportRequester();
 		if (player == null)
 		{
 			throw new Exception(_("noPendingRequest"));

@@ -2,7 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.DescParseTickFormat;
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
 import java.util.*;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -34,7 +34,7 @@ public class Commandtime extends EssentialsCommand
 			return;
 		}
 
-		final User user = ess.getUser(sender);
+		final IUser user = ess.getUser(sender);
 		if (user != null && !user.isAuthorized("essentials.time.set"))
 		{
 			user.sendMessage(_("timeSetPermission"));
@@ -110,7 +110,7 @@ public class Commandtime extends EssentialsCommand
 		// If there is no selector we want the world the user is currently in. Or all worlds if it isn't a user.
 		if (selector == null)
 		{
-			final User user = ess.getUser(sender);
+			final IUser user = ess.getUser(sender);
 			if (user == null)
 			{
 				worlds.addAll(server.getWorlds());

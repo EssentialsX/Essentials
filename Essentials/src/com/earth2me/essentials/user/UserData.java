@@ -17,7 +17,7 @@ public class UserData implements StorageObject
 {
 	public enum TimestampType
 	{
-		JAIL, MUTE, LASTHEAL, LASTTELEPORT, LOGIN
+		JAIL, MUTE, LASTHEAL, LASTTELEPORT, LOGIN, LOGOUT
 	}
 	private String nickname;
 	private Double money;
@@ -68,5 +68,13 @@ public class UserData implements StorageObject
 	public List<String> getPowertool(Material mat)
 	{
 		return powerTools == null ? Collections.<String>emptyList() : powerTools.get(mat);
+	}
+	
+	public void removeHome(String home)
+	{
+		if (homes == null) {
+			return;
+		}
+		homes.remove(home);
 	}
 }

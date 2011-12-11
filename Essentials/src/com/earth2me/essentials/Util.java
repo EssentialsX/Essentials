@@ -1,12 +1,15 @@
 package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.ISettings;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import lombok.Cleanup;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -427,7 +430,10 @@ public class Util
 
 	public static String formatCurrency(final double value, final IEssentials ess)
 	{
-		String str = ess.getSettings().getCurrencySymbol() + df.format(value);
+		@Cleanup
+		final ISettings settings = ess.getSettings();
+		settings.acquireReadLock();
+		String str = settings.getData().getEconomy().getCurrencySymbol() + df.format(value);
 		if (str.endsWith(".00"))
 		{
 			str = str.substring(0, str.length() - 3);

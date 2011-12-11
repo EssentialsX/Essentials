@@ -4,11 +4,13 @@ import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.storage.IStorageObjectHolder;
 import com.earth2me.essentials.user.CooldownException;
 import com.earth2me.essentials.user.UserData;
+import java.util.List;
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
-public interface IUser extends Player, IStorageObjectHolder<UserData>, IReload, IReplyTo
+public interface IUser extends Player, IStorageObjectHolder<UserData>, IReload, IReplyTo, Comparable<IUser>
 {
 	boolean isAuthorized(String node);
 
@@ -22,7 +24,15 @@ public interface IUser extends Player, IStorageObjectHolder<UserData>, IReload, 
 
 	void takeMoney(double value);
 
+	void takeMoney(double value, CommandSender initiator);
+
 	void giveMoney(double value);
+
+	void giveMoney(double value, CommandSender initiator);
+
+	void setMoney(double value);
+	
+	void payUser(final IUser reciever, final double value) throws Exception;
 
 	String getGroup();
 
@@ -39,16 +49,54 @@ public interface IUser extends Player, IStorageObjectHolder<UserData>, IReload, 
 	void checkCooldown(UserData.TimestampType cooldownType, double cooldown, boolean set, String bypassPermission) throws CooldownException;
 
 	boolean toggleAfk();
-	
+
 	void updateActivity(boolean broadcast);
-	
+
 	void updateDisplayName();
-	
-	boolean checkJailTimeout(final long currentTime);
-	
-	boolean checkMuteTimeout(final long currentTime);
-	
-	boolean checkBanTimeout(final long currentTime);
-	
-	void setTimestamp(final UserData.TimestampType name, final long value);
+
+	boolean checkJailTimeout(long currentTime);
+
+	boolean checkMuteTimeout(long currentTime);
+
+	boolean checkBanTimeout(long currentTime);
+
+	long getTimestamp(UserData.TimestampType name);
+
+	void setTimestamp(UserData.TimestampType name, long value);
+
+	void setLastOnlineActivity(long currentTime);
+
+	void checkActivity();
+
+	long getLastOnlineActivity();
+
+	boolean isGodModeEnabled();
+
+	boolean isIgnoringPlayer(String name);
+
+	void setIgnoredPlayer(String name, boolean set);
+
+	Location getAfkPosition();
+
+	boolean toggleGodModeEnabled();
+
+	void dispose();
+
+	void updateCompass();
+
+	List<String> getHomes();
+
+	void addMail(String string);
+
+	boolean toggleMuted();
+
+	public boolean toggleSocialSpy();
+
+	public void requestTeleport(IUser user, boolean b);
+
+	public boolean isTeleportRequestHere();
+
+	public IUser getTeleportRequester();
+
+	public boolean toggleTeleportEnabled();
 }

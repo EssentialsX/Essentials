@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
 import java.util.List;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -17,7 +17,7 @@ public class Commandclearinventory extends EssentialsCommand
 
 	//TODO: Cleanup
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(Server server, IUser user, String commandLabel, String[] args) throws Exception
 	{
 		if (args.length > 0 && user.isAuthorized("essentials.clearinventory.others"))
 		{

@@ -1,9 +1,8 @@
 package com.earth2me.essentials.listener;
 
-import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.Util;
-import java.util.logging.Logger;
 import org.bukkit.GameMode;
 import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -12,30 +11,30 @@ import org.bukkit.inventory.ItemStack;
 
 public class EssentialsBlockListener extends BlockListener
 {
-	private final IEssentials ess;
-	private static final Logger logger = Logger.getLogger("Minecraft");
+	private final transient IEssentials ess;
 
-	public EssentialsBlockListener(IEssentials ess)
+	public EssentialsBlockListener(final IEssentials ess)
 	{
+		super();
 		this.ess = ess;
 	}
 
 	@Override
-	public void onBlockPlace(BlockPlaceEvent event)
+	public void onBlockPlace(final BlockPlaceEvent event)
 	{
 		if (event.isCancelled())
 		{
 			return;
 		}
-		final User user = ess.getUser(event.getPlayer());
 		// Do not rely on getItemInHand();
 		// http://leaky.bukkit.org/issues/663
-		final ItemStack is = Util.convertBlockToItem(event.getBlockPlaced());
-		if (is == null)
+		final ItemStack itemstack = Util.convertBlockToItem(event.getBlockPlaced());
+		if (itemstack == null)
 		{
 			return;
 		}
-		boolean unlimitedForUser = user.hasUnlimited(is);
+		final IUser user = ess.getUser(event.getPlayer());
+		final boolean unlimitedForUser = user.getData().hasUnlimited(itemstack.getType());
 		if (unlimitedForUser && user.getGameMode() == GameMode.SURVIVAL)
 		{
 			ess.scheduleSyncDelayedTask(
@@ -44,7 +43,7 @@ public class EssentialsBlockListener extends BlockListener
 						@Override
 						public void run()
 						{
-							user.getInventory().addItem(is);
+							user.getInventory().addItem(itemstack);
 							user.updateInventory();
 						}
 					});

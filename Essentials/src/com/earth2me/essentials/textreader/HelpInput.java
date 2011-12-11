@@ -1,12 +1,14 @@
 package com.earth2me.essentials.textreader;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.ISettings;
+import com.earth2me.essentials.api.IUser;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import lombok.Cleanup;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 
@@ -21,8 +23,11 @@ public class HelpInput implements IText
 	private final transient Map<String, Integer> bookmarks = new HashMap<String, Integer>();
 	private final static Logger logger = Logger.getLogger("Minecraft");
 
-	public HelpInput(final User user, final String match, final IEssentials ess) throws IOException
+	public HelpInput(final IUser user, final String match, final IEssentials ess) throws IOException
 	{
+		@Cleanup
+		final ISettings settings = ess.getSettings();
+		settings.acquireReadLock();
 		boolean reported = false;
 		String pluginName = "";
 		for (Plugin p : ess.getServer().getPluginManager().getPlugins())
@@ -48,14 +53,14 @@ public class HelpInput implements IText
 						if (pluginName.contains("essentials"))
 						{
 							final String node = "essentials." + k.getKey();
-							if (!ess.getSettings().isCommandDisabled(k.getKey()) && user.isAuthorized(node))
+							if (!settings.getData().getCommands().isDisabled(k.getKey()) && user.isAuthorized(node))
 							{
 								lines.add("§c" + k.getKey() + "§7: " + k.getValue().get(DESCRIPTION));
 							}
 						}
 						else
 						{
-							if (ess.getSettings().showNonEssCommandsInHelp())
+							if (settings.getData().getCommands().getHelp().isShowNonEssCommandsInHelp())
 							{
 								final HashMap<String, Object> value = k.getValue();
 								Object permissions = null;
@@ -96,7 +101,7 @@ public class HelpInput implements IText
 								}
 								else
 								{
-									if (!ess.getSettings().hidePermissionlessHelp())
+									if (!settings.getData().getCommands().getHelp().isHidePermissionlessCommands())
 									{
 										lines.add("§c" + k.getKey() + "§7: " + value.get(DESCRIPTION));
 									}

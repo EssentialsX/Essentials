@@ -1,12 +1,13 @@
 package com.earth2me.essentials.textreader;
 
 import com.earth2me.essentials.DescParseTickFormat;
-import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.IUser;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import lombok.Cleanup;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -33,11 +34,13 @@ public class KeywordReplacer implements IText
 		String version;
 		if (sender instanceof Player)
 		{
-			final User user = ess.getUser(sender);
+			@Cleanup
+			final IUser user = ess.getUser(sender);
+			user.acquireReadLock();
 			displayName = user.getDisplayName();
 			ipAddress = user.getAddress().getAddress().toString();
 			balance = Double.toString(user.getMoney());
-			mails = Integer.toString(user.getMails().size());
+			mails = Integer.toString(user.getData().getMails() == null ? 0 : user.getData().getMails().size());
 			world = user.getLocation().getWorld().getName();
 			worldTime12 = DescParseTickFormat.format12(user.getWorld().getTime());
 			worldTime24 = DescParseTickFormat.format24(user.getWorld().getTime());
@@ -98,7 +101,7 @@ public class KeywordReplacer implements IText
 
 		date = DateFormat.getDateInstance(DateFormat.MEDIUM, ess.getI18n().getCurrentLocale()).format(new Date());
 		time = DateFormat.getTimeInstance(DateFormat.MEDIUM, ess.getI18n().getCurrentLocale()).format(new Date());
-		
+
 		version = ess.getServer().getVersion();
 
 		for (int i = 0; i < input.getLines().size(); i++)

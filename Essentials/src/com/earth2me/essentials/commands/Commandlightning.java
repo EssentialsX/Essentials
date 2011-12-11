@@ -1,7 +1,9 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.api.ISettings;
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
+import lombok.Cleanup;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LightningStrike;
@@ -19,7 +21,7 @@ public class Commandlightning extends EssentialsCommand
 	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 
-		User user = null;
+		IUser user = null;
 		if (sender instanceof Player)
 		{
 			user = ess.getUser(((Player)sender));
@@ -63,7 +65,10 @@ public class Commandlightning extends EssentialsCommand
 			{
 				matchPlayer.setHealth(matchPlayer.getHealth() < 5 ? 0 : matchPlayer.getHealth() - 5);
 			}
-			if (ess.getSettings().warnOnSmite())
+			@Cleanup
+			final ISettings settings = ess.getSettings();
+			settings.acquireReadLock();
+			if (settings.getData().getCommands().getLightning().isWarnPlayer())
 			{
 				matchPlayer.sendMessage(_("lightningSmited"));
 			}

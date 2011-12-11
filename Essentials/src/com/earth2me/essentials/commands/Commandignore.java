@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
 import org.bukkit.Server;
 
 
@@ -13,13 +13,13 @@ public class Commandignore extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
+	protected void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		User player;
+		IUser player;
 		try
 		{
 			player = getPlayer(server, args, 0);
@@ -33,7 +33,8 @@ public class Commandignore extends EssentialsCommand
 			throw new Exception(_("playerNotFound"));
 		}
 		final String name = player.getName();
-		if (user.isIgnoredPlayer(name))
+		user.acquireWriteLock();
+		if (user.isIgnoringPlayer(name))
 		{
 			user.setIgnoredPlayer(name, false);
 			user.sendMessage(_("unignorePlayer", player.getName()));

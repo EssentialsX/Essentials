@@ -1,8 +1,10 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.api.ISettings;
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
 import java.util.Locale;
+import lombok.Cleanup;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -16,13 +18,16 @@ public class Commandnick extends EssentialsCommand
 	}
 
 	@Override
-	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
+	public void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		if (!ess.getSettings().changeDisplayName())
+		@Cleanup
+		final ISettings settings = ess.getSettings();
+		settings.acquireReadLock();
+		if (!settings.getData().getChat().getChangeDisplayname())
 		{
 			throw new Exception(_("nickDisplayName"));
 		}
@@ -46,7 +51,10 @@ public class Commandnick extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		if (!ess.getSettings().changeDisplayName())
+		@Cleanup
+		final ISettings settings = ess.getSettings();
+		settings.acquireReadLock();
+		if (!settings.getData().getChat().getChangeDisplayname())
 		{
 			throw new Exception(_("nickDisplayName"));
 		}
@@ -61,7 +69,7 @@ public class Commandnick extends EssentialsCommand
 		sender.sendMessage(_("nickChanged"));
 	}
 
-	private String formatNickname(final User user, final String nick)
+	private String formatNickname(final IUser user, final String nick)
 	{
 		if (user == null || user.isAuthorized("essentials.nick.color"))
 		{
@@ -84,7 +92,7 @@ public class Commandnick extends EssentialsCommand
 		}
 	}
 
-	private void setNickname(final Server server, final User target, final String nick) throws Exception
+	private void setNickname(final Server server, final IUser target, final String nick) throws Exception
 	{
 		if (nick.matches("[^a-zA-Z_0-9]"))
 		{

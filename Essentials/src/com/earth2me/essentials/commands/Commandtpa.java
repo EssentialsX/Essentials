@@ -1,7 +1,8 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
+import lombok.Cleanup;
 import org.bukkit.Server;
 
 
@@ -13,19 +14,21 @@ public class Commandtpa extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(Server server, IUser user, String commandLabel, String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
 
-		User player = getPlayer(server, args, 0);
-		if (!player.isTeleportEnabled())
+		@Cleanup
+		IUser player = getPlayer(server, args, 0);
+		player.acquireReadLock();
+		if (!player.getData().isTeleportEnabled())
 		{
 			throw new Exception(_("teleportDisabled", player.getDisplayName()));
 		}
-		if (!player.isIgnoredPlayer(user.getName()))
+		if (!player.isIgnoringPlayer(user.getName()))
 		{
 			player.requestTeleport(user, false);
 			player.sendMessage(_("teleportRequest", user.getDisplayName()));

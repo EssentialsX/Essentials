@@ -1,12 +1,15 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.api.IJails;
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.storage.AsyncStorageObjectHolder;
 import static com.earth2me.essentials.I18n._;
 import java.io.File;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import lombok.Cleanup;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.Event.Priority;
@@ -37,9 +40,9 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 		pluginManager.registerEvent(Type.BLOCK_DAMAGE, blockListener, Priority.Low, ess);
 		pluginManager.registerEvent(Type.BLOCK_PLACE, blockListener, Priority.Low, ess);
 		pluginManager.registerEvent(Type.PLAYER_INTERACT, playerListener, Priority.Low, ess);
-		pluginManager.registerEvent(Type.PLAYER_RESPAWN, playerListener, Priority.High, ess);
-		pluginManager.registerEvent(Type.PLAYER_TELEPORT, playerListener, Priority.High, ess);
-		pluginManager.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.High, ess);
+		pluginManager.registerEvent(Type.PLAYER_RESPAWN, playerListener, Priority.Highest, ess);
+		pluginManager.registerEvent(Type.PLAYER_TELEPORT, playerListener, Priority.Highest, ess);
+		pluginManager.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Highest, ess);
 	}
 
 	@Override
@@ -113,7 +116,15 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 			{
 				user.getTeleport().now(getJail(jail), false, TeleportCause.COMMAND);
 			}
-			user.setJail(jail);
+			user.acquireWriteLock();
+			try
+			{
+				user.getData().setJail(jail);
+			}
+			finally
+			{
+				unlock();
+			}
 		}
 		finally
 		{
@@ -145,8 +156,10 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 		@Override
 		public void onBlockBreak(final BlockBreakEvent event)
 		{
-			final User user = ((Essentials)ess).getUser(event.getPlayer());
-			if (user.isJailed())
+			@Cleanup
+			final IUser user = ess.getUser(event.getPlayer());
+			user.acquireReadLock();
+			if (user.getData().isJailed())
 			{
 				event.setCancelled(true);
 			}
@@ -155,8 +168,10 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 		@Override
 		public void onBlockPlace(final BlockPlaceEvent event)
 		{
-			final User user = ((Essentials)ess).getUser(event.getPlayer());
-			if (user.isJailed())
+			@Cleanup
+			final IUser user = ess.getUser(event.getPlayer());
+			user.acquireReadLock();
+			if (user.getData().isJailed())
 			{
 				event.setCancelled(true);
 			}
@@ -165,8 +180,10 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 		@Override
 		public void onBlockDamage(final BlockDamageEvent event)
 		{
-			final User user = ((Essentials)ess).getUser(event.getPlayer());
-			if (user.isJailed())
+			@Cleanup
+			final IUser user = ess.getUser(event.getPlayer());
+			user.acquireReadLock();
+			if (user.getData().isJailed())
 			{
 				event.setCancelled(true);
 			}
@@ -179,8 +196,10 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 		@Override
 		public void onPlayerInteract(final PlayerInteractEvent event)
 		{
-			final User user = ((Essentials)ess).getUser(event.getPlayer());
-			if (user.isJailed())
+			@Cleanup
+			final IUser user = ess.getUser(event.getPlayer());
+			user.acquireReadLock();
+			if (user.getData().isJailed())
 			{
 				event.setCancelled(true);
 			}
@@ -189,15 +208,17 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 		@Override
 		public void onPlayerRespawn(final PlayerRespawnEvent event)
 		{
-			final User user = ((Essentials)ess).getUser(event.getPlayer());
-			if (!user.isJailed() || user.getJail() == null || user.getJail().isEmpty())
+			@Cleanup
+			final IUser user = ess.getUser(event.getPlayer());
+			user.acquireReadLock();
+			if (!user.getData().isJailed() || user.getData().getJail() == null || user.getData().getJail().isEmpty())
 			{
 				return;
 			}
 
 			try
 			{
-				event.setRespawnLocation(getJail(user.getJail()));
+				event.setRespawnLocation(getJail(user.getData().getJail()));
 			}
 			catch (Exception ex)
 			{
@@ -208,15 +229,17 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 		@Override
 		public void onPlayerTeleport(final PlayerTeleportEvent event)
 		{
-			final User user = ((Essentials)ess).getUser(event.getPlayer());
-			if (!user.isJailed() || user.getJail() == null || user.getJail().isEmpty())
+			@Cleanup
+			final IUser user = ess.getUser(event.getPlayer());
+			user.acquireReadLock();
+			if (!user.getData().isJailed() || user.getData().getJail() == null || user.getData().getJail().isEmpty())
 			{
 				return;
 			}
 
 			try
 			{
-				event.setTo(getJail(user.getJail()));
+				event.setTo(getJail(user.getData().getJail()));
 			}
 			catch (Exception ex)
 			{
@@ -228,15 +251,17 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 		@Override
 		public void onPlayerJoin(final PlayerJoinEvent event)
 		{
-			final User user = ((Essentials)ess).getUser(event.getPlayer());
-			if (!user.isJailed() || user.getJail() == null || user.getJail().isEmpty())
+			@Cleanup
+			final IUser user = ess.getUser(event.getPlayer());
+			user.acquireReadLock();
+			if (!user.getData().isJailed() || user.getData().getJail() == null || user.getData().getJail().isEmpty())
 			{
 				return;
 			}
 
 			try
 			{
-				sendToJail(user, user.getJail());
+				sendToJail(user, user.getData().getJail());
 			}
 			catch (Exception ex)
 			{

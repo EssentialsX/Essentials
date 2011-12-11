@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
 import java.util.Locale;
 import org.bukkit.GameMode;
 import org.bukkit.Server;
@@ -28,7 +28,7 @@ public class Commandgamemode extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
+	protected void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length > 0 && !args[0].trim().isEmpty() && user.isAuthorized("essentials.gamemode.others"))
 		{
@@ -44,7 +44,7 @@ public class Commandgamemode extends EssentialsCommand
 	{
 		for (Player matchPlayer : server.matchPlayer(name))
 		{
-			final User player = ess.getUser(matchPlayer);
+			final IUser player = ess.getUser(matchPlayer);
 			if (player.isHidden())
 			{
 				continue;

@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
@@ -21,7 +21,7 @@ public class Commandsudo extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		final User user = getPlayer(server, args, 0, false);
+		final IUser user = getPlayer(server, args, 0, false);
 		final String command = args[1];
 		final String[] arguments = new String[args.length - 2];
 		if (arguments.length > 0)

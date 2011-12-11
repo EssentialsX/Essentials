@@ -1,9 +1,11 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.Util;
+import com.earth2me.essentials.api.ISettings;
 import java.util.Locale;
+import lombok.Cleanup;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -36,15 +38,21 @@ public class Commandwhois extends EssentialsCommand
 			showhidden = true;
 		}
 		final String whois = args[0].toLowerCase(Locale.ENGLISH);
-		final int prefixLength = Util.stripColor(ess.getSettings().getNicknamePrefix()).length();
+		@Cleanup
+		ISettings settings = ess.getSettings();
+		settings.acquireReadLock();
+		final int prefixLength = Util.stripColor(settings.getData().getChat().getNicknamePrefix()).length();
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
-			final User user = ess.getUser(onlinePlayer);
+			@Cleanup
+			final IUser user = ess.getUser(onlinePlayer);
+			
 			if (user.isHidden() && !showhidden)
 			{
 				continue;
 			}
-			final String nickName = Util.stripColor(user.getNickname());
+			user.acquireReadLock();
+			final String nickName = Util.stripColor(user.getData().getNickname());
 			if (!whois.equalsIgnoreCase(nickName)
 				&& !whois.substring(prefixLength).equalsIgnoreCase(nickName)
 				&& !whois.equalsIgnoreCase(user.getName()))
@@ -58,15 +66,15 @@ public class Commandwhois extends EssentialsCommand
 			sender.sendMessage(_("whoisGod", (user.isGodModeEnabled() ? _("true") : _("false"))));
 			sender.sendMessage(_("whoisGamemode", _(user.getGameMode().toString().toLowerCase(Locale.ENGLISH))));
 			sender.sendMessage(_("whoisLocation", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ()));
-			if (!ess.getSettings().isEcoDisabled())
+			if (!settings.getData().getEconomy().isEcoDisabled())
 			{
 				sender.sendMessage(_("whoisMoney", Util.formatCurrency(user.getMoney(), ess)));
 			}
-			sender.sendMessage(user.isAfk()
+			sender.sendMessage(user.getData().isAfk()
 							   ? _("whoisStatusAway")
 							   : _("whoisStatusAvailable"));
 			sender.sendMessage(_("whoisIPAddress", user.getAddress().getAddress().toString()));
-			final String location = user.getGeoLocation();
+			final String location = user.getData().getGeolocation();
 			if (location != null
 				&& (sender instanceof Player ? ess.getUser(sender).isAuthorized("essentials.geoip.show") : true))
 			{

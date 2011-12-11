@@ -1,6 +1,8 @@
 package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import java.util.*;
@@ -11,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 public class Kit
 {
 	//TODO: Convert this to use one of the new text classes?
-	public static String listKits(final IEssentials ess, final User user) throws Exception
+	public static String listKits(final IEssentials ess, final IUser user) throws Exception
 	{
 		try
 		{
@@ -33,7 +35,7 @@ public class Kit
 
 	}
 
-	public static void checkTime(final User user, final String kitName, final Map<String, Object> els) throws NoChargeException
+	public static void checkTime(final IUser user, final String kitName, final Map<String, Object> els) throws NoChargeException
 	{
 		final double delay = els.containsKey("delay") ? ((Number)els.get("delay")).doubleValue() : 0L;
 		final Calendar c = new GregorianCalendar();
@@ -59,7 +61,7 @@ public class Kit
 		}
 	}
 
-	public static List<String> getItems(final User user, final Map<String, Object> els) throws Exception
+	public static List<String> getItems(final IUser user, final Map<String, Object> els) throws Exception
 	{
 		try
 		{
@@ -72,7 +74,7 @@ public class Kit
 		}
 	}
 
-	public static void expandItems(final IEssentials ess, final User user, final List<String> items) throws Exception
+	public static void expandItems(final IEssentials ess, final IUser user, final List<String> items) throws Exception
 	{
 		try
 		{

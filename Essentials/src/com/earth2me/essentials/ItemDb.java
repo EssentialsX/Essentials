@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.api.IItemDb;
+import com.earth2me.essentials.api.IEssentials;
 import static com.earth2me.essentials.I18n._;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +25,7 @@ public class ItemDb implements IConf, IItemDb
 	private final transient ManagedFile file;
 
 	@Override
-	public void reloadConfig()
+	public void onReload()
 	{
 		final List<String> lines = file.getLines();
 
@@ -118,5 +119,11 @@ public class ItemDb implements IConf, IItemDb
 		retval.setAmount(mat.getMaxStackSize());
 		retval.setDurability(metaData);
 		return retval;
+	}
+
+	@Override
+	public void reloadConfig()
+	{
+		onReload();
 	}
 }

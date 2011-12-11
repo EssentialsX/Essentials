@@ -1,9 +1,9 @@
 package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.ChargeException;
-import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.Trade;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.commands.Commandspawnmob;
 
 
@@ -15,7 +15,7 @@ public class SignSpawnmob extends EssentialsSign
 	}
 
 	@Override
-	protected boolean onSignCreate(ISign sign, User player, String username, IEssentials ess) throws SignException, ChargeException
+	protected boolean onSignCreate(ISign sign, IUser player, String username, IEssentials ess) throws SignException, ChargeException
 	{
 		validateInteger(sign, 1);
 		validateTrade(sign, 3, ess);
@@ -23,7 +23,7 @@ public class SignSpawnmob extends EssentialsSign
 	}
 
 	@Override
-	protected boolean onSignInteract(ISign sign, User player, String username, IEssentials ess) throws SignException, ChargeException
+	protected boolean onSignInteract(ISign sign, IUser player, String username, IEssentials ess) throws SignException, ChargeException
 	{
 		final Trade charge = getTrade(sign, 3, ess);
 		charge.isAffordableFor(player);

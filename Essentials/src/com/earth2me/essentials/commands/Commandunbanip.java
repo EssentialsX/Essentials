@@ -1,7 +1,8 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
+import lombok.Cleanup;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
@@ -22,8 +23,10 @@ public class Commandunbanip extends EssentialsCommand
 		}
 		try
 		{
-			final User user = getPlayer(server, args, 0, true);
-			ess.getServer().unbanIP(user.getLastLoginAddress());
+			@Cleanup
+			final IUser user = getPlayer(server, args, 0, true);
+			user.acquireReadLock();
+			ess.getServer().unbanIP(user.getData().getIpAddress());
 		}
 		catch (Exception ex)
 		{

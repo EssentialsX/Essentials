@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -17,10 +17,10 @@ public class Commandnear extends EssentialsCommand
 	}
 	
 	@Override
-	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
+	protected void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		long radius = 200;
-		User otherUser = null;
+		IUser otherUser = null;
 		
 		if (args.length > 0)
 		{
@@ -63,7 +63,7 @@ public class Commandnear extends EssentialsCommand
 	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		
-		User otherUser = null;
+		IUser otherUser = null;
 		if (args.length > 0)
 		{
 			otherUser = getPlayer(server, args, 0);
@@ -86,7 +86,7 @@ public class Commandnear extends EssentialsCommand
 		sender.sendMessage(_("nearbyPlayers", getLocal(server, otherUser, radius)));
 	}
 	
-	private String getLocal(final Server server, final User user, final long radius)
+	private String getLocal(final Server server, final IUser user, final long radius)
 	{
 		final Location loc = user.getLocation();
 		final World world = loc.getWorld();
@@ -95,7 +95,7 @@ public class Commandnear extends EssentialsCommand
 		
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
-			final User player = ess.getUser(onlinePlayer);
+			final IUser player = ess.getUser(onlinePlayer);
 			if (!player.equals(user) && !player.isHidden())
 			{
 				final Location playerLoc = player.getLocation();

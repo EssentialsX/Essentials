@@ -2,7 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
@@ -15,7 +15,7 @@ public class Commandpay extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 2)
 		{
@@ -27,7 +27,7 @@ public class Commandpay extends EssentialsCommand
 		Boolean foundUser = false;
 		for (Player p : server.matchPlayer(args[0]))
 		{
-			User u = ess.getUser(p);
+			IUser u = ess.getUser(p);
 			if (u.isHidden())
 			{
 				continue;

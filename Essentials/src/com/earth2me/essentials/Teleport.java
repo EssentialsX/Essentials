@@ -2,6 +2,8 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.api.ITeleport;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.ISettings;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import com.earth2me.essentials.user.CooldownException;
@@ -9,6 +11,7 @@ import com.earth2me.essentials.user.UserData.TimestampType;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Logger;
+import lombok.Cleanup;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -115,7 +118,7 @@ public class Teleport implements Runnable, ITeleport
 				}
 				catch (Throwable ex)
 				{
-					ess.showError(user.getBase(), ex, "teleport");
+					ess.showCommandError(user.getBase(), "teleport", ex);
 				}
 			}
 			catch (Exception ex)
@@ -142,7 +145,7 @@ public class Teleport implements Runnable, ITeleport
 
 	public void warp(String warp, Trade chargeFor, TeleportCause cause) throws Exception
 	{
-		Location loc = ess.getWarps().getWarp(warp);
+		final Location loc = ess.getWarps2().getWarp(warp);
 		teleport(new Target(loc), chargeFor, cause);
 		user.sendMessage(_("warpingTo", warp));
 	}
@@ -202,7 +205,7 @@ public class Teleport implements Runnable, ITeleport
 
 	private void teleport(Target target, Trade chargeFor, TeleportCause cause) throws Exception
 	{
-		double delay = ess.getSettings().getTeleportDelay();
+		double delay = ess.getGroups().getTeleportDelay(user);
 
 		if (chargeFor != null)
 		{

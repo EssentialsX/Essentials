@@ -1,7 +1,7 @@
 package com.earth2me.essentials.textreader;
 
-import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.Util;
 import java.io.*;
 import java.util.*;
@@ -21,7 +21,7 @@ public class TextInput implements IText
 		File file = null;
 		if (sender instanceof Player)
 		{
-			final User user = ess.getUser(sender);
+			final IUser user = ess.getUser(sender);
 			file = new File(ess.getDataFolder(), filename + "_" + Util.sanitizeFileName(user.getName()) + ".txt");
 			if (!file.exists())
 			{

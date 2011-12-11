@@ -1,8 +1,10 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.Util;
+import com.earth2me.essentials.user.UserData.TimestampType;
+import lombok.Cleanup;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
@@ -22,8 +24,10 @@ public class Commandmute extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		final User player = getPlayer(server, args, 0, true);
-		if (!player.isMuted() && player.isAuthorized("essentials.mute.exempt"))
+		@Cleanup
+		final IUser player = getPlayer(server, args, 0, true);
+		player.acquireReadLock();
+		if (!player.getData().isMuted() && player.isAuthorized("essentials.mute.exempt"))
 		{
 			throw new Exception(_("muteExempt"));
 		}
@@ -33,7 +37,7 @@ public class Commandmute extends EssentialsCommand
 			String time = getFinalArg(args, 1);
 			muteTimestamp = Util.parseDateDiff(time, true);
 		}
-		player.setMuteTimeout(muteTimestamp);
+		player.setTimestamp(TimestampType.MUTE, muteTimestamp);
 		final boolean muted = player.toggleMuted();
 		sender.sendMessage(
 				muted

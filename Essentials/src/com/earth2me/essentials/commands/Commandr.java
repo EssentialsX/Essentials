@@ -2,8 +2,8 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.IReplyTo;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IReplyTo;
+import com.earth2me.essentials.api.IUser;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -38,8 +38,8 @@ public class Commandr extends EssentialsCommand
 		sender.sendMessage(_("msgFormat", _("me"), targetName, message));
 		if (target instanceof Player)
 		{
-			User player = ess.getUser(target);
-			if (player.isIgnoredPlayer(sender instanceof Player ? ((Player)sender).getName() : Console.NAME))
+			IUser player = ess.getUser(target);
+			if (player.isIgnoringPlayer(sender instanceof Player ? ((Player)sender).getName() : Console.NAME))
 			{
 				return;
 			}

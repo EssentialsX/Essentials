@@ -3,7 +3,7 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.Mob.MobException;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.Util;
 import java.util.Locale;
 import java.util.Random;
@@ -22,7 +22,7 @@ public class Commandspawnmob extends EssentialsCommand
 	}
 
 	@Override
-	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
+	public void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -76,7 +76,7 @@ public class Commandspawnmob extends EssentialsCommand
 		{
 			throw new Exception(_("unableToSpawnMob"));
 		}
-		User otherUser = null;
+		IUser otherUser = null;
 		if (args.length >= 3)
 		{
 			 otherUser = getPlayer(ess.getServer(), args, 2);
@@ -184,7 +184,7 @@ public class Commandspawnmob extends EssentialsCommand
 		}
 	}
 
-	private void changeMobData(final CreatureType type, final Entity spawned, final String data, final User user) throws Exception
+	private void changeMobData(final CreatureType type, final Entity spawned, final String data, final IUser user) throws Exception
 	{
 		if (type == CreatureType.SLIME || type == CreatureType.MAGMA_CUBE)
 		{
@@ -238,7 +238,7 @@ public class Commandspawnmob extends EssentialsCommand
 		{
 			final Wolf wolf = ((Wolf)spawned);
 			wolf.setTamed(true);
-			wolf.setOwner(user);
+			wolf.setOwner(user.getBase());
 			wolf.setSitting(true);
 			if (data.equalsIgnoreCase("tamedbaby"))
 			{

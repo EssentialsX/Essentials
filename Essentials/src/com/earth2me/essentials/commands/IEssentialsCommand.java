@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.IEssentialsModule;
+import com.earth2me.essentials.api.IEssentialsModule;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.IUser;
 import org.bukkit.Server;

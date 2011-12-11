@@ -1,7 +1,8 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
+import lombok.Cleanup;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -27,21 +28,23 @@ public class Commandtpaall extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		final User player = getPlayer(server, args, 0);
+		final IUser player = getPlayer(server, args, 0);
 		teleportAAllPlayers(server, sender, player);
 	}
 
-	private void teleportAAllPlayers(final Server server, final CommandSender sender, final User user)
+	private void teleportAAllPlayers(final Server server, final CommandSender sender, final IUser user)
 	{
 		sender.sendMessage(_("teleportAAll"));
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
-			final User player = ess.getUser(onlinePlayer);
+			@Cleanup
+			final IUser player = ess.getUser(onlinePlayer);
+			player.acquireReadLock();
 			if (user == player)
 			{
 				continue;
 			}
-			if (!player.isTeleportEnabled())
+			if (!player.getData().isTeleportEnabled())
 			{
 				continue;
 			}
@@ -57,7 +60,7 @@ public class Commandtpaall extends EssentialsCommand
 			}
 			catch (Exception ex)
 			{
-				ess.showError(sender, ex, getName());
+				ess.showCommandError(sender, getName(), ex);
 			}
 		}
 	}

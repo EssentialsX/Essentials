@@ -2,9 +2,9 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.Util;
-import com.earth2me.essentials.Warps;
+import com.earth2me.essentials.api.IWarps;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -23,7 +23,7 @@ public class Commandwarp extends EssentialsCommand
 	}
 
 	@Override
-	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
+	public void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length == 0 || args[0].matches("[0-9]+"))
 		{
@@ -36,7 +36,7 @@ public class Commandwarp extends EssentialsCommand
 		}
 		if (args.length > 0)
 		{
-			User otherUser = null;
+			IUser otherUser = null;
 			if (args.length == 2 && user.isAuthorized("essentials.warp.otherplayers"))
 			{
 				otherUser = ess.getUser(server.getPlayer(args[1]));
@@ -60,7 +60,7 @@ public class Commandwarp extends EssentialsCommand
 			warpList(sender, args);
 			throw new NoChargeException();
 		}
-		User otherUser = ess.getUser(server.getPlayer(args[1]));
+		IUser otherUser = ess.getUser(server.getPlayer(args[1]));
 		if (otherUser == null)
 		{
 			throw new Exception(_("playerNotFound"));
@@ -73,14 +73,14 @@ public class Commandwarp extends EssentialsCommand
 	//TODO: Use one of the new text classes, like /help ?
 	private void warpList(final CommandSender sender, final String[] args) throws Exception
 	{
-		final Warps warps = ess.getWarps();
+		final IWarps warps = ess.getWarps2();
 		if (warps.isEmpty())
 		{
 			throw new Exception(_("noWarpsDefined"));
 		}
-		final List<String> warpNameList = new ArrayList<String>(warps.getWarpNames());
+		final List<String> warpNameList = new ArrayList<String>(warps.getList());
 
-		if (sender instanceof User)
+		if (sender instanceof IUser)
 		{
 			final Iterator<String> iterator = warpNameList.iterator();
 			while (iterator.hasNext())
@@ -112,7 +112,7 @@ public class Commandwarp extends EssentialsCommand
 		}
 	}
 
-	private void warpUser(final User user, final String name) throws Exception
+	private void warpUser(final IUser user, final String name) throws Exception
 	{
 		final Trade charge = new Trade(this.getName(), ess);
 		charge.isAffordableFor(user);

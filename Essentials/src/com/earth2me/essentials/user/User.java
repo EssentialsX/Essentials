@@ -9,10 +9,10 @@ import com.earth2me.essentials.api.IGroups;
 import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.register.payment.Method;
-import com.earth2me.essentials.settings.WorldOptions;
 import static com.earth2me.essentials.I18n._;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.logging.Logger;
 import lombok.Cleanup;
 import lombok.Getter;
@@ -29,7 +29,9 @@ public class User extends UserBase implements IUser
 	@Getter
 	@Setter
 	private CommandSender replyTo = null;
+	@Getter
 	private transient User teleportRequester;
+	@Getter
 	private transient boolean teleportRequestHere;
 	@Getter
 	private transient final Teleport teleport;
@@ -100,7 +102,7 @@ public class User extends UserBase implements IUser
 		return isAuthorized(permissionPrefix + (cmd.getName().equals("r") ? "msg" : cmd.getName()));
 	}
 
-	public void checkCooldown(final UserData.TimestampType cooldownType,final double cooldown, final boolean set, final String bypassPermission) throws CooldownException
+	public void checkCooldown(final UserData.TimestampType cooldownType, final double cooldown, final boolean set, final String bypassPermission) throws CooldownException
 	{
 		final Calendar now = new GregorianCalendar();
 		if (getTimestamp(cooldownType) > 0)
@@ -114,7 +116,8 @@ public class User extends UserBase implements IUser
 				throw new CooldownException(Util.formatDateDiff(cooldownTime.getTimeInMillis()));
 			}
 		}
-		if (set) {
+		if (set)
+		{
 			setTimestamp(cooldownType, now.getTimeInMillis());
 		}
 	}
@@ -148,7 +151,7 @@ public class User extends UserBase implements IUser
 		}
 	}
 
-	public void payUser(final User reciever, final double value) throws Exception
+	public void payUser(final IUser reciever, final double value) throws Exception
 	{
 		if (value == 0)
 		{
@@ -224,16 +227,6 @@ public class User extends UserBase implements IUser
 		teleportRequestHere = here;
 	}
 
-	public User getTeleportRequest()
-	{
-		return teleportRequester;
-	}
-
-	public boolean isTeleportRequestHere()
-	{
-		return teleportRequestHere;
-	}
-
 	public String getNick(boolean addprefixsuffix)
 	{
 		acquireReadLock();
@@ -305,7 +298,7 @@ public class User extends UserBase implements IUser
 	{
 		return super.getDisplayName() == null ? super.getName() : super.getDisplayName();
 	}
-	
+
 	@Override
 	public void updateDisplayName()
 	{
@@ -585,5 +578,38 @@ public class User extends UserBase implements IUser
 	public Location getHome(String name) throws Exception
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void updateCompass()
+	{
+		try
+		{
+			Location loc = getHome(getLocation());
+			if (loc == null)
+			{
+				loc = getBedSpawnLocation();
+			}
+			if (loc != null)
+			{
+				setCompassTarget(loc);
+			}
+		}
+		catch (Exception ex)
+		{
+			// Ignore
+		}
+	}
+
+	@Override
+	public List<String> getHomes()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public int compareTo(final IUser t)
+	{
+		return Util.stripColor(this.getDisplayName()).compareTo(Util.stripColor(t.getDisplayName()));
 	}
 }

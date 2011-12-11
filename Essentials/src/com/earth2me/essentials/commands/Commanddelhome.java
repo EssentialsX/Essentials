@@ -1,8 +1,9 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
 import java.util.Locale;
+import lombok.Cleanup;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
@@ -22,7 +23,8 @@ public class Commanddelhome extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		User user = ess.getUser(sender);
+		@Cleanup
+		IUser user = ess.getUser(sender);
 		String name;
 		final String[] expandedArg = args[0].split(":");
 
@@ -45,7 +47,8 @@ public class Commanddelhome extends EssentialsCommand
 		 *   throw new Exception("You cannot remove the vanilla home point");
 		 * }
 		 */
-		user.delHome(name.toLowerCase(Locale.ENGLISH));
+		user.acquireWriteLock();
+		user.getData().removeHome(name.toLowerCase(Locale.ENGLISH));
 		sender.sendMessage(_("deleteHome", name));
 	}
 }

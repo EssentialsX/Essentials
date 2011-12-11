@@ -1,21 +1,25 @@
 package com.earth2me.essentials.listener;
 
 import com.earth2me.essentials.IConf;
-import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.IReload;
+import com.earth2me.essentials.api.ISettings;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import lombok.Cleanup;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.ServerListener;
 
 
-public class EssentialsPluginListener extends ServerListener implements IConf
+public class EssentialsPluginListener extends ServerListener implements IConf, IReload
 {
 	private final transient IEssentials ess;
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 
 	public EssentialsPluginListener(final IEssentials ess)
 	{
+		super();
 		this.ess = ess;
 	}
 
@@ -26,7 +30,7 @@ public class EssentialsPluginListener extends ServerListener implements IConf
 		ess.getAlternativeCommandsHandler().addPlugin(event.getPlugin());
 		if (!ess.getPaymentMethod().hasMethod() && ess.getPaymentMethod().setMethod(ess.getServer().getPluginManager()))
 		{
-			LOGGER.log(Level.INFO, "[Essentials] Payment method found (" + ess.getPaymentMethod().getMethod().getName() + " version: " + ess.getPaymentMethod().getMethod().getVersion() + ")");
+			LOGGER.log(Level.INFO, "[Essentials] Payment method found ({0} version: {1})", new Object[]{ess.getPaymentMethod().getMethod().getName(), ess.getPaymentMethod().getMethod().getVersion()});
 		}
 	}
 
@@ -46,7 +50,11 @@ public class EssentialsPluginListener extends ServerListener implements IConf
 	@Override
 	public void reloadConfig()
 	{
-		ess.getPermissionsHandler().setUseSuperperms(ess.getSettings().useBukkitPermissions());
-		ess.getPermissionsHandler().checkPermissions();
+		//ess.getPermissionsHandler().setUseSuperperms(ess.getSettings().useBukkitPermissions());
+	}
+
+	@Override
+	public void onReload()
+	{
 	}
 }

@@ -95,6 +95,19 @@ public class GroupsHolder extends AsyncStorageObjectHolder<Groups> implements IG
 		}
 		return 0;
 	}
+	
+	@Override
+	public double getTeleportDelay(final IUser player)
+	{
+		for (GroupOptions groupOptions : getGroups(player))
+		{
+			if (groupOptions.getTeleportDelay() != null)
+			{
+				return groupOptions.getTeleportDelay();
+			}
+		}
+		return 0;
+	}
 
 	@Override
 	public String getPrefix(final IUser player)

@@ -8,9 +8,11 @@ public interface IWarps extends IReload
 {
 	Location getWarp(String warp) throws Exception;
 
-	Collection<String> getWarps();
+	Collection<String> getList();
 
 	void removeWarp(String name) throws Exception;
 
 	void setWarp(String name, Location loc) throws Exception;
+
+	public boolean isEmpty();
 }

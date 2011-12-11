@@ -2,9 +2,10 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.IReplyTo;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IReplyTo;
+import com.earth2me.essentials.api.IUser;
 import java.util.List;
+import lombok.Cleanup;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -18,7 +19,7 @@ public class Commandmsg extends EssentialsCommand
 	}
 
 	@Override
-	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final CommandSender sender, final String commandLabel, String[] args) throws Exception
 	{
 		if (args.length < 2 || args[0].trim().isEmpty() || args[1].trim().isEmpty())
 		{
@@ -27,8 +28,10 @@ public class Commandmsg extends EssentialsCommand
 
 		if (sender instanceof Player)
 		{
-			User user = ess.getUser(sender);
-			if (user.isMuted())
+			@Cleanup
+			IUser user = ess.getUser(sender);
+			user.acquireReadLock();
+			if (user.getData().isMuted())
 			{
 				throw new Exception(_("voiceSilenced"));
 			}
@@ -60,7 +63,7 @@ public class Commandmsg extends EssentialsCommand
 		int i = 0;
 		for (Player p : matches)
 		{
-			final User u = ess.getUser(p);
+			final IUser u = ess.getUser(p);
 			if (u.isHidden())
 			{
 				i++;
@@ -74,8 +77,8 @@ public class Commandmsg extends EssentialsCommand
 		for (Player p : matches)
 		{
 			sender.sendMessage(_("msgFormat", translatedMe, p.getDisplayName(), message));
-			final User u = ess.getUser(p);
-			if (sender instanceof Player && (u.isIgnoredPlayer(((Player)sender).getName()) || u.isHidden()))
+			final IUser u = ess.getUser(p);
+			if (sender instanceof Player && (u.isIgnoringPlayer(((Player)sender).getName()) || u.isHidden()))
 			{
 				continue;
 			}

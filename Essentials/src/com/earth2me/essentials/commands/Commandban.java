@@ -3,7 +3,9 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.OfflinePlayer;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.user.Ban;
+import lombok.Cleanup;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -23,7 +25,8 @@ public class Commandban extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		final User user = getPlayer(server, args, 0, true);
+		@Cleanup
+		final IUser user = getPlayer(server, args, 0, true);
 		if (user.getBase() instanceof OfflinePlayer)
 		{
 			if (sender instanceof Player
@@ -42,11 +45,13 @@ public class Commandban extends EssentialsCommand
 			}
 		}
 
+		user.acquireWriteLock();
 		String banReason;
+		user.getData().setBan(new Ban());
 		if (args.length > 1)
 		{
 			banReason = getFinalArg(args, 1);
-			user.setBanReason(banReason);
+			user.getData().getBan().setReason(banReason);
 		}
 		else
 		{
@@ -58,7 +63,7 @@ public class Commandban extends EssentialsCommand
 
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
-			final User player = ess.getUser(onlinePlayer);
+			final IUser player = ess.getUser(onlinePlayer);
 			if (player.isAuthorized("essentials.ban.notify"))
 			{
 				onlinePlayer.sendMessage(_("playerBanned", senderName, user.getName(), banReason));

@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.textreader.ArrayListInput;
@@ -109,7 +109,7 @@ public class Commandbalancetop extends EssentialsCommand
 					final Map<String, Double> balances = new HashMap<String, Double>();
 					for (String u : ess.getUserMap().getAllUniqueUsers())
 					{
-						final User user = ess.getUserMap().getUser(u);
+						final IUser user = ess.getUserMap().getUser(u);
 						if (user != null)
 						{
 							balances.put(u, user.getMoney());
