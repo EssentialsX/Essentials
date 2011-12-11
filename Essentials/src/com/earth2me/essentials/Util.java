@@ -20,20 +20,17 @@ import org.bukkit.plugin.PluginManager;
 
 public class Util
 {
-
-	
 	private Util()
 	{
 	}
 	private final static Logger logger = Logger.getLogger("Minecraft");
-	
 	private static Pattern unsafeChars = Pattern.compile("[^a-z0-9]");
 
 	public static String sanitizeFileName(String name)
 	{
 		return unsafeChars.matcher(name.toLowerCase(Locale.ENGLISH)).replaceAll("_");
 	}
-	
+
 	public static String sanitizeKey(String name)
 	{
 		return unsafeChars.matcher(name.toLowerCase(Locale.ENGLISH)).replaceAll("_");
@@ -497,7 +494,7 @@ public class Util
 			return;
 		}
 		final PluginManager pluginManager = ess.getServer().getPluginManager();
-		Permission basePerm = pluginManager.getPermission(path +".*");
+		Permission basePerm = pluginManager.getPermission(path + ".*");
 		if (basePerm != null && !basePerm.getChildren().isEmpty())
 		{
 			basePerm.getChildren().clear();
@@ -528,5 +525,16 @@ public class Util
 			basePerm.getChildren().put(permissionName, Boolean.TRUE);
 		}
 		basePerm.recalculatePermissibles();
+	}
+	private static transient final Pattern COLOR_PATTERN = Pattern.compile("(?i)\u00A7[0-9A-F]");
+
+	public static String stripColor(final String input)
+	{
+		if (input == null)
+		{
+			return null;
+		}
+
+		return COLOR_PATTERN.matcher(input).replaceAll("");
 	}
 }

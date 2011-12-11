@@ -2,8 +2,8 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import java.util.Locale;
-import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -31,9 +31,9 @@ public class Commandrealname extends EssentialsCommand
 			{
 				continue;
 			}
-			final String displayName = ChatColor.stripColor(u.getDisplayName()).toLowerCase(Locale.ENGLISH);
+			final String displayName = Util.stripColor(u.getDisplayName()).toLowerCase(Locale.ENGLISH);
 			if (!whois.equals(displayName)
-				&& !displayName.equals(ChatColor.stripColor(ess.getSettings().getNicknamePrefix()) + whois)
+				&& !displayName.equals(Util.stripColor(ess.getSettings().getNicknamePrefix()) + whois)
 				&& !whois.equalsIgnoreCase(u.getName()))
 			{
 				continue;
