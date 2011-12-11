@@ -477,4 +477,15 @@ public class Util
 		}
 		return buf.toString();
 	}
+	private static transient final Pattern COLOR_PATTERN = Pattern.compile("(?i)\u00A7[0-9A-F]");
+
+	public static String stripColor(final String input)
+	{
+		if (input == null)
+		{
+			return null;
+		}
+
+		return COLOR_PATTERN.matcher(input).replaceAll("");
+	}
 }
