@@ -80,3 +80,6 @@ v 1.6:
 	- Fix superperms to pass all tests http://dev.bukkit.org/server-mods/superpermstest/
 	- Optimizations include changing the return of comparePermissionString.
 	- Added file details in error messages for loading groups/users.
+v 1.7:
+	- GM now supports offline players without having to mantogglevalidate
+	- Offline player checks now support partial name matches.
