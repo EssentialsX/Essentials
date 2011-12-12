@@ -1800,9 +1800,16 @@ public class GroupManager extends JavaPlugin {
 
 		players = this.getServer().matchPlayer(playerName);
 		if (players.isEmpty()) {
-			// Check for an offline player.
-			if (Arrays.asList(this.getServer().getOfflinePlayers()).contains(Bukkit.getOfflinePlayer(playerName)))
+			// Check for an offline player (exact match).
+			if (Arrays.asList(this.getServer().getOfflinePlayers()).contains(Bukkit.getOfflinePlayer(playerName))) {
 				match.add(playerName);
+			} else {
+				//look for partial matches
+				for (OfflinePlayer offline : this.getServer().getOfflinePlayers()) {
+					if (offline.getName().toLowerCase().startsWith(playerName.toLowerCase()))
+						match.add(offline.getName());
+				}
+			}
 
 		} else {
 			for (Player player : players) {
