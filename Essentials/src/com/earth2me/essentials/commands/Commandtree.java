@@ -35,6 +35,14 @@ public class Commandtree extends EssentialsCommand
 		{
 			tree = TreeType.TREE;
 		}
+		else if (args[0].equalsIgnoreCase("redmushroom"))
+		{
+			tree = TreeType.RED_MUSHROOM;
+		}
+		else if (args[0].equalsIgnoreCase("brownmushroom"))
+		{
+			tree = TreeType.BROWN_MUSHROOM;
+		}
 		else
 		{
 			throw new NotEnoughArgumentsException();
