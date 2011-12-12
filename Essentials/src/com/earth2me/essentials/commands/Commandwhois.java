@@ -4,7 +4,6 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.util.Locale;
-import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -37,7 +36,7 @@ public class Commandwhois extends EssentialsCommand
 			showhidden = true;
 		}
 		final String whois = args[0].toLowerCase(Locale.ENGLISH);
-		final int prefixLength = ChatColor.stripColor(ess.getSettings().getNicknamePrefix()).length();
+		final int prefixLength = Util.stripColor(ess.getSettings().getNicknamePrefix()).length();
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
 			final User user = ess.getUser(onlinePlayer);
@@ -45,7 +44,7 @@ public class Commandwhois extends EssentialsCommand
 			{
 				continue;
 			}
-			final String nickName = ChatColor.stripColor(user.getNickname());
+			final String nickName = Util.stripColor(user.getNickname());
 			if (!whois.equalsIgnoreCase(nickName)
 				&& !whois.substring(prefixLength).equalsIgnoreCase(nickName)
 				&& !whois.equalsIgnoreCase(user.getName()))

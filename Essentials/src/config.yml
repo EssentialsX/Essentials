@@ -273,6 +273,10 @@ sethome-multiple:
   # essentials.sethome.multiple.staff
   staff: 10
 
+#Set timeout in seconds for players to accept tpa before request is cancelled.
+#Set to 0 for no timeout
+tpa-accept-cancellation: 0
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsEco                      | #
@@ -368,24 +372,21 @@ protect:
 
   # For which block types would you like to be alerted?
   # You can find a list of IDs in plugins/Essentials/items.csv after loading Essentials for the first time.
+  # 10 = lava :: 11 = still lava :: 46 = TNT :: 327 = lava bucket
   alert:
-    # 10: lava
-    # 11: still lava
-    # 46: TNT
-    on-placement: 10,11,46
-    on-use: 
-    # 46: TNT
+    on-placement: 10,11,46,327
+    on-use: 327
     on-break: 
 
-  # Users cannot PLACE these types of blocks/items.
-  # < 255 designates a BLOCK
-  # > 255 designates an ITEM (Some blocks can be placed as blocks OR items; lava blocks can be placed by lava buckets, for example.)
   blacklist:
-    placement: 327,326,14,56,46,11,10,9,8
-    usage: 327,326,325
+
+    # Which blocks should people be prevented from placing
+    placement: 10,11,46,327
     
-    #prevent people from breaking blocks
-    #break: 20,50
+    # Which items should people be prevented from using
+    usage: 327
+    
+    # Which blocks should people be prevented from breaking
     break:
     
     # Which blocks should not be pushed by pistons

@@ -816,4 +816,10 @@ public class OfflinePlayer implements Player
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
+	@Override
+	public Player getKiller()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }

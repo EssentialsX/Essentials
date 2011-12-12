@@ -70,6 +70,7 @@ public class Commandwarp extends EssentialsCommand
 
 	}
 
+	//TODO: Use one of the new text classes, like /help ?
 	private void warpList(final CommandSender sender, final String[] args) throws Exception
 	{
 		final Warps warps = ess.getWarps();

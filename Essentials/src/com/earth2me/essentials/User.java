@@ -19,6 +19,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	private transient User teleportRequester;
 	private transient boolean teleportRequestHere;
 	private transient final Teleport teleport;
+	private transient long teleportRequestTime;
 	private transient long lastOnlineActivity;
 	private transient long lastActivity = System.currentTimeMillis();
 	private boolean hidden = false;
@@ -174,7 +175,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	@Override
 	public int compareTo(final User other)
 	{
-		return ChatColor.stripColor(this.getDisplayName()).compareToIgnoreCase(ChatColor.stripColor(other.getDisplayName()));
+		return Util.stripColor(this.getDisplayName()).compareToIgnoreCase(Util.stripColor(other.getDisplayName()));
 	}
 
 	@Override
@@ -184,14 +185,14 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		{
 			return false;
 		}
-		return ChatColor.stripColor(this.getDisplayName()).equalsIgnoreCase(ChatColor.stripColor(((User)object).getDisplayName()));
+		return this.getName().equalsIgnoreCase(((User)object).getName());
 
 	}
 
 	@Override
 	public int hashCode()
 	{
-		return ChatColor.stripColor(this.getDisplayName()).hashCode();
+		return this.getName().hashCode();		
 	}
 
 	public Boolean canSpawnItem(final int itemId)
@@ -222,6 +223,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 	public void requestTeleport(final User player, final boolean here)
 	{
+		teleportRequestTime = System.currentTimeMillis();
 		teleportRequester = player;
 		teleportRequestHere = here;
 	}
@@ -536,5 +538,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public boolean canBuild()
 	{
 		return ess.getPermissionsHandler().canBuild(base, getGroup());
+	}
+	
+	public long getTeleportRequestTime()
+	{
+		return teleportRequestTime;
 	}
 }

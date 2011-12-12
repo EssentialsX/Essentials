@@ -606,4 +606,10 @@ public class Settings implements ISettings
 		}
 		return Priority.Normal;
 	}
+	
+	@Override
+	public long getTpaAcceptCancellation()
+	{
+		return config.getLong("tpa-accept-cancellation", 0);		
+	}
 }

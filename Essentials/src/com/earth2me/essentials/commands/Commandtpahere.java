@@ -28,6 +28,10 @@ public class Commandtpahere extends EssentialsCommand
 		player.requestTeleport(user, true);
 		player.sendMessage(_("teleportHereRequest", user.getDisplayName()));
 		player.sendMessage(_("typeTpaccept"));
+		if (ess.getSettings().getTpaAcceptCancellation() != 0)
+		{
+			player.sendMessage(_("teleportRequestTimeoutInfo", ess.getSettings().getTpaAcceptCancellation()));
+		}
 		user.sendMessage(_("requestSent", player.getDisplayName()));
 	}
 }
