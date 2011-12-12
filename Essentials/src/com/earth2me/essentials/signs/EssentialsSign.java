@@ -49,11 +49,11 @@ public class EssentialsSign
 		}
 		catch (ChargeException ex)
 		{
-			ess.showCommandError(user, signName, ex);
+			ess.getCommandHandler().showCommandError(user, signName, ex);
 		}
 		catch (SignException ex)
 		{
-			ess.showCommandError(user, signName, ex);
+			ess.getCommandHandler().showCommandError(user, signName, ex);
 		}
 		// Return true, so the player sees the wrong sign.
 		return true;
@@ -86,12 +86,12 @@ public class EssentialsSign
 		}
 		catch (ChargeException ex)
 		{
-			ess.showCommandError(user,signName, ex);
+			ess.getCommandHandler().showCommandError(user,signName, ex);
 			return false;
 		}
 		catch (SignException ex)
 		{
-			ess.showCommandError(user, signName, ex);
+			ess.getCommandHandler().showCommandError(user, signName, ex);
 			return false;
 		}
 	}
@@ -108,7 +108,7 @@ public class EssentialsSign
 		}
 		catch (SignException ex)
 		{
-			ess.showCommandError(user, signName, ex);
+			ess.getCommandHandler().showCommandError(user, signName, ex);
 			return false;
 		}
 	}
@@ -137,11 +137,11 @@ public class EssentialsSign
 		}
 		catch (ChargeException ex)
 		{
-			ess.showCommandError(user, signName, ex);
+			ess.getCommandHandler().showCommandError(user, signName, ex);
 		}
 		catch (SignException ex)
 		{
-			ess.showCommandError(user, signName, ex);
+			ess.getCommandHandler().showCommandError(user, signName, ex);
 		}
 		return false;
 	}
@@ -155,11 +155,11 @@ public class EssentialsSign
 		}
 		catch (ChargeException ex)
 		{
-			ess.showCommandError(user, signName, ex);
+			ess.getCommandHandler().showCommandError(user, signName, ex);
 		}
 		catch (SignException ex)
 		{
-			ess.showCommandError(user, signName, ex);
+			ess.getCommandHandler().showCommandError(user, signName, ex);
 		}
 		return false;
 	}
@@ -173,7 +173,7 @@ public class EssentialsSign
 		}
 		catch (SignException ex)
 		{
-			ess.showCommandError(user, signName, ex);
+			ess.getCommandHandler().showCommandError(user, signName, ex);
 		}
 		return false;
 	}

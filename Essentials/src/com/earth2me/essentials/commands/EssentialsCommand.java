@@ -92,7 +92,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 	@Override
 	public final void run(final Server server, final IUser user, final String commandLabel, final Command cmd, final String[] args) throws Exception
 	{
-		final Trade charge = new Trade(this.getName(), (com.earth2me.essentials.IEssentials)ess);
+		final Trade charge = new Trade(this.getName(), ess);
 		charge.isAffordableFor(user);
 		run(server, user, commandLabel, args);
 		charge.charge(user);

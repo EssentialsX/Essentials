@@ -1,9 +1,9 @@
 package com.earth2me.essentials.storage;
 
-import com.earth2me.essentials.user.UserData;
+import com.earth2me.essentials.api.IReload;
 
 
-public interface IStorageObjectHolder<T extends StorageObject>
+public interface IStorageObjectHolder<T extends StorageObject> extends IReload
 {
 	T getData();
 

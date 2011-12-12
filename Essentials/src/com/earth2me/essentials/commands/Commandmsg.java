@@ -29,7 +29,7 @@ public class Commandmsg extends EssentialsCommand
 		if (sender instanceof Player)
 		{
 			@Cleanup
-			IUser user = ess.getUser(sender);
+			IUser user = ess.getUser((Player)sender);
 			user.acquireReadLock();
 			if (user.getData().isMuted())
 			{

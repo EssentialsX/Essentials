@@ -19,4 +19,6 @@ public interface IPermissionsHandler
 	String getPrefix(Player base);
 
 	String getSuffix(Player base);
+
+	public void checkPermissions();
 }

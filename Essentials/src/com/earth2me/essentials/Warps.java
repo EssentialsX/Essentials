@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.api.IWarps;
 import static com.earth2me.essentials.I18n._;
 import java.io.File;
 import java.util.*;
@@ -9,7 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 
 
-public class Warps implements IConf
+public class Warps implements IWarps
 {
 	private static final Logger logger = Logger.getLogger("Minecraft");
 	private final Map<StringIgnoreCase, EssentialsConf> warpPoints = new HashMap<StringIgnoreCase, EssentialsConf>();

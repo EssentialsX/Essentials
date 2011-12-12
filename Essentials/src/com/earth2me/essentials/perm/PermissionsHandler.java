@@ -96,6 +96,7 @@ public class PermissionsHandler implements IPermissionsHandler
 		return suffix;
 	}
 
+	@Override
 	public void checkPermissions()
 	{
 		final PluginManager pluginManager = plugin.getServer().getPluginManager();

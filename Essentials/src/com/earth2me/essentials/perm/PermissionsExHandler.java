@@ -8,7 +8,7 @@ import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 
-public class PermissionsExHandler implements IPermissionsHandler
+public class PermissionsExHandler extends AbstractPermissionsHandler
 {
 	private final transient PermissionManager manager;
 

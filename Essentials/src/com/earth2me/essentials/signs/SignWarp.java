@@ -29,7 +29,7 @@ public class SignWarp extends EssentialsSign
 		{
 			try
 			{
-				ess.getWarps2().getWarp(warpName);
+				ess.getWarps().getWarp(warpName);
 			}
 			catch (Exception ex)
 			{

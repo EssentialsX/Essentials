@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.II18n;
 import java.io.File;
 import java.io.FileInputStream;

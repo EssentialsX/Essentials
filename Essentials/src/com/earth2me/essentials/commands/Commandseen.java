@@ -29,7 +29,7 @@ public class Commandseen extends EssentialsCommand
 		}
 		catch (NoSuchFieldException e)
 		{
-			IUser u = ess.getOfflineUser(args[0]);
+			IUser u = ess.getUser(args[0]);
 			if (u == null)
 			{
 				throw new Exception(_("playerNotFound"));

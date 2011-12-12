@@ -50,13 +50,13 @@ public class User extends UserBase implements IUser
 	public User(final Player base, final IEssentials ess)
 	{
 		super(base, ess);
-		teleport = new Teleport(this, (com.earth2me.essentials.IEssentials)ess);
+		teleport = new Teleport(this, ess);
 	}
 
 	public User(final OfflinePlayer offlinePlayer, final IEssentials ess)
 	{
 		super(offlinePlayer, ess);
-		teleport = new Teleport(this, (com.earth2me.essentials.IEssentials)ess);
+		teleport = new Teleport(this, ess);
 	}
 
 	public void example()
@@ -139,10 +139,10 @@ public class User extends UserBase implements IUser
 		try
 		{
 			setMoney(getMoney() + value);
-			sendMessage(_("addedToAccount", Util.formatCurrency(value, (com.earth2me.essentials.IEssentials)ess)));
+			sendMessage(_("addedToAccount", Util.formatCurrency(value, ess)));
 			if (initiator != null)
 			{
-				initiator.sendMessage(_("addedToOthersAccount", Util.formatCurrency(value, (com.earth2me.essentials.IEssentials)ess), this.getDisplayName()));
+				initiator.sendMessage(_("addedToOthersAccount", Util.formatCurrency(value, ess), this.getDisplayName()));
 			}
 		}
 		finally
@@ -161,8 +161,8 @@ public class User extends UserBase implements IUser
 		{
 			setMoney(getMoney() - value);
 			reciever.setMoney(reciever.getMoney() + value);
-			sendMessage(_("moneySentTo", Util.formatCurrency(value, (com.earth2me.essentials.IEssentials)ess), reciever.getDisplayName()));
-			reciever.sendMessage(_("moneyRecievedFrom", Util.formatCurrency(value, (com.earth2me.essentials.IEssentials)ess), getDisplayName()));
+			sendMessage(_("moneySentTo", Util.formatCurrency(value, ess), reciever.getDisplayName()));
+			reciever.sendMessage(_("moneyRecievedFrom", Util.formatCurrency(value, ess), getDisplayName()));
 		}
 		else
 		{
@@ -183,10 +183,10 @@ public class User extends UserBase implements IUser
 			return;
 		}
 		setMoney(getMoney() - value);
-		sendMessage(_("takenFromAccount", Util.formatCurrency(value, (com.earth2me.essentials.IEssentials)ess)));
+		sendMessage(_("takenFromAccount", Util.formatCurrency(value, ess)));
 		if (initiator != null)
 		{
-			initiator.sendMessage(_("takenFromOthersAccount", Util.formatCurrency(value, (com.earth2me.essentials.IEssentials)ess), this.getDisplayName()));
+			initiator.sendMessage(_("takenFromOthersAccount", Util.formatCurrency(value, ess), this.getDisplayName()));
 		}
 	}
 

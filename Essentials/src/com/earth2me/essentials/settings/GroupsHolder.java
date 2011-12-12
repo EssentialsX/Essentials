@@ -36,7 +36,7 @@ public class GroupsHolder extends AsyncStorageObjectHolder<Groups> implements IG
 			{
 				return;
 			}
-			Util.registerPermissions("essentials.groups", groups.keySet(), true, (com.earth2me.essentials.IEssentials)ess);
+			Util.registerPermissions("essentials.groups", groups.keySet(), true, ess);
 		}
 		finally
 		{

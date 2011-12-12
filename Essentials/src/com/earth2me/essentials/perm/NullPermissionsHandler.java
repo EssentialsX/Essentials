@@ -5,7 +5,7 @@ import java.util.List;
 import org.bukkit.entity.Player;
 
 
-public class NullPermissionsHandler implements IPermissionsHandler
+public class NullPermissionsHandler extends AbstractPermissionsHandler
 {
 	@Override
 	public String getGroup(final Player base)

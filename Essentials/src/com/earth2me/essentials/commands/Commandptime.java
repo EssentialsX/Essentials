@@ -45,7 +45,7 @@ public class Commandptime extends EssentialsCommand
 			return;
 		}
 
-		IUser user = ess.getUser(sender);
+		IUser user = sender instanceof Player ? ess.getUser((Player)sender) : null;
 		if ((!users.contains(user) || users.size() > 1) && user != null && !user.isAuthorized("essentials.ptime.others"))
 		{
 			user.sendMessage(_("pTimeOthersPermission"));
@@ -187,7 +187,7 @@ public class Commandptime extends EssentialsCommand
 		// If there is no selector we want the sender itself. Or all users if sender isn't a user.
 		if (selector == null)
 		{
-			final IUser user = ess.getUser(sender);
+			final IUser user = sender instanceof Player ? ess.getUser((Player)sender) : null;
 			if (user == null)
 			{
 				for (Player player : server.getOnlinePlayers())

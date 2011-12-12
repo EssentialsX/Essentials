@@ -27,7 +27,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 	public Jails(final IEssentials ess)
 	{
 		super(ess, com.earth2me.essentials.settings.Jails.class);
-		reloadConfig();
+		onReload();
 		registerListeners();
 	}
 

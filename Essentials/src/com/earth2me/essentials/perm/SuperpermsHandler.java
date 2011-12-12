@@ -4,7 +4,7 @@ import java.util.List;
 import org.bukkit.entity.Player;
 
 
-public class SuperpermsHandler implements IPermissionsHandler
+public class SuperpermsHandler extends AbstractPermissionsHandler
 {
 	@Override
 	public String getGroup(final Player base)

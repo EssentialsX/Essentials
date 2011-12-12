@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 
-public class GroupManagerHandler implements IPermissionsHandler
+public class GroupManagerHandler extends AbstractPermissionsHandler
 {
 	private final transient GroupManager groupManager;
 

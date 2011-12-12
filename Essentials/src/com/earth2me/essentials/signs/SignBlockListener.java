@@ -1,7 +1,7 @@
 package com.earth2me.essentials.signs;
 
-import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.IUser;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Material;
@@ -16,7 +16,7 @@ public class SignBlockListener extends BlockListener
 	private final transient IEssentials ess;
 	private final static Logger LOGGER = Logger.getLogger("Minecraft");
 
-	public SignBlockListener(IEssentials ess)
+	public SignBlockListener(final IEssentials ess)
 	{
 		this.ess = ess;
 	}
@@ -80,7 +80,7 @@ public class SignBlockListener extends BlockListener
 		{
 			return;
 		}
-		User user = ess.getUser(event.getPlayer());
+		IUser user = ess.getUser(event.getPlayer());
 		if (user.isAuthorized("essentials.signs.color"))
 		{
 			for (int i = 0; i < 4; i++)

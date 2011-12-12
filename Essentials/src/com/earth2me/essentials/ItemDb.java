@@ -11,7 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 
-public class ItemDb implements IConf, IItemDb
+public class ItemDb implements IItemDb
 {
 	private final transient IEssentials ess;
 
@@ -119,11 +119,5 @@ public class ItemDb implements IConf, IItemDb
 		retval.setAmount(mat.getMaxStackSize());
 		retval.setDurability(metaData);
 		return retval;
-	}
-
-	@Override
-	public void reloadConfig()
-	{
-		onReload();
 	}
 }

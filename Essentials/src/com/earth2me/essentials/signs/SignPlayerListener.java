@@ -1,6 +1,6 @@
 package com.earth2me.essentials.signs;
 
-import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.api.IEssentials;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;

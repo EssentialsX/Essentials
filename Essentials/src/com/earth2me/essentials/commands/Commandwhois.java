@@ -28,7 +28,7 @@ public class Commandwhois extends EssentialsCommand
 		boolean showhidden = false;
 		if (sender instanceof Player)
 		{
-			if (ess.getUser(sender).isAuthorized("essentials.list.hidden"))
+			if (ess.getUser((Player)sender).isAuthorized("essentials.list.hidden"))
 			{
 				showhidden = true;
 			}
@@ -76,7 +76,7 @@ public class Commandwhois extends EssentialsCommand
 			sender.sendMessage(_("whoisIPAddress", user.getAddress().getAddress().toString()));
 			final String location = user.getData().getGeolocation();
 			if (location != null
-				&& (sender instanceof Player ? ess.getUser(sender).isAuthorized("essentials.geoip.show") : true))
+				&& (sender instanceof Player ? ess.getUser((Player)sender).isAuthorized("essentials.geoip.show") : true))
 			{
 				sender.sendMessage(_("whoisGeoLocation", location));
 			}

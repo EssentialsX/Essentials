@@ -1,6 +1,6 @@
 package com.earth2me.essentials.craftbukkit;
 
-import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.api.IEssentials;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.minecraft.server.NBTTagCompound;

@@ -4,15 +4,19 @@ import com.earth2me.essentials.listener.TNTExplodeListener;
 import com.earth2me.essentials.perm.IPermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
 import org.bukkit.World;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 
-public interface IEssentials extends Plugin, IReload
+public interface IEssentials extends Plugin
 {
 	void addReloadListener(IReload listener);
 
-	IUser getUser(Object base);
+	IUser getUser(Player player);
+	
+	IUser getUser(String playerName);
 
 	int broadcastMessage(IUser sender, String message);
 
@@ -24,7 +28,7 @@ public interface IEssentials extends Plugin, IReload
 
 	IJails getJails();
 
-	IWarps getWarps2();
+	IWarps getWarps();
 
 	IWorth getWorth();
 
@@ -35,6 +39,8 @@ public interface IEssentials extends Plugin, IReload
 	IBackup getBackup();
 
 	IEssentialsEconomy getEconomy();
+	
+	ICommandHandler getCommandHandler();
 
 	World getWorld(String name);
 
@@ -49,14 +55,8 @@ public interface IEssentials extends Plugin, IReload
 	int scheduleSyncRepeatingTask(Runnable run, long delay, long period);
 
 	IPermissionsHandler getPermissionsHandler();
+	
+	void reload();
 
-	IAlternativeCommandsHandler getAlternativeCommandsHandler();
-
-	void showCommandError(CommandSender sender, String commandLabel, Throwable exception);
-
-	public void reload();
-
-	public IUser getOfflineUser(String string);
-
-	public TNTExplodeListener getTNTListener();
+	TNTExplodeListener getTNTListener();
 }

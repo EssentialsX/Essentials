@@ -5,6 +5,7 @@ import junit.framework.TestCase;
 import org.bukkit.Location;
 import org.bukkit.World.Environment;
 import org.bukkit.plugin.InvalidDescriptionException;
+import com.earth2me.essentials.api.IUser;
 
 
 public class UserTest extends TestCase
@@ -49,11 +50,11 @@ public class UserTest extends TestCase
 
 	public void testHome()
 	{
-		User user = ess.getUser(base1);
+		IUser user = ess.getUser(base1);
 		Location loc = base1.getLocation();
 		user.setHome();
 		OfflinePlayer base2 = server.createPlayer(base1.getName(), ess);
-		User user2 = ess.getUser(base2);
+		IUser user2 = ess.getUser(base2);
 
 		Location home = user2.getHome(loc);
 		assertNotNull(home);
@@ -68,7 +69,7 @@ public class UserTest extends TestCase
 	public void testMoney()
 	{
 		should("properly set, take, give, and get money");
-		User user = ess.getUser(base1);
+		IUser user = ess.getUser(base1);
 		double i;
 		user.setMoney(i = 100.5);
 		user.takeMoney(50);
@@ -81,7 +82,7 @@ public class UserTest extends TestCase
 	public void testGetGroup()
 	{
 		should("return the default group");
-		User user = ess.getUser(base1);
+		IUser user = ess.getUser(base1);
 		assertEquals(user.getGroup(), "default");
 	}
 }

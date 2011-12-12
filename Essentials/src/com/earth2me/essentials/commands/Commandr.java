@@ -38,7 +38,7 @@ public class Commandr extends EssentialsCommand
 		sender.sendMessage(_("msgFormat", _("me"), targetName, message));
 		if (target instanceof Player)
 		{
-			IUser player = ess.getUser(target);
+			IUser player = ess.getUser((Player)target);
 			if (player.isIgnoringPlayer(sender instanceof Player ? ((Player)sender).getName() : Console.NAME))
 			{
 				return;

@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 import org.bukkit.inventory.ItemStack;
 
 
-public class Worth implements IConf, IWorth
+public class Worth implements IWorth
 {
 	private static final Logger logger = Logger.getLogger("Minecraft");
 	private final EssentialsConf config;
@@ -55,14 +55,8 @@ public class Worth implements IConf, IWorth
 	}
 
 	@Override
-	public void reloadConfig()
-	{
-		config.load();
-	}
-
-	@Override
 	public void onReload()
 	{
-		reloadConfig();
+		config.load();
 	}
 }

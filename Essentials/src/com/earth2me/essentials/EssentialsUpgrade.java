@@ -4,6 +4,7 @@ import com.earth2me.essentials.craftbukkit.FakeWorld;
 import com.earth2me.essentials.settings.Spawns;
 import com.earth2me.essentials.storage.YamlStorageWriter;
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.api.IEssentials;
 import java.io.*;
 import java.math.BigInteger;
 import java.security.DigestInputStream;

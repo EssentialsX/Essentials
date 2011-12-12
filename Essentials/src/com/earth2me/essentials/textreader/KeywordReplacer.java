@@ -35,7 +35,7 @@ public class KeywordReplacer implements IText
 		if (sender instanceof Player)
 		{
 			@Cleanup
-			final IUser user = ess.getUser(sender);
+			final IUser user = ess.getUser((Player)sender);
 			user.acquireReadLock();
 			displayName = user.getDisplayName();
 			ipAddress = user.getAddress().getAddress().toString();

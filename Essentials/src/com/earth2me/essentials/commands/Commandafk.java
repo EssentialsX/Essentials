@@ -1,9 +1,9 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.User;
 import com.earth2me.essentials.api.IUser;
 import org.bukkit.Server;
+import org.bukkit.entity.Player;
 
 
 public class Commandafk extends EssentialsCommand
@@ -18,7 +18,7 @@ public class Commandafk extends EssentialsCommand
 	{
 		if (args.length > 0 && user.isAuthorized("essentials.afk.others"))
 		{
-			IUser afkUser = ess.getUser(ess.getServer().matchPlayer(args[0]));
+			IUser afkUser = ess.getUser((Player)ess.getServer().matchPlayer(args[0]));
 			if (afkUser != null)
 			{
 				toggleAfk(afkUser);

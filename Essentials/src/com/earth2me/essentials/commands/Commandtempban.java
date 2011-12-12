@@ -29,7 +29,7 @@ public class Commandtempban extends EssentialsCommand
 		if (user.getBase() instanceof OfflinePlayer)
 		{
 			if (sender instanceof Player
-				&& !ess.getUser(sender).isAuthorized("essentials.tempban.offline"))
+				&& !ess.getUser((Player)sender).isAuthorized("essentials.tempban.offline"))
 			{
 				sender.sendMessage(_("tempbanExempt"));
 				return;

@@ -8,7 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.event.Event.Priority;
 
 @Deprecated
-public interface ISettings extends IConf, com.earth2me.essentials.api.ISettings
+public interface ISettings extends com.earth2me.essentials.api.ISettings
 {
 	boolean areSignsDisabled();
 

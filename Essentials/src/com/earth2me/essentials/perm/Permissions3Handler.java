@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 
-public class Permissions3Handler implements IPermissionsHandler
+public class Permissions3Handler extends AbstractPermissionsHandler
 {
 	private final transient PermissionHandler permissionHandler;
 

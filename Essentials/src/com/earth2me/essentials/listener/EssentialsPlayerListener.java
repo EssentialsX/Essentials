@@ -162,8 +162,8 @@ public class EssentialsPlayerListener extends PlayerListener
 		{
 			try
 			{
-				final IText input = new TextInput(user, "motd", true, (com.earth2me.essentials.IEssentials)ess);
-				final IText output = new KeywordReplacer(input, user, (com.earth2me.essentials.IEssentials)ess);
+				final IText input = new TextInput(user, "motd", true, ess);
+				final IText output = new KeywordReplacer(input, user, ess);
 				final TextPager pager = new TextPager(output, true);
 				pager.showPage("1", null, "motd", user);
 			}

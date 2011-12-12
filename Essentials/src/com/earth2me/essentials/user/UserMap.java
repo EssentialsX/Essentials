@@ -2,6 +2,7 @@ package com.earth2me.essentials.user;
 
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.Util;
+import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.api.IUserMap;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -57,12 +58,14 @@ public class UserMap extends CacheLoader<String, User> implements IUserMap
 		});
 	}
 
+	@Override
 	public boolean userExists(final String name)
 	{
 		return keys.contains(name.toLowerCase(Locale.ENGLISH));
 	}
 
-	public User getUser(final String name)
+	@Override
+	public IUser getUser(final String name)
 	{
 		try
 		{
@@ -98,22 +101,26 @@ public class UserMap extends CacheLoader<String, User> implements IUserMap
 		throw new Exception("User not found!");
 	}
 
+	@Override
 	public void removeUser(final String name)
 	{
 		keys.remove(name.toLowerCase(Locale.ENGLISH));
 		users.invalidate(name.toLowerCase(Locale.ENGLISH));
 	}
 
+	@Override
 	public Set<String> getAllUniqueUsers()
 	{
 		return Collections.unmodifiableSet(keys);
 	}
 
+	@Override
 	public int getUniqueUsers()
 	{
 		return keys.size();
 	}
 
+	@Override
 	public File getUserFile(final String name)
 	{
 		final File userFolder = new File(ess.getDataFolder(), "userdata");
@@ -124,5 +131,25 @@ public class UserMap extends CacheLoader<String, User> implements IUserMap
 	public void onReload()
 	{
 		loadAllUsersAsync();
+	}
+
+	@Override
+	public IUser getUser(final Player player)
+	{
+		if (player instanceof IUser)
+		{
+			return (IUser)player;
+		}
+		IUser user = getUser(player.getName());
+
+		if (user == null)
+		{
+			user = new User(player, ess);
+		}
+		else
+		{
+			((User)user).update(player);
+		}
+		return user;
 	}
 }

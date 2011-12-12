@@ -49,7 +49,7 @@ public class Commandmail extends EssentialsCommand
 			}
 			else
 			{
-				u = ess.getOfflineUser(args[1]);
+				u = ess.getUser(args[1]);
 			}
 			if (u == null)
 			{
@@ -103,7 +103,7 @@ public class Commandmail extends EssentialsCommand
 			}
 			else
 			{
-				u = ess.getOfflineUser(args[1]);
+				u = ess.getUser(args[1]);
 			}
 			if (u == null)
 			{
@@ -128,7 +128,7 @@ public class Commandmail extends EssentialsCommand
 			}
 			else
 			{
-				u = ess.getOfflineUser(args[0]);
+				u = ess.getUser(args[0]);
 			}
 			if (u == null)
 			{

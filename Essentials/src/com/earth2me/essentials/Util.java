@@ -21,7 +21,7 @@ import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 
 
-public class Util
+public final class Util
 {
 	private Util()
 	{

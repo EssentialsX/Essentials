@@ -7,6 +7,7 @@ import java.util.*;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 
 public class Commandtime extends EssentialsCommand
@@ -34,7 +35,7 @@ public class Commandtime extends EssentialsCommand
 			return;
 		}
 
-		final IUser user = ess.getUser(sender);
+		final IUser user = sender instanceof Player ? ess.getUser((Player)sender) : null;
 		if (user != null && !user.isAuthorized("essentials.time.set"))
 		{
 			user.sendMessage(_("timeSetPermission"));
@@ -110,7 +111,7 @@ public class Commandtime extends EssentialsCommand
 		// If there is no selector we want the world the user is currently in. Or all worlds if it isn't a user.
 		if (selector == null)
 		{
-			final IUser user = ess.getUser(sender);
+			final IUser user = sender instanceof Player ? ess.getUser((Player)sender) : null;
 			if (user == null)
 			{
 				worlds.addAll(server.getWorlds());

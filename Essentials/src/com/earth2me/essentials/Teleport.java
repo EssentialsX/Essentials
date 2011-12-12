@@ -118,7 +118,7 @@ public class Teleport implements Runnable, ITeleport
 				}
 				catch (Throwable ex)
 				{
-					ess.showCommandError(user.getBase(), "teleport", ex);
+					ess.getCommandHandler().showCommandError(user.getBase(), "teleport", ex);
 				}
 			}
 			catch (Exception ex)
@@ -145,7 +145,7 @@ public class Teleport implements Runnable, ITeleport
 
 	public void warp(String warp, Trade chargeFor, TeleportCause cause) throws Exception
 	{
-		final Location loc = ess.getWarps2().getWarp(warp);
+		final Location loc = ess.getWarps().getWarp(warp);
 		teleport(new Target(loc), chargeFor, cause);
 		user.sendMessage(_("warpingTo", warp));
 	}

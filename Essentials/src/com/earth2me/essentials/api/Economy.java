@@ -2,8 +2,6 @@ package com.earth2me.essentials.api;
 
 import com.earth2me.essentials.EssentialsConf;
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.io.File;
 import java.util.logging.Level;
@@ -66,13 +64,13 @@ public final class Economy
 		}
 	}
 
-	private static User getUserByName(String name)
+	private static IUser getUserByName(String name)
 	{
 		if (ess == null)
 		{
 			throw new RuntimeException(noCallBeforeLoad);
 		}
-		User user;
+		IUser user;
 		Player player = ess.getServer().getPlayer(name);
 		if (player != null)
 		{
@@ -93,7 +91,7 @@ public final class Economy
 	 */
 	public static double getMoney(String name) throws UserDoesNotExistException
 	{
-		User user = getUserByName(name);
+		IUser user = getUserByName(name);
 		if (user == null)
 		{
 			throw new UserDoesNotExistException(name);
@@ -110,7 +108,7 @@ public final class Economy
 	 */
 	public static void setMoney(String name, double balance) throws UserDoesNotExistException, NoLoanPermittedException
 	{
-		User user = getUserByName(name);
+		IUser user = getUserByName(name);
 		if (user == null)
 		{
 			throw new UserDoesNotExistException(name);
@@ -266,7 +264,7 @@ public final class Economy
 	 */
 	public static boolean isNPC(String name) throws UserDoesNotExistException
 	{
-		User user = getUserByName(name);
+		IUser user = getUserByName(name);
 		if (user == null)
 		{
 			throw new UserDoesNotExistException(name);
@@ -281,7 +279,7 @@ public final class Economy
 	 */
 	public static boolean createNPC(String name)
 	{
-		User user = getUserByName(name);
+		IUser user = getUserByName(name);
 		if (user == null)
 		{
 			createNPCFile(name);
@@ -297,7 +295,7 @@ public final class Economy
 	 */
 	public static void removeNPC(String name) throws UserDoesNotExistException
 	{
-		User user = getUserByName(name);
+		IUser user = getUserByName(name);
 		if (user == null)
 		{
 			throw new UserDoesNotExistException(name);

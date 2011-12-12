@@ -6,6 +6,7 @@ import java.util.Locale;
 import lombok.Cleanup;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 
 public class Commanddelhome extends EssentialsCommand
@@ -24,7 +25,7 @@ public class Commanddelhome extends EssentialsCommand
 		}
 
 		@Cleanup
-		IUser user = ess.getUser(sender);
+		IUser user = sender instanceof Player ? ess.getUser((Player)sender) : null;
 		String name;
 		final String[] expandedArg = args[0].split(":");
 

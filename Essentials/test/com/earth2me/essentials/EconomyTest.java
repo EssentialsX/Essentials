@@ -45,7 +45,7 @@ public class EconomyTest extends TestCase
 		assertFalse("NPC does not exists", Economy.playerExists(NPCNAME));
 		assertTrue("Create NPC", Economy.createNPC(NPCNAME));
 		assertTrue("NPC exists", Economy.playerExists(NPCNAME));
-		assertNotNull("NPC can be accessed", ess.getOfflineUser(NPCNAME));
+		assertNotNull("NPC can be accessed", ess.getUser(NPCNAME));
 		try
 		{
 			Economy.removeNPC(NPCNAME);

@@ -2,6 +2,7 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.craftbukkit.FakeWorld;
 import com.avaje.ebean.config.ServerConfig;
+import com.earth2me.essentials.api.IEssentials;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.Callable;
