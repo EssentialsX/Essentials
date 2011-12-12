@@ -1,5 +1,5 @@
 name: GroupManager
-version: "1.6 (Phoenix)"
+version: "1.7 (Phoenix)"
 main: org.anjocaido.groupmanager.GroupManager
 website: http://www.anjocaido.info/
 description: Provides on-the-fly system for permissions system created by Nijikokun. But all in memory, and with flat-file saving schedule.
