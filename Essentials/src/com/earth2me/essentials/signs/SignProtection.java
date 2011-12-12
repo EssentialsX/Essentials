@@ -5,8 +5,8 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import java.util.*;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -147,7 +147,7 @@ public class SignProtection extends EssentialsSign
 		{
 			return SignProtectionState.OWNER;
 		}
-		if (ChatColor.stripColor(sign.getLine(3)).equalsIgnoreCase(username))
+		if (Util.stripColor(sign.getLine(3)).equalsIgnoreCase(username))
 		{
 			return SignProtectionState.OWNER;
 		}
