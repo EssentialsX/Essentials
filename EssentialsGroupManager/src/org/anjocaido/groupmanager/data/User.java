@@ -143,7 +143,7 @@ public class User extends DataUnit implements Cloneable {
 			if (notify)
 				GroupManager.notify(this.getName(), String.format(" moved to the group %s.", group.getName()));
 			
-			GroupManagerEventHandler.callEvent(this, Action.GROUP_CHANGED);
+			GroupManagerEventHandler.callEvent(this, Action.USER_GROUP_CHANGED);
 		}
 	}
 
@@ -161,7 +161,7 @@ public class User extends DataUnit implements Cloneable {
 		if (GroupManager.isLoaded()) {
 			if (GroupManager.BukkitPermissions.player_join = false)
 				GroupManager.BukkitPermissions.updateAllPlayers();
-			GroupManagerEventHandler.callEvent(this, Action.SUBGROUP_CHANGED);
+			GroupManagerEventHandler.callEvent(this, Action.USER_SUBGROUP_CHANGED);
 		}
 	}
 
@@ -184,7 +184,7 @@ public class User extends DataUnit implements Cloneable {
 				if (GroupManager.isLoaded())
 					if (GroupManager.BukkitPermissions.player_join = false)
 						GroupManager.BukkitPermissions.updateAllPlayers();
-				GroupManagerEventHandler.callEvent(this, Action.SUBGROUP_CHANGED);
+				GroupManagerEventHandler.callEvent(this, Action.USER_SUBGROUP_CHANGED);
 				return true;
 			}
 		} catch (Exception e) {
@@ -231,7 +231,7 @@ public class User extends DataUnit implements Cloneable {
 		if (GroupManager.isLoaded()) {
 			if (GroupManager.BukkitPermissions.player_join = false)
 				GroupManager.BukkitPermissions.updateAllPlayers();
-			GroupManagerEventHandler.callEvent(this, Action.INFO_CHANGED);
+			GroupManagerEventHandler.callEvent(this, Action.USER_INFO_CHANGED);
 		}
 	}
 

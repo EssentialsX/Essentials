@@ -119,7 +119,7 @@ public class Group extends DataUnit implements Cloneable {
         flagAsChanged();
         if (GroupManager.isLoaded()) {
         	GroupManager.BukkitPermissions.updateAllPlayers();
-        	GroupManagerEventHandler.callEvent(this, Action.INHERITANCE_CHANGED);
+        	GroupManagerEventHandler.callEvent(this, Action.GROUP_INHERITANCE_CHANGED);
         }
     }
 
@@ -127,7 +127,7 @@ public class Group extends DataUnit implements Cloneable {
         if (this.inherits.contains(inherit.toLowerCase())) {
             this.inherits.remove(inherit.toLowerCase());
             flagAsChanged();
-            GroupManagerEventHandler.callEvent(this, Action.INHERITANCE_CHANGED);
+            GroupManagerEventHandler.callEvent(this, Action.GROUP_INHERITANCE_CHANGED);
             return true;
         }
         return false;
@@ -153,7 +153,7 @@ public class Group extends DataUnit implements Cloneable {
         flagAsChanged();
         if (GroupManager.isLoaded()) {
         	GroupManager.BukkitPermissions.updateAllPlayers();
-        	GroupManagerEventHandler.callEvent(this, Action.INFO_CHANGED);
+        	GroupManagerEventHandler.callEvent(this, Action.GROUP_INFO_CHANGED);
         }
     }
 }
