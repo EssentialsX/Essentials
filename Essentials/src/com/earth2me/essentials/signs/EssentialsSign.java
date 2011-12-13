@@ -278,6 +278,7 @@ public class EssentialsSign
 			int amount = getIntegerPositive(sign.getLine(amountIndex));
 			sign.setLine(amountIndex, Integer.toString(amount));
 			sign.setLine(itemIndex, "exp");
+			return;
 		}
 		final Trade trade = getTrade(sign, amountIndex, itemIndex, player, ess);
 		final ItemStack item = trade.getItemStack();
