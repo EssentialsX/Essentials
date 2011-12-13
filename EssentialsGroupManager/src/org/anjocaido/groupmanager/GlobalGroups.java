@@ -14,6 +14,8 @@ import java.util.Set;
 import java.util.logging.Level;
 
 import org.anjocaido.groupmanager.data.Group;
+import org.anjocaido.groupmanager.events.GMGroupEvent;
+import org.anjocaido.groupmanager.events.GroupManagerEventHandler;
 import org.anjocaido.groupmanager.utils.PermissionCheckResult;
 import org.anjocaido.groupmanager.utils.Tasks;
 import org.bukkit.configuration.MemorySection;
@@ -243,6 +245,8 @@ public class GlobalGroups {
         
 		newGroup(groupToAdd);
         haveGroupsChanged = true;
+        if (GroupManager.isLoaded())
+        	GroupManagerEventHandler.callEvent(groupToAdd, GMGroupEvent.Action.GROUP_ADDED);
 	}
 
 	/**
@@ -270,6 +274,8 @@ public class GlobalGroups {
 		if (groups.containsKey(groupName.toLowerCase())) {
 			groups.remove(groupName.toLowerCase());
 			this.setGroupsChanged(true);
+			if (GroupManager.isLoaded())
+				GroupManagerEventHandler.callEvent(groupName.toLowerCase(), GMGroupEvent.Action.GROUP_REMOVED);
 			return true;
 		}
 		return false;

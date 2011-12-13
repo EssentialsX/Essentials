@@ -22,6 +22,11 @@ import java.util.logging.Logger;
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.data.Group;
 import org.anjocaido.groupmanager.data.User;
+import org.anjocaido.groupmanager.events.GMGroupEvent;
+import org.anjocaido.groupmanager.events.GMSystemEvent;
+import org.anjocaido.groupmanager.events.GMUserEvent;
+import org.anjocaido.groupmanager.events.GMUserEvent.Action;
+import org.anjocaido.groupmanager.events.GroupManagerEventHandler;
 import org.anjocaido.groupmanager.permissions.AnjoPermissionsHandler;
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
@@ -144,6 +149,8 @@ public class WorldDataHolder {
         removeUser(theUser.getName());
         users.put(theUser.getName().toLowerCase(), theUser);
         haveUsersChanged = true;
+        if (GroupManager.isLoaded())
+        	GroupManagerEventHandler.callEvent(theUser, Action.USER_ADDED);
     }
 
     /**
@@ -155,6 +162,8 @@ public class WorldDataHolder {
         if (users.containsKey(userName.toLowerCase())) {
             users.remove(userName.toLowerCase());
             haveUsersChanged = true;
+            if (GroupManager.isLoaded())
+            	GroupManagerEventHandler.callEvent(userName, GMUserEvent.Action.USER_REMOVED);
             return true;
         }
         return false;
@@ -179,6 +188,8 @@ public class WorldDataHolder {
         }
         defaultGroup = this.getGroup(group.getName());
         haveGroupsChanged = true;
+        if (GroupManager.isLoaded())
+        	GroupManagerEventHandler.callEvent(GMSystemEvent.Action.DEFAULT_GROUP_CHANGED);
     }
 
     /**
@@ -221,6 +232,7 @@ public class WorldDataHolder {
     public void addGroup(Group groupToAdd) {
     	if (groupToAdd.getName().toLowerCase().startsWith("g:")) {
     		GroupManager.getGlobalGroups().addGroup(groupToAdd);
+    		GroupManagerEventHandler.callEvent(groupToAdd, GMGroupEvent.Action.GROUP_ADDED);
         	return;
         }
     	
@@ -230,10 +242,12 @@ public class WorldDataHolder {
         removeGroup(groupToAdd.getName());
         groups.put(groupToAdd.getName().toLowerCase(), groupToAdd);
         haveGroupsChanged = true;
+        if (GroupManager.isLoaded())
+        	GroupManagerEventHandler.callEvent(groupToAdd, GMGroupEvent.Action.GROUP_ADDED);
     }
 
     /**
-     * Remove the group to the list
+     * Remove the group from the list
      * @param groupName
      * @return true if had something to remove. false the group was default or non-existant
      */
@@ -248,6 +262,8 @@ public class WorldDataHolder {
         if (groups.containsKey(groupName.toLowerCase())) {
             groups.remove(groupName.toLowerCase());
             haveGroupsChanged = true;
+            if (GroupManager.isLoaded())
+            	GroupManagerEventHandler.callEvent(groupName.toLowerCase(), GMGroupEvent.Action.GROUP_REMOVED);
             return true;
         }
         return false;
@@ -345,6 +361,7 @@ public class WorldDataHolder {
             Logger.getLogger(WorldDataHolder.class.getName()).log(Level.WARNING, null, ex);
         }
     	GroupManager.setLoaded(true);
+    	GroupManagerEventHandler.callEvent(GMSystemEvent.Action.RELOADED);
     }
     
     /**
@@ -375,6 +392,7 @@ public class WorldDataHolder {
             Logger.getLogger(WorldDataHolder.class.getName()).log(Level.WARNING, null, ex);
         } 
     	GroupManager.setLoaded(true);
+    	GroupManagerEventHandler.callEvent(GMSystemEvent.Action.RELOADED);
     }
 
     /**
@@ -936,6 +954,9 @@ public class WorldDataHolder {
         ph.groupsFile = groupsFile;
         ph.setTimeStampGroups(groupsFile.lastModified());
         ph.removeGroupsChangedFlag();
+        
+        if (GroupManager.isLoaded())
+        	GroupManagerEventHandler.callEvent(GMSystemEvent.Action.SAVED);
 
         /*FileWriter tx = null;
         try {
@@ -1009,6 +1030,9 @@ public class WorldDataHolder {
         ph.usersFile = usersFile;
         ph.setTimeStampUsers(usersFile.lastModified());
         ph.removeUsersChangedFlag();
+        
+        if (GroupManager.isLoaded())
+        	GroupManagerEventHandler.callEvent(GMSystemEvent.Action.SAVED);
         
         /*FileWriter tx = null;
         try {
@@ -1191,5 +1215,6 @@ public class WorldDataHolder {
 			setTimeStampGroups(groupsFile.lastModified());
 		if (usersFile != null)
 			setTimeStampUsers(usersFile.lastModified());
-	}
+	}	
+	
 }
