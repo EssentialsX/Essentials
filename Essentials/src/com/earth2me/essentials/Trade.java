@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
+import com.earth2me.essentials.craftbukkit.SetExpFix;
 import static com.earth2me.essentials.I18n._;
 import java.io.File;
 import java.io.FileWriter;
@@ -115,7 +116,7 @@ public class Trade
 		}
 		if (getExperience() != null)
 		{
-			user.setTotalExperience(user.getTotalExperience() + getExperience());
+			SetExpFix.setTotalExperience(user, user.getTotalExperience() + getExperience());
 		}
 		return success;
 	}
@@ -159,7 +160,7 @@ public class Trade
 			{
 				throw new ChargeException(_("notEnoughExperience"));
 			}
-			user.setTotalExperience(experience - getExperience());
+			SetExpFix.setTotalExperience(user, experience - getExperience());
 		}
 	}
 

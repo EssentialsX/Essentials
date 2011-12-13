@@ -55,10 +55,6 @@ commands:
     description: Set a player on fire.
     usage: /<command> <player> <seconds>
     aliases: [eburn]
-  butcher:
-    description: Kill all mobs in a world.
-    usage: /<command> <mobType> <radius>
-    aliases: [ebutcher]
   clearinventory:
     description: Clear all items in your inventory.
     usage: /<command>
@@ -186,6 +182,10 @@ commands:
     description: Kills specified player.
     usage: /<command> <player>
     aliases: [ekill]
+  killall:
+    description: Kill all mobs in a world.
+    usage: /<command> <mobType> <radius>
+    aliases: [ekillall,butcher]
   list:
     description: List all online players.
     usage: /<command>

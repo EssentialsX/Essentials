@@ -6,7 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 //TODO: Sell Enchantment on Trade signs?
 public class SignTrade extends EssentialsSign
-{
+{	
+
 	public SignTrade()
 	{
 		super("Trade");
@@ -267,6 +268,11 @@ public class SignTrade extends EssentialsSign
 		{
 			changeAmount(sign, index, -item.getAmount(), ess);
 		}
+		final Integer exp = trade.getExperience();
+		if (exp != null)
+		{
+			changeAmount(sign, index, -exp.intValue(), ess);
+		}
 	}
 
 	protected final void addAmount(final ISign sign, final int index, final Trade trade, final IEssentials ess) throws SignException
@@ -281,10 +287,16 @@ public class SignTrade extends EssentialsSign
 		{
 			changeAmount(sign, index, item.getAmount(), ess);
 		}
+		final Integer exp = trade.getExperience();
+		if (exp != null)
+		{
+			changeAmount(sign, index, exp.intValue(), ess);
+		}
 	}
 
 	private void changeAmount(final ISign sign, final int index, final double value, final IEssentials ess) throws SignException
 	{
+
 		final String line = sign.getLine(index).trim();
 		if (line.isEmpty())
 		{

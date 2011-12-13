@@ -11,16 +11,8 @@ import org.bukkit.inventory.PlayerInventory;
  * @deprecated This will be moved to the api package soon
  */
 @Deprecated
-public interface IUser
+public interface IUser extends Player
 {
-	int getHealth();
-
-	Location getLocation();
-
-	boolean isOnline();
-
-	void sendMessage(String string);
-
 	long getLastTeleportTimestamp();
 
 	boolean isAuthorized(String node);
@@ -41,10 +33,6 @@ public interface IUser
 
 	void giveMoney(double value);
 
-	PlayerInventory getInventory();
-
-	void updateInventory();
-
 	String getGroup();
 
 	void setLastLocation();
@@ -53,19 +41,9 @@ public interface IUser
 
 	Location getHome(Location loc) throws Exception;
 
-	String getName();
-
-	InetSocketAddress getAddress();
-
-	String getDisplayName();
-
 	boolean isHidden();
 
 	Teleport getTeleport();
 
 	void setJail(String jail);
-
-	public int getTotalExperience();
-
-	public void setTotalExperience(int l);
 }
