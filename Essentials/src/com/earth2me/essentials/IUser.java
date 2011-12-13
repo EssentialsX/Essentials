@@ -65,7 +65,7 @@ public interface IUser
 
 	void setJail(String jail);
 
-	public int getTotalExperience();
+	public int getXP();
 
-	public void setTotalExperience(int l);
+	public void setXP(int l);
 }

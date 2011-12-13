@@ -80,7 +80,7 @@ public class Trade
 		}
 		
 		if (exp != null && exp > 0 
-			&& user.getTotalExperience() < exp) {
+			&& user.getXP() < exp) {
 			throw new ChargeException(_("notEnoughExperience"));
 		}
 	}
@@ -115,7 +115,7 @@ public class Trade
 		}
 		if (getExperience() != null)
 		{
-			user.setTotalExperience(user.getTotalExperience() + getExperience());
+			user.setXP(user.getXP() + getExperience());
 		}
 		return success;
 	}
@@ -154,12 +154,12 @@ public class Trade
 		}
 		if (getExperience() != null)
 		{
-			final int experience = user.getTotalExperience();
+			final int experience = user.getXP();
 			if (experience < getExperience() && getExperience() > 0)
 			{
 				throw new ChargeException(_("notEnoughExperience"));
 			}
-			user.setTotalExperience(experience - getExperience());
+			user.setXP(experience - getExperience());
 		}
 	}
 
