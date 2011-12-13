@@ -196,17 +196,4 @@ public class User extends UserBase implements IUser
 			unlock();
 		}
 	}
-
-	@Override
-	public int getXP()
-	{
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
-
-	@Override
-	public void setXP(int l)
-	{
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
-		
 }

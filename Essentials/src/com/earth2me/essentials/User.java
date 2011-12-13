@@ -25,32 +25,32 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	private boolean hidden = false;
 	private transient Location afkPosition;
 	private static final Logger logger = Logger.getLogger("Minecraft");
-
+	
 	User(final Player base, final IEssentials ess)
 	{
 		super(base, ess);
 		teleport = new Teleport(this, ess);
 		afkPosition = getLocation();
 	}
-
+	
 	User update(final Player base)
 	{
 		setBase(base);
 		return this;
 	}
-
+	
 	@Override
 	public boolean isAuthorized(final IEssentialsCommand cmd)
 	{
 		return isAuthorized(cmd, "essentials.");
 	}
-
+	
 	@Override
 	public boolean isAuthorized(final IEssentialsCommand cmd, final String permissionPrefix)
 	{
 		return isAuthorized(permissionPrefix + (cmd.getName().equals("r") ? "msg" : cmd.getName()));
 	}
-
+	
 	@Override
 	public boolean isAuthorized(final String node)
 	{
@@ -58,20 +58,20 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		{
 			return false;
 		}
-
+		
 		if (isOp())
 		{
 			return true;
 		}
-
+		
 		if (isJailed())
 		{
 			return false;
 		}
-
+		
 		return ess.getPermissionsHandler().hasPermission(base, node);
 	}
-
+	
 	public void healCooldown() throws Exception
 	{
 		final Calendar now = new GregorianCalendar();
@@ -89,13 +89,13 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		}
 		setLastHealTimestamp(now.getTimeInMillis());
 	}
-
+	
 	@Override
 	public void giveMoney(final double value)
 	{
 		giveMoney(value, null);
 	}
-
+	
 	public void giveMoney(final double value, final CommandSender initiator)
 	{
 		if (value == 0)
@@ -109,7 +109,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			initiator.sendMessage(_("addedToOthersAccount", Util.formatCurrency(value, ess), this.getDisplayName()));
 		}
 	}
-
+	
 	public void payUser(final User reciever, final double value) throws Exception
 	{
 		if (value == 0)
@@ -128,13 +128,13 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			throw new Exception(_("notEnoughMoney"));
 		}
 	}
-
+	
 	@Override
 	public void takeMoney(final double value)
 	{
 		takeMoney(value, null);
 	}
-
+	
 	public void takeMoney(final double value, final CommandSender initiator)
 	{
 		if (value == 0)
@@ -148,36 +148,36 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			initiator.sendMessage(_("takenFromOthersAccount", Util.formatCurrency(value, ess), this.getDisplayName()));
 		}
 	}
-
+	
 	public boolean canAfford(final double cost)
 	{
 		final double mon = getMoney();
 		return mon >= cost || isAuthorized("essentials.eco.loan");
 	}
-
+	
 	public void dispose()
 	{
 		this.base = new OfflinePlayer(getName(), ess);
 	}
-
+	
 	@Override
 	public void setReplyTo(final CommandSender user)
 	{
 		replyTo = user;
 	}
-
+	
 	@Override
 	public CommandSender getReplyTo()
 	{
 		return replyTo;
 	}
-
+	
 	@Override
 	public int compareTo(final User other)
 	{
 		return Util.stripColor(this.getDisplayName()).compareToIgnoreCase(Util.stripColor(other.getDisplayName()));
 	}
-
+	
 	@Override
 	public boolean equals(final Object object)
 	{
@@ -186,58 +186,58 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			return false;
 		}
 		return this.getName().equalsIgnoreCase(((User)object).getName());
-
+		
 	}
-
+	
 	@Override
 	public int hashCode()
 	{
-		return this.getName().hashCode();		
+		return this.getName().hashCode();
 	}
-
+	
 	public Boolean canSpawnItem(final int itemId)
 	{
 		return !ess.getSettings().itemSpawnBlacklist().contains(itemId);
 	}
-
+	
 	public Location getHome() throws Exception
 	{
 		return getHome(getHomes().get(0));
 	}
-
+	
 	public void setHome()
 	{
 		setHome("home", getLocation());
 	}
-
+	
 	public void setHome(final String name)
 	{
 		setHome(name, getLocation());
 	}
-
+	
 	@Override
 	public void setLastLocation()
 	{
 		setLastLocation(getLocation());
 	}
-
+	
 	public void requestTeleport(final User player, final boolean here)
 	{
 		teleportRequestTime = System.currentTimeMillis();
 		teleportRequester = player;
 		teleportRequestHere = here;
 	}
-
+	
 	public User getTeleportRequest()
 	{
 		return teleportRequester;
 	}
-
+	
 	public boolean isTeleportRequestHere()
 	{
 		return teleportRequestHere;
 	}
-
+	
 	public String getNick(boolean addprefixsuffix)
 	{
 		final StringBuilder nickname = new StringBuilder();
@@ -261,7 +261,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			{
 			}
 		}
-
+		
 		if (addprefixsuffix && ess.getSettings().addPrefixSuffix())
 		{
 			if (!ess.getSettings().disablePrefix())
@@ -283,10 +283,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 				nickname.append("§f");
 			}
 		}
-
+		
 		return nickname.toString();
 	}
-
+	
 	public void setDisplayNick()
 	{
 		String name = getNick(true);
@@ -308,7 +308,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			logger.log(Level.INFO, "Playerlist for " + name + " was not updated. Use a shorter displayname prefix.");
 		}
 	}
-
+	
 	@Override
 	public String getDisplayName()
 	{
@@ -318,22 +318,22 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		}
 		return super.getDisplayName() == null ? super.getName() : super.getDisplayName();
 	}
-
+	
 	public Teleport getTeleport()
 	{
 		return teleport;
 	}
-
+	
 	public long getLastOnlineActivity()
 	{
 		return lastOnlineActivity;
 	}
-
+	
 	public void setLastOnlineActivity(final long timestamp)
 	{
 		lastOnlineActivity = timestamp;
 	}
-
+	
 	@Override
 	public double getMoney()
 	{
@@ -355,7 +355,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		}
 		return super.getMoney();
 	}
-
+	
 	@Override
 	public void setMoney(final double value)
 	{
@@ -377,7 +377,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		}
 		super.setMoney(value);
 	}
-
+	
 	@Override
 	public void setAfk(final boolean set)
 	{
@@ -388,7 +388,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		}
 		super.setAfk(set);
 	}
-
+	
 	@Override
 	public boolean toggleAfk()
 	{
@@ -396,13 +396,13 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		this.setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") ? true : now);
 		return now;
 	}
-
+	
 	@Override
 	public boolean isHidden()
 	{
 		return hidden;
 	}
-
+	
 	public void setHidden(final boolean hidden)
 	{
 		this.hidden = hidden;
@@ -453,7 +453,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		}
 		return false;
 	}
-
+	
 	public void updateActivity(final boolean broadcast)
 	{
 		if (isAfk())
@@ -466,7 +466,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		}
 		lastActivity = System.currentTimeMillis();
 	}
-
+	
 	public void checkActivity()
 	{
 		final long autoafkkick = ess.getSettings().getAutoAfkKick();
@@ -476,8 +476,8 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			final String kickReason = _("autoAfkKickReason", autoafkkick / 60.0);
 			lastActivity = 0;
 			kickPlayer(kickReason);
-
-
+			
+			
 			for (Player player : ess.getServer().getOnlinePlayers())
 			{
 				final User user = ess.getUser(player);
@@ -497,12 +497,12 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			}
 		}
 	}
-
+	
 	public Location getAfkPosition()
 	{
 		return afkPosition;
 	}
-
+	
 	@Override
 	public boolean toggleGodModeEnabled()
 	{
@@ -512,7 +512,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		}
 		return super.toggleGodModeEnabled();
 	}
-
+	
 	@Override
 	public boolean isGodModeEnabled()
 	{
@@ -524,17 +524,17 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	{
 		return super.isGodModeEnabled();
 	}
-
+	
 	public String getGroup()
 	{
 		return ess.getPermissionsHandler().getGroup(base);
 	}
-
+	
 	public boolean inGroup(final String group)
 	{
 		return ess.getPermissionsHandler().inGroup(base, group);
 	}
-
+	
 	public boolean canBuild()
 	{
 		return ess.getPermissionsHandler().canBuild(base, getGroup());
@@ -543,21 +543,5 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public long getTeleportRequestTime()
 	{
 		return teleportRequestTime;
-	}
-	
-	@Override
-	public int getXP() {
-		return base.getTotalExperience();
-	}
-	
-	@Override
-	public void setXP(final int exp) {
-		base.setExp(0);		
-		base.setLevel(0);
-		base.setTotalExperience(0);
-		for(int i=0;i<exp; ++i) {
-			base.giveExp(1);
-		}		
-	}
-	
+	}	
 }

@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
+import com.earth2me.essentials.craftbukkit.SetExpFix;
 import static com.earth2me.essentials.I18n._;
 import java.io.File;
 import java.io.FileWriter;
@@ -40,8 +41,7 @@ public class Trade
 	
 	public Trade(final int exp, final IEssentials ess)
 	{
-		//TODO: Revert this change, when exp is fixed in Bukkit
-		this(null, (double)exp, null, null, ess);
+		this(null, null, null, exp, ess);
 	}
 
 	private Trade(final String command, final Double money, final ItemStack item, final Integer exp, final IEssentials ess)
@@ -81,7 +81,7 @@ public class Trade
 		}
 		
 		if (exp != null && exp > 0 
-			&& user.getXP() < exp) {
+			&& user.getTotalExperience() < exp) {
 			throw new ChargeException(_("notEnoughExperience"));
 		}
 	}
@@ -116,7 +116,7 @@ public class Trade
 		}
 		if (getExperience() != null)
 		{
-			user.setXP(user.getXP() + getExperience());
+			SetExpFix.setTotalExperience(user, user.getTotalExperience() + getExperience());
 		}
 		return success;
 	}
@@ -155,12 +155,12 @@ public class Trade
 		}
 		if (getExperience() != null)
 		{
-			final int experience = user.getXP();
+			final int experience = user.getTotalExperience();
 			if (experience < getExperience() && getExperience() > 0)
 			{
 				throw new ChargeException(_("notEnoughExperience"));
 			}
-			user.setXP(experience - getExperience());
+			SetExpFix.setTotalExperience(user, experience - getExperience());
 		}
 	}
 
