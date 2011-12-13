@@ -184,8 +184,8 @@ commands:
     aliases: [ekill]
   killall:
     description: Kill all mobs in a world.
-    usage: /<command> <mobType> <radius>
-    aliases: [ekillall,butcher]
+    usage: /<command> [mobType] [radius]
+    aliases: [ekillall,butcher,ebutcher]
   list:
     description: List all online players.
     usage: /<command>
