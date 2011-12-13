@@ -38,8 +38,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.event.Event.Priority;
 import org.bukkit.event.world.WorldListener;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
@@ -90,6 +92,9 @@ public class GroupManager extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		setLoaded(false);
+		
+		// Un-register this service.
+		this.getServer().getServicesManager().unregister(this);
 
 		disableScheduler(); // Shutdown before we save, so it doesn't interfere.
 		if (worldsHolder != null) {
@@ -154,6 +159,9 @@ public class GroupManager extends JavaPlugin {
 		}
 
 		System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
+		
+		// Register as a service
+		this.getServer().getServicesManager().register(AnjoPermissionsHandler.class, this.permissionHandler, this, ServicePriority.Normal);
 	}
 
 	public static boolean isLoaded() {

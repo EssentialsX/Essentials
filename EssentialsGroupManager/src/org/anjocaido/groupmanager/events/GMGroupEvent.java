@@ -25,6 +25,7 @@ public class GMGroupEvent extends GroupManagerEvent {
 
         this.group = group;
         this.action = action;
+        this.groupName = group.getName();
     }
     
     public GMGroupEvent(String groupName, Action action) {

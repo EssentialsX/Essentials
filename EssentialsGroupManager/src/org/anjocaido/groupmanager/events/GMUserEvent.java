@@ -25,6 +25,7 @@ public class GMUserEvent extends GroupManagerEvent {
 
         this.user = user;
         this.action = action;
+        this.userName = user.getName();
     }
     
     public GMUserEvent(String userName, Action action) {
