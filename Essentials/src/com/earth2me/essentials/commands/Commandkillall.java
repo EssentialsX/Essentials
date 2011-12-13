@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.Mob;
 import static com.earth2me.essentials.I18n._;
 import java.util.Collections;
+import java.util.Locale;
 import org.bukkit.Chunk;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -22,11 +23,12 @@ import org.bukkit.entity.WaterMob;
 import org.bukkit.entity.Wolf;
 import org.bukkit.event.entity.EntityDeathEvent;
 
-public class Commandbutcher extends EssentialsCommand
+
+public class Commandkillall extends EssentialsCommand
 {
-	public Commandbutcher()
+	public Commandkillall()
 	{
-		super("butcher");
+		super("killall");
 	}
 
 	//TODO: Tidy - missed this during command cleanup
@@ -79,10 +81,23 @@ public class Commandbutcher extends EssentialsCommand
 				world = ess.getWorld(args[1]);
 			}
 		}
-		if (radius >=0) {
+		if (radius >= 0)
+		{
 			radius *= radius;
 		}
-		String killType = type.toLowerCase();
+		String killType = type.toLowerCase(Locale.ENGLISH);
+		boolean animals = killType.startsWith("animal");
+		boolean monster = killType.startsWith("monster") || killType.startsWith("mob");
+		boolean all = killType.equals("all");
+		Class<? extends Entity> entityClass = null;
+		if (!animals && !monster && !all)
+		{
+			if (Mob.fromName(killType) == null)
+			{
+				throw new Exception(_("invalidMob"));
+			}
+			entityClass = Mob.fromName(killType).getType().getEntityClass();
+		}
 		int numKills = 0;
 		for (Chunk chunk : world.getLoadedChunks())
 		{
@@ -90,7 +105,7 @@ public class Commandbutcher extends EssentialsCommand
 			{
 				if (sender instanceof Player)
 				{
-					if (((Player)sender).getLocation().distanceSquared(entity.getLocation()) > radius && radius >= 0)
+					if (radius >= 0 && ((Player)sender).getLocation().distanceSquared(entity.getLocation()) > radius)
 					{
 						continue;
 					}
@@ -106,7 +121,7 @@ public class Commandbutcher extends EssentialsCommand
 						continue;
 					}
 				}
-				if (killType.contains("animal"))
+				if (animals)
 				{
 					if (entity instanceof Animals || entity instanceof NPC || entity instanceof Snowman || entity instanceof WaterMob)
 					{
@@ -116,7 +131,7 @@ public class Commandbutcher extends EssentialsCommand
 						numKills++;
 					}
 				}
-				else if (killType.contains("monster"))
+				else if (monster)
 				{
 					if (entity instanceof Monster || entity instanceof ComplexLivingEntity || entity instanceof Flying || entity instanceof Slime)
 					{
@@ -126,22 +141,19 @@ public class Commandbutcher extends EssentialsCommand
 						numKills++;
 					}
 				}
-				else if (killType.contains("all"))
+				else if (all)
 				{
 					EntityDeathEvent event = new EntityDeathEvent(entity, Collections.EMPTY_LIST);
 					ess.getServer().getPluginManager().callEvent(event);
 					entity.remove();
 					numKills++;
 				}
-				else
+				else if (entityClass != null && entityClass.isAssignableFrom(entity.getClass()))
 				{
-					if (Mob.fromName(killType).getType().getEntityClass().isAssignableFrom(entity.getClass()))
-					{
-						EntityDeathEvent event = new EntityDeathEvent(entity, Collections.EMPTY_LIST);
-						ess.getServer().getPluginManager().callEvent(event);
-						entity.remove();
-						numKills++;
-					}
+					EntityDeathEvent event = new EntityDeathEvent(entity, Collections.EMPTY_LIST);
+					ess.getServer().getPluginManager().callEvent(event);
+					entity.remove();
+					numKills++;
 				}
 			}
 		}
