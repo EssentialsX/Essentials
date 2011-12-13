@@ -64,6 +64,8 @@ public class Commandheal extends EssentialsCommand
 				continue;
 			}
 			p.setHealth(20);
+			p.setFoodLevel(20);
+			p.sendMessage(_("heal"));
 			sender.sendMessage(_("healOther", p.getDisplayName()));
 		}
 	}
