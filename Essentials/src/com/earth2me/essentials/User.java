@@ -551,14 +551,13 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	}
 	
 	@Override
-	public void setXP(int l) {
+	public void setXP(final int exp) {
 		base.setExp(0);		
 		base.setLevel(0);
 		base.setTotalExperience(0);
-		for(int i=0;i<l; ++i) {
+		for(int i=0;i<exp; ++i) {
 			base.giveExp(1);
 		}		
-		this.sendMessage("new exp: " + base.getExp() + " total exp: " + base.getTotalExperience());
 	}
 	
 }
