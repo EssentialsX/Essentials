@@ -26,6 +26,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.anjocaido.groupmanager.dataholder.worlds.WorldsHolder;
 import org.anjocaido.groupmanager.events.GMWorldListener;
+import org.anjocaido.groupmanager.events.GroupManagerEvent;
 import org.anjocaido.groupmanager.utils.GMLoggerHandler;
 import org.anjocaido.groupmanager.utils.PermissionCheckResult;
 import org.anjocaido.groupmanager.utils.Tasks;
@@ -1828,6 +1829,15 @@ public class GroupManager extends JavaPlugin {
 		return match;
 
 	}
+	
+	/**
+	 * Triggers all GroupManager events for other plugins to see.
+	 * 
+	 * @param event
+	 */
+	public static void callEvent(GroupManagerEvent event) {
+        Bukkit.getServer().getPluginManager().callEvent(event);
+    }
 
 	/**
 	 * @return the config

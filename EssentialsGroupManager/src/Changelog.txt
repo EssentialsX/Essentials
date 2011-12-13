@@ -83,3 +83,4 @@ v 1.6:
 v 1.7:
 	- GM now supports offline players without having to mantogglevalidate
 	- Offline player checks now support partial name matches.
+	- Added custom events so plugins can now be notified of changes within GroupManager.
