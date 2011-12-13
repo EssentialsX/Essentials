@@ -40,7 +40,8 @@ public class Trade
 	
 	public Trade(final int exp, final IEssentials ess)
 	{
-		this(null, null, null, exp, ess);
+		//TODO: Revert this change, when exp is fixed in Bukkit
+		this(null, (double)exp, null, null, ess);
 	}
 
 	private Trade(final String command, final Double money, final ItemStack item, final Integer exp, final IEssentials ess)
