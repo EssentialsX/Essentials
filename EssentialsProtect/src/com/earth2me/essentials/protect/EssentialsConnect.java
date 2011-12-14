@@ -1,8 +1,8 @@
 package com.earth2me.essentials.protect;
 
-import com.earth2me.essentials.IConf;
-import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IReload;
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.protect.data.ProtectedBlockMemory;
 import com.earth2me.essentials.protect.data.ProtectedBlockMySQL;
 import com.earth2me.essentials.protect.data.ProtectedBlockSQLite;
@@ -45,7 +45,7 @@ public class EssentialsConnect
 		return ess;
 	}
 
-	public void alert(final User user, final String item, final String type)
+	public void alert(final IUser user, final String item, final String type)
 	{
 		final Location loc = user.getLocation();
 		final String warnMessage = _("alertFormat", user.getName(), type, item,
@@ -54,7 +54,7 @@ public class EssentialsConnect
 		LOGGER.log(Level.WARNING, warnMessage);
 		for (Player p : ess.getServer().getOnlinePlayers())
 		{
-			final User alertUser = ess.getUser(p);
+			final IUser alertUser = ess.getUser(p);
 			if (alertUser.isAuthorized("essentials.protect.alerts"))
 			{
 				alertUser.sendMessage(warnMessage);
@@ -63,10 +63,10 @@ public class EssentialsConnect
 	}
 
 
-	private class ProtectReloader implements IConf
+	private class ProtectReloader implements IReload
 	{
 		@Override
-		public void reloadConfig()
+		public void onReload()
 		{
 			if (protect.getStorage() != null)
 			{

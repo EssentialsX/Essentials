@@ -1,12 +1,12 @@
 package com.earth2me.essentials.xmpp;
 
 import com.earth2me.essentials.EssentialsConf;
-import com.earth2me.essentials.IConf;
+import com.earth2me.essentials.api.IReload;
 import java.io.File;
 import java.util.*;
 
 
-public class UserManager implements IConf
+public class UserManager implements IReload
 {
 	private final transient EssentialsConf users;
 	private final transient List<String> spyusers = new ArrayList<String>();
@@ -16,7 +16,7 @@ public class UserManager implements IConf
 	public UserManager(final File folder)
 	{
 		users = new EssentialsConf(new File(folder, "users.yml"));
-		reloadConfig();
+		onReload();
 	}
 
 	public final boolean isSpy(final String username)
@@ -65,11 +65,11 @@ public class UserManager implements IConf
 		userdata.put(SPY, spy);
 		users.setProperty(username, userdata);
 		users.save();
-		reloadConfig();
+		onReload();
 	}
 
 	@Override
-	public final void reloadConfig()
+	public final void onReload()
 	{
 		users.load();
 		spyusers.clear();

@@ -1,7 +1,7 @@
 package com.earth2me.essentials.xmpp;
 
-import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.IUser;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
@@ -21,21 +21,21 @@ class EssentialsXMPPPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
-		final User user = ess.getUser(event.getPlayer());
+		final IUser user = ess.getUser(event.getPlayer());
 		sendMessageToSpyUsers("Player " + user.getDisplayName() + " joined the game");
 	}
 
 	@Override
 	public void onPlayerChat(final PlayerChatEvent event)
 	{
-		final User user = ess.getUser(event.getPlayer());
+		final IUser user = ess.getUser(event.getPlayer());
 		sendMessageToSpyUsers(String.format(event.getFormat(), user.getDisplayName(), event.getMessage()));
 	}
 
 	@Override
 	public void onPlayerQuit(final PlayerQuitEvent event)
 	{
-		final User user = ess.getUser(event.getPlayer());
+		final IUser user = ess.getUser(event.getPlayer());
 		sendMessageToSpyUsers("Player " + user.getDisplayName() + " left the game");
 	}
 

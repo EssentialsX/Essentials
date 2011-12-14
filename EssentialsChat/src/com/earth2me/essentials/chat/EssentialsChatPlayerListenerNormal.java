@@ -1,8 +1,8 @@
 package com.earth2me.essentials.chat;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.IUser;
 import java.util.Locale;
 import java.util.Map;
 import org.bukkit.Server;
@@ -48,7 +48,7 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer
 			return;
 		}
 		radius *= radius;
-		final User user = ess.getUser(event.getPlayer());
+		final IUser user = ess.getUser(event.getPlayer());
 
 		if (event.getMessage().length() > 0 && chatType.length() > 0)
 		{

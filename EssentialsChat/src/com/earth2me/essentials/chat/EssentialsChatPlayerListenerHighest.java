@@ -1,8 +1,8 @@
 package com.earth2me.essentials.chat;
 
 import com.earth2me.essentials.ChargeException;
-import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.IUser;
 import java.util.Map;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerChatEvent;
@@ -37,7 +37,7 @@ public class EssentialsChatPlayerListenerHighest extends EssentialsChatPlayer
 		/**
 		 * This file should handle charging the user for the action before returning control back
 		 */
-		final User user = ess.getUser(event.getPlayer());
+		final IUser user = ess.getUser(event.getPlayer());
 
 		try
 		{
@@ -45,7 +45,7 @@ public class EssentialsChatPlayerListenerHighest extends EssentialsChatPlayer
 		}
 		catch (ChargeException e)
 		{
-			ess.showError(user, e, charge);
+			ess.getCommandHandler().showCommandError(user, charge, e);
 			event.setCancelled(true);
 			return;
 		}

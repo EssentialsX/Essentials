@@ -1,8 +1,8 @@
 package com.earth2me.essentials.protect;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.protect.data.IProtectedBlock;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 			return;
 		}
 
-		final User user = ess.getUser(event.getPlayer());
+		final IUser user = ess.getUser(event.getPlayer());
 
 		if (prot.getSettingBool(ProtectConfig.disable_build) && !user.canBuild())
 		{
@@ -228,7 +228,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 		{
 			return;
 		}
-		final User user = ess.getUser(event.getPlayer());
+		final IUser user = ess.getUser(event.getPlayer());
 
 		if (prot.getSettingBool(ProtectConfig.disable_build) && !user.canBuild())
 		{

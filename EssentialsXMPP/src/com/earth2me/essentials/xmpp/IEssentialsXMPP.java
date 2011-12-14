@@ -1,6 +1,6 @@
 package com.earth2me.essentials.xmpp;
 
-import com.earth2me.essentials.IUser;
+import com.earth2me.essentials.api.IUser;
 import java.util.List;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;

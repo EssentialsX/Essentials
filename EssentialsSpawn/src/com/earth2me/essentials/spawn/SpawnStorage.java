@@ -1,7 +1,7 @@
 package com.earth2me.essentials.spawn;
 
-import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.IEssentialsModule;
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.IEssentialsModule;
 import com.earth2me.essentials.settings.Spawns;
 import com.earth2me.essentials.storage.AsyncStorageObjectHolder;
 import java.io.File;
@@ -17,7 +17,7 @@ public class SpawnStorage extends AsyncStorageObjectHolder<Spawns> implements IE
 	public SpawnStorage(final IEssentials ess)
 	{
 		super(ess, Spawns.class);
-		reloadConfig();
+		onReload();
 	}
 
 	@Override

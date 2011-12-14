@@ -1,7 +1,7 @@
 package com.earth2me.essentials.protect;
 
-import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.craftbukkit.FakeExplosion;
 import java.util.Locale;
 import org.bukkit.Material;
@@ -39,7 +39,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 			return;
 		}
 
-		final User user = ess.getUser(target);
+		final IUser user = target instanceof Player ? ess.getUser((Player)target) : null;
 		if (event instanceof EntityDamageByBlockEvent)
 		{
 			final DamageCause cause = event.getCause();
@@ -77,7 +77,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 		{
 			final EntityDamageByEntityEvent edEvent = (EntityDamageByEntityEvent)event;
 			final Entity eAttack = edEvent.getDamager();
-			final User attacker = ess.getUser(eAttack);
+			final IUser attacker = eAttack instanceof Player ? ess.getUser((Player)eAttack) : null;
 
 			// PVP Settings
 			if (target instanceof Player && eAttack instanceof Player
@@ -134,7 +134,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 					|| (((Projectile)edEvent.getDamager()).getShooter() instanceof Player
 						&& prot.getSettingBool(ProtectConfig.disable_pvp)
 						&& (!user.isAuthorized("essentials.protect.pvp")
-							|| !ess.getUser(((Projectile)edEvent.getDamager()).getShooter()).isAuthorized("essentials.protect.pvp")))))
+							|| !ess.getUser((Player)((Projectile)edEvent.getDamager()).getShooter()).isAuthorized("essentials.protect.pvp")))))
 			{
 				event.setCancelled(true);
 				return;
@@ -299,7 +299,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 		{
 			return;
 		}
-		final User user = ess.getUser(event.getTarget());
+		final IUser user = ess.getUser((Player)event.getTarget());
 		if ((event.getReason() == TargetReason.CLOSEST_PLAYER
 			 || event.getReason() == TargetReason.TARGET_ATTACKED_ENTITY
 			 || event.getReason() == TargetReason.PIG_ZOMBIE_TARGET

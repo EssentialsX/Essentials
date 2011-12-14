@@ -1,7 +1,7 @@
 package com.earth2me.essentials.chat;
 
-import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.IUser;
 import java.util.Locale;
 import java.util.Map;
 import org.bukkit.Server;
@@ -28,7 +28,7 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer
 		/**
 		 * This listener should apply the general chat formatting only...then return control back the event handler
 		 */
-		final User user = ess.getUser(event.getPlayer());
+		final IUser user = ess.getUser(event.getPlayer());
 		if (user.isAuthorized("essentials.chat.color"))
 		{
 			event.setMessage(event.getMessage().replaceAll("&([0-9a-f])", "\u00a7$1"));

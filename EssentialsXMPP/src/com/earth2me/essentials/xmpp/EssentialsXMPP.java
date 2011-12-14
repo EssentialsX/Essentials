@@ -1,8 +1,10 @@
 package com.earth2me.essentials.xmpp;
 
+import com.earth2me.essentials.EssentialsCommandHandler;
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.IUser;
+import com.earth2me.essentials.api.ICommandHandler;
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.IUser;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
@@ -23,6 +25,7 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 	private transient UserManager users;
 	private transient XMPPManager xmpp;
 	private transient IEssentials ess;
+	private transient ICommandHandler commandHandler;
 
 	public static IEssentialsXMPP getInstance()
 	{
@@ -56,6 +59,8 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 
 		ess.addReloadListener(users);
 		ess.addReloadListener(xmpp);
+		
+		commandHandler = new EssentialsCommandHandler(EssentialsXMPP.class.getClassLoader(), "com.earth2me.essentials.xmpp.Command", "essentials.", ess);
 
 		LOGGER.info(_("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
 	}
@@ -73,7 +78,7 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args)
 	{
-		return ess.onCommandEssentials(sender, command, commandLabel, args, EssentialsXMPP.class.getClassLoader(), "com.earth2me.essentials.xmpp.Command", "essentials.", null);
+		return commandHandler.handleCommand(sender, command, commandLabel, args);
 	}
 
 	@Override

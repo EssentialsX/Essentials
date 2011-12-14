@@ -1,8 +1,8 @@
 package com.earth2me.essentials.spawn;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.IUser;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -27,7 +27,7 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerRespawn(final PlayerRespawnEvent event)
 	{
-		final User user = ess.getUser(event.getPlayer());
+		final IUser user = ess.getUser(event.getPlayer());
 
 		if (ess.getSettings().getRespawnAtHome())
 		{
@@ -52,7 +52,7 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
-		final User user = ess.getUser(event.getPlayer());
+		final IUser user = ess.getUser(event.getPlayer());
 
 		if (!user.isNew() || user.getBedSpawnLocation() != null)
 		{
@@ -73,9 +73,9 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 
 	private class NewPlayerTeleport implements Runnable
 	{
-		private final transient User user;
+		private final transient IUser user;
 
-		public NewPlayerTeleport(final User user)
+		public NewPlayerTeleport(final IUser user)
 		{
 			this.user = user;
 		}

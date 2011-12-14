@@ -2,9 +2,9 @@ package com.earth2me.essentials.chat;
 
 import com.earth2me.essentials.ChargeException;
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.Trade;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IUser;
 import java.util.Map;
 import java.util.logging.Logger;
 import org.bukkit.Location;
@@ -53,7 +53,7 @@ public abstract class EssentialsChatPlayer extends PlayerListener
 			}
 		}
 
-		final User user = ess.getUser(event.getPlayer());
+		final IUser user = ess.getUser(event.getPlayer());
 		if (!isAffordableFor(user, command))
 		{
 			event.setCancelled(true);
@@ -106,7 +106,7 @@ public abstract class EssentialsChatPlayer extends PlayerListener
 		return true;
 	}
 
-	protected void sendLocalChat(final User sender, final long radius, final PlayerChatEvent event)
+	protected void sendLocalChat(final IUser sender, final long radius, final PlayerChatEvent event)
 	{
 		event.setCancelled(true);
 		logger.info(_("localFormat", sender.getName(), event.getMessage()));
@@ -116,9 +116,9 @@ public abstract class EssentialsChatPlayer extends PlayerListener
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
 			String type = "[L]";
-			final User user = ess.getUser(onlinePlayer);
+			final IUser user = ess.getUser(onlinePlayer);
 			//TODO: remove reference to op 
-			if (user.isIgnoredPlayer(sender.getName()) && !sender.isOp())
+			if (user.isIgnoringPlayer(sender.getName()) && !sender.isOp())
 			{
 				continue;
 			}

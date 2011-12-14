@@ -2,9 +2,9 @@ package com.earth2me.essentials.geoip;
 
 import com.earth2me.essentials.EssentialsConf;
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.IConf;
-import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.IReload;
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.IUser;
 import com.maxmind.geoip.Location;
 import com.maxmind.geoip.LookupService;
 import com.maxmind.geoip.regionName;
@@ -21,7 +21,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 
 
-public class EssentialsGeoIPPlayerListener extends PlayerListener implements IConf
+public class EssentialsGeoIPPlayerListener extends PlayerListener implements IReload
 {
 	LookupService ls = null;
 	private static final Logger logger = Logger.getLogger("Minecraft");
@@ -36,13 +36,13 @@ public class EssentialsGeoIPPlayerListener extends PlayerListener implements ICo
 		this.dataFolder = dataFolder;
 		this.config = new EssentialsConf(new File(dataFolder, "config.yml"));
 		config.setTemplateName("/config.yml", EssentialsGeoIP.class);
-		reloadConfig();
+		onReload();
 	}
 
 	@Override
 	public void onPlayerJoin(PlayerJoinEvent event)
 	{
-		User u = ess.getUser(event.getPlayer());
+		IUser u = ess.getUser(event.getPlayer());
 		if (u.isAuthorized("essentials.geoip.hide"))
 		{
 			return;
@@ -73,13 +73,21 @@ public class EssentialsGeoIPPlayerListener extends PlayerListener implements ICo
 		}
 		if (config.getBoolean("show-on-whois", true))
 		{
-			u.setGeoLocation(sb.toString());
+			u.acquireWriteLock();
+			try
+			{
+				u.getData().setGeolocation(sb.toString());
+			}
+			finally
+			{
+				u.unlock();
+			}
 		}
 		if (config.getBoolean("show-on-login", true) && !u.isHidden())
 		{
 			for (Player player : event.getPlayer().getServer().getOnlinePlayers())
 			{
-				User user = ess.getUser(player);
+				IUser user = ess.getUser(player);
 				if (user.isAuthorized("essentials.geoip.show"))
 				{
 					user.sendMessage(_("geoipJoinFormat", u.getDisplayName(), sb.toString()));
@@ -89,7 +97,7 @@ public class EssentialsGeoIPPlayerListener extends PlayerListener implements ICo
 	}
 
 	@Override
-	public final void reloadConfig()
+	public final void onReload()
 	{
 		config.load();
 

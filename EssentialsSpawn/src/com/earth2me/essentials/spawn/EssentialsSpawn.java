@@ -1,8 +1,10 @@
 package com.earth2me.essentials.spawn;
 
+import com.earth2me.essentials.EssentialsCommandHandler;
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.IEssentialsModule;
+import com.earth2me.essentials.api.ICommandHandler;
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.IEssentialsModule;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
@@ -19,6 +21,7 @@ public class EssentialsSpawn extends JavaPlugin
 	private static final Logger LOGGER = Bukkit.getLogger();
 	private transient IEssentials ess;
 	private transient SpawnStorage spawns;
+	private transient ICommandHandler commandHandler;
 
 	public void onEnable()
 	{
@@ -36,6 +39,8 @@ public class EssentialsSpawn extends JavaPlugin
 
 		spawns = new SpawnStorage(ess);
 		ess.addReloadListener(spawns);
+		
+		commandHandler = new EssentialsCommandHandler(EssentialsSpawn.class.getClassLoader(), "com.earth2me.essentials.spawn.Command", "essentials.", spawns, ess);
 
 		final EssentialsSpawnPlayerListener playerListener = new EssentialsSpawnPlayerListener(ess, spawns);
 		pluginManager.registerEvent(Type.PLAYER_RESPAWN, playerListener, ess.getSettings().getRespawnPriority(), this);
@@ -52,6 +57,6 @@ public class EssentialsSpawn extends JavaPlugin
 	public boolean onCommand(final CommandSender sender, final Command command,
 							 final String commandLabel, final String[] args)
 	{
-		return ess.onCommandEssentials(sender, command, commandLabel, args, EssentialsSpawn.class.getClassLoader(), "com.earth2me.essentials.spawn.Command", "essentials.", spawns);
+		return commandHandler.handleCommand(sender, command, commandLabel, args);
 	}
 }
