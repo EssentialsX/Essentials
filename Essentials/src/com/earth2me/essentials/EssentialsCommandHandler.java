@@ -62,7 +62,7 @@ public class EssentialsCommandHandler implements ICommandHandler
 	public boolean handleCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args)
 	{
 		// Allow plugins to override the command via onCommand
-		if (!ess.getSettings().isCommandOverridden(command.getName()) && !commandLabel.startsWith("e"))
+		if (!ess.getSettings().isCommandOverridden(command.getName()) && (!commandLabel.startsWith("e") || commandLabel.equalsIgnoreCase(command.getName()))
 		{
 			final PluginCommand pc = getAlternative(commandLabel);
 			if (pc != null)

@@ -275,6 +275,13 @@ public class EssentialsSign
 	protected final void validateTrade(final ISign sign, final int amountIndex, final int itemIndex,
 									   final IUser player, final IEssentials ess) throws SignException
 	{
+		if (sign.getLine(itemIndex).equalsIgnoreCase("exp") || sign.getLine(itemIndex).equalsIgnoreCase("xp"))
+		{
+			int amount = getIntegerPositive(sign.getLine(amountIndex));
+			sign.setLine(amountIndex, Integer.toString(amount));
+			sign.setLine(itemIndex, "exp");
+			return;
+		}
 		final Trade trade = getTrade(sign, amountIndex, itemIndex, player, ess);
 		final ItemStack item = trade.getItemStack();
 		sign.setLine(amountIndex, Integer.toString(item.getAmount()));
@@ -284,7 +291,11 @@ public class EssentialsSign
 	protected final Trade getTrade(final ISign sign, final int amountIndex, final int itemIndex,
 								   final IUser player, final IEssentials ess) throws SignException
 	{
-
+		if (sign.getLine(itemIndex).equalsIgnoreCase("exp") || sign.getLine(itemIndex).equalsIgnoreCase("xp"))
+		{
+			final int amount = getIntegerPositive(sign.getLine(amountIndex));
+			return new Trade(amount, ess);
+		}
 		final ItemStack item = getItemStack(sign.getLine(itemIndex), 1, ess);
 		final int amount = Math.min(getIntegerPositive(sign.getLine(amountIndex)), item.getType().getMaxStackSize() * player.getInventory().getSize());
 		if (item.getTypeId() == 0 || amount < 1)

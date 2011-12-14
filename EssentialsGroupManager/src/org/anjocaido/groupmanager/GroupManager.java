@@ -16,6 +16,7 @@ import org.anjocaido.groupmanager.dataholder.WorldDataHolder;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,18 +26,22 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.anjocaido.groupmanager.dataholder.worlds.WorldsHolder;
 import org.anjocaido.groupmanager.events.GMWorldListener;
+import org.anjocaido.groupmanager.events.GroupManagerEvent;
 import org.anjocaido.groupmanager.utils.GMLoggerHandler;
 import org.anjocaido.groupmanager.utils.PermissionCheckResult;
 import org.anjocaido.groupmanager.utils.Tasks;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.event.Event.Priority;
 import org.bukkit.event.world.WorldListener;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
@@ -87,6 +92,9 @@ public class GroupManager extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		setLoaded(false);
+		
+		// Un-register this service.
+		this.getServer().getServicesManager().unregister(this);
 
 		disableScheduler(); // Shutdown before we save, so it doesn't interfere.
 		if (worldsHolder != null) {
@@ -151,6 +159,9 @@ public class GroupManager extends JavaPlugin {
 		}
 
 		System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
+		
+		// Register as a service
+		this.getServer().getServicesManager().register(AnjoPermissionsHandler.class, this.permissionHandler, this, ServicePriority.Normal);
 	}
 
 	public static boolean isLoaded() {
@@ -325,7 +336,7 @@ public class GroupManager extends JavaPlugin {
 		PermissionCheckResult permissionResult = null;
 		ArrayList<User> removeList = null;
 		String auxString = null;
-		List<Player> match = null;
+		List<String> match = null;
 		User auxUser = null;
 		Group auxGroup = null;
 		Group auxGroup2 = null;
@@ -373,15 +384,12 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player> <group>)");
 					return false;
 				}
-				if (validateOnlinePlayer) {
-					match = this.getServer().matchPlayer(args[0]);
-					if (match.size() != 1) {
-						sender.sendMessage(ChatColor.RED + "Player not found!");
+				if ((validateOnlinePlayer) && ((match = validatePlayer(args[0], sender)) == null)) {
 						return false;
-					}
 				}
+				
 				if (match != null) {
-					auxUser = dataHolder.getUser(match.get(0).getName());
+					auxUser = dataHolder.getUser(match.get(0));
 				} else {
 					auxUser = dataHolder.getUser(args[0]);
 				}
@@ -427,15 +435,12 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player>)");
 					return false;
 				}
-				if (validateOnlinePlayer) {
-					match = this.getServer().matchPlayer(args[0]);
-					if (match.size() != 1) {
-						sender.sendMessage(ChatColor.RED + "Player not found!");
+				if ((validateOnlinePlayer) && ((match = validatePlayer(args[0], sender)) == null)) {
 						return false;
-					}
 				}
+				
 				if (match != null) {
-					auxUser = dataHolder.getUser(match.get(0).getName());
+					auxUser = dataHolder.getUser(match.get(0));
 				} else {
 					auxUser = dataHolder.getUser(args[0]);
 				}
@@ -467,15 +472,12 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player> <group>)");
 					return false;
 				}
-				if (validateOnlinePlayer) {
-					match = this.getServer().matchPlayer(args[0]);
-					if (match.size() != 1) {
-						sender.sendMessage(ChatColor.RED + "Player not found!");
+				if ((validateOnlinePlayer) && ((match = validatePlayer(args[0], sender)) == null)) {
 						return false;
-					}
 				}
+				
 				if (match != null) {
-					auxUser = dataHolder.getUser(match.get(0).getName());
+					auxUser = dataHolder.getUser(match.get(0));
 				} else {
 					auxUser = dataHolder.getUser(args[0]);
 				}
@@ -509,15 +511,12 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/manudelsub <user> <group>)");
 					return false;
 				}
-				if (validateOnlinePlayer) {
-					match = this.getServer().matchPlayer(args[0]);
-					if (match.size() != 1) {
-						sender.sendMessage(ChatColor.RED + "Player not found!");
+				if ((validateOnlinePlayer) && ((match = validatePlayer(args[0], sender)) == null)) {
 						return false;
-					}
 				}
+				
 				if (match != null) {
-					auxUser = dataHolder.getUser(match.get(0).getName());
+					auxUser = dataHolder.getUser(match.get(0));
 				} else {
 					auxUser = dataHolder.getUser(args[0]);
 				}
@@ -596,15 +595,12 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player> <permission>)");
 					return false;
 				}
-				if (validateOnlinePlayer) {
-					match = this.getServer().matchPlayer(args[0]);
-					if (match.size() != 1) {
-						sender.sendMessage(ChatColor.RED + "Player not found!");
+				if ((validateOnlinePlayer) && ((match = validatePlayer(args[0], sender)) == null)) {
 						return false;
-					}
 				}
+				
 				if (match != null) {
-					auxUser = dataHolder.getUser(match.get(0).getName());
+					auxUser = dataHolder.getUser(match.get(0));
 				} else {
 					auxUser = dataHolder.getUser(args[0]);
 				}
@@ -664,15 +660,12 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player> <permission>)");
 					return false;
 				}
-				if (validateOnlinePlayer) {
-					match = this.getServer().matchPlayer(args[0]);
-					if (match.size() != 1) {
-						sender.sendMessage(ChatColor.RED + "Player not found!");
+				if ((validateOnlinePlayer) && ((match = validatePlayer(args[0], sender)) == null)) {
 						return false;
-					}
 				}
+				
 				if (match != null) {
-					auxUser = dataHolder.getUser(match.get(0).getName());
+					auxUser = dataHolder.getUser(match.get(0));
 				} else {
 					auxUser = dataHolder.getUser(args[0]);
 				}
@@ -718,17 +711,13 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player> (+))");
 					return false;
 				}
-
-				if (validateOnlinePlayer) {
-					match = this.getServer().matchPlayer(args[0]);
-					if (match.size() != 1) {
-						sender.sendMessage(ChatColor.RED + "Player not found!");
+				
+				if ((validateOnlinePlayer) && ((match = validatePlayer(args[0], sender)) == null)) {
 						return false;
-					} else
-						targetPlayer = this.getServer().getPlayer(match.get(0).getName());
 				}
+				
 				if (match != null) {
-					auxUser = dataHolder.getUser(match.get(0).getName());
+					auxUser = dataHolder.getUser(match.get(0));
 				} else {
 					auxUser = dataHolder.getUser(args[0]);
 				}
@@ -765,6 +754,7 @@ public class GroupManager extends JavaPlugin {
 
 				// bukkit perms
 				if ((args.length == 2) && (args[1].equalsIgnoreCase("+"))) {
+					targetPlayer = this.getServer().getPlayer(auxUser.getName());
 					if (targetPlayer != null) {
 						sender.sendMessage(ChatColor.YELLOW + "Superperms reports: ");
 						for (String line : BukkitPermissions.listPerms(targetPlayer))
@@ -786,19 +776,16 @@ public class GroupManager extends JavaPlugin {
 					return false;
 				}
 
-				if (validateOnlinePlayer) {
-					match = this.getServer().matchPlayer(args[0]);
-					if (match.size() != 1) {
-						sender.sendMessage(ChatColor.RED + "Player not found!");
+				if ((validateOnlinePlayer) && ((match = validatePlayer(args[0], sender)) == null)) {
 						return false;
-					} else
-						targetPlayer = this.getServer().getPlayer(match.get(0).getName());
 				}
+				
 				if (match != null) {
-					auxUser = dataHolder.getUser(match.get(0).getName());
+					auxUser = dataHolder.getUser(match.get(0));
 				} else {
 					auxUser = dataHolder.getUser(args[0]);
 				}
+				targetPlayer = this.getServer().getPlayer(auxUser.getName());
 				// VALIDANDO PERMISSAO
 				permissionResult = permissionHandler.checkFullUserPermission(auxUser, args[1]);
 				if (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND)) {
@@ -1089,15 +1076,12 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <user> <variable> <value>)");
 					return false;
 				}
-				if (validateOnlinePlayer) {
-					match = this.getServer().matchPlayer(args[0]);
-					if (match.size() != 1) {
-						sender.sendMessage(ChatColor.RED + "Player not found!");
+				if ((validateOnlinePlayer) && ((match = validatePlayer(args[0], sender)) == null)) {
 						return false;
-					}
 				}
+				
 				if (match != null) {
-					auxUser = dataHolder.getUser(match.get(0).getName());
+					auxUser = dataHolder.getUser(match.get(0));
 				} else {
 					auxUser = dataHolder.getUser(args[0]);
 				}
@@ -1124,15 +1108,12 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <user> <variable>)");
 					return false;
 				}
-				if (validateOnlinePlayer) {
-					match = this.getServer().matchPlayer(args[0]);
-					if (match.size() != 1) {
-						sender.sendMessage(ChatColor.RED + "Player not found!");
+				if ((validateOnlinePlayer) && ((match = validatePlayer(args[0], sender)) == null)) {
 						return false;
-					}
 				}
+				
 				if (match != null) {
-					auxUser = dataHolder.getUser(match.get(0).getName());
+					auxUser = dataHolder.getUser(match.get(0));
 				} else {
 					auxUser = dataHolder.getUser(args[0]);
 				}
@@ -1155,15 +1136,11 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <user>)");
 					return false;
 				}
-				if (validateOnlinePlayer) {
-					match = this.getServer().matchPlayer(args[0]);
-					if (match.size() != 1) {
-						sender.sendMessage(ChatColor.RED + "Player not found!");
+				if ((validateOnlinePlayer) && ((match = validatePlayer(args[0], sender)) == null)) {
 						return false;
-					}
 				}
 				if (match != null) {
-					auxUser = dataHolder.getUser(match.get(0).getName());
+					auxUser = dataHolder.getUser(match.get(0));
 				} else {
 					auxUser = dataHolder.getUser(args[0]);
 				}
@@ -1192,15 +1169,11 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <user> <variable>)");
 					return false;
 				}
-				if (validateOnlinePlayer) {
-					match = this.getServer().matchPlayer(args[0]);
-					if (match.size() != 1) {
-						sender.sendMessage(ChatColor.RED + "Player not found!");
+				if ((validateOnlinePlayer) && ((match = validatePlayer(args[0], sender)) == null)) {
 						return false;
-					}
 				}
 				if (match != null) {
-					auxUser = dataHolder.getUser(match.get(0).getName());
+					auxUser = dataHolder.getUser(match.get(0));
 				} else {
 					auxUser = dataHolder.getUser(args[0]);
 				}
@@ -1359,15 +1332,11 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player>)");
 					return false;
 				}
-				if (validateOnlinePlayer) {
-					match = this.getServer().matchPlayer(args[0]);
-					if (match.size() != 1) {
-						sender.sendMessage(ChatColor.RED + "Player not found!");
+				if ((validateOnlinePlayer) && ((match = validatePlayer(args[0], sender)) == null)) {
 						return false;
-					}
 				}
 				if (match != null) {
-					auxUser = dataHolder.getUser(match.get(0).getName());
+					auxUser = dataHolder.getUser(match.get(0));
 				} else {
 					auxUser = dataHolder.getUser(args[0]);
 				}
@@ -1393,15 +1362,11 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player>)");
 					return false;
 				}
-				if (validateOnlinePlayer) {
-					match = this.getServer().matchPlayer(args[0]);
-					if (match.size() != 1) {
-						sender.sendMessage(ChatColor.RED + "Player not found!");
+				if ((validateOnlinePlayer) && ((match = validatePlayer(args[0], sender)) == null)) {
 						return false;
-					}
 				}
 				if (match != null) {
-					auxUser = dataHolder.getUser(match.get(0).getName());
+					auxUser = dataHolder.getUser(match.get(0));
 				} else {
 					auxUser = dataHolder.getUser(args[0]);
 				}
@@ -1431,15 +1396,11 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player>)");
 					return false;
 				}
-				if (validateOnlinePlayer) {
-					match = this.getServer().matchPlayer(args[0]);
-					if (match.size() != 1) {
-						sender.sendMessage(ChatColor.RED + "Player not found!");
+				if ((validateOnlinePlayer) && ((match = validatePlayer(args[0], sender)) == null)) {
 						return false;
-					}
 				}
 				if (match != null) {
-					auxUser = dataHolder.getUser(match.get(0).getName());
+					auxUser = dataHolder.getUser(match.get(0));
 				} else {
 					auxUser = dataHolder.getUser(args[0]);
 				}
@@ -1613,15 +1574,11 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player> <group>)");
 					return false;
 				}
-				if (validateOnlinePlayer) {
-					match = this.getServer().matchPlayer(args[0]);
-					if (match.size() != 1) {
-						sender.sendMessage(ChatColor.RED + "Player not found!");
+				if ((validateOnlinePlayer) && ((match = validatePlayer(args[0], sender)) == null)) {
 						return false;
-					}
 				}
 				if (match != null) {
-					auxUser = dataHolder.getUser(match.get(0).getName());
+					auxUser = dataHolder.getUser(match.get(0));
 				} else {
 					auxUser = dataHolder.getUser(args[0]);
 				}
@@ -1673,15 +1630,11 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player> <group>)");
 					return false;
 				}
-				if (validateOnlinePlayer) {
-					match = this.getServer().matchPlayer(args[0]);
-					if (match.size() != 1) {
-						sender.sendMessage(ChatColor.RED + "Player not found!");
+				if ((validateOnlinePlayer) && ((match = validatePlayer(args[0], sender)) == null)) {
 						return false;
-					}
 				}
 				if (match != null) {
-					auxUser = dataHolder.getUser(match.get(0).getName());
+					auxUser = dataHolder.getUser(match.get(0));
 				} else {
 					auxUser = dataHolder.getUser(args[0]);
 				}
@@ -1841,6 +1794,58 @@ public class GroupManager extends JavaPlugin {
 		}
 
 	}
+	
+	/**
+	 * Load a List of players matching the name given. If none online, check
+	 * Offline.
+	 * 
+	 * @param playerName, sender
+	 * @return true if a single match is found
+	 */
+	private List<String> validatePlayer(String playerName, CommandSender sender) {
+
+		List<Player> players = new ArrayList<Player>();
+		List<String> match = new ArrayList<String>();
+
+		players = this.getServer().matchPlayer(playerName);
+		if (players.isEmpty()) {
+			// Check for an offline player (exact match).
+			if (Arrays.asList(this.getServer().getOfflinePlayers()).contains(Bukkit.getOfflinePlayer(playerName))) {
+				match.add(playerName);
+			} else {
+				//look for partial matches
+				for (OfflinePlayer offline : this.getServer().getOfflinePlayers()) {
+					if (offline.getName().toLowerCase().startsWith(playerName.toLowerCase()))
+						match.add(offline.getName());
+				}
+			}
+
+		} else {
+			for (Player player : players) {
+				match.add(player.getName());
+			}
+		}
+
+		if (match.isEmpty() || match == null) {
+			sender.sendMessage(ChatColor.RED + "Player not found!");
+			return null;
+		} else if (match.size() > 1) {
+			sender.sendMessage(ChatColor.RED + "Too many matches found! (" + match.toString() + ")");
+			return null;
+		}
+		
+		return match;
+
+	}
+	
+	/**
+	 * Triggers all GroupManager events for other plugins to see.
+	 * 
+	 * @param event
+	 */
+	public static void callEvent(GroupManagerEvent event) {
+        Bukkit.getServer().getPluginManager().callEvent(event);
+    }
 
 	/**
 	 * @return the config

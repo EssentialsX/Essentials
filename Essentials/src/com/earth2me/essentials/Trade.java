@@ -1,9 +1,13 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
+<<<<<<< HEAD
 import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.ISettings;
+=======
+import com.earth2me.essentials.craftbukkit.SetExpFix;
+>>>>>>> refs/heads/master
 import static com.earth2me.essentials.I18n._;
 import java.io.File;
 import java.io.FileWriter;
@@ -86,10 +90,16 @@ public class Trade
 		{
 			throw new ChargeException(_("notEnoughMoney"));
 		}
+<<<<<<< HEAD
 
 		if (exp != null && exp > 0
 			&& user.getTotalExperience() < exp)
 		{
+=======
+		
+		if (exp != null && exp > 0 
+			&& SetExpFix.getTotalExperience(user) < exp) {
+>>>>>>> refs/heads/master
 			throw new ChargeException(_("notEnoughExperience"));
 		}
 	}
@@ -124,7 +134,7 @@ public class Trade
 		}
 		if (getExperience() != null)
 		{
-			user.setTotalExperience(user.getTotalExperience() + getExperience());
+			SetExpFix.setTotalExperience(user, SetExpFix.getTotalExperience(user) + getExperience());
 		}
 		return success;
 	}
@@ -166,12 +176,12 @@ public class Trade
 		}
 		if (getExperience() != null)
 		{
-			final int experience = user.getTotalExperience();
+			final int experience = SetExpFix.getTotalExperience(user);
 			if (experience < getExperience() && getExperience() > 0)
 			{
 				throw new ChargeException(_("notEnoughExperience"));
 			}
-			user.setTotalExperience(experience - getExperience());
+			SetExpFix.setTotalExperience(user, experience - getExperience());
 		}
 	}
 

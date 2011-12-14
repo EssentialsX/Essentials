@@ -6,6 +6,9 @@ package org.anjocaido.groupmanager.data;
 
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.dataholder.WorldDataHolder;
+import org.anjocaido.groupmanager.events.GMGroupEvent.Action;
+import org.anjocaido.groupmanager.events.GroupManagerEventHandler;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -13,7 +16,7 @@ import java.util.Map;
 
 /**
  *
- * @author gabrielcouto
+ * @author gabrielcouto/ElgarL
  */
 public class Group extends DataUnit implements Cloneable {
 
@@ -45,7 +48,7 @@ public class Group extends DataUnit implements Cloneable {
     public Group(String name) {
         super(name);
     }
-
+	
     /**
      * Clone this group
      * @return a clone of this group
@@ -114,14 +117,17 @@ public class Group extends DataUnit implements Cloneable {
             inherits.add(inherit.getName().toLowerCase());
         }
         flagAsChanged();
-        if (GroupManager.isLoaded())
+        if (GroupManager.isLoaded()) {
         	GroupManager.BukkitPermissions.updateAllPlayers();
+        	GroupManagerEventHandler.callEvent(this, Action.GROUP_INHERITANCE_CHANGED);
+        }
     }
 
     public boolean removeInherits(String inherit) {
         if (this.inherits.contains(inherit.toLowerCase())) {
             this.inherits.remove(inherit.toLowerCase());
             flagAsChanged();
+            GroupManagerEventHandler.callEvent(this, Action.GROUP_INHERITANCE_CHANGED);
             return true;
         }
         return false;
@@ -145,7 +151,9 @@ public class Group extends DataUnit implements Cloneable {
             variables.addVar(key, temp.getVarObject(key));
         }
         flagAsChanged();
-        if (GroupManager.isLoaded())
+        if (GroupManager.isLoaded()) {
         	GroupManager.BukkitPermissions.updateAllPlayers();
+        	GroupManagerEventHandler.callEvent(this, Action.GROUP_INFO_CHANGED);
+        }
     }
 }
