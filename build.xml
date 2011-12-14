@@ -18,6 +18,7 @@
     <ant dir="EssentialsProtect" antfile="build.xml"/>
     <ant dir="EssentialsGeoIP" antfile="build.xml"/>
     <ant dir="EssentialsXMPP" antfile="build.xml"/>
+    <ant dir="EssentialsSigns" antfile="build.xml"/>
   </target>
   <target name="collect" depends="buildRest">
     <mkdir dir="jars"/>
