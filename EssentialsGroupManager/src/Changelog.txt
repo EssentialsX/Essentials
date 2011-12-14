@@ -86,3 +86,4 @@ v 1.7:
 	- Added custom events so plugins can now be notified of changes within GroupManager.
 	- GM now registers with Bukkits ServicesManager.
 	- deleting the contents of GlobalGroups.yml will no longer thrown a NullPointerException.
+	- Removed op permissions from admins in the default GloblaGroups.yml.

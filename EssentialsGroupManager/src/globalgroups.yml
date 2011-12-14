@@ -150,9 +150,9 @@ groups:
     - bukkit.command.kill
     - bukkit.command.list
     - bukkit.command.me
-    - bukkit.command.op
-    - bukkit.command.op.give
-    - bukkit.command.op.take
+    - -bukkit.command.op
+    - -bukkit.command.op.give
+    - -bukkit.command.op.take
     - bukkit.command.plugins
     - bukkit.command.reload
     - bukkit.command.save
