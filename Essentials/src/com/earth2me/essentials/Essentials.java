@@ -219,22 +219,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 		final EssentialsBlockListener blockListener = new EssentialsBlockListener(this);
 		pm.registerEvent(Type.BLOCK_PLACE, blockListener, Priority.Lowest, this);
 
-		final SignBlockListener signBlockListener = new SignBlockListener(this);
-		pm.registerEvent(Type.SIGN_CHANGE, signBlockListener, Priority.Highest, this);
-		pm.registerEvent(Type.BLOCK_PLACE, signBlockListener, Priority.Low, this);
-		pm.registerEvent(Type.BLOCK_BREAK, signBlockListener, Priority.Highest, this);
-		pm.registerEvent(Type.BLOCK_IGNITE, signBlockListener, Priority.Low, this);
-		pm.registerEvent(Type.BLOCK_BURN, signBlockListener, Priority.Low, this);
-		pm.registerEvent(Type.BLOCK_PISTON_EXTEND, signBlockListener, Priority.Low, this);
-		pm.registerEvent(Type.BLOCK_PISTON_RETRACT, signBlockListener, Priority.Low, this);
-
-		final SignPlayerListener signPlayerListener = new SignPlayerListener(this);
-		pm.registerEvent(Type.PLAYER_INTERACT, signPlayerListener, Priority.Low, this);
-
-		final SignEntityListener signEntityListener = new SignEntityListener(this);
-		pm.registerEvent(Type.ENTITY_EXPLODE, signEntityListener, Priority.Low, this);
-		pm.registerEvent(Type.ENDERMAN_PICKUP, signEntityListener, Priority.Low, this);
-
 		final EssentialsEntityListener entityListener = new EssentialsEntityListener(this);
 		pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Priority.Lowest, this);
 		pm.registerEvent(Type.ENTITY_COMBUST, entityListener, Priority.Lowest, this);
@@ -313,11 +297,13 @@ public class Essentials extends JavaPlugin implements IEssentials
 		return backup;
 	}
 	
+	@Override
 	public IUser getUser(final Player player)
 	{
 		return userMap.getUser(player);
 	}
 	
+	@Override
 	public IUser getUser(final String playerName)
 	{
 		return userMap.getUser(playerName);

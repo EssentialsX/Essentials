@@ -6,15 +6,12 @@ import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.craftbukkit.OfflineBedLocation;
 import com.earth2me.essentials.storage.AsyncStorageObjectHolder;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import lombok.Cleanup;
 import lombok.Delegate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Entity;
@@ -23,7 +20,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.ServerOperator;
-import org.bukkit.OfflinePlayer;
 
 
 public abstract class UserBase extends AsyncStorageObjectHolder<UserData> implements Player, IOfflineUser
@@ -41,14 +37,14 @@ public abstract class UserBase extends AsyncStorageObjectHolder<UserData> implem
 	{
 		super(ess, UserData.class);
 		this.base = base;
-		reloadConfig();
+		onReload();
 	}
 
 	public UserBase(final OfflinePlayer offlinePlayer, final IEssentials ess)
 	{
 		super(ess, UserData.class);
 		this.offlinePlayer = offlinePlayer;
-		reloadConfig();
+		onReload();
 	}
 
 	public final Player getBase()
@@ -117,7 +113,7 @@ public abstract class UserBase extends AsyncStorageObjectHolder<UserData> implem
 		}
 		else
 		{
-			return OfflineBedLocation.getBedLocation(base.getName(), (com.earth2me.essentials.IEssentials)ess);
+			return OfflineBedLocation.getBedLocation(base.getName(), ess);
 		}
 	}
 

@@ -4,6 +4,7 @@ main: com.earth2me.essentials.update.EssentialsUpdate
 # Note to developers: This next line cannot change, or the automatic versioning system will break.
 version: TeamCity
 description: This plugin allows to install or update all Essentials plugins
+website: http://tiny.cc/EssentialsWiki
 authors: [snowleo]
 commands:
   essentialsupdate:

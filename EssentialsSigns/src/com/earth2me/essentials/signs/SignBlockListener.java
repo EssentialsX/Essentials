@@ -24,7 +24,7 @@ public class SignBlockListener extends BlockListener
 	@Override
 	public void onBlockBreak(final BlockBreakEvent event)
 	{
-		if (event.isCancelled() || ess.getSettings().areSignsDisabled())
+		if (event.isCancelled())
 		{
 			return;
 		}
@@ -76,7 +76,7 @@ public class SignBlockListener extends BlockListener
 	@Override
 	public void onSignChange(final SignChangeEvent event)
 	{
-		if (event.isCancelled() || ess.getSettings().areSignsDisabled())
+		if (event.isCancelled())
 		{
 			return;
 		}
@@ -108,7 +108,7 @@ public class SignBlockListener extends BlockListener
 	@Override
 	public void onBlockPlace(final BlockPlaceEvent event)
 	{
-		if (event.isCancelled() || ess.getSettings().areSignsDisabled())
+		if (event.isCancelled())
 		{
 			return;
 		}
@@ -142,7 +142,7 @@ public class SignBlockListener extends BlockListener
 	@Override
 	public void onBlockBurn(final BlockBurnEvent event)
 	{
-		if (event.isCancelled() || ess.getSettings().areSignsDisabled())
+		if (event.isCancelled())
 		{
 			return;
 		}
@@ -171,7 +171,7 @@ public class SignBlockListener extends BlockListener
 	@Override
 	public void onBlockIgnite(final BlockIgniteEvent event)
 	{
-		if (event.isCancelled() || ess.getSettings().areSignsDisabled())
+		if (event.isCancelled())
 		{
 			return;
 		}

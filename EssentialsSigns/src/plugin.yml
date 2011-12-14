@@ -1,9 +1,9 @@
 # This determines the command prefix when there are conflicts (/name:home, /name:help, etc.)
-name: EssentialsProtect
-main: com.earth2me.essentials.protect.EssentialsProtect
+name: EssentialsSigns
+main: com.earth2me.essentials.signs.EssentialsSignsPlugin
 # Note to developers: This next line cannot change, or the automatic versioning system will break.
 version: TeamCity
 website: http://tiny.cc/EssentialsWiki
-description: Provides protection for various parts of the world.
+description: Provides signs, utilizing Essentials.
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits]
-softdepend: [Essentials]
+depend: [Essentials]

@@ -90,13 +90,13 @@ public interface IUser extends Player, IStorageObjectHolder<UserData>, IReload, 
 
 	boolean toggleMuted();
 
-	public boolean toggleSocialSpy();
+	boolean toggleSocialSpy();
 
-	public void requestTeleport(IUser user, boolean b);
+	void requestTeleport(IUser user, boolean b);
 
-	public boolean isTeleportRequestHere();
+	boolean isTeleportRequestHere();
 
-	public IUser getTeleportRequester();
+	IUser getTeleportRequester();
 
-	public boolean toggleTeleportEnabled();
+	boolean toggleTeleportEnabled();
 }

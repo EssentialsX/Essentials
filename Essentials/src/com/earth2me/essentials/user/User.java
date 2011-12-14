@@ -1,15 +1,12 @@
 package com.earth2me.essentials.user;
 
 import com.earth2me.essentials.Console;
-import com.earth2me.essentials.api.IEssentials;
-import com.earth2me.essentials.api.IUser;
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.Util;
-import com.earth2me.essentials.api.IGroups;
-import com.earth2me.essentials.api.ISettings;
+import com.earth2me.essentials.api.*;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.register.payment.Method;
-import static com.earth2me.essentials.I18n._;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -26,15 +23,13 @@ import org.bukkit.entity.Player;
 
 public class User extends UserBase implements IUser
 {
-	@Getter
-	@Setter
 	private CommandSender replyTo = null;
 	@Getter
-	private transient User teleportRequester;
+	private transient IUser teleportRequester;
 	@Getter
 	private transient boolean teleportRequestHere;
 	@Getter
-	private transient final Teleport teleport;
+	private transient final ITeleport teleport;
 	@Getter
 	private transient long teleportRequestTime;
 	@Getter
@@ -611,5 +606,23 @@ public class User extends UserBase implements IUser
 	public int compareTo(final IUser t)
 	{
 		return Util.stripColor(this.getDisplayName()).compareTo(Util.stripColor(t.getDisplayName()));
+	}
+
+	@Override
+	public void requestTeleport(IUser user, boolean b)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setReplyTo(CommandSender user)
+	{
+		replyTo = user;
+	}
+
+	@Override
+	public CommandSender getReplyTo()
+	{
+		return replyTo;
 	}
 }

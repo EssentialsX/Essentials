@@ -45,7 +45,7 @@ public class SignEntityListener extends EntityListener
 	@Override
 	public void onEndermanPickup(EndermanPickupEvent event)
 	{
-		if (event.isCancelled() || ess.getSettings().areSignsDisabled())
+		if (event.isCancelled())
 		{
 			return;
 		}

@@ -21,7 +21,7 @@ public class SignPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
-		if (event.isCancelled() || ess.getSettings().areSignsDisabled())
+		if (event.isCancelled())
 		{
 			return;
 		}
