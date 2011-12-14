@@ -17,7 +17,7 @@ public class SetExpFix
 		int amount = exp;
 		while (amount > 0)
 		{
-			final int expToLevel = getExpTolevel(player);
+			final int expToLevel = getExpToLevel(player);
 			amount -= expToLevel;
 			if (amount >= 0)
 			{
@@ -34,8 +34,25 @@ public class SetExpFix
 		}
 	}
 
-	private static int getExpTolevel(final Player player)
+	private static int getExpToLevel(final Player player)
+	{		
+		return getExpToLevel(player.getLevel());
+	}
+	
+	private static int getExpToLevel(final int level)
+	{		
+		return 7 + (level * 7 >> 1);
+	}
+	
+	public static int getTotalExperience(final Player player)
 	{
-		return 7 + (player.getLevel() * 7 >> 1);
+		int exp = (int) (getExpToLevel(player) * player.getExp());
+		int currentLevel = player.getLevel();
+		
+		while (currentLevel > 0) {			
+			currentLevel--;
+			exp += getExpToLevel(currentLevel);
+		}
+		return exp;
 	}
 }
