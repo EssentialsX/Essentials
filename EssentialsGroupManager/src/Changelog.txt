@@ -85,3 +85,4 @@ v 1.7:
 	- Offline player checks now support partial name matches.
 	- Added custom events so plugins can now be notified of changes within GroupManager.
 	- GM now registers with Bukkits ServicesManager.
+	- deleting the contents of GlobalGroups.yml will no longer thrown a NullPointerException.
