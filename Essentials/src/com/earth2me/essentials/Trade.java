@@ -1,13 +1,10 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
-<<<<<<< HEAD
 import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.ISettings;
-=======
 import com.earth2me.essentials.craftbukkit.SetExpFix;
->>>>>>> refs/heads/master
 import static com.earth2me.essentials.I18n._;
 import java.io.File;
 import java.io.FileWriter;
@@ -90,16 +87,10 @@ public class Trade
 		{
 			throw new ChargeException(_("notEnoughMoney"));
 		}
-<<<<<<< HEAD
 
 		if (exp != null && exp > 0
-			&& user.getTotalExperience() < exp)
+			&& SetExpFix.getTotalExperience(user) < exp)
 		{
-=======
-		
-		if (exp != null && exp > 0 
-			&& SetExpFix.getTotalExperience(user) < exp) {
->>>>>>> refs/heads/master
 			throw new ChargeException(_("notEnoughExperience"));
 		}
 	}
@@ -164,8 +155,8 @@ public class Trade
 			&& !user.isAuthorized("essentials.nocommandcost." + command))
 		{
 			@Cleanup
-		final ISettings settings = ess.getSettings();
-		settings.acquireReadLock();
+			final ISettings settings = ess.getSettings();
+			settings.acquireReadLock();
 			final double mon = user.getMoney();
 			final double cost = settings.getData().getEconomy().getCommandCost(command.charAt(0) == '/' ? command.substring(1) : command);
 			if (mon < cost && cost > 0 && !user.isAuthorized("essentials.eco.loan"))
