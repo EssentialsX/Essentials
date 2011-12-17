@@ -17,7 +17,7 @@ public class EssentialsLocalChatEvent extends Event implements Cancellable
 
 	public EssentialsLocalChatEvent(final Player player, final String message, final String format, final long radius)
 	{
-		super("LocalChat");
+		super("EssLocalChat");
 		this.player = player;
 		this.message = message;
 		this.format = format;
