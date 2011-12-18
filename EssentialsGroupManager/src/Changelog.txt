@@ -87,3 +87,4 @@ v 1.7:
 	- GM now registers with Bukkits ServicesManager.
 	- deleting the contents of GlobalGroups.yml will no longer thrown a NullPointerException.
 	- Removed op permissions from admins in the default GloblaGroups.yml.
+	- Changed ServicesManager registration to lowest from normal.
