@@ -711,12 +711,14 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 
 		PermissionCheckResult resultUser = checkUserOnlyPermission(user, targetPermission);
 		if (resultUser.resultType != PermissionCheckResult.Type.NOTFOUND) {
+			resultUser.accessLevel = targetPermission;
 			return resultUser;
 		}
 
 		// IT ONLY CHECKS GROUPS PERMISSIONS IF RESULT FOR USER IS NOT FOUND
 		PermissionCheckResult resultGroup = checkGroupPermissionWithInheritance(user.getGroup(), targetPermission);
 		if (resultGroup.resultType != PermissionCheckResult.Type.NOTFOUND) {
+			result.accessLevel = targetPermission;
 			return resultGroup;
 		}
 
@@ -724,6 +726,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 		for (Group subGroup : user.subGroupListCopy()) {
 			PermissionCheckResult resultSubGroup = checkGroupPermissionWithInheritance(subGroup, targetPermission);
 			if (resultSubGroup.resultType != PermissionCheckResult.Type.NOTFOUND) {
+				resultSubGroup.accessLevel = targetPermission;
 				return resultSubGroup;
 			}
 		}
