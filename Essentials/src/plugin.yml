@@ -341,7 +341,7 @@ commands:
   tpa:
     description: Request to teleport to the specified player.
     usage: /<command> <player>
-    aliases: [call,etpa,ecall]
+    aliases: [call,join,etpa,ecall,ejoin]
   tpaall:
     description: Requests all players online to teleport to you.
     usage: /<command> <player>
@@ -353,7 +353,7 @@ commands:
   tpahere:
     description: Request that the specified player teleport to you.
     usage: /<command> <player>
-    aliases: [etpahere]
+    aliases: [come,etpahere,ecome]
   tpall:
     description: Teleport all online players to another player.
     usage: /<command> <player>
