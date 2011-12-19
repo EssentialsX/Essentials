@@ -415,7 +415,7 @@ public class GroupManager extends JavaPlugin {
 
 				// PARECE OK
 				auxUser.setGroup(auxGroup);
-				if (!sender.hasPermission("groupmanager.notify.other"))
+				if (!sender.hasPermission("groupmanager.notify.other") || (isConsole))
 					sender.sendMessage(ChatColor.YELLOW + "You changed player '" + auxUser.getName() + "' group to '" + auxGroup.getName() + "'.");
 
 				targetPlayer = this.getServer().getPlayer(auxUser.getName());
@@ -1610,7 +1610,7 @@ public class GroupManager extends JavaPlugin {
 				}
 				// PARECE OK
 				auxUser.setGroup(auxGroup);
-				if (!sender.hasPermission("groupmanager.notify.other"))
+				if (!sender.hasPermission("groupmanager.notify.other") || (isConsole))
 					sender.sendMessage(ChatColor.YELLOW + "You changed " + auxUser.getName() + " group to " + auxGroup.getName() + ".");
 
 				targetPlayer = this.getServer().getPlayer(auxUser.getName());
@@ -1666,7 +1666,7 @@ public class GroupManager extends JavaPlugin {
 				}
 				// PARECE OK
 				auxUser.setGroup(auxGroup);
-				if (!sender.hasPermission("groupmanager.notify.other"))
+				if (!sender.hasPermission("groupmanager.notify.other") || (isConsole))
 					sender.sendMessage(ChatColor.YELLOW + "You changed " + auxUser.getName() + " group to " + auxGroup.getName() + ".");
 
 				targetPlayer = this.getServer().getPlayer(auxUser.getName());

@@ -90,3 +90,4 @@ v 1.7:
 v 1.8:
 	- Changed ServicesManager registration to lowest from normal.
 	- Fixed 'manucheckp' returning a null for the searched node when it's a group/subgroup.
+	- manpromote and mandemote now correctly send the notification to the console if the command was issued there.
