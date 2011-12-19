@@ -124,7 +124,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 				LOGGER.log(Level.WARNING, _("versionMismatch", plugin.getDescription().getName()));
 			}
 		}
-		final Matcher versionMatch = Pattern.compile("git-Bukkit-([0-9]+).([0-9]+).([0-9]+)-R[0-9]+-[0-9]+-[0-9a-z]+-b([0-9]+)jnks.*").matcher(getServer().getVersion());
+		final Matcher versionMatch = Pattern.compile("git-Bukkit-([0-9]+).([0-9]+).([0-9]+)-R[0-9]+-b([0-9]+)jnks.*").matcher(getServer().getVersion());
 		if (versionMatch.matches())
 		{
 			final int versionNumber = Integer.parseInt(versionMatch.group(4));
@@ -294,7 +294,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	public boolean onCommandEssentials(final CommandSender sender, final Command command, final String commandLabel, final String[] args, final ClassLoader classLoader, final String commandPath, final String permissionPrefix, final IEssentialsModule module)
 	{
 		// Allow plugins to override the command via onCommand
-		if (!getSettings().isCommandOverridden(command.getName()) && !commandLabel.startsWith("e"))
+		if (!getSettings().isCommandOverridden(command.getName()) && (!commandLabel.startsWith("e") || commandLabel.equalsIgnoreCase(command.getName())))
 		{
 			final PluginCommand pc = alternativeCommandsHandler.getAlternative(commandLabel);
 			if (pc != null)

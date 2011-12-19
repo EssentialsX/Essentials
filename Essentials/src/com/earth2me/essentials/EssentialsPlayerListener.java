@@ -313,10 +313,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			}
 			else if (command.startsWith("c:"))
 			{
-				for (Player p : server.getOnlinePlayers())
-				{
-					p.sendMessage(user.getDisplayName() + ":" + command.substring(2));
-				}
+				user.chat(command.substring(2));
 			}
 			else
 			{
