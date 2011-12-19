@@ -20,6 +20,10 @@ public class Commandsetwarp extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
+		
+		if (args[0].matches("[0-9]+")) {
+			throw new NotEnoughArgumentsException();
+		}
 
 		final Location loc = user.getLocation();
 		ess.getWarps().setWarp(args[0], loc);
