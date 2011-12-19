@@ -26,11 +26,11 @@ import org.bukkit.util.Vector;
 public class OfflinePlayer implements Player
 {
 	private final transient IEssentials ess;
-	private Location location = new Location(null, 0, 0, 0, 0, 0);
-	private World world;
-	private UUID uniqueId = UUID.randomUUID();
+	private transient Location location = new Location(null, 0, 0, 0, 0, 0);
+	private transient World world;
+	private final transient UUID uniqueId = UUID.randomUUID();
 	@Delegate(types = org.bukkit.OfflinePlayer.class)
-	private final org.bukkit.OfflinePlayer base;
+	private transient org.bukkit.OfflinePlayer base;
 
 	public OfflinePlayer(final String name, final IEssentials ess)
 	{
@@ -821,5 +821,12 @@ public class OfflinePlayer implements Player
 	public Player getKiller()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	void setName(final String name)
+	{
+		if (!this.base.getName().equalsIgnoreCase(name)) {
+			this.base = ess.getServer().getOfflinePlayer(name);
+		}
 	}
 }

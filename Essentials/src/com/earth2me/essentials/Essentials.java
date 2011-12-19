@@ -36,7 +36,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -440,7 +439,12 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 		if (base instanceof String)
 		{
-			return userMap.getUser((String)base);
+			final User user = userMap.getUser((String)base);
+			if (user != null && user.getBase() instanceof OfflinePlayer)
+			{
+				((OfflinePlayer)user.getBase()).setName((String)base);
+			}
+			return user;
 		}
 		return null;
 	}
@@ -472,7 +476,12 @@ public class Essentials extends JavaPlugin implements IEssentials
 	@Override
 	public User getOfflineUser(final String name)
 	{
-		return userMap.getUser(name);
+		final User user = userMap.getUser(name);
+		if (user != null && user.getBase() instanceof OfflinePlayer)
+		{
+			((OfflinePlayer)user.getBase()).setName(name);
+		}
+		return user;
 	}
 
 	@Override
