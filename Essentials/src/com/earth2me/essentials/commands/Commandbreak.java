@@ -31,7 +31,7 @@ public class Commandbreak extends EssentialsCommand
 		{
 			throw new Exception("You are not allowed to destroy bedrock."); //TODO: Translation
 		}
-		final BlockBreakEvent event = new BlockBreakEvent(block, user);
+		final BlockBreakEvent event = new BlockBreakEvent(block, user.getBase());
 		server.getPluginManager().callEvent(event);
 		if (event.isCancelled())
 		{
