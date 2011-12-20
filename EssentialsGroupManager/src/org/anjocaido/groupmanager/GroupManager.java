@@ -1840,11 +1840,21 @@ public class GroupManager extends JavaPlugin {
 	
 	/**
 	 * Triggers all GroupManager events for other plugins to see.
+	 * Schedules events for 1 tick later to allow GM to finish populating super perms.
 	 * 
 	 * @param event
 	 */
-	public static void callEvent(GroupManagerEvent event) {
-        Bukkit.getServer().getPluginManager().callEvent(event);
+	public static void callEvent(final GroupManagerEvent event) {
+		
+		if (Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugin("GroupManager"), new Runnable() {
+
+			@Override
+			public void run() {
+				Bukkit.getServer().getPluginManager().callEvent(event);
+			}
+		}) == -1)
+			GroupManager.logger.warning("Could not schedule GM Event.");
+        
     }
 
 	/**

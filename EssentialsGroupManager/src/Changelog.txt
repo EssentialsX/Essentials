@@ -92,3 +92,4 @@ v 1.8:
 	- Fixed 'manucheckp' returning a null for the searched node when it's a group/subgroup.
 	- manpromote and mandemote now correctly send the notification to the console if the command was issued there.
 	- Expanded GlobalGroups.yml and Groups.yml to include Towny permissions.
+	- Delayed GroupManager events so Superperms will be fully updated before plugins receive the events.
