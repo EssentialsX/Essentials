@@ -6,10 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
-import org.yaml.snakeyaml.error.YAMLException;
 
 
 public abstract class AbstractDelayedYamlFileReader<T extends StorageObject> implements Runnable
@@ -56,7 +54,7 @@ public abstract class AbstractDelayedYamlFileReader<T extends StorageObject> imp
 		catch (FileNotFoundException ex)
 		{
 			onException();
-			Bukkit.getLogger().log(Level.WARNING, "File not found: " + file.toString());
+			Bukkit.getLogger().log(Level.INFO, "File not found: " + file.toString());
 		}
 		catch (ObjectLoadException ex)
 		{
