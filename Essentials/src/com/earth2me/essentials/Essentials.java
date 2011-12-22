@@ -121,7 +121,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 				LOGGER.log(Level.WARNING, _("versionMismatch", plugin.getDescription().getName()));
 			}
 		}
-		final Matcher versionMatch = Pattern.compile("git-Bukkit-([0-9]+).([0-9]+).([0-9]+)-R[0-9]+-b([0-9]+)jnks.*").matcher(getServer().getVersion());
+		final Matcher versionMatch = Pattern.compile("git-Bukkit-([0-9]+).([0-9]+).([0-9]+)-R[0-9]+-(?:[0-9]+-g[0-9a-f]+-)?b([0-9]+)jnks.*").matcher(getServer().getVersion());
 		if (versionMatch.matches())
 		{
 			final int versionNumber = Integer.parseInt(versionMatch.group(4));
@@ -306,7 +306,12 @@ public class Essentials extends JavaPlugin implements IEssentials
 	@Override
 	public IUser getUser(final String playerName)
 	{
-		return userMap.getUser(playerName);
+		final User user = userMap.getUser(playerName);
+		if (user != null && user.getBase() instanceof OfflinePlayer)
+		{
+			((OfflinePlayer)user.getBase()).setName(name);
+		}
+		return user;
 	}
 
 	@Override

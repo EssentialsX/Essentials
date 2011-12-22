@@ -62,7 +62,12 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 			{
 				throw new Exception(_("jailNotExist"));
 			}
-			return getData().getJails().get(jailName.toLowerCase(Locale.ENGLISH));
+			Location loc = getData().getJails().get(jailName.toLowerCase(Locale.ENGLISH));
+			if (loc == null || loc.getWorld() == null)
+			{
+				throw new Exception(_("jailNotExist"));
+			}
+			return loc;
 		}
 		finally
 		{
@@ -114,7 +119,8 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 		{
 			if (!(user.getBase() instanceof OfflinePlayer))
 			{
-				user.getTeleport().now(getJail(jail), false, TeleportCause.COMMAND);
+				Location loc = getJail(jail);
+				user.getTeleport().now(loc, false, TeleportCause.COMMAND);
 			}
 			user.acquireWriteLock();
 			try

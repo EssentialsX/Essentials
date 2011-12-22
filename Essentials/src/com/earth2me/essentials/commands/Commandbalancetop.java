@@ -112,7 +112,7 @@ public class Commandbalancetop extends EssentialsCommand
 						final IUser user = ess.getUserMap().getUser(u);
 						if (user != null)
 						{
-							balances.put(u, user.getMoney());
+							balances.put(user.getDisplayName(), user.getMoney());
 						}
 					}
 

@@ -48,7 +48,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf, IUserMa
 						continue;
 					}
 					final String name = string.substring(0, string.length() - 4);
-					keys.add(name.toLowerCase(Locale.ENGLISH));
+					keys.add(Util.sanitizeFileName(name));
 				}
 			}
 		});
@@ -56,14 +56,14 @@ public class UserMap extends CacheLoader<String, User> implements IConf, IUserMa
 
 	public boolean userExists(final String name)
 	{
-		return keys.contains(name.toLowerCase(Locale.ENGLISH));
+		return keys.contains(Util.sanitizeFileName(name));
 	}
 
 	public User getUser(final String name)
 	{
 		try
 		{
-			return users.get(name.toLowerCase(Locale.ENGLISH));
+			return users.get(Util.sanitizeFileName(name));
 		}
 		catch (ExecutionException ex)
 		{
@@ -82,14 +82,14 @@ public class UserMap extends CacheLoader<String, User> implements IConf, IUserMa
 		{
 			if (player.getName().equalsIgnoreCase(name))
 			{
-				keys.add(name.toLowerCase(Locale.ENGLISH));
+				keys.add(Util.sanitizeFileName(name));
 				return new User(player, ess);
 			}
 		}
 		final File userFile = getUserFile(name);
 		if (userFile.exists())
 		{
-			keys.add(name.toLowerCase(Locale.ENGLISH));
+			keys.add(Util.sanitizeFileName(name));
 			return new User(new OfflinePlayer(name, ess), ess);
 		}
 		throw new Exception("User not found!");
@@ -103,8 +103,8 @@ public class UserMap extends CacheLoader<String, User> implements IConf, IUserMa
 
 	public void removeUser(final String name)
 	{
-		keys.remove(name.toLowerCase(Locale.ENGLISH));
-		users.invalidate(name.toLowerCase(Locale.ENGLISH));
+		keys.remove(Util.sanitizeFileName(name));
+		users.invalidate(Util.sanitizeFileName(name));
 	}
 
 	public Set<String> getAllUniqueUsers()
