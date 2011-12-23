@@ -2,6 +2,8 @@ package com.earth2me.essentials.storage;
 
 import com.earth2me.essentials.api.IEssentials;
 import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
@@ -13,6 +15,9 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
 	private final transient ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
 	private final transient Class<T> clazz;
 	protected final transient IEssentials ess;
+	private final transient StorageObjectDataWriter writer = new StorageObjectDataWriter();
+	private final transient StorageObjectDataReader reader = new StorageObjectDataReader();
+	private final transient AtomicBoolean loaded = new AtomicBoolean(false);
 
 	public AsyncStorageObjectHolder(final IEssentials ess, final Class<T> clazz)
 	{
@@ -34,16 +39,23 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
 	 * 
 	 * @return Object storing all the data
 	 */
+	@Override
 	public T getData()
 	{
+		if (!loaded.get())
+		{
+			reader.schedule(true);
+		}
 		return data;
 	}
 
+	@Override
 	public void acquireReadLock()
 	{
 		rwl.readLock().lock();
 	}
 
+	@Override
 	public void acquireWriteLock()
 	{
 		while (rwl.getReadHoldCount() > 0)
@@ -54,17 +66,19 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
 		rwl.readLock().lock();
 	}
 
+	@Override
 	public void close()
 	{
 		unlock();
 	}
 
+	@Override
 	public void unlock()
 	{
 		if (rwl.isWriteLockedByCurrentThread())
 		{
 			rwl.writeLock().unlock();
-			new StorageObjectDataWriter();
+			writer.schedule();
 		}
 		while (rwl.getReadHoldCount() > 0)
 		{
@@ -75,17 +89,23 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
 	@Override
 	public void onReload()
 	{
-		new StorageObjectDataReader();
+		reader.schedule(false);
 	}
 
-	public abstract File getStorageFile();
+	public abstract File getStorageFile() throws IOException;
 
 
 	private class StorageObjectDataWriter extends AbstractDelayedYamlFileWriter
 	{
 		public StorageObjectDataWriter()
 		{
-			super(ess, getStorageFile());
+			super(ess);
+		}
+
+		@Override
+		public File getFile() throws IOException
+		{
+			return getStorageFile();
 		}
 
 		@Override
@@ -107,13 +127,15 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
 	{
 		public StorageObjectDataReader()
 		{
-			super(ess, getStorageFile(), clazz);
+			super(ess, clazz);
 		}
 
 		@Override
-		public void onStart()
+		public File onStart() throws IOException
 		{
+			final File file = getStorageFile();
 			rwl.writeLock().lock();
+			return file;
 		}
 
 		@Override
@@ -124,6 +146,7 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
 				data = object;
 			}
 			rwl.writeLock().unlock();
+			loaded.set(true);
 		}
 
 		@Override
@@ -141,6 +164,7 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
 				}
 			}
 			rwl.writeLock().unlock();
+			loaded.set(true);
 		}
 	}
 }

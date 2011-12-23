@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutionException;
 import org.bukkit.entity.Player;
 
-@Deprecated
+/*@Deprecated
 public class UserMap extends CacheLoader<String, User> implements IConf, IUserMap
 {
 	private final transient IEssentials ess;
@@ -128,4 +128,4 @@ public class UserMap extends CacheLoader<String, User> implements IConf, IUserMa
 	{
 		loadAllUsersAsync(ess);
 	}
-}
+}*/

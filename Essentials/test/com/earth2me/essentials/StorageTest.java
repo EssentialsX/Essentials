@@ -133,7 +133,7 @@ public class StorageTest extends TestCase
 
 	}
 
-	@Test
+	/*@Test
 	public void testOldUserdata()
 	{
 		ExecuteTimer ext = new ExecuteTimer();
@@ -157,5 +157,5 @@ public class StorageTest extends TestCase
 		user.reloadConfig();
 		ext.mark("reloaded file (cached)");
 		System.out.println(ext.end());
-	}
+	}*/
 }

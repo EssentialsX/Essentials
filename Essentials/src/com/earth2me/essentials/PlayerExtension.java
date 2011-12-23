@@ -11,7 +11,7 @@ import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.ServerOperator;
 
 
-public class PlayerExtension implements Player
+/*public class PlayerExtension implements Player
 {
 	@Delegate(types =
 	{
@@ -35,4 +35,4 @@ public class PlayerExtension implements Player
 	{
 		return this.base = base;
 	}
-}
+}*/

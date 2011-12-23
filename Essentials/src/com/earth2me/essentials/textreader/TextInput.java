@@ -3,10 +3,15 @@ package com.earth2me.essentials.textreader;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.Util;
+import com.earth2me.essentials.api.InvalidNameException;
 import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import sun.util.BuddhistCalendar;
 
 
 public class TextInput implements IText
@@ -21,11 +26,18 @@ public class TextInput implements IText
 		File file = null;
 		if (sender instanceof Player)
 		{
-			final IUser user = ess.getUser((Player)sender);
-			file = new File(ess.getDataFolder(), filename + "_" + Util.sanitizeFileName(user.getName()) + ".txt");
-			if (!file.exists())
+			try
 			{
-				file = new File(ess.getDataFolder(), filename + "_" + Util.sanitizeFileName(user.getGroup()) + ".txt");
+				final IUser user = ess.getUser((Player)sender);
+				file = new File(ess.getDataFolder(), filename + "_" + Util.sanitizeFileName(user.getName()) + ".txt");
+				if (!file.exists())
+				{
+					file = new File(ess.getDataFolder(), filename + "_" + Util.sanitizeFileName(user.getGroup()) + ".txt");
+				}
+			}
+			catch (InvalidNameException ex)
+			{
+				Bukkit.getLogger().log(Level.WARNING, ex.getMessage(), ex);
 			}
 		}
 		if (file == null || !file.exists())

@@ -15,18 +15,18 @@ public class PermissionsHandler implements IPermissionsHandler
 	private transient String defaultGroup = "default";
 	private final transient Plugin plugin;
 	private final static Logger LOGGER = Logger.getLogger("Minecraft");
-	private transient boolean useSuperperms = false;
+	//private transient boolean useSuperperms = false;
 
 	public PermissionsHandler(final Plugin plugin)
 	{
 		this.plugin = plugin;
 	}
 
-	public PermissionsHandler(final Plugin plugin, final boolean useSuperperms)
+	/*public PermissionsHandler(final Plugin plugin, final boolean useSuperperms)
 	{
 		this.plugin = plugin;
 		this.useSuperperms = useSuperperms;
-	}
+	}*/
 
 	public PermissionsHandler(final Plugin plugin, final String defaultGroup)
 	{
@@ -167,14 +167,14 @@ public class PermissionsHandler implements IPermissionsHandler
 			return;
 		}
 
-		if (useSuperperms)
-		{
+		//if (useSuperperms)
+		//{
 			if (!(handler instanceof SuperpermsHandler))
 			{
 				LOGGER.log(Level.INFO, "Essentials: Using superperms based permissions.");
 				handler = new SuperpermsHandler();
 			}
-		}
+		/*}
 		else
 		{
 			if (!(handler instanceof ConfigPermissionsHandler))
@@ -182,11 +182,11 @@ public class PermissionsHandler implements IPermissionsHandler
 				LOGGER.log(Level.INFO, "Essentials: Using config based permissions. Enable superperms in config.");
 				handler = new ConfigPermissionsHandler(plugin);
 			}
-		}
+		}*/
 	}
 
-	public void setUseSuperperms(final boolean useSuperperms)
+	/*public void setUseSuperperms(final boolean useSuperperms)
 	{
 		this.useSuperperms = useSuperperms;
-	}
+	}*/
 }

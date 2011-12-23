@@ -1,8 +1,11 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.api.InvalidNameException;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import junit.framework.TestCase;
 import org.bukkit.World.Environment;
 import org.bukkit.plugin.InvalidDescriptionException;
@@ -170,5 +173,27 @@ public class UtilTest extends TestCase
 		a = new GregorianCalendar(2010, 9, 17, 23, 45, 45);
 		b = new GregorianCalendar(2000, 3, 7, 10, 0, 0);
 		assertEquals(" 10 years 6 months 10 days 13 hours 45 minutes 45 seconds", Util.formatDateDiff(a, b));
+	}
+	
+	public void filenameTest() {
+		try
+		{
+			assertEquals("_-", Util.sanitizeFileName("\u0000"));
+			assertEquals("_-", Util.sanitizeFileName("\u0001"));
+			assertEquals("_-", Util.sanitizeFileName("\u001f"));
+			assertEquals(" -", Util.sanitizeFileName(" "));
+			assertEquals("_-", Util.sanitizeFileName(".."));
+			assertEquals("_-", Util.sanitizeFileName("..\\"));
+			assertEquals("_-", Util.sanitizeFileName("../"));
+			assertEquals("_-", Util.sanitizeFileName("\""));
+			assertEquals("_-", Util.sanitizeFileName("<>?:*."));
+			assertEquals("a-0fa", Util.sanitizeFileName("aä"));
+			
+		}
+		catch (InvalidNameException ex)
+		{
+			Logger.getLogger(UtilTest.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		
 	}
 }

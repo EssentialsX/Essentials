@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -12,54 +13,78 @@ import org.bukkit.plugin.Plugin;
 
 public abstract class AbstractDelayedYamlFileReader<T extends StorageObject> implements Runnable
 {
-	private final transient File file;
 	private final transient Class<T> clazz;
 	private final transient Plugin plugin;
+	private final transient ReentrantLock lock = new ReentrantLock();
 
-	public AbstractDelayedYamlFileReader(final IEssentials ess, final File file, final Class<T> clazz)
+	public AbstractDelayedYamlFileReader(final IEssentials ess, final Class<T> clazz)
 	{
-		this.file = file;
 		this.clazz = clazz;
 		this.plugin = ess;
-		ess.scheduleAsyncDelayedTask(this);
 	}
 
-	public abstract void onStart();
+	public void schedule(boolean instant)
+	{
+		if (instant)
+		{
+			run();
+		}
+		else
+		{
+			plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, this);
+		}
+	}
+
+	public abstract File onStart() throws IOException;
 
 	@Override
 	public void run()
 	{
-		onStart();
+		lock.lock();
 		try
 		{
-			final FileReader reader = new FileReader(file);
+			final File file = onStart();
 			try
 			{
-				final T object = new YamlStorageReader(reader, plugin).load(clazz);
-				onSuccess(object);
-			}
-			finally
-			{
+				final FileReader reader = new FileReader(file);
 				try
 				{
-					reader.close();
+					final T object = new YamlStorageReader(reader, plugin).load(clazz);
+					onSuccess(object);
 				}
-				catch (IOException ex)
+				finally
 				{
-					Bukkit.getLogger().log(Level.SEVERE, "File can't be closed: " + file.toString(), ex);
+					try
+					{
+						reader.close();
+					}
+					catch (IOException ex)
+					{
+						Bukkit.getLogger().log(Level.SEVERE, "File can't be closed: " + file.toString(), ex);
+					}
 				}
-			}
 
+			}
+			catch (FileNotFoundException ex)
+			{
+				onException();
+				Bukkit.getLogger().log(Level.INFO, "File not found: " + file.toString());
+			}
+			catch (ObjectLoadException ex)
+			{
+				onException();
+				File broken = new File(file.getAbsolutePath() + ".broken." + System.currentTimeMillis());
+				file.renameTo(broken);
+				Bukkit.getLogger().log(Level.SEVERE, "The file " + file.toString() + " is broken, it has been renamed to " + broken.toString(), ex.getCause());
+			}
 		}
-		catch (FileNotFoundException ex)
+		catch (IOException ex)
 		{
-			onException();
-			Bukkit.getLogger().log(Level.INFO, "File not found: " + file.toString());
+			Bukkit.getLogger().log(Level.SEVERE, "File could not be opened: " + ex.getMessage(), ex);
 		}
-		catch (ObjectLoadException ex)
+		finally
 		{
-			onException();
-			Bukkit.getLogger().log(Level.SEVERE, "File broken: " + file.toString(), ex.getCause());
+			lock.unlock();
 		}
 	}
 

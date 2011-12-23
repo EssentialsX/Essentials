@@ -14,7 +14,7 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-@Deprecated
+/*@Deprecated
 public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 {
 	private CommandSender replyTo = null;
@@ -594,4 +594,4 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
-}
+}*/

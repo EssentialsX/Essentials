@@ -10,9 +10,11 @@ public interface IGroups extends IStorageObjectHolder<Groups>
 
 	double getTeleportCooldown(IUser player);
 
-	double getTeleportDelay(final IUser player);
+	double getTeleportDelay(IUser player);
 
 	String getPrefix(IUser player);
 
 	String getSuffix(IUser player);
+
+	int getHomeLimit(IUser player);
 }

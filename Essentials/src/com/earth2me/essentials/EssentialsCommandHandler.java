@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.api.ICommandHandler;
+import com.earth2me.essentials.api.ISettings;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.IEssentialsModule;
@@ -61,8 +62,18 @@ public class EssentialsCommandHandler implements ICommandHandler
 	@Override
 	public boolean handleCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args)
 	{
+		boolean disabled = false;
+		boolean overridden = false;
+		ISettings settings = ess.getSettings();
+		settings.acquireReadLock();
+		try {
+			disabled = settings.getData().getCommands().isDisabled(command.getName());
+			overridden = !disabled || settings.getData().getCommands().isOverridden(command.getName());
+		} finally {
+			settings.unlock();
+		}
 		// Allow plugins to override the command via onCommand
-		if (!ess.getSettings().isCommandOverridden(command.getName()) && (!commandLabel.startsWith("e") || commandLabel.equalsIgnoreCase(command.getName()))
+		if (!overridden && (!commandLabel.startsWith("e") || commandLabel.equalsIgnoreCase(command.getName())))
 		{
 			final PluginCommand pc = getAlternative(commandLabel);
 			if (pc != null)
@@ -81,18 +92,8 @@ public class EssentialsCommandHandler implements ICommandHandler
 				LOGGER.log(Level.INFO, String.format("[PLAYER_COMMAND] %s: /%s %s ", ((Player)sender).getName(), commandLabel, EssentialsCommand.getFinalArg(args, 0)));
 			}
 
-			// New mail notification
-			if (user != null && !ess.getSettings().isCommandDisabled("mail") && !commandLabel.equals("mail") && user.isAuthorized("essentials.mail"))
-			{
-				final List<String> mail = user.getMails();
-				if (mail != null && !mail.isEmpty())
-				{
-					user.sendMessage(_("youHaveNewMail", mail.size()));
-				}
-			}
-
 			// Check for disabled commands
-			if (ess.getSettings().isCommandDisabled(commandLabel))
+			if (disabled)
 			{
 				return true;
 			}

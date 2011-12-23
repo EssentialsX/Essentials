@@ -3,9 +3,13 @@ package com.earth2me.essentials.api;
 import com.earth2me.essentials.EssentialsConf;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Util;
+import com.earth2me.essentials.craftbukkit.DummyOfflinePlayer;
+import com.earth2me.essentials.user.User;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import lombok.Cleanup;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 
@@ -37,11 +41,28 @@ public final class Economy
 		{
 			folder.mkdirs();
 		}
-		EssentialsConf npcConfig = new EssentialsConf(new File(folder, Util.sanitizeFileName(name) + ".yml"));
+		double startingBalance = 0;
+		ISettings settings = ess.getSettings();
+		settings.acquireReadLock();
+		try {
+			startingBalance = settings.getData().getEconomy().getStartingBalance();
+		} finally {
+			settings.unlock();
+		}
+		IUser npc = new User(new DummyOfflinePlayer(name), ess);
+		npc.acquireWriteLock();
+		try {
+			npc.getData().setNpc(true);
+			npc.setMoney(startingBalance);
+		} finally {
+			npc.unlock();
+		}
+		
+		/*EssentialsConf npcConfig = new EssentialsConf(new File(folder, Util.sanitizeFileName(name) + ".yml"));
 		npcConfig.load();
 		npcConfig.setProperty("npc", true);
 		npcConfig.setProperty("money", ess.getSettings().getStartingBalance());
-		npcConfig.save();
+		npcConfig.save();*/
 	}
 
 	private static void deleteNPC(String name)
@@ -51,16 +72,25 @@ public final class Economy
 		{
 			folder.mkdirs();
 		}
-		File config = new File(folder, Util.sanitizeFileName(name) + ".yml");
-		EssentialsConf npcConfig = new EssentialsConf(config);
-		npcConfig.load();
-		if (npcConfig.hasProperty("npc") && npcConfig.getBoolean("npc", false))
-		{
-			if (!config.delete())
-			{
-				logger.log(Level.WARNING, _("deleteFileError", config));
+		IUser user = ess.getUser(name);
+		if (user != null) {
+			boolean npc = false;
+			user.acquireReadLock();
+			try {
+				npc = user.getData().isNpc();
+			} finally {
+				user.unlock();
 			}
-			ess.getUserMap().removeUser(name);
+			if (npc) {
+				try
+				{
+					ess.getUserMap().removeUser(name);
+				}
+				catch (InvalidNameException ex)
+				{
+					Bukkit.getLogger().log(Level.INFO, name, ex);
+				}
+			}
 		}
 	}
 
@@ -78,7 +108,7 @@ public final class Economy
 		}
 		else
 		{
-			user = ess.getOfflineUser(name);
+			user = ess.getUser(name);
 		}
 		return user;
 	}
@@ -184,7 +214,15 @@ public final class Economy
 		{
 			throw new RuntimeException(noCallBeforeLoad);
 		}
-		setMoney(name, ess.getSettings().getStartingBalance());
+		double startingBalance = 0;
+		ISettings settings = ess.getSettings();
+		settings.acquireReadLock();
+		try {
+			startingBalance = settings.getData().getEconomy().getStartingBalance();
+		} finally {
+			settings.unlock();
+		}
+		setMoney(name, startingBalance);
 	}
 
 	/**
@@ -264,12 +302,14 @@ public final class Economy
 	 */
 	public static boolean isNPC(String name) throws UserDoesNotExistException
 	{
+		@Cleanup
 		IUser user = getUserByName(name);
 		if (user == null)
 		{
 			throw new UserDoesNotExistException(name);
 		}
-		return user.isNPC();
+		user.acquireReadLock();
+		return user.getData().isNpc();
 	}
 
 	/**

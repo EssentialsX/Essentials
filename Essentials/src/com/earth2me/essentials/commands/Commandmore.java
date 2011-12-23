@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.api.IUser;
 import java.util.Locale;
 import org.bukkit.Server;
@@ -22,28 +23,38 @@ public class Commandmore extends EssentialsCommand
 		{
 			throw new Exception(_("cantSpawnItem", "Air"));
 		}
-		if (stack.getAmount() >= ((user.isAuthorized("essentials.oversizedstacks")) 
-								  ? ess.getSettings().getOversizedStackSize() : stack.getMaxStackSize()))
+		int defaultStackSize = 0;
+		int oversizedStackSize = 0;
+		ISettings settings = ess.getSettings();
+		settings.acquireReadLock();
+		try
+		{
+			defaultStackSize = settings.getData().getGeneral().getDefaultStacksize();
+			oversizedStackSize = settings.getData().getGeneral().getOversizedStacksize();
+		}
+		finally
+		{
+			settings.unlock();
+		}
+		if (stack.getAmount() >= ((user.isAuthorized("essentials.oversizedstacks"))
+								  ? oversizedStackSize
+								  : defaultStackSize > 0 ? defaultStackSize : stack.getMaxStackSize()))
 		{
 			throw new NoChargeException();
 		}
 		final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
-		if (ess.getSettings().permissionBasedItemSpawn()
-			? (!user.isAuthorized("essentials.itemspawn.item-all")
-			   && !user.isAuthorized("essentials.itemspawn.item-" + itemname)
-			   && !user.isAuthorized("essentials.itemspawn.item-" + stack.getTypeId()))
-			: (!user.isAuthorized("essentials.itemspawn.exempt")
-			   && !user.canSpawnItem(stack.getTypeId())))
+		if (!user.isAuthorized("essentials.itemspawn.item-" + itemname)
+			&& !user.isAuthorized("essentials.itemspawn.item-" + stack.getTypeId()))
 		{
 			throw new Exception(_("cantSpawnItem", itemname));
 		}
 		if (user.isAuthorized("essentials.oversizedstacks"))
 		{
-			stack.setAmount(ess.getSettings().getOversizedStackSize());
+			stack.setAmount(oversizedStackSize);
 		}
 		else
 		{
-			stack.setAmount(stack.getMaxStackSize());
+			stack.setAmount(defaultStackSize > 0 ? defaultStackSize : stack.getMaxStackSize());
 		}
 		user.updateInventory();
 	}

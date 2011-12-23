@@ -1,7 +1,8 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
+import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import java.util.Locale;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -32,29 +33,38 @@ public class Commandgive extends EssentialsCommand
 
 		final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 		if (sender instanceof Player
-			&& (ess.getSettings().permissionBasedItemSpawn()
-				? (!ess.getUser(sender).isAuthorized("essentials.give.item-all")
-				   && !ess.getUser(sender).isAuthorized("essentials.give.item-" + itemname)
-				   && !ess.getUser(sender).isAuthorized("essentials.give.item-" + stack.getTypeId()))
-				: (!ess.getUser(sender).isAuthorized("essentials.itemspawn.exempt")
-				   && !ess.getUser(sender).canSpawnItem(stack.getTypeId()))))
+			&& (!ess.getUser((Player)sender).isAuthorized("essentials.give.item-" + itemname)
+				&& !ess.getUser((Player)sender).isAuthorized("essentials.give.item-" + stack.getTypeId())))
 		{
 			throw new Exception(ChatColor.RED + "You are not allowed to spawn the item " + itemname);
 		}
 
-		final User giveTo = getPlayer(server, args, 0);
+		final IUser giveTo = getPlayer(server, args, 0);
 
+		int defaultStackSize = 0;
+		int oversizedStackSize = 0;
+		ISettings settings = ess.getSettings();
+		settings.acquireReadLock();
+		try
+		{
+			defaultStackSize = settings.getData().getGeneral().getDefaultStacksize();
+			oversizedStackSize = settings.getData().getGeneral().getOversizedStacksize();
+		}
+		finally
+		{
+			settings.unlock();
+		}
 		if (args.length > 2 && Integer.parseInt(args[2]) > 0)
 		{
 			stack.setAmount(Integer.parseInt(args[2]));
 		}
-		else if (ess.getSettings().getDefaultStackSize() > 0)
+		else if (defaultStackSize > 0)
 		{
-			stack.setAmount(ess.getSettings().getDefaultStackSize());
+			stack.setAmount(defaultStackSize);
 		}
-		else if (ess.getSettings().getOversizedStackSize() > 0 && giveTo.isAuthorized("essentials.oversizedstacks"))
+		else if (oversizedStackSize > 0 && giveTo.isAuthorized("essentials.oversizedstacks"))
 		{
-			stack.setAmount(ess.getSettings().getOversizedStackSize());
+			stack.setAmount(oversizedStackSize);
 		}
 
 		if (args.length > 3)
@@ -66,7 +76,7 @@ public class Commandgive extends EssentialsCommand
 				{
 					continue;
 				}
-				final Enchantment enchantment = Commandenchant.getEnchantment(split[0], sender instanceof Player ? ess.getUser(sender) : null);
+				final Enchantment enchantment = Commandenchant.getEnchantment(split[0], sender instanceof Player ? ess.getUser((Player)sender) : null);
 				int level;
 				if (split.length > 1)
 				{
@@ -89,7 +99,7 @@ public class Commandgive extends EssentialsCommand
 		sender.sendMessage(ChatColor.BLUE + "Giving " + stack.getAmount() + " of " + itemName + " to " + giveTo.getDisplayName() + ".");
 		if (giveTo.isAuthorized("essentials.oversizedstacks"))
 		{
-			InventoryWorkaround.addItem(giveTo.getInventory(), true, ess.getSettings().getOversizedStackSize(), stack);
+			InventoryWorkaround.addItem(giveTo.getInventory(), true, oversizedStackSize, stack);
 		}
 		else
 		{

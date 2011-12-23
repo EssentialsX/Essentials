@@ -3,6 +3,8 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.craftbukkit.FakeWorld;
 import com.avaje.ebean.config.ServerConfig;
 import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.craftbukkit.DummyOfflinePlayer;
+import com.earth2me.essentials.user.User;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.Callable;
@@ -322,13 +324,6 @@ public class FakeServer implements Server
 	public void addPlayer(Player base1)
 	{
 		players.add(base1);
-	}
-
-	public OfflinePlayer createPlayer(String name, IEssentials ess)
-	{
-		OfflinePlayer player = new OfflinePlayer(name, ess);
-		player.setLocation(new Location(worlds.get(0), 0, 0, 0, 0, 0));
-		return player;
 	}
 
 	@Override

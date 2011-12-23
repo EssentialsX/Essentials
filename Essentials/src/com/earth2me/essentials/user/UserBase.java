@@ -3,10 +3,14 @@ package com.earth2me.essentials.user;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.ISettings;
+import com.earth2me.essentials.api.InvalidNameException;
 import com.earth2me.essentials.craftbukkit.OfflineBedLocation;
 import com.earth2me.essentials.storage.AsyncStorageObjectHolder;
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import lombok.Cleanup;
 import lombok.Delegate;
 import org.bukkit.Bukkit;
@@ -131,9 +135,16 @@ public abstract class UserBase extends AsyncStorageObjectHolder<UserData> implem
 	}
 
 	@Override
-	public File getStorageFile()
+	public File getStorageFile() throws IOException
 	{
-		return ess.getUserMap().getUserFile(getName());
+		try
+		{
+			return ess.getUserMap().getUserFile(getName());
+		}
+		catch (InvalidNameException ex)
+		{
+			throw new IOException(ex.getMessage(), ex);
+		}
 	}
 
 	public long getTimestamp(final UserData.TimestampType name)
@@ -267,7 +278,7 @@ public abstract class UserBase extends AsyncStorageObjectHolder<UserData> implem
 			unlock();
 		}
 	}
-	
+
 	public boolean toggleMuted()
 	{
 		acquireWriteLock();
@@ -282,7 +293,7 @@ public abstract class UserBase extends AsyncStorageObjectHolder<UserData> implem
 			unlock();
 		}
 	}
-	
+
 	public boolean toggleSocialSpy()
 	{
 		acquireWriteLock();
@@ -297,7 +308,7 @@ public abstract class UserBase extends AsyncStorageObjectHolder<UserData> implem
 			unlock();
 		}
 	}
-	
+
 	public boolean toggleTeleportEnabled()
 	{
 		acquireWriteLock();
@@ -349,16 +360,40 @@ public abstract class UserBase extends AsyncStorageObjectHolder<UserData> implem
 			unlock();
 		}
 	}
-	
+
 	public void addMail(String string)
 	{
 		acquireWriteLock();
-		try {
-			if (getData().getMails() == null) {
+		try
+		{
+			if (getData().getMails() == null)
+			{
 				getData().setMails(new ArrayList<String>());
 			}
 			getData().getMails().add(string);
-		} finally {
+		}
+		finally
+		{
+			unlock();
+		}
+	}
+
+	public List<String> getMails()
+	{
+		acquireReadLock();
+		try
+		{
+			if (getData().getMails() == null)
+			{
+				return Collections.emptyList();
+			}
+			else
+			{
+				return new ArrayList<String>(getData().getMails());
+			}
+		}
+		finally
+		{
 			unlock();
 		}
 	}

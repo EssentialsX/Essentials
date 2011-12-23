@@ -3,9 +3,13 @@ package com.earth2me.essentials;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.ISettings;
+import com.earth2me.essentials.api.InvalidNameException;
+import com.earth2me.essentials.external.gnu.inet.encoding.Punycode;
+import com.earth2me.essentials.external.gnu.inet.encoding.PunycodeException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,10 +32,55 @@ public final class Util
 	}
 	private final static Logger logger = Logger.getLogger("Minecraft");
 	private static Pattern unsafeChars = Pattern.compile("[^a-z0-9]");
+	private static Pattern unsafeFileChars = Pattern.compile("[\u0000-\u001f]+");
 
-	public static String sanitizeFileName(String name)
+	public static String sanitizeFileName(String name) throws InvalidNameException
 	{
-		return unsafeChars.matcher(name.toLowerCase(Locale.ENGLISH)).replaceAll("_");
+		try
+		{
+			String r = name.toLowerCase(Locale.ENGLISH);
+			r = r.replace('.', (char)('\ue200'+'.'));
+			r = r.replace('\\', (char)('\ue200'+'\\'));
+			r = r.replace('/', (char)('\ue200'+'/'));
+			r = r.replace('"', (char)('\ue200'+'"'));
+			r = r.replace('<', (char)('\ue200'+'<'));
+			r = r.replace('>', (char)('\ue200'+'>'));
+			r = r.replace('|', (char)('\ue200'+'|'));
+			r = r.replace('?', (char)('\ue200'+'?'));
+			r = r.replace('*', (char)('\ue200'+'*'));
+			r = r.replace(':', (char)('\ue200'+':'));
+			r = r.replace('-', (char)('\ue200'+'-'));
+			r = unsafeFileChars.matcher(r).replaceAll("");
+			return Punycode.encode(r);
+		}
+		catch (PunycodeException ex)
+		{
+			throw new InvalidNameException(ex);
+		}
+	}
+	
+	public static String decodeFileName(String name) throws InvalidNameException
+	{
+		try
+		{
+			String r = Punycode.decode(name);
+			r = r.replace((char)('\ue200'+'.'), '.');
+			r = r.replace((char)('\ue200'+'\\'), '\\');
+			r = r.replace((char)('\ue200'+'/'), '/');
+			r = r.replace((char)('\ue200'+'"'), '"');
+			r = r.replace((char)('\ue200'+'<'), '<');
+			r = r.replace((char)('\ue200'+'>'), '>');
+			r = r.replace((char)('\ue200'+'|'), '|');
+			r = r.replace((char)('\ue200'+'?'), '?');
+			r = r.replace((char)('\ue200'+'*'), '*');
+			r = r.replace((char)('\ue200'+':'), ':');
+			r = r.replace((char)('\ue200'+'-'), '-');
+			return r;
+		}
+		catch (PunycodeException ex)
+		{
+			throw new InvalidNameException(ex);
+		}
 	}
 
 	public static String sanitizeKey(String name)

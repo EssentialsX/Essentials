@@ -99,4 +99,8 @@ public interface IUser extends Player, IStorageObjectHolder<UserData>, IReload, 
 	IUser getTeleportRequester();
 
 	boolean toggleTeleportEnabled();
+
+	public boolean gotMailInfo();
+
+	public List<String> getMails();
 }

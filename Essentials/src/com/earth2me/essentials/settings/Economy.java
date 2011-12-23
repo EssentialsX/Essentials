@@ -40,6 +40,7 @@ public class Economy implements StorageObject
 	@Comment("Enable this to log all interactions with trade/buy/sell signs and sell command")
 	private boolean logEnabled = false;
 	private Worth worth = new Worth();
+	private boolean tradeInStacks = false;
 
 	public double getCommandCost(String command)
 	{

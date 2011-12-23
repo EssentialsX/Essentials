@@ -11,7 +11,7 @@ import org.bukkit.event.Event.Priority;
 import org.bukkit.inventory.ItemStack;
 
 
-public class Settings implements ISettings
+/*public class Settings implements ISettings
 {
 	private final transient EssentialsConf config;
 	private final static Logger logger = Logger.getLogger("Minecraft");
@@ -643,3 +643,4 @@ public class Settings implements ISettings
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }
+*/

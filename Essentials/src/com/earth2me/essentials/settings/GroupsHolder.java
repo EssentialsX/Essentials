@@ -134,4 +134,17 @@ public class GroupsHolder extends AsyncStorageObjectHolder<Groups> implements IG
 		}
 		return "";
 	}
+
+	@Override
+	public int getHomeLimit(final IUser player)
+	{
+		for (GroupOptions groupOptions : getGroups(player))
+		{
+			if (groupOptions.getHomes() != null)
+			{
+				return groupOptions.getHomes();
+			}
+		}
+		return 0;
+	}
 }

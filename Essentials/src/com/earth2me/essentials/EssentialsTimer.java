@@ -1,11 +1,14 @@
 package com.earth2me.essentials;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.user.UserData.TimestampType;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import org.bukkit.entity.Player;
 
 
@@ -29,6 +32,24 @@ public class EssentialsTimer implements Runnable
 			onlineUsers.add(user);
 			user.setLastOnlineActivity(currentTime);
 			user.checkActivity();
+			
+			boolean mailDisabled = false;
+			ISettings settings = ess.getSettings();
+			settings.acquireReadLock();
+			try {
+				mailDisabled = settings.getData().getCommands().isDisabled("mail");
+			} finally {
+				settings.unlock();
+			}
+			// New mail notification
+			if (user != null && !mailDisabled && user.isAuthorized("essentials.mail") && !user.gotMailInfo())
+			{
+				final List<String> mail = user.getMails();
+				if (mail != null && !mail.isEmpty())
+				{
+					user.sendMessage(_("youHaveNewMail", mail.size()));
+				}
+			}
 		}
 
 		final Iterator<IUser> iterator = onlineUsers.iterator();

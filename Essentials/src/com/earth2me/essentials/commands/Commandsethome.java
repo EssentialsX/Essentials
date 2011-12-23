@@ -2,7 +2,10 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IUser;
+import java.util.HashMap;
 import java.util.Locale;
+import lombok.Cleanup;
+import org.bukkit.Location;
 import org.bukkit.Server;
 
 
@@ -29,14 +32,19 @@ public class Commandsethome extends EssentialsCommand
 			{
 				if (user.isAuthorized("essentials.sethome.multiple"))
 				{
-					if ((user.isAuthorized("essentials.sethome.multiple.unlimited")) || (user.getHomes().size() < ess.getSettings().getHomeLimit(user))
+					if ((user.isAuthorized("essentials.sethome.multiple.unlimited")) || (user.getHomes().size() < ess.getGroups().getHomeLimit(user))
 						|| (user.getHomes().contains(args[0].toLowerCase(Locale.ENGLISH))))
 					{
-						user.setHome(args[0].toLowerCase(Locale.ENGLISH));
+						user.acquireWriteLock();
+						if (user.getData().getHomes() == null)
+						{
+							user.getData().setHomes(new HashMap<String, Location>());
+						}
+						user.getData().getHomes().put(args[0].toLowerCase(Locale.ENGLISH), user.getLocation());
 					}
 					else
 					{
-						throw new Exception(_("maxHomes", ess.getSettings().getHomeLimit(user)));
+						throw new Exception(_("maxHomes", ess.getGroups().getHomeLimit(user)));
 					}
 
 				}
@@ -49,11 +57,8 @@ public class Commandsethome extends EssentialsCommand
 			{
 				if (user.isAuthorized("essentials.sethome.others"))
 				{
-					User usersHome = ess.getUser(ess.getServer().getPlayer(args[0]));
-					if (usersHome == null)
-					{
-						usersHome = ess.getOfflineUser(args[0]);
-					}
+					@Cleanup
+					IUser usersHome = ess.getUser(ess.getServer().getPlayer(args[0]));
 					if (usersHome == null)
 					{
 						throw new Exception(_("playerNotFound"));
@@ -63,13 +68,24 @@ public class Commandsethome extends EssentialsCommand
 					{
 						name = "home";
 					}
-					usersHome.setHome(name, user.getLocation());
+
+					usersHome.acquireWriteLock();
+					if (usersHome.getData().getHomes() == null)
+					{
+						usersHome.getData().setHomes(new HashMap<String, Location>());
+					}
+					usersHome.getData().getHomes().put(name, user.getLocation());
 				}
 			}
 		}
 		else
 		{
-			user.setHome();
+			user.acquireWriteLock();
+			if (user.getData().getHomes() == null)
+			{
+				user.getData().setHomes(new HashMap<String, Location>());
+			}
+			user.getData().getHomes().put("home", user.getLocation());
 		}
 		user.sendMessage(_("homeSet"));
 

@@ -13,11 +13,11 @@ public interface IUserMap extends IReload
 	
 	IUser getUser(final String playerName);
 
-	void removeUser(final String name);
+	void removeUser(final String name) throws InvalidNameException;
 
 	Set<String> getAllUniqueUsers();
 
 	int getUniqueUsers();
 
-	File getUserFile(final String name);
+	File getUserFile(final String name) throws InvalidNameException;
 }

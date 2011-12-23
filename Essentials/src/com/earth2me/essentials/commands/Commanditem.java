@@ -1,9 +1,9 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import java.util.Locale;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -28,27 +28,36 @@ public class Commanditem extends EssentialsCommand
 		final ItemStack stack = ess.getItemDb().get(args[0]);
 
 		final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
-		if (ess.getSettings().permissionBasedItemSpawn()
-			? (!user.isAuthorized("essentials.itemspawn.item-all")
-			   && !user.isAuthorized("essentials.itemspawn.item-" + itemname)
+		if (!user.isAuthorized("essentials.itemspawn.item-" + itemname)
 			   && !user.isAuthorized("essentials.itemspawn.item-" + stack.getTypeId()))
-			: (!user.isAuthorized("essentials.itemspawn.exempt")
-			   && !user.canSpawnItem(stack.getTypeId())))
 		{
 			throw new Exception(_("cantSpawnItem", itemname));
 		}
 
+		int defaultStackSize = 0;
+		int oversizedStackSize = 0;
+		ISettings settings = ess.getSettings();
+		settings.acquireReadLock();
+		try
+		{
+			defaultStackSize = settings.getData().getGeneral().getDefaultStacksize();
+			oversizedStackSize = settings.getData().getGeneral().getOversizedStacksize();
+		}
+		finally
+		{
+			settings.unlock();
+		}
 		if (args.length > 1 && Integer.parseInt(args[1]) > 0)
 		{
 			stack.setAmount(Integer.parseInt(args[1]));
 		}
-		else if (ess.getSettings().getDefaultStackSize() > 0)
+		else if (defaultStackSize > 0)
 		{
-			stack.setAmount(ess.getSettings().getDefaultStackSize());
+			stack.setAmount(defaultStackSize);
 		}
-		else if (ess.getSettings().getOversizedStackSize() > 0 && user.isAuthorized("essentials.oversizedstacks"))
+		else if (oversizedStackSize > 0 && user.isAuthorized("essentials.oversizedstacks"))
 		{
-			stack.setAmount(ess.getSettings().getOversizedStackSize());
+			stack.setAmount(oversizedStackSize);
 		}
 
 		if (args.length > 2)
@@ -83,7 +92,7 @@ public class Commanditem extends EssentialsCommand
 		user.sendMessage(_("itemSpawn", stack.getAmount(), displayName));
 		if (user.isAuthorized("essentials.oversizedstacks"))
 		{
-			InventoryWorkaround.addItem(user.getInventory(), true, ess.getSettings().getOversizedStackSize(), stack);
+			InventoryWorkaround.addItem(user.getInventory(), true, oversizedStackSize, stack);
 		}
 		else
 		{

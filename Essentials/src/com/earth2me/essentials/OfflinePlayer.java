@@ -23,7 +23,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
 
-public class OfflinePlayer implements Player
+/*public class OfflinePlayer implements Player
 {
 	private final transient IEssentials ess;
 	private transient Location location = new Location(null, 0, 0, 0, 0, 0);
@@ -830,3 +830,4 @@ public class OfflinePlayer implements Player
 		}
 	}
 }
+*/

@@ -373,7 +373,7 @@ public class EssentialsUpgrade
 		doneFile.save();
 	}
 
-	private void moveUsersDataToUserdataFolder()
+	/*private void moveUsersDataToUserdataFolder()
 	{
 		final File usersFile = new File(ess.getDataFolder(), "users.yml");
 		if (!usersFile.exists())
@@ -419,7 +419,7 @@ public class EssentialsUpgrade
 			}
 		}
 		usersFile.renameTo(new File(usersFile.getAbsolutePath() + ".old"));
-	}
+	}*/
 
 	private void convertWarps()
 	{
@@ -562,7 +562,7 @@ public class EssentialsUpgrade
 		}
 	}
 
-	private void sanitizeAllUserFilenames()
+	/*private void sanitizeAllUserFilenames()
 	{
 		if (doneFile.getBoolean("sanitizeAllUserFilenames", false))
 		{
@@ -605,7 +605,7 @@ public class EssentialsUpgrade
 		}
 		doneFile.setProperty("sanitizeAllUserFilenames", true);
 		doneFile.save();
-	}
+	}*/
 
 	private World getFakeWorld(final String name)
 	{
@@ -792,9 +792,10 @@ public class EssentialsUpgrade
 
 	public void afterSettings()
 	{
-		sanitizeAllUserFilenames();
+		//TODO?
+		//sanitizeAllUserFilenames();
 		updateUsersToNewDefaultHome();
-		moveUsersDataToUserdataFolder();
+		//moveUsersDataToUserdataFolder();
 		convertWarps();
 		updateUsersPowerToolsFormat();
 		updateUsersHomesFormat();

@@ -10,6 +10,7 @@ import com.earth2me.essentials.register.payment.Method;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 import lombok.Cleanup;
 import lombok.Getter;
@@ -41,6 +42,7 @@ public class User extends UserBase implements IUser
 	private boolean hidden = false;
 	private transient Location afkPosition;
 	private static final Logger logger = Bukkit.getLogger();
+	private AtomicBoolean gotMailInfo = new AtomicBoolean(false);
 
 	public User(final Player base, final IEssentials ess)
 	{
@@ -624,5 +626,16 @@ public class User extends UserBase implements IUser
 	public CommandSender getReplyTo()
 	{
 		return replyTo;
+	}
+	
+	@Override
+	public boolean gotMailInfo() {
+		return gotMailInfo.getAndSet(true);
+	}
+	
+	@Override
+	public void addMail(String mail) {
+		super.addMail(mail);
+		gotMailInfo.set(false);
 	}
 }

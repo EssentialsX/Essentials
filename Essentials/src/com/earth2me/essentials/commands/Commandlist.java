@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.api.IUser;
 import java.util.*;
 import org.bukkit.Server;
@@ -49,8 +50,17 @@ public class Commandlist extends EssentialsCommand
 			online = _("listAmount", server.getOnlinePlayers().length - playerHidden, server.getMaxPlayers());
 		}
 		sender.sendMessage(online);
+		
+		boolean sortListByGroups = false;
+		ISettings settings = ess.getSettings();
+		settings.acquireReadLock();
+		try {
+			sortListByGroups = settings.getData().getCommands().getList().isSortByGroups();
+		} finally {
+			settings.unlock();
+		}
 
-		if (ess.getSettings().getSortListByGroups())
+		if (sortListByGroups)
 		{
 			Map<String, List<IUser>> sort = new HashMap<String, List<IUser>>();
 			for (Player OnlinePlayer : server.getOnlinePlayers())

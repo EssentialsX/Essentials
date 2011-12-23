@@ -54,13 +54,11 @@ public class Commandworld extends EssentialsCommand
 			}
 		}
 
-		if (ess.getSettings().getIsWorldTeleportPermissions())
+
+		if (!user.isAuthorized("essentials.world." + world.getName()))
 		{
-			if (!user.isAuthorized("essentials.world." + world.getName()))
-			{
-				user.sendMessage(_("invalidWorld")); //TODO: Make a "world teleport denied" translation
-				throw new NoChargeException();
-			}
+			user.sendMessage(_("invalidWorld")); //TODO: Make a "world teleport denied" translation
+			throw new NoChargeException();
 		}
 
 		double factor;

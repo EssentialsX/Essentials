@@ -19,17 +19,12 @@ package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.*;
-import com.earth2me.essentials.api.IUser;
-import com.earth2me.essentials.api.ISettings;
-import com.earth2me.essentials.user.UserMap;
 import com.earth2me.essentials.craftbukkit.ItemDupeFix;
 import com.earth2me.essentials.listener.*;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
 import com.earth2me.essentials.settings.SettingsHolder;
-import com.earth2me.essentials.signs.SignBlockListener;
-import com.earth2me.essentials.signs.SignEntityListener;
-import com.earth2me.essentials.signs.SignPlayerListener;
+import com.earth2me.essentials.user.UserMap;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -97,10 +92,10 @@ public class Essentials extends JavaPlugin implements IEssentials
 		LOGGER.log(Level.INFO, _("usingTempFolderForTesting"));
 		LOGGER.log(Level.INFO, dataFolder.toString());
 		this.initialize(null, server, new PluginDescriptionFile(new FileReader(new File("src" + File.separator + "plugin.yml"))), dataFolder, null, null);
-		settings = new Settings(this);
+		settings = new SettingsHolder(this);
 		i18n.updateLocale("en");
 		userMap = new UserMap(this);
-		permissionsHandler = new PermissionsHandler(this, false);
+		permissionsHandler = new PermissionsHandler(this);
 		Economy.setEss(this);
 	}
 
@@ -155,7 +150,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 			userMap = new UserMap(this);
 			reloadList.add(userMap);
 			execTimer.mark("Init(Usermap)");
-			warps = new Warps(getServer(), this.getDataFolder());
+			warps = new Warps(this);
 			reloadList.add(warps);
 			execTimer.mark("Init(Spawn/Warp)");
 			worth = new Worth(this.getDataFolder());
@@ -306,12 +301,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	@Override
 	public IUser getUser(final String playerName)
 	{
-		final User user = userMap.getUser(playerName);
-		if (user != null && user.getBase() instanceof OfflinePlayer)
-		{
-			((OfflinePlayer)user.getBase()).setName(name);
-		}
-		return user;
+		return userMap.getUser(playerName);
 	}
 
 	@Override

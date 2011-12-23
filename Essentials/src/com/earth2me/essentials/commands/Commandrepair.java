@@ -35,7 +35,6 @@ public class Commandrepair extends EssentialsCommand
 			}
 
 			if (!item.getEnchantments().isEmpty()
-				&& !ess.getSettings().getRepairEnchanted()
 				&& !user.isAuthorized("essentials.repair.enchanted"))
 			{
 				throw new Exception(_("repairEnchanted"));
@@ -114,7 +113,6 @@ public class Commandrepair extends EssentialsCommand
 				continue;
 			}
 			if (!item.getEnchantments().isEmpty()
-				&& !ess.getSettings().getRepairEnchanted()
 				&& !user.isAuthorized("essentials.repair.enchanted"))
 			{
 				continue;

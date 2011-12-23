@@ -1,10 +1,10 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.Trade;
-import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.Util;
+import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import java.util.Locale;
 import java.util.logging.Level;
 import org.bukkit.Material;
@@ -92,15 +92,10 @@ public class Commandsell extends EssentialsCommand
 		}
 		double worth = ess.getWorth().getPrice(is);
 		boolean stack = args.length > 1 && args[1].endsWith("s");
-		boolean requireStack = ess.getSettings().isTradeInStacks(id);
 
 		if (Double.isNaN(worth))
 		{
 			throw new Exception(_("itemCannotBeSold"));
-		}
-		if (requireStack && !stack)
-		{
-			throw new Exception(_("itemMustBeStacked"));
 		}
 
 
@@ -135,10 +130,6 @@ public class Commandsell extends EssentialsCommand
 			amount += max;
 		}
 
-		if (requireStack)
-		{
-			amount -= amount % is.getType().getMaxStackSize();
-		}
 		if (amount > max || amount < 1)
 		{
 			if (!isBulkSell)

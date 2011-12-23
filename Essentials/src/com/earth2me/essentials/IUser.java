@@ -10,7 +10,7 @@ import org.bukkit.inventory.PlayerInventory;
 /**
  * @deprecated This will be moved to the api package soon
  */
-@Deprecated
+/*@Deprecated
 public interface IUser extends Player, com.earth2me.essentials.api.IUser
 {
 	long getLastTeleportTimestamp();
@@ -46,4 +46,4 @@ public interface IUser extends Player, com.earth2me.essentials.api.IUser
 	Teleport getTeleport();
 
 	void setJail(String jail);
-}
+}*/

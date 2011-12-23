@@ -1,121 +1,115 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.api.IWarps;
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.IWarp;
+import com.earth2me.essentials.api.IWarps;
+import com.earth2me.essentials.api.InvalidNameException;
+import com.earth2me.essentials.settings.WarpHolder;
+import com.earth2me.essentials.storage.StorageObjectMap;
 import java.io.File;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Server;
 
 
-public class Warps implements IWarps
+public class Warps extends StorageObjectMap<IWarp> implements IWarps
 {
-	private static final Logger logger = Logger.getLogger("Minecraft");
-	private final Map<StringIgnoreCase, EssentialsConf> warpPoints = new HashMap<StringIgnoreCase, EssentialsConf>();
-	private final File warpsFolder;
-	private final Server server;
+	private static final Logger logger = Bukkit.getLogger();
 
-	public Warps(Server server, File dataFolder)
+	public Warps(IEssentials ess)
 	{
-		this.server = server;
-		warpsFolder = new File(dataFolder, "warps");
-		if (!warpsFolder.exists())
-		{
-			warpsFolder.mkdirs();
-		}
-		reloadConfig();
-	}
-
-	public boolean isEmpty()
-	{
-		return warpPoints.isEmpty();
-	}
-
-	public Collection<String> getWarpNames()
-	{
-		final List<String> keys = new ArrayList<String>();
-		for (StringIgnoreCase stringIgnoreCase : warpPoints.keySet())
-		{
-			keys.add(stringIgnoreCase.getString());
-		}
-		Collections.sort(keys, String.CASE_INSENSITIVE_ORDER);
-		return keys;
-	}
-
-	public Location getWarp(String warp) throws Exception
-	{
-		EssentialsConf conf = warpPoints.get(new StringIgnoreCase(warp));
-		if (conf == null)
-		{
-			throw new Exception(_("warpNotExist"));
-		}
-		return conf.getLocation(null, server);
-	}
-
-	public void setWarp(String name, Location loc) throws Exception
-	{
-		String filename = Util.sanitizeFileName(name);
-		EssentialsConf conf = warpPoints.get(new StringIgnoreCase(name));
-		if (conf == null)
-		{
-			File confFile = new File(warpsFolder, filename + ".yml");
-			if (confFile.exists())
-			{
-				throw new Exception(_("similarWarpExist"));
-			}
-			conf = new EssentialsConf(confFile);
-			warpPoints.put(new StringIgnoreCase(name), conf);
-		}
-		conf.setProperty(null, loc);
-		conf.setProperty("name", name);
-		conf.save();
-	}
-
-	public void delWarp(String name) throws Exception
-	{
-		EssentialsConf conf = warpPoints.get(new StringIgnoreCase(name));
-		if (conf == null)
-		{
-			throw new Exception(_("warpNotExist"));
-		}
-		if (!conf.getFile().delete())
-		{
-			throw new Exception(_("warpDeleteError"));
-		}
-		warpPoints.remove(new StringIgnoreCase(name));
+		super(ess, "warps");
 	}
 
 	@Override
-	public final void reloadConfig()
+	public boolean isEmpty()
 	{
-		warpPoints.clear();
-		File[] listOfFiles = warpsFolder.listFiles();
-		if (listOfFiles.length >= 1)
+		return getKeySize() == 0;
+	}
+
+	@Override
+	public Collection<String> getList()
+	{
+		final List<String> names = new ArrayList<String>();
+		for (String key : getAllKeys())
 		{
-			for (int i = 0; i < listOfFiles.length; i++)
+			IWarp warp = getObject(key);
+			if (warp == null)
 			{
-				String filename = listOfFiles[i].getName();
-				if (listOfFiles[i].isFile() && filename.endsWith(".yml"))
-				{
-					try
-					{
-						EssentialsConf conf = new EssentialsConf(listOfFiles[i]);
-						conf.load();
-						String name = conf.getString("name");
-						if (name != null)
-						{
-							warpPoints.put(new StringIgnoreCase(name), conf);
-						}
-					}
-					catch (Exception ex)
-					{
-						logger.log(Level.WARNING, _("loadWarpError", filename), ex);
-					}
-				}
+				continue;
+			}
+			warp.acquireReadLock();
+			try
+			{
+				names.add(warp.getData().getName());
+			}
+			finally
+			{
+				warp.unlock();
 			}
 		}
+		Collections.sort(names, String.CASE_INSENSITIVE_ORDER);
+		return names;
+	}
+
+	@Override
+	public Location getWarp(final String name) throws Exception
+	{
+		IWarp warp = getObject(name);
+		if (warp == null)
+		{
+			throw new Exception(_("warpNotExist"));
+		}
+		warp.acquireReadLock();
+		try
+		{
+			return warp.getData().getLocation();
+		}
+		finally
+		{
+			warp.unlock();
+		}
+	}
+
+	@Override
+	public void setWarp(final String name, final Location loc) throws Exception
+	{
+		IWarp warp = getObject(name);
+		if (warp == null)
+		{
+			warp = new WarpHolder(name, ess);
+		}
+		warp.acquireWriteLock();
+		try
+		{
+			warp.getData().setLocation(loc);
+		}
+		finally
+		{
+			warp.unlock();
+		}
+	}
+
+	@Override
+	public void removeWarp(final String name) throws Exception
+	{
+		removeObject(name);
+	}
+
+	@Override
+	public File getWarpFile(String name) throws InvalidNameException
+	{
+		return getStorageFile(name);
+	}
+
+	@Override
+	public IWarp load(String name) throws Exception
+	{
+		final IWarp warp = new WarpHolder(name, ess);
+		warp.onReload();
+		return warp;
 	}
 
 

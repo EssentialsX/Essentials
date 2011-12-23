@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 
-public class ConfigPermissionsHandler extends AbstractPermissionsHandler
+/*public class ConfigPermissionsHandler extends AbstractPermissionsHandler
 {
 	private final transient IEssentials ess;
 
@@ -58,4 +58,4 @@ public class ConfigPermissionsHandler extends AbstractPermissionsHandler
 	{
 		return null;
 	}
-}
+}*/
