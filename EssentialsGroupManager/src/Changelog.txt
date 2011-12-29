@@ -93,3 +93,4 @@ v 1.8:
 	- manpromote and mandemote now correctly send the notification to the console if the command was issued there.
 	- Expanded GlobalGroups.yml and Groups.yml to include Towny permissions.
 	- Delayed GroupManager events so Superperms will be fully updated before plugins receive the events.
+	- Changed the way events are raised to prevent variable corruption.
