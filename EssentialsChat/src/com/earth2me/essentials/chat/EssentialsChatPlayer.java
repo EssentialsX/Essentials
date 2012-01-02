@@ -4,7 +4,9 @@ import com.earth2me.essentials.ChargeException;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.Trade;
+import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.settings.GroupOptions;
 import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -111,8 +113,9 @@ public abstract class EssentialsChatPlayer extends PlayerListener
 		if (user.isAuthorized("essentials.chat.color"))
 		{
 			event.setMessage(event.getMessage().replaceAll("&([0-9a-f])", "\u00a7$1"));
-		}		
-		event.setFormat(ess.getSettings().getChatFormat(user.getGroup()).replace('&', '\u00a7').replace("\u00a7\u00a7", "&").replace("{DISPLAYNAME}", "%1$s").replace("{GROUP}", user.getGroup()).replace("{MESSAGE}", "%2$s").replace("{WORLDNAME}", user.getWorld().getName()).replace("{SHORTWORLDNAME}", user.getWorld().getName().substring(0, 1).toUpperCase(Locale.ENGLISH)));
+		}
+		String format = ess.getGroups().getChatFormat(user);
+		event.setFormat(format.replace('&', '\u00a7').replace("\u00a7\u00a7", "&").replace("{DISPLAYNAME}", "%1$s").replace("{GROUP}", user.getGroup()).replace("{MESSAGE}", "%2$s").replace("{WORLDNAME}", user.getWorld().getName()).replace("{SHORTWORLDNAME}", user.getWorld().getName().substring(0, 1).toUpperCase(Locale.ENGLISH)));
 	}
 	
 	protected String getChatType(final String message)
@@ -132,8 +135,14 @@ public abstract class EssentialsChatPlayer extends PlayerListener
 
 	protected void handleLocalChat(final Map<PlayerChatEvent, String> charges, final PlayerChatEvent event)
 	{
-		
-		long radius = ess.getSettings().getChatRadius();
+		long radius = 0;
+		ISettings settings = ess.getSettings();
+		settings.acquireReadLock();
+		try {
+			radius = settings.getData().getChat().getLocalRadius();
+		} finally {
+			settings.unlock();
+		}
 		radius *= radius;
 
 		final IUser user = ess.getUser(event.getPlayer());

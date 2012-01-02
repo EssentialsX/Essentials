@@ -566,12 +566,6 @@ public class User extends UserBase implements IUser
 	}
 
 	@Override
-	public Location getHome(Location loc) throws Exception
-	{
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
-
-	@Override
 	public Location getHome(String name) throws Exception
 	{
 		throw new UnsupportedOperationException("Not supported yet.");

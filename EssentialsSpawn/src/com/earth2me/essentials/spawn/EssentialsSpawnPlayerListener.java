@@ -2,6 +2,7 @@ package com.earth2me.essentials.spawn;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.api.IUser;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
@@ -28,8 +29,16 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 	public void onPlayerRespawn(final PlayerRespawnEvent event)
 	{
 		final IUser user = ess.getUser(event.getPlayer());
-
-		if (ess.getSettings().getRespawnAtHome())
+		
+		boolean respawnAtHome = false;
+		ISettings settings = ess.getSettings();
+		settings.acquireReadLock();
+		try {
+			respawnAtHome = ess.getSettings().getData().getCommands().getHome().isRespawnAtHome();
+		} finally {
+			settings.unlock();
+		}
+		if (respawnAtHome)
 		{
 			Location home = user.getHome(user.getLocation());
 			if (home == null)
@@ -53,20 +62,29 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
 		final IUser user = ess.getUser(event.getPlayer());
-
-		if (!user.isNew() || user.getBedSpawnLocation() != null)
+		user.acquireReadLock();
+		try
 		{
-			return;
+
+			if (!user.getData().isNewplayer() || user.getBedSpawnLocation() != null)
+			{
+				return;
+			}
+			user.acquireWriteLock();
+			user.getData().setNewplayer(false);
 		}
-		user.setNew(false);
-		if (!"none".equalsIgnoreCase(ess.getSettings().getNewbieSpawn()))
+		finally
+		{
+			user.unlock();
+		}
+		if (spawns.getNewbieSpawn() != null)
 		{
 			ess.scheduleSyncDelayedTask(new NewPlayerTeleport(user));
 		}
 
-		if (ess.getSettings().getAnnounceNewPlayers())
+		if (spawns.getAnnounceNewPlayers())
 		{
-			ess.broadcastMessage(user, ess.getSettings().getAnnounceNewPlayerFormat(user));
+			ess.broadcastMessage(user, spawns.getAnnounceNewPlayerFormat(user));
 		}
 	}
 
@@ -85,7 +103,7 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 		{
 			try
 			{
-				Location spawn = spawns.getSpawn(ess.getSettings().getNewbieSpawn());
+				Location spawn = spawns.getNewbieSpawn();
 				if (spawn != null)
 				{
 					user.getTeleport().now(spawn, false, TeleportCause.PLUGIN);

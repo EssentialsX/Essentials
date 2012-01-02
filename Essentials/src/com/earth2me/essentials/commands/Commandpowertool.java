@@ -26,7 +26,8 @@ public class Commandpowertool extends EssentialsCommand
 		// check to see if this is a clear all command
 		if (command != null && command.equalsIgnoreCase("d:"))
 		{
-			user.clearAllPowertools();
+			user.acquireWriteLock();
+			user.getData().clearAllPowertools();
 			user.sendMessage(_("powerToolClearAll"));
 			return;
 		}
@@ -38,7 +39,7 @@ public class Commandpowertool extends EssentialsCommand
 		}
 
 		final String itemName = itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replaceAll("_", " ");
-		List<String> powertools = user.getPowertool(itemStack);
+		List<String> powertools = user.getData().getPowertool(itemStack.getType());
 		if (command != null && !command.isEmpty())
 		{
 			if (command.equalsIgnoreCase("l:"))
@@ -110,6 +111,7 @@ public class Commandpowertool extends EssentialsCommand
 			user.sendMessage(_("powerToolRemoveAll", itemName));
 		}
 
-		user.setPowertool(itemStack, powertools);
+		user.acquireWriteLock();
+		user.getData().setPowertool(itemStack.getType(), powertools);
 	}
 }

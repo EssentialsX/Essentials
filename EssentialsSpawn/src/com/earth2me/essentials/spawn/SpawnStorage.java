@@ -2,6 +2,7 @@ package com.earth2me.essentials.spawn;
 
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.IEssentialsModule;
+import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.settings.Spawns;
 import com.earth2me.essentials.storage.AsyncStorageObjectHolder;
 import java.io.File;
@@ -10,6 +11,7 @@ import java.util.Locale;
 import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.event.Event.Priority;
 
 
 public class SpawnStorage extends AsyncStorageObjectHolder<Spawns> implements IEssentialsModule
@@ -86,5 +88,59 @@ public class SpawnStorage extends AsyncStorageObjectHolder<Spawns> implements IE
 			return world.getSpawnLocation();
 		}
 		return ess.getServer().getWorlds().get(0).getSpawnLocation();
+	}
+
+	public Priority getRespawnPriority()
+	{
+		acquireReadLock();
+		try
+		{
+			for (Priority priority : Priority.values())
+			{
+				if (priority.toString().equalsIgnoreCase(getData().getRespawnPriority())) {
+					return priority;
+				}
+			}
+			return Priority.Normal;
+		} finally {
+			unlock();
+		}
+	}
+
+	public Location getNewbieSpawn()
+	{
+		acquireReadLock();
+		try
+		{
+			if (getData().getNewbieSpawn() == null || getData().getNewbieSpawn().isEmpty() || 
+				getData().getNewbieSpawn().equalsIgnoreCase("none")) {
+				return null;
+			}
+			return getSpawn(getData().getNewbieSpawn());
+		} finally {
+			unlock();
+		}
+	}
+
+	public boolean getAnnounceNewPlayers()
+	{
+		acquireReadLock();
+		try
+		{
+			return getData().getNewPlayerAnnouncement() != null && !getData().getNewPlayerAnnouncement().isEmpty();
+		} finally {
+			unlock();
+		}
+	}
+
+	public String getAnnounceNewPlayerFormat(IUser user)
+	{
+		acquireReadLock();
+		try
+		{
+			return getData().getNewPlayerAnnouncement().replace('&', '§').replace("§§", "&").replace("{PLAYER}", user.getDisplayName()).replace("{DISPLAYNAME}", user.getDisplayName()).replace("{GROUP}", user.getGroup()).replace("{USERNAME}", user.getName()).replace("{ADDRESS}", user.getAddress().toString());
+		} finally {
+			unlock();
+		}
 	}
 }

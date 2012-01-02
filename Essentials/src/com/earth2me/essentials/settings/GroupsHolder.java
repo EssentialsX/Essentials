@@ -3,6 +3,7 @@ package com.earth2me.essentials.settings;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.IGroups;
+import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.storage.AsyncStorageObjectHolder;
 import java.io.File;
@@ -11,6 +12,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
+import lombok.Cleanup;
 
 
 public class GroupsHolder extends AsyncStorageObjectHolder<Groups> implements IGroups
@@ -146,5 +148,21 @@ public class GroupsHolder extends AsyncStorageObjectHolder<Groups> implements IG
 			}
 		}
 		return 0;
+	}
+
+	@Override
+	public String getChatFormat(final IUser player)
+	{
+		for (GroupOptions groupOptions : getGroups(player))
+		{
+			if (groupOptions.getMessageFormat() != null)
+			{
+				return groupOptions.getMessageFormat();
+			}
+		}
+		@Cleanup
+		ISettings settings = ess.getSettings();
+		settings.acquireReadLock();
+		return settings.getData().getChat().getDefaultFormat();
 	}
 }

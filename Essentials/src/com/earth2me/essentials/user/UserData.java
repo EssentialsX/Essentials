@@ -49,7 +49,7 @@ public class UserData implements StorageObject
 	private String geolocation;
 	private boolean socialspy;
 	private boolean npc;
-	private boolean powertoolsenabled;
+	private boolean powerToolsEnabled;
 
 	public UserData()
 	{
@@ -70,9 +70,30 @@ public class UserData implements StorageObject
 		return powerTools == null ? Collections.<String>emptyList() : powerTools.get(mat);
 	}
 	
+	
+	public boolean hasPowerTools()
+	{
+		return powerTools != null && !powerTools.isEmpty();
+	}
+
+	public void setPowertool(Material mat, List<String> commands)
+	{
+		if (powerTools == null)
+		{
+			powerTools = new HashMap<Material, List<String>>();
+		}
+		powerTools.put(mat, commands);
+	}
+
+	public void clearAllPowertools()
+	{
+		powerTools = null;
+	}
+
 	public void removeHome(String home)
 	{
-		if (homes == null) {
+		if (homes == null)
+		{
 			return;
 		}
 		homes.remove(home);

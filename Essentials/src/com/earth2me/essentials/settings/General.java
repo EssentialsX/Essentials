@@ -25,13 +25,6 @@ public class General implements StorageObject
 	private String locale;
 	@Comment(
 	{
-		"Should we announce to the server when someone logs in for the first time?",
-		"If so, use this format, replacing {DISPLAYNAME} with the player name.",
-		"If not, set to ''"
-	})
-	private String newPlayerAnnouncement = "&dWelcome {DISPLAYNAME} to the server!";
-	@Comment(
-	{
 		"The number of items given, if the quantity parameter is left out in /item or /give.",
 		"If this number is below 1, the maximum stack size size is given. If oversized stacks",
 		"is not enabled, any number higher then the maximum stack size results in more than one stack."

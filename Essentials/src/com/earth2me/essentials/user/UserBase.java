@@ -397,4 +397,45 @@ public abstract class UserBase extends AsyncStorageObjectHolder<UserData> implem
 			unlock();
 		}
 	}
+	
+	public Location getHome(Location loc)
+	{
+		
+		acquireReadLock();
+		try
+		{
+			if (getData().getHomes() == null)
+			{
+				return null;
+			}
+			ArrayList<Location> worldHomes = new ArrayList<Location>();
+			for (Location location : getData().getHomes().values())
+			{
+				if (location.getWorld().equals(loc.getWorld())) {
+					worldHomes.add(location);
+				}
+			}
+			if (worldHomes.isEmpty()) {
+				return null;
+			}
+			if (worldHomes.size() == 1) {
+				return worldHomes.get(0);
+			}
+			double distance = Double.MAX_VALUE;
+			Location target = null;
+			for (Location location : worldHomes)
+			{
+				final double d = loc.distanceSquared(location);
+				if (d < distance) {
+					target = location;
+					distance = d;
+				}
+			}
+			return target;
+		}
+		finally
+		{
+			unlock();
+		}
+	}
 }

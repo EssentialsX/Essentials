@@ -17,4 +17,6 @@ public interface IGroups extends IStorageObjectHolder<Groups>
 	String getSuffix(IUser player);
 
 	int getHomeLimit(IUser player);
+
+	String getChatFormat(IUser player);
 }

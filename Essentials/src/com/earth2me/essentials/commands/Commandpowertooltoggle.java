@@ -15,12 +15,14 @@ public class Commandpowertooltoggle extends EssentialsCommand
 	@Override
 	protected void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
-		if (!user.hasPowerTools())
+		if (!user.getData().hasPowerTools())
 		{
 			user.sendMessage(_("noPowerTools"));
 			return;
 		}
-		user.sendMessage(user.togglePowerToolsEnabled()
+		user.acquireWriteLock();
+		user.getData().setPowerToolsEnabled(!user.getData().isPowerToolsEnabled());
+		user.sendMessage(user.getData().isPowerToolsEnabled()
 						 ? _("powerToolsEnabled")
 						 : _("powerToolsDisabled"));
 	}

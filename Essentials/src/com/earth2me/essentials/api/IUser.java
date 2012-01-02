@@ -40,7 +40,7 @@ public interface IUser extends Player, IStorageObjectHolder<UserData>, IReload, 
 
 	Location getHome(String name) throws Exception;
 
-	Location getHome(Location loc) throws Exception;
+	Location getHome(Location loc);
 
 	boolean isHidden();
 

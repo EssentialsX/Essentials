@@ -304,7 +304,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		final IUser user = ess.getUser(event.getPlayer());
 		user.acquireReadLock();
 		final ItemStack hand = user.getItemInHand();
-		if (hand == null || hand.getType() == Material.AIR || !user.getData().isPowertoolsenabled())
+		if (hand == null || hand.getType() == Material.AIR || !user.getData().isPowerToolsEnabled())
 		{
 			return;
 		}
