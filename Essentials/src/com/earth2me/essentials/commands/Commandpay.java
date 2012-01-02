@@ -21,6 +21,11 @@ public class Commandpay extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
+		
+		if (args[0] == "")
+		{
+			throw new NotEnoughArgumentsException("You need to specify a player to pay.");
+		}
 
 		double amount = Double.parseDouble(args[1].replaceAll("[^0-9\\.]", ""));
 
