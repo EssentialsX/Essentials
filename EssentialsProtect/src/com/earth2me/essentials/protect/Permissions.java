@@ -6,6 +6,7 @@ import java.util.Locale;
 
 public enum Permissions implements IPermission
 {
+	BUILD,
 	PREVENTDAMAGE_FALL,
 	PREVENTDAMAGE_NONE
 	;

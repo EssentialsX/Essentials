@@ -1,13 +1,13 @@
 package com.earth2me.essentials.protect;
 
-import com.earth2me.essentials.api.IReload;
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.IReload;
 import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.protect.data.ProtectedBlockMemory;
 import com.earth2me.essentials.protect.data.ProtectedBlockMySQL;
 import com.earth2me.essentials.protect.data.ProtectedBlockSQLite;
 import java.beans.PropertyVetoException;
-import static com.earth2me.essentials.I18n._;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Location;
@@ -30,7 +30,7 @@ public class EssentialsConnect
 		ess = (IEssentials)essPlugin;
 		protect = (IProtect)essProtect;
 		ProtectReloader pr = new ProtectReloader();
-		pr.reloadConfig();
+		pr.onReload();
 		ess.addReloadListener(pr);
 		LOGGER.info(_("loadinfo", essProtect.getDescription().getName(), essProtect.getDescription().getVersion(), "essentials team"));
 
@@ -72,7 +72,8 @@ public class EssentialsConnect
 			{
 				protect.getStorage().onPluginDeactivation();
 			}
-			for (ProtectConfig protectConfig : ProtectConfig.values())
+			
+			/*for (ProtectConfig protectConfig : ProtectConfig.values())
 			{
 				if (protectConfig.isList())
 				{
@@ -87,7 +88,7 @@ public class EssentialsConnect
 					protect.getSettingsBoolean().put(protectConfig, ess.getSettings().getProtectBoolean(protectConfig.getConfigName(), protectConfig.getDefaultValueBoolean()));
 				}
 
-			}
+			}*/
 
 			if (protect.getSettingString(ProtectConfig.datatype).equalsIgnoreCase("mysql"))
 			{

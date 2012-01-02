@@ -13,6 +13,8 @@ import org.bukkit.entity.Player;
 public interface IUser extends Player, IStorageObjectHolder<UserData>, IReload, IReplyTo, Comparable<IUser>
 {
 	boolean isAuthorized(String node);
+	
+	boolean isAuthorized(IPermission node);
 
 	boolean isAuthorized(IEssentialsCommand cmd);
 

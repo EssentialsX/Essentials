@@ -33,7 +33,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 
 		final IUser user = ess.getUser(event.getPlayer());
 
-		if (prot.getSettingBool(ProtectConfig.disable_build) && !user.canBuild())
+		if (prot.getSettingBool(ProtectConfig.disable_build) && !user.isAuthorized(Permissions.BUILD))
 		{
 			event.setCancelled(true);
 			return;
@@ -230,7 +230,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 		}
 		final IUser user = ess.getUser(event.getPlayer());
 
-		if (prot.getSettingBool(ProtectConfig.disable_build) && !user.canBuild())
+		if (prot.getSettingBool(ProtectConfig.disable_build) && !user.isAuthorized(Permissions.BUILD))
 		{
 			event.setCancelled(true);
 			return;

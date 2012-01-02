@@ -1,7 +1,7 @@
 package com.earth2me.essentials.protect;
 
 
-public enum ProtectConfig
+/*public enum ProtectConfig
 {
 	datatype("protect.datatype", "sqlite"),
 	mysqlDB("protect.mysqlDb", "jdbc:mysql://localhost:3306/minecraft"),
@@ -87,7 +87,7 @@ public enum ProtectConfig
 
 	/**
 	 * @return the configName
-	 */
+	 *//*
 	public String getConfigName()
 	{
 		return configName;
@@ -95,7 +95,7 @@ public enum ProtectConfig
 
 	/**
 	 * @return the default value String
-	 */
+	 *//*
 	public String getDefaultValueString()
 	{
 		return defValueString;
@@ -103,7 +103,7 @@ public enum ProtectConfig
 
 	/**
 	 * @return the default value boolean
-	 */
+	 *//*
 	public boolean getDefaultValueBoolean()
 	{
 		return defValueBoolean;
@@ -118,4 +118,4 @@ public enum ProtectConfig
 	{
 		return isList;
 	}
-}
+}*/
