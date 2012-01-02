@@ -86,6 +86,11 @@ public class User extends UserBase implements IUser
 
 		return ess.getPermissionsHandler().hasPermission(base, node);
 	}
+	
+	public boolean isAuthorized(IPermission permission)
+	{
+		return isAuthorized(permission.getPermission());
+	}
 
 	@Override
 	public boolean isAuthorized(IEssentialsCommand cmd)
