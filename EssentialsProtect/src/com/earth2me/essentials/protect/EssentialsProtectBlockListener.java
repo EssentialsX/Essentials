@@ -32,64 +32,72 @@ public class EssentialsProtectBlockListener extends BlockListener
 		}
 
 		final IUser user = ess.getUser(event.getPlayer());
-
-		if (prot.getSettingBool(ProtectConfig.disable_build) && !user.isAuthorized(Permissions.BUILD))
+		final ProtectHolder settings = prot.getSettings();
+		settings.acquireReadLock();
+		try
 		{
-			event.setCancelled(true);
-			return;
-		}
-
-		final Block blockPlaced = event.getBlockPlaced();
-		final int id = blockPlaced.getTypeId();
-
-		if (prot.checkProtectionItems(ProtectConfig.blacklist_placement, id) && !user.isAuthorized("essentials.protect.exemptplacement"))
-		{
-			event.setCancelled(true);
-			return;
-		}
-
-		if (prot.checkProtectionItems(ProtectConfig.alert_on_placement, id))
-		{
-			prot.getEssentialsConnect().alert(user, blockPlaced.getType().toString(), _("alertPlaced"));
-		}
-
-		final Block below = blockPlaced.getRelative(BlockFace.DOWN);
-		if ((below.getType() == Material.RAILS || below.getType() == Material.POWERED_RAIL || below.getType() == Material.DETECTOR_RAIL)
-			&& prot.getSettingBool(ProtectConfig.prevent_block_on_rail)
-			&& prot.getStorage().isProtected(below, user.getName()))
-		{
-			event.setCancelled(true);
-			return;
-		}
-
-		final List<Block> protect = new ArrayList<Block>();
-		if ((blockPlaced.getType() == Material.RAILS || blockPlaced.getType() == Material.POWERED_RAIL || blockPlaced.getType() == Material.DETECTOR_RAIL)
-			&& prot.getSettingBool(ProtectConfig.protect_rails)
-			&& user.isAuthorized("essentials.protect"))
-		{
-			protect.add(blockPlaced);
-			if (prot.getSettingBool(ProtectConfig.protect_below_rails)
-				&& !prot.getStorage().isProtected(blockPlaced.getRelative(BlockFace.DOWN), user.getName()))
+			if (!user.isAuthorized(Permissions.BUILD))
 			{
-				protect.add(blockPlaced.getRelative(BlockFace.DOWN));
+				event.setCancelled(true);
+				return;
+			}
+
+			final Block blockPlaced = event.getBlockPlaced();
+			final int id = blockPlaced.getTypeId();
+
+			if (!user.isAuthorized(BlockPlacePermissions.getPermission(blockPlaced.getType())))
+			{
+				event.setCancelled(true);
+				return;
+			}
+
+			if (settings.getData().getAlertOnPlacement().contains(blockPlaced.getType()))
+			{
+				prot.getEssentialsConnect().alert(user, blockPlaced.getType().toString(), _("alertPlaced"));
+			}
+
+			final Block below = blockPlaced.getRelative(BlockFace.DOWN);
+			if ((below.getType() == Material.RAILS || below.getType() == Material.POWERED_RAIL || below.getType() == Material.DETECTOR_RAIL)
+				&& settings.getData().getSignsAndRails().isPreventBlockAboveRails()
+				&& prot.getStorage().isProtected(below, user.getName()))
+			{
+				event.setCancelled(true);
+				return;
+			}
+
+			final List<Block> protect = new ArrayList<Block>();
+			if ((blockPlaced.getType() == Material.RAILS || blockPlaced.getType() == Material.POWERED_RAIL || blockPlaced.getType() == Material.DETECTOR_RAIL)
+				&& settings.getData().getSignsAndRails().isRails()
+				&& user.isAuthorized("essentials.protect"))
+			{
+				protect.add(blockPlaced);
+				if (settings.getData().getSignsAndRails().isBlockBelow()
+					&& !prot.getStorage().isProtected(blockPlaced.getRelative(BlockFace.DOWN), user.getName()))
+				{
+					protect.add(blockPlaced.getRelative(BlockFace.DOWN));
+				}
+			}
+			if ((blockPlaced.getType() == Material.SIGN_POST || blockPlaced.getType() == Material.WALL_SIGN)
+				&& settings.getData().getSignsAndRails().isSigns()
+				&& user.isAuthorized("essentials.protect"))
+			{
+				protect.add(blockPlaced);
+				if (settings.getData().getSignsAndRails().isBlockBelow()
+					&& event.getBlockAgainst().getType() != Material.SIGN_POST
+					&& event.getBlockAgainst().getType() != Material.WALL_SIGN
+					&& !prot.getStorage().isProtected(event.getBlockAgainst(), user.getName()))
+				{
+					protect.add(event.getBlockAgainst());
+				}
+			}
+			for (Block block : protect)
+			{
+				prot.getStorage().protectBlock(block, user.getName());
 			}
 		}
-		if ((blockPlaced.getType() == Material.SIGN_POST || blockPlaced.getType() == Material.WALL_SIGN)
-			&& prot.getSettingBool(ProtectConfig.protect_signs)
-			&& user.isAuthorized("essentials.protect"))
+		finally
 		{
-			protect.add(blockPlaced);
-			if (prot.getSettingBool(ProtectConfig.protect_against_signs)
-				&& event.getBlockAgainst().getType() != Material.SIGN_POST
-				&& event.getBlockAgainst().getType() != Material.WALL_SIGN
-				&& !prot.getStorage().isProtected(event.getBlockAgainst(), user.getName()))
-			{
-				protect.add(event.getBlockAgainst());
-			}
-		}
-		for (Block block : protect)
-		{
-			prot.getStorage().protectBlock(block, user.getName());
+			settings.unlock();
 		}
 	}
 
@@ -100,47 +108,56 @@ public class EssentialsProtectBlockListener extends BlockListener
 		{
 			return;
 		}
-		final Block block = event.getBlock();
-		if ((block.getType() == Material.RAILS || block.getType() == Material.POWERED_RAIL || block.getType() == Material.DETECTOR_RAIL)
-			&& prot.getSettingBool(ProtectConfig.protect_rails))
+		final ProtectHolder settings = prot.getSettings();
+		settings.acquireReadLock();
+		try
 		{
-			event.setCancelled(true);
-			return;
-		}
-		if ((block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST)
-			&& prot.getSettingBool(ProtectConfig.protect_signs))
-		{
-			event.setCancelled(true);
-			return;
-		}
-		if (event.getBlock().getType() == Material.OBSIDIAN
-			|| event.getBlock().getRelative(BlockFace.DOWN).getType() == Material.OBSIDIAN)
-		{
-			event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_portal_creation));
-			return;
-		}
+			final Block block = event.getBlock();
+			if ((block.getType() == Material.RAILS || block.getType() == Material.POWERED_RAIL || block.getType() == Material.DETECTOR_RAIL)
+				&& settings.getData().getSignsAndRails().isRails())
+			{
+				event.setCancelled(true);
+				return;
+			}
+			if ((block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST)
+				&& settings.getData().getSignsAndRails().isSigns())
+			{
+				event.setCancelled(true);
+				return;
+			}
+			if (event.getBlock().getType() == Material.OBSIDIAN
+				|| event.getBlock().getRelative(BlockFace.DOWN).getType() == Material.OBSIDIAN)
+			{
+				event.setCancelled(settings.getData().getPrevent().isPortalCreation());
+				return;
+			}
 
-		if (event.getCause().equals(BlockIgniteEvent.IgniteCause.SPREAD))
-		{
-			event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_fire_spread));
-			return;
-		}
+			if (event.getCause().equals(BlockIgniteEvent.IgniteCause.SPREAD))
+			{
+				event.setCancelled(settings.getData().getPrevent().isFirespread());
+				return;
+			}
 
-		if (event.getCause().equals(BlockIgniteEvent.IgniteCause.FLINT_AND_STEEL))
-		{
-			event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_flint_fire));
-			return;
-		}
+			if (event.getCause().equals(BlockIgniteEvent.IgniteCause.FLINT_AND_STEEL) && event.getPlayer() != null)
+			{
+				event.setCancelled(ess.getUser(event.getPlayer()).isAuthorized(Permissions.USEFLINTSTEEL));
+				return;
+			}
 
-		if (event.getCause().equals(BlockIgniteEvent.IgniteCause.LAVA))
-		{
-			event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_lava_fire_spread));
-			return;
+			if (event.getCause().equals(BlockIgniteEvent.IgniteCause.LAVA))
+			{
+				event.setCancelled(settings.getData().getPrevent().isLavaFirespread());
+				return;
+			}
+			if (event.getCause().equals(BlockIgniteEvent.IgniteCause.LIGHTNING))
+			{
+				event.setCancelled(settings.getData().getPrevent().isLightningFirespread());
+				return;
+			}
 		}
-		if (event.getCause().equals(BlockIgniteEvent.IgniteCause.LIGHTNING))
+		finally
 		{
-			event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_lightning_fire_spread));
-			return;
+			settings.unlock();
 		}
 	}
 
@@ -151,37 +168,46 @@ public class EssentialsProtectBlockListener extends BlockListener
 		{
 			return;
 		}
-		final Block toBlock = event.getToBlock();
-		if ((toBlock.getType() == Material.RAILS || toBlock.getType() == Material.POWERED_RAIL || toBlock.getType() == Material.DETECTOR_RAIL)
-			&& prot.getSettingBool(ProtectConfig.protect_rails))
+		final ProtectHolder settings = prot.getSettings();
+		settings.acquireReadLock();
+		try
 		{
-			event.setCancelled(true);
-			return;
-		}
-		if ((toBlock.getType() == Material.WALL_SIGN || toBlock.getType() == Material.SIGN_POST)
-			&& prot.getSettingBool(ProtectConfig.protect_signs))
-		{
-			event.setCancelled(true);
-			return;
-		}
+			final Block toBlock = event.getToBlock();
+			if ((toBlock.getType() == Material.RAILS || toBlock.getType() == Material.POWERED_RAIL || toBlock.getType() == Material.DETECTOR_RAIL)
+				&& settings.getData().getSignsAndRails().isRails())
+			{
+				event.setCancelled(true);
+				return;
+			}
+			if ((toBlock.getType() == Material.WALL_SIGN || toBlock.getType() == Material.SIGN_POST)
+				&& settings.getData().getSignsAndRails().isSigns())
+			{
+				event.setCancelled(true);
+				return;
+			}
 
-		final Block block = event.getBlock();
-		if (block.getType() == Material.WATER || block.getType() == Material.STATIONARY_WATER)
-		{
-			event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_water_flow));
-			return;
-		}
+			final Block block = event.getBlock();
+			if (block.getType() == Material.WATER || block.getType() == Material.STATIONARY_WATER)
+			{
+				event.setCancelled(settings.getData().getPrevent().isWaterFlow());
+				return;
+			}
 
-		if (block.getType() == Material.LAVA || block.getType() == Material.STATIONARY_LAVA)
-		{
-			event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_lava_flow));
-			return;
+			if (block.getType() == Material.LAVA || block.getType() == Material.STATIONARY_LAVA)
+			{
+				event.setCancelled(settings.getData().getPrevent().isLavaFlow());
+				return;
+			}
+			// TODO: Test if this still works
+			/*
+			 * if (block.getType() == Material.AIR) {
+			 * event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_water_bucket_flow)); return;
+			}
+			 */
 		}
-
-		if (block.getType() == Material.AIR)
+		finally
 		{
-			event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_water_bucket_flow));
-			return;
+			settings.unlock();
 		}
 	}
 
@@ -192,22 +218,32 @@ public class EssentialsProtectBlockListener extends BlockListener
 		{
 			return;
 		}
-		final Block block = event.getBlock();
-		if ((block.getType() == Material.RAILS || block.getType() == Material.POWERED_RAIL || block.getType() == Material.DETECTOR_RAIL) && prot.getSettingBool(ProtectConfig.protect_rails))
+		final ProtectHolder settings = prot.getSettings();
+		settings.acquireReadLock();
+		try
 		{
-			event.setCancelled(true);
-			return;
+			final Block block = event.getBlock();
+			if ((block.getType() == Material.RAILS || block.getType() == Material.POWERED_RAIL || block.getType() == Material.DETECTOR_RAIL)
+				&& settings.getData().getSignsAndRails().isRails())
+			{
+				event.setCancelled(true);
+				return;
+			}
+			if ((block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST)
+				&& settings.getData().getSignsAndRails().isSigns())
+			{
+				event.setCancelled(true);
+				return;
+			}
+			if (settings.getData().getPrevent().isFirespread())
+			{
+				event.setCancelled(true);
+				return;
+			}
 		}
-		if ((block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST)
-			&& prot.getSettingBool(ProtectConfig.protect_signs))
+		finally
 		{
-			event.setCancelled(true);
-			return;
-		}
-		if (prot.getSettingBool(ProtectConfig.prevent_fire_spread))
-		{
-			event.setCancelled(true);
-			return;
+			settings.unlock();
 		}
 	}
 	private final static BlockFace[] faces = new BlockFace[]
@@ -230,7 +266,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 		}
 		final IUser user = ess.getUser(event.getPlayer());
 
-		if (prot.getSettingBool(ProtectConfig.disable_build) && !user.isAuthorized(Permissions.BUILD))
+		if (!user.isAuthorized(Permissions.BUILD))
 		{
 			event.setCancelled(true);
 			return;
@@ -238,8 +274,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 		final Block block = event.getBlock();
 		final int typeId = block.getTypeId();
 
-		if (prot.checkProtectionItems(ProtectConfig.blacklist_break, typeId)
-			&& !user.isAuthorized("essentials.protect.exemptbreak"))
+		if (!user.isAuthorized(BlockBreakPermissions.getPermission(block.getType())))
 		{
 			event.setCancelled(true);
 			return;

@@ -145,43 +145,38 @@ public class EssentialsProtectEntityListener extends EntityListener
 		if (target instanceof Player)
 		{
 			if (cause == DamageCause.FALL
-				&& prot.getSettingBool(ProtectConfig.disable_fall)
-				&& !(user.isAuthorized("essentials.protect.damage.fall")
-					 && !user.isAuthorized("essentials.protect.damage.disable")))
+				&& (user.isAuthorized(Permissions.PREVENTDAMAGE_FALL)
+					&& !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
 			{
 				event.setCancelled(true);
 				return;
 			}
 
 			if (cause == DamageCause.SUFFOCATION
-				&& prot.getSettingBool(ProtectConfig.disable_suffocate)
-				&& !(user.isAuthorized("essentials.protect.damage.suffocation")
-					 && !user.isAuthorized("essentials.protect.damage.disable")))
+				&& (user.isAuthorized(Permissions.PREVENTDAMAGE_SUFFOCATION)
+					&& !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
 			{
 				event.setCancelled(true);
 				return;
 			}
 			if ((cause == DamageCause.FIRE
 				 || cause == DamageCause.FIRE_TICK)
-				&& prot.getSettingBool(ProtectConfig.disable_firedmg)
-				&& !(user.isAuthorized("essentials.protect.damage.fire")
-					 && !user.isAuthorized("essentials.protect.damage.disable")))
+				&& (user.isAuthorized(Permissions.PREVENTDAMAGE_FIRE)
+					&& !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
 			{
 				event.setCancelled(true);
 				return;
 			}
 			if (cause == DamageCause.DROWNING
-				&& prot.getSettingBool(ProtectConfig.disable_drown)
-				&& !(user.isAuthorized("essentials.protect.damage.drowning")
-					 && !user.isAuthorized("essentials.protect.damage.disable")))
+				&& (user.isAuthorized(Permissions.PREVENTDAMAGE_DROWNING)
+					 && !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
 			{
 				event.setCancelled(true);
 				return;
 			}
 			if (cause == DamageCause.LIGHTNING
-				&& prot.getSettingBool(ProtectConfig.disable_lightning)
-				&& !(user.isAuthorized("essentials.protect.damage.lightning")
-					 && !user.isAuthorized("essentials.protect.damage.disable")))
+				&& (user.isAuthorized(Permissions.PREVENTDAMAGE_LIGHTNING)
+					 && !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
 			{
 				event.setCancelled(true);
 				return;

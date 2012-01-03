@@ -618,6 +618,7 @@ public final class Util
 			}
 			parent = perm;
 		}
+		perm.recalculatePermissibles();
 		return perm;
 	}
 	private static transient final Pattern COLOR_PATTERN = Pattern.compile("(?i)\u00A7[0-9A-F]");
