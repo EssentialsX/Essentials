@@ -2,18 +2,12 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IUser;
-import org.bukkit.Server;
 
 
 public class Commandignore extends EssentialsCommand
 {
-	public Commandignore()
-	{
-		super("ignore");
-	}
-
 	@Override
-	protected void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
+	protected void run(final IUser user, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -22,7 +16,7 @@ public class Commandignore extends EssentialsCommand
 		IUser player;
 		try
 		{
-			player = getPlayer(server, args, 0);
+			player = getPlayer(args, 0);
 		}
 		catch (NoSuchFieldException ex)
 		{

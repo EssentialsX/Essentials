@@ -2,23 +2,17 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.api.IUser;
 import org.bukkit.Location;
-import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
 
 public class Commandgetpos extends EssentialsCommand
 {
-	public Commandgetpos()
-	{
-		super("getpos");
-	}
-	
 	@Override
-	public void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
+	public void run(final IUser user, final String[] args) throws Exception
 	{
 		if (args.length > 0 && user.isAuthorized("essentials.getpos.others"))
 		{
-			final IUser otherUser = getPlayer(server, args, 0);
+			final IUser otherUser = getPlayer(args, 0);
 			outputPosition(user, otherUser.getLocation(), user.getLocation());
 		}
 		else
@@ -26,18 +20,18 @@ public class Commandgetpos extends EssentialsCommand
 			outputPosition(user, user.getLocation(), null);
 		}
 	}
-	
+
 	@Override
-	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	protected void run(final CommandSender sender, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		final IUser user = getPlayer(server, args, 0);
+		final IUser user = getPlayer(args, 0);
 		outputPosition(sender, user.getLocation(), null);
 	}
-	
+
 	//TODO: Translate
 	private void outputPosition(final CommandSender sender, final Location coords, final Location distance)
 	{

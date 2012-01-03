@@ -4,20 +4,14 @@ import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IReplyTo;
 import com.earth2me.essentials.api.IUser;
-import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
 public class Commandr extends EssentialsCommand
 {
-	public Commandr()
-	{
-		super("r");
-	}
-
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	public void run(final CommandSender sender, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -57,5 +51,11 @@ public class Commandr extends EssentialsCommand
 				Console.getConsoleReplyTo().setReplyTo(sender);
 			}
 		}
+	}
+
+	@Override
+	public String getPermission()
+	{
+		return "essentials.msg";
 	}
 }

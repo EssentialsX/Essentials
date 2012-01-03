@@ -9,20 +9,14 @@ import java.util.Locale;
 import java.util.Random;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
-import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 
 
 public class Commandspawnmob extends EssentialsCommand
 {
-	public Commandspawnmob()
-	{
-		super("spawnmob");
-	}
-
 	@Override
-	public void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
+	public void run(final IUser user, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -79,7 +73,7 @@ public class Commandspawnmob extends EssentialsCommand
 		IUser otherUser = null;
 		if (args.length >= 3)
 		{
-			 otherUser = getPlayer(ess.getServer(), args, 2);
+			otherUser = getPlayer(ess.getServer(), args, 2);
 		}
 		final Location loc = (otherUser == null) ? block.getLocation() : otherUser.getLocation();
 		final Location sloc = Util.getSafeDestination(loc);

@@ -1,4 +1,4 @@
-package com.earth2me.essentials.protect;
+package com.earth2me.essentials.perm;
 
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.IPermission;
@@ -9,11 +9,9 @@ import org.bukkit.permissions.PermissionDefault;
 
 public enum Permissions implements IPermission
 {
-	BUILD,
-	PREVENTDAMAGE_FALL,
-	PREVENTDAMAGE_NONE
-	;
-	private static final String base = "essentials.protect.";
+	AFK_OTHERS,
+	BALANCE_OTHERS;
+	private static final String base = "essentials.";
 	private final String permission;
 	private final PermissionDefault defaultPerm;
 	private transient Permission bukkitPerm = null;

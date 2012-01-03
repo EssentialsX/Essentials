@@ -2,31 +2,24 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.user.Ban;
 import lombok.Cleanup;
-import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
 public class Commandban extends EssentialsCommand
 {
-	public Commandban()
-	{
-		super("ban");
-	}
-
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	public void run(final CommandSender sender, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
 		@Cleanup
-		final IUser user = getPlayer(server, args, 0, true);
+		final IUser user = getPlayer(args, 0, true);
 		if (user.getBase() instanceof OfflinePlayer)
 		{
 			if (sender instanceof Player

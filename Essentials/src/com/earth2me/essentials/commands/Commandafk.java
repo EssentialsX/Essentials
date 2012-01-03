@@ -2,21 +2,17 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IUser;
-import org.bukkit.Server;
+import com.earth2me.essentials.perm.Permissions;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionDefault;
 
 
 public class Commandafk extends EssentialsCommand
 {
-	public Commandafk()
-	{
-		super("afk");
-	}
-
 	@Override
-	public void run(Server server, IUser user, String commandLabel, String[] args) throws Exception
+	public void run(IUser user, String[] args) throws Exception
 	{
-		if (args.length > 0 && user.isAuthorized("essentials.afk.others"))
+		if (args.length > 0 && user.isAuthorized(Permissions.AFK_OTHERS))
 		{
 			IUser afkUser = ess.getUser((Player)ess.getServer().matchPlayer(args[0]));
 			if (afkUser != null)
@@ -49,5 +45,11 @@ public class Commandafk extends EssentialsCommand
 				ess.broadcastMessage(user, _("userIsAway", user.getDisplayName()));
 			}
 		}
+	}
+	
+	@Override
+	public PermissionDefault getPermissionDefault()
+	{
+		return PermissionDefault.TRUE;
 	}
 }

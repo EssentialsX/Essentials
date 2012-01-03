@@ -1,21 +1,18 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.*;
-import com.earth2me.essentials.api.IUser;
 import static com.earth2me.essentials.I18n._;
-import java.util.*;
-import org.bukkit.Server;
+import com.earth2me.essentials.Kit;
+import com.earth2me.essentials.Trade;
+import com.earth2me.essentials.api.IUser;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 
 public class Commandkit extends EssentialsCommand
 {
-	public Commandkit()
-	{
-		super("kit");
-	}
-
 	@Override
-	public void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
+	public void run(final IUser user, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -48,7 +45,7 @@ public class Commandkit extends EssentialsCommand
 			charge.isAffordableFor(user);
 
 			Kit.expandItems(ess, user, items);
-			
+
 			charge.charge(user);
 			user.sendMessage(_("kitGive", kitName));
 

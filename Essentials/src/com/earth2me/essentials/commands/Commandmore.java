@@ -4,19 +4,13 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.api.IUser;
 import java.util.Locale;
-import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 
 
 public class Commandmore extends EssentialsCommand
 {
-	public Commandmore()
-	{
-		super("more");
-	}
-
 	@Override
-	public void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
+	public void run(final IUser user, final String[] args) throws Exception
 	{
 		final ItemStack stack = user.getItemInHand();
 		if (stack == null)

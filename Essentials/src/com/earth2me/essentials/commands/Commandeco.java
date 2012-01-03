@@ -4,20 +4,14 @@ import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.api.IUser;
 import java.util.Locale;
 import lombok.Cleanup;
-import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
 public class Commandeco extends EssentialsCommand
 {
-	public Commandeco()
-	{
-		super("eco");
-	}
-
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	public void run(final CommandSender sender, final String[] args) throws Exception
 	{
 		if (args.length < 2)
 		{
@@ -60,7 +54,7 @@ public class Commandeco extends EssentialsCommand
 		}
 		else
 		{
-			final IUser player = getPlayer(server, args, 1, true);
+			final IUser player = getPlayer(args, 1, true);
 			switch (cmd)
 			{
 			case GIVE:

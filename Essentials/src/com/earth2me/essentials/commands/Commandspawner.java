@@ -7,19 +7,13 @@ import com.earth2me.essentials.Util;
 import java.util.Locale;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Server;
 import org.bukkit.block.CreatureSpawner;
 
 
 public class Commandspawner extends EssentialsCommand
 {
-	public Commandspawner()
-	{
-		super("spawner");
-	}
-
 	@Override
-	protected void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
+	protected void run(final IUser user, final String[] args) throws Exception
 	{
 		if (args.length < 1 || args[0].length() < 2)
 		{

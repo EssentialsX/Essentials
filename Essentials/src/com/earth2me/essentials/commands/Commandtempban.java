@@ -6,26 +6,21 @@ import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.user.Ban;
-import org.bukkit.Server;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
 public class Commandtempban extends EssentialsCommand
 {
-	public Commandtempban()
-	{
-		super("tempban");
-	}
-
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	public void run(final CommandSender sender, final String[] args) throws Exception
 	{
 		if (args.length < 2)
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		final IUser user = getPlayer(server, args, 0, true);
+		final IUser user = getPlayer(args, 0, true);
 		if (user.getBase() instanceof OfflinePlayer)
 		{
 			if (sender instanceof Player

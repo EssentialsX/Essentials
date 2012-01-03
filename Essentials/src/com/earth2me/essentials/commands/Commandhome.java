@@ -2,27 +2,20 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
-import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.Util;
+import com.earth2me.essentials.api.IUser;
 import java.util.List;
 import java.util.Locale;
-import lombok.Cleanup;
 import org.bukkit.Location;
-import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 
 public class Commandhome extends EssentialsCommand
 {
-	public Commandhome()
-	{
-		super("home");
-	}
-
 	@Override
-	public void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
+	public void run(final IUser user, final String[] args) throws Exception
 	{
-		final Trade charge = new Trade(this.getName(), ess);
+		final Trade charge = new Trade(commandName, ess);
 		charge.isAffordableFor(user);
 		IUser player = user;
 		String homeName = "";
@@ -36,7 +29,7 @@ public class Commandhome extends EssentialsCommand
 			}
 			else
 			{
-				player = getPlayer(server, nameParts, 0, true);
+				player = getPlayer(nameParts, 0, true);
 				if (nameParts.length > 1)
 				{
 					homeName = nameParts[1];

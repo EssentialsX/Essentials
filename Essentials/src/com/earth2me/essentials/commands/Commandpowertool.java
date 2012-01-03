@@ -7,19 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import org.bukkit.Material;
-import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 
 
 public class Commandpowertool extends EssentialsCommand
 {
-	public Commandpowertool()
-	{
-		super("powertool");
-	}
-
 	@Override
-	protected void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
+	protected void run(final IUser user, final String[] args) throws Exception
 	{
 		String command = getFinalArg(args, 0);
 

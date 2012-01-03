@@ -4,7 +4,6 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IUser;
 import java.util.Locale;
 import org.bukkit.Chunk;
-import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.*;
@@ -12,12 +11,6 @@ import org.bukkit.entity.*;
 
 public class Commandremove extends EssentialsCommand
 {
-	public Commandremove()
-	{
-		super("remove");
-	}
-
-
 	private enum ToRemove
 	{
 		DROPS,
@@ -29,7 +22,7 @@ public class Commandremove extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
+	protected void run(final IUser user, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -64,7 +57,7 @@ public class Commandremove extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	protected void run(final CommandSender sender, final String[] args) throws Exception
 	{
 		if (args.length < 2)
 		{
@@ -92,8 +85,9 @@ public class Commandremove extends EssentialsCommand
 	protected void removeEntities(final CommandSender sender, final World world, final ToRemove toRemove, int radius) throws Exception
 	{
 		int removed = 0;
-		if (radius > 0) {
-			radius*=radius;
+		if (radius > 0)
+		{
+			radius *= radius;
 		}
 		for (Chunk chunk : world.getLoadedChunks())
 		{

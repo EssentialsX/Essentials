@@ -3,35 +3,30 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.IUser;
-import org.bukkit.Server;
+import com.earth2me.essentials.perm.Permissions;
 import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.PermissionDefault;
 
 
 public class Commandbalance extends EssentialsCommand
 {
-	public Commandbalance()
-	{
-		super("balance");
-	}
-
 	@Override
-	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	protected void run(final CommandSender sender, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		sender.sendMessage(_("balance", Util.formatCurrency(getPlayer(server, args, 0, true).getMoney(), ess)));
+		sender.sendMessage(_("balance", Util.formatCurrency(getPlayer(args, 0, true).getMoney(), ess)));
 	}
 
 	@Override
-	public void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
+	public void run(final IUser user, final String[] args) throws Exception
 	{
 		final double bal = (args.length < 1
-							|| !(user.isAuthorized("essentials.balance.others")
-								 || user.isAuthorized("essentials.balance.other"))
+							|| !user.isAuthorized(Permissions.BALANCE_OTHERS)
 							? user
-							: getPlayer(server, args, 0, true)).getMoney();
+							: getPlayer(args, 0, true)).getMoney();
 		user.sendMessage(_("balance", Util.formatCurrency(bal, ess)));
 	}
 }

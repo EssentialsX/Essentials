@@ -6,18 +6,12 @@ import java.util.HashMap;
 import java.util.Locale;
 import lombok.Cleanup;
 import org.bukkit.Location;
-import org.bukkit.Server;
 
 
 public class Commandsethome extends EssentialsCommand
 {
-	public Commandsethome()
-	{
-		super("sethome");
-	}
-
 	@Override
-	public void run(final Server server, final IUser user, final String commandLabel, String[] args) throws Exception
+	public void run(final IUser user, String[] args) throws Exception
 	{
 		if (args.length > 0)
 		{

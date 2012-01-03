@@ -1,5 +1,14 @@
 package com.earth2me.essentials.api;
 
-public interface IPermission {
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+
+
+public interface IPermission
+{
 	String getPermission();
+
+	Permission getBukkitPermission();
+	
+	PermissionDefault getPermissionDefault();
 }

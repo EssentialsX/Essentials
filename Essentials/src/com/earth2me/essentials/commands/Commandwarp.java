@@ -8,7 +8,6 @@ import com.earth2me.essentials.api.IWarps;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
@@ -17,13 +16,8 @@ public class Commandwarp extends EssentialsCommand
 {
 	private final static int WARPS_PER_PAGE = 20;
 
-	public Commandwarp()
-	{
-		super("warp");
-	}
-
 	@Override
-	public void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
+	public void run(final IUser user, final String[] args) throws Exception
 	{
 		if (args.length == 0 || args[0].matches("[0-9]+"))
 		{
@@ -53,7 +47,7 @@ public class Commandwarp extends EssentialsCommand
 	}
 
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	public void run(final CommandSender sender, final String[] args) throws Exception
 	{
 		if (args.length < 2 || args[0].matches("[0-9]+"))
 		{
@@ -86,7 +80,7 @@ public class Commandwarp extends EssentialsCommand
 			while (iterator.hasNext())
 			{
 				final String warpName = iterator.next();
-				if (ess.getSettings().getPerWarpPermission() && !((User)sender).isAuthorized("essentials.warp." + warpName))
+				if (ess.getSettings().getPerWarpPermission() && !((IUser)sender).isAuthorized("essentials.warp." + warpName))
 				{
 					iterator.remove();
 				}
@@ -114,7 +108,7 @@ public class Commandwarp extends EssentialsCommand
 
 	private void warpUser(final IUser user, final String name) throws Exception
 	{
-		final Trade charge = new Trade(this.getName(), ess);
+		final Trade charge = new Trade(commandName, ess);
 		charge.isAffordableFor(user);
 		if (ess.getSettings().getPerWarpPermission())
 		{

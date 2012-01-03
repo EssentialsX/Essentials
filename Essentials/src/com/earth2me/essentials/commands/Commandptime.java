@@ -4,7 +4,6 @@ import com.earth2me.essentials.DescParseTickFormat;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IUser;
 import java.util.*;
-import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -22,13 +21,8 @@ public class Commandptime extends EssentialsCommand
 		getAliases.add("display");
 	}
 
-	public Commandptime()
-	{
-		super("ptime");
-	}
-
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	public void run(final CommandSender sender, final String[] args) throws Exception
 	{
 		// Which Players(s) / Users(s) are we interested in?
 		String userSelector = null;
@@ -36,7 +30,7 @@ public class Commandptime extends EssentialsCommand
 		{
 			userSelector = args[1];
 		}
-		Set<IUser> users = getUsers(server, sender, userSelector);
+		Set<IUser> users = getUsers(sender, userSelector);
 
 		// If no arguments we are reading the time
 		if (args.length == 0)
@@ -181,7 +175,7 @@ public class Commandptime extends EssentialsCommand
 	/**
 	 * Used to parse an argument of the type "users(s) selector"
 	 */
-	private Set<IUser> getUsers(final Server server, final CommandSender sender, final String selector) throws Exception
+	private Set<IUser> getUsers(final CommandSender sender, final String selector) throws Exception
 	{
 		final Set<IUser> users = new TreeSet<IUser>();
 		// If there is no selector we want the sender itself. Or all users if sender isn't a user.

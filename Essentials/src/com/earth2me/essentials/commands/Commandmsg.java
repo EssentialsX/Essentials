@@ -6,20 +6,14 @@ import com.earth2me.essentials.api.IReplyTo;
 import com.earth2me.essentials.api.IUser;
 import java.util.List;
 import lombok.Cleanup;
-import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
 public class Commandmsg extends EssentialsCommand
 {
-	public Commandmsg()
-	{
-		super("msg");
-	}
-
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, String[] args) throws Exception
+	public void run(final CommandSender sender, String[] args) throws Exception
 	{
 		if (args.length < 2 || args[0].trim().isEmpty() || args[1].trim().isEmpty())
 		{

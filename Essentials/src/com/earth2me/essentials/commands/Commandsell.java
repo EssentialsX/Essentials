@@ -8,19 +8,13 @@ import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import java.util.Locale;
 import java.util.logging.Level;
 import org.bukkit.Material;
-import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 
 
 public class Commandsell extends EssentialsCommand
 {
-	public Commandsell()
-	{
-		super("sell");
-	}
-
 	@Override
-	public void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
+	public void run(final IUser user, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{

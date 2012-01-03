@@ -4,26 +4,20 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.api.IUser;
-import lombok.Cleanup;
-import org.bukkit.Server;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 
 public class Commandtpaccept extends EssentialsCommand
 {
-	public Commandtpaccept()
-	{
-		super("tpaccept");
-	}
-
 	@Override
-	public void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
+	public void run(final IUser user, final String[] args) throws Exception
 	{
 		if (user.getTeleportRequester() == null)
 		{
 			throw new Exception(_("noPendingRequest"));
 		}
-		
+
 		final IUser target = user.getTeleportRequester();
 		if (target.getBase() instanceof OfflinePlayer
 			|| (user.isTeleportRequestHere() && !target.isAuthorized("essentials.tpahere")))
@@ -38,7 +32,7 @@ public class Commandtpaccept extends EssentialsCommand
 			throw new Exception(_("requestTimedOut"));
 		}
 
-		final Trade charge = new Trade(this.getName(), ess);
+		final Trade charge = new Trade(commandName, ess);
 		if (user.isTeleportRequestHere())
 		{
 			charge.isAffordableFor(user);

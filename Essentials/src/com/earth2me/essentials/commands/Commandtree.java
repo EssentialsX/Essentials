@@ -4,19 +4,13 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.Util;
 import org.bukkit.Location;
-import org.bukkit.Server;
 import org.bukkit.TreeType;
 
 
 public class Commandtree extends EssentialsCommand
 {
-	public Commandtree()
-	{
-		super("tree");
-	}
-
 	@Override
-	public void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
+	public void run(final IUser user, final String[] args) throws Exception
 	{
 		TreeType tree;
 		if (args.length < 1)

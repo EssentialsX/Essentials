@@ -12,13 +12,8 @@ import org.bukkit.entity.Player;
 
 public class Commandnick extends EssentialsCommand
 {
-	public Commandnick()
-	{
-		super("nick");
-	}
-
 	@Override
-	public void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
+	public void run(final IUser user, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -37,15 +32,15 @@ public class Commandnick extends EssentialsCommand
 			{
 				throw new Exception(_("nickOthersPermission"));
 			}
-			setNickname(server, getPlayer(server, args, 0), formatNickname(user, args[1]));
+			setNickname(getPlayer(args, 0), formatNickname(user, args[1]));
 			user.sendMessage(_("nickChanged"));
 			return;
 		}
-		setNickname(server, user, formatNickname(user, args[0]));
+		setNickname(user, formatNickname(user, args[0]));
 	}
 
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	public void run(final CommandSender sender, final String[] args) throws Exception
 	{
 		if (args.length < 2)
 		{
@@ -64,7 +59,7 @@ public class Commandnick extends EssentialsCommand
 		}
 		else
 		{
-			setNickname(server, getPlayer(server, args, 0), formatNickname(null, args[1]));
+			setNickname(getPlayer(args, 0), formatNickname(null, args[1]));
 		}
 		sender.sendMessage(_("nickChanged"));
 	}
@@ -84,7 +79,7 @@ public class Commandnick extends EssentialsCommand
 		{
 			try
 			{
-				setNickname(server, ess.getUser(player), "off");
+				setNickname(ess.getUser(player), "off");
 			}
 			catch (Exception ex)
 			{
@@ -92,7 +87,7 @@ public class Commandnick extends EssentialsCommand
 		}
 	}
 
-	private void setNickname(final Server server, final IUser target, final String nick) throws Exception
+	private void setNickname(final IUser target, final String nick) throws Exception
 	{
 		if (nick.matches("[^a-zA-Z_0-9]"))
 		{

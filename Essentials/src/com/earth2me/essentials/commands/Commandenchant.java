@@ -5,21 +5,15 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.Util;
 import java.util.*;
-import org.bukkit.Server;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
 
 public class Commandenchant extends EssentialsCommand
 {
-	public Commandenchant()
-	{
-		super("enchant");
-	}
-
 	//TODO: Implement charge costs: final Trade charge = new Trade("enchant-" + enchantmentName, ess);
 	@Override
-	protected void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
+	protected void run(final IUser user, final String[] args) throws Exception
 	{
 		final ItemStack stack = user.getItemInHand();
 		if (stack == null)

@@ -3,18 +3,12 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IUser;
 import lombok.Cleanup;
-import org.bukkit.Server;
 
 
 public class Commandtpahere extends EssentialsCommand
 {
-	public Commandtpahere()
-	{
-		super("tpahere");
-	}
-
 	@Override
-	public void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
+	public void run(final IUser user, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -22,7 +16,7 @@ public class Commandtpahere extends EssentialsCommand
 		}
 
 		@Cleanup
-		final IUser player = getPlayer(server, args, 0);
+		final IUser player = getPlayer(args, 0);
 		player.acquireReadLock();
 		if (!player.getData().isTeleportEnabled())
 		{

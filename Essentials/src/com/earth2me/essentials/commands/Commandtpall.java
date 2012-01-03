@@ -10,25 +10,20 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 public class Commandtpall extends EssentialsCommand
 {
-	public Commandtpall()
-	{
-		super("tpall");
-	}
-
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	public void run(final CommandSender sender, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
 			if (sender instanceof Player)
 			{
-				teleportAllPlayers(server, sender, ess.getUser(sender));
+				teleportAllPlayers(sender, ess.getUser(sender));
 				return;
 			}
 			throw new NotEnoughArgumentsException();
 		}
 
-		final IUser player = getPlayer(server, args, 0);
+		final IUser player = getPlayer(args, 0);
 		teleportAllPlayers(server, sender, player);
 	}
 
@@ -48,7 +43,7 @@ public class Commandtpall extends EssentialsCommand
 			}
 			catch (Exception ex)
 			{
-				ess.showCommandError(sender, getName(), ex);
+				ess.showCommandError(sender, commandName, ex);
 			}
 		}
 	}

@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.Cleanup;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -39,17 +40,17 @@ public final class Util
 		try
 		{
 			String r = name.toLowerCase(Locale.ENGLISH);
-			r = r.replace('.', (char)('\ue200'+'.'));
-			r = r.replace('\\', (char)('\ue200'+'\\'));
-			r = r.replace('/', (char)('\ue200'+'/'));
-			r = r.replace('"', (char)('\ue200'+'"'));
-			r = r.replace('<', (char)('\ue200'+'<'));
-			r = r.replace('>', (char)('\ue200'+'>'));
-			r = r.replace('|', (char)('\ue200'+'|'));
-			r = r.replace('?', (char)('\ue200'+'?'));
-			r = r.replace('*', (char)('\ue200'+'*'));
-			r = r.replace(':', (char)('\ue200'+':'));
-			r = r.replace('-', (char)('\ue200'+'-'));
+			r = r.replace('.', (char)('\ue200' + '.'));
+			r = r.replace('\\', (char)('\ue200' + '\\'));
+			r = r.replace('/', (char)('\ue200' + '/'));
+			r = r.replace('"', (char)('\ue200' + '"'));
+			r = r.replace('<', (char)('\ue200' + '<'));
+			r = r.replace('>', (char)('\ue200' + '>'));
+			r = r.replace('|', (char)('\ue200' + '|'));
+			r = r.replace('?', (char)('\ue200' + '?'));
+			r = r.replace('*', (char)('\ue200' + '*'));
+			r = r.replace(':', (char)('\ue200' + ':'));
+			r = r.replace('-', (char)('\ue200' + '-'));
 			r = unsafeFileChars.matcher(r).replaceAll("");
 			return Punycode.encode(r);
 		}
@@ -58,23 +59,23 @@ public final class Util
 			throw new InvalidNameException(ex);
 		}
 	}
-	
+
 	public static String decodeFileName(String name) throws InvalidNameException
 	{
 		try
 		{
 			String r = Punycode.decode(name);
-			r = r.replace((char)('\ue200'+'.'), '.');
-			r = r.replace((char)('\ue200'+'\\'), '\\');
-			r = r.replace((char)('\ue200'+'/'), '/');
-			r = r.replace((char)('\ue200'+'"'), '"');
-			r = r.replace((char)('\ue200'+'<'), '<');
-			r = r.replace((char)('\ue200'+'>'), '>');
-			r = r.replace((char)('\ue200'+'|'), '|');
-			r = r.replace((char)('\ue200'+'?'), '?');
-			r = r.replace((char)('\ue200'+'*'), '*');
-			r = r.replace((char)('\ue200'+':'), ':');
-			r = r.replace((char)('\ue200'+'-'), '-');
+			r = r.replace((char)('\ue200' + '.'), '.');
+			r = r.replace((char)('\ue200' + '\\'), '\\');
+			r = r.replace((char)('\ue200' + '/'), '/');
+			r = r.replace((char)('\ue200' + '"'), '"');
+			r = r.replace((char)('\ue200' + '<'), '<');
+			r = r.replace((char)('\ue200' + '>'), '>');
+			r = r.replace((char)('\ue200' + '|'), '|');
+			r = r.replace((char)('\ue200' + '?'), '?');
+			r = r.replace((char)('\ue200' + '*'), '*');
+			r = r.replace((char)('\ue200' + ':'), ':');
+			r = r.replace((char)('\ue200' + '-'), '-');
 			return r;
 		}
 		catch (PunycodeException ex)
@@ -580,6 +581,44 @@ public final class Util
 			basePerm.getChildren().put(permissionName, Boolean.TRUE);
 		}
 		basePerm.recalculatePermissibles();
+	}
+	private static transient final Pattern DOT_PATTERN = Pattern.compile("\\.");
+
+	public static Permission registerPermission(String permission, PermissionDefault defaultPerm)
+	{
+		final PluginManager pluginManager = Bukkit.getServer().getPluginManager();
+		final String[] parts = DOT_PATTERN.split(permission);
+		final StringBuilder builder = new StringBuilder(permission.length());
+		Permission parent = null;
+		for (int i = 0; i < parts.length - 1; i++)
+		{
+			builder.append(parts[i]).append(".*");
+			String permString = builder.toString();
+			Permission perm = pluginManager.getPermission(permString);
+			if (perm == null)
+			{
+				perm = new Permission(permString, PermissionDefault.FALSE);
+				pluginManager.addPermission(perm);
+				if (parent != null)
+				{
+					parent.getChildren().put(perm.getName(), Boolean.TRUE);
+				}
+				parent = perm;
+			}
+			builder.deleteCharAt(builder.length() - 1);
+		}
+		Permission perm = pluginManager.getPermission(permission);
+		if (perm == null)
+		{
+			perm = new Permission(permission, defaultPerm);
+			pluginManager.addPermission(perm);
+			if (parent != null)
+			{
+				parent.getChildren().put(perm.getName(), Boolean.TRUE);
+			}
+			parent = perm;
+		}
+		return perm;
 	}
 	private static transient final Pattern COLOR_PATTERN = Pattern.compile("(?i)\u00A7[0-9A-F]");
 

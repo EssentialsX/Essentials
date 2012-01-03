@@ -3,27 +3,21 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IUser;
-import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
 public class Commandkick extends EssentialsCommand
 {
-	public Commandkick()
-	{
-		super("kick");
-	}
-
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	public void run(final CommandSender sender, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
 
-		final IUser user = getPlayer(server, args, 0);
+		final IUser user = getPlayer(args, 0);
 		if (user.isAuthorized("essentials.kick.exempt"))
 		{
 			throw new Exception(_("kickExempt"));

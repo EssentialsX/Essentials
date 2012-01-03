@@ -4,7 +4,6 @@ import com.earth2me.essentials.DescParseTickFormat;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IUser;
 import java.util.*;
-import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -12,13 +11,8 @@ import org.bukkit.entity.Player;
 
 public class Commandtime extends EssentialsCommand
 {
-	public Commandtime()
-	{
-		super("time");
-	}
-
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	public void run(final CommandSender sender, final String[] args) throws Exception
 	{
 		// Which World(s) are we interested in?
 		String worldSelector = null;
@@ -26,7 +20,7 @@ public class Commandtime extends EssentialsCommand
 		{
 			worldSelector = args[1];
 		}
-		final Set<World> worlds = getWorlds(server, sender, worldSelector);
+		final Set<World> worlds = getWorlds(sender, worldSelector);
 
 		// If no arguments we are reading the time
 		if (args.length == 0)
@@ -104,7 +98,7 @@ public class Commandtime extends EssentialsCommand
 	/**
 	 * Used to parse an argument of the type "world(s) selector"
 	 */
-	private Set<World> getWorlds(final Server server, final CommandSender sender, final String selector) throws Exception
+	private Set<World> getWorlds(final CommandSender sender, final String selector) throws Exception
 	{
 		final Set<World> worlds = new TreeSet<World>(new WorldNameComparator());
 

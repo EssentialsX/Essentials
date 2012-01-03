@@ -16,9 +16,9 @@ public interface IUser extends Player, IStorageObjectHolder<UserData>, IReload, 
 	
 	boolean isAuthorized(IPermission node);
 
-	boolean isAuthorized(IEssentialsCommand cmd);
+	//boolean isAuthorized(IEssentialsCommand cmd);
 
-	boolean isAuthorized(IEssentialsCommand cmd, String permissionPrefix);
+	//boolean isAuthorized(IEssentialsCommand cmd, String permissionPrefix);
 
 	Player getBase();
 

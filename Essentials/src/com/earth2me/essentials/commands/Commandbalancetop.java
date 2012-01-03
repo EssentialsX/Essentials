@@ -1,24 +1,19 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.api.IUser;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Util;
+import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.textreader.ArrayListInput;
 import com.earth2me.essentials.textreader.TextPager;
 import java.text.DateFormat;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
 
 public class Commandbalancetop extends EssentialsCommand
 {
-	public Commandbalancetop()
-	{
-		super("balancetop");
-	}
 	private static final int CACHETIME = 2 * 60 * 1000;
 	public static final int MINUSERS = 50;
 	private static ArrayListInput cache = new ArrayListInput();
@@ -26,7 +21,7 @@ public class Commandbalancetop extends EssentialsCommand
 	private static ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
 	@Override
-	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	protected void run(final CommandSender sender, final String[] args) throws Exception
 	{
 		int page = 0;
 		boolean force = false;

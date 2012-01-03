@@ -3,21 +3,15 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IUser;
 import java.util.List;
-import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
 public class Commandmail extends EssentialsCommand
 {
-	public Commandmail()
-	{
-		super("mail");
-	}
-
 	//TODO: Tidy this up
 	@Override
-	public void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
+	public void run(final IUser user, final String[] args) throws Exception
 	{
 		if (args.length >= 1 && "read".equalsIgnoreCase(args[0]))
 		{
@@ -38,7 +32,7 @@ public class Commandmail extends EssentialsCommand
 		{
 			if (!user.isAuthorized("essentials.mail.send"))
 			{
-				throw new Exception(_("noPerm","essentials.mail.send"));
+				throw new Exception(_("noPerm", "essentials.mail.send"));
 			}
 
 			Player player = server.getPlayer(args[1]);
@@ -66,7 +60,7 @@ public class Commandmail extends EssentialsCommand
 		{
 			if (!user.isAuthorized("essentials.mail.sendall"))
 			{
-				throw new Exception(_("noPerm","essentials.mail.sendall"));
+				throw new Exception(_("noPerm", "essentials.mail.sendall"));
 			}
 			ess.scheduleAsyncDelayedTask(new SendAll(user.getName() + ": " + getFinalArg(args, 1)));
 			user.sendMessage(_("mailSent"));
@@ -83,15 +77,15 @@ public class Commandmail extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	protected void run(final CommandSender sender, final String[] args) throws Exception
 	{
 		if (args.length >= 1 && "read".equalsIgnoreCase(args[0]))
 		{
-			throw new Exception(_("onlyPlayers", commandLabel + " read"));
+			throw new Exception(_("onlyPlayers", commandName + " read"));
 		}
 		else if (args.length >= 1 && "clear".equalsIgnoreCase(args[0]))
 		{
-			throw new Exception(_("onlyPlayers", commandLabel + " clear"));
+			throw new Exception(_("onlyPlayers", commandName + " clear"));
 		}
 		else if (args.length >= 3 && "send".equalsIgnoreCase(args[0]))
 		{

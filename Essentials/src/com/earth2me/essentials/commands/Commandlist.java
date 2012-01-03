@@ -4,20 +4,14 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.api.IUser;
 import java.util.*;
-import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
 public class Commandlist extends EssentialsCommand
 {
-	public Commandlist()
-	{
-		super("list");
-	}
-
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	public void run(final CommandSender sender, final String[] args) throws Exception
 	{
 		boolean showhidden = false;
 		if (sender instanceof Player)
@@ -50,13 +44,16 @@ public class Commandlist extends EssentialsCommand
 			online = _("listAmount", server.getOnlinePlayers().length - playerHidden, server.getMaxPlayers());
 		}
 		sender.sendMessage(online);
-		
+
 		boolean sortListByGroups = false;
 		ISettings settings = ess.getSettings();
 		settings.acquireReadLock();
-		try {
+		try
+		{
 			sortListByGroups = settings.getData().getCommands().getList().isSortByGroups();
-		} finally {
+		}
+		finally
+		{
 			settings.unlock();
 		}
 

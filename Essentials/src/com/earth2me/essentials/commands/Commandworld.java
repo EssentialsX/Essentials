@@ -5,20 +5,14 @@ import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.api.IUser;
 import java.util.List;
 import org.bukkit.Location;
-import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 
 public class Commandworld extends EssentialsCommand
 {
-	public Commandworld()
-	{
-		super("world");
-	}
-
 	@Override
-	protected void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
+	protected void run(final IUser user, final String[] args) throws Exception
 	{
 		World world;
 
@@ -78,7 +72,7 @@ public class Commandworld extends EssentialsCommand
 		final Location loc = user.getLocation();
 		final Location target = new Location(world, loc.getBlockX() * factor + .5, loc.getBlockY(), loc.getBlockZ() * factor + .5);
 
-		final Trade charge = new Trade(this.getName(), ess);
+		final Trade charge = new Trade(commandName, ess);
 		charge.isAffordableFor(user);
 		user.getTeleport().teleport(target, charge, TeleportCause.COMMAND);
 		throw new NoChargeException();

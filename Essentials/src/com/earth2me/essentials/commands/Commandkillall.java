@@ -5,7 +5,6 @@ import static com.earth2me.essentials.I18n._;
 import java.util.Collections;
 import java.util.Locale;
 import org.bukkit.Chunk;
-import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Animals;
@@ -26,14 +25,9 @@ import org.bukkit.event.entity.EntityDeathEvent;
 
 public class Commandkillall extends EssentialsCommand
 {
-	public Commandkillall()
-	{
-		super("killall");
-	}
-
 	//TODO: Tidy - missed this during command cleanup
 	@Override
-	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	public void run(final CommandSender sender, final String[] args) throws Exception
 	{
 		String type = "all";
 		int radius = -1;

@@ -5,19 +5,13 @@ import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.user.UserData.TimestampType;
 import lombok.Cleanup;
-import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
 
 public class Commandmute extends EssentialsCommand
 {
-	public Commandmute()
-	{
-		super("mute");
-	}
-
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	public void run(final CommandSender sender, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -25,7 +19,7 @@ public class Commandmute extends EssentialsCommand
 		}
 
 		@Cleanup
-		final IUser player = getPlayer(server, args, 0, true);
+		final IUser player = getPlayer(args, 0, true);
 		player.acquireReadLock();
 		if (!player.getData().isMuted() && player.isAuthorized("essentials.mute.exempt"))
 		{

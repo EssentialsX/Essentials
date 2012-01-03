@@ -3,7 +3,6 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IUser;
 import org.bukkit.Location;
-import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -11,22 +10,17 @@ import org.bukkit.entity.Player;
 
 public class Commandnear extends EssentialsCommand
 {
-	public Commandnear()
-	{
-		super("near");
-	}
-	
 	@Override
-	protected void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
+	protected void run(final IUser user, final String[] args) throws Exception
 	{
 		long radius = 200;
 		IUser otherUser = null;
-		
+
 		if (args.length > 0)
 		{
 			try
 			{
-				otherUser = getPlayer(server, args, 0);
+				otherUser = getPlayer(args, 0);
 			}
 			catch (Exception ex)
 			{
@@ -51,22 +45,22 @@ public class Commandnear extends EssentialsCommand
 		}
 		if (otherUser == null || user.isAuthorized("essentials.near.others"))
 		{
-			user.sendMessage(_("nearbyPlayers", getLocal(server, otherUser == null ? user : otherUser, radius)));
+			user.sendMessage(_("nearbyPlayers", getLocal(otherUser == null ? user : otherUser, radius)));
 		}
 		else
 		{
 			user.sendMessage(_("noAccessCommand"));
 		}
 	}
-	
+
 	@Override
-	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	protected void run(final CommandSender sender, final String[] args) throws Exception
 	{
-		
+
 		IUser otherUser = null;
 		if (args.length > 0)
 		{
-			otherUser = getPlayer(server, args, 0);
+			otherUser = getPlayer(args, 0);
 		}
 		else
 		{
@@ -83,16 +77,16 @@ public class Commandnear extends EssentialsCommand
 			{
 			}
 		}
-		sender.sendMessage(_("nearbyPlayers", getLocal(server, otherUser, radius)));
+		sender.sendMessage(_("nearbyPlayers", getLocal(otherUser, radius)));
 	}
-	
-	private String getLocal(final Server server, final IUser user, final long radius)
+
+	private String getLocal(final IUser user, final long radius)
 	{
 		final Location loc = user.getLocation();
 		final World world = loc.getWorld();
 		final StringBuilder output = new StringBuilder();
 		final long radiusSquared = radius * radius;
-		
+
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
 			final IUser player = ess.getUser(onlinePlayer);
@@ -103,7 +97,7 @@ public class Commandnear extends EssentialsCommand
 				{
 					continue;
 				}
-				
+
 				final long delta = (long)playerLoc.distanceSquared(loc);
 				if (delta < radiusSquared)
 				{

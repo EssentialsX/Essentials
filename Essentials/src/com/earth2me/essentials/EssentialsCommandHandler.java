@@ -1,21 +1,12 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.api.ICommandHandler;
-import com.earth2me.essentials.api.ISettings;
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.api.IEssentials;
-import com.earth2me.essentials.api.IEssentialsModule;
-import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.api.*;
 import com.earth2me.essentials.commands.EssentialsCommand;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
@@ -36,6 +27,7 @@ public class EssentialsCommandHandler implements ICommandHandler
 	private static final transient Logger LOGGER = Bukkit.getLogger();
 	private final transient Map<String, List<PluginCommand>> altcommands = new HashMap<String, List<PluginCommand>>();
 	private final transient Map<String, String> disabledList = new HashMap<String, String>();
+	private final transient Map<String, IEssentialsCommand> commands = new HashMap<String, IEssentialsCommand>();
 	private final transient IEssentials ess;
 
 	public EssentialsCommandHandler(ClassLoader classLoader, String commandPath, String permissionPrefix, IEssentials ess)
@@ -66,10 +58,13 @@ public class EssentialsCommandHandler implements ICommandHandler
 		boolean overridden = false;
 		ISettings settings = ess.getSettings();
 		settings.acquireReadLock();
-		try {
+		try
+		{
 			disabled = settings.getData().getCommands().isDisabled(command.getName());
 			overridden = !disabled || settings.getData().getCommands().isOverridden(command.getName());
-		} finally {
+		}
+		finally
+		{
 			settings.unlock();
 		}
 		// Allow plugins to override the command via onCommand
@@ -98,22 +93,27 @@ public class EssentialsCommandHandler implements ICommandHandler
 				return true;
 			}
 
-			IEssentialsCommand cmd;
-			try
+			final String commandName = command.getName().toLowerCase(Locale.ENGLISH);
+			IEssentialsCommand cmd = commands.get(commandName);
+			if (cmd == null)
 			{
-				cmd = (IEssentialsCommand)classLoader.loadClass(commandPath + command.getName()).newInstance();
-				cmd.setEssentials(ess);
-				cmd.setEssentialsModule(module);
-			}
-			catch (Exception ex)
-			{
-				sender.sendMessage(_("commandNotLoaded", commandLabel));
-				LOGGER.log(Level.SEVERE, _("commandNotLoaded", commandLabel), ex);
-				return true;
+				try
+				{
+					cmd = (IEssentialsCommand)classLoader.loadClass(commandPath + commandName).newInstance();
+					cmd.init(ess, commandName);
+					cmd.setEssentialsModule(module);
+					commands.put(commandName, cmd);
+				}
+				catch (Exception ex)
+				{
+					sender.sendMessage(_("commandNotLoaded", commandName));
+					LOGGER.log(Level.SEVERE, _("commandNotLoaded", commandName), ex);
+					return true;
+				}
 			}
 
 			// Check authorization
-			if (user != null && !user.isAuthorized(cmd, permissionPrefix))
+			if (user != null && !user.isAuthorized(cmd))
 			{
 				LOGGER.log(Level.WARNING, _("deniedAccessCommand", user.getName()));
 				user.sendMessage(_("noAccessCommand"));
@@ -125,14 +125,14 @@ public class EssentialsCommandHandler implements ICommandHandler
 			{
 				if (user == null)
 				{
-					cmd.run(ess.getServer(), sender, commandLabel, command, args);
+					cmd.run(sender, command, args);
 				}
 				else
 				{
 					user.acquireReadLock();
 					try
 					{
-						cmd.run(ess.getServer(), user, commandLabel, command, args);
+						cmd.run(user, command, args);
 					}
 					finally
 					{
@@ -177,11 +177,10 @@ public class EssentialsCommandHandler implements ICommandHandler
 			LOGGER.log(Level.WARNING, _("errorCallingCommand", commandLabel), exception);
 		}
 	}
-	
+
 	@Override
 	public void onReload()
 	{
-		
 	}
 
 	public final void addPlugin(final Plugin plugin)

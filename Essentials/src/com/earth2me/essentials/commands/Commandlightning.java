@@ -4,7 +4,6 @@ import com.earth2me.essentials.api.ISettings;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IUser;
 import lombok.Cleanup;
-import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.Player;
@@ -12,13 +11,8 @@ import org.bukkit.entity.Player;
 
 public class Commandlightning extends EssentialsCommand
 {
-	public Commandlightning()
-	{
-		super("lightning");
-	}
-
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	public void run(final CommandSender sender, final String[] args) throws Exception
 	{
 
 		IUser user = null;

@@ -1,6 +1,5 @@
 package com.earth2me.essentials.commands;
 
-import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -8,13 +7,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class Commanditemdb extends EssentialsCommand
 {
-	public Commanditemdb()
-	{
-		super("find");
-	}
-
 	@Override
-	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	protected void run(final CommandSender sender, final String[] args) throws Exception
 	{
 		ItemStack itemStack = null;
 		if (args.length < 1)

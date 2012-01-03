@@ -3,21 +3,15 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IUser;
 import java.util.List;
-import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
 public class Commandclearinventory extends EssentialsCommand
 {
-	public Commandclearinventory()
-	{
-		super("clearinventory");
-	}
-
 	//TODO: Cleanup
 	@Override
-	public void run(Server server, IUser user, String commandLabel, String[] args) throws Exception
+	public void run(final IUser user, final String[] args) throws Exception
 	{
 		if (args.length > 0 && user.isAuthorized("essentials.clearinventory.others"))
 		{
@@ -59,7 +53,7 @@ public class Commandclearinventory extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	protected void run(final CommandSender sender, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{

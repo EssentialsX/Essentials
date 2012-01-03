@@ -6,7 +6,6 @@ import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import java.util.Locale;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -15,14 +14,9 @@ import org.bukkit.inventory.ItemStack;
 
 public class Commandgive extends EssentialsCommand
 {
-	public Commandgive()
-	{
-		super("give");
-	}
-
 	//TODO: move these messages to message file
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	public void run(final CommandSender sender, final String[] args) throws Exception
 	{
 		if (args.length < 2)
 		{
@@ -39,7 +33,7 @@ public class Commandgive extends EssentialsCommand
 			throw new Exception(ChatColor.RED + "You are not allowed to spawn the item " + itemname);
 		}
 
-		final IUser giveTo = getPlayer(server, args, 0);
+		final IUser giveTo = getPlayer(args, 0);
 
 		int defaultStackSize = 0;
 		int oversizedStackSize = 0;

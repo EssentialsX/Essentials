@@ -1,24 +1,18 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.Util;
+import com.earth2me.essentials.api.IUser;
 import java.util.Locale;
-import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
 
 public class Commandworth extends EssentialsCommand
 {
-	public Commandworth()
-	{
-		super("worth");
-	}
-
 	//TODO: Remove duplication
 	@Override
-	public void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
+	public void run(final IUser user, final String[] args) throws Exception
 	{
 		ItemStack iStack = user.getInventory().getItemInHand();
 		int amount = iStack.getAmount();
@@ -62,7 +56,7 @@ public class Commandworth extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	protected void run(final CommandSender sender, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{

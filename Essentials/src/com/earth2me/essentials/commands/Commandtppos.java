@@ -4,19 +4,13 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.api.IUser;
 import org.bukkit.Location;
-import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 
 public class Commandtppos extends EssentialsCommand
 {
-	public Commandtppos()
-	{
-		super("tppos");
-	}
-
 	@Override
-	public void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
+	public void run(final IUser user, final String[] args) throws Exception
 	{
 		if (args.length < 3)
 		{
@@ -35,7 +29,7 @@ public class Commandtppos extends EssentialsCommand
 		{
 			location.setPitch(Float.parseFloat(args[4]));
 		}
-		final Trade charge = new Trade(this.getName(), ess);
+		final Trade charge = new Trade(commandName, ess);
 		charge.isAffordableFor(user);
 		user.sendMessage(_("teleporting"));
 		user.getTeleport().teleport(location, charge, TeleportCause.COMMAND);

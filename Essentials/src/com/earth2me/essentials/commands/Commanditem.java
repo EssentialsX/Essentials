@@ -6,20 +6,14 @@ import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import java.util.Locale;
 import org.bukkit.Material;
-import org.bukkit.Server;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
 
 public class Commanditem extends EssentialsCommand
 {
-	public Commanditem()
-	{
-		super("item");
-	}
-
 	@Override
-	public void run(final Server server, final IUser user, final String commandLabel, final String[] args) throws Exception
+	public void run(final IUser user, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -29,7 +23,7 @@ public class Commanditem extends EssentialsCommand
 
 		final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 		if (!user.isAuthorized("essentials.itemspawn.item-" + itemname)
-			   && !user.isAuthorized("essentials.itemspawn.item-" + stack.getTypeId()))
+			&& !user.isAuthorized("essentials.itemspawn.item-" + stack.getTypeId()))
 		{
 			throw new Exception(_("cantSpawnItem", itemname));
 		}

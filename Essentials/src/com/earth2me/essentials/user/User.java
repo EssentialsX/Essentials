@@ -83,7 +83,7 @@ public class User extends UserBase implements IUser
 		{
 			return false;
 		}
-
+		//TODO: switch to Superperms only
 		return ess.getPermissionsHandler().hasPermission(base, node);
 	}
 	
@@ -92,7 +92,7 @@ public class User extends UserBase implements IUser
 		return isAuthorized(permission.getPermission());
 	}
 
-	@Override
+	/*@Override
 	public boolean isAuthorized(IEssentialsCommand cmd)
 	{
 		return isAuthorized(cmd, "essentials.");
@@ -102,7 +102,7 @@ public class User extends UserBase implements IUser
 	public boolean isAuthorized(IEssentialsCommand cmd, String permissionPrefix)
 	{
 		return isAuthorized(permissionPrefix + (cmd.getName().equals("r") ? "msg" : cmd.getName()));
-	}
+	}*/
 
 	public void checkCooldown(final UserData.TimestampType cooldownType, final double cooldown, final boolean set, final String bypassPermission) throws CooldownException
 	{
