@@ -11,9 +11,9 @@ import lombok.EqualsAndHashCode;
 public class SignsAndRails implements StorageObject
 {
 	@Comment("Protect all signs")
-	private boolean signs = true;
+	private boolean protectSigns = true;
 	@Comment("Prevent users from destroying rails")
-	private boolean rails = true;
+	private boolean protectRails = true;
 	@Comment(
 	{
 		"Blocks below rails/signs are also protected if the respective rail/sign is protected.",
