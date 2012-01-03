@@ -1,6 +1,5 @@
 package com.earth2me.essentials.api;
 
-import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.storage.IStorageObjectHolder;
 import com.earth2me.essentials.user.CooldownException;
 import com.earth2me.essentials.user.UserData;
@@ -13,13 +12,11 @@ import org.bukkit.entity.Player;
 public interface IUser extends Player, IStorageObjectHolder<UserData>, IReload, IReplyTo, Comparable<IUser>
 {
 	boolean isAuthorized(String node);
-	
+
 	boolean isAuthorized(IPermission node);
 
 	//boolean isAuthorized(IEssentialsCommand cmd);
-
 	//boolean isAuthorized(IEssentialsCommand cmd, String permissionPrefix);
-
 	Player getBase();
 
 	double getMoney();
@@ -33,7 +30,7 @@ public interface IUser extends Player, IStorageObjectHolder<UserData>, IReload, 
 	void giveMoney(double value, CommandSender initiator);
 
 	void setMoney(double value);
-	
+
 	void payUser(final IUser reciever, final double value) throws Exception;
 
 	String getGroup();
@@ -102,7 +99,9 @@ public interface IUser extends Player, IStorageObjectHolder<UserData>, IReload, 
 
 	boolean toggleTeleportEnabled();
 
-	public boolean gotMailInfo();
+	long getTeleportRequestTime();
 
-	public List<String> getMails();
+	boolean gotMailInfo();
+
+	List<String> getMails();
 }

@@ -2,8 +2,8 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
-import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.Util;
+import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.api.IWarps;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -80,7 +80,7 @@ public class Commandwarp extends EssentialsCommand
 			while (iterator.hasNext())
 			{
 				final String warpName = iterator.next();
-				if (ess.getSettings().getPerWarpPermission() && !((IUser)sender).isAuthorized("essentials.warp." + warpName))
+				if (!((IUser)sender).isAuthorized("essentials.warp." + warpName))
 				{
 					iterator.remove();
 				}
@@ -110,15 +110,12 @@ public class Commandwarp extends EssentialsCommand
 	{
 		final Trade charge = new Trade(commandName, ess);
 		charge.isAffordableFor(user);
-		if (ess.getSettings().getPerWarpPermission())
+
+		if (user.isAuthorized("essentials.warp." + name))
 		{
-			if (user.isAuthorized("essentials.warp." + name))
-			{
-				user.getTeleport().warp(name, charge, TeleportCause.COMMAND);
-				return;
-			}
-			throw new Exception(_("warpUsePermission"));
+			user.getTeleport().warp(name, charge, TeleportCause.COMMAND);
+			return;
 		}
-		user.getTeleport().warp(name, charge, TeleportCause.COMMAND);
+		throw new Exception(_("warpUsePermission"));
 	}
 }

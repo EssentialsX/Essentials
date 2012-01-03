@@ -5,8 +5,10 @@ import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.Mob.MobException;
 import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.Util;
+import com.earth2me.essentials.api.ISettings;
 import java.util.Locale;
 import java.util.Random;
+import lombok.Cleanup;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -56,10 +58,6 @@ public class Commandspawnmob extends EssentialsCommand
 			throw new Exception(_("invalidMob"));
 		}
 
-		if (ess.getSettings().getProtectPreventSpawn(mob.getType().toString().toLowerCase(Locale.ENGLISH)))
-		{
-			throw new Exception(_("disabledToSpawnMob"));
-		}
 		if (!user.isAuthorized("essentials.spawnmob." + mob.name.toLowerCase()))
 		{
 			throw new Exception(_("noPermToSpawnMob"));
@@ -73,7 +71,7 @@ public class Commandspawnmob extends EssentialsCommand
 		IUser otherUser = null;
 		if (args.length >= 3)
 		{
-			otherUser = getPlayer(ess.getServer(), args, 2);
+			otherUser = getPlayer(args, 2);
 		}
 		final Location loc = (otherUser == null) ? block.getLocation() : otherUser.getLocation();
 		final Location sloc = Util.getSafeDestination(loc);
@@ -95,10 +93,6 @@ public class Commandspawnmob extends EssentialsCommand
 				return;
 			}
 
-			if (ess.getSettings().getProtectPreventSpawn(mobMount.getType().toString().toLowerCase(Locale.ENGLISH)))
-			{
-				throw new Exception(_("disabledToSpawnMob"));
-			}
 			if (!user.isAuthorized("essentials.spawnmob." + mobMount.name.toLowerCase()))
 			{
 				throw new Exception(_("noPermToSpawnMob"));
@@ -124,7 +118,17 @@ public class Commandspawnmob extends EssentialsCommand
 		if (args.length >= 2)
 		{
 			int mobCount = Integer.parseInt(args[1]);
-			int serverLimit = ess.getSettings().getSpawnMobLimit();
+			int serverLimit = 1;
+			ISettings settings = ess.getSettings();
+			settings.acquireReadLock();
+			try
+			{
+				serverLimit = settings.getData().getCommands().getSpawnmob().getLimit();
+			}
+			finally
+			{
+				settings.unlock();
+			}
 			if (mobCount > serverLimit)
 			{
 				mobCount = serverLimit;

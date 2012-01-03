@@ -1,8 +1,8 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import java.util.List;
 import java.util.Locale;
 import lombok.Cleanup;
@@ -85,12 +85,8 @@ public class Commandunlimited extends EssentialsCommand
 		stack.setAmount(Math.min(stack.getType().getMaxStackSize(), 2));
 
 		final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
-		if (ess.getSettings().permissionBasedItemSpawn()
-			&& (!user.isAuthorized("essentials.unlimited.item-all")
-				&& !user.isAuthorized("essentials.unlimited.item-" + itemname)
-				&& !user.isAuthorized("essentials.unlimited.item-" + stack.getTypeId())
-				&& !((stack.getType() == Material.WATER_BUCKET || stack.getType() == Material.LAVA_BUCKET)
-					 && user.isAuthorized("essentials.unlimited.item-bucket"))))
+		if (!user.isAuthorized("essentials.unlimited.item-" + itemname)
+			&& !user.isAuthorized("essentials.unlimited.item-" + stack.getTypeId()))
 		{
 			throw new Exception(_("unlimitedItemPermission", itemname));
 		}

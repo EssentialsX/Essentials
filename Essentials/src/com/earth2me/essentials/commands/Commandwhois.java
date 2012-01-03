@@ -13,11 +13,6 @@ import org.bukkit.entity.Player;
 
 public class Commandwhois extends EssentialsCommand
 {
-	public Commandwhois()
-	{
-		super("whois");
-	}
-
 	@Override
 	public void run(final CommandSender sender,  final String[] args) throws Exception
 	{
@@ -66,10 +61,7 @@ public class Commandwhois extends EssentialsCommand
 			sender.sendMessage(_("whoisGod", (user.isGodModeEnabled() ? _("true") : _("false"))));
 			sender.sendMessage(_("whoisGamemode", _(user.getGameMode().toString().toLowerCase(Locale.ENGLISH))));
 			sender.sendMessage(_("whoisLocation", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ()));
-			if (!settings.getData().getEconomy().isEcoDisabled())
-			{
-				sender.sendMessage(_("whoisMoney", Util.formatCurrency(user.getMoney(), ess)));
-			}
+			sender.sendMessage(_("whoisMoney", Util.formatCurrency(user.getMoney(), ess)));
 			sender.sendMessage(user.getData().isAfk()
 							   ? _("whoisStatusAway")
 							   : _("whoisStatusAvailable"));

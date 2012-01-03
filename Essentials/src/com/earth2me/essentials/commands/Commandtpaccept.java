@@ -1,8 +1,8 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.Trade;
+import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.api.IUser;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -25,8 +25,19 @@ public class Commandtpaccept extends EssentialsCommand
 			throw new Exception(_("noPendingRequest"));
 		}
 
-		long timeout = ess.getSettings().getTpaAcceptCancellation();
-		if (timeout != 0 && (System.currentTimeMillis() - user.getTeleportRequestTime()) / 1000 > timeout)
+		int tpaAcceptCancellation = 0;
+		ISettings settings = ess.getSettings();
+		settings.acquireReadLock();
+		try
+		{
+			tpaAcceptCancellation = settings.getData().getCommands().getTpa().getTimeout();
+		}
+		finally
+		{
+			settings.unlock();
+		}
+
+		if (tpaAcceptCancellation != 0 && (System.currentTimeMillis() - user.getTeleportRequestTime()) / 1000 > tpaAcceptCancellation)
 		{
 			user.requestTeleport(null, false);
 			throw new Exception(_("requestTimedOut"));

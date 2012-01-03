@@ -20,10 +20,9 @@ public class Commandban extends EssentialsCommand
 		}
 		@Cleanup
 		final IUser user = getPlayer(args, 0, true);
-		if (user.getBase() instanceof OfflinePlayer)
+		if (user.isOnline())
 		{
-			if (sender instanceof Player
-				&& !ess.getUser((Player)sender).isAuthorized("essentials.ban.offline"))
+			if (user.isAuthorized("essentials.ban.exempt"))
 			{
 				sender.sendMessage(_("banExempt"));
 				return;
@@ -31,7 +30,8 @@ public class Commandban extends EssentialsCommand
 		}
 		else
 		{
-			if (user.isAuthorized("essentials.ban.exempt"))
+			if (sender instanceof Player
+				&& !ess.getUser((Player)sender).isAuthorized("essentials.ban.offline"))
 			{
 				sender.sendMessage(_("banExempt"));
 				return;

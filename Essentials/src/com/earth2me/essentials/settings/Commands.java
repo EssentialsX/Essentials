@@ -23,6 +23,7 @@ public class Commands implements StorageObject
 	private Lightning lightning = new Lightning();
 	private com.earth2me.essentials.settings.commands.List list = new com.earth2me.essentials.settings.commands.List();
 	private Spawnmob spawnmob = new Spawnmob();
+	private Tpa tpa = new Tpa();
 	@ListType
 	@Comment(
 	{
