@@ -94,3 +94,5 @@ v 1.8:
 	- Expanded GlobalGroups.yml and Groups.yml to include Towny permissions.
 	- Delayed GroupManager events so Superperms will be fully updated before plugins receive the events.
 	- Changed the way events are raised to prevent variable corruption.
+	- Reload GlobalGroups when you perform a world load.
+	- Changed GlobalGroups to save/load before local groups in the scheduled data saving/loading

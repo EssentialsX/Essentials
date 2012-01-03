@@ -1504,7 +1504,9 @@ public class GroupManager extends JavaPlugin {
 
 					isLoaded = false; // Disable Bukkit Perms update
 
+					globalGroups.load();
 					worldsHolder.loadWorld(auxString);
+					
 					sender.sendMessage("The request to world '" + auxString + "' was sent.");
 
 					isLoaded = true;
