@@ -3,20 +3,14 @@ package com.earth2me.essentials.xmpp;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.commands.EssentialsCommand;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
-import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
 public class Commandxmpp extends EssentialsCommand
 {
-	public Commandxmpp()
-	{
-		super("xmpp");
-	}
-
 	@Override
-	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws NotEnoughArgumentsException
+	protected void run(final CommandSender sender, final String[] args) throws NotEnoughArgumentsException
 	{
 		if (args.length < 2)
 		{
