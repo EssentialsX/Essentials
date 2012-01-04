@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 
 @Data
@@ -63,6 +64,18 @@ public class UserData implements StorageObject
 	public boolean hasUnlimited(Material mat)
 	{
 		return unlimited != null && unlimited.contains(mat);
+	}
+	
+	public void setUnlimited(Material mat, boolean state)
+	{
+		if (unlimited.contains(mat))
+		{
+			unlimited.remove(mat);
+		}
+		if (state)
+		{
+			unlimited.add(mat);
+		}
 	}
 
 	public List<String> getPowertool(Material mat)

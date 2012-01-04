@@ -27,7 +27,7 @@ public class Commandrealname extends EssentialsCommand
 			}
 			final String displayName = Util.stripColor(u.getDisplayName()).toLowerCase(Locale.ENGLISH);
 			if (!whois.equals(displayName)
-				&& !displayName.equals(Util.stripColor(ess.getSettings().getNicknamePrefix()) + whois)
+				&& !displayName.equals(Util.stripColor(ess.getSettings().getData().getChat().getNicknamePrefix()) + whois)
 				&& !whois.equalsIgnoreCase(u.getName()))
 			{
 				continue;

@@ -19,8 +19,12 @@ package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.*;
+import com.earth2me.essentials.api.ISettings;
+import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.craftbukkit.ItemDupeFix;
 import com.earth2me.essentials.listener.*;
+import com.earth2me.essentials.listener.TNTExplodeListener;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
 import com.earth2me.essentials.settings.SettingsHolder;
@@ -387,6 +391,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		return this.getServer().getScheduler().scheduleSyncRepeatingTask(this, run, delay, period);
 	}
 
+	
 	@Override
 	public TNTExplodeListener getTNTListener()
 	{

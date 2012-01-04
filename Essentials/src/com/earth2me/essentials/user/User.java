@@ -7,21 +7,27 @@ import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.*;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.register.payment.Method;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Map;
+import java.net.InetSocketAddress;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 import lombok.Cleanup;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.map.MapView;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.permissions.PermissionAttachmentInfo;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.util.Vector;
 
 
 public class User extends UserBase implements IUser
@@ -88,12 +94,13 @@ public class User extends UserBase implements IUser
 		//TODO: switch to Superperms only
 		return ess.getPermissionsHandler().hasPermission(base, node);
 	}
-	
+
+	@Override
 	public boolean isAuthorized(IPermission permission)
 	{
 		return isAuthorized(permission.getPermission());
 	}
-
+	
 	/*@Override
 	public boolean isAuthorized(IEssentialsCommand cmd)
 	{
@@ -105,7 +112,8 @@ public class User extends UserBase implements IUser
 	{
 		return isAuthorized(permissionPrefix + (cmd.getName().equals("r") ? "msg" : cmd.getName()));
 	}*/
-
+	
+	@Override
 	public void checkCooldown(final UserData.TimestampType cooldownType, final double cooldown, final boolean set, final String bypassPermission) throws CooldownException
 	{
 		final Calendar now = new GregorianCalendar();
@@ -132,6 +140,7 @@ public class User extends UserBase implements IUser
 		giveMoney(value, null);
 	}
 
+	@Override
 	public void giveMoney(final double value, final CommandSender initiator)
 	{
 
@@ -155,6 +164,7 @@ public class User extends UserBase implements IUser
 		}
 	}
 
+	@Override
 	public void payUser(final IUser reciever, final double value) throws Exception
 	{
 		if (value == 0)
@@ -180,6 +190,7 @@ public class User extends UserBase implements IUser
 		takeMoney(value, null);
 	}
 
+	@Override
 	public void takeMoney(final double value, final CommandSender initiator)
 	{
 		if (value == 0)
@@ -676,7 +687,7 @@ public class User extends UserBase implements IUser
 		{
 			@Cleanup
 			final ISettings settings = ess.getSettings();
-			settings.acquireReadLock();			
+			settings.acquireReadLock();
 			int oversizedStackSize = settings.getData().getGeneral().getOversizedStacksize();
 
 			overfilled = InventoryWorkaround.addItem(getInventory(), true, oversizedStackSize, itemStack);
@@ -692,4 +703,823 @@ public class User extends UserBase implements IUser
 		}
 		return spew;
 	}
+
+	@Override
+	public void setDisplayName(String string)
+	{
+		base.setDisplayName(string);
+	}
+
+	@Override
+	public String getPlayerListName()
+	{
+		return base.getPlayerListName();
+	}
+
+	@Override
+	public void setPlayerListName(String string)
+	{
+		base.setPlayerListName(string);
+	}
+
+	@Override
+	public void setCompassTarget(Location lctn)
+	{
+		base.setCompassTarget(lctn);
+	}
+
+	@Override
+	public Location getCompassTarget()
+	{
+		return base.getCompassTarget();
+	}
+
+	@Override
+	public InetSocketAddress getAddress()
+	{
+		return base.getAddress();
+	}
+
+	@Override
+	public void sendRawMessage(String string)
+	{
+		base.sendRawMessage(string);
+	}
+
+	@Override
+	public void kickPlayer(String string)
+	{
+		base.kickPlayer(string);
+	}
+
+	@Override
+	public void chat(String string)
+	{
+		base.chat(string);
+	}
+
+	@Override
+	public boolean performCommand(String string)
+	{
+		return base.performCommand(string);
+	}
+
+	@Override
+	public boolean isSneaking()
+	{
+		return base.isSneaking();
+	}
+
+	@Override
+	public void setSneaking(boolean bln)
+	{
+		base.setSneaking(bln);
+	}
+
+	@Override
+	public boolean isSprinting()
+	{
+		return base.isSprinting();
+	}
+
+	@Override
+	public void setSprinting(boolean bln)
+	{
+		base.setSprinting(bln);
+	}
+
+	@Override
+	public void saveData()
+	{
+		base.saveData();
+	}
+
+	@Override
+	public void loadData()
+	{
+		base.loadData();
+	}
+
+	@Override
+	public void setSleepingIgnored(boolean bln)
+	{
+		base.setSleepingIgnored(bln);
+	}
+
+	@Override
+	public boolean isSleepingIgnored()
+	{
+		return base.isSleepingIgnored();
+	}
+
+	@Override
+	public void playNote(Location lctn, byte b, byte b1)
+	{
+		base.playNote(lctn, b, b1);
+	}
+
+	@Override
+	public void playNote(Location lctn, Instrument i, Note note)
+	{
+		base.playNote(lctn, i, note);
+	}
+
+	@Override
+	public void playEffect(Location lctn, Effect effect, int i)
+	{
+		base.playEffect(lctn, effect, i);
+	}
+
+	@Override
+	public void sendBlockChange(Location lctn, Material mtrl, byte b)
+	{
+		base.sendBlockChange(lctn, mtrl, b);
+	}
+
+	@Override
+	public boolean sendChunkChange(Location lctn, int i, int i1, int i2, byte[] bytes)
+	{
+		return base.sendChunkChange(lctn, i, i1, i2, bytes);
+	}
+
+	@Override
+	public void sendBlockChange(Location lctn, int i, byte b)
+	{
+		base.sendBlockChange(lctn, i, b);
+	}
+
+	@Override
+	public void sendMap(MapView mv)
+	{
+		base.sendMap(mv);
+	}
+
+	@Override
+	public void updateInventory()
+	{
+		base.updateInventory();
+	}
+
+	@Override
+	public void awardAchievement(Achievement a)
+	{
+		base.awardAchievement(a);
+	}
+
+	@Override
+	public void incrementStatistic(Statistic ststc)
+	{
+		base.incrementStatistic(ststc);
+	}
+
+	@Override
+	public void incrementStatistic(Statistic ststc, int i)
+	{
+		base.incrementStatistic(ststc, i);
+	}
+
+	@Override
+	public void incrementStatistic(Statistic ststc, Material mtrl)
+	{
+		base.incrementStatistic(ststc, mtrl);
+	}
+
+	@Override
+	public void incrementStatistic(Statistic ststc, Material mtrl, int i)
+	{
+		base.incrementStatistic(ststc, mtrl, i);
+	}
+
+	@Override
+	public void setPlayerTime(long l, boolean bln)
+	{
+		base.setPlayerTime(l, bln);
+	}
+
+	@Override
+	public long getPlayerTime()
+	{
+		return base.getPlayerTime();
+	}
+
+	@Override
+	public long getPlayerTimeOffset()
+	{
+		return base.getPlayerTimeOffset();
+	}
+
+	@Override
+	public boolean isPlayerTimeRelative()
+	{
+		return base.isPlayerTimeRelative();
+	}
+
+	@Override
+	public void resetPlayerTime()
+	{
+		base.resetPlayerTime();
+	}
+
+	@Override
+	public void giveExp(int i)
+	{
+		base.giveExp(i);
+	}
+
+	@Override
+	public float getExp()
+	{
+		return base.getExp();
+	}
+
+	@Override
+	public void setExp(float f)
+	{
+		base.setExp(f);
+	}
+
+	@Deprecated
+	@Override
+	public int getExperience()
+	{
+		return base.getExperience();
+	}
+
+	@Deprecated
+	@Override
+	public void setExperience(int i)
+	{
+		base.setExperience(i);
+	}
+
+	@Override
+	public int getLevel()
+	{
+		return base.getLevel();
+	}
+
+	@Override
+	public void setLevel(int i)
+	{
+		base.setLevel(i);
+	}
+
+	@Override
+	public int getTotalExperience()
+	{
+		return base.getTotalExperience();
+	}
+
+	@Override
+	public void setTotalExperience(int i)
+	{
+		base.setTotalExperience(i);
+	}
+
+	@Override
+	public float getExhaustion()
+	{
+		return base.getExhaustion();
+	}
+
+	@Override
+	public void setExhaustion(float f)
+	{
+		base.setExhaustion(f);
+	}
+
+	@Override
+	public float getSaturation()
+	{
+		return base.getSaturation();
+	}
+
+	@Override
+	public void setSaturation(float f)
+	{
+		base.setSaturation(f);
+	}
+
+	@Override
+	public int getFoodLevel()
+	{
+		return base.getFoodLevel();
+	}
+
+	@Override
+	public void setFoodLevel(int i)
+	{
+		base.setFoodLevel(i);
+	}
+
+	@Override
+	public PlayerInventory getInventory()
+	{
+		return base.getInventory();
+	}
+
+	@Override
+	public ItemStack getItemInHand()
+	{
+		return base.getItemInHand();
+	}
+
+	@Override
+	public void setItemInHand(ItemStack is)
+	{
+		base.setItemInHand(is);
+	}
+
+	@Override
+	public boolean isSleeping()
+	{
+		return base.isSleeping();
+	}
+
+	@Override
+	public int getSleepTicks()
+	{
+		return base.getSleepTicks();
+	}
+
+	@Override
+	public GameMode getGameMode()
+	{
+		return base.getGameMode();
+	}
+
+	@Override
+	public void setGameMode(GameMode gm)
+	{
+		base.setGameMode(gm);
+	}
+
+	@Override
+	public int getHealth()
+	{
+		return base.getHealth();
+	}
+
+	@Override
+	public void setHealth(int i)
+	{
+		base.setHealth(i);
+	}
+
+	@Override
+	public int getMaxHealth()
+	{
+		return base.getMaxHealth();
+	}
+
+	@Override
+	public double getEyeHeight()
+	{
+		return base.getEyeHeight();
+	}
+
+	@Override
+	public double getEyeHeight(boolean bln)
+	{
+		return base.getEyeHeight(bln);
+	}
+
+	@Override
+	public Location getEyeLocation()
+	{
+		return base.getEyeLocation();
+	}
+
+	@Override
+	public List<Block> getLineOfSight(HashSet<Byte> hs, int i)
+	{
+		return base.getLineOfSight(hs, i);
+	}
+
+	@Override
+	public Block getTargetBlock(HashSet<Byte> hs, int i)
+	{
+		return base.getTargetBlock(hs, i);
+	}
+
+	@Override
+	public List<Block> getLastTwoTargetBlocks(HashSet<Byte> hs, int i)
+	{
+		return base.getLastTwoTargetBlocks(hs, i);
+	}
+
+	@Override
+	public Egg throwEgg()
+	{
+		return base.throwEgg();
+	}
+
+	@Override
+	public Snowball throwSnowball()
+	{
+		return base.throwSnowball();
+	}
+
+	@Override
+	public Arrow shootArrow()
+	{
+		return base.shootArrow();
+	}
+
+	@Override
+	public boolean isInsideVehicle()
+	{
+		return base.isInsideVehicle();
+	}
+
+	@Override
+	public boolean leaveVehicle()
+	{
+		return base.leaveVehicle();
+	}
+
+	@Override
+	public Vehicle getVehicle()
+	{
+		return base.getVehicle();
+	}
+
+	@Override
+	public int getRemainingAir()
+	{
+		return base.getRemainingAir();
+	}
+
+	@Override
+	public void setRemainingAir(int i)
+	{
+		base.setRemainingAir(i);
+	}
+
+	@Override
+	public int getMaximumAir()
+	{
+		return base.getMaximumAir();
+	}
+
+	@Override
+	public void setMaximumAir(int i)
+	{
+		base.setMaximumAir(i);
+	}
+
+	@Override
+	public void damage(int i)
+	{
+		base.damage(i);
+	}
+
+	@Override
+	public void damage(int i, Entity entity)
+	{
+		base.damage(i, entity);
+	}
+
+	@Override
+	public int getMaximumNoDamageTicks()
+	{
+		return base.getMaximumNoDamageTicks();
+	}
+
+	@Override
+	public void setMaximumNoDamageTicks(int i)
+	{
+		base.setMaximumNoDamageTicks(i);
+	}
+
+	@Override
+	public int getLastDamage()
+	{
+		return base.getLastDamage();
+	}
+
+	@Override
+	public void setLastDamage(int i)
+	{
+		base.setLastDamage(i);
+	}
+
+	@Override
+	public int getNoDamageTicks()
+	{
+		return base.getNoDamageTicks();
+	}
+
+	@Override
+	public void setNoDamageTicks(int i)
+	{
+		base.setNoDamageTicks(i);
+	}
+
+	@Override
+	public Player getKiller()
+	{
+	    return base.getKiller();
+	}
+
+	@Override
+	public Location getLocation()
+	{
+		return base.getLocation();
+	}
+
+	@Override
+	public void setVelocity(Vector vector)
+	{
+		base.setVelocity(vector);
+	}
+
+	@Override
+	public Vector getVelocity()
+	{
+		return base.getVelocity();
+				
+	}
+
+	@Override
+	public World getWorld()
+	{
+		return base.getWorld();
+	}
+
+	@Override
+	public boolean teleport(Location lctn)
+	{
+		return base.teleport(lctn);				
+	}
+
+	@Override
+	public boolean teleport(Location lctn, TeleportCause tc)
+	{
+		return base.teleport(this, tc);
+	}
+
+	@Override
+	public boolean teleport(Entity entity)
+	{
+		return base.teleport(entity);
+	}
+
+	@Override
+	public boolean teleport(Entity entity, TeleportCause tc)
+	{
+		return base.teleport(entity, tc);
+	}
+
+	@Override
+	public List<Entity> getNearbyEntities(double d, double d1, double d2)
+	{
+		return base.getNearbyEntities(d, d1, d2);
+	}
+
+	@Override
+	public int getEntityId()
+	{
+		return base.getEntityId();
+	}
+
+	@Override
+	public int getFireTicks()
+	{
+		return base.getFireTicks();
+	}
+
+	@Override
+	public int getMaxFireTicks()
+	{
+		return base.getMaxFireTicks();
+	}
+
+	@Override
+	public void setFireTicks(int i)
+	{
+		base.setFireTicks(i);
+	}
+
+	@Override
+	public void remove()
+	{
+		base.remove();
+	}
+
+	@Override
+	public boolean isDead()
+	{
+		return base.isDead();
+	}
+
+	@Override
+	public Server getServer()
+	{
+		return base.getServer();
+	}
+
+	@Override
+	public Entity getPassenger()
+	{
+		return base.getPassenger();
+	}
+
+	@Override
+	public boolean setPassenger(Entity entity)
+	{
+		return base.setPassenger(entity);
+	}
+
+	@Override
+	public boolean isEmpty()
+	{
+		return base.isEmpty();
+	}
+
+	@Override
+	public boolean eject()
+	{
+		return base.eject();
+	}
+
+	@Override
+	public float getFallDistance()
+	{
+		return base.getFallDistance();
+	}
+
+	@Override
+	public void setFallDistance(float f)
+	{
+		base.setFallDistance(f);
+	}
+
+	@Override
+	public void setLastDamageCause(EntityDamageEvent ede)
+	{
+		base.setLastDamageCause(ede);
+	}
+
+	@Override
+	public EntityDamageEvent getLastDamageCause()
+	{
+		return base.getLastDamageCause();
+	}
+
+	@Override
+	public UUID getUniqueId()
+	{
+		return base.getUniqueId();
+	}
+
+	@Override
+	public int getTicksLived()
+	{
+		return base.getTicksLived();
+	}
+
+	@Override
+	public void setTicksLived(int i)
+	{
+		base.setTicksLived(i);
+	}
+
+	@Override
+	public boolean isPermissionSet(String string)
+	{
+		return base.isPermissionSet(string);
+	}
+
+	@Override
+	public boolean isPermissionSet(Permission prmsn)
+	{
+		return base.isPermissionSet(prmsn);
+	}
+
+	@Override
+	public boolean hasPermission(String string)
+	{
+		return base.hasPermission(string);
+	}
+
+	@Override
+	public boolean hasPermission(Permission prmsn)
+	{
+		return base.hasPermission(prmsn);
+	}
+
+	@Override
+	public PermissionAttachment addAttachment(Plugin plugin, String string, boolean bln)
+	{
+		return base.addAttachment(plugin, string, bln);
+	}
+
+	@Override
+	public PermissionAttachment addAttachment(Plugin plugin)
+	{
+		return base.addAttachment(plugin);
+	}
+
+	@Override
+	public PermissionAttachment addAttachment(Plugin plugin, String string, boolean bln, int i)
+	{
+		return base.addAttachment(plugin, string, bln, i);
+	}
+
+	@Override
+	public PermissionAttachment addAttachment(Plugin plugin, int i)
+	{
+		return base.addAttachment(plugin, i);
+	}
+
+	@Override
+	public void removeAttachment(PermissionAttachment pa)
+	{
+		base.removeAttachment(pa);
+	}
+
+	@Override
+	public void recalculatePermissions()
+	{
+		base.recalculatePermissions();
+	}
+
+	@Override
+	public Set<PermissionAttachmentInfo> getEffectivePermissions()
+	{
+		return base.getEffectivePermissions();
+	}
+
+	@Override
+	public boolean isOp()
+	{
+		return base.isOp();
+	}
+
+	@Override
+	public void setOp(boolean bln)
+	{
+		base.setOp(bln);
+	}
+
+	@Override
+	public void sendMessage(String string)
+	{
+		base.sendMessage(string);
+	}
+
+	@Override
+	public boolean isOnline()
+	{
+		return base.isOnline();
+	}
+
+	@Override
+	public boolean isBanned()
+	{
+		return base.isBanned();
+	}
+
+	@Override
+	public boolean isWhitelisted()
+	{
+		return base.isWhitelisted();
+	}
+
+	@Override
+	public void setWhitelisted(boolean bln)
+	{
+		base.setWhitelisted(bln);
+	}
+
+	@Override
+	public Player getPlayer()
+	{
+		return base.getPlayer();
+	}
+
+	@Override
+	public long getFirstPlayed()
+	{
+		return base.getFirstPlayed();
+	}
+
+	@Override
+	public long getLastPlayed()
+	{
+		return base.getLastPlayed();
+	}
+
+	@Override
+	public boolean hasPlayedBefore()
+	{
+		return base.hasPlayedBefore();
+	}
+
+	@Override
+	public Map<String, Object> serialize()
+	{
+		return base.serialize();
+	}	
 }

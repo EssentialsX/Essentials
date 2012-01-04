@@ -5,6 +5,7 @@ import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import lombok.Cleanup;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -37,16 +38,11 @@ public class Commandunlimited extends EssentialsCommand
 		else if (args[0].equalsIgnoreCase("clear"))
 		{
 			//TODO: Fix this, the clear should always work, even when the player does not have permission.
-			final List<Integer> itemList = target.getData().getUnlimited();
-
-			int index = 0;
-			while (itemList.size() > index)
+			final Set<Material> itemList = target.getData().getUnlimited();
+			for(Material mat : itemList)
 			{
-				final Integer item = itemList.get(index);
-				if (toggleUnlimited(user, target, item.toString()) == false)
-				{
-					index++;
-				}
+				toggleUnlimited(user, target, mat.name());
+				
 			}
 		}
 		else
@@ -60,19 +56,19 @@ public class Commandunlimited extends EssentialsCommand
 		final StringBuilder output = new StringBuilder();
 		output.append(_("unlimitedItems")).append(" ");
 		boolean first = true;
-		final List<Integer> items = target.getUnlimited();
+		final Set<Material> items = target.getData().getUnlimited();
 		if (items.isEmpty())
 		{
 			output.append(_("none"));
 		}
-		for (Integer integer : items)
+		for (Material mater : items)
 		{
 			if (!first)
 			{
 				output.append(", ");
 			}
 			first = false;
-			final String matname = Material.getMaterial(integer).toString().toLowerCase(Locale.ENGLISH).replace("_", "");
+			final String matname = mater.name().toLowerCase(Locale.ENGLISH).replace("_", "");
 			output.append(matname);
 		}
 
@@ -93,7 +89,7 @@ public class Commandunlimited extends EssentialsCommand
 
 		String message = "disableUnlimited";
 		Boolean enableUnlimited = false;
-		if (!target.hasUnlimited(stack))
+		if (!target.getData().hasUnlimited(stack.getType()))
 		{
 			message = "enableUnlimited";
 			enableUnlimited = true;
@@ -108,7 +104,7 @@ public class Commandunlimited extends EssentialsCommand
 			user.sendMessage(_(message, itemname, target.getDisplayName()));
 		}
 		target.sendMessage(_(message, itemname, target.getDisplayName()));
-		target.setUnlimited(stack, enableUnlimited);
+		target.getData().setUnlimited(stack.getType(), enableUnlimited);
 
 		return true;
 	}
