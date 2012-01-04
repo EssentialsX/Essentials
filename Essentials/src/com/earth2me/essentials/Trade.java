@@ -96,32 +96,38 @@ public class Trade
 	}
 
 	public void pay(final IUser user)
-	{		
-		try
-		{
-			pay(user, true);
-		}
-		catch (ChargeException ex)
-		{
-			//This should never ever get here... true above means items get dropped.			
-			user.sendMessage(ex.getMessage());
-		}
+	{
+		pay(user, true);
 	}
 
-	public void pay(final IUser user, final boolean dropItems) throws ChargeException
+	public boolean pay(final IUser user, final boolean dropItems)
 	{
+		boolean success = true;
 		if (getMoney() != null && getMoney() > 0)
 		{
 			user.giveMoney(getMoney());
 		}
 		if (getItemStack() != null)
 		{
-			user.giveItems(itemStack, dropItems);
+			if (dropItems)
+			{
+				final Map<Integer, ItemStack> leftOver = InventoryWorkaround.addItem(user.getInventory(), true, getItemStack());
+				for (ItemStack itemStack : leftOver.values())
+				{
+					InventoryWorkaround.dropItem(user.getLocation(), itemStack);
+				}
+			}
+			else
+			{
+				success = InventoryWorkaround.addAllItems(user.getInventory(), true, getItemStack());
+			}
+			user.updateInventory();
 		}
 		if (getExperience() != null)
 		{
 			SetExpFix.setTotalExperience(user, SetExpFix.getTotalExperience(user) + getExperience());
 		}
+		return success;
 	}
 
 	public void charge(final IUser user) throws ChargeException

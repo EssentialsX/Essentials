@@ -661,6 +661,7 @@ public class User extends UserBase implements IUser
 		{
 			sendMessage(_("InvFull"));
 		}
+		updateInventory();
 	}
 
 	@Override
@@ -678,6 +679,7 @@ public class User extends UserBase implements IUser
 		{
 			sendMessage(_("InvFull"));
 		}
+		updateInventory();
 	}
 
 	private boolean giveItemStack(ItemStack itemStack, Boolean canSpew) throws ChargeException
