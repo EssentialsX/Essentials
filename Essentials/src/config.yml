@@ -247,6 +247,13 @@ repair-enchanted: true
 #If you set this to true any plugin that uses teleport will have the previous location registered.
 register-back-in-listener: false
 
+#Set timeout in seconds for players to accept tpa before request is cancelled.
+#Set to 0 for no timeout
+tpa-accept-cancellation: 0
+
+#Cancels a request made by tpa / tpc on world change to prevent cross world tp
+cancel-tp-requests-on-world-change: false
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #

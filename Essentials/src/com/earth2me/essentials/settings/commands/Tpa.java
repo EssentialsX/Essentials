@@ -16,4 +16,6 @@ public class Tpa implements StorageObject
 		"Set to 0 for no timeout."
 	})
 	private int timeout = 0;
+	@Comment({"Cancels a request made by tpa / tphere on world change to prevent cross world tp"})	
+    private boolean cancelTpRequestsOnWorldChange = false;
 }

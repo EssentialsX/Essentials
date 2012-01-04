@@ -268,8 +268,7 @@ public class EssentialsPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerBucketEmpty(final PlayerBucketEmptyEvent event)
 	{
-		@Cleanup
-		final IUser user = ess.getUser(event.getPlayer());
+		@Cleanup final IUser user = ess.getUser(event.getPlayer());
 		user.acquireReadLock();
 		if (user.getData().hasUnlimited(event.getBucket()))
 		{
@@ -364,17 +363,23 @@ public class EssentialsPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerChangedWorld(final PlayerChangedWorldEvent event)
 	{
-		@Cleanup
-		final ISettings settings = ess.getSettings();
+		@Cleanup final ISettings settings = ess.getSettings();
 		settings.acquireReadLock();
-		if (!settings.getData().getWorldOptions(event.getPlayer().getLocation().getWorld().getName()).isGodmode())
+		@Cleanup final IUser user = ess.getUser(event.getPlayer());
+		user.acquireReadLock();
+		if (!settings.getData().getWorldOptions(event.getPlayer().getLocation().getWorld().getName()).isGodmode() && !user.isAuthorized("essentials.nogod.override"))
 		{
-			@Cleanup
-			final IUser user = ess.getUser(event.getPlayer());
-			user.acquireReadLock();
 			if (user.getData().isGodmode())
 			{
 				user.sendMessage(_("noGodWorldWarning"));
+			}
+		}
+		if (settings.getData().getCommands().getTpa().isCancelTpRequestsOnWorldChange())
+		{
+			if (user.getTeleportRequester() != null)
+			{
+				user.requestTeleport(null, false);
+				user.sendMessage(_("teleportRequestsCancelledWorldChange"));
 			}
 		}
 	}

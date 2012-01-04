@@ -95,8 +95,8 @@ public class Commandnick extends EssentialsCommand
 		}
 		else if ("off".equalsIgnoreCase(nick) || target.getName().equalsIgnoreCase(nick))
 		{
-			target.setNickname(null);
-			target.setDisplayNick();
+			target.getData().setNickname(null);
+			target.updateDisplayName();
 			target.sendMessage(_("nickNoMore"));
 		}
 		else
@@ -116,8 +116,8 @@ public class Commandnick extends EssentialsCommand
 				}
 			}
 
-			target.setNickname(nick);
-			target.setDisplayNick();
+			target.getData().setNickname(nick);
+			target.updateDisplayName();
 			target.sendMessage(_("nickSet", target.getDisplayName() + "§7."));
 		}
 	}
