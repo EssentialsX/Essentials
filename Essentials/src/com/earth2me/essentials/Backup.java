@@ -1,7 +1,7 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.api.IBackup;
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.api.IBackup;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.ISettings;
 import java.io.BufferedReader;

@@ -1,11 +1,11 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
-import com.earth2me.essentials.api.IUser;
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.ISettings;
+import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.craftbukkit.SetExpFix;
-import static com.earth2me.essentials.I18n._;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;

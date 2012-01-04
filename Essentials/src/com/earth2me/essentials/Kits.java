@@ -1,11 +1,11 @@
 package com.earth2me.essentials;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.IKits;
+import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.settings.Kit;
 import com.earth2me.essentials.storage.AsyncStorageObjectHolder;
-import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.api.IUser;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;

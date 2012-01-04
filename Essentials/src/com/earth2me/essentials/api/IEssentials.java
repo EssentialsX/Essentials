@@ -4,8 +4,6 @@ import com.earth2me.essentials.listener.TNTExplodeListener;
 import com.earth2me.essentials.perm.IPermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
 import org.bukkit.World;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 

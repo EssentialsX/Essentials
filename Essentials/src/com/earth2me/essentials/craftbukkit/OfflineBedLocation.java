@@ -7,7 +7,6 @@ import net.minecraft.server.NBTTagCompound;
 import net.minecraft.server.WorldNBTStorage;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.CraftServer;
-import org.bukkit.craftbukkit.CraftWorld;
 
 
 public class OfflineBedLocation

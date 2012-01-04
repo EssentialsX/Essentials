@@ -5,7 +5,6 @@ import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.perm.Permissions;
 import org.bukkit.command.CommandSender;
-import org.bukkit.permissions.PermissionDefault;
 
 
 public class Commandbalance extends EssentialsCommand

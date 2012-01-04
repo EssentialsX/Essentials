@@ -9,8 +9,6 @@ import com.earth2me.essentials.storage.AsyncStorageObjectHolder;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import lombok.Cleanup;
 import lombok.Delegate;
 import org.bukkit.Bukkit;

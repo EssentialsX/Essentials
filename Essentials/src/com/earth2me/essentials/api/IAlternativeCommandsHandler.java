@@ -1,7 +1,6 @@
 package com.earth2me.essentials.api;
 
 import java.util.Map;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.Plugin;
 
 

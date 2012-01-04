@@ -1,8 +1,8 @@
 package com.earth2me.essentials.listener;
 
+import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.IUser;
-import com.earth2me.essentials.Util;
 import org.bukkit.GameMode;
 import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockPlaceEvent;

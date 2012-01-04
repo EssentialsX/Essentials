@@ -1,8 +1,8 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.api.IReplyTo;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
-import com.earth2me.essentials.api.IReplyTo;
 
 
 public final class Console implements IReplyTo

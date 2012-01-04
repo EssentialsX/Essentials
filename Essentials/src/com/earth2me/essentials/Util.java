@@ -9,7 +9,6 @@ import com.earth2me.essentials.external.gnu.inet.encoding.PunycodeException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

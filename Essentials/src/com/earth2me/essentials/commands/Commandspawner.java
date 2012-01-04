@@ -2,10 +2,8 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Mob;
-import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.Util;
-import com.earth2me.essentials.api.ISettings;
-import java.util.Locale;
+import com.earth2me.essentials.api.IUser;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.CreatureSpawner;

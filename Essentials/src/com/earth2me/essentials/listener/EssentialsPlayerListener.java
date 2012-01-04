@@ -1,10 +1,10 @@
 package com.earth2me.essentials.listener;
 
-import com.earth2me.essentials.api.ISettings;
-import com.earth2me.essentials.api.IEssentials;
-import com.earth2me.essentials.api.IUser;
-import com.earth2me.essentials.Util;
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.Util;
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.ISettings;
+import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.craftbukkit.SetBed;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
@@ -26,7 +26,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.*;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 

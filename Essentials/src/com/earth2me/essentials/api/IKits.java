@@ -2,8 +2,6 @@ package com.earth2me.essentials.api;
 
 import com.earth2me.essentials.settings.Kit;
 import java.util.Collection;
-import java.util.List;
-import org.bukkit.Location;
 
 
 public interface IKits extends IReload

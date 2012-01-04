@@ -1,10 +1,10 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.api.IJails;
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.IJails;
 import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.storage.AsyncStorageObjectHolder;
-import static com.earth2me.essentials.I18n._;
 import java.io.File;
 import java.util.*;
 import java.util.logging.Level;
@@ -14,7 +14,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
-import org.bukkit.event.block.*;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDamageEvent;
+import org.bukkit.event.block.BlockListener;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.plugin.PluginManager;

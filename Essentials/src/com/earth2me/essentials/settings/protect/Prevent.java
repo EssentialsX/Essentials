@@ -1,10 +1,6 @@
 package com.earth2me.essentials.settings.protect;
 
-import com.earth2me.essentials.storage.Comment;
-import com.earth2me.essentials.storage.ListType;
-import com.earth2me.essentials.storage.MapKeyType;
-import com.earth2me.essentials.storage.MapValueType;
-import com.earth2me.essentials.storage.StorageObject;
+import com.earth2me.essentials.storage.*;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;

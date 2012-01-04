@@ -4,7 +4,6 @@ import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.IWarp;
 import com.earth2me.essentials.api.InvalidNameException;
 import com.earth2me.essentials.storage.AsyncStorageObjectHolder;
-import com.earth2me.essentials.storage.StorageObject;
 import java.io.File;
 import java.io.IOException;
 

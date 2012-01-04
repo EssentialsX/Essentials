@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 

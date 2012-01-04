@@ -1,17 +1,15 @@
 package com.earth2me.essentials.textreader;
 
+import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.IUser;
-import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.InvalidNameException;
 import java.io.*;
 import java.util.*;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import sun.util.BuddhistCalendar;
 
 
 public class TextInput implements IText
