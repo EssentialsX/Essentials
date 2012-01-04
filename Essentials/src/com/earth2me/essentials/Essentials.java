@@ -58,6 +58,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private transient ISettings settings;
 	private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
 	private transient IJails jails;
+	private transient IKits kits;
 	private transient IWarps warps;
 	private transient IWorth worth;
 	private transient List<IReload> reloadList;
@@ -158,6 +159,8 @@ public class Essentials extends JavaPlugin implements IEssentials
 			itemDb = new ItemDb(this);
 			reloadList.add(itemDb);
 			execTimer.mark("Init(Worth/ItemDB)");
+			kits = new Kits(this);
+			reloadList.add(kits);
 			commandHandler = new EssentialsCommandHandler(Essentials.class.getClassLoader(), "com.earth2me.essentials.commands.Command", "essentials.", this);
 			reloadList.add(commandHandler);
 			reload();
@@ -221,7 +224,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 		pm.registerEvent(Type.ENTITY_REGAIN_HEALTH, entityListener, Priority.Lowest, this);
 		pm.registerEvent(Type.FOOD_LEVEL_CHANGE, entityListener, Priority.Lowest, this);
 
-		//TODO: Check if this should be here, and not above before reload()
 		jails = new Jails(this);
 		reloadList.add(jails);
 
@@ -272,6 +274,12 @@ public class Essentials extends JavaPlugin implements IEssentials
 	public IJails getJails()
 	{
 		return jails;
+	}
+	
+	@Override
+	public IKits getKits()
+	{
+		return kits;
 	}
 
 	@Override

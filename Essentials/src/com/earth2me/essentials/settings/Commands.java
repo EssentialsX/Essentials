@@ -19,7 +19,6 @@ public class Commands implements StorageObject
 	private God god = new God();
 	private Help help = new Help();
 	private Home home = new Home();
-	private Kit kit = new Kit();
 	private Lightning lightning = new Lightning();
 	private com.earth2me.essentials.settings.commands.List list = new com.earth2me.essentials.settings.commands.List();
 	private Spawnmob spawnmob = new Spawnmob();

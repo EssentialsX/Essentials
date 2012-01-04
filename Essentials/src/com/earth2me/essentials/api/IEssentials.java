@@ -27,6 +27,8 @@ public interface IEssentials extends Plugin
 	IGroups getGroups();
 
 	IJails getJails();
+	
+	IKits getKits();
 
 	IWarps getWarps();
 

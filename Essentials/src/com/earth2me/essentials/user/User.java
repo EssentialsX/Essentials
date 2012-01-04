@@ -6,11 +6,14 @@ import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.*;
 import com.earth2me.essentials.commands.IEssentialsCommand;
+import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.register.payment.Method;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.Cleanup;
 import lombok.Getter;
@@ -20,6 +23,7 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 
 public class User extends UserBase implements IUser
@@ -626,15 +630,65 @@ public class User extends UserBase implements IUser
 	{
 		return replyTo;
 	}
-	
+
 	@Override
-	public boolean gotMailInfo() {
+	public boolean gotMailInfo()
+	{
 		return gotMailInfo.getAndSet(true);
 	}
-	
+
 	@Override
-	public void addMail(String mail) {
+	public void addMail(String mail)
+	{
 		super.addMail(mail);
 		gotMailInfo.set(false);
+	}
+
+	@Override
+	public void giveItems(ItemStack itemStack)
+	{
+		if (giveItemStack(itemStack))
+		{
+			sendMessage(_("InvFull"));
+		}
+	}
+
+	@Override
+	public void giveItems(List<ItemStack> itemStacks)
+	{
+		boolean spew = false;
+		for (ItemStack itemStack : itemStacks)
+		{
+			if (giveItemStack(itemStack))
+			{
+				spew = true;
+			}
+		}
+		if (spew)
+		{
+			sendMessage(_("InvFull"));
+		}
+	}
+
+	private boolean giveItemStack(ItemStack itemStack)
+	{
+		boolean spew = false;
+		final Map<Integer, ItemStack> overfilled;
+		if (isAuthorized("essentials.oversizedstacks"))
+		{
+			int oversizedStackSize = ess.getSettings().getData().getGeneral().getOversizedStacksize();
+
+			overfilled = InventoryWorkaround.addItem(getInventory(), true, oversizedStackSize, itemStack);
+		}
+		else
+		{
+			overfilled = InventoryWorkaround.addItem(getInventory(), true, itemStack);
+		}
+		for (ItemStack overflowStack : overfilled.values())
+		{
+			getWorld().dropItemNaturally(getLocation(), overflowStack);
+			spew = true;
+		}
+		return spew;
 	}
 }

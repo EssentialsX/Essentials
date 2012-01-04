@@ -9,7 +9,7 @@ import java.util.*;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-
+/*
 public class Kit
 {
 	//TODO: Convert this to use one of the new text classes?
@@ -35,31 +35,7 @@ public class Kit
 
 	}
 
-	public static void checkTime(final IUser user, final String kitName, final Map<String, Object> els) throws NoChargeException
-	{
-		final double delay = els.containsKey("delay") ? ((Number)els.get("delay")).doubleValue() : 0L;
-		final Calendar c = new GregorianCalendar();
-		c.add(Calendar.SECOND, -(int)delay);
-		c.add(Calendar.MILLISECOND, -(int)((delay * 1000.0) % 1000.0));
 
-		final long mintime = c.getTimeInMillis();
-
-		final Long lastTime = user.getKitTimestamp(kitName);
-		if (lastTime == null || lastTime < mintime)
-		{
-			final Calendar now = new GregorianCalendar();
-			user.setKitTimestamp(kitName, now.getTimeInMillis());
-		}
-		else
-		{
-			final Calendar future = new GregorianCalendar();
-			future.setTimeInMillis(lastTime);
-			future.add(Calendar.SECOND, (int)delay);
-			future.add(Calendar.MILLISECOND, (int)((delay * 1000.0) % 1000.0));
-			user.sendMessage(_("kitTimed", Util.formatDateDiff(future.getTimeInMillis())));
-			throw new NoChargeException();
-		}
-	}
 
 	public static List<String> getItems(final IUser user, final Map<String, Object> els) throws Exception
 	{
@@ -112,4 +88,32 @@ public class Kit
 			throw new Exception(_("kitError2"));
 		}
 	}
+	 
+	
+		public static void checkTime(final IUser user, final String kitName, final Map<String, Object> els) throws NoChargeException
+	{
+		final double delay = els.containsKey("delay") ? ((Number)els.get("delay")).doubleValue() : 0L;
+		final Calendar c = new GregorianCalendar();
+		c.add(Calendar.SECOND, -(int)delay);
+		c.add(Calendar.MILLISECOND, -(int)((delay * 1000.0) % 1000.0));
+
+		final long mintime = c.getTimeInMillis();
+
+		final Long lastTime = user.getKitTimestamp(kitName);
+		if (lastTime == null || lastTime < mintime)
+		{
+			final Calendar now = new GregorianCalendar();
+			user.setKitTimestamp(kitName, now.getTimeInMillis());
+		}
+		else
+		{
+			final Calendar future = new GregorianCalendar();
+			future.setTimeInMillis(lastTime);
+			future.add(Calendar.SECOND, (int)delay);
+			future.add(Calendar.MILLISECOND, (int)((delay * 1000.0) % 1000.0));
+			user.sendMessage(_("kitTimed", Util.formatDateDiff(future.getTimeInMillis())));
+			throw new NoChargeException();
+		}
+	}
 }
+*/

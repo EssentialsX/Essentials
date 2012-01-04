@@ -7,6 +7,7 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 
 public interface IUser extends Player, IStorageObjectHolder<UserData>, IReload, IReplyTo, Comparable<IUser>
@@ -28,6 +29,10 @@ public interface IUser extends Player, IStorageObjectHolder<UserData>, IReload, 
 	void giveMoney(double value);
 
 	void giveMoney(double value, CommandSender initiator);
+	
+	void giveItems(ItemStack itemStack);
+	
+	void giveItems(List<ItemStack> itemStacks);
 
 	void setMoney(double value);
 
