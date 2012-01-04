@@ -676,7 +676,10 @@ public class User extends UserBase implements IUser
 		final Map<Integer, ItemStack> overfilled;
 		if (isAuthorized("essentials.oversizedstacks"))
 		{
-			int oversizedStackSize = ess.getSettings().getData().getGeneral().getOversizedStacksize();
+			@Cleanup
+			final ISettings settings = ess.getSettings();
+			settings.acquireReadLock();			
+			int oversizedStackSize = settings.getData().getGeneral().getOversizedStacksize();
 
 			overfilled = InventoryWorkaround.addItem(getInventory(), true, oversizedStackSize, itemStack);
 		}

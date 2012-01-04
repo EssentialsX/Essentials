@@ -45,7 +45,8 @@ public class Commandeco extends EssentialsCommand
 					break;
 
 				case RESET:
-					@Cleanup ISettings settings = ess.getSettings();
+					@Cleanup 
+					ISettings settings = ess.getSettings();
 					settings.acquireReadLock();
 					player.setMoney(amount == 0 ? settings.getData().getEconomy().getStartingBalance() : amount);
 					break;

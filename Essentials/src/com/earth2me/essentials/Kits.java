@@ -33,6 +33,7 @@ public class Kits extends AsyncStorageObjectHolder<com.earth2me.essentials.setti
 	@Override
 	public Kit getKit(String kitName) throws Exception
 	{
+		Kit kit;
 		acquireReadLock();
 		try
 		{
@@ -41,18 +42,18 @@ public class Kits extends AsyncStorageObjectHolder<com.earth2me.essentials.setti
 			{
 				throw new Exception(_("kitError2"));
 			}
-			Kit kit = getData().getKits().get(kitName.toLowerCase(Locale.ENGLISH));
+			kit = getData().getKits().get(kitName.toLowerCase(Locale.ENGLISH));
 			if (kit == null)
 			{
 				throw new Exception(_("kitError2"));
 			}
-			return kit;
+			
 		}
 		finally
 		{
 			unlock();
-		}
-
+		}		
+		return kit;
 	}
 
 	@Override
