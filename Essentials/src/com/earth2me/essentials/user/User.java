@@ -1,5 +1,6 @@
 package com.earth2me.essentials.user;
 
+import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Teleport;
@@ -654,7 +655,7 @@ public class User extends UserBase implements IUser
 	}
 
 	@Override
-	public void giveItems(ItemStack itemStack, Boolean canSpew)
+	public void giveItems(ItemStack itemStack, Boolean canSpew) throws ChargeException
 	{
 		if (giveItemStack(itemStack, canSpew))
 		{
@@ -663,7 +664,7 @@ public class User extends UserBase implements IUser
 	}
 
 	@Override
-	public void giveItems(List<ItemStack> itemStacks, Boolean canSpew)
+	public void giveItems(List<ItemStack> itemStacks, Boolean canSpew) throws ChargeException
 	{
 		boolean spew = false;
 		for (ItemStack itemStack : itemStacks)
@@ -679,7 +680,7 @@ public class User extends UserBase implements IUser
 		}
 	}
 
-	private boolean giveItemStack(ItemStack itemStack, Boolean canSpew)
+	private boolean giveItemStack(ItemStack itemStack, Boolean canSpew) throws ChargeException
 	{
 		boolean spew = false;
 		
@@ -708,6 +709,11 @@ public class User extends UserBase implements IUser
 			{
 				getWorld().dropItemNaturally(getLocation(), overflowStack);
 				spew = true;
+			}
+		}
+		else {
+			if (!overfilled.isEmpty()) {
+				throw new ChargeException("Inventory full");
 			}
 		}
 		return spew;
