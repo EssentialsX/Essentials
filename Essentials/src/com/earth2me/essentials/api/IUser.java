@@ -40,6 +40,8 @@ public interface IUser extends Player, IStorageObjectHolder<UserData>, IReload, 
 	void payUser(final IUser reciever, final double value) throws Exception;
 
 	String getGroup();
+	
+	boolean inGroup(String group);
 
 	void setLastLocation();
 
