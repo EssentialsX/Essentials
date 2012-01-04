@@ -35,7 +35,8 @@ public class Backup implements Runnable, IBackup
 		}
 	}
 
-	public void startTask()
+	@Override
+	public final void startTask()
 	{
 		if (running.compareAndSet(false, true))
 		{
@@ -63,78 +64,90 @@ public class Backup implements Runnable, IBackup
 		final ISettings settings = ess.getSettings();
 		settings.acquireReadLock();
 		final String command = settings.getData().getGeneral().getBackup().getCommand();
-		if (command == null || "".equals(command))
+		if (command == null || command.isEmpty())
 		{
 			return;
 		}
 		LOGGER.log(Level.INFO, _("backupStarted"));
-		final CommandSender cs = server.getConsoleSender();
-		server.dispatchCommand(cs, "save-all");
-		server.dispatchCommand(cs, "save-off");
+		final CommandSender consoleSender = server.getConsoleSender();
+		server.dispatchCommand(consoleSender, "save-all");
+		server.dispatchCommand(consoleSender, "save-off");
 
-		ess.scheduleAsyncDelayedTask(
-				new Runnable()
+		ess.scheduleAsyncDelayedTask(new BackupRunner(command));
+	}
+
+
+	private class BackupRunner implements Runnable
+	{
+		private final transient String command;
+
+		public BackupRunner(final String command)
+		{
+			this.command = command;
+		}
+
+		@Override
+		public void run()
+		{
+			try
+			{
+				final ProcessBuilder childBuilder = new ProcessBuilder(command);
+				childBuilder.redirectErrorStream(true);
+				childBuilder.directory(ess.getDataFolder().getParentFile().getParentFile());
+				final Process child = childBuilder.start();
+				final BufferedReader reader = new BufferedReader(new InputStreamReader(child.getInputStream()));
+				try
 				{
-					@Override
-					public void run()
+					child.waitFor();
+					String line;
+					do
 					{
-						try
+						line = reader.readLine();
+						if (line != null)
 						{
-							final ProcessBuilder childBuilder = new ProcessBuilder(command);
-							childBuilder.redirectErrorStream(true);
-							childBuilder.directory(ess.getDataFolder().getParentFile().getParentFile());
-							final Process child = childBuilder.start();
-							final BufferedReader reader = new BufferedReader(new InputStreamReader(child.getInputStream()));
-							try
-							{
-								child.waitFor();
-								String line;
-								do
-								{
-									line = reader.readLine();
-									if (line != null)
-									{
-										LOGGER.log(Level.INFO, line);
-									}
-								}
-								while (line != null);
-							}
-							finally
-							{
-								reader.close();
-							}
-						}
-						catch (InterruptedException ex)
-						{
-							LOGGER.log(Level.SEVERE, null, ex);
-						}
-						catch (IOException ex)
-						{
-							LOGGER.log(Level.SEVERE, null, ex);
-						}
-						finally
-						{
-							ess.scheduleSyncDelayedTask(
-									new Runnable()
-									{
-										@Override
-										public void run()
-										{
-											server.dispatchCommand(cs, "save-on");
-											if (server.getOnlinePlayers().length == 0)
-											{
-												running.set(false);
-												if (taskId != -1)
-												{
-													server.getScheduler().cancelTask(taskId);
-												}
-											}
-											active.set(false);
-											LOGGER.log(Level.INFO, _("backupFinished"));
-										}
-									});
+							LOGGER.log(Level.INFO, line);
 						}
 					}
-				});
+					while (line != null);
+				}
+				finally
+				{
+					reader.close();
+				}
+			}
+			catch (InterruptedException ex)
+			{
+				LOGGER.log(Level.SEVERE, null, ex);
+			}
+			catch (IOException ex)
+			{
+				LOGGER.log(Level.SEVERE, null, ex);
+			}
+			finally
+			{
+				ess.scheduleSyncDelayedTask(new EnableSavingRunner());
+			}
+		}
+	}
+
+
+	private class EnableSavingRunner implements Runnable
+	{
+		@Override
+		public void run()
+		{
+			server.dispatchCommand(server.getConsoleSender(), "save-on");
+			if (server.getOnlinePlayers().length == 0)
+			{
+				running.set(false);
+				if (taskId != -1)
+				{
+					server.getScheduler().cancelTask(taskId);
+				}
+			}
+
+			active.set(false);
+			LOGGER.log(Level.INFO, _("backupFinished"));
+		}
 	}
 }
