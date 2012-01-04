@@ -30,9 +30,9 @@ public interface IUser extends Player, IStorageObjectHolder<UserData>, IReload, 
 
 	void giveMoney(double value, CommandSender initiator);
 	
-	void giveItems(ItemStack itemStack);
+	void giveItems(ItemStack itemStack, Boolean canSpew);
 	
-	void giveItems(List<ItemStack> itemStacks);
+	void giveItems(List<ItemStack> itemStacks, Boolean canSpew);
 
 	void setMoney(double value);
 

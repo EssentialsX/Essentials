@@ -654,21 +654,21 @@ public class User extends UserBase implements IUser
 	}
 
 	@Override
-	public void giveItems(ItemStack itemStack)
+	public void giveItems(ItemStack itemStack, Boolean canSpew)
 	{
-		if (giveItemStack(itemStack))
+		if (giveItemStack(itemStack, canSpew))
 		{
 			sendMessage(_("InvFull"));
 		}
 	}
 
 	@Override
-	public void giveItems(List<ItemStack> itemStacks)
+	public void giveItems(List<ItemStack> itemStacks, Boolean canSpew)
 	{
 		boolean spew = false;
 		for (ItemStack itemStack : itemStacks)
 		{
-			if (giveItemStack(itemStack))
+			if (giveItemStack(itemStack, canSpew))
 			{
 				spew = true;
 			}
@@ -679,9 +679,15 @@ public class User extends UserBase implements IUser
 		}
 	}
 
-	private boolean giveItemStack(ItemStack itemStack)
+	private boolean giveItemStack(ItemStack itemStack, Boolean canSpew)
 	{
 		boolean spew = false;
+		
+		if (itemStack == null || itemStack.getType() == Material.AIR)
+		{
+			return spew;
+		}
+		
 		final Map<Integer, ItemStack> overfilled;
 		if (isAuthorized("essentials.oversizedstacks"))
 		{
@@ -696,11 +702,14 @@ public class User extends UserBase implements IUser
 		{
 			overfilled = InventoryWorkaround.addItem(getInventory(), true, itemStack);
 		}
-		for (ItemStack overflowStack : overfilled.values())
+		if (canSpew)
 		{
-			getWorld().dropItemNaturally(getLocation(), overflowStack);
-			spew = true;
+			for (ItemStack overflowStack : overfilled.values())
+			{
+				getWorld().dropItemNaturally(getLocation(), overflowStack);
+				spew = true;
+			}
 		}
 		return spew;
-	}	
+	}
 }

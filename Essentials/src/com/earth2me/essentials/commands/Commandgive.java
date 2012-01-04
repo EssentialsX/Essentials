@@ -22,8 +22,10 @@ public class Commandgive extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
+		
+		final IUser giveTo = getPlayer(args, 0);
 
-		final ItemStack stack = ess.getItemDb().get(args[1]);
+		final ItemStack stack = ess.getItemDb().get(args[1], giveTo);
 
 		final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 		if (sender instanceof Player
@@ -31,35 +33,12 @@ public class Commandgive extends EssentialsCommand
 				&& !ess.getUser((Player)sender).isAuthorized("essentials.give.item-" + stack.getTypeId())))
 		{
 			throw new Exception(ChatColor.RED + "You are not allowed to spawn the item " + itemname);
-		}
+		}	
 
-		final IUser giveTo = getPlayer(args, 0);
-
-		int defaultStackSize = 0;
-		int oversizedStackSize = 0;
-		ISettings settings = ess.getSettings();
-		settings.acquireReadLock();
-		try
-		{
-			defaultStackSize = settings.getData().getGeneral().getDefaultStacksize();
-			oversizedStackSize = settings.getData().getGeneral().getOversizedStacksize();
-		}
-		finally
-		{
-			settings.unlock();
-		}
 		if (args.length > 2 && Integer.parseInt(args[2]) > 0)
 		{
 			stack.setAmount(Integer.parseInt(args[2]));
-		}
-		else if (defaultStackSize > 0)
-		{
-			stack.setAmount(defaultStackSize);
-		}
-		else if (oversizedStackSize > 0 && giveTo.isAuthorized("essentials.oversizedstacks"))
-		{
-			stack.setAmount(oversizedStackSize);
-		}
+		}		
 
 		if (args.length > 3)
 		{
@@ -88,17 +67,11 @@ public class Commandgive extends EssentialsCommand
 		{
 			throw new Exception(ChatColor.RED + "You can't give air.");
 		}
+		
+		giveTo.giveItems(stack, false);
 
 		final String itemName = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ');
 		sender.sendMessage(ChatColor.BLUE + "Giving " + stack.getAmount() + " of " + itemName + " to " + giveTo.getDisplayName() + ".");
-		if (giveTo.isAuthorized("essentials.oversizedstacks"))
-		{
-			InventoryWorkaround.addItem(giveTo.getInventory(), true, oversizedStackSize, stack);
-		}
-		else
-		{
-			InventoryWorkaround.addItem(giveTo.getInventory(), true, stack);
-		}
-		giveTo.updateInventory();
+		
 	}
 }

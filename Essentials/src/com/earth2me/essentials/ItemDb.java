@@ -3,10 +3,12 @@ package com.earth2me.essentials;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.IItemDb;
+import com.earth2me.essentials.api.IUser;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import lombok.Cleanup;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -58,6 +60,31 @@ public class ItemDb implements IItemDb
 		}
 	}
 
+	public ItemStack get(final String id, final IUser user) throws Exception
+	{
+		final ItemStack stack = get(id.toLowerCase(Locale.ENGLISH));
+		
+		int defaultStackSize = 0;
+		int oversizedStackSize = 0;
+		@Cleanup
+		com.earth2me.essentials.api.ISettings settings = ess.getSettings();
+		settings.acquireReadLock();
+		
+		defaultStackSize = settings.getData().getGeneral().getDefaultStacksize();
+		oversizedStackSize = settings.getData().getGeneral().getOversizedStacksize();
+		
+		if (defaultStackSize > 0)
+		{
+			stack.setAmount(defaultStackSize);
+		}
+		else if (oversizedStackSize > 0 && user.isAuthorized("essentials.oversizedstacks"))
+		{
+			stack.setAmount(oversizedStackSize);
+		}
+		
+		return stack;
+	}
+	
 	public ItemStack get(final String id, final int quantity) throws Exception
 	{
 		final ItemStack retval = get(id.toLowerCase(Locale.ENGLISH));

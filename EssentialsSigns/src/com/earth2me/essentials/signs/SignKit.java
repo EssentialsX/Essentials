@@ -3,6 +3,7 @@ package com.earth2me.essentials.signs;
 import com.earth2me.essentials.*;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.settings.Kit;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -31,7 +32,7 @@ public class SignKit extends EssentialsSign
 		{
 			try
 			{
-				ess.getSettings().getKit(kitName);
+				ess.getKits().getKit(kitName);				
 			}
 			catch (Exception ex)
 			{
@@ -58,10 +59,9 @@ public class SignKit extends EssentialsSign
 			charge.isAffordableFor(player);
 			try
 			{
-				final Object kit = ess.getSettings().getKit(kitName);
-				final Map<String, Object> els = (Map<String, Object>)kit;
-				final List<String> items = Kit.getItems(player, els);			
-				Kit.expandItems(ess, player, items);	
+				final Kit kit = ess.getKits().getKit(kitName);				
+				ess.getKits().sendKit(player, kit);
+								
 				charge.charge(player);
 			}
 			catch (Exception ex)

@@ -19,7 +19,8 @@ public class Commandrealname extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		@Cleanup final ISettings settings = ess.getSettings();
+		@Cleanup 
+		final ISettings settings = ess.getSettings();
 		final String whois = args[0].toLowerCase(Locale.ENGLISH);
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{

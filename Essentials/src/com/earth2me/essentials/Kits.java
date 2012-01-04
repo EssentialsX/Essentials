@@ -65,7 +65,7 @@ public class Kits extends AsyncStorageObjectHolder<com.earth2me.essentials.setti
 	public void sendKit(IUser user, Kit kit) throws Exception
 	{
 		final List<ItemStack> itemList = kit.getItems();		
-		user.giveItems(itemList);					
+		user.giveItems(itemList, true);					
 	}
 
 	@Override

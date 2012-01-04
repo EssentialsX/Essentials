@@ -104,6 +104,7 @@ public class Commandunlimited extends EssentialsCommand
 			user.sendMessage(_(message, itemname, target.getDisplayName()));
 		}
 		target.sendMessage(_(message, itemname, target.getDisplayName()));
+		target.acquireWriteLock();
 		target.getData().setUnlimited(stack.getType(), enableUnlimited);
 
 		return true;
