@@ -2,7 +2,6 @@ package com.earth2me.essentials.chat;
 
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.IUser;
-import com.earth2me.essentials.chat.EssentialsLocalChatEvent;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;

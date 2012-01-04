@@ -1,8 +1,8 @@
 package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.ChargeException;
-import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.Trade;
+import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.IUser;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
@@ -49,10 +49,9 @@ public class SignWarp extends EssentialsSign
 	{
 		final String warpName = sign.getLine(1);
 		final String group = sign.getLine(2);
-		if ((!group.isEmpty()
-			 && ("§2Everyone".equals(group)
-				 || player.inGroup(group)))
-			|| (group.isEmpty() && (!ess.getSettings().getPerWarpPermission() || player.isAuthorized("essentials.warp." + warpName))))
+
+		if ((!group.isEmpty() && ("§2Everyone".equals(group) || player.inGroup(group)))
+			|| (group.isEmpty() && player.isAuthorized("essentials.warp." + warpName)))
 		{
 			final Trade charge = getTrade(sign, 3, ess);
 			try

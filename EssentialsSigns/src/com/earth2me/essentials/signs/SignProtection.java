@@ -2,10 +2,10 @@ package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.ChargeException;
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.Trade;
-import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.Util;
+import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.IUser;
 import java.util.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
