@@ -787,29 +787,29 @@ public class GroupManager extends JavaPlugin {
 				}
 				targetPlayer = this.getServer().getPlayer(auxUser.getName());
 				// VALIDANDO PERMISSAO
-				permissionResult = permissionHandler.checkFullUserPermission(auxUser, args[1]);
+				permissionResult = permissionHandler.checkFullGMPermission(auxUser, args[1], false);
+
 				if (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND)) {
+					//No permissions found in GM so fall through and check Bukkit.
 					sender.sendMessage(ChatColor.RED + "The player doesn't have access to that permission");
-					sender.sendMessage(ChatColor.YELLOW + "SuperPerms reports Node: " + targetPlayer.hasPermission(args[1]));
-					return false;
-				}
-				// PARECE OK
-				// auxString =
-				// permissionHandler.checkUserOnlyPermission(auxUser, args[1]);
-				if (permissionResult.owner instanceof User) {
-					if (permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION)) {
-						sender.sendMessage(ChatColor.RED + "The user has directly a negation node for that permission.");
-					} else {
-						sender.sendMessage(ChatColor.YELLOW + "The user has directly this permission.");
+					
+				} else {
+					// This permission was found in groupmanager.
+					if (permissionResult.owner instanceof User) {
+						if (permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION)) {
+							sender.sendMessage(ChatColor.RED + "The user has directly a negation node for that permission.");
+						} else {
+							sender.sendMessage(ChatColor.YELLOW + "The user has directly this permission.");
+						}
+						sender.sendMessage(ChatColor.YELLOW + "Permission Node: " + permissionResult.accessLevel);
+					} else if (permissionResult.owner instanceof Group) {
+						if (permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION)) {
+							sender.sendMessage(ChatColor.RED + "The user inherits a negation permission from group: " + permissionResult.owner.getName());
+						} else {
+							sender.sendMessage(ChatColor.YELLOW + "The user inherits the permission from group: " + permissionResult.owner.getName());
+						}
+						sender.sendMessage(ChatColor.YELLOW + "Permission Node: " + permissionResult.accessLevel);
 					}
-					sender.sendMessage(ChatColor.YELLOW + "Permission Node: " + permissionResult.accessLevel);
-				} else if (permissionResult.owner instanceof Group) {
-					if (permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION)) {
-						sender.sendMessage(ChatColor.RED + "The user inherits a negation permission from group: " + permissionResult.owner.getName());
-					} else {
-						sender.sendMessage(ChatColor.YELLOW + "The user inherits the permission from group: " + permissionResult.owner.getName());
-					}
-					sender.sendMessage(ChatColor.YELLOW + "Permission Node: " + permissionResult.accessLevel);
 				}
 
 				// superperms

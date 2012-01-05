@@ -96,3 +96,4 @@ v 1.8:
 	- Changed the way events are raised to prevent variable corruption.
 	- Reload GlobalGroups when you perform a world load.
 	- Changed GlobalGroups to save/load before local groups in the scheduled data saving/loading
+	- Fix 'manucheckp' to correctly report if a permission is available from GroupManager or Bukkit.
