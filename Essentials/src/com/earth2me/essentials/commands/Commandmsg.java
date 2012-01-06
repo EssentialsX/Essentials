@@ -40,7 +40,7 @@ public class Commandmsg extends EssentialsCommand
 		if (args[0].equalsIgnoreCase(Console.NAME))
 		{
 			sender.sendMessage(_("msgFormat", translatedMe, Console.NAME, message));
-			CommandSender cs = Console.getCommandSender(server);
+			CommandSender cs = server.getConsoleSender();
 			cs.sendMessage(_("msgFormat", senderName, translatedMe, message));
 			replyTo.setReplyTo(cs);
 			Console.getConsoleReplyTo().setReplyTo(sender);

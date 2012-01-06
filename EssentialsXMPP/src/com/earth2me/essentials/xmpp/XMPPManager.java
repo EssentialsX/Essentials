@@ -1,6 +1,5 @@
 package com.earth2me.essentials.xmpp;
 
-import com.earth2me.essentials.Console;
 import com.earth2me.essentials.EssentialsConf;
 import com.earth2me.essentials.api.IReload;
 import com.earth2me.essentials.api.IUser;
@@ -355,7 +354,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 		{
 			try
 			{
-				parent.getServer().dispatchCommand(Console.getCommandSender(parent.getServer()), message.substring(1));
+				parent.getServer().dispatchCommand(parent.getServer().getConsoleSender(), message.substring(1));
 			}
 			catch (Exception ex)
 			{
