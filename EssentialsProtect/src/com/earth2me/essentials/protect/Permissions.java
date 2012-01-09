@@ -12,13 +12,20 @@ public enum Permissions implements IPermission
 	BUILD(PermissionDefault.TRUE),
 	INTERACT(PermissionDefault.TRUE),
 	USEFLINTSTEEL(PermissionDefault.TRUE),
+	PVP(PermissionDefault.TRUE),
+	ENTITYTARGET(PermissionDefault.TRUE),
 	PREVENTDAMAGE_FALL(PermissionDefault.FALSE),
+	PREVENTDAMAGE_CREEPER(PermissionDefault.FALSE),
+	PREVENTDAMAGE_CONTACT(PermissionDefault.FALSE),
+	PREVENTDAMAGE_FIREBALL(PermissionDefault.FALSE),
+	PREVENTDAMAGE_PROJECTILES(PermissionDefault.FALSE),
+	PREVENTDAMAGE_LAVADAMAGE(PermissionDefault.FALSE),
+	PREVENTDAMAGE_TNT(PermissionDefault.FALSE),
 	PREVENTDAMAGE_SUFFOCATION(PermissionDefault.FALSE),
 	PREVENTDAMAGE_FIRE(PermissionDefault.FALSE),
 	PREVENTDAMAGE_DROWNING(PermissionDefault.FALSE),
 	PREVENTDAMAGE_LIGHTNING(PermissionDefault.FALSE),
-	PREVENTDAMAGE_NONE(PermissionDefault.FALSE)
-	;
+	PREVENTDAMAGE_NONE(PermissionDefault.FALSE);
 	private static final String base = "essentials.protect.";
 	private final String permission;
 	private final PermissionDefault defaultPerm;

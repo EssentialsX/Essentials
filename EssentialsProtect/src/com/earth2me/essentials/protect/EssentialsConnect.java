@@ -72,54 +72,59 @@ public class EssentialsConnect
 			{
 				protect.getStorage().onPluginDeactivation();
 			}
-			
-			/*for (ProtectConfig protectConfig : ProtectConfig.values())
+
+			/*
+			 * for (ProtectConfig protectConfig : ProtectConfig.values()) { if (protectConfig.isList()) {
+			 * protect.getSettingsList().put(protectConfig,
+			 * ess.getSettings().getProtectList(protectConfig.getConfigName())); } else if (protectConfig.isString()) {
+			 * protect.getSettingsString().put(protectConfig,
+			 * ess.getSettings().getProtectString(protectConfig.getConfigName())); } else {
+			 * protect.getSettingsBoolean().put(protectConfig,
+			 * ess.getSettings().getProtectBoolean(protectConfig.getConfigName(),
+			 * protectConfig.getDefaultValueBoolean())); }
+			 *
+			 * }
+			 */
+
+			ProtectHolder settings = protect.getSettings();
+			settings.acquireReadLock();
+			try
 			{
-				if (protectConfig.isList())
+				if (settings.getData().getDbtype().equalsIgnoreCase("mysql"))
 				{
-					protect.getSettingsList().put(protectConfig, ess.getSettings().getProtectList(protectConfig.getConfigName()));
-				}
-				else if (protectConfig.isString())
-				{
-					protect.getSettingsString().put(protectConfig, ess.getSettings().getProtectString(protectConfig.getConfigName()));
+					try
+					{
+						protect.setStorage(new ProtectedBlockMySQL(
+								settings.getData().getDburl(),
+								settings.getData().getDbuser(),
+								settings.getData().getDbpassword()));
+					}
+					catch (PropertyVetoException ex)
+					{
+						LOGGER.log(Level.SEVERE, null, ex);
+					}
 				}
 				else
 				{
-					protect.getSettingsBoolean().put(protectConfig, ess.getSettings().getProtectBoolean(protectConfig.getConfigName(), protectConfig.getDefaultValueBoolean()));
+					try
+					{
+						protect.setStorage(new ProtectedBlockSQLite("jdbc:sqlite:plugins/Essentials/EssentialsProtect.db"));
+					}
+					catch (PropertyVetoException ex)
+					{
+						LOGGER.log(Level.SEVERE, null, ex);
+					}
 				}
+				/*if (protect.getSettingBool(ProtectConfig.memstore))
+				{
+					protect.setStorage(new ProtectedBlockMemory(protect.getStorage(), protect));
+				}*/
 
-			}*/
-
-			if (protect.getSettingString(ProtectConfig.datatype).equalsIgnoreCase("mysql"))
-			{
-				try
-				{
-					protect.setStorage(new ProtectedBlockMySQL(
-							protect.getSettingString(ProtectConfig.mysqlDB),
-							protect.getSettingString(ProtectConfig.dbUsername),
-							protect.getSettingString(ProtectConfig.dbPassword)));
-				}
-				catch (PropertyVetoException ex)
-				{
-					LOGGER.log(Level.SEVERE, null, ex);
-				}
 			}
-			else
+			finally
 			{
-				try
-				{
-					protect.setStorage(new ProtectedBlockSQLite("jdbc:sqlite:plugins/Essentials/EssentialsProtect.db"));
-				}
-				catch (PropertyVetoException ex)
-				{
-					LOGGER.log(Level.SEVERE, null, ex);
-				}
+				settings.unlock();
 			}
-			if (protect.getSettingBool(ProtectConfig.memstore))
-			{
-				protect.setStorage(new ProtectedBlockMemory(protect.getStorage(), protect));
-			}
-
 		}
 	}
 }

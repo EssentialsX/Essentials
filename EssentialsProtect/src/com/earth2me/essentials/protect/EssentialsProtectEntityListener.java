@@ -3,7 +3,6 @@ package com.earth2me.essentials.protect;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.craftbukkit.FakeExplosion;
-import java.util.Locale;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -20,6 +19,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 
 	public EssentialsProtectEntityListener(final IProtect prot)
 	{
+		super();
 		this.prot = prot;
 		this.ess = prot.getEssentialsConnect().getEssentials();
 	}
@@ -31,156 +31,142 @@ public class EssentialsProtectEntityListener extends EntityListener
 		{
 			return;
 		}
-		final Entity target = event.getEntity();
-
-		if (target instanceof Villager && prot.getSettingBool(ProtectConfig.prevent_villager_death))
+		final ProtectHolder settings = prot.getSettings();
+		settings.acquireReadLock();
+		try
 		{
-			event.setCancelled(true);
-			return;
-		}
+			final Entity target = event.getEntity();
 
-		final IUser user = target instanceof Player ? ess.getUser((Player)target) : null;
-		if (event instanceof EntityDamageByBlockEvent)
-		{
+			if (target instanceof Villager && settings.getData().getPrevent().isVillagerDeath())
+			{
+				event.setCancelled(true);
+				return;
+			}
+
+			final IUser user = target instanceof Player ? ess.getUser((Player)target) : null;
+			if (target instanceof Player && event instanceof EntityDamageByBlockEvent)
+			{
+				final DamageCause cause = event.getCause();
+
+				if (cause == DamageCause.CONTACT
+					&& (user.isAuthorized(Permissions.PREVENTDAMAGE_CONTACT)
+						&& !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
+				{
+					event.setCancelled(true);
+					return;
+				}
+				if (cause == DamageCause.LAVA
+					&& (user.isAuthorized(Permissions.PREVENTDAMAGE_LAVADAMAGE)
+						&& !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
+				{
+					event.setCancelled(true);
+					return;
+				}
+				if (cause == DamageCause.BLOCK_EXPLOSION
+					&& (user.isAuthorized(Permissions.PREVENTDAMAGE_TNT)
+						&& !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
+				{
+					event.setCancelled(true);
+					return;
+				}
+			}
+
+			if (target instanceof Player && event instanceof EntityDamageByEntityEvent)
+			{
+				final EntityDamageByEntityEvent edEvent = (EntityDamageByEntityEvent)event;
+				final Entity eAttack = edEvent.getDamager();
+				final IUser attacker = eAttack instanceof Player ? ess.getUser((Player)eAttack) : null;
+
+				// PVP Settings
+				if (target instanceof Player && eAttack instanceof Player
+					&& (!user.isAuthorized(Permissions.PVP) || !attacker.isAuthorized(Permissions.PVP)))
+				{
+					event.setCancelled(true);
+					return;
+				}
+
+				//Creeper explode prevention
+				if (eAttack instanceof Creeper && settings.getData().getPrevent().isCreeperExplosion()
+					|| (user.isAuthorized(Permissions.PREVENTDAMAGE_CREEPER)
+						&& !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
+				{
+					event.setCancelled(true);
+					return;
+				}
+
+				if ((event.getEntity() instanceof Fireball || event.getEntity() instanceof SmallFireball)
+					&& (user.isAuthorized(Permissions.PREVENTDAMAGE_FIREBALL)
+						&& !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
+				{
+					event.setCancelled(true);
+					return;
+				}
+
+				if (eAttack instanceof TNTPrimed
+					&& (user.isAuthorized(Permissions.PREVENTDAMAGE_TNT)
+						&& !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
+				{
+					event.setCancelled(true);
+					return;
+				}
+
+				if (edEvent.getDamager() instanceof Projectile
+					&& ((user.isAuthorized(Permissions.PREVENTDAMAGE_PROJECTILES)
+						 && !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE))
+						|| (((Projectile)edEvent.getDamager()).getShooter() instanceof Player
+							&& (!user.isAuthorized(Permissions.PVP)
+								|| !ess.getUser((Player)((Projectile)edEvent.getDamager()).getShooter()).isAuthorized(Permissions.PVP)))))
+				{
+					event.setCancelled(true);
+					return;
+				}
+			}
+
 			final DamageCause cause = event.getCause();
+			if (target instanceof Player)
+			{
+				if (cause == DamageCause.FALL
+					&& (user.isAuthorized(Permissions.PREVENTDAMAGE_FALL)
+						&& !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
+				{
+					event.setCancelled(true);
+					return;
+				}
 
-			if (prot.getSettingBool(ProtectConfig.disable_contactdmg)
-				&& cause == DamageCause.CONTACT
-				&& !(target instanceof Player
-					 && user.isAuthorized("essentials.protect.damage.contact")
-					 && !user.isAuthorized("essentials.protect.damage.disable")))
-			{
-				event.setCancelled(true);
-				return;
-			}
-			if (prot.getSettingBool(ProtectConfig.disable_lavadmg)
-				&& cause == DamageCause.LAVA
-				&& !(target instanceof Player
-					 && user.isAuthorized("essentials.protect.damage.lava")
-					 && !user.isAuthorized("essentials.protect.damage.disable")))
-			{
-				event.setCancelled(true);
-				return;
-			}
-			if (prot.getSettingBool(ProtectConfig.prevent_tnt_explosion)
-				&& cause == DamageCause.BLOCK_EXPLOSION
-				&& !(target instanceof Player
-					 && user.isAuthorized("essentials.protect.damage.tnt")
-					 && !user.isAuthorized("essentials.protect.damage.disable")))
-			{
-				event.setCancelled(true);
-				return;
+				if (cause == DamageCause.SUFFOCATION
+					&& (user.isAuthorized(Permissions.PREVENTDAMAGE_SUFFOCATION)
+						&& !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
+				{
+					event.setCancelled(true);
+					return;
+				}
+				if ((cause == DamageCause.FIRE
+					 || cause == DamageCause.FIRE_TICK)
+					&& (user.isAuthorized(Permissions.PREVENTDAMAGE_FIRE)
+						&& !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
+				{
+					event.setCancelled(true);
+					return;
+				}
+				if (cause == DamageCause.DROWNING
+					&& (user.isAuthorized(Permissions.PREVENTDAMAGE_DROWNING)
+						&& !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
+				{
+					event.setCancelled(true);
+					return;
+				}
+				if (cause == DamageCause.LIGHTNING
+					&& (user.isAuthorized(Permissions.PREVENTDAMAGE_LIGHTNING)
+						&& !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
+				{
+					event.setCancelled(true);
+					return;
+				}
 			}
 		}
-
-		if (event instanceof EntityDamageByEntityEvent)
+		finally
 		{
-			final EntityDamageByEntityEvent edEvent = (EntityDamageByEntityEvent)event;
-			final Entity eAttack = edEvent.getDamager();
-			final IUser attacker = eAttack instanceof Player ? ess.getUser((Player)eAttack) : null;
-
-			// PVP Settings
-			if (target instanceof Player && eAttack instanceof Player
-				&& prot.getSettingBool(ProtectConfig.disable_pvp)
-				&& (!user.isAuthorized("essentials.protect.pvp") || !attacker.isAuthorized("essentials.protect.pvp")))
-			{
-				event.setCancelled(true);
-				return;
-			}
-
-			//Creeper explode prevention
-			if (eAttack instanceof Creeper && prot.getSettingBool(ProtectConfig.prevent_creeper_explosion)
-				&& !(target instanceof Player
-					 && user.isAuthorized("essentials.protect.damage.creeper")
-					 && !user.isAuthorized("essentials.protect.damage.disable")))
-			{
-				event.setCancelled(true);
-				return;
-			}
-
-			if (eAttack instanceof Creeper && prot.getSettingBool(ProtectConfig.prevent_creeper_playerdmg)
-				&& !(target instanceof Player
-					 && user.isAuthorized("essentials.protect.damage.creeper")
-					 && !user.isAuthorized("essentials.protect.damage.disable")))
-			{
-				event.setCancelled(true);
-				return;
-			}
-
-			if ((event.getEntity() instanceof Fireball || event.getEntity() instanceof SmallFireball)
-				&& prot.getSettingBool(ProtectConfig.prevent_fireball_playerdmg)
-				&& !(target instanceof Player
-					 && user.isAuthorized("essentials.protect.damage.fireball")
-					 && !user.isAuthorized("essentials.protect.damage.disable")))
-			{
-				event.setCancelled(true);
-				return;
-			}
-
-			if (eAttack instanceof TNTPrimed && prot.getSettingBool(ProtectConfig.prevent_tnt_playerdmg)
-				&& !(target instanceof Player
-					 && user.isAuthorized("essentials.protect.damage.tnt")
-					 && !user.isAuthorized("essentials.protect.damage.disable")))
-			{
-				event.setCancelled(true);
-				return;
-			}
-
-			if (edEvent.getDamager() instanceof Projectile
-				&& target instanceof Player
-				&& ((prot.getSettingBool(ProtectConfig.disable_projectiles)
-					 && !(user.isAuthorized("essentials.protect.damage.projectiles")
-						  && !user.isAuthorized("essentials.protect.damage.disable")))
-					|| (((Projectile)edEvent.getDamager()).getShooter() instanceof Player
-						&& prot.getSettingBool(ProtectConfig.disable_pvp)
-						&& (!user.isAuthorized("essentials.protect.pvp")
-							|| !ess.getUser((Player)((Projectile)edEvent.getDamager()).getShooter()).isAuthorized("essentials.protect.pvp")))))
-			{
-				event.setCancelled(true);
-				return;
-			}
-		}
-
-		final DamageCause cause = event.getCause();
-		if (target instanceof Player)
-		{
-			if (cause == DamageCause.FALL
-				&& (user.isAuthorized(Permissions.PREVENTDAMAGE_FALL)
-					&& !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
-			{
-				event.setCancelled(true);
-				return;
-			}
-
-			if (cause == DamageCause.SUFFOCATION
-				&& (user.isAuthorized(Permissions.PREVENTDAMAGE_SUFFOCATION)
-					&& !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
-			{
-				event.setCancelled(true);
-				return;
-			}
-			if ((cause == DamageCause.FIRE
-				 || cause == DamageCause.FIRE_TICK)
-				&& (user.isAuthorized(Permissions.PREVENTDAMAGE_FIRE)
-					&& !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
-			{
-				event.setCancelled(true);
-				return;
-			}
-			if (cause == DamageCause.DROWNING
-				&& (user.isAuthorized(Permissions.PREVENTDAMAGE_DROWNING)
-					 && !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
-			{
-				event.setCancelled(true);
-				return;
-			}
-			if (cause == DamageCause.LIGHTNING
-				&& (user.isAuthorized(Permissions.PREVENTDAMAGE_LIGHTNING)
-					 && !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
-			{
-				event.setCancelled(true);
-				return;
-			}
+			settings.unlock();
 		}
 	}
 
@@ -191,68 +177,73 @@ public class EssentialsProtectEntityListener extends EntityListener
 		{
 			return;
 		}
-		final int maxHeight = ess.getSettings().getProtectCreeperMaxHeight();
-
-		if (event.getEntity() instanceof EnderDragon
-			&& prot.getSettingBool(ProtectConfig.prevent_enderdragon_blockdmg))
+		final ProtectHolder settings = prot.getSettings();
+		settings.acquireReadLock();
+		try
 		{
-			if (prot.getSettingBool(ProtectConfig.enderdragon_fakeexplosions))
+			final int maxHeight = settings.getData().getCreeperMaxHeight();
+
+			if (event.getEntity() instanceof EnderDragon
+				&& settings.getData().getPrevent().isEnderdragonBlockdamage())
 			{
+				event.setCancelled(true);
+				return;
+			}
+			else if (event.getEntity() instanceof Creeper
+					 && (settings.getData().getPrevent().isCreeperExplosion()
+						 || settings.getData().getPrevent().isCreeperBlockdamage()
+						 || (maxHeight >= 0 && event.getLocation().getBlockY() > maxHeight)))
+			{
+				//Nicccccccccce plaaacccccccccce..
 				FakeExplosion.createExplosion(event, ess.getServer(), ess.getServer().getOnlinePlayers());
+				event.setCancelled(true);
+				return;
 			}
-			event.setCancelled(true);
-			return;
-		}
-		else if (event.getEntity() instanceof Creeper
-				 && (prot.getSettingBool(ProtectConfig.prevent_creeper_explosion)
-					 || prot.getSettingBool(ProtectConfig.prevent_creeper_blockdmg)
-					 || (maxHeight >= 0 && event.getLocation().getBlockY() > maxHeight)))
-		{
-			//Nicccccccccce plaaacccccccccce..
-			FakeExplosion.createExplosion(event, ess.getServer(), ess.getServer().getOnlinePlayers());
-			event.setCancelled(true);
-			return;
-		}
-		else if (event.getEntity() instanceof TNTPrimed
-				 && prot.getSettingBool(ProtectConfig.prevent_tnt_explosion))
-		{
-			event.setCancelled(true);
-			return;
-		}
-		else if ((event.getEntity() instanceof Fireball || event.getEntity() instanceof SmallFireball)
-				 && prot.getSettingBool(ProtectConfig.prevent_fireball_explosion))
-		{
-			event.setCancelled(true);
-			return;
-		}
-		// This code will prevent explosions near protected rails, signs or protected chests
-		// TODO: Use protect db instead of this code
+			else if (event.getEntity() instanceof TNTPrimed
+					 && settings.getData().getPrevent().isTntExplosion())
+			{
+				event.setCancelled(true);
+				return;
+			}
+			else if ((event.getEntity() instanceof Fireball || event.getEntity() instanceof SmallFireball)
+					 && settings.getData().getPrevent().isFireballExplosion())
+			{
+				event.setCancelled(true);
+				return;
+			}
+			// This code will prevent explosions near protected rails, signs or protected chests
+			// TODO: Use protect db instead of this code
 
-		for (Block block : event.blockList())
+			for (Block block : event.blockList())
+			{
+				if ((block.getRelative(BlockFace.UP).getType() == Material.RAILS
+					 || block.getType() == Material.RAILS
+					 || block.getRelative(BlockFace.UP).getType() == Material.POWERED_RAIL
+					 || block.getType() == Material.POWERED_RAIL
+					 || block.getRelative(BlockFace.UP).getType() == Material.DETECTOR_RAIL
+					 || block.getType() == Material.DETECTOR_RAIL)
+					&& settings.getData().getSignsAndRails().isProtectRails())
+				{
+					event.setCancelled(true);
+					return;
+				}
+				if ((block.getType() == Material.WALL_SIGN
+					 || block.getRelative(BlockFace.NORTH).getType() == Material.WALL_SIGN
+					 || block.getRelative(BlockFace.EAST).getType() == Material.WALL_SIGN
+					 || block.getRelative(BlockFace.SOUTH).getType() == Material.WALL_SIGN
+					 || block.getRelative(BlockFace.WEST).getType() == Material.WALL_SIGN
+					 || block.getType() == Material.SIGN_POST
+					 || block.getRelative(BlockFace.UP).getType() == Material.SIGN_POST)
+					&& settings.getData().getSignsAndRails().isProtectSigns())
+				{
+					event.setCancelled(true);
+					return;
+				}
+			}
+		}
+		finally
 		{
-			if ((block.getRelative(BlockFace.UP).getType() == Material.RAILS
-				 || block.getType() == Material.RAILS
-				 || block.getRelative(BlockFace.UP).getType() == Material.POWERED_RAIL
-				 || block.getType() == Material.POWERED_RAIL
-				 || block.getRelative(BlockFace.UP).getType() == Material.DETECTOR_RAIL
-				 || block.getType() == Material.DETECTOR_RAIL)
-				&& prot.getSettingBool(ProtectConfig.protect_rails))
-			{
-				event.setCancelled(true);
-				return;
-			}
-			if ((block.getType() == Material.WALL_SIGN
-				 || block.getRelative(BlockFace.NORTH).getType() == Material.WALL_SIGN
-				 || block.getRelative(BlockFace.EAST).getType() == Material.WALL_SIGN
-				 || block.getRelative(BlockFace.SOUTH).getType() == Material.WALL_SIGN
-				 || block.getRelative(BlockFace.WEST).getType() == Material.WALL_SIGN
-				 || block.getType() == Material.SIGN_POST
-				 || block.getRelative(BlockFace.UP).getType() == Material.SIGN_POST)
-				&& prot.getSettingBool(ProtectConfig.protect_signs))
-			{
-				event.setCancelled(true);
-				return;
-			}
+			settings.unlock();
 		}
 	}
 
@@ -272,25 +263,26 @@ public class EssentialsProtectEntityListener extends EntityListener
 		{
 			return;
 		}
-		final String creatureName = creature.toString().toLowerCase(Locale.ENGLISH);
-		if (creatureName == null || creatureName.isEmpty())
+		final ProtectHolder settings = prot.getSettings();
+		settings.acquireReadLock();
+		try
 		{
-			return;
+			final Boolean prevent = settings.getData().getPrevent().getSpawn().get(creature);
+			if (prevent != null && prevent)
+			{
+				event.setCancelled(true);
+			}
 		}
-		if (ess.getSettings().getProtectPreventSpawn(creatureName))
+		finally
 		{
-			event.setCancelled(true);
+			settings.unlock();
 		}
 	}
 
 	@Override
 	public void onEntityTarget(final EntityTargetEvent event)
 	{
-		if (event.isCancelled())
-		{
-			return;
-		}
-		if (!(event.getTarget() instanceof Player))
+		if (event.isCancelled() || !(event.getTarget() instanceof Player))
 		{
 			return;
 		}
@@ -301,8 +293,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 			 || event.getReason() == TargetReason.RANDOM_TARGET
 			 || event.getReason() == TargetReason.TARGET_ATTACKED_OWNER
 			 || event.getReason() == TargetReason.OWNER_ATTACKED_TARGET)
-			&& prot.getSettingBool(ProtectConfig.prevent_entitytarget)
-			&& !user.isAuthorized("essentials.protect.entitytarget.bypass"))
+			&& user.isAuthorized(Permissions.ENTITYTARGET))
 		{
 			event.setCancelled(true);
 			return;
@@ -310,26 +301,43 @@ public class EssentialsProtectEntityListener extends EntityListener
 	}
 
 	@Override
-	public void onExplosionPrime(ExplosionPrimeEvent event)
+	public void onExplosionPrime(final ExplosionPrimeEvent event)
 	{
-		if ((event.getEntity() instanceof Fireball || event.getEntity() instanceof SmallFireball)
-			&& prot.getSettingBool(ProtectConfig.prevent_fireball_fire))
+		final ProtectHolder settings = prot.getSettings();
+		settings.acquireReadLock();
+		try
 		{
-			event.setFire(false);
+			if ((event.getEntity() instanceof Fireball || event.getEntity() instanceof SmallFireball)
+				&& settings.getData().getPrevent().isFireballFire())
+			{
+				event.setFire(false);
+			}
+		}
+		finally
+		{
+			settings.unlock();
 		}
 	}
 
 	@Override
-	public void onEndermanPickup(EndermanPickupEvent event)
+	public void onEndermanPickup(final EndermanPickupEvent event)
 	{
 		if (event.isCancelled())
 		{
 			return;
 		}
-		if (prot.getSettingBool(ProtectConfig.prevent_enderman_pickup))
+		final ProtectHolder settings = prot.getSettings();
+		settings.acquireReadLock();
+		try
 		{
-			event.setCancelled(true);
-			return;
+			if (settings.getData().getPrevent().isEndermanPickup())
+			{
+				event.setCancelled(true);
+			}
+		}
+		finally
+		{
+			settings.unlock();
 		}
 	}
 }

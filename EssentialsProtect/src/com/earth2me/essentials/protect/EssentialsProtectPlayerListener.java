@@ -28,62 +28,70 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 		// Do not return if cancelled, because the interact event has 2 cancelled states.
 		final IUser user = ess.getUser(event.getPlayer());
 
-		if (event.hasItem()
-			&& (event.getItem().getType() == Material.WATER_BUCKET
-				|| event.getItem().getType() == Material.LAVA_BUCKET)
-			&& prot.getSettingBool(ProtectConfig.disable_build) && !user.canBuild())
+		final ProtectHolder settings = prot.getSettings();
+		settings.acquireReadLock();
+		try
 		{
-			if (ess.getSettings().warnOnBuildDisallow())
+			if (event.hasItem()
+				&& (event.getItem().getType() == Material.WATER_BUCKET
+					|| event.getItem().getType() == Material.LAVA_BUCKET)
+				&& !user.isAuthorized(Permissions.BUILD))
 			{
-				user.sendMessage(_("buildAlert"));
-			}
-			event.setCancelled(true);
-			return;
-		}
-
-		if (prot.getSettingBool(ProtectConfig.disable_use) && !user.canBuild())
-		{
-			if (ess.getSettings().warnOnBuildDisallow())
-			{
-				user.sendMessage(_("buildAlert"));
-			}
-			event.setCancelled(true);
-			return;
-		}
-
-		final ItemStack item = event.getItem();
-		if (item != null
-			&& prot.checkProtectionItems(ProtectConfig.blacklist_usage, item.getTypeId())
-			&& !user.isAuthorized("essentials.protect.exemptusage"))
-		{
-			event.setCancelled(true);
-			return;
-		}
-
-		if (user.isAuthorized("essentials.protect.ownerinfo") && event.getAction() == Action.RIGHT_CLICK_BLOCK)
-		{
-			final StringBuilder stringBuilder = new StringBuilder();
-			boolean first = true;
-			final Block blockClicked = event.getClickedBlock();
-			for (String owner : prot.getStorage().getOwners(blockClicked))
-			{
-				if (!first)
+				if (settings.getData().isWarnOnBuildDisallow())
 				{
-					stringBuilder.append(", ");
+					user.sendMessage(_("buildAlert"));
 				}
-				first = false;
-				stringBuilder.append(owner);
+				event.setCancelled(true);
+				return;
 			}
-			final String ownerNames = stringBuilder.toString();
-			if (ownerNames != null && !ownerNames.isEmpty())
+
+			if (!user.isAuthorized(Permissions.INTERACT))
 			{
-				user.sendMessage(_("protectionOwner", ownerNames));
+				if (settings.getData().isWarnOnBuildDisallow())
+				{
+					user.sendMessage(_("buildAlert"));
+				}
+				event.setCancelled(true);
+				return;
+			}
+
+			final ItemStack item = event.getItem();
+			if (item != null
+				&& !user.isAuthorized(ItemUsePermissions.getPermission(item.getType())))
+			{
+				event.setCancelled(true);
+				return;
+			}
+
+			if (user.isAuthorized("essentials.protect.ownerinfo") && event.getAction() == Action.RIGHT_CLICK_BLOCK)
+			{
+				final StringBuilder stringBuilder = new StringBuilder();
+				boolean first = true;
+				final Block blockClicked = event.getClickedBlock();
+				for (String owner : prot.getStorage().getOwners(blockClicked))
+				{
+					if (!first)
+					{
+						stringBuilder.append(", ");
+					}
+					first = false;
+					stringBuilder.append(owner);
+				}
+				final String ownerNames = stringBuilder.toString();
+				if (ownerNames != null && !ownerNames.isEmpty())
+				{
+					user.sendMessage(_("protectionOwner", ownerNames));
+				}
+			}
+			if (item != null
+				&& settings.getData().getAlertOnUse().contains(item.getType()))
+			{
+				prot.getEssentialsConnect().alert(user, item.getType().toString(), _("alertUsed"));
 			}
 		}
-		if (item != null
-			&& prot.checkProtectionItems(ProtectConfig.alert_on_use, item.getTypeId()))
+		finally
 		{
-			prot.getEssentialsConnect().alert(user, item.getType().toString(), _("alertUsed"));
+			settings.unlock();
 		}
 	}
 }
