@@ -39,7 +39,7 @@ public class UtilTest extends TestCase
 	{
 		Calendar c = new GregorianCalendar();
 		String resp = Util.formatDateDiff(c, c);
-		assertEquals(resp, "now");
+		assertEquals("now", resp);
 	}
 
 	public void testFDDfuture()

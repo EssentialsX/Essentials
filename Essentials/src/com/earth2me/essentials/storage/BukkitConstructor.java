@@ -1,5 +1,6 @@
 package com.earth2me.essentials.storage;
 
+import com.earth2me.essentials.Essentials;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Locale;
@@ -422,7 +423,7 @@ public class BukkitConstructor extends Constructor
 	{
 		Class<?> clazz;
 		final String name = node.getTag().getClassName();
-		if (plugin == null)
+		if (plugin == null || (plugin instanceof Essentials && ((Essentials)plugin).testing))
 		{
 			clazz = super.getClassForNode(node);
 		}

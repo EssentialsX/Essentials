@@ -1,5 +1,6 @@
 package com.earth2me.essentials.storage;
 
+import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.api.IEssentials;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,14 +17,21 @@ public abstract class AbstractDelayedYamlFileWriter implements Runnable
 	private final transient Plugin plugin;
 	private final transient ReentrantLock lock = new ReentrantLock();
 
-	public AbstractDelayedYamlFileWriter(IEssentials ess)
+	public AbstractDelayedYamlFileWriter(final IEssentials ess)
 	{
 		this.plugin = ess;
 	}
 
 	public void schedule()
 	{
-		plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, this);
+		if (((Essentials)plugin).testing)
+		{
+			run();
+		}
+		else
+		{
+			plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, this);
+		}
 	}
 
 	public abstract File getFile() throws IOException;

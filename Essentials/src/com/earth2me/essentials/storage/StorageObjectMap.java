@@ -101,9 +101,10 @@ public abstract class StorageObjectMap<I> extends CacheLoader<String, I> impleme
 	{
 		keys.remove(name.toLowerCase(Locale.ENGLISH));
 		cache.invalidate(name.toLowerCase(Locale.ENGLISH));
-		File file = getStorageFile(name);
+		final File file = getStorageFile(name);
 		if (file.exists())
 		{
+			file.delete();
 		}
 	}
 

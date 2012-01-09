@@ -68,7 +68,7 @@ public class UserTest extends TestCase
 		assertEquals(loc.getPitch(), home.getPitch());
 	}*/
 
-	public void testMoney()
+	/*public void testMoney()
 	{
 		should("properly set, take, give, and get money");
 		IUser user = ess.getUser(base1);
@@ -79,7 +79,7 @@ public class UserTest extends TestCase
 		user.giveMoney(25);
 		i += 25;
 		assertEquals(user.getMoney(), i);
-	}
+	}*/
 
 	public void testGetGroup()
 	{

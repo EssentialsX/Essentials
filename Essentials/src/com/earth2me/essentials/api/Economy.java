@@ -63,7 +63,7 @@ public final class Economy
 		npcConfig.save();*/
 	}
 
-	private static void deleteNPC(String name)
+	private static void deleteNPC(final String name)
 	{
 		File folder = new File(ess.getDataFolder(), "userdata");
 		if (!folder.exists())

@@ -188,9 +188,9 @@ public abstract class UserBase extends AsyncStorageObjectHolder<UserData> implem
 			@Cleanup
 			final ISettings settings = ess.getSettings();
 			settings.acquireReadLock();
-			if (Math.abs(getData().getMoney()) > settings.getData().getEconomy().getMaxMoney())
+			if (Math.abs(value) > settings.getData().getEconomy().getMaxMoney())
 			{
-				getData().setMoney(getData().getMoney() < 0 ? -settings.getData().getEconomy().getMaxMoney() : settings.getData().getEconomy().getMaxMoney());
+				getData().setMoney(value < 0 ? -settings.getData().getEconomy().getMaxMoney() : settings.getData().getEconomy().getMaxMoney());
 			}
 			else
 			{

@@ -70,6 +70,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private transient ExecuteTimer execTimer;
 	private transient I18n i18n;
 	private transient ICommandHandler commandHandler;
+	public transient boolean testing;
 
 	@Override
 	public ISettings getSettings()
@@ -79,6 +80,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 
 	public void setupForTesting(final Server server) throws IOException, InvalidDescriptionException
 	{
+		testing = true;
 		final File dataFolder = File.createTempFile("essentialstest", "");
 		if (!dataFolder.delete())
 		{

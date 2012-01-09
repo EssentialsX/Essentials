@@ -15,14 +15,16 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
 	private final transient ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
 	private final transient Class<T> clazz;
 	protected final transient IEssentials ess;
-	private final transient StorageObjectDataWriter writer = new StorageObjectDataWriter();
-	private final transient StorageObjectDataReader reader = new StorageObjectDataReader();
+	private final transient StorageObjectDataWriter writer;
+	private final transient StorageObjectDataReader reader;
 	private final transient AtomicBoolean loaded = new AtomicBoolean(false);
 
 	public AsyncStorageObjectHolder(final IEssentials ess, final Class<T> clazz)
 	{
 		this.ess = ess;
 		this.clazz = clazz;
+		writer = new StorageObjectDataWriter();
+		reader = new StorageObjectDataReader();
 		try
 		{
 			this.data = clazz.newInstance();
@@ -89,7 +91,12 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
 	@Override
 	public void onReload()
 	{
-		reader.schedule(false);
+		onReload(true);
+	}
+	
+	public void onReload(boolean instant)
+	{
+		reader.schedule(instant);
 	}
 
 	public abstract File getStorageFile() throws IOException;

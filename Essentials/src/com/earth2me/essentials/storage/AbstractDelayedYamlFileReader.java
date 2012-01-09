@@ -1,5 +1,6 @@
 package com.earth2me.essentials.storage;
 
+import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.api.IEssentials;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,7 +26,7 @@ public abstract class AbstractDelayedYamlFileReader<T extends StorageObject> imp
 
 	public void schedule(boolean instant)
 	{
-		if (instant)
+		if (instant || ((Essentials)plugin).testing)
 		{
 			run();
 		}
