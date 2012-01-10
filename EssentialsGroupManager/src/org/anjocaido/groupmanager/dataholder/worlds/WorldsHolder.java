@@ -270,11 +270,12 @@ public class WorldsHolder {
      */
     public OverloadedWorldHolder getWorldData(String worldName) {
     	String worldNameLowered = worldName.toLowerCase();
-    	OverloadedWorldHolder data = worldsData.get(worldNameLowered);
+    	// If a mirror change to the real world to load.
     	if (mirrors.containsKey(worldNameLowered)) {
-    		String realOne = mirrors.get(worldNameLowered);
-            data = worldsData.get(realOne.toLowerCase());
-        }
+    		worldNameLowered = mirrors.get(worldNameLowered);
+    	}
+    	OverloadedWorldHolder data = worldsData.get(worldNameLowered);
+
         if (data == null) {
             GroupManager.logger.finest("Requested world " + worldName + " not found or badly mirrored. Returning default world...");
             data = getDefaultWorld();
@@ -283,8 +284,9 @@ public class WorldsHolder {
     }
 
     /**
-     * Do a matching of playerName, if it s found only one player, do
+     * Do a matching of playerName, if its found only one player, do
      * getWorldData(player)
+     * 
      * @param playerName
      * @return null if matching returned no player, or more than one.
      */

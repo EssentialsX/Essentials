@@ -98,3 +98,4 @@ v 1.8:
 	- Changed GlobalGroups to save/load before local groups in the scheduled data saving/loading
 	- Fix 'manucheckp' to correctly report if a permission is available from GroupManager or Bukkit.
 	- Changed over to a reflection method for populating superperms as Bukkit lags when you handle permissions one at a time.
+	- Optimize fetching of Mirrored world data.

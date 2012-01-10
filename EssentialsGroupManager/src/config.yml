@@ -25,14 +25,14 @@ settings:
     level: INFO
     
   mirrors:
-        # Worlds listed here have their permissions mirrored in their children.
+        # Worlds listed here have their settings mirrored in their children.
         # the first element 'world' is the main worlds name
-        # subsequent elements '- world_nether' are worlds which will use the same
-        # user/groups permissions as the parent.
+        # subsequent elements 'world_nether' and 'world_the_end' are worlds which will use the same
+        # user/groups files as the parent.
         world:
           - world_nether
           - world_the_end
-          - world2
-          - world3
+      #    - world2
+      #    - world3
       #  world4:
       #    - world5
