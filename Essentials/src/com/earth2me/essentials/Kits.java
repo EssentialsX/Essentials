@@ -27,7 +27,7 @@ public class Kits extends AsyncStorageObjectHolder<com.earth2me.essentials.setti
 	@Override
 	public File getStorageFile() throws IOException
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		return new File(ess.getDataFolder(), "kits.yml");
 	}
 
 	@Override

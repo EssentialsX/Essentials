@@ -29,6 +29,7 @@ public class EssentialsConnect
 		}
 		ess = (IEssentials)essPlugin;
 		protect = (IProtect)essProtect;
+		protect.setSettings(new ProtectHolder(ess));
 		ProtectReloader pr = new ProtectReloader();
 		pr.onReload();
 		ess.addReloadListener(pr);

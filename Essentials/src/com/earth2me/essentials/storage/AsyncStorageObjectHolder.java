@@ -37,8 +37,8 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
 
 	/**
 	 * Warning: If you access this method, you have to acquire a read or write lock first
-	 * 
-	 * 
+	 *
+	 *
 	 * @return Object storing all the data
 	 */
 	@Override
@@ -93,7 +93,7 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
 	{
 		onReload(true);
 	}
-	
+
 	public void onReload(boolean instant)
 	{
 		reader.schedule(instant);
@@ -141,6 +141,10 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
 		public File onStart() throws IOException
 		{
 			final File file = getStorageFile();
+			while (rwl.getReadHoldCount() > 0)
+			{
+				rwl.readLock().unlock();
+			}
 			rwl.writeLock().lock();
 			return file;
 		}
