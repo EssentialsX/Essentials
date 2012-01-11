@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
@@ -49,72 +48,37 @@ public class WorldDataHolder {
     /**
      * The actual groups holder
      */
-    protected Map<String, Group> groups = new HashMap<String, Group>();
+    protected GroupsDataHolder groups = new GroupsDataHolder();
 	/**
      * The actual users holder
      */
-    protected Map<String, User> users = new HashMap<String, User>();
-    
-	/**
-     * Points to the default group
-     */
-    protected Group defaultGroup = null;
-    
-    /**
-     * The file, which this class loads/save data from/to
-     * @deprecated
-     */
-    @Deprecated
-    protected File f;
-    
+    protected UsersDataHolder users = new UsersDataHolder();    
     /**
      *
      */
     protected AnjoPermissionsHandler permissionsHandler;
-    /**
-     *
-     */
-    protected File usersFile;
-    /**
-     *
-     */
-    protected File groupsFile;
-    /**
-     *
-     */
-    protected boolean haveUsersChanged = false;
-    /**
-     *
-     */
-    protected boolean haveGroupsChanged = false;
-    /**
-    *
-    */
-    protected long timeStampGroups = 0;
-	/**
-    *
-    */
-    protected long timeStampUsers = 0;
 
     
 	/**
      * Prevent direct instantiation
      * @param worldName
      */
-    protected WorldDataHolder(String worldName) {
+    public WorldDataHolder(String worldName) {
         name = worldName;
     }
 
     /**
      * The main constructor for a new WorldDataHolder
-     * Please don't set the default group as null
      * @param worldName
-     * @param defaultGroup the default group. its good to start with one
+     * @param groups
+     * @param users
      */
-    public WorldDataHolder(String worldName, Group defaultGroup) {
+    public WorldDataHolder(String worldName, GroupsDataHolder groups, UsersDataHolder users) {
         this.name = worldName;
-        groups.put(defaultGroup.getName().toLowerCase(), defaultGroup);
-        this.defaultGroup = defaultGroup;
+        this.groups = groups;
+        this.users = users;
+        
+        //this.defaultGroup = defaultGroup;
     }
 
     /**
@@ -125,8 +89,8 @@ public class WorldDataHolder {
      * @return class that manage that user permission
      */
     public User getUser(String userName) {
-        if (users.containsKey(userName.toLowerCase())) {
-            return users.get(userName.toLowerCase());
+        if (getUsers().containsKey(userName.toLowerCase())) {
+            return getUsers().get(userName.toLowerCase());
         }
         User newUser = createUser(userName);
         return newUser;
@@ -144,11 +108,11 @@ public class WorldDataHolder {
             return;
         }
         if ((theUser.getGroup() == null)) {
-            theUser.setGroup(defaultGroup);
+            theUser.setGroup(groups.getDefaultGroup());
         }
         removeUser(theUser.getName());
-        users.put(theUser.getName().toLowerCase(), theUser);
-        haveUsersChanged = true;
+        getUsers().put(theUser.getName().toLowerCase(), theUser);
+        setUsersChanged(true);
         if (GroupManager.isLoaded())
         	GroupManagerEventHandler.callEvent(theUser, Action.USER_ADDED);
     }
@@ -159,9 +123,9 @@ public class WorldDataHolder {
      * @return true if it had something to remove
      */
     public boolean removeUser(String userName) {
-        if (users.containsKey(userName.toLowerCase())) {
-            users.remove(userName.toLowerCase());
-            haveUsersChanged = true;
+        if (getUsers().containsKey(userName.toLowerCase())) {
+        	getUsers().remove(userName.toLowerCase());
+        	setUsersChanged(true);
             if (GroupManager.isLoaded())
             	GroupManagerEventHandler.callEvent(userName, GMUserEvent.Action.USER_REMOVED);
             return true;
@@ -175,7 +139,7 @@ public class WorldDataHolder {
      * @return true if we have data for this player.
      */
     public boolean isUserDeclared(String userName) {
-        return users.containsKey(userName.toLowerCase());
+        return getUsers().containsKey(userName.toLowerCase());
     }
 
     /**
@@ -183,11 +147,11 @@ public class WorldDataHolder {
      * @param group the group you want make default.
      */
     public void setDefaultGroup(Group group) {
-        if (!groups.containsKey(group.getName().toLowerCase()) || (group.getDataSource() != this)) {
+        if (!getGroups().containsKey(group.getName().toLowerCase()) || (group.getDataSource() != this)) {
             addGroup(group);
         }
-        defaultGroup = this.getGroup(group.getName());
-        haveGroupsChanged = true;
+        groups.setDefaultGroup(getGroup(group.getName()));
+        setGroupsChanged(true);
         if (GroupManager.isLoaded())
         	GroupManagerEventHandler.callEvent(GMSystemEvent.Action.DEFAULT_GROUP_CHANGED);
     }
@@ -197,7 +161,7 @@ public class WorldDataHolder {
      * @return the default group
      */
     public Group getDefaultGroup() {
-        return defaultGroup;
+        return groups.getDefaultGroup();
     }
 
     /**
@@ -209,7 +173,7 @@ public class WorldDataHolder {
     	if (groupName.toLowerCase().startsWith("g:"))
     		return GroupManager.getGlobalGroups().getGroup(groupName);
     	else
-    		return groups.get(groupName.toLowerCase());
+    		return getGroups().get(groupName.toLowerCase());
     }
 
     /**
@@ -222,7 +186,7 @@ public class WorldDataHolder {
     	if (groupName.toLowerCase().startsWith("g:"))
     		return GroupManager.getGlobalGroups().hasGroup(groupName);
     	else
-    		return groups.containsKey(groupName.toLowerCase());
+    		return getGroups().containsKey(groupName.toLowerCase());
     }
 
     /**
@@ -240,8 +204,8 @@ public class WorldDataHolder {
             groupToAdd = groupToAdd.clone(this);
         }
         removeGroup(groupToAdd.getName());
-        groups.put(groupToAdd.getName().toLowerCase(), groupToAdd);
-        haveGroupsChanged = true;
+        getGroups().put(groupToAdd.getName().toLowerCase(), groupToAdd);
+        setGroupsChanged(true);
         if (GroupManager.isLoaded())
         	GroupManagerEventHandler.callEvent(groupToAdd, GMGroupEvent.Action.GROUP_ADDED);
     }
@@ -256,12 +220,12 @@ public class WorldDataHolder {
         	return GroupManager.getGlobalGroups().removeGroup(groupName);
         }
     	
-        if (defaultGroup != null && groupName.equalsIgnoreCase(defaultGroup.getName())) {
+        if (getDefaultGroup() != null && groupName.equalsIgnoreCase(getDefaultGroup().getName())) {
             return false;
         }
-        if (groups.containsKey(groupName.toLowerCase())) {
-            groups.remove(groupName.toLowerCase());
-            haveGroupsChanged = true;
+        if (getGroups().containsKey(groupName.toLowerCase())) {
+            getGroups().remove(groupName.toLowerCase());
+            setGroupsChanged(true);
             if (GroupManager.isLoaded())
             	GroupManagerEventHandler.callEvent(groupName.toLowerCase(), GMGroupEvent.Action.GROUP_REMOVED);
             return true;
@@ -277,13 +241,13 @@ public class WorldDataHolder {
      * @return null if user already exists. or new User
      */
     public User createUser(String userName) {
-        if (this.users.containsKey(userName.toLowerCase())) {
+        if (getUsers().containsKey(userName.toLowerCase())) {
             return null;
         }
         User newUser = new User(this, userName);
-        newUser.setGroup(defaultGroup);
-        this.addUser(newUser);
-        haveUsersChanged = true;
+        newUser.setGroup(groups.getDefaultGroup());
+        addUser(newUser);
+        setUsersChanged(true);
         return newUser;
     }
 
@@ -299,13 +263,13 @@ public class WorldDataHolder {
         	return GroupManager.getGlobalGroups().newGroup(newGroup);
         }
     	
-    	if (this.groups.containsKey(groupName.toLowerCase())) {
+    	if (getGroups().containsKey(groupName.toLowerCase())) {
             return null;
         }
         
     	Group newGroup = new Group(this, groupName);
-        this.addGroup(newGroup);
-        haveGroupsChanged = true;
+        addGroup(newGroup);
+        setGroupsChanged(true);
         return newGroup;
     }
 
@@ -314,7 +278,7 @@ public class WorldDataHolder {
      * @return a collection of the groups
      */
     public Collection<Group> getGroupList() {
-        return groups.values();
+        return getGroups().values();
     }
 
     /**
@@ -322,7 +286,7 @@ public class WorldDataHolder {
      * @return a collection of the users
      */
     public Collection<User> getUserList() {
-        return users.values();
+        return getUsers().values();
     }
 
     /**
@@ -352,9 +316,9 @@ public class WorldDataHolder {
     		for (Group tempGroup : ph.getGroupList()) {
     			tempGroup.clone(this);
     		}
-    		this.setDefaultGroup(this.getGroup(ph.getDefaultGroup().getName()));
+    		this.setDefaultGroup(getGroup(ph.getDefaultGroup().getName()));
     		this.removeGroupsChangedFlag();
-    		this.timeStampGroups = getGroupsFile().lastModified();
+    		this.setTimeStampGroups(getGroupsFile().lastModified());
     		
     		ph = null;
     	} catch (Exception ex) {
@@ -377,7 +341,7 @@ public class WorldDataHolder {
     			tempGroup.clone(ph);
     		}
     		// setup the default group before loading user data.
-    		ph.setDefaultGroup(ph.getGroup(this.getDefaultGroup().getName()));
+    		ph.setDefaultGroup(ph.getGroup(getDefaultGroup().getName()));
     		loadUsers(ph, getUsersFile());
     		// transfer new data
     		resetUsers();
@@ -385,7 +349,7 @@ public class WorldDataHolder {
     			tempUser.clone(this);
     		}
     		this.removeUsersChangedFlag();
-    		this.timeStampUsers = getUsersFile().lastModified();
+    		this.setTimeStampUsers(getUsersFile().lastModified());
     		
     		ph = null;
     	} catch (Exception ex) {
@@ -395,165 +359,39 @@ public class WorldDataHolder {
     	GroupManagerEventHandler.callEvent(GMSystemEvent.Action.RELOADED);
     }
 
-    /**
-     * Save by yourself!
-     * @deprecated
-     */
-    @Deprecated
-    public void commit() {
-        writeGroups(this, getGroupsFile());
-        writeUsers(this, getUsersFile());
+    public void loadGroups(File groupsFile) {
+
+    	GroupManager.setLoaded(false);
+    	try {
+    		setGroupsFile(groupsFile);
+			loadGroups(this, groupsFile);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException("The file which should contain groups does not exist!\n" + groupsFile.getPath());
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException("Error access the groups file!\n" + groupsFile.getPath());
+		}
+
+    	GroupManager.setLoaded(true);
     }
+    
+    public void loadUsers(File usersFile) {
 
-    /**
-     * Returns a data holder for the given file
-     * 
-     * @param worldName
-     * @param file
-     * @return a new WorldDataHolder
-     * 
-     * @throws Exception
-     * @deprecated
-     */
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    @Deprecated
-    public static WorldDataHolder load(String worldName, File file) throws Exception {
-        WorldDataHolder ph = new WorldDataHolder(worldName);
-        ph.f = file;
-        final Yaml yaml = new Yaml(new SafeConstructor());
-        Map<String, Object> rootDataNode;
-        if (!file.exists()) {
-            throw new Exception("The file which should contain permissions does not exist!\n" + file.getPath());
-        }
-        FileInputStream rx = new FileInputStream(file);
-        try {
-            rootDataNode = (Map<String, Object>) yaml.load(new UnicodeReader(rx));
-            if (rootDataNode == null) {
-                throw new NullPointerException();
-            }
-        } catch (Exception ex) {
-            throw new Exception("The following file couldn't pass on Parser.\n" + file.getPath(), ex);
-        } finally {
-            rx.close();
-        }
-        Map<String, List<String>> inheritance = new HashMap<String, List<String>>();
-        try {
-            Map<String, Object> allGroupsNode = (Map<String, Object>) rootDataNode.get("groups");
-            for (String groupKey : allGroupsNode.keySet()) {
-                Map<String, Object> thisGroupNode = (Map<String, Object>) allGroupsNode.get(groupKey);
-                Group thisGrp = ph.createGroup(groupKey);
-                if (thisGrp == null) {
-                    throw new IllegalArgumentException("I think this group was declared more than once: " + groupKey);
-                }
-                if (thisGroupNode.get("default") == null) {
-                    thisGroupNode.put("default", false);
-                }
-                if ((Boolean.parseBoolean(thisGroupNode.get("default").toString()))) {
-                    if (ph.getDefaultGroup() != null) {
-                        GroupManager.logger.warning("The group " + thisGrp.getName() + " is declaring be default where" + ph.getDefaultGroup().getName() + " already was.");
-                        GroupManager.logger.warning("Overriding first request.");
-                    }
-                    ph.setDefaultGroup(thisGrp);
-                }
+    	GroupManager.setLoaded(false);
+    	try {
+    		setUsersFile(usersFile);
+			loadUsers(this, usersFile);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException("The file which should contain users does not exist!\n" + usersFile.getPath());
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException("Error access the users file!\n" + usersFile.getPath());
+		}
 
-                //PERMISSIONS NODE
-                if (thisGroupNode.get("permissions") == null) {
-                    thisGroupNode.put("permissions", new ArrayList<String>());
-                }
-                if (thisGroupNode.get("permissions") instanceof List) {
-                    for (Object o : ((List) thisGroupNode.get("permissions"))) {
-                        thisGrp.addPermission(o.toString());
-                    }
-                } else if (thisGroupNode.get("permissions") instanceof String) {
-                    thisGrp.addPermission((String) thisGroupNode.get("permissions"));
-                } else {
-                    throw new IllegalArgumentException("Unknown type of permissions node(Should be String or List<String>): " + thisGroupNode.get("permissions").getClass().getName());
-                }
-
-                //INFO NODE
-                Map<String, Object> infoNode = (Map<String, Object>) thisGroupNode.get("info");
-                if (infoNode != null) {
-                    thisGrp.setVariables(infoNode);
-                }
-
-                //END INFO NODE
-
-                Object inheritNode = thisGroupNode.get("inheritance");
-                if (inheritNode == null) {
-                    thisGroupNode.put("inheritance", new ArrayList<String>());
-                } else if (inheritNode instanceof List) {
-                    List<String> groupsInh = (List<String>) inheritNode;
-                    for (String grp : groupsInh) {
-                        if (inheritance.get(groupKey) == null) {
-                            List<String> thisInherits = new ArrayList<String>();
-                            inheritance.put(groupKey, thisInherits);
-                        }
-                        inheritance.get(groupKey).add(grp);
-
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            throw new Exception("Your Permissions config file is invalid. See console for details.");
-        }
-        if (ph.defaultGroup == null) {
-            throw new IllegalArgumentException("There was no Default Group declared.");
-        }
-        for (String groupKey : inheritance.keySet()) {
-            List<String> inheritedList = inheritance.get(groupKey);
-            Group thisGroup = ph.getGroup(groupKey);
-            for (String inheritedKey : inheritedList) {
-                Group inheritedGroup = ph.getGroup(inheritedKey);
-                if (thisGroup != null && inheritedGroup != null) {
-                    thisGroup.addInherits(inheritedGroup);
-                }
-            }
-        }
-        // Process USERS
-        Map<String, Object> allUsersNode = (Map<String, Object>) rootDataNode.get("users");
-        for (String usersKey : allUsersNode.keySet()) {
-            Map<String, Object> thisUserNode = (Map<String, Object>) allUsersNode.get(usersKey);
-            User thisUser = ph.createUser(usersKey);
-            if (thisUser == null) {
-                GroupManager.logger.warning("I think this user was declared more than once: " + usersKey);
-                continue;
-            }
-            if (thisUserNode.get("permissions") == null) {
-                thisUserNode.put("permissions", new ArrayList<String>());
-            }
-            if (thisUserNode.get("permissions") instanceof List) {
-                for (Object o : ((List) thisUserNode.get("permissions"))) {
-                    thisUser.addPermission(o.toString());
-                }
-            } else if (thisUserNode.get("permissions") instanceof String) {
-                thisUser.addPermission(thisUserNode.get("permissions").toString());
-            }
-
-
-            //USER INFO NODE - BETA
-
-            //INFO NODE
-            Map<String, Object> infoNode = (Map<String, Object>) thisUserNode.get("info");
-            if (infoNode != null) {
-                thisUser.setVariables(infoNode);
-            }
-            //END INFO NODE - BETA
-
-            if (thisUserNode.get("group") != null) {
-                Group hisGroup = ph.getGroup(thisUserNode.get("group").toString());
-                if (hisGroup == null) {
-                    GroupManager.logger.warning("There is no group " + thisUserNode.get("group").toString() + ", as stated for player " + thisUser.getName());
-                    thisUser.setGroup(ph.defaultGroup);
-                }
-                thisUser.setGroup(hisGroup);
-            } else {
-                thisUser.setGroup(ph.defaultGroup);
-            }
-        }
-        return ph;
+    	GroupManager.setLoaded(true);
     }
-
     /**
      * Returns a NEW data holder containing data read from the files
      * 
@@ -568,8 +406,8 @@ public class WorldDataHolder {
     	WorldDataHolder ph = new WorldDataHolder(worldName);
     	
     	GroupManager.setLoaded(false);
-    	loadGroups(ph, groupsFile);
-    	loadUsers(ph, usersFile);
+    	if (groupsFile != null) loadGroups(ph, groupsFile);
+    	if (usersFile != null) loadUsers(ph, usersFile);
     	GroupManager.setLoaded(true);
     	
     	return ph;
@@ -673,7 +511,7 @@ public class WorldDataHolder {
         //    ex.printStackTrace();
         //    throw new IllegalArgumentException("Your Permissions config file is invalid. See console for details.");
         //}
-        if (ph.defaultGroup == null) {
+        if (ph.getDefaultGroup() == null) {
             throw new IllegalArgumentException("There was no Default Group declared in file: " + groupsFile.getPath());
         }
         for (String groupKey : inheritance.keySet()) {
@@ -689,7 +527,7 @@ public class WorldDataHolder {
         
         ph.removeGroupsChangedFlag();
         // Update the LastModified time.
-        ph.groupsFile = groupsFile;
+        ph.setGroupsFile(groupsFile);
         ph.setTimeStampGroups(groupsFile.lastModified());
 
         //return ph;
@@ -788,106 +626,19 @@ public class WorldDataHolder {
 	                Group hisGroup = ph.getGroup(thisUserNode.get("group").toString());
 	                if (hisGroup == null) {
 	                	GroupManager.logger.warning("There is no group " + thisUserNode.get("group").toString() + ", as stated for player " + thisUser.getName() + ": Set to '" + ph.getDefaultGroup().getName() + "' for file: " + usersFile.getPath());
-	                	hisGroup = ph.defaultGroup;
+	                	hisGroup = ph.getDefaultGroup();
 	                    //throw new IllegalArgumentException("There is no group " + thisUserNode.get("group").toString() + ", as stated for player " + thisUser.getName());
 	                }
 	                thisUser.setGroup(hisGroup);
 	            } else {
-	                thisUser.setGroup(ph.defaultGroup);
+	                thisUser.setGroup(ph.getDefaultGroup());
 	            }
 	        }
         
         ph.removeUsersChangedFlag();
         // Update the LastModified time.
-        ph.usersFile = usersFile;
+        ph.setUsersFile(usersFile);
         ph.setTimeStampUsers(usersFile.lastModified());
-    }
-
-    /**
-     * Write a dataHolder in a specified file
-     * @param ph
-     * @param file
-     * @deprecated
-     */
-    @Deprecated
-    public static void write(WorldDataHolder ph, File file) {
-        Map<String, Object> root = new HashMap<String, Object>();
-
-        Map<String, Object> pluginMap = new HashMap<String, Object>();
-        root.put("plugin", pluginMap);
-
-        Map<String, Object> permissionsMap = new HashMap<String, Object>();
-        pluginMap.put("permissions", permissionsMap);
-
-        permissionsMap.put("system", "default");
-
-        Map<String, Object> groupsMap = new HashMap<String, Object>();
-        root.put("groups", groupsMap);
-        for (String groupKey : ph.groups.keySet()) {
-            Group group = ph.groups.get(groupKey);
-
-            Map<String, Object> aGroupMap = new HashMap<String, Object>();
-            groupsMap.put(group.getName(), aGroupMap);
-
-            aGroupMap.put("default", group.equals(ph.defaultGroup));
-
-            Map<String, Object> infoMap = new HashMap<String, Object>();
-            aGroupMap.put("info", infoMap);
-
-            for (String infoKey : group.getVariables().getVarKeyList()) {
-                infoMap.put(infoKey, group.getVariables().getVarObject(infoKey));
-            }
-
-            aGroupMap.put("inheritance", group.getInherits());
-
-            aGroupMap.put("permissions", group.getPermissionList());
-        }
-
-        Map<String, Object> usersMap = new HashMap<String, Object>();
-        root.put("users", usersMap);
-        for (String userKey : ph.users.keySet()) {
-            User user = ph.users.get(userKey);
-            if ((user.getGroup() == null || user.getGroup().equals(ph.defaultGroup)) && user.getPermissionList().isEmpty()) {
-                continue;
-            }
-
-            Map<String, Object> aUserMap = new HashMap<String, Object>();
-            usersMap.put(user.getName(), aUserMap);
-
-            if (user.getGroup() == null) {
-                aUserMap.put("group", ph.defaultGroup.getName());
-            } else {
-                aUserMap.put("group", user.getGroup().getName());
-            }
-            //USER INFO NODE - BETA
-            if (user.getVariables().getSize() > 0) {
-                Map<String, Object> infoMap = new HashMap<String, Object>();
-                aUserMap.put("info", infoMap);
-
-                for (String infoKey : user.getVariables().getVarKeyList()) {
-                    infoMap.put(infoKey, user.getVariables().getVarObject(infoKey));
-                }
-            }
-            //END USER INFO NODE - BETA
-
-            aUserMap.put("permissions", user.getPermissionList());
-        }
-        DumperOptions opt = new DumperOptions();
-        opt.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-        final Yaml yaml = new Yaml(opt);
-
-        FileWriter tx = null;
-        try {
-            tx = new FileWriter(file, false);
-            tx.write(yaml.dump(root));
-            tx.flush();
-        } catch (Exception e) {
-        } finally {
-            try {
-                tx.close();
-            } catch (IOException ex) {
-            }
-        }
     }
 
     /**
@@ -901,16 +652,16 @@ public class WorldDataHolder {
         Map<String, Object> groupsMap = new HashMap<String, Object>();
 
         root.put("groups", groupsMap);
-        for (String groupKey : ph.groups.keySet()) {
-            Group group = ph.groups.get(groupKey);
+        for (String groupKey : ph.getGroups().keySet()) {
+            Group group = ph.getGroups().get(groupKey);
 
             Map<String, Object> aGroupMap = new HashMap<String, Object>();
             groupsMap.put(group.getName(), aGroupMap);
 
-            if (ph.defaultGroup == null) {
+            if (ph.getDefaultGroup() == null) {
                 GroupManager.logger.severe("There is no default group for world: " + ph.getName());
             }
-            aGroupMap.put("default", group.equals(ph.defaultGroup));
+            aGroupMap.put("default", group.equals(ph.getDefaultGroup()));
 
             Map<String, Object> infoMap = new HashMap<String, Object>();
             aGroupMap.put("info", infoMap);
@@ -951,7 +702,7 @@ public class WorldDataHolder {
         }
         
         // Update the LastModified time.
-        ph.groupsFile = groupsFile;
+        ph.setGroupsFile(groupsFile);
         ph.setTimeStampGroups(groupsFile.lastModified());
         ph.removeGroupsChangedFlag();
         
@@ -982,9 +733,9 @@ public class WorldDataHolder {
 
         Map<String, Object> usersMap = new HashMap<String, Object>();
         root.put("users", usersMap);
-        for (String userKey : ph.users.keySet()) {
-            User user = ph.users.get(userKey);
-            if ((user.getGroup() == null || user.getGroup().equals(ph.defaultGroup)) && user.getPermissionList().isEmpty() && user.getVariables().isEmpty() && user.isSubGroupsEmpty()) {
+        for (String userKey : ph.getUsers().keySet()) {
+            User user = ph.getUsers().get(userKey);
+            if ((user.getGroup() == null || user.getGroup().equals(ph.getDefaultGroup())) && user.getPermissionList().isEmpty() && user.getVariables().isEmpty() && user.isSubGroupsEmpty()) {
                 continue;
             }
 
@@ -992,7 +743,7 @@ public class WorldDataHolder {
             usersMap.put(user.getName(), aUserMap);
 
             if (user.getGroup() == null) {
-                aUserMap.put("group", ph.defaultGroup.getName());
+                aUserMap.put("group", ph.getDefaultGroup().getName());
             } else {
                 aUserMap.put("group", user.getGroup().getName());
             }
@@ -1027,7 +778,7 @@ public class WorldDataHolder {
         }
         
         // Update the LastModified time.
-        ph.usersFile = usersFile;
+        ph.setUsersFile(usersFile);
         ph.setTimeStampUsers(usersFile.lastModified());
         ph.removeUsersChangedFlag();
         
@@ -1083,16 +834,23 @@ public class WorldDataHolder {
         }
         return permissionsHandler;
     }
+    
+    /**
+	 * @param haveUsersChanged the haveUsersChanged to set
+	 */
+	public void setUsersChanged(boolean haveUsersChanged) {
+		users.setUsersChanged(haveUsersChanged);
+	}
 
     /**
      *
      * @return true if any user data has changed
      */
     public boolean haveUsersChanged() {
-        if (haveUsersChanged) {
+        if (users.HaveUsersChanged()) {
             return true;
         }
-        for (User u : users.values()) {
+        for (User u : users.getUsers().values()) {
             if (u.isChanged()) {
                 return true;
             }
@@ -1101,14 +859,21 @@ public class WorldDataHolder {
     }
 
     /**
+	 * @param setGroupsChanged the haveGroupsChanged to set
+	 */
+	public void setGroupsChanged(boolean setGroupsChanged) {
+		groups.setGroupsChanged(setGroupsChanged);
+	}
+	
+    /**
      *
      * @return true if any group data has changed.
      */
     public boolean haveGroupsChanged() {
-        if (haveGroupsChanged) {
+        if (groups.HaveGroupsChanged()) {
             return true;
         }
-        for (Group g : groups.values()) {
+        for (Group g : groups.getGroups().values()) {
             if (g.isChanged()) {
                 return true;
             }
@@ -1120,8 +885,8 @@ public class WorldDataHolder {
      *
      */
     public void removeUsersChangedFlag() {
-        haveUsersChanged = false;
-        for (User u : users.values()) {
+    	setUsersChanged(false);
+        for (User u : getUsers().values()) {
             u.flagAsSaved();
         }
     }
@@ -1130,8 +895,8 @@ public class WorldDataHolder {
      *
      */
     public void removeGroupsChangedFlag() {
-        haveGroupsChanged = false;
-        for (Group g : groups.values()) {
+        setGroupsChanged(false);
+        for (Group g : getGroups().values()) {
             g.flagAsSaved();
         }
     }
@@ -1140,14 +905,28 @@ public class WorldDataHolder {
      * @return the usersFile
      */
     public File getUsersFile() {
-        return usersFile;
+        return users.getUsersFile();
+    }
+    
+    /**
+     * @param file the usersFile to set
+     */
+    public void setUsersFile(File file) {
+        users.setUsersFile(file);
     }
 
     /**
      * @return the groupsFile
      */
     public File getGroupsFile() {
-        return groupsFile;
+        return groups.getGroupsFile();
+    }
+    
+    /**
+     * @param file the groupsFile to set
+     */
+    public void setGroupsFile(File file) {
+        groups.setGroupsFile(file);
     }
 
     /**
@@ -1161,60 +940,85 @@ public class WorldDataHolder {
 	 * Resets Groups.
 	 */
 	public void resetGroups() {
-		this.defaultGroup = null;
-		this.groups = new HashMap<String, Group>();
+		//setDefaultGroup(null);
+		groups.setGroups(new HashMap<String, Group>());
 	}
     /**
 	 * Resets Users
 	 */
 	public void resetUsers() {
-		this.users = new HashMap<String, User>();
+		users.setUsers(new HashMap<String, User>());
 	}
     
     /**
 	 * @return the groups
 	 */
 	public Map<String, Group> getGroups() {
-		return groups;
+		return groups.getGroups();
 	}
     /**
 	 * @return the users
 	 */
 	public Map<String, User> getUsers() {
+		return users.getUsers();
+	}
+	
+	/**
+	 * @return the groups
+	 */
+	public GroupsDataHolder getGroupsObject() {
+		return groups;
+	}
+	/**
+	 * @param groupsDataHolder the GroupsDataHolder to set
+	 */
+	public void setGroupsObject(GroupsDataHolder groupsDataHolder) {
+		groups = groupsDataHolder;
+	}
+    /**
+	 * @return the users
+	 */
+	public UsersDataHolder getUsersObject() {
 		return users;
+	}
+	/**
+	 * @param usersDataHolder the UsersDataHolder to set
+	 */
+	public void setUsersObject(UsersDataHolder usersDataHolder) {
+		users = usersDataHolder;
 	}
     
     /**
 	 * @return the timeStampGroups
 	 */
 	public long getTimeStampGroups() {
-		return timeStampGroups;
+		return groups.getTimeStampGroups();
 	}
     /**
 	 * @return the timeStampUsers
 	 */
 	public long getTimeStampUsers() {
-		return timeStampUsers;
+		return users.getTimeStampUsers();
 	}
 
 	/**
 	 * @param timeStampGroups the timeStampGroups to set
 	 */
 	protected void setTimeStampGroups(long timeStampGroups) {
-		this.timeStampGroups = timeStampGroups;
+		groups.setTimeStampGroups(timeStampGroups);
 	}
     /**
 	 * @param timeStampUsers the timeStampUsers to set
 	 */
 	protected void setTimeStampUsers(long timeStampUsers) {
-		this.timeStampUsers = timeStampUsers;
+		users.setTimeStampUsers(timeStampUsers);
 	}
 	
 	public void setTimeStamps() {
-		if (groupsFile != null)
-			setTimeStampGroups(groupsFile.lastModified());
-		if (usersFile != null)
-			setTimeStampUsers(usersFile.lastModified());
+		if (getGroupsFile() != null)
+			setTimeStampGroups(getGroupsFile().lastModified());
+		if (getUsersFile() != null)
+			setTimeStampUsers(getUsersFile().lastModified());
 	}	
 	
 }

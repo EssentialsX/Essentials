@@ -287,7 +287,7 @@ public class BukkitPermissions {
 	 * List all effective permissions for this player.
 	 * 
 	 * @param player
-	 * @return
+	 * @return List<String> of permissions
 	 */
 	public List<String> listPerms(Player player) {
 		List<String> perms = new ArrayList<String>();
