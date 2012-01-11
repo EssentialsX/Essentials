@@ -38,7 +38,7 @@ public class OfflineBedLocation
 				{
 					spawnWorld = cserver.getWorlds().get(0).getName();
 				}
-				return new Location(cserver.getWorld(spawnWorld), playerStorage.getInt("SpawnX"), playerStorage.getInt("SpawnY"), playerStorage.getInt("SpawnZ"));
+				return new BetterLocation(spawnWorld, playerStorage.getInt("SpawnX"), playerStorage.getInt("SpawnY"), playerStorage.getInt("SpawnZ"));
 			}
 			return null;
 		}

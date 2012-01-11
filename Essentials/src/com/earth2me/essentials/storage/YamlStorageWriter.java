@@ -1,5 +1,6 @@
 package com.earth2me.essentials.storage;
 
+import com.earth2me.essentials.craftbukkit.BetterLocation;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -24,12 +25,12 @@ public class YamlStorageWriter implements IStorageWriter
 	private transient static final Pattern NON_WORD_PATTERN = Pattern.compile("\\W");
 	private transient final PrintWriter writer;
 	private transient static final Yaml YAML = new Yaml();
-
+	
 	public YamlStorageWriter(final PrintWriter writer)
 	{
 		this.writer = writer;
 	}
-
+	
 	@Override
 	public void save(final StorageObject object)
 	{
@@ -46,7 +47,7 @@ public class YamlStorageWriter implements IStorageWriter
 			Logger.getLogger(YamlStorageWriter.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
-
+	
 	private void writeToFile(final Object object, final int depth, final Class clazz) throws IllegalAccessException
 	{
 		for (Field field : clazz.getDeclaredFields())
@@ -55,7 +56,7 @@ public class YamlStorageWriter implements IStorageWriter
 			if (Modifier.isPrivate(modifier) && !Modifier.isTransient(modifier) && !Modifier.isStatic(modifier))
 			{
 				field.setAccessible(true);
-
+				
 				final Object data = field.get(object);
 				if (writeKey(field, depth, data))
 				{
@@ -86,7 +87,7 @@ public class YamlStorageWriter implements IStorageWriter
 			}
 		}
 	}
-
+	
 	private boolean writeKey(final Field field, final int depth, final Object data)
 	{
 		final boolean commentPresent = writeComment(field, depth);
@@ -110,7 +111,7 @@ public class YamlStorageWriter implements IStorageWriter
 		}
 		return false;
 	}
-
+	
 	private boolean writeComment(final Field field, final int depth)
 	{
 		final boolean commentPresent = field.isAnnotationPresent(Comment.class);
@@ -132,7 +133,7 @@ public class YamlStorageWriter implements IStorageWriter
 		}
 		return commentPresent;
 	}
-
+	
 	private void writeCollection(final Collection<Object> data, final int depth) throws IllegalAccessException
 	{
 		writer.println();
@@ -163,7 +164,7 @@ public class YamlStorageWriter implements IStorageWriter
 		}
 		writer.println();
 	}
-
+	
 	private void writeMap(final Map<Object, Object> data, final int depth) throws IllegalArgumentException, IllegalAccessException
 	{
 		writer.println();
@@ -200,7 +201,7 @@ public class YamlStorageWriter implements IStorageWriter
 			}
 		}
 	}
-
+	
 	private void writeIndention(final int depth)
 	{
 		for (int i = 0; i < depth; i++)
@@ -208,7 +209,7 @@ public class YamlStorageWriter implements IStorageWriter
 			writer.print("  ");
 		}
 	}
-
+	
 	private void writeScalar(final Object data)
 	{
 		if (data instanceof String || data instanceof Boolean || data instanceof Number)
@@ -248,7 +249,7 @@ public class YamlStorageWriter implements IStorageWriter
 			throw new UnsupportedOperationException();
 		}
 	}
-
+	
 	private void writeKey(final Object data)
 	{
 		if (data instanceof String || data instanceof Boolean || data instanceof Number)
@@ -286,12 +287,12 @@ public class YamlStorageWriter implements IStorageWriter
 			throw new UnsupportedOperationException();
 		}
 	}
-
+	
 	private void writeMaterial(final Object data)
 	{
 		writer.print(data.toString().toLowerCase(Locale.ENGLISH));
 	}
-
+	
 	private void writeMaterialData(final Object data)
 	{
 		final MaterialData matData = (MaterialData)data;
@@ -302,7 +303,7 @@ public class YamlStorageWriter implements IStorageWriter
 			writer.print(matData.getData());
 		}
 	}
-
+	
 	private void writeItemStack(final Object data)
 	{
 		final ItemStack itemStack = (ItemStack)data;
@@ -315,7 +316,7 @@ public class YamlStorageWriter implements IStorageWriter
 			writeEnchantmentLevel(entry);
 		}
 	}
-
+	
 	private void writeEnchantmentLevel(Object data)
 	{
 		final Entry<Enchantment, Integer> enchLevel = (Entry<Enchantment, Integer>)data;
@@ -323,13 +324,20 @@ public class YamlStorageWriter implements IStorageWriter
 		writer.print(':');
 		writer.print(enchLevel.getValue());
 	}
-
+	
 	private void writeLocation(final Location entry, final int depth)
 	{
 		writer.println();
 		writeIndention(depth);
 		writer.print("world: ");
-		writeScalar(entry.getWorld().getName());
+		if (entry instanceof BetterLocation)
+		{
+			writeScalar(((BetterLocation)entry).getWorldName());
+		}
+		else
+		{
+			writeScalar(entry.getWorld().getName());
+		}
 		writeIndention(depth);
 		writer.print("x: ");
 		writeScalar(entry.getX());

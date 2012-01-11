@@ -1,15 +1,14 @@
 package com.earth2me.essentials.storage;
 
 import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.craftbukkit.BetterLocation;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
@@ -281,12 +280,7 @@ public class BukkitConstructor extends Constructor
 				{
 					return null;
 				}
-				final World world = Bukkit.getWorld(worldName);
-				if (world == null)
-				{
-					return null;
-				}
-				return new Location(world, x, y, z, yaw, pitch);
+				return new BetterLocation(worldName, x, y, z, yaw, pitch);
 			}
 			return super.construct(node);
 		}

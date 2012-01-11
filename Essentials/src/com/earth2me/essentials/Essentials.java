@@ -19,6 +19,7 @@ package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.*;
+import com.earth2me.essentials.craftbukkit.BetterLocation;
 import com.earth2me.essentials.craftbukkit.ItemDupeFix;
 import com.earth2me.essentials.listener.*;
 import com.earth2me.essentials.perm.PermissionsHandler;
@@ -230,6 +231,10 @@ public class Essentials extends JavaPlugin implements IEssentials
 		reloadList.add(jails);
 
 		pm.registerEvent(Type.ENTITY_EXPLODE, tntListener, Priority.High, this);
+		
+		pm.registerEvent(Type.WORLD_LOAD, BetterLocation.getListener(), Priority.Monitor, this);
+		pm.registerEvent(Type.WORLD_UNLOAD, BetterLocation.getListener(), Priority.Monitor, this);
+		getServer().getScheduler().scheduleAsyncRepeatingTask(this, BetterLocation.getListener(), 200, 200);
 
 		final EssentialsTimer timer = new EssentialsTimer(this);
 		getServer().getScheduler().scheduleSyncRepeatingTask(this, timer, 1, 100);
@@ -249,6 +254,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		i18n.onDisable();
 		Economy.setEss(null);
 		Trade.closeLog();
+		BetterLocation.cleanup();
 	}
 
 	@Override

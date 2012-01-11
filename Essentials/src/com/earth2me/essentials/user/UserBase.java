@@ -4,6 +4,7 @@ import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.api.InvalidNameException;
+import com.earth2me.essentials.craftbukkit.BetterLocation;
 import com.earth2me.essentials.craftbukkit.OfflineBedLocation;
 import com.earth2me.essentials.storage.AsyncStorageObjectHolder;
 import java.io.File;
@@ -31,7 +32,7 @@ public abstract class UserBase extends AsyncStorageObjectHolder<UserData> implem
 		Player.class, Entity.class, CommandSender.class, ServerOperator.class,
 		HumanEntity.class, ConfigurationSerializable.class, LivingEntity.class,
 		Permissible.class
-	}, excludes = IOfflinePlayer.class)
+	}, excludes = {IOfflinePlayer.class, OtherExcludes.class})
 	protected Player base;
 	protected transient OfflinePlayer offlinePlayer;
 
@@ -435,5 +436,15 @@ public abstract class UserBase extends AsyncStorageObjectHolder<UserData> implem
 		{
 			unlock();
 		}
+	}
+	
+	@Override
+	public Location getLocation()
+	{
+		return new BetterLocation(base.getLocation());
+	}
+	
+	public static interface OtherExcludes {
+		Location getLocation();
 	}
 }
