@@ -68,12 +68,12 @@ public abstract class AbstractDelayedYamlFileReader<T extends StorageObject> imp
 			}
 			catch (FileNotFoundException ex)
 			{
-				onException();
+				onException(ex);
 				Bukkit.getLogger().log(Level.INFO, "File not found: " + file.toString());
 			}
 			catch (ObjectLoadException ex)
 			{
-				onException();
+				onException(ex);
 				File broken = new File(file.getAbsolutePath() + ".broken." + System.currentTimeMillis());
 				file.renameTo(broken);
 				Bukkit.getLogger().log(Level.SEVERE, "The file " + file.toString() + " is broken, it has been renamed to " + broken.toString(), ex.getCause());
@@ -91,5 +91,5 @@ public abstract class AbstractDelayedYamlFileReader<T extends StorageObject> imp
 
 	public abstract void onSuccess(T object);
 
-	public abstract void onException();
+	public abstract void onException(Exception exception);
 }

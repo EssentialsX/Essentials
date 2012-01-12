@@ -2,6 +2,7 @@ package com.earth2me.essentials.storage;
 
 import com.earth2me.essentials.api.IEssentials;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -94,7 +95,7 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
 		onReload(true);
 	}
 
-	public void onReload(boolean instant)
+	public void onReload(final boolean instant)
 	{
 		reader.schedule(instant);
 	}
@@ -161,7 +162,7 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
 		}
 
 		@Override
-		public void onException()
+		public void onException(final Exception exception)
 		{
 			if (data == null)
 			{
@@ -176,6 +177,10 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
 			}
 			rwl.writeLock().unlock();
 			loaded.set(true);
+			if (exception instanceof FileNotFoundException)
+			{
+				writer.schedule();
+			}
 		}
 	}
 }
