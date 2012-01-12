@@ -59,6 +59,10 @@ public final class Enchantments
 		ENCHANTMENTS.put("silktouch", Enchantment.SILK_TOUCH);
 		ENCHANTMENTS.put("waterworker", Enchantment.WATER_WORKER);
 		ENCHANTMENTS.put("aquaaffinity", Enchantment.WATER_WORKER);
+		ENCHANTMENTS.put("firearrow", Enchantment.ARROW_FIRE);
+		ENCHANTMENTS.put("arrowdamage", Enchantment.ARROW_DAMAGE);
+		ENCHANTMENTS.put("arrowknockback", Enchantment.ARROW_KNOCKBACK);
+		ENCHANTMENTS.put("infinitearrows", Enchantment.ARROW_INFINITE);
 	}
 	
 	public static Enchantment getByName(final String name) {
