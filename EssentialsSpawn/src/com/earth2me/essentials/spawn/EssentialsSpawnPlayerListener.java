@@ -47,11 +47,7 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 		final Location spawn = spawns.getSpawn(user.getGroup());
 		if (spawn != null)
 		{
-			LOGGER.log(Level.INFO, "setting respawn location");
 			event.setRespawnLocation(spawn);
-		}
-		else {
-			LOGGER.log(Level.INFO, "spawn was null");
 		}
 	}
 
