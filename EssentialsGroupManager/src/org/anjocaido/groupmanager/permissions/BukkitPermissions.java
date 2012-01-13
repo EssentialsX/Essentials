@@ -16,6 +16,7 @@
 
 package org.anjocaido.groupmanager.permissions;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -23,9 +24,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.anjocaido.groupmanager.GroupManager;
-import org.anjocaido.groupmanager.data.User;
+//import org.anjocaido.groupmanager.data.User;
 import org.anjocaido.groupmanager.dataholder.OverloadedWorldHolder;
-import org.anjocaido.groupmanager.utils.PermissionCheckResult;
+//import org.anjocaido.groupmanager.utils.PermissionCheckResult;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -43,8 +44,7 @@ import org.bukkit.event.server.ServerListener;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
-import org.bukkit.permissions.PermissionDefault;
-import org.bukkit.plugin.Plugin;
+//import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 
 
@@ -52,7 +52,7 @@ import org.bukkit.plugin.PluginManager;
  * 
  * BukkitPermissions overrides to force GM reponses to Superperms
  * 
- * @author ElgarL, based upon PermissionsEX implementation
+ * @author ElgarL, originally based upon PermissionsEX implementation
  */
 public class BukkitPermissions {
 
@@ -62,13 +62,25 @@ public class BukkitPermissions {
 	protected boolean dumpAllPermissions = true;
 	protected boolean dumpMatchedPermissions = true;
 	public boolean player_join = false;
+	
+	private static Field permissions;
+
+	// Setup reflection (Thanks to Codename_B for the reflection source)
+	static {
+		try {
+			permissions = PermissionAttachment.class.getDeclaredField("permissions");
+			permissions.setAccessible(true);
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (NoSuchFieldException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public BukkitPermissions(GroupManager plugin) {
 		this.plugin = plugin;
-
-		this.collectPermissions();
+		//this.collectPermissions();
 		this.registerEvents();
-
 		this.updateAllPlayers();
 
 		GroupManager.logger.info("Superperms support enabled.");
@@ -93,6 +105,7 @@ public class BukkitPermissions {
 		manager.registerEvent(Event.Type.PLUGIN_DISABLE, serverListener, Event.Priority.Normal, plugin);
 	}
 
+	/*
 	public void collectPermissions() {
 		registeredPermissions.clear();
 		for (Plugin bukkitPlugin : Bukkit.getServer().getPluginManager().getPlugins()) {
@@ -100,43 +113,56 @@ public class BukkitPermissions {
 				registeredPermissions.push(permission);
 		}
 	}
+	*/
 
 	public void updatePermissions(Player player) {
 		this.updatePermissions(player, null);
 	}
 
+
+	/**
+	 * Push all permissions which are registered with GM for this player, on this world to Bukkit
+	 * and make it update for the child nodes.
+	 * 
+	 * @param player
+	 * @param world
+	 */
 	public void updatePermissions(Player player, String world) {
 		if (player == null || !GroupManager.isLoaded()) {
 			return;
 		}
 
-		if (!this.attachments.containsKey(player)) {
-			this.attachments.put(player, player.addAttachment(plugin));
+		PermissionAttachment attachment;
+		// Find the players current attachment, or add a new one.
+		if (this.attachments.containsKey(player)) {
+			attachment = this.attachments.get(player);
+		} else {
+			attachment = player.addAttachment(plugin);
+			this.attachments.put(player, attachment);;
 		}
 
 		if (world == null) {
 			world = player.getWorld().getName();
 		}
 
-		// All permissions registered with Bukkit for this player
-		PermissionAttachment attachment = this.attachments.get(player);
-
 		OverloadedWorldHolder worldData = plugin.getWorldsHolder().getWorldData(world);
+		Boolean value = false;
+		//User user = worldData.getUser(player.getName());
 
-		User user = worldData.getUser(player.getName());
-
+		/*
 		// clear permissions
 		for (String permission : attachment.getPermissions().keySet())
 			attachment.unsetPermission(permission);
-
+		*/
+		
 		/*
 		 * find matching permissions
 		 * 
 		 * and base bukkit perms if we are set to allow bukkit permissions to
 		 * override.
 		 */
-		Boolean value = false;
-				
+		
+		/*	
 		for (Permission permission : registeredPermissions) {
 			
 			PermissionCheckResult result = worldData.getPermissionsHandler().checkFullGMPermission(user, permission.getName(), false);
@@ -163,35 +189,47 @@ public class BukkitPermissions {
 			if ((value == true) || (result.resultType == PermissionCheckResult.Type.NEGATION)) {
 				attachment.setPermission(permission, value);
 			}
-			/*
-			if ((value == true) || (result.resultType == PermissionCheckResult.Type.NOTFOUND)) {
-				// fetch and set all children of this permission node
-				Map<String, Boolean> children = permission.getChildren();
-				if (children != null) {
-					for (String child : children.keySet()) {
-						if (children.get(child))
-							attachment.setPermission(child, value);
-					}
-				}
-			}*/
-
 		}
+		*/
 
-		// Add any missing permissions for this player (non bukkit plugins and child nodes)
+		// Add all permissions for this player (GM only)
+		// child nodes will be calculated by Bukkit.
 		List<String> playerPermArray = worldData.getPermissionsHandler().getAllPlayersPermissions(player.getName());
-
+		Map<String, Boolean> newPerms = new HashMap<String, Boolean>();
+		
 		for (String permission : playerPermArray) {
 			value = true;
 			if (permission.startsWith("-")) {
 				permission = permission.substring(1); // cut off -
 				value = false;
 			}
-			
+			/*
 			if (!attachment.getPermissions().containsKey(permission)) {
 				attachment.setPermission(permission, value);
 			}
+			*/
+			newPerms.put(permission, value);
 		}
-		player.recalculatePermissions();
+		//player.recalculatePermissions();
+		
+		/**
+		* This is put in place until such a time as Bukkit pull 466 is implemented
+		* https://github.com/Bukkit/Bukkit/pull/466
+		*/
+		try { // Codename_B source
+			@SuppressWarnings("unchecked")
+			Map<String, Boolean> orig = (Map<String, Boolean>) permissions.get(attachment);
+			// Clear the map (faster than removing the attachment and recalculating)
+			orig.clear();
+			// Then whack our map into there
+			orig.putAll(newPerms);
+			// That's all folks!
+			attachment.getPermissible().recalculatePermissions();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -245,6 +283,12 @@ public class BukkitPermissions {
 		return null;
 	}
 
+	/**
+	 * List all effective permissions for this player.
+	 * 
+	 * @param player
+	 * @return
+	 */
 	public List<String> listPerms(Player player) {
 		List<String> perms = new ArrayList<String>();
 
@@ -266,6 +310,9 @@ public class BukkitPermissions {
 		return perms;
 	}
 
+	/**
+	 * force Bukkit to update every OnlinePlayers permissions.
+	 */
 	public void updateAllPlayers() {
 		for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 			updatePermissions(player);
@@ -326,7 +373,7 @@ public class BukkitPermissions {
 			if (!GroupManager.isLoaded())
 				return;
 
-			collectPermissions();
+			//collectPermissions();
 			updateAllPlayers();
 		}
 

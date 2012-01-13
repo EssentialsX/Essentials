@@ -24,6 +24,7 @@ groups:
     inheritance:
     - default
     - g:essentials_builder
+    - g:towny_moderator
     info:
       prefix: '&2'
       build: true
@@ -35,6 +36,7 @@ groups:
     - builder
     - g:essentials_moderator
     - g:bukkit_moderator
+    - g:towny_moderator
     info:
       prefix: '&5'
       build: true
@@ -46,6 +48,7 @@ groups:
     - moderator
     - g:essentials_admin
     - g:bukkit_admin
+    - g:towny_admin
     info:
       prefix: '&c'
       build: true

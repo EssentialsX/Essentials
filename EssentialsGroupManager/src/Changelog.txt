@@ -86,3 +86,15 @@ v 1.7:
 	- Added custom events so plugins can now be notified of changes within GroupManager.
 	- GM now registers with Bukkits ServicesManager.
 	- deleting the contents of GlobalGroups.yml will no longer thrown a NullPointerException.
+	- Removed op permissions from admins in the default GloblaGroups.yml.
+v 1.8:
+	- Changed ServicesManager registration to lowest from normal.
+	- Fixed 'manucheckp' returning a null for the searched node when it's a group/subgroup.
+	- manpromote and mandemote now correctly send the notification to the console if the command was issued there.
+	- Expanded GlobalGroups.yml and Groups.yml to include Towny permissions.
+	- Delayed GroupManager events so Superperms will be fully updated before plugins receive the events.
+	- Changed the way events are raised to prevent variable corruption.
+	- Reload GlobalGroups when you perform a world load.
+	- Changed GlobalGroups to save/load before local groups in the scheduled data saving/loading
+	- Fix 'manucheckp' to correctly report if a permission is available from GroupManager or Bukkit.
+	- Changed over to a reflection method for populating superperms as Bukkit lags when you handle permissions one at a time.

@@ -1,9 +1,7 @@
 package org.anjocaido.groupmanager.events;
 
-import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.data.Group;
 import org.anjocaido.groupmanager.data.User;
-
 
 
 /**
@@ -13,13 +11,13 @@ import org.anjocaido.groupmanager.data.User;
 public class GroupManagerEventHandler {
 	
 	protected static void callEvent(GMGroupEvent event) {
-		GroupManager.callEvent(event);
+		event.schedule(event);
 	}
 	protected static void callEvent(GMUserEvent event) {
-		GroupManager.callEvent(event);
+		event.schedule(event);
 	}
 	protected static void callEvent(GMSystemEvent event) {
-		GroupManager.callEvent(event);
+		event.schedule(event);
 	}
 
 	public static void callEvent(Group group, GMGroupEvent.Action action) {
