@@ -25,13 +25,11 @@ public class OverloadedWorldHolder extends WorldDataHolder {
      *
      * @param ph
      */
-    @SuppressWarnings("deprecation")
     public OverloadedWorldHolder(WorldDataHolder ph) {
         super(ph.getName());
-        this.f = ph.f;
-        this.groupsFile = ph.groupsFile;
-        this.usersFile = ph.usersFile;
-        this.defaultGroup = ph.defaultGroup;
+        this.setGroupsFile(ph.getGroupsFile());
+        this.setUsersFile(ph.getUsersFile());
+        //this.setDefaultGroup(ph.getDefaultGroup());
         this.groups = ph.groups;
         this.users = ph.users;
     }
@@ -49,11 +47,11 @@ public class OverloadedWorldHolder extends WorldDataHolder {
     		return overloadedUsers.get(userNameLowered);
         }
         //END CODE
-        if (users.containsKey(userNameLowered)) {
-            return users.get(userNameLowered);
+        if (getUsers().containsKey(userNameLowered)) {
+            return getUsers().get(userNameLowered);
         }
         User newUser = createUser(userName);
-        haveUsersChanged = true;
+        setUsersChanged(true);
         return newUser;
     }
 
@@ -69,8 +67,8 @@ public class OverloadedWorldHolder extends WorldDataHolder {
         if (theUser == null) {
             return;
         }
-        if ((theUser.getGroup() == null) || (!groups.containsKey(theUser.getGroupName().toLowerCase()))) {
-            theUser.setGroup(defaultGroup);
+        if ((theUser.getGroup() == null) || (!getGroups().containsKey(theUser.getGroupName().toLowerCase()))) {
+            theUser.setGroup(getDefaultGroup());
         }
         //OVERLOADED CODE
         if (overloadedUsers.containsKey(theUser.getName().toLowerCase())) {
@@ -80,8 +78,8 @@ public class OverloadedWorldHolder extends WorldDataHolder {
         }
         //END CODE
         removeUser(theUser.getName());
-        users.put(theUser.getName().toLowerCase(), theUser);
-        haveUsersChanged = true;
+        getUsers().put(theUser.getName().toLowerCase(), theUser);
+        setUsersChanged(true);
     }
 
     /**
@@ -97,9 +95,9 @@ public class OverloadedWorldHolder extends WorldDataHolder {
             return true;
         }
         //END CODE
-        if (users.containsKey(userName.toLowerCase())) {
-            users.remove(userName.toLowerCase());
-            haveUsersChanged = true;
+        if (getUsers().containsKey(userName.toLowerCase())) {
+        	getUsers().remove(userName.toLowerCase());
+            setUsersChanged(true);
             return true;
         }
         return false;
@@ -107,16 +105,16 @@ public class OverloadedWorldHolder extends WorldDataHolder {
 
     @Override
     public boolean removeGroup(String groupName) {
-        if (groupName.equals(defaultGroup)) {
+        if (groupName.equals(getDefaultGroup())) {
             return false;
         }
-        for (String key : groups.keySet()) {
+        for (String key : getGroups().keySet()) {
             if (groupName.equalsIgnoreCase(key)) {
-                groups.remove(key);
-                for (String userKey : users.keySet()) {
-                    User user = users.get(userKey);
+            	getGroups().remove(key);
+                for (String userKey : getUsers().keySet()) {
+                    User user = getUsers().get(userKey);
                     if (user.getGroupName().equalsIgnoreCase(key)) {
-                        user.setGroup(defaultGroup);
+                        user.setGroup(getDefaultGroup());
                     }
 
                 }
@@ -124,12 +122,12 @@ public class OverloadedWorldHolder extends WorldDataHolder {
                 for (String userKey : overloadedUsers.keySet()) {
                     User user = overloadedUsers.get(userKey);
                     if (user.getGroupName().equalsIgnoreCase(key)) {
-                        user.setGroup(defaultGroup);
+                        user.setGroup(getDefaultGroup());
                     }
 
                 }
                 //END OVERLOAD
-                haveGroupsChanged = true;
+                setGroupsChanged(true);
                 return true;
             }
         }
@@ -143,7 +141,7 @@ public class OverloadedWorldHolder extends WorldDataHolder {
     @Override
     public Collection<User> getUserList() {
         Collection<User> overloadedList = new ArrayList<User>();
-        Collection<User> normalList = users.values();
+        Collection<User> normalList = getUsers().values();
         for (User u : normalList) {
             if (overloadedUsers.containsKey(u.getName().toLowerCase())) {
                 overloadedList.add(overloadedUsers.get(u.getName().toLowerCase()));
@@ -198,8 +196,8 @@ public class OverloadedWorldHolder extends WorldDataHolder {
         if (!isOverloaded(userName)) {
             return getUser(userName);
         }
-        if (users.containsKey(userName.toLowerCase())) {
-            return users.get(userName.toLowerCase());
+        if (getUsers().containsKey(userName.toLowerCase())) {
+            return getUsers().get(userName.toLowerCase());
         }
         User newUser = createUser(userName);
         return newUser;
