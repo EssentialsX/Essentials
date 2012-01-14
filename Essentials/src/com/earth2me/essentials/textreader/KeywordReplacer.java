@@ -41,7 +41,7 @@ public class KeywordReplacer implements IText
 			world = user.getLocation().getWorld().getName();
 			worldTime12 = DescParseTickFormat.format12(user.getWorld().getTime());
 			worldTime24 = DescParseTickFormat.format24(user.getWorld().getTime());
-			worldDate = DateFormat.getDateInstance(DateFormat.MEDIUM, ess.getI18n().getCurrentLocale()).format(DescParseTickFormat.ticksToDate(user.getWorld().getTime()));
+			worldDate = DateFormat.getDateInstance(DateFormat.MEDIUM, ess.getI18n().getCurrentLocale()).format(DescParseTickFormat.ticksToDate(user.getWorld().getFullTime()));
 		}
 		else
 		{
