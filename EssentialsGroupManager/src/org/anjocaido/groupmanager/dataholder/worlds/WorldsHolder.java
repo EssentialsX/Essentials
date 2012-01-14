@@ -176,6 +176,16 @@ public class WorldsHolder {
         ArrayList<WorldDataHolder> alreadyDone = new ArrayList<WorldDataHolder>();
         Tasks.removeOldFiles(plugin, plugin.getBackupFolder());
         
+        // Write Global Groups
+        if (GroupManager.getGlobalGroups().haveGroupsChanged()) {
+        	GroupManager.getGlobalGroups().writeGroups(overwrite);
+        } else {
+        	if (GroupManager.getGlobalGroups().getTimeStampGroups() < GroupManager.getGlobalGroups().getGlobalGroupsFile().lastModified()) {
+        		System.out.print("Newer GlobalGroups file found (Loading changes)!");
+        		GroupManager.getGlobalGroups().load();
+        	}
+        }
+        
         for (OverloadedWorldHolder w : worldsData.values()) {
             if (alreadyDone.contains(w)) {
                 continue;
@@ -227,15 +237,6 @@ public class WorldsHolder {
             	}
             }
             alreadyDone.add(w);
-        }
-        // Write Global Groups
-        if (GroupManager.getGlobalGroups().haveGroupsChanged()) {
-        	GroupManager.getGlobalGroups().writeGroups(overwrite);
-        } else {
-        	if (GroupManager.getGlobalGroups().getTimeStampGroups() < GroupManager.getGlobalGroups().getGlobalGroupsFile().lastModified()) {
-        		System.out.print("Newer GlobalGroups file found (Loading changes)!");
-        		GroupManager.getGlobalGroups().load();
-        	}
         }
     }
     

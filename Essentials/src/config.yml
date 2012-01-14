@@ -253,10 +253,7 @@ register-back-in-listener: false
 # +------------------------------------------------------+ #
 ############################################################
 
-# When users die, should they respawn at their first home, instead of the spawnpoint or bed?
-respawn-at-home: false
-
-# If no home is set send you to bed or spawn when /home is used
+# If no home is set, send players to spawn when /home is used
 spawn-if-no-home: true
 
 # Allows people to set their bed at daytime
@@ -532,8 +529,11 @@ newbies:
   spawnpoint: newbies
 
 # Set this to lowest, if you want Multiverse to handle the respawning
-# Set this to normal, if you want EssentialsSpawn to handle the respawning
+# Set this to high, if you want EssentialsSpawn to handle the respawning
 # Set this to highest, if you want to force EssentialsSpawn to handle the respawning
-respawn-listener-priority: normal
+respawn-listener-priority: high
+
+# When users die, should they respawn at their first home or bed, instead of the spawnpoint?
+respawn-at-home: false
 
 # End of File <-- No seriously, you're done with configuration.

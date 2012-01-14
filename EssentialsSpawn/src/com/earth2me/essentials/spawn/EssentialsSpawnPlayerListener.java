@@ -4,6 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -16,6 +17,7 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 {
 	private final transient IEssentials ess;
 	private final transient SpawnStorage spawns;
+	private static final Logger LOGGER = Bukkit.getLogger();
 
 	public EssentialsSpawnPlayerListener(final IEssentials ess, final SpawnStorage spawns)
 	{
@@ -26,7 +28,7 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 
 	@Override
 	public void onPlayerRespawn(final PlayerRespawnEvent event)
-	{
+	{		
 		final User user = ess.getUser(event.getPlayer());
 
 		if (ess.getSettings().getRespawnAtHome())
@@ -54,20 +56,22 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 	{
 		final User user = ess.getUser(event.getPlayer());
 
-		if (!user.isNew() || user.getBedSpawnLocation() != null)
+		if (user.hasPlayedBefore())
 		{
+			LOGGER.log(Level.FINE, "Old player join");
 			return;
-		}
-		user.setNew(false);
+		}		
 		if (!"none".equalsIgnoreCase(ess.getSettings().getNewbieSpawn()))
 		{
-			ess.scheduleSyncDelayedTask(new NewPlayerTeleport(user));
+			ess.scheduleSyncDelayedTask(new NewPlayerTeleport(user), 1L);
 		}
 
 		if (ess.getSettings().getAnnounceNewPlayers())
 		{
 			ess.broadcastMessage(user, ess.getSettings().getAnnounceNewPlayerFormat(user));
 		}
+		
+		LOGGER.log(Level.FINE, "New player join");
 	}
 
 

@@ -161,7 +161,7 @@ public class GroupManager extends JavaPlugin {
 		System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
 		
 		// Register as a service
-		this.getServer().getServicesManager().register(AnjoPermissionsHandler.class, this.permissionHandler, this, ServicePriority.Normal);
+		this.getServer().getServicesManager().register(AnjoPermissionsHandler.class, this.permissionHandler, this, ServicePriority.Lowest);
 	}
 
 	public static boolean isLoaded() {
@@ -415,7 +415,7 @@ public class GroupManager extends JavaPlugin {
 
 				// PARECE OK
 				auxUser.setGroup(auxGroup);
-				if (!sender.hasPermission("groupmanager.notify.other"))
+				if (!sender.hasPermission("groupmanager.notify.other") || (isConsole))
 					sender.sendMessage(ChatColor.YELLOW + "You changed player '" + auxUser.getName() + "' group to '" + auxGroup.getName() + "'.");
 
 				targetPlayer = this.getServer().getPlayer(auxUser.getName());
@@ -787,29 +787,29 @@ public class GroupManager extends JavaPlugin {
 				}
 				targetPlayer = this.getServer().getPlayer(auxUser.getName());
 				// VALIDANDO PERMISSAO
-				permissionResult = permissionHandler.checkFullUserPermission(auxUser, args[1]);
+				permissionResult = permissionHandler.checkFullGMPermission(auxUser, args[1], false);
+
 				if (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND)) {
+					//No permissions found in GM so fall through and check Bukkit.
 					sender.sendMessage(ChatColor.RED + "The player doesn't have access to that permission");
-					sender.sendMessage(ChatColor.YELLOW + "SuperPerms reports Node: " + targetPlayer.hasPermission(args[1]));
-					return false;
-				}
-				// PARECE OK
-				// auxString =
-				// permissionHandler.checkUserOnlyPermission(auxUser, args[1]);
-				if (permissionResult.owner instanceof User) {
-					if (permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION)) {
-						sender.sendMessage(ChatColor.RED + "The user has directly a negation node for that permission.");
-					} else {
-						sender.sendMessage(ChatColor.YELLOW + "The user has directly this permission.");
+					
+				} else {
+					// This permission was found in groupmanager.
+					if (permissionResult.owner instanceof User) {
+						if (permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION)) {
+							sender.sendMessage(ChatColor.RED + "The user has directly a negation node for that permission.");
+						} else {
+							sender.sendMessage(ChatColor.YELLOW + "The user has directly this permission.");
+						}
+						sender.sendMessage(ChatColor.YELLOW + "Permission Node: " + permissionResult.accessLevel);
+					} else if (permissionResult.owner instanceof Group) {
+						if (permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION)) {
+							sender.sendMessage(ChatColor.RED + "The user inherits a negation permission from group: " + permissionResult.owner.getName());
+						} else {
+							sender.sendMessage(ChatColor.YELLOW + "The user inherits the permission from group: " + permissionResult.owner.getName());
+						}
+						sender.sendMessage(ChatColor.YELLOW + "Permission Node: " + permissionResult.accessLevel);
 					}
-					sender.sendMessage(ChatColor.YELLOW + "Permission Node: " + permissionResult.accessLevel);
-				} else if (permissionResult.owner instanceof Group) {
-					if (permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION)) {
-						sender.sendMessage(ChatColor.RED + "The user inherits the a negation permission from group: " + permissionResult.owner.getName());
-					} else {
-						sender.sendMessage(ChatColor.YELLOW + "The user inherits the permission from group: " + permissionResult.owner.getName());
-					}
-					sender.sendMessage(ChatColor.YELLOW + "Permission Node: " + permissionResult.accessLevel);
 				}
 
 				// superperms
@@ -1504,7 +1504,9 @@ public class GroupManager extends JavaPlugin {
 
 					isLoaded = false; // Disable Bukkit Perms update
 
+					globalGroups.load();
 					worldsHolder.loadWorld(auxString);
+					
 					sender.sendMessage("The request to world '" + auxString + "' was sent.");
 
 					isLoaded = true;
@@ -1610,7 +1612,7 @@ public class GroupManager extends JavaPlugin {
 				}
 				// PARECE OK
 				auxUser.setGroup(auxGroup);
-				if (!sender.hasPermission("groupmanager.notify.other"))
+				if (!sender.hasPermission("groupmanager.notify.other") || (isConsole))
 					sender.sendMessage(ChatColor.YELLOW + "You changed " + auxUser.getName() + " group to " + auxGroup.getName() + ".");
 
 				targetPlayer = this.getServer().getPlayer(auxUser.getName());
@@ -1666,7 +1668,7 @@ public class GroupManager extends JavaPlugin {
 				}
 				// PARECE OK
 				auxUser.setGroup(auxGroup);
-				if (!sender.hasPermission("groupmanager.notify.other"))
+				if (!sender.hasPermission("groupmanager.notify.other") || (isConsole))
 					sender.sendMessage(ChatColor.YELLOW + "You changed " + auxUser.getName() + " group to " + auxGroup.getName() + ".");
 
 				targetPlayer = this.getServer().getPlayer(auxUser.getName());
@@ -1837,15 +1839,6 @@ public class GroupManager extends JavaPlugin {
 		return match;
 
 	}
-	
-	/**
-	 * Triggers all GroupManager events for other plugins to see.
-	 * 
-	 * @param event
-	 */
-	public static void callEvent(GroupManagerEvent event) {
-        Bukkit.getServer().getPluginManager().callEvent(event);
-    }
 
 	/**
 	 * @return the config

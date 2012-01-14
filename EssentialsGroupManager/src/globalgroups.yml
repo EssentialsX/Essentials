@@ -1,9 +1,5 @@
 groups:
 
-  g:bukkit_default:
-    permissions:
-    - bukkit.broadcast.user
-
   g:essentials_default:
     permissions:
     - essentials.help
@@ -129,6 +125,11 @@ groups:
     - groupmanager.manucheckp
     - groupmanager.manulistp
     
+  g:bukkit_default:
+    permissions:
+    - bukkit.broadcast.user
+    - -bukkit.command.plugins
+    
   g:bukkit_moderator:
     permissions:
     - bukkit.command.ban
@@ -150,9 +151,9 @@ groups:
     - bukkit.command.kill
     - bukkit.command.list
     - bukkit.command.me
-    - bukkit.command.op
-    - bukkit.command.op.give
-    - bukkit.command.op.take
+    - -bukkit.command.op
+    - -bukkit.command.op.give
+    - -bukkit.command.op.take
     - bukkit.command.plugins
     - bukkit.command.reload
     - bukkit.command.save
@@ -174,3 +175,52 @@ groups:
     - bukkit.command.whitelist.list
     - bukkit.command.whitelist.reload
     - bukkit.command.whitelist.remove
+
+  g:towny_builder:
+    permissions:
+    - towny.town.*
+    - towny.nation.*
+    - towny.chat.tc
+    - towny.chat.nc
+    - towny.wild.block.6.*
+    - towny.wild.block.14.destroy
+    - towny.wild.block.15.destroy
+    - towny.wild.block.16.destroy
+    - towny.wild.block.17.*
+    - towny.wild.block.18.destroy
+    - towny.wild.block.21.destroy
+    - towny.wild.block.31.destroy
+    - towny.wild.block.37.destroy
+    - towny.wild.block.38.destroy
+    - towny.wild.block.39.destroy
+    - towny.wild.block.40.destroy
+    - towny.wild.block.50.destroy
+    - towny.wild.block.56.destroy
+    - towny.wild.block.73.destroy
+    - towny.wild.block.74.destroy
+    - towny.wild.block.78.destroy
+    - towny.wild.block.81.destroy
+    - towny.wild.block.82.destroy
+    - towny.wild.block.83.destroy
+    - towny.wild.block.86.destroy
+    - towny.wild.block.103.destroy
+    - towny.wild.block.106.destroy
+    - towny.wild.block.111.destroy
+    - towny.wild.block.115.destroy
+
+  g:towny_moderator:
+    permissions:
+    - towny.chat.mod
+    - towny.wild.block.64.switch
+    - towny.wild.block.83.build
+    - towny.wild.block.86.build
+    - towny.wild.block.103.build
+    - towny.wild.block.111.build
+    - towny.wild.block.115.build
+
+  g:towny_admin:
+    permissions:
+    - towny.admin
+    - -towny.wild.block.119.destroy
+    - -towny.wild.block.120.destroy
+    - towny.chat.admin
