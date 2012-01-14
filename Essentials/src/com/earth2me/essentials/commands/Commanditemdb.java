@@ -10,7 +10,7 @@ public class Commanditemdb extends EssentialsCommand
 {
 	public Commanditemdb()
 	{
-		super("find");
+		super("itemdb");
 	}
 
 	@Override
