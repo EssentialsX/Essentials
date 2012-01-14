@@ -41,7 +41,7 @@ public class Commandhelp extends EssentialsCommand
 			output = new KeywordReplacer(input, user, ess);
 		}
 		final TextPager pager = new TextPager(output);
-		pager.showPage(pageStr, chapterPageStr, "help", user);
+		pager.showPage(pageStr, chapterPageStr, commandLabel, user);
 	}
 
 	@Override
