@@ -614,13 +614,27 @@ public class Essentials extends JavaPlugin implements IEssentials
 		@Override
 		public void onWorldLoad(WorldLoadEvent event)
 		{
-			ess.scheduleSyncDelayedTask(this);
+			ess.getJails().onReload();
+			ess.getWarps().reloadConfig();
+			for (IConf iConf : ((Essentials)ess).confList)
+			{
+				if (iConf instanceof IEssentialsModule) {
+					iConf.reloadConfig();
+				}
+			}
 		}
 
 		@Override
 		public void onWorldUnload(WorldUnloadEvent event)
 		{
-			ess.scheduleSyncDelayedTask(this);
+			ess.getJails().onReload();
+			ess.getWarps().reloadConfig();
+			for (IConf iConf : ((Essentials)ess).confList)
+			{
+				if (iConf instanceof IEssentialsModule) {
+					iConf.reloadConfig();
+				}
+			}
 		}
 
 		@Override
