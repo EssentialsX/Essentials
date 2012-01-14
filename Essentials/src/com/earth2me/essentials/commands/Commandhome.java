@@ -50,7 +50,7 @@ public class Commandhome extends EssentialsCommand
 				if (bed != null)
 				{
 					user.getTeleport().teleport(bed, charge, TeleportCause.COMMAND);
-					return;
+					throw new NoChargeException();
 				}
 			}
 			user.getTeleport().home(player, homeName.toLowerCase(Locale.ENGLISH), charge);
@@ -64,10 +64,10 @@ public class Commandhome extends EssentialsCommand
 				if (bed != null)
 				{
 					user.getTeleport().teleport(bed, charge, TeleportCause.COMMAND);
-					return;
+					throw new NoChargeException();
 				}
 				user.getTeleport().respawn(charge, TeleportCause.COMMAND);
-				return;
+
 			}
 			else if (homes.isEmpty())
 			{
@@ -76,7 +76,6 @@ public class Commandhome extends EssentialsCommand
 			else if (homes.size() == 1 && player.equals(user))
 			{
 				user.getTeleport().home(player, homes.get(0), charge);
-				return;
 			}
 			else
 			{
