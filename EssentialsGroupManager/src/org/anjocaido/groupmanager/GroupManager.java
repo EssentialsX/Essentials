@@ -948,7 +948,7 @@ public class GroupManager extends JavaPlugin {
 					}
 
 				} else {
-					sender.sendMessage(ChatColor.YELLOW + "The grpup '" + auxGroup.getName() + "' has no specific permissions.");
+					sender.sendMessage(ChatColor.YELLOW + "The group '" + auxGroup.getName() + "' has no specific permissions.");
 					auxString = "";
 					for (String grp : auxGroup.getInherits()) {
 						auxString += grp + ", ";
@@ -1522,7 +1522,8 @@ public class GroupManager extends JavaPlugin {
 				}
 				// WORKING
 				config.load();
-
+				worldsHolder.mirrorSetUp();
+				
 				isLoaded = false;
 
 				if (args.length > 0) {
@@ -1539,7 +1540,6 @@ public class GroupManager extends JavaPlugin {
 					worldsHolder.reloadAll();
 					sender.sendMessage(ChatColor.YELLOW + " The current world was reloaded.");
 				}
-				worldsHolder.mirrorSetUp();
 
 				isLoaded = true;
 
