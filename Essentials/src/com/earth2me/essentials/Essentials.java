@@ -49,6 +49,9 @@ import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
+import org.bukkit.event.world.WorldListener;
+import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.plugin.InvalidDescriptionException;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -242,6 +245,10 @@ public class Essentials extends JavaPlugin implements IEssentials
 		pm.registerEvent(Type.ENTITY_DEATH, entityListener, Priority.Lowest, this);
 		pm.registerEvent(Type.ENTITY_REGAIN_HEALTH, entityListener, Priority.Lowest, this);
 		pm.registerEvent(Type.FOOD_LEVEL_CHANGE, entityListener, Priority.Lowest, this);
+		
+		final EssentialsWorldListener worldListener = new EssentialsWorldListener(this);
+		pm.registerEvent(Type.WORLD_LOAD, worldListener, Priority.Monitor, this);
+		pm.registerEvent(Type.WORLD_UNLOAD, worldListener, Priority.Monitor, this);
 
 		//TODO: Check if this should be here, and not above before reload()
 		jails = new Jails(this);
@@ -593,5 +600,33 @@ public class Essentials extends JavaPlugin implements IEssentials
 	public I18n getI18n()
 	{
 		return i18n;
+	}
+	
+	private static class EssentialsWorldListener extends WorldListener implements Runnable {
+		private transient final IEssentials ess;
+
+		public EssentialsWorldListener(IEssentials ess)
+		{
+			this.ess = ess;
+		}
+		
+
+		@Override
+		public void onWorldLoad(WorldLoadEvent event)
+		{
+			ess.scheduleSyncDelayedTask(this);
+		}
+
+		@Override
+		public void onWorldUnload(WorldUnloadEvent event)
+		{
+			ess.scheduleSyncDelayedTask(this);
+		}
+
+		@Override
+		public void run()
+		{
+			ess.reload();
+		}
 	}
 }
