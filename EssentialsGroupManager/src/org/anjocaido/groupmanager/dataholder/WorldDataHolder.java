@@ -470,7 +470,12 @@ public class WorldDataHolder {
                 }
                 if (thisGroupNode.get("permissions") instanceof List) {
                     for (Object o : ((List) thisGroupNode.get("permissions"))) {
-                        thisGrp.addPermission(o.toString());
+                    	try {
+                    		thisGrp.addPermission(o.toString());
+                    	} catch (NullPointerException e) {
+                    		// Ignore this entry as it's null.
+                    		//throw new IllegalArgumentException("Invalid permission node in group:  " + thisGrp.getName() + " in file: " + groupsFile.getPath());
+                    	}
                     }
                 } else if (thisGroupNode.get("permissions") instanceof String) {
                     thisGrp.addPermission((String) thisGroupNode.get("permissions"));
@@ -582,7 +587,12 @@ public class WorldDataHolder {
 	                    thisUser.addPermission(o.toString());
 	                }
 	            } else if (thisUserNode.get("permissions") instanceof String) {
-	                thisUser.addPermission(thisUserNode.get("permissions").toString());
+	            	try {
+	                	thisUser.addPermission(thisUserNode.get("permissions").toString());
+	            	} catch (NullPointerException e) {
+	            		// Ignore this entry as it's null.
+	            		//throw new IllegalArgumentException("Invalid permission node for user:  " + thisUser.getName() + " in file: " + UserFile.getPath());
+	            	}
 	            }
 	
 	            //SUBGROUPS LOADING
