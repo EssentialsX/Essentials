@@ -1,23 +1,20 @@
 package com.earth2me.essentials;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.util.concurrent.UncheckedExecutionException;
 import java.io.File;
-import java.util.Collections;
-import java.util.Locale;
+import java.lang.ref.SoftReference;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.concurrent.ExecutionException;
 import org.bukkit.entity.Player;
 
 
-public class UserMap extends CacheLoader<String, User> implements IConf
+public class UserMap implements IConf
 {
 	private final transient IEssentials ess;
-	private final transient Cache<String, User> users = CacheBuilder.newBuilder().softValues().build(this);
-	private final transient ConcurrentSkipListSet<String> keys = new ConcurrentSkipListSet<String>();
+	private final transient Map<String, SoftReference<User>> users = new HashMap<String, SoftReference<User>>();
+	//CacheBuilder.newBuilder().softValues().build(this);
+	//private final transient ConcurrentSkipListSet<String> keys = new ConcurrentSkipListSet<String>();
 
 	public UserMap(final IEssentials ess)
 	{
@@ -38,16 +35,19 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 				{
 					return;
 				}
-				keys.clear();
-				users.invalidateAll();
-				for (String string : userdir.list())
+				synchronized (users)
 				{
-					if (!string.endsWith(".yml"))
+					users.clear();
+
+					for (String string : userdir.list())
 					{
-						continue;
+						if (!string.endsWith(".yml"))
+						{
+							continue;
+						}
+						final String name = string.substring(0, string.length() - 4);
+						users.put(Util.sanitizeFileName(name), null);
 					}
-					final String name = string.substring(0, string.length() - 4);
-					keys.add(Util.sanitizeFileName(name));
 				}
 			}
 		});
@@ -55,40 +55,43 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 
 	public boolean userExists(final String name)
 	{
-		return keys.contains(Util.sanitizeFileName(name));
+		return users.containsKey(Util.sanitizeFileName(name));
 	}
 
 	public User getUser(final String name)
 	{
 		try
 		{
-			return users.get(Util.sanitizeFileName(name));
+			synchronized (users)
+			{
+				final SoftReference<User> softRef = users.get(Util.sanitizeFileName(name));
+				User user = softRef == null ? null : softRef.get();
+				if (user == null)
+				{
+					user = load(name);
+					users.put(name, new SoftReference<User>(user));
+				}
+				return user;
+			}
 		}
-		catch (ExecutionException ex)
-		{
-			return null;
-		}
-		catch (UncheckedExecutionException ex)
+		catch (Exception ex)
 		{
 			return null;
 		}
 	}
 
-	@Override
 	public User load(final String name) throws Exception
 	{
 		for (Player player : ess.getServer().getOnlinePlayers())
 		{
 			if (player.getName().equalsIgnoreCase(name))
 			{
-				keys.add(Util.sanitizeFileName(name));
 				return new User(player, ess);
 			}
 		}
 		final File userFile = getUserFile(name);
 		if (userFile.exists())
 		{
-			keys.add(Util.sanitizeFileName(name));
 			return new User(new OfflinePlayer(name, ess), ess);
 		}
 		throw new Exception("User not found!");
@@ -102,20 +105,28 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 
 	public void removeUser(final String name)
 	{
-		keys.remove(Util.sanitizeFileName(name));
-		users.invalidate(Util.sanitizeFileName(name));
+		synchronized (users)
+		{
+			users.remove(Util.sanitizeFileName(name));
+		}
 	}
 
 	public Set<String> getAllUniqueUsers()
 	{
-		return Collections.unmodifiableSet(keys);
+		synchronized (users)
+		{
+			return new HashSet<String>(users.keySet());
+		}
 	}
 
 	public int getUniqueUsers()
 	{
-		return keys.size();
+		synchronized (users)
+		{
+			return users.size();
+		}
 	}
-	
+
 	public File getUserFile(final String name)
 	{
 		final File userFolder = new File(ess.getDataFolder(), "userdata");
