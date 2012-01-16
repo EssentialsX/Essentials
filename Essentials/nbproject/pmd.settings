@@ -1,3 +1,4 @@
 DoNotUseThreads
 LongVariable
 SignatureDeclareThrowsException
+LocalVariableCouldBeFinal
