@@ -282,22 +282,22 @@ public class EssentialsPlayerListener extends PlayerListener
 	{
 		final User user = ess.getUser(event.getPlayer());
 		user.updateActivity(true);
-		usePowertools(event);
+		if (event.getAnimationType() == PlayerAnimationType.ARM_SWING
+			&& user.hasPowerTools() && user.arePowerToolsEnabled())
+		{
+			usePowertools(user);
+		}
 	}
 
-	private void usePowertools(final PlayerAnimationEvent event)
+	private void usePowertools(final User user)
 	{
-		if (event.getAnimationType() != PlayerAnimationType.ARM_SWING)
-		{
-			return;
-		}
-		final User user = ess.getUser(event.getPlayer());
 		final ItemStack is = user.getItemInHand();
-		if (is == null || is.getType() == Material.AIR || !user.arePowerToolsEnabled())
+		int id;
+		if (is == null || (id = is.getTypeId()) == 0)
 		{
 			return;
 		}
-		final List<String> commandList = user.getPowertool(is);
+		final List<String> commandList = user.getPowertool(id);
 		if (commandList == null || commandList.isEmpty())
 		{
 			return;
@@ -317,7 +317,7 @@ public class EssentialsPlayerListener extends PlayerListener
 			}
 			else
 			{
-				user.getServer().dispatchCommand(event.getPlayer(), command);
+				user.getServer().dispatchCommand(user.getBase(), command);
 			}
 		}
 	}

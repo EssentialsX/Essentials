@@ -264,6 +264,11 @@ public abstract class UserData extends PlayerExtension implements IConf
 	{
 		return (List<String>)powertools.get(stack.getTypeId());
 	}
+	
+	public List<String> getPowertool(int id)
+	{
+		return (List<String>)powertools.get(id);
+	}
 
 	public void setPowertool(ItemStack stack, List<String> commandList)
 	{

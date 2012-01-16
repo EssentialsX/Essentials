@@ -4,6 +4,7 @@ import com.earth2me.essentials.DescParseTickFormat;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -16,15 +17,17 @@ import org.bukkit.plugin.Plugin;
 public class KeywordReplacer implements IText
 {
 	private final transient IText input;
+	private final transient List<String> replaced;
 	private final transient IEssentials ess;
-
+	
 	public KeywordReplacer(final IText input, final CommandSender sender, final IEssentials ess)
 	{
 		this.input = input;
+		this.replaced = new ArrayList<String>(this.input.getLines().size());
 		this.ess = ess;
 		replaceKeywords(sender);
 	}
-
+	
 	private void replaceKeywords(final CommandSender sender)
 	{
 		String displayName, ipAddress, balance, mails, world;
@@ -41,7 +44,7 @@ public class KeywordReplacer implements IText
 			world = user.getLocation().getWorld().getName();
 			worldTime12 = DescParseTickFormat.format12(user.getWorld().getTime());
 			worldTime24 = DescParseTickFormat.format24(user.getWorld().getTime());
-			worldDate = DateFormat.getDateInstance(DateFormat.MEDIUM, ess.getI18n().getCurrentLocale()).format(DescParseTickFormat.ticksToDate(user.getWorld().getTime()));
+			worldDate = DateFormat.getDateInstance(DateFormat.MEDIUM, ess.getI18n().getCurrentLocale()).format(DescParseTickFormat.ticksToDate(user.getWorld().getFullTime()));
 		}
 		else
 		{
@@ -98,7 +101,7 @@ public class KeywordReplacer implements IText
 
 		date = DateFormat.getDateInstance(DateFormat.MEDIUM, ess.getI18n().getCurrentLocale()).format(new Date());
 		time = DateFormat.getTimeInstance(DateFormat.MEDIUM, ess.getI18n().getCurrentLocale()).format(new Date());
-		
+
 		version = ess.getServer().getVersion();
 
 		for (int i = 0; i < input.getLines().size(); i++)
@@ -120,14 +123,14 @@ public class KeywordReplacer implements IText
 			line = line.replace("{WORLDDATE}", worldDate);
 			line = line.replace("{PLUGINS}", plugins);
 			line = line.replace("{VERSION}", version);
-			input.getLines().set(i, line);
+			replaced.add(line);
 		}
 	}
 
 	@Override
 	public List<String> getLines()
 	{
-		return input.getLines();
+		return replaced;
 	}
 
 	@Override
