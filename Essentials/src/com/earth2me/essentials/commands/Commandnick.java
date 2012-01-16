@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import java.util.Locale;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -65,9 +66,10 @@ public class Commandnick extends EssentialsCommand
 	{
 		if (user == null || user.isAuthorized("essentials.nick.color"))
 		{
-			return nick.replace('&', '\u00a7').replace("\u00a7\u00a7", "&");
+			return nick.replace('&', '\u00a7').replaceAll("\u00a7+k", "");
+		} else {
+			return Util.stripColor(nick);
 		}
-		return nick;
 	}
 
 	private void resetAllNicknames(final Server server)
@@ -86,7 +88,7 @@ public class Commandnick extends EssentialsCommand
 
 	private void setNickname(final Server server, final User target, final String nick) throws Exception
 	{
-		if (nick.matches("[^a-zA-Z_0-9]"))
+		if (!nick.matches("^[a-zA-Z_0-9\u00a7]+$"))
 		{
 			throw new Exception(_("nickNamesAlpha"));
 		}
