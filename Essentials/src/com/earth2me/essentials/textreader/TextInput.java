@@ -4,6 +4,7 @@ import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.io.*;
+import java.lang.ref.SoftReference;
 import java.util.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -11,9 +12,11 @@ import org.bukkit.entity.Player;
 
 public class TextInput implements IText
 {
-	private final transient List<String> lines = new ArrayList<String>();
-	private final transient List<String> chapters = new ArrayList<String>();
-	private final transient Map<String, Integer> bookmarks = new HashMap<String, Integer>();
+	private final transient List<String> lines;
+	private final transient List<String> chapters;
+	private final transient Map<String, Integer> bookmarks;
+	private final transient long lastChange;
+	private final static HashMap<String, SoftReference<TextInput>> cache = new HashMap<String, SoftReference<TextInput>>();
 
 	public TextInput(final CommandSender sender, final String filename, final boolean createFile, final IEssentials ess) throws IOException
 	{
@@ -34,33 +37,62 @@ public class TextInput implements IText
 		}
 		if (file.exists())
 		{
-			final BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-			try
+			lastChange = file.lastModified();
+			boolean readFromfile;
+			synchronized (cache)
 			{
-				int lineNumber = 0;
-				while (bufferedReader.ready())
+				final SoftReference<TextInput> inputRef = cache.get(file.getName());
+				TextInput input;
+				if (inputRef == null || (input = inputRef.get()) == null || input.lastChange < lastChange)
 				{
-					final String line = bufferedReader.readLine();
-					if (line == null)
-					{
-						break;
-					}
-					if (line.length() > 0 && line.charAt(0) == '#')
-					{
-						bookmarks.put(line.substring(1).toLowerCase(Locale.ENGLISH).replaceAll("&[0-9a-f]", ""), lineNumber);
-						chapters.add(line.substring(1).replace('&', '§').replace("§§", "&"));
-					}
-					lines.add(line.replace('&', '§').replace("§§", "&"));
-					lineNumber++;
+					lines = new ArrayList<String>();
+					chapters = new ArrayList<String>();
+					bookmarks = new HashMap<String, Integer>();
+					cache.put(file.getName(), new SoftReference<TextInput>(this));
+					readFromfile = true;
+				}
+				else
+				{
+					lines = Collections.unmodifiableList(input.getLines());
+					chapters = Collections.unmodifiableList(input.getChapters());
+					bookmarks = Collections.unmodifiableMap(input.getBookmarks());
+					readFromfile = false;
 				}
 			}
-			finally
+			if (readFromfile)
 			{
-				bufferedReader.close();
+				final BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+				try
+				{
+					int lineNumber = 0;
+					while (bufferedReader.ready())
+					{
+						final String line = bufferedReader.readLine();
+						if (line == null)
+						{
+							break;
+						}
+						if (line.length() > 0 && line.charAt(0) == '#')
+						{
+							bookmarks.put(line.substring(1).toLowerCase(Locale.ENGLISH).replaceAll("&[0-9a-f]", ""), lineNumber);
+							chapters.add(line.substring(1).replace('&', '§').replace("§§", "&"));
+						}
+						lines.add(line.replace('&', '§').replace("§§", "&"));
+						lineNumber++;
+					}
+				}
+				finally
+				{
+					bufferedReader.close();
+				}
 			}
 		}
 		else
 		{
+			lastChange = 0;
+			lines = Collections.emptyList();
+			chapters = Collections.emptyList();
+			bookmarks = Collections.emptyMap();
 			if (createFile)
 			{
 				final InputStream input = ess.getResource(filename + ".txt");
@@ -68,8 +100,7 @@ public class TextInput implements IText
 				try
 				{
 					final byte[] buffer = new byte[1024];
-					int length = 0;
-					length = input.read(buffer);
+					int length = input.read(buffer);
 					while (length > 0)
 					{
 						output.write(buffer, 0, length);
