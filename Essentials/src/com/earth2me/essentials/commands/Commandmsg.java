@@ -26,6 +26,7 @@ public class Commandmsg extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
+		String message = getFinalArg(args, 1);
 		if (sender instanceof Player)
 		{
 			User user = ess.getUser(sender);
@@ -33,9 +34,20 @@ public class Commandmsg extends EssentialsCommand
 			{
 				throw new Exception(_("voiceSilenced"));
 			}
+			if (user.isAuthorized("essentials.msg.color"))
+			{
+				message = message.replaceAll("&([0-9a-fk])", "§$1");
+			}
+			else
+			{
+				message = Util.stripColor(message);
+			}
+		}
+		else
+		{
+			message = message.replaceAll("&([0-9a-fk])", "§$1");
 		}
 
-		final String message = Util.stripColor(getFinalArg(args, 1));
 		final String translatedMe = _("me");
 
 		final IReplyTo replyTo = sender instanceof Player ? ess.getUser((Player)sender) : Console.getConsoleReplyTo();

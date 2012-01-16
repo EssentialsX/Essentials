@@ -4,6 +4,7 @@ import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IReplyTo;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -24,9 +25,31 @@ public class Commandr extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		final String message = getFinalArg(args, 0);
-		final IReplyTo replyTo = sender instanceof Player ? ess.getUser((Player)sender) : Console.getConsoleReplyTo();
-		final String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
+		String message = getFinalArg(args, 0);
+		IReplyTo replyTo;
+		String senderName;
+
+		if (sender instanceof Player)
+		{
+			User user = ess.getUser(sender);
+			if (user.isAuthorized("essentials.msg.color"))
+			{
+				message = message.replaceAll("&([0-9a-fk])", "§$1");
+			}
+			else
+			{
+				message = Util.stripColor(message);
+			}
+			replyTo = user;
+			senderName = user.getDisplayName();
+		}
+		else
+		{
+			message = message.replaceAll("&([0-9a-fk])", "§$1");
+			replyTo = Console.getConsoleReplyTo();
+			senderName = Console.NAME;
+		}
+
 		final CommandSender target = replyTo.getReplyTo();
 		final String targetName = target instanceof Player ? ((Player)target).getDisplayName() : Console.NAME;
 

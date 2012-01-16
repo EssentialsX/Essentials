@@ -32,7 +32,7 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer
 		final User user = ess.getUser(event.getPlayer());
 		if (user.isAuthorized("essentials.chat.color"))
 		{
-			event.setMessage(event.getMessage().replaceAll("&([0-9a-f])", "\u00a7$1"));
+			event.setMessage(event.getMessage().replaceAll("&([0-9a-fk])", "\u00a7$1"));
 		} else {
 			event.setMessage(Util.stripColor(event.getMessage()));
 		}
