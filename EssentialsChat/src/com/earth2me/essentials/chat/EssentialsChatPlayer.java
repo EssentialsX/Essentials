@@ -112,7 +112,7 @@ public abstract class EssentialsChatPlayer extends PlayerListener
 		logger.info(_("localFormat", sender.getName(), event.getMessage()));
 		final Location loc = sender.getLocation();
 		final World world = loc.getWorld();
-		
+
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
 			String type = "[L]";
@@ -123,11 +123,14 @@ public abstract class EssentialsChatPlayer extends PlayerListener
 				continue;
 			}
 			if (!user.equals(sender))
-			{				
+			{
 				final Location playerLoc = user.getLocation();
-				if (playerLoc.getWorld() != world) { continue; }
+				if (playerLoc.getWorld() != world)
+				{
+					continue;
+				}
 				final double delta = playerLoc.distanceSquared(loc);
-				
+
 				if (delta > radius)
 				{
 					if (user.isAuthorized("essentials.chat.spy"))
