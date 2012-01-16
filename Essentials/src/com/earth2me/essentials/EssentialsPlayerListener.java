@@ -183,7 +183,6 @@ public class EssentialsPlayerListener extends PlayerListener
 	{
 		if (event.getResult() != Result.ALLOWED && event.getResult() != Result.KICK_FULL && event.getResult() != Result.KICK_BANNED)
 		{
-			LOGGER.log(Level.INFO, "Disconnecting user " + event.getPlayer().toString() + " due to " + event.getResult().toString());
 			return;
 		}
 		User user = ess.getUser(event.getPlayer());
