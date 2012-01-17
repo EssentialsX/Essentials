@@ -39,8 +39,7 @@ public class Commandsetwarp extends EssentialsCommand
 		}
 		else
 		{
-			user.sendMessage(_("warpOverwrite"));
-			return;
+			throw new Exception(_("warpOverwrite"));
 		}
 
 		user.sendMessage(_("warpSet", args[0]));
