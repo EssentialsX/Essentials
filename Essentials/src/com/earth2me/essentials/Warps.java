@@ -5,6 +5,7 @@ import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.IWarp;
 import com.earth2me.essentials.api.IWarps;
 import com.earth2me.essentials.api.InvalidNameException;
+import com.earth2me.essentials.commands.WarpNotFoundException;
 import com.earth2me.essentials.settings.WarpHolder;
 import com.earth2me.essentials.storage.StorageObjectMap;
 import java.io.File;
@@ -60,7 +61,7 @@ public class Warps extends StorageObjectMap<IWarp> implements IWarps
 		IWarp warp = getObject(name);
 		if (warp == null)
 		{
-			throw new Exception(_("warpNotExist"));
+			throw new WarpNotFoundException(_("warpNotExist"));
 		}
 		warp.acquireReadLock();
 		try
