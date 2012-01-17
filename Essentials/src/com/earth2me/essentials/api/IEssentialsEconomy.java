@@ -1,6 +1,6 @@
 package com.earth2me.essentials.api;
 
-
+//TODO: Decide on this files fate
 public interface IEssentialsEconomy
 {
 	double getMoney(String name) throws UserDoesNotExistException;
