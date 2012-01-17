@@ -79,7 +79,7 @@ public class BukkitPermissions {
 
 	public BukkitPermissions(GroupManager plugin) {
 		this.plugin = plugin;
-		//this.collectPermissions();
+		this.collectPermissions();
 		this.registerEvents();
 		this.updateAllPlayers();
 
@@ -105,15 +105,20 @@ public class BukkitPermissions {
 		manager.registerEvent(Event.Type.PLUGIN_DISABLE, serverListener, Event.Priority.Normal, plugin);
 	}
 
-	/*
+	
 	public void collectPermissions() {
 		registeredPermissions.clear();
+		/*
 		for (Plugin bukkitPlugin : Bukkit.getServer().getPluginManager().getPlugins()) {
 			for (Permission permission : bukkitPlugin.getDescription().getPermissions())
 				registeredPermissions.push(permission);
 		}
+		*/
+		
+		registeredPermissions =  new LinkedList<Permission>(Bukkit.getPluginManager().getPermissions());
+		
 	}
-	*/
+	
 
 	public void updatePermissions(Player player) {
 		this.updatePermissions(player, null);
@@ -194,7 +199,7 @@ public class BukkitPermissions {
 
 		// Add all permissions for this player (GM only)
 		// child nodes will be calculated by Bukkit.
-		List<String> playerPermArray = worldData.getPermissionsHandler().getAllPlayersPermissions(player.getName());
+		List<String> playerPermArray = worldData.getPermissionsHandler().getAllPlayersPermissions(player.getName(), false);
 		Map<String, Boolean> newPerms = new HashMap<String, Boolean>();
 		
 		for (String permission : playerPermArray) {
@@ -210,6 +215,7 @@ public class BukkitPermissions {
 			*/
 			newPerms.put(permission, value);
 		}
+			
 		//player.recalculatePermissions();
 		
 		/**
@@ -373,13 +379,13 @@ public class BukkitPermissions {
 			if (!GroupManager.isLoaded())
 				return;
 
-			//collectPermissions();
+			collectPermissions();
 			updateAllPlayers();
 		}
 
 		@Override
 		public void onPluginDisable(PluginDisableEvent event) {
-			// collectPermissions();
+			collectPermissions();
 			// updateAllPlayers();
 		}
 	}

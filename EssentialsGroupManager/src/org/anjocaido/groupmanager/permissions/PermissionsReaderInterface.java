@@ -234,4 +234,6 @@ public abstract class PermissionsReaderInterface {
 //////////////////////////////
 
 	public abstract List<String> getAllPlayersPermissions(String userName);
+
+	public abstract List<String> getAllPlayersPermissions(String userName, Boolean includeChildren);
 }
