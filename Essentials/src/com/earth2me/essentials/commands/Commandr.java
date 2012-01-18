@@ -34,7 +34,7 @@ public class Commandr extends EssentialsCommand
 			User user = ess.getUser(sender);
 			if (user.isAuthorized("essentials.msg.color"))
 			{
-				message = message.replaceAll("&([0-9a-fk])", "§$1");
+				message = Util.replaceColor(message);
 			}
 			else
 			{
@@ -45,7 +45,7 @@ public class Commandr extends EssentialsCommand
 		}
 		else
 		{
-			message = message.replaceAll("&([0-9a-fk])", "§$1");
+			message = Util.replaceColor(message);
 			replyTo = Console.getConsoleReplyTo();
 			senderName = Console.NAME;
 		}

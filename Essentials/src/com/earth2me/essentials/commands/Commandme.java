@@ -29,7 +29,7 @@ public class Commandme extends EssentialsCommand
 		String message = getFinalArg(args, 0);
 		if (user.isAuthorized("essentials.chat.color"))
 		{
-			message = message.replaceAll("&([0-9a-fk])", "§$1");
+			message = Util.replaceColor(message);
 		}
 		else {
 			message = Util.stripColor(message);
