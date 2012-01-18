@@ -19,9 +19,11 @@ package org.anjocaido.groupmanager.permissions;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.anjocaido.groupmanager.GroupManager;
 //import org.anjocaido.groupmanager.data.User;
@@ -61,8 +63,22 @@ public class BukkitPermissions {
 	protected GroupManager plugin;
 	protected boolean dumpAllPermissions = true;
 	protected boolean dumpMatchedPermissions = true;
-	public boolean player_join = false;
+	private boolean player_join = false;
 	
+	/**
+	 * @return the player_join
+	 */
+	public boolean isPlayer_join() {
+		return player_join;
+	}
+
+	/**
+	 * @param player_join the player_join to set
+	 */
+	public void setPlayer_join(boolean player_join) {
+		this.player_join = player_join;
+	}
+
 	private static Field permissions;
 
 	// Setup reflection (Thanks to Codename_B for the reflection source)
@@ -199,21 +215,23 @@ public class BukkitPermissions {
 
 		// Add all permissions for this player (GM only)
 		// child nodes will be calculated by Bukkit.
-		List<String> playerPermArray = worldData.getPermissionsHandler().getAllPlayersPermissions(player.getName(), false);
+		Set<String> playerPermArray = worldData.getPermissionsHandler().getAllPlayersPermissions(player.getName(), false);
 		Map<String, Boolean> newPerms = new HashMap<String, Boolean>();
 		
-		for (String permission : playerPermArray) {
-			value = true;
-			if (permission.startsWith("-")) {
-				permission = permission.substring(1); // cut off -
-				value = false;
-			}
+		//Set<String> hash = new HashSet<String>();
+		//for (String permission : playerPermArray)
+		//	hash.add(permission);
+		
+		
+		for (String permission : playerPermArray) {			
+			value = (!permission.startsWith("-"));
 			/*
 			if (!attachment.getPermissions().containsKey(permission)) {
 				attachment.setPermission(permission, value);
 			}
 			*/
-			newPerms.put(permission, value);
+			System.out.print("Permission: " + permission);
+			newPerms.put((value? permission : permission.substring(1)), value);
 		}
 			
 		//player.recalculatePermissions();
@@ -238,14 +256,46 @@ public class BukkitPermissions {
 		}
 	}
 
+	
 	/**
-	 * Returns a map of the ALL child permissions as defined by the supplying plugin
+	 * Fetch all permissions which are registered with superperms.
+	 * {can include child nodes)
+	 * 
+	 * @param includeChildren
+	 * @return List of all permission nodes
+	 */
+	public List<String> getAllRegisteredPermissions(boolean includeChildren) {
+		
+		List<String> perms = new ArrayList<String>();
+		
+		for (Permission permission : registeredPermissions) {
+			String name = permission.getName();
+			if (!perms.contains(name)) {
+				perms.add(name);
+				
+				if (includeChildren) {
+					Map<String, Boolean> children = getAllChildren(name, new HashSet<String>());
+					if (children != null) {
+						for (String node : children.keySet())
+							if (!perms.contains(node))
+								perms.add(node);
+					}
+				}
+			}
+			
+		}
+		return perms;
+	}
+	
+	/**
+	 * Returns a map of ALL child permissions registered with bukkit
 	 * null is empty
 	 * 
 	 * @param node
+	 * @param playerPermArray current list of perms to check against for negations
 	 * @return Map of child permissions
 	 */
-	public Map<String, Boolean> getAllChildren(String node, List<String> playerPermArray) {
+	public Map<String, Boolean> getAllChildren(String node, Set<String> playerPermArray) {
 		
 		LinkedList<String> stack = new LinkedList<String>();
 		Map<String, Boolean> alreadyVisited = new HashMap<String, Boolean>();
@@ -273,7 +323,7 @@ public class BukkitPermissions {
 	}
 		
 	/**
-	 * Returns a map of the child permissions (1 node deep) as defined by the supplying plugin
+	 * Returns a map of the child permissions (1 node deep) as registered with Bukkit.
 	 * null is empty
 	 * 
 	 * @param node
@@ -329,14 +379,14 @@ public class BukkitPermissions {
 
 		@Override
 		public void onPlayerJoin(PlayerJoinEvent event) {
-			player_join = true;
+			setPlayer_join(true);
 			Player player = event.getPlayer();
 			// force GM to create the player if they are not already listed.
 			if (plugin.getWorldsHolder().getWorldData(player.getWorld().getName()).getUser(player.getName()) != null) {
-				player_join = false;
+				//setPlayer_join(false);
 				updatePermissions(event.getPlayer());
-			} else
-				player_join = false;
+			}
+			setPlayer_join(false);
 		}
 
 		@Override

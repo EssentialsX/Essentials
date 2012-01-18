@@ -105,3 +105,4 @@ v 1.8:
 v 1.9:
 	- Optimize populating Bukkit perms so we no longer calculate the child nodes (Bukkit already does this).
 	- Added a tidy error message for invalid permission entries in GlobalGroups.
+	- Better optimize assembling of a players permissions and allow the * node to populate all registered superperms.
