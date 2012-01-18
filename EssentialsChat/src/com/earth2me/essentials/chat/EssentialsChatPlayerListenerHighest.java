@@ -21,6 +21,7 @@ public class EssentialsChatPlayerListenerHighest extends EssentialsChatPlayer
 	@Override
 	public void onPlayerChat(final PlayerChatEvent event)
 	{
+		final ChatStore chatStore = delChatStore(event);
 		if (isAborted(event))
 		{
 			return;
@@ -29,6 +30,6 @@ public class EssentialsChatPlayerListenerHighest extends EssentialsChatPlayer
 		/**
 		 * This file should handle charging the user for the action before returning control back
 		 */
-		charge(event, getChatStore(event));
+		charge(event, chatStore);
 	}
 }
