@@ -10,7 +10,7 @@ import org.bukkit.TreeType;
 public class Commandbigtree extends EssentialsCommand
 {
 	@Override
-	public void run(final IUser user,  final String[] args) throws Exception
+	public void run(final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		TreeType tree;
 		if (args.length > 0 && args[0].equalsIgnoreCase("redwood"))

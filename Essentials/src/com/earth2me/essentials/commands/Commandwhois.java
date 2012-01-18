@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 public class Commandwhois extends EssentialsCommand
 {
 	@Override
-	public void run(final CommandSender sender,  final String[] args) throws Exception
+	public void run(final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -40,7 +40,7 @@ public class Commandwhois extends EssentialsCommand
 		{
 			@Cleanup
 			final IUser user = ess.getUser(onlinePlayer);
-			
+
 			if (user.isHidden() && !showhidden)
 			{
 				continue;

@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 public class Commandhelp extends EssentialsCommand
 {
 	@Override
-	protected void run(final IUser user, final String[] args) throws Exception
+	protected void run(final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		IText output;
 		String pageStr = args.length > 0 ? args[0] : null;
@@ -35,11 +35,11 @@ public class Commandhelp extends EssentialsCommand
 			output = new KeywordReplacer(input, user, ess);
 		}
 		final TextPager pager = new TextPager(output);
-		pager.showPage(pageStr, chapterPageStr, "help", user);
+		pager.showPage(pageStr, chapterPageStr, commandLabel, user);
 	}
 
 	@Override
-	protected void run(final CommandSender sender, final String[] args) throws Exception
+	protected void run(final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		sender.sendMessage(_("helpConsole"));
 	}

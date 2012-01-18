@@ -12,7 +12,7 @@ import org.bukkit.block.CreatureSpawner;
 public class Commandspawner extends EssentialsCommand
 {
 	@Override
-	protected void run(final IUser user, final String[] args) throws Exception
+	protected void run(final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1 || args[0].length() < 2)
 		{

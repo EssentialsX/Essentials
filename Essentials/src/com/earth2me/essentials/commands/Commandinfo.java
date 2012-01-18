@@ -10,11 +10,11 @@ import org.bukkit.command.CommandSender;
 public class Commandinfo extends EssentialsCommand
 {
 	@Override
-	protected void run(final CommandSender sender, final String[] args) throws Exception
+	protected void run(final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		final IText input = new TextInput(sender, "info", true, ess);
 		final IText output = new KeywordReplacer(input, sender, ess);
 		final TextPager pager = new TextPager(output);
-		pager.showPage(args.length > 0 ? args[0] : null, args.length > 1 ? args[1] : null, "info", sender);
+		pager.showPage(args.length > 0 ? args[0] : null, args.length > 1 ? args[1] : null, commandLabel, sender);
 	}
 }

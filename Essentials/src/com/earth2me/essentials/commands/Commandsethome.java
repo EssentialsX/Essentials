@@ -11,7 +11,7 @@ import org.bukkit.Location;
 public class Commandsethome extends EssentialsCommand
 {
 	@Override
-	public void run(final IUser user, String[] args) throws Exception
+	public void run(final IUser user, final String commandLabel, String[] args) throws Exception
 	{
 		if (args.length > 0)
 		{

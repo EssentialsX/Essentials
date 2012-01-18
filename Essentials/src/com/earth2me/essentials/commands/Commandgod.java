@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 public class Commandgod extends EssentialsCommand
 {
 	@Override
-	protected void run(final CommandSender sender, final String[] args) throws Exception
+	protected void run(final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -20,7 +20,7 @@ public class Commandgod extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(final IUser user, final String[] args) throws Exception
+	protected void run(final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length > 0 && !args[0].trim().isEmpty() && user.isAuthorized("essentials.god.others"))
 		{

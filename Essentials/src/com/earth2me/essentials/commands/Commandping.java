@@ -7,8 +7,8 @@ import com.earth2me.essentials.api.IUser;
 public class Commandping extends EssentialsCommand
 {
 	@Override
-	public void run(final IUser player, final String[] args) throws Exception
+	public void run(final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
-		player.sendMessage(_("pong"));
+		user.sendMessage(_("pong"));
 	}
 }

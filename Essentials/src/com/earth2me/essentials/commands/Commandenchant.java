@@ -16,7 +16,7 @@ public class Commandenchant extends EssentialsCommand
 {
 	//TODO: Implement charge costs: final Trade charge = new Trade("enchant-" + enchantmentName, ess);
 	@Override
-	protected void run(final IUser user, final String[] args) throws Exception
+	protected void run(final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		final ItemStack stack = user.getItemInHand();
 		if (stack == null)

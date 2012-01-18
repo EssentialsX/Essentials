@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 public class Commandbackup extends EssentialsCommand
 {
 	@Override
-	protected void run(final CommandSender sender, final String[] args) throws Exception
+	protected void run(final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		final IBackup backup = ess.getBackup();
 		backup.run();

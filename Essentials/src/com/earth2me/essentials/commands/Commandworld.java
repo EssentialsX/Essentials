@@ -12,7 +12,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 public class Commandworld extends EssentialsCommand
 {
 	@Override
-	protected void run(final IUser user, final String[] args) throws Exception
+	protected void run(final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		World world;
 

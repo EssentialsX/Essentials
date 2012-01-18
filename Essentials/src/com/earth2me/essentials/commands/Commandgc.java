@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 public class Commandgc extends EssentialsCommand
 {
 	@Override
-	protected void run(final CommandSender sender, final String[] args) throws Exception
+	protected void run(final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		sender.sendMessage(_("gcmax", (Runtime.getRuntime().maxMemory() / 1024 / 1024)));
 		sender.sendMessage(_("gctotal", (Runtime.getRuntime().totalMemory() / 1024 / 1024)));

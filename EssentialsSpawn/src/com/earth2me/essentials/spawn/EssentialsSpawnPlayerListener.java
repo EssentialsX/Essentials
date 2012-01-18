@@ -29,13 +29,16 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 	public void onPlayerRespawn(final PlayerRespawnEvent event)
 	{
 		final IUser user = ess.getUser(event.getPlayer());
-		
+
 		boolean respawnAtHome = false;
-		ISettings settings = ess.getSettings();
+		final ISettings settings = ess.getSettings();
 		settings.acquireReadLock();
-		try {
+		try
+		{
 			respawnAtHome = ess.getSettings().getData().getCommands().getHome().isRespawnAtHome();
-		} finally {
+		}
+		finally
+		{
 			settings.unlock();
 		}
 		if (respawnAtHome)
@@ -62,24 +65,15 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
 		final IUser user = ess.getUser(event.getPlayer());
-		user.acquireReadLock();
-		try
-		{
 
-			if (!user.getData().isNewplayer() || user.getBedSpawnLocation() != null)
-			{
-				return;
-			}
-			user.acquireWriteLock();
-			user.getData().setNewplayer(false);
-		}
-		finally
+		if (user.hasPlayedBefore())
 		{
-			user.unlock();
+			return;
 		}
+
 		if (spawns.getNewbieSpawn() != null)
 		{
-			ess.scheduleSyncDelayedTask(new NewPlayerTeleport(user));
+			ess.scheduleSyncDelayedTask(new NewPlayerTeleport(user), 1L);
 		}
 
 		if (spawns.getAnnounceNewPlayers())
@@ -103,7 +97,7 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 		{
 			try
 			{
-				Location spawn = spawns.getNewbieSpawn();
+				final Location spawn = spawns.getNewbieSpawn();
 				if (spawn != null)
 				{
 					user.getTeleport().now(spawn, false, TeleportCause.PLUGIN);

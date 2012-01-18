@@ -198,7 +198,6 @@ public class EssentialsPlayerListener extends PlayerListener
 	{
 		if (event.getResult() != Result.ALLOWED && event.getResult() != Result.KICK_FULL && event.getResult() != Result.KICK_BANNED)
 		{
-			LOGGER.log(Level.INFO, "Disconnecting user {0} due to {1}", new Object[]{event.getPlayer().toString(), event.getResult().toString()});
 			return;
 		}
 		@Cleanup
@@ -268,7 +267,8 @@ public class EssentialsPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerBucketEmpty(final PlayerBucketEmptyEvent event)
 	{
-		@Cleanup final IUser user = ess.getUser(event.getPlayer());
+		@Cleanup
+		final IUser user = ess.getUser(event.getPlayer());
 		user.acquireReadLock();
 		if (user.getData().hasUnlimited(event.getBucket()))
 		{
@@ -289,45 +289,56 @@ public class EssentialsPlayerListener extends PlayerListener
 	{
 		final IUser user = ess.getUser(event.getPlayer());
 		user.updateActivity(true);
-		usePowertools(event);
+		if (event.getAnimationType() == PlayerAnimationType.ARM_SWING)
+		{
+			usePowertools(user);
+		}
 	}
 
-	private void usePowertools(final PlayerAnimationEvent event)
+	private void usePowertools(final IUser user)
 	{
-		if (event.getAnimationType() != PlayerAnimationType.ARM_SWING)
-		{
-			return;
-		}
-		@Cleanup
-		final IUser user = ess.getUser(event.getPlayer());
 		user.acquireReadLock();
-		final ItemStack hand = user.getItemInHand();
-		if (hand == null || hand.getType() == Material.AIR || !user.getData().isPowerToolsEnabled())
+		try
 		{
-			return;
-		}
-		final List<String> commandList = user.getData().getPowertool(hand.getType());
-		if (commandList == null || commandList.isEmpty())
-		{
-			return;
-		}
+			if (!user.getData().hasPowerTools() || !user.getData().isPowerToolsEnabled())
+			{
+				return;
+			}
 
-		// We need to loop through each command and execute
-		for (String command : commandList)
+			final ItemStack hand = user.getItemInHand();
+			Material type;
+			if (hand == null || (type = hand.getType()) == Material.AIR)
+			{
+				return;
+			}
+			final List<String> commandList = user.getData().getPowertool(type);
+
+			if (commandList == null || commandList.isEmpty())
+			{
+				return;
+			}
+
+			// We need to loop through each command and execute
+			for (String command : commandList)
+			{
+				if (command.matches(".*\\{player\\}.*"))
+				{
+					//user.sendMessage("Click a player to use this command");
+					continue;
+				}
+				else if (command.startsWith("c:"))
+				{
+					user.chat(command.substring(2));
+				}
+				else
+				{
+					user.getServer().dispatchCommand(user.getBase(), command);
+				}
+			}
+		}
+		finally
 		{
-			if (command.matches(".*\\{player\\}.*"))
-			{
-				//user.sendMessage("Click a player to use this command");
-				continue;
-			}
-			else if (command.startsWith("c:"))
-			{
-				user.chat(command.substring(2));
-			}
-			else
-			{
-				user.getServer().dispatchCommand(event.getPlayer(), command);
-			}
+			user.unlock();
 		}
 	}
 
@@ -363,9 +374,11 @@ public class EssentialsPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerChangedWorld(final PlayerChangedWorldEvent event)
 	{
-		@Cleanup final ISettings settings = ess.getSettings();
+		@Cleanup
+		final ISettings settings = ess.getSettings();
 		settings.acquireReadLock();
-		@Cleanup final IUser user = ess.getUser(event.getPlayer());
+		@Cleanup
+		final IUser user = ess.getUser(event.getPlayer());
 		user.acquireReadLock();
 		if (!settings.getData().getWorldOptions(event.getPlayer().getLocation().getWorld().getName()).isGodmode() && !user.isAuthorized("essentials.nogod.override"))
 		{

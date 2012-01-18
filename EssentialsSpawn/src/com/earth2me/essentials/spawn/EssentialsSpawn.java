@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -38,12 +37,12 @@ public class EssentialsSpawn extends JavaPlugin
 
 		spawns = new SpawnStorage(ess);
 		ess.addReloadListener(spawns);
-		
+
 		commandHandler = new EssentialsCommandHandler(EssentialsSpawn.class.getClassLoader(), "com.earth2me.essentials.spawn.Command", "essentials.", spawns, ess);
 
 		final EssentialsSpawnPlayerListener playerListener = new EssentialsSpawnPlayerListener(ess, spawns);
 		pluginManager.registerEvent(Type.PLAYER_RESPAWN, playerListener, spawns.getRespawnPriority(), this);
-		pluginManager.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Low, this);
+		pluginManager.registerEvent(Type.PLAYER_JOIN, playerListener, spawns.getRespawnPriority(), this);
 
 		LOGGER.info(_("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
 	}

@@ -21,7 +21,7 @@ public class Commandbalancetop extends EssentialsCommand
 	private static ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
 	@Override
-	protected void run(final CommandSender sender, final String[] args) throws Exception
+	protected void run(final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		int page = 0;
 		boolean force = false;

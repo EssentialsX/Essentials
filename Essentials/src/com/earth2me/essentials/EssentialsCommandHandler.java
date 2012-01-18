@@ -125,14 +125,14 @@ public class EssentialsCommandHandler implements ICommandHandler
 			{
 				if (user == null)
 				{
-					cmd.run(sender, command, args);
+					cmd.run(sender, command, commandLabel, args);
 				}
 				else
 				{
 					user.acquireReadLock();
 					try
 					{
-						cmd.run(user, command, args);
+						cmd.run(user, command, commandLabel, args);
 					}
 					finally
 					{

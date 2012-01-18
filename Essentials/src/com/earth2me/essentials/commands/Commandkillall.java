@@ -15,7 +15,7 @@ public class Commandkillall extends EssentialsCommand
 {
 	//TODO: Tidy - missed this during command cleanup
 	@Override
-	public void run(final CommandSender sender, final String[] args) throws Exception
+	public void run(final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		String type = "all";
 		int radius = -1;

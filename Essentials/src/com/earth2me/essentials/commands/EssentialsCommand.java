@@ -85,26 +85,26 @@ public abstract class EssentialsCommand extends AbstractSuperpermsPermission imp
 	}
 
 	@Override
-	public final void run(final IUser user, final Command cmd, final String[] args) throws Exception
+	public final void run(final IUser user, final Command cmd, final String commandLabel, final String[] args) throws Exception
 	{
 		final Trade charge = new Trade(commandName, ess);
 		charge.isAffordableFor(user);
-		run(user, args);
+		run(user, commandLabel, args);
 		charge.charge(user);
 	}
 
-	protected void run(final IUser user, final String[] args) throws Exception
+	protected void run(final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
-		run((CommandSender)user.getBase(), args);
+		run((CommandSender)user.getBase(), commandLabel, args);
 	}
 
 	@Override
-	public final void run(final CommandSender sender, final Command cmd, final String[] args) throws Exception
+	public final void run(final CommandSender sender, final Command cmd, final String commandLabel, final String[] args) throws Exception
 	{
-		run(sender, args);
+		run(sender, commandLabel, args);
 	}
 
-	protected void run(final CommandSender sender, final String[] args) throws Exception
+	protected void run(final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		throw new Exception(_("onlyPlayers", commandName));
 	}

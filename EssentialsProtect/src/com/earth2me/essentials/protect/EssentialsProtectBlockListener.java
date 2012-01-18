@@ -59,7 +59,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 			final Block below = blockPlaced.getRelative(BlockFace.DOWN);
 			if ((below.getType() == Material.RAILS || below.getType() == Material.POWERED_RAIL || below.getType() == Material.DETECTOR_RAIL)
 				&& settings.getData().getSignsAndRails().isPreventBlockAboveRails()
-				&& prot.getStorage().isProtected(below, user.getName()))
+				&& isProtected(below, user, settings))
 			{
 				event.setCancelled(true);
 				return;
@@ -72,7 +72,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 			{
 				protect.add(blockPlaced);
 				if (settings.getData().getSignsAndRails().isBlockBelow()
-					&& !prot.getStorage().isProtected(blockPlaced.getRelative(BlockFace.DOWN), user.getName()))
+					&& !isProtected(blockPlaced.getRelative(BlockFace.DOWN), user, settings))
 				{
 					protect.add(blockPlaced.getRelative(BlockFace.DOWN));
 				}
@@ -85,7 +85,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 				if (settings.getData().getSignsAndRails().isBlockBelow()
 					&& event.getBlockAgainst().getType() != Material.SIGN_POST
 					&& event.getBlockAgainst().getType() != Material.WALL_SIGN
-					&& !prot.getStorage().isProtected(event.getBlockAgainst(), user.getName()))
+					&& !isProtected(event.getBlockAgainst(), user, settings))
 				{
 					protect.add(event.getBlockAgainst());
 				}
@@ -321,7 +321,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 			else
 			{
 
-				final boolean isProtected = storage.isProtected(block, user.getName());
+				final boolean isProtected = isProtected(block, user, settings);
 				if (isProtected)
 				{
 					event.setCancelled(true);
@@ -482,5 +482,58 @@ public class EssentialsProtectBlockListener extends BlockListener
 		{
 			settings.unlock();
 		}
+	}
+
+	private boolean isProtected(final Block block, final IUser user, final ProtectHolder settings)
+	{
+		final Material type = block.getType();
+		if (settings.getData().getSignsAndRails().isProtectSigns())
+		{
+			if (type == Material.WALL_SIGN || type == Material.SIGN_POST)
+			{
+				return prot.getStorage().isProtected(block, user.getName());
+			}
+
+				final Block up = block.getRelative(BlockFace.UP);
+				if (up != null && up.getType() == Material.SIGN_POST)
+				{
+					return prot.getStorage().isProtected(block, user.getName());
+				}
+				final BlockFace[] directions = new BlockFace[]
+				{
+					BlockFace.NORTH,
+					BlockFace.EAST,
+					BlockFace.SOUTH,
+					BlockFace.WEST
+				};
+				for (BlockFace blockFace : directions)
+				{
+					final Block signblock = block.getRelative(blockFace);
+					if (signblock.getType() == Material.WALL_SIGN)
+					{
+						final org.bukkit.material.Sign signMat = (org.bukkit.material.Sign)signblock.getState().getData();
+						if (signMat != null && signMat.getFacing() == blockFace)
+						{
+							return prot.getStorage().isProtected(block, user.getName());
+						}
+					}
+				}
+			
+		}
+		if (settings.getData().getSignsAndRails().isProtectRails()) {
+			if (type == Material.RAILS || type == Material.POWERED_RAIL || type == Material.DETECTOR_RAIL)
+			{
+				return prot.getStorage().isProtected(block, user.getName());
+			}
+			if (settings.getData().getSignsAndRails().isBlockBelow())
+			{
+				final Block up = block.getRelative(BlockFace.UP);
+				if (up != null && (type == Material.RAILS || type == Material.POWERED_RAIL || type == Material.DETECTOR_RAIL))
+				{
+					return prot.getStorage().isProtected(block, user.getName());
+				}
+			}
+		}
+		return false;
 	}
 }

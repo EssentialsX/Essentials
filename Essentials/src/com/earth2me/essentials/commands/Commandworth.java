@@ -12,7 +12,7 @@ public class Commandworth extends EssentialsCommand
 {
 	//TODO: Remove duplication
 	@Override
-	public void run(final IUser user, final String[] args) throws Exception
+	public void run(final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		ItemStack iStack = user.getInventory().getItemInHand();
 		int amount = iStack.getAmount();
@@ -56,7 +56,7 @@ public class Commandworth extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(final CommandSender sender, final String[] args) throws Exception
+	protected void run(final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{

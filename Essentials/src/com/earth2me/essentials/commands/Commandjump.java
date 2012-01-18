@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 public class Commandjump extends EssentialsCommand
 {
 	@Override
-	public void run(final IUser user, final String[] args) throws Exception
+	public void run(final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		Location loc;
 		final Location cloc = user.getLocation();

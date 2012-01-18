@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 public class Commandxmpp extends EssentialsCommand
 {
 	@Override
-	protected void run(final CommandSender sender, final String[] args) throws NotEnoughArgumentsException
+	protected void run(final CommandSender sender, final String commandLabel, final String[] args) throws NotEnoughArgumentsException
 	{
 		if (args.length < 2)
 		{

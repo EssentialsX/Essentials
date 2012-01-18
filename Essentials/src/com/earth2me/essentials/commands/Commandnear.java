@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 public class Commandnear extends EssentialsCommand
 {
 	@Override
-	protected void run(final IUser user, final String[] args) throws Exception
+	protected void run(final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		long radius = 200;
 		IUser otherUser = null;
@@ -54,7 +54,7 @@ public class Commandnear extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(final CommandSender sender, final String[] args) throws Exception
+	protected void run(final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 
 		IUser otherUser = null;

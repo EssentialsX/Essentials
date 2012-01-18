@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 public class Commandtime extends EssentialsCommand
 {
 	@Override
-	public void run(final CommandSender sender, final String[] args) throws Exception
+	public void run(final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		// Which World(s) are we interested in?
 		String worldSelector = null;

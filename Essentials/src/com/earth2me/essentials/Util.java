@@ -620,7 +620,7 @@ public final class Util
 		perm.recalculatePermissibles();
 		return perm;
 	}
-	private static transient final Pattern COLOR_PATTERN = Pattern.compile("(?i)\u00A7[0-9A-F]");
+	private static transient final Pattern COLOR_PATTERN = Pattern.compile("\u00A7+[0-9A-FKa-fk]");
 
 	public static String stripColor(final String input)
 	{

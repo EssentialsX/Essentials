@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 public class Commandpowertool extends EssentialsCommand
 {
 	@Override
-	protected void run(final IUser user, final String[] args) throws Exception
+	protected void run(final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		String command = getFinalArg(args, 0);
 

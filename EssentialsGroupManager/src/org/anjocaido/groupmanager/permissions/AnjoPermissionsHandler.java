@@ -90,13 +90,24 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 
 	/**
 	 * Returns All permissions (including inheritance and sub groups) for the
-	 * player.
+	 * player, including child nodes from Bukkit.
 	 * 
 	 * @param userName
 	 * @return List<String> of all players permissions.
 	 */
 	@Override
 	public List<String> getAllPlayersPermissions(String userName) {
+		return getAllPlayersPermissions(userName, true);
+	}
+	/**
+	 * Returns All permissions (including inheritance and sub groups) for the
+	 * player. With or without Bukkit child nodes.
+	 * 
+	 * @param userName
+	 * @return List<String> of all players permissions.
+	 */
+	@Override
+	public List<String> getAllPlayersPermissions(String userName, Boolean includeChildren) {
 
 		List<String> playerPermArray = new ArrayList<String>();
 
@@ -104,14 +115,16 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 			if ((!playerPermArray.contains(perm)) && (!playerPermArray.contains("-" + perm))) {
 				playerPermArray.add(perm);
 
-				Map<String, Boolean> children = GroupManager.BukkitPermissions.getAllChildren(perm, playerPermArray);
-
-				if (children != null) {
-					for (String child : children.keySet()) {
-						if (children.get(child))
-							if ((!playerPermArray.contains(child)) && (!playerPermArray.contains("-" + child))) {
-								playerPermArray.add(child);
-							}
+				if (includeChildren) {
+					Map<String, Boolean> children = GroupManager.BukkitPermissions.getAllChildren(perm, playerPermArray);
+	
+					if (children != null) {
+						for (String child : children.keySet()) {
+							if (children.get(child))
+								if ((!playerPermArray.contains(child)) && (!playerPermArray.contains("-" + child))) {
+									playerPermArray.add(child);
+								}
+						}
 					}
 				}
 			}
@@ -122,12 +135,14 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 					if ((!playerPermArray.contains(perm)) && (!playerPermArray.contains("-" + perm))) {
 						playerPermArray.add(perm);
 
-						Map<String, Boolean> children = GroupManager.BukkitPermissions.getAllChildren(perm, playerPermArray);
-						if (children != null) {
-							for (String child : children.keySet()) {
-								if (children.get(child))
-									if ((!playerPermArray.contains(child)) && (!playerPermArray.contains("-" + child)))
-										playerPermArray.add(child);
+						if (includeChildren) {
+							Map<String, Boolean> children = GroupManager.BukkitPermissions.getAllChildren(perm, playerPermArray);
+							if (children != null) {
+								for (String child : children.keySet()) {
+									if (children.get(child))
+										if ((!playerPermArray.contains(child)) && (!playerPermArray.contains("-" + child)))
+											playerPermArray.add(child);
+								}
 							}
 						}
 					}
@@ -137,13 +152,15 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 					if ((!playerPermArray.contains(perm)) && (!playerPermArray.contains("-" + perm))) {
 						playerPermArray.add(perm);
 
-						Map<String, Boolean> children = GroupManager.BukkitPermissions.getAllChildren(perm, playerPermArray);
-						if (children != null) {
-							for (String child : children.keySet()) {
-								if (children.get(child))
-									if ((!playerPermArray.contains(child)) && (!playerPermArray.contains("-" + child))) {
-										playerPermArray.add(child);
-									}
+						if (includeChildren) {
+							Map<String, Boolean> children = GroupManager.BukkitPermissions.getAllChildren(perm, playerPermArray);
+							if (children != null) {
+								for (String child : children.keySet()) {
+									if (children.get(child))
+										if ((!playerPermArray.contains(child)) && (!playerPermArray.contains("-" + child))) {
+											playerPermArray.add(child);
+										}
+								}
 							}
 						}
 					}
@@ -711,12 +728,14 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 
 		PermissionCheckResult resultUser = checkUserOnlyPermission(user, targetPermission);
 		if (resultUser.resultType != PermissionCheckResult.Type.NOTFOUND) {
+			resultUser.accessLevel = targetPermission;
 			return resultUser;
 		}
 
 		// IT ONLY CHECKS GROUPS PERMISSIONS IF RESULT FOR USER IS NOT FOUND
 		PermissionCheckResult resultGroup = checkGroupPermissionWithInheritance(user.getGroup(), targetPermission);
 		if (resultGroup.resultType != PermissionCheckResult.Type.NOTFOUND) {
+			resultGroup.accessLevel = targetPermission;
 			return resultGroup;
 		}
 
@@ -724,6 +743,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 		for (Group subGroup : user.subGroupListCopy()) {
 			PermissionCheckResult resultSubGroup = checkGroupPermissionWithInheritance(subGroup, targetPermission);
 			if (resultSubGroup.resultType != PermissionCheckResult.Type.NOTFOUND) {
+				resultSubGroup.accessLevel = targetPermission;
 				return resultSubGroup;
 			}
 		}

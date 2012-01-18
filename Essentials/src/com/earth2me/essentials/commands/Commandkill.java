@@ -9,7 +9,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 public class Commandkill extends EssentialsCommand
 {
 	@Override
-	public void run(final CommandSender sender, final String[] args) throws Exception
+	public void run(final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{

@@ -2,12 +2,13 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.Util;
 
 
 public class Commandme extends EssentialsCommand
 {
 	@Override
-	public void run(final IUser user, final String[] args) throws Exception
+	public void run(final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (user.getData().isMuted())
 		{
@@ -22,8 +23,12 @@ public class Commandme extends EssentialsCommand
 		String message = getFinalArg(args, 0);
 		if (user.isAuthorized("essentials.chat.color"))
 		{
-			message = message.replaceAll("&([0-9a-f])", "§$1");
+			message = message.replaceAll("&([0-9a-fk])", "§$1");
 		}
+		else {
+			message = Util.stripColor(message);
+		}
+		
 
 		ess.broadcastMessage(user, _("action", user.getDisplayName(), message));
 	}

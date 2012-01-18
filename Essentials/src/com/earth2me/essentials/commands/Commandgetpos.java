@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 public class Commandgetpos extends EssentialsCommand
 {
 	@Override
-	public void run(final IUser user, final String[] args) throws Exception
+	public void run(final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length > 0 && user.isAuthorized("essentials.getpos.others"))
 		{
@@ -22,7 +22,7 @@ public class Commandgetpos extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(final CommandSender sender, final String[] args) throws Exception
+	protected void run(final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{

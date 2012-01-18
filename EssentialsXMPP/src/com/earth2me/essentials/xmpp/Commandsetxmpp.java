@@ -8,7 +8,7 @@ import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 public class Commandsetxmpp extends EssentialsCommand
 {
 	@Override
-	protected void run(final IUser user, final String[] args) throws NotEnoughArgumentsException
+	protected void run(final IUser user, final String commandLabel, final String[] args) throws NotEnoughArgumentsException
 	{
 		if (args.length < 1)
 		{

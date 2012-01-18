@@ -7,7 +7,7 @@ import com.earth2me.essentials.api.IUser;
 public class Commandtpdeny extends EssentialsCommand
 {
 	@Override
-	public void run(final IUser user, final String[] args) throws Exception
+	public void run(final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		final IUser player = user.getTeleportRequester();
 		if (player == null)

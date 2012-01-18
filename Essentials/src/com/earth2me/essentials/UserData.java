@@ -53,7 +53,6 @@ public abstract class UserData extends PlayerExtension implements IConf
 		lastLogout = _getLastLogout();
 		lastLoginAddress = _getLastLoginAddress();
 		afk = getAfk();
-		newplayer = getNew();
 		geolocation = _getGeoLocation();
 		isSocialSpyEnabled = _isSocialSpyEnabled();
 		isNPC = _isNPC();
@@ -264,6 +263,11 @@ public abstract class UserData extends PlayerExtension implements IConf
 	public List<String> getPowertool(ItemStack stack)
 	{
 		return (List<String>)powertools.get(stack.getTypeId());
+	}
+	
+	public List<String> getPowertool(int id)
+	{
+		return (List<String>)powertools.get(id);
 	}
 
 	public void setPowertool(ItemStack stack, List<String> commandList)
@@ -736,22 +740,6 @@ public abstract class UserData extends PlayerExtension implements IConf
 	}
 	private boolean newplayer;
 
-	private boolean getNew()
-	{
-		return config.getBoolean("newplayer", true);
-	}
-
-	public boolean isNew()
-	{
-		return newplayer;
-	}
-
-	public void setNew(boolean set)
-	{
-		newplayer = set;
-		config.setProperty("newplayer", set);
-		config.save();
-	}
 	private String geolocation;
 
 	private String _getGeoLocation()

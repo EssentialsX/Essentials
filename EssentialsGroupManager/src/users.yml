@@ -3,7 +3,7 @@ users:
   snowleo:
     subgroups: []
     permissions: []
-    group: Admin
+    group: Builder
   KHobbits:
     subgroups: []
     permissions: []
@@ -11,5 +11,5 @@ users:
   ElgarL:
     subgroups: []
     permissions: []
-    group: Owner
+    group: Moderator
 

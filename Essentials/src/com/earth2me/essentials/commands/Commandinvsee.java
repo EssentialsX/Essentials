@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 public class Commandinvsee extends EssentialsCommand
 {
 	@Override
-	protected void run(final IUser user, final String[] args) throws Exception
+	protected void run(final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 
 		if (args.length < 1 && user.getData().getInventory() == null)

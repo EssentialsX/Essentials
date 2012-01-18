@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 public class Commandtphere extends EssentialsCommand
 {
 	@Override
-	public void run(final IUser user, final String[] args) throws Exception
+	public void run(final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		@Cleanup
 		final IUser player = getPlayer(args, 0);

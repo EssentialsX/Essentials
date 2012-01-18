@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 public class Commandrules extends EssentialsCommand
 {
 	@Override
-	public void run(final CommandSender sender, final String[] args) throws Exception
+	public void run(final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		final IText input = new TextInput(sender, "rules", true, ess);
 		final IText output = new KeywordReplacer(input, sender, ess);

@@ -10,7 +10,7 @@ public class Commandbreak extends EssentialsCommand
 {
 	//TODO: Switch to use util class
 	@Override
-	public void run(final IUser user, final String[] args) throws Exception
+	public void run(final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		final Block block = user.getTargetBlock(null, 20);
 		if (block == null)

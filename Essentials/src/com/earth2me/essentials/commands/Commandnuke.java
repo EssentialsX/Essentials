@@ -13,7 +13,7 @@ import org.bukkit.entity.TNTPrimed;
 public class Commandnuke extends EssentialsCommand
 {
 	@Override
-	protected void run(final CommandSender sender, final String[] args) throws NoSuchFieldException, NotEnoughArgumentsException
+	protected void run(final CommandSender sender, final String commandLabel, final String[] args) throws NoSuchFieldException, NotEnoughArgumentsException
 	{
 		List<Player> targets;
 		if (args.length > 0)

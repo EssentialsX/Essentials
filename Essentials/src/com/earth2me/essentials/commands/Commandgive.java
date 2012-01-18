@@ -14,7 +14,7 @@ public class Commandgive extends EssentialsCommand
 {
 	//TODO: move these messages to message file
 	@Override
-	public void run(final CommandSender sender, final String[] args) throws Exception
+	public void run(final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 2)
 		{

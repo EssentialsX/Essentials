@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 public class Commandsetworth extends EssentialsCommand
 {
 	@Override
-	public void run(final IUser user, final String[] args) throws Exception
+	public void run(final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 2)
 		{

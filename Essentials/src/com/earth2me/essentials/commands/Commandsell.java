@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 public class Commandsell extends EssentialsCommand
 {
 	@Override
-	public void run(final IUser user, final String[] args) throws Exception
+	public void run(final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{

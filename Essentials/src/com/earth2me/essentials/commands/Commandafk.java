@@ -10,7 +10,7 @@ import org.bukkit.permissions.PermissionDefault;
 public class Commandafk extends EssentialsCommand
 {
 	@Override
-	public void run(IUser user, String[] args) throws Exception
+	public void run(final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length > 0 && user.isAuthorized(Permissions.AFK_OTHERS))
 		{

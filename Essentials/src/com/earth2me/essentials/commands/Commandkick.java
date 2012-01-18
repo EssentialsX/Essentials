@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 public class Commandkick extends EssentialsCommand
 {
 	@Override
-	public void run(final CommandSender sender, final String[] args) throws Exception
+	public void run(final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{

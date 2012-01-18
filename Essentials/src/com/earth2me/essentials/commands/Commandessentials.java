@@ -16,7 +16,7 @@ public class Commandessentials extends EssentialsCommand
 	private final transient Map<Player, Block> noteBlocks = new HashMap<Player, Block>();
 
 	@Override
-	public void run(final CommandSender sender, final String[] args) throws Exception
+	public void run(final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length == 0)
 		{

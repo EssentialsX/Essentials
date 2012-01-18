@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 public class Commandtop extends EssentialsCommand
 {
 	@Override
-	public void run(final IUser user, final String[] args) throws Exception
+	public void run(final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		final int topX = user.getLocation().getBlockX();
 		final int topZ = user.getLocation().getBlockZ();
