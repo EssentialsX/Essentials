@@ -303,11 +303,13 @@ public class Settings implements ISettings
 			String format = config.getString("chat.group-formats." + (group == null ? "Default" : group),
 											 config.getString("chat.format", "&7[{GROUP}]&f {DISPLAYNAME}&7:&f {MESSAGE}"));
 			format = Util.replaceColor(format);
-			format.replace("{DISPLAYNAME}", "%1$s");
-			format.replace("{GROUP}", "{0}");
-			format.replace("{MESSAGE}", "%2$s");
-			format.replace("{WORLDNAME}", "{1}");
-			format.replace("{SHORTWORLDNAME}", "{2}");
+			format = format.replace("{DISPLAYNAME}", "%1$s");
+			format = format.replace("{GROUP}", "{0}");
+			format = format.replace("{MESSAGE}", "%2$s");
+			format = format.replace("{WORLDNAME}", "{1}");
+			format = format.replace("{SHORTWORLDNAME}", "{2}");
+			format = format.replaceAll("\\{(\\D*)\\}", "\\[$1\\]");
+			logger.log(Level.INFO, "debug-format: " + format);
 			mFormat = new MessageFormat(format);
 			chatFormats.put(group, mFormat);
 		}
