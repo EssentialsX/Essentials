@@ -230,7 +230,6 @@ public class BukkitPermissions {
 				attachment.setPermission(permission, value);
 			}
 			*/
-			System.out.print("Permission: " + permission);
 			newPerms.put((value? permission : permission.substring(1)), value);
 		}
 			

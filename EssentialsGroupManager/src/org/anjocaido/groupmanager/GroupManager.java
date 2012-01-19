@@ -493,7 +493,7 @@ public class GroupManager extends JavaPlugin {
 				}
 				// PARECE OK
 				auxUser.addSubGroup(auxGroup);
-				sender.sendMessage(ChatColor.YELLOW + "You changed player '" + auxUser.getName() + "' group to '" + auxGroup.getName() + "'.");
+				sender.sendMessage(ChatColor.YELLOW + "You added subgroup '" + auxGroup.getName() + "' to player '" + auxUser.getName() + "'.");
 
 				targetPlayer = this.getServer().getPlayer(auxUser.getName());
 				if (targetPlayer != null)
