@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import java.io.File;
+import java.text.MessageFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -291,12 +292,26 @@ public class Settings implements ISettings
 	{
 		return config.getString("backup.command", null);
 	}
+	private Map<String, MessageFormat> chatFormats = new HashMap<String, MessageFormat>();
 
 	@Override
-	public String getChatFormat(String group)
+	public MessageFormat getChatFormat(String group)
 	{
-		return config.getString("chat.group-formats." + (group == null ? "Default" : group),
-								config.getString("chat.format", "&7[{GROUP}]&f {DISPLAYNAME}&7:&f {MESSAGE}"));
+		MessageFormat mFormat = chatFormats.get(group);
+		if (mFormat == null)
+		{
+			String format = config.getString("chat.group-formats." + (group == null ? "Default" : group),
+											 config.getString("chat.format", "&7[{GROUP}]&f {DISPLAYNAME}&7:&f {MESSAGE}"));
+			format = Util.replaceColor(format);
+			format.replace("{DISPLAYNAME}", "%1$s");
+			format.replace("{GROUP}", "{0}");
+			format.replace("{MESSAGE}", "%2$s");
+			format.replace("{WORLDNAME}", "{1}");
+			format.replace("{SHORTWORLDNAME}", "{2}");
+			mFormat = new MessageFormat(format);
+			chatFormats.put(group, mFormat);
+		}
+		return mFormat;
 	}
 
 	@Override
@@ -340,6 +355,7 @@ public class Settings implements ISettings
 	{
 		config.load();
 		noGodWorlds = new HashSet<String>(config.getStringList("no-god-in-worlds", Collections.<String>emptyList()));
+		chatFormats.clear();
 	}
 
 	@Override
@@ -606,10 +622,10 @@ public class Settings implements ISettings
 		}
 		return Priority.Normal;
 	}
-	
+
 	@Override
 	public long getTpaAcceptCancellation()
 	{
-		return config.getLong("tpa-accept-cancellation", 0);		
+		return config.getLong("tpa-accept-cancellation", 0);
 	}
 }
