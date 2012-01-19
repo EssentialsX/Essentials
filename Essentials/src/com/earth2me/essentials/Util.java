@@ -490,7 +490,7 @@ public class Util
 
 		return VANILLA_COLOR_PATTERN.matcher(input).replaceAll("");
 	}
-		
+
 	public static String replaceColor(final String input)
 	{
 		if (input == null)
