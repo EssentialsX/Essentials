@@ -232,7 +232,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 		getScheduler().scheduleSyncRepeatingTask(this, timer, 1, 100);
 		Economy.setEss(this);
 		execTimer.mark("RegListeners");
-		LOGGER.info(_("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), Util.joinList(this.getDescription().getAuthors())));
 		final String timeroutput = execTimer.end();
 		if (getSettings().isDebug())
 		{

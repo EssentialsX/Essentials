@@ -24,7 +24,7 @@ public class EssentialsProtectPlayerListener implements Listener
 		this.ess = prot.getEssentialsConnect().getEssentials();
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerInteract(final PlayerInteractEvent event)
 	{
 		// Do not return if cancelled, because the interact event has 2 cancelled states.

@@ -10,8 +10,6 @@ import java.util.logging.Logger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -54,8 +52,6 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 
 		ess.addReloadListener(users);
 		ess.addReloadListener(xmpp);
-
-		LOGGER.info(_("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
 	}
 
 	@Override

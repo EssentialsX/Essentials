@@ -2,15 +2,12 @@ package com.earth2me.essentials.spawn;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.IEssentialsModule;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Event;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
 import org.bukkit.event.EventException;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -60,8 +57,6 @@ public class EssentialsSpawn extends JavaPlugin
 				((EssentialsSpawnPlayerListener)ll).onPlayerJoin((PlayerJoinEvent)event);
 			}
 		}, this);
-
-		LOGGER.info(_("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
 	}
 
 	public void onDisable()

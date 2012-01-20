@@ -45,7 +45,6 @@ public class EssentialsChat extends JavaPlugin
 		pluginManager.registerEvents(playerListenerNormal, this);
 		pluginManager.registerEvents(playerListenerHighest, this);
 
-		LOGGER.info(_("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
 	}
 
 	@Override
