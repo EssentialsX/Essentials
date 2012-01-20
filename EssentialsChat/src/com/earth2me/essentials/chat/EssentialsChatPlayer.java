@@ -117,7 +117,7 @@ public abstract class EssentialsChatPlayer implements Listener
 
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
-			String type = "[L]";
+			String type = _("chatTypeLocal");
 			final User onlineUser = ess.getUser(onlinePlayer);
 			//TODO: remove reference to op 
 			if (onlineUser.isIgnoredPlayer(sender.getName()) && !sender.isOp())
@@ -137,7 +137,7 @@ public abstract class EssentialsChatPlayer implements Listener
 				{
 					if (onlineUser.isAuthorized("essentials.chat.spy"))
 					{
-						type = type.concat("[Spy]");
+						type = type.concat(_("chatTypeSpy"));
 					}
 					else
 					{
