@@ -8,7 +8,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.ChatColor;
-import org.bukkit.event.Event.Priority;
+import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -599,30 +599,30 @@ public class Settings implements ISettings
 	}
 
 	@Override
-	public Priority getRespawnPriority()
+	public EventPriority getRespawnPriority()
 	{
 		String priority = config.getString("respawn-listener-priority", "normal").toLowerCase(Locale.ENGLISH);
 		if ("lowest".equals(priority))
 		{
-			return Priority.Lowest;
+			return EventPriority.LOWEST;
 		}
 		if ("low".equals(priority))
 		{
-			return Priority.Low;
+			return EventPriority.LOW;
 		}
 		if ("normal".equals(priority))
 		{
-			return Priority.Normal;
+			return EventPriority.NORMAL;
 		}
 		if ("high".equals(priority))
 		{
-			return Priority.High;
+			return EventPriority.HIGH;
 		}
 		if ("highest".equals(priority))
 		{
-			return Priority.Highest;
+			return EventPriority.HIGHEST;
 		}
-		return Priority.Normal;
+		return EventPriority.NORMAL;
 	}
 
 	@Override

@@ -8,8 +8,14 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
+import org.bukkit.event.EventException;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -38,8 +44,22 @@ public class EssentialsSpawn extends JavaPlugin
 		ess.addReloadListener(spawns);
 
 		final EssentialsSpawnPlayerListener playerListener = new EssentialsSpawnPlayerListener(ess, spawns);
-		pluginManager.registerEvent(Type.PLAYER_RESPAWN, playerListener, ess.getSettings().getRespawnPriority(), this);
-		pluginManager.registerEvent(Type.PLAYER_JOIN, playerListener, ess.getSettings().getRespawnPriority(), this);
+		pluginManager.registerEvent(PlayerRespawnEvent.class, playerListener, ess.getSettings().getRespawnPriority(), new EventExecutor()
+		{
+			@Override
+			public void execute(final Listener ll, final Event event) throws EventException
+			{
+				((EssentialsSpawnPlayerListener)ll).onPlayerRespawn((PlayerRespawnEvent)event);
+			}
+		}, this);
+		pluginManager.registerEvent(PlayerJoinEvent.class, playerListener, ess.getSettings().getRespawnPriority(), new EventExecutor()
+		{
+			@Override
+			public void execute(final Listener ll, final Event event) throws EventException
+			{
+				((EssentialsSpawnPlayerListener)ll).onPlayerJoin((PlayerJoinEvent)event);
+			}
+		}, this);
 
 		LOGGER.info(_("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
 	}
