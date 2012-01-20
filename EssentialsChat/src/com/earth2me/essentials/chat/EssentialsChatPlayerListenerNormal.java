@@ -45,7 +45,7 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer
 		final User user = chatStore.getUser();
 		chatStore.setRadius(radius);
 		
-		if (event.getMessage().length() > 0 && chatStore.getType().length() > 0)
+		if (event.getMessage().length() > 1 && chatStore.getType().length() > 0)
 		{
 			final StringBuilder permission = new StringBuilder();
 			permission.append("essentials.chat.").append(chatStore.getType());
