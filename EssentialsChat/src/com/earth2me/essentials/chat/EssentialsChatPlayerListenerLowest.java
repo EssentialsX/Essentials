@@ -6,6 +6,8 @@ import com.earth2me.essentials.Util;
 import java.util.Locale;
 import java.util.Map;
 import org.bukkit.Server;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerChatEvent;
 
 
@@ -19,6 +21,7 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer
 		super(server, ess, listeners, chatStorage);
 	}
 
+	@EventHandler(priority = EventPriority.LOWEST)
 	@Override
 	public void onPlayerChat(final PlayerChatEvent event)
 	{

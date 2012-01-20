@@ -2,11 +2,13 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.craftbukkit.FakeExplosion;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.EntityListener;
 
 
-public class TNTExplodeListener extends EntityListener implements Runnable
+public class TNTExplodeListener implements Listener, Runnable
 {
 	private final transient IEssentials ess;
 	private transient boolean enabled = false;
@@ -33,7 +35,7 @@ public class TNTExplodeListener extends EntityListener implements Runnable
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.LOW)
 	public void onEntityExplode(final EntityExplodeEvent event)
 	{
 		if (!enabled)

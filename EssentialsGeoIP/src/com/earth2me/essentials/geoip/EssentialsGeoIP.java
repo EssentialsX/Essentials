@@ -37,7 +37,7 @@ public class EssentialsGeoIP extends JavaPlugin
 			return;
 		}
 		final EssentialsGeoIPPlayerListener playerListener = new EssentialsGeoIPPlayerListener(getDataFolder(), ess);
-		pm.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
+		pm.registerEvents(playerListener, this);
 
 		logger.info(_("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
 

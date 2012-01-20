@@ -78,16 +78,8 @@ public class EssentialsProtect extends JavaPlugin implements IProtect
 
 	private void enableEmergencyMode(final PluginManager pm)
 	{
-		final EmergencyBlockListener emBlockListener = new EmergencyBlockListener();
-		final EmergencyEntityListener emEntityListener = new EmergencyEntityListener();
-		final EmergencyPlayerListener emPlayerListener = new EmergencyPlayerListener();
-		pm.registerEvent(Type.PLAYER_JOIN, emPlayerListener, Priority.Low, this);
-		pm.registerEvent(Type.BLOCK_BURN, emBlockListener, Priority.Low, this);
-		pm.registerEvent(Type.BLOCK_IGNITE, emBlockListener, Priority.Low, this);
-		pm.registerEvent(Type.BLOCK_FROMTO, emBlockListener, Priority.Low, this);
-		pm.registerEvent(Type.BLOCK_BREAK, emBlockListener, Priority.Low, this);
-		pm.registerEvent(Type.ENTITY_DAMAGE, emEntityListener, Priority.Low, this);
-		pm.registerEvent(Type.ENTITY_EXPLODE, emEntityListener, Priority.Low, this);
+		final EmergencyListener emListener = new EmergencyListener();
+		pm.registerEvents(emListener, this);
 		for (Player player : getServer().getOnlinePlayers())
 		{
 			player.sendMessage("Essentials Protect is in emergency mode. Check your log for errors.");

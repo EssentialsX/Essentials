@@ -2,19 +2,20 @@ package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
 import java.util.List;
-import java.util.logging.Logger;
 import org.bukkit.Material;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.*;
 import org.bukkit.inventory.ItemStack;
 
 
-public class EssentialsEntityListener extends EntityListener
+public class EssentialsEntityListener implements Listener
 {
-	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private final IEssentials ess;
 
 	public EssentialsEntityListener(IEssentials ess)
@@ -22,7 +23,7 @@ public class EssentialsEntityListener extends EntityListener
 		this.ess = ess;
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onEntityDamage(EntityDamageEvent event)
 	{
 		if (event instanceof EntityDamageByEntityEvent)
@@ -55,7 +56,8 @@ public class EssentialsEntityListener extends EntityListener
 			{
 				User player = ess.getUser(eAttack);
 				ItemStack hand = player.getItemInHand();
-				if (hand != null && hand.getType() == Material.MILK_BUCKET) {
+				if (hand != null && hand.getType() == Material.MILK_BUCKET)
+				{
 					((Animals)eDefend).setAge(-24000);
 					hand.setType(Material.BUCKET);
 					player.setItemInHand(hand);
@@ -73,7 +75,7 @@ public class EssentialsEntityListener extends EntityListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onEntityCombust(EntityCombustEvent event)
 	{
 		if (event.getEntity() instanceof Player && ess.getUser(event.getEntity()).isGodModeEnabled())
@@ -82,7 +84,7 @@ public class EssentialsEntityListener extends EntityListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onEntityDeath(final EntityDeathEvent event)
 	{
 		if (event instanceof PlayerDeathEvent)
@@ -101,7 +103,7 @@ public class EssentialsEntityListener extends EntityListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onFoodLevelChange(FoodLevelChangeEvent event)
 	{
 		if (event.getEntity() instanceof Player && ess.getUser(event.getEntity()).isGodModeEnabled())
@@ -110,7 +112,7 @@ public class EssentialsEntityListener extends EntityListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onEntityRegainHealth(EntityRegainHealthEvent event)
 	{
 		if (event.getRegainReason() == RegainReason.SATIATED && event.getEntity() instanceof Player

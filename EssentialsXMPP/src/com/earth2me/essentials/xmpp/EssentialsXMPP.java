@@ -47,9 +47,7 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 		}
 
 		final EssentialsXMPPPlayerListener playerListener = new EssentialsXMPPPlayerListener(ess);
-		pluginManager.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
-		pluginManager.registerEvent(Type.PLAYER_CHAT, playerListener, Priority.Monitor, this);
-		pluginManager.registerEvent(Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
+		pluginManager.registerEvents(playerListener, this);
 
 		users = new UserManager(this.getDataFolder());
 		xmpp = new XMPPManager(this);

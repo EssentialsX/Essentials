@@ -149,9 +149,9 @@ public interface ISettings extends IConf
 	
 	boolean registerBackInListener();
 
-	public boolean getDisableItemPickupWhileAfk();
+	boolean getDisableItemPickupWhileAfk();
 
-	public Priority getRespawnPriority();
+	Priority getRespawnPriority();
 	
 	long getTpaAcceptCancellation();
 }

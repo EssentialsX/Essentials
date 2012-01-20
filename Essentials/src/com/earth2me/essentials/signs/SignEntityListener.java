@@ -3,12 +3,14 @@ package com.earth2me.essentials.signs;
 import com.earth2me.essentials.IEssentials;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EndermanPickupEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.EntityListener;
 
 
-public class SignEntityListener extends EntityListener
+public class SignEntityListener implements Listener
 {
 	private final transient IEssentials ess;
 
@@ -17,7 +19,7 @@ public class SignEntityListener extends EntityListener
 		this.ess = ess;
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.LOW)
 	public void onEntityExplode(final EntityExplodeEvent event)
 	{
 		for (Block block : event.blockList())
@@ -42,8 +44,8 @@ public class SignEntityListener extends EntityListener
 		}
 	}
 
-	@Override
-	public void onEndermanPickup(EndermanPickupEvent event)
+	@EventHandler(priority = EventPriority.LOW)
+	public void onEndermanPickup(final EndermanPickupEvent event)
 	{
 		if (event.isCancelled() || ess.getSettings().areSignsDisabled())
 		{

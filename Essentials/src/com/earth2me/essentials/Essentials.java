@@ -24,7 +24,6 @@ import com.earth2me.essentials.commands.EssentialsCommand;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
-import com.earth2me.essentials.craftbukkit.ItemDupeFix;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
 import com.earth2me.essentials.signs.SignBlockListener;
@@ -45,11 +44,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerListener;
-import org.bukkit.event.world.WorldListener;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.plugin.InvalidDescriptionException;
@@ -63,7 +61,7 @@ import org.yaml.snakeyaml.error.YAMLException;
 
 public class Essentials extends JavaPlugin implements IEssentials
 {
-	public static final int BUKKIT_VERSION = 1713;
+	public static final int BUKKIT_VERSION = 1791;
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private transient ISettings settings;
 	private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
@@ -181,14 +179,14 @@ public class Essentials extends JavaPlugin implements IEssentials
 				LOGGER.log(Level.SEVERE, _("essentialsHelp1"));
 			}
 			LOGGER.log(Level.SEVERE, exception.toString());
-			pm.registerEvent(Type.PLAYER_JOIN, new PlayerListener()
+			pm.registerEvents(new Listener()
 			{
-				@Override
-				public void onPlayerJoin(PlayerJoinEvent event)
+				@EventHandler(priority = EventPriority.LOW)
+				public void onPlayerJoin(final PlayerJoinEvent event)
 				{
 					event.getPlayer().sendMessage("Essentials failed to load, read the log file.");
 				}
-			}, Priority.Low, this);
+			}, this);
 			for (Player player : getServer().getOnlinePlayers())
 			{
 				player.sendMessage("Essentials failed to load, read the log file.");
@@ -200,61 +198,35 @@ public class Essentials extends JavaPlugin implements IEssentials
 		permissionsHandler = new PermissionsHandler(this, settings.useBukkitPermissions());
 		alternativeCommandsHandler = new AlternativeCommandsHandler(this);
 		final EssentialsPluginListener serverListener = new EssentialsPluginListener(this);
-		pm.registerEvent(Type.PLUGIN_ENABLE, serverListener, Priority.Low, this);
-		pm.registerEvent(Type.PLUGIN_DISABLE, serverListener, Priority.Low, this);
+		pm.registerEvents(serverListener, this);
 		confList.add(serverListener);
 
 		final EssentialsPlayerListener playerListener = new EssentialsPlayerListener(this);
-		pm.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
-		pm.registerEvent(Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
-		pm.registerEvent(Type.PLAYER_CHAT, playerListener, Priority.Lowest, this);
-		pm.registerEvent(Type.PLAYER_COMMAND_PREPROCESS, playerListener, Priority.Lowest, this);
-		pm.registerEvent(Type.PLAYER_MOVE, playerListener, Priority.High, this);
-		pm.registerEvent(Type.PLAYER_LOGIN, playerListener, Priority.High, this);
-		pm.registerEvent(Type.PLAYER_TELEPORT, playerListener, Priority.High, this);
-		pm.registerEvent(Type.PLAYER_EGG_THROW, playerListener, Priority.High, this);
-		pm.registerEvent(Type.PLAYER_BUCKET_EMPTY, playerListener, Priority.High, this);
-		pm.registerEvent(Type.PLAYER_ANIMATION, playerListener, Priority.High, this);
-		pm.registerEvent(Type.PLAYER_CHANGED_WORLD, playerListener, Priority.Normal, this);
-		pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Priority.Monitor, this);
-		pm.registerEvent(Type.PLAYER_PICKUP_ITEM, playerListener, Priority.Low, this);
-		pm.registerEvent(Type.PLAYER_TELEPORT, new ItemDupeFix(), Priority.Monitor, this);
+		pm.registerEvents(playerListener, this);
 
 		final EssentialsBlockListener blockListener = new EssentialsBlockListener(this);
-		pm.registerEvent(Type.BLOCK_PLACE, blockListener, Priority.Lowest, this);
+		pm.registerEvents(blockListener, this);
 
 		final SignBlockListener signBlockListener = new SignBlockListener(this);
-		pm.registerEvent(Type.SIGN_CHANGE, signBlockListener, Priority.Highest, this);
-		pm.registerEvent(Type.BLOCK_PLACE, signBlockListener, Priority.Low, this);
-		pm.registerEvent(Type.BLOCK_BREAK, signBlockListener, Priority.Highest, this);
-		pm.registerEvent(Type.BLOCK_IGNITE, signBlockListener, Priority.Low, this);
-		pm.registerEvent(Type.BLOCK_BURN, signBlockListener, Priority.Low, this);
-		pm.registerEvent(Type.BLOCK_PISTON_EXTEND, signBlockListener, Priority.Low, this);
-		pm.registerEvent(Type.BLOCK_PISTON_RETRACT, signBlockListener, Priority.Low, this);
+		pm.registerEvents(signBlockListener, this);
 
 		final SignPlayerListener signPlayerListener = new SignPlayerListener(this);
-		pm.registerEvent(Type.PLAYER_INTERACT, signPlayerListener, Priority.Low, this);
+		pm.registerEvents(signPlayerListener, this);
 
 		final SignEntityListener signEntityListener = new SignEntityListener(this);
-		pm.registerEvent(Type.ENTITY_EXPLODE, signEntityListener, Priority.Low, this);
-		pm.registerEvent(Type.ENDERMAN_PICKUP, signEntityListener, Priority.Low, this);
+		pm.registerEvents(signEntityListener, this);
 
 		final EssentialsEntityListener entityListener = new EssentialsEntityListener(this);
-		pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Priority.Lowest, this);
-		pm.registerEvent(Type.ENTITY_COMBUST, entityListener, Priority.Lowest, this);
-		pm.registerEvent(Type.ENTITY_DEATH, entityListener, Priority.Lowest, this);
-		pm.registerEvent(Type.ENTITY_REGAIN_HEALTH, entityListener, Priority.Lowest, this);
-		pm.registerEvent(Type.FOOD_LEVEL_CHANGE, entityListener, Priority.Lowest, this);
+		pm.registerEvents(entityListener, this);
 		
 		final EssentialsWorldListener worldListener = new EssentialsWorldListener(this);
-		pm.registerEvent(Type.WORLD_LOAD, worldListener, Priority.Monitor, this);
-		pm.registerEvent(Type.WORLD_UNLOAD, worldListener, Priority.Monitor, this);
+		pm.registerEvents(worldListener, this);
 
 		//TODO: Check if this should be here, and not above before reload()
 		jails = new Jails(this);
 		confList.add(jails);
 
-		pm.registerEvent(Type.ENTITY_EXPLODE, tntListener, Priority.High, this);
+		pm.registerEvents(tntListener, this);
 
 		final EssentialsTimer timer = new EssentialsTimer(this);
 		getScheduler().scheduleSyncRepeatingTask(this, timer, 1, 100);
@@ -602,17 +574,17 @@ public class Essentials extends JavaPlugin implements IEssentials
 		return i18n;
 	}
 	
-	private static class EssentialsWorldListener extends WorldListener implements Runnable {
+	private static class EssentialsWorldListener implements Listener, Runnable {
 		private transient final IEssentials ess;
 
-		public EssentialsWorldListener(IEssentials ess)
+		public EssentialsWorldListener(final IEssentials ess)
 		{
 			this.ess = ess;
 		}
 		
 
-		@Override
-		public void onWorldLoad(WorldLoadEvent event)
+		@EventHandler(priority = EventPriority.LOW)
+		public void onWorldLoad(final WorldLoadEvent event)
 		{
 			ess.getJails().onReload();
 			ess.getWarps().reloadConfig();
@@ -624,8 +596,8 @@ public class Essentials extends JavaPlugin implements IEssentials
 			}
 		}
 
-		@Override
-		public void onWorldUnload(WorldUnloadEvent event)
+		@EventHandler(priority = EventPriority.LOW)
+		public void onWorldUnload(final WorldUnloadEvent event)
 		{
 			ess.getJails().onReload();
 			ess.getWarps().reloadConfig();

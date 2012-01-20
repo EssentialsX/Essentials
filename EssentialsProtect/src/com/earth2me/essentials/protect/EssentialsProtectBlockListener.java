@@ -9,10 +9,13 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 
 
-public class EssentialsProtectBlockListener extends BlockListener
+public class EssentialsProtectBlockListener implements Listener
 {
 	final private transient IProtect prot;
 	final private transient IEssentials ess;
@@ -23,7 +26,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 		this.ess = prot.getEssentialsConnect().getEssentials();
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockPlace(final BlockPlaceEvent event)
 	{
 		if (event.isCancelled())
@@ -93,7 +96,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockIgnite(BlockIgniteEvent event)
 	{
 		if (event.isCancelled())
@@ -144,7 +147,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockFromTo(final BlockFromToEvent event)
 	{
 		if (event.isCancelled())
@@ -185,7 +188,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockBurn(final BlockBurnEvent event)
 	{
 		if (event.isCancelled())
@@ -221,7 +224,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 		BlockFace.SELF
 	};
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockBreak(final BlockBreakEvent event)
 	{
 		if (event.isCancelled())
@@ -319,7 +322,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockPistonExtend(BlockPistonExtendEvent event)
 	{
 		if (event.isCancelled())
@@ -372,7 +375,7 @@ public class EssentialsProtectBlockListener extends BlockListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockPistonRetract(BlockPistonRetractEvent event)
 	{
 		if (event.isCancelled() || !event.isSticky())
@@ -460,7 +463,8 @@ public class EssentialsProtectBlockListener extends BlockListener
 				}
 			}
 		}
-		if (prot.getSettingBool(ProtectConfig.protect_rails)) {
+		if (prot.getSettingBool(ProtectConfig.protect_rails))
+		{
 			if (type == Material.RAILS || type == Material.POWERED_RAIL || type == Material.DETECTOR_RAIL)
 			{
 				return prot.getStorage().isProtected(block, user.getName());

@@ -41,9 +41,9 @@ public class EssentialsChat extends JavaPlugin
 		final EssentialsChatPlayerListenerLowest playerListenerLowest = new EssentialsChatPlayerListenerLowest(getServer(), ess, chatListener, chatStore);
 		final EssentialsChatPlayerListenerNormal playerListenerNormal = new EssentialsChatPlayerListenerNormal(getServer(), ess, chatListener, chatStore);
 		final EssentialsChatPlayerListenerHighest playerListenerHighest = new EssentialsChatPlayerListenerHighest(getServer(), ess, chatListener, chatStore);
-		pluginManager.registerEvent(Type.PLAYER_CHAT, playerListenerLowest, Priority.Lowest, this);
-		pluginManager.registerEvent(Type.PLAYER_CHAT, playerListenerNormal, Priority.Normal, this);
-		pluginManager.registerEvent(Type.PLAYER_CHAT, playerListenerHighest, Priority.Highest, this);
+		pluginManager.registerEvents(playerListenerLowest, this);
+		pluginManager.registerEvents(playerListenerNormal, this);
+		pluginManager.registerEvents(playerListenerHighest, this);
 
 		LOGGER.info(_("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
 	}
