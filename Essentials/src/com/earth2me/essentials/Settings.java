@@ -309,7 +309,6 @@ public class Settings implements ISettings
 			format = format.replace("{WORLDNAME}", "{1}");
 			format = format.replace("{SHORTWORLDNAME}", "{2}");
 			format = format.replaceAll("\\{(\\D*)\\}", "\\[$1\\]");
-			logger.log(Level.INFO, "debug-format: " + format);
 			mFormat = new MessageFormat(format);
 			chatFormats.put(group, mFormat);
 		}
