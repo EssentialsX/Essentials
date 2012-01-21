@@ -126,7 +126,7 @@ public class VaultEco implements Method
 			RegisteredServiceProvider<Economy> ecoPlugin = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
 			return plugin instanceof Vault && ecoPlugin != null && !ecoPlugin.getProvider().getName().equals("Essentials Economy");
 		}
-		catch (Exception e)
+		catch (Throwable e)
 		{
 			return false;
 		}
