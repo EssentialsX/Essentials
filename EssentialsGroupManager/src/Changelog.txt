@@ -107,3 +107,5 @@ v 1.9:
 	- Added a tidy error message for invalid permission entries in GlobalGroups.
 	- Better optimize assembling of a players permissions and allow the * node to populate all registered superperms.
 	- Fixed text when adding a subgroup to not say the player was moved.
+	- Update to new Bukkit Event system.
+	- Update GroupManagerBridge for new event system.

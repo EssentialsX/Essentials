@@ -32,17 +32,17 @@ import org.anjocaido.groupmanager.dataholder.OverloadedWorldHolder;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
-import org.bukkit.event.server.ServerListener;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
@@ -105,20 +105,8 @@ public class BukkitPermissions {
 	private void registerEvents() {
 		PluginManager manager = plugin.getServer().getPluginManager();
 
-		PlayerEvents playerEventListener = new PlayerEvents();
-
-		manager.registerEvent(Event.Type.PLAYER_JOIN, playerEventListener, Event.Priority.Lowest, plugin);
-		manager.registerEvent(Event.Type.PLAYER_KICK, playerEventListener, Event.Priority.Lowest, plugin);
-		manager.registerEvent(Event.Type.PLAYER_QUIT, playerEventListener, Event.Priority.Lowest, plugin);
-
-		manager.registerEvent(Event.Type.PLAYER_RESPAWN, playerEventListener, Event.Priority.Lowest, plugin);
-		manager.registerEvent(Event.Type.PLAYER_TELEPORT, playerEventListener, Event.Priority.Lowest, plugin);
-		manager.registerEvent(Event.Type.PLAYER_PORTAL, playerEventListener, Event.Priority.Lowest, plugin);
-
-		ServerListener serverListener = new BukkitEvents();
-
-		manager.registerEvent(Event.Type.PLUGIN_ENABLE, serverListener, Event.Priority.Normal, plugin);
-		manager.registerEvent(Event.Type.PLUGIN_DISABLE, serverListener, Event.Priority.Normal, plugin);
+		manager.registerEvents(new PlayerEvents(), plugin);
+		manager.registerEvents(new BukkitEvents(), plugin);
 	}
 
 	
@@ -374,9 +362,9 @@ public class BukkitPermissions {
 		}
 	}
 
-	protected class PlayerEvents extends PlayerListener {
+	protected class PlayerEvents implements Listener {
 
-		@Override
+		@EventHandler(priority = EventPriority.LOWEST)
 		public void onPlayerJoin(PlayerJoinEvent event) {
 			setPlayer_join(true);
 			Player player = event.getPlayer();
@@ -388,26 +376,26 @@ public class BukkitPermissions {
 			setPlayer_join(false);
 		}
 
-		@Override
+		@EventHandler(priority = EventPriority.LOWEST)
 		public void onPlayerPortal(PlayerPortalEvent event) { // will portal into another world
 			if (event.getTo() != null && !event.getFrom().getWorld().equals(event.getTo().getWorld())) { // only if world actually changed
 				updatePermissions(event.getPlayer(), event.getTo().getWorld().getName());
 			}
 		}
 
-		@Override
+		@EventHandler(priority = EventPriority.LOWEST)
 		public void onPlayerRespawn(PlayerRespawnEvent event) { // can be respawned in another world
 			updatePermissions(event.getPlayer(), event.getRespawnLocation().getWorld().getName());
 		}
 
-		@Override
+		@EventHandler(priority = EventPriority.LOWEST)
 		public void onPlayerTeleport(PlayerTeleportEvent event) { // can be teleported into another world
 			if (event.getTo() != null && !event.getFrom().getWorld().equals(event.getTo().getWorld())) { // only if world actually changed
 				updatePermissions(event.getPlayer(), event.getTo().getWorld().getName());
 			}
 		}
 
-		@Override
+		@EventHandler(priority = EventPriority.LOWEST)
 		public void onPlayerQuit(PlayerQuitEvent event) {
 			if (!GroupManager.isLoaded())
 				return;
@@ -415,15 +403,15 @@ public class BukkitPermissions {
 			attachments.remove(event.getPlayer());
 		}
 
-		@Override
+		@EventHandler(priority = EventPriority.LOWEST)
 		public void onPlayerKick(PlayerKickEvent event) {
 			attachments.remove(event.getPlayer());
 		}
 	}
 
-	protected class BukkitEvents extends ServerListener {
+	protected class BukkitEvents implements Listener {
 
-		@Override
+		@EventHandler(priority = EventPriority.NORMAL)
 		public void onPluginEnable(PluginEnableEvent event) {
 			if (!GroupManager.isLoaded())
 				return;
@@ -432,7 +420,7 @@ public class BukkitPermissions {
 			updateAllPlayers();
 		}
 
-		@Override
+		@EventHandler(priority = EventPriority.NORMAL)
 		public void onPluginDisable(PluginDisableEvent event) {
 			collectPermissions();
 			// updateAllPlayers();
