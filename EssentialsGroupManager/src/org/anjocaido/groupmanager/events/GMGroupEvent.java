@@ -1,6 +1,7 @@
 package org.anjocaido.groupmanager.events;
 
 import org.anjocaido.groupmanager.data.Group;
+import org.bukkit.event.HandlerList;
 
 
 /**
@@ -13,6 +14,18 @@ public class GMGroupEvent extends GroupManagerEvent {
 	 * 
 	 */
 	private static final long serialVersionUID = -5294917600434510451L;
+	private static final HandlerList handlers = new HandlerList();
+
+	@Override
+	public HandlerList getHandlers() {
+        return handlers;
+    }
+ 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
+    //////////////////////////////
 
 	protected Group group;
 	

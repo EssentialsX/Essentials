@@ -32,8 +32,6 @@ public class EssentialsConnect
 		ProtectReloader pr = new ProtectReloader();
 		pr.reloadConfig();
 		ess.addReloadListener(pr);
-		LOGGER.info(_("loadinfo", essProtect.getDescription().getName(), essProtect.getDescription().getVersion(), "essentials team"));
-
 	}
 
 	public void onDisable()

@@ -8,10 +8,13 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 
 
-public class SignBlockListener extends BlockListener
+public class SignBlockListener implements Listener
 {
 	private final transient IEssentials ess;
 	private final static Logger LOGGER = Logger.getLogger("Minecraft");
@@ -21,7 +24,7 @@ public class SignBlockListener extends BlockListener
 		this.ess = ess;
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockBreak(final BlockBreakEvent event)
 	{
 		if (event.isCancelled() || ess.getSettings().areSignsDisabled())
@@ -73,7 +76,7 @@ public class SignBlockListener extends BlockListener
 		return false;
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onSignChange(final SignChangeEvent event)
 	{
 		if (event.isCancelled() || ess.getSettings().areSignsDisabled())
@@ -105,7 +108,7 @@ public class SignBlockListener extends BlockListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.LOW)
 	public void onBlockPlace(final BlockPlaceEvent event)
 	{
 		if (event.isCancelled() || ess.getSettings().areSignsDisabled())
@@ -139,7 +142,7 @@ public class SignBlockListener extends BlockListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.LOW)
 	public void onBlockBurn(final BlockBurnEvent event)
 	{
 		if (event.isCancelled() || ess.getSettings().areSignsDisabled())
@@ -168,7 +171,7 @@ public class SignBlockListener extends BlockListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.LOW)
 	public void onBlockIgnite(final BlockIgniteEvent event)
 	{
 		if (event.isCancelled() || ess.getSettings().areSignsDisabled())
@@ -197,7 +200,7 @@ public class SignBlockListener extends BlockListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.LOW)
 	public void onBlockPistonExtend(final BlockPistonExtendEvent event)
 	{
 		for (Block block : event.getBlocks())
@@ -223,7 +226,7 @@ public class SignBlockListener extends BlockListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.LOW)
 	public void onBlockPistonRetract(final BlockPistonRetractEvent event)
 	{
 		if (event.isSticky())

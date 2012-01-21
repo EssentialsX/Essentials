@@ -57,7 +57,9 @@ public class Enchantments
 		ENCHANTMENTS.put("firearrow", Enchantment.ARROW_FIRE);
 		ENCHANTMENTS.put("arrowdamage", Enchantment.ARROW_DAMAGE);
 		ENCHANTMENTS.put("arrowknockback", Enchantment.ARROW_KNOCKBACK);
+		ENCHANTMENTS.put("arrowkb", Enchantment.ARROW_KNOCKBACK);
 		ENCHANTMENTS.put("infinitearrows", Enchantment.ARROW_INFINITE);
+		ENCHANTMENTS.put("infarrows", Enchantment.ARROW_INFINITE);
 	}
 	
 	public static Enchantment getByName(String name) {

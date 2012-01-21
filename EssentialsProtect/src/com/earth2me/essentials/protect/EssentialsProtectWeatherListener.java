@@ -1,12 +1,14 @@
 package com.earth2me.essentials.protect;
 
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.weather.LightningStrikeEvent;
 import org.bukkit.event.weather.ThunderChangeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
-import org.bukkit.event.weather.WeatherListener;
 
 
-public class EssentialsProtectWeatherListener extends WeatherListener
+public class EssentialsProtectWeatherListener implements Listener
 {
 	private final transient IProtect prot;
 
@@ -15,7 +17,7 @@ public class EssentialsProtectWeatherListener extends WeatherListener
 		this.prot = prot;
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onWeatherChange(final WeatherChangeEvent event)
 	{
 		if (!event.isCancelled()
@@ -27,7 +29,7 @@ public class EssentialsProtectWeatherListener extends WeatherListener
 
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onLightningStrike(final LightningStrikeEvent event)
 	{
 		if (!event.isCancelled()
@@ -37,7 +39,7 @@ public class EssentialsProtectWeatherListener extends WeatherListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onThunderChange(final ThunderChangeEvent event)
 	{
 		if (!event.isCancelled()

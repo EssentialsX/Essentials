@@ -3,10 +3,7 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.craftbukkit.OfflineBedLocation;
 import static com.earth2me.essentials.I18n._;
 import java.net.InetSocketAddress;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import lombok.Delegate;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -740,12 +737,6 @@ public class OfflinePlayer implements Player
 	}
 
 	@Override
-	public Location getBedSpawnLocation()
-	{
-		return OfflineBedLocation.getBedLocation(base.getName(), ess);
-	}
-
-	@Override
 	public boolean isSprinting()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
@@ -825,8 +816,45 @@ public class OfflinePlayer implements Player
 
 	void setName(final String name)
 	{
-		if (!this.base.getName().equalsIgnoreCase(name)) {
+		if (!this.base.getName().equalsIgnoreCase(name))
+		{
 			this.base = ess.getServer().getOfflinePlayer(name);
 		}
+	}
+
+	@Override
+	public void sendPluginMessage(Plugin plugin, String string, byte[] bytes)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public Set<String> getListeningPluginChannels()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setAllowFlight(boolean bln)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public boolean getAllowFlight()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setBedSpawnLocation(Location lctn)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void playEffect(EntityEffect ee)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }

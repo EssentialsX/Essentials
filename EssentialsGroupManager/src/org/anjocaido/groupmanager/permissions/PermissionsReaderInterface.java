@@ -4,6 +4,7 @@ package org.anjocaido.groupmanager.permissions;
 //import java.util.Map;
 //import java.util.Set;
 import java.util.List;
+import java.util.Set;
 
 import org.anjocaido.groupmanager.data.Group;
 //import org.anjocaido.groupmanager.data.User;
@@ -234,4 +235,6 @@ public abstract class PermissionsReaderInterface {
 //////////////////////////////
 
 	public abstract List<String> getAllPlayersPermissions(String userName);
+
+	public abstract Set<String> getAllPlayersPermissions(String userName, Boolean includeChildren);
 }

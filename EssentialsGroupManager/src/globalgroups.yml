@@ -145,7 +145,6 @@ groups:
     permissions:
     - bukkit.broadcast
     - bukkit.broadcast.admin
-    - bukkit.command
     - bukkit.command.give
     - bukkit.command.help
     - bukkit.command.kill

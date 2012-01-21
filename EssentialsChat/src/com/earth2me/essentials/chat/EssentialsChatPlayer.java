@@ -10,24 +10,28 @@ import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
-import org.bukkit.event.player.PlayerListener;
 
 //TODO: Translate the local/spy tags
-public abstract class EssentialsChatPlayer extends PlayerListener
+public abstract class EssentialsChatPlayer implements Listener
 {
 	protected transient IEssentials ess;
 	protected final static Logger logger = Logger.getLogger("Minecraft");
 	protected final transient Map<String, IEssentialsChatListener> listeners;
 	protected final transient Server server;
+	protected final transient Map<PlayerChatEvent, ChatStore> chatStorage;
 
-	public EssentialsChatPlayer(Server server, IEssentials ess, Map<String, IEssentialsChatListener> listeners)
+	public EssentialsChatPlayer(final Server server,
+								final IEssentials ess,
+								final Map<String, IEssentialsChatListener> listeners,
+								final Map<PlayerChatEvent, ChatStore> chatStorage)
 	{
 		this.ess = ess;
 		this.listeners = listeners;
 		this.server = server;
+		this.chatStorage = chatStorage;
 	}
 
 	public void onPlayerChat(final PlayerChatEvent event)
@@ -35,11 +39,6 @@ public abstract class EssentialsChatPlayer extends PlayerListener
 	}
 
 	public boolean isAborted(final PlayerChatEvent event)
-	{
-		return isAborted(event, "chat");
-	}
-
-	public boolean isAborted(final PlayerChatEvent event, final String command)
 	{
 		if (event.isCancelled())
 		{
@@ -51,13 +50,6 @@ public abstract class EssentialsChatPlayer extends PlayerListener
 			{
 				return true;
 			}
-		}
-
-		final User user = ess.getUser(event.getPlayer());
-		if (!isAffordableFor(user, command))
-		{
-			event.setCancelled(true);
-			return true;
 		}
 		return false;
 	}
@@ -75,64 +67,77 @@ public abstract class EssentialsChatPlayer extends PlayerListener
 		}
 	}
 
-	protected void charge(final CommandSender sender, final String command) throws ChargeException
+	public ChatStore getChatStore(final PlayerChatEvent event)
 	{
-		if (sender instanceof Player)
-		{
-			final Trade charge = new Trade(command, ess);
-			charge.charge(ess.getUser((Player)sender));
-		}
+		return chatStorage.get(event);
 	}
 
-	protected boolean isAffordableFor(final CommandSender sender, final String command)
+	public void setChatStore(final PlayerChatEvent event, final ChatStore chatStore)
 	{
-		if (sender instanceof Player)
+		chatStorage.put(event, chatStore);
+	}
+
+	public ChatStore delChatStore(final PlayerChatEvent event)
+	{
+		return chatStorage.remove(event);
+	}
+
+	protected void charge(final User user, final Trade charge) throws ChargeException
+	{
+		charge.charge(user);
+	}
+
+	protected boolean charge(final PlayerChatEvent event, final ChatStore chatStore)
+	{
+		try
 		{
-			try
-			{
-				final Trade charge = new Trade(command, ess);
-				charge.isAffordableFor(ess.getUser((Player)sender));
-			}
-			catch (ChargeException e)
-			{
-				return false;
-			}
+			charge(chatStore.getUser(), chatStore.getCharge());
 		}
-		else
+		catch (ChargeException e)
 		{
+			ess.showError(chatStore.getUser(), e, chatStore.getLongType());
+			event.setCancelled(true);
 			return false;
 		}
-
 		return true;
 	}
 
-	protected void sendLocalChat(final User sender, final long radius, final PlayerChatEvent event)
+	protected void sendLocalChat(final PlayerChatEvent event, final ChatStore chatStore)
 	{
 		event.setCancelled(true);
+		final User sender = chatStore.getUser();
 		logger.info(_("localFormat", sender.getName(), event.getMessage()));
 		final Location loc = sender.getLocation();
 		final World world = loc.getWorld();
-		
+
+		if (charge(event, chatStore) == false)
+		{
+			return;
+		}
+
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
-			String type = "[L]";
-			final User user = ess.getUser(onlinePlayer);
+			String type = _("chatTypeLocal");
+			final User onlineUser = ess.getUser(onlinePlayer);
 			//TODO: remove reference to op 
-			if (user.isIgnoredPlayer(sender.getName()) && !sender.isOp())
+			if (onlineUser.isIgnoredPlayer(sender.getName()) && !sender.isOp())
 			{
 				continue;
 			}
-			if (!user.equals(sender))
-			{				
-				final Location playerLoc = user.getLocation();
-				if (playerLoc.getWorld() != world) { continue; }
-				final double delta = playerLoc.distanceSquared(loc);
-				
-				if (delta > radius)
+			if (!onlineUser.equals(sender))
+			{
+				final Location playerLoc = onlineUser.getLocation();
+				if (playerLoc.getWorld() != world)
 				{
-					if (user.isAuthorized("essentials.chat.spy"))
+					continue;
+				}
+				final double delta = playerLoc.distanceSquared(loc);
+
+				if (delta > chatStore.getRadius())
+				{
+					if (onlineUser.isAuthorized("essentials.chat.spy"))
 					{
-						type = type.concat("[Spy]");
+						type = type.concat(_("chatTypeSpy"));
 					}
 					else
 					{
@@ -146,7 +151,7 @@ public abstract class EssentialsChatPlayer extends PlayerListener
 			{
 				message = listener.modifyMessage(event, onlinePlayer, message);
 			}
-			user.sendMessage(message);
+			onlineUser.sendMessage(message);
 		}
 	}
 }

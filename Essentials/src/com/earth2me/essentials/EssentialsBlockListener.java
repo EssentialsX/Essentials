@@ -1,25 +1,24 @@
 package com.earth2me.essentials;
 
-import java.util.logging.Logger;
 import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.event.block.BlockListener;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
 
-public class EssentialsBlockListener extends BlockListener
+public class EssentialsBlockListener implements Listener
 {
-	private final IEssentials ess;
-	private static final Logger logger = Logger.getLogger("Minecraft");
+	private final transient IEssentials ess;
 
-	public EssentialsBlockListener(IEssentials ess)
+	public EssentialsBlockListener(final IEssentials ess)
 	{
 		this.ess = ess;
 	}
 
-	@Override
-	public void onBlockPlace(BlockPlaceEvent event)
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onBlockPlace(final BlockPlaceEvent event)
 	{
 		if (event.isCancelled())
 		{

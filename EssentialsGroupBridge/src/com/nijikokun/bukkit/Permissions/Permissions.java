@@ -4,10 +4,6 @@ import com.nijiko.permissions.PermissionHandler;
 import java.util.logging.Logger;
 //import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.permissions.NijikoPermissionsProxy;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
-import org.bukkit.event.server.PluginEnableEvent;
-import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -41,15 +37,7 @@ public class Permissions extends JavaPlugin {
                 setGM(p);
             } else {
                 if (this.getServer() != null) {
-                    this.getServer().getPluginManager().registerEvent(Type.PLUGIN_ENABLE, new ServerListener() {
-
-                        @Override
-                        public void onPluginEnable(PluginEnableEvent event) {
-                            if (event.getPlugin().getDescription().getName().equals("GroupManager")) {
-                                Permissions.this.setGM(event.getPlugin());
-                            }
-                        }
-                    }, Priority.Normal, this);
+                    this.getServer().getPluginManager().registerEvents(new OverrideListener(this), this);
                 }
             }
         } else {
@@ -62,7 +50,7 @@ public class Permissions extends JavaPlugin {
         }
     }
 
-    private void setGM(final Plugin p) {
+    public void setGM(final Plugin p) {
         //GroupManager groupManager = (GroupManager) p;
         ((NijikoPermissionsProxy) Security).setGM(p);
     }
@@ -79,4 +67,9 @@ public class Permissions extends JavaPlugin {
             Security = new NijikoPermissionsProxy(null);
         }
     }
+    
+    
+    
 }
+
+

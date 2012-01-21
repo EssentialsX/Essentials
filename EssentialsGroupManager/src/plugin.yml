@@ -1,11 +1,12 @@
 name: GroupManager
-version: "1.8 (Phoenix)"
+version: GMBuildVer (Phoenix)
 main: org.anjocaido.groupmanager.GroupManager
 website: http://www.anjocaido.info/
 description: Provides on-the-fly system for permissions system created by Nijikokun. But all in memory, and with flat-file saving schedule.
 authors:
   - AnjoCaido
   - Gabriel Couto
+  - ElgarL
 commands:
   manuadd:
     description: Move a player to desired group.(Adds to the file if not exists)

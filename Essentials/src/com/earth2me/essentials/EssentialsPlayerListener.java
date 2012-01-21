@@ -1,7 +1,6 @@
 package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.craftbukkit.SetBed;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.TextInput;
@@ -17,15 +16,17 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.*;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 
 
-public class EssentialsPlayerListener extends PlayerListener
+public class EssentialsPlayerListener implements Listener
 {
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private final transient Server server;
@@ -37,7 +38,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		this.server = parent.getServer();
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerRespawn(final PlayerRespawnEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
@@ -48,7 +49,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerChat(final PlayerChatEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
@@ -74,7 +75,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerMove(final PlayerMoveEvent event)
 	{
 		if (event.isCancelled())
@@ -108,7 +109,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerQuit(final PlayerQuitEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
@@ -125,7 +126,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		user.dispose();
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
 		ess.getBackup().onPlayerJoin();
@@ -178,12 +179,11 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerLogin(final PlayerLoginEvent event)
 	{
 		if (event.getResult() != Result.ALLOWED && event.getResult() != Result.KICK_FULL && event.getResult() != Result.KICK_BANNED)
 		{
-			LOGGER.log(Level.INFO, "Disconnecting user " + event.getPlayer().toString() + " due to " + event.getResult().toString());
 			return;
 		}
 		User user = ess.getUser(event.getPlayer());
@@ -225,8 +225,8 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 	}
 
-	@Override
-	public void onPlayerTeleport(PlayerTeleportEvent event)
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onPlayerTeleport(final PlayerTeleportEvent event)
 	{
 		if (event.isCancelled())
 		{
@@ -247,19 +247,19 @@ public class EssentialsPlayerListener extends PlayerListener
 		updateCompass(user);
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerEggThrow(final PlayerEggThrowEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
-		final ItemStack is = new ItemStack(Material.EGG, 1);
-		if (user.hasUnlimited(is))
+		final ItemStack stack = new ItemStack(Material.EGG, 1);
+		if (user.hasUnlimited(stack))
 		{
-			user.getInventory().addItem(is);
+			user.getInventory().addItem(stack);
 			user.updateInventory();
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerBucketEmpty(final PlayerBucketEmptyEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
@@ -277,7 +277,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerAnimation(final PlayerAnimationEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
@@ -322,7 +322,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerCommandPreprocess(final PlayerCommandPreprocessEvent event)
 	{
 		if (event.isCancelled())
@@ -349,7 +349,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerChangedWorld(final PlayerChangedWorldEvent event)
 	{
 		if (ess.getSettings().getNoGodWorlds().contains(event.getPlayer().getLocation().getWorld().getName()))
@@ -362,7 +362,7 @@ public class EssentialsPlayerListener extends PlayerListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerInteract(final PlayerInteractEvent event)
 	{
 		if (event.isCancelled())
@@ -376,11 +376,11 @@ public class EssentialsPlayerListener extends PlayerListener
 
 		if (ess.getSettings().getUpdateBedAtDaytime() && event.getClickedBlock().getType() == Material.BED_BLOCK)
 		{
-			SetBed.setBed(event.getPlayer(), event.getClickedBlock());
+			event.getPlayer().setBedSpawnLocation(event.getClickedBlock().getLocation());
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerPickupItem(PlayerPickupItemEvent event)
 	{
 		if (event.isCancelled() || !ess.getSettings().getDisableItemPickupWhileAfk())

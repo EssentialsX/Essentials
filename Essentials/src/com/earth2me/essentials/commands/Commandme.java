@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 
 
@@ -28,8 +29,12 @@ public class Commandme extends EssentialsCommand
 		String message = getFinalArg(args, 0);
 		if (user.isAuthorized("essentials.chat.color"))
 		{
-			message = message.replaceAll("&([0-9a-f])", "§$1");
+			message = Util.replaceColor(message);
 		}
+		else {
+			message = Util.stripColor(message);
+		}
+		
 
 		ess.broadcastMessage(user, _("action", user.getDisplayName(), message));
 	}

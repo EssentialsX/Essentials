@@ -7,13 +7,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 
-public class EssentialsSpawnPlayerListener extends PlayerListener
+public class EssentialsSpawnPlayerListener implements Listener
 {
 	private final transient IEssentials ess;
 	private final transient SpawnStorage spawns;
@@ -26,7 +26,6 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 		this.spawns = spawns;
 	}
 
-	@Override
 	public void onPlayerRespawn(final PlayerRespawnEvent event)
 	{		
 		final User user = ess.getUser(event.getPlayer());
@@ -51,7 +50,6 @@ public class EssentialsSpawnPlayerListener extends PlayerListener
 		}
 	}
 
-	@Override
 	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());

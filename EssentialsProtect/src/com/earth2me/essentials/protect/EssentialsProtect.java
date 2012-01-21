@@ -9,8 +9,6 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -51,43 +49,22 @@ public class EssentialsProtect extends JavaPlugin implements IProtect
 		ess = new EssentialsConnect(essPlugin, this);
 
 		final EssentialsProtectPlayerListener playerListener = new EssentialsProtectPlayerListener(this);
-		pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Priority.Low, this);
+		pm.registerEvents(playerListener, this);
 
 		final EssentialsProtectBlockListener blockListener = new EssentialsProtectBlockListener(this);
-		pm.registerEvent(Type.BLOCK_PLACE, blockListener, Priority.Highest, this);
-		pm.registerEvent(Type.BLOCK_FROMTO, blockListener, Priority.Highest, this);
-		pm.registerEvent(Type.BLOCK_IGNITE, blockListener, Priority.Highest, this);
-		pm.registerEvent(Type.BLOCK_BURN, blockListener, Priority.Highest, this);
-		pm.registerEvent(Type.BLOCK_BREAK, blockListener, Priority.Highest, this);
-		pm.registerEvent(Type.BLOCK_PISTON_EXTEND, blockListener, Priority.Highest, this);
-		pm.registerEvent(Type.BLOCK_PISTON_RETRACT, blockListener, Priority.Highest, this);
+		pm.registerEvents(blockListener, this);
 
 		final EssentialsProtectEntityListener entityListener = new EssentialsProtectEntityListener(this);
-		pm.registerEvent(Type.ENTITY_EXPLODE, entityListener, Priority.Highest, this);
-		pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Priority.Highest, this);
-		pm.registerEvent(Type.CREATURE_SPAWN, entityListener, Priority.Highest, this);
-		pm.registerEvent(Type.ENTITY_TARGET, entityListener, Priority.Highest, this);
-		pm.registerEvent(Type.EXPLOSION_PRIME, entityListener, Priority.Highest, this);
-		pm.registerEvent(Type.ENDERMAN_PICKUP, entityListener, Priority.Highest, this);
+		pm.registerEvents(entityListener, this);
 
 		final EssentialsProtectWeatherListener weatherListener = new EssentialsProtectWeatherListener(this);
-		pm.registerEvent(Type.LIGHTNING_STRIKE, weatherListener, Priority.Highest, this);
-		pm.registerEvent(Type.THUNDER_CHANGE, weatherListener, Priority.Highest, this);
-		pm.registerEvent(Type.WEATHER_CHANGE, weatherListener, Priority.Highest, this);
+		pm.registerEvents(weatherListener, this);
 	}
 
 	private void enableEmergencyMode(final PluginManager pm)
 	{
-		final EmergencyBlockListener emBlockListener = new EmergencyBlockListener();
-		final EmergencyEntityListener emEntityListener = new EmergencyEntityListener();
-		final EmergencyPlayerListener emPlayerListener = new EmergencyPlayerListener();
-		pm.registerEvent(Type.PLAYER_JOIN, emPlayerListener, Priority.Low, this);
-		pm.registerEvent(Type.BLOCK_BURN, emBlockListener, Priority.Low, this);
-		pm.registerEvent(Type.BLOCK_IGNITE, emBlockListener, Priority.Low, this);
-		pm.registerEvent(Type.BLOCK_FROMTO, emBlockListener, Priority.Low, this);
-		pm.registerEvent(Type.BLOCK_BREAK, emBlockListener, Priority.Low, this);
-		pm.registerEvent(Type.ENTITY_DAMAGE, emEntityListener, Priority.Low, this);
-		pm.registerEvent(Type.ENTITY_EXPLODE, emEntityListener, Priority.Low, this);
+		final EmergencyListener emListener = new EmergencyListener();
+		pm.registerEvents(emListener, this);
 		for (Player player : getServer().getOnlinePlayers())
 		{
 			player.sendMessage("Essentials Protect is in emergency mode. Check your log for errors.");

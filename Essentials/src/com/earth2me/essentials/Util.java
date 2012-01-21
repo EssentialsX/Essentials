@@ -478,7 +478,8 @@ public class Util
 		}
 		return buf.toString();
 	}
-	private static transient final Pattern COLOR_PATTERN = Pattern.compile("(?i)\u00A7[0-9A-F]");
+	private static transient final Pattern VANILLA_COLOR_PATTERN = Pattern.compile("\u00A7+[0-9A-FKa-fk]");
+	private static transient final Pattern EASY_COLOR_PATTERN = Pattern.compile("&([0-9a-fk])");
 
 	public static String stripColor(final String input)
 	{
@@ -487,6 +488,16 @@ public class Util
 			return null;
 		}
 
-		return COLOR_PATTERN.matcher(input).replaceAll("");
+		return VANILLA_COLOR_PATTERN.matcher(input).replaceAll("");
+	}
+
+	public static String replaceColor(final String input)
+	{
+		if (input == null)
+		{
+			return null;
+		}
+
+		return EASY_COLOR_PATTERN.matcher(input).replaceAll("\u00a7$1");
 	}
 }

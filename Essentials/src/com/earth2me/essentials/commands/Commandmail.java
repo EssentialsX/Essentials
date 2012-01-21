@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
@@ -58,7 +59,7 @@ public class Commandmail extends EssentialsCommand
 			}
 			if (!u.isIgnoredPlayer(user.getName()))
 			{
-				u.addMail(user.getName() + ": " + getFinalArg(args, 2));
+				u.addMail(user.getName() + ": " + Util.stripColor(getFinalArg(args, 2)));
 			}
 			user.sendMessage(_("mailSent"));
 			return;
@@ -69,7 +70,7 @@ public class Commandmail extends EssentialsCommand
 			{
 				throw new Exception(_("noPerm","essentials.mail.sendall"));
 			}
-			ess.scheduleAsyncDelayedTask(new SendAll(user.getName() + ": " + getFinalArg(args, 1)));
+			ess.scheduleAsyncDelayedTask(new SendAll(user.getName() + ": " + Util.stripColor(getFinalArg(args, 1))));
 			user.sendMessage(_("mailSent"));
 			return;
 		}

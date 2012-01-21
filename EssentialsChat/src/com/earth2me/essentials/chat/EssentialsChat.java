@@ -18,7 +18,6 @@ public class EssentialsChat extends JavaPlugin
 {
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private transient Map<String, IEssentialsChatListener> chatListener;
-	
 
 	@Override
 	public void onEnable()
@@ -36,17 +35,16 @@ public class EssentialsChat extends JavaPlugin
 		}
 
 		chatListener = new ConcurrentSkipListMap<String, IEssentialsChatListener>();
-		final Map<PlayerChatEvent, String> charges = new HashMap<PlayerChatEvent, String>();
-		
+		final Map<PlayerChatEvent, ChatStore> chatStore = new HashMap<PlayerChatEvent, ChatStore>();
 
-		final EssentialsChatPlayerListenerLowest playerListenerLowest = new EssentialsChatPlayerListenerLowest(getServer(), ess, chatListener);
-		final EssentialsChatPlayerListenerNormal playerListenerNormal = new EssentialsChatPlayerListenerNormal(getServer(), ess, chatListener, charges);
-		final EssentialsChatPlayerListenerHighest playerListenerHighest = new EssentialsChatPlayerListenerHighest(getServer(), ess, chatListener, charges);
-		pluginManager.registerEvent(Type.PLAYER_CHAT, playerListenerLowest, Priority.Lowest, this);
-		pluginManager.registerEvent(Type.PLAYER_CHAT, playerListenerNormal, Priority.Normal, this);
-		pluginManager.registerEvent(Type.PLAYER_CHAT, playerListenerHighest, Priority.Highest, this);
 
-		LOGGER.info(_("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
+		final EssentialsChatPlayerListenerLowest playerListenerLowest = new EssentialsChatPlayerListenerLowest(getServer(), ess, chatListener, chatStore);
+		final EssentialsChatPlayerListenerNormal playerListenerNormal = new EssentialsChatPlayerListenerNormal(getServer(), ess, chatListener, chatStore);
+		final EssentialsChatPlayerListenerHighest playerListenerHighest = new EssentialsChatPlayerListenerHighest(getServer(), ess, chatListener, chatStore);
+		pluginManager.registerEvents(playerListenerLowest, this);
+		pluginManager.registerEvents(playerListenerNormal, this);
+		pluginManager.registerEvents(playerListenerHighest, this);
+
 	}
 
 	@Override

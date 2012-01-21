@@ -4,6 +4,7 @@ import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IReplyTo;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import java.util.List;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -25,6 +26,7 @@ public class Commandmsg extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
+		String message = getFinalArg(args, 1);
 		if (sender instanceof Player)
 		{
 			User user = ess.getUser(sender);
@@ -32,13 +34,24 @@ public class Commandmsg extends EssentialsCommand
 			{
 				throw new Exception(_("voiceSilenced"));
 			}
+			if (user.isAuthorized("essentials.msg.color"))
+			{
+				message = Util.replaceColor(message);
+			}
+			else
+			{
+				message = Util.stripColor(message);
+			}
+		}
+		else
+		{
+			message = Util.replaceColor(message);
 		}
 
-		String message = getFinalArg(args, 1);
-		String translatedMe = _("me");
+		final String translatedMe = _("me");
 
-		IReplyTo replyTo = sender instanceof Player ? ess.getUser((Player)sender) : Console.getConsoleReplyTo();
-		String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
+		final IReplyTo replyTo = sender instanceof Player ? ess.getUser((Player)sender) : Console.getConsoleReplyTo();
+		final String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
 
 		if (args[0].equalsIgnoreCase(Console.NAME))
 		{
@@ -50,38 +63,38 @@ public class Commandmsg extends EssentialsCommand
 			return;
 		}
 
-		List<Player> matches = server.matchPlayer(args[0]);
+		final List<Player> matchedPlayers = server.matchPlayer(args[0]);
 
-		if (matches.isEmpty())
+		if (matchedPlayers.isEmpty())
 		{
 			throw new Exception(_("playerNotFound"));
 		}
 
 		int i = 0;
-		for (Player p : matches)
+		for (Player matchedPlayer : matchedPlayers)
 		{
-			final User u = ess.getUser(p);
+			final User u = ess.getUser(matchedPlayer);
 			if (u.isHidden())
 			{
 				i++;
 			}
 		}
-		if (i == matches.size())
+		if (i == matchedPlayers.size())
 		{
 			throw new Exception(_("playerNotFound"));
 		}
 
-		for (Player p : matches)
+		for (Player matchedPlayer : matchedPlayers)
 		{
-			sender.sendMessage(_("msgFormat", translatedMe, p.getDisplayName(), message));
-			final User u = ess.getUser(p);
-			if (sender instanceof Player && (u.isIgnoredPlayer(((Player)sender).getName()) || u.isHidden()))
+			sender.sendMessage(_("msgFormat", translatedMe, matchedPlayer.getDisplayName(), message));
+			final User matchedUser = ess.getUser(matchedPlayer);
+			if (sender instanceof Player && (matchedUser.isIgnoredPlayer(((Player)sender).getName()) || matchedUser.isHidden()))
 			{
 				continue;
 			}
-			p.sendMessage(_("msgFormat", senderName, translatedMe, message));
-			replyTo.setReplyTo(ess.getUser(p));
-			ess.getUser(p).setReplyTo(sender);
+			matchedPlayer.sendMessage(_("msgFormat", senderName, translatedMe, message));
+			replyTo.setReplyTo(ess.getUser(matchedPlayer));
+			ess.getUser(matchedPlayer).setReplyTo(sender);
 		}
 	}
 }

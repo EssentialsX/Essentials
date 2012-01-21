@@ -1,11 +1,12 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.IEssentialsCommand;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.bukkit.ChatColor;
-import org.bukkit.event.Event.Priority;
+import org.bukkit.event.EventPriority;
 
 
 public interface ISettings extends IConf
@@ -22,7 +23,7 @@ public interface ISettings extends IConf
 
 	long getBackupInterval();
 
-	String getChatFormat(String group);
+	MessageFormat getChatFormat(String group);
 
 	int getChatRadius();
 
@@ -148,9 +149,9 @@ public interface ISettings extends IConf
 	
 	boolean registerBackInListener();
 
-	public boolean getDisableItemPickupWhileAfk();
+	boolean getDisableItemPickupWhileAfk();
 
-	public Priority getRespawnPriority();
+	EventPriority getRespawnPriority();
 	
 	long getTpaAcceptCancellation();
 }

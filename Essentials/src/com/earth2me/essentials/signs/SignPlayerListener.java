@@ -4,22 +4,24 @@ import com.earth2me.essentials.IEssentials;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerListener;
 
 
-public class SignPlayerListener extends PlayerListener
+public class SignPlayerListener implements Listener
 {
 	private final transient IEssentials ess;
 
-	public SignPlayerListener(IEssentials ess)
+	public SignPlayerListener(final IEssentials ess)
 	{
 		this.ess = ess;
 	}
 
-	@Override
-	public void onPlayerInteract(PlayerInteractEvent event)
+	@EventHandler(priority = EventPriority.LOW)
+	public void onPlayerInteract(final PlayerInteractEvent event)
 	{
 		if (event.isCancelled() || ess.getSettings().areSignsDisabled())
 		{

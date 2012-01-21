@@ -5,13 +5,15 @@ import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerListener;
 import org.bukkit.inventory.ItemStack;
 
 
-public class EssentialsProtectPlayerListener extends PlayerListener
+public class EssentialsProtectPlayerListener implements Listener
 {
 	private final transient IProtect prot;
 	private final transient IEssentials ess;
@@ -22,7 +24,7 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 		this.ess = prot.getEssentialsConnect().getEssentials();
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerInteract(final PlayerInteractEvent event)
 	{
 		// Do not return if cancelled, because the interact event has 2 cancelled states.
