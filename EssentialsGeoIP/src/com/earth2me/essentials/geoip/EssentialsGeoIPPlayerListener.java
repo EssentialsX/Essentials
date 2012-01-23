@@ -1,9 +1,8 @@
 package com.earth2me.essentials.geoip;
 
-import com.earth2me.essentials.EssentialsConf;
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.api.IReload;
 import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.api.IReload;
 import com.earth2me.essentials.api.IUser;
 import com.maxmind.geoip.Location;
 import com.maxmind.geoip.LookupService;
@@ -19,165 +18,205 @@ import java.util.zip.GZIPInputStream;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
+import org.bukkit.plugin.Plugin;
 
 
 public class EssentialsGeoIPPlayerListener extends PlayerListener implements IReload
 {
-	LookupService ls = null;
-	private static final Logger logger = Logger.getLogger("Minecraft");
-	File databaseFile;
-	File dataFolder;
-	EssentialsConf config;
+	private transient LookupService ls = null;
+	private static final Logger LOGGER = Logger.getLogger("Minecraft");
+	private transient File databaseFile;
+	private final transient ConfigHolder config;
 	private final transient IEssentials ess;
+	private final transient Plugin geoip;
 
-	public EssentialsGeoIPPlayerListener(File dataFolder, IEssentials ess)
+	public EssentialsGeoIPPlayerListener(final Plugin geoip, final IEssentials ess)
 	{
+		super();
 		this.ess = ess;
-		this.dataFolder = dataFolder;
-		this.config = new EssentialsConf(new File(dataFolder, "config.yml"));
-		config.setTemplateName("/config.yml", EssentialsGeoIP.class);
+		this.geoip = geoip;
+		this.config = new ConfigHolder(ess, geoip);
 		onReload();
 	}
 
 	@Override
-	public void onPlayerJoin(PlayerJoinEvent event)
+	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
-		IUser u = ess.getUser(event.getPlayer());
+		final IUser u = ess.getUser(event.getPlayer());
 		if (u.isAuthorized("essentials.geoip.hide"))
 		{
 			return;
 		}
-		InetAddress address = event.getPlayer().getAddress().getAddress();
-		StringBuilder sb = new StringBuilder();
-		if (config.getBoolean("database.show-cities", false))
+		config.acquireReadLock();
+		try
 		{
-			Location loc = ls.getLocation(address);
-			if (loc == null)
+			final InetAddress address = event.getPlayer().getAddress().getAddress();
+			final StringBuilder builder = new StringBuilder();
+			if (config.getData().getDatabase().isShowCities())
 			{
-				return;
-			}
-			if (loc.city != null)
-			{
-				sb.append(loc.city).append(", ");
-			}
-			String region = regionName.regionNameByCode(loc.countryCode, loc.region);
-			if (region != null)
-			{
-				sb.append(region).append(", ");
-			}
-			sb.append(loc.countryName);
-		}
-		else
-		{
-			sb.append(ls.getCountry(address).getName());
-		}
-		if (config.getBoolean("show-on-whois", true))
-		{
-			u.acquireWriteLock();
-			try
-			{
-				u.getData().setGeolocation(sb.toString());
-			}
-			finally
-			{
-				u.unlock();
-			}
-		}
-		if (config.getBoolean("show-on-login", true) && !u.isHidden())
-		{
-			for (Player player : event.getPlayer().getServer().getOnlinePlayers())
-			{
-				IUser user = ess.getUser(player);
-				if (user.isAuthorized("essentials.geoip.show"))
+				final Location loc = ls.getLocation(address);
+				if (loc == null)
 				{
-					user.sendMessage(_("geoipJoinFormat", u.getDisplayName(), sb.toString()));
+					return;
+				}
+				if (loc.city != null)
+				{
+					builder.append(loc.city).append(", ");
+				}
+				final String region = regionName.regionNameByCode(loc.countryCode, loc.region);
+				if (region != null)
+				{
+					builder.append(region).append(", ");
+				}
+				builder.append(loc.countryName);
+			}
+			else
+			{
+				builder.append(ls.getCountry(address).getName());
+			}
+			if (config.getData().isShowOnWhois())
+			{
+				u.acquireWriteLock();
+				try
+				{
+					u.getData().setGeolocation(builder.toString());
+				}
+				finally
+				{
+					u.unlock();
 				}
 			}
+			if (config.getData().isShowOnLogin() && !u.isHidden())
+			{
+				for (Player player : event.getPlayer().getServer().getOnlinePlayers())
+				{
+					final IUser user = ess.getUser(player);
+					if (user.isAuthorized("essentials.geoip.show"))
+					{
+						user.sendMessage(_("geoipJoinFormat", user.getDisplayName(), builder.toString()));
+					}
+				}
+			}
+		}
+		finally
+		{
+			config.unlock();
 		}
 	}
 
 	@Override
 	public final void onReload()
 	{
-		config.load();
-
-		if (config.getBoolean("database.show-cities", false))
+		config.onReload();
+		config.acquireReadLock();
+		try
 		{
-			databaseFile = new File(dataFolder, "GeoIPCity.dat");
-		}
-		else
-		{
-			databaseFile = new File(dataFolder, "GeoIP.dat");
-		}
-		if (!databaseFile.exists())
-		{
-			if (config.getBoolean("database.download-if-missing", true))
+			if (config.getData().getDatabase().isShowCities())
 			{
-				downloadDatabase();
+				databaseFile = new File(geoip.getDataFolder(), "GeoIPCity.dat");
 			}
 			else
 			{
-				logger.log(Level.SEVERE, _("cantFindGeoIpDB"));
-				return;
+				databaseFile = new File(geoip.getDataFolder(), "GeoIP.dat");
+			}
+			if (!databaseFile.exists())
+			{
+				if (config.getData().getDatabase().isDownloadIfMissing())
+				{
+					if (config.getData().getDatabase().isShowCities())
+					{
+						downloadDatabase(config.getData().getDatabase().getDownloadUrlCity());
+					}
+					else
+					{
+						downloadDatabase(config.getData().getDatabase().getDownloadUrl());
+					}
+				}
+				else
+				{
+					LOGGER.log(Level.SEVERE, _("cantFindGeoIpDB"));
+					return;
+				}
+			}
+			try
+			{
+				ls = new LookupService(databaseFile);
+			}
+			catch (IOException ex)
+			{
+				LOGGER.log(Level.SEVERE, _("cantReadGeoIpDB"), ex);
 			}
 		}
-		try
+		finally
 		{
-			ls = new LookupService(databaseFile);
-		}
-		catch (IOException ex)
-		{
-			logger.log(Level.SEVERE, _("cantReadGeoIpDB"), ex);
+			config.unlock();
 		}
 	}
 
-	private void downloadDatabase()
+	private void downloadDatabase(final String url)
 	{
+		if (url == null || url.isEmpty())
+		{
+			LOGGER.log(Level.SEVERE, _("geoIpUrlEmpty"));
+			return;
+		}
+		InputStream input = null;
+		OutputStream output = null;
 		try
 		{
-			String url;
-			if (config.getBoolean("database.show-cities", false))
-			{
-				url = config.getString("database.download-url-city");
-			}
-			else
-			{
-				url = config.getString("database.download-url");
-			}
-			if (url == null || url.isEmpty())
-			{
-				logger.log(Level.SEVERE, _("geoIpUrlEmpty"));
-				return;
-			}
-			logger.log(Level.INFO, _("downloadingGeoIp"));
-			URL downloadUrl = new URL(url);
-			URLConnection conn = downloadUrl.openConnection();
+			LOGGER.log(Level.INFO, _("downloadingGeoIp"));
+			final URL downloadUrl = new URL(url);
+			final URLConnection conn = downloadUrl.openConnection();
 			conn.setConnectTimeout(10000);
 			conn.connect();
-			InputStream input = conn.getInputStream();
+			input = conn.getInputStream();
 			if (url.endsWith(".gz"))
 			{
 				input = new GZIPInputStream(input);
 			}
-			OutputStream output = new FileOutputStream(databaseFile);
-			byte[] buffer = new byte[2048];
+			output = new FileOutputStream(databaseFile);
+			final byte[] buffer = new byte[2048];
 			int length = input.read(buffer);
 			while (length >= 0)
 			{
 				output.write(buffer, 0, length);
 				length = input.read(buffer);
 			}
-			output.close();
 			input.close();
+			output.close();
 		}
 		catch (MalformedURLException ex)
 		{
-			logger.log(Level.SEVERE, _("geoIpUrlInvalid"), ex);
-			return;
+			LOGGER.log(Level.SEVERE, _("geoIpUrlInvalid"), ex);
 		}
 		catch (IOException ex)
 		{
-			logger.log(Level.SEVERE, _("connectionFailed"), ex);
+			LOGGER.log(Level.SEVERE, _("connectionFailed"), ex);
+		}
+		finally
+		{
+			if (output != null)
+			{
+				try
+				{
+					output.close();
+				}
+				catch (IOException ex)
+				{
+					LOGGER.log(Level.SEVERE, _("connectionFailed"), ex);
+				}
+			}
+			if (input != null)
+			{
+				try
+				{
+					input.close();
+				}
+				catch (IOException ex)
+				{
+					LOGGER.log(Level.SEVERE, _("connectionFailed"), ex);
+				}
+			}
 		}
 	}
 }

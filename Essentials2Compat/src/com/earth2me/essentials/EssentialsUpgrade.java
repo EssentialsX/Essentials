@@ -18,7 +18,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 
-
+@Deprecated
 public class EssentialsUpgrade
 {
 	private final static Logger LOGGER = Logger.getLogger("Minecraft");
@@ -51,7 +51,7 @@ public class EssentialsUpgrade
 			}
 			final EssentialsConf conf = new EssentialsConf(configFile);
 			conf.load();
-			final Worth worth = new Worth(ess.getDataFolder());
+			final Worth worth = new Worth(ess);
 			boolean found = false;
 			for (Material mat : Material.values())
 			{

@@ -16,9 +16,6 @@ import java.util.*;
  */
 public final class DescParseTickFormat
 {
-	// ============================================
-	// First some information vars. TODO: Should this be in a config file?
-	// --------------------------------------------
 	public static final Map<String, Integer> nameToTicks = new LinkedHashMap<String, Integer>();
 	public static final Set<String> resetAliases = new HashSet<String>();
 	public static final int ticksAtMidnight = 18000;

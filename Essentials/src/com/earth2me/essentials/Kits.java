@@ -16,8 +16,6 @@ import org.bukkit.inventory.ItemStack;
 
 public class Kits extends AsyncStorageObjectHolder<com.earth2me.essentials.settings.Kits> implements IKits
 {
-	private static final transient Logger LOGGER = Bukkit.getLogger();
-
 	public Kits(final IEssentials ess)
 	{
 		super(ess, com.earth2me.essentials.settings.Kits.class);

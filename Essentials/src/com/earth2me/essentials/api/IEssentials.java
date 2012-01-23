@@ -37,8 +37,6 @@ public interface IEssentials extends Plugin
 	IUserMap getUserMap();
 
 	IBackup getBackup();
-
-	IEssentialsEconomy getEconomy();
 	
 	ICommandHandler getCommandHandler();
 

@@ -14,6 +14,7 @@
     <ant dir="Essentials" antfile="build.xml"/>
   </target>  
   <target name="buildRest" depends="buildEss">
+    <ant dir="Essentials2Compat" antfile="build.xml"/>
     <ant dir="EssentialsChat" antfile="build.xml"/>
     <ant dir="EssentialsSpawn" antfile="build.xml"/>
     <ant dir="EssentialsProtect" antfile="build.xml"/>

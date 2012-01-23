@@ -1,62 +1,86 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.IWorth;
+import com.earth2me.essentials.storage.AsyncStorageObjectHolder;
+import com.earth2me.essentials.storage.EnchantmentLevel;
 import java.io.File;
-import java.util.Locale;
-import java.util.logging.Logger;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.MaterialData;
 
 
-public class Worth implements IWorth
+public class Worth extends AsyncStorageObjectHolder<com.earth2me.essentials.settings.Worth> implements IWorth
 {
-	private static final Logger logger = Logger.getLogger("Minecraft");
-	private final EssentialsConf config;
-
-	public Worth(File dataFolder)
+	public Worth(final IEssentials ess)
 	{
-		config = new EssentialsConf(new File(dataFolder, "worth.yml"));
-		config.setTemplateName("/worth.yml");
-		config.load();
-	}
-
-	public double getPrice(ItemStack itemStack)
-	{
-		String itemname = itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
-		double result;
-		result = config.getDouble("worth." + itemname + "." + itemStack.getDurability(), Double.NaN);
-		if (Double.isNaN(result))
-		{
-			result = config.getDouble("worth." + itemname + ".0", Double.NaN);
-		}
-		if (Double.isNaN(result))
-		{
-			result = config.getDouble("worth." + itemname, Double.NaN);
-		}
-		if (Double.isNaN(result))
-		{
-			result = config.getDouble("worth-" + itemStack.getTypeId(), Double.NaN);
-		}
-		return result;
-	}
-
-	public void setPrice(ItemStack itemStack, double price)
-	{
-		if (itemStack.getType().getData() == null)
-		{
-			config.setProperty("worth." + itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""), price);
-		}
-		else
-		{
-			// Bukkit-bug: getDurability still contains the correct value, while getData().getData() is 0.
-			config.setProperty("worth." + itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "") + "." + itemStack.getDurability(), price);
-		}
-		config.removeProperty("worth-" + itemStack.getTypeId());
-		config.save();
+		super(ess, com.earth2me.essentials.settings.Worth.class);
+		onReload(false);
 	}
 
 	@Override
-	public void onReload()
+	public double getPrice(final ItemStack itemStack)
 	{
-		config.load();
+		this.acquireReadLock();
+		try
+		{
+			final Map<MaterialData, Double> prices = this.getData().getSell();
+			if (prices == null || itemStack == null)
+			{
+				return Double.NaN;
+			}
+			final Double basePrice = prices.get(itemStack.getData());
+			if (basePrice == null || Double.isNaN(basePrice))
+			{
+				return Double.NaN;
+			}
+			double multiplier = 1.0;
+			if (itemStack.getType().getMaxDurability() > 0) {
+				multiplier *= (double)itemStack.getDurability() / (double)itemStack.getType().getMaxDurability();
+			}
+			if (itemStack.getEnchantments() != null && !itemStack.getEnchantments().isEmpty())
+			{
+				final Map<EnchantmentLevel, Double> enchantmentMultipliers = this.getData().getEnchantmentMultiplier();
+				if (enchantmentMultipliers != null)
+				{
+					for (Map.Entry<Enchantment, Integer> entry : itemStack.getEnchantments().entrySet())
+					{
+						final Double enchMult = enchantmentMultipliers.get(new EnchantmentLevel(entry.getKey(), entry.getValue()));
+						if (enchMult != null)
+						{
+							multiplier *= enchMult;
+						}
+					}
+				}
+			}
+			return basePrice * multiplier;
+		}
+		finally
+		{
+			this.unlock();
+		}
+	}
+
+	@Override
+	public void setPrice(final ItemStack itemStack, final double price)
+	{
+		acquireWriteLock();
+		try {
+			if (getData().getSell() == null) {
+				getData().setSell(new HashMap<MaterialData, Double>());
+			}
+			getData().getSell().put(itemStack.getData(), price);
+		} finally {
+			unlock();
+		}
+	}
+
+	@Override
+	public File getStorageFile() throws IOException
+	{
+		return new File(ess.getDataFolder(), "worth.yml");
 	}
 }

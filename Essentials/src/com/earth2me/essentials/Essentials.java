@@ -24,6 +24,7 @@ import com.earth2me.essentials.craftbukkit.ItemDupeFix;
 import com.earth2me.essentials.listener.*;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
+import com.earth2me.essentials.settings.GroupsHolder;
 import com.earth2me.essentials.settings.SettingsHolder;
 import com.earth2me.essentials.user.UserMap;
 import java.io.File;
@@ -65,6 +66,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private transient List<IReload> reloadList;
 	private transient IBackup backup;
 	private transient IItemDb itemDb;
+	private transient IGroups groups;
 	private transient final Methods paymentMethod = new Methods();
 	private transient PermissionsHandler permissionsHandler;
 	private transient IUserMap userMap;
@@ -141,23 +143,25 @@ public class Essentials extends JavaPlugin implements IEssentials
 		execTimer.mark("BukkitCheck");
 		try
 		{
-			final EssentialsUpgrade upgrade = new EssentialsUpgrade(this);
-			upgrade.beforeSettings();
-			execTimer.mark("Upgrade");
+			//final EssentialsUpgrade upgrade = new EssentialsUpgrade(this);
+			//upgrade.beforeSettings();
+			//execTimer.mark("Upgrade");
 			reloadList = new ArrayList<IReload>();
 			settings = new SettingsHolder(this);
 			reloadList.add(settings);
 			execTimer.mark("Settings");
-			upgrade.afterSettings();
-			execTimer.mark("Upgrade2");
+			//upgrade.afterSettings();
+			//execTimer.mark("Upgrade2");
 			i18n.updateLocale(settings.getLocale());
 			userMap = new UserMap(this);
 			reloadList.add(userMap);
 			execTimer.mark("Init(Usermap)");
+			groups = new GroupsHolder(this);
+			reloadList.add(groups);
 			warps = new Warps(this);
 			reloadList.add(warps);
 			execTimer.mark("Init(Spawn/Warp)");
-			worth = new Worth(this.getDataFolder());
+			worth = new Worth(this);
 			reloadList.add(worth);
 			itemDb = new ItemDb(this);
 			reloadList.add(itemDb);
@@ -429,13 +433,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	@Override
 	public IGroups getGroups()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
-
-	@Override
-	public IEssentialsEconomy getEconomy()
-	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		return groups;
 	}
 
 	@Override
