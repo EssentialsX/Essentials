@@ -121,8 +121,19 @@ public class VaultEco implements Method
 	@Override
 	public boolean isCompatible(Plugin plugin)
 	{
-		RegisteredServiceProvider<Economy> ecoPlugin = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-		return plugin instanceof Vault && ecoPlugin != null && !ecoPlugin.getProvider().getName().equals("Essentials Economy");
+		try
+		{
+			RegisteredServiceProvider<Economy> ecoPlugin = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+			return plugin instanceof Vault && ecoPlugin != null && !ecoPlugin.getProvider().getName().equals("Essentials Economy");
+		}
+		catch (LinkageError e)
+		{
+			return false;
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
 	}
 
 	@Override

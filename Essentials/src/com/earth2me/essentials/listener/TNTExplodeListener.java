@@ -4,11 +4,13 @@ import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.craftbukkit.FakeExplosion;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.EntityListener;
 
 
-public class TNTExplodeListener extends EntityListener implements Runnable
+public class TNTExplodeListener implements Listener, Runnable
 {
 	private final transient IEssentials ess;
 	private transient AtomicBoolean enabled = new AtomicBoolean(false);
@@ -34,7 +36,7 @@ public class TNTExplodeListener extends EntityListener implements Runnable
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.LOW)
 	public void onEntityExplode(final EntityExplodeEvent event)
 	{
 		if (!enabled.get())

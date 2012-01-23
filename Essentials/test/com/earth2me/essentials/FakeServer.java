@@ -22,6 +22,7 @@ import org.bukkit.map.MapView;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.ServicesManager;
+import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scheduler.BukkitWorker;
@@ -545,6 +546,12 @@ public class FakeServer implements Server
 			{
 				throw new UnsupportedOperationException("Not supported yet.");
 			}
+
+			@Override
+			public Location getBedSpawnLocation()
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
 		};
 	}
 
@@ -616,6 +623,24 @@ public class FakeServer implements Server
 
 	@Override
 	public boolean getAllowEnd()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public Messenger getMessenger()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void sendPluginMessage(Plugin plugin, String string, byte[] bytes)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public Set<String> getListeningPluginChannels()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}

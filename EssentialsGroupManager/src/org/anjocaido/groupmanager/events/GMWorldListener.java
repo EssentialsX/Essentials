@@ -1,9 +1,10 @@
 package org.anjocaido.groupmanager.events;
 
 import org.anjocaido.groupmanager.GroupManager;
-import org.bukkit.event.Event;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldInitEvent;
-import org.bukkit.event.world.WorldListener;
 
 
 /**
@@ -12,7 +13,7 @@ import org.bukkit.event.world.WorldListener;
  * Handle new world creation from other plugins
  *
  */
-public class GMWorldListener extends WorldListener {
+public class GMWorldListener implements Listener {
 	
 	private final GroupManager plugin;
 
@@ -22,10 +23,10 @@ public class GMWorldListener extends WorldListener {
 	}
 	
 	private void registerEvents() {
-    	plugin.getServer().getPluginManager().registerEvent(Event.Type.WORLD_INIT, this, Event.Priority.Lowest, plugin);
+    	plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 	
-	@Override
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onWorldInit(WorldInitEvent event) {
 		String worldName =  event.getWorld().getName();
 		

@@ -12,8 +12,6 @@ import java.util.logging.Logger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -50,9 +48,7 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 		}
 
 		final EssentialsXMPPPlayerListener playerListener = new EssentialsXMPPPlayerListener(ess);
-		pluginManager.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
-		pluginManager.registerEvent(Type.PLAYER_CHAT, playerListener, Priority.Monitor, this);
-		pluginManager.registerEvent(Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
+		pluginManager.registerEvents(playerListener, this);
 
 		users = new UserManager(this.getDataFolder());
 		xmpp = new XMPPManager(this);
@@ -61,8 +57,6 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 		ess.addReloadListener(xmpp);
 		
 		commandHandler = new EssentialsCommandHandler(EssentialsXMPP.class.getClassLoader(), "com.earth2me.essentials.xmpp.Command", "essentials.", ess);
-
-		LOGGER.info(_("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
 	}
 
 	@Override

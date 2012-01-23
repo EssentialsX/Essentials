@@ -12,6 +12,7 @@ import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.event.Event.Priority;
+import org.bukkit.event.EventPriority;
 
 
 public class SpawnStorage extends AsyncStorageObjectHolder<Spawns> implements IEssentialsModule
@@ -90,18 +91,18 @@ public class SpawnStorage extends AsyncStorageObjectHolder<Spawns> implements IE
 		return ess.getServer().getWorlds().get(0).getSpawnLocation();
 	}
 
-	public Priority getRespawnPriority()
+	public EventPriority getRespawnPriority()
 	{
 		acquireReadLock();
 		try
 		{
-			for (Priority priority : Priority.values())
+			for (EventPriority priority : EventPriority.values())
 			{
 				if (priority.toString().equalsIgnoreCase(getData().getRespawnPriority())) {
 					return priority;
 				}
 			}
-			return Priority.Normal;
+			return EventPriority.NORMAL;
 		} finally {
 			unlock();
 		}

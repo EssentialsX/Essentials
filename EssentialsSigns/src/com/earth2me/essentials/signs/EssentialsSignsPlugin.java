@@ -44,7 +44,14 @@ public class EssentialsSignsPlugin extends JavaPlugin
 		final SignEntityListener signEntityListener = new SignEntityListener(ess);
 		pluginManager.registerEvent(Event.Type.ENTITY_EXPLODE, signEntityListener, Event.Priority.Low, this);
 		pluginManager.registerEvent(Event.Type.ENDERMAN_PICKUP, signEntityListener, Event.Priority.Low, this);
+		//final SignBlockListener signBlockListener = new SignBlockListener(ess);
+		pluginManager.registerEvents(signBlockListener, this);
 
+		//final SignPlayerListener signPlayerListener = new SignPlayerListener(ess);
+		pluginManager.registerEvents(signPlayerListener, this);
+
+		//final SignEntityListener signEntityListener = new SignEntityListener(ess);
+		pluginManager.registerEvents(signEntityListener, this);
 		
 		LOGGER.info(_("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
 	}

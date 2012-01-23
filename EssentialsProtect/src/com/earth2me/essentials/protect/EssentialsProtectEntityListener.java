@@ -7,12 +7,15 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.*;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityTargetEvent.TargetReason;
 import org.bukkit.event.entity.*;
 
 
-public class EssentialsProtectEntityListener extends EntityListener
+public class EssentialsProtectEntityListener implements Listener
 {
 	private final transient IProtect prot;
 	private final transient IEssentials ess;
@@ -24,7 +27,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 		this.ess = prot.getEssentialsConnect().getEssentials();
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityDamage(final EntityDamageEvent event)
 	{
 		if (event.isCancelled())
@@ -170,7 +173,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityExplode(final EntityExplodeEvent event)
 	{
 		if (event.isCancelled())
@@ -247,7 +250,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onCreatureSpawn(final CreatureSpawnEvent event)
 	{
 		if (event.getEntity() instanceof Player)
@@ -279,7 +282,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityTarget(final EntityTargetEvent event)
 	{
 		if (event.isCancelled() || !(event.getTarget() instanceof Player))
@@ -300,7 +303,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onExplosionPrime(final ExplosionPrimeEvent event)
 	{
 		final ProtectHolder settings = prot.getSettings();
@@ -319,7 +322,7 @@ public class EssentialsProtectEntityListener extends EntityListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEndermanPickup(final EndermanPickupEvent event)
 	{
 		if (event.isCancelled())

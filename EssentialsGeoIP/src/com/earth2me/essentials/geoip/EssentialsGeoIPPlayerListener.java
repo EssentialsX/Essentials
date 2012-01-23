@@ -16,12 +16,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerListener;
 import org.bukkit.plugin.Plugin;
 
 
-public class EssentialsGeoIPPlayerListener extends PlayerListener implements IReload
+public class EssentialsGeoIPPlayerListener implements Listener, IReload
 {
 	private transient LookupService ls = null;
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
@@ -39,7 +41,7 @@ public class EssentialsGeoIPPlayerListener extends PlayerListener implements IRe
 		onReload();
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
 		final IUser u = ess.getUser(event.getPlayer());

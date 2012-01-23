@@ -1,7 +1,9 @@
 package com.earth2me.essentials.craftbukkit;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import org.bukkit.*;
 import org.bukkit.block.Biome;
@@ -10,6 +12,7 @@ import org.bukkit.entity.*;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
 
@@ -518,6 +521,30 @@ public class FakeWorld implements World
 
 	@Override
 	public File getWorldFolder()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public <T extends Entity> Collection<T> getEntitiesByClass(Class<T>... types)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public WorldType getWorldType()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void sendPluginMessage(Plugin plugin, String string, byte[] bytes)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public Set<String> getListeningPluginChannels()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}

@@ -4,12 +4,14 @@ import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.IUser;
 import org.bukkit.GameMode;
-import org.bukkit.event.block.BlockListener;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
 
-public class EssentialsBlockListener extends BlockListener
+public class EssentialsBlockListener implements Listener
 {
 	private final transient IEssentials ess;
 
@@ -19,7 +21,7 @@ public class EssentialsBlockListener extends BlockListener
 		this.ess = ess;
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockPlace(final BlockPlaceEvent event)
 	{
 		if (event.isCancelled())

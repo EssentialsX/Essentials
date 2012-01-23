@@ -9,7 +9,12 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.event.Event.Type;
+import org.bukkit.event.Event;
+import org.bukkit.event.EventException;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -41,10 +46,22 @@ public class EssentialsSpawn extends JavaPlugin
 		commandHandler = new EssentialsCommandHandler(EssentialsSpawn.class.getClassLoader(), "com.earth2me.essentials.spawn.Command", "essentials.", spawns, ess);
 
 		final EssentialsSpawnPlayerListener playerListener = new EssentialsSpawnPlayerListener(ess, spawns);
-		pluginManager.registerEvent(Type.PLAYER_RESPAWN, playerListener, spawns.getRespawnPriority(), this);
-		pluginManager.registerEvent(Type.PLAYER_JOIN, playerListener, spawns.getRespawnPriority(), this);
-
-		LOGGER.info(_("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
+		pluginManager.registerEvent(PlayerRespawnEvent.class, playerListener, spawns.getRespawnPriority(), new EventExecutor()
+		{
+			@Override
+			public void execute(final Listener ll, final Event event) throws EventException
+			{
+				((EssentialsSpawnPlayerListener)ll).onPlayerRespawn((PlayerRespawnEvent)event);
+			}
+		}, this);
+		pluginManager.registerEvent(PlayerJoinEvent.class, playerListener, spawns.getRespawnPriority(), new EventExecutor()
+		{
+			@Override
+			public void execute(final Listener ll, final Event event) throws EventException
+			{
+				((EssentialsSpawnPlayerListener)ll).onPlayerJoin((PlayerJoinEvent)event);
+			}
+		}, this);
 	}
 
 	public void onDisable()

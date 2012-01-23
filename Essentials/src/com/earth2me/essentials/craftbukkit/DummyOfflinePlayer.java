@@ -2,6 +2,7 @@ package com.earth2me.essentials.craftbukkit;
 
 import java.util.Map;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
@@ -86,6 +87,12 @@ public class DummyOfflinePlayer implements OfflinePlayer
 
 	@Override
 	public Map<String, Object> serialize()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public Location getBedSpawnLocation()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
