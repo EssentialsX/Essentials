@@ -83,6 +83,7 @@ public class EssentialsProtectPlayerListener implements Listener
 			}
 		}
 		if (item != null
+			&& !user.hasPermission("essentials.protect.alerts.notrigger")
 			&& prot.checkProtectionItems(ProtectConfig.alert_on_use, item.getTypeId()))
 		{
 			prot.getEssentialsConnect().alert(user, item.getType().toString(), _("alertUsed"));
