@@ -37,7 +37,7 @@ public class SignSpawnmob extends EssentialsSign
 		};
 		try
 		{
-			command.run(player, args);
+			command.run(player, "spawnmob", args);
 		}
 		catch (Exception ex)
 		{

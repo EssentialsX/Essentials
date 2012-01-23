@@ -84,7 +84,8 @@ public class EssentialsProtectPlayerListener extends PlayerListener
 				}
 			}
 			if (item != null
-				&& settings.getData().getAlertOnUse().contains(item.getType()))
+				&& !user.hasPermission("essentials.protect.alerts.notrigger") 
+				&&  settings.getData().getAlertOnUse().contains(item.getType()))
 			{
 				prot.getEssentialsConnect().alert(user, item.getType().toString(), _("alertUsed"));
 			}
