@@ -150,12 +150,14 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 		
 		Set<String> permArray = new HashSet<String>();
 		
+		// Allow * node to populate ALL perms in Bukkit.
+		if (perms.contains("*")) {
+			permArray.addAll(GroupManager.BukkitPermissions.getAllRegisteredPermissions(includeChildren));
+			perms.remove("*");
+		}
+			
 		for (String perm : perms) {
-			
-			// Allow * node to populate ALL perms in Bukkit.
-			if (perm.equalsIgnoreCase("*"))
-				permArray.addAll(GroupManager.BukkitPermissions.getAllRegisteredPermissions(includeChildren));
-			
+
 			boolean negated = false;
 			if (perm.startsWith("-"))
 				negated = true;

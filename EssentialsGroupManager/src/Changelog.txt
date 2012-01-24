@@ -117,3 +117,4 @@ v 1.9:
 	- Changed addSubGroup() to only add the group if it doesn't already exist (no need to update an already existing group).
 	- addSubGroup now returns a boolean for success/failure.
 	- '/manuaddsub' now correctly reports if it was able to add the sub group.
+	- Allow negations with the * permission node when population superperms.
