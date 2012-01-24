@@ -168,7 +168,7 @@ public class GroupsHolder extends AsyncStorageObjectHolder<Groups> implements IG
 	{
 		for (GroupOptions groupOptions : getGroups(player))
 		{
-			if (groupOptions.getMessageFormat() != null)
+			if (groupOptions != null && groupOptions.getMessageFormat() != null)
 			{
 				return groupOptions.getMessageFormat();
 			}

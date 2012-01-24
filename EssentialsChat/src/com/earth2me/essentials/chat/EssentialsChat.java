@@ -42,7 +42,7 @@ public class EssentialsChat extends JavaPlugin
 		pluginManager.registerEvents(playerListenerLowest, this);
 		pluginManager.registerEvents(playerListenerNormal, this);
 		pluginManager.registerEvents(playerListenerHighest, this);
-		
+
 		final EssentialsLocalChatEventListener localChatListener = new EssentialsLocalChatEventListener(getServer(), ess);
 		pluginManager.registerEvents(localChatListener, this);
 

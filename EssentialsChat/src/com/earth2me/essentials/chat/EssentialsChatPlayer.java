@@ -83,18 +83,21 @@ public abstract class EssentialsChatPlayer implements Listener
 		}
 		String group = user.getGroup();
 		String world = user.getWorld().getName();
-		
+
 		IGroups groupSettings = ess.getGroups();
 		groupSettings.acquireReadLock();
 		try
-		{			
-			event.setFormat(groupSettings.getChatFormat(user).format(new Object[] {group, world, world.substring(0, 1).toUpperCase(Locale.ENGLISH)}));
+		{
+			event.setFormat(groupSettings.getChatFormat(user).format(new Object[]
+					{
+						group, world, world.substring(0, 1).toUpperCase(Locale.ENGLISH)
+					}));
 		}
 		finally
 		{
 			groupSettings.unlock();
 		}
-		
+
 	}
 
 	//TODO: Flesh this out - '?' trigger is too easily accidentally triggered
@@ -105,7 +108,7 @@ public abstract class EssentialsChatPlayer implements Listener
 		case '!':
 			return "shout";
 		//case '?':
-			//return "question";
+		//return "question";
 		//case '@':
 		//	return "admin";			
 		default:
@@ -126,8 +129,13 @@ public abstract class EssentialsChatPlayer implements Listener
 		{
 			settings.unlock();
 		}
+
+		if (radius < 1)
+		{
+			return;
+		}
+
 		radius *= radius;
-		chatStore.setRadius(radius);
 
 		final IUser user = chatStore.getUser();
 
@@ -154,7 +162,7 @@ public abstract class EssentialsChatPlayer implements Listener
 		}
 
 		event.setCancelled(true);
-		final EssentialsLocalChatEvent localChat = new EssentialsLocalChatEvent(event, chatStore);
+		final EssentialsLocalChatEvent localChat = new EssentialsLocalChatEvent(event, radius);
 		ess.getServer().getPluginManager().callEvent(localChat);
 	}
 }

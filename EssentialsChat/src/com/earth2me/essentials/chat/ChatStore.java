@@ -10,7 +10,6 @@ public class ChatStore
 	private final transient IUser user;
 	private final transient String type;
 	private final transient Trade charge;
-	private long radius;
 
 	public ChatStore(final IEssentials ess, final IUser user, final String type)
 	{
@@ -37,15 +36,5 @@ public class ChatStore
 	public final String getLongType()
 	{
 		return type.length() > 0 ? "chat" : "chat-" + type;
-	}
-
-	public long getRadius()
-	{
-		return radius;
-	}
-
-	public void setRadius(final long radius)
-	{
-		this.radius = radius;
 	}
 }

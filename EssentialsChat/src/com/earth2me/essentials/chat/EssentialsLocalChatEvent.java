@@ -25,9 +25,9 @@ public class EssentialsLocalChatEvent extends Event implements Cancellable
 		this.radius = radius;
 	}
 
-	public EssentialsLocalChatEvent(final PlayerChatEvent event, final ChatStore chatStore)
+	public EssentialsLocalChatEvent(final PlayerChatEvent event, final long radius)
 	{
-		this(event.getPlayer(), event.getMessage(), event.getFormat(), chatStore.getRadius());
+		this(event.getPlayer(), event.getMessage(), event.getFormat(), radius);
 		this.parentEvent = event;
 	}
 
