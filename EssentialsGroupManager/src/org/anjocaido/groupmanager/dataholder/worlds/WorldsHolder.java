@@ -553,7 +553,7 @@ public class WorldsHolder {
      * @return true if it has its own holder. false if not.
      */
     public boolean hasOwnData(String worldName) {
-        if (worldsData.containsKey(worldName.toLowerCase())) {
+        if (worldsData.containsKey(worldName.toLowerCase()) && (!mirrorsGroup.containsKey(worldName.toLowerCase()) || !mirrorsUser.containsKey(worldName.toLowerCase()))) {
             return true;
         }
         return false;
