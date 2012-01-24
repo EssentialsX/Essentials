@@ -130,41 +130,48 @@ public class WorldsHolder {
                     
                     // These worlds fully mirror their parent
                     for (Object o : mirrorList) {
-                        try {
-                            mirrorsGroup.remove(o.toString().toLowerCase());
-                            mirrorsUser.remove(o.toString().toLowerCase());
-                        } catch (Exception e) {
-                        }
-                        mirrorsGroup.put(o.toString().toLowerCase(), getWorldData(source).getName());
-                        mirrorsUser.put(o.toString().toLowerCase(), getWorldData(source).getName());
+                    	String world = o.toString().toLowerCase();
+                    	if (world != serverDefaultWorldName) {
+	                        try {
+	                            mirrorsGroup.remove(world);
+	                            mirrorsUser.remove(world);
+	                        } catch (Exception e) {
+	                        }
+	                        mirrorsGroup.put(world, getWorldData(source).getName());
+	                        mirrorsUser.put(world, getWorldData(source).getName());
+                    	} else
+                    		GroupManager.logger.log(Level.WARNING, "Mirroring error with " + o.toString() + ". Recursive loop detected!");
                     }
                 } else if (mirrorsMap.get(source) instanceof MemorySection) {
                 	MemorySection subSection = (MemorySection) mirrorsMap.get(source);
                 	
                 	for (String key : subSection.getKeys(true)) {
-                		//System.out.print("Key - " + key);
                 		
-                		if (subSection.get(key) instanceof ArrayList) {
-                			ArrayList mirrorList = (ArrayList) subSection.get(key);
-                			
-                			// These worlds have defined mirroring
-                			for (Object o : mirrorList) {
-                				String type = o.toString().toLowerCase();
-                                try {
-                                	if (type.equals("groups"))
-                                		mirrorsGroup.remove(key.toLowerCase());
-                                	
-                                	if (type.equals("users"))
-                                		mirrorsUser.remove(key.toLowerCase());
-                                	
-                                } catch (Exception e) {
-                                }
-                                if (type.equals("groups"))
-                                	mirrorsGroup.put(key.toLowerCase(), getWorldData(source).getName());
-                                
-                                if (type.equals("users"))
-                                	mirrorsUser.put(key.toLowerCase(), getWorldData(source).getName());
-                            }
+                		if (key.toLowerCase() != serverDefaultWorldName) {
+                		
+	                		if (subSection.get(key) instanceof ArrayList) {
+	                			ArrayList mirrorList = (ArrayList) subSection.get(key);
+	                			
+	                			// These worlds have defined mirroring
+	                			for (Object o : mirrorList) {
+	                				String type = o.toString().toLowerCase();
+	                                try {
+	                                	if (type.equals("groups"))
+	                                		mirrorsGroup.remove(key.toLowerCase());
+	                                	
+	                                	if (type.equals("users"))
+	                                		mirrorsUser.remove(key.toLowerCase());
+	                                	
+	                                } catch (Exception e) {
+	                                }
+	                                if (type.equals("groups"))
+	                                	mirrorsGroup.put(key.toLowerCase(), getWorldData(source).getName());
+	                                
+	                                if (type.equals("users"))
+	                                	mirrorsUser.put(key.toLowerCase(), getWorldData(source).getName());
+	                            }
+                		} else
+                    		GroupManager.logger.log(Level.WARNING, "Mirroring error with " + key + ". Recursive loop detected!");
                 			
                 			
                 			
@@ -312,27 +319,19 @@ public class WorldsHolder {
      * If the world is not on the worlds list, returns the default world
      * holder.
      *
-     * (WHEN A WORLD IS CONFIGURED TO MIRROR, IT WILL BE ON THE LIST, BUT
-     * POINTING TO ANOTHER WORLD HOLDER)
-     *
-     * Mirrors prevails original data.
+     * Mirrors return original world data.
      *
      * @param worldName
      * @return OverloadedWorldHolder
      */
     public OverloadedWorldHolder getWorldData(String worldName) {
     	String worldNameLowered = worldName.toLowerCase();
-    	// If a mirror change to the real world to load.
-    	if (mirrorsGroup.containsKey(worldNameLowered)) {
-    		worldNameLowered = mirrorsGroup.get(worldNameLowered);
-    	}
-    	OverloadedWorldHolder data = worldsData.get(worldNameLowered);
+    	
+    	if (worldsData.containsKey(worldNameLowered))
+    			return worldsData.get(worldNameLowered);
 
-        if (data == null) {
-            GroupManager.logger.finest("Requested world " + worldName + " not found or badly mirrored. Returning default world...");
-            data = getDefaultWorld();
-        }
-        return data;
+        GroupManager.logger.finest("Requested world " + worldName + " not found or badly mirrored. Returning default world...");
+        return getDefaultWorld();
     }
 
     /**

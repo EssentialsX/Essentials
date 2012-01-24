@@ -112,3 +112,5 @@ v 1.9:
 	- Fixed a random null error upon a player portaling.
 	- Fixed infinite loop error on player join.
 	- Optimized code to only update the player logging in instead of all players online.
+	- Added recursive loop detection for World mirroring (you may not set the main world as a mirror of another).
+	- Fixed fetching world data so it no longer returns the mirrored world for groups. Each world data holder now points to the correct data set, so can be returned as an object.
