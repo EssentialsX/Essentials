@@ -147,22 +147,26 @@ public class User extends DataUnit implements Cloneable {
 		}
 	}
 
-	public void addSubGroup(Group subGroup) {
+	public boolean addSubGroup(Group subGroup) {
+		// Don't allow adding a subgroup if it's already set as the primary.
 		if (this.group.equalsIgnoreCase(subGroup.getName())) {
-			return;
+			return false;
 		}
 		if (!this.getDataSource().groupExists(subGroup.getName())) {
 			getDataSource().addGroup(subGroup);
+			
+			flagAsChanged();
+			if (GroupManager.isLoaded()) {
+				if (!GroupManager.BukkitPermissions.isPlayer_join())
+					GroupManager.BukkitPermissions.updatePlayer(getBukkitPlayer());
+				GroupManagerEventHandler.callEvent(this, Action.USER_SUBGROUP_CHANGED);
+			}
+			return true;
 		}
-		subGroup = getDataSource().getGroup(subGroup.getName());
-		removeSubGroup(subGroup);
-		subGroups.add(subGroup.getName());
-		flagAsChanged();
-		if (GroupManager.isLoaded()) {
-			if (!GroupManager.BukkitPermissions.isPlayer_join())
-				GroupManager.BukkitPermissions.updatePlayer(getBukkitPlayer());
-			GroupManagerEventHandler.callEvent(this, Action.USER_SUBGROUP_CHANGED);
-		}
+		//subGroup = getDataSource().getGroup(subGroup.getName());
+		//removeSubGroup(subGroup);
+		//subGroups.add(subGroup.getName());
+		return false;
 	}
 
 	public int subGroupsSize() {

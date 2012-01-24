@@ -114,3 +114,6 @@ v 1.9:
 	- Optimized code to only update the player logging in instead of all players online.
 	- Added recursive loop detection for World mirroring (you may not set the main world as a mirror of another).
 	- Fixed fetching world data so it no longer returns the mirrored world for groups. Each world data holder now points to the correct data set, so can be returned as an object.
+	- Changed addSubGroup() to only add the group if it doesn't already exist (no need to update an already existing group).
+	- addSubGroup now returns a boolean for success/failure.
+	- '/manuaddsub' now correctly reports if it was able to add the sub group.
