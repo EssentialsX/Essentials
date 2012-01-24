@@ -1,6 +1,9 @@
 package org.anjocaido.groupmanager.events;
 
+import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.data.Group;
+import org.bukkit.Bukkit;
+import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 
@@ -8,7 +11,7 @@ import org.bukkit.event.HandlerList;
  * @author ElgarL
  *
  */
-public class GMGroupEvent extends GroupManagerEvent {
+public class GMGroupEvent extends Event {
 
     /**
 	 * 
@@ -66,5 +69,17 @@ public class GMGroupEvent extends GroupManagerEvent {
         GROUP_INFO_CHANGED,
         GROUP_ADDED,
         GROUP_REMOVED,
+    }
+    
+    public void schedule(final GMGroupEvent event) {
+
+		if (Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugin("GroupManager"), new Runnable() {
+
+			@Override
+			public void run() {
+				Bukkit.getServer().getPluginManager().callEvent(event);
+			}
+		}, 1) == -1)
+			GroupManager.logger.warning("Could not schedule GM Event.");
     }
 }

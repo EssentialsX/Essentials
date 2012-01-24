@@ -51,7 +51,8 @@ public class EssentialsProtectBlockListener implements Listener
 			return;
 		}
 
-		if (prot.checkProtectionItems(ProtectConfig.alert_on_placement, id))
+		if (!user.hasPermission("essentials.protect.alerts.notrigger") 
+			&& prot.checkProtectionItems(ProtectConfig.alert_on_placement, id))
 		{
 			prot.getEssentialsConnect().alert(user, blockPlaced.getType().toString(), _("alertPlaced"));
 		}
@@ -249,7 +250,8 @@ public class EssentialsProtectBlockListener implements Listener
 		}
 		final Material type = block.getType();
 
-		if (prot.checkProtectionItems(ProtectConfig.alert_on_break, typeId))
+		if (!user.hasPermission("essentials.protect.alerts.notrigger") 
+			&& prot.checkProtectionItems(ProtectConfig.alert_on_break, typeId))
 		{
 			prot.getEssentialsConnect().alert(user, type.toString(), _("alertBroke"));
 		}
