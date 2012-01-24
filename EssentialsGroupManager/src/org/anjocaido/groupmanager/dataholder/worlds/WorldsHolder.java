@@ -540,7 +540,7 @@ public class WorldsHolder {
      * @return true if world is loaded or mirrored. false if not listed
      */
     public boolean isInList(String worldName) {
-        if (worldsData.containsKey(worldName.toLowerCase()) || mirrorsGroup.containsKey(worldName.toLowerCase())) {
+        if (worldsData.containsKey(worldName.toLowerCase()) || mirrorsGroup.containsKey(worldName.toLowerCase()) || mirrorsUser.containsKey(worldName.toLowerCase())) {
             return true;
         }
         return false;
