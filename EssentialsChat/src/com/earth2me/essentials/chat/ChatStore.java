@@ -12,7 +12,7 @@ public class ChatStore
 	private final transient Trade charge;
 	private long radius;
 
-	ChatStore(final IEssentials ess, final IUser user, final String type)
+	public ChatStore(final IEssentials ess, final IUser user, final String type)
 	{
 		this.user = user;
 		this.type = type;

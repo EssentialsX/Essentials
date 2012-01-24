@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -35,17 +33,18 @@ public class EssentialsChat extends JavaPlugin
 			return;
 		}
 
-		final Map<PlayerChatEvent, String> charges = new HashMap<PlayerChatEvent, String>();
+		final Map<PlayerChatEvent, ChatStore> chatStore = new HashMap<PlayerChatEvent, ChatStore>();
 
 
-		final EssentialsChatPlayerListenerLowest playerListenerLowest = new EssentialsChatPlayerListenerLowest(getServer(), ess);
-		final EssentialsChatPlayerListenerNormal playerListenerNormal = new EssentialsChatPlayerListenerNormal(getServer(), ess, charges);
-		final EssentialsChatPlayerListenerHighest playerListenerHighest = new EssentialsChatPlayerListenerHighest(getServer(), ess, charges);
+		final EssentialsChatPlayerListenerLowest playerListenerLowest = new EssentialsChatPlayerListenerLowest(getServer(), ess, chatStore);
+		final EssentialsChatPlayerListenerNormal playerListenerNormal = new EssentialsChatPlayerListenerNormal(getServer(), ess, chatStore);
+		final EssentialsChatPlayerListenerHighest playerListenerHighest = new EssentialsChatPlayerListenerHighest(getServer(), ess, chatStore);
+		pluginManager.registerEvents(playerListenerLowest, this);
+		pluginManager.registerEvents(playerListenerNormal, this);
+		pluginManager.registerEvents(playerListenerHighest, this);
+		
 		final EssentialsLocalChatEventListener localChatListener = new EssentialsLocalChatEventListener(getServer(), ess);
-		pluginManager.registerEvent(Type.PLAYER_CHAT, playerListenerLowest, Priority.Lowest, this);
-		pluginManager.registerEvent(Type.PLAYER_CHAT, playerListenerNormal, Priority.Normal, this);
-		pluginManager.registerEvent(Type.PLAYER_CHAT, playerListenerHighest, Priority.Highest, this);
-		pluginManager.registerEvent(Type.CUSTOM_EVENT, localChatListener, Priority.Highest, this);
+		pluginManager.registerEvents(localChatListener, this);
 
 		LOGGER.info(_("loadinfo", this.getDescription().getName(), this.getDescription().getVersion(), "essentials team"));
 	}

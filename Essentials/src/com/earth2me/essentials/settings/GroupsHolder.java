@@ -7,10 +7,8 @@ import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.storage.AsyncStorageObjectHolder;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
+import java.text.MessageFormat;
+import java.util.*;
 import java.util.Map.Entry;
 import lombok.Cleanup;
 
@@ -149,9 +147,24 @@ public class GroupsHolder extends AsyncStorageObjectHolder<Groups> implements IG
 		}
 		return 0;
 	}
-
+	
+	//TODO: Reimplement caching
 	@Override
-	public String getChatFormat(final IUser player)
+	public MessageFormat getChatFormat(final IUser player)
+	{
+			String format = getRawChatFormat(player);
+			format = Util.replaceColor(format);
+			format = format.replace("{DISPLAYNAME}", "%1$s");
+			format = format.replace("{GROUP}", "{0}");
+			format = format.replace("{MESSAGE}", "%2$s");
+			format = format.replace("{WORLDNAME}", "{1}");
+			format = format.replace("{SHORTWORLDNAME}", "{2}");
+			format = format.replaceAll("\\{(\\D*)\\}", "\\[$1\\]");
+			MessageFormat mFormat = new MessageFormat(format);
+			return mFormat;		
+	}
+	
+	private String getRawChatFormat(final IUser player)
 	{
 		for (GroupOptions groupOptions : getGroups(player))
 		{
@@ -165,4 +178,5 @@ public class GroupsHolder extends AsyncStorageObjectHolder<Groups> implements IG
 		settings.acquireReadLock();
 		return settings.getData().getChat().getDefaultFormat();
 	}
+	
 }

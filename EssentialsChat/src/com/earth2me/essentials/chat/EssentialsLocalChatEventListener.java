@@ -1,16 +1,17 @@
 package com.earth2me.essentials.chat;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.IUser;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.event.CustomEventListener;
 import org.bukkit.event.Event;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
  
-public class EssentialsLocalChatEventListener extends CustomEventListener implements Listener {
+public class EssentialsLocalChatEventListener implements Listener {
 
 	
 	protected transient IEssentials ess;
@@ -21,7 +22,8 @@ public class EssentialsLocalChatEventListener extends CustomEventListener implem
 		this.ess = ess;
 		this.server = server;
 	}
-		
+	
+	@EventHandler
     public void onLocalChat(final EssentialsLocalChatEvent event) {		
 		final Player sender = event.getPlayer();
 		if (event.getRadius() < 1)
@@ -34,7 +36,7 @@ public class EssentialsLocalChatEventListener extends CustomEventListener implem
 
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
-			String type = "[L]";
+			String type = _("chatTypeLocal");
 			final IUser user = ess.getUser(onlinePlayer);
 			//TODO: remove reference to op 
 			if (user.isIgnoringPlayer(sender.getName()) && !sender.isOp())
@@ -54,7 +56,7 @@ public class EssentialsLocalChatEventListener extends CustomEventListener implem
 				{
 					if (user.isAuthorized("essentials.chat.spy"))
 					{
-						type = type.concat("[Spy]");
+						type = type.concat(_("chatTypeSpy"));
 					}
 					else
 					{
@@ -66,12 +68,5 @@ public class EssentialsLocalChatEventListener extends CustomEventListener implem
 			final String message = String.format(event.getFormat(), type.concat(sender.getDisplayName()), event.getMessage());
 			user.sendMessage(message);
 		}	
-    }
- 
-    @Override
-    public void onCustomEvent(final Event event) {
-        if (event instanceof EssentialsLocalChatEvent) {
-            onLocalChat((EssentialsLocalChatEvent) event);
-        }
-    }
+    } 
 }
