@@ -7,6 +7,7 @@ import com.earth2me.essentials.api.IUser;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -93,6 +94,11 @@ public class EssentialsSpawnPlayerListener implements Listener
 		@Override
 		public void run()
 		{
+			if (user.getBase() instanceof OfflinePlayer)
+			{
+				return;
+			}
+			
 			try
 			{
 				final Location spawn = spawns.getNewbieSpawn();
