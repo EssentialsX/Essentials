@@ -109,3 +109,6 @@ v 1.9:
 	- Fixed text when adding a subgroup to not say the player was moved.
 	- Update to new Bukkit Event system.
 	- Update GroupManagerBridge for new event system.
+	- Fixed a random null error upon a player portaling.
+	- Fixed infinite loop error on player join.
+	- Optimized code to only update the player logging in instead of all players online.

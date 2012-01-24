@@ -122,7 +122,6 @@ public class BukkitPermissions {
 		registeredPermissions =  new LinkedList<Permission>(Bukkit.getPluginManager().getPermissions());
 		
 	}
-	
 
 	public void updatePermissions(Player player) {
 		this.updatePermissions(player, null);
@@ -361,6 +360,14 @@ public class BukkitPermissions {
 			updatePermissions(player);
 		}
 	}
+	
+	/**
+	 * force Bukkit to update this Players permissions.
+	 */
+	public void updatePlayer(Player player) {
+		if (player != null)
+			this.updatePermissions(player, null);
+	}
 
 	protected class PlayerEvents implements Listener {
 
@@ -370,7 +377,7 @@ public class BukkitPermissions {
 			Player player = event.getPlayer();
 			// force GM to create the player if they are not already listed.
 			if (plugin.getWorldsHolder().getWorldData(player.getWorld().getName()).getUser(player.getName()) != null) {
-				//setPlayer_join(false);
+				setPlayer_join(false);
 				updatePermissions(event.getPlayer());
 			}
 			setPlayer_join(false);
@@ -378,7 +385,7 @@ public class BukkitPermissions {
 
 		@EventHandler(priority = EventPriority.LOWEST)
 		public void onPlayerPortal(PlayerPortalEvent event) { // will portal into another world
-			if (event.getTo() != null && !event.getFrom().getWorld().equals(event.getTo().getWorld())) { // only if world actually changed
+			if ((event.getTo() != null) && (!event.getFrom().getWorld().equals(event.getTo().getWorld()))) { // only if world actually changed
 				updatePermissions(event.getPlayer(), event.getTo().getWorld().getName());
 			}
 		}
@@ -390,7 +397,7 @@ public class BukkitPermissions {
 
 		@EventHandler(priority = EventPriority.LOWEST)
 		public void onPlayerTeleport(PlayerTeleportEvent event) { // can be teleported into another world
-			if (event.getTo() != null && !event.getFrom().getWorld().equals(event.getTo().getWorld())) { // only if world actually changed
+			if ((event.getTo() != null) && (!event.getFrom().getWorld().equals(event.getTo().getWorld()))) { // only if world actually changed
 				updatePermissions(event.getPlayer(), event.getTo().getWorld().getName());
 			}
 		}
