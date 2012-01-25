@@ -59,7 +59,10 @@ public class GroupsHolder extends AsyncStorageObjectHolder<Groups> implements IG
 			{
 				if (player.isAuthorized("essentials.groups." + entry.getKey()))
 				{
+					if(entry.getValue() != null)
+					{
 					list.add(entry.getValue());
+					}
 				}
 			}
 			return list;

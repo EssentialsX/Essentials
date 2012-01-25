@@ -17,7 +17,7 @@ public class Chat implements StorageObject
 		"Disable this if you have any other plugin, that modifies the displayname of a user.",
 		"If it is not set, it will be enabled if EssentialsChat is installed, otherwise not."
 	})
-	private Boolean changeDisplayname;
+	private Boolean changeDisplayname = true;
 	private String displaynameFormat = "{PREFIX}{NICKNAMEPREFIX}{NAME}{SUFFIX}";
 	@Comment(
 	{
