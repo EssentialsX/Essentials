@@ -397,7 +397,7 @@ public class BukkitPermissions {
 
 		@EventHandler(priority = EventPriority.LOWEST)
 		public void onPlayerTeleport(PlayerTeleportEvent event) { // can be teleported into another world
-			if ((event.getTo() != null) && (!event.getFrom().getWorld().equals(event.getTo().getWorld()))) { // only if world actually changed
+			if ((event.getTo() != null) && (event.getPlayer() != null) && (!event.getFrom().getWorld().equals(event.getTo().getWorld()))) { // only if world actually changed
 				updatePermissions(event.getPlayer(), event.getTo().getWorld().getName());
 			}
 		}
