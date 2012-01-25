@@ -118,3 +118,4 @@ v 1.9:
 	- addSubGroup now returns a boolean for success/failure.
 	- '/manuaddsub' now correctly reports if it was able to add the sub group.
 	- Allow negation to the * permission node when populating superperms.
+	- Fix trying to modify an unmodifiable collection breaking superperms.

@@ -153,41 +153,42 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 		// Allow * node to populate ALL perms in Bukkit.
 		if (perms.contains("*")) {
 			permArray.addAll(GroupManager.BukkitPermissions.getAllRegisteredPermissions(includeChildren));
-			perms.remove("*");
 		}
 			
 		for (String perm : perms) {
 
-			boolean negated = false;
-			if (perm.startsWith("-"))
-				negated = true;
-			
-			if (!permArray.contains(perm)) {
-				permArray.add(perm);
+			if (!perm.equalsIgnoreCase("*")) {
+				boolean negated = false;
+				if (perm.startsWith("-"))
+					negated = true;
 				
-				if ((negated) && (permArray.contains(perm.substring(1))))
-					permArray.remove(perm.substring(1));
-
-				if (includeChildren) {
-
-					Map<String, Boolean> children = GroupManager.BukkitPermissions.getAllChildren((negated ? perm.substring(1) : perm), new HashSet<String>());
-
-					if (children != null) {
-						if (negated) {
-
-							// Remove children of negated nodes
-							for (String child : children.keySet())
-								if (children.get(child))
-									if (permArray.contains(child))
-										permArray.remove(child);
-
-						} else {
-
-							// Add child nodes
-							for (String child : children.keySet())
-								if (children.get(child))
-									if ((!permArray.contains(child)) && (!permArray.contains("-" + child)))
-										permArray.add(child);
+				if (!permArray.contains(perm)) {
+					permArray.add(perm);
+					
+					if ((negated) && (permArray.contains(perm.substring(1))))
+						permArray.remove(perm.substring(1));
+	
+					if (includeChildren) {
+	
+						Map<String, Boolean> children = GroupManager.BukkitPermissions.getAllChildren((negated ? perm.substring(1) : perm), new HashSet<String>());
+	
+						if (children != null) {
+							if (negated) {
+	
+								// Remove children of negated nodes
+								for (String child : children.keySet())
+									if (children.get(child))
+										if (permArray.contains(child))
+											permArray.remove(child);
+	
+							} else {
+	
+								// Add child nodes
+								for (String child : children.keySet())
+									if (children.get(child))
+										if ((!permArray.contains(child)) && (!permArray.contains("-" + child)))
+											permArray.add(child);
+							}
 						}
 					}
 				}
