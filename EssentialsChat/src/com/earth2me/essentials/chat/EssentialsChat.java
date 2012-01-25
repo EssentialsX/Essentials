@@ -22,7 +22,7 @@ public class EssentialsChat extends JavaPlugin
 	public void onEnable()
 	{
 		final PluginManager pluginManager = getServer().getPluginManager();
-		final IEssentials ess = (IEssentials)pluginManager.getPlugin("Essentials");
+		final IEssentials ess = (IEssentials)pluginManager.getPlugin("Essentials3");
 		if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion()))
 		{
 			LOGGER.log(Level.WARNING, _("versionMismatchAll"));

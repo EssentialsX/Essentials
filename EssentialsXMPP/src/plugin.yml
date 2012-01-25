@@ -7,7 +7,7 @@ website: http://tiny.cc/EssentialsWiki
 description: Provides xmpp communication.
 authors:
   - snowleo
-depend: [Essentials]
+depend: [Essentials3]
 commands:
   setxmpp:
     description: set your xmpp address

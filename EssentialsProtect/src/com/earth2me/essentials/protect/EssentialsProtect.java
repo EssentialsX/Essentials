@@ -38,7 +38,7 @@ public class EssentialsProtect extends JavaPlugin implements IProtect
 	public void onEnable()
 	{
 		final PluginManager pm = this.getServer().getPluginManager();
-		final Plugin essPlugin = pm.getPlugin("Essentials");
+		final Plugin essPlugin = pm.getPlugin("Essentials3");
 		if (essPlugin == null || !essPlugin.isEnabled())
 		{
 			enableEmergencyMode(pm);

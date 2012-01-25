@@ -6,5 +6,5 @@ version: TeamCity
 website: http://tiny.cc/EssentialsWiki
 description: Provides chat control features for Essentials.  Requires Permissions.
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, Okamosy]
-depend: [Essentials]
+depend: [Essentials3]
 #softdepend: [Factions]

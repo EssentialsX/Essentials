@@ -6,7 +6,7 @@ version: TeamCity
 website: http://tiny.cc/EssentialsWiki
 description: Provides spawn control commands, utilizing Essentials.
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits]
-depend: [Essentials]
+depend: [Essentials3]
 commands:
   setspawn:
     description: Set the spawnpoint to your current position.

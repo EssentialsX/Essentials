@@ -22,7 +22,7 @@ public class EssentialsGeoIP extends JavaPlugin
 	public void onEnable()
 	{
 		final PluginManager pm = getServer().getPluginManager();
-		final IEssentials ess = (IEssentials)pm.getPlugin("Essentials");
+		final IEssentials ess = (IEssentials)pm.getPlugin("Essentials3");
 		if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion()))
 		{
 			getLogger().log(Level.WARNING, _("versionMismatchAll"));

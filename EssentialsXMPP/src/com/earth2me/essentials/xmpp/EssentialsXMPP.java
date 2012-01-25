@@ -36,7 +36,7 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 		instance = this;
 
 		final PluginManager pluginManager = getServer().getPluginManager();
-		ess = (IEssentials)pluginManager.getPlugin("Essentials");
+		ess = (IEssentials)pluginManager.getPlugin("Essentials3");
 		if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion()))
 		{
 			LOGGER.log(Level.WARNING, _("versionMismatchAll"));
