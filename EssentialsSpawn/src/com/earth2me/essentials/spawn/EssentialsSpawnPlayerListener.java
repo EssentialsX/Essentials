@@ -2,6 +2,7 @@ package com.earth2me.essentials.spawn;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,7 +28,7 @@ public class EssentialsSpawnPlayerListener implements Listener
 	}
 
 	public void onPlayerRespawn(final PlayerRespawnEvent event)
-	{		
+	{
 		final User user = ess.getUser(event.getPlayer());
 
 		if (ess.getSettings().getRespawnAtHome())
@@ -58,7 +59,7 @@ public class EssentialsSpawnPlayerListener implements Listener
 		{
 			LOGGER.log(Level.FINE, "Old player join");
 			return;
-		}		
+		}
 		if (!"none".equalsIgnoreCase(ess.getSettings().getNewbieSpawn()))
 		{
 			ess.scheduleSyncDelayedTask(new NewPlayerTeleport(user), 1L);
@@ -68,7 +69,7 @@ public class EssentialsSpawnPlayerListener implements Listener
 		{
 			ess.broadcastMessage(user, ess.getSettings().getAnnounceNewPlayerFormat(user));
 		}
-		
+
 		LOGGER.log(Level.FINE, "New player join");
 	}
 
@@ -85,6 +86,11 @@ public class EssentialsSpawnPlayerListener implements Listener
 		@Override
 		public void run()
 		{
+			if (user.getBase() instanceof OfflinePlayer)
+			{
+				return;
+			}
+			
 			try
 			{
 				Location spawn = spawns.getSpawn(ess.getSettings().getNewbieSpawn());
