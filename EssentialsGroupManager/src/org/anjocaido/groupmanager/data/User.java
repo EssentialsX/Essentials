@@ -122,6 +122,15 @@ public class User extends DataUnit implements Cloneable {
 	 *            the group to set
 	 */
 	public void setGroup(Group group) {
+		setGroup(group, true);
+	}
+		
+	/**
+	 * @param group the group to set
+	 * @param updatePerms if we are to trigger a superperms update.
+	 *            
+	 */
+	public void setGroup(Group group, Boolean updatePerms) {
 		if (!this.getDataSource().groupExists(group.getName())) {
 			getDataSource().addGroup(group);
 		}
@@ -129,7 +138,7 @@ public class User extends DataUnit implements Cloneable {
 		String oldGroup = this.group;
 		this.group = group.getName();
 		flagAsChanged();
-		if (GroupManager.isLoaded()) {
+		if (GroupManager.isLoaded() && (updatePerms)) {
 			if (!GroupManager.BukkitPermissions.isPlayer_join())
 				GroupManager.BukkitPermissions.updatePlayer(getBukkitPlayer());
 

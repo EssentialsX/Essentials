@@ -122,3 +122,4 @@ v 1.9:
 	- Fixed subgroups (I broke earlier).
 	- Check for a null player object in the PlayerTeleportEvent.
 	- Trap errors in fetching the mirrors map.
+	- Fixed an infinite loop error when using '/manudel' on a logged in player. It caused setDefaultGroup to trigger a bukkit update when no GM User existed yet.
