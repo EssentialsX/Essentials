@@ -66,10 +66,12 @@ public class GMConfiguration {
 
 	public Map<String, Object> getMirrorsMap() {   
     	// Try to fetch the old mirror path first		
-		if (GMconfig.isConfigurationSection("settings.permission.world.mirror"))
+		if (GMconfig.isConfigurationSection("settings.permission.world.mirror")) {
 			return (Map<String, Object>) GMconfig.getConfigurationSection("settings.permission.world.mirror").getValues(false);
-		else
+		} else if (GMconfig.isConfigurationSection("settings.mirrors")){
 			return (Map<String, Object>) GMconfig.getConfigurationSection("settings.mirrors").getValues(false);
+		}
+		return null;
 		
     }
 

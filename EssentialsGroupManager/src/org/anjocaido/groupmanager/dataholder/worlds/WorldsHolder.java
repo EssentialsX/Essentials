@@ -116,7 +116,8 @@ public class WorldsHolder {
     public void mirrorSetUp() {
     	mirrorsGroup.clear();
     	mirrorsUser.clear();
-        Map<String, Object> mirrorsMap = plugin.getGMConfig().getMirrorsMap();
+    	Map<String, Object> mirrorsMap = plugin.getGMConfig().getMirrorsMap();
+        
         if (mirrorsMap != null) {
             for (String source : mirrorsMap.keySet()) {
             	// Make sure all non mirrored worlds have a set of data files.

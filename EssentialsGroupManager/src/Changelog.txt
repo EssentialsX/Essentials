@@ -121,3 +121,4 @@ v 1.9:
 	- Fix trying to modify an unmodifiable collection breaking superperms.
 	- Fixed subgroups (I broke earlier).
 	- Check for a null player object in the PlayerTeleportEvent.
+	- Trap errors in fetching the mirrors map.
