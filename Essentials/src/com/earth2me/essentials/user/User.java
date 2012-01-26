@@ -255,6 +255,7 @@ public class User extends UserBase implements IUser
 			if (settings.getData().getCommands().isDisabled("nick") || nick == null || nick.isEmpty() || nick.equals(getName()))
 			{
 				displayname = displayname.replace("{NAME}", getName());
+				displayname = displayname.replace("{NICKNAMEPREFIX}", "");
 			}
 			else
 			{
