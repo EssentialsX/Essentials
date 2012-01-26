@@ -122,6 +122,15 @@ public class User extends DataUnit implements Cloneable {
 	 *            the group to set
 	 */
 	public void setGroup(Group group) {
+		setGroup(group, true);
+	}
+		
+	/**
+	 * @param group the group to set
+	 * @param updatePerms if we are to trigger a superperms update.
+	 *            
+	 */
+	public void setGroup(Group group, Boolean updatePerms) {
 		if (!this.getDataSource().groupExists(group.getName())) {
 			getDataSource().addGroup(group);
 		}
@@ -129,7 +138,7 @@ public class User extends DataUnit implements Cloneable {
 		String oldGroup = this.group;
 		this.group = group.getName();
 		flagAsChanged();
-		if (GroupManager.isLoaded()) {
+		if (GroupManager.isLoaded() && (updatePerms)) {
 			if (!GroupManager.BukkitPermissions.isPlayer_join())
 				GroupManager.BukkitPermissions.updatePlayer(getBukkitPlayer());
 
@@ -152,21 +161,27 @@ public class User extends DataUnit implements Cloneable {
 		if (this.group.equalsIgnoreCase(subGroup.getName())) {
 			return false;
 		}
+		// User already has this subgroup
+		if (containsSubGroup(subGroup))
+			return false;
+		
+		// If the group doesn't exists add it
 		if (!this.getDataSource().groupExists(subGroup.getName())) {
 			getDataSource().addGroup(subGroup);
-			
-			flagAsChanged();
-			if (GroupManager.isLoaded()) {
-				if (!GroupManager.BukkitPermissions.isPlayer_join())
-					GroupManager.BukkitPermissions.updatePlayer(getBukkitPlayer());
-				GroupManagerEventHandler.callEvent(this, Action.USER_SUBGROUP_CHANGED);
-			}
-			return true;
 		}
+		
+		subGroups.add(subGroup.getName());
+		flagAsChanged();
+		if (GroupManager.isLoaded()) {
+			if (!GroupManager.BukkitPermissions.isPlayer_join())
+				GroupManager.BukkitPermissions.updatePlayer(getBukkitPlayer());
+			GroupManagerEventHandler.callEvent(this, Action.USER_SUBGROUP_CHANGED);
+		}
+		return true;
+			
 		//subGroup = getDataSource().getGroup(subGroup.getName());
 		//removeSubGroup(subGroup);
 		//subGroups.add(subGroup.getName());
-		return false;
 	}
 
 	public int subGroupsSize() {
