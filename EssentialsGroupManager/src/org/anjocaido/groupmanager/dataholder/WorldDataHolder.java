@@ -245,7 +245,7 @@ public class WorldDataHolder {
             return null;
         }
         User newUser = new User(this, userName);
-        newUser.setGroup(groups.getDefaultGroup());
+        newUser.setGroup(groups.getDefaultGroup(), false);
         addUser(newUser);
         setUsersChanged(true);
         return newUser;
