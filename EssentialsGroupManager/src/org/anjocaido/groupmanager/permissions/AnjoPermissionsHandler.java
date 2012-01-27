@@ -134,12 +134,13 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 				groupPermArray = populatePerms(ph.getGroup(group).getPermissionList(), includeChildren);
 			}
 			
-			// Add all group permissions, unless negated by direct player perms.
+			// Add all group permissions, unless negated by earlier permissions.
 			for (String perm : groupPermArray) {
+				boolean negated = (perm.startsWith("-"));
 				// Perm doesn't already exists and there is no negation for it
-				// It's not a negated perm where a normal perm exists (don't allow inheritance to negate higher perms)
-				if ((!playerPermArray.contains(perm)) && (!playerPermArray.contains("-" + perm)) 
-						&& (!perm.startsWith("-") && (!playerPermArray.contains(perm.substring(1)))))
+				// or It's a negated perm where a normal perm doesn't exists (don't allow inheritance to negate higher perms)
+				if ((!negated && !playerPermArray.contains(perm) && !playerPermArray.contains("-" + perm))
+					|| (negated && !playerPermArray.contains(perm.substring(1))))
 					playerPermArray.add(perm);
 			}
 
