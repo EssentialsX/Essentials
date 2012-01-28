@@ -98,12 +98,15 @@ public class SpawnStorage extends AsyncStorageObjectHolder<Spawns> implements IE
 		{
 			for (EventPriority priority : EventPriority.values())
 			{
-				if (priority.toString().equalsIgnoreCase(getData().getRespawnPriority())) {
+				if (priority.toString().equalsIgnoreCase(getData().getRespawnPriority()))
+				{
 					return priority;
 				}
 			}
 			return EventPriority.NORMAL;
-		} finally {
+		}
+		finally
+		{
 			unlock();
 		}
 	}
@@ -113,12 +116,15 @@ public class SpawnStorage extends AsyncStorageObjectHolder<Spawns> implements IE
 		acquireReadLock();
 		try
 		{
-			if (getData().getNewbieSpawn() == null || getData().getNewbieSpawn().isEmpty() || 
-				getData().getNewbieSpawn().equalsIgnoreCase("none")) {
+			if (getData().getNewbieSpawn() == null || getData().getNewbieSpawn().isEmpty()
+				|| getData().getNewbieSpawn().equalsIgnoreCase("none"))
+			{
 				return null;
 			}
 			return getSpawn(getData().getNewbieSpawn());
-		} finally {
+		}
+		finally
+		{
 			unlock();
 		}
 	}
@@ -129,7 +135,9 @@ public class SpawnStorage extends AsyncStorageObjectHolder<Spawns> implements IE
 		try
 		{
 			return getData().getNewPlayerAnnouncement() != null && !getData().getNewPlayerAnnouncement().isEmpty();
-		} finally {
+		}
+		finally
+		{
 			unlock();
 		}
 	}
@@ -140,7 +148,9 @@ public class SpawnStorage extends AsyncStorageObjectHolder<Spawns> implements IE
 		try
 		{
 			return getData().getNewPlayerAnnouncement().replace('&', '§').replace("§§", "&").replace("{PLAYER}", user.getDisplayName()).replace("{DISPLAYNAME}", user.getDisplayName()).replace("{GROUP}", user.getGroup()).replace("{USERNAME}", user.getName()).replace("{ADDRESS}", user.getAddress().toString());
-		} finally {
+		}
+		finally
+		{
 			unlock();
 		}
 	}

@@ -28,7 +28,6 @@ public class EssentialsLocalChatEventListener implements Listener
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onLocalChat(final EssentialsLocalChatEvent event)
 	{
-
 		final Player sender = event.getPlayer();
 		final Location loc = sender.getLocation();
 		final World world = loc.getWorld();

@@ -104,7 +104,7 @@ public class EssentialsSpawnPlayerListener implements Listener
 			{
 				return;
 			}
-			
+
 			try
 			{
 				final Location spawn = spawns.getNewbieSpawn();

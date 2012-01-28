@@ -80,7 +80,6 @@ public class EssentialsLocalChatEvent extends Event implements Cancellable
 			ex.fillInStackTrace();
 			throw ex;
 		}
-
 		this.format = format;
 	}
 

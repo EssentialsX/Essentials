@@ -28,7 +28,6 @@ public class EssentialsChatPlayerListenerHighest extends EssentialsChatPlayer
 		{
 			return;
 		}
-
 		chargeChat(event, chatStore);
 	}
 }
