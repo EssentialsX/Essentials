@@ -4,7 +4,6 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.IReload;
 import com.earth2me.essentials.api.IUser;
-import com.earth2me.essentials.protect.data.ProtectedBlockMemory;
 import com.earth2me.essentials.protect.data.ProtectedBlockMySQL;
 import com.earth2me.essentials.protect.data.ProtectedBlockSQLite;
 import java.beans.PropertyVetoException;
