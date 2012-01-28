@@ -20,15 +20,15 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
 import org.anjocaido.groupmanager.GroupManager;
-//import org.anjocaido.groupmanager.data.User;
 import org.anjocaido.groupmanager.dataholder.OverloadedWorldHolder;
-//import org.anjocaido.groupmanager.utils.PermissionCheckResult;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -46,7 +46,6 @@ import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
-//import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 
 
@@ -54,12 +53,12 @@ import org.bukkit.plugin.PluginManager;
  * 
  * BukkitPermissions overrides to force GM reponses to Superperms
  * 
- * @author ElgarL, originally based upon PermissionsEX implementation
+ * @author ElgarL
  */
 public class BukkitPermissions {
 
 	protected Map<Player, PermissionAttachment> attachments = new HashMap<Player, PermissionAttachment>();
-	protected LinkedList<Permission> registeredPermissions = new LinkedList<Permission>();
+	protected LinkedHashMap<String, Permission> registeredPermissions = new LinkedHashMap<String, Permission>();
 	protected GroupManager plugin;
 	protected boolean dumpAllPermissions = true;
 	protected boolean dumpMatchedPermissions = true;
@@ -112,14 +111,10 @@ public class BukkitPermissions {
 	
 	public void collectPermissions() {
 		registeredPermissions.clear();
-		/*
-		for (Plugin bukkitPlugin : Bukkit.getServer().getPluginManager().getPlugins()) {
-			for (Permission permission : bukkitPlugin.getDescription().getPermissions())
-				registeredPermissions.push(permission);
+
+		for (Permission perm : Bukkit.getPluginManager().getPermissions()) {
+				registeredPermissions.put(perm.getName().toLowerCase(), perm);
 		}
-		*/
-		
-		registeredPermissions =  new LinkedList<Permission>(Bukkit.getPluginManager().getPermissions());
 		
 	}
 
@@ -155,73 +150,22 @@ public class BukkitPermissions {
 
 		OverloadedWorldHolder worldData = plugin.getWorldsHolder().getWorldData(world);
 		Boolean value = false;
-		//User user = worldData.getUser(player.getName());
-
-		/*
-		// clear permissions
-		for (String permission : attachment.getPermissions().keySet())
-			attachment.unsetPermission(permission);
-		*/
-		
-		/*
-		 * find matching permissions
-		 * 
-		 * and base bukkit perms if we are set to allow bukkit permissions to
-		 * override.
-		 */
-		
-		/*	
-		for (Permission permission : registeredPermissions) {
-			
-			PermissionCheckResult result = worldData.getPermissionsHandler().checkFullGMPermission(user, permission.getName(), false);
-
-			// Only check bukkit override IF we don't have the permission
-			// directly.
-			if (result.resultType == PermissionCheckResult.Type.NOTFOUND) {
-				PermissionDefault permDefault = permission.getDefault();
-
-				if ((plugin.getGMConfig().isBukkitPermsOverride()) && ((permDefault == PermissionDefault.TRUE)
-						|| ((permDefault == PermissionDefault.NOT_OP) && !player.isOp())
-						|| ((permDefault == PermissionDefault.OP) && player.isOp()))) {
-					value = true;
-				} else {
-					value = false;
-				}
-			} else if (result.resultType == PermissionCheckResult.Type.NEGATION) {
-				value = false;
-			} else {
-				value = true;
-			}
-
-			// Set the root permission
-			if ((value == true) || (result.resultType == PermissionCheckResult.Type.NEGATION)) {
-				attachment.setPermission(permission, value);
-			}
-		}
-		*/
 
 		// Add all permissions for this player (GM only)
 		// child nodes will be calculated by Bukkit.
-		Set<String> playerPermArray = worldData.getPermissionsHandler().getAllPlayersPermissions(player.getName(), false);
-		Map<String, Boolean> newPerms = new HashMap<String, Boolean>();
-		
-		//Set<String> hash = new HashSet<String>();
-		//for (String permission : playerPermArray)
-		//	hash.add(permission);
-		
+		List<String> playerPermArray = new ArrayList<String>(worldData.getPermissionsHandler().getAllPlayersPermissions(player.getName(), false));
+		LinkedHashMap<String, Boolean> newPerms = new LinkedHashMap<String, Boolean>();
+
+		// Sort the perm list by parent/child, so it will push to superperms correctly.
+		playerPermArray = sort(playerPermArray);
+
 		
 		for (String permission : playerPermArray) {			
 			value = (!permission.startsWith("-"));
-			/*
-			if (!attachment.getPermissions().containsKey(permission)) {
-				attachment.setPermission(permission, value);
-			}
-			*/
+
 			newPerms.put((value? permission : permission.substring(1)), value);
 		}
-			
-		//player.recalculatePermissions();
-		
+
 		/**
 		* This is put in place until such a time as Bukkit pull 466 is implemented
 		* https://github.com/Bukkit/Bukkit/pull/466
@@ -241,6 +185,42 @@ public class BukkitPermissions {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Sort a permission node list by parent/child
+	 * 
+	 * @param permList
+	 * @return List sorted for priority
+	 */
+	private List<String> sort(List<String> permList) {
+		
+		List<String> result = new ArrayList<String>();
+		
+		for (String key : permList) {
+			String a = key.charAt(0) == '-'? key.substring(1):key;
+			Map<String, Boolean> allchildren = GroupManager.BukkitPermissions.getAllChildren(a, new HashSet<String>());
+			if (allchildren != null) {
+
+				ListIterator<String> itr = result.listIterator();
+				
+				while (itr.hasNext()){
+					String node = (String) itr.next();
+					String b = node.charAt(0) == '-'? node.substring(1):node;
+					
+					// Insert the parent node before the child
+					if (allchildren.containsKey(b)) {
+						itr.set(key);
+						itr.add(node);
+						break;
+					}
+				}
+			}
+			if (!result.contains(key))
+				result.add(key);
+		}
+		
+		return result;
+	}
 
 	
 	/**
@@ -254,13 +234,12 @@ public class BukkitPermissions {
 		
 		List<String> perms = new ArrayList<String>();
 		
-		for (Permission permission : registeredPermissions) {
-			String name = permission.getName();
-			if (!perms.contains(name)) {
-				perms.add(name);
+		for (String key : registeredPermissions.keySet()) {
+			if (!perms.contains(key)) {
+				perms.add(key);
 				
 				if (includeChildren) {
-					Map<String, Boolean> children = getAllChildren(name, new HashSet<String>());
+					Map<String, Boolean> children = getAllChildren(key, new HashSet<String>());
 					if (children != null) {
 						for (String node : children.keySet())
 							if (!perms.contains(node))
@@ -316,13 +295,13 @@ public class BukkitPermissions {
 	 * @return Map of child permissions
 	 */
 	public Map<String, Boolean> getChildren(String node) {
-		for (Permission permission : registeredPermissions) {
-			if (permission.getName().equalsIgnoreCase(node)) {
-				return permission.getChildren();
-			}
-		}
 		
-		return null;
+		Permission perm = registeredPermissions.get(node.toLowerCase());
+		if (perm == null)
+			return null;
+		
+		return perm.getChildren();
+
 	}
 
 	/**

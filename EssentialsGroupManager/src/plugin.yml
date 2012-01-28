@@ -1,7 +1,7 @@
 name: GroupManager
 version: GMBuildVer (Phoenix)
 main: org.anjocaido.groupmanager.GroupManager
-website: http://www.anjocaido.info/
+website: http://ess.khhq.net/wiki/Group_Manager
 description: Provides on-the-fly system for permissions system created by Nijikokun. But all in memory, and with flat-file saving schedule.
 authors:
   - AnjoCaido
