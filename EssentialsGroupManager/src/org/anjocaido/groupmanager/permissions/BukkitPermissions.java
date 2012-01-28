@@ -207,9 +207,10 @@ public class BukkitPermissions {
 					String node = (String) itr.next();
 					String b = node.charAt(0) == '-'? node.substring(1):node;
 					
+					// Insert the parent node before the child
 					if (allchildren.containsKey(b)) {
-						itr.previous();
-						itr.add(key);
+						itr.set(key);
+						itr.add(node);
 						break;
 					}
 				}
