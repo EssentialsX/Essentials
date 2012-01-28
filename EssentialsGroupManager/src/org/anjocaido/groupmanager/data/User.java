@@ -114,7 +114,7 @@ public class User extends DataUnit implements Cloneable {
 		flagAsChanged();
 		if (GroupManager.isLoaded())
 			if (!GroupManager.BukkitPermissions.isPlayer_join())
-				GroupManager.BukkitPermissions.updateAllPlayers();
+				GroupManager.BukkitPermissions.updatePlayer(getBukkitPlayer());
 	}
 
 	/**
@@ -122,6 +122,15 @@ public class User extends DataUnit implements Cloneable {
 	 *            the group to set
 	 */
 	public void setGroup(Group group) {
+		setGroup(group, true);
+	}
+		
+	/**
+	 * @param group the group to set
+	 * @param updatePerms if we are to trigger a superperms update.
+	 *            
+	 */
+	public void setGroup(Group group, Boolean updatePerms) {
 		if (!this.getDataSource().groupExists(group.getName())) {
 			getDataSource().addGroup(group);
 		}
@@ -129,9 +138,9 @@ public class User extends DataUnit implements Cloneable {
 		String oldGroup = this.group;
 		this.group = group.getName();
 		flagAsChanged();
-		if (GroupManager.isLoaded()) {
+		if (GroupManager.isLoaded() && (updatePerms)) {
 			if (!GroupManager.BukkitPermissions.isPlayer_join())
-				GroupManager.BukkitPermissions.updateAllPlayers();
+				GroupManager.BukkitPermissions.updatePlayer(getBukkitPlayer());
 
 			// Do we notify of the group change?
 			String defaultGroupName = getDataSource().getDefaultGroup().getName();
@@ -147,22 +156,32 @@ public class User extends DataUnit implements Cloneable {
 		}
 	}
 
-	public void addSubGroup(Group subGroup) {
+	public boolean addSubGroup(Group subGroup) {
+		// Don't allow adding a subgroup if it's already set as the primary.
 		if (this.group.equalsIgnoreCase(subGroup.getName())) {
-			return;
+			return false;
 		}
+		// User already has this subgroup
+		if (containsSubGroup(subGroup))
+			return false;
+		
+		// If the group doesn't exists add it
 		if (!this.getDataSource().groupExists(subGroup.getName())) {
 			getDataSource().addGroup(subGroup);
 		}
-		subGroup = getDataSource().getGroup(subGroup.getName());
-		removeSubGroup(subGroup);
+		
 		subGroups.add(subGroup.getName());
 		flagAsChanged();
 		if (GroupManager.isLoaded()) {
 			if (!GroupManager.BukkitPermissions.isPlayer_join())
-				GroupManager.BukkitPermissions.updateAllPlayers();
+				GroupManager.BukkitPermissions.updatePlayer(getBukkitPlayer());
 			GroupManagerEventHandler.callEvent(this, Action.USER_SUBGROUP_CHANGED);
 		}
+		return true;
+			
+		//subGroup = getDataSource().getGroup(subGroup.getName());
+		//removeSubGroup(subGroup);
+		//subGroups.add(subGroup.getName());
 	}
 
 	public int subGroupsSize() {
@@ -183,7 +202,7 @@ public class User extends DataUnit implements Cloneable {
 				flagAsChanged();
 				if (GroupManager.isLoaded())
 					if (!GroupManager.BukkitPermissions.isPlayer_join())
-						GroupManager.BukkitPermissions.updateAllPlayers();
+						GroupManager.BukkitPermissions.updatePlayer(getBukkitPlayer());
 				GroupManagerEventHandler.callEvent(this, Action.USER_SUBGROUP_CHANGED);
 				return true;
 			}
@@ -229,8 +248,8 @@ public class User extends DataUnit implements Cloneable {
 		}
 		flagAsChanged();
 		if (GroupManager.isLoaded()) {
-			if (!GroupManager.BukkitPermissions.isPlayer_join())
-				GroupManager.BukkitPermissions.updateAllPlayers();
+			//if (!GroupManager.BukkitPermissions.isPlayer_join())
+			//	GroupManager.BukkitPermissions.updatePlayer(this.getName());
 			GroupManagerEventHandler.callEvent(this, Action.USER_INFO_CHANGED);
 		}
 	}

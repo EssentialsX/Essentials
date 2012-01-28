@@ -6,6 +6,8 @@ import org.anjocaido.groupmanager.data.User;
 
 /**
  * @author ElgarL
+ * 
+ * Handles all Event generation.
  *
  */
 public class GroupManagerEventHandler {

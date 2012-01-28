@@ -26,7 +26,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.anjocaido.groupmanager.dataholder.worlds.WorldsHolder;
 import org.anjocaido.groupmanager.events.GMWorldListener;
-import org.anjocaido.groupmanager.events.GroupManagerEvent;
 import org.anjocaido.groupmanager.utils.GMLoggerHandler;
 import org.anjocaido.groupmanager.utils.PermissionCheckResult;
 import org.anjocaido.groupmanager.utils.Tasks;
@@ -490,8 +489,10 @@ public class GroupManager extends JavaPlugin {
 					return false;
 				}
 				// PARECE OK
-				auxUser.addSubGroup(auxGroup);
-				sender.sendMessage(ChatColor.YELLOW + "You added subgroup '" + auxGroup.getName() + "' to player '" + auxUser.getName() + "'.");
+				if (auxUser.addSubGroup(auxGroup))
+					sender.sendMessage(ChatColor.YELLOW + "You added subgroup '" + auxGroup.getName() + "' to player '" + auxUser.getName() + "'.");
+				else
+					sender.sendMessage(ChatColor.RED + "The subgroup '" + auxGroup.getName() + "' is already available to '" + auxUser.getName() + "'.");
 
 				targetPlayer = this.getServer().getPlayer(auxUser.getName());
 				if (targetPlayer != null)

@@ -26,6 +26,9 @@ public class Commandsethome extends EssentialsCommand
 			{
 				if (user.isAuthorized("essentials.sethome.multiple"))
 				{
+					if ("bed".equals(args[0].toLowerCase(Locale.ENGLISH))) {
+						throw new NotEnoughArgumentsException();
+					}
 					if ((user.isAuthorized("essentials.sethome.multiple.unlimited")) || (user.getHomes().size() < ess.getGroups().getHomeLimit(user))
 						|| (user.getHomes().contains(args[0].toLowerCase(Locale.ENGLISH))))
 					{
@@ -61,6 +64,9 @@ public class Commandsethome extends EssentialsCommand
 					if (!user.isAuthorized("essentials.sethome.multiple"))
 					{
 						name = "home";
+					}
+					if ("bed".equals(name.toLowerCase(Locale.ENGLISH))) {
+						throw new NotEnoughArgumentsException();
 					}
 
 					usersHome.acquireWriteLock();

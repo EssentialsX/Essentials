@@ -134,14 +134,18 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 				groupPermArray = populatePerms(ph.getGroup(group).getPermissionList(), includeChildren);
 			}
 			
-			// Add all group permissions, unless negated by direct player perms.
-			for (String perm : groupPermArray)
-				if ((!playerPermArray.contains(perm)) && (!playerPermArray.contains("-" + perm)))
+			// Add all group permissions, unless negated by earlier permissions.
+			for (String perm : groupPermArray) {
+				boolean negated = (perm.startsWith("-"));
+				// Perm doesn't already exists and there is no negation for it
+				// or It's a negated perm where a normal perm doesn't exists (don't allow inheritance to negate higher perms)
+				if ((!negated && !playerPermArray.contains(perm) && !playerPermArray.contains("-" + perm))
+					|| (negated && !playerPermArray.contains(perm.substring(1))))
 					playerPermArray.add(perm);
+			}
 
 		}
-		// Collections.sort(playerPermArray,
-		// StringPermissionComparator.getInstance());
+		// Collections.sort(playerPermArray, StringPermissionComparator.getInstance());
 
 		return playerPermArray;
 	}
@@ -150,42 +154,45 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 		
 		Set<String> permArray = new HashSet<String>();
 		
+		// Allow * node to populate ALL perms in Bukkit.
+		if (perms.contains("*")) {
+			permArray.addAll(GroupManager.BukkitPermissions.getAllRegisteredPermissions(includeChildren));
+		}
+			
 		for (String perm : perms) {
-			
-			// Allow * node to populate ALL perms in Bukkit.
-			if (perm.equalsIgnoreCase("*"))
-				permArray.addAll(GroupManager.BukkitPermissions.getAllRegisteredPermissions(includeChildren));
-			
-			boolean negated = false;
-			if (perm.startsWith("-"))
-				negated = true;
-			
-			if (!permArray.contains(perm)) {
-				permArray.add(perm);
+
+			if (!perm.equalsIgnoreCase("*")) {
+				boolean negated = false;
+				if (perm.startsWith("-"))
+					negated = true;
 				
-				if ((negated) && (permArray.contains(perm.substring(1))))
-					permArray.remove(perm.substring(1));
-
-				if (includeChildren) {
-
-					Map<String, Boolean> children = GroupManager.BukkitPermissions.getAllChildren((negated ? perm.substring(1) : perm), new HashSet<String>());
-
-					if (children != null) {
-						if (negated) {
-
-							// Remove children of negated nodes
-							for (String child : children.keySet())
-								if (children.get(child))
-									if (permArray.contains(child))
-										permArray.remove(child);
-
-						} else {
-
-							// Add child nodes
-							for (String child : children.keySet())
-								if (children.get(child))
-									if ((!permArray.contains(child)) && (!permArray.contains("-" + child)))
-										permArray.add(child);
+				if (!permArray.contains(perm)) {
+					permArray.add(perm);
+					
+					if ((negated) && (permArray.contains(perm.substring(1))))
+						permArray.remove(perm.substring(1));
+	
+					if (includeChildren) {
+	
+						Map<String, Boolean> children = GroupManager.BukkitPermissions.getAllChildren((negated ? perm.substring(1) : perm), new HashSet<String>());
+	
+						if (children != null) {
+							if (negated) {
+	
+								// Remove children of negated nodes
+								for (String child : children.keySet())
+									if (children.get(child))
+										if (permArray.contains(child))
+											permArray.remove(child);
+	
+							} else {
+	
+								// Add child nodes
+								for (String child : children.keySet())
+									if (children.get(child))
+										if ((!permArray.contains(child)) && (!permArray.contains("-" + child)))
+											permArray.add(child);
+							}
 						}
 					}
 				}
