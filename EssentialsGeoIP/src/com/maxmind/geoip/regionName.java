@@ -5,7 +5,7 @@ static public String regionNameByCode(String country_code,String region_code) {
     String name = null;
     int region_code2 = -1;
     if (region_code == null) { return null; }
-    if (region_code.equals("")) { return null; }
+    if (region_code.isEmpty()) { return null; }
 
     if (    ((region_code.charAt(0) >= 48 ) && ( region_code.charAt(0) < ( 48 + 10 )))
          && ((region_code.charAt(1) >= 48 ) && ( region_code.charAt(1) < ( 48 + 10 )))

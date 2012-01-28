@@ -70,7 +70,7 @@ private static SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
     }
 
     public int getType() {
-        if (info == null || info.equals("")) {
+        if (info == null || info.isEmpty()) {
             return COUNTRY_EDITION;
         }
         else {

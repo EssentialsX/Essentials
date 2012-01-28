@@ -11,7 +11,6 @@ import java.util.Locale;
 import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.event.Event.Priority;
 import org.bukkit.event.EventPriority;
 
 
