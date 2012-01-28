@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Locale;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 

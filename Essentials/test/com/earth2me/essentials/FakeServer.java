@@ -1,10 +1,7 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.craftbukkit.FakeWorld;
 import com.avaje.ebean.config.ServerConfig;
-import com.earth2me.essentials.api.IEssentials;
-import com.earth2me.essentials.craftbukkit.DummyOfflinePlayer;
-import com.earth2me.essentials.user.User;
+import com.earth2me.essentials.craftbukkit.FakeWorld;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.Callable;

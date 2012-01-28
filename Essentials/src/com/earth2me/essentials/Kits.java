@@ -9,8 +9,6 @@ import com.earth2me.essentials.storage.AsyncStorageObjectHolder;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.logging.Logger;
-import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
 
