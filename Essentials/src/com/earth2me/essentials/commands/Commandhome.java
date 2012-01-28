@@ -7,6 +7,7 @@ import com.earth2me.essentials.Util;
 import java.util.List;
 import java.util.Locale;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
@@ -61,7 +62,7 @@ public class Commandhome extends EssentialsCommand
 			if (homes.isEmpty() && player.equals(user))
 			{
 				final Location bed = player.getBedSpawnLocation();
-				if (bed != null)
+				if (bed != null && bed.getBlock().getType() == Material.BED_BLOCK)
 				{
 					user.getTeleport().teleport(bed, charge, TeleportCause.COMMAND);
 					throw new NoChargeException();

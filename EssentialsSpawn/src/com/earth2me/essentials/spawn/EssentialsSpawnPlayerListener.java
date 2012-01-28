@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -36,7 +37,12 @@ public class EssentialsSpawnPlayerListener implements Listener
 			Location home = user.getHome(user.getLocation());
 			if (home == null)
 			{
-				home = user.getBedSpawnLocation();
+				final Location bed = user.getBedSpawnLocation();
+				if (bed.getBlock().getType() == Material.BED_BLOCK)
+				{
+					home = bed;
+				}
+
 			}
 			if (home != null)
 			{
@@ -90,7 +96,7 @@ public class EssentialsSpawnPlayerListener implements Listener
 			{
 				return;
 			}
-			
+
 			try
 			{
 				Location spawn = spawns.getSpawn(ess.getSettings().getNewbieSpawn());
