@@ -145,8 +145,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 			}
 
 		}
-		// Collections.sort(playerPermArray,
-		// StringPermissionComparator.getInstance());
+		// Collections.sort(playerPermArray, StringPermissionComparator.getInstance());
 
 		return playerPermArray;
 	}
