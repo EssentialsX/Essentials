@@ -34,15 +34,15 @@ public class EssentialsSpawnPlayerListener implements Listener
 
 		if (ess.getSettings().getRespawnAtHome())
 		{
-			Location home = user.getHome(user.getLocation());
-			if (home == null)
+			Location home;
+			final Location bed = user.getBedSpawnLocation();
+			if (bed != null && bed.getBlock().getType() == Material.BED_BLOCK)
 			{
-				final Location bed = user.getBedSpawnLocation();
-				if (bed.getBlock().getType() == Material.BED_BLOCK)
-				{
-					home = bed;
-				}
-
+				home = bed;
+			}
+			else
+			{
+				home = user.getHome(user.getLocation());
 			}
 			if (home != null)
 			{
