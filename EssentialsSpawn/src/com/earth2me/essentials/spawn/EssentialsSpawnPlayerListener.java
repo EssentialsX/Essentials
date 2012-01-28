@@ -7,6 +7,7 @@ import com.earth2me.essentials.api.IUser;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
