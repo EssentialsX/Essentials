@@ -38,3 +38,5 @@
 /WebPush/nbproject/private
 /.idea
 *.iml
+/EssentialsGroupManager/bin
+/EssentialsGroupManager/.externalToolBuilders
