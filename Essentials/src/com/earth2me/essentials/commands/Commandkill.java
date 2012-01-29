@@ -31,7 +31,7 @@ public class Commandkill extends EssentialsCommand
 				continue;
 			}
 
-			matchPlayer.setHealth(0);
+			matchPlayer.damage(1000);			
 			sender.sendMessage(_("kill", matchPlayer.getDisplayName()));
 		}
 	}
