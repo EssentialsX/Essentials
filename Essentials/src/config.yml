@@ -157,6 +157,7 @@ player-commands:
   - xmpp
 
 # Note: All items MUST be followed by a quantity!
+# All kit names should be lower case, and will be treated as lower in permissions/costs.
 # Times are measured in seconds.
 kits:
   tools:

@@ -15,38 +15,38 @@ public class Commandnear extends EssentialsCommand
 	{
 		super("near");
 	}
-	
+
 	@Override
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		long radius = 200;
 		User otherUser = null;
-		
+
 		if (args.length > 0)
 		{
 			try
 			{
-				otherUser = getPlayer(server, args, 0);
+				radius = Long.parseLong(args[0]);
 			}
-			catch (Exception ex)
+			catch (NumberFormatException e)
 			{
 				try
 				{
-					radius = Long.parseLong(args[0]);
+					otherUser = getPlayer(server, args, 0);
+				}
+				catch (Exception ex)
+				{
+				}
+			}
+			if (args.length > 1 && otherUser != null)
+			{
+				try
+				{
+					radius = Long.parseLong(args[1]);
 				}
 				catch (NumberFormatException e)
 				{
 				}
-			}
-		}
-		if (args.length > 1 && otherUser != null)
-		{
-			try
-			{
-				radius = Long.parseLong(args[1]);
-			}
-			catch (NumberFormatException e)
-			{
 			}
 		}
 		if (otherUser == null || user.isAuthorized("essentials.near.others"))
@@ -58,20 +58,15 @@ public class Commandnear extends EssentialsCommand
 			user.sendMessage(_("noAccessCommand"));
 		}
 	}
-	
+
 	@Override
 	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
-		
-		User otherUser = null;
-		if (args.length > 0)
-		{
-			otherUser = getPlayer(server, args, 0);
-		}
-		else
+		if (args.length == 0)
 		{
 			throw new NotEnoughArgumentsException();
 		}
+		final User otherUser = getPlayer(server, args, 0);
 		long radius = 200;
 		if (args.length > 1)
 		{
@@ -85,14 +80,14 @@ public class Commandnear extends EssentialsCommand
 		}
 		sender.sendMessage(_("nearbyPlayers", getLocal(server, otherUser, radius)));
 	}
-	
+
 	private String getLocal(final Server server, final User user, final long radius)
 	{
 		final Location loc = user.getLocation();
 		final World world = loc.getWorld();
 		final StringBuilder output = new StringBuilder();
 		final long radiusSquared = radius * radius;
-		
+
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
 			final User player = ess.getUser(onlinePlayer);
@@ -103,7 +98,7 @@ public class Commandnear extends EssentialsCommand
 				{
 					continue;
 				}
-				
+
 				final long delta = (long)playerLoc.distanceSquared(loc);
 				if (delta < radiusSquared)
 				{

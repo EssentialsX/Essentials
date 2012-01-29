@@ -26,6 +26,11 @@ public class Commandtpaccept extends EssentialsCommand
 		{
 			throw new Exception(_("noPendingRequest"));
 		}
+		
+		if (args.length > 0 && !target.getName().contains(args[0]))
+		{
+			throw new Exception(_("noPendingRequest"));
+		}
 
 		long timeout = ess.getSettings().getTpaAcceptCancellation();
 		if (timeout != 0 && (System.currentTimeMillis() - user.getTeleportRequestTime()) / 1000 > timeout)
