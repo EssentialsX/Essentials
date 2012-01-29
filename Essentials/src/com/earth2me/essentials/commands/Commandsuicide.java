@@ -19,6 +19,7 @@ public class Commandsuicide extends EssentialsCommand
 		EntityDamageEvent ede = new EntityDamageEvent(user, EntityDamageEvent.DamageCause.SUICIDE, 1000);
 		server.getPluginManager().callEvent(ede);
 		user.damage(1000);
+		user.setHealth(0);
 		user.sendMessage(_("suicideMessage"));
 		ess.broadcastMessage(user,_("suicideSuccess", user.getDisplayName()));		
 	}
