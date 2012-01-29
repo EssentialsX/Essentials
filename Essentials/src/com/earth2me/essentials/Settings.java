@@ -2,6 +2,8 @@ package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.commands.IEssentialsCommand;
+import com.earth2me.essentials.signs.EssentialsSign;
+import com.earth2me.essentials.signs.Signs;
 import java.io.File;
 import java.text.MessageFormat;
 import java.util.*;
@@ -278,7 +280,7 @@ public class Settings implements ISettings
 	@Override
 	public boolean areSignsDisabled()
 	{
-		return config.getBoolean("signs-disabled", false);
+		return enabledSigns.isEmpty();
 	}
 
 	@Override
@@ -356,11 +358,20 @@ public class Settings implements ISettings
 	{
 		config.load();
 		noGodWorlds = new HashSet<String>(config.getStringList("no-god-in-worlds", Collections.<String>emptyList()));
+		enabledSigns = getEnabledSigns();
+		itemSpawnBl = getItemSpawnBlacklist();
 		chatFormats.clear();
 	}
 
+	private List<Integer> itemSpawnBl = new ArrayList<Integer>();
+	
 	@Override
 	public List<Integer> itemSpawnBlacklist()
+	{
+		return itemSpawnBl;
+	}
+	
+	private List<Integer> getItemSpawnBlacklist()
 	{
 		final List<Integer> epItemSpwn = new ArrayList<Integer>();
 		for (String itemName : config.getString("item-spawn-blacklist", "").split(","))
@@ -369,12 +380,11 @@ public class Settings implements ISettings
 			if (itemName.isEmpty())
 			{
 				continue;
-			}
-			ItemStack is;
+			}		
 			try
 			{
-				is = ess.getItemDb().get(itemName);
-				epItemSpwn.add(is.getTypeId());
+				final ItemStack iStack = ess.getItemDb().get(itemName);
+				epItemSpwn.add(iStack.getTypeId());
 			}
 			catch (Exception ex)
 			{
@@ -382,6 +392,37 @@ public class Settings implements ISettings
 			}
 		}
 		return epItemSpwn;
+	}
+	
+	private List<EssentialsSign> enabledSigns = new ArrayList<EssentialsSign>();
+	
+	@Override
+	public List<EssentialsSign> enabledSigns()
+	{
+		return enabledSigns;
+	}
+	
+	private List<EssentialsSign> getEnabledSigns()
+	{
+		List<EssentialsSign> newSigns = new ArrayList<EssentialsSign>();
+		
+		for (String signName : config.getStringList("enabledSigns", null))
+		{
+			signName = signName.trim().toUpperCase(Locale.ENGLISH);
+			if (signName.isEmpty())
+			{
+				continue;
+			}
+			try
+			{
+				newSigns.add(Signs.valueOf(signName).getSign());
+			}
+			catch (Exception ex)
+			{
+				logger.log(Level.SEVERE, _("unknownItemInList", signName, "enabledSigns"));
+			}
+		}
+		return newSigns;
 	}
 
 	@Override
@@ -559,7 +600,8 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("death-messages", true);
 	}
-	Set<String> noGodWorlds = new HashSet<String>();
+	
+	private Set<String> noGodWorlds = new HashSet<String>();
 
 	@Override
 	public Set<String> getNoGodWorlds()

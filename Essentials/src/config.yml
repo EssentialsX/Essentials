@@ -166,8 +166,28 @@ kits:
       - 278 1
       - 279 1
 
-# Disable all signs
-signs-disabled: false
+# Essentials Sign Control
+# See http://ess.khhq.net/wiki/Sign_Tutorial for instructions on how to use these.
+# To enable signs, remove # symbol. To disable all signs, comment/remove each sign.
+# We recommend not enabling chest protection signs if you don't intend to use them, (or are using LWC/Lockette).
+
+enabledSigns:
+  #- balance
+  #- buy  
+  #- sell
+  #- trade
+  #- free
+  #- disposal
+  #- warp
+  #- kit
+  #- mail
+  #- enchant
+  #- gamemode
+  #- heal
+  #- spawnmob
+  #- time
+  #- weather
+  #- protection
 
 # Backup runs a command while saving is disabled
 backup:
