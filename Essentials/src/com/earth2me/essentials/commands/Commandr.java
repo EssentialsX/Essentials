@@ -53,7 +53,7 @@ public class Commandr extends EssentialsCommand
 		final CommandSender target = replyTo.getReplyTo();
 		final String targetName = target instanceof Player ? ((Player)target).getDisplayName() : Console.NAME;
 
-		if (target == null)
+		if (target == null || ((target instanceof Player) && ((Player)target).isOnline()))
 		{
 			throw new Exception(_("foreverAlone"));
 		}
