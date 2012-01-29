@@ -648,4 +648,10 @@ public class FakeServer implements Server
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
+	@Override
+	public boolean useExactLoginLocation()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }

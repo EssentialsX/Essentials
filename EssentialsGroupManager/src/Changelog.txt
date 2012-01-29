@@ -125,3 +125,4 @@ v 1.9:
 	- Fixed an infinite loop error when using '/manudel' on a logged in player. It caused setDefaultGroup to trigger a bukkit update when no GM User existed yet.
 	- do not allow inherited permissions to negate higher perms.
 	- Fixed a bug when pushing superperms in the wrong order.
+	- Fix players retaining permissions when demoted.

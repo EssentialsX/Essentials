@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.anjocaido.groupmanager.GroupManager;
-import org.anjocaido.groupmanager.dataholder.OverloadedWorldHolder;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -136,33 +135,30 @@ public class BukkitPermissions {
 		}
 
 		PermissionAttachment attachment;
+
 		// Find the players current attachment, or add a new one.
 		if (this.attachments.containsKey(player)) {
 			attachment = this.attachments.get(player);
 		} else {
 			attachment = player.addAttachment(plugin);
-			this.attachments.put(player, attachment);;
+			this.attachments.put(player, attachment);
 		}
 
 		if (world == null) {
 			world = player.getWorld().getName();
 		}
 
-		OverloadedWorldHolder worldData = plugin.getWorldsHolder().getWorldData(world);
-		Boolean value = false;
-
 		// Add all permissions for this player (GM only)
 		// child nodes will be calculated by Bukkit.
-		List<String> playerPermArray = new ArrayList<String>(worldData.getPermissionsHandler().getAllPlayersPermissions(player.getName(), false));
+		List<String> playerPermArray = new ArrayList<String>(plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getAllPlayersPermissions(player.getName(), false));
 		LinkedHashMap<String, Boolean> newPerms = new LinkedHashMap<String, Boolean>();
 
 		// Sort the perm list by parent/child, so it will push to superperms correctly.
 		playerPermArray = sort(playerPermArray);
-
 		
+		Boolean value = false;
 		for (String permission : playerPermArray) {			
 			value = (!permission.startsWith("-"));
-
 			newPerms.put((value? permission : permission.substring(1)), value);
 		}
 
@@ -178,7 +174,8 @@ public class BukkitPermissions {
 			// Then whack our map into there
 			orig.putAll(newPerms);
 			// That's all folks!
-			attachment.getPermissible().recalculatePermissions();
+			//attachment.getPermissible().recalculatePermissions();
+			player.recalculatePermissions();
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
