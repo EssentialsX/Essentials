@@ -415,9 +415,9 @@ public class GroupManager extends JavaPlugin {
 				if (!sender.hasPermission("groupmanager.notify.other") || (isConsole))
 					sender.sendMessage(ChatColor.YELLOW + "You changed player '" + auxUser.getName() + "' group to '" + auxGroup.getName() + "'.");
 
-				targetPlayer = this.getServer().getPlayer(auxUser.getName());
-				if (targetPlayer != null)
-					BukkitPermissions.updatePermissions(targetPlayer);
+				//targetPlayer = this.getServer().getPlayer(auxUser.getName());
+				//if (targetPlayer != null)
+				//	BukkitPermissions.updatePermissions(targetPlayer);
 
 				return true;
 				// break;
@@ -450,6 +450,7 @@ public class GroupManager extends JavaPlugin {
 				dataHolder.removeUser(auxUser.getName());
 				sender.sendMessage(ChatColor.YELLOW + "You changed player '" + auxUser.getName() + "' to default settings.");
 
+				// If the player is online, this will create new data for the user.
 				targetPlayer = this.getServer().getPlayer(auxUser.getName());
 				if (targetPlayer != null)
 					BukkitPermissions.updatePermissions(targetPlayer);
@@ -494,9 +495,9 @@ public class GroupManager extends JavaPlugin {
 				else
 					sender.sendMessage(ChatColor.RED + "The subgroup '" + auxGroup.getName() + "' is already available to '" + auxUser.getName() + "'.");
 
-				targetPlayer = this.getServer().getPlayer(auxUser.getName());
-				if (targetPlayer != null)
-					BukkitPermissions.updatePermissions(targetPlayer);
+				//targetPlayer = this.getServer().getPlayer(auxUser.getName());
+				//if (targetPlayer != null)
+				//	BukkitPermissions.updatePermissions(targetPlayer);
 
 				return true;
 			case manudelsub:
@@ -534,9 +535,9 @@ public class GroupManager extends JavaPlugin {
 				auxUser.removeSubGroup(auxGroup);
 				sender.sendMessage(ChatColor.YELLOW + "You removed subgroup '" + auxGroup.getName() + "' from player '" + auxUser.getName() + "' list.");
 
-				targetPlayer = this.getServer().getPlayer(auxUser.getName());
-				if (targetPlayer != null)
-					BukkitPermissions.updatePermissions(targetPlayer);
+				//targetPlayer = this.getServer().getPlayer(auxUser.getName());
+				//if (targetPlayer != null)
+				//	BukkitPermissions.updatePermissions(targetPlayer);
 
 				return true;
 			case mangadd:
@@ -1614,9 +1615,9 @@ public class GroupManager extends JavaPlugin {
 				if (!sender.hasPermission("groupmanager.notify.other") || (isConsole))
 					sender.sendMessage(ChatColor.YELLOW + "You changed " + auxUser.getName() + " group to " + auxGroup.getName() + ".");
 
-				targetPlayer = this.getServer().getPlayer(auxUser.getName());
-				if (targetPlayer != null)
-					BukkitPermissions.updatePermissions(targetPlayer);
+				//targetPlayer = this.getServer().getPlayer(auxUser.getName());
+				//if (targetPlayer != null)
+				//	BukkitPermissions.updatePermissions(targetPlayer);
 
 				return true;
 				// break;
@@ -1670,9 +1671,9 @@ public class GroupManager extends JavaPlugin {
 				if (!sender.hasPermission("groupmanager.notify.other") || (isConsole))
 					sender.sendMessage(ChatColor.YELLOW + "You changed " + auxUser.getName() + " group to " + auxGroup.getName() + ".");
 
-				targetPlayer = this.getServer().getPlayer(auxUser.getName());
-				if (targetPlayer != null)
-					BukkitPermissions.updatePermissions(targetPlayer);
+				//targetPlayer = this.getServer().getPlayer(auxUser.getName());
+				//if (targetPlayer != null)
+				//	BukkitPermissions.updatePermissions(targetPlayer);
 
 				return true;
 				// break;
