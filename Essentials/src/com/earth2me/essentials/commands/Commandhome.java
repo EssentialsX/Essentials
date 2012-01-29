@@ -48,7 +48,7 @@ public class Commandhome extends EssentialsCommand
 			if ("bed".equalsIgnoreCase(homeName))
 			{
 				final Location bed = player.getBedSpawnLocation();
-				if (bed != null)
+				if (bed != null && bed.getBlock().getType() == Material.BED_BLOCK)
 				{
 					user.getTeleport().teleport(bed, charge, TeleportCause.COMMAND);
 					throw new NoChargeException();
