@@ -90,8 +90,9 @@ public class SignBlockListener implements Listener
 				event.setLine(i, event.getLine(i).replaceAll("&([0-9a-f])", "§$1"));
 			}
 		}
-		for (EssentialsSign sign : ess.getSettings().enabledSigns())
+		for (Signs signs : Signs.values())
 		{
+			final EssentialsSign sign = signs.getSign();
 			if (event.getLine(0).equalsIgnoreCase(sign.getSuccessName()))
 			{
 				event.setCancelled(true);
@@ -128,8 +129,9 @@ public class SignBlockListener implements Listener
 		{
 			return;
 		}
-		for (EssentialsSign sign : ess.getSettings().enabledSigns())
+		for (Signs signs : Signs.values())
 		{
+			final EssentialsSign sign = signs.getSign();
 			if (sign.getBlocks().contains(block.getType())
 				&& !sign.onBlockPlace(block, event.getPlayer(), ess))
 			{
