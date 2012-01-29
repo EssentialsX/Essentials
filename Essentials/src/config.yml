@@ -166,8 +166,26 @@ kits:
       - 278 1
       - 279 1
 
-# Disable all signs
-signs-disabled: false
+# Enable specifc signs on the server
+# See http://ess.khhq.net/wiki/Sign_Tutorial for specific instructions.
+# To enable remove # symbol.
+enabledSigns:
+  - balance
+  #- buy  
+  #- sell
+  #- trade
+  #- free
+  - disposal
+  #- warp
+  #- kit
+  #- mail
+  #- enchant
+  #- gamemode
+  #- heal
+  #- spawnmob
+  #- time
+  #- weather
+  #- protection
 
 # Backup runs a command while saving is disabled
 backup:

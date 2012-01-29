@@ -41,9 +41,8 @@ public class SignPlayerListener implements Listener
 				return;
 			}
 			final Sign csign = (Sign)block.getState();
-			for (Signs signs : Signs.values())
+			for (EssentialsSign sign : ess.getSettings().enabledSigns())
 			{
-				final EssentialsSign sign = signs.getSign();
 				if (csign.getLine(0).equalsIgnoreCase(sign.getSuccessName()))
 				{
 					sign.onSignInteract(block, event.getPlayer(), ess);
@@ -54,9 +53,8 @@ public class SignPlayerListener implements Listener
 		}
 		else
 		{
-			for (Signs signs : Signs.values())
+			for (EssentialsSign sign : ess.getSettings().enabledSigns())
 			{
-				final EssentialsSign sign = signs.getSign();
 				if (sign.getBlocks().contains(block.getType())
 					&& !sign.onBlockInteract(block, event.getPlayer(), ess))
 				{

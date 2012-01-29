@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.IEssentialsCommand;
+import com.earth2me.essentials.signs.EssentialsSign;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
@@ -100,6 +101,8 @@ public interface ISettings extends IConf
 	boolean isTradeInStacks(int id);
 
 	List<Integer> itemSpawnBlacklist();
+	
+	List<EssentialsSign> enabledSigns();
 
 	boolean permissionBasedItemSpawn();
 
