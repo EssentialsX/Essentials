@@ -166,16 +166,18 @@ kits:
       - 278 1
       - 279 1
 
-# Enable specifc signs on the server
-# See http://ess.khhq.net/wiki/Sign_Tutorial for specific instructions.
-# To enable remove # symbol.
+# Essentials Sign Control
+# See http://ess.khhq.net/wiki/Sign_Tutorial for instructions on how to use these.
+# To enable signs, remove # symbol. To disable all signs, comment/remove each sign.
+# We recommend not enabling chest protection signs if you don't intend to use them, (or are using LWC/Lockette).
+
 enabledSigns:
-  - balance
+  #- balance
   #- buy  
   #- sell
   #- trade
   #- free
-  - disposal
+  #- disposal
   #- warp
   #- kit
   #- mail
