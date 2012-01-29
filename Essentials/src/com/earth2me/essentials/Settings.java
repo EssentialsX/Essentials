@@ -405,9 +405,10 @@ public class Settings implements ISettings
 	private List<EssentialsSign> getEnabledSigns()
 	{
 		List<EssentialsSign> newSigns = new ArrayList<EssentialsSign>();
-		for (String signName : config.getString("enabledSigns", "").split(","))
+		
+		for (String signName : config.getStringList("enabledSigns", null))
 		{
-			signName = signName.trim();
+			signName = signName.trim().toUpperCase(Locale.ENGLISH);
 			if (signName.isEmpty())
 			{
 				continue;
