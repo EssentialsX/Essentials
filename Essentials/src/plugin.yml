@@ -348,7 +348,7 @@ commands:
     aliases: [etpaall]
   tpaccept:
     description: Accepts a teleport request.
-    usage: /<command>
+    usage: /<command> [otherplayer]
     aliases: [tpyes,etpaccept,etpyes]
   tpahere:
     description: Request that the specified player teleport to you.
