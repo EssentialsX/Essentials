@@ -374,6 +374,10 @@ public class Settings implements ISettings
 	private List<Integer> getItemSpawnBlacklist()
 	{
 		final List<Integer> epItemSpwn = new ArrayList<Integer>();
+		if (ess.getItemDb() == null) {
+			logger.log(Level.FINE, "Aborting ItemSpawnBL read, itemDB not yet loaded.");
+			return epItemSpwn;
+		}
 		for (String itemName : config.getString("item-spawn-blacklist", "").split(","))
 		{
 			itemName = itemName.trim();
