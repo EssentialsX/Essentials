@@ -153,15 +153,23 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	private Set<String> populatePerms (List<String>  perms, boolean includeChildren) {
 		
 		Set<String> permArray = new HashSet<String>();
+		Boolean allPerms = false;
 		
-		// Allow * node to populate ALL perms in Bukkit.
+		// Allow * node to populate ALL permissions to Bukkit.
 		if (perms.contains("*")) {
 			permArray.addAll(GroupManager.BukkitPermissions.getAllRegisteredPermissions(includeChildren));
+			allPerms = true;
 		}
 			
 		for (String perm : perms) {
 
 			if (!perm.equalsIgnoreCase("*")) {
+				
+				/**
+				 * all permission sets are passed here pre-sorted, alphabetically.
+				 * This means negated nodes will be processed before all permissions
+				 * other than *.
+				 */
 				boolean negated = false;
 				if (perm.startsWith("-"))
 					negated = true;
@@ -172,12 +180,17 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 					if ((negated) && (permArray.contains(perm.substring(1))))
 						permArray.remove(perm.substring(1));
 	
-					if (includeChildren) {
+					/**
+					 * Process child nodes if required,
+					 * or this is a negated node AND we used * to include all permissions,
+					 * in which case we need to remove all children of that node.
+					 */
+					if ((includeChildren) || (negated && allPerms)) {
 	
 						Map<String, Boolean> children = GroupManager.BukkitPermissions.getAllChildren((negated ? perm.substring(1) : perm), new HashSet<String>());
 	
 						if (children != null) {
-							if (negated) {
+							if (negated || (negated && allPerms)) {
 	
 								// Remove children of negated nodes
 								for (String child : children.keySet())
@@ -185,7 +198,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 										if (permArray.contains(child))
 											permArray.remove(child);
 	
-							} else {
+							} else if (!negated){
 	
 								// Add child nodes
 								for (String child : children.keySet())

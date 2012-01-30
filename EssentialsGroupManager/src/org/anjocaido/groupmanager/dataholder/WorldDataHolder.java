@@ -451,7 +451,7 @@ public class WorldDataHolder {
                 Map<String, Object> thisGroupNode = (Map<String, Object>) allGroupsNode.get(groupKey);
                 Group thisGrp = ph.createGroup(groupKey);
                 if (thisGrp == null) {
-                    throw new IllegalArgumentException("I think this user was declared more than once: " + groupKey + " in file: " + groupsFile.getPath());
+                    throw new IllegalArgumentException("I think this Group was declared more than once: " + groupKey + " in file: " + groupsFile.getPath());
                 }
                 if (thisGroupNode.get("default") == null) {
                     thisGroupNode.put("default", false);
@@ -467,20 +467,22 @@ public class WorldDataHolder {
                 //PERMISSIONS NODE
                 if (thisGroupNode.get("permissions") == null) {
                     thisGroupNode.put("permissions", new ArrayList<String>());
-                }
-                if (thisGroupNode.get("permissions") instanceof List) {
-                    for (Object o : ((List) thisGroupNode.get("permissions"))) {
-                    	try {
-                    		thisGrp.addPermission(o.toString());
-                    	} catch (NullPointerException e) {
-                    		// Ignore this entry as it's null.
-                    		//throw new IllegalArgumentException("Invalid permission node in group:  " + thisGrp.getName() + " in file: " + groupsFile.getPath());
-                    	}
-                    }
-                } else if (thisGroupNode.get("permissions") instanceof String) {
-                    thisGrp.addPermission((String) thisGroupNode.get("permissions"));
                 } else {
-                    throw new IllegalArgumentException("Unknown type of permissions node(Should be String or List<String>) for group:  " + thisGrp.getName() + " in file: " + groupsFile.getPath());
+	                if (thisGroupNode.get("permissions") instanceof List) {
+	                    for (Object o : ((List) thisGroupNode.get("permissions"))) {
+	                    	try {
+	                    		thisGrp.addPermission(o.toString());
+	                    	} catch (NullPointerException e) {
+	                    		// Ignore this entry as it's null.
+	                    		//throw new IllegalArgumentException("Invalid permission node in group:  " + thisGrp.getName() + " in file: " + groupsFile.getPath());
+	                    	}
+	                    }
+	                } else if (thisGroupNode.get("permissions") instanceof String) {
+	                    thisGrp.addPermission((String) thisGroupNode.get("permissions"));
+	                } else {
+	                    throw new IllegalArgumentException("Unknown type of permissions node(Should be String or List<String>) for group:  " + thisGrp.getName() + " in file: " + groupsFile.getPath());
+	                }
+	                thisGrp.sortPermissions();
                 }
 
                 //INFO NODE
@@ -581,18 +583,20 @@ public class WorldDataHolder {
 	            }
 	            if (thisUserNode.get("permissions") == null) {
 	                thisUserNode.put("permissions", new ArrayList<String>());
-	            }
-	            if (thisUserNode.get("permissions") instanceof List) {
-	                for (Object o : ((List) thisUserNode.get("permissions"))) {
-	                    thisUser.addPermission(o.toString());
-	                }
-	            } else if (thisUserNode.get("permissions") instanceof String) {
-	            	try {
-	                	thisUser.addPermission(thisUserNode.get("permissions").toString());
-	            	} catch (NullPointerException e) {
-	            		// Ignore this entry as it's null.
-	            		//throw new IllegalArgumentException("Invalid permission node for user:  " + thisUser.getName() + " in file: " + UserFile.getPath());
-	            	}
+	            } else {
+		            if (thisUserNode.get("permissions") instanceof List) {
+		                for (Object o : ((List) thisUserNode.get("permissions"))) {
+		                    thisUser.addPermission(o.toString());
+		                }
+		            } else if (thisUserNode.get("permissions") instanceof String) {
+		            	try {
+		                	thisUser.addPermission(thisUserNode.get("permissions").toString());
+		            	} catch (NullPointerException e) {
+		            		// Ignore this entry as it's null.
+		            		//throw new IllegalArgumentException("Invalid permission node for user:  " + thisUser.getName() + " in file: " + UserFile.getPath());
+		            	}
+		            }
+		            thisUser.sortPermissions();
 	            }
 	
 	            //SUBGROUPS LOADING

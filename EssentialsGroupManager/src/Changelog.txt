@@ -126,3 +126,9 @@ v 1.9:
 	- do not allow inherited permissions to negate higher perms.
 	- Fixed a bug when pushing superperms in the wrong order.
 	- Fix players retaining permissions when demoted.
+	- Auto sort permissions on load to speed up population of superperms.
+	- Negating a parent node after adding all nodes with * will now correctly remove all child nodes of that parent before populating superperms.
+	  eg.
+	      - '*'
+	      - -vanish.*
+	      - vanish.standard
