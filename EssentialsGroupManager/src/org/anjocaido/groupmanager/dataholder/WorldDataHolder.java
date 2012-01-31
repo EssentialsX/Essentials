@@ -445,7 +445,7 @@ public class WorldDataHolder {
 
         //PROCESS GROUPS FILE
         Map<String, List<String>> inheritance = new HashMap<String, List<String>>();
-        //try {
+        try {
             Map<String, Object> allGroupsNode = (Map<String, Object>) groupsRootDataNode.get("groups");
             for (String groupKey : allGroupsNode.keySet()) {
                 Map<String, Object> thisGroupNode = (Map<String, Object>) allGroupsNode.get(groupKey);
@@ -514,10 +514,11 @@ public class WorldDataHolder {
                 }else
                 	throw new IllegalArgumentException("Unknown entry found in inheritance section for group: " + thisGrp.getName() + " in file: " + groupsFile.getPath());
             }
-        //} catch (Exception ex) {
-        //    ex.printStackTrace();
-        //    throw new IllegalArgumentException("Your Permissions config file is invalid. See console for details.");
-        //}
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new IllegalArgumentException("Your " + groupsFile.getPath() + " file is invalid. See console for details.");
+        }
+        
         if (ph.getDefaultGroup() == null) {
             throw new IllegalArgumentException("There was no Default Group declared in file: " + groupsFile.getPath());
         }

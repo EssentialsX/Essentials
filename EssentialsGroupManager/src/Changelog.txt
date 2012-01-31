@@ -133,3 +133,4 @@ v 1.9:
 	      - -vanish.*
 	      - vanish.standard
 	- Track the 'onPlayerChangeWorld' event as some teleports seem to not be triggering a world move.
+	- Catch all errors in badly formatted groups.
