@@ -121,27 +121,34 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 		// Add the players own permissions.
 		playerPermArray.addAll(populatePerms(ph.getUser(userName).getPermissionList(), includeChildren));
 		
+		ArrayList<String> alreadyProcessed = new ArrayList<String>();
+		
 		// fetch all group permissions
 		for (String group : getGroups(userName)) {
-			Set<String> groupPermArray = new HashSet<String>();
-			
-			if (group.startsWith("g:") && GroupManager.getGlobalGroups().hasGroup(group)) {
-				// GlobalGroups
-				groupPermArray = populatePerms(GroupManager.getGlobalGroups().getGroupsPermissions(group), includeChildren);
+			// Don't process a group more than once.
+			if (!alreadyProcessed.contains(group)) {
+				alreadyProcessed.add(group);
 				
-			} else {
-				// World Groups
-				groupPermArray = populatePerms(ph.getGroup(group).getPermissionList(), includeChildren);
-			}
-			
-			// Add all group permissions, unless negated by earlier permissions.
-			for (String perm : groupPermArray) {
-				boolean negated = (perm.startsWith("-"));
-				// Perm doesn't already exists and there is no negation for it
-				// or It's a negated perm where a normal perm doesn't exists (don't allow inheritance to negate higher perms)
-				if ((!negated && !playerPermArray.contains(perm) && !playerPermArray.contains("-" + perm))
-					|| (negated && !playerPermArray.contains(perm.substring(1))))
-					playerPermArray.add(perm);
+				Set<String> groupPermArray = new HashSet<String>();
+				
+				if (group.startsWith("g:") && GroupManager.getGlobalGroups().hasGroup(group)) {
+					// GlobalGroups
+					groupPermArray = populatePerms(GroupManager.getGlobalGroups().getGroupsPermissions(group), includeChildren);
+					
+				} else {
+					// World Groups
+					groupPermArray = populatePerms(ph.getGroup(group).getPermissionList(), includeChildren);
+				}
+				
+				// Add all group permissions, unless negated by earlier permissions.
+				for (String perm : groupPermArray) {
+					boolean negated = (perm.startsWith("-"));
+					// Perm doesn't already exists and there is no negation for it
+					// or It's a negated perm where a normal perm doesn't exists (don't allow inheritance to negate higher perms)
+					if ((!negated && !playerPermArray.contains(perm) && !playerPermArray.contains("-" + perm))
+						|| (negated && !playerPermArray.contains(perm.substring(1))))
+						playerPermArray.add(perm);
+				}
 			}
 
 		}

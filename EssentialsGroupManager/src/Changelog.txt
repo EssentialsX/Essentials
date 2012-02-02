@@ -135,3 +135,4 @@ v 1.9:
 	- Track the 'onPlayerChangeWorld' event as some teleports seem to not be triggering a world move.
 	- Catch all errors in badly formatted groups.
 	- Fix a bug with getWorldData return the main world data for all mirrors, instead of the worlds parent data.
+	- Prevent getAllPlayersPermissions() processing a group more than once. Improves performance when using complex inheritance structures.
