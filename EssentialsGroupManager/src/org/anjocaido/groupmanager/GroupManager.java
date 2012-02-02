@@ -1762,9 +1762,9 @@ public class GroupManager extends JavaPlugin {
 
 		dataHolder = worldsHolder.getWorldData(worldsHolder.getDefaultWorld().getName());
 		permissionHandler = dataHolder.getPermissionsHandler();
-		selectedWorlds.put(sender, dataHolder.getName());
 
 		if ((dataHolder != null) && (permissionHandler != null)) {
+			selectedWorlds.put(sender, dataHolder.getName());
 			sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. Default world '" + worldsHolder.getDefaultWorld().getName() + "' selected.");
 			return true;
 		}

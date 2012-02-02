@@ -320,7 +320,8 @@ public class WorldsHolder {
      * If the world is not on the worlds list, returns the default world
      * holder.
      *
-     * Mirrors return original world data.
+     * Mirrors return their parent world data.
+     * If no mirroring data it returns the default world.
      *
      * @param worldName
      * @return OverloadedWorldHolder
@@ -328,8 +329,17 @@ public class WorldsHolder {
     public OverloadedWorldHolder getWorldData(String worldName) {
     	String worldNameLowered = worldName.toLowerCase();
     	
+    	// Return this worlds data
     	if (worldsData.containsKey(worldNameLowered))
     			return worldsData.get(worldNameLowered);
+    	
+    	// If groups mirrored return the parent worlds data
+    	if (mirrorsGroup.containsKey(worldNameLowered))
+    		return worldsData.get(mirrorsGroup.get(worldNameLowered).toLowerCase());
+    	
+    	// If users mirrored return the parent worlds data
+    	if (mirrorsUser.containsKey(worldNameLowered))
+    		return worldsData.get(mirrorsUser.get(worldNameLowered).toLowerCase());
 
         GroupManager.logger.finest("Requested world " + worldName + " not found or badly mirrored. Returning default world...");
         return getDefaultWorld();
@@ -353,6 +363,7 @@ public class WorldsHolder {
     /**
      * Retrieves the field player.getWorld().getName() and do
      * getWorld(worldName)
+     * 
      * @param player
      * @return OverloadedWorldHolder
      */
