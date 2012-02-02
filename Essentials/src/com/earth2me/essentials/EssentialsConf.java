@@ -110,9 +110,10 @@ public class EssentialsConf extends Configuration
 			super.load();
 		}
 		catch (RuntimeException e)
-		{
-			LOGGER.log(Level.SEVERE, "File broken: " + configFile.toString());
-			throw e;
+		{		
+			File broken = new File(configFile.getAbsolutePath() + ".broken." + System.currentTimeMillis());
+			configFile.renameTo(broken);
+			LOGGER.log(Level.SEVERE, "The file " + configFile.toString() + " is broken, it has been renamed to " + broken.toString(), e.getCause());			
 		}
 
 		if (this.root == null)
