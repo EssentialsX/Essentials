@@ -80,7 +80,7 @@ public class Commandrepair extends EssentialsCommand
 	private void repairItem(final ItemStack item) throws Exception
 	{
 		final Material material = Material.getMaterial(item.getTypeId());
-		if (material.isBlock() || material.getMaxDurability() < 0)
+		if (material.isBlock() || material.getMaxDurability() < 1)
 		{
 			throw new Exception(_("repairInvalidType"));
 		}

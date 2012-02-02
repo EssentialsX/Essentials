@@ -21,11 +21,17 @@ public class Util
 	{
 	}
 	private final static Logger logger = Logger.getLogger("Minecraft");
-	private final static Pattern INVALIDCHARS = Pattern.compile("[^a-z0-9]");
+	private final static Pattern INVALIDFILECHARS = Pattern.compile("[^a-z0-9]");
+	private final static Pattern INVALIDCHARS = Pattern.compile("[^\t\n\r\u0020-\u007E\u0085\u00A0-\uD7FF\uE000-\uFFFC]");;
 
 	public static String sanitizeFileName(final String name)
 	{
-		return INVALIDCHARS.matcher(name.toLowerCase(Locale.ENGLISH)).replaceAll("_");
+		return INVALIDFILECHARS.matcher(name.toLowerCase(Locale.ENGLISH)).replaceAll("_");
+	}
+
+	public static String sanitizeString(final String string)
+	{
+		return INVALIDCHARS.matcher(string).replaceAll("");
 	}
 
 	public static String formatDateDiff(long date)
