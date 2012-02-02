@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.logging.Level;
 import org.bukkit.entity.Player;
 
 
@@ -22,10 +23,17 @@ public class EssentialsTimer implements Runnable
 		final long currentTime = System.currentTimeMillis();
 		for (Player player : ess.getServer().getOnlinePlayers())
 		{
-			final User user = ess.getUser(player);
-			onlineUsers.add(user);
-			user.setLastOnlineActivity(currentTime);
-			user.checkActivity();
+			try
+			{
+				final User user = ess.getUser(player);
+				onlineUsers.add(user);
+				user.setLastOnlineActivity(currentTime);
+				user.checkActivity();
+			}
+			catch (Exception e)
+			{
+				ess.getLogger().log(Level.WARNING, "EssentialsTimer Error:", e);
+			}
 		}
 
 		final Iterator<User> iterator = onlineUsers.iterator();

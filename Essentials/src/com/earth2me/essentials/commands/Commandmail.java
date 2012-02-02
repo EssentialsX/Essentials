@@ -40,7 +40,7 @@ public class Commandmail extends EssentialsCommand
 		{
 			if (!user.isAuthorized("essentials.mail.send"))
 			{
-				throw new Exception(_("noPerm","essentials.mail.send"));
+				throw new Exception(_("noPerm", "essentials.mail.send"));
 			}
 
 			Player player = server.getPlayer(args[1]);
@@ -59,7 +59,8 @@ public class Commandmail extends EssentialsCommand
 			}
 			if (!u.isIgnoredPlayer(user.getName()))
 			{
-				u.addMail(user.getName() + ": " + Util.stripColor(getFinalArg(args, 2)));
+				final String mail = Util.sanitizeString(Util.stripColor(getFinalArg(args, 2)));
+				u.addMail(user.getName() + ": " + mail);
 			}
 			user.sendMessage(_("mailSent"));
 			return;
@@ -68,7 +69,7 @@ public class Commandmail extends EssentialsCommand
 		{
 			if (!user.isAuthorized("essentials.mail.sendall"))
 			{
-				throw new Exception(_("noPerm","essentials.mail.sendall"));
+				throw new Exception(_("noPerm", "essentials.mail.sendall"));
 			}
 			ess.scheduleAsyncDelayedTask(new SendAll(user.getName() + ": " + Util.stripColor(getFinalArg(args, 1))));
 			user.sendMessage(_("mailSent"));
