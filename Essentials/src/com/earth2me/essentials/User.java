@@ -544,6 +544,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 	public boolean canBuild()
 	{
+		if (isOp())
+		{
+			return true;
+		}
 		return ess.getPermissionsHandler().canBuild(base, getGroup());
 	}
 
