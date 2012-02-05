@@ -243,13 +243,13 @@ public abstract class UserBase extends AsyncStorageObjectHolder<UserData> implem
 		acquireWriteLock();
 		try
 		{
-			Map<String, Location> homes = getData().getHomes();
+			Map<String, com.earth2me.essentials.storage.Location> homes = getData().getHomes();
 			if (homes == null)
 			{
-				homes = new HashMap<String, Location>();
+				homes = new HashMap<String, com.earth2me.essentials.storage.Location>();
 				getData().setHomes(homes);
 			}
-			homes.put(Util.sanitizeKey(name), loc);
+			homes.put(Util.sanitizeKey(name), new com.earth2me.essentials.storage.Location(loc));
 		}
 		finally
 		{
@@ -417,10 +417,17 @@ public abstract class UserBase extends AsyncStorageObjectHolder<UserData> implem
 				return null;
 			}
 			ArrayList<Location> worldHomes = new ArrayList<Location>();
-			for (Location location : getData().getHomes().values())
+			for (com.earth2me.essentials.storage.Location location : getData().getHomes().values())
 			{
-				if (location.getWorld().equals(loc.getWorld())) {
-					worldHomes.add(location);
+				if (location.getWorldName().equals(loc.getWorld().getName())) {
+					try
+					{
+						worldHomes.add(location.getBukkitLocation());
+					}
+					catch (WorldNotLoadedException ex)
+					{
+						continue;
+					}
 				}
 			}
 			if (worldHomes.isEmpty()) {

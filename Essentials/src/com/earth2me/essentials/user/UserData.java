@@ -1,13 +1,9 @@
 package com.earth2me.essentials.user;
 
-import com.earth2me.essentials.storage.ListType;
-import com.earth2me.essentials.storage.MapKeyType;
-import com.earth2me.essentials.storage.MapValueType;
-import com.earth2me.essentials.storage.StorageObject;
+import com.earth2me.essentials.storage.*;
 import java.util.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.bukkit.Location;
 import org.bukkit.Material;
 
 

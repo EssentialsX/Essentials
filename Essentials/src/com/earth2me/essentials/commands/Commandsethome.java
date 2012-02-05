@@ -36,9 +36,9 @@ public class Commandsethome extends EssentialsCommand
 						user.acquireWriteLock();
 						if (user.getData().getHomes() == null)
 						{
-							user.getData().setHomes(new HashMap<String, Location>());
+							user.getData().setHomes(new HashMap<String, com.earth2me.essentials.storage.Location>());
 						}
-						user.getData().getHomes().put(args[0].toLowerCase(Locale.ENGLISH), user.getLocation());
+						user.getData().getHomes().put(args[0].toLowerCase(Locale.ENGLISH), new com.earth2me.essentials.storage.Location(user.getLocation()));
 					}
 					else
 					{
@@ -73,9 +73,9 @@ public class Commandsethome extends EssentialsCommand
 					usersHome.acquireWriteLock();
 					if (usersHome.getData().getHomes() == null)
 					{
-						usersHome.getData().setHomes(new HashMap<String, Location>());
+						usersHome.getData().setHomes(new HashMap<String, com.earth2me.essentials.storage.Location>());
 					}
-					usersHome.getData().getHomes().put(name, user.getLocation());
+					usersHome.getData().getHomes().put(name, new com.earth2me.essentials.storage.Location(user.getLocation()));
 				}
 			}
 		}
@@ -84,9 +84,9 @@ public class Commandsethome extends EssentialsCommand
 			user.acquireWriteLock();
 			if (user.getData().getHomes() == null)
 			{
-				user.getData().setHomes(new HashMap<String, Location>());
+				user.getData().setHomes(new HashMap<String, com.earth2me.essentials.storage.Location>());
 			}
-			user.getData().getHomes().put("home", user.getLocation());
+			user.getData().getHomes().put("home", new com.earth2me.essentials.storage.Location(user.getLocation()));
 		}
 		user.sendMessage(_("homeSet"));
 

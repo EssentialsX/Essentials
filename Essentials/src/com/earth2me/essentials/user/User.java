@@ -190,7 +190,7 @@ public class User extends UserBase implements IUser
 		acquireWriteLock();
 		try
 		{
-			getData().setLastLocation(getLocation());
+			getData().setLastLocation(new com.earth2me.essentials.storage.Location(getLocation()));
 		}
 		finally
 		{

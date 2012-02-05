@@ -269,7 +269,7 @@ public class Teleport implements Runnable, ITeleport
 		user.acquireReadLock();
 		try
 		{
-			teleport(new Target(user.getData().getLastLocation()), chargeFor, TeleportCause.COMMAND);
+			teleport(new Target(user.getData().getLastLocation().getBukkitLocation()), chargeFor, TeleportCause.COMMAND);
 		}
 		finally
 		{
@@ -282,7 +282,7 @@ public class Teleport implements Runnable, ITeleport
 		user.acquireReadLock();
 		try
 		{
-			now(new Target(user.getData().getLastLocation()), TeleportCause.COMMAND);
+			now(new Target(user.getData().getLastLocation().getBukkitLocation()), TeleportCause.COMMAND);
 		}
 		finally
 		{
