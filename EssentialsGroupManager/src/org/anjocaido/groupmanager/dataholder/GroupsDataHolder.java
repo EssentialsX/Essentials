@@ -17,7 +17,8 @@ public class GroupsDataHolder {
 	/**
 	 * Root World name this set of groups is associated with.
 	 */
-	private String name;
+	//private String name;
+	private WorldDataHolder dataSource;
 	private Group defaultGroup = null;
 	private File groupsFile;
 	private boolean haveGroupsChanged = false;
@@ -33,17 +34,24 @@ public class GroupsDataHolder {
 	 */
 	protected GroupsDataHolder() {
 	}
-
-	protected void setWorldName(String worldName) {
-		name = worldName;
+	
+	public void setDataSource(WorldDataHolder dataSource) {
+		this.dataSource = dataSource;
+		//push this data source to the users, so they pull the correct groups data.
+		for (Group group : groups.values())
+			group.setDataSource(this.dataSource);
 	}
+
+	//protected void setWorldName(String worldName) {
+	//	name = worldName;
+	//}
 
 	/**
 	 * @return the name
 	 */
-	public String getWorldName() {
-		return name;
-	}
+	//public String getWorldName() {
+	//	return name;
+	//}
 
 	/**
 	 * @return the defaultGroup

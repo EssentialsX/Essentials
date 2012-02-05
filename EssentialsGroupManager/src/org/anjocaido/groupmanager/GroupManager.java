@@ -1485,7 +1485,7 @@ public class GroupManager extends JavaPlugin {
 				
 				try {
 					worldsHolder.saveChanges(forced);
-					sender.sendMessage(ChatColor.YELLOW + " The changes were saved.");
+					sender.sendMessage(ChatColor.YELLOW + " All changes were saved.");
 				} catch (IllegalStateException ex) {
 					sender.sendMessage(ChatColor.RED + ex.getMessage());
 				}
@@ -1522,6 +1522,7 @@ public class GroupManager extends JavaPlugin {
 				}
 				// WORKING
 				config.load();
+				globalGroups.load();
 				worldsHolder.mirrorSetUp();
 				
 				isLoaded = false;
@@ -1538,7 +1539,7 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage("The request to world '" + auxString + "' was sent.");
 				} else {
 					worldsHolder.reloadAll();
-					sender.sendMessage(ChatColor.YELLOW + " The current world was reloaded.");
+					sender.sendMessage(ChatColor.YELLOW + " All worlds were reloaded.");
 				}
 
 				isLoaded = true;

@@ -80,6 +80,16 @@ public class WorldDataHolder {
         
         //this.defaultGroup = defaultGroup;
     }
+    
+    /**
+     * update the dataSource to point to this object.
+     * 
+     * This should be called whenever a set of world data is fetched.
+     */
+    public void updateDataSource() {
+    	this.groups.setDataSource(this);
+    	this.users.setDataSource(this);
+    }
 
     /**
      * Search for a user. If it doesn't exist, create a new one with
@@ -465,54 +475,66 @@ public class WorldDataHolder {
                 }
 
                 //PERMISSIONS NODE
-                if (thisGroupNode.get("permissions") == null) {
-                    thisGroupNode.put("permissions", new ArrayList<String>());
-                } else {
-	                if (thisGroupNode.get("permissions") instanceof List) {
-	                    for (Object o : ((List) thisGroupNode.get("permissions"))) {
-	                    	try {
-	                    		thisGrp.addPermission(o.toString());
-	                    	} catch (NullPointerException e) {
-	                    		// Ignore this entry as it's null.
-	                    		//throw new IllegalArgumentException("Invalid permission node in group:  " + thisGrp.getName() + " in file: " + groupsFile.getPath());
-	                    	}
-	                    }
-	                } else if (thisGroupNode.get("permissions") instanceof String) {
-	                    thisGrp.addPermission((String) thisGroupNode.get("permissions"));
+                try {
+	                if (thisGroupNode.get("permissions") == null) {
+	                    thisGroupNode.put("permissions", new ArrayList<String>());
 	                } else {
-	                    throw new IllegalArgumentException("Unknown type of permissions node(Should be String or List<String>) for group:  " + thisGrp.getName() + " in file: " + groupsFile.getPath());
+		                if (thisGroupNode.get("permissions") instanceof List) {
+		                    for (Object o : ((List) thisGroupNode.get("permissions"))) {
+		                    	try {
+		                    		thisGrp.addPermission(o.toString());
+		                    	} catch (NullPointerException e) {
+		                    		// Ignore this entry as it's null.
+		                    		//throw new IllegalArgumentException("Invalid permission node in group:  " + thisGrp.getName() + " in file: " + groupsFile.getPath());
+		                    	}
+		                    }
+		                } else if (thisGroupNode.get("permissions") instanceof String) {
+		                    thisGrp.addPermission((String) thisGroupNode.get("permissions"));
+		                } else {
+		                    throw new IllegalArgumentException("Unknown type of permissions node(Should be String or List<String>) for group:  " + thisGrp.getName() + " in file: " + groupsFile.getPath());
+		                }
+		                thisGrp.sortPermissions();
 	                }
-	                thisGrp.sortPermissions();
+                } catch (Exception e) {
+                	throw new IllegalArgumentException("Invalid formatting found in permissions section for group: " + thisGrp.getName() + " in file: " + groupsFile.getPath());
                 }
 
                 //INFO NODE
-                if (thisGroupNode.get("info") instanceof Map) {
-	                Map<String, Object> infoNode = (Map<String, Object>) thisGroupNode.get("info");
-	                if (infoNode != null) {
-	                    thisGrp.setVariables(infoNode);
-	                }
-                } else
-                	throw new IllegalArgumentException("Unknown entry found in Info section for group: " + thisGrp.getName() + " in file: " + groupsFile.getPath());
+                try {
+	                if (thisGroupNode.get("info") instanceof Map) {
+		                Map<String, Object> infoNode = (Map<String, Object>) thisGroupNode.get("info");
+		                if (infoNode != null) {
+		                    thisGrp.setVariables(infoNode);
+		                }
+	                } else
+	                	throw new IllegalArgumentException("Unknown entry found in Info section for group: " + thisGrp.getName() + " in file: " + groupsFile.getPath());
+                } catch (Exception e1) {
+                	throw new IllegalArgumentException("Invalid formatting found in info section for group: " + thisGrp.getName() + " in file: " + groupsFile.getPath());
+                }
                 	
                 //END INFO NODE
 
-                if (thisGroupNode.get("inheritance") == null || thisGroupNode.get("inheritance") instanceof List) {
-	                Object inheritNode = thisGroupNode.get("inheritance");
-	                if (inheritNode == null) {
-	                    thisGroupNode.put("inheritance", new ArrayList<String>());
-	                } else if (inheritNode instanceof List) {
-	                    List<String> groupsInh = (List<String>) inheritNode;
-	                    for (String grp : groupsInh) {
-	                        if (inheritance.get(groupKey) == null) {
-	                            List<String> thisInherits = new ArrayList<String>();
-	                            inheritance.put(groupKey, thisInherits);
-	                        }
-	                        inheritance.get(groupKey).add(grp);
-	
-	                    }
-	                }
-                }else
-                	throw new IllegalArgumentException("Unknown entry found in inheritance section for group: " + thisGrp.getName() + " in file: " + groupsFile.getPath());
+                try {
+	                if (thisGroupNode.get("inheritance") == null || thisGroupNode.get("inheritance") instanceof List) {
+		                Object inheritNode = thisGroupNode.get("inheritance");
+		                if (inheritNode == null) {
+		                    thisGroupNode.put("inheritance", new ArrayList<String>());
+		                } else if (inheritNode instanceof List) {
+		                    List<String> groupsInh = (List<String>) inheritNode;
+		                    for (String grp : groupsInh) {
+		                        if (inheritance.get(groupKey) == null) {
+		                            List<String> thisInherits = new ArrayList<String>();
+		                            inheritance.put(groupKey, thisInherits);
+		                        }
+		                        inheritance.get(groupKey).add(grp);
+		
+		                    }
+		                }
+	                }else
+	                	throw new IllegalArgumentException("Unknown entry found in inheritance section for group: " + thisGrp.getName() + " in file: " + groupsFile.getPath());
+                } catch (Exception e2) {
+                	throw new IllegalArgumentException("Invalid formatting found in inheritance section for group: " + thisGrp.getName() + " in file: " + groupsFile.getPath());
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
