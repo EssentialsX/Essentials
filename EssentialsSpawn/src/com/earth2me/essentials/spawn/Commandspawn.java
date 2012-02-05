@@ -5,6 +5,7 @@ import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.commands.EssentialsCommand;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
+import com.earth2me.essentials.perm.Permissions;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -17,7 +18,7 @@ public class Commandspawn extends EssentialsCommand
 	{
 		final Trade charge = new Trade(commandName, ess);
 		charge.isAffordableFor(user);
-		if (args.length > 0 && user.isAuthorized("essentials.spawn.others"))
+		if (args.length > 0 && Permissions.SPAWN_OTHERS.isAuthorized(user))
 		{
 			final IUser otherUser = getPlayer(args, 0);
 			respawn(otherUser, null);

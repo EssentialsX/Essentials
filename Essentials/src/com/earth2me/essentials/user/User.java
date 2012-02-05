@@ -7,6 +7,7 @@ import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.*;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
+import com.earth2me.essentials.perm.Permissions;
 import com.earth2me.essentials.register.payment.Method;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -76,41 +77,7 @@ public class User extends UserBase implements IUser
 	}
 
 	@Override
-	public boolean isAuthorized(String node)
-	{
-		if (!isOnlineUser())
-		{
-			return false;
-		}
-
-		if (getData().isJailed())
-		{
-			return false;
-		}
-		//TODO: switch to Superperms only
-		return ess.getPermissionsHandler().hasPermission(base, node);
-	}
-
-	@Override
-	public boolean isAuthorized(IPermission permission)
-	{
-		return isAuthorized(permission.getPermission());
-	}
-	
-	/*@Override
-	public boolean isAuthorized(IEssentialsCommand cmd)
-	{
-		return isAuthorized(cmd, "essentials.");
-	}
-
-	@Override
-	public boolean isAuthorized(IEssentialsCommand cmd, String permissionPrefix)
-	{
-		return isAuthorized(permissionPrefix + (cmd.getName().equals("r") ? "msg" : cmd.getName()));
-	}*/
-	
-	@Override
-	public void checkCooldown(final UserData.TimestampType cooldownType, final double cooldown, final boolean set, final String bypassPermission) throws CooldownException
+	public void checkCooldown(final UserData.TimestampType cooldownType, final double cooldown, final boolean set, final IPermission bypassPermission) throws CooldownException
 	{
 		final Calendar now = new GregorianCalendar();
 		if (getTimestamp(cooldownType) > 0)
@@ -119,7 +86,7 @@ public class User extends UserBase implements IUser
 			cooldownTime.setTimeInMillis(getTimestamp(cooldownType));
 			cooldownTime.add(Calendar.SECOND, (int)cooldown);
 			cooldownTime.add(Calendar.MILLISECOND, (int)((cooldown * 1000.0) % 1000.0));
-			if (cooldownTime.after(now) && !isAuthorized(bypassPermission))
+			if (cooldownTime.after(now) && !bypassPermission.isAuthorized(this))
 			{
 				throw new CooldownException(Util.formatDateDiff(cooldownTime.getTimeInMillis()));
 			}
@@ -204,7 +171,7 @@ public class User extends UserBase implements IUser
 	public boolean canAfford(final double cost)
 	{
 		final double mon = getMoney();
-		return mon >= cost || isAuthorized("essentials.eco.loan");
+		return mon >= cost || Permissions.ECO_LOAN.isAuthorized(this);
 	}
 
 	public void setHome()
@@ -372,7 +339,7 @@ public class User extends UserBase implements IUser
 		acquireWriteLock();
 		try
 		{
-			this.setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") ? true : set);
+			this.setSleepingIgnored(Permissions.SLEEPINGIGNORED.isAuthorized(this) ? true : set);
 			if (set && !getData().isAfk())
 			{
 				afkPosition = getLocation();
@@ -389,7 +356,7 @@ public class User extends UserBase implements IUser
 	public boolean toggleAfk()
 	{
 		final boolean now = super.toggleAfk();
-		this.setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") ? true : now);
+		this.setSleepingIgnored(Permissions.SLEEPINGIGNORED.isAuthorized(this) ? true : now);
 		return now;
 	}
 
@@ -497,7 +464,9 @@ public class User extends UserBase implements IUser
 		settings.acquireReadLock();
 		final long autoafkkick = settings.getData().getCommands().getAfk().getAutoAFKKick();
 		if (autoafkkick > 0 && lastActivity > 0 && (lastActivity + (autoafkkick * 1000)) < System.currentTimeMillis()
-			&& !hidden && !isAuthorized("essentials.kick.exempt") && !isAuthorized("essentials.afk.kickexempt"))
+			&& !hidden 
+			&& !Permissions.KICK_EXEMPT.isAuthorized(this)
+			&& !Permissions.AFK_KICKEXEMPT.isAuthorized(this))
 		{
 			final String kickReason = _("autoAfkKickReason", autoafkkick / 60.0);
 			lastActivity = 0;
@@ -507,7 +476,7 @@ public class User extends UserBase implements IUser
 			for (Player player : ess.getServer().getOnlinePlayers())
 			{
 				final IUser user = ess.getUser(player);
-				if (user.isAuthorized("essentials.kick.notify"))
+				if (Permissions.KICK_NOTIFY.isAuthorized(user))
 				{
 					player.sendMessage(_("playerKicked", Console.NAME, getName(), kickReason));
 				}
@@ -517,7 +486,7 @@ public class User extends UserBase implements IUser
 		acquireReadLock();
 		try
 		{
-			if (!getData().isAfk() && autoafk > 0 && lastActivity + autoafk * 1000 < System.currentTimeMillis() && isAuthorized("essentials.afk"))
+			if (!getData().isAfk() && autoafk > 0 && lastActivity + autoafk * 1000 < System.currentTimeMillis() && Permissions.AFK.isAuthorized(this))
 			{
 				setAfk(true);
 				if (!hidden)
@@ -688,7 +657,7 @@ public class User extends UserBase implements IUser
 		}
 		
 		final Map<Integer, ItemStack> overfilled;
-		if (isAuthorized("essentials.oversizedstacks"))
+		if (Permissions.OVERSIZEDSTACKS.isAuthorized(this))
 		{
 			@Cleanup
 			final ISettings settings = ess.getSettings();

@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.Permissions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -71,7 +72,7 @@ public class Commandpowertool extends EssentialsCommand
 			{
 				if (command.startsWith("a:"))
 				{
-					if (!user.isAuthorized("essentials.powertool.append"))
+					if (!Permissions.POWERTOOL_APPEND.isAuthorized(user))
 					{
 						throw new Exception(_("noPerm", "essentials.powertool.append"));
 					}

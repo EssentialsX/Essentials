@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.Permissions;
 import java.util.HashMap;
 import java.util.Locale;
 import lombok.Cleanup;
@@ -24,12 +25,12 @@ public class Commandsethome extends EssentialsCommand
 
 			if (args.length < 2)
 			{
-				if (user.isAuthorized("essentials.sethome.multiple"))
+				if (Permissions.SETHOME_MULTIPLE.isAuthorized(user))
 				{
 					if ("bed".equals(args[0].toLowerCase(Locale.ENGLISH))) {
 						throw new NotEnoughArgumentsException();
 					}
-					if ((user.isAuthorized("essentials.sethome.multiple.unlimited")) || (user.getHomes().size() < ess.getGroups().getHomeLimit(user))
+					if ((user.getHomes().size() < ess.getGroups().getHomeLimit(user))
 						|| (user.getHomes().contains(args[0].toLowerCase(Locale.ENGLISH))))
 					{
 						user.acquireWriteLock();
@@ -52,7 +53,7 @@ public class Commandsethome extends EssentialsCommand
 			}
 			else
 			{
-				if (user.isAuthorized("essentials.sethome.others"))
+				if (Permissions.SETHOME_OTHERS.isAuthorized(user))
 				{
 					@Cleanup
 					IUser usersHome = ess.getUser(ess.getServer().getPlayer(args[0]));
@@ -61,7 +62,7 @@ public class Commandsethome extends EssentialsCommand
 						throw new Exception(_("playerNotFound"));
 					}
 					String name = args[1].toLowerCase(Locale.ENGLISH);
-					if (!user.isAuthorized("essentials.sethome.multiple"))
+					if (!Permissions.SETHOME_MULTIPLE.isAuthorized(user))
 					{
 						name = "home";
 					}

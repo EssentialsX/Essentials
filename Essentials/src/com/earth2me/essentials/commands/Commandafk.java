@@ -12,7 +12,7 @@ public class Commandafk extends EssentialsCommand
 	@Override
 	public void run(final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
-		if (args.length > 0 && user.isAuthorized(Permissions.AFK_OTHERS))
+		if (args.length > 0 && Permissions.AFK_OTHERS.isAuthorized(user))
 		{
 			IUser afkUser = ess.getUser((Player)ess.getServer().matchPlayer(args[0]));
 			if (afkUser != null)

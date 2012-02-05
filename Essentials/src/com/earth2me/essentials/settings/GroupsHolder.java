@@ -5,6 +5,7 @@ import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.IGroups;
 import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.GroupsPermissions;
 import com.earth2me.essentials.storage.AsyncStorageObjectHolder;
 import java.io.File;
 import java.text.MessageFormat;
@@ -28,25 +29,7 @@ public class GroupsHolder extends AsyncStorageObjectHolder<Groups> implements IG
 	{
 		return new File(ess.getDataFolder(), "groups.yml");
 	}
-
-	public void registerPermissions()
-	{
-		acquireReadLock();
-		try
-		{
-			final Map<String, GroupOptions> groups = getData().getGroups();
-			if (groups == null || groups.isEmpty())
-			{
-				return;
-			}
-			Util.registerPermissions("essentials.groups", groups.keySet(), true, ess);
-		}
-		finally
-		{
-			unlock();
-		}
-	}
-
+	
 	public Collection<GroupOptions> getGroups(final IUser player)
 	{
 		acquireReadLock();
@@ -60,7 +43,7 @@ public class GroupsHolder extends AsyncStorageObjectHolder<Groups> implements IG
 			final ArrayList<GroupOptions> list = new ArrayList();
 			for (Entry<String, GroupOptions> entry : groups.entrySet())
 			{
-				if (player.isAuthorized("essentials.groups." + entry.getKey()))
+				if (GroupsPermissions.getPermission(entry.getKey()).isAuthorized(player))
 				{
 					if(entry.getValue() != null)
 					{

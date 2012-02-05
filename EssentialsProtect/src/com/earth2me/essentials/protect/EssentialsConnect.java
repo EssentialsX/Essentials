@@ -43,7 +43,7 @@ public class EssentialsConnect
 		return ess;
 	}
 
-	public void alert(final IUser user, final String item, final String type)
+	public void alert(final Player user, final String item, final String type)
 	{
 		final Location loc = user.getLocation();
 		final String warnMessage = _("alertFormat", user.getName(), type, item,
@@ -53,7 +53,7 @@ public class EssentialsConnect
 		for (Player p : ess.getServer().getOnlinePlayers())
 		{
 			final IUser alertUser = ess.getUser(p);
-			if (alertUser.isAuthorized("essentials.protect.alerts"))
+			if (Permissions.ALERTS.isAuthorized(alertUser))
 			{
 				alertUser.sendMessage(warnMessage);
 			}

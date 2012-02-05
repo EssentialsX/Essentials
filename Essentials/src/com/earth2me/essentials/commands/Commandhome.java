@@ -4,6 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.Permissions;
 import java.util.List;
 import java.util.Locale;
 import org.bukkit.Location;
@@ -24,7 +25,7 @@ public class Commandhome extends EssentialsCommand
 		if (args.length > 0)
 		{
 			nameParts = args[0].split(":");
-			if (nameParts[0].length() == args[0].length() || !user.isAuthorized("essentials.home.others"))
+			if (nameParts[0].length() == args[0].length() || !Permissions.HOME_OTHERS.isAuthorized(user))
 			{
 				homeName = nameParts[0];
 			}

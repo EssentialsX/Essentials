@@ -5,6 +5,8 @@ import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.api.IWarps;
+import com.earth2me.essentials.perm.Permissions;
+import com.earth2me.essentials.perm.WarpPermissions;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -21,7 +23,7 @@ public class Commandwarp extends EssentialsCommand
 	{
 		if (args.length == 0 || args[0].matches("[0-9]+"))
 		{
-			if (!user.isAuthorized("essentials.warp.list"))
+			if (!Permissions.WARP_LIST.isAuthorized(user))
 			{
 				throw new Exception(_("warpListPermission"));
 			}
@@ -31,7 +33,7 @@ public class Commandwarp extends EssentialsCommand
 		if (args.length > 0)
 		{
 			IUser otherUser = null;
-			if (args.length == 2 && user.isAuthorized("essentials.warp.otherplayers"))
+			if (args.length == 2 && Permissions.WARP_OTHERS.isAuthorized(user))
 			{
 				otherUser = ess.getUser(server.getPlayer(args[1]));
 				if (otherUser == null)
@@ -80,7 +82,7 @@ public class Commandwarp extends EssentialsCommand
 			while (iterator.hasNext())
 			{
 				final String warpName = iterator.next();
-				if (!((IUser)sender).isAuthorized("essentials.warp." + warpName))
+				if (!WarpPermissions.getPermission(warpName).isAuthorized(sender))
 				{
 					iterator.remove();
 				}
@@ -111,7 +113,7 @@ public class Commandwarp extends EssentialsCommand
 		final Trade charge = new Trade(commandName, ess);
 		charge.isAffordableFor(user);
 
-		if (user.isAuthorized("essentials.warp." + name))
+		if (WarpPermissions.getPermission(name).isAuthorized(user))
 		{
 			user.getTeleport().warp(name, charge, TeleportCause.COMMAND);
 			return;

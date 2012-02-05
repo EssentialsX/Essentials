@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.Permissions;
 import java.util.List;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -31,7 +32,7 @@ public class Commandmail extends EssentialsCommand
 		}
 		if (args.length >= 3 && "send".equalsIgnoreCase(args[0]))
 		{
-			if (!user.isAuthorized("essentials.mail.send"))
+			if (!Permissions.MAIL_SEND.isAuthorized(user))
 			{
 				throw new Exception(_("noPerm", "essentials.mail.send"));
 			}
@@ -59,7 +60,7 @@ public class Commandmail extends EssentialsCommand
 		}
 		if (args.length > 1 && "sendall".equalsIgnoreCase(args[0]))
 		{
-			if (!user.isAuthorized("essentials.mail.sendall"))
+			if (!Permissions.MAIL_SENDALL.isAuthorized(user))
 			{
 				throw new Exception(_("noPerm", "essentials.mail.sendall"));
 			}

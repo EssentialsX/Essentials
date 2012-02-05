@@ -8,6 +8,7 @@ import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.IGroups;
 import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.Permissions;
 import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -77,7 +78,7 @@ public abstract class EssentialsChatPlayer implements Listener
 	protected void formatChat(final PlayerChatEvent event, final ChatStore chatStore)
 	{
 		final IUser user = chatStore.getUser();
-		if (user.isAuthorized("essentials.chat.color"))
+		if (Permissions.CHAT_COLOR.isAuthorized(user))
 		{
 			event.setMessage(Util.stripColor(event.getMessage()));
 		}
@@ -141,10 +142,7 @@ public abstract class EssentialsChatPlayer implements Listener
 
 		if (event.getMessage().length() > 1 && chatStore.getType().length() > 0)
 		{
-			final StringBuilder permission = new StringBuilder();
-			permission.append("essentials.chat.").append(chatStore.getType());
-
-			if (user.isAuthorized(permission.toString()))
+			if (ChatPermissions.getPermission(chatStore.getType()).isAuthorized(user))
 			{
 				final StringBuilder format = new StringBuilder();
 				format.append(chatStore.getType()).append("Format");

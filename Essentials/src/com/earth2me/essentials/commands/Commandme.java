@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.Permissions;
 
 
 public class Commandme extends EssentialsCommand
@@ -21,7 +22,7 @@ public class Commandme extends EssentialsCommand
 		}
 
 		String message = getFinalArg(args, 0);
-		if (user.isAuthorized("essentials.chat.color"))
+		if (Permissions.CHAT_COLOR.isAuthorized(user))
 		{
 			message = Util.replaceColor(message);
 		}

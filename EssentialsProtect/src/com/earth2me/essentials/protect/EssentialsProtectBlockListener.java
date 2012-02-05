@@ -2,13 +2,13 @@ package com.earth2me.essentials.protect;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IEssentials;
-import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.protect.data.IProtectedBlock;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -34,12 +34,12 @@ public class EssentialsProtectBlockListener implements Listener
 			return;
 		}
 
-		final IUser user = ess.getUser(event.getPlayer());
+		final Player user = event.getPlayer();
 		final ProtectHolder settings = prot.getSettings();
 		settings.acquireReadLock();
 		try
 		{
-			if (!user.isAuthorized(Permissions.BUILD))
+			if (!Permissions.BUILD.isAuthorized(user))
 			{
 				event.setCancelled(true);
 				return;
@@ -48,13 +48,13 @@ public class EssentialsProtectBlockListener implements Listener
 			final Block blockPlaced = event.getBlockPlaced();
 			final int id = blockPlaced.getTypeId();
 
-			if (!user.isAuthorized(BlockPlacePermissions.getPermission(blockPlaced.getType())))
+			if (!BlockPlacePermissions.getPermission(blockPlaced.getType()).isAuthorized(user))
 			{
 				event.setCancelled(true);
 				return;
 			}
 
-			if (!user.hasPermission("essentials.protect.alerts.notrigger") &&
+			if (!Permissions.ALERTS_NOTRIGGER.isAuthorized(user) &&
 				settings.getData().getAlertOnPlacement().contains(blockPlaced.getType()))
 			{
 				prot.getEssentialsConnect().alert(user, blockPlaced.getType().toString(), _("alertPlaced"));
@@ -72,7 +72,7 @@ public class EssentialsProtectBlockListener implements Listener
 			final List<Block> protect = new ArrayList<Block>();
 			if ((blockPlaced.getType() == Material.RAILS || blockPlaced.getType() == Material.POWERED_RAIL || blockPlaced.getType() == Material.DETECTOR_RAIL)
 				&& settings.getData().getSignsAndRails().isProtectRails()
-				&& user.isAuthorized("essentials.protect"))
+				&& Permissions.RAILS.isAuthorized(user))
 			{
 				protect.add(blockPlaced);
 				if (settings.getData().getSignsAndRails().isBlockBelow()
@@ -81,7 +81,7 @@ public class EssentialsProtectBlockListener implements Listener
 					protect.add(blockPlaced.getRelative(BlockFace.DOWN));
 				}
 			}
-			if ((blockPlaced.getType() == Material.SIGN_POST || blockPlaced.getType() == Material.WALL_SIGN)
+			/*if ((blockPlaced.getType() == Material.SIGN_POST || blockPlaced.getType() == Material.WALL_SIGN)
 				&& settings.getData().getSignsAndRails().isProtectSigns()
 				&& user.isAuthorized("essentials.protect"))
 			{
@@ -93,7 +93,7 @@ public class EssentialsProtectBlockListener implements Listener
 				{
 					protect.add(event.getBlockAgainst());
 				}
-			}
+			}*/
 			for (Block block : protect)
 			{
 				prot.getStorage().protectBlock(block, user.getName());
@@ -144,7 +144,7 @@ public class EssentialsProtectBlockListener implements Listener
 
 			if (event.getCause().equals(BlockIgniteEvent.IgniteCause.FLINT_AND_STEEL) && event.getPlayer() != null)
 			{
-				event.setCancelled(ess.getUser(event.getPlayer()).isAuthorized(Permissions.USEFLINTSTEEL));
+				event.setCancelled(Permissions.USEFLINTSTEEL.isAuthorized(event.getPlayer()));
 				return;
 			}
 
@@ -267,9 +267,9 @@ public class EssentialsProtectBlockListener implements Listener
 		{
 			return;
 		}
-		final IUser user = ess.getUser(event.getPlayer());
+		final Player user = event.getPlayer();
 
-		if (!user.isAuthorized(Permissions.BUILD))
+		if (!Permissions.BUILD.isAuthorized(user))
 		{
 			event.setCancelled(true);
 			return;
@@ -277,7 +277,7 @@ public class EssentialsProtectBlockListener implements Listener
 		final Block block = event.getBlock();
 		final int typeId = block.getTypeId();
 
-		if (!user.isAuthorized(BlockBreakPermissions.getPermission(block.getType())))
+		if (!BlockBreakPermissions.getPermission(block.getType()).isAuthorized(user))
 		{
 			event.setCancelled(true);
 			return;
@@ -288,13 +288,13 @@ public class EssentialsProtectBlockListener implements Listener
 		{
 			final Material type = block.getType();
 
-			if (!user.hasPermission("essentials.protect.alerts.notrigger") && settings.getData().getAlertOnBreak().contains(type))
+			if (!Permissions.ALERTS_NOTRIGGER.isAuthorized(user) && settings.getData().getAlertOnBreak().contains(type))
 			{
 				prot.getEssentialsConnect().alert(user, type.toString(), _("alertBroke"));
 			}
 			final IProtectedBlock storage = prot.getStorage();
 
-			if (user.isAuthorized("essentials.protect.admin"))
+			if (Permissions.ADMIN.isAuthorized(user))
 			{
 				if (type == Material.WALL_SIGN || type == Material.SIGN_POST || type == Material.RAILS || type == Material.POWERED_RAIL || type == Material.DETECTOR_RAIL)
 				{
@@ -489,7 +489,7 @@ public class EssentialsProtectBlockListener implements Listener
 		}
 	}
 
-	private boolean isProtected(final Block block, final IUser user, final ProtectHolder settings)
+	private boolean isProtected(final Block block, final Player user, final ProtectHolder settings)
 	{
 		final Material type = block.getType();
 		if (settings.getData().getSignsAndRails().isProtectSigns())

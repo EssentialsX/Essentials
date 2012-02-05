@@ -6,6 +6,8 @@ import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.craftbukkit.SetExpFix;
+import com.earth2me.essentials.perm.NoCommandCostPermissions;
+import com.earth2me.essentials.perm.Permissions;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -63,7 +65,7 @@ public class Trade
 		if (getMoney() != null
 			&& mon < getMoney()
 			&& getMoney() > 0
-			&& !user.isAuthorized("essentials.eco.loan"))
+			&& !Permissions.ECO_LOAN.isAuthorized(user))
 		{
 			throw new ChargeException(_("notEnoughMoney"));
 		}
@@ -79,11 +81,10 @@ public class Trade
 		settings.acquireReadLock();
 
 		if (command != null && !command.isEmpty()
-			&& !user.isAuthorized("essentials.nocommandcost.all")
-			&& !user.isAuthorized("essentials.nocommandcost." + command)
+			&& !NoCommandCostPermissions.getPermission(command).isAuthorized(user)
 			&& mon < settings.getData().getEconomy().getCommandCost(command.charAt(0) == '/' ? command.substring(1) : command)
 			&& 0 < settings.getData().getEconomy().getCommandCost(command.charAt(0) == '/' ? command.substring(1) : command)
-			&& !user.isAuthorized("essentials.eco.loan"))
+			&& !Permissions.ECO_LOAN.isAuthorized(user))
 		{
 			throw new ChargeException(_("notEnoughMoney"));
 		}
@@ -135,7 +136,7 @@ public class Trade
 		if (getMoney() != null)
 		{
 			final double mon = user.getMoney();
-			if (mon < getMoney() && getMoney() > 0 && !user.isAuthorized("essentials.eco.loan"))
+			if (mon < getMoney() && getMoney() > 0 && !Permissions.ECO_LOAN.isAuthorized(user))
 			{
 				throw new ChargeException(_("notEnoughMoney"));
 			}
@@ -151,15 +152,14 @@ public class Trade
 			user.updateInventory();
 		}
 		if (command != null && !command.isEmpty()
-			&& !user.isAuthorized("essentials.nocommandcost.all")
-			&& !user.isAuthorized("essentials.nocommandcost." + command))
+			&& !NoCommandCostPermissions.getPermission(command).isAuthorized(user))
 		{
 			@Cleanup
 			final ISettings settings = ess.getSettings();
 			settings.acquireReadLock();
 			final double mon = user.getMoney();
 			final double cost = settings.getData().getEconomy().getCommandCost(command.charAt(0) == '/' ? command.substring(1) : command);
-			if (mon < cost && cost > 0 && !user.isAuthorized("essentials.eco.loan"))
+			if (mon < cost && cost > 0 && !Permissions.ECO_LOAN.isAuthorized(user))
 			{
 				throw new ChargeException(_("notEnoughMoney"));
 			}

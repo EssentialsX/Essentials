@@ -5,6 +5,7 @@ import com.earth2me.essentials.api.IEssentialsModule;
 import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.settings.Spawns;
 import com.earth2me.essentials.storage.AsyncStorageObjectHolder;
+import com.earth2me.essentials.storage.Location.WorldNotLoadedException;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Locale;
@@ -35,9 +36,9 @@ public class SpawnStorage extends AsyncStorageObjectHolder<Spawns> implements IE
 		{
 			if (getData().getSpawns() == null)
 			{
-				getData().setSpawns(new HashMap<String, Location>());
+				getData().setSpawns(new HashMap<String, com.earth2me.essentials.storage.Location>());
 			}
-			getData().getSpawns().put(group.toLowerCase(Locale.ENGLISH), loc);
+			getData().getSpawns().put(group.toLowerCase(Locale.ENGLISH), new com.earth2me.essentials.storage.Location(loc));
 		}
 		finally
 		{
@@ -59,7 +60,7 @@ public class SpawnStorage extends AsyncStorageObjectHolder<Spawns> implements IE
 			{
 				return getWorldSpawn();
 			}
-			final Map<String, Location> spawnMap = getData().getSpawns();
+			final Map<String, com.earth2me.essentials.storage.Location> spawnMap = getData().getSpawns();
 			String groupName = group.toLowerCase(Locale.ENGLISH);
 			if (!spawnMap.containsKey(groupName))
 			{
@@ -69,7 +70,14 @@ public class SpawnStorage extends AsyncStorageObjectHolder<Spawns> implements IE
 			{
 				return getWorldSpawn();
 			}
-			return spawnMap.get(groupName);
+			try
+			{
+				return spawnMap.get(groupName).getBukkitLocation();
+			}
+			catch (WorldNotLoadedException ex)
+			{
+				return getWorldSpawn();
+			}
 		}
 		finally
 		{

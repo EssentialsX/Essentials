@@ -4,6 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.Permissions;
 import java.util.List;
 import lombok.Cleanup;
 import org.bukkit.Material;
@@ -98,7 +99,7 @@ public class EssentialsEntityListener extends EntityListener
 			@Cleanup
 			final ISettings settings = ess.getSettings();
 			settings.acquireReadLock();
-			if (user.isAuthorized("essentials.back.ondeath") && !settings.getData().getCommands().isDisabled("back"))
+			if (Permissions.BACK_ONDEATH.isAuthorized(user) && !settings.getData().getCommands().isDisabled("back"))
 			{
 				user.setLastLocation();
 				user.sendMessage(_("backAfterDeath"));

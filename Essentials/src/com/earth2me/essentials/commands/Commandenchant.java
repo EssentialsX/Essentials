@@ -4,6 +4,7 @@ import com.earth2me.essentials.Enchantments;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.EnchantPermissions;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -29,7 +30,7 @@ public class Commandenchant extends EssentialsCommand
 			for (Map.Entry<String, Enchantment> entry : Enchantments.entrySet())
 			{
 				final String enchantmentName = entry.getValue().getName().toLowerCase(Locale.ENGLISH);
-				if (enchantmentslist.contains(enchantmentName) || user.isAuthorized("essentials.enchant." + enchantmentName))
+				if (enchantmentslist.contains(enchantmentName) || EnchantPermissions.getPermission(enchantmentName).isAuthorized(user))
 				{
 					enchantmentslist.add(entry.getKey());
 					//enchantmentslist.add(enchantmentName);
@@ -84,7 +85,7 @@ public class Commandenchant extends EssentialsCommand
 			throw new Exception(_("enchantmentNotFound"));
 		}
 		final String enchantmentName = enchantment.getName().toLowerCase(Locale.ENGLISH);
-		if (user != null && !user.isAuthorized("essentials.enchant." + enchantmentName))
+		if (user != null && !EnchantPermissions.getPermission(enchantmentName).isAuthorized(user))
 		{
 			throw new Exception(_("enchantmentPerm", enchantmentName));
 		}

@@ -4,6 +4,7 @@ import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.Permissions;
 import lombok.Cleanup;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -34,7 +35,7 @@ public class Commandtp extends EssentialsCommand
 			throw new NoChargeException();
 
 		default:
-			if (!user.isAuthorized("essentials.tpohere"))
+			if (!Permissions.TPOHERE.isAuthorized(user))
 			{
 				//TODO: Translate this
 				throw new Exception("You need access to /tpohere to teleport other players.");

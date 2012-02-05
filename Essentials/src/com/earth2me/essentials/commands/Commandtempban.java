@@ -4,6 +4,7 @@ import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.Permissions;
 import com.earth2me.essentials.user.Ban;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -22,8 +23,7 @@ public class Commandtempban extends EssentialsCommand
 		final IUser user = getPlayer(args, 0, true);
 		if (user.getBase() instanceof OfflinePlayer)
 		{
-			if (sender instanceof Player
-				&& !ess.getUser((Player)sender).isAuthorized("essentials.tempban.offline"))
+			if (Permissions.TEMPBAN_OFFLINE.isAuthorized(sender))
 			{
 				sender.sendMessage(_("tempbanExempt"));
 				return;
@@ -31,7 +31,7 @@ public class Commandtempban extends EssentialsCommand
 		}
 		else
 		{
-			if (user.isAuthorized("essentials.tempban.exempt"))
+			if (Permissions.TEMPBAN_EXEMPT.isAuthorized(user))
 			{
 				sender.sendMessage(_("tempbanExempt"));
 				return;
@@ -52,7 +52,7 @@ public class Commandtempban extends EssentialsCommand
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
 			final IUser player = ess.getUser(onlinePlayer);
-			if (player.isAuthorized("essentials.ban.notify"))
+			if (Permissions.BAN_NOTIFY.isAuthorized(player))
 			{
 				onlinePlayer.sendMessage(_("playerBanned", senderName, user.getName(), banReason));
 			}

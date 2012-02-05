@@ -2,6 +2,7 @@ package com.earth2me.essentials.api;
 
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.craftbukkit.DummyOfflinePlayer;
+import com.earth2me.essentials.perm.Permissions;
 import com.earth2me.essentials.user.User;
 import java.io.File;
 import java.util.logging.Level;
@@ -141,7 +142,7 @@ public final class Economy
 		{
 			throw new UserDoesNotExistException(name);
 		}
-		if (balance < 0.0 && !user.isAuthorized("essentials.eco.loan"))
+		if (balance < 0.0 && !Permissions.ECO_LOAN.isAuthorized(user))
 		{
 			throw new NoLoanPermittedException();
 		}

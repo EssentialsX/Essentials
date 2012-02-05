@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.DescParseTickFormat;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.Permissions;
 import java.util.*;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -40,7 +41,7 @@ public class Commandptime extends EssentialsCommand
 		}
 
 		IUser user = sender instanceof Player ? ess.getUser((Player)sender) : null;
-		if ((!users.contains(user) || users.size() > 1) && user != null && !user.isAuthorized("essentials.ptime.others"))
+		if ((!users.contains(user) || users.size() > 1) && user != null && !Permissions.PTIME_OTHERS.isAuthorized(user))
 		{
 			user.sendMessage(_("pTimeOthersPermission"));
 			return;

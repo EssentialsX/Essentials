@@ -4,6 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.Permissions;
 import java.util.Locale;
 import lombok.Cleanup;
 import org.bukkit.Server;
@@ -29,7 +30,7 @@ public class Commandnick extends EssentialsCommand
 		}
 		if (args.length > 1)
 		{
-			if (!user.isAuthorized("essentials.nick.others"))
+			if (!Permissions.NICK_OTHERS.isAuthorized(user))
 			{
 				throw new Exception(_("nickOthersPermission"));
 			}
@@ -67,7 +68,7 @@ public class Commandnick extends EssentialsCommand
 
 	private String formatNickname(final IUser user, final String nick)
 	{
-		if (user == null || user.isAuthorized("essentials.nick.color"))
+		if (user == null || Permissions.NICK_COLOR.isAuthorized(user))
 		{
 			return nick.replace('&', '\u00a7').replaceAll("\u00a7+k", "");
 		} else {

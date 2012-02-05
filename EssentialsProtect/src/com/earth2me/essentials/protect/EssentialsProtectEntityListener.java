@@ -1,7 +1,6 @@
 package com.earth2me.essentials.protect;
 
 import com.earth2me.essentials.api.IEssentials;
-import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.craftbukkit.FakeExplosion;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -46,28 +45,28 @@ public class EssentialsProtectEntityListener implements Listener
 				return;
 			}
 
-			final IUser user = target instanceof Player ? ess.getUser((Player)target) : null;
+			final Player user = target instanceof Player ? (Player)target : null;
 			if (target instanceof Player && event instanceof EntityDamageByBlockEvent)
 			{
 				final DamageCause cause = event.getCause();
 
 				if (cause == DamageCause.CONTACT
-					&& (user.isAuthorized(Permissions.PREVENTDAMAGE_CONTACT)
-						&& !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
+					&& (Permissions.PREVENTDAMAGE_CONTACT.isAuthorized(user)
+						&& !Permissions.PREVENTDAMAGE_NONE.isAuthorized(user)))
 				{
 					event.setCancelled(true);
 					return;
 				}
 				if (cause == DamageCause.LAVA
-					&& (user.isAuthorized(Permissions.PREVENTDAMAGE_LAVADAMAGE)
-						&& !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
+					&& (Permissions.PREVENTDAMAGE_LAVADAMAGE.isAuthorized(user)
+						&& !Permissions.PREVENTDAMAGE_NONE.isAuthorized(user)))
 				{
 					event.setCancelled(true);
 					return;
 				}
 				if (cause == DamageCause.BLOCK_EXPLOSION
-					&& (user.isAuthorized(Permissions.PREVENTDAMAGE_TNT)
-						&& !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
+					&& (Permissions.PREVENTDAMAGE_TNT.isAuthorized(user)
+						&& !Permissions.PREVENTDAMAGE_NONE.isAuthorized(user)))
 				{
 					event.setCancelled(true);
 					return;
@@ -78,11 +77,11 @@ public class EssentialsProtectEntityListener implements Listener
 			{
 				final EntityDamageByEntityEvent edEvent = (EntityDamageByEntityEvent)event;
 				final Entity eAttack = edEvent.getDamager();
-				final IUser attacker = eAttack instanceof Player ? ess.getUser((Player)eAttack) : null;
+				final Player attacker = eAttack instanceof Player ? (Player)eAttack : null;
 
 				// PVP Settings
 				if (target instanceof Player && eAttack instanceof Player
-					&& (!user.isAuthorized(Permissions.PVP) || !attacker.isAuthorized(Permissions.PVP)))
+					&& (!Permissions.PVP.isAuthorized(user) || !Permissions.PVP.isAuthorized(attacker)))
 				{
 					event.setCancelled(true);
 					return;
@@ -90,35 +89,35 @@ public class EssentialsProtectEntityListener implements Listener
 
 				//Creeper explode prevention
 				if (eAttack instanceof Creeper && settings.getData().getPrevent().isCreeperExplosion()
-					|| (user.isAuthorized(Permissions.PREVENTDAMAGE_CREEPER)
-						&& !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
+					|| (Permissions.PREVENTDAMAGE_CREEPER.isAuthorized(user)
+						&& !Permissions.PREVENTDAMAGE_NONE.isAuthorized(user)))
 				{
 					event.setCancelled(true);
 					return;
 				}
 
 				if ((event.getEntity() instanceof Fireball || event.getEntity() instanceof SmallFireball)
-					&& (user.isAuthorized(Permissions.PREVENTDAMAGE_FIREBALL)
-						&& !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
+					&& (Permissions.PREVENTDAMAGE_FIREBALL.isAuthorized(user)
+						&& !Permissions.PREVENTDAMAGE_NONE.isAuthorized(user)))
 				{
 					event.setCancelled(true);
 					return;
 				}
 
 				if (eAttack instanceof TNTPrimed
-					&& (user.isAuthorized(Permissions.PREVENTDAMAGE_TNT)
-						&& !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
+					&& (Permissions.PREVENTDAMAGE_TNT.isAuthorized(user)
+						&& !Permissions.PREVENTDAMAGE_NONE.isAuthorized(user)))
 				{
 					event.setCancelled(true);
 					return;
 				}
 
 				if (edEvent.getDamager() instanceof Projectile
-					&& ((user.isAuthorized(Permissions.PREVENTDAMAGE_PROJECTILES)
-						 && !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE))
+					&& ((Permissions.PREVENTDAMAGE_PROJECTILES.isAuthorized(user)
+						 && !Permissions.PREVENTDAMAGE_NONE.isAuthorized(user))
 						|| (((Projectile)edEvent.getDamager()).getShooter() instanceof Player
-							&& (!user.isAuthorized(Permissions.PVP)
-								|| !ess.getUser((Player)((Projectile)edEvent.getDamager()).getShooter()).isAuthorized(Permissions.PVP)))))
+							&& (!Permissions.PVP.isAuthorized(user)
+								|| !Permissions.PVP.isAuthorized((Player)((Projectile)edEvent.getDamager()).getShooter())))))
 				{
 					event.setCancelled(true);
 					return;
@@ -129,38 +128,38 @@ public class EssentialsProtectEntityListener implements Listener
 			if (target instanceof Player)
 			{
 				if (cause == DamageCause.FALL
-					&& (user.isAuthorized(Permissions.PREVENTDAMAGE_FALL)
-						&& !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
+					&& (Permissions.PREVENTDAMAGE_FALL.isAuthorized(user)
+						&& !Permissions.PREVENTDAMAGE_NONE.isAuthorized(user)))
 				{
 					event.setCancelled(true);
 					return;
 				}
 
 				if (cause == DamageCause.SUFFOCATION
-					&& (user.isAuthorized(Permissions.PREVENTDAMAGE_SUFFOCATION)
-						&& !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
+					&& (Permissions.PREVENTDAMAGE_SUFFOCATION.isAuthorized(user)
+						&& !Permissions.PREVENTDAMAGE_NONE.isAuthorized(user)))
 				{
 					event.setCancelled(true);
 					return;
 				}
 				if ((cause == DamageCause.FIRE
 					 || cause == DamageCause.FIRE_TICK)
-					&& (user.isAuthorized(Permissions.PREVENTDAMAGE_FIRE)
-						&& !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
+					&& (Permissions.PREVENTDAMAGE_FIRE.isAuthorized(user)
+						&& !Permissions.PREVENTDAMAGE_NONE.isAuthorized(user)))
 				{
 					event.setCancelled(true);
 					return;
 				}
 				if (cause == DamageCause.DROWNING
-					&& (user.isAuthorized(Permissions.PREVENTDAMAGE_DROWNING)
-						&& !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
+					&& (Permissions.PREVENTDAMAGE_DROWNING.isAuthorized(user)
+						&& !Permissions.PREVENTDAMAGE_NONE.isAuthorized(user)))
 				{
 					event.setCancelled(true);
 					return;
 				}
 				if (cause == DamageCause.LIGHTNING
-					&& (user.isAuthorized(Permissions.PREVENTDAMAGE_LIGHTNING)
-						&& !user.isAuthorized(Permissions.PREVENTDAMAGE_NONE)))
+					&& (Permissions.PREVENTDAMAGE_LIGHTNING.isAuthorized(user)
+						&& !Permissions.PREVENTDAMAGE_NONE.isAuthorized(user)))
 				{
 					event.setCancelled(true);
 					return;
@@ -289,14 +288,14 @@ public class EssentialsProtectEntityListener implements Listener
 		{
 			return;
 		}
-		final IUser user = ess.getUser((Player)event.getTarget());
+		final Player user = (Player)event.getTarget();
 		if ((event.getReason() == TargetReason.CLOSEST_PLAYER
 			 || event.getReason() == TargetReason.TARGET_ATTACKED_ENTITY
 			 || event.getReason() == TargetReason.PIG_ZOMBIE_TARGET
 			 || event.getReason() == TargetReason.RANDOM_TARGET
 			 || event.getReason() == TargetReason.TARGET_ATTACKED_OWNER
 			 || event.getReason() == TargetReason.OWNER_ATTACKED_TARGET)
-			&& user.isAuthorized(Permissions.ENTITYTARGET))
+			&& Permissions.ENTITYTARGET.isAuthorized(user))
 		{
 			event.setCancelled(true);
 			return;

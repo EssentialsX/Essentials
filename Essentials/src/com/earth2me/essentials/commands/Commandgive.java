@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.GivePermissions;
 import java.util.Locale;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -26,9 +27,7 @@ public class Commandgive extends EssentialsCommand
 		final ItemStack stack = ess.getItemDb().get(args[1], giveTo);
 
 		final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
-		if (sender instanceof Player
-			&& (!ess.getUser((Player)sender).isAuthorized("essentials.give.item-" + itemname)
-				&& !ess.getUser((Player)sender).isAuthorized("essentials.give.item-" + stack.getTypeId())))
+		if (!GivePermissions.getPermission(stack.getType()).isAuthorized(sender))
 		{
 			throw new Exception(ChatColor.RED + "You are not allowed to spawn the item " + itemname);
 		}	

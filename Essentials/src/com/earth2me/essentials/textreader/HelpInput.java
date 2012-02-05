@@ -4,6 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.HelpPermissions;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
@@ -53,7 +54,7 @@ public class HelpInput implements IText
 						if (pluginName.contains("essentials"))
 						{
 							final String node = "essentials." + k.getKey();
-							if (!settings.getData().getCommands().isDisabled(k.getKey()) && user.isAuthorized(node))
+							if (!settings.getData().getCommands().isDisabled(k.getKey()) && user.hasPermission(node))
 							{
 								lines.add("§c" + k.getKey() + "§7: " + k.getValue().get(DESCRIPTION));
 							}
@@ -72,7 +73,7 @@ public class HelpInput implements IText
 								{
 									permissions = value.get(PERMISSIONS);
 								}
-								if (user.isAuthorized("essentials.help." + pluginName))
+								if (HelpPermissions.getPermission(pluginName).isAuthorized(user))
 								{
 									lines.add("§c" + k.getKey() + "§7: " + value.get(DESCRIPTION));
 								}
@@ -81,7 +82,7 @@ public class HelpInput implements IText
 									boolean enabled = false;
 									for (Object o : (List<Object>)permissions)
 									{
-										if (o instanceof String && user.isAuthorized(o.toString()))
+										if (o instanceof String && user.hasPermission(o.toString()))
 										{
 											enabled = true;
 											break;
@@ -94,7 +95,7 @@ public class HelpInput implements IText
 								}
 								else if (permissions instanceof String && !"".equals(permissions))
 								{
-									if (user.isAuthorized(permissions.toString()))
+									if (user.hasPermission(permissions.toString()))
 									{
 										lines.add("§c" + k.getKey() + "§7: " + value.get(DESCRIPTION));
 									}

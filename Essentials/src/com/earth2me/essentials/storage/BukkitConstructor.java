@@ -1,13 +1,11 @@
 package com.earth2me.essentials.storage;
 
 import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.craftbukkit.BetterLocation;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -280,11 +278,12 @@ public class BukkitConstructor extends Constructor
 				{
 					return null;
 				}
-				return new BetterLocation(worldName, x, y, z, yaw, pitch);
+				return new Location(worldName, x, y, z, yaw, pitch);
 			}
 			return super.construct(node);
 		}
 
+		@Override
 		protected Object constructJavaBean2ndStep(final MappingNode node, final Object object)
 		{
 			Map<Class<? extends Object>, TypeDescription> typeDefinitions;

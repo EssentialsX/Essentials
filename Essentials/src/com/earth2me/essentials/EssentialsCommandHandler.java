@@ -113,7 +113,7 @@ public class EssentialsCommandHandler implements ICommandHandler
 			}
 
 			// Check authorization
-			if (user != null && !user.isAuthorized(cmd))
+			if (sender != null && cmd.isAuthorized(sender))
 			{
 				LOGGER.log(Level.WARNING, _("deniedAccessCommand", user.getName()));
 				user.sendMessage(_("noAccessCommand"));

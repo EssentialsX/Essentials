@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.DescParseTickFormat;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.Permissions;
 import java.util.*;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -29,10 +30,9 @@ public class Commandtime extends EssentialsCommand
 			return;
 		}
 
-		final IUser user = sender instanceof Player ? ess.getUser((Player)sender) : null;
-		if (user != null && !user.isAuthorized("essentials.time.set"))
+		if (Permissions.TIME_SET.isAuthorized(sender))
 		{
-			user.sendMessage(_("timeSetPermission"));
+			sender.sendMessage(_("timeSetPermission"));
 			return;
 		}
 

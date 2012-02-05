@@ -4,6 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.KitPermissions;
 import com.earth2me.essentials.settings.Kit;
 import java.util.Collection;
 import java.util.Locale;
@@ -25,7 +26,7 @@ public class Commandkit extends EssentialsCommand
 			{
 				for (String kitName : kitList)
 				{
-					if (!user.isAuthorized("essentials.kit." + kitName))
+					if (!KitPermissions.getPermission(kitName).isAuthorized(user))
 					{
 						kitList.remove(kitName);
 					}
@@ -39,7 +40,7 @@ public class Commandkit extends EssentialsCommand
 			final String kitName = args[0].toLowerCase(Locale.ENGLISH);
 			final Kit kit = ess.getKits().getKit(kitName);
 
-			if (!user.isAuthorized("essentials.kit." + kitName))
+			if (!KitPermissions.getPermission(kitName).isAuthorized(user))
 			{
 				throw new Exception(_("noKitPermission", "essentials.kit." + kitName));
 			}

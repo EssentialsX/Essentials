@@ -4,12 +4,14 @@ import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.api.InvalidNameException;
-import com.earth2me.essentials.craftbukkit.BetterLocation;
 import com.earth2me.essentials.craftbukkit.OfflineBedLocation;
 import com.earth2me.essentials.storage.AsyncStorageObjectHolder;
+import com.earth2me.essentials.storage.Location.WorldNotLoadedException;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import lombok.Cleanup;
 import lombok.Delegate;
 import org.bukkit.Bukkit;
@@ -32,7 +34,7 @@ public abstract class UserBase extends AsyncStorageObjectHolder<UserData> implem
 		Player.class, Entity.class, CommandSender.class, ServerOperator.class,
 		HumanEntity.class, ConfigurationSerializable.class, LivingEntity.class,
 		Permissible.class
-	}, excludes = {IOfflinePlayer.class, OtherExcludes.class})
+	}, excludes = {IOfflinePlayer.class})
 	protected Player base;
 	protected transient OfflinePlayer offlinePlayer;
 
@@ -116,7 +118,14 @@ public abstract class UserBase extends AsyncStorageObjectHolder<UserData> implem
 		}
 		else
 		{
-			return OfflineBedLocation.getBedLocation(base.getName(), ess);
+			try
+			{
+				return OfflineBedLocation.getBedLocation(base.getName(), ess).getBukkitLocation();
+			}
+			catch (WorldNotLoadedException ex)
+			{
+				return null;
+			}
 		}
 	}
 
@@ -436,15 +445,5 @@ public abstract class UserBase extends AsyncStorageObjectHolder<UserData> implem
 		{
 			unlock();
 		}
-	}
-	
-	@Override
-	public Location getLocation()
-	{
-		return new BetterLocation(base.getLocation());
-	}
-	
-	public static interface OtherExcludes {
-		Location getLocation();
 	}
 }

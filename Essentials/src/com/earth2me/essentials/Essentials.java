@@ -19,7 +19,6 @@ package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.*;
-import com.earth2me.essentials.craftbukkit.BetterLocation;
 import com.earth2me.essentials.listener.*;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
@@ -235,7 +234,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 		i18n.onDisable();
 		Economy.setEss(null);
 		Trade.closeLog();
-		BetterLocation.cleanup();
 	}
 
 	@Override

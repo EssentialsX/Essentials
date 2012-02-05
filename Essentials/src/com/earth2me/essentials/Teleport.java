@@ -5,6 +5,7 @@ import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.ITeleport;
 import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
+import com.earth2me.essentials.perm.Permissions;
 import com.earth2me.essentials.user.CooldownException;
 import com.earth2me.essentials.user.UserData.TimestampType;
 import java.util.Calendar;
@@ -152,7 +153,7 @@ public class Teleport implements Runnable, ITeleport
 	{
 		try
 		{
-			user.checkCooldown(TimestampType.LASTTELEPORT, ess.getGroups().getTeleportCooldown(user), !check, "essentials.teleport.cooldown.bypass");
+			user.checkCooldown(TimestampType.LASTTELEPORT, ess.getGroups().getTeleportCooldown(user), !check, Permissions.TELEPORT_COOLDOWN_BYPASS);
 		}
 		catch (CooldownException ex)
 		{
@@ -210,7 +211,7 @@ public class Teleport implements Runnable, ITeleport
 			chargeFor.isAffordableFor(user);
 		}
 		cooldown(true);
-		if (delay <= 0 || user.isAuthorized("essentials.teleport.timer.bypass"))
+		if (delay <= 0 || Permissions.TELEPORT_TIMER_BYPASS.isAuthorized(user))
 		{
 			cooldown(false);
 			now(target, cause);

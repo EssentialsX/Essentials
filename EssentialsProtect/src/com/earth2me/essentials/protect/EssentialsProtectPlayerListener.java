@@ -2,9 +2,9 @@ package com.earth2me.essentials.protect;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IEssentials;
-import com.earth2me.essentials.api.IUser;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -28,7 +28,7 @@ public class EssentialsProtectPlayerListener implements Listener
 	public void onPlayerInteract(final PlayerInteractEvent event)
 	{
 		// Do not return if cancelled, because the interact event has 2 cancelled states.
-		final IUser user = ess.getUser(event.getPlayer());
+		final Player user = event.getPlayer();
 
 		final ProtectHolder settings = prot.getSettings();
 		settings.acquireReadLock();
@@ -37,7 +37,7 @@ public class EssentialsProtectPlayerListener implements Listener
 			if (event.hasItem()
 				&& (event.getItem().getType() == Material.WATER_BUCKET
 					|| event.getItem().getType() == Material.LAVA_BUCKET)
-				&& !user.isAuthorized(Permissions.BUILD))
+				&& !Permissions.BUILD.isAuthorized(user))
 			{
 				if (settings.getData().isWarnOnBuildDisallow())
 				{
@@ -47,7 +47,7 @@ public class EssentialsProtectPlayerListener implements Listener
 				return;
 			}
 
-			if (!user.isAuthorized(Permissions.INTERACT))
+			if (!Permissions.INTERACT.isAuthorized(user))
 			{
 				if (settings.getData().isWarnOnBuildDisallow())
 				{
@@ -59,13 +59,13 @@ public class EssentialsProtectPlayerListener implements Listener
 
 			final ItemStack item = event.getItem();
 			if (item != null
-				&& !user.isAuthorized(ItemUsePermissions.getPermission(item.getType())))
+				&& !ItemUsePermissions.getPermission(item.getType()).isAuthorized(user))
 			{
 				event.setCancelled(true);
 				return;
 			}
 
-			if (user.isAuthorized("essentials.protect.ownerinfo") && event.getAction() == Action.RIGHT_CLICK_BLOCK)
+			if (Permissions.OWNERINFO.isAuthorized(user) && event.getAction() == Action.RIGHT_CLICK_BLOCK)
 			{
 				final StringBuilder stringBuilder = new StringBuilder();
 				boolean first = true;
@@ -86,8 +86,8 @@ public class EssentialsProtectPlayerListener implements Listener
 				}
 			}
 			if (item != null
-				&& !user.hasPermission("essentials.protect.alerts.notrigger") 
-				&&  settings.getData().getAlertOnUse().contains(item.getType()))
+				&& !Permissions.ALERTS_NOTRIGGER.isAuthorized(user)
+				&& settings.getData().getAlertOnUse().contains(item.getType()))
 			{
 				prot.getEssentialsConnect().alert(user, item.getType().toString(), _("alertUsed"));
 			}

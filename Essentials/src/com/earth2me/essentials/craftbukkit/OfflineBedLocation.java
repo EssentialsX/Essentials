@@ -1,11 +1,11 @@
 package com.earth2me.essentials.craftbukkit;
 
 import com.earth2me.essentials.api.IEssentials;
+import com.earth2me.essentials.storage.Location;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.minecraft.server.NBTTagCompound;
 import net.minecraft.server.WorldNBTStorage;
-import org.bukkit.Location;
 import org.bukkit.craftbukkit.CraftServer;
 
 
@@ -38,7 +38,7 @@ public class OfflineBedLocation
 				{
 					spawnWorld = cserver.getWorlds().get(0).getName();
 				}
-				return new BetterLocation(spawnWorld, playerStorage.getInt("SpawnX"), playerStorage.getInt("SpawnY"), playerStorage.getInt("SpawnZ"));
+				return new Location(spawnWorld, playerStorage.getInt("SpawnX"), playerStorage.getInt("SpawnY"), playerStorage.getInt("SpawnZ"));
 			}
 			return null;
 		}

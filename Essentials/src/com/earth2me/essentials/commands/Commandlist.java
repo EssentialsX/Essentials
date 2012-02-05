@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.Permissions;
 import java.util.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -14,14 +15,7 @@ public class Commandlist extends EssentialsCommand
 	public void run(final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		boolean showhidden = false;
-		if (sender instanceof Player)
-		{
-			if (ess.getUser((Player)sender).isAuthorized("essentials.list.hidden"))
-			{
-				showhidden = true;
-			}
-		}
-		else
+		if (Permissions.LIST_HIDDEN.isAuthorized(sender))
 		{
 			showhidden = true;
 		}

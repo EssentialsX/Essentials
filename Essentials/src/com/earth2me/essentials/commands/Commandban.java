@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.Permissions;
 import com.earth2me.essentials.user.Ban;
 import lombok.Cleanup;
 import org.bukkit.command.CommandSender;
@@ -22,7 +23,7 @@ public class Commandban extends EssentialsCommand
 		final IUser user = getPlayer(args, 0, true);
 		if (user.isOnline())
 		{
-			if (user.isAuthorized("essentials.ban.exempt"))
+			if (Permissions.BAN_EXEMPT.isAuthorized(user))
 			{
 				sender.sendMessage(_("banExempt"));
 				return;
@@ -30,8 +31,7 @@ public class Commandban extends EssentialsCommand
 		}
 		else
 		{
-			if (sender instanceof Player
-				&& !ess.getUser((Player)sender).isAuthorized("essentials.ban.offline"))
+			if (Permissions.BAN_OFFLINE.isAuthorized(sender))
 			{
 				sender.sendMessage(_("banExempt"));
 				return;
@@ -57,7 +57,7 @@ public class Commandban extends EssentialsCommand
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
 			final IUser player = ess.getUser(onlinePlayer);
-			if (player.isAuthorized("essentials.ban.notify"))
+			if (Permissions.BAN_NOTIFY.isAuthorized(player))
 			{
 				onlinePlayer.sendMessage(_("playerBanned", senderName, user.getName(), banReason));
 			}

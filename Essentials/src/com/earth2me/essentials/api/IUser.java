@@ -13,12 +13,6 @@ import org.bukkit.inventory.ItemStack;
 
 public interface IUser extends Player, IStorageObjectHolder<UserData>, IReload, IReplyTo, Comparable<IUser>
 {
-	boolean isAuthorized(String node);
-
-	boolean isAuthorized(IPermission node);
-
-	//boolean isAuthorized(IEssentialsCommand cmd);
-	//boolean isAuthorized(IEssentialsCommand cmd, String permissionPrefix);
 	Player getBase();
 
 	double getMoney();
@@ -53,7 +47,7 @@ public interface IUser extends Player, IStorageObjectHolder<UserData>, IReload, 
 
 	ITeleport getTeleport();
 
-	void checkCooldown(UserData.TimestampType cooldownType, double cooldown, boolean set, String bypassPermission) throws CooldownException;
+	void checkCooldown(UserData.TimestampType cooldownType, double cooldown, boolean set, IPermission bypassPermission) throws CooldownException;
 
 	boolean toggleAfk();
 

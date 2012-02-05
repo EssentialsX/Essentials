@@ -2,8 +2,8 @@ package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IEssentials;
-import com.earth2me.essentials.craftbukkit.FakeWorld;
 import com.earth2me.essentials.settings.Spawns;
+import com.earth2me.essentials.storage.Location;
 import com.earth2me.essentials.storage.YamlStorageWriter;
 import java.io.*;
 import java.math.BigInteger;
@@ -13,10 +13,10 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
+
 
 @Deprecated
 public class EssentialsUpgrade
@@ -211,14 +211,10 @@ public class EssentialsUpgrade
 						continue;
 					}
 					World world = ess.getServer().getWorlds().get(0);
-					if (vals.size() > 5)
-					{
-						world = ess.getServer().getWorld((String)vals.get(5));
-					}
 					if (world != null)
 					{
 						final Location loc = new Location(
-								world,
+								(String)vals.get(5),
 								((Number)vals.get(0)).doubleValue(),
 								((Number)vals.get(1)).doubleValue(),
 								((Number)vals.get(2)).doubleValue(),
@@ -352,7 +348,7 @@ public class EssentialsUpgrade
 						{
 							continue;
 						}
-						worldName = loc.getWorld().getName().toLowerCase(Locale.ENGLISH);
+						worldName = loc.getWorldName().toLowerCase(Locale.ENGLISH);
 						if (worldName != null && !worldName.isEmpty())
 						{
 							config.setProperty("homes." + worldName, loc);
@@ -373,54 +369,21 @@ public class EssentialsUpgrade
 		doneFile.save();
 	}
 
-	/*private void moveUsersDataToUserdataFolder()
-	{
-		final File usersFile = new File(ess.getDataFolder(), "users.yml");
-		if (!usersFile.exists())
-		{
-			return;
-		}
-		final EssentialsConf usersConfig = new EssentialsConf(usersFile);
-		usersConfig.load();
-		for (String username : usersConfig.getKeys(null))
-		{
-			final User user = new User(new OfflinePlayer(username, ess), ess);
-			final String nickname = usersConfig.getString(username + ".nickname");
-			if (nickname != null && !nickname.isEmpty() && !nickname.equals(username))
-			{
-				user.setNickname(nickname);
-			}
-			final List<String> mails = usersConfig.getStringList(username + ".mail", null);
-			if (mails != null && !mails.isEmpty())
-			{
-				user.setMails(mails);
-			}
-			if (!user.hasHome())
-			{
-				@SuppressWarnings("unchecked")
-				final List<Object> vals = (List<Object>)usersConfig.getProperty(username + ".home");
-				if (vals != null)
-				{
-					World world = ess.getServer().getWorlds().get(0);
-					if (vals.size() > 5)
-					{
-						world = getFakeWorld((String)vals.get(5));
-					}
-					if (world != null)
-					{
-						user.setHome("home", new Location(world,
-														  ((Number)vals.get(0)).doubleValue(),
-														  ((Number)vals.get(1)).doubleValue(),
-														  ((Number)vals.get(2)).doubleValue(),
-														  ((Number)vals.get(3)).floatValue(),
-														  ((Number)vals.get(4)).floatValue()));
-					}
-				}
-			}
-		}
-		usersFile.renameTo(new File(usersFile.getAbsolutePath() + ".old"));
-	}*/
-
+	/*
+	 * private void moveUsersDataToUserdataFolder() { final File usersFile = new File(ess.getDataFolder(), "users.yml");
+	 * if (!usersFile.exists()) { return; } final EssentialsConf usersConfig = new EssentialsConf(usersFile);
+	 * usersConfig.load(); for (String username : usersConfig.getKeys(null)) { final User user = new User(new
+	 * OfflinePlayer(username, ess), ess); final String nickname = usersConfig.getString(username + ".nickname"); if
+	 * (nickname != null && !nickname.isEmpty() && !nickname.equals(username)) { user.setNickname(nickname); } final
+	 * List<String> mails = usersConfig.getStringList(username + ".mail", null); if (mails != null && !mails.isEmpty())
+	 * { user.setMails(mails); } if (!user.hasHome()) { @SuppressWarnings("unchecked") final List<Object> vals =
+	 * (List<Object>)usersConfig.getProperty(username + ".home"); if (vals != null) { World world =
+	 * ess.getServer().getWorlds().get(0); if (vals.size() > 5) { world = getFakeWorld((String)vals.get(5)); } if (world
+	 * != null) { user.setHome("home", new Location(world, ((Number)vals.get(0)).doubleValue(),
+	 * ((Number)vals.get(1)).doubleValue(), ((Number)vals.get(2)).doubleValue(), ((Number)vals.get(3)).floatValue(),
+	 * ((Number)vals.get(4)).floatValue())); } } } } usersFile.renameTo(new File(usersFile.getAbsolutePath() + ".old"));
+	 * }
+	 */
 	private void convertWarps()
 	{
 		final File warpsFolder = new File(ess.getDataFolder(), "warps");
@@ -475,31 +438,16 @@ public class EssentialsUpgrade
 						{
 							rx.close();
 						}
-						World w = null;
-						for (World world : ess.getServer().getWorlds())
-						{
-							if (world.getEnvironment() != World.Environment.NETHER)
-							{
-								w = world;
-								break;
-							}
-						}
 						if (worldName != null)
 						{
-							worldName = worldName.trim();
-							World w1 = null;
-							w1 = getFakeWorld(worldName);
-							if (w1 != null)
+							final Location loc = new Location(worldName, x, y, z, yaw, pitch);
+							((Warps)ess.getWarps()).setWarp(filename.substring(0, filename.length() - 4), loc);
+							if (!listOfFiles[i].renameTo(new File(warpsFolder, filename + ".old")))
 							{
-								w = w1;
+								throw new Exception(_("fileRenameError", filename));
 							}
 						}
-						final Location loc = new Location(w, x, y, z, yaw, pitch);
-						ess.getWarps().setWarp(filename.substring(0, filename.length() - 4), loc);
-						if (!listOfFiles[i].renameTo(new File(warpsFolder, filename + ".old")))
-						{
-							throw new Exception(_("fileRenameError", filename));
-						}
+
 					}
 					catch (Exception ex)
 					{
@@ -509,7 +457,7 @@ public class EssentialsUpgrade
 			}
 
 		}
-		final File warpFile = new File(ess.getDataFolder(), "warps.txt");
+		/*final File warpFile = new File(ess.getDataFolder(), "warps.txt");
 		if (warpFile.exists())
 		{
 			try
@@ -542,7 +490,7 @@ public class EssentialsUpgrade
 								break;
 							}
 						}
-						final Location loc = new Location(w, x, y, z, yaw, pitch);
+						final Location loc = new Location(name, x, y, z, yaw, pitch);
 						ess.getWarps().setWarp(name, loc);
 						if (!warpFile.renameTo(new File(ess.getDataFolder(), "warps.txt.old")))
 						{
@@ -559,65 +507,30 @@ public class EssentialsUpgrade
 			{
 				LOGGER.log(Level.SEVERE, null, ex);
 			}
-		}
+		}*/
 	}
 
-	/*private void sanitizeAllUserFilenames()
-	{
-		if (doneFile.getBoolean("sanitizeAllUserFilenames", false))
-		{
-			return;
-		}
-		final File usersFolder = new File(ess.getDataFolder(), "userdata");
-		if (!usersFolder.exists())
-		{
-			return;
-		}
-		final File[] listOfFiles = usersFolder.listFiles();
-		for (int i = 0; i < listOfFiles.length; i++)
-		{
-			final String filename = listOfFiles[i].getName();
-			if (!listOfFiles[i].isFile() || !filename.endsWith(".yml"))
-			{
-				continue;
-			}
-			final String sanitizedFilename = Util.sanitizeFileName(filename.substring(0, filename.length() - 4)) + ".yml";
-			if (sanitizedFilename.equals(filename))
-			{
-				continue;
-			}
-			final File tmpFile = new File(listOfFiles[i].getParentFile(), sanitizedFilename + ".tmp");
-			final File newFile = new File(listOfFiles[i].getParentFile(), sanitizedFilename);
-			if (!listOfFiles[i].renameTo(tmpFile))
-			{
-				LOGGER.log(Level.WARNING, _("userdataMoveError", filename, sanitizedFilename));
-				continue;
-			}
-			if (newFile.exists())
-			{
-				LOGGER.log(Level.WARNING, _("duplicatedUserdata", filename, sanitizedFilename));
-				continue;
-			}
-			if (!tmpFile.renameTo(newFile))
-			{
-				LOGGER.log(Level.WARNING, _("userdataMoveBackError", sanitizedFilename, sanitizedFilename));
-			}
-		}
-		doneFile.setProperty("sanitizeAllUserFilenames", true);
-		doneFile.save();
-	}*/
-
-	private World getFakeWorld(final String name)
-	{
-		final File bukkitDirectory = ess.getDataFolder().getParentFile().getParentFile();
-		final File worldDirectory = new File(bukkitDirectory, name);
-		if (worldDirectory.exists() && worldDirectory.isDirectory())
-		{
-			return new FakeWorld(worldDirectory.getName(), World.Environment.NORMAL);
-		}
-		return null;
+	/*
+	 * private void sanitizeAllUserFilenames() { if (doneFile.getBoolean("sanitizeAllUserFilenames", false)) { return; }
+	 * final File usersFolder = new File(ess.getDataFolder(), "userdata"); if (!usersFolder.exists()) { return; } final
+	 * File[] listOfFiles = usersFolder.listFiles(); for (int i = 0; i < listOfFiles.length; i++) { final String
+	 * filename = listOfFiles[i].getName(); if (!listOfFiles[i].isFile() || !filename.endsWith(".yml")) { continue; }
+	 * final String sanitizedFilename = Util.sanitizeFileName(filename.substring(0, filename.length() - 4)) + ".yml"; if
+	 * (sanitizedFilename.equals(filename)) { continue; } final File tmpFile = new File(listOfFiles[i].getParentFile(),
+	 * sanitizedFilename + ".tmp"); final File newFile = new File(listOfFiles[i].getParentFile(), sanitizedFilename); if
+	 * (!listOfFiles[i].renameTo(tmpFile)) { LOGGER.log(Level.WARNING, _("userdataMoveError", filename,
+	 * sanitizedFilename)); continue; } if (newFile.exists()) { LOGGER.log(Level.WARNING, _("duplicatedUserdata",
+	 * filename, sanitizedFilename)); continue; } if (!tmpFile.renameTo(newFile)) { LOGGER.log(Level.WARNING,
+	 * _("userdataMoveBackError", sanitizedFilename, sanitizedFilename)); } }
+	 * doneFile.setProperty("sanitizeAllUserFilenames", true); doneFile.save(); }
+	 */
+	/*
+	 * private World getFakeWorld(final String name) { final File bukkitDirectory =
+	 * ess.getDataFolder().getParentFile().getParentFile(); final File worldDirectory = new File(bukkitDirectory, name);
+	 * if (worldDirectory.exists() && worldDirectory.isDirectory()) { return new FakeWorld(worldDirectory.getName(),
+	 * World.Environment.NORMAL); } return null;
 	}
-
+	 */
 	public Location getFakeLocation(EssentialsConf config, String path)
 	{
 		String worldName = config.getString((path != null ? path + "." : "") + "world");
@@ -625,12 +538,7 @@ public class EssentialsUpgrade
 		{
 			return null;
 		}
-		World world = getFakeWorld(worldName);
-		if (world == null)
-		{
-			return null;
-		}
-		return new Location(world,
+		return new Location(worldName,
 							config.getDouble((path != null ? path + "." : "") + "x", 0),
 							config.getDouble((path != null ? path + "." : "") + "y", 0),
 							config.getDouble((path != null ? path + "." : "") + "z", 0),
@@ -731,7 +639,7 @@ public class EssentialsUpgrade
 		doneFile.setProperty("updateSpawnsToNewSpawnsConfig", true);
 		doneFile.save();
 	}
-	
+
 	private void updateJailsToNewJailsConfig()
 	{
 		if (doneFile.getBoolean("updateJailsToNewJailsConfig", false))

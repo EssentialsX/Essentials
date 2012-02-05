@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.ItemPermissions;
 import java.util.Locale;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -20,8 +21,7 @@ public class Commanditem extends EssentialsCommand
 		final ItemStack stack = ess.getItemDb().get(args[0], user);
 
 		final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
-		if (!user.isAuthorized("essentials.itemspawn.item-" + itemname)
-			&& !user.isAuthorized("essentials.itemspawn.item-" + stack.getTypeId()))
+		if (!ItemPermissions.getPermission(stack.getType()).isAuthorized(user))
 		{
 			throw new Exception(_("cantSpawnItem", itemname));
 		}

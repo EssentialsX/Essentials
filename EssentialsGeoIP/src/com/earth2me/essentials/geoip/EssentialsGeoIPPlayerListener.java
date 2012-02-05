@@ -4,6 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.IReload;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.Permissions;
 import com.maxmind.geoip.Location;
 import com.maxmind.geoip.LookupService;
 import com.maxmind.geoip.regionName;
@@ -45,7 +46,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IReload
 	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
 		final IUser u = ess.getUser(event.getPlayer());
-		if (u.isAuthorized("essentials.geoip.hide"))
+		if (Permissions.GEOIP_HIDE.isAuthorized(u))
 		{
 			return;
 		}
@@ -93,7 +94,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IReload
 				for (Player player : event.getPlayer().getServer().getOnlinePlayers())
 				{
 					final IUser user = ess.getUser(player);
-					if (user.isAuthorized("essentials.geoip.show"))
+					if (Permissions.GEOIP_SHOW.isAuthorized(user))
 					{
 						user.sendMessage(_("geoipJoinFormat", user.getDisplayName(), builder.toString()));
 					}

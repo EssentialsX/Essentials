@@ -66,7 +66,7 @@ public class Warps extends StorageObjectMap<IWarp> implements IWarps
 		warp.acquireReadLock();
 		try
 		{
-			return warp.getData().getLocation();
+			return warp.getData().getLocation().getBukkitLocation();
 		}
 		finally
 		{
@@ -76,6 +76,11 @@ public class Warps extends StorageObjectMap<IWarp> implements IWarps
 
 	@Override
 	public void setWarp(final String name, final Location loc) throws Exception
+	{
+		setWarp(name, new com.earth2me.essentials.storage.Location(loc));
+	}
+	
+	public void setWarp(final String name, final com.earth2me.essentials.storage.Location loc) throws Exception
 	{
 		IWarp warp = getObject(name);
 		if (warp == null)

@@ -21,13 +21,14 @@ public abstract class EssentialsCommand extends AbstractSuperpermsPermission imp
 	protected transient IEssentials ess;
 	protected transient IEssentialsModule module;
 	protected transient Server server;
-	protected final static Logger logger = Logger.getLogger("Minecraft");
+	protected transient Logger logger;
 	private transient String permission;
 	private transient Permission bukkitPerm;
 
 	public void init(final IEssentials ess, final String commandName)
 	{
 		this.ess = ess;
+		this.logger = ess.getLogger();
 		this.server = ess.getServer();
 		this.commandName = commandName;
 		this.permission = "essentials." + commandName;

@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.Permissions;
 import java.util.List;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -13,7 +14,7 @@ public class Commandclearinventory extends EssentialsCommand
 	@Override
 	public void run(final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
-		if (args.length > 0 && user.isAuthorized("essentials.clearinventory.others"))
+		if (args.length > 0 && Permissions.CLEARINVENTORY_OTHERS.isAuthorized(user))
 		{
 			//TODO: Fix fringe user match case.
 			if (args[0].length() >= 3)

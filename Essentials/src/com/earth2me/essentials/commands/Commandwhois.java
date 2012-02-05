@@ -4,6 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.Permissions;
 import java.util.Locale;
 import lombok.Cleanup;
 import org.bukkit.command.CommandSender;
@@ -22,7 +23,7 @@ public class Commandwhois extends EssentialsCommand
 		boolean showhidden = false;
 		if (sender instanceof Player)
 		{
-			if (ess.getUser((Player)sender).isAuthorized("essentials.list.hidden"))
+			if (Permissions.LIST_HIDDEN.isAuthorized(sender))
 			{
 				showhidden = true;
 			}
@@ -67,7 +68,7 @@ public class Commandwhois extends EssentialsCommand
 			sender.sendMessage(_("whoisIPAddress", user.getAddress().getAddress().toString()));
 			final String location = user.getData().getGeolocation();
 			if (location != null
-				&& (sender instanceof Player ? ess.getUser((Player)sender).isAuthorized("essentials.geoip.show") : true))
+				&& Permissions.GEOIP_SHOW.isAuthorized(sender))
 			{
 				sender.sendMessage(_("whoisGeoLocation", location));
 			}

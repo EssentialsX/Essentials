@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.Permissions;
 import java.util.Locale;
 import lombok.Cleanup;
 import org.bukkit.command.CommandSender;
@@ -34,7 +35,7 @@ public class Commanddelhome extends EssentialsCommand
 			expandedArg = args;
 		}
 
-		if (expandedArg.length > 1 && (user == null || user.isAuthorized("essentials.delhome.others")))
+		if (expandedArg.length > 1 && (user == null || Permissions.DELHOME_OTHERS.isAuthorized(user)))
 		{
 			user = getPlayer(expandedArg, 0, true);
 			name = expandedArg[1];

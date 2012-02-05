@@ -3,6 +3,7 @@ package com.earth2me.essentials.chat;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.Permissions;
 import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -52,7 +53,7 @@ public class EssentialsLocalChatEventListener implements Listener
 
 				if (delta > event.getRadius())
 				{
-					if (user.isAuthorized("essentials.chat.spy"))
+					if (Permissions.CHAT_SPY.isAuthorized(user))
 					{
 						type = type.concat(_("chatTypeSpy"));
 					}

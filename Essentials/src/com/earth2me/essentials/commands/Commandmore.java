@@ -3,7 +3,10 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.ItemPermissions;
+import com.earth2me.essentials.perm.Permissions;
 import java.util.Locale;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -30,19 +33,18 @@ public class Commandmore extends EssentialsCommand
 		{
 			settings.unlock();
 		}
-		if (stack.getAmount() >= ((user.isAuthorized("essentials.oversizedstacks"))
+		if (stack.getAmount() >= (Permissions.OVERSIZEDSTACKS.isAuthorized(user)
 								  ? oversizedStackSize
 								  : defaultStackSize > 0 ? defaultStackSize : stack.getMaxStackSize()))
 		{
 			throw new NoChargeException();
 		}
 		final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
-		if (!user.isAuthorized("essentials.itemspawn.item-" + itemname)
-			&& !user.isAuthorized("essentials.itemspawn.item-" + stack.getTypeId()))
+		if (!ItemPermissions.getPermission(stack.getType()).isAuthorized(user))
 		{
 			throw new Exception(_("cantSpawnItem", itemname));
 		}
-		if (user.isAuthorized("essentials.oversizedstacks"))
+		if (Permissions.OVERSIZEDSTACKS.isAuthorized(user))
 		{
 			stack.setAmount(oversizedStackSize);
 		}

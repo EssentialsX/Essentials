@@ -1,6 +1,5 @@
 package com.earth2me.essentials.storage;
 
-import com.earth2me.essentials.craftbukkit.BetterLocation;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -12,7 +11,6 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -330,14 +328,7 @@ public class YamlStorageWriter implements IStorageWriter
 		writer.println();
 		writeIndention(depth);
 		writer.print("world: ");
-		if (entry instanceof BetterLocation)
-		{
-			writeScalar(((BetterLocation)entry).getWorldName());
-		}
-		else
-		{
-			writeScalar(entry.getWorld().getName());
-		}
+		writeScalar(entry.getWorldName());
 		writeIndention(depth);
 		writer.print("x: ");
 		writeScalar(entry.getX());

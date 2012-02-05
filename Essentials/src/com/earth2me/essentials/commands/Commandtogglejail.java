@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.Permissions;
 import com.earth2me.essentials.user.UserData.TimestampType;
 import lombok.Cleanup;
 import org.bukkit.OfflinePlayer;
@@ -28,8 +29,7 @@ public class Commandtogglejail extends EssentialsCommand
 		{
 			if (player.getBase() instanceof OfflinePlayer)
 			{
-				if (sender instanceof Player
-					&& !ess.getUser((Player)sender).isAuthorized("essentials.togglejail.offline"))
+				if (Permissions.TOGGLEJAIL_OFFLINE.isAuthorized(sender))
 				{
 					sender.sendMessage(_("mayNotJail"));
 					return;
@@ -37,7 +37,7 @@ public class Commandtogglejail extends EssentialsCommand
 			}
 			else
 			{
-				if (player.isAuthorized("essentials.jail.exempt"))
+				if (Permissions.JAIL_EXEMPT.isAuthorized(player))
 				{
 					sender.sendMessage(_("mayNotJail"));
 					return;

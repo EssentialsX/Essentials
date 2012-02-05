@@ -6,6 +6,7 @@ import com.earth2me.essentials.Mob.MobException;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.SpawnmobPermissions;
 import java.util.Locale;
 import java.util.Random;
 import org.bukkit.DyeColor;
@@ -57,7 +58,7 @@ public class Commandspawnmob extends EssentialsCommand
 			throw new Exception(_("invalidMob"));
 		}
 
-		if (!user.isAuthorized("essentials.spawnmob." + mob.name.toLowerCase()))
+		if (!SpawnmobPermissions.getPermission(mob.name).isAuthorized(user))
 		{
 			throw new Exception(_("noPermToSpawnMob"));
 		}
@@ -92,7 +93,7 @@ public class Commandspawnmob extends EssentialsCommand
 				return;
 			}
 
-			if (!user.isAuthorized("essentials.spawnmob." + mobMount.name.toLowerCase()))
+			if (!SpawnmobPermissions.getPermission(mobMount.name).isAuthorized(user))
 			{
 				throw new Exception(_("noPermToSpawnMob"));
 			}

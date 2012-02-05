@@ -5,6 +5,7 @@ import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.Permissions;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.TextInput;
@@ -150,7 +151,7 @@ public class EssentialsPlayerListener implements Listener
 		user.updateDisplayName();
 		user.getData().setIpAddress(user.getAddress().getAddress().getHostAddress());
 		user.updateActivity(false);
-		if (user.isAuthorized("essentials.sleepingignored"))
+		if (Permissions.SLEEPINGIGNORED.isAuthorized(user))
 		{
 			user.setSleepingIgnored(true);
 		}
@@ -159,7 +160,7 @@ public class EssentialsPlayerListener implements Listener
 		final ISettings settings = ess.getSettings();
 		settings.acquireReadLock();
 
-		if (!settings.getData().getCommands().isDisabled("motd") && user.isAuthorized("essentials.motd"))
+		if (!settings.getData().getCommands().isDisabled("motd") && Permissions.MOTD.isAuthorized(user))
 		{
 			try
 			{
@@ -181,7 +182,7 @@ public class EssentialsPlayerListener implements Listener
 			}
 		}
 
-		if (!settings.getData().getCommands().isDisabled("mail") && user.isAuthorized("essentials.mail"))
+		if (!settings.getData().getCommands().isDisabled("mail") && Permissions.MAIL.isAuthorized(user))
 		{
 			final List<String> mail = user.getData().getMails();
 			if (mail == null || mail.isEmpty())
@@ -219,7 +220,7 @@ public class EssentialsPlayerListener implements Listener
 			return;
 		}
 
-		if (server.getOnlinePlayers().length >= server.getMaxPlayers() && !user.isAuthorized("essentials.joinfullserver"))
+		if (server.getOnlinePlayers().length >= server.getMaxPlayers() && !Permissions.JOINFULLSERVER.isAuthorized(user))
 		{
 			event.disallow(Result.KICK_FULL, _("serverFull"));
 			return;
@@ -382,7 +383,7 @@ public class EssentialsPlayerListener implements Listener
 		@Cleanup
 		final IUser user = ess.getUser(event.getPlayer());
 		user.acquireReadLock();
-		if (!settings.getData().getWorldOptions(event.getPlayer().getLocation().getWorld().getName()).isGodmode() && !user.isAuthorized("essentials.nogod.override"))
+		if (!settings.getData().getWorldOptions(event.getPlayer().getLocation().getWorld().getName()).isGodmode() && !Permissions.NOGOD_OVERRIDE.isAuthorized(user))
 		{
 			if (user.getData().isGodmode())
 			{

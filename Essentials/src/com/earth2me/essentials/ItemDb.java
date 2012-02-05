@@ -4,6 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.IItemDb;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.Permissions;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -77,7 +78,7 @@ public class ItemDb implements IItemDb
 		else
 		{
 			final int oversizedStackSize = settings.getData().getGeneral().getOversizedStacksize();
-			if (oversizedStackSize > 0 && user.isAuthorized("essentials.oversizedstacks"))
+			if (oversizedStackSize > 0 && Permissions.OVERSIZEDSTACKS.isAuthorized(user))
 			{
 				stack.setAmount(oversizedStackSize);
 			}

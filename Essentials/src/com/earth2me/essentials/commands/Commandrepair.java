@@ -5,6 +5,7 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.Permissions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -31,7 +32,7 @@ public class Commandrepair extends EssentialsCommand
 			}
 
 			if (!item.getEnchantments().isEmpty()
-				&& !user.isAuthorized("essentials.repair.enchanted"))
+				&& !Permissions.REPAIR_ENCHANTED.isAuthorized(user))
 			{
 				throw new Exception(_("repairEnchanted"));
 			}
@@ -52,7 +53,7 @@ public class Commandrepair extends EssentialsCommand
 			final List<String> repaired = new ArrayList<String>();
 			repairItems(user.getInventory().getContents(), user, repaired);
 
-			if (user.isAuthorized("essentials.repair.armor"))
+			if (Permissions.REPAIR_ARMOR.isAuthorized(user))
 			{
 				repairItems(user.getInventory().getArmorContents(), user, repaired);
 			}
@@ -109,7 +110,7 @@ public class Commandrepair extends EssentialsCommand
 				continue;
 			}
 			if (!item.getEnchantments().isEmpty()
-				&& !user.isAuthorized("essentials.repair.enchanted"))
+				&& !Permissions.REPAIR_ENCHANTED.isAuthorized(user))
 			{
 				continue;
 			}

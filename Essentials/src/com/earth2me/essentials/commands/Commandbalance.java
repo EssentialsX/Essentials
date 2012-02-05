@@ -23,7 +23,7 @@ public class Commandbalance extends EssentialsCommand
 	public void run(final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		final double bal = (args.length < 1
-							|| !user.isAuthorized(Permissions.BALANCE_OTHERS)
+							|| !Permissions.BALANCE_OTHERS.isAuthorized(user)
 							? user
 							: getPlayer(args, 0, true)).getMoney();
 		user.sendMessage(_("balance", Util.formatCurrency(bal, ess)));

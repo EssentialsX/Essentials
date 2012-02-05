@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.WorldPermissions;
 import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -49,7 +50,7 @@ public class Commandworld extends EssentialsCommand
 		}
 
 
-		if (!user.isAuthorized("essentials.world." + world.getName()))
+		if (!WorldPermissions.getPermission(world.getName()).isAuthorized(user))
 		{
 			user.sendMessage(_("invalidWorld")); //TODO: Make a "world teleport denied" translation
 			throw new NoChargeException();
