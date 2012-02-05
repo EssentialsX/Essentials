@@ -84,7 +84,7 @@ public class SignBlockListener implements Listener
 			return;
 		}
 		IUser user = ess.getUser(event.getPlayer());
-		if (user.isAuthorized("essentials.signs.color"))
+		if (SignsPermissions.COLOR.isAuthorized(user))
 		{
 			for (int i = 0; i < 4; i++)
 			{

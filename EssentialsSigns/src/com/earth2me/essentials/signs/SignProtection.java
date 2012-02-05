@@ -36,7 +36,7 @@ public class SignProtection extends EssentialsSign
 		{
 			final SignProtectionState state = isBlockProtected(sign.getBlock(), player, username, true);
 			if (state == SignProtectionState.NOSIGN || state == SignProtectionState.OWNER
-				|| player.isAuthorized("essentials.signs.protection.override"))
+				|| SignsPermissions.PROTECTION_OVERRIDE.isAuthorized(player))
 			{
 				sign.setLine(3, "§1" + username);
 				return true;
@@ -143,7 +143,7 @@ public class SignProtection extends EssentialsSign
 		{
 			return SignProtectionState.NOT_ALLOWED;
 		}
-		if (user.isAuthorized("essentials.signs.protection.override"))
+		if (SignsPermissions.PROTECTION_OVERRIDE.isAuthorized(user))
 		{
 			return SignProtectionState.OWNER;
 		}
@@ -254,7 +254,7 @@ public class SignProtection extends EssentialsSign
 			final SignProtectionState state = isBlockProtected(adjBlock, player, username, true);
 
 			if ((state == SignProtectionState.ALLOWED || state == SignProtectionState.NOT_ALLOWED)
-				&& !player.isAuthorized("essentials.signs.protection.override"))
+				&& !SignsPermissions.PROTECTION_OVERRIDE.isAuthorized(player))
 			{
 				player.sendMessage(_("noPlacePermission", block.getType().toString().toLowerCase(Locale.ENGLISH)));
 				return false;
@@ -275,7 +275,7 @@ public class SignProtection extends EssentialsSign
 		}
 
 		if (state == SignProtectionState.NOT_ALLOWED
-			&& player.isAuthorized("essentials.signs.protection.override"))
+			&& SignsPermissions.PROTECTION_OVERRIDE.isAuthorized(player))
 		{
 			return true;
 		}
@@ -297,7 +297,7 @@ public class SignProtection extends EssentialsSign
 		}
 
 		if ((state == SignProtectionState.ALLOWED || state == SignProtectionState.NOT_ALLOWED)
-			&& player.isAuthorized("essentials.signs.protection.override"))
+			&& SignsPermissions.PROTECTION_OVERRIDE.isAuthorized(player))
 		{
 			checkIfSignsAreBroken(block, player, username, ess);
 			return true;

@@ -97,7 +97,7 @@ public class SignTrade extends EssentialsSign
 	protected boolean onSignBreak(final ISign sign, final IUser player, final String username, final IEssentials ess) throws SignException
 	{
 		if ((sign.getLine(3).length() > 3 && sign.getLine(3).substring(2).equalsIgnoreCase(username))
-			|| player.isAuthorized("essentials.signs.trade.override"))
+			|| SignsPermissions.TRADE_OVERRIDE.isAuthorized(player))
 		{
 			try
 			{
@@ -109,7 +109,7 @@ public class SignTrade extends EssentialsSign
 			}
 			catch (SignException e)
 			{
-				if (player.isAuthorized("essentials.signs.trade.override"))
+				if (SignsPermissions.TRADE_OVERRIDE.isAuthorized(player))
 				{
 					return true;
 				}
