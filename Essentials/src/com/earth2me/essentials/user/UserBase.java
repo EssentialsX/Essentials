@@ -24,6 +24,7 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
+import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.ServerOperator;
 
 
@@ -34,7 +35,10 @@ public abstract class UserBase extends AsyncStorageObjectHolder<UserData> implem
 		Player.class, Entity.class, CommandSender.class, ServerOperator.class,
 		HumanEntity.class, ConfigurationSerializable.class, LivingEntity.class,
 		Permissible.class
-	}, excludes = {IOfflinePlayer.class})
+	}, excludes =
+	{
+		IOfflinePlayer.class
+	})
 	protected Player base;
 	protected transient OfflinePlayer offlinePlayer;
 
@@ -139,6 +143,19 @@ public abstract class UserBase extends AsyncStorageObjectHolder<UserData> implem
 		else
 		{
 			offlinePlayer.setBanned(bln);
+		}
+	}
+
+	@Override
+	public boolean hasPermission(Permission prmsn)
+	{
+		if (isOnlineUser())
+		{
+			return base.hasPermission(prmsn);
+		}
+		else
+		{
+			return false;
 		}
 	}
 
@@ -405,10 +422,10 @@ public abstract class UserBase extends AsyncStorageObjectHolder<UserData> implem
 			unlock();
 		}
 	}
-	
+
 	public Location getHome(Location loc)
 	{
-		
+
 		acquireReadLock();
 		try
 		{
@@ -419,7 +436,8 @@ public abstract class UserBase extends AsyncStorageObjectHolder<UserData> implem
 			ArrayList<Location> worldHomes = new ArrayList<Location>();
 			for (com.earth2me.essentials.storage.Location location : getData().getHomes().values())
 			{
-				if (location.getWorldName().equals(loc.getWorld().getName())) {
+				if (location.getWorldName().equals(loc.getWorld().getName()))
+				{
 					try
 					{
 						worldHomes.add(location.getBukkitLocation());
@@ -430,10 +448,12 @@ public abstract class UserBase extends AsyncStorageObjectHolder<UserData> implem
 					}
 				}
 			}
-			if (worldHomes.isEmpty()) {
+			if (worldHomes.isEmpty())
+			{
 				return null;
 			}
-			if (worldHomes.size() == 1) {
+			if (worldHomes.size() == 1)
+			{
 				return worldHomes.get(0);
 			}
 			double distance = Double.MAX_VALUE;
@@ -441,7 +461,8 @@ public abstract class UserBase extends AsyncStorageObjectHolder<UserData> implem
 			for (Location location : worldHomes)
 			{
 				final double d = loc.distanceSquared(location);
-				if (d < distance) {
+				if (d < distance)
+				{
 					target = location;
 					distance = d;
 				}

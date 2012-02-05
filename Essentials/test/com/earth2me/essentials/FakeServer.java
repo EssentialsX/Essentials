@@ -13,12 +13,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.Event.Priority;
+import org.bukkit.event.Event.Type;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.map.MapView;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.ServicesManager;
+import org.bukkit.permissions.Permissible;
+import org.bukkit.permissions.Permission;
+import org.bukkit.plugin.*;
 import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
@@ -139,11 +144,200 @@ public class FakeServer implements Server
 		}
 		return matches;
 	}
+	
+	private PluginManager pManager = new PluginManager() {
+			private Set<Permission> permissions = new HashSet<Permission>();
+
+			@Override
+			public void registerInterface(Class<? extends PluginLoader> type) throws IllegalArgumentException
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public Plugin getPlugin(String string)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public Plugin[] getPlugins()
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public boolean isPluginEnabled(String string)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public boolean isPluginEnabled(Plugin plugin)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public Plugin loadPlugin(File file) throws InvalidPluginException, InvalidDescriptionException, UnknownDependencyException
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public Plugin[] loadPlugins(File file)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public void disablePlugins()
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public void clearPlugins()
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public void callEvent(Event event)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public void registerEvent(Type type, Listener ll, Priority prt, Plugin plugin)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public void registerEvent(Type type, Listener ll, EventExecutor ee, Priority prt, Plugin plugin)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public void registerEvents(Listener ll, Plugin plugin)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public void registerEvent(Class<? extends Event> type, Listener ll, EventPriority ep, EventExecutor ee, Plugin plugin)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public void enablePlugin(Plugin plugin)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public void disablePlugin(Plugin plugin)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public Permission getPermission(String string)
+			{
+				for (Permission permission : permissions)
+				{
+					if (permission.getName().equals(string)) {
+						return permission;
+					}
+				}
+				return null;
+			}
+
+			@Override
+			public void addPermission(Permission prmsn)
+			{
+				permissions.add(prmsn);
+			}
+
+			@Override
+			public void removePermission(Permission prmsn)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public void removePermission(String string)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public Set<Permission> getDefaultPermissions(boolean bln)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public void recalculatePermissionDefaults(Permission prmsn)
+			{
+			}
+
+			@Override
+			public void subscribeToPermission(String string, Permissible prmsbl)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public void unsubscribeFromPermission(String string, Permissible prmsbl)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public Set<Permissible> getPermissionSubscriptions(String string)
+			{
+				return Collections.emptySet();
+			}
+
+			@Override
+			public void subscribeToDefaultPerms(boolean bln, Permissible prmsbl)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public void unsubscribeFromDefaultPerms(boolean bln, Permissible prmsbl)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public Set<Permissible> getDefaultPermSubscriptions(boolean bln)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public Set<Permission> getPermissions()
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public boolean useTimings()
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+		};
 
 	@Override
 	public PluginManager getPluginManager()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		return pManager;
 	}
 
 	@Override

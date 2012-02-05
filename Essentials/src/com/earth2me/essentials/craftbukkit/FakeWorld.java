@@ -432,7 +432,7 @@ public class FakeWorld implements World
 	@Override
 	public UUID getUID()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		return UUID.randomUUID();
 	}
 
 	@Override
