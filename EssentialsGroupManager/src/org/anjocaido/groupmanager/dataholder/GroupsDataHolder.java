@@ -9,15 +9,13 @@ import org.anjocaido.groupmanager.data.Group;
 
 
 /**
+ * This container holds all Groups loaded from the relevant groupsFile.
+ * 
  * @author ElgarL
  * 
  */
 public class GroupsDataHolder {
 
-	/**
-	 * Root World name this set of groups is associated with.
-	 */
-	//private String name;
 	private WorldDataHolder dataSource;
 	private Group defaultGroup = null;
 	private File groupsFile;
@@ -41,17 +39,6 @@ public class GroupsDataHolder {
 		for (Group group : groups.values())
 			group.setDataSource(this.dataSource);
 	}
-
-	//protected void setWorldName(String worldName) {
-	//	name = worldName;
-	//}
-
-	/**
-	 * @return the name
-	 */
-	//public String getWorldName() {
-	//	return name;
-	//}
 
 	/**
 	 * @return the defaultGroup

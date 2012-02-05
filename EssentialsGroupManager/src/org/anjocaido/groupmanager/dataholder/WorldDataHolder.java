@@ -36,8 +36,11 @@ import org.yaml.snakeyaml.constructor.SafeConstructor;
 import org.yaml.snakeyaml.reader.UnicodeReader;
 
 /**
- *
- * @author gabrielcouto
+ * One instance of this should exist per world/mirror
+ * it contains all functions to manage these data sets
+ * and points to the relevant users and groups objects.
+ * 
+ * @author gabrielcouto, ElgarL
  */
 public class WorldDataHolder {
 

@@ -9,15 +9,13 @@ import org.anjocaido.groupmanager.data.User;
 
 
 /**
+ * This container holds all Users loaded from the relevant usersFile.
+ * 
  * @author ElgarL
  * 
  */
 public class UsersDataHolder {
 
-	/**
-	 * Root World name this set of groups is associated with.
-	 */
-	//private String name;
 	private WorldDataHolder dataSource;
 	private File usersFile;
 	private boolean haveUsersChanged = false;
@@ -41,20 +39,6 @@ public class UsersDataHolder {
 			user.setDataSource(this.dataSource);
 		
 	}
-
-	/**
-	 * @param worldName
-	 */
-	//public void setWorldName(String worldName) {
-	//	this.name = worldName;
-	//}
-	
-	/**
-	 * @return the name
-	 */
-	//public String getWorldName() {
-	//	return this.name;
-	//}
 
 	/**
 	 * @return the users

@@ -67,7 +67,7 @@ public abstract class DataUnit {
     }
     
     /**
-     * Set the data source to point to a new worldDataHolder
+     * Set the data source to point to a different worldDataHolder
      * 
      * @param source
      */
@@ -76,6 +76,8 @@ public abstract class DataUnit {
     }
 
     /**
+     * Get the current worldDataHolder this object is pointing to
+     * 
      * @return the dataSource
      */
     public WorldDataHolder getDataSource() {
