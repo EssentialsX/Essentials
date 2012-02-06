@@ -61,7 +61,7 @@ public class Commandlist extends EssentialsCommand
 				{
 					continue;
 				}
-				final String group = player.getGroup();
+				final String group = ess.getGroups().getMainGroup(player);
 				List<IUser> list = sort.get(group);
 				if (list == null)
 				{

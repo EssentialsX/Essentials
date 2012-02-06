@@ -1,6 +1,5 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.api.Economy;
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
 import com.earth2me.essentials.craftbukkit.DummyOfflinePlayer;
@@ -44,37 +43,29 @@ public class EconomyTest extends TestCase
 	public void testEconomy()
 	{
 		// test NPC
-		assertFalse("NPC does not exists", Economy.playerExists(NPCNAME));
-		assertTrue("Create NPC", Economy.createNPC(NPCNAME));
-		assertTrue("NPC exists", Economy.playerExists(NPCNAME));
-		assertNotNull("NPC can be accessed", ess.getUser(NPCNAME));
+		assertFalse("NPC does not exists", ess.getEconomy().playerExists(NPCNAME));
+		assertTrue("Create NPC", ess.getEconomy().createNPC(NPCNAME));
+		assertTrue("NPC exists", ess.getEconomy().playerExists(NPCNAME));
+		assertNull("NPC can not be accessed", ess.getUser(NPCNAME));
 		try
 		{
-			Economy.removeNPC(NPCNAME);
+			ess.getEconomy().removeNPC(NPCNAME);
 		}
 		catch (UserDoesNotExistException ex)
 		{
 			fail(ex.getMessage());
 		}
-		assertFalse("NPC can be removed", Economy.playerExists(NPCNAME));
+		assertFalse("NPC can be removed",ess.getEconomy().playerExists(NPCNAME));
 
 		//test Math
 		try
 		{
 
-			assertTrue("Player exists", Economy.playerExists(PLAYERNAME));
-			Economy.resetBalance(PLAYERNAME);
-			assertEquals("Player has no money", 0.0, Economy.getMoney(PLAYERNAME));
-			Economy.add(PLAYERNAME, 10.0);
-			assertEquals("Add money", 10.0, Economy.getMoney(PLAYERNAME));
-			Economy.subtract(PLAYERNAME, 5.0);
-			assertEquals("Subtract money", 5.0, Economy.getMoney(PLAYERNAME));
-			Economy.multiply(PLAYERNAME, 2.0);
-			assertEquals("Multiply money", 10.0, Economy.getMoney(PLAYERNAME));
-			Economy.divide(PLAYERNAME, 2.0);
-			assertEquals("Divide money", 5.0, Economy.getMoney(PLAYERNAME));
-			Economy.setMoney(PLAYERNAME, 10.0);
-			assertEquals("Set money", 10.0, Economy.getMoney(PLAYERNAME));
+			assertTrue("Player exists", ess.getEconomy().playerExists(PLAYERNAME));
+			ess.getEconomy().resetBalance(PLAYERNAME);
+			assertEquals("Player has no money", 0.0, ess.getEconomy().getMoney(PLAYERNAME));
+			ess.getEconomy().setMoney(PLAYERNAME, 10.0);
+			assertEquals("Set money", 10.0, ess.getEconomy().getMoney(PLAYERNAME));
 		}
 		catch (NoLoanPermittedException ex)
 		{
@@ -86,20 +77,20 @@ public class EconomyTest extends TestCase
 		}
 
 		//test Format
-		assertEquals("Format $1000", "$1000", Economy.format(1000.0));
-		assertEquals("Format $10", "$10", Economy.format(10.0));
-		assertEquals("Format $10.10", "$10.10", Economy.format(10.10));
-		assertEquals("Format $10.10", "$10.10", Economy.format(10.102));
-		assertEquals("Format $10.11", "$10.11", Economy.format(10.109));
+		assertEquals("Format $1000", "$1000", ess.getEconomy().format(1000.0));
+		assertEquals("Format $10", "$10", ess.getEconomy().format(10.0));
+		assertEquals("Format $10.10", "$10.10", ess.getEconomy().format(10.10));
+		assertEquals("Format $10.10", "$10.10", ess.getEconomy().format(10.102));
+		assertEquals("Format $10.11", "$10.11", ess.getEconomy().format(10.109));
 
 
 		//test Exceptions
 		try
 		{
-			assertTrue("Player exists", Economy.playerExists(PLAYERNAME));
-			Economy.resetBalance(PLAYERNAME);
-			assertEquals("Reset balance", 0.0, Economy.getMoney(PLAYERNAME));
-			Economy.subtract(PLAYERNAME, 5.0);
+			assertTrue("Player exists", ess.getEconomy().playerExists(PLAYERNAME));
+			ess.getEconomy().resetBalance(PLAYERNAME);
+			assertEquals("Reset balance", 0.0, ess.getEconomy().getMoney(PLAYERNAME));
+			ess.getEconomy().setMoney(PLAYERNAME, -5.0);
 			fail("Did not throw exception");
 		}
 		catch (NoLoanPermittedException ex)
@@ -112,7 +103,7 @@ public class EconomyTest extends TestCase
 
 		try
 		{
-			Economy.resetBalance("UnknownPlayer");
+			ess.getEconomy().resetBalance("UnknownPlayer");
 			fail("Did not throw exception");
 		}
 		catch (NoLoanPermittedException ex)

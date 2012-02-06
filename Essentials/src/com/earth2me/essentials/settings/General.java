@@ -37,4 +37,18 @@ public class General implements StorageObject
 		"How many items should be in a oversized stack?"
 	})
 	private int oversizedStacksize = 64;
+
+
+	public enum GroupStorage
+	{
+		FILE, GROUPMANAGER, VAULT
+	}
+	@Comment(
+	{
+		"Sets the place where group options should be stored:",
+		" FILE: Options are stored inside groups.yml in the Essentials folder",
+		" GROUPMANAGER: Options are stored using the GroupManager groups",
+		" VAULT: Options are stored using a permissions plugin supported by Vault"
+	})
+	private GroupStorage groupStorage = GroupStorage.FILE;
 }

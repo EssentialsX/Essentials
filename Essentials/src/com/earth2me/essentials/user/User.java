@@ -214,9 +214,7 @@ public class User extends UserBase implements IUser
 			@Cleanup
 			final ISettings settings = ess.getSettings();
 			settings.acquireReadLock();
-			@Cleanup
 			final IGroups groups = ess.getGroups();
-			groups.acquireReadLock();
 			// default: {PREFIX}{NICKNAMEPREFIX}{NAME}{SUFFIX}
 			String displayname = settings.getData().getChat().getDisplaynameFormat();
 			if (settings.getData().getCommands().isDisabled("nick") || nick == null || nick.isEmpty() || nick.equals(getName()))
@@ -531,22 +529,6 @@ public class User extends UserBase implements IUser
 		{
 			unlock();
 		}
-	}
-
-	@Override
-	public String getGroup()
-	{
-		return ess.getPermissionsHandler().getGroup(base);
-	}
-
-	public boolean inGroup(final String group)
-	{
-		return ess.getPermissionsHandler().inGroup(base, group);
-	}
-
-	public boolean canBuild()
-	{
-		return ess.getPermissionsHandler().canBuild(base, getGroup());
 	}
 
 	@Override

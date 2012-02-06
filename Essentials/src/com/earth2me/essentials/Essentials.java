@@ -66,11 +66,12 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private transient IItemDb itemDb;
 	private transient IGroups groups;
 	private transient final Methods paymentMethod = new Methods();
-	private transient PermissionsHandler permissionsHandler;
+	//private transient PermissionsHandler permissionsHandler;
 	private transient IUserMap userMap;
 	private transient ExecuteTimer execTimer;
 	private transient I18n i18n;
 	private transient ICommandHandler commandHandler;
+	private transient Economy economy;
 	public transient boolean testing;
 
 	@Override
@@ -99,8 +100,8 @@ public class Essentials extends JavaPlugin implements IEssentials
 		settings = new SettingsHolder(this);
 		i18n.updateLocale("en");
 		userMap = new UserMap(this);
-		permissionsHandler = new PermissionsHandler(this);
-		Economy.setEss(this);
+		//permissionsHandler = new PermissionsHandler(this);
+		economy = new Economy(this);
 	}
 
 	@Override
@@ -155,7 +156,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 			reloadList.add(userMap);
 			execTimer.mark("Init(Usermap)");
 			groups = new GroupsHolder(this);
-			reloadList.add(groups);
+			reloadList.add((GroupsHolder)groups);
 			warps = new Warps(this);
 			reloadList.add(warps);
 			execTimer.mark("Init(Spawn/Warp)");
@@ -168,6 +169,8 @@ public class Essentials extends JavaPlugin implements IEssentials
 			reloadList.add(kits);
 			commandHandler = new EssentialsCommandHandler(Essentials.class.getClassLoader(), "com.earth2me.essentials.commands.Command", "essentials.", this);
 			reloadList.add(commandHandler);
+			economy = new Economy(this);
+			reloadList.add(economy);
 			reload();
 		}
 		catch (YAMLException exception)
@@ -197,7 +200,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 			return;
 		}
 		backup = new Backup(this);
-		permissionsHandler = new PermissionsHandler(this);
+		//permissionsHandler = new PermissionsHandler(this);
 		final EssentialsPluginListener serverListener = new EssentialsPluginListener(this);
 		pm.registerEvents(serverListener, this);
 		reloadList.add(serverListener);
@@ -219,7 +222,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 
 		final EssentialsTimer timer = new EssentialsTimer(this);
 		getServer().getScheduler().scheduleSyncRepeatingTask(this, timer, 1, 100);
-		Economy.setEss(this);
 		execTimer.mark("RegListeners");
 		final String timeroutput = execTimer.end();
 		if (getSettings().isDebug())
@@ -232,7 +234,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 	public void onDisable()
 	{
 		i18n.onDisable();
-		Economy.setEss(null);
 		Trade.closeLog();
 	}
 
@@ -262,7 +263,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	{
 		return jails;
 	}
-	
+
 	@Override
 	public IKits getKits()
 	{
@@ -286,13 +287,13 @@ public class Essentials extends JavaPlugin implements IEssentials
 	{
 		return backup;
 	}
-	
+
 	@Override
 	public IUser getUser(final Player player)
 	{
 		return userMap.getUser(player);
 	}
-	
+
 	@Override
 	public IUser getUser(final String playerName)
 	{
@@ -374,18 +375,17 @@ public class Essentials extends JavaPlugin implements IEssentials
 		return this.getServer().getScheduler().scheduleSyncRepeatingTask(this, run, delay, period);
 	}
 
-	
 	@Override
 	public TNTExplodeListener getTNTListener()
 	{
 		return tntListener;
 	}
 
-	@Override
+	/*@Override
 	public PermissionsHandler getPermissionsHandler()
 	{
 		return permissionsHandler;
-	}
+	}*/
 
 	@Override
 	public IItemDb getItemDb()
@@ -415,5 +415,23 @@ public class Essentials extends JavaPlugin implements IEssentials
 	public ICommandHandler getCommandHandler()
 	{
 		return commandHandler;
+	}
+
+	@Override
+	public void setGroups(final IGroups groups)
+	{
+		this.groups = groups;
+	}
+
+	@Override
+	public void removeReloadListener(IReload groups)
+	{
+		this.reloadList.remove(groups);
+	}
+
+	@Override
+	public IEconomy getEconomy()
+	{
+		return economy;
 	}
 }

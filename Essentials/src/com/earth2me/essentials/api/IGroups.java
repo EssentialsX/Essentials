@@ -1,12 +1,14 @@
 package com.earth2me.essentials.api;
 
-import com.earth2me.essentials.settings.Groups;
-import com.earth2me.essentials.storage.IStorageObjectHolder;
 import java.text.MessageFormat;
 
 
-public interface IGroups extends IStorageObjectHolder<Groups>
+public interface IGroups
 {
+	String getMainGroup(IUser player);
+
+	boolean inGroup(IUser player, String groupname);
+
 	double getHealCooldown(IUser player);
 
 	double getTeleportCooldown(IUser player);

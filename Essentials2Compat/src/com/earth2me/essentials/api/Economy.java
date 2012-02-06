@@ -1,15 +1,6 @@
 package com.earth2me.essentials.api;
 
 import com.earth2me.essentials.Util;
-import com.earth2me.essentials.craftbukkit.DummyOfflinePlayer;
-import com.earth2me.essentials.perm.Permissions;
-import com.earth2me.essentials.user.User;
-import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import lombok.Cleanup;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 
 /**
@@ -21,96 +12,8 @@ public final class Economy
 	private Economy()
 	{
 	}
-	private static final Logger logger = Logger.getLogger("Minecraft");
 	private static IEssentials ess;
 	private static final String noCallBeforeLoad = "Essentials API is called before Essentials is loaded.";
-
-	/**
-	 * @param aEss the ess to set
-	 */
-	public static void setEss(IEssentials aEss)
-	{
-		ess = aEss;
-	}
-
-	private static void createNPCFile(String name)
-	{
-		File folder = new File(ess.getDataFolder(), "userdata");
-		if (!folder.exists())
-		{
-			folder.mkdirs();
-		}
-		double startingBalance = 0;
-		ISettings settings = ess.getSettings();
-		settings.acquireReadLock();
-		try {
-			startingBalance = settings.getData().getEconomy().getStartingBalance();
-		} finally {
-			settings.unlock();
-		}
-		IUser npc = new User(new DummyOfflinePlayer(name), ess);
-		npc.acquireWriteLock();
-		try {
-			npc.getData().setNpc(true);
-			npc.setMoney(startingBalance);
-		} finally {
-			npc.unlock();
-		}
-		
-		/*EssentialsConf npcConfig = new EssentialsConf(new File(folder, Util.sanitizeFileName(name) + ".yml"));
-		npcConfig.load();
-		npcConfig.setProperty("npc", true);
-		npcConfig.setProperty("money", ess.getSettings().getStartingBalance());
-		npcConfig.save();*/
-	}
-
-	private static void deleteNPC(final String name)
-	{
-		File folder = new File(ess.getDataFolder(), "userdata");
-		if (!folder.exists())
-		{
-			folder.mkdirs();
-		}
-		IUser user = ess.getUser(name);
-		if (user != null) {
-			boolean npc = false;
-			user.acquireReadLock();
-			try {
-				npc = user.getData().isNpc();
-			} finally {
-				user.unlock();
-			}
-			if (npc) {
-				try
-				{
-					ess.getUserMap().removeUser(name);
-				}
-				catch (InvalidNameException ex)
-				{
-					Bukkit.getLogger().log(Level.INFO, name, ex);
-				}
-			}
-		}
-	}
-
-	private static IUser getUserByName(String name)
-	{
-		if (ess == null)
-		{
-			throw new RuntimeException(noCallBeforeLoad);
-		}
-		IUser user;
-		Player player = ess.getServer().getPlayer(name);
-		if (player != null)
-		{
-			user = ess.getUser(player);
-		}
-		else
-		{
-			user = ess.getUser(name);
-		}
-		return user;
-	}
 
 	/**
 	 * Returns the balance of a user
@@ -120,12 +23,11 @@ public final class Economy
 	 */
 	public static double getMoney(String name) throws UserDoesNotExistException
 	{
-		IUser user = getUserByName(name);
-		if (user == null)
+		if (ess == null)
 		{
-			throw new UserDoesNotExistException(name);
+			throw new RuntimeException(noCallBeforeLoad);
 		}
-		return user.getMoney();
+		return ess.getEconomy().getMoney(name);
 	}
 
 	/**
@@ -137,16 +39,11 @@ public final class Economy
 	 */
 	public static void setMoney(String name, double balance) throws UserDoesNotExistException, NoLoanPermittedException
 	{
-		IUser user = getUserByName(name);
-		if (user == null)
+		if (ess == null)
 		{
-			throw new UserDoesNotExistException(name);
+			throw new RuntimeException(noCallBeforeLoad);
 		}
-		if (balance < 0.0 && !Permissions.ECO_LOAN.isAuthorized(user))
-		{
-			throw new NoLoanPermittedException();
-		}
-		user.setMoney(balance);
+		ess.getEconomy().setMoney(name, balance);
 	}
 
 	/**
@@ -213,15 +110,7 @@ public final class Economy
 		{
 			throw new RuntimeException(noCallBeforeLoad);
 		}
-		double startingBalance = 0;
-		ISettings settings = ess.getSettings();
-		settings.acquireReadLock();
-		try {
-			startingBalance = settings.getData().getEconomy().getStartingBalance();
-		} finally {
-			settings.unlock();
-		}
-		setMoney(name, startingBalance);
+		ess.getEconomy().resetBalance(name);
 	}
 
 	/**
@@ -290,7 +179,11 @@ public final class Economy
 	 */
 	public static boolean playerExists(String name)
 	{
-		return getUserByName(name) != null;
+		if (ess == null)
+		{
+			throw new RuntimeException(noCallBeforeLoad);
+		}
+		return ess.getEconomy().playerExists(name);
 	}
 
 	/**
@@ -301,14 +194,11 @@ public final class Economy
 	 */
 	public static boolean isNPC(String name) throws UserDoesNotExistException
 	{
-		@Cleanup
-		IUser user = getUserByName(name);
-		if (user == null)
+		if (ess == null)
 		{
-			throw new UserDoesNotExistException(name);
+			throw new RuntimeException(noCallBeforeLoad);
 		}
-		user.acquireReadLock();
-		return user.getData().isNpc();
+		return ess.getEconomy().isNPC(name);
 	}
 
 	/**
@@ -318,13 +208,11 @@ public final class Economy
 	 */
 	public static boolean createNPC(String name)
 	{
-		IUser user = getUserByName(name);
-		if (user == null)
+		if (ess == null)
 		{
-			createNPCFile(name);
-			return true;
+			throw new RuntimeException(noCallBeforeLoad);
 		}
-		return false;
+		return ess.getEconomy().createNPC(name);
 	}
 
 	/**
@@ -334,11 +222,10 @@ public final class Economy
 	 */
 	public static void removeNPC(String name) throws UserDoesNotExistException
 	{
-		IUser user = getUserByName(name);
-		if (user == null)
+		if (ess == null)
 		{
-			throw new UserDoesNotExistException(name);
+			throw new RuntimeException(noCallBeforeLoad);
 		}
-		deleteNPC(name);
+		ess.getEconomy().removeNPC(name);
 	}
 }

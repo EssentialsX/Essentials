@@ -82,22 +82,14 @@ public abstract class EssentialsChatPlayer implements Listener
 		{
 			event.setMessage(Util.stripColor(event.getMessage()));
 		}
-		String group = user.getGroup();
+		String group = ess.getGroups().getMainGroup(user);
 		String world = user.getWorld().getName();
 
 		IGroups groupSettings = ess.getGroups();
-		groupSettings.acquireReadLock();
-		try
-		{
-			event.setFormat(groupSettings.getChatFormat(user).format(new Object[]
-					{
-						group, world, world.substring(0, 1).toUpperCase(Locale.ENGLISH)
-					}));
-		}
-		finally
-		{
-			groupSettings.unlock();
-		}
+		event.setFormat(groupSettings.getChatFormat(user).format(new Object[]
+				{
+					group, world, world.substring(0, 1).toUpperCase(Locale.ENGLISH)
+				}));
 
 	}
 

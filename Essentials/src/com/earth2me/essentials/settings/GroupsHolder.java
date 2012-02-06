@@ -22,6 +22,7 @@ public class GroupsHolder extends AsyncStorageObjectHolder<Groups> implements IG
 	public GroupsHolder(final IEssentials ess)
 	{
 		super(ess, Groups.class);
+		onReload();
 	}
 
 	@Override
@@ -30,7 +31,7 @@ public class GroupsHolder extends AsyncStorageObjectHolder<Groups> implements IG
 		return new File(ess.getDataFolder(), "groups.yml");
 	}
 	
-	public Collection<GroupOptions> getGroups(final IUser player)
+	public Collection<Entry<String, GroupOptions>> getGroups(final IUser player)
 	{
 		acquireReadLock();
 		try
@@ -40,14 +41,14 @@ public class GroupsHolder extends AsyncStorageObjectHolder<Groups> implements IG
 			{
 				return Collections.emptyList();
 			}
-			final ArrayList<GroupOptions> list = new ArrayList();
+			final ArrayList<Entry<String, GroupOptions>> list = new ArrayList();
 			for (Entry<String, GroupOptions> entry : groups.entrySet())
 			{
 				if (GroupsPermissions.getPermission(entry.getKey()).isAuthorized(player))
 				{
 					if(entry.getValue() != null)
 					{
-					list.add(entry.getValue());
+					list.add(entry);
 					}
 				}
 			}
@@ -62,11 +63,11 @@ public class GroupsHolder extends AsyncStorageObjectHolder<Groups> implements IG
 	@Override
 	public double getHealCooldown(final IUser player)
 	{
-		for (GroupOptions groupOptions : getGroups(player))
+		for (Entry<String, GroupOptions> groupOptions : getGroups(player))
 		{
-			if (groupOptions.getHealCooldown() != null)
+			if (groupOptions.getValue().getHealCooldown() != null)
 			{
-				return groupOptions.getHealCooldown();
+				return groupOptions.getValue().getHealCooldown();
 			}
 		}
 		return 0;
@@ -75,11 +76,11 @@ public class GroupsHolder extends AsyncStorageObjectHolder<Groups> implements IG
 	@Override
 	public double getTeleportCooldown(final IUser player)
 	{
-		for (GroupOptions groupOptions : getGroups(player))
+		for (Entry<String, GroupOptions> groupOptions : getGroups(player))
 		{
-			if (groupOptions.getTeleportCooldown() != null)
+			if (groupOptions.getValue().getTeleportCooldown() != null)
 			{
-				return groupOptions.getTeleportCooldown();
+				return groupOptions.getValue().getTeleportCooldown();
 			}
 		}
 		return 0;
@@ -88,11 +89,11 @@ public class GroupsHolder extends AsyncStorageObjectHolder<Groups> implements IG
 	@Override
 	public double getTeleportDelay(final IUser player)
 	{
-		for (GroupOptions groupOptions : getGroups(player))
+		for (Entry<String, GroupOptions> groupOptions : getGroups(player))
 		{
-			if (groupOptions.getTeleportDelay() != null)
+			if (groupOptions.getValue().getTeleportDelay() != null)
 			{
-				return groupOptions.getTeleportDelay();
+				return groupOptions.getValue().getTeleportDelay();
 			}
 		}
 		return 0;
@@ -101,11 +102,11 @@ public class GroupsHolder extends AsyncStorageObjectHolder<Groups> implements IG
 	@Override
 	public String getPrefix(final IUser player)
 	{
-		for (GroupOptions groupOptions : getGroups(player))
+		for (Entry<String, GroupOptions> groupOptions : getGroups(player))
 		{
-			if (groupOptions.getPrefix() != null)
+			if (groupOptions.getValue().getPrefix() != null)
 			{
-				return groupOptions.getPrefix();
+				return groupOptions.getValue().getPrefix();
 			}
 		}
 		return "";
@@ -114,11 +115,11 @@ public class GroupsHolder extends AsyncStorageObjectHolder<Groups> implements IG
 	@Override
 	public String getSuffix(final IUser player)
 	{
-		for (GroupOptions groupOptions : getGroups(player))
+		for (Entry<String, GroupOptions> groupOptions : getGroups(player))
 		{
-			if (groupOptions.getSuffix() != null)
+			if (groupOptions.getValue().getSuffix() != null)
 			{
-				return groupOptions.getSuffix();
+				return groupOptions.getValue().getSuffix();
 			}
 		}
 		return "";
@@ -127,11 +128,11 @@ public class GroupsHolder extends AsyncStorageObjectHolder<Groups> implements IG
 	@Override
 	public int getHomeLimit(final IUser player)
 	{
-		for (GroupOptions groupOptions : getGroups(player))
+		for (Entry<String, GroupOptions> groupOptions : getGroups(player))
 		{
-			if (groupOptions.getHomes() != null)
+			if (groupOptions.getValue().getHomes() != null)
 			{
-				return groupOptions.getHomes();
+				return groupOptions.getValue().getHomes();
 			}
 		}
 		return 0;
@@ -155,17 +156,40 @@ public class GroupsHolder extends AsyncStorageObjectHolder<Groups> implements IG
 	
 	private String getRawChatFormat(final IUser player)
 	{
-		for (GroupOptions groupOptions : getGroups(player))
+		for (Entry<String, GroupOptions> groupOptions : getGroups(player))
 		{
-			if (groupOptions != null && groupOptions.getMessageFormat() != null)
+			if (groupOptions.getValue().getMessageFormat() != null)
 			{
-				return groupOptions.getMessageFormat();
+				return groupOptions.getValue().getMessageFormat();
 			}
 		}
 		@Cleanup
 		ISettings settings = ess.getSettings();
 		settings.acquireReadLock();
 		return settings.getData().getChat().getDefaultFormat();
+	}
+
+	@Override
+	public boolean inGroup(IUser player, String groupname)
+	{
+		for (Entry<String, GroupOptions> groupOptions : getGroups(player))
+		{
+			if (groupOptions.getKey().equalsIgnoreCase(groupname))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public String getMainGroup(IUser player)
+	{
+		for (Entry<String, GroupOptions> groupOptions : getGroups(player))
+		{
+			return groupOptions.getKey();
+		}
+		return "default";
 	}
 	
 }

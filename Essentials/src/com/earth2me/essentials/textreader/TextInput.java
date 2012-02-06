@@ -33,7 +33,7 @@ public class TextInput implements IText
 				file = new File(ess.getDataFolder(), filename + "_" + Util.sanitizeFileName(user.getName()) + ".txt");
 				if (!file.exists())
 				{
-					file = new File(ess.getDataFolder(), filename + "_" + Util.sanitizeFileName(user.getGroup()) + ".txt");
+					file = new File(ess.getDataFolder(), filename + "_" + Util.sanitizeFileName(ess.getGroups().getMainGroup(user)) + ".txt");
 				}
 			}
 			catch (InvalidNameException ex)

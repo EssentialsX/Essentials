@@ -1,6 +1,7 @@
 package com.earth2me.essentials.api;
 
 import com.earth2me.essentials.listener.TNTExplodeListener;
+import com.earth2me.essentials.perm.GMGroups;
 import com.earth2me.essentials.perm.IPermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
 import org.bukkit.World;
@@ -52,9 +53,15 @@ public interface IEssentials extends Plugin
 
 	int scheduleSyncRepeatingTask(Runnable run, long delay, long period);
 
-	IPermissionsHandler getPermissionsHandler();
+	//IPermissionsHandler getPermissionsHandler();
 	
 	void reload();
 
 	TNTExplodeListener getTNTListener();
+
+	void setGroups(IGroups groups);
+
+	void removeReloadListener(IReload groups);
+	
+	IEconomy getEconomy();
 }

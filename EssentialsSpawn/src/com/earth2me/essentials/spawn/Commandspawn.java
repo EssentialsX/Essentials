@@ -50,7 +50,7 @@ public class Commandspawn extends EssentialsCommand
 	private void respawn(final IUser user, final Trade charge) throws Exception
 	{
 		final SpawnStorage spawns = (SpawnStorage)this.module;
-		final Location spawn = spawns.getSpawn(user.getGroup());
+		final Location spawn = spawns.getSpawn(ess.getGroups().getMainGroup(user));
 		user.getTeleport().teleport(spawn, charge, TeleportCause.COMMAND);
 	}
 }

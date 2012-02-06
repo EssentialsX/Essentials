@@ -34,7 +34,7 @@ public class SignProtection extends EssentialsSign
 		sign.setLine(3, "§4" + username);
 		if (hasAdjacentBlock(sign.getBlock()))
 		{
-			final SignProtectionState state = isBlockProtected(sign.getBlock(), player, username, true);
+			final SignProtectionState state = isBlockProtected(sign.getBlock(), player, username, true, ess);
 			if (state == SignProtectionState.NOSIGN || state == SignProtectionState.OWNER
 				|| SignsPermissions.PROTECTION_OVERRIDE.isAuthorized(player))
 			{
@@ -49,7 +49,7 @@ public class SignProtection extends EssentialsSign
 	@Override
 	protected boolean onSignBreak(final ISign sign, final IUser player, final String username, final IEssentials ess) throws SignException
 	{
-		final SignProtectionState state = checkProtectionSign(sign, player, username);
+		final SignProtectionState state = checkProtectionSign(sign, player, username, ess);
 		return state == SignProtectionState.OWNER;
 	}
 
@@ -75,7 +75,7 @@ public class SignProtection extends EssentialsSign
 
 	private void checkIfSignsAreBroken(final Block block, final IUser player, final String username, final IEssentials ess)
 	{
-		final Map<Location, SignProtectionState> signs = getConnectedSigns(block, player, username, false);
+		final Map<Location, SignProtectionState> signs = getConnectedSigns(block, player, username, false, ess);
 		for (Map.Entry<Location, SignProtectionState> entry : signs.entrySet())
 		{
 			if (entry.getValue() != SignProtectionState.NOSIGN)
@@ -91,14 +91,14 @@ public class SignProtection extends EssentialsSign
 		}
 	}
 
-	private Map<Location, SignProtectionState> getConnectedSigns(final Block block, final IUser user, final String username, boolean secure)
+	private Map<Location, SignProtectionState> getConnectedSigns(final Block block, final IUser user, final String username, boolean secure, final IEssentials ess)
 	{
 		final Map<Location, SignProtectionState> signs = new HashMap<Location, SignProtectionState>();
-		getConnectedSigns(block, signs, user, username, secure ? 4 : 2);
+		getConnectedSigns(block, signs, user, username, secure ? 4 : 2, ess);
 		return signs;
 	}
 
-	private void getConnectedSigns(final Block block, final Map<Location, SignProtectionState> signs, final IUser user, final String username, final int depth)
+	private void getConnectedSigns(final Block block, final Map<Location, SignProtectionState> signs, final IUser user, final String username, final int depth, final IEssentials ess)
 	{
 		final Block[] faces = getAdjacentBlocks(block);
 		for (Block b : faces)
@@ -108,12 +108,12 @@ public class SignProtection extends EssentialsSign
 			{
 				continue;
 			}
-			final SignProtectionState check = checkProtectionSign(b, user, username);
+			final SignProtectionState check = checkProtectionSign(b, user, username, ess);
 			signs.put(loc, check);
 
 			if (protectedBlocks.contains(b.getType()) && depth > 0)
 			{
-				getConnectedSigns(b, signs, user, username, depth - 1);
+				getConnectedSigns(b, signs, user, username, depth - 1, ess);
 			}
 		}
 	}
@@ -124,20 +124,20 @@ public class SignProtection extends EssentialsSign
 		NOT_ALLOWED, ALLOWED, NOSIGN, OWNER
 	}
 
-	private SignProtectionState checkProtectionSign(final Block block, final IUser user, final String username)
+	private SignProtectionState checkProtectionSign(final Block block, final IUser user, final String username, final IEssentials ess)
 	{
 		if (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN)
 		{
 			final BlockSign sign = new BlockSign(block);
 			if (sign.getLine(0).equalsIgnoreCase(this.getSuccessName()))
 			{
-				return checkProtectionSign(sign, user, username);
+				return checkProtectionSign(sign, user, username, ess);
 			}
 		}
 		return SignProtectionState.NOSIGN;
 	}
 
-	private SignProtectionState checkProtectionSign(final ISign sign, final IUser user, final String username)
+	private SignProtectionState checkProtectionSign(final ISign sign, final IUser user, final String username, final IEssentials ess)
 	{
 		if (user == null || username == null)
 		{
@@ -154,7 +154,7 @@ public class SignProtection extends EssentialsSign
 		for (int i = 1; i <= 2; i++)
 		{
 			final String line = sign.getLine(i);
-			if (line.startsWith("(") && line.endsWith(")") && user.inGroup(line.substring(1, line.length() - 1)))
+			if (line.startsWith("(") && line.endsWith(")") && ess.getGroups().inGroup(user, line.substring(1, line.length() - 1)))
 			{
 				return SignProtectionState.ALLOWED;
 			}
@@ -179,9 +179,9 @@ public class SignProtection extends EssentialsSign
 				};
 	}
 
-	public SignProtectionState isBlockProtected(final Block block, final IUser user, final String username, boolean secure)
+	public SignProtectionState isBlockProtected(final Block block, final IUser user, final String username, boolean secure, final IEssentials ess)
 	{
-		final Map<Location, SignProtectionState> signs = getConnectedSigns(block, user, username, secure);
+		final Map<Location, SignProtectionState> signs = getConnectedSigns(block, user, username, secure, ess);
 		SignProtectionState retstate = SignProtectionState.NOSIGN;
 		for (SignProtectionState state : signs.values())
 		{
@@ -251,7 +251,7 @@ public class SignProtection extends EssentialsSign
 	{
 		for (Block adjBlock : getAdjacentBlocks(block))
 		{
-			final SignProtectionState state = isBlockProtected(adjBlock, player, username, true);
+			final SignProtectionState state = isBlockProtected(adjBlock, player, username, true, ess);
 
 			if ((state == SignProtectionState.ALLOWED || state == SignProtectionState.NOT_ALLOWED)
 				&& !SignsPermissions.PROTECTION_OVERRIDE.isAuthorized(player))
@@ -267,7 +267,7 @@ public class SignProtection extends EssentialsSign
 	@Override
 	protected boolean onBlockInteract(final Block block, final IUser player, final String username, final IEssentials ess) throws SignException
 	{
-		final SignProtectionState state = isBlockProtected(block, player, username, false);
+		final SignProtectionState state = isBlockProtected(block, player, username, false, ess);
 
 		if (state == SignProtectionState.OWNER || state == SignProtectionState.NOSIGN || state == SignProtectionState.ALLOWED)
 		{
@@ -288,7 +288,7 @@ public class SignProtection extends EssentialsSign
 	@Override
 	protected boolean onBlockBreak(final Block block, final IUser player, final String username, final IEssentials ess) throws SignException
 	{
-		final SignProtectionState state = isBlockProtected(block, player, username, false);
+		final SignProtectionState state = isBlockProtected(block, player, username, false, ess);
 
 		if (state == SignProtectionState.OWNER || state == SignProtectionState.NOSIGN)
 		{
@@ -311,7 +311,7 @@ public class SignProtection extends EssentialsSign
 	@Override
 	public boolean onBlockBreak(final Block block, final IEssentials ess)
 	{
-		final SignProtectionState state = isBlockProtected(block, null, null, false);
+		final SignProtectionState state = isBlockProtected(block, null, null, false, ess);
 
 		return state == SignProtectionState.NOSIGN;
 	}
@@ -319,7 +319,7 @@ public class SignProtection extends EssentialsSign
 	@Override
 	public boolean onBlockExplode(final Block block, final IEssentials ess)
 	{
-		final SignProtectionState state = isBlockProtected(block, null, null, false);
+		final SignProtectionState state = isBlockProtected(block, null, null, false, ess);
 
 		return state == SignProtectionState.NOSIGN;
 	}
@@ -327,7 +327,7 @@ public class SignProtection extends EssentialsSign
 	@Override
 	public boolean onBlockBurn(final Block block, final IEssentials ess)
 	{
-		final SignProtectionState state = isBlockProtected(block, null, null, false);
+		final SignProtectionState state = isBlockProtected(block, null, null, false, ess);
 
 		return state == SignProtectionState.NOSIGN;
 	}
@@ -335,7 +335,7 @@ public class SignProtection extends EssentialsSign
 	@Override
 	public boolean onBlockIgnite(final Block block, final IEssentials ess)
 	{
-		final SignProtectionState state = isBlockProtected(block, null, null, false);
+		final SignProtectionState state = isBlockProtected(block, null, null, false, ess);
 
 		return state == SignProtectionState.NOSIGN;
 	}
@@ -343,7 +343,7 @@ public class SignProtection extends EssentialsSign
 	@Override
 	public boolean onBlockPush(final Block block, final IEssentials ess)
 	{
-		final SignProtectionState state = isBlockProtected(block, null, null, false);
+		final SignProtectionState state = isBlockProtected(block, null, null, false, ess);
 
 		return state == SignProtectionState.NOSIGN;
 	}
