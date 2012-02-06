@@ -1,8 +1,6 @@
 package com.earth2me.essentials.api;
 
 import com.earth2me.essentials.listener.TNTExplodeListener;
-import com.earth2me.essentials.perm.GMGroups;
-import com.earth2me.essentials.perm.IPermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
 import org.bukkit.World;
 import org.bukkit.entity.Player;

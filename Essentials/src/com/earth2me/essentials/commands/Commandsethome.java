@@ -6,7 +6,6 @@ import com.earth2me.essentials.perm.Permissions;
 import java.util.HashMap;
 import java.util.Locale;
 import lombok.Cleanup;
-import org.bukkit.Location;
 
 
 public class Commandsethome extends EssentialsCommand

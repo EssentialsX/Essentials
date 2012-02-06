@@ -1,7 +1,5 @@
 package com.earth2me.essentials.perm;
 
-import com.earth2me.essentials.api.IPermission;
-
 public class BasePermission extends AbstractSuperpermsPermission {
 	protected String permission;
 

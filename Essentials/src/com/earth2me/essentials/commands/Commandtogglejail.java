@@ -8,7 +8,6 @@ import com.earth2me.essentials.user.UserData.TimestampType;
 import lombok.Cleanup;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 
 public class Commandtogglejail extends EssentialsCommand

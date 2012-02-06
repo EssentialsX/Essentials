@@ -6,9 +6,6 @@ import com.earth2me.essentials.settings.MoneyHolder;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.bukkit.plugin.ServicePriority;
 
 
 public class Economy implements IEconomy

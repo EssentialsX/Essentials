@@ -6,7 +6,6 @@ import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.perm.ItemPermissions;
 import com.earth2me.essentials.perm.Permissions;
 import java.util.Locale;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 
