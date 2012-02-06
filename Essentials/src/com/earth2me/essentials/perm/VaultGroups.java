@@ -8,7 +8,6 @@ import com.earth2me.essentials.api.IUser;
 import java.text.MessageFormat;
 import lombok.Cleanup;
 import net.milkbowl.vault.chat.Chat;
-import org.anjocaido.groupmanager.permissions.AnjoPermissionsHandler;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 
@@ -19,7 +18,6 @@ public class VaultGroups implements IGroups
 	public VaultGroups(final IEssentials ess)
 	{
 		this.ess = ess;
-
 	}
 
 	@Override
@@ -67,7 +65,7 @@ public class VaultGroups implements IGroups
 	{
 		RegisteredServiceProvider<Chat> rsp = ess.getServer().getServicesManager().getRegistration(Chat.class);
 		Chat chat = rsp.getProvider();
-		return chat.getPlayerInfoInteger(player.getBase(), "teleportdelay", 0);
+		return chat.getPlayerInfoInteger(player.getBase(), "homes", 0);
 	}
 
 	@Override
