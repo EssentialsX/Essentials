@@ -144,6 +144,17 @@ public class PermissionsHandler implements IPermissionsHandler
 			return;
 		}
 
+		final Plugin privPlugin = pluginManager.getPlugin("Privileges");
+		if (privPlugin != null && privPlugin.isEnabled())
+		{
+			if (!(handler instanceof PrivilegesHandler))
+			{
+				LOGGER.log(Level.INFO, "Essentials: Using Privileges based permissions.");
+				handler = new PrivilegesHandler(privPlugin);
+			}
+			return;
+		}
+
 		final Plugin permPlugin = pluginManager.getPlugin("Permissions");
 		if (permPlugin != null && permPlugin.isEnabled())
 		{
