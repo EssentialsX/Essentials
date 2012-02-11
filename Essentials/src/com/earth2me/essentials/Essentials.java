@@ -32,15 +32,20 @@ import com.earth2me.essentials.signs.SignPlayerListener;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
@@ -277,7 +282,29 @@ public class Essentials extends JavaPlugin implements IEssentials
 			if (pc != null)
 			{
 				alternativeCommandsHandler.executed(commandLabel, pc.getLabel());
-				return pc.execute(sender, commandLabel, args);
+				try
+				{
+					return pc.execute(sender, commandLabel, args);
+				}
+				catch (final Exception ex)
+				{
+					final ArrayList<StackTraceElement> elements = new ArrayList<StackTraceElement>(Arrays.asList(ex.getStackTrace()));
+					elements.remove(0);
+					final ArrayList<StackTraceElement> toRemove = new ArrayList<StackTraceElement>();
+					for (final StackTraceElement e : elements)
+					{
+						if (e.getClassName().equals("com.earth2me.essentials.Essentials"))
+						{
+							toRemove.add(e);
+						}
+					}
+					elements.removeAll(toRemove);
+					final StackTraceElement[] trace = elements.toArray(new StackTraceElement[elements.size()]);
+					ex.setStackTrace(trace);
+					ex.printStackTrace();
+					sender.sendMessage(ChatColor.RED + "An internal error occurred while attempting to perform this command");
+					return true;
+				}
 			}
 		}
 
