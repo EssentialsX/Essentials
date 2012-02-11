@@ -158,7 +158,7 @@ public class GroupManager extends JavaPlugin {
 		System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
 		
 		// Register as a service
-		this.getServer().getServicesManager().register(AnjoPermissionsHandler.class, this.permissionHandler, this, ServicePriority.Lowest);
+		this.getServer().getServicesManager().register(WorldsHolder.class, this.worldsHolder, this, ServicePriority.Lowest);
 	}
 
 	public static boolean isLoaded() {

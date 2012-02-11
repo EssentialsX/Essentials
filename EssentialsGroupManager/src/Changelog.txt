@@ -137,4 +137,5 @@ v 1.9:
 	- Fix a bug with getWorldData return the main world data for all mirrors, instead of the worlds parent data.
 	- Prevent getAllPlayersPermissions() processing a group more than once. Improves performance when using complex inheritance structures.
 	- Fix world mirroring so it correctly creates data files and data sources for partially mirrored worlds.
-	- Fixed world mirroring so it returns the correct data for the requested world
+	- Fixed world mirroring so it returns the correct data for the requested world.
+	- Change Service registration to register WorldsHolder instead of AnjoPermissionsHandler. This is the correct entry point for all data.
