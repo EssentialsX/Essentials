@@ -8,6 +8,7 @@ import com.earth2me.essentials.Warps;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -44,10 +45,10 @@ public class Commandwarp extends EssentialsCommand
 				{
 					throw new Exception(_("playerNotFound"));
 				}
-				warpUser(otherUser, args[0]);
+				warpUser(user, otherUser, args[0]);
 				throw new NoChargeException();
 			}
-			warpUser(user, args[0]);
+			warpUser(user, user, args[0]);
 			throw new NoChargeException();
 		}
 	}
@@ -65,7 +66,7 @@ public class Commandwarp extends EssentialsCommand
 		{
 			throw new Exception(_("playerNotFound"));
 		}
-		warpUser(otherUser, args[0]);
+		otherUser.getTeleport().warp(args[0], null, TeleportCause.COMMAND);
 		throw new NoChargeException();
 
 	}
@@ -112,17 +113,12 @@ public class Commandwarp extends EssentialsCommand
 		}
 	}
 
-	private void warpUser(final User user, final String name) throws Exception
+	private void warpUser(final User owner, final User user, final String name) throws Exception
 	{
-		final Trade charge = new Trade(this.getName(), ess);
-		charge.isAffordableFor(user);
-		if (ess.getSettings().getPerWarpPermission())
+		final Trade charge = new Trade("warp-" + name.toLowerCase(Locale.ENGLISH).replace('_', '-'), ess);
+		charge.isAffordableFor(owner);
+		if (ess.getSettings().getPerWarpPermission() && !owner.isAuthorized("essentials.warp." + name))
 		{
-			if (user.isAuthorized("essentials.warp." + name))
-			{
-				user.getTeleport().warp(name, charge, TeleportCause.COMMAND);
-				return;
-			}
 			throw new Exception(_("warpUsePermission"));
 		}
 		user.getTeleport().warp(name, charge, TeleportCause.COMMAND);
