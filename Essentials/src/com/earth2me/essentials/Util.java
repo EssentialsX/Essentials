@@ -23,15 +23,10 @@ public class Util
 	private final static Logger logger = Logger.getLogger("Minecraft");
 	private final static Pattern INVALIDFILECHARS = Pattern.compile("[^a-z0-9]");
 	private final static Pattern INVALIDCHARS = Pattern.compile("[^\t\n\r\u0020-\u007E\u0085\u00A0-\uD7FF\uE000-\uFFFC]");
-	private static Map<String,String> sanitizedName = new HashMap<String,String>();
 
 	public static String sanitizeFileName(final String name)
 	{
-		if (sanitizedName.containsKey(name)) {
-			return sanitizedName.get(name);
-		}
 		final String newName = INVALIDFILECHARS.matcher(name.toLowerCase(Locale.ENGLISH)).replaceAll("_");
-		sanitizedName.put(name, newName);
 		return newName;
 	}
 

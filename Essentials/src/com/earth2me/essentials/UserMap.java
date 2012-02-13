@@ -61,7 +61,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 	{
 		try
 		{
-			return users.get(Util.sanitizeFileName(name));
+			return users.get(name);
 		}
 		catch (ExecutionException ex)
 		{
@@ -76,18 +76,22 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 	@Override
 	public User load(final String name) throws Exception
 	{
+		String sanitizedName = Util.sanitizeFileName(name);
+		if (!sanitizedName.equals(name)) {
+			return getUser(sanitizedName);
+		}
 		for (Player player : ess.getServer().getOnlinePlayers())
 		{
 			if (player.getName().equalsIgnoreCase(name))
 			{
-				keys.add(Util.sanitizeFileName(name));
+				keys.add(sanitizedName);
 				return new User(player, ess);
 			}
 		}
-		final File userFile = getUserFile(name);
+		final File userFile = getUserFile2(sanitizedName);
 		if (userFile.exists())
 		{
-			keys.add(Util.sanitizeFileName(name));
+			keys.add(sanitizedName);
 			return new User(new OfflinePlayer(name, ess), ess);
 		}
 		throw new Exception("User not found!");
@@ -103,6 +107,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 	{
 		keys.remove(Util.sanitizeFileName(name));
 		users.invalidate(Util.sanitizeFileName(name));
+		users.invalidate(name);
 	}
 
 	public Set<String> getAllUniqueUsers()
@@ -117,7 +122,12 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 	
 	public File getUserFile(final String name)
 	{
+		return getUserFile2(Util.sanitizeFileName(name));
+	}
+	
+	private File getUserFile2(final String name)
+	{
 		final File userFolder = new File(ess.getDataFolder(), "userdata");
-		return new File(userFolder, Util.sanitizeFileName(name) + ".yml");
+		return new File(userFolder, name + ".yml");
 	}
 }
