@@ -65,8 +65,19 @@ public abstract class DataUnit {
         hash = 71 * hash + (this.name != null ? this.name.toLowerCase().hashCode() : 0);
         return hash;
     }
+    
+    /**
+     * Set the data source to point to a different worldDataHolder
+     * 
+     * @param source
+     */
+    public void setDataSource(WorldDataHolder source) {
+    	this.dataSource = source;
+    }
 
     /**
+     * Get the current worldDataHolder this object is pointing to
+     * 
      * @return the dataSource
      */
     public WorldDataHolder getDataSource() {
