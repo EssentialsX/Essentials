@@ -120,14 +120,7 @@ public abstract class UserBase extends AsyncStorageObjectHolder<UserData> implem
 		}
 		else
 		{
-			try
-			{
-				return OfflineBedLocation.getBedLocation(base.getName(), ess).getBukkitLocation();
-			}
-			catch (WorldNotLoadedException ex)
-			{
-				return null;
-			}
+			return ess.getServer().getOfflinePlayer(base.getName()).getBedSpawnLocation();
 		}
 	}
 
