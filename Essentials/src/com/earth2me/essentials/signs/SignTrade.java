@@ -36,7 +36,7 @@ public class SignTrade extends EssentialsSign
 			try
 			{
 				stored = getTrade(sign, 1, true, true, ess);
-				substractAmount(sign, 1, stored, ess);
+				subtractAmount(sign, 1, stored, ess);
 				stored.pay(player);
 			}
 			catch (SignException e)
@@ -53,12 +53,14 @@ public class SignTrade extends EssentialsSign
 			final Trade charge = getTrade(sign, 1, false, false, ess);
 			final Trade trade = getTrade(sign, 2, false, true, ess);
 			charge.isAffordableFor(player);
+			addAmount(sign, 1, charge, ess);
+			subtractAmount(sign, 2, trade, ess);
 			if (!trade.pay(player, false))
 			{
+				subtractAmount(sign, 1, charge, ess);
+				addAmount(sign, 2, trade, ess);
 				throw new ChargeException("Full inventory");
 			}
-			substractAmount(sign, 2, trade, ess);
-			addAmount(sign, 1, charge, ess);
 			charge.charge(player);
 			Trade.log("Sign", "Trade", "Interact", sign.getLine(3), charge, username, trade, sign.getBlock().getLocation(), ess);
 		}
@@ -256,7 +258,7 @@ public class SignTrade extends EssentialsSign
 		throw new SignException(_("invalidSignLine", index + 1));
 	}
 
-	protected final void substractAmount(final ISign sign, final int index, final Trade trade, final IEssentials ess) throws SignException
+	protected final void subtractAmount(final ISign sign, final int index, final Trade trade, final IEssentials ess) throws SignException
 	{
 		final Double money = trade.getMoney();
 		if (money != null)
@@ -294,6 +296,7 @@ public class SignTrade extends EssentialsSign
 		}
 	}
 
+	//TODO: Translate these exceptions.
 	private void changeAmount(final ISign sign, final int index, final double value, final IEssentials ess) throws SignException
 	{
 
@@ -313,7 +316,7 @@ public class SignTrade extends EssentialsSign
 				final String newline = Util.formatCurrency(money, ess) + ":" + Util.formatCurrency(amount + value, ess).substring(1);
 				if (newline.length() > 15)
 				{
-					throw new SignException("Line too long!");
+					throw new SignException("This sign is full: Line too long!");
 				}
 				sign.setLine(index, newline);
 				return;
@@ -329,7 +332,7 @@ public class SignTrade extends EssentialsSign
 				final String newline = stackamount + " " + split[1] + ":" + (amount + Math.round(value));
 				if (newline.length() > 15)
 				{
-					throw new SignException("Line too long!");
+					throw new SignException("This sign is full: Line too long!");
 				}
 				sign.setLine(index, newline);
 				return;
@@ -343,7 +346,7 @@ public class SignTrade extends EssentialsSign
 				final String newline = stackamount + " " + split[1] + ":" + (amount + Math.round(value));
 				if (newline.length() > 15)
 				{
-					throw new SignException("Line too long!");
+					throw new SignException("This sign is full: Line too long!");
 				}
 				sign.setLine(index, newline);
 				return;

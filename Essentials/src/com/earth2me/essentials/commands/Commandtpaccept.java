@@ -22,7 +22,9 @@ public class Commandtpaccept extends EssentialsCommand
 		final User target = user.getTeleportRequest();
 		if (target == null
 			|| target.getBase() instanceof OfflinePlayer
-			|| (user.isTeleportRequestHere() && !target.isAuthorized("essentials.tpahere")))
+			|| (user.isTeleportRequestHere() && !target.isAuthorized("essentials.tpahere"))
+			|| (!user.isTeleportRequestHere() && !target.isAuthorized("essentials.tpa") && !target.isAuthorized("essentials.tpaall"))
+			)
 		{
 			throw new Exception(_("noPendingRequest"));
 		}

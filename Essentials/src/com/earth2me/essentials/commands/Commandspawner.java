@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Mob;
+import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.util.Locale;
@@ -47,11 +48,14 @@ public class Commandspawner extends EssentialsCommand
 			{
 				throw new Exception(_("unableToSpawnMob"));
 			}
-			if (!user.isAuthorized("essentials.spawner." + mob.name.toLowerCase()))
+			if (!user.isAuthorized("essentials.spawner." + mob.name.toLowerCase(Locale.ENGLISH)))
 			{
 				throw new Exception(_("unableToSpawnMob"));
 			}
+			final Trade charge = new Trade("spawner-" + mob.name.toLowerCase(Locale.ENGLISH), ess);
+			charge.isAffordableFor(user);
 			((CreatureSpawner)target.getBlock().getState()).setCreatureType(mob.getType());
+			charge.charge(user);
 			user.sendMessage(_("setSpawner", mob.name));
 		}
 		catch (Throwable ex)

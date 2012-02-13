@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -45,7 +46,7 @@ public class WorldsHolder {
     private Map<String, String> mirrorsGroup = new HashMap<String, String>();
     private Map<String, String> mirrorsUser = new HashMap<String, String>();
     
-    private OverloadedWorldHolder defaultWorld;
+    //private OverloadedWorldHolder defaultWorld;
     private String serverDefaultWorldName;
     private GroupManager plugin;
     private File worldsFolder;
@@ -59,7 +60,7 @@ public class WorldsHolder {
         // Setup folders and check files exist for the primary world
         verifyFirstRun();
         initialLoad();
-        if (defaultWorld == null) {
+        if (serverDefaultWorldName == null) {
             throw new IllegalStateException("There is no default group! OMG!");
         }
     }
@@ -76,7 +77,7 @@ public class WorldsHolder {
     private void initialWorldLoading() {
         //Load the default world
         loadWorld(serverDefaultWorldName);
-        defaultWorld = worldsData.get(serverDefaultWorldName);
+        //defaultWorld = getUpdatedWorldData(serverDefaultWorldName);
     }
     
     private void loadAllSearchedWorlds() {
@@ -117,6 +118,8 @@ public class WorldsHolder {
     	mirrorsGroup.clear();
     	mirrorsUser.clear();
     	Map<String, Object> mirrorsMap = plugin.getGMConfig().getMirrorsMap();
+    	
+    	HashSet<String> mirroredWorlds = new HashSet<String>();
         
         if (mirrorsMap != null) {
             for (String source : mirrorsMap.keySet()) {
@@ -140,6 +143,10 @@ public class WorldsHolder {
 	                        }
 	                        mirrorsGroup.put(world, getWorldData(source).getName());
 	                        mirrorsUser.put(world, getWorldData(source).getName());
+	                        
+	                        // Track this world so we can create a datasource for it later
+	                        mirroredWorlds.add(o.toString());	                        
+	                        
                     	} else
                     		GroupManager.logger.log(Level.WARNING, "Mirroring error with " + o.toString() + ". Recursive loop detected!");
                     }
@@ -171,10 +178,12 @@ public class WorldsHolder {
 	                                if (type.equals("users"))
 	                                	mirrorsUser.put(key.toLowerCase(), getWorldData(source).getName());
 	                            }
+	                			
+	                			// Track this world so we can create a datasource for it later
+	                			mirroredWorlds.add(key);
+	                			
                 		} else
                     		GroupManager.logger.log(Level.WARNING, "Mirroring error with " + key + ". Recursive loop detected!");
-                			
-                			
                 			
                 		} else {
                 			throw new IllegalStateException("Unknown mirroring format for " + key);
@@ -182,6 +191,14 @@ public class WorldsHolder {
                 		
                 	}
                 }
+            }
+            
+            // Create a datasource for any worlds not already loaded
+            for (String world : mirroredWorlds){
+            	if (!worldsData.containsKey(world.toLowerCase())) {
+            		setupWorldFolder(world);
+            		loadWorld(world, true);
+            	}	
             }
         }
     }
@@ -320,7 +337,8 @@ public class WorldsHolder {
      * If the world is not on the worlds list, returns the default world
      * holder.
      *
-     * Mirrors return original world data.
+     * Mirrors return their parent world data.
+     * If no mirroring data it returns the default world.
      *
      * @param worldName
      * @return OverloadedWorldHolder
@@ -328,11 +346,54 @@ public class WorldsHolder {
     public OverloadedWorldHolder getWorldData(String worldName) {
     	String worldNameLowered = worldName.toLowerCase();
     	
-    	if (worldsData.containsKey(worldNameLowered))
-    			return worldsData.get(worldNameLowered);
-
+    	// Find this worlds data
+    	if (worldsData.containsKey(worldNameLowered)) {
+    		
+    		String usersMirror = mirrorsUser.get(worldNameLowered);
+        	String groupsMirror = mirrorsGroup.get(worldNameLowered);
+    		
+    		if (usersMirror != null) {
+    			
+    			// If both are mirrored
+    			if (groupsMirror != null) {
+    				
+    				// if the data sources are the same, return the parent
+    				if (usersMirror == groupsMirror)
+    					return getUpdatedWorldData(usersMirror.toLowerCase());
+    				
+    				// Both data sources are mirrors, but they are from different parents
+        			// so we return the actual data object.
+        			return getUpdatedWorldData(worldNameLowered);
+    			}
+    			
+    			// Groups isn't a mirror  so return this this worlds data source
+    			return getUpdatedWorldData(worldNameLowered);	
+    		}
+    		
+    		// users isn't mirrored so we need to return this worlds data source
+    		return getUpdatedWorldData(worldNameLowered);
+    	}
+    	
+    	// Oddly no data source was found for this world so return the default.
         GroupManager.logger.finest("Requested world " + worldName + " not found or badly mirrored. Returning default world...");
         return getDefaultWorld();
+    }
+    
+    /**
+     * Get the requested world data and update it's dataSource to be relevant for this world
+     * 
+     * @param worldName
+     * @return updated world holder
+     */
+    private OverloadedWorldHolder getUpdatedWorldData(String worldName) {
+    	
+    	if (worldsData.containsKey(worldName.toLowerCase())) {
+    		OverloadedWorldHolder data = worldsData.get(worldName.toLowerCase());
+    		data.updateDataSource();
+    		return data;
+    	}
+    	return null;
+    	
     }
 
     /**
@@ -353,6 +414,7 @@ public class WorldsHolder {
     /**
      * Retrieves the field player.getWorld().getName() and do
      * getWorld(worldName)
+     * 
      * @param player
      * @return OverloadedWorldHolder
      */
@@ -476,18 +538,29 @@ public class WorldsHolder {
     }
 
     /**
+     * Wrapper for LoadWorld(String,Boolean) for backwards compatibility
+     * 
      * Load a world from file.
      * If it already been loaded, summon reload method from dataHolder.
      * @param worldName
      */
     public void loadWorld(String worldName) {
+    	loadWorld(worldName, false);
+    }
+    
+    /**
+     * Load a world from file.
+     * If it already been loaded, summon reload method from dataHolder.
+     * @param worldName
+     */
+    public void loadWorld(String worldName, Boolean isMirror) {
         if (worldsData.containsKey(worldName.toLowerCase())) {
             worldsData.get(worldName.toLowerCase()).reload();
             return;
         }
         GroupManager.logger.finest("Trying to load world " + worldName + "...");
         File thisWorldFolder = new File(worldsFolder, worldName);
-        if (thisWorldFolder.exists() && thisWorldFolder.isDirectory()) {
+        if ((isMirror) || (thisWorldFolder.exists() && thisWorldFolder.isDirectory())) {
         	
         	// Setup file handles, if not mirrored
             File groupsFile = (mirrorsGroup.containsKey(worldName.toLowerCase()))? null : new File(thisWorldFolder, "groups.yml");
@@ -564,17 +637,43 @@ public class WorldsHolder {
      * @return the defaultWorld
      */
     public OverloadedWorldHolder getDefaultWorld() {
-        return defaultWorld;
+        return getUpdatedWorldData(serverDefaultWorldName);
     }
 
     /**
-     * Returns all physically loaded worlds.
+     * Returns all physically loaded worlds which have at least
+     * one of their own data sets for users or groups.
+     * 
      * @return ArrayList<OverloadedWorldHolder> of all loaded worlds
      */
     public ArrayList<OverloadedWorldHolder> allWorldsDataList() {
         ArrayList<OverloadedWorldHolder> list = new ArrayList<OverloadedWorldHolder>();
         for (OverloadedWorldHolder data : worldsData.values()) {
-            if (!list.contains(data)) {
+            if ((!list.contains(data)) && (!mirrorsGroup.containsKey(data.getName().toLowerCase()) || !mirrorsUser.containsKey(data.getName().toLowerCase()))) {
+            	
+            	String worldNameLowered = data.getName().toLowerCase();
+            	String usersMirror = mirrorsUser.get(worldNameLowered);
+            	String groupsMirror = mirrorsGroup.get(worldNameLowered);
+        		
+            	// is users mirrored?
+        		if (usersMirror != null) {
+        			
+        			// If both are mirrored
+        			if (groupsMirror != null) {
+        				
+        				// if the data sources are the same, return the parent
+        				if (usersMirror == groupsMirror) {
+        					if (!list.contains(usersMirror.toLowerCase()))
+        							list.add(worldsData.get(usersMirror.toLowerCase()));
+        					continue;
+        				}
+        				// Both data sources are mirrors, but they are from different parents
+            			// so fall through to add the actual data object.
+        			}
+        			// Groups isn't a mirror so fall through to add this this worlds data source
+        		}
+        		
+        		// users isn't mirrored so we need to add this worlds data source
                 list.add(data);
             }
         }

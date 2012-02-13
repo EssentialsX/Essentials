@@ -36,7 +36,7 @@ public class ChatStore
 
 	public String getLongType()
 	{
-		return type.length() > 0 ? "chat" : "chat-" + type;
+		return type.length() == 0 ? "chat" : "chat-" + type;
 	}
 
 	public long getRadius()

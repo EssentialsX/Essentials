@@ -126,3 +126,16 @@ v 1.9:
 	- do not allow inherited permissions to negate higher perms.
 	- Fixed a bug when pushing superperms in the wrong order.
 	- Fix players retaining permissions when demoted.
+	- Auto sort permissions on load to speed up population of superperms.
+	- Negating a parent node after adding all nodes with * will now correctly remove all child nodes of that parent before populating superperms.
+	  eg.
+	      - '*'
+	      - -vanish.*
+	      - vanish.standard
+	- Track the 'onPlayerChangeWorld' event as some teleports seem to not be triggering a world move.
+	- Catch all errors in badly formatted groups.
+	- Fix a bug with getWorldData return the main world data for all mirrors, instead of the worlds parent data.
+	- Prevent getAllPlayersPermissions() processing a group more than once. Improves performance when using complex inheritance structures.
+	- Fix world mirroring so it correctly creates data files and data sources for partially mirrored worlds.
+	- Fixed world mirroring so it returns the correct data for the requested world.
+	- Change Service registration to register WorldsHolder instead of AnjoPermissionsHandler. This is the correct entry point for all data.

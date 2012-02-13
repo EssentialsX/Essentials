@@ -138,8 +138,8 @@ public class User extends DataUnit implements Cloneable {
 		String oldGroup = this.group;
 		this.group = group.getName();
 		flagAsChanged();
-		if (GroupManager.isLoaded() && (updatePerms)) {
-			if (!GroupManager.BukkitPermissions.isPlayer_join())
+		if (GroupManager.isLoaded()) {
+			if (!GroupManager.BukkitPermissions.isPlayer_join() && (updatePerms))
 				GroupManager.BukkitPermissions.updatePlayer(getBukkitPlayer());
 
 			// Do we notify of the group change?
