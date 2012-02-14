@@ -77,8 +77,17 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 	public User load(final String name) throws Exception
 	{
 		String sanitizedName = Util.sanitizeFileName(name);
-		if (!sanitizedName.equals(name)) {
-			return getUser(sanitizedName);
+		if (!sanitizedName.equals(name))
+		{
+			User user = getUser(sanitizedName);
+			if (user == null)
+			{
+				throw new Exception("User not found!");
+			}
+			else
+			{
+				return user;
+			}
 		}
 		for (Player player : ess.getServer().getOnlinePlayers())
 		{
@@ -119,12 +128,12 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 	{
 		return keys.size();
 	}
-	
+
 	public File getUserFile(final String name)
 	{
 		return getUserFile2(Util.sanitizeFileName(name));
 	}
-	
+
 	private File getUserFile2(final String name)
 	{
 		final File userFolder = new File(ess.getDataFolder(), "userdata");
