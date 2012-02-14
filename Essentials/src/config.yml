@@ -519,7 +519,7 @@ protect:
     build: true
     
     # Should people with build: false in permissions be allowed to use items
-    # Set true to disable useing for those people
+    # Set true to disable using for those people
     use: true
 
     # Should we tell people they are not allowed to build
