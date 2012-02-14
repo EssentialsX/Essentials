@@ -7,6 +7,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.util.Locale;
 import java.util.Random;
+import java.util.Set;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -26,7 +27,19 @@ public class Commandspawnmob extends EssentialsCommand
 	{
 		if (args.length < 1)
 		{
-			throw new NotEnoughArgumentsException(_("mobsAvailable", Util.joinList(Mob.getMobList())));
+			Set<String> availableList = Mob.getMobList();
+			for (String mob : availableList)
+			{
+				if (!user.isAuthorized("essentials.spawnmob." + mob.toLowerCase()))
+				{
+					availableList.remove(mob);
+				}
+			}
+			if (availableList.isEmpty())
+			{
+				availableList.add(_("none"));
+			}
+			throw new NotEnoughArgumentsException(_("mobsAvailable", Util.joinList(availableList)));
 		}
 
 
@@ -79,7 +92,7 @@ public class Commandspawnmob extends EssentialsCommand
 		User otherUser = null;
 		if (args.length >= 3)
 		{
-			 otherUser = getPlayer(ess.getServer(), args, 2);
+			otherUser = getPlayer(ess.getServer(), args, 2);
 		}
 		final Location loc = (otherUser == null) ? block.getLocation() : otherUser.getLocation();
 		final Location sloc = Util.getSafeDestination(loc);
