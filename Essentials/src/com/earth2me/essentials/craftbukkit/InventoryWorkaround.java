@@ -1,17 +1,12 @@
 package com.earth2me.essentials.craftbukkit;
 
-import com.earth2me.essentials.craftbukkit.FakeInventory;
 import java.util.HashMap;
 import java.util.Map;
-import org.bukkit.Location;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 /*
- * This class can be removed when 
- * https://github.com/Bukkit/CraftBukkit/pull/193
- * is accepted to CraftBukkit
+ * This class can be removed when https://github.com/Bukkit/CraftBukkit/pull/193 is accepted to CraftBukkit
  */
 
 public final class InventoryWorkaround
@@ -47,7 +42,7 @@ public final class InventoryWorkaround
 	{
 		return firstPartial(cinventory, item, forceDurability, item.getType().getMaxStackSize());
 	}
-	
+
 	public static int firstPartial(final Inventory cinventory, final ItemStack item, final boolean forceDurability, final int maxAmount)
 	{
 		if (item == null)
@@ -93,10 +88,9 @@ public final class InventoryWorkaround
 	{
 		final Map<Integer, ItemStack> leftover = new HashMap<Integer, ItemStack>();
 
-		/* TODO: some optimization
-		 *  - Create a 'firstPartial' with a 'fromIndex'
-		 *  - Record the lastPartial per Material
-		 *  - Cache firstEmpty result
+		/*
+		 * TODO: some optimization - Create a 'firstPartial' with a 'fromIndex' - Record the lastPartial per Material -
+		 * Cache firstEmpty result
 		 */
 
 		// combine items
@@ -175,7 +169,7 @@ public final class InventoryWorkaround
 
 					final int amount = item.getAmount();
 					final int partialAmount = partialItem.getAmount();
-					
+
 					// Check if it fully fits
 					if (amount + partialAmount <= maxAmount)
 					{
@@ -324,26 +318,5 @@ public final class InventoryWorkaround
 			}
 		}
 		return leftover.isEmpty();
-	}
-
-	public static Item[] dropItem(final Location loc, final ItemStack itm)
-	{
-		final int maxStackSize = itm.getType().getMaxStackSize();
-		final int stacks = itm.getAmount() / maxStackSize;
-		final int leftover = itm.getAmount() % maxStackSize;
-		final Item[] itemStacks = new Item[stacks + (leftover > 0 ? 1 : 0)];
-		for (int i = 0; i < stacks; i++)
-		{
-			final ItemStack stack = itm.clone();
-			stack.setAmount(maxStackSize);
-			itemStacks[i] = loc.getWorld().dropItem(loc, stack);
-		}
-		if (leftover > 0)
-		{
-			final ItemStack stack = itm.clone();
-			stack.setAmount(leftover);
-			itemStacks[stacks] = loc.getWorld().dropItem(loc, stack);
-		}
-		return itemStacks;
 	}
 }
