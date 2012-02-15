@@ -13,7 +13,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
 
 
 public class UpdateProcess implements Listener
@@ -32,7 +31,7 @@ public class UpdateProcess implements Listener
 
 	public void registerEvents()
 	{
-		final PluginManager pluginManager = plugin.getServer().getPluginManager();
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
 	public boolean selfUpdate()
