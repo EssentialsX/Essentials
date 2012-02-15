@@ -5,7 +5,7 @@ main: com.earth2me.essentials.Essentials
 version: TeamCity
 website: http://tiny.cc/EssentialsCommands
 description: Provides an essential, core set of commands for Bukkit.
-authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits]
+authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, md_5]
 commands:
   afk:
     description: Marks you as away-from-keyboard.
@@ -120,7 +120,7 @@ commands:
     aliases: [mem,memory,egc,emem,ememory]
   give:
     description: Give a player an item.
-    usage: /<command> <player> <item|numeric> [amount <enchantmentname[:level]> ...]  
+    usage: /<command> <player> <item|numeric> [amount <enchantmentname[:level]> ...]
     aliases: [egive]
   god:
     description: Enables your godly powers.
@@ -220,7 +220,7 @@ commands:
     aliases: [emute]
   near:
     description: Lists the players near by or around a player
-    usage: /<command> [playername] [radius] 
+    usage: /<command> [playername] [radius]
     aliases: [nearby,enear,enearby]
   nick:
     description: Change your nickname or that of another player.
