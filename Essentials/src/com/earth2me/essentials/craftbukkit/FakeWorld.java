@@ -554,4 +554,28 @@ public class FakeWorld implements World
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
+	@Override
+	public long getTicksPerAnimalSpawns()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setTicksPerAnimalSpawns(int i)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public long getTicksPerMonsterSpawns()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setTicksPerMonsterSpawns(int i)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }

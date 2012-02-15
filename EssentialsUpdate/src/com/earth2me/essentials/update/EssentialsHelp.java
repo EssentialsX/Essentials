@@ -7,16 +7,15 @@ import java.util.Map;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
-import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 
-public class EssentialsHelp extends PlayerListener
+public class EssentialsHelp implements Listener
 {
 	private transient Player chatUser;
 	private final transient Server server;
@@ -39,8 +38,7 @@ public class EssentialsHelp extends PlayerListener
 	public void registerEvents()
 	{
 		final PluginManager pluginManager = server.getPluginManager();
-		pluginManager.registerEvent(Type.PLAYER_QUIT, this, Priority.Low, plugin);
-		pluginManager.registerEvent(Type.PLAYER_CHAT, this, Priority.Low, plugin);
+		pluginManager.registerEvents(this, plugin);
 	}
 
 	public void onCommand(final CommandSender sender)
@@ -155,18 +153,17 @@ public class EssentialsHelp extends PlayerListener
 		ircBot = new IrcBot(player, "Ess_" + player.getName(), UsernameUtil.createUsername(player));
 	}
 
-	@Override
+	@EventHandler
 	public void onPlayerChat(final PlayerChatEvent event)
 	{
 		if (event.getPlayer() == chatUser)
 		{
 			final boolean success = sendChatMessage(event.getPlayer(), event.getMessage());
 			event.setCancelled(success);
-			return;
 		}
 	}
 
-	@Override
+	@EventHandler
 	public void onPlayerQuit(final PlayerQuitEvent event)
 	{
 		closeConnection();

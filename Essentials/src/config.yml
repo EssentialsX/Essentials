@@ -291,8 +291,8 @@ sethome-multiple:
   # essentials.sethome.multiple.staff
   staff: 10
 
-#Set timeout in seconds for players to accept tpa before request is cancelled.
-#Set to 0 for no timeout
+# Set timeout in seconds for players to accept tpa before request is cancelled.
+# Set to 0 for no timeout
 tpa-accept-cancellation: 0
 
 ############################################################
@@ -313,7 +313,7 @@ command-costs:
   #example: 1000
   # /kit tools costs $1500 PER USE
   #kit-tools: 1500
- 
+
 # Set this to a currency symbol you want to use.
 currency-symbol: '$'
 
@@ -346,22 +346,22 @@ hide-permissionless-help: true
 ############################################################
 
 chat:
-  
+
   # If EssentialsChat is installed, this will define how far a player's voice travels, in blocks.  Set to 0 to make all chat global.
   # Note that users with the "essentials.chat.spy" permission will hear everything, regardless of this setting.
   # Users with essentials.chat.shout can override this by prefixing text with an exclamation mark (!)
   # Or with essentials.chat.question can override this by prefixing text with a question mark (?)
   # You can add command costs for shout/question by adding chat-shout and chat-question to the command costs section."
   radius: 0
-  
+
   # Chat formatting can be done in two ways, you can either define a standard format for all chat
   # Or you can give a group specific chat format, to give some extra variation.
   # If set to the default chat format which "should" be compatible with ichat.
   # For more information of chat formatting, check out the wiki: http://ess.khhq.net/wiki/Chat_Formatting  
-  
+
   format: '<{DISPLAYNAME}> {MESSAGE}'
   #format: '&7[{GROUP}]&f {DISPLAYNAME}&7:&f {MESSAGE}'
-    
+
   group-formats:
   #  Default: '{WORLDNAME} {DISPLAYNAME}&7:&f {MESSAGE}'
   #  Admins: '{WORLDNAME} &c[{GROUP}]&f {DISPLAYNAME}&7:&c {MESSAGE}'
@@ -400,13 +400,13 @@ protect:
 
     # Which blocks should people be prevented from placing
     placement: 10,11,46,327
-    
+
     # Which items should people be prevented from using
     usage: 327
-    
+
     # Which blocks should people be prevented from breaking
     break:
-    
+
     # Which blocks should not be pushed by pistons
     piston:
 
@@ -460,12 +460,12 @@ protect:
       mushroom_cow: false
       magma_cube: false
       snowman: false
-  
+
   # Maximum height the creeper should explode. -1 allows them to explode everywhere.
   # Set prevent.creeper-explosion to true, if you want to disable creeper explosions.
   creeper:
     max-height: -1
-  
+
   # Protect various blocks.
   protect:
     # Protect all signs
@@ -481,7 +481,7 @@ protect:
 
     # Prevent placing blocks above protected rails, this is to stop a potential griefing
     prevent-block-on-rails: false
-    
+
     # Store blocks / signs in memory before writing
     memstore: false
 
@@ -510,14 +510,14 @@ protect:
 
     # Burn, baby, burn!  Should fire damage be disabled?
     firedmg: false
-    
+
     # Should the damage after hit by a lightning be disabled?
     lightning: false
 
     # Should people with build: false in permissions be allowed to build
     # Set true to disable building for those people
     build: true
-    
+
     # Should people with build: false in permissions be allowed to use items
     # Set true to disable using for those people
     use: true
@@ -544,7 +544,7 @@ newbies:
   # If not, set to ''
   #announce-format: ''
   announce-format: '&dWelcome {DISPLAYNAME}&d to the server!'
-  
+
   # When we spawn for the first time, which spawnpoint do we use?
   # Set to "none" if you want to use the spawn point of the world.
   spawnpoint: newbies

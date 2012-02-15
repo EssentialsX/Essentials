@@ -654,4 +654,16 @@ public class FakeServer implements Server
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
+	@Override
+	public int getTicksPerAnimalSpawns()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public int getTicksPerMonsterSpawns()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }
