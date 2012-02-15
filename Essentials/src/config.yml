@@ -40,7 +40,7 @@ change-displayname: true
 # The value of change-displayname (above) has to be true.
 # If you don't set this, it will default to true if essentials chat is installed.
 # Don't forget to remove the # infront of the line
-# add-prefix-suffix: false
+#add-prefix-suffix: false
 
 # The delay, in seconds, required between /home, /tp, etc.
 teleport-cooldown: 0
