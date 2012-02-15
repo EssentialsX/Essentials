@@ -346,7 +346,7 @@ public class BukkitPermissions {
 	/**
 	 * Player events tracked to cause Superperms updates
 	 * 
-	 * @author Steve
+	 * @author ElgarL
 	 *
 	 */
 	protected class PlayerEvents implements Listener {
