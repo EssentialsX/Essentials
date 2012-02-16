@@ -20,5 +20,6 @@ public class Commandback extends EssentialsCommand
 		charge.isAffordableFor(user);
 		user.sendMessage(_("backUsageMsg"));
 		user.getTeleport().back(charge);
+		throw new NoChargeException();
 	}
 }
