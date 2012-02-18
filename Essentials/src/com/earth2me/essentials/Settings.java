@@ -330,7 +330,7 @@ public class Settings implements ISettings
 	@Override
 	public IText getAnnounceNewPlayerFormat()
 	{
-		return new SimpleTextInput(config.getString("newbies.announce-format", "&dWelcome {DISPLAYNAME} to the server!"));		
+		return new SimpleTextInput(Util.replaceColor(config.getString("newbies.announce-format", "&dWelcome {DISPLAYNAME} to the server!")));		
 	}
 
 	@Override
