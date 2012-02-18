@@ -4,6 +4,10 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.signs.Signs;
+import com.earth2me.essentials.textreader.IText;
+import com.earth2me.essentials.textreader.KeywordReplacer;
+import com.earth2me.essentials.textreader.SimpleTextInput;
+import com.earth2me.essentials.textreader.SimpleTextPager;
 import java.io.File;
 import java.text.MessageFormat;
 import java.util.*;
@@ -324,15 +328,9 @@ public class Settings implements ISettings
 	}
 
 	@Override
-	public String getAnnounceNewPlayerFormat(IUser user)
+	public IText getAnnounceNewPlayerFormat()
 	{
-		return format(config.getString("newbies.announce-format", "&dWelcome {DISPLAYNAME} to the server!"), user);
-	}
-
-	@Override
-	public String format(String format, IUser user)
-	{
-		return format.replace('&', '§').replace("§§", "&").replace("{PLAYER}", user.getDisplayName()).replace("{DISPLAYNAME}", user.getDisplayName()).replace("{GROUP}", user.getGroup()).replace("{USERNAME}", user.getName()).replace("{ADDRESS}", user.getAddress().toString());
+		return new SimpleTextInput(config.getString("newbies.announce-format", "&dWelcome {DISPLAYNAME} to the server!"));		
 	}
 
 	@Override
@@ -362,19 +360,19 @@ public class Settings implements ISettings
 		itemSpawnBl = getItemSpawnBlacklist();
 		chatFormats.clear();
 	}
-
 	private List<Integer> itemSpawnBl = new ArrayList<Integer>();
-	
+
 	@Override
 	public List<Integer> itemSpawnBlacklist()
 	{
 		return itemSpawnBl;
 	}
-	
+
 	private List<Integer> getItemSpawnBlacklist()
 	{
 		final List<Integer> epItemSpwn = new ArrayList<Integer>();
-		if (ess.getItemDb() == null) {
+		if (ess.getItemDb() == null)
+		{
 			logger.log(Level.FINE, "Aborting ItemSpawnBL read, itemDB not yet loaded.");
 			return epItemSpwn;
 		}
@@ -384,7 +382,7 @@ public class Settings implements ISettings
 			if (itemName.isEmpty())
 			{
 				continue;
-			}		
+			}
 			try
 			{
 				final ItemStack iStack = ess.getItemDb().get(itemName);
@@ -397,19 +395,18 @@ public class Settings implements ISettings
 		}
 		return epItemSpwn;
 	}
-	
 	private List<EssentialsSign> enabledSigns = new ArrayList<EssentialsSign>();
-	
+
 	@Override
 	public List<EssentialsSign> enabledSigns()
 	{
 		return enabledSigns;
 	}
-	
+
 	private List<EssentialsSign> getEnabledSigns()
 	{
 		List<EssentialsSign> newSigns = new ArrayList<EssentialsSign>();
-		
+
 		for (String signName : config.getStringList("enabledSigns", null))
 		{
 			signName = signName.trim().toUpperCase(Locale.ENGLISH);
@@ -604,7 +601,6 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("death-messages", true);
 	}
-	
 	private Set<String> noGodWorlds = new HashSet<String>();
 
 	@Override
