@@ -141,3 +141,4 @@ v 1.9:
 	- Change Service registration to register WorldsHolder instead of AnjoPermissionsHandler. This is the correct entry point for all data.
 	- Depreciate PlayerTeleportEvent, PlayerRespawnEvent and PlayerPortalEvent as it's all handled in PlayerChangedWorldEvent.
 	  This also means we no longer update permissions before we change worlds.
+	- A command of '/manload' with no world arguments now performs a full reload of GM.
