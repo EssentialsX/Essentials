@@ -158,12 +158,13 @@ public class PermissionsHandler implements IPermissionsHandler
 				}
 				return;
 			}
-			if (!(handler instanceof SuperpermsHandler))
+			if (!(handler instanceof BPermissions2Handler))
 			{
-				LOGGER.log(Level.INFO, "Essentials: bPermissions api broken, switching to superperms based permissions.");
-				handler = new SuperpermsHandler();
+				LOGGER.log(Level.INFO, "Essentials: Using bPermissions2 based permissions.");
+				handler = new BPermissions2Handler();
 			}
 			return;
+
 		}
 		final Plugin permPlugin = pluginManager.getPlugin("Permissions");
 		if (permPlugin != null && permPlugin.isEnabled())
