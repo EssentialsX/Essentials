@@ -1,5 +1,6 @@
 package com.earth2me.essentials.perm;
 
+import com.earth2me.essentials.Util;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
@@ -111,17 +112,6 @@ public class PermissionsHandler implements IPermissionsHandler
 			return;
 		}
 
-		final Plugin bPermPlugin = pluginManager.getPlugin("bPermissions");
-		if (bPermPlugin != null && bPermPlugin.isEnabled())
-		{
-			if (!(handler instanceof BPermissionsHandler))
-			{
-				LOGGER.log(Level.INFO, "Essentials: Using bPermissions based permissions.");
-				handler = new BPermissionsHandler();
-			}
-			return;
-		}
-
 		final Plugin GMplugin = pluginManager.getPlugin("GroupManager");
 		if (GMplugin != null && GMplugin.isEnabled())
 		{
@@ -155,6 +145,27 @@ public class PermissionsHandler implements IPermissionsHandler
 			return;
 		}
 
+		final Plugin bPermPlugin = pluginManager.getPlugin("bPermissions");
+		if (bPermPlugin != null && bPermPlugin.isEnabled())
+		{
+			final String bVer = bPermPlugin.getDescription().getVersion().replace(".", "");
+			if (Util.isInt(bVer) && Integer.parseInt(bVer) < 284)
+			{
+				if (!(handler instanceof BPermissionsHandler))
+				{
+					LOGGER.log(Level.INFO, "Essentials: Using bPermissions based permissions.");
+					handler = new BPermissionsHandler();
+				}
+				return;
+			}
+			if (!(handler instanceof BPermissions2Handler))
+			{
+				LOGGER.log(Level.INFO, "Essentials: Using bPermissions2 based permissions.");
+				handler = new BPermissions2Handler();
+			}
+			return;
+
+		}
 		final Plugin permPlugin = pluginManager.getPlugin("Permissions");
 		if (permPlugin != null && permPlugin.isEnabled())
 		{

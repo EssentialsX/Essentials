@@ -2,6 +2,7 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.signs.EssentialsSign;
+import com.earth2me.essentials.textreader.IText;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
@@ -14,9 +15,7 @@ public interface ISettings extends IConf
 {
 	boolean areSignsDisabled();
 
-	String format(String format, IUser user);
-
-	String getAnnounceNewPlayerFormat(IUser user);
+	IText getAnnounceNewPlayerFormat();
 
 	boolean getAnnounceNewPlayers();
 
@@ -35,7 +34,7 @@ public interface ISettings extends IConf
 	String getCurrencySymbol();
 
 	int getOversizedStackSize();
-	
+
 	int getDefaultStackSize();
 
 	double getHealCooldown();
@@ -101,7 +100,7 @@ public interface ISettings extends IConf
 	boolean isTradeInStacks(int id);
 
 	List<Integer> itemSpawnBlacklist();
-	
+
 	List<EssentialsSign> enabledSigns();
 
 	boolean permissionBasedItemSpawn();
@@ -143,18 +142,18 @@ public interface ISettings extends IConf
 	public void setDebug(boolean debug);
 
 	Set<String> getNoGodWorlds();
-	
+
 	boolean getUpdateBedAtDaytime();
-	
+
 	boolean getRepairEnchanted();
-	
+
 	boolean getIsWorldTeleportPermissions();
-	
+
 	boolean registerBackInListener();
 
 	boolean getDisableItemPickupWhileAfk();
 
 	EventPriority getRespawnPriority();
-	
+
 	long getTpaAcceptCancellation();
 }
