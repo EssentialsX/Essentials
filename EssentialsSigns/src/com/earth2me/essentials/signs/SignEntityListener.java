@@ -13,10 +13,12 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 public class SignEntityListener implements Listener
 {
 	private final transient IEssentials ess;
+	private final transient ISignsPlugin plugin;
 
-	public SignEntityListener(final IEssentials ess)
+	public SignEntityListener(final IEssentials ess, final ISignsPlugin plugin)
 	{
 		this.ess = ess;
+		this.plugin = plugin;
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
@@ -32,7 +34,7 @@ public class SignEntityListener implements Listener
 				event.setCancelled(true);
 				return;
 			}
-			for (EssentialsSign sign : ess.getSettings().enabledSigns())
+			for (EssentialsSign sign : plugin.getSettings().getEnabledSigns())
 			{
 				if (sign.getBlocks().contains(block.getType()))
 				{
@@ -60,7 +62,7 @@ public class SignEntityListener implements Listener
 			event.setCancelled(true);
 			return;
 		}
-		for (EssentialsSign sign : ess.getSettings().enabledSigns())
+		for (EssentialsSign sign : plugin.getSettings().getEnabledSigns())
 		{
 			if (sign.getBlocks().contains(block.getType())
 				&& !sign.onBlockBreak(block, ess))

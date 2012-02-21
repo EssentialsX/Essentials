@@ -17,11 +17,13 @@ import org.bukkit.event.block.*;
 public class SignBlockListener implements Listener
 {
 	private final transient IEssentials ess;
+	private final transient ISignsPlugin plugin;
 	private final static Logger LOGGER = Logger.getLogger("Minecraft");
 
-	public SignBlockListener(final IEssentials ess)
+	public SignBlockListener(final IEssentials ess, final ISignsPlugin plugin)
 	{
 		this.ess = ess;
+		this.plugin = plugin;
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -45,7 +47,7 @@ public class SignBlockListener implements Listener
 		{
 			final Sign csign = (Sign)block.getState();
 
-			for (EssentialsSign sign : ess.getSettings().enabledSigns())
+			for (EssentialsSign sign : plugin.getSettings().getEnabledSigns())
 			{
 				if (csign.getLine(0).equalsIgnoreCase(sign.getSuccessName())
 					&& !sign.onSignBreak(block, player, ess))
@@ -62,7 +64,7 @@ public class SignBlockListener implements Listener
 				LOGGER.log(Level.INFO, "Prevented that a block was broken next to a sign.");
 				return true;
 			}
-			for (EssentialsSign sign : ess.getSettings().enabledSigns())
+			for (EssentialsSign sign : plugin.getSettings().getEnabledSigns())
 			{
 				if (sign.getBlocks().contains(block.getType())
 					&& !sign.onBlockBreak(block, player, ess))
@@ -158,7 +160,7 @@ public class SignBlockListener implements Listener
 			event.setCancelled(true);
 			return;
 		}
-		for (EssentialsSign sign : ess.getSettings().enabledSigns())
+		for (EssentialsSign sign : plugin.getSettings().getEnabledSigns())
 		{
 			if (sign.getBlocks().contains(block.getType())
 				&& !sign.onBlockBurn(block, ess))
@@ -186,7 +188,7 @@ public class SignBlockListener implements Listener
 			event.setCancelled(true);
 			return;
 		}
-		for (EssentialsSign sign : ess.getSettings().enabledSigns())
+		for (EssentialsSign sign : plugin.getSettings().getEnabledSigns())
 		{
 			if (sign.getBlocks().contains(block.getType())
 				&& !sign.onBlockIgnite(block, ess))
@@ -210,7 +212,7 @@ public class SignBlockListener implements Listener
 				event.setCancelled(true);
 				return;
 			}
-			for (EssentialsSign sign : ess.getSettings().enabledSigns())
+			for (EssentialsSign sign : plugin.getSettings().getEnabledSigns())
 			{
 				if (sign.getBlocks().contains(block.getType())
 					&& !sign.onBlockPush(block, ess))
@@ -236,7 +238,7 @@ public class SignBlockListener implements Listener
 				event.setCancelled(true);
 				return;
 			}
-			for (EssentialsSign sign : ess.getSettings().enabledSigns())
+			for (EssentialsSign sign : plugin.getSettings().getEnabledSigns())
 			{
 				if (sign.getBlocks().contains(block.getType())
 					&& !sign.onBlockPush(block, ess))
