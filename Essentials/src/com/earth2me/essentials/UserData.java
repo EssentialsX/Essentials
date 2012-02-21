@@ -2,7 +2,6 @@ package com.earth2me.essentials;
 
 import java.io.File;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -95,7 +94,10 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	private Map<String, Object> _getHomes()
 	{
-		return config.getConfigurationSection("homes").getValues(false);		
+		if (config.isConfigurationSection("homes")) {
+			return config.getConfigurationSection("homes").getValues(false);		
+		}
+		return new HashMap<String, Object>();
 	}
 
 	public Location getHome(String name) throws Exception
@@ -145,7 +147,6 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	public List<String> getHomes()
 	{
-		ess.getLogger().log(Level.INFO, "player " + this.getName() + " homecount: " + homes.size());
 		return new ArrayList(homes.keySet());
 	}
 
