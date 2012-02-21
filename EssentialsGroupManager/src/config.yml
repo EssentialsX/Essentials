@@ -4,10 +4,6 @@ settings:
     # The user will be able to promote players to the same group or even above.
     opOverrides: true
     
-    # If enabled any bukkit permissiosn which default to true will be left enabled.
-    # If the player is op any permissions set to Op will follow suit.
-    bukkit_perms_override: true
-    
     # Default setting for 'mantoglevalidate'
     # true will cause GroupManager to attempt name matching by default.
     validate_toggle: true

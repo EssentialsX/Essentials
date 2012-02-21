@@ -57,9 +57,6 @@ public class GMConfiguration {
     public boolean isOpOverride() {
     	return GMconfig.getBoolean("settings.config.opOverrides", true);
     }
-    public boolean isBukkitPermsOverride() {
-    	return GMconfig.getBoolean("settings.config.bukkit_perms_override", false);
-    }
     public boolean isToggleValidate() {
     	return GMconfig.getBoolean("settings.config.validate_toggle", true);
     }
