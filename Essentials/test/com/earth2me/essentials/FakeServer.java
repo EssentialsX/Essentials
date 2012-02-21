@@ -14,6 +14,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.map.MapView;
 import org.bukkit.plugin.Plugin;
@@ -250,7 +251,6 @@ public class FakeServer implements Server
 		return worlds;
 	}
 
-	@Override
 	public World createWorld(String string, Environment e)
 	{
 		World w = new FakeWorld(string, e);
@@ -258,7 +258,6 @@ public class FakeServer implements Server
 		return w;
 	}
 
-	@Override
 	public World createWorld(String string, Environment e, long l)
 	{
 		World w = new FakeWorld(string, e);
@@ -329,18 +328,6 @@ public class FakeServer implements Server
 		OfflinePlayer player = new OfflinePlayer(name, ess);
 		player.setLocation(new Location(worlds.get(0), 0, 0, 0, 0, 0));
 		return player;
-	}
-
-	@Override
-	public World createWorld(String string, Environment e, ChunkGenerator cg)
-	{
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
-
-	@Override
-	public World createWorld(String string, Environment e, long l, ChunkGenerator cg)
-	{
-		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override
@@ -663,6 +650,30 @@ public class FakeServer implements Server
 
 	@Override
 	public int getTicksPerMonsterSpawns()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public List<Recipe> getRecipesFor(ItemStack is)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public Iterator<Recipe> recipeIterator()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void clearRecipes()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void resetRecipes()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}

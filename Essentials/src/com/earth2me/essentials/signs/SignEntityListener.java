@@ -6,7 +6,7 @@ import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EndermanPickupEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
 
@@ -44,7 +44,7 @@ public class SignEntityListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
-	public void onEndermanPickup(final EndermanPickupEvent event)
+	public void onEntityChangeBlock(final EntityChangeBlockEvent event)
 	{
 		if (event.isCancelled() || ess.getSettings().areSignsDisabled())
 		{

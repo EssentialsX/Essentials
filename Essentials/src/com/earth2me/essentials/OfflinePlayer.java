@@ -667,18 +667,6 @@ public class OfflinePlayer implements Player
 	}
 
 	@Override
-	public int getExperience()
-	{
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
-
-	@Override
-	public void setExperience(int i)
-	{
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
-
-	@Override
 	public int getLevel()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");

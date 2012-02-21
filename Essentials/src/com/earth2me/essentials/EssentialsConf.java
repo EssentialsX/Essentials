@@ -3,7 +3,6 @@ package com.earth2me.essentials;
 import static com.earth2me.essentials.I18n._;
 import java.io.*;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
@@ -12,12 +11,14 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.config.Configuration;
 
 
-public class EssentialsConf extends Configuration
+public class EssentialsConf extends YamlConfiguration
 {
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private transient File configFile;
@@ -26,15 +27,10 @@ public class EssentialsConf extends Configuration
 
 	public EssentialsConf(final File configFile)
 	{
-		super(configFile);
+		super();
 		this.configFile = configFile;
-		if (this.root == null)
-		{
-			this.root = new HashMap<String, Object>();
-		}
 	}
 
-	@Override
 	public void load()
 	{
 		configFile = configFile.getAbsoluteFile();
@@ -105,20 +101,24 @@ public class EssentialsConf extends Configuration
 			}
 		}
 
+
 		try
 		{
-			super.load();
+			super.load(configFile);
 		}
-		catch (RuntimeException e)
-		{		
+		catch (FileNotFoundException ex)
+		{
+			LOGGER.log(Level.SEVERE, null, ex);
+		}
+		catch (IOException ex)
+		{
+			LOGGER.log(Level.SEVERE, null, ex);
+		}
+		catch (InvalidConfigurationException ex)
+		{
 			File broken = new File(configFile.getAbsolutePath() + ".broken." + System.currentTimeMillis());
 			configFile.renameTo(broken);
-			LOGGER.log(Level.SEVERE, "The file " + configFile.toString() + " is broken, it has been renamed to " + broken.toString(), e.getCause());			
-		}
-
-		if (this.root == null)
-		{
-			this.root = new HashMap<String, Object>();
+			LOGGER.log(Level.SEVERE, "The file " + configFile.toString() + " is broken, it has been renamed to " + broken.toString(), ex.getCause());
 		}
 	}
 
@@ -193,7 +193,7 @@ public class EssentialsConf extends Configuration
 
 	public boolean hasProperty(final String path)
 	{
-		return getProperty(path) != null;
+		return isSet(path);
 	}
 
 	public Location getLocation(final String path, final Server server) throws Exception
@@ -218,24 +218,25 @@ public class EssentialsConf extends Configuration
 
 	public void setProperty(final String path, final Location loc)
 	{
-		setProperty((path == null ? "" : path + ".") + "world", loc.getWorld().getName());
-		setProperty((path == null ? "" : path + ".") + "x", loc.getX());
-		setProperty((path == null ? "" : path + ".") + "y", loc.getY());
-		setProperty((path == null ? "" : path + ".") + "z", loc.getZ());
-		setProperty((path == null ? "" : path + ".") + "yaw", loc.getYaw());
-		setProperty((path == null ? "" : path + ".") + "pitch", loc.getPitch());
+		set((path == null ? "" : path + ".") + "world", loc.getWorld().getName());
+		set((path == null ? "" : path + ".") + "x", loc.getX());
+		set((path == null ? "" : path + ".") + "y", loc.getY());
+		set((path == null ? "" : path + ".") + "z", loc.getZ());
+		set((path == null ? "" : path + ".") + "yaw", loc.getYaw());
+		set((path == null ? "" : path + ".") + "pitch", loc.getPitch());
 	}
 
+	@Override
 	public ItemStack getItemStack(final String path)
 	{
 		final ItemStack stack = new ItemStack(
 				Material.valueOf(getString(path + ".type", "AIR")),
 				getInt(path + ".amount", 1),
 				(short)getInt(path + ".damage", 0));
-		final List<String> enchants = getKeys(path + ".enchant");
+		final ConfigurationSection enchants = getConfigurationSection(path + ".enchant");
 		if (enchants != null)
 		{
-			for (String enchant : enchants)
+			for (String enchant : enchants.getKeys(false))
 			{
 				final Enchantment enchantment = Enchantment.getByName(enchant.toUpperCase(Locale.ENGLISH));
 				if (enchantment == null)
@@ -271,14 +272,14 @@ public class EssentialsConf extends Configuration
 		}
 		// getData().getData() is broken
 		//map.put("data", stack.getDurability());
-		setProperty(path, map);
+		set(path, map);
 	}
 
 	public long getLong(final String path, final long def)
 	{
 		try
 		{
-			final Number num = (Number)getProperty(path);
+			final Number num = (Number)get(path);
 			return num == null ? def : num.longValue();
 		}
 		catch (ClassCastException ex)
@@ -292,12 +293,35 @@ public class EssentialsConf extends Configuration
 	{
 		try
 		{
-			Number num = (Number)getProperty(path);
+			Number num = (Number)get(path);
 			return num == null ? def : num.doubleValue();
 		}
 		catch (ClassCastException ex)
 		{
 			return def;
 		}
+	}
+	
+	public void save() {
+		try
+		{
+			save(configFile);
+		}
+		catch (IOException ex)
+		{
+			LOGGER.log(Level.SEVERE, null, ex);
+		}
+	}
+	
+	public Object getProperty(String path) {
+		return get(path);
+	}
+	
+	public void setProperty(String path, Object object) {
+		set(path, object);
+	}
+	
+	public void removeProperty(String path) {
+		set(path, null);
 	}
 }

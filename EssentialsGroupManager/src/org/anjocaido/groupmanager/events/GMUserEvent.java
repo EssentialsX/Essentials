@@ -37,7 +37,7 @@ public class GMUserEvent extends Event {
     protected Action action;
 
     public GMUserEvent(User user, Action action) {
-        super(action.toString());
+        super();
 
         this.user = user;
         this.action = action;
@@ -45,7 +45,7 @@ public class GMUserEvent extends Event {
     }
     
     public GMUserEvent(String userName, Action action) {
-        super(action.toString());
+        super();
 
         this.userName = userName;
         this.action = action;

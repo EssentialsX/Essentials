@@ -856,7 +856,7 @@ public class WorldDataHolder {
         PluginManager pm = server.getPluginManager();
         Plugin[] plugins = pm.getPlugins();
         for (int i = 0; i < plugins.length; i++) {
-            plugins[i].getConfiguration().load();
+            //plugins[i].getConfiguration().load();
             try {
                 plugins[i].getClass().getMethod("setupPermissions").invoke(plugins[i]);
             } catch (Exception ex) {

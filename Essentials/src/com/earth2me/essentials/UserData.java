@@ -209,7 +209,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	private List<Integer> _getUnlimited()
 	{
-		return config.getIntList("unlimited", new ArrayList<Integer>());
+		return config.getIntegerList("unlimited");
 	}
 
 	public List<Integer> getUnlimited()
@@ -383,7 +383,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	private List<String> _getMails()
 	{
-		return config.getStringList("mail", new ArrayList<String>());
+		return config.getStringList("mail");
 	}
 
 	public List<String> getMails()
@@ -491,7 +491,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	public List<String> getIgnoredPlayers()
 	{
-		return config.getStringList("ignore", new ArrayList<String>());
+		return config.getStringList("ignore");
 	}
 
 	public void setIgnoredPlayers(List<String> players)

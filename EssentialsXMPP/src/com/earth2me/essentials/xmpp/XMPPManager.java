@@ -183,7 +183,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 		if (config.getBoolean("log-enabled", false))
 		{
 			LOGGER.addHandler(this);
-			logUsers = config.getStringList("log-users", new ArrayList<String>());
+			logUsers = config.getStringList("log-users");
 			final String level = config.getString("log-level", "info");
 			try
 			{
@@ -351,7 +351,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 
 	private void sendCommand(final Chat chat, final String message)
 	{
-		if (config.getStringList("op-users", new ArrayList<String>()).contains(StringUtils.parseBareAddress(chat.getParticipant())))
+		if (config.getStringList("op-users").contains(StringUtils.parseBareAddress(chat.getParticipant())))
 		{
 			try
 			{

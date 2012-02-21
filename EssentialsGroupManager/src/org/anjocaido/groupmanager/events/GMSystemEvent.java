@@ -32,7 +32,7 @@ public class GMSystemEvent extends Event {
 	protected Action action;
     
     public GMSystemEvent(Action action) {
-        super(action.toString());
+        super();
         
         this.action = action;
     }

@@ -328,7 +328,7 @@ public class EssentialsProtectEntityListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onEndermanPickup(EndermanPickupEvent event)
+	public void onEntityChangeBlock(EntityChangeBlockEvent event)
 	{
 		if (event.isCancelled())
 		{

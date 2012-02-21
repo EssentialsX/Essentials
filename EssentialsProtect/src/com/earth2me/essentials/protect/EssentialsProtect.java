@@ -9,8 +9,6 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -65,21 +63,8 @@ public class EssentialsProtect extends JavaPlugin implements IProtect
 
 	private void enableEmergencyMode(final PluginManager pm)
 	{
-		//final EmergencyListener emListener = new EmergencyListener();
-		//pm.registerEvents(emListener, this);
-		
-		//TODO: Remove deprecated listners in a few weeks.
-		
-		final EmergencyBlockListener emBlockListener = new EmergencyBlockListener();
-		final EmergencyEntityListener emEntityListener = new EmergencyEntityListener();
-		final EmergencyPlayerListener emPlayerListener = new EmergencyPlayerListener();
-		pm.registerEvent(Type.PLAYER_JOIN, emPlayerListener, Priority.Low, this);
-		pm.registerEvent(Type.BLOCK_BURN, emBlockListener, Priority.Low, this);
-		pm.registerEvent(Type.BLOCK_IGNITE, emBlockListener, Priority.Low, this);
-		pm.registerEvent(Type.BLOCK_FROMTO, emBlockListener, Priority.Low, this);
-		pm.registerEvent(Type.BLOCK_BREAK, emBlockListener, Priority.Low, this);
-		pm.registerEvent(Type.ENTITY_DAMAGE, emEntityListener, Priority.Low, this);
-		pm.registerEvent(Type.ENTITY_EXPLODE, emEntityListener, Priority.Low, this);
+		final EmergencyListener emListener = new EmergencyListener();
+		pm.registerEvents(emListener, this);
 		
 		for (Player player : getServer().getOnlinePlayers())
 		{
