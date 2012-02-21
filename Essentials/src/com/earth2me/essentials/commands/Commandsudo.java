@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
@@ -36,7 +37,7 @@ public class Commandsudo extends EssentialsCommand
 		}
 
 		//TODO: Translate this.
-		sender.sendMessage("Forcing " + user.getDisplayName() + " to run: /" + command + " " + arguments);
+		sender.sendMessage("Forcing " + user.getDisplayName() + " to run: /" + command + " " + getFinalArg(arguments, 0));
 
 		final PluginCommand execCommand = ess.getServer().getPluginCommand(command);
 		if (execCommand != null)
