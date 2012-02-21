@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.Cleanup;
 import org.bukkit.Location;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -113,9 +114,25 @@ public class Trade
 			if (dropItems)
 			{
 				final Map<Integer, ItemStack> leftOver = InventoryWorkaround.addItem(user.getInventory(), true, getItemStack());
+				final Location loc = user.getLocation();
 				for (ItemStack itemStack : leftOver.values())
 				{
-					InventoryWorkaround.dropItem(user.getLocation(), itemStack);
+					final int maxStackSize = itemStack.getType().getMaxStackSize();
+					final int stacks = itemStack.getAmount() / maxStackSize;
+					final int leftover = itemStack.getAmount() % maxStackSize;
+					final Item[] itemStacks = new Item[stacks + (leftover > 0 ? 1 : 0)];
+					for (int i = 0; i < stacks; i++)
+					{
+						final ItemStack stack = itemStack.clone();
+						stack.setAmount(maxStackSize);
+						itemStacks[i] = loc.getWorld().dropItem(loc, stack);
+					}
+					if (leftover > 0)
+					{
+						final ItemStack stack = itemStack.clone();
+						stack.setAmount(leftover);
+						itemStacks[stacks] = loc.getWorld().dropItem(loc, stack);
+					}
 				}
 			}
 			else

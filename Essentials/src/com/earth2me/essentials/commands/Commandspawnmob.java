@@ -9,6 +9,7 @@ import com.earth2me.essentials.api.IUser;
 import com.earth2me.essentials.perm.SpawnmobPermissions;
 import java.util.Locale;
 import java.util.Random;
+import java.util.Set;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -22,7 +23,19 @@ public class Commandspawnmob extends EssentialsCommand
 	{
 		if (args.length < 1)
 		{
-			throw new NotEnoughArgumentsException(_("mobsAvailable", Util.joinList(Mob.getMobList())));
+			Set<String> availableList = Mob.getMobList();
+			for (String mob : availableList)
+			{
+				if (!SpawnmobPermissions.getPermission(mob).isAuthorized(user))
+				{
+					availableList.remove(mob);
+				}
+			}
+			if (availableList.isEmpty())
+			{
+				availableList.add(_("none"));
+			}
+			throw new NotEnoughArgumentsException(_("mobsAvailable", Util.joinList(availableList)));
 		}
 
 

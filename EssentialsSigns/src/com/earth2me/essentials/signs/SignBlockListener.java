@@ -44,9 +44,9 @@ public class SignBlockListener implements Listener
 		if (mat == Material.SIGN_POST.getId() || mat == Material.WALL_SIGN.getId())
 		{
 			final Sign csign = (Sign)block.getState();
-			for (Signs signs : Signs.values())
+
+			for (EssentialsSign sign : ess.getSettings().enabledSigns())
 			{
-				final EssentialsSign sign = signs.getSign();
 				if (csign.getLine(0).equalsIgnoreCase(sign.getSuccessName())
 					&& !sign.onSignBreak(block, player, ess))
 				{
@@ -62,9 +62,8 @@ public class SignBlockListener implements Listener
 				LOGGER.log(Level.INFO, "Prevented that a block was broken next to a sign.");
 				return true;
 			}
-			for (Signs signs : Signs.values())
+			for (EssentialsSign sign : ess.getSettings().enabledSigns())
 			{
-				final EssentialsSign sign = signs.getSign();
 				if (sign.getBlocks().contains(block.getType())
 					&& !sign.onBlockBreak(block, player, ess))
 				{
@@ -159,9 +158,8 @@ public class SignBlockListener implements Listener
 			event.setCancelled(true);
 			return;
 		}
-		for (Signs signs : Signs.values())
+		for (EssentialsSign sign : ess.getSettings().enabledSigns())
 		{
-			final EssentialsSign sign = signs.getSign();
 			if (sign.getBlocks().contains(block.getType())
 				&& !sign.onBlockBurn(block, ess))
 			{
@@ -188,9 +186,8 @@ public class SignBlockListener implements Listener
 			event.setCancelled(true);
 			return;
 		}
-		for (Signs signs : Signs.values())
+		for (EssentialsSign sign : ess.getSettings().enabledSigns())
 		{
-			final EssentialsSign sign = signs.getSign();
 			if (sign.getBlocks().contains(block.getType())
 				&& !sign.onBlockIgnite(block, ess))
 			{
@@ -213,9 +210,8 @@ public class SignBlockListener implements Listener
 				event.setCancelled(true);
 				return;
 			}
-			for (Signs signs : Signs.values())
+			for (EssentialsSign sign : ess.getSettings().enabledSigns())
 			{
-				final EssentialsSign sign = signs.getSign();
 				if (sign.getBlocks().contains(block.getType())
 					&& !sign.onBlockPush(block, ess))
 				{
@@ -240,9 +236,8 @@ public class SignBlockListener implements Listener
 				event.setCancelled(true);
 				return;
 			}
-			for (Signs signs : Signs.values())
+			for (EssentialsSign sign : ess.getSettings().enabledSigns())
 			{
-				final EssentialsSign sign = signs.getSign();
 				if (sign.getBlocks().contains(block.getType())
 					&& !sign.onBlockPush(block, ess))
 				{

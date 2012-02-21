@@ -10,6 +10,7 @@ import com.earth2me.essentials.perm.WarpPermissions;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
@@ -61,7 +62,7 @@ public class Commandwarp extends EssentialsCommand
 		{
 			throw new Exception(_("playerNotFound"));
 		}
-		warpUser(otherUser, args[0]);
+		otherUser.getTeleport().warp(args[0], null, TeleportCause.COMMAND);
 		throw new NoChargeException();
 
 	}
@@ -110,9 +111,8 @@ public class Commandwarp extends EssentialsCommand
 
 	private void warpUser(final IUser user, final String name) throws Exception
 	{
-		final Trade charge = new Trade(commandName, ess);
+		final Trade charge = new Trade("warp-" + name.toLowerCase(Locale.ENGLISH).replace('_', '-'), ess);
 		charge.isAffordableFor(user);
-
 		if (WarpPermissions.getPermission(name).isAuthorized(user))
 		{
 			user.getTeleport().warp(name, charge, TeleportCause.COMMAND);

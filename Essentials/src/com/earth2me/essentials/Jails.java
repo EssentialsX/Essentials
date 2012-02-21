@@ -12,13 +12,16 @@ import java.util.logging.Logger;
 import lombok.Cleanup;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
-import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.plugin.PluginManager;
 
@@ -39,13 +42,8 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 		final PluginManager pluginManager = ess.getServer().getPluginManager();
 		final JailBlockListener blockListener = new JailBlockListener();
 		final JailPlayerListener playerListener = new JailPlayerListener();
-		pluginManager.registerEvent(Type.BLOCK_BREAK, blockListener, Priority.Low, ess);
-		pluginManager.registerEvent(Type.BLOCK_DAMAGE, blockListener, Priority.Low, ess);
-		pluginManager.registerEvent(Type.BLOCK_PLACE, blockListener, Priority.Low, ess);
-		pluginManager.registerEvent(Type.PLAYER_INTERACT, playerListener, Priority.Low, ess);
-		pluginManager.registerEvent(Type.PLAYER_RESPAWN, playerListener, Priority.Highest, ess);
-		pluginManager.registerEvent(Type.PLAYER_TELEPORT, playerListener, Priority.Highest, ess);
-		pluginManager.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Highest, ess);
+		pluginManager.registerEvents(blockListener, ess);
+		pluginManager.registerEvents(playerListener, ess);
 	}
 
 	@Override
@@ -160,9 +158,9 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 	}
 
 
-	private class JailBlockListener extends BlockListener
+	private class JailBlockListener implements Listener
 	{
-		@Override
+		@EventHandler(priority = EventPriority.LOW)
 		public void onBlockBreak(final BlockBreakEvent event)
 		{
 			@Cleanup
@@ -174,7 +172,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 			}
 		}
 
-		@Override
+		@EventHandler(priority = EventPriority.LOW)
 		public void onBlockPlace(final BlockPlaceEvent event)
 		{
 			@Cleanup
@@ -186,7 +184,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 			}
 		}
 
-		@Override
+		@EventHandler(priority = EventPriority.LOW)
 		public void onBlockDamage(final BlockDamageEvent event)
 		{
 			@Cleanup
@@ -200,9 +198,9 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 	}
 
 
-	private class JailPlayerListener extends PlayerListener
+	private class JailPlayerListener implements Listener
 	{
-		@Override
+		@EventHandler(priority = EventPriority.LOW)
 		public void onPlayerInteract(final PlayerInteractEvent event)
 		{
 			@Cleanup
@@ -214,7 +212,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 			}
 		}
 
-		@Override
+		@EventHandler(priority = EventPriority.HIGH)
 		public void onPlayerRespawn(final PlayerRespawnEvent event)
 		{
 			@Cleanup
@@ -231,11 +229,18 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 			}
 			catch (Exception ex)
 			{
-				LOGGER.log(Level.WARNING, _("returnPlayerToJailError"), ex);
+				if (ess.getSettings().isDebug())
+				{
+					LOGGER.log(Level.INFO, _("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
+				}
+				else
+				{
+					LOGGER.log(Level.INFO, _("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()));
+				}
 			}
 		}
 
-		@Override
+		@EventHandler(priority = EventPriority.HIGH)
 		public void onPlayerTeleport(final PlayerTeleportEvent event)
 		{
 			@Cleanup
@@ -252,12 +257,19 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 			}
 			catch (Exception ex)
 			{
-				LOGGER.log(Level.WARNING, _("returnPlayerToJailError"), ex);
+				if (ess.getSettings().isDebug())
+				{
+					LOGGER.log(Level.INFO, _("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
+				}
+				else
+				{
+					LOGGER.log(Level.INFO, _("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()));
+				}
 			}
 			user.sendMessage(_("jailMessage"));
 		}
 
-		@Override
+		@EventHandler(priority = EventPriority.HIGH)
 		public void onPlayerJoin(final PlayerJoinEvent event)
 		{
 			@Cleanup
@@ -274,7 +286,14 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 			}
 			catch (Exception ex)
 			{
-				LOGGER.log(Level.WARNING, _("returnPlayerToJailError"), ex);
+				if (ess.getSettings().isDebug())
+				{
+					LOGGER.log(Level.INFO, _("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
+				}
+				else
+				{
+					LOGGER.log(Level.INFO, _("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()));
+				}
 			}
 			user.sendMessage(_("jailMessage"));
 		}

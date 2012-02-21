@@ -27,15 +27,20 @@ import com.earth2me.essentials.user.UserMap;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -52,7 +57,7 @@ import org.yaml.snakeyaml.error.YAMLException;
 
 public class Essentials extends JavaPlugin implements IEssentials
 {
-	public static final int BUKKIT_VERSION = 1818;
+	public static final int BUKKIT_VERSION = 1952;
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private transient ISettings settings;
 	private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);

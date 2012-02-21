@@ -10,6 +10,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
@@ -73,8 +74,31 @@ public class EssentialsCommandHandler implements ICommandHandler
 			final PluginCommand pc = getAlternative(commandLabel);
 			if (pc != null)
 			{
+				
 				executed(commandLabel, pc.getLabel());
-				return pc.execute(sender, commandLabel, args);
+				try
+				{
+					return pc.execute(sender, commandLabel, args);
+				}
+				catch (final Exception ex)
+				{
+					final ArrayList<StackTraceElement> elements = new ArrayList<StackTraceElement>(Arrays.asList(ex.getStackTrace()));
+					elements.remove(0);
+					final ArrayList<StackTraceElement> toRemove = new ArrayList<StackTraceElement>();
+					for (final StackTraceElement e : elements)
+					{
+						if (e.getClassName().equals("com.earth2me.essentials.Essentials"))
+						{
+							toRemove.add(e);
+						}
+					}
+					elements.removeAll(toRemove);
+					final StackTraceElement[] trace = elements.toArray(new StackTraceElement[elements.size()]);
+					ex.setStackTrace(trace);
+					ex.printStackTrace();
+					sender.sendMessage(ChatColor.RED + "An internal error occurred while attempting to perform this command");
+					return true;
+				}
 			}
 		}
 

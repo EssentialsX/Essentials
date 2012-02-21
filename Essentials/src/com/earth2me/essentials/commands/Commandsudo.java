@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.perm.Permissions;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 
@@ -24,7 +25,13 @@ public class Commandsudo extends EssentialsCommand
 		}
 
 		//TODO: Translate this.
-		sender.sendMessage("Running the command as " + user.getDisplayName());
+		if (Permissions.SUDO_EXEMPT.isAuthorized(user))
+		{
+			throw new Exception("You cannot sudo this user");
+		}
+
+		//TODO: Translate this.
+		sender.sendMessage("Forcing " + user.getDisplayName() + " to run: /" + command + " " + arguments);
 
 		final PluginCommand execCommand = ess.getServer().getPluginCommand(command);
 		if (execCommand != null)

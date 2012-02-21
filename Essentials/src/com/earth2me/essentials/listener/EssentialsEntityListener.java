@@ -11,22 +11,24 @@ import org.bukkit.Material;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.*;
 import org.bukkit.inventory.ItemStack;
 
 
-public class EssentialsEntityListener extends EntityListener
+public class EssentialsEntityListener implements Listener
 {
 	private final transient IEssentials ess;
 
 	public EssentialsEntityListener(final IEssentials ess)
 	{
-		super();
 		this.ess = ess;
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onEntityDamage(final EntityDamageEvent event)
 	{
 		if (event instanceof EntityDamageByEntityEvent)
@@ -80,7 +82,7 @@ public class EssentialsEntityListener extends EntityListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onEntityCombust(final EntityCombustEvent event)
 	{
 		if (event.getEntity() instanceof Player && ess.getUser((Player)event.getEntity()).isGodModeEnabled())
@@ -89,7 +91,7 @@ public class EssentialsEntityListener extends EntityListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onEntityDeath(final EntityDeathEvent event)
 	{
 		if (event instanceof PlayerDeathEvent)
@@ -111,7 +113,7 @@ public class EssentialsEntityListener extends EntityListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onFoodLevelChange(final FoodLevelChangeEvent event)
 	{
 		if (event.getEntity() instanceof Player && ess.getUser((Player)event.getEntity()).isGodModeEnabled())
@@ -120,7 +122,7 @@ public class EssentialsEntityListener extends EntityListener
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onEntityRegainHealth(final EntityRegainHealthEvent event)
 	{
 

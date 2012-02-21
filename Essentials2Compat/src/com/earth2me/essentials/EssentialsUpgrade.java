@@ -96,7 +96,7 @@ public class EssentialsUpgrade
 			}
 			final EssentialsConf conf = new EssentialsConf(configFile);
 			conf.load();
-			List<String> lines = conf.getStringList(name, null);
+			List<String> lines = conf.getStringList(name);
 			if (lines != null && !lines.isEmpty())
 			{
 				if (!file.createNewFile())
@@ -329,7 +329,7 @@ public class EssentialsUpgrade
 						config.setProperty("homes.home", defloc);
 					}
 
-					List<String> worlds = config.getKeys("home.worlds");
+					Set<String> worlds = config.getConfigurationSection("home.worlds").getKeys(false);
 					Location loc;
 					String worldName;
 
@@ -384,6 +384,7 @@ public class EssentialsUpgrade
 	 * ((Number)vals.get(4)).floatValue())); } } } } usersFile.renameTo(new File(usersFile.getAbsolutePath() + ".old"));
 	 * }
 	 */
+
 	private void convertWarps()
 	{
 		final File warpsFolder = new File(ess.getDataFolder(), "warps");
@@ -610,7 +611,7 @@ public class EssentialsUpgrade
 				if (!config.hasProperty("spawns"))
 				{
 					final Spawns spawns = new Spawns();
-					List<String> keys = config.getKeys();
+					Set<String> keys = config.getKeys(false);
 					for (String group : keys)
 					{
 						Location loc = getFakeLocation(config, group);
@@ -657,7 +658,7 @@ public class EssentialsUpgrade
 				if (!config.hasProperty("jails"))
 				{
 					final com.earth2me.essentials.settings.Jails jails = new com.earth2me.essentials.settings.Jails();
-					List<String> keys = config.getKeys();
+					Set<String> keys = config.getKeys(false);
 					for (String jailName : keys)
 					{
 						Location loc = getFakeLocation(config, jailName);

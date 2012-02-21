@@ -15,6 +15,7 @@ public class Commandnear extends EssentialsCommand
 	protected void run(final IUser user, final String commandLabel, final String[] args) throws Exception
 	{
 		long radius = 200;
+
 		IUser otherUser = null;
 
 		if (args.length > 0)
@@ -33,15 +34,15 @@ public class Commandnear extends EssentialsCommand
 				{
 				}
 			}
-		}
-		if (args.length > 1 && otherUser != null)
-		{
-			try
+			if (args.length > 1 && otherUser != null)
 			{
-				radius = Long.parseLong(args[1]);
-			}
-			catch (NumberFormatException e)
-			{
+				try
+				{
+					radius = Long.parseLong(args[1]);
+				}
+				catch (NumberFormatException e)
+				{
+				}
 			}
 		}
 		if (otherUser == null || Permissions.NEAR_OTHERS.isAuthorized(user))
@@ -57,16 +58,11 @@ public class Commandnear extends EssentialsCommand
 	@Override
 	protected void run(final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
-
-		IUser otherUser = null;
-		if (args.length > 0)
-		{
-			otherUser = getPlayer(args, 0);
-		}
-		else
+		if (args.length == 0)
 		{
 			throw new NotEnoughArgumentsException();
 		}
+		final IUser otherUser = getPlayer(args, 0);
 		long radius = 200;
 		if (args.length > 1)
 		{

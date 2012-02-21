@@ -35,6 +35,6 @@ public class ChatStore
 
 	public final String getLongType()
 	{
-		return type.length() > 0 ? "chat" : "chat-" + type;
+		return type.length() == 0 ? "chat" : "chat-" + type;
 	}
 }

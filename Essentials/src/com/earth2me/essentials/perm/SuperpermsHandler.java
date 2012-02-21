@@ -27,7 +27,7 @@ public class SuperpermsHandler extends AbstractPermissionsHandler
 	@Override
 	public boolean inGroup(final Player base, final String group)
 	{
-		return false;
+		return hasPermission(base, "group." + group);
 	}
 
 	@Override

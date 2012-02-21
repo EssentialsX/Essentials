@@ -232,12 +232,6 @@ public class FakeWorld implements World
 	}
 
 	@Override
-	public long getId()
-	{
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
-
-	@Override
 	public Location getSpawnLocation()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
@@ -545,6 +539,48 @@ public class FakeWorld implements World
 
 	@Override
 	public Set<String> getListeningPluginChannels()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public boolean canGenerateStructures()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public long getTicksPerAnimalSpawns()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setTicksPerAnimalSpawns(int i)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public long getTicksPerMonsterSpawns()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setTicksPerMonsterSpawns(int i)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public <T extends Entity> Collection<T> getEntitiesByClass(Class<T> type)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public Collection<Entity> getEntitiesByClasses(Class<?>... types)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}

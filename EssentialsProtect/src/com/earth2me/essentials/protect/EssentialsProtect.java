@@ -63,6 +63,7 @@ public class EssentialsProtect extends JavaPlugin implements IProtect
 	{
 		final EmergencyListener emListener = new EmergencyListener();
 		pm.registerEvents(emListener, this);
+
 		for (Player player : getServer().getOnlinePlayers())
 		{
 			player.sendMessage("Essentials Protect is in emergency mode. Check your log for errors.");

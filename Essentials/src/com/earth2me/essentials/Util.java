@@ -30,9 +30,8 @@ public final class Util
 	private Util()
 	{
 	}
-	private final static Logger logger = Logger.getLogger("Minecraft");
-	private static Pattern unsafeChars = Pattern.compile("[^a-z0-9]");
-	private static Pattern unsafeFileChars = Pattern.compile("[\u0000-\u001f]+");
+	private final static Pattern INVALIDFILECHARS = Pattern.compile("[^\u0020-\u007E\u0085\u00A0-\uD7FF\uE000-\uFFFC]");
+	private final static Pattern INVALIDCHARS = Pattern.compile("[^\t\n\r\u0020-\u007E\u0085\u00A0-\uD7FF\uE000-\uFFFC]");
 
 	public static String sanitizeFileName(String name) throws InvalidNameException
 	{
@@ -50,7 +49,7 @@ public final class Util
 			r = r.replace('*', (char)('\ue200' + '*'));
 			r = r.replace(':', (char)('\ue200' + ':'));
 			r = r.replace('-', (char)('\ue200' + '-'));
-			r = unsafeFileChars.matcher(r).replaceAll("");
+			r = INVALIDFILECHARS.matcher(r).replaceAll("");
 			return Punycode.encode(r);
 		}
 		catch (PunycodeException ex)
@@ -85,7 +84,12 @@ public final class Util
 
 	public static String sanitizeKey(String name)
 	{
-		return unsafeChars.matcher(name.toLowerCase(Locale.ENGLISH)).replaceAll("_");
+		return INVALIDCHARS.matcher(name.toLowerCase(Locale.ENGLISH)).replaceAll("_");
+	}
+
+	public static String sanitizeString(final String string)
+	{
+		return INVALIDCHARS.matcher(string).replaceAll("");
 	}
 
 	public static String formatDateDiff(long date)

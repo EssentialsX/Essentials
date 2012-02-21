@@ -34,14 +34,16 @@ public class KeywordReplacer implements IText
 		String displayName, ipAddress, balance, mails, world;
 		String worlds, online, unique, playerlist, date, time;
 		String worldTime12, worldTime24, worldDate, plugins;
-		String version;
+		String userName, address, version;
 		if (sender instanceof Player)
 		{
 			@Cleanup
 			final IUser user = ess.getUser((Player)sender);
 			user.acquireReadLock();
 			displayName = user.getDisplayName();
+			userName = user.getName();
 			ipAddress = user.getAddress().getAddress().toString();
+			address = user.getAddress().toString();
 			balance = Double.toString(user.getMoney());
 			mails = Integer.toString(user.getData().getMails() == null ? 0 : user.getData().getMails().size());
 			world = user.getLocation().getWorld().getName();
@@ -110,8 +112,12 @@ public class KeywordReplacer implements IText
 		for (int i = 0; i < input.getLines().size(); i++)
 		{
 			String line = input.getLines().get(i);
+
 			line = line.replace("{PLAYER}", displayName);
+			line = line.replace("{DISPLAYNAME}", displayName);
+			line = line.replace("{USERNAME}", displayName);
 			line = line.replace("{IP}", ipAddress);
+			line = line.replace("{ADDRESS}", ipAddress);
 			line = line.replace("{BALANCE}", balance);
 			line = line.replace("{MAILS}", mails);
 			line = line.replace("{WORLD}", world);

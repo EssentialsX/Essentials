@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 import org.bukkit.entity.Player;
 
 
@@ -29,27 +30,38 @@ public class EssentialsTimer implements Runnable
 		final long currentTime = System.currentTimeMillis();
 		for (Player player : ess.getServer().getOnlinePlayers())
 		{
-			final IUser user = ess.getUser(player);
-			onlineUsers.add(user);
-			user.setLastOnlineActivity(currentTime);
-			user.checkActivity();
-			
-			boolean mailDisabled = false;
-			ISettings settings = ess.getSettings();
-			settings.acquireReadLock();
-			try {
-				mailDisabled = settings.getData().getCommands().isDisabled("mail");
-			} finally {
-				settings.unlock();
-			}
-			// New mail notification
-			if (user != null && !mailDisabled && Permissions.MAIL.isAuthorized(user) && !user.gotMailInfo())
+
+			try
 			{
-				final List<String> mail = user.getMails();
-				if (mail != null && !mail.isEmpty())
+				final IUser user = ess.getUser(player);
+				onlineUsers.add(user);
+				user.setLastOnlineActivity(currentTime);
+				user.checkActivity();
+
+				boolean mailDisabled = false;
+				ISettings settings = ess.getSettings();
+				settings.acquireReadLock();
+				try
 				{
-					user.sendMessage(_("youHaveNewMail", mail.size()));
+					mailDisabled = settings.getData().getCommands().isDisabled("mail");
 				}
+				finally
+				{
+					settings.unlock();
+				}
+				// New mail notification
+				if (user != null && !mailDisabled && Permissions.MAIL.isAuthorized(user) && !user.gotMailInfo())
+				{
+					final List<String> mail = user.getMails();
+					if (mail != null && !mail.isEmpty())
+					{
+						user.sendMessage(_("youHaveNewMail", mail.size()));
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				ess.getLogger().log(Level.WARNING, "EssentialsTimer Error:", e);
 			}
 		}
 

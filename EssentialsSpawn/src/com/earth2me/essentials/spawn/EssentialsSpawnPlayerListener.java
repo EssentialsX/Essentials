@@ -4,6 +4,10 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.api.IUser;
+import com.earth2me.essentials.textreader.IText;
+import com.earth2me.essentials.textreader.KeywordReplacer;
+import com.earth2me.essentials.textreader.SimpleTextInput;
+import com.earth2me.essentials.textreader.SimpleTextPager;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -83,7 +87,9 @@ public class EssentialsSpawnPlayerListener implements Listener
 
 		if (spawns.getAnnounceNewPlayers())
 		{
-			ess.broadcastMessage(user, spawns.getAnnounceNewPlayerFormat(user));
+			final IText output = new KeywordReplacer(new SimpleTextInput(spawns.getAnnounceNewPlayerFormat(user)), user, ess);
+			final SimpleTextPager pager = new SimpleTextPager(output);
+			ess.broadcastMessage(user, pager.getString(0));
 		}
 	}
 
