@@ -139,3 +139,6 @@ v 1.9:
 	- Fix world mirroring so it correctly creates data files and data sources for partially mirrored worlds.
 	- Fixed world mirroring so it returns the correct data for the requested world.
 	- Change Service registration to register WorldsHolder instead of AnjoPermissionsHandler. This is the correct entry point for all data.
+	- Depreciate PlayerTeleportEvent, PlayerRespawnEvent and PlayerPortalEvent as it's all handled in PlayerChangedWorldEvent.
+	  This also means we no longer update permissions before we change worlds.
+	- A command of '/manload' with no world arguments now performs a full reload of GM.
