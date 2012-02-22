@@ -26,7 +26,7 @@ commands:
   balance:
     description: States the current balance of a player.
     usage: /<command> [player]
-    aliases: [bal,emoney,ebalance,ebal]
+    aliases: [bal,money,emoney,ebalance,ebal]
   balancetop:
     description: Gets the top balance values.
     usage: /<command> <page>
@@ -58,11 +58,11 @@ commands:
   clearinventory:
     description: Clear all items in your inventory.
     usage: /<command>
-    aliases: [ci,eci,eclearinventory]
+    aliases: [ci,eci,clearinvent,eclearinvent,eclearinventory]
   compass:
     description: Describes your current bearing.
     usage: /<command>
-    aliases: [ecompass]
+    aliases: [ecompass,direction,edirection]
   delhome:
     description: Removes a home
     usage: /<command> [player:]<name>
@@ -97,7 +97,7 @@ commands:
   feed:
     description: Satisfy the hunger.
     usage: /<command> [player]
-    aliases: [efeed]
+    aliases: [efeed,eat,eeat]
   itemdb:
     description: Searches for an item.
     usage: /<command> <item>
@@ -113,7 +113,7 @@ commands:
   getpos:
     description: Get your current coordinates or those of a player.
     usage: /<command> [player]
-    aliases: [coords,egetpos,whereami,ewhereami]
+    aliases: [coords,egetpos,position,eposition,whereami,ewhereami]
   gc:
     description: Reports garbage collection info; useful to developers.
     usage: /<command>
@@ -141,7 +141,7 @@ commands:
   home:
     description: Teleport to your home.
     usage: /<command> [player:][name]
-    aliases: [ehome]
+    aliases: [ehome,homes,ehomes]
   ignore:
     description: Ignore other players.
     usage: /<command> <player>
@@ -165,7 +165,7 @@ commands:
   jump:
     description: Jumps to the nearest block in the line of sight.
     usage: /<command>
-    aliases: [j,ejump]
+    aliases: [j,ej,jumpto,ejumpto,ejump]
   kick:
     description: Kicks a specified player with a reason.
     usage: /<command> <player> [reason]
@@ -177,7 +177,7 @@ commands:
   kit:
     description: Obtains the specified kit or views all available kits.
     usage: /<command> [kit]
-    aliases: [ekit,kits]
+    aliases: [ekit,kits,ekits]
   kill:
     description: Kills specified player.
     usage: /<command> <player>
@@ -189,7 +189,7 @@ commands:
   list:
     description: List all online players.
     usage: /<command>
-    aliases: [playerlist,who,online,elist,ewho,eplayerlist,eonline]
+    aliases: [playerlist,who,online,plist,eplist,elist,ewho,eplayerlist,eonline]
   lightning:
     description: The power of Thor. Strike at cursor or player.
     usage: /<command> [player] [power]
@@ -237,7 +237,7 @@ commands:
   ping:
     description: Pong!
     usage: /<command>
-    aliases: [pong,eping,epong]
+    aliases: [pong,echo,echo,eping,epong]
   powertool:
     description: Assigns a command to the item in hand, {player} will be replaced by the name of the player that you click.
     usage: /<command> [l:|a:|r:|c:|d:][command] [arguments]
@@ -245,7 +245,7 @@ commands:
   powertooltoggle:
     description: Enables or disables all current powertools
     usage: /<command>
-    aliases: [ptt,epowertooltoggle,eptt]
+    aliases: [ptt,epowertooltoggle,pttoggle,epttoggle,eptt]
   ptime:
     description: Adjust player's client time. Add @ prefix to fix.
     usage: /<command> [list|reset|day|night|dawn|17:30|4pm|4000ticks] [player|*]
@@ -337,11 +337,11 @@ commands:
   tp:
     description: Teleport to a player.
     usage: /<command> <player> [otherplayer]
-    aliases: [tele,etele,etp,tp2p,etp2p]
+    aliases: [tele,teleport,eteleport,etele,etp,tp2p,etp2p]
   tpa:
     description: Request to teleport to the specified player.
     usage: /<command> <player>
-    aliases: [call,etpa,ecall]
+    aliases: [call,tpask,etpask,etpa,ecall]
   tpaall:
     description: Requests all players online to teleport to you.
     usage: /<command> <player>
@@ -389,11 +389,11 @@ commands:
   unban:
     description: Unbans the specified player.
     usage: /<command> <player>
-    aliases: [pardon,eunban]
+    aliases: [pardon,eunban,epardon]
   unbanip:
     description: Unbans the specified IP address.
     usage: /<command> <address>
-    aliases: [eunbanip,pardonip]
+    aliases: [eunbanip,pardonip,epardonip]
   unlimited:
     description: Allows the unlimited placing of items.
     usage: /<command> <list|item|clear> [player]
@@ -401,7 +401,7 @@ commands:
   warp:
     description: List all warps or warp to the specified location.
     usage: /<command> <pagenumber|warp> [player]
-    aliases: [ewarp,warps]
+    aliases: [ewarp,warps,ewarps]
   weather:
     description: Setting the weather.
     usage: /<command> <storm/sun> [duration]
@@ -417,4 +417,4 @@ commands:
   worth:
     description: Calculates the worth of items in hand or as specified.
     usage: /<command> [item] [amount]
-    aliases: [eworth]
+    aliases: [eworth,price,eprice]
