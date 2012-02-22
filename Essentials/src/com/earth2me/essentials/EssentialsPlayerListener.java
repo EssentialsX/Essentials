@@ -370,7 +370,7 @@ public class EssentialsPlayerListener implements Listener
 		}
 		boolean used = false;
 		// We need to loop through each command and execute
-		for (String command : commandList)
+		for (final String command : commandList)
 		{
 			if (command.matches(".*\\{player\\}.*"))
 			{
@@ -385,7 +385,15 @@ public class EssentialsPlayerListener implements Listener
 			else
 			{
 				used = true;
-				user.getServer().dispatchCommand(user.getBase(), command);
+				ess.scheduleSyncDelayedTask(
+						new Runnable()
+						{
+							@Override
+							public void run()
+							{
+								user.getServer().dispatchCommand(user.getBase(), command);
+							}
+						});
 			}
 		}
 		return used;
