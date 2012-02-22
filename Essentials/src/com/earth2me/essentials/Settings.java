@@ -14,6 +14,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
 
@@ -211,23 +212,28 @@ public class Settings implements ISettings
 	}
 
 	@Override
-	public Object getKit(String name)
+	public Map<String, Object> getKit(String name)
 	{
-		Map<String, Object> kits = (Map<String, Object>)config.get("kits");
-		for (Map.Entry<String, Object> entry : kits.entrySet())
+		name = name.replace('.', '_').replace('/', '_');
+		if (config.isConfigurationSection("kits"))
 		{
-			if (entry.getKey().equalsIgnoreCase(name.replace('.', '_').replace('/', '_')))
+			final ConfigurationSection kits = getKits();
+			if (kits.isConfigurationSection(name)) 
 			{
-				return entry.getValue();
-			}
+				return kits.getConfigurationSection(name).getValues(true);
+			}			
 		}
 		return null;
 	}
 
 	@Override
-	public Map<String, Object> getKits()
+	public ConfigurationSection getKits()
 	{
-		return (Map<String, Object>)config.get("kits");
+		if (config.isConfigurationSection("kits"))
+		{
+			return config.getConfigurationSection("kits");
+		}
+		return null;
 	}
 
 	@Override
@@ -328,7 +334,7 @@ public class Settings implements ISettings
 	@Override
 	public IText getAnnounceNewPlayerFormat()
 	{
-		return new SimpleTextInput(Util.replaceColor(config.getString("newbies.announce-format", "&dWelcome {DISPLAYNAME} to the server!")));		
+		return new SimpleTextInput(Util.replaceColor(config.getString("newbies.announce-format", "&dWelcome {DISPLAYNAME} to the server!")));
 	}
 
 	@Override
