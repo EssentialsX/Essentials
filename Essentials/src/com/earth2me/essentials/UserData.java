@@ -94,8 +94,9 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	private Map<String, Object> _getHomes()
 	{
-		if (config.isConfigurationSection("homes")) {
-			return config.getConfigurationSection("homes").getValues(false);		
+		if (config.isConfigurationSection("homes"))
+		{
+			return config.getConfigurationSection("homes").getValues(false);
 		}
 		return new HashMap<String, Object>();
 	}
@@ -228,22 +229,15 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.setProperty("unlimited", unlimited);
 		config.save();
 	}
-	private Map<Integer, Object> powertools;
+	private Map<String, Object> powertools;
 
-	@SuppressWarnings("unchecked")
-	private Map<Integer, Object> _getPowertools()
+	private Map<String, Object> _getPowertools()
 	{
-		Object o = config.getProperty("powertools");
-
-		if (o instanceof Map)
+		if (config.isConfigurationSection("powertools"))
 		{
-			return (Map<Integer, Object>)o;
+			return config.getConfigurationSection("powertools").getValues(false);
 		}
-		else
-		{
-			return new HashMap<Integer, Object>();
-		}
-
+		return new HashMap<String, Object>();
 	}
 
 	public void clearAllPowertools()
@@ -255,23 +249,23 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	public List<String> getPowertool(ItemStack stack)
 	{
-		return (List<String>)powertools.get(stack.getTypeId());
+		return (List<String>)powertools.get("" + stack.getTypeId());
 	}
-	
+
 	public List<String> getPowertool(int id)
 	{
-		return (List<String>)powertools.get(id);
+		return (List<String>)powertools.get("" + id);
 	}
 
 	public void setPowertool(ItemStack stack, List<String> commandList)
 	{
 		if (commandList == null || commandList.isEmpty())
 		{
-			powertools.remove(stack.getTypeId());
+			powertools.remove("" + stack.getTypeId());
 		}
 		else
 		{
-			powertools.put(stack.getTypeId(), commandList);
+			powertools.put("" + stack.getTypeId(), commandList);
 		}
 		config.setProperty("powertools", powertools);
 		config.save();
@@ -732,7 +726,6 @@ public abstract class UserData extends PlayerExtension implements IConf
 		return ret;
 	}
 	private boolean newplayer;
-
 	private String geolocation;
 
 	private String _getGeoLocation()
