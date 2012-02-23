@@ -38,7 +38,7 @@ public class Location
 		this.yaw = yaw;
 		this.pitch = pitch;
 	}
-	
+
 	public Location(String worldname, double x, double y, double z)
 	{
 		this.worldname = worldname;
@@ -56,13 +56,16 @@ public class Location
 		if (loc == null)
 		{
 			World world = null;
-			if (worldUID != null) {
+			if (worldUID != null)
+			{
 				world = Bukkit.getWorld(worldUID);
 			}
-			if (world == null) {
+			if (world == null)
+			{
 				world = Bukkit.getWorld(worldname);
 			}
-			if (world == null) {
+			if (world == null)
+			{
 				throw new WorldNotLoadedException(worldname);
 			}
 			loc = new org.bukkit.Location(world, getX(), getY(), getZ(), getYaw(), getPitch());
@@ -100,12 +103,13 @@ public class Location
 	{
 		return pitch;
 	}
-	
+
+
 	public static class WorldNotLoadedException extends Exception
 	{
 		public WorldNotLoadedException(String worldname)
 		{
-			super("World "+worldname+" is not loaded.");
+			super("World " + worldname + " is not loaded.");
 		}
 	}
 }
