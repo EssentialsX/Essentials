@@ -9,7 +9,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 public interface ITeleport
 {
 	void now(Location loc, boolean cooldown, TeleportCause cause) throws Exception;
-	
+
 	void now(Entity entity, boolean cooldown, TeleportCause cause) throws Exception;
 
 	void back(Trade chargeFor) throws Exception;

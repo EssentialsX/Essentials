@@ -12,7 +12,7 @@ public interface IEssentials extends Plugin
 	void addReloadListener(IReload listener);
 
 	IUser getUser(Player player);
-	
+
 	IUser getUser(String playerName);
 
 	int broadcastMessage(IUser sender, String message);
@@ -24,7 +24,7 @@ public interface IEssentials extends Plugin
 	IGroups getGroups();
 
 	IJails getJails();
-	
+
 	IKits getKits();
 
 	IWarps getWarps();
@@ -36,7 +36,7 @@ public interface IEssentials extends Plugin
 	IUserMap getUserMap();
 
 	IBackup getBackup();
-	
+
 	ICommandHandler getCommandHandler();
 
 	World getWorld(String name);
@@ -52,7 +52,6 @@ public interface IEssentials extends Plugin
 	int scheduleSyncRepeatingTask(Runnable run, long delay, long period);
 
 	//IPermissionsHandler getPermissionsHandler();
-	
 	void reload();
 
 	TNTExplodeListener getTNTListener();
@@ -60,6 +59,6 @@ public interface IEssentials extends Plugin
 	void setGroups(IGroups groups);
 
 	void removeReloadListener(IReload groups);
-	
+
 	IEconomy getEconomy();
 }

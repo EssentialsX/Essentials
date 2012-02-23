@@ -24,9 +24,9 @@ public interface IUser extends Player, IStorageObjectHolder<UserData>, IReload, 
 	void giveMoney(double value);
 
 	void giveMoney(double value, CommandSender initiator);
-	
+
 	void giveItems(ItemStack itemStack, Boolean canSpew) throws ChargeException;
-	
+
 	void giveItems(List<ItemStack> itemStacks, Boolean canSpew) throws ChargeException;
 
 	void setMoney(double value);

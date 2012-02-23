@@ -10,7 +10,7 @@ public interface IUserMap extends IReload
 	boolean userExists(final String name);
 
 	IUser getUser(final Player player);
-	
+
 	IUser getUser(final String playerName);
 
 	void removeUser(final String name) throws InvalidNameException;

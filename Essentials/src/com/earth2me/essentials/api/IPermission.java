@@ -8,10 +8,10 @@ import org.bukkit.permissions.PermissionDefault;
 public interface IPermission
 {
 	String getPermission();
-	
+
 	boolean isAuthorized(CommandSender sender);
 
 	Permission getBukkitPermission();
-	
+
 	PermissionDefault getPermissionDefault();
 }
