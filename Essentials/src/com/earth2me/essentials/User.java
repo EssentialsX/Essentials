@@ -381,6 +381,14 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		super.setMoney(value);
 	}
 
+	public void updateMoneyCache(final double value)
+	{
+		if (ess.getPaymentMethod().hasMethod())
+		{
+			super.setMoney(value);
+		}
+	}
+
 	@Override
 	public void setAfk(final boolean set)
 	{
