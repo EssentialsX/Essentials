@@ -44,6 +44,7 @@ public class I18n implements II18n
 		instance = null;
 	}
 
+	@Override
 	public Locale getCurrentLocale()
 	{
 		return currentLocale;
