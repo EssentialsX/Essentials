@@ -27,20 +27,15 @@ import com.earth2me.essentials.user.UserMap;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -230,7 +225,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		final String timeroutput = execTimer.end();
 		if (getSettings().isDebug())
 		{
-			LOGGER.log(Level.INFO, "Essentials load " + timeroutput);
+			LOGGER.log(Level.INFO, "Essentials load {0}", timeroutput);
 		}
 	}
 
