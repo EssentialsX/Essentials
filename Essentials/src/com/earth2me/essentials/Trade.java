@@ -115,21 +115,21 @@ public class Trade
 			{
 				final Map<Integer, ItemStack> leftOver = InventoryWorkaround.addItem(user.getInventory(), true, getItemStack());
 				final Location loc = user.getLocation();
-				for (ItemStack itemStack : leftOver.values())
+				for (ItemStack s : leftOver.values())
 				{
-					final int maxStackSize = itemStack.getType().getMaxStackSize();
-					final int stacks = itemStack.getAmount() / maxStackSize;
-					final int leftover = itemStack.getAmount() % maxStackSize;
+					final int maxStackSize = s.getType().getMaxStackSize();
+					final int stacks = s.getAmount() / maxStackSize;
+					final int leftover = s.getAmount() % maxStackSize;
 					final Item[] itemStacks = new Item[stacks + (leftover > 0 ? 1 : 0)];
 					for (int i = 0; i < stacks; i++)
 					{
-						final ItemStack stack = itemStack.clone();
+						final ItemStack stack = s.clone();
 						stack.setAmount(maxStackSize);
 						itemStacks[i] = loc.getWorld().dropItem(loc, stack);
 					}
 					if (leftover > 0)
 					{
-						final ItemStack stack = itemStack.clone();
+						final ItemStack stack = s.clone();
 						stack.setAmount(leftover);
 						itemStacks[stacks] = loc.getWorld().dropItem(loc, stack);
 					}
