@@ -10,13 +10,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
 
-public class TNTExplodeListener implements Listener, Runnable
+public class TntExplodeListener implements Listener, Runnable
 {
 	private final transient IEssentials ess;
 	private transient AtomicBoolean enabled = new AtomicBoolean(false);
 	private transient int timer = -1;
 
-	public TNTExplodeListener(final IEssentials ess)
+	public TntExplodeListener(final IEssentials ess)
 	{
 		super();
 		this.ess = ess;

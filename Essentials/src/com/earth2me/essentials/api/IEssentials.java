@@ -1,6 +1,6 @@
 package com.earth2me.essentials.api;
 
-import com.earth2me.essentials.listener.TNTExplodeListener;
+import com.earth2me.essentials.listener.TntExplodeListener;
 import com.earth2me.essentials.register.payment.Methods;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -54,7 +54,7 @@ public interface IEssentials extends Plugin
 	//IPermissionsHandler getPermissionsHandler();
 	void reload();
 
-	TNTExplodeListener getTNTListener();
+	TntExplodeListener getTNTListener();
 
 	void setGroups(IGroups groups);
 

@@ -55,7 +55,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	public static final int BUKKIT_VERSION = 1952;
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private transient ISettings settings;
-	private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
+	private final transient TntExplodeListener tntListener = new TntExplodeListener(this);
 	private transient IJails jails;
 	private transient IKits kits;
 	private transient IWarps warps;
@@ -375,7 +375,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	}
 
 	@Override
-	public TNTExplodeListener getTNTListener()
+	public TntExplodeListener getTNTListener()
 	{
 		return tntListener;
 	}
