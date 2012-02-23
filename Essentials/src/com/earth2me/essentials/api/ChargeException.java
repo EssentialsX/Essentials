@@ -1,4 +1,4 @@
-package com.earth2me.essentials;
+package com.earth2me.essentials.api;
 
 
 public class ChargeException extends Exception

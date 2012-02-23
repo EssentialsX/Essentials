@@ -1,6 +1,5 @@
 package com.earth2me.essentials.api;
 
-import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.storage.IStorageObjectHolder;
 import com.earth2me.essentials.user.CooldownException;
 import com.earth2me.essentials.user.UserData;
