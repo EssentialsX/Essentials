@@ -1,7 +1,7 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.api.ChargeException;
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.api.ChargeException;
 import com.earth2me.essentials.api.IEssentials;
 import com.earth2me.essentials.api.ISettings;
 import com.earth2me.essentials.api.IUser;
@@ -116,21 +116,21 @@ public class Trade
 			{
 				final Map<Integer, ItemStack> leftOver = InventoryWorkaround.addItem(user.getInventory(), true, getItemStack());
 				final Location loc = user.getLocation();
-				for (ItemStack s : leftOver.values())
+				for (ItemStack dropStack : leftOver.values())
 				{
-					final int maxStackSize = s.getType().getMaxStackSize();
-					final int stacks = s.getAmount() / maxStackSize;
-					final int leftover = s.getAmount() % maxStackSize;
+					final int maxStackSize = dropStack.getType().getMaxStackSize();
+					final int stacks = dropStack.getAmount() / maxStackSize;
+					final int leftover = dropStack.getAmount() % maxStackSize;
 					final Item[] itemStacks = new Item[stacks + (leftover > 0 ? 1 : 0)];
 					for (int i = 0; i < stacks; i++)
 					{
-						final ItemStack stack = s.clone();
+						final ItemStack stack = dropStack.clone();
 						stack.setAmount(maxStackSize);
 						itemStacks[i] = loc.getWorld().dropItem(loc, stack);
 					}
 					if (leftover > 0)
 					{
-						final ItemStack stack = s.clone();
+						final ItemStack stack = dropStack.clone();
 						stack.setAmount(leftover);
 						itemStacks[stacks] = loc.getWorld().dropItem(loc, stack);
 					}
