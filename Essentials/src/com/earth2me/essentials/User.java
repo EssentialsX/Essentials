@@ -383,8 +383,8 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 	public void updateMoneyCache(final double value)
 	{
-		if (ess.getPaymentMethod().hasMethod())
-		{
+		if (ess.getPaymentMethod().hasMethod() && super.getMoney() != value)
+		{			
 			super.setMoney(value);
 		}
 	}
