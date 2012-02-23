@@ -210,7 +210,8 @@ public class BukkitConstructor extends Constructor
 				}
 				return new EnchantmentLevel(enchant, level);
 			}
-			if (node.getType().isEnum()) {
+			if (node.getType().isEnum())
+			{
 				final String val = (String)constructScalar((ScalarNode)node);
 				if (val.isEmpty())
 				{
@@ -218,7 +219,8 @@ public class BukkitConstructor extends Constructor
 				}
 				for (Object object : node.getType().getEnumConstants())
 				{
-					if (object.toString().equalsIgnoreCase(val)) {
+					if (object.toString().equalsIgnoreCase(val))
+					{
 						return object;
 					}
 				}
@@ -292,7 +294,8 @@ public class BukkitConstructor extends Constructor
 				final Field typeDefField = Constructor.class.getDeclaredField("typeDefinitions");
 				typeDefField.setAccessible(true);
 				typeDefinitions = (Map<Class<? extends Object>, TypeDescription>)typeDefField.get((Constructor)BukkitConstructor.this);
-				if (typeDefinitions == null) {
+				if (typeDefinitions == null)
+				{
 					throw new NullPointerException();
 				}
 			}
