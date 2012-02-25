@@ -584,4 +584,10 @@ public class FakeWorld implements World
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
+	@Override
+	public LivingEntity spawnCreature(Location arg0, EntityType arg1)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }
