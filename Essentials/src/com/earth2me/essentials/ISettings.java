@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventPriority;
 
 
@@ -39,9 +40,9 @@ public interface ISettings extends IConf
 
 	double getHealCooldown();
 
-	Object getKit(String name);
+	Map<String, Object> getKit(String name);
 
-	Map<String, Object> getKits();
+	ConfigurationSection getKits();
 
 	String getLocale();
 
@@ -65,7 +66,7 @@ public interface ISettings extends IConf
 
 	boolean getRespawnAtHome();
 
-	List getMultipleHomes();
+	Set getMultipleHomes();
 
 	int getHomeLimit(String set);
 

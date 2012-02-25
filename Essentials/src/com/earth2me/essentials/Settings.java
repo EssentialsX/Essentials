@@ -14,6 +14,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
 
@@ -45,15 +46,15 @@ public class Settings implements ISettings
 	}
 
 	@Override
-	public List<String> getMultipleHomes()
+	public Set<String> getMultipleHomes()
 	{
-		return config.getKeys("sethome-multiple");
+		return config.getConfigurationSection("sethome-multiple").getKeys(false);
 	}
 
 	@Override
 	public int getHomeLimit(final User user)
 	{
-		final List<String> homeList = getMultipleHomes();
+		final Set<String> homeList = getMultipleHomes();
 		if (homeList == null)
 		{
 			//TODO: Replace this code to remove backwards compat, after settings are automatically updated
@@ -116,7 +117,7 @@ public class Settings implements ISettings
 	@Override
 	public boolean isCommandDisabled(String label)
 	{
-		for (String c : config.getStringList("disabled-commands", new ArrayList<String>(0)))
+		for (String c : config.getStringList("disabled-commands"))
 		{
 			if (!c.equalsIgnoreCase(label))
 			{
@@ -136,7 +137,7 @@ public class Settings implements ISettings
 	@Override
 	public boolean isCommandRestricted(String label)
 	{
-		for (String c : config.getStringList("restricted-commands", new ArrayList<String>(0)))
+		for (String c : config.getStringList("restricted-commands"))
 		{
 			if (!c.equalsIgnoreCase(label))
 			{
@@ -150,7 +151,7 @@ public class Settings implements ISettings
 	@Override
 	public boolean isPlayerCommand(String label)
 	{
-		for (String c : config.getStringList("player-commands", new ArrayList<String>(0)))
+		for (String c : config.getStringList("player-commands"))
 		{
 			if (!c.equalsIgnoreCase(label))
 			{
@@ -164,9 +165,7 @@ public class Settings implements ISettings
 	@Override
 	public boolean isCommandOverridden(String name)
 	{
-		List<String> defaultList = new ArrayList<String>(1);
-		defaultList.add("god");
-		for (String c : config.getStringList("overridden-commands", defaultList))
+		for (String c : config.getStringList("overridden-commands"))
 		{
 			if (!c.equalsIgnoreCase(name))
 			{
@@ -213,23 +212,28 @@ public class Settings implements ISettings
 	}
 
 	@Override
-	public Object getKit(String name)
+	public Map<String, Object> getKit(String name)
 	{
-		Map<String, Object> kits = (Map<String, Object>)config.getProperty("kits");
-		for (Map.Entry<String, Object> entry : kits.entrySet())
+		name = name.replace('.', '_').replace('/', '_');
+		if (config.isConfigurationSection("kits"))
 		{
-			if (entry.getKey().equalsIgnoreCase(name.replace('.', '_').replace('/', '_')))
+			final ConfigurationSection kits = getKits();
+			if (kits.isConfigurationSection(name)) 
 			{
-				return entry.getValue();
-			}
+				return kits.getConfigurationSection(name).getValues(true);
+			}			
 		}
 		return null;
 	}
 
 	@Override
-	public Map<String, Object> getKits()
+	public ConfigurationSection getKits()
 	{
-		return (Map<String, Object>)config.getProperty("kits");
+		if (config.isConfigurationSection("kits"))
+		{
+			return config.getConfigurationSection("kits");
+		}
+		return null;
 	}
 
 	@Override
@@ -254,7 +258,7 @@ public class Settings implements ISettings
 		{
 		}
 
-		return ChatColor.getByCode(Integer.parseInt(colorName, 16));
+		return ChatColor.getByChar(colorName);
 	}
 
 	@Override
@@ -330,7 +334,7 @@ public class Settings implements ISettings
 	@Override
 	public IText getAnnounceNewPlayerFormat()
 	{
-		return new SimpleTextInput(Util.replaceColor(config.getString("newbies.announce-format", "&dWelcome {DISPLAYNAME} to the server!")));		
+		return new SimpleTextInput(Util.replaceColor(config.getString("newbies.announce-format", "&dWelcome {DISPLAYNAME} to the server!")));
 	}
 
 	@Override
@@ -355,7 +359,7 @@ public class Settings implements ISettings
 	public void reloadConfig()
 	{
 		config.load();
-		noGodWorlds = new HashSet<String>(config.getStringList("no-god-in-worlds", Collections.<String>emptyList()));
+		noGodWorlds = new HashSet<String>(config.getStringList("no-god-in-worlds"));
 		enabledSigns = getEnabledSigns();
 		itemSpawnBl = getItemSpawnBlacklist();
 		chatFormats.clear();
@@ -407,7 +411,7 @@ public class Settings implements ISettings
 	{
 		List<EssentialsSign> newSigns = new ArrayList<EssentialsSign>();
 
-		for (String signName : config.getStringList("enabledSigns", null))
+		for (String signName : config.getStringList("enabledSigns"))
 		{
 			signName = signName.trim().toUpperCase(Locale.ENGLISH);
 			if (signName.isEmpty())

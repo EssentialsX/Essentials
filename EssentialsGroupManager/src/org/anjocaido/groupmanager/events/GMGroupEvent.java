@@ -16,7 +16,6 @@ public class GMGroupEvent extends Event {
     /**
 	 * 
 	 */
-	private static final long serialVersionUID = -5294917600434510451L;
 	private static final HandlerList handlers = new HandlerList();
 
 	@Override
@@ -37,7 +36,7 @@ public class GMGroupEvent extends Event {
     protected Action action;
 
     public GMGroupEvent(Group group, Action action) {
-        super(action.toString());
+        super();
 
         this.group = group;
         this.action = action;
@@ -45,7 +44,7 @@ public class GMGroupEvent extends Event {
     }
     
     public GMGroupEvent(String groupName, Action action) {
-        super(action.toString());
+        super();
 
         this.groupName = groupName;
         this.action = action;

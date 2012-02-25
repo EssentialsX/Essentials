@@ -36,7 +36,7 @@ public class UserManager implements IConf
 
 	public final String getUserByAddress(final String search)
 	{
-		final List<String> usernames = users.getKeys(null);
+		final Set<String> usernames = users.getKeys(false);
 		for (String username : usernames)
 		{
 			final String address = users.getString(username + "." + ADDRESS, null);
@@ -73,7 +73,7 @@ public class UserManager implements IConf
 	{
 		users.load();
 		spyusers.clear();
-		final List<String> keys = users.getKeys(null);
+		final Set<String> keys = users.getKeys(false);
 		for (String key : keys)
 		{
 			if (isSpy(key))

@@ -16,7 +16,6 @@ public class GMUserEvent extends Event {
     /**
 	 * 
 	 */
-	private static final long serialVersionUID = -5294917600434510451L;
 	private static final HandlerList handlers = new HandlerList();
 
 	@Override
@@ -37,7 +36,7 @@ public class GMUserEvent extends Event {
     protected Action action;
 
     public GMUserEvent(User user, Action action) {
-        super(action.toString());
+        super();
 
         this.user = user;
         this.action = action;
@@ -45,7 +44,7 @@ public class GMUserEvent extends Event {
     }
     
     public GMUserEvent(String userName, Action action) {
-        super(action.toString());
+        super();
 
         this.userName = userName;
         this.action = action;

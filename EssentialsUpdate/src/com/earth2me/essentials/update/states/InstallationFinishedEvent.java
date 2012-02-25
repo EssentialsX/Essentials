@@ -7,6 +7,6 @@ public class InstallationFinishedEvent extends Event
 {
 	public InstallationFinishedEvent()
 	{
-		super(Type.CUSTOM_EVENT);
+		super();
 	}
 }
