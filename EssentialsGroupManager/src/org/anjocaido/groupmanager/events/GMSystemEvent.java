@@ -15,7 +15,6 @@ public class GMSystemEvent extends Event {
     /**
 	 * 
 	 */
-	private static final long serialVersionUID = -8786811924448821548L;
 	private static final HandlerList handlers = new HandlerList();
 
 	@Override

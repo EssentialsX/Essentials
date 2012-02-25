@@ -398,6 +398,10 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Group not found!");
 					return false;
 				}
+				if (auxGroup.isGlobal()) {
+					sender.sendMessage(ChatColor.RED + "Players may not be members of GlobalGroups directly.");
+					return false;
+				}
 
 				// VALIDANDO PERMISSAO
 				if (!isConsole && !isOpOverride && (senderGroup != null ? permissionHandler.inGroup(auxUser.getName(), senderGroup.getName()) : false)) {
@@ -1019,6 +1023,11 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Group 2 does not exists!");
 					return false;
 				}
+				if (auxGroup.isGlobal()) {
+					sender.sendMessage(ChatColor.RED + "GlobalGroups do NOT support inheritance.");
+					return false;
+				}
+				
 				// VALIDANDO PERMISSAO
 				if (permissionHandler.searchGroupInInheritance(auxGroup, auxGroup2.getName(), null)) {
 					sender.sendMessage(ChatColor.RED + "Group " + auxGroup.getName() + " already inherits " + auxGroup2.getName() + " (might not be directly)");
@@ -1052,6 +1061,11 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Group 2 does not exists!");
 					return false;
 				}
+				if (auxGroup.isGlobal()) {
+					sender.sendMessage(ChatColor.RED + "GlobalGroups do NOT support inheritance.");
+					return false;
+				}
+				
 				// VALIDANDO PERMISSAO
 				if (!permissionHandler.searchGroupInInheritance(auxGroup, auxGroup2.getName(), null)) {
 					sender.sendMessage(ChatColor.RED + "Group " + auxGroup.getName() + " does not inherits " + auxGroup2.getName() + ".");
@@ -1222,6 +1236,10 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Group does not exists!");
 					return false;
 				}
+				if (auxGroup.isGlobal()) {
+					sender.sendMessage(ChatColor.RED + "GlobalGroups do NOT support Info Nodes.");
+					return false;
+				}
 				// VALIDANDO PERMISSAO
 				// PARECE OK
 				auxString = "";
@@ -1251,6 +1269,10 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Group does not exists!");
 					return false;
 				}
+				if (auxGroup.isGlobal()) {
+					sender.sendMessage(ChatColor.RED + "GlobalGroups do NOT support Info Nodes.");
+					return false;
+				}
 				// VALIDANDO PERMISSAO
 				if (!auxGroup.getVariables().hasVar(args[1])) {
 					sender.sendMessage(ChatColor.RED + "The group doesn't have directly that variable!");
@@ -1274,6 +1296,10 @@ public class GroupManager extends JavaPlugin {
 				auxGroup = dataHolder.getGroup(args[0]);
 				if (auxGroup == null) {
 					sender.sendMessage(ChatColor.RED + "Group does not exists!");
+					return false;
+				}
+				if (auxGroup.isGlobal()) {
+					sender.sendMessage(ChatColor.RED + "GlobalGroups do NOT support Info Nodes.");
 					return false;
 				}
 				// VALIDANDO PERMISSAO
@@ -1311,6 +1337,10 @@ public class GroupManager extends JavaPlugin {
 				auxGroup = dataHolder.getGroup(args[0]);
 				if (auxGroup == null) {
 					sender.sendMessage(ChatColor.RED + "Group does not exists!");
+					return false;
+				}
+				if (auxGroup.isGlobal()) {
+					sender.sendMessage(ChatColor.RED + "GlobalGroups do NOT support Info Nodes.");
 					return false;
 				}
 				// VALIDANDO PERMISSAO
@@ -1578,6 +1608,10 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Group not found!");
 					return false;
 				}
+				if (auxGroup.isGlobal()) {
+					sender.sendMessage(ChatColor.RED + "Players may not be members of GlobalGroups directly.");
+					return false;
+				}
 				// VALIDANDO PERMISSAO
 				if (!isConsole && !isOpOverride && (senderGroup != null ? permissionHandler.inGroup(auxUser.getName(), senderGroup.getName()) : false)) {
 					sender.sendMessage(ChatColor.RED + "Can't modify player with same permissions than you, or higher.");
@@ -1632,6 +1666,10 @@ public class GroupManager extends JavaPlugin {
 				auxGroup = dataHolder.getGroup(args[1]);
 				if (auxGroup == null) {
 					sender.sendMessage(ChatColor.RED + "Group not found!");
+					return false;
+				}
+				if (auxGroup.isGlobal()) {
+					sender.sendMessage(ChatColor.RED + "Players may not be members of GlobalGroups directly.");
 					return false;
 				}
 				// VALIDANDO PERMISSAO

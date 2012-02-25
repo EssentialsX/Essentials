@@ -16,7 +16,6 @@ public class GMUserEvent extends Event {
     /**
 	 * 
 	 */
-	private static final long serialVersionUID = -5294917600434510451L;
 	private static final HandlerList handlers = new HandlerList();
 
 	@Override

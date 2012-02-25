@@ -142,3 +142,7 @@ v 1.9:
 	- Depreciate PlayerTeleportEvent, PlayerRespawnEvent and PlayerPortalEvent as it's all handled in PlayerChangedWorldEvent.
 	  This also means we no longer update permissions before we change worlds.
 	- A command of '/manload' with no world arguments now performs a full reload of GM.
+	- Update for Bukkit R5 compatability.
+	- Removed BukkitPermsOverride as this is now the default with bukkit handling child nodes.
+	- Prevent adding inheritances and info nodes to globalgroups. These are permissions collections, not player groups.
+	- Prevent promoting players to, and demoting to GlobalGroups.
