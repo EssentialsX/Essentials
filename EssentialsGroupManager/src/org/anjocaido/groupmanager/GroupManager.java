@@ -1019,6 +1019,11 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Group 2 does not exists!");
 					return false;
 				}
+				if (auxGroup.isGlobal()) {
+					sender.sendMessage(ChatColor.RED + "GlobalGroups do NOT support inheritance.");
+					return false;
+				}
+				
 				// VALIDANDO PERMISSAO
 				if (permissionHandler.searchGroupInInheritance(auxGroup, auxGroup2.getName(), null)) {
 					sender.sendMessage(ChatColor.RED + "Group " + auxGroup.getName() + " already inherits " + auxGroup2.getName() + " (might not be directly)");
@@ -1052,6 +1057,11 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Group 2 does not exists!");
 					return false;
 				}
+				if (auxGroup.isGlobal()) {
+					sender.sendMessage(ChatColor.RED + "GlobalGroups do NOT support inheritance.");
+					return false;
+				}
+				
 				// VALIDANDO PERMISSAO
 				if (!permissionHandler.searchGroupInInheritance(auxGroup, auxGroup2.getName(), null)) {
 					sender.sendMessage(ChatColor.RED + "Group " + auxGroup.getName() + " does not inherits " + auxGroup2.getName() + ".");
