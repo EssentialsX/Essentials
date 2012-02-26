@@ -115,6 +115,8 @@ public interface ISettings extends IConf
 	boolean warnOnSmite();
 
 	double getMaxMoney();
+	
+	double getMinMoney();
 
 	boolean isEcoLogEnabled();
 

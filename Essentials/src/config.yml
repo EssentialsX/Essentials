@@ -281,10 +281,10 @@ spawn-if-no-home: true
 update-bed-at-daytime: true
 
 # Allow players to have multiple homes.
+# Players need essentials.sethome.multiple before they can have more than 1 home, default to 'default' below.
 # Define different amounts of multiple homes for different permissions, e.g. essentials.sethome.multiple.vip
 # People with essentials.sethome.multiple.unlimited are not limited by these numbers.
 sethome-multiple:  
-  # essentials.sethome.multiple
   default: 3
   # essentials.sethome.multiple.vip
   vip: 5
@@ -320,6 +320,10 @@ currency-symbol: '$'
 # Set the maximum amount of money a player can have
 # The amount is always limited to 10 trillions because of the limitations of a java double
 max-money: 10000000000000
+
+# Set the minimum amount of money a player can have
+# Setting this to 0, will disable overdrafts/loans compeltely.  Users need 'essentials.eco.loan' perm to go below 0.
+min-money: -10000000000000
 
 # Enable this to log all interactions with trade/buy/sell signs and sell command
 economy-log-enabled: false

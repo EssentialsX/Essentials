@@ -154,8 +154,17 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 	public boolean canAfford(final double cost)
 	{
+		return canAfford(cost, true);
+	}
+
+	public boolean canAfford(final double cost, final boolean permcheck)
+	{
 		final double mon = getMoney();
-		return mon >= cost || isAuthorized("essentials.eco.loan");
+		if (!permcheck || isAuthorized("essentials.eco.loan"))
+		{
+			return (mon + cost) > ess.getSettings().getMinMoney();
+		}
+		return cost <= mon;
 	}
 
 	public void dispose()
@@ -384,7 +393,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public void updateMoneyCache(final double value)
 	{
 		if (ess.getPaymentMethod().hasMethod() && super.getMoney() != value)
-		{			
+		{
 			super.setMoney(value);
 		}
 	}
