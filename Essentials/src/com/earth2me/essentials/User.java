@@ -161,7 +161,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		final double mon = getMoney();
 		if (!permcheck || isAuthorized("essentials.eco.loan"))
 		{
-			return (mon - cost) > ess.getSettings().getMinMoney();
+			return (mon - cost) >= ess.getSettings().getMinMoney();
 		}
 		return cost <= mon;
 	}
