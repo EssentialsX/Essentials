@@ -115,6 +115,10 @@ public final class Economy
 		{
 			throw new UserDoesNotExistException(name);
 		}
+		if (balance < ess.getSettings().getMinMoney())
+		{
+			throw new NoLoanPermittedException();
+		}
 		if (balance < 0.0 && !user.isAuthorized("essentials.eco.loan"))
 		{
 			throw new NoLoanPermittedException();

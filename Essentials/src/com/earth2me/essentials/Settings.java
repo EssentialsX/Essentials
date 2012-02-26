@@ -539,6 +539,22 @@ public class Settings implements ISettings
 		}
 		return max;
 	}
+	
+	private final static double MINMONEY = -10000000000000.0;
+	
+	@Override
+	public double getMinMoney()
+	{
+		double min = config.getDouble("min-money", MINMONEY);
+		if (min > 0) {
+			min = -min;			
+		}
+		if (min < MINMONEY)
+		{
+			min = MINMONEY;
+		}
+		return min;
+	}
 
 	@Override
 	public boolean isEcoLogEnabled()
