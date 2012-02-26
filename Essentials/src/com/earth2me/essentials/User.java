@@ -160,9 +160,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public boolean canAfford(final double cost, final boolean permcheck)
 	{
 		final double mon = getMoney();
+		ess.getLogger().log(Level.INFO, "min cash is " + ess.getSettings().getMinMoney());
 		if (!permcheck || isAuthorized("essentials.eco.loan"))
 		{
-			return (mon + cost) > ess.getSettings().getMinMoney();
+			return (mon - cost) > ess.getSettings().getMinMoney();
 		}
 		return cost <= mon;
 	}
