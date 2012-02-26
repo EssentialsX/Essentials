@@ -7,7 +7,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -160,7 +159,6 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public boolean canAfford(final double cost, final boolean permcheck)
 	{
 		final double mon = getMoney();
-		ess.getLogger().log(Level.INFO, "min cash is " + ess.getSettings().getMinMoney());
 		if (!permcheck || isAuthorized("essentials.eco.loan"))
 		{
 			return (mon - cost) > ess.getSettings().getMinMoney();

@@ -5,9 +5,7 @@ import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.signs.Signs;
 import com.earth2me.essentials.textreader.IText;
-import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
-import com.earth2me.essentials.textreader.SimpleTextPager;
 import java.io.File;
 import java.text.MessageFormat;
 import java.util.*;
@@ -218,10 +216,10 @@ public class Settings implements ISettings
 		if (config.isConfigurationSection("kits"))
 		{
 			final ConfigurationSection kits = getKits();
-			if (kits.isConfigurationSection(name)) 
+			if (kits.isConfigurationSection(name))
 			{
 				return kits.getConfigurationSection(name).getValues(true);
-			}			
+			}
 		}
 		return null;
 	}
@@ -539,15 +537,15 @@ public class Settings implements ISettings
 		}
 		return max;
 	}
-	
 	private final static double MINMONEY = -10000000000000.0;
-	
+
 	@Override
 	public double getMinMoney()
 	{
 		double min = config.getDouble("min-money", MINMONEY);
-		if (min > 0) {
-			min = -min;			
+		if (min > 0)
+		{
+			min = -min;
 		}
 		if (min < MINMONEY)
 		{
