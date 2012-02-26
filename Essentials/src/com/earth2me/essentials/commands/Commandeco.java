@@ -46,8 +46,9 @@ public class Commandeco extends EssentialsCommand
 					break;
 
 				case TAKE:
-					if (!player.canAfford(amount, false)) {
-						throw new Exception(_("notEnoughMoney"));					
+					if (!player.canAfford(amount, false))
+					{
+						throw new Exception(_("notEnoughMoney"));
 					}
 					player.takeMoney(amount);
 					break;
@@ -68,6 +69,10 @@ public class Commandeco extends EssentialsCommand
 				break;
 
 			case TAKE:
+				if (!player.canAfford(amount, false))
+				{
+					throw new Exception(_("notEnoughMoney"));
+				}
 				player.takeMoney(amount, sender);
 				break;
 
