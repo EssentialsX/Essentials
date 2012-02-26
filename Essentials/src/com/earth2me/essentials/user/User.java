@@ -203,7 +203,7 @@ public class User extends UserBase implements IUser
 		final double mon = getMoney();
 		if (isAuthorized("essentials.eco.loan"))
 		{
-			return (mon - cost) > ess.getSettings().getMinMoney();
+			return (mon - cost) >= ess.getSettings().getMinMoney();
 		}
 		return cost <= mon;
 	}
