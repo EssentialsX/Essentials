@@ -385,8 +385,9 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			catch (Throwable ex)
 			{
 			}
-		}
+		}		
 		super.setMoney(value);
+		Trade.log("Update", "Set", "API", getName(), new Trade(value, ess), null, null, null, ess);
 	}
 
 	public void updateMoneyCache(final double value)

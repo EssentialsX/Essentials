@@ -559,6 +559,12 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("economy-log-enabled", false);
 	}
+	
+	@Override
+	public boolean isEcoLogUpdateEnabled()
+	{
+		return config.getBoolean("economy-log-update-enabled", false);
+	}
 
 	@Override
 	public boolean removeGodOnDisconnect()

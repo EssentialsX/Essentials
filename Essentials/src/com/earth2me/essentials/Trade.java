@@ -198,7 +198,8 @@ public class Trade
 
 	public static void log(String type, String subtype, String event, String sender, Trade charge, String receiver, Trade pay, Location loc, IEssentials ess)
 	{
-		if (!ess.getSettings().isEcoLogEnabled())
+		if ((loc == null && !ess.getSettings().isEcoLogUpdateEnabled())
+			|| (loc != null && !ess.getSettings().isEcoLogEnabled()))
 		{
 			return;
 		}
