@@ -119,6 +119,8 @@ public interface ISettings extends IConf
 	double getMinMoney();
 
 	boolean isEcoLogEnabled();
+	
+	boolean isEcoLogUpdateEnabled();
 
 	boolean removeGodOnDisconnect();
 
