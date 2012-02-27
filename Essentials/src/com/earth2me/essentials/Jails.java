@@ -193,7 +193,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 			}
 		}
 
-		@EventHandler(priority = EventPriority.HIGH)
+		@EventHandler(priority = EventPriority.HIGHEST)
 		public void onPlayerRespawn(final PlayerRespawnEvent event)
 		{
 			final User user = ess.getUser(event.getPlayer());
@@ -246,7 +246,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 			user.sendMessage(_("jailMessage"));
 		}
 
-		@EventHandler(priority = EventPriority.HIGH)
+		@EventHandler(priority = EventPriority.HIGHEST)
 		public void onPlayerJoin(final PlayerJoinEvent event)
 		{
 			final User user = ess.getUser(event.getPlayer());
