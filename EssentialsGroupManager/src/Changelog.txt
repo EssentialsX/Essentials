@@ -146,3 +146,4 @@ v 1.9:
 	- Removed BukkitPermsOverride as this is now the default with bukkit handling child nodes.
 	- Prevent adding inheritances and info nodes to globalgroups. These are permissions collections, not player groups.
 	- Prevent promoting players to, and demoting to GlobalGroups.
+	- Make 'manload' reload the config correctly.

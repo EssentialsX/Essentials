@@ -121,15 +121,15 @@ public class GroupManager extends JavaPlugin {
 		ch = new GMLoggerHandler();
 		GroupManager.logger.addHandler(ch);
 		logger.setLevel(Level.ALL);
-		if (worldsHolder == null) {
-			// Create the backup folder, if it doesn't exist.
-			prepareFileFields();
-			// Load the config.yml
-			prepareConfig();
-			// Load the global groups
-			globalGroups = new GlobalGroups(this);
-			worldsHolder = new WorldsHolder(this);
-		}
+
+		// Create the backup folder, if it doesn't exist.
+		prepareFileFields();
+		// Load the config.yml
+		prepareConfig();
+		// Load the global groups
+		globalGroups = new GlobalGroups(this);
+		worldsHolder = new WorldsHolder(this);
+
 
 		PluginDescriptionFile pdfFile = this.getDescription();
 		if (worldsHolder == null) {
