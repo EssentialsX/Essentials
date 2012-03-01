@@ -817,16 +817,12 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	private Map<String, Object> _getKitTimestamps()
 	{
-		final Object map = config.getProperty("timestamps.kits");
-
-		if (map instanceof Map)
+		
+		if (config.isConfigurationSection("timestamps.kits"))
 		{
-			return (Map<String, Object>)map;
+			return config.getConfigurationSection("timestamps.kits").getValues(false);
 		}
-		else
-		{
-			return new HashMap<String, Object>();
-		}
+		return new HashMap<String, Object>();		
 	}
 
 	public Long getKitTimestamp(final String name)
