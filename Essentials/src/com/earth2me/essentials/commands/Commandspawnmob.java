@@ -197,8 +197,9 @@ public class Commandspawnmob extends EssentialsCommand
 		}
 	}
 
-	private void changeMobData(final EntityType type, final Entity spawned, final String data, final User user) throws Exception
+	private void changeMobData(final EntityType type, final Entity spawned, String data, final User user) throws Exception
 	{
+		data = data.toLowerCase(Locale.ENGLISH);
 		if (type == EntityType.SLIME || type == EntityType.MAGMA_CUBE)
 		{
 			try
@@ -216,14 +217,14 @@ public class Commandspawnmob extends EssentialsCommand
 			 || type == EntityType.CHICKEN
 			 || type == EntityType.PIG
 			 || type == EntityType.WOLF)
-			&& data.equalsIgnoreCase("baby"))
+			&& data.equals("baby"))
 		{
 			((Animals)spawned).setAge(-24000);
 			return;
 		}
 		if (type == EntityType.SHEEP)
 		{
-			if (data.toLowerCase(Locale.ENGLISH).contains("baby"))
+			if (data.contains("baby"))
 			{
 				((Sheep)spawned).setAge(-24000);
 			}
@@ -231,7 +232,7 @@ public class Commandspawnmob extends EssentialsCommand
 			try
 			{
 
-				if (color.equalsIgnoreCase("random"))
+				if (color.equals("RANDOM"))
 				{
 					Random rand = new Random();
 					((Sheep)spawned).setColor(DyeColor.values()[rand.nextInt(DyeColor.values().length)]);
@@ -247,41 +248,49 @@ public class Commandspawnmob extends EssentialsCommand
 			}
 		}
 		if (type == EntityType.WOLF
-			&& data.toLowerCase(Locale.ENGLISH).startsWith("tamed"))
+			&& data.startsWith("tamed"))
 		{
 			final Wolf wolf = ((Wolf)spawned);
 			wolf.setTamed(true);
 			wolf.setOwner(user);
 			wolf.setSitting(true);
-			if (data.equalsIgnoreCase("tamedbaby"))
+			if (data.equals("tamedbaby"))
 			{
 				((Animals)spawned).setAge(-24000);
 			}
 		}
 		if (type == EntityType.WOLF
-			&& data.toLowerCase(Locale.ENGLISH).startsWith("angry"))
+			&& data.startsWith("angry"))
 		{
 			((Wolf)spawned).setAngry(true);
-			if (data.equalsIgnoreCase("angrybaby"))
+			if (data.equals("angrybaby"))
 			{
 				((Animals)spawned).setAge(-24000);
 			}
 		}
-		if (type == EntityType.CREEPER && data.equalsIgnoreCase("powered"))
+		if (type == EntityType.CREEPER && data.equals("powered"))
 		{
 			((Creeper)spawned).setPowered(true);
 		}
-		if (type == EntityType.OCELOT && data.equalsIgnoreCase("siamese"))
+		if (type == EntityType.OCELOT)
 		{
-			((Ocelot)spawned).setCatType(Ocelot.Type.SIAMESE_CAT);
-		}
-		if (type == EntityType.OCELOT && data.equalsIgnoreCase("red"))
-		{
-			((Ocelot)spawned).setCatType(Ocelot.Type.RED_CAT);
-		}
-		if (type == EntityType.OCELOT && data.equalsIgnoreCase("black"))
-		{
-			((Ocelot)spawned).setCatType(Ocelot.Type.BLACK_CAT);
+			final Ocelot cat = ((Ocelot)spawned);
+			if (data.contains("siamese")) {
+				cat.setCatType(Ocelot.Type.SIAMESE_CAT);
+			}
+			if (data.contains("red")) {
+				cat.setCatType(Ocelot.Type.RED_CAT);
+			}
+			if (data.contains("black")) {
+				cat.setCatType(Ocelot.Type.BLACK_CAT);
+			}
+			if (data.contains("tamed")) {
+				cat.setTamed(true);
+				cat.setOwner(user);
+			}
+			if (data.contains("baby")) {
+				cat.setAge(-24000);
+			}
 		}
 	}
 }
