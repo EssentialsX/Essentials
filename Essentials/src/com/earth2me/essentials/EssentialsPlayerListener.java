@@ -282,44 +282,6 @@ public class EssentialsPlayerListener implements Listener
 	{
 		final User user = ess.getUser(event.getPlayer());
 		user.updateActivity(true);
-		if (event.getAnimationType() == PlayerAnimationType.ARM_SWING
-			&& user.hasPowerTools() && user.arePowerToolsEnabled())
-		{
-			usePowertools(user);
-		}
-	}
-
-	private void usePowertools(final User user)
-	{
-		final ItemStack is = user.getItemInHand();
-		int id;
-		if (is == null || (id = is.getTypeId()) == 0)
-		{
-			return;
-		}
-		final List<String> commandList = user.getPowertool(id);
-		if (commandList == null || commandList.isEmpty())
-		{
-			return;
-		}
-
-		// We need to loop through each command and execute
-		for (String command : commandList)
-		{
-			if (command.matches(".*\\{player\\}.*"))
-			{
-				//user.sendMessage("Click a player to use this command");
-				continue;
-			}
-			else if (command.startsWith("c:"))
-			{
-				user.chat(command.substring(2));
-			}
-			else
-			{
-				user.getServer().dispatchCommand(user.getBase(), command);
-			}
-		}
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
@@ -365,19 +327,76 @@ public class EssentialsPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerInteract(final PlayerInteractEvent event)
 	{
-		if (event.isCancelled())
+		switch (event.getAction())
 		{
-			return;
+		case RIGHT_CLICK_BLOCK:
+			if (event.isCancelled())
+			{
+				return;
+			}
+			if (ess.getSettings().getUpdateBedAtDaytime() && event.getClickedBlock().getType() == Material.BED_BLOCK)
+			{
+				event.getPlayer().setBedSpawnLocation(event.getClickedBlock().getLocation());
+			}
+			break;
+		case LEFT_CLICK_AIR:
+		case LEFT_CLICK_BLOCK:
+			final User user = ess.getUser(event.getPlayer());
+			if (user.hasPowerTools() && user.arePowerToolsEnabled())
+			{
+				if (usePowertools(user))
+				{
+					event.setCancelled(true);
+				}
+			}
+			break;
+		default:
+			break;
 		}
-		if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
-		{
-			return;
-		}
+	}
 
-		if (ess.getSettings().getUpdateBedAtDaytime() && event.getClickedBlock().getType() == Material.BED_BLOCK)
+	private boolean usePowertools(final User user)
+	{
+		final ItemStack is = user.getItemInHand();
+		int id;
+		if (is == null || (id = is.getTypeId()) == 0)
 		{
-			event.getPlayer().setBedSpawnLocation(event.getClickedBlock().getLocation());
+			return false;
 		}
+		final List<String> commandList = user.getPowertool(id);
+		if (commandList == null || commandList.isEmpty())
+		{
+			return false;
+		}
+		boolean used = false;
+		// We need to loop through each command and execute
+		for (final String command : commandList)
+		{
+			if (command.matches(".*\\{player\\}.*"))
+			{
+				//user.sendMessage("Click a player to use this command");
+				continue;
+			}
+			else if (command.startsWith("c:"))
+			{
+				used = true;
+				user.chat(command.substring(2));
+			}
+			else
+			{
+				used = true;
+				ess.scheduleSyncDelayedTask(
+						new Runnable()
+						{
+							@Override
+							public void run()
+							{
+								user.getServer().dispatchCommand(user.getBase(), command);
+							}
+						});
+			}
+		}
+		return used;
 	}
 
 	@EventHandler(priority = EventPriority.LOW)

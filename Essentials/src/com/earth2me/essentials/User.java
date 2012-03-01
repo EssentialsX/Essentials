@@ -7,7 +7,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -109,7 +108,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		sendMessage(_("addedToAccount", Util.formatCurrency(value, ess)));
 		if (initiator != null)
 		{
-			initiator.sendMessage(_("addedToOthersAccount", Util.formatCurrency(value, ess), this.getDisplayName()));
+			initiator.sendMessage(_("addedToOthersAccount", Util.formatCurrency(value, ess), this.getDisplayName(), Util.formatCurrency(getMoney(), ess)));
 		}
 	}
 
@@ -148,14 +147,23 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		sendMessage(_("takenFromAccount", Util.formatCurrency(value, ess)));
 		if (initiator != null)
 		{
-			initiator.sendMessage(_("takenFromOthersAccount", Util.formatCurrency(value, ess), this.getDisplayName()));
+			initiator.sendMessage(_("takenFromOthersAccount", Util.formatCurrency(value, ess), this.getDisplayName(), Util.formatCurrency(getMoney(), ess)));
 		}
 	}
 
 	public boolean canAfford(final double cost)
 	{
+		return canAfford(cost, true);
+	}
+
+	public boolean canAfford(final double cost, final boolean permcheck)
+	{
 		final double mon = getMoney();
-		return mon >= cost || isAuthorized("essentials.eco.loan");
+		if (!permcheck || isAuthorized("essentials.eco.loan"))
+		{
+			return (mon - cost) >= ess.getSettings().getMinMoney();
+		}
+		return cost <= mon;
 	}
 
 	public void dispose()
@@ -377,8 +385,17 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			catch (Throwable ex)
 			{
 			}
-		}
+		}		
 		super.setMoney(value);
+		Trade.log("Update", "Set", "API", getName(), new Trade(value, ess), null, null, null, ess);
+	}
+
+	public void updateMoneyCache(final double value)
+	{
+		if (ess.getPaymentMethod().hasMethod() && super.getMoney() != value)
+		{
+			super.setMoney(value);
+		}
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import java.util.*;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -15,16 +16,16 @@ public class Kit
 	{
 		try
 		{
-			final Map<String, Object> kits = ess.getSettings().getKits();
+			final ConfigurationSection kits = ess.getSettings().getKits();
 			final StringBuilder list = new StringBuilder();
-			for (String kiteItem : kits.keySet())
+			for (String kiteItem : kits.getKeys(false))
 			{
 				if (user.isAuthorized("essentials.kit." + kiteItem.toLowerCase(Locale.ENGLISH)))
 				{
 					list.append(" ").append(kiteItem);
 				}
 			}
-			return list.toString();
+			return list.toString().trim();
 		}
 		catch (Exception ex)
 		{

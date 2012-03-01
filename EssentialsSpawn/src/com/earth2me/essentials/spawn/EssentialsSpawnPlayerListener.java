@@ -4,6 +4,9 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.textreader.IText;
+import com.earth2me.essentials.textreader.KeywordReplacer;
+import com.earth2me.essentials.textreader.SimpleTextPager;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
@@ -31,6 +34,11 @@ public class EssentialsSpawnPlayerListener implements Listener
 	public void onPlayerRespawn(final PlayerRespawnEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
+
+		if (user.isJailed() && user.getJail() != null && !user.getJail().isEmpty())
+		{
+			return;
+		}
 
 		if (ess.getSettings().getRespawnAtHome())
 		{
@@ -73,7 +81,9 @@ public class EssentialsSpawnPlayerListener implements Listener
 
 		if (ess.getSettings().getAnnounceNewPlayers())
 		{
-			ess.broadcastMessage(user, ess.getSettings().getAnnounceNewPlayerFormat(user));
+			final IText output = new KeywordReplacer(ess.getSettings().getAnnounceNewPlayerFormat(), user, ess);
+			final SimpleTextPager pager = new SimpleTextPager(output);
+			ess.broadcastMessage(user, pager.getString(0));
 		}
 
 		LOGGER.log(Level.FINE, "New player join");

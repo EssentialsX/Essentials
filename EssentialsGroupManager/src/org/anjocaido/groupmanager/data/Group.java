@@ -48,6 +48,15 @@ public class Group extends DataUnit implements Cloneable {
     public Group(String name) {
         super(name);
     }
+    
+    /**
+     * Is this a GlobalGroup
+     * 
+     * @return
+     */
+    public boolean isGlobal() {
+    	return (getDataSource() == null);
+    }
 	
     /**
      * Clone this group
@@ -57,7 +66,7 @@ public class Group extends DataUnit implements Cloneable {
     public Group clone() {
     	Group clone;
     	
-    	if (getDataSource() == null) {
+    	if (isGlobal()) {
     		clone = new Group(this.getName());
     	} else {
     		clone = new Group(getDataSource(), this.getName());
@@ -85,7 +94,7 @@ public class Group extends DataUnit implements Cloneable {
         Group clone = dataSource.createGroup(this.getName());
         
         // Don't add inheritance for GlobalGroups
-        if (getDataSource() != null) {
+        if (!isGlobal()) {
     		clone.inherits = new ArrayList<String>(this.getInherits());
     	}
         for (String perm : this.getPermissionList()) {
@@ -110,26 +119,30 @@ public class Group extends DataUnit implements Cloneable {
      * @param inherit the inherits to set
      */
     public void addInherits(Group inherit) {
-        if (!this.getDataSource().groupExists(inherit.getName())) {
-            getDataSource().addGroup(inherit);
-        }
-        if (!inherits.contains(inherit.getName().toLowerCase())) {
-            inherits.add(inherit.getName().toLowerCase());
-        }
-        flagAsChanged();
-        if (GroupManager.isLoaded()) {
-        	GroupManager.BukkitPermissions.updateAllPlayers();
-        	GroupManagerEventHandler.callEvent(this, Action.GROUP_INHERITANCE_CHANGED);
-        }
+    	if (!isGlobal()) {
+	        if (!this.getDataSource().groupExists(inherit.getName())) {
+	            getDataSource().addGroup(inherit);
+	        }
+	        if (!inherits.contains(inherit.getName().toLowerCase())) {
+	            inherits.add(inherit.getName().toLowerCase());
+	        }
+	        flagAsChanged();
+	        if (GroupManager.isLoaded()) {
+	        	GroupManager.BukkitPermissions.updateAllPlayers();
+	        	GroupManagerEventHandler.callEvent(this, Action.GROUP_INHERITANCE_CHANGED);
+	        }
+    	}
     }
 
     public boolean removeInherits(String inherit) {
-        if (this.inherits.contains(inherit.toLowerCase())) {
-            this.inherits.remove(inherit.toLowerCase());
-            flagAsChanged();
-            GroupManagerEventHandler.callEvent(this, Action.GROUP_INHERITANCE_CHANGED);
-            return true;
-        }
+    	if (!isGlobal()) {
+	        if (this.inherits.contains(inherit.toLowerCase())) {
+	            this.inherits.remove(inherit.toLowerCase());
+	            flagAsChanged();
+	            GroupManagerEventHandler.callEvent(this, Action.GROUP_INHERITANCE_CHANGED);
+	            return true;
+	        }
+    	}
         return false;
     }
 
@@ -145,15 +158,17 @@ public class Group extends DataUnit implements Cloneable {
      * @param varList
      */
     public void setVariables(Map<String, Object> varList) {
-        GroupVariables temp = new GroupVariables(this, varList);
-        variables.clearVars();
-        for (String key : temp.getVarKeyList()) {
-            variables.addVar(key, temp.getVarObject(key));
-        }
-        flagAsChanged();
-        if (GroupManager.isLoaded()) {
-        	GroupManager.BukkitPermissions.updateAllPlayers();
-        	GroupManagerEventHandler.callEvent(this, Action.GROUP_INFO_CHANGED);
-        }
+    	if (!isGlobal()) {
+	        GroupVariables temp = new GroupVariables(this, varList);
+	        variables.clearVars();
+	        for (String key : temp.getVarKeyList()) {
+	            variables.addVar(key, temp.getVarObject(key));
+	        }
+	        flagAsChanged();
+	        if (GroupManager.isLoaded()) {
+	        	GroupManager.BukkitPermissions.updateAllPlayers();
+	        	GroupManagerEventHandler.callEvent(this, Action.GROUP_INFO_CHANGED);
+	        }
+    	}
     }
 }

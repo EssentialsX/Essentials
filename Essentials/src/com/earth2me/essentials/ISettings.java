@@ -2,11 +2,13 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.signs.EssentialsSign;
+import com.earth2me.essentials.textreader.IText;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventPriority;
 
 
@@ -14,9 +16,7 @@ public interface ISettings extends IConf
 {
 	boolean areSignsDisabled();
 
-	String format(String format, IUser user);
-
-	String getAnnounceNewPlayerFormat(IUser user);
+	IText getAnnounceNewPlayerFormat();
 
 	boolean getAnnounceNewPlayers();
 
@@ -35,14 +35,14 @@ public interface ISettings extends IConf
 	String getCurrencySymbol();
 
 	int getOversizedStackSize();
-	
+
 	int getDefaultStackSize();
 
 	double getHealCooldown();
 
-	Object getKit(String name);
+	Map<String, Object> getKit(String name);
 
-	Map<String, Object> getKits();
+	ConfigurationSection getKits();
 
 	String getLocale();
 
@@ -66,7 +66,7 @@ public interface ISettings extends IConf
 
 	boolean getRespawnAtHome();
 
-	List getMultipleHomes();
+	Set getMultipleHomes();
 
 	int getHomeLimit(String set);
 
@@ -101,7 +101,7 @@ public interface ISettings extends IConf
 	boolean isTradeInStacks(int id);
 
 	List<Integer> itemSpawnBlacklist();
-	
+
 	List<EssentialsSign> enabledSigns();
 
 	boolean permissionBasedItemSpawn();
@@ -115,8 +115,12 @@ public interface ISettings extends IConf
 	boolean warnOnSmite();
 
 	double getMaxMoney();
+	
+	double getMinMoney();
 
 	boolean isEcoLogEnabled();
+	
+	boolean isEcoLogUpdateEnabled();
 
 	boolean removeGodOnDisconnect();
 
@@ -143,18 +147,18 @@ public interface ISettings extends IConf
 	public void setDebug(boolean debug);
 
 	Set<String> getNoGodWorlds();
-	
+
 	boolean getUpdateBedAtDaytime();
-	
+
 	boolean getRepairEnchanted();
-	
+
 	boolean getIsWorldTeleportPermissions();
-	
+
 	boolean registerBackInListener();
 
 	boolean getDisableItemPickupWhileAfk();
 
 	EventPriority getRespawnPriority();
-	
+
 	long getTpaAcceptCancellation();
 }

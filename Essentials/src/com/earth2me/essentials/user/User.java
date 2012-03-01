@@ -196,4 +196,15 @@ public class User extends UserBase implements IUser
 			unlock();
 		}
 	}
+
+	@Override
+	public boolean canAfford(final double cost)
+	{
+		final double mon = getMoney();
+		if (isAuthorized("essentials.eco.loan"))
+		{
+			return (mon - cost) >= ess.getSettings().getMinMoney();
+		}
+		return cost <= mon;
+	}
 }

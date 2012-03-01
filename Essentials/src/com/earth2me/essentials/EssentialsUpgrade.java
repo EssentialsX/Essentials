@@ -95,7 +95,7 @@ public class EssentialsUpgrade
 			}
 			final EssentialsConf conf = new EssentialsConf(configFile);
 			conf.load();
-			List<String> lines = conf.getStringList(name, null);
+			List<String> lines = conf.getStringList(name);
 			if (lines != null && !lines.isEmpty())
 			{
 				if (!file.createNewFile())
@@ -271,18 +271,18 @@ public class EssentialsUpgrade
 				if (config.hasProperty("powertools"))
 				{
 					@SuppressWarnings("unchecked")
-					final Map<Integer, Object> powertools = (Map<Integer, Object>)config.getProperty("powertools");
+					final Map<String, Object> powertools = config.getConfigurationSection("powertools").getValues(false);
 					if (powertools == null)
 					{
 						continue;
 					}
-					for (Map.Entry<Integer, Object> entry : powertools.entrySet())
+					for (Map.Entry<String, Object> entry : powertools.entrySet())
 					{
 						if (entry.getValue() instanceof String)
 						{
 							List<String> temp = new ArrayList<String>();
 							temp.add((String)entry.getValue());
-							((Map<Integer, Object>)powertools).put(entry.getKey(), temp);
+							((Map<String, Object>)powertools).put(entry.getKey(), temp);
 						}
 					}
 					config.save();
@@ -332,7 +332,7 @@ public class EssentialsUpgrade
 						config.setProperty("homes.home", defloc);
 					}
 
-					List<String> worlds = config.getKeys("home.worlds");
+					Set<String> worlds = config.getConfigurationSection("home.worlds").getKeys(false);
 					Location loc;
 					String worldName;
 
@@ -381,7 +381,7 @@ public class EssentialsUpgrade
 		}
 		final EssentialsConf usersConfig = new EssentialsConf(usersFile);
 		usersConfig.load();
-		for (String username : usersConfig.getKeys(null))
+		for (String username : usersConfig.getKeys(false))
 		{
 			final User user = new User(new OfflinePlayer(username, ess), ess);
 			final String nickname = usersConfig.getString(username + ".nickname");
@@ -389,7 +389,7 @@ public class EssentialsUpgrade
 			{
 				user.setNickname(nickname);
 			}
-			final List<String> mails = usersConfig.getStringList(username + ".mail", null);
+			final List<String> mails = usersConfig.getStringList(username + ".mail");
 			if (mails != null && !mails.isEmpty())
 			{
 				user.setMails(mails);
@@ -701,7 +701,7 @@ public class EssentialsUpgrade
 				if (!config.hasProperty("spawns"))
 				{
 					final Spawns spawns = new Spawns();
-					List<String> keys = config.getKeys();
+					Set<String> keys = config.getKeys(false);
 					for (String group : keys)
 					{
 						Location loc = getFakeLocation(config, group);
@@ -748,7 +748,7 @@ public class EssentialsUpgrade
 				if (!config.hasProperty("jails"))
 				{
 					final com.earth2me.essentials.settings.Jails jails = new com.earth2me.essentials.settings.Jails();
-					List<String> keys = config.getKeys();
+					Set<String> keys = config.getKeys(false);
 					for (String jailName : keys)
 					{
 						Location loc = getFakeLocation(config, jailName);

@@ -143,8 +143,7 @@ public class Trade
 	{
 		if (getMoney() != null)
 		{
-			final double mon = user.getMoney();
-			if (mon < getMoney() && getMoney() > 0 && !user.isAuthorized("essentials.eco.loan"))
+			if (!user.canAfford(getMoney()) && getMoney() > 0)
 			{
 				throw new ChargeException(_("notEnoughMoney"));
 			}
@@ -163,9 +162,8 @@ public class Trade
 			&& !user.isAuthorized("essentials.nocommandcost.all")
 			&& !user.isAuthorized("essentials.nocommandcost." + command))
 		{
-			final double mon = user.getMoney();
 			final double cost = ess.getSettings().getCommandCost(command.charAt(0) == '/' ? command.substring(1) : command);
-			if (mon < cost && cost > 0 && !user.isAuthorized("essentials.eco.loan"))
+			if (!user.canAfford(cost) && cost > 0)
 			{
 				throw new ChargeException(_("notEnoughMoney"));
 			}
@@ -200,7 +198,8 @@ public class Trade
 
 	public static void log(String type, String subtype, String event, String sender, Trade charge, String receiver, Trade pay, Location loc, IEssentials ess)
 	{
-		if (!ess.getSettings().isEcoLogEnabled())
+		if ((loc == null && !ess.getSettings().isEcoLogUpdateEnabled())
+			|| (loc != null && !ess.getSettings().isEcoLogEnabled()))
 		{
 			return;
 		}

@@ -172,11 +172,6 @@ public class OfflinePlayer implements Player
 		return false;
 	}
 
-	public boolean isPlayer()
-	{
-		return false;
-	}
-
 	@Override
 	public int getRemainingAir()
 	{
@@ -667,18 +662,6 @@ public class OfflinePlayer implements Player
 	}
 
 	@Override
-	public int getExperience()
-	{
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
-
-	@Override
-	public void setExperience(int i)
-	{
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
-
-	@Override
 	public int getLevel()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
@@ -912,5 +895,17 @@ public class OfflinePlayer implements Player
 	public Collection<PotionEffect> getActivePotionEffects()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public <T extends Projectile> T launchProjectile(Class<? extends T> arg0)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public EntityType getType()
+	{
+		return EntityType.PLAYER;
 	}
 }
