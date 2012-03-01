@@ -271,5 +271,17 @@ public class Commandspawnmob extends EssentialsCommand
 		{
 			((Creeper)spawned).setPowered(true);
 		}
+		if (type == EntityType.OCELOT && data.equalsIgnoreCase("siamese"))
+		{
+			((Ocelot)spawned).setCatType(Ocelot.Type.SIAMESE_CAT);
+		}
+		if (type == EntityType.OCELOT && data.equalsIgnoreCase("red"))
+		{
+			((Ocelot)spawned).setCatType(Ocelot.Type.RED_CAT);
+		}
+		if (type == EntityType.OCELOT && data.equalsIgnoreCase("black"))
+		{
+			((Ocelot)spawned).setCatType(Ocelot.Type.BLACK_CAT);
+		}
 	}
 }

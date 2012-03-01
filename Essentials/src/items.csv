@@ -1461,6 +1461,9 @@ dragonegg,122,0
 degg,122,0
 bossegg,122,0
 begg,122,0
+redstonelamp,123,0
+redlamp,123,0
+rslamp,123,0
 ironshovel,256,0
 ironspade,256,0
 ishovel,256,0
@@ -2453,6 +2456,10 @@ wolfegg,383,95
 mooshroomegg,383,96
 mushroomcowegg,383,96
 villageregg,383,120
+bottleofenchanting,384,0
+enchantingbottle,384,0
+expbottle,384,0
+xpbottle,384,0
 goldmusicrecord,2256,0
 goldmusicdisk,2256,0
 goldmusiccd,2256,0
