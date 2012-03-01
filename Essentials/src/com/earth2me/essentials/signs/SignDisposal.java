@@ -2,7 +2,6 @@ package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
-import org.bukkit.event.inventory.InventoryType;
 
 
 public class SignDisposal extends EssentialsSign
@@ -15,7 +14,10 @@ public class SignDisposal extends EssentialsSign
 	@Override
 	protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess)
 	{
-		player.getBase().openInventory(ess.getServer().createInventory(player, InventoryType.CHEST));
+		player.sendMessage("Bukkit broke this sign :(");
+		//TODO: wait for a fix in bukkit
+		//Problem: Items can be duplicated
+		//player.getBase().openInventory(ess.getServer().createInventory(player, 36));
 		return true;
 	}
 }
