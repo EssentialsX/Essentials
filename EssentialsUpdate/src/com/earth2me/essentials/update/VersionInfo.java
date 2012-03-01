@@ -16,7 +16,7 @@ public class VersionInfo
 
 	public VersionInfo(final Configuration updateConfig, final String path)
 	{
-		changelog = updateConfig.getList(path + ".changelog", Collections.<String>emptyList());
+		changelog = updateConfig.getStringList(path + ".changelog");
 		minBukkit = updateConfig.getInt(path + ".min-bukkit", 0);
 		maxBukkit = updateConfig.getInt(path + ".max-bukkit", 0);
 		modules = new HashMap<String, ModuleInfo>();
