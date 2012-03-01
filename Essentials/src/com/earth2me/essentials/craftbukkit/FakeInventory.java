@@ -1,8 +1,13 @@
 package com.earth2me.essentials.craftbukkit;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.ListIterator;
 import org.bukkit.Material;
+import org.bukkit.entity.HumanEntity;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -186,5 +191,35 @@ public class FakeInventory implements Inventory
 		{
 			items[i] = null;
 		}
+	}
+
+	@Override
+	public List<HumanEntity> getViewers()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public String getTitle()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public InventoryType getType()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public InventoryHolder getHolder()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public ListIterator<ItemStack> iterator()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }

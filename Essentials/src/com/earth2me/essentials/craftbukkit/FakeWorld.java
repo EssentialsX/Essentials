@@ -12,6 +12,7 @@ import org.bukkit.entity.*;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
@@ -587,6 +588,42 @@ public class FakeWorld implements World
 
 	@Override
 	public LivingEntity spawnCreature(Location arg0, EntityType arg1)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public <T> void playEffect(Location lctn, Effect effect, T t)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public <T> void playEffect(Location lctn, Effect effect, T t, int i)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setMetadata(String string, MetadataValue mv)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public List<MetadataValue> getMetadata(String string)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public boolean hasMetadata(String string)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void removeMetadata(String string, Plugin plugin)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}

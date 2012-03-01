@@ -4,8 +4,9 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.craftbukkit.ShowInventory;
 import org.bukkit.Material;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -33,7 +34,9 @@ public class SignFree extends EssentialsSign
 		}
 
 		item.setAmount(item.getType().getMaxStackSize() * 9 * 4);
-		ShowInventory.showFilledInventory(player.getBase(), item);
+		Inventory i = ess.getServer().createInventory(player, InventoryType.CHEST);
+		i.addItem(item);
+		player.openInventory(i);
 		Trade.log("Sign", "Free", "Interact", username, null, username, new Trade(item, ess), sign.getBlock().getLocation(), ess);
 		return true;
 	}

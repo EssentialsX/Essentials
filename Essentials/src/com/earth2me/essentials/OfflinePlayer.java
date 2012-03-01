@@ -1,18 +1,22 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.craftbukkit.OfflineBedLocation;
 import static com.earth2me.essentials.I18n._;
 import java.net.InetSocketAddress;
 import java.util.*;
 import lombok.Delegate;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.conversations.Conversation;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
+import org.bukkit.inventory.InventoryView.Property;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.map.MapView;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
@@ -907,5 +911,120 @@ public class OfflinePlayer implements Player
 	public EntityType getType()
 	{
 		return EntityType.PLAYER;
+	}
+
+	@Override
+	public <T> void playEffect(Location lctn, Effect effect, T t)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public boolean setWindowProperty(Property prprt, int i)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public InventoryView getOpenInventory()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public InventoryView openInventory(Inventory invntr)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public InventoryView openWorkbench(Location lctn, boolean bln)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public InventoryView openEnchanting(Location lctn, boolean bln)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void openInventory(InventoryView iv)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void closeInventory()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public ItemStack getItemOnCursor()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setItemOnCursor(ItemStack is)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setMetadata(String string, MetadataValue mv)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public List<MetadataValue> getMetadata(String string)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public boolean hasMetadata(String string)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void removeMetadata(String string, Plugin plugin)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+
+	@Override
+	public boolean isConversing()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void acceptConversationInput(String string)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public boolean beginConversation(Conversation c)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void abandonConversation(Conversation c)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void sendMessage(String[] strings)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }
