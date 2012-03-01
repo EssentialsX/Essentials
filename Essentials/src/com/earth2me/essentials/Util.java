@@ -293,7 +293,7 @@ public class Util
 		while (isBlockUnsafe(world, x, y, z))
 		{
 			y += 1;
-			if (y >= 127)
+			if (y >= world.getHighestBlockYAt(x, z))
 			{
 				x += 1;
 				break;
@@ -304,8 +304,8 @@ public class Util
 			y -= 1;
 			if (y <= 1)
 			{
-				y = 127;
 				x += 1;
+				y = world.getHighestBlockYAt(x, z);
 				if (x - 32 > loc.getBlockX())
 				{
 					throw new Exception(_("holeInFloor"));
