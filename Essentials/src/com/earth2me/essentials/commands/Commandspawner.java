@@ -10,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.block.CreatureSpawner;
+import org.bukkit.entity.EntityType;
 
 
 public class Commandspawner extends EssentialsCommand
@@ -54,7 +55,7 @@ public class Commandspawner extends EssentialsCommand
 			}
 			final Trade charge = new Trade("spawner-" + mob.name.toLowerCase(Locale.ENGLISH), ess);
 			charge.isAffordableFor(user);
-			((CreatureSpawner)target.getBlock().getState()).setCreatureType(mob.getType());
+			((CreatureSpawner)target.getBlock().getState()).setSpawnedType(mob.getType());
 			charge.charge(user);
 			user.sendMessage(_("setSpawner", mob.name));
 		}
