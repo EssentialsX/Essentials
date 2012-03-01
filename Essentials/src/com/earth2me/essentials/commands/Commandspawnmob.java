@@ -197,9 +197,9 @@ public class Commandspawnmob extends EssentialsCommand
 		}
 	}
 
-	private void changeMobData(final CreatureType type, final Entity spawned, final String data, final User user) throws Exception
+	private void changeMobData(final EntityType type, final Entity spawned, final String data, final User user) throws Exception
 	{
-		if (type == CreatureType.SLIME || type == CreatureType.MAGMA_CUBE)
+		if (type == EntityType.SLIME || type == EntityType.MAGMA_CUBE)
 		{
 			try
 			{
@@ -210,18 +210,18 @@ public class Commandspawnmob extends EssentialsCommand
 				throw new Exception(_("slimeMalformedSize"), e);
 			}
 		}
-		if ((type == CreatureType.SHEEP
-			 || type == CreatureType.COW
-			 || type == CreatureType.MUSHROOM_COW
-			 || type == CreatureType.CHICKEN
-			 || type == CreatureType.PIG
-			 || type == CreatureType.WOLF)
+		if ((type == EntityType.SHEEP
+			 || type == EntityType.COW
+			 || type == EntityType.MUSHROOM_COW
+			 || type == EntityType.CHICKEN
+			 || type == EntityType.PIG
+			 || type == EntityType.WOLF)
 			&& data.equalsIgnoreCase("baby"))
 		{
 			((Animals)spawned).setAge(-24000);
 			return;
 		}
-		if (type == CreatureType.SHEEP)
+		if (type == EntityType.SHEEP)
 		{
 			if (data.toLowerCase(Locale.ENGLISH).contains("baby"))
 			{
@@ -246,7 +246,7 @@ public class Commandspawnmob extends EssentialsCommand
 				throw new Exception(_("sheepMalformedColor"), e);
 			}
 		}
-		if (type == CreatureType.WOLF
+		if (type == EntityType.WOLF
 			&& data.toLowerCase(Locale.ENGLISH).startsWith("tamed"))
 		{
 			final Wolf wolf = ((Wolf)spawned);
@@ -258,7 +258,7 @@ public class Commandspawnmob extends EssentialsCommand
 				((Animals)spawned).setAge(-24000);
 			}
 		}
-		if (type == CreatureType.WOLF
+		if (type == EntityType.WOLF
 			&& data.toLowerCase(Locale.ENGLISH).startsWith("angry"))
 		{
 			((Wolf)spawned).setAngry(true);
@@ -267,7 +267,7 @@ public class Commandspawnmob extends EssentialsCommand
 				((Animals)spawned).setAge(-24000);
 			}
 		}
-		if (type == CreatureType.CREEPER && data.equalsIgnoreCase("powered"))
+		if (type == EntityType.CREEPER && data.equalsIgnoreCase("powered"))
 		{
 			((Creeper)spawned).setPowered(true);
 		}
