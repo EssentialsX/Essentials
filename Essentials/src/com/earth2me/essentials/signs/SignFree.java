@@ -37,6 +37,7 @@ public class SignFree extends EssentialsSign
 		item.setAmount(item.getType().getMaxStackSize());
 		InventoryWorkaround.addItem(player.getInventory(), true, item);
 		player.sendMessage("Item added to your inventory.");
+		player.updateInventory();
 		//TODO: wait for a fix in bukkit
 		//Problem: Items can be duplicated
 		//Inventory i = ess.getServer().createInventory(player, InventoryType.CHEST);
