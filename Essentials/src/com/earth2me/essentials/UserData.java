@@ -44,7 +44,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		savedInventory = _getSavedInventory();
 		teleportEnabled = getTeleportEnabled();
 		ignoredPlayers = getIgnoredPlayers();
-		godmode = getGodModeEnabled();
+		godmode = _getGodModeEnabled();
 		muted = getMuted();
 		muteTimeout = _getMuteTimeout();
 		jailed = getJailed();
@@ -58,6 +58,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		isNPC = _isNPC();
 		arePowerToolsEnabled = _arePowerToolsEnabled();
 		kitTimestamps = _getKitTimestamps();
+		nickname = _getNickname();
 	}
 	private double money;
 
@@ -189,13 +190,21 @@ public abstract class UserData extends PlayerExtension implements IConf
 		return false;
 	}
 
-	public String getNickname()
+	private String nickname;
+	
+	public String _getNickname()
 	{
 		return config.getString("nickname");
+	}
+	
+	public String getNickname()
+	{
+		return nickname;
 	}
 
 	public void setNickname(String nick)
 	{
+		nickname = nick;
 		config.setProperty("nickname", nick);
 		config.save();
 	}
@@ -515,7 +524,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 	}
 	private boolean godmode;
 
-	private boolean getGodModeEnabled()
+	private boolean _getGodModeEnabled()
 	{
 		return config.getBoolean("godmode", false);
 	}
@@ -817,12 +826,12 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	private Map<String, Object> _getKitTimestamps()
 	{
-		
+
 		if (config.isConfigurationSection("timestamps.kits"))
 		{
 			return config.getConfigurationSection("timestamps.kits").getValues(false);
 		}
-		return new HashMap<String, Object>();		
+		return new HashMap<String, Object>();
 	}
 
 	public Long getKitTimestamp(final String name)

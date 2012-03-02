@@ -233,18 +233,13 @@ public class EssentialsPlayerListener implements Listener
 			return;
 		}
 
-		final User user = ess.getUser(event.getPlayer());
 		//There is TeleportCause.COMMMAND but plugins have to actively pass the cause in on their teleports.
 		if ((event.getCause() == TeleportCause.PLUGIN || event.getCause() == TeleportCause.COMMAND) && ess.getSettings().registerBackInListener())
 		{
+			final User user = ess.getUser(event.getPlayer());
 			user.setLastLocation();
 		}
 
-		if (ess.getSettings().changeDisplayName())
-		{
-			user.setDisplayNick();
-		}
-		updateCompass(user);
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)
@@ -307,9 +302,15 @@ public class EssentialsPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerChangedWorld(final PlayerChangedWorldEvent event)
 	{
+		final User user = ess.getUser(event.getPlayer());
+		if (ess.getSettings().changeDisplayName())
+		{
+			user.setDisplayNick();
+		}
+		updateCompass(user);
+
 		if (ess.getSettings().getNoGodWorlds().contains(event.getPlayer().getLocation().getWorld().getName()))
 		{
-			User user = ess.getUser(event.getPlayer());
 			if (user.isGodModeEnabledRaw())
 			{
 				user.sendMessage(_("noGodWorldWarning"));
