@@ -317,9 +317,11 @@ public class EssentialsPlayerListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerInteract(final PlayerInteractEvent event)
 	{
+		final User user = ess.getUser(event.getPlayer());
+		user.updateActivity(true);
 		switch (event.getAction())
 		{
 		case RIGHT_CLICK_BLOCK:
@@ -334,7 +336,6 @@ public class EssentialsPlayerListener implements Listener
 			break;
 		case LEFT_CLICK_AIR:
 		case LEFT_CLICK_BLOCK:
-			final User user = ess.getUser(event.getPlayer());
 			if (user.hasPowerTools() && user.arePowerToolsEnabled())
 			{
 				if (usePowertools(user))
