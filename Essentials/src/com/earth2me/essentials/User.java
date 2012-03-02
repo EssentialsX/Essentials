@@ -249,7 +249,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		return teleportRequestHere;
 	}
 
-	public String getNick(boolean addprefixsuffix)
+	public String getNick(final boolean addprefixsuffix)
 	{
 		final StringBuilder nickname = new StringBuilder();
 		final String nick = getNickname();
@@ -261,28 +261,28 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		{
 			nickname.append(ess.getSettings().getNicknamePrefix()).append(nick);
 		}
-		if (isOp())
-		{
-			try
-			{
-				nickname.insert(0, ess.getSettings().getOperatorColor().toString());
-				nickname.append("§f");
-			}
-			catch (Exception e)
-			{
-			}
-		}
 
 		if (addprefixsuffix && ess.getSettings().addPrefixSuffix())
 		{
+			if (isOp())
+			{
+				try
+				{
+					nickname.insert(0, ess.getSettings().getOperatorColor().toString());
+				}
+				catch (Exception e)
+				{
+				}
+			}
+
 			if (!ess.getSettings().disablePrefix())
 			{
-				final String prefix = ess.getPermissionsHandler().getPrefix(base).replace('&', '§').replace("{WORLDNAME}", this.getWorld().getName());
+				final String prefix = ess.getPermissionsHandler().getPrefix(base).replace('&', '§');
 				nickname.insert(0, prefix);
 			}
 			if (!ess.getSettings().disableSuffix())
 			{
-				final String suffix = ess.getPermissionsHandler().getSuffix(base).replace('&', '§').replace("{WORLDNAME}", this.getWorld().getName());
+				final String suffix = ess.getPermissionsHandler().getSuffix(base).replace('&', '§');
 				nickname.append(suffix);
 				if (suffix.length() < 2 || !suffix.substring(suffix.length() - 2, suffix.length() - 1).equals("§"))
 				{
@@ -330,6 +330,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		return super.getDisplayName() == null ? super.getName() : super.getDisplayName();
 	}
 
+	@Override
 	public Teleport getTeleport()
 	{
 		return teleport;
@@ -385,7 +386,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			catch (Throwable ex)
 			{
 			}
-		}		
+		}
 		super.setMoney(value);
 		Trade.log("Update", "Set", "API", getName(), new Trade(value, ess), null, null, null, ess);
 	}
