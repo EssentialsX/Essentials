@@ -13,7 +13,7 @@ commands:
     aliases: [eafk]
   antioch:
     description: 'A little surprise for operators.'
-    usage: /<command>
+    usage: /<command> [message]
     aliases: [eantioch]
   back:
     description: Teleports you to your location prior to tp/spawn/warp.
