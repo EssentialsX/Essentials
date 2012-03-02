@@ -17,8 +17,11 @@ public class Commandantioch extends EssentialsCommand
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		ess.broadcastMessage(user, "...lobbest thou thy Holy Hand Grenade of Antioch towards thy foe,");
-		ess.broadcastMessage(user, "who being naughty in My sight, shall snuff it.");
+		if (args.length > 0)
+		{
+			ess.broadcastMessage(user, "...lobbest thou thy Holy Hand Grenade of Antioch towards thy foe,");
+			ess.broadcastMessage(user, "who being naughty in My sight, shall snuff it.");
+		}		
 
 		final Location loc = Util.getTarget(user);
 		loc.getWorld().spawn(loc, TNTPrimed.class);
