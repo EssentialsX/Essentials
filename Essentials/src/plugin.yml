@@ -186,6 +186,9 @@ commands:
     description: Kill all mobs in a world.
     usage: /<command> [mobType] [radius]
     aliases: [ekillall,butcher,ebutcher]
+  kittycannon:
+    description: Throw an exploding kitten at your opponent
+    usage: /<command>
   list:
     description: List all online players.
     usage: /<command>
