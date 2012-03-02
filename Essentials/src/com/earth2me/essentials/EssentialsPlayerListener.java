@@ -277,13 +277,6 @@ public class EssentialsPlayerListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerAnimation(final PlayerAnimationEvent event)
-	{
-		final User user = ess.getUser(event.getPlayer());
-		user.updateActivity(true);
-	}
-
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerCommandPreprocess(final PlayerCommandPreprocessEvent event)
 	{
