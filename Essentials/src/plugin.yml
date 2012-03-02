@@ -14,7 +14,7 @@ commands:
   antioch:
     description: 'A little surprise for operators.'
     usage: /<command> [message]
-    aliases: [eantioch]
+    aliases: [eantioch,grenade,tnt,egrenade,etnt]
   back:
     description: Teleports you to your location prior to tp/spawn/warp.
     usage: /<command>
