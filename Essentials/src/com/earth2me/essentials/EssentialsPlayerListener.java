@@ -182,15 +182,16 @@ public class EssentialsPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerLogin(final PlayerLoginEvent event)
 	{
-		switch (event.getResult()) {
+		switch (event.getResult())
+		{
 		case ALLOWED:
 		case KICK_FULL:
-		case KICK_BANNED:		
+		case KICK_BANNED:
 			break;
 		default:
-			return;		
+			return;
 		}
-		
+
 		User user = ess.getUser(event.getPlayer());
 		user.setNPC(false);
 
@@ -199,7 +200,7 @@ public class EssentialsPlayerListener implements Listener
 		user.checkMuteTimeout(currentTime);
 		user.checkJailTimeout(currentTime);
 
-		if (banExpired == false && (user.isBanned() || event.getResult() == Result.KICK_BANNED))
+		if (!banExpired && (user.isBanned() || event.getResult() == Result.KICK_BANNED))
 		{
 			final String banReason = user.getBanReason();
 			event.disallow(Result.KICK_BANNED, banReason != null && !banReason.isEmpty() && !banReason.equalsIgnoreCase("ban") ? banReason : _("defaultBanReason"));
@@ -291,7 +292,7 @@ public class EssentialsPlayerListener implements Listener
 		{
 			for (Player player : ess.getServer().getOnlinePlayers())
 			{
-				User spyer = ess.getUser(player);
+				final User spyer = ess.getUser(player);
 				if (spyer.isSocialSpyEnabled() && !user.equals(spyer))
 				{
 					player.sendMessage(user.getDisplayName() + " : " + event.getMessage());
@@ -400,7 +401,7 @@ public class EssentialsPlayerListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
-	public void onPlayerPickupItem(PlayerPickupItemEvent event)
+	public void onPlayerPickupItem(final PlayerPickupItemEvent event)
 	{
 		if (event.isCancelled() || !ess.getSettings().getDisableItemPickupWhileAfk())
 		{
