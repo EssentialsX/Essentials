@@ -216,6 +216,8 @@ public class Commandspawnmob extends EssentialsCommand
 			 || type == EntityType.MUSHROOM_COW
 			 || type == EntityType.CHICKEN
 			 || type == EntityType.PIG
+			 || type == EntityType.VILLAGER
+			 || type == EntityType.OCELOT
 			 || type == EntityType.WOLF)
 			&& data.equals("baby"))
 		{
