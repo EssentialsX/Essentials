@@ -60,11 +60,15 @@ public class Kit
 		}
 	}
 
-	public static List<String> getItems(final User user, final Map<String, Object> els) throws Exception
+	public static List<String> getItems(final User user, final Map<String, Object> kit) throws Exception
 	{
+		if (kit == null) {
+			throw new Exception(_("kitError2"));
+		}
+		
 		try
 		{
-			return (List<String>)els.get("items");
+			return (List<String>)kit.get("items");
 		}
 		catch (Exception e)
 		{

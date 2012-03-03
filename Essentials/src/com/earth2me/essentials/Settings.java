@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
 
@@ -208,6 +209,31 @@ public class Settings implements ISettings
 	{
 		return config.getDouble("heal-cooldown", 0);
 	}
+	private ConfigurationSection kits;
+
+	public ConfigurationSection _getKits()
+	{
+		if (config.isConfigurationSection("kits"))
+		{
+			final ConfigurationSection section = config.getConfigurationSection("kits");
+			final ConfigurationSection newSection = new MemoryConfiguration();
+			for (String kitItem : section.getKeys(false))
+			{
+				if (section.isConfigurationSection(kitItem))
+				{
+					newSection.set(kitItem.toLowerCase(Locale.ENGLISH), section.getConfigurationSection(kitItem));
+				}
+			}
+			return newSection;
+		}
+		return null;
+	}
+
+	@Override
+	public ConfigurationSection getKits()
+	{
+		return kits;
+	}
 
 	@Override
 	public Map<String, Object> getKit(String name)
@@ -220,16 +246,6 @@ public class Settings implements ISettings
 			{
 				return kits.getConfigurationSection(name).getValues(true);
 			}
-		}
-		return null;
-	}
-
-	@Override
-	public ConfigurationSection getKits()
-	{
-		if (config.isConfigurationSection("kits"))
-		{
-			return config.getConfigurationSection("kits");
 		}
 		return null;
 	}
@@ -358,8 +374,9 @@ public class Settings implements ISettings
 	{
 		config.load();
 		noGodWorlds = new HashSet<String>(config.getStringList("no-god-in-worlds"));
-		enabledSigns = getEnabledSigns();
-		itemSpawnBl = getItemSpawnBlacklist();
+		enabledSigns = _getEnabledSigns();
+		itemSpawnBl = _getItemSpawnBlacklist();
+		kits = _getKits();
 		chatFormats.clear();
 	}
 	private List<Integer> itemSpawnBl = new ArrayList<Integer>();
@@ -370,7 +387,7 @@ public class Settings implements ISettings
 		return itemSpawnBl;
 	}
 
-	private List<Integer> getItemSpawnBlacklist()
+	private List<Integer> _getItemSpawnBlacklist()
 	{
 		final List<Integer> epItemSpwn = new ArrayList<Integer>();
 		if (ess.getItemDb() == null)
@@ -405,7 +422,7 @@ public class Settings implements ISettings
 		return enabledSigns;
 	}
 
-	private List<EssentialsSign> getEnabledSigns()
+	private List<EssentialsSign> _getEnabledSigns()
 	{
 		List<EssentialsSign> newSigns = new ArrayList<EssentialsSign>();
 
@@ -559,7 +576,7 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("economy-log-enabled", false);
 	}
-	
+
 	@Override
 	public boolean isEcoLogUpdateEnabled()
 	{
