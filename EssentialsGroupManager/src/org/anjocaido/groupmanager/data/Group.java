@@ -52,7 +52,7 @@ public class Group extends DataUnit implements Cloneable {
     /**
      * Is this a GlobalGroup
      * 
-     * @return
+     * @return true if this is a global group
      */
     public boolean isGlobal() {
     	return (getDataSource() == null);

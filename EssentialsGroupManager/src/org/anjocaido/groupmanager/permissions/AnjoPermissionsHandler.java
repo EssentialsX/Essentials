@@ -766,7 +766,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 			// (Heroes).
 			final Player player = user.getBukkitPlayer();
 			//final Permission bukkitPerm = Bukkit.getPluginManager().getPermission(targetPermission);
-			if (player != null && player.hasPermission(targetPermission)) {
+			if ((player != null) && player.hasPermission(targetPermission)) {
 				result.resultType = PermissionCheckResult.Type.FOUND;
 				result.owner = user;
 				return result;
