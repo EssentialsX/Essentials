@@ -35,6 +35,10 @@ public class Commandessentials extends EssentialsCommand
 		{
 			run_nya(server, sender, commandLabel, args);
 		}
+		else if (args[0].equalsIgnoreCase("moo"))
+		{
+			run_moo(server, sender, commandLabel, args);
+		}
 		else {
 			run_reload(server, sender, commandLabel, args);
 		}
@@ -158,5 +162,10 @@ public class Commandessentials extends EssentialsCommand
 			}
 		}
 		noteBlocks.clear();
+	}
+	
+	private void run_moo(final Server server, final CommandSender sender, final String command, final String args[])
+	{
+		sender.sendMessage(new String[]{"         (__)", "         (oo)", "   /------\\/", "  / |    ||", " *  /\\---/\\", "    ~~   ~~", "....\"Have you mooed today?\"..." } );
 	}
 }
