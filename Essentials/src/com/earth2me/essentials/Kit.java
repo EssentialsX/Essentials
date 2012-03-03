@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.capitalCase;
 import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import java.util.*;
@@ -22,7 +23,7 @@ public class Kit
 			{
 				if (user.isAuthorized("essentials.kit." + kiteItem.toLowerCase(Locale.ENGLISH)))
 				{
-					list.append(" ").append(kiteItem);
+					list.append(" ").append(capitalCase(kiteItem));
 				}
 			}
 			return list.toString().trim();
