@@ -32,7 +32,7 @@ public class EssentialsBlockListener implements Listener
 		{
 			return;
 		}
-		boolean unlimitedForUser = user.hasUnlimited(is);
+		final boolean unlimitedForUser = user.hasUnlimited(is);
 		if (unlimitedForUser && user.getGameMode() == GameMode.SURVIVAL)
 		{
 			ess.scheduleSyncDelayedTask(
