@@ -219,21 +219,16 @@ public class Commandspawnmob extends EssentialsCommand
 			 || type == EntityType.VILLAGER
 			 || type == EntityType.OCELOT
 			 || type == EntityType.WOLF)
-			&& data.equals("baby"))
+			&& data.contains("baby"))
 		{
-			((Animals)spawned).setAge(-24000);
+			((Animals)spawned).setBaby();
 			return;
 		}
 		if (type == EntityType.SHEEP)
 		{
-			if (data.contains("baby"))
-			{
-				((Sheep)spawned).setAge(-24000);
-			}
 			final String color = data.toUpperCase(Locale.ENGLISH).replace("BABY", "");
 			try
 			{
-
 				if (color.equals("RANDOM"))
 				{
 					Random rand = new Random();
@@ -249,49 +244,36 @@ public class Commandspawnmob extends EssentialsCommand
 				throw new Exception(_("sheepMalformedColor"), e);
 			}
 		}
-		if (type == EntityType.WOLF
-			&& data.startsWith("tamed"))
+		if ((type == EntityType.WOLF
+			 || type == EntityType.OCELOT)
+			&& data.contains("tamed"))
 		{
-			final Wolf wolf = ((Wolf)spawned);
-			wolf.setTamed(true);
-			wolf.setOwner(user);
-			wolf.setSitting(true);
-			if (data.equals("tamedbaby"))
-			{
-				((Animals)spawned).setAge(-24000);
-			}
+			final Tameable tameable = ((Tameable)spawned);
+			tameable.setTamed(true);
+			tameable.setOwner(user.getBase());
 		}
 		if (type == EntityType.WOLF
-			&& data.startsWith("angry"))
+			&& data.contains("angry"))
 		{
 			((Wolf)spawned).setAngry(true);
-			if (data.equals("angrybaby"))
-			{
-				((Animals)spawned).setAge(-24000);
-			}
 		}
-		if (type == EntityType.CREEPER && data.equals("powered"))
+		if (type == EntityType.CREEPER && data.contains("powered"))
 		{
 			((Creeper)spawned).setPowered(true);
 		}
 		if (type == EntityType.OCELOT)
 		{
-			final Ocelot cat = ((Ocelot)spawned);
-			if (data.contains("siamese")) {
-				cat.setCatType(Ocelot.Type.SIAMESE_CAT);
+			if (data.contains("siamese"))
+			{
+				((Ocelot)spawned).setCatType(Ocelot.Type.SIAMESE_CAT);
 			}
-			if (data.contains("red")) {
-				cat.setCatType(Ocelot.Type.RED_CAT);
+			if (data.contains("red"))
+			{
+				((Ocelot)spawned).setCatType(Ocelot.Type.RED_CAT);
 			}
-			if (data.contains("black")) {
-				cat.setCatType(Ocelot.Type.BLACK_CAT);
-			}
-			if (data.contains("tamed")) {
-				cat.setTamed(true);
-				cat.setOwner(user);
-			}
-			if (data.contains("baby")) {
-				cat.setAge(-24000);
+			if (data.contains("black"))
+			{
+				((Ocelot)spawned).setCatType(Ocelot.Type.BLACK_CAT);
 			}
 		}
 	}
