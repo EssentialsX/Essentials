@@ -66,7 +66,7 @@ import org.yaml.snakeyaml.error.YAMLException;
 
 public class Essentials extends JavaPlugin implements IEssentials
 {
-	public static final int BUKKIT_VERSION = 2004;
+	public static final int BUKKIT_VERSION = 2015;
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private transient ISettings settings;
 	private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
