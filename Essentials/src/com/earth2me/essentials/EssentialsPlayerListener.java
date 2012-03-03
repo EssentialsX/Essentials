@@ -182,10 +182,15 @@ public class EssentialsPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerLogin(final PlayerLoginEvent event)
 	{
-		if (event.getResult() != Result.ALLOWED && event.getResult() != Result.KICK_FULL && event.getResult() != Result.KICK_BANNED)
-		{
-			return;
+		switch (event.getResult()) {
+		case ALLOWED:
+		case KICK_FULL:
+		case KICK_BANNED:		
+			break;
+		default:
+			return;		
 		}
+		
 		User user = ess.getUser(event.getPlayer());
 		user.setNPC(false);
 
