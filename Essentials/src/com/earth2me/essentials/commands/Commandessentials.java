@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 
@@ -34,6 +35,10 @@ public class Commandessentials extends EssentialsCommand
 		else if (args[0].equalsIgnoreCase("nya"))
 		{
 			run_nya(server, sender, commandLabel, args);
+		}
+		else if (args[0].equalsIgnoreCase("moo"))
+		{
+			run_moo(server, sender, commandLabel, args);
 		}
 		else {
 			run_reload(server, sender, commandLabel, args);
@@ -158,5 +163,13 @@ public class Commandessentials extends EssentialsCommand
 			}
 		}
 		noteBlocks.clear();
+	}
+	
+	private void run_moo(final Server server, final CommandSender sender, final String command, final String args[])
+	{
+		if(sender instanceof ConsoleCommandSender)
+			sender.sendMessage(new String[]{"         (__)", "         (oo)", "   /------\\/", "  / |    ||", " *  /\\---/\\", "    ~~   ~~", "....\"Have you mooed today?\"..." } );
+		else
+			sender.sendMessage(new String[]{"            (__)", "            (oo)", "   /------\\/", "  /  |      | |", " *  /\\---/\\", "    ~~    ~~", "....\"Have you mooed today?\"..." } );
 	}
 }
