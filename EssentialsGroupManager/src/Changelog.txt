@@ -147,3 +147,4 @@ v 1.9:
 	- Prevent adding inheritances and info nodes to globalgroups. These are permissions collections, not player groups.
 	- Prevent promoting players to, and demoting to GlobalGroups.
 	- Make 'manload' reload the config correctly.
+	- Minor optimization when checking bukkit permissions.
