@@ -602,7 +602,12 @@ public class WorldDataHolder {
         // Load users if the file is NOT empty
         if (allUsersNode != null)
 	        for (String usersKey : allUsersNode.keySet()) {
-	            Map<String, Object> thisUserNode = (Map<String, Object>) allUsersNode.get(usersKey);
+	        	Map<String, Object> thisUserNode = null;
+	        	try {
+	        		thisUserNode = (Map<String, Object>) allUsersNode.get(usersKey);
+	        	} catch (Exception ex) {
+	        		throw new IllegalArgumentException("Bad format found in file: " + usersFile.getPath());
+	            }
 	            User thisUser = ph.createUser(usersKey);
 	            if (thisUser == null) {
 	                throw new IllegalArgumentException("I think this user was declared more than once: " + usersKey + " in file: " + usersFile.getPath());
