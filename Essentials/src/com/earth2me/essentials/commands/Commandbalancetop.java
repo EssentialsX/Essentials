@@ -130,11 +130,11 @@ public class Commandbalancetop extends EssentialsCommand
 						}
 					});
 					
-					cache.getLines().add(_("serverTotal", Util.formatCurrency(totalMoney, ess)));
+					cache.getLines().add(_("serverTotal", Util.displayCurrency(totalMoney, ess)));
 					int pos = 1;
 					for (Map.Entry<String, Double> entry : sortedEntries)
 					{
-						cache.getLines().add(pos + ". " + entry.getKey() + ", " + Util.formatCurrency(entry.getValue(), ess));
+						cache.getLines().add(pos + ". " + entry.getKey() + ", " + Util.displayCurrency(entry.getValue(), ess));
 						pos++;
 					}
 					cacheage = System.currentTimeMillis();

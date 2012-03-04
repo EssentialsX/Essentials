@@ -422,16 +422,26 @@ public class Util
 		}
 		return is;
 	}
-	private static DecimalFormat df = new DecimalFormat("#0.00", DecimalFormatSymbols.getInstance(Locale.US));
+	private static DecimalFormat dFormat = new DecimalFormat("#0.00", DecimalFormatSymbols.getInstance(Locale.US));
 
-	public static String formatCurrency(final double value, final IEssentials ess)
+	public static String formatAsCurrency(final double value)
 	{
-		String str = ess.getSettings().getCurrencySymbol() + df.format(value);
+		String str = dFormat.format(value);
 		if (str.endsWith(".00"))
 		{
 			str = str.substring(0, str.length() - 3);
 		}
 		return str;
+	}
+
+	public static String displayCurrency(final double value, final IEssentials ess)
+	{
+		return _("currency", ess.getSettings().getCurrencySymbol(), formatAsCurrency(value));
+	}
+
+	public static String shortCurrency(final double value, final IEssentials ess)
+	{
+		return ess.getSettings().getCurrencySymbol() + formatAsCurrency(value);
 	}
 
 	public static double roundDouble(final double d)

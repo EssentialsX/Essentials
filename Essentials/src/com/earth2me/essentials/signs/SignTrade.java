@@ -135,11 +135,11 @@ public class SignTrade extends EssentialsSign
 			final Double money = getMoney(split[0]);
 			if (money != null)
 			{
-				if (Util.formatCurrency(money, ess).length() * 2 > 15)
+				if (Util.shortCurrency(money, ess).length() * 2 > 15)
 				{
 					throw new SignException("Line can be too long!");
 				}
-				sign.setLine(index, Util.formatCurrency(money, ess) + ":0");
+				sign.setLine(index, Util.shortCurrency(money, ess) + ":0");
 				return;
 			}
 		}
@@ -155,7 +155,7 @@ public class SignTrade extends EssentialsSign
 				{
 					throw new SignException(_("moreThanZero"));
 				}
-				sign.setLine(index, Util.formatCurrency(money, ess) + ":" + Util.formatCurrency(amount, ess).substring(1));
+				sign.setLine(index, Util.shortCurrency(money, ess) + ":" + Util.shortCurrency(amount, ess).substring(1));
 				return;
 			}
 		}
@@ -313,7 +313,7 @@ public class SignTrade extends EssentialsSign
 			final Double amount = getDouble(split[1]);
 			if (money != null && amount != null)
 			{
-				final String newline = Util.formatCurrency(money, ess) + ":" + Util.formatCurrency(amount + value, ess).substring(1);
+				final String newline = Util.shortCurrency(money, ess) + ":" + Util.shortCurrency(amount + value, ess).substring(1);
 				if (newline.length() > 15)
 				{
 					throw new SignException("This sign is full: Line too long!");

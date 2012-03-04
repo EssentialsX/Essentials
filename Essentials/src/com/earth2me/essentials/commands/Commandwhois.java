@@ -60,7 +60,7 @@ public class Commandwhois extends EssentialsCommand
 			sender.sendMessage(_("whoisLocation", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ()));
 			if (!ess.getSettings().isEcoDisabled())
 			{
-				sender.sendMessage(_("whoisMoney", Util.formatCurrency(user.getMoney(), ess)));
+				sender.sendMessage(_("whoisMoney", Util.displayCurrency(user.getMoney(), ess)));
 			}
 			sender.sendMessage(user.isAfk()
 							   ? _("whoisStatusAway")

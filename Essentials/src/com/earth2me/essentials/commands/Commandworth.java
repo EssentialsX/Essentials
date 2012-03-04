@@ -51,14 +51,14 @@ public class Commandworth extends EssentialsCommand
 						 ? _("worthMeta",
 							 iStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""),
 							 iStack.getDurability(),
-							 Util.formatCurrency(worth * amount, ess),
+							 Util.displayCurrency(worth * amount, ess),
 							 amount,
-							 Util.formatCurrency(worth, ess))
+							 Util.displayCurrency(worth, ess))
 						 : _("worth",
 							 iStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""),
-							 Util.formatCurrency(worth * amount, ess),
+							 Util.displayCurrency(worth * amount, ess),
 							 amount,
-							 Util.formatCurrency(worth, ess)));
+							 Util.displayCurrency(worth, ess)));
 	}
 
 	@Override
@@ -95,14 +95,14 @@ public class Commandworth extends EssentialsCommand
 						   ? _("worthMeta",
 							   iStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""),
 							   iStack.getDurability(),
-							   Util.formatCurrency(worth * amount, ess),
+							   Util.displayCurrency(worth * amount, ess),
 							   amount,
-							   Util.formatCurrency(worth, ess))
+							   Util.displayCurrency(worth, ess))
 						   : _("worth",
 							   iStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""),
-							   Util.formatCurrency(worth * amount, ess),
+							   Util.displayCurrency(worth * amount, ess),
 							   amount,
-							   Util.formatCurrency(worth, ess)));
+							   Util.displayCurrency(worth, ess)));
 
 	}
 }
