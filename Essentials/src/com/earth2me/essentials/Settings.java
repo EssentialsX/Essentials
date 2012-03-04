@@ -352,6 +352,12 @@ public class Settings implements ISettings
 	}
 
 	@Override
+	public String getNewPlayerKit()
+	{
+		return config.getString("newbies.kit", "");
+	}
+
+	@Override
 	public String getNewbieSpawn()
 	{
 		return config.getString("newbies.spawnpoint", "default");

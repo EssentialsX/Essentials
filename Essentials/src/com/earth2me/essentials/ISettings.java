@@ -20,6 +20,8 @@ public interface ISettings extends IConf
 
 	boolean getAnnounceNewPlayers();
 
+	String getNewPlayerKit();
+
 	String getBackupCommand();
 
 	long getBackupInterval();
@@ -115,11 +117,11 @@ public interface ISettings extends IConf
 	boolean warnOnSmite();
 
 	double getMaxMoney();
-	
+
 	double getMinMoney();
 
 	boolean isEcoLogEnabled();
-	
+
 	boolean isEcoLogUpdateEnabled();
 
 	boolean removeGodOnDisconnect();

@@ -547,6 +547,11 @@ newbies:
   # When we spawn for the first time, which spawnpoint do we use?
   # Set to "none" if you want to use the spawn point of the world.
   spawnpoint: newbies
+  
+  # Do we want to give users anything on first join? Set to '' to disable
+  # This kit will be given reguardless of cost, and permissions.
+  #kit: ''
+  kit: tools
 
 # Set this to lowest, if you want Multiverse to handle the respawning
 # Set this to high, if you want EssentialsSpawn to handle the respawning
