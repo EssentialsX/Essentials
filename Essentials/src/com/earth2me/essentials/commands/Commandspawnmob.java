@@ -5,9 +5,7 @@ import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.Mob.MobException;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
-import java.util.Locale;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -27,12 +25,13 @@ public class Commandspawnmob extends EssentialsCommand
 	{
 		if (args.length < 1)
 		{
-			final Set<String> availableList = Mob.getMobList();
-			for (String mob : availableList)
+			final Set<String> mobList = Mob.getMobList();
+			final Set<String> availableList = new HashSet<String>();
+			for (String mob : mobList)
 			{
-				if (!user.isAuthorized("essentials.spawnmob." + mob.toLowerCase()))
+				if (user.isAuthorized("essentials.spawnmob." + mob.toLowerCase()))
 				{
-					availableList.remove(mob);
+					availableList.add(mob);
 				}
 			}
 			if (availableList.isEmpty())
