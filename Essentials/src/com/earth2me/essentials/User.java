@@ -105,10 +105,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			return;
 		}
 		setMoney(getMoney() + value);
-		sendMessage(_("addedToAccount", Util.formatCurrency(value, ess)));
+		sendMessage(_("addedToAccount", Util.displayCurrency(value, ess)));
 		if (initiator != null)
 		{
-			initiator.sendMessage(_("addedToOthersAccount", Util.formatCurrency(value, ess), this.getDisplayName(), Util.formatCurrency(getMoney(), ess)));
+			initiator.sendMessage(_("addedToOthersAccount", Util.displayCurrency(value, ess), this.getDisplayName(), Util.displayCurrency(getMoney(), ess)));
 		}
 	}
 
@@ -122,8 +122,8 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		{
 			setMoney(getMoney() - value);
 			reciever.setMoney(reciever.getMoney() + value);
-			sendMessage(_("moneySentTo", Util.formatCurrency(value, ess), reciever.getDisplayName()));
-			reciever.sendMessage(_("moneyRecievedFrom", Util.formatCurrency(value, ess), getDisplayName()));
+			sendMessage(_("moneySentTo", Util.displayCurrency(value, ess), reciever.getDisplayName()));
+			reciever.sendMessage(_("moneyRecievedFrom", Util.displayCurrency(value, ess), getDisplayName()));
 		}
 		else
 		{
@@ -144,10 +144,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			return;
 		}
 		setMoney(getMoney() - value);
-		sendMessage(_("takenFromAccount", Util.formatCurrency(value, ess)));
+		sendMessage(_("takenFromAccount", Util.displayCurrency(value, ess)));
 		if (initiator != null)
 		{
-			initiator.sendMessage(_("takenFromOthersAccount", Util.formatCurrency(value, ess), this.getDisplayName(), Util.formatCurrency(getMoney(), ess)));
+			initiator.sendMessage(_("takenFromOthersAccount", Util.displayCurrency(value, ess), this.getDisplayName(), Util.displayCurrency(getMoney(), ess)));
 		}
 	}
 
