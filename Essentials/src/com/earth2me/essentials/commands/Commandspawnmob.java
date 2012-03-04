@@ -27,7 +27,7 @@ public class Commandspawnmob extends EssentialsCommand
 	{
 		if (args.length < 1)
 		{
-			Set<String> availableList = Mob.getMobList();
+			final Set<String> availableList = Mob.getMobList();
 			for (String mob : availableList)
 			{
 				if (!user.isAuthorized("essentials.spawnmob." + mob.toLowerCase()))

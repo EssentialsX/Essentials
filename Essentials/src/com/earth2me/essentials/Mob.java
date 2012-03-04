@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -73,7 +74,7 @@ public enum Mob
 	}
 	
 	public static Set<String> getMobList() {
-		return hashMap.keySet();
+		return Collections.unmodifiableSet(hashMap.keySet());
 	}
 
 	public LivingEntity spawn(final Player player, final Server server, final Location loc) throws MobException
