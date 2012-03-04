@@ -262,19 +262,19 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			nickname.append(ess.getSettings().getNicknamePrefix()).append(nick);
 		}
 
+		if (isOp())
+		{
+			try
+			{
+				nickname.insert(0, ess.getSettings().getOperatorColor().toString());
+				nickname.append("§f");
+			}
+			catch (Exception e)
+			{
+			}
+		}
 		if (addprefixsuffix && ess.getSettings().addPrefixSuffix())
 		{
-			if (isOp())
-			{
-				try
-				{
-					nickname.insert(0, ess.getSettings().getOperatorColor().toString());
-				}
-				catch (Exception e)
-				{
-				}
-			}
-
 			if (!ess.getSettings().disablePrefix())
 			{
 				final String prefix = ess.getPermissionsHandler().getPrefix(base).replace('&', '§');
