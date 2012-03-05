@@ -37,7 +37,7 @@ public class Commandkittycannon extends EssentialsCommand
 			{
 				final Location loc = ocelot.getLocation();
 				ocelot.remove();
-				loc.getWorld().createExplosion(loc, 1f);
+				loc.getWorld().createExplosion(loc, 0F);
 			}
 		}, 20);
 	}
