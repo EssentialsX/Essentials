@@ -73,7 +73,7 @@ public class Commandlist extends EssentialsCommand
 			for (String group : groups)
 			{
 				final StringBuilder groupString = new StringBuilder();
-				groupString.append(Util.replaceColor(group)).append(": ");
+				groupString.append(_("listGroupTag",Util.replaceColor(group)));
 				final List<User> users = sort.get(group);
 				Collections.sort(users);
 				boolean first = true;
