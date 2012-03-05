@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import java.util.*;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -72,7 +73,7 @@ public class Commandlist extends EssentialsCommand
 			for (String group : groups)
 			{
 				final StringBuilder groupString = new StringBuilder();
-				groupString.append(group).append(": ");
+				groupString.append(Util.replaceColor(group)).append(": ");
 				final List<User> users = sort.get(group);
 				Collections.sort(users);
 				boolean first = true;
