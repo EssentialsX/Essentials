@@ -83,7 +83,7 @@ warn-on-smite: true
 overridden-commands:
   - god
 
-# Disabled commands will be completelly unavailable on the server.
+# Disabled commands will be completely unavailable on the server.
 disabled-commands:
 # - nick
 
@@ -326,9 +326,9 @@ currency-symbol: '$'
 # The amount is always limited to 10 trillions because of the limitations of a java double
 max-money: 10000000000000
 
-# Set the minimum amount of money a player can have
-# Setting this to 0, will disable overdrafts/loans compeltely.  Users need 'essentials.eco.loan' perm to go below 0.
-min-money: -10000000000000
+# Set the minimum amount of money a player can have (must be above the negitive of max-money).
+# Setting this to 0, will disable overdrafts/loans completely.  Users need 'essentials.eco.loan' perm to go below 0.
+min-money: -10000
 
 # Enable this to log all interactions with trade/buy/sell signs and sell command
 economy-log-enabled: false
