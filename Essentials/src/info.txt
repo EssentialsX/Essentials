@@ -11,6 +11,9 @@ Extra pages:
 Type /info Colours
 Type /info Tags
 
+If you have problem viewing this file ingame, try using /einfo.
+If this works, it means another command is blocking /info.
+
 It can contain chapters like the Chapter1 below:
 
 #Chapter1
