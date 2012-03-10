@@ -62,7 +62,7 @@ public class EssentialsEntityListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityDamage(final EntityDamageEvent event)
 	{
 		if (event.getEntity() instanceof Player && ess.getUser(event.getEntity()).isGodModeEnabled())
@@ -74,7 +74,7 @@ public class EssentialsEntityListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityCombust(final EntityCombustEvent event)
 	{
 		if (event.getEntity() instanceof Player && ess.getUser(event.getEntity()).isGodModeEnabled())
@@ -98,7 +98,7 @@ public class EssentialsEntityListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onFoodLevelChange(final FoodLevelChangeEvent event)
 	{
 		if (event.getEntity() instanceof Player && ess.getUser(event.getEntity()).isGodModeEnabled())
@@ -107,7 +107,7 @@ public class EssentialsEntityListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityRegainHealth(final EntityRegainHealthEvent event)
 	{
 		if (event.getRegainReason() == RegainReason.SATIATED && event.getEntity() instanceof Player

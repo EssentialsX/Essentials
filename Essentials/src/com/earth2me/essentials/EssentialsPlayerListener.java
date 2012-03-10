@@ -75,13 +75,9 @@ public class EssentialsPlayerListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerMove(final PlayerMoveEvent event)
 	{
-		if (event.isCancelled())
-		{
-			return;
-		}
 		final User user = ess.getUser(event.getPlayer());
 
 		if (user.isAfk() && ess.getSettings().getFreezeAfkPlayers())
@@ -231,13 +227,9 @@ public class EssentialsPlayerListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerTeleport(final PlayerTeleportEvent event)
 	{
-		if (event.isCancelled())
-		{
-			return;
-		}
 
 		//There is TeleportCause.COMMMAND but plugins have to actively pass the cause in on their teleports.
 		if ((event.getCause() == TeleportCause.PLUGIN || event.getCause() == TeleportCause.COMMAND) && ess.getSettings().registerBackInListener())
@@ -248,7 +240,7 @@ public class EssentialsPlayerListener implements Listener
 
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerEggThrow(final PlayerEggThrowEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
@@ -260,7 +252,7 @@ public class EssentialsPlayerListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerBucketEmpty(final PlayerBucketEmptyEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
@@ -278,13 +270,9 @@ public class EssentialsPlayerListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerCommandPreprocess(final PlayerCommandPreprocessEvent event)
 	{
-		if (event.isCancelled())
-		{
-			return;
-		}
 		final User user = ess.getUser(event.getPlayer());
 		final String cmd = event.getMessage().toLowerCase(Locale.ENGLISH).split(" ")[0].replace("/", "").toLowerCase(Locale.ENGLISH);
 		final List<String> commands = Arrays.asList("msg", "r", "mail", "m", "t", "emsg", "tell", "er", "reply", "ereply", "email");
@@ -400,10 +388,10 @@ public class EssentialsPlayerListener implements Listener
 		return used;
 	}
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerPickupItem(final PlayerPickupItemEvent event)
 	{
-		if (event.isCancelled() || !ess.getSettings().getDisableItemPickupWhileAfk())
+		if (!ess.getSettings().getDisableItemPickupWhileAfk())
 		{
 			return;
 		}
