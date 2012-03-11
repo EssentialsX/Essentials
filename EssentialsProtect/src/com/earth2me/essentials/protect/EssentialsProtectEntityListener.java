@@ -334,7 +334,7 @@ public class EssentialsProtectEntityListener implements Listener
 		{
 			return;
 		}
-		if (prot.getSettingBool(ProtectConfig.prevent_enderman_pickup))
+		if (event.getEntityType() == EntityType.ENDERMAN && prot.getSettingBool(ProtectConfig.prevent_enderman_pickup))
 		{
 			event.setCancelled(true);
 			return;
