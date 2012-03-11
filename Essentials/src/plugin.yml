@@ -295,7 +295,7 @@ commands:
     aliases: [createwarp,esetwarp]
   setworth:
     description: Set the sell value of an item.
-    usage: /<command> <itemname|id> <price>
+    usage: /<command> [itemname|id] <price>
     aliases: [esetworth]
   socialspy:
     description: Toggles if you can see msg/mail commands in chat.
