@@ -24,7 +24,7 @@ public class Commandlightning extends EssentialsCommand
 		{
 			user = ess.getUser(((Player)sender));
 		}
-		if (args.length < 1 & user != null)
+		if ((args.length < 1 || !user.isAuthorized("essentials.lightning.others")) & user != null)
 		{
 			user.getWorld().strikeLightning(user.getTargetBlock(null, 600).getLocation());
 			return;
