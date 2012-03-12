@@ -24,7 +24,7 @@ groups:
     inheritance:
     - default
     - g:essentials_builder
-    - g:towny_moderator
+    - g:towny_builder
     info:
       prefix: '&2'
       build: true
