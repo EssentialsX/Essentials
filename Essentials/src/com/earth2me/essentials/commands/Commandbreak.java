@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -29,7 +30,7 @@ public class Commandbreak extends EssentialsCommand
 		}
 		if (block.getType() == Material.BEDROCK && !user.isAuthorized("essentials.break.bedrock"))
 		{
-			throw new Exception("You are not allowed to destroy bedrock."); //TODO: Translation
+			throw new Exception(_("noBreakBedrock"));
 		}
 		final BlockBreakEvent event = new BlockBreakEvent(block, user.getBase());
 		server.getPluginManager().callEvent(event);

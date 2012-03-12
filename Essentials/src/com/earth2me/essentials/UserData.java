@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import static com.earth2me.essentials.I18n._;
 import java.io.File;
 import java.util.*;
 import java.util.logging.Logger;
@@ -176,8 +177,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		}
 		else
 		{
-			//TODO: move this message to messages file
-			throw new Exception("Home " + name + " doesn't exist");
+			throw new Exception(_("invalidHome", name));
 		}
 	}
 
