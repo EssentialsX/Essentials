@@ -50,7 +50,7 @@ public class HelpInput implements IText
 							final String node = "essentials." + k.getKey();
 							if (!ess.getSettings().isCommandDisabled(k.getKey()) && user.isAuthorized(node))
 							{
-								lines.add("§c" + k.getKey() + "§7: " + k.getValue().get(DESCRIPTION));
+								lines.add(_("helpLine", k.getKey(), k.getValue().get(DESCRIPTION)));
 							}
 						}
 						else
@@ -69,7 +69,7 @@ public class HelpInput implements IText
 								}
 								if (user.isAuthorized("essentials.help." + pluginName))
 								{
-									lines.add("§c" + k.getKey() + "§7: " + value.get(DESCRIPTION));
+									lines.add(_("helpLine", k.getKey(), value.get(DESCRIPTION)));
 								}
 								else if (permissions instanceof List && !((List<Object>)permissions).isEmpty())
 								{
@@ -84,21 +84,21 @@ public class HelpInput implements IText
 									}
 									if (enabled)
 									{
-										lines.add("§c" + k.getKey() + "§7: " + value.get(DESCRIPTION));
+										lines.add(_("helpLine", k.getKey(), value.get(DESCRIPTION)));
 									}
 								}
 								else if (permissions instanceof String && !"".equals(permissions))
 								{
 									if (user.isAuthorized(permissions.toString()))
 									{
-										lines.add("§c" + k.getKey() + "§7: " + value.get(DESCRIPTION));
+										lines.add(_("helpLine", k.getKey(), value.get(DESCRIPTION)));
 									}
 								}
 								else
 								{
 									if (!ess.getSettings().hidePermissionlessHelp())
 									{
-										lines.add("§c" + k.getKey() + "§7: " + value.get(DESCRIPTION));
+										lines.add(_("helpLine", k.getKey(), value.get(DESCRIPTION)));
 									}
 								}
 							}
