@@ -17,26 +17,37 @@ public class Commandseen extends EssentialsCommand
 	@Override
 	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
+		seen(server,sender,args,true);
+	}
+	
+	@Override
+	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
+	{
+		seen(server,user,args,user.isAuthorized("essentials.seen.banreason"));
+	}
+	
+	protected void seen (final Server server, final CommandSender sender, final String[] args, final boolean show) throws Exception
+	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
 		try
 		{
-			User user = getPlayer(server, args, 0);
-			sender.sendMessage(_("seenOnline", user.getDisplayName(), Util.formatDateDiff(user.getLastLogin())));
+			User player = getPlayer(server, args, 0);
+			sender.sendMessage(_("seenOnline", player.getDisplayName(), Util.formatDateDiff(player.getLastLogin())));
 		}
 		catch (NoSuchFieldException e)
 		{
-			User user = ess.getOfflineUser(args[0]);
-			if (user == null)
+			User player = ess.getOfflineUser(args[0]);
+			if (player == null)
 			{
 				throw new Exception(_("playerNotFound"));
 			}
-			sender.sendMessage(_("seenOffline", user.getDisplayName(), Util.formatDateDiff(user.getLastLogout())));
-			if (user.isBanned())
+			sender.sendMessage(_("seenOffline", player.getDisplayName(), Util.formatDateDiff(player.getLastLogout())));
+			if (player.isBanned())
 			{
-				sender.sendMessage(_("whoisBanned", user.getBanReason()));
+				sender.sendMessage(_("whoisBanned", show ? player.getBanReason() : _("true")));
 			}
 		}
 	}
