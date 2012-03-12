@@ -1,7 +1,6 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
@@ -21,7 +20,7 @@ public class Commandtpaccept extends EssentialsCommand
 
 		final User target = user.getTeleportRequest();
 		if (target == null
-			|| target.getBase() instanceof OfflinePlayer
+			|| !target.isOnline()
 			|| (user.isTeleportRequestHere() && !target.isAuthorized("essentials.tpahere"))
 			|| (!user.isTeleportRequestHere() && !target.isAuthorized("essentials.tpa") && !target.isAuthorized("essentials.tpaall"))
 			)

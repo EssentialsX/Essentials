@@ -2,7 +2,6 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -24,7 +23,7 @@ public class Commandban extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 		final User user = getPlayer(server, args, 0, true);
-		if (user.getBase() instanceof OfflinePlayer)
+		if (!user.isOnline())
 		{
 			if (sender instanceof Player
 				&& !ess.getUser(sender).isAuthorized("essentials.ban.offline"))

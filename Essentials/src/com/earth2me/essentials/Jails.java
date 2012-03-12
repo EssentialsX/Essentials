@@ -115,7 +115,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 		acquireReadLock();
 		try
 		{
-			if (!(user.getBase() instanceof OfflinePlayer))
+			if (user.isOnline())
 			{
 				Location loc = getJail(jail);
 				user.getTeleport().now(loc, false, TeleportCause.COMMAND);

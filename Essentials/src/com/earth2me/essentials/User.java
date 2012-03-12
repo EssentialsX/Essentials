@@ -267,7 +267,8 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			try
 			{
 				final String opPrefix = ess.getSettings().getOperatorColor().toString();
-				if (opPrefix.length() > 0) {
+				if (opPrefix.length() > 0)
+				{
 					nickname.insert(0, opPrefix);
 					nickname.append("§f");
 				}
@@ -326,7 +327,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	@Override
 	public String getDisplayName()
 	{
-		if (!(base instanceof OfflinePlayer) && ess.getSettings().changeDisplayName())
+		if (base.isOnline() && ess.getSettings().changeDisplayName())
 		{
 			setDisplayNick();
 		}

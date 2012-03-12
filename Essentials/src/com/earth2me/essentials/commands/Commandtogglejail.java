@@ -1,7 +1,6 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import org.bukkit.Server;
@@ -28,7 +27,7 @@ public class Commandtogglejail extends EssentialsCommand
 
 		if (args.length >= 2 && !player.isJailed())
 		{
-			if (player.getBase() instanceof OfflinePlayer)
+			if (!player.isOnline())
 			{
 				if (sender instanceof Player
 					&& !ess.getUser(sender).isAuthorized("essentials.togglejail.offline"))
@@ -45,7 +44,7 @@ public class Commandtogglejail extends EssentialsCommand
 					return;
 				}
 			}
-			if (!(player.getBase() instanceof OfflinePlayer))
+			if (player.isOnline())
 			{
 				ess.getJails().sendToJail(player, args[1]);
 			}
@@ -96,7 +95,7 @@ public class Commandtogglejail extends EssentialsCommand
 			player.setJailTimeout(0);
 			player.sendMessage(_("jailReleasedPlayerNotify"));
 			player.setJail(null);
-			if (!(player.getBase() instanceof OfflinePlayer))
+			if (player.isOnline())
 			{
 				player.getTeleport().back();
 			}

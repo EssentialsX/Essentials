@@ -23,20 +23,20 @@ public class Commandseen extends EssentialsCommand
 		}
 		try
 		{
-			User u = getPlayer(server, args, 0);
-			sender.sendMessage(_("seenOnline", u.getDisplayName(), Util.formatDateDiff(u.getLastLogin())));
+			User user = getPlayer(server, args, 0);
+			sender.sendMessage(_("seenOnline", user.getDisplayName(), Util.formatDateDiff(user.getLastLogin())));
 		}
 		catch (NoSuchFieldException e)
 		{
-			User u = ess.getOfflineUser(args[0]);
-			if (u == null)
+			User user = ess.getOfflineUser(args[0]);
+			if (user == null)
 			{
 				throw new Exception(_("playerNotFound"));
 			}
-			sender.sendMessage(_("seenOffline", u.getDisplayName(), Util.formatDateDiff(u.getLastLogout())));
-			if (u.isBanned())
+			sender.sendMessage(_("seenOffline", user.getDisplayName(), Util.formatDateDiff(user.getLastLogout())));
+			if (user.isBanned())
 			{
-				sender.sendMessage(_("whoisBanned", _("true")));
+				sender.sendMessage(_("whoisBanned", user.getBanReason()));
 			}
 		}
 	}
