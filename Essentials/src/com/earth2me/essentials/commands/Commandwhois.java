@@ -62,6 +62,11 @@ public class Commandwhois extends EssentialsCommand
 			{
 				sender.sendMessage(_("whoisMoney", Util.displayCurrency(user.getMoney(), ess)));
 			}
+			sender.sendMessage(_("whoisJail", (user.isJailed()
+											   ? user.getJailTimeout() > 0
+												 ? Util.formatDateDiff(user.getJailTimeout())
+												 : _("true")
+											   : _("false"))));
 			sender.sendMessage(user.isAfk()
 							   ? _("whoisStatusAway")
 							   : _("whoisStatusAvailable"));
