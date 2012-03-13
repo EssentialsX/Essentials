@@ -158,11 +158,9 @@ public class Trade
 			InventoryWorkaround.removeItem(user.getInventory(), true, true, getItemStack());
 			user.updateInventory();
 		}
-		if (command != null && !command.isEmpty()
-			&& !user.isAuthorized("essentials.nocommandcost.all")
-			&& !user.isAuthorized("essentials.nocommandcost." + command))
+		if (command != null)
 		{
-			final double cost = ess.getSettings().getCommandCost(command.charAt(0) == '/' ? command.substring(1) : command);
+			final double cost = getCommandCost(user);
 			if (!user.canAfford(cost) && cost > 0)
 			{
 				throw new ChargeException(_("notEnoughMoney"));
@@ -193,6 +191,18 @@ public class Trade
 	public Integer getExperience()
 	{
 		return exp;
+	}
+
+	public Double getCommandCost(final IUser user)
+	{
+		double cost = 0d;
+		if (command != null && !command.isEmpty()
+			&& !user.isAuthorized("essentials.nocommandcost.all")
+			&& !user.isAuthorized("essentials.nocommandcost." + command))
+		{
+			cost = ess.getSettings().getCommandCost(command.charAt(0) == '/' ? command.substring(1) : command);
+		}
+		return cost;
 	}
 	private static FileWriter fw = null;
 
