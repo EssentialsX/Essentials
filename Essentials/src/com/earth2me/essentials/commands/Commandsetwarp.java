@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import com.earth2me.essentials.Warps;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -34,11 +35,11 @@ public class Commandsetwarp extends EssentialsCommand
 		{
 			warpLoc = warps.getWarp(args[0]);
 		}
-		catch (WarpNotFoundException ex)
+		catch (Exception ex)
 		{
 		}
 
-		if (warpLoc == null || user.hasPermission("essentials.warp.overwrite." + args[0]))
+		if (warpLoc == null || user.isAuthorized("essentials.warp.overwrite." + Util.sanitizeFileName(args[0])))
 		{
 			warps.setWarp(args[0], loc);
 		}

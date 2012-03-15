@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.commands.WarpNotFoundException;
 import java.io.File;
 import java.util.*;
 import java.util.logging.Level;
@@ -48,7 +49,7 @@ public class Warps implements IConf
 		EssentialsConf conf = warpPoints.get(new StringIgnoreCase(warp));
 		if (conf == null)
 		{
-			throw new Exception(_("warpNotExist"));
+			throw new WarpNotFoundException();
 		}
 		return conf.getLocation(null, server);
 	}
