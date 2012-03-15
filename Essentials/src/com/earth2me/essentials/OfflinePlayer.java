@@ -7,6 +7,7 @@ import lombok.Delegate;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.conversations.Conversation;
+import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -1024,6 +1025,18 @@ public class OfflinePlayer implements Player
 
 	@Override
 	public void sendMessage(String[] strings)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public boolean isBlocking()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void abandonConversation(Conversation arg0, ConversationAbandonedEvent arg1)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}

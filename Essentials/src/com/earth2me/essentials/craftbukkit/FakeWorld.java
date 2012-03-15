@@ -627,4 +627,10 @@ public class FakeWorld implements World
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
+	@Override
+	public void setBiome(int arg0, int arg1, Biome arg2)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }
