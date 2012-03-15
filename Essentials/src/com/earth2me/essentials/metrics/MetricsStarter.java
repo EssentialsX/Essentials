@@ -2,7 +2,9 @@ package com.earth2me.essentials.metrics;
 
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.metrics.Metrics.Graph;
+import com.earth2me.essentials.metrics.Metrics.Plotter;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.logging.Level;
 
 
@@ -64,16 +66,38 @@ public class MetricsStarter implements Runnable
 				final String moduleName = module.toString();
 				if (ess.getServer().getPluginManager().isPluginEnabled(moduleName))
 				{
-					moduleGraph.addPlotter(new Metrics.Plotter(moduleName)
-					{
-						@Override
-						public int getValue()
-						{
-							return 1;
-						}
-					});
+					moduleGraph.addPlotter(new SimplePlotter(moduleName));
 				}
 			}
+
+			Graph localeGraph = metrics.createGraph("Locale");
+			localeGraph.addPlotter(new SimplePlotter(ess.getI18n().getCurrentLocale().getDisplayLanguage(Locale.ENGLISH)));
+
+			Graph featureGraph = metrics.createGraph("Features");
+			featureGraph.addPlotter(new Plotter("Unique Accounts")
+			{
+				@Override
+				public int getValue()
+				{
+					return ess.getUserMap().getUniqueUsers();
+				}
+			});
+			featureGraph.addPlotter(new Plotter("Kits")
+			{
+				@Override
+				public int getValue()
+				{
+					return ess.getSettings().getKits().getKeys(false).size();
+				}
+			});
+			featureGraph.addPlotter(new Plotter("Warps")
+			{
+				@Override
+				public int getValue()
+				{
+					return ess.getWarps().getWarpNames().size();
+				}
+			});
 
 			metrics.start();
 
@@ -99,5 +123,20 @@ public class MetricsStarter implements Runnable
 	public Boolean getStart()
 	{
 		return start;
+	}
+
+
+	private class SimplePlotter extends Plotter
+	{
+		public SimplePlotter(final String name)
+		{
+			super(name);
+		}
+
+		@Override
+		public int getValue()
+		{
+			return 1;
+		}
 	}
 }
