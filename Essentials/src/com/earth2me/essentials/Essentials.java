@@ -24,6 +24,7 @@ import com.earth2me.essentials.commands.EssentialsCommand;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
+import com.earth2me.essentials.metrics.Metrics;
 import com.earth2me.essentials.metrics.MetricsListener;
 import com.earth2me.essentials.metrics.MetricsStarter;
 import com.earth2me.essentials.perm.PermissionsHandler;
@@ -84,6 +85,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private transient UserMap userMap;
 	private transient ExecuteTimer execTimer;
 	private transient I18n i18n;
+	private transient Metrics metrics;
 
 	@Override
 	public ISettings getSettings()
@@ -239,13 +241,13 @@ public class Essentials extends JavaPlugin implements IEssentials
 		getScheduler().scheduleSyncRepeatingTask(this, timer, 1, 100);
 		Economy.setEss(this);
 		execTimer.mark("RegListeners");
-
+		
 		final MetricsStarter metricsStarter = new MetricsStarter(this);
-		if (metricsStarter.getStart())
+		if (metricsStarter.getStart() != null && metricsStarter.getStart() == true)
 		{
 			getScheduler().scheduleAsyncDelayedTask(this, metricsStarter, 1);
 		}
-		else if (metricsStarter.getStart() == false)
+		else if (metricsStarter.getStart() != null && metricsStarter.getStart() == false)
 		{
 			final MetricsListener metricsListener = new MetricsListener(this, metricsStarter);
 			pm.registerEvents(metricsListener, this);
@@ -447,6 +449,16 @@ public class Essentials extends JavaPlugin implements IEssentials
 	public Backup getBackup()
 	{
 		return backup;
+	}
+
+	public Metrics getMetrics()
+	{
+		return metrics;
+	}
+
+	public void setMetrics(Metrics metrics)
+	{
+		this.metrics = metrics;
 	}
 
 	@Override

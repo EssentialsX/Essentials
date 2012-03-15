@@ -31,7 +31,7 @@ public class MetricsListener implements Listener
 		if (ess.getSettings().isMetricsEnabled() == false && (player.isAuthorized("essentials.essentials") || player.isAuthorized("bukkit.broadcast.admin")))
 		{
 			player.sendMessage("PluginMetrics collects minimal statistic data, starting in about 5 minutes.");
-			player.sendMessage("To opt out, edit plugins/PluginMetrics/config.yml.");
+			player.sendMessage("To opt out, run /essentials opt-out");
 			ess.getLogger().log(Level.INFO, "[Metrics] Admin join - Starting 5 minute opt-out period.");
 			ess.getSettings().setMetricsEnabled(true);
 			ess.getScheduler().scheduleAsyncDelayedTask(ess, starter, 5 * 1200);

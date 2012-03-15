@@ -2,8 +2,12 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Util;
+import com.earth2me.essentials.metrics.Metrics;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -39,6 +43,10 @@ public class Commandessentials extends EssentialsCommand
 		else if (args[0].equalsIgnoreCase("moo"))
 		{
 			run_moo(server, sender, commandLabel, args);
+		}
+		else if (args[0].equalsIgnoreCase("opt-out"))
+		{
+			run_optout(server, sender, commandLabel, args);
 		}
 		else {
 			run_reload(server, sender, commandLabel, args);
@@ -170,5 +178,20 @@ public class Commandessentials extends EssentialsCommand
 			sender.sendMessage(new String[]{"         (__)", "         (oo)", "   /------\\/", "  / |    ||", " *  /\\---/\\", "    ~~   ~~", "....\"Have you mooed today?\"..." } );
 		else
 			sender.sendMessage(new String[]{"            (__)", "            (oo)", "   /------\\/", "  /  |      | |", " *  /\\---/\\", "    ~~    ~~", "....\"Have you mooed today?\"..." } );
+	}
+	
+	private void run_optout(final Server server, final CommandSender sender, final String command, final String args[])
+	{
+		final Metrics metrics = ess.getMetrics();
+		try
+		{
+			sender.sendMessage("Essentials collects simple metrics to highlight which features to concentrate work on in the future.");
+			metrics.setOptOut(!metrics.isOptOut());			
+			sender.sendMessage("Annonmous Metrics are now: " + (metrics.isOptOut() ? "disabled" : "enabled"));
+		}
+		catch (IOException ex)
+		{
+			sender.sendMessage("Unable to modify 'plugins/PluginMetrics/config.yml': " + ex.getMessage());
+		}
 	}
 }

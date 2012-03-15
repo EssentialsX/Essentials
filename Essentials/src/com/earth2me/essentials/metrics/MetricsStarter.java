@@ -29,7 +29,9 @@ public class MetricsStarter implements Runnable
 		ess = plugin;
 		try
 		{
+
 			final Metrics metrics = new Metrics(ess);
+			ess.setMetrics(metrics);
 
 			if (!metrics.isOptOut())
 			{
@@ -40,14 +42,14 @@ public class MetricsStarter implements Runnable
 				else
 				{
 					ess.getLogger().info("This plugin collects minimal statistic data and sends it to http://metrics.essentials3.net.");
-					ess.getLogger().info("You can opt out by changing plugins/PluginMetrics/config.yml, set opt-out to true.");
+					ess.getLogger().info("You can opt out by running /essentials opt-out");
 					ess.getLogger().info("This will start 5 minutes after the first admin/op joins.");
 					start = false;
 				}
 				return;
 			}
 		}
-		catch (IOException ex)
+		catch (Exception ex)
 		{
 			metricsError(ex);
 		}
@@ -58,9 +60,9 @@ public class MetricsStarter implements Runnable
 	{
 		try
 		{
-			final Metrics metrics = new Metrics(ess);
+			final Metrics metrics = ess.getMetrics();
 
-			Graph moduleGraph = metrics.createGraph("Modules Used");
+			final Graph moduleGraph = metrics.createGraph("Modules Used");
 			for (Modules module : Modules.values())
 			{
 				final String moduleName = module.toString();
@@ -70,10 +72,10 @@ public class MetricsStarter implements Runnable
 				}
 			}
 
-			Graph localeGraph = metrics.createGraph("Locale");
+			final Graph localeGraph = metrics.createGraph("Locale");
 			localeGraph.addPlotter(new SimplePlotter(ess.getI18n().getCurrentLocale().getDisplayLanguage(Locale.ENGLISH)));
 
-			Graph featureGraph = metrics.createGraph("Features");
+			final Graph featureGraph = metrics.createGraph("Features");
 			featureGraph.addPlotter(new Plotter("Unique Accounts")
 			{
 				@Override
@@ -102,13 +104,13 @@ public class MetricsStarter implements Runnable
 			metrics.start();
 
 		}
-		catch (IOException ex)
+		catch (Exception ex)
 		{
 			metricsError(ex);
 		}
 	}
 
-	public void metricsError(IOException ex)
+	public void metricsError(final Exception ex)
 	{
 		if (ess.getSettings().isDebug())
 		{

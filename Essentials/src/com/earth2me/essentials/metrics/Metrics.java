@@ -97,7 +97,11 @@ public class Metrics
 	/**
 	 * The plugin configuration file
 	 */
-	private final YamlConfiguration configuration;
+	private final YamlConfiguration configuration;	
+	/**
+	 * The plugin configuration file
+	 */
+	private final File configurationFile;
 	/**
 	 * Unique server id
 	 */
@@ -113,8 +117,8 @@ public class Metrics
 		this.plugin = plugin;
 
 		// load the config
-		File file = new File(CONFIG_FILE);
-		configuration = YamlConfiguration.loadConfiguration(file);
+		configurationFile = new File(CONFIG_FILE);
+		configuration = YamlConfiguration.loadConfiguration(configurationFile);
 
 		// add some defaults
 		configuration.addDefault("opt-out", false);
@@ -124,7 +128,7 @@ public class Metrics
 		if (configuration.get("guid", null) == null)
 		{
 			configuration.options().header("http://metrics.griefcraft.com").copyDefaults(true);
-			configuration.save(file);
+			configuration.save(configurationFile);
 		}
 
 		// Load the guid then
@@ -177,6 +181,12 @@ public class Metrics
 	public boolean isOptOut()
 	{
 		return configuration.getBoolean("opt-out", false);
+	}
+	
+	public void setOptOut(final boolean toggle) throws IOException
+	{
+		configuration.set("opt-out", toggle);
+		configuration.save(configurationFile);
 	}
 
 	/**
