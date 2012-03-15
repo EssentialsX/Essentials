@@ -145,7 +145,7 @@ public class MetricsStarter implements Runnable
 				enabledGraph.addPlotter(new SimplePlotter("LocalChat"));
 			}
 
-			final Graph depGraph = metrics.createGraph("Dependancies");
+			final Graph depGraph = metrics.createGraph("Dependencies");
 			Method method = ess.getPaymentMethod().getMethod();
 			if (method != null)
 			{
