@@ -3,7 +3,7 @@ package com.earth2me.essentials.metrics;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.metrics.Metrics.Graph;
 import com.earth2me.essentials.metrics.Metrics.Plotter;
-import java.io.IOException;
+import com.earth2me.essentials.register.payment.Method;
 import java.util.Locale;
 import java.util.logging.Level;
 
@@ -84,6 +84,14 @@ public class MetricsStarter implements Runnable
 					return ess.getUserMap().getUniqueUsers();
 				}
 			});
+			featureGraph.addPlotter(new Plotter("Jails")
+			{
+				@Override
+				public int getValue()
+				{
+					return ess.getJails().getCount();
+				}
+			});
 			featureGraph.addPlotter(new Plotter("Kits")
 			{
 				@Override
@@ -100,6 +108,50 @@ public class MetricsStarter implements Runnable
 					return ess.getWarps().getWarpNames().size();
 				}
 			});
+
+			final Graph enabledGraph = metrics.createGraph("EnabledFeatures");
+			enabledGraph.addPlotter(new SimplePlotter("Total"));
+			final String BKcommand = ess.getSettings().getBackupCommand();
+			if (BKcommand != null && !"".equals(BKcommand))
+			{
+				enabledGraph.addPlotter(new SimplePlotter("Backup"));
+			}
+			if (ess.getJails().getCount() > 0)
+			{
+				enabledGraph.addPlotter(new SimplePlotter("Jails"));
+			}
+			if (ess.getSettings().getKits().getKeys(false).size() > 0)
+			{
+				enabledGraph.addPlotter(new SimplePlotter("Kits"));
+			}
+			if (ess.getWarps().getWarpNames().size() > 0)
+			{
+				enabledGraph.addPlotter(new SimplePlotter("Warps"));
+			}
+			if (!ess.getSettings().areSignsDisabled())
+			{
+				enabledGraph.addPlotter(new SimplePlotter("Signs"));
+			}
+			if (ess.getSettings().getAutoAfk() > 0)
+			{
+				enabledGraph.addPlotter(new SimplePlotter("AutoAFK"));
+			}
+			if (ess.getSettings().changeDisplayName())
+			{
+				enabledGraph.addPlotter(new SimplePlotter("DisplayName"));
+			}
+			if (ess.getSettings().getChatRadius() >= 1)
+			{
+				enabledGraph.addPlotter(new SimplePlotter("LocalChat"));
+			}
+
+			final Graph depGraph = metrics.createGraph("Dependancies");
+			Method method = ess.getPaymentMethod().getMethod();
+			if (method != null)
+			{
+				depGraph.addPlotter(new SimplePlotter(method.getName() + " " + method.getVersion()));
+			}
+			depGraph.addPlotter(new SimplePlotter(ess.getPermissionsHandler().getName()));
 
 			metrics.start();
 

@@ -210,4 +210,9 @@ public class PermissionsHandler implements IPermissionsHandler
 	{
 		this.useSuperperms = useSuperperms;
 	}
+
+	public String getName()
+	{
+		return handler.getClass().getSimpleName().replace("Handler", "");
+	}
 }

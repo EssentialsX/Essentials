@@ -146,6 +146,19 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 		}
 	}
 
+	@Override
+	public int getCount()
+	{
+		try
+		{
+			return getList().size();
+		}
+		catch (Exception ex)
+		{
+			return 0;
+		}
+	}
+
 
 	private class JailBlockListener implements Listener
 	{
