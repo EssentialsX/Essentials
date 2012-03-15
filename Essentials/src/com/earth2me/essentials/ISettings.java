@@ -163,4 +163,8 @@ public interface ISettings extends IConf
 	EventPriority getRespawnPriority();
 
 	long getTpaAcceptCancellation();
+	
+	boolean isMetricsEnabled();
+	
+	void setMetricsEnabled(boolean metricsEnabled);
 }

@@ -23,6 +23,7 @@ public class Settings implements ISettings
 	private final transient EssentialsConf config;
 	private final static Logger logger = Logger.getLogger("Minecraft");
 	private final transient IEssentials ess;
+	private boolean metricsEnabled = true;
 
 	public Settings(IEssentials ess)
 	{
@@ -717,5 +718,17 @@ public class Settings implements ISettings
 	public long getTpaAcceptCancellation()
 	{
 		return config.getLong("tpa-accept-cancellation", 0);
+	}
+
+	@Override
+	public boolean isMetricsEnabled()
+	{
+		return metricsEnabled;
+	}
+
+	@Override
+	public void setMetricsEnabled(boolean metricsEnabled)
+	{
+		this.metricsEnabled = metricsEnabled;
 	}
 }

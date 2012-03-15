@@ -24,6 +24,8 @@ import com.earth2me.essentials.commands.EssentialsCommand;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
+import com.earth2me.essentials.metrics.MetricsListener;
+import com.earth2me.essentials.metrics.MetricsStarter;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
 import com.earth2me.essentials.signs.SignBlockListener;
@@ -223,7 +225,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 
 		final EssentialsEntityListener entityListener = new EssentialsEntityListener(this);
 		pm.registerEvents(entityListener, this);
-		
+
 		final EssentialsWorldListener worldListener = new EssentialsWorldListener(this);
 		pm.registerEvents(worldListener, this);
 
@@ -237,6 +239,18 @@ public class Essentials extends JavaPlugin implements IEssentials
 		getScheduler().scheduleSyncRepeatingTask(this, timer, 1, 100);
 		Economy.setEss(this);
 		execTimer.mark("RegListeners");
+
+		final MetricsStarter metricsStarter = new MetricsStarter(this);
+		if (metricsStarter.getStart())
+		{
+			getScheduler().scheduleAsyncDelayedTask(this, metricsStarter, 1);
+		}
+		else if (metricsStarter.getStart() == false)
+		{
+			final MetricsListener metricsListener = new MetricsListener(this, metricsStarter);
+			pm.registerEvents(metricsListener, this);
+		}
+
 		final String timeroutput = execTimer.end();
 		if (getSettings().isDebug())
 		{
@@ -599,15 +613,16 @@ public class Essentials extends JavaPlugin implements IEssentials
 	{
 		return i18n;
 	}
-	
-	private static class EssentialsWorldListener implements Listener, Runnable {
+
+
+	private static class EssentialsWorldListener implements Listener, Runnable
+	{
 		private transient final IEssentials ess;
 
 		public EssentialsWorldListener(final IEssentials ess)
 		{
 			this.ess = ess;
 		}
-		
 
 		@EventHandler(priority = EventPriority.LOW)
 		public void onWorldLoad(final WorldLoadEvent event)
@@ -616,7 +631,8 @@ public class Essentials extends JavaPlugin implements IEssentials
 			ess.getWarps().reloadConfig();
 			for (IConf iConf : ((Essentials)ess).confList)
 			{
-				if (iConf instanceof IEssentialsModule) {
+				if (iConf instanceof IEssentialsModule)
+				{
 					iConf.reloadConfig();
 				}
 			}
@@ -629,7 +645,8 @@ public class Essentials extends JavaPlugin implements IEssentials
 			ess.getWarps().reloadConfig();
 			for (IConf iConf : ((Essentials)ess).confList)
 			{
-				if (iConf instanceof IEssentialsModule) {
+				if (iConf instanceof IEssentialsModule)
+				{
 					iConf.reloadConfig();
 				}
 			}
