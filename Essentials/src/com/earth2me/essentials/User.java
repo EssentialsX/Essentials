@@ -71,7 +71,13 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			return false;
 		}
 
-		return ess.getPermissionsHandler().hasPermission(base, node);
+		try {
+			return ess.getPermissionsHandler().hasPermission(base, node);
+		}
+		catch (Exception ex) {
+			ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage());
+			return false;
+		}
 	}
 
 	public void healCooldown() throws Exception

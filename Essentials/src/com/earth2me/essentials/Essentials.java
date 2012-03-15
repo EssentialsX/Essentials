@@ -139,8 +139,10 @@ public class Essentials extends JavaPlugin implements IEssentials
 			final int versionNumber = Integer.parseInt(versionMatch.group(1));
 			if (versionNumber < BUKKIT_VERSION && versionNumber > 100)
 			{
+				LOGGER.log(Level.SEVERE, "* ! * ! * ! * ! * ! * ! * ! * ! * ! *");
 				LOGGER.log(Level.SEVERE, _("notRecommendedBukkit"));
 				LOGGER.log(Level.SEVERE, _("requiredBukkit", Integer.toString(BUKKIT_VERSION)));
+				LOGGER.log(Level.SEVERE, "* ! * ! * ! * ! * ! * ! * ! * ! * ! *");
 				this.setEnabled(false);
 				return;
 			}
