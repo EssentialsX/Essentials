@@ -45,9 +45,9 @@ public class MetricsStarter implements Runnable
 				return;
 			}
 		}
-		catch (IOException e)
+		catch (IOException ex)
 		{
-			ess.getLogger().log(Level.WARNING, "[Metrics] " + e.getMessage(), e);
+			metricsError(ex);
 		}
 	}
 
@@ -78,9 +78,21 @@ public class MetricsStarter implements Runnable
 			metrics.start();
 
 		}
-		catch (IOException e)
+		catch (IOException ex)
 		{
-			ess.getLogger().log(Level.WARNING, "[Metrics] " + e.getMessage(), e);
+			metricsError(ex);
+		}
+	}
+
+	public void metricsError(IOException ex)
+	{
+		if (ess.getSettings().isDebug())
+		{
+			ess.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage(), ex);
+		}
+		else
+		{
+			ess.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
 		}
 	}
 
