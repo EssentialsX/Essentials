@@ -14,10 +14,7 @@ public class SignDisposal extends EssentialsSign
 	@Override
 	protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess)
 	{
-		player.sendMessage("Bukkit broke this sign :(");
-		//TODO: wait for a fix in bukkit
-		//Problem: Items can be duplicated
-		//player.getBase().openInventory(ess.getServer().createInventory(player, 36));
+		player.getBase().openInventory(ess.getServer().createInventory(player, 36));
 		return true;
 	}
 }
