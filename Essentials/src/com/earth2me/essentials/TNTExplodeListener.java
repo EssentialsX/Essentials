@@ -1,6 +1,5 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.craftbukkit.FakeExplosion;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -46,8 +45,12 @@ public class TNTExplodeListener implements Listener, Runnable
 		{
 			return;
 		}
-		FakeExplosion.createExplosion(event, ess.getServer(), ess.getServer().getOnlinePlayers());
+		if (event.blockList().size() < 1)
+		{
+			return;
+		}
 		event.setCancelled(true);
+		event.getLocation().getWorld().createExplosion(event.getLocation(), 0F);
 	}
 
 	@Override

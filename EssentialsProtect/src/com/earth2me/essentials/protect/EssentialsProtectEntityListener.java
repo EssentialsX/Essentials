@@ -2,7 +2,6 @@ package com.earth2me.essentials.protect;
 
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.craftbukkit.FakeExplosion;
 import java.util.Locale;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -204,11 +203,11 @@ public class EssentialsProtectEntityListener implements Listener
 		if (event.getEntity() instanceof EnderDragon
 			&& prot.getSettingBool(ProtectConfig.prevent_enderdragon_blockdmg))
 		{
+			event.setCancelled(true);
 			if (prot.getSettingBool(ProtectConfig.enderdragon_fakeexplosions))
 			{
-				FakeExplosion.createExplosion(event, ess.getServer(), ess.getServer().getOnlinePlayers());
+				event.getLocation().getWorld().createExplosion(event.getLocation(), 0F);
 			}
-			event.setCancelled(true);
 			return;
 		}
 		else if (event.getEntity() instanceof Creeper
@@ -217,8 +216,8 @@ public class EssentialsProtectEntityListener implements Listener
 					 || (maxHeight >= 0 && event.getLocation().getBlockY() > maxHeight)))
 		{
 			//Nicccccccccce plaaacccccccccce..
-			FakeExplosion.createExplosion(event, ess.getServer(), ess.getServer().getOnlinePlayers());
 			event.setCancelled(true);
+			event.getLocation().getWorld().createExplosion(event.getLocation(), 0F);
 			return;
 		}
 		else if (event.getEntity() instanceof TNTPrimed
