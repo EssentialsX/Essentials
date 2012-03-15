@@ -730,7 +730,7 @@ public class EssentialsUpgrade
 		doneFile.setProperty("updateSpawnsToNewSpawnsConfig", true);
 		doneFile.save();
 	}
-	
+
 	private void updateJailsToNewJailsConfig()
 	{
 		if (doneFile.getBoolean("updateJailsToNewJailsConfig", false))
@@ -777,13 +777,14 @@ public class EssentialsUpgrade
 		doneFile.setProperty("updateJailsToNewJailsConfig", true);
 		doneFile.save();
 	}
-	
-	private void warnMetrics() {
+
+	private void warnMetrics()
+	{
 		if (doneFile.getBoolean("warnMetrics", false))
 		{
 			return;
 		}
-		ess.getSettings().setMetricsEnabled(false);		
+		ess.getSettings().setMetricsEnabled(false);
 		doneFile.setProperty("warnMetrics", true);
 		doneFile.save();
 	}

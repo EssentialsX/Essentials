@@ -1,7 +1,7 @@
 package com.earth2me.essentials.metrics;
 
-
 import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.metrics.Metrics.Graph;
 import java.io.IOException;
 import java.util.logging.Level;
 
@@ -10,6 +10,17 @@ public class MetricsStarter implements Runnable
 {
 	private final IEssentials ess;
 	private transient Boolean start;
+
+
+	private enum Modules
+	{
+		Essentials,
+		EssentialsChat,
+		EssentialsSpawn,
+		EssentialsProtect,
+		EssentialsGeoIP,
+		EssentialsXMPP
+	};
 
 	public MetricsStarter(final IEssentials plugin)
 	{
@@ -45,7 +56,25 @@ public class MetricsStarter implements Runnable
 	{
 		try
 		{
-			final Metrics metrics = new Metrics(ess);		
+			final Metrics metrics = new Metrics(ess);
+
+			Graph moduleGraph = metrics.createGraph("Modules Used");
+			for (Modules module : Modules.values())
+			{
+				final String moduleName = module.toString();
+				if (ess.getServer().getPluginManager().isPluginEnabled(moduleName))
+				{
+					moduleGraph.addPlotter(new Metrics.Plotter(moduleName)
+					{
+						@Override
+						public int getValue()
+						{
+							return 1;
+						}
+					});
+				}
+			}
+
 			metrics.start();
 
 		}
