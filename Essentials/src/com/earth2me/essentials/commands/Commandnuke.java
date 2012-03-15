@@ -51,7 +51,7 @@ public class Commandnuke extends EssentialsCommand
 			{
 				for (int z = -10; z <= 10; z += 5)
 				{
-					final Location tntloc = new Location(world, loc.getBlockX() + x, world.getMaxHeight(), loc.getBlockZ() + z);
+					final Location tntloc = new Location(world, loc.getBlockX() + x, world.getHighestBlockYAt(loc) + 64, loc.getBlockZ() + z);
 					final TNTPrimed tnt = world.spawn(tntloc, TNTPrimed.class);
 				}
 			}
