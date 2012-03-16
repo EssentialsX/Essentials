@@ -8,7 +8,7 @@ Name it info_username.txt or info_groupname.txt
 This also works with motd and rules.
 
 Extra pages:
-Type /info Colours
+Type /info Colors
 Type /info Tags
 
 If you have problem viewing this file ingame, try using /einfo.
@@ -29,6 +29,7 @@ Minecraft colors:
 &4 &&4 &5 &&5 &6 &&6 &7 &&7
 &8 &&8 &9 &&9 &a &&a &b &&b
 &c &&c &d &&d &e &&e &f &&f 
+&&k &k Magic! 
 
 #Tags
 PLAYER: {PLAYER}
