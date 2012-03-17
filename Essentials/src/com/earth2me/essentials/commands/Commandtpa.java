@@ -36,6 +36,11 @@ public class Commandtpa extends EssentialsCommand
 				player.sendMessage(_("teleportRequestTimeoutInfo", ess.getSettings().getTpaAcceptCancellation()));
 			}
 		}
+		if (user.getWorld() != player.getWorld() && ess.getSettings().getIsWorldTeleportPermissions()
+			&& !user.isAuthorized("essentials.world." + player.getWorld().getName()))
+		{
+			throw new Exception(_("noPerm", "essentials.world." + player.getWorld().getName()));
+		}
 		user.sendMessage(_("requestSent", player.getDisplayName()));
 	}
 }

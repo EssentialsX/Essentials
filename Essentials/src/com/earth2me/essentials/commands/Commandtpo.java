@@ -32,6 +32,11 @@ public class Commandtpo extends EssentialsCommand
 		// Verify permission
 		if (!player.isHidden() || user.isAuthorized("essentials.teleport.hidden"))
 		{
+			if (user.getWorld() != player.getWorld() && ess.getSettings().getIsWorldTeleportPermissions()
+				&& !user.isAuthorized("essentials.world." + player.getWorld().getName()))
+			{
+				throw new Exception(_("noPerm", "essentials.world." + player.getWorld().getName()));
+			}
 			user.getTeleport().now(player, false, TeleportCause.COMMAND);
 			user.sendMessage(_("teleporting"));
 		}
