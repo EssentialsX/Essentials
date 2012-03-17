@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.WeakHashMap;
 
 import org.anjocaido.groupmanager.GroupManager;
 
@@ -37,7 +38,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.permissions.Permission;
@@ -54,7 +54,7 @@ import org.bukkit.plugin.PluginManager;
  */
 public class BukkitPermissions {
 
-	protected Map<Player, PermissionAttachment> attachments = new HashMap<Player, PermissionAttachment>();
+	protected WeakHashMap<Player, PermissionAttachment> attachments = new WeakHashMap<Player, PermissionAttachment>();
 	protected LinkedHashMap<String, Permission> registeredPermissions = new LinkedHashMap<String, Permission>();
 	protected GroupManager plugin;
 	protected boolean dumpAllPermissions = true;
@@ -366,14 +366,6 @@ public class BukkitPermissions {
 		@EventHandler(priority = EventPriority.LOWEST)
 		public void onPlayerChangeWorld(PlayerChangedWorldEvent event) { // has changed worlds
 			updatePermissions(event.getPlayer(), event.getPlayer().getWorld().getName());
-		}
-
-		@EventHandler(priority = EventPriority.LOWEST)
-		public void onPlayerQuit(PlayerQuitEvent event) {
-			if (!GroupManager.isLoaded())
-				return;
-
-			attachments.remove(event.getPlayer());
 		}
 
 		@EventHandler(priority = EventPriority.LOWEST)

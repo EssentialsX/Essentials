@@ -347,32 +347,8 @@ public class WorldsHolder {
     	String worldNameLowered = worldName.toLowerCase();
     	
     	// Find this worlds data
-    	if (worldsData.containsKey(worldNameLowered)) {
-    		
-    		String usersMirror = mirrorsUser.get(worldNameLowered);
-        	String groupsMirror = mirrorsGroup.get(worldNameLowered);
-    		
-    		if (usersMirror != null) {
-    			
-    			// If both are mirrored
-    			if (groupsMirror != null) {
-    				
-    				// if the data sources are the same, return the parent
-    				if (usersMirror == groupsMirror)
-    					return getUpdatedWorldData(usersMirror.toLowerCase());
-    				
-    				// Both data sources are mirrors, but they are from different parents
-        			// so we return the actual data object.
-        			return getUpdatedWorldData(worldNameLowered);
-    			}
-    			
-    			// Groups isn't a mirror  so return this this worlds data source
-    			return getUpdatedWorldData(worldNameLowered);	
-    		}
-    		
-    		// users isn't mirrored so we need to return this worlds data source
+    	if (worldsData.containsKey(worldNameLowered))
     		return getUpdatedWorldData(worldNameLowered);
-    	}
     	
     	// Oddly no data source was found for this world so return the default.
         GroupManager.logger.finest("Requested world " + worldName + " not found or badly mirrored. Returning default world...");

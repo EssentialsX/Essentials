@@ -151,3 +151,4 @@ v 1.9:
 	- Better reporting when a users.yml is failing to load.
 	- Expanded '/manuadd'to accept an optional variable for the world (eg '/manuadd <player> <group> <world>').
 	- Removed some debug spam.
+	- Don't remove an attachment on a player leaving as Bukkit never forgets it. This fixes non mirrored permissions being messed up if a player relogs.
