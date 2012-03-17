@@ -35,10 +35,8 @@ import com.earth2me.essentials.signs.SignPlayerListener;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,7 +46,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
@@ -139,10 +136,10 @@ public class Essentials extends JavaPlugin implements IEssentials
 			final int versionNumber = Integer.parseInt(versionMatch.group(1));
 			if (versionNumber < BUKKIT_VERSION && versionNumber > 100)
 			{
-				LOGGER.log(Level.SEVERE, "* ! * ! * ! * ! * ! * ! * ! * ! * ! *");
+				LOGGER.log(Level.SEVERE, " * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! *");
 				LOGGER.log(Level.SEVERE, _("notRecommendedBukkit"));
 				LOGGER.log(Level.SEVERE, _("requiredBukkit", Integer.toString(BUKKIT_VERSION)));
-				LOGGER.log(Level.SEVERE, "* ! * ! * ! * ! * ! * ! * ! * ! * ! *");
+				LOGGER.log(Level.SEVERE, " * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! *");
 				this.setEnabled(false);
 				return;
 			}
