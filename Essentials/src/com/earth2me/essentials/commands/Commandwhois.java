@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import com.earth2me.essentials.craftbukkit.SetExpFix;
 import java.util.Locale;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -54,6 +55,7 @@ public class Commandwhois extends EssentialsCommand
 			sender.sendMessage("");
 			sender.sendMessage(_("whoisIs", user.getDisplayName(), user.getName()));
 			sender.sendMessage(_("whoisHealth", user.getHealth()));
+			sender.sendMessage(_("whoisExp", SetExpFix.getTotalExperience(user), user.getLevel()));
 			sender.sendMessage(_("whoisOP", (user.isOp() ? _("true") : _("false"))));
 			sender.sendMessage(_("whoisGod", (user.isGodModeEnabled() ? _("true") : _("false"))));
 			sender.sendMessage(_("whoisGamemode", _(user.getGameMode().toString().toLowerCase(Locale.ENGLISH))));
