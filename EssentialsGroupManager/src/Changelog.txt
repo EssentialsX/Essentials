@@ -150,3 +150,4 @@ v 1.9:
 	- Minor optimization when checking bukkit permissions.
 	- Better reporting when a users.yml is failing to load.
 	- Expanded '/manuadd'to accept an optional variable for the world (eg '/manuadd <player> <group> <world>').
+	- Removed some debug spam.

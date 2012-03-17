@@ -243,7 +243,6 @@ public class User extends DataUnit implements Cloneable {
 		//UserVariables temp = new UserVariables(this, varList);
 		variables.clearVars();
 		for (String key : varList.keySet()) {
-			System.out.print("Adding variable - " + key);
 			variables.addVar(key, varList.get(key));
 		}
 		flagAsChanged();
