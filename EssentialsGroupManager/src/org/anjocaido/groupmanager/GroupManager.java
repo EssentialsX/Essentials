@@ -374,16 +374,16 @@ public class GroupManager extends JavaPlugin {
 		if (isConsole || playerCanDo) {
 			switch (execCmd) {
 			case manuadd:
-				// VALIDANDO ESTADO DO SENDER
-				if (dataHolder == null || permissionHandler == null) {
-					if (!setDefaultWorldHandler(sender))
-						return true;
-				}
+				
 				// VALIDANDO ARGUMENTOS
-				if (args.length != 2) {
-					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player> <group>)");
+				if ((args.length != 2) && (args.length != 3)) {
+					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player> <group> | optional [world])");
 					return false;
 				}
+				// Select the relevant world
+				dataHolder = worldsHolder.getWorldData((args.length == 3)? args[2]:Bukkit.getWorlds().get(0).getName());
+				permissionHandler = dataHolder.getPermissionsHandler();
+				
 				if ((validateOnlinePlayer) && ((match = validatePlayer(args[0], sender)) == null)) {
 						return false;
 				}
@@ -420,14 +420,10 @@ public class GroupManager extends JavaPlugin {
 				// PARECE OK
 				auxUser.setGroup(auxGroup);
 				if (!sender.hasPermission("groupmanager.notify.other") || (isConsole))
-					sender.sendMessage(ChatColor.YELLOW + "You changed player '" + auxUser.getName() + "' group to '" + auxGroup.getName() + "'.");
-
-				//targetPlayer = this.getServer().getPlayer(auxUser.getName());
-				//if (targetPlayer != null)
-				//	BukkitPermissions.updatePermissions(targetPlayer);
+					sender.sendMessage(ChatColor.YELLOW + "You changed player '" + auxUser.getName() + "' group to '" + auxGroup.getName() + "' in world '" + dataHolder.getName() + "'.");
 
 				return true;
-				// break;
+				
 			case manudel:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -463,6 +459,7 @@ public class GroupManager extends JavaPlugin {
 					BukkitPermissions.updatePermissions(targetPlayer);
 
 				return true;
+				
 			case manuaddsub:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -502,11 +499,8 @@ public class GroupManager extends JavaPlugin {
 				else
 					sender.sendMessage(ChatColor.RED + "The subgroup '" + auxGroup.getName() + "' is already available to '" + auxUser.getName() + "'.");
 
-				//targetPlayer = this.getServer().getPlayer(auxUser.getName());
-				//if (targetPlayer != null)
-				//	BukkitPermissions.updatePermissions(targetPlayer);
-
 				return true;
+				
 			case manudelsub:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -547,6 +541,7 @@ public class GroupManager extends JavaPlugin {
 				//	BukkitPermissions.updatePermissions(targetPlayer);
 
 				return true;
+				
 			case mangadd:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -568,6 +563,7 @@ public class GroupManager extends JavaPlugin {
 				sender.sendMessage(ChatColor.YELLOW + "You created a group named: " + auxGroup.getName());
 
 				return true;
+				
 			case mangdel:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -591,6 +587,7 @@ public class GroupManager extends JavaPlugin {
 				BukkitPermissions.updateAllPlayers();
 
 				return true;
+				
 			case manuaddp:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -655,7 +652,7 @@ public class GroupManager extends JavaPlugin {
 					BukkitPermissions.updatePermissions(targetPlayer);
 
 				return true;
-				// break;
+				
 			case manudelp:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -706,7 +703,7 @@ public class GroupManager extends JavaPlugin {
 					BukkitPermissions.updatePermissions(targetPlayer);
 
 				return true;
-				// break;
+				
 			case manulistp:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -771,6 +768,7 @@ public class GroupManager extends JavaPlugin {
 				}
 
 				return true;
+								
 			case manucheckp:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -825,6 +823,7 @@ public class GroupManager extends JavaPlugin {
 				}
 
 				return true;
+				
 			case mangaddp:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -879,6 +878,7 @@ public class GroupManager extends JavaPlugin {
 				BukkitPermissions.updateAllPlayers();
 
 				return true;
+				
 			case mangdelp:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -919,6 +919,7 @@ public class GroupManager extends JavaPlugin {
 				BukkitPermissions.updateAllPlayers();
 
 				return true;
+				
 			case manglistp:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -967,6 +968,7 @@ public class GroupManager extends JavaPlugin {
 
 				}
 				return true;
+				
 			case mangcheckp:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -1002,6 +1004,7 @@ public class GroupManager extends JavaPlugin {
 
 				}
 				return true;
+				
 			case mangaddi:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -1040,6 +1043,7 @@ public class GroupManager extends JavaPlugin {
 				BukkitPermissions.updateAllPlayers();
 
 				return true;
+				
 			case mangdeli:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -1082,6 +1086,7 @@ public class GroupManager extends JavaPlugin {
 				BukkitPermissions.updateAllPlayers();
 
 				return true;
+				
 			case manuaddv:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -1113,7 +1118,9 @@ public class GroupManager extends JavaPlugin {
 				}
 				auxUser.getVariables().addVar(args[1], Variables.parseVariableValue(auxString));
 				sender.sendMessage(ChatColor.YELLOW + "Variable " + ChatColor.GOLD + args[1] + ChatColor.YELLOW + ":'" + ChatColor.GREEN + auxString + ChatColor.YELLOW + "' added to the user " + auxUser.getName());
+				
 				return true;
+				
 			case manudelv:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -1141,7 +1148,9 @@ public class GroupManager extends JavaPlugin {
 				// PARECE OK
 				auxUser.getVariables().removeVar(args[1]);
 				sender.sendMessage(ChatColor.YELLOW + "Variable " + ChatColor.GOLD + args[1] + ChatColor.YELLOW + " removed from the user " + ChatColor.GREEN + auxUser.getName());
+				
 				return true;
+				
 			case manulistv:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -1174,7 +1183,9 @@ public class GroupManager extends JavaPlugin {
 				sender.sendMessage(ChatColor.YELLOW + "Variables of user " + auxUser.getName() + ": ");
 				sender.sendMessage(auxString + ".");
 				sender.sendMessage(ChatColor.YELLOW + "Plus all variables from group: " + auxUser.getGroupName());
+				
 				return true;
+				
 			case manucheckv:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -1219,7 +1230,9 @@ public class GroupManager extends JavaPlugin {
 				if (!auxGroup.equals(auxGroup2)) {
 					sender.sendMessage(ChatColor.YELLOW + "And the value was inherited from group: " + ChatColor.GREEN + auxGroup2.getName());
 				}
+				
 				return true;
+				
 			case mangaddv:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -1253,6 +1266,7 @@ public class GroupManager extends JavaPlugin {
 				sender.sendMessage(ChatColor.YELLOW + "Variable " + ChatColor.GOLD + args[1] + ChatColor.YELLOW + ":'" + ChatColor.GREEN + auxString + ChatColor.YELLOW + "' added to the group " + auxGroup.getName());
 
 				return true;
+				
 			case mangdelv:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -1282,6 +1296,7 @@ public class GroupManager extends JavaPlugin {
 				sender.sendMessage(ChatColor.YELLOW + "Variable " + ChatColor.GOLD + args[1] + ChatColor.YELLOW + " removed from the group " + ChatColor.GREEN + auxGroup.getName());
 
 				return true;
+				
 			case manglistv:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -1322,7 +1337,9 @@ public class GroupManager extends JavaPlugin {
 					auxString = auxString.substring(0, auxString.lastIndexOf(","));
 					sender.sendMessage(ChatColor.YELLOW + "Plus all variables from groups: " + auxString);
 				}
+				
 				return true;
+				
 			case mangcheckv:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -1353,7 +1370,9 @@ public class GroupManager extends JavaPlugin {
 				if (!auxGroup.equals(auxGroup2)) {
 					sender.sendMessage(ChatColor.YELLOW + "And the value was inherited from group: " + ChatColor.GREEN + auxGroup2.getName());
 				}
+				
 				return true;
+				
 			case manwhois:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -1383,7 +1402,7 @@ public class GroupManager extends JavaPlugin {
 				}
 				// victim.permissions.add(args[1]);
 				return true;
-				// break;
+				
 			case tempadd:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -1417,7 +1436,7 @@ public class GroupManager extends JavaPlugin {
 				sender.sendMessage(ChatColor.YELLOW + "Player overloaded!");
 
 				return true;
-				// break;
+				
 			case tempdel:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -1453,7 +1472,7 @@ public class GroupManager extends JavaPlugin {
 				sender.sendMessage(ChatColor.YELLOW + "You removed that player overload. He's back to normal!");
 
 				return true;
-				// break;
+				
 			case templist:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -1482,7 +1501,9 @@ public class GroupManager extends JavaPlugin {
 				}
 				overloadedUsers.get(dataHolder.getName().toLowerCase()).removeAll(removeList);
 				sender.sendMessage(ChatColor.YELLOW + " " + count + " Users in overload mode: " + ChatColor.WHITE + auxString);
+				
 				return true;
+				
 			case tempdelall:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -1509,6 +1530,7 @@ public class GroupManager extends JavaPlugin {
 				sender.sendMessage(ChatColor.YELLOW + " " + count + " Users in overload mode. Now they are normal again.");
 
 				return true;
+				
 			case mansave:
 				
 				boolean forced = false;
@@ -1583,7 +1605,9 @@ public class GroupManager extends JavaPlugin {
 					auxString = auxString.substring(0, auxString.lastIndexOf(","));
 				}
 				sender.sendMessage(ChatColor.YELLOW + " Groups Available: " + ChatColor.WHITE + auxString);
+				
 				return true;
+				
 			case manpromote:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -1638,12 +1662,8 @@ public class GroupManager extends JavaPlugin {
 				if (!sender.hasPermission("groupmanager.notify.other") || (isConsole))
 					sender.sendMessage(ChatColor.YELLOW + "You changed " + auxUser.getName() + " group to " + auxGroup.getName() + ".");
 
-				//targetPlayer = this.getServer().getPlayer(auxUser.getName());
-				//if (targetPlayer != null)
-				//	BukkitPermissions.updatePermissions(targetPlayer);
-
 				return true;
-				// break;
+				
 			case mandemote:
 				// VALIDANDO ESTADO DO SENDER
 				if (dataHolder == null || permissionHandler == null) {
@@ -1698,12 +1718,8 @@ public class GroupManager extends JavaPlugin {
 				if (!sender.hasPermission("groupmanager.notify.other") || (isConsole))
 					sender.sendMessage(ChatColor.YELLOW + "You changed " + auxUser.getName() + " group to " + auxGroup.getName() + ".");
 
-				//targetPlayer = this.getServer().getPlayer(auxUser.getName());
-				//if (targetPlayer != null)
-				//	BukkitPermissions.updatePermissions(targetPlayer);
-
 				return true;
-				// break;
+				
 			case mantogglevalidate:
 				validateOnlinePlayer = !validateOnlinePlayer;
 				sender.sendMessage(ChatColor.YELLOW + "Validade if player is online, now set to: " + Boolean.toString(validateOnlinePlayer));
@@ -1734,7 +1750,9 @@ public class GroupManager extends JavaPlugin {
 						sender.sendMessage(ChatColor.YELLOW + "Your world now uses permissions of world name: '" + dataHolder.getName() + "' ");
 					}
 				}
+				
 				return true;
+				
 			case manselect:
 				if (args.length < 1) {
 					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <world>)");
@@ -1765,7 +1783,9 @@ public class GroupManager extends JavaPlugin {
 				permissionHandler = dataHolder.getPermissionsHandler();
 				selectedWorlds.put(sender, dataHolder.getName());
 				sender.sendMessage(ChatColor.YELLOW + "You have selected world '" + dataHolder.getName() + "'.");
+				
 				return true;
+				
 			case manclear:
 				if (args.length != 0) {
 					sender.sendMessage(ChatColor.RED + "Review your arguments count!");
@@ -1773,7 +1793,9 @@ public class GroupManager extends JavaPlugin {
 				}
 				selectedWorlds.remove(sender);
 				sender.sendMessage(ChatColor.YELLOW + "You have removed your world selection. Working with current world(if possible).");
+				
 				return true;
+				
 			default:
 				break;
 			}

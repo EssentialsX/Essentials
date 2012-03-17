@@ -17,9 +17,7 @@ import org.anjocaido.groupmanager.dataholder.WorldDataHolder;
 import org.anjocaido.groupmanager.data.User;
 import org.anjocaido.groupmanager.utils.PermissionCheckResult;
 import org.anjocaido.groupmanager.utils.PermissionCheckResult.Type;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
 
 /**
  * Everything here maintains the model created by Nijikokun
@@ -767,9 +765,9 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 			// Check Bukkit perms to support plugins which add perms via code
 			// (Heroes).
 			final Player player = user.getBukkitPlayer();
-			final Permission bukkitPerm = Bukkit.getPluginManager().getPermission(targetPermission);
-			if (player != null && bukkitPerm != null) {
-				result.resultType = player.hasPermission(bukkitPerm) ? PermissionCheckResult.Type.FOUND : PermissionCheckResult.Type.NEGATION;
+			//final Permission bukkitPerm = Bukkit.getPluginManager().getPermission(targetPermission);
+			if ((player != null) && player.hasPermission(targetPermission)) {
+				result.resultType = PermissionCheckResult.Type.FOUND;
 				result.owner = user;
 				return result;
 			}

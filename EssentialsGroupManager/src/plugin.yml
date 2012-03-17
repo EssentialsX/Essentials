@@ -10,7 +10,7 @@ authors:
 commands:
   manuadd:
     description: Move a player to desired group.(Adds to the file if not exists)
-    usage: /<command> <player> <group>
+    usage: /<command> <player> <group> | optional [world]
     permissions: groupmanager.manuadd
   manudel:
     description: Remove any user specific configuration. Make him default group.
