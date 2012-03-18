@@ -326,7 +326,9 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		}
 		catch (IllegalArgumentException e)
 		{
-			logger.log(Level.INFO, "Playerlist for " + name + " was not updated. Use a shorter displayname prefix.");
+			if (ess.getSettings().isDebug()) {
+				logger.log(Level.INFO, "Playerlist for " + name + " was not updated. Name clashed with another online player.");
+			}
 		}
 	}
 
