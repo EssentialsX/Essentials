@@ -242,8 +242,8 @@ commands:
     usage: /<command>
     aliases: [pong,echo,echo,eping,epong]
   powertool:
-    description: Assigns a command to the item in hand, {player} will be replaced by the name of the player that you click.
-    usage: /<command> [l:|a:|r:|c:|d:][command] [arguments]
+    description: Assigns a command to the item in hand.
+    usage: /<command> [l:|a:|r:|c:|d:][command] [arguments] - {player} can be replaced by name of a clicked player.
     aliases: [pt,epowertool,ept]
   powertooltoggle:
     description: Enables or disables all current powertools
@@ -258,7 +258,7 @@ commands:
     usage: /<command> <message>
     aliases: [er,reply,ereply]
   realname:
-    description: Displays the username of a user based on nickname.
+    description: Displays the username of a user based on nick.
     usage: /<command> <nickname>
     aliases: [erealname]
   remove:
@@ -330,7 +330,7 @@ commands:
     usage: /<command> [day|night|dawn|17:30|4pm|4000ticks] [worldname|all]
     aliases: [etime, day, night]
   togglejail:
-    description: Prevents a player from interacting with the world and teleports him/her to the jail specified
+    description: Jails/Unjails a player and tp them to the jail specified.
     usage: /<command> <player> <jailname> [datediff]
     aliases: [tjail,jail,ejail,unjail,eunjail,etogglejail]
   top:
