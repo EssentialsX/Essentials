@@ -303,7 +303,7 @@ public class Settings implements ISettings
 	@Override
 	public boolean areSignsDisabled()
 	{
-		return enabledSigns.isEmpty();
+		return !signsEnabled;
 	}
 
 	@Override
@@ -422,6 +422,7 @@ public class Settings implements ISettings
 		return epItemSpwn;
 	}
 	private List<EssentialsSign> enabledSigns = new ArrayList<EssentialsSign>();
+	private boolean signsEnabled = false;
 
 	@Override
 	public List<EssentialsSign> enabledSigns()
@@ -440,6 +441,11 @@ public class Settings implements ISettings
 			{
 				continue;
 			}
+			if (signName.equals("COLOR") || signName.equals("COLOUR"))
+			{
+				signsEnabled = true;
+				continue;
+			}
 			try
 			{
 				newSigns.add(Signs.valueOf(signName).getSign());
@@ -447,7 +453,9 @@ public class Settings implements ISettings
 			catch (Exception ex)
 			{
 				logger.log(Level.SEVERE, _("unknownItemInList", signName, "enabledSigns"));
+				continue;
 			}
+			signsEnabled = true;
 		}
 		return newSigns;
 	}

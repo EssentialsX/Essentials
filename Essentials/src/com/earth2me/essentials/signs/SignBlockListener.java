@@ -2,6 +2,7 @@ package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Material;
@@ -87,9 +88,17 @@ public class SignBlockListener implements Listener
 		{
 			for (int i = 0; i < 4; i++)
 			{
-				event.setLine(i, event.getLine(i).replaceAll("&([0-9a-f])", "§$1"));
+				event.setLine(i, Util.replaceColor(event.getLine(i)));
 			}
 		}
+		else
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				event.setLine(i, Util.stripColor(event.getLine(i)));
+			}
+		}
+
 		for (Signs signs : Signs.values())
 		{
 			final EssentialsSign sign = signs.getSign();

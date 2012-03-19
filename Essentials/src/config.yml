@@ -175,10 +175,11 @@ kits:
 # Essentials Sign Control
 # See http://ess.khhq.net/wiki/Sign_Tutorial for instructions on how to use these.
 # To enable signs, remove # symbol. To disable all signs, comment/remove each sign.
-# If there are no signs enabled, all sign features will be disabled including sign colours.
+# Essentials Colored sign support will be enabled when any sign types are enabled.
 # We recommend not enabling chest protection signs if you don't intend to use them, (or are using LWC/Lockette).
 
 enabledSigns:
+  #- color
   #- balance
   #- buy  
   #- sell
