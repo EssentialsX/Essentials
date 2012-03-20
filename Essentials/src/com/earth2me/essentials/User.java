@@ -250,7 +250,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		return teleportRequester;
 	}
 
-	public boolean isTeleportRequestHere()
+	public boolean isTpRequestHere()
 	{
 		return teleportRequestHere;
 	}

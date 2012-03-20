@@ -154,7 +154,7 @@ public interface ISettings extends IConf
 
 	boolean getRepairEnchanted();
 
-	boolean getIsWorldTeleportPermissions();
+	boolean isWorldTeleportPermissions();
 
 	boolean registerBackInListener();
 

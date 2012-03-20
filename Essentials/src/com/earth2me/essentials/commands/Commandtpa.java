@@ -25,7 +25,7 @@ public class Commandtpa extends EssentialsCommand
 		{
 			throw new Exception(_("teleportDisabled", player.getDisplayName()));
 		}
-		if (user.getWorld() != player.getWorld() && ess.getSettings().getIsWorldTeleportPermissions()
+		if (user.getWorld() != player.getWorld() && ess.getSettings().isWorldTeleportPermissions()
 			&& !user.isAuthorized("essentials.world." + player.getWorld().getName()))
 		{
 			throw new Exception(_("noPerm", "essentials.world." + player.getWorld().getName()));

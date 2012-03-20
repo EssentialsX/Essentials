@@ -678,7 +678,7 @@ public class Settings implements ISettings
 	}
 
 	@Override
-	public boolean getIsWorldTeleportPermissions()
+	public boolean isWorldTeleportPermissions()
 	{
 		return config.getBoolean("world-teleport-permissions", false);
 	}
