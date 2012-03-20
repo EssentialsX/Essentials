@@ -20,13 +20,24 @@ public class Commandtpaccept extends EssentialsCommand
 
 		final User target = user.getTeleportRequest();
 
-		if (target == null || !target.isOnline()
-			|| (args.length > 0 && !target.getName().contains(args[0]))
-			|| (user.isTpRequestHere() && !target.isAuthorized("essentials.tpahere"))
-			|| (!user.isTpRequestHere() && ((!target.isAuthorized("essentials.tpa") && !target.isAuthorized("essentials.tpaall"))
-												  || (user.getWorld() != target.getWorld()
-													  && ess.getSettings().isWorldTeleportPermissions()
-													  && !user.isAuthorized("essentials.world." + target.getWorld().getName())))))
+		if (target == null || !target.isOnline())
+		{
+			throw new Exception(_("noPendingRequest"));
+		}
+
+		if (user.isTpRequestHere() && !target.isAuthorized("essentials.tpahere"))
+		{
+			throw new Exception(_("noPendingRequest"));
+		}
+
+		if (!user.isTpRequestHere() && ((!target.isAuthorized("essentials.tpa") && !target.isAuthorized("essentials.tpaall"))
+										|| (user.getWorld() != target.getWorld() && ess.getSettings().isWorldTeleportPermissions()
+											&& !user.isAuthorized("essentials.world." + target.getWorld().getName()))))
+		{
+			throw new Exception(_("noPendingRequest"));
+		}
+
+		if (args.length > 0 && !target.getName().contains(args[0]))
 		{
 			throw new Exception(_("noPendingRequest"));
 		}
