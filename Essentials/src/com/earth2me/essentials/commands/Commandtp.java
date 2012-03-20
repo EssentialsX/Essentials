@@ -49,6 +49,11 @@ public class Commandtp extends EssentialsCommand
 			user.sendMessage(_("teleporting"));
 			final User target = getPlayer(server, args, 0);
 			final User toPlayer = getPlayer(server, args, 1);
+			if (target.getWorld() != toPlayer.getWorld() && ess.getSettings().getIsWorldTeleportPermissions()
+				&& !user.isAuthorized("essentials.world." + toPlayer.getWorld().getName()))
+			{
+				throw new Exception(_("noPerm", "essentials.world." + toPlayer.getWorld().getName()));
+			}
 			target.getTeleport().now(toPlayer, false, TeleportCause.COMMAND);
 			target.sendMessage(_("teleportAtoB", user.getDisplayName(), toPlayer.getDisplayName()));
 			break;
