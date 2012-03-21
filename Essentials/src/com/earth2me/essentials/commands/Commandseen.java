@@ -17,16 +17,16 @@ public class Commandseen extends EssentialsCommand
 	@Override
 	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
-		seen(server,sender,args,true);
+		seen(server, sender, args, true);
 	}
-	
+
 	@Override
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		seen(server,user,args,user.isAuthorized("essentials.seen.banreason"));
+		seen(server, user, args, user.isAuthorized("essentials.seen.banreason"));
 	}
-	
-	protected void seen (final Server server, final CommandSender sender, final String[] args, final boolean show) throws Exception
+
+	protected void seen(final Server server, final CommandSender sender, final String[] args, final boolean show) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -35,6 +35,7 @@ public class Commandseen extends EssentialsCommand
 		try
 		{
 			User player = getPlayer(server, args, 0);
+			player.setDisplayNick();
 			sender.sendMessage(_("seenOnline", player.getDisplayName(), Util.formatDateDiff(player.getLastLogin())));
 		}
 		catch (NoSuchFieldException e)
@@ -44,6 +45,7 @@ public class Commandseen extends EssentialsCommand
 			{
 				throw new Exception(_("playerNotFound"));
 			}
+			player.setDisplayNick();
 			sender.sendMessage(_("seenOffline", player.getDisplayName(), Util.formatDateDiff(player.getLastLogout())));
 			if (player.isBanned())
 			{

@@ -71,10 +71,12 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			return false;
 		}
 
-		try {
+		try
+		{
 			return ess.getPermissionsHandler().hasPermission(base, node);
 		}
-		catch (Exception ex) {
+		catch (Exception ex)
+		{
 			ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage());
 			return false;
 		}
@@ -289,6 +291,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			{
 				final String prefix = ess.getPermissionsHandler().getPrefix(base).replace('&', '§');
 				nickname.insert(0, prefix);
+				if (prefix.length() < 2 || prefix.charAt(0) != '&')
+				{
+					nickname.insert(0, "&f");
+				}
 			}
 			if (!ess.getSettings().disableSuffix())
 			{
@@ -310,24 +316,28 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 	public void setDisplayNick()
 	{
-		String name = getNick(true);
-		setDisplayName(name);
-		if (name.length() > 16)
+		if (base.isOnline() && ess.getSettings().changeDisplayName())
 		{
-			name = getNick(false);
-		}
-		if (name.length() > 16)
-		{
-			name = name.substring(0, name.charAt(15) == '§' ? 15 : 16);
-		}
-		try
-		{
-			setPlayerListName(name);
-		}
-		catch (IllegalArgumentException e)
-		{
-			if (ess.getSettings().isDebug()) {
-				logger.log(Level.INFO, "Playerlist for " + name + " was not updated. Name clashed with another online player.");
+			String name = getNick(true);
+			setDisplayName(name);
+			if (name.length() > 16)
+			{
+				name = getNick(false);
+			}
+			if (name.length() > 16)
+			{
+				name = Util.stripColor(name);
+			}
+			try
+			{
+				setPlayerListName(name);
+			}
+			catch (IllegalArgumentException e)
+			{
+				if (ess.getSettings().isDebug())
+				{
+					logger.log(Level.INFO, "Playerlist for " + name + " was not updated. Name clashed with another online player.");
+				}
 			}
 		}
 	}
@@ -335,10 +345,6 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	@Override
 	public String getDisplayName()
 	{
-		if (base.isOnline() && ess.getSettings().changeDisplayName())
-		{
-			setDisplayNick();
-		}
 		return super.getDisplayName() == null ? super.getName() : super.getDisplayName();
 	}
 
@@ -498,6 +504,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			setAfk(false);
 			if (broadcast && !isHidden())
 			{
+				setDisplayNick();
 				ess.broadcastMessage(this, _("userIsNotAway", getDisplayName()));
 			}
 		}
@@ -530,6 +537,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			setAfk(true);
 			if (!isHidden())
 			{
+				setDisplayNick();
 				ess.broadcastMessage(this, _("userIsAway", getDisplayName()));
 			}
 		}

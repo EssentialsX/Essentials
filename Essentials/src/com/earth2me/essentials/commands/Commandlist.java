@@ -44,8 +44,10 @@ public class Commandlist extends EssentialsCommand
 		if (showhidden && playerHidden > 0)
 		{
 			online = _("listAmountHidden", server.getOnlinePlayers().length - playerHidden, playerHidden, server.getMaxPlayers());
-		} else {
-			online = _("listAmount",server.getOnlinePlayers().length - playerHidden, server.getMaxPlayers());
+		}
+		else
+		{
+			online = _("listAmount", server.getOnlinePlayers().length - playerHidden, server.getMaxPlayers());
 		}
 		sender.sendMessage(online);
 
@@ -73,7 +75,7 @@ public class Commandlist extends EssentialsCommand
 			for (String group : groups)
 			{
 				final StringBuilder groupString = new StringBuilder();
-				groupString.append(_("listGroupTag",Util.replaceColor(group)));
+				groupString.append(_("listGroupTag", Util.replaceColor(group)));
 				final List<User> users = sort.get(group);
 				Collections.sort(users);
 				boolean first = true;
@@ -95,6 +97,7 @@ public class Commandlist extends EssentialsCommand
 					{
 						groupString.append(_("listHiddenTag"));
 					}
+					user.setDisplayNick();
 					groupString.append(user.getDisplayName());
 					groupString.append("§f");
 				}
@@ -136,6 +139,7 @@ public class Commandlist extends EssentialsCommand
 				{
 					onlineUsers.append(_("listHiddenTag"));
 				}
+				user.setDisplayNick();
 				onlineUsers.append(user.getDisplayName());
 				onlineUsers.append("§f");
 			}

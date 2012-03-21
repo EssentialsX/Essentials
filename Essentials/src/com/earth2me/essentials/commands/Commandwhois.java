@@ -53,6 +53,7 @@ public class Commandwhois extends EssentialsCommand
 				continue;
 			}
 			sender.sendMessage("");
+			user.setDisplayNick();
 			sender.sendMessage(_("whoisIs", user.getDisplayName(), user.getName()));
 			sender.sendMessage(_("whoisHealth", user.getHealth()));
 			sender.sendMessage(_("whoisExp", SetExpFix.getTotalExperience(user), user.getLevel()));

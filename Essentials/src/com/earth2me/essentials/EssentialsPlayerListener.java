@@ -43,10 +43,7 @@ public class EssentialsPlayerListener implements Listener
 	{
 		final User user = ess.getUser(event.getPlayer());
 		updateCompass(user);
-		if (ess.getSettings().changeDisplayName())
-		{
-			user.setDisplayNick();
-		}
+		user.setDisplayNick();
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -69,10 +66,7 @@ public class EssentialsPlayerListener implements Listener
 			}
 		}
 		user.updateActivity(true);
-		if (ess.getSettings().changeDisplayName())
-		{
-			user.setDisplayNick();
-		}
+		user.setDisplayNick();
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -127,11 +121,7 @@ public class EssentialsPlayerListener implements Listener
 	{
 		ess.getBackup().onPlayerJoin();
 		final User user = ess.getUser(event.getPlayer());
-
-		if (ess.getSettings().changeDisplayName())
-		{
-			user.setDisplayNick();
-		}
+		user.setDisplayNick();
 		user.setLastLoginAddress(user.getAddress().getAddress().getHostAddress());
 		user.updateActivity(false);
 		if (user.isAuthorized("essentials.sleepingignored"))
@@ -297,10 +287,7 @@ public class EssentialsPlayerListener implements Listener
 	public void onPlayerChangedWorld(final PlayerChangedWorldEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
-		if (ess.getSettings().changeDisplayName())
-		{
-			user.setDisplayNick();
-		}
+		user.setDisplayNick();
 		updateCompass(user);
 
 		if (ess.getSettings().getNoGodWorlds().contains(event.getPlayer().getLocation().getWorld().getName()))

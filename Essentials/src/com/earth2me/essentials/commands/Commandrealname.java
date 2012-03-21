@@ -31,6 +31,7 @@ public class Commandrealname extends EssentialsCommand
 			{
 				continue;
 			}
+			u.setDisplayNick();
 			final String displayName = Util.stripColor(u.getDisplayName()).toLowerCase(Locale.ENGLISH);
 			if (!whois.equals(displayName)
 				&& !displayName.equals(Util.stripColor(ess.getSettings().getNicknamePrefix()) + whois)
