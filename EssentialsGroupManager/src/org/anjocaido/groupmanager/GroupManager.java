@@ -1527,7 +1527,7 @@ public class GroupManager extends JavaPlugin {
 					overloadedUsers.put(dataHolder.getName().toLowerCase(), new ArrayList<User>());
 				}
 				overloadedUsers.get(dataHolder.getName().toLowerCase()).clear();
-				sender.sendMessage(ChatColor.YELLOW + " " + count + "All users in overload mode are now are normal again.");
+				sender.sendMessage(ChatColor.YELLOW + " " + count + "All users in overload mode are now normal again.");
 
 				return true;
 				
