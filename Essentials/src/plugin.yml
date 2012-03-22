@@ -98,6 +98,10 @@ commands:
     description: Satisfy the hunger.
     usage: /<command> [player]
     aliases: [efeed,eat,eeat]
+  fly:
+    description: Take off, and soar!
+    usage: /<command> [player]
+    aliases: [efly]
   itemdb:
     description: Searches for an item.
     usage: /<command> <item>

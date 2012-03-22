@@ -26,7 +26,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-
 public class OfflinePlayer implements Player
 {
 	private final transient IEssentials ess;
@@ -1037,6 +1036,18 @@ public class OfflinePlayer implements Player
 
 	@Override
 	public void abandonConversation(Conversation arg0, ConversationAbandonedEvent arg1)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public boolean isFlying()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setFlying(boolean arg0)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
