@@ -293,7 +293,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 				nickname.insert(0, prefix);
 				if (prefix.length() < 2 || prefix.charAt(0) != '&')
 				{
-					nickname.insert(0, "&f");
+					nickname.insert(0, "§f");
 				}
 			}
 			if (!ess.getSettings().disableSuffix())
