@@ -32,7 +32,7 @@ public class Commandr extends EssentialsCommand
 		if (sender instanceof Player)
 		{
 			User user = ess.getUser(sender);
-			message = Util.formatString(user, "essentials.msg", message);			
+			message = Util.formatMessage(user, "essentials.msg", message);			
 			replyTo = user;
 			senderName = user.getDisplayName();
 		}

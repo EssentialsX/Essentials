@@ -34,7 +34,7 @@ public class Commandmsg extends EssentialsCommand
 			{
 				throw new Exception(_("voiceSilenced"));
 			}
-			message = Util.formatString(user, "essentials.msg", message);
+			message = Util.formatMessage(user, "essentials.msg", message);
 		}
 		else
 		{

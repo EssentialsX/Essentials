@@ -27,7 +27,7 @@ public class Commandme extends EssentialsCommand
 		}
 
 		String message = getFinalArg(args, 0);
-		message = Util.formatString(user, "essentials.chat", message);	
+		message = Util.formatMessage(user, "essentials.chat", message);	
 
 		user.setDisplayNick();
 		ess.broadcastMessage(user, _("action", user.getDisplayName(), message));

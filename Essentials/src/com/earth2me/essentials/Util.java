@@ -495,6 +495,7 @@ public class Util
 		}
 		return buf.toString();
 	}
+	private static transient final Pattern URL_PATTERN = Pattern.compile("^((?:(?:https?)://)?[\\w-_\\.]{2,})\\.([a-z]{2,3}(?:/\\S+)?)$");
 	private static transient final Pattern VANILLA_PATTERN = Pattern.compile("\u00A7+[0-9A-FK-ORa-fk-or]");
 	private static transient final Pattern REPLACE_PATTERN = Pattern.compile("&([0-9a-fk-or])");
 	private static transient final Pattern VANILLA_COLOR_PATTERN = Pattern.compile("\u00A7+[0-9A-Fa-f]");
@@ -528,7 +529,7 @@ public class Util
 		{
 			return null;
 		}
-		return input.replace(".", ". ").replace(".  ", ". ");
+		return URL_PATTERN.matcher(input).replaceAll("$1 $2");
 	}
 
 	public static String formatString(final IUser user, final String permBase, final String input)
@@ -546,6 +547,24 @@ public class Util
 		{
 			message = Util.stripColor(input, VANILLA_COLOR_PATTERN);
 		}
+		if (user.isAuthorized(permBase + ".format"))
+		{
+			message = Util.replaceColor(message, REPLACE_FORMAT_PATTERN);
+		}
+		else
+		{
+			message = Util.stripColor(message, VANILLA_FORMAT_PATTERN);
+		}
+		return message;
+	}
+
+	public static String formatMessage(final IUser user, final String permBase, final String input)
+	{
+		if (input == null)
+		{
+			return null;
+		}
+		String message = formatString(user, permBase, input);
 		if (user.isAuthorized(permBase + ".magic"))
 		{
 			message = Util.replaceColor(message, REPLACE_MAGIC_PATTERN);
@@ -554,13 +573,9 @@ public class Util
 		{
 			message = Util.stripColor(message, VANILLA_MAGIC_PATTERN);
 		}
-		if (user.isAuthorized(permBase + ".format"))
+		if (!user.isAuthorized(permBase + ".url"))
 		{
-			message = Util.replaceColor(message, REPLACE_FORMAT_PATTERN);
-		}
-		else
-		{
-			message = Util.stripColor(message, VANILLA_FORMAT_PATTERN);
+			message = Util.blockURL(message);
 		}
 		return message;
 	}

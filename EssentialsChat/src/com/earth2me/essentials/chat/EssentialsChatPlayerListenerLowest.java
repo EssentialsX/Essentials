@@ -37,9 +37,12 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer
 		/**
 		 * This listener should apply the general chat formatting only...then return control back the event handler
 		 */
-		event.setMessage(Util.formatString(user, "essentials.chat", event.getMessage()));		
+		event.setMessage(Util.formatMessage(user, "essentials.chat", event.getMessage()));
 		String group = user.getGroup();
 		String world = user.getWorld().getName();
-		event.setFormat(ess.getSettings().getChatFormat(group).format(new Object[] {group, world, world.substring(0, 1).toUpperCase(Locale.ENGLISH)}));
+		event.setFormat(ess.getSettings().getChatFormat(group).format(new Object[]
+				{
+					group, world, world.substring(0, 1).toUpperCase(Locale.ENGLISH)
+				}));
 	}
 }
