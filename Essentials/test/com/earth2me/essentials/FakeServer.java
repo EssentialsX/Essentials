@@ -717,4 +717,10 @@ public class FakeServer implements Server
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
+	@Override
+	public long getConnectionThrottle()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }
