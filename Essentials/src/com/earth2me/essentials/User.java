@@ -291,7 +291,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			{
 				final String prefix = ess.getPermissionsHandler().getPrefix(base).replace('&', '§');
 				nickname.insert(0, prefix);
-				if (prefix.length() < 2 || prefix.charAt(0) != '&')
+				if (prefix.length() < 2 || prefix.charAt(0) != '§')
 				{
 					nickname.insert(0, "§f");
 				}
