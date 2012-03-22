@@ -84,19 +84,10 @@ public class SignBlockListener implements Listener
 			return;
 		}
 		User user = ess.getUser(event.getPlayer());
-		if (user.isAuthorized("essentials.signs.color"))
+
+		for (int i = 0; i < 4; i++)
 		{
-			for (int i = 0; i < 4; i++)
-			{
-				event.setLine(i, Util.replaceFormat(event.getLine(i)));
-			}
-		}
-		else
-		{
-			for (int i = 0; i < 4; i++)
-			{
-				event.setLine(i, Util.stripFormat(event.getLine(i)));
-			}
+			event.setLine(i, Util.formatString(user, "essentials.signs", event.getLine(i)));
 		}
 
 		for (Signs signs : Signs.values())

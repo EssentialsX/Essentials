@@ -547,6 +547,14 @@ public class Util
 		{
 			message = Util.stripColor(input, VANILLA_COLOR_PATTERN);
 		}
+		if (user.isAuthorized(permBase + ".magic"))
+		{
+			message = Util.replaceColor(message, REPLACE_MAGIC_PATTERN);
+		}
+		else
+		{
+			message = Util.stripColor(message, VANILLA_MAGIC_PATTERN);
+		}
 		if (user.isAuthorized(permBase + ".format"))
 		{
 			message = Util.replaceColor(message, REPLACE_FORMAT_PATTERN);
@@ -565,14 +573,6 @@ public class Util
 			return null;
 		}
 		String message = formatString(user, permBase, input);
-		if (user.isAuthorized(permBase + ".magic"))
-		{
-			message = Util.replaceColor(message, REPLACE_MAGIC_PATTERN);
-		}
-		else
-		{
-			message = Util.stripColor(message, VANILLA_MAGIC_PATTERN);
-		}
 		if (!user.isAuthorized(permBase + ".url"))
 		{
 			message = Util.blockURL(message);
