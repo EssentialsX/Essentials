@@ -222,4 +222,22 @@ public class FakeInventory implements Inventory
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
+	@Override
+	public int getMaxStackSize()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setMaxStackSize(int size)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public ListIterator<ItemStack> iterator(int index)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }

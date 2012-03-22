@@ -2,10 +2,13 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
 
 
 public class Commandbreak extends EssentialsCommand
@@ -32,7 +35,8 @@ public class Commandbreak extends EssentialsCommand
 		{
 			throw new Exception(_("noBreakBedrock"));
 		}
-		final BlockBreakEvent event = new BlockBreakEvent(block, user.getBase());
+		final List<ItemStack> list = (List<ItemStack>)block.getDrops();		
+		final BlockBreakEvent event = new BlockBreakEvent(block, user.getBase(), list);
 		server.getPluginManager().callEvent(event);
 		if (event.isCancelled())
 		{
