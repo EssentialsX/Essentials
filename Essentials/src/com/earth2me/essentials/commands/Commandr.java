@@ -32,20 +32,13 @@ public class Commandr extends EssentialsCommand
 		if (sender instanceof Player)
 		{
 			User user = ess.getUser(sender);
-			if (user.isAuthorized("essentials.msg.color"))
-			{
-				message = Util.replaceColor(message);
-			}
-			else
-			{
-				message = Util.stripColor(message);
-			}
+			message = Util.formatString(user, "essentials.msg", message);			
 			replyTo = user;
 			senderName = user.getDisplayName();
 		}
 		else
 		{
-			message = Util.replaceColor(message);
+			message = Util.replaceFormat(message);
 			replyTo = Console.getConsoleReplyTo();
 			senderName = Console.NAME;
 		}

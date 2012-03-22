@@ -147,7 +147,7 @@ public class SignProtection extends EssentialsSign
 		{
 			return SignProtectionState.OWNER;
 		}
-		if (Util.stripColor(sign.getLine(3)).equalsIgnoreCase(username))
+		if (Util.stripFormat(sign.getLine(3)).equalsIgnoreCase(username))
 		{
 			return SignProtectionState.OWNER;
 		}

@@ -327,7 +327,7 @@ public class Settings implements ISettings
 		{
 			String format = config.getString("chat.group-formats." + (group == null ? "Default" : group),
 											 config.getString("chat.format", "&7[{GROUP}]&f {DISPLAYNAME}&7:&f {MESSAGE}"));
-			format = Util.replaceColor(format);
+			format = Util.replaceFormat(format);
 			format = format.replace("{DISPLAYNAME}", "%1$s");
 			format = format.replace("{GROUP}", "{0}");
 			format = format.replace("{MESSAGE}", "%2$s");
@@ -349,7 +349,7 @@ public class Settings implements ISettings
 	@Override
 	public IText getAnnounceNewPlayerFormat()
 	{
-		return new SimpleTextInput(Util.replaceColor(config.getString("newbies.announce-format", "&dWelcome {DISPLAYNAME} to the server!")));
+		return new SimpleTextInput(Util.replaceFormat(config.getString("newbies.announce-format", "&dWelcome {DISPLAYNAME} to the server!")));
 	}
 
 	@Override

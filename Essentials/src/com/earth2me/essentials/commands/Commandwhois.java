@@ -37,7 +37,7 @@ public class Commandwhois extends EssentialsCommand
 			showhidden = true;
 		}
 		final String whois = args[0].toLowerCase(Locale.ENGLISH);
-		final int prefixLength = Util.stripColor(ess.getSettings().getNicknamePrefix()).length();
+		final int prefixLength = Util.stripFormat(ess.getSettings().getNicknamePrefix()).length();
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
 			final User user = ess.getUser(onlinePlayer);
@@ -45,7 +45,7 @@ public class Commandwhois extends EssentialsCommand
 			{
 				continue;
 			}
-			final String nickName = Util.stripColor(user.getNickname());
+			final String nickName = Util.stripFormat(user.getNickname());
 			if (!whois.equalsIgnoreCase(nickName)
 				&& !whois.substring(prefixLength).equalsIgnoreCase(nickName)
 				&& !whois.equalsIgnoreCase(user.getName()))

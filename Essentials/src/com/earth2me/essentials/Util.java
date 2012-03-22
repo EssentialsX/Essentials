@@ -495,26 +495,83 @@ public class Util
 		}
 		return buf.toString();
 	}
-	private static transient final Pattern VANILLA_COLOR_PATTERN = Pattern.compile("\u00A7+[0-9A-FKa-fk]");
-	private static transient final Pattern EASY_COLOR_PATTERN = Pattern.compile("&([0-9a-fk])");
+	private static transient final Pattern VANILLA_PATTERN = Pattern.compile("\u00A7+[0-9A-FK-ORa-fk-or]");
+	private static transient final Pattern REPLACE_PATTERN = Pattern.compile("&([0-9a-fk-or])");
+	private static transient final Pattern VANILLA_COLOR_PATTERN = Pattern.compile("\u00A7+[0-9A-Fa-f]");
+	private static transient final Pattern VANILLA_MAGIC_PATTERN = Pattern.compile("\u00A7+[Kk]");
+	private static transient final Pattern VANILLA_FORMAT_PATTERN = Pattern.compile("\u00A7+[L-ORl-or]");
+	private static transient final Pattern REPLACE_COLOR_PATTERN = Pattern.compile("&([0-9a-f])");
+	private static transient final Pattern REPLACE_MAGIC_PATTERN = Pattern.compile("&(k)");
+	private static transient final Pattern REPLACE_FORMAT_PATTERN = Pattern.compile("&([l-or])");
 
-	public static String stripColor(final String input)
+	public static String stripFormat(final String input)
 	{
 		if (input == null)
 		{
 			return null;
 		}
-
-		return VANILLA_COLOR_PATTERN.matcher(input).replaceAll("");
+		return VANILLA_PATTERN.matcher(input).replaceAll("");
 	}
 
-	public static String replaceColor(final String input)
+	public static String replaceFormat(final String input)
 	{
 		if (input == null)
 		{
 			return null;
 		}
+		return REPLACE_PATTERN.matcher(input).replaceAll("");
+	}
 
-		return EASY_COLOR_PATTERN.matcher(input).replaceAll("\u00a7$1");
+	public static String blockURL(final String input)
+	{
+		if (input == null)
+		{
+			return null;
+		}
+		return input.replace(".", ". ").replace(".  ", ". ");
+	}
+
+	public static String formatString(final IUser user, final String permBase, final String input)
+	{
+		if (input == null)
+		{
+			return null;
+		}
+		String message;
+		if (user.isAuthorized(permBase + ".color"))
+		{
+			message = Util.replaceColor(input, REPLACE_COLOR_PATTERN);
+		}
+		else
+		{
+			message = Util.stripColor(input, VANILLA_COLOR_PATTERN);
+		}
+		if (user.isAuthorized(permBase + ".magic"))
+		{
+			message = Util.replaceColor(message, REPLACE_MAGIC_PATTERN);
+		}
+		else
+		{
+			message = Util.stripColor(message, VANILLA_MAGIC_PATTERN);
+		}
+		if (user.isAuthorized(permBase + ".format"))
+		{
+			message = Util.replaceColor(message, REPLACE_FORMAT_PATTERN);
+		}
+		else
+		{
+			message = Util.stripColor(message, VANILLA_FORMAT_PATTERN);
+		}
+		return message;
+	}
+
+	private static String stripColor(final String input, final Pattern pattern)
+	{
+		return pattern.matcher(input).replaceAll("");
+	}
+
+	private static String replaceColor(final String input, final Pattern pattern)
+	{
+		return pattern.matcher(input).replaceAll("\u00a7$1");
 	}
 }

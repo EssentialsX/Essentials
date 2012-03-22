@@ -23,7 +23,7 @@ public class Commandping extends EssentialsCommand
 		}
 		else
 		{
-			sender.sendMessage(Util.replaceColor(getFinalArg(args, 0)));
+			sender.sendMessage(Util.replaceFormat(getFinalArg(args, 0)));
 		}
 	}
 }

@@ -88,14 +88,14 @@ public class SignBlockListener implements Listener
 		{
 			for (int i = 0; i < 4; i++)
 			{
-				event.setLine(i, Util.replaceColor(event.getLine(i)));
+				event.setLine(i, Util.replaceFormat(event.getLine(i)));
 			}
 		}
 		else
 		{
 			for (int i = 0; i < 4; i++)
 			{
-				event.setLine(i, Util.stripColor(event.getLine(i)));
+				event.setLine(i, Util.stripFormat(event.getLine(i)));
 			}
 		}
 

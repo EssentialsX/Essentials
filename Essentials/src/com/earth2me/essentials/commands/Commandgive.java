@@ -85,6 +85,7 @@ public class Commandgive extends EssentialsCommand
 			throw new Exception(_("cantSpawnItem", "Air"));
 		}
 
+		//TODO: TL this.
 		final String itemName = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ');
 		sender.sendMessage(ChatColor.BLUE + "Giving " + stack.getAmount() + " of " + itemName + " to " + giveTo.getDisplayName() + ".");
 		if (giveTo.isAuthorized("essentials.oversizedstacks"))

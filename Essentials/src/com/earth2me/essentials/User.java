@@ -194,7 +194,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	@Override
 	public int compareTo(final User other)
 	{
-		return Util.stripColor(this.getDisplayName()).compareToIgnoreCase(Util.stripColor(other.getDisplayName()));
+		return Util.stripFormat(this.getDisplayName()).compareToIgnoreCase(Util.stripFormat(other.getDisplayName()));
 	}
 
 	@Override
@@ -326,7 +326,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			}
 			if (name.length() > 16)
 			{
-				name = Util.stripColor(name);
+				name = Util.stripFormat(name);
 			}
 			try
 			{
