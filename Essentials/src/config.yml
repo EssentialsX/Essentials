@@ -168,19 +168,20 @@ player-commands:
 
 # Note: All items MUST be followed by a quantity!
 # All kit names should be lower case, and will be treated as lower in permissions/costs.
+# Syntax: - itemID[:DataValue] Amount [Enchantment:Level]..
 # Times are measured in seconds.
 kits:
   dtools:
     delay: 10
     items:
-      - 277 1
+      - 277 1 efficiency:1
       - 278 1
-      - 279 1
+      - 279:780 1
   tools:
     delay: 10
     items:
       - 272 1
-      - 273 1
+      - 273 1 
       - 274 1
       - 275 1
 
