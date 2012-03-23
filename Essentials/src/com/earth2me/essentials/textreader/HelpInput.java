@@ -36,6 +36,7 @@ public class HelpInput implements IText
 		{
 			try
 			{
+				final List<String> pluginLines = new ArrayList<String>();
 				final PluginDescriptionFile desc = p.getDescription();
 				final Map<String, Map<String, Object>> cmds = desc.getCommands();
 				pluginName = p.getDescription().getName();
@@ -63,7 +64,7 @@ public class HelpInput implements IText
 							final String node = "essentials." + k.getKey();
 							if (!ess.getSettings().isCommandDisabled(k.getKey()) && user.isAuthorized(node))
 							{
-								newLines.add(_("helpLine", k.getKey(), k.getValue().get(DESCRIPTION)));
+								pluginLines.add(_("helpLine", k.getKey(), k.getValue().get(DESCRIPTION)));
 							}
 						}
 						else
@@ -82,7 +83,7 @@ public class HelpInput implements IText
 								}
 								if (user.isAuthorized("essentials.help." + pluginNameLow))
 								{
-									newLines.add(_("helpLine", k.getKey(), value.get(DESCRIPTION)));
+									pluginLines.add(_("helpLine", k.getKey(), value.get(DESCRIPTION)));
 								}
 								else if (permissions instanceof List && !((List<Object>)permissions).isEmpty())
 								{
@@ -97,21 +98,21 @@ public class HelpInput implements IText
 									}
 									if (enabled)
 									{
-										newLines.add(_("helpLine", k.getKey(), value.get(DESCRIPTION)));
+										pluginLines.add(_("helpLine", k.getKey(), value.get(DESCRIPTION)));
 									}
 								}
 								else if (permissions instanceof String && !"".equals(permissions))
 								{
 									if (user.isAuthorized(permissions.toString()))
 									{
-										newLines.add(_("helpLine", k.getKey(), value.get(DESCRIPTION)));
+										pluginLines.add(_("helpLine", k.getKey(), value.get(DESCRIPTION)));
 									}
 								}
 								else
 								{
 									if (!ess.getSettings().hidePermissionlessHelp())
 									{
-										newLines.add(_("helpLine", k.getKey(), value.get(DESCRIPTION)));
+										pluginLines.add(_("helpLine", k.getKey(), value.get(DESCRIPTION)));
 									}
 								}
 							}
@@ -122,8 +123,9 @@ public class HelpInput implements IText
 						continue;
 					}
 				}
-				if (!newLines.isEmpty())
+				if (!pluginLines.isEmpty())
 				{
+					newLines.addAll(pluginLines);
 					if (pluginNameLow.equals(match))
 					{
 						break;
