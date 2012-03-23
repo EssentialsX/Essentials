@@ -462,30 +462,31 @@ protect:
     entitytarget: false
     # Prevent the spawning of creatures
     spawn:
-      chicken: false
-      cow: false
       creeper: false
-      ghast: false
-      giant: false
-      monster: false
-      pig: false
-      pig_zombie: false
-      sheep: false
       skeleton: false
-      slime: false
       spider: false
-      squid: false
+      giant: false
       zombie: false
-      wolf: false
-      cave_spider: false
+      slime: false
+      ghast: false
+      pig_zombie: false
       enderman: false
+      cave_spider: false
       silverfish: false
-      ender_dragon: false
-      villager: false
       blaze: false
-      mushroom_cow: false
       magma_cube: false
+      ender_dragon: false
+      pig: false
+      sheep: false
+      cow: false      
+      chicken: false
+      squid: false
+      wolf: false
+      mushroom_cow: false
       snowman: false
+      ocelot: false
+      iron_golem: false
+      villager: false
 
   # Maximum height the creeper should explode. -1 allows them to explode everywhere.
   # Set prevent.creeper-explosion to true, if you want to disable creeper explosions.
