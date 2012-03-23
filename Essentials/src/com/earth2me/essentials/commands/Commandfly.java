@@ -40,7 +40,7 @@ public class Commandfly extends EssentialsCommand
 		{
 			user.setFlying(false);
 		}
-		user.sendMessage(_("flyMode", _(user.getAllowFlight() ? "true" : "false"), user.getDisplayName()));
+		user.sendMessage(_("flyMode", _(user.getAllowFlight() ? "enabled" : "disabled"), user.getDisplayName()));
 	}
 
 	private void flyOtherPlayers(final Server server, final CommandSender sender, final String name)
@@ -57,7 +57,7 @@ public class Commandfly extends EssentialsCommand
 			{
 				player.setFlying(false);
 			}
-			sender.sendMessage(_("flyMode", _(player.getAllowFlight() ? "true" : "false"), player.getDisplayName()));
+			sender.sendMessage(_("flyMode", _(player.getAllowFlight() ? "enabled" : "disabled"), player.getDisplayName()));
 		}
 	}
 }
