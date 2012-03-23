@@ -520,7 +520,7 @@ public class Util
 		{
 			return null;
 		}
-		return REPLACE_PATTERN.matcher(input).replaceAll("");
+		return REPLACE_PATTERN.matcher(input).replaceAll("\u00a7$1");
 	}
 
 	public static String blockURL(final String input)
