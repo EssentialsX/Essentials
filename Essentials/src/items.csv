@@ -809,6 +809,7 @@ blawool,35,15
 blacotton,35,15
 pistonmovingpiece,36,0
 pistonmp,36,0
+pistontop,36,0
 yellowflower,37,0
 yflower,37,0
 flower,37,0
@@ -979,6 +980,9 @@ sbdstep,43,5
 stonebrickdoubleslab,43,5
 stonebdslab,43,5
 sbdslab,43,5
+adminslab,43,6
+magicslab,43,6
+adslab,43,6
 smoothstonestep,44,0
 stonestep,44,0
 sstep,44,0
