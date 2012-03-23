@@ -495,7 +495,7 @@ public class Util
 		}
 		return buf.toString();
 	}
-	private static transient final Pattern URL_PATTERN = Pattern.compile("^((?:(?:https?)://)?[\\w-_\\.]{2,})\\.([a-z]{2,3}(?:/\\S+)?)$");
+	private static transient final Pattern URL_PATTERN = Pattern.compile("((?:(?:https?)://)?[\\w-_\\.]{2,})\\.([a-z]{2,3}(?:/\\S+)?)");
 	private static transient final Pattern VANILLA_PATTERN = Pattern.compile("\u00A7+[0-9A-FK-ORa-fk-or]");
 	private static transient final Pattern REPLACE_PATTERN = Pattern.compile("&([0-9a-fk-or])");
 	private static transient final Pattern VANILLA_COLOR_PATTERN = Pattern.compile("\u00A7+[0-9A-Fa-f]");
@@ -529,7 +529,12 @@ public class Util
 		{
 			return null;
 		}
-		return URL_PATTERN.matcher(input).replaceAll("$1 $2");
+		String text = URL_PATTERN.matcher(input).replaceAll("$1 $2");
+		while (URL_PATTERN.matcher(text).find())
+		{
+			text = URL_PATTERN.matcher(text).replaceAll("$1 $2");
+		}
+		return text;
 	}
 
 	public static String formatString(final IUser user, final String permBase, final String input)
