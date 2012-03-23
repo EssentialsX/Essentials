@@ -24,33 +24,46 @@ public class HelpInput implements IText
 	public HelpInput(final User user, final String match, final IEssentials ess) throws IOException
 	{
 		boolean reported = false;
+		final List<String> newLines = new ArrayList<String>();
 		String pluginName = "";
+		String pluginNameLow = "";
+		if (!match.equalsIgnoreCase(""))
+		{
+			lines.add(_("helpMatching", match));
+		}
+
 		for (Plugin p : ess.getServer().getPluginManager().getPlugins())
 		{
 			try
 			{
 				final PluginDescriptionFile desc = p.getDescription();
 				final Map<String, Map<String, Object>> cmds = desc.getCommands();
-				pluginName = p.getDescription().getName().toLowerCase(Locale.ENGLISH);
+				pluginName = p.getDescription().getName();
+				pluginNameLow = pluginName.toLowerCase(Locale.ENGLISH);
+				if (pluginNameLow.equals(match))
+				{
+					lines.clear();
+					newLines.clear();
+					lines.add(_("helpFrom", p.getDescription().getName()));
+				}
+
 				for (Map.Entry<String, Map<String, Object>> k : cmds.entrySet())
 				{
 					try
 					{
-						if ((!match.equalsIgnoreCase(""))
-							&& (!k.getKey().toLowerCase(Locale.ENGLISH).contains(match))
+						if (!match.equalsIgnoreCase("") && (!pluginNameLow.contains(match)) && (!k.getKey().toLowerCase(Locale.ENGLISH).contains(match))
 							&& (!(k.getValue().get(DESCRIPTION) instanceof String
-								  && ((String)k.getValue().get(DESCRIPTION)).toLowerCase(Locale.ENGLISH).contains(match)))
-							&& (!pluginName.contains(match)))
+								  && ((String)k.getValue().get(DESCRIPTION)).toLowerCase(Locale.ENGLISH).contains(match))))
 						{
 							continue;
 						}
 
-						if (pluginName.contains("essentials"))
+						if (pluginNameLow.contains("essentials"))
 						{
 							final String node = "essentials." + k.getKey();
 							if (!ess.getSettings().isCommandDisabled(k.getKey()) && user.isAuthorized(node))
 							{
-								lines.add(_("helpLine", k.getKey(), k.getValue().get(DESCRIPTION)));
+								newLines.add(_("helpLine", k.getKey(), k.getValue().get(DESCRIPTION)));
 							}
 						}
 						else
@@ -67,9 +80,9 @@ public class HelpInput implements IText
 								{
 									permissions = value.get(PERMISSIONS);
 								}
-								if (user.isAuthorized("essentials.help." + pluginName))
+								if (user.isAuthorized("essentials.help." + pluginNameLow))
 								{
-									lines.add(_("helpLine", k.getKey(), value.get(DESCRIPTION)));
+									newLines.add(_("helpLine", k.getKey(), value.get(DESCRIPTION)));
 								}
 								else if (permissions instanceof List && !((List<Object>)permissions).isEmpty())
 								{
@@ -84,21 +97,21 @@ public class HelpInput implements IText
 									}
 									if (enabled)
 									{
-										lines.add(_("helpLine", k.getKey(), value.get(DESCRIPTION)));
+										newLines.add(_("helpLine", k.getKey(), value.get(DESCRIPTION)));
 									}
 								}
 								else if (permissions instanceof String && !"".equals(permissions))
 								{
 									if (user.isAuthorized(permissions.toString()))
 									{
-										lines.add(_("helpLine", k.getKey(), value.get(DESCRIPTION)));
+										newLines.add(_("helpLine", k.getKey(), value.get(DESCRIPTION)));
 									}
 								}
 								else
 								{
 									if (!ess.getSettings().hidePermissionlessHelp())
 									{
-										lines.add(_("helpLine", k.getKey(), value.get(DESCRIPTION)));
+										newLines.add(_("helpLine", k.getKey(), value.get(DESCRIPTION)));
 									}
 								}
 							}
@@ -107,6 +120,17 @@ public class HelpInput implements IText
 					catch (NullPointerException ex)
 					{
 						continue;
+					}
+				}
+				if (!newLines.isEmpty())
+				{
+					if (pluginNameLow.equals(match))
+					{
+						break;
+					}
+					if (match.equalsIgnoreCase(""))
+					{
+						lines.add(_("helpPlugin", pluginName, pluginNameLow));
 					}
 				}
 			}
@@ -118,12 +142,13 @@ public class HelpInput implements IText
 			{
 				if (!reported)
 				{
-					logger.log(Level.WARNING, _("commandHelpFailedForPlugin", pluginName), ex);
+					logger.log(Level.WARNING, _("commandHelpFailedForPlugin", pluginNameLow), ex);
 				}
 				reported = true;
 				continue;
 			}
 		}
+		lines.addAll(newLines);
 	}
 
 	@Override
