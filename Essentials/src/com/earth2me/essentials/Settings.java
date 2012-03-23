@@ -609,6 +609,12 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("change-displayname", true);
 	}
+	
+	@Override
+	public boolean changePlayerListName()
+	{
+		return config.getBoolean("change-playerlist", false);
+	}
 
 	@Override
 	public boolean useBukkitPermissions()

@@ -328,15 +328,18 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			{
 				name = Util.stripFormat(name);
 			}
-			try
+			if (ess.getSettings().changePlayerListName())
 			{
-				setPlayerListName(name);
-			}
-			catch (IllegalArgumentException e)
-			{
-				if (ess.getSettings().isDebug())
+				try
 				{
-					logger.log(Level.INFO, "Playerlist for " + name + " was not updated. Name clashed with another online player.");
+					setPlayerListName(name);
+				}
+				catch (IllegalArgumentException e)
+				{
+					if (ess.getSettings().isDebug())
+					{
+						logger.log(Level.INFO, "Playerlist for " + name + " was not updated. Name clashed with another online player.");
+					}
 				}
 			}
 		}
