@@ -33,7 +33,8 @@ nickname-prefix: '~'
 # Disable this if you have any other plugin, that modifies the displayname of a user.
 change-displayname: true
 
-# When this option is enabled, the (tab) player list will be updated with nicknames and colours.
+# When this option is enabled, the (tab) player list will be updated with the displayname.
+# The value of change-displayname (above) has to be true.
 #change-playerlist: true
 
 # Adds the prefix and suffix to the displayname of the player, so it will be displayed in messages and lists.
