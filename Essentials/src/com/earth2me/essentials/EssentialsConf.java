@@ -126,23 +126,25 @@ public class EssentialsConf extends YamlConfiguration
 				{
 					buffer.rewind();
 					data.clear();
-					LOGGER.log(Level.INFO, "File {0} is not utf-8 encoded, trying {1}", new Object[]
-							{
-								configFile.getAbsolutePath().toString(), Charset.defaultCharset().displayName()
-							});
+					LOGGER.log(Level.INFO, "File " + configFile.getAbsolutePath().toString() + "is not utf-8 encoded, trying " + Charset.defaultCharset().displayName());
 					decoder = Charset.defaultCharset().newDecoder();
 					result = decoder.decode(buffer, data, true);
 					if (result.isError())
 					{
 						throw new InvalidConfigurationException("Invalid Characters in file " + configFile.getAbsolutePath().toString());
-					} else {
+					}
+					else
+					{
 						decoder.flush(data);
 					}
-				} else {
+				}
+				else
+				{
 					decoder.flush(data);
 				}
+				final int end = data.position();
 				data.rewind();
-				super.loadFromString(data.toString());
+				super.loadFromString(data.subSequence(0, end).toString());
 			}
 			finally
 			{

@@ -114,6 +114,7 @@ public class I18n implements II18n
 		{
 			currentLocale = new Locale(parts[0], parts[1], parts[2]);
 		}
+		ResourceBundle.clearCache();
 		Logger.getLogger("Minecraft").log(Level.INFO, String.format("Using locale %s", currentLocale.toString()));
 		customBundle = ResourceBundle.getBundle(MESSAGES, currentLocale, new FileResClassLoader(I18n.class.getClassLoader(), ess));
 		localeBundle = ResourceBundle.getBundle(MESSAGES, currentLocale);
