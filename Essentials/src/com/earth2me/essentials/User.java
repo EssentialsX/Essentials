@@ -291,16 +291,12 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			{
 				final String prefix = ess.getPermissionsHandler().getPrefix(base).replace('&', '§');
 				nickname.insert(0, prefix);
-				if (prefix.length() < 2 || prefix.charAt(0) != '§')
-				{
-					nickname.insert(0, "§f");
-				}
 			}
 			if (!ess.getSettings().disableSuffix())
 			{
 				final String suffix = ess.getPermissionsHandler().getSuffix(base).replace('&', '§');
 				nickname.append(suffix);
-				if (suffix.length() < 2 || !suffix.substring(suffix.length() - 2, suffix.length() - 1).equals("§"))
+				if (suffix.length() < 2 || suffix.charAt(suffix.length() - 2) != '§')
 				{
 					nickname.append("§f");
 				}
