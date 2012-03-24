@@ -406,6 +406,8 @@ protect:
   # Database settings for sign/rail protection
 
   # mysql or sqlite
+  # We strongly recommend against using mysql here, unless you have a good reason.
+  # sqllite seems to be faster in almost all cases, and in some cases mysql can be far far slower.
   datatype: 'sqlite'
 
   # If you specified MySQL above, you MUST enter the appropriate details here.
