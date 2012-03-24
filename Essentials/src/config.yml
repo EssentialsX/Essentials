@@ -407,7 +407,7 @@ protect:
 
   # mysql or sqlite
   # We strongly recommend against using mysql here, unless you have a good reason.
-  # sqllite seems to be faster in almost all cases, and in some cases mysql can be far far slower.
+  # Sqlite seems to be faster in almost all cases, and in some cases mysql can be much slower.
   datatype: 'sqlite'
 
   # If you specified MySQL above, you MUST enter the appropriate details here.
