@@ -42,7 +42,6 @@ public abstract class UserData extends PlayerExtension implements IConf
 		lastHealTimestamp = _getLastHealTimestamp();
 		jail = _getJail();
 		mails = _getMails();
-		savedInventory = _getSavedInventory();
 		teleportEnabled = getTeleportEnabled();
 		ignoredPlayers = getIgnoredPlayers();
 		godmode = _getGodModeEnabled();
@@ -407,50 +406,17 @@ public abstract class UserData extends PlayerExtension implements IConf
 		mails.add(mail);
 		setMails(mails);
 	}
-	private ItemStack[] savedInventory;
-
-	public ItemStack[] getSavedInventory()
-	{
-		return savedInventory;
+	
+	private boolean invSee;
+	
+	public boolean isInvSee() {
+		return invSee;
 	}
-
-	private ItemStack[] _getSavedInventory()
-	{
-		int size = config.getInt("inventory.size", 0);
-		if (size < 1 || (getInventory() != null && size > getInventory().getSize()))
-		{
-			return null;
-		}
-		ItemStack[] is = new ItemStack[size];
-		for (int i = 0; i < size; i++)
-		{
-			is[i] = config.getItemStack("inventory." + i);
-		}
-		return is;
+	
+	public void setInvSee(boolean set) {
+		invSee = set;
 	}
-
-	public void setSavedInventory(ItemStack[] is)
-	{
-		if (is == null || is.length == 0)
-		{
-			savedInventory = null;
-			config.removeProperty("inventory");
-		}
-		else
-		{
-			savedInventory = is;
-			config.setProperty("inventory.size", is.length);
-			for (int i = 0; i < is.length; i++)
-			{
-				if (is[i] == null || is[i].getType() == Material.AIR)
-				{
-					continue;
-				}
-				config.setProperty("inventory." + i, is[i]);
-			}
-		}
-		config.save();
-	}
+	
 	private boolean teleportEnabled;
 
 	private boolean getTeleportEnabled()

@@ -189,7 +189,7 @@ commands:
   killall:
     description: Kill all mobs in a world.
     usage: /<command> [mobType] [radius]
-    aliases: [ekillall,butcher,ebutcher]
+    aliases: [ekillall,butcher,ebutcher,mobkill,emobkill]
   kittycannon:
     description: Throw an exploding kitten at your opponent
     usage: /<command>
@@ -308,11 +308,11 @@ commands:
   spawner:
     description: Change the mob type of a spawner
     usage: /<command> <mob>
-    aliases: [espawner]
+    aliases: [espawner,changems,echangems]
   spawnmob:
     description: Spawns a mob.
     usage: /<command> <mob>[:data][,<mount>[:data]] [amount] [player]
-    aliases: [espawnmob]
+    aliases: [espawnmob,mob,emob]
   sudo:
     description: Make another user perform a command.
     usage: /<command> <player> <command [args]>

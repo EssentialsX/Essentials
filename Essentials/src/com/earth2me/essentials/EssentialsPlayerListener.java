@@ -20,6 +20,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.*;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -106,11 +109,6 @@ public class EssentialsPlayerListener implements Listener
 		if (ess.getSettings().removeGodOnDisconnect() && user.isGodModeEnabled())
 		{
 			user.toggleGodModeEnabled();
-		}
-		if (user.getSavedInventory() != null)
-		{
-			user.getInventory().setContents(user.getSavedInventory());
-			user.setSavedInventory(null);
 		}
 		user.updateActivity(false);
 		user.dispose();
@@ -386,6 +384,28 @@ public class EssentialsPlayerListener implements Listener
 		if (user.isAfk())
 		{
 			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOW)
+	public void onInventoryClickEvent(final InventoryClickEvent event)
+	{
+		if (event.getView().getTopInventory().getType() == InventoryType.PLAYER)
+		{
+			final User user = ess.getUser(event.getWhoClicked());
+			if (user.isInvSee() && !user.isAuthorized("essentials.invsee.modify"))
+			{
+				event.setCancelled(true);
+			}
+		}
+	}
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onInventoryCloseEvent(final InventoryCloseEvent event)
+	{
+		if (event.getView().getTopInventory().getType() == InventoryType.PLAYER)
+		{
+			final User user = ess.getUser(event.getPlayer());
+			user.setInvSee(false);			
 		}
 	}
 }
