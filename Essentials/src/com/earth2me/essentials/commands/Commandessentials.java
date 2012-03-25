@@ -186,8 +186,12 @@ public class Commandessentials extends EssentialsCommand
 		try
 		{
 			sender.sendMessage("Essentials collects simple metrics to highlight which features to concentrate work on in the future.");
-			metrics.setOptOut(!metrics.isOptOut());			
-			sender.sendMessage("Annonmous Metrics are now: " + (metrics.isOptOut() ? "disabled" : "enabled"));
+			if (metrics.isOptOut()) {
+				metrics.enable();		
+			} else {
+				metrics.disable();
+			}
+			sender.sendMessage("Anonymous Metrics are now: " + (metrics.isOptOut() ? "disabled" : "enabled"));
 		}
 		catch (IOException ex)
 		{

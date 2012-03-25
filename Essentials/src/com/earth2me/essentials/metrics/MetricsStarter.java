@@ -17,6 +17,7 @@ public class MetricsStarter implements Runnable
 	private enum Modules
 	{
 		Essentials,
+		EssentialsAntiCheat,
 		EssentialsChat,
 		EssentialsSpawn,
 		EssentialsProtect,
@@ -146,10 +147,16 @@ public class MetricsStarter implements Runnable
 			}
 
 			final Graph depGraph = metrics.createGraph("Dependencies");
-			Method method = ess.getPaymentMethod().getMethod();
+			final Method method = ess.getPaymentMethod().getMethod();
 			if (method != null)
 			{
-				depGraph.addPlotter(new SimplePlotter(method.getName() + " " + method.getVersion()));
+				String version = method.getVersion();
+				final int dashPosition = version.indexOf('-');
+				if (dashPosition > 0)
+				{
+					version = version.substring(0, dashPosition);
+				}
+				depGraph.addPlotter(new SimplePlotter(method.getName() + " " + version));
 			}
 			depGraph.addPlotter(new SimplePlotter(ess.getPermissionsHandler().getName()));
 
