@@ -217,8 +217,9 @@ enabledSigns:
 # Backup runs a command while saving is disabled
 backup:
   # Interval in minutes
-  interval: 60
-  # Add a command that backups your data, e.g.
+  interval: 30
+  # Unless you add a valid backup command or script here, this feature will be useless.
+  # Use 'save-all' to simply force regular world saving without backup.
   #command: 'rdiff-backup World1 backups/World1'
 
 # Set this true to enable permission per warp.

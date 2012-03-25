@@ -22,7 +22,7 @@ public class Commandbackup extends EssentialsCommand
 			throw new Exception(_("backupDisabled"));
 		}
 		final String command = ess.getSettings().getBackupCommand();
-		if (command == null || "".equals(command))
+		if (command == null || "".equals(command) || "save-all".equalsIgnoreCase(command))
 		{
 			throw new Exception(_("backupDisabled"));
 		}
