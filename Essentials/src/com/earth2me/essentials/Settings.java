@@ -333,7 +333,7 @@ public class Settings implements ISettings
 			format = format.replace("{MESSAGE}", "%2$s");
 			format = format.replace("{WORLDNAME}", "{1}");
 			format = format.replace("{SHORTWORLDNAME}", "{2}");
-			format = format.replaceAll("\\{(\\D*)\\}", "\\[$1\\]");
+			format = format.replaceAll("\\{(\\D*?)\\}", "\\[$1\\]");
 			mFormat = new MessageFormat(format);
 			chatFormats.put(group, mFormat);
 		}
