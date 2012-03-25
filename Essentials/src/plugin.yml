@@ -375,7 +375,7 @@ commands:
     aliases: [s,etphere]
   tpo:
     description: Teleport override for tptoggle.
-    usage: /<command> <player>
+    usage: /<command> <player> [otherplayer]
     aliases: [etpo]
   tpohere:
     description: Teleport here override for tptoggle.
