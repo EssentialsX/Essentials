@@ -387,7 +387,7 @@ public class EssentialsPlayerListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onInventoryClickEvent(final InventoryClickEvent event)
 	{
 		if (event.getView().getTopInventory().getType() == InventoryType.PLAYER)
