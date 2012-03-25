@@ -198,7 +198,7 @@ public class EssentialsPlayerListener implements Listener
 			return;
 		}
 
-		if (server.getOnlinePlayers().length >= server.getMaxPlayers() && !user.isAuthorized("essentials.joinfullserver"))
+		if (event.getResult() == Result.KICK_FULL && !user.isAuthorized("essentials.joinfullserver"))
 		{
 			event.disallow(Result.KICK_FULL, _("serverFull"));
 			return;
