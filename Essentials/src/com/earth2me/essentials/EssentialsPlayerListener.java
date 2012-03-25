@@ -126,9 +126,13 @@ public class EssentialsPlayerListener implements Listener
 	{
 		ess.getBackup().onPlayerJoin();
 		final User user = ess.getUser(event.getPlayer());
+
 		user.setDisplayNick();
+		user.setLastLogin(System.currentTimeMillis());
 		user.setLastLoginAddress(user.getAddress().getAddress().getHostAddress());
+
 		user.updateActivity(false);
+		updateCompass(user);
 		if (user.isAuthorized("essentials.sleepingignored"))
 		{
 			user.setSleepingIgnored(true);
@@ -184,7 +188,10 @@ public class EssentialsPlayerListener implements Listener
 		}
 
 		User user = ess.getUser(event.getPlayer());
-		user.setNPC(false);
+		if (user.isNPC())
+		{
+			user.setNPC(false);
+		}
 
 		final long currentTime = System.currentTimeMillis();
 		final boolean banExpired = user.checkBanTimeout(currentTime);
@@ -204,9 +211,6 @@ public class EssentialsPlayerListener implements Listener
 			return;
 		}
 		event.allow();
-
-		user.setLastLogin(System.currentTimeMillis());
-		updateCompass(user);
 	}
 
 	private void updateCompass(final User user)
