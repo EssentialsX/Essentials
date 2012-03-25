@@ -275,7 +275,7 @@ public class Metrics
 				configuration.save(configurationFile);
 			}
 
-			// Disable Task, if it is running
+			// Enable Task, if it is not running
 			if (taskId < 0)
 			{
 				start();
