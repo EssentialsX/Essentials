@@ -75,6 +75,13 @@ public class EssentialsPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerMove(final PlayerMoveEvent event)
 	{
+		if (event.getFrom().getBlockX() == event.getTo().getBlockX()
+			&& event.getFrom().getBlockZ() == event.getTo().getBlockZ()
+			&& event.getFrom().getBlockY() == event.getTo().getBlockY())
+		{
+			return;
+		}
+
 		final User user = ess.getUser(event.getPlayer());
 
 		if (user.isAfk() && ess.getSettings().getFreezeAfkPlayers())
@@ -399,13 +406,14 @@ public class EssentialsPlayerListener implements Listener
 			}
 		}
 	}
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onInventoryCloseEvent(final InventoryCloseEvent event)
 	{
 		if (event.getView().getTopInventory().getType() == InventoryType.PLAYER)
 		{
 			final User user = ess.getUser(event.getPlayer());
-			user.setInvSee(false);			
+			user.setInvSee(false);
 		}
 	}
 }
