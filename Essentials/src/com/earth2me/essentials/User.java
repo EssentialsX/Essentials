@@ -23,6 +23,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	private transient long lastActivity = System.currentTimeMillis();
 	private boolean hidden = false;
 	private transient Location afkPosition = null;
+	private boolean invSee = false;
 	private static final Logger logger = Logger.getLogger("Minecraft");
 
 	User(final Player base, final IEssentials ess)
@@ -591,5 +592,15 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public long getTeleportRequestTime()
 	{
 		return teleportRequestTime;
+	}
+
+	public boolean isInvSee()
+	{
+		return invSee;
+	}
+
+	public void setInvSee(boolean set)
+	{
+		invSee = set;
 	}
 }

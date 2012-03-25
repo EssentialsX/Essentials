@@ -188,14 +188,13 @@ public abstract class UserData extends PlayerExtension implements IConf
 		}
 		return false;
 	}
-
 	private String nickname;
-	
+
 	public String _getNickname()
 	{
 		return config.getString("nickname");
 	}
-	
+
 	public String getNickname()
 	{
 		return nickname;
@@ -406,17 +405,6 @@ public abstract class UserData extends PlayerExtension implements IConf
 		mails.add(mail);
 		setMails(mails);
 	}
-	
-	private boolean invSee;
-	
-	public boolean isInvSee() {
-		return invSee;
-	}
-	
-	public void setInvSee(boolean set) {
-		invSee = set;
-	}
-	
 	private boolean teleportEnabled;
 
 	private boolean getTeleportEnabled()

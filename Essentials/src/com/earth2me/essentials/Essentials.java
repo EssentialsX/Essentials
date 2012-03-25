@@ -125,7 +125,8 @@ public class Essentials extends JavaPlugin implements IEssentials
 		for (Plugin plugin : pm.getPlugins())
 		{
 			if (plugin.getDescription().getName().startsWith("Essentials")
-				&& !plugin.getDescription().getVersion().equals(this.getDescription().getVersion()))
+				&& !plugin.getDescription().getVersion().equals(this.getDescription().getVersion())
+				&& !plugin.getDescription().getName().equals("EssentialsAntiCheat"))
 			{
 				LOGGER.log(Level.WARNING, _("versionMismatch", plugin.getDescription().getName()));
 			}
