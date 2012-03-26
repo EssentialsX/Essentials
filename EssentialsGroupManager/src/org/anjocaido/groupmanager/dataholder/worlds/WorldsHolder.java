@@ -106,7 +106,12 @@ public class WorldsHolder {
 	        	if (!worldsData.containsKey(folder.getName().toLowerCase())
 	        			&& ((!mirrorsGroup.containsKey(folder.getName().toLowerCase()))
 	        			|| (!mirrorsUser.containsKey(folder.getName().toLowerCase())))) {
-	        		loadWorld(folder.getName());
+	        		/*
+	        		 * Call setupWorldFolder to check case sensitivity
+	        		 * and convert to lower case, before we attempt to load this world.
+	        		 */
+	        		setupWorldFolder(folder.getName());
+	        		loadWorld(folder.getName().toLowerCase());
 	            }
 	            
             }
@@ -454,7 +459,22 @@ public class WorldsHolder {
 
 		File defaultWorldFolder = new File(worldsFolder, worldNameLowered);
 		if ((!defaultWorldFolder.exists()) && ((!mirrorsGroup.containsKey(worldNameLowered))) || (!mirrorsUser.containsKey(worldNameLowered))) {
-			defaultWorldFolder.mkdirs();
+			
+			/*
+    		 * check and convert all old case sensitive folders to lower case
+    		 */
+			File casedWorldFolder = new File(worldsFolder, worldName);
+    		if ((casedWorldFolder.exists()) && (casedWorldFolder.getName().toLowerCase().equals(worldNameLowered))) {
+    			/*
+    			 * Rename the old folder to the new lower cased format
+    			 */
+    			casedWorldFolder.renameTo(new File(worldsFolder, worldNameLowered));
+    		} else {
+    			/*
+    			 *  Else we just create the folder
+    			 */
+    			defaultWorldFolder.mkdirs();
+    		}
 		}
 		if (defaultWorldFolder.exists()) {
 			if (!mirrorsGroup.containsKey(worldNameLowered)) {
