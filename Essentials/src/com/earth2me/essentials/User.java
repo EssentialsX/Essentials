@@ -57,6 +57,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	@Override
 	public boolean isAuthorized(final String node)
 	{
+		if (ess.getSettings().isDebug())
+		{
+			ess.getLogger().log(Level.INFO, "checking if " + base.getName() + " has " + node);
+		}
 		if (base instanceof OfflinePlayer)
 		{
 			return false;

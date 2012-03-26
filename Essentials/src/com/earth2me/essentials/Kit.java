@@ -2,7 +2,6 @@ package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
 import static com.earth2me.essentials.I18n.capitalCase;
-import com.earth2me.essentials.commands.Commandenchant;
 import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import java.util.*;
@@ -104,7 +103,7 @@ public class Kit
 						{
 							continue;
 						}
-						final Enchantment enchantment = Commandenchant.getEnchantment(split[0], user);
+						final Enchantment enchantment = Enchantments.getByName(split[0]);
 						int level;
 						if (split.length > 1)
 						{
@@ -125,7 +124,7 @@ public class Kit
 				}
 				else
 				{
-					overfilled = InventoryWorkaround.addItem(user.getInventory(), true, new ItemStack(id, amount, data));
+					overfilled = InventoryWorkaround.addItem(user.getInventory(), true, 0, stack);
 				}
 				for (ItemStack itemStack : overfilled.values())
 				{
