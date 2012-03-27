@@ -25,12 +25,14 @@ public class Commandtpaccept extends EssentialsCommand
 			throw new Exception(_("noPendingRequest"));
 		}
 
-		if (user.isTpRequestHere() && !target.isAuthorized("essentials.tpahere"))
+		if (user.isTpRequestHere() && ((!target.isAuthorized("essentials.tpahere") && !target.isAuthorized("essentials.tpaall"))
+									   || (user.getWorld() != target.getWorld() && ess.getSettings().isWorldTeleportPermissions()
+										   && !user.isAuthorized("essentials.world." + user.getWorld().getName()))))
 		{
 			throw new Exception(_("noPendingRequest"));
 		}
 
-		if (!user.isTpRequestHere() && ((!target.isAuthorized("essentials.tpa") && !target.isAuthorized("essentials.tpaall"))
+		if (!user.isTpRequestHere() && (!target.isAuthorized("essentials.tpa")
 										|| (user.getWorld() != target.getWorld() && ess.getSettings().isWorldTeleportPermissions()
 											&& !user.isAuthorized("essentials.world." + target.getWorld().getName()))))
 		{
