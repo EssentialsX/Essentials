@@ -229,14 +229,13 @@ public class EssentialsPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerTeleport(final PlayerTeleportEvent event)
 	{
-
+		final User user = ess.getUser(event.getPlayer());
 		//There is TeleportCause.COMMMAND but plugins have to actively pass the cause in on their teleports.
 		if ((event.getCause() == TeleportCause.PLUGIN || event.getCause() == TeleportCause.COMMAND) && ess.getSettings().registerBackInListener())
 		{
-			final User user = ess.getUser(event.getPlayer());
 			user.setLastLocation();
 		}
-
+		user.enableInvulnerabilityAfterTeleport();
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)

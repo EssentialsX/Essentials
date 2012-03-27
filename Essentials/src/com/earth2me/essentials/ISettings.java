@@ -169,4 +169,6 @@ public interface ISettings extends IConf
 	boolean isMetricsEnabled();
 	
 	void setMetricsEnabled(boolean metricsEnabled);
+
+	public long getTeleportInvulnerability();
 }

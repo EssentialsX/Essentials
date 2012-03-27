@@ -32,6 +32,9 @@ public class EssentialsEntityListener implements Listener
 		{
 			final User defender = ess.getUser(eDefend);
 			final User attacker = ess.getUser(eAttack);
+			if (attacker.hasInvulnerabilityAfterTeleport() || defender.hasInvulnerabilityAfterTeleport()) {
+				event.setCancelled(true);
+			}
 			attacker.updateActivity(true);
 			final List<String> commandList = attacker.getPowertool(attacker.getItemInHand());
 			if (commandList != null && !commandList.isEmpty())

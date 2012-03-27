@@ -609,7 +609,7 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("change-displayname", true);
 	}
-	
+
 	@Override
 	public boolean changePlayerListName()
 	{
@@ -744,5 +744,11 @@ public class Settings implements ISettings
 	public void setMetricsEnabled(boolean metricsEnabled)
 	{
 		this.metricsEnabled = metricsEnabled;
+	}
+
+	@Override
+	public long getTeleportInvulnerability()
+	{
+		return config.getLong("teleport-invulnerability", 0) * 1000;
 	}
 }

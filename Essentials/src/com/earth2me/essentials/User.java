@@ -603,8 +603,32 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		return invSee;
 	}
 
-	public void setInvSee(boolean set)
+	public void setInvSee(final boolean set)
 	{
 		invSee = set;
+	}
+	private transient long teleportInvulnerabilityTimestamp = 0;
+
+	public void enableInvulnerabilityAfterTeleport()
+	{
+		final long time = ess.getSettings().getTeleportInvulnerability();
+		if (time > 0)
+		{
+			teleportInvulnerabilityTimestamp = System.currentTimeMillis() + time;
+		}
+	}
+
+	public void resetInvulnerabilityAfterTeleport()
+	{
+		if (teleportInvulnerabilityTimestamp != 0
+			&& teleportInvulnerabilityTimestamp < System.currentTimeMillis())
+		{
+			teleportInvulnerabilityTimestamp = 0;
+		}
+	}
+	
+	public boolean hasInvulnerabilityAfterTeleport()
+	{
+		return teleportInvulnerabilityTimestamp != 0 && teleportInvulnerabilityTimestamp >= System.currentTimeMillis();
 	}
 }
