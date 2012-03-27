@@ -621,10 +621,16 @@ public abstract class UserData extends PlayerExtension implements IConf
 		return lastLogin;
 	}
 
-	public void setLastLogin(long time)
+	private void _setLastLogin(long time)
 	{
 		lastLogin = time;
 		config.setProperty("timestamps.login", time);
+	}
+
+	public void setLastLogin(long time)
+	{
+		_setLastLogin(time);
+		_setLastLoginAddress(base.getAddress().getAddress().getHostAddress());
 		config.save();
 	}
 	private long lastLogout;
@@ -657,11 +663,10 @@ public abstract class UserData extends PlayerExtension implements IConf
 		return lastLoginAddress;
 	}
 
-	public void setLastLoginAddress(String address)
+	private void _setLastLoginAddress(String address)
 	{
 		lastLoginAddress = address;
 		config.setProperty("ipAddress", address);
-		config.save();
 	}
 	private boolean afk;
 

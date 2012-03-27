@@ -129,7 +129,6 @@ public class EssentialsPlayerListener implements Listener
 
 		user.setDisplayNick();
 		user.setLastLogin(System.currentTimeMillis());
-		user.setLastLoginAddress(user.getAddress().getAddress().getHostAddress());
 
 		user.updateActivity(false);
 		updateCompass(user);
