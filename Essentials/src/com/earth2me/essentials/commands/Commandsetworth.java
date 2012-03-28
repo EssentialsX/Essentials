@@ -17,7 +17,7 @@ public class Commandsetworth extends EssentialsCommand
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		if (args.length < 2)
+		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
