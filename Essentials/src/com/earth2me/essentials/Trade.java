@@ -58,7 +58,7 @@ public class Trade
 	{
 		if (getMoney() != null
 			&& getMoney() > 0
-			&& user.canAfford(getMoney()))
+			&& !user.canAfford(getMoney()))
 		{
 			throw new ChargeException(_("notEnoughMoney"));
 		}
@@ -72,7 +72,7 @@ public class Trade
 		double money;
 		if (command != null && !command.isEmpty()
 			&& 0 < (money = getCommandCost(user))
-			&& user.canAfford(money))
+			&& !user.canAfford(money))
 		{
 			throw new ChargeException(_("notEnoughMoney"));
 		}
