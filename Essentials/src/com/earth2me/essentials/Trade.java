@@ -56,11 +56,9 @@ public class Trade
 
 	public void isAffordableFor(final IUser user) throws ChargeException
 	{
-		final double mon = user.getMoney();
 		if (getMoney() != null
-			&& mon < getMoney()
 			&& getMoney() > 0
-			&& !user.isAuthorized("essentials.eco.loan"))
+			&& !user.canAfford(getMoney()))
 		{
 			throw new ChargeException(_("notEnoughMoney"));
 		}
@@ -71,12 +69,10 @@ public class Trade
 			throw new ChargeException(_("missingItems", getItemStack().getAmount(), getItemStack().getType().toString().toLowerCase(Locale.ENGLISH).replace("_", " ")));
 		}
 
+		double money;
 		if (command != null && !command.isEmpty()
-			&& !user.isAuthorized("essentials.nocommandcost.all")
-			&& !user.isAuthorized("essentials.nocommandcost." + command)
-			&& mon < ess.getSettings().getCommandCost(command.charAt(0) == '/' ? command.substring(1) : command)
-			&& 0 < ess.getSettings().getCommandCost(command.charAt(0) == '/' ? command.substring(1) : command)
-			&& !user.isAuthorized("essentials.eco.loan"))
+			&& 0 < (money = getCommandCost(user))
+			&& !user.canAfford(money))
 		{
 			throw new ChargeException(_("notEnoughMoney"));
 		}
