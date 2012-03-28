@@ -79,7 +79,11 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
 	{
 		new StorageObjectDataReader();
 	}
-
+	
+	public abstract void finishRead();
+	
+	public abstract void finishWrite();
+	
 	public abstract File getStorageFile();
 
 
@@ -101,6 +105,7 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
 		public void onFinish()
 		{
 			unlock();
+			finishWrite();
 		}
 	}
 
@@ -126,6 +131,7 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
 				data = object;
 			}
 			rwl.writeLock().unlock();
+			finishRead();
 		}
 
 		@Override

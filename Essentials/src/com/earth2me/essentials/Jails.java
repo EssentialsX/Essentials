@@ -26,16 +26,17 @@ import org.bukkit.plugin.PluginManager;
 public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.settings.Jails> implements IJails
 {
 	private static final transient Logger LOGGER = Bukkit.getLogger();
+	private static transient boolean enabled = false;
 
 	public Jails(final IEssentials ess)
 	{
 		super(ess, com.earth2me.essentials.settings.Jails.class);
 		reloadConfig();
-		registerListeners();
 	}
 
 	private void registerListeners()
 	{
+		enabled = true;
 		final PluginManager pluginManager = ess.getServer().getPluginManager();
 		final JailBlockListener blockListener = new JailBlockListener();
 		final JailPlayerListener playerListener = new JailPlayerListener();
@@ -47,6 +48,24 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 	public File getStorageFile()
 	{
 		return new File(ess.getDataFolder(), "jail.yml");
+	}
+
+	@Override
+	public void finishRead()
+	{
+		if (enabled == false && getCount() > 0)
+		{
+			registerListeners();
+		}
+	}
+
+	@Override
+	public void finishWrite()
+	{
+		if (enabled == false)
+		{
+			registerListeners();
+		}
 	}
 
 	@Override
