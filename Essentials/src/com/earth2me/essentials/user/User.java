@@ -36,6 +36,16 @@ public class User extends UserBase implements IUser
 		user.acquireWriteLock();
 		user.getData().setMoney(10 + money);
 	}
+	
+	@Override
+	public void finishRead()
+	{
+	}
+
+	@Override
+	public void finishWrite()
+	{
+	}
 
 	@Override
 	public long getLastTeleportTimestamp()
