@@ -106,7 +106,12 @@ public class WorldsHolder {
 	        	if (!worldsData.containsKey(folder.getName().toLowerCase())
 	        			&& ((!mirrorsGroup.containsKey(folder.getName().toLowerCase()))
 	        			|| (!mirrorsUser.containsKey(folder.getName().toLowerCase())))) {
-	        		loadWorld(folder.getName());
+	        		/*
+	        		 * Call setupWorldFolder to check case sensitivity
+	        		 * and convert to lower case, before we attempt to load this world.
+	        		 */
+	        		setupWorldFolder(folder.getName());
+	        		loadWorld(folder.getName().toLowerCase());
 	            }
 	            
             }
@@ -362,9 +367,10 @@ public class WorldsHolder {
      * @return updated world holder
      */
     private OverloadedWorldHolder getUpdatedWorldData(String worldName) {
+    	String worldNameLowered = worldName.toLowerCase();
     	
-    	if (worldsData.containsKey(worldName.toLowerCase())) {
-    		OverloadedWorldHolder data = worldsData.get(worldName.toLowerCase());
+    	if (worldsData.containsKey(worldNameLowered)) {
+    		OverloadedWorldHolder data = worldsData.get(worldNameLowered);
     		data.updateDataSource();
     		return data;
     	}
@@ -444,17 +450,34 @@ public class WorldsHolder {
     }
         
 	public void setupWorldFolder(String worldName) {
+		String worldNameLowered = worldName.toLowerCase();
+		
 		worldsFolder = new File(plugin.getDataFolder(), "worlds");
 		if (!worldsFolder.exists()) {
 			worldsFolder.mkdirs();
 		}
 
-		File defaultWorldFolder = new File(worldsFolder, worldName);
-		if ((!defaultWorldFolder.exists()) && ((!mirrorsGroup.containsKey(worldName.toLowerCase()))) || (!mirrorsUser.containsKey(worldName.toLowerCase()))) {
-			defaultWorldFolder.mkdirs();
+		File defaultWorldFolder = new File(worldsFolder, worldNameLowered);
+		if ((!defaultWorldFolder.exists()) && ((!mirrorsGroup.containsKey(worldNameLowered))) || (!mirrorsUser.containsKey(worldNameLowered))) {
+			
+			/*
+    		 * check and convert all old case sensitive folders to lower case
+    		 */
+			File casedWorldFolder = new File(worldsFolder, worldName);
+    		if ((casedWorldFolder.exists()) && (casedWorldFolder.getName().toLowerCase().equals(worldNameLowered))) {
+    			/*
+    			 * Rename the old folder to the new lower cased format
+    			 */
+    			casedWorldFolder.renameTo(new File(worldsFolder, worldNameLowered));
+    		} else {
+    			/*
+    			 *  Else we just create the folder
+    			 */
+    			defaultWorldFolder.mkdirs();
+    		}
 		}
 		if (defaultWorldFolder.exists()) {
-			if (!mirrorsGroup.containsKey(worldName.toLowerCase())) {
+			if (!mirrorsGroup.containsKey(worldNameLowered)) {
 				File groupsFile = new File(defaultWorldFolder, "groups.yml");
 				if (!groupsFile.exists() || groupsFile.length() == 0) {
 
@@ -467,7 +490,7 @@ public class WorldsHolder {
 				}
 			}
 
-			if (!mirrorsUser.containsKey(worldName.toLowerCase())) {
+			if (!mirrorsUser.containsKey(worldNameLowered)) {
 				File usersFile = new File(defaultWorldFolder, "users.yml");
 				if (!usersFile.exists() || usersFile.length() == 0) {
 
@@ -485,13 +508,15 @@ public class WorldsHolder {
 
     /**
      * Copies the specified world data to another world
+     * 
      * @param fromWorld
      * @param toWorld
      * @return true if successfully copied.
      */
     public boolean cloneWorld(String fromWorld, String toWorld) {
-        File fromWorldFolder = new File(worldsFolder, fromWorld);
-        File toWorldFolder = new File(worldsFolder, toWorld);
+
+        File fromWorldFolder = new File(worldsFolder, fromWorld.toLowerCase());
+        File toWorldFolder = new File(worldsFolder, toWorld.toLowerCase());
         if (toWorldFolder.exists() || !fromWorldFolder.exists()) {
             return false;
         }
@@ -530,17 +555,20 @@ public class WorldsHolder {
      * @param worldName
      */
     public void loadWorld(String worldName, Boolean isMirror) {
-        if (worldsData.containsKey(worldName.toLowerCase())) {
-            worldsData.get(worldName.toLowerCase()).reload();
+    	
+    	String worldNameLowered = worldName.toLowerCase();
+    	
+        if (worldsData.containsKey(worldNameLowered)) {
+            worldsData.get(worldNameLowered).reload();
             return;
         }
         GroupManager.logger.finest("Trying to load world " + worldName + "...");
-        File thisWorldFolder = new File(worldsFolder, worldName);
+        File thisWorldFolder = new File(worldsFolder, worldNameLowered);
         if ((isMirror) || (thisWorldFolder.exists() && thisWorldFolder.isDirectory())) {
         	
         	// Setup file handles, if not mirrored
-            File groupsFile = (mirrorsGroup.containsKey(worldName.toLowerCase()))? null : new File(thisWorldFolder, "groups.yml");
-            File usersFile = (mirrorsUser.containsKey(worldName.toLowerCase()))? null : new File(thisWorldFolder, "users.yml");
+            File groupsFile = (mirrorsGroup.containsKey(worldNameLowered))? null : new File(thisWorldFolder, "groups.yml");
+            File usersFile = (mirrorsUser.containsKey(worldNameLowered))? null : new File(thisWorldFolder, "users.yml");
             
             if ((groupsFile != null) && (!groupsFile.exists())) {
                 throw new IllegalArgumentException("Groups file for world '" + worldName + "' doesnt exist: " + groupsFile.getPath());
@@ -552,14 +580,14 @@ public class WorldsHolder {
             	WorldDataHolder tempHolder = new WorldDataHolder(worldName);
             	
             	// Map the group object for any mirror
-            	if (mirrorsGroup.containsKey(worldName.toLowerCase()))
-            		tempHolder.setGroupsObject(this.getWorldData(mirrorsGroup.get(worldName.toLowerCase())).getGroupsObject());
+            	if (mirrorsGroup.containsKey(worldNameLowered))
+            		tempHolder.setGroupsObject(this.getWorldData(mirrorsGroup.get(worldNameLowered)).getGroupsObject());
             	else
             		tempHolder.loadGroups(groupsFile);
             	
             	// Map the user object for any mirror
-            	if (mirrorsUser.containsKey(worldName.toLowerCase()))
-            		tempHolder.setUsersObject(this.getWorldData(mirrorsUser.get(worldName.toLowerCase())).getUsersObject());
+            	if (mirrorsUser.containsKey(worldNameLowered))
+            		tempHolder.setUsersObject(this.getWorldData(mirrorsUser.get(worldNameLowered)).getUsersObject());
             	else
             		tempHolder.loadUsers(usersFile);
             	
@@ -573,7 +601,7 @@ public class WorldsHolder {
                 
                 if (thisWorldData != null) {
                     GroupManager.logger.finest("Successful load of world " + worldName + "...");
-                    worldsData.put(worldName.toLowerCase(), thisWorldData);
+                    worldsData.put(worldNameLowered, thisWorldData);
                     return;
                 }
 

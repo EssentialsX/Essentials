@@ -181,47 +181,47 @@ groups:
     - towny.nation.*
     - towny.chat.tc
     - towny.chat.nc
-    - towny.wild.block.6.build
-    - towny.wild.block.6.destroy
-    - towny.wild.block.14.destroy
-    - towny.wild.block.15.destroy
-    - towny.wild.block.16.destroy
-    - towny.wild.block.17.build
-    - towny.wild.block.17.destroy
-    - towny.wild.block.18.destroy
-    - towny.wild.block.21.destroy
-    - towny.wild.block.31.destroy
-    - towny.wild.block.37.destroy
-    - towny.wild.block.38.destroy
-    - towny.wild.block.39.destroy
-    - towny.wild.block.40.destroy
-    - towny.wild.block.50.destroy
-    - towny.wild.block.56.destroy
-    - towny.wild.block.73.destroy
-    - towny.wild.block.74.destroy
-    - towny.wild.block.78.destroy
-    - towny.wild.block.81.destroy
-    - towny.wild.block.82.destroy
-    - towny.wild.block.83.destroy
-    - towny.wild.block.86.destroy
-    - towny.wild.block.103.destroy
-    - towny.wild.block.106.destroy
-    - towny.wild.block.111.destroy
-    - towny.wild.block.115.destroy
+    - towny.wild.build.6
+    - towny.wild.destroy.6
+    - towny.wild.destroy.14
+    - towny.wild.destroy.15
+    - towny.wild.destroy.16
+    - towny.wild.build.17
+    - towny.wild.destroy.17
+    - towny.wild.destroy.18
+    - towny.wild.destroy.21
+    - towny.wild.destroy.31
+    - towny.wild.destroy.37
+    - towny.wild.destroy.38
+    - towny.wild.destroy.39
+    - towny.wild.destroy.40
+    - towny.wild.destroy.50
+    - towny.wild.destroy.56
+    - towny.wild.destroy.73
+    - towny.wild.destroy.74
+    - towny.wild.destroy.78
+    - towny.wild.destroy.81
+    - towny.wild.destroy.82
+    - towny.wild.destroy.83
+    - towny.wild.destroy.86
+    - towny.wild.destroy.103
+    - towny.wild.destroy.106
+    - towny.wild.destroy.111
+    - towny.wild.destroy.115
 
   g:towny_moderator:
     permissions:
     - towny.chat.mod
-    - towny.wild.block.64.switch
-    - towny.wild.block.83.build
-    - towny.wild.block.86.build
-    - towny.wild.block.103.build
-    - towny.wild.block.111.build
-    - towny.wild.block.115.build
+    - towny.wild.switch.64
+    - towny.wild.build.83
+    - towny.wild.build.86
+    - towny.wild.build.103
+    - towny.wild.build.111
+    - towny.wild.build.115
 
   g:towny_admin:
     permissions:
     - towny.admin
-    - -towny.wild.block.119.destroy
-    - -towny.wild.block.120.destroy
+    - -towny.wild.destroy.119
+    - -towny.wild.destroy.120
     - towny.chat.admin

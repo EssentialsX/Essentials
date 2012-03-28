@@ -152,3 +152,6 @@ v 1.9:
 	- Expanded '/manuadd'to accept an optional variable for the world (eg '/manuadd <player> <group> <world>').
 	- Removed some debug spam.
 	- Don't remove an attachment on a player leaving as Bukkit never forgets it. This fixes non mirrored permissions being messed up if a player relogs.
+	- Treat all world names as lower case for file handling (please check in your worlds folder. You should have no folders with upper case letters from now).
+	- Auto rename all case sensitive world folders to lower case (if possible).
+	- Update GlobalGroups.yml for new/changed Towny permission nodes.
