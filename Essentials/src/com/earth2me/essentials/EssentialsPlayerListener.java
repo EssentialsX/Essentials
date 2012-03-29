@@ -19,7 +19,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -228,6 +227,7 @@ public class EssentialsPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerTeleport(final PlayerTeleportEvent event)
 	{
+		//TODO: Don't fetch user unless one of these features are enabled.
 		final User user = ess.getUser(event.getPlayer());
 		//There is TeleportCause.COMMMAND but plugins have to actively pass the cause in on their teleports.
 		if ((event.getCause() == TeleportCause.PLUGIN || event.getCause() == TeleportCause.COMMAND) && ess.getSettings().registerBackInListener())
@@ -318,19 +318,16 @@ public class EssentialsPlayerListener implements Listener
 			{
 				return;
 			}
-			if (ess.getSettings().getUpdateBedAtDaytime() && event.getClickedBlock().getType() == Material.BED_BLOCK)
+			if (event.getClickedBlock().getType() == Material.BED_BLOCK && ess.getSettings().getUpdateBedAtDaytime())
 			{
 				event.getPlayer().setBedSpawnLocation(event.getClickedBlock().getLocation());
 			}
 			break;
-		case LEFT_CLICK_AIR:
 		case LEFT_CLICK_BLOCK:
-			if (user.hasPowerTools() && user.arePowerToolsEnabled())
+		case LEFT_CLICK_AIR:
+			if (user.hasPowerTools() && user.arePowerToolsEnabled() && usePowertools(user, event.getItem()))
 			{
-				if (usePowertools(user))
-				{
-					event.setCancelled(true);
-				}
+				event.setCancelled(true);
 			}
 			break;
 		default:
@@ -338,9 +335,8 @@ public class EssentialsPlayerListener implements Listener
 		}
 	}
 
-	private boolean usePowertools(final User user)
+	private boolean usePowertools(final User user, final ItemStack is)
 	{
-		final ItemStack is = user.getItemInHand();
 		int id;
 		if (is == null || (id = is.getTypeId()) == 0)
 		{
