@@ -242,6 +242,7 @@ public class Util
 		AIR_MATERIALS.add(Material.REDSTONE_TORCH_OFF.getId());
 		AIR_MATERIALS.add(Material.REDSTONE_TORCH_ON.getId());
 		AIR_MATERIALS.add(Material.STONE_BUTTON.getId());
+		AIR_MATERIALS.add(Material.SNOW.getId());
 		AIR_MATERIALS.add(Material.SUGAR_CANE_BLOCK.getId());
 		AIR_MATERIALS.add(Material.DIODE_BLOCK_OFF.getId());
 		AIR_MATERIALS.add(Material.DIODE_BLOCK_ON.getId());
@@ -249,8 +250,10 @@ public class Util
 		AIR_MATERIALS.add(Material.PUMPKIN_STEM.getId());
 		AIR_MATERIALS.add(Material.MELON_STEM.getId());
 		AIR_MATERIALS.add(Material.VINE.getId());
-		AIR_MATERIALS.add(Material.NETHER_WARTS.getId());
+		AIR_MATERIALS.add(Material.FENCE_GATE.getId());		
 		AIR_MATERIALS.add(Material.WATER_LILY.getId());
+		AIR_MATERIALS.add(Material.NETHER_FENCE.getId());
+		AIR_MATERIALS.add(Material.NETHER_WARTS.getId());
 
 		for (Integer integer : AIR_MATERIALS)
 		{
