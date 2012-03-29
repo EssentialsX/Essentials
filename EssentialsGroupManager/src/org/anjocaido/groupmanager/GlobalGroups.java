@@ -116,42 +116,46 @@ public class GlobalGroups {
 	
 			// Load each groups permissions list.
 			if (allGroups != null) {
-				for (String groupName : allGroups.keySet()) {
-					Group newGroup = new Group(groupName.toLowerCase());
-					Object element;
-					
-					// Permission nodes
-					element = GGroups.get("groups." + groupName + ".permissions");
-	
-					if (element != null)
-						if (element instanceof List) {
-							try {
-								for (String node : (List<String>) element) {
-									newGroup.addPermission(node);
+				try {
+					for (String groupName : allGroups.keySet()) {
+						Group newGroup = new Group(groupName.toLowerCase());
+						Object element;
+						
+						// Permission nodes
+						element = GGroups.get("groups." + groupName + ".permissions");
+		
+						if (element != null)
+							if (element instanceof List) {
+								try {
+									for (String node : (List<String>) element) {
+										newGroup.addPermission(node);
+									}
+								} catch (ClassCastException e) {
+									throw new IllegalArgumentException("Invalid permission node for global group:  " + groupName);
 								}
-							} catch (ClassCastException e) {
-								throw new IllegalArgumentException("Invalid permission node for global group:  " + groupName);
-							}
-						} else if (element instanceof String) {
-							newGroup.addPermission((String) element);
-						} else
-							throw new IllegalArgumentException("Unknown type of permission node for global group:  " + groupName);
-					
-					// Info nodes
-					element = GGroups.get("groups." + groupName + ".info");
-					
-					if (element != null)
-						if (element instanceof MemorySection) {
-							Map<String, Object> vars = new HashMap<String, Object>();
-							for (String key : ((MemorySection) element).getKeys(false)) {
-					            vars.put(key, ((MemorySection) element).get(key));
-					        }
-							newGroup.setVariables(vars);
-						} else
-							throw new IllegalArgumentException("Unknown type of info node for global group:  " + groupName);
-	
-					// Push a new group
-					addGroup(newGroup);
+							} else if (element instanceof String) {
+								newGroup.addPermission((String) element);
+							} else
+								throw new IllegalArgumentException("Unknown type of permission node for global group:  " + groupName);
+						
+						// Info nodes
+						element = GGroups.get("groups." + groupName + ".info");
+						
+						if (element != null)
+							if (element instanceof MemorySection) {
+								Map<String, Object> vars = new HashMap<String, Object>();
+								for (String key : ((MemorySection) element).getKeys(false)) {
+						            vars.put(key, ((MemorySection) element).get(key));
+						        }
+								newGroup.setVariables(vars);
+							} else
+								throw new IllegalArgumentException("Unknown type of info node for global group:  " + groupName);
+		
+						// Push a new group
+						addGroup(newGroup);
+					}
+				} catch (Exception e) {
+					throw new IllegalArgumentException("Invalid node type, or bad indentation in GlobalGroups! ");
 				}
 			}
 		

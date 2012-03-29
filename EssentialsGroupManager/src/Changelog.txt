@@ -156,3 +156,4 @@ v 1.9:
 	- Auto rename all case sensitive world folders to lower case (if possible).
 	- Update GlobalGroups.yml for new/changed Towny permission nodes.
 	- Stop attempting to push empty permissions when players edit the yml's incorrectly.
+	- Catch errors caused by bad indentation in yml's.
