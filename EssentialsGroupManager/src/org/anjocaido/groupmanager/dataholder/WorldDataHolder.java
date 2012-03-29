@@ -485,14 +485,22 @@ public class WorldDataHolder {
 		                if (thisGroupNode.get("permissions") instanceof List) {
 		                    for (Object o : ((List) thisGroupNode.get("permissions"))) {
 		                    	try {
-		                    		thisGrp.addPermission(o.toString());
+		                    		/*
+		                    		 * Only add this permission if it's not empty.
+		                    		 */
+		                    		if (!thisGroupNode.get("permissions").toString().isEmpty())
+		                    			thisGrp.addPermission(o.toString());
 		                    	} catch (NullPointerException e) {
 		                    		// Ignore this entry as it's null.
 		                    		//throw new IllegalArgumentException("Invalid permission node in group:  " + thisGrp.getName() + " in file: " + groupsFile.getPath());
 		                    	}
 		                    }
 		                } else if (thisGroupNode.get("permissions") instanceof String) {
-		                    thisGrp.addPermission((String) thisGroupNode.get("permissions"));
+		                	/*
+		                	 * Only add this permission if it's not empty.
+		                	 */
+		                	if (!thisGroupNode.get("permissions").toString().isEmpty())
+		                		thisGrp.addPermission((String) thisGroupNode.get("permissions"));
 		                } else {
 		                    throw new IllegalArgumentException("Unknown type of permissions node(Should be String or List<String>) for group:  " + thisGrp.getName() + " in file: " + groupsFile.getPath());
 		                }
@@ -617,11 +625,19 @@ public class WorldDataHolder {
 	            } else {
 		            if (thisUserNode.get("permissions") instanceof List) {
 		                for (Object o : ((List) thisUserNode.get("permissions"))) {
-		                    thisUser.addPermission(o.toString());
+		                	/*
+		            		 * Only add this permission if it's not empty
+		            		 */
+		            		if (!o.toString().isEmpty())
+		            			thisUser.addPermission(o.toString());
 		                }
 		            } else if (thisUserNode.get("permissions") instanceof String) {
 		            	try {
-		                	thisUser.addPermission(thisUserNode.get("permissions").toString());
+		            		/*
+		            		 * Only add this permission if it's not empty
+		            		 */
+		            		if (!thisUserNode.get("permissions").toString().isEmpty())
+		            			thisUser.addPermission(thisUserNode.get("permissions").toString());
 		            	} catch (NullPointerException e) {
 		            		// Ignore this entry as it's null.
 		            		//throw new IllegalArgumentException("Invalid permission node for user:  " + thisUser.getName() + " in file: " + UserFile.getPath());
