@@ -34,6 +34,7 @@ public class Commandtpo extends EssentialsCommand
 			}
 			user.sendMessage(_("teleporting"));
 			user.getTeleport().now(player, false, TeleportCause.COMMAND);
+			break;
 
 		default:
 			if (!user.isAuthorized("essentials.tp.others"))
