@@ -115,7 +115,10 @@ public class Commandwarp extends EssentialsCommand
 
 	private void warpUser(final User owner, final User user, final String name) throws Exception
 	{
-		final Trade charge = new Trade("warp-" + name.toLowerCase(Locale.ENGLISH).replace('_', '-'), ess);
+		final Trade chargeWarp = new Trade("warp-" + name.toLowerCase(Locale.ENGLISH).replace('_', '-'), ess);
+		final Trade chargeCmd = new Trade(this.getName(), ess);
+		final double fullCharge = chargeWarp.getCommandCost(user) + chargeCmd.getCommandCost(user);
+		final Trade charge = new Trade(fullCharge, ess);
 		charge.isAffordableFor(owner);
 		if (ess.getSettings().getPerWarpPermission() && !owner.isAuthorized("essentials.warp." + name))
 		{

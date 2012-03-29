@@ -12,21 +12,23 @@ public class Commandgetpos extends EssentialsCommand
 	{
 		super("getpos");
 	}
-	
+
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length > 0 && user.isAuthorized("essentials.getpos.others"))
 		{
 			final User otherUser = getPlayer(server, args, 0);
-			outputPosition(user, otherUser.getLocation(), user.getLocation());
+			if (!otherUser.isHidden() || user.isAuthorized("essentials.list.hidden"))
+			{
+				outputPosition(user, otherUser.getLocation(), user.getLocation());
+				return;
+			}
+
 		}
-		else
-		{
-			outputPosition(user, user.getLocation(), null);
-		}
+		outputPosition(user, user.getLocation(), null);
 	}
-	
+
 	@Override
 	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
@@ -37,7 +39,7 @@ public class Commandgetpos extends EssentialsCommand
 		final User user = getPlayer(server, args, 0);
 		outputPosition(sender, user.getLocation(), null);
 	}
-	
+
 	//TODO: Translate
 	private void outputPosition(final CommandSender sender, final Location coords, final Location distance)
 	{

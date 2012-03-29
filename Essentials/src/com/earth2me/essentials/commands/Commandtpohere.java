@@ -1,7 +1,6 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -26,9 +25,15 @@ public class Commandtpohere extends EssentialsCommand
 		final User player = getPlayer(server, args, 0, true);
 
 		// Check if user is offline
-		if (player.getBase() instanceof OfflinePlayer)
+		if (!player.isOnline())
 		{
 			throw new NoSuchFieldException(_("playerNotFound"));
+		}
+
+		if (user.getWorld() != player.getWorld() && ess.getSettings().isWorldTeleportPermissions()
+			&& !user.isAuthorized("essentials.world." + user.getWorld().getName()))
+		{
+			throw new Exception(_("noPerm", "essentials.world." + user.getWorld().getName()));
 		}
 
 		// Verify permission

@@ -38,7 +38,7 @@ public class Commandkit extends EssentialsCommand
 			{
 				throw new Exception(_("noKitPermission", "essentials.kit." + kitName));
 			}
-			
+
 			final List<String> items = Kit.getItems(user, kit);
 
 			Kit.checkTime(user, kitName, kit);
@@ -47,7 +47,7 @@ public class Commandkit extends EssentialsCommand
 			charge.isAffordableFor(user);
 
 			Kit.expandItems(ess, user, items);
-			
+
 			charge.charge(user);
 			user.sendMessage(_("kitGive", kitName));
 

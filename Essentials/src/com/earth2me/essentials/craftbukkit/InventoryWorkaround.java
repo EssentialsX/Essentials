@@ -15,12 +15,12 @@ public final class InventoryWorkaround
 	{
 	}
 
-	public static int first(final Inventory inventory, final ItemStack item, final boolean forceDurability, final boolean forceAmount, final boolean forceEnchantments)
+	public static int first(final Inventory inventory, final ItemStack item, final boolean enforceDurability, final boolean enforceAmount, final boolean enforceEnchantments)
 	{
-		return next(inventory, item, 0, forceDurability, forceAmount, forceEnchantments);
+		return next(inventory, item, 0, enforceDurability, enforceAmount, enforceEnchantments);
 	}
 
-	public static int next(final Inventory cinventory, final ItemStack item, final int start, final boolean forceDurability, final boolean forceAmount, final boolean forceEnchantments)
+	public static int next(final Inventory cinventory, final ItemStack item, final int start, final boolean enforceDurability, final boolean enforceAmount, final boolean enforceEnchantments)
 	{
 		final ItemStack[] inventory = cinventory.getContents();
 		for (int i = start; i < inventory.length; i++)
@@ -30,7 +30,7 @@ public final class InventoryWorkaround
 			{
 				continue;
 			}
-			if (item.getTypeId() == cItem.getTypeId() && (!forceAmount || item.getAmount() == cItem.getAmount()) && (!forceDurability || cItem.getDurability() == item.getDurability()) && (!forceEnchantments || cItem.getEnchantments().equals(item.getEnchantments())))
+			if (item.getTypeId() == cItem.getTypeId() && (!enforceAmount || item.getAmount() == cItem.getAmount()) && (!enforceDurability || cItem.getDurability() == item.getDurability()) && (!enforceEnchantments || cItem.getEnchantments().equals(item.getEnchantments())))
 			{
 				return i;
 			}
@@ -38,12 +38,12 @@ public final class InventoryWorkaround
 		return -1;
 	}
 
-	public static int firstPartial(final Inventory cinventory, final ItemStack item, final boolean forceDurability)
+	public static int firstPartial(final Inventory cinventory, final ItemStack item, final boolean enforceDurability)
 	{
-		return firstPartial(cinventory, item, forceDurability, item.getType().getMaxStackSize());
+		return firstPartial(cinventory, item, enforceDurability, item.getType().getMaxStackSize());
 	}
 
-	public static int firstPartial(final Inventory cinventory, final ItemStack item, final boolean forceDurability, final int maxAmount)
+	public static int firstPartial(final Inventory cinventory, final ItemStack item, final boolean enforceDurability, final int maxAmount)
 	{
 		if (item == null)
 		{
@@ -57,7 +57,7 @@ public final class InventoryWorkaround
 			{
 				continue;
 			}
-			if (item.getTypeId() == cItem.getTypeId() && cItem.getAmount() < maxAmount && (!forceDurability || cItem.getDurability() == item.getDurability()) && cItem.getEnchantments().equals(item.getEnchantments()))
+			if (item.getTypeId() == cItem.getTypeId() && cItem.getAmount() < maxAmount && (!enforceDurability || cItem.getDurability() == item.getDurability()) && cItem.getEnchantments().equals(item.getEnchantments()))
 			{
 				return i;
 			}
@@ -65,12 +65,12 @@ public final class InventoryWorkaround
 		return -1;
 	}
 
-	public static boolean addAllItems(final Inventory cinventory, final boolean forceDurability, final ItemStack... items)
+	public static boolean addAllItems(final Inventory cinventory, final boolean enforceDurability, final ItemStack... items)
 	{
 		final Inventory fake = new FakeInventory(cinventory.getContents());
-		if (addItem(fake, forceDurability, items).isEmpty())
+		if (addItem(fake, enforceDurability, items).isEmpty())
 		{
-			addItem(cinventory, forceDurability, items);
+			addItem(cinventory, enforceDurability, items);
 			return true;
 		}
 		else
@@ -84,7 +84,7 @@ public final class InventoryWorkaround
 		return addItem(cinventory, forceDurability, 0, items);
 	}
 
-	public static Map<Integer, ItemStack> addItem(final Inventory cinventory, final boolean forceDurability, final int oversizedStacks, final ItemStack... items)
+	public static Map<Integer, ItemStack> addItem(final Inventory cinventory, final boolean enforceDurability, final int oversizedStacks, final ItemStack... items)
 	{
 		final Map<Integer, ItemStack> leftover = new HashMap<Integer, ItemStack>();
 
@@ -109,7 +109,7 @@ public final class InventoryWorkaround
 					combined[j] = items[i].clone();
 					break;
 				}
-				if (combined[j].getTypeId() == items[i].getTypeId() && (!forceDurability || combined[j].getDurability() == items[i].getDurability()) && combined[j].getEnchantments().equals(items[i].getEnchantments()))
+				if (combined[j].getTypeId() == items[i].getTypeId() && (!enforceDurability || combined[j].getDurability() == items[i].getDurability()) && combined[j].getEnchantments().equals(items[i].getEnchantments()))
 				{
 					combined[j].setAmount(combined[j].getAmount() + items[i].getAmount());
 					break;
@@ -130,7 +130,7 @@ public final class InventoryWorkaround
 			{
 				// Do we already have a stack of it?
 				final int maxAmount = oversizedStacks > item.getType().getMaxStackSize() ? oversizedStacks : item.getType().getMaxStackSize();
-				final int firstPartial = firstPartial(cinventory, item, forceDurability, maxAmount);
+				final int firstPartial = firstPartial(cinventory, item, enforceDurability, maxAmount);
 
 				// Drat! no partial stack
 				if (firstPartial == -1)
@@ -186,7 +186,7 @@ public final class InventoryWorkaround
 		return leftover;
 	}
 
-	public static Map<Integer, ItemStack> removeItem(final Inventory cinventory, final boolean forceDurability, final boolean forceEnchantments, final ItemStack... items)
+	public static Map<Integer, ItemStack> removeItem(final Inventory cinventory, final boolean enforceDurability, final boolean enforceEnchantments, final ItemStack... items)
 	{
 		final Map<Integer, ItemStack> leftover = new HashMap<Integer, ItemStack>();
 
@@ -211,7 +211,7 @@ public final class InventoryWorkaround
 				}
 
 				// get first Item, ignore the amount
-				final int first = first(cinventory, item, forceDurability, false, forceEnchantments);
+				final int first = first(cinventory, item, enforceDurability, false, enforceEnchantments);
 
 				// Drat! we don't have this type in the inventory
 				if (first == -1)
@@ -244,7 +244,7 @@ public final class InventoryWorkaround
 		return leftover;
 	}
 
-	public static boolean containsItem(final Inventory cinventory, final boolean forceDurability, final boolean forceEnchantments, final ItemStack... items)
+	public static boolean containsItem(final Inventory cinventory, final boolean enforceDurability, final boolean enforceEnchantments, final ItemStack... items)
 	{
 		final Map<Integer, ItemStack> leftover = new HashMap<Integer, ItemStack>();
 
@@ -266,7 +266,7 @@ public final class InventoryWorkaround
 					combined[j] = items[i].clone();
 					break;
 				}
-				if (combined[j].getTypeId() == items[i].getTypeId() && (!forceDurability || combined[j].getDurability() == items[i].getDurability()) && (!forceEnchantments || combined[j].getEnchantments().equals(items[i].getEnchantments())))
+				if (combined[j].getTypeId() == items[i].getTypeId() && (!enforceDurability || combined[j].getDurability() == items[i].getDurability()) && (!enforceEnchantments || combined[j].getEnchantments().equals(items[i].getEnchantments())))
 				{
 					combined[j].setAmount(combined[j].getAmount() + items[i].getAmount());
 					break;
@@ -292,7 +292,7 @@ public final class InventoryWorkaround
 					break;
 				}
 
-				final int slot = next(cinventory, item, position, forceDurability, false, forceEnchantments);
+				final int slot = next(cinventory, item, position, enforceDurability, false, enforceEnchantments);
 
 				// Drat! we don't have this type in the inventory
 				if (slot == -1)

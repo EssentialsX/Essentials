@@ -43,6 +43,18 @@ public class Commandtree extends EssentialsCommand
 		{
 			tree = TreeType.BROWN_MUSHROOM;
 		}
+		else if (args[0].equalsIgnoreCase("jungle"))
+		{
+			tree = TreeType.SMALL_JUNGLE;
+		}
+		else if (args[0].equalsIgnoreCase("junglebush"))
+		{
+			tree = TreeType.JUNGLE_BUSH;
+					}
+		else if (args[0].equalsIgnoreCase("swamp"))
+		{
+			tree = TreeType.SWAMP;
+		}
 		else
 		{
 			throw new NotEnoughArgumentsException();

@@ -17,7 +17,7 @@ public class SignKit extends EssentialsSign
 	protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException
 	{
 		validateTrade(sign, 3, ess);
-		
+
 		final String kitName = sign.getLine(1).toLowerCase(Locale.ENGLISH);
 
 		if (kitName.isEmpty())
@@ -56,10 +56,10 @@ public class SignKit extends EssentialsSign
 			charge.isAffordableFor(player);
 			try
 			{
-				final Object kit = ess.getSettings().getKit(kitName);
-				final Map<String, Object> els = (Map<String, Object>)kit;
-				final List<String> items = Kit.getItems(player, els);			
-				Kit.expandItems(ess, player, items);	
+				final Map<String, Object> kit = ess.getSettings().getKit(kitName);
+				Kit.checkTime(player, kitName, kit);
+				final List<String> items = Kit.getItems(player, kit);
+				Kit.expandItems(ess, player, items);
 				charge.charge(player);
 			}
 			catch (Exception ex)

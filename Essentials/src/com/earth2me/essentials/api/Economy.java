@@ -249,7 +249,7 @@ public final class Economy
 		{
 			throw new RuntimeException(noCallBeforeLoad);
 		}
-		return Util.formatCurrency(amount, ess);
+		return Util.displayCurrency(amount, ess);
 	}
 
 	/**

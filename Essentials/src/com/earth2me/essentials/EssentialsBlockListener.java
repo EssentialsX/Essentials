@@ -17,13 +17,9 @@ public class EssentialsBlockListener implements Listener
 		this.ess = ess;
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onBlockPlace(final BlockPlaceEvent event)
 	{
-		if (event.isCancelled())
-		{
-			return;
-		}
 		final User user = ess.getUser(event.getPlayer());
 		// Do not rely on getItemInHand();
 		// http://leaky.bukkit.org/issues/663
@@ -32,7 +28,7 @@ public class EssentialsBlockListener implements Listener
 		{
 			return;
 		}
-		boolean unlimitedForUser = user.hasUnlimited(is);
+		final boolean unlimitedForUser = user.hasUnlimited(is);
 		if (unlimitedForUser && user.getGameMode() == GameMode.SURVIVAL)
 		{
 			ess.scheduleSyncDelayedTask(

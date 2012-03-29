@@ -30,6 +30,11 @@ public class Commandtp extends EssentialsCommand
 			{
 				throw new Exception(_("teleportDisabled", player.getDisplayName()));
 			}
+			if (user.getWorld() != player.getWorld() && ess.getSettings().isWorldTeleportPermissions()
+				&& !user.isAuthorized("essentials.world." + player.getWorld().getName()))
+			{
+				throw new Exception(_("noPerm", "essentials.world." + player.getWorld().getName()));
+			}
 			user.sendMessage(_("teleporting"));
 			final Trade charge = new Trade(this.getName(), ess);
 			charge.isAffordableFor(user);
@@ -37,14 +42,26 @@ public class Commandtp extends EssentialsCommand
 			throw new NoChargeException();
 
 		default:
-			if (!user.isAuthorized("essentials.tpohere"))
+			if (!user.isAuthorized("essentials.tp.others"))
 			{
-				//TODO: Translate this
-				throw new Exception("You need access to /tpohere to teleport other players.");
+				throw new Exception(_("noPerm", "essentials.tp.others"));
 			}
 			user.sendMessage(_("teleporting"));
 			final User target = getPlayer(server, args, 0);
 			final User toPlayer = getPlayer(server, args, 1);
+			if (!target.isTeleportEnabled())
+			{
+				throw new Exception(_("teleportDisabled", target.getDisplayName()));
+			}
+			if (!toPlayer.isTeleportEnabled())
+			{
+				throw new Exception(_("teleportDisabled", toPlayer.getDisplayName()));
+			}
+			if (target.getWorld() != toPlayer.getWorld() && ess.getSettings().isWorldTeleportPermissions()
+				&& !user.isAuthorized("essentials.world." + toPlayer.getWorld().getName()))
+			{
+				throw new Exception(_("noPerm", "essentials.world." + toPlayer.getWorld().getName()));
+			}
 			target.getTeleport().now(toPlayer, false, TeleportCause.COMMAND);
 			target.sendMessage(_("teleportAtoB", user.getDisplayName(), toPlayer.getDisplayName()));
 			break;

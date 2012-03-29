@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import java.util.*;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -43,8 +44,10 @@ public class Commandlist extends EssentialsCommand
 		if (showhidden && playerHidden > 0)
 		{
 			online = _("listAmountHidden", server.getOnlinePlayers().length - playerHidden, playerHidden, server.getMaxPlayers());
-		} else {
-			online = _("listAmount",server.getOnlinePlayers().length - playerHidden, server.getMaxPlayers());
+		}
+		else
+		{
+			online = _("listAmount", server.getOnlinePlayers().length - playerHidden, server.getMaxPlayers());
 		}
 		sender.sendMessage(online);
 
@@ -72,7 +75,7 @@ public class Commandlist extends EssentialsCommand
 			for (String group : groups)
 			{
 				final StringBuilder groupString = new StringBuilder();
-				groupString.append(group).append(": ");
+				groupString.append(_("listGroupTag", Util.replaceFormat(group)));
 				final List<User> users = sort.get(group);
 				Collections.sort(users);
 				boolean first = true;
@@ -94,6 +97,7 @@ public class Commandlist extends EssentialsCommand
 					{
 						groupString.append(_("listHiddenTag"));
 					}
+					user.setDisplayNick();
 					groupString.append(user.getDisplayName());
 					groupString.append("§f");
 				}
@@ -135,6 +139,7 @@ public class Commandlist extends EssentialsCommand
 				{
 					onlineUsers.append(_("listHiddenTag"));
 				}
+				user.setDisplayNick();
 				onlineUsers.append(user.getDisplayName());
 				onlineUsers.append("§f");
 			}

@@ -19,6 +19,7 @@ public enum Signs
 	TRADE(new SignTrade()),
 	WARP(new SignWarp()),
 	WEATHER(new SignWeather());
+	
 	private final EssentialsSign sign;
 
 	private Signs(final EssentialsSign sign)

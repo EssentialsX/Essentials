@@ -20,6 +20,8 @@ public interface ISettings extends IConf
 
 	boolean getAnnounceNewPlayers();
 
+	String getNewPlayerKit();
+
 	String getBackupCommand();
 
 	long getBackupInterval();
@@ -115,16 +117,18 @@ public interface ISettings extends IConf
 	boolean warnOnSmite();
 
 	double getMaxMoney();
-	
+
 	double getMinMoney();
 
 	boolean isEcoLogEnabled();
-	
+
 	boolean isEcoLogUpdateEnabled();
 
 	boolean removeGodOnDisconnect();
 
 	boolean changeDisplayName();
+	
+	boolean changePlayerListName();
 
 	boolean isPlayerCommand(String string);
 
@@ -152,7 +156,7 @@ public interface ISettings extends IConf
 
 	boolean getRepairEnchanted();
 
-	boolean getIsWorldTeleportPermissions();
+	boolean isWorldTeleportPermissions();
 
 	boolean registerBackInListener();
 
@@ -161,4 +165,10 @@ public interface ISettings extends IConf
 	EventPriority getRespawnPriority();
 
 	long getTpaAcceptCancellation();
+	
+	boolean isMetricsEnabled();
+	
+	void setMetricsEnabled(boolean metricsEnabled);
+
+	public long getTeleportInvulnerability();
 }

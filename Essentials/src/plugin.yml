@@ -13,8 +13,8 @@ commands:
     aliases: [eafk]
   antioch:
     description: 'A little surprise for operators.'
-    usage: /<command>
-    aliases: [eantioch]
+    usage: /<command> [message]
+    aliases: [eantioch,grenade,tnt,egrenade,etnt]
   back:
     description: Teleports you to your location prior to tp/spawn/warp.
     usage: /<command>
@@ -49,7 +49,7 @@ commands:
     aliases: [ebroadcast,bcast,ebcast]
   bigtree:
     description: Spawn a big tree where you are looking.
-    usage: /<command> <tree|redwood>
+    usage: /<command> <tree|redwood|jungle>
     aliases: [ebigtree]
   burn:
     description: Set a player on fire.
@@ -58,7 +58,7 @@ commands:
   clearinventory:
     description: Clear all items in your inventory.
     usage: /<command>
-    aliases: [ci,eci,clearinvent,eclearinvent,eclearinventory]
+    aliases: [ci,eci,clearinvent,clean,eclean,eclearinvent,eclearinventory]
   compass:
     description: Describes your current bearing.
     usage: /<command>
@@ -98,6 +98,10 @@ commands:
     description: Satisfy the hunger.
     usage: /<command> [player]
     aliases: [efeed,eat,eeat]
+  fly:
+    description: Take off, and soar!
+    usage: /<command> [player]
+    aliases: [efly]
   itemdb:
     description: Searches for an item.
     usage: /<command> <item>
@@ -185,7 +189,10 @@ commands:
   killall:
     description: Kill all mobs in a world.
     usage: /<command> [mobType] [radius]
-    aliases: [ekillall,butcher,ebutcher]
+    aliases: [ekillall,butcher,ebutcher,mobkill,emobkill]
+  kittycannon:
+    description: Throw an exploding kitten at your opponent
+    usage: /<command>
   list:
     description: List all online players.
     usage: /<command>
@@ -239,8 +246,8 @@ commands:
     usage: /<command>
     aliases: [pong,echo,echo,eping,epong]
   powertool:
-    description: Assigns a command to the item in hand, {player} will be replaced by the name of the player that you click.
-    usage: /<command> [l:|a:|r:|c:|d:][command] [arguments]
+    description: Assigns a command to the item in hand.
+    usage: /<command> [l:|a:|r:|c:|d:][command] [arguments] - {player} can be replaced by name of a clicked player.
     aliases: [pt,epowertool,ept]
   powertooltoggle:
     description: Enables or disables all current powertools
@@ -255,7 +262,7 @@ commands:
     usage: /<command> <message>
     aliases: [er,reply,ereply]
   realname:
-    description: Displays the username of a user based on nickname.
+    description: Displays the username of a user based on nick.
     usage: /<command> <nickname>
     aliases: [erealname]
   remove:
@@ -292,7 +299,7 @@ commands:
     aliases: [createwarp,esetwarp]
   setworth:
     description: Set the sell value of an item.
-    usage: /<command> <itemname|id> <price>
+    usage: /<command> [itemname|id] <price>
     aliases: [esetworth]
   socialspy:
     description: Toggles if you can see msg/mail commands in chat.
@@ -301,11 +308,11 @@ commands:
   spawner:
     description: Change the mob type of a spawner
     usage: /<command> <mob>
-    aliases: [espawner]
+    aliases: [espawner,changems,echangems]
   spawnmob:
     description: Spawns a mob.
     usage: /<command> <mob>[:data][,<mount>[:data]] [amount] [player]
-    aliases: [espawnmob]
+    aliases: [espawnmob,mob,emob]
   sudo:
     description: Make another user perform a command.
     usage: /<command> <player> <command [args]>
@@ -327,7 +334,7 @@ commands:
     usage: /<command> [day|night|dawn|17:30|4pm|4000ticks] [worldname|all]
     aliases: [etime, day, night]
   togglejail:
-    description: Prevents a player from interacting with the world and teleports him/her to the jail specified
+    description: Jails/Unjails a player and tp them to the jail specified.
     usage: /<command> <player> <jailname> [datediff]
     aliases: [tjail,jail,ejail,unjail,eunjail,etogglejail]
   top:
@@ -368,7 +375,7 @@ commands:
     aliases: [s,etphere]
   tpo:
     description: Teleport override for tptoggle.
-    usage: /<command> <player>
+    usage: /<command> <player> [otherplayer]
     aliases: [etpo]
   tpohere:
     description: Teleport here override for tptoggle.
@@ -384,7 +391,7 @@ commands:
     aliases: [etptoggle]
   tree:
     description: Spawn a tree where you are looking.
-    usage: /<command> <tree|birch|redwood>
+    usage: /<command> <tree|birch|redwood|redmushroom|brownmushroom|jungle|junglebush|swamp>
     aliases: [etree]
   unban:
     description: Unbans the specified player.

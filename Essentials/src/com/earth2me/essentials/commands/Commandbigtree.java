@@ -27,6 +27,10 @@ public class Commandbigtree extends EssentialsCommand
 		{
 			tree = TreeType.BIG_TREE;
 		}
+		else if (args.length > 0 && args[0].equalsIgnoreCase("jungle"))
+		{
+			tree = TreeType.JUNGLE;
+		}
 		else
 		{
 			throw new NotEnoughArgumentsException();

@@ -3,6 +3,7 @@ package com.earth2me.essentials.perm;
 import java.util.Arrays;
 import java.util.List;
 import org.anjocaido.groupmanager.GroupManager;
+import org.anjocaido.groupmanager.dataholder.worlds.WorldsHolder;
 import org.anjocaido.groupmanager.permissions.AnjoPermissionsHandler;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -20,7 +21,7 @@ public class GroupManagerHandler implements IPermissionsHandler
 	@Override
 	public String getGroup(final Player base)
 	{
-		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(base);
+		final AnjoPermissionsHandler handler = getHandler(base);
 		if (handler == null)
 		{
 			return null;
@@ -31,7 +32,7 @@ public class GroupManagerHandler implements IPermissionsHandler
 	@Override
 	public List<String> getGroups(final Player base)
 	{
-		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(base);
+		final AnjoPermissionsHandler handler = getHandler(base);
 		if (handler == null)
 		{
 			return null;
@@ -42,7 +43,7 @@ public class GroupManagerHandler implements IPermissionsHandler
 	@Override
 	public boolean canBuild(final Player base, final String group)
 	{
-		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(base);
+		final AnjoPermissionsHandler handler = getHandler(base);
 		if (handler == null)
 		{
 			return false;
@@ -53,7 +54,7 @@ public class GroupManagerHandler implements IPermissionsHandler
 	@Override
 	public boolean inGroup(final Player base, final String group)
 	{
-		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(base);
+		AnjoPermissionsHandler handler = getHandler(base);
 		if (handler == null)
 		{
 			return false;
@@ -64,7 +65,7 @@ public class GroupManagerHandler implements IPermissionsHandler
 	@Override
 	public boolean hasPermission(final Player base, final String node)
 	{
-		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(base);
+		AnjoPermissionsHandler handler = getHandler(base);
 		if (handler == null)
 		{
 			return false;
@@ -75,7 +76,7 @@ public class GroupManagerHandler implements IPermissionsHandler
 	@Override
 	public String getPrefix(final Player base)
 	{
-		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(base);
+		AnjoPermissionsHandler handler = getHandler(base);
 		if (handler == null)
 		{
 			return null;
@@ -86,11 +87,21 @@ public class GroupManagerHandler implements IPermissionsHandler
 	@Override
 	public String getSuffix(final Player base)
 	{
-		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(base);
+		AnjoPermissionsHandler handler = getHandler(base);
 		if (handler == null)
 		{
 			return null;
 		}
 		return handler.getUserSuffix(base.getName());
+	}
+
+	private AnjoPermissionsHandler getHandler(final Player base)
+	{
+		final WorldsHolder holder = groupManager.getWorldsHolder();
+		if (holder == null)
+		{
+			return null;
+		}
+		return holder.getWorldPermissions(base);
 	}
 }

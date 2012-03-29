@@ -48,6 +48,7 @@ public class EssentialsTimer implements Runnable
 			}
 			user.checkMuteTimeout(currentTime);
 			user.checkJailTimeout(currentTime);
+			user.resetInvulnerabilityAfterTeleport();
 		}
 	}
 }

@@ -64,11 +64,13 @@ public class Commandnick extends EssentialsCommand
 
 	private String formatNickname(final User user, final String nick)
 	{
-		if (user == null || user.isAuthorized("essentials.nick.color"))
+		if (user == null)
 		{
-			return nick.replace('&', '\u00a7').replaceAll("\u00a7+k", "");
-		} else {
-			return Util.stripColor(nick);
+			return Util.replaceFormat(nick);
+		}
+		else
+		{
+			return Util.formatString(user, "essentials.nick", nick);
 		}
 	}
 

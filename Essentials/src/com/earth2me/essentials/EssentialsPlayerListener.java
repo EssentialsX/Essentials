@@ -19,7 +19,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.*;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -43,10 +45,7 @@ public class EssentialsPlayerListener implements Listener
 	{
 		final User user = ess.getUser(event.getPlayer());
 		updateCompass(user);
-		if (ess.getSettings().changeDisplayName())
-		{
-			user.setDisplayNick();
-		}
+		user.setDisplayNick();
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -69,19 +68,19 @@ public class EssentialsPlayerListener implements Listener
 			}
 		}
 		user.updateActivity(true);
-		if (ess.getSettings().changeDisplayName())
-		{
-			user.setDisplayNick();
-		}
+		user.setDisplayNick();
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerMove(final PlayerMoveEvent event)
 	{
-		if (event.isCancelled())
+		if (event.getFrom().getBlockX() == event.getTo().getBlockX()
+			&& event.getFrom().getBlockZ() == event.getTo().getBlockZ()
+			&& event.getFrom().getBlockY() == event.getTo().getBlockY())
 		{
 			return;
 		}
+
 		final User user = ess.getUser(event.getPlayer());
 
 		if (user.isAfk() && ess.getSettings().getFreezeAfkPlayers())
@@ -117,11 +116,6 @@ public class EssentialsPlayerListener implements Listener
 		{
 			user.toggleGodModeEnabled();
 		}
-		if (user.getSavedInventory() != null)
-		{
-			user.getInventory().setContents(user.getSavedInventory());
-			user.setSavedInventory(null);
-		}
 		user.updateActivity(false);
 		user.dispose();
 	}
@@ -132,12 +126,11 @@ public class EssentialsPlayerListener implements Listener
 		ess.getBackup().onPlayerJoin();
 		final User user = ess.getUser(event.getPlayer());
 
-		if (ess.getSettings().changeDisplayName())
-		{
-			user.setDisplayNick();
-		}
-		user.setLastLoginAddress(user.getAddress().getAddress().getHostAddress());
+		user.setDisplayNick();
+		user.setLastLogin(System.currentTimeMillis());
+
 		user.updateActivity(false);
+		updateCompass(user);
 		if (user.isAuthorized("essentials.sleepingignored"))
 		{
 			user.setSleepingIgnored(true);
@@ -182,34 +175,40 @@ public class EssentialsPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerLogin(final PlayerLoginEvent event)
 	{
-		if (event.getResult() != Result.ALLOWED && event.getResult() != Result.KICK_FULL && event.getResult() != Result.KICK_BANNED)
+		switch (event.getResult())
 		{
+		case ALLOWED:
+		case KICK_FULL:
+		case KICK_BANNED:
+			break;
+		default:
 			return;
 		}
+
 		User user = ess.getUser(event.getPlayer());
-		user.setNPC(false);
+		if (user.isNPC())
+		{
+			user.setNPC(false);
+		}
 
 		final long currentTime = System.currentTimeMillis();
 		final boolean banExpired = user.checkBanTimeout(currentTime);
 		user.checkMuteTimeout(currentTime);
 		user.checkJailTimeout(currentTime);
 
-		if (banExpired == false && (user.isBanned() || event.getResult() == Result.KICK_BANNED))
+		if (!banExpired && (user.isBanned() || event.getResult() == Result.KICK_BANNED))
 		{
 			final String banReason = user.getBanReason();
 			event.disallow(Result.KICK_BANNED, banReason != null && !banReason.isEmpty() && !banReason.equalsIgnoreCase("ban") ? banReason : _("defaultBanReason"));
 			return;
 		}
 
-		if (server.getOnlinePlayers().length >= server.getMaxPlayers() && !user.isAuthorized("essentials.joinfullserver"))
+		if (event.getResult() == Result.KICK_FULL && !user.isAuthorized("essentials.joinfullserver"))
 		{
 			event.disallow(Result.KICK_FULL, _("serverFull"));
 			return;
 		}
 		event.allow();
-
-		user.setLastLogin(System.currentTimeMillis());
-		updateCompass(user);
 	}
 
 	private void updateCompass(final User user)
@@ -225,29 +224,20 @@ public class EssentialsPlayerListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerTeleport(final PlayerTeleportEvent event)
 	{
-		if (event.isCancelled())
-		{
-			return;
-		}
-
+		//TODO: Don't fetch user unless one of these features are enabled.
 		final User user = ess.getUser(event.getPlayer());
 		//There is TeleportCause.COMMMAND but plugins have to actively pass the cause in on their teleports.
 		if ((event.getCause() == TeleportCause.PLUGIN || event.getCause() == TeleportCause.COMMAND) && ess.getSettings().registerBackInListener())
 		{
 			user.setLastLocation();
 		}
-
-		if (ess.getSettings().changeDisplayName())
-		{
-			user.setDisplayNick();
-		}
-		updateCompass(user);
+		user.enableInvulnerabilityAfterTeleport();
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerEggThrow(final PlayerEggThrowEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
@@ -259,7 +249,7 @@ public class EssentialsPlayerListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerBucketEmpty(final PlayerBucketEmptyEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
@@ -277,20 +267,9 @@ public class EssentialsPlayerListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerAnimation(final PlayerAnimationEvent event)
-	{
-		final User user = ess.getUser(event.getPlayer());
-		user.updateActivity(true);
-	}
-
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerCommandPreprocess(final PlayerCommandPreprocessEvent event)
 	{
-		if (event.isCancelled())
-		{
-			return;
-		}
 		final User user = ess.getUser(event.getPlayer());
 		final String cmd = event.getMessage().toLowerCase(Locale.ENGLISH).split(" ")[0].replace("/", "").toLowerCase(Locale.ENGLISH);
 		final List<String> commands = Arrays.asList("msg", "r", "mail", "m", "t", "emsg", "tell", "er", "reply", "ereply", "email");
@@ -298,7 +277,7 @@ public class EssentialsPlayerListener implements Listener
 		{
 			for (Player player : ess.getServer().getOnlinePlayers())
 			{
-				User spyer = ess.getUser(player);
+				final User spyer = ess.getUser(player);
 				if (spyer.isSocialSpyEnabled() && !user.equals(spyer))
 				{
 					player.sendMessage(user.getDisplayName() + " : " + event.getMessage());
@@ -314,9 +293,12 @@ public class EssentialsPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerChangedWorld(final PlayerChangedWorldEvent event)
 	{
+		final User user = ess.getUser(event.getPlayer());
+		user.setDisplayNick();
+		updateCompass(user);
+
 		if (ess.getSettings().getNoGodWorlds().contains(event.getPlayer().getLocation().getWorld().getName()))
 		{
-			User user = ess.getUser(event.getPlayer());
 			if (user.isGodModeEnabledRaw())
 			{
 				user.sendMessage(_("noGodWorldWarning"));
@@ -324,9 +306,11 @@ public class EssentialsPlayerListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerInteract(final PlayerInteractEvent event)
 	{
+		final User user = ess.getUser(event.getPlayer());
+		user.updateActivity(true);
 		switch (event.getAction())
 		{
 		case RIGHT_CLICK_BLOCK:
@@ -334,20 +318,16 @@ public class EssentialsPlayerListener implements Listener
 			{
 				return;
 			}
-			if (ess.getSettings().getUpdateBedAtDaytime() && event.getClickedBlock().getType() == Material.BED_BLOCK)
+			if (event.getClickedBlock().getType() == Material.BED_BLOCK && ess.getSettings().getUpdateBedAtDaytime())
 			{
 				event.getPlayer().setBedSpawnLocation(event.getClickedBlock().getLocation());
 			}
 			break;
-		case LEFT_CLICK_AIR:
 		case LEFT_CLICK_BLOCK:
-			final User user = ess.getUser(event.getPlayer());
-			if (user.hasPowerTools() && user.arePowerToolsEnabled())
+		case LEFT_CLICK_AIR:
+			if (user.hasPowerTools() && user.arePowerToolsEnabled() && usePowertools(user, event.getItem()))
 			{
-				if (usePowertools(user))
-				{
-					event.setCancelled(true);
-				}
+				event.setCancelled(true);
 			}
 			break;
 		default:
@@ -355,9 +335,8 @@ public class EssentialsPlayerListener implements Listener
 		}
 	}
 
-	private boolean usePowertools(final User user)
+	private boolean usePowertools(final User user, final ItemStack is)
 	{
-		final ItemStack is = user.getItemInHand();
 		int id;
 		if (is == null || (id = is.getTypeId()) == 0)
 		{
@@ -399,10 +378,10 @@ public class EssentialsPlayerListener implements Listener
 		return used;
 	}
 
-	@EventHandler(priority = EventPriority.LOW)
-	public void onPlayerPickupItem(PlayerPickupItemEvent event)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onPlayerPickupItem(final PlayerPickupItemEvent event)
 	{
-		if (event.isCancelled() || !ess.getSettings().getDisableItemPickupWhileAfk())
+		if (!ess.getSettings().getDisableItemPickupWhileAfk())
 		{
 			return;
 		}
@@ -410,6 +389,29 @@ public class EssentialsPlayerListener implements Listener
 		if (user.isAfk())
 		{
 			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onInventoryClickEvent(final InventoryClickEvent event)
+	{
+		if (event.getView().getTopInventory().getType() == InventoryType.PLAYER)
+		{
+			final User user = ess.getUser(event.getWhoClicked());
+			if (user.isInvSee() && !user.isAuthorized("essentials.invsee.modify"))
+			{
+				event.setCancelled(true);
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onInventoryCloseEvent(final InventoryCloseEvent event)
+	{
+		if (event.getView().getTopInventory().getType() == InventoryType.PLAYER)
+		{
+			final User user = ess.getUser(event.getPlayer());
+			user.setInvSee(false);
 		}
 	}
 }

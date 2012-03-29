@@ -705,4 +705,22 @@ public class FakeServer implements Server
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
+	@Override
+	public String getWorldType()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public boolean getGenerateStructures()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public long getConnectionThrottle()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }

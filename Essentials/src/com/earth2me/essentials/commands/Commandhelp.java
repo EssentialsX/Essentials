@@ -4,6 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.textreader.*;
+import java.util.Locale;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
@@ -21,6 +22,7 @@ public class Commandhelp extends EssentialsCommand
 		IText output;
 		String pageStr = args.length > 0 ? args[0] : null;
 		String chapterPageStr = args.length > 1 ? args[1] : null;
+		String command = commandLabel;
 		final IText input = new TextInput(user, "help", false, ess);
 
 		if (input.getLines().isEmpty())
@@ -31,7 +33,12 @@ public class Commandhelp extends EssentialsCommand
 			}
 			else
 			{
-				output = new HelpInput(user, pageStr, ess);
+				if (pageStr.length() > 26)
+				{
+					pageStr = pageStr.substring(0, 25);
+				}
+				output = new HelpInput(user, pageStr.toLowerCase(Locale.ENGLISH), ess);
+				command = command.concat(" ").concat(pageStr);
 				pageStr = chapterPageStr;
 			}
 			chapterPageStr = null;
@@ -41,7 +48,7 @@ public class Commandhelp extends EssentialsCommand
 			output = new KeywordReplacer(input, user, ess);
 		}
 		final TextPager pager = new TextPager(output);
-		pager.showPage(pageStr, chapterPageStr, commandLabel, user);
+		pager.showPage(pageStr, chapterPageStr, command, user);
 	}
 
 	@Override

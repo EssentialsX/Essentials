@@ -19,7 +19,12 @@ public class Commandbackup extends EssentialsCommand
 		final Backup backup = ess.getBackup();
 		if (backup == null)
 		{
-			throw new Exception();
+			throw new Exception(_("backupDisabled"));
+		}
+		final String command = ess.getSettings().getBackupCommand();
+		if (command == null || "".equals(command) || "save-all".equalsIgnoreCase(command))
+		{
+			throw new Exception(_("backupDisabled"));
 		}
 		backup.run();
 		sender.sendMessage(_("backupStarted"));

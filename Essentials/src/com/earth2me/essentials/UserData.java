@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import static com.earth2me.essentials.I18n._;
 import java.io.File;
 import java.util.*;
 import java.util.logging.Logger;
@@ -41,10 +42,9 @@ public abstract class UserData extends PlayerExtension implements IConf
 		lastHealTimestamp = _getLastHealTimestamp();
 		jail = _getJail();
 		mails = _getMails();
-		savedInventory = _getSavedInventory();
 		teleportEnabled = getTeleportEnabled();
 		ignoredPlayers = getIgnoredPlayers();
-		godmode = getGodModeEnabled();
+		godmode = _getGodModeEnabled();
 		muted = getMuted();
 		muteTimeout = _getMuteTimeout();
 		jailed = getJailed();
@@ -58,6 +58,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		isNPC = _isNPC();
 		arePowerToolsEnabled = _arePowerToolsEnabled();
 		kitTimestamps = _getKitTimestamps();
+		nickname = _getNickname();
 	}
 	private double money;
 
@@ -175,8 +176,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		}
 		else
 		{
-			//TODO: move this message to messages file
-			throw new Exception("Home " + name + " doesn't exist");
+			throw new Exception(_("invalidHome", name));
 		}
 	}
 
@@ -188,14 +188,21 @@ public abstract class UserData extends PlayerExtension implements IConf
 		}
 		return false;
 	}
+	private String nickname;
 
-	public String getNickname()
+	public String _getNickname()
 	{
 		return config.getString("nickname");
 	}
 
+	public String getNickname()
+	{
+		return nickname;
+	}
+
 	public void setNickname(String nick)
 	{
+		nickname = nick;
 		config.setProperty("nickname", nick);
 		config.save();
 	}
@@ -398,50 +405,6 @@ public abstract class UserData extends PlayerExtension implements IConf
 		mails.add(mail);
 		setMails(mails);
 	}
-	private ItemStack[] savedInventory;
-
-	public ItemStack[] getSavedInventory()
-	{
-		return savedInventory;
-	}
-
-	private ItemStack[] _getSavedInventory()
-	{
-		int size = config.getInt("inventory.size", 0);
-		if (size < 1 || (getInventory() != null && size > getInventory().getSize()))
-		{
-			return null;
-		}
-		ItemStack[] is = new ItemStack[size];
-		for (int i = 0; i < size; i++)
-		{
-			is[i] = config.getItemStack("inventory." + i);
-		}
-		return is;
-	}
-
-	public void setSavedInventory(ItemStack[] is)
-	{
-		if (is == null || is.length == 0)
-		{
-			savedInventory = null;
-			config.removeProperty("inventory");
-		}
-		else
-		{
-			savedInventory = is;
-			config.setProperty("inventory.size", is.length);
-			for (int i = 0; i < is.length; i++)
-			{
-				if (is[i] == null || is[i].getType() == Material.AIR)
-				{
-					continue;
-				}
-				config.setProperty("inventory." + i, is[i]);
-			}
-		}
-		config.save();
-	}
 	private boolean teleportEnabled;
 
 	private boolean getTeleportEnabled()
@@ -515,7 +478,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 	}
 	private boolean godmode;
 
-	private boolean getGodModeEnabled()
+	private boolean _getGodModeEnabled()
 	{
 		return config.getBoolean("godmode", false);
 	}
@@ -658,10 +621,16 @@ public abstract class UserData extends PlayerExtension implements IConf
 		return lastLogin;
 	}
 
-	public void setLastLogin(long time)
+	private void _setLastLogin(long time)
 	{
 		lastLogin = time;
 		config.setProperty("timestamps.login", time);
+	}
+
+	public void setLastLogin(long time)
+	{
+		_setLastLogin(time);
+		_setLastLoginAddress(base.getAddress().getAddress().getHostAddress());
 		config.save();
 	}
 	private long lastLogout;
@@ -694,11 +663,10 @@ public abstract class UserData extends PlayerExtension implements IConf
 		return lastLoginAddress;
 	}
 
-	public void setLastLoginAddress(String address)
+	private void _setLastLoginAddress(String address)
 	{
 		lastLoginAddress = address;
 		config.setProperty("ipAddress", address);
-		config.save();
 	}
 	private boolean afk;
 
@@ -817,16 +785,12 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	private Map<String, Object> _getKitTimestamps()
 	{
-		final Object map = config.getProperty("timestamps.kits");
 
-		if (map instanceof Map)
+		if (config.isConfigurationSection("timestamps.kits"))
 		{
-			return (Map<String, Object>)map;
+			return config.getConfigurationSection("timestamps.kits").getValues(false);
 		}
-		else
-		{
-			return new HashMap<String, Object>();
-		}
+		return new HashMap<String, Object>();
 	}
 
 	public Long getKitTimestamp(final String name)

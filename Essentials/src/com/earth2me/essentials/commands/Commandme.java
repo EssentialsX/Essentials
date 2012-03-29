@@ -27,15 +27,9 @@ public class Commandme extends EssentialsCommand
 		}
 
 		String message = getFinalArg(args, 0);
-		if (user.isAuthorized("essentials.chat.color"))
-		{
-			message = Util.replaceColor(message);
-		}
-		else {
-			message = Util.stripColor(message);
-		}
-		
+		message = Util.formatMessage(user, "essentials.chat", message);	
 
+		user.setDisplayNick();
 		ess.broadcastMessage(user, _("action", user.getDisplayName(), message));
 	}
 }

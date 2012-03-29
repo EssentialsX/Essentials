@@ -25,6 +25,16 @@ public class SpawnStorage extends AsyncStorageObjectHolder<Spawns> implements IE
 	{
 		return new File(ess.getDataFolder(), "spawn.yml");
 	}
+	
+	@Override
+	public void finishRead()
+	{
+	}
+	
+	@Override
+	public void finishWrite()
+	{
+	}
 
 	public void setSpawn(final Location loc, final String group)
 	{

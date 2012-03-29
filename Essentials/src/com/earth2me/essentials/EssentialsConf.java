@@ -1,7 +1,14 @@
 package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
+import com.google.common.io.Files;
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CoderResult;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -24,6 +31,7 @@ public class EssentialsConf extends YamlConfiguration
 	private transient File configFile;
 	private transient String templateName = null;
 	private transient Class<?> resourceClass = EssentialsConf.class;
+	private static final Charset UTF8 = Charset.forName("UTF-8");
 
 	public EssentialsConf(final File configFile)
 	{
@@ -104,15 +112,48 @@ public class EssentialsConf extends YamlConfiguration
 
 		try
 		{
-			super.load(configFile);
-		}
-		catch (FileNotFoundException ex)
-		{
-			LOGGER.log(Level.SEVERE, null, ex);
+			final FileInputStream inputStream = new FileInputStream(configFile);
+			try
+			{
+				final FileChannel channel = inputStream.getChannel();
+				final ByteBuffer buffer = ByteBuffer.allocate((int)configFile.length());
+				channel.read(buffer);
+				buffer.rewind();
+				final CharBuffer data = CharBuffer.allocate((int)configFile.length());
+				CharsetDecoder decoder = UTF8.newDecoder();
+				CoderResult result = decoder.decode(buffer, data, true);
+				if (result.isError())
+				{
+					buffer.rewind();
+					data.clear();
+					LOGGER.log(Level.INFO, "File " + configFile.getAbsolutePath().toString() + " is not utf-8 encoded, trying " + Charset.defaultCharset().displayName());
+					decoder = Charset.defaultCharset().newDecoder();
+					result = decoder.decode(buffer, data, true);
+					if (result.isError())
+					{
+						throw new InvalidConfigurationException("Invalid Characters in file " + configFile.getAbsolutePath().toString());
+					}
+					else
+					{
+						decoder.flush(data);
+					}
+				}
+				else
+				{
+					decoder.flush(data);
+				}
+				final int end = data.position();
+				data.rewind();
+				super.loadFromString(data.subSequence(0, end).toString());
+			}
+			finally
+			{
+				inputStream.close();
+			}
 		}
 		catch (IOException ex)
 		{
-			LOGGER.log(Level.SEVERE, null, ex);
+			LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
 		}
 		catch (InvalidConfigurationException ex)
 		{
@@ -301,27 +342,55 @@ public class EssentialsConf extends YamlConfiguration
 			return def;
 		}
 	}
-	
-	public void save() {
+
+	public void save()
+	{
 		try
 		{
 			save(configFile);
 		}
 		catch (IOException ex)
 		{
-			LOGGER.log(Level.SEVERE, null, ex);
+			LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
 		}
 	}
-	
-	public Object getProperty(String path) {
+
+	@Override
+	public void save(final File file) throws IOException
+	{
+		if (file == null)
+		{
+			throw new IllegalArgumentException("File cannot be null");
+		}
+
+		Files.createParentDirs(file);
+
+		final String data = saveToString();
+
+		final OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file), UTF8);
+
+		try
+		{
+			writer.write(data);
+		}
+		finally
+		{
+			writer.close();
+		}
+	}
+
+	public Object getProperty(String path)
+	{
 		return get(path);
 	}
-	
-	public void setProperty(String path, Object object) {
+
+	public void setProperty(String path, Object object)
+	{
 		set(path, object);
 	}
-	
-	public void removeProperty(String path) {
+
+	public void removeProperty(String path)
+	{
 		set(path, null);
 	}
 }

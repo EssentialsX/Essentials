@@ -33,6 +33,10 @@ nickname-prefix: '~'
 # Disable this if you have any other plugin, that modifies the displayname of a user.
 change-displayname: true
 
+# When this option is enabled, the (tab) player list will be updated with the displayname.
+# The value of change-displayname (above) has to be true.
+#change-playerlist: true
+
 # Adds the prefix and suffix to the displayname of the player, so it will be displayed in messages and lists.
 # The prefix/suffix can be set using Permissions, Group Manager or PermissionsEx.
 # The value of change-displayname (above) has to be true.
@@ -45,6 +49,10 @@ teleport-cooldown: 0
 
 # The delay, in seconds, before a user actually teleports.  If the user moves or gets attacked in this timeframe, the teleport never occurs.
 teleport-delay: 0
+
+# The delay, in seconds, a player can't be attacked by other players after he has been teleported by a command
+# This will also prevent that the player can attack other players
+teleport-invulnerability: 0
 
 # The delay, in seconds, required between /heal attempts
 heal-cooldown: 60
@@ -83,7 +91,7 @@ warn-on-smite: true
 overridden-commands:
   - god
 
-# Disabled commands will be completelly unavailable on the server.
+# Disabled commands will be completely unavailable on the server.
 disabled-commands:
 # - nick
 
@@ -97,9 +105,14 @@ player-commands:
   - back
   - back.ondeath
   - balance
+  - balance.others
+  - balancetop
+  - chat.shout
+  - chat.question
   - clearinventory
   - compass
   - depth
+  - delhome
   - getpos
   - geoip.show
   - help
@@ -108,20 +121,26 @@ player-commands:
   - home.others
   - ignore
   - info
+  - itemdb
   - kit
+  - kit.tools
   - list
   - mail
   - mail.send
   - me
   - motd
   - msg
+  - msg.color
   - nick
+  - near
   - pay
   - ping
   - powertool
+  - powertooltoggle
   - protect
   - r
   - rules
+  - realname
   - seen
   - sell
   - sethome
@@ -144,6 +163,7 @@ player-commands:
   - signs.use.weather
   - spawn
   - suicide
+  - time
   - tpa
   - tpaccept
   - tpahere
@@ -156,21 +176,31 @@ player-commands:
 
 # Note: All items MUST be followed by a quantity!
 # All kit names should be lower case, and will be treated as lower in permissions/costs.
+# Syntax: - itemID[:DataValue] Amount [Enchantment:Level]..
 # Times are measured in seconds.
 kits:
+  dtools:
+    delay: 10
+    items:
+      - 277 1 efficiency:1
+      - 278 1
+      - 279:780 1
   tools:
     delay: 10
     items:
-      - 277 1
-      - 278 1
-      - 279 1
+      - 272 1
+      - 273 1 
+      - 274 1
+      - 275 1
 
 # Essentials Sign Control
 # See http://ess.khhq.net/wiki/Sign_Tutorial for instructions on how to use these.
 # To enable signs, remove # symbol. To disable all signs, comment/remove each sign.
+# Essentials Colored sign support will be enabled when any sign types are enabled.
 # We recommend not enabling chest protection signs if you don't intend to use them, (or are using LWC/Lockette).
 
 enabledSigns:
+  #- color
   #- balance
   #- buy  
   #- sell
@@ -191,8 +221,9 @@ enabledSigns:
 # Backup runs a command while saving is disabled
 backup:
   # Interval in minutes
-  interval: 60
-  # Add a command that backups your data, e.g.
+  interval: 30
+  # Unless you add a valid backup command or script here, this feature will be useless.
+  # Use 'save-all' to simply force regular world saving without backup.
   #command: 'rdiff-backup World1 backups/World1'
 
 # Set this true to enable permission per warp.
@@ -243,7 +274,7 @@ death-messages: true
 no-god-in-worlds:
 #  - world_nether
 
-# Set to true to enable per-world permissions for teleporting with /world
+# Set to true to enable per-world permissions for teleporting with /world, /tp ,/tpa and /tpo.
 # Give someone permission to teleport to a world with essentials.world.<worldname>
 world-teleport-permissions: false
 
@@ -319,9 +350,9 @@ currency-symbol: '$'
 # The amount is always limited to 10 trillions because of the limitations of a java double
 max-money: 10000000000000
 
-# Set the minimum amount of money a player can have
-# Setting this to 0, will disable overdrafts/loans compeltely.  Users need 'essentials.eco.loan' perm to go below 0.
-min-money: -10000000000000
+# Set the minimum amount of money a player can have (must be above the negitive of max-money).
+# Setting this to 0, will disable overdrafts/loans completely.  Users need 'essentials.eco.loan' perm to go below 0.
+min-money: -10000
 
 # Enable this to log all interactions with trade/buy/sell signs and sell command
 economy-log-enabled: false
@@ -380,6 +411,8 @@ protect:
   # Database settings for sign/rail protection
 
   # mysql or sqlite
+  # We strongly recommend against using mysql here, unless you have a good reason.
+  # Sqlite seems to be faster in almost all cases, and in some cases mysql can be much slower.
   datatype: 'sqlite'
 
   # If you specified MySQL above, you MUST enter the appropriate details here.
@@ -436,30 +469,31 @@ protect:
     entitytarget: false
     # Prevent the spawning of creatures
     spawn:
-      chicken: false
-      cow: false
       creeper: false
-      ghast: false
-      giant: false
-      monster: false
-      pig: false
-      pig_zombie: false
-      sheep: false
       skeleton: false
-      slime: false
       spider: false
-      squid: false
+      giant: false
       zombie: false
-      wolf: false
-      cave_spider: false
+      slime: false
+      ghast: false
+      pig_zombie: false
       enderman: false
+      cave_spider: false
       silverfish: false
-      ender_dragon: false
-      villager: false
       blaze: false
-      mushroom_cow: false
       magma_cube: false
+      ender_dragon: false
+      pig: false
+      sheep: false
+      cow: false      
+      chicken: false
+      squid: false
+      wolf: false
+      mushroom_cow: false
       snowman: false
+      ocelot: false
+      iron_golem: false
+      villager: false
 
   # Maximum height the creeper should explode. -1 allows them to explode everywhere.
   # Set prevent.creeper-explosion to true, if you want to disable creeper explosions.
@@ -547,6 +581,11 @@ newbies:
   # When we spawn for the first time, which spawnpoint do we use?
   # Set to "none" if you want to use the spawn point of the world.
   spawnpoint: newbies
+  
+  # Do we want to give users anything on first join? Set to '' to disable
+  # This kit will be given reguardless of cost, and permissions.
+  #kit: ''
+  kit: tools
 
 # Set this to lowest, if you want Multiverse to handle the respawning
 # Set this to high, if you want EssentialsSpawn to handle the respawning

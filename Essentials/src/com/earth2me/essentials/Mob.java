@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -38,7 +39,9 @@ public enum Mob
 	BLAZE("Blaze", Enemies.ENEMY, EntityType.BLAZE),
 	MUSHROOMCOW("MushroomCow", Enemies.FRIENDLY, EntityType.MUSHROOM_COW),
 	MAGMACUBE("MagmaCube", Enemies.ENEMY, EntityType.MAGMA_CUBE),
-	SNOWMAN("Snowman", Enemies.FRIENDLY, "", EntityType.SNOWMAN);
+	SNOWMAN("Snowman", Enemies.FRIENDLY, "", EntityType.SNOWMAN),
+	OCELOT("Ocelot", Enemies.NEUTRAL, EntityType.OCELOT),
+	IRONGOLEM("IronGolem", Enemies.NEUTRAL, EntityType.IRON_GOLEM);
 	
 	public static final Logger logger = Logger.getLogger("Minecraft");
 
@@ -71,7 +74,7 @@ public enum Mob
 	}
 	
 	public static Set<String> getMobList() {
-		return hashMap.keySet();
+		return Collections.unmodifiableSet(hashMap.keySet());
 	}
 
 	public LivingEntity spawn(final Player player, final Server server, final Location loc) throws MobException

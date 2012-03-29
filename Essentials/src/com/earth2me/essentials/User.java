@@ -23,6 +23,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	private transient long lastActivity = System.currentTimeMillis();
 	private boolean hidden = false;
 	private transient Location afkPosition = null;
+	private boolean invSee = false;
 	private static final Logger logger = Logger.getLogger("Minecraft");
 
 	User(final Player base, final IEssentials ess)
@@ -56,6 +57,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	@Override
 	public boolean isAuthorized(final String node)
 	{
+		if (ess.getSettings().isDebug())
+		{
+			ess.getLogger().log(Level.INFO, "checking if " + base.getName() + " has " + node);
+		}
 		if (base instanceof OfflinePlayer)
 		{
 			return false;
@@ -71,7 +76,15 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			return false;
 		}
 
-		return ess.getPermissionsHandler().hasPermission(base, node);
+		try
+		{
+			return ess.getPermissionsHandler().hasPermission(base, node);
+		}
+		catch (Exception ex)
+		{
+			ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage());
+			return false;
+		}
 	}
 
 	public void healCooldown() throws Exception
@@ -105,10 +118,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			return;
 		}
 		setMoney(getMoney() + value);
-		sendMessage(_("addedToAccount", Util.formatCurrency(value, ess)));
+		sendMessage(_("addedToAccount", Util.displayCurrency(value, ess)));
 		if (initiator != null)
 		{
-			initiator.sendMessage(_("addedToOthersAccount", Util.formatCurrency(value, ess), this.getDisplayName(), Util.formatCurrency(getMoney(), ess)));
+			initiator.sendMessage(_("addedToOthersAccount", Util.displayCurrency(value, ess), this.getDisplayName(), Util.displayCurrency(getMoney(), ess)));
 		}
 	}
 
@@ -122,8 +135,8 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		{
 			setMoney(getMoney() - value);
 			reciever.setMoney(reciever.getMoney() + value);
-			sendMessage(_("moneySentTo", Util.formatCurrency(value, ess), reciever.getDisplayName()));
-			reciever.sendMessage(_("moneyRecievedFrom", Util.formatCurrency(value, ess), getDisplayName()));
+			sendMessage(_("moneySentTo", Util.displayCurrency(value, ess), reciever.getDisplayName()));
+			reciever.sendMessage(_("moneyRecievedFrom", Util.displayCurrency(value, ess), getDisplayName()));
 		}
 		else
 		{
@@ -144,10 +157,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			return;
 		}
 		setMoney(getMoney() - value);
-		sendMessage(_("takenFromAccount", Util.formatCurrency(value, ess)));
+		sendMessage(_("takenFromAccount", Util.displayCurrency(value, ess)));
 		if (initiator != null)
 		{
-			initiator.sendMessage(_("takenFromOthersAccount", Util.formatCurrency(value, ess), this.getDisplayName(), Util.formatCurrency(getMoney(), ess)));
+			initiator.sendMessage(_("takenFromOthersAccount", Util.displayCurrency(value, ess), this.getDisplayName(), Util.displayCurrency(getMoney(), ess)));
 		}
 	}
 
@@ -186,7 +199,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	@Override
 	public int compareTo(final User other)
 	{
-		return Util.stripColor(this.getDisplayName()).compareToIgnoreCase(Util.stripColor(other.getDisplayName()));
+		return Util.stripFormat(this.getDisplayName()).compareToIgnoreCase(Util.stripFormat(other.getDisplayName()));
 	}
 
 	@Override
@@ -244,12 +257,12 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		return teleportRequester;
 	}
 
-	public boolean isTeleportRequestHere()
+	public boolean isTpRequestHere()
 	{
 		return teleportRequestHere;
 	}
 
-	public String getNick(boolean addprefixsuffix)
+	public String getNick(final boolean addprefixsuffix)
 	{
 		final StringBuilder nickname = new StringBuilder();
 		final String nick = getNickname();
@@ -261,30 +274,34 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		{
 			nickname.append(ess.getSettings().getNicknamePrefix()).append(nick);
 		}
-		if (isOp())
+
+		if (addprefixsuffix && isOp())
 		{
 			try
 			{
-				nickname.insert(0, ess.getSettings().getOperatorColor().toString());
-				nickname.append("§f");
+				final String opPrefix = ess.getSettings().getOperatorColor().toString();
+				if (opPrefix.length() > 0)
+				{
+					nickname.insert(0, opPrefix);
+					nickname.append("§f");
+				}
 			}
 			catch (Exception e)
 			{
 			}
 		}
-
 		if (addprefixsuffix && ess.getSettings().addPrefixSuffix())
 		{
 			if (!ess.getSettings().disablePrefix())
 			{
-				final String prefix = ess.getPermissionsHandler().getPrefix(base).replace('&', '§').replace("{WORLDNAME}", this.getWorld().getName());
+				final String prefix = ess.getPermissionsHandler().getPrefix(base).replace('&', '§');
 				nickname.insert(0, prefix);
 			}
 			if (!ess.getSettings().disableSuffix())
 			{
-				final String suffix = ess.getPermissionsHandler().getSuffix(base).replace('&', '§').replace("{WORLDNAME}", this.getWorld().getName());
+				final String suffix = ess.getPermissionsHandler().getSuffix(base).replace('&', '§');
 				nickname.append(suffix);
-				if (suffix.length() < 2 || !suffix.substring(suffix.length() - 2, suffix.length() - 1).equals("§"))
+				if (suffix.length() < 2 || suffix.charAt(suffix.length() - 2) != '§')
 				{
 					nickname.append("§f");
 				}
@@ -300,36 +317,42 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 	public void setDisplayNick()
 	{
-		String name = getNick(true);
-		setDisplayName(name);
-		if (name.length() > 16)
+		if (base.isOnline() && ess.getSettings().changeDisplayName())
 		{
-			name = getNick(false);
-		}
-		if (name.length() > 16)
-		{
-			name = name.substring(0, name.charAt(15) == '§' ? 15 : 16);
-		}
-		try
-		{
-			setPlayerListName(name);
-		}
-		catch (IllegalArgumentException e)
-		{
-			logger.log(Level.INFO, "Playerlist for " + name + " was not updated. Use a shorter displayname prefix.");
+			String name = getNick(true);
+			setDisplayName(name);
+			if (name.length() > 16)
+			{
+				name = getNick(false);
+			}
+			if (name.length() > 16)
+			{
+				name = Util.stripFormat(name);
+			}
+			if (ess.getSettings().changePlayerListName())
+			{
+				try
+				{
+					setPlayerListName(name);
+				}
+				catch (IllegalArgumentException e)
+				{
+					if (ess.getSettings().isDebug())
+					{
+						logger.log(Level.INFO, "Playerlist for " + name + " was not updated. Name clashed with another online player.");
+					}
+				}
+			}
 		}
 	}
 
 	@Override
 	public String getDisplayName()
 	{
-		if (!(base instanceof OfflinePlayer) && ess.getSettings().changeDisplayName())
-		{
-			setDisplayNick();
-		}
 		return super.getDisplayName() == null ? super.getName() : super.getDisplayName();
 	}
 
+	@Override
 	public Teleport getTeleport()
 	{
 		return teleport;
@@ -385,7 +408,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			catch (Throwable ex)
 			{
 			}
-		}		
+		}
 		super.setMoney(value);
 		Trade.log("Update", "Set", "API", getName(), new Trade(value, ess), null, null, null, ess);
 	}
@@ -485,6 +508,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			setAfk(false);
 			if (broadcast && !isHidden())
 			{
+				setDisplayNick();
 				ess.broadcastMessage(this, _("userIsNotAway", getDisplayName()));
 			}
 		}
@@ -517,6 +541,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			setAfk(true);
 			if (!isHidden())
 			{
+				setDisplayNick();
 				ess.broadcastMessage(this, _("userIsAway", getDisplayName()));
 			}
 		}
@@ -571,5 +596,39 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public long getTeleportRequestTime()
 	{
 		return teleportRequestTime;
+	}
+
+	public boolean isInvSee()
+	{
+		return invSee;
+	}
+
+	public void setInvSee(final boolean set)
+	{
+		invSee = set;
+	}
+	private transient long teleportInvulnerabilityTimestamp = 0;
+
+	public void enableInvulnerabilityAfterTeleport()
+	{
+		final long time = ess.getSettings().getTeleportInvulnerability();
+		if (time > 0)
+		{
+			teleportInvulnerabilityTimestamp = System.currentTimeMillis() + time;
+		}
+	}
+
+	public void resetInvulnerabilityAfterTeleport()
+	{
+		if (teleportInvulnerabilityTimestamp != 0
+			&& teleportInvulnerabilityTimestamp < System.currentTimeMillis())
+		{
+			teleportInvulnerabilityTimestamp = 0;
+		}
+	}
+	
+	public boolean hasInvulnerabilityAfterTeleport()
+	{
+		return teleportInvulnerabilityTimestamp != 0 && teleportInvulnerabilityTimestamp >= System.currentTimeMillis();
 	}
 }

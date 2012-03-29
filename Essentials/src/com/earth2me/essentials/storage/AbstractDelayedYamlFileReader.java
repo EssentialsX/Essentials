@@ -14,7 +14,7 @@ public abstract class AbstractDelayedYamlFileReader<T extends StorageObject> imp
 {
 	private final transient File file;
 	private final transient Class<T> clazz;
-	private final transient Plugin plugin;
+	protected final transient IEssentials plugin;
 
 	public AbstractDelayedYamlFileReader(final IEssentials ess, final File file, final Class<T> clazz)
 	{
@@ -54,7 +54,10 @@ public abstract class AbstractDelayedYamlFileReader<T extends StorageObject> imp
 		catch (FileNotFoundException ex)
 		{
 			onException();
-			Bukkit.getLogger().log(Level.INFO, "File not found: " + file.toString());
+			if (plugin.getSettings() == null || plugin.getSettings().isDebug())
+			{
+				Bukkit.getLogger().log(Level.INFO, "File not found: " + file.toString());
+			}
 		}
 		catch (ObjectLoadException ex)
 		{

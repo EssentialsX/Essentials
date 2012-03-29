@@ -45,6 +45,11 @@ public class Commandtpaall extends EssentialsCommand
 			{
 				continue;
 			}
+			if (user.getWorld() != player.getWorld() && ess.getSettings().isWorldTeleportPermissions()
+				&& !user.isAuthorized("essentials.world." + user.getWorld().getName()))
+			{
+				continue;
+			}
 			try
 			{
 				player.requestTeleport(user, true);

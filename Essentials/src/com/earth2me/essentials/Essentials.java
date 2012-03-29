@@ -24,6 +24,9 @@ import com.earth2me.essentials.commands.EssentialsCommand;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
+import com.earth2me.essentials.metrics.Metrics;
+import com.earth2me.essentials.metrics.MetricsListener;
+import com.earth2me.essentials.metrics.MetricsStarter;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
 import com.earth2me.essentials.signs.SignBlockListener;
@@ -32,10 +35,8 @@ import com.earth2me.essentials.signs.SignPlayerListener;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,7 +46,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
@@ -66,7 +66,7 @@ import org.yaml.snakeyaml.error.YAMLException;
 
 public class Essentials extends JavaPlugin implements IEssentials
 {
-	public static final int BUKKIT_VERSION = 1988;
+	public static final int BUKKIT_VERSION = 2122;
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private transient ISettings settings;
 	private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
@@ -82,6 +82,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private transient UserMap userMap;
 	private transient ExecuteTimer execTimer;
 	private transient I18n i18n;
+	private transient Metrics metrics;
 
 	@Override
 	public ISettings getSettings()
@@ -124,19 +125,22 @@ public class Essentials extends JavaPlugin implements IEssentials
 		for (Plugin plugin : pm.getPlugins())
 		{
 			if (plugin.getDescription().getName().startsWith("Essentials")
-				&& !plugin.getDescription().getVersion().equals(this.getDescription().getVersion()))
+				&& !plugin.getDescription().getVersion().equals(this.getDescription().getVersion())
+				&& !plugin.getDescription().getName().equals("EssentialsAntiCheat"))
 			{
 				LOGGER.log(Level.WARNING, _("versionMismatch", plugin.getDescription().getName()));
 			}
 		}
-		final Matcher versionMatch = Pattern.compile("git-Bukkit-([0-9]+).([0-9]+).([0-9]+)-R[0-9]+-(?:[0-9]+-g[0-9a-f]+-)?b([0-9]+)jnks.*").matcher(getServer().getVersion());
+		final Matcher versionMatch = Pattern.compile("git-Bukkit-(?:(?:[0-9]+)\\.)+[0-9]+-R[\\.0-9]+-(?:[0-9]+-g[0-9a-f]+-)?b([0-9]+)jnks.*").matcher(getServer().getVersion());
 		if (versionMatch.matches())
 		{
-			final int versionNumber = Integer.parseInt(versionMatch.group(4));
-			if (versionNumber < BUKKIT_VERSION)
+			final int versionNumber = Integer.parseInt(versionMatch.group(1));
+			if (versionNumber < BUKKIT_VERSION && versionNumber > 100)
 			{
+				LOGGER.log(Level.SEVERE, " * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! *");
 				LOGGER.log(Level.SEVERE, _("notRecommendedBukkit"));
 				LOGGER.log(Level.SEVERE, _("requiredBukkit", Integer.toString(BUKKIT_VERSION)));
+				LOGGER.log(Level.SEVERE, " * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! *");
 				this.setEnabled(false);
 				return;
 			}
@@ -223,7 +227,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 
 		final EssentialsEntityListener entityListener = new EssentialsEntityListener(this);
 		pm.registerEvents(entityListener, this);
-		
+
 		final EssentialsWorldListener worldListener = new EssentialsWorldListener(this);
 		pm.registerEvents(worldListener, this);
 
@@ -237,6 +241,18 @@ public class Essentials extends JavaPlugin implements IEssentials
 		getScheduler().scheduleSyncRepeatingTask(this, timer, 1, 100);
 		Economy.setEss(this);
 		execTimer.mark("RegListeners");
+		
+		final MetricsStarter metricsStarter = new MetricsStarter(this);
+		if (metricsStarter.getStart() != null && metricsStarter.getStart() == true)
+		{
+			getScheduler().scheduleAsyncDelayedTask(this, metricsStarter, 1);
+		}
+		else if (metricsStarter.getStart() != null && metricsStarter.getStart() == false)
+		{
+			final MetricsListener metricsListener = new MetricsListener(this, metricsStarter);
+			pm.registerEvents(metricsListener, this);
+		}
+
 		final String timeroutput = execTimer.end();
 		if (getSettings().isDebug())
 		{
@@ -435,6 +451,16 @@ public class Essentials extends JavaPlugin implements IEssentials
 		return backup;
 	}
 
+	public Metrics getMetrics()
+	{
+		return metrics;
+	}
+
+	public void setMetrics(Metrics metrics)
+	{
+		this.metrics = metrics;
+	}
+
 	@Override
 	public User getUser(final Object base)
 	{
@@ -599,15 +625,16 @@ public class Essentials extends JavaPlugin implements IEssentials
 	{
 		return i18n;
 	}
-	
-	private static class EssentialsWorldListener implements Listener, Runnable {
+
+
+	private static class EssentialsWorldListener implements Listener, Runnable
+	{
 		private transient final IEssentials ess;
 
 		public EssentialsWorldListener(final IEssentials ess)
 		{
 			this.ess = ess;
 		}
-		
 
 		@EventHandler(priority = EventPriority.LOW)
 		public void onWorldLoad(final WorldLoadEvent event)
@@ -616,7 +643,8 @@ public class Essentials extends JavaPlugin implements IEssentials
 			ess.getWarps().reloadConfig();
 			for (IConf iConf : ((Essentials)ess).confList)
 			{
-				if (iConf instanceof IEssentialsModule) {
+				if (iConf instanceof IEssentialsModule)
+				{
 					iConf.reloadConfig();
 				}
 			}
@@ -629,7 +657,8 @@ public class Essentials extends JavaPlugin implements IEssentials
 			ess.getWarps().reloadConfig();
 			for (IConf iConf : ((Essentials)ess).confList)
 			{
-				if (iConf instanceof IEssentialsModule) {
+				if (iConf instanceof IEssentialsModule)
+				{
 					iConf.reloadConfig();
 				}
 			}

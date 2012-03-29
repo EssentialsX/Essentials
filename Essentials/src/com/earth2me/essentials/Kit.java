@@ -1,11 +1,13 @@
 package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.capitalCase;
 import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import java.util.*;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -22,7 +24,7 @@ public class Kit
 			{
 				if (user.isAuthorized("essentials.kit." + kiteItem.toLowerCase(Locale.ENGLISH)))
 				{
-					list.append(" ").append(kiteItem);
+					list.append(" ").append(capitalCase(kiteItem));
 				}
 			}
 			return list.toString().trim();
@@ -60,11 +62,16 @@ public class Kit
 		}
 	}
 
-	public static List<String> getItems(final User user, final Map<String, Object> els) throws Exception
+	public static List<String> getItems(final User user, final Map<String, Object> kit) throws Exception
 	{
+		if (kit == null)
+		{
+			throw new Exception(_("kitError2"));
+		}
+
 		try
 		{
-			return (List<String>)els.get("items");
+			return (List<String>)kit.get("items");
 		}
 		catch (Exception e)
 		{
@@ -80,18 +87,44 @@ public class Kit
 			boolean spew = false;
 			for (String d : items)
 			{
-				final String[] parts = d.split("[^0-9]+", 3);
-				final int id = Material.getMaterial(Integer.parseInt(parts[0])).getId();
-				final int amount = parts.length > 1 ? Integer.parseInt(parts[parts.length > 2 ? 2 : 1]) : 1;
-				final short data = parts.length > 2 ? Short.parseShort(parts[1]) : 0;
+				final String[] parts = d.split(" ");
+				final String[] item = parts[0].split("[:+',;.]", 2);
+				final int id = Material.getMaterial(Integer.parseInt(item[0])).getId();
+				final short data = item.length > 1 ? Short.parseShort(item[1]) : 0;
+				final int amount = parts.length > 1 ? Integer.parseInt(parts[1]) : 1;
+
+				final ItemStack stack = new ItemStack(id, amount, data);
+				if (parts.length > 2)
+				{
+					for (int i = 2; i < parts.length; i++)
+					{
+						final String[] split = parts[i].split("[:+',;.]", 2);
+						if (split.length < 1)
+						{
+							continue;
+						}
+						final Enchantment enchantment = Enchantments.getByName(split[0]);
+						int level;
+						if (split.length > 1)
+						{
+							level = Integer.parseInt(split[1]);
+						}
+						else
+						{
+							level = enchantment.getMaxLevel();
+						}
+						stack.addEnchantment(enchantment, level);
+					}
+				}
+
 				final Map<Integer, ItemStack> overfilled;
 				if (user.isAuthorized("essentials.oversizedstacks"))
 				{
-					overfilled = InventoryWorkaround.addItem(user.getInventory(), true, ess.getSettings().getOversizedStackSize(), new ItemStack(id, amount, data));
+					overfilled = InventoryWorkaround.addItem(user.getInventory(), true, ess.getSettings().getOversizedStackSize(), stack);
 				}
 				else
 				{
-					overfilled = InventoryWorkaround.addItem(user.getInventory(), true, new ItemStack(id, amount, data));
+					overfilled = InventoryWorkaround.addItem(user.getInventory(), true, 0, stack);
 				}
 				for (ItemStack itemStack : overfilled.values())
 				{

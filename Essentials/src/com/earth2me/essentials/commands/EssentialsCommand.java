@@ -3,7 +3,6 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.IEssentialsModule;
-import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import java.util.List;
@@ -31,7 +30,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 	{
 		this.ess = ess;
 	}
-	
+
 	@Override
 	public void setEssentialsModule(final IEssentialsModule module)
 	{
@@ -62,7 +61,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 		final User user = ess.getUser(args[pos]);
 		if (user != null)
 		{
-			if (!getOffline && (user.getBase() instanceof OfflinePlayer || user.isHidden()))
+			if (!getOffline && (!user.isOnline() || user.isHidden()))
 			{
 				throw new NoSuchFieldException(_("playerNotFound"));
 			}

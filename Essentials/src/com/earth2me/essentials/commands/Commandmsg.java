@@ -34,18 +34,11 @@ public class Commandmsg extends EssentialsCommand
 			{
 				throw new Exception(_("voiceSilenced"));
 			}
-			if (user.isAuthorized("essentials.msg.color"))
-			{
-				message = Util.replaceColor(message);
-			}
-			else
-			{
-				message = Util.stripColor(message);
-			}
+			message = Util.formatMessage(user, "essentials.msg", message);
 		}
 		else
 		{
-			message = Util.replaceColor(message);
+			message = Util.replaceFormat(message);
 		}
 
 		final String translatedMe = _("me");

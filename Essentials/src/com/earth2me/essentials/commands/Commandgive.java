@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.User;
 import java.util.Locale;
@@ -19,7 +20,6 @@ public class Commandgive extends EssentialsCommand
 		super("give");
 	}
 
-	//TODO: move these messages to message file
 	@Override
 	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
@@ -39,7 +39,7 @@ public class Commandgive extends EssentialsCommand
 				: (!ess.getUser(sender).isAuthorized("essentials.itemspawn.exempt")
 				   && !ess.getUser(sender).canSpawnItem(stack.getTypeId()))))
 		{
-			throw new Exception(ChatColor.RED + "You are not allowed to spawn the item " + itemname);
+			throw new Exception(_("cantSpawnItem", itemname));
 		}
 
 		final User giveTo = getPlayer(server, args, 0);
@@ -82,9 +82,10 @@ public class Commandgive extends EssentialsCommand
 
 		if (stack.getType() == Material.AIR)
 		{
-			throw new Exception(ChatColor.RED + "You can't give air.");
+			throw new Exception(_("cantSpawnItem", "Air"));
 		}
 
+		//TODO: TL this.
 		final String itemName = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ');
 		sender.sendMessage(ChatColor.BLUE + "Giving " + stack.getAmount() + " of " + itemName + " to " + giveTo.getDisplayName() + ".");
 		if (giveTo.isAuthorized("essentials.oversizedstacks"))

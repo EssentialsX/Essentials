@@ -1,7 +1,6 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
@@ -20,15 +19,26 @@ public class Commandtpaccept extends EssentialsCommand
 	{
 
 		final User target = user.getTeleportRequest();
-		if (target == null
-			|| target.getBase() instanceof OfflinePlayer
-			|| (user.isTeleportRequestHere() && !target.isAuthorized("essentials.tpahere"))
-			|| (!user.isTeleportRequestHere() && !target.isAuthorized("essentials.tpa") && !target.isAuthorized("essentials.tpaall"))
-			)
+
+		if (target == null || !target.isOnline())
 		{
 			throw new Exception(_("noPendingRequest"));
 		}
-		
+
+		if (user.isTpRequestHere() && ((!target.isAuthorized("essentials.tpahere") && !target.isAuthorized("essentials.tpaall"))
+									   || (user.getWorld() != target.getWorld() && ess.getSettings().isWorldTeleportPermissions()
+										   && !user.isAuthorized("essentials.world." + user.getWorld().getName()))))
+		{
+			throw new Exception(_("noPendingRequest"));
+		}
+
+		if (!user.isTpRequestHere() && (!target.isAuthorized("essentials.tpa")
+										|| (user.getWorld() != target.getWorld() && ess.getSettings().isWorldTeleportPermissions()
+											&& !user.isAuthorized("essentials.world." + target.getWorld().getName()))))
+		{
+			throw new Exception(_("noPendingRequest"));
+		}
+
 		if (args.length > 0 && !target.getName().contains(args[0]))
 		{
 			throw new Exception(_("noPendingRequest"));
@@ -42,7 +52,7 @@ public class Commandtpaccept extends EssentialsCommand
 		}
 
 		final Trade charge = new Trade(this.getName(), ess);
-		if (user.isTeleportRequestHere())
+		if (user.isTpRequestHere())
 		{
 			charge.isAffordableFor(user);
 		}
@@ -53,7 +63,7 @@ public class Commandtpaccept extends EssentialsCommand
 		user.sendMessage(_("requestAccepted"));
 		target.sendMessage(_("requestAcceptedFrom", user.getDisplayName()));
 
-		if (user.isTeleportRequestHere())
+		if (user.isTpRequestHere())
 		{
 			user.getTeleport().teleport(target, charge, TeleportCause.COMMAND);
 		}

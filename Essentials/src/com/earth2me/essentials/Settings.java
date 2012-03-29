@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
 
@@ -22,6 +23,7 @@ public class Settings implements ISettings
 	private final transient EssentialsConf config;
 	private final static Logger logger = Logger.getLogger("Minecraft");
 	private final transient IEssentials ess;
+	private boolean metricsEnabled = true;
 
 	public Settings(IEssentials ess)
 	{
@@ -208,6 +210,31 @@ public class Settings implements ISettings
 	{
 		return config.getDouble("heal-cooldown", 0);
 	}
+	private ConfigurationSection kits;
+
+	public ConfigurationSection _getKits()
+	{
+		if (config.isConfigurationSection("kits"))
+		{
+			final ConfigurationSection section = config.getConfigurationSection("kits");
+			final ConfigurationSection newSection = new MemoryConfiguration();
+			for (String kitItem : section.getKeys(false))
+			{
+				if (section.isConfigurationSection(kitItem))
+				{
+					newSection.set(kitItem.toLowerCase(Locale.ENGLISH), section.getConfigurationSection(kitItem));
+				}
+			}
+			return newSection;
+		}
+		return null;
+	}
+
+	@Override
+	public ConfigurationSection getKits()
+	{
+		return kits;
+	}
 
 	@Override
 	public Map<String, Object> getKit(String name)
@@ -220,16 +247,6 @@ public class Settings implements ISettings
 			{
 				return kits.getConfigurationSection(name).getValues(true);
 			}
-		}
-		return null;
-	}
-
-	@Override
-	public ConfigurationSection getKits()
-	{
-		if (config.isConfigurationSection("kits"))
-		{
-			return config.getConfigurationSection("kits");
 		}
 		return null;
 	}
@@ -286,7 +303,7 @@ public class Settings implements ISettings
 	@Override
 	public boolean areSignsDisabled()
 	{
-		return enabledSigns.isEmpty();
+		return !signsEnabled;
 	}
 
 	@Override
@@ -310,13 +327,13 @@ public class Settings implements ISettings
 		{
 			String format = config.getString("chat.group-formats." + (group == null ? "Default" : group),
 											 config.getString("chat.format", "&7[{GROUP}]&f {DISPLAYNAME}&7:&f {MESSAGE}"));
-			format = Util.replaceColor(format);
+			format = Util.replaceFormat(format);
 			format = format.replace("{DISPLAYNAME}", "%1$s");
 			format = format.replace("{GROUP}", "{0}");
 			format = format.replace("{MESSAGE}", "%2$s");
 			format = format.replace("{WORLDNAME}", "{1}");
 			format = format.replace("{SHORTWORLDNAME}", "{2}");
-			format = format.replaceAll("\\{(\\D*)\\}", "\\[$1\\]");
+			format = format.replaceAll("\\{(\\D*?)\\}", "\\[$1\\]");
 			mFormat = new MessageFormat(format);
 			chatFormats.put(group, mFormat);
 		}
@@ -332,7 +349,13 @@ public class Settings implements ISettings
 	@Override
 	public IText getAnnounceNewPlayerFormat()
 	{
-		return new SimpleTextInput(Util.replaceColor(config.getString("newbies.announce-format", "&dWelcome {DISPLAYNAME} to the server!")));
+		return new SimpleTextInput(Util.replaceFormat(config.getString("newbies.announce-format", "&dWelcome {DISPLAYNAME} to the server!")));
+	}
+
+	@Override
+	public String getNewPlayerKit()
+	{
+		return config.getString("newbies.kit", "");
 	}
 
 	@Override
@@ -358,8 +381,9 @@ public class Settings implements ISettings
 	{
 		config.load();
 		noGodWorlds = new HashSet<String>(config.getStringList("no-god-in-worlds"));
-		enabledSigns = getEnabledSigns();
-		itemSpawnBl = getItemSpawnBlacklist();
+		enabledSigns = _getEnabledSigns();
+		itemSpawnBl = _getItemSpawnBlacklist();
+		kits = _getKits();
 		chatFormats.clear();
 	}
 	private List<Integer> itemSpawnBl = new ArrayList<Integer>();
@@ -370,7 +394,7 @@ public class Settings implements ISettings
 		return itemSpawnBl;
 	}
 
-	private List<Integer> getItemSpawnBlacklist()
+	private List<Integer> _getItemSpawnBlacklist()
 	{
 		final List<Integer> epItemSpwn = new ArrayList<Integer>();
 		if (ess.getItemDb() == null)
@@ -398,6 +422,7 @@ public class Settings implements ISettings
 		return epItemSpwn;
 	}
 	private List<EssentialsSign> enabledSigns = new ArrayList<EssentialsSign>();
+	private boolean signsEnabled = false;
 
 	@Override
 	public List<EssentialsSign> enabledSigns()
@@ -405,7 +430,7 @@ public class Settings implements ISettings
 		return enabledSigns;
 	}
 
-	private List<EssentialsSign> getEnabledSigns()
+	private List<EssentialsSign> _getEnabledSigns()
 	{
 		List<EssentialsSign> newSigns = new ArrayList<EssentialsSign>();
 
@@ -416,6 +441,11 @@ public class Settings implements ISettings
 			{
 				continue;
 			}
+			if (signName.equals("COLOR") || signName.equals("COLOUR"))
+			{
+				signsEnabled = true;
+				continue;
+			}
 			try
 			{
 				newSigns.add(Signs.valueOf(signName).getSign());
@@ -423,7 +453,9 @@ public class Settings implements ISettings
 			catch (Exception ex)
 			{
 				logger.log(Level.SEVERE, _("unknownItemInList", signName, "enabledSigns"));
+				continue;
 			}
+			signsEnabled = true;
 		}
 		return newSigns;
 	}
@@ -559,7 +591,7 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("economy-log-enabled", false);
 	}
-	
+
 	@Override
 	public boolean isEcoLogUpdateEnabled()
 	{
@@ -576,6 +608,12 @@ public class Settings implements ISettings
 	public boolean changeDisplayName()
 	{
 		return config.getBoolean("change-displayname", true);
+	}
+
+	@Override
+	public boolean changePlayerListName()
+	{
+		return config.getBoolean("change-playerlist", false);
 	}
 
 	@Override
@@ -646,7 +684,7 @@ public class Settings implements ISettings
 	}
 
 	@Override
-	public boolean getIsWorldTeleportPermissions()
+	public boolean isWorldTeleportPermissions()
 	{
 		return config.getBoolean("world-teleport-permissions", false);
 	}
@@ -694,5 +732,23 @@ public class Settings implements ISettings
 	public long getTpaAcceptCancellation()
 	{
 		return config.getLong("tpa-accept-cancellation", 0);
+	}
+
+	@Override
+	public boolean isMetricsEnabled()
+	{
+		return metricsEnabled;
+	}
+
+	@Override
+	public void setMetricsEnabled(boolean metricsEnabled)
+	{
+		this.metricsEnabled = metricsEnabled;
+	}
+
+	@Override
+	public long getTeleportInvulnerability()
+	{
+		return config.getLong("teleport-invulnerability", 0) * 1000;
 	}
 }

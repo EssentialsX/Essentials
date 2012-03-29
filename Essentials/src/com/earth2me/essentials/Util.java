@@ -293,7 +293,7 @@ public class Util
 		while (isBlockUnsafe(world, x, y, z))
 		{
 			y += 1;
-			if (y >= 127)
+			if (y >= world.getHighestBlockYAt(x, z))
 			{
 				x += 1;
 				break;
@@ -304,8 +304,8 @@ public class Util
 			y -= 1;
 			if (y <= 1)
 			{
-				y = 127;
 				x += 1;
+				y = world.getHighestBlockYAt(x, z);
 				if (x - 32 > loc.getBlockX())
 				{
 					throw new Exception(_("holeInFloor"));
@@ -422,16 +422,26 @@ public class Util
 		}
 		return is;
 	}
-	private static DecimalFormat df = new DecimalFormat("#0.00", DecimalFormatSymbols.getInstance(Locale.US));
+	private static DecimalFormat dFormat = new DecimalFormat("#0.00", DecimalFormatSymbols.getInstance(Locale.US));
 
-	public static String formatCurrency(final double value, final IEssentials ess)
+	public static String formatAsCurrency(final double value)
 	{
-		String str = ess.getSettings().getCurrencySymbol() + df.format(value);
+		String str = dFormat.format(value);
 		if (str.endsWith(".00"))
 		{
 			str = str.substring(0, str.length() - 3);
 		}
 		return str;
+	}
+
+	public static String displayCurrency(final double value, final IEssentials ess)
+	{
+		return _("currency", ess.getSettings().getCurrencySymbol(), formatAsCurrency(value));
+	}
+
+	public static String shortCurrency(final double value, final IEssentials ess)
+	{
+		return ess.getSettings().getCurrencySymbol() + formatAsCurrency(value);
 	}
 
 	public static double roundDouble(final double d)
@@ -485,26 +495,103 @@ public class Util
 		}
 		return buf.toString();
 	}
-	private static transient final Pattern VANILLA_COLOR_PATTERN = Pattern.compile("\u00A7+[0-9A-FKa-fk]");
-	private static transient final Pattern EASY_COLOR_PATTERN = Pattern.compile("&([0-9a-fk])");
+	private static transient final Pattern URL_PATTERN = Pattern.compile("((?:(?:https?)://)?[\\w-_\\.]{2,})\\.([a-z]{2,3}(?:/\\S+)?)");
+	private static transient final Pattern VANILLA_PATTERN = Pattern.compile("\u00A7+[0-9A-FK-ORa-fk-or]");
+	private static transient final Pattern REPLACE_PATTERN = Pattern.compile("&([0-9a-fk-or])");
+	private static transient final Pattern VANILLA_COLOR_PATTERN = Pattern.compile("\u00A7+[0-9A-Fa-f]");
+	private static transient final Pattern VANILLA_MAGIC_PATTERN = Pattern.compile("\u00A7+[Kk]");
+	private static transient final Pattern VANILLA_FORMAT_PATTERN = Pattern.compile("\u00A7+[L-ORl-or]");
+	private static transient final Pattern REPLACE_COLOR_PATTERN = Pattern.compile("&([0-9a-f])");
+	private static transient final Pattern REPLACE_MAGIC_PATTERN = Pattern.compile("&(k)");
+	private static transient final Pattern REPLACE_FORMAT_PATTERN = Pattern.compile("&([l-or])");
 
-	public static String stripColor(final String input)
+	public static String stripFormat(final String input)
 	{
 		if (input == null)
 		{
 			return null;
 		}
-
-		return VANILLA_COLOR_PATTERN.matcher(input).replaceAll("");
+		return VANILLA_PATTERN.matcher(input).replaceAll("");
 	}
 
-	public static String replaceColor(final String input)
+	public static String replaceFormat(final String input)
 	{
 		if (input == null)
 		{
 			return null;
 		}
+		return REPLACE_PATTERN.matcher(input).replaceAll("\u00a7$1");
+	}
 
-		return EASY_COLOR_PATTERN.matcher(input).replaceAll("\u00a7$1");
+	public static String blockURL(final String input)
+	{
+		if (input == null)
+		{
+			return null;
+		}
+		String text = URL_PATTERN.matcher(input).replaceAll("$1 $2");
+		while (URL_PATTERN.matcher(text).find())
+		{
+			text = URL_PATTERN.matcher(text).replaceAll("$1 $2");
+		}
+		return text;
+	}
+
+	public static String formatString(final IUser user, final String permBase, final String input)
+	{
+		if (input == null)
+		{
+			return null;
+		}
+		String message;
+		if (user.isAuthorized(permBase + ".color"))
+		{
+			message = Util.replaceColor(input, REPLACE_COLOR_PATTERN);
+		}
+		else
+		{
+			message = Util.stripColor(input, VANILLA_COLOR_PATTERN);
+		}
+		if (user.isAuthorized(permBase + ".magic"))
+		{
+			message = Util.replaceColor(message, REPLACE_MAGIC_PATTERN);
+		}
+		else
+		{
+			message = Util.stripColor(message, VANILLA_MAGIC_PATTERN);
+		}
+		if (user.isAuthorized(permBase + ".format"))
+		{
+			message = Util.replaceColor(message, REPLACE_FORMAT_PATTERN);
+		}
+		else
+		{
+			message = Util.stripColor(message, VANILLA_FORMAT_PATTERN);
+		}
+		return message;
+	}
+
+	public static String formatMessage(final IUser user, final String permBase, final String input)
+	{
+		if (input == null)
+		{
+			return null;
+		}
+		String message = formatString(user, permBase, input);
+		if (!user.isAuthorized(permBase + ".url"))
+		{
+			message = Util.blockURL(message);
+		}
+		return message;
+	}
+
+	private static String stripColor(final String input, final Pattern pattern)
+	{
+		return pattern.matcher(input).replaceAll("");
+	}
+
+	private static String replaceColor(final String input, final Pattern pattern)
+	{
+		return pattern.matcher(input).replaceAll("\u00a7$1");
 	}
 }
