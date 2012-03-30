@@ -382,6 +382,7 @@ public class Settings implements ISettings
 		config.load();
 		noGodWorlds = new HashSet<String>(config.getStringList("no-god-in-worlds"));
 		enabledSigns = _getEnabledSigns();
+		teleportInvulnerability = _isTeleportInvulnerability();
 		itemSpawnBl = _getItemSpawnBlacklist();
 		kits = _getKits();
 		chatFormats.clear();
@@ -745,10 +746,23 @@ public class Settings implements ISettings
 	{
 		this.metricsEnabled = metricsEnabled;
 	}
+	
+	private boolean teleportInvulnerability;
 
 	@Override
 	public long getTeleportInvulnerability()
 	{
 		return config.getLong("teleport-invulnerability", 0) * 1000;
+	}
+	
+	private boolean _isTeleportInvulnerability()
+	{
+		return (config.getLong("teleport-invulnerability", 0) > 0);
+	}
+	
+	@Override
+	public boolean isTeleportInvulnerability()
+	{
+		return teleportInvulnerability;
 	}
 }

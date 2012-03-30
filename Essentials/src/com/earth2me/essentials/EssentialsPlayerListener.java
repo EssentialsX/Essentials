@@ -227,14 +227,21 @@ public class EssentialsPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerTeleport(final PlayerTeleportEvent event)
 	{
-		//TODO: Don't fetch user unless one of these features are enabled.
-		final User user = ess.getUser(event.getPlayer());
-		//There is TeleportCause.COMMMAND but plugins have to actively pass the cause in on their teleports.
-		if ((event.getCause() == TeleportCause.PLUGIN || event.getCause() == TeleportCause.COMMAND) && ess.getSettings().registerBackInListener())
+		boolean backListener = ess.getSettings().registerBackInListener();
+		boolean teleportInvulnerability = ess.getSettings().isTeleportInvulnerability();
+		if (backListener || teleportInvulnerability)
 		{
-			user.setLastLocation();
+			final User user = ess.getUser(event.getPlayer());
+			//There is TeleportCause.COMMMAND but plugins have to actively pass the cause in on their teleports.
+			if (backListener && (event.getCause() == TeleportCause.PLUGIN || event.getCause() == TeleportCause.COMMAND))
+			{
+				user.setLastLocation();
+			}
+			if (teleportInvulnerability)
+			{
+				user.enableInvulnerabilityAfterTeleport();
+			}
 		}
-		user.enableInvulnerabilityAfterTeleport();
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -309,8 +316,6 @@ public class EssentialsPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerInteract(final PlayerInteractEvent event)
 	{
-		final User user = ess.getUser(event.getPlayer());
-		user.updateActivity(true);
 		switch (event.getAction())
 		{
 		case RIGHT_CLICK_BLOCK:
@@ -323,11 +328,15 @@ public class EssentialsPlayerListener implements Listener
 				event.getPlayer().setBedSpawnLocation(event.getClickedBlock().getLocation());
 			}
 			break;
-		case LEFT_CLICK_BLOCK:
 		case LEFT_CLICK_AIR:
-			if (user.hasPowerTools() && user.arePowerToolsEnabled() && usePowertools(user, event.getItem()))
+		case LEFT_CLICK_BLOCK:
+			if (event.getItem() != null && event.getMaterial() != Material.AIR)
 			{
-				event.setCancelled(true);
+				final User user = ess.getUser(event.getPlayer());
+				if (user.hasPowerTools() && user.arePowerToolsEnabled() && usePowertools(user, event.getItem().getTypeId()))
+				{
+					event.setCancelled(true);
+				}
 			}
 			break;
 		default:
@@ -335,13 +344,8 @@ public class EssentialsPlayerListener implements Listener
 		}
 	}
 
-	private boolean usePowertools(final User user, final ItemStack is)
+	private boolean usePowertools(final User user, final int id)
 	{
-		int id;
-		if (is == null || (id = is.getTypeId()) == 0)
-		{
-			return false;
-		}
 		final List<String> commandList = user.getPowertool(id);
 		if (commandList == null || commandList.isEmpty())
 		{
@@ -351,9 +355,8 @@ public class EssentialsPlayerListener implements Listener
 		// We need to loop through each command and execute
 		for (final String command : commandList)
 		{
-			if (command.matches(".*\\{player\\}.*"))
+			if (command.contains("{player}"))
 			{
-				//user.sendMessage("Click a player to use this command");
 				continue;
 			}
 			else if (command.startsWith("c:"))

@@ -626,7 +626,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			teleportInvulnerabilityTimestamp = 0;
 		}
 	}
-	
+
 	public boolean hasInvulnerabilityAfterTeleport()
 	{
 		return teleportInvulnerabilityTimestamp != 0 && teleportInvulnerabilityTimestamp >= System.currentTimeMillis();
