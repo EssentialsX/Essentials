@@ -28,6 +28,12 @@ public class BOSE6 implements Method
 	{
 		return "BOSEconomy";
 	}
+	
+	@Override
+	public String getLongName()
+	{
+		return  getName();
+	}
 
 	@Override
 	public String getVersion()

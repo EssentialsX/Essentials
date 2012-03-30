@@ -34,8 +34,18 @@ public class VaultEco implements Method
 	@Override
 	public String getName()
 	{
-
-		return this.vault.getDescription().getName().concat(" - Economy: ").concat(economy == null ? "NoEco" : economy.getName());
+		return this.vault.getDescription().getName();
+	}
+	
+	public String getEconomy()
+	{
+		return economy == null ? "NoEco" : economy.getName();
+	}
+	
+	@Override
+	public String getLongName()
+	{
+		return getName().concat(" - Economy: ").concat(getEconomy());
 	}
 
 	@Override

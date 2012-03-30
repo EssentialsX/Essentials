@@ -33,6 +33,13 @@ public interface Method
 	 * @return <code>String</code> Plugin name.
 	 */
 	public String getName();
+	
+	/**
+	 * Returns the reported name of this method.
+	 *
+	 * @return <code>String</code> Plugin name.
+	 */
+	public String getLongName();
 
 	/**
 	 * Returns the actual version of this method.

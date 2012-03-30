@@ -30,6 +30,12 @@ public class iCo6 implements Method
 	{
 		return "iConomy";
 	}
+	
+	@Override
+	public String getLongName()
+	{
+		return  getName();
+	}
 
 	@Override
 	public String getVersion()

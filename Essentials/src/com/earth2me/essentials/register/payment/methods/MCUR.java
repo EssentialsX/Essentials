@@ -28,6 +28,12 @@ public class MCUR implements Method
 	{
 		return "MultiCurrency";
 	}
+	
+	@Override
+	public String getLongName()
+	{
+		return  getName();
+	}
 
 	@Override
 	public String getVersion()

@@ -4,6 +4,7 @@ import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.metrics.Metrics.Graph;
 import com.earth2me.essentials.metrics.Metrics.Plotter;
 import com.earth2me.essentials.register.payment.Method;
+import com.earth2me.essentials.register.payment.methods.VaultEco;
 import java.util.Locale;
 import java.util.logging.Level;
 
@@ -150,11 +151,18 @@ public class MetricsStarter implements Runnable
 			final Method method = ess.getPaymentMethod().getMethod();
 			if (method != null)
 			{
-				String version = method.getVersion();
-				final int dashPosition = version.indexOf('-');
-				if (dashPosition > 0)
-				{
-					version = version.substring(0, dashPosition);
+				String version;
+				if (method instanceof VaultEco) {
+					
+					version = ((VaultEco)method).getEconomy();
+				}
+				else {
+					version = method.getVersion();
+					final int dashPosition = version.indexOf('-');
+					if (dashPosition > 0)
+					{
+						version = version.substring(0, dashPosition);
+					}
 				}
 				depGraph.addPlotter(new SimplePlotter(method.getName() + " " + version));
 			}

@@ -31,6 +31,12 @@ public class iCo5 implements Method
 	{
 		return "iConomy";
 	}
+	
+	@Override
+	public String getLongName()
+	{
+		return  getName();
+	}
 
 	@Override
 	public String getVersion()
