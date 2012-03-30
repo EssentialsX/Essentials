@@ -152,11 +152,12 @@ public class MetricsStarter implements Runnable
 			if (method != null)
 			{
 				String version;
-				if (method instanceof VaultEco) {
-					
+				if (method instanceof VaultEco)
+				{
 					version = ((VaultEco)method).getEconomy();
 				}
-				else {
+				else
+				{
 					version = method.getVersion();
 					final int dashPosition = version.indexOf('-');
 					if (dashPosition > 0)

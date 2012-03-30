@@ -9,9 +9,7 @@ import org.bukkit.plugin.Plugin;
 /**
  * MultiCurrency Method implementation.
  *
- * @author Acrobot
- * @copyright (c) 2011
- * @license AOL license <http://aol.nexua.org>
+ * @author Acrobot @copyright (c) 2011 @license AOL license <http://aol.nexua.org>
  */
 public class MCUR implements Method
 {
@@ -28,11 +26,11 @@ public class MCUR implements Method
 	{
 		return "MultiCurrency";
 	}
-	
+
 	@Override
 	public String getLongName()
 	{
-		return  getName();
+		return getName();
 	}
 
 	@Override

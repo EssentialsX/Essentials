@@ -8,9 +8,8 @@ import org.bukkit.plugin.Plugin;
 /**
  * BOSEconomy 6 Implementation of Method
  *
- * @author Nijikokun <nijikokun@shortmail.com> (@nijikokun)
- * @copyright (c) 2011
- * @license AOL license <http://aol.nexua.org>
+ * @author Nijikokun <nijikokun@shortmail.com> (@nijikokun) @copyright (c) 2011 @license AOL license
+ * <http://aol.nexua.org>
  */
 @SuppressWarnings("deprecation")
 public class BOSE6 implements Method
@@ -28,11 +27,11 @@ public class BOSE6 implements Method
 	{
 		return "BOSEconomy";
 	}
-	
+
 	@Override
 	public String getLongName()
 	{
-		return  getName();
+		return getName();
 	}
 
 	@Override
