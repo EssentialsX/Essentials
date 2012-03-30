@@ -152,8 +152,11 @@ player-commands:
   - signs.use.balance
   - signs.use.buy
   - signs.use.disposal
+  - signs.use.enchant
   - signs.use.free
+  - signs.use.gamemode  
   - signs.use.heal
+  - signs.use.kit
   - signs.use.mail
   - signs.use.protection
   - signs.use.sell
