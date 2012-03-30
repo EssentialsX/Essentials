@@ -50,7 +50,9 @@ public class Commandban extends EssentialsCommand
 		else
 		{
 			banReason = _("defaultBanReason");
+			user.setBanReason("");
 		}
+		
 		user.setBanned(true);
 		user.kickPlayer(banReason);
 		final String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
