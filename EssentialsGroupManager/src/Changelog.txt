@@ -157,3 +157,4 @@ v 1.9:
 	- Update GlobalGroups.yml for new/changed Towny permission nodes.
 	- Stop attempting to push empty permissions when players edit the yml's incorrectly.
 	- Catch errors caused by bad indentation in yml's.
+	- Force remove player attachments on disconnect, and tidyup during player join in case of any errors. Fixes a bug of losing permissions.
