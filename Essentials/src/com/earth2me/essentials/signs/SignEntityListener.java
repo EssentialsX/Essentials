@@ -24,8 +24,8 @@ public class SignEntityListener implements Listener
 	{
 		for (Block block : event.blockList())
 		{
-			if (((block.getType() == Material.WALL_SIGN
-				  || block.getType() == Material.SIGN_POST)
+			if (((block.getTypeId() == Material.WALL_SIGN.getId()
+				  || block.getTypeId() == Material.SIGN_POST.getId())
 				 && EssentialsSign.isValidSign(new EssentialsSign.BlockSign(block)))
 				|| EssentialsSign.checkIfBlockBreaksSigns(block))
 			{
@@ -52,8 +52,8 @@ public class SignEntityListener implements Listener
 		}
 
 		final Block block = event.getBlock();
-		if (((block.getType() == Material.WALL_SIGN
-			  || block.getType() == Material.SIGN_POST)
+		if (((block.getTypeId() == Material.WALL_SIGN.getId()
+			  || block.getTypeId() == Material.SIGN_POST.getId())
 			 && EssentialsSign.isValidSign(new EssentialsSign.BlockSign(block)))
 			|| EssentialsSign.checkIfBlockBreaksSigns(block))
 		{

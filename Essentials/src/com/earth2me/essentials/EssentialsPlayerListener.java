@@ -323,7 +323,7 @@ public class EssentialsPlayerListener implements Listener
 			{
 				return;
 			}
-			if (event.getClickedBlock().getType() == Material.BED_BLOCK && ess.getSettings().getUpdateBedAtDaytime())
+			if (event.getClickedBlock().getTypeId() == Material.BED_BLOCK.getId() && ess.getSettings().getUpdateBedAtDaytime())
 			{
 				event.getPlayer().setBedSpawnLocation(event.getClickedBlock().getLocation());
 			}

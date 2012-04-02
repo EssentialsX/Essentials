@@ -34,7 +34,8 @@ public class SignPlayerListener implements Listener
 			return;
 		}
 
-		if (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN)
+		final int mat = block.getTypeId();
+		if (mat == Material.SIGN_POST.getId() || mat == Material.WALL_SIGN.getId())
 		{
 			if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
 			{

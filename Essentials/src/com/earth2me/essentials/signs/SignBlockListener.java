@@ -19,6 +19,8 @@ public class SignBlockListener implements Listener
 {
 	private final transient IEssentials ess;
 	private final static Logger LOGGER = Logger.getLogger("Minecraft");
+	private final static int WALL_SIGN = Material.WALL_SIGN.getId();
+	private final static int SIGN_POST = Material.SIGN_POST.getId();
 
 	public SignBlockListener(IEssentials ess)
 	{
@@ -42,7 +44,7 @@ public class SignBlockListener implements Listener
 	public boolean protectSignsAndBlocks(final Block block, final Player player)
 	{
 		final int mat = block.getTypeId();
-		if (mat == Material.SIGN_POST.getId() || mat == Material.WALL_SIGN.getId())
+		if (mat == SIGN_POST || mat == WALL_SIGN)
 		{
 			final Sign csign = (Sign)block.getState();
 
@@ -116,16 +118,16 @@ public class SignBlockListener implements Listener
 		}
 
 		final Block against = event.getBlockAgainst();
-		if ((against.getType() == Material.WALL_SIGN
-			 || against.getType() == Material.SIGN_POST)
+		if ((against.getTypeId() == WALL_SIGN
+			 || against.getTypeId() == SIGN_POST)
 			&& EssentialsSign.isValidSign(new EssentialsSign.BlockSign(against)))
 		{
 			event.setCancelled(true);
 			return;
 		}
 		final Block block = event.getBlock();
-		if (block.getType() == Material.WALL_SIGN
-			|| block.getType() == Material.SIGN_POST)
+		if (block.getTypeId() == WALL_SIGN
+			|| block.getTypeId() == SIGN_POST)
 		{
 			return;
 		}
@@ -150,8 +152,8 @@ public class SignBlockListener implements Listener
 		}
 
 		final Block block = event.getBlock();
-		if (((block.getType() == Material.WALL_SIGN
-			  || block.getType() == Material.SIGN_POST)
+		if (((block.getTypeId() == WALL_SIGN
+			  || block.getTypeId() == SIGN_POST)
 			 && EssentialsSign.isValidSign(new EssentialsSign.BlockSign(block)))
 			|| EssentialsSign.checkIfBlockBreaksSigns(block))
 		{
@@ -178,8 +180,8 @@ public class SignBlockListener implements Listener
 		}
 
 		final Block block = event.getBlock();
-		if (((block.getType() == Material.WALL_SIGN
-			  || block.getType() == Material.SIGN_POST)
+		if (((block.getTypeId() == WALL_SIGN
+			  || block.getTypeId() == SIGN_POST)
 			 && EssentialsSign.isValidSign(new EssentialsSign.BlockSign(block)))
 			|| EssentialsSign.checkIfBlockBreaksSigns(block))
 		{
@@ -202,8 +204,8 @@ public class SignBlockListener implements Listener
 	{
 		for (Block block : event.getBlocks())
 		{
-			if (((block.getType() == Material.WALL_SIGN
-				  || block.getType() == Material.SIGN_POST)
+			if (((block.getTypeId() == WALL_SIGN
+				  || block.getTypeId() == SIGN_POST)
 				 && EssentialsSign.isValidSign(new EssentialsSign.BlockSign(block)))
 				|| EssentialsSign.checkIfBlockBreaksSigns(block))
 			{
@@ -228,8 +230,8 @@ public class SignBlockListener implements Listener
 		if (event.isSticky())
 		{
 			final Block block = event.getBlock();
-			if (((block.getType() == Material.WALL_SIGN
-				  || block.getType() == Material.SIGN_POST)
+			if (((block.getTypeId() == WALL_SIGN
+				  || block.getTypeId() == SIGN_POST)
 				 && EssentialsSign.isValidSign(new EssentialsSign.BlockSign(block)))
 				|| EssentialsSign.checkIfBlockBreaksSigns(block))
 			{
