@@ -383,6 +383,7 @@ public class Settings implements ISettings
 		noGodWorlds = new HashSet<String>(config.getStringList("no-god-in-worlds"));
 		enabledSigns = _getEnabledSigns();
 		teleportInvulnerability = _isTeleportInvulnerability();
+		disableItemPickupWhileAfk = _getDisableItemPickupWhileAfk();
 		itemSpawnBl = _getItemSpawnBlacklist();
 		kits = _getKits();
 		chatFormats.clear();
@@ -695,9 +696,15 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("register-back-in-listener", false);
 	}
+	private boolean disableItemPickupWhileAfk;
 
 	@Override
 	public boolean getDisableItemPickupWhileAfk()
+	{
+		return disableItemPickupWhileAfk;
+	}
+
+	private boolean _getDisableItemPickupWhileAfk()
 	{
 		return config.getBoolean("disable-item-pickup-while-afk", true);
 	}
@@ -746,7 +753,6 @@ public class Settings implements ISettings
 	{
 		this.metricsEnabled = metricsEnabled;
 	}
-	
 	private boolean teleportInvulnerability;
 
 	@Override
@@ -754,12 +760,12 @@ public class Settings implements ISettings
 	{
 		return config.getLong("teleport-invulnerability", 0) * 1000;
 	}
-	
+
 	private boolean _isTeleportInvulnerability()
 	{
 		return (config.getLong("teleport-invulnerability", 0) > 0);
 	}
-	
+
 	@Override
 	public boolean isTeleportInvulnerability()
 	{

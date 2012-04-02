@@ -25,10 +25,10 @@ public class SignBlockListener implements Listener
 		this.ess = ess;
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockBreak(final BlockBreakEvent event)
 	{
-		if (event.isCancelled() || ess.getSettings().areSignsDisabled())
+		if (ess.getSettings().areSignsDisabled())
 		{
 			return;
 		}
@@ -76,10 +76,10 @@ public class SignBlockListener implements Listener
 		return false;
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onSignChange(final SignChangeEvent event)
 	{
-		if (event.isCancelled() || ess.getSettings().areSignsDisabled())
+		if (ess.getSettings().areSignsDisabled())
 		{
 			return;
 		}
@@ -107,10 +107,10 @@ public class SignBlockListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockPlace(final BlockPlaceEvent event)
 	{
-		if (event.isCancelled() || ess.getSettings().areSignsDisabled())
+		if (ess.getSettings().areSignsDisabled())
 		{
 			return;
 		}
@@ -141,10 +141,10 @@ public class SignBlockListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockBurn(final BlockBurnEvent event)
 	{
-		if (event.isCancelled() || ess.getSettings().areSignsDisabled())
+		if (ess.getSettings().areSignsDisabled())
 		{
 			return;
 		}
@@ -169,10 +169,10 @@ public class SignBlockListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockIgnite(final BlockIgniteEvent event)
 	{
-		if (event.isCancelled() || ess.getSettings().areSignsDisabled())
+		if (ess.getSettings().areSignsDisabled())
 		{
 			return;
 		}

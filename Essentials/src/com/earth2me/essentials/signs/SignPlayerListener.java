@@ -20,10 +20,10 @@ public class SignPlayerListener implements Listener
 		this.ess = ess;
 	}
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerInteract(final PlayerInteractEvent event)
 	{
-		if (event.isCancelled() || ess.getSettings().areSignsDisabled())
+		if (ess.getSettings().areSignsDisabled())
 		{
 			return;
 		}
@@ -33,8 +33,8 @@ public class SignPlayerListener implements Listener
 		{
 			return;
 		}
-		final int mat = block.getTypeId();
-		if (mat == Material.SIGN_POST.getId() || mat == Material.WALL_SIGN.getId())
+
+		if (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN)
 		{
 			if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
 			{

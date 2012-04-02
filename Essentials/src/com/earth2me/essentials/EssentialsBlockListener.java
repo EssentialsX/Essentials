@@ -20,14 +20,14 @@ public class EssentialsBlockListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onBlockPlace(final BlockPlaceEvent event)
 	{
-		final User user = ess.getUser(event.getPlayer());
 		// Do not rely on getItemInHand();
-		// http://leaky.bukkit.org/issues/663
+		// http://leaky.bukkit.org/issues/663		
 		final ItemStack is = Util.convertBlockToItem(event.getBlockPlaced());
 		if (is == null)
 		{
 			return;
 		}
+		final User user = ess.getUser(event.getPlayer());
 		final boolean unlimitedForUser = user.hasUnlimited(is);
 		if (unlimitedForUser && user.getGameMode() == GameMode.SURVIVAL)
 		{
