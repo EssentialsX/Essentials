@@ -160,3 +160,4 @@ v 1.9:
 	- Force remove player attachments on disconnect, and tidyup during player join in case of any errors. Fixes a bug of losing permissions.
 	- Added a new permission node 'groupmanager.op'. This will cause players with this node to be treated as op's when
 	  using GroupManager commands (they will still require each commands permission node to use them).
+	- Prevent Null entries in group inheritance from throwing errors.
