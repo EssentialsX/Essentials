@@ -20,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 public class Trade
 {
 	private final transient String command;
+	private final transient String fallbackCommand;
 	private final transient Double money;
 	private final transient ItemStack itemStack;
 	private final transient Integer exp;
@@ -27,27 +28,33 @@ public class Trade
 
 	public Trade(final String command, final IEssentials ess)
 	{
-		this(command, null, null, null, ess);
+		this(command, null, null, null, null, ess);
+	}
+
+	public Trade(final String command, final String fallback, final IEssentials ess)
+	{
+		this(command, fallback, null, null, null, ess);
 	}
 
 	public Trade(final double money, final IEssentials ess)
 	{
-		this(null, money, null, null, ess);
+		this(null, null, money, null, null, ess);
 	}
 
 	public Trade(final ItemStack items, final IEssentials ess)
 	{
-		this(null, null, items, null, ess);
+		this(null, null, null, items, null, ess);
 	}
 
 	public Trade(final int exp, final IEssentials ess)
 	{
-		this(null, null, null, exp, ess);
+		this(null, null, null, null, exp, ess);
 	}
 
-	private Trade(final String command, final Double money, final ItemStack item, final Integer exp, final IEssentials ess)
+	private Trade(final String command, final String fallback, final Double money, final ItemStack item, final Integer exp, final IEssentials ess)
 	{
 		this.command = command;
+		this.fallbackCommand = fallback;
 		this.money = money;
 		this.itemStack = item;
 		this.exp = exp;
@@ -197,6 +204,10 @@ public class Trade
 			&& !user.isAuthorized("essentials.nocommandcost." + command))
 		{
 			cost = ess.getSettings().getCommandCost(command.charAt(0) == '/' ? command.substring(1) : command);
+			if (cost == 0.0 && fallbackCommand != null && !fallbackCommand.isEmpty())
+			{
+				cost = ess.getSettings().getCommandCost(fallbackCommand.charAt(0) == '/' ? fallbackCommand.substring(1) : fallbackCommand);
+			}
 		}
 		return cost;
 	}
