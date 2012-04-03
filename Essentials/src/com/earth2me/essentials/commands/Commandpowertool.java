@@ -51,26 +51,18 @@ public class Commandpowertool extends EssentialsCommand
 				{
 					user.sendMessage(_("powerToolList", Util.joinList(powertools), itemName));
 				}
-				return;
+				throw new NoChargeException();
 			}
 			if (command.startsWith("r:"))
 			{
-				try
+				command = command.substring(2);
+				if (!powertools.contains(command))
 				{
-					command = command.substring(2);
-					if (!powertools.contains(command))
-					{
-						throw new Exception(_("powerToolNoSuchCommandAssigned", command, itemName));
-					}
+					throw new Exception(_("powerToolNoSuchCommandAssigned", command, itemName));
+				}
 
-					powertools.remove(command);
-					user.sendMessage(_("powerToolRemove", command, itemName));
-				}
-				catch (Exception e)
-				{
-					user.sendMessage(e.getMessage());
-					return;
-				}
+				powertools.remove(command);
+				user.sendMessage(_("powerToolRemove", command, itemName));
 			}
 			else
 			{
@@ -85,7 +77,6 @@ public class Commandpowertool extends EssentialsCommand
 					{
 						throw new Exception(_("powerToolAlreadySet", command, itemName));
 					}
-
 				}
 				else if (powertools != null && !powertools.isEmpty())
 				{
@@ -110,7 +101,8 @@ public class Commandpowertool extends EssentialsCommand
 			user.sendMessage(_("powerToolRemoveAll", itemName));
 		}
 
-		if (!user.arePowerToolsEnabled()) {
+		if (!user.arePowerToolsEnabled())
+		{
 			user.setPowerToolsEnabled(true);
 			user.sendMessage(_("powerToolsEnabled"));
 		}
