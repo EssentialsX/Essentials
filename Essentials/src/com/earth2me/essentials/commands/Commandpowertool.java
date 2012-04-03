@@ -110,6 +110,10 @@ public class Commandpowertool extends EssentialsCommand
 			user.sendMessage(_("powerToolRemoveAll", itemName));
 		}
 
+		if (!user.arePowerToolsEnabled()) {
+			user.setPowerToolsEnabled(true);
+			user.sendMessage(_("powerToolsEnabled"));
+		}
 		user.setPowertool(itemStack, powertools);
 	}
 }
