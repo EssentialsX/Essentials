@@ -46,7 +46,7 @@ public class Commandseen extends EssentialsCommand
 				throw new Exception(_("playerNotFound"));
 			}
 			player.setDisplayNick();
-			sender.sendMessage(_("seenOffline", player.getDisplayName(), Util.formatDateDiff(player.getLastLogout())));
+			sender.sendMessage(_("seenOffline", player.getName(), Util.formatDateDiff(player.getLastLogout())));
 			if (player.isBanned())
 			{
 				sender.sendMessage(_("whoisBanned", show ? player.getBanReason() : _("true")));
