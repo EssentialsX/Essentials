@@ -187,10 +187,6 @@ public class Util
 			throw new Exception(_("illegalDate"));
 		}
 		Calendar c = new GregorianCalendar();
-		if (years > 10)
-		{
-			years = 10;
-		}
 		if (years > 0)
 		{
 			c.add(Calendar.YEAR, years * (future ? 1 : -1));
@@ -218,6 +214,12 @@ public class Util
 		if (seconds > 0)
 		{
 			c.add(Calendar.SECOND, seconds * (future ? 1 : -1));
+		}
+		
+		Calendar max = new GregorianCalendar();
+		max.add(Calendar.YEAR, 10);
+		if (c.after(max)) {
+			return max.getTimeInMillis();
 		}
 		return c.getTimeInMillis();
 	}
