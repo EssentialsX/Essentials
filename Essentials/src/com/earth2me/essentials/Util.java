@@ -80,11 +80,17 @@ public class Util
 			_("second"),
 			_("seconds")
 		};
+		int accuracy = 0;
 		for (int i = 0; i < types.length; i++)
 		{
+			if (accuracy > 2)
+			{
+				break;
+			}
 			int diff = dateDiff(types[i], fromDate, toDate, future);
 			if (diff > 0)
 			{
+				accuracy++;
 				sb.append(" ").append(diff).append(" ").append(names[i * 2 + (diff > 1 ? 1 : 0)]);
 			}
 		}
@@ -92,7 +98,7 @@ public class Util
 		{
 			return "now";
 		}
-		return sb.toString();
+		return sb.toString().trim();
 	}
 
 	private static int dateDiff(int type, Calendar fromDate, Calendar toDate, boolean future)
@@ -181,6 +187,10 @@ public class Util
 			throw new Exception(_("illegalDate"));
 		}
 		Calendar c = new GregorianCalendar();
+		if (years > 10)
+		{
+			years = 10;
+		}
 		if (years > 0)
 		{
 			c.add(Calendar.YEAR, years * (future ? 1 : -1));
@@ -250,7 +260,7 @@ public class Util
 		AIR_MATERIALS.add(Material.PUMPKIN_STEM.getId());
 		AIR_MATERIALS.add(Material.MELON_STEM.getId());
 		AIR_MATERIALS.add(Material.VINE.getId());
-		AIR_MATERIALS.add(Material.FENCE_GATE.getId());		
+		AIR_MATERIALS.add(Material.FENCE_GATE.getId());
 		AIR_MATERIALS.add(Material.WATER_LILY.getId());
 		AIR_MATERIALS.add(Material.NETHER_FENCE.getId());
 		AIR_MATERIALS.add(Material.NETHER_WARTS.getId());
