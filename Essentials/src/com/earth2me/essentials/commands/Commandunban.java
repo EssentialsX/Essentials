@@ -29,7 +29,7 @@ public class Commandunban extends EssentialsCommand
 		}
 		catch (NoSuchFieldException e)
 		{
-			throw new Exception(_("playerNotFound"));
+			throw new Exception(_("playerNotFound"), e);
 		}
 	}
 }

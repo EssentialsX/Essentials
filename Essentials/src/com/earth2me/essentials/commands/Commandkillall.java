@@ -61,7 +61,7 @@ public class Commandkillall extends EssentialsCommand
 				}
 				catch (NumberFormatException e)
 				{
-					throw new Exception(_("numberRequired"));
+					throw new Exception(_("numberRequired"), e);
 				}
 			}
 		}

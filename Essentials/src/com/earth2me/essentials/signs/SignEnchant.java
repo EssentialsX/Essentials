@@ -41,7 +41,7 @@ public class SignEnchant extends EssentialsSign
 		}
 		catch (NumberFormatException ex)
 		{
-			throw new SignException(ex.getMessage());
+			throw new SignException(ex.getMessage(), ex);
 		}
 		if (level < 1 || level > enchantment.getMaxLevel())
 		{
@@ -57,7 +57,7 @@ public class SignEnchant extends EssentialsSign
 		}
 		catch (Throwable ex)
 		{
-			throw new SignException(ex.getMessage());
+			throw new SignException(ex.getMessage(), ex);
 		}
 		getTrade(sign, 3, ess);
 		return true;

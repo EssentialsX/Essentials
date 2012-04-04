@@ -79,7 +79,7 @@ public class Commandptime extends EssentialsCommand
 			}
 			catch (NumberFormatException e)
 			{
-				throw new NotEnoughArgumentsException();
+				throw new NotEnoughArgumentsException(e);
 			}
 		}
 

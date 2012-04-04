@@ -103,7 +103,7 @@ public class Commandspawnmob extends EssentialsCommand
 		}
 		catch (MobException e)
 		{
-			throw new Exception(_("unableToSpawnMob"));
+			throw new Exception(_("unableToSpawnMob"), e);
 		}
 
 		if (mountType != null)
@@ -129,7 +129,7 @@ public class Commandspawnmob extends EssentialsCommand
 			}
 			catch (MobException e)
 			{
-				throw new Exception(_("unableToSpawnMob"));
+				throw new Exception(_("unableToSpawnMob"), e);
 			}
 			spawnedMob.setPassenger(spawnedMount);
 		}
@@ -164,7 +164,7 @@ public class Commandspawnmob extends EssentialsCommand
 						}
 						catch (MobException e)
 						{
-							throw new Exception(_("unableToSpawnMob"));
+							throw new Exception(_("unableToSpawnMob"), e);
 						}
 						spawnedMob.setPassenger(spawnedMount);
 					}

@@ -224,7 +224,7 @@ public class SignTrade extends EssentialsSign
 			}
 			catch (SignException e)
 			{
-				throw new SignException(_("tradeSignEmpty"));
+				throw new SignException(_("tradeSignEmpty"), e);
 			}
 		}
 

@@ -49,7 +49,7 @@ public class Commandtime extends EssentialsCommand
 		}
 		catch (NumberFormatException e)
 		{
-			throw new NotEnoughArgumentsException();
+			throw new NotEnoughArgumentsException(e);
 		}
 
 		setWorldsTime(sender, worlds, ticks);

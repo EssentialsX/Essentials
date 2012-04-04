@@ -5,6 +5,7 @@ import static com.earth2me.essentials.I18n.capitalCase;
 import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import java.util.*;
+import java.util.logging.Level;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
@@ -31,7 +32,7 @@ public class Kit
 		}
 		catch (Exception ex)
 		{
-			throw new Exception(_("kitError"));
+			throw new Exception(_("kitError"), ex);
 		}
 
 	}
@@ -76,7 +77,7 @@ public class Kit
 		catch (Exception e)
 		{
 			user.sendMessage(_("kitError2"));
-			throw new Exception(_("kitErrorHelp"));
+			throw new Exception(_("kitErrorHelp"),e);
 		}
 	}
 
@@ -104,6 +105,10 @@ public class Kit
 							continue;
 						}
 						final Enchantment enchantment = Enchantments.getByName(split[0]);
+						if (enchantment == null)
+						{
+							throw new Exception("Enchantment not found: " + split[0]);
+						}
 						int level;
 						if (split.length > 1)
 						{
@@ -113,7 +118,14 @@ public class Kit
 						{
 							level = enchantment.getMaxLevel();
 						}
-						stack.addEnchantment(enchantment, level);
+						try
+						{
+							stack.addEnchantment(enchantment, level);
+						}
+						catch (Exception ex)
+						{
+							throw new Exception("Enchantment " + enchantment.getName() + ": " + ex.getMessage(), ex);
+						}
 					}
 				}
 
@@ -141,7 +153,15 @@ public class Kit
 		catch (Exception e)
 		{
 			user.updateInventory();
-			throw new Exception(_("kitError2"));
+			if (ess.getSettings().isDebug())
+			{
+				ess.getLogger().log(Level.WARNING, e.getMessage());
+			}
+			else
+			{
+				ess.getLogger().log(Level.WARNING, e.getMessage());
+			}
+			throw new Exception(_("kitError2"), e);
 		}
 	}
 }
