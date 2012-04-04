@@ -453,6 +453,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public void setHidden(final boolean hidden)
 	{
 		this.hidden = hidden;
+		if (hidden == true)
+		{
+			setLastLogout(getLastOnlineActivity());
+		}
 	}
 
 	//Returns true if status expired during this check
