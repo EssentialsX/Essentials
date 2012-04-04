@@ -203,7 +203,7 @@ commands:
     aliases: [strike,smite,thor,shock,elightning,estrike,esmite,ethor,eshock]
   mail:
     description: Manages inter-player, intra-server mail.
-    usage: /<command> [read|clear|send [to] [message]]
+    usage: /<command> [read|clear|send [to] [message]|sendall [message]]
     aliases: [email]
   me:
     description: Describes an action in the context of the player.
