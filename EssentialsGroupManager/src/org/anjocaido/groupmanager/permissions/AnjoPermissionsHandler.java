@@ -144,7 +144,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 					// Perm doesn't already exists and there is no negation for it
 					// or It's a negated perm where a normal perm doesn't exists (don't allow inheritance to negate higher perms)
 					if ((!negated && !playerPermArray.contains(perm) && !playerPermArray.contains("-" + perm))
-						|| (negated && !playerPermArray.contains(perm.substring(1))))
+						|| (negated && !playerPermArray.contains(perm.substring(1)) && !playerPermArray.contains("-" + perm)))
 						playerPermArray.add(perm);
 				}
 			}
@@ -155,8 +155,10 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 		return playerPermArray;
 	}
 	
-	private Set<String> populatePerms (List<String>  perms, boolean includeChildren) {
+	private Set<String> populatePerms (List<String>  permsList, boolean includeChildren) {
 		
+		// Create a new array so it's modifiable.
+		List<String> perms = new ArrayList<String>(permsList);
 		Set<String> permArray = new HashSet<String>();
 		Boolean allPerms = false;
 		
@@ -164,20 +166,17 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 		if (perms.contains("*")) {
 			permArray.addAll(GroupManager.BukkitPermissions.getAllRegisteredPermissions(includeChildren));
 			allPerms = true;
+			perms.remove("*");
 		}
 			
 		for (String perm : perms) {
-
-			if (!perm.equalsIgnoreCase("*")) {
-				
+	
 				/**
 				 * all permission sets are passed here pre-sorted, alphabetically.
 				 * This means negated nodes will be processed before all permissions
 				 * other than *.
 				 */
-				boolean negated = false;
-				if (perm.startsWith("-"))
-					negated = true;
+				boolean negated = perm.startsWith("-");
 				
 				if (!permArray.contains(perm)) {
 					permArray.add(perm);
@@ -195,15 +194,16 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 						Map<String, Boolean> children = GroupManager.BukkitPermissions.getAllChildren((negated ? perm.substring(1) : perm), new HashSet<String>());
 	
 						if (children != null) {
-							if (negated || (negated && allPerms)) {
+							if (negated)
+								if (allPerms) {
 	
-								// Remove children of negated nodes
-								for (String child : children.keySet())
-									if (children.get(child))
-										if (permArray.contains(child))
-											permArray.remove(child);
+									// Remove children of negated nodes
+									for (String child : children.keySet())
+										if (children.get(child))
+											if (permArray.contains(child))
+												permArray.remove(child);
 	
-							} else if (!negated){
+							} else {
 	
 								// Add child nodes
 								for (String child : children.keySet())
@@ -214,7 +214,6 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 						}
 					}
 				}
-			}
 		}
 		
 		return permArray;
@@ -959,7 +958,8 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 			for (String sonName : now.getInherits()) {
 				Group son = ph.getGroup(sonName);
 				if (son != null && !alreadyVisited.contains(son)) {
-					stack.push(son);
+					// Add rather than push to retain inheritance order.
+					stack.add(son);
 					alreadyVisited.add(son);
 				}
 			}

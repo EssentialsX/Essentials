@@ -164,3 +164,8 @@ commands:
     description: Clear world selection. Next commands will work on your world.
     usage: /<command>
     permissions: groupmanager.manclear
+    
+Permissions:
+    groupmanager.op:
+        description: User is treated as an op when using the GroupManager commands.
+        default: false

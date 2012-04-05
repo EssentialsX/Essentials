@@ -563,10 +563,12 @@ public class WorldDataHolder {
             List<String> inheritedList = inheritance.get(groupKey);
             Group thisGroup = ph.getGroup(groupKey);
             for (String inheritedKey : inheritedList) {
-                Group inheritedGroup = ph.getGroup(inheritedKey);
-                if (thisGroup != null && inheritedGroup != null) {
-                    thisGroup.addInherits(inheritedGroup);
-                }
+            	if (inheritedKey != null) {
+	                Group inheritedGroup = ph.getGroup(inheritedKey);
+	                if (thisGroup != null && inheritedGroup != null) {
+	                    thisGroup.addInherits(inheritedGroup);
+	                }
+            	}
             }
         }
         

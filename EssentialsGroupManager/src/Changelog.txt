@@ -157,3 +157,10 @@ v 1.9:
 	- Update GlobalGroups.yml for new/changed Towny permission nodes.
 	- Stop attempting to push empty permissions when players edit the yml's incorrectly.
 	- Catch errors caused by bad indentation in yml's.
+	- Force remove player attachments on disconnect, and tidyup during player join in case of any errors. Fixes a bug of losing permissions.
+	- Added a new permission node 'groupmanager.op'. This will cause players with this node to be treated as op's when
+	  using GroupManager commands (they will still require each commands permission node to use them).
+	- Prevent Null entries in group inheritance from throwing errors.
+v 2.0:
+	- Fix GM reporting of permission inheritance to retain the correct order. Lower inheritance groups can no longer negate a higher groups permissions.
+	- Fix an error I caused trying to modify an unmodifiable list when parsing '*' permissions.
