@@ -163,3 +163,4 @@ v 1.9:
 	- Prevent Null entries in group inheritance from throwing errors.
 v 2.0:
 	- Fix GM reporting of permission inheritance to retain the correct order. Lower inheritance groups can no longer negate a higher groups permissions.
+	- Fix an error I caused trying to modify an unmodifiable list when parsing '*' permissions.

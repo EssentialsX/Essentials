@@ -155,8 +155,10 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 		return playerPermArray;
 	}
 	
-	private Set<String> populatePerms (List<String>  perms, boolean includeChildren) {
+	private Set<String> populatePerms (List<String>  permsList, boolean includeChildren) {
 		
+		// Create a new array so it's modifiable.
+		List<String> perms = new ArrayList<String>(permsList);
 		Set<String> permArray = new HashSet<String>();
 		Boolean allPerms = false;
 		
