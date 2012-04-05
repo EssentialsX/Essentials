@@ -161,3 +161,5 @@ v 1.9:
 	- Added a new permission node 'groupmanager.op'. This will cause players with this node to be treated as op's when
 	  using GroupManager commands (they will still require each commands permission node to use them).
 	- Prevent Null entries in group inheritance from throwing errors.
+v 2.0:
+	- Fix GM reporting of permission inheritance to retain the correct order. Lower inheritance groups can no longer negate a higher groups permissions.
