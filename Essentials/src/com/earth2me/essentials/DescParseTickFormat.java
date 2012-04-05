@@ -6,12 +6,11 @@ import java.util.*;
 
 
 /**
- * This utility class is used for converting between the ingame
- * time in ticks to ingame time as a friendly string.
- * Note that the time is INGAME.
- * 
+ * This utility class is used for converting between the ingame time in ticks to ingame time as a friendly string. Note
+ * that the time is INGAME.
+ *
  * http://www.minecraftwiki.net/wiki/Day/night_cycle
- * 
+ *
  * @author Olof Larsson
  */
 public final class DescParseTickFormat
@@ -156,30 +155,31 @@ public final class DescParseTickFormat
 		int hours = 0;
 		int minutes = 0;
 
-		desc = desc.toLowerCase(Locale.ENGLISH).replaceAll("[^0-9]", "");
+		desc = desc.toLowerCase(Locale.ENGLISH);
+		String parsetime = desc.replaceAll("[^0-9]", "");
 
-		if (desc.length() > 4)
+		if (parsetime.length() > 4)
 		{
 			throw new NumberFormatException();
 		}
 
-		if (desc.length() == 4)
+		if (parsetime.length() == 4)
 		{
-			hours += Integer.parseInt(desc.substring(0, 2));
-			minutes += Integer.parseInt(desc.substring(2, 4));
+			hours += Integer.parseInt(parsetime.substring(0, 2));
+			minutes += Integer.parseInt(parsetime.substring(2, 4));
 		}
-		else if (desc.length() == 3)
+		else if (parsetime.length() == 3)
 		{
-			hours += Integer.parseInt(desc.substring(0, 1));
-			minutes += Integer.parseInt(desc.substring(1, 3));
+			hours += Integer.parseInt(parsetime.substring(0, 1));
+			minutes += Integer.parseInt(parsetime.substring(1, 3));
 		}
-		else if (desc.length() == 2)
+		else if (parsetime.length() == 2)
 		{
-			hours += Integer.parseInt(desc.substring(0, 2));
+			hours += Integer.parseInt(parsetime.substring(0, 2));
 		}
-		else if (desc.length() == 1)
+		else if (parsetime.length() == 1)
 		{
-			hours += Integer.parseInt(desc.substring(0, 1));
+			hours += Integer.parseInt(parsetime.substring(0, 1));
 		}
 		else
 		{
