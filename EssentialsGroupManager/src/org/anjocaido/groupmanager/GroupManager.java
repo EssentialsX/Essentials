@@ -303,7 +303,7 @@ public class GroupManager extends JavaPlugin {
 			senderPlayer = (Player) sender;
 			senderUser = worldsHolder.getWorldData(senderPlayer).getUser(senderPlayer.getName());
 			senderGroup = senderUser.getGroup();
-			isOpOverride = (isOpOverride && senderPlayer.isOp());
+			isOpOverride = (isOpOverride && (senderPlayer.isOp() || worldsHolder.getWorldPermissions(senderPlayer).has(senderPlayer, "groupmanager.op")));
 
 			System.out.println("[PLAYER_COMMAND] " + senderPlayer.getName() + ": /" + commandLabel + " " + Tasks.join(args, " "));
 			if (isOpOverride || worldsHolder.getWorldPermissions(senderPlayer).has(senderPlayer, "groupmanager." + cmd.getName())) {

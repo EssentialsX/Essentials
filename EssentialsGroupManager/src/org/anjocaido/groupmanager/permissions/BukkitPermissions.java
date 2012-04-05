@@ -38,6 +38,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.permissions.Permission;
@@ -342,6 +343,18 @@ public class BukkitPermissions {
 		if (player != null)
 			this.updatePermissions(player, null);
 	}
+	
+	/**
+	 * Force remove any attachments
+	 * 
+	 * @param player
+	 */
+	private void removeAttachment(Player player) {
+		if (attachments.containsKey(player)) {
+			player.removeAttachment(attachments.get(player));
+			attachments.remove(player);
+		}
+	}
 
 	/**
 	 * Player events tracked to cause Superperms updates
@@ -355,6 +368,12 @@ public class BukkitPermissions {
 		public void onPlayerJoin(PlayerJoinEvent event) {
 			setPlayer_join(true);
 			Player player = event.getPlayer();
+			
+			/*
+			 * Tidy up any lose ends
+			 */
+			removeAttachment(player);
+			
 			// force GM to create the player if they are not already listed.
 			if (plugin.getWorldsHolder().getWorldData(player.getWorld().getName()).getUser(player.getName()) != null) {
 				setPlayer_join(false);
@@ -370,7 +389,25 @@ public class BukkitPermissions {
 
 		@EventHandler(priority = EventPriority.LOWEST)
 		public void onPlayerKick(PlayerKickEvent event) {
-			attachments.remove(event.getPlayer());
+			Player player = event.getPlayer();
+			
+			/*
+			 * force remove any attachments as bukkit may not
+			 */
+			removeAttachment(player);
+		}
+		
+		@EventHandler(priority = EventPriority.LOWEST)
+		public void onPlayerQuit(PlayerQuitEvent event) {
+			if (!GroupManager.isLoaded())
+				return;
+
+			Player player = event.getPlayer();
+			
+			/*
+			 * force remove any attachments as bukkit may not
+			 */
+			removeAttachment(player);
 		}
 	}
 
