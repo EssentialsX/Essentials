@@ -9,12 +9,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -38,10 +42,8 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 	{
 		enabled = true;
 		final PluginManager pluginManager = ess.getServer().getPluginManager();
-		final JailBlockListener blockListener = new JailBlockListener();
-		final JailPlayerListener playerListener = new JailPlayerListener();
+		final JailListener blockListener = new JailListener();
 		pluginManager.registerEvents(blockListener, ess);
-		pluginManager.registerEvents(playerListener, ess);
 	}
 
 	@Override
@@ -179,7 +181,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 	}
 
 
-	private class JailBlockListener implements Listener
+	private class JailListener implements Listener
 	{
 		@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 		public void onBlockBreak(final BlockBreakEvent event)
@@ -210,11 +212,22 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 				event.setCancelled(true);
 			}
 		}
-	}
 
+		@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+		public void onEntityDamageByEntity(final EntityDamageByEntityEvent event)
+		{
+			if (event.getCause() != DamageCause.ENTITY_ATTACK || event.getEntity().getType() != EntityType.PLAYER)
+			{
+				return;
+			}
+			final Entity damager = event.getDamager();
+			final User user = ess.getUser(damager);
+			if (user.isJailed())
+			{
+				event.setCancelled(true);
+			}
+		}
 
-	private class JailPlayerListener implements Listener
-	{
 		@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 		public void onPlayerInteract(final PlayerInteractEvent event)
 		{
