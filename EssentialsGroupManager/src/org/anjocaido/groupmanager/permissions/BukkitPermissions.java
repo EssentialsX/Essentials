@@ -351,7 +351,14 @@ public class BukkitPermissions {
 	 */
 	private void removeAttachment(Player player) {
 		if (attachments.containsKey(player)) {
-			player.removeAttachment(attachments.get(player));
+			try {
+				player.removeAttachment(attachments.get(player));
+			} catch (IllegalArgumentException e) {
+				/*
+				 * Failed to remove attachment
+				 * This usually means Bukkit no longer know of it.
+				 */
+			}
 			attachments.remove(player);
 		}
 	}
