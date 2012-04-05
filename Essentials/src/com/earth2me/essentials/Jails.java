@@ -221,10 +221,13 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 				return;
 			}
 			final Entity damager = event.getDamager();
-			final User user = ess.getUser(damager);
-			if (user.isJailed())
+			if (damager.getType() == EntityType.PLAYER)
 			{
-				event.setCancelled(true);
+				final User user = ess.getUser(damager);
+				if (user != null && user.isJailed())
+				{
+					event.setCancelled(true);
+				}
 			}
 		}
 
