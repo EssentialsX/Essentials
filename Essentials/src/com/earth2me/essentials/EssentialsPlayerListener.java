@@ -123,14 +123,25 @@ public class EssentialsPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
+		ess.scheduleAsyncDelayedTask(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				delayedJoin(event.getPlayer());
+			}
+		});
+	}
+
+	public void delayedJoin(final Player player)
+	{
 		ess.getBackup().onPlayerJoin();
-		final User user = ess.getUser(event.getPlayer());
-
+		final User user = ess.getUser(player);
 		user.setDisplayNick();
-		user.setLastLogin(System.currentTimeMillis());
-
-		user.updateActivity(false);
 		updateCompass(user);
+		user.setLastLogin(System.currentTimeMillis());
+		user.updateActivity(false);
+
 		if (user.isAuthorized("essentials.sleepingignored"))
 		{
 			user.setSleepingIgnored(true);
@@ -172,6 +183,27 @@ public class EssentialsPlayerListener implements Listener
 		}
 	}
 
+	private void updateCompass(final User user)
+	{
+		Location loc = user.getHome(user.getLocation());
+		if (loc == null)
+		{
+			loc = user.getBedSpawnLocation();
+		}
+		if (loc != null)
+		{
+			final Location updateLoc = loc;
+			ess.scheduleSyncDelayedTask(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					user.setCompassTarget(updateLoc);
+				}
+			});
+		}
+	}
+
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerLogin(final PlayerLoginEvent event)
 	{
@@ -209,19 +241,6 @@ public class EssentialsPlayerListener implements Listener
 			return;
 		}
 		event.allow();
-	}
-
-	private void updateCompass(final User user)
-	{
-		Location loc = user.getHome(user.getLocation());
-		if (loc == null)
-		{
-			loc = user.getBedSpawnLocation();
-		}
-		if (loc != null)
-		{
-			user.setCompassTarget(loc);
-		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
