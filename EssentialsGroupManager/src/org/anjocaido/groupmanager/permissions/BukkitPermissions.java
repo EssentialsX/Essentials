@@ -362,6 +362,15 @@ public class BukkitPermissions {
 			attachments.remove(player);
 		}
 	}
+	
+	/**
+	 * Remove all attachments in case of a restart or reload.
+	 */
+	public void removeAllAttachments() {
+		
+		for (Player player : attachments.keySet())
+			removeAttachment(player);
+	}
 
 	/**
 	 * Player events tracked to cause Superperms updates

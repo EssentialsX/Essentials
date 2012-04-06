@@ -106,6 +106,9 @@ public class GroupManager extends JavaPlugin {
 		}
 
 		WorldEvents = null;
+		
+		// Remove all attachments before clearing
+		BukkitPermissions.removeAllAttachments();
 		BukkitPermissions = null;
 
 		// EXAMPLE: Custom code, here we just output some info so we can check that
