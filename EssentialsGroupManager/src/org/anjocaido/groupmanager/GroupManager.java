@@ -1590,6 +1590,8 @@ public class GroupManager extends JavaPlugin {
 					 */
 					onDisable();
 					onEnable();
+					
+					sender.sendMessage("All settings and worlds were reloaded!");
 				}
 				
 				/**

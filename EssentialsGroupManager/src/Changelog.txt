@@ -169,3 +169,4 @@ v 2.0:
 	- Expand 'manwhois' to also list a users subgroups.
 	- Fix a concurrent modification error when removing all attachments.
 	- Better handling of errors in user and group yml's.
+	- Added missing confirmation message on '/manload'.
