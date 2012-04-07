@@ -20,6 +20,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -368,8 +369,11 @@ public class BukkitPermissions {
 	 */
 	public void removeAllAttachments() {
 		
-		for (Player player : attachments.keySet())
-			removeAttachment(player);
+		Iterator<Player> itr = attachments.keySet().iterator();
+		
+		while (itr.hasNext()){
+			removeAttachment(itr.next());
+		}
 	}
 
 	/**
