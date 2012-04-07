@@ -24,7 +24,7 @@ public class Commandkick extends EssentialsCommand
 		}
 
 		final User user = getPlayer(server, args, 0);
-		if (user.isAuthorized("essentials.kick.exempt"))
+		if (sender instanceof Player && user.isAuthorized("essentials.kick.exempt"))
 		{
 			throw new Exception(_("kickExempt"));
 		}
