@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.DescParseTickFormat;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import java.util.*;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -19,16 +20,22 @@ public class Commandtime extends EssentialsCommand
 	@Override
 	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
+		final List<String> argList = new ArrayList<String>(Arrays.asList(args));
+		if ((argList.remove("set") || argList.remove("add")) && Util.isInt(argList.get(0))) {
+				ess.getLogger().info("debug edited 0" + argList.get(0).toString());
+		}
+		final String[] validArgs = argList.toArray(new String[0]);	
+		
 		// Which World(s) are we interested in?
 		String worldSelector = null;
-		if (args.length == 2)
+		if (validArgs.length == 2)
 		{
-			worldSelector = args[1];
+			worldSelector = validArgs[1];
 		}
 		final Set<World> worlds = getWorlds(server, sender, worldSelector);
 
 		// If no arguments we are reading the time
-		if (args.length == 0)
+		if (validArgs.length == 0)
 		{
 			getWorldsTime(sender, worlds);
 			return;
@@ -45,7 +52,7 @@ public class Commandtime extends EssentialsCommand
 		long ticks;
 		try
 		{
-			ticks = DescParseTickFormat.parse(args[0]);
+			ticks = DescParseTickFormat.parse(validArgs[0]);
 		}
 		catch (NumberFormatException e)
 		{
