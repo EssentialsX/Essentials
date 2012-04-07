@@ -168,3 +168,4 @@ v 2.0:
 	- Remove all permission attachments when performing a manload or restart.
 	- Expand 'manwhois' to also list a users subgroups.
 	- Fix a concurrent modification error when removing all attachments.
+	- Better handling of errors in user and group yml's.
