@@ -180,7 +180,7 @@ commands:
     aliases: [ekickall]
   kit:
     description: Obtains the specified kit or views all available kits.
-    usage: /<command> [kit]
+    usage: /<command> [kit] [player]
     aliases: [ekit,kits,ekits]
   kill:
     description: Kills specified player.

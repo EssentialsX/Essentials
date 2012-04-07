@@ -23,7 +23,7 @@ public class Kit
 			final StringBuilder list = new StringBuilder();
 			for (String kiteItem : kits.getKeys(false))
 			{
-				if (user.isAuthorized("essentials.kit." + kiteItem.toLowerCase(Locale.ENGLISH)))
+				if (user == null || user.isAuthorized("essentials.kit." + kiteItem.toLowerCase(Locale.ENGLISH)))
 				{
 					list.append(" ").append(capitalCase(kiteItem));
 				}
