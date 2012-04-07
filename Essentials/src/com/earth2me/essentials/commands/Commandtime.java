@@ -21,11 +21,12 @@ public class Commandtime extends EssentialsCommand
 	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		final List<String> argList = new ArrayList<String>(Arrays.asList(args));
-		if ((argList.remove("set") || argList.remove("add")) && Util.isInt(argList.get(0))) {
-				ess.getLogger().info("debug edited 0" + argList.get(0).toString());
+		if ((argList.remove("set") || argList.remove("add")) && Util.isInt(argList.get(0)))
+		{
+			ess.getLogger().info("debug edited 0" + argList.get(0).toString());
 		}
-		final String[] validArgs = argList.toArray(new String[0]);	
-		
+		final String[] validArgs = argList.toArray(new String[0]);
+
 		// Which World(s) are we interested in?
 		String worldSelector = null;
 		if (validArgs.length == 2)

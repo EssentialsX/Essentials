@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import java.util.Locale;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -44,7 +45,12 @@ public class Commandgive extends EssentialsCommand
 
 		final User giveTo = getPlayer(server, args, 0);
 
-		if (args.length > 2 && Integer.parseInt(args[2]) > 0)
+		if (args.length > 3 && Util.isInt(args[2]) && Util.isInt(args[3]))
+		{
+			stack.setDurability(Short.parseShort(args[2]));
+			stack.setAmount(Integer.parseInt(args[3]));
+		}
+		else if (args.length > 2 && Integer.parseInt(args[2]) > 0)
 		{
 			stack.setAmount(Integer.parseInt(args[2]));
 		}
@@ -59,7 +65,7 @@ public class Commandgive extends EssentialsCommand
 
 		if (args.length > 3)
 		{
-			for (int i = 3; i < args.length; i++)
+			for (int i = Util.isInt(args[3]) ? 4 : 3; i < args.length; i++)
 			{
 				final String[] split = args[i].split("[:+',;.]", 2);
 				if (split.length < 1)
