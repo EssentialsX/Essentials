@@ -1398,6 +1398,16 @@ public class GroupManager extends JavaPlugin {
 				// Seems OK
 				sender.sendMessage(ChatColor.YELLOW + "Name: " + ChatColor.GREEN + auxUser.getName());
 				sender.sendMessage(ChatColor.YELLOW + "Group: " + ChatColor.GREEN + auxUser.getGroup().getName());
+				// Compile a list of subgroups
+				auxString = "";
+				for (String subGroup : auxUser.subGroupListStringCopy()) {
+					auxString += subGroup + ", ";
+				}
+				if (auxString.lastIndexOf(",") > 0) {
+					auxString = auxString.substring(0, auxString.lastIndexOf(","));
+					sender.sendMessage(ChatColor.YELLOW + "subgroups: " + auxString);
+				}
+				
 				sender.sendMessage(ChatColor.YELLOW + "Overloaded: " + ChatColor.GREEN + dataHolder.isOverloaded(auxUser.getName()));
 				auxGroup = dataHolder.surpassOverload(auxUser.getName()).getGroup();
 				if (!auxGroup.equals(auxUser.getGroup())) {

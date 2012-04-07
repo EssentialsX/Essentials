@@ -166,3 +166,4 @@ v 2.0:
 	- Fix an error I caused trying to modify an unmodifiable list when parsing '*' permissions.
 	- Don't throw errors when attempting to remove permission attachments (bukkit will have already removed it).
 	- Remove all permission attachments when performing a manload or restart.
+	- Expand 'manwhois' to also list a users subgroups.
