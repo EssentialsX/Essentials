@@ -53,7 +53,7 @@ public class SetExpFix
 	//Without this people would be able to use exp and then still sell it.
 	public static int getTotalExperience(final Player player)
 	{
-		int exp = (int) (getExpToLevel(player) * player.getExp());
+		int exp = (int)Math.round(getExpToLevel(player) * player.getExp());
 		int currentLevel = player.getLevel();
 		
 		while (currentLevel > 0) {			
