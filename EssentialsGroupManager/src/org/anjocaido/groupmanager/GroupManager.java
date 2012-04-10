@@ -14,6 +14,7 @@ import org.anjocaido.groupmanager.data.Group;
 import org.anjocaido.groupmanager.dataholder.OverloadedWorldHolder;
 import org.anjocaido.groupmanager.dataholder.WorldDataHolder;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,6 +61,9 @@ public class GroupManager extends JavaPlugin {
 	private Map<CommandSender, String> selectedWorlds = new HashMap<CommandSender, String>();
 	private WorldsHolder worldsHolder;
 	private boolean validateOnlinePlayer = true;
+	
+	private String lastError = "";
+	
 	/**
 	 * @return the validateOnlinePlayer
 	 */
@@ -108,8 +112,10 @@ public class GroupManager extends JavaPlugin {
 		WorldEvents = null;
 		
 		// Remove all attachments before clearing
-		BukkitPermissions.removeAllAttachments();
-		BukkitPermissions = null;
+		if (BukkitPermissions != null) {
+			BukkitPermissions.removeAllAttachments();
+			BukkitPermissions = null;
+		}
 
 		// EXAMPLE: Custom code, here we just output some info so we can check that
 		// all is well
@@ -118,53 +124,108 @@ public class GroupManager extends JavaPlugin {
 		GroupManager.logger.removeHandler(ch);
 	}
 
-	@Override
+	//@Override
 	public void onEnable() {
-		GroupManager.logger.setUseParentHandlers(false);
-		ch = new GMLoggerHandler();
-		GroupManager.logger.addHandler(ch);
-		logger.setLevel(Level.ALL);
+		
+		try {
+			lastError = "";
+			
+			GroupManager.logger.setUseParentHandlers(false);
+			ch = new GMLoggerHandler();
+			GroupManager.logger.addHandler(ch);
+			logger.setLevel(Level.ALL);
+	
+			// Create the backup folder, if it doesn't exist.
+			prepareFileFields();
+			// Load the config.yml
+			prepareConfig();
+			// Load the global groups
+			globalGroups = new GlobalGroups(this);
+			worldsHolder = new WorldsHolder(this);
+	
+	
+			PluginDescriptionFile pdfFile = this.getDescription();
+			if (worldsHolder == null) {
+				GroupManager.logger.severe("Can't enable " + pdfFile.getName() + " version " + pdfFile.getVersion() + ", bad loading!");
+				this.getServer().getPluginManager().disablePlugin(this);
+				throw new IllegalStateException("An error ocurred while loading GroupManager");
+			}
+	
+			// Set a few defaults (reloads)
+			setLoaded(false);
+			
+			// Initialize the world listener and bukkit permissions to handle
+			// events.
+			WorldEvents = new GMWorldListener(this);
+			BukkitPermissions = new BukkitPermissions(this);
+	
+			enableScheduler();
+	
+			/*
+			 * Schedule a Bukiit Permissions update for 1 tick later. All plugins
+			 * will be loaded by then
+			 */
+	
+			if (getServer().getScheduler().scheduleSyncDelayedTask(this, new BukkitPermsUpdateTask(), 1) == -1) {
+				GroupManager.logger.severe("Could not schedule superperms Update.");
+				setLoaded(true);
+			}
+	
+			System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
+			
+			// Register as a service
+			this.getServer().getServicesManager().register(WorldsHolder.class, this.worldsHolder, this, ServicePriority.Lowest);
+		} catch (Exception ex) {
+			
+			/*
+			 * Store the error and write to the log.
+			 */
+			saveErrorLog(ex);
 
-		// Create the backup folder, if it doesn't exist.
-		prepareFileFields();
-		// Load the config.yml
-		prepareConfig();
-		// Load the global groups
-		globalGroups = new GlobalGroups(this);
-		worldsHolder = new WorldsHolder(this);
+			/*
+			 * Throw an error so Bukkit knows about it.
+			 */
+			throw new IllegalArgumentException(ex.getMessage(),ex);
 
+		}
+	}
+	
+	/**
+	 * Write an error.log
+	 * 
+	 * @param ex
+	 */
+	private void saveErrorLog(Exception ex) {
+		
+		if (!getDataFolder().exists()) {
+            getDataFolder().mkdirs();
+        }
+		
+		lastError = ex.getMessage();
+		
+		GroupManager.logger.severe("===================================================");
+		GroupManager.logger.severe("= ERROR REPORT START =");
+		GroupManager.logger.severe("===================================================");
+		GroupManager.logger.severe("=== PLEASE COPY AND PASTE THE ERROR.LOG FROM THE ==");
+		GroupManager.logger.severe("= GROUPMANAGER FOLDER TO AN ESSENTIALS  DEVELOPER =");
+		GroupManager.logger.severe("===================================================");
+		GroupManager.logger.severe(lastError);			
+		GroupManager.logger.severe("===================================================");
+		GroupManager.logger.severe("= ERROR REPORT ENDED =");
+		GroupManager.logger.severe("===================================================");
 
-		PluginDescriptionFile pdfFile = this.getDescription();
-		if (worldsHolder == null) {
-			GroupManager.logger.severe("Can't enable " + pdfFile.getName() + " version " + pdfFile.getVersion() + ", bad loading!");
-			this.getServer().getPluginManager().disablePlugin(this);
-			throw new IllegalStateException("An error ocurred while loading GroupManager");
+		// Append this error to the error log.
+        try {
+        	String error = "=============================== GM ERROR LOG ===============================\n\n";
+        	error += Tasks.getStackTraceAsString(ex);
+        	error += "\n============================================================================\n";
+        	
+			Tasks.appendStringToFile(error, (getDataFolder() + System.getProperty("file.separator") + "ERROR.LOG"));
+		} catch (IOException e) {
+			// Failed to write file.
+			e.printStackTrace();
 		}
 
-		// Set a few defaults (reloads)
-		setLoaded(false);
-		
-		// Initialize the world listener and bukkit permissions to handle
-		// events.
-		WorldEvents = new GMWorldListener(this);
-		BukkitPermissions = new BukkitPermissions(this);
-
-		enableScheduler();
-
-		/*
-		 * Schedule a Bukiit Permissions update for 1 tick later. All plugins
-		 * will be loaded by then
-		 */
-
-		if (getServer().getScheduler().scheduleSyncDelayedTask(this, new BukkitPermsUpdateTask(), 1) == -1) {
-			GroupManager.logger.severe("Could not schedule superperms Update.");
-			setLoaded(true);
-		}
-
-		System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
-		
-		// Register as a service
-		this.getServer().getServicesManager().register(WorldsHolder.class, this.worldsHolder, this, ServicePriority.Lowest);
 	}
 
 	public static boolean isLoaded() {
@@ -300,10 +361,17 @@ public class GroupManager extends JavaPlugin {
 		Group senderGroup = null;
 		User senderUser = null;
 		boolean isOpOverride = config.isOpOverride();
+			
 
 		// DETERMINING PLAYER INFORMATION
 		if (sender instanceof Player) {
 			senderPlayer = (Player) sender;
+			
+			if (!lastError.isEmpty() && !commandLabel.equalsIgnoreCase("manload")) {
+				sender.sendMessage(ChatColor.RED + "All commands are locked due to an error. Check the log and then try a '/manload'.)");
+				return true;
+			}
+			
 			senderUser = worldsHolder.getWorldData(senderPlayer).getUser(senderPlayer.getName());
 			senderGroup = senderUser.getGroup();
 			isOpOverride = (isOpOverride && (senderPlayer.isOp() || worldsHolder.getWorldPermissions(senderPlayer).has(senderPlayer, "groupmanager.op")));
@@ -313,6 +381,12 @@ public class GroupManager extends JavaPlugin {
 				playerCanDo = true;
 			}
 		} else if (sender instanceof ConsoleCommandSender) {
+			
+			if (!lastError.isEmpty() && !commandLabel.equalsIgnoreCase("manload")) {
+				sender.sendMessage(ChatColor.RED + "All commands are locked due to an error. Check the log and then try a '/manload'.)");
+				return true;
+			}
+			
 			isConsole = true;
 		}
 
@@ -1560,10 +1634,17 @@ public class GroupManager extends JavaPlugin {
 				return true;
 
 			case manload:
+				
 				/**
 				 * Attempt to reload a specific world
 				 */
 				if (args.length > 0) {
+					
+					if (!lastError.isEmpty()) {
+						sender.sendMessage(ChatColor.RED + "All commands are locked due to an error. Check the log and then try a '/manload'.)");
+						return true;
+					}
+					
 					auxString = "";
 					for (int i = 0; i < args.length; i++) {
 						auxString += args[i];
@@ -1588,6 +1669,11 @@ public class GroupManager extends JavaPlugin {
 					/**
 					 * Reload all settings and data as no world was specified.
 					 */
+					
+					/*
+					 * Reset the last error as we are attempting a fresh load.
+					 */
+					lastError = "";
 					onDisable();
 					onEnable();
 					

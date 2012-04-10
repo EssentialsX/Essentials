@@ -170,3 +170,6 @@ v 2.0:
 	- Fix a concurrent modification error when removing all attachments.
 	- Better handling of errors in user and group yml's.
 	- Added missing confirmation message on '/manload'.
+	- Stop the error on shutdown if GM failed to load at startup.
+	- GroupManager will now generate it's own log (in the GM folder) to keep things tidy, but also to account of those players unable to find/access their server.log.
+	- Startup errors will now lock out ALL commands other than '/manload'
