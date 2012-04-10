@@ -457,9 +457,18 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player> <group> | optional [world])");
 					return false;
 				}
-				// Select the relevant world
-				dataHolder = worldsHolder.getWorldData((args.length == 3)? args[2]:Bukkit.getWorlds().get(0).getName());
-				permissionHandler = dataHolder.getPermissionsHandler();
+				
+				// Select the relevant world (if specified)
+				if (args.length == 3) {
+					dataHolder = worldsHolder.getWorldData(args[2]);
+					permissionHandler = dataHolder.getPermissionsHandler();
+				}
+				
+				// Validating state of sender
+				if (dataHolder == null || permissionHandler == null) {
+					if (!setDefaultWorldHandler(sender))
+						return true;
+				}
 				
 				if ((validateOnlinePlayer) && ((match = validatePlayer(args[0], sender)) == null)) {
 						return false;
