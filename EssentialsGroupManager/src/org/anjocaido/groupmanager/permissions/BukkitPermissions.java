@@ -357,7 +357,7 @@ public class BukkitPermissions {
 			} catch (IllegalArgumentException e) {
 				/*
 				 * Failed to remove attachment
-				 * This usually means Bukkit no longer know of it.
+				 * This usually means Bukkit no longer knows of it.
 				 */
 			}
 			attachments.remove(player);
@@ -372,8 +372,17 @@ public class BukkitPermissions {
 		Iterator<Player> itr = attachments.keySet().iterator();
 		
 		while (itr.hasNext()){
-			removeAttachment(itr.next());
+			Player player = itr.next();
+			try {
+				player.removeAttachment(attachments.get(player));
+			} catch (IllegalArgumentException e) {
+				/*
+				 * Failed to remove attachment
+				 * This usually means Bukkit no longer knows of it.
+				 */
+			}
 		}
+		attachments.clear();
 	}
 
 	/**
