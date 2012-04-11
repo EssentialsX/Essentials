@@ -809,12 +809,14 @@ public class WorldDataHolder {
 	        	String newLine = System.getProperty("line.separator");
 	        	
 	        	out.write("# Group inheritance" + newLine);
-	        	out.write("# any inherited groups prefixed with a g: are global groups" + newLine);
-	        	out.write("# These groups are defined in the globalgroups.yml" + newLine);
-	        	out.write("# and can be inherited in any worlds groups/users.yml." + newLine);
+	        	out.write("#" + newLine);
+	        	out.write("# Any inherited groups prefixed with a g: are global groups" + newLine);
+	        	out.write("# and are inherited from the GlobalGroups.yml." + newLine);
 	        	out.write("#" + newLine);
 	        	out.write("# Groups without the g: prefix are groups local to this world" + newLine);
-	        	out.write("# and defined in the this groups.yml file." + newLine);
+	        	out.write("# and are defined in the this groups.yml file." + newLine);
+	        	out.write("#" + newLine);
+	        	out.write("# Local group inheritances define your promotion tree when using 'manpromote/mandemote'" + newLine);
 	        	out.write(newLine);
 	        	
 	            yaml.dump(root, out);
