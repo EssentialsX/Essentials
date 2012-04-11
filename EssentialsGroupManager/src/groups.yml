@@ -1,10 +1,12 @@
 # Group inheritance
-# any inherited groups prefixed with a g: are global groups
-# These groups are defined in the globalgroups.yml
-# and can be inherited in any worlds groups/users.yml.
+#
+# Any inherited groups prefixed with a g: are global groups
+# and are inherited from the GlobalGroups.yml.
 #
 # Groups without the g: prefix are groups local to this world
-# and defined in the this groups.yml file.
+# and are defined in the this groups.yml file.
+#
+# Local group inheritances define your promotion tree when using 'manpromote/mandemote'
 
 groups:
   Default:
@@ -12,8 +14,10 @@ groups:
     permissions:
     - -bukkit.command.kill
     inheritance:
-    - g:essentials_default
+    - g:groupmanager_default
     - g:bukkit_default
+    - g:essentials_default
+    - g:towny_default
     info:
       prefix: '&e'
       build: false
@@ -34,9 +38,11 @@ groups:
     permissions: []
     inheritance:
     - builder
-    - g:essentials_moderator
+    - g:groupmanager_moderator
     - g:bukkit_moderator
+    - g:essentials_moderator
     - g:towny_moderator
+    - g:vanish_moderator
     info:
       prefix: '&5'
       build: true
@@ -46,9 +52,11 @@ groups:
     permissions: []
     inheritance:
     - moderator
-    - g:essentials_admin
+    - g:groupmanager_admin
     - g:bukkit_admin
+    - g:essentials_admin
     - g:towny_admin
+    - g:vanish_admin
     info:
       prefix: '&c'
       build: true
@@ -57,6 +65,7 @@ groups:
     default: false
     permissions:
     - '*'
+    - -vanish.*
     inheritance:
     - admin
     info:

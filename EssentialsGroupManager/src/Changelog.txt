@@ -164,3 +164,14 @@ v 1.9:
 v 2.0:
 	- Fix GM reporting of permission inheritance to retain the correct order. Lower inheritance groups can no longer negate a higher groups permissions.
 	- Fix an error I caused trying to modify an unmodifiable list when parsing '*' permissions.
+	- Don't throw errors when attempting to remove permission attachments (bukkit will have already removed it).
+	- Remove all permission attachments when performing a manload or restart.
+	- Expand 'manwhois' to also list a users subgroups.
+	- Fix a concurrent modification error when removing all attachments.
+	- Better handling of errors in user and group yml's.
+	- Added missing confirmation message on '/manload'.
+	- Stop the error on shutdown if GM failed to load at startup.
+	- GroupManager will now generate it's own log (in the GM folder) to keep things tidy, but also to account of those players unable to find/access their server.log.
+	- Startup errors will now lock out ALL commands other than '/manload'
+	- Fix 'manuadd' to use the default or selected world (via 'manselect'), if the world is not specified in the command.
+	- Expand GlobalGroups.yml and groups.yml to cover the VanishNoPacket plugin. Demonstrating how to negate and add nodes when using the '*' permission with inheritance.
