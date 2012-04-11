@@ -39,7 +39,7 @@ public class EssentialsConf extends YamlConfiguration
 		this.configFile = configFile;
 	}
 
-	public void load()
+	public synchronized void load()
 	{
 		configFile = configFile.getAbsoluteFile();
 		if (!configFile.getParentFile().exists())
@@ -356,7 +356,7 @@ public class EssentialsConf extends YamlConfiguration
 	}
 
 	@Override
-	public void save(final File file) throws IOException
+	public synchronized void save(final File file) throws IOException
 	{
 		if (file == null)
 		{
