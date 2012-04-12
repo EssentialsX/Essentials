@@ -459,160 +459,180 @@ public class WorldDataHolder {
 
         //PROCESS GROUPS FILE
         Map<String, List<String>> inheritance = new HashMap<String, List<String>>();
+
+        /*
+    	 * Fetch all child nodes under the 'groups' entry.
+    	 */
+        Map<String, Object> allGroupsNode = new HashMap<String, Object>();
+        
         try {
-        	/*
-        	 * Fetch all child nodes under the 'groups' entry.
-        	 */
-            Map<String, Object> allGroupsNode = (Map<String, Object>) groupsRootDataNode.get("groups");
-            Iterator<String> groupItr = allGroupsNode.keySet().iterator();
-        	String groupKey;
-        	Integer groupCount = 0;
-        	
-        	/*
-        	 * loop each group entry
-        	 * and read it's data.
-        	 */
-        	while (groupItr.hasNext()) {
-        		try {
-        			groupCount++;
-        			// Attempt to fetch the next group name.
-        			groupKey = groupItr.next();
-        		} catch (Exception e) {
-    				throw new IllegalArgumentException("Invalid node type for group entry (" + groupCount + ") in file: " + groupsFile.getPath());
-    			}
-        		
-        		/*
-        		 * Fetch this groups child nodes
-        		 */
-        		Map<String, Object> thisGroupNode = (Map<String, Object>) allGroupsNode.get(groupKey);
-        		/*
-        		 * Create a new group with this name
-        		 * in the assigned data source.
-        		 */
-                Group thisGrp = ph.createGroup(groupKey);
-                
-                if (thisGrp == null) {
-                    throw new IllegalArgumentException("I think this Group was declared more than once: " + groupKey + " in file: " + groupsFile.getPath());
+        	allGroupsNode = (Map<String, Object>) groupsRootDataNode.get("groups");
+        } catch (Exception ex) {
+            //ex.printStackTrace();
+            throw new IllegalArgumentException("Your " + groupsFile.getPath() + " file is invalid. See console for details.", ex);
+        }
+        
+        
+        Iterator<String> groupItr = allGroupsNode.keySet().iterator();
+    	String groupKey;
+    	Integer groupCount = 0;
+    	
+    	/*
+    	 * loop each group entry
+    	 * and read it's data.
+    	 */
+    	while (groupItr.hasNext()) {
+    		try {
+    			groupCount++;
+    			// Attempt to fetch the next group name.
+    			groupKey = groupItr.next();
+    		} catch (Exception ex) {
+				throw new IllegalArgumentException("Invalid group name for group entry (" + groupCount + ") in file: " + groupsFile.getPath(), ex);
+			}
+    		
+    		/*
+    		 * Fetch this groups child nodes
+    		 */
+    		Map<String, Object> thisGroupNode = new HashMap<String, Object>();
+    		
+    		try {
+    			thisGroupNode = (Map<String, Object>) allGroupsNode.get(groupKey);
+    		} catch (Exception ex) {
+				throw new IllegalArgumentException("Invalid child nodes for group '" + groupKey + "' in file: " + groupsFile.getPath(), ex);
+			}
+    		
+    		/*
+    		 * Create a new group with this name
+    		 * in the assigned data source.
+    		 */
+            Group thisGrp = ph.createGroup(groupKey);
+            
+            if (thisGrp == null) {
+                throw new IllegalArgumentException("I think this Group was declared more than once: " + groupKey + " in file: " + groupsFile.getPath());
+            }
+            
+            /*
+             * If no default node is found set it as false.
+             */
+            if (thisGroupNode.get("default") == null) {
+                thisGroupNode.put("default", false);
+            } else if ((Boolean.parseBoolean(thisGroupNode.get("default").toString()))) {
+            	/*
+            	 * Set this as the default group.
+            	 * Warn if some other group has already claimed that position.
+            	 */
+                if (ph.getDefaultGroup() != null) {
+                    GroupManager.logger.warning("The group " + thisGrp.getName() + " is claiming to be default where" + ph.getDefaultGroup().getName() + " already was.");
+                    GroupManager.logger.warning("Overriding first request for file: " + groupsFile.getPath());
                 }
-                /*
-                 * If no default node is found set it as false.
-                 */
-                if (thisGroupNode.get("default") == null) {
-                    thisGroupNode.put("default", false);
-                } else if ((Boolean.parseBoolean(thisGroupNode.get("default").toString()))) {
-                	/*
-                	 * Set this as the default group.
-                	 * Warn if some other group has already claimed that position.
-                	 */
-                    if (ph.getDefaultGroup() != null) {
-                        GroupManager.logger.warning("The group " + thisGrp.getName() + " is claiming to be default where" + ph.getDefaultGroup().getName() + " already was.");
-                        GroupManager.logger.warning("Overriding first request for file: " + groupsFile.getPath());
-                    }
-                    ph.setDefaultGroup(thisGrp);
-                }
-
-                //PERMISSIONS NODE
-                try {
-                	/*
-                	 * If no permissions node is found, or it's empty
-                	 * set an empty permission list
-                	 */
-	                if (thisGroupNode.get("permissions") == null) {
-	                    thisGroupNode.put("permissions", new ArrayList<String>());
-	                } else {
-	                	/*
-	                	 * There is a permission list Which seems to hold some data
-	                	 */
-		                if (thisGroupNode.get("permissions") instanceof List) {
-		                	/*
-		                	 * Check each entry and add it as a new permission.
-		                	 */
-		                    for (Object o : ((List) thisGroupNode.get("permissions"))) {
-		                    	try {
-		                    		/*
-		                    		 * Only add this permission if it's not empty.
-		                    		 */
-		                    		if (!thisGroupNode.get("permissions").toString().isEmpty())
-		                    			thisGrp.addPermission(o.toString());
-		                    	} catch (NullPointerException e) {
-		                    		// Ignore this entry as it's null. It can be safely dropped
-		                    	}
-		                    }
-		                } else if (thisGroupNode.get("permissions") instanceof String) {
-		                	/*
-		                	 * Only add this permission if it's not empty.
-		                	 */
-		                	if (!thisGroupNode.get("permissions").toString().isEmpty())
-		                		thisGrp.addPermission((String) thisGroupNode.get("permissions"));
-		                } else {
-		                    throw new IllegalArgumentException("Unknown type of permissions node(Should be String or List<String>) for group:  " + thisGrp.getName() + " in file: " + groupsFile.getPath());
-		                }
-		                /*
-		                 * Sort all permissions so they are in the correct order for checking.
-		                 */
-		                thisGrp.sortPermissions();
-	                }
-                } catch (Exception e) {
-                	throw new IllegalArgumentException("Invalid formatting found in permissions section for group: " + thisGrp.getName() + " in file: " + groupsFile.getPath());
-                }
-
-                //INFO NODE
-                try {
-	                if (thisGroupNode.get("info") instanceof Map) {
-		                Map<String, Object> infoNode = (Map<String, Object>) thisGroupNode.get("info");
-		                if (infoNode != null) {
-		                    thisGrp.setVariables(infoNode);
-		                }
-	                } else
-	                	throw new IllegalArgumentException("Unknown entry found in Info section for group: " + thisGrp.getName() + " in file: " + groupsFile.getPath());
-                } catch (Exception e1) {
-                	throw new IllegalArgumentException("Invalid formatting found in info section for group: " + thisGrp.getName() + " in file: " + groupsFile.getPath());
-                }
-                	
-                //END INFO NODE
-
-                try {
-	                if (thisGroupNode.get("inheritance") == null || thisGroupNode.get("inheritance") instanceof List) {
-		                Object inheritNode = thisGroupNode.get("inheritance");
-		                if (inheritNode == null) {
-		                    thisGroupNode.put("inheritance", new ArrayList<String>());
-		                } else if (inheritNode instanceof List) {
-		                    List<String> groupsInh = (List<String>) inheritNode;
-		                    for (String grp : groupsInh) {
-		                        if (inheritance.get(groupKey) == null) {
-		                            List<String> thisInherits = new ArrayList<String>();
-		                            inheritance.put(groupKey, thisInherits);
-		                        }
-		                        inheritance.get(groupKey).add(grp);
-		
-		                    }
-		                }
-	                }else
-	                	throw new IllegalArgumentException("Unknown entry found in inheritance section for group: " + thisGrp.getName() + " in file: " + groupsFile.getPath());
-                } catch (Exception e2) {
-                	throw new IllegalArgumentException("Invalid formatting found in inheritance section for group: " + thisGrp.getName() + " in file: " + groupsFile.getPath());
-                }
+                ph.setDefaultGroup(thisGrp);
             }
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            throw new IllegalArgumentException("Your " + groupsFile.getPath() + " file is invalid. See console for details.");
+            //PERMISSIONS NODE
+
+            /*
+        	 * If no permissions node is found, or it's empty
+        	 * set an empty permission list
+        	 */
+            if (thisGroupNode.get("permissions") == null) {
+                thisGroupNode.put("permissions", new ArrayList<String>());
+            } else {
+            	/*
+            	 * There is a permission list Which seems to hold some data
+            	 */
+                if (thisGroupNode.get("permissions") instanceof List) {
+                	/*
+                	 * Check each entry and add it as a new permission.
+                	 */
+                    for (Object o : ((List) thisGroupNode.get("permissions"))) {
+                    	try {
+                    		/*
+                    		 * Only add this permission if it's not empty.
+                    		 */
+                    		if (!thisGroupNode.get("permissions").toString().isEmpty())
+                    			thisGrp.addPermission(o.toString());
+                    		
+                    	} catch (NullPointerException ex) {
+                    		// Ignore this entry as it's null. It can be safely dropped
+                    	} catch (Exception ex) {
+                        	throw new IllegalArgumentException("Invalid formatting found in permissions section for group: " + thisGrp.getName() + " in file: " + groupsFile.getPath(), ex);
+                        }
+                    }
+                } else if (thisGroupNode.get("permissions") instanceof String) {
+                	/*
+                	 * Only add this permission if it's not empty.
+                	 */
+                	if (!thisGroupNode.get("permissions").toString().isEmpty())
+                		thisGrp.addPermission((String) thisGroupNode.get("permissions"));
+                	
+                } else {
+                    throw new IllegalArgumentException("Unknown type of permissions node(Should be String or List<String>) for group:  " + thisGrp.getName() + " in file: " + groupsFile.getPath());
+                }
+                /*
+                 * Sort all permissions so they are in the correct order for checking.
+                 */
+                thisGrp.sortPermissions();
+            }
+
+            //INFO NODE
+            try {
+                if (thisGroupNode.get("info") instanceof Map) {
+	                Map<String, Object> infoNode = (Map<String, Object>) thisGroupNode.get("info");
+	                if (infoNode != null) {
+	                    thisGrp.setVariables(infoNode);
+	                }
+                } else
+                	throw new IllegalArgumentException("Unknown entry found in Info section for group: " + thisGrp.getName() + " in file: " + groupsFile.getPath());
+            } catch (Exception ex) {
+            	throw new IllegalArgumentException("Invalid formatting found in info section for group: " + thisGrp.getName() + " in file: " + groupsFile.getPath(), ex);
+            }
+            	
+            //END INFO NODE
+
+            try {
+                if (thisGroupNode.get("inheritance") == null || thisGroupNode.get("inheritance") instanceof List) {
+	                Object inheritNode = thisGroupNode.get("inheritance");
+	                if (inheritNode == null) {
+	                    thisGroupNode.put("inheritance", new ArrayList<String>());
+	                } else if (inheritNode instanceof List) {
+	                    List<String> groupsInh = (List<String>) inheritNode;
+	                    for (String grp : groupsInh) {
+	                        if (inheritance.get(groupKey) == null) {
+	                            List<String> thisInherits = new ArrayList<String>();
+	                            inheritance.put(groupKey, thisInherits);
+	                        }
+	                        inheritance.get(groupKey).add(grp);
+	
+	                    }
+	                }
+                }else
+                	throw new IllegalArgumentException("Unknown entry found in inheritance section for group: " + thisGrp.getName() + " in file: " + groupsFile.getPath());
+            } catch (Exception ex) {
+            	throw new IllegalArgumentException("Invalid formatting found in inheritance section for group: " + thisGrp.getName() + " in file: " + groupsFile.getPath(), ex);
+            }
         }
+
         
         if (ph.getDefaultGroup() == null) {
             throw new IllegalArgumentException("There was no Default Group declared in file: " + groupsFile.getPath());
         }
-        for (String groupKey : inheritance.keySet()) {
-            List<String> inheritedList = inheritance.get(groupKey);
-            Group thisGroup = ph.getGroup(groupKey);
-            for (String inheritedKey : inheritedList) {
-            	if (inheritedKey != null) {
-	                Group inheritedGroup = ph.getGroup(inheritedKey);
-	                if (thisGroup != null && inheritedGroup != null) {
-	                    thisGroup.addInherits(inheritedGroup);
-	                }
-            	}
-            }
+        
+        /*
+         * Build the inheritance map and recored any errors
+         */
+        for (String group : inheritance.keySet()) {
+            List<String> inheritedList = inheritance.get(group);
+            Group thisGroup = ph.getGroup(group);
+            if (thisGroup != null)
+	            for (String inheritedKey : inheritedList) {
+	            	if (inheritedKey != null) {
+		                Group inheritedGroup = ph.getGroup(inheritedKey);
+		                if (inheritedGroup != null) {
+		                    thisGroup.addInherits(inheritedGroup);
+		                } else
+		                	GroupManager.logger.warning("Inherited group '" + inheritedKey + "' not found for group " + thisGroup.getName() + ". Ignoring entry in file: " + groupsFile.getPath());
+	            	}
+	            }
         }
         
         ph.removeGroupsChangedFlag();
@@ -654,7 +674,17 @@ public class WorldDataHolder {
         }
 
         // PROCESS USERS FILE
-        Map<String, Object> allUsersNode = (Map<String, Object>) usersRootDataNode.get("users");
+        Map<String, Object> allUsersNode = new HashMap<String, Object>();
+        
+        /*
+    	 * Fetch all child nodes under the 'users' entry.
+    	 */
+        try {
+        	allUsersNode = (Map<String, Object>) usersRootDataNode.get("users");
+        } catch (Exception ex) {
+            //ex.printStackTrace();
+            throw new IllegalArgumentException("Your " + usersFile.getPath() + " file is invalid. See console for details.", ex);
+        }
         
         // Load users if the file is NOT empty
         if (allUsersNode != null) {
@@ -668,8 +698,8 @@ public class WorldDataHolder {
         			userCount++;
         			// Attempt to fetch the next user name.
         			usersKey = usersItr.next();
-        		} catch (Exception e) {
-    				throw new IllegalArgumentException("Invalid node type for user entry (" + userCount + ") in file: " + usersFile.getPath());
+        		} catch (Exception ex) {
+    				throw new IllegalArgumentException("Invalid node type for user entry (" + userCount + ") in file: " + usersFile.getPath(), ex);
     			}
 
         		Map<String, Object> thisUserNode = null;
@@ -702,7 +732,6 @@ public class WorldDataHolder {
 		            			thisUser.addPermission(thisUserNode.get("permissions").toString());
 		            	} catch (NullPointerException e) {
 		            		// Ignore this entry as it's null.
-		            		//throw new IllegalArgumentException("Invalid permission node for user:  " + thisUser.getName() + " in file: " + UserFile.getPath());
 		            	}
 		            }
 		            thisUser.sortPermissions();
