@@ -319,16 +319,21 @@ public class EssentialsPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerChangedWorld(final PlayerChangedWorldEvent event)
 	{
-		final User user = ess.getUser(event.getPlayer());
+		final User user = ess.getUser(event.getPlayer());		
+		final String newWorld = event.getPlayer().getLocation().getWorld().getName();
 		user.setDisplayNick();
 		updateCompass(user);
-
-		if (ess.getSettings().getNoGodWorlds().contains(event.getPlayer().getLocation().getWorld().getName()))
+		if (ess.getSettings().getNoGodWorlds().contains(newWorld))
 		{
 			if (user.isGodModeEnabledRaw())
 			{
 				user.sendMessage(_("noGodWorldWarning"));
 			}
+		}
+		
+		if(!event.getPlayer().getWorld().getName().equals(newWorld))
+		{
+			user.sendMessage(_("currentWorld", newWorld));
 		}
 	}
 
