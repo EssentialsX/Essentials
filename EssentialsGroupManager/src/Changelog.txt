@@ -176,3 +176,4 @@ v 2.0:
 	- Fix 'manuadd' to use the default or selected world (via 'manselect'), if the world is not specified in the command.
 	- Expand GlobalGroups.yml and groups.yml to cover the VanishNoPacket plugin. Demonstrating how to negate and add nodes when using the '*' permission with inheritance.
 	- Fix silly nested throw/catch statements. Errors are now correctly generated when reading yml's.
+	- Unregister the worldsHolder as a service on a reload/shutdown instead of the whole plugin.
