@@ -98,7 +98,7 @@ public class GroupManager extends JavaPlugin {
 		setLoaded(false);
 		
 		// Un-register this service.
-		this.getServer().getServicesManager().unregister(this);
+		this.getServer().getServicesManager().unregister(this.worldsHolder);
 
 		disableScheduler(); // Shutdown before we save, so it doesn't interfere.
 		if (worldsHolder != null) {
