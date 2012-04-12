@@ -20,6 +20,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -351,9 +352,37 @@ public class BukkitPermissions {
 	 */
 	private void removeAttachment(Player player) {
 		if (attachments.containsKey(player)) {
-			player.removeAttachment(attachments.get(player));
+			try {
+				player.removeAttachment(attachments.get(player));
+			} catch (IllegalArgumentException e) {
+				/*
+				 * Failed to remove attachment
+				 * This usually means Bukkit no longer knows of it.
+				 */
+			}
 			attachments.remove(player);
 		}
+	}
+	
+	/**
+	 * Remove all attachments in case of a restart or reload.
+	 */
+	public void removeAllAttachments() {
+		
+		Iterator<Player> itr = attachments.keySet().iterator();
+		
+		while (itr.hasNext()){
+			Player player = itr.next();
+			try {
+				player.removeAttachment(attachments.get(player));
+			} catch (IllegalArgumentException e) {
+				/*
+				 * Failed to remove attachment
+				 * This usually means Bukkit no longer knows of it.
+				 */
+			}
+		}
+		attachments.clear();
 	}
 
 	/**
