@@ -16,7 +16,6 @@ import org.anjocaido.groupmanager.data.Group;
 import org.anjocaido.groupmanager.dataholder.WorldDataHolder;
 import org.anjocaido.groupmanager.data.User;
 import org.anjocaido.groupmanager.utils.PermissionCheckResult;
-import org.anjocaido.groupmanager.utils.PermissionCheckResult.Type;
 import org.bukkit.entity.Player;
 
 /**
@@ -27,7 +26,7 @@ import org.bukkit.entity.Player;
  * 
  * It holds permissions only for one single world.
  * 
- * @author gabrielcouto
+ * @author gabrielcouto, ElgarL
  */
 public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 
@@ -825,34 +824,13 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	}
 
 	/**
-	 * Verifies if a given group has a variable. Including it's inheritance.
-	 * 
-	 * it redirects to the other method now. This one was deprecated, and will
-	 * be gone in a future release.
-	 * 
-	 * @param start
-	 * @param variable
-	 * @param alreadyChecked
-	 * @return returns the closest inherited group with the variable.
-	 * @deprecated use now nextGroupWithVariable(Group start, String
-	 *             targetVariable)
-	 */
-	@Deprecated
-	public Group nextGroupWithVariable(Group start, String variable, List<Group> alreadyChecked) {
-
-		return nextGroupWithVariable(start, variable);
-	}
-
-	/**
 	 * Returns the next group, including inheritance, which contains that
 	 * variable name.
 	 * 
 	 * It does Breadth-first search
 	 * 
-	 * @param start
-	 *            the starting group to look for
-	 * @param targetVariable
-	 *            the variable name
+	 * @param start the starting group to look for
+	 * @param targetVariable the variable name
 	 * @return The group if found. Null if not.
 	 */
 	public Group nextGroupWithVariable(Group start, String targetVariable) {
@@ -880,37 +858,14 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 		return null;
 	}
 
-	/**
-	 * Check if given group inherits another group.
-	 * 
-	 * redirected to the other method. this is deprecated now. and will be gone
-	 * in the future releases.
-	 * 
-	 * @param start
-	 *            The group to start the search.
-	 * @param askedGroup
-	 *            Name of the group you're looking for
-	 * @param alreadyChecked
-	 *            groups to ignore(pass null on it, please)
-	 * @return true if it inherits the group.
-	 * @deprecated prefer using hasGroupInInheritance(Group start, String
-	 *             askedGroup)
-	 */
-	@Deprecated
-	public boolean searchGroupInInheritance(Group start, String askedGroup, List<Group> alreadyChecked) {
-
-		return hasGroupInInheritance(start, askedGroup);
-	}
 
 	/**
 	 * Check if given group inherits another group.
 	 * 
 	 * It does Breadth-first search
 	 * 
-	 * @param start
-	 *            The group to start the search.
-	 * @param askedGroup
-	 *            Name of the group you're looking for
+	 * @param start The group to start the search.
+	 * @param askedGroup Name of the group you're looking for
 	 * @return true if it inherits the group.
 	 */
 	public boolean hasGroupInInheritance(Group start, String askedGroup) {
@@ -934,26 +889,6 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 					alreadyVisited.add(son);
 				}
 			}
-		}
-		return false;
-	}
-
-	/**
-	 * Check if the group has given permission. Including it's inheritance
-	 * 
-	 * @param start
-	 * @param permission
-	 * @param alreadyChecked
-	 * @return true if PermissionCheckResult is EXCEPTION or FOUND
-	 * @deprecated use the other checkGroupPermissionWithInheritance for
-	 *             everything
-	 */
-	@Deprecated
-	public boolean checkGroupPermissionWithInheritance(Group start, String permission, List<Group> alreadyChecked) {
-
-		PermissionCheckResult result = checkGroupPermissionWithInheritance(start, permission);
-		if (result.resultType.equals(Type.EXCEPTION) || result.resultType.equals(Type.FOUND)) {
-			return true;
 		}
 		return false;
 	}
@@ -1000,44 +935,6 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 		result.askedPermission = targetPermission;
 		result.resultType = PermissionCheckResult.Type.NOTFOUND;
 		return result;
-	}
-
-	/**
-	 * It uses checkGroupPermissionWithInheritance and cast the owner to Group
-	 * type if result type was EXCEPTION or FOUND.
-	 * 
-	 * @param start
-	 * @param permission
-	 * @param alreadyChecked
-	 * @return the group that passed on test. null if no group passed.
-	 * @deprecated use checkGroupPermissionWithInheritance for everything now.
-	 */
-	@Deprecated
-	public Group nextGroupWithPermission(Group start, String permission, List<Group> alreadyChecked) {
-
-		PermissionCheckResult result = checkGroupPermissionWithInheritance(start, permission);
-		if (result.resultType.equals(Type.EXCEPTION) || result.resultType.equals(Type.FOUND)) {
-			return (Group) checkGroupPermissionWithInheritance(start, permission).owner;
-		}
-		return null;
-	}
-
-	/**
-	 * Return whole list of names of groups in a inheritance chain. Including a
-	 * starting group.
-	 * 
-	 * it now redirects to the other method. but get away from this one, it will
-	 * disappear in a future release.
-	 * 
-	 * @param start
-	 * @param alreadyChecked
-	 * @return the group that passed on test. null if no group passed.
-	 * @deprecated use the other method with same name, instead
-	 */
-	@Deprecated
-	public ArrayList<String> listAllGroupsInherited(Group start, ArrayList<String> alreadyChecked) {
-
-		return listAllGroupsInherited(start);
 	}
 
 	/**

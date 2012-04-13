@@ -179,3 +179,4 @@ v 2.0:
 	- Unregister the worldsHolder as a service on a reload/shutdown instead of the whole plugin.
 	- Update all code formatting to use tabs for indentation.
 	- Stop using our own deprecated methods as we tell others to do.
+	- Finally remove all deprecated methods.

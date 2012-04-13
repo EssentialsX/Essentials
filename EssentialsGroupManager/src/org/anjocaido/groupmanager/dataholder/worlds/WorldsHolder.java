@@ -46,7 +46,6 @@ public class WorldsHolder {
 	private Map<String, String> mirrorsGroup = new HashMap<String, String>();
 	private Map<String, String> mirrorsUser = new HashMap<String, String>();
 
-	//private OverloadedWorldHolder defaultWorld;
 	private String serverDefaultWorldName;
 	private GroupManager plugin;
 	private File worldsFolder;

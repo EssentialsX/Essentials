@@ -108,19 +108,6 @@ public class User extends DataUnit implements Cloneable {
 		return group;
 	}
 
-	/**
-	 * @param group
-	 *            the group to set
-	 */
-	@Deprecated
-	public void setGroup(String group) {
-
-		this.group = group;
-		flagAsChanged();
-		if (GroupManager.isLoaded())
-			if (!GroupManager.BukkitPermissions.isPlayer_join())
-				GroupManager.BukkitPermissions.updatePlayer(getBukkitPlayer());
-	}
 
 	/**
 	 * @param group

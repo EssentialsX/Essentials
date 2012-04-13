@@ -12,7 +12,6 @@ import org.anjocaido.groupmanager.data.Variables;
 import org.anjocaido.groupmanager.data.User;
 import org.anjocaido.groupmanager.data.Group;
 import org.anjocaido.groupmanager.dataholder.OverloadedWorldHolder;
-import org.anjocaido.groupmanager.dataholder.WorldDataHolder;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -295,63 +294,9 @@ public class GroupManager extends JavaPlugin {
 		}
 	}
 
-	/**
-	 * Use the WorldsHolder saveChanges directly instead Saves the data on file
-	 */
-	@Deprecated
-	public void commit() {
-
-		if (worldsHolder != null) {
-			worldsHolder.saveChanges();
-		}
-	}
-
-	/**
-	 * Use worlds holder to reload a specific world Reloads the data
-	 */
-	@Deprecated
-	public void reload() {
-
-		worldsHolder.reloadAll();
-	}
-
 	public WorldsHolder getWorldsHolder() {
 
 		return worldsHolder;
-	}
-
-	/**
-	 * The handler in the interface created by AnjoCaido
-	 * 
-	 * @return AnjoPermissionsHandler
-	 */
-	@Deprecated
-	public AnjoPermissionsHandler getPermissionHandler() {
-
-		return worldsHolder.getDefaultWorld().getPermissionsHandler();
-	}
-
-	/**
-	 * A simple interface, for ones that don't want to mess with overloading.
-	 * Yet it is affected by overloading. But seamless.
-	 * 
-	 * @return the dataholder with all information
-	 */
-	@Deprecated
-	public WorldDataHolder getData() {
-
-		return worldsHolder.getDefaultWorld();
-	}
-
-	/**
-	 * Use this if you want to play with overloading.
-	 * 
-	 * @return a dataholder with overloading interface
-	 */
-	@Deprecated
-	public OverloadedWorldHolder getOverloadedClassData() {
-
-		return worldsHolder.getDefaultWorld();
 	}
 
 	/**

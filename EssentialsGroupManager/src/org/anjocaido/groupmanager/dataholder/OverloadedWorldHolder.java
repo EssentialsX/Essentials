@@ -30,7 +30,6 @@ public class OverloadedWorldHolder extends WorldDataHolder {
 		super(ph.getName());
 		this.setGroupsFile(ph.getGroupsFile());
 		this.setUsersFile(ph.getUsersFile());
-		//this.setDefaultGroup(ph.getDefaultGroup());
 		this.groups = ph.groups;
 		this.users = ph.users;
 	}
