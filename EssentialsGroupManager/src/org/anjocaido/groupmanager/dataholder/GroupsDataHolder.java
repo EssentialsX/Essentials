@@ -6,8 +6,6 @@ import java.util.Map;
 
 import org.anjocaido.groupmanager.data.Group;
 
-
-
 /**
  * This container holds all Groups loaded from the relevant groupsFile.
  * 
@@ -31,9 +29,11 @@ public class GroupsDataHolder {
 	 * Constructor
 	 */
 	protected GroupsDataHolder() {
+
 	}
-	
+
 	public void setDataSource(WorldDataHolder dataSource) {
+
 		this.dataSource = dataSource;
 		//push this data source to the users, so they pull the correct groups data.
 		for (Group group : groups.values())
@@ -44,6 +44,7 @@ public class GroupsDataHolder {
 	 * @return the defaultGroup
 	 */
 	public Group getDefaultGroup() {
+
 		return defaultGroup;
 	}
 
@@ -51,6 +52,7 @@ public class GroupsDataHolder {
 	 * @param defaultGroup the defaultGroup to set
 	 */
 	public void setDefaultGroup(Group defaultGroup) {
+
 		this.defaultGroup = defaultGroup;
 	}
 
@@ -58,20 +60,23 @@ public class GroupsDataHolder {
 	 * @return the groups
 	 */
 	public Map<String, Group> getGroups() {
+
 		return groups;
 	}
-	
+
 	/**
 	 * @param groups the groups to set
 	 */
 	public void setGroups(Map<String, Group> groups) {
+
 		this.groups = groups;
 	}
-	
+
 	/**
 	 * @return the groupsFile
 	 */
 	public File getGroupsFile() {
+
 		return groupsFile;
 	}
 
@@ -79,6 +84,7 @@ public class GroupsDataHolder {
 	 * @param groupsFile the groupsFile to set
 	 */
 	public void setGroupsFile(File groupsFile) {
+
 		this.groupsFile = groupsFile;
 	}
 
@@ -86,6 +92,7 @@ public class GroupsDataHolder {
 	 * @return the haveGroupsChanged
 	 */
 	public boolean HaveGroupsChanged() {
+
 		return haveGroupsChanged;
 	}
 
@@ -93,6 +100,7 @@ public class GroupsDataHolder {
 	 * @param haveGroupsChanged the haveGroupsChanged to set
 	 */
 	public void setGroupsChanged(boolean haveGroupsChanged) {
+
 		this.haveGroupsChanged = haveGroupsChanged;
 	}
 
@@ -100,6 +108,7 @@ public class GroupsDataHolder {
 	 * @return the timeStampGroups
 	 */
 	public long getTimeStampGroups() {
+
 		return timeStampGroups;
 	}
 
@@ -107,6 +116,7 @@ public class GroupsDataHolder {
 	 * @param timeStampGroups the timeStampGroups to set
 	 */
 	public void setTimeStampGroups(long timeStampGroups) {
+
 		this.timeStampGroups = timeStampGroups;
 	}
 

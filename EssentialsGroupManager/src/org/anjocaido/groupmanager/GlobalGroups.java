@@ -24,8 +24,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
-
-
 /**
  * @author ElgarL
  * 
@@ -42,6 +40,7 @@ public class GlobalGroups {
 	protected File GlobalGroupsFile = null;
 
 	public GlobalGroups(GroupManager plugin) {
+
 		this.plugin = plugin;
 		load();
 	}
@@ -50,6 +49,7 @@ public class GlobalGroups {
 	 * @return the haveGroupsChanged
 	 */
 	public boolean haveGroupsChanged() {
+
 		if (this.haveGroupsChanged) {
 			return true;
 		}
@@ -65,20 +65,24 @@ public class GlobalGroups {
 	 * @return the timeStampGroups
 	 */
 	public long getTimeStampGroups() {
+
 		return timeStampGroups;
 	}
+
 	/**
 	 * @param timeStampGroups the timeStampGroups to set
 	 */
 	protected void setTimeStampGroups(long timeStampGroups) {
+
 		this.timeStampGroups = timeStampGroups;
 	}
-	
+
 	/**
 	 * @param haveGroupsChanged
 	 *            the haveGroupsChanged to set
 	 */
 	public void setGroupsChanged(boolean haveGroupsChanged) {
+
 		this.haveGroupsChanged = haveGroupsChanged;
 	}
 
@@ -86,7 +90,7 @@ public class GlobalGroups {
 	public void load() {
 
 		GGroups = new YamlConfiguration();
-		
+
 		GroupManager.setLoaded(false);
 
 		// READ globalGroups FILE
@@ -110,47 +114,47 @@ public class GlobalGroups {
 
 		// Clear out old groups
 		resetGlobalGroups();
-		
+
 		if (!GGroups.getKeys(false).isEmpty()) {
 			// Read all global groups
 			Map<String, Object> allGroups = new HashMap<String, Object>();
-			
+
 			try {
 				allGroups = (Map<String, Object>) GGroups.getConfigurationSection("groups").getValues(false);
 			} catch (Exception ex) {
-	            //ex.printStackTrace();
-	            throw new IllegalArgumentException("Your " + GlobalGroupsFile.getPath() + " file is invalid. See console for details.", ex);
-	        }
-	
+				// ex.printStackTrace();
+				throw new IllegalArgumentException("Your " + GlobalGroupsFile.getPath() + " file is invalid. See console for details.", ex);
+			}
+
 			// Load each groups permissions list.
 			if (allGroups != null) {
-				
+
 				Iterator<String> groupItr = allGroups.keySet().iterator();
-		    	String groupName;
-		    	Integer groupCount = 0;
-		    	
-		    	/*
-		    	 * loop each group entry
-		    	 * and read it's data.
-		    	 */
-		    	while (groupItr.hasNext()) {
-		    		try {
-		    			groupCount++;
-		    			// Attempt to fetch the next group name.
-		    			groupName = groupItr.next();
-		    		} catch (Exception ex) {
+				String groupName;
+				Integer groupCount = 0;
+
+				/*
+				 * loop each group entry
+				 * and read it's data.
+				 */
+				while (groupItr.hasNext()) {
+					try {
+						groupCount++;
+						// Attempt to fetch the next group name.
+						groupName = groupItr.next();
+					} catch (Exception ex) {
 						throw new IllegalArgumentException("Invalid group name for GlobalGroup entry (" + groupCount + ") in file: " + GlobalGroupsFile.getPath(), ex);
 					}
 
-		    		/*
-		    		 * Create a new group with this name.
-		    		 */
-		    		Group newGroup = new Group(groupName.toLowerCase());
+					/*
+					 * Create a new group with this name.
+					 */
+					Group newGroup = new Group(groupName.toLowerCase());
 					Object element;
-					
+
 					// Permission nodes
 					element = GGroups.get("groups." + groupName + ".permissions");
-	
+
 					if (element != null)
 						if (element instanceof List) {
 							try {
@@ -164,31 +168,31 @@ public class GlobalGroups {
 							newGroup.addPermission((String) element);
 						} else
 							throw new IllegalArgumentException("Unknown type of permission node for global group:  " + groupName);
-					
+
 					// Info nodes
 					element = GGroups.get("groups." + groupName + ".info");
-					
+
 					if (element != null)
 						if (element instanceof MemorySection) {
 							Map<String, Object> vars = new HashMap<String, Object>();
 							for (String key : ((MemorySection) element).getKeys(false)) {
-					            vars.put(key, ((MemorySection) element).get(key));
-					        }
+								vars.put(key, ((MemorySection) element).get(key));
+							}
 							newGroup.setVariables(vars);
 						} else
 							throw new IllegalArgumentException("Unknown type of info node for global group:  " + groupName);
-	
+
 					// Push a new group
 					addGroup(newGroup);
 				}
 			}
-		
+
 			removeGroupsChangedFlag();
 		}
-		
+
 		setTimeStampGroups(GlobalGroupsFile.lastModified());
 		GroupManager.setLoaded(true);
-		//GlobalGroupsFile = null;
+		// GlobalGroupsFile = null;
 	}
 
 	/**
@@ -197,33 +201,33 @@ public class GlobalGroups {
 
 	public void writeGroups(boolean overwrite) {
 
-		//File GlobalGroupsFile = new File(plugin.getDataFolder(), "globalgroups.yml");
+		// File GlobalGroupsFile = new File(plugin.getDataFolder(), "globalgroups.yml");
 
 		if (haveGroupsChanged()) {
 			if (overwrite || (!overwrite && (getTimeStampGroups() >= GlobalGroupsFile.lastModified()))) {
 				Map<String, Object> root = new HashMap<String, Object>();
-		
+
 				Map<String, Object> groupsMap = new HashMap<String, Object>();
 				root.put("groups", groupsMap);
 				for (String groupKey : groups.keySet()) {
 					Group group = groups.get(groupKey);
-		
+
 					// Group header
 					Map<String, Object> aGroupMap = new HashMap<String, Object>();
 					groupsMap.put(group.getName(), aGroupMap);
-					
+
 					// Info nodes
 					Map<String, Object> infoMap = new HashMap<String, Object>();
-		            aGroupMap.put("info", infoMap);
-		
-		            for (String infoKey : group.getVariables().getVarKeyList()) {
-		                infoMap.put(infoKey, group.getVariables().getVarObject(infoKey));
-		            }
-		
-		            // Permission nodes
+					aGroupMap.put("info", infoMap);
+
+					for (String infoKey : group.getVariables().getVarKeyList()) {
+						infoMap.put(infoKey, group.getVariables().getVarObject(infoKey));
+					}
+
+					// Permission nodes
 					aGroupMap.put("permissions", group.getPermissionList());
 				}
-		
+
 				if (!root.isEmpty()) {
 					DumperOptions opt = new DumperOptions();
 					opt.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
@@ -236,53 +240,55 @@ public class GlobalGroups {
 				}
 				setTimeStampGroups(GlobalGroupsFile.lastModified());
 			} else {
-         		// Newer file found.
-         		GroupManager.logger.log(Level.WARNING, "Newer GlobalGroups file found, but we have local changes!");
-         		throw new IllegalStateException("Unable to save unless you issue a '/mansave force'");
-         	}
+				// Newer file found.
+				GroupManager.logger.log(Level.WARNING, "Newer GlobalGroups file found, but we have local changes!");
+				throw new IllegalStateException("Unable to save unless you issue a '/mansave force'");
+			}
 			removeGroupsChangedFlag();
 		} else {
-        	//Check for newer file as no local changes.
-        	if (getTimeStampGroups() < GlobalGroupsFile.lastModified()) {
-        		System.out.print("Newer GlobalGroups file found (Loading changes)!");
-        		// Backup GlobalGroups file
-            	backupFile();
-        		load();
-        	}
-        }
+			// Check for newer file as no local changes.
+			if (getTimeStampGroups() < GlobalGroupsFile.lastModified()) {
+				System.out.print("Newer GlobalGroups file found (Loading changes)!");
+				// Backup GlobalGroups file
+				backupFile();
+				load();
+			}
+		}
 
 	}
-	
+
 	/**
-     * Backup the BlobalGroups file
-     * @param w
-     */
-    private void backupFile() {
-    	
-    	File backupFile = new File(plugin.getBackupFolder(), "bkp_ggroups_" + Tasks.getDateString() + ".yml");
-        try {
-            Tasks.copy(GlobalGroupsFile, backupFile);
-        } catch (IOException ex) {
-            GroupManager.logger.log(Level.SEVERE, null, ex);
-        }
-    }
-	
+	 * Backup the BlobalGroups file
+	 * 
+	 * @param w
+	 */
+	private void backupFile() {
+
+		File backupFile = new File(plugin.getBackupFolder(), "bkp_ggroups_" + Tasks.getDateString() + ".yml");
+		try {
+			Tasks.copy(GlobalGroupsFile, backupFile);
+		} catch (IOException ex) {
+			GroupManager.logger.log(Level.SEVERE, null, ex);
+		}
+	}
+
 	/**
 	 * Adds a group, or replaces an existing one.
 	 * 
 	 * @param groupToAdd
 	 */
 	public void addGroup(Group groupToAdd) {
+
 		// Create a new group if it already exists
 		if (hasGroup(groupToAdd.getName())) {
 			groupToAdd = groupToAdd.clone();
 			removeGroup(groupToAdd.getName());
 		}
-        
+
 		newGroup(groupToAdd);
-        haveGroupsChanged = true;
-        if (GroupManager.isLoaded())
-        	GroupManagerEventHandler.callEvent(groupToAdd, GMGroupEvent.Action.GROUP_ADDED);
+		haveGroupsChanged = true;
+		if (GroupManager.isLoaded())
+			GroupManagerEventHandler.callEvent(groupToAdd, GMGroupEvent.Action.GROUP_ADDED);
 	}
 
 	/**
@@ -291,6 +297,7 @@ public class GlobalGroups {
 	 * @param newGroup
 	 */
 	public Group newGroup(Group newGroup) {
+
 		// Push a new group
 		if (!groups.containsKey(newGroup.getName().toLowerCase())) {
 			groups.put(newGroup.getName().toLowerCase(), newGroup);
@@ -306,6 +313,7 @@ public class GlobalGroups {
 	 * @param groupName
 	 */
 	public boolean removeGroup(String groupName) {
+
 		// Push a new group
 		if (groups.containsKey(groupName.toLowerCase())) {
 			groups.remove(groupName.toLowerCase());
@@ -324,6 +332,7 @@ public class GlobalGroups {
 	 * @return true if the group exists
 	 */
 	public boolean hasGroup(String groupName) {
+
 		return groups.containsKey(groupName.toLowerCase());
 	}
 
@@ -379,6 +388,7 @@ public class GlobalGroups {
 	 * @return List of all group names
 	 */
 	public List<String> getGroupsPermissions(String groupName) {
+
 		if (!hasGroup(groupName))
 			return null;
 
@@ -391,6 +401,7 @@ public class GlobalGroups {
 	 * @return Set containing all group names.
 	 */
 	public Set<String> getGlobalGroups() {
+
 		return groups.keySet();
 	}
 
@@ -398,14 +409,16 @@ public class GlobalGroups {
 	 * Resets GlobalGroups.
 	 */
 	public void resetGlobalGroups() {
+
 		this.groups = new HashMap<String, Group>();
 	}
-	
+
 	/**
 	 * 
 	 * @return a collection of the groups
 	 */
 	public Collection<Group> getGroupList() {
+
 		return groups.values();
 	}
 
@@ -416,6 +429,7 @@ public class GlobalGroups {
 	 * @return Group object
 	 */
 	public Group getGroup(String groupName) {
+
 		if (!hasGroup(groupName))
 			return null;
 
@@ -427,17 +441,19 @@ public class GlobalGroups {
 	 * @return the globalGroupsFile
 	 */
 	public File getGlobalGroupsFile() {
+
 		return GlobalGroupsFile;
 	}
-	
+
 	/**
     *
     */
-   public void removeGroupsChangedFlag() {
-	   setGroupsChanged(false);
-       for (Group g : groups.values()) {
-           g.flagAsSaved();
-       }
-   }
+	public void removeGroupsChangedFlag() {
+
+		setGroupsChanged(false);
+		for (Group g : groups.values()) {
+			g.flagAsSaved();
+		}
+	}
 
 }

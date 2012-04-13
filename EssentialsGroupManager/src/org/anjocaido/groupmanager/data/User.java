@@ -16,7 +16,6 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-
 /**
  * 
  * @author gabrielcouto/ElgarL
@@ -40,6 +39,7 @@ public class User extends DataUnit implements Cloneable {
 	 * @param name
 	 */
 	public User(WorldDataHolder source, String name) {
+
 		super(source, name);
 		this.group = source.getDefaultGroup().getName();
 	}
@@ -50,6 +50,7 @@ public class User extends DataUnit implements Cloneable {
 	 */
 	@Override
 	public User clone() {
+
 		User clone = new User(getDataSource(), this.getName());
 		clone.group = this.group;
 		for (String perm : this.getPermissionList()) {
@@ -67,6 +68,7 @@ public class User extends DataUnit implements Cloneable {
 	 * @return null if given dataSource already contains the same user
 	 */
 	public User clone(WorldDataHolder dataSource) {
+
 		if (dataSource.isUserDeclared(this.getName())) {
 			return null;
 		}
@@ -85,6 +87,7 @@ public class User extends DataUnit implements Cloneable {
 	}
 
 	public Group getGroup() {
+
 		Group result = getDataSource().getGroup(group);
 		if (result == null) {
 			this.setGroup(getDataSource().getDefaultGroup());
@@ -97,6 +100,7 @@ public class User extends DataUnit implements Cloneable {
 	 * @return the group
 	 */
 	public String getGroupName() {
+
 		Group result = getDataSource().getGroup(group);
 		if (result == null) {
 			group = getDataSource().getDefaultGroup().getName();
@@ -110,6 +114,7 @@ public class User extends DataUnit implements Cloneable {
 	 */
 	@Deprecated
 	public void setGroup(String group) {
+
 		this.group = group;
 		flagAsChanged();
 		if (GroupManager.isLoaded())
@@ -122,15 +127,17 @@ public class User extends DataUnit implements Cloneable {
 	 *            the group to set
 	 */
 	public void setGroup(Group group) {
+
 		setGroup(group, true);
 	}
-		
+
 	/**
 	 * @param group the group to set
 	 * @param updatePerms if we are to trigger a superperms update.
-	 *            
+	 * 
 	 */
 	public void setGroup(Group group, Boolean updatePerms) {
+
 		if (!this.getDataSource().groupExists(group.getName())) {
 			getDataSource().addGroup(group);
 		}
@@ -151,12 +158,13 @@ public class User extends DataUnit implements Cloneable {
 
 			if (notify)
 				GroupManager.notify(this.getName(), String.format(" moved to the group %s.", group.getName()));
-			
+
 			GroupManagerEventHandler.callEvent(this, Action.USER_GROUP_CHANGED);
 		}
 	}
 
 	public boolean addSubGroup(Group subGroup) {
+
 		// Don't allow adding a subgroup if it's already set as the primary.
 		if (this.group.equalsIgnoreCase(subGroup.getName())) {
 			return false;
@@ -164,12 +172,12 @@ public class User extends DataUnit implements Cloneable {
 		// User already has this subgroup
 		if (containsSubGroup(subGroup))
 			return false;
-		
+
 		// If the group doesn't exists add it
 		if (!this.getDataSource().groupExists(subGroup.getName())) {
 			getDataSource().addGroup(subGroup);
 		}
-		
+
 		subGroups.add(subGroup.getName());
 		flagAsChanged();
 		if (GroupManager.isLoaded()) {
@@ -178,25 +186,29 @@ public class User extends DataUnit implements Cloneable {
 			GroupManagerEventHandler.callEvent(this, Action.USER_SUBGROUP_CHANGED);
 		}
 		return true;
-			
+
 		//subGroup = getDataSource().getGroup(subGroup.getName());
 		//removeSubGroup(subGroup);
 		//subGroups.add(subGroup.getName());
 	}
 
 	public int subGroupsSize() {
+
 		return subGroups.size();
 	}
 
 	public boolean isSubGroupsEmpty() {
+
 		return subGroups.isEmpty();
 	}
 
 	public boolean containsSubGroup(Group subGroup) {
+
 		return subGroups.contains(subGroup.getName());
 	}
 
 	public boolean removeSubGroup(Group subGroup) {
+
 		try {
 			if (subGroups.remove(subGroup.getName())) {
 				flagAsChanged();
@@ -212,6 +224,7 @@ public class User extends DataUnit implements Cloneable {
 	}
 
 	public ArrayList<Group> subGroupListCopy() {
+
 		ArrayList<Group> val = new ArrayList<Group>();
 		for (String gstr : subGroups) {
 			Group g = getDataSource().getGroup(gstr);
@@ -225,6 +238,7 @@ public class User extends DataUnit implements Cloneable {
 	}
 
 	public ArrayList<String> subGroupListStringCopy() {
+
 		return new ArrayList<String>(subGroups);
 	}
 
@@ -232,6 +246,7 @@ public class User extends DataUnit implements Cloneable {
 	 * @return the variables
 	 */
 	public UserVariables getVariables() {
+
 		return variables;
 	}
 
@@ -240,6 +255,7 @@ public class User extends DataUnit implements Cloneable {
 	 * @param varList
 	 */
 	public void setVariables(Map<String, Object> varList) {
+
 		//UserVariables temp = new UserVariables(this, varList);
 		variables.clearVars();
 		for (String key : varList.keySet()) {
@@ -254,6 +270,7 @@ public class User extends DataUnit implements Cloneable {
 	}
 
 	public User updatePlayer(Player player) {
+
 		if (player != null) {
 			bukkitPlayer = player;
 		}
@@ -261,6 +278,7 @@ public class User extends DataUnit implements Cloneable {
 	}
 
 	public Player getBukkitPlayer() {
+
 		if (bukkitPlayer == null) {
 			bukkitPlayer = Bukkit.getPlayer(this.getName());
 		}
