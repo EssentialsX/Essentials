@@ -178,3 +178,4 @@ v 2.0:
 	- Fix silly nested throw/catch statements. Errors are now correctly generated when reading yml's.
 	- Unregister the worldsHolder as a service on a reload/shutdown instead of the whole plugin.
 	- Update all code formatting to use tabs for indentation.
+	- Stop using our own deprecated methods as we tell others to do.

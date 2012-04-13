@@ -29,7 +29,6 @@ import org.anjocaido.groupmanager.dataholder.worlds.WorldsHolder;
 import org.anjocaido.groupmanager.events.GMSystemEvent;
 import org.anjocaido.groupmanager.events.GMWorldListener;
 import org.anjocaido.groupmanager.events.GroupManagerEventHandler;
-import org.anjocaido.groupmanager.events.GMGroupEvent.Action;
 import org.anjocaido.groupmanager.utils.GMLoggerHandler;
 import org.anjocaido.groupmanager.utils.PermissionCheckResult;
 import org.anjocaido.groupmanager.utils.Tasks;
@@ -40,15 +39,14 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
-@SuppressWarnings("unused")
+
 /**
  *
- * @author gabrielcouto
+ * @author gabrielcouto, ElgarL
  */
 public class GroupManager extends JavaPlugin {
 
@@ -79,7 +77,6 @@ public class GroupManager extends JavaPlugin {
 		this.validateOnlinePlayer = validateOnlinePlayer;
 	}
 
-	private boolean isReady = false;
 	private static boolean isLoaded = false;
 	protected GMConfiguration config;
 
@@ -111,7 +108,8 @@ public class GroupManager extends JavaPlugin {
 			}
 		}
 
-		WorldEvents = null;
+		if (WorldEvents != null)
+			WorldEvents = null;
 
 		// Remove all attachments before clearing
 		if (BukkitPermissions != null) {
@@ -366,7 +364,7 @@ public class GroupManager extends JavaPlugin {
 	 * @param cmd
 	 * @param args
 	 */
-	@SuppressWarnings({ "deprecation" })
+	//@SuppressWarnings({ "deprecation" })
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 
@@ -1131,7 +1129,7 @@ public class GroupManager extends JavaPlugin {
 				}
 
 				// Validating permission
-				if (permissionHandler.searchGroupInInheritance(auxGroup, auxGroup2.getName(), null)) {
+				if (permissionHandler.hasGroupInInheritance(auxGroup, auxGroup2.getName())) {
 					sender.sendMessage(ChatColor.RED + "Group " + auxGroup.getName() + " already inherits " + auxGroup2.getName() + " (might not be directly)");
 					return false;
 				}
@@ -1170,7 +1168,7 @@ public class GroupManager extends JavaPlugin {
 				}
 
 				// Validating permission
-				if (!permissionHandler.searchGroupInInheritance(auxGroup, auxGroup2.getName(), null)) {
+				if (!permissionHandler.hasGroupInInheritance(auxGroup, auxGroup2.getName())) {
 					sender.sendMessage(ChatColor.RED + "Group " + auxGroup.getName() + " does not inherits " + auxGroup2.getName() + ".");
 					return false;
 				}
@@ -1461,7 +1459,7 @@ public class GroupManager extends JavaPlugin {
 					return false;
 				}
 				// Validating permission
-				auxGroup2 = permissionHandler.nextGroupWithVariable(auxGroup, args[1], null);
+				auxGroup2 = permissionHandler.nextGroupWithVariable(auxGroup, args[1]);
 				if (auxGroup2 == null) {
 					sender.sendMessage(ChatColor.RED + "The group doesn't have access to that variable!");
 				}
