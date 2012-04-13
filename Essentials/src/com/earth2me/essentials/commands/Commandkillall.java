@@ -16,6 +16,7 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.NPC;
+import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Slime;
 import org.bukkit.entity.Snowman;
@@ -117,6 +118,13 @@ public class Commandkillall extends EssentialsCommand
 				if (entity instanceof Wolf)
 				{
 					if (((Wolf)entity).isTamed())
+					{
+						continue;
+					}
+				}
+				if(entity instanceof Ocelot)
+				{
+					if (((Ocelot)entity).isTamed())
 					{
 						continue;
 					}
