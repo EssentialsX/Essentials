@@ -142,6 +142,9 @@ public class GlobalGroups {
 						throw new IllegalArgumentException("Invalid group name for GlobalGroup entry (" + groupCount + ") in file: " + GlobalGroupsFile.getPath(), ex);
 					}
 
+		    		/*
+		    		 * Create a new group with this name.
+		    		 */
 		    		Group newGroup = new Group(groupName.toLowerCase());
 					Object element;
 					
