@@ -50,7 +50,6 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class GroupManager extends JavaPlugin {
 
-	// private File configFile;
 	private File backupFolder;
 	private Runnable commiter;
 	private ScheduledThreadPoolExecutor scheduler;
@@ -88,15 +87,15 @@ public class GroupManager extends JavaPlugin {
 	public static final Logger logger = Logger.getLogger(GroupManager.class.getName());
 
 	// PERMISSIONS FOR COMMAND BEING LOADED
-	OverloadedWorldHolder dataHolder = null;
-	AnjoPermissionsHandler permissionHandler = null;
+	private OverloadedWorldHolder dataHolder = null;
+	private AnjoPermissionsHandler permissionHandler = null;
 
 	@Override
 	public void onDisable() {
 
 		setLoaded(false);
 
-		// Un-register this service.
+		// Unregister this service.
 		this.getServer().getServicesManager().unregister(this.worldsHolder);
 
 		disableScheduler(); // Shutdown before we save, so it doesn't interfere.
@@ -123,7 +122,7 @@ public class GroupManager extends JavaPlugin {
 		GroupManager.logger.removeHandler(ch);
 	}
 
-	// @Override
+	@Override
 	public void onEnable() {
 
 		try {
@@ -159,9 +158,8 @@ public class GroupManager extends JavaPlugin {
 			enableScheduler();
 
 			/*
-			 * Schedule a Bukiit Permissions update for 1 tick later. All
-			 * plugins
-			 * will be loaded by then
+			 * Schedule a Bukkit Permissions update for 1 tick later.
+			 * All plugins will be loaded by then
 			 */
 
 			if (getServer().getScheduler().scheduleSyncDelayedTask(this, new BukkitPermsUpdateTask(), 1) == -1) {
@@ -243,7 +241,6 @@ public class GroupManager extends JavaPlugin {
 
 	private void prepareFileFields() {
 
-		// configFile = new File(this.getDataFolder(), "config.yml");
 		backupFolder = new File(this.getDataFolder(), "backup");
 		if (!backupFolder.exists()) {
 			getBackupFolder().mkdirs();
@@ -364,7 +361,6 @@ public class GroupManager extends JavaPlugin {
 	 * @param cmd
 	 * @param args
 	 */
-	//@SuppressWarnings({ "deprecation" })
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 
