@@ -31,13 +31,11 @@ import org.bukkit.inventory.ItemStack;
 public class EssentialsPlayerListener implements Listener
 {
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
-	private final transient Server server;
 	private final transient IEssentials ess;
 
 	public EssentialsPlayerListener(final IEssentials parent)
 	{
 		this.ess = parent;
-		this.server = parent.getServer();
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
@@ -217,7 +215,7 @@ public class EssentialsPlayerListener implements Listener
 			return;
 		}
 
-		User user = ess.getUser(event.getPlayer());
+		final User user = ess.getUser(event.getPlayer());
 		if (user.isNPC())
 		{
 			user.setNPC(false);
@@ -246,8 +244,8 @@ public class EssentialsPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerTeleport(final PlayerTeleportEvent event)
 	{
-		boolean backListener = ess.getSettings().registerBackInListener();
-		boolean teleportInvulnerability = ess.getSettings().isTeleportInvulnerability();
+		final boolean backListener = ess.getSettings().registerBackInListener();
+		final boolean teleportInvulnerability = ess.getSettings().isTeleportInvulnerability();
 		if (backListener || teleportInvulnerability)
 		{
 			final User user = ess.getUser(event.getPlayer());
@@ -319,19 +317,16 @@ public class EssentialsPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerChangedWorld(final PlayerChangedWorldEvent event)
 	{
-		final User user = ess.getUser(event.getPlayer());		
+		final User user = ess.getUser(event.getPlayer());
 		final String newWorld = event.getPlayer().getLocation().getWorld().getName();
 		user.setDisplayNick();
 		updateCompass(user);
-		if (ess.getSettings().getNoGodWorlds().contains(newWorld))
+		if (ess.getSettings().getNoGodWorlds().contains(newWorld) && user.isGodModeEnabledRaw())
 		{
-			if (user.isGodModeEnabledRaw())
-			{
-				user.sendMessage(_("noGodWorldWarning"));
-			}
+			user.sendMessage(_("noGodWorldWarning"));
 		}
-		
-		if(!event.getPlayer().getWorld().getName().equals(newWorld))
+
+		if (!event.getPlayer().getWorld().getName().equals(newWorld))
 		{
 			user.sendMessage(_("currentWorld", newWorld));
 		}
@@ -343,11 +338,7 @@ public class EssentialsPlayerListener implements Listener
 		switch (event.getAction())
 		{
 		case RIGHT_CLICK_BLOCK:
-			if (event.isCancelled())
-			{
-				return;
-			}
-			if (event.getClickedBlock().getTypeId() == Material.BED_BLOCK.getId() && ess.getSettings().getUpdateBedAtDaytime())
+			if (!event.isCancelled() && event.getClickedBlock().getTypeId() == Material.BED_BLOCK.getId() && ess.getSettings().getUpdateBedAtDaytime())
 			{
 				event.getPlayer().setBedSpawnLocation(event.getClickedBlock().getLocation());
 			}
@@ -408,14 +399,12 @@ public class EssentialsPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerPickupItem(final PlayerPickupItemEvent event)
 	{
-		if (!ess.getSettings().getDisableItemPickupWhileAfk())
+		if (ess.getSettings().getDisableItemPickupWhileAfk())
 		{
-			return;
-		}
-		final User user = ess.getUser(event.getPlayer());
-		if (user.isAfk())
-		{
-			event.setCancelled(true);
+			if (ess.getUser(event.getPlayer()).isAfk())
+			{
+				event.setCancelled(true);
+			}
 		}
 	}
 
