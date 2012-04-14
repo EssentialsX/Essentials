@@ -36,41 +36,46 @@ public class Commanditem extends EssentialsCommand
 		{
 			throw new Exception(_("cantSpawnItem", itemname));
 		}
-
-		if (args.length > 1 && Integer.parseInt(args[1]) > 0)
+		try
 		{
-			stack.setAmount(Integer.parseInt(args[1]));
-		}
-		else if (ess.getSettings().getDefaultStackSize() > 0)
-		{
-			stack.setAmount(ess.getSettings().getDefaultStackSize());
-		}
-		else if (ess.getSettings().getOversizedStackSize() > 0 && user.isAuthorized("essentials.oversizedstacks"))
-		{
-			stack.setAmount(ess.getSettings().getOversizedStackSize());
-		}
-
-		if (args.length > 2)
-		{
-			for (int i = 2; i < args.length; i++)
+			if (args.length > 1 && Integer.parseInt(args[1]) > 0)
 			{
-				final String[] split = args[i].split("[:+',;.]", 2);
-				if (split.length < 1)
-				{
-					continue;
-				}
-				final Enchantment enchantment = Commandenchant.getEnchantment(split[0], user);
-				int level;
-				if (split.length > 1)
-				{
-					level = Integer.parseInt(split[1]);
-				}
-				else
-				{
-					level = enchantment.getMaxLevel();
-				}
-				stack.addEnchantment(enchantment, level);
+				stack.setAmount(Integer.parseInt(args[1]));
 			}
+			else if (ess.getSettings().getDefaultStackSize() > 0)
+			{
+				stack.setAmount(ess.getSettings().getDefaultStackSize());
+			}
+			else if (ess.getSettings().getOversizedStackSize() > 0 && user.isAuthorized("essentials.oversizedstacks"))
+			{
+				stack.setAmount(ess.getSettings().getOversizedStackSize());
+			}
+			if (args.length > 2)
+			{
+				for (int i = 2; i < args.length; i++)
+				{
+					final String[] split = args[i].split("[:+',;.]", 2);
+					if (split.length < 1)
+					{
+						continue;
+					}
+					final Enchantment enchantment = Commandenchant.getEnchantment(split[0], user);
+					int level;
+					if (split.length > 1)
+					{
+						level = Integer.parseInt(split[1]);
+					}
+					else
+					{
+						level = enchantment.getMaxLevel();
+					}
+					stack.addEnchantment(enchantment, level);
+				}
+			}
+		}
+		catch (NumberFormatException e)
+		{
+			throw new NotEnoughArgumentsException();
 		}
 
 		if (stack.getType() == Material.AIR)
