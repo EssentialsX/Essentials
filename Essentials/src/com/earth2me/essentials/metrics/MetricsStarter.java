@@ -172,6 +172,9 @@ public class MetricsStarter implements Runnable
 			metrics.start();
 
 		}
+		catch (UnsupportedOperationException ex)
+		{
+		}
 		catch (Exception ex)
 		{
 			metricsError(ex);

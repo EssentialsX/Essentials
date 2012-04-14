@@ -232,8 +232,11 @@ public class Essentials extends JavaPlugin implements IEssentials
 		pm.registerEvents(worldListener, this);
 
 		//TODO: Check if this should be here, and not above before reload()
-		jails = new Jails(this);
-		confList.add(jails);
+		if (settings.isJailsEnabled())
+		{
+			jails = new Jails(this);
+			confList.add(jails);
+		}
 
 		pm.registerEvents(tntListener, this);
 
@@ -428,9 +431,16 @@ public class Essentials extends JavaPlugin implements IEssentials
 	}
 
 	@Override
-	public IJails getJails()
+	public IJails getJails() throws UnsupportedOperationException
 	{
-		return jails;
+		if (jails == null)
+		{
+			throw new UnsupportedOperationException("Jails are not enabled in your configuration");
+		}
+		else
+		{
+			return jails;
+		}
 	}
 
 	@Override
