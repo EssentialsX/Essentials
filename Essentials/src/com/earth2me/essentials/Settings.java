@@ -780,10 +780,4 @@ public class Settings implements ISettings
 	{
 		return teleportInvulnerability;
 	}
-
-	@Override
-	public boolean isJailsEnabled()
-	{
-		return config.getBoolean("enable-jails", true);
-	}
 }

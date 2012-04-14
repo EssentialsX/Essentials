@@ -37,7 +37,7 @@ public interface IEssentials extends Plugin
 
 	BukkitScheduler getScheduler();
 
-	IJails getJails() throws UnsupportedOperationException;
+	IJails getJails();
 
 	Warps getWarps();
 

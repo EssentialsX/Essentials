@@ -44,9 +44,6 @@ change-displayname: true
 # Don't forget to remove the # infront of the line
 #add-prefix-suffix: false
 
-# Whether or not jails are activated
-enable-jails: true
-
 # The delay, in seconds, required between /home, /tp, etc.
 teleport-cooldown: 0
 
@@ -587,7 +584,7 @@ newbies:
   # When we spawn for the first time, which spawnpoint do we use?
   # Set to "none" if you want to use the spawn point of the world.
   spawnpoint: newbies
-
+  
   # Do we want to give users anything on first join? Set to '' to disable
   # This kit will be given reguardless of cost, and permissions.
   #kit: ''

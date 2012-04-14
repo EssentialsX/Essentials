@@ -173,6 +173,4 @@ public interface ISettings extends IConf
 	long getTeleportInvulnerability();
 	
 	boolean isTeleportInvulnerability();
-
-	boolean isJailsEnabled();
 }
