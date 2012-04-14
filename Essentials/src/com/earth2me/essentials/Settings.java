@@ -384,6 +384,7 @@ public class Settings implements ISettings
 		enabledSigns = _getEnabledSigns();
 		teleportInvulnerability = _isTeleportInvulnerability();
 		disableItemPickupWhileAfk = _getDisableItemPickupWhileAfk();
+		registerBackInListener = _registerBackInListener();
 		itemSpawnBl = _getItemSpawnBlacklist();
 		kits = _getKits();
 		chatFormats.clear();
@@ -691,11 +692,19 @@ public class Settings implements ISettings
 		return config.getBoolean("world-teleport-permissions", false);
 	}
 
+	private boolean registerBackInListener;
+	
 	@Override
 	public boolean registerBackInListener()
 	{
+		return registerBackInListener;
+	}
+	
+	private boolean _registerBackInListener()
+	{
 		return config.getBoolean("register-back-in-listener", false);
 	}
+	
 	private boolean disableItemPickupWhileAfk;
 
 	@Override
