@@ -60,7 +60,9 @@ public class Commandseen extends EssentialsCommand
 			{
 				sender.sendMessage(_("whoisIPAddress", player.getLastLoginAddress()));
 				final Location loc = player.getLastLocation();
-				sender.sendMessage(_("whoisLocation", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+				if (loc != null) {
+					sender.sendMessage(_("whoisLocation", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+				}
 			}
 		}
 	}

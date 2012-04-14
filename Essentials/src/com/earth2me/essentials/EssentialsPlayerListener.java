@@ -116,6 +116,7 @@ public class EssentialsPlayerListener implements Listener
 		{
 			user.toggleGodModeEnabled();
 		}
+		user.setLastLocation();
 		user.updateActivity(false);
 		user.dispose();
 	}
