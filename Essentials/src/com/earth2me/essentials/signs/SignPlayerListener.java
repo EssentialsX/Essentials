@@ -23,11 +23,10 @@ public class SignPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerInteract(final PlayerInteractEvent event)
 	{
-		if (ess.getSettings().areSignsDisabled())
+		if (ess.getSettings().areSignsDisabled() || event.getAction() != Action.RIGHT_CLICK_BLOCK)
 		{
 			return;
 		}
-
 		final Block block = event.getClickedBlock();
 		if (block == null)
 		{
@@ -37,10 +36,6 @@ public class SignPlayerListener implements Listener
 		final int mat = block.getTypeId();
 		if (mat == Material.SIGN_POST.getId() || mat == Material.WALL_SIGN.getId())
 		{
-			if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
-			{
-				return;
-			}
 			final Sign csign = (Sign)block.getState();
 			for (EssentialsSign sign : ess.getSettings().enabledSigns())
 			{
@@ -61,7 +56,6 @@ public class SignPlayerListener implements Listener
 				{
 					event.setCancelled(true);
 					return;
-
 				}
 			}
 		}
