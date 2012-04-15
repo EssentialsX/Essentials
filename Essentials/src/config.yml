@@ -272,6 +272,11 @@ freeze-afk-players: false
 # Enable this, when you don't want people idling in mob traps.
 disable-item-pickup-while-afk: true
 
+# Should we automatically remove afk status when the player moves?
+# Player will be removed from afk on chat/command reguardless of this setting.
+# Disable this to reduce server lag.
+cancel-afk-on-move: true
+
 # You can disable the death messages of minecraft here
 death-messages: true
 

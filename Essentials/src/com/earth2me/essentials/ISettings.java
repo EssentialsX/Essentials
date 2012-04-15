@@ -127,7 +127,7 @@ public interface ISettings extends IConf
 	boolean removeGodOnDisconnect();
 
 	boolean changeDisplayName();
-	
+
 	boolean changePlayerListName();
 
 	boolean isPlayerCommand(String string);
@@ -145,6 +145,8 @@ public interface ISettings extends IConf
 	long getAutoAfkKick();
 
 	boolean getFreezeAfkPlayers();
+
+	boolean cancelAfkOnMove();
 
 	boolean areDeathMessagesEnabled();
 
@@ -165,12 +167,12 @@ public interface ISettings extends IConf
 	EventPriority getRespawnPriority();
 
 	long getTpaAcceptCancellation();
-	
+
 	boolean isMetricsEnabled();
-	
+
 	void setMetricsEnabled(boolean metricsEnabled);
 
 	long getTeleportInvulnerability();
-	
+
 	boolean isTeleportInvulnerability();
 }

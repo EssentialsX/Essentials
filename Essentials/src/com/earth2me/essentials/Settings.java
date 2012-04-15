@@ -385,6 +385,8 @@ public class Settings implements ISettings
 		teleportInvulnerability = _isTeleportInvulnerability();
 		disableItemPickupWhileAfk = _getDisableItemPickupWhileAfk();
 		registerBackInListener = _registerBackInListener();
+		cancelAfkOnMove = _cancelAfkOnMove();
+		getFreezeAfkPlayers = _getFreezeAfkPlayers();
 		itemSpawnBl = _getItemSpawnBlacklist();
 		kits = _getKits();
 		chatFormats.clear();
@@ -654,11 +656,29 @@ public class Settings implements ISettings
 	{
 		return config.getLong("auto-afk-kick", -1);
 	}
+	private boolean getFreezeAfkPlayers;
 
 	@Override
 	public boolean getFreezeAfkPlayers()
 	{
+		return getFreezeAfkPlayers;
+	}
+
+	private boolean _getFreezeAfkPlayers()
+	{
 		return config.getBoolean("freeze-afk-players", false);
+	}
+	private boolean cancelAfkOnMove;
+
+	@Override
+	public boolean cancelAfkOnMove()
+	{
+		return cancelAfkOnMove;
+	}
+
+	private boolean _cancelAfkOnMove()
+	{
+		return config.getBoolean("cancel-afk-on-move", true);
 	}
 
 	@Override
@@ -691,20 +711,18 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("world-teleport-permissions", false);
 	}
-
 	private boolean registerBackInListener;
-	
+
 	@Override
 	public boolean registerBackInListener()
 	{
 		return registerBackInListener;
 	}
-	
+
 	private boolean _registerBackInListener()
 	{
 		return config.getBoolean("register-back-in-listener", false);
 	}
-	
 	private boolean disableItemPickupWhileAfk;
 
 	@Override

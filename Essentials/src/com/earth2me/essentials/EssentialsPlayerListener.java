@@ -72,37 +72,40 @@ public class EssentialsPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerMove(final PlayerMoveEvent event)
 	{
-		if (event.getFrom().getBlockX() == event.getTo().getBlockX()
-			&& event.getFrom().getBlockZ() == event.getTo().getBlockZ()
-			&& event.getFrom().getBlockY() == event.getTo().getBlockY())
+		if ((!ess.getSettings().cancelAfkOnMove() && !ess.getSettings().getFreezeAfkPlayers())
+			|| event.getFrom().getBlockX() == event.getTo().getBlockX()
+			   && event.getFrom().getBlockZ() == event.getTo().getBlockZ()
+			   && event.getFrom().getBlockY() == event.getTo().getBlockY())
 		{
 			return;
 		}
 
 		final User user = ess.getUser(event.getPlayer());
-
-		if (user.isAfk() && ess.getSettings().getFreezeAfkPlayers())
+		if (user.isAfk())
 		{
-			final Location from = event.getFrom();
-			final Location to = event.getTo().clone();
-			to.setX(from.getX());
-			to.setY(from.getY());
-			to.setZ(from.getZ());
-			try
+			if (ess.getSettings().getFreezeAfkPlayers())
 			{
-				event.setTo(Util.getSafeDestination(to));
+				final Location from = event.getFrom();
+				final Location to = event.getTo().clone();
+				to.setX(from.getX());
+				to.setY(from.getY());
+				to.setZ(from.getZ());
+				try
+				{
+					event.setTo(Util.getSafeDestination(to));
+				}
+				catch (Exception ex)
+				{
+					event.setTo(to);
+				}
+				return;
 			}
-			catch (Exception ex)
-			{
-				event.setTo(to);
-			}
-			return;
-		}
 
-		final Location afk = user.getAfkPosition();
-		if (afk == null || !event.getTo().getWorld().equals(afk.getWorld()) || afk.distanceSquared(event.getTo()) > 9)
-		{
-			user.updateActivity(true);
+			final Location afk = user.getAfkPosition();
+			if (afk == null || !event.getTo().getWorld().equals(afk.getWorld()) || afk.distanceSquared(event.getTo()) > 9)
+			{
+				user.updateActivity(true);
+			}
 		}
 	}
 
@@ -346,7 +349,7 @@ public class EssentialsPlayerListener implements Listener
 			break;
 		case LEFT_CLICK_AIR:
 		case LEFT_CLICK_BLOCK:
-			if (event.getItem() != null && event.getMaterial() != Material.AIR)
+			if (event.getItem() != null && event.getItem().getTypeId() != Material.AIR.getId())
 			{
 				final User user = ess.getUser(event.getPlayer());
 				if (user.hasPowerTools() && user.arePowerToolsEnabled() && usePowertools(user, event.getItem().getTypeId()))
