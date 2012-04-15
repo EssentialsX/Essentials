@@ -32,6 +32,8 @@ public class EssentialsPlayerListener implements Listener
 {
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private final transient IEssentials ess;
+	private static final int AIR = Material.AIR.getId();
+	private static final int BED = Material.BED_BLOCK.getId();
 
 	public EssentialsPlayerListener(final IEssentials parent)
 	{
@@ -342,14 +344,14 @@ public class EssentialsPlayerListener implements Listener
 		switch (event.getAction())
 		{
 		case RIGHT_CLICK_BLOCK:
-			if (!event.isCancelled() && event.getClickedBlock().getTypeId() == Material.BED_BLOCK.getId() && ess.getSettings().getUpdateBedAtDaytime())
+			if (!event.isCancelled() && event.getClickedBlock().getTypeId() == BED && ess.getSettings().getUpdateBedAtDaytime())
 			{
 				event.getPlayer().setBedSpawnLocation(event.getClickedBlock().getLocation());
 			}
 			break;
 		case LEFT_CLICK_AIR:
 		case LEFT_CLICK_BLOCK:
-			if (event.getItem() != null && event.getItem().getTypeId() != Material.AIR.getId())
+			if (event.getItem() != null && event.getItem().getTypeId() != AIR)
 			{
 				final User user = ess.getUser(event.getPlayer());
 				if (user.hasPowerTools() && user.arePowerToolsEnabled() && usePowertools(user, event.getItem().getTypeId()))
