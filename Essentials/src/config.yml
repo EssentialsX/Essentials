@@ -107,6 +107,8 @@ player-commands:
   - balance
   - balance.others
   - balancetop
+  - chat.color
+  - chat.format
   - chat.shout
   - chat.question
   - clearinventory

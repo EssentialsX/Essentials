@@ -118,6 +118,7 @@ groups:
     - essentials.chat.shout
     - essentials.chat.question
     - essentials.compass
+    - essentials.delhome
     - essentials.depth
     - essentials.getpos
     - essentials.home
@@ -175,6 +176,7 @@ groups:
     - essentials.ext
     - essentials.fly
     - essentials.getpos
+    - essentials.getpos.others
     - essentials.helpop.recieve
     - essentials.home.others
     - essentials.invsee
@@ -190,6 +192,7 @@ groups:
     - essentials.nick.others
     - essentials.realname
     - essentials.seen.banreason
+    - essentials.seen.extra
     - essentials.setwarp
     - essentials.signs.create.*
     - essentials.signs.break.*
