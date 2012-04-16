@@ -62,7 +62,7 @@ public class EssentialsEntityListener implements Listener
 		}
 		else if (eDefend instanceof Animals && eAttack instanceof Player)
 		{
-			final User player = ess.getUser(eAttack);
+			final Player player = (Player)eAttack;
 			final ItemStack hand = player.getItemInHand();
 			if (hand != null && hand.getType() == Material.MILK_BUCKET)
 			{
