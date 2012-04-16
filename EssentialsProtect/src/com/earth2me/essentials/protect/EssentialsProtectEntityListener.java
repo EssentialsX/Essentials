@@ -194,7 +194,7 @@ public class EssentialsProtectEntityListener implements Listener
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityExplode(final EntityExplodeEvent event)
 	{
-		if (event.isCancelled())
+		if (event.isCancelled() || event.getEntity() == null)
 		{
 			return;
 		}
