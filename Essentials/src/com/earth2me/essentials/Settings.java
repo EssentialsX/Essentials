@@ -733,7 +733,7 @@ public class Settings implements ISettings
 
 	private boolean _getDisableItemPickupWhileAfk()
 	{
-		return config.getBoolean("disable-item-pickup-while-afk", true);
+		return config.getBoolean("disable-item-pickup-while-afk", false);
 	}
 
 	@Override

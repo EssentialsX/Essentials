@@ -270,7 +270,7 @@ freeze-afk-players: false
 
 # When the player is afk, should he be able to pickup items?
 # Enable this, when you don't want people idling in mob traps.
-disable-item-pickup-while-afk: true
+disable-item-pickup-while-afk: false
 
 # Should we automatically remove afk status when the player moves?
 # Player will be removed from afk on chat/command reguardless of this setting.
