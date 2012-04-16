@@ -32,18 +32,28 @@ public class EssentialsEntityListener implements Listener
 		{
 			final User defender = ess.getUser(eDefend);
 			final User attacker = ess.getUser(eAttack);
-			if (attacker.hasInvulnerabilityAfterTeleport() || defender.hasInvulnerabilityAfterTeleport()) {
+			if (attacker.hasInvulnerabilityAfterTeleport() || defender.hasInvulnerabilityAfterTeleport())
+			{
 				event.setCancelled(true);
 			}
 			attacker.updateActivity(true);
 			final List<String> commandList = attacker.getPowertool(attacker.getItemInHand());
 			if (commandList != null && !commandList.isEmpty())
 			{
-				for (String command : commandList)
+				for (final String command : commandList)
 				{
 					if (command != null && !command.isEmpty())
 					{
-						attacker.getServer().dispatchCommand(attacker, command.replaceAll("\\{player\\}", defender.getName()));
+						ess.scheduleSyncDelayedTask(
+								new Runnable()
+								{
+									@Override
+									public void run()
+									{
+										attacker.getServer().dispatchCommand(attacker.getBase(), command.replaceAll("\\{player\\}", defender.getName()));
+									}
+								});
+
 						event.setCancelled(true);
 						return;
 					}
