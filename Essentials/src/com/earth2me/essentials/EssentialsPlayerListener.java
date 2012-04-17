@@ -14,7 +14,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -104,7 +103,7 @@ public class EssentialsPlayerListener implements Listener
 			}
 
 			final Location afk = user.getAfkPosition();
-			if (afk == null || !event.getTo().getWorld().equals(afk.getWorld()) || afk.distanceSquared(event.getTo()) > 9)
+			if (afk == null || event.getTo().getWorld() != afk.getWorld() || afk.distanceSquared(event.getTo()) > 9)
 			{
 				user.updateActivity(true);
 			}
