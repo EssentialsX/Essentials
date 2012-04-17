@@ -212,13 +212,14 @@ groups:
   g:towny_default:
     permissions:
     - towny.chat.general
+    - towny.chat.local
 
   g:towny_builder:
     permissions:
     - towny.town.*
     - towny.nation.*
-    - towny.chat.tc
-    - towny.chat.nc
+    - towny.chat.town
+    - towny.chat.nation
     - towny.wild.build.6
     - towny.wild.destroy.6
     - towny.wild.destroy.14
