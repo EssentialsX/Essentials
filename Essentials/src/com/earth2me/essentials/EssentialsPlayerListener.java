@@ -296,26 +296,27 @@ public class EssentialsPlayerListener implements Listener
 			});
 		}
 	}
+	private final static List<String> COMMANDS = Arrays.asList("msg", "r", "mail", "m", "t", "emsg", "tell", "er", "reply", "ereply", "email");
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerCommandPreprocess(final PlayerCommandPreprocessEvent event)
 	{
-		final User user = ess.getUser(event.getPlayer());
+		final Player player = event.getPlayer();
 		final String cmd = event.getMessage().toLowerCase(Locale.ENGLISH).split(" ")[0].replace("/", "").toLowerCase(Locale.ENGLISH);
-		final List<String> commands = Arrays.asList("msg", "r", "mail", "m", "t", "emsg", "tell", "er", "reply", "ereply", "email");
-		if (commands.contains(cmd))
+		if (COMMANDS.contains(cmd))
 		{
-			for (Player player : ess.getServer().getOnlinePlayers())
+			for (Player onlinePlayer : ess.getServer().getOnlinePlayers())
 			{
-				final User spyer = ess.getUser(player);
-				if (spyer.isSocialSpyEnabled() && !user.equals(spyer))
+				final User spyer = ess.getUser(onlinePlayer);
+				if (spyer.isSocialSpyEnabled() && !player.equals(onlinePlayer))
 				{
-					player.sendMessage(user.getDisplayName() + " : " + event.getMessage());
+					onlinePlayer.sendMessage(player.getDisplayName() + " : " + event.getMessage());
 				}
 			}
 		}
-		if (!cmd.equalsIgnoreCase("afk"))
+		else if (!cmd.equalsIgnoreCase("afk"))
 		{
+			final User user = ess.getUser(player);
 			user.updateActivity(true);
 		}
 	}
