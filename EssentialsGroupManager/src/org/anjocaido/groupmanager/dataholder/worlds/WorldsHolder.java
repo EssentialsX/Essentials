@@ -57,12 +57,19 @@ public class WorldsHolder {
 	public WorldsHolder(GroupManager plugin) {
 
 		this.plugin = plugin;
+		resetWorldsHolder();
+	}
+	
+	public void resetWorldsHolder() {
+		
+		mirrorsGroup = new HashMap<String, String>();
+		mirrorsUser = new HashMap<String, String>();
+		
 		// Setup folders and check files exist for the primary world
 		verifyFirstRun();
 		initialLoad();
-		if (serverDefaultWorldName == null) {
+		if (serverDefaultWorldName == null)
 			throw new IllegalStateException("There is no default group! OMG!");
-		}
 	}
 
 	private void initialLoad() {

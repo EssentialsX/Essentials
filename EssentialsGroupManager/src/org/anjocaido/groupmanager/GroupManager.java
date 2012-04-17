@@ -56,25 +56,7 @@ public class GroupManager extends JavaPlugin {
 	private Map<CommandSender, String> selectedWorlds = new HashMap<CommandSender, String>();
 	private WorldsHolder worldsHolder;
 	private boolean validateOnlinePlayer = true;
-
-	private String lastError = "";
-
-	/**
-	 * @return the validateOnlinePlayer
-	 */
-	public boolean isValidateOnlinePlayer() {
-
-		return validateOnlinePlayer;
-	}
-
-	/**
-	 * @param validateOnlinePlayer the validateOnlinePlayer to set
-	 */
-	public void setValidateOnlinePlayer(boolean validateOnlinePlayer) {
-
-		this.validateOnlinePlayer = validateOnlinePlayer;
-	}
-
+	
 	private static boolean isLoaded = false;
 	protected GMConfiguration config;
 
@@ -89,13 +71,28 @@ public class GroupManager extends JavaPlugin {
 	private OverloadedWorldHolder dataHolder = null;
 	private AnjoPermissionsHandler permissionHandler = null;
 
+	private String lastError = "";
+
 	@Override
 	public void onDisable() {
+		
+		onDisable(false);
+	}
+	
+	@Override
+	public void onEnable() {
+		
+		onEnable(false);
+	}
+	
+	public void onDisable(boolean restarting) {
 
 		setLoaded(false);
 
-		// Unregister this service.
-		this.getServer().getServicesManager().unregister(this.worldsHolder);
+		if (!restarting) {
+			// Unregister this service if we are shutting down.
+			this.getServer().getServicesManager().unregister(this.worldsHolder);
+		}
 
 		disableScheduler(); // Shutdown before we save, so it doesn't interfere.
 		if (worldsHolder != null) {
@@ -118,18 +115,26 @@ public class GroupManager extends JavaPlugin {
 		// EXAMPLE: Custom code, here we just output some info so we can check that all is well
 		PluginDescriptionFile pdfFile = this.getDescription();
 		System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is disabled!");
-		GroupManager.logger.removeHandler(ch);
+		
+		if (!restarting)
+			GroupManager.logger.removeHandler(ch);
 	}
-
-	@Override
-	public void onEnable() {
+	
+	public void onEnable(boolean restarting) {
 
 		try {
+			/*
+			 * reset local variables.
+			 */
+			overloadedUsers = new HashMap<String, ArrayList<User>>();
+			selectedWorlds = new HashMap<CommandSender, String>();
 			lastError = "";
-
-			GroupManager.logger.setUseParentHandlers(false);
-			ch = new GMLoggerHandler();
-			GroupManager.logger.addHandler(ch);
+			
+			if (!restarting) {
+				GroupManager.logger.setUseParentHandlers(false);
+				ch = new GMLoggerHandler();
+				GroupManager.logger.addHandler(ch);
+			}
 			logger.setLevel(Level.ALL);
 
 			// Create the backup folder, if it doesn't exist.
@@ -138,7 +143,11 @@ public class GroupManager extends JavaPlugin {
 			prepareConfig();
 			// Load the global groups
 			globalGroups = new GlobalGroups(this);
-			worldsHolder = new WorldsHolder(this);
+			
+			if (!restarting)
+				worldsHolder = new WorldsHolder(this);
+			else
+				worldsHolder.resetWorldsHolder();
 
 			PluginDescriptionFile pdfFile = this.getDescription();
 			if (worldsHolder == null) {
@@ -169,7 +178,9 @@ public class GroupManager extends JavaPlugin {
 			System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
 
 			// Register as a service
-			this.getServer().getServicesManager().register(WorldsHolder.class, this.worldsHolder, this, ServicePriority.Lowest);
+			if (!restarting)
+				this.getServer().getServicesManager().register(WorldsHolder.class, this.worldsHolder, this, ServicePriority.Lowest);
+			
 		} catch (Exception ex) {
 
 			/*
@@ -221,6 +232,22 @@ public class GroupManager extends JavaPlugin {
 			e.printStackTrace();
 		}
 
+	}
+	
+	/**
+	 * @return the validateOnlinePlayer
+	 */
+	public boolean isValidateOnlinePlayer() {
+
+		return validateOnlinePlayer;
+	}
+
+	/**
+	 * @param validateOnlinePlayer the validateOnlinePlayer to set
+	 */
+	public void setValidateOnlinePlayer(boolean validateOnlinePlayer) {
+
+		this.validateOnlinePlayer = validateOnlinePlayer;
 	}
 
 	public static boolean isLoaded() {
@@ -1633,11 +1660,10 @@ public class GroupManager extends JavaPlugin {
 					 */
 
 					/*
-					 * Reset the last error as we are attempting a fresh load.
+					 * Attempting a fresh load.
 					 */
-					lastError = "";
-					onDisable();
-					onEnable();
+					onDisable(true);
+					onEnable(true);
 
 					sender.sendMessage("All settings and worlds were reloaded!");
 				}
