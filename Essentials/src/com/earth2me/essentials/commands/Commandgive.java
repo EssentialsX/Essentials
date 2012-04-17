@@ -46,9 +46,9 @@ public class Commandgive extends EssentialsCommand
 		final User giveTo = getPlayer(server, args, 0);
 
 		if (args.length > 3 && Util.isInt(args[2]) && Util.isInt(args[3]))
-		{
-			stack.setDurability(Short.parseShort(args[2]));
-			stack.setAmount(Integer.parseInt(args[3]));
+		{			
+			stack.setAmount(Integer.parseInt(args[2]));
+			stack.setDurability(Short.parseShort(args[3]));
 		}
 		else if (args.length > 2 && Integer.parseInt(args[2]) > 0)
 		{
