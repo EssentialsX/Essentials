@@ -159,12 +159,14 @@ public class GlobalGroups {
 						if (element instanceof List) {
 							try {
 								for (String node : (List<String>) element) {
-									newGroup.addPermission(node);
+									if ((node != null) && !node.isEmpty())
+										newGroup.addPermission(node);
 								}
 							} catch (ClassCastException ex) {
 								throw new IllegalArgumentException("Invalid permission node for global group:  " + groupName, ex);
 							}
 						} else if (element instanceof String) {
+							if ((element != null) && !((String)element).isEmpty())
 							newGroup.addPermission((String) element);
 						} else
 							throw new IllegalArgumentException("Unknown type of permission node for global group:  " + groupName);
