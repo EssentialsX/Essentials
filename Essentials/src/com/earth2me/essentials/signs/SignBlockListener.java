@@ -57,22 +57,19 @@ public class SignBlockListener implements Listener
 				}
 			}
 		}
-		else
+		// prevent any signs be broken by destroying the block they are attached to
+		if (EssentialsSign.checkIfBlockBreaksSigns(block))
 		{
-			// prevent any signs be broken by destroying the block they are attached to
-			if (EssentialsSign.checkIfBlockBreaksSigns(block))
+			LOGGER.log(Level.INFO, "Prevented that a block was broken next to a sign.");
+			return true;
+		}
+		for (EssentialsSign sign : ess.getSettings().enabledSigns())
+		{
+			if (sign.getBlocks().contains(block.getType())
+				&& !sign.onBlockBreak(block, player, ess))
 			{
-				LOGGER.log(Level.INFO, "Prevented that a block was broken next to a sign.");
+				LOGGER.log(Level.INFO, "A block was protected by a sign.");
 				return true;
-			}
-			for (EssentialsSign sign : ess.getSettings().enabledSigns())
-			{
-				if (sign.getBlocks().contains(block.getType())
-					&& !sign.onBlockBreak(block, player, ess))
-				{
-					LOGGER.log(Level.INFO, "A block was protected by a sign.");
-					return true;
-				}
 			}
 		}
 		return false;
