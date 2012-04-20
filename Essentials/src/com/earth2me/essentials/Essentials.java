@@ -42,6 +42,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -241,7 +242,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		getScheduler().scheduleSyncRepeatingTask(this, timer, 1, 100);
 		Economy.setEss(this);
 		execTimer.mark("RegListeners");
-		
+
 		final MetricsStarter metricsStarter = new MetricsStarter(this);
 		if (metricsStarter.getStart() != null && metricsStarter.getStart() == true)
 		{
@@ -304,20 +305,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 				}
 				catch (final Exception ex)
 				{
-					final ArrayList<StackTraceElement> elements = new ArrayList<StackTraceElement>(Arrays.asList(ex.getStackTrace()));
-					elements.remove(0);
-					final ArrayList<StackTraceElement> toRemove = new ArrayList<StackTraceElement>();
-					for (final StackTraceElement e : elements)
-					{
-						if (e.getClassName().equals("com.earth2me.essentials.Essentials"))
-						{
-							toRemove.add(e);
-						}
-					}
-					elements.removeAll(toRemove);
-					final StackTraceElement[] trace = elements.toArray(new StackTraceElement[elements.size()]);
-					ex.setStackTrace(trace);
-					ex.printStackTrace();
+					Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
 					sender.sendMessage(ChatColor.RED + "An internal error occurred while attempting to perform this command");
 					return true;
 				}
