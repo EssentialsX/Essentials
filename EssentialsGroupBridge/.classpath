@@ -3,7 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="../lib/bukkit.jar"/>
-	<classpathentry kind="lib" path="../lib/craftbukkit.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/EssentialsGroupManager"/>
 	<classpathentry kind="lib" path="../lib/Permissions3.jar"/>
 	<classpathentry kind="output" path="bin"/>
