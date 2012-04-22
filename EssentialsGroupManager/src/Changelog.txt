@@ -183,3 +183,4 @@ v 2.0:
 	- Re-initialize the WorldsHolder on a reload, as un-registering and re-registering a new holder means all plugins have to check for the new service on every quiery.
 	- Prevent null perms getting past the GlobalGroups loader.
 	- Fix forgetting sub groups on a manload.
+	- Allow 'manucheckp' to notify when superperms reports false but it is really negated.

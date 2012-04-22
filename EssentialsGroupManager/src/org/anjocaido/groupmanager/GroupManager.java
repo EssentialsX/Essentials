@@ -921,7 +921,7 @@ public class GroupManager extends JavaPlugin {
 
 				// superperms
 				if (targetPlayer != null) {
-					sender.sendMessage(ChatColor.YELLOW + "SuperPerms reports Node: " + targetPlayer.hasPermission(args[1]));
+					sender.sendMessage(ChatColor.YELLOW + "SuperPerms reports Node: " + targetPlayer.hasPermission(args[1]) + ((!targetPlayer.hasPermission(args[1]) && targetPlayer.isPermissionSet(args[1])) ? " (Negated)": ""));
 				}
 
 				return true;
