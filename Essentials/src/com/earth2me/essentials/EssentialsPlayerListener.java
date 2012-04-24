@@ -421,7 +421,7 @@ public class EssentialsPlayerListener implements Listener
 		{
 			final User user = ess.getUser(event.getWhoClicked());
 			final User invOwner = ess.getUser(event.getView().getPlayer());
-			if (user.isInvSee() && !user.isAuthorized("essentials.invsee.modify") 
+			if (user.isInvSee() && !user.isAuthorized("essentials.invsee.modify")
 				|| invOwner.isAuthorized("essentials.invsee.preventmodify"))
 			{
 				event.setCancelled(true);

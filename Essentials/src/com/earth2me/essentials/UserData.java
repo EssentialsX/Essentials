@@ -3,9 +3,7 @@ package com.earth2me.essentials;
 import static com.earth2me.essentials.I18n._;
 import java.io.File;
 import java.util.*;
-import java.util.logging.Logger;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -14,7 +12,6 @@ public abstract class UserData extends PlayerExtension implements IConf
 {
 	protected final transient IEssentials ess;
 	private final EssentialsConf config;
-	private static final Logger logger = Logger.getLogger("Minecraft");
 
 	protected UserData(Player base, IEssentials ess)
 	{
@@ -149,7 +146,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	public List<String> getHomes()
 	{
-		return new ArrayList(homes.keySet());
+		return new ArrayList<String>(homes.keySet());
 	}
 
 	public void setHome(String name, Location loc)
@@ -254,11 +251,13 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.save();
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<String> getPowertool(ItemStack stack)
 	{
 		return (List<String>)powertools.get("" + stack.getTypeId());
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<String> getPowertool(int id)
 	{
 		return (List<String>)powertools.get("" + id);

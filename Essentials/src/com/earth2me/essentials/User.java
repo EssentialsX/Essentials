@@ -164,6 +164,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		}
 	}
 
+	@Override
 	public boolean canAfford(final double cost)
 	{
 		return canAfford(cost, true);
@@ -578,6 +579,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		return super.isGodModeEnabled();
 	}
 
+	@Override
 	public String getGroup()
 	{
 		return ess.getPermissionsHandler().getGroup(base);

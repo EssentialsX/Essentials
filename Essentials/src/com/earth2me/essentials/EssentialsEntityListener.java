@@ -3,7 +3,7 @@ package com.earth2me.essentials;
 import static com.earth2me.essentials.I18n._;
 import java.util.List;
 import org.bukkit.Material;
-import org.bukkit.entity.Animals;
+import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -60,13 +60,13 @@ public class EssentialsEntityListener implements Listener
 				}
 			}
 		}
-		else if (eDefend instanceof Animals && eAttack instanceof Player)
+		else if (eDefend instanceof Ageable && eAttack instanceof Player)
 		{
 			final Player player = (Player)eAttack;
 			final ItemStack hand = player.getItemInHand();
 			if (hand != null && hand.getType() == Material.MILK_BUCKET)
 			{
-				((Animals)eDefend).setAge(-24000);
+				((Ageable)eDefend).setBaby();
 				hand.setType(Material.BUCKET);
 				player.setItemInHand(hand);
 				player.updateInventory();

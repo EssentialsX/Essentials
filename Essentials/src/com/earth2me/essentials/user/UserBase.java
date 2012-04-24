@@ -1,7 +1,6 @@
 package com.earth2me.essentials.user;
 
 import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.craftbukkit.OfflineBedLocation;
 import com.earth2me.essentials.storage.AsyncStorageObjectHolder;
 import java.io.File;
 import lombok.Delegate;
@@ -97,11 +96,7 @@ public abstract class UserBase extends AsyncStorageObjectHolder<UserData> implem
 	@Override
 	public Location getBedSpawnLocation()
 	{
-		if (isOnlineUser()) {
-			return base.getBedSpawnLocation();
-		} else {
-			return OfflineBedLocation.getBedLocation(base.getName(), ess);
-		} 
+		return base.getBedSpawnLocation();
 	}
 
 	@Override
