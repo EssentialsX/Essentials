@@ -621,7 +621,6 @@ pistonstickbase,29,7
 pistonstick,29,7
 pistonsbase,29,7
 pistons,29,7
-psticky,,
 pstick,29,7
 spiderweb,30,0
 sweb,30,0
@@ -2636,7 +2635,8 @@ eggzombiep,383,57
 endermanegg,383,58
 eggenderman,383,58
 cavespideregg,383,59
-cavespideregg,383,59
+eggcavespider,383,59
+silverfishegg,383,60
 eggsilverfish,383,60
 blazeegg,383,61
 eggblaze,383,61
