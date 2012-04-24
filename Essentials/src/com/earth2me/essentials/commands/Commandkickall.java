@@ -27,5 +27,6 @@ public class Commandkickall extends EssentialsCommand
 				onlinePlayer.kickPlayer(args.length > 0 ? getFinalArg(args, 0) : _("kickDefault"));
 			}
 		}
+		sender.sendMessage(_("kickedAll"));
 	}
 }
