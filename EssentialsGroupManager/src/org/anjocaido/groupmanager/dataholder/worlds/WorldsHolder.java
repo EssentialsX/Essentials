@@ -62,6 +62,7 @@ public class WorldsHolder {
 	
 	public void resetWorldsHolder() {
 		
+		worldsData = new HashMap<String, OverloadedWorldHolder>();
 		mirrorsGroup = new HashMap<String, String>();
 		mirrorsUser = new HashMap<String, String>();
 		

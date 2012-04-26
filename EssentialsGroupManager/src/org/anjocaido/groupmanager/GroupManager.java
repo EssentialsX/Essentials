@@ -103,13 +103,20 @@ public class GroupManager extends JavaPlugin {
 			}
 		}
 
-		if (WorldEvents != null)
-			WorldEvents = null;
+		
 
 		// Remove all attachments before clearing
 		if (BukkitPermissions != null) {
 			BukkitPermissions.removeAllAttachments();
+		}
+		
+		if (!restarting) {
+			
+			if (WorldEvents != null)
+				WorldEvents = null;
+
 			BukkitPermissions = null;
+			
 		}
 
 		// EXAMPLE: Custom code, here we just output some info so we can check that all is well
@@ -130,6 +137,9 @@ public class GroupManager extends JavaPlugin {
 			selectedWorlds = new HashMap<CommandSender, String>();
 			lastError = "";
 			
+			/*
+			 * Setup our logger if we are not restarting.
+			 */
 			if (!restarting) {
 				GroupManager.logger.setUseParentHandlers(false);
 				ch = new GMLoggerHandler();
@@ -144,11 +154,17 @@ public class GroupManager extends JavaPlugin {
 			// Load the global groups
 			globalGroups = new GlobalGroups(this);
 			
+			/*
+			 * Configure the worlds holder.
+			 */
 			if (!restarting)
 				worldsHolder = new WorldsHolder(this);
 			else
 				worldsHolder.resetWorldsHolder();
 
+			/*
+			 * This should NEVER happen. No idea why it's still here.
+			 */
 			PluginDescriptionFile pdfFile = this.getDescription();
 			if (worldsHolder == null) {
 				GroupManager.logger.severe("Can't enable " + pdfFile.getName() + " version " + pdfFile.getVersion() + ", bad loading!");
@@ -156,13 +172,30 @@ public class GroupManager extends JavaPlugin {
 				throw new IllegalStateException("An error ocurred while loading GroupManager");
 			}
 
-			// Set a few defaults (reloads)
+			/*
+			 *  Prevent our registered events from triggering
+			 *  updates as we are not fully loaded.
+			 */
 			setLoaded(false);
 
-			// Initialize the world listener and bukkit permissions to handle events.
-			WorldEvents = new GMWorldListener(this);
-			BukkitPermissions = new BukkitPermissions(this);
+			/*
+			 *  Initialize the world listener and bukkit permissions
+			 *  to handle events if this is a fresh start
+			 *  
+			 *  else
+			 *  
+			 *  Reset bukkit perms.
+			 */
+			if (!restarting) {
+				WorldEvents = new GMWorldListener(this);
+				BukkitPermissions = new BukkitPermissions(this);
+			} else {
+				BukkitPermissions.reset();
+			}
 
+			/*
+			 * Start the scheduler for data saving.
+			 */
 			enableScheduler();
 
 			/*
@@ -172,6 +205,9 @@ public class GroupManager extends JavaPlugin {
 
 			if (getServer().getScheduler().scheduleSyncDelayedTask(this, new BukkitPermsUpdateTask(), 1) == -1) {
 				GroupManager.logger.severe("Could not schedule superperms Update.");
+				/*
+				 * Flag that we are now loaded and should start processing events.
+				 */
 				setLoaded(true);
 			}
 
@@ -885,7 +921,7 @@ public class GroupManager extends JavaPlugin {
 
 				// superperms
 				if (targetPlayer != null) {
-					sender.sendMessage(ChatColor.YELLOW + "SuperPerms reports Node: " + targetPlayer.hasPermission(args[1]));
+					sender.sendMessage(ChatColor.YELLOW + "SuperPerms reports Node: " + targetPlayer.hasPermission(args[1]) + ((!targetPlayer.hasPermission(args[1]) && targetPlayer.isPermissionSet(args[1])) ? " (Negated)": ""));
 				}
 
 				return true;

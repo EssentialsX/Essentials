@@ -96,11 +96,16 @@ public class BukkitPermissions {
 	public BukkitPermissions(GroupManager plugin) {
 
 		this.plugin = plugin;
-		this.collectPermissions();
+		this.reset();
 		this.registerEvents();
-		this.updateAllPlayers();
+		
 
 		GroupManager.logger.info("Superperms support enabled.");
+	}
+	
+	public void reset() {
+		this.collectPermissions();
+		this.updateAllPlayers();
 	}
 
 	private void registerEvents() {
