@@ -30,7 +30,7 @@ public class Commandgamemode extends EssentialsCommand
 	@Override
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		if (args.length > 0 && !args[0].trim().isEmpty() && user.isAuthorized("essentials.gamemode.others"))
+		if (args.length > 0 && args[0].trim().length() > 2 && user.isAuthorized("essentials.gamemode.others"))
 		{
 			gamemodeOtherPlayers(server, user, args);
 			return;
