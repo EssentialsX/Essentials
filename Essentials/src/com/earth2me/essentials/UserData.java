@@ -4,6 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import java.io.File;
 import java.util.*;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -147,6 +148,17 @@ public abstract class UserData extends PlayerExtension implements IConf
 	public List<String> getHomes()
 	{
 		return new ArrayList<String>(homes.keySet());
+	}
+
+	public int getHomeCount()
+	{
+		int count = getHomes().size();
+		Location bed = getBedSpawnLocation();
+		if (bed != null && bed.getBlock().getType() == Material.BED_BLOCK)
+		{
+			count++;
+		}
+		return count;
 	}
 
 	public void setHome(String name, Location loc)
