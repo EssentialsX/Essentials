@@ -73,15 +73,15 @@ public class EssentialsPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerMove(final PlayerMoveEvent event)
 	{
-		if (event.getFrom().getBlockX() == event.getTo().getBlockX()
-			&& event.getFrom().getBlockZ() == event.getTo().getBlockZ()
-			&& event.getFrom().getBlockY() == event.getTo().getBlockY())
+		if ((!ess.getSettings().cancelAfkOnMove() && !ess.getSettings().getFreezeAfkPlayers())
+			|| event.getFrom().getBlockX() == event.getTo().getBlockX()
+			   && event.getFrom().getBlockZ() == event.getTo().getBlockZ()
+			   && event.getFrom().getBlockY() == event.getTo().getBlockY())
 		{
 			return;
 		}
 
 		final User user = ess.getUser(event.getPlayer());
-
 		if (user.isAfk() && ess.getSettings().getFreezeAfkPlayers())
 		{
 			final Location from = event.getFrom();
@@ -99,7 +99,6 @@ public class EssentialsPlayerListener implements Listener
 			}
 			return;
 		}
-
 		final Location afk = user.getAfkPosition();
 		if (afk == null || !event.getTo().getWorld().equals(afk.getWorld()) || afk.distanceSquared(event.getTo()) > 9)
 		{
@@ -419,7 +418,7 @@ public class EssentialsPlayerListener implements Listener
 			final User user = ess.getUser(event.getWhoClicked());
 			final User invOwner = ess.getUser(event.getView().getPlayer());
 			if (user.isInvSee() && (!user.isAuthorized("essentials.invsee.modify")
-				|| invOwner.isAuthorized("essentials.invsee.preventmodify")))
+									|| invOwner.isAuthorized("essentials.invsee.preventmodify")))
 			{
 				event.setCancelled(true);
 			}
