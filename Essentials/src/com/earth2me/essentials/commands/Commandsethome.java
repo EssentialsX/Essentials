@@ -33,7 +33,7 @@ public class Commandsethome extends EssentialsCommand
 					{
 						throw new NotEnoughArgumentsException();
 					}
-					if ((user.isAuthorized("essentials.sethome.multiple.unlimited")) || (user.getHomeCount() < ess.getSettings().getHomeLimit(user))
+					if ((user.isAuthorized("essentials.sethome.multiple.unlimited")) || (user.getHomes().size() < ess.getSettings().getHomeLimit(user))
 						|| (user.getHomes().contains(args[0].toLowerCase(Locale.ENGLISH))))
 					{
 						user.setHome(args[0].toLowerCase(Locale.ENGLISH));
