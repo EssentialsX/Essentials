@@ -292,7 +292,7 @@ public class EssentialsPlayerListener implements Listener
 			});
 		}
 	}
-	private final static List<String> COMMANDS = Arrays.asList("msg", "r", "mail", "m", "t", "emsg", "tell", "er", "reply", "ereply", "email");
+	private final static List<String> COMMANDS = Arrays.asList("msg", "r", "mail", "m", "t", "whisper", "emsg", "tell", "er", "reply", "ereply", "email");
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerCommandPreprocess(final PlayerCommandPreprocessEvent event)
