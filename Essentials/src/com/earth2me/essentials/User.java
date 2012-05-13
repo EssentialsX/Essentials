@@ -263,75 +263,78 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		return teleportRequestHere;
 	}
 
-	public String getNick(final boolean addprefixsuffix)
+	public String getNick(final boolean longnick)
 	{
-		final StringBuilder nickname = new StringBuilder();
+		final StringBuilder prefix = new StringBuilder();
+		String nickname;
+		String suffix = "§f";
 		final String nick = getNickname();
 		if (ess.getSettings().isCommandDisabled("nick") || nick == null || nick.isEmpty() || nick.equals(getName()))
 		{
-			nickname.append(getName());
+			nickname = getName();
 		}
 		else
 		{
-			nickname.append(ess.getSettings().getNicknamePrefix()).append(nick);
+			nickname = ess.getSettings().getNicknamePrefix() + nick;
 		}
 
-		if (addprefixsuffix && isOp())
+		if (isOp())
 		{
 			try
 			{
 				final String opPrefix = ess.getSettings().getOperatorColor().toString();
 				if (opPrefix.length() > 0)
 				{
-					nickname.insert(0, opPrefix);
-					nickname.append("§f");
+					prefix.insert(0, opPrefix);
 				}
 			}
 			catch (Exception e)
 			{
 			}
 		}
-		if (addprefixsuffix && ess.getSettings().addPrefixSuffix())
+
+		if (ess.getSettings().addPrefixSuffix())
 		{
 			if (!ess.getSettings().disablePrefix())
 			{
-				final String prefix = ess.getPermissionsHandler().getPrefix(base).replace('&', '§');
-				nickname.insert(0, prefix);
+				final String ptext = ess.getPermissionsHandler().getPrefix(base).replace('&', '§');
+				prefix.insert(0, ptext);
 			}
 			if (!ess.getSettings().disableSuffix())
 			{
-				final String suffix = ess.getPermissionsHandler().getSuffix(base).replace('&', '§');
-				nickname.append(suffix);
-				if (suffix.length() < 2 || suffix.charAt(suffix.length() - 2) != '§')
-				{
-					nickname.append("§f");
-				}
-			}
-			else
-			{
-				nickname.append("§f");
+				final String stext = ess.getPermissionsHandler().getSuffix(base).replace('&', '§');
+				suffix = stext + "§f";
+				suffix = suffix.replace("§f§f", "§f");
 			}
 		}
-
-		return nickname.toString();
+		final String strPrefix = prefix.toString();
+		String output = strPrefix + nickname + suffix;
+		if (!longnick && output.length() > 16)
+		{
+			output = strPrefix + nickname;
+		}
+		if (!longnick && output.length() > 16)
+		{
+			output = Util.lastCode(strPrefix) + nickname;
+		}
+		if (!longnick && output.length() > 16)
+		{
+			output = Util.lastCode(strPrefix) + nickname.substring(0, 14);
+		}
+		if (output.charAt(output.length() - 1) == '§') {
+			output = output.substring(0, output.length() - 1);
+		}
+		return output;
 	}
 
 	public void setDisplayNick()
 	{
 		if (base.isOnline() && ess.getSettings().changeDisplayName())
 		{
-			String name = getNick(true);
-			setDisplayName(name);
-			if (name.length() > 16)
-			{
-				name = getNick(false);
-			}
-			if (name.length() > 16)
-			{
-				name = Util.stripFormat(name);
-			}
+			setDisplayName(getNick(true));
 			if (ess.getSettings().changePlayerListName())
 			{
+				String name = getNick(false);
 				try
 				{
 					setPlayerListName(name);

@@ -510,6 +510,15 @@ public class Util
 		}
 		return buf.toString();
 	}
+	
+	public static String lastCode(final String input) {
+		int pos = input.lastIndexOf("§");
+		if (pos == -1 || (pos + 1) == input.length()) {
+			return "";
+		}
+		return input.substring(pos, pos + 2);		
+	}
+	
 	private static transient final Pattern URL_PATTERN = Pattern.compile("((?:(?:https?)://)?[\\w-_\\.]{2,})\\.([a-z]{2,3}(?:/\\S+)?)");
 	private static transient final Pattern VANILLA_PATTERN = Pattern.compile("\u00A7+[0-9A-FK-ORa-fk-or]");
 	private static transient final Pattern REPLACE_PATTERN = Pattern.compile("&([0-9a-fk-or])");
