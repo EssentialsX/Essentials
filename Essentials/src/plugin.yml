@@ -90,6 +90,10 @@ commands:
   essentials:
     description: Reloads essentials.
     usage: /<command>
+  exp:
+    description: States how much exp you have.
+    usage: /<command>
+    aliases: [eexp]
   ext:
     description: Extinguish players.
     usage: /<command> [player]
