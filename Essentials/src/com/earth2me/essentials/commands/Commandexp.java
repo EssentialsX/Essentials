@@ -8,7 +8,6 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-
 public class Commandexp extends EssentialsCommand
 {
 	public Commandexp()
@@ -23,16 +22,63 @@ public class Commandexp extends EssentialsCommand
 		{
 			final User user = ess.getUser(onlinePlayer);
 			{
-				if (user.isAuthorized("essentials.exp.needed"))
+				if (args.length < 1 && user.isAuthorized("essentials.exp"))
 				{
 					int totalexp = SetExpFix.getTotalExperience(user);
 					int expleft = (int)Util.roundDouble(((((3.5 * user.getLevel()) + 6.7) - (totalexp - ((1.75 *(user.getLevel() * user.getLevel())) + (5.00 * user.getLevel())))) + 1));
-					sender.sendMessage(_("expneeded", SetExpFix.getTotalExperience(user),"" + expleft));
+					sender.sendMessage(_("exp", SetExpFix.getTotalExperience(user), expleft));
 				}
-				else if (user.isAuthorized("essentials.exp"))
+				if (args.length == 1 && user.isAuthorized("essentials.exp.others"))
 				{
-					sender.sendMessage(_("exp", SetExpFix.getTotalExperience(user)));
+					for (Player p : server.matchPlayer(args[0]))
+					{
+						User player = getPlayer(server, args, 1);
+						int totalexp = SetExpFix.getTotalExperience(user);
+						int expleft = (int)Util.roundDouble(((((3.5 * user.getLevel()) + 6.7) - (totalexp - ((1.75 *(user.getLevel() * user.getLevel())) + (5.00 * user.getLevel())))) + 1));
+					sender.sendMessage(_("expothers", player.getDisplayName(), SetExpFix.getTotalExperience(p), expleft));
+					}
 				}
+				if(args.length >= 1)
+					if (args[0].equalsIgnoreCase("set"))
+					{
+						if (args.length >= 2)
+							for (Player p : server.matchPlayer(args[1]))
+								if ((args.length == 3) && (user.isAuthorized("essentials.exp.set.others")))
+								{
+									User player = getPlayer(server, args, 1);
+									int exp = Integer.parseInt(args[2]);
+									SetExpFix.setTotalExperience(p, exp);
+									sender.sendMessage(_("expsetothers", player.getDisplayName(), exp));
+								}
+								else if ((args.length == 2) && (user.isAuthorized("essentials.exp.set")))
+								{
+									int exp = Integer.parseInt(args[1]);
+									SetExpFix.setTotalExperience(user, exp);
+									sender.sendMessage(_("expset", exp));
+								}
+						
+						
+					}
+					else if (args[0].equalsIgnoreCase("give"))
+					{
+						if (args.length >= 2)
+							for (Player p : server.matchPlayer(args[1]))
+								if ((args.length == 3) && (user.isAuthorized("essentials.exp.give.others")))
+								{
+									User player = getPlayer(server, args, 1);
+									int amount = Integer.parseInt(args[2]);
+									p.giveExp(amount);
+									sender.sendMessage(_("expgiveothers", player.getDisplayName(), amount));
+								}
+								else if ((args.length == 2) && (user.isAuthorized("essentials.exp.give")))
+								{
+									int amount = Integer.parseInt(args[1]);
+									user.giveExp(amount);
+									sender.sendMessage(_("expgive", amount));
+								}
+
+					}
+				
 			}
 		}	
 	}
