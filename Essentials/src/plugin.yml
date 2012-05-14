@@ -91,7 +91,7 @@ commands:
     description: Reloads essentials.
     usage: /<command>
   exp:
-    description: States how much exp you have and how much you need to level up.
+    description: give, set or look at a players exp.
     usage: /<command> [player|set|give] [playername] [amount]
     aliases: [eexp]
   ext:
