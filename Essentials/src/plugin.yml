@@ -92,7 +92,7 @@ commands:
     usage: /<command>
   exp:
     description: give, set or look at a players exp.
-    usage: /<command> [player|set|give] [playername] [amount]
+    usage: /<command> [player|set|give|fix] [playername] [amount]
     aliases: [eexp]
   ext:
     description: Extinguish players.
