@@ -71,5 +71,5 @@ public interface IEssentials extends Plugin
 	
 	void setMetrics(Metrics metrics);
 	
-	LagMeter getLagMeter();
+	EssentialsTimer getTimer();
 }

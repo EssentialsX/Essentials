@@ -84,7 +84,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private transient ExecuteTimer execTimer;
 	private transient I18n i18n;
 	private transient Metrics metrics;
-	private transient LagMeter lagMeter;
+	private transient EssentialsTimer timer;
 
 	@Override
 	public ISettings getSettings()
@@ -239,11 +239,8 @@ public class Essentials extends JavaPlugin implements IEssentials
 
 		pm.registerEvents(tntListener, this);
 
-		final EssentialsTimer timer = new EssentialsTimer(this);
+		timer = new EssentialsTimer(this);
 		getScheduler().scheduleSyncRepeatingTask(this, timer, 1, 100);
-
-		lagMeter = new LagMeter();
-		getScheduler().scheduleSyncRepeatingTask(this, lagMeter, 0, 40);
 
 		Economy.setEss(this);
 		execTimer.mark("RegListeners");
@@ -626,9 +623,10 @@ public class Essentials extends JavaPlugin implements IEssentials
 		return i18n;
 	}
 
-	public LagMeter getLagMeter()
+	@Override
+	public EssentialsTimer getTimer()
 	{
-		return lagMeter;
+		return timer;
 	}
 
 	private static class EssentialsWorldListener implements Listener, Runnable
