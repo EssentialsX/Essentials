@@ -723,4 +723,22 @@ public class FakeServer implements Server
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
+	@Override
+	public int getMonsterSpawnLimit()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public int getAnimalSpawnLimit()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public int getWaterAnimalSpawnLimit()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }
