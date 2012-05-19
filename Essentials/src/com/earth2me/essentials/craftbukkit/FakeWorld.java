@@ -633,4 +633,40 @@ public class FakeWorld implements World
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
+	@Override
+	public int getMonsterSpawnLimit()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setMonsterSpawnLimit(int arg0)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public int getAnimalSpawnLimit()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setAnimalSpawnLimit(int arg0)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public int getWaterAnimalSpawnLimit()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setWaterAnimalSpawnLimit(int arg0)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }
