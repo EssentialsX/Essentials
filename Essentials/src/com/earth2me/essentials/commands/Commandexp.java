@@ -15,38 +15,16 @@ public class Commandexp extends EssentialsCommand
 		super("exp");
 	}
 
-	private void showExp(final User user, final User target)
-	{
-		final int totalExp = SetExpFix.getTotalExperience(target);
-		final int expLeft = (int)Util.roundDouble(((((3.5 * target.getLevel()) + 6.7) - (totalExp - ((1.75 * (target.getLevel() * target.getLevel())) + (5.00 * target.getLevel())))) + 1));
-		user.sendMessage(_("exp", target.getDisplayName(), SetExpFix.getTotalExperience(target), target.getLevel(), expLeft));
-	}
-
-	private void setExp(final User user, final User target, final String strAmount, final boolean give)
-	{
-		Long amount = Long.parseLong(strAmount);
-		if (give)
-		{
-			amount += SetExpFix.getTotalExperience(target);
-		}
-		if (amount > Integer.MAX_VALUE) {
-			amount = (long)Integer.MAX_VALUE;
-		}
-		SetExpFix.setTotalExperience(target, amount.intValue());
-		user.sendMessage(_("expset", target.getDisplayName(), amount));
-	}
-
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length == 0)
 		{
 			showExp(user, user);
-			return;
 		}
-		if (args[0].equalsIgnoreCase("set") && user.isAuthorized("essentials.exp.set"))
+		else if (args[0].equalsIgnoreCase("set") && user.isAuthorized("essentials.exp.set"))
 		{
-			if (args.length == 3)
+			if (args.length == 3 && user.isAuthorized("essentials.exp.set.others"))
 			{
 				Boolean foundUser = false;
 				for (Player matchPlayer : server.matchPlayer(args[1]))
@@ -65,7 +43,7 @@ public class Commandexp extends EssentialsCommand
 		}
 		else if (args[0].equalsIgnoreCase("give") && user.isAuthorized("essentials.exp.give"))
 		{
-			if (args.length == 3)
+			if (args.length == 3 && user.isAuthorized("essentials.exp.give.others"))
 			{
 				Boolean foundUser = false;
 				for (Player matchPlayer : server.matchPlayer(args[1]))
@@ -100,5 +78,27 @@ public class Commandexp extends EssentialsCommand
 				showExp(user, target);
 			}
 		}
+	}
+
+	private void showExp(final User user, final User target)
+	{
+		final int totalExp = SetExpFix.getTotalExperience(target);
+		final int expLeft = (int)Util.roundDouble(((((3.5 * target.getLevel()) + 6.7) - (totalExp - ((1.75 * (target.getLevel() * target.getLevel())) + (5.00 * target.getLevel())))) + 1));
+		user.sendMessage(_("exp", target.getDisplayName(), SetExpFix.getTotalExperience(target), target.getLevel(), expLeft));
+	}
+
+	private void setExp(final User user, final User target, final String strAmount, final boolean give)
+	{
+		Long amount = Long.parseLong(strAmount);
+		if (give)
+		{
+			amount += SetExpFix.getTotalExperience(target);
+		}
+		if (amount > Integer.MAX_VALUE)
+		{
+			amount = (long)Integer.MAX_VALUE;
+		}
+		SetExpFix.setTotalExperience(target, amount.intValue());
+		user.sendMessage(_("expSet", target.getDisplayName(), amount));
 	}
 }
