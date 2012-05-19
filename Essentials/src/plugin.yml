@@ -90,10 +90,11 @@ commands:
   essentials:
     description: Reloads essentials.
     usage: /<command>
+    aliases: [ess]
   exp:
-    description: give, set or look at a players exp.
-    usage: /<command> [player|set|give|fix] [playername] [amount]
-    aliases: [eexp]
+    description: Give, set or look at a players exp.
+    usage: /<command> [show|set|give|fix] [playername [amount]]
+    aliases: [eexp,xp]
   ext:
     description: Extinguish players.
     usage: /<command> [player]

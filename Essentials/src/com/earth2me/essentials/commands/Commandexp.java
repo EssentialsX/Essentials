@@ -7,6 +7,7 @@ import com.earth2me.essentials.craftbukkit.SetExpFix;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
+
 public class Commandexp extends EssentialsCommand
 {
 	public Commandexp()
@@ -14,120 +15,90 @@ public class Commandexp extends EssentialsCommand
 		super("exp");
 	}
 
+	private void showExp(final User user, final User target)
+	{
+		final int totalExp = SetExpFix.getTotalExperience(target);
+		final int expLeft = (int)Util.roundDouble(((((3.5 * target.getLevel()) + 6.7) - (totalExp - ((1.75 * (target.getLevel() * target.getLevel())) + (5.00 * target.getLevel())))) + 1));
+		user.sendMessage(_("exp", target.getDisplayName(), SetExpFix.getTotalExperience(target), target.getLevel(), expLeft));
+	}
+
+	private void setExp(final User user, final User target, final String strAmount, final boolean give)
+	{
+		Long amount = Long.parseLong(strAmount);
+		if (give)
+		{
+			amount += SetExpFix.getTotalExperience(target);
+		}
+		if (amount > Integer.MAX_VALUE) {
+			amount = (long)Integer.MAX_VALUE;
+		}
+		SetExpFix.setTotalExperience(target, amount.intValue());
+		user.sendMessage(_("expset", target.getDisplayName(), amount));
+	}
+
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length == 0)
-		{		
-			if (user.isAuthorized("essentials.exp"))
-			{
-				int totalexp = SetExpFix.getTotalExperience(user);
-				int expleft = (int)Util.roundDouble(((((3.5 * user.getLevel()) + 6.7) - (totalexp - ((1.75 * (user.getLevel() * user.getLevel())) + (5.00 * user.getLevel())))) + 1));
-				user.sendMessage(_("exp", totalexp, expleft));
-			}
-		}
-		else if (args.length > 0)
 		{
-			if (args[0].equalsIgnoreCase("set"))
+			showExp(user, user);
+			return;
+		}
+		if (args[0].equalsIgnoreCase("set") && user.isAuthorized("essentials.exp.set"))
+		{
+			if (args.length == 3)
 			{
-				if (args.length > 1)
+				Boolean foundUser = false;
+				for (Player matchPlayer : server.matchPlayer(args[1]))
 				{
-					for (Player p : server.matchPlayer(args[1]))
-					{
-						if ((args.length == 3) && (args[1].trim().length() > 2) && (user.isAuthorized("essentials.exp.set.others")))
-						{
-							User player = getPlayer(server, args, 1);
-							int amount = Integer.parseInt(args[2]);
-							SetExpFix.setTotalExperience(p, amount);
-							user.sendMessage(_("expsetothers", player.getDisplayName(), amount));
-							p.sendMessage(_("expsetothersreceive", amount));
-						}
-					}
-					if ((args.length == 2) && (user.isAuthorized("essentials.exp.set")))
-					{
-						int amount = Integer.parseInt(args[1]);
-						SetExpFix.setTotalExperience(user, amount);
-						user.sendMessage(_("expset", amount));
-					}
+					User target = ess.getUser(matchPlayer);
+					setExp(user, target, args[2], false);
+					foundUser = true;
 				}
-			}
-			if (args[0].equalsIgnoreCase("give"))
-			{
-				if (args.length > 1)
+				if (foundUser == false)
 				{
-					for (Player p : server.matchPlayer(args[1]))
-					{
-						if ((args.length == 3) && (args[1].trim().length() > 2) && (user.isAuthorized("essentials.exp.give.others")))
-						{
-							User player = getPlayer(server, args, 1);
-							int amount = Integer.parseInt(args[2]);
-							p.giveExp(amount);
-							user.sendMessage(_("expgiveothers", player.getDisplayName(), amount));
-							p.sendMessage (_("expgiveothersreceive", amount));
-						}
-					}
-					if ((args.length == 2) && (user.isAuthorized("essentials.exp.give")))
-					{
-						int amount = Integer.parseInt(args[1]);
-						user.giveExp(amount);
-						user.sendMessage(_("expgive", amount));
-					}
-
+					throw new NoSuchFieldException(_("playerNotFound"));
 				}
+				return;
 			}
-			if (args[0].equalsIgnoreCase("player"))
+			setExp(user, user, args[1], false);
+		}
+		else if (args[0].equalsIgnoreCase("give") && user.isAuthorized("essentials.exp.give"))
+		{
+			if (args.length == 3)
 			{
-				if (args.length > 1)
+				Boolean foundUser = false;
+				for (Player matchPlayer : server.matchPlayer(args[1]))
 				{
-					for (Player p : server.matchPlayer(args[1]))
-					{
-						if ((args.length == 2) && (args[1].trim().length() > 2) && (user.isAuthorized("essentials.exp.others")))
-						{
-							User player = getPlayer(server, args, 1);
-							int totalexp = SetExpFix.getTotalExperience(p);
-							int expleft = (int)Util.roundDouble(((((3.5 * p.getLevel()) + 6.7) - (totalexp - ((1.75 * (player.getLevel() * player.getLevel())) + (5.00 * player.getLevel())))) + 1));
-							user.sendMessage(_("expothers", player.getDisplayName(), SetExpFix.getTotalExperience(p), expleft));
-						}
-					}
+					User target = ess.getUser(matchPlayer);
+					setExp(user, target, args[2], true);
+					foundUser = true;
 				}
+				if (foundUser == false)
+				{
+					throw new NoSuchFieldException(_("playerNotFound"));
+				}
+				return;
 			}
-			if (args[0].equalsIgnoreCase("fix"))
+			setExp(user, user, args[1], true);
+		}
+		else
+		{
+			String search = args[0].trim();
+			if (args.length == 2)
 			{
-				{	if ((args.length == 1) && (user.isAuthorized("essentials.exp.fix")))
-					{
-						if (SetExpFix.getTotalExperience(user) < 0)
-						{
-							user.sendMessage(_("expfix"));
-							user.setExp(0);
-							user.setLevel(0);
-							user.setTotalExperience(0);
-						}
-						else if (SetExpFix.getTotalExperience(user) >= 0)
-						{
-							user.sendMessage(_("expfixfalse"));
-						}
-					}
-					else if ((args.length == 2) && (user.isAuthorized("essentials.exp.fix.others")))
-					{
-						for (Player p : server.matchPlayer(args[1]))
-						{
-							if (SetExpFix.getTotalExperience(p) < 0)
-							{
-								
-								user.sendMessage(_("expfixothers", p.getDisplayName()));
-								p.setExp(0);
-								p.setLevel(0);
-								p.setTotalExperience(0);
-								p.sendMessage(_("expfixothersreceive"));
-							}
-							else if (SetExpFix.getTotalExperience(p) >= 0)
-							{
-								user.sendMessage(_("expfixothersfalse", p.getDisplayName()));
-							}
-						}
-					}
-				}
+				search = args[1].trim();
+			}
+			if (search.equalsIgnoreCase("show") || !user.isAuthorized("essentials.exp.others"))
+			{
+				showExp(user, user);
+				return;
+			}
+			for (Player matchPlayer : server.matchPlayer(search))
+			{
+				User target = ess.getUser(matchPlayer);
+				showExp(user, target);
 			}
 		}
-	}	
+	}
 }
