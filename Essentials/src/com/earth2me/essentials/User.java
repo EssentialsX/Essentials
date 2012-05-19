@@ -17,6 +17,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	private CommandSender replyTo = null;
 	private transient User teleportRequester;
 	private transient boolean teleportRequestHere;
+	private transient boolean vanished;
 	private transient final Teleport teleport;
 	private transient long teleportRequestTime;
 	private transient long lastOnlineActivity;
@@ -639,5 +640,15 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public boolean hasInvulnerabilityAfterTeleport()
 	{
 		return teleportInvulnerabilityTimestamp != 0 && teleportInvulnerabilityTimestamp >= System.currentTimeMillis();
+	}
+
+	public boolean isVanished()
+	{
+		return vanished;
+	}
+
+	public void toggleVanished()
+	{
+		vanished = !vanished;
 	}
 }

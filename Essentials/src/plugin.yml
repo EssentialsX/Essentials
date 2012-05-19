@@ -119,9 +119,9 @@ commands:
     usage: /<command> [player]
     aliases: [coords,egetpos,position,eposition,whereami,ewhereami]
   gc:
-    description: Reports garbage collection info; useful to developers.
+    description: Reports garbage collection and tick info; useful to developers.
     usage: /<command>
-    aliases: [mem,memory,egc,emem,ememory]
+    aliases: [elag,lag,mem,memory,egc,emem,ememory]
   give:
     description: Give a player an item.
     usage: /<command> <player> <item|numeric> [amount <enchantmentname[:level]> ...]
@@ -405,6 +405,10 @@ commands:
     description: Allows the unlimited placing of items.
     usage: /<command> <list|item|clear> [player]
     aliases: [eunlimited,ul,unl,eul,eunl]
+  vanish:
+    description: Hide yourself from other players.
+    usage: /<command>
+    aliases: [evanish]
   warp:
     description: List all warps or warp to the specified location.
     usage: /<command> <pagenumber|warp> [player]

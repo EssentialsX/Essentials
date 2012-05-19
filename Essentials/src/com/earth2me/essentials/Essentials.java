@@ -84,6 +84,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private transient ExecuteTimer execTimer;
 	private transient I18n i18n;
 	private transient Metrics metrics;
+	private transient EssentialsTimer timer;
 
 	@Override
 	public ISettings getSettings()
@@ -238,8 +239,9 @@ public class Essentials extends JavaPlugin implements IEssentials
 
 		pm.registerEvents(tntListener, this);
 
-		final EssentialsTimer timer = new EssentialsTimer(this);
+		timer = new EssentialsTimer(this);
 		getScheduler().scheduleSyncRepeatingTask(this, timer, 1, 100);
+
 		Economy.setEss(this);
 		execTimer.mark("RegListeners");
 
@@ -264,6 +266,13 @@ public class Essentials extends JavaPlugin implements IEssentials
 	@Override
 	public void onDisable()
 	{
+		for (Player p : getServer().getOnlinePlayers())
+		{
+			if (getUser(p).isVanished())
+			{
+				p.sendMessage(ChatColor.RED + _("unvanishedReload"));
+			}
+		}
 		i18n.onDisable();
 		Economy.setEss(null);
 		Trade.closeLog();
@@ -614,6 +623,11 @@ public class Essentials extends JavaPlugin implements IEssentials
 		return i18n;
 	}
 
+	@Override
+	public EssentialsTimer getTimer()
+	{
+		return timer;
+	}
 
 	private static class EssentialsWorldListener implements Listener, Runnable
 	{
