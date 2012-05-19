@@ -594,7 +594,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	public void setBanReason(String reason)
 	{
-		config.setProperty("ban.reason", reason);
+		config.setProperty("ban.reason", Util.sanitizeString(reason));
 		config.save();
 	}
 

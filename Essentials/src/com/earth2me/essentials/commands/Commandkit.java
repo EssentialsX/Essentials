@@ -25,12 +25,12 @@ public class Commandkit extends EssentialsCommand
 		else if (args.length > 1 && user.isAuthorized("essentials.kit.others"))
 		{
 			final User userTo = getPlayer(server, args, 1, true);
-			final String kitName = args[0].toLowerCase(Locale.ENGLISH);
+			final String kitName = Util.sanitizeString(args[0].toLowerCase(Locale.ENGLISH));
 			giveKit(userTo, user, kitName);
 		}
 		else
 		{
-			final String kitName = args[0].toLowerCase(Locale.ENGLISH);
+			final String kitName = Util.sanitizeString(args[0].toLowerCase(Locale.ENGLISH));
 			giveKit(user, user, kitName);
 		}
 	}
