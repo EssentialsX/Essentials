@@ -284,7 +284,8 @@ death-messages: true
 no-god-in-worlds:
 #  - world_nether
 
-# Set to true to enable per-world permissions for teleporting with /world, /tp ,/tpa and /tpo.
+# Set to true to enable per-world permissions for teleporting between worlds with essentials commands
+# This applies to /world, /home, /back, /tp[a|o][here|all], but not warps.
 # Give someone permission to teleport to a world with essentials.world.<worldname>
 world-teleport-permissions: false
 

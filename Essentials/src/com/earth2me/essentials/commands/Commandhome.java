@@ -54,7 +54,7 @@ public class Commandhome extends EssentialsCommand
 					throw new NoChargeException();
 				}
 			}
-			user.getTeleport().home(player, homeName.toLowerCase(Locale.ENGLISH), charge);
+			goHome(user, player, homeName.toLowerCase(Locale.ENGLISH), charge);
 		}
 		catch (NotEnoughArgumentsException e)
 		{
@@ -80,7 +80,7 @@ public class Commandhome extends EssentialsCommand
 			}
 			else if (homes.size() == 1 && player.equals(user))
 			{
-				user.getTeleport().home(player, homes.get(0), charge);
+				goHome(user, player, homes.get(0), charge);
 			}
 			else
 			{
@@ -92,5 +92,15 @@ public class Commandhome extends EssentialsCommand
 			}
 		}
 		throw new NoChargeException();
+	}
+
+	private void goHome(final User user, final User player, final String home, final Trade charge) throws Exception
+	{
+		if (user.getWorld() != player.getHome(home).getWorld() && ess.getSettings().isWorldTeleportPermissions()
+			&& !user.isAuthorized("essentials.world." + player.getHome(home).getWorld().getName()))
+		{
+			throw new Exception(_("noPerm", "essentials.world." + player.getHome(home).getWorld().getName()));
+		}
+		user.getTeleport().home(player, home, charge);
 	}
 }
