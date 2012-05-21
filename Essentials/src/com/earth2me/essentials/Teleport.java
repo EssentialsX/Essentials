@@ -277,14 +277,9 @@ public class Teleport implements Runnable, ITeleport
 	{
 		now(new Target(user.getLastLocation()), TeleportCause.COMMAND);
 	}
-
-	public void home(IUser user, String home, Trade chargeFor) throws Exception
+	
+	public void home(Location loc, Trade chargeFor) throws Exception
 	{
-		final Location loc = user.getHome(home);
-		if (loc == null)
-		{
-			throw new NotEnoughArgumentsException();
-		}
 		teleport(new Target(loc), chargeFor, TeleportCause.COMMAND);
 	}
 }

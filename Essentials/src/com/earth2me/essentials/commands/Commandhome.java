@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
@@ -96,11 +97,16 @@ public class Commandhome extends EssentialsCommand
 
 	private void goHome(final User user, final User player, final String home, final Trade charge) throws Exception
 	{
-		if (user.getWorld() != player.getHome(home).getWorld() && ess.getSettings().isWorldTeleportPermissions()
-			&& !user.isAuthorized("essentials.world." + player.getHome(home).getWorld().getName()))
+		final Location loc = player.getHome(home);
+		if (loc == null)
 		{
-			throw new Exception(_("noPerm", "essentials.world." + player.getHome(home).getWorld().getName()));
+			throw new NotEnoughArgumentsException();
 		}
-		user.getTeleport().home(player, home, charge);
+		if (user.getWorld() != loc.getWorld() && ess.getSettings().isWorldTeleportPermissions()
+			&& !user.isAuthorized("essentials.world." + loc.getWorld().getName()))
+		{
+			throw new Exception(_("noPerm", "essentials.world." + loc.getWorld().getName()));
+		}
+		user.getTeleport().home(loc, charge);	
 	}
 }
