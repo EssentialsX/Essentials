@@ -1,7 +1,6 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
@@ -107,6 +106,6 @@ public class Commandhome extends EssentialsCommand
 		{
 			throw new Exception(_("noPerm", "essentials.world." + loc.getWorld().getName()));
 		}
-		user.getTeleport().home(loc, charge);	
+		user.getTeleport().home(loc, charge);
 	}
 }

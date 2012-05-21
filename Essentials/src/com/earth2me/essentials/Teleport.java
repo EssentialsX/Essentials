@@ -2,7 +2,6 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.api.ITeleport;
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Logger;
@@ -190,7 +189,7 @@ public class Teleport implements Runnable, ITeleport
 	{
 		cancel(false);
 	}
-	
+
 	public void teleport(Location loc, Trade chargeFor) throws Exception
 	{
 		teleport(new Target(loc), chargeFor, TeleportCause.PLUGIN);
@@ -277,7 +276,7 @@ public class Teleport implements Runnable, ITeleport
 	{
 		now(new Target(user.getLastLocation()), TeleportCause.COMMAND);
 	}
-	
+
 	public void home(Location loc, Trade chargeFor) throws Exception
 	{
 		teleport(new Target(loc), chargeFor, TeleportCause.COMMAND);
