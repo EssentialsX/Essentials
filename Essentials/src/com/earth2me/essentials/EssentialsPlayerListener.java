@@ -114,6 +114,7 @@ public class EssentialsPlayerListener implements Listener
 		{
 			user.toggleGodModeEnabled();
 		}
+		ess.getVanishedPlayers().remove(user.getName());
 		user.setLastLocation();
 		user.updateActivity(false);
 		user.dispose();
@@ -140,6 +141,14 @@ public class EssentialsPlayerListener implements Listener
 		updateCompass(user);
 		user.setLastLogin(System.currentTimeMillis());
 		user.updateActivity(false);
+
+		for (String p : ess.getVanishedPlayers())
+		{
+			if (!user.isAuthorized("essentials.vanish.see"))
+			{
+				user.hidePlayer(ess.getUser(p));
+			}
+		}
 
 		if (user.isAuthorized("essentials.sleepingignored"))
 		{

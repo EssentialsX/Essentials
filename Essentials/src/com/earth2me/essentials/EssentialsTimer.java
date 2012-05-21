@@ -12,7 +12,7 @@ public class EssentialsTimer implements Runnable
 {
 	private final transient IEssentials ess;
 	private final transient Set<User> onlineUsers = new HashSet<User>();
-	private transient long lastPoll = System.currentTimeMillis() - 3000;
+	private transient long lastPoll = System.currentTimeMillis();
 	private final transient LinkedList<Float> history = new LinkedList<Float>();
 
 	EssentialsTimer(final IEssentials ess)

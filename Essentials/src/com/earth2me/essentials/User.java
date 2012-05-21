@@ -650,5 +650,13 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public void toggleVanished()
 	{
 		vanished = !vanished;
+		if (vanished)
+		{
+			ess.getVanishedPlayers().add(getName());
+		}
+		else
+		{
+			ess.getVanishedPlayers().remove(getName());
+		}
 	}
 }
