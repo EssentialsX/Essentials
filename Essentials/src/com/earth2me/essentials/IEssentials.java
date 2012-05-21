@@ -4,6 +4,7 @@ import com.earth2me.essentials.api.IJails;
 import com.earth2me.essentials.metrics.Metrics;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
+import java.util.List;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -72,4 +73,6 @@ public interface IEssentials extends Plugin
 	void setMetrics(Metrics metrics);
 	
 	EssentialsTimer getTimer();
+	
+	List<String> getVanishedPlayers();
 }

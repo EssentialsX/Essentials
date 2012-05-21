@@ -36,5 +36,6 @@ public class Commandvanish extends EssentialsCommand
 				user.sendMessage(ChatColor.GREEN + _("unvanished"));
 			}
 		}
+		user.toggleVanished();
 	}
 }

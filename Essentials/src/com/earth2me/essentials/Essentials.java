@@ -85,6 +85,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private transient I18n i18n;
 	private transient Metrics metrics;
 	private transient EssentialsTimer timer;
+	private transient List<String> vanishedPlayers = new ArrayList<String>();
 
 	@Override
 	public ISettings getSettings()
@@ -240,7 +241,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		pm.registerEvents(tntListener, this);
 
 		timer = new EssentialsTimer(this);
-		getScheduler().scheduleSyncRepeatingTask(this, timer, 1, 100);
+		getScheduler().scheduleSyncRepeatingTask(this, timer, 100, 100);
 
 		Economy.setEss(this);
 		execTimer.mark("RegListeners");
@@ -627,6 +628,12 @@ public class Essentials extends JavaPlugin implements IEssentials
 	public EssentialsTimer getTimer()
 	{
 		return timer;
+	}
+
+	@Override
+	public List<String> getVanishedPlayers()
+	{
+		return vanishedPlayers;
 	}
 
 	private static class EssentialsWorldListener implements Listener, Runnable
