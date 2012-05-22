@@ -308,6 +308,9 @@ repair-enchanted: true
 #If you set this to true any plugin that uses teleport will have the previous location registered.
 register-back-in-listener: false
 
+#Delay to wait before people can cause attack damage after logging in 
+login-attack-delay: 0
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #

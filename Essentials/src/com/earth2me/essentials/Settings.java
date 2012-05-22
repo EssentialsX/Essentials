@@ -792,10 +792,22 @@ public class Settings implements ISettings
 	{
 		return (config.getLong("teleport-invulnerability", 0) > 0);
 	}
-
+	
 	@Override
 	public boolean isTeleportInvulnerability()
 	{
 		return teleportInvulnerability;
 	}
+	
+	private long _loginAttackDelay()
+	{
+		return config.getLong("login-attack-delay", 0) * 1000;
+	}
+	
+	@Override
+	public long getLoginAttackDelay()
+	{
+		return _loginAttackDelay();
+	}
+	
 }
