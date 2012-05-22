@@ -9,8 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -32,10 +32,18 @@ public class EssentialsEntityListener implements Listener
 		{
 			final User defender = ess.getUser(eDefend);
 			final User attacker = ess.getUser(eAttack);
+			
+			if (!attacker.isAuthorized("essentials.pvpdelay.exempt") &&
+				System.currentTimeMillis() < (attacker.getLastLogin() + ess.getSettings().getLoginAttackDelay()))
+			{
+				event.setCancelled(true);
+			}
+			
 			if (attacker.hasInvulnerabilityAfterTeleport() || defender.hasInvulnerabilityAfterTeleport())
 			{
 				event.setCancelled(true);
 			}
+			
 			attacker.updateActivity(true);
 			final List<String> commandList = attacker.getPowertool(attacker.getItemInHand());
 			if (commandList != null && !commandList.isEmpty())
