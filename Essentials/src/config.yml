@@ -285,7 +285,7 @@ no-god-in-worlds:
 #  - world_nether
 
 # Set to true to enable per-world permissions for teleporting between worlds with essentials commands
-# This applies to /world, /home, /back, /tp[a|o][here|all], but not warps.
+# This applies to /world, /back, /tp[a|o][here|all], but not warps.
 # Give someone permission to teleport to a world with essentials.world.<worldname>
 world-teleport-permissions: false
 
@@ -319,6 +319,11 @@ spawn-if-no-home: true
 
 # Allows people to set their bed at daytime
 update-bed-at-daytime: true
+
+# Set to true to enable per-world permissions for using homes to teleport between worlds
+# This applies to the /home only.
+# Give someone permission to teleport to a world with essentials.world.<worldname>
+world-home-permissions: false
 
 # Allow players to have multiple homes.
 # Players need essentials.sethome.multiple before they can have more than 1 home, default to 'default' below.
