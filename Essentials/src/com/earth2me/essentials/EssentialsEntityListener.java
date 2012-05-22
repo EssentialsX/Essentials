@@ -32,18 +32,18 @@ public class EssentialsEntityListener implements Listener
 		{
 			final User defender = ess.getUser(eDefend);
 			final User attacker = ess.getUser(eAttack);
-			
-			if (!attacker.isAuthorized("essentials.pvpdelay.exempt") &&
-				System.currentTimeMillis() < (attacker.getLastLogin() + ess.getSettings().getLoginAttackDelay()))
+
+			if (ess.getSettings().getLoginAttackDelay() > 0 && !attacker.isAuthorized("essentials.pvpdelay.exempt")
+				&& (System.currentTimeMillis() < (attacker.getLastLogin() + ess.getSettings().getLoginAttackDelay())))
 			{
 				event.setCancelled(true);
 			}
-			
+
 			if (attacker.hasInvulnerabilityAfterTeleport() || defender.hasInvulnerabilityAfterTeleport())
 			{
 				event.setCancelled(true);
 			}
-			
+
 			attacker.updateActivity(true);
 			final List<String> commandList = attacker.getPowertool(attacker.getItemInHand());
 			if (commandList != null && !commandList.isEmpty())

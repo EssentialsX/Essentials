@@ -388,6 +388,7 @@ public class Settings implements ISettings
 		cancelAfkOnMove = _cancelAfkOnMove();
 		getFreezeAfkPlayers = _getFreezeAfkPlayers();
 		itemSpawnBl = _getItemSpawnBlacklist();
+		loginAttackDelay = _loginAttackDelay();
 		kits = _getKits();
 		chatFormats.clear();
 	}
@@ -805,6 +806,8 @@ public class Settings implements ISettings
 		return teleportInvulnerability;
 	}
 	
+	private long loginAttackDelay;
+	
 	private long _loginAttackDelay()
 	{
 		return config.getLong("login-attack-delay", 0) * 1000;
@@ -813,7 +816,7 @@ public class Settings implements ISettings
 	@Override
 	public long getLoginAttackDelay()
 	{
-		return _loginAttackDelay();
+		return loginAttackDelay;
 	}
 	
 }
