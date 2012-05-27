@@ -135,6 +135,10 @@ commands:
     description: Enables your godly powers.
     usage: /<command> [player]
     aliases: [tgm,godmode,egod,etgm,egodmode]
+  hat:
+    description: Get some cool new headgear
+    usage: /<command>
+    aliases: [ehat]
   heal:
     description: Heals you or the given player.
     usage: /<command> [player]

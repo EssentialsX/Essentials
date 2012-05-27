@@ -23,7 +23,7 @@ public class Commandvanish extends EssentialsCommand
 			{
 				p.showPlayer(user);
 			}
-			user.sendMessage(ChatColor.GREEN + _("vanished"));
+			user.sendMessage(_("vanished"));
 		}
 		else
 		{
@@ -33,7 +33,7 @@ public class Commandvanish extends EssentialsCommand
 				{
 					p.hidePlayer(user);
 				}
-				user.sendMessage(ChatColor.GREEN + _("unvanished"));
+				user.sendMessage(_("unvanished"));
 			}
 		}
 		user.toggleVanished();
