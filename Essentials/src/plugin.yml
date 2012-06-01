@@ -82,7 +82,7 @@ commands:
   durability:
     description: Shows the uses an item has left.
     usage: /<command>
-    aliases: [dura]
+    aliases: [edura,dura,edurability]
   eco:
     description: Manages the server economy.
     usage: /<command> <give|take|reset> <player> <amount>
