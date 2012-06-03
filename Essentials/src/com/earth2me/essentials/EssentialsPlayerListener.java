@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -24,6 +25,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.*;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -427,11 +429,16 @@ public class EssentialsPlayerListener implements Listener
 		if (event.getView().getTopInventory().getType() == InventoryType.PLAYER)
 		{
 			final User user = ess.getUser(event.getWhoClicked());
-			final User invOwner = ess.getUser(event.getView().getPlayer());
-			if (user.isInvSee() && (!user.isAuthorized("essentials.invsee.modify")
-									|| invOwner.isAuthorized("essentials.invsee.preventmodify")))
+			final InventoryHolder invHolder = event.getView().getTopInventory().getHolder();
+			if (invHolder != null && invHolder instanceof HumanEntity)
 			{
-				event.setCancelled(true);
+				final User invOwner = ess.getUser((HumanEntity)invHolder);
+				if (user.isInvSee() && (!user.isAuthorized("essentials.invsee.modify")
+										|| invOwner.isAuthorized("essentials.invsee.preventmodify")
+										|| !invOwner.isOnline()))
+				{
+					event.setCancelled(true);
+				}
 			}
 		}
 	}
