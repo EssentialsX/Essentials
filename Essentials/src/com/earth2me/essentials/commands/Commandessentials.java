@@ -125,7 +125,7 @@ public class Commandessentials extends EssentialsCommand
 				if (loc.getBlock().getTypeId() == 0)
 				{
 					noteBlocks.put(player, loc.getBlock());
-					player.sendBlockChange(loc, Material.NOTE_BLOCK, (byte)0);
+					loc.getBlock().setType(Material.NOTE_BLOCK);
 				}
 			}
 			taskid = ess.scheduleSyncRepeatingTask(new Runnable()

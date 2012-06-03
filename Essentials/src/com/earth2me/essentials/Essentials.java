@@ -271,7 +271,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		{
 			if (getUser(p).isVanished())
 			{
-				p.sendMessage(ChatColor.RED + _("unvanishedReload"));
+				p.sendMessage(_("unvanishedReload"));
 			}
 		}
 		i18n.onDisable();
