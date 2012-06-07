@@ -4,6 +4,7 @@ import com.earth2me.essentials.Console;
 import com.earth2me.essentials.EssentialsConf;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.IUser;
+import com.earth2me.essentials.Util;
 import java.io.File;
 import java.util.*;
 import java.util.logging.Handler;
@@ -61,7 +62,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 						disconnect();
 						connect();
 					}
-					chat.sendMessage(message.replaceAll("§[0-9a-f]", ""));
+					chat.sendMessage(Util.stripFormat(message));
 					return true;
 				}
 			}
