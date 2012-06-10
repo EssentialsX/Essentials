@@ -39,26 +39,35 @@ public class Kit
 
 	public static void checkTime(final User user, final String kitName, final Map<String, Object> els) throws NoChargeException
 	{
+		final Calendar time = new GregorianCalendar();
+
+		// Take the current time, and remove the delay from it.
 		final double delay = els.containsKey("delay") ? ((Number)els.get("delay")).doubleValue() : 0L;
-		final Calendar c = new GregorianCalendar();
-		c.add(Calendar.SECOND, -(int)delay);
-		c.add(Calendar.MILLISECOND, -(int)((delay * 1000.0) % 1000.0));
+		final Calendar earliestTime = new GregorianCalendar();
+		earliestTime.add(Calendar.SECOND, -(int)delay);
+		earliestTime.add(Calendar.MILLISECOND, -(int)((delay * 1000.0) % 1000.0));
+		// This value contains the most recent time a kit could have been used that would allow another use.
+		final long earliestLong = earliestTime.getTimeInMillis();
 
-		final long mintime = c.getTimeInMillis();
-
+		// When was the last kit used?
 		final Long lastTime = user.getKitTimestamp(kitName);
-		if (lastTime == null || lastTime < mintime)
+
+		if (lastTime == null || lastTime < earliestLong)
 		{
-			final Calendar now = new GregorianCalendar();
-			user.setKitTimestamp(kitName, now.getTimeInMillis());
+			user.setKitTimestamp(kitName, time.getTimeInMillis());
+		}
+		else if (lastTime > time.getTimeInMillis())
+		{
+			// This is to make sure time didn't get messed up on last kit use.
+			// If this happens, let's give the user the benifit of the doubt.
+			user.setKitTimestamp(kitName, time.getTimeInMillis());
 		}
 		else
 		{
-			final Calendar future = new GregorianCalendar();
-			future.setTimeInMillis(lastTime);
-			future.add(Calendar.SECOND, (int)delay);
-			future.add(Calendar.MILLISECOND, (int)((delay * 1000.0) % 1000.0));
-			user.sendMessage(_("kitTimed", Util.formatDateDiff(future.getTimeInMillis())));
+			time.setTimeInMillis(lastTime);
+			time.add(Calendar.SECOND, (int)delay);
+			time.add(Calendar.MILLISECOND, (int)((delay * 1000.0) % 1000.0));
+			user.sendMessage(_("kitTimed", Util.formatDateDiff(time.getTimeInMillis())));
 			throw new NoChargeException();
 		}
 	}
@@ -77,7 +86,7 @@ public class Kit
 		catch (Exception e)
 		{
 			user.sendMessage(_("kitError2"));
-			throw new Exception(_("kitErrorHelp"),e);
+			throw new Exception(_("kitErrorHelp"), e);
 		}
 	}
 

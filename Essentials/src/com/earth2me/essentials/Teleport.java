@@ -145,23 +145,39 @@ public class Teleport implements Runnable, ITeleport
 
 	public void cooldown(boolean check) throws Exception
 	{
-		Calendar now = new GregorianCalendar();
+		final Calendar time = new GregorianCalendar();
 		if (user.getLastTeleportTimestamp() > 0)
 		{
-			double cooldown = ess.getSettings().getTeleportCooldown();
-			Calendar cooldownTime = new GregorianCalendar();
-			cooldownTime.setTimeInMillis(user.getLastTeleportTimestamp());
-			cooldownTime.add(Calendar.SECOND, (int)cooldown);
-			cooldownTime.add(Calendar.MILLISECOND, (int)((cooldown * 1000.0) % 1000.0));
-			if (cooldownTime.after(now) && !user.isAuthorized("essentials.teleport.cooldown.bypass"))
+			// Take the current time, and remove the delay from it.
+			final double cooldown = ess.getSettings().getTeleportCooldown();
+			final Calendar earliestTime = new GregorianCalendar();
+			earliestTime.add(Calendar.SECOND, -(int)cooldown);
+			earliestTime.add(Calendar.MILLISECOND, -(int)((cooldown * 1000.0) % 1000.0));
+			// This value contains the most recent time a teleport could have been used that would allow another use.
+			final long earliestLong = earliestTime.getTimeInMillis();
+
+			// When was the last teleport used?
+			final Long lastTime = user.getLastTeleportTimestamp();
+
+			if (lastTime > time.getTimeInMillis())
 			{
-				throw new Exception(_("timeBeforeTeleport", Util.formatDateDiff(cooldownTime.getTimeInMillis())));
+				// This is to make sure time didn't get messed up on last kit use.
+				// If this happens, let's give the user the benifit of the doubt.
+				user.setLastTeleportTimestamp(time.getTimeInMillis());
+				return;
+			}
+			else if (lastTime > earliestLong && !user.isAuthorized("essentials.teleport.cooldown.bypass"))
+			{
+				time.setTimeInMillis(lastTime);
+				time.add(Calendar.SECOND, (int)delay);
+				time.add(Calendar.MILLISECOND, (int)((delay * 1000.0) % 1000.0));
+				throw new Exception(_("timeBeforeTeleport", Util.formatDateDiff(time.getTimeInMillis())));
 			}
 		}
 		// if justCheck is set, don't update lastTeleport; we're just checking
 		if (!check)
 		{
-			user.setLastTeleportTimestamp(now.getTimeInMillis());
+			user.setLastTeleportTimestamp(time.getTimeInMillis());
 		}
 	}
 
