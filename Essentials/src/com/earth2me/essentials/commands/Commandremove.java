@@ -9,7 +9,7 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.*;
 
-
+//Todo: Fix this up
 public class Commandremove extends EssentialsCommand
 {
 	public Commandremove()
@@ -131,7 +131,7 @@ public class Commandremove extends EssentialsCommand
 						removed++;
 					}
 				}
-				else if (toRemove == ToRemove.DROPS)
+				else if (toRemove == ToRemove.MINECARTS)
 				{
 					if (e instanceof Minecart)
 					{
