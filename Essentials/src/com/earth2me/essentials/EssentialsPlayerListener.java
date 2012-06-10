@@ -148,7 +148,7 @@ public class EssentialsPlayerListener implements Listener
 		{
 			if (!user.isAuthorized("essentials.vanish.see"))
 			{
-				user.hidePlayer(ess.getUser(p));
+				user.hidePlayer(ess.getUser(p).getBase());
 			}
 		}
 
