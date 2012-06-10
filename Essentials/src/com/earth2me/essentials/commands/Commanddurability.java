@@ -30,7 +30,7 @@ public class Commanddurability extends EssentialsCommand
 			}
 			else
 			{
-				user.sendMessage(_("notATool"));
+				user.sendMessage(_("noDurability"));
 			}
 		}
 		else
