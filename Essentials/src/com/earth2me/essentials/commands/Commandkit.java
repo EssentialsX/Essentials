@@ -19,7 +19,8 @@ public class Commandkit extends EssentialsCommand
 	{
 		if (args.length < 1)
 		{
-			listKits(user);
+			final String kitList = Kit.listKits(ess, user);
+			user.sendMessage(kitList.length() > 0 ? _("kits", kitList) : _("noKits"));
 			throw new NoChargeException();
 		}
 		else if (args.length > 1 && user.isAuthorized("essentials.kit.others"))
@@ -40,7 +41,8 @@ public class Commandkit extends EssentialsCommand
 	{
 		if (args.length < 2)
 		{
-			listKits(sender);
+			final String kitList = Kit.listKits(ess, null);
+			sender.sendMessage(kitList.length() > 0 ? _("kits", kitList) : _("noKits"));
 			throw new NoChargeException();
 		}
 		else
@@ -53,19 +55,6 @@ public class Commandkit extends EssentialsCommand
 			Kit.expandItems(ess, userTo, items);
 
 			sender.sendMessage(_("kitGive", kitName));
-		}
-	}
-
-	private void listKits(CommandSender sender) throws Exception
-	{
-		final String kitList = Kit.listKits(ess, null);
-		if (kitList.length() > 0)
-		{
-			sender.sendMessage(_("kits", kitList));
-		}
-		else
-		{
-			sender.sendMessage(_("noKits"));
 		}
 	}
 
