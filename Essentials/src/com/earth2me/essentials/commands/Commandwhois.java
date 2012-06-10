@@ -38,6 +38,7 @@ public class Commandwhois extends EssentialsCommand
 		}
 		final String whois = args[0].toLowerCase(Locale.ENGLISH);
 		final int prefixLength = Util.stripFormat(ess.getSettings().getNicknamePrefix()).length();
+		Boolean foundUser = false;
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
 			final User user = ess.getUser(onlinePlayer);
@@ -52,6 +53,7 @@ public class Commandwhois extends EssentialsCommand
 			{
 				continue;
 			}
+			foundUser = true;
 			sender.sendMessage("");
 			user.setDisplayNick();
 			sender.sendMessage(_("whoisIs", user.getDisplayName(), user.getName()));
@@ -80,6 +82,10 @@ public class Commandwhois extends EssentialsCommand
 			{
 				sender.sendMessage(_("whoisGeoLocation", location));
 			}
+		}
+		if (!foundUser)
+		{
+			throw new NoSuchFieldException(_("playerNotFound"));
 		}
 	}
 }
