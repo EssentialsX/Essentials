@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
@@ -20,6 +21,6 @@ public class Commandbroadcast extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		ess.broadcastMessage(null, _("broadcast", getFinalArg(args, 0)));
+		ess.broadcastMessage(null, _("broadcast", Util.replaceFormat(getFinalArg(args, 0))));
 	}
 }
