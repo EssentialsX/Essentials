@@ -199,6 +199,11 @@ public class SignBlockListener implements Listener
 	@EventHandler(priority = EventPriority.LOW)
 	public void onBlockPistonExtend(final BlockPistonExtendEvent event)
 	{
+		if (ess.getSettings().areSignsDisabled())
+		{
+			return;
+		}
+
 		for (Block block : event.getBlocks())
 		{
 			if (((block.getTypeId() == WALL_SIGN
@@ -224,6 +229,11 @@ public class SignBlockListener implements Listener
 	@EventHandler(priority = EventPriority.LOW)
 	public void onBlockPistonRetract(final BlockPistonRetractEvent event)
 	{
+		if (ess.getSettings().areSignsDisabled())
+		{
+			return;
+		}
+
 		if (event.isSticky())
 		{
 			final Block block = event.getBlock();
