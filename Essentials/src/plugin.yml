@@ -79,10 +79,6 @@ commands:
     description: States current depth, relative to sea level.
     usage: /depth
     aliases: [edepth]
-  durability:
-    description: Shows the uses an item has left.
-    usage: /<command>
-    aliases: [edura,dura,edurability]
   eco:
     description: Manages the server economy.
     usage: /<command> <give|take|reset> <player> <amount>
@@ -114,7 +110,7 @@ commands:
   itemdb:
     description: Searches for an item.
     usage: /<command> <item>
-    aliases: [eitemdb]
+    aliases: [eitemdb,itemno,eitemno,durability,dura,edura,edurability]
   fireball:
     description: Throw a fireball.
     usage: /<command> [small]

@@ -1,5 +1,7 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
+import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -33,5 +35,15 @@ public class Commanditemdb extends EssentialsCommand
 			itemStack = ess.getItemDb().get(args[0]);
 		}
 		sender.sendMessage(itemStack.getType().toString() + "- " + itemStack.getTypeId() + ":" + Integer.toString(itemStack.getData().getData()));
+		
+		int maxuses = itemStack.getType().getMaxDurability();
+		int durability = ((itemStack.getType().getMaxDurability() + 1) - itemStack.getDurability());
+		if (itemStack.getType() != Material.AIR)
+		{
+			if (maxuses != 0)
+			{
+				sender.sendMessage(_("durability", Integer.toString(durability)));
+			}
+		}		
 	}
 }
