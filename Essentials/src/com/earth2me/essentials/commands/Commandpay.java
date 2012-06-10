@@ -29,7 +29,7 @@ public class Commandpay extends EssentialsCommand
 
 		double amount = Double.parseDouble(args[1].replaceAll("[^0-9\\.]", ""));
 
-		Boolean foundUser = false;
+		boolean foundUser = false;
 		for (Player p : server.matchPlayer(args[0]))
 		{
 			User u = ess.getUser(p);

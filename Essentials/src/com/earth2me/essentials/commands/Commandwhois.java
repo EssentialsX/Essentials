@@ -38,7 +38,7 @@ public class Commandwhois extends EssentialsCommand
 		}
 		final String whois = args[0].toLowerCase(Locale.ENGLISH);
 		final int prefixLength = Util.stripFormat(ess.getSettings().getNicknamePrefix()).length();
-		Boolean foundUser = false;
+		boolean foundUser = false;
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
 			final User user = ess.getUser(onlinePlayer);
