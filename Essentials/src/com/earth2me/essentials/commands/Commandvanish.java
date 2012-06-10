@@ -16,25 +16,14 @@ public class Commandvanish extends EssentialsCommand
 	@Override
 	protected void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		if (user.isVanished())
+		user.toggleVanished();
+		if (!user.isVanished())
 		{
-			for (Player p : server.getOnlinePlayers())
-			{
-				p.showPlayer(user);
-			}
-			user.sendMessage(_("vanished"));
+			user.sendMessage(_("unvanished"));
 		}
 		else
 		{
-			for (Player p : server.getOnlinePlayers())
-			{
-				if (!ess.getUser(p).isAuthorized("essentials.vanish.see"))
-				{
-					p.hidePlayer(user);
-				}
-				user.sendMessage(_("unvanished"));
-			}
+			user.sendMessage(_("vanished"));
 		}
-		user.toggleVanished();
 	}
 }

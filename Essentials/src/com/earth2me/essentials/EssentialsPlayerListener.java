@@ -116,7 +116,10 @@ public class EssentialsPlayerListener implements Listener
 		{
 			user.setGodModeEnabled(false);
 		}
-		ess.getVanishedPlayers().remove(user.getName());
+		if (user.isVanished())
+		{
+			user.toggleVanished();
+		}
 		user.setLastLocation();
 		user.updateActivity(false);
 		user.dispose();

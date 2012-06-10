@@ -269,8 +269,10 @@ public class Essentials extends JavaPlugin implements IEssentials
 	{
 		for (Player p : getServer().getOnlinePlayers())
 		{
-			if (getUser(p).isVanished())
+			User user = getUser(p);
+			if (user.isVanished())
 			{
+				user.toggleVanished();
 				p.sendMessage(_("unvanishedReload"));
 			}
 		}
