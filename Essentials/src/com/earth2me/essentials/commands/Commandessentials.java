@@ -57,7 +57,7 @@ public class Commandessentials extends EssentialsCommand
 	{
 		sender.sendMessage("Essentials " + ess.getDescription().getVersion());
 		sender.sendMessage("/<command> <reload/debug>");
-		sender.sendMessage(_("blockList"));
+		
 		final StringBuilder disabledCommands = new StringBuilder();
 		for (Map.Entry<String, String> entry : ess.getAlternativeCommandsHandler().disabledCommands().entrySet())
 		{
@@ -66,7 +66,10 @@ public class Commandessentials extends EssentialsCommand
 			}
 			disabledCommands.append(entry.getKey()).append(" => ").append(entry.getValue());
 		}
-		sender.sendMessage(disabledCommands.toString());
+		if (disabledCommands.length() > 0) {
+			sender.sendMessage(_("blockList"));
+			sender.sendMessage(disabledCommands.toString());
+		}
 	}
 	
 	private void run_debug(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
