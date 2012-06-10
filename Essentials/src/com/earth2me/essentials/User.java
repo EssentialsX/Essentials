@@ -562,16 +562,6 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	}
 
 	@Override
-	public boolean toggleGodModeEnabled()
-	{
-		if (!isGodModeEnabled())
-		{
-			setFoodLevel(20);
-		}
-		return super.toggleGodModeEnabled();
-	}
-
-	@Override
 	public boolean isGodModeEnabled()
 	{
 		return (super.isGodModeEnabled() && !ess.getSettings().getNoGodWorlds().contains(getLocation().getWorld().getName()))

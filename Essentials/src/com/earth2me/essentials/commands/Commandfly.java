@@ -2,8 +2,6 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import java.util.Locale;
-import org.bukkit.GameMode;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -51,13 +49,13 @@ public class Commandfly extends EssentialsCommand
 			if (player.isHidden())
 			{
 				continue;
-			}		
-			
+			}
+
 			if (args.length > 1)
 			{
 				if (args[1].contains("on") || args[1].contains("ena") || args[1].equalsIgnoreCase("1"))
 				{
-					player.setAllowFlight(!player.getAllowFlight());
+					player.setAllowFlight(true);
 				}
 				else
 				{
@@ -68,7 +66,7 @@ public class Commandfly extends EssentialsCommand
 			{
 				player.setAllowFlight(!player.getAllowFlight());
 			}
-			
+
 			if (!player.getAllowFlight())
 			{
 				player.setFlying(false);

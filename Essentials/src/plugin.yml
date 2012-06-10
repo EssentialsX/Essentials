@@ -105,7 +105,7 @@ commands:
     aliases: [efeed,eat,eeat]
   fly:
     description: Take off, and soar!
-    usage: /<command> [player]
+    usage: /<command> [player] [on|off]
     aliases: [efly]
   itemdb:
     description: Searches for an item.
@@ -133,7 +133,7 @@ commands:
     aliases: [egive]
   god:
     description: Enables your godly powers.
-    usage: /<command> [player]
+    usage: /<command> [player] [on|off]
     aliases: [tgm,godmode,egod,etgm,egodmode]
   hat:
     description: Get some cool new headgear

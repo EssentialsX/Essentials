@@ -114,7 +114,7 @@ public class EssentialsPlayerListener implements Listener
 		final User user = ess.getUser(event.getPlayer());
 		if (ess.getSettings().removeGodOnDisconnect() && user.isGodModeEnabled())
 		{
-			user.toggleGodModeEnabled();
+			user.setGodModeEnabled(false);
 		}
 		ess.getVanishedPlayers().remove(user.getName());
 		user.setLastLocation();

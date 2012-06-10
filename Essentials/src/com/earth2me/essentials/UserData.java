@@ -494,12 +494,6 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.save();
 	}
 
-	public boolean toggleGodModeEnabled()
-	{
-		boolean ret = !isGodModeEnabled();
-		setGodModeEnabled(ret);
-		return ret;
-	}
 	private boolean muted;
 
 	private boolean getMuted()
