@@ -642,10 +642,12 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		vanished = !vanished;
 		if (vanished)
 		{
+			setHidden(true);
 			ess.getVanishedPlayers().add(getName());
 		}
 		else
 		{
+			setHidden(false);
 			ess.getVanishedPlayers().remove(getName());
 		}
 	}
