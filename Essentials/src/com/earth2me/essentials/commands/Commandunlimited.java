@@ -98,7 +98,7 @@ public class Commandunlimited extends EssentialsCommand
 		}
 
 		String message = "disableUnlimited";
-		Boolean enableUnlimited = false;
+		boolean enableUnlimited = false;
 		if (!target.hasUnlimited(stack))
 		{
 			message = "enableUnlimited";

@@ -55,7 +55,7 @@ public class Commandptime extends EssentialsCommand
 		Long ticks;
 		// Parse the target time int ticks from args[0]
 		String timeParam = args[0];
-		Boolean relative = true;
+		boolean relative = true;
 		if (timeParam.startsWith("@"))
 		{
 			relative = false;
