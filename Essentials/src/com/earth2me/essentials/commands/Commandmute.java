@@ -28,13 +28,19 @@ public class Commandmute extends EssentialsCommand
 			throw new Exception(_("muteExempt"));
 		}
 		long muteTimestamp = 0;
+
 		if (args.length > 1)
 		{
-			String time = getFinalArg(args, 1);
+			final String time = getFinalArg(args, 1);
 			muteTimestamp = Util.parseDateDiff(time, true);
+			player.setMuted(true);
+		}
+		else
+		{
+			player.setMuted(!player.getMuted());
 		}
 		player.setMuteTimeout(muteTimestamp);
-		final boolean muted = player.toggleMuted();
+		final boolean muted = player.getMuted();
 		sender.sendMessage(
 				muted
 				? (muteTimestamp > 0

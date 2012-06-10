@@ -493,10 +493,9 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.setProperty("godmode", set);
 		config.save();
 	}
-
 	private boolean muted;
 
-	private boolean getMuted()
+	public boolean getMuted()
 	{
 		return config.getBoolean("muted", false);
 	}
@@ -511,13 +510,6 @@ public abstract class UserData extends PlayerExtension implements IConf
 		muted = set;
 		config.setProperty("muted", set);
 		config.save();
-	}
-
-	public boolean toggleMuted()
-	{
-		boolean ret = !isMuted();
-		setMuted(ret);
-		return ret;
 	}
 	private long muteTimeout;
 
