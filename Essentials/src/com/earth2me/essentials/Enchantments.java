@@ -40,6 +40,7 @@ public class Enchantments
 		ENCHANTMENTS.put("unbreaking", Enchantment.DURABILITY);
 		
 		ENCHANTMENTS.put("fireaspect", Enchantment.FIRE_ASPECT);
+		ENCHANTMENTS.put("fire", Enchantment.FIRE_ASPECT);
 		ENCHANTMENTS.put("meleefire", Enchantment.FIRE_ASPECT);
 		ENCHANTMENTS.put("meleeflame", Enchantment.FIRE_ASPECT);
 		
@@ -88,7 +89,6 @@ public class Enchantments
 		
 		ENCHANTMENTS.put("firearrow", Enchantment.ARROW_FIRE);
 		ENCHANTMENTS.put("flame", Enchantment.ARROW_FIRE);
-		ENCHANTMENTS.put("fire", Enchantment.ARROW_FIRE);
 		ENCHANTMENTS.put("flamearrow", Enchantment.ARROW_FIRE);
 		
 		ENCHANTMENTS.put("arrowdamage", Enchantment.ARROW_DAMAGE);
