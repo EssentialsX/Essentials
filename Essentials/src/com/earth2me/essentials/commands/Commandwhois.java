@@ -72,6 +72,11 @@ public class Commandwhois extends EssentialsCommand
 												 ? Util.formatDateDiff(user.getJailTimeout())
 												 : _("true")
 											   : _("false"))));
+			sender.sendMessage(_("whoisMute", (user.isMuted()
+											   ? user.getMuteTimeout() > 0
+												 ? Util.formatDateDiff(user.getMuteTimeout())
+												 : _("true")
+											   : _("false"))));
 			sender.sendMessage(user.isAfk()
 							   ? _("whoisStatusAway")
 							   : _("whoisStatusAvailable"));
