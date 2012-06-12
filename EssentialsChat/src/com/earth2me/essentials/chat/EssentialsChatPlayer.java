@@ -62,8 +62,8 @@ public abstract class EssentialsChatPlayer implements Listener
 			return "shout";
 		case '?':
 			return "question";
-		case '@':
-			return "admin";
+		//case '@':
+			//return "admin";
 		default:
 			return "";
 		}
