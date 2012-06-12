@@ -54,32 +54,16 @@ public class Commandwhois extends EssentialsCommand
 				continue;
 			}
 			foundUser = true;
-			sender.sendMessage("");
+			sender.sendMessage(_("whoisTop", user.getName()));
 			user.setDisplayNick();
-			sender.sendMessage(_("whoisIs", user.getDisplayName(), user.getName()));
+			sender.sendMessage(_("whoisNick", user.getDisplayName()));
 			sender.sendMessage(_("whoisHealth", user.getHealth()));
-			sender.sendMessage(_("whoisExp", SetExpFix.getTotalExperience(user), user.getLevel()));
-			sender.sendMessage(_("whoisOP", (user.isOp() ? _("true") : _("false"))));
-			sender.sendMessage(_("whoisGod", (user.isGodModeEnabled() ? _("true") : _("false"))));
-			sender.sendMessage(_("whoisGamemode", _(user.getGameMode().toString().toLowerCase(Locale.ENGLISH))));
+			sender.sendMessage(_("whoisExp", SetExpFix.getTotalExperience(user), user.getLevel()));			
 			sender.sendMessage(_("whoisLocation", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ()));
 			if (!ess.getSettings().isEcoDisabled())
 			{
 				sender.sendMessage(_("whoisMoney", Util.displayCurrency(user.getMoney(), ess)));
 			}
-			sender.sendMessage(_("whoisJail", (user.isJailed()
-											   ? user.getJailTimeout() > 0
-												 ? Util.formatDateDiff(user.getJailTimeout())
-												 : _("true")
-											   : _("false"))));
-			sender.sendMessage(_("whoisMute", (user.isMuted()
-											   ? user.getMuteTimeout() > 0
-												 ? Util.formatDateDiff(user.getMuteTimeout())
-												 : _("true")
-											   : _("false"))));
-			sender.sendMessage(user.isAfk()
-							   ? _("whoisStatusAway")
-							   : _("whoisStatusAvailable"));
 			sender.sendMessage(_("whoisIPAddress", user.getAddress().getAddress().toString()));
 			final String location = user.getGeoLocation();
 			if (location != null
@@ -87,6 +71,22 @@ public class Commandwhois extends EssentialsCommand
 			{
 				sender.sendMessage(_("whoisGeoLocation", location));
 			}
+			sender.sendMessage(_("whoisGamemode", _(user.getGameMode().toString().toLowerCase(Locale.ENGLISH))));
+			sender.sendMessage(_("whoisGod", (user.isGodModeEnabled() ? _("true") : _("false"))));
+			sender.sendMessage(_("whoisOp", (user.isOp() ? _("true") : _("false"))));
+			sender.sendMessage(_("whoisFly", user.getAllowFlight() ? _("true") : _("false"), user.isFlying() ? _("flying") : _("notFlying")));
+			sender.sendMessage(_("whoisAFK", (user.isAfk() ? _("true") : _("false"))));
+			sender.sendMessage(_("whoisJail", (user.isJailed()
+											   ? user.getJailTimeout() > 0
+												 ? Util.formatDateDiff(user.getJailTimeout())
+												 : _("true")
+											   : _("false"))));
+			sender.sendMessage(_("whoisMuted", (user.isMuted()
+											   ? user.getMuteTimeout() > 0
+												 ? Util.formatDateDiff(user.getMuteTimeout())
+												 : _("true")
+											   : _("false"))));
+						
 		}
 		if (!foundUser)
 		{
