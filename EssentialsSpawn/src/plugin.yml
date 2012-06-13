@@ -11,6 +11,8 @@ commands:
   setspawn:
     description: Set the spawnpoint to your current position.
     usage: /<command> <group>
+    aliases: [esetspawn]
   spawn:
     description: Teleport to the spawnpoint.
     usage: /<command> [player]
+    aliases: [espawn]
