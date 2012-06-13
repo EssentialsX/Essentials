@@ -22,7 +22,7 @@ public class Commandpay extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 		
-		if (args[0] == "")
+		if (args[0].trim().length() < 3)
 		{
 			throw new NotEnoughArgumentsException("You need to specify a player to pay.");
 		}
