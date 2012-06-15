@@ -30,12 +30,12 @@ public class Commandvanish extends EssentialsCommand
 		}
 		if (args.length > 0)
 		{
-			if (args[1].contains("on") && !user.isVanished())
+			if (args[0].contains("on") && !user.isVanished())
 			{
 				user.toggleVanished();
 				user.sendMessage(_("vanished"));
 			}
-			if (args[1].contains("off") && user.isVanished())
+			if (args[0].contains("off") && user.isVanished())
 			{
 				user.toggleVanished();
 				user.sendMessage(_("unvanished"));
