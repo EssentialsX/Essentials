@@ -268,7 +268,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	{
 		final StringBuilder prefix = new StringBuilder();
 		String nickname;
-		String suffix = "§f";
+		String suffix = "";
 		final String nick = getNickname();
 		if (ess.getSettings().isCommandDisabled("nick") || nick == null || nick.isEmpty() || nick.equals(getName()))
 		{
@@ -287,6 +287,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 				if (opPrefix.length() > 0)
 				{
 					prefix.insert(0, opPrefix);
+					suffix = "§f";
 				}
 			}
 			catch (Exception e)
@@ -300,6 +301,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			{
 				final String ptext = ess.getPermissionsHandler().getPrefix(base).replace('&', '§');
 				prefix.insert(0, ptext);
+				suffix = "§f";
 			}
 			if (!ess.getSettings().disableSuffix())
 			{
