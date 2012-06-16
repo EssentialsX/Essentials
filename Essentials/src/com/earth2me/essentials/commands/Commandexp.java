@@ -5,6 +5,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.craftbukkit.SetExpFix;
 import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
@@ -26,39 +27,23 @@ public class Commandexp extends EssentialsCommand
 		{
 			if (args.length == 3 && user.isAuthorized("essentials.exp.set.others"))
 			{
-				boolean foundUser = false;
-				for (Player matchPlayer : server.matchPlayer(args[1]))
-				{
-					User target = ess.getUser(matchPlayer);
-					setExp(user, target, args[2], false);
-					foundUser = true;
-				}
-				if (foundUser == false)
-				{
-					throw new NoSuchFieldException(_("playerNotFound"));
-				}
-				return;
+				expMatch(server, user, args[1], args[2]);
 			}
-			setExp(user, user, args[1], false);
+			else
+			{
+				setExp(user, user, args[1], false);
+			}
 		}
 		else if (args[0].equalsIgnoreCase("give") && user.isAuthorized("essentials.exp.give"))
 		{
 			if (args.length == 3 && user.isAuthorized("essentials.exp.give.others"))
 			{
-				boolean foundUser = false;
-				for (Player matchPlayer : server.matchPlayer(args[1]))
-				{
-					User target = ess.getUser(matchPlayer);
-					setExp(user, target, args[2], true);
-					foundUser = true;
-				}
-				if (foundUser == false)
-				{
-					throw new NoSuchFieldException(_("playerNotFound"));
-				}
-				return;
+				expMatch(server, user, args[1], args[2]);
 			}
-			setExp(user, user, args[1], true);
+			else
+			{
+				setExp(user, user, args[1], true);
+			}
 		}
 		else
 		{
@@ -70,24 +55,71 @@ public class Commandexp extends EssentialsCommand
 			if (search.equalsIgnoreCase("show") || !user.isAuthorized("essentials.exp.others"))
 			{
 				showExp(user, user);
-				return;
 			}
-			for (Player matchPlayer : server.matchPlayer(search))
+			else
 			{
-				User target = ess.getUser(matchPlayer);
-				showExp(user, target);
+				for (Player matchPlayer : server.matchPlayer(search))
+				{
+					final User target = ess.getUser(matchPlayer);
+					showExp(user, target);
+				}
 			}
 		}
 	}
 
-	private void showExp(final User user, final User target)
+	@Override
+	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	{
+		if (args.length < 1)
+		{
+			throw new NotEnoughArgumentsException();
+		}
+		else if (args.length > 2 && args[0].equalsIgnoreCase("set"))
+		{
+			expMatch(server, sender, args[1], args[2]);
+		}
+		else if (args.length > 2 && args[0].equalsIgnoreCase("give"))
+		{
+			expMatch(server, sender, args[1], args[2]);
+		}
+		else
+		{
+			String search = args[0].trim();
+			if (args.length == 2)
+			{
+				search = args[1].trim();
+			}
+			for (Player matchPlayer : server.matchPlayer(search))
+			{
+				final User target = ess.getUser(matchPlayer);
+				showExp(sender, target);
+			}
+		}
+	}
+
+	private void expMatch(final Server server, final CommandSender sender, final String match, final String toggle) throws NoSuchFieldException
+	{
+		boolean foundUser = false;
+		for (Player matchPlayer : server.matchPlayer(match))
+		{
+			final User target = ess.getUser(matchPlayer);
+			setExp(sender, target, toggle, true);
+			foundUser = true;
+		}
+		if (!foundUser)
+		{
+			throw new NoSuchFieldException(_("playerNotFound"));
+		}
+	}
+
+	private void showExp(final CommandSender sender, final User target)
 	{
 		final int totalExp = SetExpFix.getTotalExperience(target);
 		final int expLeft = (int)Util.roundDouble(((((3.5 * target.getLevel()) + 6.7) - (totalExp - ((1.75 * (target.getLevel() * target.getLevel())) + (5.00 * target.getLevel())))) + 1));
-		user.sendMessage(_("exp", target.getDisplayName(), SetExpFix.getTotalExperience(target), target.getLevel(), expLeft));
+		sender.sendMessage(_("exp", target.getDisplayName(), SetExpFix.getTotalExperience(target), target.getLevel(), expLeft));
 	}
 
-	private void setExp(final User user, final User target, final String strAmount, final boolean give)
+	private void setExp(final CommandSender sender, final User target, final String strAmount, final boolean give)
 	{
 		Long amount = Long.parseLong(strAmount);
 		if (give)
@@ -99,6 +131,6 @@ public class Commandexp extends EssentialsCommand
 			amount = (long)Integer.MAX_VALUE;
 		}
 		SetExpFix.setTotalExperience(target, amount.intValue());
-		user.sendMessage(_("expSet", target.getDisplayName(), amount));
+		sender.sendMessage(_("expSet", target.getDisplayName(), amount));
 	}
 }
