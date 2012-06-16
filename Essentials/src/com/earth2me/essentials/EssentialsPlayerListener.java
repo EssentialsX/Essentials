@@ -63,7 +63,7 @@ public class EssentialsPlayerListener implements Listener
 		while (it.hasNext())
 		{
 			final User u = ess.getUser(it.next());
-			if (u.isIgnoredPlayer(user.getName()))
+			if (u.isIgnoredPlayer(user))
 			{
 				it.remove();
 			}

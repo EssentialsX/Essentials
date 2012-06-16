@@ -55,7 +55,7 @@ public class Commandr extends EssentialsCommand
 		if (target instanceof Player)
 		{
 			User player = ess.getUser(target);
-			if (player.isIgnoredPlayer(sender instanceof Player ? ((Player)sender).getName() : Console.NAME))
+			if (sender instanceof Player && player.isIgnoredPlayer(ess.getUser(sender)))
 			{
 				return;
 			}

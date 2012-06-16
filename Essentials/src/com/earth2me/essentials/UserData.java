@@ -458,20 +458,20 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.save();
 	}
 
-	public boolean isIgnoredPlayer(String name)
+	public boolean isIgnoredPlayer(IUser user)
 	{
-		return ignoredPlayers.contains(name.toLowerCase(Locale.ENGLISH));
+		return (ignoredPlayers.contains(user.getName().toLowerCase(Locale.ENGLISH)) && !user.isAuthorized("essentials.chat.ignoreexempt"));
 	}
 
-	public void setIgnoredPlayer(String name, boolean set)
+	public void setIgnoredPlayer(IUser user, boolean set)
 	{
 		if (set)
 		{
-			ignoredPlayers.add(name.toLowerCase(Locale.ENGLISH));
+			ignoredPlayers.add(user.getName().toLowerCase(Locale.ENGLISH));
 		}
 		else
 		{
-			ignoredPlayers.remove(name.toLowerCase(Locale.ENGLISH));
+			ignoredPlayers.remove(user.getName().toLowerCase(Locale.ENGLISH));
 		}
 		setIgnoredPlayers(ignoredPlayers);
 	}
