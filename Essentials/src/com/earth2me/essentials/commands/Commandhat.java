@@ -41,7 +41,7 @@ public class Commandhat extends EssentialsCommand
 				user.sendMessage(_("hatFail"));
 			}
 		}
-		if (args.length > 0)
+		else
 		{
 			if (args[0].contains("remove"))
 			{
