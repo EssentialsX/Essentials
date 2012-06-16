@@ -636,11 +636,11 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	{
 		return vanished;
 	}
-
-	public void toggleVanished()
+	
+	public void setVanished(final boolean set)
 	{
-		vanished = !vanished;
-		if (vanished)
+		vanished = set;
+		if (set)
 		{
 			for (Player p : ess.getServer().getOnlinePlayers())
 			{
@@ -661,5 +661,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			setHidden(false);
 			ess.getVanishedPlayers().remove(getName());
 		}
+	}
+
+	public void toggleVanished()
+	{
+		final boolean set = !vanished;
 	}
 }

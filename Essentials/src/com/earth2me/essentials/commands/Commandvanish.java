@@ -19,27 +19,26 @@ public class Commandvanish extends EssentialsCommand
 		if (args.length < 1)
 		{
 			user.toggleVanished();
-			if (!user.isVanished())
+			if (user.isVanished())
 			{
-				user.sendMessage(_("unvanished"));
+				user.sendMessage(_("vanished"));
 			}
 			else
 			{
-				user.sendMessage(_("vanished"));
-			}
-		}
-		if (args.length > 0)
-		{
-			if (args[0].contains("on") && !user.isVanished())
-			{
-				user.toggleVanished();
-				user.sendMessage(_("vanished"));
-			}
-			if (args[0].contains("off") && user.isVanished())
-			{
-				user.toggleVanished();
 				user.sendMessage(_("unvanished"));
 			}
+		}
+		else
+		{
+			if (args[1].contains("on") || args[1].contains("ena") || args[1].equalsIgnoreCase("1"))
+			{
+				user.setVanished(true);
+			}
+			else
+			{
+				user.setVanished(false);
+			}
+			user.sendMessage(user.isVanished() ? _("vanished") : _("unvanished"));
 		}
 	}
 }
