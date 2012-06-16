@@ -17,9 +17,25 @@ public class Commandhat extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(Server server, User user, String commandLabel, String[] args) throws Exception
+	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		if (args.length < 1)
+		if (args.length > 0 && (args[0].contains("rem") || args[0].contains("off") || args[0].equalsIgnoreCase("0")))
+		{
+			final PlayerInventory inv = user.getInventory();
+			final ItemStack head = inv.getHelmet();
+			if (head == null || head.getType() == Material.AIR)
+			{
+				user.sendMessage(_("hatEmpty"));
+			}
+			else
+			{
+				final ItemStack air = new ItemStack(Material.AIR);
+				inv.setHelmet(air);
+				InventoryWorkaround.addItem(user.getInventory(), true, head);
+				user.sendMessage(_("hatRemoved"));
+			}
+		}
+		else
 		{
 			if (user.getItemInHand().getType() != Material.AIR)
 			{
@@ -32,32 +48,15 @@ public class Commandhat extends EssentialsCommand
 					inv.setHelmet(hand);
 					inv.setItemInHand(head);
 					user.sendMessage(_("hatPlaced"));
-				} else {
+				}
+				else
+				{
 					user.sendMessage(_("hatArmor"));
 				}
 			}
 			else
 			{
 				user.sendMessage(_("hatFail"));
-			}
-		}
-		else
-		{
-			if (args[0].contains("remove"))
-			{
-				final PlayerInventory inv = user.getInventory();
-				final ItemStack head = inv.getHelmet();
-				if (head == null)
-				{
-					user.sendMessage(_("hatEmpty"));
-				}
-				else if (head.getType() != Material.AIR)
-				{
-					final ItemStack air = new ItemStack(Material.AIR);
-					inv.setHelmet(air);
-					InventoryWorkaround.addItem(user.getInventory(), true, head);
-					user.sendMessage(_("hatRemoved"));
-				}
 			}
 		}
 	}
