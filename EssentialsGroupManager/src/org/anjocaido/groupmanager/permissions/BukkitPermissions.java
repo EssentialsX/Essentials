@@ -145,6 +145,11 @@ public class BukkitPermissions {
 		if (player == null || !GroupManager.isLoaded()) {
 			return;
 		}
+		
+		// Reset the User objects player reference.
+		User user = plugin.getWorldsHolder().getWorldData(player.getWorld().getName()).getUser(player.getName());
+		if (user != null)
+			user.updatePlayer(player);
 
 		PermissionAttachment attachment;
 
@@ -441,10 +446,6 @@ public class BukkitPermissions {
 		public void onPlayerKick(PlayerKickEvent event) {
 
 			Player player = event.getPlayer();
-
-			User user = plugin.getWorldsHolder().getWorldData(player.getWorld().getName()).getUser(player.getName());
-			if (user != null)
-				user.clearPlayer();
 			
 			/*
 			 * force remove any attachments as bukkit may not
@@ -459,10 +460,6 @@ public class BukkitPermissions {
 				return;
 
 			Player player = event.getPlayer();
-			
-			User user = plugin.getWorldsHolder().getWorldData(player.getWorld().getName()).getUser(player.getName());
-			if (user != null)
-				user.clearPlayer();
 
 			/*
 			 * force remove any attachments as bukkit may not

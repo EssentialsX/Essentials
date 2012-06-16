@@ -256,15 +256,10 @@ public class User extends DataUnit implements Cloneable {
 		}
 	}
 
-	public void clearPlayer() {
-		bukkitPlayer = null;
-	}
 	
 	public User updatePlayer(Player player) {
 
-		if (player != null) {
-			bukkitPlayer = player;
-		}
+		bukkitPlayer = player;
 		return this;
 	}
 
