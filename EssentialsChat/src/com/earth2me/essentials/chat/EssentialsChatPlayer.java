@@ -127,23 +127,26 @@ public abstract class EssentialsChatPlayer implements Listener
 			}
 			if (!onlineUser.equals(sender))
 			{
-				if (onlineUser.isAuthorized("essentials.chat.spy"))
-				{
-					type = type.concat(_("chatTypeSpy"));
-				}
-				else
-				{
+					boolean abort = false;
 					final Location playerLoc = onlineUser.getLocation();
 					if (playerLoc.getWorld() != world)
 					{
-						continue;
+						abort = true;
 					}
 					final double delta = playerLoc.distanceSquared(loc);
 					if (delta > chatStore.getRadius())
 					{
-						continue;
+						abort = true;
 					}
-				}
+					if (abort) {
+						if (onlineUser.isAuthorized("essentials.chat.spy"))
+						{
+						type = type.concat(_("chatTypeSpy"));
+						}
+						else
+						{
+							continue;
+						}
 			}
 
 			String message = String.format(event.getFormat(), type.concat(sender.getDisplayName()), event.getMessage());
