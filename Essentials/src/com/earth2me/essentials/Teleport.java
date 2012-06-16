@@ -169,8 +169,8 @@ public class Teleport implements Runnable, ITeleport
 			else if (lastTime > earliestLong && !user.isAuthorized("essentials.teleport.cooldown.bypass"))
 			{
 				time.setTimeInMillis(lastTime);
-				time.add(Calendar.SECOND, (int)delay);
-				time.add(Calendar.MILLISECOND, (int)((delay * 1000.0) % 1000.0));
+				time.add(Calendar.SECOND, (int)cooldown);
+				time.add(Calendar.MILLISECOND, (int)((cooldown * 1000.0) % 1000.0));
 				throw new Exception(_("timeBeforeTeleport", Util.formatDateDiff(time.getTimeInMillis())));
 			}
 		}
