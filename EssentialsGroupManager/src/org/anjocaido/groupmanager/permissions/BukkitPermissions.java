@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.WeakHashMap;
 
 import org.anjocaido.groupmanager.GroupManager;
+import org.anjocaido.groupmanager.data.User;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -441,6 +442,10 @@ public class BukkitPermissions {
 
 			Player player = event.getPlayer();
 
+			User user = plugin.getWorldsHolder().getWorldData(player.getWorld().getName()).getUser(player.getName());
+			if (user != null)
+				user.clearPlayer();
+			
 			/*
 			 * force remove any attachments as bukkit may not
 			 */
@@ -454,6 +459,10 @@ public class BukkitPermissions {
 				return;
 
 			Player player = event.getPlayer();
+			
+			User user = plugin.getWorldsHolder().getWorldData(player.getWorld().getName()).getUser(player.getName());
+			if (user != null)
+				user.clearPlayer();
 
 			/*
 			 * force remove any attachments as bukkit may not
