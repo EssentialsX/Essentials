@@ -137,7 +137,7 @@ commands:
     aliases: [tgm,godmode,egod,etgm,egodmode]
   hat:
     description: Get some cool new headgear
-    usage: /<command>
+    usage: /<command> [remove]
     aliases: [ehat]
   heal:
     description: Heals you or the given player.
@@ -416,7 +416,7 @@ commands:
     aliases: [eunlimited,ul,unl,eul,eunl]
   vanish:
     description: Hide yourself from other players.
-    usage: /<command>
+    usage: /<command> [on|off]
     aliases: [evanish]
   warp:
     description: List all warps or warp to the specified location.
