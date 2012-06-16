@@ -27,7 +27,7 @@ public class Commandexp extends EssentialsCommand
 		{
 			if (args.length == 3 && user.isAuthorized("essentials.exp.set.others"))
 			{
-				expMatch(server, user, args[1], args[2]);
+				expMatch(server, user, args[1], args[2], false);
 			}
 			else
 			{
@@ -38,7 +38,7 @@ public class Commandexp extends EssentialsCommand
 		{
 			if (args.length == 3 && user.isAuthorized("essentials.exp.give.others"))
 			{
-				expMatch(server, user, args[1], args[2]);
+				expMatch(server, user, args[1], args[2], true);
 			}
 			else
 			{
@@ -47,22 +47,18 @@ public class Commandexp extends EssentialsCommand
 		}
 		else
 		{
-			String search = args[0].trim();
+			String match = args[0].trim();
 			if (args.length == 2)
 			{
-				search = args[1].trim();
+				match = args[1].trim();
 			}
-			if (search.equalsIgnoreCase("show") || !user.isAuthorized("essentials.exp.others"))
+			if (match.equalsIgnoreCase("show") || !user.isAuthorized("essentials.exp.others"))
 			{
 				showExp(user, user);
 			}
 			else
 			{
-				for (Player matchPlayer : server.matchPlayer(search))
-				{
-					final User target = ess.getUser(matchPlayer);
-					showExp(user, target);
-				}
+				showMatch(server, user, match);
 			}
 		}
 	}
@@ -76,39 +72,50 @@ public class Commandexp extends EssentialsCommand
 		}
 		else if (args.length > 2 && args[0].equalsIgnoreCase("set"))
 		{
-			expMatch(server, sender, args[1], args[2]);
+			expMatch(server, sender, args[1], args[2], false);
 		}
 		else if (args.length > 2 && args[0].equalsIgnoreCase("give"))
 		{
-			expMatch(server, sender, args[1], args[2]);
+			expMatch(server, sender, args[1], args[2], true);
 		}
 		else
 		{
-			String search = args[0].trim();
+			String match = args[0].trim();
 			if (args.length == 2)
 			{
-				search = args[1].trim();
+				match = args[1].trim();
 			}
-			for (Player matchPlayer : server.matchPlayer(search))
-			{
-				final User target = ess.getUser(matchPlayer);
-				showExp(sender, target);
-			}
+			showMatch(server, sender, match);
 		}
 	}
 
-	private void expMatch(final Server server, final CommandSender sender, final String match, final String toggle) throws NoSuchFieldException
+	private void showMatch(final Server server, final CommandSender sender, final String match) throws NotEnoughArgumentsException
+	{
+		boolean foundUser = false;
+		for (Player matchPlayer : server.matchPlayer(match))
+		{
+			foundUser = true;
+			final User target = ess.getUser(matchPlayer);
+			showExp(sender, target);
+		}
+		if (!foundUser)
+		{
+			throw new NotEnoughArgumentsException(_("playerNotFound"));
+		}
+	}
+
+	private void expMatch(final Server server, final CommandSender sender, final String match, final String amount, final boolean toggle) throws NotEnoughArgumentsException
 	{
 		boolean foundUser = false;
 		for (Player matchPlayer : server.matchPlayer(match))
 		{
 			final User target = ess.getUser(matchPlayer);
-			setExp(sender, target, toggle, true);
+			setExp(sender, target, amount, toggle);
 			foundUser = true;
 		}
 		if (!foundUser)
 		{
-			throw new NoSuchFieldException(_("playerNotFound"));
+			throw new NotEnoughArgumentsException(_("playerNotFound"));
 		}
 	}
 
