@@ -140,6 +140,10 @@ public class EssentialsPlayerListener implements Listener
 
 	public void delayedJoin(final Player player)
 	{
+		if (!player.isOnline())
+		{
+			return;
+		}
 		ess.getBackup().onPlayerJoin();
 		final User user = ess.getUser(player);
 		user.setDisplayNick();
