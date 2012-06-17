@@ -76,6 +76,10 @@ public class EssentialsSign
 	{
 		final ISign sign = new BlockSign(block);
 		final User user = ess.getUser(player);
+		if (user.checkSignThrottle())
+		{
+			return false;
+		}
 		try
 		{
 			return (user.isAuthorized("essentials.signs." + signName.toLowerCase(Locale.ENGLISH) + ".use")

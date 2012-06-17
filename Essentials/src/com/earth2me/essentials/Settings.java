@@ -388,7 +388,8 @@ public class Settings implements ISettings
 		cancelAfkOnMove = _cancelAfkOnMove();
 		getFreezeAfkPlayers = _getFreezeAfkPlayers();
 		itemSpawnBl = _getItemSpawnBlacklist();
-		loginAttackDelay = _loginAttackDelay();
+		loginAttackDelay = _getLoginAttackDelay();
+		signUsePerSecond = _getSignUsePerSecond();
 		kits = _getKits();
 		chatFormats.clear();
 	}
@@ -808,7 +809,7 @@ public class Settings implements ISettings
 	
 	private long loginAttackDelay;
 	
-	private long _loginAttackDelay()
+	private long _getLoginAttackDelay()
 	{
 		return config.getLong("login-attack-delay", 0) * 1000;
 	}
@@ -817,6 +818,20 @@ public class Settings implements ISettings
 	public long getLoginAttackDelay()
 	{
 		return loginAttackDelay;
+	}
+	
+	private int signUsePerSecond;
+	
+	private int _getSignUsePerSecond()
+	{
+		final int perSec = config.getInt("sign-use-per-second", 4);
+		return perSec > 0 ? perSec : 1;
+	}
+	
+	@Override
+	public int getSignUsePerSecond()
+	{
+		return signUsePerSecond;
 	}
 	
 }
