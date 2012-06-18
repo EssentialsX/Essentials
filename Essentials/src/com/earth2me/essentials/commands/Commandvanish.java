@@ -3,7 +3,6 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
-import org.bukkit.entity.Player;
 
 
 public class Commandvanish extends EssentialsCommand
@@ -30,7 +29,7 @@ public class Commandvanish extends EssentialsCommand
 		}
 		else
 		{
-			if (args[1].contains("on") || args[1].contains("ena") || args[1].equalsIgnoreCase("1"))
+			if (args[0].contains("on") || args[0].contains("ena") || args[0].equalsIgnoreCase("1"))
 			{
 				user.setVanished(true);
 			}
