@@ -458,6 +458,17 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.save();
 	}
 
+	@Deprecated
+	public boolean isIgnoredPlayer(final String userName)
+	{
+		final IUser user = ess.getUser(userName);
+		if (user == null || !user.isOnline())
+		{
+			return false;
+		}
+		return (ignoredPlayers.contains(user.getName().toLowerCase(Locale.ENGLISH)) && !user.isAuthorized("essentials.chat.ignoreexempt"));
+	}
+
 	public boolean isIgnoredPlayer(IUser user)
 	{
 		return (ignoredPlayers.contains(user.getName().toLowerCase(Locale.ENGLISH)) && !user.isAuthorized("essentials.chat.ignoreexempt"));

@@ -179,4 +179,6 @@ public interface ISettings extends IConf
 	boolean isTeleportInvulnerability();
 	
 	long getLoginAttackDelay();
+	
+	int getSignUsePerSecond();
 }

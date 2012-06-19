@@ -44,12 +44,12 @@ public class Commandtempban extends EssentialsCommand
 		final String time = getFinalArg(args, 1);
 		final long banTimestamp = Util.parseDateDiff(time, true);
 
-		final String banReason = _("tempBanned", Util.formatDateDiff(banTimestamp));
+		final String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
+		final String banReason = _("tempBanned", Util.formatDateDiff(banTimestamp), senderName);
 		user.setBanReason(banReason);
 		user.setBanTimeout(banTimestamp);
 		user.setBanned(true);
 		user.kickPlayer(banReason);
-		final String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
 
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
