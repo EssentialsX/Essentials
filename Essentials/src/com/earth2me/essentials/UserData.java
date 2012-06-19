@@ -466,7 +466,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		{
 			return false;
 		}
-		return (ignoredPlayers.contains(user.getName().toLowerCase(Locale.ENGLISH)) && !user.isAuthorized("essentials.chat.ignoreexempt"));
+		return isIgnoredPlayer(user);		
 	}
 
 	public boolean isIgnoredPlayer(IUser user)
