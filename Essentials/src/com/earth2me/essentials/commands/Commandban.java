@@ -40,21 +40,21 @@ public class Commandban extends EssentialsCommand
 				return;
 			}
 		}
-
+		
+		final String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
 		String banReason;
 		if (args.length > 1)
 		{
-			banReason = _("banFormat", getFinalArg(args, 1), sender.getName());
+			banReason = _("banFormat", getFinalArg(args, 1), senderName);
 		}
 		else
 		{
-			banReason = _("banFormat", _("defaultBanReason"), sender.getName());
+			banReason = _("banFormat", _("defaultBanReason"), senderName);
 		}
 		
 		user.setBanReason(banReason);
 		user.setBanned(true);
 		user.kickPlayer(banReason);
-		final String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
 
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
