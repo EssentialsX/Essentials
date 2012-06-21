@@ -52,7 +52,7 @@ teleport-delay: 0
 
 # The delay, in seconds, a player can't be attacked by other players after he has been teleported by a command
 # This will also prevent that the player can attack other players
-teleport-invulnerability: 0
+teleport-invulnerability: 2
 
 # The delay, in seconds, required between /heal attempts
 heal-cooldown: 60
@@ -222,6 +222,12 @@ enabledSigns:
   #- time
   #- weather
   #- protection
+  
+  
+# How many times per second can Essentials signs be interacted with.
+# Values should be between 1-20, 20 being virtually no lag protection.s
+# Lower numbers will reduce the possiblity of lag, but may annoy players.
+sign-use-per-second: 4
 
 # Backup runs a command while saving is disabled
 backup:
@@ -309,7 +315,7 @@ repair-enchanted: true
 register-back-in-listener: false
 
 #Delay to wait before people can cause attack damage after logging in 
-login-attack-delay: 0
+login-attack-delay: 5
 
 ############################################################
 # +------------------------------------------------------+ #

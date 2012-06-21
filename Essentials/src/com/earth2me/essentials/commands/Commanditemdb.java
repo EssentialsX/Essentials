@@ -39,7 +39,7 @@ public class Commanditemdb extends EssentialsCommand
 		if (itemStack.getType() != Material.AIR)
 		{
 			int maxuses = itemStack.getType().getMaxDurability();
-			int durability = ((itemStack.getType().getMaxDurability() + 1) - itemStack.getDurability());
+			int durability = ((maxuses + 1) - itemStack.getDurability());
 			if (maxuses != 0)
 			{
 				sender.sendMessage(_("durability", Integer.toString(durability)));

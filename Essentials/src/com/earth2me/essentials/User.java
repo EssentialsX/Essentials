@@ -21,6 +21,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	private transient final Teleport teleport;
 	private transient long teleportRequestTime;
 	private transient long lastOnlineActivity;
+	private transient long lastThrottledAction;
 	private transient long lastActivity = System.currentTimeMillis();
 	private boolean hidden = false;
 	private transient Location afkPosition = null;
@@ -668,5 +669,24 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public void toggleVanished()
 	{
 		final boolean set = !vanished;
+	}
+	
+	public boolean checkSignThrottle() {
+		if (isSignThrottled()) {
+			return true;
+		}
+		updateThrottle();
+		return false;
+	}
+	
+	public boolean isSignThrottled()
+	{
+		final long minTime = lastThrottledAction + (1000 / ess.getSettings().getSignUsePerSecond());
+		return (System.currentTimeMillis() < minTime);
+	}
+	
+	public void updateThrottle()
+	{
+		lastThrottledAction = System.currentTimeMillis();;
 	}
 }
