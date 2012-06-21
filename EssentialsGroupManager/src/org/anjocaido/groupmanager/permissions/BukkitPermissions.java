@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.WeakHashMap;
 
 import org.anjocaido.groupmanager.GroupManager;
+import org.anjocaido.groupmanager.data.User;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -144,6 +145,11 @@ public class BukkitPermissions {
 		if (player == null || !GroupManager.isLoaded()) {
 			return;
 		}
+		
+		// Reset the User objects player reference.
+		User user = plugin.getWorldsHolder().getWorldData(player.getWorld().getName()).getUser(player.getName());
+		if (user != null)
+			user.updatePlayer(player);
 
 		PermissionAttachment attachment;
 
@@ -440,7 +446,7 @@ public class BukkitPermissions {
 		public void onPlayerKick(PlayerKickEvent event) {
 
 			Player player = event.getPlayer();
-
+			
 			/*
 			 * force remove any attachments as bukkit may not
 			 */
