@@ -669,6 +669,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public void toggleVanished()
 	{
 		final boolean set = !vanished;
+		this.setVanished(set);
 	}
 	
 	public boolean checkSignThrottle() {
