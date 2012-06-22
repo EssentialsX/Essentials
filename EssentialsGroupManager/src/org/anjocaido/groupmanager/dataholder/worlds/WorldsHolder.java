@@ -264,8 +264,9 @@ public class WorldsHolder {
 	/**
      *
      */
-	public void saveChanges(boolean overwrite) {
+	public boolean saveChanges(boolean overwrite) {
 
+		boolean changed = false;
 		ArrayList<WorldDataHolder> alreadyDone = new ArrayList<WorldDataHolder>();
 		Tasks.removeOldFiles(plugin, plugin.getBackupFolder());
 
@@ -294,6 +295,7 @@ public class WorldsHolder {
 						backupFile(w, true);
 
 						WorldDataHolder.writeGroups(w, w.getGroupsFile());
+						changed = true;
 						//w.removeGroupsChangedFlag();
 					} else {
 						// Newer file found.
@@ -307,6 +309,7 @@ public class WorldsHolder {
 						// Backup Groups file
 						backupFile(w, true);
 						w.reloadGroups();
+						changed = true;
 					}
 				}
 			if (!mirrorsUser.containsKey(w.getName().toLowerCase()))
@@ -316,6 +319,7 @@ public class WorldsHolder {
 						backupFile(w, false);
 
 						WorldDataHolder.writeUsers(w, w.getUsersFile());
+						changed = true;
 						//w.removeUsersChangedFlag();
 					} else {
 						// Newer file found.
@@ -329,10 +333,12 @@ public class WorldsHolder {
 						// Backup Users file
 						backupFile(w, false);
 						w.reloadUsers();
+						changed = true;
 					}
 				}
 			alreadyDone.add(w);
 		}
+		return changed;
 	}
 
 	/**

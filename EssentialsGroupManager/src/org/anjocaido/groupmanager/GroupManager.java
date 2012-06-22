@@ -324,8 +324,8 @@ public class GroupManager extends JavaPlugin {
 				public void run() {
 
 					try {
-						worldsHolder.saveChanges(false);
-						GroupManager.logger.log(Level.INFO, " Data files refreshed.");
+						if (worldsHolder.saveChanges(false))
+							GroupManager.logger.log(Level.INFO, " Data files refreshed.");
 					} catch (IllegalStateException ex) {
 						GroupManager.logger.log(Level.WARNING, ex.getMessage());
 					}

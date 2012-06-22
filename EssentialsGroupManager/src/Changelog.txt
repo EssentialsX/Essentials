@@ -184,3 +184,4 @@ v 2.0:
 	- Prevent null perms getting past the GlobalGroups loader.
 	- Fix forgetting sub groups on a manload.
 	- Allow 'manucheckp' to notify when superperms reports false but it is really negated.
+	- Only output a Data update message if something has changed.
