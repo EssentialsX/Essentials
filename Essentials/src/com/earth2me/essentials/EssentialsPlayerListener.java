@@ -120,9 +120,7 @@ public class EssentialsPlayerListener implements Listener
 		{
 			user.toggleVanished();
 		}
-		if (user.getLastLocation() == null) {
-				user.setLastLocation();
-		}
+		user.setLastLocation();
 		user.updateActivity(false);
 		user.dispose();
 	}
