@@ -44,10 +44,10 @@ public class KeywordReplacer implements IText
 			address = user.getAddress().toString();
 			balance = Double.toString(user.getMoney());
 			mails = Integer.toString(user.getMails().size());
-			world = user.getLocation().getWorld().getName();
-			worldTime12 = DescParseTickFormat.format12(user.getWorld().getTime());
-			worldTime24 = DescParseTickFormat.format24(user.getWorld().getTime());
-			worldDate = DateFormat.getDateInstance(DateFormat.MEDIUM, ess.getI18n().getCurrentLocale()).format(DescParseTickFormat.ticksToDate(user.getWorld().getFullTime()));
+			world = user.getLocation() == null || user.getLocation().getWorld() == null ? "" : user.getLocation().getWorld().getName();
+			worldTime12 = DescParseTickFormat.format12(user.getWorld() == null ? 0 : user.getWorld().getTime());
+			worldTime24 = DescParseTickFormat.format24(user.getWorld() == null ? 0 : user.getWorld().getTime());
+			worldDate = DateFormat.getDateInstance(DateFormat.MEDIUM, ess.getI18n().getCurrentLocale()).format(DescParseTickFormat.ticksToDate(user.getWorld() == null ? 0 : user.getWorld().getFullTime()));
 		}
 		else
 		{
