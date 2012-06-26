@@ -133,10 +133,13 @@ public abstract class EssentialsChatPlayer implements Listener
 				{
 					abort = true;
 				}
-				final double delta = playerLoc.distanceSquared(loc);
-				if (delta > chatStore.getRadius())
+				else
 				{
-					abort = true;
+					final double delta = playerLoc.distanceSquared(loc);
+					if (delta > chatStore.getRadius())
+					{
+						abort = true;
+					}
 				}
 				if (abort)
 				{
