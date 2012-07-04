@@ -186,3 +186,4 @@ v 2.0:
 	- Allow 'manucheckp' to notify when superperms reports false but it is really negated.
 	- Only output a Data update message if something has changed.
 	- Fix loading users with only numerals in their names to be seen as strings.
+	- Ignore any sub folders in the Worlds folder which start with a period (fix for storing data in svn respoitories).

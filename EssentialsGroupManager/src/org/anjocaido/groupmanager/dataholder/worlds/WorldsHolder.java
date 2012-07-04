@@ -105,7 +105,7 @@ public class WorldsHolder {
 		 * and attempt to load the world data
 		 */
 		for (File folder : worldsFolder.listFiles()) {
-			if (folder.isDirectory()) {
+			if (folder.isDirectory() && !folder.getName().startsWith(".")) {
 				GroupManager.logger.info("World Found: " + folder.getName());
 
 				/*
