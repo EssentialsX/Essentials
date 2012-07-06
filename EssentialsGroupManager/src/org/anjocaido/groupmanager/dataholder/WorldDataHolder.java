@@ -508,6 +508,10 @@ public class WorldDataHolder {
 		} catch (Exception ex) {
 			throw new IllegalArgumentException("Your " + groupsFile.getPath() + " file is invalid. See console for details.", ex);
 		}
+		
+		if (allGroupsNode == null) {
+			throw new IllegalArgumentException("You have no groups in " + groupsFile.getPath() + ".");
+		}
 
 		Iterator<String> groupItr = allGroupsNode.keySet().iterator();
 		String groupKey;

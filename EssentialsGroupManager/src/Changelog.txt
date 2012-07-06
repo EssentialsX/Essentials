@@ -187,3 +187,4 @@ v 2.0:
 	- Only output a Data update message if something has changed.
 	- Fix loading users with only numerals in their names to be seen as strings.
 	- Ignore any sub folders in the Worlds folder which start with a period (fix for storing data in svn respoitories).
+	- Throw a better error than 'null' when someone removes all groups from a yml.
