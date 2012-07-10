@@ -45,7 +45,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf
 	public void onPlayerJoin(PlayerJoinEvent event)
 	{
 		User u = ess.getUser(event.getPlayer());
-		if (u.isAuthorized("essentials.geoip.hide"))
+		if (u.isAuthorized("essentials.geoip.hide") || event.getPlayer().getAddress() == null)
 		{
 			return;
 		}
