@@ -442,18 +442,7 @@ public class BukkitPermissions {
 			updatePermissions(event.getPlayer(), event.getPlayer().getWorld().getName());
 		}
 
-		@EventHandler(priority = EventPriority.LOWEST)
-		public void onPlayerKick(PlayerKickEvent event) {
-
-			Player player = event.getPlayer();
-			
-			/*
-			 * force remove any attachments as bukkit may not
-			 */
-			removeAttachment(player);
-		}
-
-		@EventHandler(priority = EventPriority.LOWEST)
+		@EventHandler(priority = EventPriority.HIGHEST)
 		public void onPlayerQuit(PlayerQuitEvent event) {
 
 			if (!GroupManager.isLoaded())
