@@ -1,6 +1,7 @@
 package org.anjocaido.groupmanager;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -20,9 +21,10 @@ import org.anjocaido.groupmanager.events.GroupManagerEventHandler;
 import org.anjocaido.groupmanager.utils.PermissionCheckResult;
 import org.anjocaido.groupmanager.utils.Tasks;
 import org.bukkit.configuration.MemorySection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.SafeConstructor;
+import org.yaml.snakeyaml.reader.UnicodeReader;
 
 /**
  * @author ElgarL
@@ -31,7 +33,7 @@ import org.yaml.snakeyaml.Yaml;
 public class GlobalGroups {
 
 	private GroupManager plugin;
-	private YamlConfiguration GGroups;
+	//private Yaml GGroups;
 
 	private Map<String, Group> groups;
 
@@ -89,8 +91,9 @@ public class GlobalGroups {
 	@SuppressWarnings("unchecked")
 	public void load() {
 
-		GGroups = new YamlConfiguration();
-
+		Yaml GGroupYAML = new Yaml(new SafeConstructor());
+		Map<String, Object> GGroups;
+		
 		GroupManager.setLoaded(false);
 
 		// READ globalGroups FILE
@@ -106,8 +109,13 @@ public class GlobalGroups {
 			}
 		}
 
+		/*
+		 * Load the YAML file.
+		 */
 		try {
-			GGroups.load(GlobalGroupsFile);
+			FileInputStream groupsInputStream = new FileInputStream(GlobalGroupsFile);
+			GGroups = (Map<String, Object>) GGroupYAML.load(new UnicodeReader(groupsInputStream));
+			groupsInputStream.close();
 		} catch (Exception ex) {
 			throw new IllegalArgumentException("The following file couldn't pass on Parser.\n" + GlobalGroupsFile.getPath(), ex);
 		}
@@ -115,12 +123,12 @@ public class GlobalGroups {
 		// Clear out old groups
 		resetGlobalGroups();
 
-		if (!GGroups.getKeys(false).isEmpty()) {
+		if (!GGroups.keySet().isEmpty()) {
 			// Read all global groups
 			Map<String, Object> allGroups = new HashMap<String, Object>();
 
 			try {
-				allGroups = (Map<String, Object>) GGroups.getConfigurationSection("groups").getValues(false);
+				allGroups = (Map<String, Object>) GGroups.get("groups");
 			} catch (Exception ex) {
 				// ex.printStackTrace();
 				throw new IllegalArgumentException("Your " + GlobalGroupsFile.getPath() + " file is invalid. See console for details.", ex);

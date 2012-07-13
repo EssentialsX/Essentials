@@ -189,3 +189,4 @@ v 2.0:
 	- Ignore any sub folders in the Worlds folder which start with a period (fix for storing data in svn respoitories).
 	- Throw a better error than 'null' when someone removes all groups from a yml.
 	- Stop force removing attachments and let Bukkit handle it's own mess.
+	- Change to our own Yaml parsing for globalgroups instead of using the YAMLConfiguration class in bukkit.
