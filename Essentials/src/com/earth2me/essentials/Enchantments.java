@@ -77,6 +77,8 @@ public class Enchantments
 		ENCHANTMENTS.put("flameprotection", Enchantment.PROTECTION_FIRE);
 		ENCHANTMENTS.put("fireprotect", Enchantment.PROTECTION_FIRE);
 		ENCHANTMENTS.put("flameprotect", Enchantment.PROTECTION_FIRE);
+		ENCHANTMENTS.put("fireprot", Enchantment.PROTECTION_FIRE);
+		ENCHANTMENTS.put("flameprot", Enchantment.PROTECTION_FIRE);
 		
 		ENCHANTMENTS.put("projectileprotection", Enchantment.PROTECTION_PROJECTILE);
 		ENCHANTMENTS.put("projprot", Enchantment.PROTECTION_PROJECTILE);
