@@ -325,17 +325,14 @@ public class Util
 			y -= 1;
 			if (y + 4 < oy)
 			{
-				System.out.println("Lets inc x");
 				x += 1;
 				y = oy + 4;
 				if (x - 3 > loc.getBlockX())
 				{
-					System.out.println("Lets inc z");
 					x = loc.getBlockX() - 3;
 					z += 1;
 					if (z - 3 > loc.getBlockZ())
 					{
-						System.out.println("Time to give up");
 						x = loc.getBlockX() + 4;
 						z = loc.getBlockZ();
 						y = world.getHighestBlockYAt(x, z);
