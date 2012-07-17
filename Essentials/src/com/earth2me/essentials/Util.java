@@ -340,10 +340,6 @@ public class Util
 				}
 
 				y = origY + 4;
-				if (origY - 4 > world.getHighestBlockYAt(x, z))
-				{
-					y = origY - 4;
-				}
 			}
 		}
 
