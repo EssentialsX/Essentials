@@ -296,14 +296,14 @@ public class Util
 		int x = loc.getBlockX();
 		int y = (int)Math.round(loc.getY());
 		int z = loc.getBlockZ();
-		final int oy = y;
+		final int origY = y;
 
 		while (isBlockAboveAir(world, x, y, z))
 		{
 			y -= 1;
 			if (y < 0)
 			{
-				y = oy;
+				y = origY;
 				break;
 			}
 		}
@@ -315,7 +315,7 @@ public class Util
 			{
 				x -= 3;
 				z -= 3;
-				y = oy + 4;
+				y = origY + 4;
 				break;
 			}
 		}
@@ -323,10 +323,9 @@ public class Util
 		while (isBlockUnsafe(world, x, y, z))
 		{
 			y -= 1;
-			if (y + 4 < oy)
+			if (y + 4 < origY)
 			{
 				x += 1;
-				y = oy + 4;
 				if (x - 3 > loc.getBlockX())
 				{
 					x = loc.getBlockX() - 3;
@@ -338,6 +337,12 @@ public class Util
 						y = world.getHighestBlockYAt(x, z);
 						break;
 					}
+				}
+
+				y = origY + 4;
+				if (origY - 4 > world.getHighestBlockYAt(x, z))
+				{
+					y = origY - 4;
 				}
 			}
 		}
