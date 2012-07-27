@@ -75,8 +75,8 @@ public class SignBlockListener implements Listener
 		return false;
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onSignChange(final SignChangeEvent event)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onSignChange2(final SignChangeEvent event)
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
@@ -87,6 +87,15 @@ public class SignBlockListener implements Listener
 		for (int i = 0; i < 4; i++)
 		{
 			event.setLine(i, Util.formatString(user, "essentials.signs", event.getLine(i)));
+		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onSignChange(final SignChangeEvent event)
+	{
+		if (ess.getSettings().areSignsDisabled())
+		{
+			return;
 		}
 
 		for (Signs signs : Signs.values())
