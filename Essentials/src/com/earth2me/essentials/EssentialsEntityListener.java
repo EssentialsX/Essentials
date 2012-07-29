@@ -125,6 +125,7 @@ public class EssentialsEntityListener implements Listener
 		if (user.isAuthorized("essentials.keepxp"))
 		{
 			event.setKeepLevel(true);
+			event.setDroppedExp(0);
 		}
 	}
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
