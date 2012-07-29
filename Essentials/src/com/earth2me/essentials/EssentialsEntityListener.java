@@ -118,6 +118,7 @@ public class EssentialsEntityListener implements Listener
 			event.setDeathMessage("");
 		}
 	}
+
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerDeathExpEvent(final PlayerDeathEvent event)
 	{
@@ -128,6 +129,7 @@ public class EssentialsEntityListener implements Listener
 			event.setDroppedExp(0);
 		}
 	}
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onFoodLevelChange(final FoodLevelChangeEvent event)
 	{

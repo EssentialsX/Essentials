@@ -40,8 +40,8 @@ public class KeywordReplacer implements IText
 			user.setDisplayNick();
 			displayName = user.getDisplayName();
 			userName = user.getName();
-			ipAddress = user.getAddress().getAddress().toString();
-			address = user.getAddress().toString();
+			ipAddress = user.getAddress() == null || user.getAddress().getAddress() == null ? "" : user.getAddress().getAddress().toString();
+			address = user.getAddress() == null ? "" : user.getAddress().toString();
 			balance = Double.toString(user.getMoney());
 			mails = Integer.toString(user.getMails().size());
 			world = user.getLocation() == null || user.getLocation().getWorld() == null ? "" : user.getLocation().getWorld().getName();
