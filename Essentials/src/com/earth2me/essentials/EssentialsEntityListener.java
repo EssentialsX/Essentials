@@ -119,6 +119,17 @@ public class EssentialsEntityListener implements Listener
 		}
 	}
 
+	@EventHandler(priority = EventPriority.LOW)
+	public void onPlayerDeathExpEvent(final PlayerDeathEvent event)
+	{
+		final User user = ess.getUser(event.getEntity());
+		if (user.isAuthorized("essentials.keepxp"))
+		{
+			event.setKeepLevel(true);
+			event.setDroppedExp(0);
+		}
+	}
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onFoodLevelChange(final FoodLevelChangeEvent event)
 	{
