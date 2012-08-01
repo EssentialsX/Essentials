@@ -58,7 +58,7 @@ public class Commandtp extends EssentialsCommand
 				throw new Exception(_("teleportDisabled", toPlayer.getDisplayName()));
 			}
 			if (target.getWorld() != toPlayer.getWorld() && ess.getSettings().isWorldTeleportPermissions()
-				&& !user.isAuthorized("essentials.world." + toPlayer.getWorld().getName()))
+				&& !player.isAuthorized("essentials.world." + toPlayer.getWorld().getName()))
 			{
 				throw new Exception(_("noPerm", "essentials.world." + toPlayer.getWorld().getName()));
 			}
