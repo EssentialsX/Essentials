@@ -19,24 +19,27 @@ public class Commandgamemode extends EssentialsCommand
 	@Override
 	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
-		if (args.length < 1)
+		if (args.length < 2)
 		{
 			throw new NotEnoughArgumentsException();
 		}
-
 		gamemodeOtherPlayers(server, sender, args);
 	}
 
 	@Override
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		if (args.length > 0 && args[0].trim().length() > 2 && user.isAuthorized("essentials.gamemode.others"))
+		if(args.length < 1)
+		{
+			throw new NotEnoughArgumentsException();
+		}
+		
+		if (args.length > 1 && args[0].trim().length() > 2 && user.isAuthorized("essentials.gamemode.others"))
 		{
 			gamemodeOtherPlayers(server, user, args);
 			return;
-		}
-
-		user.setGameMode(user.getGameMode() == GameMode.SURVIVAL ? GameMode.CREATIVE : GameMode.SURVIVAL);
+		}	
+		performSetMode(args[0], user);
 		user.sendMessage(_("gameMode", _(user.getGameMode().toString().toLowerCase(Locale.ENGLISH)), user.getDisplayName()));
 	}
 
@@ -48,24 +51,25 @@ public class Commandgamemode extends EssentialsCommand
 			if (player.isHidden())
 			{
 				continue;
-			}
-
-			if (args.length > 1)
-			{
-				if (args[1].contains("creat") || args[1].equalsIgnoreCase("1"))
-				{
-					player.setGameMode(GameMode.CREATIVE);
-				}
-				else
-				{
-					player.setGameMode(GameMode.SURVIVAL);
-				}
-			}
-			else
-			{
-				player.setGameMode(player.getGameMode() == GameMode.SURVIVAL ? GameMode.CREATIVE : GameMode.SURVIVAL);
-			}
+			}		
+			performSetMode(args[1], player);
 			sender.sendMessage(_("gameMode", _(player.getGameMode().toString().toLowerCase(Locale.ENGLISH)), player.getDisplayName()));
 		}
+	}
+	
+	private void performSetMode(String mode, Player player)
+	{
+			if (mode.contains("survi") || mode.equalsIgnoreCase("0"))
+			{
+				player.setGameMode(GameMode.SURVIVAL);
+			}
+			else if (mode.contains("creat") || mode.equalsIgnoreCase("1"))
+			{
+				player.setGameMode(GameMode.CREATIVE);
+			}
+			else if (mode.contains("advent") || mode.equalsIgnoreCase("2"))
+			{
+				player.setGameMode(GameMode.ADVENTURE);
+			}
 	}
 }
