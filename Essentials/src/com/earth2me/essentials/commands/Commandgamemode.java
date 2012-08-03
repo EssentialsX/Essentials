@@ -39,7 +39,7 @@ public class Commandgamemode extends EssentialsCommand
 			gamemodeOtherPlayers(server, user, args);
 			return;
 		}
-		performSetMode(args[0], user);
+		performSetMode(args[0].toLowerCase(Locale.ENGLISH), user);
 		user.sendMessage(_("gameMode", _(user.getGameMode().toString().toLowerCase(Locale.ENGLISH)), user.getDisplayName()));
 	}
 
@@ -52,7 +52,7 @@ public class Commandgamemode extends EssentialsCommand
 			{
 				continue;
 			}
-			performSetMode(args[0], player);
+			performSetMode(args[0].toLowerCase(Locale.ENGLISH), player);
 			sender.sendMessage(_("gameMode", _(player.getGameMode().toString().toLowerCase(Locale.ENGLISH)), player.getDisplayName()));
 		}
 	}
