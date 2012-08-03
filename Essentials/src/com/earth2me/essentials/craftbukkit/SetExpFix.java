@@ -74,14 +74,8 @@ public class SetExpFix
 	
 	public static int getExpUntilNextLevel(final Player player)
 	{
-		int exp = 0;
-		int currentLevel = player.getLevel() + 1;
-
-		while (currentLevel > 0)
-		{
-			currentLevel--;
-			exp += getExpToLevel(currentLevel);
-		}
-		return exp - getTotalExperience(player);
+		int exp = (int)Math.round(getExpToLevel(player) * player.getExp());
+		int nextLevel = player.getLevel() + 1;
+		return getExpToLevel(nextLevel) - exp;
 	}
 }
