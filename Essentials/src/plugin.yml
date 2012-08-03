@@ -117,7 +117,7 @@ commands:
     aliases: [efireball]
   gamemode:
     description: Change player gamemode.
-    usage: /<command> [player] <creative|survival|adventure>
+    usage: /<command> <survival|creative|adventure> [player]
     aliases: [gm,creative,creativemode,egamemode,ecreative,ecreativemode,egm]
   getpos:
     description: Get your current coordinates or those of a player.
