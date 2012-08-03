@@ -16,7 +16,7 @@ public class SetExpFix
 		player.setExp(0);
 		player.setLevel(0);
 		player.setTotalExperience(0);
-		
+
 		//This following code is technically redundant now, as bukkit now calulcates levels more or less correctly
 		//At larger numbers however... player.getExp(3000), only seems to give 2999, putting the below calculations off.
 		int amount = exp;
@@ -40,23 +40,32 @@ public class SetExpFix
 	}
 
 	private static int getExpToLevel(final Player player)
-	{		
+	{
 		return getExpToLevel(player.getLevel());
 	}
-	
+
 	private static int getExpToLevel(final int level)
-	{		
-		return 7 + (level * 7 >> 1);
+	{
+		if (level >= 30)
+		{
+			return 62 + (level - 30) * 7;
+		}
+		if (level >= 15)
+		{
+			return 17 + (level - 15) * 3;
+		}
+		return 17;
 	}
-	
+
 	//This method is required because the bukkit player.getTotalExperience() method, shows exp that has been 'spent'.
 	//Without this people would be able to use exp and then still sell it.
 	public static int getTotalExperience(final Player player)
 	{
 		int exp = (int)Math.round(getExpToLevel(player) * player.getExp());
 		int currentLevel = player.getLevel();
-		
-		while (currentLevel > 0) {			
+
+		while (currentLevel > 0)
+		{
 			currentLevel--;
 			exp += getExpToLevel(currentLevel);
 		}
