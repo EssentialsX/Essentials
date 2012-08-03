@@ -29,34 +29,33 @@ public class SignGameMode extends EssentialsSign
 	{
 		final Trade charge = getTrade(sign, 1, ess);
 		final String mode = sign.getLine(2).trim();
-		
-		if(mode.isEmpty())
+
+		if (mode.isEmpty())
 		{
 			throw new SignException(_("invalidSignLine", 3));
 		}
-		
+
 		charge.isAffordableFor(player);
 
-		performSetMode(mode, player);
+		performSetMode(mode.toLowerCase(Locale.ENGLISH), player);
 		player.sendMessage(_("gameMode", _(player.getGameMode().toString().toLowerCase(Locale.ENGLISH)), player.getDisplayName()));
 		charge.charge(player);
 		return true;
 	}
-	
+
 	private void performSetMode(String mode, Player player)
 	{
-			if (mode.contains("survi") || mode.equalsIgnoreCase("0"))
-			{
-				player.setGameMode(GameMode.SURVIVAL);
-			}
-			else if (mode.contains("creat") || mode.equalsIgnoreCase("1"))
-			{
-				player.setGameMode(GameMode.CREATIVE);
-			}
-			else if (mode.contains("advent") || mode.equalsIgnoreCase("2"))
-			{
-				player.setGameMode(GameMode.ADVENTURE);
-			}
+		if (mode.contains("survi") || mode.equalsIgnoreCase("0"))
+		{
+			player.setGameMode(GameMode.SURVIVAL);
+		}
+		else if (mode.contains("creat") || mode.equalsIgnoreCase("1"))
+		{
+			player.setGameMode(GameMode.CREATIVE);
+		}
+		else if (mode.contains("advent") || mode.equalsIgnoreCase("2"))
+		{
+			player.setGameMode(GameMode.ADVENTURE);
+		}
 	}
-	
 }
