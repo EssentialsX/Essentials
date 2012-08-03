@@ -191,3 +191,4 @@ v 2.0:
 	- Stop force removing attachments and let Bukkit handle it's own mess.
 	- Change to our own Yaml parsing for globalgroups instead of using the YAMLConfiguration class in bukkit.
 	- Fix a cases sensitivity bug in world loading.
+	- Stop using the YamlConfiguration in bukkit for our config handling. We can now support periods in world names.
