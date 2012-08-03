@@ -2,6 +2,7 @@ package com.earth2me.essentials.chat;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IEssentials;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
@@ -33,7 +34,7 @@ public class EssentialsChat extends JavaPlugin
 		}
 
 		chatListener = new ConcurrentSkipListMap<String, IEssentialsChatListener>();
-		final Map<PlayerChatEvent, ChatStore> chatStore = new HashMap<PlayerChatEvent, ChatStore>();
+		final Map<PlayerChatEvent, ChatStore> chatStore = Collections.synchronizedMap(new HashMap<PlayerChatEvent, ChatStore>());
 
 
 		final EssentialsChatPlayerListenerLowest playerListenerLowest = new EssentialsChatPlayerListenerLowest(getServer(), ess, chatListener, chatStore);
