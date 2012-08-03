@@ -190,3 +190,4 @@ v 2.0:
 	- Throw a better error than 'null' when someone removes all groups from a yml.
 	- Stop force removing attachments and let Bukkit handle it's own mess.
 	- Change to our own Yaml parsing for globalgroups instead of using the YAMLConfiguration class in bukkit.
+	- Fix a cases sensitivity bug in world loading.

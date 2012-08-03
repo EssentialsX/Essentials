@@ -612,7 +612,7 @@ public class WorldsHolder {
 				throw new IllegalArgumentException("Users file for world '" + worldName + "' doesnt exist: " + usersFile.getPath());
 			}
 
-			WorldDataHolder tempHolder = new WorldDataHolder(worldName);
+			WorldDataHolder tempHolder = new WorldDataHolder(worldNameLowered);
 
 			// Map the group object for any mirror
 			if (mirrorsGroup.containsKey(worldNameLowered))
