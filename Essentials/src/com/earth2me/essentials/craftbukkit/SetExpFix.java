@@ -71,4 +71,17 @@ public class SetExpFix
 		}
 		return exp;
 	}
+	
+	public static int getExpUntilNextLevel(final Player player)
+	{
+		int exp = 0;
+		int currentLevel = player.getLevel() + 1;
+
+		while (currentLevel > 0)
+		{
+			currentLevel--;
+			exp += getExpToLevel(currentLevel);
+		}
+		return exp - getTotalExperience(player);
+	}
 }
