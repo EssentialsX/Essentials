@@ -3,6 +3,7 @@ package com.earth2me.essentials.chat;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.Map;
 import org.bukkit.Server;
@@ -40,9 +41,13 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer
 		event.setMessage(Util.formatMessage(user, "essentials.chat", event.getMessage()));
 		String group = user.getGroup();
 		String world = user.getWorld().getName();
-		event.setFormat(ess.getSettings().getChatFormat(group).format(new Object[]
-				{
-					group, world, world.substring(0, 1).toUpperCase(Locale.ENGLISH)
-				}));
+		MessageFormat format = ess.getSettings().getChatFormat(group);
+		synchronized (format)
+		{
+			event.setFormat(format.format(new Object[]
+					{
+						group, world, world.substring(0, 1).toUpperCase(Locale.ENGLISH)
+					}));
+		}
 	}
 }

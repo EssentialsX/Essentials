@@ -440,14 +440,14 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	public List<String> getIgnoredPlayers()
 	{
-		return config.getStringList("ignore");
+		return Collections.synchronizedList(config.getStringList("ignore"));
 	}
 
 	public void setIgnoredPlayers(List<String> players)
 	{
 		if (players == null || players.isEmpty())
 		{
-			ignoredPlayers = new ArrayList<String>();
+			ignoredPlayers = Collections.synchronizedList(new ArrayList<String>());
 			config.removeProperty("ignore");
 		}
 		else
@@ -466,7 +466,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		{
 			return false;
 		}
-		return isIgnoredPlayer(user);		
+		return isIgnoredPlayer(user);
 	}
 
 	public boolean isIgnoredPlayer(IUser user)
