@@ -34,7 +34,7 @@ public class Commandgamemode extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		if (args.length > 1 && args[0].trim().length() > 2 && user.isAuthorized("essentials.gamemode.others"))
+		if (args.length > 1 && args[1].trim().length() > 2 && user.isAuthorized("essentials.gamemode.others"))
 		{
 			gamemodeOtherPlayers(server, user, args);
 			return;
