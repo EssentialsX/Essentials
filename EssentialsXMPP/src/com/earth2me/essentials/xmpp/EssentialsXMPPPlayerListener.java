@@ -5,7 +5,7 @@ import com.earth2me.essentials.User;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -28,7 +28,7 @@ class EssentialsXMPPPlayerListener implements Listener
 	}
 
 	@EventHandler(priority= EventPriority.MONITOR)
-	public void onPlayerChat(final PlayerChatEvent event)
+	public void onPlayerChat(final AsyncPlayerChatEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
 		sendMessageToSpyUsers(String.format(event.getFormat(), user.getDisplayName(), event.getMessage()));

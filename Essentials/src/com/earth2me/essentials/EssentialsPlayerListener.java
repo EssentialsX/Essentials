@@ -50,7 +50,7 @@ public class EssentialsPlayerListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerChat(final PlayerChatEvent event)
+	public void onPlayerChat(final AsyncPlayerChatEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
 		if (user.isMuted())
