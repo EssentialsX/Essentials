@@ -424,7 +424,7 @@ chat:
   #  Default: '{WORLDNAME} {DISPLAYNAME}&7:&f {MESSAGE}'
   #  Admins: '{WORLDNAME} &c[{GROUP}]&f {DISPLAYNAME}&7:&c {MESSAGE}'
 
-  # If your using group formats make sure to remove the '#' to allow the setting to be read.
+  # If you are using group formats make sure to remove the '#' to allow the setting to be read.
 
 ############################################################
 # +------------------------------------------------------+ #
