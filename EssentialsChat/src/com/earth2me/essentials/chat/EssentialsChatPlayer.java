@@ -44,11 +44,14 @@ public abstract class EssentialsChatPlayer implements Listener
 		{
 			return true;
 		}
-		for (IEssentialsChatListener listener : listeners.values())
+		synchronized (listeners)
 		{
-			if (listener.shouldHandleThisChat(event))
+			for (IEssentialsChatListener listener : listeners.values())
 			{
-				return true;
+				if (listener.shouldHandleThisChat(event))
+				{
+					return true;
+				}
 			}
 		}
 		return false;
@@ -155,9 +158,12 @@ public abstract class EssentialsChatPlayer implements Listener
 			}
 
 			String message = String.format(event.getFormat(), type.concat(sender.getDisplayName()), event.getMessage());
-			for (IEssentialsChatListener listener : listeners.values())
+			synchronized (listeners)
 			{
-				message = listener.modifyMessage(event, onlinePlayer, message);
+				for (IEssentialsChatListener listener : listeners.values())
+				{
+					message = listener.modifyMessage(event, onlinePlayer, message);
+				}
 			}
 			onlineUser.sendMessage(message);
 		}
