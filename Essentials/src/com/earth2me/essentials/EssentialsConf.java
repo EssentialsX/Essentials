@@ -118,7 +118,7 @@ public class EssentialsConf extends YamlConfiguration
 			{
 				final FileChannel channel = inputStream.getChannel();
 				final ByteBuffer buffer = ByteBuffer.allocate((int)configFile.length());
-				boolean retry;
+				int retry = 0;
 				do
 				{
 					try
@@ -133,15 +133,19 @@ public class EssentialsConf extends YamlConfiguration
 						{
 							channel.read(buffer, left);
 						}
-						retry = false;
+						retry = 0;
 					}
 					catch (ClosedByInterruptException ex)
 					{
 						buffer.rewind();
-						retry = true;
+						retry++;
+						if (retry >= 5)
+						{
+							throw ex;
+						}
 					}
 				}
-				while (retry);
+				while (retry > 0);
 				buffer.rewind();
 				final CharBuffer data = CharBuffer.allocate((int)configFile.length());
 				CharsetDecoder decoder = UTF8.newDecoder();
