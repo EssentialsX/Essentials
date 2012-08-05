@@ -48,7 +48,7 @@ public class TextPager
 
 			final int start = onePage ? 0 : (page - 1) * 9;
 			final int pages = lines.size() / 9 + (lines.size() % 9 > 0 ? 1 : 0);
-			if (!onePage)
+			if (!onePage && commandName != null)
 			{
 				StringBuilder content = new StringBuilder();
 				final String[] title = commandName.split(" ", 2);
@@ -72,7 +72,7 @@ public class TextPager
 			{
 				sender.sendMessage(lines.get(i));
 			}
-			if (!onePage && page < pages)
+			if (!onePage && page < pages && commandName != null)
 			{
 				sender.sendMessage(_("readNextPage", commandName, page + 1));
 			}
@@ -130,7 +130,7 @@ public class TextPager
 				}
 
 				int pages = end / 9 + (end % 9 > 0 ? 1 : 0);
-				if (!onePage)
+				if (!onePage && commandName != null)
 				{
 
 					sender.sendMessage(_("infoPages", page, pages, I18n.capitalCase(commandName)));
@@ -139,7 +139,7 @@ public class TextPager
 				{
 					sender.sendMessage(lines.get(i));
 				}
-				if (!onePage && page < pages)
+				if (!onePage && page < pages && commandName != null)
 				{
 					sender.sendMessage(_("readNextPage", commandName, page + 1));
 				}
@@ -183,7 +183,7 @@ public class TextPager
 
 		final int page = chapterpage + 1;
 		final int pages = (chapterend - chapterstart) / 9 + ((chapterend - chapterstart) % 9 > 0 ? 1 : 0);
-		if (!onePage)
+		if (!onePage && commandName != null)
 		{
 			sender.sendMessage(_("infoChapterPages", pageStr, page, pages));
 		}
@@ -191,7 +191,7 @@ public class TextPager
 		{
 			sender.sendMessage(lines.get(i));
 		}
-		if (!onePage && page < pages)
+		if (!onePage && page < pages && commandName != null)
 		{
 			sender.sendMessage(_("readNextPage", commandName, pageStr + " " + (page + 1)));
 		}
