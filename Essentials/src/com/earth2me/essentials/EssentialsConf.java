@@ -124,16 +124,7 @@ public class EssentialsConf extends YamlConfiguration
 					channel.position(0);
 					try
 					{
-						int BUFFERSIZE = 1024;
-						long left = configFile.length() % BUFFERSIZE;
-						for (long i = 0; i < configFile.length() - left; i += BUFFERSIZE)
-						{
-							channel.read(buffer, BUFFERSIZE);
-						}
-						if (left > 0)
-						{
-							channel.read(buffer, left);
-						}
+						channel.read(buffer);
 						retry = 0;
 					}
 					catch (ClosedByInterruptException ex)
