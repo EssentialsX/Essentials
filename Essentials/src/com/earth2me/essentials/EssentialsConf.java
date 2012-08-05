@@ -116,11 +116,12 @@ public class EssentialsConf extends YamlConfiguration
 			final FileInputStream inputStream = new FileInputStream(configFile);
 			try
 			{
-				final FileChannel channel = inputStream.getChannel();
 				final ByteBuffer buffer = ByteBuffer.allocate((int)configFile.length());
 				int retry = 0;
 				do
 				{
+					final FileChannel channel = inputStream.getChannel();
+					channel.position(0);
 					try
 					{
 						int BUFFERSIZE = 1024;
