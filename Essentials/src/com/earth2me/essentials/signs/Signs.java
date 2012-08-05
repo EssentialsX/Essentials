@@ -13,6 +13,7 @@ public enum Signs
 	KIT(new SignKit()),
 	MAIL(new SignMail()),
 	PROTECTION(new SignProtection()),
+	REPAIR(new SignRepair()),
 	SELL(new SignSell()),
 	SPAWNMOB(new SignSpawnmob()),
 	TIME(new SignTime()),

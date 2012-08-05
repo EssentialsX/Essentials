@@ -219,6 +219,7 @@ enabledSigns:
   #- gamemode
   #- heal
   #- spawnmob
+  #- repair
   #- time
   #- weather
   #- protection
