@@ -19,20 +19,27 @@ public class SignGameMode extends EssentialsSign
 
 	@Override
 	protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException
-	{
-		validateTrade(sign, 1, ess);
+	{				
+		final String gamemode = sign.getLine(1);
+		if (gamemode.isEmpty())
+		{
+			sign.setLine(1, "Survival");
+		}
+		
+		validateTrade(sign, 2, ess);
+		
 		return true;
 	}
 
 	@Override
 	protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException
 	{
-		final Trade charge = getTrade(sign, 1, ess);
-		final String mode = sign.getLine(2).trim();
+		final Trade charge = getTrade(sign, 2, ess);
+		final String mode = sign.getLine(1).trim();
 
 		if (mode.isEmpty())
 		{
-			throw new SignException(_("invalidSignLine", 3));
+			throw new SignException(_("invalidSignLine", 2));
 		}
 
 		charge.isAffordableFor(player);
@@ -43,7 +50,7 @@ public class SignGameMode extends EssentialsSign
 		return true;
 	}
 
-	private void performSetMode(String mode, Player player)
+	private void performSetMode(String mode, Player player) throws SignException
 	{
 		if (mode.contains("survi") || mode.equalsIgnoreCase("0"))
 		{
@@ -56,6 +63,9 @@ public class SignGameMode extends EssentialsSign
 		else if (mode.contains("advent") || mode.equalsIgnoreCase("2"))
 		{
 			player.setGameMode(GameMode.ADVENTURE);
+		}
+		else {
+			throw new SignException(_("invalidSignLine", 2));
 		}
 	}
 }
