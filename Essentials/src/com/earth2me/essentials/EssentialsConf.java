@@ -39,6 +39,7 @@ public class EssentialsConf extends YamlConfiguration
 		super();
 		this.configFile = configFile;
 	}
+	private final byte[] bytebuffer = new byte[1024];
 
 	public synchronized void load()
 	{
@@ -117,27 +118,11 @@ public class EssentialsConf extends YamlConfiguration
 			try
 			{
 				final ByteBuffer buffer = ByteBuffer.allocate((int)configFile.length());
-				int retry = 0;
-				do
+				int length;
+				while ((length = inputStream.read(bytebuffer)) != -1)
 				{
-					final FileChannel channel = inputStream.getChannel();
-					channel.position(0);
-					try
-					{
-						channel.read(buffer);
-						retry = 0;
-					}
-					catch (ClosedByInterruptException ex)
-					{
-						buffer.rewind();
-						retry++;
-						if (retry >= 5)
-						{
-							throw ex;
-						}
-					}
+					buffer.put(bytebuffer, 0, length);
 				}
-				while (retry > 0);
 				buffer.rewind();
 				final CharBuffer data = CharBuffer.allocate((int)configFile.length());
 				CharsetDecoder decoder = UTF8.newDecoder();
