@@ -19,15 +19,15 @@ public class SignGameMode extends EssentialsSign
 
 	@Override
 	protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException
-	{				
+	{
 		final String gamemode = sign.getLine(1);
 		if (gamemode.isEmpty())
 		{
 			sign.setLine(1, "Survival");
 		}
-		
+
 		validateTrade(sign, 2, ess);
-		
+
 		return true;
 	}
 
@@ -64,7 +64,8 @@ public class SignGameMode extends EssentialsSign
 		{
 			player.setGameMode(GameMode.ADVENTURE);
 		}
-		else {
+		else
+		{
 			throw new SignException(_("invalidSignLine", 2));
 		}
 	}
