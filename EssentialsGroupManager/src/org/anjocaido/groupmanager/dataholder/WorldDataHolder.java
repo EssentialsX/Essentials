@@ -508,6 +508,10 @@ public class WorldDataHolder {
 		} catch (Exception ex) {
 			throw new IllegalArgumentException("Your " + groupsFile.getPath() + " file is invalid. See console for details.", ex);
 		}
+		
+		if (allGroupsNode == null) {
+			throw new IllegalArgumentException("You have no groups in " + groupsFile.getPath() + ".");
+		}
 
 		Iterator<String> groupItr = allGroupsNode.keySet().iterator();
 		String groupKey;
@@ -775,20 +779,26 @@ public class WorldDataHolder {
 
 			Iterator<String> usersItr = allUsersNode.keySet().iterator();
 			String usersKey;
+			Object node;
 			Integer userCount = 0;
 
 			while (usersItr.hasNext()) {
 				try {
 					userCount++;
 					// Attempt to fetch the next user name.
-					usersKey = usersItr.next();
+					node = usersItr.next();
+					if (node instanceof Integer)
+						usersKey = Integer.toString((Integer)node);
+					else
+						usersKey = node.toString();
+					
 				} catch (Exception ex) {
 					throw new IllegalArgumentException("Invalid node type for user entry (" + userCount + ") in file: " + usersFile.getPath(), ex);
 				}
 
 				Map<String, Object> thisUserNode = null;
 				try {
-					thisUserNode = (Map<String, Object>) allUsersNode.get(usersKey);
+					thisUserNode = (Map<String, Object>) allUsersNode.get(node);
 				} catch (Exception ex) {
 					throw new IllegalArgumentException("Bad format found for user: " + usersKey + " in file: " + usersFile.getPath());
 				}

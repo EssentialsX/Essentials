@@ -22,7 +22,6 @@ import org.anjocaido.groupmanager.dataholder.OverloadedWorldHolder;
 import org.anjocaido.groupmanager.permissions.AnjoPermissionsHandler;
 import org.anjocaido.groupmanager.utils.Tasks;
 import org.bukkit.World;
-import org.bukkit.configuration.MemorySection;
 import org.bukkit.entity.Player;
 
 /**
@@ -97,15 +96,19 @@ public class WorldsHolder {
 		 * Create the data files if they don't already exist,
 		 * and they are not mirrored.
 		 */
-		for (World world : plugin.getServer().getWorlds())
-			if ((!worldsData.containsKey(world.getName().toLowerCase())) && ((!mirrorsGroup.containsKey(world.getName().toLowerCase())) || (!mirrorsUser.containsKey(world.getName().toLowerCase()))))
+		for (World world : plugin.getServer().getWorlds()){
+			GroupManager.logger.log(Level.FINE, "Checking data for " + world.getName() + ".");
+			if ((!worldsData.containsKey(world.getName().toLowerCase())) && ((!mirrorsGroup.containsKey(world.getName().toLowerCase())) || (!mirrorsUser.containsKey(world.getName().toLowerCase())))) {
+				GroupManager.logger.log(Level.FINE, "Creating folders for " + world.getName() + ".");
 				setupWorldFolder(world.getName());
+			}
+		}
 		/*
 		 * Loop over all folders within the worlds folder
 		 * and attempt to load the world data
 		 */
 		for (File folder : worldsFolder.listFiles()) {
-			if (folder.isDirectory()) {
+			if (folder.isDirectory() && !folder.getName().startsWith(".")) {
 				GroupManager.logger.info("World Found: " + folder.getName());
 
 				/*
@@ -164,12 +167,12 @@ public class WorldsHolder {
 						} else
 							GroupManager.logger.log(Level.WARNING, "Mirroring error with " + o.toString() + ". Recursive loop detected!");
 					}
-				} else if (mirrorsMap.get(source) instanceof MemorySection) {
-					MemorySection subSection = (MemorySection) mirrorsMap.get(source);
+				} else if (mirrorsMap.get(source) instanceof Map) {
+					Map subSection = (Map) mirrorsMap.get(source);
 
-					for (String key : subSection.getKeys(true)) {
+					for (Object key : subSection.keySet()) {
 
-						if (key.toLowerCase() != serverDefaultWorldName) {
+						if (((String)key).toLowerCase() != serverDefaultWorldName) {
 
 							if (subSection.get(key) instanceof ArrayList) {
 								ArrayList mirrorList = (ArrayList) subSection.get(key);
@@ -179,28 +182,32 @@ public class WorldsHolder {
 									String type = o.toString().toLowerCase();
 									try {
 										if (type.equals("groups"))
-											mirrorsGroup.remove(key.toLowerCase());
+											mirrorsGroup.remove(((String)key).toLowerCase());
 
 										if (type.equals("users"))
-											mirrorsUser.remove(key.toLowerCase());
+											mirrorsUser.remove(((String)key).toLowerCase());
 
 									} catch (Exception e) {
 									}
-									if (type.equals("groups"))
-										mirrorsGroup.put(key.toLowerCase(), getWorldData(source).getName());
+									if (type.equals("groups")) {
+										mirrorsGroup.put(((String)key).toLowerCase(), getWorldData(source).getName());
+										GroupManager.logger.log(Level.FINE, "Adding groups mirror for " + key + ".");
+									}
 
-									if (type.equals("users"))
-										mirrorsUser.put(key.toLowerCase(), getWorldData(source).getName());
+									if (type.equals("users")) {
+										mirrorsUser.put(((String)key).toLowerCase(), getWorldData(source).getName());
+										GroupManager.logger.log(Level.FINE, "Adding users mirror for " + key + ".");
+									}
 								}
 
 								// Track this world so we can create a datasource for it later
-								mirroredWorlds.add(key);
+								mirroredWorlds.add((String)key);
 
 							} else
-								GroupManager.logger.log(Level.WARNING, "Mirroring error with " + key + ". Recursive loop detected!");
+								GroupManager.logger.log(Level.WARNING, "Mirroring error with " + (String)key + ". Recursive loop detected!");
 
 						} else {
-							throw new IllegalStateException("Unknown mirroring format for " + key);
+							throw new IllegalStateException("Unknown mirroring format for " + (String)key);
 						}
 
 					}
@@ -210,6 +217,7 @@ public class WorldsHolder {
 			// Create a datasource for any worlds not already loaded
 			for (String world : mirroredWorlds) {
 				if (!worldsData.containsKey(world.toLowerCase())) {
+					GroupManager.logger.log(Level.FINE, "No data for " + world + ".");
 					setupWorldFolder(world);
 					loadWorld(world, true);
 				}
@@ -264,8 +272,9 @@ public class WorldsHolder {
 	/**
      *
      */
-	public void saveChanges(boolean overwrite) {
+	public boolean saveChanges(boolean overwrite) {
 
+		boolean changed = false;
 		ArrayList<WorldDataHolder> alreadyDone = new ArrayList<WorldDataHolder>();
 		Tasks.removeOldFiles(plugin, plugin.getBackupFolder());
 
@@ -294,6 +303,7 @@ public class WorldsHolder {
 						backupFile(w, true);
 
 						WorldDataHolder.writeGroups(w, w.getGroupsFile());
+						changed = true;
 						//w.removeGroupsChangedFlag();
 					} else {
 						// Newer file found.
@@ -307,6 +317,7 @@ public class WorldsHolder {
 						// Backup Groups file
 						backupFile(w, true);
 						w.reloadGroups();
+						changed = true;
 					}
 				}
 			if (!mirrorsUser.containsKey(w.getName().toLowerCase()))
@@ -316,6 +327,7 @@ public class WorldsHolder {
 						backupFile(w, false);
 
 						WorldDataHolder.writeUsers(w, w.getUsersFile());
+						changed = true;
 						//w.removeUsersChangedFlag();
 					} else {
 						// Newer file found.
@@ -329,10 +341,12 @@ public class WorldsHolder {
 						// Backup Users file
 						backupFile(w, false);
 						w.reloadUsers();
+						changed = true;
 					}
 				}
 			alreadyDone.add(w);
 		}
+		return changed;
 	}
 
 	/**
@@ -606,7 +620,7 @@ public class WorldsHolder {
 				throw new IllegalArgumentException("Users file for world '" + worldName + "' doesnt exist: " + usersFile.getPath());
 			}
 
-			WorldDataHolder tempHolder = new WorldDataHolder(worldName);
+			WorldDataHolder tempHolder = new WorldDataHolder(worldNameLowered);
 
 			// Map the group object for any mirror
 			if (mirrorsGroup.containsKey(worldNameLowered))

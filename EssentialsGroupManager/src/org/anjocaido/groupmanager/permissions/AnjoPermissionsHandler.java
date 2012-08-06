@@ -920,6 +920,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 			Group now = stack.pop();
 			PermissionCheckResult resultNow = checkGroupOnlyPermission(now, targetPermission);
 			if (!resultNow.resultType.equals(PermissionCheckResult.Type.NOTFOUND)) {
+				resultNow.accessLevel = targetPermission;
 				return resultNow;
 			}
 			for (String sonName : now.getInherits()) {
