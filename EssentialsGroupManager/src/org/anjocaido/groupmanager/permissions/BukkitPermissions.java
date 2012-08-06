@@ -214,26 +214,31 @@ public class BukkitPermissions {
 		List<String> result = new ArrayList<String>();
 
 		for (String key : permList) {
-			String a = key.charAt(0) == '-' ? key.substring(1) : key;
-			Map<String, Boolean> allchildren = GroupManager.BukkitPermissions.getAllChildren(a, new HashSet<String>());
-			if (allchildren != null) {
-
-				ListIterator<String> itr = result.listIterator();
-
-				while (itr.hasNext()) {
-					String node = (String) itr.next();
-					String b = node.charAt(0) == '-' ? node.substring(1) : node;
-
-					// Insert the parent node before the child
-					if (allchildren.containsKey(b)) {
-						itr.set(key);
-						itr.add(node);
-						break;
+			/*
+			 * Ignore stupid plugins which add empty permission nodes.
+			 */
+			if (!key.isEmpty()) {
+				String a = key.charAt(0) == '-' ? key.substring(1) : key;
+				Map<String, Boolean> allchildren = GroupManager.BukkitPermissions.getAllChildren(a, new HashSet<String>());
+				if (allchildren != null) {
+	
+					ListIterator<String> itr = result.listIterator();
+	
+					while (itr.hasNext()) {
+						String node = (String) itr.next();
+						String b = node.charAt(0) == '-' ? node.substring(1) : node;
+	
+						// Insert the parent node before the child
+						if (allchildren.containsKey(b)) {
+							itr.set(key);
+							itr.add(node);
+							break;
+						}
 					}
 				}
+				if (!result.contains(key))
+					result.add(key);
 			}
-			if (!result.contains(key))
-				result.add(key);
 		}
 
 		return result;
