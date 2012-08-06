@@ -161,7 +161,7 @@ public class GlobalGroups {
 					Object element;
 
 					// Permission nodes
-					element = GGroups.get("groups." + groupName + ".permissions");
+					element = ((Map<String, Object>)allGroups.get(groupName)).get("permissions");
 
 					if (element != null)
 						if (element instanceof List) {
@@ -180,7 +180,7 @@ public class GlobalGroups {
 							throw new IllegalArgumentException("Unknown type of permission node for global group:  " + groupName);
 
 					// Info nodes
-					element = GGroups.get("groups." + groupName + ".info");
+					element = ((Map<String, Object>)allGroups.get(groupName)).get("info");
 
 					if (element != null)
 						if (element instanceof MemorySection) {
