@@ -7,7 +7,7 @@
 # If you want to use special characters in this document, such as accented letters, you MUST save the file as UTF-8, not ANSI.
 # If you receive an error when Essentials loads, ensure that:
 #   - No tabs are present: YAML only allows spaces
-#   - Indents are correct: YAML heirarchy is based entirely on indentation
+#   - Indents are correct: YAML hierarchy is based entirely on indentation
 #   - You have "escaped" all apostrophes in your text: If you want to write "don't", for example, write "don''t" instead (note the doubled apostrphe)
 #   - List items are prefixed with a hyphen and indented:
 #       lists:
@@ -41,7 +41,7 @@ change-displayname: true
 # The prefix/suffix can be set using Permissions, Group Manager or PermissionsEx.
 # The value of change-displayname (above) has to be true.
 # If you don't set this, it will default to true if essentials chat is installed.
-# Don't forget to remove the # infront of the line
+# Don't forget to remove the # in front of the line
 #add-prefix-suffix: false
 
 # The delay, in seconds, required between /home, /tp, etc.
@@ -218,7 +218,9 @@ enabledSigns:
   #- enchant
   #- gamemode
   #- heal
+  #- info
   #- spawnmob
+  #- repair
   #- time
   #- weather
   #- protection
@@ -226,7 +228,7 @@ enabledSigns:
   
 # How many times per second can Essentials signs be interacted with.
 # Values should be between 1-20, 20 being virtually no lag protection.s
-# Lower numbers will reduce the possiblity of lag, but may annoy players.
+# Lower numbers will reduce the possibility of lag, but may annoy players.
 sign-use-per-second: 4
 
 # Backup runs a command while saving is disabled
@@ -302,7 +304,7 @@ default-stack-size: -1
 
 # Oversized stacks are stacks that ignore the normal max stacksize.
 # They can be obtained using /give and /item, if the player has essentials.oversizedstacks permission.
-# How many items should be in a oversized stack?
+# How many items should be in an oversized stack?
 oversized-stacksize: 64
 
 # Do you allow to repair enchanted weapons and armor?
@@ -375,7 +377,7 @@ currency-symbol: '$'
 # The amount is always limited to 10 trillions because of the limitations of a java double
 max-money: 10000000000000
 
-# Set the minimum amount of money a player can have (must be above the negitive of max-money).
+# Set the minimum amount of money a player can have (must be above the negative of max-money).
 # Setting this to 0, will disable overdrafts/loans completely.  Users need 'essentials.eco.loan' perm to go below 0.
 min-money: -10000
 
@@ -391,7 +393,7 @@ economy-log-enabled: false
 # Show other plugins commands in help
 non-ess-in-help: true
 
-# Hide plugins which dont give a permission
+# Hide plugins which do not give a permission
 # You can override a true value here for a single plugin by adding a permission to a user/group.
 # The individual permission is: essentials.help.<plugin>, anyone with essentials.* or '*' will see all help this setting reguardless.
 # You can use negitive permissions to remove access to just a single plugins help if the following is enabled.
@@ -424,7 +426,7 @@ chat:
   #  Default: '{WORLDNAME} {DISPLAYNAME}&7:&f {MESSAGE}'
   #  Admins: '{WORLDNAME} &c[{GROUP}]&f {DISPLAYNAME}&7:&c {MESSAGE}'
 
-  # If your using group formats make sure to remove the '#' to allow the setting to be read.
+  # If you are using group formats make sure to remove the '#' to allow the setting to be read.
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -608,7 +610,7 @@ newbies:
   spawnpoint: newbies
   
   # Do we want to give users anything on first join? Set to '' to disable
-  # This kit will be given reguardless of cost, and permissions.
+  # This kit will be given regardless  of cost, and permissions.
   #kit: ''
   kit: tools
 

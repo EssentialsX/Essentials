@@ -184,3 +184,12 @@ v 2.0:
 	- Prevent null perms getting past the GlobalGroups loader.
 	- Fix forgetting sub groups on a manload.
 	- Allow 'manucheckp' to notify when superperms reports false but it is really negated.
+	- Only output a Data update message if something has changed.
+	- Fix loading users with only numerals in their names to be seen as strings.
+	- Ignore any sub folders in the Worlds folder which start with a period (fix for storing data in svn respoitories).
+	- Throw a better error than 'null' when someone removes all groups from a yml.
+	- Stop force removing attachments and let Bukkit handle it's own mess.
+	- Change to our own Yaml parsing for globalgroups instead of using the YAMLConfiguration class in bukkit.
+	- Fix a cases sensitivity bug in world loading.
+	- Stop using the YamlConfiguration in bukkit for our config handling. We can now support periods in world names.
+	- Fix GlobalGroups not loading permission nodes.

@@ -77,11 +77,17 @@ public class Settings implements ISettings
 	{
 		return config.getInt("sethome-multiple." + set, config.getInt("sethome-multiple.default", 3));
 	}
+	private int chatRadius = 0;
+
+	private int _getChatRadius()
+	{
+		return config.getInt("chat.radius", config.getInt("chat-radius", 0));
+	}
 
 	@Override
 	public int getChatRadius()
 	{
-		return config.getInt("chat.radius", config.getInt("chat-radius", 0));
+		return chatRadius;
 	}
 
 	@Override
@@ -113,19 +119,29 @@ public class Settings implements ISettings
 	{
 		return isCommandDisabled(cmd.getName());
 	}
+	private Set<String> disabledCommands = new HashSet<String>();
 
 	@Override
 	public boolean isCommandDisabled(String label)
 	{
+		return disabledCommands.contains(label);
+	}
+
+	private Set<String> getDisabledCommands()
+	{
+		Set<String> disCommands = new HashSet<String>();
 		for (String c : config.getStringList("disabled-commands"))
 		{
-			if (!c.equalsIgnoreCase(label))
-			{
-				continue;
-			}
-			return true;
+			disCommands.add(c.toLowerCase(Locale.ENGLISH));
 		}
-		return config.getBoolean("disable-" + label.toLowerCase(Locale.ENGLISH), false);
+		for (String c : config.getKeys(false))
+		{
+			if (c.startsWith("disable-"))
+			{
+				disCommands.add(c.substring(8).toLowerCase(Locale.ENGLISH));
+			}
+		}
+		return disCommands;
 	}
 
 	@Override
@@ -192,11 +208,17 @@ public class Settings implements ISettings
 		}
 		return cost;
 	}
+	private String nicknamePrefix = "~";
+
+	private String _getNicknamePrefix()
+	{
+		return config.getString("nickname-prefix", "~");
+	}
 
 	@Override
 	public String getNicknamePrefix()
 	{
-		return config.getString("nickname-prefix", "~");
+		return nicknamePrefix;
 	}
 
 	@Override
@@ -250,9 +272,15 @@ public class Settings implements ISettings
 		}
 		return null;
 	}
+	private ChatColor operatorColor = null;
 
 	@Override
-	public ChatColor getOperatorColor() throws Exception
+	public ChatColor getOperatorColor()
+	{
+		return operatorColor;
+	}
+
+	private ChatColor _getOperatorColor()
 	{
 		String colorName = config.getString("ops-name-color", null);
 
@@ -262,7 +290,7 @@ public class Settings implements ISettings
 		}
 		if ("none".equalsIgnoreCase(colorName) || colorName.isEmpty())
 		{
-			throw new Exception();
+			return null;
 		}
 
 		try
@@ -317,7 +345,7 @@ public class Settings implements ISettings
 	{
 		return config.getString("backup.command", null);
 	}
-	private Map<String, MessageFormat> chatFormats = new HashMap<String, MessageFormat>();
+	private Map<String, MessageFormat> chatFormats = Collections.synchronizedMap(new HashMap<String, MessageFormat>());
 
 	@Override
 	public MessageFormat getChatFormat(String group)
@@ -392,6 +420,17 @@ public class Settings implements ISettings
 		signUsePerSecond = _getSignUsePerSecond();
 		kits = _getKits();
 		chatFormats.clear();
+		changeDisplayName = _changeDisplayName();
+		disabledCommands = getDisabledCommands();
+		nicknamePrefix = _getNicknamePrefix();
+		operatorColor = _getOperatorColor();
+		changePlayerListName = _changePlayerListName();
+		configDebug = _isDebug();
+		prefixsuffixconfigured = _isPrefixSuffixConfigured();
+		addprefixsuffix = _addPrefixSuffix();
+		disablePrefix = _disablePrefix();
+		disableSuffix = _disableSuffix();
+		chatRadius = _getChatRadius();
 	}
 	private List<Integer> itemSpawnBl = new ArrayList<Integer>();
 
@@ -479,11 +518,17 @@ public class Settings implements ISettings
 		return config.getBoolean("protect.disable.warn-on-build-disallow", false);
 	}
 	private boolean debug = false;
+	private boolean configDebug = false;
+
+	private boolean _isDebug()
+	{
+		return config.getBoolean("debug", false);
+	}
 
 	@Override
 	public boolean isDebug()
 	{
-		return debug || config.getBoolean("debug", false);
+		return debug || configDebug;
 	}
 
 	@Override
@@ -610,17 +655,29 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("remove-god-on-disconnect", false);
 	}
+	private boolean changeDisplayName = true;
 
-	@Override
-	public boolean changeDisplayName()
+	private boolean _changeDisplayName()
 	{
 		return config.getBoolean("change-displayname", true);
 	}
 
 	@Override
-	public boolean changePlayerListName()
+	public boolean changeDisplayName()
+	{
+		return changeDisplayName;
+	}
+	private boolean changePlayerListName = false;
+
+	private boolean _changePlayerListName()
 	{
 		return config.getBoolean("change-playerlist", false);
+	}
+
+	@Override
+	public boolean changePlayerListName()
+	{
+		return changePlayerListName;
 	}
 
 	@Override
@@ -628,23 +685,47 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("use-bukkit-permissions", false);
 	}
+	private boolean prefixsuffixconfigured = false;
+	private boolean addprefixsuffix = false;
+
+	private boolean _addPrefixSuffix()
+	{
+		return config.getBoolean("add-prefix-suffix", false);
+	}
+
+	private boolean _isPrefixSuffixConfigured()
+	{
+		return config.hasProperty("add-prefix-suffix");
+	}
 
 	@Override
 	public boolean addPrefixSuffix()
 	{
-		return config.getBoolean("add-prefix-suffix", ess.getServer().getPluginManager().isPluginEnabled("EssentialsChat"));
+		return prefixsuffixconfigured ? addprefixsuffix : ess.getServer().getPluginManager().isPluginEnabled("EssentialsChat");
 	}
+	private boolean disablePrefix = false;
 
-	@Override
-	public boolean disablePrefix()
+	private boolean _disablePrefix()
 	{
 		return config.getBoolean("disablePrefix", false);
 	}
 
 	@Override
-	public boolean disableSuffix()
+	public boolean disablePrefix()
+	{
+		return disablePrefix;
+	}
+	private boolean disableSuffix = false;
+
+	private boolean _disableSuffix()
 	{
 		return config.getBoolean("disableSuffix", false);
+	}
+
+	@Override
+	public boolean disableSuffix()
+	{
+		return disableSuffix;
 	}
 
 	@Override
@@ -713,7 +794,7 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("world-teleport-permissions", false);
 	}
-	
+
 	@Override
 	public boolean isWorldHomePermissions()
 	{
@@ -800,38 +881,35 @@ public class Settings implements ISettings
 	{
 		return (config.getLong("teleport-invulnerability", 0) > 0);
 	}
-	
+
 	@Override
 	public boolean isTeleportInvulnerability()
 	{
 		return teleportInvulnerability;
 	}
-	
 	private long loginAttackDelay;
-	
+
 	private long _getLoginAttackDelay()
 	{
 		return config.getLong("login-attack-delay", 0) * 1000;
 	}
-	
+
 	@Override
 	public long getLoginAttackDelay()
 	{
 		return loginAttackDelay;
 	}
-	
 	private int signUsePerSecond;
-	
+
 	private int _getSignUsePerSecond()
 	{
 		final int perSec = config.getInt("sign-use-per-second", 4);
 		return perSec > 0 ? perSec : 1;
 	}
-	
+
 	@Override
 	public int getSignUsePerSecond()
 	{
 		return signUsePerSecond;
 	}
-	
 }

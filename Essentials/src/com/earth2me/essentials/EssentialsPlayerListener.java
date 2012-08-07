@@ -50,7 +50,7 @@ public class EssentialsPlayerListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerChat(final PlayerChatEvent event)
+	public void onPlayerChat(final AsyncPlayerChatEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
 		if (user.isMuted())
@@ -309,7 +309,7 @@ public class EssentialsPlayerListener implements Listener
 			});
 		}
 	}
-	private final static List<String> COMMANDS = Arrays.asList("msg", "r", "mail", "m", "t", "whisper", "emsg", "tell", "er", "reply", "ereply", "email");
+	private final static List<String> COMMANDS = Arrays.asList("msg", "r", "mail", "m", "t", "whisper", "emsg", "tell", "er", "reply", "ereply", "email", "action", "describe", "eme", "eaction", "edescribe", "etell", "ewhisper", "pm");
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerCommandPreprocess(final PlayerCommandPreprocessEvent event)

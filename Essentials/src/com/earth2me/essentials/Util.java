@@ -215,10 +215,11 @@ public class Util
 		{
 			c.add(Calendar.SECOND, seconds * (future ? 1 : -1));
 		}
-		
+
 		Calendar max = new GregorianCalendar();
 		max.add(Calendar.YEAR, 10);
-		if (c.after(max)) {
+		if (c.after(max))
+		{
 			return max.getTimeInMillis();
 		}
 		return c.getTimeInMillis();
@@ -295,12 +296,14 @@ public class Util
 		int x = loc.getBlockX();
 		int y = (int)Math.round(loc.getY());
 		int z = loc.getBlockZ();
+		final int origY = y;
 
 		while (isBlockAboveAir(world, x, y, z))
 		{
 			y -= 1;
 			if (y < 0)
 			{
+				y = origY;
 				break;
 			}
 		}
@@ -310,10 +313,36 @@ public class Util
 			y += 1;
 			if (y >= world.getHighestBlockYAt(x, z))
 			{
-				x += 1;
+				x -= 3;
+				z -= 3;
+				y = origY + 4;
 				break;
 			}
 		}
+
+		while (isBlockUnsafe(world, x, y, z))
+		{
+			y -= 1;
+			if (y + 4 < origY)
+			{
+				x += 1;
+				if (x - 3 > loc.getBlockX())
+				{
+					x = loc.getBlockX() - 3;
+					z += 1;
+					if (z - 3 > loc.getBlockZ())
+					{
+						x = loc.getBlockX() + 4;
+						z = loc.getBlockZ();
+						y = world.getHighestBlockYAt(x, z);
+						break;
+					}
+				}
+
+				y = origY + 4;
+			}
+		}
+
 		while (isBlockUnsafe(world, x, y, z))
 		{
 			y -= 1;
@@ -321,7 +350,7 @@ public class Util
 			{
 				x += 1;
 				y = world.getHighestBlockYAt(x, z);
-				if (x - 32 > loc.getBlockX())
+				if (x - 48 > loc.getBlockX())
 				{
 					throw new Exception(_("holeInFloor"));
 				}
@@ -510,15 +539,16 @@ public class Util
 		}
 		return buf.toString();
 	}
-	
-	public static String lastCode(final String input) {
+
+	public static String lastCode(final String input)
+	{
 		int pos = input.lastIndexOf("§");
-		if (pos == -1 || (pos + 1) == input.length()) {
+		if (pos == -1 || (pos + 1) == input.length())
+		{
 			return "";
 		}
-		return input.substring(pos, pos + 2);		
+		return input.substring(pos, pos + 2);
 	}
-	
 	private static transient final Pattern URL_PATTERN = Pattern.compile("((?:(?:https?)://)?[\\w-_\\.]{2,})\\.([a-z]{2,3}(?:/\\S+)?)");
 	private static transient final Pattern VANILLA_PATTERN = Pattern.compile("\u00A7+[0-9A-FK-ORa-fk-or]");
 	private static transient final Pattern REPLACE_PATTERN = Pattern.compile("&([0-9a-fk-or])");

@@ -21,7 +21,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,7 +39,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
@@ -57,7 +55,7 @@ import org.bukkit.plugin.PluginManager;
  */
 public class BukkitPermissions {
 
-	protected WeakHashMap<Player, PermissionAttachment> attachments = new WeakHashMap<Player, PermissionAttachment>();
+	protected WeakHashMap<String, PermissionAttachment> attachments = new WeakHashMap<String, PermissionAttachment>();
 	protected LinkedHashMap<String, Permission> registeredPermissions = new LinkedHashMap<String, Permission>();
 	protected GroupManager plugin;
 	protected boolean dumpAllPermissions = true;
@@ -146,19 +144,21 @@ public class BukkitPermissions {
 			return;
 		}
 		
+		String name = player.getName();
+		
 		// Reset the User objects player reference.
-		User user = plugin.getWorldsHolder().getWorldData(player.getWorld().getName()).getUser(player.getName());
+		User user = plugin.getWorldsHolder().getWorldData(player.getWorld().getName()).getUser(name);
 		if (user != null)
 			user.updatePlayer(player);
 
 		PermissionAttachment attachment;
 
 		// Find the players current attachment, or add a new one.
-		if (this.attachments.containsKey(player)) {
-			attachment = this.attachments.get(player);
+		if (this.attachments.containsKey(name)) {
+			attachment = this.attachments.get(name);
 		} else {
 			attachment = player.addAttachment(plugin);
-			this.attachments.put(player, attachment);
+			this.attachments.put(name, attachment);
 		}
 
 		if (world == null) {
@@ -167,7 +167,7 @@ public class BukkitPermissions {
 
 		// Add all permissions for this player (GM only)
 		// child nodes will be calculated by Bukkit.
-		List<String> playerPermArray = new ArrayList<String>(plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getAllPlayersPermissions(player.getName(), false));
+		List<String> playerPermArray = new ArrayList<String>(plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getAllPlayersPermissions(name, false));
 		LinkedHashMap<String, Boolean> newPerms = new LinkedHashMap<String, Boolean>();
 
 		// Sort the perm list by parent/child, so it will push to superperms correctly.
@@ -192,13 +192,15 @@ public class BukkitPermissions {
 			// Then whack our map into there
 			orig.putAll(newPerms);
 			// That's all folks!
-			//attachment.getPermissible().recalculatePermissions();
-			player.recalculatePermissions();
+			attachment.getPermissible().recalculatePermissions();
+			//player.recalculatePermissions();
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
+		
+		GroupManager.logger.finest("Attachment updated for: " + name);
 	}
 
 	/**
@@ -212,26 +214,31 @@ public class BukkitPermissions {
 		List<String> result = new ArrayList<String>();
 
 		for (String key : permList) {
-			String a = key.charAt(0) == '-' ? key.substring(1) : key;
-			Map<String, Boolean> allchildren = GroupManager.BukkitPermissions.getAllChildren(a, new HashSet<String>());
-			if (allchildren != null) {
-
-				ListIterator<String> itr = result.listIterator();
-
-				while (itr.hasNext()) {
-					String node = (String) itr.next();
-					String b = node.charAt(0) == '-' ? node.substring(1) : node;
-
-					// Insert the parent node before the child
-					if (allchildren.containsKey(b)) {
-						itr.set(key);
-						itr.add(node);
-						break;
+			/*
+			 * Ignore stupid plugins which add empty permission nodes.
+			 */
+			if (!key.isEmpty()) {
+				String a = key.charAt(0) == '-' ? key.substring(1) : key;
+				Map<String, Boolean> allchildren = GroupManager.BukkitPermissions.getAllChildren(a, new HashSet<String>());
+				if (allchildren != null) {
+	
+					ListIterator<String> itr = result.listIterator();
+	
+					while (itr.hasNext()) {
+						String node = (String) itr.next();
+						String b = node.charAt(0) == '-' ? node.substring(1) : node;
+	
+						// Insert the parent node before the child
+						if (allchildren.containsKey(b)) {
+							itr.set(key);
+							itr.add(node);
+							break;
+						}
 					}
 				}
+				if (!result.contains(key))
+					result.add(key);
 			}
-			if (!result.contains(key))
-				result.add(key);
 		}
 
 		return result;
@@ -373,19 +380,10 @@ public class BukkitPermissions {
 	 * 
 	 * @param player
 	 */
-	private void removeAttachment(Player player) {
+	private void removeAttachment(String playerName) {
 
-		if (attachments.containsKey(player)) {
-			try {
-				player.removeAttachment(attachments.get(player));
-			} catch (IllegalArgumentException e) {
-				/*
-				 * Failed to remove attachment
-				 * This usually means Bukkit no longer knows of it.
-				 */
-			}
-			attachments.remove(player);
-		}
+		if (attachments.containsKey(playerName))
+			attachments.remove(playerName);
 	}
 
 	/**
@@ -393,19 +391,6 @@ public class BukkitPermissions {
 	 */
 	public void removeAllAttachments() {
 
-		Iterator<Player> itr = attachments.keySet().iterator();
-
-		while (itr.hasNext()) {
-			Player player = itr.next();
-			try {
-				player.removeAttachment(attachments.get(player));
-			} catch (IllegalArgumentException e) {
-				/*
-				 * Failed to remove attachment
-				 * This usually means Bukkit no longer knows of it.
-				 */
-			}
-		}
 		attachments.clear();
 	}
 
@@ -420,13 +405,17 @@ public class BukkitPermissions {
 		@EventHandler(priority = EventPriority.LOWEST)
 		public void onPlayerJoin(PlayerJoinEvent event) {
 
+			
+			
 			setPlayer_join(true);
 			Player player = event.getPlayer();
+			
+			GroupManager.logger.finest("Player Join event: " + player.getName());
 
 			/*
 			 * Tidy up any lose ends
 			 */
-			removeAttachment(player);
+			removeAttachment(player.getName());
 
 			// force GM to create the player if they are not already listed.
 			if (plugin.getWorldsHolder().getWorldData(player.getWorld().getName()).getUser(player.getName()) != null) {
@@ -442,18 +431,10 @@ public class BukkitPermissions {
 			updatePermissions(event.getPlayer(), event.getPlayer().getWorld().getName());
 		}
 
-		@EventHandler(priority = EventPriority.LOWEST)
-		public void onPlayerKick(PlayerKickEvent event) {
-
-			Player player = event.getPlayer();
-			
-			/*
-			 * force remove any attachments as bukkit may not
-			 */
-			removeAttachment(player);
-		}
-
-		@EventHandler(priority = EventPriority.LOWEST)
+		/*
+		 * Trigger at highest so we tidy up last.
+		 */
+		@EventHandler(priority = EventPriority.HIGHEST)
 		public void onPlayerQuit(PlayerQuitEvent event) {
 
 			if (!GroupManager.isLoaded())
@@ -464,7 +445,7 @@ public class BukkitPermissions {
 			/*
 			 * force remove any attachments as bukkit may not
 			 */
-			removeAttachment(player);
+			removeAttachment(player.getName());
 		}
 	}
 

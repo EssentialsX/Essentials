@@ -1051,4 +1051,22 @@ public class OfflinePlayer implements Player
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+	
+	@Override
+	public int getExpToLevel()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public boolean hasLineOfSight(Entity entity)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public boolean isValid()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}	
 }

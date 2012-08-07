@@ -67,7 +67,7 @@ import org.yaml.snakeyaml.error.YAMLException;
 
 public class Essentials extends JavaPlugin implements IEssentials
 {
-	public static final int BUKKIT_VERSION = 2149;
+	public static final int BUKKIT_VERSION = 2289;
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private transient ISettings settings;
 	private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
@@ -491,6 +491,12 @@ public class Essentials extends JavaPlugin implements IEssentials
 		{
 			return (User)base;
 		}
+		
+		if (userMap == null) {
+			LOGGER.log(Level.WARNING, "Essentials userMap not initialized");
+			return null;
+		}
+		
 		User user = userMap.getUser(base.getName());
 
 		if (user == null)

@@ -2,10 +2,11 @@ package com.earth2me.essentials.xmpp;
 
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
+import java.util.List;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -20,21 +21,21 @@ class EssentialsXMPPPlayerListener implements Listener
 		this.ess = ess;
 	}
 
-	@EventHandler(priority= EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
 		sendMessageToSpyUsers("Player " + user.getDisplayName() + " joined the game");
 	}
 
-	@EventHandler(priority= EventPriority.MONITOR)
-	public void onPlayerChat(final PlayerChatEvent event)
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onPlayerChat(final AsyncPlayerChatEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
 		sendMessageToSpyUsers(String.format(event.getFormat(), user.getDisplayName(), event.getMessage()));
 	}
 
-	@EventHandler(priority= EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerQuit(final PlayerQuitEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
@@ -45,9 +46,13 @@ class EssentialsXMPPPlayerListener implements Listener
 	{
 		try
 		{
-			for (String address : EssentialsXMPP.getInstance().getSpyUsers())
+			List<String> users = EssentialsXMPP.getInstance().getSpyUsers();
+			synchronized (users)
 			{
-				EssentialsXMPP.getInstance().sendMessage(address, message);
+				for (String address : users)
+				{
+					EssentialsXMPP.getInstance().sendMessage(address, message);
+				}
 			}
 		}
 		catch (Exception ex)

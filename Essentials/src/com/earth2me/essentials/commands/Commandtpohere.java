@@ -31,7 +31,7 @@ public class Commandtpohere extends EssentialsCommand
 		}
 
 		if (user.getWorld() != player.getWorld() && ess.getSettings().isWorldTeleportPermissions()
-			&& !user.isAuthorized("essentials.world." + user.getWorld().getName()))
+			&& !player.isAuthorized("essentials.world." + user.getWorld().getName()))
 		{
 			throw new Exception(_("noPerm", "essentials.world." + user.getWorld().getName()));
 		}

@@ -2,7 +2,6 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import com.earth2me.essentials.craftbukkit.SetExpFix;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -122,8 +121,7 @@ public class Commandexp extends EssentialsCommand
 	private void showExp(final CommandSender sender, final User target)
 	{
 		final int totalExp = SetExpFix.getTotalExperience(target);
-		final int expLeft = (int)Util.roundDouble(((((3.5 * target.getLevel()) + 6.7) - (totalExp - ((1.75 * (target.getLevel() * target.getLevel())) + (5.00 * target.getLevel())))) + 1));
-		sender.sendMessage(_("exp", target.getDisplayName(), SetExpFix.getTotalExperience(target), target.getLevel(), expLeft));
+		sender.sendMessage(_("exp", target.getDisplayName(), SetExpFix.getTotalExperience(target), target.getLevel(), SetExpFix.getExpUntilNextLevel(target)));
 	}
 
 	private void setExp(final CommandSender sender, final User target, final String strAmount, final boolean give)

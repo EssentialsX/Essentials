@@ -12,7 +12,7 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 //TODO: Translate the local/spy tags
 public abstract class EssentialsChatPlayer implements Listener
@@ -21,12 +21,12 @@ public abstract class EssentialsChatPlayer implements Listener
 	protected final static Logger logger = Logger.getLogger("Minecraft");
 	protected final transient Map<String, IEssentialsChatListener> listeners;
 	protected final transient Server server;
-	protected final transient Map<PlayerChatEvent, ChatStore> chatStorage;
+	protected final transient Map<AsyncPlayerChatEvent, ChatStore> chatStorage;
 
 	public EssentialsChatPlayer(final Server server,
 								final IEssentials ess,
 								final Map<String, IEssentialsChatListener> listeners,
-								final Map<PlayerChatEvent, ChatStore> chatStorage)
+								final Map<AsyncPlayerChatEvent, ChatStore> chatStorage)
 	{
 		this.ess = ess;
 		this.listeners = listeners;
@@ -34,21 +34,24 @@ public abstract class EssentialsChatPlayer implements Listener
 		this.chatStorage = chatStorage;
 	}
 
-	public void onPlayerChat(final PlayerChatEvent event)
+	public void onPlayerChat(final AsyncPlayerChatEvent event)
 	{
 	}
 
-	public boolean isAborted(final PlayerChatEvent event)
+	public boolean isAborted(final AsyncPlayerChatEvent event)
 	{
 		if (event.isCancelled())
 		{
 			return true;
 		}
-		for (IEssentialsChatListener listener : listeners.values())
+		synchronized (listeners)
 		{
-			if (listener.shouldHandleThisChat(event))
+			for (IEssentialsChatListener listener : listeners.values())
 			{
-				return true;
+				if (listener.shouldHandleThisChat(event))
+				{
+					return true;
+				}
 			}
 		}
 		return false;
@@ -69,17 +72,17 @@ public abstract class EssentialsChatPlayer implements Listener
 		}
 	}
 
-	public ChatStore getChatStore(final PlayerChatEvent event)
+	public ChatStore getChatStore(final AsyncPlayerChatEvent event)
 	{
 		return chatStorage.get(event);
 	}
 
-	public void setChatStore(final PlayerChatEvent event, final ChatStore chatStore)
+	public void setChatStore(final AsyncPlayerChatEvent event, final ChatStore chatStore)
 	{
 		chatStorage.put(event, chatStore);
 	}
 
-	public ChatStore delChatStore(final PlayerChatEvent event)
+	public ChatStore delChatStore(final AsyncPlayerChatEvent event)
 	{
 		return chatStorage.remove(event);
 	}
@@ -89,7 +92,7 @@ public abstract class EssentialsChatPlayer implements Listener
 		charge.charge(user);
 	}
 
-	protected boolean charge(final PlayerChatEvent event, final ChatStore chatStore)
+	protected boolean charge(final AsyncPlayerChatEvent event, final ChatStore chatStore)
 	{
 		try
 		{
@@ -104,7 +107,7 @@ public abstract class EssentialsChatPlayer implements Listener
 		return true;
 	}
 
-	protected void sendLocalChat(final PlayerChatEvent event, final ChatStore chatStore)
+	protected void sendLocalChat(final AsyncPlayerChatEvent event, final ChatStore chatStore)
 	{
 		event.setCancelled(true);
 		final User sender = chatStore.getUser();
@@ -133,10 +136,13 @@ public abstract class EssentialsChatPlayer implements Listener
 				{
 					abort = true;
 				}
-				final double delta = playerLoc.distanceSquared(loc);
-				if (delta > chatStore.getRadius())
+				else
 				{
-					abort = true;
+					final double delta = playerLoc.distanceSquared(loc);
+					if (delta > chatStore.getRadius())
+					{
+						abort = true;
+					}
 				}
 				if (abort)
 				{
@@ -152,9 +158,12 @@ public abstract class EssentialsChatPlayer implements Listener
 			}
 
 			String message = String.format(event.getFormat(), type.concat(sender.getDisplayName()), event.getMessage());
-			for (IEssentialsChatListener listener : listeners.values())
+			synchronized (listeners)
 			{
-				message = listener.modifyMessage(event, onlinePlayer, message);
+				for (IEssentialsChatListener listener : listeners.values())
+				{
+					message = listener.modifyMessage(event, onlinePlayer, message);
+				}
 			}
 			onlineUser.sendMessage(message);
 		}

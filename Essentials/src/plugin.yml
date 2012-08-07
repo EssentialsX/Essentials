@@ -117,7 +117,7 @@ commands:
     aliases: [efireball]
   gamemode:
     description: Change player gamemode.
-    usage: /<command> [player]
+    usage: /<command> <survival|creative|adventure> [player]
     aliases: [gm,creative,creativemode,egamemode,ecreative,ecreativemode,egm]
   getpos:
     description: Get your current coordinates or those of a player.
@@ -430,6 +430,10 @@ commands:
     description: Determine the username behind a nickname.
     usage: /<command> <nickname>
     aliases: [ewhois]
+  workbench:
+    description: Opens up a workbench
+    usage: /<command>
+    aliases: [eworkbench,wb,ewb,wbench,ewbench]
   world:
     description: Switch between worlds.
     usage: /<command> [world]

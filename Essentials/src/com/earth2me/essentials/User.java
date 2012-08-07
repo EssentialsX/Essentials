@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -284,10 +285,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		{
 			try
 			{
-				final String opPrefix = ess.getSettings().getOperatorColor().toString();
-				if (opPrefix.length() > 0)
+				final ChatColor opPrefix = ess.getSettings().getOperatorColor();
+				if (opPrefix != null && opPrefix.toString().length() > 0)
 				{
-					prefix.insert(0, opPrefix);
+					prefix.insert(0, opPrefix.toString());
 					suffix = "§f";
 				}
 			}
@@ -325,7 +326,8 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		{
 			output = Util.lastCode(strPrefix) + nickname.substring(0, 14);
 		}
-		if (output.charAt(output.length() - 1) == '§') {
+		if (output.charAt(output.length() - 1) == '§')
+		{
 			output = output.substring(0, output.length() - 1);
 		}
 		return output;
@@ -639,7 +641,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	{
 		return vanished;
 	}
-	
+
 	public void setVanished(final boolean set)
 	{
 		vanished = set;
@@ -671,21 +673,23 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		final boolean set = !vanished;
 		this.setVanished(set);
 	}
-	
-	public boolean checkSignThrottle() {
-		if (isSignThrottled()) {
+
+	public boolean checkSignThrottle()
+	{
+		if (isSignThrottled())
+		{
 			return true;
 		}
 		updateThrottle();
 		return false;
 	}
-	
+
 	public boolean isSignThrottled()
 	{
 		final long minTime = lastThrottledAction + (1000 / ess.getSettings().getSignUsePerSecond());
 		return (System.currentTimeMillis() < minTime);
 	}
-	
+
 	public void updateThrottle()
 	{
 		lastThrottledAction = System.currentTimeMillis();;

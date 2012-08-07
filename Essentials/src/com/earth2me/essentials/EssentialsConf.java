@@ -5,6 +5,7 @@ import com.google.common.io.Files;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import java.nio.channels.ClosedByInterruptException;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
@@ -38,6 +39,7 @@ public class EssentialsConf extends YamlConfiguration
 		super();
 		this.configFile = configFile;
 	}
+	private final byte[] bytebuffer = new byte[1024];
 
 	public synchronized void load()
 	{
@@ -115,9 +117,12 @@ public class EssentialsConf extends YamlConfiguration
 			final FileInputStream inputStream = new FileInputStream(configFile);
 			try
 			{
-				final FileChannel channel = inputStream.getChannel();
 				final ByteBuffer buffer = ByteBuffer.allocate((int)configFile.length());
-				channel.read(buffer);
+				int length;
+				while ((length = inputStream.read(bytebuffer)) != -1)
+				{
+					buffer.put(bytebuffer, 0, length);
+				}
 				buffer.rewind();
 				final CharBuffer data = CharBuffer.allocate((int)configFile.length());
 				CharsetDecoder decoder = UTF8.newDecoder();
