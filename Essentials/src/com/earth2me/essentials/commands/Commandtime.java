@@ -20,10 +20,16 @@ public class Commandtime extends EssentialsCommand
 	@Override
 	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
+		boolean add = false;
 		final List<String> argList = new ArrayList<String>(Arrays.asList(args));
-		if ((argList.remove("set") || argList.remove("add")) && Util.isInt(argList.get(0)))
+		if (argList.remove("set") && !argList.isEmpty() && Util.isInt(argList.get(0)))
 		{
-			ess.getLogger().info("debug edited 0" + argList.get(0).toString());
+			argList.set(0, argList.get(0) + "t");
+		}
+		if (argList.remove("add") && !argList.isEmpty() && Util.isInt(argList.get(0)))
+		{
+			add = true;
+			argList.set(0, argList.get(0) + "t");
 		}
 		final String[] validArgs = argList.toArray(new String[0]);
 
@@ -34,12 +40,27 @@ public class Commandtime extends EssentialsCommand
 			worldSelector = validArgs[1];
 		}
 		final Set<World> worlds = getWorlds(server, sender, worldSelector);
+		final String setTime;
 
 		// If no arguments we are reading the time
 		if (validArgs.length == 0)
 		{
-			getWorldsTime(sender, worlds);
-			return;
+			if (commandLabel.equalsIgnoreCase("day") || commandLabel.equalsIgnoreCase("eday"))
+			{
+				setTime = "day";
+			}
+			else if (commandLabel.equalsIgnoreCase("night") || commandLabel.equalsIgnoreCase("enight"))
+			{
+				setTime = "night";
+			}
+			else
+			{
+				getWorldsTime(sender, worlds);
+				return;
+			}
+		}
+		else {
+			setTime = validArgs[0];
 		}
 
 		final User user = ess.getUser(sender);
@@ -53,14 +74,14 @@ public class Commandtime extends EssentialsCommand
 		long ticks;
 		try
 		{
-			ticks = DescParseTickFormat.parse(validArgs[0]);
+			ticks = DescParseTickFormat.parse(setTime);
 		}
 		catch (NumberFormatException e)
 		{
 			throw new NotEnoughArgumentsException(e);
 		}
 
-		setWorldsTime(sender, worlds, ticks);
+		setWorldsTime(sender, worlds, ticks, add);
 	}
 
 	/**
@@ -84,14 +105,17 @@ public class Commandtime extends EssentialsCommand
 	/**
 	 * Used to set the time and inform of the change
 	 */
-	private void setWorldsTime(final CommandSender sender, final Collection<World> worlds, final long ticks)
+	private void setWorldsTime(final CommandSender sender, final Collection<World> worlds, final long ticks, final boolean add)
 	{
 		// Update the time
 		for (World world : worlds)
 		{
 			long time = world.getTime();
-			time -= time % 24000;
-			world.setTime(time + 24000 + ticks);
+			if (!add)
+			{
+				time -= time % 24000;
+			}
+			world.setTime(time + (add ? 0 : 24000) + ticks);
 		}
 
 		final StringBuilder output = new StringBuilder();

@@ -18,12 +18,27 @@ public class Commandweather extends EssentialsCommand
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
+		final boolean isStorm;
 		if (args.length < 1)
 		{
-			throw new NotEnoughArgumentsException();
+			if (commandLabel.equalsIgnoreCase("sun") || commandLabel.equalsIgnoreCase("esun"))
+			{
+				isStorm = false;
+			}
+			else if (commandLabel.equalsIgnoreCase("storm") || commandLabel.equalsIgnoreCase("estorm")
+					 || commandLabel.equalsIgnoreCase("rain") || commandLabel.equalsIgnoreCase("erain"))
+			{
+				isStorm = true;
+			}
+			else
+			{
+				throw new NotEnoughArgumentsException();
+			}
 		}
-
-		final boolean isStorm = args[0].equalsIgnoreCase("storm");
+		else
+		{
+			isStorm = args[0].equalsIgnoreCase("storm");
+		}
 		final World world = user.getWorld();
 		if (args.length > 1)
 		{

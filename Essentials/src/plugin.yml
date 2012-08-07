@@ -341,7 +341,7 @@ commands:
   time:
     description: Display/Change the world time. Defaults to current world.
     usage: /<command> [day|night|dawn|17:30|4pm|4000ticks] [worldname|all]
-    aliases: [etime, day, night]
+    aliases: [etime, day, night, eday, enight]
   togglejail:
     description: Jails/Unjails a player and tp them to the jail specified.
     usage: /<command> <player> <jailname> [datediff]
@@ -425,7 +425,7 @@ commands:
   weather:
     description: Setting the weather.
     usage: /<command> <storm/sun> [duration]
-    aliases: [sky,sun,storm,eweather,esky,esun,estorm]
+    aliases: [sky,sun,storm,eweather,rain,erain,esky,esun,estorm]
   whois:
     description: Determine the username behind a nickname.
     usage: /<command> <nickname>
