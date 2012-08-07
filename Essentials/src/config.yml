@@ -196,7 +196,7 @@ kits:
     delay: 10
     items:
       - 272 1
-      - 273 1 
+      - 273 1
       - 274 1
       - 275 1
 
@@ -209,7 +209,7 @@ kits:
 enabledSigns:
   #- color
   #- balance
-  #- buy  
+  #- buy
   #- sell
   #- trade
   #- free
@@ -514,7 +514,7 @@ protect:
       ender_dragon: false
       pig: false
       sheep: false
-      cow: false      
+      cow: false
       chicken: false
       squid: false
       wolf: false
