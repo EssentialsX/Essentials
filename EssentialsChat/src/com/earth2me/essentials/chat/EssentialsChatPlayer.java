@@ -6,6 +6,7 @@ import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -46,11 +47,25 @@ public abstract class EssentialsChatPlayer implements Listener
 		}
 		synchronized (listeners)
 		{
-			for (IEssentialsChatListener listener : listeners.values())
+			for (Map.Entry<String, IEssentialsChatListener> listener : listeners.entrySet())
 			{
-				if (listener.shouldHandleThisChat(event))
+				try
 				{
-					return true;
+					if (listener.getValue().shouldHandleThisChat(event))
+					{
+						return true;
+					}
+				}
+				catch (Throwable t)
+				{
+					if (ess.getSettings().isDebug())
+					{
+						logger.log(Level.WARNING, "Error with EssentialsChat listener of " + listener.getKey() + ": " + t.getMessage(), t);
+					}
+					else
+					{
+						logger.log(Level.WARNING, "Error with EssentialsChat listener of " + listener.getKey() + ": " + t.getMessage());
+					}
 				}
 			}
 		}
@@ -160,9 +175,23 @@ public abstract class EssentialsChatPlayer implements Listener
 			String message = String.format(event.getFormat(), type.concat(sender.getDisplayName()), event.getMessage());
 			synchronized (listeners)
 			{
-				for (IEssentialsChatListener listener : listeners.values())
+				for (Map.Entry<String, IEssentialsChatListener> listener : listeners.entrySet())
 				{
-					message = listener.modifyMessage(event, onlinePlayer, message);
+					try
+					{
+						message = listener.getValue().modifyMessage(event, onlinePlayer, message);
+					}
+					catch (Throwable t)
+					{
+						if (ess.getSettings().isDebug())
+						{
+							logger.log(Level.WARNING, "Error with EssentialsChat listener of " + listener.getKey() + ": " + t.getMessage(), t);
+						}
+						else
+						{
+							logger.log(Level.WARNING, "Error with EssentialsChat listener of " + listener.getKey() + ": " + t.getMessage());
+						}
+					}
 				}
 			}
 			onlineUser.sendMessage(message);
