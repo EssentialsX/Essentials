@@ -456,7 +456,7 @@ protect:
   alert:
     on-placement: 10,11,46,327
     on-use: 327
-    on-break: 
+    on-break:
 
   blacklist:
 
