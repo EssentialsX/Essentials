@@ -43,7 +43,7 @@ public class Commandtpall extends EssentialsCommand
 				continue;
 			}
 			if (user.getWorld() != player.getWorld() && ess.getSettings().isWorldTeleportPermissions()
-				&& !player.isAuthorized("essentials.world." + user.getWorld().getName()))
+				&& !user.isAuthorized("essentials.world." + user.getWorld().getName()))
 			{
 				continue;
 			}
