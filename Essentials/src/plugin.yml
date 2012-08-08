@@ -423,7 +423,7 @@ commands:
     usage: /<command> <pagenumber|warp> [player]
     aliases: [ewarp,warps,ewarps]
   weather:
-    description: Setting the weather.
+    description: Sets the weather.
     usage: /<command> <storm/sun> [duration]
     aliases: [sky,sun,storm,eweather,rain,erain,esky,esun,estorm]
   whois:
