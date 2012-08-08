@@ -20,14 +20,19 @@ public class SignPlayerListener implements Listener
 		this.ess = ess;
 	}
 
-	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerInteract(final PlayerInteractEvent event)
 	{
-		if (ess.getSettings().areSignsDisabled() || event.getAction() != Action.RIGHT_CLICK_BLOCK)
+		if (ess.getSettings().areSignsDisabled() || (event.getAction() != Action.RIGHT_CLICK_BLOCK && event.getAction() != Action.RIGHT_CLICK_AIR))
 		{
 			return;
 		}
-		final Block block = event.getClickedBlock();
+		final Block block;
+		if (event.isCancelled() && event.getAction() == Action.RIGHT_CLICK_AIR) {
+			block = event.getPlayer().getTargetBlock(null, 5);
+		} else {
+			block = event.getClickedBlock();
+		}
 		if (block == null)
 		{
 			return;
