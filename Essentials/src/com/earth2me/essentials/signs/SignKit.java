@@ -1,6 +1,7 @@
 package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.*;
+import com.earth2me.essentials.commands.NoChargeException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -61,6 +62,10 @@ public class SignKit extends EssentialsSign
 				final List<String> items = Kit.getItems(player, kit);
 				Kit.expandItems(ess, player, items);
 				charge.charge(player);
+			}
+			catch (NoChargeException ex)
+			{
+				return false;
 			}
 			catch (Exception ex)
 			{

@@ -22,7 +22,7 @@ public class SetExpFix
 		int amount = exp;
 		while (amount > 0)
 		{
-			final int expToLevel = getExpToLevel(player);
+			final int expToLevel = getExpAtLevel(player);
 			amount -= expToLevel;
 			if (amount >= 0)
 			{
@@ -39,43 +39,56 @@ public class SetExpFix
 		}
 	}
 
-	private static int getExpToLevel(final Player player)
+	private static int getExpAtLevel(final Player player)
 	{
-		return getExpToLevel(player.getLevel());
+		return getExpAtLevel(player.getLevel());
 	}
 
-	private static int getExpToLevel(final int level)
+	public static int getExpAtLevel(final int level)
 	{
-		if (level >= 30)
+		if (level > 29)
 		{
 			return 62 + (level - 30) * 7;
 		}
-		if (level >= 15)
+		if (level > 15)
 		{
 			return 17 + (level - 15) * 3;
 		}
 		return 17;
+	}
+	
+	public static int getExpToLevel(final int level)
+	{
+		int currentLevel = 0;
+		int exp = 0;
+
+		while (currentLevel < level)
+		{
+			exp += getExpAtLevel(currentLevel);
+			currentLevel++;
+		}
+		return exp;
 	}
 
 	//This method is required because the bukkit player.getTotalExperience() method, shows exp that has been 'spent'.
 	//Without this people would be able to use exp and then still sell it.
 	public static int getTotalExperience(final Player player)
 	{
-		int exp = (int)Math.round(getExpToLevel(player) * player.getExp());
+		int exp = (int)Math.round(getExpAtLevel(player) * player.getExp());
 		int currentLevel = player.getLevel();
 
 		while (currentLevel > 0)
 		{
 			currentLevel--;
-			exp += getExpToLevel(currentLevel);
+			exp += getExpAtLevel(currentLevel);
 		}
 		return exp;
 	}
 	
 	public static int getExpUntilNextLevel(final Player player)
 	{
-		int exp = (int)Math.round(getExpToLevel(player) * player.getExp());
-		int nextLevel = player.getLevel() + 1;
-		return getExpToLevel(nextLevel) - exp;
+		int exp = (int)Math.round(getExpAtLevel(player) * player.getExp());		
+		int nextLevel = player.getLevel();
+		return getExpAtLevel(nextLevel) - exp;
 	}
 }

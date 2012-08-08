@@ -156,11 +156,13 @@ player-commands:
   - signs.use.disposal
   - signs.use.enchant
   - signs.use.free
-  - signs.use.gamemode  
+  - signs.use.gamemode
   - signs.use.heal
+  - signs.use.info
   - signs.use.kit
   - signs.use.mail
   - signs.use.protection
+  - signs.use.repair
   - signs.use.sell
   - signs.use.time
   - signs.use.trade
@@ -194,7 +196,7 @@ kits:
     delay: 10
     items:
       - 272 1
-      - 273 1 
+      - 273 1
       - 274 1
       - 275 1
 
@@ -207,7 +209,7 @@ kits:
 enabledSigns:
   #- color
   #- balance
-  #- buy  
+  #- buy
   #- sell
   #- trade
   #- free
@@ -454,7 +456,7 @@ protect:
   alert:
     on-placement: 10,11,46,327
     on-use: 327
-    on-break: 
+    on-break:
 
   blacklist:
 
@@ -512,7 +514,7 @@ protect:
       ender_dragon: false
       pig: false
       sheep: false
-      cow: false      
+      cow: false
       chicken: false
       squid: false
       wolf: false

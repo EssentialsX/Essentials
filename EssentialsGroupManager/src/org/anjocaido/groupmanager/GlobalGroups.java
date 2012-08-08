@@ -161,7 +161,11 @@ public class GlobalGroups {
 					Object element;
 
 					// Permission nodes
-					element = ((Map<String, Object>)allGroups.get(groupName)).get("permissions");
+					try {
+						element = ((Map<String, Object>)allGroups.get(groupName)).get("permissions");
+					} catch ( Exception ex) {
+						throw new IllegalArgumentException("The GlobalGroup ' " + groupName + "' is formatted incorrectly: ", ex);
+					}
 
 					if (element != null)
 						if (element instanceof List) {
@@ -180,7 +184,11 @@ public class GlobalGroups {
 							throw new IllegalArgumentException("Unknown type of permission node for global group:  " + groupName);
 
 					// Info nodes
-					element = ((Map<String, Object>)allGroups.get(groupName)).get("info");
+					try {
+						element = ((Map<String, Object>)allGroups.get(groupName)).get("info");
+					} catch ( Exception ex) {
+						throw new IllegalArgumentException("The GlobalGroup ' " + groupName + "' is formatted incorrectly: ", ex);
+					}
 
 					if (element != null)
 						if (element instanceof MemorySection) {

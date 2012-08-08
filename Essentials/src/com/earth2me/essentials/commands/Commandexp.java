@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.SetExpFix;
+import java.util.Locale;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -103,7 +104,7 @@ public class Commandexp extends EssentialsCommand
 		}
 	}
 
-	private void expMatch(final Server server, final CommandSender sender, final String match, final String amount, final boolean toggle) throws NotEnoughArgumentsException
+	private void expMatch(final Server server, final CommandSender sender, final String match, String amount, final boolean toggle) throws NotEnoughArgumentsException
 	{
 		boolean foundUser = false;
 		for (Player matchPlayer : server.matchPlayer(match))
@@ -124,9 +125,25 @@ public class Commandexp extends EssentialsCommand
 		sender.sendMessage(_("exp", target.getDisplayName(), SetExpFix.getTotalExperience(target), target.getLevel(), SetExpFix.getExpUntilNextLevel(target)));
 	}
 
-	private void setExp(final CommandSender sender, final User target, final String strAmount, final boolean give)
+	private void setExp(final CommandSender sender, final User target, String strAmount, final boolean give)
 	{
-		Long amount = Long.parseLong(strAmount);
+		Long amount;
+		strAmount = strAmount.toLowerCase(Locale.ENGLISH);
+		if (strAmount.startsWith("l"))
+		{
+			strAmount = strAmount.substring(1);			
+			int neededLevel = Integer.parseInt(strAmount);
+			if (give)
+			{
+				neededLevel += target.getLevel();
+			}
+			amount = (long)SetExpFix.getExpToLevel(neededLevel);
+			SetExpFix.setTotalExperience(target, 0);
+		}
+		else {
+			amount = Long.parseLong(strAmount);
+		}
+
 		if (give)
 		{
 			amount += SetExpFix.getTotalExperience(target);
