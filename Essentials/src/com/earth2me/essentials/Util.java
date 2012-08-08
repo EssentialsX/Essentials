@@ -285,6 +285,45 @@ public class Util
 		}
 		return block.getLocation();
 	}
+	public final static int RADIUS = 3;
+	public final static Vector3D[] VOLUME;
+
+	public static class Vector3D
+	{
+		public Vector3D(int x, int y, int z)
+		{
+			this.x = x;
+			this.y = y;
+			this.z = z;
+		}
+		public int x;
+		public int y;
+		public int z;
+	}
+
+	static
+	{
+		List<Vector3D> pos = new ArrayList<Vector3D>();
+		for (int x = -RADIUS; x <= RADIUS; x++)
+		{
+			for (int y = -RADIUS; y <= RADIUS; y++)
+			{
+				for (int z = -RADIUS; z <= RADIUS; z++)
+				{
+					pos.add(new Vector3D(x, y, z));
+				}
+			}
+		}
+		Collections.sort(pos, new Comparator<Vector3D>()
+		{
+			@Override
+			public int compare(Vector3D a, Vector3D b)
+			{
+				return (a.x * a.x + a.y * a.y + a.z * a.z) - (b.x * b.x + b.y * b.y + b.z * b.z);
+			}
+		});
+		VOLUME = pos.toArray(new Vector3D[0]);
+	}
 
 	public static Location getSafeDestination(final Location loc) throws Exception
 	{
@@ -296,7 +335,9 @@ public class Util
 		int x = loc.getBlockX();
 		int y = (int)Math.round(loc.getY());
 		int z = loc.getBlockZ();
+		final int origX = x;
 		final int origY = y;
+		final int origZ = z;
 
 		while (isBlockAboveAir(world, x, y, z))
 		{
@@ -308,38 +349,29 @@ public class Util
 			}
 		}
 
+		int i = 0;
+		while (isBlockUnsafe(world, x, y, z))
+		{
+			i++;
+			if (i >= VOLUME.length)
+			{
+				x = origX;
+				y = origY + RADIUS;
+				z = origZ;
+				break;
+			}
+			x = origX + VOLUME[i].x;
+			y = origY + VOLUME[i].y;
+			z = origZ + VOLUME[i].z;
+		}
+
 		while (isBlockUnsafe(world, x, y, z))
 		{
 			y += 1;
 			if (y >= world.getHighestBlockYAt(x, z))
 			{
-				x -= 3;
-				z -= 3;
-				y = origY + 4;
-				break;
-			}
-		}
-
-		while (isBlockUnsafe(world, x, y, z))
-		{
-			y -= 1;
-			if (y + 4 < origY)
-			{
 				x += 1;
-				if (x - 3 > loc.getBlockX())
-				{
-					x = loc.getBlockX() - 3;
-					z += 1;
-					if (z - 3 > loc.getBlockZ())
-					{
-						x = loc.getBlockX() + 4;
-						z = loc.getBlockZ();
-						y = world.getHighestBlockYAt(x, z);
-						break;
-					}
-				}
-
-				y = origY + 4;
+				break;
 			}
 		}
 
@@ -376,7 +408,7 @@ public class Util
 		{
 			return true;
 		}
-		
+
 		if (below.getType() == Material.BED)
 		{
 			return true;

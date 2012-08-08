@@ -3,6 +3,8 @@ package com.earth2me.essentials;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Set;
 import junit.framework.TestCase;
 import org.bukkit.World.Environment;
 import org.bukkit.plugin.InvalidDescriptionException;
@@ -30,6 +32,33 @@ public class UtilTest extends TestCase
 		{
 			fail("IOException");
 		}
+	}
+
+	public void testSafeLocation()
+	{
+		Set<String> testSet = new HashSet<String>();
+		int count = 0;
+		int x, y, z, origX, origY, origZ;
+		x = y = z = origX = origY = origZ = 0;
+		int i = 0;
+		while (true)
+		{
+			testSet.add(x + ":" + y + ":" + z);
+			count++;
+			i++;
+			if (i >= Util.VOLUME.length)
+			{
+				break;
+			}
+			x = origX + Util.VOLUME[i].x;
+			y = origY + Util.VOLUME[i].y;
+			z = origZ + Util.VOLUME[i].z;
+		}
+		assertTrue(testSet.contains("0:0:0"));
+		assertTrue(testSet.contains("3:3:3"));
+		assertEquals(testSet.size(), count);
+		int diameter = Util.RADIUS * 2 + 1;
+		assertEquals(diameter * diameter * diameter, count);
 	}
 
 	public void testFDDnow()
