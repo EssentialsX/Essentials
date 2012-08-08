@@ -409,7 +409,7 @@ public class Util
 			return true;
 		}
 
-		if (below.getType() == Material.BED)
+		if (below.getType() == Material.BED_BLOCK)
 		{
 			return true;
 		}
