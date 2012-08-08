@@ -376,6 +376,11 @@ public class Util
 		{
 			return true;
 		}
+		
+		if (below.getType() == Material.BED)
+		{
+			return true;
+		}
 
 		if ((!AIR_MATERIALS.contains(world.getBlockAt(x, y, z).getType().getId()))
 			|| (!AIR_MATERIALS.contains(world.getBlockAt(x, y + 1, z).getType().getId())))
