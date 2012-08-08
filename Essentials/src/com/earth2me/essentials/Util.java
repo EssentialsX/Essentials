@@ -368,7 +368,7 @@ public class Util
 		while (isBlockUnsafe(world, x, y, z))
 		{
 			y += 1;
-			if (y >= world.getHighestBlockYAt(x, z))
+			if (y >= world.getMaxHeight())
 			{
 				x += 1;
 				break;
