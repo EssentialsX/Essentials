@@ -586,6 +586,12 @@ lightgrecotton,35,5
 lgrecloth,35,5
 lgrewool,35,5
 lgrecotton,35,5
+limecloth,35,5
+limewool,35,5
+lcotton,35,5
+lcloth,35,5
+lwool,35,5
+lcotton,35,5
 pinkcloth,35,6
 pinkwool,35,6
 pinkcotton,35,6
@@ -1104,6 +1110,9 @@ mcobblestone,48,0
 mossycobble,48,0
 mosscobble,48,0
 mcobble,48,0
+mossstone,48,0
+mossystone,48,0
+mstone,48,0
 obsidian,49,0
 obsi,49,0
 obby,49,0
@@ -4108,7 +4117,7 @@ spldmgpotion,373,16396
 splharmingpot,373,16396
 spldamagepot,373,16396
 spldmgpot,373,16396
-sdpot,373,16396
+spdpot,373,16396
 splashregenerationleveliipotion,373,16417
 splashregenerateleveliipotion,373,16417
 splashregenleveliipotion,373,16417
