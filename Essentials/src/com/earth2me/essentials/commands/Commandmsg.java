@@ -21,7 +21,7 @@ public class Commandmsg extends EssentialsCommand
 	@Override
 	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
-		if (args.length < 2 || args[0].trim().length() < 3  || args[1].trim().isEmpty())
+		if (args.length < 2 || args[0].trim().length() < 2  || args[1].trim().isEmpty())
 		{
 			throw new NotEnoughArgumentsException();
 		}
