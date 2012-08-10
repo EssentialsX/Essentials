@@ -23,7 +23,7 @@ public class Commandkill extends EssentialsCommand
 		}
 				
 		//TODO: TL this
-		if (args[0].trim().length() < 3)
+		if (args[0].trim().length() < 2)
 		{
 			throw new NotEnoughArgumentsException("You need to specify a player to kill.");
 		}
