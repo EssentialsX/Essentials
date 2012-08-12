@@ -23,44 +23,57 @@ public class Commandgamemode extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		gamemodeOtherPlayers(server, sender, args);
+		GameMode gameMode = matchGameMode(args[0].toLowerCase(Locale.ENGLISH));
+		gamemodeOtherPlayers(server, sender, gameMode, args[1]);
 	}
 
 	@Override
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		if (args.length < 1)
+		GameMode gameMode;
+		if (args.length == 0)
 		{
-			throw new NotEnoughArgumentsException();
+			gameMode = matchGameMode(commandLabel);
 		}
-
-		if (args.length > 1 && args[1].trim().length() > 2 && user.isAuthorized("essentials.gamemode.others"))
+		else if (args.length > 1 && args[1].trim().length() > 2 && user.isAuthorized("essentials.gamemode.others"))
 		{
-			gamemodeOtherPlayers(server, user, args);
+			gameMode = matchGameMode(args[0].toLowerCase(Locale.ENGLISH));
+			gamemodeOtherPlayers(server, user, gameMode, args[1]);
 			return;
 		}
-		performSetMode(args[0].toLowerCase(Locale.ENGLISH), user);
+		else
+		{
+			try {
+				gameMode = matchGameMode(args[0].toLowerCase(Locale.ENGLISH));
+			}
+			catch (NotEnoughArgumentsException e) {
+				gameMode = matchGameMode(commandLabel);
+				gamemodeOtherPlayers(server, user, gameMode, args[0]);
+				return;
+			}
+		}
+		user.setGameMode(gameMode);
 		user.sendMessage(_("gameMode", _(user.getGameMode().toString().toLowerCase(Locale.ENGLISH)), user.getDisplayName()));
 	}
 
-	private void gamemodeOtherPlayers(final Server server, final CommandSender sender, final String[] args) throws NotEnoughArgumentsException
+	private void gamemodeOtherPlayers(final Server server, final CommandSender sender, final GameMode gameMode, final String player) throws NotEnoughArgumentsException
 	{
 		//TODO: TL this
-		if (args[1].trim().length() < 2)
+		if (player.trim().length() < 2)
 		{
 			throw new NotEnoughArgumentsException("You need to specify a valid player/mode.");
 		}
 
 		boolean foundUser = false;
-		for (Player matchPlayer : server.matchPlayer(args[1]))
+		for (Player matchPlayer : server.matchPlayer(player))
 		{
-			final User player = ess.getUser(matchPlayer);
-			if (player.isHidden())
+			final User user = ess.getUser(matchPlayer);
+			if (user.isHidden())
 			{
 				continue;
 			}
-			performSetMode(args[0].toLowerCase(Locale.ENGLISH), player);
-			sender.sendMessage(_("gameMode", _(player.getGameMode().toString().toLowerCase(Locale.ENGLISH)), player.getDisplayName()));
+			user.setGameMode(gameMode);
+			sender.sendMessage(_("gameMode", _(user.getGameMode().toString().toLowerCase(Locale.ENGLISH)), user.getDisplayName()));
 			foundUser = true;
 		}
 		if (!foundUser)
@@ -69,19 +82,27 @@ public class Commandgamemode extends EssentialsCommand
 		}
 	}
 
-	private void performSetMode(String mode, Player player)
+	private GameMode matchGameMode(String modeString) throws NotEnoughArgumentsException
 	{
-		if (mode.contains("survi") || mode.equalsIgnoreCase("0") || mode.equalsIgnoreCase("s"))
+		GameMode mode = null;
+		if (modeString.equalsIgnoreCase("gmc") || modeString.equalsIgnoreCase("egmc")
+			|| modeString.contains("creat") || modeString.equalsIgnoreCase("1") || modeString.equalsIgnoreCase("c"))
 		{
-			player.setGameMode(GameMode.SURVIVAL);
+			mode = GameMode.CREATIVE;
 		}
-		else if (mode.contains("creat") || mode.equalsIgnoreCase("1") || mode.equalsIgnoreCase("c"))
+		else if (modeString.equalsIgnoreCase("gms") || modeString.equalsIgnoreCase("egms")
+				 || modeString.contains("survi") || modeString.equalsIgnoreCase("0") || modeString.equalsIgnoreCase("s"))
 		{
-			player.setGameMode(GameMode.CREATIVE);
+			mode = GameMode.SURVIVAL;
 		}
-		else if (mode.contains("advent") || mode.equalsIgnoreCase("2") || mode.equalsIgnoreCase("a"))
+		else if (modeString.equalsIgnoreCase("gma") || modeString.equalsIgnoreCase("egma")
+				 || modeString.contains("advent") || modeString.equalsIgnoreCase("2") || modeString.equalsIgnoreCase("a"))
 		{
-			player.setGameMode(GameMode.ADVENTURE);
+			mode = GameMode.ADVENTURE;
 		}
+		else {
+			throw new NotEnoughArgumentsException();
+		}
+		return mode;
 	}
 }
