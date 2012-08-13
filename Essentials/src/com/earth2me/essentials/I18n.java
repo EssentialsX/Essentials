@@ -70,7 +70,8 @@ public class I18n implements II18n
 
 	public static String _(final String string, final Object... objects)
 	{
-		if (instance == null) {
+		if (instance == null)
+		{
 			return "";
 		}
 		if (objects.length == 0)
@@ -85,11 +86,20 @@ public class I18n implements II18n
 
 	public String format(final String string, final Object... objects)
 	{
-		final String format = translate(string);
+		String format = translate(string);
 		MessageFormat messageFormat = messageFormatCache.get(format);
 		if (messageFormat == null)
 		{
-			messageFormat = new MessageFormat(format);
+			try
+			{
+				messageFormat = new MessageFormat(format);
+			}
+			catch (IllegalArgumentException e)
+			{
+				ess.getLogger().log(Level.SEVERE, "Invalid Translation key for '" + string + "': " + e.getMessage());
+				format = format.replaceAll("\\{(\\D*?)\\}", "\\[$1\\]");
+				messageFormat = new MessageFormat(format);
+			}
 			messageFormatCache.put(format, messageFormat);
 		}
 		return messageFormat.format(objects);
