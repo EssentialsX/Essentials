@@ -193,3 +193,4 @@ v 2.0:
 	- Fix a cases sensitivity bug in world loading.
 	- Stop using the YamlConfiguration in bukkit for our config handling. We can now support periods in world names.
 	- Fix GlobalGroups not loading permission nodes.
+	- Fix an error with Logging set to 'OFF' triggering a cast exception.

@@ -25,7 +25,7 @@ public class GMConfiguration {
 	private boolean toggleValidate;
 	private Integer saveInterval;
 	private Integer backupDuration;
-	private String loggerLevel;
+	private String loggerLevel = "OFF";
 	private Map<String, Object> mirrorsMap;
 	
 
@@ -82,7 +82,9 @@ public class GMConfiguration {
 		saveInterval = (Integer) save.get("minutes");
 		backupDuration = (Integer) save.get("hours");
 		
-		loggerLevel = ((Map<String, String>) getElement("settings", GMconfig).get("logging")).get("level");
+		Object level = ((Map<String, String>) getElement("settings", GMconfig).get("logging")).get("level");
+		if (level instanceof String)
+			level = (String) level;
 		
 		/*
 		 * Store our mirrors map for parsing later.
