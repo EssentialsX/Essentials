@@ -8,8 +8,6 @@ import org.bukkit.plugin.Plugin;
 
 public interface IProtect extends Plugin
 {
-	boolean checkProtectionItems(final ProtectConfig list, final int id);
-
 	boolean getSettingBool(final ProtectConfig protectConfig);
 
 	String getSettingString(final ProtectConfig protectConfig);

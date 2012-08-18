@@ -10,8 +10,6 @@ public enum ProtectConfig
 	memstore("protect.memstore", false),
 	disable_contactdmg("protect.disable.contactdmg", false),
 	disable_lavadmg("protect.disable.lavadmg", false),
-	disable_build("protect.disable.build", true),
-	disable_use("protect.disable.use", true),
 	disable_pvp("protect.disable.pvp", false),
 	disable_projectiles("protect.disable.projectiles", false),
 	disable_fall("protect.disable.fall", false),
@@ -47,14 +45,7 @@ public enum ProtectConfig
 	protect_below_rails("protect.protect.block-below", true),
 	protect_signs("protect.protect.signs", true),
 	protect_against_signs("protect.protect.block-below", true),
-	enderdragon_fakeexplosions("protect.enderdragon-fakeexplosions", false),
-	alert_on_placement("protect.alert.on-placement"),
-	alert_on_use("protect.alert.on-use"),
-	alert_on_break("protect.alert.on-break"),
-	blacklist_placement("protect.blacklist.placement"),
-	blacklist_usage("protect.blacklist.usage"),
-	blacklist_break("protect.blacklist.break"),
-	blacklist_piston("protect.blacklist.piston");
+	enderdragon_fakeexplosions("protect.enderdragon-fakeexplosions", false);
 	private final String configName;
 	private final String defValueString;
 	private final boolean defValueBoolean;

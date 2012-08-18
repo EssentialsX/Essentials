@@ -55,7 +55,7 @@ public class PrivilegesHandler extends SuperpermsHandler
 	@Override
 	public boolean canBuild(Player base, String group)
 	{
-		return hasPermission(base, "essentials.build") || hasPermission(base, "privileges.build");
+		return hasPermission(base, "privileges.build");
 	}
 
 }

@@ -21,7 +21,7 @@ public class SuperpermsHandler implements IPermissionsHandler
 	@Override
 	public boolean canBuild(final Player base, final String group)
 	{
-		return hasPermission(base, "essentials.build");
+		return false;
 	}
 
 	@Override

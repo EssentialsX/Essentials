@@ -74,13 +74,6 @@ public class EssentialsProtect extends JavaPlugin implements IProtect
 	}
 
 	@Override
-	public boolean checkProtectionItems(final ProtectConfig list, final int id)
-	{
-		final List<Integer> itemList = settingsList.get(list);
-		return itemList != null && !itemList.isEmpty() && itemList.contains(id);
-	}
-
-	@Override
 	public IProtectedBlock getStorage()
 	{
 		return storage;
