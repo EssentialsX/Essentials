@@ -5,10 +5,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 
-/**
- * @deprecated This will be moved to the api package soon
- */
-@Deprecated
 public interface IUser extends Player
 {
 	long getLastTeleportTimestamp();
