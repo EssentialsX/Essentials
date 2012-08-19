@@ -36,7 +36,7 @@ public class EssentialsAntiBuildListener implements Listener
 	
 	private boolean metaPermCheck(User user, String action, int blockId, byte data)
 	{
-		String blockPerm = "essentials.build." + action + blockId;
+		String blockPerm = "essentials.build." + action + "." + blockId;
 		String dataPerm = blockPerm + ":" + data;
 
 		if (user.isAuthorized(dataPerm))
@@ -66,7 +66,7 @@ public class EssentialsAntiBuildListener implements Listener
 		final User user = ess.getUser(event.getPlayer());
 
 		if (prot.getSettingBool(AntiBuildConfig.disable_build) && !user.canBuild() && !user.isAuthorized("essentials.build")
-			&& metaPermCheck(user, "place", event.getBlock()))
+			&& !metaPermCheck(user, "place", event.getBlock()))
 		{
 			event.setCancelled(true);
 			return;
@@ -98,7 +98,7 @@ public class EssentialsAntiBuildListener implements Listener
 		final User user = ess.getUser(event.getPlayer());
 
 		if (prot.getSettingBool(AntiBuildConfig.disable_build) && !user.canBuild() && !user.isAuthorized("essentials.build")
-			&& metaPermCheck(user, "break", event.getBlock()))
+			&& !metaPermCheck(user, "break", event.getBlock()))
 		{
 			event.setCancelled(true);
 			return;
@@ -191,7 +191,7 @@ public class EssentialsAntiBuildListener implements Listener
 		if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild() && !user.isAuthorized("essentials.interact") && !user.isAuthorized("essentials.build"))
 		{
 			
-			if (metaPermCheck(user, "interact", event.getClickedBlock()))
+			if (!metaPermCheck(user, "interact", event.getClickedBlock()))
 			{
 				event.setUseInteractedBlock(Result.DENY);
 				if (ess.getSettings().warnOnBuildDisallow())
@@ -199,7 +199,7 @@ public class EssentialsAntiBuildListener implements Listener
 					user.sendMessage(_("buildAlert"));
 				}
 			}
-			if (event.hasItem() && metaPermCheck(user, "interact", event.getItem().getTypeId(), event.getItem().getData().getData()))
+			if (event.hasItem() && !metaPermCheck(user, "use", event.getItem().getTypeId(), event.getItem().getData().getData()))
 			{
 				event.setUseItemInHand(Result.DENY);
 			}
