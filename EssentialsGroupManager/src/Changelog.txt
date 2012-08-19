@@ -194,3 +194,4 @@ v 2.0:
 	- Stop using the YamlConfiguration in bukkit for our config handling. We can now support periods in world names.
 	- Fix GlobalGroups not loading permission nodes.
 	- Fix an error with Logging set to 'OFF' triggering a cast exception.
+	- No more null errors from corrupt config.yml's.

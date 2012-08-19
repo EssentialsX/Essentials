@@ -7,6 +7,7 @@ package org.anjocaido.groupmanager;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -21,10 +22,10 @@ import org.yaml.snakeyaml.reader.UnicodeReader;
  */
 public class GMConfiguration {
 	
-	private boolean opOverride;
-	private boolean toggleValidate;
-	private Integer saveInterval;
-	private Integer backupDuration;
+	private boolean opOverride = true;
+	private boolean toggleValidate = true;
+	private Integer saveInterval = 10;
+	private Integer backupDuration = 24;
 	private String loggerLevel = "OFF";
 	private Map<String, Object> mirrorsMap;
 	
@@ -35,6 +36,16 @@ public class GMConfiguration {
 	public GMConfiguration(GroupManager plugin) {
 
 		this.plugin = plugin;
+		
+		/*
+		 * Set defaults
+		 */
+		opOverride = true;
+		toggleValidate = true;
+		saveInterval = 10;
+		backupDuration = 24;
+		loggerLevel = "OFF";
+				
 		load();
 	}
 
@@ -44,14 +55,14 @@ public class GMConfiguration {
 		if (!plugin.getDataFolder().exists()) {
 			plugin.getDataFolder().mkdirs();
 		}
-		
+
 		File configFile = new File(plugin.getDataFolder(), "config.yml");
 
 		if (!configFile.exists()) {
 			try {
 				Tasks.copy(plugin.getResourceAsStream("config.yml"), configFile);
 			} catch (IOException ex) {
-				GroupManager.logger.log(Level.SEVERE, null, ex);
+				GroupManager.logger.log(Level.SEVERE, "Error creating a new config.yml", ex);
 			}
 		}
 
@@ -61,7 +72,7 @@ public class GMConfiguration {
 			FileInputStream configInputStream = new FileInputStream(configFile);
 			GMconfig = (Map<String, Object>) configYAML.load(new UnicodeReader(configInputStream));
 			configInputStream.close();
-			
+
 		} catch (Exception ex) {
 			throw new IllegalArgumentException("The following file couldn't pass on Parser.\n" + configFile.getPath(), ex);
 		}
@@ -69,28 +80,53 @@ public class GMConfiguration {
 		/*
 		 * Read our config settings ands store them for reading later.
 		 */
-		Map<String, Object> config = getElement("config", getElement("settings", GMconfig));
-		
-		opOverride = (Boolean) config.get("opOverrides");
-		toggleValidate = (Boolean) config.get("validate_toggle");
-		
-		/*
-		 * data node for save/backup timers.
-		 */
-		Map<String, Object> save = getElement("save", getElement("data", getElement("settings", GMconfig)));
-		
-		saveInterval = (Integer) save.get("minutes");
-		backupDuration = (Integer) save.get("hours");
-		
-		Object level = ((Map<String, String>) getElement("settings", GMconfig).get("logging")).get("level");
-		if (level instanceof String)
-			level = (String) level;
-		
-		/*
-		 * Store our mirrors map for parsing later.
-		 */
-		mirrorsMap = (Map<String, Object>) ((Map<String, Object>) GMconfig.get("settings")).get("mirrors");
-		
+		try {
+			Map<String, Object> config = getElement("config", getElement("settings", GMconfig));
+
+			opOverride = (Boolean) config.get("opOverrides");
+			toggleValidate = (Boolean) config.get("validate_toggle");
+
+			/*
+			 * data node for save/backup timers.
+			 */
+			try {
+				Map<String, Object> save = getElement("save", getElement("data", getElement("settings", GMconfig)));
+				
+				try {
+					saveInterval = (Integer) save.get("minutes");
+				} catch (Exception ex) {
+					GroupManager.logger.log(Level.SEVERE, "Missing or corrupt 'minutes' node. Using default setting", ex);
+				}
+				
+				try {
+					backupDuration = (Integer) save.get("hours");
+				} catch (Exception ex) {
+					GroupManager.logger.log(Level.SEVERE, "Missing or corrupt 'hours' node. Using default setting", ex);
+				}
+				
+			} catch (Exception ex) {
+				GroupManager.logger.log(Level.SEVERE, "Missing or corrupt 'data' node. Using default settings", ex);
+			}
+
+			
+
+			Object level = ((Map<String, String>) getElement("settings", GMconfig).get("logging")).get("level");
+			if (level instanceof String)
+				level = (String) level;
+
+			/*
+			 * Store our mirrors map for parsing later.
+			 */
+			mirrorsMap = (Map<String, Object>) ((Map<String, Object>) GMconfig.get("settings")).get("mirrors");
+
+		} catch (Exception ex) {
+			/*
+			 * Flag the error and use defaults
+			 */
+			GroupManager.logger.log(Level.SEVERE, "There are errors in your config.yml. Using default settings", ex);
+			
+			mirrorsMap = new HashMap<String, Object>();
+		}
 		// Setup defaults
 		adjustLoggerLevel();
 		plugin.setValidateOnlinePlayer(isToggleValidate());
