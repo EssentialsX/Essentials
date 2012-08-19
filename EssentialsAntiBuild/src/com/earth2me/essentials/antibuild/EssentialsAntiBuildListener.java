@@ -25,6 +25,36 @@ public class EssentialsAntiBuildListener implements Listener
 		this.ess = prot.getEssentialsConnect().getEssentials();
 	}
 
+	private boolean metaPermCheck(User user, String action, Block block)
+	{
+		if (block == null)
+		{
+			return false;
+		}
+		return metaPermCheck(user, action, block.getTypeId(), block.getData());
+	}
+	
+	private boolean metaPermCheck(User user, String action, int blockId, byte data)
+	{
+		String blockPerm = "essentials.build." + action + blockId;
+		String dataPerm = blockPerm + ":" + data;
+
+		if (user.isAuthorized(dataPerm))
+		{
+			return true;
+		}
+
+		if (user.isAuthorized(blockPerm))
+		{
+			if (user.isPermissionSet(dataPerm) && !user.isAuthorized(dataPerm))
+			{
+				return false;
+			}
+			return true;
+		}
+		return false;
+	}
+
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockPlace(final BlockPlaceEvent event)
 	{
@@ -36,7 +66,7 @@ public class EssentialsAntiBuildListener implements Listener
 		final User user = ess.getUser(event.getPlayer());
 
 		if (prot.getSettingBool(AntiBuildConfig.disable_build) && !user.canBuild() && !user.isAuthorized("essentials.build")
-			&& (event.getBlock() != null && !user.isAuthorized("essentials.build.place." + event.getBlock().getTypeId())))
+			&& metaPermCheck(user, "place", event.getBlock()))
 		{
 			event.setCancelled(true);
 			return;
@@ -68,7 +98,7 @@ public class EssentialsAntiBuildListener implements Listener
 		final User user = ess.getUser(event.getPlayer());
 
 		if (prot.getSettingBool(AntiBuildConfig.disable_build) && !user.canBuild() && !user.isAuthorized("essentials.build")
-			&& (event.getBlock() != null && !user.isAuthorized("essentials.build.break." + event.getBlock().getTypeId())))
+			&& metaPermCheck(user, "break", event.getBlock()))
 		{
 			event.setCancelled(true);
 			return;
@@ -160,7 +190,8 @@ public class EssentialsAntiBuildListener implements Listener
 
 		if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild() && !user.isAuthorized("essentials.interact") && !user.isAuthorized("essentials.build"))
 		{
-			if (event.getClickedBlock() != null && !user.isAuthorized("essentials.build.interact." + event.getClickedBlock().getTypeId()))
+			
+			if (metaPermCheck(user, "interact", event.getClickedBlock()))
 			{
 				event.setUseInteractedBlock(Result.DENY);
 				if (ess.getSettings().warnOnBuildDisallow())
@@ -168,7 +199,7 @@ public class EssentialsAntiBuildListener implements Listener
 					user.sendMessage(_("buildAlert"));
 				}
 			}
-			if (event.hasItem() && !user.isAuthorized("essentials.build.use." + event.getMaterial().getId()))
+			if (event.hasItem() && metaPermCheck(user, "interact", event.getItem().getTypeId(), event.getItem().getData().getData()))
 			{
 				event.setUseItemInHand(Result.DENY);
 			}
