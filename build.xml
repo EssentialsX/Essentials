@@ -16,6 +16,7 @@
   <target name="buildRest" depends="buildEss">
     <ant dir="EssentialsChat" antfile="build.xml"/>
     <ant dir="EssentialsSpawn" antfile="build.xml"/>
+    <ant dir="EssentialsAntiBuild" antfile="build.xml"/>
     <ant dir="EssentialsProtect" antfile="build.xml"/>
     <ant dir="EssentialsGeoIP" antfile="build.xml"/>
     <ant dir="EssentialsXMPP" antfile="build.xml"/>

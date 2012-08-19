@@ -450,28 +450,6 @@ protect:
   password: 'root'
   mysqlDb: 'jdbc:mysql://localhost:3306/minecraft'
 
-  # For which block types would you like to be alerted?
-  # You can find a list of IDs in plugins/Essentials/items.csv after loading Essentials for the first time.
-  # 10 = lava :: 11 = still lava :: 46 = TNT :: 327 = lava bucket
-  alert:
-    on-placement: 10,11,46,327
-    on-use: 327
-    on-break:
-
-  blacklist:
-
-    # Which blocks should people be prevented from placing
-    placement: 10,11,46,327
-
-    # Which items should people be prevented from using
-    usage: 327
-
-    # Which blocks should people be prevented from breaking
-    break:
-
-    # Which blocks should not be pushed by pistons
-    piston:
-
   # General physics/behavior modifications
   prevent:
     lava-flow: false
@@ -532,10 +510,10 @@ protect:
   # Protect various blocks.
   protect:
     # Protect all signs
-    signs: true
+    signs: false
 
     # Prevent users from destroying rails
-    rails: true
+    rails: false
 
     # Blocks below rails/signs are also protected if the respective rail/sign is protected.
     # This makes it more difficult to circumvent protection, and should be enabled.
@@ -577,6 +555,20 @@ protect:
     # Should the damage after hit by a lightning be disabled?
     lightning: false
 
+    # Disable weather options
+    weather:
+      storm: false
+      thunder: false
+      lightning: false     
+        
+############################################################
+# +------------------------------------------------------+ #
+# |                EssentialsAntiBuild                   | #
+# +------------------------------------------------------+ #
+############################################################
+  
+  # Disable various default physics and behaviors
+  
     # Should people with build: false in permissions be allowed to build
     # Set true to disable building for those people
     build: true
@@ -587,12 +579,28 @@ protect:
 
     # Should we tell people they are not allowed to build
     warn-on-build-disallow: true
+    
+    # For which block types would you like to be alerted?
+  # You can find a list of IDs in plugins/Essentials/items.csv after loading Essentials for the first time.
+  # 10 = lava :: 11 = still lava :: 46 = TNT :: 327 = lava bucket
+  alert:
+    on-placement: 10,11,46,327
+    on-use: 327
+    on-break:
 
-    # Disable weather options
-    weather:
-      storm: false
-      thunder: false
-      lightning: false
+  blacklist:
+
+    # Which blocks should people be prevented from placing
+    placement: 10,11,46,327
+
+    # Which items should people be prevented from using
+    usage: 327
+
+    # Which blocks should people be prevented from breaking
+    break:
+
+    # Which blocks should not be pushed by pistons
+    piston:
 
 ############################################################
 # +------------------------------------------------------+ #

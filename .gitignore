@@ -40,3 +40,6 @@
 *.iml
 /EssentialsGroupManager/bin
 /EssentialsGroupManager/.externalToolBuilders
+/EssentialsAntiBuild/nbproject/private/
+/EssentialsAntiBuild/dist/
+/EssentialsAntiBuild/build/
