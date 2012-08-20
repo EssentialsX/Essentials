@@ -85,8 +85,8 @@ public class EssentialsAntiBuildListener implements Listener
 			return;
 		}
 
-		if (!user.isAuthorized("essentials.protect.alerts.notrigger")
-			&& prot.checkProtectionItems(AntiBuildConfig.alert_on_placement, id))
+		if (prot.checkProtectionItems(AntiBuildConfig.alert_on_placement, id)
+			&& !user.isAuthorized("essentials.protect.alerts.notrigger"))
 		{
 			prot.getEssentialsConnect().alert(user, blockPlaced.getType().toString(), _("alertPlaced"));
 		}
@@ -122,8 +122,8 @@ public class EssentialsAntiBuildListener implements Listener
 		}
 		final Material type = block.getType();
 
-		if (!user.isAuthorized("essentials.protect.alerts.notrigger")
-			&& prot.checkProtectionItems(AntiBuildConfig.alert_on_break, typeId))
+		if (prot.checkProtectionItems(AntiBuildConfig.alert_on_break, typeId)
+			&& !user.isAuthorized("essentials.protect.alerts.notrigger"))
 		{
 			prot.getEssentialsConnect().alert(user, type.toString(), _("alertBroke"));
 		}
@@ -190,8 +190,8 @@ public class EssentialsAntiBuildListener implements Listener
 		}
 
 		if (item != null
-			&& !user.isAuthorized("essentials.protect.alerts.notrigger")
-			&& prot.checkProtectionItems(AntiBuildConfig.alert_on_use, item.getTypeId()))
+			&& prot.checkProtectionItems(AntiBuildConfig.alert_on_use, item.getTypeId())
+			&& !user.isAuthorized("essentials.protect.alerts.notrigger"))
 		{
 			prot.getEssentialsConnect().alert(user, item.getType().toString(), _("alertUsed"));
 		}
