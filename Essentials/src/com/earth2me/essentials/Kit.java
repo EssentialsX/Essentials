@@ -78,6 +78,7 @@ public class Kit
 		{
 			throw new Exception(_("kitError2"));
 		}
+	
 
 		try
 		{

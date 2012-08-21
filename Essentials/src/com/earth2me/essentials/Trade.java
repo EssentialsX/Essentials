@@ -63,6 +63,12 @@ public class Trade
 
 	public void isAffordableFor(final IUser user) throws ChargeException
 	{
+
+		if (ess.getSettings().isDebug())
+		{
+			ess.getLogger().log(Level.INFO, "checking if " + user.getName() + " can afford charge.");
+		}
+
 		if (getMoney() != null
 			&& getMoney() > 0
 			&& !user.canAfford(getMoney()))
@@ -206,7 +212,16 @@ public class Trade
 			cost = ess.getSettings().getCommandCost(command.charAt(0) == '/' ? command.substring(1) : command);
 			if (cost == 0.0 && fallbackCommand != null && !fallbackCommand.isEmpty())
 			{
+				if (ess.getSettings().isDebug())
+				{
+					ess.getLogger().log(Level.INFO, "checking fallback command cost (" + fallbackCommand + ") cost for " + user.getName());
+				}
 				cost = ess.getSettings().getCommandCost(fallbackCommand.charAt(0) == '/' ? fallbackCommand.substring(1) : fallbackCommand);
+			}
+
+			if (ess.getSettings().isDebug())
+			{
+				ess.getLogger().log(Level.INFO, "calculated command (" + command + ") cost for " + user.getName() + " as " + cost);
 			}
 		}
 		return cost;

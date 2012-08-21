@@ -172,7 +172,7 @@ public abstract class EssentialsChatPlayer implements Listener
 				}
 			}
 
-			String message = String.format(event.getFormat(), type.concat(sender.getDisplayName()), event.getMessage());
+			String message = type.concat(String.format(event.getFormat(), sender.getDisplayName(), event.getMessage()));
 			synchronized (listeners)
 			{
 				for (Map.Entry<String, IEssentialsChatListener> listener : listeners.entrySet())

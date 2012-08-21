@@ -1,6 +1,5 @@
 package com.earth2me.essentials.protect;
 
-import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.protect.data.IProtectedBlock;
@@ -36,26 +35,9 @@ public class EssentialsProtectBlockListener implements Listener
 
 		final User user = ess.getUser(event.getPlayer());
 
-		if (prot.getSettingBool(ProtectConfig.disable_build) && !user.canBuild())
-		{
-			event.setCancelled(true);
-			return;
-		}
-
 		final Block blockPlaced = event.getBlockPlaced();
 		final int id = blockPlaced.getTypeId();
 
-		if (prot.checkProtectionItems(ProtectConfig.blacklist_placement, id) && !user.isAuthorized("essentials.protect.exemptplacement"))
-		{
-			event.setCancelled(true);
-			return;
-		}
-
-		if (!user.hasPermission("essentials.protect.alerts.notrigger") 
-			&& prot.checkProtectionItems(ProtectConfig.alert_on_placement, id))
-		{
-			prot.getEssentialsConnect().alert(user, blockPlaced.getType().toString(), _("alertPlaced"));
-		}
 
 		final Block below = blockPlaced.getRelative(BlockFace.DOWN);
 		if ((below.getType() == Material.RAILS || below.getType() == Material.POWERED_RAIL || below.getType() == Material.DETECTOR_RAIL)
@@ -234,27 +216,11 @@ public class EssentialsProtectBlockListener implements Listener
 		}
 		final User user = ess.getUser(event.getPlayer());
 
-		if (prot.getSettingBool(ProtectConfig.disable_build) && !user.canBuild())
-		{
-			event.setCancelled(true);
-			return;
-		}
 		final Block block = event.getBlock();
 		final int typeId = block.getTypeId();
 
-		if (prot.checkProtectionItems(ProtectConfig.blacklist_break, typeId)
-			&& !user.isAuthorized("essentials.protect.exemptbreak"))
-		{
-			event.setCancelled(true);
-			return;
-		}
 		final Material type = block.getType();
 
-		if (!user.hasPermission("essentials.protect.alerts.notrigger") 
-			&& prot.checkProtectionItems(ProtectConfig.alert_on_break, typeId))
-		{
-			prot.getEssentialsConnect().alert(user, type.toString(), _("alertBroke"));
-		}
 		final IProtectedBlock storage = prot.getStorage();
 
 		if (user.isAuthorized("essentials.protect.admin"))
@@ -333,11 +299,6 @@ public class EssentialsProtectBlockListener implements Listener
 		}
 		for (Block block : event.getBlocks())
 		{
-			if (prot.checkProtectionItems(ProtectConfig.blacklist_piston, block.getTypeId()))
-			{
-				event.setCancelled(true);
-				return;
-			}
 			if ((block.getRelative(BlockFace.UP).getType() == Material.RAILS
 				 || block.getType() == Material.RAILS
 				 || block.getRelative(BlockFace.UP).getType() == Material.POWERED_RAIL
@@ -385,11 +346,6 @@ public class EssentialsProtectBlockListener implements Listener
 			return;
 		}
 		final Block block = event.getRetractLocation().getBlock();
-		if (prot.checkProtectionItems(ProtectConfig.blacklist_piston, block.getTypeId()))
-		{
-			event.setCancelled(true);
-			return;
-		}
 		if ((block.getRelative(BlockFace.UP).getType() == Material.RAILS
 			 || block.getType() == Material.RAILS
 			 || block.getRelative(BlockFace.UP).getType() == Material.POWERED_RAIL

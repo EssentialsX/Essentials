@@ -19,7 +19,7 @@ public class SignKit extends EssentialsSign
 	{
 		validateTrade(sign, 3, ess);
 
-		final String kitName = sign.getLine(1).toLowerCase(Locale.ENGLISH);
+		final String kitName = sign.getLine(1).toLowerCase(Locale.ENGLISH).trim();
 
 		if (kitName.isEmpty())
 		{
@@ -48,7 +48,7 @@ public class SignKit extends EssentialsSign
 	@Override
 	protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException
 	{
-		final String kitName = sign.getLine(1).toLowerCase(Locale.ENGLISH);
+		final String kitName = sign.getLine(1).toLowerCase(Locale.ENGLISH).trim();
 		final String group = sign.getLine(2);
 		if ((!group.isEmpty() && ("§2Everyone".equals(group) || player.inGroup(group)))
 			|| (group.isEmpty() && (player.isAuthorized("essentials.kit." + kitName))))

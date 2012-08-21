@@ -118,7 +118,7 @@ commands:
   gamemode:
     description: Change player gamemode.
     usage: /<command> <survival|creative|adventure> [player]
-    aliases: [gm,creative,creativemode,egamemode,ecreative,ecreativemode,egm]
+    aliases: [gm,creative,creativemode,survival,survivalmode,adventure,adventuremode,gmc,gma,gms,egamemod,eecreative,ecreativemode,esurvival,esurvivalmode,eadventure,eadventuremode,egmc,egma,egms,egm]
   getpos:
     description: Get your current coordinates or those of a player.
     usage: /<command> [player]
@@ -423,7 +423,7 @@ commands:
     usage: /<command> <pagenumber|warp> [player]
     aliases: [ewarp,warps,ewarps]
   weather:
-    description: Setting the weather.
+    description: Sets the weather.
     usage: /<command> <storm/sun> [duration]
     aliases: [sky,sun,storm,eweather,rain,erain,esky,esun,estorm]
   whois:
