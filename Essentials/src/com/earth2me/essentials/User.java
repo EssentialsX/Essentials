@@ -27,6 +27,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	private boolean hidden = false;
 	private transient Location afkPosition = null;
 	private boolean invSee = false;
+	private boolean enderSee = false;
 	private static final Logger logger = Logger.getLogger("Minecraft");
 
 	User(final Player base, final IEssentials ess)
@@ -612,6 +613,17 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	{
 		invSee = set;
 	}
+	
+	public boolean isEnderSee()
+	{
+		return enderSee;
+	}
+
+	public void setEnderSee(final boolean set)
+	{
+		enderSee = set;
+	}
+	
 	private transient long teleportInvulnerabilityTimestamp = 0;
 
 	public void enableInvulnerabilityAfterTeleport()

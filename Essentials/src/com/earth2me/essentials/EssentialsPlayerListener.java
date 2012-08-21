@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.minecraft.server.InventoryEnderChest;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
@@ -25,6 +26,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.*;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
@@ -433,12 +435,15 @@ public class EssentialsPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onInventoryClickEvent(final InventoryClickEvent event)
 	{
+		ess.getLogger().info("Detected invent click");
 		if (event.getView().getTopInventory().getType() == InventoryType.PLAYER)
 		{
+			ess.getLogger().info("This is a player/player inventory click");
 			final User user = ess.getUser(event.getWhoClicked());
 			final InventoryHolder invHolder = event.getView().getTopInventory().getHolder();
 			if (invHolder != null && invHolder instanceof HumanEntity)
 			{
+				ess.getLogger().info("Confirmed the top inventory belongs to a valid human.");
 				final User invOwner = ess.getUser((HumanEntity)invHolder);
 				if (user.isInvSee() && (!user.isAuthorized("essentials.invsee.modify")
 										|| invOwner.isAuthorized("essentials.invsee.preventmodify")
@@ -446,6 +451,14 @@ public class EssentialsPlayerListener implements Listener
 				{
 					event.setCancelled(true);
 				}
+			}
+		}
+		else if (event.getView().getTopInventory().getType() == InventoryType.ENDER_CHEST)
+		{
+			final User user = ess.getUser(event.getWhoClicked());
+			if (user.isEnderSee() && (!user.isAuthorized("essentials.enderchest.modify")))
+			{
+				event.setCancelled(true);
 			}
 		}
 	}
@@ -457,6 +470,11 @@ public class EssentialsPlayerListener implements Listener
 		{
 			final User user = ess.getUser(event.getPlayer());
 			user.setInvSee(false);
+		}
+		else if (event.getView().getTopInventory().getType() == InventoryType.ENDER_CHEST)
+		{
+			final User user = ess.getUser(event.getPlayer());
+			user.setEnderSee(false);
 		}
 	}
 }
