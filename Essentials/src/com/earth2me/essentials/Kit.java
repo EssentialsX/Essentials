@@ -39,6 +39,10 @@ public class Kit
 
 	public static void checkTime(final User user, final String kitName, final Map<String, Object> els) throws NoChargeException
 	{
+		if (user.isAuthorized("essentials.kit.exemptdelay")) {
+			return;
+		}
+		
 		final Calendar time = new GregorianCalendar();
 
 		// Take the current time, and remove the delay from it.
