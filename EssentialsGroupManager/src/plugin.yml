@@ -149,7 +149,7 @@ commands:
     usage: /<command>
     permissions: groupmanager.mantogglevalidate
   mantogglesave:
-    description: Toggle on/ff the autosave.
+    description: Toggle on/off the autosave.
     usage: /<command>
     permissions: groupmanager.mantogglesave
   manworld:
