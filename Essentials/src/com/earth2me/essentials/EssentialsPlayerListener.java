@@ -435,15 +435,12 @@ public class EssentialsPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onInventoryClickEvent(final InventoryClickEvent event)
 	{
-		ess.getLogger().info("Detected invent click");
 		if (event.getView().getTopInventory().getType() == InventoryType.PLAYER)
 		{
-			ess.getLogger().info("This is a player/player inventory click");
 			final User user = ess.getUser(event.getWhoClicked());
 			final InventoryHolder invHolder = event.getView().getTopInventory().getHolder();
 			if (invHolder != null && invHolder instanceof HumanEntity)
 			{
-				ess.getLogger().info("Confirmed the top inventory belongs to a valid human.");
 				final User invOwner = ess.getUser((HumanEntity)invHolder);
 				if (user.isInvSee() && (!user.isAuthorized("essentials.invsee.modify")
 										|| invOwner.isAuthorized("essentials.invsee.preventmodify")
