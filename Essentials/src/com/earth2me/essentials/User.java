@@ -176,7 +176,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 	public boolean canAfford(final double cost, final boolean permcheck)
 	{
-		if (cost <= 0) { return true; }
+		if (cost <= 0.0) { return true; }
 		final double mon = getMoney();
 		if (!permcheck || isAuthorized("essentials.eco.loan"))
 		{
