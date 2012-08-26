@@ -9,7 +9,7 @@ authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xe
 commands:
   afk:
     description: Marks you as away-from-keyboard.
-    usage: /<command>
+    usage: /<command> [player]
     aliases: [eafk]
   antioch:
     description: 'A little surprise for operators.'
