@@ -23,7 +23,7 @@ public class Commandspeed extends EssentialsCommand
 		}
 		final boolean isFly = isFlyMode(args[0]);
 		final float speed = getMoveSpeed(args[1]);
-		speedOtherPlayers(server, sender, isFly, speed, args[2]);
+		speedOtherPlayers(server, sender, isFly, true, speed, args[2]);
 	}
 
 	@Override
@@ -36,48 +36,47 @@ public class Commandspeed extends EssentialsCommand
 
 		boolean isFly;
 		float speed;
+		boolean isBypass = user.isAuthorized("essentials.speed.bypass");
 		if (args.length == 1)
 		{
 			isFly = user.isFlying();
 			speed = getMoveSpeed(args[0]);
 		}
-		else if (args.length == 2)
-		{
-			isFly = isFlyMode(args[0]);
-			speed = getMoveSpeed(args[1]);
-		}
 		else
 		{
 			isFly = isFlyMode(args[0]);
 			speed = getMoveSpeed(args[1]);
-			speedOtherPlayers(server, user, isFly, speed, args[2]);
-			return;
+			if (args.length > 2 && user.isAuthorized("essentials.speed.others"))
+			{
+				speedOtherPlayers(server, user, isFly, isBypass, speed, args[2]);
+				return;
+			}
 		}
 
 		if (isFly)
 		{
-			user.setFlySpeed(getRealMoveSpeed(speed, isFly));
+			user.setFlySpeed(getRealMoveSpeed(speed, isFly, isBypass));
 			user.sendMessage(_("moveSpeed", _("flying"), speed, user.getDisplayName()));
 		}
 		else
 		{
-			user.setWalkSpeed(getRealMoveSpeed(speed, isFly));
+			user.setWalkSpeed(getRealMoveSpeed(speed, isFly, isBypass));
 			user.sendMessage(_("moveSpeed", _("walking"), speed, user.getDisplayName()));
 		}
 	}
 
-	private void speedOtherPlayers(final Server server, final CommandSender sender, final boolean isFly, final float speed, final String target)
+	private void speedOtherPlayers(final Server server, final CommandSender sender, final boolean isFly, final boolean isBypass, final float speed, final String target)
 	{
 		for (Player matchPlayer : server.matchPlayer(target))
 		{
 			if (isFly)
 			{
-				matchPlayer.setFlySpeed(getRealMoveSpeed(speed, isFly));
+				matchPlayer.setFlySpeed(getRealMoveSpeed(speed, isFly, isBypass));
 				sender.sendMessage(_("moveSpeed", _("flying"), speed, matchPlayer.getDisplayName()));
 			}
 			else
 			{
-				matchPlayer.setWalkSpeed(getRealMoveSpeed(speed, isFly));
+				matchPlayer.setWalkSpeed(getRealMoveSpeed(speed, isFly, isBypass));
 				sender.sendMessage(_("moveSpeed", _("walking"), speed, matchPlayer.getDisplayName()));
 			}
 		}
@@ -124,10 +123,14 @@ public class Commandspeed extends EssentialsCommand
 		return userSpeed;
 	}
 
-	private float getRealMoveSpeed(final float userSpeed, final boolean isFly)
+	private float getRealMoveSpeed(final float userSpeed, final boolean isFly, final boolean isBypass)
 	{
-		float maxSpeed = (float)(isFly ? ess.getSettings().getMaxFlySpeed() : ess.getSettings().getMaxWalkSpeed());
-		float defaultSpeed = isFly ? 0.1f : 0.2f;
+		final float defaultSpeed = isFly ? 0.1f : 0.2f;
+		float maxSpeed = 1f;
+		if (!isBypass)
+		{
+			maxSpeed = (float)(isFly ? ess.getSettings().getMaxFlySpeed() : ess.getSettings().getMaxWalkSpeed());
+		}
 
 		if (userSpeed < 1f)
 		{

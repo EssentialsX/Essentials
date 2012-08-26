@@ -326,6 +326,10 @@ commands:
     description: Spawns a mob.
     usage: /<command> <mob>[:data][,<mount>[:data]] [amount] [player]
     aliases: [espawnmob,mob,emob]
+  speed:
+    description: Change your speed limits
+    usage: /<command> [fly|walk] [speed] [player]
+    aliases: [flyspeed,walkspeed,fspeed,wspeed,eflyspeed,ewalkspeed,efspeed,ewspeed,espeed]
   sudo:
     description: Make another user perform a command.
     usage: /<command> <player> <command [args]>
