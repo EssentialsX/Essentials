@@ -159,7 +159,7 @@ public interface ISettings extends IConf
 	boolean getRepairEnchanted();
 
 	boolean isWorldTeleportPermissions();
-	
+
 	boolean isWorldHomePermissions();
 
 	boolean registerBackInListener();
@@ -177,8 +177,12 @@ public interface ISettings extends IConf
 	long getTeleportInvulnerability();
 
 	boolean isTeleportInvulnerability();
-	
+
 	long getLoginAttackDelay();
-	
+
 	int getSignUsePerSecond();
+
+	double getMaxFlySpeed();
+
+	double getMaxWalkSpeed();
 }

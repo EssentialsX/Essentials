@@ -233,7 +233,7 @@ enabledSigns:
 # Lower numbers will reduce the possibility of lag, but may annoy players.
 sign-use-per-second: 4
 
-# Backup runs a command while saving is disabled
+# Backup runs a batch/bash command while saving is disabled
 backup:
   # Interval in minutes
   interval: 30
@@ -320,6 +320,12 @@ register-back-in-listener: false
 
 #Delay to wait before people can cause attack damage after logging in 
 login-attack-delay: 5
+
+#Set the max fly speed, values range from 0.1 to 1.0
+max-fly-speed: 1.0
+
+#Set the max walk speed, values range from 0.1 to 1.0
+max-walk-speed: 0.8
 
 ############################################################
 # +------------------------------------------------------+ #

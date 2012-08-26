@@ -912,4 +912,18 @@ public class Settings implements ISettings
 	{
 		return signUsePerSecond;
 	}
+
+	@Override
+	public double getMaxFlySpeed()
+	{
+		double maxSpeed = config.getDouble("max-fly-speed", 1.0);
+		return maxSpeed > 1.0 ? 1.0 : Math.abs(maxSpeed);
+	}
+
+	@Override
+	public double getMaxWalkSpeed()
+	{
+		double maxSpeed = config.getDouble("max-walk-speed", 0.8);
+		return maxSpeed > 1.0 ? 1.0 : Math.abs(maxSpeed);
+	}
 }
