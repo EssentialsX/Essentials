@@ -196,7 +196,7 @@ public class EssentialsAntiBuildListener implements Listener
 			prot.getEssentialsConnect().alert(user, item.getType().toString(), _("alertUsed"));
 		}
 
-		if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild() && !user.isAuthorized("essentials.interact") && !user.isAuthorized("essentials.build"))
+		if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild() && !user.isAuthorized("essentials.build"))
 		{
 			if (!metaPermCheck(user, "interact", event.getClickedBlock()))
 			{
