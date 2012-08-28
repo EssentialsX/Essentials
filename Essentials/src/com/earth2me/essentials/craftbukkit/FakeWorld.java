@@ -693,4 +693,10 @@ public class FakeWorld implements World
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
+	@Override
+	public void playSound(Location arg0, Sound arg1, float arg2, float arg3)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }
