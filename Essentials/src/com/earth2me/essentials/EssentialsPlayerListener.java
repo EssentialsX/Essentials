@@ -89,7 +89,12 @@ public class EssentialsPlayerListener implements Listener
 		if (user.isAfk() && ess.getSettings().getFreezeAfkPlayers())
 		{
 			final Location from = event.getFrom();
-			final Location to = event.getTo().clone();
+			final Location origTo = event.getTo();
+			final Location to = origTo.clone();
+			if (ess.getSettings().cancelAfkOnMove() && origTo.getY() >= from.getBlockY() + 1) {
+				user.updateActivity(true);
+				return;
+			}
 			to.setX(from.getX());
 			to.setY(from.getY());
 			to.setZ(from.getZ());
