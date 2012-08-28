@@ -425,7 +425,7 @@ commands:
   vanish:
     description: Hide yourself from other players.
     usage: /<command> [on|off]
-    aliases: [evanish]
+    aliases: [v,evanish,ev]
   warp:
     description: List all warps or warp to the specified location.
     usage: /<command> <pagenumber|warp> [player]
