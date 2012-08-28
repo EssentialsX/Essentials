@@ -122,7 +122,9 @@ public class EssentialsPlayerListener implements Listener
 		{
 			user.toggleVanished();
 		}
-		user.setLastLocation();
+		if (!user.isJailed()) {
+			user.setLastLocation();
+		}
 		user.updateActivity(false);
 		user.dispose();
 	}

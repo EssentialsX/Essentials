@@ -11,6 +11,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 
 public class User extends UserData implements Comparable<User>, IReplyTo, IUser
@@ -176,7 +177,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 	public boolean canAfford(final double cost, final boolean permcheck)
 	{
-		if (cost <= 0.0) { return true; }
+		if (cost <= 0.0)
+		{
+			return true;
+		}
 		final double mon = getMoney();
 		if (!permcheck || isAuthorized("essentials.eco.loan"))
 		{
@@ -486,6 +490,13 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			}
 			catch (Exception ex)
 			{
+				try
+				{
+					getTeleport().respawn(null, TeleportCause.PLUGIN);
+				}
+				catch (Exception ex1)
+				{
+				}
 			}
 			return true;
 		}
@@ -614,7 +625,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	{
 		invSee = set;
 	}
-	
+
 	public boolean isEnderSee()
 	{
 		return enderSee;
@@ -624,7 +635,6 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	{
 		enderSee = set;
 	}
-	
 	private transient long teleportInvulnerabilityTimestamp = 0;
 
 	public void enableInvulnerabilityAfterTeleport()
