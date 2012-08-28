@@ -9,7 +9,7 @@ authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xe
 commands:
   afk:
     description: Marks you as away-from-keyboard.
-    usage: /<command>
+    usage: /<command> [player]
     aliases: [eafk]
   antioch:
     description: 'A little surprise for operators.'
@@ -87,6 +87,10 @@ commands:
     description: Enchants the item the user is holding.
     usage: /<command> <enchantmentname> [level]
     aliases: [enchantment,eenchant,eenchantment]
+  enderchest:
+    description: Lets you see inside an enderchest.
+    usage: /<command> [player]
+    aliases: [endersee,echest,eenderchest,eendersee,eechest]
   essentials:
     description: Reloads essentials.
     usage: /<command>
@@ -322,6 +326,10 @@ commands:
     description: Spawns a mob.
     usage: /<command> <mob>[:data][,<mount>[:data]] [amount] [player]
     aliases: [espawnmob,mob,emob]
+  speed:
+    description: Change your speed limits
+    usage: /<command> <speed> [player]
+    aliases: [flyspeed,walkspeed,fspeed,wspeed,eflyspeed,ewalkspeed,efspeed,ewspeed,espeed]
   sudo:
     description: Make another user perform a command.
     usage: /<command> <player> <command [args]>
@@ -417,7 +425,7 @@ commands:
   vanish:
     description: Hide yourself from other players.
     usage: /<command> [on|off]
-    aliases: [evanish]
+    aliases: [v,evanish,ev]
   warp:
     description: List all warps or warp to the specified location.
     usage: /<command> <pagenumber|warp> [player]

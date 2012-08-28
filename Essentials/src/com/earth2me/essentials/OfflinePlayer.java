@@ -1068,5 +1068,35 @@ public class OfflinePlayer implements Player
 	public boolean isValid()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
-	}	
+	}
+
+	@Override
+	public void setFlySpeed(float value) throws IllegalArgumentException
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setWalkSpeed(float value) throws IllegalArgumentException
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public float getFlySpeed()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public float getWalkSpeed()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public Inventory getEnderChest()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }

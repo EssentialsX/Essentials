@@ -11,6 +11,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 
 public class User extends UserData implements Comparable<User>, IReplyTo, IUser
@@ -27,6 +28,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	private boolean hidden = false;
 	private transient Location afkPosition = null;
 	private boolean invSee = false;
+	private boolean enderSee = false;
 	private static final Logger logger = Logger.getLogger("Minecraft");
 
 	User(final Player base, final IEssentials ess)
@@ -175,6 +177,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 	public boolean canAfford(final double cost, final boolean permcheck)
 	{
+		if (cost <= 0.0)
+		{
+			return true;
+		}
 		final double mon = getMoney();
 		if (!permcheck || isAuthorized("essentials.eco.loan"))
 		{
@@ -484,6 +490,13 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			}
 			catch (Exception ex)
 			{
+				try
+				{
+					getTeleport().respawn(null, TeleportCause.PLUGIN);
+				}
+				catch (Exception ex1)
+				{
+				}
 			}
 			return true;
 		}
@@ -611,6 +624,16 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public void setInvSee(final boolean set)
 	{
 		invSee = set;
+	}
+
+	public boolean isEnderSee()
+	{
+		return enderSee;
+	}
+
+	public void setEnderSee(final boolean set)
+	{
+		enderSee = set;
 	}
 	private transient long teleportInvulnerabilityTimestamp = 0;
 

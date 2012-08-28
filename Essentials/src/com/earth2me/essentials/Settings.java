@@ -431,6 +431,7 @@ public class Settings implements ISettings
 		disablePrefix = _disablePrefix();
 		disableSuffix = _disableSuffix();
 		chatRadius = _getChatRadius();
+		warnOnBuildDisallow = _warnOnBuildDisallow();
 	}
 	private List<Integer> itemSpawnBl = new ArrayList<Integer>();
 
@@ -511,12 +512,21 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("spawn-if-no-home", false);
 	}
+	
+	private boolean warnOnBuildDisallow;
 
-	@Override
-	public boolean warnOnBuildDisallow()
+	private boolean _warnOnBuildDisallow()
 	{
 		return config.getBoolean("protect.disable.warn-on-build-disallow", false);
 	}
+	
+	@Override
+	public boolean warnOnBuildDisallow()
+	{
+		return warnOnBuildDisallow;
+	}
+	
+	
 	private boolean debug = false;
 	private boolean configDebug = false;
 
@@ -911,5 +921,19 @@ public class Settings implements ISettings
 	public int getSignUsePerSecond()
 	{
 		return signUsePerSecond;
+	}
+
+	@Override
+	public double getMaxFlySpeed()
+	{
+		double maxSpeed = config.getDouble("max-fly-speed", 1.0);
+		return maxSpeed > 1.0 ? 1.0 : Math.abs(maxSpeed);
+	}
+
+	@Override
+	public double getMaxWalkSpeed()
+	{
+		double maxSpeed = config.getDouble("max-walk-speed", 0.8);
+		return maxSpeed > 1.0 ? 1.0 : Math.abs(maxSpeed);
 	}
 }

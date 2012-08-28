@@ -18,6 +18,7 @@ public class MetricsStarter implements Runnable
 	private enum Modules
 	{
 		Essentials,
+		EssentialsAntiBuild,
 		EssentialsAntiCheat,
 		EssentialsChat,
 		EssentialsSpawn,

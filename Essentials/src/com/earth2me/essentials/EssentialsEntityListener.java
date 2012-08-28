@@ -68,17 +68,21 @@ public class EssentialsEntityListener implements Listener
 				}
 			}
 		}
-		else if (eDefend instanceof Ageable && eAttack instanceof Player)
+		else if (eAttack instanceof Player)
 		{
-			final Player player = (Player)eAttack;
-			final ItemStack hand = player.getItemInHand();
-			if (hand != null && hand.getType() == Material.MILK_BUCKET)
+			final User player = ess.getUser(eAttack);
+			player.updateActivity(true);
+			if (eDefend instanceof Ageable)
 			{
-				((Ageable)eDefend).setBaby();
-				hand.setType(Material.BUCKET);
-				player.setItemInHand(hand);
-				player.updateInventory();
-				event.setCancelled(true);
+				final ItemStack hand = player.getItemInHand();
+				if (hand != null && hand.getType() == Material.MILK_BUCKET)
+				{
+					((Ageable)eDefend).setBaby();
+					hand.setType(Material.BUCKET);
+					player.setItemInHand(hand);
+					player.updateInventory();
+					event.setCancelled(true);
+				}
 			}
 		}
 	}
