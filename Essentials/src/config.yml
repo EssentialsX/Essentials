@@ -580,7 +580,7 @@ protect:
 
     # Should people with build: false in permissions be allowed to use items
     # Set true to disable using for those people
-    # Setting to false means EssentialsAntiBuild will never prevent you from building
+    # Setting to false means EssentialsAntiBuild will never prevent you from using
     use: true
 
     # Should we tell people they are not allowed to build
