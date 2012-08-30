@@ -342,6 +342,15 @@ public class EssentialsPlayerListener implements Listener
 			user.updateActivity(true);
 		}
 	}
+	
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onPlayerChangedWorldHack(final PlayerChangedWorldEvent event)
+	{
+		final Player user = event.getPlayer();
+		user.setAllowFlight(false);
+		user.setFlySpeed(0.1f);
+		user.setWalkSpeed(0.2f);
+	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerChangedWorld(final PlayerChangedWorldEvent event)
