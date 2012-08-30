@@ -72,7 +72,7 @@ item-spawn-blacklist:
 #  - essentials.give.item-[itemid]
 permission-based-item-spawn: false
 
-# Mob limit on spawnmob
+# Mob limit on the /spawnmob command per execution
 spawnmob-limit: 10
 
 # Shall we notify users when using /lightning
@@ -204,6 +204,7 @@ kits:
 # See http://ess.khhq.net/wiki/Sign_Tutorial for instructions on how to use these.
 # To enable signs, remove # symbol. To disable all signs, comment/remove each sign.
 # Essentials Colored sign support will be enabled when any sign types are enabled.
+# Color is not an actual sign, its for enabling using color codes on signs, when the correct permissions are given.
 # We recommend not enabling chest protection signs if you don't intend to use them, (or are using LWC/Lockette).
 
 enabledSigns:
@@ -228,7 +229,7 @@ enabledSigns:
   #- protection
   
   
-# How many times per second can Essentials signs be interacted with.
+# How many times per second can Essentials signs be interacted with per player.
 # Values should be between 1-20, 20 being virtually no lag protection.s
 # Lower numbers will reduce the possibility of lag, but may annoy players.
 sign-use-per-second: 4
@@ -574,16 +575,18 @@ protect:
   
     # Should people with build: false in permissions be allowed to build
     # Set true to disable building for those people
+    # Setting to false means EssentialsAntiBuild will never prevent you from building
     build: true
 
     # Should people with build: false in permissions be allowed to use items
     # Set true to disable using for those people
+    # Setting to false means EssentialsAntiBuild will never prevent you from building
     use: true
 
     # Should we tell people they are not allowed to build
     warn-on-build-disallow: true
-    
-    # For which block types would you like to be alerted?
+   
+  # For which block types would you like to be alerted?
   # You can find a list of IDs in plugins/Essentials/items.csv after loading Essentials for the first time.
   # 10 = lava :: 11 = still lava :: 46 = TNT :: 327 = lava bucket
   alert:
