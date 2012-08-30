@@ -1,6 +1,7 @@
 package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.IEssentials;
+import java.util.logging.Level;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -28,9 +29,24 @@ public class SignPlayerListener implements Listener
 			return;
 		}
 		final Block block;
-		if (event.isCancelled() && event.getAction() == Action.RIGHT_CLICK_AIR) {
-			block = event.getPlayer().getTargetBlock(null, 5);
-		} else {
+		if (event.isCancelled() && event.getAction() == Action.RIGHT_CLICK_AIR)
+		{
+			Block targetBlock = null;
+			try
+			{
+				targetBlock = event.getPlayer().getTargetBlock(null, 5);
+			}
+			catch (IllegalStateException ex)
+			{
+				if (ess.getSettings().isDebug())
+				{
+					ess.getLogger().log(Level.WARNING, ex.getMessage(), ex);
+				}
+			}
+			block = targetBlock;
+		}
+		else
+		{
 			block = event.getClickedBlock();
 		}
 		if (block == null)

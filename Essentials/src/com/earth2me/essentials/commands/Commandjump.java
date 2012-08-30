@@ -19,6 +19,21 @@ public class Commandjump extends EssentialsCommand
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
+		if (args.length > 0 && args[0].contains("lock") && user.isAuthorized("essentials.jump.lock"))
+		{
+			if (user.isFlyClickJump())
+			{
+				user.setRightClickJump(false);
+				user.sendMessage("Flying wizard mode disabled");
+			}
+			else
+			{
+				user.setRightClickJump(true);
+				user.sendMessage("Enabling flying wizard mode");
+			}
+			return;
+		}
+
 		Location loc;
 		final Location cloc = user.getLocation();
 

@@ -288,6 +288,7 @@ public class Util
 	public final static int RADIUS = 3;
 	public final static Vector3D[] VOLUME;
 
+
 	public static class Vector3D
 	{
 		public Vector3D(int x, int y, int z)
@@ -398,6 +399,15 @@ public class Util
 
 	public static boolean isBlockUnsafe(final World world, final int x, final int y, final int z)
 	{
+		if (isBlockDamaging(world, x, y, z))
+		{
+			return true;
+		}
+		return isBlockAboveAir(world, x, y, z);
+	}
+
+	public static boolean isBlockDamaging(final World world, final int x, final int y, final int z)
+	{
 		final Block below = world.getBlockAt(x, y - 1, z);
 		if (below.getType() == Material.LAVA || below.getType() == Material.STATIONARY_LAVA)
 		{
@@ -419,7 +429,7 @@ public class Util
 		{
 			return true;
 		}
-		return isBlockAboveAir(world, x, y, z);
+		return false;
 	}
 
 	public static ItemStack convertBlockToItem(final Block block)

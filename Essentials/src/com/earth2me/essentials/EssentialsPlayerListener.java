@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.minecraft.server.InventoryEnderChest;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
@@ -26,7 +25,6 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.*;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
@@ -91,7 +89,8 @@ public class EssentialsPlayerListener implements Listener
 			final Location from = event.getFrom();
 			final Location origTo = event.getTo();
 			final Location to = origTo.clone();
-			if (ess.getSettings().cancelAfkOnMove() && origTo.getY() >= from.getBlockY() + 1) {
+			if (ess.getSettings().cancelAfkOnMove() && origTo.getY() >= from.getBlockY() + 1)
+			{
 				user.updateActivity(true);
 				return;
 			}
@@ -127,7 +126,8 @@ public class EssentialsPlayerListener implements Listener
 		{
 			user.toggleVanished();
 		}
-		if (!user.isJailed()) {
+		if (!user.isJailed())
+		{
 			user.setLastLocation();
 		}
 		user.updateActivity(false);
@@ -342,7 +342,7 @@ public class EssentialsPlayerListener implements Listener
 			user.updateActivity(true);
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerChangedWorldHack(final PlayerChangedWorldEvent event)
 	{
@@ -384,6 +384,15 @@ public class EssentialsPlayerListener implements Listener
 			}
 			break;
 		case LEFT_CLICK_AIR:
+			if (event.getPlayer().isFlying())			
+			{
+				final User user = ess.getUser(event.getPlayer());
+				if (user.isFlyClickJump())
+				{
+					useFlyClickJump(user);
+					return;
+				}
+			}
 		case LEFT_CLICK_BLOCK:
 			if (event.getItem() != null && event.getItem().getTypeId() != AIR)
 			{
@@ -396,6 +405,37 @@ public class EssentialsPlayerListener implements Listener
 			break;
 		default:
 			break;
+		}
+	}
+
+	private void useFlyClickJump(final User user)
+	{
+		try
+		{
+			final Location otarget = Util.getTarget(user);
+
+			ess.scheduleSyncDelayedTask(
+					new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							Location loc = user.getLocation();
+							loc.setX(otarget.getX());
+							loc.setZ(otarget.getZ());
+							while (Util.isBlockDamaging(loc.getWorld(), loc.getBlockX(), loc.getBlockY() -1, loc.getBlockZ())) {
+								loc.setY(loc.getY() + 1d);
+							}
+							user.getBase().teleport(loc, TeleportCause.PLUGIN);
+						}
+					});
+		}
+		catch (Exception ex)
+		{
+			if (ess.getSettings().isDebug())
+			{
+				LOGGER.log(Level.WARNING, ex.getMessage(), ex);
+			}
 		}
 	}
 
