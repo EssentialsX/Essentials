@@ -80,14 +80,14 @@ warn-on-smite: true
 
 # motd and rules are now configured in the files motd.txt and rules.txt
 
-# When a command conflicts with another plugin, by default, Essentials will try to force the OTHER plugin to take
-# priority.  If a command is in this list, Essentials will try to give ITSELF priority.  This does not always work:
-# usually whichever plugin was updated most recently wins out.  However, the full name of the command will always work.
-# For example, if WorldGuard and Essentials are both enabled, and WorldGuard takes control over /god, /essentials:god
-# will still map to Essentials, whereas it might normally get forced upon WorldGuard.  Commands prefixed with an "e",
-# such as /egod, will always grant Essentials priority.
-# We should try to take priority over /god.  If this doesn't work, use
-# /essentials:god or /egod.  If god is set using WorldGuard, use /ungod to remove then use whichever you see fit.
+# When a command conflicts with another plugin, by default, Essentials will try to force the OTHER plugin to take priority.
+# Commands in in this list, will tell Essentials to 'not give up' the command to other plugins.
+# In this state, which plugin 'wins' appears to be almost random.
+# 
+# If you have two plugin with the same command and you wish to force Essentials to take over, you need an alias.
+# To force essentials to take 'god' alias 'god' to 'egod'.
+# See http://wiki.bukkit.org/Bukkit.yml#aliases for more information
+
 overridden-commands:
   - god
 
