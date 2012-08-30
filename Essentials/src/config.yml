@@ -426,11 +426,11 @@ chat:
   # For more information of chat formatting, check out the wiki: http://ess.khhq.net/wiki/Chat_Formatting  
 
   format: '<{DISPLAYNAME}> {MESSAGE}'
-  #format: '&7[{GROUP}]&f {DISPLAYNAME}&7:&f {MESSAGE}'
+  #format: '&7[{GROUP}]&r {DISPLAYNAME}&7:&r {MESSAGE}'
 
   group-formats:
-  #  Default: '{WORLDNAME} {DISPLAYNAME}&7:&f {MESSAGE}'
-  #  Admins: '{WORLDNAME} &c[{GROUP}]&f {DISPLAYNAME}&7:&c {MESSAGE}'
+  #  Default: '{WORLDNAME} {DISPLAYNAME}&7:&r {MESSAGE}'
+  #  Admins: '{WORLDNAME} &c[{GROUP}]&r {DISPLAYNAME}&7:&c {MESSAGE}'
 
   # If you are using group formats make sure to remove the '#' to allow the setting to be read.
 

@@ -295,7 +295,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 				if (opPrefix != null && opPrefix.toString().length() > 0)
 				{
 					prefix.insert(0, opPrefix.toString());
-					suffix = "§f";
+					suffix = "§r";
 				}
 			}
 			catch (Exception e)
@@ -309,13 +309,13 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			{
 				final String ptext = ess.getPermissionsHandler().getPrefix(base).replace('&', '§');
 				prefix.insert(0, ptext);
-				suffix = "§f";
+				suffix = "§r";
 			}
 			if (!ess.getSettings().disableSuffix())
 			{
 				final String stext = ess.getPermissionsHandler().getSuffix(base).replace('&', '§');
-				suffix = stext + "§f";
-				suffix = suffix.replace("§f§f", "§f");
+				suffix = stext + "§r";
+				suffix = suffix.replace("§f§f", "§f").replace("§f§r", "§r").replace("§r§r", "§r");
 			}
 		}
 		final String strPrefix = prefix.toString();
