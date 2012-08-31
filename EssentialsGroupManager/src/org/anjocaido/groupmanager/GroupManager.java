@@ -246,7 +246,7 @@ public class GroupManager extends JavaPlugin {
 		lastError = ex.getMessage();
 
 		GroupManager.logger.severe("===================================================");
-		GroupManager.logger.severe("= ERROR REPORT START =");
+		GroupManager.logger.severe("= ERROR REPORT START - " + this.getDescription().getVersion() + " =");
 		GroupManager.logger.severe("===================================================");
 		GroupManager.logger.severe("=== PLEASE COPY AND PASTE THE ERROR.LOG FROM THE ==");
 		GroupManager.logger.severe("= GROUPMANAGER FOLDER TO AN ESSENTIALS  DEVELOPER =");
@@ -258,7 +258,9 @@ public class GroupManager extends JavaPlugin {
 
 		// Append this error to the error log.
 		try {
-			String error = "=============================== GM ERROR LOG ===============================\n\n";
+			String error = "=============================== GM ERROR LOG ===============================\n";
+			error += "= ERROR REPORT START - " + this.getDescription().getVersion() + " =\n\n";
+			
 			error += Tasks.getStackTraceAsString(ex);
 			error += "\n============================================================================\n";
 

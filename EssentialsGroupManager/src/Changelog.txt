@@ -196,3 +196,4 @@ v 2.0:
 	- Fix an error with Logging set to 'OFF' triggering a cast exception.
 	- No more null errors from corrupt config.yml's.
 	- Give a better error when a subgroup is null.
+	- Include the GM version when logging errors.
