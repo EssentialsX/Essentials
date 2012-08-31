@@ -89,9 +89,10 @@ warn-on-smite: true
 # See http://wiki.bukkit.org/Bukkit.yml#aliases for more information
 
 overridden-commands:
-  - god
+#  - god
 
 # Disabled commands will be completely unavailable on the server.
+# Disabling commands here will have no effect on command conflicts.
 disabled-commands:
 # - nick
 
@@ -201,7 +202,7 @@ kits:
       - 275 1
 
 # Essentials Sign Control
-# See http://ess.khhq.net/wiki/Sign_Tutorial for instructions on how to use these.
+# See http://wiki.ess3.net/wiki/Sign_Tutorial for instructions on how to use these.
 # To enable signs, remove # symbol. To disable all signs, comment/remove each sign.
 # Essentials Colored sign support will be enabled when any sign types are enabled.
 # Color is not an actual sign, its for enabling using color codes on signs, when the correct permissions are given.
@@ -370,6 +371,7 @@ starting-balance: 0
 # These are now defined in worth.yml
 
 # Defines the cost to use the given commands PER USE
+# Some commands like /repair have subcosts, check the wiki for more information.
 command-costs:
   # /example costs $1000 PER USE
   #example: 1000
@@ -423,7 +425,7 @@ chat:
   # Chat formatting can be done in two ways, you can either define a standard format for all chat
   # Or you can give a group specific chat format, to give some extra variation.
   # If set to the default chat format which "should" be compatible with ichat.
-  # For more information of chat formatting, check out the wiki: http://ess.khhq.net/wiki/Chat_Formatting  
+  # For more information of chat formatting, check out the wiki: http://wiki.ess3.net/wiki/Chat_Formatting  
 
   format: '<{DISPLAYNAME}> {MESSAGE}'
   #format: '&7[{GROUP}]&r {DISPLAYNAME}&7:&r {MESSAGE}'
