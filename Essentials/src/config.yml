@@ -299,6 +299,7 @@ no-god-in-worlds:
 # Set to true to enable per-world permissions for teleporting between worlds with essentials commands
 # This applies to /world, /back, /tp[a|o][here|all], but not warps.
 # Give someone permission to teleport to a world with essentials.world.<worldname>
+# This does not effect the /home command, there is a seperate toggle below for this.
 world-teleport-permissions: false
 
 # The number of items given if the quantity parameter is left out in /item or /give.
