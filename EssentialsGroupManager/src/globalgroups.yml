@@ -17,7 +17,7 @@ groups:
   g:groupmanager_default:
     permissions:
     - groupmanager.notify.self
-    
+
   g:groupmanager_moderator:
     permissions:
     - groupmanager.listgroups
@@ -28,7 +28,7 @@ groups:
     - groupmanager.manudel
     - groupmanager.manwhois
     - groupmanager.notify.other
-    
+
   g:groupmanager_admin:
     permissions:
     - groupmanager.mantogglevalidate
@@ -46,7 +46,7 @@ groups:
     permissions:
     - bukkit.broadcast.user
     - -bukkit.command.plugins
-    
+
   g:bukkit_moderator:
     permissions:
     - bukkit.command.ban
@@ -104,7 +104,7 @@ groups:
     - essentials.motd
     - essentials.rules
     - essentials.spawn
-    
+
   g:essentials_builder:
     permissions:
     - essentials.afk
@@ -161,7 +161,7 @@ groups:
     - essentials.warp
     - essentials.warp.list
     - essentials.worth
-    
+
   g:essentials_moderator:
     permissions:
     - -essentials.spawner.enderdragon
@@ -225,7 +225,7 @@ groups:
     - essentials.workbench
     - essentials.world
     - essentials.world.*
-    
+
   g:essentials_admin:
     permissions:
     - -essentials.backup
@@ -293,7 +293,7 @@ groups:
     - -towny.wild.destroy.119
     - -towny.wild.destroy.120
     - towny.chat.admin
-    
+
 # Permission nodes for VanishNoPacket by mbaxter
 # http://dev.bukkit.org/server-mods/vanish/
 
