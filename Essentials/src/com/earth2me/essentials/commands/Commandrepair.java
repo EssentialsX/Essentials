@@ -41,7 +41,7 @@ public class Commandrepair extends EssentialsCommand
 			}
 
 			final String itemName = item.getType().toString().toLowerCase(Locale.ENGLISH);
-			final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), ess);
+			final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), new Trade("repair-" + item.getTypeId(), new Trade("repair-item", ess), ess), ess);
 
 			charge.isAffordableFor(user);
 
