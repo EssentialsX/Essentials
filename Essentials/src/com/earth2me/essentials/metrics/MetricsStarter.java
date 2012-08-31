@@ -7,6 +7,7 @@ import com.earth2me.essentials.register.payment.Method;
 import com.earth2me.essentials.register.payment.methods.VaultEco;
 import java.util.Locale;
 import java.util.logging.Level;
+import org.bukkit.configuration.ConfigurationSection;
 
 
 public class MetricsStarter implements Runnable
@@ -100,7 +101,9 @@ public class MetricsStarter implements Runnable
 				@Override
 				public int getValue()
 				{
-					return ess.getSettings().getKits().getKeys(false).size();
+					ConfigurationSection kits =  ess.getSettings().getKits();
+					if (kits == null) { return 0; }
+					return kits.getKeys(false).size();
 				}
 			});
 			featureGraph.addPlotter(new Plotter("Warps")
@@ -123,7 +126,7 @@ public class MetricsStarter implements Runnable
 			{
 				enabledGraph.addPlotter(new SimplePlotter("Jails"));
 			}
-			if (ess.getSettings().getKits().getKeys(false).size() > 0)
+			if (ess.getSettings().getKits() != null && ess.getSettings().getKits().getKeys(false).size() > 0)
 			{
 				enabledGraph.addPlotter(new SimplePlotter("Kits"));
 			}
