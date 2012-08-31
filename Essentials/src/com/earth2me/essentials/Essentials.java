@@ -330,7 +330,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 			if (sender instanceof Player)
 			{
 				user = getUser(sender);
-				LOGGER.log(Level.INFO, String.format("[PLAYER_COMMAND] %s: /%s %s ", ((Player)sender).getName(), commandLabel, EssentialsCommand.getFinalArg(args, 0)));
 			}
 
 			// New mail notification
