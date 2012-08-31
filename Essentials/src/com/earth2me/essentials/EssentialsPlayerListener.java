@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.commands.EssentialsCommand;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.TextInput;
@@ -469,6 +470,7 @@ public class EssentialsPlayerListener implements Listener
 							public void run()
 							{
 								user.getServer().dispatchCommand(user.getBase(), command);
+								LOGGER.log(Level.INFO, String.format("[PT] %s issued server command: /%s", user.getName(), command));
 							}
 						});
 			}

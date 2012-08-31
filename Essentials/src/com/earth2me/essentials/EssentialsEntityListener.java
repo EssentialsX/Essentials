@@ -2,6 +2,8 @@ package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.Material;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Entity;
@@ -16,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class EssentialsEntityListener implements Listener
 {
+	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private final IEssentials ess;
 
 	public EssentialsEntityListener(IEssentials ess)
@@ -59,6 +62,7 @@ public class EssentialsEntityListener implements Listener
 									public void run()
 									{
 										attacker.getServer().dispatchCommand(attacker.getBase(), command.replaceAll("\\{player\\}", defender.getName()));
+										LOGGER.log(Level.INFO, String.format("[PT] %s issued server command: /%s", attacker.getName(), command));
 									}
 								});
 

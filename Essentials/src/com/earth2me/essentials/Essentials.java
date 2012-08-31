@@ -490,12 +490,13 @@ public class Essentials extends JavaPlugin implements IEssentials
 		{
 			return (User)base;
 		}
-		
-		if (userMap == null) {
+
+		if (userMap == null)
+		{
 			LOGGER.log(Level.WARNING, "Essentials userMap not initialized");
 			return null;
 		}
-		
+
 		User user = userMap.getUser(base.getName());
 
 		if (user == null)
@@ -642,6 +643,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	{
 		return vanishedPlayers;
 	}
+
 
 	private static class EssentialsWorldListener implements Listener, Runnable
 	{
