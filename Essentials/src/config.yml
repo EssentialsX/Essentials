@@ -50,8 +50,8 @@ teleport-cooldown: 0
 # The delay, in seconds, before a user actually teleports.  If the user moves or gets attacked in this timeframe, the teleport never occurs.
 teleport-delay: 0
 
-# The delay, in seconds, a player can't be attacked by other players after he has been teleported by a command
-# This will also prevent that the player can attack other players
+# The delay, in seconds, a player can't be attacked by other players after they have been teleported by a command
+# This will also prevent the player attacking other players
 teleport-invulnerability: 2
 
 # The delay, in seconds, required between /heal attempts
@@ -230,7 +230,7 @@ enabledSigns:
   
   
 # How many times per second can Essentials signs be interacted with per player.
-# Values should be between 1-20, 20 being virtually no lag protection.s
+# Values should be between 1-20, 20 being virtually no lag protection.
 # Lower numbers will reduce the possibility of lag, but may annoy players.
 sign-use-per-second: 4
 
