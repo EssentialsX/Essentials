@@ -50,8 +50,8 @@ teleport-cooldown: 0
 # The delay, in seconds, before a user actually teleports.  If the user moves or gets attacked in this timeframe, the teleport never occurs.
 teleport-delay: 0
 
-# The delay, in seconds, a player can't be attacked by other players after he has been teleported by a command
-# This will also prevent that the player can attack other players
+# The delay, in seconds, a player can't be attacked by other players after they have been teleported by a command
+# This will also prevent the player attacking other players
 teleport-invulnerability: 2
 
 # The delay, in seconds, required between /heal attempts
@@ -230,7 +230,7 @@ enabledSigns:
   
   
 # How many times per second can Essentials signs be interacted with per player.
-# Values should be between 1-20, 20 being virtually no lag protection.s
+# Values should be between 1-20, 20 being virtually no lag protection.
 # Lower numbers will reduce the possibility of lag, but may annoy players.
 sign-use-per-second: 4
 
@@ -310,7 +310,7 @@ default-stack-size: -1
 # How many items should be in an oversized stack?
 oversized-stacksize: 64
 
-# Do you allow to repair enchanted weapons and armor?
+# Allow repair of enchanted weapons and armor.
 # If you set this to false, you can still allow it for certain players using the permission
 # essentials.repair.enchanted
 repair-enchanted: true
@@ -343,7 +343,7 @@ update-bed-at-daytime: true
 world-home-permissions: false
 
 # Allow players to have multiple homes.
-# Players need essentials.sethome.multiple before they can have more than 1 home, default to 'default' below.
+# Players need essentials.sethome.multiple before they can have more than 1 home, defaults to 'default' below.
 # Define different amounts of multiple homes for different permissions, e.g. essentials.sethome.multiple.vip
 # People with essentials.sethome.multiple.unlimited are not limited by these numbers.
 sethome-multiple:  
@@ -401,8 +401,8 @@ non-ess-in-help: true
 
 # Hide plugins which do not give a permission
 # You can override a true value here for a single plugin by adding a permission to a user/group.
-# The individual permission is: essentials.help.<plugin>, anyone with essentials.* or '*' will see all help this setting reguardless.
-# You can use negitive permissions to remove access to just a single plugins help if the following is enabled.
+# The individual permission is: essentials.help.<plugin>, anyone with essentials.* or '*' will see all help regardless.
+# You can use negative permissions to remove access to just a single plugins help if the following is enabled.
 hide-permissionless-help: true
 
 ############################################################
@@ -416,7 +416,7 @@ chat:
   # If EssentialsChat is installed, this will define how far a player's voice travels, in blocks.  Set to 0 to make all chat global.
   # Note that users with the "essentials.chat.spy" permission will hear everything, regardless of this setting.
   # Users with essentials.chat.shout can override this by prefixing text with an exclamation mark (!)
-  # Or with essentials.chat.question can override this by prefixing text with a question mark (?)
+  # Users with essentials.chat.question can override this by prefixing text with a question mark (?)
   # You can add command costs for shout/question by adding chat-shout and chat-question to the command costs section."
   radius: 0
 
