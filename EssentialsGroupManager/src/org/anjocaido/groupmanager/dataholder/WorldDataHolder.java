@@ -861,11 +861,15 @@ public class WorldDataHolder {
 					 */
 				} else if (nodeData instanceof List) {
 					for (Object o : ((List) nodeData)) {
-						Group subGrp = ph.getGroup(o.toString());
-						if (subGrp != null) {
-							thisUser.addSubGroup(subGrp);
+						if (o == null) {
+							GroupManager.logger.warning("Invalid Subgroup data for user: " + thisUser.getName() + ". Ignoring entry in file: " + usersFile.getPath());
 						} else {
-							GroupManager.logger.warning("Subgroup '" + o.toString() + "' not found for user: " + thisUser.getName() + ". Ignoring entry in file: " + usersFile.getPath());
+							Group subGrp = ph.getGroup(o.toString());
+							if (subGrp != null) {
+								thisUser.addSubGroup(subGrp);
+							} else {
+								GroupManager.logger.warning("Subgroup '" + o.toString() + "' not found for user: " + thisUser.getName() + ". Ignoring entry in file: " + usersFile.getPath());
+							}
 						}
 					}
 				} else if (nodeData instanceof String) {
