@@ -20,7 +20,7 @@ import org.bukkit.inventory.ItemStack;
 public class Trade
 {
 	private final transient String command;
-	private final transient String fallbackCommand;
+	private final transient Trade fallbackTrade;
 	private final transient Double money;
 	private final transient ItemStack itemStack;
 	private final transient Integer exp;
@@ -31,7 +31,7 @@ public class Trade
 		this(command, null, null, null, null, ess);
 	}
 
-	public Trade(final String command, final String fallback, final IEssentials ess)
+	public Trade(final String command, final Trade fallback, final IEssentials ess)
 	{
 		this(command, fallback, null, null, null, ess);
 	}
@@ -51,10 +51,10 @@ public class Trade
 		this(null, null, null, null, exp, ess);
 	}
 
-	private Trade(final String command, final String fallback, final Double money, final ItemStack item, final Integer exp, final IEssentials ess)
+	private Trade(final String command, final Trade fallback, final Double money, final ItemStack item, final Integer exp, final IEssentials ess)
 	{
 		this.command = command;
-		this.fallbackCommand = fallback;
+		this.fallbackTrade = fallback;
 		this.money = money;
 		this.itemStack = item;
 		this.exp = exp;
@@ -150,9 +150,14 @@ public class Trade
 
 	public void charge(final IUser user) throws ChargeException
 	{
+		if (ess.getSettings().isDebug())
+		{
+			ess.getLogger().log(Level.INFO, "charging user " + user.getName());
+		}
+
 		if (getMoney() != null)
 		{
-			if (!user.canAfford(getMoney()) && getMoney() > 0)
+			if (!user.canAfford(getMoney()) && getMoney() > 0.0d)
 			{
 				throw new ChargeException(_("notEnoughMoney"));
 			}
@@ -170,7 +175,7 @@ public class Trade
 		if (command != null)
 		{
 			final double cost = getCommandCost(user);
-			if (!user.canAfford(cost) && cost > 0)
+			if (!user.canAfford(cost) && cost > 0.0d)
 			{
 				throw new ChargeException(_("notEnoughMoney"));
 			}
@@ -204,25 +209,24 @@ public class Trade
 
 	public Double getCommandCost(final IUser user)
 	{
-		double cost = 0d;
-		if (command != null && !command.isEmpty()
-			&& !user.isAuthorized("essentials.nocommandcost.all")
-			&& !user.isAuthorized("essentials.nocommandcost." + command))
+		double cost = 0.0d;
+		if (command != null && !command.isEmpty())
 		{
 			cost = ess.getSettings().getCommandCost(command.charAt(0) == '/' ? command.substring(1) : command);
-			if (cost == 0.0 && fallbackCommand != null && !fallbackCommand.isEmpty())
+			if (cost == 0.0d && fallbackTrade != null)
 			{
-				if (ess.getSettings().isDebug())
-				{
-					ess.getLogger().log(Level.INFO, "checking fallback command cost (" + fallbackCommand + ") cost for " + user.getName());
-				}
-				cost = ess.getSettings().getCommandCost(fallbackCommand.charAt(0) == '/' ? fallbackCommand.substring(1) : fallbackCommand);
+				cost = fallbackTrade.getCommandCost(user);
 			}
 
 			if (ess.getSettings().isDebug())
 			{
 				ess.getLogger().log(Level.INFO, "calculated command (" + command + ") cost for " + user.getName() + " as " + cost);
 			}
+		}
+		if (cost != 0.0d && (user.isAuthorized("essentials.nocommandcost.all")
+							 || user.isAuthorized("essentials.nocommandcost." + command)))
+		{
+			return 0.0d;
 		}
 		return cost;
 	}

@@ -119,7 +119,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 	public void giveMoney(final double value, final CommandSender initiator)
 	{
-		if (value == 0)
+		if (value == 0.0d)
 		{
 			return;
 		}
@@ -133,7 +133,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 	public void payUser(final User reciever, final double value) throws Exception
 	{
-		if (value == 0)
+		if (value == 0.0d)
 		{
 			return;
 		}
@@ -158,7 +158,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 	public void takeMoney(final double value, final CommandSender initiator)
 	{
-		if (value == 0)
+		if (value == 0.0d)
 		{
 			return;
 		}
@@ -178,7 +178,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 	public boolean canAfford(final double cost, final boolean permcheck)
 	{
-		if (cost <= 0.0)
+		if (cost <= 0.0d)
 		{
 			return true;
 		}
@@ -727,5 +727,5 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public void setRightClickJump(boolean rightClickJump)
 	{
 		this.rightClickJump = rightClickJump;
-	}	
+	}
 }

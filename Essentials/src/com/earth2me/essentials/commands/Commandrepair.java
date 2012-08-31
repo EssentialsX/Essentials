@@ -100,12 +100,12 @@ public class Commandrepair extends EssentialsCommand
 	{
 		for (ItemStack item : items)
 		{
-			if (item == null)
+			if (item == null || item.getType().isBlock() || item.getDurability() == 0)
 			{
 				continue;
 			}
 			final String itemName = item.getType().toString().toLowerCase(Locale.ENGLISH);
-			final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), "repair-item", ess);
+			final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), new Trade("repair-" + item.getTypeId(), new Trade("repair-item", ess), ess), ess);
 			try
 			{
 				charge.isAffordableFor(user);

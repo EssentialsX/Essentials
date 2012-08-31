@@ -191,6 +191,7 @@ public class Settings implements ISettings
 		}
 		return config.getBoolean("override-" + name.toLowerCase(Locale.ENGLISH), false);
 	}
+	private ConfigurationSection commandCosts;
 
 	@Override
 	public double getCommandCost(IEssentialsCommand cmd)
@@ -198,15 +199,37 @@ public class Settings implements ISettings
 		return getCommandCost(cmd.getName());
 	}
 
-	@Override
-	public double getCommandCost(String label)
+	public ConfigurationSection _getCommandCosts()
 	{
-		double cost = config.getDouble("command-costs." + label, 0.0);
-		if (cost == 0.0)
+		if (config.isConfigurationSection("command-costs"))
 		{
-			cost = config.getDouble("cost-" + label, 0.0);
+			final ConfigurationSection section = config.getConfigurationSection("command-costs");
+			final ConfigurationSection newSection = new MemoryConfiguration();
+			for (String command : section.getKeys(false))
+			{
+				if (section.isDouble(command))
+				{
+					newSection.set(command.toLowerCase(Locale.ENGLISH), section.getDouble(command));
+				}
+				else if (section.isInt(command))
+				{
+					newSection.set(command.toLowerCase(Locale.ENGLISH), (double)section.getInt(command));
+				}
+			}
+			return newSection;
 		}
-		return cost;
+		return null;
+	}
+
+	@Override
+	public double getCommandCost(String name)
+	{
+		name = name.replace('.', '_').replace('/', '_');
+		if (commandCosts != null)
+		{
+			return commandCosts.getDouble(name, 0.0);
+		}
+		return 0.0;
 	}
 	private String nicknamePrefix = "~";
 
@@ -262,7 +285,7 @@ public class Settings implements ISettings
 	public Map<String, Object> getKit(String name)
 	{
 		name = name.replace('.', '_').replace('/', '_');
-		if (config.isConfigurationSection("kits"))
+		if (getKits() != null)
 		{
 			final ConfigurationSection kits = getKits();
 			if (kits.isConfigurationSection(name))
@@ -431,6 +454,7 @@ public class Settings implements ISettings
 		disablePrefix = _disablePrefix();
 		disableSuffix = _disableSuffix();
 		chatRadius = _getChatRadius();
+		commandCosts = _getCommandCosts();
 		warnOnBuildDisallow = _warnOnBuildDisallow();
 	}
 	private List<Integer> itemSpawnBl = new ArrayList<Integer>();
@@ -512,21 +536,18 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("spawn-if-no-home", false);
 	}
-	
 	private boolean warnOnBuildDisallow;
 
 	private boolean _warnOnBuildDisallow()
 	{
 		return config.getBoolean("protect.disable.warn-on-build-disallow", false);
 	}
-	
+
 	@Override
 	public boolean warnOnBuildDisallow()
 	{
 		return warnOnBuildDisallow;
 	}
-	
-	
 	private boolean debug = false;
 	private boolean configDebug = false;
 
