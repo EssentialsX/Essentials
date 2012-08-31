@@ -6,10 +6,13 @@ import com.earth2me.essentials.User;
 import java.util.logging.Level;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
+import org.bukkit.event.painting.PaintingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -34,6 +37,12 @@ public class EssentialsAntiBuildListener implements Listener
 		return metaPermCheck(user, action, block.getTypeId(), block.getData());
 	}
 
+	private boolean metaPermCheck(User user, String action, int blockId)
+	{
+		final String blockPerm = "essentials.build." + action + "." + blockId;
+		return user.isAuthorized(blockPerm);
+	}
+
 	private boolean metaPermCheck(User user, String action, int blockId, byte data)
 	{
 		final String blockPerm = "essentials.build." + action + "." + blockId;
@@ -54,14 +63,9 @@ public class EssentialsAntiBuildListener implements Listener
 		return user.isAuthorized(blockPerm);
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockPlace(final BlockPlaceEvent event)
 	{
-		if (event.isCancelled())
-		{
-			return;
-		}
-
 		final User user = ess.getUser(event.getPlayer());
 		final Block block = event.getBlockPlaced();
 		final int typeId = block.getTypeId();
@@ -95,13 +99,9 @@ public class EssentialsAntiBuildListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockBreak(final BlockBreakEvent event)
 	{
-		if (event.isCancelled())
-		{
-			return;
-		}
 		final User user = ess.getUser(event.getPlayer());
 		final Block block = event.getBlock();
 		final int typeId = block.getTypeId();
@@ -136,13 +136,28 @@ public class EssentialsAntiBuildListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onPaintingBreak(PaintingBreakByEntityEvent event)
+	{
+		final Entity entity = event.getRemover();
+		if (entity instanceof Player)
+		{
+			final User user = ess.getUser(entity);
+			if (prot.getSettingBool(AntiBuildConfig.disable_build) && !user.canBuild() && !user.isAuthorized("essentials.build")
+				&& !metaPermCheck(user, "break", Material.PAINTING.getId()))
+			{
+				if (ess.getSettings().warnOnBuildDisallow())
+				{
+					user.sendMessage(_("antiBuildBreak", Material.PAINTING.toString()));
+				}
+				event.setCancelled(true);
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockPistonExtend(BlockPistonExtendEvent event)
 	{
-		if (event.isCancelled())
-		{
-			return;
-		}
 		for (Block block : event.getBlocks())
 		{
 			if (prot.checkProtectionItems(AntiBuildConfig.blacklist_piston, block.getTypeId()))
@@ -153,10 +168,10 @@ public class EssentialsAntiBuildListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockPistonRetract(BlockPistonRetractEvent event)
 	{
-		if (event.isCancelled() || !event.isSticky())
+		if (!event.isSticky())
 		{
 			return;
 		}
