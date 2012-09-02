@@ -52,6 +52,9 @@ public class Commandgamemode extends EssentialsCommand
 				return;
 			}
 		}
+		if (gameMode == null) {
+			gameMode = user.getGameMode() == GameMode.SURVIVAL ? GameMode.CREATIVE : user.getGameMode() == GameMode.CREATIVE ? GameMode.ADVENTURE : GameMode.SURVIVAL;
+		}
 		user.setGameMode(gameMode);
 		user.sendMessage(_("gameMode", _(user.getGameMode().toString().toLowerCase(Locale.ENGLISH)), user.getDisplayName()));
 	}
@@ -59,7 +62,7 @@ public class Commandgamemode extends EssentialsCommand
 	private void gamemodeOtherPlayers(final Server server, final CommandSender sender, final GameMode gameMode, final String player) throws NotEnoughArgumentsException
 	{
 		//TODO: TL this
-		if (player.trim().length() < 2)
+		if (player.trim().length() < 2 || gameMode == null)
 		{
 			throw new NotEnoughArgumentsException("You need to specify a valid player/mode.");
 		}
@@ -99,6 +102,11 @@ public class Commandgamemode extends EssentialsCommand
 				 || modeString.contains("advent") || modeString.equalsIgnoreCase("2") || modeString.equalsIgnoreCase("a"))
 		{
 			mode = GameMode.ADVENTURE;
+		}
+		else if (modeString.equalsIgnoreCase("gmt") || modeString.equalsIgnoreCase("egmt")
+				 || modeString.contains("toggle") || modeString.contains("cycle")  || modeString.equalsIgnoreCase("t"))
+		{
+			mode = null;
 		}
 		else {
 			throw new NotEnoughArgumentsException();

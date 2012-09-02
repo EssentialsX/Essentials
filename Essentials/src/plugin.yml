@@ -122,7 +122,7 @@ commands:
   gamemode:
     description: Change player gamemode.
     usage: /<command> <survival|creative|adventure> [player]
-    aliases: [gm,creative,creativemode,survival,survivalmode,adventure,adventuremode,gmc,gma,gms,egamemod,eecreative,ecreativemode,esurvival,esurvivalmode,eadventure,eadventuremode,egmc,egma,egms,egm]
+    aliases: [gm,creative,creativemode,survival,survivalmode,adventure,adventuremode,gmc,gma,gms,gmt,egamemod,eecreative,ecreativemode,esurvival,esurvivalmode,eadventure,eadventuremode,egmc,egma,egms,egm,egmt]
   getpos:
     description: Get your current coordinates or those of a player.
     usage: /<command> [player]
