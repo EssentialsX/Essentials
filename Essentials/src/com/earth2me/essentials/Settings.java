@@ -583,7 +583,7 @@ public class Settings implements ISettings
 	@Override
 	public String getCurrencySymbol()
 	{
-		return config.getString("currency-symbol", "$").substring(0, 1).replaceAll("[0-9]", "$");
+		return config.getString("currency-symbol", "$").concat("$").substring(0, 1).replaceAll("[0-9]", "$");
 	}
 
 	@Override

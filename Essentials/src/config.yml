@@ -325,7 +325,7 @@ register-back-in-listener: false
 login-attack-delay: 5
 
 #Set the max fly speed, values range from 0.1 to 1.0
-max-fly-speed: 1.0
+max-fly-speed: 0.8
 
 ############################################################
 # +------------------------------------------------------+ #
