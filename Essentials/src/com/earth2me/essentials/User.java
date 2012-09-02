@@ -88,7 +88,15 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		}
 		catch (Exception ex)
 		{
-			ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage());
+			if (ess.getSettings().isDebug())
+			{
+				ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage(), ex);
+			}
+			else
+			{
+				ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage());
+			}
+
 			return false;
 		}
 	}
