@@ -54,9 +54,9 @@ public class Kit
 		final long earliestLong = earliestTime.getTimeInMillis();
 
 		// When was the last kit used?
-		final Long lastTime = user.getKitTimestamp(kitName);
+		final long lastTime = user.getKitTimestamp(kitName);
 
-		if (lastTime == null || lastTime < earliestLong)
+		if (lastTime < earliestLong)
 		{
 			user.setKitTimestamp(kitName, time.getTimeInMillis());
 		}

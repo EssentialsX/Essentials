@@ -4,6 +4,8 @@ import static com.earth2me.essentials.I18n._;
 import java.io.File;
 import java.util.*;
 import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -777,27 +779,44 @@ public abstract class UserData extends PlayerExtension implements IConf
 	{
 		return config.getBoolean("powertoolsenabled", true);
 	}
-	private Map<String, Object> kitTimestamps;
+	private ConfigurationSection kitTimestamps;
 
-	private Map<String, Object> _getKitTimestamps()
+	private ConfigurationSection _getKitTimestamps()
 	{
 
 		if (config.isConfigurationSection("timestamps.kits"))
 		{
-			return config.getConfigurationSection("timestamps.kits").getValues(false);
+			final ConfigurationSection section = config.getConfigurationSection("timestamps.kits");
+			final ConfigurationSection newSection = new MemoryConfiguration();
+			for (String command : section.getKeys(false))
+			{
+				if (section.isLong(command))
+				{
+					newSection.set(command.toLowerCase(Locale.ENGLISH), section.getLong(command));
+				}
+				else if (section.isInt(command))
+				{
+					newSection.set(command.toLowerCase(Locale.ENGLISH), (long)section.getInt(command));
+				}
+			}
+			return newSection;
 		}
-		return new HashMap<String, Object>();
+		return new MemoryConfiguration();
 	}
 
-	public Long getKitTimestamp(final String name)
+	public long getKitTimestamp(String name)
 	{
-		final Number num = (Number)kitTimestamps.get(name.toLowerCase(Locale.ENGLISH));
-		return num == null ? null : num.longValue();
+		name = name.replace('.', '_').replace('/', '_');
+		if (kitTimestamps != null)
+		{
+			return kitTimestamps.getLong(name, 0l);
+		}
+		return 0l;
 	}
 
 	public void setKitTimestamp(final String name, final long time)
 	{
-		kitTimestamps.put(name.toLowerCase(Locale.ENGLISH), time);
+		kitTimestamps.set(name.toLowerCase(Locale.ENGLISH), time);
 		config.setProperty("timestamps.kits", kitTimestamps);
 		config.save();
 	}
