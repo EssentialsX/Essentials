@@ -24,7 +24,7 @@ public class Commandburn extends EssentialsCommand
 		//TODO: TL this
 		if (args[0].trim().length() < 2)
 		{
-			throw new NotEnoughArgumentsException("You need to specify a player to kill.");
+			throw new NotEnoughArgumentsException("You need to specify a player to burn.");
 		}
 
 		for (Player p : server.matchPlayer(args[0]))
