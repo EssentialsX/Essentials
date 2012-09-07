@@ -5,18 +5,19 @@ import com.google.common.io.Files;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.nio.channels.ClosedByInterruptException;
-import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -24,6 +25,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 
 public class EssentialsConf extends YamlConfiguration
@@ -397,5 +399,262 @@ public class EssentialsConf extends YamlConfiguration
 	public void removeProperty(String path)
 	{
 		set(path, null);
+	}
+
+	@Override
+	public synchronized Object get(String path)
+	{
+		return super.get(path);
+	}
+
+	@Override
+	public synchronized Object get(String path, Object def)
+	{
+		return super.get(path, def);
+	}
+
+	@Override
+	public synchronized boolean getBoolean(String path)
+	{
+		return super.getBoolean(path);
+	}
+
+	@Override
+	public synchronized boolean getBoolean(String path, boolean def)
+	{
+		return super.getBoolean(path, def);
+	}
+
+	@Override
+	public synchronized List<Boolean> getBooleanList(String path)
+	{
+		return super.getBooleanList(path);
+	}
+
+	@Override
+	public synchronized List<Byte> getByteList(String path)
+	{
+		return super.getByteList(path);
+	}
+
+	@Override
+	public synchronized List<Character> getCharacterList(String path)
+	{
+		return super.getCharacterList(path);
+	}
+
+	@Override
+	public synchronized ConfigurationSection getConfigurationSection(String path)
+	{
+		return super.getConfigurationSection(path);
+	}
+
+	@Override
+	public synchronized double getDouble(String path)
+	{
+		return super.getDouble(path);
+	}
+
+	@Override
+	public synchronized List<Double> getDoubleList(String path)
+	{
+		return super.getDoubleList(path);
+	}
+
+	@Override
+	public synchronized List<Float> getFloatList(String path)
+	{
+		return super.getFloatList(path);
+	}
+
+	@Override
+	public synchronized int getInt(String path)
+	{
+		return super.getInt(path);
+	}
+
+	@Override
+	public synchronized int getInt(String path, int def)
+	{
+		return super.getInt(path, def);
+	}
+
+	@Override
+	public synchronized List<Integer> getIntegerList(String path)
+	{
+		return super.getIntegerList(path);
+	}
+
+	@Override
+	public synchronized ItemStack getItemStack(String path, ItemStack def)
+	{
+		return super.getItemStack(path, def);
+	}
+
+	@Override
+	public synchronized Set<String> getKeys(boolean deep)
+	{
+		return super.getKeys(deep);
+	}
+
+	@Override
+	public synchronized List<?> getList(String path)
+	{
+		return super.getList(path);
+	}
+
+	@Override
+	public synchronized List<?> getList(String path, List<?> def)
+	{
+		return super.getList(path, def);
+	}
+
+	@Override
+	public synchronized long getLong(String path)
+	{
+		return super.getLong(path);
+	}
+
+	@Override
+	public synchronized List<Long> getLongList(String path)
+	{
+		return super.getLongList(path);
+	}
+
+	public synchronized Map<String, Object> getMap()
+	{
+		return map;
+	}
+
+	@Override
+	public synchronized List<Map<?, ?>> getMapList(String path)
+	{
+		return super.getMapList(path);
+	}
+
+	@Override
+	public synchronized OfflinePlayer getOfflinePlayer(String path)
+	{
+		return super.getOfflinePlayer(path);
+	}
+
+	@Override
+	public synchronized OfflinePlayer getOfflinePlayer(String path, OfflinePlayer def)
+	{
+		return super.getOfflinePlayer(path, def);
+	}
+
+	@Override
+	public synchronized List<Short> getShortList(String path)
+	{
+		return super.getShortList(path);
+	}
+
+	@Override
+	public synchronized String getString(String path)
+	{
+		return super.getString(path);
+	}
+
+	@Override
+	public synchronized String getString(String path, String def)
+	{
+		return super.getString(path, def);
+	}
+
+	@Override
+	public synchronized List<String> getStringList(String path)
+	{
+		return super.getStringList(path);
+	}
+
+	@Override
+	public synchronized Map<String, Object> getValues(boolean deep)
+	{
+		return super.getValues(deep);
+	}
+
+	@Override
+	public synchronized Vector getVector(String path)
+	{
+		return super.getVector(path);
+	}
+
+	@Override
+	public synchronized Vector getVector(String path, Vector def)
+	{
+		return super.getVector(path, def);
+	}
+
+	@Override
+	public synchronized boolean isBoolean(String path)
+	{
+		return super.isBoolean(path);
+	}
+
+	@Override
+	public synchronized boolean isConfigurationSection(String path)
+	{
+		return super.isConfigurationSection(path);
+	}
+
+	@Override
+	public synchronized boolean isDouble(String path)
+	{
+		return super.isDouble(path);
+	}
+
+	@Override
+	public synchronized boolean isInt(String path)
+	{
+		return super.isInt(path);
+	}
+
+	@Override
+	public synchronized boolean isItemStack(String path)
+	{
+		return super.isItemStack(path);
+	}
+
+	@Override
+	public synchronized boolean isList(String path)
+	{
+		return super.isList(path);
+	}
+
+	@Override
+	public synchronized boolean isLong(String path)
+	{
+		return super.isLong(path);
+	}
+
+	@Override
+	public synchronized boolean isOfflinePlayer(String path)
+	{
+		return super.isOfflinePlayer(path);
+	}
+
+	@Override
+	public synchronized boolean isSet(String path)
+	{
+		return super.isSet(path);
+	}
+
+	@Override
+	public synchronized boolean isString(String path)
+	{
+		return super.isString(path);
+	}
+
+	@Override
+	public synchronized boolean isVector(String path)
+	{
+		return super.isVector(path);
+	}
+
+	@Override
+	public synchronized void set(String path, Object value)
+	{
+		super.set(path, value);
 	}
 }
