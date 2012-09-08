@@ -19,10 +19,12 @@ public class Commanditemdb extends EssentialsCommand
 	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
 		ItemStack itemStack = null;
+		boolean itemHeld = false;
 		if (args.length < 1)
 		{
 			if (sender instanceof Player)
 			{
+				itemHeld = true;
 				itemStack = ((Player)sender).getItemInHand();
 			}
 			if (itemStack == null)
@@ -36,7 +38,7 @@ public class Commanditemdb extends EssentialsCommand
 		}
 		sender.sendMessage(itemStack.getType().toString() + "- " + itemStack.getTypeId() + ":" + Integer.toString(itemStack.getDurability()));
 				
-		if (itemStack.getType() != Material.AIR)
+		if (itemHeld && itemStack.getType() != Material.AIR)
 		{
 			int maxuses = itemStack.getType().getMaxDurability();
 			int durability = ((maxuses + 1) - itemStack.getDurability());
