@@ -52,7 +52,7 @@ teleport-delay: 0
 
 # The delay, in seconds, a player can't be attacked by other players after they have been teleported by a command
 # This will also prevent the player attacking other players
-teleport-invulnerability: 2
+teleport-invulnerability: 4
 
 # The delay, in seconds, required between /heal attempts
 heal-cooldown: 60

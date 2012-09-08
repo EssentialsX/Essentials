@@ -6,7 +6,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Logger;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -17,28 +16,29 @@ public class Teleport implements Runnable, ITeleport
 	private static final double MOVE_CONSTANT = 0.3;
 
 
-	private static class Target
+	private class Target
 	{
 		private final Location location;
-		private final Entity entity;
+		private final String name;
 
 		public Target(Location location)
 		{
 			this.location = location;
-			this.entity = null;
+			this.name = null;
 		}
 
-		public Target(Entity entity)
+		public Target(Player entity)
 		{
-			this.entity = entity;
+			this.name = entity.getName();
 			this.location = null;
 		}
 
 		public Location getLocation()
 		{
-			if (this.entity != null)
+			if (this.name != null)
 			{
-				return this.entity.getLocation();
+				
+				return ess.getServer().getPlayerExact(name).getLocation();
 			}
 			return location;
 		}
@@ -216,7 +216,7 @@ public class Teleport implements Runnable, ITeleport
 		teleport(new Target(loc), chargeFor, cause);
 	}
 
-	public void teleport(Entity entity, Trade chargeFor, TeleportCause cause) throws Exception
+	public void teleport(Player entity, Trade chargeFor, TeleportCause cause) throws Exception
 	{
 		teleport(new Target(entity), chargeFor, cause);
 	}
@@ -274,7 +274,7 @@ public class Teleport implements Runnable, ITeleport
 		now(new Target(loc), cause);
 	}
 
-	public void now(Entity entity, boolean cooldown, TeleportCause cause) throws Exception
+	public void now(Player entity, boolean cooldown, TeleportCause cause) throws Exception
 	{
 		if (cooldown)
 		{
