@@ -29,7 +29,7 @@ groups:
         - essentials.home
         - essentials.ignore
         - essentials.kit
-        - essentials.kit.tools
+        - essentials.kits.tools
         - essentials.mail
         - essentials.mail.send
         - essentials.me
@@ -109,6 +109,7 @@ groups:
         - essentials.weather
         - essentials.whois
         - essentials.world
+        - essentials.worlds.*
         - permissions.user.promote.default
         - permissions.user.demote.default
         - permissions.manage.membership

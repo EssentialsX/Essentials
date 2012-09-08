@@ -126,7 +126,7 @@ player-commands:
   - info
   - itemdb
   - kit
-  - kit.tools
+  - kits.tools
   - list
   - mail
   - mail.send

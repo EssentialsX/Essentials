@@ -127,7 +127,7 @@ groups:
     - essentials.ignore
     - essentials.itemdb
     - essentials.kit
-    - essentials.kit.tools
+    - essentials.kits.tools
     - essentials.mail
     - essentials.mail.send
     - essentials.me
@@ -188,7 +188,7 @@ groups:
     - essentials.kick
     - essentials.kick.notify
     - essentials.kill
-    - essentials.kit.*
+    - essentials.kits.*
     - essentials.msg.magic
     - essentials.mute
     - essentials.nick.color
@@ -219,12 +219,12 @@ groups:
     - essentials.unban
     - essentials.unbanip
     - essentials.vanish
-    - essentials.warp.*
+    - essentials.warps.*
     - essentials.weather
     - essentials.whois
     - essentials.workbench
     - essentials.world
-    - essentials.world.*
+    - essentials.worlds.*
 
   g:essentials_admin:
     permissions:

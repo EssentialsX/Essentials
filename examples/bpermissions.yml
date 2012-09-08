@@ -23,7 +23,7 @@ groups:
     - essentials.home
     - essentials.ignore
     - essentials.kit
-    - essentials.kit.tools
+    - essentials.kits.tools
     - essentials.mail
     - essentials.mail.send
     - essentials.me
@@ -70,6 +70,7 @@ groups:
     - essentials.jump
     - essentials.kick
     - essentials.kick.notify
+    - essentials.kits.*
     - essentials.kill
     - essentials.mute
     - essentials.nick.others
@@ -94,9 +95,11 @@ groups:
     - essentials.tptoggle
     - essentials.unban
     - essentials.unbanip
+    - essentials.warps.*
     - essentials.weather
     - essentials.whois
     - essentials.world
+    - essentials.worlds.*
     Admin:
     # Since we use essentials.* permission here, we can still disable commands like this
     # This can be done with any pemission nodes
