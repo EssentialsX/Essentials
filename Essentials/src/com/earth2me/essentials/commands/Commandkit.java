@@ -72,9 +72,9 @@ public class Commandkit extends EssentialsCommand
 		
 		final Map<String, Object> kit = ess.getSettings().getKit(kitName);
 
-		if (!userFrom.isAuthorized("essentials.kit." + kitName))
+		if (!userFrom.isAuthorized("essentials.kits." + kitName))
 		{
-			throw new Exception(_("noKitPermission", "essentials.kit." + kitName));
+			throw new Exception(_("noKitPermission", "essentials.kits." + kitName));
 		}
 
 		final List<String> items = Kit.getItems(userTo, kit);

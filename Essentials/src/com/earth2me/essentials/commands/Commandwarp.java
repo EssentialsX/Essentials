@@ -87,7 +87,7 @@ public class Commandwarp extends EssentialsCommand
 			while (iterator.hasNext())
 			{
 				final String warpName = iterator.next();
-				if (ess.getSettings().getPerWarpPermission() && !((User)sender).isAuthorized("essentials.warp." + warpName))
+				if (ess.getSettings().getPerWarpPermission() && !((User)sender).isAuthorized("essentials.warps." + warpName))
 				{
 					iterator.remove();
 				}
@@ -120,7 +120,7 @@ public class Commandwarp extends EssentialsCommand
 		final double fullCharge = chargeWarp.getCommandCost(user) + chargeCmd.getCommandCost(user);
 		final Trade charge = new Trade(fullCharge, ess);
 		charge.isAffordableFor(owner);
-		if (ess.getSettings().getPerWarpPermission() && !owner.isAuthorized("essentials.warp." + name))
+		if (ess.getSettings().getPerWarpPermission() && !owner.isAuthorized("essentials.warps." + name))
 		{
 			throw new Exception(_("warpUsePermission"));
 		}
