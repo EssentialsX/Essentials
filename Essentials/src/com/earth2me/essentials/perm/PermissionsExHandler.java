@@ -45,10 +45,10 @@ public class PermissionsExHandler implements IPermissionsHandler
 		final PermissionUser user = manager.getUser(base.getName());
 		if (user == null)
 		{
-			return true;
+			return false;
 		}
 
-		return user.getOptionBoolean("build", base.getWorld().getName(), true);
+		return user.getOptionBoolean("build", base.getWorld().getName(), false);
 	}
 
 	@Override
