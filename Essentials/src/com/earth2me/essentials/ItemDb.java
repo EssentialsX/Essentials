@@ -139,6 +139,14 @@ public class ItemDb implements IConf, IItemDb
 	{
 		ItemData itemData = new ItemData(item.getTypeId(), item.getDurability());
 		List<String> nameList = names.get(itemData);
+		if (nameList == null) {
+			itemData = new ItemData(item.getTypeId(), (short) 0);
+			nameList = names.get(itemData);
+			if (nameList == null) {
+				return null;
+			}
+		}
+		
 		if (nameList.size() > 15)
 		{
 			nameList = nameList.subList(0, 14);
