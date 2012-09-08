@@ -1,7 +1,7 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.api.IItemDb;
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.api.IItemDb;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;

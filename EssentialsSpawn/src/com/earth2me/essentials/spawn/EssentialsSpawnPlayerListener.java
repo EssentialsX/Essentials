@@ -1,7 +1,10 @@
 package com.earth2me.essentials.spawn;
 
-import com.earth2me.essentials.*;
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.Kit;
+import com.earth2me.essentials.OfflinePlayer;
+import com.earth2me.essentials.User;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextPager;
@@ -13,6 +16,7 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -68,13 +72,25 @@ public class EssentialsSpawnPlayerListener implements Listener
 
 	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
-		if (event.getPlayer().hasPlayedBefore())
+		ess.scheduleAsyncDelayedTask(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				delayedJoin(event.getPlayer());
+			}
+		});
+	}
+
+	public void delayedJoin(Player player)
+	{
+		if (player.hasPlayedBefore())
 		{
 			LOGGER.log(Level.FINE, "Old player join");
 			return;
 		}
 
-		final User user = ess.getUser(event.getPlayer());
+		final User user = ess.getUser(player);
 
 		if (!"none".equalsIgnoreCase(ess.getSettings().getNewbieSpawn()))
 		{

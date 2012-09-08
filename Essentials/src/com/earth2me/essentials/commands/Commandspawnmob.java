@@ -5,13 +5,16 @@ import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.Mob.MobException;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Random;
+import java.util.Set;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
-import org.bukkit.entity.*;
 import org.bukkit.entity.Villager.Profession;
+import org.bukkit.entity.*;
 import org.bukkit.material.Colorable;
 
 

@@ -4,7 +4,6 @@ import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import java.util.logging.Level;
 import org.bukkit.Server;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;

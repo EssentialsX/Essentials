@@ -1,8 +1,13 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.*;
 import static com.earth2me.essentials.I18n._;
-import java.util.*;
+import com.earth2me.essentials.Kit;
+import com.earth2me.essentials.Trade;
+import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 

@@ -1,6 +1,6 @@
 package com.earth2me.essentials;
 
-import java.io.*;
+import java.io.IOException;
 import junit.framework.TestCase;
 import org.bukkit.Location;
 import org.bukkit.World;
