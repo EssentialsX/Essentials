@@ -110,8 +110,6 @@ public interface ISettings extends IConf
 
 	boolean showNonEssCommandsInHelp();
 
-	boolean spawnIfNoHome();
-
 	boolean warnOnBuildDisallow();
 
 	boolean warnOnSmite();
