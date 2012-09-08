@@ -28,9 +28,9 @@ public class Commandtpo extends EssentialsCommand
 				throw new NoSuchFieldException(_("playerNotFound"));
 			}
 			if (user.getWorld() != player.getWorld() && ess.getSettings().isWorldTeleportPermissions()
-				&& !user.isAuthorized("essentials.world." + player.getWorld().getName()))
+				&& !user.isAuthorized("essentials.worlds." + player.getWorld().getName()))
 			{
-				throw new Exception(_("noPerm", "essentials.world." + player.getWorld().getName()));
+				throw new Exception(_("noPerm", "essentials.worlds." + player.getWorld().getName()));
 			}
 			user.sendMessage(_("teleporting"));
 			user.getTeleport().now(player, false, TeleportCause.COMMAND);
@@ -52,9 +52,9 @@ public class Commandtpo extends EssentialsCommand
 			}
 
 			if (target.getWorld() != toPlayer.getWorld() && ess.getSettings().isWorldTeleportPermissions()
-				&& !user.isAuthorized("essentials.world." + toPlayer.getWorld().getName()))
+				&& !user.isAuthorized("essentials.worlds." + toPlayer.getWorld().getName()))
 			{
-				throw new Exception(_("noPerm", "essentials.world." + toPlayer.getWorld().getName()));
+				throw new Exception(_("noPerm", "essentials.worlds." + toPlayer.getWorld().getName()));
 			}
 
 			target.getTeleport().now(toPlayer, false, TeleportCause.COMMAND);

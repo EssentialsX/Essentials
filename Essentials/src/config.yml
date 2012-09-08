@@ -298,7 +298,7 @@ no-god-in-worlds:
 
 # Set to true to enable per-world permissions for teleporting between worlds with essentials commands
 # This applies to /world, /back, /tp[a|o][here|all], but not warps.
-# Give someone permission to teleport to a world with essentials.world.<worldname>
+# Give someone permission to teleport to a world with essentials.worlds.<worldname>
 # This does not effect the /home command, there is a seperate toggle below for this.
 world-teleport-permissions: false
 
@@ -338,7 +338,7 @@ update-bed-at-daytime: true
 
 # Set to true to enable per-world permissions for using homes to teleport between worlds
 # This applies to the /home only.
-# Give someone permission to teleport to a world with essentials.world.<worldname>
+# Give someone permission to teleport to a world with essentials.worlds.<worldname>
 world-home-permissions: false
 
 # Allow players to have multiple homes.

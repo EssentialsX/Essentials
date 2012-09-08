@@ -17,9 +17,9 @@ public class Commandback extends EssentialsCommand
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		if (user.getWorld() != user.getLastLocation().getWorld() && ess.getSettings().isWorldTeleportPermissions()
-			&& !user.isAuthorized("essentials.world." + user.getLastLocation().getWorld().getName()))
+			&& !user.isAuthorized("essentials.worlds." + user.getLastLocation().getWorld().getName()))
 		{
-			throw new Exception(_("noPerm", "essentials.world." + user.getLastLocation().getWorld().getName()));
+			throw new Exception(_("noPerm", "essentials.worlds." + user.getLastLocation().getWorld().getName()));
 		}
 		final Trade charge = new Trade(this.getName(), ess);
 		charge.isAffordableFor(user);

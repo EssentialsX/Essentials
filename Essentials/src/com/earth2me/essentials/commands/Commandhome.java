@@ -102,9 +102,9 @@ public class Commandhome extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 		if (user.getWorld() != loc.getWorld() && ess.getSettings().isWorldHomePermissions()
-			&& !user.isAuthorized("essentials.world." + loc.getWorld().getName()))
+			&& !user.isAuthorized("essentials.worlds." + loc.getWorld().getName()))
 		{
-			throw new Exception(_("noPerm", "essentials.world." + loc.getWorld().getName()));
+			throw new Exception(_("noPerm", "essentials.worlds." + loc.getWorld().getName()));
 		}
 		user.getTeleport().home(loc, charge);
 	}
