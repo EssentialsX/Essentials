@@ -40,7 +40,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf
 		config.setTemplateName("/config.yml", EssentialsGeoIP.class);
 		reloadConfig();
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(final PlayerJoinEvent event)
 	{

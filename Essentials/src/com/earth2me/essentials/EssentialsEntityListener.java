@@ -46,6 +46,11 @@ public class EssentialsEntityListener implements Listener
 			{
 				event.setCancelled(true);
 			}
+			
+			if (attacker.isGodModeEnabled() && !attacker.isAuthorized("essentials.god.pvp"))
+			{
+				event.setCancelled(true);
+			}
 
 			attacker.updateActivity(true);
 			final List<String> commandList = attacker.getPowertool(attacker.getItemInHand());
