@@ -531,11 +531,6 @@ public class Settings implements ISettings
 		return newSigns;
 	}
 
-	@Override
-	public boolean spawnIfNoHome()
-	{
-		return config.getBoolean("spawn-if-no-home", false);
-	}
 	private boolean warnOnBuildDisallow;
 
 	private boolean _warnOnBuildDisallow()

@@ -333,9 +333,6 @@ max-fly-speed: 0.8
 # +------------------------------------------------------+ #
 ############################################################
 
-# If no home is set, send players to spawn when /home is used
-spawn-if-no-home: true
-
 # Allows people to set their bed at daytime
 update-bed-at-daytime: true
 
