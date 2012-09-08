@@ -40,16 +40,28 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf
 		config.setTemplateName("/config.yml", EssentialsGeoIP.class);
 		reloadConfig();
 	}
-
+	
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPlayerJoin(PlayerJoinEvent event)
+	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
-		User u = ess.getUser(event.getPlayer());
-		if (u.isAuthorized("essentials.geoip.hide") || event.getPlayer().getAddress() == null)
+		ess.scheduleAsyncDelayedTask(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				delayedJoin(event.getPlayer());
+			}
+		});
+	}
+
+	public void delayedJoin(Player player)
+	{
+		User u = ess.getUser(player);
+		if (u.isAuthorized("essentials.geoip.hide") || player.getAddress() == null)
 		{
 			return;
 		}
-		InetAddress address = event.getPlayer().getAddress().getAddress();
+		InetAddress address = player.getAddress().getAddress();
 		StringBuilder sb = new StringBuilder();
 		if (config.getBoolean("database.show-cities", false))
 		{
@@ -79,9 +91,9 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf
 		}
 		if (config.getBoolean("show-on-login", true) && !u.isHidden())
 		{
-			for (Player player : event.getPlayer().getServer().getOnlinePlayers())
+			for (Player onlinePlayer : player.getServer().getOnlinePlayers())
 			{
-				User user = ess.getUser(player);
+				User user = ess.getUser(onlinePlayer);
 				if (user.isAuthorized("essentials.geoip.show"))
 				{
 					user.sendMessage(_("geoipJoinFormat", u.getDisplayName(), sb.toString()));
