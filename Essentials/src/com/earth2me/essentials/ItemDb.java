@@ -2,10 +2,7 @@ package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IItemDb;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -20,6 +17,7 @@ public class ItemDb implements IConf, IItemDb
 		file = new ManagedFile("items.csv", ess);
 	}
 	private final transient Map<String, Integer> items = new HashMap<String, Integer>();
+	private final transient Map<ItemData, List<String>> names = new HashMap<ItemData, List<String>>();
 	private final transient Map<String, Short> durabilities = new HashMap<String, Short>();
 	private final transient ManagedFile file;
 
@@ -35,6 +33,7 @@ public class ItemDb implements IConf, IItemDb
 
 		durabilities.clear();
 		items.clear();
+		names.clear();
 
 		for (String line : lines)
 		{
@@ -51,9 +50,25 @@ public class ItemDb implements IConf, IItemDb
 			}
 
 			final int numeric = Integer.parseInt(parts[1]);
+			final short data = parts.length > 2 && !parts[2].equals("0") ? Short.parseShort(parts[2]) : 0;
+			String itemName = parts[0].toLowerCase(Locale.ENGLISH);
 
-			durabilities.put(parts[0].toLowerCase(Locale.ENGLISH), parts.length > 2 && !parts[2].equals("0") ? Short.parseShort(parts[2]) : 0);
-			items.put(parts[0].toLowerCase(Locale.ENGLISH), numeric);
+			durabilities.put(itemName, data);
+			items.put(itemName, numeric);
+
+			ItemData itemData = new ItemData(numeric, data);
+			if (names.containsKey(itemData))
+			{
+				List<String> nameList = names.get(itemData);
+				nameList.add(itemName);
+				Collections.sort(nameList, new LengthCompare());
+			}
+			else
+			{
+				List<String> nameList = new ArrayList<String>();
+				nameList.add(itemName);
+				names.put(itemData, nameList);
+			}
 		}
 	}
 
@@ -118,5 +133,74 @@ public class ItemDb implements IConf, IItemDb
 		retval.setAmount(mat.getMaxStackSize());
 		retval.setDurability(metaData);
 		return retval;
+	}
+
+	public String names(ItemStack item)
+	{
+		ItemData itemData = new ItemData(item.getTypeId(), item.getDurability());
+		List<String> nameList = names.get(itemData);
+		if (nameList.size() > 15)
+		{
+			nameList = nameList.subList(0, 14);
+		}
+		return Util.joinList(", ", nameList);
+	}
+
+	class ItemData
+	{
+		final private int itemNo;
+		final private short itemData;
+
+		ItemData(final int itemNo, final short itemData)
+		{
+			this.itemNo = itemNo;
+			this.itemData = itemData;
+		}
+
+		public int getItemNo()
+		{
+			return itemNo;
+		}
+
+		public short getItemData()
+		{
+			return itemData;
+		}
+
+		@Override
+		public int hashCode()
+		{
+			return (31 * itemNo) ^ itemData;
+		}
+
+		@Override
+		public boolean equals(Object o)
+		{
+			if (o == null)
+			{
+				return false;
+			}
+			if (!(o instanceof ItemData))
+			{
+				return false;
+			}
+			ItemData pairo = (ItemData)o;
+			return this.itemNo == pairo.getItemNo()
+				   && this.itemData == pairo.getItemData();
+		}
+	}
+
+	class LengthCompare implements java.util.Comparator<String>
+	{
+		public LengthCompare()
+		{
+			super();
+		}
+
+		@Override
+		public int compare(String s1, String s2)
+		{
+			return s1.length() - s2.length();
+		}
 	}
 }

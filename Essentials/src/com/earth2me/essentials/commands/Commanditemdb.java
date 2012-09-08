@@ -36,7 +36,7 @@ public class Commanditemdb extends EssentialsCommand
 		{
 			itemStack = ess.getItemDb().get(args[0]);
 		}
-		sender.sendMessage(itemStack.getType().toString() + "- " + itemStack.getTypeId() + ":" + Integer.toString(itemStack.getDurability()));
+		sender.sendMessage(_("itemType", itemStack.getType().toString(), itemStack.getTypeId() + ":" + Integer.toString(itemStack.getDurability())));
 				
 		if (itemHeld && itemStack.getType() != Material.AIR)
 		{
@@ -46,6 +46,7 @@ public class Commanditemdb extends EssentialsCommand
 			{
 				sender.sendMessage(_("durability", Integer.toString(durability)));
 			}
-		}		
+		}
+		sender.sendMessage(_("itemNames", ess.getItemDb().names(itemStack)));
 	}
 }
