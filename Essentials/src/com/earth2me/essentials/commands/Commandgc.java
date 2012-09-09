@@ -50,7 +50,7 @@ public class Commandgc extends EssentialsCommand
 			}
 
 			sender.sendMessage(
-					worldType + " \"" + w.getName() + "\": "
+					"\u00a76" + worldType + " \"" + w.getName() + "\": "
 					+ w.getLoadedChunks().length + _("gcchunks")
 					+ w.getEntities().size() + _("gcentities"));
 		}
