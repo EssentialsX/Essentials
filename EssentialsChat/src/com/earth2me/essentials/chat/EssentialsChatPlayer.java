@@ -15,7 +15,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-//TODO: Translate the local/spy tags
 public abstract class EssentialsChatPlayer implements Listener
 {
 	protected transient IEssentials ess;
