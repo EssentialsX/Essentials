@@ -5,7 +5,6 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import java.util.Locale;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -46,7 +45,7 @@ public class Commandgive extends EssentialsCommand
 		final User giveTo = getPlayer(server, args, 0);
 
 		if (args.length > 3 && Util.isInt(args[2]) && Util.isInt(args[3]))
-		{			
+		{
 			stack.setAmount(Integer.parseInt(args[2]));
 			stack.setDurability(Short.parseShort(args[3]));
 		}
@@ -91,9 +90,8 @@ public class Commandgive extends EssentialsCommand
 			throw new Exception(_("cantSpawnItem", "Air"));
 		}
 
-		//TODO: TL this.
 		final String itemName = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ');
-		sender.sendMessage(ChatColor.BLUE + "Giving " + stack.getAmount() + " of " + itemName + " to " + giveTo.getDisplayName() + ".");
+		sender.sendMessage(_("giveSpawn", stack.getAmount(), itemName, giveTo.getDisplayName()));
 		if (giveTo.isAuthorized("essentials.oversizedstacks"))
 		{
 			InventoryWorkaround.addItem(giveTo.getInventory(), true, ess.getSettings().getOversizedStackSize(), stack);

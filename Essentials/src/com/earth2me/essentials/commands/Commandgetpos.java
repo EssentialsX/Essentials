@@ -41,7 +41,6 @@ public class Commandgetpos extends EssentialsCommand
 		outputPosition(sender, user.getLocation(), null);
 	}
 
-	//TODO: Translate
 	private void outputPosition(final CommandSender sender, final Location coords, final Location distance)
 	{
 		sender.sendMessage(_("currentWorld", coords.getWorld().getName()));
