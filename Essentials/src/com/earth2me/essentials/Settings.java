@@ -309,7 +309,7 @@ public class Settings implements ISettings
 
 		if (colorName == null)
 		{
-			return ChatColor.RED;
+			return ChatColor.DARK_RED;
 		}
 		if ("none".equalsIgnoreCase(colorName) || colorName.isEmpty())
 		{
