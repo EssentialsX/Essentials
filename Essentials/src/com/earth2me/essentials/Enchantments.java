@@ -22,8 +22,7 @@ public class Enchantments
 		ENCHANTMENTS.put("sharpness", Enchantment.DAMAGE_ALL);
 		ENCHANTMENTS.put("sharp", Enchantment.DAMAGE_ALL);
 		ALIASENCHANTMENTS.put("dal", Enchantment.DAMAGE_ALL);
-		
-		ENCHANTMENTS.put("arthropodsdamage", Enchantment.DAMAGE_ARTHROPODS);
+				
 		ENCHANTMENTS.put("ardmg", Enchantment.DAMAGE_ARTHROPODS);
 		ENCHANTMENTS.put("baneofarthropods", Enchantment.DAMAGE_ARTHROPODS);
 		ALIASENCHANTMENTS.put("baneofarthropod", Enchantment.DAMAGE_ARTHROPODS);
@@ -37,7 +36,7 @@ public class Enchantments
 		ENCHANTMENTS.put("digspeed", Enchantment.DIG_SPEED);
 		ENCHANTMENTS.put("efficiency", Enchantment.DIG_SPEED);
 		ENCHANTMENTS.put("minespeed", Enchantment.DIG_SPEED);
-		ENCHANTMENTS.put("cutspeed", Enchantment.DIG_SPEED);
+		ALIASENCHANTMENTS.put("cutspeed", Enchantment.DIG_SPEED);
 		ALIASENCHANTMENTS.put("ds", Enchantment.DIG_SPEED);
 		
 		ENCHANTMENTS.put("durability", Enchantment.DURABILITY);
@@ -70,7 +69,7 @@ public class Enchantments
 		ALIASENCHANTMENTS.put("o", Enchantment.OXYGEN);
 		
 		ENCHANTMENTS.put("protection", Enchantment.PROTECTION_ENVIRONMENTAL);
-		ENCHANTMENTS.put("prot", Enchantment.PROTECTION_ENVIRONMENTAL);
+		ALIASENCHANTMENTS.put("prot", Enchantment.PROTECTION_ENVIRONMENTAL);
 		ENCHANTMENTS.put("protect", Enchantment.PROTECTION_ENVIRONMENTAL);
 		ALIASENCHANTMENTS.put("p", Enchantment.PROTECTION_ENVIRONMENTAL);
 		
@@ -88,11 +87,11 @@ public class Enchantments
 		ALIASENCHANTMENTS.put("pfa", Enchantment.PROTECTION_FALL);
 		
 		ENCHANTMENTS.put("fireprotection", Enchantment.PROTECTION_FIRE);
-		ENCHANTMENTS.put("flameprotection", Enchantment.PROTECTION_FIRE);
+		ALIASENCHANTMENTS.put("flameprotection", Enchantment.PROTECTION_FIRE);
 		ENCHANTMENTS.put("fireprotect", Enchantment.PROTECTION_FIRE);
-		ENCHANTMENTS.put("flameprotect", Enchantment.PROTECTION_FIRE);
+		ALIASENCHANTMENTS.put("flameprotect", Enchantment.PROTECTION_FIRE);
 		ENCHANTMENTS.put("fireprot", Enchantment.PROTECTION_FIRE);
-		ENCHANTMENTS.put("flameprot", Enchantment.PROTECTION_FIRE);
+		ALIASENCHANTMENTS.put("flameprot", Enchantment.PROTECTION_FIRE);
 		ALIASENCHANTMENTS.put("pf", Enchantment.PROTECTION_FIRE);
 		
 		ENCHANTMENTS.put("projectileprotection", Enchantment.PROTECTION_PROJECTILE);
@@ -105,6 +104,7 @@ public class Enchantments
 		
 		ENCHANTMENTS.put("waterworker", Enchantment.WATER_WORKER);
 		ENCHANTMENTS.put("aquaaffinity", Enchantment.WATER_WORKER);
+		ENCHANTMENTS.put("watermine", Enchantment.WATER_WORKER);
 		ALIASENCHANTMENTS.put("ww", Enchantment.WATER_WORKER);
 		
 		ENCHANTMENTS.put("firearrow", Enchantment.ARROW_FIRE);
@@ -119,14 +119,14 @@ public class Enchantments
 		
 		ENCHANTMENTS.put("arrowknockback", Enchantment.ARROW_KNOCKBACK);
 		ENCHANTMENTS.put("arrowkb", Enchantment.ARROW_KNOCKBACK);
-		ENCHANTMENTS.put("punch", Enchantment.ARROW_KNOCKBACK);
+		ALIASENCHANTMENTS.put("punch", Enchantment.ARROW_KNOCKBACK);
 		ENCHANTMENTS.put("arrowpunch", Enchantment.ARROW_KNOCKBACK);
 		ALIASENCHANTMENTS.put("ak", Enchantment.ARROW_KNOCKBACK);
 		
 		ENCHANTMENTS.put("infinitearrows", Enchantment.ARROW_INFINITE);
 		ENCHANTMENTS.put("infarrows", Enchantment.ARROW_INFINITE);
-		ENCHANTMENTS.put("infinity", Enchantment.ARROW_INFINITE);
-		ALIASENCHANTMENTS.put("infinite", Enchantment.ARROW_INFINITE);
+		ALIASENCHANTMENTS.put("infinity", Enchantment.ARROW_INFINITE);
+		ENCHANTMENTS.put("infinite", Enchantment.ARROW_INFINITE);
 		ENCHANTMENTS.put("unlimited", Enchantment.ARROW_INFINITE);
 		ENCHANTMENTS.put("unlimitedarrows", Enchantment.ARROW_INFINITE);
 		ALIASENCHANTMENTS.put("ai", Enchantment.ARROW_INFINITE);
