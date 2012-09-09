@@ -32,6 +32,12 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer
 		}
 
 		final User user = ess.getUser(event.getPlayer());
+
+		if (user == null) {
+			event.setCancelled(true);
+			return;
+		}
+		
 		final ChatStore chatStore = new ChatStore(ess, user, getChatType(event.getMessage()));
 		setChatStore(event, chatStore);
 
