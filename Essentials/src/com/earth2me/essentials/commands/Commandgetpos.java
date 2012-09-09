@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -43,15 +44,15 @@ public class Commandgetpos extends EssentialsCommand
 	//TODO: Translate
 	private void outputPosition(final CommandSender sender, final Location coords, final Location distance)
 	{
-		sender.sendMessage("§7World: " + coords.getWorld().getName());
-		sender.sendMessage("§7X: " + coords.getBlockX() + " (+East <-> -West)");
-		sender.sendMessage("§7Y: " + coords.getBlockY() + " (+Up <-> -Down)");
-		sender.sendMessage("§7Z: " + coords.getBlockZ() + " (+South <-> -North)");
-		sender.sendMessage("§7Yaw: " + (coords.getYaw() + 180 + 360) % 360 + " (Rotation)");
-		sender.sendMessage("§7Pitch: " + coords.getPitch() + " (Head angle)");
+		sender.sendMessage(_("currentWorld", coords.getWorld().getName()));
+		sender.sendMessage(_("posX", coords.getBlockX()));
+		sender.sendMessage(_("posY", coords.getBlockY()));
+		sender.sendMessage(_("posZ", coords.getBlockZ()));
+		sender.sendMessage(_("posYaw", (coords.getYaw() + 180 + 360) % 360));
+		sender.sendMessage(_("posPitch", coords.getPitch()));
 		if (distance != null && coords.getWorld().equals(distance.getWorld()))
 		{
-			sender.sendMessage("§7Distance: " + coords.distance(distance));
+			sender.sendMessage(_("distance", coords.distance(distance)));
 		}
 	}
 }
