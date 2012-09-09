@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -33,7 +34,7 @@ public class WorldsHolder {
 	/**
 	 * Map with instances of loaded worlds.
 	 */
-	private Map<String, OverloadedWorldHolder> worldsData = new HashMap<String, OverloadedWorldHolder>();
+	private Hashtable<String, OverloadedWorldHolder> worldsData = new Hashtable<String, OverloadedWorldHolder>();
 
 	/**
 	 * Map of mirrors: <nonExistingWorldName, existingAndLoadedWorldName>
@@ -61,7 +62,7 @@ public class WorldsHolder {
 	
 	public void resetWorldsHolder() {
 		
-		worldsData = new HashMap<String, OverloadedWorldHolder>();
+		worldsData = new Hashtable<String, OverloadedWorldHolder>();
 		mirrorsGroup = new HashMap<String, String>();
 		mirrorsUser = new HashMap<String, String>();
 		
