@@ -160,11 +160,14 @@ public class EssentialsPlayerListener implements Listener
 		user.setLastLogin(System.currentTimeMillis());
 		user.updateActivity(false);
 
-		for (String p : ess.getVanishedPlayers())
+		if (!ess.getVanishedPlayers().isEmpty() && !user.isAuthorized("essentials.vanish.see"))
 		{
-			if (!user.isAuthorized("essentials.vanish.see"))
+			for (String p : ess.getVanishedPlayers())
 			{
-				user.hidePlayer(ess.getUser(p).getBase());
+				Player toVanish = ess.getUser(p).getBase();
+				if (toVanish.isOnline()) {
+					user.hidePlayer(toVanish);
+				}
 			}
 		}
 
@@ -384,7 +387,7 @@ public class EssentialsPlayerListener implements Listener
 			}
 			break;
 		case LEFT_CLICK_AIR:
-			if (event.getPlayer().isFlying())			
+			if (event.getPlayer().isFlying())
 			{
 				final User user = ess.getUser(event.getPlayer());
 				if (user.isFlyClickJump())
@@ -423,7 +426,8 @@ public class EssentialsPlayerListener implements Listener
 							Location loc = user.getLocation();
 							loc.setX(otarget.getX());
 							loc.setZ(otarget.getZ());
-							while (Util.isBlockDamaging(loc.getWorld(), loc.getBlockX(), loc.getBlockY() -1, loc.getBlockZ())) {
+							while (Util.isBlockDamaging(loc.getWorld(), loc.getBlockX(), loc.getBlockY() - 1, loc.getBlockZ()))
+							{
 								loc.setY(loc.getY() + 1d);
 							}
 							user.getBase().teleport(loc, TeleportCause.PLUGIN);
