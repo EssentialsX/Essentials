@@ -23,7 +23,8 @@ public class UserVariables extends Variables {
 	public UserVariables(User owner, Map<String, Object> varList) {
 
 		super(owner);
-		this.variables = varList;
+		this.variables.clear();
+		this.variables.putAll(varList);
 		this.owner = owner;
 	}
 
@@ -35,8 +36,10 @@ public class UserVariables extends Variables {
 	protected UserVariables clone(User newOwner) {
 
 		UserVariables clone = new UserVariables(newOwner);
+		synchronized(variables) {
 		for (String key : variables.keySet()) {
 			clone.variables.put(key, variables.get(key));
+		}
 		}
 		newOwner.flagAsChanged();
 		return clone;

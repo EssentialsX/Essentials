@@ -6,6 +6,7 @@ package org.anjocaido.groupmanager.dataholder;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import org.anjocaido.groupmanager.data.User;
@@ -19,7 +20,7 @@ public class OverloadedWorldHolder extends WorldDataHolder {
 	/**
      *
      */
-	protected Map<String, User> overloadedUsers = new HashMap<String, User>();
+	protected final Map<String, User> overloadedUsers = Collections.synchronizedMap(new HashMap<String, User>());
 
 	/**
 	 * 
@@ -112,9 +113,11 @@ public class OverloadedWorldHolder extends WorldDataHolder {
 		if (groupName.equals(getDefaultGroup())) {
 			return false;
 		}
+		synchronized(getGroups()) {
 		for (String key : getGroups().keySet()) {
 			if (groupName.equalsIgnoreCase(key)) {
 				getGroups().remove(key);
+				synchronized(getUsers()) {
 				for (String userKey : getUsers().keySet()) {
 					User user = getUsers().get(userKey);
 					if (user.getGroupName().equalsIgnoreCase(key)) {
@@ -122,7 +125,9 @@ public class OverloadedWorldHolder extends WorldDataHolder {
 					}
 
 				}
+				}
 				//OVERLOADED CODE
+				synchronized(overloadedUsers) {
 				for (String userKey : overloadedUsers.keySet()) {
 					User user = overloadedUsers.get(userKey);
 					if (user.getGroupName().equalsIgnoreCase(key)) {
@@ -130,10 +135,12 @@ public class OverloadedWorldHolder extends WorldDataHolder {
 					}
 
 				}
+				}
 				//END OVERLOAD
 				setGroupsChanged(true);
 				return true;
 			}
+		}
 		}
 		return false;
 	}
@@ -146,6 +153,7 @@ public class OverloadedWorldHolder extends WorldDataHolder {
 	public Collection<User> getUserList() {
 
 		Collection<User> overloadedList = new ArrayList<User>();
+		synchronized(getUsers()) {
 		Collection<User> normalList = getUsers().values();
 		for (User u : normalList) {
 			if (overloadedUsers.containsKey(u.getName().toLowerCase())) {
@@ -153,6 +161,7 @@ public class OverloadedWorldHolder extends WorldDataHolder {
 			} else {
 				overloadedList.add(u);
 			}
+		}
 		}
 		return overloadedList;
 	}

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -35,7 +36,7 @@ public class GlobalGroups {
 	private GroupManager plugin;
 	//private Yaml GGroups;
 
-	private Map<String, Group> groups;
+	private final Map<String, Group> groups = Collections.synchronizedMap(new HashMap<String, Group>());
 
 	protected long timeStampGroups = 0;
 	protected boolean haveGroupsChanged = false;
@@ -55,10 +56,12 @@ public class GlobalGroups {
 		if (this.haveGroupsChanged) {
 			return true;
 		}
+		synchronized(groups) {
 		for (Group g : groups.values()) {
 			if (g.isChanged()) {
 				return true;
 			}
+		}
 		}
 		return false;
 	}
@@ -227,6 +230,7 @@ public class GlobalGroups {
 
 				Map<String, Object> groupsMap = new HashMap<String, Object>();
 				root.put("groups", groupsMap);
+				synchronized(groups) {
 				for (String groupKey : groups.keySet()) {
 					Group group = groups.get(groupKey);
 
@@ -244,6 +248,7 @@ public class GlobalGroups {
 
 					// Permission nodes
 					aGroupMap.put("permissions", group.getPermissionList());
+				}
 				}
 
 				if (!root.isEmpty()) {
@@ -418,26 +423,26 @@ public class GlobalGroups {
 	 * 
 	 * @return Set containing all group names.
 	 */
-	public Set<String> getGlobalGroups() {
+	/*public Set<String> getGlobalGroups() {
 
 		return groups.keySet();
-	}
+	}*/
 
 	/**
 	 * Resets GlobalGroups.
 	 */
 	public void resetGlobalGroups() {
-
-		this.groups = new HashMap<String, Group>();
+		this.groups.clear();
 	}
 
 	/**
 	 * 
 	 * @return a collection of the groups
 	 */
-	public Collection<Group> getGroupList() {
-
-		return groups.values();
+	public Group[] getGroupList() {
+		synchronized(groups) {
+			return groups.values().toArray(new Group[0]);
+		}
 	}
 
 	/**
@@ -469,8 +474,10 @@ public class GlobalGroups {
 	public void removeGroupsChangedFlag() {
 
 		setGroupsChanged(false);
+		synchronized(groups) {
 		for (Group g : groups.values()) {
 			g.flagAsSaved();
+		}
 		}
 	}
 

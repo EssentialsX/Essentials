@@ -4,6 +4,7 @@
  */
 package org.anjocaido.groupmanager.data;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -21,7 +22,7 @@ import java.util.Set;
 public abstract class Variables implements Cloneable {
 
 	private DataUnit owner;
-	protected Map<String, Object> variables = new HashMap<String, Object>();
+	protected final Map<String, Object> variables = Collections.synchronizedMap(new HashMap<String, Object>());
 
 	public Variables(DataUnit owner) {
 
@@ -126,9 +127,10 @@ public abstract class Variables implements Cloneable {
 	 * 
 	 * @return Set of all variable names.
 	 */
-	public Set<String> getVarKeyList() {
-
-		return variables.keySet();
+	public String[] getVarKeyList() {
+		synchronized(variables) {
+			return variables.keySet().toArray(new String[0]);
+		}
 	}
 
 	/**

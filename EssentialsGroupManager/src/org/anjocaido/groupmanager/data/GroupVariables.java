@@ -26,7 +26,8 @@ public class GroupVariables extends Variables implements Cloneable {
 	public GroupVariables(Group owner, Map<String, Object> varList) {
 
 		super(owner);
-		variables = varList;
+		variables.clear();
+		variables.putAll(varList);
 		if (variables.get("prefix") == null) {
 			variables.put("prefix", "");
 			owner.flagAsChanged();
@@ -54,8 +55,10 @@ public class GroupVariables extends Variables implements Cloneable {
 	protected GroupVariables clone(Group newOwner) {
 
 		GroupVariables clone = new GroupVariables(newOwner);
+		synchronized(variables) {
 		for (String key : variables.keySet()) {
 			clone.variables.put(key, variables.get(key));
+		}
 		}
 		newOwner.flagAsChanged();
 		return clone;
