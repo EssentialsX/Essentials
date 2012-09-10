@@ -1,7 +1,7 @@
 package org.anjocaido.groupmanager.dataholder;
 
 import java.io.File;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.anjocaido.groupmanager.data.User;
@@ -22,7 +22,7 @@ public class UsersDataHolder {
 	/**
 	 * The actual groups holder
 	 */
-	private Hashtable<String, User> users = new Hashtable<String, User>();
+	private Map<String, User> users = new HashMap<String, User>();
 
 	/**
 	 * Constructor
@@ -53,7 +53,7 @@ public class UsersDataHolder {
 	 */
 	public void setUsers(Map<String, User> users) {
 
-		this.users = (Hashtable<String, User>) users;
+		this.users = users;
 	}
 
 	/**

@@ -197,4 +197,3 @@ v 2.0:
 	- No more null errors from corrupt config.yml's.
 	- Give a better error when a subgroup is null.
 	- Include the GM version when logging errors.
-	- Change to Hashtables to reduce the chance of a ConcurrentModificationException pulling group/user data in an Async thread.
