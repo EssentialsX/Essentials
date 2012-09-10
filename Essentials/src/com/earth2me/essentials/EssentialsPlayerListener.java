@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
@@ -350,7 +351,9 @@ public class EssentialsPlayerListener implements Listener
 	public void onPlayerChangedWorldHack(final PlayerChangedWorldEvent event)
 	{
 		final Player user = event.getPlayer();
-		user.setAllowFlight(false);
+		if (user.getGameMode() != GameMode.CREATIVE) {
+			user.setAllowFlight(false);	
+		}		
 		user.setFlySpeed(0.1f);
 		user.setWalkSpeed(0.2f);
 	}
