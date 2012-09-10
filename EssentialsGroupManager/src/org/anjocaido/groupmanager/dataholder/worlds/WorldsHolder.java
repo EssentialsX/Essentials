@@ -403,8 +403,10 @@ public class WorldsHolder {
 
 		if (worldsData.containsKey(worldNameLowered)) {
 			OverloadedWorldHolder data = worldsData.get(worldNameLowered);
-			data.updateDataSource();
-			return data;
+			synchronized (data) {
+				data.updateDataSource();
+				return data;
+			}
 		}
 		return null;
 
