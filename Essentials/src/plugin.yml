@@ -166,7 +166,7 @@ commands:
   info:
     description: Shows information set by the server owner
     usage: /<command> [chapter] [page]
-    aliases: [ifo,einfo,eabout,news,enews,eifo]
+    aliases: [ifo,einfo,about,inform,einform,eabout,news,enews,eifo]
   invsee:
     description: See the inventory of other players.
     usage: /<command> <player>
