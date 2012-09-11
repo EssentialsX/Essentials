@@ -34,14 +34,11 @@ public class Commandrealname extends EssentialsCommand
 			}
 			u.setDisplayNick();
 			final String displayName = Util.stripFormat(u.getDisplayName()).toLowerCase(Locale.ENGLISH);
-			if (!whois.equals(displayName)
-				&& !displayName.equals(Util.stripFormat(ess.getSettings().getNicknamePrefix()) + whois)
-				&& !whois.equalsIgnoreCase(u.getName()))
+			if (displayName.contains(whois))
 			{
-				continue;
+				foundUser = true;
+				sender.sendMessage(u.getDisplayName() + " " + _("is") + " " + u.getName());
 			}
-			foundUser = true;
-			sender.sendMessage(u.getDisplayName() + " " + _("is") + " " + u.getName());
 		}
 		if (!foundUser)
 		{
