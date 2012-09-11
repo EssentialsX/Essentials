@@ -7,7 +7,6 @@ package org.anjocaido.groupmanager.data;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * A class that holds variables of a user/group.
