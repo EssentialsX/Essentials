@@ -1,13 +1,17 @@
 default: Default
 groups:
-    Default:
+  Default:
+    permissions:
     - essentials.spawn
     - essentials.rules
     - essentials.motd
     - essentials.list
     - essentials.helpop
     - essentials.help
-    Builder:
+    groups: []
+    meta: []
+  Builder:
+    permissions:
     - essentials.build
     - essentials.afk
     - essentials.back
@@ -52,8 +56,12 @@ groups:
     - essentials.warp
     - essentials.warp.list
     - essentials.worth
-    Moderator:
-    - essentials.build
+    groups:
+    - Default
+    meta:
+      priority: '20'
+  Moderator:
+    permissions:
     - essentials.ban
     - essentials.ban.notify
     - essentials.banip
@@ -100,7 +108,12 @@ groups:
     - essentials.whois
     - essentials.world
     - essentials.worlds.*
-    Admin:
+    groups:
+    - Builder
+    meta:
+      priority: '40'
+  Admin:
+    permissions:
     # Since we use essentials.* permission here, we can still disable commands like this
     # This can be done with any pemission nodes
     - ^essentials.backup
@@ -108,15 +121,21 @@ groups:
     - ^essentials.setspawn
     - ^essentials.reloadall
     - essentials.*
-    Owner:
-    - essentials.*
-players:
-    notch:
-    - Default
-    snowleo:
-    - Admin
+    groups:
     - Moderator
-    - Builder
-    - Default
-    KHobbits:
-    - Owner
+    meta:
+      priority: '80'
+  Owner:
+    permissions:
+    - essentials.*
+    groups:
+    - Admin
+    meta:
+      priority: '100'
+players:
+  notch:
+  - Default
+  snowleo:
+  - Admin
+  KHobbits:
+  - Owner
