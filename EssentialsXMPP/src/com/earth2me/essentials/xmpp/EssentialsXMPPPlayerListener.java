@@ -3,6 +3,7 @@ package com.earth2me.essentials.xmpp;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import java.util.List;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -49,9 +50,18 @@ class EssentialsXMPPPlayerListener implements Listener
 			List<String> users = EssentialsXMPP.getInstance().getSpyUsers();
 			synchronized (users)
 			{
-				for (String address : users)
+				for (final String address : users)
 				{
-					EssentialsXMPP.getInstance().sendMessage(address, message);
+					Bukkit.getScheduler().scheduleSyncDelayedTask(ess, new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							EssentialsXMPP.getInstance().sendMessage(address, message);
+						}
+
+					});
+
 				}
 			}
 		}
