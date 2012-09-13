@@ -132,10 +132,3 @@ groups:
     - Admin
     meta:
       priority: '100'
-players:
-  notch:
-  - Default
-  snowleo:
-  - Admin
-  KHobbits:
-  - Owner
