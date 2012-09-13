@@ -91,18 +91,7 @@ public class EssentialsConf extends YamlConfiguration
 			}
 			else
 			{
-				try
-				{
-					LOGGER.log(Level.INFO, _("creatingEmptyConfig", configFile.toString()));
-					if (!configFile.createNewFile())
-					{
-						LOGGER.log(Level.SEVERE, _("failedToCreateConfig", configFile.toString()));
-					}
-				}
-				catch (IOException ex)
-				{
-					LOGGER.log(Level.SEVERE, _("failedToCreateConfig", configFile.toString()), ex);
-				}
+				return;
 			}
 		}
 
@@ -366,6 +355,28 @@ public class EssentialsConf extends YamlConfiguration
 		Files.createParentDirs(file);
 
 		final String data = saveToString();
+
+		if (data.length() == 0)
+		{
+			return;
+		}
+
+		if (!configFile.exists())
+		{
+			try
+			{
+				LOGGER.log(Level.INFO, _("creatingEmptyConfig", configFile.toString()));
+				if (!configFile.createNewFile())
+				{
+					LOGGER.log(Level.SEVERE, _("failedToCreateConfig", configFile.toString()));
+				}
+			}
+			catch (IOException ex)
+			{
+				LOGGER.log(Level.SEVERE, _("failedToCreateConfig", configFile.toString()), ex);
+			}
+		}
+
 
 		final OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file), UTF8);
 
