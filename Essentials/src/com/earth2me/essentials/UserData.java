@@ -13,17 +13,24 @@ import org.bukkit.inventory.ItemStack;
 public abstract class UserData extends PlayerExtension implements IConf
 {
 	protected final transient IEssentials ess;
-	private final EssentialsConf config;
+	private EssentialsConf config;
+	private final File folder;
 
 	protected UserData(Player base, IEssentials ess)
 	{
 		super(base);
 		this.ess = ess;
-		File folder = new File(ess.getDataFolder(), "userdata");
+		folder = new File(ess.getDataFolder(), "userdata");
 		if (!folder.exists())
 		{
 			folder.mkdirs();
 		}
+		config = new EssentialsConf(new File(folder, Util.sanitizeFileName(base.getName()) + ".yml"));
+		reloadConfig();
+	}
+	
+	public final void reset () {
+		config.getFile().delete();
 		config = new EssentialsConf(new File(folder, Util.sanitizeFileName(base.getName()) + ".yml"));
 		reloadConfig();
 	}

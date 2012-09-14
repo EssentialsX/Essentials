@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.User;
 import com.earth2me.essentials.metrics.Metrics;
 import java.io.IOException;
 import java.util.HashMap;
@@ -41,6 +42,10 @@ public class Commandessentials extends EssentialsCommand
 		{
 			run_moo(server, sender, commandLabel, args);
 		}
+		else if (args[0].equalsIgnoreCase("reset"))
+		{
+			run_reset(server, sender, commandLabel, args);
+		}
 		else if (args[0].equalsIgnoreCase("opt-out"))
 		{
 			run_optout(server, sender, commandLabel, args);
@@ -67,6 +72,17 @@ public class Commandessentials extends EssentialsCommand
 			sender.sendMessage(_("blockList"));
 			sender.sendMessage(disabledCommands.toString());
 		}
+	}
+	
+	private void run_reset(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	{
+		if (args.length < 2)
+		{
+			throw new NotEnoughArgumentsException("/<command> reset <player>");
+		}
+		final User user = getPlayer(server, args, 1, true);
+		user.reset();
+		sender.sendMessage("Reset Essentials userdata for player: " + user.getDisplayName());
 	}
 	
 	private void run_debug(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
