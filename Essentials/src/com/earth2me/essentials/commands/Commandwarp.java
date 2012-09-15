@@ -105,7 +105,7 @@ public class Commandwarp extends EssentialsCommand
 		if (warpNameList.size() > WARPS_PER_PAGE)
 		{
 			sender.sendMessage(_("warpsCount", warpNameList.size(), page, (int)Math.ceil(warpNameList.size() / (double)WARPS_PER_PAGE)));
-			sender.sendMessage(warpList);
+			sender.sendMessage(_("warpList", warpList));
 		}
 		else
 		{
