@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
 import java.util.logging.Level;
 import org.bukkit.Server;
@@ -23,7 +24,15 @@ public class Commandban extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		final User user = getPlayer(server, args, 0, true);
+		User user;
+		try
+		{
+			user = getPlayer(server, args, 0, true);
+		}
+		catch (NoSuchFieldException e)
+		{
+			user = ess.getUser(new OfflinePlayer(args[0], ess));
+		}
 		if (!user.isOnline())
 		{
 			if (sender instanceof Player
@@ -41,7 +50,7 @@ public class Commandban extends EssentialsCommand
 				return;
 			}
 		}
-		
+
 		final String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
 		String banReason;
 		if (args.length > 1)
@@ -52,11 +61,11 @@ public class Commandban extends EssentialsCommand
 		{
 			banReason = _("banFormat", _("defaultBanReason"), senderName);
 		}
-		
+
 		user.setBanReason(banReason);
 		user.setBanned(true);
 		user.kickPlayer(banReason);
-		
+
 		server.getLogger().log(Level.INFO, _("playerBanned", senderName, user.getName(), banReason));
 
 		for (Player onlinePlayer : server.getOnlinePlayers())
