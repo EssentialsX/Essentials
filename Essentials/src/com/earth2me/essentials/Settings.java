@@ -54,19 +54,21 @@ public class Settings implements ISettings
 	@Override
 	public int getHomeLimit(final User user)
 	{
-		final Set<String> homeList = getMultipleHomes();
-		if (homeList == null)
+		int limit = 1;
+		if (user.isAuthorized("essentials.sethome.multiple"))
 		{
-			//TODO: Replace this code to remove backwards compat, after settings are automatically updated
-			// return getHomeLimit("default");
-			return config.getInt("multiple-homes", 5);
+			limit = getHomeLimit("default");
 		}
-		int limit = getHomeLimit("default");
-		for (String set : homeList)
+
+		final Set<String> homeList = getMultipleHomes();
+		if (homeList != null)
 		{
-			if (user.isAuthorized("essentials.sethome.multiple." + set) && (limit < getHomeLimit(set)))
+			for (String set : homeList)
 			{
-				limit = getHomeLimit(set);
+				if (user.isAuthorized("essentials.sethome.multiple." + set) && (limit < getHomeLimit(set)))
+				{
+					limit = getHomeLimit(set);
+				}
 			}
 		}
 		return limit;
@@ -530,7 +532,6 @@ public class Settings implements ISettings
 		}
 		return newSigns;
 	}
-
 	private boolean warnOnBuildDisallow;
 
 	private boolean _warnOnBuildDisallow()

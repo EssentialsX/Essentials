@@ -248,16 +248,6 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		return getHome(getHomes().get(0));
 	}
 
-	public void setHome()
-	{
-		setHome("home", getLocation());
-	}
-
-	public void setHome(final String name)
-	{
-		setHome(name, getLocation());
-	}
-
 	@Override
 	public void setLastLocation()
 	{
