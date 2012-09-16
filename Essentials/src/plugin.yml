@@ -441,7 +441,7 @@ commands:
   workbench:
     description: Opens up a workbench
     usage: /<command>
-    aliases: [eworkbench,wb,ewb,wbench,ewbench]
+    aliases: [eworkbench,wb,ewb,wbench,ewbench,craft,ecraft]
   world:
     description: Switch between worlds.
     usage: /<command> [world]
