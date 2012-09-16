@@ -9,14 +9,9 @@
 #   - No tabs are present: YAML only allows spaces
 #   - Indents are correct: YAML hierarchy is based entirely on indentation
 #   - You have "escaped" all apostrophes in your text: If you want to write "don't", for example, write "don''t" instead (note the doubled apostrphe)
-#   - List items are prefixed with a hyphen and indented:
-#       lists:
-#         - look like this
-#       not:
-#       - like this
 #   - Text with symbols is enclosed in single or double quotation marks
-#   - CraftBukkit and Permissions have been updated: CraftBukkit and Essentials almost always line up, but sometimes other plugins fall behind CraftBukkit's multiple daily updates
-#   - You have saved the document as UTF-8, NOT the default, ANSI
+
+# If you have problems join the Essentials help support channel: http://tiny.cc/EssentialsChat
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -103,11 +98,13 @@ disabled-commands:
 # These are the permissions without the "essentials." part.
 player-commands:
   - afk
+  - afk.auto
   - back
   - back.ondeath
   - balance
   - balance.others
   - balancetop
+  - build
   - chat.color
   - chat.format
   - chat.shout
@@ -138,8 +135,6 @@ player-commands:
   - near
   - pay
   - ping
-  - powertool
-  - powertooltoggle
   - protect
   - r
   - rules
