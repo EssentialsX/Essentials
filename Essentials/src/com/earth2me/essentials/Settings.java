@@ -147,26 +147,6 @@ public class Settings implements ISettings
 	}
 
 	@Override
-	public boolean isCommandRestricted(IEssentialsCommand cmd)
-	{
-		return isCommandRestricted(cmd.getName());
-	}
-
-	@Override
-	public boolean isCommandRestricted(String label)
-	{
-		for (String c : config.getStringList("restricted-commands"))
-		{
-			if (!c.equalsIgnoreCase(label))
-			{
-				continue;
-			}
-			return true;
-		}
-		return config.getBoolean("restrict-" + label.toLowerCase(Locale.ENGLISH), false);
-	}
-
-	@Override
 	public boolean isPlayerCommand(String label)
 	{
 		for (String c : config.getStringList("player-commands"))

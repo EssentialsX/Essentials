@@ -200,7 +200,8 @@ public class PermissionsHandler implements IPermissionsHandler
 		{
 			if (!(handler instanceof ConfigPermissionsHandler))
 			{
-				LOGGER.log(Level.INFO, "Essentials: Using config based permissions. Enable superperms in config.");
+				LOGGER.log(Level.INFO, "Essentials: Using config file enhanced permissions.");
+				LOGGER.log(Level.INFO, "Permissions listed in as player-commands will be given to all users.");
 				handler = new ConfigPermissionsHandler(plugin);
 			}
 		}

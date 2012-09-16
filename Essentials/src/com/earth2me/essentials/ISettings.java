@@ -92,10 +92,6 @@ public interface ISettings extends IConf
 
 	boolean isCommandOverridden(String name);
 
-	boolean isCommandRestricted(IEssentialsCommand cmd);
-
-	boolean isCommandRestricted(String label);
-
 	boolean isDebug();
 
 	boolean isEcoDisabled();

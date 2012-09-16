@@ -96,10 +96,10 @@ overridden-commands:
 disabled-commands:
 # - nick
 
-# Restricted commands have been removed.
-# Now we have a whitelist, all commands not on this list are only available to ops.
-# These will have NO EFFECT if you have Permissions installed!
-# They are here only if you want something simpler than Permissions.
+# If you do not wish to use a permission system, you can define a list of 'player perms' below.
+# This list has no effect if your using a supported permissions system.
+# If your using an unsupported permissions system simply delete this section.
+# Whitelist the commands and permissions you wish to give players by default (everything else is op only).
 # These are the permissions without the "essentials." part.
 player-commands:
   - afk
@@ -259,10 +259,6 @@ debug: false
 
 # Turn off god mode when people exit
 remove-god-on-disconnect: false
-
-# Use the permission system of bukkit
-# This only works if no other permission plugins are installed
-use-bukkit-permissions: false
 
 # Auto-AFK
 # After this timeout in seconds, the user will be set as afk.

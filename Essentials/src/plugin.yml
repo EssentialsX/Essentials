@@ -450,3 +450,8 @@ commands:
     description: Calculates the worth of items in hand or as specified.
     usage: /<command> [item] [amount]
     aliases: [eworth,price,eprice]
+
+permissions:
+  essentials.*:
+    default: op
+    description: Give op's everything by default

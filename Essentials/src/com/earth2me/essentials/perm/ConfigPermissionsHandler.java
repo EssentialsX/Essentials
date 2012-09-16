@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 
-public class ConfigPermissionsHandler implements IPermissionsHandler
+public class ConfigPermissionsHandler extends SuperpermsHandler
 {
 	private final transient IEssentials ess;
 
@@ -16,46 +16,16 @@ public class ConfigPermissionsHandler implements IPermissionsHandler
 	}
 
 	@Override
-	public String getGroup(final Player base)
-	{
-		return null;
-	}
-
-	@Override
-	public List<String> getGroups(final Player base)
-	{
-		return null;
-	}
-
-	@Override
 	public boolean canBuild(final Player base, final String group)
 	{
 		return true;
 	}
 
 	@Override
-	public boolean inGroup(final Player base, final String group)
-	{
-		return false;
-	}
-
-	@Override
 	public boolean hasPermission(final Player base, final String node)
 	{
 		final String[] cmds = node.split("\\.", 2);
-		return !ess.getSettings().isCommandRestricted(cmds[cmds.length - 1])
-			   && ess.getSettings().isPlayerCommand(cmds[cmds.length - 1]);
+		return ess.getSettings().isPlayerCommand(cmds[cmds.length - 1]) || super.hasPermission(base, node);
 	}
 
-	@Override
-	public String getPrefix(final Player base)
-	{
-		return null;
-	}
-
-	@Override
-	public String getSuffix(final Player base)
-	{
-		return null;
-	}
 }
