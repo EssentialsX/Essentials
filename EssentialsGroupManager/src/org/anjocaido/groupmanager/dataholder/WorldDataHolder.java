@@ -319,8 +319,9 @@ public class WorldDataHolder {
 	 * @return a collection of the groups
 	 */
 	public Collection<Group> getGroupList() {
-
-		return getGroups().values();
+		synchronized(getGroups()) {
+			return new ArrayList<Group>(getGroups().values());
+		}
 	}
 
 	/**
@@ -328,8 +329,9 @@ public class WorldDataHolder {
 	 * @return a collection of the users
 	 */
 	public Collection<User> getUserList() {
-
-		return getUsers().values();
+		synchronized(getUsers()) {
+			return new ArrayList<User>(getUsers().values());
+		}
 	}
 
 	/**
@@ -944,6 +946,7 @@ public class WorldDataHolder {
 		Map<String, Object> groupsMap = new HashMap<String, Object>();
 
 		root.put("groups", groupsMap);
+		synchronized(ph.getGroups()) {
 		for (String groupKey : ph.getGroups().keySet()) {
 			Group group = ph.getGroups().get(groupKey);
 
@@ -965,6 +968,7 @@ public class WorldDataHolder {
 			aGroupMap.put("inheritance", group.getInherits());
 
 			aGroupMap.put("permissions", group.getPermissionList());
+		}
 		}
 
 		if (!root.isEmpty()) {
@@ -1031,6 +1035,7 @@ public class WorldDataHolder {
 
 		Map<String, Object> usersMap = new HashMap<String, Object>();
 		root.put("users", usersMap);
+		synchronized(ph.getUsers()) {
 		for (String userKey : ph.getUsers().keySet()) {
 			User user = ph.getUsers().get(userKey);
 			if ((user.getGroup() == null || user.getGroup().equals(ph.getDefaultGroup())) && user.getPermissionList().isEmpty() && user.getVariables().isEmpty() && user.isSubGroupsEmpty()) {
@@ -1059,6 +1064,7 @@ public class WorldDataHolder {
 			// SUBGROUPS NODE - BETA
 			aUserMap.put("subgroups", user.subGroupListStringCopy());
 			// END SUBGROUPS NODE - BETA
+		}
 		}
 
 		if (!root.isEmpty()) {
@@ -1159,10 +1165,12 @@ public class WorldDataHolder {
 		if (users.HaveUsersChanged()) {
 			return true;
 		}
+		synchronized(users.getUsers()) {
 		for (User u : users.getUsers().values()) {
 			if (u.isChanged()) {
 				return true;
 			}
+		}
 		}
 		return false;
 	}
@@ -1184,10 +1192,12 @@ public class WorldDataHolder {
 		if (groups.HaveGroupsChanged()) {
 			return true;
 		}
+		synchronized(groups.getGroups()) {
 		for (Group g : groups.getGroups().values()) {
 			if (g.isChanged()) {
 				return true;
 			}
+		}
 		}
 		return false;
 	}
@@ -1198,8 +1208,10 @@ public class WorldDataHolder {
 	public void removeUsersChangedFlag() {
 
 		setUsersChanged(false);
+		synchronized(getUsers()) {
 		for (User u : getUsers().values()) {
 			u.flagAsSaved();
+		}
 		}
 	}
 
@@ -1209,8 +1221,10 @@ public class WorldDataHolder {
 	public void removeGroupsChangedFlag() {
 
 		setGroupsChanged(false);
+		synchronized(getGroups()) {
 		for (Group g : getGroups().values()) {
 			g.flagAsSaved();
+		}
 		}
 	}
 
@@ -1260,18 +1274,18 @@ public class WorldDataHolder {
 	public void resetGroups() {
 
 		// setDefaultGroup(null);
-		groups.setGroups(new HashMap<String, Group>());
+		groups.resetGroups();
 	}
 
 	/**
 	 * Resets Users
 	 */
 	public void resetUsers() {
-
-		users.setUsers(new HashMap<String, User>());
+		users.resetUsers();
 	}
 
 	/**
+	 * Note: Iteration over this object has to be synchronized!
 	 * @return the groups
 	 */
 	public Map<String, Group> getGroups() {
@@ -1280,6 +1294,7 @@ public class WorldDataHolder {
 	}
 
 	/**
+	 * Note: Iteration over this object has to be synchronized!
 	 * @return the users
 	 */
 	public Map<String, User> getUsers() {

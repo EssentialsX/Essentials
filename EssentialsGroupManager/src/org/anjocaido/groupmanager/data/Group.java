@@ -23,7 +23,7 @@ public class Group extends DataUnit implements Cloneable {
 	/**
 	 * The group it inherits DIRECTLY!
 	 */
-	private ArrayList<String> inherits = new ArrayList<String>();
+	private List<String> inherits = Collections.unmodifiableList(Collections.<String>emptyList());
 	/**
 	 * This one holds the fields in INFO node.
 	 * like prefix = 'c'
@@ -75,7 +75,9 @@ public class Group extends DataUnit implements Cloneable {
 			clone = new Group(this.getName());
 		} else {
 			clone = new Group(getDataSource(), this.getName());
-			clone.inherits = new ArrayList<String>(this.getInherits());
+			clone.inherits = this.getInherits().isEmpty() ?
+					Collections.unmodifiableList(Collections.<String>emptyList())
+					: Collections.unmodifiableList(new ArrayList<String>(this.getInherits()));
 		}
 
 		for (String perm : this.getPermissionList()) {
@@ -102,7 +104,9 @@ public class Group extends DataUnit implements Cloneable {
 
 		// Don't add inheritance for GlobalGroups
 		if (!isGlobal()) {
-			clone.inherits = new ArrayList<String>(this.getInherits());
+			clone.inherits = this.getInherits().isEmpty() ?
+					Collections.unmodifiableList(Collections.<String>emptyList())
+					: Collections.unmodifiableList(new ArrayList<String>(this.getInherits()));
 		}
 		for (String perm : this.getPermissionList()) {
 			clone.addPermission(perm);
@@ -120,8 +124,7 @@ public class Group extends DataUnit implements Cloneable {
 	 * @return the inherits
 	 */
 	public List<String> getInherits() {
-
-		return Collections.unmodifiableList(inherits);
+		return inherits;
 	}
 
 	/**
@@ -134,7 +137,9 @@ public class Group extends DataUnit implements Cloneable {
 				getDataSource().addGroup(inherit);
 			}
 			if (!inherits.contains(inherit.getName().toLowerCase())) {
-				inherits.add(inherit.getName().toLowerCase());
+				List<String> clone = new ArrayList<String>(inherits);
+				clone.add(inherit.getName().toLowerCase());
+				inherits = Collections.unmodifiableList(clone);
 			}
 			flagAsChanged();
 			if (GroupManager.isLoaded()) {
@@ -148,7 +153,9 @@ public class Group extends DataUnit implements Cloneable {
 
 		if (!isGlobal()) {
 			if (this.inherits.contains(inherit.toLowerCase())) {
-				this.inherits.remove(inherit.toLowerCase());
+				List<String> clone = new ArrayList<String>(inherits);
+				clone.remove(inherit.toLowerCase());
+				inherits = Collections.unmodifiableList(clone);
 				flagAsChanged();
 				GroupManagerEventHandler.callEvent(this, Action.GROUP_INHERITANCE_CHANGED);
 				return true;

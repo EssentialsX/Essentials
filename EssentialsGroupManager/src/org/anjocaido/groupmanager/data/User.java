@@ -6,6 +6,8 @@ package org.anjocaido.groupmanager.data;
 
 //import com.sun.org.apache.bcel.internal.generic.AALOAD;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.dataholder.WorldDataHolder;
@@ -26,7 +28,7 @@ public class User extends DataUnit implements Cloneable {
      *
      */
 	private String group = null;
-	private ArrayList<String> subGroups = new ArrayList<String>();
+	private final List<String> subGroups = Collections.synchronizedList(Collections.<String>emptyList());
 	/**
 	 * This one holds the fields in INFO node. like prefix = 'c' or build =
 	 * false
@@ -213,6 +215,7 @@ public class User extends DataUnit implements Cloneable {
 	public ArrayList<Group> subGroupListCopy() {
 
 		ArrayList<Group> val = new ArrayList<Group>();
+		synchronized(subGroups) {
 		for (String gstr : subGroups) {
 			Group g = getDataSource().getGroup(gstr);
 			if (g == null) {
@@ -221,12 +224,14 @@ public class User extends DataUnit implements Cloneable {
 			}
 			val.add(g);
 		}
+		}
 		return val;
 	}
 
 	public ArrayList<String> subGroupListStringCopy() {
-
-		return new ArrayList<String>(subGroups);
+		synchronized(subGroups) {
+			return new ArrayList<String>(subGroups);
+		}
 	}
 
 	/**

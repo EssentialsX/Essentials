@@ -21,7 +21,7 @@ public abstract class DataUnit {
 	private WorldDataHolder dataSource;
 	private String name;
 	private boolean changed, sorted = false;
-	private ArrayList<String> permissions = new ArrayList<String>();
+	private List<String> permissions = Collections.unmodifiableList(Collections.<String>emptyList());
 
 	public DataUnit(WorldDataHolder dataSource, String name) {
 
@@ -144,7 +144,9 @@ public abstract class DataUnit {
 	public void addPermission(String permission) {
 
 		if (!hasSamePermissionNode(permission)) {
-			permissions.add(permission);
+			List<String> clone = new ArrayList<String>(permissions);
+			clone.add(permission);
+			permissions = Collections.unmodifiableList(clone);
 		}
 		flagAsChanged();
 	}
@@ -152,7 +154,10 @@ public abstract class DataUnit {
 	public boolean removePermission(String permission) {
 
 		flagAsChanged();
-		return permissions.remove(permission);
+		List<String> clone = new ArrayList<String>(permissions);
+		boolean ret = clone.remove(permission);
+		permissions = Collections.unmodifiableList(clone);
+		return ret;
 	}
 
 	/**
@@ -162,8 +167,7 @@ public abstract class DataUnit {
 	 * @return a copy of the permission list
 	 */
 	public List<String> getPermissionList() {
-
-		return Collections.unmodifiableList(permissions);
+		return permissions;
 	}
 
 	public boolean isSorted() {
@@ -174,7 +178,9 @@ public abstract class DataUnit {
 	public void sortPermissions() {
 
 		if (!isSorted()) {
-			Collections.sort(permissions, StringPermissionComparator.getInstance());
+			List<String> clone = new ArrayList<String>(permissions);
+			Collections.sort(clone, StringPermissionComparator.getInstance());
+			permissions = Collections.unmodifiableList(clone);
 			sorted = true;
 		}
 	}
