@@ -201,7 +201,6 @@ kits:
 # To enable signs, remove # symbol. To disable all signs, comment/remove each sign.
 # Essentials Colored sign support will be enabled when any sign types are enabled.
 # Color is not an actual sign, its for enabling using color codes on signs, when the correct permissions are given.
-# We recommend not enabling chest protection signs if you don't intend to use them, (or are using LWC/Lockette).
 
 enabledSigns:
   #- color
@@ -221,9 +220,7 @@ enabledSigns:
   #- spawnmob
   #- repair
   #- time
-  #- weather
-  #- protection
-  
+  #- weather  
   
 # How many times per second can Essentials signs be interacted with per player.
 # Values should be between 1-20, 20 being virtually no lag protection.
