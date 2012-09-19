@@ -7,11 +7,13 @@ import java.util.logging.Level;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.painting.PaintingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -226,6 +228,27 @@ public class EssentialsAntiBuildListener implements Listener
 				if (ess.getSettings().warnOnBuildDisallow())
 				{
 					user.sendMessage(_("antiBuildInteract", event.getClickedBlock().getType().toString()));
+				}
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOW)
+	public void onCraftItemEvent(final CraftItemEvent event)
+	{
+		HumanEntity entity = event.getWhoClicked();
+
+		if (entity instanceof Player)
+		{
+			final User user = ess.getUser(entity);
+			final ItemStack item = event.getRecipe().getResult();
+
+			if (!metaPermCheck(user, "craft", item.getTypeId(), item.getData().getData()))
+			{
+				event.setCancelled(true);
+				if (ess.getSettings().warnOnBuildDisallow())
+				{
+					user.sendMessage(_("antiBuildUse", item.getType().toString()));
 				}
 			}
 		}
