@@ -15,7 +15,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.painting.PaintingBreakByEntityEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -248,9 +250,43 @@ public class EssentialsAntiBuildListener implements Listener
 				event.setCancelled(true);
 				if (ess.getSettings().warnOnBuildDisallow())
 				{
-					user.sendMessage(_("antiBuildUse", item.getType().toString()));
+					user.sendMessage(_("antiBuildCraft", item.getType().toString()));
 				}
 			}
 		}
+	}
+
+	@EventHandler(priority = EventPriority.LOW)
+	public void onPlayerPickupItem(PlayerPickupItemEvent event)
+	{
+
+		final User user = ess.getUser(event.getPlayer());
+		final ItemStack item = event.getItem().getItemStack();
+
+		if (!metaPermCheck(user, "craft", item.getTypeId(), item.getData().getData()))
+		{
+			event.setCancelled(true);
+			event.getItem().setPickupDelay(50);
+		}
+
+	}
+
+	@EventHandler(priority = EventPriority.LOW)
+	public void onPlayerDropItem(PlayerDropItemEvent event)
+	{
+
+		final User user = ess.getUser(event.getPlayer());
+		final ItemStack item = event.getItemDrop().getItemStack();
+
+		if (!metaPermCheck(user, "drop", item.getTypeId(), item.getData().getData()))
+		{
+			event.setCancelled(true);
+			user.updateInventory();
+			if (ess.getSettings().warnOnBuildDisallow())
+			{
+				user.sendMessage(_("antiBuildDrop", item.getType().toString()));
+			}
+		}
+
 	}
 }
