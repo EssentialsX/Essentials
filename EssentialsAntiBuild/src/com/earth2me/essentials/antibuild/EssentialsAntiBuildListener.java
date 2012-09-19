@@ -235,7 +235,7 @@ public class EssentialsAntiBuildListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onCraftItemEvent(final CraftItemEvent event)
 	{
 		HumanEntity entity = event.getWhoClicked();
@@ -256,14 +256,14 @@ public class EssentialsAntiBuildListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerPickupItem(PlayerPickupItemEvent event)
 	{
 
 		final User user = ess.getUser(event.getPlayer());
 		final ItemStack item = event.getItem().getItemStack();
 
-		if (!metaPermCheck(user, "craft", item.getTypeId(), item.getData().getData()))
+		if (!metaPermCheck(user, "pickup", item.getTypeId(), item.getData().getData()))
 		{
 			event.setCancelled(true);
 			event.getItem().setPickupDelay(50);
@@ -271,7 +271,7 @@ public class EssentialsAntiBuildListener implements Listener
 
 	}
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerDropItem(PlayerDropItemEvent event)
 	{
 

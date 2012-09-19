@@ -25,14 +25,9 @@ public class EssentialsProtectBlockListener implements Listener
 		this.ess = prot.getEssentialsConnect().getEssentials();
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockPlace(final BlockPlaceEvent event)
 	{
-		if (event.isCancelled())
-		{
-			return;
-		}
-
 		final User user = ess.getUser(event.getPlayer());
 
 		final Block blockPlaced = event.getBlockPlaced();
@@ -79,13 +74,9 @@ public class EssentialsProtectBlockListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockIgnite(BlockIgniteEvent event)
 	{
-		if (event.isCancelled())
-		{
-			return;
-		}
 		final Block block = event.getBlock();
 		if ((block.getType() == Material.RAILS || block.getType() == Material.POWERED_RAIL || block.getType() == Material.DETECTOR_RAIL)
 			&& prot.getSettingBool(ProtectConfig.protect_rails))
@@ -130,13 +121,9 @@ public class EssentialsProtectBlockListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockFromTo(final BlockFromToEvent event)
 	{
-		if (event.isCancelled())
-		{
-			return;
-		}
 		final Block toBlock = event.getToBlock();
 		if ((toBlock.getType() == Material.RAILS || toBlock.getType() == Material.POWERED_RAIL || toBlock.getType() == Material.DETECTOR_RAIL)
 			&& prot.getSettingBool(ProtectConfig.protect_rails))
@@ -171,13 +158,9 @@ public class EssentialsProtectBlockListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockBurn(final BlockBurnEvent event)
 	{
-		if (event.isCancelled())
-		{
-			return;
-		}
 		final Block block = event.getBlock();
 		if ((block.getType() == Material.RAILS || block.getType() == Material.POWERED_RAIL || block.getType() == Material.DETECTOR_RAIL) && prot.getSettingBool(ProtectConfig.protect_rails))
 		{
@@ -207,13 +190,9 @@ public class EssentialsProtectBlockListener implements Listener
 		BlockFace.SELF
 	};
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockBreak(final BlockBreakEvent event)
 	{
-		if (event.isCancelled())
-		{
-			return;
-		}
 		final User user = ess.getUser(event.getPlayer());
 
 		final Block block = event.getBlock();
@@ -290,13 +269,9 @@ public class EssentialsProtectBlockListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockPistonExtend(BlockPistonExtendEvent event)
 	{
-		if (event.isCancelled())
-		{
-			return;
-		}
 		for (Block block : event.getBlocks())
 		{
 			if ((block.getRelative(BlockFace.UP).getType() == Material.RAILS
@@ -338,10 +313,10 @@ public class EssentialsProtectBlockListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockPistonRetract(BlockPistonRetractEvent event)
 	{
-		if (event.isCancelled() || !event.isSticky())
+		if (!event.isSticky())
 		{
 			return;
 		}
