@@ -8,7 +8,7 @@ import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 
-public class PermissionsExHandler implements IPermissionsHandler
+public class PermissionsExHandler extends SuperpermsHandler
 {
 	private final transient PermissionManager manager;
 
@@ -66,7 +66,7 @@ public class PermissionsExHandler implements IPermissionsHandler
 	@Override
 	public boolean hasPermission(final Player base, final String node)
 	{
-		return base.hasPermission(node);
+		return super.hasPermission(base, node);
 	}
 
 	@Override
