@@ -66,7 +66,7 @@ public class PermissionsExHandler extends SuperpermsHandler
 	@Override
 	public boolean hasPermission(final Player base, final String node)
 	{
-		return super.hasPermission(base, node);
+		return base.hasPermission("*") || super.hasPermission(base, node);
 	}
 
 	@Override
