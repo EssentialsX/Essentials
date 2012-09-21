@@ -185,7 +185,7 @@ kits:
   dtools:
     delay: 10
     items:
-      - 277 1 efficiency:1
+      - 277 1 efficiency:1 durability:1
       - 278 1
       - 279:780 1
   tools:
