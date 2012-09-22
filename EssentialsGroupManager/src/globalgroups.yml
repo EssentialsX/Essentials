@@ -1,6 +1,8 @@
 # These groups only contain permission nodes.
 #
 # **** You can NOT add anything other than permission nodes ****
+# **** This is NOT where you set up the groups which you give to users! ****
+# **** goto groupmanager/worlds/worldname/groups.yml if you want to set the actual groups! ****
 #
 # These collections are to be inherited in your different worlds groups.yml's
 # They can also be added as one of a users subgroups, but NOT as a primary group.
