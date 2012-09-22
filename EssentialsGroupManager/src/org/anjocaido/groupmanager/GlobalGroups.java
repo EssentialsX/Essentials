@@ -236,14 +236,6 @@ public class GlobalGroups {
 					Map<String, Object> aGroupMap = new HashMap<String, Object>();
 					groupsMap.put(group.getName(), aGroupMap);
 
-					// Info nodes
-					Map<String, Object> infoMap = new HashMap<String, Object>();
-					aGroupMap.put("info", infoMap);
-
-					for (String infoKey : group.getVariables().getVarKeyList()) {
-						infoMap.put(infoKey, group.getVariables().getVarObject(infoKey));
-					}
-
 					// Permission nodes
 					aGroupMap.put("permissions", group.getPermissionList());
 				}
