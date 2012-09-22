@@ -19,7 +19,6 @@ import org.anjocaido.groupmanager.events.GMGroupEvent;
 import org.anjocaido.groupmanager.events.GroupManagerEventHandler;
 import org.anjocaido.groupmanager.utils.PermissionCheckResult;
 import org.anjocaido.groupmanager.utils.Tasks;
-import org.bukkit.configuration.MemorySection;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
@@ -184,22 +183,22 @@ public class GlobalGroups {
 						} else
 							throw new IllegalArgumentException("Unknown type of permission node for global group:  " + groupName);
 
-					// Info nodes
-					try {
-						element = ((Map<String, Object>)allGroups.get(groupName)).get("info");
-					} catch ( Exception ex) {
-						throw new IllegalArgumentException("The GlobalGroup ' " + groupName + "' is formatted incorrectly: ", ex);
-					}
-
-					if (element != null)
-						if (element instanceof MemorySection) {
-							Map<String, Object> vars = new HashMap<String, Object>();
-							for (String key : ((MemorySection) element).getKeys(false)) {
-								vars.put(key, ((MemorySection) element).get(key));
-							}
-							newGroup.setVariables(vars);
-						} else
-							throw new IllegalArgumentException("Unknown type of info node for global group:  " + groupName);
+//					// Info nodes
+//					try {
+//						element = ((Map<String, Object>)allGroups.get(groupName)).get("info");
+//					} catch ( Exception ex) {
+//						throw new IllegalArgumentException("The GlobalGroup ' " + groupName + "' is formatted incorrectly: ", ex);
+//					}
+//
+//					if (element != null)
+//						if (element instanceof MemorySection) {
+//							Map<String, Object> vars = new HashMap<String, Object>();
+//							for (String key : ((MemorySection) element).getKeys(false)) {
+//								vars.put(key, ((MemorySection) element).get(key));
+//							}
+//							newGroup.setVariables(vars);
+//						} else
+//							throw new IllegalArgumentException("Unknown type of info node for global group:  " + groupName);
 
 					// Push a new group
 					addGroup(newGroup);
@@ -236,13 +235,13 @@ public class GlobalGroups {
 					Map<String, Object> aGroupMap = new HashMap<String, Object>();
 					groupsMap.put(group.getName(), aGroupMap);
 
-					// Info nodes
-					Map<String, Object> infoMap = new HashMap<String, Object>();
-					aGroupMap.put("info", infoMap);
-
-					for (String infoKey : group.getVariables().getVarKeyList()) {
-						infoMap.put(infoKey, group.getVariables().getVarObject(infoKey));
-					}
+//					// Info nodes
+//					Map<String, Object> infoMap = new HashMap<String, Object>();
+//					aGroupMap.put("info", infoMap);
+//
+//					for (String infoKey : group.getVariables().getVarKeyList()) {
+//						infoMap.put(infoKey, group.getVariables().getVarObject(infoKey));
+//					}
 
 					// Permission nodes
 					aGroupMap.put("permissions", group.getPermissionList());

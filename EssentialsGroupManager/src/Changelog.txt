@@ -197,3 +197,5 @@ v 2.0:
 	- No more null errors from corrupt config.yml's.
 	- Give a better error when a subgroup is null.
 	- Include the GM version when logging errors.
+	- Fix Synchronization on adding subgroups (thanks snowleo).
+	- Remove info node support from GlobalGroups. It should not have them as GlobalGroups are only permission collections.

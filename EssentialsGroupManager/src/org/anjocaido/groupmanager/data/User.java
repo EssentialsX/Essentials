@@ -28,7 +28,7 @@ public class User extends DataUnit implements Cloneable {
      *
      */
 	private String group = null;
-	private final List<String> subGroups = Collections.synchronizedList(Collections.<String>emptyList());
+	private final List<String> subGroups = Collections.synchronizedList(new ArrayList<String>());
 	/**
 	 * This one holds the fields in INFO node. like prefix = 'c' or build =
 	 * false
