@@ -11,7 +11,9 @@ public class SimpleTextInput implements IText
 	private final transient List<String> lines = new ArrayList<String>();
 	
 	public SimpleTextInput (final String input) {
-		lines.add(input);
+		for (String line : input.split("\\n")) {
+			lines.add(line);
+		}
 	}
 		
 	@Override

@@ -552,15 +552,15 @@ protect:
       storm: false
       thunder: false
       lightning: false     
-        
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                EssentialsAntiBuild                   | #
 # +------------------------------------------------------+ #
 ############################################################
-  
+
   # Disable various default physics and behaviors
-  
+
     # Should people with build: false in permissions be allowed to build
     # Set true to disable building for those people
     # Setting to false means EssentialsAntiBuild will never prevent you from building
@@ -573,7 +573,7 @@ protect:
 
     # Should we tell people they are not allowed to build
     warn-on-build-disallow: true
-   
+
   # For which block types would you like to be alerted?
   # You can find a list of IDs in plugins/Essentials/items.csv after loading Essentials for the first time.
   # 10 = lava :: 11 = still lava :: 46 = TNT :: 327 = lava bucket
@@ -612,7 +612,7 @@ newbies:
   # When we spawn for the first time, which spawnpoint do we use?
   # Set to "none" if you want to use the spawn point of the world.
   spawnpoint: newbies
-  
+
   # Do we want to give users anything on first join? Set to '' to disable
   # This kit will be given regardless  of cost, and permissions.
   #kit: ''

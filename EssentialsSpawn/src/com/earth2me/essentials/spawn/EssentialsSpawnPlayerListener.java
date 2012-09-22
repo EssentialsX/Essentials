@@ -101,7 +101,11 @@ public class EssentialsSpawnPlayerListener implements Listener
 		{
 			final IText output = new KeywordReplacer(ess.getSettings().getAnnounceNewPlayerFormat(), user, ess);
 			final SimpleTextPager pager = new SimpleTextPager(output);
-			ess.broadcastMessage(user, pager.getString(0));
+
+			for (String line : pager.getLines())
+			{
+				ess.broadcastMessage(user, line);
+			}
 		}
 
 		final String kitName = ess.getSettings().getNewPlayerKit();
