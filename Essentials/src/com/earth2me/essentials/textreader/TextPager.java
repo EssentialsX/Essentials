@@ -70,7 +70,7 @@ public class TextPager
 			}
 			for (int i = start; i < lines.size() && i < start + (onePage ? 20 : 9); i++)
 			{
-				sender.sendMessage(lines.get(i));
+				sender.sendMessage("§r" + lines.get(i));
 			}
 			if (!onePage && page < pages && commandName != null)
 			{
@@ -137,7 +137,7 @@ public class TextPager
 				}
 				for (int i = start; i < end && i < start + (onePage ? 20 : 9); i++)
 				{
-					sender.sendMessage(lines.get(i));
+					sender.sendMessage("§r" + lines.get(i));
 				}
 				if (!onePage && page < pages && commandName != null)
 				{
@@ -189,7 +189,7 @@ public class TextPager
 		}
 		for (int i = start; i < chapterend && i < start + (onePage ? 20 : 9); i++)
 		{
-			sender.sendMessage(lines.get(i));
+			sender.sendMessage("§r" + lines.get(i));
 		}
 		if (!onePage && page < pages && commandName != null)
 		{

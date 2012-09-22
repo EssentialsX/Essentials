@@ -25,16 +25,14 @@ when he does not select a chapter.
 
 #Colors
 Minecraft colors:
-&0 &&0 &1 &&1 &2 &&2 &3 &&3
-&4 &&4 &5 &&5 &6 &&6 &7 &&7
-&8 &&8 &9 &&9 &a &&a &b &&b
-&c &&c &d &&d &e &&e &f &&f 
-&r&&k &k Magic!
-&r&&l &l Bold!
-&r&&m &m Strike!
-&r&&n &n Underline!
-&r&&o &o Italic!
-&&r &r reset format codes!
+&0 &&0  &1 &&1  &2 &&2  &3 &&3
+&4 &&4  &5 &&5  &6 &&6  &7 &&7
+&8 &&8  &9 &&9  &a &&a  &b &&b
+&c &&c  &d &&d  &e &&e  &f &&f
+
+&&k &k Magic!&r   &&l &l Bold!
+&&m &m Strike!&r  &&n &n Underline!
+&&o &o Italic!&r   &&r &r reset format codes!
 
 #Tags
 Player name: {PLAYER}
