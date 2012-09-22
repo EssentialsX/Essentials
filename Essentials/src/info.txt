@@ -35,20 +35,20 @@ Minecraft colors:
 &&o &o Italic!&r   &&r &r reset format codes!
 
 #Tags
-Player name: {PLAYER}
-IP: {IP}
-Address: {ADDRESS}
-Balance: {BALANCE}
-Unread mails:{MAILS}
-Current world: {WORLD}
-Worlds list: {WORLDS}
-Number of online players: {ONLINE}
-Number of unique players who joined the server: {UNIQUE}
-Player list: {PLAYERLIST}
-Time of server: {TIME}
-Date of server: {DATE}
-Time of world PM/AM: {WORLDTIME12}
-Time of world: {WORLDTIME24}
-Date of world: {WORLDDATE}
-Plugin list: {PLUGINS}
-Version of Craftbukkit: {VERSION}
+&6Player name:&r {PLAYER}
+&6IP:&r {IP}
+&6Address:&r {ADDRESS}
+&6Balance:&r {BALANCE}
+&6Unread mails:&r {MAILS}
+&6Current world:&r {WORLD}
+&6Worlds list:&r {WORLDS}
+&6Number of online players:&r {ONLINE}
+&6Number of unique players who joined the server:&r {UNIQUE}
+&6Player list:&r {PLAYERLIST}
+&6Time of server:&r {TIME}
+&6Date of server:&r {DATE}
+&6Time of world PM/AM:&r {WORLDTIME12}
+&6Time of world:&r {WORLDTIME24}
+&6Date of world:&r {WORLDDATE}
+&6Plugin list:&r {PLUGINS}
+&6Version of Craftbukkit:&r {VERSION}
