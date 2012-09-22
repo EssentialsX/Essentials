@@ -28,8 +28,9 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config = new EssentialsConf(new File(folder, Util.sanitizeFileName(base.getName()) + ".yml"));
 		reloadConfig();
 	}
-	
-	public final void reset () {
+
+	public final void reset()
+	{
 		config.getFile().delete();
 		config = new EssentialsConf(new File(folder, Util.sanitizeFileName(base.getName()) + ".yml"));
 		reloadConfig();
@@ -108,26 +109,25 @@ public abstract class UserData extends PlayerExtension implements IConf
 		return new HashMap<String, Object>();
 	}
 
-	public Location getHome(String name) throws Exception
+	private String getHomeName(String search)
 	{
-		Location loc = config.getLocation("homes." + name, getServer());
-		if (loc == null)
+		if (Util.isInt(search))
 		{
 			try
 			{
-				loc = config.getLocation("homes." + getHomes().get(Integer.parseInt(name) - 1), getServer());
+				search = getHomes().get(Integer.parseInt(search) - 1);
 			}
-			catch (IndexOutOfBoundsException e)
+			catch (Exception e)
 			{
-				return null;
-			}
-			catch (NumberFormatException e)
-			{
-				return null;
 			}
 		}
-
-		return loc;
+		return search;
+	}
+		
+	public Location getHome(String name) throws Exception
+	{
+		String search = getHomeName(name);
+		return config.getLocation("homes." + search, getServer());	
 	}
 
 	public Location getHome(final Location world)
@@ -169,20 +169,20 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	public void delHome(String name) throws Exception
 	{
-		String search = name;
+		String search = getHomeName(name);
 		if (!homes.containsKey(search))
 		{
-			search = Util.sanitizeFileName(name);
+			search = Util.sanitizeFileName(search);
 		}
 		if (homes.containsKey(search))
 		{
-			homes.remove(name);
-			config.removeProperty("homes." + name);
+			homes.remove(search);
+			config.removeProperty("homes." + search);
 			config.save();
 		}
 		else
 		{
-			throw new Exception(_("invalidHome", name));
+			throw new Exception(_("invalidHome", search));
 		}
 	}
 
