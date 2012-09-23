@@ -33,6 +33,10 @@ public class SuperpermsHandler implements IPermissionsHandler
 	@Override
 	public boolean hasPermission(final Player base, final String node)
 	{
+		if (base.hasPermission("*"))
+		{
+			return true;
+		}
 		if (base.hasPermission("-" + node))
 		{
 			return false;
