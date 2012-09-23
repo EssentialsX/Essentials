@@ -17,12 +17,14 @@ public class SignWarp extends EssentialsSign
 	@Override
 	protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException
 	{
+		ess.getLogger().info("triggered warp sign create");
 		validateTrade(sign, 3, ess);
 		final String warpName = sign.getLine(1);
 
 		if (warpName.isEmpty())
 		{
-			sign.setLine(1, "§dWarp name!");
+			ess.getLogger().info("trying to change sign to show error");
+			sign.setLine(1, "§c<Warp name>");
 			return false;
 		}
 		else

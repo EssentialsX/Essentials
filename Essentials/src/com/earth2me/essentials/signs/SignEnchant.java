@@ -21,11 +21,13 @@ public class SignEnchant extends EssentialsSign
 		final String[] enchantLevel = sign.getLine(2).split(":");
 		if (enchantLevel.length != 2)
 		{
+			sign.setLine(2, "§c<enchant>");
 			throw new SignException(_("invalidSignLine", 3));
 		}
 		final Enchantment enchantment = Enchantments.getByName(enchantLevel[0]);
 		if (enchantment == null)
 		{
+			sign.setLine(2, "§c<enchant>");
 			throw new SignException(_("enchantmentNotFound"));
 		}
 		int level;
@@ -35,6 +37,7 @@ public class SignEnchant extends EssentialsSign
 		}
 		catch (NumberFormatException ex)
 		{
+			sign.setLine(2, "§c<enchant>");
 			throw new SignException(ex.getMessage(), ex);
 		}
 		if (level < 1 || level > enchantment.getMaxLevel())

@@ -438,11 +438,13 @@ public class EssentialsSign
 	{
 		private final transient SignChangeEvent event;
 		private final transient Block block;
+		private final transient Sign sign;
 
 		public EventSign(final SignChangeEvent event)
 		{
 			this.event = event;
 			this.block = event.getBlock();
+			this.sign = (Sign)block.getState();
 		}
 
 		@Override
@@ -455,6 +457,8 @@ public class EssentialsSign
 		public final void setLine(final int index, final String text)
 		{
 			event.setLine(index, text);
+			sign.setLine(index, text);			
+			updateSign();
 		}
 
 		@Override
@@ -466,6 +470,7 @@ public class EssentialsSign
 		@Override
 		public void updateSign()
 		{
+			sign.update();
 		}
 	}
 
