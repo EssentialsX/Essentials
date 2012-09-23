@@ -53,10 +53,7 @@ public class Commandgc extends EssentialsCommand
 				break;
 			}
 
-			sender.sendMessage(
-					"\u00a76" + worldType + " \"" + w.getName() + "\": "
-					+ w.getLoadedChunks().length + _("gcchunks")
-					+ w.getEntities().size() + _("gcentities"));
+			sender.sendMessage(_("gcWorld", worldType, w.getName(), w.getLoadedChunks().length, w.getEntities().size()));
 		}
 		
 	}
