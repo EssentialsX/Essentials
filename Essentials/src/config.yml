@@ -273,7 +273,7 @@ freeze-afk-players: false
 disable-item-pickup-while-afk: false
 
 # Should we automatically remove afk status when the player moves?
-# Player will be removed from afk on chat/command reguardless of this setting.
+# Player will be removed from afk on chat/command regardless of this setting.
 # Disable this to reduce server lag.
 cancel-afk-on-move: true
 
