@@ -32,7 +32,7 @@ public class EssentialsAntiBuildListener implements Listener
 		this.ess = prot.getEssentialsConnect().getEssentials();
 	}
 
-	private boolean metaPermCheck(User user, String action, Block block)
+	private boolean metaPermCheck(final User user, final String action, final Block block)
 	{
 		if (block == null)
 		{
@@ -41,13 +41,13 @@ public class EssentialsAntiBuildListener implements Listener
 		return metaPermCheck(user, action, block.getTypeId(), block.getData());
 	}
 
-	private boolean metaPermCheck(User user, String action, int blockId)
+	private boolean metaPermCheck(final User user, final String action, final int blockId)
 	{
 		final String blockPerm = "essentials.build." + action + "." + blockId;
 		return user.isAuthorized(blockPerm);
 	}
 
-	private boolean metaPermCheck(User user, String action, int blockId, byte data)
+	private boolean metaPermCheck(final User user, final String action, final int blockId, final byte data)
 	{
 		final String blockPerm = "essentials.build." + action + "." + blockId;
 		final String dataPerm = blockPerm + ":" + data;
@@ -141,7 +141,7 @@ public class EssentialsAntiBuildListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onPaintingBreak(PaintingBreakByEntityEvent event)
+	public void onPaintingBreak(final PaintingBreakByEntityEvent event)
 	{
 		final Entity entity = event.getRemover();
 		if (entity instanceof Player)
@@ -160,7 +160,7 @@ public class EssentialsAntiBuildListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onBlockPistonExtend(BlockPistonExtendEvent event)
+	public void onBlockPistonExtend(final BlockPistonExtendEvent event)
 	{
 		for (Block block : event.getBlocks())
 		{
@@ -173,7 +173,7 @@ public class EssentialsAntiBuildListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onBlockPistonRetract(BlockPistonRetractEvent event)
+	public void onBlockPistonRetract(final BlockPistonRetractEvent event)
 	{
 		if (!event.isSticky())
 		{
@@ -272,7 +272,7 @@ public class EssentialsAntiBuildListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-	public void onPlayerDropItem(PlayerDropItemEvent event)
+	public void onPlayerDropItem(final PlayerDropItemEvent event)
 	{
 
 		final User user = ess.getUser(event.getPlayer());

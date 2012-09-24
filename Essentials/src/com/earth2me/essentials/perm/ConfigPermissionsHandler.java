@@ -1,7 +1,6 @@
 package com.earth2me.essentials.perm;
 
 import com.earth2me.essentials.IEssentials;
-import java.util.List;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 

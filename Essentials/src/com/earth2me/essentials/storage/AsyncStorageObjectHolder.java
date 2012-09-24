@@ -89,7 +89,7 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
 
 	private class StorageObjectDataWriter extends AbstractDelayedYamlFileWriter
 	{
-		public StorageObjectDataWriter()
+		StorageObjectDataWriter()
 		{
 			super(ess, getStorageFile());
 		}
@@ -112,7 +112,7 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
 
 	private class StorageObjectDataReader extends AbstractDelayedYamlFileReader<T>
 	{
-		public StorageObjectDataReader()
+		StorageObjectDataReader()
 		{
 			super(ess, getStorageFile(), clazz);
 		}

@@ -269,11 +269,11 @@ public final class DescParseTickFormat
 
 		// How many ingame days have passed since the server start?
 		final long days = ticks / ticksPerDay;
-		ticks = ticks - days * ticksPerDay;
+		ticks -= days * ticksPerDay;
 
 		// How many hours on the last day?
 		final long hours = ticks / ticksPerHour;
-		ticks = ticks - hours * ticksPerHour;
+		ticks -= hours * ticksPerHour;
 
 		// How many minutes on the last day?
 		final long minutes = (long)Math.floor(ticks / ticksPerMinute);

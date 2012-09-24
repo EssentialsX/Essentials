@@ -440,7 +440,7 @@ public class EssentialsSign
 		private final transient Block block;
 		private final transient Sign sign;
 
-		public EventSign(final SignChangeEvent event)
+		EventSign(final SignChangeEvent event)
 		{
 			this.event = event;
 			this.block = event.getBlock();
@@ -480,7 +480,7 @@ public class EssentialsSign
 		private final transient Sign sign;
 		private final transient Block block;
 
-		public BlockSign(final Block block)
+		BlockSign(final Block block)
 		{
 			this.block = block;
 			this.sign = (Sign)block.getState();
