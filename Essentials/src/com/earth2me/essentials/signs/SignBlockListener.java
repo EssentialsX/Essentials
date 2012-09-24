@@ -88,6 +88,16 @@ public class SignBlockListener implements Listener
 		{
 			event.setLine(i, Util.formatString(user, "essentials.signs", event.getLine(i)));
 		}
+
+		final String topLine = event.getLine(0);
+		for (Signs signs : Signs.values())
+		{
+			final EssentialsSign sign = signs.getSign();
+			if (topLine.equalsIgnoreCase(sign.getSuccessName()))
+			{
+				event.setLine(0, Util.stripFormat(topLine));
+			}
+		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
