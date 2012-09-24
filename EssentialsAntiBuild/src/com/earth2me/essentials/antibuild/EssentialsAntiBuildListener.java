@@ -245,12 +245,15 @@ public class EssentialsAntiBuildListener implements Listener
 			final User user = ess.getUser(entity);
 			final ItemStack item = event.getRecipe().getResult();
 
-			if (!metaPermCheck(user, "craft", item.getTypeId(), item.getData().getData()))
+			if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild() && !user.isAuthorized("essentials.build"))
 			{
-				event.setCancelled(true);
-				if (ess.getSettings().warnOnBuildDisallow())
+				if (!metaPermCheck(user, "craft", item.getTypeId(), item.getData().getData()))
 				{
-					user.sendMessage(_("antiBuildCraft", item.getType().toString()));
+					event.setCancelled(true);
+					if (ess.getSettings().warnOnBuildDisallow())
+					{
+						user.sendMessage(_("antiBuildCraft", item.getType().toString()));
+					}
 				}
 			}
 		}
@@ -263,12 +266,14 @@ public class EssentialsAntiBuildListener implements Listener
 		final User user = ess.getUser(event.getPlayer());
 		final ItemStack item = event.getItem().getItemStack();
 
-		if (!metaPermCheck(user, "pickup", item.getTypeId(), item.getData().getData()))
+		if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild() && !user.isAuthorized("essentials.build"))
 		{
-			event.setCancelled(true);
-			event.getItem().setPickupDelay(50);
+			if (!metaPermCheck(user, "pickup", item.getTypeId(), item.getData().getData()))
+			{
+				event.setCancelled(true);
+				event.getItem().setPickupDelay(50);
+			}
 		}
-
 	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
@@ -278,15 +283,17 @@ public class EssentialsAntiBuildListener implements Listener
 		final User user = ess.getUser(event.getPlayer());
 		final ItemStack item = event.getItemDrop().getItemStack();
 
-		if (!metaPermCheck(user, "drop", item.getTypeId(), item.getData().getData()))
+		if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild() && !user.isAuthorized("essentials.build"))
 		{
-			event.setCancelled(true);
-			user.updateInventory();
-			if (ess.getSettings().warnOnBuildDisallow())
+			if (!metaPermCheck(user, "drop", item.getTypeId(), item.getData().getData()))
 			{
-				user.sendMessage(_("antiBuildDrop", item.getType().toString()));
+				event.setCancelled(true);
+				user.updateInventory();
+				if (ess.getSettings().warnOnBuildDisallow())
+				{
+					user.sendMessage(_("antiBuildDrop", item.getType().toString()));
+				}
 			}
 		}
-
 	}
 }
