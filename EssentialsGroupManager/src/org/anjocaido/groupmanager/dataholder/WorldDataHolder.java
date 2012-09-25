@@ -1026,9 +1026,7 @@ public class WorldDataHolder {
 		synchronized (ph.getUsers()) {
 			
 			// A sorted list of users.
-			ArrayList<String> names = new ArrayList<String>(new TreeSet<String>(ph.getUsers().keySet()));
-			
-			for (String userKey : names) {
+			for (String userKey : new TreeSet<String>(ph.getUsers().keySet())) {
 				User user = ph.getUsers().get(userKey);
 				if ((user.getGroup() == null || user.getGroup().equals(ph.getDefaultGroup())) && user.getPermissionList().isEmpty() && user.getVariables().isEmpty() && user.isSubGroupsEmpty()) {
 					continue;
