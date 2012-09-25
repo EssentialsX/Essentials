@@ -1,6 +1,7 @@
 package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.ChargeException;
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
@@ -17,15 +18,13 @@ public class SignWarp extends EssentialsSign
 	@Override
 	protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException
 	{
-		ess.getLogger().info("triggered warp sign create");
 		validateTrade(sign, 3, ess);
 		final String warpName = sign.getLine(1);
 
 		if (warpName.isEmpty())
 		{
-			ess.getLogger().info("trying to change sign to show error");
 			sign.setLine(1, "§c<Warp name>");
-			return false;
+			throw new SignException(_("invalidSignLine", 1));
 		}
 		else
 		{
