@@ -1654,7 +1654,7 @@ public class GroupManager extends JavaPlugin {
 
 				try {
 					worldsHolder.saveChanges(forced);
-					sender.sendMessage(ChatColor.YELLOW + " All changes were saved.");
+					sender.sendMessage(ChatColor.YELLOW + "All changes were saved.");
 				} catch (IllegalStateException ex) {
 					sender.sendMessage(ChatColor.RED + ex.getMessage());
 				}

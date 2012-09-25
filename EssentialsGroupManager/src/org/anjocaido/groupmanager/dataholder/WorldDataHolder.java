@@ -37,9 +37,9 @@ import org.yaml.snakeyaml.constructor.SafeConstructor;
 import org.yaml.snakeyaml.reader.UnicodeReader;
 
 /**
- * One instance of this should exist per world/mirror
- * it contains all functions to manage these data sets
- * and points to the relevant users and groups objects.
+ * One instance of this should exist per world/mirror it contains all functions
+ * to manage these data sets and points to the relevant users and groups
+ * objects.
  * 
  * @author gabrielcouto, ElgarL
  */
@@ -100,8 +100,8 @@ public class WorldDataHolder {
 	}
 
 	/**
-	 * Search for a user. If it doesn't exist, create a new one with
-	 * default group.
+	 * Search for a user. If it doesn't exist, create a new one with default
+	 * group.
 	 * 
 	 * @param userName the name of the user
 	 * @return class that manage that user permission
@@ -207,8 +207,8 @@ public class WorldDataHolder {
 	}
 
 	/**
-	 * Check if a group exists.
-	 * Its the same of getGroup, but check if it is null.
+	 * Check if a group exists. Its the same of getGroup, but check if it is
+	 * null.
 	 * 
 	 * @param groupName the name of the group
 	 * @return true if exists. false if not.
@@ -272,8 +272,7 @@ public class WorldDataHolder {
 	}
 
 	/**
-	 * Creates a new User with the given name
-	 * and adds it to this holder.
+	 * Creates a new User with the given name and adds it to this holder.
 	 * 
 	 * @param userName the username you want
 	 * @return null if user already exists. or new User
@@ -291,8 +290,7 @@ public class WorldDataHolder {
 	}
 
 	/**
-	 * Creates a new Group with the given name
-	 * and adds it to this holder
+	 * Creates a new Group with the given name and adds it to this holder
 	 * 
 	 * @param groupName the groupname you want
 	 * @return null if group already exists. or new Group
@@ -319,7 +317,8 @@ public class WorldDataHolder {
 	 * @return a collection of the groups
 	 */
 	public Collection<Group> getGroupList() {
-		synchronized(getGroups()) {
+
+		synchronized (getGroups()) {
 			return new ArrayList<Group>(getGroups().values());
 		}
 	}
@@ -329,7 +328,8 @@ public class WorldDataHolder {
 	 * @return a collection of the users
 	 */
 	public Collection<User> getUserList() {
-		synchronized(getUsers()) {
+
+		synchronized (getUsers()) {
 			return new ArrayList<User>(getUsers().values());
 		}
 	}
@@ -510,7 +510,7 @@ public class WorldDataHolder {
 		} catch (Exception ex) {
 			throw new IllegalArgumentException("Your " + groupsFile.getPath() + " file is invalid. See console for details.", ex);
 		}
-		
+
 		if (allGroupsNode == null) {
 			throw new IllegalArgumentException("You have no groups in " + groupsFile.getPath() + ".");
 		}
@@ -520,8 +520,7 @@ public class WorldDataHolder {
 		Integer groupCount = 0;
 
 		/*
-		 * loop each group entry
-		 * and process it's data.
+		 * loop each group entry and process it's data.
 		 */
 		while (groupItr.hasNext()) {
 
@@ -545,8 +544,7 @@ public class WorldDataHolder {
 			}
 
 			/*
-			 * Create a new group with this name
-			 * in the assigned data source.
+			 * Create a new group with this name in the assigned data source.
 			 */
 			Group thisGrp = ph.createGroup(groupKey);
 
@@ -569,8 +567,8 @@ public class WorldDataHolder {
 				 */
 			} else if ((Boolean.parseBoolean(nodeData.toString()))) {
 				/*
-				 * Set this as the default group.
-				 * Warn if some other group has already claimed that position.
+				 * Set this as the default group. Warn if some other group has
+				 * already claimed that position.
 				 */
 				if (ph.getDefaultGroup() != null) {
 					GroupManager.logger.warning("The group '" + thisGrp.getName() + "' is claiming to be default where '" + ph.getDefaultGroup().getName() + "' already was.");
@@ -590,8 +588,7 @@ public class WorldDataHolder {
 
 			if (nodeData == null) {
 				/*
-				 * If no permissions node is found, or it's empty
-				 * do nothing.
+				 * If no permissions node is found, or it's empty do nothing.
 				 */
 			} else {
 				/*
@@ -677,8 +674,8 @@ public class WorldDataHolder {
 			if (nodeData == null || nodeData instanceof List) {
 				if (nodeData == null) {
 					/*
-					 * If no inheritance node is found, or it's empty
-					 * do nothing.
+					 * If no inheritance node is found, or it's empty do
+					 * nothing.
 					 */
 				} else if (nodeData instanceof List) {
 
@@ -790,10 +787,10 @@ public class WorldDataHolder {
 					// Attempt to fetch the next user name.
 					node = usersItr.next();
 					if (node instanceof Integer)
-						usersKey = Integer.toString((Integer)node);
+						usersKey = Integer.toString((Integer) node);
 					else
 						usersKey = node.toString();
-					
+
 				} catch (Exception ex) {
 					throw new IllegalArgumentException("Invalid node type for user entry (" + userCount + ") in file: " + usersFile.getPath(), ex);
 				}
@@ -821,8 +818,8 @@ public class WorldDataHolder {
 
 				if (nodeData == null) {
 					/*
-					 * If no permissions node is found, or it's empty
-					 * do nothing.
+					 * If no permissions node is found, or it's empty do
+					 * nothing.
 					 */
 				} else {
 					if (nodeData instanceof List) {
@@ -858,8 +855,7 @@ public class WorldDataHolder {
 
 				if (nodeData == null) {
 					/*
-					 * If no subgroups node is found, or it's empty
-					 * do nothing.
+					 * If no subgroups node is found, or it's empty do nothing.
 					 */
 				} else if (nodeData instanceof List) {
 					for (Object o : ((List) nodeData)) {
@@ -894,8 +890,7 @@ public class WorldDataHolder {
 
 				if (nodeData == null) {
 					/*
-					 * If no info node is found, or it's empty
-					 * do nothing.
+					 * If no info node is found, or it's empty do nothing.
 					 */
 				} else if (nodeData instanceof Map) {
 					thisUser.setVariables((Map<String, Object>) nodeData);
@@ -946,29 +941,29 @@ public class WorldDataHolder {
 		Map<String, Object> groupsMap = new HashMap<String, Object>();
 
 		root.put("groups", groupsMap);
-		synchronized(ph.getGroups()) {
-		for (String groupKey : ph.getGroups().keySet()) {
-			Group group = ph.getGroups().get(groupKey);
+		synchronized (ph.getGroups()) {
+			for (String groupKey : ph.getGroups().keySet()) {
+				Group group = ph.getGroups().get(groupKey);
 
-			Map<String, Object> aGroupMap = new HashMap<String, Object>();
-			groupsMap.put(group.getName(), aGroupMap);
+				Map<String, Object> aGroupMap = new HashMap<String, Object>();
+				groupsMap.put(group.getName(), aGroupMap);
 
-			if (ph.getDefaultGroup() == null) {
-				GroupManager.logger.severe("There is no default group for world: " + ph.getName());
+				if (ph.getDefaultGroup() == null) {
+					GroupManager.logger.severe("There is no default group for world: " + ph.getName());
+				}
+				aGroupMap.put("default", group.equals(ph.getDefaultGroup()));
+
+				Map<String, Object> infoMap = new HashMap<String, Object>();
+				aGroupMap.put("info", infoMap);
+
+				for (String infoKey : group.getVariables().getVarKeyList()) {
+					infoMap.put(infoKey, group.getVariables().getVarObject(infoKey));
+				}
+
+				aGroupMap.put("inheritance", group.getInherits());
+
+				aGroupMap.put("permissions", group.getPermissionList());
 			}
-			aGroupMap.put("default", group.equals(ph.getDefaultGroup()));
-
-			Map<String, Object> infoMap = new HashMap<String, Object>();
-			aGroupMap.put("info", infoMap);
-
-			for (String infoKey : group.getVariables().getVarKeyList()) {
-				infoMap.put(infoKey, group.getVariables().getVarObject(infoKey));
-			}
-
-			aGroupMap.put("inheritance", group.getInherits());
-
-			aGroupMap.put("permissions", group.getPermissionList());
-		}
 		}
 
 		if (!root.isEmpty()) {
@@ -1008,18 +1003,9 @@ public class WorldDataHolder {
 			GroupManagerEventHandler.callEvent(GMSystemEvent.Action.SAVED);
 
 		/*
-		 * FileWriter tx = null;
-		 * try {
-		 * tx = new FileWriter(groupsFile, false);
-		 * tx.write(yaml.dump(root));
-		 * tx.flush();
-		 * } catch (Exception e) {
-		 * } finally {
-		 * try {
-		 * tx.close();
-		 * } catch (IOException ex) {
-		 * }
-		 * }
+		 * FileWriter tx = null; try { tx = new FileWriter(groupsFile, false);
+		 * tx.write(yaml.dump(root)); tx.flush(); } catch (Exception e) { }
+		 * finally { try { tx.close(); } catch (IOException ex) { } }
 		 */
 	}
 
@@ -1035,36 +1021,40 @@ public class WorldDataHolder {
 
 		Map<String, Object> usersMap = new HashMap<String, Object>();
 		root.put("users", usersMap);
-		synchronized(ph.getUsers()) {
-		for (String userKey : ph.getUsers().keySet()) {
-			User user = ph.getUsers().get(userKey);
-			if ((user.getGroup() == null || user.getGroup().equals(ph.getDefaultGroup())) && user.getPermissionList().isEmpty() && user.getVariables().isEmpty() && user.isSubGroupsEmpty()) {
-				continue;
-			}
-
-			Map<String, Object> aUserMap = new HashMap<String, Object>();
-			usersMap.put(user.getName(), aUserMap);
-
-			if (user.getGroup() == null) {
-				aUserMap.put("group", ph.getDefaultGroup().getName());
-			} else {
-				aUserMap.put("group", user.getGroup().getName());
-			}
-			// USER INFO NODE - BETA
-			if (user.getVariables().getSize() > 0) {
-				Map<String, Object> infoMap = new HashMap<String, Object>();
-				aUserMap.put("info", infoMap);
-				for (String infoKey : user.getVariables().getVarKeyList()) {
-					infoMap.put(infoKey, user.getVariables().getVarObject(infoKey));
+		synchronized (ph.getUsers()) {
+			for (String userKey : ph.getUsers().keySet()) {
+				User user = ph.getUsers().get(userKey);
+				if ((user.getGroup() == null || user.getGroup().equals(ph.getDefaultGroup())) && user.getPermissionList().isEmpty() && user.getVariables().isEmpty() && user.isSubGroupsEmpty()) {
+					continue;
 				}
-			}
-			// END USER INFO NODE - BETA
-			aUserMap.put("permissions", user.getPermissionList());
 
-			// SUBGROUPS NODE - BETA
-			aUserMap.put("subgroups", user.subGroupListStringCopy());
-			// END SUBGROUPS NODE - BETA
-		}
+				Map<String, Object> aUserMap = new HashMap<String, Object>();
+				usersMap.put(user.getName(), aUserMap);
+
+				// GROUP NODE
+				if (user.getGroup() == null) {
+					aUserMap.put("group", ph.getDefaultGroup().getName());
+				} else {
+					aUserMap.put("group", user.getGroup().getName());
+				}
+
+				// SUBGROUPS NODE
+				aUserMap.put("subgroups", user.subGroupListStringCopy());
+
+				// PERMISSIONS NODE
+				aUserMap.put("permissions", user.getPermissionList());
+
+				// USER INFO NODE - BETA
+				if (user.getVariables().getSize() > 0) {
+					Map<String, Object> infoMap = new HashMap<String, Object>();
+					aUserMap.put("info", infoMap);
+					for (String infoKey : user.getVariables().getVarKeyList()) {
+						infoMap.put(infoKey, user.getVariables().getVarObject(infoKey));
+					}
+				}
+				// END USER INFO NODE - BETA
+
+			}
 		}
 
 		if (!root.isEmpty()) {
@@ -1090,32 +1080,20 @@ public class WorldDataHolder {
 			GroupManagerEventHandler.callEvent(GMSystemEvent.Action.SAVED);
 
 		/*
-		 * FileWriter tx = null;
-		 * try {
-		 * tx = new FileWriter(usersFile, false);
-		 * tx.write(yaml.dump(root));
-		 * tx.flush();
-		 * } catch (Exception e) {
-		 * } finally {
-		 * try {
-		 * tx.close();
-		 * } catch (IOException ex) {
-		 * }
-		 * }
+		 * FileWriter tx = null; try { tx = new FileWriter(usersFile, false);
+		 * tx.write(yaml.dump(root)); tx.flush(); } catch (Exception e) { }
+		 * finally { try { tx.close(); } catch (IOException ex) { } }
 		 */
 	}
 
 	/**
 	 * Don't use this. Unless you want to make this plugin to interact with
-	 * original Nijikokun Permissions
-	 * This method is supposed to make the original one reload the file, and
-	 * propagate the changes made here.
+	 * original Nijikokun Permissions This method is supposed to make the
+	 * original one reload the file, and propagate the changes made here.
 	 * 
 	 * Prefer to use the AnjoCaido's fake version of Nijikokun's Permission
-	 * plugin.
-	 * The AnjoCaido's Permission can propagate the changes made on this plugin
-	 * instantly,
-	 * without need to save the file.
+	 * plugin. The AnjoCaido's Permission can propagate the changes made on this
+	 * plugin instantly, without need to save the file.
 	 * 
 	 * @param server the server that holds the plugin
 	 * @deprecated it is not used anymore... unless if you use original
@@ -1165,12 +1143,12 @@ public class WorldDataHolder {
 		if (users.HaveUsersChanged()) {
 			return true;
 		}
-		synchronized(users.getUsers()) {
-		for (User u : users.getUsers().values()) {
-			if (u.isChanged()) {
-				return true;
+		synchronized (users.getUsers()) {
+			for (User u : users.getUsers().values()) {
+				if (u.isChanged()) {
+					return true;
+				}
 			}
-		}
 		}
 		return false;
 	}
@@ -1192,12 +1170,12 @@ public class WorldDataHolder {
 		if (groups.HaveGroupsChanged()) {
 			return true;
 		}
-		synchronized(groups.getGroups()) {
-		for (Group g : groups.getGroups().values()) {
-			if (g.isChanged()) {
-				return true;
+		synchronized (groups.getGroups()) {
+			for (Group g : groups.getGroups().values()) {
+				if (g.isChanged()) {
+					return true;
+				}
 			}
-		}
 		}
 		return false;
 	}
@@ -1208,10 +1186,10 @@ public class WorldDataHolder {
 	public void removeUsersChangedFlag() {
 
 		setUsersChanged(false);
-		synchronized(getUsers()) {
-		for (User u : getUsers().values()) {
-			u.flagAsSaved();
-		}
+		synchronized (getUsers()) {
+			for (User u : getUsers().values()) {
+				u.flagAsSaved();
+			}
 		}
 	}
 
@@ -1221,10 +1199,10 @@ public class WorldDataHolder {
 	public void removeGroupsChangedFlag() {
 
 		setGroupsChanged(false);
-		synchronized(getGroups()) {
-		for (Group g : getGroups().values()) {
-			g.flagAsSaved();
-		}
+		synchronized (getGroups()) {
+			for (Group g : getGroups().values()) {
+				g.flagAsSaved();
+			}
 		}
 	}
 
@@ -1281,11 +1259,13 @@ public class WorldDataHolder {
 	 * Resets Users
 	 */
 	public void resetUsers() {
+
 		users.resetUsers();
 	}
 
 	/**
 	 * Note: Iteration over this object has to be synchronized!
+	 * 
 	 * @return the groups
 	 */
 	public Map<String, Group> getGroups() {
@@ -1295,6 +1275,7 @@ public class WorldDataHolder {
 
 	/**
 	 * Note: Iteration over this object has to be synchronized!
+	 * 
 	 * @return the users
 	 */
 	public Map<String, User> getUsers() {
