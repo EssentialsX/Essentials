@@ -31,29 +31,26 @@ public class SuperpermsHandler implements IPermissionsHandler
 	}
 
 	@Override
-	public boolean hasPermission(final Player base, final String node)
+	public boolean hasPermission(final Player base, String node)
 	{
-		if (base.hasPermission("*"))
+		String permCheck = node;
+		int index;
+		while (true)
 		{
-			return true;
-		}
-		if (base.hasPermission("-" + node))
-		{
-			return false;
-		}
-		final String[] parts = node.split("\\.");
-		final StringBuilder builder = new StringBuilder(node.length());
-		for (String part : parts)
-		{
-			builder.append('*');
-			if (base.hasPermission(builder.toString()))
+			if (base.isPermissionSet(permCheck))
 			{
-				return true;
+				return base.hasPermission(permCheck);
 			}
-			builder.deleteCharAt(builder.length() - 1);
-			builder.append(part).append('.');
+		
+			index = node.lastIndexOf('.');
+			if (index < 1)
+			{
+				return base.hasPermission("*");
+			}
+
+			node = node.substring(0, index);
+			permCheck = node + ".*";
 		}
-		return base.hasPermission(node);
 	}
 
 	@Override
