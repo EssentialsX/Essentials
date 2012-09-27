@@ -246,7 +246,7 @@ debug: false
 
 # Set the locale for all messages
 # If you don't set this, the default locale of the server will be used.
-# Don't forget to remove the # infront of the line
+# Don't forget to remove the # in front of the line
 #locale: de_DE
 
 # Turn off god mode when people exit
@@ -277,7 +277,7 @@ disable-item-pickup-while-afk: false
 # Disable this to reduce server lag.
 cancel-afk-on-move: true
 
-# You can disable the death messages of minecraft here
+# You can disable the death messages of Minecraft here
 death-messages: true
 
 # Add worlds to this list, if you want to automatically disable god mode there
@@ -287,17 +287,17 @@ no-god-in-worlds:
 # Set to true to enable per-world permissions for teleporting between worlds with essentials commands
 # This applies to /world, /back, /tp[a|o][here|all], but not warps.
 # Give someone permission to teleport to a world with essentials.worlds.<worldname>
-# This does not effect the /home command, there is a seperate toggle below for this.
+# This does not effect the /home command, there is a separate toggle below for this.
 world-teleport-permissions: false
 
 # The number of items given if the quantity parameter is left out in /item or /give.
-# If this number is below 1, the maximum stack size size is given. If oversized stacks
-# is not enabled, any number higher then the maximum stack size results in more than one stack.
+# If this number is below 1, the maximum stack size size is given. If over-sized stacks
+# are not enabled, any number higher then the maximum stack size results in more than one stack.
 default-stack-size: -1
 
-# Oversized stacks are stacks that ignore the normal max stacksize.
+# Over-sized stacks are stacks that ignore the normal max stack size.
 # They can be obtained using /give and /item, if the player has essentials.oversizedstacks permission.
-# How many items should be in an oversized stack?
+# How many items should be in an over-sized stack?
 oversized-stacksize: 64
 
 # Allow repair of enchanted weapons and armor.
@@ -357,7 +357,7 @@ starting-balance: 0
 # These are now defined in worth.yml
 
 # Defines the cost to use the given commands PER USE
-# Some commands like /repair have subcosts, check the wiki for more information.
+# Some commands like /repair have sub-costs, check the wiki for more information.
 command-costs:
   # /example costs $1000 PER USE
   #example: 1000
