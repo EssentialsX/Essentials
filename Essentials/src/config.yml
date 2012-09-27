@@ -8,7 +8,7 @@
 # If you receive an error when Essentials loads, ensure that:
 #   - No tabs are present: YAML only allows spaces
 #   - Indents are correct: YAML hierarchy is based entirely on indentation
-#   - You have "escaped" all apostrophes in your text: If you want to write "don't", for example, write "don''t" instead (note the doubled apostrphe)
+#   - You have "escaped" all apostrophes in your text: If you want to write "don't", for example, write "don''t" instead (note the doubled apostrophe)
 #   - Text with symbols is enclosed in single or double quotation marks
 
 # If you have problems join the Essentials help support channel: http://tiny.cc/EssentialsChat
