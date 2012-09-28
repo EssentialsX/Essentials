@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import org.bukkit.Material;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,6 +15,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 
 public class EssentialsEntityListener implements Listener
@@ -159,6 +162,17 @@ public class EssentialsEntityListener implements Listener
 			&& ess.getUser(event.getEntity()).isAfk() && ess.getSettings().getFreezeAfkPlayers())
 		{
 			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onPotionSplashEvent(final PotionSplashEvent event)
+	{
+		LivingEntity[] entities = event.getAffectedEntities().toArray(new LivingEntity[event.getAffectedEntities().size()]);
+		for(int i = 0; i < entities.length; i++)
+		{
+			if (entities[i] instanceof Player && ess.getUser(entities[i]).isGodModeEnabled())
+				event.setIntensity(entities[i], 0);
 		}
 	}
 }
