@@ -49,7 +49,7 @@ public class EssentialsEntityListener implements Listener
 			{
 				event.setCancelled(true);
 			}
-			
+
 			if (attacker.isGodModeEnabled() && !attacker.isAuthorized("essentials.god.pvp"))
 			{
 				event.setCancelled(true);
@@ -168,11 +168,16 @@ public class EssentialsEntityListener implements Listener
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPotionSplashEvent(final PotionSplashEvent event)
 	{
-		LivingEntity[] entities = event.getAffectedEntities().toArray(new LivingEntity[event.getAffectedEntities().size()]);
-		for(int i = 0; i < entities.length; i++)
+		for (LivingEntity entity : event.getAffectedEntities())
 		{
-			if (entities[i] instanceof Player && ess.getUser(entities[i]).isGodModeEnabled())
-				event.setIntensity(entities[i], 0);
+			if (entity instanceof Player)
+			{
+				User user = ess.getUser(entity);
+				if (user.isGodModeEnabled())
+				{
+					event.setIntensity(entity, 0d);
+				}
+			}
 		}
 	}
-}
+}	
