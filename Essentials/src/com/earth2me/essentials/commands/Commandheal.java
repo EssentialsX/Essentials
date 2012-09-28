@@ -6,6 +6,8 @@ import java.util.List;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 
 public class Commandheal extends EssentialsCommand
@@ -33,9 +35,7 @@ public class Commandheal extends EssentialsCommand
 		{
 			user.healCooldown();
 		}
-		user.setHealth(20);
-		user.setFoodLevel(20);
-		user.sendMessage(_("heal"));
+		healPlayer(user);
 	}
 
 	@Override
@@ -63,10 +63,19 @@ public class Commandheal extends EssentialsCommand
 			{
 				continue;
 			}
-			p.setHealth(20);
-			p.setFoodLevel(20);
-			p.sendMessage(_("heal"));
+			healPlayer(p);
 			sender.sendMessage(_("healOther", p.getDisplayName()));
+		}
+	}
+
+	private void healPlayer(final Player p)
+	{
+		p.setHealth(20);
+		p.setFoodLevel(20);
+		p.sendMessage(_("heal"));
+		for (PotionEffect effect : p.getActivePotionEffects())
+		{
+			p.removePotionEffect(effect.getType());
 		}
 	}
 }

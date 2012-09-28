@@ -15,8 +15,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.*;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 
 public class EssentialsEntityListener implements Listener
@@ -170,14 +168,10 @@ public class EssentialsEntityListener implements Listener
 	{
 		for (LivingEntity entity : event.getAffectedEntities())
 		{
-			if (entity instanceof Player)
+			if (entity instanceof Player && ess.getUser(entity).isGodModeEnabled())
 			{
-				User user = ess.getUser(entity);
-				if (user.isGodModeEnabled())
-				{
-					event.setIntensity(entity, 0d);
-				}
+				event.setIntensity(entity, 0d);
 			}
 		}
 	}
-}	
+}
