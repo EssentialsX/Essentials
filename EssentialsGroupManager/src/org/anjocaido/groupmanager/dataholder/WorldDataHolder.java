@@ -15,8 +15,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.anjocaido.groupmanager.GroupManager;
@@ -1018,17 +1020,19 @@ public class WorldDataHolder {
 	public static void writeUsers(WorldDataHolder ph, File usersFile) {
 
 		Map<String, Object> root = new HashMap<String, Object>();
-
-		Map<String, Object> usersMap = new HashMap<String, Object>();
+		LinkedHashMap<String, Object> usersMap = new LinkedHashMap<String, Object>();
+		
 		root.put("users", usersMap);
 		synchronized (ph.getUsers()) {
-			for (String userKey : ph.getUsers().keySet()) {
+			
+			// A sorted list of users.
+			for (String userKey : new TreeSet<String>(ph.getUsers().keySet())) {
 				User user = ph.getUsers().get(userKey);
 				if ((user.getGroup() == null || user.getGroup().equals(ph.getDefaultGroup())) && user.getPermissionList().isEmpty() && user.getVariables().isEmpty() && user.isSubGroupsEmpty()) {
 					continue;
 				}
 
-				Map<String, Object> aUserMap = new HashMap<String, Object>();
+				LinkedHashMap<String, Object> aUserMap = new LinkedHashMap<String, Object>();
 				usersMap.put(user.getName(), aUserMap);
 
 				// GROUP NODE
