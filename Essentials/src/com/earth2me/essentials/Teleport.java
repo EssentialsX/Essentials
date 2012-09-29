@@ -207,6 +207,32 @@ public class Teleport implements Runnable, ITeleport
 			teleTimer = -1;
 		}
 	}
+	
+	//The now function is used when you want to skip tp delay when teleporting someone to a location or player.
+	public void now(Location loc, boolean cooldown, TeleportCause cause) throws Exception
+	{
+		if (cooldown)
+		{
+			cooldown(false);
+		}
+		now(new Target(loc), cause);
+	}
+
+	public void now(Player entity, boolean cooldown, TeleportCause cause) throws Exception
+	{
+		if (cooldown)
+		{
+			cooldown(false);
+		}
+		now(new Target(entity), cause);
+	}
+
+	private void now(Target target, TeleportCause cause) throws Exception
+	{
+		cancel(false);
+		user.setLastLocation();
+		user.getBase().teleport(Util.getSafeDestination(target.getLocation()), cause);
+	}
 
 	//The teleport function is used when you want to normally teleport someone to a location or player.
 	public void teleport(Location loc, Trade chargeFor, TeleportCause cause) throws Exception
@@ -240,39 +266,10 @@ public class Teleport implements Runnable, ITeleport
 		}
 
 		cancel(false);
-		Calendar c = new GregorianCalendar();
-		c.add(Calendar.SECOND, (int)delay);
-		c.add(Calendar.MILLISECOND, (int)((delay * 1000.0) % 1000.0));
-		user.sendMessage(_("dontMoveMessage", Util.formatDateDiff(c.getTimeInMillis())));
+		warnUser(user);
 		initTimer((long)(delay * 1000.0), target, chargeFor, cause);
 
 		teleTimer = ess.scheduleSyncRepeatingTask(this, 10, 10);
-	}
-
-	//The now function is used when you want to skip tp delay when teleporting someone to a location or player.
-	public void now(Location loc, boolean cooldown, TeleportCause cause) throws Exception
-	{
-		if (cooldown)
-		{
-			cooldown(false);
-		}
-		now(new Target(loc), cause);
-	}
-
-	public void now(Player entity, boolean cooldown, TeleportCause cause) throws Exception
-	{
-		if (cooldown)
-		{
-			cooldown(false);
-		}
-		now(new Target(entity), cause);
-	}
-
-	private void now(Target target, TeleportCause cause) throws Exception
-	{
-		cancel(false);
-		user.setLastLocation();
-		user.getBase().teleport(Util.getSafeDestination(target.getLocation()), cause);
 	}
 
 	//The teleportToMe function is a wrapper used to handle teleporting players to them, like /tphere
@@ -299,13 +296,17 @@ public class Teleport implements Runnable, ITeleport
 		}
 
 		cancel(false);
-		Calendar c = new GregorianCalendar();
-		c.add(Calendar.SECOND, (int)delay);
-		c.add(Calendar.MILLISECOND, (int)((delay * 1000.0) % 1000.0));
-		otherUser.sendMessage(_("dontMoveMessage", Util.formatDateDiff(c.getTimeInMillis())));
+		warnUser(otherUser);
 		initTimer((long)(delay * 1000.0), otherUser, target, chargeFor, cause);
 
 		teleTimer = ess.scheduleSyncRepeatingTask(this, 10, 10);
+	}
+	
+	private void warnUser(final IUser user) {
+		Calendar c = new GregorianCalendar();
+		c.add(Calendar.SECOND, (int)delay);
+		c.add(Calendar.MILLISECOND, (int)((delay * 1000.0) % 1000.0));
+		user.sendMessage(_("dontMoveMessage", Util.formatDateDiff(c.getTimeInMillis())));
 	}
 
 	//The respawn function is a wrapper used to handle tp fallback, on /jail and /home
