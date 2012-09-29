@@ -37,7 +37,7 @@ public class Teleport implements Runnable, ITeleport
 		{
 			if (this.name != null)
 			{
-				
+
 				return ess.getServer().getPlayerExact(name).getLocation();
 			}
 			return location;
@@ -63,12 +63,18 @@ public class Teleport implements Runnable, ITeleport
 
 	private void initTimer(long delay, Target target, Trade chargeFor, TeleportCause cause)
 	{
+		initTimer(delay, user, target, chargeFor, cause);
+	}
+
+	private void initTimer(long delay, IUser teleportUser, Target target, Trade chargeFor, TeleportCause cause)
+	{
 		this.started = System.currentTimeMillis();
 		this.delay = delay;
-		this.health = user.getHealth();
-		this.initX = Math.round(user.getLocation().getX() * MOVE_CONSTANT);
-		this.initY = Math.round(user.getLocation().getY() * MOVE_CONSTANT);
-		this.initZ = Math.round(user.getLocation().getZ() * MOVE_CONSTANT);
+		this.health = teleportUser.getHealth();
+		this.initX = Math.round(teleportUser.getLocation().getX() * MOVE_CONSTANT);
+		this.initY = Math.round(teleportUser.getLocation().getY() * MOVE_CONSTANT);
+		this.initZ = Math.round(teleportUser.getLocation().getZ() * MOVE_CONSTANT);
+		this.teleportUser = teleportUser;
 		this.teleportTarget = target;
 		this.chargeFor = chargeFor;
 		this.cause = cause;
@@ -80,19 +86,25 @@ public class Teleport implements Runnable, ITeleport
 
 		if (user == null || !user.isOnline() || user.getLocation() == null)
 		{
-			cancel();
+			cancel(false);
 			return;
 		}
-		if (Math.round(user.getLocation().getX() * MOVE_CONSTANT) != initX
-			|| Math.round(user.getLocation().getY() * MOVE_CONSTANT) != initY
-			|| Math.round(user.getLocation().getZ() * MOVE_CONSTANT) != initZ
-			|| user.getHealth() < health)
+		if (teleportUser == null || !teleportUser.isOnline() || teleportUser.getLocation() == null)
+		{
+			cancel(false);
+			return;
+		}
+
+		if (Math.round(teleportUser.getLocation().getX() * MOVE_CONSTANT) != initX
+			|| Math.round(teleportUser.getLocation().getY() * MOVE_CONSTANT) != initY
+			|| Math.round(teleportUser.getLocation().getZ() * MOVE_CONSTANT) != initZ
+			|| teleportUser.getHealth() < health)
 		{	// user moved, cancel teleport
 			cancel(true);
 			return;
 		}
 
-		health = user.getHealth();  // in case user healed, then later gets injured
+		health = teleportUser.getHealth();  // in case user healed, then later gets injured
 
 		long now = System.currentTimeMillis();
 		if (now > started + delay)
@@ -100,11 +112,12 @@ public class Teleport implements Runnable, ITeleport
 			try
 			{
 				cooldown(false);
-				user.sendMessage(_("teleportationCommencing"));
+				teleportUser.sendMessage(_("teleportationCommencing"));
 				try
 				{
 
-					now(teleportTarget, cause);
+					teleportUser.getTeleport().now(teleportTarget, cause);
+					cancel(false);
 					if (chargeFor != null)
 					{
 						chargeFor.charge(user);
@@ -118,6 +131,10 @@ public class Teleport implements Runnable, ITeleport
 			catch (Exception ex)
 			{
 				user.sendMessage(_("cooldownWithMessage", ex.getMessage()));
+				if (user != teleportUser)
+				{
+					teleportUser.sendMessage(_("cooldownWithMessage", ex.getMessage()));
+				}
 			}
 		}
 	}
@@ -179,6 +196,10 @@ public class Teleport implements Runnable, ITeleport
 			if (notifyUser)
 			{
 				user.sendMessage(_("pendingTeleportCancelled"));
+				if (teleportUser != user)
+				{
+					teleportUser.sendMessage(_("pendingTeleportCancelled"));
+				}
 			}
 		}
 		finally
@@ -254,13 +275,37 @@ public class Teleport implements Runnable, ITeleport
 		user.getBase().teleport(Util.getSafeDestination(target.getLocation()), cause);
 	}
 
-	public void now(Player entity, boolean cooldown, TeleportCause cause) throws Exception
+	//The teleportToMe function is a wrapper used to handle teleporting players to them, like /tphere
+	public void teleportToMe(User otherUser, Trade chargeFor, TeleportCause cause) throws Exception
 	{
-		if (cooldown)
+		Target target = new Target(user);
+
+		double delay = ess.getSettings().getTeleportDelay();
+
+		if (chargeFor != null)
+		{
+			chargeFor.isAffordableFor(user);
+		}
+		cooldown(true);
+		if (delay <= 0 || user.isAuthorized("essentials.teleport.timer.bypass"))
 		{
 			cooldown(false);
+			otherUser.getTeleport().now(target, cause);
+			if (chargeFor != null)
+			{
+				chargeFor.charge(user);
+			}
+			return;
 		}
-		now(new Target(entity), cause);
+
+		cancel(false);
+		Calendar c = new GregorianCalendar();
+		c.add(Calendar.SECOND, (int)delay);
+		c.add(Calendar.MILLISECOND, (int)((delay * 1000.0) % 1000.0));
+		otherUser.sendMessage(_("dontMoveMessage", Util.formatDateDiff(c.getTimeInMillis())));
+		initTimer((long)(delay * 1000.0), otherUser, target, chargeFor, cause);
+
+		teleTimer = ess.scheduleSyncRepeatingTask(this, 10, 10);
 	}
 
 	//The respawn function is a wrapper used to handle tp fallback, on /jail and /home
