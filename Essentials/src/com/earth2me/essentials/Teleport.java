@@ -95,17 +95,17 @@ public class Teleport implements Runnable, ITeleport
 			return;
 		}
 
-		if (Math.round(teleportUser.getLocation().getX() * MOVE_CONSTANT) != initX
-			|| Math.round(teleportUser.getLocation().getY() * MOVE_CONSTANT) != initY
-			|| Math.round(teleportUser.getLocation().getZ() * MOVE_CONSTANT) != initZ
-			|| teleportUser.getHealth() < health)
-		{	// user moved, cancel teleport
+		if (!user.isAuthorized("essentials.teleport.timer.move")
+			&& (Math.round(teleportUser.getLocation().getX() * MOVE_CONSTANT) != initX
+				|| Math.round(teleportUser.getLocation().getY() * MOVE_CONSTANT) != initY
+				|| Math.round(teleportUser.getLocation().getZ() * MOVE_CONSTANT) != initZ
+				|| teleportUser.getHealth() < health))
+		{
+			// user moved, cancel teleport
 			cancel(true);
 			return;
 		}
-
 		health = teleportUser.getHealth();  // in case user healed, then later gets injured
-
 		long now = System.currentTimeMillis();
 		if (now > started + delay)
 		{
@@ -207,7 +207,7 @@ public class Teleport implements Runnable, ITeleport
 			teleTimer = -1;
 		}
 	}
-	
+
 	//The now function is used when you want to skip tp delay when teleporting someone to a location or player.
 	public void now(Location loc, boolean cooldown, TeleportCause cause) throws Exception
 	{
@@ -301,8 +301,9 @@ public class Teleport implements Runnable, ITeleport
 
 		teleTimer = ess.scheduleSyncRepeatingTask(this, 10, 10);
 	}
-	
-	private void warnUser(final IUser user) {
+
+	private void warnUser(final IUser user)
+	{
 		Calendar c = new GregorianCalendar();
 		c.add(Calendar.SECOND, (int)delay);
 		c.add(Calendar.MILLISECOND, (int)((delay * 1000.0) % 1000.0));
