@@ -44,6 +44,7 @@ public class Teleport implements Runnable, ITeleport
 		}
 	}
 	private IUser user;
+	private IUser teleportUser;
 	private int teleTimer = -1;
 	private long started;	// time this task was initiated
 	private long delay;		// how long to delay the teleport
@@ -127,22 +128,6 @@ public class Teleport implements Runnable, ITeleport
 		this.ess = ess;
 	}
 
-	public void respawn(final Trade chargeFor, TeleportCause cause) throws Exception
-	{
-		final Player player = user.getBase();
-		final Location bed = player.getBedSpawnLocation();
-		final PlayerRespawnEvent pre = new PlayerRespawnEvent(player, bed == null ? player.getWorld().getSpawnLocation() : bed, bed != null);
-		ess.getServer().getPluginManager().callEvent(pre);
-		teleport(new Target(pre.getRespawnLocation()), chargeFor, cause);
-	}
-
-	public void warp(String warp, Trade chargeFor, TeleportCause cause) throws Exception
-	{
-		Location loc = ess.getWarps().getWarp(warp);
-		teleport(new Target(loc), chargeFor, cause);
-		user.sendMessage(_("warpingTo", warp));
-	}
-
 	public void cooldown(boolean check) throws Exception
 	{
 		final Calendar time = new GregorianCalendar();
@@ -181,6 +166,7 @@ public class Teleport implements Runnable, ITeleport
 		}
 	}
 
+	//If we need to cancel a pending teleport call this method
 	public void cancel(boolean notifyUser)
 	{
 		if (teleTimer == -1)
@@ -201,16 +187,7 @@ public class Teleport implements Runnable, ITeleport
 		}
 	}
 
-	public void cancel()
-	{
-		cancel(false);
-	}
-
-	public void teleport(Location loc, Trade chargeFor) throws Exception
-	{
-		teleport(new Target(loc), chargeFor, TeleportCause.PLUGIN);
-	}
-
+	//The teleport function is used when you want to normally teleport someone to a location or player.
 	public void teleport(Location loc, Trade chargeFor, TeleportCause cause) throws Exception
 	{
 		teleport(new Target(loc), chargeFor, cause);
@@ -241,7 +218,7 @@ public class Teleport implements Runnable, ITeleport
 			return;
 		}
 
-		cancel();
+		cancel(false);
 		Calendar c = new GregorianCalendar();
 		c.add(Calendar.SECOND, (int)delay);
 		c.add(Calendar.MILLISECOND, (int)((delay * 1000.0) % 1000.0));
@@ -251,26 +228,13 @@ public class Teleport implements Runnable, ITeleport
 		teleTimer = ess.scheduleSyncRepeatingTask(this, 10, 10);
 	}
 
-	private void now(Target target, TeleportCause cause) throws Exception
-	{
-		cancel();
-		user.setLastLocation();
-		user.getBase().teleport(Util.getSafeDestination(target.getLocation()), cause);
-	}
-
+	//The now function is used when you want to skip tp delay when teleporting someone to a location or player.
 	public void now(Location loc, boolean cooldown, TeleportCause cause) throws Exception
 	{
 		if (cooldown)
 		{
 			cooldown(false);
 		}
-		now(new Target(loc), cause);
-	}
-
-	public void now(Location loc, Trade chargeFor, TeleportCause cause) throws Exception
-	{
-		cooldown(false);
-		chargeFor.charge(user);
 		now(new Target(loc), cause);
 	}
 
@@ -283,16 +247,53 @@ public class Teleport implements Runnable, ITeleport
 		now(new Target(entity), cause);
 	}
 
+	private void now(Target target, TeleportCause cause) throws Exception
+	{
+		cancel(false);
+		user.setLastLocation();
+		user.getBase().teleport(Util.getSafeDestination(target.getLocation()), cause);
+	}
+
+	public void now(Player entity, boolean cooldown, TeleportCause cause) throws Exception
+	{
+		if (cooldown)
+		{
+			cooldown(false);
+		}
+		now(new Target(entity), cause);
+	}
+
+	//The respawn function is a wrapper used to handle tp fallback, on /jail and /home
+	public void respawn(final Trade chargeFor, TeleportCause cause) throws Exception
+	{
+		final Player player = user.getBase();
+		final Location bed = player.getBedSpawnLocation();
+		final PlayerRespawnEvent pre = new PlayerRespawnEvent(player, bed == null ? player.getWorld().getSpawnLocation() : bed, bed != null);
+		ess.getServer().getPluginManager().callEvent(pre);
+		teleport(new Target(pre.getRespawnLocation()), chargeFor, cause);
+	}
+
+	//The warp function is a wrapper used to teleport a player to a /warp
+	public void warp(String warp, Trade chargeFor, TeleportCause cause) throws Exception
+	{
+		Location loc = ess.getWarps().getWarp(warp);
+		teleport(new Target(loc), chargeFor, cause);
+		user.sendMessage(_("warpingTo", warp));
+	}
+
+	//The back function is a wrapper used to teleport a player /back to their previous location.	
 	public void back(Trade chargeFor) throws Exception
 	{
 		teleport(new Target(user.getLastLocation()), chargeFor, TeleportCause.COMMAND);
 	}
 
+	//This function is used to throw a user back after a jail sentence
 	public void back() throws Exception
 	{
 		now(new Target(user.getLastLocation()), TeleportCause.COMMAND);
 	}
 
+	//This function handles teleporting to /home
 	public void home(Location loc, Trade chargeFor) throws Exception
 	{
 		teleport(new Target(loc), chargeFor, TeleportCause.COMMAND);
