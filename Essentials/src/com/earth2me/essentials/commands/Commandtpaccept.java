@@ -72,5 +72,6 @@ public class Commandtpaccept extends EssentialsCommand
 			target.getTeleport().teleport(user, charge, TeleportCause.COMMAND);
 		}
 		user.requestTeleport(null, false);
+		throw new NoChargeException();
 	}
 }
