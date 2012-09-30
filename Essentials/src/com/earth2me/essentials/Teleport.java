@@ -235,6 +235,13 @@ public class Teleport implements Runnable, ITeleport
 	}
 
 	//The teleport function is used when you want to normally teleport someone to a location or player.
+	//This method is nolonger used internally and will be removed.
+	@Deprecated
+	public void teleport(Location loc, Trade chargeFor) throws Exception
+	{
+		teleport(loc, chargeFor, TeleportCause.PLUGIN);
+	}
+		
 	public void teleport(Location loc, Trade chargeFor, TeleportCause cause) throws Exception
 	{
 		teleport(new Target(loc), chargeFor, cause);
