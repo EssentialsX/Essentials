@@ -1329,7 +1329,6 @@ burningfurnace,62,0
 bfurnace,62,0
 signpost,63,0
 spost,63,0
-door,64,0
 woodendoorhalf,64,0
 wooddoorhalf,64,0
 wdoorhalf,64,0
@@ -1588,6 +1587,7 @@ tdoor,96,0
 doort,96,0
 trapd,96,0
 dtrap,96,0
+monsteregg,97,0
 silverfish,97,0
 monstereggsmoothstone,97,0
 monstereggsstone,97,0
@@ -3397,6 +3397,7 @@ sign,323,0
 woodendoor,324,0
 wooddoor,324,0
 wdoor,324,0
+door,324,0
 bucket,325,0
 bukkit,325,0
 waterbucket,326,0
