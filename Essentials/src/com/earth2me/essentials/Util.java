@@ -26,7 +26,9 @@ public class Util
 
 	public static String sanitizeFileName(final String name)
 	{
-		final String newName = INVALIDFILECHARS.matcher(name.toLowerCase(Locale.ENGLISH)).replaceAll("_");
+		String newName = INVALIDFILECHARS.matcher(name.toLowerCase(Locale.ENGLISH)).replaceAll("_");
+		if(Pattern.compile("^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(\\.(.+))?$", Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE | Pattern.COMMENTS).matcher(newName).matches())
+			newName = "_" + newName;
 		return newName;
 	}
 
