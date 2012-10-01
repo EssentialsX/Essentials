@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.entity.Player;
 
 
 public class Commandsudo extends EssentialsCommand
@@ -26,6 +27,15 @@ public class Commandsudo extends EssentialsCommand
 		}
 
 		final User user = getPlayer(server, args, 0, false);
+		if(args[1].equalsIgnoreCase("say"))
+		{
+			if (user.isAuthorized("essentials.sudo.exempt"))
+			{
+				throw new Exception(_("sudoExempt"));
+			}
+			user.chat(getFinalArg(args, 2));
+			return;
+		}
 		final String command = args[1];
 		final String[] arguments = new String[args.length - 2];
 		if (arguments.length > 0)
@@ -33,7 +43,7 @@ public class Commandsudo extends EssentialsCommand
 			System.arraycopy(args, 2, arguments, 0, args.length - 2);
 		}
 
-		if (user.isAuthorized("essentials.sudo.exempt"))
+		if (user.isAuthorized("essentials.sudo.exempt") && sender instanceof Player)
 		{
 			throw new Exception(_("sudoExempt"));
 		}

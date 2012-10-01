@@ -128,9 +128,9 @@ commands:
     usage: /<command> [player]
     aliases: [coords,egetpos,position,eposition,whereami,ewhereami]
   gc:
-    description: Reports garbage collection and tick info; useful to developers.
+    description: Reports memory, uptime and tick info.
     usage: /<command>
-    aliases: [elag,lag,mem,memory,egc,emem,ememory]
+    aliases: [elag,lag,mem,memory,egc,emem,ememory,uptime,euptime]
   give:
     description: Give a player an item.
     usage: /<command> <player> <item|numeric> [amount <enchantmentname[:level]> ...]
@@ -351,7 +351,7 @@ commands:
     usage: /<command> [day|night|dawn|17:30|4pm|4000ticks] [worldname|all]
     aliases: [etime, day, night, eday, enight]
   togglejail:
-    description: Jails/Unjails a player and tp them to the jail specified.
+    description: Jails/Unjails a player, TPs them to the jail specified.
     usage: /<command> <player> <jailname> [datediff]
     aliases: [tjail,jail,ejail,unjail,eunjail,etogglejail]
   top:
@@ -450,3 +450,8 @@ commands:
     description: Calculates the worth of items in hand or as specified.
     usage: /<command> [item] [amount]
     aliases: [eworth,price,eprice]
+
+permissions:
+  essentials.*:
+    default: op
+    description: Give players with op everything by default

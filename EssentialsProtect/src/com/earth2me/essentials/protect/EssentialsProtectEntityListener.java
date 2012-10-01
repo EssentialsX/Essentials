@@ -26,13 +26,9 @@ public class EssentialsProtectEntityListener implements Listener
 		this.ess = prot.getEssentialsConnect().getEssentials();
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onEntityDamage(final EntityDamageEvent event)
 	{
-		if (event.isCancelled())
-		{
-			return;
-		}
 		final Entity target = event.getEntity();
 
 		if (target instanceof Villager && prot.getSettingBool(ProtectConfig.prevent_villager_death))
@@ -191,10 +187,10 @@ public class EssentialsProtectEntityListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onEntityExplode(final EntityExplodeEvent event)
 	{
-		if (event.isCancelled() || event.getEntity() == null)
+		if (event.getEntity() == null)
 		{
 			return;
 		}
@@ -263,14 +259,10 @@ public class EssentialsProtectEntityListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onCreatureSpawn(final CreatureSpawnEvent event)
 	{
 		if (event.getEntity() instanceof Player)
-		{
-			return;
-		}
-		if (event.isCancelled())
 		{
 			return;
 		}
@@ -290,13 +282,9 @@ public class EssentialsProtectEntityListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onEntityTarget(final EntityTargetEvent event)
 	{
-		if (event.isCancelled())
-		{
-			return;
-		}
 		if (!(event.getTarget() instanceof Player))
 		{
 			return;
@@ -316,7 +304,7 @@ public class EssentialsProtectEntityListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onExplosionPrime(ExplosionPrimeEvent event)
 	{
 		if ((event.getEntity() instanceof Fireball || event.getEntity() instanceof SmallFireball)
@@ -326,13 +314,9 @@ public class EssentialsProtectEntityListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onEntityChangeBlock(EntityChangeBlockEvent event)
 	{
-		if (event.isCancelled())
-		{
-			return;
-		}
 		if (event.getEntityType() == EntityType.ENDERMAN && prot.getSettingBool(ProtectConfig.prevent_enderman_pickup))
 		{
 			event.setCancelled(true);

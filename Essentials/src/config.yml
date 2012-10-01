@@ -8,15 +8,10 @@
 # If you receive an error when Essentials loads, ensure that:
 #   - No tabs are present: YAML only allows spaces
 #   - Indents are correct: YAML hierarchy is based entirely on indentation
-#   - You have "escaped" all apostrophes in your text: If you want to write "don't", for example, write "don''t" instead (note the doubled apostrphe)
-#   - List items are prefixed with a hyphen and indented:
-#       lists:
-#         - look like this
-#       not:
-#       - like this
+#   - You have "escaped" all apostrophes in your text: If you want to write "don't", for example, write "don''t" instead (note the doubled apostrophe)
 #   - Text with symbols is enclosed in single or double quotation marks
-#   - CraftBukkit and Permissions have been updated: CraftBukkit and Essentials almost always line up, but sometimes other plugins fall behind CraftBukkit's multiple daily updates
-#   - You have saved the document as UTF-8, NOT the default, ANSI
+
+# If you have problems join the Essentials help support channel: http://tiny.cc/EssentialsChat
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -96,18 +91,20 @@ overridden-commands:
 disabled-commands:
 # - nick
 
-# Restricted commands have been removed.
-# Now we have a whitelist, all commands not on this list are only available to ops.
-# These will have NO EFFECT if you have Permissions installed!
-# They are here only if you want something simpler than Permissions.
+# If you do not wish to use a permission system, you can define a list of 'player perms' below.
+# This list has no effect if your using a supported permissions system.
+# If your using an unsupported permissions system simply delete this section.
+# Whitelist the commands and permissions you wish to give players by default (everything else is op only).
 # These are the permissions without the "essentials." part.
 player-commands:
   - afk
+  - afk.auto
   - back
   - back.ondeath
   - balance
   - balance.others
   - balancetop
+  - build
   - chat.color
   - chat.format
   - chat.shout
@@ -138,8 +135,6 @@ player-commands:
   - near
   - pay
   - ping
-  - powertool
-  - powertooltoggle
   - protect
   - r
   - rules
@@ -190,7 +185,7 @@ kits:
   dtools:
     delay: 10
     items:
-      - 277 1 efficiency:1
+      - 277 1 efficiency:1 durability:1
       - 278 1
       - 279:780 1
   tools:
@@ -206,7 +201,6 @@ kits:
 # To enable signs, remove # symbol. To disable all signs, comment/remove each sign.
 # Essentials Colored sign support will be enabled when any sign types are enabled.
 # Color is not an actual sign, its for enabling using color codes on signs, when the correct permissions are given.
-# We recommend not enabling chest protection signs if you don't intend to use them, (or are using LWC/Lockette).
 
 enabledSigns:
   #- color
@@ -226,9 +220,7 @@ enabledSigns:
   #- spawnmob
   #- repair
   #- time
-  #- weather
-  #- protection
-  
+  #- weather  
   
 # How many times per second can Essentials signs be interacted with per player.
 # Values should be between 1-20, 20 being virtually no lag protection.
@@ -254,15 +246,11 @@ debug: false
 
 # Set the locale for all messages
 # If you don't set this, the default locale of the server will be used.
-# Don't forget to remove the # infront of the line
+# Don't forget to remove the # in front of the line
 #locale: de_DE
 
 # Turn off god mode when people exit
 remove-god-on-disconnect: false
-
-# Use the permission system of bukkit
-# This only works if no other permission plugins are installed
-use-bukkit-permissions: false
 
 # Auto-AFK
 # After this timeout in seconds, the user will be set as afk.
@@ -285,11 +273,11 @@ freeze-afk-players: false
 disable-item-pickup-while-afk: false
 
 # Should we automatically remove afk status when the player moves?
-# Player will be removed from afk on chat/command reguardless of this setting.
+# Player will be removed from afk on chat/command regardless of this setting.
 # Disable this to reduce server lag.
 cancel-afk-on-move: true
 
-# You can disable the death messages of minecraft here
+# You can disable the death messages of Minecraft here
 death-messages: true
 
 # Add worlds to this list, if you want to automatically disable god mode there
@@ -299,17 +287,17 @@ no-god-in-worlds:
 # Set to true to enable per-world permissions for teleporting between worlds with essentials commands
 # This applies to /world, /back, /tp[a|o][here|all], but not warps.
 # Give someone permission to teleport to a world with essentials.worlds.<worldname>
-# This does not effect the /home command, there is a seperate toggle below for this.
+# This does not effect the /home command, there is a separate toggle below for this.
 world-teleport-permissions: false
 
 # The number of items given if the quantity parameter is left out in /item or /give.
-# If this number is below 1, the maximum stack size size is given. If oversized stacks
-# is not enabled, any number higher then the maximum stack size results in more than one stack.
+# If this number is below 1, the maximum stack size size is given. If over-sized stacks
+# are not enabled, any number higher then the maximum stack size results in more than one stack.
 default-stack-size: -1
 
-# Oversized stacks are stacks that ignore the normal max stacksize.
+# Over-sized stacks are stacks that ignore the normal max stack size.
 # They can be obtained using /give and /item, if the player has essentials.oversizedstacks permission.
-# How many items should be in an oversized stack?
+# How many items should be in an over-sized stack?
 oversized-stacksize: 64
 
 # Allow repair of enchanted weapons and armor.
@@ -369,7 +357,7 @@ starting-balance: 0
 # These are now defined in worth.yml
 
 # Defines the cost to use the given commands PER USE
-# Some commands like /repair have subcosts, check the wiki for more information.
+# Some commands like /repair have sub-costs, check the wiki for more information.
 command-costs:
   # /example costs $1000 PER USE
   #example: 1000
@@ -564,15 +552,15 @@ protect:
       storm: false
       thunder: false
       lightning: false     
-        
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                EssentialsAntiBuild                   | #
 # +------------------------------------------------------+ #
 ############################################################
-  
+
   # Disable various default physics and behaviors
-  
+
     # Should people with build: false in permissions be allowed to build
     # Set true to disable building for those people
     # Setting to false means EssentialsAntiBuild will never prevent you from building
@@ -585,7 +573,7 @@ protect:
 
     # Should we tell people they are not allowed to build
     warn-on-build-disallow: true
-   
+
   # For which block types would you like to be alerted?
   # You can find a list of IDs in plugins/Essentials/items.csv after loading Essentials for the first time.
   # 10 = lava :: 11 = still lava :: 46 = TNT :: 327 = lava bucket
@@ -624,7 +612,7 @@ newbies:
   # When we spawn for the first time, which spawnpoint do we use?
   # Set to "none" if you want to use the spawn point of the world.
   spawnpoint: newbies
-  
+
   # Do we want to give users anything on first join? Set to '' to disable
   # This kit will be given regardless  of cost, and permissions.
   #kit: ''

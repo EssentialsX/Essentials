@@ -7,13 +7,17 @@ import java.util.logging.Level;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.painting.PaintingBreakByEntityEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -28,7 +32,7 @@ public class EssentialsAntiBuildListener implements Listener
 		this.ess = prot.getEssentialsConnect().getEssentials();
 	}
 
-	private boolean metaPermCheck(User user, String action, Block block)
+	private boolean metaPermCheck(final User user, final String action, final Block block)
 	{
 		if (block == null)
 		{
@@ -37,13 +41,13 @@ public class EssentialsAntiBuildListener implements Listener
 		return metaPermCheck(user, action, block.getTypeId(), block.getData());
 	}
 
-	private boolean metaPermCheck(User user, String action, int blockId)
+	private boolean metaPermCheck(final User user, final String action, final int blockId)
 	{
 		final String blockPerm = "essentials.build." + action + "." + blockId;
 		return user.isAuthorized(blockPerm);
 	}
 
-	private boolean metaPermCheck(User user, String action, int blockId, byte data)
+	private boolean metaPermCheck(final User user, final String action, final int blockId, final byte data)
 	{
 		final String blockPerm = "essentials.build." + action + "." + blockId;
 		final String dataPerm = blockPerm + ":" + data;
@@ -137,7 +141,7 @@ public class EssentialsAntiBuildListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onPaintingBreak(PaintingBreakByEntityEvent event)
+	public void onPaintingBreak(final PaintingBreakByEntityEvent event)
 	{
 		final Entity entity = event.getRemover();
 		if (entity instanceof Player)
@@ -156,7 +160,7 @@ public class EssentialsAntiBuildListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onBlockPistonExtend(BlockPistonExtendEvent event)
+	public void onBlockPistonExtend(final BlockPistonExtendEvent event)
 	{
 		for (Block block : event.getBlocks())
 		{
@@ -169,7 +173,7 @@ public class EssentialsAntiBuildListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onBlockPistonRetract(BlockPistonRetractEvent event)
+	public void onBlockPistonRetract(final BlockPistonRetractEvent event)
 	{
 		if (!event.isSticky())
 		{
@@ -226,6 +230,68 @@ public class EssentialsAntiBuildListener implements Listener
 				if (ess.getSettings().warnOnBuildDisallow())
 				{
 					user.sendMessage(_("antiBuildInteract", event.getClickedBlock().getType().toString()));
+				}
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onCraftItemEvent(final CraftItemEvent event)
+	{
+		HumanEntity entity = event.getWhoClicked();
+
+		if (entity instanceof Player)
+		{
+			final User user = ess.getUser(entity);
+			final ItemStack item = event.getRecipe().getResult();
+
+			if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild() && !user.isAuthorized("essentials.build"))
+			{
+				if (!metaPermCheck(user, "craft", item.getTypeId(), item.getData().getData()))
+				{
+					event.setCancelled(true);
+					if (ess.getSettings().warnOnBuildDisallow())
+					{
+						user.sendMessage(_("antiBuildCraft", item.getType().toString()));
+					}
+				}
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onPlayerPickupItem(PlayerPickupItemEvent event)
+	{
+
+		final User user = ess.getUser(event.getPlayer());
+		final ItemStack item = event.getItem().getItemStack();
+
+		if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild() && !user.isAuthorized("essentials.build"))
+		{
+			if (!metaPermCheck(user, "pickup", item.getTypeId(), item.getData().getData()))
+			{
+				event.setCancelled(true);
+				event.getItem().setPickupDelay(50);
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onPlayerDropItem(final PlayerDropItemEvent event)
+	{
+
+		final User user = ess.getUser(event.getPlayer());
+		final ItemStack item = event.getItemDrop().getItemStack();
+
+		if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild() && !user.isAuthorized("essentials.build"))
+		{
+			if (!metaPermCheck(user, "drop", item.getTypeId(), item.getData().getData()))
+			{
+				event.setCancelled(true);
+				user.updateInventory();
+				if (ess.getSettings().warnOnBuildDisallow())
+				{
+					user.sendMessage(_("antiBuildDrop", item.getType().toString()));
 				}
 			}
 		}

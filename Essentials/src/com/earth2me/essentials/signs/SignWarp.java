@@ -1,6 +1,7 @@
 package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.ChargeException;
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
@@ -22,8 +23,8 @@ public class SignWarp extends EssentialsSign
 
 		if (warpName.isEmpty())
 		{
-			sign.setLine(1, "§dWarp name!");
-			return false;
+			sign.setLine(1, "§c<Warp name>");
+			throw new SignException(_("invalidSignLine", 1));
 		}
 		else
 		{
@@ -52,7 +53,7 @@ public class SignWarp extends EssentialsSign
 		if ((!group.isEmpty()
 			 && ("§2Everyone".equals(group)
 				 || player.inGroup(group)))
-			|| (group.isEmpty() && (!ess.getSettings().getPerWarpPermission() || player.isAuthorized("essentials.warp." + warpName))))
+			|| (group.isEmpty() && (!ess.getSettings().getPerWarpPermission() || player.isAuthorized("essentials.warps." + warpName))))
 		{
 			final Trade charge = getTrade(sign, 3, ess);
 			try

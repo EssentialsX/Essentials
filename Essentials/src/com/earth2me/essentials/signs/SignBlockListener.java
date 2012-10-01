@@ -88,6 +88,16 @@ public class SignBlockListener implements Listener
 		{
 			event.setLine(i, Util.formatString(user, "essentials.signs", event.getLine(i)));
 		}
+
+		final String topLine = event.getLine(0);
+		for (Signs signs : Signs.values())
+		{
+			final EssentialsSign sign = signs.getSign();
+			if (topLine.equalsIgnoreCase(sign.getSuccessName()))
+			{
+				event.setLine(0, Util.stripFormat(topLine));
+			}
+		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -98,9 +108,8 @@ public class SignBlockListener implements Listener
 			return;
 		}
 
-		for (Signs signs : Signs.values())
+		for (EssentialsSign sign : ess.getSettings().enabledSigns())
 		{
-			final EssentialsSign sign = signs.getSign();
 			if (event.getLine(0).equalsIgnoreCase(sign.getSuccessName()))
 			{
 				event.setCancelled(true);
@@ -137,9 +146,8 @@ public class SignBlockListener implements Listener
 		{
 			return;
 		}
-		for (Signs signs : Signs.values())
+		for (EssentialsSign sign : ess.getSettings().enabledSigns())
 		{
-			final EssentialsSign sign = signs.getSign();
 			if (sign.getBlocks().contains(block.getType())
 				&& !sign.onBlockPlace(block, event.getPlayer(), ess))
 			{

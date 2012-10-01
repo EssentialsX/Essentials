@@ -21,13 +21,13 @@ public class Teleport implements Runnable, ITeleport
 		private final Location location;
 		private final String name;
 
-		public Target(Location location)
+		Target(Location location)
 		{
 			this.location = location;
 			this.name = null;
 		}
 
-		public Target(Player entity)
+		Target(Player entity)
 		{
 			this.name = entity.getName();
 			this.location = null;
@@ -37,13 +37,14 @@ public class Teleport implements Runnable, ITeleport
 		{
 			if (this.name != null)
 			{
-				
+
 				return ess.getServer().getPlayerExact(name).getLocation();
 			}
 			return location;
 		}
 	}
 	private IUser user;
+	private IUser teleportUser;
 	private int teleTimer = -1;
 	private long started;	// time this task was initiated
 	private long delay;		// how long to delay the teleport
@@ -62,12 +63,18 @@ public class Teleport implements Runnable, ITeleport
 
 	private void initTimer(long delay, Target target, Trade chargeFor, TeleportCause cause)
 	{
+		initTimer(delay, user, target, chargeFor, cause);
+	}
+
+	private void initTimer(long delay, IUser teleportUser, Target target, Trade chargeFor, TeleportCause cause)
+	{
 		this.started = System.currentTimeMillis();
 		this.delay = delay;
-		this.health = user.getHealth();
-		this.initX = Math.round(user.getLocation().getX() * MOVE_CONSTANT);
-		this.initY = Math.round(user.getLocation().getY() * MOVE_CONSTANT);
-		this.initZ = Math.round(user.getLocation().getZ() * MOVE_CONSTANT);
+		this.health = teleportUser.getHealth();
+		this.initX = Math.round(teleportUser.getLocation().getX() * MOVE_CONSTANT);
+		this.initY = Math.round(teleportUser.getLocation().getY() * MOVE_CONSTANT);
+		this.initZ = Math.round(teleportUser.getLocation().getZ() * MOVE_CONSTANT);
+		this.teleportUser = teleportUser;
 		this.teleportTarget = target;
 		this.chargeFor = chargeFor;
 		this.cause = cause;
@@ -79,31 +86,38 @@ public class Teleport implements Runnable, ITeleport
 
 		if (user == null || !user.isOnline() || user.getLocation() == null)
 		{
-			cancel();
+			cancel(false);
 			return;
 		}
-		if (Math.round(user.getLocation().getX() * MOVE_CONSTANT) != initX
-			|| Math.round(user.getLocation().getY() * MOVE_CONSTANT) != initY
-			|| Math.round(user.getLocation().getZ() * MOVE_CONSTANT) != initZ
-			|| user.getHealth() < health)
-		{	// user moved, cancel teleport
+		if (teleportUser == null || !teleportUser.isOnline() || teleportUser.getLocation() == null)
+		{
+			cancel(false);
+			return;
+		}
+
+		if (!user.isAuthorized("essentials.teleport.timer.move")
+			&& (Math.round(teleportUser.getLocation().getX() * MOVE_CONSTANT) != initX
+				|| Math.round(teleportUser.getLocation().getY() * MOVE_CONSTANT) != initY
+				|| Math.round(teleportUser.getLocation().getZ() * MOVE_CONSTANT) != initZ
+				|| teleportUser.getHealth() < health))
+		{
+			// user moved, cancel teleport
 			cancel(true);
 			return;
 		}
-
-		health = user.getHealth();  // in case user healed, then later gets injured
-
+		health = teleportUser.getHealth();  // in case user healed, then later gets injured
 		long now = System.currentTimeMillis();
 		if (now > started + delay)
 		{
 			try
 			{
 				cooldown(false);
-				user.sendMessage(_("teleportationCommencing"));
+				teleportUser.sendMessage(_("teleportationCommencing"));
 				try
 				{
 
-					now(teleportTarget, cause);
+					teleportUser.getTeleport().now(teleportTarget, cause);
+					cancel(false);
 					if (chargeFor != null)
 					{
 						chargeFor.charge(user);
@@ -117,6 +131,10 @@ public class Teleport implements Runnable, ITeleport
 			catch (Exception ex)
 			{
 				user.sendMessage(_("cooldownWithMessage", ex.getMessage()));
+				if (user != teleportUser)
+				{
+					teleportUser.sendMessage(_("cooldownWithMessage", ex.getMessage()));
+				}
 			}
 		}
 	}
@@ -125,22 +143,6 @@ public class Teleport implements Runnable, ITeleport
 	{
 		this.user = user;
 		this.ess = ess;
-	}
-
-	public void respawn(final Trade chargeFor, TeleportCause cause) throws Exception
-	{
-		final Player player = user.getBase();
-		final Location bed = player.getBedSpawnLocation();
-		final PlayerRespawnEvent pre = new PlayerRespawnEvent(player, bed == null ? player.getWorld().getSpawnLocation() : bed, bed != null);
-		ess.getServer().getPluginManager().callEvent(pre);
-		teleport(new Target(pre.getRespawnLocation()), chargeFor, cause);
-	}
-
-	public void warp(String warp, Trade chargeFor, TeleportCause cause) throws Exception
-	{
-		Location loc = ess.getWarps().getWarp(warp);
-		teleport(new Target(loc), chargeFor, cause);
-		user.sendMessage(_("warpingTo", warp));
 	}
 
 	public void cooldown(boolean check) throws Exception
@@ -181,6 +183,7 @@ public class Teleport implements Runnable, ITeleport
 		}
 	}
 
+	//If we need to cancel a pending teleport call this method
 	public void cancel(boolean notifyUser)
 	{
 		if (teleTimer == -1)
@@ -193,6 +196,10 @@ public class Teleport implements Runnable, ITeleport
 			if (notifyUser)
 			{
 				user.sendMessage(_("pendingTeleportCancelled"));
+				if (teleportUser != user)
+				{
+					teleportUser.sendMessage(_("pendingTeleportCancelled"));
+				}
 			}
 		}
 		finally
@@ -201,16 +208,40 @@ public class Teleport implements Runnable, ITeleport
 		}
 	}
 
-	public void cancel()
+	//The now function is used when you want to skip tp delay when teleporting someone to a location or player.
+	public void now(Location loc, boolean cooldown, TeleportCause cause) throws Exception
+	{
+		if (cooldown)
+		{
+			cooldown(false);
+		}
+		now(new Target(loc), cause);
+	}
+
+	public void now(Player entity, boolean cooldown, TeleportCause cause) throws Exception
+	{
+		if (cooldown)
+		{
+			cooldown(false);
+		}
+		now(new Target(entity), cause);
+	}
+
+	private void now(Target target, TeleportCause cause) throws Exception
 	{
 		cancel(false);
+		user.setLastLocation();
+		user.getBase().teleport(Util.getSafeDestination(target.getLocation()), cause);
 	}
 
+	//The teleport function is used when you want to normally teleport someone to a location or player.
+	//This method is nolonger used internally and will be removed.
+	@Deprecated
 	public void teleport(Location loc, Trade chargeFor) throws Exception
 	{
-		teleport(new Target(loc), chargeFor, TeleportCause.PLUGIN);
+		teleport(loc, chargeFor, TeleportCause.PLUGIN);
 	}
-
+		
 	public void teleport(Location loc, Trade chargeFor, TeleportCause cause) throws Exception
 	{
 		teleport(new Target(loc), chargeFor, cause);
@@ -241,58 +272,82 @@ public class Teleport implements Runnable, ITeleport
 			return;
 		}
 
-		cancel();
-		Calendar c = new GregorianCalendar();
-		c.add(Calendar.SECOND, (int)delay);
-		c.add(Calendar.MILLISECOND, (int)((delay * 1000.0) % 1000.0));
-		user.sendMessage(_("dontMoveMessage", Util.formatDateDiff(c.getTimeInMillis())));
+		cancel(false);
+		warnUser(user);
 		initTimer((long)(delay * 1000.0), target, chargeFor, cause);
 
 		teleTimer = ess.scheduleSyncRepeatingTask(this, 10, 10);
 	}
 
-	private void now(Target target, TeleportCause cause) throws Exception
+	//The teleportToMe function is a wrapper used to handle teleporting players to them, like /tphere
+	public void teleportToMe(User otherUser, Trade chargeFor, TeleportCause cause) throws Exception
 	{
-		cancel();
-		user.setLastLocation();
-		user.getBase().teleport(Util.getSafeDestination(target.getLocation()), cause);
-	}
+		Target target = new Target(user);
 
-	public void now(Location loc, boolean cooldown, TeleportCause cause) throws Exception
-	{
-		if (cooldown)
+		double delay = ess.getSettings().getTeleportDelay();
+
+		if (chargeFor != null)
+		{
+			chargeFor.isAffordableFor(user);
+		}
+		cooldown(true);
+		if (delay <= 0 || user.isAuthorized("essentials.teleport.timer.bypass"))
 		{
 			cooldown(false);
+			otherUser.getTeleport().now(target, cause);
+			if (chargeFor != null)
+			{
+				chargeFor.charge(user);
+			}
+			return;
 		}
-		now(new Target(loc), cause);
+
+		cancel(false);
+		warnUser(otherUser);
+		initTimer((long)(delay * 1000.0), otherUser, target, chargeFor, cause);
+
+		teleTimer = ess.scheduleSyncRepeatingTask(this, 10, 10);
 	}
 
-	public void now(Location loc, Trade chargeFor, TeleportCause cause) throws Exception
+	private void warnUser(final IUser user)
 	{
-		cooldown(false);
-		chargeFor.charge(user);
-		now(new Target(loc), cause);
+		Calendar c = new GregorianCalendar();
+		c.add(Calendar.SECOND, (int)delay);
+		c.add(Calendar.MILLISECOND, (int)((delay * 1000.0) % 1000.0));
+		user.sendMessage(_("dontMoveMessage", Util.formatDateDiff(c.getTimeInMillis())));
 	}
 
-	public void now(Player entity, boolean cooldown, TeleportCause cause) throws Exception
+	//The respawn function is a wrapper used to handle tp fallback, on /jail and /home
+	public void respawn(final Trade chargeFor, TeleportCause cause) throws Exception
 	{
-		if (cooldown)
-		{
-			cooldown(false);
-		}
-		now(new Target(entity), cause);
+		final Player player = user.getBase();
+		final Location bed = player.getBedSpawnLocation();
+		final PlayerRespawnEvent pre = new PlayerRespawnEvent(player, bed == null ? player.getWorld().getSpawnLocation() : bed, bed != null);
+		ess.getServer().getPluginManager().callEvent(pre);
+		teleport(new Target(pre.getRespawnLocation()), chargeFor, cause);
 	}
 
+	//The warp function is a wrapper used to teleport a player to a /warp
+	public void warp(String warp, Trade chargeFor, TeleportCause cause) throws Exception
+	{
+		Location loc = ess.getWarps().getWarp(warp);
+		teleport(new Target(loc), chargeFor, cause);
+		user.sendMessage(_("warpingTo", warp));
+	}
+
+	//The back function is a wrapper used to teleport a player /back to their previous location.	
 	public void back(Trade chargeFor) throws Exception
 	{
 		teleport(new Target(user.getLastLocation()), chargeFor, TeleportCause.COMMAND);
 	}
 
+	//This function is used to throw a user back after a jail sentence
 	public void back() throws Exception
 	{
 		now(new Target(user.getLastLocation()), TeleportCause.COMMAND);
 	}
 
+	//This function handles teleporting to /home
 	public void home(Location loc, Trade chargeFor) throws Exception
 	{
 		teleport(new Target(loc), chargeFor, TeleportCause.COMMAND);

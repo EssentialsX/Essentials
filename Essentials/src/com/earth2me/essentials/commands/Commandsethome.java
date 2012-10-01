@@ -2,7 +2,9 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import java.util.Locale;
+import java.util.regex.Pattern;
 import org.bukkit.Location;
 import org.bukkit.Server;
 
@@ -55,9 +57,10 @@ public class Commandsethome extends EssentialsCommand
 		{
 			name = "home";
 		}
-		if ("bed".equals(name))
+		if ("bed".equals(name) || Util.isInt(name))
 		{
-			throw new NotEnoughArgumentsException();
+			user.sendMessage(_("invalidHomeName"));
+			throw new NoChargeException();
 		}
 		usersHome.setHome(name, location);
 		user.sendMessage(_("homeSet", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ()));

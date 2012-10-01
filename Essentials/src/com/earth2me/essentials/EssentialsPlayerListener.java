@@ -347,7 +347,7 @@ public class EssentialsPlayerListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerChangedWorldHack(final PlayerChangedWorldEvent event)
 	{
 		final Player user = event.getPlayer();
@@ -496,7 +496,7 @@ public class EssentialsPlayerListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onInventoryClickEvent(final InventoryClickEvent event)
 	{
 		if (event.getView().getTopInventory().getType() == InventoryType.PLAYER)

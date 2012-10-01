@@ -25,28 +25,30 @@ when he does not select a chapter.
 
 #Colors
 Minecraft colors:
-&0 &&0 &1 &&1 &2 &&2 &3 &&3
-&4 &&4 &5 &&5 &6 &&6 &7 &&7
-&8 &&8 &9 &&9 &a &&a &b &&b
-&c &&c &d &&d &e &&e &f &&f 
-&&k &k Magic! 
+&0 &&0  &1 &&1  &2 &&2  &3 &&3
+&4 &&4  &5 &&5  &6 &&6  &7 &&7
+&8 &&8  &9 &&9  &a &&a  &b &&b
+&c &&c  &d &&d  &e &&e  &f &&f
+
+&&k &k Magic!&r   &&l &l Bold!
+&&m &m Strike!&r  &&n &n Underline!
+&&o &o Italic!&r   &&r &r reset format codes!
 
 #Tags
-PLAYER: {PLAYER}
-USERNAME: {PLAYER}
-IP: {IP}
-ADDRESS: {ADDRESS}
-BALANCE: {BALANCE}
-MAILS: {MAILS}
-WORLD: {WORLD}
-WORLDS: {WORLDS}
-ONLINE: {ONLINE}
-UNIQUE: {UNIQUE}
-PLAYERLIST: {PLAYERLIST}
-TIME: {TIME}
-DATE: {DATE}
-WORLDTIME12: {WORLDTIME12}
-WORLDTIME24: {WORLDTIME24}
-WORLDDATE: {WORLDDATE}
-PLUGINS: {PLUGINS}
-VERSION: {VERSION}
+&6Player name:&r {PLAYER}
+&6IP:&r {IP}
+&6Address:&r {ADDRESS}
+&6Balance:&r {BALANCE}
+&6Unread mails:&r {MAILS}
+&6Current world:&r {WORLD}
+&6Worlds list:&r {WORLDS}
+&6Number of online players:&r {ONLINE}
+&6Number of unique players who joined the server:&r {UNIQUE}
+&6Player list:&r {PLAYERLIST}
+&6Time of server:&r {TIME}
+&6Date of server:&r {DATE}
+&6Time of world PM/AM:&r {WORLDTIME12}
+&6Time of world:&r {WORLDTIME24}
+&6Date of world:&r {WORLDDATE}
+&6Plugin list:&r {PLUGINS}
+&6Version of Craftbukkit:&r {VERSION}

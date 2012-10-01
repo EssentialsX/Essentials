@@ -17,11 +17,10 @@ public class EssentialsProtectWeatherListener implements Listener
 		this.prot = prot;
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onWeatherChange(final WeatherChangeEvent event)
 	{
-		if (!event.isCancelled()
-			&& prot.getSettingBool(ProtectConfig.disable_weather_storm)
+		if (prot.getSettingBool(ProtectConfig.disable_weather_storm)
 			&& event.toWeatherState())
 		{
 			event.setCancelled(true);
@@ -29,21 +28,19 @@ public class EssentialsProtectWeatherListener implements Listener
 
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onLightningStrike(final LightningStrikeEvent event)
 	{
-		if (!event.isCancelled()
-			&& prot.getSettingBool(ProtectConfig.disable_weather_lightning))
+		if (prot.getSettingBool(ProtectConfig.disable_weather_lightning))
 		{
 			event.setCancelled(true);
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onThunderChange(final ThunderChangeEvent event)
 	{
-		if (!event.isCancelled()
-			&& prot.getSettingBool(ProtectConfig.disable_weather_thunder)
+		if (prot.getSettingBool(ProtectConfig.disable_weather_thunder)
 			&& event.toThunderState())
 		{
 			event.setCancelled(true);

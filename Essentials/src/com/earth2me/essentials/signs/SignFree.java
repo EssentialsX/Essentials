@@ -19,7 +19,14 @@ public class SignFree extends EssentialsSign
 	@Override
 	protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException
 	{
-		getItemStack(sign.getLine(1), 1, ess);
+		try {
+			getItemStack(sign.getLine(1), 1, ess);
+		}
+		catch (SignException ex)
+		{
+			sign.setLine(1, "§c<item>");
+			throw new SignException(ex.getMessage(), ex);
+		}
 		return true;
 	}
 
