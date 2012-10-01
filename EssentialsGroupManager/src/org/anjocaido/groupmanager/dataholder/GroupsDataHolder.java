@@ -69,7 +69,7 @@ public class GroupsDataHolder {
 	}
 
 	/**
-	 * @param groups the groups to set
+	 * Resets the Groups
 	 */
 	public void resetGroups() {
 		this.groups.clear();

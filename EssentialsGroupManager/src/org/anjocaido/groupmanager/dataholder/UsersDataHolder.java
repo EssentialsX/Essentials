@@ -52,7 +52,7 @@ public class UsersDataHolder {
 	}
 
 	/**
-	 * @param users the users to set
+	 * Resets the Users
 	 */
 	public void resetUsers() {
 		this.users.clear();

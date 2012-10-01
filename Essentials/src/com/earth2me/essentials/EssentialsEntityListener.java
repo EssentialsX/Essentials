@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import org.bukkit.Material;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -46,7 +47,7 @@ public class EssentialsEntityListener implements Listener
 			{
 				event.setCancelled(true);
 			}
-			
+
 			if (attacker.isGodModeEnabled() && !attacker.isAuthorized("essentials.god.pvp"))
 			{
 				event.setCancelled(true);
@@ -159,6 +160,18 @@ public class EssentialsEntityListener implements Listener
 			&& ess.getUser(event.getEntity()).isAfk() && ess.getSettings().getFreezeAfkPlayers())
 		{
 			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onPotionSplashEvent(final PotionSplashEvent event)
+	{
+		for (LivingEntity entity : event.getAffectedEntities())
+		{
+			if (entity instanceof Player && ess.getUser(entity).isGodModeEnabled())
+			{
+				event.setIntensity(entity, 0d);
+			}
 		}
 	}
 }

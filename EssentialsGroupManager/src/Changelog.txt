@@ -199,3 +199,5 @@ v 2.0:
 	- Include the GM version when logging errors.
 	- Fix Synchronization on adding subgroups (thanks snowleo).
 	- Remove info node support from GlobalGroups. It should not have them as GlobalGroups are only permission collections.
+	- Change order of data in Users.yml to [name, Group, SubGroup, Permissions, Info nodes].
+	- Add alphabetically sorted user lists.
