@@ -22,9 +22,10 @@ public class Commandsetwarp extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		
-		if (args[0].matches("[0-9]+")) {
-			throw new NotEnoughArgumentsException();
+
+		if (Util.isInt(args[0]))
+		{
+			throw new NoSuchFieldException(_("invalidWarpName"));
 		}
 
 		final Location loc = user.getLocation();

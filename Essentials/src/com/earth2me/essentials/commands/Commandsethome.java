@@ -4,7 +4,6 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.util.Locale;
-import java.util.regex.Pattern;
 import org.bukkit.Location;
 import org.bukkit.Server;
 
@@ -47,7 +46,7 @@ public class Commandsethome extends EssentialsCommand
 					}
 					if (usersHome == null)
 					{
-						throw new Exception(_("playerNotFound"));
+						throw new NoSuchFieldException(_("playerNotFound"));
 					}
 					name = args[1].toLowerCase(Locale.ENGLISH);
 				}
@@ -59,8 +58,7 @@ public class Commandsethome extends EssentialsCommand
 		}
 		if ("bed".equals(name) || Util.isInt(name))
 		{
-			user.sendMessage(_("invalidHomeName"));
-			throw new NoChargeException();
+			throw new NoSuchFieldException(_("invalidHomeName"));
 		}
 		usersHome.setHome(name, location);
 		user.sendMessage(_("homeSet", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ()));
