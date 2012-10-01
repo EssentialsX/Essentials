@@ -40,7 +40,7 @@ public class Commandsetwarp extends EssentialsCommand
 		{
 		}
 
-		if (warpLoc == null || user.isAuthorized("essentials.warp.overwrite." + Util.sanitizeFileName(args[0])))
+		if (warpLoc == null || user.isAuthorized("essentials.warp.overwrite." + Util.safeString(args[0])))
 		{
 			warps.setWarp(args[0], loc);
 		}

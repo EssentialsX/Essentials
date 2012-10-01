@@ -161,7 +161,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 	public void setHome(String name, Location loc)
 	{
 		//Invalid names will corrupt the yaml
-		name = Util.sanitizeFileName(name);
+		name = Util.safeString(name);
 		homes.put(name, loc);
 		config.setProperty("homes." + name, loc);
 		config.save();
@@ -172,7 +172,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		String search = getHomeName(name);
 		if (!homes.containsKey(search))
 		{
-			search = Util.sanitizeFileName(search);
+			search = Util.safeString(search);
 		}
 		if (homes.containsKey(search))
 		{
