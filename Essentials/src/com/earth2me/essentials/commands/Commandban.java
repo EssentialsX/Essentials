@@ -44,7 +44,7 @@ public class Commandban extends EssentialsCommand
 		}
 		else
 		{
-			if (user.isAuthorized("essentials.ban.exempt"))
+			if (user.isAuthorized("essentials.ban.exempt") && sender instanceof Player)
 			{
 				sender.sendMessage(_("banExempt"));
 				return;
