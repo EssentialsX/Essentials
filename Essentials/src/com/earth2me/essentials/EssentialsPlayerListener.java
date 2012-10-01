@@ -347,7 +347,7 @@ public class EssentialsPlayerListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerChangedWorldHack(final PlayerChangedWorldEvent event)
 	{
 		final Player user = event.getPlayer();
