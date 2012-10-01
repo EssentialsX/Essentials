@@ -692,7 +692,7 @@ public class WorldsHolder {
 
 	/**
 	 * Returns all physically loaded worlds which have at least
-	 * one of their own data sets for users or groups.
+	 * one of their own data sets for users or groups which isn't an identical mirror.
 	 * 
 	 * @return ArrayList<OverloadedWorldHolder> of all loaded worlds
 	 */
@@ -700,7 +700,7 @@ public class WorldsHolder {
 
 		ArrayList<OverloadedWorldHolder> list = new ArrayList<OverloadedWorldHolder>();
 		for (OverloadedWorldHolder data : worldsData.values()) {
-			if ((!list.contains(data)) && (!mirrorsGroup.containsKey(data.getName().toLowerCase()) || !mirrorsUser.containsKey(data.getName().toLowerCase()))) {
+			if ((!list.contains(data))) { // && (!mirrorsGroup.containsKey(data.getName().toLowerCase()) || !mirrorsUser.containsKey(data.getName().toLowerCase()))) {
 
 				String worldNameLowered = data.getName().toLowerCase();
 				String usersMirror = mirrorsUser.get(worldNameLowered);
