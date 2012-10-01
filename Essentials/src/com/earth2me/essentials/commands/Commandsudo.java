@@ -27,6 +27,15 @@ public class Commandsudo extends EssentialsCommand
 		}
 
 		final User user = getPlayer(server, args, 0, false);
+		if(args[1].equalsIgnoreCase("say"))
+		{
+			if (user.isAuthorized("essentials.sudo.exempt"))
+			{
+				throw new Exception(_("sudoExempt"));
+			}
+			user.chat(getFinalArg(args, 2));
+			return;
+		}
 		final String command = args[1];
 		final String[] arguments = new String[args.length - 2];
 		if (arguments.length > 0)
