@@ -27,6 +27,7 @@ public class EssentialsEntityListener implements Listener
 		this.ess = ess;
 	}
 
+	// This method does something undocumented reguarding certain bucket types #EasterEgg
 	@EventHandler(priority = EventPriority.LOW)
 	public void onEntityDamage(final EntityDamageByEntityEvent event)
 	{

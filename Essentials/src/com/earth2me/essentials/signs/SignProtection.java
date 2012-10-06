@@ -10,7 +10,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
 
-
+@Deprecated // This sign will be removed soon
 public class SignProtection extends EssentialsSign
 {
 	private final transient Set<Material> protectedBlocks = EnumSet.noneOf(Material.class);

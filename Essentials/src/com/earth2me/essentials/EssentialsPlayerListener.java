@@ -414,6 +414,7 @@ public class EssentialsPlayerListener implements Listener
 		}
 	}
 
+	// This method allows the /jump lock feature to work, allows teleporting while flying #EasterEgg
 	private void useFlyClickJump(final User user)
 	{
 		try

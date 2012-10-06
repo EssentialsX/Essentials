@@ -928,6 +928,8 @@ public class Settings implements ISettings
 		return maxSpeed > 1.0 ? 1.0 : Math.abs(maxSpeed);
 	}
 
+	//This option does not exist in the config.yml because it wasn't yet implemented in bukkit
+	//The code was commented out in the /speed command
 	@Override
 	public double getMaxWalkSpeed()
 	{
