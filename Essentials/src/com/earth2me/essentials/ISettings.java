@@ -179,4 +179,6 @@ public interface ISettings extends IConf
 	double getMaxFlySpeed();
 
 	double getMaxWalkSpeed();
+
+	public int getMailsPerMinute();
 }

@@ -439,6 +439,7 @@ public class Settings implements ISettings
 		chatRadius = _getChatRadius();
 		commandCosts = _getCommandCosts();
 		warnOnBuildDisallow = _warnOnBuildDisallow();
+		mailsPerMinute = _getMailsPerMinute();
 	}
 	private List<Integer> itemSpawnBl = new ArrayList<Integer>();
 
@@ -935,5 +936,16 @@ public class Settings implements ISettings
 	{
 		double maxSpeed = config.getDouble("max-walk-speed", 0.8);
 		return maxSpeed > 1.0 ? 1.0 : Math.abs(maxSpeed);
+	}
+	
+	private int mailsPerMinute;
+
+	private int _getMailsPerMinute() {
+		return config.getInt("mails-per-minute", 1000);
+	}
+	@Override
+	public int getMailsPerMinute()
+	{
+		return mailsPerMinute;
 	}
 }
