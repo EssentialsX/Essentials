@@ -37,8 +37,9 @@ public class Commandwarp extends EssentialsCommand
 		}
 		if (args.length > 0)
 		{
+			//TODO: Remove 'otherplayers' permission.
 			User otherUser = null;
-			if (args.length == 2 && user.isAuthorized("essentials.warp.otherplayers"))
+			if (args.length == 2 && (user.isAuthorized("essentials.warp.otherplayers") || user.isAuthorized("essentials.warp.others")))
 			{
 				otherUser = ess.getUser(server.getPlayer(args[1]));
 				if (otherUser == null)

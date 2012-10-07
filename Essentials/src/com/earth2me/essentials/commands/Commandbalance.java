@@ -27,6 +27,7 @@ public class Commandbalance extends EssentialsCommand
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
+		//TODO: Remove 'other' perm
 		final double bal = (args.length < 1
 							|| !(user.isAuthorized("essentials.balance.others")
 								 || user.isAuthorized("essentials.balance.other"))
