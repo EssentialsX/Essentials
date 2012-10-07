@@ -11,6 +11,9 @@ import org.bukkit.entity.Player;
 
 public class Commandmail extends EssentialsCommand
 {
+	private static int mailsPerMinute = 0;
+	private static long timestamp = 0;
+
 	public Commandmail()
 	{
 		super("mail");
@@ -58,8 +61,22 @@ public class Commandmail extends EssentialsCommand
 			}
 			if (!u.isIgnoredPlayer(user))
 			{
-				final String mail = Util.sanitizeString(Util.stripFormat(getFinalArg(args, 2)));
-				u.addMail(user.getName() + ": " + mail);
+				final String mail = user.getName() + ": " + Util.sanitizeString(Util.stripFormat(getFinalArg(args, 2)));
+				if (mail.length() > 1000)
+				{
+					throw new Exception("Mail message too long. Try to keep it below 1000");
+				}
+				if (Math.abs(System.currentTimeMillis() - timestamp) > 60000)
+				{
+					timestamp = System.currentTimeMillis();
+					mailsPerMinute = 0;
+				}
+				mailsPerMinute++;
+				if (mailsPerMinute > ess.getSettings().getMailsPerMinute())
+				{
+					throw new Exception("Too many mails have been send within the last minute. Maximum: " + ess.getSettings().getMailsPerMinute());
+				}
+				u.addMail(mail);
 			}
 			user.sendMessage(_("mailSent"));
 			return;

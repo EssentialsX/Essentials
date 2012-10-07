@@ -315,6 +315,9 @@ login-attack-delay: 5
 #Set the max fly speed, values range from 0.1 to 1.0
 max-fly-speed: 0.8
 
+#Set the maximum amount of mails that can be send within a minute.
+mails-per-minute: 1000
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #
