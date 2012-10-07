@@ -54,6 +54,11 @@ public class EssentialsEntityListener implements Listener
 				event.setCancelled(true);
 			}
 
+			if (attacker.isHidden() && !attacker.isAuthorized("essentials.vanish.pvp"))
+			{
+				event.setCancelled(true);
+			}
+
 			attacker.updateActivity(true);
 			final List<String> commandList = attacker.getPowertool(attacker.getItemInHand());
 			if (commandList != null && !commandList.isEmpty())
