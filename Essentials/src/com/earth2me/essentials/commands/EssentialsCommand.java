@@ -56,14 +56,14 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 		}
 		if (args[pos].isEmpty())
 		{
-			throw new NoSuchFieldException(_("playerNotFound"));
+			throw new PlayerNotFoundException();
 		}
 		final User user = ess.getUser(args[pos]);
 		if (user != null)
 		{
 			if (!getOffline && (!user.isOnline() || user.isHidden()))
 			{
-				throw new NoSuchFieldException(_("playerNotFound"));
+				throw new PlayerNotFoundException();
 			}
 			return user;
 		}
@@ -85,7 +85,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 				return userMatch;
 			}
 		}
-		throw new NoSuchFieldException(_("playerNotFound"));
+		throw new PlayerNotFoundException();
 	}
 
 	@Override
