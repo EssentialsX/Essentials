@@ -240,6 +240,42 @@ public class FakeServer implements Server
 			{
 				throw new UnsupportedOperationException("Not supported yet.");
 			}
+
+			@Override
+			public BukkitTask runTask(Plugin plugin, Runnable r) throws IllegalArgumentException
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public BukkitTask runTaskAsynchronously(Plugin plugin, Runnable r) throws IllegalArgumentException
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public BukkitTask runTaskLater(Plugin plugin, Runnable r, long l) throws IllegalArgumentException
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public BukkitTask runTaskLaterAsynchronously(Plugin plugin, Runnable r, long l) throws IllegalArgumentException
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public BukkitTask runTaskTimer(Plugin plugin, Runnable r, long l, long l1) throws IllegalArgumentException
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public BukkitTask runTaskTimerAsynchronously(Plugin plugin, Runnable r, long l, long l1) throws IllegalArgumentException
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
 		};
 	}
 
