@@ -32,7 +32,7 @@ public class Commandkill extends EssentialsCommand
 		{
 			final EntityDamageEvent ede = new EntityDamageEvent(matchPlayer, sender instanceof Player && ((Player)sender).getName().equals(matchPlayer.getName()) ? EntityDamageEvent.DamageCause.SUICIDE : EntityDamageEvent.DamageCause.CUSTOM, Short.MAX_VALUE);
 			server.getPluginManager().callEvent(ede);
-			if (ede.isCancelled() && !sender.hasPermission("essentials.kill.force"))
+			if (ede.isCancelled() && sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.kill.force"))
 			{
 				continue;
 			}
