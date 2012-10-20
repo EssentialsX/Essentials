@@ -21,7 +21,7 @@ public class Commandkill extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-				
+
 		//TODO: TL this
 		if (args[0].trim().length() < 2)
 		{
@@ -38,6 +38,12 @@ public class Commandkill extends EssentialsCommand
 			}
 
 			matchPlayer.damage(Short.MAX_VALUE);
+					
+			if (matchPlayer.getHealth() > 0)
+			{
+				matchPlayer.setHealth(0);
+			}
+
 			sender.sendMessage(_("kill", matchPlayer.getDisplayName()));
 		}
 	}
