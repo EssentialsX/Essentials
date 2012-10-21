@@ -635,7 +635,10 @@ public abstract class UserData extends PlayerExtension implements IConf
 	public void setLastLogin(long time)
 	{
 		_setLastLogin(time);
-		_setLastLoginAddress(base.getAddress().getAddress().getHostAddress());
+		if (base.getAddress() != null && base.getAddress().getAddress() != null)
+		{
+			_setLastLoginAddress(base.getAddress().getAddress().getHostAddress());
+		}
 		config.save();
 	}
 	private long lastLogout;
