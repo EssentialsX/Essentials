@@ -47,7 +47,7 @@ public class Teleport implements Runnable, ITeleport
 	private IUser teleportUser;
 	private int teleTimer = -1;
 	private long started;	// time this task was initiated
-	private long delay;		// how long to delay the teleport
+	private long tpdelay;		// how long to delay the teleport
 	private int health;
 	// note that I initially stored a clone of the location for reference, but...
 	// when comparing locations, I got incorrect mismatches (rounding errors, looked like)
@@ -69,7 +69,7 @@ public class Teleport implements Runnable, ITeleport
 	private void initTimer(long delay, IUser teleportUser, Target target, Trade chargeFor, TeleportCause cause)
 	{
 		this.started = System.currentTimeMillis();
-		this.delay = delay;
+		this.tpdelay = delay;
 		this.health = teleportUser.getHealth();
 		this.initX = Math.round(teleportUser.getLocation().getX() * MOVE_CONSTANT);
 		this.initY = Math.round(teleportUser.getLocation().getY() * MOVE_CONSTANT);
@@ -107,7 +107,7 @@ public class Teleport implements Runnable, ITeleport
 		}
 		health = teleportUser.getHealth();  // in case user healed, then later gets injured
 		long now = System.currentTimeMillis();
-		if (now > started + delay)
+		if (now > started + tpdelay)
 		{
 			try
 			{
@@ -273,7 +273,7 @@ public class Teleport implements Runnable, ITeleport
 		}
 
 		cancel(false);
-		warnUser(user);
+		warnUser(user, delay);
 		initTimer((long)(delay * 1000.0), target, chargeFor, cause);
 
 		teleTimer = ess.scheduleSyncRepeatingTask(this, 10, 10);
@@ -303,13 +303,13 @@ public class Teleport implements Runnable, ITeleport
 		}
 
 		cancel(false);
-		warnUser(otherUser);
+		warnUser(otherUser, delay);
 		initTimer((long)(delay * 1000.0), otherUser, target, chargeFor, cause);
 
 		teleTimer = ess.scheduleSyncRepeatingTask(this, 10, 10);
 	}
 
-	private void warnUser(final IUser user)
+	private void warnUser(final IUser user, final double delay)
 	{
 		Calendar c = new GregorianCalendar();
 		c.add(Calendar.SECOND, (int)delay);
@@ -331,8 +331,8 @@ public class Teleport implements Runnable, ITeleport
 	public void warp(String warp, Trade chargeFor, TeleportCause cause) throws Exception
 	{
 		Location loc = ess.getWarps().getWarp(warp);
-		teleport(new Target(loc), chargeFor, cause);
 		user.sendMessage(_("warpingTo", warp));
+		teleport(new Target(loc), chargeFor, cause);		
 	}
 
 	//The back function is a wrapper used to teleport a player /back to their previous location.	
