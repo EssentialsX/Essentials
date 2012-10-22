@@ -213,6 +213,7 @@ public class EssentialsPlayerListener implements Listener
 		}
 	}
 
+	// Makes the compass item ingame always point to the first essentials home.  #EasterEgg
 	private void updateCompass(final User user)
 	{
 		Location loc = user.getHome(user.getLocation());
