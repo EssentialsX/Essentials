@@ -8,7 +8,6 @@ import com.earth2me.essentials.Util;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.bukkit.entity.Player;
 
 
 /**
@@ -72,17 +71,7 @@ public final class Economy
 		{
 			throw new RuntimeException(noCallBeforeLoad);
 		}
-		User user;
-		Player player = ess.getServer().getPlayer(name);
-		if (player != null)
-		{
-			user = ess.getUser(player);
-		}
-		else
-		{
-			user = ess.getOfflineUser(name);
-		}
-		return user;
+		return ess.getUser(name);
 	}
 
 	/**

@@ -467,14 +467,20 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 		if (base instanceof String)
 		{
-			final User user = userMap.getUser((String)base);
-			if (user != null && user.getBase() instanceof OfflinePlayer)
-			{
-				((OfflinePlayer)user.getBase()).setName((String)base);
-			}
-			return user;
+			return getOfflineUser((String)base);
 		}
 		return null;
+	}
+	
+	@Override
+	public User getOfflineUser(final String name)
+	{
+		final User user = userMap.getUser(name);
+		if (user != null && user.getBase() instanceof OfflinePlayer)
+		{
+			((OfflinePlayer)user.getBase()).setName(name);
+		}
+		return user;
 	}
 
 	private <T extends Player> User getUser(final T base)
@@ -504,17 +510,6 @@ public class Essentials extends JavaPlugin implements IEssentials
 		else
 		{
 			user.update(base);
-		}
-		return user;
-	}
-
-	@Override
-	public User getOfflineUser(final String name)
-	{
-		final User user = userMap.getUser(name);
-		if (user != null && user.getBase() instanceof OfflinePlayer)
-		{
-			((OfflinePlayer)user.getBase()).setName(name);
 		}
 		return user;
 	}
