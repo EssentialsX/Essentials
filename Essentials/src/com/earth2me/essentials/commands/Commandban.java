@@ -20,6 +20,7 @@ public class Commandban extends EssentialsCommand
 	@Override
 	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
+		boolean nomatch = false;
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
@@ -31,6 +32,7 @@ public class Commandban extends EssentialsCommand
 		}
 		catch (NoSuchFieldException e)
 		{
+			nomatch = true;
 			user = ess.getUser(new OfflinePlayer(args[0], ess));
 		}
 		if (!user.isOnline())
@@ -44,7 +46,7 @@ public class Commandban extends EssentialsCommand
 		}
 		else
 		{
-			if (user.isAuthorized("essentials.ban.exempt"))
+			if (user.isAuthorized("essentials.ban.exempt") && sender instanceof Player)
 			{
 				sender.sendMessage(_("banExempt"));
 				return;
@@ -65,13 +67,17 @@ public class Commandban extends EssentialsCommand
 		user.setBanReason(banReason);
 		user.setBanned(true);
 		user.kickPlayer(banReason);
-
+		
 		server.getLogger().log(Level.INFO, _("playerBanned", senderName, user.getName(), banReason));
+		
+		if (nomatch) {
+			sender.sendMessage(_("userUnknown", user.getName()));
+		}
 
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
 			final User player = ess.getUser(onlinePlayer);
-			if (player.isAuthorized("essentials.ban.notify"))
+			if (onlinePlayer == sender || player.isAuthorized("essentials.ban.notify"))
 			{
 				onlinePlayer.sendMessage(_("playerBanned", senderName, user.getName(), banReason));
 			}

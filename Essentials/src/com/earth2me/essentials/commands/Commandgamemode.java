@@ -41,18 +41,25 @@ public class Commandgamemode extends EssentialsCommand
 			gamemodeOtherPlayers(server, user, gameMode, args[1]);
 			return;
 		}
-		else
+		else 
 		{
-			try {
+			try
+			{
 				gameMode = matchGameMode(args[0].toLowerCase(Locale.ENGLISH));
 			}
-			catch (NotEnoughArgumentsException e) {
-				gameMode = matchGameMode(commandLabel);
-				gamemodeOtherPlayers(server, user, gameMode, args[0]);
-				return;
+			catch (NotEnoughArgumentsException e)
+			{
+				if (user.isAuthorized("essentials.gamemode.others"))
+				{
+					gameMode = matchGameMode(commandLabel);
+					gamemodeOtherPlayers(server, user, gameMode, args[0]);
+					return;
+				}
+				throw new NotEnoughArgumentsException();
 			}
 		}
-		if (gameMode == null) {
+		if (gameMode == null)
+		{
 			gameMode = user.getGameMode() == GameMode.SURVIVAL ? GameMode.CREATIVE : user.getGameMode() == GameMode.CREATIVE ? GameMode.ADVENTURE : GameMode.SURVIVAL;
 		}
 		user.setGameMode(gameMode);
@@ -104,11 +111,12 @@ public class Commandgamemode extends EssentialsCommand
 			mode = GameMode.ADVENTURE;
 		}
 		else if (modeString.equalsIgnoreCase("gmt") || modeString.equalsIgnoreCase("egmt")
-				 || modeString.contains("toggle") || modeString.contains("cycle")  || modeString.equalsIgnoreCase("t"))
+				 || modeString.contains("toggle") || modeString.contains("cycle") || modeString.equalsIgnoreCase("t"))
 		{
 			mode = null;
 		}
-		else {
+		else
+		{
 			throw new NotEnoughArgumentsException();
 		}
 		return mode;

@@ -23,7 +23,6 @@ public class Commandhome extends EssentialsCommand
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		final Trade charge = new Trade(this.getName(), ess);
-		charge.isAffordableFor(user);
 		User player = user;
 		String homeName = "";
 		String[] nameParts;
@@ -45,7 +44,7 @@ public class Commandhome extends EssentialsCommand
 		}
 		try
 		{
-			if ("bed".equalsIgnoreCase(homeName))
+			if ("bed".equalsIgnoreCase(homeName) && user.isAuthorized("essentials.home.bed"))
 			{
 				final Location bed = player.getBedSpawnLocation();
 				if (bed != null && bed.getBlock().getType() == Material.BED_BLOCK)

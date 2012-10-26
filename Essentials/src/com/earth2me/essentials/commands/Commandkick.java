@@ -24,23 +24,29 @@ public class Commandkick extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		final User user = getPlayer(server, args, 0);
-		if (sender instanceof Player && user.isAuthorized("essentials.kick.exempt"))
-		{
-			throw new Exception(_("kickExempt"));
+		final User target = getPlayer(server, args, 0, true);
+		if (sender instanceof Player) {
+			User user = ess.getUser(sender);
+			if (target.isHidden() && !user.isAuthorized("essentials.list.hidden")) {
+				throw new PlayerNotFoundException();
+			}
+			if (target.isAuthorized("essentials.kick.exempt"))
+			{
+				throw new Exception(_("kickExempt"));
+			}
 		}
 		final String kickReason = args.length > 1 ? getFinalArg(args, 1) : _("kickDefault");
-		user.kickPlayer(kickReason);
+		target.kickPlayer(kickReason);
 		final String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
 		
-		server.getLogger().log(Level.INFO, _("playerKicked", senderName, user.getName(), kickReason));
+		server.getLogger().log(Level.INFO, _("playerKicked", senderName, target.getName(), kickReason));
 
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
 			User player = ess.getUser(onlinePlayer);
 			if (player.isAuthorized("essentials.kick.notify"))
 			{
-				onlinePlayer.sendMessage(_("playerKicked", senderName, user.getName(), kickReason));
+				onlinePlayer.sendMessage(_("playerKicked", senderName, target.getName(), kickReason));
 			}
 		}
 	}

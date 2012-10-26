@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.commands.WarpNotFoundException;
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -70,7 +71,14 @@ public class Warps implements IConf
 		}
 		conf.setProperty(null, loc);
 		conf.setProperty("name", name);
-		conf.save();
+		try
+		{
+			conf.saveWithError();
+		}
+		catch (IOException ex)
+		{
+			throw new IOException(_("invalidWarpName"));
+		}
 	}
 
 	public void delWarp(String name) throws Exception

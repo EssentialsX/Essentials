@@ -234,6 +234,9 @@ public class Trade
 
 	public static void log(String type, String subtype, String event, String sender, Trade charge, String receiver, Trade pay, Location loc, IEssentials ess)
 	{
+		//isEcoLogUpdateEnabled() - This refers to log entries with no location, ie API updates #EasterEgg
+		//isEcoLogEnabled() - This refers to log entries with with location, ie /pay /sell and eco signs.
+		
 		if ((loc == null && !ess.getSettings().isEcoLogUpdateEnabled())
 			|| (loc != null && !ess.getSettings().isEcoLogEnabled()))
 		{

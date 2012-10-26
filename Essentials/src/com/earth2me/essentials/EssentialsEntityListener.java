@@ -27,6 +27,7 @@ public class EssentialsEntityListener implements Listener
 		this.ess = ess;
 	}
 
+	// This method does something undocumented reguarding certain bucket types #EasterEgg
 	@EventHandler(priority = EventPriority.LOW)
 	public void onEntityDamage(final EntityDamageByEntityEvent event)
 	{
@@ -49,6 +50,11 @@ public class EssentialsEntityListener implements Listener
 			}
 
 			if (attacker.isGodModeEnabled() && !attacker.isAuthorized("essentials.god.pvp"))
+			{
+				event.setCancelled(true);
+			}
+
+			if (attacker.isHidden() && !attacker.isAuthorized("essentials.vanish.pvp"))
 			{
 				event.setCancelled(true);
 			}

@@ -5,7 +5,7 @@ import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
-
+// This command can be used to echo messages to the users screen, mostly useless but also an #EasterEgg
 public class Commandping extends EssentialsCommand
 {
 	public Commandping()

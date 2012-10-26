@@ -439,6 +439,7 @@ public class Settings implements ISettings
 		chatRadius = _getChatRadius();
 		commandCosts = _getCommandCosts();
 		warnOnBuildDisallow = _warnOnBuildDisallow();
+		mailsPerMinute = _getMailsPerMinute();
 	}
 	private List<Integer> itemSpawnBl = new ArrayList<Integer>();
 
@@ -695,6 +696,7 @@ public class Settings implements ISettings
 	}
 	private boolean prefixsuffixconfigured = false;
 	private boolean addprefixsuffix = false;
+	private boolean essentialsChatActive = false;
 
 	private boolean _addPrefixSuffix()
 	{
@@ -707,9 +709,15 @@ public class Settings implements ISettings
 	}
 
 	@Override
+	public void setEssentialsChatActive(boolean essentialsChatActive)
+	{
+		this.essentialsChatActive = essentialsChatActive;
+	}
+
+	@Override
 	public boolean addPrefixSuffix()
 	{
-		return prefixsuffixconfigured ? addprefixsuffix : ess.getServer().getPluginManager().isPluginEnabled("EssentialsChat");
+		return prefixsuffixconfigured ? addprefixsuffix : essentialsChatActive;
 	}
 	private boolean disablePrefix = false;
 
@@ -928,10 +936,23 @@ public class Settings implements ISettings
 		return maxSpeed > 1.0 ? 1.0 : Math.abs(maxSpeed);
 	}
 
+	//This option does not exist in the config.yml because it wasn't yet implemented in bukkit
+	//The code was commented out in the /speed command
 	@Override
 	public double getMaxWalkSpeed()
 	{
 		double maxSpeed = config.getDouble("max-walk-speed", 0.8);
 		return maxSpeed > 1.0 ? 1.0 : Math.abs(maxSpeed);
+	}
+	
+	private int mailsPerMinute;
+
+	private int _getMailsPerMinute() {
+		return config.getInt("mails-per-minute", 1000);
+	}
+	@Override
+	public int getMailsPerMinute()
+	{
+		return mailsPerMinute;
 	}
 }

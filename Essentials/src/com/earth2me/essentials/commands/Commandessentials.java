@@ -14,7 +14,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-
+// This command has 4 undocumented behaviours #EasterEgg
 public class Commandessentials extends EssentialsCommand
 {
 	public Commandessentials()
@@ -55,6 +55,7 @@ public class Commandessentials extends EssentialsCommand
 		}
 	}
 	
+	//If you do not supply an argument this command will list 'overridden' commands.
 	private void run_disabled(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		sender.sendMessage("Essentials " + ess.getDescription().getVersion());

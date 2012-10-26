@@ -344,6 +344,11 @@ public class EssentialsConf extends YamlConfiguration
 		}
 	}
 
+	public void saveWithError() throws IOException
+	{
+		save(configFile);
+	}
+
 	@Override
 	public synchronized void save(final File file) throws IOException
 	{

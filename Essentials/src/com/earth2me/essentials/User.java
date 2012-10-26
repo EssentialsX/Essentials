@@ -306,6 +306,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 		if (ess.getSettings().addPrefixSuffix())
 		{
+			//These two extra toggles are not documented, because they are mostly redundant #EasterEgg
 			if (!ess.getSettings().disablePrefix())
 			{
 				final String ptext = ess.getPermissionsHandler().getPrefix(base).replace('&', '§');

@@ -36,6 +36,10 @@ public class EssentialsAntiBuildListener implements Listener
 	{
 		if (block == null)
 		{
+			if (ess.getSettings().isDebug())
+			{
+				ess.getLogger().log(Level.INFO, "AntiBuild permission check failed, invalid block.");
+			}
 			return false;
 		}
 		return metaPermCheck(user, action, block.getTypeId(), block.getData());

@@ -213,6 +213,7 @@ public class EssentialsPlayerListener implements Listener
 		}
 	}
 
+	// Makes the compass item ingame always point to the first essentials home.  #EasterEgg
 	private void updateCompass(final User user)
 	{
 		Location loc = user.getHome(user.getLocation());
@@ -347,7 +348,7 @@ public class EssentialsPlayerListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerChangedWorldHack(final PlayerChangedWorldEvent event)
 	{
 		final Player user = event.getPlayer();
@@ -414,6 +415,7 @@ public class EssentialsPlayerListener implements Listener
 		}
 	}
 
+	// This method allows the /jump lock feature to work, allows teleporting while flying #EasterEgg
 	private void useFlyClickJump(final User user)
 	{
 		try
