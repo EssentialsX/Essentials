@@ -39,11 +39,7 @@ public class Commandsethome extends EssentialsCommand
 			{
 				if (user.isAuthorized("essentials.sethome.others"))
 				{
-					usersHome = ess.getUser(ess.getServer().getPlayer(args[0]));
-					if (usersHome == null)
-					{
-						usersHome = ess.getOfflineUser(args[0]);
-					}
+					usersHome = ess.getUser(args[0]);
 					if (usersHome == null)
 					{
 						throw new NoSuchFieldException(_("playerNotFound"));
