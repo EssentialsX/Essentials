@@ -2972,6 +2972,8 @@ forestwstair,136,0
 foreststair,136,0
 commandblock,137,0
 blockcommand,137,0
+cmdblock,137,0
+blockcmd,137,0
 macroblock,137,0
 blockmacro,137,0
 beacon,138,0
