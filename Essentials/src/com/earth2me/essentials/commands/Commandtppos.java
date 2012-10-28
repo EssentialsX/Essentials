@@ -36,7 +36,7 @@ public class Commandtppos extends EssentialsCommand
 		{
 			location.setPitch(Float.parseFloat(args[4]));
 		}
-		if (x > 30000000 ||  y > 30000000 || z > 30000000 || x < -30000000 || y < 30000000 || z < 30000000)
+		if (x > 30000000 ||  y > 30000000 || z > 30000000 || x < -30000000 || y < -30000000 || z < -30000000)
 		{
 			throw new NotEnoughArgumentsException("Value of coordinates cannot be over 30000000"); //todo: I18n
 		}
@@ -68,7 +68,7 @@ public class Commandtppos extends EssentialsCommand
 		{
 			location.setPitch(Float.parseFloat(args[5]));
 		}
-		if (x > 30000000 ||  y > 30000000 || z > 30000000 || x < -30000000 || y < 30000000 || z < 30000000)
+		if (x > 30000000 ||  y > 30000000 || z > 30000000 || x < -30000000 || y < -30000000 || z < -30000000)
 		{
 			throw new NotEnoughArgumentsException("Value of coordinates cannot be over 30000000"); //todo: I18n
 		}
