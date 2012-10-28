@@ -37,7 +37,7 @@ public enum ProtectConfig
 	prevent_fireball_playerdmg("protect.prevent.fireball-playerdamage", false),
 	prevent_witherskull_explosion("protect.prevent.witherskull-explosion", false),
 	prevent_witherskull_playerdmg("protect.prevent.witherskull-playerdamage", false),
-	prevent_witherskull_spawnexplosion("protect.prevent.witherskull-spawnexplosion", false),
+	prevent_wither_spawnexplosion("protect.prevent.wither-spawnexplosion", false),
 	prevent_creeper_explosion("protect.prevent.creeper-explosion", true),
 	prevent_creeper_playerdmg("protect.prevent.creeper-playerdamage", false),
 	prevent_creeper_blockdmg("protect.prevent.creeper-blockdamage", false),

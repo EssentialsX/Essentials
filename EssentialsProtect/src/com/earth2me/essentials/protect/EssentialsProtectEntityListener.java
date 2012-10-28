@@ -224,7 +224,7 @@ public class EssentialsProtectEntityListener implements Listener
 			}
 			return;
 		}
-		if (event.getEntity() instanceof WitherSkull
+		if (event.getEntity() instanceof Wither
 			&& prot.getSettingBool(ProtectConfig.prevent_witherskull_spawnexplosion))
 		{
 			event.setCancelled(true);
