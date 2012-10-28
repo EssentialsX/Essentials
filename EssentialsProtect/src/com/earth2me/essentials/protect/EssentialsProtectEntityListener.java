@@ -225,7 +225,7 @@ public class EssentialsProtectEntityListener implements Listener
 			return;
 		}
 		if (event.getEntity() instanceof Wither
-			&& prot.getSettingBool(ProtectConfig.prevent_witherskull_spawnexplosion))
+			&& prot.getSettingBool(ProtectConfig.prevent_wither_spawnexplosion))
 		{
 			event.setCancelled(true);
 			return;
@@ -349,6 +349,11 @@ public class EssentialsProtectEntityListener implements Listener
 	public void onEntityChangeBlock(EntityChangeBlockEvent event)
 	{
 		if (event.getEntityType() == EntityType.ENDERMAN && prot.getSettingBool(ProtectConfig.prevent_enderman_pickup))
+		{
+			event.setCancelled(true);
+			return;
+		}
+		if (event.getEntityType() == EntityType.WITHER && prot.getSettingBool(ProtectConfig.prevent_wither_blockreplace))
 		{
 			event.setCancelled(true);
 			return;
