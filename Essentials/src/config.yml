@@ -460,6 +460,9 @@ protect:
     fireball-explosion: false
     fireball-fire: false
     fireball-playerdamage: false
+    witherskull-explosion: flase
+    witherskull-playerdamage: false
+    witherskull-spawnexplosion: flase
     creeper-explosion: false
     creeper-playerdamage: false
     creeper-blockdamage: false

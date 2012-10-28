@@ -114,6 +114,16 @@ public class EssentialsProtectEntityListener implements Listener
 				event.setCancelled(true);
 				return;
 			}
+			
+			if ((event.getEntity() instanceof WitherSkull 
+				&& prot.getSettingBool(ProtectConfig.prevent_witherskull_playerdmg)
+				&& !(target instanceof Player
+					 && user.isAuthorized("essentials.protect.damage.witherskull")
+					 && !user.isAuthorized("essentials.protect.damage.disable"))))
+			{
+				event.setCancelled(true);
+				return;
+			}
 
 			if (eAttack instanceof TNTPrimed && prot.getSettingBool(ProtectConfig.prevent_tnt_playerdmg)
 				&& !(target instanceof Player
@@ -214,6 +224,12 @@ public class EssentialsProtectEntityListener implements Listener
 			}
 			return;
 		}
+		if (event.getEntity() instanceof WitherSkull
+			&& prot.getSettingBool(ProtectConfig.prevent_witherskull_spawnexplosion))
+		{
+			event.setCancelled(true);
+			return;
+		}
 		else if (event.getEntity() instanceof Creeper
 				 && (prot.getSettingBool(ProtectConfig.prevent_creeper_explosion)
 					 || prot.getSettingBool(ProtectConfig.prevent_creeper_blockdmg)
@@ -236,6 +252,13 @@ public class EssentialsProtectEntityListener implements Listener
 			event.setCancelled(true);
 			return;
 		}
+		else if ((event.getEntity() instanceof WitherSkull)
+			     && prot.getSettingBool(ProtectConfig.prevent_witherskull_explosion))
+		{
+			event.setCancelled(true);
+			return;
+		}
+			
 		// This code will prevent explosions near protected rails, signs or protected chests
 		// TODO: Use protect db instead of this code
 
