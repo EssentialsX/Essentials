@@ -496,7 +496,10 @@ protect:
       ocelot: false
       iron_golem: false
       villager: false
-
+      wither: false
+      bat: false
+      witch: false
+      
   # Maximum height the creeper should explode. -1 allows them to explode everywhere.
   # Set prevent.creeper-explosion to true, if you want to disable creeper explosions.
   creeper:
@@ -549,6 +552,9 @@ protect:
 
     # Should the damage after hit by a lightning be disabled?
     lightning: false
+    
+    # Should Wither damage be disabled?
+    wither: false
 
     # Disable weather options
     weather:

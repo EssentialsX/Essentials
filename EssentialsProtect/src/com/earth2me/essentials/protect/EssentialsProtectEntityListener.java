@@ -10,9 +10,9 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityTargetEvent.TargetReason;
-import org.bukkit.event.entity.*;
 
 
 public class EssentialsProtectEntityListener implements Listener
@@ -180,6 +180,14 @@ public class EssentialsProtectEntityListener implements Listener
 				&& prot.getSettingBool(ProtectConfig.disable_lightning)
 				&& !(user.isAuthorized("essentials.protect.damage.lightning")
 					 && !user.isAuthorized("essentials.protect.damage.disable")))
+			{
+				event.setCancelled(true);
+				return;
+			}
+			if (cause == DamageCause.WITHER
+				&& prot.getSettingBool(ProtectConfig.disable_wither)
+				&& !(user.isAuthorized("essentials.protect.damage.wither"))
+					 && !user.isAuthorized("essentials.protect.damage.disable"))
 			{
 				event.setCancelled(true);
 				return;
