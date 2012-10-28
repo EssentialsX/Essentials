@@ -6,7 +6,6 @@ import com.earth2me.essentials.Util;
 import java.util.List;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 
 public class Commandmail extends EssentialsCommand
@@ -45,7 +44,7 @@ public class Commandmail extends EssentialsCommand
 				throw new Exception(_("noPerm", "essentials.mail.send"));
 			}
 
-			User u = ess.getUser(args[0]);
+			User u = ess.getUser(args[1]);
 			if (u == null)
 			{
 				throw new Exception(_("playerNeverOnServer", args[1]));
@@ -104,7 +103,7 @@ public class Commandmail extends EssentialsCommand
 		}
 		else if (args.length >= 3 && "send".equalsIgnoreCase(args[0]))
 		{
-			User u = ess.getUser(args[0]);
+			User u = ess.getUser(args[1]);
 			if (u == null)
 			{
 				throw new Exception(_("playerNeverOnServer", args[1]));
