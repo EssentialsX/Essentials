@@ -37,9 +37,9 @@ public enum Mob
 	MAGMACUBE("MagmaCube", Enemies.ENEMY, EntityType.MAGMA_CUBE),
 	SNOWMAN("Snowman", Enemies.FRIENDLY, "", EntityType.SNOWMAN),
 	OCELOT("Ocelot", Enemies.NEUTRAL, EntityType.OCELOT),
-	IRONGOLEM("IronGolem", Enemies.NEUTRAL, EntityType.IRON_GOLEM);
-	WITHER("Wither", Enemies.ENEMY, EntityType.WITHER);
-	BAT("Bat", Enemies.NEUTRAL, EntityType.BAT);
+	IRONGOLEM("IronGolem", Enemies.NEUTRAL, EntityType.IRON_GOLEM),
+	WITHER("Wither", Enemies.ENEMY, EntityType.WITHER),
+	BAT("Bat", Enemies.NEUTRAL, EntityType.BAT),
 	WITCH("Witch", Enemies.ENEMY, EntityType.WITCH);
 	
 	public static final Logger logger = Logger.getLogger("Minecraft");
@@ -71,7 +71,7 @@ public enum Mob
 			hashMap.put(mob.name.toLowerCase(Locale.ENGLISH), mob);
 		}
 	}
-	
+
 	public static Set<String> getMobList() {
 		return Collections.unmodifiableSet(hashMap.keySet());
 	}
