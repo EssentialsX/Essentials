@@ -119,6 +119,12 @@ public class FakeServer implements Server
 	}
 
 	@Override
+	public boolean isHardcore()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+	
+	@Override
 	public Player getPlayer(String string)
 	{
 		for (Player player : players)
