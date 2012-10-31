@@ -67,6 +67,10 @@ public class SetExpFix
 			exp += getExpAtLevel(currentLevel);
 			currentLevel++;
 		}
+		if (exp < 0)
+		{
+			exp = Integer.MAX_VALUE;
+		}
 		return exp;
 	}
 
@@ -81,6 +85,10 @@ public class SetExpFix
 		{
 			currentLevel--;
 			exp += getExpAtLevel(currentLevel);
+		}
+		if (exp < 0)
+		{
+			exp = Integer.MAX_VALUE;
 		}
 		return exp;
 	}
