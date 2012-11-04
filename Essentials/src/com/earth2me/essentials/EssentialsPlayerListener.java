@@ -204,7 +204,11 @@ public class EssentialsPlayerListener implements Listener
 			final List<String> mail = user.getMails();
 			if (mail.isEmpty())
 			{
-				user.sendMessage(_("noNewMail"));
+				final String msg = _("noNewMail");
+				if (!msg.isEmpty())
+				{
+					user.sendMessage(msg);
+				}
 			}
 			else
 			{
