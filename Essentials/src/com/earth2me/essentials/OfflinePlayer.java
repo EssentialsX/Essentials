@@ -1111,4 +1111,10 @@ public class OfflinePlayer implements Player
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
+	@Override
+	public void giveExpLevels(int i)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }

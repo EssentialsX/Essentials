@@ -699,4 +699,40 @@ public class FakeWorld implements World
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
+	@Override
+	public int getAmbientSpawnLimit()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setAmbientSpawnLimit(int i)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public String[] getGameRules()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public String getGameRuleValue(String string)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public boolean setGameRuleValue(String string, String string1)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public boolean isGameRule(String string)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }
