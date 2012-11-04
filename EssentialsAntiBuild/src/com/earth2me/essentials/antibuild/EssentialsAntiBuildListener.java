@@ -51,7 +51,7 @@ public class EssentialsAntiBuildListener implements Listener
 		return user.isAuthorized(blockPerm);
 	}
 
-	private boolean metaPermCheck(final User user, final String action, final int blockId, final byte data)
+	private boolean metaPermCheck(final User user, final String action, final int blockId, final short data)
 	{
 		final String blockPerm = "essentials.build." + action + "." + blockId;
 		final String dataPerm = blockPerm + ":" + data;
@@ -219,7 +219,7 @@ public class EssentialsAntiBuildListener implements Listener
 
 		if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild() && !user.isAuthorized("essentials.build"))
 		{
-			if (event.hasItem() && !metaPermCheck(user, "interact", item.getTypeId(), item.getData().getData()))
+			if (event.hasItem() && !metaPermCheck(user, "interact", item.getTypeId(), item.getDurability()))
 			{
 				event.setCancelled(true);
 				if (ess.getSettings().warnOnBuildDisallow())
@@ -251,7 +251,7 @@ public class EssentialsAntiBuildListener implements Listener
 
 			if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild() && !user.isAuthorized("essentials.build"))
 			{
-				if (!metaPermCheck(user, "craft", item.getTypeId(), item.getData().getData()))
+				if (!metaPermCheck(user, "craft", item.getTypeId(), item.getDurability()))
 				{
 					event.setCancelled(true);
 					if (ess.getSettings().warnOnBuildDisallow())
@@ -272,7 +272,7 @@ public class EssentialsAntiBuildListener implements Listener
 
 		if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild() && !user.isAuthorized("essentials.build"))
 		{
-			if (!metaPermCheck(user, "pickup", item.getTypeId(), item.getData().getData()))
+			if (!metaPermCheck(user, "pickup", item.getTypeId(), item.getDurability()))
 			{
 				event.setCancelled(true);
 				event.getItem().setPickupDelay(50);
@@ -289,7 +289,7 @@ public class EssentialsAntiBuildListener implements Listener
 
 		if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild() && !user.isAuthorized("essentials.build"))
 		{
-			if (!metaPermCheck(user, "drop", item.getTypeId(), item.getData().getData()))
+			if (!metaPermCheck(user, "drop", item.getTypeId(), item.getDurability()))
 			{
 				event.setCancelled(true);
 				user.updateInventory();
