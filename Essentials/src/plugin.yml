@@ -111,10 +111,6 @@ commands:
     description: Take off, and soar!
     usage: /<command> [player [on|off]]
     aliases: [efly]
-  itemdb:
-    description: Searches for an item.
-    usage: /<command> <item>
-    aliases: [eitemdb,itemno,eitemno,durability,dura,edura,edurability]
   fireball:
     description: Throw a fireball.
     usage: /<command> [small]
@@ -123,14 +119,14 @@ commands:
     description: Change player gamemode.
     usage: /<command> <survival|creative|adventure> [player]
     aliases: [gm,creative,creativemode,survival,survivalmode,adventure,adventuremode,gmc,gma,gms,gmt,egamemod,eecreative,ecreativemode,esurvival,esurvivalmode,eadventure,eadventuremode,egmc,egma,egms,egm,egmt]
-  getpos:
-    description: Get your current coordinates or those of a player.
-    usage: /<command> [player]
-    aliases: [coords,egetpos,position,eposition,whereami,ewhereami]
   gc:
     description: Reports memory, uptime and tick info.
     usage: /<command>
     aliases: [elag,lag,mem,memory,egc,emem,ememory,uptime,euptime]
+  getpos:
+    description: Get your current coordinates or those of a player.
+    usage: /<command> [player]
+    aliases: [coords,egetpos,position,eposition,whereami,ewhereami]
   give:
     description: Give a player an item.
     usage: /<command> <player> <item|numeric> [amount <enchantmentname[:level]> ...]
@@ -175,6 +171,10 @@ commands:
     description: Spawn an item.
     usage: /<command> <item|numeric> [amount <enchantmentname[:level]> ...]
     aliases: [i,eitem]
+  itemdb:
+    description: Searches for an item.
+    usage: /<command> <item>
+    aliases: [eitemdb,itemno,eitemno,durability,dura,edura,edurability]
   jails:
     description: List all jails.
     usage: /<command>
@@ -191,10 +191,6 @@ commands:
     description: Kicks all players off the server except the issuer.
     usage: /<command> [reason]
     aliases: [ekickall]
-  kit:
-    description: Obtains the specified kit or views all available kits.
-    usage: /<command> [kit] [player]
-    aliases: [ekit,kits,ekits]
   kill:
     description: Kills specified player.
     usage: /<command> <player>
@@ -203,17 +199,21 @@ commands:
     description: Kill all mobs in a world.
     usage: /<command> [mobType] [radius]
     aliases: [ekillall,butcher,ebutcher,mobkill,emobkill]
+  kit:
+    description: Obtains the specified kit or views all available kits.
+    usage: /<command> [kit] [player]
+    aliases: [ekit,kits,ekits]
   kittycannon:
     description: Throw an exploding kitten at your opponent
     usage: /<command>
-  list:
-    description: List all online players.
-    usage: /<command>
-    aliases: [playerlist,who,online,plist,eplist,elist,ewho,eplayerlist,eonline]
   lightning:
     description: The power of Thor. Strike at cursor or player.
     usage: /<command> [player] [power]
     aliases: [strike,smite,thor,shock,elightning,estrike,esmite,ethor,eshock]
+  list:
+    description: List all online players.
+    usage: /<command>
+    aliases: [playerlist,who,online,plist,eplist,elist,ewho,eplayerlist,eonline]
   mail:
     description: Manages inter-player, intra-server mail.
     usage: /<command> [read|clear|send [to] [message]|sendall [message]]
