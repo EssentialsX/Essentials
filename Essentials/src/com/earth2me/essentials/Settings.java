@@ -558,6 +558,8 @@ public class Settings implements ISettings
 		return config.getString("locale", "");
 	}
 
+	//This method should always only return one character due to the implementation of the calling methods
+	//If you need to use a string currency, for example "coins", use the translation key 'currency'.
 	@Override
 	public String getCurrencySymbol()
 	{
