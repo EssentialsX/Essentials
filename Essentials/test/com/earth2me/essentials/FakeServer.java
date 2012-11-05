@@ -801,4 +801,10 @@ public class FakeServer implements Server
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
+	@Override
+	public int getAmbientSpawnLimit()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }
