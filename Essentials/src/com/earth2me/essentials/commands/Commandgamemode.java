@@ -19,12 +19,22 @@ public class Commandgamemode extends EssentialsCommand
 	@Override
 	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
-		if (args.length < 2)
+		GameMode gameMode;
+		if (args.length == 0)
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		GameMode gameMode = matchGameMode(args[0].toLowerCase(Locale.ENGLISH));
-		gamemodeOtherPlayers(server, sender, gameMode, args[1]);
+		else if (args.length == 1)
+		{
+			gameMode = matchGameMode(commandLabel);
+			gamemodeOtherPlayers(server, sender, gameMode, args[0]);
+		}
+		else if (args.length == 2)
+		{
+			gameMode = matchGameMode(args[0].toLowerCase(Locale.ENGLISH));
+			gamemodeOtherPlayers(server, sender, gameMode, args[1]);
+		}
+
 	}
 
 	@Override
@@ -41,7 +51,7 @@ public class Commandgamemode extends EssentialsCommand
 			gamemodeOtherPlayers(server, user, gameMode, args[1]);
 			return;
 		}
-		else 
+		else
 		{
 			try
 			{
