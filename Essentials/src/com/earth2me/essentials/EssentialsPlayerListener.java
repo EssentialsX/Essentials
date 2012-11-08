@@ -166,7 +166,8 @@ public class EssentialsPlayerListener implements Listener
 			for (String p : ess.getVanishedPlayers())
 			{
 				Player toVanish = ess.getUser(p).getBase();
-				if (toVanish.isOnline()) {
+				if (toVanish.isOnline())
+				{
 					user.hidePlayer(toVanish);
 				}
 			}
@@ -174,7 +175,14 @@ public class EssentialsPlayerListener implements Listener
 
 		if (user.isAuthorized("essentials.sleepingignored"))
 		{
-			user.setSleepingIgnored(true);
+			ess.scheduleSyncDelayedTask(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					user.setSleepingIgnored(true);
+				}
+			});
 		}
 
 		if (!ess.getSettings().isCommandDisabled("motd") && user.isAuthorized("essentials.motd"))
@@ -356,9 +364,10 @@ public class EssentialsPlayerListener implements Listener
 	public void onPlayerChangedWorldHack(final PlayerChangedWorldEvent event)
 	{
 		final Player user = event.getPlayer();
-		if (user.getGameMode() != GameMode.CREATIVE) {
-			user.setAllowFlight(false);	
-		}		
+		if (user.getGameMode() != GameMode.CREATIVE)
+		{
+			user.setAllowFlight(false);
+		}
 		user.setFlySpeed(0.1f);
 		user.setWalkSpeed(0.2f);
 	}
