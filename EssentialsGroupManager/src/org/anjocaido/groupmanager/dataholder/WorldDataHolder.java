@@ -420,7 +420,7 @@ public class WorldDataHolder {
 			throw new IllegalArgumentException("The file which should contain groups does not exist!\n" + groupsFile.getPath());
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new IllegalArgumentException("Error access the groups file!\n" + groupsFile.getPath());
+			throw new IllegalArgumentException("Error accessing the groups file!\n" + groupsFile.getPath());
 		}
 
 		GroupManager.setLoaded(true);
@@ -437,7 +437,7 @@ public class WorldDataHolder {
 			throw new IllegalArgumentException("The file which should contain users does not exist!\n" + usersFile.getPath());
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new IllegalArgumentException("Error access the users file!\n" + usersFile.getPath());
+			throw new IllegalArgumentException("Error accessing the users file!\n" + usersFile.getPath());
 		}
 
 		GroupManager.setLoaded(true);
