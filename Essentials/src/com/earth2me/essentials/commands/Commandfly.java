@@ -30,16 +30,21 @@ public class Commandfly extends EssentialsCommand
 	{
 		if (args.length == 1)
 		{
-			if (args[0].contains("on") || args[0].contains("ena") || args[0].equalsIgnoreCase("1"))
+			if (args[0].equalsIgnoreCase("on") || args[0].startsWith("ena") || args[0].equalsIgnoreCase("1"))
 			{
 				user.setAllowFlight(true);
 			}
-			else if (args[0].contains("off") || args[0].contains("dis") || args[0].equalsIgnoreCase("0"))
+			else if (args[0].equalsIgnoreCase("off") || args[0].startsWith("dis") || args[0].equalsIgnoreCase("0"))
 			{
 				user.setAllowFlight(false);
 			}
+			else if (user.isAuthorized("essentials.fly.others"))
+			{
+				flyOtherPlayers(server, user, args);
+				return;
+			}
 		}
-		else if (args.length > 0 && args[0].trim().length() > 2 && user.isAuthorized("essentials.fly.others"))
+		else if (args.length == 2 && user.isAuthorized("essentials.fly.others"))
 		{
 			flyOtherPlayers(server, user, args);
 			return;
