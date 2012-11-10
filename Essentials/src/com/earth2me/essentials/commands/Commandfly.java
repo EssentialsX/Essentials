@@ -28,15 +28,29 @@ public class Commandfly extends EssentialsCommand
 	@Override
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		if (args.length > 0 && args[0].trim().length() > 2 && user.isAuthorized("essentials.fly.others"))
+		if (args.length == 1)
+		{
+			if (args[0].contains("on") || args[0].contains("ena") || args[0].equalsIgnoreCase("1"))
+			{
+				user.setAllowFlight(true);
+			}
+			else if (args[0].contains("off") || args[0].contains("dis") || args[0].equalsIgnoreCase("0"))
+			{
+				user.setAllowFlight(false);
+			}
+		}
+		else if (args.length > 0 && args[0].trim().length() > 2 && user.isAuthorized("essentials.fly.others"))
 		{
 			flyOtherPlayers(server, user, args);
 			return;
 		}
-		user.setAllowFlight(!user.getAllowFlight());
-		if (!user.getAllowFlight())
+		else
 		{
-			user.setFlying(false);
+			user.setAllowFlight(!user.getAllowFlight());
+			if (!user.getAllowFlight())
+			{
+				user.setFlying(false);
+			}
 		}
 		user.sendMessage(_("flyMode", _(user.getAllowFlight() ? "enabled" : "disabled"), user.getDisplayName()));
 	}
