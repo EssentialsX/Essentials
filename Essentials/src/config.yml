@@ -200,7 +200,7 @@ kits:
 # See http://wiki.ess3.net/wiki/Sign_Tutorial for instructions on how to use these.
 # To enable signs, remove # symbol. To disable all signs, comment/remove each sign.
 # Essentials Colored sign support will be enabled when any sign types are enabled.
-# Color is not an actual sign, its for enabling using color codes on signs, when the correct permissions are given.
+# Color is not an actual sign, it's for enabling using color codes on signs, when the correct permissions are given.
 
 enabledSigns:
   #- color
@@ -287,12 +287,12 @@ no-god-in-worlds:
 # Set to true to enable per-world permissions for teleporting between worlds with essentials commands
 # This applies to /world, /back, /tp[a|o][here|all], but not warps.
 # Give someone permission to teleport to a world with essentials.worlds.<worldname>
-# This does not effect the /home command, there is a separate toggle below for this.
+# This does not affect the /home command, there is a separate toggle below for this.
 world-teleport-permissions: false
 
 # The number of items given if the quantity parameter is left out in /item or /give.
 # If this number is below 1, the maximum stack size size is given. If over-sized stacks
-# are not enabled, any number higher then the maximum stack size results in more than one stack.
+# are not enabled, any number higher than the maximum stack size results in more than one stack.
 default-stack-size: -1
 
 # Over-sized stacks are stacks that ignore the normal max stack size.
@@ -315,7 +315,7 @@ login-attack-delay: 5
 #Set the max fly speed, values range from 0.1 to 1.0
 max-fly-speed: 0.8
 
-#Set the maximum amount of mails that can be send within a minute.
+#Set the maximum amount of mail that can be sent within a minute.
 mails-per-minute: 1000
 
 ############################################################
@@ -460,6 +460,10 @@ protect:
     fireball-explosion: false
     fireball-fire: false
     fireball-playerdamage: false
+    witherskull-explosion: false
+    witherskull-playerdamage: false
+    wither-spawnexplosion: false
+    wither-blockreplace: false
     creeper-explosion: false
     creeper-playerdamage: false
     creeper-blockdamage: false
@@ -496,7 +500,10 @@ protect:
       ocelot: false
       iron_golem: false
       villager: false
-
+      wither: false
+      bat: false
+      witch: false
+      
   # Maximum height the creeper should explode. -1 allows them to explode everywhere.
   # Set prevent.creeper-explosion to true, if you want to disable creeper explosions.
   creeper:
@@ -549,6 +556,9 @@ protect:
 
     # Should the damage after hit by a lightning be disabled?
     lightning: false
+    
+    # Should Wither damage be disabled?
+    wither: false
 
     # Disable weather options
     weather:

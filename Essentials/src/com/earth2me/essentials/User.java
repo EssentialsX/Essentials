@@ -70,8 +70,8 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		}
 		return result;
 	}
-	
-	private boolean isAuthorizedCheck(final String node) 
+
+	private boolean isAuthorizedCheck(final String node)
 	{
 
 		if (base instanceof OfflinePlayer)
@@ -538,7 +538,11 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			if (broadcast && !isHidden())
 			{
 				setDisplayNick();
-				ess.broadcastMessage(this, _("userIsNotAway", getDisplayName()));
+				final String msg = _("userIsNotAway", getDisplayName());
+				if (!msg.isEmpty())
+				{					
+					ess.broadcastMessage(this, msg);
+				}
 			}
 		}
 		lastActivity = System.currentTimeMillis();
@@ -571,7 +575,11 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			if (!isHidden())
 			{
 				setDisplayNick();
-				ess.broadcastMessage(this, _("userIsAway", getDisplayName()));
+				final String msg = _("userIsAway", getDisplayName());
+				if (!msg.isEmpty())
+				{					
+					ess.broadcastMessage(this, msg);
+				}
 			}
 		}
 	}

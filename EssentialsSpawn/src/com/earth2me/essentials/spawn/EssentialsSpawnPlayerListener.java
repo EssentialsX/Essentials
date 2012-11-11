@@ -97,6 +97,7 @@ public class EssentialsSpawnPlayerListener implements Listener
 			ess.scheduleSyncDelayedTask(new NewPlayerTeleport(user), 1L);
 		}
 
+		//This method allows for multiple line player announce messages using multiline yaml syntax #EasterEgg
 		if (ess.getSettings().getAnnounceNewPlayers())
 		{
 			final IText output = new KeywordReplacer(ess.getSettings().getAnnounceNewPlayerFormat(), user, ess);

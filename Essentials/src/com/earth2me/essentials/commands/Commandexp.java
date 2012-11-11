@@ -125,13 +125,13 @@ public class Commandexp extends EssentialsCommand
 		sender.sendMessage(_("exp", target.getDisplayName(), SetExpFix.getTotalExperience(target), target.getLevel(), SetExpFix.getExpUntilNextLevel(target)));
 	}
 
-	private void setExp(final CommandSender sender, final User target, String strAmount, final boolean give)
+	private void setExp(final CommandSender sender, final User target, String strAmount, final boolean give) throws NotEnoughArgumentsException 
 	{
 		Long amount;
 		strAmount = strAmount.toLowerCase(Locale.ENGLISH);
-		if (strAmount.startsWith("l"))
+		if (strAmount.startsWith("l") || strAmount.endsWith("l"))
 		{
-			strAmount = strAmount.substring(1);			
+			strAmount = strAmount.replaceAll("l","");			
 			int neededLevel = Integer.parseInt(strAmount);
 			if (give)
 			{
@@ -142,6 +142,10 @@ public class Commandexp extends EssentialsCommand
 		}
 		else {
 			amount = Long.parseLong(strAmount);
+			if (amount < 0 || amount > Integer.MAX_VALUE)
+			{
+				throw new NotEnoughArgumentsException();	
+			}
 		}
 
 		if (give)

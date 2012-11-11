@@ -119,6 +119,12 @@ public class FakeServer implements Server
 	}
 
 	@Override
+	public boolean isHardcore()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+	
+	@Override
 	public Player getPlayer(String string)
 	{
 		for (Player player : players)
@@ -792,6 +798,12 @@ public class FakeServer implements Server
 
 	@Override
 	public WarningState getWarningState()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public int getAmbientSpawnLimit()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}

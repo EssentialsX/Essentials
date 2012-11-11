@@ -102,6 +102,13 @@ public class Kit
 			boolean spew = false;
 			for (String d : items)
 			{
+				if (d.startsWith(ess.getSettings().getCurrencySymbol())) 
+				{
+					Double value = Double.parseDouble(d.substring(ess.getSettings().getCurrencySymbol().length()).trim());
+					Trade t = new Trade(value, ess);
+					t.pay(user);
+					continue;
+				}
 				final String[] parts = d.split(" ");
 				final String[] item = parts[0].split("[:+',;.]", 2);
 				final int id = Material.getMaterial(Integer.parseInt(item[0])).getId();

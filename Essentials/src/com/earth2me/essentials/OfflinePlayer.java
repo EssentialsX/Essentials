@@ -842,6 +842,12 @@ public class OfflinePlayer implements Player
 	}
 
 	@Override
+	public void setBedSpawnLocation(Location lctn, boolean force)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+	
+	@Override
 	public void playEffect(EntityEffect ee)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
@@ -1102,6 +1108,12 @@ public class OfflinePlayer implements Player
 
 	@Override
 	public void playSound(Location arg0, Sound arg1, float arg2, float arg3)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void giveExpLevels(int i)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}

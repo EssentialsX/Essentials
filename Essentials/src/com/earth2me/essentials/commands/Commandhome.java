@@ -83,7 +83,7 @@ public class Commandhome extends EssentialsCommand
 			}
 			else
 			{
-				if (bed != null)
+				if (bed != null  && user.isAuthorized("essentials.home.bed"))
 				{
 					homes.add("bed");
 				}

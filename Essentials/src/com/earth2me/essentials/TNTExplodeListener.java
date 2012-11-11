@@ -24,13 +24,13 @@ public class TNTExplodeListener implements Listener, Runnable
 		if (!enabled)
 		{
 			enabled = true;
-			timer = ess.scheduleSyncDelayedTask(this, 1000);
+			timer = ess.scheduleSyncDelayedTask(this, 200);
 			return;
 		}
 		if (timer != -1)
 		{
 			ess.getScheduler().cancelTask(timer);
-			timer = ess.scheduleSyncDelayedTask(this, 1000);
+			timer = ess.scheduleSyncDelayedTask(this, 200);
 		}
 	}
 

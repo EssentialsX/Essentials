@@ -5,10 +5,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Material;
-import org.bukkit.entity.Ageable;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -37,51 +34,18 @@ public class EssentialsEntityListener implements Listener
 		{
 			final User defender = ess.getUser(eDefend);
 			final User attacker = ess.getUser(eAttack);
-
-			if (ess.getSettings().getLoginAttackDelay() > 0 && !attacker.isAuthorized("essentials.pvpdelay.exempt")
-				&& (System.currentTimeMillis() < (attacker.getLastLogin() + ess.getSettings().getLoginAttackDelay())))
+			onPlayerVsPlayerDamage(event, defender, attacker);
+			onPlayerVsPlayerPowertool(event, defender, attacker);
+		}
+		else if (eDefend instanceof Player && eAttack instanceof Projectile)
+		{
+			Entity shooter = ((Projectile)event.getDamager()).getShooter();
+			if (shooter instanceof Player)
 			{
-				event.setCancelled(true);
-			}
-
-			if (attacker.hasInvulnerabilityAfterTeleport() || defender.hasInvulnerabilityAfterTeleport())
-			{
-				event.setCancelled(true);
-			}
-
-			if (attacker.isGodModeEnabled() && !attacker.isAuthorized("essentials.god.pvp"))
-			{
-				event.setCancelled(true);
-			}
-
-			if (attacker.isHidden() && !attacker.isAuthorized("essentials.vanish.pvp"))
-			{
-				event.setCancelled(true);
-			}
-
-			attacker.updateActivity(true);
-			final List<String> commandList = attacker.getPowertool(attacker.getItemInHand());
-			if (commandList != null && !commandList.isEmpty())
-			{
-				for (final String command : commandList)
-				{
-					if (command != null && !command.isEmpty())
-					{
-						ess.scheduleSyncDelayedTask(
-								new Runnable()
-								{
-									@Override
-									public void run()
-									{
-										attacker.getServer().dispatchCommand(attacker.getBase(), command.replaceAll("\\{player\\}", defender.getName()));
-										LOGGER.log(Level.INFO, String.format("[PT] %s issued server command: /%s", attacker.getName(), command));
-									}
-								});
-
-						event.setCancelled(true);
-						return;
-					}
-				}
+				final User defender = ess.getUser(eDefend);
+				final User attacker = ess.getUser(shooter);
+				onPlayerVsPlayerDamage(event, defender, attacker);
+				onPlayerVsPlayerPowertool(event, defender, attacker);
 			}
 		}
 		else if (eAttack instanceof Player)
@@ -98,6 +62,59 @@ public class EssentialsEntityListener implements Listener
 					player.setItemInHand(hand);
 					player.updateInventory();
 					event.setCancelled(true);
+				}
+			}
+		}
+	}
+
+	private void onPlayerVsPlayerDamage(final EntityDamageByEntityEvent event, final User defender, final User attacker)
+	{
+		if (ess.getSettings().getLoginAttackDelay() > 0 && !attacker.isAuthorized("essentials.pvpdelay.exempt")
+			&& (System.currentTimeMillis() < (attacker.getLastLogin() + ess.getSettings().getLoginAttackDelay())))
+		{
+			event.setCancelled(true);
+		}
+
+		if (attacker.hasInvulnerabilityAfterTeleport() || defender.hasInvulnerabilityAfterTeleport())
+		{
+			event.setCancelled(true);
+		}
+
+		if (attacker.isGodModeEnabled() && !attacker.isAuthorized("essentials.god.pvp"))
+		{
+			event.setCancelled(true);
+		}
+
+		if (attacker.isHidden() && !attacker.isAuthorized("essentials.vanish.pvp"))
+		{
+			event.setCancelled(true);
+		}
+
+		attacker.updateActivity(true);
+	}
+
+	private void onPlayerVsPlayerPowertool(final EntityDamageByEntityEvent event, final User defender, final User attacker)
+	{
+		final List<String> commandList = attacker.getPowertool(attacker.getItemInHand());
+		if (commandList != null && !commandList.isEmpty())
+		{
+			for (final String command : commandList)
+			{
+				if (command != null && !command.isEmpty())
+				{
+					ess.scheduleSyncDelayedTask(
+							new Runnable()
+							{
+								@Override
+								public void run()
+								{
+									attacker.getServer().dispatchCommand(attacker.getBase(), command.replaceAll("\\{player\\}", defender.getName()));
+									LOGGER.log(Level.INFO, String.format("[PT] %s issued server command: /%s", attacker.getName(), command));
+								}
+							});
+
+					event.setCancelled(true);
+					return;
 				}
 			}
 		}
