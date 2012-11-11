@@ -381,6 +381,12 @@ public class GroupManager extends JavaPlugin {
 		Group senderGroup = null;
 		User senderUser = null;
 		boolean isOpOverride = config.isOpOverride();
+		
+		// PREVENT GM COMMANDS BEING USED ON COMMANDBLOCKS
+		if (sender.getClass().getName().equals("org.bukkit.command.BlockCommandSender")) {
+			sender.sendMessage(ChatColor.RED + "GM Commands can not be called from CommandBlocks");
+		  	return true;
+		}
 
 		// DETERMINING PLAYER INFORMATION
 		if (sender instanceof Player) {

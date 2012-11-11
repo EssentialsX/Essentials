@@ -203,3 +203,4 @@ v 2.0:
 	- Add alphabetically sorted user lists.
 	- allWorldsDataList now returns fully mirrored worlds which are not identical mirrors (fixes the /manselect list).
 	- Add support for Rcon.
+	- Prevent GM commands from being used on CommandBlocks.
