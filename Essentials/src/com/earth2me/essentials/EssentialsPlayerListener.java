@@ -23,8 +23,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -552,5 +552,12 @@ public class EssentialsPlayerListener implements Listener
 			final User user = ess.getUser(event.getPlayer());
 			user.setEnderSee(false);
 		}
+	}
+	
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onPlayerFishEvent(final PlayerFishEvent event)
+	{
+		final User user = ess.getUser(event.getPlayer());
+		user.updateActivity(true);
 	}
 }
