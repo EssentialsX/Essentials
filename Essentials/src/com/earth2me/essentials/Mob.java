@@ -11,6 +11,8 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 
+// Suffixes can be appended on the end of a mob name to make it plural
+// Entities without a suffix, will default to 's'
 public enum Mob
 {
 	CHICKEN("Chicken", Enemies.FRIENDLY, EntityType.CHICKEN),
