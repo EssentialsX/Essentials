@@ -39,7 +39,7 @@ public enum Mob
 	OCELOT("Ocelot", Enemies.NEUTRAL, EntityType.OCELOT),
 	IRONGOLEM("IronGolem", Enemies.NEUTRAL, EntityType.IRON_GOLEM),
 	WITHER("Wither", Enemies.ENEMY, EntityType.WITHER),
-	BAT("Bat", Enemies.NEUTRAL, EntityType.BAT),
+	BAT("Bat", Enemies.FRIENDLY, EntityType.BAT),
 	WITCH("Witch", Enemies.ENEMY, EntityType.WITCH);
 	
 	public static final Logger logger = Logger.getLogger("Minecraft");
