@@ -202,3 +202,4 @@ v 2.0:
 	- Change order of data in Users.yml to [name, Group, SubGroup, Permissions, Info nodes].
 	- Add alphabetically sorted user lists.
 	- allWorldsDataList now returns fully mirrored worlds which are not identical mirrors (fixes the /manselect list).
+	- Add support for Rcon.

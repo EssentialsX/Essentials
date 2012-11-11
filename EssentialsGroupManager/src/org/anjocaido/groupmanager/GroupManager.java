@@ -37,6 +37,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.ServicePriority;
@@ -398,7 +399,7 @@ public class GroupManager extends JavaPlugin {
 			if (isOpOverride || worldsHolder.getWorldPermissions(senderPlayer).has(senderPlayer, "groupmanager." + cmd.getName())) {
 				playerCanDo = true;
 			}
-		} else if (sender instanceof ConsoleCommandSender) {
+		} else if ((sender instanceof ConsoleCommandSender) || (sender instanceof RemoteConsoleCommandSender)) {
 
 			if (!lastError.isEmpty() && !commandLabel.equalsIgnoreCase("manload")) {
 				sender.sendMessage(ChatColor.RED + "All commands are locked due to an error." + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Check the log" + ChatColor.RESET + " and then try a '/manload'.");
