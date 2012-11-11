@@ -9,7 +9,7 @@ authors:
   - ElgarL
 commands:
   manuadd:
-    description: Move a player to desired group.(Adds to the file if not exists)
+    description: Move a player to desired group. (Adds to the file if not exists)
     usage: /<command> <player> <group> | optional [world]
     permissions: groupmanager.manuadd
   manudel:
@@ -29,7 +29,7 @@ commands:
     usage: /<command> <group>
     permissions: groupmanager.mangadd
   mangdel:
-    description: Removes group from the system(all it's users become default)
+    description: Removes group from the system (all it's users become default)
     usage: /<command> <group>
     permissions: groupmanager.mangdel
   manuaddp:

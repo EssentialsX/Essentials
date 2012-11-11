@@ -391,7 +391,7 @@ public class GroupManager extends JavaPlugin {
 			senderPlayer = (Player) sender;
 
 			if (!lastError.isEmpty() && !commandLabel.equalsIgnoreCase("manload")) {
-				sender.sendMessage(ChatColor.RED + "All commands are locked due to an error. Check the log and then try a '/manload'.)");
+				sender.sendMessage(ChatColor.RED + "All commands are locked due to an error." + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Check the log" + ChatColor.RESET + " and then try a '/manload'.");
 				return true;
 			}
 
@@ -406,7 +406,7 @@ public class GroupManager extends JavaPlugin {
 		} else if (sender instanceof ConsoleCommandSender) {
 
 			if (!lastError.isEmpty() && !commandLabel.equalsIgnoreCase("manload")) {
-				sender.sendMessage(ChatColor.RED + "All commands are locked due to an error. Check the log and then try a '/manload'.)");
+				sender.sendMessage(ChatColor.RED + "All commands are locked due to an error." + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Check the log" + ChatColor.RESET + " and then try a '/manload'.");
 				return true;
 			}
 
@@ -1673,7 +1673,7 @@ public class GroupManager extends JavaPlugin {
 				if (args.length > 0) {
 
 					if (!lastError.isEmpty()) {
-						sender.sendMessage(ChatColor.RED + "All commands are locked due to an error. Check the log and then try a '/manload'.)");
+						sender.sendMessage(ChatColor.RED + "All commands are locked due to an error." + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Check the log" + ChatColor.RESET + " and then try a '/manload'.");
 						return true;
 					}
 
@@ -1838,7 +1838,7 @@ public class GroupManager extends JavaPlugin {
 					return false;
 				}
 				if (!isConsole && !isOpOverride && (!permissionHandler.hasGroupInInheritance(auxUser.getGroup(), auxGroup.getName()) && !permissionHandler.hasGroupInInheritance(auxGroup, auxUser.getGroupName()))) {
-					sender.sendMessage(ChatColor.RED + "You can't modify a player using groups with different heritage line.");
+					sender.sendMessage(ChatColor.RED + "You can't modify a player using groups with different inheritage line.");
 					return false;
 				}
 				if (!isConsole && !isOpOverride && (permissionHandler.hasGroupInInheritance(auxGroup, auxUser.getGroupName()))) {
@@ -1854,9 +1854,9 @@ public class GroupManager extends JavaPlugin {
 
 			case mantogglevalidate:
 				validateOnlinePlayer = !validateOnlinePlayer;
-				sender.sendMessage(ChatColor.YELLOW + "Validade if player is online, now set to: " + Boolean.toString(validateOnlinePlayer));
+				sender.sendMessage(ChatColor.YELLOW + "Validate if player is online, now set to: " + Boolean.toString(validateOnlinePlayer));
 				if (!validateOnlinePlayer) {
-					sender.sendMessage(ChatColor.GOLD + "From now on you can edit players not connected... BUT:");
+					sender.sendMessage(ChatColor.GOLD + "From now on you can edit players that are not connected... BUT:");
 					sender.sendMessage(ChatColor.LIGHT_PURPLE + "From now on you should type the whole name of the player, correctly.");
 				}
 				return true;
