@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.Server;
+import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -80,7 +81,12 @@ public enum Mob
 
 	public LivingEntity spawn(final Player player, final Server server, final Location loc) throws MobException
 	{
-		final LivingEntity entity = player.getWorld().spawn(loc, (Class<? extends LivingEntity>)this.bukkitType.getEntityClass());
+		return spawn(player.getWorld(), server, loc);
+	}
+	
+	public LivingEntity spawn(final World world, final Server server, final Location loc) throws MobException
+	{
+		final LivingEntity entity = world.spawn(loc, (Class<? extends LivingEntity>)this.bukkitType.getEntityClass());
 		if (entity == null)
 		{
 			logger.log(Level.WARNING, _("unableToSpawnMob"));
