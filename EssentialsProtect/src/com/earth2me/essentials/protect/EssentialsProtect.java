@@ -1,9 +1,11 @@
 package com.earth2me.essentials.protect;
 
 import com.earth2me.essentials.protect.data.IProtectedBlock;
+import com.mchange.v2.log.MLevel;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.logging.Filter;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
@@ -27,24 +29,20 @@ public class EssentialsProtect extends JavaPlugin implements IProtect
 	@Override
 	public void onLoad()
 	{
-		try {
+		try
+		{
 			// Simple fix for the case that log4j is on the class path by another plugin
-			Class basicConfiguratorClass = Class.forName("org.apache.log4j.BasicConfigurator");
-			basicConfiguratorClass.getMethod("configure").invoke(null);
+			Class propertyConfiguratorClass = Class.forName("org.apache.log4j.PropertyConfigurator");
+			Properties properties = new Properties();
+			properties.load(this.getClass().getResourceAsStream("log4j.properties"));
+			propertyConfiguratorClass.getMethod("configure", Properties.class).invoke(null, properties);
 		}
 		catch (Exception ex)
 		{
 			//Ignore me, log4j not found on classloader.
 		}
-		
 		C3P0logger = com.mchange.v2.log.MLog.getLogger(com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource.class);
-		C3P0logger.setFilter(new Filter()
-		{
-			public boolean isLoggable(LogRecord lr)
-			{
-				return lr.getLevel() != Level.INFO;
-			}
-		});
+		C3P0logger.setLevel(MLevel.WARNING);
 	}
 
 	public void onEnable()
@@ -75,7 +73,7 @@ public class EssentialsProtect extends JavaPlugin implements IProtect
 	{
 		final EmergencyListener emListener = new EmergencyListener();
 		pm.registerEvents(emListener, this);
-		
+
 		for (Player player : getServer().getOnlinePlayers())
 		{
 			player.sendMessage("Essentials Protect is in emergency mode. Check your log for errors.");
@@ -99,7 +97,7 @@ public class EssentialsProtect extends JavaPlugin implements IProtect
 	{
 		return ess;
 	}
-	
+
 	public Map<ProtectConfig, Boolean> getSettingsBoolean()
 	{
 		return settingsBoolean;
