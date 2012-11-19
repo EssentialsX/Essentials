@@ -27,6 +27,16 @@ public class EssentialsProtect extends JavaPlugin implements IProtect
 	@Override
 	public void onLoad()
 	{
+		try {
+			// Simple fix for the case that log4j is on the class path by another plugin
+			Class basicConfiguratorClass = Class.forName("org.apache.log4j.BasicConfigurator");
+			basicConfiguratorClass.getMethod("configure").invoke(null);
+		}
+		catch (Exception ex)
+		{
+			//Ignore me, log4j not found on classloader.
+		}
+		
 		C3P0logger = com.mchange.v2.log.MLog.getLogger(com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource.class);
 		C3P0logger.setFilter(new Filter()
 		{
