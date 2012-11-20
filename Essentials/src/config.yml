@@ -89,7 +89,7 @@ overridden-commands:
 # Disabled commands will be completely unavailable on the server.
 # Disabling commands here will have no effect on command conflicts.
 disabled-commands:
-# - nick
+#  - nick
 
 # If you do not wish to use a permission system, you can define a list of 'player perms' below.
 # This list has no effect if your using a supported permissions system.
