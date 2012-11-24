@@ -404,7 +404,7 @@ commands:
     aliases: [etppos]
   tptoggle:
     description: Blocks all forms of teleportation.
-    usage: /<command>
+    usage: /<command> [player [on|off]]
     aliases: [etptoggle]
   tree:
     description: Spawn a tree where you are looking.
