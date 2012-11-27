@@ -37,7 +37,7 @@ public class Kit
 
 	}
 
-	public static void checkTime(final User user, final String kitName, final Map<String, Object> els) throws NoChargeException
+	public static void checkTime(final User user, final String kitName, final Map<String, Object> els) throws Exception
 	{
 		if (user.isAuthorized("essentials.kit.exemptdelay")) {
 			return;
@@ -46,7 +46,7 @@ public class Kit
 		final Calendar time = new GregorianCalendar();
 
 		// Take the current time, and remove the delay from it.
-		final double delay = els.containsKey("delay") ? ((Number)els.get("delay")).doubleValue() : 0L;
+		final double delay = els.containsKey("delay") ? ((Number)els.get("delay")).doubleValue() : 0.0d;
 		final Calendar earliestTime = new GregorianCalendar();
 		earliestTime.add(Calendar.SECOND, -(int)delay);
 		earliestTime.add(Calendar.MILLISECOND, -(int)((delay * 1000.0) % 1000.0));
@@ -56,7 +56,7 @@ public class Kit
 		// When was the last kit used?
 		final long lastTime = user.getKitTimestamp(kitName);
 
-		if (lastTime < earliestLong)
+		if (lastTime < earliestLong || lastTime == 0L)
 		{
 			user.setKitTimestamp(kitName, time.getTimeInMillis());
 		}
@@ -65,6 +65,11 @@ public class Kit
 			// This is to make sure time didn't get messed up on last kit use.
 			// If this happens, let's give the user the benifit of the doubt.
 			user.setKitTimestamp(kitName, time.getTimeInMillis());
+		}
+		else if (earliestLong < 0L)
+		{
+			user.sendMessage(_("kitOnce"));
+			throw new NoChargeException();
 		}
 		else
 		{

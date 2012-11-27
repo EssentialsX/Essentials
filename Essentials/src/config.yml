@@ -92,8 +92,8 @@ disabled-commands:
 #  - nick
 
 # If you do not wish to use a permission system, you can define a list of 'player perms' below.
-# This list has no effect if your using a supported permissions system.
-# If your using an unsupported permissions system simply delete this section.
+# This list has no effect if you are using a supported permissions system.
+# If you are using an unsupported permissions system simply delete this section.
 # Whitelist the commands and permissions you wish to give players by default (everything else is op only).
 # These are the permissions without the "essentials." part.
 player-commands:

@@ -42,4 +42,6 @@ public interface IUser extends Player
 	Teleport getTeleport();
 
 	void setJail(String jail);
+	
+	boolean isIgnoreExempt();
 }

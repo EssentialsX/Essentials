@@ -737,4 +737,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	{
 		this.rightClickJump = rightClickJump;
 	}
+
+	@Override
+	public boolean isIgnoreExempt()
+	{
+		return this.isAuthorized("essentials.chat.ignoreexempt");		
+	}
 }
