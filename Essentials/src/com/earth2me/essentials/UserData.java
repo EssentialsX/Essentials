@@ -49,23 +49,23 @@ public abstract class UserData extends PlayerExtension implements IConf
 		lastHealTimestamp = _getLastHealTimestamp();
 		jail = _getJail();
 		mails = _getMails();
-		teleportEnabled = getTeleportEnabled();
-		ignoredPlayers = getIgnoredPlayers();
+		teleportEnabled = _getTeleportEnabled();
 		godmode = _getGodModeEnabled();
-		muted = getMuted();
+		muted = _getMuted();
 		muteTimeout = _getMuteTimeout();
-		jailed = getJailed();
+		jailed = _getJailed();
 		jailTimeout = _getJailTimeout();
 		lastLogin = _getLastLogin();
 		lastLogout = _getLastLogout();
 		lastLoginAddress = _getLastLoginAddress();
-		afk = getAfk();
+		afk = _getAfk();
 		geolocation = _getGeoLocation();
 		isSocialSpyEnabled = _isSocialSpyEnabled();
 		isNPC = _isNPC();
 		arePowerToolsEnabled = _arePowerToolsEnabled();
 		kitTimestamps = _getKitTimestamps();
 		nickname = _getNickname();
+		setIgnoredPlayers(_getIgnoredPlayers());
 	}
 	private double money;
 
@@ -415,7 +415,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 	}
 	private boolean teleportEnabled;
 
-	private boolean getTeleportEnabled()
+	private boolean _getTeleportEnabled()
 	{
 		return config.getBoolean("teleportenabled", true);
 	}
@@ -447,7 +447,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 	}
 	private List<String> ignoredPlayers;
 
-	public List<String> getIgnoredPlayers()
+	public List<String> _getIgnoredPlayers()
 	{
 		return Collections.synchronizedList(config.getStringList("ignore"));
 	}
@@ -480,7 +480,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	public boolean isIgnoredPlayer(IUser user)
 	{
-		return (ignoredPlayers.contains(user.getName().toLowerCase(Locale.ENGLISH)) && !user.isAuthorized("essentials.chat.ignoreexempt"));
+		return (ignoredPlayers.contains(user.getName().toLowerCase(Locale.ENGLISH)) && !user.isIgnoreExempt());
 	}
 
 	public void setIgnoredPlayer(IUser user, boolean set)
@@ -515,9 +515,14 @@ public abstract class UserData extends PlayerExtension implements IConf
 	}
 	private boolean muted;
 
-	public boolean getMuted()
+	public boolean _getMuted()
 	{
 		return config.getBoolean("muted", false);
+	}
+	
+	public boolean getMuted()
+	{
+		return muted;
 	}
 
 	public boolean isMuted()
@@ -551,7 +556,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 	}
 	private boolean jailed;
 
-	private boolean getJailed()
+	private boolean _getJailed()
 	{
 		return config.getBoolean("jailed", false);
 	}
@@ -678,7 +683,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 	}
 	private boolean afk;
 
-	private boolean getAfk()
+	private boolean _getAfk()
 	{
 		return config.getBoolean("afk", false);
 	}
