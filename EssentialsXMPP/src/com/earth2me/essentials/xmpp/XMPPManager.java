@@ -12,8 +12,8 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import org.bukkit.entity.Player;
-import org.jivesoftware.smack.Roster.SubscriptionMode;
 import org.jivesoftware.smack.*;
+import org.jivesoftware.smack.Roster.SubscriptionMode;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.util.StringUtils;
@@ -263,7 +263,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 								for (LogRecord logRecord : copy)
 								{
 									final String message = String.format("[" + logRecord.getLevel().getLocalizedName() + "] " + logRecord.getMessage(), logRecord.getParameters());
-									if (!XMPPManager.this.sendMessage(user, message))
+									if (!XMPPManager.this.sendMessage(user, Util.stripLogColorFormat(message)))
 									{
 										failedUsers.add(user);
 										break;
