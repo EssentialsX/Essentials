@@ -76,7 +76,7 @@ warn-on-smite: true
 # motd and rules are now configured in the files motd.txt and rules.txt
 
 # When a command conflicts with another plugin, by default, Essentials will try to force the OTHER plugin to take priority.
-# Commands in in this list, will tell Essentials to 'not give up' the command to other plugins.
+# Commands in this list, will tell Essentials to 'not give up' the command to other plugins.
 # In this state, which plugin 'wins' appears to be almost random.
 # 
 # If you have two plugin with the same command and you wish to force Essentials to take over, you need an alias.
