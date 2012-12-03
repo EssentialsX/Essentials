@@ -605,6 +605,7 @@ public class Util
 	}
 	private static transient final Pattern URL_PATTERN = Pattern.compile("((?:(?:https?)://)?[\\w-_\\.]{2,})\\.([a-z]{2,3}(?:/\\S+)?)");
 	private static transient final Pattern VANILLA_PATTERN = Pattern.compile("\u00A7+[0-9A-FK-ORa-fk-or]");
+	private static transient final Pattern LOGCOLOR_PATTERN = Pattern.compile("\\x1B\\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]");
 	private static transient final Pattern REPLACE_PATTERN = Pattern.compile("&([0-9a-fk-or])");
 	private static transient final Pattern VANILLA_COLOR_PATTERN = Pattern.compile("\u00A7+[0-9A-Fa-f]");
 	private static transient final Pattern VANILLA_MAGIC_PATTERN = Pattern.compile("\u00A7+[Kk]");
@@ -620,6 +621,15 @@ public class Util
 			return null;
 		}
 		return VANILLA_PATTERN.matcher(input).replaceAll("");
+	}
+
+	public static String stripLogColorFormat(final String input)
+	{
+		if (input == null)
+		{
+			return null;
+		}
+		return LOGCOLOR_PATTERN.matcher(input).replaceAll("");
 	}
 
 	public static String replaceFormat(final String input)
