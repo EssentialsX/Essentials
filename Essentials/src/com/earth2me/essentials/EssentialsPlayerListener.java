@@ -417,6 +417,7 @@ public class EssentialsPlayerListener implements Listener
 			if (event.getItem() != null && event.getItem().getTypeId() != AIR)
 			{
 				final User user = ess.getUser(event.getPlayer());
+				user.updateActivity(true);
 				if (user.hasPowerTools() && user.arePowerToolsEnabled() && usePowertools(user, event.getItem().getTypeId()))
 				{
 					event.setCancelled(true);
