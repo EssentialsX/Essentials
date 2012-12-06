@@ -23,7 +23,6 @@ public class Commandsell extends EssentialsCommand
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		double totalWorth = 0.0;
-		double worth = 0.0;
 		String type = "";
 		if (args.length < 1)
 		{
