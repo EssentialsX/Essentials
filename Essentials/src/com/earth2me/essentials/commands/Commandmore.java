@@ -25,7 +25,7 @@ public class Commandmore extends EssentialsCommand
 		if (stack.getAmount() >= ((user.isAuthorized("essentials.oversizedstacks")) 
 								  ? ess.getSettings().getOversizedStackSize() : stack.getMaxStackSize()))
 		{
-			throw new NoChargeException();
+			throw new Exception(_("fullStack"));
 		}
 		final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 		if (ess.getSettings().permissionBasedItemSpawn()
