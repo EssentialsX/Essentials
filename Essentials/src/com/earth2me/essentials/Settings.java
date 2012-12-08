@@ -12,6 +12,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.ChatColor;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.event.EventPriority;
@@ -189,6 +190,11 @@ public class Settings implements ISettings
 			final ConfigurationSection newSection = new MemoryConfiguration();
 			for (String command : section.getKeys(false))
 			{
+				PluginCommand cmd = ess.getServer().getPluginCommand(command);
+				if (cmd == null || !cmd.getPlugin().equals(ess))
+				{
+					ess.getLogger().warning("Invalid command cost. '" + command + "' is not a command handled by Essentials.");
+				}
 				if (section.isDouble(command))
 				{
 					newSection.set(command.toLowerCase(Locale.ENGLISH), section.getDouble(command));
@@ -196,6 +202,24 @@ public class Settings implements ISettings
 				else if (section.isInt(command))
 				{
 					newSection.set(command.toLowerCase(Locale.ENGLISH), (double)section.getInt(command));
+				}
+				else if (section.isString(command))
+				{
+					String costString = section.getString(command);
+					try
+					{
+						double cost = Double.parseDouble(costString.trim().replace(getCurrencySymbol(), "").replaceAll("\\W", ""));
+						newSection.set(command.toLowerCase(Locale.ENGLISH), cost);
+					}
+					catch (NumberFormatException ex)
+					{
+						ess.getLogger().warning("Invalid command cost for: " + command + " (" + costString + ")");
+					}
+
+				}
+				else
+				{
+					ess.getLogger().warning("Invalid command cost for: " + command);
 				}
 			}
 			return newSection;
@@ -946,12 +970,13 @@ public class Settings implements ISettings
 		double maxSpeed = config.getDouble("max-walk-speed", 0.8);
 		return maxSpeed > 1.0 ? 1.0 : Math.abs(maxSpeed);
 	}
-	
 	private int mailsPerMinute;
 
-	private int _getMailsPerMinute() {
+	private int _getMailsPerMinute()
+	{
 		return config.getInt("mails-per-minute", 1000);
 	}
+
 	@Override
 	public int getMailsPerMinute()
 	{
