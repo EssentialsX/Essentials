@@ -65,13 +65,7 @@ public class Commandhome extends EssentialsCommand
 			final List<String> homes = player.getHomes();
 			if (homes.isEmpty() && player.equals(user))
 			{
-				if (bed != null)
-				{
-					user.getTeleport().teleport(bed, charge, TeleportCause.COMMAND);
-					throw new NoChargeException();
-				}
 				user.getTeleport().respawn(charge, TeleportCause.COMMAND);
-
 			}
 			else if (homes.isEmpty())
 			{

@@ -2,10 +2,12 @@ package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.ITeleport;
+import com.earth2me.essentials.commands.NoChargeException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Logger;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -241,7 +243,7 @@ public class Teleport implements Runnable, ITeleport
 	{
 		teleport(loc, chargeFor, TeleportCause.PLUGIN);
 	}
-		
+
 	public void teleport(Location loc, Trade chargeFor, TeleportCause cause) throws Exception
 	{
 		teleport(new Target(loc), chargeFor, cause);
@@ -321,10 +323,17 @@ public class Teleport implements Runnable, ITeleport
 	public void respawn(final Trade chargeFor, TeleportCause cause) throws Exception
 	{
 		final Player player = user.getBase();
-		final Location bed = player.getBedSpawnLocation();
-		final PlayerRespawnEvent pre = new PlayerRespawnEvent(player, bed == null ? player.getWorld().getSpawnLocation() : bed, bed != null);
-		ess.getServer().getPluginManager().callEvent(pre);
-		teleport(new Target(pre.getRespawnLocation()), chargeFor, cause);
+		Location bed = player.getBedSpawnLocation();
+		if (bed != null && bed.getBlock().getType() != Material.BED_BLOCK)
+		{
+			teleport(bed, chargeFor, cause);
+		}
+		else
+		{
+			final PlayerRespawnEvent pre = new PlayerRespawnEvent(player, player.getWorld().getSpawnLocation(), false);
+			ess.getServer().getPluginManager().callEvent(pre);
+			teleport(new Target(pre.getRespawnLocation()), chargeFor, cause);
+		}
 	}
 
 	//The warp function is a wrapper used to teleport a player to a /warp
@@ -332,7 +341,7 @@ public class Teleport implements Runnable, ITeleport
 	{
 		Location loc = ess.getWarps().getWarp(warp);
 		user.sendMessage(_("warpingTo", warp));
-		teleport(new Target(loc), chargeFor, cause);		
+		teleport(new Target(loc), chargeFor, cause);
 	}
 
 	//The back function is a wrapper used to teleport a player /back to their previous location.	
