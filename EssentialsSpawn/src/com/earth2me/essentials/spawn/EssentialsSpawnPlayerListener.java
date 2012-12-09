@@ -3,7 +3,6 @@ package com.earth2me.essentials.spawn;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.Kit;
-import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
@@ -72,18 +71,7 @@ public class EssentialsSpawnPlayerListener implements Listener
 
 	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
-		ess.scheduleAsyncDelayedTask(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				delayedJoin(event.getPlayer());
-			}
-		});
-	}
-
-	public void delayedJoin(Player player)
-	{
+		Player player = event.getPlayer();
 		if (player.hasPlayedBefore())
 		{
 			LOGGER.log(Level.FINE, "Old player join");
@@ -94,7 +82,18 @@ public class EssentialsSpawnPlayerListener implements Listener
 
 		if (!"none".equalsIgnoreCase(ess.getSettings().getNewbieSpawn()))
 		{
-			ess.scheduleSyncDelayedTask(new NewPlayerTeleport(user), 1L);
+			try
+			{
+				final Location spawn = spawns.getSpawn(ess.getSettings().getNewbieSpawn());
+				if (spawn != null)
+				{
+					user.getTeleport().now(spawn, false, TeleportCause.PLUGIN);
+				}
+			}
+			catch (Exception ex)
+			{
+				Bukkit.getLogger().log(Level.WARNING, _("teleportNewPlayerError"), ex);
+			}
 		}
 
 		//This method allows for multiple line player announce messages using multiline yaml syntax #EasterEgg
@@ -125,38 +124,5 @@ public class EssentialsSpawnPlayerListener implements Listener
 		}
 
 		LOGGER.log(Level.FINE, "New player join");
-	}
-
-
-	private class NewPlayerTeleport implements Runnable
-	{
-		private final transient User user;
-
-		public NewPlayerTeleport(final User user)
-		{
-			this.user = user;
-		}
-
-		@Override
-		public void run()
-		{
-			if (user.getBase() instanceof OfflinePlayer)
-			{
-				return;
-			}
-
-			try
-			{
-				final Location spawn = spawns.getSpawn(ess.getSettings().getNewbieSpawn());
-				if (spawn != null)
-				{
-					user.getTeleport().now(spawn, false, TeleportCause.PLUGIN);
-				}
-			}
-			catch (Exception ex)
-			{
-				Bukkit.getLogger().log(Level.WARNING, _("teleportNewPlayerError"), ex);
-			}
-		}
 	}
 }
