@@ -65,6 +65,7 @@ item-spawn-blacklist:
 #  - essentials.give.item-all
 #  - essentials.give.item-[itemname]
 #  - essentials.give.item-[itemid]
+# For more information, visit http://wiki.ess3.net/wiki/Command_Reference/ICheat#Item.2FGive
 permission-based-item-spawn: false
 
 # Mob limit on the /spawnmob command per execution
@@ -181,6 +182,7 @@ player-commands:
 # All kit names should be lower case, and will be treated as lower in permissions/costs.
 # Syntax: - itemID[:DataValue] Amount [Enchantment:Level]..
 # 'delay' refers to the cooldown between how often you can use each kit, measured in seconds.
+# For more information, visit http://wiki.ess3.net/wiki/Command_Reference/ICheat#kits
 kits:
   dtools:
     delay: 10
@@ -246,8 +248,10 @@ debug: false
 
 # Set the locale for all messages
 # If you don't set this, the default locale of the server will be used.
+# For example, to set language to english, set locale to en, to use the file "messages_en.properties"
 # Don't forget to remove the # in front of the line
-#locale: de_DE
+# For more information, visit http://wiki.ess3.net/wiki/Locale
+#locale: en
 
 # Turn off god mode when people exit
 remove-god-on-disconnect: false
@@ -336,6 +340,7 @@ world-home-permissions: false
 # Players need essentials.sethome.multiple before they can have more than 1 home, defaults to 'default' below.
 # Define different amounts of multiple homes for different permissions, e.g. essentials.sethome.multiple.vip
 # People with essentials.sethome.multiple.unlimited are not limited by these numbers.
+# For more information, visit http://wiki.ess3.net/wiki/Multihome
 sethome-multiple:  
   default: 3
   # essentials.sethome.multiple.vip
@@ -352,6 +357,8 @@ tpa-accept-cancellation: 0
 # |                   EssentialsEco                      | #
 # +------------------------------------------------------+ #
 ############################################################
+
+# For more information, visit http://wiki.ess3.net/wiki/Essentials_Economy
 
 # Defines the balance with which new players begin.  Defaults to 0.
 starting-balance: 0
@@ -573,6 +580,7 @@ protect:
 ############################################################
 
   # Disable various default physics and behaviors
+  # For more information, visit http://wiki.ess3.net/wiki/AntiBuild
 
     # Should people with build: false in permissions be allowed to build
     # Set true to disable building for those people
