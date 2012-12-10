@@ -51,7 +51,7 @@ public class Metrics
 	/**
 	 * The current revision number
 	 */
-	private final static int REVISION = 5;
+	private final static int REVISION = 6;
 	/**
 	 * The base url of the metrics domain
 	 */
@@ -60,10 +60,6 @@ public class Metrics
 	 * The url used to report a server's status
 	 */
 	private static final String REPORT_URL = "/report/%s";
-	/**
-	 * The file where guid and opt out is stored in
-	 */
-	private static final String CONFIG_FILE = "plugins/PluginMetrics/config.yml";
 	/**
 	 * The separator to use for custom data. This MUST NOT change unless you are hosting your own version of metrics and
 	 * want to change it.
@@ -98,13 +94,17 @@ public class Metrics
 	 */
 	private final String guid;
 	/**
+	 * Debug mode
+	 */
+	private final boolean debug;
+	/**
 	 * Lock for synchronization
 	 */
 	private final Object optOutLock = new Object();
 	/**
-	 * Id of the scheduled task
+	 * The scheduled task
 	 */
-	private volatile int taskId = -1;
+	private volatile BukkitTask task = null;
 
 	public Metrics(final Plugin plugin) throws IOException
 	{
@@ -116,12 +116,13 @@ public class Metrics
 		this.plugin = plugin;
 
 		// load the config
-		configurationFile = new File(CONFIG_FILE);
+		configurationFile = getConfigFile();
 		configuration = YamlConfiguration.loadConfiguration(configurationFile);
 
 		// add some defaults
 		configuration.addDefault("opt-out", false);
 		configuration.addDefault("guid", UUID.randomUUID().toString());
+		configuration.addDefault("debug", false);
 
 		// Do we need to create the file?
 		if (configuration.get("guid", null) == null)
@@ -132,6 +133,7 @@ public class Metrics
 
 		// Load the guid then
 		guid = configuration.getString("guid");
+		debug = configuration.getBoolean("debug", false);
 	}
 
 	/**
@@ -193,7 +195,7 @@ public class Metrics
 			}
 
 			// Begin hitting the server with glorious data
-			taskId = plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new Runnable()
+			task = plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable()
 			{
 				private boolean firstPost = true;
 
@@ -205,10 +207,10 @@ public class Metrics
 						synchronized (optOutLock)
 						{
 							// Disable Task, if it is running and the server owner decided to opt-out
-							if (isOptOut() && taskId > 0)
+							if (isOptOut() && task != null)
 							{
-								plugin.getServer().getScheduler().cancelTask(taskId);
-								taskId = -1;
+								task.cancel();
+								task = null;
 								// Tell all plotters to stop gathering information.
 								for (Graph graph : graphs)
 								{
@@ -228,7 +230,10 @@ public class Metrics
 					}
 					catch (IOException e)
 					{
-						Bukkit.getLogger().log(Level.FINE, "[Metrics] " + e.getMessage());
+						if (debug)
+						{
+							Bukkit.getLogger().log(Level.INFO, "[Metrics] " + e.getMessage());
+						}
 					}
 				}
 			}, 0, PING_INTERVAL * 1200);
@@ -251,12 +256,18 @@ public class Metrics
 			}
 			catch (IOException ex)
 			{
-				Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
+				if (debug)
+				{
+					Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
+				}
 				return true;
 			}
 			catch (InvalidConfigurationException ex)
 			{
-				Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
+				if (debug)
+				{
+					Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
+				}
 				return true;
 			}
 			return configuration.getBoolean("opt-out", false);
@@ -281,7 +292,7 @@ public class Metrics
 			}
 
 			// Enable Task, if it is not running
-			if (taskId < 0)
+			if (task == null)
 			{
 				start();
 			}
@@ -306,10 +317,10 @@ public class Metrics
 			}
 
 			// Disable Task, if it is running
-			if (taskId >= 0)
+			if (task != null)
 			{
-				this.plugin.getServer().getScheduler().cancelTask(taskId);
-				taskId = -1;
+				task.cancel();
+				task = null;
 			}
 		}
 	}
@@ -337,16 +348,45 @@ public class Metrics
 	 */
 	private void postPlugin(final boolean isPing) throws IOException
 	{
-		// The plugin's description file containg all of the plugin data such as name, version, author, etc
-		final PluginDescriptionFile description = plugin.getDescription();
+		// Server software specific section
+		PluginDescriptionFile description = plugin.getDescription();
+		String pluginName = description.getName();
+		boolean onlineMode = Bukkit.getServer().getOnlineMode(); // TRUE if online mode is enabled
+		String pluginVersion = description.getVersion();
+		String serverVersion = Bukkit.getVersion();
+		int playersOnline = Bukkit.getServer().getOnlinePlayers().length;
+
+		// END server software specific section -- all code below does not use any code outside of this class / Java
 
 		// Construct the post data
 		final StringBuilder data = new StringBuilder();
+
+		// The plugin's description file containg all of the plugin data such as name, version, author, etc
 		data.append(encode("guid")).append('=').append(encode(guid));
-		encodeDataPair(data, "version", description.getVersion());
-		encodeDataPair(data, "server", Bukkit.getVersion());
-		encodeDataPair(data, "players", Integer.toString(Bukkit.getServer().getOnlinePlayers().length));
+		encodeDataPair(data, "version", pluginVersion);
+		encodeDataPair(data, "server", serverVersion);
+		encodeDataPair(data, "players", Integer.toString(playersOnline));
 		encodeDataPair(data, "revision", String.valueOf(REVISION));
+
+		// New data as of R6
+		String osname = System.getProperty("os.name");
+		String osarch = System.getProperty("os.arch");
+		String osversion = System.getProperty("os.version");
+		String java_version = System.getProperty("java.version");
+		int coreCount = Runtime.getRuntime().availableProcessors();
+
+		// normalize os arch .. amd64 -> x86_64
+		if (osarch.equals("amd64"))
+		{
+			osarch = "x86_64";
+		}
+
+		encodeDataPair(data, "osname", osname);
+		encodeDataPair(data, "osarch", osarch);
+		encodeDataPair(data, "osversion", osversion);
+		encodeDataPair(data, "cores", Integer.toString(coreCount));
+		encodeDataPair(data, "online-mode", Boolean.toString(onlineMode));
+		encodeDataPair(data, "java_version", java_version);
 
 		// If we're pinging, append it
 		if (isPing)
@@ -382,7 +422,7 @@ public class Metrics
 		}
 
 		// Create the url
-		URL url = new URL(BASE_URL + String.format(REPORT_URL, encode(plugin.getDescription().getName())));
+		URL url = new URL(BASE_URL + String.format(REPORT_URL, encode(pluginName)));
 
 		// Connect to the website
 		URLConnection connection;
@@ -625,7 +665,7 @@ public class Metrics
 		@Override
 		public int hashCode()
 		{
-			return getColumnName().hashCode() + getValue();
+			return getColumnName().hashCode();
 		}
 
 		@Override
