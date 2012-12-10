@@ -35,6 +35,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.scheduler.BukkitTask;
 
 
 /**
@@ -604,6 +605,13 @@ public class Metrics
 
 			final Graph graph = (Graph)object;
 			return graph.name.equals(name);
+		}
+
+		/**
+		 * Called when the server owner decides to opt-out of Metrics while the server is running.
+		 */
+		protected void onOptOut()
+		{
 		}
 	}
 
