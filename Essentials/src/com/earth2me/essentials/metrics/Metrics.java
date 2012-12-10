@@ -126,7 +126,7 @@ public class Metrics
 		// Do we need to create the file?
 		if (configuration.get("guid", null) == null)
 		{
-			configuration.options().header("http://metrics.griefcraft.com").copyDefaults(true);
+			configuration.options().header("http://mcstats.org").copyDefaults(true);
 			configuration.save(configurationFile);
 		}
 
@@ -138,7 +138,7 @@ public class Metrics
 	 * Construct and create a Graph that can be used to separate specific plotters to their own graphs on the metrics
 	 * website. Plotters can be added to the graph object returned.
 	 *
-	 * @param name
+	 * @param name The name of the graph
 	 * @return Graph object created. Will never return NULL under normal circumstances unless bad parameters are given
 	 */
 	public Graph createGraph(final String name)
@@ -161,7 +161,7 @@ public class Metrics
 	/**
 	 * Adds a custom data plotter to the default graph
 	 *
-	 * @param plotter
+	 * @param plotter The plotter to use to plot custom data
 	 */
 	public void addCustomData(final Plotter plotter)
 	{
@@ -209,6 +209,11 @@ public class Metrics
 							{
 								plugin.getServer().getScheduler().cancelTask(taskId);
 								taskId = -1;
+								// Tell all plotters to stop gathering information.
+								for (Graph graph : graphs)
+								{
+									graph.onOptOut();
+								}
 							}
 						}
 
@@ -233,7 +238,7 @@ public class Metrics
 	/**
 	 * Has the server owner denied plugin metrics?
 	 *
-	 * @return
+	 * @return true if metrics should be opted out of it
 	 */
 	public boolean isOptOut()
 	{
@@ -242,7 +247,7 @@ public class Metrics
 			try
 			{
 				// Reload the metrics file
-				configuration.load(CONFIG_FILE);
+				configuration.load(getConfigFile());
 			}
 			catch (IOException ex)
 			{
@@ -297,8 +302,7 @@ public class Metrics
 			if (!isOptOut())
 			{
 				configuration.set("opt-out", true);
-				final File file = new File(CONFIG_FILE);
-				configuration.save(file);
+				configuration.save(configurationFile);
 			}
 
 			// Disable Task, if it is running
@@ -308,6 +312,24 @@ public class Metrics
 				taskId = -1;
 			}
 		}
+	}
+
+	/**
+	 * Gets the File object of the config file that should be used to store data such as the GUID and opt-out status
+	 *
+	 * @return the File object for the config file
+	 */
+	public File getConfigFile()
+	{
+		// I believe the easiest way to get the base folder (e.g craftbukkit set via -P) for plugins to use
+		// is to abuse the plugin object we already have
+		// plugin.getDataFolder() => base/plugins/PluginA/
+		// pluginsFolder => base/plugins/
+		// The base is not necessarily relative to the startup directory.
+		File pluginsFolder = plugin.getDataFolder().getParentFile();
+
+		// return => base/plugins/PluginMetrics/config.yml
+		return new File(new File(pluginsFolder, "PluginMetrics"), "config.yml");
 	}
 
 	/**
@@ -342,10 +364,6 @@ public class Metrics
 			{
 				final Graph graph = iter.next();
 
-				// Because we have a lock on the graphs set already, it is reasonable to assume
-				// that our lock transcends down to the individual plotters in the graphs also.
-				// Because our methods are private, no one but us can reasonably access this list
-				// without reflection so this is a safe assumption without adding more code.
 				for (Plotter plotter : graph.getPlotters())
 				{
 					// The key name to send to the metrics server
@@ -364,7 +382,7 @@ public class Metrics
 		}
 
 		// Create the url
-		final URL url = new URL(BASE_URL + String.format(REPORT_URL, description.getName()));
+		URL url = new URL(BASE_URL + String.format(REPORT_URL, encode(plugin.getDescription().getName())));
 
 		// Connect to the website
 		URLConnection connection;
@@ -420,13 +438,12 @@ public class Metrics
 				}
 			}
 		}
-		//if (response.startsWith("OK")) - We should get "OK" followed by an optional description if everything goes right
 	}
 
 	/**
 	 * Check if mineshafter is present. If it is, we need to bypass it to send POST requests
 	 *
-	 * @return
+	 * @return true if mineshafter is installed on the server
 	 */
 	private boolean isMineshafterPresent()
 	{
@@ -450,10 +467,9 @@ public class Metrics
 	 * encodeDataPair(data, "version", description.getVersion());
 	 * </code>
 	 *
-	 * @param buffer
-	 * @param key
-	 * @param value
-	 * @return
+	 * @param buffer the stringbuilder to append the data pair onto
+	 * @param key the key value
+	 * @param value the value
 	 */
 	private static void encodeDataPair(final StringBuilder buffer, final String key, final String value) throws UnsupportedEncodingException
 	{
@@ -463,8 +479,8 @@ public class Metrics
 	/**
 	 * Encode text as UTF-8
 	 *
-	 * @param text
-	 * @return
+	 * @param text the text to encode
+	 * @return the encoded text, as UTF-8
 	 */
 	private static String encode(final String text) throws UnsupportedEncodingException
 	{
@@ -495,7 +511,7 @@ public class Metrics
 		/**
 		 * Gets the graph's name
 		 *
-		 * @return
+		 * @return the Graph's name
 		 */
 		public String getName()
 		{
@@ -505,7 +521,7 @@ public class Metrics
 		/**
 		 * Add a plotter to the graph, which will be used to plot entries
 		 *
-		 * @param plotter
+		 * @param plotter the plotter to add to the graph
 		 */
 		public void addPlotter(final Plotter plotter)
 		{
@@ -515,7 +531,7 @@ public class Metrics
 		/**
 		 * Remove a plotter from the graph
 		 *
-		 * @param plotter
+		 * @param plotter the plotter to remove from the graph
 		 */
 		public void removePlotter(final Plotter plotter)
 		{
@@ -525,7 +541,7 @@ public class Metrics
 		/**
 		 * Gets an <b>unmodifiable</b> set of the plotter objects in the graph
 		 *
-		 * @return
+		 * @return an unmodifiable {@link Set} of the plotter objects
 		 */
 		public Set<Plotter> getPlotters()
 		{
@@ -573,7 +589,7 @@ public class Metrics
 		/**
 		 * Construct a plotter with a specific plot name
 		 *
-		 * @param name
+		 * @param name the name of the plotter to use, which will show up on the website
 		 */
 		public Plotter(final String name)
 		{
@@ -581,9 +597,11 @@ public class Metrics
 		}
 
 		/**
-		 * Get the current value for the plotted point
+		 * Get the current value for the plotted point. Since this function defers to an external function it may or may
+		 * not return immediately thus cannot be guaranteed to be thread friendly or safe. This function can be called
+		 * from any thread so care should be taken when accessing resources that need to be synchronized.
 		 *
-		 * @return
+		 * @return the current value for the point to be plotted.
 		 */
 		public abstract int getValue();
 
