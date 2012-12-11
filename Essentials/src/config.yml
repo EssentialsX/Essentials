@@ -248,7 +248,7 @@ debug: false
 
 # Set the locale for all messages
 # If you don't set this, the default locale of the server will be used.
-# For example, to set language to english, set locale to en, to use the file "messages_en.properties"
+# For example, to set language to English, set locale to en, to use the file "messages_en.properties"
 # Don't forget to remove the # in front of the line
 # For more information, visit http://wiki.ess3.net/wiki/Locale
 #locale: en
@@ -378,7 +378,7 @@ command-costs:
 currency-symbol: '$'
 
 # Set the maximum amount of money a player can have
-# The amount is always limited to 10 trillions because of the limitations of a java double
+# The amount is always limited to 10 trillion because of the limitations of a java double
 max-money: 10000000000000
 
 # Set the minimum amount of money a player can have (must be above the negative of max-money).
