@@ -24,9 +24,9 @@ public class Commandtppos extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		final int x = Integer.parseInt(args[0]);
-		final int y = Integer.parseInt(args[1]);
-		final int z = Integer.parseInt(args[2]);
+		final double x = args[0].startsWith("~") ? user.getLocation().getX() + Integer.parseInt(args[0].substring(1)) : Integer.parseInt(args[0]);
+		final double y = args[1].startsWith("~") ? user.getLocation().getY() + Integer.parseInt(args[1].substring(1)) : Integer.parseInt(args[1]);
+		final double z = args[2].startsWith("~") ? user.getLocation().getZ() + Integer.parseInt(args[2].substring(1)) : Integer.parseInt(args[2]);
 		final Location location = new Location(user.getWorld(), x, y, z);
 		if (args.length > 3)
 		{
@@ -36,7 +36,7 @@ public class Commandtppos extends EssentialsCommand
 		{
 			location.setPitch(Float.parseFloat(args[4]));
 		}
-		if (x > 30000000 ||  y > 30000000 || z > 30000000 || x < -30000000 || y < -30000000 || z < -30000000)
+		if (x > 30000000 || y > 30000000 || z > 30000000 || x < -30000000 || y < -30000000 || z < -30000000)
 		{
 			throw new NotEnoughArgumentsException("Value of coordinates cannot be over 30000000"); //todo: I18n
 		}
@@ -56,9 +56,9 @@ public class Commandtppos extends EssentialsCommand
 		}
 
 		User user = ess.getUser(server.getPlayer(args[0]));
-		final int x = Integer.parseInt(args[1]);
-		final int y = Integer.parseInt(args[2]);
-		final int z = Integer.parseInt(args[3]);
+		final double x = args[1].startsWith("~") ? user.getLocation().getX() + Integer.parseInt(args[1].substring(1)) : Integer.parseInt(args[1]);
+		final double y = args[2].startsWith("~") ? user.getLocation().getY() + Integer.parseInt(args[2].substring(1)) : Integer.parseInt(args[2]);
+		final double z = args[3].startsWith("~") ? user.getLocation().getZ() + Integer.parseInt(args[3].substring(1)) : Integer.parseInt(args[3]);
 		final Location location = new Location(user.getWorld(), x, y, z);
 		if (args.length > 4)
 		{
@@ -68,13 +68,13 @@ public class Commandtppos extends EssentialsCommand
 		{
 			location.setPitch(Float.parseFloat(args[5]));
 		}
-		if (x > 30000000 ||  y > 30000000 || z > 30000000 || x < -30000000 || y < -30000000 || z < -30000000)
+		if (x > 30000000 || y > 30000000 || z > 30000000 || x < -30000000 || y < -30000000 || z < -30000000)
 		{
 			throw new NotEnoughArgumentsException("Value of coordinates cannot be over 30000000"); //todo: I18n
 		}
 		sender.sendMessage(_("teleporting"));
 		user.sendMessage(_("teleporting"));
 		user.getTeleport().teleport(location, null, TeleportCause.COMMAND);
-		
+
 	}
 }
