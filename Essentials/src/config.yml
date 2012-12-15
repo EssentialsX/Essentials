@@ -32,11 +32,10 @@ change-displayname: true
 # The value of change-displayname (above) has to be true.
 #change-playerlist: true
 
-# Adds the prefix and suffix to the displayname of the player, so it will be displayed in messages and lists.
-# The prefix/suffix can be set using Permissions, Group Manager or PermissionsEx.
+# When essentialschat.jar isnt used, force essentials to add the prefix and suffix from permission plugins to displayname
+# This setting is ignored if essentialschat.jar is used, and defaults to 'true'
 # The value of change-displayname (above) has to be true.
-# If you don't set this, it will default to true if essentials chat is installed.
-# Don't forget to remove the # in front of the line
+# Do not edit this setting unless you know what you are doing!
 #add-prefix-suffix: false
 
 # The delay, in seconds, required between /home, /tp, etc.
