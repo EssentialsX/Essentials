@@ -98,7 +98,6 @@ public class Commandtp extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		sender.sendMessage(_("teleporting"));
 		final User target = getPlayer(server, args, 0);
 		if (args.length == 2)
 		{
@@ -118,6 +117,9 @@ public class Commandtp extends EssentialsCommand
 			final Location location = new Location(target.getWorld(), x, y, z);
 			target.getTeleport().now(location, false, TeleportCause.COMMAND);
 			target.sendMessage(_("teleporting"));
+		} else {
+			throw new NotEnoughArgumentsException();
 		}
+		sender.sendMessage(_("teleporting"));
 	}
 }
