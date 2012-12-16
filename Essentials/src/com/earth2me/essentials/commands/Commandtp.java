@@ -46,7 +46,6 @@ public class Commandtp extends EssentialsCommand
 			{
 				throw new Exception(_("noPerm", "essentials.tp.others"));
 			}
-			user.sendMessage(_("teleporting"));
 			final User target2 = getPlayer(server, args, 0);
 			final double x = args[1].startsWith("~") ? target2.getLocation().getX() + Integer.parseInt(args[1].substring(1)) : Integer.parseInt(args[1]);
 			final double y = args[2].startsWith("~") ? target2.getLocation().getY() + Integer.parseInt(args[2].substring(1)) : Integer.parseInt(args[2]);
@@ -61,6 +60,7 @@ public class Commandtp extends EssentialsCommand
 				throw new Exception(_("teleportDisabled", target2.getDisplayName()));
 			}
 			target2.getTeleport().now(location, false, TeleportCause.COMMAND);
+			user.sendMessage(_("teleporting"));
 			target2.sendMessage(_("teleporting"));
 		case 2:
 		default:
@@ -68,7 +68,6 @@ public class Commandtp extends EssentialsCommand
 			{
 				throw new Exception(_("noPerm", "essentials.tp.others"));
 			}
-			user.sendMessage(_("teleporting"));
 			final User target = getPlayer(server, args, 0);
 			final User toPlayer = getPlayer(server, args, 1);
 			if (!target.isTeleportEnabled())
@@ -85,6 +84,7 @@ public class Commandtp extends EssentialsCommand
 				throw new Exception(_("noPerm", "essentials.worlds." + toPlayer.getWorld().getName()));
 			}
 			target.getTeleport().now(toPlayer, false, TeleportCause.COMMAND);
+			user.sendMessage(_("teleporting"));
 			target.sendMessage(_("teleportAtoB", user.getDisplayName(), toPlayer.getDisplayName()));
 			break;
 		}
