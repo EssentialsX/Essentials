@@ -134,6 +134,14 @@ public class MetricsStarter implements Runnable
 			{
 				enabledGraph.addPlotter(new SimplePlotter("Warps"));
 			}
+			if (ess.getSettings().getTeleportCooldown() > 0)
+			{
+				enabledGraph.addPlotter(new SimplePlotter("TeleportCooldown"));
+			}
+			if (ess.getSettings().getTeleportDelay() > 0)
+			{
+				enabledGraph.addPlotter(new SimplePlotter("TeleportDelay"));
+			}
 			if (!ess.getSettings().areSignsDisabled())
 			{
 				enabledGraph.addPlotter(new SimplePlotter("Signs"));
@@ -141,6 +149,14 @@ public class MetricsStarter implements Runnable
 			if (ess.getSettings().getAutoAfk() > 0)
 			{
 				enabledGraph.addPlotter(new SimplePlotter("AutoAFK"));
+			}
+			if (ess.getSettings().changePlayerListName())
+			{
+				enabledGraph.addPlotter(new SimplePlotter("PlayerListName"));
+			}
+			if (ess.getSettings().getOperatorColor() != null)
+			{
+				enabledGraph.addPlotter(new SimplePlotter("OpColour"));
 			}
 			if (ess.getSettings().changeDisplayName())
 			{
