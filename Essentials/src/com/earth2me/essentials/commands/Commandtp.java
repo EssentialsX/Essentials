@@ -62,6 +62,7 @@ public class Commandtp extends EssentialsCommand
 			target2.getTeleport().now(location, false, TeleportCause.COMMAND);
 			user.sendMessage(_("teleporting"));
 			target2.sendMessage(_("teleporting"));
+			break;
 		case 2:
 		default:
 			if (!user.isAuthorized("essentials.tp.others"))
