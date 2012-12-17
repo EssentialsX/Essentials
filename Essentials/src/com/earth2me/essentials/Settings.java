@@ -191,9 +191,13 @@ public class Settings implements ISettings
 			for (String command : section.getKeys(false))
 			{
 				PluginCommand cmd = ess.getServer().getPluginCommand(command);
-				if (cmd == null || !cmd.getPlugin().equals(ess))
+				if (cmd != null && !cmd.getPlugin().equals(ess))
 				{
 					ess.getLogger().warning("Invalid command cost. '" + command + "' is not a command handled by Essentials.");
+				}
+				else if (command.charAt(0) == '/')
+				{
+					ess.getLogger().warning("Invalid command cost. '" + command + "' should not start with '/'.");
 				}
 				if (section.isDouble(command))
 				{
