@@ -351,6 +351,10 @@ sethome-multiple:
 # Set to 0 for no timeout
 tpa-accept-cancellation: 0
 
+# Set the maximum time /tempban can be used for in seconds.
+# Set to -1 to disable, and essentials.tempban.unlimited can be used to override.
+max-tempban-time: -1
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsEco                      | #

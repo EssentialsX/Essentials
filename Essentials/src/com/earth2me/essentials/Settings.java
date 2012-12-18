@@ -986,4 +986,10 @@ public class Settings implements ISettings
 	{
 		return mailsPerMinute;
 	}
+
+	@Override
+	public long getMaxTempban()
+	{
+		return config.getLong("max-tempban-time", -1);
+	}
 }
