@@ -278,6 +278,10 @@ commands:
     description: Displays the username of a user based on nick.
     usage: /<command> <nickname>
     aliases: [erealname]
+  recipe:
+    description: Displays how to craft items.
+    usage: /<command> <item> [number]
+    aliases: [erecipe]
   remove:
     description: Removes entities in your world
     usage: /<command> <drops|arrows|boats|minecarts|xp|paintings> [radius]

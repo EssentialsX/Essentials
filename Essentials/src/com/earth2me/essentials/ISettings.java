@@ -183,4 +183,6 @@ public interface ISettings extends IConf
 	public int getMailsPerMinute();
 
 	public void setEssentialsChatActive(boolean b);
+
+	long getMaxTempban();
 }
