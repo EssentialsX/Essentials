@@ -94,11 +94,11 @@ public class Commandgive extends EssentialsCommand
 		sender.sendMessage(_("giveSpawn", stack.getAmount(), itemName, giveTo.getDisplayName()));
 		if (giveTo.isAuthorized("essentials.oversizedstacks"))
 		{
-			InventoryWorkaround.addItem(giveTo.getInventory(), true, ess.getSettings().getOversizedStackSize(), stack);
+			InventoryWorkaround.addOversizedItems(giveTo.getInventory(), ess.getSettings().getOversizedStackSize(), stack);
 		}
 		else
 		{
-			InventoryWorkaround.addItem(giveTo.getInventory(), true, stack);
+			InventoryWorkaround.addItems(giveTo.getInventory(), stack);
 		}
 		giveTo.updateInventory();
 	}

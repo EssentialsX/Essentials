@@ -77,7 +77,7 @@ public class Trade
 		}
 
 		if (getItemStack() != null
-			&& !InventoryWorkaround.containsItem(user.getInventory(), true, true, itemStack))
+			&& !user.getInventory().containsAtLeast(itemStack, itemStack.getAmount()))
 		{
 			throw new ChargeException(_("missingItems", getItemStack().getAmount(), getItemStack().getType().toString().toLowerCase(Locale.ENGLISH).replace("_", " ")));
 		}
@@ -113,7 +113,7 @@ public class Trade
 		{
 			if (dropItems)
 			{
-				final Map<Integer, ItemStack> leftOver = InventoryWorkaround.addItem(user.getInventory(), true, getItemStack());
+				final Map<Integer, ItemStack> leftOver = InventoryWorkaround.addItems(user.getInventory(), getItemStack());
 				final Location loc = user.getLocation();
 				for (ItemStack itemStack : leftOver.values())
 				{
@@ -137,7 +137,7 @@ public class Trade
 			}
 			else
 			{
-				success = InventoryWorkaround.addAllItems(user.getInventory(), true, getItemStack());
+				success = InventoryWorkaround.addAllItems(user.getInventory(), getItemStack());
 			}
 			user.updateInventory();
 		}
@@ -165,11 +165,11 @@ public class Trade
 		}
 		if (getItemStack() != null)
 		{
-			if (!InventoryWorkaround.containsItem(user.getInventory(), true, true, itemStack))
+			if (!user.getInventory().containsAtLeast(itemStack, itemStack.getAmount()))
 			{
 				throw new ChargeException(_("missingItems", getItemStack().getAmount(), getItemStack().getType().toString().toLowerCase(Locale.ENGLISH).replace("_", " ")));
 			}
-			InventoryWorkaround.removeItem(user.getInventory(), true, true, getItemStack());
+			user.getInventory().removeItem(getItemStack());
 			user.updateInventory();
 		}
 		if (command != null)
