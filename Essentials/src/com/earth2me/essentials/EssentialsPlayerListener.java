@@ -538,6 +538,14 @@ public class EssentialsPlayerListener implements Listener
 				event.setCancelled(true);
 			}
 		}
+		else if (event.getView().getTopInventory().getType() == InventoryType.WORKBENCH)
+		{
+			User user = ess.getUser(event.getWhoClicked());
+			if (user.isRecipeSee())
+			{
+				event.setCancelled(true);
+			}
+		}
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
@@ -553,8 +561,17 @@ public class EssentialsPlayerListener implements Listener
 			final User user = ess.getUser(event.getPlayer());
 			user.setEnderSee(false);
 		}
+		if (event.getView().getTopInventory().getType() == InventoryType.WORKBENCH)
+		{
+			final User user = ess.getUser(event.getPlayer());
+			if(user.isRecipeSee())
+			{
+				user.setRecipeSee(false);
+				event.getView().getTopInventory().clear();
+			}
+		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerFishEvent(final PlayerFishEvent event)
 	{
