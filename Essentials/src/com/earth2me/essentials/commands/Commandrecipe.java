@@ -86,21 +86,31 @@ public class Commandrecipe extends EssentialsCommand
 		Map<Character, ItemStack> recipeMap = recipe.getIngredientMap();
 		if (!(sender instanceof Player))
 		{
-			HashMap<ItemStack, String> colorMap = new HashMap<ItemStack, String>();
+			HashMap<Material, String> colorMap = new HashMap<Material, String>();
 			int i = 1;
 			for (Character c : "abcdefghi".toCharArray())
 			{
-				if (!colorMap.containsKey(recipeMap.get(c)))
+				ItemStack item = recipeMap.get(c);
+				if (!colorMap.containsKey(item == null ? null : item.getType()))
 				{
-					colorMap.put(recipeMap.get(c), String.valueOf(i++));
+					colorMap.put(item == null ? null : item.getType(), String.valueOf(i++));
 				}
 			}
-			sender.sendMessage(_("recipeGrid", colorMap.get(recipeMap.get('a')), colorMap.get(recipeMap.get('b')), colorMap.get(recipeMap.get('c'))));
-			sender.sendMessage(_("recipeGrid", colorMap.get(recipeMap.get('d')), colorMap.get(recipeMap.get('e')), colorMap.get(recipeMap.get('f'))));
-			sender.sendMessage(_("recipeGrid", colorMap.get(recipeMap.get('g')), colorMap.get(recipeMap.get('h')), colorMap.get(recipeMap.get('i'))));
+			Material[][] materials = new Material[3][3];
+			for (int j = 0; j < recipe.getShape().length; j++)
+			{
+				for (int k = 0; k < recipe.getShape()[j].length(); k++)
+				{
+					ItemStack item = recipe.getIngredientMap().get(recipe.getShape()[j].toCharArray()[k]);
+					materials[j][k] = item == null ? null : item.getType();
+				}
+			}
+			sender.sendMessage(_("recipeGrid", colorMap.get(materials[0][0]), colorMap.get(materials[0][1]), colorMap.get(materials[0][2])));
+			sender.sendMessage(_("recipeGrid", colorMap.get(materials[1][0]), colorMap.get(materials[1][1]), colorMap.get(materials[1][2])));
+			sender.sendMessage(_("recipeGrid", colorMap.get(materials[2][0]), colorMap.get(materials[2][1]), colorMap.get(materials[2][2])));
 
 			StringBuilder s = new StringBuilder();
-			for (ItemStack items : colorMap.keySet().toArray(new ItemStack[colorMap.size()]))
+			for (Material items : colorMap.keySet().toArray(new Material[colorMap.size()]))
 			{
 				s.append(_("recipeGridItem", colorMap.get(items), getMaterialName(items)));
 			}
