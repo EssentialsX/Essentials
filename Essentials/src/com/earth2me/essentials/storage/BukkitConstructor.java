@@ -284,7 +284,8 @@ public class BukkitConstructor extends Constructor
 				final Field typeDefField = Constructor.class.getDeclaredField("typeDefinitions");
 				typeDefField.setAccessible(true);
 				typeDefinitions = (Map<Class<? extends Object>, TypeDescription>)typeDefField.get((Constructor)BukkitConstructor.this);
-				if (typeDefinitions == null) {
+				if (typeDefinitions == null)
+				{
 					throw new NullPointerException();
 				}
 			}
@@ -400,31 +401,6 @@ public class BukkitConstructor extends Constructor
 				}
 			}
 			return object;
-		}
-	}
-
-	@Override
-	protected Class<?> getClassForNode(final Node node)
-	{
-		Class<?> clazz;
-		final String name = node.getTag().getClassName();
-		if (plugin == null)
-		{
-			clazz = super.getClassForNode(node);
-		}
-		else
-		{
-			final JavaPluginLoader jpl = (JavaPluginLoader)plugin.getPluginLoader();
-			clazz = jpl.getClassByName(name);
-		}
-
-		if (clazz == null)
-		{
-			throw new YAMLException("Class not found: " + name);
-		}
-		else
-		{
-			return clazz;
 		}
 	}
 }
