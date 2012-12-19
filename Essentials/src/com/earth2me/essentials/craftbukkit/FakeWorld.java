@@ -735,4 +735,10 @@ public class FakeWorld implements World
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
+	@Override
+	public boolean createExplosion(double d, double d1, double d2, float f, boolean bln, boolean bln1)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }

@@ -240,4 +240,10 @@ public class FakeInventory implements Inventory
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
+	@Override
+	public boolean containsAtLeast(ItemStack is, int i)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }
