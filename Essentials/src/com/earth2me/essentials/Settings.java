@@ -237,29 +237,31 @@ public class Settings implements ISettings
 		}
 		return 0.0;
 	}
-	
 	private Set<String> socialSpyCommands = new HashSet<String>();
-	
+
 	public Set<String> _getSocialSpyCommands()
 	{
 		Set<String> socialspyCommands = new HashSet<String>();
-		
-		if (!config.hasProperty("socialspy-commands")) {
-			socialspyCommands.addAll(Arrays.asList("msg", "r", "mail", "m", "whisper", "emsg", "t", "tell", "er", "reply", "ereply", "email", "action", "describe", "eme", "eaction", "edescribe", "etell", "ewhisper", "pm"));
-		}
-		
-		for (String c : config.getStringList("socialspy-commands"))
+
+		if (config.isConfigurationSection("socialspy-commands"))
 		{
-			socialspyCommands.add(c.toLowerCase(Locale.ENGLISH));
+			for (String c : config.getStringList("socialspy-commands"))
+			{
+				socialspyCommands.add(c.toLowerCase(Locale.ENGLISH));
+			}
+		}
+		else
+		{
+			socialspyCommands.addAll(Arrays.asList("msg", "r", "mail", "m", "whisper", "emsg", "t", "tell", "er", "reply", "ereply", "email", "action", "describe", "eme", "eaction", "edescribe", "etell", "ewhisper", "pm"));
 		}
 
 		return socialspyCommands;
 	}
-	
-	public Set<String> getSocialSpyCommands() {
+
+	public Set<String> getSocialSpyCommands()
+	{
 		return socialSpyCommands;
 	}
-	
 	private String nicknamePrefix = "~";
 
 	private String _getNicknamePrefix()
