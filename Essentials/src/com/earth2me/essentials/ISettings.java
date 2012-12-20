@@ -42,6 +42,8 @@ public interface ISettings extends IConf
 
 	double getHealCooldown();
 
+	Set<String> getSocialSpyCommands();
+	
 	Map<String, Object> getKit(String name);
 
 	ConfigurationSection getKits();

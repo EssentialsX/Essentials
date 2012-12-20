@@ -237,6 +237,24 @@ public class Settings implements ISettings
 		}
 		return 0.0;
 	}
+	
+	private Set<String> socialSpyCommands = new HashSet<String>();
+	
+	public Set<String> _getSocialSpyCommands()
+	{
+		Set<String> socialspyCommands = new HashSet<String>();
+		for (String c : config.getStringList("socialspy-commands"))
+		{
+			socialspyCommands.add(c.toLowerCase(Locale.ENGLISH));
+		}
+
+		return socialspyCommands;
+	}
+	
+	public Set<String> getSocialSpyCommands() {
+		return socialSpyCommands;
+	}
+	
 	private String nicknamePrefix = "~";
 
 	private String _getNicknamePrefix()
@@ -462,6 +480,7 @@ public class Settings implements ISettings
 		disableSuffix = _disableSuffix();
 		chatRadius = _getChatRadius();
 		commandCosts = _getCommandCosts();
+		socialSpyCommands = _getSocialSpyCommands();
 		warnOnBuildDisallow = _warnOnBuildDisallow();
 		mailsPerMinute = _getMailsPerMinute();
 	}
