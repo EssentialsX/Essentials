@@ -15,7 +15,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -790,41 +789,6 @@ public class EssentialsUpgrade
 		doneFile.save();
 	}
 
-	private void updateNumberedHomeNames()
-	{
-		if (doneFile.getBoolean("numberedHomeNames"))
-		{
-			return;
-		}
-		File[] files = new File(ess.getDataFolder(), "userdata").listFiles();
-		for(File file : files)
-		{
-			EssentialsConf config = new EssentialsConf(file);
-			config.load();
-			ConfigurationSection homesSection = config.getConfigurationSection("homes");
-			if(homesSection == null)
-			{
-				continue;
-			}
-			Set<String> homes = homesSection.getKeys(true);
-			for(String s : homes)
-			{
-				if(!s.contains(".") && Util.isInt(s))
-				{
-					ConfigurationSection home = config.getConfigurationSection("homes." + s);
-					double x = home.getDouble("x"), y = home.getDouble("y"), z = home.getDouble("z"), yaw = home.getDouble("yaw"), pitch = home.getDouble("pitch");
-					config.setProperty("homes.home" + s, new Location(ess.getServer().getWorld(home.getString("world")), home.getDouble("x"), home.getDouble("y"), home.getDouble("z"), (float)home.getDouble("yaw"), (float)home.getDouble("pitch")));
-					config.removeProperty("homes." + s);
-				}
-			}
-			config.save();
-		}
-		
-
-		doneFile.setProperty("numberedHomeNames", true);
-		doneFile.save();
-	}
-
 	public void beforeSettings()
 	{
 		if (!ess.getDataFolder().exists())
@@ -847,7 +811,6 @@ public class EssentialsUpgrade
 		deleteOldItemsCsv();
 		updateSpawnsToNewSpawnsConfig();
 		updateJailsToNewJailsConfig();
-		updateNumberedHomeNames();
 		warnMetrics();
 	}
 }
