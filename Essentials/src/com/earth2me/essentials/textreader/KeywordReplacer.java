@@ -3,7 +3,9 @@ package com.earth2me.essentials.textreader;
 import com.earth2me.essentials.DescParseTickFormat;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,7 +44,7 @@ public class KeywordReplacer implements IText
 			userName = user.getName();
 			ipAddress = user.getAddress() == null || user.getAddress().getAddress() == null ? "" : user.getAddress().getAddress().toString();
 			address = user.getAddress() == null ? "" : user.getAddress().toString();
-			balance = Double.toString(user.getMoney());
+			balance = Util.displayCurrency(user.getMoney(), ess);
 			mails = Integer.toString(user.getMails().size());
 			world = user.getLocation() == null || user.getLocation().getWorld() == null ? "" : user.getLocation().getWorld().getName();
 			worldTime12 = DescParseTickFormat.format12(user.getWorld() == null ? 0 : user.getWorld().getTime());
