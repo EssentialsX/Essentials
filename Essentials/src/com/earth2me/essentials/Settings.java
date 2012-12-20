@@ -191,7 +191,7 @@ public class Settings implements ISettings
 			for (String command : section.getKeys(false))
 			{
 				PluginCommand cmd = ess.getServer().getPluginCommand(command);
-				if (cmd != null && !cmd.getPlugin().equals(ess))
+				if (cmd != null && !cmd.getPlugin().equals(ess) && !isCommandOverridden(command))
 				{
 					ess.getLogger().warning("Invalid command cost. '" + command + "' is not a command handled by Essentials.");
 				}
