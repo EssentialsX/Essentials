@@ -35,12 +35,23 @@ public class Commandseen extends EssentialsCommand
 		}
 		try
 		{
-			User player = getPlayer(server, args, 0);
-			player.setDisplayNick();
-			sender.sendMessage(_("seenOnline", player.getDisplayName(), Util.formatDateDiff(player.getLastLogin())));
+			User user = getPlayer(server, args, 0);
+			user.setDisplayNick();
+			sender.sendMessage(_("seenOnline", user.getDisplayName(), Util.formatDateDiff(user.getLastLogin())));
+			sender.sendMessage(_("whoisAFK", (user.isAfk() ? _("true") : _("false"))));
+			sender.sendMessage(_("whoisJail", (user.isJailed()
+											   ? user.getJailTimeout() > 0
+												 ? Util.formatDateDiff(user.getJailTimeout())
+												 : _("true")
+											   : _("false"))));
+			sender.sendMessage(_("whoisMuted", (user.isMuted()
+											   ? user.getMuteTimeout() > 0
+												 ? Util.formatDateDiff(user.getMuteTimeout())
+												 : _("true")
+											   : _("false"))));
 			if (extra)
 			{
-				sender.sendMessage(_("whoisIPAddress", player.getAddress().getAddress().toString()));
+				sender.sendMessage(_("whoisIPAddress", user.getAddress().getAddress().toString()));
 			}
 		}
 		catch (NoSuchFieldException e)
