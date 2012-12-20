@@ -16,7 +16,7 @@ public final class InventoryWorkaround
 	{
 	}
 
-	public static int firstPartial(final Inventory inventory, final ItemStack item, final int maxAmount)
+	private static int firstPartial(final Inventory inventory, final ItemStack item, final int maxAmount)
 	{
 		if (item == null)
 		{
@@ -38,9 +38,9 @@ public final class InventoryWorkaround
 	{
 		final Inventory fakeInventory = Bukkit.getServer().createInventory(null, inventory.getType());
 		fakeInventory.setContents(inventory.getContents());
-		if (fakeInventory.addItem(items).isEmpty())
+		if (addItems(fakeInventory, items).isEmpty())
 		{
-			inventory.addItem(items);
+			addItems(inventory, items);
 			return true;
 		}
 		return false;
