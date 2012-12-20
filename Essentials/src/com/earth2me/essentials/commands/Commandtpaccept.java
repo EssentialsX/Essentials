@@ -52,14 +52,6 @@ public class Commandtpaccept extends EssentialsCommand
 		}
 
 		final Trade charge = new Trade(this.getName(), ess);
-		if (user.isTpRequestHere())
-		{
-			charge.isAffordableFor(user);
-		}
-		else
-		{
-			charge.isAffordableFor(target);
-		}
 		user.sendMessage(_("requestAccepted"));
 		target.sendMessage(_("requestAcceptedFrom", user.getDisplayName()));
 
