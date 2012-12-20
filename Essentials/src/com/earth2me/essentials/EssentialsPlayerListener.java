@@ -335,14 +335,13 @@ public class EssentialsPlayerListener implements Listener
 			});
 		}
 	}
-	private final static List<String> COMMANDS = Arrays.asList("msg", "w", "r", "mail", "m", "t", "whisper", "emsg", "tell", "er", "reply", "ereply", "email", "action", "describe", "eme", "eaction", "edescribe", "etell", "ewhisper", "pm");
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerCommandPreprocess(final PlayerCommandPreprocessEvent event)
 	{
 		final Player player = event.getPlayer();
 		final String cmd = event.getMessage().toLowerCase(Locale.ENGLISH).split(" ")[0].replace("/", "").toLowerCase(Locale.ENGLISH);
-		if (COMMANDS.contains(cmd))
+		if (ess.getSettings().getSocialSpyCommands().contains(cmd))
 		{
 			for (Player onlinePlayer : ess.getServer().getOnlinePlayers())
 			{

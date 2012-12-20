@@ -91,6 +91,32 @@ overridden-commands:
 disabled-commands:
 #  - nick
 
+# These commands will be shown to players with socialSpy enabled
+# You can add commands from other plugins you may want to track or 
+# remove commands that are used for something you dont want to spy on
+socialspy-commands:
+  - msg
+  - w
+  - r
+  - mail
+  - m
+  - t
+  - whisper
+  - emsg
+  - tell
+  - er
+  - reply
+  - ereply
+  - email
+  - action
+  - describe
+  - eme
+  - eaction
+  - edescribe
+  - etell
+  - ewhisper
+  - pm
+
 # If you do not wish to use a permission system, you can define a list of 'player perms' below.
 # This list has no effect if you are using a supported permissions system.
 # If you are using an unsupported permissions system simply delete this section.
