@@ -82,7 +82,7 @@ public class HelpInput implements IText
 								{
 									permissions = value.get(PERMISSIONS);
 								}
-								if (isOnWhitelist)
+								if (isOnWhitelist || user.isAuthorized("essentials.help." + pluginNameLow + "." + k.getKey()))
 								{
 									pluginLines.add(_("helpLine", k.getKey(), value.get(DESCRIPTION)));
 								}
