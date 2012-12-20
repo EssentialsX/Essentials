@@ -801,7 +801,12 @@ public class EssentialsUpgrade
 		{
 			EssentialsConf config = new EssentialsConf(file);
 			config.load();
-			Set<String> homes = config.getConfigurationSection("homes").getKeys(true);
+			ConfigurationSection homesSection = config.getConfigurationSection("homes");
+			if(homesSection == null)
+			{
+				continue;
+			}
+			Set<String> homes = homesSection.getKeys(true);
 			for(String s : homes)
 			{
 				if(!s.contains(".") && Util.isInt(s))
