@@ -243,6 +243,11 @@ public class Settings implements ISettings
 	public Set<String> _getSocialSpyCommands()
 	{
 		Set<String> socialspyCommands = new HashSet<String>();
+		
+		if (!config.hasProperty("socialspy-commands")) {
+			socialspyCommands.addAll(Arrays.asList("msg", "r", "mail", "m", "whisper", "emsg", "t", "tell", "er", "reply", "ereply", "email", "action", "describe", "eme", "eaction", "edescribe", "etell", "ewhisper", "pm"));
+		}
+		
 		for (String c : config.getStringList("socialspy-commands"))
 		{
 			socialspyCommands.add(c.toLowerCase(Locale.ENGLISH));
