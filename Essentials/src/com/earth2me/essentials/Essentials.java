@@ -368,6 +368,19 @@ public class Essentials extends JavaPlugin implements IEssentials
 				return true;
 			}
 
+			if (user != null && user.isJailed() && !user.isAuthorized(cmd, "essentials.jail.allow."))
+			{
+				if (user.getJailTimeout() > 0)
+				{
+					user.sendMessage(_("playerJailedFor", user.getName(), Util.formatDateDiff(user.getJailTimeout())));
+				}
+				else
+				{
+					user.sendMessage(_("jailMessage"));
+				}
+				return true;
+			}
+
 			// Run the command
 			try
 			{
@@ -471,7 +484,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 		return null;
 	}
-	
+
 	@Override
 	public User getOfflineUser(final String name)
 	{

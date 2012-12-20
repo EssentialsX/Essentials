@@ -45,10 +45,10 @@ public class Commandseen extends EssentialsCommand
 												 : _("true")
 											   : _("false"))));
 			sender.sendMessage(_("whoisMuted", (user.isMuted()
-											   ? user.getMuteTimeout() > 0
-												 ? Util.formatDateDiff(user.getMuteTimeout())
-												 : _("true")
-											   : _("false"))));
+												? user.getMuteTimeout() > 0
+												  ? Util.formatDateDiff(user.getMuteTimeout())
+												  : _("true")
+												: _("false"))));
 			if (extra)
 			{
 				sender.sendMessage(_("whoisIPAddress", user.getAddress().getAddress().toString()));
@@ -71,7 +71,8 @@ public class Commandseen extends EssentialsCommand
 			{
 				sender.sendMessage(_("whoisIPAddress", player.getLastLoginAddress()));
 				final Location loc = player.getLastLocation();
-				if (loc != null) {
+				if (loc != null)
+				{
 					sender.sendMessage(_("whoisLocation", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
 				}
 			}

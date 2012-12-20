@@ -80,11 +80,6 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			return false;
 		}
 
-		if (isJailed())
-		{
-			return false;
-		}
-
 		try
 		{
 			return ess.getPermissionsHandler().hasPermission(base, node);
