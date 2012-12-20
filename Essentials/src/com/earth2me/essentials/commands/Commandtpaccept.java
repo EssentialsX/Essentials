@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.ChargeException;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
@@ -55,13 +56,21 @@ public class Commandtpaccept extends EssentialsCommand
 		user.sendMessage(_("requestAccepted"));
 		target.sendMessage(_("requestAcceptedFrom", user.getDisplayName()));
 
-		if (user.isTpRequestHere())
+		try
 		{
-			target.getTeleport().teleportToMe(user, charge, TeleportCause.COMMAND);
+			if (user.isTpRequestHere())
+			{
+				target.getTeleport().teleportToMe(user, charge, TeleportCause.COMMAND);
+			}
+			else
+			{
+				target.getTeleport().teleport(user, charge, TeleportCause.COMMAND);
+			}
 		}
-		else
+		catch (ChargeException ex)
 		{
-			target.getTeleport().teleport(user, charge, TeleportCause.COMMAND);
+			user.sendMessage(_("pendingTeleportCancelled"));
+			ess.showError(target, ex, commandLabel);
 		}
 		user.requestTeleport(null, false);
 		throw new NoChargeException();
