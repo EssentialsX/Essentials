@@ -84,7 +84,18 @@ public class Commandrecipe extends EssentialsCommand
 	public void shapedRecipe(CommandSender sender, ShapedRecipe recipe)
 	{
 		Map<Character, ItemStack> recipeMap = recipe.getIngredientMap();
-		if (!(sender instanceof Player))
+		if (sender instanceof Player)
+		{
+			User user = ess.getUser(sender);
+			user.setRecipeSee(true);
+			InventoryView view = user.openWorkbench(null, true);
+			for (Entry<Character, ItemStack> e : ((ShapedRecipe)recipe).getIngredientMap().entrySet())
+			{
+				view.setItem(" abcdefghi".indexOf(e.getKey()), e.getValue());
+			}
+
+		}
+		else
 		{
 			HashMap<Material, String> colorMap = new HashMap<Material, String>();
 			int i = 1;
@@ -116,22 +127,23 @@ public class Commandrecipe extends EssentialsCommand
 			}
 			sender.sendMessage(_("recipeWhere", s.toString()));
 		}
-		else
-		{
-			User user = ess.getUser(sender);
-			user.setRecipeSee(true);
-			InventoryView view = user.openWorkbench(null, true);
-			for (Entry<Character, ItemStack> e : ((ShapedRecipe)recipe).getIngredientMap().entrySet())
-			{
-				view.setItem(" abcdefghi".indexOf(e.getKey()), e.getValue());
-			}
-		}
 	}
 
 	public void shapelessRecipe(CommandSender sender, ShapelessRecipe recipe)
 	{
 		List<ItemStack> ingredients = recipe.getIngredientList();
-		if (!(sender instanceof Player))
+		if (sender instanceof Player)
+		{
+			User user = ess.getUser(sender);
+			user.setRecipeSee(true);
+			InventoryView view = user.openWorkbench(null, true);
+			for (int i = 0; i < ingredients.size(); i++)
+			{
+				view.setItem(i + 1, ingredients.get(i));
+			}
+
+		}
+		else
 		{
 			StringBuilder s = new StringBuilder();
 			for (int i = 0; i < ingredients.size(); i++)
@@ -144,16 +156,6 @@ public class Commandrecipe extends EssentialsCommand
 				s.append(" ");
 			}
 			sender.sendMessage(_("recipeShapeless", s.toString()));
-		}
-		else
-		{
-			User user = ess.getUser(sender);
-			user.setRecipeSee(true);
-			InventoryView view = user.openWorkbench(null, true);
-			for (int i = 0; i < ingredients.size(); i++)
-			{
-				view.setItem(i + 1, ingredients.get(i));
-			}
 		}
 	}
 
