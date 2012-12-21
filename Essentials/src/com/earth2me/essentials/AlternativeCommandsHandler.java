@@ -121,13 +121,14 @@ public class AlternativeCommandsHandler
 		return commands.get(0);
 	}
 
-	public void executed(final String label, final String otherLabel)
+	public void executed(final String label, final PluginCommand pc)
 	{
+		final String altString = pc.getPlugin().getName() + ":" + pc.getLabel();
 		if (ess.getSettings().isDebug())
 		{
-			LOGGER.log(Level.INFO, "Essentials: Alternative command " + label + " found, using " + otherLabel);
+			LOGGER.log(Level.INFO, "Essentials: Alternative command " + label + " found, using " + altString);
 		}
-		disabledList.put(label, otherLabel);
+		disabledList.put(label, altString);
 	}
 
 	public Map<String, String> disabledCommands()

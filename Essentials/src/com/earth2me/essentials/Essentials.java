@@ -308,7 +308,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 			final PluginCommand pc = alternativeCommandsHandler.getAlternative(commandLabel);
 			if (pc != null)
 			{
-				alternativeCommandsHandler.executed(commandLabel, pc.getLabel());
+				alternativeCommandsHandler.executed(commandLabel, pc);
 				try
 				{
 					return pc.execute(sender, commandLabel, args);
