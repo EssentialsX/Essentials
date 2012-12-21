@@ -281,7 +281,7 @@ commands:
   recipe:
     description: Displays how to craft items.
     usage: /<command> <item> [number]
-    aliases: [erecipe]
+    aliases: [method, formula, recipes, emethod, eformula, erecipes, erecipe]
   remove:
     description: Removes entities in your world
     usage: /<command> <drops|arrows|boats|minecarts|xp|paintings> [radius]
