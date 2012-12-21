@@ -84,14 +84,17 @@ public class Commandrecipe extends EssentialsCommand
 	public void shapedRecipe(CommandSender sender, ShapedRecipe recipe)
 	{
 		Map<Character, ItemStack> recipeMap = recipe.getIngredientMap();
+		
 		if (sender instanceof Player)
 		{
 			User user = ess.getUser(sender);
 			user.setRecipeSee(true);
 			InventoryView view = user.openWorkbench(null, true);
+			String shapeMap = recipe.getShape().length == 2 ? " abecdfghi" : " abcdefghi";
 			for (Entry<Character, ItemStack> e : ((ShapedRecipe)recipe).getIngredientMap().entrySet())
-			{
-				view.setItem(" abcdefghi".indexOf(e.getKey()), e.getValue());
+			{				
+				e.getValue().setAmount(0);
+				view.setItem(shapeMap.indexOf(e.getKey()), e.getValue());
 			}
 
 		}
