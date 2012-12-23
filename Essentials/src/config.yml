@@ -351,6 +351,9 @@ mails-per-minute: 1000
 # Set to -1 to disable, and essentials.tempban.unlimited can be used to override.
 max-tempban-time: -1
 
+# Require users have essentials.chat before they can speak? Any users without this node will not be able to speak
+enable-chat-perm: false
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #

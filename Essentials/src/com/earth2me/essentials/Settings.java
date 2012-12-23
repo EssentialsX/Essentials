@@ -1014,4 +1014,10 @@ public class Settings implements ISettings
 	{
 		return config.getLong("max-tempban-time", -1);
 	}
+
+	@Override
+	public boolean isChatPermEnabled()
+	{
+		return config.getBoolean("enable-chat-perm", false);
+	}
 }
