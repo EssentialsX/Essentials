@@ -47,5 +47,5 @@ public interface IUser extends Player
 
 	boolean isAfk();
 
-	void setAfk();
+	void setAfk(final boolean set);
 }
