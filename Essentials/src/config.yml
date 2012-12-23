@@ -347,6 +347,10 @@ max-fly-speed: 0.8
 #Set the maximum amount of mail that can be sent within a minute.
 mails-per-minute: 1000
 
+# Set the maximum time /tempban can be used for in seconds.
+# Set to -1 to disable, and essentials.tempban.unlimited can be used to override.
+max-tempban-time: -1
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #
@@ -376,10 +380,6 @@ sethome-multiple:
 # Set timeout in seconds for players to accept tpa before request is cancelled.
 # Set to 0 for no timeout
 tpa-accept-cancellation: 0
-
-# Set the maximum time /tempban can be used for in seconds.
-# Set to -1 to disable, and essentials.tempban.unlimited can be used to override.
-max-tempban-time: -1
 
 ############################################################
 # +------------------------------------------------------+ #
