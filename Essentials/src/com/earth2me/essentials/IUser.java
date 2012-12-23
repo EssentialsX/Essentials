@@ -44,4 +44,8 @@ public interface IUser extends Player
 	void setJail(String jail);
 	
 	boolean isIgnoreExempt();
+
+	boolean isAfk();
+
+	void setAfk();
 }
