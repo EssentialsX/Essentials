@@ -12,6 +12,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.ChatColor;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.event.EventPriority;
@@ -189,6 +190,11 @@ public class Settings implements ISettings
 			final ConfigurationSection newSection = new MemoryConfiguration();
 			for (String command : section.getKeys(false))
 			{
+				PluginCommand cmd = ess.getServer().getPluginCommand(command);
+				if (command.charAt(0) == '/')
+				{
+					ess.getLogger().warning("Invalid command cost. '" + command + "' should not start with '/'.");
+				}
 				if (section.isDouble(command))
 				{
 					newSection.set(command.toLowerCase(Locale.ENGLISH), section.getDouble(command));
@@ -196,6 +202,24 @@ public class Settings implements ISettings
 				else if (section.isInt(command))
 				{
 					newSection.set(command.toLowerCase(Locale.ENGLISH), (double)section.getInt(command));
+				}
+				else if (section.isString(command))
+				{
+					String costString = section.getString(command);
+					try
+					{
+						double cost = Double.parseDouble(costString.trim().replace(getCurrencySymbol(), "").replaceAll("\\W", ""));
+						newSection.set(command.toLowerCase(Locale.ENGLISH), cost);
+					}
+					catch (NumberFormatException ex)
+					{
+						ess.getLogger().warning("Invalid command cost for: " + command + " (" + costString + ")");
+					}
+
+				}
+				else
+				{
+					ess.getLogger().warning("Invalid command cost for: " + command);
 				}
 			}
 			return newSection;
@@ -212,6 +236,31 @@ public class Settings implements ISettings
 			return commandCosts.getDouble(name, 0.0);
 		}
 		return 0.0;
+	}
+	private Set<String> socialSpyCommands = new HashSet<String>();
+
+	public Set<String> _getSocialSpyCommands()
+	{
+		Set<String> socialspyCommands = new HashSet<String>();
+
+		if (config.isConfigurationSection("socialspy-commands"))
+		{
+			for (String c : config.getStringList("socialspy-commands"))
+			{
+				socialspyCommands.add(c.toLowerCase(Locale.ENGLISH));
+			}
+		}
+		else
+		{
+			socialspyCommands.addAll(Arrays.asList("msg", "r", "mail", "m", "whisper", "emsg", "t", "tell", "er", "reply", "ereply", "email", "action", "describe", "eme", "eaction", "edescribe", "etell", "ewhisper", "pm"));
+		}
+
+		return socialspyCommands;
+	}
+
+	public Set<String> getSocialSpyCommands()
+	{
+		return socialSpyCommands;
 	}
 	private String nicknamePrefix = "~";
 
@@ -438,6 +487,7 @@ public class Settings implements ISettings
 		disableSuffix = _disableSuffix();
 		chatRadius = _getChatRadius();
 		commandCosts = _getCommandCosts();
+		socialSpyCommands = _getSocialSpyCommands();
 		warnOnBuildDisallow = _warnOnBuildDisallow();
 		mailsPerMinute = _getMailsPerMinute();
 	}
@@ -946,15 +996,28 @@ public class Settings implements ISettings
 		double maxSpeed = config.getDouble("max-walk-speed", 0.8);
 		return maxSpeed > 1.0 ? 1.0 : Math.abs(maxSpeed);
 	}
-	
 	private int mailsPerMinute;
 
-	private int _getMailsPerMinute() {
+	private int _getMailsPerMinute()
+	{
 		return config.getInt("mails-per-minute", 1000);
 	}
+
 	@Override
 	public int getMailsPerMinute()
 	{
 		return mailsPerMinute;
+	}
+
+	@Override
+	public long getMaxTempban()
+	{
+		return config.getLong("max-tempban-time", -1);
+	}
+
+	@Override
+	public boolean isChatPermEnabled()
+	{
+		return config.getBoolean("enable-chat-perm", false);
 	}
 }

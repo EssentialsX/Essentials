@@ -29,6 +29,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	private boolean rightClickJump = false;
 	private transient Location afkPosition = null;
 	private boolean invSee = false;
+	private boolean recipeSee = false;
 	private boolean enderSee = false;
 	private static final Logger logger = Logger.getLogger("Minecraft");
 
@@ -75,11 +76,6 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	{
 
 		if (base instanceof OfflinePlayer)
-		{
-			return false;
-		}
-
-		if (isJailed())
 		{
 			return false;
 		}
@@ -742,5 +738,15 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public boolean isIgnoreExempt()
 	{
 		return this.isAuthorized("essentials.chat.ignoreexempt");		
+	}
+
+	public boolean isRecipeSee()
+	{
+		return recipeSee;
+	}
+
+	public void setRecipeSee(boolean recipeSee)
+	{
+		this.recipeSee = recipeSee;
 	}
 }

@@ -35,12 +35,28 @@ public class Commandseen extends EssentialsCommand
 		}
 		try
 		{
-			User player = getPlayer(server, args, 0);
-			player.setDisplayNick();
-			sender.sendMessage(_("seenOnline", player.getDisplayName(), Util.formatDateDiff(player.getLastLogin())));
+			User user = getPlayer(server, args, 0);
+			user.setDisplayNick();
+			sender.sendMessage(_("seenOnline", user.getDisplayName(), Util.formatDateDiff(user.getLastLogin())));
+			if (user.isAfk())
+			{
+				sender.sendMessage(_("whoisAFK", _("true")));
+			}
+			if (user.isJailed())
+			{
+				sender.sendMessage(_("whoisJail", (user.getJailTimeout() > 0
+												   ? Util.formatDateDiff(user.getJailTimeout())
+												   : _("true"))));
+			}
+			if (user.isMuted())
+			{
+				sender.sendMessage(_("whoisMuted", (user.getMuteTimeout() > 0
+													? Util.formatDateDiff(user.getMuteTimeout())
+													: _("true"))));
+			}
 			if (extra)
 			{
-				sender.sendMessage(_("whoisIPAddress", player.getAddress().getAddress().toString()));
+				sender.sendMessage(_("whoisIPAddress", user.getAddress().getAddress().toString()));
 			}
 		}
 		catch (NoSuchFieldException e)
@@ -60,7 +76,8 @@ public class Commandseen extends EssentialsCommand
 			{
 				sender.sendMessage(_("whoisIPAddress", player.getLastLoginAddress()));
 				final Location loc = player.getLastLocation();
-				if (loc != null) {
+				if (loc != null)
+				{
 					sender.sendMessage(_("whoisLocation", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
 				}
 			}

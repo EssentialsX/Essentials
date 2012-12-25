@@ -12,6 +12,7 @@ import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.*;
+import org.bukkit.entity.Skeleton.SkeletonType;
 import org.bukkit.material.Colorable;
 
 
@@ -34,20 +35,20 @@ public class SpawnMob
 		}
 		return Util.joinList(availableList);
 	}
-	
-	public static String[] mobData(final String mobString) 
+
+	public static String[] mobData(final String mobString)
 	{
 		String[] returnString = new String[4];
-		
+
 		final String[] parts = mobString.split(",");
 		String[] mobParts = parts[0].split(":");
-		
+
 		returnString[0] = mobParts[0];
 		if (mobParts.length == 2)
 		{
 			returnString[1] = mobParts[1];
 		}
-		
+
 		if (parts.length > 1)
 		{
 			String[] mountParts = parts[1].split(":");
@@ -57,8 +58,8 @@ public class SpawnMob
 				returnString[3] = mountParts[1];
 			}
 		}
-		
-		return returnString;			
+
+		return returnString;
 	}
 
 	// This method spawns a mob where the user is looking, owned by user
@@ -71,7 +72,7 @@ public class SpawnMob
 		}
 		spawnmob(ess, server, user, user, block.getLocation(), Data, mobCount);
 	}
-	
+
 	// This method spawns a mob at loc, owned by noone
 	public static void spawnmob(final IEssentials ess, final Server server, final CommandSender sender, final Location loc, final String[] Data, int mobCount) throws Exception
 	{
@@ -83,7 +84,7 @@ public class SpawnMob
 	{
 		spawnmob(ess, server, sender, target, target.getLocation(), Data, mobCount);
 	}
-	
+
 	// This method spawns a mob at loc, owned by target
 	public static void spawnmob(final IEssentials ess, final Server server, final CommandSender sender, final User target, final Location loc, final String[] Data, int mobCount) throws Exception
 	{
@@ -91,7 +92,7 @@ public class SpawnMob
 		final String mobType = Data[0];
 		final String mobData = Data[1];
 		final String mountType = Data[2];
-		final String mountData = Data[3];		
+		final String mountData = Data[3];
 
 		Mob mob = Mob.fromName(mobType);
 		Mob mobMount = null;
@@ -137,7 +138,7 @@ public class SpawnMob
 	{
 		Entity spawnedMob = mob.spawn(sloc.getWorld(), server, sloc);
 		Entity spawnedMount = null;
-		
+
 		if (mobMount != null)
 		{
 			spawnedMount = mobMount.spawn(sloc.getWorld(), server, sloc);
@@ -186,14 +187,16 @@ public class SpawnMob
 				throw new Exception(_("slimeMalformedSize"), e);
 			}
 		}
-		if (spawned instanceof Ageable && data.contains("baby"))
+
+		if ((spawned instanceof Ageable) && data.contains("baby"))
 		{
 			((Ageable)spawned).setBaby();
-			return;
+			data = data.replace("baby", "");
 		}
+
 		if (spawned instanceof Colorable)
 		{
-			final String color = data.toUpperCase(Locale.ENGLISH).replace("BABY", "");
+			final String color = data.toUpperCase(Locale.ENGLISH);
 			try
 			{
 				if (color.equals("RANDOM"))
@@ -201,7 +204,7 @@ public class SpawnMob
 					final Random rand = new Random();
 					((Colorable)spawned).setColor(DyeColor.values()[rand.nextInt(DyeColor.values().length)]);
 				}
-				else
+				else if (color.length() > 1)
 				{
 					((Colorable)spawned).setColor(DyeColor.valueOf(color));
 				}
@@ -211,21 +214,28 @@ public class SpawnMob
 				throw new Exception(_("sheepMalformedColor"), e);
 			}
 		}
+
 		if (spawned instanceof Tameable && data.contains("tamed") && target != null)
 		{
 			final Tameable tameable = ((Tameable)spawned);
 			tameable.setTamed(true);
 			tameable.setOwner(target.getBase());
+			data = data.replace("tamed", "");
 		}
-		if (type == EntityType.WOLF
-			&& data.contains("angry"))
+
+		if (type == EntityType.WOLF)
 		{
-			((Wolf)spawned).setAngry(true);
+			if (data.contains("angry"))
+			{
+				((Wolf)spawned).setAngry(true);
+			}
 		}
+
 		if (type == EntityType.CREEPER && data.contains("powered"))
 		{
 			((Creeper)spawned).setPowered(true);
 		}
+
 		if (type == EntityType.OCELOT)
 		{
 			if (data.contains("siamese"))
@@ -241,6 +251,7 @@ public class SpawnMob
 				((Ocelot)spawned).setCatType(Ocelot.Type.BLACK_CAT);
 			}
 		}
+
 		if (type == EntityType.VILLAGER)
 		{
 			for (Villager.Profession prof : Villager.Profession.values())
@@ -251,5 +262,26 @@ public class SpawnMob
 				}
 			}
 		}
+
+		if (spawned instanceof Zombie)
+		{
+			if (data.contains("villager"))
+			{
+				((Zombie)spawned).setVillager(true);
+			}
+			if (data.contains("baby"))
+			{
+				((Zombie)spawned).setBaby(true);
+			}
+		}
+
+		if (type == EntityType.SKELETON)
+		{
+			if (data.contains("wither"))
+			{
+				((Skeleton)spawned).setSkeletonType(SkeletonType.WITHER);
+			}
+		}
+
 	}
 }

@@ -47,6 +47,7 @@ public class HelpInput implements IText
 					newLines.clear();
 					lines.add(_("helpFrom", p.getDescription().getName()));
 				}
+				final boolean isOnWhitelist = user.isAuthorized("essentials.help." + pluginNameLow);
 
 				for (Map.Entry<String, Map<String, Object>> k : cmds.entrySet())
 				{
@@ -81,7 +82,7 @@ public class HelpInput implements IText
 								{
 									permissions = value.get(PERMISSIONS);
 								}
-								if (user.isAuthorized("essentials.help." + pluginNameLow))
+								if (isOnWhitelist || user.isAuthorized("essentials.help." + pluginNameLow + "." + k.getKey()))
 								{
 									pluginLines.add(_("helpLine", k.getKey(), value.get(DESCRIPTION)));
 								}

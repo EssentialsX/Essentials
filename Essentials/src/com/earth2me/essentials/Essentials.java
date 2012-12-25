@@ -65,7 +65,7 @@ import org.yaml.snakeyaml.error.YAMLException;
 
 public class Essentials extends JavaPlugin implements IEssentials
 {
-	public static final int BUKKIT_VERSION = 2455;
+	public static final int BUKKIT_VERSION = 2543;
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private transient ISettings settings;
 	private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
@@ -308,7 +308,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 			final PluginCommand pc = alternativeCommandsHandler.getAlternative(commandLabel);
 			if (pc != null)
 			{
-				alternativeCommandsHandler.executed(commandLabel, pc.getLabel());
+				alternativeCommandsHandler.executed(commandLabel, pc);
 				try
 				{
 					return pc.execute(sender, commandLabel, args);
@@ -365,6 +365,19 @@ public class Essentials extends JavaPlugin implements IEssentials
 			{
 				LOGGER.log(Level.WARNING, _("deniedAccessCommand", user.getName()));
 				user.sendMessage(_("noAccessCommand"));
+				return true;
+			}
+
+			if (user != null && user.isJailed() && !user.isAuthorized(cmd, "essentials.jail.allow."))
+			{
+				if (user.getJailTimeout() > 0)
+				{
+					user.sendMessage(_("playerJailedFor", user.getName(), Util.formatDateDiff(user.getJailTimeout())));
+				}
+				else
+				{
+					user.sendMessage(_("jailMessage"));
+				}
 				return true;
 			}
 
@@ -471,7 +484,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 		return null;
 	}
-	
+
 	@Override
 	public User getOfflineUser(final String name)
 	{

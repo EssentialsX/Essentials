@@ -158,11 +158,11 @@ public class Kit
 				final Map<Integer, ItemStack> overfilled;
 				if (user.isAuthorized("essentials.oversizedstacks"))
 				{
-					overfilled = InventoryWorkaround.addItem(user.getInventory(), true, ess.getSettings().getOversizedStackSize(), stack);
+					overfilled = InventoryWorkaround.addOversizedItems(user.getInventory(), ess.getSettings().getOversizedStackSize(), stack);
 				}
 				else
 				{
-					overfilled = InventoryWorkaround.addItem(user.getInventory(), true, 0, stack);
+					overfilled = InventoryWorkaround.addItems(user.getInventory(), stack);
 				}
 				for (ItemStack itemStack : overfilled.values())
 				{

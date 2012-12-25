@@ -22,6 +22,8 @@ public class Commandsell extends EssentialsCommand
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
+		double totalWorth = 0.0;
+		String type = "";
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
@@ -41,11 +43,15 @@ public class Commandsell extends EssentialsCommand
 				}
 				try
 				{
-					sellItem(user, stack, args, true);
+					totalWorth += sellItem(user, stack, args, true);				
 				}
 				catch (Exception e)
 				{
 				}
+			}
+			if (totalWorth > 0)
+			{
+				user.sendMessage(_("totalWorthAll", type, Util.displayCurrency(totalWorth, ess)));
 			}
 			return;
 		}
@@ -59,11 +65,15 @@ public class Commandsell extends EssentialsCommand
 				}
 				try
 				{
-					sellItem(user, stack, args, true);
+					totalWorth += sellItem(user, stack, args, true);
 				}
 				catch (Exception e)
 				{
 				}
+			}
+			if (totalWorth > 0)
+			{
+				user.sendMessage(_("totalWorthBlocks", type, Util.displayCurrency(totalWorth, ess)));
 			}
 			return;
 		}
@@ -74,7 +84,7 @@ public class Commandsell extends EssentialsCommand
 		sellItem(user, is, args, false);
 	}
 
-	private void sellItem(User user, ItemStack is, String[] args, boolean isBulkSell) throws Exception
+	private double sellItem(User user, ItemStack is, String[] args, boolean isBulkSell) throws Exception
 	{
 		if (is == null || is.getType() == Material.AIR)
 		{
@@ -149,19 +159,19 @@ public class Commandsell extends EssentialsCommand
 			}
 			else
 			{
-				return;
+				return worth * amount;
 			}
 		}
 
 		//TODO: Prices for Enchantments
 		final ItemStack ris = is.clone();
 		ris.setAmount(amount);
-		InventoryWorkaround.removeItem(user.getInventory(), true, true, ris);
+		user.getInventory().removeItem(ris);
 		user.updateInventory();
 		Trade.log("Command", "Sell", "Item", user.getName(), new Trade(ris, ess), user.getName(), new Trade(worth * amount, ess), user.getLocation(), ess);
 		user.giveMoney(worth * amount);
 		user.sendMessage(_("itemSold", Util.displayCurrency(worth * amount, ess), amount, is.getType().toString().toLowerCase(Locale.ENGLISH), Util.displayCurrency(worth, ess)));
 		logger.log(Level.INFO, _("itemSoldConsole", user.getDisplayName(), is.getType().toString().toLowerCase(Locale.ENGLISH), Util.displayCurrency(worth * amount, ess), amount, Util.displayCurrency(worth, ess)));
-
+		return worth * amount;
 	}
 }

@@ -32,11 +32,10 @@ change-displayname: true
 # The value of change-displayname (above) has to be true.
 #change-playerlist: true
 
-# Adds the prefix and suffix to the displayname of the player, so it will be displayed in messages and lists.
-# The prefix/suffix can be set using Permissions, Group Manager or PermissionsEx.
+# When essentialschat.jar isnt used, force essentials to add the prefix and suffix from permission plugins to displayname
+# This setting is ignored if essentialschat.jar is used, and defaults to 'true'
 # The value of change-displayname (above) has to be true.
-# If you don't set this, it will default to true if essentials chat is installed.
-# Don't forget to remove the # in front of the line
+# Do not edit this setting unless you know what you are doing!
 #add-prefix-suffix: false
 
 # The delay, in seconds, required between /home, /tp, etc.
@@ -65,6 +64,7 @@ item-spawn-blacklist:
 #  - essentials.give.item-all
 #  - essentials.give.item-[itemname]
 #  - essentials.give.item-[itemid]
+# For more information, visit http://wiki.ess3.net/wiki/Command_Reference/ICheat#Item.2FGive
 permission-based-item-spawn: false
 
 # Mob limit on the /spawnmob command per execution
@@ -76,7 +76,7 @@ warn-on-smite: true
 # motd and rules are now configured in the files motd.txt and rules.txt
 
 # When a command conflicts with another plugin, by default, Essentials will try to force the OTHER plugin to take priority.
-# Commands in in this list, will tell Essentials to 'not give up' the command to other plugins.
+# Commands in this list, will tell Essentials to 'not give up' the command to other plugins.
 # In this state, which plugin 'wins' appears to be almost random.
 # 
 # If you have two plugin with the same command and you wish to force Essentials to take over, you need an alias.
@@ -90,6 +90,32 @@ overridden-commands:
 # Disabling commands here will have no effect on command conflicts.
 disabled-commands:
 #  - nick
+
+# These commands will be shown to players with socialSpy enabled
+# You can add commands from other plugins you may want to track or 
+# remove commands that are used for something you dont want to spy on
+socialspy-commands:
+  - msg
+  - w
+  - r
+  - mail
+  - m
+  - t
+  - whisper
+  - emsg
+  - tell
+  - er
+  - reply
+  - ereply
+  - email
+  - action
+  - describe
+  - eme
+  - eaction
+  - edescribe
+  - etell
+  - ewhisper
+  - pm
 
 # If you do not wish to use a permission system, you can define a list of 'player perms' below.
 # This list has no effect if you are using a supported permissions system.
@@ -181,6 +207,7 @@ player-commands:
 # All kit names should be lower case, and will be treated as lower in permissions/costs.
 # Syntax: - itemID[:DataValue] Amount [Enchantment:Level]..
 # 'delay' refers to the cooldown between how often you can use each kit, measured in seconds.
+# For more information, visit http://wiki.ess3.net/wiki/Command_Reference/ICheat#kits
 kits:
   dtools:
     delay: 10
@@ -246,8 +273,10 @@ debug: false
 
 # Set the locale for all messages
 # If you don't set this, the default locale of the server will be used.
+# For example, to set language to English, set locale to en, to use the file "messages_en.properties"
 # Don't forget to remove the # in front of the line
-#locale: de_DE
+# For more information, visit http://wiki.ess3.net/wiki/Locale
+#locale: en
 
 # Turn off god mode when people exit
 remove-god-on-disconnect: false
@@ -318,6 +347,13 @@ max-fly-speed: 0.8
 #Set the maximum amount of mail that can be sent within a minute.
 mails-per-minute: 1000
 
+# Set the maximum time /tempban can be used for in seconds.
+# Set to -1 to disable, and essentials.tempban.unlimited can be used to override.
+max-tempban-time: -1
+
+# Require users have essentials.chat before they can speak? Any users without this node will not be able to speak
+enable-chat-perm: false
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #
@@ -336,6 +372,7 @@ world-home-permissions: false
 # Players need essentials.sethome.multiple before they can have more than 1 home, defaults to 'default' below.
 # Define different amounts of multiple homes for different permissions, e.g. essentials.sethome.multiple.vip
 # People with essentials.sethome.multiple.unlimited are not limited by these numbers.
+# For more information, visit http://wiki.ess3.net/wiki/Multihome
 sethome-multiple:  
   default: 3
   # essentials.sethome.multiple.vip
@@ -352,6 +389,8 @@ tpa-accept-cancellation: 0
 # |                   EssentialsEco                      | #
 # +------------------------------------------------------+ #
 ############################################################
+
+# For more information, visit http://wiki.ess3.net/wiki/Essentials_Economy
 
 # Defines the balance with which new players begin.  Defaults to 0.
 starting-balance: 0
@@ -371,7 +410,7 @@ command-costs:
 currency-symbol: '$'
 
 # Set the maximum amount of money a player can have
-# The amount is always limited to 10 trillions because of the limitations of a java double
+# The amount is always limited to 10 trillion because of the limitations of a java double
 max-money: 10000000000000
 
 # Set the minimum amount of money a player can have (must be above the negative of max-money).
@@ -573,6 +612,7 @@ protect:
 ############################################################
 
   # Disable various default physics and behaviors
+  # For more information, visit http://wiki.ess3.net/wiki/AntiBuild
 
     # Should people with build: false in permissions be allowed to build
     # Set true to disable building for those people

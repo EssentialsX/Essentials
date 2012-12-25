@@ -13,22 +13,22 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPluginLoader;
 import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.constructor.CustomClassLoaderConstructor;
 import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.introspector.Property;
 import org.yaml.snakeyaml.nodes.*;
 
 
-public class BukkitConstructor extends Constructor
+public class BukkitConstructor extends CustomClassLoaderConstructor
 {
 	private final transient Pattern NUMPATTERN = Pattern.compile("\\d+");
 	private final transient Plugin plugin;
 
 	public BukkitConstructor(final Class clazz, final Plugin plugin)
 	{
-		super(clazz);
+		super(clazz, plugin.getClass().getClassLoader());
 		this.plugin = plugin;
 		yamlClassConstructors.put(NodeId.scalar, new ConstructBukkitScalar());
 		yamlClassConstructors.put(NodeId.mapping, new ConstructBukkitMapping());
@@ -276,6 +276,7 @@ public class BukkitConstructor extends Constructor
 			return super.construct(node);
 		}
 
+		@Override
 		protected Object constructJavaBean2ndStep(final MappingNode node, final Object object)
 		{
 			Map<Class<? extends Object>, TypeDescription> typeDefinitions;
@@ -284,7 +285,8 @@ public class BukkitConstructor extends Constructor
 				final Field typeDefField = Constructor.class.getDeclaredField("typeDefinitions");
 				typeDefField.setAccessible(true);
 				typeDefinitions = (Map<Class<? extends Object>, TypeDescription>)typeDefField.get((Constructor)BukkitConstructor.this);
-				if (typeDefinitions == null) {
+				if (typeDefinitions == null)
+				{
 					throw new NullPointerException();
 				}
 			}
@@ -400,31 +402,6 @@ public class BukkitConstructor extends Constructor
 				}
 			}
 			return object;
-		}
-	}
-
-	@Override
-	protected Class<?> getClassForNode(final Node node)
-	{
-		Class<?> clazz;
-		final String name = node.getTag().getClassName();
-		if (plugin == null)
-		{
-			clazz = super.getClassForNode(node);
-		}
-		else
-		{
-			final JavaPluginLoader jpl = (JavaPluginLoader)plugin.getPluginLoader();
-			clazz = jpl.getClassByName(name);
-		}
-
-		if (clazz == null)
-		{
-			throw new YAMLException("Class not found: " + name);
-		}
-		else
-		{
-			return clazz;
 		}
 	}
 }

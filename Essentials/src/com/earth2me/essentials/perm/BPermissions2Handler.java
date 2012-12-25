@@ -35,7 +35,7 @@ public class BPermissions2Handler extends SuperpermsHandler
 	@Override
 	public boolean inGroup(final Player base, final String group)
 	{
-		return ApiLayer.hasGroup(base.getWorld().getName(), CalculableType.USER, base.getName(), group);
+		return ApiLayer.hasGroupRecursive(base.getWorld().getName(), CalculableType.USER, base.getName(), group);
 	}
 
 	@Override

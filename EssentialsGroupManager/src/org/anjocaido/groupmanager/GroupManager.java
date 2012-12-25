@@ -34,9 +34,11 @@ import org.anjocaido.groupmanager.utils.Tasks;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.ServicePriority;
@@ -380,6 +382,12 @@ public class GroupManager extends JavaPlugin {
 		Group senderGroup = null;
 		User senderUser = null;
 		boolean isOpOverride = config.isOpOverride();
+		
+		// PREVENT GM COMMANDS BEING USED ON COMMANDBLOCKS
+		if (sender instanceof BlockCommandSender) {
+			sender.sendMessage(ChatColor.RED + "GM Commands can not be called from CommandBlocks");
+		  	return true;
+		}
 
 		if (sender.getClass().getName().equals("org.bukkit.craftbukkit.command.CraftBlockCommandSender")) {
 			sender.sendMessage(ChatColor.RED + "GM Commands can not be called from CommandBlocks");
@@ -403,7 +411,7 @@ public class GroupManager extends JavaPlugin {
 			if (isOpOverride || worldsHolder.getWorldPermissions(senderPlayer).has(senderPlayer, "groupmanager." + cmd.getName())) {
 				playerCanDo = true;
 			}
-		} else if (sender instanceof ConsoleCommandSender) {
+		} else if ((sender instanceof ConsoleCommandSender) || (sender instanceof RemoteConsoleCommandSender)) {
 
 			if (!lastError.isEmpty() && !commandLabel.equalsIgnoreCase("manload")) {
 				sender.sendMessage(ChatColor.RED + "All commands are locked due to an error." + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Check the log" + ChatColor.RESET + " and then try a '/manload'.");

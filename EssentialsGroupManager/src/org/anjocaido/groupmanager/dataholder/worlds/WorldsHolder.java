@@ -204,10 +204,10 @@ public class WorldsHolder {
 								mirroredWorlds.add((String)key);
 
 							} else
-								GroupManager.logger.log(Level.WARNING, "Mirroring error with " + (String)key + ". Recursive loop detected!");
+								throw new IllegalStateException("Unknown mirroring format for " + (String)key);
 
 						} else {
-							throw new IllegalStateException("Unknown mirroring format for " + (String)key);
+							GroupManager.logger.log(Level.WARNING, "Mirroring error with " + (String)key + ". Recursive loop detected!");
 						}
 
 					}

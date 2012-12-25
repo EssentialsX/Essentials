@@ -2,10 +2,12 @@ package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.ITeleport;
+import com.earth2me.essentials.commands.NoChargeException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Logger;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -56,6 +58,7 @@ public class Teleport implements Runnable, ITeleport
 	private long initY;
 	private long initZ;
 	private Target teleportTarget;
+	private boolean respawn;
 	private Trade chargeFor;
 	private final IEssentials ess;
 	private static final Logger logger = Logger.getLogger("Minecraft");
@@ -63,10 +66,10 @@ public class Teleport implements Runnable, ITeleport
 
 	private void initTimer(long delay, Target target, Trade chargeFor, TeleportCause cause)
 	{
-		initTimer(delay, user, target, chargeFor, cause);
+		initTimer(delay, user, target, chargeFor, cause, false);
 	}
 
-	private void initTimer(long delay, IUser teleportUser, Target target, Trade chargeFor, TeleportCause cause)
+	private void initTimer(long delay, IUser teleportUser, Target target, Trade chargeFor, TeleportCause cause, boolean respawn)
 	{
 		this.started = System.currentTimeMillis();
 		this.tpdelay = delay;
@@ -78,6 +81,7 @@ public class Teleport implements Runnable, ITeleport
 		this.teleportTarget = target;
 		this.chargeFor = chargeFor;
 		this.cause = cause;
+		this.respawn = respawn;
 	}
 
 	@Override
@@ -115,8 +119,12 @@ public class Teleport implements Runnable, ITeleport
 				teleportUser.sendMessage(_("teleportationCommencing"));
 				try
 				{
-
-					teleportUser.getTeleport().now(teleportTarget, cause);
+					if (respawn) {
+						teleportUser.getTeleport().respawn(cause);
+					}
+					else {
+						teleportUser.getTeleport().now(teleportTarget, cause);
+					}
 					cancel(false);
 					if (chargeFor != null)
 					{
@@ -241,7 +249,7 @@ public class Teleport implements Runnable, ITeleport
 	{
 		teleport(loc, chargeFor, TeleportCause.PLUGIN);
 	}
-		
+
 	public void teleport(Location loc, Trade chargeFor, TeleportCause cause) throws Exception
 	{
 		teleport(new Target(loc), chargeFor, cause);
@@ -283,7 +291,6 @@ public class Teleport implements Runnable, ITeleport
 	public void teleportToMe(User otherUser, Trade chargeFor, TeleportCause cause) throws Exception
 	{
 		Target target = new Target(user);
-
 		double delay = ess.getSettings().getTeleportDelay();
 
 		if (chargeFor != null)
@@ -304,8 +311,7 @@ public class Teleport implements Runnable, ITeleport
 
 		cancel(false);
 		warnUser(otherUser, delay);
-		initTimer((long)(delay * 1000.0), otherUser, target, chargeFor, cause);
-
+		initTimer((long)(delay * 1000.0), otherUser, target, chargeFor, cause, false);
 		teleTimer = ess.scheduleSyncRepeatingTask(this, 10, 10);
 	}
 
@@ -320,11 +326,42 @@ public class Teleport implements Runnable, ITeleport
 	//The respawn function is a wrapper used to handle tp fallback, on /jail and /home
 	public void respawn(final Trade chargeFor, TeleportCause cause) throws Exception
 	{
+		double delay = ess.getSettings().getTeleportDelay();
+		if (chargeFor != null)
+		{
+			chargeFor.isAffordableFor(user);
+		}
+		cooldown(true);
+		if (delay <= 0 || user.isAuthorized("essentials.teleport.timer.bypass"))
+		{
+			cooldown(false);
+			respawn(cause);
+			if (chargeFor != null)
+			{
+				chargeFor.charge(user);
+			}
+			return;
+		}
+
+		cancel(false);
+		initTimer((long)(delay * 1000.0), user, null, chargeFor, cause, true);
+		teleTimer = ess.scheduleSyncRepeatingTask(this, 10, 10);
+	}
+		
+	public void respawn(TeleportCause cause) throws Exception
+	{
 		final Player player = user.getBase();
-		final Location bed = player.getBedSpawnLocation();
-		final PlayerRespawnEvent pre = new PlayerRespawnEvent(player, bed == null ? player.getWorld().getSpawnLocation() : bed, bed != null);
-		ess.getServer().getPluginManager().callEvent(pre);
-		teleport(new Target(pre.getRespawnLocation()), chargeFor, cause);
+		Location bed = player.getBedSpawnLocation();
+		if (bed != null && bed.getBlock().getType() != Material.BED_BLOCK)
+		{
+			now(new Target(bed), cause);
+		}
+		else
+		{
+			final PlayerRespawnEvent pre = new PlayerRespawnEvent(player, player.getWorld().getSpawnLocation(), false);
+			ess.getServer().getPluginManager().callEvent(pre);
+			now(new Target(pre.getRespawnLocation()), cause);
+		}
 	}
 
 	//The warp function is a wrapper used to teleport a player to a /warp
@@ -332,7 +369,7 @@ public class Teleport implements Runnable, ITeleport
 	{
 		Location loc = ess.getWarps().getWarp(warp);
 		user.sendMessage(_("warpingTo", warp));
-		teleport(new Target(loc), chargeFor, cause);		
+		teleport(new Target(loc), chargeFor, cause);
 	}
 
 	//The back function is a wrapper used to teleport a player /back to their previous location.	

@@ -233,7 +233,7 @@ commands:
   msg:
     description: Sends a private message to the specified player.
     usage: /<command> <to> <message>
-    aliases: [m,t,emsg,tell,etell,whisper,ewhisper]
+    aliases: [w,m,t,emsg,tell,etell,whisper,ewhisper]
   mute:
     description: Mutes or unmutes a player.
     usage: /<command> <player> [datediff]
@@ -278,6 +278,10 @@ commands:
     description: Displays the username of a user based on nick.
     usage: /<command> <nickname>
     aliases: [erealname]
+  recipe:
+    description: Displays how to craft items.
+    usage: /<command> <item> [number]
+    aliases: [method, formula, recipes, emethod, eformula, erecipes, erecipe]
   remove:
     description: Removes entities in your world
     usage: /<command> <drops|arrows|boats|minecarts|xp|paintings> [radius]
