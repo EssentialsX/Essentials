@@ -187,6 +187,4 @@ public interface ISettings extends IConf
 	public void setEssentialsChatActive(boolean b);
 
 	long getMaxTempban();
-
-	boolean isChatPermEnabled();
 }
