@@ -60,12 +60,6 @@ public class EssentialsPlayerListener implements Listener
 			user.sendMessage(_("playerMuted"));
 			LOGGER.info(_("mutedUserSpeaks", user.getName()));
 		}
-		if(ess.getSettings().isChatPermEnabled() && !user.isAuthorized("essentials.chat.allowed"))
-		{
-			event.setCancelled(true);
-			user.sendMessage(_("playerChatDenied"));
-			LOGGER.info(_("mutedUserSpeaks", user.getName()));
-		}
 		final Iterator<Player> it = event.getRecipients().iterator();
 		while (it.hasNext())
 		{
