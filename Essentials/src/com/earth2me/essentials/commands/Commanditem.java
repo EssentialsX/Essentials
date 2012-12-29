@@ -16,7 +16,7 @@ public class Commanditem extends EssentialsCommand
 	{
 		super("item");
 	}
-
+	
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
@@ -25,7 +25,7 @@ public class Commanditem extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 		final ItemStack stack = ess.getItemDb().get(args[0]);
-
+		
 		final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 		if (ess.getSettings().permissionBasedItemSpawn()
 			? (!user.isAuthorized("essentials.itemspawn.item-all")
@@ -69,7 +69,14 @@ public class Commanditem extends EssentialsCommand
 					{
 						level = enchantment.getMaxLevel();
 					}
-					stack.addEnchantment(enchantment, level);
+					if (ess.getSettings().allowUnsafeEnchantments() && user.isAuthorized("essentials.enchant.allowunsafe"))
+					{
+						stack.addUnsafeEnchantment(enchantment, level);
+					}
+					else
+					{
+						stack.addEnchantment(enchantment, level);
+					}
 				}
 			}
 		}
@@ -77,12 +84,12 @@ public class Commanditem extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-
+		
 		if (stack.getType() == Material.AIR)
 		{
 			throw new Exception(_("cantSpawnItem", "Air"));
 		}
-
+		
 		final String displayName = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ');
 		user.sendMessage(_("itemSpawn", stack.getAmount(), displayName));
 		if (user.isAuthorized("essentials.oversizedstacks"))

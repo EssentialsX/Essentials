@@ -856,6 +856,12 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("repair-enchanted", true);
 	}
+	
+	@Override
+	public boolean allowUnsafeEnchantments()
+	{
+		return config.getBoolean("unsafe-enchantments", false);
+	}
 
 	@Override
 	public boolean isWorldTeleportPermissions()

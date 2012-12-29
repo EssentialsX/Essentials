@@ -81,7 +81,19 @@ public class Commandgive extends EssentialsCommand
 				{
 					level = enchantment.getMaxLevel();
 				}
-				stack.addEnchantment(enchantment, level);
+				boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
+				if (allowUnsafe && sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.enchant.allowunsafe"))
+				{
+					allowUnsafe = false;
+				}
+				if (allowUnsafe)
+				{
+					stack.addUnsafeEnchantment(enchantment, level);
+				}
+				else
+				{
+					stack.addEnchantment(enchantment, level);
+				}
 			}
 		}
 
