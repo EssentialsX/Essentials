@@ -11,6 +11,7 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import org.bukkit.entity.Player;
 import org.jivesoftware.smack.*;
 import org.jivesoftware.smack.Roster.SubscriptionMode;
@@ -22,6 +23,7 @@ import org.jivesoftware.smack.util.StringUtils;
 public class XMPPManager extends Handler implements MessageListener, ChatManagerListener, IConf
 {
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
+	private static final SimpleFormatter formatter = new SimpleFormatter();
 	private final transient EssentialsConf config;
 	private transient XMPPConnection connection;
 	private transient ChatManager chatManager;
@@ -262,7 +264,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 								XMPPManager.this.startChat(user);
 								for (LogRecord logRecord : copy)
 								{
-									final String message = String.format("[" + logRecord.getLevel().getLocalizedName() + "] " + logRecord.getMessage(), logRecord.getParameters());
+									final String message = formatter.format(logRecord);
 									if (!XMPPManager.this.sendMessage(user, Util.stripLogColorFormat(message)))
 									{
 										failedUsers.add(user);
