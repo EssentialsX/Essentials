@@ -929,7 +929,7 @@ public class Settings implements ISettings
 	@Override
 	public long getTpaAcceptCancellation()
 	{
-		return config.getLong("tpa-accept-cancellation", 0);
+		return config.getLong("tpa-accept-cancellation", 120);
 	}
 
 	@Override
