@@ -44,6 +44,12 @@ public class Enchantments
 		ENCHANTMENTS.put("unbreaking", Enchantment.DURABILITY);
 		ALIASENCHANTMENTS.put("d", Enchantment.DURABILITY);
 		
+		ENCHANTMENTS.put("thorns", Enchantment.THORNS);
+		ENCHANTMENTS.put("highcrit", Enchantment.THORNS);
+		ALIASENCHANTMENTS.put("thorn", Enchantment.THORNS);
+		ALIASENCHANTMENTS.put("highercrit", Enchantment.THORNS);
+		ALIASENCHANTMENTS.put("t", Enchantment.THORNS);
+		
 		ENCHANTMENTS.put("fireaspect", Enchantment.FIRE_ASPECT);
 		ENCHANTMENTS.put("fire", Enchantment.FIRE_ASPECT);
 		ALIASENCHANTMENTS.put("meleefire", Enchantment.FIRE_ASPECT);
@@ -129,7 +135,7 @@ public class Enchantments
 		ALIASENCHANTMENTS.put("infinite", Enchantment.ARROW_INFINITE);
 		ALIASENCHANTMENTS.put("unlimited", Enchantment.ARROW_INFINITE);
 		ALIASENCHANTMENTS.put("unlimitedarrows", Enchantment.ARROW_INFINITE);
-		ALIASENCHANTMENTS.put("ai", Enchantment.ARROW_INFINITE);
+		ALIASENCHANTMENTS.put("ai", Enchantment.ARROW_INFINITE);			
 	}
 	
 	public static Enchantment getByName(String name) {
