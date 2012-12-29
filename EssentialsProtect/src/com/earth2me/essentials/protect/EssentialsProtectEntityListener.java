@@ -233,7 +233,7 @@ public class EssentialsProtectEntityListener implements Listener
 			event.setCancelled(true);
 			return;
 		}
-
+		
 		// This code will prevent explosions near protected rails, signs or protected chests
 		// TODO: Use protect db instead of this code
 

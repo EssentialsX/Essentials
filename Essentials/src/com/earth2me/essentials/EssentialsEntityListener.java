@@ -75,7 +75,7 @@ public class EssentialsEntityListener implements Listener
 			event.setCancelled(true);
 		}
 
-		if (attacker.hasInvulnerabilityAfterTeleport() || defender.hasInvulnerabilityAfterTeleport())
+		if (!attacker.equals(defender) && (attacker.hasInvulnerabilityAfterTeleport() || defender.hasInvulnerabilityAfterTeleport()))
 		{
 			event.setCancelled(true);
 		}
