@@ -131,6 +131,10 @@ public class EssentialsPlayerListener implements Listener
 		{
 			user.setLastLocation();
 		}
+		if (user.isRecipeSee())
+		{
+			user.getPlayer().getOpenInventory().getTopInventory().clear();
+		}
 		user.updateActivity(false);
 		user.dispose();
 	}
@@ -563,7 +567,7 @@ public class EssentialsPlayerListener implements Listener
 		if (event.getView().getTopInventory().getType() == InventoryType.WORKBENCH)
 		{
 			final User user = ess.getUser(event.getPlayer());
-			if(user.isRecipeSee())
+			if (user.isRecipeSee())
 			{
 				user.setRecipeSee(false);
 				event.getView().getTopInventory().clear();
