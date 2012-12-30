@@ -30,44 +30,40 @@ public class EssentialsEntityListener implements Listener
 	{
 		final Entity eAttack = event.getDamager();
 		final Entity eDefend = event.getEntity();
-		if (eDefend instanceof Player && eAttack instanceof Player)
+		if (eAttack instanceof Player)
 		{
-			final User defender = ess.getUser(eDefend);
 			final User attacker = ess.getUser(eAttack);
-			onPlayerVsPlayerDamage(event, defender, attacker);
-			onPlayerVsPlayerPowertool(event, defender, attacker);
-		}
-		else if (eDefend instanceof Player && eAttack instanceof Projectile)
-		{
-			Entity shooter = ((Projectile)event.getDamager()).getShooter();
-			if (shooter instanceof Player)
+			if (eDefend instanceof Player)
 			{
-				final User defender = ess.getUser(eDefend);
-				final User attacker = ess.getUser(shooter);
-				onPlayerVsPlayerDamage(event, defender, attacker);
-				onPlayerVsPlayerPowertool(event, defender, attacker);
+				onPlayerVsPlayerDamage(event, (Player)eDefend, attacker);
 			}
-		}
-		else if (eAttack instanceof Player)
-		{
-			final User player = ess.getUser(eAttack);
-			player.updateActivity(true);
-			if (eDefend instanceof Ageable)
+			else if (eDefend instanceof Ageable)
 			{
-				final ItemStack hand = player.getItemInHand();
+				final ItemStack hand = attacker.getItemInHand();
 				if (hand != null && hand.getType() == Material.MILK_BUCKET)
 				{
 					((Ageable)eDefend).setBaby();
 					hand.setType(Material.BUCKET);
-					player.setItemInHand(hand);
-					player.updateInventory();
+					attacker.setItemInHand(hand);
+					attacker.updateInventory();
 					event.setCancelled(true);
 				}
+			}
+			attacker.updateActivity(true);
+		}
+		else if (eAttack instanceof Projectile && eDefend instanceof Player)
+		{
+			Entity shooter = ((Projectile)event.getDamager()).getShooter();
+			if (shooter instanceof Player)
+			{
+				final User attacker = ess.getUser(shooter);
+				onPlayerVsPlayerDamage(event, (Player)eDefend, attacker);
+				attacker.updateActivity(true);
 			}
 		}
 	}
 
-	private void onPlayerVsPlayerDamage(final EntityDamageByEntityEvent event, final User defender, final User attacker)
+	private void onPlayerVsPlayerDamage(final EntityDamageByEntityEvent event, final Player defender, final User attacker)
 	{
 		if (ess.getSettings().getLoginAttackDelay() > 0 && !attacker.isAuthorized("essentials.pvpdelay.exempt")
 			&& (System.currentTimeMillis() < (attacker.getLastLogin() + ess.getSettings().getLoginAttackDelay())))
@@ -75,7 +71,7 @@ public class EssentialsEntityListener implements Listener
 			event.setCancelled(true);
 		}
 
-		if (!attacker.equals(defender) && (attacker.hasInvulnerabilityAfterTeleport() || defender.hasInvulnerabilityAfterTeleport()))
+		if (!defender.equals(attacker.getBase()) && (attacker.hasInvulnerabilityAfterTeleport() || ess.getUser(defender).hasInvulnerabilityAfterTeleport()))
 		{
 			event.setCancelled(true);
 		}
@@ -90,10 +86,10 @@ public class EssentialsEntityListener implements Listener
 			event.setCancelled(true);
 		}
 
-		attacker.updateActivity(true);
+		onPlayerVsPlayerPowertool(event, defender, attacker);
 	}
 
-	private void onPlayerVsPlayerPowertool(final EntityDamageByEntityEvent event, final User defender, final User attacker)
+	private void onPlayerVsPlayerPowertool(final EntityDamageByEntityEvent event, final Player defender, final User attacker)
 	{
 		final List<String> commandList = attacker.getPowertool(attacker.getItemInHand());
 		if (commandList != null && !commandList.isEmpty())
