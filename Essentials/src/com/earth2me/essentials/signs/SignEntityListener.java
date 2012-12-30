@@ -39,7 +39,7 @@ public class SignEntityListener implements Listener
 			}
 			for (EssentialsSign sign : ess.getSettings().enabledSigns())
 			{
-				if (sign.getBlocks().contains(block.getType()))
+				if (sign.areHeavyEventRequired() && sign.getBlocks().contains(block.getType()))
 				{
 					event.setCancelled(!sign.onBlockExplode(block, ess));
 					return;
@@ -67,7 +67,7 @@ public class SignEntityListener implements Listener
 		}
 		for (EssentialsSign sign : ess.getSettings().enabledSigns())
 		{
-			if (sign.getBlocks().contains(block.getType())
+			if (sign.areHeavyEventRequired() && sign.getBlocks().contains(block.getType())
 				&& !sign.onBlockBreak(block, ess))
 			{
 				event.setCancelled(true);

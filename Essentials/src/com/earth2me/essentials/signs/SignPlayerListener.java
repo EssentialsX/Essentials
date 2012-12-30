@@ -77,7 +77,7 @@ public class SignPlayerListener implements Listener
 		{
 			for (EssentialsSign sign : ess.getSettings().enabledSigns())
 			{
-				if (sign.getBlocks().contains(block.getType())
+				if (sign.areHeavyEventRequired() && sign.getBlocks().contains(block.getType())
 					&& !sign.onBlockInteract(block, event.getPlayer(), ess))
 				{
 					event.setCancelled(true);
