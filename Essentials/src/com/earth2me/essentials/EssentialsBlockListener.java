@@ -28,8 +28,7 @@ public class EssentialsBlockListener implements Listener
 			return;
 		}
 		final User user = ess.getUser(event.getPlayer());
-		final boolean unlimitedForUser = user.hasUnlimited(is);
-		if (unlimitedForUser && user.getGameMode() == GameMode.SURVIVAL)
+		if (user.hasUnlimited(is) && user.getGameMode() == GameMode.SURVIVAL)
 		{
 			ess.scheduleSyncDelayedTask(
 					new Runnable()

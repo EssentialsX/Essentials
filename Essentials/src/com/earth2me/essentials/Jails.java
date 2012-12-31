@@ -44,6 +44,10 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 		final PluginManager pluginManager = ess.getServer().getPluginManager();
 		final JailListener blockListener = new JailListener();
 		pluginManager.registerEvents(blockListener, ess);
+		if (ess.getSettings().isDebug())
+		{
+			LOGGER.log(Level.INFO, "Registering Jail listener");
+		}
 	}
 
 	@Override
@@ -55,16 +59,24 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 	@Override
 	public void finishRead()
 	{
-		if (enabled == false && getCount() > 0)
-		{
-			registerListeners();
-		}
+		checkRegister();
 	}
 
 	@Override
 	public void finishWrite()
 	{
-		if (enabled == false)
+		checkRegister();
+	}
+	
+	public void resetListener()
+	{
+		enabled = false;
+		checkRegister();
+	}
+
+	private void checkRegister()
+	{
+		if (enabled == false && getCount() > 0)
 		{
 			registerListeners();
 		}

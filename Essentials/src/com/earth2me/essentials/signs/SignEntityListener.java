@@ -24,6 +24,7 @@ public class SignEntityListener implements Listener
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
+			event.getHandlers().unregister(ess);
 			return;
 		}
 		
@@ -53,6 +54,7 @@ public class SignEntityListener implements Listener
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
+			event.getHandlers().unregister(ess);
 			return;
 		}
 

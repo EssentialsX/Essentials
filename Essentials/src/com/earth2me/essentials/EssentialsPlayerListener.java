@@ -76,10 +76,20 @@ public class EssentialsPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerMove(final PlayerMoveEvent event)
 	{
-		if ((!ess.getSettings().cancelAfkOnMove() && !ess.getSettings().getFreezeAfkPlayers())
-			|| event.getFrom().getBlockX() == event.getTo().getBlockX()
-			   && event.getFrom().getBlockZ() == event.getTo().getBlockZ()
-			   && event.getFrom().getBlockY() == event.getTo().getBlockY())
+		if (!ess.getSettings().cancelAfkOnMove() && !ess.getSettings().getFreezeAfkPlayers())
+		{
+			event.getHandlers().unregister(ess);
+
+			if (ess.getSettings().isDebug())
+			{
+				LOGGER.log(Level.INFO, "Unregistering move listener");
+			}
+
+			return;
+		}
+		if (event.getFrom().getBlockX() == event.getTo().getBlockX()
+			&& event.getFrom().getBlockZ() == event.getTo().getBlockZ()
+			&& event.getFrom().getBlockY() == event.getTo().getBlockY())
 		{
 			return;
 		}

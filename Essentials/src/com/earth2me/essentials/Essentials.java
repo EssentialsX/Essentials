@@ -50,6 +50,7 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.world.WorldLoadEvent;
@@ -176,6 +177,8 @@ public class Essentials extends JavaPlugin implements IEssentials
 			itemDb = new ItemDb(this);
 			confList.add(itemDb);
 			execTimer.mark("Init(Worth/ItemDB)");
+			jails = new Jails(this);
+			confList.add(jails);
 			reload();
 		}
 		catch (YAMLException exception)
@@ -207,6 +210,39 @@ public class Essentials extends JavaPlugin implements IEssentials
 		backup = new Backup(this);
 		permissionsHandler = new PermissionsHandler(this, settings.useBukkitPermissions());
 		alternativeCommandsHandler = new AlternativeCommandsHandler(this);
+		
+		timer = new EssentialsTimer(this);
+		getScheduler().scheduleSyncRepeatingTask(this, timer, 100, 100);
+
+		Economy.setEss(this);
+		execTimer.mark("RegHandler");
+
+		final MetricsStarter metricsStarter = new MetricsStarter(this);
+		if (metricsStarter.getStart() != null && metricsStarter.getStart() == true)
+		{
+			getScheduler().scheduleAsyncDelayedTask(this, metricsStarter, 1);
+		}
+		else if (metricsStarter.getStart() != null && metricsStarter.getStart() == false)
+		{
+			final MetricsListener metricsListener = new MetricsListener(this, metricsStarter);
+			pm.registerEvents(metricsListener, this);
+		}
+
+		final String timeroutput = execTimer.end();
+		if (getSettings().isDebug())
+		{
+			LOGGER.log(Level.INFO, "Essentials load " + timeroutput);
+		}
+	}
+	
+	private void registerListeners(PluginManager pm) {
+		HandlerList.unregisterAll(this);
+		
+		if (getSettings().isDebug())
+		{
+			LOGGER.log(Level.INFO, "Registering Listeners");
+		}
+		
 		final EssentialsPluginListener serverListener = new EssentialsPluginListener(this);
 		pm.registerEvents(serverListener, this);
 		confList.add(serverListener);
@@ -231,35 +267,10 @@ public class Essentials extends JavaPlugin implements IEssentials
 
 		final EssentialsWorldListener worldListener = new EssentialsWorldListener(this);
 		pm.registerEvents(worldListener, this);
-
-		//TODO: Check if this should be here, and not above before reload()
-		jails = new Jails(this);
-		confList.add(jails);
-
+		
 		pm.registerEvents(tntListener, this);
-
-		timer = new EssentialsTimer(this);
-		getScheduler().scheduleSyncRepeatingTask(this, timer, 100, 100);
-
-		Economy.setEss(this);
-		execTimer.mark("RegListeners");
-
-		final MetricsStarter metricsStarter = new MetricsStarter(this);
-		if (metricsStarter.getStart() != null && metricsStarter.getStart() == true)
-		{
-			getScheduler().scheduleAsyncDelayedTask(this, metricsStarter, 1);
-		}
-		else if (metricsStarter.getStart() != null && metricsStarter.getStart() == false)
-		{
-			final MetricsListener metricsListener = new MetricsListener(this, metricsStarter);
-			pm.registerEvents(metricsListener, this);
-		}
-
-		final String timeroutput = execTimer.end();
-		if (getSettings().isDebug())
-		{
-			LOGGER.log(Level.INFO, "Essentials load " + timeroutput);
-		}
+		
+		jails.resetListener();		
 	}
 
 	@Override
@@ -291,6 +302,9 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 
 		i18n.updateLocale(settings.getLocale());
+		
+		final PluginManager pm = getServer().getPluginManager();
+		registerListeners(pm);
 	}
 
 	@Override
