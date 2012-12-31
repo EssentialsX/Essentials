@@ -32,7 +32,7 @@ public class SignBlockListener implements Listener
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
-			event.getHandlers().unregister(ess);
+			event.getHandlers().unregister(this);
 			return;
 		}
 
@@ -81,7 +81,7 @@ public class SignBlockListener implements Listener
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
-			event.getHandlers().unregister(ess);
+			event.getHandlers().unregister(this);
 			return;
 		}
 		User user = ess.getUser(event.getPlayer());
@@ -107,7 +107,7 @@ public class SignBlockListener implements Listener
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
-			event.getHandlers().unregister(ess);
+			event.getHandlers().unregister(this);
 			return;
 		}
 
@@ -132,7 +132,7 @@ public class SignBlockListener implements Listener
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
-			event.getHandlers().unregister(ess);
+			event.getHandlers().unregister(this);
 			return;
 		}
 
@@ -166,7 +166,7 @@ public class SignBlockListener implements Listener
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
-			event.getHandlers().unregister(ess);
+			event.getHandlers().unregister(this);
 			return;
 		}
 
@@ -195,7 +195,7 @@ public class SignBlockListener implements Listener
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
-			event.getHandlers().unregister(ess);
+			event.getHandlers().unregister(this);
 			return;
 		}
 
@@ -224,7 +224,7 @@ public class SignBlockListener implements Listener
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
-			event.getHandlers().unregister(ess);
+			event.getHandlers().unregister(this);
 			return;
 		}
 
@@ -255,7 +255,7 @@ public class SignBlockListener implements Listener
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
-			event.getHandlers().unregister(ess);
+			event.getHandlers().unregister(this);
 			return;
 		}
 

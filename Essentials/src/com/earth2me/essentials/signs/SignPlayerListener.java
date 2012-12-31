@@ -30,7 +30,7 @@ public class SignPlayerListener implements Listener
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
-			event.getHandlers().unregister(ess);
+			event.getHandlers().unregister(this);
 			return;
 		}
 		if (event.getAction() != Action.RIGHT_CLICK_BLOCK && event.getAction() != Action.RIGHT_CLICK_AIR)

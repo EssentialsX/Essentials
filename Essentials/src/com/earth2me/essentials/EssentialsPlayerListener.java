@@ -78,7 +78,7 @@ public class EssentialsPlayerListener implements Listener
 	{
 		if (!ess.getSettings().cancelAfkOnMove() && !ess.getSettings().getFreezeAfkPlayers())
 		{
-			event.getHandlers().unregister(ess);
+			event.getHandlers().unregister(this);
 
 			if (ess.getSettings().isDebug())
 			{
