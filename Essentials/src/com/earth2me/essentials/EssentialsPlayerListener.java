@@ -568,26 +568,9 @@ public class EssentialsPlayerListener implements Listener
 		{
 			final User user = ess.getUser(event.getWhoClicked());
 			final InventoryHolder invHolder = top.getHolder();
-			if (invHolder != null && invHolder instanceof HumanEntity)
+			if (invHolder != null && invHolder instanceof HumanEntity && user.isInvSee())
 			{
-				final User invOwner = ess.getUser((HumanEntity)invHolder);
-
-				if (user.isInvSee() && (!user.isAuthorized("essentials.invsee.modify")
-										|| invOwner.isAuthorized("essentials.invsee.preventmodify")
-										|| !invOwner.isOnline()
-										|| (event.getSlot() > 3 && event.getSlot() < 9)))
-				{
-					event.setCancelled(true);
-					user.updateInventory();
-				}
-				else
-				{
-					final ItemStack[] contents =
-					{
-						top.getItem(0), top.getItem(1), top.getItem(2), top.getItem(3)
-					};
-					invOwner.getInventory().setArmorContents(contents);
-				}
+				event.setCancelled(true);
 			}
 		}
 	}
@@ -622,11 +605,6 @@ public class EssentialsPlayerListener implements Listener
 			if (invHolder != null && invHolder instanceof HumanEntity)
 			{
 				final User user = ess.getUser(event.getPlayer());
-				final ItemStack[] contents =
-				{
-					top.getItem(0), top.getItem(1), top.getItem(2), top.getItem(3),
-				};
-				((HumanEntity)invHolder).getInventory().setArmorContents(contents);
 				user.setInvSee(false);
 			}
 		}
