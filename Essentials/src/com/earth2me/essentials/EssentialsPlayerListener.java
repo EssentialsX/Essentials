@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -236,6 +237,24 @@ public class EssentialsPlayerListener implements Listener
 			else
 			{
 				user.sendMessage(_("youHaveNewMail", mail.size()));
+			}
+		}
+		if (user.isAuthorized("essentials.fly.safelogin"))
+		{
+			final World world = user.getLocation().getWorld();
+			final int x = user.getLocation().getBlockX();
+			int y = user.getLocation().getBlockY();
+			final int z = user.getLocation().getBlockZ();
+			while (Util.isBlockUnsafe(world, x, y, z) && y > -1)
+			{
+				y--;
+			}
+
+			if (user.getLocation().getBlockY() - y > 1 || y < 0)
+			{
+				user.setAllowFlight(true);
+				user.setFlying(true);
+				user.sendMessage(_("flyMode", _("enabled"), user.getDisplayName()));
 			}
 		}
 	}
