@@ -544,6 +544,7 @@ public class EssentialsPlayerListener implements Listener
 										|| !invOwner.isOnline()))
 				{
 					event.setCancelled(true);
+					user.updateInventory();
 				}
 			}
 		}
@@ -565,10 +566,28 @@ public class EssentialsPlayerListener implements Listener
 		}
 		else if (type == InventoryType.CHEST && top.getSize() == 9)
 		{
-			User user = ess.getUser(event.getWhoClicked());
-			if (user.isInvSee())
+			final User user = ess.getUser(event.getWhoClicked());
+			final InventoryHolder invHolder = top.getHolder();
+			if (invHolder != null && invHolder instanceof HumanEntity)
 			{
-				event.setCancelled(true);
+				final User invOwner = ess.getUser((HumanEntity)invHolder);
+
+				if (user.isInvSee() && (!user.isAuthorized("essentials.invsee.modify")
+										|| invOwner.isAuthorized("essentials.invsee.preventmodify")
+										|| !invOwner.isOnline()
+										|| (event.getSlot() > 3 && event.getSlot() < 9)))
+				{
+					event.setCancelled(true);
+					user.updateInventory();
+				}
+				else
+				{
+					final ItemStack[] contents =
+					{
+						top.getItem(0), top.getItem(1), top.getItem(2), top.getItem(3)
+					};
+					invOwner.getInventory().setArmorContents(contents);
+				}
 			}
 		}
 	}
@@ -599,8 +618,17 @@ public class EssentialsPlayerListener implements Listener
 		}
 		else if (type == InventoryType.CHEST && top.getSize() == 9)
 		{
-			final User user = ess.getUser(event.getPlayer());
-			user.setInvSee(false);			
+			final InventoryHolder invHolder = top.getHolder();
+			if (invHolder != null && invHolder instanceof HumanEntity)
+			{
+				final User user = ess.getUser(event.getPlayer());
+				final ItemStack[] contents =
+				{
+					top.getItem(0), top.getItem(1), top.getItem(2), top.getItem(3),
+				};
+				((HumanEntity)invHolder).getInventory().setArmorContents(contents);
+				user.setInvSee(false);
+			}
 		}
 	}
 

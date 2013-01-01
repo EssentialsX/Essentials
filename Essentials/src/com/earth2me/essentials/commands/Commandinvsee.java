@@ -12,7 +12,7 @@ public class Commandinvsee extends EssentialsCommand
 		super("invsee");
 	}
 	
-	//This method has a hidden param, which if given will display the armour slots. #easteregg
+	//This method has a hidden param, which if given will display the equip slots. #easteregg
 
 	@Override
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
@@ -25,9 +25,9 @@ public class Commandinvsee extends EssentialsCommand
 		final User invUser = getPlayer(server, args, 0);
 		Inventory inv;
 
-		if (args.length > 1)
+		if (args.length > 1 && user.isAuthorized("essentials.invsee.equip"))
 		{
-			inv = server.createInventory(user, 9, "Equipped");
+			inv = server.createInventory(invUser, 9, "Equipped");
 			inv.setContents(invUser.getInventory().getArmorContents());
 		}
 		else
