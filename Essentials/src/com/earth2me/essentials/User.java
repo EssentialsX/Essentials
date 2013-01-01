@@ -12,6 +12,8 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 
 public class User extends UserData implements Comparable<User>, IReplyTo, IUser
@@ -536,7 +538,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 				setDisplayNick();
 				final String msg = _("userIsNotAway", getDisplayName());
 				if (!msg.isEmpty())
-				{					
+				{
 					ess.broadcastMessage(this, msg);
 				}
 			}
@@ -573,7 +575,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 				setDisplayNick();
 				final String msg = _("userIsAway", getDisplayName());
 				if (!msg.isEmpty())
-				{					
+				{
 					ess.broadcastMessage(this, msg);
 				}
 			}
@@ -685,6 +687,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			}
 			setHidden(true);
 			ess.getVanishedPlayers().add(getName());
+			if (isAuthorized("essentials.vanish.effect"))
+			{
+				this.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false));
+			}
 		}
 		else
 		{
@@ -694,6 +700,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			}
 			setHidden(false);
 			ess.getVanishedPlayers().remove(getName());
+			if (isAuthorized("essentials.vanish.effect"))
+			{
+				this.removePotionEffect(PotionEffectType.INVISIBILITY);
+			}
 		}
 	}
 
@@ -737,7 +747,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	@Override
 	public boolean isIgnoreExempt()
 	{
-		return this.isAuthorized("essentials.chat.ignoreexempt");		
+		return this.isAuthorized("essentials.chat.ignoreexempt");
 	}
 
 	public boolean isRecipeSee()
