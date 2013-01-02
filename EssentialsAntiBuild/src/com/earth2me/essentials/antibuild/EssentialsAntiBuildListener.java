@@ -13,8 +13,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.event.painting.PaintingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -145,7 +145,7 @@ public class EssentialsAntiBuildListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onPaintingBreak(final PaintingBreakByEntityEvent event)
+	public void onHangingBreak(final HangingBreakByEntityEvent event)
 	{
 		final Entity entity = event.getRemover();
 		if (entity instanceof Player)
