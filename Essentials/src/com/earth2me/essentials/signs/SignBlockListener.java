@@ -32,6 +32,7 @@ public class SignBlockListener implements Listener
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
+			event.getHandlers().unregister(this);
 			return;
 		}
 
@@ -65,7 +66,7 @@ public class SignBlockListener implements Listener
 		}
 		for (EssentialsSign sign : ess.getSettings().enabledSigns())
 		{
-			if (sign.getBlocks().contains(block.getType())
+			if (sign.areHeavyEventRequired() && sign.getBlocks().contains(block.getType())
 				&& !sign.onBlockBreak(block, player, ess))
 			{
 				LOGGER.log(Level.INFO, "A block was protected by a sign.");
@@ -80,6 +81,7 @@ public class SignBlockListener implements Listener
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
+			event.getHandlers().unregister(this);
 			return;
 		}
 		User user = ess.getUser(event.getPlayer());
@@ -105,6 +107,7 @@ public class SignBlockListener implements Listener
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
+			event.getHandlers().unregister(this);
 			return;
 		}
 
@@ -129,6 +132,7 @@ public class SignBlockListener implements Listener
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
+			event.getHandlers().unregister(this);
 			return;
 		}
 
@@ -148,7 +152,7 @@ public class SignBlockListener implements Listener
 		}
 		for (EssentialsSign sign : ess.getSettings().enabledSigns())
 		{
-			if (sign.getBlocks().contains(block.getType())
+			if (sign.areHeavyEventRequired() && sign.getBlocks().contains(block.getType())
 				&& !sign.onBlockPlace(block, event.getPlayer(), ess))
 			{
 				event.setCancelled(true);
@@ -162,6 +166,7 @@ public class SignBlockListener implements Listener
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
+			event.getHandlers().unregister(this);
 			return;
 		}
 
@@ -176,7 +181,7 @@ public class SignBlockListener implements Listener
 		}
 		for (EssentialsSign sign : ess.getSettings().enabledSigns())
 		{
-			if (sign.getBlocks().contains(block.getType())
+			if (sign.areHeavyEventRequired() && sign.getBlocks().contains(block.getType())
 				&& !sign.onBlockBurn(block, ess))
 			{
 				event.setCancelled(true);
@@ -190,6 +195,7 @@ public class SignBlockListener implements Listener
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
+			event.getHandlers().unregister(this);
 			return;
 		}
 
@@ -204,7 +210,7 @@ public class SignBlockListener implements Listener
 		}
 		for (EssentialsSign sign : ess.getSettings().enabledSigns())
 		{
-			if (sign.getBlocks().contains(block.getType())
+			if (sign.areHeavyEventRequired() && sign.getBlocks().contains(block.getType())
 				&& !sign.onBlockIgnite(block, ess))
 			{
 				event.setCancelled(true);
@@ -218,6 +224,7 @@ public class SignBlockListener implements Listener
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
+			event.getHandlers().unregister(this);
 			return;
 		}
 
@@ -233,7 +240,7 @@ public class SignBlockListener implements Listener
 			}
 			for (EssentialsSign sign : ess.getSettings().enabledSigns())
 			{
-				if (sign.getBlocks().contains(block.getType())
+				if (sign.areHeavyEventRequired() && sign.getBlocks().contains(block.getType())
 					&& !sign.onBlockPush(block, ess))
 				{
 					event.setCancelled(true);
@@ -248,6 +255,7 @@ public class SignBlockListener implements Listener
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
+			event.getHandlers().unregister(this);
 			return;
 		}
 
@@ -264,7 +272,7 @@ public class SignBlockListener implements Listener
 			}
 			for (EssentialsSign sign : ess.getSettings().enabledSigns())
 			{
-				if (sign.getBlocks().contains(block.getType())
+				if (sign.areHeavyEventRequired() && sign.getBlocks().contains(block.getType())
 					&& !sign.onBlockPush(block, ess))
 				{
 					event.setCancelled(true);

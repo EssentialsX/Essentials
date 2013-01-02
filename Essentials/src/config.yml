@@ -334,6 +334,10 @@ oversized-stacksize: 64
 # essentials.repair.enchanted
 repair-enchanted: true
 
+# Allow 'unsafe' enchantments in kits and item spawning.
+# Warning: Mixing and overleveling some enchantments can cause issues with clients, servers and plugins.
+unsafe-enchantments: false
+
 #Do you want essentials to keep track of previous location for /back in the teleport listener?
 #If you set this to true any plugin that uses teleport will have the previous location registered.
 register-back-in-listener: false
@@ -379,7 +383,7 @@ sethome-multiple:
 
 # Set timeout in seconds for players to accept tpa before request is cancelled.
 # Set to 0 for no timeout
-tpa-accept-cancellation: 0
+tpa-accept-cancellation: 120
 
 ############################################################
 # +------------------------------------------------------+ #

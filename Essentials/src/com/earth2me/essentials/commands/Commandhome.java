@@ -69,7 +69,7 @@ public class Commandhome extends EssentialsCommand
 			}
 			else if (homes.isEmpty())
 			{
-				throw new Exception(player == user ? _("noHomeSet") : _("noHomeSetPlayer"));
+				throw new Exception(_("noHomeSetPlayer"));
 			}
 			else if (homes.size() == 1 && player.equals(user))
 			{

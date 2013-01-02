@@ -134,14 +134,10 @@ public abstract class EssentialsChatPlayer implements Listener
 			return;
 		}
 
-		for (Player onlinePlayer : server.getOnlinePlayers())
+		for (Player onlinePlayer : event.getRecipients())
 		{
 			String type = _("chatTypeLocal");
 			final User onlineUser = ess.getUser(onlinePlayer);
-			if (onlineUser.isIgnoredPlayer(sender))
-			{
-				continue;
-			}
 			if (!onlineUser.equals(sender))
 			{
 				boolean abort = false;

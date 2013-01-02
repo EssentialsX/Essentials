@@ -241,6 +241,12 @@ public class SignProtection extends EssentialsSign
 	{
 		return protectedBlocks;
 	}
+	
+	@Override
+	public boolean areHeavyEventRequired()
+	{
+		return true;
+	}
 
 	@Override
 	protected boolean onBlockPlace(final Block block, final User player, final String username, final IEssentials ess) throws SignException

@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
@@ -23,12 +24,19 @@ public class Commandunban extends EssentialsCommand
 
 		try
 		{
-			final User player = getPlayer(server, args, 0, true);
-			player.setBanned(false);
+			final User user = getPlayer(server, args, 0, true);
+			user.setBanned(false);
 			sender.sendMessage(_("unbannedPlayer"));
 		}
 		catch (NoSuchFieldException e)
 		{
+			final OfflinePlayer player = server.getOfflinePlayer(args[0]);
+			if (player.isBanned()) {
+				player.setBanned(false);
+				sender.sendMessage(_("unbannedPlayer"));
+				return;
+			}			
+			
 			throw new Exception(_("playerNotFound"), e);
 		}
 	}

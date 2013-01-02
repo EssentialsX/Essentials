@@ -134,6 +134,17 @@ public class PermissionsHandler implements IPermissionsHandler
 			return;
 		}
 
+		final Plugin simplyPermsPlugin = pluginManager.getPlugin("SimplyPerms");
+		if (simplyPermsPlugin != null && simplyPermsPlugin.isEnabled())
+		{
+			if (!(handler instanceof SimplyPermsHandler))
+			{
+				LOGGER.log(Level.INFO, "Essentials: Using SimplyPerms based permissions.");
+				handler = new SimplyPermsHandler(simplyPermsPlugin);
+			}
+			return;
+		}
+
 		final Plugin privPlugin = pluginManager.getPlugin("Privileges");
 		if (privPlugin != null && privPlugin.isEnabled())
 		{

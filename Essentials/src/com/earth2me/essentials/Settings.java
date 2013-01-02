@@ -856,6 +856,12 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("repair-enchanted", true);
 	}
+	
+	@Override
+	public boolean allowUnsafeEnchantments()
+	{
+		return config.getBoolean("unsafe-enchantments", false);
+	}
 
 	@Override
 	public boolean isWorldTeleportPermissions()
@@ -923,7 +929,7 @@ public class Settings implements ISettings
 	@Override
 	public long getTpaAcceptCancellation()
 	{
-		return config.getLong("tpa-accept-cancellation", 0);
+		return config.getLong("tpa-accept-cancellation", 120);
 	}
 
 	@Override

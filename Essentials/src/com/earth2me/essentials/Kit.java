@@ -34,12 +34,13 @@ public class Kit
 		{
 			throw new Exception(_("kitError"), ex);
 		}
-
+		
 	}
-
+	
 	public static void checkTime(final User user, final String kitName, final Map<String, Object> els) throws Exception
 	{
-		if (user.isAuthorized("essentials.kit.exemptdelay")) {
+		if (user.isAuthorized("essentials.kit.exemptdelay"))
+		{
 			return;
 		}
 		
@@ -55,7 +56,7 @@ public class Kit
 
 		// When was the last kit used?
 		final long lastTime = user.getKitTimestamp(kitName);
-
+		
 		if (lastTime < earliestLong || lastTime == 0L)
 		{
 			user.setKitTimestamp(kitName, time.getTimeInMillis());
@@ -80,15 +81,15 @@ public class Kit
 			throw new NoChargeException();
 		}
 	}
-
+	
 	public static List<String> getItems(final User user, final Map<String, Object> kit) throws Exception
 	{
 		if (kit == null)
 		{
 			throw new Exception(_("kitError2"));
 		}
-	
-
+		
+		
 		try
 		{
 			return (List<String>)kit.get("items");
@@ -99,7 +100,7 @@ public class Kit
 			throw new Exception(_("kitErrorHelp"), e);
 		}
 	}
-
+	
 	public static void expandItems(final IEssentials ess, final User user, final List<String> items) throws Exception
 	{
 		try
@@ -107,7 +108,7 @@ public class Kit
 			boolean spew = false;
 			for (String d : items)
 			{
-				if (d.startsWith(ess.getSettings().getCurrencySymbol())) 
+				if (d.startsWith(ess.getSettings().getCurrencySymbol()))				
 				{
 					Double value = Double.parseDouble(d.substring(ess.getSettings().getCurrencySymbol().length()).trim());
 					Trade t = new Trade(value, ess);
@@ -119,7 +120,7 @@ public class Kit
 				final int id = Material.getMaterial(Integer.parseInt(item[0])).getId();
 				final short data = item.length > 1 ? Short.parseShort(item[1]) : 0;
 				final int amount = parts.length > 1 ? Integer.parseInt(parts[1]) : 1;
-
+				
 				final ItemStack stack = new ItemStack(id, amount, data);
 				if (parts.length > 2)
 				{
@@ -146,7 +147,14 @@ public class Kit
 						}
 						try
 						{
-							stack.addEnchantment(enchantment, level);
+							if (ess.getSettings().allowUnsafeEnchantments())
+							{
+								stack.addUnsafeEnchantment(enchantment, level);
+							}
+							else
+							{
+								stack.addEnchantment(enchantment, level);
+							}
 						}
 						catch (Exception ex)
 						{
@@ -154,7 +162,7 @@ public class Kit
 						}
 					}
 				}
-
+				
 				final Map<Integer, ItemStack> overfilled;
 				if (user.isAuthorized("essentials.oversizedstacks"))
 				{

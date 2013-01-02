@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 public class EssentialsSign
 {
 	private static final Set<Material> EMPTY_SET = new HashSet<Material>();
+
 	protected transient final String signName;
 
 	public EssentialsSign(final String signName)
@@ -257,6 +258,11 @@ public class EssentialsSign
 	public Set<Material> getBlocks()
 	{
 		return EMPTY_SET;
+	}
+	
+	public boolean areHeavyEventRequired()
+	{
+		return false;
 	}
 
 	protected final void validateTrade(final ISign sign, final int index, final IEssentials ess) throws SignException
