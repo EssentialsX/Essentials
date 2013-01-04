@@ -44,6 +44,13 @@ public class SignBlockListener implements Listener
 
 	public boolean protectSignsAndBlocks(final Block block, final Player player)
 	{
+		// prevent any signs be broken by destroying the block they are attached to
+		if (EssentialsSign.checkIfBlockBreaksSigns(block))
+		{
+			LOGGER.log(Level.INFO, "Prevented that a block was broken next to a sign.");
+			return true;
+		}
+		
 		final int mat = block.getTypeId();
 		if (mat == SIGN_POST || mat == WALL_SIGN)
 		{
@@ -58,12 +65,7 @@ public class SignBlockListener implements Listener
 				}
 			}
 		}
-		// prevent any signs be broken by destroying the block they are attached to
-		if (EssentialsSign.checkIfBlockBreaksSigns(block))
-		{
-			LOGGER.log(Level.INFO, "Prevented that a block was broken next to a sign.");
-			return true;
-		}
+		
 		for (EssentialsSign sign : ess.getSettings().enabledSigns())
 		{
 			if (sign.areHeavyEventRequired() && sign.getBlocks().contains(block.getType())
