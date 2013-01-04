@@ -111,7 +111,7 @@ public class Commandkillall extends EssentialsCommand
 						continue;
 					}
 				}
-				if(entity instanceof Ocelot)
+				if (entity instanceof Ocelot)
 				{
 					if (((Ocelot)entity).isTamed())
 					{
@@ -140,14 +140,14 @@ public class Commandkillall extends EssentialsCommand
 				}
 				else if (all)
 				{
-					EntityDeathEvent event = new EntityDeathEvent((LivingEntity)entity, Collections.EMPTY_LIST);
+					EntityDeathEvent event = new EntityDeathEvent((LivingEntity)entity, new ArrayList<ItemStack>(0));
 					ess.getServer().getPluginManager().callEvent(event);
 					entity.remove();
 					numKills++;
 				}
 				else if (entityClass != null && entityClass.isAssignableFrom(entity.getClass()))
 				{
-					EntityDeathEvent event = new EntityDeathEvent((LivingEntity)entity, Collections.EMPTY_LIST);
+					EntityDeathEvent event = new EntityDeathEvent((LivingEntity)entity, new ArrayList<ItemStack>(0));
 					ess.getServer().getPluginManager().callEvent(event);
 					entity.remove();
 					numKills++;
