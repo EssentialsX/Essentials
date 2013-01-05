@@ -4064,6 +4064,7 @@ badflesh,367,0
 poisonflesh,367,0
 zombieremains,367,0
 enderpearl,368,0
+endpearl,368,0
 pearl,368,0
 epearl,368,0
 bluepearl,368,0
@@ -5463,6 +5464,7 @@ icauldronitem,380,0
 scauldronitem,380,0
 eyeofender,381,0
 endereye,381,0
+endeye,381,0
 evilendereye,381,0
 evileyeofender,381,0
 evilenderpearl,381,0
@@ -5626,6 +5628,9 @@ carrotonastick,398,0
 carrotonstick,398,0
 netherstar,399,0
 hellstar,399,0
+nstar,399,0
+hstar,399,0
+star,399,0
 pumpkinpie,400,0
 pumpkincake,400,0
 ppie,400,0
@@ -5648,6 +5653,9 @@ fwball,402,0
 fireworkpowder,402,0
 fworkpowder,402,0
 fwpowder,402,0
+fireworkcharge,402,0
+fworkcharge,402,0
+fwcharge,402,0
 enchantmentbook,403,0
 enchantedbook,403,0
 enchantingbook,403,0
