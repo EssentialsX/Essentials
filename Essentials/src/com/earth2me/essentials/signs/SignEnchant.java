@@ -40,7 +40,8 @@ public class SignEnchant extends EssentialsSign
 			sign.setLine(2, "§c<enchant>");
 			throw new SignException(ex.getMessage(), ex);
 		}
-		if (level < 1 || level > enchantment.getMaxLevel())
+		final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments() && player.isAuthorized("essentials.enchant.allowunsafe");
+		if (level < 0 || (!allowUnsafe && level > enchantment.getMaxLevel()))
 		{
 			level = enchantment.getMaxLevel();
 			sign.setLine(2, enchantLevel[0] + ":" + level);
@@ -49,7 +50,14 @@ public class SignEnchant extends EssentialsSign
 		{
 			if (stack != null)
 			{
-				stack.addEnchantment(enchantment, level);
+				if (allowUnsafe)
+				{
+					stack.addUnsafeEnchantment(enchantment, level);
+				}
+				else
+				{
+					stack.addEnchantment(enchantment, level);
+				}
 			}
 		}
 		catch (Throwable ex)
@@ -103,7 +111,21 @@ public class SignEnchant extends EssentialsSign
 		final ItemStack toEnchant = playerHand;
 		try
 		{
-			toEnchant.addEnchantment(enchantment, level);
+			if (level == 0)
+			{
+				toEnchant.removeEnchantment(enchantment);
+			}
+			else
+			{
+				if (ess.getSettings().allowUnsafeEnchantments())
+				{
+					toEnchant.addUnsafeEnchantment(enchantment, level);
+				}
+				else
+				{
+					toEnchant.addEnchantment(enchantment, level);
+				}
+			}
 		}
 		catch (Exception ex)
 		{
