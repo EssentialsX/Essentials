@@ -38,6 +38,7 @@ public class Enchantments
 		ALIASENCHANTMENTS.put("minespeed", Enchantment.DIG_SPEED);
 		ALIASENCHANTMENTS.put("cutspeed", Enchantment.DIG_SPEED);
 		ALIASENCHANTMENTS.put("ds", Enchantment.DIG_SPEED);
+		ALIASENCHANTMENTS.put("eff", Enchantment.DIG_SPEED);
 		
 		ENCHANTMENTS.put("durability", Enchantment.DURABILITY);
 		ALIASENCHANTMENTS.put("dura", Enchantment.DURABILITY);
@@ -57,10 +58,13 @@ public class Enchantments
 		ALIASENCHANTMENTS.put("fa", Enchantment.FIRE_ASPECT);
 		
 		ENCHANTMENTS.put("knockback", Enchantment.KNOCKBACK);
+		ALIASENCHANTMENTS.put("kback", Enchantment.KNOCKBACK);
+		ALIASENCHANTMENTS.put("kb", Enchantment.KNOCKBACK);
 		ALIASENCHANTMENTS.put("k", Enchantment.KNOCKBACK);
 		
 		ALIASENCHANTMENTS.put("blockslootbonus", Enchantment.LOOT_BONUS_BLOCKS);
 		ENCHANTMENTS.put("fortune", Enchantment.LOOT_BONUS_BLOCKS);
+		ALIASENCHANTMENTS.put("fort", Enchantment.LOOT_BONUS_BLOCKS);
 		ALIASENCHANTMENTS.put("lbb", Enchantment.LOOT_BONUS_BLOCKS);
 		
 		ALIASENCHANTMENTS.put("mobslootbonus", Enchantment.LOOT_BONUS_MOBS);
