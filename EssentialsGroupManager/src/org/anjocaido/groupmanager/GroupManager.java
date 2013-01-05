@@ -1107,7 +1107,7 @@ public class GroupManager extends JavaPlugin {
 				// auxString = permissionHandler.checkUserOnlyPermission(auxUser, args[1]);
 				if (permissionResult.owner instanceof Group) {
 					if (permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION)) {
-						sender.sendMessage(ChatColor.RED + "The group inherits the a negation permission from group: " + permissionResult.owner.getName());
+						sender.sendMessage(ChatColor.RED + "The group inherits the negation permission from group: " + permissionResult.owner.getName());
 					} else {
 						sender.sendMessage(ChatColor.YELLOW + "The user inherits the permission from group: " + permissionResult.owner.getName());
 					}
