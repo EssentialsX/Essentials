@@ -1,5 +1,6 @@
 package com.earth2me.essentials.signs;
 
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.*;
 import com.earth2me.essentials.commands.NoChargeException;
 import java.util.List;
@@ -73,6 +74,9 @@ public class SignKit extends EssentialsSign
 			}
 			return true;
 		}
-		return false;
+		else
+		{
+			throw new SignException(_("noKitPermission", "essentials.kits." + kitName));
+		}
 	}
 }
