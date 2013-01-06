@@ -43,6 +43,7 @@ public class Commandenchant extends EssentialsCommand
 			}
 			throw new NotEnoughArgumentsException(_("enchantments", Util.joinList(enchantmentslist.toArray())));
 		}
+
 		int level = -1;
 		if (args.length > 1)
 		{
@@ -55,27 +56,12 @@ public class Commandenchant extends EssentialsCommand
 				level = -1;
 			}
 		}
-		final Enchantment enchantment = getEnchantment(args[0], user);
+
 		final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments() && user.isAuthorized("essentials.enchant.allowunsafe");
-		if (level < 0 || (!allowUnsafe && level > enchantment.getMaxLevel()))
-		{
-			level = enchantment.getMaxLevel();
-		}
-		if (level == 0)
-		{
-			stack.removeEnchantment(enchantment);
-		}
-		else
-		{
-			if (allowUnsafe)
-			{
-				stack.addUnsafeEnchantment(enchantment, level);
-			}
-			else
-			{
-				stack.addEnchantment(enchantment, level);
-			}
-		}
+		final Enchantment enchantment = ess.getItemDb().getEnchantment(user, args[0]);
+		ess.getItemDb().addEnchantment(user, allowUnsafe, stack, enchantment, level);
+
+
 		user.getInventory().setItemInHand(stack);
 		user.updateInventory();
 		final String enchantmentName = enchantment.getName().toLowerCase(Locale.ENGLISH);
@@ -87,21 +73,5 @@ public class Commandenchant extends EssentialsCommand
 		{
 			user.sendMessage(_("enchantmentApplied", enchantmentName.replace('_', ' ')));
 		}
-	}
-
-	public static Enchantment getEnchantment(final String name, final User user) throws Exception
-	{
-
-		final Enchantment enchantment = Enchantments.getByName(name);
-		if (enchantment == null)
-		{
-			throw new Exception(_("enchantmentNotFound"));
-		}
-		final String enchantmentName = enchantment.getName().toLowerCase(Locale.ENGLISH);
-		if (user != null && !user.isAuthorized("essentials.enchant." + enchantmentName))
-		{
-			throw new Exception(_("enchantmentPerm", enchantmentName));
-		}
-		return enchantment;
 	}
 }

@@ -8,7 +8,6 @@ import java.util.Locale;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -44,56 +43,42 @@ public class Commandgive extends EssentialsCommand
 
 		final User giveTo = getPlayer(server, args, 0);
 
-		if (args.length > 3 && Util.isInt(args[2]) && Util.isInt(args[3]))
+		try
 		{
-			stack.setAmount(Integer.parseInt(args[2]));
-			stack.setDurability(Short.parseShort(args[3]));
+			if (args.length > 3 && Util.isInt(args[2]) && Util.isInt(args[3]))
+			{
+				stack.setAmount(Integer.parseInt(args[2]));
+				stack.setDurability(Short.parseShort(args[3]));
+			}
+			else if (args.length > 2 && Integer.parseInt(args[2]) > 0)
+			{
+				stack.setAmount(Integer.parseInt(args[2]));
+			}
+			else if (ess.getSettings().getDefaultStackSize() > 0)
+			{
+				stack.setAmount(ess.getSettings().getDefaultStackSize());
+			}
+			else if (ess.getSettings().getOversizedStackSize() > 0 && giveTo.isAuthorized("essentials.oversizedstacks"))
+			{
+				stack.setAmount(ess.getSettings().getOversizedStackSize());
+			}
 		}
-		else if (args.length > 2 && Integer.parseInt(args[2]) > 0)
+		catch (NumberFormatException e)
 		{
-			stack.setAmount(Integer.parseInt(args[2]));
-		}
-		else if (ess.getSettings().getDefaultStackSize() > 0)
-		{
-			stack.setAmount(ess.getSettings().getDefaultStackSize());
-		}
-		else if (ess.getSettings().getOversizedStackSize() > 0 && giveTo.isAuthorized("essentials.oversizedstacks"))
-		{
-			stack.setAmount(ess.getSettings().getOversizedStackSize());
+			throw new NotEnoughArgumentsException();
 		}
 
 		if (args.length > 3)
 		{
+			boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
+			if (allowUnsafe && sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.enchant.allowunsafe"))
+			{
+				allowUnsafe = false;
+			}
+
 			for (int i = Util.isInt(args[3]) ? 4 : 3; i < args.length; i++)
 			{
-				final String[] split = args[i].split("[:+',;.]", 2);
-				if (split.length < 1)
-				{
-					continue;
-				}
-				final Enchantment enchantment = Commandenchant.getEnchantment(split[0], sender instanceof Player ? ess.getUser(sender) : null);
-				int level;
-				if (split.length > 1)
-				{
-					level = Integer.parseInt(split[1]);
-				}
-				else
-				{
-					level = enchantment.getMaxLevel();
-				}
-				boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
-				if (allowUnsafe && sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.enchant.allowunsafe"))
-				{
-					allowUnsafe = false;
-				}
-				if (allowUnsafe)
-				{
-					stack.addUnsafeEnchantment(enchantment, level);
-				}
-				else
-				{
-					stack.addEnchantment(enchantment, level);
-				}
+				ess.getItemDb().addStringEnchantment(null, allowUnsafe, stack, args[i]);
 			}
 		}
 

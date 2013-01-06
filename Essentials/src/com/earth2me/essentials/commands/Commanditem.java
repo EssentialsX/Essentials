@@ -6,7 +6,6 @@ import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import java.util.Locale;
 import org.bukkit.Material;
 import org.bukkit.Server;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -16,7 +15,7 @@ public class Commanditem extends EssentialsCommand
 	{
 		super("item");
 	}
-	
+
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
@@ -25,7 +24,7 @@ public class Commanditem extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 		final ItemStack stack = ess.getItemDb().get(args[0]);
-		
+
 		final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 		if (ess.getSettings().permissionBasedItemSpawn()
 			? (!user.isAuthorized("essentials.itemspawn.item-all")
@@ -50,46 +49,27 @@ public class Commanditem extends EssentialsCommand
 			{
 				stack.setAmount(ess.getSettings().getOversizedStackSize());
 			}
-			if (args.length > 2)
-			{
-				for (int i = 2; i < args.length; i++)
-				{
-					final String[] split = args[i].split("[:+',;.]", 2);
-					if (split.length < 1)
-					{
-						continue;
-					}
-					final Enchantment enchantment = Commandenchant.getEnchantment(split[0], user);
-					int level;
-					if (split.length > 1)
-					{
-						level = Integer.parseInt(split[1]);
-					}
-					else
-					{
-						level = enchantment.getMaxLevel();
-					}
-					if (ess.getSettings().allowUnsafeEnchantments() && user.isAuthorized("essentials.enchant.allowunsafe"))
-					{
-						stack.addUnsafeEnchantment(enchantment, level);
-					}
-					else
-					{
-						stack.addEnchantment(enchantment, level);
-					}
-				}
-			}
 		}
 		catch (NumberFormatException e)
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		
+		if (args.length > 2)
+		{
+			final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments() && user.isAuthorized("essentials.enchant.allowunsafe");
+
+			for (int i = 2; i < args.length; i++)
+			{
+				ess.getItemDb().addStringEnchantment(null, allowUnsafe, stack, args[i]);
+			}
+		}
+
+
 		if (stack.getType() == Material.AIR)
 		{
 			throw new Exception(_("cantSpawnItem", "Air"));
 		}
-		
+
 		final String displayName = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ');
 		user.sendMessage(_("itemSpawn", stack.getAmount(), displayName));
 		if (user.isAuthorized("essentials.oversizedstacks"))

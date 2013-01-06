@@ -4,6 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IItemDb;
 import java.util.*;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -135,24 +136,99 @@ public class ItemDb implements IConf, IItemDb
 		return retval;
 	}
 
+	public void addStringEnchantment(final User user, final boolean allowUnsafe, final ItemStack stack, final String string) throws Exception
+	{
+		final String[] split = string.split("[:+',;.]", 2);
+		if (split.length < 1)
+		{
+			return;
+		}
+
+		Enchantment enchantment = getEnchantment(user, split[0]);
+
+		int level = -1;
+		if (split.length > 1)
+		{
+			try
+			{
+				level = Integer.parseInt(split[1]);
+			}
+			catch (NumberFormatException ex)
+			{
+				level = -1;
+			}
+		}
+
+		if (level < 0 || (!allowUnsafe && level > enchantment.getMaxLevel()))
+		{
+			level = enchantment.getMaxLevel();
+		}
+		addEnchantment(user, allowUnsafe, stack, enchantment, level);
+	}
+
+	public void addEnchantment(final User user, final boolean allowUnsafe, final ItemStack stack, final Enchantment enchantment, final int level) throws Exception
+	{
+		if (level == 0)
+		{
+			stack.removeEnchantment(enchantment);
+		}
+		else
+		{
+			try
+			{
+				if (allowUnsafe)
+				{
+					stack.addUnsafeEnchantment(enchantment, level);
+				}
+				else
+				{
+					stack.addEnchantment(enchantment, level);
+				}
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Enchantment " + enchantment.getName() + ": " + ex.getMessage(), ex);
+			}
+		}
+	}
+
+	//TODO: Properly TL this
+	public Enchantment getEnchantment(final User user, final String name) throws Exception
+	{
+		final Enchantment enchantment = Enchantments.getByName(name);
+		if (enchantment == null)
+		{
+			throw new Exception(_("enchantmentNotFound") + ": " + name);
+		}
+		final String enchantmentName = enchantment.getName().toLowerCase(Locale.ENGLISH);
+		if (user != null && !user.isAuthorized("essentials.enchant." + enchantmentName))
+		{
+			throw new Exception(_("enchantmentPerm", enchantmentName));
+		}
+		return enchantment;
+	}
+
 	public String names(ItemStack item)
 	{
 		ItemData itemData = new ItemData(item.getTypeId(), item.getDurability());
 		List<String> nameList = names.get(itemData);
-		if (nameList == null) {
-			itemData = new ItemData(item.getTypeId(), (short) 0);
+		if (nameList == null)
+		{
+			itemData = new ItemData(item.getTypeId(), (short)0);
 			nameList = names.get(itemData);
-			if (nameList == null) {
+			if (nameList == null)
+			{
 				return null;
 			}
 		}
-		
+
 		if (nameList.size() > 15)
 		{
 			nameList = nameList.subList(0, 14);
 		}
 		return Util.joinList(", ", nameList);
 	}
+
 
 	class ItemData
 	{
@@ -197,6 +273,7 @@ public class ItemDb implements IConf, IItemDb
 				   && this.itemData == pairo.getItemData();
 		}
 	}
+
 
 	class LengthCompare implements java.util.Comparator<String>
 	{
