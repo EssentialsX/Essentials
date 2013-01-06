@@ -115,6 +115,8 @@ public class Commandmail extends EssentialsCommand
 		else if (args.length >= 1 && "sendall".equalsIgnoreCase(args[0]))
 		{
 			ess.scheduleAsyncDelayedTask(new SendAll("Server: " + getFinalArg(args, 2)));
+			sender.sendMessage(_("mailSent"));
+			return;
 		}
 		else if (args.length >= 2)
 		{
