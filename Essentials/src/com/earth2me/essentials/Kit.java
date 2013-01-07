@@ -114,7 +114,7 @@ public class Kit
 					continue;
 				}
 
-				final String[] parts = d.split(" ", 3);
+				final String[] parts = d.split(" ");
 				final ItemStack stack = ess.getItemDb().get(parts[0], parts.length > 1 ? Integer.parseInt(parts[1]) : 1);
 
 				if (parts.length > 2)
