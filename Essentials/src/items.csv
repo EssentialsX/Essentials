@@ -2848,9 +2848,14 @@ forestwoodhalfblock,126,3
 forestwhalfblock,126,3
 foresthalfblock,126,3
 cocoaplant,127,0
-cocopant,127,0
+cocoplant,127,0
+cplant,127,0
 cocoafruit,127,0
 cocofruit,127,0
+cfruit,127,0
+cocoapod,127,0
+cocopod,127,0
+cpod,127,0
 sandstairs,128,0
 sandstonestairs,128,0
 sandsstairs,128,0
