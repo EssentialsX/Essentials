@@ -11,7 +11,6 @@ import org.bukkit.enchantments.Enchantment;
 
 public class Enchantments
 {
-	private static final transient Pattern NUMPATTERN = Pattern.compile("\\d+");
 	private static final Map<String, Enchantment> ENCHANTMENTS = new HashMap<String, Enchantment>();
 	private static final Map<String, Enchantment> ALIASENCHANTMENTS = new HashMap<String, Enchantment>();
 
@@ -144,7 +143,7 @@ public class Enchantments
 	
 	public static Enchantment getByName(String name) {
 		Enchantment enchantment;
-		if (NUMPATTERN.matcher(name).matches()) {
+		if (Util.isInt(name)) {
 			enchantment = Enchantment.getById(Integer.parseInt(name));
 		} else {
 			enchantment = Enchantment.getByName(name.toUpperCase(Locale.ENGLISH));
