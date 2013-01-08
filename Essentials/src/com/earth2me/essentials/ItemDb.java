@@ -176,19 +176,14 @@ public class ItemDb implements IConf, IItemDb
 		{
 			if (stack.getType().equals(Material.ENCHANTED_BOOK))
 			{
-
 				EnchantmentStorageMeta meta = (EnchantmentStorageMeta)stack.getItemMeta();
-
 				if (level == 0)
 				{
-//					if (meta.hasStoredEnchant(enchantment))
-//					{
-						meta.removeStoredEnchant(enchantment);
-//					}
+					meta.removeStoredEnchant(enchantment);
 				}
 				else
 				{
-					meta.addStoredEnchant(enchantment, level, allowUnsafe);					
+					meta.addStoredEnchant(enchantment, level, allowUnsafe);
 				}
 				stack.setItemMeta(meta);
 			}
@@ -208,7 +203,6 @@ public class ItemDb implements IConf, IItemDb
 					{
 						stack.addEnchantment(enchantment, level);
 					}
-
 				}
 			}
 		}
