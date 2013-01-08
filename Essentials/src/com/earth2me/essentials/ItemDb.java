@@ -172,53 +172,33 @@ public class ItemDb implements IConf, IItemDb
 
 	public void addEnchantment(final User user, final boolean allowUnsafe, final ItemStack stack, final Enchantment enchantment, final int level) throws Exception
 	{
-		if (stack.getType().equals(Material.ENCHANTED_BOOK))
+		try
 		{
-			try
+			if (stack.getType().equals(Material.ENCHANTED_BOOK))
 			{
-				EnchantmentStorageMeta meta = (EnchantmentStorageMeta) stack.getItemMeta();
+
+				EnchantmentStorageMeta meta = (EnchantmentStorageMeta)stack.getItemMeta();
 
 				if (level == 0)
 				{
-					if (meta.hasStoredEnchant(enchantment))
-					{
+//					if (meta.hasStoredEnchant(enchantment))
+//					{
 						meta.removeStoredEnchant(enchantment);
-						stack.setItemMeta(meta);
-					}
+//					}
 				}
 				else
 				{
-					// Enchanted Books only allowed to have one enchantment
-					if (meta.hasStoredEnchants())
-					{
-						// Although there should be only one, don't make assumptions
-						Iterator<Map.Entry<Enchantment, Integer>> entries = meta.getStoredEnchants().entrySet().iterator();
-						while (entries.hasNext())
-						{
-							Map.Entry<Enchantment, Integer> entry = entries.next();
-							Enchantment ench = entry.getKey();
-							meta.removeStoredEnchant(ench);
-						}
-					}
-					
-					meta.addStoredEnchant(enchantment, level, allowUnsafe);
-					stack.setItemMeta(meta);
+					meta.addStoredEnchant(enchantment, level, allowUnsafe);					
 				}
+				stack.setItemMeta(meta);
 			}
-			catch (Exception ex)
+			else // all other material types besides ENCHANTED_BOOK
 			{
-				throw new Exception("Enchantment " + enchantment.getName() + ": " + ex.getMessage(), ex);
-			}
-		}
-		else // all other material types besides ENCHANTED_BOOK
-		{
-			if (level == 0)
-			{
-				stack.removeEnchantment(enchantment);
-			}
-			else
-			{
-				try
+				if (level == 0)
+				{
+					stack.removeEnchantment(enchantment);
+				}
+				else
 				{
 					if (allowUnsafe)
 					{
@@ -228,12 +208,13 @@ public class ItemDb implements IConf, IItemDb
 					{
 						stack.addEnchantment(enchantment, level);
 					}
-				}
-				catch (Exception ex)
-				{
-					throw new Exception("Enchantment " + enchantment.getName() + ": " + ex.getMessage(), ex);
+
 				}
 			}
+		}
+		catch (Exception ex)
+		{
+			throw new Exception("Enchantment " + enchantment.getName() + ": " + ex.getMessage(), ex);
 		}
 	}
 
