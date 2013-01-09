@@ -113,8 +113,8 @@ commands:
     aliases: [efly]
   fireball:
     description: Throw a fireball.
-    usage: /<command> [small]
-    aliases: [efireball]
+    usage: /<command> [small|skull]
+    aliases: [efireball,fireskull,efireskull,fireentity,efireentity]
   gamemode:
     description: Change player gamemode.
     usage: /<command> <survival|creative|adventure> [player]
