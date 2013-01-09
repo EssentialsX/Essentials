@@ -4,7 +4,6 @@ import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -47,7 +46,7 @@ public class Commandtempban extends EssentialsCommand
 		final long banTimestamp = Util.parseDateDiff(time, true);
 
 		final long maxBanLength = ess.getSettings().getMaxTempban() * 1000;
-		if(maxBanLength > 0 && ((banTimestamp - GregorianCalendar.getInstance().getTimeInMillis()) > maxBanLength) && !(ess.getUser(sender).isAuthorized("essentials.tempban.unlimited")))
+		if (maxBanLength > 0 && ((banTimestamp - GregorianCalendar.getInstance().getTimeInMillis()) > maxBanLength) && !(ess.getUser(sender).isAuthorized("essentials.tempban.unlimited")))
 		{
 			sender.sendMessage(_("oversizedTempban"));
 			throw new NoChargeException();

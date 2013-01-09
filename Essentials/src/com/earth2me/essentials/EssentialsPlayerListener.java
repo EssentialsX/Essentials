@@ -6,7 +6,6 @@ import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.TextInput;
 import com.earth2me.essentials.textreader.TextPager;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -307,8 +306,17 @@ public class EssentialsPlayerListener implements Listener
 
 		if (!banExpired && (user.isBanned() || event.getResult() == Result.KICK_BANNED))
 		{
-			final String banReason = user.getBanReason();
-			event.disallow(Result.KICK_BANNED, banReason != null && !banReason.isEmpty() && !banReason.equalsIgnoreCase("ban") ? banReason : _("defaultBanReason"));
+			String banReason = user.getBanReason();
+			if (banReason == null || banReason.isEmpty() || banReason.equalsIgnoreCase("ban"))
+			{
+				banReason = _("defaultBanReason");
+			}
+			if (user.getBanTimeout() > 0)
+			{
+				//TODO: TL This
+				banReason += "\n\n" + "Expires in " + Util.formatDateDiff(user.getBanTimeout());
+			}
+			event.disallow(Result.KICK_BANNED, banReason);
 			return;
 		}
 
