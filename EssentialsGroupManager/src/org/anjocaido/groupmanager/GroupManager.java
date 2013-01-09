@@ -1697,7 +1697,7 @@ public class GroupManager extends JavaPlugin {
 
 					isLoaded = true;
 
-					BukkitPermissions.updateAllPlayers();
+					BukkitPermissions.reset();
 
 				} else {
 

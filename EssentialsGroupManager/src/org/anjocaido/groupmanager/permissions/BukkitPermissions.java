@@ -103,6 +103,8 @@ public class BukkitPermissions {
 	}
 	
 	public void reset() {
+		attachments = new WeakHashMap<String, PermissionAttachment>();
+		
 		this.collectPermissions();
 		this.updateAllPlayers();
 	}
