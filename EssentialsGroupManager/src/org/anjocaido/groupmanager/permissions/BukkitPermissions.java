@@ -112,8 +112,10 @@ public class BukkitPermissions {
 			attachments.remove(key);
 		}
 		
-		attachments = new WeakHashMap<String, PermissionAttachment>();
-		
+		/*
+		 * collect new permissions
+		 * and register all attachments.
+		 */
 		this.collectPermissions();
 		this.updateAllPlayers();
 	}
