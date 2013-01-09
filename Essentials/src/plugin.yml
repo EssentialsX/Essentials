@@ -329,7 +329,7 @@ commands:
   spawnmob:
     description: Spawns a mob.
     usage: /<command> <mob>[:data][,<mount>[:data]] [amount] [player]
-    aliases: [espawnmob,mob,emob]
+    aliases: [espawnmob,spawnentity,espawnentity,mob,emob]
   speed:
     description: Change your speed limits
     usage: /<command> <speed> [player]

@@ -283,5 +283,13 @@ public class SpawnMob
 			}
 		}
 
+		if (type == EntityType.EXPERIENCE_ORB)
+		{
+			if (Util.isInt(data))
+			{
+				((ExperienceOrb)spawned).setExperience(Integer.parseInt(data));
+
+			}
+		}
 	}
 }

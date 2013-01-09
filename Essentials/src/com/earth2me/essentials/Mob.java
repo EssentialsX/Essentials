@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -43,8 +44,11 @@ public enum Mob
 	IRONGOLEM("IronGolem", Enemies.NEUTRAL, EntityType.IRON_GOLEM),
 	WITHER("Wither", Enemies.ENEMY, EntityType.WITHER),
 	BAT("Bat", Enemies.FRIENDLY, EntityType.BAT),
-	WITCH("Witch", Enemies.ENEMY, EntityType.WITCH);
-	
+	WITCH("Witch", Enemies.ENEMY, EntityType.WITCH),
+	BOAT("Boat", Enemies.NEUTRAL, EntityType.BOAT),
+	MINECART("Minecart", Enemies.NEUTRAL, EntityType.MINECART),
+	ENDERCRYSTAL("EnderCrystal", Enemies.NEUTRAL, EntityType.ENDER_CRYSTAL),
+	EXPERIENCEORB("ExperienceOrb", Enemies.NEUTRAL, EntityType.EXPERIENCE_ORB);
 	public static final Logger logger = Logger.getLogger("Minecraft");
 
 	private Mob(String n, Enemies en, String s, EntityType type)
@@ -75,18 +79,19 @@ public enum Mob
 		}
 	}
 
-	public static Set<String> getMobList() {
+	public static Set<String> getMobList()
+	{
 		return Collections.unmodifiableSet(hashMap.keySet());
 	}
 
-	public LivingEntity spawn(final Player player, final Server server, final Location loc) throws MobException
+	public Entity spawn(final Player player, final Server server, final Location loc) throws MobException
 	{
 		return spawn(player.getWorld(), server, loc);
 	}
-	
-	public LivingEntity spawn(final World world, final Server server, final Location loc) throws MobException
+
+	public Entity spawn(final World world, final Server server, final Location loc) throws MobException
 	{
-		final LivingEntity entity = world.spawn(loc, (Class<? extends LivingEntity>)this.bukkitType.getEntityClass());
+		final Entity entity = world.spawn(loc, (Class<? extends Entity>)this.bukkitType.getEntityClass());
 		if (entity == null)
 		{
 			logger.log(Level.WARNING, _("unableToSpawnMob"));
