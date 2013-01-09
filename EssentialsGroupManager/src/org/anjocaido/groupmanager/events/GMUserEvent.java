@@ -74,14 +74,16 @@ public class GMUserEvent extends Event {
 
 	public void schedule(final GMUserEvent event) {
 
-		if (Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugin("GroupManager"), new Runnable() {
-
-			@Override
-			public void run() {
-
-				Bukkit.getServer().getPluginManager().callEvent(event);
-			}
-		}, 1) == -1)
-			GroupManager.logger.warning("Could not schedule GM Event.");
+		synchronized (GroupManager.getGMEventHandler().getServer()) {
+			if (Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugin("GroupManager"), new Runnable() {
+	
+				@Override
+				public void run() {
+	
+					Bukkit.getServer().getPluginManager().callEvent(event);
+				}
+			}, 1) == -1)
+				GroupManager.logger.warning("Could not schedule GM Event.");
+		}
 	}
 }

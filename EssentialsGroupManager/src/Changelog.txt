@@ -204,3 +204,5 @@ v 2.0:
 	- allWorldsDataList now returns fully mirrored worlds which are not identical mirrors (fixes the /manselect list).
 	- Add support for Rcon.
 	- Prevent GM commands from being used on CommandBlocks.
+	- Clear our attachment map upon a manload so we correctly reconfigure a players new permissions.
+	- Synchronize the raising of GroupManager events to Bukkit.getServer() (should prevent deadlocks).

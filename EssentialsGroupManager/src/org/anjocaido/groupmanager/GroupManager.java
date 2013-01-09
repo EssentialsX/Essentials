@@ -65,6 +65,8 @@ public class GroupManager extends JavaPlugin {
 	protected static GlobalGroups globalGroups;
 
 	private GMLoggerHandler ch;
+	
+	private static GroupManagerEventHandler GMEventHandler;
 	public static BukkitPermissions BukkitPermissions;
 	private static GMWorldListener WorldEvents;
 	public static final Logger logger = Logger.getLogger(GroupManager.class.getName());
@@ -83,7 +85,10 @@ public class GroupManager extends JavaPlugin {
 	
 	@Override
 	public void onEnable() {
-		
+		/*
+		 * Initialize the event handler
+		 */
+		setGMEventHandler(new GroupManagerEventHandler(this.getServer()));
 		onEnable(false);
 	}
 	
@@ -399,7 +404,7 @@ public class GroupManager extends JavaPlugin {
 			senderPlayer = (Player) sender;
 
 			if (!lastError.isEmpty() && !commandLabel.equalsIgnoreCase("manload")) {
-				sender.sendMessage(ChatColor.RED + "All commands are locked due to an error." + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Check the log" + ChatColor.RESET + " and then try a '/manload'.");
+				sender.sendMessage(ChatColor.RED + "All commands are locked due to an error. " + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Check the log" + ChatColor.RESET + "" + ChatColor.RED + " and then try a '/manload'.");
 				return true;
 			}
 
@@ -414,7 +419,7 @@ public class GroupManager extends JavaPlugin {
 		} else if ((sender instanceof ConsoleCommandSender) || (sender instanceof RemoteConsoleCommandSender)) {
 
 			if (!lastError.isEmpty() && !commandLabel.equalsIgnoreCase("manload")) {
-				sender.sendMessage(ChatColor.RED + "All commands are locked due to an error." + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Check the log" + ChatColor.RESET + " and then try a '/manload'.");
+				sender.sendMessage(ChatColor.RED + "All commands are locked due to an error. " + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Check the log" + ChatColor.RESET + "" + ChatColor.RED + " and then try a '/manload'.");
 				return true;
 			}
 
@@ -726,7 +731,7 @@ public class GroupManager extends JavaPlugin {
 					auxUser = dataHolder.getUser(args[0]);
 				}
 				// Validating your permissions
-				if (!isConsole && (senderGroup != null ? permissionHandler.inGroup(auxUser.getName(), senderGroup.getName()) : false)) {
+				if (!isConsole && !isOpOverride && (senderGroup != null ? permissionHandler.inGroup(auxUser.getName(), senderGroup.getName()) : false)) {
 					sender.sendMessage(ChatColor.RED + "Can't modify player with same group than you, or higher.");
 					return false;
 				}
@@ -959,7 +964,7 @@ public class GroupManager extends JavaPlugin {
 				}
 				// Validating your permissions
 				permissionResult = permissionHandler.checkFullUserPermission(senderUser, args[1]);
-				if (!isConsole && (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND) || permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION))) {
+				if (!isConsole && !isOpOverride && (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND) || permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION))) {
 					sender.sendMessage(ChatColor.RED + "You can't add a permission you don't have.");
 					return false;
 				}
@@ -1112,7 +1117,7 @@ public class GroupManager extends JavaPlugin {
 				// auxString = permissionHandler.checkUserOnlyPermission(auxUser, args[1]);
 				if (permissionResult.owner instanceof Group) {
 					if (permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION)) {
-						sender.sendMessage(ChatColor.RED + "The group inherits the a negation permission from group: " + permissionResult.owner.getName());
+						sender.sendMessage(ChatColor.RED + "The group inherits the negation permission from group: " + permissionResult.owner.getName());
 					} else {
 						sender.sendMessage(ChatColor.YELLOW + "The user inherits the permission from group: " + permissionResult.owner.getName());
 					}
@@ -1550,7 +1555,7 @@ public class GroupManager extends JavaPlugin {
 					auxUser = dataHolder.getUser(args[0]);
 				}
 				// Validating permission
-				if (!isConsole && (senderGroup != null ? permissionHandler.inGroup(auxUser.getName(), senderGroup.getName()) : false)) {
+				if (!isConsole && !isOpOverride && (senderGroup != null ? permissionHandler.inGroup(auxUser.getName(), senderGroup.getName()) : false)) {
 					sender.sendMessage(ChatColor.RED + "Can't modify player with same permissions than you, or higher.");
 					return false;
 				}
@@ -1584,7 +1589,7 @@ public class GroupManager extends JavaPlugin {
 					auxUser = dataHolder.getUser(args[0]);
 				}
 				// Validating permission
-				if (!isConsole && (senderGroup != null ? permissionHandler.inGroup(auxUser.getName(), senderGroup.getName()) : false)) {
+				if (!isConsole && !isOpOverride && (senderGroup != null ? permissionHandler.inGroup(auxUser.getName(), senderGroup.getName()) : false)) {
 					sender.sendMessage(ChatColor.RED + "You can't modify a player with same permissions as you, or higher.");
 					return false;
 				}
@@ -1681,7 +1686,7 @@ public class GroupManager extends JavaPlugin {
 				if (args.length > 0) {
 
 					if (!lastError.isEmpty()) {
-						sender.sendMessage(ChatColor.RED + "All commands are locked due to an error." + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Check the log" + ChatColor.RESET + " and then try a '/manload'.");
+						sender.sendMessage(ChatColor.RED + "All commands are locked due to an error. " + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Check the log" + ChatColor.RESET + "" + ChatColor.RED + " and then try a '/manload'.");
 						return true;
 					}
 
@@ -1702,7 +1707,7 @@ public class GroupManager extends JavaPlugin {
 
 					isLoaded = true;
 
-					BukkitPermissions.updateAllPlayers();
+					BukkitPermissions.reset();
 
 				} else {
 
@@ -1723,7 +1728,7 @@ public class GroupManager extends JavaPlugin {
 				 * Fire an event as none will have been triggered in the reload.
 				 */
 				if (GroupManager.isLoaded())
-					GroupManagerEventHandler.callEvent(GMSystemEvent.Action.RELOADED);
+					GroupManager.getGMEventHandler().callEvent(GMSystemEvent.Action.RELOADED);
 
 				return true;
 
@@ -2049,5 +2054,15 @@ public class GroupManager extends JavaPlugin {
 
 		return globalGroups;
 
+	}
+
+	public static GroupManagerEventHandler getGMEventHandler() {
+
+		return GMEventHandler;
+	}
+
+	public static void setGMEventHandler(GroupManagerEventHandler gMEventHandler) {
+
+		GMEventHandler = gMEventHandler;
 	}
 }

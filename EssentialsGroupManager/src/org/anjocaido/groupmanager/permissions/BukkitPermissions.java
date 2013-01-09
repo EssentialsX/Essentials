@@ -103,6 +103,11 @@ public class BukkitPermissions {
 	}
 	
 	public void reset() {
+		
+		/*
+		 * collect new permissions
+		 * and register all attachments.
+		 */
 		this.collectPermissions();
 		this.updateAllPlayers();
 	}
@@ -382,8 +387,10 @@ public class BukkitPermissions {
 	 */
 	private void removeAttachment(String playerName) {
 
-		if (attachments.containsKey(playerName))
+		if (attachments.containsKey(playerName)) {
+			attachments.get(playerName).remove();
 			attachments.remove(playerName);
+		}
 	}
 
 	/**
@@ -391,6 +398,12 @@ public class BukkitPermissions {
 	 */
 	public void removeAllAttachments() {
 
+		/*
+		 * Remove all attachments.
+		 */
+		for (String key : attachments.keySet()) {
+			attachments.get(key).remove();
+		}
 		attachments.clear();
 	}
 
