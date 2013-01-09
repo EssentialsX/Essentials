@@ -65,6 +65,8 @@ public class GroupManager extends JavaPlugin {
 	protected static GlobalGroups globalGroups;
 
 	private GMLoggerHandler ch;
+	
+	private static GroupManagerEventHandler GMEventHandler;
 	public static BukkitPermissions BukkitPermissions;
 	private static GMWorldListener WorldEvents;
 	public static final Logger logger = Logger.getLogger(GroupManager.class.getName());
@@ -83,7 +85,10 @@ public class GroupManager extends JavaPlugin {
 	
 	@Override
 	public void onEnable() {
-		
+		/*
+		 * Initialize the event handler
+		 */
+		setGMEventHandler(new GroupManagerEventHandler(this.getServer()));
 		onEnable(false);
 	}
 	
@@ -1718,7 +1723,7 @@ public class GroupManager extends JavaPlugin {
 				 * Fire an event as none will have been triggered in the reload.
 				 */
 				if (GroupManager.isLoaded())
-					GroupManagerEventHandler.callEvent(GMSystemEvent.Action.RELOADED);
+					GroupManager.getGMEventHandler().callEvent(GMSystemEvent.Action.RELOADED);
 
 				return true;
 
@@ -2044,5 +2049,15 @@ public class GroupManager extends JavaPlugin {
 
 		return globalGroups;
 
+	}
+
+	public static GroupManagerEventHandler getGMEventHandler() {
+
+		return GMEventHandler;
+	}
+
+	public static void setGMEventHandler(GroupManagerEventHandler gMEventHandler) {
+
+		GMEventHandler = gMEventHandler;
 	}
 }

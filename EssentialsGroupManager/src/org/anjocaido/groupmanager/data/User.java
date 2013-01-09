@@ -12,8 +12,6 @@ import java.util.List;
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.dataholder.WorldDataHolder;
 import org.anjocaido.groupmanager.events.GMUserEvent.Action;
-import org.anjocaido.groupmanager.events.GroupManagerEventHandler;
-
 import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -148,7 +146,7 @@ public class User extends DataUnit implements Cloneable {
 			if (notify)
 				GroupManager.notify(this.getName(), String.format(" moved to the group %s.", group.getName()));
 
-			GroupManagerEventHandler.callEvent(this, Action.USER_GROUP_CHANGED);
+			GroupManager.getGMEventHandler().callEvent(this, Action.USER_GROUP_CHANGED);
 		}
 	}
 
@@ -172,7 +170,7 @@ public class User extends DataUnit implements Cloneable {
 		if (GroupManager.isLoaded()) {
 			if (!GroupManager.BukkitPermissions.isPlayer_join())
 				GroupManager.BukkitPermissions.updatePlayer(getBukkitPlayer());
-			GroupManagerEventHandler.callEvent(this, Action.USER_SUBGROUP_CHANGED);
+			GroupManager.getGMEventHandler().callEvent(this, Action.USER_SUBGROUP_CHANGED);
 		}
 		return true;
 
@@ -204,7 +202,7 @@ public class User extends DataUnit implements Cloneable {
 				if (GroupManager.isLoaded())
 					if (!GroupManager.BukkitPermissions.isPlayer_join())
 						GroupManager.BukkitPermissions.updatePlayer(getBukkitPlayer());
-				GroupManagerEventHandler.callEvent(this, Action.USER_SUBGROUP_CHANGED);
+				GroupManager.getGMEventHandler().callEvent(this, Action.USER_SUBGROUP_CHANGED);
 				return true;
 			}
 		} catch (Exception e) {
@@ -257,7 +255,7 @@ public class User extends DataUnit implements Cloneable {
 		if (GroupManager.isLoaded()) {
 			//if (!GroupManager.BukkitPermissions.isPlayer_join())
 			//	GroupManager.BukkitPermissions.updatePlayer(this.getName());
-			GroupManagerEventHandler.callEvent(this, Action.USER_INFO_CHANGED);
+			GroupManager.getGMEventHandler().callEvent(this, Action.USER_INFO_CHANGED);
 		}
 	}
 

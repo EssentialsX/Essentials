@@ -7,8 +7,6 @@ package org.anjocaido.groupmanager.data;
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.dataholder.WorldDataHolder;
 import org.anjocaido.groupmanager.events.GMGroupEvent.Action;
-import org.anjocaido.groupmanager.events.GroupManagerEventHandler;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -144,7 +142,7 @@ public class Group extends DataUnit implements Cloneable {
 			flagAsChanged();
 			if (GroupManager.isLoaded()) {
 				GroupManager.BukkitPermissions.updateAllPlayers();
-				GroupManagerEventHandler.callEvent(this, Action.GROUP_INHERITANCE_CHANGED);
+				GroupManager.getGMEventHandler().callEvent(this, Action.GROUP_INHERITANCE_CHANGED);
 			}
 		}
 	}
@@ -157,7 +155,7 @@ public class Group extends DataUnit implements Cloneable {
 				clone.remove(inherit.toLowerCase());
 				inherits = Collections.unmodifiableList(clone);
 				flagAsChanged();
-				GroupManagerEventHandler.callEvent(this, Action.GROUP_INHERITANCE_CHANGED);
+				GroupManager.getGMEventHandler().callEvent(this, Action.GROUP_INHERITANCE_CHANGED);
 				return true;
 			}
 		}
@@ -187,7 +185,7 @@ public class Group extends DataUnit implements Cloneable {
 			flagAsChanged();
 			if (GroupManager.isLoaded()) {
 				GroupManager.BukkitPermissions.updateAllPlayers();
-				GroupManagerEventHandler.callEvent(this, Action.GROUP_INFO_CHANGED);
+				GroupManager.getGMEventHandler().callEvent(this, Action.GROUP_INFO_CHANGED);
 			}
 		}
 	}

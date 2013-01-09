@@ -205,3 +205,4 @@ v 2.0:
 	- Add support for Rcon.
 	- Prevent GM commands from being used on CommandBlocks.
 	- Clear our attachment map upon a manload so we correctly reconfigure a players new permissions.
+	- Synchronize the raising of GroupManager events to Bukkit.getServer() (should prevent deadlocks).

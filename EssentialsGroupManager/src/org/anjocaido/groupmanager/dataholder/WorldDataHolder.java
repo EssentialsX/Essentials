@@ -28,7 +28,6 @@ import org.anjocaido.groupmanager.events.GMGroupEvent;
 import org.anjocaido.groupmanager.events.GMSystemEvent;
 import org.anjocaido.groupmanager.events.GMUserEvent;
 import org.anjocaido.groupmanager.events.GMUserEvent.Action;
-import org.anjocaido.groupmanager.events.GroupManagerEventHandler;
 import org.anjocaido.groupmanager.permissions.AnjoPermissionsHandler;
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
@@ -137,7 +136,7 @@ public class WorldDataHolder {
 		getUsers().put(theUser.getName().toLowerCase(), theUser);
 		setUsersChanged(true);
 		if (GroupManager.isLoaded())
-			GroupManagerEventHandler.callEvent(theUser, Action.USER_ADDED);
+			GroupManager.getGMEventHandler().callEvent(theUser, Action.USER_ADDED);
 	}
 
 	/**
@@ -152,7 +151,7 @@ public class WorldDataHolder {
 			getUsers().remove(userName.toLowerCase());
 			setUsersChanged(true);
 			if (GroupManager.isLoaded())
-				GroupManagerEventHandler.callEvent(userName, GMUserEvent.Action.USER_REMOVED);
+				GroupManager.getGMEventHandler().callEvent(userName, GMUserEvent.Action.USER_REMOVED);
 			return true;
 		}
 		return false;
@@ -181,7 +180,7 @@ public class WorldDataHolder {
 		groups.setDefaultGroup(getGroup(group.getName()));
 		setGroupsChanged(true);
 		if (GroupManager.isLoaded())
-			GroupManagerEventHandler.callEvent(GMSystemEvent.Action.DEFAULT_GROUP_CHANGED);
+			GroupManager.getGMEventHandler().callEvent(GMSystemEvent.Action.DEFAULT_GROUP_CHANGED);
 	}
 
 	/**
@@ -232,7 +231,7 @@ public class WorldDataHolder {
 
 		if (groupToAdd.getName().toLowerCase().startsWith("g:")) {
 			GroupManager.getGlobalGroups().addGroup(groupToAdd);
-			GroupManagerEventHandler.callEvent(groupToAdd, GMGroupEvent.Action.GROUP_ADDED);
+			GroupManager.getGMEventHandler().callEvent(groupToAdd, GMGroupEvent.Action.GROUP_ADDED);
 			return;
 		}
 
@@ -243,7 +242,7 @@ public class WorldDataHolder {
 		getGroups().put(groupToAdd.getName().toLowerCase(), groupToAdd);
 		setGroupsChanged(true);
 		if (GroupManager.isLoaded())
-			GroupManagerEventHandler.callEvent(groupToAdd, GMGroupEvent.Action.GROUP_ADDED);
+			GroupManager.getGMEventHandler().callEvent(groupToAdd, GMGroupEvent.Action.GROUP_ADDED);
 	}
 
 	/**
@@ -266,7 +265,7 @@ public class WorldDataHolder {
 			getGroups().remove(groupName.toLowerCase());
 			setGroupsChanged(true);
 			if (GroupManager.isLoaded())
-				GroupManagerEventHandler.callEvent(groupName.toLowerCase(), GMGroupEvent.Action.GROUP_REMOVED);
+				GroupManager.getGMEventHandler().callEvent(groupName.toLowerCase(), GMGroupEvent.Action.GROUP_REMOVED);
 			return true;
 		}
 		return false;
@@ -374,7 +373,7 @@ public class WorldDataHolder {
 			Logger.getLogger(WorldDataHolder.class.getName()).log(Level.WARNING, null, ex);
 		}
 		GroupManager.setLoaded(true);
-		GroupManagerEventHandler.callEvent(GMSystemEvent.Action.RELOADED);
+		GroupManager.getGMEventHandler().callEvent(GMSystemEvent.Action.RELOADED);
 	}
 
 	/**
@@ -406,7 +405,7 @@ public class WorldDataHolder {
 			Logger.getLogger(WorldDataHolder.class.getName()).log(Level.WARNING, null, ex);
 		}
 		GroupManager.setLoaded(true);
-		GroupManagerEventHandler.callEvent(GMSystemEvent.Action.RELOADED);
+		GroupManager.getGMEventHandler().callEvent(GMSystemEvent.Action.RELOADED);
 	}
 
 	public void loadGroups(File groupsFile) {
@@ -1002,7 +1001,7 @@ public class WorldDataHolder {
 		ph.removeGroupsChangedFlag();
 
 		if (GroupManager.isLoaded())
-			GroupManagerEventHandler.callEvent(GMSystemEvent.Action.SAVED);
+			GroupManager.getGMEventHandler().callEvent(GMSystemEvent.Action.SAVED);
 
 		/*
 		 * FileWriter tx = null; try { tx = new FileWriter(groupsFile, false);
@@ -1081,7 +1080,7 @@ public class WorldDataHolder {
 		ph.removeUsersChangedFlag();
 
 		if (GroupManager.isLoaded())
-			GroupManagerEventHandler.callEvent(GMSystemEvent.Action.SAVED);
+			GroupManager.getGMEventHandler().callEvent(GMSystemEvent.Action.SAVED);
 
 		/*
 		 * FileWriter tx = null; try { tx = new FileWriter(usersFile, false);
