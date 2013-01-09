@@ -614,6 +614,7 @@ public class Util
 	private static transient final Pattern REPLACE_MAGIC_PATTERN = Pattern.compile("&(k)");
 	private static transient final Pattern REPLACE_FORMAT_PATTERN = Pattern.compile("&([l-or])");
 
+	//This method is used to simply strip the native minecraft colour codes
 	public static String stripFormat(final String input)
 	{
 		if (input == null)
@@ -632,6 +633,7 @@ public class Util
 		return LOGCOLOR_PATTERN.matcher(input).replaceAll("");
 	}
 
+	//This method is used to simply replace the ess colour codes with minecraft ones, ie &c
 	public static String replaceFormat(final String input)
 	{
 		if (input == null)
@@ -641,20 +643,7 @@ public class Util
 		return REPLACE_PATTERN.matcher(input).replaceAll("\u00a7$1");
 	}
 
-	public static String blockURL(final String input)
-	{
-		if (input == null)
-		{
-			return null;
-		}
-		String text = URL_PATTERN.matcher(input).replaceAll("$1 $2");
-		while (URL_PATTERN.matcher(text).find())
-		{
-			text = URL_PATTERN.matcher(text).replaceAll("$1 $2");
-		}
-		return text;
-	}
-
+	//This is the general permission sensitive message format function, does not touch urls.
 	public static String formatString(final IUser user, final String permBase, final String input)
 	{
 		if (input == null)
@@ -689,6 +678,7 @@ public class Util
 		return message;
 	}
 
+	//This is the general permission sensitive message format function, checks for urls.
 	public static String formatMessage(final IUser user, final String permBase, final String input)
 	{
 		if (input == null)
@@ -701,6 +691,20 @@ public class Util
 			message = Util.blockURL(message);
 		}
 		return message;
+	}
+	
+	private static String blockURL(final String input)
+	{
+		if (input == null)
+		{
+			return null;
+		}
+		String text = URL_PATTERN.matcher(input).replaceAll("$1 $2");
+		while (URL_PATTERN.matcher(text).find())
+		{
+			text = URL_PATTERN.matcher(text).replaceAll("$1 $2");
+		}
+		return text;
 	}
 
 	private static String stripColor(final String input, final Pattern pattern)
