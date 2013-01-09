@@ -103,6 +103,15 @@ public class BukkitPermissions {
 	}
 	
 	public void reset() {
+		
+		/*
+		 * Remove all attachments.
+		 */
+		for (String key : attachments.keySet()) {
+			attachments.get(key).remove();
+			attachments.remove(key);
+		}
+		
 		attachments = new WeakHashMap<String, PermissionAttachment>();
 		
 		this.collectPermissions();
