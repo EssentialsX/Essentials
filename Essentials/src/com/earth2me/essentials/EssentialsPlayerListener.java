@@ -439,9 +439,12 @@ public class EssentialsPlayerListener implements Listener
 		case RIGHT_CLICK_BLOCK:
 			if (!event.isCancelled() && event.getClickedBlock().getTypeId() == BED && ess.getSettings().getUpdateBedAtDaytime())
 			{
-				Player player = event.getPlayer();
-				player.setBedSpawnLocation(event.getClickedBlock().getLocation());
-				player.sendMessage(_("homeSet", player.getLocation().getWorld().getName(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ()));
+				User player = ess.getUser(event.getPlayer());
+				if (player.isAuthorized("essentials.sethome.bed"))
+				{
+					player.setBedSpawnLocation(event.getClickedBlock().getLocation());
+					player.sendMessage(_("homeSet", player.getLocation().getWorld().getName(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ()));
+				}
 			}
 			break;
 		case LEFT_CLICK_AIR:
