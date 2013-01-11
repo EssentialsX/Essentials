@@ -88,7 +88,7 @@ public class GroupManager extends JavaPlugin {
 		/*
 		 * Initialize the event handler
 		 */
-		setGMEventHandler(new GroupManagerEventHandler(this.getServer()));
+		setGMEventHandler(new GroupManagerEventHandler(this));
 		onEnable(false);
 	}
 	

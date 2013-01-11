@@ -1,5 +1,6 @@
 package org.anjocaido.groupmanager.events;
 
+import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.data.Group;
 import org.anjocaido.groupmanager.data.User;
 import org.bukkit.Server;
@@ -12,10 +13,15 @@ import org.bukkit.Server;
  */
 public class GroupManagerEventHandler {
 	
-	protected Server server;
+	private final Server server;
+	private final GroupManager plugin;
 	
-	public GroupManagerEventHandler(Server server) {
-		this.server = server;
+
+	public GroupManagerEventHandler(GroupManager plugin) {
+		
+		this.plugin = plugin;
+		this.server = plugin.getServer();
+		
 	}
 
 	protected void callEvent(GMGroupEvent event) {
@@ -59,6 +65,14 @@ public class GroupManagerEventHandler {
 	}
 	
 	/**
+	 * @return the plugin
+	 */
+	public GroupManager getPlugin() {
+	
+		return plugin;
+	}
+	
+	/**
 	 * @return the server
 	 */
 	public Server getServer() {
@@ -67,11 +81,4 @@ public class GroupManagerEventHandler {
 	}
 
 	
-	/**
-	 * @param server the server to set
-	 */
-	public void setServer(Server server) {
-	
-		this.server = server;
-	}
 }
