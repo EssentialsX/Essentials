@@ -1,7 +1,6 @@
 package org.anjocaido.groupmanager.events;
 
 import org.anjocaido.groupmanager.GroupManager;
-import org.bukkit.Server;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -30,7 +29,6 @@ public class GMSystemEvent extends Event {
 	//////////////////////////////
 
 	protected Action action;
-	protected Server server;
 
 	public GMSystemEvent(Action action) {
 
@@ -51,12 +49,12 @@ public class GMSystemEvent extends Event {
 	public void schedule(final GMSystemEvent event) {
 
 		synchronized (GroupManager.getGMEventHandler().getServer()) {
-			if (server.getScheduler().scheduleSyncDelayedTask(server.getPluginManager().getPlugin("GroupManager"), new Runnable() {
+			if (GroupManager.getGMEventHandler().getServer().getScheduler().scheduleSyncDelayedTask(GroupManager.getGMEventHandler().getPlugin(), new Runnable() {
 	
 				@Override
 				public void run() {
 	
-					server.getPluginManager().callEvent(event);
+					GroupManager.getGMEventHandler().getServer().getPluginManager().callEvent(event);
 				}
 			}, 1) == -1)
 				GroupManager.logger.warning("Could not schedule GM Event.");
