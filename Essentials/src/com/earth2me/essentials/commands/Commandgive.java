@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
@@ -9,7 +10,6 @@ import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 
 public class Commandgive extends EssentialsCommand
@@ -27,7 +27,7 @@ public class Commandgive extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		final ItemStack stack = ess.getItemDb().get(args[1]);
+		final MetaItemStack stack = new MetaItemStack(ess.getItemDb().get(args[1]));
 
 		final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 		if (sender instanceof Player
@@ -78,7 +78,7 @@ public class Commandgive extends EssentialsCommand
 
 			for (int i = Util.isInt(args[3]) ? 4 : 3; i < args.length; i++)
 			{
-				ess.getItemDb().addStringEnchantment(null, allowUnsafe, stack, args[i]);
+				stack.addStringEnchantment(null, allowUnsafe, args[i]);
 			}
 		}
 
@@ -91,11 +91,11 @@ public class Commandgive extends EssentialsCommand
 		sender.sendMessage(_("giveSpawn", stack.getAmount(), itemName, giveTo.getDisplayName()));
 		if (giveTo.isAuthorized("essentials.oversizedstacks"))
 		{
-			InventoryWorkaround.addOversizedItems(giveTo.getInventory(), ess.getSettings().getOversizedStackSize(), stack);
+			InventoryWorkaround.addOversizedItems(giveTo.getInventory(), ess.getSettings().getOversizedStackSize(), stack.getBase());
 		}
 		else
 		{
-			InventoryWorkaround.addItems(giveTo.getInventory(), stack);
+			InventoryWorkaround.addItems(giveTo.getInventory(), stack.getBase());
 		}
 		giveTo.updateInventory();
 	}

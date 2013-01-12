@@ -1,12 +1,12 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import java.util.Locale;
 import org.bukkit.Material;
 import org.bukkit.Server;
-import org.bukkit.inventory.ItemStack;
 
 
 public class Commanditem extends EssentialsCommand
@@ -23,7 +23,7 @@ public class Commanditem extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		final ItemStack stack = ess.getItemDb().get(args[0]);
+		final MetaItemStack stack = new MetaItemStack(ess.getItemDb().get(args[0]));
 
 		final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 		if (ess.getSettings().permissionBasedItemSpawn()
@@ -60,7 +60,7 @@ public class Commanditem extends EssentialsCommand
 
 			for (int i = 2; i < args.length; i++)
 			{
-				ess.getItemDb().addStringEnchantment(null, allowUnsafe, stack, args[i]);
+				stack.addStringEnchantment(null, allowUnsafe, args[i]);
 			}
 		}
 
@@ -74,11 +74,11 @@ public class Commanditem extends EssentialsCommand
 		user.sendMessage(_("itemSpawn", stack.getAmount(), displayName));
 		if (user.isAuthorized("essentials.oversizedstacks"))
 		{
-			InventoryWorkaround.addOversizedItems(user.getInventory(), ess.getSettings().getOversizedStackSize(), stack);
+			InventoryWorkaround.addOversizedItems(user.getInventory(), ess.getSettings().getOversizedStackSize(), stack.getBase());
 		}
 		else
 		{
-			InventoryWorkaround.addItems(user.getInventory(), stack);
+			InventoryWorkaround.addItems(user.getInventory(), stack.getBase());
 		}
 		user.updateInventory();
 	}
