@@ -116,24 +116,24 @@ public class Kit
 
 				final String[] parts = d.split(" ");
 				final ItemStack parseStack = ess.getItemDb().get(parts[0], parts.length > 1 ? Integer.parseInt(parts[1]) : 1);
-				final MetaItemStack stack = new MetaItemStack(parseStack);
+				final MetaItemStack metaStack = new MetaItemStack(parseStack);
 
 				if (parts.length > 2)
 				{
 					for (int i = 2; i < parts.length; i++)
 					{
-						stack.addStringEnchantment(null, allowUnsafe, parts[i]);
+						metaStack.addStringEnchantment(null, allowUnsafe, parts[i]);
 					}
 				}
 
 				final Map<Integer, ItemStack> overfilled;
 				if (user.isAuthorized("essentials.oversizedstacks"))
 				{
-					overfilled = InventoryWorkaround.addOversizedItems(user.getInventory(), ess.getSettings().getOversizedStackSize(), stack.getBase());
+					overfilled = InventoryWorkaround.addOversizedItems(user.getInventory(), ess.getSettings().getOversizedStackSize(), metaStack.getItemStack());
 				}
 				else
 				{
-					overfilled = InventoryWorkaround.addItems(user.getInventory(), stack.getBase());
+					overfilled = InventoryWorkaround.addItems(user.getInventory(), metaStack.getItemStack());
 				}
 				for (ItemStack itemStack : overfilled.values())
 				{

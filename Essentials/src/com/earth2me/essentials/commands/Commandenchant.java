@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import org.bukkit.Server;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemStack;
 
 
 public class Commandenchant extends EssentialsCommand
@@ -24,7 +25,7 @@ public class Commandenchant extends EssentialsCommand
 	@Override
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		final MetaItemStack stack = new MetaItemStack(user.getItemInHand());
+		final ItemStack stack = user.getItemInHand();
 		if (stack == null)
 		{
 			throw new Exception(_("nothingInHand"));
@@ -58,11 +59,13 @@ public class Commandenchant extends EssentialsCommand
 		}
 
 		final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments() && user.isAuthorized("essentials.enchant.allowunsafe");
-		final Enchantment enchantment = stack.getEnchantment(user, args[0]);
-		stack.addEnchantment(user, allowUnsafe, enchantment, level);
+		
+		final MetaItemStack metaStack = new MetaItemStack(stack);
+		final Enchantment enchantment = metaStack.getEnchantment(user, args[0]);
+		metaStack.addEnchantment(user, allowUnsafe, enchantment, level);
 
 
-		user.getInventory().setItemInHand(stack.getBase());
+		user.getInventory().setItemInHand(metaStack.getItemStack());
 		user.updateInventory();
 		final String enchantmentName = enchantment.getName().toLowerCase(Locale.ENGLISH);
 		if (level == 0)

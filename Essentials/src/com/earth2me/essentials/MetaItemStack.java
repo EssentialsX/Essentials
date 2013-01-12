@@ -9,17 +9,17 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 
-public class MetaItemStack extends ItemStack
+public class MetaItemStack
 {
 	private final transient Pattern splitPattern = Pattern.compile("[:+',;.]");
 	private final ItemStack stack;
 
 	public MetaItemStack(final ItemStack stack)
 	{
-		this.stack = stack;
+		this.stack = stack.clone();
 	}
 	
-	public ItemStack getBase()
+	public ItemStack getItemStack()
 	{
 		return stack;
 	}

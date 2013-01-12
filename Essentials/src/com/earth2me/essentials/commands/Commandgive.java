@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 
 public class Commandgive extends EssentialsCommand
@@ -27,7 +28,7 @@ public class Commandgive extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		final MetaItemStack stack = new MetaItemStack(ess.getItemDb().get(args[1]));
+		ItemStack stack = ess.getItemDb().get(args[1]);
 
 		final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 		if (sender instanceof Player
@@ -70,7 +71,8 @@ public class Commandgive extends EssentialsCommand
 
 		if (args.length > 3)
 		{
-			boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
+			MetaItemStack metaStack = new MetaItemStack(stack);
+			boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();			
 			if (allowUnsafe && sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.enchant.allowunsafe"))
 			{
 				allowUnsafe = false;
@@ -78,8 +80,9 @@ public class Commandgive extends EssentialsCommand
 
 			for (int i = Util.isInt(args[3]) ? 4 : 3; i < args.length; i++)
 			{
-				stack.addStringEnchantment(null, allowUnsafe, args[i]);
+				metaStack.addStringEnchantment(null, allowUnsafe, args[i]);
 			}
+			stack = metaStack.getItemStack();
 		}
 
 		if (stack.getType() == Material.AIR)
@@ -91,11 +94,11 @@ public class Commandgive extends EssentialsCommand
 		sender.sendMessage(_("giveSpawn", stack.getAmount(), itemName, giveTo.getDisplayName()));
 		if (giveTo.isAuthorized("essentials.oversizedstacks"))
 		{
-			InventoryWorkaround.addOversizedItems(giveTo.getInventory(), ess.getSettings().getOversizedStackSize(), stack.getBase());
+			InventoryWorkaround.addOversizedItems(giveTo.getInventory(), ess.getSettings().getOversizedStackSize(), stack);
 		}
 		else
 		{
-			InventoryWorkaround.addItems(giveTo.getInventory(), stack.getBase());
+			InventoryWorkaround.addItems(giveTo.getInventory(), stack);
 		}
 		giveTo.updateInventory();
 	}
