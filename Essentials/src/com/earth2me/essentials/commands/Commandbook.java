@@ -39,7 +39,7 @@ public class Commandbook extends EssentialsCommand
 		}
 		else
 		{
-			throw new Exception("You are not holding a book.");
+			throw new Exception("You are not holding a writable book.");
 		}
 	}
 }

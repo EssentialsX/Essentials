@@ -227,6 +227,10 @@ kits:
     delay: 1000    
     items:
       - 397:3 1 player:Notch
+  color:
+    delay: 1000    
+    items:
+      - 387 1 title:Colors author:KHobbits lore:Ingame_color_codes info:Colors
 
 # Essentials Sign Control
 # See http://wiki.ess3.net/wiki/Sign_Tutorial for instructions on how to use these.

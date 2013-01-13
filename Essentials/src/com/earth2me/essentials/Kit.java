@@ -122,7 +122,7 @@ public class Kit
 				{
 					for (int i = 2; i < parts.length; i++)
 					{
-						metaStack.addStringMeta(null, allowUnsafe, parts[i]);
+						metaStack.addStringMeta(null, allowUnsafe, parts[i], ess);
 					}
 				}
 

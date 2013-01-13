@@ -30,6 +30,8 @@ public class TextPager
 		List<String> chapters = text.getChapters();
 		Map<String, Integer> bookmarks = text.getBookmarks();
 
+		//This code deals with the initial chapter.  We use this to display the initial output or contents.
+		//We also use this code to display some extra information if we don't intend to use chapters
 		if (pageStr == null || pageStr.isEmpty() || pageStr.matches("[0-9]+"))
 		{
 			//If an info file starts with a chapter title, list the chapters
@@ -116,6 +118,7 @@ public class TextPager
 			}
 		}
 
+		//If we have a chapter, check to see if we have a page number
 		int chapterpage = 0;
 		if (chapterPageStr != null)
 		{
@@ -133,11 +136,14 @@ public class TextPager
 			}
 		}
 
+		//This checks to see if we have the chapter in the index
 		if (!bookmarks.containsKey(pageStr.toLowerCase(Locale.ENGLISH)))
 		{
 			sender.sendMessage(_("infoUnknownChapter"));
 			return;
 		}
+		
+		//Since we have a valid chapter, count the number of lines in the chapter
 		final int chapterstart = bookmarks.get(pageStr.toLowerCase(Locale.ENGLISH)) + 1;
 		int chapterend;
 		for (chapterend = chapterstart; chapterend < lines.size(); chapterend++)
@@ -148,8 +154,9 @@ public class TextPager
 				break;
 			}
 		}
+		
+		//Display the chapter from the starting position
 		final int start = chapterstart + (onePage ? 0 : chapterpage * 9);
-
 		final int page = chapterpage + 1;
 		final int pages = (chapterend - chapterstart) / 9 + ((chapterend - chapterstart) % 9 > 0 ? 1 : 0);
 		if (!onePage && commandName != null)

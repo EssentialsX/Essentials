@@ -1,45 +1,42 @@
 package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.textreader.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.inventory.meta.*;
 
 
 public class MetaItemStack
 {
 	private final transient Pattern splitPattern = Pattern.compile("[:+',;.]");
 	private final ItemStack stack;
-
+	
 	public MetaItemStack(final ItemStack stack)
 	{
 		this.stack = stack.clone();
 	}
-
+	
 	public ItemStack getItemStack()
 	{
 		return stack;
 	}
 
 	//TODO: TL this
-	public void addStringMeta(final User user, final boolean allowUnsafe, final String string) throws Exception
+	public void addStringMeta(final User user, final boolean allowUnsafe, final String string, final IEssentials ess) throws Exception
 	{
 		final String[] split = splitPattern.split(string, 2);
 		if (split.length < 1)
 		{
 			return;
 		}
-
+		
 		if (split.length > 1 && split[0].equalsIgnoreCase("name"))
 		{
 			final String displayName = split[1].replace('_', ' ');
@@ -72,6 +69,31 @@ public class MetaItemStack
 				throw new Exception("You can only set the owner of player skulls (397:3)");
 			}
 		}
+		else if (split.length > 1 && split[0].equalsIgnoreCase("info") && stack.getType() == Material.WRITTEN_BOOK)
+		{
+			final BookMeta meta = (BookMeta)stack.getItemMeta();
+			final IText input = new BookInput("info", true, ess);
+			final BookPager pager = new BookPager(input);			
+			
+			List<String> pages = pager.getPages(split[1]);
+			meta.setPages(pages);
+			
+			stack.setItemMeta(meta);
+		}
+		else if (split.length > 1 && split[0].equalsIgnoreCase("author") && stack.getType() == Material.WRITTEN_BOOK)
+		{
+			final String author = split[1];
+			final BookMeta meta = (BookMeta)stack.getItemMeta();
+			meta.setAuthor(author);
+			stack.setItemMeta(meta);
+		}
+		else if (split.length > 1 && split[0].equalsIgnoreCase("title") && stack.getType() == Material.WRITTEN_BOOK)
+		{
+			final String title = split[1];
+			final BookMeta meta = (BookMeta)stack.getItemMeta();
+			meta.setTitle(title);
+			stack.setItemMeta(meta);
+		}
 		else if (split.length > 1 && (split[0].equalsIgnoreCase("color") || split[0].equalsIgnoreCase("colour"))
 				 && (stack.getType() == Material.LEATHER_BOOTS
 					 || stack.getType() == Material.LEATHER_CHESTPLATE
@@ -98,7 +120,7 @@ public class MetaItemStack
 			parseEnchantmentStrings(user, allowUnsafe, split);
 		}
 	}
-
+	
 	public void addStringEnchantment(final User user, final boolean allowUnsafe, final String string) throws Exception
 	{
 		final String[] split = splitPattern.split(string, 2);
@@ -106,14 +128,14 @@ public class MetaItemStack
 		{
 			return;
 		}
-
+		
 		parseEnchantmentStrings(user, allowUnsafe, split);
 	}
-
+	
 	private void parseEnchantmentStrings(final User user, final boolean allowUnsafe, final String[] split) throws Exception
 	{
 		Enchantment enchantment = getEnchantment(user, split[0]);
-
+		
 		int level = -1;
 		if (split.length > 1)
 		{
@@ -126,14 +148,14 @@ public class MetaItemStack
 				level = -1;
 			}
 		}
-
+		
 		if (level < 0 || (!allowUnsafe && level > enchantment.getMaxLevel()))
 		{
 			level = enchantment.getMaxLevel();
 		}
 		addEnchantment(user, allowUnsafe, enchantment, level);
 	}
-
+	
 	public void addEnchantment(final User user, final boolean allowUnsafe, final Enchantment enchantment, final int level) throws Exception
 	{
 		try

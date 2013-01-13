@@ -12,7 +12,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
-
+//TODO: Remove op and replace with perm
 public class Commandbalancetop extends EssentialsCommand
 {
 	public Commandbalancetop()
