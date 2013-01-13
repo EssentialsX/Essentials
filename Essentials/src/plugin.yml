@@ -39,6 +39,10 @@ commands:
     description: Bans an IP address.
     usage: /<command> <address>
     aliases: [ebanip]
+  book:
+    description: Allows reopening written books.
+    usage: /<command>
+    aliases: [ebook]
   break:
     description: Breaks the block you are looking at.
     usage: /<command>

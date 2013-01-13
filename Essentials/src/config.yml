@@ -212,8 +212,9 @@ kits:
   dtools:
     delay: 10
     items:
-      - 277 1 efficiency:1 durability:1
-      - 278 1
+      - 277 1 digspeed:3 name:Dwarf lore:Diggy|Diggy|Hole
+      - 278 1 efficiency:1 durability:1 fortune:1 name:Gigadrill lore:The_drill_that_pierces|the_heavens
+      - 298 1 color:255|0|0
       - 279:780 1
   tools:
     delay: 10
@@ -222,6 +223,10 @@ kits:
       - 273 1
       - 274 1
       - 275 1
+  notch:
+    delay: 1000    
+    items:
+      - 397:3 1 player:Notch
 
 # Essentials Sign Control
 # See http://wiki.ess3.net/wiki/Sign_Tutorial for instructions on how to use these.

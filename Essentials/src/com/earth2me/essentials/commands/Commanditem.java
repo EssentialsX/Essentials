@@ -62,7 +62,7 @@ public class Commanditem extends EssentialsCommand
 
 			for (int i = 2; i < args.length; i++)
 			{
-				metaStack.addStringEnchantment(null, allowUnsafe, args[i]);
+				metaStack.addStringMeta(null, allowUnsafe, args[i]);
 			}
 			stack = metaStack.getItemStack();
 		}

@@ -80,7 +80,7 @@ public class Commandgive extends EssentialsCommand
 
 			for (int i = Util.isInt(args[3]) ? 4 : 3; i < args.length; i++)
 			{
-				metaStack.addStringEnchantment(null, allowUnsafe, args[i]);
+				metaStack.addStringMeta(null, allowUnsafe, args[i]);
 			}
 			stack = metaStack.getItemStack();
 		}
