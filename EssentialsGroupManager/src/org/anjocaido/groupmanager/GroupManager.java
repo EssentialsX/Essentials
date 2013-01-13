@@ -152,7 +152,7 @@ public class GroupManager extends JavaPlugin {
 				ch = new GMLoggerHandler();
 				GroupManager.logger.addHandler(ch);
 			}
-			logger.setLevel(Level.ALL);
+			GroupManager.logger.setLevel(Level.ALL);
 
 			// Create the backup folder, if it doesn't exist.
 			prepareFileFields();
