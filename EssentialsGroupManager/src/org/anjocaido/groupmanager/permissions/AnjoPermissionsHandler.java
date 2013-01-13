@@ -16,6 +16,7 @@ import org.anjocaido.groupmanager.data.Group;
 import org.anjocaido.groupmanager.dataholder.WorldDataHolder;
 import org.anjocaido.groupmanager.data.User;
 import org.anjocaido.groupmanager.utils.PermissionCheckResult;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
@@ -784,6 +785,15 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 		if (user == null || targetPermission == null || targetPermission.isEmpty()) {
 			return result;
 		}
+		
+		/*
+		 * Do not push any perms to bukkit if...
+		 * We are in offline mode
+		 * and the player has the 'groupmanager.noofflineperms' permission.
+		 */
+		if (!Bukkit.getServer().getOnlineMode()
+				&& (checkFullGMPermission(user, "groupmanager.noofflineperms", true).resultType == PermissionCheckResult.Type.FOUND))
+			return result;
 
 		if (checkBukkit) {
 			// Check Bukkit perms to support plugins which add perms via code

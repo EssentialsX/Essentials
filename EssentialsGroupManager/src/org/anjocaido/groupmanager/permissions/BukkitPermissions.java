@@ -31,7 +31,6 @@ import java.util.WeakHashMap;
 
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.data.User;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -183,6 +182,18 @@ public class BukkitPermissions {
 			value = (!permission.startsWith("-"));
 			newPerms.put((value ? permission : permission.substring(1)), value);
 		}
+		
+		/*
+		 * Do not push any perms to bukkit if...
+		 * We are in offline mode
+		 * and the player has the 'groupmanager.noofflineperms' permission.
+		 */
+		if (!Bukkit.getServer().getOnlineMode()
+				&& (newPerms.containsKey("groupmanager.noofflineperms") && (newPerms.get("groupmanager.noofflineperms") == true))) {
+			removeAttachment(name);
+			return;
+		}
+
 
 		/**
 		 * This is put in place until such a time as Bukkit pull 466 is
