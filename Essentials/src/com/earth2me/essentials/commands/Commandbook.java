@@ -6,7 +6,6 @@ import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.inventory.meta.ItemMeta;
 
 
 public class Commandbook extends EssentialsCommand
@@ -20,49 +19,36 @@ public class Commandbook extends EssentialsCommand
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-
-		ItemStack item = user.getItemInHand();
-		String player = user.getName();
+		final ItemStack item = user.getItemInHand();
+		final String player = user.getName();
 		if (item.getType() == Material.WRITTEN_BOOK)
 		{
-			ItemMeta meta = item.getItemMeta();
-			BookMeta bmeta = (BookMeta)meta;
+			BookMeta bmeta = (BookMeta)item.getItemMeta();
+
 			if (args[0].equalsIgnoreCase("author"))
 			{
 				if (user.isAuthorized("essentals.book.author"))
 				{
-					ItemStack newbook = new ItemStack(Material.WRITTEN_BOOK, 1);
 					bmeta.setAuthor(args[1]);
-					newbook.setItemMeta(bmeta);
-					user.setItemInHand(newbook);
+					item.setItemMeta(bmeta);
 					user.sendMessage(_("bookAuthorSet", args[1]));
 				}
 				else
 				{
-					user.sendMessage(_("denyChangeAuthor"));
+					throw new Exception(_("denyChangeAuthor"));
 				}
 			}
 			else if (args[0].equalsIgnoreCase("title"))
 			{
-				if (user.isAuthorized("essentials.book.title"))
+				if (user.isAuthorized("essentials.book.title") && (isAuthor(bmeta, player) || user.isAuthorized("essentials.book.others")))
 				{
-
-					if (isAuthor(bmeta, player) || user.isAuthorized("essentials.book.title.others"))
-					{
-						ItemStack newbook = new ItemStack(Material.WRITTEN_BOOK, 1);
-						bmeta.setTitle(args[1]);
-						newbook.setItemMeta(bmeta);
-						user.setItemInHand(newbook);
-						user.sendMessage(_("bookTitleSet", args[1]));
-					}
-					else
-					{
-						user.sendMessage(_("denyChangeTitle"));
-					}
+					bmeta.setTitle(args[1]);
+					item.setItemMeta(bmeta);
+					user.sendMessage(_("bookTitleSet", args[1]));
 				}
 				else
 				{
-					user.sendMessage(_("denyChangeTitle"));
+					throw new Exception(_("denyChangeTitle"));
 				}
 			}
 			else
@@ -70,20 +56,19 @@ public class Commandbook extends EssentialsCommand
 				if (isAuthor(bmeta, player) || user.isAuthorized("essentials.book.others"))
 				{
 					ItemStack newItem = new ItemStack(Material.BOOK_AND_QUILL, item.getAmount());
-					newItem.setItemMeta(meta);
+					newItem.setItemMeta(bmeta);
 					user.setItemInHand(newItem);
 					user.sendMessage(_("editBookContents"));
 				}
 				else
 				{
-					user.sendMessage(_("denyBookEdit"));
+					throw new Exception(_("denyBookEdit"));
 				}
 			}
 		}
 		else if (item.getType() == Material.BOOK_AND_QUILL)
 		{
-			ItemMeta meta = item.getItemMeta();
-			BookMeta bmeta = (BookMeta)meta;
+			BookMeta bmeta = (BookMeta)item.getItemMeta();
 			bmeta.setAuthor(player);
 			ItemStack newItem = new ItemStack(Material.WRITTEN_BOOK, item.getAmount());
 			newItem.setItemMeta(bmeta);
