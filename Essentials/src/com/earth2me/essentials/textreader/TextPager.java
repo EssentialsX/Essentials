@@ -30,57 +30,10 @@ public class TextPager
 		List<String> chapters = text.getChapters();
 		Map<String, Integer> bookmarks = text.getBookmarks();
 
-		if (bookmarks.isEmpty())
-		{
-			int page = 1;
-			try
-			{
-				page = Integer.parseInt(pageStr);
-			}
-			catch (Exception ex)
-			{
-				page = 1;
-			}
-			if (page < 1)
-			{
-				page = 1;
-			}
-
-			final int start = onePage ? 0 : (page - 1) * 9;
-			final int pages = lines.size() / 9 + (lines.size() % 9 > 0 ? 1 : 0);
-			if (!onePage && commandName != null)
-			{
-				StringBuilder content = new StringBuilder();
-				final String[] title = commandName.split(" ", 2);
-				if (title.length > 1)
-				{
-					content.append(I18n.capitalCase(title[0])).append(": ");
-					content.append(title[1]);
-				}
-				else if (chapterPageStr != null)
-				{
-					content.append(I18n.capitalCase(commandName)).append(": ");
-					content.append(chapterPageStr);
-				}
-				else
-				{
-					content.append(I18n.capitalCase(commandName));
-				}
-				sender.sendMessage(_("infoPages", page, pages, content));
-			}
-			for (int i = start; i < lines.size() && i < start + (onePage ? 20 : 9); i++)
-			{
-				sender.sendMessage("§r" + lines.get(i));
-			}
-			if (!onePage && page < pages && commandName != null)
-			{
-				sender.sendMessage(_("readNextPage", commandName, page + 1));
-			}
-			return;
-		}
-
 		if (pageStr == null || pageStr.isEmpty() || pageStr.matches("[0-9]+"))
 		{
+			//If an info file starts with a chapter title, list the chapters
+			//If not display the text up until the first chapter.
 			if (lines.get(0).startsWith("#"))
 			{
 				if (onePage)
@@ -133,7 +86,23 @@ public class TextPager
 				if (!onePage && commandName != null)
 				{
 
-					sender.sendMessage(_("infoPages", page, pages, I18n.capitalCase(commandName)));
+					StringBuilder content = new StringBuilder();
+					final String[] title = commandName.split(" ", 2);
+					if (title.length > 1)
+					{
+						content.append(I18n.capitalCase(title[0])).append(": ");
+						content.append(title[1]);
+					}
+					else if (chapterPageStr != null)
+					{
+						content.append(I18n.capitalCase(commandName)).append(": ");
+						content.append(chapterPageStr);
+					}
+					else
+					{
+						content.append(I18n.capitalCase(commandName));
+					}
+					sender.sendMessage(_("infoPages", page, pages, content));
 				}
 				for (int i = start; i < end && i < start + (onePage ? 20 : 9); i++)
 				{

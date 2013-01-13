@@ -82,7 +82,7 @@ public class Commandbalancetop extends EssentialsCommand
 		cal.setTimeInMillis(cacheage);
 		final DateFormat format = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 		sender.sendMessage(_("balanceTop", format.format(cal.getTime())));
-		new TextPager(cache).showPage(Integer.toString(page), "", "balancetop", sender);
+		new TextPager(cache).showPage(Integer.toString(page), null, "balancetop", sender);
 	}
 
 
