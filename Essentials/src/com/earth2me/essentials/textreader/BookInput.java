@@ -17,7 +17,7 @@ public class BookInput implements IText
 	public BookInput(final String filename, final boolean createFile, final IEssentials ess) throws IOException
 	{
 
-		File file = null;		
+		File file = null;
 		if (file == null || !file.exists())
 		{
 			file = new File(ess.getDataFolder(), filename + ".txt");

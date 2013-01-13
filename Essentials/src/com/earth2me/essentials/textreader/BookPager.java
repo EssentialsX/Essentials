@@ -1,12 +1,9 @@
 package com.earth2me.essentials.textreader;
 
-import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.Util;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.logging.Logger;
 
 
 public class BookPager
@@ -22,9 +19,8 @@ public class BookPager
 	{
 		List<String> lines = text.getLines();
 		List<String> chapters = text.getChapters();
+		List<String> pageLines = new ArrayList<String>();
 		Map<String, Integer> bookmarks = text.getBookmarks();
-
-		int chapterpage = 0;
 
 		//This checks to see if we have the chapter in the index
 		if (!bookmarks.containsKey(pageStr.toLowerCase(Locale.ENGLISH)))
@@ -43,8 +39,6 @@ public class BookPager
 				break;
 			}
 		}
-
-		List<String> pageLines = new ArrayList<String>();
 
 		for (int lineNo = chapterstart; lineNo < chapterend; lineNo += 1)
 		{
@@ -72,7 +66,7 @@ public class BookPager
 				if (letter == '\u00a7')
 				{
 					Character nextLetter = pageLine.charAt(pointer + 1);
-					if (nextLetter == 'l')
+					if (nextLetter == 'l' || nextLetter == 'L')
 					{
 						weight = 1.25;
 					}
@@ -100,23 +94,17 @@ public class BookPager
 		}
 
 		List<String> pages = new ArrayList<String>();
-
 		for (int count = 0; count < pageLines.size(); count += 12)
 		{
-
 			StringBuilder newPage = new StringBuilder();
-
 			for (int i = count; i < count + 12 && i < pageLines.size(); i++)
 			{
 				newPage.append("\n").append(pageLines.get(i));
-				//Logger.getLogger("Minecraft").info("adding line " + pageLines.get(i) + " to book");
 			}
 
-			//Logger.getLogger("Minecraft").info("adding page to book");
 			pages.add(newPage.toString());
 		}
 
 		return pages;
-
 	}
 }
