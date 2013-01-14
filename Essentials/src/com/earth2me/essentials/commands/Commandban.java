@@ -58,7 +58,7 @@ public class Commandban extends EssentialsCommand
 		String banReason;
 		if (args.length > 1)
 		{
-			banReason = _("banFormat", Util.replaceFormat(getFinalArg(args, 1).replace("\\n", "\n")), senderName);
+			banReason = _("banFormat", Util.replaceFormat(getFinalArg(args, 1).replace("\\n", "\n").replace("|", "\n")), senderName);
 		}
 		else
 		{
