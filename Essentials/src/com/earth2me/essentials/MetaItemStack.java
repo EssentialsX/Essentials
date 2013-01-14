@@ -39,7 +39,7 @@ public class MetaItemStack
 		
 		if (split.length > 1 && split[0].equalsIgnoreCase("name"))
 		{
-			final String displayName = split[1].replace('_', ' ');
+			final String displayName = Util.replaceFormat(split[1].replace('_', ' '));
 			final ItemMeta meta = stack.getItemMeta();
 			meta.setDisplayName(displayName);
 			stack.setItemMeta(meta);
@@ -49,7 +49,7 @@ public class MetaItemStack
 			final List<String> lore = new ArrayList<String>();
 			for (String line : split[1].split("\\|"))
 			{
-				lore.add(line.replace('_', ' '));
+				lore.add(Util.replaceFormat(line.replace('_', ' ')));
 			}
 			final ItemMeta meta = stack.getItemMeta();
 			meta.setLore(lore);
@@ -89,7 +89,7 @@ public class MetaItemStack
 		}
 		else if (split.length > 1 && split[0].equalsIgnoreCase("title") && stack.getType() == Material.WRITTEN_BOOK)
 		{
-			final String title = split[1];
+			final String title = Util.replaceFormat(split[1].replace('_', ' '));
 			final BookMeta meta = (BookMeta)stack.getItemMeta();
 			meta.setTitle(title);
 			stack.setItemMeta(meta);

@@ -220,9 +220,9 @@ kits:
   dtools:
     delay: 600
     items:
-      - 278 1 efficiency:1 durability:1 fortune:1 name:Gigadrill lore:The_drill_that_pierces|the_heavens
+      - 278 1 efficiency:1 durability:1 fortune:1 name:&4Gigadrill lore:The_drill_that_&npierces|the_heavens
       - 277 1 digspeed:3 name:Dwarf lore:Diggy|Diggy|Hole
-      - 298 1 color:255|255|255 name:Top_hat lore:Good_day,_Good_day
+      - 298 1 color:255|255|255 name:Top_Hat lore:Good_day,_Good_day
       - 279:780 1
   notch:
     delay: 6000
@@ -231,7 +231,7 @@ kits:
   color:
     delay: 6000
     items:
-      - 387 1 title:Book_o_Colors author:KHobbits lore:Ingame_color_codes book:Colors
+      - 387 1 title:&4Book_&9o_&6Colors author:KHobbits lore:Ingame_color_codes book:Colors
 
 # Essentials Sign Control
 # See http://wiki.ess3.net/wiki/Sign_Tutorial for instructions on how to use these.
