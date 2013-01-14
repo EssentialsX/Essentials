@@ -58,17 +58,17 @@ public class Commandban extends EssentialsCommand
 		String banReason;
 		if (args.length > 1)
 		{
-			banReason = _("banFormat", Util.replaceFormat(getFinalArg(args, 1).replace("\\n", "\n").replace("|", "\n")), senderName);
+			banReason = Util.replaceFormat(getFinalArg(args, 1).replace("\\n", "\n").replace("|", "\n"));
 		}
 		else
 		{
-			banReason = _("banFormat", _("defaultBanReason"), senderName);
+			banReason = _("defaultBanReason");
 		}
 
-		user.setBanReason(banReason);
+		user.setBanReason(_("banFormat", banReason, senderName));
 		user.setBanned(true);
 		user.setBanTimeout(0);
-		user.kickPlayer(banReason);
+		user.kickPlayer(_("banFormat", banReason, senderName));
 		
 		server.getLogger().log(Level.INFO, _("playerBanned", senderName, user.getName(), banReason));
 		
