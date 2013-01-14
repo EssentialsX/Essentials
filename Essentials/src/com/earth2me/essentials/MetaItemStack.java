@@ -69,10 +69,10 @@ public class MetaItemStack
 				throw new Exception("You can only set the owner of player skulls (397:3)");
 			}
 		}
-		else if (split.length > 1 && split[0].equalsIgnoreCase("info") && stack.getType() == Material.WRITTEN_BOOK)
+		else if (split.length > 1 && split[0].equalsIgnoreCase("book") && stack.getType() == Material.WRITTEN_BOOK)
 		{
 			final BookMeta meta = (BookMeta)stack.getItemMeta();
-			final IText input = new BookInput("info", true, ess);
+			final IText input = new BookInput("book", true, ess);
 			final BookPager pager = new BookPager(input);			
 			
 			List<String> pages = pager.getPages(split[1]);
