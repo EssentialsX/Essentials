@@ -152,9 +152,9 @@ commands:
     usage: /<command> [search term] [page]
     aliases: [ehelp]
   helpop:
-    description: Request help from online operators.
+    description: Message online admins.
     usage: /<command> <message>
-    aliases: [ehelpop]
+    aliases: [amsg,eamsg,ac,eac,ehelpop]
   home:
     description: Teleport to your home.
     usage: /<command> [player:][name]
