@@ -22,7 +22,39 @@ public class BookInput implements IText
 		{
 			file = new File(ess.getDataFolder(), filename + ".txt");
 		}
-		if (file.exists())
+		if (!file.exists())
+		{
+			if (createFile)
+			{
+				final InputStream input = ess.getResource(filename + ".txt");
+				final OutputStream output = new FileOutputStream(file);
+				try
+				{
+					final byte[] buffer = new byte[1024];
+					int length = input.read(buffer);
+					while (length > 0)
+					{
+						output.write(buffer, 0, length);
+						length = input.read(buffer);
+					}
+				}
+				finally
+				{
+					output.close();
+					input.close();
+				}
+				ess.getLogger().info("File " + filename + ".txt does not exist. Creating one for you.");
+			}
+		}
+		if (!file.exists())
+		{
+			lastChange = 0;
+			lines = Collections.emptyList();
+			chapters = Collections.emptyList();
+			bookmarks = Collections.emptyMap();
+			throw new FileNotFoundException("Could not create " + filename + ".txt");
+		}
+		else
 		{
 			lastChange = file.lastModified();
 			boolean readFromfile;
@@ -72,34 +104,6 @@ public class BookInput implements IText
 				{
 					bufferedReader.close();
 				}
-			}
-		}
-		else
-		{
-			lastChange = 0;
-			lines = Collections.emptyList();
-			chapters = Collections.emptyList();
-			bookmarks = Collections.emptyMap();
-			if (createFile)
-			{
-				final InputStream input = ess.getResource(filename + ".txt");
-				final OutputStream output = new FileOutputStream(file);
-				try
-				{
-					final byte[] buffer = new byte[1024];
-					int length = input.read(buffer);
-					while (length > 0)
-					{
-						output.write(buffer, 0, length);
-						length = input.read(buffer);
-					}
-				}
-				finally
-				{
-					output.close();
-					input.close();
-				}
-				throw new FileNotFoundException("File " + filename + ".txt does not exist. Creating one for you.");
 			}
 		}
 	}
