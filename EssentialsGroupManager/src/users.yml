@@ -3,13 +3,16 @@ users:
   snowleo:
     group: Builder
     subgroups: []
-    permissions: []
+    permissions:
+    - groupmanager.noofflineperms
   KHobbits:
     group: Moderator
     subgroups: []
-    permissions: []
+    permissions:
+    - groupmanager.noofflineperms
   ElgarL:
     group: Moderator
     subgroups: []
-    permissions: []
+    permissions:
+    - groupmanager.noofflineperms
 

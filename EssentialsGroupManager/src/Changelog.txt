@@ -206,3 +206,5 @@ v 2.0:
 	- Prevent GM commands from being used on CommandBlocks.
 	- Clear our attachment map upon a manload so we correctly reconfigure a players new permissions.
 	- Synchronize the raising of GroupManager events to Bukkit.getServer() (should prevent deadlocks).
+	- Synchronize pushing to Bukkit perms to prevent any ConcurrentModificationException.
+	- Do not grant any permissions (nor update Bukkit) if the server is in offline mode and the player has the permission node 'groupmanager.noofflineperms'.

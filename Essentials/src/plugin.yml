@@ -39,6 +39,10 @@ commands:
     description: Bans an IP address.
     usage: /<command> <address>
     aliases: [ebanip]
+  book:
+    description: Allows reopening written books.
+    usage: /<command>
+    aliases: [ebook]
   break:
     description: Breaks the block you are looking at.
     usage: /<command>
@@ -148,9 +152,9 @@ commands:
     usage: /<command> [search term] [page]
     aliases: [ehelp]
   helpop:
-    description: Request help from online operators.
+    description: Message online admins.
     usage: /<command> <message>
-    aliases: [ehelpop]
+    aliases: [amsg,eamsg,ac,eac,ehelpop]
   home:
     description: Teleport to your home.
     usage: /<command> [player:][name]

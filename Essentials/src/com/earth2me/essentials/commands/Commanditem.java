@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import java.util.Locale;
@@ -23,7 +24,7 @@ public class Commanditem extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		final ItemStack stack = ess.getItemDb().get(args[0]);
+		ItemStack stack = ess.getItemDb().get(args[0]);
 
 		final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 		if (ess.getSettings().permissionBasedItemSpawn()
@@ -56,12 +57,14 @@ public class Commanditem extends EssentialsCommand
 		}
 		if (args.length > 2)
 		{
+			MetaItemStack metaStack = new MetaItemStack(stack);
 			final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments() && user.isAuthorized("essentials.enchant.allowunsafe");
 
 			for (int i = 2; i < args.length; i++)
 			{
-				ess.getItemDb().addStringEnchantment(null, allowUnsafe, stack, args[i]);
+				metaStack.addStringMeta(null, allowUnsafe, args[i], ess);
 			}
+			stack = metaStack.getItemStack();
 		}
 
 

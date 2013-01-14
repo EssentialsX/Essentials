@@ -221,6 +221,69 @@ public class EssentialsConf extends YamlConfiguration
 		this.resourceClass = resClass;
 	}
 
+	public void save()
+	{
+		try
+		{
+			save(configFile);
+		}
+		catch (IOException ex)
+		{
+			LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+		}
+	}
+
+	public void saveWithError() throws IOException
+	{
+		save(configFile);
+	}
+
+	@Override
+	public synchronized void save(final File file) throws IOException
+	{
+		if (file == null)
+		{
+			throw new IllegalArgumentException("File cannot be null");
+		}
+
+		Files.createParentDirs(file);
+
+		final String data = saveToString();
+
+		if (data.length() == 0)
+		{
+			return;
+		}
+
+		if (!configFile.exists())
+		{
+			try
+			{
+				LOGGER.log(Level.INFO, _("creatingEmptyConfig", configFile.toString()));
+				if (!configFile.createNewFile())
+				{
+					LOGGER.log(Level.SEVERE, _("failedToCreateConfig", configFile.toString()));
+				}
+			}
+			catch (IOException ex)
+			{
+				LOGGER.log(Level.SEVERE, _("failedToCreateConfig", configFile.toString()), ex);
+			}
+		}
+
+
+		final OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file), UTF8);
+
+		try
+		{
+			writer.write(data);
+		}
+		finally
+		{
+			writer.close();
+		}
+	}
+
 	public boolean hasProperty(final String path)
 	{
 		return isSet(path);
@@ -305,94 +368,14 @@ public class EssentialsConf extends YamlConfiguration
 		set(path, map);
 	}
 
-	public long getLong(final String path, final long def)
+	public void setProperty(String path, List object)
 	{
-		try
-		{
-			final Number num = (Number)get(path);
-			return num == null ? def : num.longValue();
-		}
-		catch (ClassCastException ex)
-		{
-			return def;
-		}
+		set(path, new ArrayList(object));
 	}
 
-	@Override
-	public double getDouble(final String path, final double def)
+	public void setProperty(String path, Map object)
 	{
-		try
-		{
-			Number num = (Number)get(path);
-			return num == null ? def : num.doubleValue();
-		}
-		catch (ClassCastException ex)
-		{
-			return def;
-		}
-	}
-
-	public void save()
-	{
-		try
-		{
-			save(configFile);
-		}
-		catch (IOException ex)
-		{
-			LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
-		}
-	}
-
-	public void saveWithError() throws IOException
-	{
-		save(configFile);
-	}
-
-	@Override
-	public synchronized void save(final File file) throws IOException
-	{
-		if (file == null)
-		{
-			throw new IllegalArgumentException("File cannot be null");
-		}
-
-		Files.createParentDirs(file);
-
-		final String data = saveToString();
-
-		if (data.length() == 0)
-		{
-			return;
-		}
-
-		if (!configFile.exists())
-		{
-			try
-			{
-				LOGGER.log(Level.INFO, _("creatingEmptyConfig", configFile.toString()));
-				if (!configFile.createNewFile())
-				{
-					LOGGER.log(Level.SEVERE, _("failedToCreateConfig", configFile.toString()));
-				}
-			}
-			catch (IOException ex)
-			{
-				LOGGER.log(Level.SEVERE, _("failedToCreateConfig", configFile.toString()), ex);
-			}
-		}
-
-
-		final OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file), UTF8);
-
-		try
-		{
-			writer.write(data);
-		}
-		finally
-		{
-			writer.close();
-		}
+		set(path, new LinkedHashMap(object));
 	}
 
 	public Object getProperty(String path)
@@ -465,6 +448,12 @@ public class EssentialsConf extends YamlConfiguration
 	}
 
 	@Override
+	public synchronized double getDouble(final String path, final double def)
+	{
+		return super.getDouble(path, def);
+	}
+
+	@Override
 	public synchronized List<Double> getDoubleList(String path)
 	{
 		return super.getDoubleList(path);
@@ -522,6 +511,12 @@ public class EssentialsConf extends YamlConfiguration
 	public synchronized long getLong(String path)
 	{
 		return super.getLong(path);
+	}
+
+	@Override
+	public synchronized long getLong(final String path, final long def)
+	{
+		return super.getLong(path, def);
 	}
 
 	@Override

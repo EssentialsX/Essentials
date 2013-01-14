@@ -205,16 +205,11 @@ player-commands:
 
 # Note: All items MUST be followed by a quantity!
 # All kit names should be lower case, and will be treated as lower in permissions/costs.
-# Syntax: - itemID[:DataValue] Amount [Enchantment:Level]..
+# Syntax: - itemID[:DataValue/Durability] Amount [Enchantment:Level].. [meta:value]...
+# Supported meta includes: name, lore, color, player, title, author, book
 # 'delay' refers to the cooldown between how often you can use each kit, measured in seconds.
 # For more information, visit http://wiki.ess3.net/wiki/Command_Reference/ICheat#kits
 kits:
-  dtools:
-    delay: 10
-    items:
-      - 277 1 efficiency:1 durability:1
-      - 278 1
-      - 279:780 1
   tools:
     delay: 10
     items:
@@ -222,6 +217,21 @@ kits:
       - 273 1
       - 274 1
       - 275 1
+  dtools:
+    delay: 600
+    items:
+      - 278 1 efficiency:1 durability:1 fortune:1 name:&4Gigadrill lore:The_drill_that_&npierces|the_heavens
+      - 277 1 digspeed:3 name:Dwarf lore:Diggy|Diggy|Hole
+      - 298 1 color:255|255|255 name:Top_Hat lore:Good_day,_Good_day
+      - 279:780 1
+  notch:
+    delay: 6000
+    items:
+      - 397:3 1 player:Notch
+  color:
+    delay: 6000
+    items:
+      - 387 1 title:&4Book_&9o_&6Colors author:KHobbits lore:Ingame_color_codes book:Colors
 
 # Essentials Sign Control
 # See http://wiki.ess3.net/wiki/Sign_Tutorial for instructions on how to use these.

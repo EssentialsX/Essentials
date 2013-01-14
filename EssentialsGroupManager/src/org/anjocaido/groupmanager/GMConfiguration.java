@@ -112,7 +112,7 @@ public class GMConfiguration {
 
 			Object level = ((Map<String, String>) getElement("settings", GMconfig).get("logging")).get("level");
 			if (level instanceof String)
-				level = (String) level;
+				loggerLevel = (String) level;
 
 			/*
 			 * Store our mirrors map for parsing later.

@@ -31,7 +31,6 @@ import java.util.WeakHashMap;
 
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.data.User;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -137,8 +136,7 @@ public class BukkitPermissions {
 
 	/**
 	 * Push all permissions which are registered with GM for this player, on
-	 * this world to Bukkit
-	 * and make it update for the child nodes.
+	 * this world to Bukkit and make it update for the child nodes.
 	 * 
 	 * @param player
 	 * @param world
@@ -148,9 +146,9 @@ public class BukkitPermissions {
 		if (player == null || !GroupManager.isLoaded()) {
 			return;
 		}
-		
+
 		String name = player.getName();
-		
+
 		// Reset the User objects player reference.
 		User user = plugin.getWorldsHolder().getWorldData(player.getWorld().getName()).getUser(name);
 		if (user != null)
@@ -175,7 +173,8 @@ public class BukkitPermissions {
 		List<String> playerPermArray = new ArrayList<String>(plugin.getWorldsHolder().getWorldData(world).getPermissionsHandler().getAllPlayersPermissions(name, false));
 		LinkedHashMap<String, Boolean> newPerms = new LinkedHashMap<String, Boolean>();
 
-		// Sort the perm list by parent/child, so it will push to superperms correctly.
+		// Sort the perm list by parent/child, so it will push to superperms
+		// correctly.
 		playerPermArray = sort(playerPermArray);
 
 		Boolean value = false;
@@ -183,28 +182,43 @@ public class BukkitPermissions {
 			value = (!permission.startsWith("-"));
 			newPerms.put((value ? permission : permission.substring(1)), value);
 		}
+		
+		/*
+		 * Do not push any perms to bukkit if...
+		 * We are in offline mode
+		 * and the player has the 'groupmanager.noofflineperms' permission.
+		 */
+		if (!Bukkit.getServer().getOnlineMode()
+				&& (newPerms.containsKey("groupmanager.noofflineperms") && (newPerms.get("groupmanager.noofflineperms") == true))) {
+			removeAttachment(name);
+			return;
+		}
+
 
 		/**
 		 * This is put in place until such a time as Bukkit pull 466 is
-		 * implemented
-		 * https://github.com/Bukkit/Bukkit/pull/466
+		 * implemented https://github.com/Bukkit/Bukkit/pull/466
 		 */
 		try { // Codename_B source
-			@SuppressWarnings("unchecked")
-			Map<String, Boolean> orig = (Map<String, Boolean>) permissions.get(attachment);
-			// Clear the map (faster than removing the attachment and recalculating)
-			orig.clear();
-			// Then whack our map into there
-			orig.putAll(newPerms);
-			// That's all folks!
-			attachment.getPermissible().recalculatePermissions();
-			//player.recalculatePermissions();
+			synchronized (attachment.getPermissible()) {
+
+				@SuppressWarnings("unchecked")
+				Map<String, Boolean> orig = (Map<String, Boolean>) permissions.get(attachment);
+				// Clear the map (faster than removing the attachment and
+				// recalculating)
+				orig.clear();
+				// Then whack our map into there
+				orig.putAll(newPerms);
+				// That's all folks!
+				attachment.getPermissible().recalculatePermissions();
+
+			}
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
-		
+
 		GroupManager.logger.finest("Attachment updated for: " + name);
 	}
 

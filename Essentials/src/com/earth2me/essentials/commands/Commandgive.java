@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
@@ -27,7 +28,7 @@ public class Commandgive extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		final ItemStack stack = ess.getItemDb().get(args[1]);
+		ItemStack stack = ess.getItemDb().get(args[1]);
 
 		final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 		if (sender instanceof Player
@@ -70,7 +71,8 @@ public class Commandgive extends EssentialsCommand
 
 		if (args.length > 3)
 		{
-			boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
+			MetaItemStack metaStack = new MetaItemStack(stack);
+			boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();			
 			if (allowUnsafe && sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.enchant.allowunsafe"))
 			{
 				allowUnsafe = false;
@@ -78,8 +80,9 @@ public class Commandgive extends EssentialsCommand
 
 			for (int i = Util.isInt(args[3]) ? 4 : 3; i < args.length; i++)
 			{
-				ess.getItemDb().addStringEnchantment(null, allowUnsafe, stack, args[i]);
+				metaStack.addStringMeta(null, allowUnsafe, args[i], ess);
 			}
+			stack = metaStack.getItemStack();
 		}
 
 		if (stack.getType() == Material.AIR)
