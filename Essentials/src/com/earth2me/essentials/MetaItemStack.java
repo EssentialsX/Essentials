@@ -104,34 +104,8 @@ public class MetaItemStack
 			final FireworkMeta meta = (FireworkMeta)stack.getItemMeta();
 			meta.setPower(power);
 			stack.setItemMeta(meta);
-		}
-		else if (split.length > 1 && split[0].equalsIgnoreCase("effect") && stack.getType() == Material.FIREWORK)
-		{			
-			//TODO: Add validation messages
-			final FireworkMeta meta = (FireworkMeta)stack.getItemMeta();				
-			Builder builder = FireworkEffect.builder();
-			
-			String[] effectData = split[1].toUpperCase(Locale.ENGLISH).split("\\|");
-			
-			builder.with(FireworkEffect.Type.valueOf(effectData[0]));
-			
-			String[] primaryColorStrings = effectData[1].split(",");
-			List<Color> primaryColors = new ArrayList<Color>();
-			
-			for (String primaryColorString : primaryColorStrings) {
-				primaryColors.add(DyeColor.valueOf(primaryColorString).getFireworkColor());
-			}
-			
-			//if (effectData.length > 2) {
-
-			//}
-			
-			builder.withColor(primaryColors);
-			
-			final FireworkEffect effect = builder.build();
-			meta.addEffect(effect);
-			stack.setItemMeta(meta);
-		}
+			//TODO: Complain at Snowleo to code firework meta
+		}		
 		else if (split.length > 1 && (split[0].equalsIgnoreCase("color") || split[0].equalsIgnoreCase("colour"))
 				 && (stack.getType() == Material.LEATHER_BOOTS
 					 || stack.getType() == Material.LEATHER_CHESTPLATE
