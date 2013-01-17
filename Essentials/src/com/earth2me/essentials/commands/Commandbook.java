@@ -25,26 +25,26 @@ public class Commandbook extends EssentialsCommand
 		{
 			BookMeta bmeta = (BookMeta)item.getItemMeta();
 
-			if (args[0].equalsIgnoreCase("author"))
+			if (args.length > 1 && args[0].equalsIgnoreCase("author"))
 			{
 				if (user.isAuthorized("essentals.book.author"))
 				{
 					bmeta.setAuthor(args[1]);
 					item.setItemMeta(bmeta);
-					user.sendMessage(_("bookAuthorSet", args[1]));
+					user.sendMessage(_("bookAuthorSet", getFinalArg(args, 1)));
 				}
 				else
 				{
 					throw new Exception(_("denyChangeAuthor"));
 				}
 			}
-			else if (args[0].equalsIgnoreCase("title"))
+			else if (args.length > 1 && args[0].equalsIgnoreCase("title"))
 			{
 				if (user.isAuthorized("essentials.book.title") && (isAuthor(bmeta, player) || user.isAuthorized("essentials.book.others")))
 				{
 					bmeta.setTitle(args[1]);
 					item.setItemMeta(bmeta);
-					user.sendMessage(_("bookTitleSet", args[1]));
+					user.sendMessage(_("bookTitleSet", getFinalArg(args, 1)));
 				}
 				else
 				{

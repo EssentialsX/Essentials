@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 import org.bukkit.Color;
+import org.bukkit.DyeColor;
+import org.bukkit.FireworkEffect;
+import org.bukkit.FireworkEffect.Builder;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -94,13 +97,43 @@ public class MetaItemStack
 			meta.setTitle(title);
 			stack.setItemMeta(meta);
 		}
+		else if (split.length > 1 && split[0].equalsIgnoreCase("power") && stack.getType() == Material.FIREWORK)
+		{
+			final int power = Integer.parseInt(split[1]);
+			final FireworkMeta meta = (FireworkMeta)stack.getItemMeta();
+			meta.setPower(power);
+			stack.setItemMeta(meta);
+		}
+//		else if (split.length > 1 && split[0].equalsIgnoreCase("effect") && stack.getType() == Material.FIREWORK)
+//		{			
+//			//TODO: Add validation messages
+//			final FireworkMeta meta = (FireworkMeta)stack.getItemMeta();				
+//			Builder builder = FireworkEffect.builder();
+//			
+//			String[] effectData = split[1].toUpperCase(Locale.ENGLISH).split("\\|");
+//			
+//			builder.with(FireworkEffect.Type.valueOf(effectData[0]));
+//			
+//			String[] primaryColorStrings = effectData[1].split(",");
+//			List<Color> primaryColors = new ArrayList<Color>();
+//			
+//			for (String primaryColorString : primaryColorStrings) {
+//				primaryColors.add(DyeColor.valueOf(primaryColorString).getFireworkColor());
+//			}
+//					
+//			builder.withColor(primaryColors);
+//			
+//			final FireworkEffect effect = builder.build();
+//			meta.addEffect(effect);
+//			stack.setItemMeta(meta);
+//		}
 		else if (split.length > 1 && (split[0].equalsIgnoreCase("color") || split[0].equalsIgnoreCase("colour"))
 				 && (stack.getType() == Material.LEATHER_BOOTS
 					 || stack.getType() == Material.LEATHER_CHESTPLATE
 					 || stack.getType() == Material.LEATHER_HELMET
 					 || stack.getType() == Material.LEATHER_LEGGINGS))
 		{
-			final String[] color = split[1].split("\\|");
+			final String[] color = split[1].split(",");
 			if (color.length == 3)
 			{
 				final int red = Util.isInt(color[0]) ? Integer.parseInt(color[0]) : 0;
