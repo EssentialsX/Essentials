@@ -32,7 +32,8 @@ public class Commandunban extends EssentialsCommand
 		catch (NoSuchFieldException e)
 		{
 			final OfflinePlayer player = server.getOfflinePlayer(args[0]);
-			if (player.isBanned()) {
+			if (player.isBanned()) 
+			{
 				player.setBanned(false);
 				sender.sendMessage(_("unbannedPlayer"));
 				return;
