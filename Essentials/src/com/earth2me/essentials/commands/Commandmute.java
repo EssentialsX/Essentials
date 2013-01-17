@@ -5,6 +5,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 
 public class Commandmute extends EssentialsCommand
@@ -41,17 +42,31 @@ public class Commandmute extends EssentialsCommand
 		}
 		player.setMuteTimeout(muteTimestamp);
 		final boolean muted = player.getMuted();
-		sender.sendMessage(
-				muted
-				? (muteTimestamp > 0
-				   ? _("mutedPlayerFor", player.getDisplayName(), Util.formatDateDiff(muteTimestamp))
-				   : _("mutedPlayer", player.getDisplayName()))
-				: _("unmutedPlayer", player.getDisplayName()));
-		player.sendMessage(
-				muted
-				? (muteTimestamp > 0
-				   ? _("playerMutedFor", Util.formatDateDiff(muteTimestamp))
-				   : _("playerMuted"))
-				: _("playerUnmuted"));
+		if (muted)
+		{
+			if (muteTimestamp > 0)
+			{
+				sender.sendMessage(_("mutedPlayerFor", player.getDisplayName(), Util.formatDateDiff(muteTimestamp)));
+				player.sendMessage(_("playerMutedFor", Util.formatDateDiff(muteTimestamp)));
+			}
+			else
+			{
+				sender.sendMessage(_("mutedPlayer", player.getDisplayName()));
+				player.sendMessage(_("playerMuted"));
+			}
+			for (Player onlinePlayer : server.getOnlinePlayers())
+			{
+				final User user = ess.getUser(onlinePlayer);
+				if (onlinePlayer != sender && user.isAuthorized("essentials.mute.notify"))
+				{
+					onlinePlayer.sendMessage(_("muteNotify", sender.getName(), player.getName()));
+				}
+			}
+		}
+		else
+		{
+			sender.sendMessage(_("unmutedPlayer", player.getDisplayName()));
+			player.sendMessage(_("playerUnmuted"));
+		}
 	}
 }
