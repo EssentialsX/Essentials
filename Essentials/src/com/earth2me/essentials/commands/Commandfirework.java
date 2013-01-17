@@ -12,6 +12,8 @@ import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.Server;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 
@@ -57,7 +59,6 @@ public class Commandfirework extends EssentialsCommand
 					{
 						fmeta.clearEffects();
 						stack.setItemMeta(fmeta);
-						user.setItemInHand(stack);
 					}
 					else
 					{
@@ -66,6 +67,8 @@ public class Commandfirework extends EssentialsCommand
 						FireworkEffect.Type finalEffect = null;
 
 						boolean valid = false;
+						boolean fire = false;
+						int amount = 1;
 						for (String arg : args)
 						{
 							final String[] split = splitPattern.split(arg, 2);
@@ -151,13 +154,44 @@ public class Commandfirework extends EssentialsCommand
 									user.sendMessage(_("invalidFireworkFormat", split[1], split[0]));
 								}
 							}
+							if ((split[0].equalsIgnoreCase("fire") || split[0].equalsIgnoreCase("f")) && user.isAuthorized("essentials.firework.fire"))
+							{
+								fire = true;
+								try
+								{
+									amount = Integer.parseInt(split[1]);
+									int serverLimit = ess.getSettings().getSpawnMobLimit();
+									if(amount > serverLimit)
+									{
+										amount = serverLimit;
+										user.sendMessage(_("mobSpawnLimit"));
+									}
+								}
+								catch (NumberFormatException e)
+								{
+									amount = 1;
+								}
+							}
 						}
 						if (valid)
 						{
-							final FireworkEffect effect = builder.build();
-							fmeta.addEffect(effect);
-							stack.setItemMeta(fmeta);
-							user.setItemInHand(stack);
+							if (fire)
+							{
+								for (int i = 0; i < amount; i++ )
+								{
+									Firework firework = (Firework)user.getWorld().spawnEntity(user.getLocation(), EntityType.FIREWORK);
+									FireworkMeta ffmeta = firework.getFireworkMeta();
+									ffmeta.addEffect(builder.build());
+									ffmeta.setPower(fmeta.getPower());
+									firework.setFireworkMeta(ffmeta);
+								}
+							}
+							else
+							{
+								final FireworkEffect effect = builder.build();
+								fmeta.addEffect(effect);
+								stack.setItemMeta(fmeta);
+							}
 						}
 						else
 						{
