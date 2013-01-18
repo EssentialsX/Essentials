@@ -768,6 +768,9 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	}
 
 	/**
+	 * Wrapper for offline server checks.
+	 * Looks for the 'groupmanager.noofflineperms' permissions and reports no permissions on servers set to offline.
+	 * 
 	 * Check user and groups with inheritance and Bukkit if bukkit = true return
 	 * a PermissionCheckResult.
 	 * 
@@ -778,23 +781,42 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	 */
 	public PermissionCheckResult checkFullGMPermission(User user, String targetPermission, Boolean checkBukkit) {
 
-		PermissionCheckResult result = new PermissionCheckResult();
-		result.accessLevel = targetPermission;
-		result.resultType = PermissionCheckResult.Type.NOTFOUND;
-
-		if (user == null || targetPermission == null || targetPermission.isEmpty()) {
-			return result;
-		}
-		
 		/*
-		 * Do not push any perms to bukkit if...
+		 * Report no permissions under the following conditions.
+		 * 
 		 * We are in offline mode
 		 * and the player has the 'groupmanager.noofflineperms' permission.
 		 */
-		if (!Bukkit.getServer().getOnlineMode()
-				&& (checkFullGMPermission(user, "groupmanager.noofflineperms", true).resultType == PermissionCheckResult.Type.FOUND))
+		if (user == null || targetPermission == null || targetPermission.isEmpty() ||
+				(!Bukkit.getServer().getOnlineMode()
+						&& (checkPermission(user, "groupmanager.noofflineperms", true).resultType == PermissionCheckResult.Type.FOUND))) {
+			
+			PermissionCheckResult result = new PermissionCheckResult();
+			result.accessLevel = targetPermission;
+			result.resultType = PermissionCheckResult.Type.NOTFOUND;
+			
 			return result;
+		}
+		
+		return checkPermission(user, targetPermission, checkBukkit);
+	}
 
+	/**
+	 * 
+	 * Check user and groups with inheritance and Bukkit if bukkit = true return
+	 * a PermissionCheckResult.
+	 * 
+	 * @param user
+	 * @param targetPermission
+	 * @param checkBukkit
+	 * @return PermissionCheckResult
+	 */
+	private PermissionCheckResult checkPermission(User user, String targetPermission, Boolean checkBukkit) {
+
+		PermissionCheckResult result = new PermissionCheckResult();
+		result.accessLevel = targetPermission;
+		result.resultType = PermissionCheckResult.Type.NOTFOUND;
+		
 		if (checkBukkit) {
 			// Check Bukkit perms to support plugins which add perms via code
 			// (Heroes).
