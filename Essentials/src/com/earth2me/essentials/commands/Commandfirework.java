@@ -154,7 +154,7 @@ public class Commandfirework extends EssentialsCommand
 									user.sendMessage(_("invalidFireworkFormat", split[1], split[0]));
 								}
 							}
-							if ((split[0].equalsIgnoreCase("fire") || split[0].equalsIgnoreCase("f")) && user.isAuthorized("essentials.firework.fire"))
+							if (split[0].equalsIgnoreCase("fire") && user.isAuthorized("essentials.firework.fire"))
 							{
 								fire = true;
 								try
