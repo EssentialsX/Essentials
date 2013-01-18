@@ -36,7 +36,7 @@ public class TextPager
 		{
 			//If an info file starts with a chapter title, list the chapters
 			//If not display the text up until the first chapter.
-			if (lines.get(0).startsWith("#"))
+			if (!lines.isEmpty() && lines.get(0).startsWith("#"))
 			{
 				if (onePage)
 				{
