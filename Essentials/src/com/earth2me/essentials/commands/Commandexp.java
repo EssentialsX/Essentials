@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import com.earth2me.essentials.craftbukkit.SetExpFix;
 import java.util.Locale;
 import org.bukkit.Server;
@@ -22,6 +23,33 @@ public class Commandexp extends EssentialsCommand
 		if (args.length == 0)
 		{
 			showExp(user, user);
+		}
+		else if (Util.isInt(args[0].toLowerCase().replace("l", ""))) // check vanilla syntax
+		{
+			int lvl = Integer.parseInt(args[0].toLowerCase().replace("l", ""));
+			if (args.length > 1 && user.isAuthorized("essentials.exp.give.others"))
+			{
+				if (args[0].toLowerCase(Locale.ENGLISH).contains("l"))
+				{
+					addLevel(server, user, lvl, args[1]);
+				}
+				else
+				{
+					expMatch(server, user, args[1], args[0], true);
+				}
+			}
+			else
+			{
+				if (args[0].toLowerCase(Locale.ENGLISH).contains("l"))
+				{
+					addLevel(server, user, lvl, user.getName());
+				}
+				else
+				{
+					expMatch(server, user, user.getName(), args[0], true);
+				}
+			}
+
 		}
 		else if (args[0].equalsIgnoreCase("set") && user.isAuthorized("essentials.exp.set"))
 		{
@@ -66,26 +94,43 @@ public class Commandexp extends EssentialsCommand
 	@Override
 	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
-		if (args.length < 1)
+		String parseLevel = args[0].toLowerCase().replace("l", "");
+		int lvl = Integer.parseInt(parseLevel);
+		if (Util.isInt(parseLevel))
 		{
-			throw new NotEnoughArgumentsException();
-		}
-		else if (args.length > 2 && args[0].equalsIgnoreCase("set"))
-		{
-			expMatch(server, sender, args[1], args[2], false);
-		}
-		else if (args.length > 2 && args[0].equalsIgnoreCase("give"))
-		{
-			expMatch(server, sender, args[1], args[2], true);
+			if (args[0].toLowerCase(Locale.ENGLISH).contains("l"))
+			{
+				addLevel(server, sender, lvl, args[1]);
+			}
+			else
+			{
+				expMatch(server, sender, args[1], args[0], true);
+			}
+
 		}
 		else
 		{
-			String match = args[0].trim();
-			if (args.length == 2)
+			if (args.length < 1)
 			{
-				match = args[1].trim();
+				throw new NotEnoughArgumentsException();
 			}
-			showMatch(server, sender, match);
+			else if (args.length > 2 && args[0].equalsIgnoreCase("set"))
+			{
+				expMatch(server, sender, args[1], args[2], false);
+			}
+			else if (args.length > 2 && args[0].equalsIgnoreCase("give"))
+			{
+				expMatch(server, sender, args[1], args[2], true);
+			}
+			else
+			{
+				String match = args[0].trim();
+				if (args.length == 2)
+				{
+					match = args[1].trim();
+				}
+				showMatch(server, sender, match);
+			}
 		}
 	}
 
@@ -119,19 +164,44 @@ public class Commandexp extends EssentialsCommand
 		}
 	}
 
+	private void addLevel(final Server server, final CommandSender sender, final int level, final String target) throws NotEnoughArgumentsException
+	{
+		boolean foundUser = false;
+		for (Player matchPlayer : server.matchPlayer(target))
+		{
+			final User user = ess.getUser(matchPlayer);
+			final int curLevel = user.getLevel();
+			final int fLevel = curLevel + level;
+			if (fLevel < 0)
+			{
+				user.setLevel(0);
+				user.setExp(0F);
+			}
+			else
+			{
+				user.setLevel(fLevel);
+			}
+			foundUser = true;
+		}
+		if (!foundUser)
+		{
+			throw new NotEnoughArgumentsException(_("playerNotFound"));
+		}
+	}
+
 	private void showExp(final CommandSender sender, final User target)
 	{
 		final int totalExp = SetExpFix.getTotalExperience(target);
 		sender.sendMessage(_("exp", target.getDisplayName(), SetExpFix.getTotalExperience(target), target.getLevel(), SetExpFix.getExpUntilNextLevel(target)));
 	}
 
-	private void setExp(final CommandSender sender, final User target, String strAmount, final boolean give) throws NotEnoughArgumentsException 
+	private void setExp(final CommandSender sender, final User target, String strAmount, final boolean give) throws NotEnoughArgumentsException
 	{
 		Long amount;
 		strAmount = strAmount.toLowerCase(Locale.ENGLISH);
 		if (strAmount.startsWith("l") || strAmount.endsWith("l"))
 		{
-			strAmount = strAmount.replaceAll("l","");			
+			strAmount = strAmount.replaceAll("l", "");
 			int neededLevel = Integer.parseInt(strAmount);
 			if (give)
 			{
@@ -140,11 +210,12 @@ public class Commandexp extends EssentialsCommand
 			amount = (long)SetExpFix.getExpToLevel(neededLevel);
 			SetExpFix.setTotalExperience(target, 0);
 		}
-		else {
+		else
+		{
 			amount = Long.parseLong(strAmount);
 			if (amount < 0 || amount > Integer.MAX_VALUE)
 			{
-				throw new NotEnoughArgumentsException();	
+				throw new NotEnoughArgumentsException();
 			}
 		}
 
