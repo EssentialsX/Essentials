@@ -1,13 +1,12 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.User;
 import static com.earth2me.essentials.I18n._;
-import java.util.ArrayList;
+import com.earth2me.essentials.MetaItemStack;
+import com.earth2me.essentials.User;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
@@ -44,116 +43,28 @@ public class Commandfirework extends EssentialsCommand
 	@Override
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-
 		if (args.length > 0)
 		{
-			ItemStack stack = user.getItemInHand();
+			final ItemStack stack = user.getItemInHand();			
 			if (stack.getType() == Material.FIREWORK)
 			{
-				FireworkEffect.Builder builder = FireworkEffect.builder();
-				FireworkMeta fmeta = (FireworkMeta)stack.getItemMeta();
-
 				if (args.length > 0)
 				{
 					if (args[0].equalsIgnoreCase("clear"))
 					{
+						FireworkMeta fmeta = (FireworkMeta)stack.getItemMeta();
 						fmeta.clearEffects();
 						stack.setItemMeta(fmeta);
 					}
 					else
 					{
-						List<Color> primaryColors = new ArrayList<Color>();
-						List<Color> fadeColors = new ArrayList<Color>();
-						FireworkEffect.Type finalEffect = null;
-
-						boolean valid = false;
+						final MetaItemStack mStack = new MetaItemStack(stack);
 						boolean fire = false;
 						int amount = 1;
 						for (String arg : args)
 						{
 							final String[] split = splitPattern.split(arg, 2);
-							if (split[0].equalsIgnoreCase("color") || split[0].equalsIgnoreCase("colour") || split[0].equalsIgnoreCase("c"))
-							{
-								String[] colors = split[1].split(",");
-								for (String color : colors)
-								{
-									if (colorMap.containsKey(color.toUpperCase()))
-									{
-										valid = true;
-										primaryColors.add(colorMap.get(color.toUpperCase()).getFireworkColor());
-									}
-									else
-									{
-										user.sendMessage(_("invalidFireworkFormat", split[1], split[0]));
-									}
-								}
-								builder.withColor(primaryColors);
-							}
-							if (split[0].equalsIgnoreCase("shape") || split[0].equalsIgnoreCase("s") || split[0].equalsIgnoreCase("type") || split[0].equalsIgnoreCase("t"))
-							{
-								split[1] = (split[1].equalsIgnoreCase("large") ? "BALL_LARGE" : split[1]);
-								if (fireworkShape.containsKey(split[1].toUpperCase()))
-								{
-									finalEffect = fireworkShape.get(split[1].toUpperCase());
-								}
-								else
-								{
-									user.sendMessage(_("invalidFireworkFormat", split[1], split[0]));
-								}
-								if (finalEffect != null)
-								{
-									builder.with(finalEffect);
-								}
-							}
-							if (split[0].equalsIgnoreCase("fade") || split[0].equalsIgnoreCase("f"))
-							{
-								String[] colors = split[1].split(",");
-								for (String color : colors)
-								{
-									if (colorMap.containsKey(color.toUpperCase()))
-									{
-										fadeColors.add(colorMap.get(color.toUpperCase()).getFireworkColor());
-									}
-									else
-									{
-										user.sendMessage(_("invalidFireworkFormat", split[1], split[0]));
-									}
-								}
-								if (!fadeColors.isEmpty())
-								{
-									builder.withFade(fadeColors);
-								}
-							}
-							if (split[0].equalsIgnoreCase("effect") || split[0].equalsIgnoreCase("e"))
-							{
-								String[] effects = split[1].split(",");
-								for (String effect : effects)
-								{
-									if (effect.equalsIgnoreCase("twinkle"))
-									{
-										builder.flicker(true);
-									}
-									else if (effect.equalsIgnoreCase("trail"))
-									{
-										builder.trail(true);
-									}
-									else
-									{
-										user.sendMessage(_("invalidFireworkFormat", split[1], split[0]));
-									}
-								}
-							}
-							if (split[0].equalsIgnoreCase("power") || split[0].equalsIgnoreCase("p"))
-							{
-								try
-								{
-									fmeta.setPower(Integer.parseInt(split[1]));
-								}
-								catch (NumberFormatException e)
-								{
-									user.sendMessage(_("invalidFireworkFormat", split[1], split[0]));
-								}
-							}
+							mStack.addFireworkMeta(user, true, arg, ess);
 							if (split[0].equalsIgnoreCase("fire") && user.isAuthorized("essentials.firework.fire"))
 							{
 								fire = true;
@@ -161,7 +72,7 @@ public class Commandfirework extends EssentialsCommand
 								{
 									amount = Integer.parseInt(split[1]);
 									int serverLimit = ess.getSettings().getSpawnMobLimit();
-									if(amount > serverLimit)
+									if (amount > serverLimit)
 									{
 										amount = serverLimit;
 										user.sendMessage(_("mobSpawnLimit"));
@@ -173,31 +84,32 @@ public class Commandfirework extends EssentialsCommand
 								}
 							}
 						}
-						if (valid)
+
+						if (fire)
 						{
-							if (fire)
+							for (int i = 0; i < amount; i++)
 							{
-								for (int i = 0; i < amount; i++ )
+								Firework firework = (Firework)user.getWorld().spawnEntity(user.getLocation(), EntityType.FIREWORK);
+								FireworkMeta fmeta = (FireworkMeta)mStack.getItemStack().getItemMeta();
+								if (mStack.isValidFirework())
 								{
-									Firework firework = (Firework)user.getWorld().spawnEntity(user.getLocation(), EntityType.FIREWORK);
-									FireworkMeta ffmeta = firework.getFireworkMeta();
-									ffmeta.addEffect(builder.build());
-									ffmeta.setPower(fmeta.getPower());
-									firework.setFireworkMeta(ffmeta);
+									FireworkEffect effect = mStack.getFireworkBuilder().build();
+									fmeta.addEffect(effect);
 								}
-							}
-							else
-							{
-								final FireworkEffect effect = builder.build();
-								fmeta.addEffect(effect);
-								stack.setItemMeta(fmeta);
+								firework.setFireworkMeta(fmeta);
 							}
 						}
-						else
+						else if (!mStack.isValidFirework())
 						{
 							user.sendMessage(_("fireworkColor"));
 						}
-
+						else
+						{
+							FireworkMeta fmeta = (FireworkMeta)mStack.getItemStack().getItemMeta();
+							FireworkEffect effect = mStack.getFireworkBuilder().build();
+							fmeta.addEffect(effect);
+							stack.setItemMeta(fmeta);
+						}
 					}
 				}
 			}
@@ -208,7 +120,26 @@ public class Commandfirework extends EssentialsCommand
 		}
 		else
 		{
-			throw new NotEnoughArgumentsException();
+			final ItemStack stack = user.getItemInHand();
+			if (stack.getType() == Material.FIREWORK)
+			{
+				FireworkMeta fmeta = (FireworkMeta)stack.getItemMeta();
+				List<FireworkEffect> effects = fmeta.getEffects();
+				user.sendMessage("The firework you are holding has the following effects:");
+
+				for (FireworkEffect effect : effects)
+				{
+					StringBuilder effectDesc = new StringBuilder();
+					effectDesc.append("Effect: ");
+					Map<String, Object> desc = effect.serialize();
+
+					for (String info : desc.keySet())
+					{
+						effectDesc.append(info).append(": ").append(desc.get(info)).append(" ");
+					}
+					user.sendMessage(effectDesc.toString());
+				}
+			}
 		}
 	}
 }

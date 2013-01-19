@@ -77,11 +77,9 @@ public class Commandgive extends EssentialsCommand
 			{
 				allowUnsafe = false;
 			}
-
-			for (int i = Util.isInt(args[3]) ? 4 : 3; i < args.length; i++)
-			{
-				metaStack.addStringMeta(null, allowUnsafe, args[i], ess);
-			}
+			
+			metaStack.parseStringMeta(sender, allowUnsafe, args, Util.isInt(args[3]) ? 4 : 3, ess);
+			
 			stack = metaStack.getItemStack();
 		}
 

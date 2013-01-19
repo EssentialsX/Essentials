@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import java.util.Locale;
 import org.bukkit.Material;
@@ -59,11 +60,9 @@ public class Commanditem extends EssentialsCommand
 		{
 			MetaItemStack metaStack = new MetaItemStack(stack);
 			final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments() && user.isAuthorized("essentials.enchant.allowunsafe");
-
-			for (int i = 2; i < args.length; i++)
-			{
-				metaStack.addStringMeta(null, allowUnsafe, args[i], ess);
-			}
+			
+			metaStack.parseStringMeta(user, allowUnsafe, args, 2, ess);
+			
 			stack = metaStack.getItemStack();
 		}
 

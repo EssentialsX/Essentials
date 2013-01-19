@@ -63,9 +63,8 @@ public class Commandenchant extends EssentialsCommand
 		final MetaItemStack metaStack = new MetaItemStack(stack);
 		final Enchantment enchantment = metaStack.getEnchantment(user, args[0]);
 		metaStack.addEnchantment(user, allowUnsafe, enchantment, level);
-
-
 		user.getInventory().setItemInHand(metaStack.getItemStack());
+		
 		user.updateInventory();
 		final String enchantmentName = enchantment.getName().toLowerCase(Locale.ENGLISH);
 		if (level == 0)

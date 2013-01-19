@@ -2,15 +2,13 @@ package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.textreader.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.regex.Pattern;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
-import org.bukkit.FireworkEffect.Builder;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
@@ -20,26 +18,68 @@ public class MetaItemStack
 {
 	private final transient Pattern splitPattern = Pattern.compile("[:+',;.]");
 	private final ItemStack stack;
-	
+	private final static Map<String, DyeColor> colorMap = new HashMap<String, DyeColor>();
+	private final static Map<String, FireworkEffect.Type> fireworkShape = new HashMap<String, FireworkEffect.Type>();
+	private FireworkEffect.Builder builder = FireworkEffect.builder();
+	private boolean validFirework = false;
+
+	static
+	{
+		for (DyeColor color : DyeColor.values())
+		{
+			colorMap.put(color.name(), color);
+		}
+		for (FireworkEffect.Type type : FireworkEffect.Type.values())
+		{
+			fireworkShape.put(type.name(), type);
+		}
+	}
+
 	public MetaItemStack(final ItemStack stack)
 	{
 		this.stack = stack.clone();
 	}
-	
+
 	public ItemStack getItemStack()
 	{
 		return stack;
 	}
 
+	public boolean isValidFirework()
+	{
+		return validFirework;
+	}
+
+	public FireworkEffect.Builder getFireworkBuilder()
+	{
+		return builder;
+	}
+
+	public void parseStringMeta(final CommandSender user, final boolean allowUnsafe, String[] string, int fromArg, final IEssentials ess) throws Exception
+	{
+
+		for (int i = fromArg; i < string.length; i++)
+		{
+			addStringMeta(user, allowUnsafe, string[i], ess);
+		}
+		if (validFirework)
+		{
+			FireworkEffect effect = builder.build();
+			FireworkMeta fmeta = (FireworkMeta)stack.getItemMeta();
+			fmeta.addEffect(effect);
+			stack.setItemMeta(fmeta);
+		}
+	}
+
 	//TODO: TL this
-	public void addStringMeta(final User user, final boolean allowUnsafe, final String string, final IEssentials ess) throws Exception
+	private void addStringMeta(final CommandSender user, final boolean allowUnsafe, final String string, final IEssentials ess) throws Exception
 	{
 		final String[] split = splitPattern.split(string, 2);
 		if (split.length < 1)
 		{
 			return;
 		}
-		
+
 		if (split.length > 1 && split[0].equalsIgnoreCase("name"))
 		{
 			final String displayName = Util.replaceFormat(split[1].replace('_', ' '));
@@ -76,11 +116,11 @@ public class MetaItemStack
 		{
 			final BookMeta meta = (BookMeta)stack.getItemMeta();
 			final IText input = new BookInput("book", true, ess);
-			final BookPager pager = new BookPager(input);			
-			
+			final BookPager pager = new BookPager(input);
+
 			List<String> pages = pager.getPages(split[1]);
 			meta.setPages(pages);
-			
+
 			stack.setItemMeta(meta);
 		}
 		else if (split.length > 1 && split[0].equalsIgnoreCase("author") && stack.getType() == Material.WRITTEN_BOOK)
@@ -97,36 +137,10 @@ public class MetaItemStack
 			meta.setTitle(title);
 			stack.setItemMeta(meta);
 		}
-		else if (split.length > 1 && split[0].equalsIgnoreCase("power") && stack.getType() == Material.FIREWORK)
+		else if (stack.getType() == Material.FIREWORK) //WARNING - Meta for fireworks will be ignored after this point.
 		{
-			final int power = Integer.parseInt(split[1]);
-			final FireworkMeta meta = (FireworkMeta)stack.getItemMeta();
-			meta.setPower(power);
-			stack.setItemMeta(meta);
+			addFireworkMeta(user, false, string, ess);
 		}
-//		else if (split.length > 1 && split[0].equalsIgnoreCase("effect") && stack.getType() == Material.FIREWORK)
-//		{			
-//			//TODO: Add validation messages
-//			final FireworkMeta meta = (FireworkMeta)stack.getItemMeta();				
-//			Builder builder = FireworkEffect.builder();
-//			
-//			String[] effectData = split[1].toUpperCase(Locale.ENGLISH).split("\\|");
-//			
-//			builder.with(FireworkEffect.Type.valueOf(effectData[0]));
-//			
-//			String[] primaryColorStrings = effectData[1].split(",");
-//			List<Color> primaryColors = new ArrayList<Color>();
-//			
-//			for (String primaryColorString : primaryColorStrings) {
-//				primaryColors.add(DyeColor.valueOf(primaryColorString).getFireworkColor());
-//			}
-//					
-//			builder.withColor(primaryColors);
-//			
-//			final FireworkEffect effect = builder.build();
-//			meta.addEffect(effect);
-//			stack.setItemMeta(meta);
-//		}
 		else if (split.length > 1 && (split[0].equalsIgnoreCase("color") || split[0].equalsIgnoreCase("colour"))
 				 && (stack.getType() == Material.LEATHER_BOOTS
 					 || stack.getType() == Material.LEATHER_CHESTPLATE
@@ -153,22 +167,108 @@ public class MetaItemStack
 			parseEnchantmentStrings(user, allowUnsafe, split);
 		}
 	}
-	
-	public void addStringEnchantment(final User user, final boolean allowUnsafe, final String string) throws Exception
+
+	public void addFireworkMeta(final CommandSender user, final boolean allowShortName, final String string, final IEssentials ess)
 	{
-		final String[] split = splitPattern.split(string, 2);
-		if (split.length < 1)
+		if (stack.getType() == Material.FIREWORK)
 		{
-			return;
+			FireworkMeta fmeta = (FireworkMeta)stack.getItemMeta();
+			final String[] split = splitPattern.split(string, 2);
+
+			if (split[0].equalsIgnoreCase("color") || split[0].equalsIgnoreCase("colour") || (allowShortName && split[0].equalsIgnoreCase("c")))
+			{
+				List<Color> primaryColors = new ArrayList<Color>();
+				String[] colors = split[1].split(",");
+				for (String color : colors)
+				{
+					if (colorMap.containsKey(color.toUpperCase()))
+					{
+						validFirework = true;
+						primaryColors.add(colorMap.get(color.toUpperCase()).getFireworkColor());
+					}
+					else
+					{
+						user.sendMessage(_("invalidFireworkFormat", split[1], split[0]));
+					}
+				}
+				builder.withColor(primaryColors);
+			}
+			else if (split[0].equalsIgnoreCase("shape") || split[0].equalsIgnoreCase("type") || (allowShortName && (split[0].equalsIgnoreCase("s") || split[0].equalsIgnoreCase("t"))))
+			{
+				FireworkEffect.Type finalEffect = null;
+				split[1] = (split[1].equalsIgnoreCase("large") ? "BALL_LARGE" : split[1]);
+				if (fireworkShape.containsKey(split[1].toUpperCase()))
+				{
+					finalEffect = fireworkShape.get(split[1].toUpperCase());
+				}
+				else
+				{
+					user.sendMessage(_("invalidFireworkFormat", split[1], split[0]));
+				}
+				if (finalEffect != null)
+				{
+					builder.with(finalEffect);
+				}
+			}
+			else if (split[0].equalsIgnoreCase("fade") || (allowShortName && split[0].equalsIgnoreCase("f")))
+			{
+				List<Color> fadeColors = new ArrayList<Color>();
+				String[] colors = split[1].split(",");
+				for (String color : colors)
+				{
+					if (colorMap.containsKey(color.toUpperCase()))
+					{
+						fadeColors.add(colorMap.get(color.toUpperCase()).getFireworkColor());
+					}
+					else
+					{
+						user.sendMessage(_("invalidFireworkFormat", split[1], split[0]));
+					}
+				}
+				if (!fadeColors.isEmpty())
+				{
+					builder.withFade(fadeColors);
+				}
+			}
+			else if (split[0].equalsIgnoreCase("effect") || (allowShortName && split[0].equalsIgnoreCase("e")))
+			{
+				String[] effects = split[1].split(",");
+				for (String effect : effects)
+				{
+					if (effect.equalsIgnoreCase("twinkle"))
+					{
+						builder.flicker(true);
+					}
+					else if (effect.equalsIgnoreCase("trail"))
+					{
+						builder.trail(true);
+					}
+					else
+					{
+						user.sendMessage(_("invalidFireworkFormat", split[1], split[0]));
+					}
+				}
+			}
+			else if (split[0].equalsIgnoreCase("power") || (allowShortName && split[0].equalsIgnoreCase("p")))
+			{
+				try
+				{
+					int power = Integer.parseInt(split[1]);
+					fmeta.setPower(power > 3 ? 4 : power);
+				}
+				catch (NumberFormatException e)
+				{
+					user.sendMessage(_("invalidFireworkFormat", split[1], split[0]));
+				}
+				stack.setItemMeta(fmeta);
+			}
 		}
-		
-		parseEnchantmentStrings(user, allowUnsafe, split);
 	}
-	
-	private void parseEnchantmentStrings(final User user, final boolean allowUnsafe, final String[] split) throws Exception
+
+	private void parseEnchantmentStrings(final CommandSender user, final boolean allowUnsafe, final String[] split) throws Exception
 	{
-		Enchantment enchantment = getEnchantment(user, split[0]);
-		
+		Enchantment enchantment = getEnchantment(null, split[0]);
+
 		int level = -1;
 		if (split.length > 1)
 		{
@@ -181,15 +281,15 @@ public class MetaItemStack
 				level = -1;
 			}
 		}
-		
+
 		if (level < 0 || (!allowUnsafe && level > enchantment.getMaxLevel()))
 		{
 			level = enchantment.getMaxLevel();
 		}
 		addEnchantment(user, allowUnsafe, enchantment, level);
 	}
-	
-	public void addEnchantment(final User user, final boolean allowUnsafe, final Enchantment enchantment, final int level) throws Exception
+
+	public void addEnchantment(final CommandSender user, final boolean allowUnsafe, final Enchantment enchantment, final int level) throws Exception
 	{
 		try
 		{
