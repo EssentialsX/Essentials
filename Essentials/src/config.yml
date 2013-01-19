@@ -232,6 +232,11 @@ kits:
     delay: 6000
     items:
       - 387 1 title:&4Book_&9o_&6Colors author:KHobbits lore:Ingame_color_codes book:Colors
+  firework:
+    delay: 6000
+    items:
+      - 401 1 name:Angry_Creeper color:red fade:green type:creeper power:1
+      - 401 1 name:StarryNight color:yellow,orange fade:blue type:star effect:trail,twinkle power:1
 
 # Essentials Sign Control
 # See http://wiki.ess3.net/wiki/Sign_Tutorial for instructions on how to use these.

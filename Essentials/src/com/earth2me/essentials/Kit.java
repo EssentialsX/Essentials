@@ -120,10 +120,7 @@ public class Kit
 
 				if (parts.length > 2)
 				{
-					for (int i = 2; i < parts.length; i++)
-					{
-						metaStack.parseStringMeta(user, allowUnsafe, parts, 2, ess);
-					}
+					metaStack.parseStringMeta(user, allowUnsafe, parts, 2, ess);
 				}
 
 				final Map<Integer, ItemStack> overfilled;

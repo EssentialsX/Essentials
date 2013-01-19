@@ -120,26 +120,7 @@ public class Commandfirework extends EssentialsCommand
 		}
 		else
 		{
-			final ItemStack stack = user.getItemInHand();
-			if (stack.getType() == Material.FIREWORK)
-			{
-				FireworkMeta fmeta = (FireworkMeta)stack.getItemMeta();
-				List<FireworkEffect> effects = fmeta.getEffects();
-				user.sendMessage("The firework you are holding has the following effects:");
-
-				for (FireworkEffect effect : effects)
-				{
-					StringBuilder effectDesc = new StringBuilder();
-					effectDesc.append("Effect: ");
-					Map<String, Object> desc = effect.serialize();
-
-					for (String info : desc.keySet())
-					{
-						effectDesc.append(info).append(": ").append(desc.get(info)).append(" ");
-					}
-					user.sendMessage(effectDesc.toString());
-				}
-			}
+			throw new NotEnoughArgumentsException();
 		}
 	}
 }
