@@ -208,3 +208,4 @@ v 2.0:
 	- Synchronize the raising of GroupManager events to Bukkit.getServer() (should prevent deadlocks).
 	- Synchronize pushing to Bukkit perms to prevent any ConcurrentModificationException.
 	- Do not grant any permissions (nor update Bukkit) if the server is in offline mode and the player has the permission node 'groupmanager.noofflineperms'.
+	- Negate 'groupmanager.noofflineperms' by default in the owner group.
