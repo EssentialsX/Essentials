@@ -85,7 +85,7 @@ commands:
     aliases: [edepth]
   eco:
     description: Manages the server economy.
-    usage: /<command> <give|take|reset> <player> <amount>
+    usage: /<command> <give|take|set|reset> <player> <amount>
     aliases: [economy,eeco,eeconomy]
   enchant:
     description: Enchants the item the user is holding.
