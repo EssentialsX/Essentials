@@ -26,10 +26,12 @@ public class Commandexp extends EssentialsCommand
 		}
 		else if (Util.isInt(args[0].toLowerCase().replace("l", ""))) // check vanilla syntax
 		{
-			int lvl = Integer.parseInt(args[0].toLowerCase().replace("l", ""));
+			final String lowerArgs0 = args[0].toLowerCase();
+			final int lvl = Integer.parseInt(lowerArgs0.replace("l", ""));
+			final boolean containsL = lowerArgs0.contains("l");
 			if (args.length > 1 && user.isAuthorized("essentials.exp.give.others"))
 			{
-				if (args[0].toLowerCase(Locale.ENGLISH).contains("l"))
+				if (containsL)
 				{
 					addLevel(server, user, lvl, args[1]);
 				}
@@ -40,7 +42,7 @@ public class Commandexp extends EssentialsCommand
 			}
 			else
 			{
-				if (args[0].toLowerCase(Locale.ENGLISH).contains("l"))
+				if (containsL)
 				{
 					addLevel(server, user, lvl, user.getName());
 				}
@@ -94,10 +96,10 @@ public class Commandexp extends EssentialsCommand
 	@Override
 	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
-		String parseLevel = args[0].toLowerCase().replace("l", "");
-		int lvl = Integer.parseInt(parseLevel);
+		final String parseLevel = args[0].toLowerCase().replace("l", "");
 		if (Util.isInt(parseLevel))
 		{
+			final int lvl = Integer.parseInt(parseLevel);
 			if (args[0].toLowerCase(Locale.ENGLISH).contains("l"))
 			{
 				addLevel(server, sender, lvl, args[1]);
@@ -191,15 +193,14 @@ public class Commandexp extends EssentialsCommand
 
 	private void showExp(final CommandSender sender, final User target)
 	{
-		final int totalExp = SetExpFix.getTotalExperience(target);
 		sender.sendMessage(_("exp", target.getDisplayName(), SetExpFix.getTotalExperience(target), target.getLevel(), SetExpFix.getExpUntilNextLevel(target)));
 	}
 
 	private void setExp(final CommandSender sender, final User target, String strAmount, final boolean give) throws NotEnoughArgumentsException
 	{
-		Long amount;
+		long amount;
 		strAmount = strAmount.toLowerCase(Locale.ENGLISH);
-		if (strAmount.startsWith("l") || strAmount.endsWith("l"))
+		if (strAmount.contains("l"))
 		{
 			strAmount = strAmount.replaceAll("l", "");
 			int neededLevel = Integer.parseInt(strAmount);
@@ -227,7 +228,7 @@ public class Commandexp extends EssentialsCommand
 		{
 			amount = (long)Integer.MAX_VALUE;
 		}
-		SetExpFix.setTotalExperience(target, amount.intValue());
+		SetExpFix.setTotalExperience(target, (int)amount);
 		sender.sendMessage(_("expSet", target.getDisplayName(), amount));
 	}
 }
