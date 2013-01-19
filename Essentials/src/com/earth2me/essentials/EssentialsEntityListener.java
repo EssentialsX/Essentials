@@ -94,9 +94,10 @@ public class EssentialsEntityListener implements Listener
 		final List<String> commandList = attacker.getPowertool(attacker.getItemInHand());
 		if (commandList != null && !commandList.isEmpty())
 		{
-			for (final String command : commandList)
+			for (final String tempCommand : commandList)
 			{
-				if (command != null && !command.isEmpty())
+				final String command = tempCommand.replaceAll("\\{player\\}", defender.getName());
+				if (command != null && !command.isEmpty() && !command.equals(tempCommand))
 				{
 					ess.scheduleSyncDelayedTask(
 							new Runnable()
@@ -104,7 +105,7 @@ public class EssentialsEntityListener implements Listener
 								@Override
 								public void run()
 								{
-									attacker.getServer().dispatchCommand(attacker.getBase(), command.replaceAll("\\{player\\}", defender.getName()));
+									attacker.getServer().dispatchCommand(attacker.getBase(), command);
 									LOGGER.log(Level.INFO, String.format("[PT] %s issued server command: /%s", attacker.getName(), command));
 								}
 							});
