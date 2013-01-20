@@ -17,15 +17,15 @@ public class Commandmsg extends EssentialsCommand
 	{
 		super("msg");
 	}
-
+	
 	@Override
 	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
-		if (args.length < 2 || args[0].trim().length() < 2  || args[1].trim().isEmpty())
+		if (args.length < 2 || args[0].trim().length() < 2 || args[1].trim().isEmpty())
 		{
 			throw new NotEnoughArgumentsException();
 		}
-	
+		
 		String message = getFinalArg(args, 1);
 		if (sender instanceof Player)
 		{
@@ -40,12 +40,12 @@ public class Commandmsg extends EssentialsCommand
 		{
 			message = Util.replaceFormat(message);
 		}
-
+		
 		final String translatedMe = _("me");
-
+		
 		final IReplyTo replyTo = sender instanceof Player ? ess.getUser((Player)sender) : Console.getConsoleReplyTo();
 		final String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
-
+		
 		if (args[0].equalsIgnoreCase(Console.NAME))
 		{
 			sender.sendMessage(_("msgFormat", translatedMe, Console.NAME, message));
@@ -55,14 +55,14 @@ public class Commandmsg extends EssentialsCommand
 			Console.getConsoleReplyTo().setReplyTo(sender);
 			return;
 		}
-
+		
 		final List<Player> matchedPlayers = server.matchPlayer(args[0]);
-
+		
 		if (matchedPlayers.isEmpty())
 		{
 			throw new Exception(_("playerNotFound"));
 		}
-
+		
 		int i = 0;
 		for (Player matchedPlayer : matchedPlayers)
 		{
@@ -76,17 +76,28 @@ public class Commandmsg extends EssentialsCommand
 		{
 			throw new Exception(_("playerNotFound"));
 		}
-
+		
 		for (Player matchedPlayer : matchedPlayers)
-		{
-			sender.sendMessage(_("msgFormat", translatedMe, matchedPlayer.getDisplayName(), message));
+		{			
 			final User matchedUser = ess.getUser(matchedPlayer);
-			if (sender instanceof Player && (matchedUser.isIgnoredPlayer(ess.getUser(sender)) || matchedUser.isHidden()))
+			
+			if (sender instanceof Player && matchedUser.isHidden())
+			{
+				continue;
+			}		
+			if (matchedUser.isAfk())
+			{
+				sender.sendMessage(_("userAFK", matchedPlayer.getDisplayName()));
+			}			
+
+			sender.sendMessage(_("msgFormat", translatedMe, matchedPlayer.getDisplayName(), message));			
+			if (sender instanceof Player && matchedUser.isIgnoredPlayer(ess.getUser(sender)))
 			{
 				continue;
 			}
+			
 			matchedPlayer.sendMessage(_("msgFormat", senderName, translatedMe, message));
-			replyTo.setReplyTo(ess.getUser(matchedPlayer));
+			replyTo.setReplyTo(matchedUser);
 			ess.getUser(matchedPlayer).setReplyTo(sender);
 		}
 	}
