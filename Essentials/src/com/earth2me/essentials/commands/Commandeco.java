@@ -126,17 +126,12 @@ public class Commandeco extends EssentialsCommand
 				break;
 
 			case TAKE:
-				if (player.canAfford(amount))
+				if (!player.canAfford(amount))
 				{
-					player.takeMoney(amount);
+					throw new Exception(_("notEnoughMoney"));
+					
 				}
-				else
-				{
-					if (player.getMoney() > 0)
-					{
-						player.setMoney(0);
-					}
-				}
+				player.takeMoney(amount, sender);
 				break;
 
 			case RESET:
