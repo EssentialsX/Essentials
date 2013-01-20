@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import java.util.Locale;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -18,10 +19,9 @@ public class Commandeco extends EssentialsCommand
 	@Override
 	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
-		boolean broadcast = false;
-		boolean broadcastAll = false;
+		Double broadcast = null;
+		Double broadcastAll = null;
 		final double startingBalance = (double)ess.getSettings().getStartingBalance();
-		final String start = ess.getSettings().getCurrencySymbol() + ess.getSettings().getStartingBalance();
 		if (args.length < 2)
 		{
 			throw new NotEnoughArgumentsException();
@@ -67,12 +67,13 @@ public class Commandeco extends EssentialsCommand
 
 				case RESET:
 					player.setMoney(startingBalance);
-					broadcastAll = true;
+					broadcastAll = startingBalance;
 					break;
 
 				case SET:
 					boolean underMinimum = (player.getMoney() - amount) < minBalance;
 					player.setMoney(underMinimum ? minBalance : amount);
+					broadcastAll = underMinimum ? minBalance : amount;
 					break;
 				}
 			}
@@ -104,12 +105,13 @@ public class Commandeco extends EssentialsCommand
 
 				case RESET:
 					player.setMoney(startingBalance);
-					broadcast = true;
+					broadcast = startingBalance;
 					break;
 
 				case SET:
 					boolean underMinimum = (player.getMoney() - amount) < minBalance;
 					player.setMoney(underMinimum ? minBalance : amount);
+					broadcast = underMinimum ? minBalance : amount;
 					break;
 				}
 			}
@@ -147,14 +149,14 @@ public class Commandeco extends EssentialsCommand
 				break;
 			}
 		}
-		
-		if(broadcast)
+
+		if (broadcast != null)
 		{
-			server.broadcastMessage(_("resetBal", start));
+			server.broadcastMessage(_("resetBal", Util.formatAsCurrency(broadcast)));
 		}
-		if(broadcastAll)
+		if (broadcastAll != null)
 		{
-			server.broadcastMessage(_("resetBalAll", start));
+			server.broadcastMessage(_("resetBalAll", Util.formatAsCurrency(broadcastAll)));
 		}
 	}
 
