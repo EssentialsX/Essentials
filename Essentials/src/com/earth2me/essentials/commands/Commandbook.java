@@ -83,6 +83,7 @@ public class Commandbook extends EssentialsCommand
 
 	private boolean isAuthor(BookMeta bmeta, String player)
 	{
-		return bmeta.getAuthor().equalsIgnoreCase(player);
+		String author = bmeta.getAuthor();
+		return author != null && author.equalsIgnoreCase(player);
 	}
 }
