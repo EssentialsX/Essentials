@@ -1,5 +1,6 @@
 package com.earth2me.essentials.textreader;
 
+import static com.earth2me.essentials.I18n._;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -25,7 +26,7 @@ public class BookPager
 		//This checks to see if we have the chapter in the index
 		if (!bookmarks.containsKey(pageStr.toLowerCase(Locale.ENGLISH)))
 		{
-			throw new Exception("No such /einfo chapter!");
+			throw new Exception(_("infoUnknownChapter"));
 		}
 
 		//Since we have a valid chapter, count the number of lines in the chapter
