@@ -129,7 +129,7 @@ commands:
     aliases: [gm,creative,creativemode,survival,survivalmode,adventure,adventuremode,gmc,gma,gms,gmt,egamemod,eecreative,ecreativemode,esurvival,esurvivalmode,eadventure,eadventuremode,egmc,egma,egms,egm,egmt]
   gc:
     description: Reports memory, uptime and tick info.
-    usage: /<command>
+    usage: /<command> [all]
     aliases: [elag,lag,mem,memory,egc,emem,ememory,uptime,euptime]
   getpos:
     description: Get your current coordinates or those of a player.
