@@ -50,7 +50,7 @@ commands:
   broadcast:
     description: Broadcasts a message to the entire server.
     usage: /<command> <msg>
-    aliases: [ebroadcast,bcast,ebcast]
+    aliases: [ebroadcast,shout,eshout,bc,ebc,bcast,ebcast]
   bigtree:
     description: Spawn a big tree where you are looking.
     usage: /<command> <tree|redwood|jungle>
