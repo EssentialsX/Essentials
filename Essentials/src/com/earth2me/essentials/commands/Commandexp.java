@@ -24,35 +24,6 @@ public class Commandexp extends EssentialsCommand
 		{
 			showExp(user, user);
 		}
-		else if (Util.isInt(args[0].toLowerCase().replace("l", ""))) // check vanilla syntax
-		{
-			final String lowerArgs0 = args[0].toLowerCase();
-			final int lvl = Integer.parseInt(lowerArgs0.replace("l", ""));
-			final boolean containsL = lowerArgs0.contains("l");
-			if (args.length > 1 && user.isAuthorized("essentials.exp.give.others"))
-			{
-				if (containsL)
-				{
-					addLevel(server, user, lvl, args[1]);
-				}
-				else
-				{
-					expMatch(server, user, args[1], args[0], true);
-				}
-			}
-			else
-			{
-				if (containsL)
-				{
-					addLevel(server, user, lvl, user.getName());
-				}
-				else
-				{
-					expMatch(server, user, user.getName(), args[0], true);
-				}
-			}
-
-		}
 		else if (args[0].equalsIgnoreCase("set") && user.isAuthorized("essentials.exp.set"))
 		{
 			if (args.length == 3 && user.isAuthorized("essentials.exp.set.others"))
@@ -75,20 +46,39 @@ public class Commandexp extends EssentialsCommand
 				setExp(user, user, args[1], true);
 			}
 		}
-		else
+		else if (args[0].equalsIgnoreCase("show"))
 		{
-			String match = args[0].trim();
-			if (args.length == 2)
+			if (args.length >= 2 && user.isAuthorized("essentials.exp.others"))
 			{
-				match = args[1].trim();
-			}
-			if (match.equalsIgnoreCase("show") || !user.isAuthorized("essentials.exp.others"))
-			{
-				showExp(user, user);
+				String match = args[1].trim();
+				showMatch(server, user, match);
 			}
 			else
 			{
+				showExp(user, user);
+			}
+		}
+		else
+		{
+			if (args.length >= 1 && Util.isInt(args[0].toLowerCase(Locale.ENGLISH).replace("l", "")) && user.isAuthorized("essentials.exp.give"))
+			{
+				if (args.length >= 2 && user.isAuthorized("essentials.exp.give.others"))
+				{
+					expMatch(server, user, args[1], args[0], true);
+				}
+				else
+				{
+					setExp(user, user, args[0], true);
+				}
+			}
+			else if (args.length >= 1 && user.isAuthorized("essentials.exp.others"))
+			{
+				String match = args[0].trim();
 				showMatch(server, user, match);
+			}
+			else
+			{
+				showExp(user, user);
 			}
 		}
 	}
@@ -96,43 +86,31 @@ public class Commandexp extends EssentialsCommand
 	@Override
 	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
-		final String parseLevel = args[0].toLowerCase().replace("l", "");
-		if (Util.isInt(parseLevel))
+		if (args.length < 1)
 		{
-			final int lvl = Integer.parseInt(parseLevel);
-			if (args[0].toLowerCase(Locale.ENGLISH).contains("l"))
-			{
-				addLevel(server, sender, lvl, args[1]);
-			}
-			else
-			{
-				expMatch(server, sender, args[1], args[0], true);
-			}
-
+			throw new NotEnoughArgumentsException();
+		}
+		else if (args.length > 2 && args[0].equalsIgnoreCase("set"))
+		{
+			expMatch(server, sender, args[1], args[2], false);
+		}
+		else if (args.length > 2 && args[0].equalsIgnoreCase("give"))
+		{
+			expMatch(server, sender, args[1], args[2], true);
 		}
 		else
 		{
-			if (args.length < 1)
+			String match = args[0].trim();
+			if (args.length >= 2 && Util.isInt(args[0].toLowerCase(Locale.ENGLISH).replace("l", "")))
 			{
-				throw new NotEnoughArgumentsException();
+				match = args[1].trim();
+				expMatch(server, sender, match, args[0], true);
 			}
-			else if (args.length > 2 && args[0].equalsIgnoreCase("set"))
+			else if (args.length == 1)
 			{
-				expMatch(server, sender, args[1], args[2], false);
+				match = args[0].trim();
 			}
-			else if (args.length > 2 && args[0].equalsIgnoreCase("give"))
-			{
-				expMatch(server, sender, args[1], args[2], true);
-			}
-			else
-			{
-				String match = args[0].trim();
-				if (args.length == 2)
-				{
-					match = args[1].trim();
-				}
-				showMatch(server, sender, match);
-			}
+			showMatch(server, sender, match);
 		}
 	}
 
@@ -151,38 +129,13 @@ public class Commandexp extends EssentialsCommand
 		}
 	}
 
-	private void expMatch(final Server server, final CommandSender sender, final String match, String amount, final boolean toggle) throws NotEnoughArgumentsException
+	private void expMatch(final Server server, final CommandSender sender, final String match, String amount, final boolean give) throws NotEnoughArgumentsException
 	{
 		boolean foundUser = false;
 		for (Player matchPlayer : server.matchPlayer(match))
 		{
 			final User target = ess.getUser(matchPlayer);
-			setExp(sender, target, amount, toggle);
-			foundUser = true;
-		}
-		if (!foundUser)
-		{
-			throw new NotEnoughArgumentsException(_("playerNotFound"));
-		}
-	}
-
-	private void addLevel(final Server server, final CommandSender sender, final int level, final String target) throws NotEnoughArgumentsException
-	{
-		boolean foundUser = false;
-		for (Player matchPlayer : server.matchPlayer(target))
-		{
-			final User user = ess.getUser(matchPlayer);
-			final int curLevel = user.getLevel();
-			final int fLevel = curLevel + level;
-			if (fLevel < 0)
-			{
-				user.setLevel(0);
-				user.setExp(0F);
-			}
-			else
-			{
-				user.setLevel(fLevel);
-			}
+			setExp(sender, target, amount, give);
 			foundUser = true;
 		}
 		if (!foundUser)
