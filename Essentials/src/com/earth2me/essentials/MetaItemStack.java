@@ -147,7 +147,7 @@ public class MetaItemStack
 					 || stack.getType() == Material.LEATHER_HELMET
 					 || stack.getType() == Material.LEATHER_LEGGINGS))
 		{
-			final String[] color = split[1].split(",");
+			final String[] color = split[1].split("(\\||,)");
 			if (color.length == 3)
 			{
 				final int red = Util.isInt(color[0]) ? Integer.parseInt(color[0]) : 0;
@@ -159,7 +159,7 @@ public class MetaItemStack
 			}
 			else
 			{
-				throw new Exception("Leather Color Syntax: color:<red>|<green>|<blue> eg: color:255|0|0");
+				throw new Exception("Leather Color Syntax: color:<red>,<green>,<blue> eg: color:255,0,0");
 			}
 		}
 		else
