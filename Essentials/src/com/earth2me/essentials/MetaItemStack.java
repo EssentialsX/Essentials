@@ -10,6 +10,7 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Firework;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 
@@ -140,7 +141,7 @@ public class MetaItemStack
 		else if (split.length > 1 && split[0].equalsIgnoreCase("power") && stack.getType() == Material.FIREWORK)
 		{
 			final int power = Util.isInt(split[1]) ? Integer.parseInt(split[1]) : 0;
-			final FireworkMeta meta = (FireworkMeta)stack.getItemMeta();			
+			final FireworkMeta meta = (FireworkMeta)stack.getItemMeta();
 			meta.setPower(power > 3 ? 4 : power);
 			stack.setItemMeta(meta);
 		}
@@ -179,7 +180,6 @@ public class MetaItemStack
 	{
 		if (stack.getType() == Material.FIREWORK)
 		{
-			FireworkMeta fmeta = (FireworkMeta)stack.getItemMeta();
 			final String[] split = splitPattern.split(string, 2);
 
 			if (split.length < 2)
@@ -189,6 +189,15 @@ public class MetaItemStack
 
 			if (split[0].equalsIgnoreCase("color") || split[0].equalsIgnoreCase("colour") || (allowShortName && split[0].equalsIgnoreCase("c")))
 			{
+				if (validFirework)
+				{
+					FireworkEffect effect = builder.build();
+					FireworkMeta fmeta = (FireworkMeta)stack.getItemMeta();
+					fmeta.addEffect(effect);
+					stack.setItemMeta(fmeta);
+					builder = FireworkEffect.builder();
+				}
+
 				List<Color> primaryColors = new ArrayList<Color>();
 				String[] colors = split[1].split(",");
 				for (String color : colors)
@@ -202,7 +211,7 @@ public class MetaItemStack
 					{
 						user.sendMessage(_("fireworkSyntax"));
 						throw new Exception(_("invalidFireworkFormat", split[1], split[0]));
-						
+
 					}
 				}
 				builder.withColor(primaryColors);
