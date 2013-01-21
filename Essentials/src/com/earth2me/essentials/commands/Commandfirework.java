@@ -4,7 +4,6 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.User;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 import org.bukkit.DyeColor;
@@ -43,85 +42,88 @@ public class Commandfirework extends EssentialsCommand
 	@Override
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		if (args.length > 0)
+		final ItemStack stack = user.getItemInHand();
+		if (stack.getType() == Material.FIREWORK)
 		{
-			final ItemStack stack = user.getItemInHand();
-			if (stack.getType() == Material.FIREWORK)
+			if (args.length > 0)
 			{
-				if (args.length > 0)
+				if (args[0].equalsIgnoreCase("clear"))
 				{
-					if (args[0].equalsIgnoreCase("clear"))
+					FireworkMeta fmeta = (FireworkMeta)stack.getItemMeta();
+					fmeta.clearEffects();
+					stack.setItemMeta(fmeta);
+					user.sendMessage(_("fireworkEffectsCleared"));
+				}
+				else if (args.length > 1 && (args[0].equalsIgnoreCase("power") || (args[0].equalsIgnoreCase("p"))))
+				{
+					FireworkMeta fmeta = (FireworkMeta)stack.getItemMeta();
+					try
 					{
+						int power = Integer.parseInt(args[1]);
+						fmeta.setPower(power > 3 ? 4 : power);
+					}
+					catch (NumberFormatException e)
+					{
+						throw new Exception(_("invalidFireworkFormat", args[1], args[0]));
+					}
+					stack.setItemMeta(fmeta);
+				}
+				else if ((args[0].equalsIgnoreCase("fire") || (args[0].equalsIgnoreCase("p")))
+						 && user.isAuthorized("essentials.firework.fire"))
+				{
+					int amount;
+					try
+					{
+						final int serverLimit = ess.getSettings().getSpawnMobLimit();
+						amount = Integer.parseInt(args[1]);
+						if (amount > serverLimit)
+						{
+							amount = serverLimit;
+							user.sendMessage(_("mobSpawnLimit"));
+						}
+					}
+					catch (Exception e)
+					{
+						amount = 1;
+					}
+					for (int i = 0; i < amount; i++)
+					{
+						Firework firework = (Firework)user.getWorld().spawnEntity(user.getLocation(), EntityType.FIREWORK);
 						FireworkMeta fmeta = (FireworkMeta)stack.getItemMeta();
-						fmeta.clearEffects();
+						firework.setFireworkMeta(fmeta);
+					}
+				}
+				else
+				{
+					final MetaItemStack mStack = new MetaItemStack(stack);
+					for (String arg : args)
+					{
+						final String[] split = splitPattern.split(arg, 2);
+						mStack.addFireworkMeta(user, true, arg, ess);
+					}
+
+					if (mStack.isValidFirework())
+					{
+						FireworkMeta fmeta = (FireworkMeta)mStack.getItemStack().getItemMeta();
+						FireworkEffect effect = mStack.getFireworkBuilder().build();
+						fmeta.addEffect(effect);
 						stack.setItemMeta(fmeta);
 					}
 					else
 					{
-						final MetaItemStack mStack = new MetaItemStack(stack);
-						boolean fire = false;
-						int amount = 1;
-						for (String arg : args)
-						{
-							final String[] split = splitPattern.split(arg, 2);
-							mStack.addFireworkMeta(user, true, arg, ess);
-
-							if (split.length > 1 && split[0].equalsIgnoreCase("fire") && user.isAuthorized("essentials.firework.fire"))
-							{
-								fire = true;
-								try
-								{
-									amount = Integer.parseInt(split[1]);
-									int serverLimit = ess.getSettings().getSpawnMobLimit();
-									if (amount > serverLimit)
-									{
-										amount = serverLimit;
-										user.sendMessage(_("mobSpawnLimit"));
-									}
-								}
-								catch (NumberFormatException e)
-								{
-									amount = 1;
-								}
-							}
-						}
-
-						if (fire)
-						{
-							for (int i = 0; i < amount; i++)
-							{
-								Firework firework = (Firework)user.getWorld().spawnEntity(user.getLocation(), EntityType.FIREWORK);
-								FireworkMeta fmeta = (FireworkMeta)mStack.getItemStack().getItemMeta();
-								if (mStack.isValidFirework())
-								{
-									FireworkEffect effect = mStack.getFireworkBuilder().build();
-									fmeta.addEffect(effect);
-								}
-								firework.setFireworkMeta(fmeta);
-							}
-						}
-						else if (!mStack.isValidFirework())
-						{
-							user.sendMessage(_("fireworkColor"));
-						}
-						else
-						{
-							FireworkMeta fmeta = (FireworkMeta)mStack.getItemStack().getItemMeta();
-							FireworkEffect effect = mStack.getFireworkBuilder().build();
-							fmeta.addEffect(effect);
-							stack.setItemMeta(fmeta);
-						}
+						user.sendMessage(_("fireworkSyntax"));
+						throw new Exception(_("fireworkColor"));
 					}
 				}
 			}
 			else
 			{
-				user.sendMessage(_("holdFirework"));
+				throw new NotEnoughArgumentsException();
 			}
 		}
 		else
 		{
-			throw new NotEnoughArgumentsException();
+			throw new Exception(_("holdFirework"));
 		}
 	}
 }

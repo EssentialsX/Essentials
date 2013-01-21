@@ -137,6 +137,13 @@ public class MetaItemStack
 			meta.setTitle(title);
 			stack.setItemMeta(meta);
 		}
+		else if (split.length > 1 && split[0].equalsIgnoreCase("power") && stack.getType() == Material.FIREWORK)
+		{
+			final int power = Util.isInt(split[1]) ? Integer.parseInt(split[1]) : 0;
+			final FireworkMeta meta = (FireworkMeta)stack.getItemMeta();			
+			meta.setPower(power > 3 ? 4 : power);
+			stack.setItemMeta(meta);
+		}
 		else if (stack.getType() == Material.FIREWORK) //WARNING - Meta for fireworks will be ignored after this point.
 		{
 			addFireworkMeta(user, false, string, ess);
@@ -168,7 +175,7 @@ public class MetaItemStack
 		}
 	}
 
-	public void addFireworkMeta(final CommandSender user, final boolean allowShortName, final String string, final IEssentials ess)
+	public void addFireworkMeta(final CommandSender user, final boolean allowShortName, final String string, final IEssentials ess) throws Exception
 	{
 		if (stack.getType() == Material.FIREWORK)
 		{
@@ -193,7 +200,9 @@ public class MetaItemStack
 					}
 					else
 					{
-						user.sendMessage(_("invalidFireworkFormat", split[1], split[0]));
+						user.sendMessage(_("fireworkSyntax"));
+						throw new Exception(_("invalidFireworkFormat", split[1], split[0]));
+						
 					}
 				}
 				builder.withColor(primaryColors);
@@ -208,7 +217,8 @@ public class MetaItemStack
 				}
 				else
 				{
-					user.sendMessage(_("invalidFireworkFormat", split[1], split[0]));
+					user.sendMessage(_("fireworkSyntax"));
+					throw new Exception(_("invalidFireworkFormat", split[1], split[0]));
 				}
 				if (finalEffect != null)
 				{
@@ -227,7 +237,8 @@ public class MetaItemStack
 					}
 					else
 					{
-						user.sendMessage(_("invalidFireworkFormat", split[1], split[0]));
+						user.sendMessage(_("fireworkSyntax"));
+						throw new Exception(_("invalidFireworkFormat", split[1], split[0]));
 					}
 				}
 				if (!fadeColors.isEmpty())
@@ -250,22 +261,10 @@ public class MetaItemStack
 					}
 					else
 					{
-						user.sendMessage(_("invalidFireworkFormat", split[1], split[0]));
+						user.sendMessage(_("fireworkSyntax"));
+						throw new Exception(_("invalidFireworkFormat", split[1], split[0]));
 					}
 				}
-			}
-			else if (split[0].equalsIgnoreCase("power") || (allowShortName && split[0].equalsIgnoreCase("p")))
-			{
-				try
-				{
-					int power = Integer.parseInt(split[1]);
-					fmeta.setPower(power > 3 ? 4 : power);
-				}
-				catch (NumberFormatException e)
-				{
-					user.sendMessage(_("invalidFireworkFormat", split[1], split[0]));
-				}
-				stack.setItemMeta(fmeta);
 			}
 		}
 	}

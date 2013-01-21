@@ -42,28 +42,20 @@ public class Commandgc extends EssentialsCommand
 		sender.sendMessage(_("gcfree", (Runtime.getRuntime().freeMemory() / 1024 / 1024)));
 
 		List<World> worlds = server.getWorlds();
-		if (worlds.size() > 3 && args.length == 0)
+		for (World w : worlds)
 		{
-			sender.sendMessage(_("messageTruncated", commandLabel, "all"));
-		}
-		else
-		{
-			for (World w : worlds)
+			String worldType = "World";
+			switch (w.getEnvironment())
 			{
-				String worldType = "World";
-				switch (w.getEnvironment())
-				{
-				case NETHER:
-					worldType = "Nether";
-					break;
-				case THE_END:
-					worldType = "The End";
-					break;
-				}
-
-				sender.sendMessage(_("gcWorld", worldType, w.getName(), w.getLoadedChunks().length, w.getEntities().size()));
+			case NETHER:
+				worldType = "Nether";
+				break;
+			case THE_END:
+				worldType = "The End";
+				break;
 			}
-		}
 
+			sender.sendMessage(_("gcWorld", worldType, w.getName(), w.getLoadedChunks().length, w.getEntities().size()));
+		}
 	}
 }
