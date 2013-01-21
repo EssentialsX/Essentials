@@ -175,6 +175,11 @@ public class MetaItemStack
 			FireworkMeta fmeta = (FireworkMeta)stack.getItemMeta();
 			final String[] split = splitPattern.split(string, 2);
 
+			if (split.length < 2)
+			{
+				return;
+			}
+
 			if (split[0].equalsIgnoreCase("color") || split[0].equalsIgnoreCase("colour") || (allowShortName && split[0].equalsIgnoreCase("c")))
 			{
 				List<Color> primaryColors = new ArrayList<Color>();

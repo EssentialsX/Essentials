@@ -69,7 +69,10 @@ public class Commandbook extends EssentialsCommand
 		else if (item.getType() == Material.BOOK_AND_QUILL)
 		{
 			BookMeta bmeta = (BookMeta)item.getItemMeta();
-			bmeta.setAuthor(player);
+			if (!user.isAuthorized("essentals.book.author"))
+			{
+				bmeta.setAuthor(player);
+			}
 			ItemStack newItem = new ItemStack(Material.WRITTEN_BOOK, item.getAmount());
 			newItem.setItemMeta(bmeta);
 			user.setItemInHand(newItem);

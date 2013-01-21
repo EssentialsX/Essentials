@@ -45,7 +45,7 @@ public class Commandfirework extends EssentialsCommand
 	{
 		if (args.length > 0)
 		{
-			final ItemStack stack = user.getItemInHand();			
+			final ItemStack stack = user.getItemInHand();
 			if (stack.getType() == Material.FIREWORK)
 			{
 				if (args.length > 0)
@@ -65,7 +65,8 @@ public class Commandfirework extends EssentialsCommand
 						{
 							final String[] split = splitPattern.split(arg, 2);
 							mStack.addFireworkMeta(user, true, arg, ess);
-							if (split[0].equalsIgnoreCase("fire") && user.isAuthorized("essentials.firework.fire"))
+
+							if (split.length > 1 && split[0].equalsIgnoreCase("fire") && user.isAuthorized("essentials.firework.fire"))
 							{
 								fire = true;
 								try
