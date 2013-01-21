@@ -149,6 +149,7 @@ public class Commandexp extends EssentialsCommand
 		sender.sendMessage(_("exp", target.getDisplayName(), SetExpFix.getTotalExperience(target), target.getLevel(), SetExpFix.getExpUntilNextLevel(target)));
 	}
 
+	//TODO: Limit who can give negative exp?
 	private void setExp(final CommandSender sender, final User target, String strAmount, final boolean give) throws NotEnoughArgumentsException
 	{
 		long amount;
@@ -167,7 +168,7 @@ public class Commandexp extends EssentialsCommand
 		else
 		{
 			amount = Long.parseLong(strAmount);
-			if (amount < 0 || amount > Integer.MAX_VALUE)
+			if (amount > Integer.MAX_VALUE || amount < Integer.MIN_VALUE)
 			{
 				throw new NotEnoughArgumentsException();
 			}
@@ -180,6 +181,10 @@ public class Commandexp extends EssentialsCommand
 		if (amount > Integer.MAX_VALUE)
 		{
 			amount = (long)Integer.MAX_VALUE;
+		}
+		if (amount < 0l)
+		{
+			amount = 0l;
 		}
 		SetExpFix.setTotalExperience(target, (int)amount);
 		sender.sendMessage(_("expSet", target.getDisplayName(), amount));
