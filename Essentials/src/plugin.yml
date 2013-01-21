@@ -120,8 +120,8 @@ commands:
     usage: /<command> [small|skull]
     aliases: [efireball,fireskull,efireskull,fireentity,efireentity]
   firework:
-    description: Add or clears effects to a firework
-    usage: /<command> [clear|params]
+    description: Adds a charge or clears all effects of a firework
+    usage: /<command> [clear|fire|power|params]
     aliases: [efirework]
   gamemode:
     description: Change player gamemode.
