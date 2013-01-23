@@ -119,6 +119,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 		connConf.setSASLAuthenticationEnabled(config.getBoolean("xmpp.sasl-enabled", false));
 		connConf.setSendPresence(true);
 		connConf.setReconnectionAllowed(true);
+		connConf.setDebuggerEnabled(config.getBoolean("debug", false));
 		connection = new XMPPConnection(connConf);
 		try
 		{

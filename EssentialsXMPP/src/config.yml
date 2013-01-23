@@ -6,6 +6,8 @@ xmpp:
 #  port: 5222
 #  sasl-enabled: false
 
+debug: false
+
 op-users:
 #  - 'name@example.com'
 
