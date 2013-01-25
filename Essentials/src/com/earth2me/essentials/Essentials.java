@@ -47,6 +47,8 @@ import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.command.defaults.VanillaCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -85,6 +87,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	private transient Metrics metrics;
 	private transient EssentialsTimer timer;
 	private transient List<String> vanishedPlayers = new ArrayList<String>();
+	private transient SimpleCommandMap scm;
 
 	@Override
 	public ISettings getSettings()
@@ -123,6 +126,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		i18n = new I18n(this);
 		i18n.onEnable();
 		execTimer.mark("I18n1");
+		scm = new SimpleCommandMap(this.getServer());
 		final PluginManager pm = getServer().getPluginManager();
 		for (Plugin plugin : pm.getPlugins())
 		{
@@ -210,7 +214,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		backup = new Backup(this);
 		permissionsHandler = new PermissionsHandler(this, settings.useBukkitPermissions());
 		alternativeCommandsHandler = new AlternativeCommandsHandler(this);
-		
+
 		timer = new EssentialsTimer(this);
 		getScheduler().scheduleSyncRepeatingTask(this, timer, 100, 100);
 
@@ -234,15 +238,16 @@ public class Essentials extends JavaPlugin implements IEssentials
 			LOGGER.log(Level.INFO, "Essentials load " + timeroutput);
 		}
 	}
-	
-	private void registerListeners(PluginManager pm) {
+
+	private void registerListeners(PluginManager pm)
+	{
 		HandlerList.unregisterAll(this);
-		
+
 		if (getSettings().isDebug())
 		{
 			LOGGER.log(Level.INFO, "Registering Listeners");
 		}
-		
+
 		final EssentialsPluginListener serverListener = new EssentialsPluginListener(this);
 		pm.registerEvents(serverListener, this);
 		confList.add(serverListener);
@@ -267,10 +272,10 @@ public class Essentials extends JavaPlugin implements IEssentials
 
 		final EssentialsWorldListener worldListener = new EssentialsWorldListener(this);
 		pm.registerEvents(worldListener, this);
-		
+
 		pm.registerEvents(tntListener, this);
-		
-		jails.resetListener();		
+
+		jails.resetListener();
 	}
 
 	@Override
@@ -302,7 +307,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 
 		i18n.updateLocale(settings.getLocale());
-		
+
 		final PluginManager pm = getServer().getPluginManager();
 		registerListeners(pm);
 	}
@@ -357,6 +362,16 @@ public class Essentials extends JavaPlugin implements IEssentials
 			// Check for disabled commands
 			if (getSettings().isCommandDisabled(commandLabel))
 			{
+				if (scm != null)
+				{
+					for (VanillaCommand cmd : scm.getFallbackCommands())
+					{
+						if (cmd.matches(commandLabel))
+						{
+							cmd.execute(sender, commandLabel, args);
+						}
+					}
+				}
 				return true;
 			}
 
