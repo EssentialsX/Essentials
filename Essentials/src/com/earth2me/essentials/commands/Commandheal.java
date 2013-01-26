@@ -72,6 +72,7 @@ public class Commandheal extends EssentialsCommand
 	{
 		player.setHealth(player.getMaxHealth());
 		player.setFoodLevel(20);
+		player.setFireTicks(0);
 		player.sendMessage(_("heal"));
 		for (PotionEffect effect : player.getActivePotionEffects())
 		{
