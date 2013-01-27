@@ -122,7 +122,7 @@ public class Commandclearinventory extends EssentialsCommand
 
 	private void clearInventory(Player player, String arg) throws Exception
 	{
-		if (arg.contentEquals("*"))
+		if (arg.equalsIgnoreCase("*"))
 		{
 			player.getInventory().clear();
 		}
@@ -132,9 +132,13 @@ public class Commandclearinventory extends EssentialsCommand
 			final ItemStack item = ess.getItemDb().get(split[0]);
 			final int type = item.getTypeId();
 
-			if (split.length > 1 && Util.isInt(arg.replace(":", "")))
+			if (split.length > 1 && Util.isInt(split[1]))
 			{
 				player.getInventory().clear(type, Integer.parseInt(split[1]));
+			}
+			else if (split.length > 1 && split[1].equalsIgnoreCase("*"))
+			{
+				player.getInventory().clear(type, -1);
 			}
 			else
 			{
