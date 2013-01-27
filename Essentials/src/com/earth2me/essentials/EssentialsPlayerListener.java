@@ -425,9 +425,13 @@ public class EssentialsPlayerListener implements Listener
 			user.sendMessage(_("noGodWorldWarning"));
 		}
 
-		if (!event.getPlayer().getWorld().getName().equals(newWorld))
+		if (!user.getWorld().getName().equals(newWorld))
 		{
 			user.sendMessage(_("currentWorld", newWorld));
+		}
+		if (user.isVanished())
+		{
+			user.setVanished(user.isAuthorized("essentials.vanish"));
 		}
 	}
 
