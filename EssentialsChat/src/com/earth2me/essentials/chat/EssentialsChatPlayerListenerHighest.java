@@ -23,7 +23,7 @@ public class EssentialsChatPlayerListenerHighest extends EssentialsChatPlayer
 	public void onPlayerChat(final AsyncPlayerChatEvent event)
 	{
 		final ChatStore chatStore = delChatStore(event);
-		if (isAborted(event))
+		if (isAborted(event) || chatStore == null)
 		{
 			return;
 		}
