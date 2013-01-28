@@ -477,14 +477,22 @@ public class WorldsHolder {
 
 	private void verifyFirstRun() {
 
-		Properties server = new Properties();
-		try {
-			server.load(new FileInputStream(new File("server.properties")));
-			serverDefaultWorldName = server.getProperty("level-name").toLowerCase();
-			setupWorldFolder(serverDefaultWorldName);
-		} catch (IOException ex) {
-			GroupManager.logger.log(Level.SEVERE, null, ex);
+		/* Do not use the folder name if this 
+		 * is a Bukkit Forge server.
+		 */
+		if (plugin.getServer().getName().equalsIgnoreCase("BukkitForge")) {
+			serverDefaultWorldName = "overworld";
+
+		} else {
+			Properties server = new Properties();
+			try {
+				server.load(new FileInputStream(new File("server.properties")));
+				serverDefaultWorldName = server.getProperty("level-name").toLowerCase();
+			} catch (IOException ex) {
+				GroupManager.logger.log(Level.SEVERE, null, ex);
+			}
 		}
+		setupWorldFolder(serverDefaultWorldName);
 
 	}
 
