@@ -211,4 +211,4 @@ v 2.0:
 	- Negate 'groupmanager.noofflineperms' by default in the owner group.
 	- Add support for BukkitForge using 'overworld' as the main world name.
 	- Prevent '*' permissions granting the 'groupmanager.noofflineperms' permission.
-	- Added '/mancheckw <world>' to inspect what permission files a world is referencing.
+	- Added '/mancheckw <world>' to inspect which permission files a world is referencing.
