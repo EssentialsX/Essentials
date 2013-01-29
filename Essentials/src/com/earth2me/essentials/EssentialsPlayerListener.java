@@ -175,87 +175,87 @@ public class EssentialsPlayerListener implements Listener
 		updateCompass(user);
 		user.setLastLogin(System.currentTimeMillis());
 		user.updateActivity(false);
-
-		if (!ess.getVanishedPlayers().isEmpty() && !user.isAuthorized("essentials.vanish.see"))
+		ess.scheduleSyncDelayedTask(new Runnable()
 		{
-			for (String p : ess.getVanishedPlayers())
+			@Override
+			public void run()
 			{
-				Player toVanish = ess.getUser(p).getBase();
-				if (toVanish.isOnline())
+				if (!ess.getVanishedPlayers().isEmpty() && !user.isAuthorized("essentials.vanish.see"))
 				{
-					user.hidePlayer(toVanish);
-				}
-			}
-		}
 
-		if (user.isAuthorized("essentials.sleepingignored"))
-		{
-			ess.scheduleSyncDelayedTask(new Runnable()
-			{
-				@Override
-				public void run()
+					for (String p : ess.getVanishedPlayers())
+					{
+						Player toVanish = ess.getServer().getPlayerExact(p);
+						if (toVanish != null && toVanish.isOnline())
+						{
+							user.hidePlayer(toVanish);
+						}
+					}
+				}
+
+				if (user.isAuthorized("essentials.sleepingignored"))
 				{
 					user.setSleepingIgnored(true);
 				}
-			});
-		}
 
-		if (!ess.getSettings().isCommandDisabled("motd") && user.isAuthorized("essentials.motd"))
-		{
-			try
-			{
-				final IText input = new TextInput(user, "motd", true, ess);
-				final IText output = new KeywordReplacer(input, user, ess);
-				final TextPager pager = new TextPager(output, true);
-				pager.showPage("1", null, "motd", user);
-			}
-			catch (IOException ex)
-			{
-				if (ess.getSettings().isDebug())
+				if (!ess.getSettings().isCommandDisabled("motd") && user.isAuthorized("essentials.motd"))
 				{
-					LOGGER.log(Level.WARNING, ex.getMessage(), ex);
+					try
+					{
+						final IText input = new TextInput(user, "motd", true, ess);
+						final IText output = new KeywordReplacer(input, user, ess);
+						final TextPager pager = new TextPager(output, true);
+						pager.showPage("1", null, "motd", user);
+					}
+					catch (IOException ex)
+					{
+						if (ess.getSettings().isDebug())
+						{
+							LOGGER.log(Level.WARNING, ex.getMessage(), ex);
+						}
+						else
+						{
+							LOGGER.log(Level.WARNING, ex.getMessage());
+						}
+					}
 				}
-				else
-				{
-					LOGGER.log(Level.WARNING, ex.getMessage());
-				}
-			}
-		}
 
-		if (!ess.getSettings().isCommandDisabled("mail") && user.isAuthorized("essentials.mail"))
-		{
-			final List<String> mail = user.getMails();
-			if (mail.isEmpty())
-			{
-				final String msg = _("noNewMail");
-				if (!msg.isEmpty())
+				if (!ess.getSettings().isCommandDisabled("mail") && user.isAuthorized("essentials.mail"))
 				{
-					user.sendMessage(msg);
+					final List<String> mail = user.getMails();
+					if (mail.isEmpty())
+					{
+						final String msg = _("noNewMail");
+						if (!msg.isEmpty())
+						{
+							user.sendMessage(msg);
+						}
+					}
+					else
+					{
+						user.sendMessage(_("youHaveNewMail", mail.size()));
+					}
+				}
+				if (user.isAuthorized("essentials.fly.safelogin"))
+				{
+					final World world = user.getLocation().getWorld();
+					final int x = user.getLocation().getBlockX();
+					int y = user.getLocation().getBlockY();
+					final int z = user.getLocation().getBlockZ();
+					while (Util.isBlockUnsafe(world, x, y, z) && y > -1)
+					{
+						y--;
+					}
+
+					if (user.getLocation().getBlockY() - y > 1 || y < 0)
+					{
+						user.setAllowFlight(true);
+						user.setFlying(true);
+						user.sendMessage(_("flyMode", _("enabled"), user.getDisplayName()));
+					}
 				}
 			}
-			else
-			{
-				user.sendMessage(_("youHaveNewMail", mail.size()));
-			}
-		}
-		if (user.isAuthorized("essentials.fly.safelogin"))
-		{
-			final World world = user.getLocation().getWorld();
-			final int x = user.getLocation().getBlockX();
-			int y = user.getLocation().getBlockY();
-			final int z = user.getLocation().getBlockZ();
-			while (Util.isBlockUnsafe(world, x, y, z) && y > -1)
-			{
-				y--;
-			}
-
-			if (user.getLocation().getBlockY() - y > 1 || y < 0)
-			{
-				user.setAllowFlight(true);
-				user.setFlying(true);
-				user.sendMessage(_("flyMode", _("enabled"), user.getDisplayName()));
-			}
-		}
+		});
 	}
 
 	// Makes the compass item ingame always point to the first essentials home.  #EasterEgg
