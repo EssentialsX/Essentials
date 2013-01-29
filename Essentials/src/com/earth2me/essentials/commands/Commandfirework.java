@@ -110,7 +110,7 @@ public class Commandfirework extends EssentialsCommand
 						FireworkMeta fmeta = (FireworkMeta)stack.getItemMeta();
 						if (direction)
 						{
-							final Vector vector = user.getEyeLocation().getDirection().multiply(0.075);
+							final Vector vector = user.getEyeLocation().getDirection().multiply(0.070);
 							if (fmeta.getPower() > 1)
 							{
 								fmeta.setPower(1);
