@@ -43,7 +43,7 @@ public class Commandsell extends EssentialsCommand
 				}
 				try
 				{
-					totalWorth += sellItem(user, stack, args, true);
+					totalWorth += sellItem(user, stack, args, true);				
 				}
 				catch (Exception e)
 				{
@@ -164,23 +164,11 @@ public class Commandsell extends EssentialsCommand
 		}
 
 		//TODO: Prices for Enchantments
-		ItemStack[] pinv = user.getInventory().getContents();
-		int itemIndex = -1;
-		for (int i = 0; i < pinv.length; i++)
-		{
-			if (pinv[i] != null)
-			{
-				if (pinv[i].getType() == is.getType() && pinv[i].getDurability() == is.getDurability())
-				{
-					itemIndex = i;
-					break;
-				}
-			}
-		}
-		pinv[itemIndex].setAmount(pinv[itemIndex].getAmount() - amount);
-		user.getInventory().setContents(pinv);
+		final ItemStack ris = is.clone();
+		ris.setAmount(amount);
+		user.getInventory().removeItem(ris);
 		user.updateInventory();
-		Trade.log("Command", "Sell", "Item", user.getName(), new Trade(pinv[itemIndex], ess), user.getName(), new Trade(worth * amount, ess), user.getLocation(), ess);
+		Trade.log("Command", "Sell", "Item", user.getName(), new Trade(ris, ess), user.getName(), new Trade(worth * amount, ess), user.getLocation(), ess);
 		user.giveMoney(worth * amount);
 		user.sendMessage(_("itemSold", Util.displayCurrency(worth * amount, ess), amount, is.getType().toString().toLowerCase(Locale.ENGLISH), Util.displayCurrency(worth, ess)));
 		logger.log(Level.INFO, _("itemSoldConsole", user.getDisplayName(), is.getType().toString().toLowerCase(Locale.ENGLISH), Util.displayCurrency(worth * amount, ess), amount, Util.displayCurrency(worth, ess)));
