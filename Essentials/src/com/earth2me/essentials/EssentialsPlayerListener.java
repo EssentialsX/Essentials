@@ -171,18 +171,19 @@ public class EssentialsPlayerListener implements Listener
 		}
 		ess.getBackup().onPlayerJoin();
 		final User user = ess.getUser(player);
-		user.setDisplayNick();
-		updateCompass(user);
 		user.setLastLogin(System.currentTimeMillis());
 		user.updateActivity(false);
+
 		ess.scheduleSyncDelayedTask(new Runnable()
 		{
 			@Override
 			public void run()
 			{
+				user.setDisplayNick();
+				updateCompass(user);
+
 				if (!ess.getVanishedPlayers().isEmpty() && !user.isAuthorized("essentials.vanish.see"))
 				{
-
 					for (String p : ess.getVanishedPlayers())
 					{
 						Player toVanish = ess.getServer().getPlayerExact(p);
@@ -236,6 +237,7 @@ public class EssentialsPlayerListener implements Listener
 						user.sendMessage(_("youHaveNewMail", mail.size()));
 					}
 				}
+
 				if (user.isAuthorized("essentials.fly.safelogin"))
 				{
 					final World world = user.getLocation().getWorld();
@@ -269,14 +271,7 @@ public class EssentialsPlayerListener implements Listener
 		if (loc != null)
 		{
 			final Location updateLoc = loc;
-			ess.scheduleSyncDelayedTask(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					user.setCompassTarget(updateLoc);
-				}
-			});
+			user.setCompassTarget(updateLoc);
 		}
 	}
 
