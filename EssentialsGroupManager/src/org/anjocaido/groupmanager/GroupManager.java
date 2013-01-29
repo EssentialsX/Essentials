@@ -1952,7 +1952,17 @@ public class GroupManager extends JavaPlugin {
 					return false;
 				}
 				
-				
+				auxString = "";
+				for (int i = 0; i < args.length; i++) {
+					if (args[i] == null) {
+						logger.warning("Bukkit gave invalid arguments array! Cmd: " + cmd.getName() + " args.length: " + args.length);
+						return false;
+					}
+					auxString += args[i];
+					if (i < (args.length - 1)) {
+						auxString += " ";
+					}
+				}
 				dataHolder = worldsHolder.getWorldData(auxString);
 				
 				sender.sendMessage(ChatColor.YELLOW + "You have selected world '" + dataHolder.getName() + "'.");
