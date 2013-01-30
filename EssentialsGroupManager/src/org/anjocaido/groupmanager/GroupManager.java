@@ -34,6 +34,7 @@ import org.anjocaido.groupmanager.utils.Tasks;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.block.Block;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -392,7 +393,7 @@ public class GroupManager extends JavaPlugin {
 		// PREVENT GM COMMANDS BEING USED ON COMMANDBLOCKS
 		if (sender instanceof BlockCommandSender && !isAllowCommandBlocks) {
 			Block block = ((BlockCommandSender)sender).getBlock();
-			console.sendMessage(ChatColor.RED + "GM Commands can not be called from CommandBlock at location:" + ChatColor.GREEN + " " + block.getX + ", " + block.getY + ", " + block.getZ);
+			GroupManager.logger.warning(ChatColor.RED + "GM Commands can not be called from the CommandBlock at location: " + ChatColor.GREEN + block.getWorld().getName() + " - " + block.getX() + ", " + block.getY() + ", " + block.getZ());
 		  	return true;
 		}
 
