@@ -387,10 +387,11 @@ public class GroupManager extends JavaPlugin {
 		Group senderGroup = null;
 		User senderUser = null;
 		boolean isOpOverride = config.isOpOverride();
+		boolean isAllowCommandBlocks = config.isAllowCommandBlocks();
 		
 		// PREVENT GM COMMANDS BEING USED ON COMMANDBLOCKS
-		if (sender instanceof BlockCommandSender) {
-			sender.sendMessage(ChatColor.RED + "GM Commands can not be called from CommandBlocks");
+		if (sender instanceof BlockCommandSender && !isAllowCommandBlocks) {
+			console.sendMessage(ChatColor.RED + "GM Commands can not be called from CommandBlocks");
 		  	return true;
 		}
 
