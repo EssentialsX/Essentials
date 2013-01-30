@@ -212,3 +212,4 @@ v 2.0:
 	- Add support for BukkitForge using 'overworld' as the main world name.
 	- Prevent '*' permissions granting the 'groupmanager.noofflineperms' permission.
 	- Added '/mancheckw <world>' to inspect which permission files a world is referencing.
+	- Add config potion to set if GM commands should be allowed on CommnandBlocks.
