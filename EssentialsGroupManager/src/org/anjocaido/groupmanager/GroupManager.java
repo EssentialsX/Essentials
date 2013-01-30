@@ -391,7 +391,8 @@ public class GroupManager extends JavaPlugin {
 		
 		// PREVENT GM COMMANDS BEING USED ON COMMANDBLOCKS
 		if (sender instanceof BlockCommandSender && !isAllowCommandBlocks) {
-			console.sendMessage(ChatColor.RED + "GM Commands can not be called from CommandBlocks");
+			Block block = ((BlockCommandSender)sender).getBlock();
+			console.sendMessage(ChatColor.RED + "GM Commands can not be called from CommandBlock at location:" + ChatColor.GREEN + " " + block.getX + ", " + block.getY + ", " + block.getZ);
 		  	return true;
 		}
 
@@ -400,7 +401,7 @@ public class GroupManager extends JavaPlugin {
 			senderPlayer = (Player) sender;
 
 			if (!lastError.isEmpty() && !commandLabel.equalsIgnoreCase("manload")) {
-				sender.sendMessage(ChatColor.RED + "All commands are locked due to an error. " + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Check the log" + ChatColor.RESET + "" + ChatColor.RED + " and then try a '/manload'.");
+				GroupManager.logger.warning(ChatColor.RED + "All commands are locked due to an error. " + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Check the log" + ChatColor.RESET + "" + ChatColor.RED + " and then try a '/manload'.");
 				return true;
 			}
 
