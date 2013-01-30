@@ -22,6 +22,7 @@ import org.yaml.snakeyaml.reader.UnicodeReader;
  */
 public class GMConfiguration {
 	
+	private boolean allowCommandBlocks = false;
 	private boolean opOverride = true;
 	private boolean toggleValidate = true;
 	private Integer saveInterval = 10;
@@ -40,6 +41,7 @@ public class GMConfiguration {
 		/*
 		 * Set defaults
 		 */
+		allowCommandBlocks = false;
 		opOverride = true;
 		toggleValidate = true;
 		saveInterval = 10;
@@ -83,6 +85,7 @@ public class GMConfiguration {
 		try {
 			Map<String, Object> config = getElement("config", getElement("settings", GMconfig));
 
+			allowCommandBlocks = (Boolean) config.get("allow_commandblocks");
 			opOverride = (Boolean) config.get("opOverrides");
 			toggleValidate = (Boolean) config.get("validate_toggle");
 
@@ -141,6 +144,10 @@ public class GMConfiguration {
 		
 		return (Map<String, Object>) map.get(element);
 		
+	}
+	public boolean isAllowCommandBlocks() {
+
+		return allowCommandBlocks;
 	}
 
 	public boolean isOpOverride() {
