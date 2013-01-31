@@ -14,7 +14,7 @@ groups:
 
 # Permission nodes for GroupManager
 # by ElgarL, snowleo, continued from gabrielcouto's original
-# http://dev.bukkit.org/server-mods/essentials/
+# http://wiki.ess3.net
 
   g:groupmanager_default:
     permissions:
@@ -106,15 +106,20 @@ groups:
     - essentials.motd
     - essentials.rules
     - essentials.spawn
+    - essentials.jail.allow.help
+    - essentials.jail.allow.helpop
+    - essentials.jail.allow.rules
 
   g:essentials_builder:
     permissions:
     - essentials.afk
+    - essentials.afk.auto
     - essentials.back
     - essentials.back.ondeath
     - essentials.balance
     - essentials.balance.others
     - essentials.balancetop
+    - essentials.book
     - essentials.chat.color
     - essentials.chat.format
     - essentials.chat.shout
@@ -142,8 +147,10 @@ groups:
     - essentials.powertool
     - essentials.powertooltoggle
     - essentials.protect
+    - essentials.recipe
     - essentials.seen
     - essentials.sethome
+    - essentials.sethome.bed
     - essentials.sethome.multiple
     - essentials.signs.use.*
     - essentials.signs.create.disposal
@@ -163,6 +170,9 @@ groups:
     - essentials.warp
     - essentials.warp.list
     - essentials.worth
+    - essentials.jail.allow.mail
+    - essentials.jail.allow.ping
+    - essentials.jail.allow.seen
 
   g:essentials_moderator:
     permissions:
@@ -171,6 +181,8 @@ groups:
     - essentials.ban
     - essentials.ban.notify
     - essentials.banip
+    - essentials.book.title
+    - essentials.book.others
     - essentials.broadcast
     - essentials.chat.url
     - essentials.chat.magic
@@ -180,6 +192,7 @@ groups:
     - essentials.exp.others
     - essentials.ext
     - essentials.fly
+    - essentials.fly.safelogin
     - essentials.getpos
     - essentials.getpos.others
     - essentials.helpop.recieve
@@ -193,6 +206,7 @@ groups:
     - essentials.kits.*
     - essentials.msg.magic
     - essentials.mute
+    - essentials.mute.notify
     - essentials.nick.color
     - essentials.nick.others
     - essentials.realname
@@ -221,12 +235,15 @@ groups:
     - essentials.unban
     - essentials.unbanip
     - essentials.vanish
+    - essentials.vanish.effect
     - essentials.warps.*
     - essentials.weather
     - essentials.whois
     - essentials.workbench
     - essentials.world
     - essentials.worlds.*
+    - essentials.jail.allow.jails
+    - essentials.jail.allow.togglejail
 
   g:essentials_admin:
     permissions:

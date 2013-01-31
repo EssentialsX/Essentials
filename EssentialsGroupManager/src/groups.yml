@@ -65,7 +65,6 @@ groups:
     default: false
     permissions:
     - '*'
-    - -groupmanager.noofflineperms
     - -vanish.*
     inheritance:
     - admin
