@@ -10,6 +10,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scheduler.BukkitTask;
 
 
 public interface IEssentials extends Plugin
@@ -44,7 +45,9 @@ public interface IEssentials extends Plugin
 
 	Methods getPaymentMethod();
 
-	int scheduleAsyncDelayedTask(Runnable run);
+	BukkitTask scheduleAsyncDelayedTask(Runnable run);
+	
+	BukkitTask runTaskLaterAsynchronously(Runnable run, long delay);
 
 	int scheduleSyncDelayedTask(Runnable run);
 

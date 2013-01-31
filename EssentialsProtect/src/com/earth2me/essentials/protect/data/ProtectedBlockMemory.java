@@ -1,7 +1,7 @@
 package com.earth2me.essentials.protect.data;
 
-import java.util.Map.Entry;
 import java.util.*;
+import java.util.Map.Entry;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.plugin.Plugin;
@@ -123,11 +123,13 @@ public class ProtectedBlockMemory implements IProtectedBlock
 		importProtections(storage.exportProtections());
 	}
 
+	@Override
 	public void clearProtections()
 	{
 		blocks.clear();
 	}
 
+	@Override
 	public final void importProtections(final List<OwnedBlock> blocks)
 	{
 		for (OwnedBlock ownedBlock : blocks)
@@ -141,6 +143,7 @@ public class ProtectedBlockMemory implements IProtectedBlock
 		}
 	}
 
+	@Override
 	public List<OwnedBlock> exportProtections()
 	{
 		final List<OwnedBlock> blockList = new ArrayList<OwnedBlock>(blocks.size());
@@ -160,12 +163,14 @@ public class ProtectedBlockMemory implements IProtectedBlock
 		return blockList;
 	}
 
+	@Override
 	public void protectBlock(final Block block, final String playerName)
 	{
 		final ProtectedLocation pl = new ProtectedLocation(block, getWorldId(block.getWorld()));
 		protectBlock(pl, playerName);
-		plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable()
+		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				storage.protectBlock(block, playerName);
@@ -173,7 +178,7 @@ public class ProtectedBlockMemory implements IProtectedBlock
 		});
 	}
 
-	private final void protectBlock(ProtectedLocation pl, String playerName)
+	private void protectBlock(ProtectedLocation pl, String playerName)
 	{
 		int playerId = getPlayerId(playerName);
 		ProtectedBy pb = blocks.get(pl);
@@ -185,6 +190,7 @@ public class ProtectedBlockMemory implements IProtectedBlock
 		pb.add(playerId);
 	}
 
+	@Override
 	public boolean isProtected(Block block, String playerName)
 	{
 		int playerId = getPlayerId(playerName);
@@ -193,6 +199,7 @@ public class ProtectedBlockMemory implements IProtectedBlock
 		return !pb.contains(playerId);
 	}
 
+	@Override
 	public List<String> getOwners(Block block)
 	{
 		ProtectedLocation pl = new ProtectedLocation(block, getWorldId(block.getWorld()));
@@ -200,12 +207,14 @@ public class ProtectedBlockMemory implements IProtectedBlock
 		return pb.getPlayers(playerNames);
 	}
 
+	@Override
 	public int unprotectBlock(final Block block)
 	{
 		ProtectedLocation pl = new ProtectedLocation(block, getWorldId(block.getWorld()));
 		ProtectedBy pb = blocks.remove(pl);
-		plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable()
+		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				storage.unprotectBlock(block);
@@ -241,6 +250,7 @@ public class ProtectedBlockMemory implements IProtectedBlock
 		return id;
 	}
 
+	@Override
 	public void onPluginDeactivation()
 	{
 		storage.onPluginDeactivation();

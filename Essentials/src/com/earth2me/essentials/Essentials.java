@@ -63,6 +63,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scheduler.BukkitTask;
 import org.yaml.snakeyaml.error.YAMLException;
 
 
@@ -608,9 +609,14 @@ public class Essentials extends JavaPlugin implements IEssentials
 	}
 
 	@Override
-	public int scheduleAsyncDelayedTask(final Runnable run)
+	public BukkitTask scheduleAsyncDelayedTask(final Runnable run)
 	{
-		return this.getScheduler().scheduleAsyncDelayedTask(this, run);
+		return this.getScheduler().runTaskAsynchronously(this, run);
+	}
+	@Override
+	public BukkitTask runTaskLaterAsynchronously(final Runnable run, final long delay)
+	{
+		return this.getScheduler().runTaskLaterAsynchronously(this, run, delay);
 	}
 
 	@Override
