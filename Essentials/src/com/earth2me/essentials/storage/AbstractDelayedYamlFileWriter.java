@@ -15,7 +15,7 @@ public abstract class AbstractDelayedYamlFileWriter implements Runnable
 	public AbstractDelayedYamlFileWriter(IEssentials ess, File file)
 	{
 		this.file = file;
-		ess.scheduleAsyncDelayedTask(this);
+		ess.runTaskAsynchronously(this);
 	}
 
 	public abstract StorageObject getObject();

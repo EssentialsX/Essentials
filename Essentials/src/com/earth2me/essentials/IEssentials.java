@@ -45,7 +45,7 @@ public interface IEssentials extends Plugin
 
 	Methods getPaymentMethod();
 
-	BukkitTask scheduleAsyncDelayedTask(Runnable run);
+	BukkitTask runTaskAsynchronously(Runnable run);
 	
 	BukkitTask runTaskLaterAsynchronously(Runnable run, long delay);
 

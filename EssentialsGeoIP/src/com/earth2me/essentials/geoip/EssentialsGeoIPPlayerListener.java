@@ -44,7 +44,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
-		ess.scheduleAsyncDelayedTask(new Runnable()
+		ess.runTaskAsynchronously(new Runnable()
 		{
 			@Override
 			public void run()

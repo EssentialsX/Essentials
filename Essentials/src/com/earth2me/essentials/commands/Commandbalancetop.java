@@ -63,7 +63,7 @@ public class Commandbalancetop extends EssentialsCommand
 			{
 				lock.readLock().unlock();
 			}
-			ess.scheduleAsyncDelayedTask(new Viewer(sender, page, force));
+			ess.runTaskAsynchronously(new Viewer(sender, page, force));
 		}
 		else
 		{
@@ -71,7 +71,7 @@ public class Commandbalancetop extends EssentialsCommand
 			{
 				sender.sendMessage(_("orderBalances", ess.getUserMap().getUniqueUsers()));
 			}
-			ess.scheduleAsyncDelayedTask(new Viewer(sender, page, force));
+			ess.runTaskAsynchronously(new Viewer(sender, page, force));
 		}
 
 	}
@@ -144,7 +144,7 @@ public class Commandbalancetop extends EssentialsCommand
 			{
 				lock.writeLock().unlock();
 			}
-			ess.scheduleAsyncDelayedTask(viewer);
+			ess.runTaskAsynchronously(viewer);
 		}
 	}
 
@@ -178,7 +178,7 @@ public class Commandbalancetop extends EssentialsCommand
 			{
 				lock.readLock().unlock();
 			}
-			ess.scheduleAsyncDelayedTask(new Calculator(new Viewer(sender, page, force), force));
+			ess.runTaskAsynchronously(new Calculator(new Viewer(sender, page, force), force));
 		}
 	}
 }

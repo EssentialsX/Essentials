@@ -72,7 +72,7 @@ public class EssentialsSpawnPlayerListener implements Listener
 
 	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
-		ess.scheduleAsyncDelayedTask(new Runnable()
+		ess.runTaskAsynchronously(new Runnable()
 		{
 			@Override
 			public void run()

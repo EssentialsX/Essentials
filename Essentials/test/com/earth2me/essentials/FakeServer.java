@@ -40,11 +40,13 @@ public class FakeServer implements Server
 		}
 	}
 
+	@Override
 	public String getName()
 	{
 		return "Essentials Fake Server";
 	}
 
+	@Override
 	public String getVersion()
 	{
 		return "1.0";
@@ -178,19 +180,6 @@ public class FakeServer implements Server
 			}
 
 			@Override
-			public int scheduleAsyncDelayedTask(Plugin plugin, Runnable r, long l)
-			{
-				throw new UnsupportedOperationException("Not supported yet.");
-			}
-
-			@Override
-			public int scheduleAsyncDelayedTask(Plugin plugin, Runnable r)
-			{
-				r.run();
-				return 0;
-			}
-
-			@Override
 			public int scheduleAsyncRepeatingTask(Plugin plugin, Runnable r, long l, long l1)
 			{
 				throw new UnsupportedOperationException("Not supported yet.");
@@ -276,6 +265,18 @@ public class FakeServer implements Server
 
 			@Override
 			public BukkitTask runTaskTimerAsynchronously(Plugin plugin, Runnable r, long l, long l1) throws IllegalArgumentException
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public int scheduleAsyncDelayedTask(Plugin plugin, Runnable r, long l)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public int scheduleAsyncDelayedTask(Plugin plugin, Runnable r)
 			{
 				throw new UnsupportedOperationException("Not supported yet.");
 			}

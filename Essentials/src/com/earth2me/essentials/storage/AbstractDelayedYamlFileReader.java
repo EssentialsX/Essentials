@@ -20,7 +20,7 @@ public abstract class AbstractDelayedYamlFileReader<T extends StorageObject> imp
 		this.file = file;
 		this.clazz = clazz;
 		this.plugin = ess;
-		ess.scheduleAsyncDelayedTask(this);
+		ess.runTaskAsynchronously(this);
 	}
 
 	public abstract void onStart();

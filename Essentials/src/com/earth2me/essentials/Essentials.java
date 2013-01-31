@@ -225,7 +225,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		final MetricsStarter metricsStarter = new MetricsStarter(this);
 		if (metricsStarter.getStart() != null && metricsStarter.getStart() == true)
 		{
-			getScheduler().scheduleAsyncDelayedTask(this, metricsStarter, 1);
+			getScheduler().runTaskLaterAsynchronously(this, metricsStarter, 1);
 		}
 		else if (metricsStarter.getStart() != null && metricsStarter.getStart() == false)
 		{
@@ -609,7 +609,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	}
 
 	@Override
-	public BukkitTask scheduleAsyncDelayedTask(final Runnable run)
+	public BukkitTask runTaskAsynchronously(final Runnable run)
 	{
 		return this.getScheduler().runTaskAsynchronously(this, run);
 	}

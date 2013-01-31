@@ -72,7 +72,7 @@ public class Backup implements Runnable
 		server.dispatchCommand(cs, "save-all");
 		server.dispatchCommand(cs, "save-off");
 
-		ess.scheduleAsyncDelayedTask(
+		ess.runTaskAsynchronously(
 				new Runnable()
 				{
 					@Override

@@ -27,7 +27,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 
 	private void loadAllUsersAsync(final IEssentials ess)
 	{
-		ess.scheduleAsyncDelayedTask(new Runnable()
+		ess.runTaskAsynchronously(new Runnable()
 		{
 			@Override
 			public void run()
