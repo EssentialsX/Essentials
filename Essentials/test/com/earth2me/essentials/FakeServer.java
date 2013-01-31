@@ -1,15 +1,16 @@
 package com.earth2me.essentials;
 
 import com.avaje.ebean.config.ServerConfig;
+import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.craftbukkit.FakeWorld;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Logger;
+import org.bukkit.*;
 import org.bukkit.Warning.WarningState;
 import org.bukkit.World.Environment;
-import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
@@ -242,7 +243,8 @@ public class FakeServer implements Server
 			@Override
 			public BukkitTask runTaskAsynchronously(Plugin plugin, Runnable r) throws IllegalArgumentException
 			{
-				throw new UnsupportedOperationException("Not supported yet.");
+				r.run();	  	
+				return null;
 			}
 
 			@Override
@@ -254,7 +256,8 @@ public class FakeServer implements Server
 			@Override
 			public BukkitTask runTaskLaterAsynchronously(Plugin plugin, Runnable r, long l) throws IllegalArgumentException
 			{
-				throw new UnsupportedOperationException("Not supported yet.");
+				r.run();	  	
+				return null;
 			}
 
 			@Override

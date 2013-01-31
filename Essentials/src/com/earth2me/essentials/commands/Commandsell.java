@@ -4,7 +4,6 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
-import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import java.util.Locale;
 import java.util.logging.Level;
 import org.bukkit.Material;

@@ -5,7 +5,6 @@ import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.SpawnMob;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.commands.Commandspawnmob;
 
 
 public class SignSpawnmob extends EssentialsSign

@@ -2,7 +2,6 @@ package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.ITeleport;
-import com.earth2me.essentials.commands.NoChargeException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Logger;
