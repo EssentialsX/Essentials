@@ -34,6 +34,7 @@ import org.anjocaido.groupmanager.utils.Tasks;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.block.Block;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -387,10 +388,12 @@ public class GroupManager extends JavaPlugin {
 		Group senderGroup = null;
 		User senderUser = null;
 		boolean isOpOverride = config.isOpOverride();
+		boolean isAllowCommandBlocks = config.isAllowCommandBlocks();
 		
 		// PREVENT GM COMMANDS BEING USED ON COMMANDBLOCKS
-		if (sender instanceof BlockCommandSender) {
-			sender.sendMessage(ChatColor.RED + "GM Commands can not be called from CommandBlocks");
+		if (sender instanceof BlockCommandSender && !isAllowCommandBlocks) {
+			Block block = ((BlockCommandSender)sender).getBlock();
+			GroupManager.logger.warning(ChatColor.RED + "GM Commands can not be called from the CommandBlock at location: " + ChatColor.GREEN + block.getWorld().getName() + " - " + block.getX() + ", " + block.getY() + ", " + block.getZ());
 		  	return true;
 		}
 
@@ -404,7 +407,7 @@ public class GroupManager extends JavaPlugin {
 			senderPlayer = (Player) sender;
 
 			if (!lastError.isEmpty() && !commandLabel.equalsIgnoreCase("manload")) {
-				sender.sendMessage(ChatColor.RED + "All commands are locked due to an error. " + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Check the log" + ChatColor.RESET + "" + ChatColor.RED + " and then try a '/manload'.");
+				GroupManager.logger.warning(ChatColor.RED + "All commands are locked due to an error. " + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Check the log" + ChatColor.RESET + "" + ChatColor.RED + " and then try a '/manload'.");
 				return true;
 			}
 
@@ -1900,7 +1903,7 @@ public class GroupManager extends JavaPlugin {
 
 			case manselect:
 				if (args.length < 1) {
-					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <world>)");
+					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/manselect <world>)");
 					sender.sendMessage(ChatColor.YELLOW + "Worlds available: ");
 					ArrayList<OverloadedWorldHolder> worlds = worldsHolder.allWorldsDataList();
 					auxString = "";
@@ -1938,6 +1941,42 @@ public class GroupManager extends JavaPlugin {
 				}
 				selectedWorlds.remove(sender);
 				sender.sendMessage(ChatColor.YELLOW + "You have removed your world selection. Working with current world(if possible).");
+
+				return true;
+				
+			case mancheckw:
+				if (args.length < 1) {
+					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/mancheckw <world>)");
+					sender.sendMessage(ChatColor.YELLOW + "Worlds available: ");
+					ArrayList<OverloadedWorldHolder> worlds = worldsHolder.allWorldsDataList();
+					auxString = "";
+					for (int i = 0; i < worlds.size(); i++) {
+						auxString += worlds.get(i).getName();
+						if ((i + 1) < worlds.size()) {
+							auxString += ", ";
+						}
+					}
+					sender.sendMessage(ChatColor.YELLOW + auxString);
+					return false;
+				}
+				
+				auxString = "";
+				for (int i = 0; i < args.length; i++) {
+					if (args[i] == null) {
+						logger.warning("Bukkit gave invalid arguments array! Cmd: " + cmd.getName() + " args.length: " + args.length);
+						return false;
+					}
+					auxString += args[i];
+					if (i < (args.length - 1)) {
+						auxString += " ";
+					}
+				}
+				dataHolder = worldsHolder.getWorldData(auxString);
+				
+				sender.sendMessage(ChatColor.YELLOW + "You have selected world '" + dataHolder.getName() + "'.");
+				sender.sendMessage(ChatColor.YELLOW + "This world is using the following data files..");
+				sender.sendMessage(ChatColor.YELLOW + "Groups: " + dataHolder.getGroupsFile().getAbsolutePath());
+				sender.sendMessage(ChatColor.YELLOW + "Users: " + dataHolder.getUsersFile().getAbsolutePath());
 
 				return true;
 

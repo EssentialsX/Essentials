@@ -172,6 +172,8 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 			permArray.addAll(GroupManager.BukkitPermissions.getAllRegisteredPermissions(includeChildren));
 			allPerms = true;
 			perms.remove("*");
+			// Remove the no offline perms node as this should not be given.
+			perms.remove("groupmanager.noofflineperms");
 		}
 
 		for (String perm : perms) {

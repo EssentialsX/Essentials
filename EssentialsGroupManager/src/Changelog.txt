@@ -209,3 +209,7 @@ v 2.0:
 	- Synchronize pushing to Bukkit perms to prevent any ConcurrentModificationException.
 	- Do not grant any permissions (nor update Bukkit) if the server is in offline mode and the player has the permission node 'groupmanager.noofflineperms'.
 	- Negate 'groupmanager.noofflineperms' by default in the owner group.
+	- Add support for BukkitForge using 'overworld' as the main world name.
+	- Prevent '*' permissions granting the 'groupmanager.noofflineperms' permission.
+	- Added '/mancheckw <world>' to inspect which permission files a world is referencing.
+	- Add config potion to set if GM commands should be allowed on CommnandBlocks.

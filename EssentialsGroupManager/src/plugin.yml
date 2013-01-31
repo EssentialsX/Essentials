@@ -164,6 +164,10 @@ commands:
     description: Clear world selection. Next commands will work on your world.
     usage: /<command>
     permissions: groupmanager.manclear
+  mancheckw:
+    description: Obtain the paths to each file a world is storing it's data in (users/groups).
+    usage: /<command> <world>
+    permissions: groupmanager.mancheckw
     
 Permissions:
     groupmanager.op:
