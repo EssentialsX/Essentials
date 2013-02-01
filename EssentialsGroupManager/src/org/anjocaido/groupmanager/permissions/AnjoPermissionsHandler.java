@@ -789,9 +789,9 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 		 * We are in offline mode
 		 * and the player has the 'groupmanager.noofflineperms' permission.
 		 */
-		if (user == null || targetPermission == null || targetPermission.isEmpty() ||
-				(!Bukkit.getServer().getOnlineMode()
-						&& (checkPermission(user, "groupmanager.noofflineperms", true).resultType == PermissionCheckResult.Type.FOUND))) {
+		if (user == null || targetPermission == null || targetPermission.isEmpty()
+				|| (!Bukkit.getServer().getOnlineMode()
+				&& (checkPermission(user, "groupmanager.noofflineperms", false).resultType == PermissionCheckResult.Type.FOUND))) {
 			
 			PermissionCheckResult result = new PermissionCheckResult();
 			result.accessLevel = targetPermission;
@@ -1037,6 +1037,15 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 			userAccessLevelOffset = 1;
 			result = PermissionCheckResult.Type.NEGATION;
 		}
+		
+		if (fullPermissionName.equals(userAccessLevel)) {
+			return result;
+		}
+		
+		if ("groupmanager.noofflineperms".equals(fullPermissionName)) {
+			result = PermissionCheckResult.Type.NOTFOUND;
+		}
+		
 		if ("*".regionMatches(0, userAccessLevel, userAccessLevelOffset, userAccessLevelLength - userAccessLevelOffset)) {
 			return result;
 		}
