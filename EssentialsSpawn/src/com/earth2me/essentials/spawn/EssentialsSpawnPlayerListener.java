@@ -49,7 +49,7 @@ public class EssentialsSpawnPlayerListener implements Listener
 		{
 			Location home;
 			final Location bed = user.getBedSpawnLocation();
-			if (bed != null && bed.getBlock().getType() == Material.BED_BLOCK)
+			if (bed != null)
 			{
 				home = bed;
 			}

@@ -354,7 +354,7 @@ public class Teleport implements Runnable, ITeleport
 	{
 		final Player player = user.getBase();
 		Location bed = player.getBedSpawnLocation();
-		if (bed != null && bed.getBlock().getType() == Material.BED_BLOCK)
+		if (bed != null)
 		{
 			now(new Target(bed), cause);
 		}
