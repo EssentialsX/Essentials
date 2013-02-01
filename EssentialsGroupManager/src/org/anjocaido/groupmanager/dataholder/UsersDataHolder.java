@@ -53,7 +53,7 @@ public class UsersDataHolder {
 	
 	public WorldDataHolder getDataSource() {
 		
-		return this.dataSource
+		return this.dataSource;
 	}
 
 	/**
