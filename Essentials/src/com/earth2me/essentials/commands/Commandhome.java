@@ -58,10 +58,6 @@ public class Commandhome extends EssentialsCommand
 		catch (NotEnoughArgumentsException e)
 		{
 			Location bed = player.getBedSpawnLocation();
-			if (bed != null && bed.getBlock().getType() != Material.BED_BLOCK)
-			{
-				bed = null;
-			}
 			final List<String> homes = player.getHomes();
 			if (homes.isEmpty() && player.equals(user))
 			{
