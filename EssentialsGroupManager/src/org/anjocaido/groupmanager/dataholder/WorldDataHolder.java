@@ -823,24 +823,28 @@ public class WorldDataHolder {
 					 * nothing.
 					 */
 				} else {
-					if (nodeData instanceof List) {
-						for (Object o : ((List) nodeData)) {
+					try {
+						if (nodeData instanceof List) {
+							for (Object o : ((List) nodeData)) {
+								/*
+								 * Only add this permission if it's not empty
+								 */
+								if (!o.toString().isEmpty()) {
+									thisUser.addPermission(o.toString());
+								}
+							}
+						} else if (nodeData instanceof String) {
+
 							/*
 							 * Only add this permission if it's not empty
 							 */
-							if (!o.toString().isEmpty())
-								thisUser.addPermission(o.toString());
-						}
-					} else if (nodeData instanceof String) {
-						try {
-							/*
-							 * Only add this permission if it's not empty
-							 */
-							if (!nodeData.toString().isEmpty())
+							if (!nodeData.toString().isEmpty()) {
 								thisUser.addPermission(nodeData.toString());
-						} catch (NullPointerException e) {
-							// Ignore this entry as it's null.
+							}
+
 						}
+					} catch (NullPointerException e) {
+						// Ignore this entry as it's null.
 					}
 					thisUser.sortPermissions();
 				}
