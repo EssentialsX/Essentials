@@ -407,7 +407,7 @@ public class GroupManager extends JavaPlugin {
 			senderPlayer = (Player) sender;
 
 			if (!lastError.isEmpty() && !commandLabel.equalsIgnoreCase("manload")) {
-				GroupManager.logger.warning(ChatColor.RED + "All commands are locked due to an error. " + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Check the log" + ChatColor.RESET + "" + ChatColor.RED + " and then try a '/manload'.");
+				sender.sendmessage(ChatColor.RED + "All commands are locked due to an error. " + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Check the log" + ChatColor.RESET + "" + ChatColor.RED + " and then try a '/manload'.");
 				return true;
 			}
 
