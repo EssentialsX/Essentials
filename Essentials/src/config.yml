@@ -317,8 +317,12 @@ freeze-afk-players: false
 # Enable this, when you don't want people idling in mob traps.
 disable-item-pickup-while-afk: false
 
+# This setting controls if a player is marked as active on interaction.
+# When this setting is false, you will need to manually un-AFK using the /afk command.
+cancel-afk-on-interact: true
+
 # Should we automatically remove afk status when the player moves?
-# Player will be removed from afk on chat/command regardless of this setting.
+# Player will be removed from AFK on chat/command regardless of this setting.
 # Disable this to reduce server lag.
 cancel-afk-on-move: true
 

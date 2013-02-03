@@ -143,6 +143,8 @@ public interface ISettings extends IConf
 	boolean getFreezeAfkPlayers();
 
 	boolean cancelAfkOnMove();
+	
+	boolean cancelAfkOnInteract();
 
 	boolean areDeathMessagesEnabled();
 
