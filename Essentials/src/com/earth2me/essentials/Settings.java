@@ -468,8 +468,8 @@ public class Settings implements ISettings
 		teleportInvulnerability = _isTeleportInvulnerability();
 		disableItemPickupWhileAfk = _getDisableItemPickupWhileAfk();
 		registerBackInListener = _registerBackInListener();
-		cancelAfkOnMove = _cancelAfkOnMove();
 		cancelAfkOnInteract = _cancelAfkOnInteract();
+		cancelAfkOnMove = _cancelAfkOnMove() && cancelAfkOnInteract;
 		getFreezeAfkPlayers = _getFreezeAfkPlayers();
 		itemSpawnBl = _getItemSpawnBlacklist();
 		loginAttackDelay = _getLoginAttackDelay();
@@ -832,7 +832,6 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("cancel-afk-on-move", true);
 	}
-	
 	private boolean cancelAfkOnInteract;
 
 	@Override
@@ -870,7 +869,7 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("repair-enchanted", true);
 	}
-	
+
 	@Override
 	public boolean allowUnsafeEnchantments()
 	{
