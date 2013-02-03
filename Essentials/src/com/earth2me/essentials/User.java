@@ -530,7 +530,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 	public void updateActivity(final boolean broadcast)
 	{
-		if (isAfk())
+		if (isAfk() && ess.getSettings().cancelAfkOnInteract())
 		{
 			setAfk(false);
 			if (broadcast && !isHidden())

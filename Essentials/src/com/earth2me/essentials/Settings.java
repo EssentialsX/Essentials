@@ -469,6 +469,7 @@ public class Settings implements ISettings
 		disableItemPickupWhileAfk = _getDisableItemPickupWhileAfk();
 		registerBackInListener = _registerBackInListener();
 		cancelAfkOnMove = _cancelAfkOnMove();
+		cancelAfkOnInteract = _cancelAfkOnInteract();
 		getFreezeAfkPlayers = _getFreezeAfkPlayers();
 		itemSpawnBl = _getItemSpawnBlacklist();
 		loginAttackDelay = _getLoginAttackDelay();
@@ -830,6 +831,19 @@ public class Settings implements ISettings
 	private boolean _cancelAfkOnMove()
 	{
 		return config.getBoolean("cancel-afk-on-move", true);
+	}
+	
+	private boolean cancelAfkOnInteract;
+
+	@Override
+	public boolean cancelAfkOnInteract()
+	{
+		return cancelAfkOnInteract;
+	}
+
+	private boolean _cancelAfkOnInteract()
+	{
+		return config.getBoolean("cancel-afk-on-interact", true);
 	}
 
 	@Override
