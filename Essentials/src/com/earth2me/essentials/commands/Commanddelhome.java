@@ -50,10 +50,10 @@ public class Commanddelhome extends EssentialsCommand
 		{
 			name = expandedArg[0];
 		}
-		//TODO: Think up a nice error message
-		/*
-		 * if (name.equalsIgnoreCase("bed")) { throw new Exception("You cannot remove the vanilla home point"); }
-		 */
+		
+		
+		if (name.equalsIgnoreCase("bed")) { throw new Exception(_("invalidHomeName")); }
+		
 		user.delHome(name.toLowerCase(Locale.ENGLISH));
 		sender.sendMessage(_("deleteHome", name));
 	}

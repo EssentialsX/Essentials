@@ -75,7 +75,7 @@ public class Commandhome extends EssentialsCommand
 			{
 				if (bed != null  && user.isAuthorized("essentials.home.bed"))
 				{
-					homes.add("bed");
+					homes.add(_("bed"));
 				}
 				user.sendMessage(_("homes", Util.joinList(homes)));
 			}
