@@ -29,7 +29,7 @@ public class SignBuy extends EssentialsSign
 		charge.isAffordableFor(player);
 		if (!items.pay(player, false))
 		{
-			throw new ChargeException("Inventory full");
+			throw new ChargeException("Inventory full"); //TODO: TL
 		}
 		charge.charge(player);
 		Trade.log("Sign", "Buy", "Interact", username, charge, username, items, sign.getBlock().getLocation(), ess);

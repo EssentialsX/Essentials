@@ -18,7 +18,7 @@ public class Commandmail extends EssentialsCommand
 		super("mail");
 	}
 
-	//TODO: Tidy this up
+	//TODO: Tidy this up / TL these errors.
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{

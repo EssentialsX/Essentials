@@ -52,7 +52,7 @@ public class Commandtp extends EssentialsCommand
 			final double z = args[3].startsWith("~") ? target2.getLocation().getZ() + Integer.parseInt(args[3].substring(1)) : Integer.parseInt(args[3]);
 			if (x > 30000000 || y > 30000000 || z > 30000000 || x < -30000000 || y < -30000000 || z < -30000000)
 			{
-				throw new NotEnoughArgumentsException("Value of coordinates cannot be over 30000000"); //todo: I18n
+				throw new NotEnoughArgumentsException("Value of coordinates cannot be over 30000000"); //TODO: I18n
 			}
 			final Location location = new Location(target2.getWorld(), x, y, z);
 			if (!target2.isTeleportEnabled())
@@ -113,7 +113,7 @@ public class Commandtp extends EssentialsCommand
 			final double z = args[3].startsWith("~") ? target.getLocation().getZ() + Integer.parseInt(args[3].substring(1)) : Integer.parseInt(args[3]);
 			if (x > 30000000 || y > 30000000 || z > 30000000 || x < -30000000 || y < -30000000 || z < -30000000)
 			{
-				throw new NotEnoughArgumentsException("Value of coordinates cannot be over 30000000"); //todo: I18n
+				throw new NotEnoughArgumentsException("Value of coordinates cannot be over 30000000"); //TODO: I18n
 			}
 			final Location location = new Location(target.getWorld(), x, y, z);
 			target.getTeleport().now(location, false, TeleportCause.COMMAND);
