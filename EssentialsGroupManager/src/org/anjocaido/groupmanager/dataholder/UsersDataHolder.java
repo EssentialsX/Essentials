@@ -50,6 +50,11 @@ public class UsersDataHolder {
 
 		return users;
 	}
+	
+	public WorldDataHolder getDataSource() {
+		
+		return this.dataSource;
+	}
 
 	/**
 	 * Resets the Users

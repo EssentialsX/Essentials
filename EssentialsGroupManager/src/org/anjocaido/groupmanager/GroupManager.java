@@ -1975,8 +1975,8 @@ public class GroupManager extends JavaPlugin {
 				
 				sender.sendMessage(ChatColor.YELLOW + "You have selected world '" + dataHolder.getName() + "'.");
 				sender.sendMessage(ChatColor.YELLOW + "This world is using the following data files..");
-				sender.sendMessage(ChatColor.YELLOW + "Groups: " + dataHolder.getGroupsFile().getAbsolutePath());
-				sender.sendMessage(ChatColor.YELLOW + "Users: " + dataHolder.getUsersFile().getAbsolutePath());
+				sender.sendMessage(ChatColor.YELLOW + "Groups:" + ChatColor.GREEN + " " + dataHolder.getGroupsFile().getDataSource.getName());
+				sender.sendMessage(ChatColor.YELLOW + "Users:" + ChatColor.GREEN + " " + dataHolder.getUsersFile().getDataSource.getName());
 
 				return true;
 
