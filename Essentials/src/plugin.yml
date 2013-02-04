@@ -266,6 +266,10 @@ commands:
     description: Pong!
     usage: /<command>
     aliases: [pong,echo,echo,eping,epong]
+  potion:
+    description: Adds custom potion effects to a potion.
+    usage: /<command> effect:<effect> power:<power> duration:<duration>
+    aliases: [epotion,elixer,eelixer]
   powertool:
     description: Assigns a command to the item in hand.
     usage: /<command> [l:|a:|r:|c:|d:][command] [arguments] - {player} can be replaced by name of a clicked player.

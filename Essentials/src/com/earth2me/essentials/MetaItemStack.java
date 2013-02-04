@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
+import org.bukkit.potion.*;
 
 
 public class MetaItemStack
@@ -21,7 +22,16 @@ public class MetaItemStack
 	private final static Map<String, DyeColor> colorMap = new HashMap<String, DyeColor>();
 	private final static Map<String, FireworkEffect.Type> fireworkShape = new HashMap<String, FireworkEffect.Type>();
 	private FireworkEffect.Builder builder = FireworkEffect.builder();
+	private PotionEffectType pEffectType;
+	private PotionEffect pEffect;
 	private boolean validFirework = false;
+	private boolean validPotionEffect = false;
+	private boolean validPotionDuration = false;
+	private boolean validPotionPower = false;
+	private boolean canceledEffect = false;
+	private boolean completePotion = false;
+	private int power = 1;
+	private int duration = 120;
 
 	static
 	{
@@ -50,9 +60,34 @@ public class MetaItemStack
 		return validFirework;
 	}
 
+	public boolean isValidPotion()
+	{
+		return validPotionEffect && validPotionDuration && validPotionPower;
+	}
+
 	public FireworkEffect.Builder getFireworkBuilder()
 	{
 		return builder;
+	}
+
+	public PotionEffect getPotionEffect()
+	{
+		return pEffect;
+	}
+
+	public boolean completePotion()
+	{
+		return completePotion;
+	}
+
+	private void resetPotionMeta()
+	{
+		pEffect = null;
+		pEffectType = null;
+		validPotionEffect = false;
+		validPotionDuration = false;
+		validPotionPower = false;
+		completePotion = true;
 	}
 
 	public void parseStringMeta(final CommandSender user, final boolean allowUnsafe, String[] string, int fromArg, final IEssentials ess) throws Exception
@@ -148,6 +183,10 @@ public class MetaItemStack
 		{
 			addFireworkMeta(user, false, string, ess);
 		}
+		else if (stack.getType() == Material.POTION) //WARNING - Meta for potions will be ignored after this point.
+		{
+			addPotionMeta(user, false, string, ess);
+		}
 		else if (split.length > 1 && (split[0].equalsIgnoreCase("color") || split[0].equalsIgnoreCase("colour"))
 				 && (stack.getType() == Material.LEATHER_BOOTS
 					 || stack.getType() == Material.LEATHER_CHESTPLATE
@@ -210,7 +249,6 @@ public class MetaItemStack
 					{
 						user.sendMessage(_("fireworkSyntax"));
 						throw new Exception(_("invalidFireworkFormat", split[1], split[0]));
-
 					}
 				}
 				builder.withColor(primaryColors);
@@ -274,6 +312,70 @@ public class MetaItemStack
 					}
 				}
 			}
+		}
+	}
+
+	public void addPotionMeta(final CommandSender user, final boolean allowShortName, final String string, final IEssentials ess) throws Exception
+	{
+		if (stack.getType() == Material.POTION)
+		{
+			final User player = ess.getUser(user);
+			final String[] split = splitPattern.split(string, 2);
+
+			if (split.length < 2)
+			{
+				return;
+			}
+
+			if (split[0].equalsIgnoreCase("effect"))
+			{
+				pEffectType = Potions.getByName(split[1]);
+				if (pEffectType != null)
+				{
+					if(player != null && player.isAuthorized("essentials.potion." + pEffectType.getName().toLowerCase()))
+					{
+						validPotionEffect = true;
+						canceledEffect = false;
+					}
+					else
+					{
+						canceledEffect = true;
+						user.sendMessage(_("invalidPotionEffect", pEffectType.getName().toLowerCase()));
+					}
+				}
+				else
+				{
+					user.sendMessage("Invalid potion effect");
+					canceledEffect = true;
+				}
+			}
+			else if (split[0].equalsIgnoreCase("power"))
+			{
+				if (Util.isInt(split[1]))
+				{
+					validPotionPower = true;
+					power = Integer.parseInt(split[1]);
+				}
+			}
+			else if (split[0].equalsIgnoreCase("duration") || split[0].equalsIgnoreCase("dur"))
+			{
+				if (Util.isInt(split[1]))
+				{
+					validPotionDuration = true;
+					duration = Integer.parseInt(split[1]) * 20; //Duration is in ticks by default, converted to seconds
+				}
+			}
+
+			if (isValidPotion() && !canceledEffect)
+			{
+				PotionMeta pmeta = (PotionMeta)stack.getItemMeta();
+				pEffect = pEffectType.createEffect(duration, power);
+				pmeta.addCustomEffect(pEffect, true);
+				stack.setItemMeta(pmeta);
+				resetPotionMeta();		
+			}
+
+			
 		}
 	}
 
