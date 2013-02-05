@@ -66,6 +66,7 @@ public class Commandgod extends EssentialsCommand
 			final boolean enabled = player.isGodModeEnabled();
 			if (enabled)
 			{
+				player.setHealth(player.getMaxHealth());
 				player.setFoodLevel(20);
 			}
 
