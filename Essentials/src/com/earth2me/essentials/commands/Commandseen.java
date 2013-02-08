@@ -75,7 +75,7 @@ public class Commandseen extends EssentialsCommand
 			if (extra)
 			{
 				sender.sendMessage(_("whoisIPAddress", player.getLastLoginAddress()));
-				final Location loc = player.getLastLocation();
+				final Location loc = player.getLogoutLocation();
 				if (loc != null)
 				{
 					sender.sendMessage(_("whoisLocation", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));

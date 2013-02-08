@@ -50,4 +50,6 @@ public interface IUser extends Player
 	void setAfk(final boolean set);
 	
 	void setLogoutLocation();
+	
+	Location getLogoutLocation();
 }
