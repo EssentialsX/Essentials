@@ -15,7 +15,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -97,34 +96,41 @@ public class EssentialsSpawnPlayerListener implements Listener
 			ess.scheduleSyncDelayedTask(new NewPlayerTeleport(user), 1L);
 		}
 
-		//This method allows for multiple line player announce messages using multiline yaml syntax #EasterEgg
-		if (ess.getSettings().getAnnounceNewPlayers())
+		ess.scheduleSyncDelayedTask(new Runnable()
 		{
-			final IText output = new KeywordReplacer(ess.getSettings().getAnnounceNewPlayerFormat(), user, ess);
-			final SimpleTextPager pager = new SimpleTextPager(output);
-
-			for (String line : pager.getLines())
+			@Override
+			public void run()
 			{
-				ess.broadcastMessage(user, line);
-			}
-		}
+				//This method allows for multiple line player announce messages using multiline yaml syntax #EasterEgg
+				if (ess.getSettings().getAnnounceNewPlayers())
+				{
+					final IText output = new KeywordReplacer(ess.getSettings().getAnnounceNewPlayerFormat(), user, ess);
+					final SimpleTextPager pager = new SimpleTextPager(output);
 
-		final String kitName = ess.getSettings().getNewPlayerKit();
-		if (!kitName.isEmpty())
-		{
-			try
-			{
-				final Map<String, Object> kit = ess.getSettings().getKit(kitName.toLowerCase(Locale.ENGLISH));
-				final List<String> items = Kit.getItems(user, kit);
-				Kit.expandItems(ess, user, items);
-			}
-			catch (Exception ex)
-			{
-				LOGGER.log(Level.WARNING, ex.getMessage());
-			}
-		}
+					for (String line : pager.getLines())
+					{
+						ess.broadcastMessage(user, line);
+					}
+				}
 
-		LOGGER.log(Level.FINE, "New player join");
+				final String kitName = ess.getSettings().getNewPlayerKit();
+				if (!kitName.isEmpty())
+				{
+					try
+					{
+						final Map<String, Object> kit = ess.getSettings().getKit(kitName.toLowerCase(Locale.ENGLISH));
+						final List<String> items = Kit.getItems(user, kit);
+						Kit.expandItems(ess, user, items);
+					}
+					catch (Exception ex)
+					{
+						LOGGER.log(Level.WARNING, ex.getMessage());
+					}
+				}
+
+				LOGGER.log(Level.FINE, "New player join");
+			}
+		});
 	}
 
 
