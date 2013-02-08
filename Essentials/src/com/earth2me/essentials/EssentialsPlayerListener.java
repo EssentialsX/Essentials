@@ -138,10 +138,7 @@ public class EssentialsPlayerListener implements Listener
 		{
 			user.toggleVanished();
 		}
-		if (!user.isJailed())
-		{
-			user.setLastLocation();
-		}
+		user.setLogoutLocation();
 		if (user.isRecipeSee())
 		{
 			user.getPlayer().getOpenInventory().getTopInventory().clear();
@@ -396,11 +393,11 @@ public class EssentialsPlayerListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerChangedWorldHack(final PlayerChangedWorldEvent event)
 	{
-		final Player user = event.getPlayer();
-		if (user.getGameMode() != GameMode.CREATIVE)
+		final User user = ess.getUser(event.getPlayer());
+		if (user.getGameMode() != GameMode.CREATIVE && !user.isAuthorized("essentials.fly"))
 		{
 			user.setAllowFlight(false);
 		}

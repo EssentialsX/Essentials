@@ -169,6 +169,9 @@ public class EssentialsEntityListener implements Listener
 	{
 		if (event.getEntity() instanceof Player && ess.getUser(event.getEntity()).isGodModeEnabled())
 		{
+			final Player player = (Player)event.getEntity();
+			player.setFoodLevel(20);
+			player.setSaturation(10);
 			event.setCancelled(true);
 		}
 	}

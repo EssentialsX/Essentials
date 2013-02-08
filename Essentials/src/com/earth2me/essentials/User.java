@@ -253,6 +253,12 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	{
 		setLastLocation(getLocation());
 	}
+	
+	@Override
+	public void setLogoutLocation()
+	{
+		setLogoutLocation(getLocation());
+	}
 
 	public void requestTeleport(final User player, final boolean here)
 	{

@@ -65,6 +65,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		kitTimestamps = _getKitTimestamps();
 		nickname = _getNickname();
 		setIgnoredPlayers(_getIgnoredPlayers());
+		logoutLocation = _getLogoutLocation();
 	}
 	private double money;
 
@@ -318,6 +319,37 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.setProperty("lastlocation", loc);
 		config.save();
 	}
+	
+	private Location logoutLocation;
+
+	private Location _getLogoutLocation()
+	{
+		try
+		{
+			return config.getLocation("logoutlocation", getServer());
+		}
+		catch (Exception e)
+		{
+			return null;
+		}
+	}
+
+	public Location getLogoutLocation()
+	{
+		return logoutLocation;
+	}
+	
+	public void setLogoutLocation(Location loc)
+	{
+		if (loc == null || loc.getWorld() == null)
+		{
+			return;
+		}
+		logoutLocation = loc;
+		config.setProperty("logoutlocation", loc);
+		config.save();
+	}
+	
 	private long lastTeleportTimestamp;
 
 	private long _getLastTeleportTimestamp()
