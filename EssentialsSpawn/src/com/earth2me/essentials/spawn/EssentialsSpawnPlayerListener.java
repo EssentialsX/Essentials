@@ -101,6 +101,10 @@ public class EssentialsSpawnPlayerListener implements Listener
 			@Override
 			public void run()
 			{
+				if (!user.isOnline()) {
+					return;
+				}
+				
 				//This method allows for multiple line player announce messages using multiline yaml syntax #EasterEgg
 				if (ess.getSettings().getAnnounceNewPlayers())
 				{
