@@ -318,6 +318,17 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.setProperty("lastlocation", loc);
 		config.save();
 	}
+	
+	public void setLogoutLocation(Location loc)
+	{
+		if (loc == null || loc.getWorld() == null)
+		{
+			return;
+		}
+		config.setProperty("logoutlocation", loc);
+		config.save();
+	}
+	
 	private long lastTeleportTimestamp;
 
 	private long _getLastTeleportTimestamp()

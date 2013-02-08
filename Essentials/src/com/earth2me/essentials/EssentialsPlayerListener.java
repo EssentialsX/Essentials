@@ -138,10 +138,7 @@ public class EssentialsPlayerListener implements Listener
 		{
 			user.toggleVanished();
 		}
-		if (!user.isJailed())
-		{
-			user.setLastLocation();
-		}
+		user.setLogoutLocation();
 		if (user.isRecipeSee())
 		{
 			user.getPlayer().getOpenInventory().getTopInventory().clear();
