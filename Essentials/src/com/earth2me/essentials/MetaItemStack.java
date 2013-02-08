@@ -327,7 +327,7 @@ public class MetaItemStack
 				return;
 			}
 
-			if (split[0].equalsIgnoreCase("effect"))
+			if (split[0].equalsIgnoreCase("effect") || (allowShortName && split[0].equalsIgnoreCase("e")))
 			{
 				pEffectType = Potions.getByName(split[1]);
 				if (pEffectType != null)
@@ -345,11 +345,11 @@ public class MetaItemStack
 				}
 				else
 				{
-					user.sendMessage("Invalid potion effect");
+					user.sendMessage(_("invalidPotionEffect", split[1]));
 					canceledEffect = true;
 				}
 			}
-			else if (split[0].equalsIgnoreCase("power"))
+			else if (split[0].equalsIgnoreCase("power") || (allowShortName && split[0].equalsIgnoreCase("p")))
 			{
 				if (Util.isInt(split[1]))
 				{
@@ -357,7 +357,7 @@ public class MetaItemStack
 					power = Integer.parseInt(split[1]);
 				}
 			}
-			else if (split[0].equalsIgnoreCase("duration") || split[0].equalsIgnoreCase("dur"))
+			else if (split[0].equalsIgnoreCase("duration") || (allowShortName && split[0].equalsIgnoreCase("d")))
 			{
 				if (Util.isInt(split[1]))
 				{

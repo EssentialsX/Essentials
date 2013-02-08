@@ -14,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 
@@ -47,13 +48,20 @@ public class Commandpotion extends EssentialsCommand
 
 		if (stack.getType() == Material.POTION)
 		{
+			PotionMeta pmeta = (PotionMeta)stack.getItemMeta();
 			if (args.length > 0)
 			{
 				if (args[0].equalsIgnoreCase("clear"))
 				{
-					PotionMeta pmeta = (PotionMeta)stack.getItemMeta();
 					pmeta.clearCustomEffects();
 					stack.setItemMeta(pmeta);
+				}
+				else if (args[0].equalsIgnoreCase("apply") && user.isAuthorized("essentials.potion.apply"))
+				{
+					for(PotionEffect effect : pmeta.getCustomEffects())
+					{
+						effect.apply(user);
+					}
 				}
 				else
 				{
@@ -64,12 +72,12 @@ public class Commandpotion extends EssentialsCommand
 					}
 					if (mStack.completePotion())
 					{
-						PotionMeta pmeta = (PotionMeta)mStack.getItemStack().getItemMeta();
+						pmeta = (PotionMeta)mStack.getItemStack().getItemMeta();
 						stack.setItemMeta(pmeta);
 					}
 					else
 					{
-						user.sendMessage("Invalid potion");
+						user.sendMessage("invalidPotion");
 						throw new NotEnoughArgumentsException();
 					}
 				}
