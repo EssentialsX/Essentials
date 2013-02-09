@@ -33,8 +33,18 @@ public class Commandgod extends EssentialsCommand
 			godOtherPlayers(server, user, args);
 			return;
 		}
-		user.setGodModeEnabled(!user.isGodModeEnabled());
+		godPlayer(user, !user.isGodModeEnabled());
 		user.sendMessage(_("godMode", (user.isGodModeEnabled() ? _("enabled") : _("disabled"))));
+	}
+
+	private void godPlayer(User player, boolean enabled)
+	{
+		player.setGodModeEnabled(enabled);
+		if (enabled)
+		{
+			player.setHealth(player.getMaxHealth());
+			player.setFoodLevel(20);
+		}
 	}
 
 	private void godOtherPlayers(final Server server, final CommandSender sender, final String[] args)
@@ -47,29 +57,24 @@ public class Commandgod extends EssentialsCommand
 				continue;
 			}
 
+			boolean enabled;
 			if (args.length > 1)
 			{
 				if (args[1].contains("on") || args[1].contains("ena") || args[1].equalsIgnoreCase("1"))
 				{
-					player.setGodModeEnabled(true);
+					enabled = true;
 				}
 				else
 				{
-					player.setGodModeEnabled(false);
+					enabled = false;
 				}
 			}
 			else
 			{
-				player.setGodModeEnabled(!player.isGodModeEnabled());
+				enabled = !player.isGodModeEnabled();
 			}
 
-			final boolean enabled = player.isGodModeEnabled();
-			if (enabled)
-			{
-				player.setHealth(player.getMaxHealth());
-				player.setFoodLevel(20);
-			}
-
+			godPlayer(player, enabled);
 			player.sendMessage(_("godMode", (enabled ? _("enabled") : _("disabled"))));
 			sender.sendMessage(_("godMode", _(enabled ? "godEnabledFor" : "godDisabledFor", matchPlayer.getDisplayName())));
 		}

@@ -397,17 +397,12 @@ public class GroupManager extends JavaPlugin {
 		  	return true;
 		}
 
-		if (sender.getClass().getName().equals("org.bukkit.craftbukkit.command.CraftBlockCommandSender")) {
-			sender.sendMessage(ChatColor.RED + "GM Commands can not be called from CommandBlocks");
-			return true;
-		}
-
 		// DETERMINING PLAYER INFORMATION
 		if (sender instanceof Player) {
 			senderPlayer = (Player) sender;
 
 			if (!lastError.isEmpty() && !commandLabel.equalsIgnoreCase("manload")) {
-				GroupManager.logger.warning(ChatColor.RED + "All commands are locked due to an error. " + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Check the log" + ChatColor.RESET + "" + ChatColor.RED + " and then try a '/manload'.");
+				sender.sendMessage(ChatColor.RED + "All commands are locked due to an error. " + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Check the log" + ChatColor.RESET + "" + ChatColor.RED + " and then try a '/manload'.");
 				return true;
 			}
 
@@ -1975,8 +1970,8 @@ public class GroupManager extends JavaPlugin {
 				
 				sender.sendMessage(ChatColor.YELLOW + "You have selected world '" + dataHolder.getName() + "'.");
 				sender.sendMessage(ChatColor.YELLOW + "This world is using the following data files..");
-				sender.sendMessage(ChatColor.YELLOW + "Groups: " + dataHolder.getGroupsFile().getAbsolutePath());
-				sender.sendMessage(ChatColor.YELLOW + "Users: " + dataHolder.getUsersFile().getAbsolutePath());
+				sender.sendMessage(ChatColor.YELLOW + "Groups:" + ChatColor.GREEN + " " + dataHolder.getGroupsFile().getAbsolutePath());
+				sender.sendMessage(ChatColor.YELLOW + "Users:" + ChatColor.GREEN + " " + dataHolder.getUsersFile().getAbsolutePath());
 
 				return true;
 
