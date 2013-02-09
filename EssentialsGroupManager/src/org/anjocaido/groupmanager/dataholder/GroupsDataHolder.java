@@ -42,6 +42,11 @@ public class GroupsDataHolder {
 			group.setDataSource(this.dataSource);
 		}
 	}
+	
+	public WorldDataHolder getDataSource() {
+
+		return this.dataSource;
+	}
 
 	/**
 	 * @return the defaultGroup
