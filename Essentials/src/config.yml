@@ -208,7 +208,7 @@ player-commands:
 # Syntax: - itemID[:DataValue/Durability] Amount [Enchantment:Level].. [itemmeta:value]...
 # For Item meta information visit http://wiki.ess3.net/wiki/Item_Meta
 # 'delay' refers to the cooldown between how often you can use each kit, measured in seconds.
-# For more information, visit http://wiki.ess3.net/wiki/Command_Reference/ICheat#kits
+# For more information, visit http://wiki.ess3.net/wiki/Kits
 kits:
   tools:
     delay: 10
