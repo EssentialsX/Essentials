@@ -62,7 +62,7 @@ commands:
   clearinventory:
     description: Clear all items in your inventory.
     usage: /<command> [<player> [item]]
-    aliases: [clear,ci,eci,clearinvent,clean,eclean,eclearinvent,eclearinventory]
+    aliases: [clear,eclear,ci,eci,clearinvent,clean,eclean,eclearinvent,eclearinventory]
   compass:
     description: Describes your current bearing.
     usage: /<command>
