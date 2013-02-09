@@ -77,7 +77,7 @@ public class Commandpotion extends EssentialsCommand
 					}
 					else
 					{
-						user.sendMessage("invalidPotion");
+						user.sendMessage(_("invalidPotion"));
 						throw new NotEnoughArgumentsException();
 					}
 				}
