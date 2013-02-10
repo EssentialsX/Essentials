@@ -42,7 +42,6 @@ public class Commandban extends EssentialsCommand
 				&& !ess.getUser(sender).isAuthorized("essentials.ban.offline"))
 			{
 				throw new Exception(_("banExempt"));
-				return;
 			}
 		}
 		else
@@ -50,7 +49,6 @@ public class Commandban extends EssentialsCommand
 			if (user.isAuthorized("essentials.ban.exempt") && sender instanceof Player)
 			{
 				throw new Exception(_("banExempt"));
-				return;
 			}
 		}
 
