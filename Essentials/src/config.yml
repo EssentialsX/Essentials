@@ -299,11 +299,13 @@ remove-god-on-disconnect: false
 
 # Auto-AFK
 # After this timeout in seconds, the user will be set as afk.
+# This feature requires the player to have essentials.auto.afk node
 # Set to -1 for no timeout.
 auto-afk: 300
 
 # Auto-AFK Kick
 # After this timeout in seconds, the user will be kicked from the server.
+# essentials.afk.kickexempt node overrides this feature
 # Set to -1 for no timeout.
 auto-afk-kick: -1
 
