@@ -4,7 +4,7 @@ settings:
     # The user will be able to promote players to the same group or even above.
     opOverrides: true
     
-    # Default setting for 'mantoglevalidate'
+    # Default setting for 'mantogglevalidate'
     # true will cause GroupManager to attempt name matching by default.
     validate_toggle: true
     # **********************************************************************************************************************************
