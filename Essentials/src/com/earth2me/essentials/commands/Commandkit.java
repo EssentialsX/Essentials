@@ -59,7 +59,8 @@ public class Commandkit extends EssentialsCommand
 			final List<String> items = Kit.getItems(userTo, kit);
 			Kit.expandItems(ess, userTo, items);
 
-			sender.sendMessage(_("kitGive", kitName));
+			sender.sendMessage(_("kitGiveTo", kitName, userTo.getDisplayName()));
+			userTo.sendMessage(_("kitReceive", kitName));
 		}
 	}
 
@@ -87,6 +88,7 @@ public class Commandkit extends EssentialsCommand
 		Kit.expandItems(ess, userTo, items);
 
 		charge.charge(userFrom);
-		userTo.sendMessage(_("kitGive", kitName));
+		userFrom.sendMessage(_("kitGiveTo", kitName, userTo.getDisplayName()));
+		userTo.sendMessage(_("kitReceive", kitName));
 	}
 }
