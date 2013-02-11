@@ -67,7 +67,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 	{
 		checkRegister();
 	}
-	
+
 	public void resetListener()
 	{
 		enabled = false;
@@ -310,6 +310,8 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 		public void onPlayerJoin(final PlayerJoinEvent event)
 		{
 			final User user = ess.getUser(event.getPlayer());
+			final long currentTime = System.currentTimeMillis();
+			user.checkJailTimeout(currentTime);
 			if (!user.isJailed() || user.getJail() == null || user.getJail().isEmpty())
 			{
 				return;
