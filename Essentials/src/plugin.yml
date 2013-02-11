@@ -121,7 +121,7 @@ commands:
     aliases: [efireball,fireskull,efireskull,fireentity,efireentity]
   firework:
     description: Allows you to modify a stack of fireworks
-    usage: /<command> <<meta param>|power [amount]|clear|fire>
+    usage: /<command> <<meta param>|power [amount]|clear|fire [amount]>
     aliases: [efirework]
   gamemode:
     description: Change player gamemode.
