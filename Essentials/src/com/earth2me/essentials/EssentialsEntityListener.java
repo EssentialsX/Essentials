@@ -4,6 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -18,6 +19,7 @@ public class EssentialsEntityListener implements Listener
 {
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private final IEssentials ess;
+	private static final transient Pattern powertoolPlayer = Pattern.compile("\\{player\\}");
 
 	public EssentialsEntityListener(IEssentials ess)
 	{
@@ -65,8 +67,9 @@ public class EssentialsEntityListener implements Listener
 
 	private void onPlayerVsPlayerDamage(final EntityDamageByEntityEvent event, final Player defender, final User attacker)
 	{
-		if (ess.getSettings().getLoginAttackDelay() > 0 && !attacker.isAuthorized("essentials.pvpdelay.exempt")
-			&& (System.currentTimeMillis() < (attacker.getLastLogin() + ess.getSettings().getLoginAttackDelay())))
+		if (ess.getSettings().getLoginAttackDelay() > 0
+			&& (System.currentTimeMillis() < (attacker.getLastLogin() + ess.getSettings().getLoginAttackDelay()))
+			&& !attacker.isAuthorized("essentials.pvpdelay.exempt"))
 		{
 			event.setCancelled(true);
 		}
@@ -96,7 +99,7 @@ public class EssentialsEntityListener implements Listener
 		{
 			for (final String tempCommand : commandList)
 			{
-				final String command = tempCommand.replaceAll("\\{player\\}", defender.getName());
+				final String command = powertoolPlayer.matcher(tempCommand).replaceAll(defender.getName());
 				if (command != null && !command.isEmpty() && !command.equals(tempCommand))
 				{
 					ess.scheduleSyncDelayedTask(
