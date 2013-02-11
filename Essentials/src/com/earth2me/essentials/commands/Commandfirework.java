@@ -85,24 +85,27 @@ public class Commandfirework extends EssentialsCommand
 					}
 					stack.setItemMeta(fmeta);
 				}
-				else if ((args[0].equalsIgnoreCase("fire") || (args[0].equalsIgnoreCase("p")))
+				else if ((args[0].equalsIgnoreCase("fire") || (args[0].equalsIgnoreCase("f")))
 						 && user.isAuthorized("essentials.firework.fire"))
 				{
 					int amount = 1;
 					boolean direction = false;
-					if (Util.isInt(args[1]))
+					if (args.length > 1)
 					{
-						final int serverLimit = ess.getSettings().getSpawnMobLimit();
-						amount = Integer.parseInt(args[1]);
-						if (amount > serverLimit)
+						if (Util.isInt(args[1]))
 						{
-							amount = serverLimit;
-							user.sendMessage(_("mobSpawnLimit"));
+							final int serverLimit = ess.getSettings().getSpawnMobLimit();
+							amount = Integer.parseInt(args[1]);
+							if (amount > serverLimit)
+							{
+								amount = serverLimit;
+								user.sendMessage(_("mobSpawnLimit"));
+							}
 						}
-					}
-					else
-					{
-						direction = true;
+						else
+						{
+							direction = true;
+						}
 					}
 					for (int i = 0; i < amount; i++)
 					{
