@@ -1263,6 +1263,7 @@ public class GroupManager extends JavaPlugin {
 				// Validating permission
 				if (!auxUser.getVariables().hasVar(args[1])) {
 					sender.sendMessage(ChatColor.RED + "The user doesn't have directly that variable!");
+					return false;
 				}
 				// Seems OK
 				auxUser.getVariables().removeVar(args[1]);
