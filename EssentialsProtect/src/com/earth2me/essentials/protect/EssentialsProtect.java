@@ -6,9 +6,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.logging.Filter;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -20,11 +18,11 @@ public class EssentialsProtect extends JavaPlugin implements IProtect
 {
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private static com.mchange.v2.log.MLogger C3P0logger;
-	private final transient Map<ProtectConfig, Boolean> settingsBoolean = new EnumMap<ProtectConfig, Boolean>(ProtectConfig.class);
-	private final transient Map<ProtectConfig, String> settingsString = new EnumMap<ProtectConfig, String>(ProtectConfig.class);
-	private final transient Map<ProtectConfig, List<Integer>> settingsList = new EnumMap<ProtectConfig, List<Integer>>(ProtectConfig.class);
-	private transient IProtectedBlock storage = null;
-	private transient EssentialsConnect ess = null;
+	private final Map<ProtectConfig, Boolean> settingsBoolean = new EnumMap<ProtectConfig, Boolean>(ProtectConfig.class);
+	private final Map<ProtectConfig, String> settingsString = new EnumMap<ProtectConfig, String>(ProtectConfig.class);
+	private final Map<ProtectConfig, List<Integer>> settingsList = new EnumMap<ProtectConfig, List<Integer>>(ProtectConfig.class);
+	private IProtectedBlock storage = null;
+	private EssentialsConnect ess = null;
 
 	@Override
 	public void onLoad()
@@ -45,6 +43,7 @@ public class EssentialsProtect extends JavaPlugin implements IProtect
 		C3P0logger.setLevel(MLevel.WARNING);
 	}
 
+	@Override
 	public void onEnable()
 	{
 		final PluginManager pm = this.getServer().getPluginManager();
@@ -93,21 +92,25 @@ public class EssentialsProtect extends JavaPlugin implements IProtect
 		storage = pb;
 	}
 
+	@Override
 	public EssentialsConnect getEssentialsConnect()
 	{
 		return ess;
 	}
 
+	@Override
 	public Map<ProtectConfig, Boolean> getSettingsBoolean()
 	{
 		return settingsBoolean;
 	}
 
+	@Override
 	public Map<ProtectConfig, String> getSettingsString()
 	{
 		return settingsString;
 	}
 
+	@Override
 	public Map<ProtectConfig, List<Integer>> getSettingsList()
 	{
 		return settingsList;
@@ -127,6 +130,7 @@ public class EssentialsProtect extends JavaPlugin implements IProtect
 		return str == null ? protectConfig.getDefaultValueString() : str;
 	}
 
+	@Override
 	public void onDisable()
 	{
 		if (storage != null)
@@ -140,6 +144,7 @@ public class EssentialsProtect extends JavaPlugin implements IProtect
 		}
 		catch (InterruptedException ex)
 		{
-		}
+			Logger.getLogger(EssentialsProtect.class.getName()).log(Level.SEVERE, null, ex);
+		}	
 	}
 }

@@ -16,8 +16,8 @@ import org.bukkit.event.block.*;
 
 public class EssentialsProtectBlockListener implements Listener
 {
-	final private transient IProtect prot;
-	final private transient IEssentials ess;
+	final private IProtect prot;
+	final private IEssentials ess;
 
 	public EssentialsProtectBlockListener(final IProtect parent)
 	{
@@ -29,11 +29,7 @@ public class EssentialsProtectBlockListener implements Listener
 	public void onBlockPlace(final BlockPlaceEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
-
 		final Block blockPlaced = event.getBlockPlaced();
-		final int id = blockPlaced.getTypeId();
-
-
 		final Block below = blockPlaced.getRelative(BlockFace.DOWN);
 		if ((below.getType() == Material.RAILS || below.getType() == Material.POWERED_RAIL || below.getType() == Material.DETECTOR_RAIL)
 			&& prot.getSettingBool(ProtectConfig.prevent_block_on_rail)
@@ -117,7 +113,6 @@ public class EssentialsProtectBlockListener implements Listener
 		if (event.getCause().equals(BlockIgniteEvent.IgniteCause.LIGHTNING))
 		{
 			event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_lightning_fire_spread));
-			return;
 		}
 	}
 
@@ -154,7 +149,6 @@ public class EssentialsProtectBlockListener implements Listener
 		if (block.getType() == Material.AIR)
 		{
 			event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_water_bucket_flow));
-			return;
 		}
 	}
 
@@ -176,7 +170,6 @@ public class EssentialsProtectBlockListener implements Listener
 		if (prot.getSettingBool(ProtectConfig.prevent_fire_spread))
 		{
 			event.setCancelled(true);
-			return;
 		}
 	}
 	private final static BlockFace[] faces = new BlockFace[]
@@ -194,12 +187,8 @@ public class EssentialsProtectBlockListener implements Listener
 	public void onBlockBreak(final BlockBreakEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
-
 		final Block block = event.getBlock();
-		final int typeId = block.getTypeId();
-
 		final Material type = block.getType();
-
 		final IProtectedBlock storage = prot.getStorage();
 
 		if (user.isAuthorized("essentials.protect.admin"))

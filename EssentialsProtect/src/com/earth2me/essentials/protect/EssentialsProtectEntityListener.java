@@ -17,8 +17,8 @@ import org.bukkit.event.entity.EntityTargetEvent.TargetReason;
 
 public class EssentialsProtectEntityListener implements Listener
 {
-	private final transient IProtect prot;
-	private final transient IEssentials ess;
+	private final IProtect prot;
+	private final IEssentials ess;
 
 	public EssentialsProtectEntityListener(final IProtect prot)
 	{
@@ -169,7 +169,6 @@ public class EssentialsProtectEntityListener implements Listener
 				&& !shouldBeDamaged(user, "wither"))
 			{
 				event.setCancelled(true);
-				return;
 			}
 		}
 	}
@@ -307,7 +306,6 @@ public class EssentialsProtectEntityListener implements Listener
 			&& !user.isAuthorized("essentials.protect.entitytarget.bypass"))
 		{
 			event.setCancelled(true);
-			return;
 		}
 	}
 
@@ -332,7 +330,6 @@ public class EssentialsProtectEntityListener implements Listener
 		if (event.getEntityType() == EntityType.WITHER && prot.getSettingBool(ProtectConfig.prevent_wither_blockreplace))
 		{
 			event.setCancelled(true);
-			return;
 		}
 	}
 }

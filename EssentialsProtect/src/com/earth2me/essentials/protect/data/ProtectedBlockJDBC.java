@@ -16,22 +16,14 @@ import org.bukkit.block.Block;
 public abstract class ProtectedBlockJDBC implements IProtectedBlock
 {
 	protected static final Logger LOGGER = Logger.getLogger("Minecraft");
-	protected final transient ComboPooledDataSource cpds;
-
+	protected final ComboPooledDataSource cpds;
 	protected abstract PreparedStatement getStatementCreateTable(Connection conn) throws SQLException;
-
 	protected abstract PreparedStatement getStatementUpdateFrom2_0Table(Connection conn) throws SQLException;
-
 	protected abstract PreparedStatement getStatementDeleteAll(Connection conn) throws SQLException;
-
 	protected abstract PreparedStatement getStatementInsert(Connection conn, String world, int x, int y, int z, String playerName) throws SQLException;
-
 	protected abstract PreparedStatement getStatementPlayerCountByLocation(Connection conn, String world, int x, int y, int z, String playerName) throws SQLException;
-
 	protected abstract PreparedStatement getStatementPlayersByLocation(Connection conn, String name, int x, int y, int z) throws SQLException;
-
 	protected abstract PreparedStatement getStatementDeleteByLocation(Connection conn, String world, int x, int y, int z) throws SQLException;
-
 	protected abstract PreparedStatement getStatementAllBlocks(Connection conn) throws SQLException;
 
 	public ProtectedBlockJDBC(String driver, String url) throws PropertyVetoException
@@ -97,6 +89,7 @@ public abstract class ProtectedBlockJDBC implements IProtectedBlock
 		}
 	}
 
+	@Override
 	public void clearProtections()
 	{
 		Connection conn = null;
@@ -138,6 +131,7 @@ public abstract class ProtectedBlockJDBC implements IProtectedBlock
 		}
 	}
 
+	@Override
 	public void importProtections(List<OwnedBlock> blocks)
 	{
 		for (OwnedBlock ownedBlock : blocks)
@@ -150,6 +144,7 @@ public abstract class ProtectedBlockJDBC implements IProtectedBlock
 		}
 	}
 
+	@Override
 	public List<OwnedBlock> exportProtections()
 	{
 		Connection conn = null;
@@ -216,6 +211,7 @@ public abstract class ProtectedBlockJDBC implements IProtectedBlock
 		}
 	}
 
+	@Override
 	public void protectBlock(Block block, String playerName)
 	{
 		protectBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), playerName);
@@ -262,6 +258,7 @@ public abstract class ProtectedBlockJDBC implements IProtectedBlock
 		}
 	}
 
+	@Override
 	public boolean isProtected(Block block, String playerName)
 	{
 		Connection conn = null;
@@ -317,6 +314,7 @@ public abstract class ProtectedBlockJDBC implements IProtectedBlock
 		}
 	}
 
+	@Override
 	public List<String> getOwners(Block block)
 	{
 		Connection conn = null;
@@ -377,6 +375,7 @@ public abstract class ProtectedBlockJDBC implements IProtectedBlock
 		}
 	}
 
+	@Override
 	public int unprotectBlock(Block block)
 	{
 		Connection conn = null;
@@ -419,6 +418,7 @@ public abstract class ProtectedBlockJDBC implements IProtectedBlock
 		}
 	}
 
+	@Override
 	public void onPluginDeactivation()
 	{
 		cpds.close();

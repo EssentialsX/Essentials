@@ -9,18 +9,18 @@ import org.bukkit.plugin.Plugin;
 
 public class ProtectedBlockMemory implements IProtectedBlock
 {
-	private final transient List<String> worlds = new ArrayList<String>();
-	private final transient List<String> playerNames = new ArrayList<String>();
-	private final transient IProtectedBlock storage;
-	private final transient Plugin plugin;
+	private final List<String> worlds = new ArrayList<String>();
+	private final List<String> playerNames = new ArrayList<String>();
+	private final IProtectedBlock storage;
+	private final Plugin plugin;
 
 
 	static class ProtectedLocation
 	{
-		private final transient int x;
-		private final transient int y;
-		private final transient int z;
-		private final transient int w;
+		private final int x;
+		private final int y;
+		private final int z;
+		private final int w;
 
 		public ProtectedLocation(final Block block, final int worldId)
 		{
@@ -59,8 +59,8 @@ public class ProtectedBlockMemory implements IProtectedBlock
 
 	static class ProtectedBy
 	{
-		private transient int playerId = -1;
-		private transient Set<Integer> playerIds;
+		private int playerId = -1;
+		private Set<Integer> playerIds;
 
 		public void add(final int playerId)
 		{
@@ -114,7 +114,7 @@ public class ProtectedBlockMemory implements IProtectedBlock
 			return playerIds.size();
 		}
 	}
-	private final transient Map<ProtectedLocation, ProtectedBy> blocks = new HashMap<ProtectedLocation, ProtectedBy>();
+	private final Map<ProtectedLocation, ProtectedBy> blocks = new HashMap<ProtectedLocation, ProtectedBy>();
 
 	public ProtectedBlockMemory(final IProtectedBlock storage, final Plugin plugin)
 	{

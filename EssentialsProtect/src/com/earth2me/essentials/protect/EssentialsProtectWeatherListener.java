@@ -10,7 +10,7 @@ import org.bukkit.event.weather.WeatherChangeEvent;
 
 public class EssentialsProtectWeatherListener implements Listener
 {
-	private final transient IProtect prot;
+	private final IProtect prot;
 
 	public EssentialsProtectWeatherListener(final IProtect prot)
 	{
@@ -25,7 +25,6 @@ public class EssentialsProtectWeatherListener implements Listener
 		{
 			event.setCancelled(true);
 		}
-
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

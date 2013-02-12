@@ -13,8 +13,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class EssentialsProtectPlayerListener implements Listener
 {
-	private final transient IProtect prot;
-	private final transient IEssentials ess;
+	private final IProtect prot;
+	private final IEssentials ess;
 
 	public EssentialsProtectPlayerListener(final IProtect prot)
 	{
