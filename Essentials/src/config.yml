@@ -32,8 +32,8 @@ change-displayname: true
 # The value of change-displayname (above) has to be true.
 #change-playerlist: true
 
-# When essentialschat.jar isnt used, force essentials to add the prefix and suffix from permission plugins to displayname
-# This setting is ignored if essentialschat.jar is used, and defaults to 'true'
+# When essentialschat.jar isn't used, force essentials to add the prefix and suffix from permission plugins to displayname.
+# This setting is ignored if essentialschat.jar is used, and defaults to 'true'.
 # The value of change-displayname (above) has to be true.
 # Do not edit this setting unless you know what you are doing!
 #add-prefix-suffix: false
@@ -44,18 +44,18 @@ teleport-cooldown: 0
 # The delay, in seconds, before a user actually teleports.  If the user moves or gets attacked in this timeframe, the teleport never occurs.
 teleport-delay: 0
 
-# The delay, in seconds, a player can't be attacked by other players after they have been teleported by a command
-# This will also prevent the player attacking other players
+# The delay, in seconds, a player can't be attacked by other players after they have been teleported by a command.
+# This will also prevent the player attacking other players.
 teleport-invulnerability: 4
 
-# The delay, in seconds, required between /heal attempts
+# The delay, in seconds, required between /heal attempts.
 heal-cooldown: 60
 
-# What to prevent from /i /give
+# What to prevent from /i /give.
 # e.g item-spawn-blacklist: 46,11,10
 item-spawn-blacklist:
 
-# Set this to true if you want permission based item spawn rules
+# Set this to true if you want permission based item spawn rules.
 # Note: The blacklist above will be ignored then.
 # Permissions:
 #  - essentials.itemspawn.item-all
@@ -67,13 +67,13 @@ item-spawn-blacklist:
 # For more information, visit http://wiki.ess3.net/wiki/Command_Reference/ICheat#Item.2FGive
 permission-based-item-spawn: false
 
-# Mob limit on the /spawnmob command per execution
+# Mob limit on the /spawnmob command per execution.
 spawnmob-limit: 10
 
-# Shall we notify users when using /lightning
+# Shall we notify users when using /lightning?
 warn-on-smite: true
 
-# motd and rules are now configured in the files motd.txt and rules.txt
+# motd and rules are now configured in the files motd.txt and rules.txt.
 
 # When a command conflicts with another plugin, by default, Essentials will try to force the OTHER plugin to take priority.
 # Commands in this list, will tell Essentials to 'not give up' the command to other plugins.
@@ -91,9 +91,9 @@ overridden-commands:
 disabled-commands:
 #  - nick
 
-# These commands will be shown to players with socialSpy enabled
+# These commands will be shown to players with socialSpy enabled.
 # You can add commands from other plugins you may want to track or 
-# remove commands that are used for something you dont want to spy on
+# remove commands that are used for something you dont want to spy on.
 socialspy-commands:
   - msg
   - w
@@ -119,7 +119,7 @@ socialspy-commands:
 
 # If you do not wish to use a permission system, you can define a list of 'player perms' below.
 # This list has no effect if you are using a supported permissions system.
-# If you are using an unsupported permissions system simply delete this section.
+# If you are using an unsupported permissions system, simply delete this section.
 # Whitelist the commands and permissions you wish to give players by default (everything else is op only).
 # These are the permissions without the "essentials." part.
 player-commands:
@@ -270,9 +270,9 @@ enabledSigns:
 # Lower numbers will reduce the possibility of lag, but may annoy players.
 sign-use-per-second: 4
 
-# Backup runs a batch/bash command while saving is disabled
+# Backup runs a batch/bash command while saving is disabled.
 backup:
-  # Interval in minutes
+  # Interval in minutes.
   interval: 30
   # Unless you add a valid backup command or script here, this feature will be useless.
   # Use 'save-all' to simply force regular world saving without backup.
@@ -281,31 +281,31 @@ backup:
 # Set this true to enable permission per warp.
 per-warp-permission: false
 
-# Sort output of /list command by groups
+# Sort output of /list command by groups.
 sort-list-by-groups: false
 
-# More output to the console
+# More output to the console.
 debug: false
 
-# Set the locale for all messages
+# Set the locale for all messages.
 # If you don't set this, the default locale of the server will be used.
-# For example, to set language to English, set locale to en, to use the file "messages_en.properties"
-# Don't forget to remove the # in front of the line
+# For example, to set language to English, set locale to en, to use the file "messages_en.properties".
+# Don't forget to remove the # in front of the line.
 # For more information, visit http://wiki.ess3.net/wiki/Locale
 #locale: en
 
-# Turn off god mode when people exit
+# Turn off god mode when people exit.
 remove-god-on-disconnect: false
 
 # Auto-AFK
 # After this timeout in seconds, the user will be set as afk.
-# This feature requires the player to have essentials.auto.afk node
+# This feature requires the player to have essentials.auto.afk node.
 # Set to -1 for no timeout.
 auto-afk: 300
 
 # Auto-AFK Kick
 # After this timeout in seconds, the user will be kicked from the server.
-# essentials.afk.kickexempt node overrides this feature
+# essentials.afk.kickexempt node overrides this feature.
 # Set to -1 for no timeout.
 auto-afk-kick: -1
 
@@ -328,21 +328,21 @@ cancel-afk-on-interact: true
 # Disable this to reduce server lag.
 cancel-afk-on-move: true
 
-# You can disable the death messages of Minecraft here
+# You can disable the death messages of Minecraft here.
 death-messages: true
 
-# Add worlds to this list, if you want to automatically disable god mode there
+# Add worlds to this list, if you want to automatically disable god mode there.
 no-god-in-worlds:
 #  - world_nether
 
-# Set to true to enable per-world permissions for teleporting between worlds with essentials commands
+# Set to true to enable per-world permissions for teleporting between worlds with essentials commands.
 # This applies to /world, /back, /tp[a|o][here|all], but not warps.
 # Give someone permission to teleport to a world with essentials.worlds.<worldname>
 # This does not affect the /home command, there is a separate toggle below for this.
 world-teleport-permissions: false
 
 # The number of items given if the quantity parameter is left out in /item or /give.
-# If this number is below 1, the maximum stack size size is given. If over-sized stacks
+# If this number is below 1, the maximum stack size size is given. If over-sized stacks.
 # are not enabled, any number higher than the maximum stack size results in more than one stack.
 default-stack-size: -1
 
@@ -352,7 +352,7 @@ default-stack-size: -1
 oversized-stacksize: 64
 
 # Allow repair of enchanted weapons and armor.
-# If you set this to false, you can still allow it for certain players using the permission
+# If you set this to false, you can still allow it for certain players using the permission.
 # essentials.repair.enchanted
 repair-enchanted: true
 
@@ -364,7 +364,7 @@ unsafe-enchantments: false
 #If you set this to true any plugin that uses teleport will have the previous location registered.
 register-back-in-listener: false
 
-#Delay to wait before people can cause attack damage after logging in 
+#Delay to wait before people can cause attack damage after logging in. 
 login-attack-delay: 5
 
 #Set the max fly speed, values range from 0.1 to 1.0
@@ -383,10 +383,10 @@ max-tempban-time: -1
 # +------------------------------------------------------+ #
 ############################################################
 
-# Allows people to set their bed at daytime
+# Allows people to set their bed at daytime.
 update-bed-at-daytime: true
 
-# Set to true to enable per-world permissions for using homes to teleport between worlds
+# Set to true to enable per-world permissions for using homes to teleport between worlds.
 # This applies to the /home only.
 # Give someone permission to teleport to a world with essentials.worlds.<worldname>
 world-home-permissions: false
@@ -404,7 +404,7 @@ sethome-multiple:
   staff: 10
 
 # Set timeout in seconds for players to accept tpa before request is cancelled.
-# Set to 0 for no timeout
+# Set to 0 for no timeout.
 tpa-accept-cancellation: 120
 
 ############################################################
@@ -421,7 +421,7 @@ starting-balance: 0
 # worth-# defines the value of an item when it is sold to the server via /sell.
 # These are now defined in worth.yml
 
-# Defines the cost to use the given commands PER USE
+# Defines the cost to use the given commands PER USE.
 # Some commands like /repair have sub-costs, check the wiki for more information.
 command-costs:
   # /example costs $1000 PER USE
@@ -432,15 +432,15 @@ command-costs:
 # Set this to a currency symbol you want to use.
 currency-symbol: '$'
 
-# Set the maximum amount of money a player can have
-# The amount is always limited to 10 trillion because of the limitations of a java double
+# Set the maximum amount of money a player can have.
+# The amount is always limited to 10 trillion because of the limitations of a java double.
 max-money: 10000000000000
 
 # Set the minimum amount of money a player can have (must be above the negative of max-money).
 # Setting this to 0, will disable overdrafts/loans completely.  Users need 'essentials.eco.loan' perm to go below 0.
 min-money: -10000
 
-# Enable this to log all interactions with trade/buy/sell signs and sell command
+# Enable this to log all interactions with trade/buy/sell signs and sell command.
 economy-log-enabled: false
 
 ############################################################
@@ -449,10 +449,10 @@ economy-log-enabled: false
 # +------------------------------------------------------+ #
 ############################################################
 
-# Show other plugins commands in help
+# Show other plugins commands in help.
 non-ess-in-help: true
 
-# Hide plugins which do not give a permission
+# Hide plugins which do not give a permission.
 # You can override a true value here for a single plugin by adding a permission to a user/group.
 # The individual permission is: essentials.help.<plugin>, anyone with essentials.* or '*' will see all help regardless.
 # You can use negative permissions to remove access to just a single plugins help if the following is enabled.
@@ -473,7 +473,7 @@ chat:
   # You can add command costs for shout/question by adding chat-shout and chat-question to the command costs section."
   radius: 0
 
-  # Chat formatting can be done in two ways, you can either define a standard format for all chat
+  # Chat formatting can be done in two ways, you can either define a standard format for all chat.
   # Or you can give a group specific chat format, to give some extra variation.
   # If set to the default chat format which "should" be compatible with ichat.
   # For more information of chat formatting, check out the wiki: http://wiki.ess3.net/wiki/Chat_Formatting  
@@ -494,7 +494,7 @@ chat:
 ############################################################
 
 protect:
-  # Database settings for sign/rail protection
+  # Database settings for sign/rail protection.
 
   # mysql or sqlite
   # We strongly recommend against using mysql here, unless you have a good reason.
@@ -507,7 +507,7 @@ protect:
   password: 'root'
   mysqlDb: 'jdbc:mysql://localhost:3306/minecraft'
 
-  # General physics/behavior modifications
+  # General physics/behavior modifications.
   prevent:
     lava-flow: false
     water-flow: false
@@ -532,10 +532,10 @@ protect:
     enderdragon-blockdamage: true
     enderman-pickup: false
     villager-death: false
-    # Monsters won't follow players
-    # permission essentials.protect.entitytarget.bypass disables this
+    # Monsters won't follow players.
+    # permission essentials.protect.entitytarget.bypass disables this.
     entitytarget: false
-    # Prevent the spawning of creatures
+    # Prevent the spawning of creatures.
     spawn:
       creeper: false
       skeleton: false
@@ -573,10 +573,10 @@ protect:
 
   # Protect various blocks.
   protect:
-    # Protect all signs
+    # Protect all signs.
     signs: false
 
-    # Prevent users from destroying rails
+    # Prevent users from destroying rails.
     rails: false
 
     # Blocks below rails/signs are also protected if the respective rail/sign is protected.
@@ -584,13 +584,13 @@ protect:
     # This only has an effect if "rails" or "signs" is also enabled.
     block-below: true
 
-    # Prevent placing blocks above protected rails, this is to stop a potential griefing
+    # Prevent placing blocks above protected rails, this is to stop a potential griefing.
     prevent-block-on-rails: false
 
-    # Store blocks / signs in memory before writing
+    # Store blocks / signs in memory before writing.
     memstore: false
 
-  # Disable various default physics and behaviors
+  # Disable various default physics and behaviors.
   disable:
     # Should fall damage be disabled?
     fall: false
@@ -600,14 +600,14 @@ protect:
     pvp: false
 
     # Should drowning damage be disabled?
-    # (Split into two behaviors; generally, you want both set to the same value)
+    # (Split into two behaviors; generally, you want both set to the same value.)
     drown: false
     suffocate: false
 
     # Should damage via lava be disabled?  Items that fall into lava will still burn to a crisp. ;)
     lavadmg: false
 
-    # Should arrow damage be disabled
+    # Should arrow damage be disabled?
     projectiles: false
 
     # This will disable damage from touching cacti.
@@ -622,7 +622,7 @@ protect:
     # Should Wither damage be disabled?
     wither: false
 
-    # Disable weather options
+    # Disable weather options?
     weather:
       storm: false
       thunder: false
@@ -637,17 +637,17 @@ protect:
   # Disable various default physics and behaviors
   # For more information, visit http://wiki.ess3.net/wiki/AntiBuild
 
-    # Should people with build: false in permissions be allowed to build
-    # Set true to disable building for those people
-    # Setting to false means EssentialsAntiBuild will never prevent you from building
+    # Should people with build: false in permissions be allowed to build?
+    # Set true to disable building for those people.
+    # Setting to false means EssentialsAntiBuild will never prevent you from building.
     build: true
 
-    # Should people with build: false in permissions be allowed to use items
-    # Set true to disable using for those people
-    # Setting to false means EssentialsAntiBuild will never prevent you from using
+    # Should people with build: false in permissions be allowed to use items?
+    # Set true to disable using for those people.
+    # Setting to false means EssentialsAntiBuild will never prevent you from using.
     use: true
 
-    # Should we tell people they are not allowed to build
+    # Should we tell people they are not allowed to build?
     warn-on-build-disallow: true
 
   # For which block types would you like to be alerted?
@@ -660,16 +660,16 @@ protect:
 
   blacklist:
 
-    # Which blocks should people be prevented from placing
+    # Which blocks should people be prevented from placing?
     placement: 10,11,46,327
 
-    # Which items should people be prevented from using
+    # Which items should people be prevented from using?
     usage: 327
 
-    # Which blocks should people be prevented from breaking
+    # Which blocks should people be prevented from breaking?
     break:
 
-    # Which blocks should not be pushed by pistons
+    # Which blocks should not be pushed by pistons?
     piston:
 
 ############################################################
@@ -690,13 +690,13 @@ newbies:
   spawnpoint: newbies
 
   # Do we want to give users anything on first join? Set to '' to disable
-  # This kit will be given regardless  of cost, and permissions.
+  # This kit will be given regardless of cost, and permissions.
   #kit: ''
   kit: tools
 
-# Set this to lowest, if you want Multiverse to handle the respawning
-# Set this to high, if you want EssentialsSpawn to handle the respawning
-# Set this to highest, if you want to force EssentialsSpawn to handle the respawning
+# Set this to lowest, if you want Multiverse to handle the respawning.
+# Set this to high, if you want EssentialsSpawn to handle the respawning.
+# Set this to highest, if you want to force EssentialsSpawn to handle the respawning.
 respawn-listener-priority: high
 
 # When users die, should they respawn at their first home or bed, instead of the spawnpoint?
