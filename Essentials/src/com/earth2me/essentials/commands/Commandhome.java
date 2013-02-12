@@ -54,7 +54,7 @@ public class Commandhome extends EssentialsCommand
 				}
 				else
 				{
-					throw new Exception(_("bedmissing"));
+					throw new Exception(_("bedMissing"));
 				}
 			}
 			goHome(user, player, homeName.toLowerCase(Locale.ENGLISH), charge);
@@ -85,7 +85,7 @@ public class Commandhome extends EssentialsCommand
 					}
 					else
 					{
-						homes.add(_("bednull"));
+						homes.add(_("bedNull"));
 					}
 				}
 				user.sendMessage(_("homes", Util.joinList(homes)));
