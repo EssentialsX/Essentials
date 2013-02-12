@@ -74,7 +74,7 @@ public class Commandclearinventory extends EssentialsCommand
 			{
 				clearInventory(onlinePlayer, args[1]);
 			}
-			sender.sendMessage("Cleared everyone's inventory");
+			user.sendMessage(_("inventoryClearedAll"));
 		}
 		else
 		{
