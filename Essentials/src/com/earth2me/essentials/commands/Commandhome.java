@@ -52,6 +52,10 @@ public class Commandhome extends EssentialsCommand
 					user.getTeleport().teleport(bed, charge, TeleportCause.COMMAND);
 					throw new NoChargeException();
 				}
+				else
+				{
+					throw new Exception(_("bedMissing"));
+				}
 			}
 			goHome(user, player, homeName.toLowerCase(Locale.ENGLISH), charge);
 		}
@@ -73,9 +77,16 @@ public class Commandhome extends EssentialsCommand
 			}
 			else
 			{
-				if (bed != null  && user.isAuthorized("essentials.home.bed"))
+				if (user.isAuthorized("essentials.home.bed"))
 				{
-					homes.add(_("bed"));
+					if (bed != null)
+					{
+						homes.add(_("bed"));
+					}
+					else
+					{
+						homes.add(_("bedNull"));
+					}
 				}
 				user.sendMessage(_("homes", Util.joinList(homes)));
 			}

@@ -442,7 +442,7 @@ public class EssentialsPlayerListener implements Listener
 				if (player.isAuthorized("essentials.sethome.bed"))
 				{
 					player.setBedSpawnLocation(event.getClickedBlock().getLocation());
-					player.sendMessage(_("homeSet", player.getLocation().getWorld().getName(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ()));
+					player.sendMessage(_("bedSet", player.getLocation().getWorld().getName(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ()));
 				}
 			}
 			break;
