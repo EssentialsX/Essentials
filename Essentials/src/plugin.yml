@@ -137,7 +137,7 @@ commands:
     aliases: [coords,egetpos,position,eposition,whereami,ewhereami]
   give:
     description: Give a player an item.
-    usage: /<command> <player> <item|numeric> [amount <enchantmentname[:level]> ...]
+    usage: /<command> <player> <item|numeric> [amount [itemmeta...]]
     aliases: [egive]
   god:
     description: Enables your godly powers.
@@ -177,7 +177,7 @@ commands:
     aliases: [einvsee]
   item:
     description: Spawn an item.
-    usage: /<command> <item|numeric> [amount <enchantmentname[:level]> ...]
+    usage: /<command> <item|numeric> [amount [itemmeta...]]
     aliases: [i,eitem]
   itemdb:
     description: Searches for an item.
