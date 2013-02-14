@@ -867,6 +867,60 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.save();
 	}
 
+	public void setConfigProperty(String node, Object object)
+    {
+        final String prefix = "info.";
+        node = prefix+node;
+        if (object instanceof Map)
+        {
+            config.setProperty(node, (Map) object);
+        }
+        else if (object instanceof List)
+        {
+            config.setProperty(node, (List<String>) object);
+        }
+        else if (object instanceof Location)
+        {
+            config.setProperty(node, (Location) object);
+        }
+        else if (object instanceof ItemStack)
+        {
+            config.setProperty(node, (ItemStack) object);
+        }
+        else
+        {
+            config.setProperty(node, object);
+        }
+        config.save();
+    }
+	
+	public Set<String> getConfigKeys()
+	{
+		if (config.isConfigurationSection("info"))
+		{
+			return config.getConfigurationSection("info").getKeys(true);
+		}
+		return new HashSet<String>();
+	}
+	
+	public Map<String, Object> getConfigMap()
+	{
+		if (config.isConfigurationSection("info"))
+		{
+			return config.getConfigurationSection("info").getValues(true);
+		}
+		return new HashMap<String, Object>();
+	}
+	
+	public Map<String, Object> getConfigMap(String node)
+	{
+		if (config.isConfigurationSection("info."+node))
+		{
+			return config.getConfigurationSection("info."+node).getValues(true);
+		}
+		return new HashMap<String, Object>();
+	}
+	
 	public void save()
 	{
 		config.save();

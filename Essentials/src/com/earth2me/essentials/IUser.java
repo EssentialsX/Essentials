@@ -1,6 +1,8 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.IEssentialsCommand;
+import java.util.Map;
+import java.util.Set;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -52,4 +54,12 @@ public interface IUser extends Player
 	void setLogoutLocation();
 	
 	Location getLogoutLocation();
+	
+	void setConfigProperty(String node, Object object);
+	
+	Set<String> getConfigKeys();
+	
+	Map<String, Object> getConfigMap();
+	
+	Map<String, Object> getConfigMap(String node);
 }
