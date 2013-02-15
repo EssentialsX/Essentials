@@ -85,7 +85,13 @@ public class GMConfiguration {
 		try {
 			Map<String, Object> config = getElement("config", getElement("settings", GMconfig));
 
-			allowCommandBlocks = (Boolean) config.get("allow_commandblocks");
+			try {
+				allowCommandBlocks = (Boolean) config.get("allow_commandblocks");
+				
+			} catch (Exception ex) {
+				GroupManager.logger.log(Level.SEVERE, "Missing or corrupt 'allow_commandblocks' node. Using default settings", ex);
+			}
+			
 			opOverride = (Boolean) config.get("opOverrides");
 			toggleValidate = (Boolean) config.get("validate_toggle");
 
