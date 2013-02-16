@@ -126,6 +126,11 @@ public class Commandclearinventory extends EssentialsCommand
 		{
 			player.getInventory().clear();
 		}
+		else if (arg.equalsIgnoreCase("**"))
+		{
+			player.getInventory().clear();
+			player.getInventory().setArmorContents(null);
+		}
 		else
 		{
 			final String[] split = arg.split(":");
