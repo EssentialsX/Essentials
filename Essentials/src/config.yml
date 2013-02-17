@@ -85,11 +85,14 @@ warn-on-smite: true
 
 overridden-commands:
 #  - god
+#  - info
 
-# Disabled commands will be completely unavailable on the server.
-# Disabling commands here will have no effect on command conflicts.
+# Disabling commands here will prevent Essentials handling the command, this will not affect command conflicts.
+# Commands should fallback to the vanilla versions if available.
+# You should not have to disable commands used in other plugins, they will automatically get priority.
 disabled-commands:
 #  - nick
+#  - clear
 
 # These commands will be shown to players with socialSpy enabled.
 # You can add commands from other plugins you may want to track or 
