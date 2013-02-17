@@ -718,6 +718,11 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player> <permission>)");
 					return false;
 				}
+				String auxString = args[1];
+				if (auxString.startsWith("'") && auxString.endsWith("'"))
+				{
+					auxString = auxString.substring(1, auxString.length() - 1)
+				}
 				if ((validateOnlinePlayer) && ((match = validatePlayer(args[0], sender)) == null)) {
 					return false;
 				}
@@ -739,13 +744,13 @@ public class GroupManager extends JavaPlugin {
 				}
 				// Validating permissions of user
 				permissionResult = permissionHandler.checkUserOnlyPermission(auxUser, args[1]);
-				if (args[1].startsWith("+")) {
+				if (auxString.startsWith("+")) {
 					if (permissionResult.resultType.equals(PermissionCheckResult.Type.EXCEPTION)) {
 						sender.sendMessage(ChatColor.RED + "The user already has direct access to that permission.");
 						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
 						return false;
 					}
-				} else if (args[1].startsWith("-")) {
+				} else if (auxString.startsWith("-")) {
 					if (permissionResult.resultType.equals(PermissionCheckResult.Type.EXCEPTION)) {
 						sender.sendMessage(ChatColor.RED + "The user already has an exception for this node.");
 						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
@@ -763,8 +768,8 @@ public class GroupManager extends JavaPlugin {
 					}
 				}
 				// Seems OK
-				auxUser.addPermission(args[1]);
-				sender.sendMessage(ChatColor.YELLOW + "You added '" + args[1] + "' to player '" + auxUser.getName() + "' permissions.");
+				auxUser.addPermission(auxString);
+				sender.sendMessage(ChatColor.YELLOW + "You added '" + auxString + "' to player '" + auxUser.getName() + "' permissions.");
 
 				targetPlayer = this.getServer().getPlayer(auxUser.getName());
 				if (targetPlayer != null)
@@ -954,6 +959,11 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <group> <permission>)");
 					return false;
 				}
+				String auxString = args[1];
+				if (auxString.startsWith("'") && auxString.endsWith("'"))
+				{
+					auxString = auxString.substring(1, auxString.length() - 1)
+				}
 				auxGroup = dataHolder.getGroup(args[0]);
 				if (auxGroup == null) {
 					sender.sendMessage(ChatColor.RED + "The specified group does not exist!");
@@ -967,13 +977,13 @@ public class GroupManager extends JavaPlugin {
 				}
 				// Validating permissions of user
 				permissionResult = permissionHandler.checkGroupOnlyPermission(auxGroup, args[1]);
-				if (args[1].startsWith("+")) {
+				if (auxString.startsWith("+")) {
 					if (permissionResult.resultType.equals(PermissionCheckResult.Type.EXCEPTION)) {
 						sender.sendMessage(ChatColor.RED + "The group already has direct access to that permission.");
 						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
 						return false;
 					}
-				} else if (args[1].startsWith("-")) {
+				} else if (auxString.startsWith("-")) {
 					if (permissionResult.resultType.equals(PermissionCheckResult.Type.EXCEPTION)) {
 						sender.sendMessage(ChatColor.RED + "The group already has an exception for this node.");
 						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
@@ -991,8 +1001,8 @@ public class GroupManager extends JavaPlugin {
 					}
 				}
 				// Seems OK
-				auxGroup.addPermission(args[1]);
-				sender.sendMessage(ChatColor.YELLOW + "You added '" + args[1] + "' to group '" + auxGroup.getName() + "' permissions.");
+				auxGroup.addPermission(auxString);
+				sender.sendMessage(ChatColor.YELLOW + "You added '" + auxString + "' to group '" + auxGroup.getName() + "' permissions.");
 
 				BukkitPermissions.updateAllPlayers();
 
@@ -1234,6 +1244,10 @@ public class GroupManager extends JavaPlugin {
 						auxString += " ";
 					}
 				}
+				if (auxString.startsWith("'") && auxString.endsWith("'"))
+				{
+					auxString = auxString.substring(1, auxString.length() - 1)
+				}
 				auxUser.getVariables().addVar(args[1], Variables.parseVariableValue(auxString));
 				sender.sendMessage(ChatColor.YELLOW + "Variable " + ChatColor.GOLD + args[1] + ChatColor.YELLOW + ":'" + ChatColor.GREEN + auxString + ChatColor.YELLOW + "' added to the user " + auxUser.getName());
 
@@ -1381,6 +1395,10 @@ public class GroupManager extends JavaPlugin {
 					if ((i + 1) < args.length) {
 						auxString += " ";
 					}
+				}
+				if (auxString.startsWith("'") && auxString.endsWith("'"))
+				{
+					auxString = auxString.substring(1, auxString.length() - 1)
 				}
 				auxGroup.getVariables().addVar(args[1], Variables.parseVariableValue(auxString));
 				sender.sendMessage(ChatColor.YELLOW + "Variable " + ChatColor.GOLD + args[1] + ChatColor.YELLOW + ":'" + ChatColor.GREEN + auxString + ChatColor.YELLOW + "' added to the group " + auxGroup.getName());
