@@ -44,7 +44,7 @@ public class Commandhat extends EssentialsCommand
 				{
 					final PlayerInventory inv = user.getInventory();
 					final ItemStack head = inv.getHelmet();
-					inv.removeItem(hand);
+					inv.removeItem(hand.clone());
 					inv.setHelmet(hand);
 					inv.setItemInHand(head);
 					user.sendMessage(_("hatPlaced"));
