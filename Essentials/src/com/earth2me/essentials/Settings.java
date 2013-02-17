@@ -243,7 +243,7 @@ public class Settings implements ISettings
 	{
 		Set<String> socialspyCommands = new HashSet<String>();
 
-		if (config.isConfigurationSection("socialspy-commands"))
+		if (config.isList("socialspy-commands"))
 		{
 			for (String c : config.getStringList("socialspy-commands"))
 			{
