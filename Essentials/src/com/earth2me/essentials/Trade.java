@@ -169,7 +169,7 @@ public class Trade
 			{
 				throw new ChargeException(_("missingItems", getItemStack().getAmount(), getItemStack().getType().toString().toLowerCase(Locale.ENGLISH).replace("_", " ")));
 			}
-			user.getInventory().removeItem(getItemStack());
+			user.getInventory().removeItem(getItemStack().clone());
 			user.updateInventory();
 		}
 		if (command != null)
