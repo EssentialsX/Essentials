@@ -718,10 +718,10 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <player> <permission>)");
 					return false;
 				}
-				String auxString = args[1];
+				auxString = args[1];
 				if (auxString.startsWith("'") && auxString.endsWith("'"))
 				{
-					auxString = auxString.substring(1, auxString.length() - 1)
+					auxString = auxString.substring(1, auxString.length() - 1);
 				}
 				if ((validateOnlinePlayer) && ((match = validatePlayer(args[0], sender)) == null)) {
 					return false;
@@ -959,10 +959,10 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/<command> <group> <permission>)");
 					return false;
 				}
-				String auxString = args[1];
+				auxString = args[1];
 				if (auxString.startsWith("'") && auxString.endsWith("'"))
 				{
-					auxString = auxString.substring(1, auxString.length() - 1)
+					auxString = auxString.substring(1, auxString.length() - 1);
 				}
 				auxGroup = dataHolder.getGroup(args[0]);
 				if (auxGroup == null) {
@@ -1246,7 +1246,7 @@ public class GroupManager extends JavaPlugin {
 				}
 				if (auxString.startsWith("'") && auxString.endsWith("'"))
 				{
-					auxString = auxString.substring(1, auxString.length() - 1)
+					auxString = auxString.substring(1, auxString.length() - 1);
 				}
 				auxUser.getVariables().addVar(args[1], Variables.parseVariableValue(auxString));
 				sender.sendMessage(ChatColor.YELLOW + "Variable " + ChatColor.GOLD + args[1] + ChatColor.YELLOW + ":'" + ChatColor.GREEN + auxString + ChatColor.YELLOW + "' added to the user " + auxUser.getName());
@@ -1398,7 +1398,7 @@ public class GroupManager extends JavaPlugin {
 				}
 				if (auxString.startsWith("'") && auxString.endsWith("'"))
 				{
-					auxString = auxString.substring(1, auxString.length() - 1)
+					auxString = auxString.substring(1, auxString.length() - 1);
 				}
 				auxGroup.getVariables().addVar(args[1], Variables.parseVariableValue(auxString));
 				sender.sendMessage(ChatColor.YELLOW + "Variable " + ChatColor.GOLD + args[1] + ChatColor.YELLOW + ":'" + ChatColor.GREEN + auxString + ChatColor.YELLOW + "' added to the group " + auxGroup.getName());
