@@ -67,14 +67,23 @@ public class Commandseen extends EssentialsCommand
 				throw new Exception(_("playerNotFound"));
 			}
 			player.setDisplayNick();
-			sender.sendMessage(_("seenOffline", player.getName(), Util.formatDateDiff(player.getLastLogout())));
+			if (player.getLastLogout() > 0)
+			{
+				sender.sendMessage(_("seenOffline", player.getName(), Util.formatDateDiff(player.getLastLogout())));
+			}
+			else {
+				sender.sendMessage(_("userUnknown", player.getName()));
+			}
 			if (player.isBanned())
 			{
 				sender.sendMessage(_("whoisBanned", showBan ? player.getBanReason() : _("true")));
 			}
 			if (extra)
 			{
-				sender.sendMessage(_("whoisIPAddress", player.getLastLoginAddress()));
+				if (!player.getLastLoginAddress().isEmpty())
+				{
+					sender.sendMessage(_("whoisIPAddress", player.getLastLoginAddress()));
+				}
 				final Location loc = player.getLogoutLocation();
 				if (loc != null)
 				{
