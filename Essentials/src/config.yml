@@ -299,7 +299,7 @@ remove-god-on-disconnect: false
 
 # Auto-AFK
 # After this timeout in seconds, the user will be set as afk.
-# This feature requires the player to have essentials.auto.afk node.
+# This feature requires the player to have essentials.afk.auto node.
 # Set to -1 for no timeout.
 auto-afk: 300
 
