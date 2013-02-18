@@ -69,6 +69,10 @@ public class Commandheal extends EssentialsCommand
 
 	private void healPlayer(final Player player)
 	{
+		if (player.getHealth() == 0)
+		{
+			throw new Exception(_("healDead"));
+		}
 		player.setHealth(player.getMaxHealth());
 		player.setFoodLevel(20);
 		player.setFireTicks(0);
