@@ -48,7 +48,7 @@ public class Commandheal extends EssentialsCommand
 		healOtherPlayers(server, sender, args[0]);
 	}
 
-	private void healOtherPlayers(final Server server, final CommandSender sender, final String name)
+	private void healOtherPlayers(final Server server, final CommandSender sender, final String name) throws Exception
 	{
 		final List<Player> players = server.matchPlayer(name);
 		if (players.isEmpty())
@@ -67,7 +67,7 @@ public class Commandheal extends EssentialsCommand
 		}
 	}
 
-	private void healPlayer(final Player player)
+	private void healPlayer(final Player player) throws Exception
 	{
 		if (player.getHealth() == 0)
 		{
