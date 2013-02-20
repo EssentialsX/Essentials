@@ -190,7 +190,7 @@ public class Commandessentials extends EssentialsCommand
 					{
 						"            (__)", "            (oo)", "   /------\\/", "  /  |      | |", " *  /\\---/\\", "    ~~    ~~", "....\"Have you mooed today?\"..."
 					});
-			Player player = (Player)sender;
+			final Player player = (Player)sender;
 			player.playSound(player.getLocation(), Sound.COW_IDLE, 1, 1.0f);
 		}
 	}
