@@ -1449,7 +1449,7 @@ public class GroupManager extends JavaPlugin {
 				}
 				auxGroup = dataHolder.getGroup(args[0]);
 				if (auxGroup == null) {
-					sender.sendMessage(ChatColor.RED + "" + auxGroup.getName() + " Group doesnt exist!");
+					sender.sendMessage(ChatColor.RED + "" + args[0] + " Group doesnt exist!");
 					return true;
 				}
 				if (auxGroup.isGlobal()) {
