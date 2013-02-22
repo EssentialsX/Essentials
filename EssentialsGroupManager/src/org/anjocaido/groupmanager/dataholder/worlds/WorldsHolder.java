@@ -418,8 +418,14 @@ public class WorldsHolder {
 		// Find this worlds data
 		if (worldsData.containsKey(worldNameLowered))
 			return getUpdatedWorldData(worldNameLowered);
-
-		// Oddly no data source was found for this world so return the default.
+		
+		// Oddly no data source was found for this world so attempt to return the global mirror.
+		if (worldsData.containsKey("all_unnamed_worlds")) {
+			GroupManager.logger.finest("Requested world " + worldName + " not found or badly mirrored. Returning all_unnamed_worlds world...");
+			return getUpdatedWorldData("all_unnamed_worlds");
+		}
+		
+		// Oddly no data source or global mirror was found for this world so return the default.
 		GroupManager.logger.finest("Requested world " + worldName + " not found or badly mirrored. Returning default world...");
 		return getDefaultWorld();
 	}
