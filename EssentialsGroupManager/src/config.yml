@@ -30,7 +30,7 @@ settings:
         # subsequent elements 'world_nether' and 'world_the_end' are worlds which will use
         # the same user/groups files as the parent.
         # the element 'all_unnamed_worlds' specifies all worlds that aren't listed, and automatically mirrors them to it's parent.
-        # Each child world can be configured to mirror the 'groups', 'users' or both files from it's parent.
+        # Each child world can be configured to mirror the 'groups', 'users' or both files from its parent.
         world:
           world_nether:
           - users
