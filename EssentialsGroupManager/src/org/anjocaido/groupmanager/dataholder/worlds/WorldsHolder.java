@@ -745,39 +745,42 @@ public class WorldsHolder {
 
 		for (String world : worldsData.keySet()) {
 
-			// Fetch the relevant world object
-			OverloadedWorldHolder data = getWorldData(world);
+			if (!world.equalsIgnoreCase("all_unnamed_worlds")) {
+				
+				// Fetch the relevant world object
+				OverloadedWorldHolder data = getWorldData(world);
 
-			if (!list.contains(data)) {
+				if (!list.contains(data)) {
 
-				String worldNameLowered = data.getName().toLowerCase();
-				String usersMirror = mirrorsUser.get(worldNameLowered);
-				String groupsMirror = mirrorsGroup.get(worldNameLowered);
+					String worldNameLowered = data.getName().toLowerCase();
+					String usersMirror = mirrorsUser.get(worldNameLowered);
+					String groupsMirror = mirrorsGroup.get(worldNameLowered);
 
-				// is users mirrored?
-				if (usersMirror != null) {
+					// is users mirrored?
+					if (usersMirror != null) {
 
-					// If both are mirrored
-					if (groupsMirror != null) {
+						// If both are mirrored
+						if (groupsMirror != null) {
 
-						// if the data sources are the same, return the parent
-						if (usersMirror == groupsMirror) {
-							data = getWorldData(usersMirror.toLowerCase());
-							
-							// Only add the parent if it's not already listed.
-							if (!list.contains(data))
-								list.add(data);
+							// if the data sources are the same, return the parent
+							if (usersMirror == groupsMirror) {
+								data = getWorldData(usersMirror.toLowerCase());
 
-							continue;
+								// Only add the parent if it's not already listed.
+								if (!list.contains(data))
+									list.add(data);
+
+								continue;
+							}
+							// Both data sources are mirrors, but they are from different parents
+							// so fall through to add the actual data object.
 						}
-						// Both data sources are mirrors, but they are from different parents
-						// so fall through to add the actual data object.
+						// Groups isn't a mirror so fall through to add this this worlds data source
 					}
-					// Groups isn't a mirror so fall through to add this this worlds data source
-				}
 
-				// users isn't mirrored so we need to add this worlds data source
-				list.add(data);
+					// users isn't mirrored so we need to add this worlds data source
+					list.add(data);
+				}
 			}
 		}
 		return list;
