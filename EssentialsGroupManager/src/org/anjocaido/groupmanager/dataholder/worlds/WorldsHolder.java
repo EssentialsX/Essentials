@@ -59,6 +59,23 @@ public class WorldsHolder {
 		resetWorldsHolder();
 	}
 	
+	/**
+	 * @return the mirrorsGroup
+	 */
+	public Map<String, String> getMirrorsGroup() {
+	
+		return mirrorsGroup;
+	}
+
+	
+	/**
+	 * @return the mirrorsUser
+	 */
+	public Map<String, String> getMirrorsUser() {
+	
+		return mirrorsUser;
+	}
+	
 	public void resetWorldsHolder() {
 		
 		worldsData = new HashMap<String, OverloadedWorldHolder>();
@@ -92,33 +109,46 @@ public class WorldsHolder {
 	private void loadAllSearchedWorlds() {
 
 		/*
-		 * Read all known worlds from Bukkit
-		 * Create the data files if they don't already exist,
-		 * and they are not mirrored.
+		 * Read all known worlds from Bukkit Create the data files if they don't
+		 * already exist, and they are not mirrored.
 		 */
-		for (World world : plugin.getServer().getWorlds()){
+		for (World world : plugin.getServer().getWorlds()) {
 			GroupManager.logger.log(Level.FINE, "Checking data for " + world.getName() + ".");
 			if ((!worldsData.containsKey(world.getName().toLowerCase())) && ((!mirrorsGroup.containsKey(world.getName().toLowerCase())) || (!mirrorsUser.containsKey(world.getName().toLowerCase())))) {
+
+				if (plugin.getWorldsHolder().getWorldData("all_unnamed_worlds") != null) {
+					
+					String usersMirror = plugin.getWorldsHolder().getMirrorsUser().get("all_unnamed_worlds");
+					String groupsMirror = plugin.getWorldsHolder().getMirrorsGroup().get("all_unnamed_worlds");
+					
+					if (usersMirror != null)
+						plugin.getWorldsHolder().getMirrorsUser().put(world.getName().toLowerCase(), usersMirror);
+					
+					if (groupsMirror != null)
+						plugin.getWorldsHolder().getMirrorsGroup().put(world.getName().toLowerCase(), groupsMirror);
+					
+				}
+				
 				GroupManager.logger.log(Level.FINE, "Creating folders for " + world.getName() + ".");
 				setupWorldFolder(world.getName());
 			}
 		}
 		/*
-		 * Loop over all folders within the worlds folder
-		 * and attempt to load the world data
+		 * Loop over all folders within the worlds folder and attempt to load
+		 * the world data
 		 */
 		for (File folder : worldsFolder.listFiles()) {
 			if (folder.isDirectory() && !folder.getName().startsWith(".")) {
 				GroupManager.logger.info("World Found: " + folder.getName());
 
 				/*
-				 * don't load any worlds which are already loaded
-				 * or fully mirrored worlds that don't need data.
+				 * don't load any worlds which are already loaded or fully
+				 * mirrored worlds that don't need data.
 				 */
 				if (!worldsData.containsKey(folder.getName().toLowerCase()) && ((!mirrorsGroup.containsKey(folder.getName().toLowerCase())) || (!mirrorsUser.containsKey(folder.getName().toLowerCase())))) {
 					/*
-					 * Call setupWorldFolder to check case sensitivity
-					 * and convert to lower case, before we attempt to load this
+					 * Call setupWorldFolder to check case sensitivity and
+					 * convert to lower case, before we attempt to load this
 					 * world.
 					 */
 					setupWorldFolder(folder.getName());
