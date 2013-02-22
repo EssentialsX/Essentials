@@ -26,9 +26,10 @@ settings:
     
   mirrors:
         # Worlds listed here have their settings mirrored in their children.
-        # The first element 'world' is the main worlds name
+        # The first element 'world' is the main worlds name, and is the parent world.
         # subsequent elements 'world_nether' and 'world_the_end' are worlds which will use
         # the same user/groups files as the parent.
+        # the element 'all_unnamed_worlds' specifies all worlds that aren't listed, and automatically mirrors them to it's parent.
         # Each child world can be configured to mirror the 'groups', 'users' or both files from it's parent.
         world:
           world_nether:
