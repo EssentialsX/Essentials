@@ -76,6 +76,11 @@ public class WorldsHolder {
 		return mirrorsUser;
 	}
 	
+	public boolean isWorldKnown(String name) {
+		
+		return worldsData.containsKey(name.toLowerCase());
+	}
+	
 	public void resetWorldsHolder() {
 		
 		worldsData = new HashMap<String, OverloadedWorldHolder>();
@@ -116,16 +121,16 @@ public class WorldsHolder {
 			GroupManager.logger.log(Level.FINE, "Checking data for " + world.getName() + ".");
 			if ((!worldsData.containsKey(world.getName().toLowerCase())) && ((!mirrorsGroup.containsKey(world.getName().toLowerCase())) || (!mirrorsUser.containsKey(world.getName().toLowerCase())))) {
 
-				if (plugin.getWorldsHolder().getWorldData("all_unnamed_worlds") != null) {
+				if (worldsData.containsKey("all_unnamed_worlds")) {
 					
-					String usersMirror = plugin.getWorldsHolder().getMirrorsUser().get("all_unnamed_worlds");
-					String groupsMirror = plugin.getWorldsHolder().getMirrorsGroup().get("all_unnamed_worlds");
+					String usersMirror = mirrorsUser.get("all_unnamed_worlds");
+					String groupsMirror = mirrorsGroup.get("all_unnamed_worlds");
 					
 					if (usersMirror != null)
-						plugin.getWorldsHolder().getMirrorsUser().put(world.getName().toLowerCase(), usersMirror);
+						mirrorsUser.put(world.getName().toLowerCase(), usersMirror);
 					
 					if (groupsMirror != null)
-						plugin.getWorldsHolder().getMirrorsGroup().put(world.getName().toLowerCase(), groupsMirror);
+						mirrorsGroup.put(world.getName().toLowerCase(), groupsMirror);
 					
 				}
 				

@@ -36,7 +36,7 @@ public class GMWorldListener implements Listener {
 			GroupManager.logger.info("New world detected...");
 			GroupManager.logger.info("Creating data for: " + worldName);
 			
-			if (plugin.getWorldsHolder().getWorldData("all_unnamed_worlds") != null) {
+			if (plugin.getWorldsHolder().isWorldKnown("all_unnamed_worlds")) {
 				
 				String usersMirror = plugin.getWorldsHolder().getMirrorsUser().get("all_unnamed_worlds");
 				String groupsMirror = plugin.getWorldsHolder().getMirrorsGroup().get("all_unnamed_worlds");
