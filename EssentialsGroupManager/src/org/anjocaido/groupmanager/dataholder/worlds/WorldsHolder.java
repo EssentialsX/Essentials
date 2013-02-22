@@ -699,16 +699,21 @@ public class WorldsHolder {
 	}
 
 	/**
-	 * Returns all physically loaded worlds which have at least
-	 * one of their own data sets for users or groups which isn't an identical mirror.
+	 * Returns all physically loaded worlds which have at least one of their own
+	 * data sets for users or groups which isn't an identical mirror.
 	 * 
 	 * @return ArrayList<OverloadedWorldHolder> of all loaded worlds
 	 */
 	public ArrayList<OverloadedWorldHolder> allWorldsDataList() {
 
 		ArrayList<OverloadedWorldHolder> list = new ArrayList<OverloadedWorldHolder>();
-		for (OverloadedWorldHolder data : worldsData.values()) {
-			if ((!list.contains(data))) { // && (!mirrorsGroup.containsKey(data.getName().toLowerCase()) || !mirrorsUser.containsKey(data.getName().toLowerCase()))) {
+
+		for (String world : worldsData.keySet()) {
+
+			// Fetch the relevant world object
+			OverloadedWorldHolder data = getWorldData(world);
+
+			if (!list.contains(data)) {
 
 				String worldNameLowered = data.getName().toLowerCase();
 				String usersMirror = mirrorsUser.get(worldNameLowered);
@@ -722,8 +727,12 @@ public class WorldsHolder {
 
 						// if the data sources are the same, return the parent
 						if (usersMirror == groupsMirror) {
-							if (!list.contains(usersMirror.toLowerCase()))
-								list.add(worldsData.get(usersMirror.toLowerCase()));
+							data = getWorldData(usersMirror.toLowerCase());
+							
+							// Only add the parent if it's not already listed.
+							if (!list.contains(data))
+								list.add(data);
+
 							continue;
 						}
 						// Both data sources are mirrors, but they are from different parents

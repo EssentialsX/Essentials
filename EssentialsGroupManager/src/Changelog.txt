@@ -214,3 +214,4 @@ v 2.0:
 	- Added '/mancheckw <world>' to inspect which permission files a world is referencing.
 	- Add config potion to set if GM commands should be allowed on CommnandBlocks.
 	- Catch the error when using an out of date config for 'allow_commandblocks' So it doesn't kill the whole config.
+	- '/manselect' will no longer list duplicate worlds.
