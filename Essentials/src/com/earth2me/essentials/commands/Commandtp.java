@@ -54,7 +54,7 @@ public class Commandtp extends EssentialsCommand
 			{
 				throw new NotEnoughArgumentsException("Value of coordinates cannot be over 30000000"); //TODO: I18n
 			}
-			final Location location = new Location(target2.getWorld(), x, y, z);
+			final Location location = new Location(target2.getWorld(), x, y, z, target2.getLocation().getYaw(), target2.getLocation().getPitch());
 			if (!target2.isTeleportEnabled())
 			{
 				throw new Exception(_("teleportDisabled", target2.getDisplayName()));
@@ -115,7 +115,7 @@ public class Commandtp extends EssentialsCommand
 			{
 				throw new NotEnoughArgumentsException("Value of coordinates cannot be over 30000000"); //TODO: I18n
 			}
-			final Location location = new Location(target.getWorld(), x, y, z);
+			final Location location = new Location(target.getWorld(), x, y, z, target.getLocation().getYaw(), target.getLocation().getPitch());
 			target.getTeleport().now(location, false, TeleportCause.COMMAND);
 			target.sendMessage(_("teleporting"));
 		} else {
