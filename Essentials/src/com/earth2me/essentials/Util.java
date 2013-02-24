@@ -692,7 +692,7 @@ public class Util
 		}
 		return message;
 	}
-	
+
 	private static String blockURL(final String input)
 	{
 		if (input == null)
@@ -715,5 +715,12 @@ public class Util
 	private static String replaceColor(final String input, final Pattern pattern)
 	{
 		return pattern.matcher(input).replaceAll("\u00a7$1");
+	}
+	private static final Pattern IPPATTERN = Pattern.compile(
+			"^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+			"([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
+	
+	public static boolean validIP(String ipAddress) {
+		return IPPATTERN.matcher(ipAddress).matches();
 	}
 }
