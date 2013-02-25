@@ -218,3 +218,4 @@ v 2.0:
 	- Added a new mirroring option in the config of 'all_unnamed_worlds'. This will cause all new or unnamed worlds to use this mirroring.
 	- Don't allow adding a node with '/manuaddp' and '/mangaddp' which is already negated.
 	- Warn when adding a node where an exception already exist.
+	- Only prevent adding nodes with '/manuaddp' and '/mangaddp' if they are exact matches (not wildcards).
