@@ -767,6 +767,10 @@ public class GroupManager extends JavaPlugin {
 						sender.sendMessage(ChatColor.RED + "The user already has direct access to that permission.");
 						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
 						return true;
+					} else if (permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION)) {
+						sender.sendMessage(ChatColor.RED + "The user already has a matching Negated node ");
+						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
+						return true;
 					}
 				}
 				// Seems OK
@@ -1013,6 +1017,10 @@ public class GroupManager extends JavaPlugin {
 				} else {
 					if (permissionResult.resultType.equals(PermissionCheckResult.Type.FOUND)) {
 						sender.sendMessage(ChatColor.RED + "The group already has direct access to that permission.");
+						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
+						return true;
+					} else if (permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION)) {
+						sender.sendMessage(ChatColor.RED + "The group already has a matching Negated node ");
 						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
 						return true;
 					}

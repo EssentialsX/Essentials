@@ -216,3 +216,4 @@ v 2.0:
 	- Catch the error when using an out of date config for 'allow_commandblocks' So it doesn't kill the whole config.
 	- '/manselect' will no longer list duplicate worlds.
 	- Added a new mirroring option in the config of 'all_unnamed_worlds'. This will cause all new or unnamed worlds to use this mirroring.
+	- Don't allow adding a node with '/manuaddp' and '/mangaddp' which is already negated.
