@@ -750,7 +750,7 @@ public class GroupManager extends JavaPlugin {
 					if (permissionResult.resultType.equals(PermissionCheckResult.Type.EXCEPTION)) {
 						sender.sendMessage(ChatColor.RED + "The user already has direct access to that permission.");
 						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
-						return false;
+						return true;
 					}
 				} else if (auxString.startsWith("-")) {
 					if (permissionResult.resultType.equals(PermissionCheckResult.Type.EXCEPTION)) {
@@ -758,19 +758,23 @@ public class GroupManager extends JavaPlugin {
 						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
 						return true;
 					} else if (permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION)) {
-						sender.sendMessage(ChatColor.RED + "The user already has a matching node ");
+						sender.sendMessage(ChatColor.RED + "The user already has a matching node.");
 						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
 						return true;
 					}
 				} else {
-					if (permissionResult.resultType.equals(PermissionCheckResult.Type.FOUND)) {
+					if (permissionResult.resultType.equals(PermissionCheckResult.Type.EXCEPTION)) {
+						// Warn only while still allowing you to add the node.
+						sender.sendMessage(ChatColor.RED + "The user already has an exception for this node.");
+						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
+					} else if (permissionResult.resultType.equals(PermissionCheckResult.Type.FOUND)) {
 						sender.sendMessage(ChatColor.RED + "The user already has direct access to that permission.");
 						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
 						return true;
 					} else if (permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION)) {
-						sender.sendMessage(ChatColor.RED + "The user already has a matching Negated node ");
+						// Warn only while still allowing you to add the node.
+						sender.sendMessage(ChatColor.RED + "The user already has a matching Negated node.");
 						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
-						return true;
 					}
 				}
 				// Seems OK
@@ -1015,14 +1019,18 @@ public class GroupManager extends JavaPlugin {
 						return true;
 					}
 				} else {
-					if (permissionResult.resultType.equals(PermissionCheckResult.Type.FOUND)) {
+					if (permissionResult.resultType.equals(PermissionCheckResult.Type.EXCEPTION)) {
+						// Warn only while still allowing you to add the node.
+						sender.sendMessage(ChatColor.RED + "The group already has an exception for this node.");
+						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
+					} else if (permissionResult.resultType.equals(PermissionCheckResult.Type.FOUND)) {
 						sender.sendMessage(ChatColor.RED + "The group already has direct access to that permission.");
 						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
 						return true;
 					} else if (permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION)) {
-						sender.sendMessage(ChatColor.RED + "The group already has a matching Negated node ");
+						// Warn only while still allowing you to add the node.
+						sender.sendMessage(ChatColor.RED + "The group already has a matching Negated node.");
 						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
-						return true;
 					}
 				}
 				// Seems OK
