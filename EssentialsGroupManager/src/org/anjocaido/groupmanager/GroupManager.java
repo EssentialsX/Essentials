@@ -56,7 +56,7 @@ public class GroupManager extends JavaPlugin {
 	private Runnable commiter;
 	private ScheduledThreadPoolExecutor scheduler;
 	private Map<String, ArrayList<User>> overloadedUsers = new HashMap<String, ArrayList<User>>();
-	private Map<CommandSender, String> selectedWorlds = new HashMap<CommandSender, String>();
+	private Map<String, String> selectedWorlds = new HashMap<String, String>();
 	private WorldsHolder worldsHolder;
 	private boolean validateOnlinePlayer = true;
 	
@@ -142,7 +142,7 @@ public class GroupManager extends JavaPlugin {
 			 * reset local variables.
 			 */
 			overloadedUsers = new HashMap<String, ArrayList<User>>();
-			selectedWorlds = new HashMap<CommandSender, String>();
+			selectedWorlds = new HashMap<String, String>();
 			lastError = "";
 			
 			/*
@@ -431,7 +431,7 @@ public class GroupManager extends JavaPlugin {
 			dataHolder = worldsHolder.getWorldData(senderPlayer);
 		}
 
-		String selectedWorld = selectedWorlds.get(sender);
+		String selectedWorld = selectedWorlds.get(sender.getName());
 		if (selectedWorld != null) {
 			dataHolder = worldsHolder.getWorldData(selectedWorld);
 		}
@@ -1950,7 +1950,7 @@ public class GroupManager extends JavaPlugin {
 				}
 				return true;
 			case manworld:
-				auxString = selectedWorlds.get(sender);
+				auxString = selectedWorlds.get(sender.getName());
 				if (auxString != null) {
 					sender.sendMessage(ChatColor.YELLOW + "You have the world '" + dataHolder.getName() + "' in your selection.");
 				} else {
@@ -1993,7 +1993,7 @@ public class GroupManager extends JavaPlugin {
 				}
 				dataHolder = worldsHolder.getWorldData(auxString);
 				permissionHandler = dataHolder.getPermissionsHandler();
-				selectedWorlds.put(sender, dataHolder.getName());
+				selectedWorlds.put(sender.getName(), dataHolder.getName());
 				sender.sendMessage(ChatColor.YELLOW + "You have selected world '" + dataHolder.getName() + "'.");
 
 				return true;
@@ -2061,7 +2061,7 @@ public class GroupManager extends JavaPlugin {
 		permissionHandler = dataHolder.getPermissionsHandler();
 
 		if ((dataHolder != null) && (permissionHandler != null)) {
-			selectedWorlds.put(sender, dataHolder.getName());
+			selectedWorlds.put(sender.getName(), dataHolder.getName());
 			sender.sendMessage(ChatColor.RED + "Couldn't retrieve your world. Default world '" + worldsHolder.getDefaultWorld().getName() + "' selected.");
 			return true;
 		}
