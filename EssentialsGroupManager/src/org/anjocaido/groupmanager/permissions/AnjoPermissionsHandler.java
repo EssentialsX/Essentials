@@ -708,6 +708,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 		for (String access : user.getPermissionList()) {
 			result.resultType = comparePermissionString(access, permission);
 			if (result.resultType != PermissionCheckResult.Type.NOTFOUND) {
+				result.accessLevel = access;
 				return result;
 			}
 		}
@@ -732,6 +733,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 		for (String access : group.getPermissionList()) {
 			result.resultType = comparePermissionString(access, permission);
 			if (result.resultType != PermissionCheckResult.Type.NOTFOUND) {
+				result.accessLevel = access;
 				return result;
 			}
 		}
