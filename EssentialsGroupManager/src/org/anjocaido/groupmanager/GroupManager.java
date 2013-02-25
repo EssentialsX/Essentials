@@ -2003,7 +2003,7 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Review your arguments count!");
 					return false;
 				}
-				selectedWorlds.remove(sender);
+				selectedWorlds.remove(sender.getName());
 				sender.sendMessage(ChatColor.YELLOW + "You have removed your world selection. Working with current world(if possible).");
 
 				return true;
