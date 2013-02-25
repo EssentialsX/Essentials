@@ -13,6 +13,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityTargetEvent.TargetReason;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.hanging.HangingBreakEvent;
 
 
 public class EssentialsProtectEntityListener implements Listener
@@ -176,7 +178,7 @@ public class EssentialsProtectEntityListener implements Listener
 	private boolean shouldBeDamaged(final User user, final String type)
 	{
 		return (user.isAuthorized("essentials.protect.damage.".concat(type))
-			&& !user.isAuthorized("essentials.protect.damage.disable"));
+				&& !user.isAuthorized("essentials.protect.damage.disable"));
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -232,7 +234,7 @@ public class EssentialsProtectEntityListener implements Listener
 			event.setCancelled(true);
 			return;
 		}
-		
+
 		// This code will prevent explosions near protected rails, signs or protected chests
 		// TODO: Use protect db instead of this code
 
@@ -328,6 +330,17 @@ public class EssentialsProtectEntityListener implements Listener
 			return;
 		}
 		if (event.getEntityType() == EntityType.WITHER && prot.getSettingBool(ProtectConfig.prevent_wither_blockreplace))
+		{
+			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onPaintingBreak(HangingBreakByEntityEvent event)
+	{
+		if (event.getCause() == HangingBreakEvent.RemoveCause.ENTITY
+			&& event.getRemover() instanceof Creeper
+			&& prot.getSettingBool(ProtectConfig.prevent_creeper_explosion))
 		{
 			event.setCancelled(true);
 		}
