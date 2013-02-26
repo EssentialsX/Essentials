@@ -23,7 +23,6 @@ public class EssentialsSpawn extends JavaPlugin
 	private transient IEssentials ess;
 	private transient SpawnStorage spawns;
 
-	@Override
 	public void onEnable()
 	{
 		final PluginManager pluginManager = getServer().getPluginManager();
@@ -60,13 +59,13 @@ public class EssentialsSpawn extends JavaPlugin
 		}, this);
 	}
 
-	@Override
 	public void onDisable()
 	{
 	}
 
 	@Override
-	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args)
+	public boolean onCommand(final CommandSender sender, final Command command,
+							 final String commandLabel, final String[] args)
 	{
 		return ess.onCommandEssentials(sender, command, commandLabel, args, EssentialsSpawn.class.getClassLoader(), "com.earth2me.essentials.spawn.Command", "essentials.", spawns);
 	}

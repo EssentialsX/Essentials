@@ -16,8 +16,6 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -37,7 +35,6 @@ public class EssentialsSpawnPlayerListener implements Listener
 		this.spawns = spawns;
 	}
 
-	@EventHandler (priority = EventPriority.HIGH)
 	public void onPlayerRespawn(final PlayerRespawnEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
@@ -72,7 +69,6 @@ public class EssentialsSpawnPlayerListener implements Listener
 		}
 	}
 
-	@EventHandler (priority = EventPriority.MONITOR)
 	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
 		ess.runTaskAsynchronously(new Runnable()
