@@ -674,7 +674,7 @@ public class GroupManager extends JavaPlugin {
 				}
 				auxGroup = dataHolder.getGroup(args[0]);
 				if (auxGroup != null) {
-					sender.sendMessage(ChatColor.RED + "" + args[0] + " Group doesnt exist!");
+					sender.sendMessage(ChatColor.RED + "" + args[0] + " Group already exist!");
 					return true;
 				}
 				// Seems OK
@@ -770,8 +770,10 @@ public class GroupManager extends JavaPlugin {
 					} else if (permissionResult.resultType.equals(PermissionCheckResult.Type.FOUND)) {
 						sender.sendMessage(ChatColor.RED + "The user already has direct access to that permission.");
 						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
-						if (permissionResult.accessLevel.equalsIgnoreCase(args[1]));
+						if (permissionResult.accessLevel.equalsIgnoreCase(args[1]))
+						{
 							return true;
+						}
 					} else if (permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION)) {
 						// Warn only while still allowing you to add the node.
 						sender.sendMessage(ChatColor.RED + "The user already has a matching Negated node.");
@@ -1028,8 +1030,10 @@ public class GroupManager extends JavaPlugin {
 						sender.sendMessage(ChatColor.RED + "The group already has direct access to that permission.");
 						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
 						// Abort adding if the node is a direct match.
-						if (permissionResult.accessLevel.equalsIgnoreCase(args[1]));
+						if (permissionResult.accessLevel.equalsIgnoreCase(args[1]))
+						{
 							return true;
+						}
 					} else if (permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION)) {
 						// Warn only while still allowing you to add the node.
 						sender.sendMessage(ChatColor.RED + "The group already has a matching Negated node.");
