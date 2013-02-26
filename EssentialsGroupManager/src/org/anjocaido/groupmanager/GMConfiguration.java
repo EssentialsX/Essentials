@@ -87,13 +87,21 @@ public class GMConfiguration {
 
 			try {
 				allowCommandBlocks = (Boolean) config.get("allow_commandblocks");
-				
 			} catch (Exception ex) {
 				GroupManager.logger.log(Level.SEVERE, "Missing or corrupt 'allow_commandblocks' node. Using default settings", ex);
 			}
 			
-			opOverride = (Boolean) config.get("opOverrides");
-			toggleValidate = (Boolean) config.get("validate_toggle");
+			try {
+				opOverride = (Boolean) config.get("opOverrides");
+			} catch (Exception ex) {
+				GroupManager.logger.log(Level.SEVERE, "Missing or corrupt 'opOverrides' node. Using default settings", ex);
+			}
+			
+			try {
+				toggleValidate = (Boolean) config.get("validate_toggle");
+			} catch (Exception ex) {
+				GroupManager.logger.log(Level.SEVERE, "Missing or corrupt 'validate_toggle' node. Using default settings", ex);
+			}
 
 			/*
 			 * data node for save/backup timers.
