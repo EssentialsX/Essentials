@@ -3,11 +3,6 @@ package com.earth2me.essentials.protect;
 
 public enum ProtectConfig
 {
-	datatype("protect.datatype", "sqlite"),
-	mysqlDB("protect.mysqlDb", "jdbc:mysql://localhost:3306/minecraft"),
-	dbUsername("protect.username", "root"),
-	dbPassword("protect.password", ""),
-	memstore("protect.memstore", false),
 	disable_contactdmg("protect.disable.contactdmg", false),
 	disable_lavadmg("protect.disable.lavadmg", false),
 	disable_pvp("protect.disable.pvp", false),
@@ -46,10 +41,6 @@ public enum ProtectConfig
 	prevent_villager_death("protect.prevent.villager-death", false),
 	prevent_enderdragon_blockdmg("protect.prevent.enderdragon-blockdamage", true),
 	prevent_entitytarget("protect.prevent.entitytarget", false),
-	protect_rails("protect.protect.rails", true),
-	protect_below_rails("protect.protect.block-below", true),
-	protect_signs("protect.protect.signs", true),
-	protect_against_signs("protect.protect.block-below", true),
 	enderdragon_fakeexplosions("protect.enderdragon-fakeexplosions", false);
 	private final String configName;
 	private final String defValueString;

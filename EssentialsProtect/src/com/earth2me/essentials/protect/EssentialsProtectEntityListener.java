@@ -3,9 +3,6 @@ package com.earth2me.essentials.protect;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import java.util.Locale;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -204,7 +201,6 @@ public class EssentialsProtectEntityListener implements Listener
 			&& prot.getSettingBool(ProtectConfig.prevent_wither_spawnexplosion))
 		{
 			event.setCancelled(true);
-			return;
 		}
 		else if (event.getEntity() instanceof Creeper
 				 && (prot.getSettingBool(ProtectConfig.prevent_creeper_explosion)
@@ -214,56 +210,26 @@ public class EssentialsProtectEntityListener implements Listener
 			//Nicccccccccce plaaacccccccccce..
 			event.setCancelled(true);
 			event.getLocation().getWorld().createExplosion(event.getLocation(), 0F);
-			return;
 		}
 		else if (event.getEntity() instanceof TNTPrimed
 				 && prot.getSettingBool(ProtectConfig.prevent_tnt_explosion))
 		{
 			event.setCancelled(true);
-			return;
+			
 		}
 		else if ((event.getEntity() instanceof Fireball || event.getEntity() instanceof SmallFireball)
 				 && prot.getSettingBool(ProtectConfig.prevent_fireball_explosion))
 		{
 			event.setCancelled(true);
-			return;
+			
 		}
 		else if ((event.getEntity() instanceof WitherSkull)
 				 && prot.getSettingBool(ProtectConfig.prevent_witherskull_explosion))
 		{
 			event.setCancelled(true);
-			return;
+			
 		}
-
-		// This code will prevent explosions near protected rails, signs or protected chests
-		// TODO: Use protect db instead of this code
-
-		for (Block block : event.blockList())
-		{
-			if ((block.getRelative(BlockFace.UP).getType() == Material.RAILS
-				 || block.getType() == Material.RAILS
-				 || block.getRelative(BlockFace.UP).getType() == Material.POWERED_RAIL
-				 || block.getType() == Material.POWERED_RAIL
-				 || block.getRelative(BlockFace.UP).getType() == Material.DETECTOR_RAIL
-				 || block.getType() == Material.DETECTOR_RAIL)
-				&& prot.getSettingBool(ProtectConfig.protect_rails))
-			{
-				event.setCancelled(true);
-				return;
-			}
-			if ((block.getType() == Material.WALL_SIGN
-				 || block.getRelative(BlockFace.NORTH).getType() == Material.WALL_SIGN
-				 || block.getRelative(BlockFace.EAST).getType() == Material.WALL_SIGN
-				 || block.getRelative(BlockFace.SOUTH).getType() == Material.WALL_SIGN
-				 || block.getRelative(BlockFace.WEST).getType() == Material.WALL_SIGN
-				 || block.getType() == Material.SIGN_POST
-				 || block.getRelative(BlockFace.UP).getType() == Material.SIGN_POST)
-				&& prot.getSettingBool(ProtectConfig.protect_signs))
-			{
-				event.setCancelled(true);
-				return;
-			}
-		}
+		
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

@@ -3,10 +3,6 @@ package com.earth2me.essentials.protect;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.protect.data.ProtectedBlockMemory;
-import com.earth2me.essentials.protect.data.ProtectedBlockMySQL;
-import com.earth2me.essentials.protect.data.ProtectedBlockSQLite;
-import java.beans.PropertyVetoException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.plugin.Plugin;
@@ -41,10 +37,6 @@ public class EssentialsConnect
 		@Override
 		public void reloadConfig()
 		{
-			if (protect.getStorage() != null)
-			{
-				protect.getStorage().onPluginDeactivation();
-			}
 			for (ProtectConfig protectConfig : ProtectConfig.values())
 			{
 				if (protectConfig.isList())
@@ -61,37 +53,6 @@ public class EssentialsConnect
 				}
 
 			}
-
-			if (protect.getSettingString(ProtectConfig.datatype).equalsIgnoreCase("mysql"))
-			{
-				try
-				{
-					protect.setStorage(new ProtectedBlockMySQL(
-							protect.getSettingString(ProtectConfig.mysqlDB),
-							protect.getSettingString(ProtectConfig.dbUsername),
-							protect.getSettingString(ProtectConfig.dbPassword)));
-				}
-				catch (PropertyVetoException ex)
-				{
-					LOGGER.log(Level.SEVERE, null, ex);
-				}
-			}
-			else
-			{
-				try
-				{
-					protect.setStorage(new ProtectedBlockSQLite("jdbc:sqlite:plugins/Essentials/EssentialsProtect.db"));
-				}
-				catch (PropertyVetoException ex)
-				{
-					LOGGER.log(Level.SEVERE, null, ex);
-				}
-			}
-			if (protect.getSettingBool(ProtectConfig.memstore))
-			{
-				protect.setStorage(new ProtectedBlockMemory(protect.getStorage(), protect));
-			}
-
 		}
 	}
 }
