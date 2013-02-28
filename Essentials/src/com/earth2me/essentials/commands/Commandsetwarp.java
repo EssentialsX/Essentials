@@ -23,7 +23,7 @@ public class Commandsetwarp extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		if (Util.isInt(args[0]))
+		if (Util.isInt(args[0]) || args[0].isEmpty())
 		{
 			throw new NoSuchFieldException(_("invalidWarpName"));
 		}
