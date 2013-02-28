@@ -4,6 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.commands.EssentialsCommand;
+import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -26,7 +27,7 @@ public class Commandspawn extends EssentialsCommand
 		if (args.length > 0 && user.isAuthorized("essentials.spawn.others"))
 		{
 			final User otherUser = getPlayer(server, args, 0);
-			respawn(otherUser, null);
+			respawn(otherUser, charge);
 			if (!otherUser.equals(user))
 			{
 				otherUser.sendMessage(_("teleportAtoB", user.getDisplayName(), "spawn"));
@@ -35,8 +36,9 @@ public class Commandspawn extends EssentialsCommand
 		}
 		else
 		{	
-			respawn(user, null);
+			respawn(user, charge);
 		}
+		throw new NoChargeException();
 	}
 
 	@Override
