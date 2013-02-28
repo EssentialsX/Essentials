@@ -44,12 +44,14 @@ public class SignTime extends EssentialsSign
 		{
 			player.getWorld().setTime(time + 24000);
 			charge.charge(player);
+			Trade.log("Sign", "TimeDay", "Interact", username, null, username, charge, sign.getBlock().getLocation(), ess);
 			return true;
 		}
 		if ("§2Night".equalsIgnoreCase(timeString))
 		{
 			player.getWorld().setTime(time + 37700);
 			charge.charge(player);
+			Trade.log("Sign", "TimeNight", "Interact", username, null, username, charge, sign.getBlock().getLocation(), ess);
 			return true;
 		}
 		throw new SignException(_("onlyDayNight"));
