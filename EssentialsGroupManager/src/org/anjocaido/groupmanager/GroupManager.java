@@ -1118,7 +1118,7 @@ public class GroupManager extends JavaPlugin {
 				}
 				// Validating your permissions
 				permissionResult = permissionHandler.checkFullUserPermission(senderUser, auxString);
-				if (!isConsole && (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND) || permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION))) {
+				if (!isConsole && !isOpOverride && (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND) || permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION))) {
 					sender.sendMessage(ChatColor.RED + "Can't remove a permission you don't have.");
 					return true;
 				}
@@ -1161,7 +1161,7 @@ public class GroupManager extends JavaPlugin {
 				
 				for (auxString : auxGroup.getPermissionList()) {
 					permissionResult = permissionHandler.checkFullUserPermission(senderUser, auxString);
-					if (!isConsole && (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND) || permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION))) {
+					if (!isConsole && !isOpOverride && (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND) || permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION))) {
 						sender.sendMessage(ChatColor.RED + "Can't remove a permission you don't have: '" + auxString + "'.");
 					}
 					else
