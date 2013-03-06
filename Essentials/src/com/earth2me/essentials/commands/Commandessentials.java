@@ -227,7 +227,7 @@ public class Commandessentials extends EssentialsCommand
 		}
 		sender.sendMessage(_("cleaning"));
 
-		final int daysArg = Integer.parseInt(args[1]);
+		final long daysArg = Long.parseLong(args[1]);
 		final double moneyArg = args.length >= 3 ? Double.parseDouble(args[2].replaceAll("[^0-9\\.]", "")) : 0;
 		final int homesArg = args.length >= 4 && Util.isInt(args[3]) ? Integer.parseInt(args[3]) : 0;
 		final int bansArg = args.length >= 5 && Util.isInt(args[4]) ? Integer.parseInt(args[4]) : 0;
@@ -248,8 +248,8 @@ public class Commandessentials extends EssentialsCommand
 
 					int ban = user.getBanReason().equals("") ? 0 : 1;
 					long lastLog = user.getLastLogout();
-					long timeDiff = System.currentTimeMillis() - lastLog;					
-					long milliDays = daysArg * 24 * 60 * 60;
+					long timeDiff = System.currentTimeMillis() - lastLog;
+					long milliDays = daysArg * 24L * 60L * 60L * 1000L;
 					int homeCount = user.getHomes().size();
 					double moneyCount = user.getMoney();
 
@@ -258,12 +258,12 @@ public class Commandessentials extends EssentialsCommand
 					{
 						continue;
 					}
-					
+
 					if (ess.getSettings().isDebug())
 					{
-						ess.getLogger().info("Deleting user: " + user.getName() + " Money: " + moneyCount + " Homes: " + homeCount  + " Last seen: " + Util.formatDateDiff(lastLog));
+						ess.getLogger().info("Deleting user: " + user.getName() + " Money: " + moneyCount + " Homes: " + homeCount + " Last seen: " + Util.formatDateDiff(lastLog));
 					}
-					
+
 					user.reset();
 				}
 				sender.sendMessage(_("cleaned"));
