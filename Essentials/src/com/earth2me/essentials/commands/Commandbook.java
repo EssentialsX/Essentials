@@ -27,7 +27,7 @@ public class Commandbook extends EssentialsCommand
 
 			if (args.length > 1 && args[0].equalsIgnoreCase("author"))
 			{
-				if (user.isAuthorized("essentals.book.author"))
+				if (user.isAuthorized("essentals.book.author") && (isAuthor(bmeta, player) || user.isAuthorized("essentials.book.others")))
 				{
 					bmeta.setAuthor(args[1]);
 					item.setItemMeta(bmeta);

@@ -118,6 +118,10 @@ public class Commandfirework extends EssentialsCommand
 					{
 						FireworkMeta fmeta = (FireworkMeta)mStack.getItemStack().getItemMeta();
 						FireworkEffect effect = mStack.getFireworkBuilder().build();
+						if (fmeta.getEffects().size() > 0 && !user.isAuthorized("essentials.firework.multiple"))
+						{
+							throw new Exception(_("multipleCharges"));
+						}
 						fmeta.addEffect(effect);
 						stack.setItemMeta(fmeta);
 					}

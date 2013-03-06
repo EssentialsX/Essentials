@@ -90,24 +90,31 @@ public class MetaItemStack
 		completePotion = true;
 	}
 
-	public void parseStringMeta(final CommandSender user, final boolean allowUnsafe, String[] string, int fromArg, final IEssentials ess) throws Exception
+	public void parseStringMeta(final CommandSender sender, final boolean allowUnsafe, String[] string, int fromArg, final IEssentials ess) throws Exception
 	{
 
 		for (int i = fromArg; i < string.length; i++)
 		{
-			addStringMeta(user, allowUnsafe, string[i], ess);
+			addStringMeta(sender, allowUnsafe, string[i], ess);
 		}
 		if (validFirework)
 		{
+			if (!hasMetaPermission(sender, "firework", true, false, ess))
+			{
+				throw new Exception(_("noMetaFirework"));
+			}
 			FireworkEffect effect = builder.build();
 			FireworkMeta fmeta = (FireworkMeta)stack.getItemMeta();
 			fmeta.addEffect(effect);
+			if (fmeta.getEffects().size() > 1 && !hasMetaPermission(sender, "firework-multiple", true, false, ess))
+			{
+				throw new Exception(_("multipleCharges"));
+			}
 			stack.setItemMeta(fmeta);
 		}
 	}
 
-	//TODO: TL this
-	private void addStringMeta(final CommandSender user, final boolean allowUnsafe, final String string, final IEssentials ess) throws Exception
+	private void addStringMeta(final CommandSender sender, final boolean allowUnsafe, final String string, final IEssentials ess) throws Exception
 	{
 		final String[] split = splitPattern.split(string, 2);
 		if (split.length < 1)
@@ -115,14 +122,14 @@ public class MetaItemStack
 			return;
 		}
 
-		if (split.length > 1 && split[0].equalsIgnoreCase("name"))
+		if (split.length > 1 && split[0].equalsIgnoreCase("name") && hasMetaPermission(sender, "name", true, true, ess))
 		{
 			final String displayName = Util.replaceFormat(split[1].replace('_', ' '));
 			final ItemMeta meta = stack.getItemMeta();
 			meta.setDisplayName(displayName);
 			stack.setItemMeta(meta);
 		}
-		else if (split.length > 1 && (split[0].equalsIgnoreCase("lore") || split[0].equalsIgnoreCase("desc")))
+		else if (split.length > 1 && (split[0].equalsIgnoreCase("lore") || split[0].equalsIgnoreCase("desc")) && hasMetaPermission(sender, "lore", true, true, ess))
 		{
 			final List<String> lore = new ArrayList<String>();
 			for (String line : split[1].split("\\|"))
@@ -133,7 +140,7 @@ public class MetaItemStack
 			meta.setLore(lore);
 			stack.setItemMeta(meta);
 		}
-		else if (split.length > 1 && (split[0].equalsIgnoreCase("player") || split[0].equalsIgnoreCase("owner")) && stack.getType() == Material.SKULL_ITEM)
+		else if (split.length > 1 && (split[0].equalsIgnoreCase("player") || split[0].equalsIgnoreCase("owner")) && stack.getType() == Material.SKULL_ITEM && hasMetaPermission(sender, "head", true, true, ess))
 		{
 			if (stack.getDurability() == 3)
 			{
@@ -144,35 +151,43 @@ public class MetaItemStack
 			}
 			else
 			{
-				throw new Exception("You can only set the owner of player skulls (397:3)");
+				throw new Exception(_("onlyPlayerSkulls"));
 			}
 		}
-		else if (split.length > 1 && split[0].equalsIgnoreCase("book") && stack.getType() == Material.WRITTEN_BOOK)
+		else if (split.length > 1 && split[0].equalsIgnoreCase("book") && stack.getType() == Material.WRITTEN_BOOK && hasMetaPermission(sender, "book", true, true, ess))
 		{
 			final BookMeta meta = (BookMeta)stack.getItemMeta();
 			final IText input = new BookInput("book", true, ess);
 			final BookPager pager = new BookPager(input);
 
-			List<String> pages = pager.getPages(split[1]);
-			meta.setPages(pages);
+			if (hasMetaPermission(sender, "chapter-" + split[1].toLowerCase(), true, true, ess))
+			{
+				List<String> pages = pager.getPages(split[1]);
+				meta.setPages(pages);
 
-			stack.setItemMeta(meta);
+				stack.setItemMeta(meta);
+			}
+			else
+			{
+				sender.sendMessage(_("noChapterMeta"));
+			}
+
 		}
-		else if (split.length > 1 && split[0].equalsIgnoreCase("author") && stack.getType() == Material.WRITTEN_BOOK)
+		else if (split.length > 1 && split[0].equalsIgnoreCase("author") && stack.getType() == Material.WRITTEN_BOOK && hasMetaPermission(sender, "author", true, true, ess))
 		{
 			final String author = split[1];
 			final BookMeta meta = (BookMeta)stack.getItemMeta();
 			meta.setAuthor(author);
 			stack.setItemMeta(meta);
 		}
-		else if (split.length > 1 && split[0].equalsIgnoreCase("title") && stack.getType() == Material.WRITTEN_BOOK)
+		else if (split.length > 1 && split[0].equalsIgnoreCase("title") && stack.getType() == Material.WRITTEN_BOOK && hasMetaPermission(sender, "title", true, true, ess))
 		{
 			final String title = Util.replaceFormat(split[1].replace('_', ' '));
 			final BookMeta meta = (BookMeta)stack.getItemMeta();
 			meta.setTitle(title);
 			stack.setItemMeta(meta);
 		}
-		else if (split.length > 1 && split[0].equalsIgnoreCase("power") && stack.getType() == Material.FIREWORK)
+		else if (split.length > 1 && split[0].equalsIgnoreCase("power") && stack.getType() == Material.FIREWORK && hasMetaPermission(sender, "firework-power", true, true, ess))
 		{
 			final int power = Util.isInt(split[1]) ? Integer.parseInt(split[1]) : 0;
 			final FireworkMeta meta = (FireworkMeta)stack.getItemMeta();
@@ -181,11 +196,11 @@ public class MetaItemStack
 		}
 		else if (stack.getType() == Material.FIREWORK) //WARNING - Meta for fireworks will be ignored after this point.
 		{
-			addFireworkMeta(user, false, string, ess);
+			addFireworkMeta(sender, false, string, ess);
 		}
 		else if (stack.getType() == Material.POTION) //WARNING - Meta for potions will be ignored after this point.
 		{
-			addPotionMeta(user, false, string, ess);
+			addPotionMeta(sender, false, string, ess);
 		}
 		else if (split.length > 1 && (split[0].equalsIgnoreCase("color") || split[0].equalsIgnoreCase("colour"))
 				 && (stack.getType() == Material.LEATHER_BOOTS
@@ -205,16 +220,16 @@ public class MetaItemStack
 			}
 			else
 			{
-				throw new Exception("Leather Color Syntax: color:<red>,<green>,<blue> eg: color:255,0,0");
+				throw new Exception(_("leatherSyntax"));
 			}
 		}
 		else
 		{
-			parseEnchantmentStrings(user, allowUnsafe, split);
+			parseEnchantmentStrings(sender, allowUnsafe, split);
 		}
 	}
 
-	public void addFireworkMeta(final CommandSender user, final boolean allowShortName, final String string, final IEssentials ess) throws Exception
+	public void addFireworkMeta(final CommandSender sender, final boolean allowShortName, final String string, final IEssentials ess) throws Exception
 	{
 		if (stack.getType() == Material.FIREWORK)
 		{
@@ -229,9 +244,17 @@ public class MetaItemStack
 			{
 				if (validFirework)
 				{
+					if (!hasMetaPermission(sender, "firework", true, false, ess))
+					{
+						throw new Exception(_("noMetaFirework"));
+					}
 					FireworkEffect effect = builder.build();
 					FireworkMeta fmeta = (FireworkMeta)stack.getItemMeta();
 					fmeta.addEffect(effect);
+					if (fmeta.getEffects().size() > 1 && !hasMetaPermission(sender, "firework-multiple", false, false, ess))
+					{
+						throw new Exception(_("multipleCharges"));
+					}
 					stack.setItemMeta(fmeta);
 					builder = FireworkEffect.builder();
 				}
@@ -247,7 +270,7 @@ public class MetaItemStack
 					}
 					else
 					{
-						user.sendMessage(_("fireworkSyntax"));
+						sender.sendMessage(_("fireworkSyntax"));
 						throw new Exception(_("invalidFireworkFormat", split[1], split[0]));
 					}
 				}
@@ -263,7 +286,7 @@ public class MetaItemStack
 				}
 				else
 				{
-					user.sendMessage(_("fireworkSyntax"));
+					sender.sendMessage(_("fireworkSyntax"));
 					throw new Exception(_("invalidFireworkFormat", split[1], split[0]));
 				}
 				if (finalEffect != null)
@@ -283,7 +306,7 @@ public class MetaItemStack
 					}
 					else
 					{
-						user.sendMessage(_("fireworkSyntax"));
+						sender.sendMessage(_("fireworkSyntax"));
 						throw new Exception(_("invalidFireworkFormat", split[1], split[0]));
 					}
 				}
@@ -307,7 +330,7 @@ public class MetaItemStack
 					}
 					else
 					{
-						user.sendMessage(_("fireworkSyntax"));
+						sender.sendMessage(_("fireworkSyntax"));
 						throw new Exception(_("invalidFireworkFormat", split[1], split[0]));
 					}
 				}
@@ -315,11 +338,11 @@ public class MetaItemStack
 		}
 	}
 
-	public void addPotionMeta(final CommandSender user, final boolean allowShortName, final String string, final IEssentials ess) throws Exception
+	public void addPotionMeta(final CommandSender sender, final boolean allowShortName, final String string, final IEssentials ess) throws Exception
 	{
 		if (stack.getType() == Material.POTION)
 		{
-			final User player = ess.getUser(user);
+			final User user = ess.getUser(sender);
 			final String[] split = splitPattern.split(string, 2);
 
 			if (split.length < 2)
@@ -332,7 +355,7 @@ public class MetaItemStack
 				pEffectType = Potions.getByName(split[1]);
 				if (pEffectType != null)
 				{
-					if(player != null && player.isAuthorized("essentials.potion." + pEffectType.getName().toLowerCase()))
+					if (user != null && user.isAuthorized("essentials.potion." + pEffectType.getName().toLowerCase()))
 					{
 						validPotionEffect = true;
 						canceledEffect = false;
@@ -340,12 +363,12 @@ public class MetaItemStack
 					else
 					{
 						canceledEffect = true;
-						user.sendMessage(_("invalidPotionEffect", pEffectType.getName().toLowerCase()));
+						sender.sendMessage(_("invalidPotionEffect", pEffectType.getName().toLowerCase()));
 					}
 				}
 				else
 				{
-					user.sendMessage(_("invalidPotionEffect", split[1]));
+					sender.sendMessage(_("invalidPotionEffect", split[1]));
 					canceledEffect = true;
 				}
 			}
@@ -370,18 +393,27 @@ public class MetaItemStack
 			{
 				PotionMeta pmeta = (PotionMeta)stack.getItemMeta();
 				pEffect = pEffectType.createEffect(duration, power);
+				if (pmeta.getCustomEffects().size() > 1 && !hasMetaPermission(sender, "potion-multiple", true, false, ess))
+				{
+					throw new Exception(_("multiplePotionEffects"));
+				}
 				pmeta.addCustomEffect(pEffect, true);
 				stack.setItemMeta(pmeta);
-				resetPotionMeta();		
+				resetPotionMeta();
 			}
 
-			
+
 		}
 	}
 
-	private void parseEnchantmentStrings(final CommandSender user, final boolean allowUnsafe, final String[] split) throws Exception
+	private void parseEnchantmentStrings(final CommandSender sender, final boolean allowUnsafe, final String[] split) throws Exception
 	{
 		Enchantment enchantment = getEnchantment(null, split[0]);
+
+		if (enchantment == null)
+		{
+			return;
+		}
 
 		int level = -1;
 		if (split.length > 1)
@@ -400,10 +432,10 @@ public class MetaItemStack
 		{
 			level = enchantment.getMaxLevel();
 		}
-		addEnchantment(user, allowUnsafe, enchantment, level);
+		addEnchantment(sender, allowUnsafe, enchantment, level);
 	}
 
-	public void addEnchantment(final CommandSender user, final boolean allowUnsafe, final Enchantment enchantment, final int level) throws Exception
+	public void addEnchantment(final CommandSender sender, final boolean allowUnsafe, final Enchantment enchantment, final int level) throws Exception
 	{
 		try
 		{
@@ -445,13 +477,12 @@ public class MetaItemStack
 		}
 	}
 
-	//TODO: Properly TL this
 	public Enchantment getEnchantment(final User user, final String name) throws Exception
 	{
 		final Enchantment enchantment = Enchantments.getByName(name);
 		if (enchantment == null)
 		{
-			throw new Exception(_("enchantmentNotFound") + ": " + name);
+			return null;
 		}
 		final String enchantmentName = enchantment.getName().toLowerCase(Locale.ENGLISH);
 		if (user != null && !user.isAuthorized("essentials.enchant." + enchantmentName))
@@ -459,5 +490,32 @@ public class MetaItemStack
 			throw new Exception(_("enchantmentPerm", enchantmentName));
 		}
 		return enchantment;
+	}
+
+	private boolean hasMetaPermission(final CommandSender sender, final String metaPerm, final boolean graceful, final boolean message, final IEssentials ess) throws Exception
+	{
+		final User user = ess.getUser(sender);
+		if (user == null)
+		{
+			return true;
+		}
+
+		if (user.isAuthorized("essentials.itemspawn.meta-" + metaPerm))
+		{
+			return true;
+		}
+
+		if (graceful)
+		{
+			if (message)
+			{
+				user.sendMessage(_("noMetaPerm", metaPerm));
+			}
+			return false;
+		}
+		else
+		{
+			throw new Exception(_("noMetaPerm", metaPerm));
+		}
 	}
 }
