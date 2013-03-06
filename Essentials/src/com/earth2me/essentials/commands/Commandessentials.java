@@ -247,14 +247,23 @@ public class Commandessentials extends EssentialsCommand
 					}
 
 					int ban = user.getBanReason().equals("") ? 0 : 1;
-					long timeDiff = System.currentTimeMillis() - user.getLastLogout();
+					long lastLog = user.getLastLogout();
+					long timeDiff = System.currentTimeMillis() - lastLog;					
 					long milliDays = daysArg * 24 * 60 * 60;
+					int homeCount = user.getHomes().size();
+					double moneyCount = user.getMoney();
 
-					if ((ban > bansArg) || (timeDiff < milliDays)
-						|| (user.getHomes().size() > homesArg) || (user.getMoney() > moneyArg))
+					if ((lastLog == 0) || (ban > bansArg) || (timeDiff < milliDays)
+						|| (homeCount > homesArg) || (moneyCount > moneyArg))
 					{
 						continue;
 					}
+					
+					if (ess.getSettings().isDebug())
+					{
+						ess.getLogger().info("Deleting user: " + user.getName() + " Money: " + moneyCount + " Homes: " + homeCount  + " Last seen: " + Util.formatDateDiff(lastLog));
+					}
+					
 					user.reset();
 				}
 				sender.sendMessage(_("cleaned"));
