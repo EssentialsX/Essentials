@@ -9,7 +9,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.regex.Pattern;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
@@ -20,8 +19,6 @@ import org.bukkit.potion.PotionEffectType;
 
 public class Commandpotion extends EssentialsCommand
 {
-	private final transient Pattern splitPattern = Pattern.compile("[:+',;.]");
-
 	public Commandpotion()
 	{
 		super("potion");
