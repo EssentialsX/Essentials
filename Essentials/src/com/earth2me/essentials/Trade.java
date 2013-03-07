@@ -25,7 +25,14 @@ public class Trade
 	private final transient ItemStack itemStack;
 	private final transient Integer exp;
 	private final transient IEssentials ess;
-
+	
+	public enum TradeType
+	{
+		MONEY,
+		EXP,
+		ITEM
+	}
+	
 	public Trade(final String command, final IEssentials ess)
 	{
 		this(command, null, null, null, null, ess);
@@ -205,6 +212,20 @@ public class Trade
 	public Integer getExperience()
 	{
 		return exp;
+	}
+	
+	public TradeType getType()
+	{
+		if (getExperience() != null) {
+			return TradeType.MONEY;
+		}
+
+		if (getItemStack() != null)
+		{
+			return TradeType.ITEM;
+		}
+
+		return TradeType.MONEY;		
 	}
 
 	public Double getCommandCost(final IUser user)
