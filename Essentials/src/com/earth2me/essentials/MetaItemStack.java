@@ -169,7 +169,7 @@ public class MetaItemStack
 			}
 			else
 			{
-				sender.sendMessage(_("noChapterMeta"));
+				throw new Exception(_("noChapterMeta"));
 			}
 
 		}
@@ -270,7 +270,6 @@ public class MetaItemStack
 					}
 					else
 					{
-						sender.sendMessage(_("fireworkSyntax"));
 						throw new Exception(_("invalidFireworkFormat", split[1], split[0]));
 					}
 				}
@@ -286,7 +285,6 @@ public class MetaItemStack
 				}
 				else
 				{
-					sender.sendMessage(_("fireworkSyntax"));
 					throw new Exception(_("invalidFireworkFormat", split[1], split[0]));
 				}
 				if (finalEffect != null)
@@ -306,7 +304,6 @@ public class MetaItemStack
 					}
 					else
 					{
-						sender.sendMessage(_("fireworkSyntax"));
 						throw new Exception(_("invalidFireworkFormat", split[1], split[0]));
 					}
 				}
@@ -330,7 +327,6 @@ public class MetaItemStack
 					}
 					else
 					{
-						sender.sendMessage(_("fireworkSyntax"));
 						throw new Exception(_("invalidFireworkFormat", split[1], split[0]));
 					}
 				}

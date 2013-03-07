@@ -111,7 +111,15 @@ public class Commandfirework extends EssentialsCommand
 					final MetaItemStack mStack = new MetaItemStack(stack);
 					for (String arg : args)
 					{
-						mStack.addFireworkMeta(user, true, arg, ess);
+						try
+						{
+							mStack.addFireworkMeta(user, true, arg, ess);
+						}
+						catch (Exception e)
+						{
+							user.sendMessage(_("fireworkSyntax"));
+							throw e;
+						}
 					}
 
 					if (mStack.isValidFirework())
