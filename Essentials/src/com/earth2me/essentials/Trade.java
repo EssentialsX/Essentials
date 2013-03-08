@@ -217,7 +217,7 @@ public class Trade
 	public TradeType getType()
 	{
 		if (getExperience() != null) {
-			return TradeType.MONEY;
+			return TradeType.EXP;
 		}
 
 		if (getItemStack() != null)
