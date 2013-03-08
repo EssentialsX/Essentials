@@ -2,6 +2,7 @@ package com.earth2me.essentials.signs;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.*;
+import com.earth2me.essentials.Trade.TradeType;
 import org.bukkit.inventory.ItemStack;
 
 //TODO: TL exceptions
@@ -20,7 +21,7 @@ public class SignTrade extends EssentialsSign
 		validateTrade(sign, 2, true, ess);
 		final Trade trade = getTrade(sign, 2, true, true, ess);
 		final Trade charge = getTrade(sign, 1, true, false, ess);
-		if (trade.getType() == charge.getType()) {
+		if (trade.getType() == charge.getType() && (trade.getType() != TradeType.ITEM || trade.getItemStack().getType().equals(charge.getItemStack().getType()))) {
 			throw new SignException("You cannot trade for the same item type.");
 		}
 		trade.isAffordableFor(player);

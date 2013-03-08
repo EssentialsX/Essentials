@@ -164,7 +164,6 @@ public class MetaItemStack
 			{
 				List<String> pages = pager.getPages(split[1]);
 				meta.setPages(pages);
-
 				stack.setItemMeta(meta);
 			}
 			else
@@ -397,8 +396,6 @@ public class MetaItemStack
 				stack.setItemMeta(pmeta);
 				resetPotionMeta();
 			}
-
-
 		}
 	}
 
@@ -479,6 +476,7 @@ public class MetaItemStack
 		{
 			return null;
 		}
+		
 		final String enchantmentName = enchantment.getName().toLowerCase(Locale.ENGLISH);
 		if (user != null && !user.isAuthorized("essentials.enchant." + enchantmentName))
 		{
@@ -490,12 +488,7 @@ public class MetaItemStack
 	private boolean hasMetaPermission(final CommandSender sender, final String metaPerm, final boolean graceful, final IEssentials ess) throws Exception
 	{
 		final User user = ess.getUser(sender);
-		if (user == null)
-		{
-			return true;
-		}
-
-		if (user.isAuthorized("essentials.itemspawn.meta-" + metaPerm))
+		if (user == null || user.isAuthorized("essentials.itemspawn.meta-" + metaPerm))
 		{
 			return true;
 		}
