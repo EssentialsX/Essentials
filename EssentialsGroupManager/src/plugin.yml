@@ -141,7 +141,7 @@ commands:
     usage: /<command> [world]
     permissions: groupmanager.manload
   listgroups:
-    aliases: [manglist]
+    aliases: [manlistg]
     description: List the groups available.
     usage: /<command>
     permissions: groupmanager.listgroups
