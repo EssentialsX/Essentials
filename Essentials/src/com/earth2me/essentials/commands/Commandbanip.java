@@ -42,7 +42,7 @@ public class Commandbanip extends EssentialsCommand
 		}
 		
 		ess.getServer().banIP(ipAddress);
-		server.getLogger().log(Level.INFO, _("playerbanIpAddress", senderName, ipAddress));
+		server.getLogger().log(Level.INFO, _("playerBanIpAddress", senderName, ipAddress));
 
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
