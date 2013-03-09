@@ -283,7 +283,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		String nickname;
 		String suffix = "";
 		final String nick = getNickname();
-		if (ess.getSettings().isCommandDisabled("nick") || nick == null || nick.isEmpty() || nick.equals(getName()))
+		if (ess.getSettings().isCommandDisabled("nick") || nick == null || nick.isEmpty() || nick.equalsIgnoreCase(getName()))
 		{
 			nickname = getName();
 		}

@@ -94,7 +94,13 @@ public class Commandnick extends EssentialsCommand
 		{
 			throw new Exception(_("nickNamesAlpha"));
 		}
-		else if ("off".equalsIgnoreCase(nick) || target.getName().equalsIgnoreCase(nick))
+		else if (target.getName().equalsIgnoreCase(nick))
+		{
+			target.setNickname(nick);
+			target.setDisplayNick();
+			target.sendMessage(_("nickNoMore"));
+		}
+		else if ("off".equalsIgnoreCase(nick))
 		{
 			target.setNickname(null);
 			target.setDisplayNick();
@@ -102,16 +108,16 @@ public class Commandnick extends EssentialsCommand
 		}
 		else
 		{
-			for (Player p : server.getOnlinePlayers())
+			for (Player onlinePlayer : server.getOnlinePlayers())
 			{
-				if (target.getBase() == p)
+				if (target.getBase() == onlinePlayer)
 				{
 					continue;
 				}
-				String dn = p.getDisplayName().toLowerCase(Locale.ENGLISH);
-				String n = p.getName().toLowerCase(Locale.ENGLISH);
-				String nk = nick.toLowerCase(Locale.ENGLISH);
-				if (nk.equals(dn) || nk.equals(n))
+				String displayName = onlinePlayer.getDisplayName().toLowerCase(Locale.ENGLISH);
+				String name = onlinePlayer.getName().toLowerCase(Locale.ENGLISH);
+				String lowerNick = nick.toLowerCase(Locale.ENGLISH);
+				if (lowerNick.equals(displayName) || lowerNick.equals(name))
 				{
 					throw new Exception(_("nickInUse"));
 				}
