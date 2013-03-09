@@ -36,7 +36,7 @@ public class Commandenchant extends EssentialsCommand
 			for (Map.Entry<String, Enchantment> entry : Enchantments.entrySet())
 			{
 				final String enchantmentName = entry.getValue().getName().toLowerCase(Locale.ENGLISH);
-				if (enchantmentslist.contains(enchantmentName) || (user.isAuthorized("essentials.enchant." + enchantmentName) && entry.getValue().canEnchantItem(stack)))
+				if (enchantmentslist.contains(enchantmentName) || (user.isAuthorized("essentials.enchantments." + enchantmentName) && entry.getValue().canEnchantItem(stack)))
 				{
 					enchantmentslist.add(entry.getKey());
 					//enchantmentslist.add(enchantmentName);
@@ -58,7 +58,7 @@ public class Commandenchant extends EssentialsCommand
 			}
 		}
 
-		final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments() && user.isAuthorized("essentials.enchant.allowunsafe");
+		final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments() && user.isAuthorized("essentials.enchantments.allowunsafe");
 		
 		final MetaItemStack metaStack = new MetaItemStack(stack);
 		final Enchantment enchantment = metaStack.getEnchantment(user, args[0]);

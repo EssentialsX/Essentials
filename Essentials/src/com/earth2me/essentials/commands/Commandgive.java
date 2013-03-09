@@ -73,7 +73,7 @@ public class Commandgive extends EssentialsCommand
 		{
 			MetaItemStack metaStack = new MetaItemStack(stack);
 			boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();			
-			if (allowUnsafe && sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.enchant.allowunsafe"))
+			if (allowUnsafe && sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.enchantments.allowunsafe"))
 			{
 				allowUnsafe = false;
 			}
