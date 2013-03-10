@@ -347,7 +347,7 @@ public class MetaItemStack
 			if (split[0].equalsIgnoreCase("effect") || (allowShortName && split[0].equalsIgnoreCase("e")))
 			{
 				pEffectType = Potions.getByName(split[1]);
-				if (pEffectType != null)
+				if (pEffectType != null && pEffectType.getName() != null)
 				{
 					if (hasMetaPermission(sender, "potions." + pEffectType.getName().toLowerCase(), false, false, ess))
 					{
