@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Server;
@@ -27,7 +28,7 @@ public class Commandsudo extends EssentialsCommand
 		}
 
 		final User user = getPlayer(server, args, 0, false);
-		if(args[1].toLowerCase().startsWith("c:"))
+		if(args[1].toLowerCase(Locale.ENGLISH).startsWith("c:"))
 		{
 			if (user.isAuthorized("essentials.sudo.exempt") && sender instanceof Player)
 			{

@@ -160,7 +160,7 @@ public class MetaItemStack
 			final IText input = new BookInput("book", true, ess);
 			final BookPager pager = new BookPager(input);
 
-			if (hasMetaPermission(sender, "chapter", true, true, ess) || hasMetaPermission(sender, "chapter-" + split[1].toLowerCase(), true, true, ess))
+			if (hasMetaPermission(sender, "chapter", true, true, ess) || hasMetaPermission(sender, "chapter-" + split[1].toLowerCase(Locale.ENGLISH), true, true, ess))
 			{
 				List<String> pages = pager.getPages(split[1]);
 				meta.setPages(pages);
@@ -349,7 +349,7 @@ public class MetaItemStack
 				pEffectType = Potions.getByName(split[1]);
 				if (pEffectType != null && pEffectType.getName() != null)
 				{
-					if (hasMetaPermission(sender, "potions." + pEffectType.getName().toLowerCase(), false, false, ess))
+					if (hasMetaPermission(sender, "potions." + pEffectType.getName().toLowerCase(Locale.ENGLISH), false, false, ess))
 					{
 						validPotionEffect = true;
 						canceledEffect = false;
@@ -357,7 +357,7 @@ public class MetaItemStack
 					else
 					{
 						canceledEffect = true;
-						sender.sendMessage(_("invalidPotionEffect", pEffectType.getName().toLowerCase()));
+						sender.sendMessage(_("invalidPotionEffect", pEffectType.getName().toLowerCase(Locale.ENGLISH)));
 					}
 				}
 				else
