@@ -1,9 +1,12 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Util;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 
 public class Commandunbanip extends EssentialsCommand
@@ -20,15 +23,30 @@ public class Commandunbanip extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		try
+		String ipAddress;
+		if (Util.validIP(args[0]))
+		{
+			ipAddress = args[0];
+		}
+		else
 		{
 			final User user = getPlayer(server, args, 0, true);
-			ess.getServer().unbanIP(user.getLastLoginAddress());
+			ipAddress = user.getLastLoginAddress();
+			if (ipAddress.isEmpty())
+			{
+				throw new PlayerNotFoundException();
+			}
 		}
-		catch (Exception ex)
+		
+		ess.getServer().unbanIP(ipAddress);
+		final String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
+		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
+			final User onlineUser = ess.getUser(onlinePlayer);
+			if (onlinePlayer == sender || onlineUser.isAuthorized("essentials.ban.notify"))
+			{
+				onlinePlayer.sendMessage(_("playerUnbanIpAddress", senderName, ipAddress));
+			}
 		}
-		ess.getServer().unbanIP(args[0]);
-		sender.sendMessage(_("unbannedIP"));
 	}
 }
