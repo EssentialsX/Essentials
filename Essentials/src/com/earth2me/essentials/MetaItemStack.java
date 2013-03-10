@@ -349,7 +349,7 @@ public class MetaItemStack
 				pEffectType = Potions.getByName(split[1]);
 				if (pEffectType != null)
 				{
-					if (!hasMetaPermission(sender, "potions." + pEffectType.getName().toLowerCase(), false, false, ess))
+					if (hasMetaPermission(sender, "potions." + pEffectType.getName().toLowerCase(), false, false, ess))
 					{
 						validPotionEffect = true;
 						canceledEffect = false;
