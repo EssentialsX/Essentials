@@ -49,7 +49,7 @@ public class Commandbanip extends EssentialsCommand
 			final User onlineUser = ess.getUser(onlinePlayer);
 			if (onlinePlayer == sender || onlineUser.isAuthorized("essentials.ban.notify"))
 			{
-				sender.sendMessage(_("playerBanIpAddress", senderName, ipAddress));
+				onlinePlayer.sendMessage(_("playerBanIpAddress", senderName, ipAddress));
 			}
 		}
 	}
