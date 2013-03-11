@@ -66,7 +66,6 @@ public class Commandessentials extends EssentialsCommand
 	//If you do not supply an argument this command will list 'overridden' commands.
 	private void run_disabled(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
-		sender.sendMessage("Essentials " + ess.getDescription().getVersion());
 		sender.sendMessage("/<command> <reload/debug>");
 
 		final StringBuilder disabledCommands = new StringBuilder();

@@ -351,13 +351,19 @@ public class Essentials extends JavaPlugin implements IEssentials
 			}
 
 			// New mail notification
-			if (user != null && !getSettings().isCommandDisabled("mail") && !commandLabel.equals("mail") && user.isAuthorized("essentials.mail"))
+			if (user != null && !getSettings().isCommandDisabled("mail") && !command.getName().equals("mail") && user.isAuthorized("essentials.mail"))
 			{
 				final List<String> mail = user.getMails();
 				if (mail != null && !mail.isEmpty())
 				{
 					user.sendMessage(_("youHaveNewMail", mail.size()));
 				}
+			}
+
+			//Print version even if admin command is not available
+			if (command.getName().equals("essentials"))
+			{
+				sender.sendMessage("This server is running Essentials " + getDescription().getVersion());
 			}
 
 			// Check for disabled commands
@@ -613,6 +619,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 	{
 		return this.getScheduler().runTaskAsynchronously(this, run);
 	}
+
 	@Override
 	public BukkitTask runTaskLaterAsynchronously(final Runnable run, final long delay)
 	{
