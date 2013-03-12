@@ -70,7 +70,8 @@ public class Commandban extends EssentialsCommand
 		
 		server.getLogger().log(Level.INFO, _("playerBanned", senderName, user.getName(), banReason));
 		
-		if (nomatch) {
+		if (nomatch)
+		{
 			sender.sendMessage(_("userUnknown", user.getName()));
 		}
 

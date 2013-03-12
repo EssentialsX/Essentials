@@ -4,6 +4,7 @@ import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import java.util.logging.Level;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -37,9 +38,11 @@ public class Commandunbanip extends EssentialsCommand
 				throw new PlayerNotFoundException();
 			}
 		}
-		
+
 		ess.getServer().unbanIP(ipAddress);
 		final String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
+		server.getLogger().log(Level.INFO, _("playerUnbanIpAddress", senderName, ipAddress));
+
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
 			final User onlineUser = ess.getUser(onlinePlayer);

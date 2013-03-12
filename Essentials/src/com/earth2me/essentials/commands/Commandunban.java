@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
+import java.util.logging.Level;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -41,8 +42,10 @@ public class Commandunban extends EssentialsCommand
 			}
 			player.setBanned(false);
 		}
-		
+
 		final String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
+		server.getLogger().log(Level.INFO, _("playerUnBanned", senderName, name));
+
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
 			final User onlineUser = ess.getUser(onlinePlayer);

@@ -40,7 +40,7 @@ public class Commandbanip extends EssentialsCommand
 				throw new Exception(_("playerNotFound"));
 			}
 		}
-		
+
 		ess.getServer().banIP(ipAddress);
 		server.getLogger().log(Level.INFO, _("playerBanIpAddress", senderName, ipAddress));
 
