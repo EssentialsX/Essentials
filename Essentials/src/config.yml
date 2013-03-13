@@ -284,9 +284,23 @@ backup:
 # Set this true to enable permission per warp.
 per-warp-permission: false
 
-# Sort output of /list command by groups.
-sort-list-by-groups: false
-
+# Sort output of /list command by groups.]
+# You are not allowed to have duplicate keys.
+list:
+  # this will merge the two groups owner and co-owner together in the list group "admin", 
+  # make sure you set the groups you merge to "hidden" to prevent duplicate names.
+  # this accepts a comma separated list, so simply separate the groups you want merged together with a comma.
+  # like this:
+  Admin: owner, admin
+  # Setting the value to hidden will hide these from /list, they will still show on /list <groupname>
+  # If a group is already defined as a merged group, then you don't need to set it to hidden, so in this case "admin" is automatically hidden.
+  # And they will also show in merged groups, like the ones above.
+  Owner: hidden
+  # Setting the value to a number limits the group.
+  # When there are more users online in the group than your limit it will truncate it to a simple, configurable message,
+  # The message will state how many users are online in that group and how to see a list of users in that group.
+  default: 20
+  
 # More output to the console.
 debug: false
 

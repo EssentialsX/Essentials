@@ -76,8 +76,6 @@ public interface ISettings extends IConf
 
 	int getHomeLimit(User user);
 
-	boolean getSortListByGroups();
-
 	int getSpawnMobLimit();
 
 	int getStartingBalance();
@@ -191,4 +189,6 @@ public interface ISettings extends IConf
 	public void setEssentialsChatActive(boolean b);
 
 	long getMaxTempban();
+	
+	public Map<String, Object> getListGroupConfig();
 }

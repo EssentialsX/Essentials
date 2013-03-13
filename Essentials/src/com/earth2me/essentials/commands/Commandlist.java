@@ -40,7 +40,7 @@ public class Commandlist extends EssentialsCommand
 			}
 		}
 
-		String online;
+		String online; 
 		if (showhidden && playerHidden > 0)
 		{
 			online = _("listAmountHidden", server.getOnlinePlayers().length - playerHidden, playerHidden, server.getMaxPlayers());
@@ -51,99 +51,188 @@ public class Commandlist extends EssentialsCommand
 		}
 		sender.sendMessage(online);
 
-		if (ess.getSettings().getSortListByGroups())
+
+		Map<String, List<User>> sort = new HashMap<String, List<User>>();
+		for (Player OnlinePlayer : server.getOnlinePlayers())
 		{
-			Map<String, List<User>> sort = new HashMap<String, List<User>>();
-			for (Player OnlinePlayer : server.getOnlinePlayers())
+			final User player = ess.getUser(OnlinePlayer);
+			if (player.isHidden() && !showhidden)
 			{
-				final User player = ess.getUser(OnlinePlayer);
-				if (player.isHidden() && !showhidden)
+				continue;
+			}
+			final String group = player.getGroup().toLowerCase();
+			List<User> list = sort.get(group);
+			if (list == null)
+			{
+				list = new ArrayList<User>();
+				sort.put(group, list);
+			}
+			list.add(player);
+		}
+		final StringBuilder groupString = new StringBuilder();
+		Set<String> keys = ess.getSettings().getListGroupConfig().keySet();
+		if (args.length > 0)
+		{
+			final List<User> users = new ArrayList<User>();
+			String group = args[0].toLowerCase();
+			for (String key : keys)
+			{
+				String groupValue = ess.getSettings().getListGroupConfig().get(key).toString().trim();
+				if(key.equalsIgnoreCase(group) && groupValue.contains(","))
+				{
+					String[] groups = groupValue.split(",");
+					for (String g : groups)
+					{
+						if (g == null || g.equals(""))
+						{
+							continue;
+						}
+						List<User> u = sort.get(g.trim());
+						if (u == null || u.isEmpty())
+						{
+							continue;
+						}
+						users.addAll(u);
+					}
+				}
+			}
+			List<User> groupUsers = sort.get(group);
+			if (groupUsers != null && !groupUsers.isEmpty())
+			{
+				users.addAll(groupUsers);
+			}
+			if (users == null || users.isEmpty())
+			{
+				throw new Exception(_("groupDoesNotExist"));
+			}
+			groupString.append(_("listGroupTag", Util.replaceFormat(group)));
+			groupString.append(listUsers(users));
+			groupString.setCharAt(0, Character.toTitleCase(groupString.charAt(0)));
+			sender.sendMessage(groupString.toString());
+			groupString.setLength(0);
+		}
+		else
+		{
+			Map<String, String> usedGroups = new HashMap();
+			for (String group : keys)
+			{
+				boolean userLimit = false;
+				String groupValue = ess.getSettings().getListGroupConfig().get(group).toString().trim();
+				usedGroups.put(group.toLowerCase(), groupValue);
+				if (groupValue.equals("hidden"))
 				{
 					continue;
 				}
-				final String group = player.getGroup();
-				List<User> list = sort.get(group);
-				if (list == null)
+				if (Util.isInt(groupValue))
 				{
-					list = new ArrayList<User>();
-					sort.put(group, list);
+					userLimit = true;
 				}
-				list.add(player);
+				group = group.toLowerCase();
+				final List<User> users = new ArrayList<User>();
+				List<User> u = sort.get(group);
+				if (u != null && !u.isEmpty())
+				{
+					users.addAll(u);
+					if (userLimit)
+					{
+						int limit = Integer.parseInt(groupValue);
+						if (u.size() > limit)
+						{
+							groupString.append(_("listGroupTag", Util.replaceFormat(group)));
+							groupString.append(_("groupNumber", u.size(), commandLabel, group));
+							groupString.setCharAt(0, Character.toTitleCase(groupString.charAt(0)));
+							sender.sendMessage(groupString.toString());
+							groupString.setLength(0);
+							continue;
+						}
+					}
+				}
+
+				if (groupValue.contains(",") || sort.containsKey(groupValue.toLowerCase()))
+				{
+					if (sort.containsKey(groupValue))
+					{
+						u = sort.get(groupValue);
+						if (u == null || u.isEmpty())
+						{
+							continue;
+						}
+						users.addAll(u);
+					} 
+					else 
+					{
+						String[] groups = groupValue.split(",");
+						for (String g : groups)
+						{
+							if (g == null || g.equals(""))
+							{
+								continue;
+							}
+							u = sort.get(g.trim());
+							if (u == null || u.isEmpty())
+							{
+								continue;
+							}
+							users.addAll(u);
+						}
+					}
+				}
+				if (users == null || users.isEmpty())
+				{
+					continue;
+				}
+				groupString.append(_("listGroupTag", Util.replaceFormat(group)));
+				groupString.append(listUsers(users));
+				groupString.setCharAt(0, Character.toTitleCase(groupString.charAt(0)));
+				sender.sendMessage(groupString.toString());
+				groupString.setLength(0);
 			}
 			final String[] groups = sort.keySet().toArray(new String[0]);
 			Arrays.sort(groups, String.CASE_INSENSITIVE_ORDER);
 			for (String group : groups)
 			{
-				final StringBuilder groupString = new StringBuilder();
-				groupString.append(_("listGroupTag", Util.replaceFormat(group)));
-				final List<User> users = sort.get(group);
-				Collections.sort(users);
-				boolean first = true;
-				for (User user : users)
-				{
-					if (!first)
-					{
-						groupString.append(", ");
-					}
-					else
-					{
-						first = false;
-					}
-					if (user.isAfk())
-					{
-						groupString.append(_("listAfkTag"));
-					}
-					if (user.isHidden())
-					{
-						groupString.append(_("listHiddenTag"));
-					}
-					user.setDisplayNick();
-					groupString.append(user.getDisplayName());
-					groupString.append("§f");
-				}
-				sender.sendMessage(groupString.toString());
-			}
-		}
-		else
-		{
-			final List<User> users = new ArrayList<User>();
-			for (Player OnlinePlayer : server.getOnlinePlayers())
-			{
-				final User player = ess.getUser(OnlinePlayer);
-				if (player.isHidden() && !showhidden)
+				group = group.toLowerCase();
+				if (usedGroups.containsKey(group))
 				{
 					continue;
 				}
-				users.add(player);
+				groupString.append(_("listGroupTag", Util.replaceFormat(group)));
+				final List<User> users = sort.get(group);
+				groupString.append(listUsers(users));
+				groupString.setCharAt(0, Character.toTitleCase(groupString.charAt(0)));
+				sender.sendMessage(groupString.toString());
+				groupString.setLength(0);
 			}
-			Collections.sort(users);
-
-			final StringBuilder onlineUsers = new StringBuilder();
-			onlineUsers.append(_("connectedPlayers"));
-			boolean first = true;
-			for (User user : users)
-			{
-				if (!first)
-				{
-					onlineUsers.append(", ");
-				}
-				else
-				{
-					first = false;
-				}
-				if (user.isAfk())
-				{
-					onlineUsers.append(_("listAfkTag"));
-				}
-				if (user.isHidden())
-				{
-					onlineUsers.append(_("listHiddenTag"));
-				}
-				user.setDisplayNick();
-				onlineUsers.append(user.getDisplayName());
-				onlineUsers.append("§f");
-			}
-			sender.sendMessage(onlineUsers.toString());
 		}
+	}
+
+	private String listUsers(List<User> users)
+	{
+		final StringBuilder groupString = new StringBuilder();
+		Collections.sort(users);
+		boolean first = true;
+		for (User user : users)
+		{
+			if (!first)
+			{
+				groupString.append(", ");
+			}
+			else
+			{
+				first = false;
+			}
+			if (user.isAfk())
+			{
+				groupString.append(_("listAfkTag"));
+			}
+			if (user.isHidden())
+			{
+				groupString.append(_("listHiddenTag"));
+			}
+			user.setDisplayNick();
+			groupString.append(user.getDisplayName());
+			groupString.append("§f");
+		}
+		return groupString.toString();
 	}
 }
