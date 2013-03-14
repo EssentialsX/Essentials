@@ -213,3 +213,10 @@ v 2.0:
 	- Prevent '*' permissions granting the 'groupmanager.noofflineperms' permission.
 	- Added '/mancheckw <world>' to inspect which permission files a world is referencing.
 	- Add config potion to set if GM commands should be allowed on CommnandBlocks.
+	- Catch the error when using an out of date config for 'allow_commandblocks' So it doesn't kill the whole config.
+	- '/manselect' will no longer list duplicate worlds.
+	- Added a new mirroring option in the config of 'all_unnamed_worlds'. This will cause all new or unnamed worlds to use this mirroring.
+	- Don't allow adding a node with '/manuaddp' and '/mangaddp' which is already negated.
+	- Warn when adding a node where an exception already exist.
+	- Only prevent adding nodes with '/manuaddp' and '/mangaddp' if they are exact matches (not wildcards).
+	- Store worldSelection indexed on the senders name rather than the object (fixes commandblocks using manselect).

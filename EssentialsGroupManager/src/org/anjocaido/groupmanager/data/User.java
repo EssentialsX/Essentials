@@ -144,7 +144,7 @@ public class User extends DataUnit implements Cloneable {
 			boolean notify = (!oldGroup.equalsIgnoreCase(defaultGroupName)) || ((oldGroup.equalsIgnoreCase(defaultGroupName)) && (!this.group.equalsIgnoreCase(defaultGroupName)));
 
 			if (notify)
-				GroupManager.notify(this.getName(), String.format(" moved to the group %s.", group.getName()));
+				GroupManager.notify(this.getName(), String.format(" moved to the group %s in %s.", group.getName(), this.getDataSource().getName()));
 
 			GroupManager.getGMEventHandler().callEvent(this, Action.USER_GROUP_CHANGED);
 		}

@@ -59,6 +59,28 @@ public class WorldsHolder {
 		resetWorldsHolder();
 	}
 	
+	/**
+	 * @return the mirrorsGroup
+	 */
+	public Map<String, String> getMirrorsGroup() {
+	
+		return mirrorsGroup;
+	}
+
+	
+	/**
+	 * @return the mirrorsUser
+	 */
+	public Map<String, String> getMirrorsUser() {
+	
+		return mirrorsUser;
+	}
+	
+	public boolean isWorldKnown(String name) {
+		
+		return worldsData.containsKey(name.toLowerCase());
+	}
+	
 	public void resetWorldsHolder() {
 		
 		worldsData = new HashMap<String, OverloadedWorldHolder>();
@@ -92,33 +114,46 @@ public class WorldsHolder {
 	private void loadAllSearchedWorlds() {
 
 		/*
-		 * Read all known worlds from Bukkit
-		 * Create the data files if they don't already exist,
-		 * and they are not mirrored.
+		 * Read all known worlds from Bukkit Create the data files if they don't
+		 * already exist, and they are not mirrored.
 		 */
-		for (World world : plugin.getServer().getWorlds()){
+		for (World world : plugin.getServer().getWorlds()) {
 			GroupManager.logger.log(Level.FINE, "Checking data for " + world.getName() + ".");
 			if ((!worldsData.containsKey(world.getName().toLowerCase())) && ((!mirrorsGroup.containsKey(world.getName().toLowerCase())) || (!mirrorsUser.containsKey(world.getName().toLowerCase())))) {
+
+				if (worldsData.containsKey("all_unnamed_worlds")) {
+					
+					String usersMirror = mirrorsUser.get("all_unnamed_worlds");
+					String groupsMirror = mirrorsGroup.get("all_unnamed_worlds");
+					
+					if (usersMirror != null)
+						mirrorsUser.put(world.getName().toLowerCase(), usersMirror);
+					
+					if (groupsMirror != null)
+						mirrorsGroup.put(world.getName().toLowerCase(), groupsMirror);
+					
+				}
+				
 				GroupManager.logger.log(Level.FINE, "Creating folders for " + world.getName() + ".");
 				setupWorldFolder(world.getName());
 			}
 		}
 		/*
-		 * Loop over all folders within the worlds folder
-		 * and attempt to load the world data
+		 * Loop over all folders within the worlds folder and attempt to load
+		 * the world data
 		 */
 		for (File folder : worldsFolder.listFiles()) {
 			if (folder.isDirectory() && !folder.getName().startsWith(".")) {
 				GroupManager.logger.info("World Found: " + folder.getName());
 
 				/*
-				 * don't load any worlds which are already loaded
-				 * or fully mirrored worlds that don't need data.
+				 * don't load any worlds which are already loaded or fully
+				 * mirrored worlds that don't need data.
 				 */
 				if (!worldsData.containsKey(folder.getName().toLowerCase()) && ((!mirrorsGroup.containsKey(folder.getName().toLowerCase())) || (!mirrorsUser.containsKey(folder.getName().toLowerCase())))) {
 					/*
-					 * Call setupWorldFolder to check case sensitivity
-					 * and convert to lower case, before we attempt to load this
+					 * Call setupWorldFolder to check case sensitivity and
+					 * convert to lower case, before we attempt to load this
 					 * world.
 					 */
 					setupWorldFolder(folder.getName());
@@ -383,8 +418,14 @@ public class WorldsHolder {
 		// Find this worlds data
 		if (worldsData.containsKey(worldNameLowered))
 			return getUpdatedWorldData(worldNameLowered);
-
-		// Oddly no data source was found for this world so return the default.
+		
+		// Oddly no data source was found for this world so attempt to return the global mirror.
+		if (worldsData.containsKey("all_unnamed_worlds")) {
+			GroupManager.logger.finest("Requested world " + worldName + " not found or badly mirrored. Returning all_unnamed_worlds world...");
+			return getUpdatedWorldData("all_unnamed_worlds");
+		}
+		
+		// Oddly no data source or global mirror was found for this world so return the default.
 		GroupManager.logger.finest("Requested world " + worldName + " not found or badly mirrored. Returning default world...");
 		return getDefaultWorld();
 	}
@@ -699,41 +740,53 @@ public class WorldsHolder {
 	}
 
 	/**
-	 * Returns all physically loaded worlds which have at least
-	 * one of their own data sets for users or groups which isn't an identical mirror.
+	 * Returns all physically loaded worlds which have at least one of their own
+	 * data sets for users or groups which isn't an identical mirror.
 	 * 
 	 * @return ArrayList<OverloadedWorldHolder> of all loaded worlds
 	 */
 	public ArrayList<OverloadedWorldHolder> allWorldsDataList() {
 
 		ArrayList<OverloadedWorldHolder> list = new ArrayList<OverloadedWorldHolder>();
-		for (OverloadedWorldHolder data : worldsData.values()) {
-			if ((!list.contains(data))) { // && (!mirrorsGroup.containsKey(data.getName().toLowerCase()) || !mirrorsUser.containsKey(data.getName().toLowerCase()))) {
 
-				String worldNameLowered = data.getName().toLowerCase();
-				String usersMirror = mirrorsUser.get(worldNameLowered);
-				String groupsMirror = mirrorsGroup.get(worldNameLowered);
+		for (String world : worldsData.keySet()) {
 
-				// is users mirrored?
-				if (usersMirror != null) {
+			if (!world.equalsIgnoreCase("all_unnamed_worlds")) {
+				
+				// Fetch the relevant world object
+				OverloadedWorldHolder data = getWorldData(world);
 
-					// If both are mirrored
-					if (groupsMirror != null) {
+				if (!list.contains(data)) {
 
-						// if the data sources are the same, return the parent
-						if (usersMirror == groupsMirror) {
-							if (!list.contains(usersMirror.toLowerCase()))
-								list.add(worldsData.get(usersMirror.toLowerCase()));
-							continue;
+					String worldNameLowered = data.getName().toLowerCase();
+					String usersMirror = mirrorsUser.get(worldNameLowered);
+					String groupsMirror = mirrorsGroup.get(worldNameLowered);
+
+					// is users mirrored?
+					if (usersMirror != null) {
+
+						// If both are mirrored
+						if (groupsMirror != null) {
+
+							// if the data sources are the same, return the parent
+							if (usersMirror == groupsMirror) {
+								data = getWorldData(usersMirror.toLowerCase());
+
+								// Only add the parent if it's not already listed.
+								if (!list.contains(data))
+									list.add(data);
+
+								continue;
+							}
+							// Both data sources are mirrors, but they are from different parents
+							// so fall through to add the actual data object.
 						}
-						// Both data sources are mirrors, but they are from different parents
-						// so fall through to add the actual data object.
+						// Groups isn't a mirror so fall through to add this this worlds data source
 					}
-					// Groups isn't a mirror so fall through to add this this worlds data source
-				}
 
-				// users isn't mirrored so we need to add this worlds data source
-				list.add(data);
+					// users isn't mirrored so we need to add this worlds data source
+					list.add(data);
+				}
 			}
 		}
 		return list;

@@ -195,7 +195,7 @@ groups:
     - essentials.fly.safelogin
     - essentials.getpos
     - essentials.getpos.others
-    - essentials.helpop.recieve
+    - essentials.helpop.receive
     - essentials.home.others
     - essentials.invsee
     - essentials.jails
