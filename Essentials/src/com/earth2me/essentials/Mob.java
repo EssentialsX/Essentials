@@ -46,6 +46,10 @@ public enum Mob
 	WITCH("Witch", Enemies.ENEMY, EntityType.WITCH),
 	BOAT("Boat", Enemies.NEUTRAL, EntityType.BOAT),
 	MINECART("Minecart", Enemies.NEUTRAL, EntityType.MINECART),
+    MINECART_CHEST("ChestMinecart", Enemies.NEUTRAL, EntityType.MINECART_CHEST),
+    MINECART_FURNACE("FurnaceMinecart", Enemies.NEUTRAL, EntityType.MINECART_FURNACE),
+    MINECART_TNT("TNTMinecart", Enemies.NEUTRAL, EntityType.MINECART_TNT),
+    MINECART_HOPPER("HopperMinecart", Enemies.NEUTRAL, EntityType.MINECART_HOPPER),
 	ENDERCRYSTAL("EnderCrystal", Enemies.NEUTRAL, EntityType.ENDER_CRYSTAL),
 	EXPERIENCEORB("ExperienceOrb", Enemies.NEUTRAL, EntityType.EXPERIENCE_ORB);
 	public static final Logger logger = Logger.getLogger("Minecraft");
