@@ -27,6 +27,8 @@ public enum ProtectConfig
 	prevent_block_on_rail("protect.protect.prevent-block-on-rails", false),
 	prevent_tnt_explosion("protect.prevent.tnt-explosion", false),
 	prevent_tnt_playerdmg("protect.prevent.tnt-playerdamage", false),
+	prevent_tntminecart_explosion("protect.prevent.tnt-minecart-explosion", false),
+	prevent_tntminecart_playerdmg("protect.prevent.tnt-minecart-playerdamage", false),
 	prevent_fireball_explosion("protect.prevent.fireball-explosion", false),
 	prevent_fireball_fire("protect.prevent.fireball-fire", false),
 	prevent_fireball_playerdmg("protect.prevent.fireball-playerdamage", false),

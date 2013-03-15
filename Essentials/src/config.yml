@@ -510,6 +510,8 @@ protect:
     portal-creation: false
     tnt-explosion: false
     tnt-playerdamage: false
+    tnt-minecart-explosion: false
+    tnt-minecart-playerdamage: false
     fireball-explosion: false
     fireball-fire: false
     fireball-playerdamage: false
