@@ -284,7 +284,7 @@ backup:
 # Set this true to enable permission per warp.
 per-warp-permission: false
 
-# Sort output of /list command by groups.]
+# Sort output of /list command by groups.
 # You are not allowed to have duplicate keys.
 list:
   # this will merge the two groups owner and co-owner together in the list group "admin", 

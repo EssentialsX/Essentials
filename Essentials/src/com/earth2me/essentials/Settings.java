@@ -461,7 +461,9 @@ public class Settings implements ISettings
 		{ 
 			return config.getConfigurationSection("list").getValues(false);
 		}
-		return new HashMap<String, Object>();
+		Map<String, Object> defaultMap = new HashMap<String, Object>();
+		defaultMap.put("User", "*");
+		return defaultMap;
 	}
 
 	@Override

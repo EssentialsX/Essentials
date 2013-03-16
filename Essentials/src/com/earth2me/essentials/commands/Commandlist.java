@@ -71,8 +71,10 @@ public class Commandlist extends EssentialsCommand
 		}
 		final StringBuilder groupString = new StringBuilder();
 		Set<String> keys = ess.getSettings().getListGroupConfig().keySet();
+		
 		if (args.length > 0)
 		{
+			
 			final List<User> users = new ArrayList<User>();
 			String group = args[0].toLowerCase();
 			for (String key : keys)
@@ -113,12 +115,21 @@ public class Commandlist extends EssentialsCommand
 		}
 		else
 		{
-			Map<String, String> usedGroups = new HashMap();
+			List<String> usedGroups = new ArrayList<String>();
+			List<String> usedGroupsAsterisk = new ArrayList<String>();
+			Map<String, Boolean> asterisk = new HashMap<String, Boolean>();
+			boolean hasAsterisk = false;
 			for (String group : keys)
 			{
 				boolean userLimit = false;
 				String groupValue = ess.getSettings().getListGroupConfig().get(group).toString().trim();
-				usedGroups.put(group.toLowerCase(), groupValue);
+				if (groupValue.equals("*"))
+				{
+					asterisk.put(group, true);
+					hasAsterisk = true;
+					continue;
+				}
+				usedGroups.add(group.toLowerCase());
 				if (groupValue.equals("hidden"))
 				{
 					continue;
@@ -132,9 +143,10 @@ public class Commandlist extends EssentialsCommand
 				List<User> u = sort.get(group);
 				if (u != null && !u.isEmpty())
 				{
-					users.addAll(u);
+					
 					if (userLimit)
 					{
+						users.addAll(u);
 						int limit = Integer.parseInt(groupValue);
 						if (u.size() > limit)
 						{
@@ -158,28 +170,35 @@ public class Commandlist extends EssentialsCommand
 							continue;
 						}
 						users.addAll(u);
+						usedGroupsAsterisk.add(groupValue);
 					} 
-					else 
+					else
 					{
 						String[] groups = groupValue.split(",");
 						for (String g : groups)
 						{
+							g = g.trim().toLowerCase();
 							if (g == null || g.equals(""))
 							{
 								continue;
 							}
-							u = sort.get(g.trim());
+							u = sort.get(g);
 							if (u == null || u.isEmpty())
 							{
 								continue;
 							}
 							users.addAll(u);
+							usedGroupsAsterisk.add(g);
 						}
 					}
 				}
 				if (users == null || users.isEmpty())
 				{
 					continue;
+				}
+				if (ess.getPermissionsHandler().getName().equals("ConfigPermissions"))
+				{
+					group = _("connectedPlayers");
 				}
 				groupString.append(_("listGroupTag", Util.replaceFormat(group)));
 				groupString.append(listUsers(users));
@@ -189,19 +208,59 @@ public class Commandlist extends EssentialsCommand
 			}
 			final String[] groups = sort.keySet().toArray(new String[0]);
 			Arrays.sort(groups, String.CASE_INSENSITIVE_ORDER);
+			List<User> asteriskUsers = new ArrayList<User>();
+			String asteriskGroup = "";
+			if (hasAsterisk)
+			{
+				for(String key : asterisk.keySet())
+				{
+					if (asterisk.get(key) == true)
+					{
+						asteriskGroup = key.toLowerCase();
+						for (String group : groups)
+						{
+							group = group.toLowerCase().trim();
+							if (usedGroups.contains(group) || usedGroupsAsterisk.contains(group))
+							{
+								continue;
+							}
+							asteriskUsers.addAll(sort.get(group));
+						}
+					}
+				}
+			}
 			for (String group : groups)
 			{
-				group = group.toLowerCase();
-				if (usedGroups.containsKey(group))
+				group = group.toLowerCase().trim();
+				if (usedGroups.contains(group))
 				{
 					continue;
 				}
+				List<User> users = sort.get(group);
+
+				if (ess.getPermissionsHandler().getName().equals("ConfigPermissions"))
+				{
+					group = _("connectedPlayers");
+				}
+				if (hasAsterisk)
+				{
+					if (asteriskUsers == null || asteriskUsers.isEmpty())
+					{
+						break;
+					}
+					users = asteriskUsers;
+					group = asteriskGroup;
+				}
 				groupString.append(_("listGroupTag", Util.replaceFormat(group)));
-				final List<User> users = sort.get(group);
+				
 				groupString.append(listUsers(users));
 				groupString.setCharAt(0, Character.toTitleCase(groupString.charAt(0)));
 				sender.sendMessage(groupString.toString());
 				groupString.setLength(0);
+				if (hasAsterisk)
+				{
+					break;
+				}
 			}
 		}
 	}
