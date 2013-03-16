@@ -4,6 +4,7 @@ import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import java.util.Locale;
 import org.bukkit.entity.*;
+import org.bukkit.entity.minecart.ExplosiveMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -102,14 +103,14 @@ public class EssentialsProtectEntityListener implements Listener
 				event.setCancelled(true);
 				return;
 			}
-			
-			if (eAttack instanceof MinecartTNT && prot.getSettingBool(ProtectConfig.prevent_tntminecart_playerdmg)
+
+			if (eAttack instanceof ExplosiveMinecart && prot.getSettingBool(ProtectConfig.prevent_tntminecart_playerdmg)
 				&& !(target instanceof Player && shouldBeDamaged(user, "tnt-minecart")))
 			{
 				event.setCancelled(true);
 				return;
 			}
-			
+
 			// PVP Settings
 			if (target instanceof Player && eAttack instanceof Player
 				&& prot.getSettingBool(ProtectConfig.disable_pvp)
@@ -223,25 +224,25 @@ public class EssentialsProtectEntityListener implements Listener
 				 && prot.getSettingBool(ProtectConfig.prevent_tnt_explosion))
 		{
 			event.setCancelled(true);
-			
+
 		}
 		else if ((entity instanceof Fireball || entity instanceof SmallFireball)
 				 && prot.getSettingBool(ProtectConfig.prevent_fireball_explosion))
 		{
 			event.setCancelled(true);
-			
+
 		}
 		else if ((entity instanceof WitherSkull)
 				 && prot.getSettingBool(ProtectConfig.prevent_witherskull_explosion))
 		{
 			event.setCancelled(true);
 		}
-		else if ((entity instanceof MinecartTNT)
+		else if ((entity instanceof ExplosiveMinecart)
 				 && prot.getSettingBool(ProtectConfig.prevent_tntminecart_explosion))
 		{
 			event.setCancelled(true);
 		}
-		
+
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -317,10 +318,10 @@ public class EssentialsProtectEntityListener implements Listener
 	public void onPaintingBreak(HangingBreakByEntityEvent event)
 	{
 		if ((event.getCause() == HangingBreakEvent.RemoveCause.ENTITY)
-			&& ((event.getRemover() instanceof Creeper) && prot.getSettingBool(ProtectConfig.prevent_creeper_explosion) 
-			|| (((event.getRemover() instanceof Fireball) || (event.getRemover() instanceof SmallFireball)) && prot.getSettingBool(ProtectConfig.prevent_fireball_explosion))
-			|| ((event.getRemover() instanceof TNTPrimed) && prot.getSettingBool(ProtectConfig.prevent_tnt_explosion))
-			|| ((event.getRemover() instanceof WitherSkull) && prot.getSettingBool(ProtectConfig.prevent_witherskull_explosion))))
+			&& ((event.getRemover() instanceof Creeper) && prot.getSettingBool(ProtectConfig.prevent_creeper_explosion)
+				|| (((event.getRemover() instanceof Fireball) || (event.getRemover() instanceof SmallFireball)) && prot.getSettingBool(ProtectConfig.prevent_fireball_explosion))
+				|| ((event.getRemover() instanceof TNTPrimed) && prot.getSettingBool(ProtectConfig.prevent_tnt_explosion))
+				|| ((event.getRemover() instanceof WitherSkull) && prot.getSettingBool(ProtectConfig.prevent_witherskull_explosion))))
 		{
 			event.setCancelled(true);
 		}
