@@ -47,6 +47,7 @@ public class Potions
 		ALIASPOTIONS.put("instaheal", PotionEffectType.HEAL);
 		
 		POTIONS.put("harm", PotionEffectType.HARM);
+		ALIASPOTIONS.put("harming", PotionEffectType.HARM);
 		ALIASPOTIONS.put("injure", PotionEffectType.HARM);
 		ALIASPOTIONS.put("damage", PotionEffectType.HARM);
 		ALIASPOTIONS.put("inflict", PotionEffectType.HARM);

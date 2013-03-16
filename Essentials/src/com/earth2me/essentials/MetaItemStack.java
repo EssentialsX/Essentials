@@ -349,21 +349,18 @@ public class MetaItemStack
 				pEffectType = Potions.getByName(split[1]);
 				if (pEffectType != null && pEffectType.getName() != null)
 				{
-					if (hasMetaPermission(sender, "potions." + pEffectType.getName().toLowerCase(Locale.ENGLISH), false, false, ess))
+					if (hasMetaPermission(sender, "potions." + pEffectType.getName().toLowerCase(Locale.ENGLISH), true, false, ess))
 					{
 						validPotionEffect = true;
-						canceledEffect = false;
 					}
 					else
 					{
-						canceledEffect = true;
-						sender.sendMessage(_("invalidPotionEffect", pEffectType.getName().toLowerCase(Locale.ENGLISH)));
+						throw new Exception(_("noPotionEffectPerm", pEffectType.getName().toLowerCase(Locale.ENGLISH)));
 					}
 				}
 				else
 				{
-					sender.sendMessage(_("invalidPotionEffect", split[1]));
-					canceledEffect = true;
+					throw new Exception(_("invalidPotionEffect", split[1]));
 				}
 			}
 			else if (split[0].equalsIgnoreCase("power") || (allowShortName && split[0].equalsIgnoreCase("p")))
@@ -383,7 +380,7 @@ public class MetaItemStack
 				}
 			}
 
-			if (isValidPotion() && !canceledEffect)
+			if (isValidPotion())
 			{
 				PotionMeta pmeta = (PotionMeta)stack.getItemMeta();
 				pEffect = pEffectType.createEffect(duration, power);
