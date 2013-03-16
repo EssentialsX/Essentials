@@ -11,8 +11,8 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.*;
 import org.bukkit.entity.Skeleton.SkeletonType;
+import org.bukkit.entity.*;
 import org.bukkit.material.Colorable;
 
 

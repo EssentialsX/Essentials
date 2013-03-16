@@ -1,7 +1,9 @@
 package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.textreader.*;
+import com.earth2me.essentials.textreader.BookInput;
+import com.earth2me.essentials.textreader.BookPager;
+import com.earth2me.essentials.textreader.IText;
 import java.util.*;
 import java.util.regex.Pattern;
 import org.bukkit.Color;
@@ -12,7 +14,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
-import org.bukkit.potion.*;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 
 public class MetaItemStack
@@ -28,7 +31,6 @@ public class MetaItemStack
 	private boolean validPotionEffect = false;
 	private boolean validPotionDuration = false;
 	private boolean validPotionPower = false;
-	private boolean canceledEffect = false;
 	private boolean completePotion = false;
 	private int power = 1;
 	private int duration = 120;
