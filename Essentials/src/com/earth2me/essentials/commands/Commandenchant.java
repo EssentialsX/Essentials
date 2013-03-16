@@ -9,6 +9,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -26,7 +27,7 @@ public class Commandenchant extends EssentialsCommand
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		final ItemStack stack = user.getItemInHand();
-		if (stack == null)
+		if (stack == null || stack.getType() == Material.AIR)
 		{
 			throw new Exception(_("nothingInHand"));
 		}

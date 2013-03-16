@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import java.util.logging.Level;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -11,7 +12,7 @@ import org.bukkit.event.server.PluginEnableEvent;
 public class EssentialsPluginListener implements Listener, IConf
 {
 	private final transient IEssentials ess;
-	
+
 	public EssentialsPluginListener(final IEssentials ess)
 	{
 		this.ess = ess;
@@ -20,7 +21,8 @@ public class EssentialsPluginListener implements Listener, IConf
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPluginEnable(final PluginEnableEvent event)
 	{
-		if (event.getPlugin().getName().equals("EssentialsChat")) {
+		if (event.getPlugin().getName().equals("EssentialsChat"))
+		{
 			ess.getSettings().setEssentialsChatActive(true);
 		}
 		ess.getPermissionsHandler().checkPermissions();
@@ -31,10 +33,31 @@ public class EssentialsPluginListener implements Listener, IConf
 		}
 	}
 
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void cleanupOpenInventories(final PluginDisableEvent event)
+	{
+		for (Player player : ess.getServer().getOnlinePlayers())
+		{
+			User user = ess.getUser(player);
+			if (user.isRecipeSee())
+			{				
+				user.getPlayer().getOpenInventory().getTopInventory().clear();
+				user.getPlayer().getOpenInventory().close();
+				user.setRecipeSee(false);
+			}
+			if (user.isInvSee())
+			{
+				user.getPlayer().getOpenInventory().close();
+				user.setInvSee(false);
+			}
+		}
+	}
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPluginDisable(final PluginDisableEvent event)
 	{
-		if (event.getPlugin().getName().equals("EssentialsChat")) {
+		if (event.getPlugin().getName().equals("EssentialsChat"))
+		{
 			ess.getSettings().setEssentialsChatActive(false);
 		}
 		ess.getPermissionsHandler().checkPermissions();
