@@ -42,6 +42,11 @@ public class Commandpotion extends EssentialsCommand
 			}
 			throw new NotEnoughArgumentsException(_("potions", Util.joinList(potionslist.toArray())));
 		}
+		
+		if (args.length < 3)
+		{
+			throw new NotEnoughArgumentsException();
+		}
 
 		if (stack.getType() == Material.POTION)
 		{
