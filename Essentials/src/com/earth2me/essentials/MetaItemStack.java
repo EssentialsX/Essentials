@@ -362,7 +362,7 @@ public class MetaItemStack
 				}
 				else
 				{
-					throw new Exception(_("invalidPotionEffect", split[1]));
+					throw new Exception(_("invalidPotionMeta", split[1]));
 				}
 			}
 			else if (split[0].equalsIgnoreCase("power") || (allowShortName && split[0].equalsIgnoreCase("p")))
@@ -371,6 +371,14 @@ public class MetaItemStack
 				{
 					validPotionPower = true;
 					power = Integer.parseInt(split[1]);
+					if (power > 0 && power < 4)
+					{
+						power -= 1;
+					}
+				}
+				else
+				{
+					throw new Exception(_("invalidPotionMeta", split[1]));
 				}
 			}
 			else if (split[0].equalsIgnoreCase("duration") || (allowShortName && split[0].equalsIgnoreCase("d")))
@@ -379,6 +387,10 @@ public class MetaItemStack
 				{
 					validPotionDuration = true;
 					duration = Integer.parseInt(split[1]) * 20; //Duration is in ticks by default, converted to seconds
+				}
+				else
+				{
+					throw new Exception(_("invalidPotionMeta", split[1]));
 				}
 			}
 
