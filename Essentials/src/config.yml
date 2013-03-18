@@ -290,11 +290,13 @@ per-warp-permission: false
 list:
     # To merge groups, list the groups you wish to merge
     #Staff: owner, admin, moderators
+    Admins: owner, admin
     # To limit groups, set a max user limit
     #builder: 20
     # To hide groups, set the group as hidden
     #default: hidden
-    Players: '*'
+    # Uncomment the line below to simply list all players with no grouping
+    #Players: '*'
   
 # More output to the console.
 debug: false
