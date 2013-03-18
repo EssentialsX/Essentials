@@ -285,8 +285,19 @@ backup:
 per-warp-permission: false
 
 # Sort output of /list command by groups.
-sort-list-by-groups: false
-
+# You can hide and merge the groups displayed in /list by defining the desired behaviour here.
+# Detailed instructions and examples can be found on the wiki: http://wiki.ess3.net/wiki/List
+list:
+    # To merge groups, list the groups you wish to merge
+    #Staff: owner, admin, moderators
+    Admins: owner, admin
+    # To limit groups, set a max user limit
+    #builder: 20
+    # To hide groups, set the group as hidden
+    #default: hidden
+    # Uncomment the line below to simply list all players with no grouping
+    #Players: '*'
+  
 # More output to the console.
 debug: false
 

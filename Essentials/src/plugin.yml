@@ -220,7 +220,7 @@ commands:
     aliases: [elightning,shock,eshock,smite,esmite,strike,estrike,thor,ethor]
   list:
     description: List all online players.
-    usage: /<command>
+    usage: /<command> [group]
     aliases: [elist,online,eonline,playerlist,eplayerlist,plist,eplist,who,ewho]
   mail:
     description: Manages inter-player, intra-server mail.
@@ -344,7 +344,7 @@ commands:
     aliases: [mob,emob,spawnentity,espawnentity,espawnmob]
   speed:
     description: Change your speed limits.
-    usage: /<command> <speed> [player]
+    usage: /<command> [type] <speed> [player]
     aliases: [flyspeed,eflyspeed,fspeed,efspeed,espeed,walkspeed,ewalkspeed,wspeed,ewspeed]
   sudo:
     description: Make another user perform a command.

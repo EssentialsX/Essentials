@@ -258,6 +258,7 @@ public class Settings implements ISettings
 		return socialspyCommands;
 	}
 
+	@Override
 	public Set<String> getSocialSpyCommands()
 	{
 		return socialSpyCommands;
@@ -452,11 +453,17 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("per-warp-permission", false);
 	}
-
+	
 	@Override
-	public boolean getSortListByGroups()
+	public Map<String, Object> getListGroupConfig()
 	{
-		return config.getBoolean("sort-list-by-groups", true);
+		if (config.isConfigurationSection("list"))
+		{ 
+			return config.getConfigurationSection("list").getValues(false);
+		}
+		Map<String, Object> defaultMap = new HashMap<String, Object>();
+		defaultMap.put("User", "*");
+		return defaultMap;
 	}
 
 	@Override
