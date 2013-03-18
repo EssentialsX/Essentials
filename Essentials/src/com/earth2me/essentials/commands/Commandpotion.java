@@ -42,11 +42,6 @@ public class Commandpotion extends EssentialsCommand
 			}
 			throw new NotEnoughArgumentsException(_("potions", Util.joinList(potionslist.toArray())));
 		}
-		
-		if (args.length < 3)
-		{
-			throw new NotEnoughArgumentsException();
-		}
 
 		if (stack.getType() == Material.POTION)
 		{
@@ -60,10 +55,14 @@ public class Commandpotion extends EssentialsCommand
 				}
 				else if (args[0].equalsIgnoreCase("apply") && user.isAuthorized("essentials.potion.apply"))
 				{
-					for(PotionEffect effect : pmeta.getCustomEffects())
+					for (PotionEffect effect : pmeta.getCustomEffects())
 					{
 						effect.apply(user);
 					}
+				}
+				else if (args.length < 3)
+				{
+					throw new NotEnoughArgumentsException();
 				}
 				else
 				{
