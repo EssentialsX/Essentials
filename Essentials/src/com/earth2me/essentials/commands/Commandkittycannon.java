@@ -29,6 +29,7 @@ public class Commandkittycannon extends EssentialsCommand
 		final int i = random.nextInt(Ocelot.Type.values().length);
 		ocelot.setCatType(Ocelot.Type.values()[i]);
 		ocelot.setTamed(true);
+		ocelot.setBaby();
 		ocelot.setVelocity(user.getEyeLocation().getDirection().multiply(2));
 		ess.scheduleSyncDelayedTask(new Runnable()
 		{
