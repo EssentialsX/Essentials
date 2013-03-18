@@ -30,15 +30,16 @@ public class Commandlist extends EssentialsCommand
 
 		if (args.length > 0)
 		{
-			sender.sendMessage(listGroupUsers(server, playerList, args[0].toLowerCase()));
+			sender.sendMessage(listGroupUsers(playerList, args[0].toLowerCase()));
 		}
 		else
 		{
-			sendGroupedList(server, sender, commandLabel, playerList);
+			sendGroupedList(sender, commandLabel, playerList);
 		}
 	}
 
-	private String listSummary(Server server, boolean showHidden)
+	// Produce a user summary: There are 5 out of maximum 10 players online.
+	private String listSummary(final Server server, final boolean showHidden)
 	{
 		int playerHidden = 0;
 		for (Player onlinePlayer : server.getOnlinePlayers())
@@ -61,7 +62,8 @@ public class Commandlist extends EssentialsCommand
 		return online;
 	}
 
-	private Map<String, List<User>> getPlayerLists(Server server, boolean showHidden)
+	// Build the basic player list, divided by groups.
+	private Map<String, List<User>> getPlayerLists(final Server server, final boolean showHidden)
 	{
 		Map<String, List<User>> playerList = new HashMap<String, List<User>>();
 		for (Player onlinePlayer : server.getOnlinePlayers())
@@ -83,18 +85,35 @@ public class Commandlist extends EssentialsCommand
 		return playerList;
 	}
 
-	private String listGroupUsers(Server server, Map<String, List<User>> playerList, String groupName) throws Exception
+	// Output a playerlist of just a single group, /list <groupname>
+	private String listGroupUsers(final Map<String, List<User>> playerList, final String groupName) throws Exception
 	{
-		final StringBuilder outputString = new StringBuilder();
+		final List<User> users = getMergedList(playerList, groupName);
+
+		List<User> groupUsers = playerList.get(groupName);
+		if (groupUsers != null && !groupUsers.isEmpty())
+		{
+			users.addAll(groupUsers);
+		}
+		if (users == null || users.isEmpty())
+		{
+			throw new Exception(_("groupDoesNotExist"));
+		}
+	
+		return  outputFormat(groupName, listUsers(users));
+	}
+
+	// Handle the merging of groups
+	private List<User> getMergedList(final Map<String, List<User>> playerList, final String groupName)
+	{
 		Set<String> configGroups = ess.getSettings().getListGroupConfig().keySet();
 		final List<User> users = new ArrayList<User>();
 
 		for (String key : configGroups)
 		{
-			String groupValue = ess.getSettings().getListGroupConfig().get(key).toString().trim();
-			if (key.equalsIgnoreCase(groupName) && groupValue.contains(","))
+			if (key.equalsIgnoreCase(groupName))
 			{
-				String[] groups = groupValue.split(",");
+				String[] groups = ess.getSettings().getListGroupConfig().get(key).toString().trim().split(" ");
 				for (String g : groups)
 				{
 					if (g == null || g.equals(""))
@@ -106,32 +125,22 @@ public class Commandlist extends EssentialsCommand
 					{
 						continue;
 					}
+					playerList.remove(g);
 					users.addAll(u);
 				}
 			}
 		}
-		List<User> groupUsers = playerList.get(groupName);
-		if (groupUsers != null && !groupUsers.isEmpty())
-		{
-			users.addAll(groupUsers);
-		}
-		if (users == null || users.isEmpty())
-		{
-			throw new Exception(_("groupDoesNotExist"));
-		}
-		outputString.append(_("listGroupTag", Util.replaceFormat(groupName)));
-		outputString.append(listUsers(users));
-		outputString.setCharAt(0, Character.toTitleCase(outputString.charAt(0)));
-		return outputString.toString();
+		return users;
 	}
 
-	private void sendGroupedList(Server server, CommandSender sender, String commandLabel, Map<String, List<User>> playerList)
+	// Output the standard /list output, when no group is specififed
+	private void sendGroupedList(CommandSender sender, String commandLabel, Map<String, List<User>> playerList)
 	{
 		final StringBuilder outputString = new StringBuilder();
 		Set<String> configGroups = ess.getSettings().getListGroupConfig().keySet();
-		List<String> usedGroups = new ArrayList<String>();
 		List<String> asterisk = new ArrayList<String>();
 
+		// Loop through the custom defined groups and display them
 		for (String group : configGroups)
 		{
 			String groupValue = ess.getSettings().getListGroupConfig().get(group).toString().trim();
@@ -144,15 +153,14 @@ public class Commandlist extends EssentialsCommand
 				continue;
 			}
 
-			usedGroups.add(group);
-
 			// If the group value is hidden, we don't need to display it
-			if (groupValue.equals("hidden"))
+			if (groupValue.equalsIgnoreCase("hidden"))
 			{
+				playerList.remove(groupValue);
 				continue;
 			}
 
-			final List<User> users = new ArrayList<User>();
+			List<User> users = new ArrayList<User>();
 			List<User> u = playerList.get(group);
 
 			// If the group value is an int, then we might need to truncate it
@@ -160,52 +168,21 @@ public class Commandlist extends EssentialsCommand
 			{
 				if (u != null && !u.isEmpty())
 				{
+					playerList.remove(group);
 					users.addAll(u);
 					int limit = Integer.parseInt(groupValue);
 					if (u.size() > limit)
-					{
-						outputString.append(_("listGroupTag", Util.replaceFormat(group)));
-						outputString.append(_("groupNumber", u.size(), commandLabel, group));
-						outputString.setCharAt(0, Character.toTitleCase(outputString.charAt(0)));
-						sender.sendMessage(outputString.toString());
-						outputString.setLength(0);
-						continue;
+					{						
+						sender.sendMessage(outputFormat(group, _("groupNumber", u.size(), commandLabel, group)));						
 					}
-				}
-
-			}
-
-			// If the group value is a list, we need to merge groups together.
-			if (groupValue.contains(",") || playerList.containsKey(groupValue.toLowerCase()))
-			{
-				if (playerList.containsKey(groupValue))
-				{
-					u = playerList.get(groupValue);
-					if (u == null || u.isEmpty())
-					{
-						continue;
-					}
-					users.addAll(u);
-				}
-				else
-				{
-					String[] groups = groupValue.split(",");
-					for (String g : groups)
-					{
-						g = g.trim().toLowerCase();
-						if (g == null || g.equals(""))
-						{
-							continue;
-						}
-						u = playerList.get(g);
-						if (u == null || u.isEmpty())
-						{
-							continue;
-						}
-						users.addAll(u);
-					}
+					else {					
+						sender.sendMessage(outputFormat(group, listUsers(users)));						
+					}					
+					continue;
 				}
 			}
+
+			users = getMergedList(playerList, group);
 
 			// If we have no users, than we don't need to continue parsing this group
 			if (users == null || users.isEmpty())
@@ -213,28 +190,18 @@ public class Commandlist extends EssentialsCommand
 				continue;
 			}
 
-			outputString.append(_("listGroupTag", Util.replaceFormat(group)));
-			outputString.append(listUsers(users));
-			outputString.setCharAt(0, Character.toTitleCase(outputString.charAt(0)));
-			sender.sendMessage(outputString.toString());
-			outputString.setLength(0);
+			sender.sendMessage(outputFormat(group, listUsers(users)));
 		}
 
 		String[] onlineGroups = playerList.keySet().toArray(new String[0]);
 		Arrays.sort(onlineGroups, String.CASE_INSENSITIVE_ORDER);
 
-
+		// If we have an asterisk group, then merge all remaining groups
 		if (!asterisk.isEmpty())
 		{
 			List<User> asteriskUsers = new ArrayList<User>();
-
 			for (String group : onlineGroups)
-			{
-				group = group.toLowerCase().trim();
-				if (usedGroups.contains(group))
-				{
-					continue;
-				}
+			{				
 				asteriskUsers.addAll(playerList.get(group));
 			}
 			for (String key : asterisk)
@@ -244,29 +211,26 @@ public class Commandlist extends EssentialsCommand
 			onlineGroups = asterisk.toArray(new String[0]);
 		}
 
+		// If we have any groups remaining after the custom groups loop through and display them
 		for (String group : onlineGroups)
 		{
-			group = group.toLowerCase().trim();
-			if (usedGroups.contains(group))
-			{
-				continue;
-			}
-
 			List<User> users = playerList.get(group);
 
 			if (ess.getPermissionsHandler().getName().equals("ConfigPermissions"))
 			{
 				group = _("connectedPlayers");
 			}
-
-			outputString.append(_("listGroupTag", Util.replaceFormat(group)));
-			outputString.append(listUsers(users));
-			outputString.setCharAt(0, Character.toTitleCase(outputString.charAt(0)));
-			sender.sendMessage(outputString.toString());
-			outputString.setLength(0);
+			
+			if (users == null || users.isEmpty())
+			{
+				continue;
+			}
+			
+			sender.sendMessage(outputFormat(group, listUsers(users)));
 		}
 	}
 
+	// Cosmetic list formatting
 	private String listUsers(List<User> users)
 	{
 		final StringBuilder groupString = new StringBuilder();
@@ -295,5 +259,15 @@ public class Commandlist extends EssentialsCommand
 			groupString.append("§f");
 		}
 		return groupString.toString();
+	}
+
+	// Build the output string
+	private String outputFormat(String group, String message)
+	{
+		final StringBuilder outputString = new StringBuilder();
+		outputString.append(_("listGroupTag", Util.replaceFormat(group)));
+		outputString.append(message);
+		outputString.setCharAt(0, Character.toTitleCase(outputString.charAt(0)));
+		return outputString.toString();		
 	}
 }
