@@ -109,23 +109,23 @@ public class Commandlist extends EssentialsCommand
 		Set<String> configGroups = ess.getSettings().getListGroupConfig().keySet();
 		final List<User> users = new ArrayList<User>();
 
-		for (String key : configGroups)
+		for (String configGroup : configGroups)
 		{
-			if (key.equalsIgnoreCase(groupName))
+			if (configGroup.equalsIgnoreCase(groupName))
 			{
-				String[] groups = ess.getSettings().getListGroupConfig().get(key).toString().trim().split(" ");
-				for (String g : groups)
+				String[] groupValues = ess.getSettings().getListGroupConfig().get(configGroup).toString().trim().split(" ");
+				for (String groupValue : groupValues)
 				{
-					if (g == null || g.equals(""))
+					if (groupValue == null || groupValue.equals(""))
 					{
 						continue;
 					}
-					List<User> u = playerList.get(g.trim());
+					List<User> u = playerList.get(groupValue.trim());
 					if (u == null || u.isEmpty())
 					{
 						continue;
 					}
-					playerList.remove(g);
+					playerList.remove(groupValue);
 					users.addAll(u);
 				}
 			}
@@ -133,23 +133,22 @@ public class Commandlist extends EssentialsCommand
 		return users;
 	}
 
-	// Output the standard /list output, when no group is specififed
+	// Output the standard /list output, when no group is specified
 	private void sendGroupedList(CommandSender sender, String commandLabel, Map<String, List<User>> playerList)
 	{
-		final StringBuilder outputString = new StringBuilder();
 		Set<String> configGroups = ess.getSettings().getListGroupConfig().keySet();
 		List<String> asterisk = new ArrayList<String>();
 
 		// Loop through the custom defined groups and display them
-		for (String group : configGroups)
+		for (String configGroup : configGroups)
 		{
-			String groupValue = ess.getSettings().getListGroupConfig().get(group).toString().trim();
-			group = group.toLowerCase();
+			String groupValue = ess.getSettings().getListGroupConfig().get(configGroup).toString().trim();
+			configGroup = configGroup.toLowerCase();
 
 			// If the group value is an asterisk, then skip it, and handle it later
 			if (groupValue.equals("*"))
 			{
-				asterisk.add(group);
+				asterisk.add(configGroup);
 				continue;
 			}
 
@@ -160,37 +159,37 @@ public class Commandlist extends EssentialsCommand
 				continue;
 			}
 
-			List<User> users = new ArrayList<User>();
-			List<User> u = playerList.get(group);
+			List<User> outputUserList = new ArrayList<User>();
+			List<User> matchedList = playerList.get(configGroup);
 
 			// If the group value is an int, then we might need to truncate it
 			if (Util.isInt(groupValue))
 			{
-				if (u != null && !u.isEmpty())
+				if (matchedList != null && !matchedList.isEmpty())
 				{
-					playerList.remove(group);
-					users.addAll(u);
+					playerList.remove(configGroup);
+					outputUserList.addAll(matchedList);
 					int limit = Integer.parseInt(groupValue);
-					if (u.size() > limit)
+					if (matchedList.size() > limit)
 					{						
-						sender.sendMessage(outputFormat(group, _("groupNumber", u.size(), commandLabel, group)));						
+						sender.sendMessage(outputFormat(configGroup, _("groupNumber", matchedList.size(), commandLabel, configGroup)));						
 					}
 					else {					
-						sender.sendMessage(outputFormat(group, listUsers(users)));						
+						sender.sendMessage(outputFormat(configGroup, listUsers(outputUserList)));						
 					}					
 					continue;
 				}
 			}
 
-			users = getMergedList(playerList, group);
+			outputUserList = getMergedList(playerList, configGroup);
 
 			// If we have no users, than we don't need to continue parsing this group
-			if (users == null || users.isEmpty())
+			if (outputUserList == null || outputUserList.isEmpty())
 			{
 				continue;
 			}
 
-			sender.sendMessage(outputFormat(group, listUsers(users)));
+			sender.sendMessage(outputFormat(configGroup, listUsers(outputUserList)));
 		}
 
 		String[] onlineGroups = playerList.keySet().toArray(new String[0]);
@@ -200,9 +199,9 @@ public class Commandlist extends EssentialsCommand
 		if (!asterisk.isEmpty())
 		{
 			List<User> asteriskUsers = new ArrayList<User>();
-			for (String group : onlineGroups)
+			for (String onlineGroup : onlineGroups)
 			{				
-				asteriskUsers.addAll(playerList.get(group));
+				asteriskUsers.addAll(playerList.get(onlineGroup));
 			}
 			for (String key : asterisk)
 			{
@@ -212,21 +211,20 @@ public class Commandlist extends EssentialsCommand
 		}
 
 		// If we have any groups remaining after the custom groups loop through and display them
-		for (String group : onlineGroups)
+		for (String onlineGroup : onlineGroups)
 		{
-			List<User> users = playerList.get(group);
+			List<User> users = playerList.get(onlineGroup);
 
 			if (ess.getPermissionsHandler().getName().equals("ConfigPermissions"))
 			{
-				group = _("connectedPlayers");
-			}
-			
+				onlineGroup = _("connectedPlayers");
+			}			
 			if (users == null || users.isEmpty())
 			{
 				continue;
 			}
 			
-			sender.sendMessage(outputFormat(group, listUsers(users)));
+			sender.sendMessage(outputFormat(onlineGroup, listUsers(users)));
 		}
 	}
 
@@ -235,17 +233,14 @@ public class Commandlist extends EssentialsCommand
 	{
 		final StringBuilder groupString = new StringBuilder();
 		Collections.sort(users);
-		boolean first = true;
+		boolean needComma = false;
 		for (User user : users)
 		{
-			if (!first)
+			if (needComma)
 			{
 				groupString.append(", ");
 			}
-			else
-			{
-				first = false;
-			}
+			needComma = true;
 			if (user.isAfk())
 			{
 				groupString.append(_("listAfkTag"));

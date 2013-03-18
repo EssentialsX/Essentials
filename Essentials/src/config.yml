@@ -289,8 +289,8 @@ per-warp-permission: false
 # Detailed instructions and examples can be found on the wiki: http://wiki.ess3.net/wiki/List
 list:
     # To merge groups, list the groups you wish to merge
-    #Staff: owner, admin, moderators
-    Admins: owner, admin
+    #Staff: owner admin moderator
+    Admins: owner admin
     # To limit groups, set a max user limit
     #builder: 20
     # To hide groups, set the group as hidden

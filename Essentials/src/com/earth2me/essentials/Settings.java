@@ -462,7 +462,7 @@ public class Settings implements ISettings
 			return config.getConfigurationSection("list").getValues(false);
 		}
 		Map<String, Object> defaultMap = new HashMap<String, Object>();
-		defaultMap.put("User", "*");
+		defaultMap.put("Players", "*");
 		return defaultMap;
 	}
 
