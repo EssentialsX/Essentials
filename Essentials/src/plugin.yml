@@ -344,7 +344,7 @@ commands:
     aliases: [mob,emob,spawnentity,espawnentity,espawnmob]
   speed:
     description: Change your speed limits.
-    usage: /<command> <speed> [player]
+    usage: /<command> [type] <speed> [player]
     aliases: [flyspeed,eflyspeed,fspeed,efspeed,espeed,walkspeed,ewalkspeed,wspeed,ewspeed]
   sudo:
     description: Make another user perform a command.
