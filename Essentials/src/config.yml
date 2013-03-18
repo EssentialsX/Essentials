@@ -294,7 +294,7 @@ list:
     #builder: 20
     # To hide groups, set the group as hidden
     #default: hidden
-    Players: *
+    Players: '*'
   
 # More output to the console.
 debug: false

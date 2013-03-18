@@ -130,44 +130,35 @@ public class Commandlist extends EssentialsCommand
 		final StringBuilder outputString = new StringBuilder();
 		Set<String> configGroups = ess.getSettings().getListGroupConfig().keySet();
 		List<String> usedGroups = new ArrayList<String>();
-		List<String> usedGroupsAsterisk = new ArrayList<String>();
-		Map<String, Boolean> asterisk = new HashMap<String, Boolean>();
-		boolean hasAsterisk = false;
-		
+		List<String> asterisk = new ArrayList<String>();
+
 		for (String group : configGroups)
 		{
-			boolean userLimit = false;
 			String groupValue = ess.getSettings().getListGroupConfig().get(group).toString().trim();
-			
+			group = group.toLowerCase();
+
 			// If the group value is an asterisk, then skip it, and handle it later
 			if (groupValue.equals("*"))
 			{
-				asterisk.put(group, true);
-				hasAsterisk = true;
+				asterisk.add(group);
 				continue;
 			}
-			
-			group = group.toLowerCase();
+
 			usedGroups.add(group);
-			
+
 			// If the group value is hidden, we don't need to display it
 			if (groupValue.equals("hidden"))
 			{
 				continue;
 			}
-			
-			
-			if (Util.isInt(groupValue))
-			{
-				userLimit = true;
-			}
-			
+
 			final List<User> users = new ArrayList<User>();
 			List<User> u = playerList.get(group);
-			if (u != null && !u.isEmpty())
-			{
 
-				if (userLimit)
+			// If the group value is an int, then we might need to truncate it
+			if (Util.isInt(groupValue))
+			{
+				if (u != null && !u.isEmpty())
 				{
 					users.addAll(u);
 					int limit = Integer.parseInt(groupValue);
@@ -181,8 +172,10 @@ public class Commandlist extends EssentialsCommand
 						continue;
 					}
 				}
+
 			}
 
+			// If the group value is a list, we need to merge groups together.
 			if (groupValue.contains(",") || playerList.containsKey(groupValue.toLowerCase()))
 			{
 				if (playerList.containsKey(groupValue))
@@ -193,7 +186,6 @@ public class Commandlist extends EssentialsCommand
 						continue;
 					}
 					users.addAll(u);
-					usedGroupsAsterisk.add(groupValue);
 				}
 				else
 				{
@@ -211,18 +203,16 @@ public class Commandlist extends EssentialsCommand
 							continue;
 						}
 						users.addAll(u);
-						usedGroupsAsterisk.add(g);
 					}
 				}
 			}
+
+			// If we have no users, than we don't need to continue parsing this group
 			if (users == null || users.isEmpty())
 			{
 				continue;
 			}
-			if (ess.getPermissionsHandler().getName().equals("ConfigPermissions"))
-			{
-				group = _("connectedPlayers");
-			}
+
 			outputString.append(_("listGroupTag", Util.replaceFormat(group)));
 			outputString.append(listUsers(users));
 			outputString.setCharAt(0, Character.toTitleCase(outputString.charAt(0)));
@@ -230,61 +220,50 @@ public class Commandlist extends EssentialsCommand
 			outputString.setLength(0);
 		}
 
-		final String[] groups = playerList.keySet().toArray(new String[0]);
-		Arrays.sort(groups, String.CASE_INSENSITIVE_ORDER);
-		List<User> asteriskUsers = new ArrayList<User>();
-		String asteriskGroup = "";
-		if (hasAsterisk)
+		String[] onlineGroups = playerList.keySet().toArray(new String[0]);
+		Arrays.sort(onlineGroups, String.CASE_INSENSITIVE_ORDER);
+
+
+		if (!asterisk.isEmpty())
 		{
-			for (String key : asterisk.keySet())
+			List<User> asteriskUsers = new ArrayList<User>();
+
+			for (String group : onlineGroups)
 			{
-				if (asterisk.get(key) == true)
+				group = group.toLowerCase().trim();
+				if (usedGroups.contains(group))
 				{
-					asteriskGroup = key.toLowerCase();
-					for (String group : groups)
-					{
-						group = group.toLowerCase().trim();
-						if (usedGroups.contains(group) || usedGroupsAsterisk.contains(group))
-						{
-							continue;
-						}
-						asteriskUsers.addAll(playerList.get(group));
-					}
+					continue;
 				}
+				asteriskUsers.addAll(playerList.get(group));
 			}
+			for (String key : asterisk)
+			{
+				playerList.put(key, asteriskUsers);
+			}
+			onlineGroups = asterisk.toArray(new String[0]);
 		}
-		for (String group : groups)
+
+		for (String group : onlineGroups)
 		{
 			group = group.toLowerCase().trim();
 			if (usedGroups.contains(group))
 			{
 				continue;
 			}
+
 			List<User> users = playerList.get(group);
 
 			if (ess.getPermissionsHandler().getName().equals("ConfigPermissions"))
 			{
 				group = _("connectedPlayers");
 			}
-			if (hasAsterisk)
-			{
-				if (asteriskUsers == null || asteriskUsers.isEmpty())
-				{
-					break;
-				}
-				users = asteriskUsers;
-				group = asteriskGroup;
-			}
-			outputString.append(_("listGroupTag", Util.replaceFormat(group)));
 
+			outputString.append(_("listGroupTag", Util.replaceFormat(group)));
 			outputString.append(listUsers(users));
 			outputString.setCharAt(0, Character.toTitleCase(outputString.charAt(0)));
 			sender.sendMessage(outputString.toString());
 			outputString.setLength(0);
-			if (hasAsterisk)
-			{
-				break;
-			}
 		}
 	}
 
