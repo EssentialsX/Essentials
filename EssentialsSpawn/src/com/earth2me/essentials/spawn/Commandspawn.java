@@ -1,6 +1,7 @@
 package com.earth2me.essentials.spawn;
 
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.Console;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.commands.EssentialsCommand;
@@ -50,7 +51,7 @@ public class Commandspawn extends EssentialsCommand
 		}
 		final User user = getPlayer(server, args, 0);
 		respawn(user, null);
-		user.sendMessage(_("teleportAtoB", user.getDisplayName(), "spawn"));
+		user.sendMessage(_("teleportAtoB", Console.NAME, "spawn"));
 		sender.sendMessage(_("teleporting"));
 	}
 	
