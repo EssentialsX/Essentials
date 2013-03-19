@@ -262,6 +262,9 @@ public class EssentialsPlayerListener implements Listener
 						user.sendMessage(_("flyMode", _("enabled"), user.getDisplayName()));
 					}
 				}
+				user.setFlySpeed(0.1f);
+				user.setWalkSpeed(0.2f);
+				
 			}
 		});
 	}
@@ -397,7 +400,7 @@ public class EssentialsPlayerListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerChangedWorldHack(final PlayerChangedWorldEvent event)
+	public void onPlayerChangedWorldFlyReset(final PlayerChangedWorldEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
 		if (user.getGameMode() != GameMode.CREATIVE && !user.isAuthorized("essentials.fly"))

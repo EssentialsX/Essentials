@@ -39,12 +39,12 @@ public class Commandspeed extends EssentialsCommand
 		boolean isBypass = user.isAuthorized("essentials.speed.bypass");
 		if (args.length == 1)
 		{
-			isFly = user.isFlying();
+			isFly = flyPermCheck(user, user.isFlying());
 			speed = getMoveSpeed(args[0]);
 		}
 		else
 		{
-			isFly = isFlyMode(args[0]);
+			isFly = flyPermCheck(user, isFlyMode(args[0]));
 			speed = getMoveSpeed(args[1]);
 			if (args.length > 2 && user.isAuthorized("essentials.speed.others"))
 			{
@@ -52,7 +52,7 @@ public class Commandspeed extends EssentialsCommand
 				return;
 			}
 		}
-
+		
 		if (isFly)
 		{
 			user.setFlySpeed(getRealMoveSpeed(speed, isFly, isBypass));
@@ -80,6 +80,19 @@ public class Commandspeed extends EssentialsCommand
 				sender.sendMessage(_("moveSpeed", _("walking"), speed, matchPlayer.getDisplayName()));
 			}
 		}
+	}
+	
+	private Boolean flyPermCheck(User user, boolean input) throws Exception
+	{
+		boolean canFly = user.isAuthorized("essentials.speed.fly");
+		boolean canWalk = user.isAuthorized("essentials.speed.walk");
+		if (input && canFly || !input && canWalk || !canFly && !canWalk) {
+			return input;
+		}
+		else if (canWalk) {
+			return false;
+		}	
+		return true;
 	}
 
 	private boolean isFlyMode(final String modeString) throws NotEnoughArgumentsException
