@@ -291,6 +291,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 				p.sendMessage(_("unvanishedReload"));
 			}
 		}
+		cleanupOpenInventories();
 		i18n.onDisable();
 		Economy.setEss(null);
 		Trade.closeLog();
@@ -454,6 +455,26 @@ public class Essentials extends JavaPlugin implements IEssentials
 		{
 			LOGGER.log(Level.SEVERE, _("commandFailed", commandLabel), ex);
 			return true;
+		}
+	}
+	
+	public void cleanupOpenInventories()
+	{
+		for (Player player : getServer().getOnlinePlayers())
+		{
+			User user = getUser(player);
+			if (user.isRecipeSee())
+			{				
+				user.getPlayer().getOpenInventory().getTopInventory().clear();
+				user.getPlayer().getOpenInventory().close();
+				user.setRecipeSee(false);
+			}
+			if (user.isInvSee() || user.isEnderSee())
+			{
+				user.getPlayer().getOpenInventory().close();
+				user.setInvSee(false);
+				user.setEnderSee(false);
+			}
 		}
 	}
 

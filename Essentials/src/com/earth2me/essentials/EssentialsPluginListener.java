@@ -31,27 +31,7 @@ public class EssentialsPluginListener implements Listener, IConf
 		{
 			ess.getLogger().log(Level.INFO, "Payment method found (" + ess.getPaymentMethod().getMethod().getLongName() + " version: " + ess.getPaymentMethod().getMethod().getVersion() + ")");
 		}
-	}
-
-	@EventHandler(priority = EventPriority.NORMAL)
-	public void cleanupOpenInventories(final PluginDisableEvent event)
-	{
-		for (Player player : ess.getServer().getOnlinePlayers())
-		{
-			User user = ess.getUser(player);
-			if (user.isRecipeSee())
-			{				
-				user.getPlayer().getOpenInventory().getTopInventory().clear();
-				user.getPlayer().getOpenInventory().close();
-				user.setRecipeSee(false);
-			}
-			if (user.isInvSee())
-			{
-				user.getPlayer().getOpenInventory().close();
-				user.setInvSee(false);
-			}
-		}
-	}
+	}	
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPluginDisable(final PluginDisableEvent event)
