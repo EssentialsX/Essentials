@@ -45,6 +45,11 @@ public class Commandext extends EssentialsCommand
 		final List<Player> matchedPlayers = server.matchPlayer(name);
 		for (Player matchPlayer : matchedPlayers)
 		{
+			final User player = ess.getUser(matchPlayer);
+			if (player.isHidden())
+			{
+				continue;
+			}
 			foundUser = true;
 			matchPlayer.setFireTicks(0);
 			sender.sendMessage(_("extinguishOthers", matchPlayer.getDisplayName()));

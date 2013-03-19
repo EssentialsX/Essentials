@@ -36,7 +36,8 @@ public class Commandfeed extends EssentialsCommand
 		final List<Player> matchedPlayers = server.matchPlayer(name);
 		for (Player matchPlayer : matchedPlayers)
 		{
-			if (ess.getUser(matchPlayer).isHidden())
+			final User player = ess.getUser(matchPlayer);
+			if (player.isHidden())
 			{
 				continue;
 			}

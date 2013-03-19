@@ -22,7 +22,7 @@ public class Commandpay extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		
+
 		//TODO: TL this.
 		if (args[0].trim().length() < 2)
 		{
@@ -30,19 +30,19 @@ public class Commandpay extends EssentialsCommand
 		}
 
 		double amount = Double.parseDouble(args[1].replaceAll("[^0-9\\.]", ""));
-		
+
 		boolean foundUser = false;
-		final List<Player> matchedPlayers = server.matchPlayer(args[0]);	
+		final List<Player> matchedPlayers = server.matchPlayer(args[0]);
 		for (Player matchPlayer : matchedPlayers)
 		{
-			User u = ess.getUser(matchPlayer);
-			if (u.isHidden())
+			User player = ess.getUser(matchPlayer);
+			if (player.isHidden())
 			{
 				continue;
 			}
 			foundUser = true;
-			user.payUser(u, amount);
-			Trade.log("Command", "Pay", "Player", user.getName(), new Trade(amount, ess), u.getName(), new Trade(amount, ess), user.getLocation(), ess);
+			user.payUser(player, amount);
+			Trade.log("Command", "Pay", "Player", user.getName(), new Trade(amount, ess), player.getName(), new Trade(amount, ess), user.getLocation(), ess);
 		}
 
 		if (!foundUser)

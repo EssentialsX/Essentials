@@ -77,26 +77,26 @@ public class Commandgamemode extends EssentialsCommand
 		user.sendMessage(_("gameMode", _(user.getGameMode().toString().toLowerCase(Locale.ENGLISH)), user.getDisplayName()));
 	}
 
-	private void gamemodeOtherPlayers(final Server server, final CommandSender sender, final GameMode gameMode, final String player) throws NotEnoughArgumentsException
+	private void gamemodeOtherPlayers(final Server server, final CommandSender sender, final GameMode gameMode, final String name) throws NotEnoughArgumentsException
 	{
 		//TODO: TL this
-		if (player.trim().length() < 2 || gameMode == null)
+		if (name.trim().length() < 2 || gameMode == null)
 		{
 			throw new NotEnoughArgumentsException("You need to specify a valid player/mode.");
 		}
 
 		boolean foundUser = false;
-		final List<Player> matchedPlayers = server.matchPlayer(player);
+		final List<Player> matchedPlayers = server.matchPlayer(name);
 		for (Player matchPlayer : matchedPlayers)
 		{
-			final User user = ess.getUser(matchPlayer);
-			if (user.isHidden())
+			final User player = ess.getUser(matchPlayer);
+			if (player.isHidden())
 			{
 				continue;
 			}
 			foundUser = true;
-			user.setGameMode(gameMode);
-			sender.sendMessage(_("gameMode", _(user.getGameMode().toString().toLowerCase(Locale.ENGLISH)), user.getDisplayName()));			
+			player.setGameMode(gameMode);
+			sender.sendMessage(_("gameMode", _(player.getGameMode().toString().toLowerCase(Locale.ENGLISH)), player.getDisplayName()));
 		}
 		if (!foundUser)
 		{
