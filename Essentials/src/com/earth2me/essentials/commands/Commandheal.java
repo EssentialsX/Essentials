@@ -53,8 +53,7 @@ public class Commandheal extends EssentialsCommand
 		final List<Player> players = server.matchPlayer(name);
 		if (players.isEmpty())
 		{
-			sender.sendMessage(_("playerNotFound"));
-			return;
+			throw new Exception(_("playerNotFound"));
 		}
 		for (Player p : players)
 		{
