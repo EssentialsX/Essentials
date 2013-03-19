@@ -4,6 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import com.earth2me.essentials.User;
 
 
 public class Commandburn extends EssentialsCommand
@@ -27,10 +28,8 @@ public class Commandburn extends EssentialsCommand
 			throw new NotEnoughArgumentsException("You need to specify a player to burn.");
 		}
 
-		for (Player p : server.matchPlayer(args[0]))
-		{
-			p.setFireTicks(Integer.parseInt(args[1]) * 20);
-			sender.sendMessage(_("burnMsg", p.getDisplayName(), Integer.parseInt(args[1])));
-		}
+		User user = getPlayer(server, args, 0);
+		user.setFireTicks(Integer.parseInt(args[1]) * 20);
+		sender.sendMessage(_("burnMsg", user.getDisplayName(), Integer.parseInt(args[1])));
 	}
 }
