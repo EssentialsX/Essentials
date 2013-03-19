@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
+import java.util.List;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -65,10 +66,18 @@ public class Commandspeed extends EssentialsCommand
 		}
 	}
 
-	private void speedOtherPlayers(final Server server, final CommandSender sender, final boolean isFly, final boolean isBypass, final float speed, final String target)
+	private void speedOtherPlayers(final Server server, final CommandSender sender, final boolean isFly, final boolean isBypass, final float speed, final String target) throws NotEnoughArgumentsException
 	{
-		for (Player matchPlayer : server.matchPlayer(target))
+		boolean foundUser = false;
+		final List<Player> matchedPlayers = server.matchPlayer(target);
+		for (Player matchPlayer : matchedPlayers)
 		{
+			final User player = ess.getUser(matchPlayer);
+			if (player.isHidden())
+			{
+				continue;
+			}
+			foundUser = true;
 			if (isFly)
 			{
 				matchPlayer.setFlySpeed(getRealMoveSpeed(speed, isFly, isBypass));
@@ -79,6 +88,10 @@ public class Commandspeed extends EssentialsCommand
 				matchPlayer.setWalkSpeed(getRealMoveSpeed(speed, isFly, isBypass));
 				sender.sendMessage(_("moveSpeed", _("walking"), speed, matchPlayer.getDisplayName()));
 			}
+		}
+		if (!foundUser)
+		{
+			throw new NotEnoughArgumentsException(_("playerNotFound"));
 		}
 	}
 	

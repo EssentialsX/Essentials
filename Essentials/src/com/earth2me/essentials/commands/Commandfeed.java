@@ -20,7 +20,7 @@ public class Commandfeed extends EssentialsCommand
 	{
 		if (args.length > 0 && user.isAuthorized("essentials.feed.others"))
 		{
-			feedOtherPlayers(server,user,args[0]);
+			feedOtherPlayers(server, user, args[0]);
 		}
 		else
 		{
@@ -29,24 +29,25 @@ public class Commandfeed extends EssentialsCommand
 			user.sendMessage(_("feed"));
 		}
 	}
-	
-		private void feedOtherPlayers(final Server server, final CommandSender sender, final String name)
+
+	private void feedOtherPlayers(final Server server, final CommandSender sender, final String name) throws NotEnoughArgumentsException
 	{
-		final List<Player> players = server.matchPlayer(name);
-		if (players.isEmpty())
+		boolean foundUser = false;
+		final List<Player> matchedPlayers = server.matchPlayer(name);
+		for (Player matchPlayer : matchedPlayers)
 		{
-			sender.sendMessage(_("playerNotFound"));
-			return;
-		}
-		for (Player player : players)
-		{
-			if (ess.getUser(player).isHidden())
+			if (ess.getUser(matchPlayer).isHidden())
 			{
 				continue;
 			}
-			player.setFoodLevel(20);
-			player.setSaturation(10);
-			sender.sendMessage(_("feedOther", player.getDisplayName()));
+			foundUser = true;
+			matchPlayer.setFoodLevel(20);
+			matchPlayer.setSaturation(10);
+			sender.sendMessage(_("feedOther", matchPlayer.getDisplayName()));
+		}
+		if (!foundUser)
+		{
+			throw new NotEnoughArgumentsException(_("playerNotFound"));
 		}
 	}
 }

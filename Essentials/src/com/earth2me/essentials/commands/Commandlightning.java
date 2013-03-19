@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
+import java.util.List;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LightningStrike;
@@ -30,11 +31,6 @@ public class Commandlightning extends EssentialsCommand
 			}
 		}
 
-		if (server.matchPlayer(args[0]).isEmpty())
-		{
-			throw new Exception(_("playerNotFound"));
-		}
-
 		int power = 5;
 		if (args.length > 1)
 		{
@@ -47,12 +43,13 @@ public class Commandlightning extends EssentialsCommand
 			}
 		}
 
-		for (Player matchPlayer : server.matchPlayer(args[0]))
+		final List<Player> matchedPlayers = server.matchPlayer(args[0]);
+		for (Player matchPlayer : matchedPlayers)
 		{
 			sender.sendMessage(_("lightningUse", matchPlayer.getDisplayName()));
 
 			final LightningStrike strike = matchPlayer.getWorld().strikeLightningEffect(matchPlayer.getLocation());
-			
+
 			if (!ess.getUser(matchPlayer).isGodModeEnabled())
 			{
 				matchPlayer.damage(power, strike);

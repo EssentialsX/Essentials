@@ -50,19 +50,22 @@ public class Commandheal extends EssentialsCommand
 
 	private void healOtherPlayers(final Server server, final CommandSender sender, final String name) throws Exception
 	{
-		final List<Player> players = server.matchPlayer(name);
-		if (players.isEmpty())
+
+		boolean foundUser = false;
+		final List<Player> matchedPlayers = server.matchPlayer(name);
+		for (Player matchPlayer : matchedPlayers)
 		{
-			throw new Exception(_("playerNotFound"));
-		}
-		for (Player p : players)
-		{
-			if (ess.getUser(p).isHidden())
+			if (ess.getUser(matchPlayer).isHidden())
 			{
 				continue;
 			}
-			healPlayer(p);
-			sender.sendMessage(_("healOther", p.getDisplayName()));
+			foundUser = true;
+			healPlayer(matchPlayer);
+			sender.sendMessage(_("healOther", matchPlayer.getDisplayName()));
+		}
+		if (!foundUser)
+		{
+			throw new NotEnoughArgumentsException(_("playerNotFound"));
 		}
 	}
 

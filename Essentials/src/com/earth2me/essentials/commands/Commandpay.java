@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import java.util.List;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
@@ -29,18 +30,19 @@ public class Commandpay extends EssentialsCommand
 		}
 
 		double amount = Double.parseDouble(args[1].replaceAll("[^0-9\\.]", ""));
-
+		
 		boolean foundUser = false;
-		for (Player p : server.matchPlayer(args[0]))
+		final List<Player> matchedPlayers = server.matchPlayer(args[0]);	
+		for (Player matchPlayer : matchedPlayers)
 		{
-			User u = ess.getUser(p);
+			User u = ess.getUser(matchPlayer);
 			if (u.isHidden())
 			{
 				continue;
 			}
+			foundUser = true;
 			user.payUser(u, amount);
 			Trade.log("Command", "Pay", "Player", user.getName(), new Trade(amount, ess), u.getName(), new Trade(amount, ess), user.getLocation(), ess);
-			foundUser = true;
 		}
 
 		if (!foundUser)

@@ -56,49 +56,36 @@ public class Commandmsg extends EssentialsCommand
 			return;
 		}
 		
-		final List<Player> matchedPlayers = server.matchPlayer(args[0]);
+		boolean foundUser = false;
+		final List<Player> matchedPlayers = server.matchPlayer(args[0]);			
 		
-		if (matchedPlayers.isEmpty())
-		{
-			throw new Exception(_("playerNotFound"));
-		}
-		
-		int i = 0;
-		for (Player matchedPlayer : matchedPlayers)
-		{
-			final User u = ess.getUser(matchedPlayer);
-			if (u.isHidden())
-			{
-				i++;
-			}
-		}
-		if (i == matchedPlayers.size())
-		{
-			throw new Exception(_("playerNotFound"));
-		}
-		
-		for (Player matchedPlayer : matchedPlayers)
+		for (Player matchPlayer : matchedPlayers)
 		{			
-			final User matchedUser = ess.getUser(matchedPlayer);
+			final User matchedUser = ess.getUser(matchPlayer);
 			
 			if (sender instanceof Player && matchedUser.isHidden())
 			{
 				continue;
 			}		
+			foundUser = true;
 			if (matchedUser.isAfk())
 			{
-				sender.sendMessage(_("userAFK", matchedPlayer.getDisplayName()));
+				sender.sendMessage(_("userAFK", matchPlayer.getDisplayName()));
 			}			
 
-			sender.sendMessage(_("msgFormat", translatedMe, matchedPlayer.getDisplayName(), message));			
+			sender.sendMessage(_("msgFormat", translatedMe, matchPlayer.getDisplayName(), message));			
 			if (sender instanceof Player && matchedUser.isIgnoredPlayer(ess.getUser(sender)))
 			{
 				continue;
 			}
 			
-			matchedPlayer.sendMessage(_("msgFormat", senderName, translatedMe, message));
+			matchPlayer.sendMessage(_("msgFormat", senderName, translatedMe, message));
 			replyTo.setReplyTo(matchedUser);
-			ess.getUser(matchedPlayer).setReplyTo(sender);
+			ess.getUser(matchPlayer).setReplyTo(sender);
+		}
+		
+		if (!foundUser) {
+			throw new Exception(_("playerNotFound"));
 		}
 	}
 }

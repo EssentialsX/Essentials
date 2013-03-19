@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
+import java.util.List;
 import java.util.Locale;
 import org.bukkit.GameMode;
 import org.bukkit.Server;
@@ -85,16 +86,17 @@ public class Commandgamemode extends EssentialsCommand
 		}
 
 		boolean foundUser = false;
-		for (Player matchPlayer : server.matchPlayer(player))
+		final List<Player> matchedPlayers = server.matchPlayer(player);
+		for (Player matchPlayer : matchedPlayers)
 		{
 			final User user = ess.getUser(matchPlayer);
 			if (user.isHidden())
 			{
 				continue;
 			}
-			user.setGameMode(gameMode);
-			sender.sendMessage(_("gameMode", _(user.getGameMode().toString().toLowerCase(Locale.ENGLISH)), user.getDisplayName()));
 			foundUser = true;
+			user.setGameMode(gameMode);
+			sender.sendMessage(_("gameMode", _(user.getGameMode().toString().toLowerCase(Locale.ENGLISH)), user.getDisplayName()));			
 		}
 		if (!foundUser)
 		{

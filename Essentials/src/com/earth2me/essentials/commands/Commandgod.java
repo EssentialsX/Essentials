@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
+import java.util.List;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -47,16 +48,18 @@ public class Commandgod extends EssentialsCommand
 		}
 	}
 
-	private void godOtherPlayers(final Server server, final CommandSender sender, final String[] args)
+	private void godOtherPlayers(final Server server, final CommandSender sender, final String[] args) throws NotEnoughArgumentsException
 	{
-		for (Player matchPlayer : server.matchPlayer(args[0]))
+		boolean foundUser = false;
+		final List<Player> matchedPlayers = server.matchPlayer(args[0]);
+		for (Player matchPlayer : matchedPlayers)
 		{
 			final User player = ess.getUser(matchPlayer);
 			if (player.isHidden())
 			{
 				continue;
 			}
-
+			foundUser = true;
 			boolean enabled;
 			if (args.length > 1)
 			{
@@ -77,6 +80,10 @@ public class Commandgod extends EssentialsCommand
 			godPlayer(player, enabled);
 			player.sendMessage(_("godMode", (enabled ? _("enabled") : _("disabled"))));
 			sender.sendMessage(_("godMode", _(enabled ? "godEnabledFor" : "godDisabledFor", matchPlayer.getDisplayName())));
+		}
+		if (!foundUser)
+		{
+			throw new NotEnoughArgumentsException(_("playerNotFound"));
 		}
 	}
 }

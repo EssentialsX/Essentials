@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
+import java.util.List;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -40,10 +41,17 @@ public class Commandext extends EssentialsCommand
 
 	private void extinguishPlayers(final Server server, final CommandSender sender, final String name) throws Exception
 	{
-		for (Player matchPlayer : server.matchPlayer(name))
+		boolean foundUser = false;
+		final List<Player> matchedPlayers = server.matchPlayer(name);
+		for (Player matchPlayer : matchedPlayers)
 		{
+			foundUser = true;
 			matchPlayer.setFireTicks(0);
 			sender.sendMessage(_("extinguishOthers", matchPlayer.getDisplayName()));
+		}
+		if (!foundUser)
+		{
+			throw new NotEnoughArgumentsException(_("playerNotFound"));
 		}
 	}
 }

@@ -4,6 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.craftbukkit.SetExpFix;
+import java.util.List;
 import java.util.Locale;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -117,7 +118,8 @@ public class Commandexp extends EssentialsCommand
 	private void showMatch(final Server server, final CommandSender sender, final String match) throws NotEnoughArgumentsException
 	{
 		boolean foundUser = false;
-		for (Player matchPlayer : server.matchPlayer(match))
+		final List<Player> matchedPlayers = server.matchPlayer(match);	
+		for (Player matchPlayer :  matchedPlayers)
 		{
 			foundUser = true;
 			final User target = ess.getUser(matchPlayer);
@@ -132,11 +134,12 @@ public class Commandexp extends EssentialsCommand
 	private void expMatch(final Server server, final CommandSender sender, final String match, String amount, final boolean give) throws NotEnoughArgumentsException
 	{
 		boolean foundUser = false;
-		for (Player matchPlayer : server.matchPlayer(match))
+		final List<Player> matchedPlayers = server.matchPlayer(match);	
+		for (Player matchPlayer :  matchedPlayers)
 		{
+			foundUser = true;
 			final User target = ess.getUser(matchPlayer);
 			setExp(sender, target, amount, give);
-			foundUser = true;
 		}
 		if (!foundUser)
 		{
