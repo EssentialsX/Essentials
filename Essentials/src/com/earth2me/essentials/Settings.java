@@ -462,7 +462,12 @@ public class Settings implements ISettings
 			return config.getConfigurationSection("list").getValues(false);
 		}
 		Map<String, Object> defaultMap = new HashMap<String, Object>();
-		defaultMap.put("Players", "*");
+		if (config.getBoolean("sort-list-by-groups", false)) {
+			defaultMap.put("ListByGroup", "ListByGroup");
+		}
+		else {
+			defaultMap.put("Players", "*");
+		}
 		return defaultMap;
 	}
 
