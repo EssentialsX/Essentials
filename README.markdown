@@ -11,7 +11,6 @@ Recommended NetBeans plugins:
 * Git
 * PMD & FindBugs ( http://kenai.com/projects/sqe/pages/Home )
 
-
 Commit Guidelines
 -----------------
 
