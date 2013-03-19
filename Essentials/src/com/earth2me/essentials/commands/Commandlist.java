@@ -223,8 +223,8 @@ public class Commandlist extends EssentialsCommand
 			{
 				continue;
 			}
-			
-			sender.sendMessage(outputFormat(onlineGroup, listUsers(users)));
+			String groupName = users.get(0).getGroup();			
+			sender.sendMessage(outputFormat(groupName, listUsers(users)));
 		}
 	}
 
