@@ -291,7 +291,6 @@ otree,17,0
 olog,17,0
 otrunk,17,0
 owood,17,0
-dark,17,1
 darktree,17,1
 darklog,17,1
 darktrunk,17,1
@@ -323,12 +322,10 @@ birchtree,17,2
 birchlog,17,2
 birchtrunk,17,2
 birchwood,17,2
-white,17,2
 whitetree,17,2
 whitelog,17,2
 whitetrunk,17,2
 whitewood,17,2
-light,17,2
 lighttree,17,2
 lightlog,17,2
 lighttrunk,17,2
@@ -345,12 +342,10 @@ ltree,17,2
 llog,17,2
 ltrunk,17,2
 lwood,17,2
-jungle,17,3
 jungletree,17,3
 junglelog,17,3
 jungletrunk,17,3
 junglewood,17,3
-forest,17,3
 foresttree,17,3
 forestlog,17,3
 foresttrunk,17,3
