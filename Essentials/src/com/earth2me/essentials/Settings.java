@@ -1022,7 +1022,7 @@ public class Settings implements ISettings
 	@Override
 	public double getMaxFlySpeed()
 	{
-		double maxSpeed = config.getDouble("max-fly-speed", 1.0);
+		double maxSpeed = config.getDouble("max-fly-speed", 0.8);
 		return maxSpeed > 1.0 ? 1.0 : Math.abs(maxSpeed);
 	}
 
