@@ -17,7 +17,7 @@ public class Commandmsg extends EssentialsCommand
 	{
 		super("msg");
 	}
-	
+
 	@Override
 	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
@@ -25,7 +25,7 @@ public class Commandmsg extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		
+
 		String message = getFinalArg(args, 1);
 		if (sender instanceof Player)
 		{
@@ -40,12 +40,12 @@ public class Commandmsg extends EssentialsCommand
 		{
 			message = Util.replaceFormat(message);
 		}
-		
+
 		final String translatedMe = _("me");
-		
+
 		final IReplyTo replyTo = sender instanceof Player ? ess.getUser((Player)sender) : Console.getConsoleReplyTo();
 		final String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
-		
+
 		if (args[0].equalsIgnoreCase(Console.NAME))
 		{
 			sender.sendMessage(_("msgFormat", translatedMe, Console.NAME, message));
@@ -55,36 +55,38 @@ public class Commandmsg extends EssentialsCommand
 			Console.getConsoleReplyTo().setReplyTo(sender);
 			return;
 		}
-		
+
+		boolean skipHidden = sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.vanish.interact");
 		boolean foundUser = false;
-		final List<Player> matchedPlayers = server.matchPlayer(args[0]);			
-		
+		final List<Player> matchedPlayers = server.matchPlayer(args[0]);
+
 		for (Player matchPlayer : matchedPlayers)
-		{			
+		{
 			final User matchedUser = ess.getUser(matchPlayer);
-			
-			if (sender instanceof Player && matchedUser.isHidden())
+
+			if (skipHidden && matchedUser.isHidden())
 			{
 				continue;
-			}		
+			}
 			foundUser = true;
 			if (matchedUser.isAfk())
 			{
 				sender.sendMessage(_("userAFK", matchPlayer.getDisplayName()));
-			}			
+			}
 
-			sender.sendMessage(_("msgFormat", translatedMe, matchPlayer.getDisplayName(), message));			
+			sender.sendMessage(_("msgFormat", translatedMe, matchPlayer.getDisplayName(), message));
 			if (sender instanceof Player && matchedUser.isIgnoredPlayer(ess.getUser(sender)))
 			{
 				continue;
 			}
-			
+
 			matchPlayer.sendMessage(_("msgFormat", senderName, translatedMe, message));
 			replyTo.setReplyTo(matchedUser);
 			ess.getUser(matchPlayer).setReplyTo(sender);
 		}
-		
-		if (!foundUser) {
+
+		if (!foundUser)
+		{
 			throw new Exception(_("playerNotFound"));
 		}
 	}

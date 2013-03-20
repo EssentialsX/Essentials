@@ -85,12 +85,13 @@ public class Commandgamemode extends EssentialsCommand
 			throw new NotEnoughArgumentsException("You need to specify a valid player/mode.");
 		}
 
+		boolean skipHidden = sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.vanish.interact");
 		boolean foundUser = false;
 		final List<Player> matchedPlayers = server.matchPlayer(name);
 		for (Player matchPlayer : matchedPlayers)
 		{
 			final User player = ess.getUser(matchPlayer);
-			if (player.isHidden())
+			if (skipHidden && player.isHidden())
 			{
 				continue;
 			}

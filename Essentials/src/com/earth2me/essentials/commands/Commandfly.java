@@ -63,12 +63,13 @@ public class Commandfly extends EssentialsCommand
 
 	private void flyOtherPlayers(final Server server, final CommandSender sender, final String[] args) throws NotEnoughArgumentsException
 	{
+		boolean skipHidden = sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.vanish.interact");
 		boolean foundUser = false;
 		final List<Player> matchedPlayers = server.matchPlayer(args[0]);
 		for (Player matchPlayer : matchedPlayers)
 		{
 			final User player = ess.getUser(matchPlayer);
-			if (player.isHidden())
+			if (skipHidden && player.isHidden())
 			{
 				continue;
 			}

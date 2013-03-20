@@ -68,12 +68,13 @@ public class Commandspeed extends EssentialsCommand
 
 	private void speedOtherPlayers(final Server server, final CommandSender sender, final boolean isFly, final boolean isBypass, final float speed, final String name) throws NotEnoughArgumentsException
 	{
+		boolean skipHidden = sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.vanish.interact");
 		boolean foundUser = false;
 		final List<Player> matchedPlayers = server.matchPlayer(name);
 		for (Player matchPlayer : matchedPlayers)
 		{
 			final User player = ess.getUser(matchPlayer);
-			if (player.isHidden())
+			if (skipHidden && player.isHidden())
 			{
 				continue;
 			}

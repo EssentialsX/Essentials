@@ -32,12 +32,13 @@ public class Commandfeed extends EssentialsCommand
 
 	private void feedOtherPlayers(final Server server, final CommandSender sender, final String name) throws NotEnoughArgumentsException
 	{
+		boolean skipHidden = sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.vanish.interact");
 		boolean foundUser = false;
 		final List<Player> matchedPlayers = server.matchPlayer(name);
 		for (Player matchPlayer : matchedPlayers)
 		{
 			final User player = ess.getUser(matchPlayer);
-			if (player.isHidden())
+			if (skipHidden && player.isHidden())
 			{
 				continue;
 			}

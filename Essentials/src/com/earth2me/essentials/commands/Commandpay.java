@@ -31,12 +31,13 @@ public class Commandpay extends EssentialsCommand
 
 		double amount = Double.parseDouble(args[1].replaceAll("[^0-9\\.]", ""));
 
+		boolean skipHidden = !user.isAuthorized("essentials.vanish.interact");
 		boolean foundUser = false;
 		final List<Player> matchedPlayers = server.matchPlayer(args[0]);
 		for (Player matchPlayer : matchedPlayers)
 		{
 			User player = ess.getUser(matchPlayer);
-			if (player.isHidden())
+			if (skipHidden && player.isHidden())
 			{
 				continue;
 			}
