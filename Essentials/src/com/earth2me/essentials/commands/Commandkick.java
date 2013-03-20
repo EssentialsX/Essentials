@@ -25,7 +25,7 @@ public class Commandkick extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		final User target = getPlayer(server, args, 0);
+		final User target = getPlayer(server, args, 0, true, false);
 		if (sender instanceof Player)
 		{
 			User user = ess.getUser(sender);

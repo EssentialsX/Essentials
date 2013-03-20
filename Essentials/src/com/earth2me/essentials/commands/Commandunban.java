@@ -27,7 +27,7 @@ public class Commandunban extends EssentialsCommand
 		String name;
 		try
 		{
-			final User user = getPlayer(server, args, 0, true);
+			final User user = getPlayer(server, args, 0, true, true);
 			name = user.getName();
 			user.setBanned(false);
 			user.setBanTimeout(0);

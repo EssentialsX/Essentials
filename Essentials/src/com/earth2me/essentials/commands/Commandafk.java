@@ -17,7 +17,7 @@ public class Commandafk extends EssentialsCommand
 	{
 		if (args.length > 0 && user.isAuthorized("essentials.afk.others"))
 		{
-			User afkUser = getPlayer(server, args, 0);
+			User afkUser = getPlayer(server, user, args, 0);
 			toggleAfk(afkUser);
 		}
 		else

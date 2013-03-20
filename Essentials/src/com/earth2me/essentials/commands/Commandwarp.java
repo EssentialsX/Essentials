@@ -41,7 +41,7 @@ public class Commandwarp extends EssentialsCommand
 			User otherUser = null;
 			if (args.length == 2 && (user.isAuthorized("essentials.warp.otherplayers") || user.isAuthorized("essentials.warp.others")))
 			{
-				otherUser = getPlayer(server, args, 1);
+				otherUser = getPlayer(server, args, 1, user.isAuthorized("essentials.teleport.hidden"), false);
 				warpUser(user, otherUser, args[0]);
 				throw new NoChargeException();
 			}
@@ -58,7 +58,7 @@ public class Commandwarp extends EssentialsCommand
 			warpList(sender, args);
 			throw new NoChargeException();
 		}
-		User otherUser = getPlayer(server, args, 1);
+		User otherUser = getPlayer(server, args, 1, true, false);
 		otherUser.getTeleport().warp(args[0], null, TeleportCause.COMMAND);
 		throw new NoChargeException();
 

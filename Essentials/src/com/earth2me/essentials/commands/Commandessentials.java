@@ -90,7 +90,7 @@ public class Commandessentials extends EssentialsCommand
 		{
 			throw new Exception("/<command> reset <player>");
 		}
-		final User user = getPlayer(server, args, 1, true);
+		final User user = getPlayer(server, args, 1, true, true);
 		user.reset();
 		sender.sendMessage("Reset Essentials userdata for player: " + user.getDisplayName());
 	}

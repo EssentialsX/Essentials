@@ -29,7 +29,7 @@ public class Commandban extends EssentialsCommand
 		User user;
 		try
 		{
-			user = getPlayer(server, args, 0, true);
+			user = getPlayer(server, args, 0, true, true);
 		}
 		catch (NoSuchFieldException e)
 		{

@@ -55,7 +55,7 @@ public class Commandtppos extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		User user = getPlayer(server, args, 0);
+		User user = getPlayer(server, args, 0, true, false);
 		final double x = args[1].startsWith("~") ? user.getLocation().getX() + Integer.parseInt(args[1].substring(1)) : Integer.parseInt(args[1]);
 		final double y = args[2].startsWith("~") ? user.getLocation().getY() + Integer.parseInt(args[2].substring(1)) : Integer.parseInt(args[2]);
 		final double z = args[3].startsWith("~") ? user.getLocation().getZ() + Integer.parseInt(args[3].substring(1)) : Integer.parseInt(args[3]);

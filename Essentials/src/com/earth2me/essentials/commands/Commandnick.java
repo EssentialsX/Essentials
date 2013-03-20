@@ -33,7 +33,7 @@ public class Commandnick extends EssentialsCommand
 			{
 				throw new Exception(_("nickOthersPermission"));
 			}
-			setNickname(server, getPlayer(server, args, 0), formatNickname(user, args[1]));
+			setNickname(server, getPlayer(server, user, args, 0), formatNickname(user, args[1]));
 			user.sendMessage(_("nickChanged"));
 			return;
 		}
@@ -57,7 +57,7 @@ public class Commandnick extends EssentialsCommand
 		}
 		else
 		{
-			setNickname(server, getPlayer(server, args, 0), formatNickname(null, args[1]));
+			setNickname(server, getPlayer(server, args, 0, true, false), formatNickname(null, args[1]));
 		}
 		sender.sendMessage(_("nickChanged"));
 	}

@@ -32,7 +32,7 @@ public class Commandnear extends EssentialsCommand
 			{
 				try
 				{
-					otherUser = getPlayer(server, args, 0);
+					otherUser = getPlayer(server, user, args, 0);
 				}
 				catch (Exception ex)
 				{
@@ -66,7 +66,7 @@ public class Commandnear extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		final User otherUser = getPlayer(server, args, 0);
+		final User otherUser = getPlayer(server, args, 0, true, false);
 		long radius = 200;
 		if (args.length > 1)
 		{

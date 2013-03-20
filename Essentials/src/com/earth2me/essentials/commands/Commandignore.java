@@ -22,7 +22,7 @@ public class Commandignore extends EssentialsCommand
 		User player;
 		try
 		{
-			player = getPlayer(server, args, 0);
+			player = getPlayer(server, args, 0, true, true);
 		}
 		catch (NoSuchFieldException ex)
 		{

@@ -30,7 +30,7 @@ public class Commandkit extends EssentialsCommand
 		}
 		else if (args.length > 1 && user.isAuthorized("essentials.kit.others"))
 		{
-			final User userTo = getPlayer(server, args, 1, true);
+			final User userTo = getPlayer(server, user, args, 1);
 			final String kitName = Util.sanitizeString(args[0].toLowerCase(Locale.ENGLISH)).trim();
 			giveKit(userTo, user, kitName);
 		}
@@ -52,7 +52,7 @@ public class Commandkit extends EssentialsCommand
 		}
 		else
 		{
-			final User userTo = getPlayer(server, args, 1, true);
+			final User userTo = getPlayer(server, args, 1, true, false);
 			final String kitName = args[0].toLowerCase(Locale.ENGLISH);
 
 			final Map<String, Object> kit = ess.getSettings().getKit(kitName);

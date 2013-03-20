@@ -45,10 +45,15 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 
 	protected User getPlayer(final Server server, final String[] args, final int pos) throws NoSuchFieldException, NotEnoughArgumentsException
 	{
-		return getPlayer(server, args, pos, false);
+		return getPlayer(server, args, pos, false, false);
+	}
+	
+	protected User getPlayer(final Server server, final User user, final String[] args, final int pos) throws NoSuchFieldException, NotEnoughArgumentsException
+	{
+		return getPlayer(server, args, pos, user.isAuthorized("essentials.vanish.interact"), false);
 	}
 
-	protected User getPlayer(final Server server, final String[] args, final int pos, final boolean getOffline) throws NoSuchFieldException, NotEnoughArgumentsException
+	protected User getPlayer(final Server server, final String[] args, final int pos, boolean getHidden, final boolean getOffline) throws NoSuchFieldException, NotEnoughArgumentsException
 	{
 		if (args.length <= pos)
 		{
@@ -61,7 +66,11 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 		final User user = ess.getUser(args[pos]);
 		if (user != null)
 		{
-			if (!getOffline && (!user.isOnline() || user.isHidden()))
+			if (!getOffline && !user.isOnline())
+			{
+				throw new PlayerNotFoundException();
+			}
+			if (!getHidden && user.isHidden())
 			{
 				throw new PlayerNotFoundException();
 			}
@@ -74,13 +83,13 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 			for (Player player : matches)
 			{
 				final User userMatch = ess.getUser(player);
-				if (userMatch.getDisplayName().startsWith(args[pos]) && (getOffline || !userMatch.isHidden()))
+				if (userMatch.getDisplayName().startsWith(args[pos]) && (getHidden || !userMatch.isHidden()))
 				{
 					return userMatch;
 				}
 			}
 			final User userMatch = ess.getUser(matches.get(0));
-			if (getOffline || !userMatch.isHidden())
+			if (getHidden || !userMatch.isHidden())
 			{
 				return userMatch;
 			}

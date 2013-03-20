@@ -31,7 +31,7 @@ public class Commandunbanip extends EssentialsCommand
 		}
 		else
 		{
-			final User user = getPlayer(server, args, 0, true);
+			final User user = getPlayer(server, args, 0, true, true);
 			ipAddress = user.getLastLoginAddress();
 			if (ipAddress.isEmpty())
 			{

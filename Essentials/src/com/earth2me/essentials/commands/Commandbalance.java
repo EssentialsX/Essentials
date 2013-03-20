@@ -21,7 +21,7 @@ public class Commandbalance extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		sender.sendMessage(_("balance", Util.displayCurrency(getPlayer(server, args, 0, true).getMoney(), ess)));
+		sender.sendMessage(_("balance", Util.displayCurrency(getPlayer(server, args, 0, true, true).getMoney(), ess)));
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class Commandbalance extends EssentialsCommand
 							|| !(user.isAuthorized("essentials.balance.others")
 								 || user.isAuthorized("essentials.balance.other"))
 							? user
-							: getPlayer(server, args, 0, true)).getMoney();
+							: getPlayer(server, args, 0, true, true)).getMoney();
 		user.sendMessage(_("balance", Util.displayCurrency(bal, ess)));
 	}
 }

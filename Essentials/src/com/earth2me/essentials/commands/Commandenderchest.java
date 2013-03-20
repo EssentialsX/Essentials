@@ -16,7 +16,7 @@ public class Commandenderchest extends EssentialsCommand
 	{		
 		if (args.length > 0 && user.isAuthorized("essentials.enderchest.others"))
 		{
-			final User invUser = getPlayer(server, args, 0);
+			final User invUser = getPlayer(server, user, args, 0);
 			user.openInventory(invUser.getEnderChest());
 			user.setEnderSee(true);
 		}

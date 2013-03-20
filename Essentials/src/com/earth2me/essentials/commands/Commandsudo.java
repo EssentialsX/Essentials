@@ -27,7 +27,7 @@ public class Commandsudo extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		final User user = getPlayer(server, args, 0, false);
+		final User user = getPlayer(server, args, 0);
 		if(args[1].toLowerCase(Locale.ENGLISH).startsWith("c:"))
 		{
 			if (user.isAuthorized("essentials.sudo.exempt") && sender instanceof Player)

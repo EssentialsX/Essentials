@@ -23,7 +23,7 @@ public class Commandtogglejail extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		final User player = getPlayer(server, args, 0, true);
+		final User player = getPlayer(server, args, 0, true, true);
 
 		if (args.length >= 2 && !player.isJailed())
 		{

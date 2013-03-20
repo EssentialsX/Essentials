@@ -28,7 +28,7 @@ public class Commandunlimited extends EssentialsCommand
 
 		if (args.length > 1 && user.isAuthorized("essentials.unlimited.others"))
 		{
-			target = getPlayer(server, args, 1);
+			target = getPlayer(server, user, args, 1);
 		}
 
 		if (args[0].equalsIgnoreCase("list"))
