@@ -459,7 +459,10 @@ public class Settings implements ISettings
 	{
 		if (config.isConfigurationSection("list"))
 		{ 
-			return config.getConfigurationSection("list").getValues(false);
+			Map<String, Object> values = config.getConfigurationSection("list").getValues(false);
+			if (!values.isEmpty()) {
+				return values;
+			}
 		}
 		Map<String, Object> defaultMap = new HashMap<String, Object>();
 		if (config.getBoolean("sort-list-by-groups", false)) {
