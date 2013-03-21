@@ -184,6 +184,11 @@ public class EssentialsPlayerListener implements Listener
 			@Override
 			public void run()
 			{
+				if (!user.isOnline())
+				{
+					return;
+				}
+
 				user.setLastLogin(currentTime);
 				user.setDisplayNick();
 				updateCompass(user);
@@ -264,7 +269,7 @@ public class EssentialsPlayerListener implements Listener
 				}
 				user.setFlySpeed(0.1f);
 				user.setWalkSpeed(0.2f);
-				
+
 			}
 		});
 	}
