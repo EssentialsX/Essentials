@@ -362,9 +362,10 @@ public class Essentials extends JavaPlugin implements IEssentials
 			}
 
 			//Print version even if admin command is not available
-			if (command.getName().equals("essentials"))
+			if (commandLabel.equalsIgnoreCase("essversion"))
 			{
 				sender.sendMessage("This server is running Essentials " + getDescription().getVersion());
+				return true;
 			}
 
 			// Check for disabled commands
