@@ -2,7 +2,9 @@ package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Mob.MobException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.Set;
@@ -11,8 +13,8 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Skeleton.SkeletonType;
 import org.bukkit.entity.*;
+import org.bukkit.entity.Skeleton.SkeletonType;
 import org.bukkit.material.Colorable;
 
 
@@ -36,73 +38,74 @@ public class SpawnMob
 		return Util.joinList(availableList);
 	}
 
-	public static String[] mobData(final String mobString)
+	public static List<String> mobParts(final String mobString)
 	{
-		String[] returnString = new String[4];
+		String[] mobParts = mobString.split(",");
 
-		final String[] parts = mobString.split(",");
-		String[] mobParts = parts[0].split(":");
+		List<String> mobs = new ArrayList<String>();
 
-		returnString[0] = mobParts[0];
-		if (mobParts.length == 2)
+		for (String mobPart : mobParts)
 		{
-			returnString[1] = mobParts[1];
+			String[] mobDatas = mobPart.split(":");
+			mobs.add(mobDatas[0]);
 		}
+		return mobs;
+	}
 
-		if (parts.length > 1)
+	public static List<String> mobData(final String mobString)
+	{
+		String[] mobParts = mobString.split(",");
+
+		List<String> mobData = new ArrayList<String>();
+
+		for (String mobPart : mobParts)
 		{
-			String[] mountParts = parts[1].split(":");
-			returnString[2] = mountParts[0];
-			if (mountParts.length == 2)
+			String[] mobDatas = mobPart.split(":");
+			if (mobDatas.length == 1)
 			{
-				returnString[3] = mountParts[1];
+				mobData.add(null);
+			}
+			else
+			{
+				mobData.add(mobDatas[1]);
 			}
 		}
 
-		return returnString;
+		return mobData;
 	}
 
 	// This method spawns a mob where the user is looking, owned by user
-	public static void spawnmob(final IEssentials ess, final Server server, final User user, final String[] Data, int mobCount) throws Exception
+	public static void spawnmob(final IEssentials ess, final Server server, final User user, final List<String> parts, final List<String> data, int mobCount) throws Exception
 	{
 		final Block block = Util.getTarget(user).getBlock();
 		if (block == null)
 		{
 			throw new Exception(_("unableToSpawnMob"));
 		}
-		spawnmob(ess, server, user, user, block.getLocation(), Data, mobCount);
+		spawnmob(ess, server, user, user, block.getLocation(), parts, data, mobCount);
 	}
 
 	// This method spawns a mob at loc, owned by noone
-	public static void spawnmob(final IEssentials ess, final Server server, final CommandSender sender, final Location loc, final String[] Data, int mobCount) throws Exception
+	public static void spawnmob(final IEssentials ess, final Server server, final CommandSender sender, final Location loc, final List<String> parts, final List<String> data, int mobCount) throws Exception
 	{
-		spawnmob(ess, server, sender, null, loc, Data, mobCount);
+		spawnmob(ess, server, sender, null, loc, parts, data, mobCount);
 	}
 
 	// This method spawns a mob at target, owned by target
-	public static void spawnmob(final IEssentials ess, final Server server, final CommandSender sender, final User target, final String[] Data, int mobCount) throws Exception
+	public static void spawnmob(final IEssentials ess, final Server server, final CommandSender sender, final User target, final List<String> parts, final List<String> data, int mobCount) throws Exception
 	{
-		spawnmob(ess, server, sender, target, target.getLocation(), Data, mobCount);
+		spawnmob(ess, server, sender, target, target.getLocation(), parts, data, mobCount);
 	}
 
 	// This method spawns a mob at loc, owned by target
-	public static void spawnmob(final IEssentials ess, final Server server, final CommandSender sender, final User target, final Location loc, final String[] Data, int mobCount) throws Exception
+	public static void spawnmob(final IEssentials ess, final Server server, final CommandSender sender, final User target, final Location loc, final List<String> parts, final List<String> data, int mobCount) throws Exception
 	{
 		final Location sloc = Util.getSafeDestination(loc);
-		final String mobType = Data[0];
-		final String mobData = Data[1];
-		final String mountType = Data[2];
-		final String mountData = Data[3];
 
-		Mob mob = Mob.fromName(mobType);
-		Mob mobMount = null;
-
-		checkSpawnable(ess, sender, mob);
-
-		if (mountType != null)
+		for(int i = 0; i < parts.size(); i++)
 		{
-			mobMount = Mob.fromName(mountType);
-			checkSpawnable(ess, sender, mobMount);
+			Mob mob = Mob.fromName(parts.get(i));
+			checkSpawnable(ess, sender, mob);
 		}
 
 		int serverLimit = ess.getSettings().getSpawnMobLimit();
@@ -112,11 +115,12 @@ public class SpawnMob
 			sender.sendMessage(_("mobSpawnLimit"));
 		}
 
+		Mob mob = Mob.fromName(parts.get(0)); // Get the first mob
 		try
 		{
 			for (int i = 0; i < mobCount; i++)
 			{
-				spawnMob(ess, server, sender, target, sloc, mob, mobData, mobMount, mountData);
+				spawnMob(ess, server, sender, target, sloc, parts, data);
 			}
 			sender.sendMessage(mobCount + " " + mob.name.toLowerCase(Locale.ENGLISH) + mob.suffix + " " + _("spawned"));
 		}
@@ -134,23 +138,40 @@ public class SpawnMob
 		}
 	}
 
-	private static void spawnMob(final IEssentials ess, final Server server, final CommandSender sender, final User target, final Location sloc, Mob mob, String mobData, Mob mobMount, String mountData) throws Exception
+	private static void spawnMob(final IEssentials ess, final Server server, final CommandSender sender, final User target, final Location sloc, List<String> parts, List<String> data) throws Exception
 	{
-		Entity spawnedMob = mob.spawn(sloc.getWorld(), server, sloc);
-		Entity spawnedMount = null;
+		Mob mob;
+		Entity spawnedMob = null;
+		Entity spawnedMount;
 
-		if (mobMount != null)
+		for (int i = 0; i < parts.size(); i++)
 		{
-			spawnedMount = mobMount.spawn(sloc.getWorld(), server, sloc);
-			spawnedMob.setPassenger(spawnedMount);
-		}
-		if (mobData != null)
-		{
-			changeMobData(mob.getType(), spawnedMob, mobData, target);
-		}
-		if (spawnedMount != null && mountData != null)
-		{
-			changeMobData(mobMount.getType(), spawnedMount, mountData, target);
+			if (i == 0)
+			{
+				mob = Mob.fromName(parts.get(i));
+				spawnedMob = mob.spawn(sloc.getWorld(), server, sloc);
+
+				if (data.get(i) != null)
+				{
+					changeMobData(mob.getType(), spawnedMob, data.get(i), target);
+				}
+			}
+			
+			int next = (i + 1);
+			if (next < parts.size()) //If it's the last mob in the list, don't set the mount
+			{
+				Mob mMob = Mob.fromName(parts.get(next));
+				spawnedMount = mMob.spawn(sloc.getWorld(), server, sloc);
+
+				if (data.get(next) != null)
+				{
+					changeMobData(mMob.getType(), spawnedMount, data.get(next), target);
+				}
+
+				spawnedMob.setPassenger(spawnedMount);
+
+				spawnedMob = spawnedMount;
+			}
 		}
 	}
 

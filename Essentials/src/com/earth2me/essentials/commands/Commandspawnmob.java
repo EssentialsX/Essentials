@@ -5,6 +5,7 @@ import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.SpawnMob;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import java.util.List;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
@@ -24,9 +25,10 @@ public class Commandspawnmob extends EssentialsCommand
 			final String mobList = SpawnMob.mobList(user);
 			throw new NotEnoughArgumentsException(_("mobsAvailable", mobList));
 		}
-
-		String[] mobData = SpawnMob.mobData(args[0]);
-
+		
+		List<String> mobParts = SpawnMob.mobParts(args[0]);
+		List<String> mobData = SpawnMob.mobData(args[0]);
+		
 		int mobCount = 1;
 		if (args.length >= 2)
 		{
@@ -36,11 +38,11 @@ public class Commandspawnmob extends EssentialsCommand
 		if (args.length >= 3)
 		{
 			final User target = getPlayer(ess.getServer(), user, args, 2);
-			SpawnMob.spawnmob(ess, server, user, target, mobData, mobCount);
+			SpawnMob.spawnmob(ess, server, user, target, mobParts, mobData, mobCount);
 			return;
 		}
 
-		SpawnMob.spawnmob(ess, server, user, mobData, mobCount);
+		SpawnMob.spawnmob(ess, server, user, mobParts, mobData, mobCount);
 	}
 
 	@Override
@@ -52,10 +54,11 @@ public class Commandspawnmob extends EssentialsCommand
 			throw new NotEnoughArgumentsException(_("mobsAvailable", mobList));
 		}
 
-		String[] mobData = SpawnMob.mobData(args[0]);
+		List<String> mobParts = SpawnMob.mobParts(args[0]);
+		List<String> mobData = SpawnMob.mobData(args[0]);
 		int mobCount = Integer.parseInt(args[1]);
 
 		final User target = getPlayer(ess.getServer(), args, 2, true, false);
-		SpawnMob.spawnmob(ess, server, sender, target, mobData, mobCount);
+		SpawnMob.spawnmob(ess, server, sender, target, mobParts, mobData, mobCount);
 	}
 }
