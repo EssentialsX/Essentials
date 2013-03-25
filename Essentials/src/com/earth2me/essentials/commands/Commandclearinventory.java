@@ -82,7 +82,7 @@ public class Commandclearinventory extends EssentialsCommand
 		}
 	}
 
-	private void cleanInventoryOthers(Server server, CommandSender user, String[] args) throws Exception
+	private void cleanInventoryOthers(Server server, CommandSender sender, String[] args) throws Exception
 	{
 		List<Player> online = server.matchPlayer(args[0]);
 
@@ -98,7 +98,7 @@ public class Commandclearinventory extends EssentialsCommand
 				{
 					p.getInventory().clear();
 				}
-				user.sendMessage(_("inventoryClearedOthers", p.getDisplayName()));
+				sender.sendMessage(_("inventoryClearedOthers", p.getDisplayName()));
 			}
 		}
 		else
