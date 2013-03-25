@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
+import org.bukkit.command.CommandSender;
 import org.bukkit.Server;
 
 
@@ -23,6 +24,20 @@ public class Commandafk extends EssentialsCommand
 		else
 		{
 			toggleAfk(user);
+		}
+	}
+	
+	@Override
+	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	{
+		if (args.length > 0)
+		{
+			User afkUser = getPlayer(server, args, 0, true, false);
+			toggleAfk(afkUser);
+		}
+		else
+		{
+			throw new NotEnoughArgumentsException();
 		}
 	}
 
@@ -53,3 +68,4 @@ public class Commandafk extends EssentialsCommand
 		}
 	}
 }
+
