@@ -205,7 +205,7 @@ commands:
     aliases: [ekill]
   killall:
     description: Kill all mobs in a world.
-    usage: /<command> [mobType] [radius]
+    usage: /<command> [mobType] [radius] [world]
     aliases: [butcher,ebutcher,ekillall,mobkill,emobkill]
   kit:
     description: Obtains the specified kit or views all available kits.
@@ -300,7 +300,7 @@ commands:
     aliases: [formula,eformula,method,emethod,erecipe,recipes,erecipes]
   remove:
     description: Removes entities in your world.
-    usage: /<command> <drops|arrows|boats|minecarts|xp|paintings> [radius]
+    usage: /<command> <drops|arrows|boats|minecarts|xp|paintings> [radius] [world]
     aliases: [eremove]
   repair:
     description: Repairs the durability of all or one item.
@@ -336,7 +336,7 @@ commands:
     aliases: [esetworth]
   socialspy:
     description: Toggles if you can see msg/mail commands in chat.
-    usage: /<command>
+    usage: /<command> [player]
     aliases: [esocialspy]
   spawner:
     description: Change the mob type of a spawner.

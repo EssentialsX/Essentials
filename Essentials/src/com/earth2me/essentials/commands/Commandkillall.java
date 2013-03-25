@@ -53,6 +53,10 @@ public class Commandkillall extends EssentialsCommand
 					throw new Exception(_("numberRequired"), e);
 				}
 			}
+			if (args.length > 2)
+			{
+				world = ess.getWorld(args[2]);
+			}
 		}
 		else
 		{

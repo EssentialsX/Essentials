@@ -37,10 +37,10 @@ public class Commandremove extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 		ToRemove toRemove;
-		final World world = user.getWorld();
+		World world = user.getWorld();
 		int radius = 0;
 
-		if (args.length < 2)
+		if (args.length >= 2)
 		{
 			try
 			{
@@ -50,6 +50,11 @@ public class Commandremove extends EssentialsCommand
 			{
 				throw new Exception(_("numberRequired"), e);
 			}
+		}
+		
+		if (args.length >= 3)
+		{
+			world = ess.getWorld(args[2]);
 		}
 
 		try
@@ -71,13 +76,8 @@ public class Commandremove extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		World world;
-		world = ess.getWorld(args[1]);
+		World world = ess.getWorld(args[1]);
 
-		if (world == null)
-		{
-			throw new Exception(_("invalidWorld"));
-		}
 		ToRemove toRemove;
 		try
 		{

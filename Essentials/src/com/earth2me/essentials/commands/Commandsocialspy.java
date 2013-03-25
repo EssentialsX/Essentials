@@ -16,26 +16,24 @@ public class Commandsocialspy extends EssentialsCommand
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		if (args.length > 1 && user.isAuthorized("essentials.socialspy.others"))
+		if (args.length > 0 && user.isAuthorized("essentials.socialspy.others"))
 		{
 			User target = getPlayer(server, user, args, 0);
-			user.sendMessage("§7SocialSpy " + (target.toggleSocialSpy() ? _("enabled") : _("disabled")));
-			
+			user.sendMessage(_("socialSpy", target.getDisplayName(), target.toggleSocialSpy() ? _("enabled") : _("disabled")));
 		}
 		else
 		{
-			user.sendMessage("§7SocialSpy " + (user.toggleSocialSpy() ? _("enabled") : _("disabled")));
+			user.sendMessage(_("socialSpy", user.getDisplayName(), user.toggleSocialSpy() ? _("enabled") : _("disabled")));
 		}
 	}
-	
+
 	@Override
 	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
-		if (args.length > 1)
+		if (args.length > 0)
 		{
 			User target = getPlayer(server, args, 0, true, false);
-			sender.sendMessage("§7SocialSpy " + (target.toggleSocialSpy() ? _("enabled") : _("disabled")));
-			
+			sender.sendMessage(_("socialSpy", target.getDisplayName(), target.toggleSocialSpy() ? _("enabled") : _("disabled")));
 		}
 		else
 		{
