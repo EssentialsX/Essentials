@@ -73,7 +73,7 @@ public class Commandlist extends EssentialsCommand
 			{
 				continue;
 			}
-			final String group = onlineUser.getGroup().toLowerCase();
+			final String group = Util.stripFormat(onlineUser.getGroup().toLowerCase());
 			List<User> list = playerList.get(group);
 			if (list == null)
 			{
