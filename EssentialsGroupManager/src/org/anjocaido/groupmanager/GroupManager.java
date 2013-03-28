@@ -1901,7 +1901,7 @@ public class GroupManager extends JavaPlugin {
 					auxString = auxString.substring(0, auxString.lastIndexOf(","));
 				}
 				if (auxString2.lastIndexOf(",") > 0) {
-					auxString2 = auxString.substring(0, auxString2.lastIndexOf(","));
+					auxString2 = auxString2.substring(0, auxString2.lastIndexOf(","));
 				}
 				sender.sendMessage(ChatColor.YELLOW + "Groups Available: " + ChatColor.WHITE + auxString);
 				sender.sendMessage(ChatColor.YELLOW + "GlobalGroups Available: " + ChatColor.WHITE + auxString2);
