@@ -875,14 +875,14 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "You can't modify a player with same group as you, or higher.");
 					return true;
 				}
-				for (auxString : auxUser.getPermissionList()) {
-					permissionResult = permissionHandler.checkFullUserPermission(senderUser, auxString);
+				for (String perm : auxUser.getPermissionList()) {
+					permissionResult = permissionHandler.checkFullUserPermission(senderUser, perm);
 					if (!isConsole && !isOpOverride && (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND) || permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION))) {
-						sender.sendMessage(ChatColor.RED + "You can't remove a permission you don't have: '" + auxString + "'.");
+						sender.sendMessage(ChatColor.RED + "You can't remove a permission you don't have: '" + perm + "'.");
 					}
 					else
 					{
-						auxUser.removePermission(auxString);
+						auxUser.removePermission(perm);
 					}
 				}
 				sender.sendMessage(ChatColor.YELLOW + "You removed all permissions from player '" + auxUser.getName() + "'.");
@@ -1159,14 +1159,14 @@ public class GroupManager extends JavaPlugin {
 					return true;
 				}
 				
-				for (auxString : auxGroup.getPermissionList()) {
-					permissionResult = permissionHandler.checkFullUserPermission(senderUser, auxString);
+				for (String perm : auxGroup.getPermissionList()) {
+					permissionResult = permissionHandler.checkFullUserPermission(senderUser, perm);
 					if (!isConsole && !isOpOverride && (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND) || permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION))) {
-						sender.sendMessage(ChatColor.RED + "Can't remove a permission you don't have: '" + auxString + "'.");
+						sender.sendMessage(ChatColor.RED + "Can't remove a permission you don't have: '" + perm + "'.");
 					}
 					else
 					{
-						auxGroup.removePermission(auxString);
+						auxGroup.removePermission(perm);
 					}
 				}
 				sender.sendMessage(ChatColor.YELLOW + "You removed all permissions from group '" + auxGroup.getName() + "'.");
