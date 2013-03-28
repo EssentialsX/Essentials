@@ -33,13 +33,17 @@ commands:
     usage: /<command> <group>
     permissions: groupmanager.mangdel
   manuaddp:
-    description: Add permissions diretly to the player.
+    description: Add permissions directly to the player.
     usage: /<command> <player> <permissions>
     permissions: groupmanager.manuaddp
   manudelp:
-    description: Removes permissions diretly from the player.
+    description: Removes permissions directly from the player.
     usage: /<command> <player> <permissions>
     permissions: groupmanager.manudelp
+  manuclearp:
+    description: Removes all permissions of a player.
+    usage: /<command> <player>
+    permissions: groupmanager.manuclearp
   manulistp:
     description: List all permissionss from a player.
     usage: /<command> <player>
@@ -54,6 +58,10 @@ commands:
     permissions: groupmanager.mangaddp
   mangdelp:
     description: Removes permissions from a group.
+    usage: /<command> <group> <permissions>
+    permissions: groupmanager.mangdelp
+  mangclearp:
+    description: Removes all permissions of a group.
     usage: /<command> <group> <permissions>
     permissions: groupmanager.mangdelp
   manglistp:
@@ -133,6 +141,7 @@ commands:
     usage: /<command> [world]
     permissions: groupmanager.manload
   listgroups:
+    aliases: [manlistg]
     description: List the groups available.
     usage: /<command>
     permissions: groupmanager.listgroups
