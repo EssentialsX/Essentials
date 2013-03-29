@@ -99,8 +99,8 @@ public class Commandlist extends EssentialsCommand
 		{
 			throw new Exception(_("groupDoesNotExist"));
 		}
-	
-		return  outputFormat(groupName, listUsers(users));
+
+		return outputFormat(groupName, listUsers(users));
 	}
 
 	// Handle the merging of groups
@@ -171,12 +171,13 @@ public class Commandlist extends EssentialsCommand
 					outputUserList.addAll(matchedList);
 					int limit = Integer.parseInt(groupValue);
 					if (matchedList.size() > limit)
-					{						
-						sender.sendMessage(outputFormat(oConfigGroup, _("groupNumber", matchedList.size(), commandLabel, Util.stripFormat(configGroup))));						
+					{
+						sender.sendMessage(outputFormat(oConfigGroup, _("groupNumber", matchedList.size(), commandLabel, Util.stripFormat(configGroup))));
 					}
-					else {					
-						sender.sendMessage(outputFormat(oConfigGroup, listUsers(outputUserList)));						
-					}					
+					else
+					{
+						sender.sendMessage(outputFormat(oConfigGroup, listUsers(outputUserList)));
+					}
 					continue;
 				}
 			}
@@ -200,7 +201,7 @@ public class Commandlist extends EssentialsCommand
 		{
 			List<User> asteriskUsers = new ArrayList<User>();
 			for (String onlineGroup : onlineGroups)
-			{				
+			{
 				asteriskUsers.addAll(playerList.get(onlineGroup));
 			}
 			for (String key : asterisk)
@@ -218,7 +219,7 @@ public class Commandlist extends EssentialsCommand
 			if (ess.getPermissionsHandler().getName().equals("ConfigPermissions"))
 			{
 				onlineGroup = _("connectedPlayers");
-			}			
+			}
 			if (users == null || users.isEmpty())
 			{
 				continue;
@@ -263,6 +264,6 @@ public class Commandlist extends EssentialsCommand
 		outputString.append(_("listGroupTag", Util.replaceFormat(group)));
 		outputString.append(message);
 		outputString.setCharAt(0, Character.toTitleCase(outputString.charAt(0)));
-		return outputString.toString();		
+		return outputString.toString();
 	}
 }
