@@ -140,10 +140,10 @@ public class Commandlist extends EssentialsCommand
 		List<String> asterisk = new ArrayList<String>();
 
 		// Loop through the custom defined groups and display them
-		for (String configGroup : configGroups)
+		for (String oConfigGroup : configGroups)
 		{
-			String groupValue = ess.getSettings().getListGroupConfig().get(configGroup).toString().trim();
-			configGroup = configGroup.toLowerCase();
+			String groupValue = ess.getSettings().getListGroupConfig().get(oConfigGroup).toString().trim();
+			String configGroup = oConfigGroup.toLowerCase();
 
 			// If the group value is an asterisk, then skip it, and handle it later
 			if (groupValue.equals("*"))
@@ -172,10 +172,10 @@ public class Commandlist extends EssentialsCommand
 					int limit = Integer.parseInt(groupValue);
 					if (matchedList.size() > limit)
 					{						
-						sender.sendMessage(outputFormat(configGroup, _("groupNumber", matchedList.size(), commandLabel, configGroup)));						
+						sender.sendMessage(outputFormat(oConfigGroup, _("groupNumber", matchedList.size(), commandLabel, Util.stripFormat(configGroup))));						
 					}
 					else {					
-						sender.sendMessage(outputFormat(configGroup, listUsers(outputUserList)));						
+						sender.sendMessage(outputFormat(oConfigGroup, listUsers(outputUserList)));						
 					}					
 					continue;
 				}
@@ -223,7 +223,7 @@ public class Commandlist extends EssentialsCommand
 			{
 				continue;
 			}
-			String groupName = users.get(0).getGroup();			
+			String groupName = users.get(0).getGroup();
 			sender.sendMessage(outputFormat(groupName, listUsers(users)));
 		}
 	}
