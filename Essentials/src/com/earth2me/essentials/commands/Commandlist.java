@@ -190,7 +190,7 @@ public class Commandlist extends EssentialsCommand
 				continue;
 			}
 
-			sender.sendMessage(outputFormat(configGroup, listUsers(outputUserList)));
+			sender.sendMessage(outputFormat(oConfigGroup, listUsers(outputUserList)));
 		}
 
 		String[] onlineGroups = playerList.keySet().toArray(new String[0]);
