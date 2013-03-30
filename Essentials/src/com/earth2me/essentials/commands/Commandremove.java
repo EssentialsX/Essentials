@@ -25,7 +25,8 @@ public class Commandremove extends EssentialsCommand
 		BOATS,
 		MINECARTS,
 		XP,
-		PAINTINGS
+		PAINTINGS,
+		ITEMFRAMES
 	}
 
 	@Override
@@ -148,6 +149,14 @@ public class Commandremove extends EssentialsCommand
 					}
 				}
 				else if (toRemove == ToRemove.PAINTINGS)
+				{
+					if (e instanceof Painting)
+					{
+						e.remove();
+						removed++;
+					}
+				}
+				else if (toRemove == ToRemove.ITEMFRAMES)
 				{
 					if (e instanceof Painting)
 					{
