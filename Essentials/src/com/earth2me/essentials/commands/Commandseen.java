@@ -9,6 +9,7 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 
 public class Commandseen extends EssentialsCommand
@@ -72,43 +73,54 @@ public class Commandseen extends EssentialsCommand
 		if (user.isJailed())
 		{
 			sender.sendMessage(_("whoisJail", (user.getJailTimeout() > 0
-											   ? Util.formatDateDiff(user.getJailTimeout())
-											   : _("true"))));
+					? Util.formatDateDiff(user.getJailTimeout())
+					: _("true"))));
 		}
 		if (user.isMuted())
 		{
 			sender.sendMessage(_("whoisMuted", (user.getMuteTimeout() > 0
-												? Util.formatDateDiff(user.getMuteTimeout())
-												: _("true"))));
+					? Util.formatDateDiff(user.getMuteTimeout())
+					: _("true"))));
 		}
 		if (extra)
 		{
 			sender.sendMessage(_("whoisIPAddress", user.getAddress().getAddress().toString()));
+			final String location = user.getGeoLocation();
+			if (location != null && (!(sender instanceof Player) || ess.getUser(sender).isAuthorized("essentials.geoip.show")))
+			{
+				sender.sendMessage(_("whoisGeoLocation", location));
+			}
+
 		}
 	}
 
-	private void seenOffline(final Server server, final CommandSender sender, User player, final boolean showBan, final boolean extra) throws Exception
+	private void seenOffline(final Server server, final CommandSender sender, User user, final boolean showBan, final boolean extra) throws Exception
 	{
-		player.setDisplayNick();
-		if (player.getLastLogout() > 0)
+		user.setDisplayNick();
+		if (user.getLastLogout() > 0)
 		{
-			sender.sendMessage(_("seenOffline", player.getName(), Util.formatDateDiff(player.getLastLogout())));
+			sender.sendMessage(_("seenOffline", user.getName(), Util.formatDateDiff(user.getLastLogout())));
 		}
 		else
 		{
-			sender.sendMessage(_("userUnknown", player.getName()));
+			sender.sendMessage(_("userUnknown", user.getName()));
 		}
-		if (player.isBanned())
+		if (user.isBanned())
 		{
-			sender.sendMessage(_("whoisBanned", showBan ? player.getBanReason() : _("true")));
+			sender.sendMessage(_("whoisBanned", showBan ? user.getBanReason() : _("true")));
 		}
 		if (extra)
 		{
-			if (!player.getLastLoginAddress().isEmpty())
+			if (!user.getLastLoginAddress().isEmpty())
 			{
-				sender.sendMessage(_("whoisIPAddress", player.getLastLoginAddress()));
+				sender.sendMessage(_("whoisIPAddress", user.getLastLoginAddress()));
 			}
-			final Location loc = player.getLogoutLocation();
+			final String location = user.getGeoLocation();
+			if (location != null && (!(sender instanceof Player) || ess.getUser(sender).isAuthorized("essentials.geoip.show")))
+			{
+				sender.sendMessage(_("whoisGeoLocation", location));
+			}
+			final Location loc = user.getLogoutLocation();
 			if (loc != null)
 			{
 				sender.sendMessage(_("whoisLocation", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
