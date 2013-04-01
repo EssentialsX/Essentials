@@ -83,8 +83,8 @@ public class EssentialsSign
 		}
 		try
 		{
-			return (user.isAuthorized("essentials.signs." + signName.toLowerCase(Locale.ENGLISH) + ".use")
-					|| user.isAuthorized("essentials.signs.use." + signName.toLowerCase(Locale.ENGLISH)))
+			return (!user.isDead() && (user.isAuthorized("essentials.signs." + signName.toLowerCase(Locale.ENGLISH) + ".use")
+					|| user.isAuthorized("essentials.signs.use." + signName.toLowerCase(Locale.ENGLISH))))
 				   && onSignInteract(sign, user, getUsername(user), ess);
 		}
 		catch (ChargeException ex)
