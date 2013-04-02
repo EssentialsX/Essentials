@@ -46,7 +46,7 @@ public class Commandptime extends EssentialsCommand
 		}
 
 		User user = ess.getUser(sender);
-		if ((!users.contains(user) || users.size() > 1) && user != null && !user.isAuthorized("essentials.ptime.others"))
+		if (user != null && (!users.contains(user) || users.size() > 1)&& !user.isAuthorized("essentials.ptime.others"))
 		{
 			user.sendMessage(_("pTimeOthersPermission"));
 			return;
