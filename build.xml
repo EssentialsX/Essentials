@@ -8,7 +8,6 @@
   </target>
   <target name="buildGM" depends="setversion">
     <ant dir="EssentialsGroupManager" antfile="build.xml"/>
-    <ant dir="EssentialsGroupBridge" antfile="build.xml"/>
   </target>
   <target name="buildEss" depends="buildGM">
     <ant dir="Essentials" antfile="build.xml"/>
