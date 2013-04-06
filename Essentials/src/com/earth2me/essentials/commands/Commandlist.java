@@ -148,7 +148,7 @@ public class Commandlist extends EssentialsCommand
 			// If the group value is an asterisk, then skip it, and handle it later
 			if (groupValue.equals("*"))
 			{
-				asterisk.add(configGroup);
+				asterisk.add(oConfigGroup);
 				continue;
 			}
 
@@ -215,16 +215,17 @@ public class Commandlist extends EssentialsCommand
 		for (String onlineGroup : onlineGroups)
 		{
 			List<User> users = playerList.get(onlineGroup);
+			String groupName = asterisk.isEmpty() ? users.get(0).getGroup() : onlineGroup;
 
 			if (ess.getPermissionsHandler().getName().equals("ConfigPermissions"))
 			{
-				onlineGroup = _("connectedPlayers");
+				groupName = _("connectedPlayers");
 			}
 			if (users == null || users.isEmpty())
 			{
 				continue;
 			}
-			String groupName = users.get(0).getGroup();
+
 			sender.sendMessage(outputFormat(groupName, listUsers(users)));
 		}
 	}
