@@ -21,18 +21,25 @@ public class Commandbalance extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		sender.sendMessage(_("balance", Util.displayCurrency(getPlayer(server, args, 0, true, true).getMoney(), ess)));
+
+		User target = getPlayer(server, args, 0, true, true);
+		sender.sendMessage(_("balanceOther", target.getDisplayName(), Util.displayCurrency(target.getMoney(), ess)));
 	}
 
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		//TODO: Remove 'other' perm
-		final double bal = (args.length < 1
-							|| !(user.isAuthorized("essentials.balance.others")
-								 || user.isAuthorized("essentials.balance.other"))
-							? user
-							: getPlayer(server, args, 0, true, true)).getMoney();
-		user.sendMessage(_("balance", Util.displayCurrency(bal, ess)));
+
+		if (args.length < 1 || !user.isAuthorized("essentials.balance.others"))
+		{
+			final double bal = user.getMoney();
+			user.sendMessage(_("balance", Util.displayCurrency(bal, ess)));
+		}
+		else
+		{
+			final User target = getPlayer(server, args, 0, true, true);
+			final double bal = target.getMoney();
+			user.sendMessage(_("balanceOther", target.getDisplayName(), Util.displayCurrency(bal, ess)));
+		}
 	}
 }
