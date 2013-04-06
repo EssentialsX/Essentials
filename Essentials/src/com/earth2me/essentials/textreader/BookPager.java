@@ -64,7 +64,7 @@ public class BookPager
 					length = 0;
 				}	
 
-				if (letter == '\u00a7')
+				if (letter == '\u00a7' && pointer + 1 < lineLength)
 				{
 					Character nextLetter = pageLine.charAt(pointer + 1);
 					if (nextLetter == 'l' || nextLetter == 'L')
