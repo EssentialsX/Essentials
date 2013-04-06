@@ -56,7 +56,7 @@ public class BookPager
 			{
 				Character letter = pageLine.charAt(pointer);
 				
-				if (length >= max || (letter == '\u00a7' && length - 1 >= max))
+				if (length >= max || (letter == '\u00a7' && length + 1 >= max))
 				{
 					tempLine = pageLine.substring(start, pointer);
 					pageLines.add(tempLine);
