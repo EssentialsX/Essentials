@@ -282,6 +282,10 @@ commands:
     description: Adjust player's client time. Add @ prefix to fix.
     usage: /<command> [list|reset|day|night|dawn|17:30|4pm|4000ticks] [player|*]
     aliases: [playertime,eplayertime,eptime]
+  pweather:
+    description: Adjust a player's weather
+    usage: /<command> [list|reset|storm|sun|clear] [player|*]
+    aliases: [playerweather,eplayerweather,epweather]
   r:
     description: Quickly reply to the last player to message you.
     usage: /<command> <message>
