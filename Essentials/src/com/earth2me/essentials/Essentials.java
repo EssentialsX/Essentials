@@ -293,6 +293,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		}
 		cleanupOpenInventories();
 		i18n.onDisable();
+		backup.cleanup();
 		Economy.setEss(null);
 		Trade.closeLog();
 	}

@@ -25,16 +25,33 @@ public class Backup implements Runnable
 		server = ess.getServer();
 		if (server.getOnlinePlayers().length > 0)
 		{
-			startTask();
+			ess.runTaskAsynchronously(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					startTask();
+				}
+			});
 		}
 	}
 
-	void onPlayerJoin()
+	public void onPlayerJoin()
 	{
 		startTask();
 	}
 
-	private void startTask()
+	public void cleanup()
+	{
+		running = false;
+		if (taskId != -1)
+		{
+			server.getScheduler().cancelTask(taskId);
+		}
+		taskId = -1;
+	}
+
+	private synchronized void startTask()
 	{
 		if (!running)
 		{
@@ -61,7 +78,8 @@ public class Backup implements Runnable
 		{
 			return;
 		}
-		if ("save-all".equalsIgnoreCase(command)) {
+		if ("save-all".equalsIgnoreCase(command))
+		{
 			final CommandSender cs = server.getConsoleSender();
 			server.dispatchCommand(cs, "save-all");
 			active = false;
@@ -123,11 +141,7 @@ public class Backup implements Runnable
 											server.dispatchCommand(cs, "save-on");
 											if (server.getOnlinePlayers().length == 0)
 											{
-												running = false;
-												if (taskId != -1)
-												{
-													server.getScheduler().cancelTask(taskId);
-												}
+												cleanup();
 											}
 											active = false;
 											LOGGER.log(Level.INFO, _("backupFinished"));
