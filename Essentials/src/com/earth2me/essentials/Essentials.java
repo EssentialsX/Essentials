@@ -459,14 +459,14 @@ public class Essentials extends JavaPlugin implements IEssentials
 			return true;
 		}
 	}
-	
+
 	public void cleanupOpenInventories()
 	{
 		for (Player player : getServer().getOnlinePlayers())
 		{
 			User user = getUser(player);
 			if (user.isRecipeSee())
-			{				
+			{
 				user.getPlayer().getOpenInventory().getTopInventory().clear();
 				user.getPlayer().getOpenInventory().close();
 				user.setRecipeSee(false);

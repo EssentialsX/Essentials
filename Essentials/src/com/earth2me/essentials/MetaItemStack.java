@@ -156,23 +156,16 @@ public class MetaItemStack
 				throw new Exception(_("onlyPlayerSkulls"));
 			}
 		}
-		else if (split.length > 1 && split[0].equalsIgnoreCase("book") && stack.getType() == Material.WRITTEN_BOOK && hasMetaPermission(sender, "book", false, true, ess))
+		else if (split.length > 1 && split[0].equalsIgnoreCase("book") && stack.getType() == Material.WRITTEN_BOOK
+				 && (hasMetaPermission(sender, "book", true, true, ess) || hasMetaPermission(sender, "chapter-" + split[1].toLowerCase(Locale.ENGLISH), true, true, ess)))
 		{
 			final BookMeta meta = (BookMeta)stack.getItemMeta();
 			final IText input = new BookInput("book", true, ess);
 			final BookPager pager = new BookPager(input);
 
-			if (hasMetaPermission(sender, "chapter", true, true, ess) || hasMetaPermission(sender, "chapter-" + split[1].toLowerCase(Locale.ENGLISH), true, true, ess))
-			{
-				List<String> pages = pager.getPages(split[1]);
-				meta.setPages(pages);
-				stack.setItemMeta(meta);
-			}
-			else
-			{
-				throw new Exception(_("noChapterMeta"));
-			}
-
+			List<String> pages = pager.getPages(split[1]);
+			meta.setPages(pages);
+			stack.setItemMeta(meta);
 		}
 		else if (split.length > 1 && split[0].equalsIgnoreCase("author") && stack.getType() == Material.WRITTEN_BOOK && hasMetaPermission(sender, "author", false, true, ess))
 		{
