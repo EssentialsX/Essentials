@@ -82,6 +82,10 @@ public class SpawnMob
 		{
 			throw new Exception(_("unableToSpawnMob"));
 		}
+        if (parts.size() > 1 && !user.isAuthorized("essentials.spawnmob.stack"))
+        {
+            throw new Exception(_("cannotStackMob"));
+        }
 		spawnmob(ess, server, user, user, block.getLocation(), parts, data, mobCount);
 	}
 
