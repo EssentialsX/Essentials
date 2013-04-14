@@ -41,7 +41,7 @@ public class Backup implements Runnable
 		startTask();
 	}
 
-	public void cleanup()
+	public synchronized void stopTask()
 	{
 		running = false;
 		if (taskId != -1)
@@ -141,7 +141,7 @@ public class Backup implements Runnable
 											server.dispatchCommand(cs, "save-on");
 											if (server.getOnlinePlayers().length == 0)
 											{
-												cleanup();
+												stopTask();
 											}
 											active = false;
 											LOGGER.log(Level.INFO, _("backupFinished"));
