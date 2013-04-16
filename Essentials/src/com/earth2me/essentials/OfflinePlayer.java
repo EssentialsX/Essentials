@@ -11,8 +11,8 @@ import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-import org.bukkit.inventory.InventoryView.Property;
 import org.bukkit.inventory.*;
+import org.bukkit.inventory.InventoryView.Property;
 import org.bukkit.map.MapView;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.permissions.Permission;
@@ -21,6 +21,7 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.util.Vector;
 
 public class OfflinePlayer implements Player
@@ -1213,6 +1214,18 @@ public class OfflinePlayer implements Player
 
 	@Override
 	public boolean isOnGround()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public Scoreboard getScoreboard()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setScoreboard(Scoreboard scrbrd) throws IllegalArgumentException, IllegalStateException
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}

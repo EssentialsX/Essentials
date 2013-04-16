@@ -25,6 +25,7 @@ import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scheduler.BukkitWorker;
+import org.bukkit.scoreboard.ScoreboardManager;
 
 
 public class FakeServer implements Server
@@ -816,6 +817,12 @@ public class FakeServer implements Server
 
 	@Override
 	public ItemFactory getItemFactory()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public ScoreboardManager getScoreboardManager()
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
