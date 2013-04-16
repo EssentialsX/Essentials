@@ -10,8 +10,8 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -198,6 +198,14 @@ public class EssentialsEntityListener implements Listener
 			{
 				event.setIntensity(entity, 0d);
 			}
+		}
+	}
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onEntityShootBow (EntityShootBowEvent event)
+	{
+		if (event.getEntity() instanceof Player && ess.getUser(event.getEntity()).isAfk())
+		{
+			ess.getUser(event.getEntity()).updateActivity(true);
 		}
 	}
 }
