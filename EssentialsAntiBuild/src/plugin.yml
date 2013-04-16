@@ -5,5 +5,5 @@ main: com.earth2me.essentials.antibuild.EssentialsAntiBuild
 version: TeamCity
 website: http://tiny.cc/EssentialsCommands
 description: Provides build protection.
-authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits]
+authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, Iaccidentally]
 depend: [Essentials]

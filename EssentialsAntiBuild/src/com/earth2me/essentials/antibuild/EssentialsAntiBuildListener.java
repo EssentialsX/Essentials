@@ -313,4 +313,14 @@ public class EssentialsAntiBuildListener implements Listener
 			}
 		}
 	}
+	
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onBlockDispense(final BlockDispenseEvent event)
+	{
+		final ItemStack item = event.getItem();
+		if (prot.checkProtectionItems(AntiBuildConfig.blacklist_dispenser, item.getTypeId()))
+		{
+			event.setCancelled(true);		
+		}
+	}
 }

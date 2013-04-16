@@ -11,7 +11,8 @@ public enum AntiBuildConfig
 	blacklist_placement("protect.blacklist.placement"),
 	blacklist_usage("protect.blacklist.usage"),
 	blacklist_break("protect.blacklist.break"),
-	blacklist_piston("protect.blacklist.piston");
+	blacklist_piston("protect.blacklist.piston"),
+	blacklist_dispenser("protect.blacklist.dispenser");
 	private final String configName;
 	private final String defValueString;
 	private final boolean defValueBoolean;

@@ -659,6 +659,9 @@ protect:
 
     # Which blocks should not be pushed by pistons?
     piston:
+          
+    # Which blocks should not be dispensed by dispensers
+    dispenser:
 
 ############################################################
 # +------------------------------------------------------+ #
