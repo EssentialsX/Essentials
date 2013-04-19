@@ -432,6 +432,10 @@ public class MetaItemStack
 
 	public void addEnchantment(final CommandSender sender, final boolean allowUnsafe, final Enchantment enchantment, final int level) throws Exception
 	{
+		if (enchantment == null)
+		{
+			throw new Exception(_("enchantmentNotFound"));
+		}
 		try
 		{
 			if (stack.getType().equals(Material.ENCHANTED_BOOK))
