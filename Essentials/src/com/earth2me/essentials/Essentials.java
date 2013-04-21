@@ -225,7 +225,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		final MetricsStarter metricsStarter = new MetricsStarter(this);
 		if (metricsStarter.getStart() != null && metricsStarter.getStart() == true)
 		{
-			getScheduler().runTaskLaterAsynchronously(this, metricsStarter, 1);
+			runTaskLaterAsynchronously(metricsStarter, 1);
 		}
 		else if (metricsStarter.getStart() != null && metricsStarter.getStart() == false)
 		{

@@ -33,7 +33,7 @@ public class MetricsListener implements Listener
 			player.sendMessage("To opt out, run /essentials opt-out");
 			ess.getLogger().log(Level.INFO, "[Metrics] Admin join - Starting 5 minute opt-out period.");
 			ess.getSettings().setMetricsEnabled(true);
-			ess.getScheduler().runTaskLaterAsynchronously(ess, starter, 5 * 1200);
+			ess.runTaskLaterAsynchronously(starter, 5 * 1200);
 		}
 	}
 }

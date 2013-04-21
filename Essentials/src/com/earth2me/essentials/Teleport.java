@@ -14,30 +14,30 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 public class Teleport implements Runnable, ITeleport
 {
 	private static final double MOVE_CONSTANT = 0.3;
-	
-	
+
+
 	private class Target
 	{
 		private final Location location;
 		private final String name;
-		
+
 		Target(Location location)
 		{
 			this.location = location;
 			this.name = null;
 		}
-		
+
 		Target(Player entity)
 		{
 			this.name = entity.getName();
 			this.location = null;
 		}
-		
+
 		public Location getLocation()
 		{
 			if (this.name != null)
 			{
-				
+
 				return ess.getServer().getPlayerExact(name).getLocation();
 			}
 			return location;
@@ -57,16 +57,17 @@ public class Teleport implements Runnable, ITeleport
 	private long initZ;
 	private Target teleportTarget;
 	private boolean respawn;
+	private boolean canMove;
 	private Trade chargeFor;
 	private final IEssentials ess;
 	private static final Logger logger = Logger.getLogger("Minecraft");
 	private TeleportCause cause;
-	
+
 	private void initTimer(long delay, Target target, Trade chargeFor, TeleportCause cause)
 	{
 		initTimer(delay, user, target, chargeFor, cause, false);
 	}
-	
+
 	private void initTimer(long delay, IUser teleportUser, Target target, Trade chargeFor, TeleportCause cause, boolean respawn)
 	{
 		this.started = System.currentTimeMillis();
@@ -80,35 +81,48 @@ public class Teleport implements Runnable, ITeleport
 		this.chargeFor = chargeFor;
 		this.cause = cause;
 		this.respawn = respawn;
+
+		this.canMove = user.isAuthorized("essentials.teleport.timer.move");
+
+		teleTimer = ess.scheduleSyncRepeatingTask(this, 10, 10);
 	}
-	
+
 	@Override
 	public void run()
 	{
-		
+
 		if (user == null || !user.isOnline() || user.getLocation() == null)
 		{
 			cancel(false);
 			return;
 		}
-		if (teleportUser == null || !teleportUser.isOnline() || teleportUser.getLocation() == null)
+
+		if (teleportUser == null || !teleportUser.isOnline())
 		{
 			cancel(false);
 			return;
 		}
-		
-		if (!user.isAuthorized("essentials.teleport.timer.move")
-			&& (Math.round(teleportUser.getLocation().getX() * MOVE_CONSTANT) != initX
-				|| Math.round(teleportUser.getLocation().getY() * MOVE_CONSTANT) != initY
-				|| Math.round(teleportUser.getLocation().getZ() * MOVE_CONSTANT) != initZ
+
+		final Location currLocation = teleportUser.getLocation();
+		if (currLocation == null)
+		{
+			cancel(false);
+			return;
+		}
+
+		if (!canMove
+			&& (Math.round(currLocation.getX() * MOVE_CONSTANT) != initX
+				|| Math.round(currLocation.getY() * MOVE_CONSTANT) != initY
+				|| Math.round(currLocation.getZ() * MOVE_CONSTANT) != initZ
 				|| teleportUser.getHealth() < health))
 		{
 			// user moved, cancel teleport
 			cancel(true);
 			return;
 		}
+
 		health = teleportUser.getHealth();  // in case user healed, then later gets injured
-		long now = System.currentTimeMillis();
+		final long now = System.currentTimeMillis();
 		if (now > started + tpdelay)
 		{
 			try
@@ -146,13 +160,13 @@ public class Teleport implements Runnable, ITeleport
 			}
 		}
 	}
-	
+
 	public Teleport(IUser user, IEssentials ess)
 	{
 		this.user = user;
 		this.ess = ess;
 	}
-	
+
 	public void cooldown(boolean check) throws Exception
 	{
 		final Calendar time = new GregorianCalendar();
@@ -168,7 +182,7 @@ public class Teleport implements Runnable, ITeleport
 
 			// When was the last teleport used?
 			final Long lastTime = user.getLastTeleportTimestamp();
-			
+
 			if (lastTime > time.getTimeInMillis())
 			{
 				// This is to make sure time didn't get messed up on last kit use.
@@ -225,7 +239,7 @@ public class Teleport implements Runnable, ITeleport
 		}
 		now(new Target(loc), cause);
 	}
-	
+
 	public void now(Player entity, boolean cooldown, TeleportCause cause) throws Exception
 	{
 		if (cooldown)
@@ -234,7 +248,7 @@ public class Teleport implements Runnable, ITeleport
 		}
 		now(new Target(entity), cause);
 	}
-	
+
 	private void now(Target target, TeleportCause cause) throws Exception
 	{
 		cancel(false);
@@ -249,21 +263,21 @@ public class Teleport implements Runnable, ITeleport
 	{
 		teleport(loc, chargeFor, TeleportCause.PLUGIN);
 	}
-	
+
 	public void teleport(Location loc, Trade chargeFor, TeleportCause cause) throws Exception
 	{
 		teleport(new Target(loc), chargeFor, cause);
 	}
-	
+
 	public void teleport(Player entity, Trade chargeFor, TeleportCause cause) throws Exception
 	{
 		teleport(new Target(entity), chargeFor, cause);
 	}
-	
+
 	private void teleport(Target target, Trade chargeFor, TeleportCause cause) throws Exception
 	{
 		double delay = ess.getSettings().getTeleportDelay();
-		
+
 		if (chargeFor != null)
 		{
 			chargeFor.isAffordableFor(user);
@@ -279,12 +293,10 @@ public class Teleport implements Runnable, ITeleport
 			}
 			return;
 		}
-		
+
 		cancel(false);
 		warnUser(user, delay);
 		initTimer((long)(delay * 1000.0), target, chargeFor, cause);
-		
-		teleTimer = ess.scheduleSyncRepeatingTask(this, 10, 10);
 	}
 
 	//The teleportToMe function is a wrapper used to handle teleporting players to them, like /tphere
@@ -292,7 +304,7 @@ public class Teleport implements Runnable, ITeleport
 	{
 		Target target = new Target(user);
 		double delay = ess.getSettings().getTeleportDelay();
-		
+
 		if (chargeFor != null)
 		{
 			chargeFor.isAffordableFor(user);
@@ -308,13 +320,12 @@ public class Teleport implements Runnable, ITeleport
 			}
 			return;
 		}
-		
+
 		cancel(false);
 		warnUser(otherUser, delay);
 		initTimer((long)(delay * 1000.0), otherUser, target, chargeFor, cause, false);
-		teleTimer = ess.scheduleSyncRepeatingTask(this, 10, 10);
 	}
-	
+
 	private void warnUser(final IUser user, final double delay)
 	{
 		Calendar c = new GregorianCalendar();
@@ -342,13 +353,12 @@ public class Teleport implements Runnable, ITeleport
 			}
 			return;
 		}
-		
+
 		cancel(false);
 		warnUser(user, delay);
 		initTimer((long)(delay * 1000.0), user, null, chargeFor, cause, true);
-		teleTimer = ess.scheduleSyncRepeatingTask(this, 10, 10);
 	}
-	
+
 	public void respawn(TeleportCause cause) throws Exception
 	{
 		final Player player = user.getBase();

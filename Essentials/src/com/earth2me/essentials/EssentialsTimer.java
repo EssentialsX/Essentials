@@ -52,8 +52,10 @@ public class EssentialsTimer implements Runnable
 				skip1--;
 				continue;
 			}
-			if (count % 10 == 0) {
-				if (System.nanoTime() - startTime > maxTime / 2) {
+			if (count % 10 == 0)
+			{
+				if (System.nanoTime() - startTime > maxTime / 2)
+				{
 					skip1 = count - 1;
 					break;
 				}
@@ -81,8 +83,10 @@ public class EssentialsTimer implements Runnable
 				skip2--;
 				continue;
 			}
-			if (count % 10 == 0) {
-				if (System.nanoTime() - startTime > maxTime) {
+			if (count % 10 == 0)
+			{
+				if (System.nanoTime() - startTime > maxTime)
+				{
 					skip2 = count - 1;
 					break;
 				}
