@@ -5,6 +5,7 @@ import com.earth2me.essentials.metrics.Metrics.Graph;
 import com.earth2me.essentials.metrics.Metrics.Plotter;
 import com.earth2me.essentials.register.payment.Method;
 import com.earth2me.essentials.register.payment.methods.VaultEco;
+import com.earth2me.essentials.signs.EssentialsSign;
 import java.util.Locale;
 import java.util.logging.Level;
 import org.bukkit.configuration.ConfigurationSection;
@@ -101,8 +102,11 @@ public class MetricsStarter implements Runnable
 				@Override
 				public int getValue()
 				{
-					ConfigurationSection kits =  ess.getSettings().getKits();
-					if (kits == null) { return 0; }
+					ConfigurationSection kits = ess.getSettings().getKits();
+					if (kits == null)
+					{
+						return 0;
+					}
 					return kits.getKeys(false).size();
 				}
 			});
@@ -188,6 +192,12 @@ public class MetricsStarter implements Runnable
 				depGraph.addPlotter(new SimplePlotter(method.getName() + " " + version));
 			}
 			depGraph.addPlotter(new SimplePlotter(ess.getPermissionsHandler().getName()));
+
+			final Graph signGraph = metrics.createGraph("Signs");
+			for (EssentialsSign sign : ess.getSettings().enabledSigns())
+			{
+				signGraph.addPlotter(new SimplePlotter(sign.getName()));
+			}
 
 			metrics.start();
 

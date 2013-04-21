@@ -217,7 +217,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 		alternativeCommandsHandler = new AlternativeCommandsHandler(this);
 
 		timer = new EssentialsTimer(this);
-		getScheduler().scheduleSyncRepeatingTask(this, timer, 100, 100);
+		scheduleSyncRepeatingTask(timer, 1000, 50);
 
 		Economy.setEss(this);
 		execTimer.mark("RegHandler");

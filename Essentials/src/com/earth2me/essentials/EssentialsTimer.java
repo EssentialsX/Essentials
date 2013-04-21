@@ -14,8 +14,8 @@ public class EssentialsTimer implements Runnable
 	private final transient Set<User> onlineUsers = new HashSet<User>();
 	private transient long lastPoll = System.currentTimeMillis();
 	private final transient LinkedList<Float> history = new LinkedList<Float>();
-	private final int skip1 = 0;
-	private final int skip2 = 0;
+	private int skip1 = 0;
+	private int skip2 = 0;
 	private final long maxTime = 10 * 1000000;
 
 	EssentialsTimer(final IEssentials ess)

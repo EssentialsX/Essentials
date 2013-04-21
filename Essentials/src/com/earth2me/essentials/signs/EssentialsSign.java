@@ -67,6 +67,10 @@ public class EssentialsSign
 	{
 		return _("signFormatTemplate", this.signName);
 	}
+	
+	public String getName() {
+		return this.signName;
+	}
 
 	private String getUsername(final User user)
 	{
