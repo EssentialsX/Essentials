@@ -14,6 +14,9 @@ public class EssentialsTimer implements Runnable
 	private final transient Set<User> onlineUsers = new HashSet<User>();
 	private transient long lastPoll = System.currentTimeMillis();
 	private final transient LinkedList<Float> history = new LinkedList<Float>();
+	private final int skip1 = 0;
+	private final int skip2 = 0;
+	private final long maxTime = 10 * 1000000;
 
 	EssentialsTimer(final IEssentials ess)
 	{
@@ -23,6 +26,7 @@ public class EssentialsTimer implements Runnable
 	@Override
 	public void run()
 	{
+		final long startTime = System.nanoTime();
 		final long currentTime = System.currentTimeMillis();
 		long timeSpent = (currentTime - lastPoll) / 1000;
 		if (timeSpent == 0)
@@ -39,8 +43,21 @@ public class EssentialsTimer implements Runnable
 			history.add(tps);
 		}
 		lastPoll = currentTime;
+		int count = 0;
 		for (Player player : ess.getServer().getOnlinePlayers())
 		{
+			count++;
+			if (skip1 > 0)
+			{
+				skip1--;
+				continue;
+			}
+			if (count % 10 == 0) {
+				if (System.nanoTime() - startTime > maxTime / 2) {
+					skip1 = count - 1;
+					break;
+				}
+			}
 			try
 			{
 				final User user = ess.getUser(player);
@@ -54,9 +71,22 @@ public class EssentialsTimer implements Runnable
 			}
 		}
 
+		count = 0;
 		final Iterator<User> iterator = onlineUsers.iterator();
 		while (iterator.hasNext())
 		{
+			count++;
+			if (skip2 > 0)
+			{
+				skip2--;
+				continue;
+			}
+			if (count % 10 == 0) {
+				if (System.nanoTime() - startTime > maxTime) {
+					skip2 = count - 1;
+					break;
+				}
+			}
 			final User user = iterator.next();
 			if (user.getLastOnlineActivity() < currentTime && user.getLastOnlineActivity() > user.getLastLogout())
 			{
