@@ -9,6 +9,9 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.*;
@@ -24,21 +27,27 @@ import org.bukkit.util.Vector;
 public class EssentialsConf extends YamlConfiguration
 {
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
-	private transient File configFile;
-	private transient String templateName = null;
-	private transient Class<?> resourceClass = EssentialsConf.class;
+	private final File configFile;
+	private String templateName = null;
+	private Class<?> resourceClass = EssentialsConf.class;
 	private static final Charset UTF8 = Charset.forName("UTF-8");
+	private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
+	private final AtomicInteger pendingDiskWrites = new AtomicInteger(0);
 
 	public EssentialsConf(final File configFile)
 	{
 		super();
-		this.configFile = configFile;
+		this.configFile = configFile.getAbsoluteFile();
 	}
 	private final byte[] bytebuffer = new byte[1024];
 
 	public synchronized void load()
 	{
-		configFile = configFile.getAbsoluteFile();
+		if (pendingDiskWrites.get() != 0)
+		{
+			LOGGER.log(Level.INFO, "File " + configFile + " not read, because it's not yet written to disk.");
+			return;
+		}
 		if (!configFile.getParentFile().exists())
 		{
 			if (!configFile.getParentFile().mkdirs())
@@ -241,12 +250,11 @@ public class EssentialsConf extends YamlConfiguration
 	@Override
 	public synchronized void save(final File file) throws IOException
 	{
+		//long startTime = System.nanoTime();
 		if (file == null)
 		{
 			throw new IllegalArgumentException("File cannot be null");
 		}
-
-		Files.createParentDirs(file);
 
 		final String data = saveToString();
 
@@ -255,32 +263,85 @@ public class EssentialsConf extends YamlConfiguration
 			return;
 		}
 
-		if (!configFile.exists())
+		pendingDiskWrites.incrementAndGet();
+
+		EXECUTOR_SERVICE.submit(new WriteRunner(configFile, data, pendingDiskWrites));
+
+		//LOGGER.log(Level.INFO, configFile + " prepared for writing in " + (System.nanoTime() - startTime) + " nsec.");
+	}
+
+
+	private static class WriteRunner implements Runnable
+	{
+		private final File configFile;
+		private final String data;
+		private final AtomicInteger pendingDiskWrites;
+
+		private WriteRunner(final File configFile, final String data, final AtomicInteger pendingDiskWrites)
 		{
-			try
+			this.configFile = configFile;
+			this.data = data;
+			this.pendingDiskWrites = pendingDiskWrites;
+		}
+
+		@Override
+		public void run()
+		{
+			//long startTime = System.nanoTime();
+			synchronized (configFile)
 			{
-				LOGGER.log(Level.INFO, _("creatingEmptyConfig", configFile.toString()));
-				if (!configFile.createNewFile())
+				if (pendingDiskWrites.get() > 1)
 				{
-					LOGGER.log(Level.SEVERE, _("failedToCreateConfig", configFile.toString()));
+					// Writes can be skipped, because they are stored in a queue (in the executor). 
+					// Only the last is actually written.
+					pendingDiskWrites.decrementAndGet();
+					//LOGGER.log(Level.INFO, configFile + " skipped writing in " + (System.nanoTime() - startTime) + " nsec.");
+					return;
+				}
+				try
+				{
+					Files.createParentDirs(configFile);
+
+					if (!configFile.exists())
+					{
+						try
+						{
+							LOGGER.log(Level.INFO, _("creatingEmptyConfig", configFile.toString()));
+							if (!configFile.createNewFile())
+							{
+								LOGGER.log(Level.SEVERE, _("failedToCreateConfig", configFile.toString()));
+								return;
+							}
+						}
+						catch (IOException ex)
+						{
+							LOGGER.log(Level.SEVERE, _("failedToCreateConfig", configFile.toString()), ex);
+							return;
+						}
+					}
+
+
+					final OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(configFile), UTF8);
+
+					try
+					{
+						writer.write(data);
+					}
+					finally
+					{
+						writer.close();
+					}
+				}
+				catch (IOException e)
+				{
+					LOGGER.log(Level.SEVERE, e.getMessage(), e);
+				}
+				finally
+				{
+					//LOGGER.log(Level.INFO, configFile + " written to disk in " + (System.nanoTime() - startTime) + " nsec.");
+					pendingDiskWrites.decrementAndGet();
 				}
 			}
-			catch (IOException ex)
-			{
-				LOGGER.log(Level.SEVERE, _("failedToCreateConfig", configFile.toString()), ex);
-			}
-		}
-
-
-		final OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file), UTF8);
-
-		try
-		{
-			writer.write(data);
-		}
-		finally
-		{
-			writer.close();
 		}
 	}
 
