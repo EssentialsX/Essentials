@@ -230,7 +230,7 @@ public class EssentialsUpgrade
 							config.removeProperty("home");
 							config.setProperty("home.default", worldName);
 							config.setProperty("home.worlds." + worldName, loc);
-							config.save();
+							config.forceSave();
 						}
 					}
 				}
@@ -285,7 +285,7 @@ public class EssentialsUpgrade
 							((Map<String, Object>)powertools).put(entry.getKey(), temp);
 						}
 					}
-					config.save();
+					config.forceSave();
 				}
 			}
 			catch (RuntimeException ex)
@@ -358,7 +358,7 @@ public class EssentialsUpgrade
 						}
 					}
 					config.removeProperty("home");
-					config.save();
+					config.forceSave();
 				}
 
 			}

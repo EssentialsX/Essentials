@@ -42,7 +42,7 @@ public final class Economy
 		npcConfig.load();
 		npcConfig.setProperty("npc", true);
 		npcConfig.setProperty("money", ess.getSettings().getStartingBalance());
-		npcConfig.save();
+		npcConfig.forceSave();
 	}
 
 	private static void deleteNPC(String name)

@@ -9,8 +9,10 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -250,6 +252,31 @@ public class EssentialsConf extends YamlConfiguration
 	@Override
 	public synchronized void save(final File file) throws IOException
 	{
+		delayedSave(file);
+	}
+
+	public synchronized void forceSave()
+	{
+		try
+		{
+			Future<?> future = delayedSave(configFile);
+			if (future != null)
+			{
+				future.get();
+			}
+		}
+		catch (InterruptedException ex)
+		{
+			LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+		}
+		catch (ExecutionException ex)
+		{
+			LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+		}
+	}
+
+	private Future<?> delayedSave(final File file)
+	{
 		//long startTime = System.nanoTime();
 		if (file == null)
 		{
@@ -260,14 +287,16 @@ public class EssentialsConf extends YamlConfiguration
 
 		if (data.length() == 0)
 		{
-			return;
+			return null;
 		}
 
 		pendingDiskWrites.incrementAndGet();
 
-		EXECUTOR_SERVICE.submit(new WriteRunner(configFile, data, pendingDiskWrites));
+		Future<?> future = EXECUTOR_SERVICE.submit(new WriteRunner(configFile, data, pendingDiskWrites));
 
 		//LOGGER.log(Level.INFO, configFile + " prepared for writing in " + (System.nanoTime() - startTime) + " nsec.");
+		
+		return future;
 	}
 
 
