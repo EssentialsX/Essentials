@@ -515,7 +515,7 @@ public class GroupManager extends JavaPlugin {
 				}
 				auxGroup = dataHolder.getGroup(args[1]);
 				if (auxGroup == null) {
-					sender.sendMessage(ChatColor.RED + "" + args[1] + " Group doesnt exist!");
+					sender.sendMessage(ChatColor.RED + "'" + args[1] + "' Group doesnt exist!");
 					return false;
 				}
 				if (auxGroup.isGlobal()) {
@@ -605,7 +605,7 @@ public class GroupManager extends JavaPlugin {
 				}
 				auxGroup = dataHolder.getGroup(args[1]);
 				if (auxGroup == null) {
-					sender.sendMessage(ChatColor.RED + "" + args[1] + " Group doesnt exist!");
+					sender.sendMessage(ChatColor.RED + "'" + args[1] + "' Group doesnt exist!");
 					return true;
 				}
 				// Validating permission
@@ -643,7 +643,7 @@ public class GroupManager extends JavaPlugin {
 				}
 				auxGroup = dataHolder.getGroup(args[1]);
 				if (auxGroup == null) {
-					sender.sendMessage(ChatColor.RED + "" + args[1] + " Group doesnt exist!");
+					sender.sendMessage(ChatColor.RED + "'" + args[1] + "' Group doesnt exist!");
 					return true;
 				}
 
@@ -675,7 +675,7 @@ public class GroupManager extends JavaPlugin {
 				}
 				auxGroup = dataHolder.getGroup(args[0]);
 				if (auxGroup != null) {
-					sender.sendMessage(ChatColor.RED + "" + args[0] + " Group already exist!");
+					sender.sendMessage(ChatColor.RED + "'" + args[0] + "' Group already exist!");
 					return true;
 				}
 				// Seems OK
@@ -848,6 +848,50 @@ public class GroupManager extends JavaPlugin {
 					BukkitPermissions.updatePermissions(targetPlayer);
 
 				return true;
+				
+			case manuclearp:
+				// Validating state of sender
+				if (dataHolder == null || permissionHandler == null) {
+					if (!setDefaultWorldHandler(sender))
+						return true;
+				}
+				// Validating arguments
+				if (args.length != 1) {
+					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/manuclearp <player>)");
+					return true;
+				}
+				
+				if ((validateOnlinePlayer) && ((match = validatePlayer(args[0], sender)) == null)) {
+					return false;
+				}
+
+				if (match != null) {
+					auxUser = dataHolder.getUser(match.get(0));
+				} else {
+					auxUser = dataHolder.getUser(args[0]);
+				}
+				// Validating your permissions
+				if (!isConsole && !isOpOverride && (senderGroup != null ? permissionHandler.inGroup(auxUser.getName(), senderGroup.getName()) : false)) {
+					sender.sendMessage(ChatColor.RED + "You can't modify a player with same group as you, or higher.");
+					return true;
+				}
+				for (String perm : auxUser.getPermissionList()) {
+					permissionResult = permissionHandler.checkFullUserPermission(senderUser, perm);
+					if (!isConsole && !isOpOverride && (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND) || permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION))) {
+						sender.sendMessage(ChatColor.RED + "You can't remove a permission you don't have: '" + perm + "'.");
+					}
+					else
+					{
+						auxUser.removePermission(perm);
+					}
+				}
+				sender.sendMessage(ChatColor.YELLOW + "You removed all permissions from player '" + auxUser.getName() + "'.");
+
+				targetPlayer = this.getServer().getPlayer(auxUser.getName());
+				if (targetPlayer != null)
+					BukkitPermissions.updatePermissions(targetPlayer);
+
+				return true;
 
 			case manulistp:
 				// Validating state of sender
@@ -995,7 +1039,7 @@ public class GroupManager extends JavaPlugin {
 				
 				auxGroup = dataHolder.getGroup(args[0]);
 				if (auxGroup == null) {
-					sender.sendMessage(ChatColor.RED + "" + args[0] + " Group doesnt exist!");
+					sender.sendMessage(ChatColor.RED + "'" + args[0] + "' Group doesnt exist!");
 					return false;
 				}
 				// Validating your permissions
@@ -1069,20 +1113,20 @@ public class GroupManager extends JavaPlugin {
 				
 				auxGroup = dataHolder.getGroup(args[0]);
 				if (auxGroup == null) {
-					sender.sendMessage(ChatColor.RED + "" + args[0] + " Group doesnt exist!");
+					sender.sendMessage(ChatColor.RED + "'" + args[0] + "' Group doesnt exist!");
 					return true;
 				}
 				// Validating your permissions
 				permissionResult = permissionHandler.checkFullUserPermission(senderUser, auxString);
-				if (!isConsole && (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND) || permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION))) {
+				if (!isConsole && !isOpOverride && (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND) || permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION))) {
 					sender.sendMessage(ChatColor.RED + "Can't remove a permission you don't have.");
 					return true;
 				}
 				// Validating permissions of user
 				permissionResult = permissionHandler.checkGroupOnlyPermission(auxGroup, auxString);
 				if (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND)) {
-					sender.sendMessage(ChatColor.RED + "The group doesn't have direct access to that permission.");
-					return false;
+					sender.sendMessage(ChatColor.YELLOW + "The group doesn't have direct access to that permission.");
+					return true;
 				}
 				if (!auxGroup.hasSamePermissionNode(auxString)) {
 					sender.sendMessage(ChatColor.RED + "This permission node doesn't match any node.");
@@ -1092,6 +1136,40 @@ public class GroupManager extends JavaPlugin {
 				// Seems OK
 				auxGroup.removePermission(auxString);
 				sender.sendMessage(ChatColor.YELLOW + "You removed '" + auxString + "' from group '" + auxGroup.getName() + "' permissions.");
+
+				BukkitPermissions.updateAllPlayers();
+
+				return true;
+				
+			case mangclearp:
+				// Validating state of sender
+				if (dataHolder == null || permissionHandler == null) {
+					if (!setDefaultWorldHandler(sender))
+						return true;
+				}
+				// Validating arguments
+				if (args.length != 1) {
+					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/mangclearp <group>)");
+					return true;
+				}
+				
+				auxGroup = dataHolder.getGroup(args[0]);
+				if (auxGroup == null) {
+					sender.sendMessage(ChatColor.RED + "'" + args[0] + "' Group doesnt exist!");
+					return true;
+				}
+				
+				for (String perm : auxGroup.getPermissionList()) {
+					permissionResult = permissionHandler.checkFullUserPermission(senderUser, perm);
+					if (!isConsole && !isOpOverride && (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND) || permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION))) {
+						sender.sendMessage(ChatColor.RED + "Can't remove a permission you don't have: '" + perm + "'.");
+					}
+					else
+					{
+						auxGroup.removePermission(perm);
+					}
+				}
+				sender.sendMessage(ChatColor.YELLOW + "You removed all permissions from group '" + auxGroup.getName() + "'.");
 
 				BukkitPermissions.updateAllPlayers();
 
@@ -1110,7 +1188,7 @@ public class GroupManager extends JavaPlugin {
 				}
 				auxGroup = dataHolder.getGroup(args[0]);
 				if (auxGroup == null) {
-					sender.sendMessage(ChatColor.RED + "" + args[0] + " Group doesnt exist!");
+					sender.sendMessage(ChatColor.RED + "'" + args[0] + "' Group doesnt exist!");
 					return true;
 				}
 				// Validating permission
@@ -1166,7 +1244,7 @@ public class GroupManager extends JavaPlugin {
 				
 				auxGroup = dataHolder.getGroup(args[0]);
 				if (auxGroup == null) {
-					sender.sendMessage(ChatColor.RED + "" + args[0] + " Group doesnt exist!");
+					sender.sendMessage(ChatColor.RED + "'" + args[0] + "' Group doesnt exist!");
 					return true;
 				}
 				// Validating permission
@@ -1201,12 +1279,12 @@ public class GroupManager extends JavaPlugin {
 				}
 				auxGroup = dataHolder.getGroup(args[0]);
 				if (auxGroup == null) {
-					sender.sendMessage(ChatColor.RED + "" + args[0] + " Group doesnt exist!");
+					sender.sendMessage(ChatColor.RED + "'" + args[0] + "' Group doesnt exist!");
 					return true;
 				}
 				auxGroup2 = dataHolder.getGroup(args[1]);
 				if (auxGroup2 == null) {
-					sender.sendMessage(ChatColor.RED + "" + args[1] + " Group doesnt exist!");
+					sender.sendMessage(ChatColor.RED + "'" + args[1] + "' Group doesnt exist!");
 					return true;
 				}
 				if (auxGroup.isGlobal()) {
@@ -1240,12 +1318,12 @@ public class GroupManager extends JavaPlugin {
 				}
 				auxGroup = dataHolder.getGroup(args[0]);
 				if (auxGroup == null) {
-					sender.sendMessage(ChatColor.RED + "" + args[0] + " Group doesnt exist!");
+					sender.sendMessage(ChatColor.RED + "'" + args[0] + "' Group doesnt exist!");
 					return true;
 				}
 				auxGroup2 = dataHolder.getGroup(args[1]);
 				if (auxGroup2 == null) {
-					sender.sendMessage(ChatColor.RED + "" + args[1] + " Group doesnt exist!");
+					sender.sendMessage(ChatColor.RED + "'" + args[1] + "' Group doesnt exist!");
 					return true;
 				}
 				if (auxGroup.isGlobal()) {
@@ -1435,7 +1513,7 @@ public class GroupManager extends JavaPlugin {
 				}
 				auxGroup = dataHolder.getGroup(args[0]);
 				if (auxGroup == null) {
-					sender.sendMessage(ChatColor.RED + "" + args[0] + " Group doesnt exist!");
+					sender.sendMessage(ChatColor.RED + "'" + args[0] + "' Group doesnt exist!");
 					return true;
 				}
 				if (auxGroup.isGlobal()) {
@@ -1473,7 +1551,7 @@ public class GroupManager extends JavaPlugin {
 				}
 				auxGroup = dataHolder.getGroup(args[0]);
 				if (auxGroup == null) {
-					sender.sendMessage(ChatColor.RED + "" + args[0] + " Group doesnt exist!");
+					sender.sendMessage(ChatColor.RED + "'" + args[0] + "' Group doesnt exist!");
 					return true;
 				}
 				if (auxGroup.isGlobal()) {
@@ -1504,7 +1582,7 @@ public class GroupManager extends JavaPlugin {
 				}
 				auxGroup = dataHolder.getGroup(args[0]);
 				if (auxGroup == null) {
-					sender.sendMessage(ChatColor.RED + "" + args[0] + " Group doesnt exist!");
+					sender.sendMessage(ChatColor.RED + "'" + args[0] + "' Group doesnt exist!");
 					return true;
 				}
 				if (auxGroup.isGlobal()) {
@@ -1547,7 +1625,7 @@ public class GroupManager extends JavaPlugin {
 				}
 				auxGroup = dataHolder.getGroup(args[0]);
 				if (auxGroup == null) {
-					sender.sendMessage(ChatColor.RED + "" + args[0] + " Group doesnt exist!");
+					sender.sendMessage(ChatColor.RED + "'" + args[0] + "' Group doesnt exist!");
 					return true;
 				}
 				if (auxGroup.isGlobal()) {
@@ -1812,16 +1890,21 @@ public class GroupManager extends JavaPlugin {
 				}
 				// WORKING
 				auxString = "";
+				String auxString2 = "";
 				for (Group g : dataHolder.getGroupList()) {
 					auxString += g.getName() + ", ";
 				}
 				for (Group g : getGlobalGroups().getGroupList()) {
-					auxString += g.getName() + ", ";
+					auxString2 += g.getName() + ", ";
 				}
 				if (auxString.lastIndexOf(",") > 0) {
 					auxString = auxString.substring(0, auxString.lastIndexOf(","));
 				}
-				sender.sendMessage(ChatColor.YELLOW + " Groups Available: " + ChatColor.WHITE + auxString);
+				if (auxString2.lastIndexOf(",") > 0) {
+					auxString2 = auxString2.substring(0, auxString2.lastIndexOf(","));
+				}
+				sender.sendMessage(ChatColor.YELLOW + "Groups Available: " + ChatColor.WHITE + auxString);
+				sender.sendMessage(ChatColor.YELLOW + "GlobalGroups Available: " + ChatColor.WHITE + auxString2);
 
 				return true;
 
@@ -1846,7 +1929,7 @@ public class GroupManager extends JavaPlugin {
 				}
 				auxGroup = dataHolder.getGroup(args[1]);
 				if (auxGroup == null) {
-					sender.sendMessage(ChatColor.RED + "" + args[0] + " Group doesnt exist!");
+					sender.sendMessage(ChatColor.RED + "'" + args[0] + "' Group doesnt exist!");
 					return true;
 				}
 				if (auxGroup.isGlobal()) {
@@ -1866,11 +1949,11 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "You can't modify a player involving a group that you don't inherit.");
 					return true;
 				}
-				if (!isConsole && !isOpOverride && (!permissionHandler.hasGroupInInheritance(auxUser.getGroup(), auxGroup.getName()) && !permissionHandler.hasGroupInInheritance(auxGroup, auxUser.getGroupName()))) {
+				if (!permissionHandler.hasGroupInInheritance(auxUser.getGroup(), auxGroup.getName()) && !permissionHandler.hasGroupInInheritance(auxGroup, auxUser.getGroupName())) {
 					sender.sendMessage(ChatColor.RED + "You can't modify a player using groups with different heritage line.");
 					return true;
 				}
-				if (!isConsole && !isOpOverride && (!permissionHandler.hasGroupInInheritance(auxGroup, auxUser.getGroupName()))) {
+				if (!permissionHandler.hasGroupInInheritance(auxGroup, auxUser.getGroupName())) {
 					sender.sendMessage(ChatColor.RED + "The new group must be a higher rank.");
 					return true;
 				}
@@ -1902,7 +1985,7 @@ public class GroupManager extends JavaPlugin {
 				}
 				auxGroup = dataHolder.getGroup(args[1]);
 				if (auxGroup == null) {
-					sender.sendMessage(ChatColor.RED + "" + args[0] + " Group doesnt exist!");
+					sender.sendMessage(ChatColor.RED + "'" + args[0] + "' Group doesnt exist!");
 					return true;
 				}
 				if (auxGroup.isGlobal()) {
@@ -1922,11 +2005,11 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "You can't modify a player involving a group that you don't inherit.");
 					return true;
 				}
-				if (!isConsole && !isOpOverride && (!permissionHandler.hasGroupInInheritance(auxUser.getGroup(), auxGroup.getName()) && !permissionHandler.hasGroupInInheritance(auxGroup, auxUser.getGroupName()))) {
+				if (!permissionHandler.hasGroupInInheritance(auxUser.getGroup(), auxGroup.getName()) && !permissionHandler.hasGroupInInheritance(auxGroup, auxUser.getGroupName())) {
 					sender.sendMessage(ChatColor.RED + "You can't modify a player using groups with different inheritage line.");
 					return true;
 				}
-				if (!isConsole && !isOpOverride && (permissionHandler.hasGroupInInheritance(auxGroup, auxUser.getGroupName()))) {
+				if (permissionHandler.hasGroupInInheritance(auxGroup, auxUser.getGroupName())) {
 					sender.sendMessage(ChatColor.RED + "The new group must be a lower rank.");
 					return true;
 				}

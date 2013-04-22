@@ -7,20 +7,20 @@ settings:
     # Default setting for 'mantogglevalidate'
     # true will cause GroupManager to attempt name matching by default.
     validate_toggle: true
-    # **********************************************************************************************************************************
-    # *** NOTE: Having this feature enabled, improper use of commandblocks will lead to undesireable permission changes, be alarmed! ***
-    # **********************************************************************************************************************************
+    # ************************************************************************************************************************************************************
+    # *** NOTE: Having this feature enabled can allow improper use of Command Blocks which may lead to undesireable permission changes. You have been warned! ***
+    # ************************************************************************************************************************************************************
     allow_commandblocks: false
     
   data:
     save:
-      # How often GroupManager will save it's data back to groups and users.yml
+      # How often GroupManager will save it's data back to groups.yml and users.yml
       minutes: 10
       # Number of hours to retain backups (plugins/GroupManager/backup)
       hours: 24
       
   logging:
-    # level of detail GroupManager will use when logging.
+    # Level of detail GroupManager will use when logging.
     # Acceptable entries are - ALL,CONFIG,FINE,FINER,FINEST,INFO,OFF,SEVERE,WARNING
     level: INFO
     
