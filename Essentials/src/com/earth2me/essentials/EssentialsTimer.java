@@ -28,7 +28,7 @@ public class EssentialsTimer implements Runnable
 	public void run()
 	{
 		final long startTime = System.nanoTime();
-		//final long currentTime = System.currentTimeMillis();
+		final long currentTime = System.currentTimeMillis();
 		long timeSpent = (startTime - lastPoll) / 1000;
 		if (timeSpent == 0)
 		{
@@ -43,7 +43,7 @@ public class EssentialsTimer implements Runnable
 		{
 			history.add(tps);
 		}
-		lastPoll = currentTime;
+		lastPoll = startTime;
 		int count = 0;
 		for (Player player : ess.getServer().getOnlinePlayers())
 		{
