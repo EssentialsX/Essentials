@@ -12,11 +12,12 @@ public class EssentialsTimer implements Runnable
 {
 	private final transient IEssentials ess;
 	private final transient Set<User> onlineUsers = new HashSet<User>();
-	private transient long lastPoll = System.currentTimeMillis();
-	private final transient LinkedList<Float> history = new LinkedList<Float>();
+	private transient long lastPoll = System.nanoTime();
+	private final LinkedList<Double> history = new LinkedList<Double>();
 	private int skip1 = 0;
 	private int skip2 = 0;
 	private final long maxTime = 10 * 1000000;
+	private final long tickInterval = 50;
 
 	EssentialsTimer(final IEssentials ess)
 	{
@@ -27,8 +28,8 @@ public class EssentialsTimer implements Runnable
 	public void run()
 	{
 		final long startTime = System.nanoTime();
-		final long currentTime = System.currentTimeMillis();
-		long timeSpent = (currentTime - lastPoll) / 1000;
+		//final long currentTime = System.currentTimeMillis();
+		long timeSpent = (startTime - lastPoll) / 1000;
 		if (timeSpent == 0)
 		{
 			timeSpent = 1;
@@ -37,7 +38,7 @@ public class EssentialsTimer implements Runnable
 		{
 			history.remove();
 		}
-		float tps = 100f / timeSpent;
+		double tps = tickInterval * 1000000.0 / timeSpent;
 		if (tps <= 20)
 		{
 			history.add(tps);
@@ -104,10 +105,10 @@ public class EssentialsTimer implements Runnable
 		}
 	}
 
-	public float getAverageTPS()
+	public double getAverageTPS()
 	{
-		float avg = 0;
-		for (Float f : history)
+		double avg = 0;
+		for (Double f : history)
 		{
 			if (f != null)
 			{
