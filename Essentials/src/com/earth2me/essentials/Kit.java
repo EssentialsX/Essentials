@@ -84,7 +84,7 @@ public class Kit
 	{
 		if (kit == null)
 		{
-			throw new Exception(_("kitError2"));
+			throw new Exception(_("kitNotFound"));
 		}
 
 		try
