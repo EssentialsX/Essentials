@@ -51,7 +51,7 @@ public class Commandremove extends EssentialsCommand
 				throw new Exception(_("numberRequired"), e);
 			}
 		}
-		
+
 		if (args.length >= 3)
 		{
 			world = ess.getWorld(args[2]);
@@ -63,7 +63,14 @@ public class Commandremove extends EssentialsCommand
 		}
 		catch (IllegalArgumentException e)
 		{
-			throw new NotEnoughArgumentsException(e); //TODO: translate and list types
+			try
+			{
+				toRemove = ToRemove.valueOf(args[0].concat("S").toUpperCase(Locale.ENGLISH));
+			}
+			catch (IllegalArgumentException ee)
+			{
+				throw new NotEnoughArgumentsException(ee); //TODO: translate and list types
+			}
 		}
 
 		removeEntities(user, world, toRemove, radius);
@@ -85,7 +92,14 @@ public class Commandremove extends EssentialsCommand
 		}
 		catch (IllegalArgumentException e)
 		{
-			throw new NotEnoughArgumentsException(e); //TODO: translate and list types
+			try
+			{
+				toRemove = ToRemove.valueOf(args[0].concat("S").toUpperCase(Locale.ENGLISH));
+			}
+			catch (IllegalArgumentException ee)
+			{
+				throw new NotEnoughArgumentsException(ee); //TODO: translate and list types
+			}
 		}
 		removeEntities(sender, world, toRemove, 0);
 	}
