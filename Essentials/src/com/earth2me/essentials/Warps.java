@@ -135,29 +135,14 @@ public class Warps implements IConf, IWarps
 	@Override
 	public Collection<String> getList()
 	{
-		final List<String> keys = new ArrayList<String>();
-		for (StringIgnoreCase stringIgnoreCase : warpPoints.keySet())
-		{
-			keys.add(stringIgnoreCase.getString());
-		}
-		Collections.sort(keys, String.CASE_INSENSITIVE_ORDER);
-		return keys;
+		return getWarpNames();
 	}
 
 	// This is for api support, and so 3.x will not break this api
 	@Override
 	public void removeWarp(String name) throws Exception
 	{
-		EssentialsConf conf = warpPoints.get(new StringIgnoreCase(name));
-		if (conf == null)
-		{
-			throw new Exception(_("warpNotExist"));
-		}
-		if (!conf.getFile().delete())
-		{
-			throw new Exception(_("warpDeleteError"));
-		}
-		warpPoints.remove(new StringIgnoreCase(name));
+		delWarp(name);
 	}
 
 	//This is here for future 3.x api support. Not implemented here becasue storage is handled differently
