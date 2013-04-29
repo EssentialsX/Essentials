@@ -1,6 +1,8 @@
 package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.api.IWarps;
+import com.earth2me.essentials.api.InvalidNameException;
 import com.earth2me.essentials.commands.WarpNotFoundException;
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 
 
-public class Warps implements IConf
+public class Warps implements IConf, IWarps
 {
 	private static final Logger logger = Logger.getLogger("Minecraft");
 	private final Map<StringIgnoreCase, EssentialsConf> warpPoints = new HashMap<StringIgnoreCase, EssentialsConf>();
@@ -29,6 +31,7 @@ public class Warps implements IConf
 		reloadConfig();
 	}
 
+	@Override
 	public boolean isEmpty()
 	{
 		return warpPoints.isEmpty();
@@ -45,6 +48,7 @@ public class Warps implements IConf
 		return keys;
 	}
 
+	@Override
 	public Location getWarp(String warp) throws Exception
 	{
 		EssentialsConf conf = warpPoints.get(new StringIgnoreCase(warp));
@@ -55,6 +59,7 @@ public class Warps implements IConf
 		return conf.getLocation(null, server);
 	}
 
+	@Override
 	public void setWarp(String name, Location loc) throws Exception
 	{
 		String filename = Util.sanitizeFileName(name);
@@ -126,6 +131,26 @@ public class Warps implements IConf
 		}
 	}
 
+	// This is for api support, and so 3.x will not break this api
+	@Override
+	public Collection<String> getList()
+	{
+		return getWarpNames();
+	}
+
+	// This is for api support, and so 3.x will not break this api
+	@Override
+	public void removeWarp(String name) throws Exception
+	{
+		delWarp(name);
+	}
+
+	//This is here for future 3.x api support. Not implemented here becasue storage is handled differently
+	@Override
+	public File getWarpFile(String name) throws InvalidNameException
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 
 	private static class StringIgnoreCase
 	{

@@ -19,26 +19,25 @@ public class Commandeco extends EssentialsCommand
 	@Override
 	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
-		Double broadcast = null;
-		Double broadcastAll = null;
-		final double startingBalance = (double)ess.getSettings().getStartingBalance();
+
 		if (args.length < 2)
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		EcoCommands cmd;
+		Commandeco.EcoCommands cmd;
+		double startingBalance = (double)ess.getSettings().getStartingBalance();
 		double amount;
+		Double broadcast = null;
+		Double broadcastAll = null;
 		try
 		{
-			cmd = EcoCommands.valueOf(args[0].toUpperCase(Locale.ENGLISH));
-			amount = Double.parseDouble(args[2].replaceAll("[^0-9\\.]", ""));
+			cmd = Commandeco.EcoCommands.valueOf(args[0].toUpperCase(Locale.ENGLISH));
+			amount = (cmd == Commandeco.EcoCommands.RESET) ? startingBalance : Double.parseDouble(args[2].replaceAll("[^0-9\\.]", ""));
 		}
 		catch (Exception ex)
 		{
 			throw new NotEnoughArgumentsException(ex);
 		}
-
-		final double minBalance = ess.getSettings().getMinMoney();
 
 		if (args[1].contentEquals("**"))
 		{
@@ -52,28 +51,13 @@ public class Commandeco extends EssentialsCommand
 					break;
 
 				case TAKE:
-					if (player.canAfford(amount, false))
-					{
-						player.takeMoney(amount);
-					}
-					else
-					{
-						if (player.getMoney() > 0)
-						{
-							player.setMoney(0);
-						}
-					}
+					take(amount, player, null);
 					break;
 
 				case RESET:
-					player.setMoney(startingBalance);
-					broadcastAll = startingBalance;
-					break;
-
 				case SET:
-					boolean underMinimum = (player.getMoney() - amount) < minBalance;
-					player.setMoney(underMinimum ? minBalance : amount);
-					broadcastAll = underMinimum ? minBalance : amount;
+					set(amount, player, null);
+					broadcastAll = amount;
 					break;
 				}
 			}
@@ -90,28 +74,13 @@ public class Commandeco extends EssentialsCommand
 					break;
 
 				case TAKE:
-					if (player.canAfford(amount))
-					{
-						player.takeMoney(amount);
-					}
-					else
-					{
-						if (player.getMoney() > 0)
-						{
-							player.setMoney(0);
-						}
-					}
+					take(amount, player, null);
 					break;
 
 				case RESET:
-					player.setMoney(startingBalance);
-					broadcast = startingBalance;
-					break;
-
 				case SET:
-					boolean underMinimum = (player.getMoney() - amount) < minBalance;
-					player.setMoney(underMinimum ? minBalance : amount);
-					broadcast = underMinimum ? minBalance : amount;
+					set(amount, player, null);
+					broadcast = amount;
 					break;
 				}
 			}
@@ -126,21 +95,12 @@ public class Commandeco extends EssentialsCommand
 				break;
 
 			case TAKE:
-				if (!player.canAfford(amount))
-				{
-					throw new Exception(_("notEnoughMoney"));
-					
-				}
-				player.takeMoney(amount, sender);
+				take(amount, player, sender);
 				break;
 
 			case RESET:
-				player.setMoney(startingBalance);
-				break;
-
 			case SET:
-				boolean underMinimum = (player.getMoney() - amount) < minBalance;
-				player.setMoney(underMinimum ? minBalance : amount);
+				set(amount, player, sender);
 				break;
 			}
 		}
@@ -155,9 +115,37 @@ public class Commandeco extends EssentialsCommand
 		}
 	}
 
+	private void take(double amount, final User player, final CommandSender sender)
+	{
+		double money = player.getMoney();
+		double minBalance = ess.getSettings().getMinMoney();
+		if (money - amount > minBalance)
+		{
+			player.takeMoney(amount, sender);
+		}
+		else
+		{
+			player.sendMessage(_("takenFromAccount", Util.displayCurrency(money - minBalance, ess)));
+			sender.sendMessage(_("takenFromOthersAccount", Util.displayCurrency(money - minBalance, ess), player.getDisplayName(), Util.displayCurrency(player.getMoney(), ess)));
+			player.setMoney(minBalance);
+		}
+	}
+
+	private void set(double amount, final User player, final CommandSender sender)
+	{
+		double minBalance = ess.getSettings().getMinMoney();
+		boolean underMinimum = amount < minBalance;
+		player.setMoney(underMinimum ? minBalance : amount);
+		player.sendMessage(_("setBal", Util.displayCurrency(player.getMoney(), ess)));
+		if (sender != null)
+		{
+			sender.sendMessage(_("setBalOthers", player.getDisplayName(), Util.displayCurrency(player.getMoney(), ess)));
+		}
+	}
+
 
 	private enum EcoCommands
 	{
-		GIVE, TAKE, RESET, SET
+		GIVE, TAKE, SET, RESET
 	}
 }

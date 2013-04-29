@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
-public interface IConf {
+public interface IConf
+{
 	public void reloadConfig();
 }
