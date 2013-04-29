@@ -4,6 +4,9 @@ import static com.earth2me.essentials.I18n._;
 import static com.earth2me.essentials.I18n.capitalCase;
 import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
+import com.earth2me.essentials.textreader.IText;
+import com.earth2me.essentials.textreader.KeywordReplacer;
+import com.earth2me.essentials.textreader.SimpleTextInput;
 import java.util.*;
 import java.util.logging.Level;
 import org.bukkit.configuration.ConfigurationSection;
@@ -102,24 +105,28 @@ public class Kit
 	{
 		try
 		{
+			IText input = new SimpleTextInput(items);
+			IText output = new KeywordReplacer(input, user, ess);
+			
 			boolean spew = false;
 			final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
-			for (String d : items)
-			{
-				if (d.startsWith(ess.getSettings().getCurrencySymbol()))
+			for (String kitItem : output.getLines())
+			{				
+				if (kitItem.startsWith(ess.getSettings().getCurrencySymbol()))
 				{
-					Double value = Double.parseDouble(d.substring(ess.getSettings().getCurrencySymbol().length()).trim());
+					Double value = Double.parseDouble(kitItem.substring(ess.getSettings().getCurrencySymbol().length()).trim());
 					Trade t = new Trade(value, ess);
 					t.pay(user);
 					continue;
 				}
 
-				final String[] parts = d.split(" ");
+				final String[] parts = kitItem.split(" ");
 				final ItemStack parseStack = ess.getItemDb().get(parts[0], parts.length > 1 ? Integer.parseInt(parts[1]) : 1);
 				final MetaItemStack metaStack = new MetaItemStack(parseStack);
 
 				if (parts.length > 2)
 				{
+					// We pass a null sender here because kits should not do perm checks
 					metaStack.parseStringMeta(null, allowUnsafe, parts, 2, ess);
 				}
 
