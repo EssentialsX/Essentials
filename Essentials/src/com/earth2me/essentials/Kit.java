@@ -107,11 +107,11 @@ public class Kit
 		{
 			IText input = new SimpleTextInput(items);
 			IText output = new KeywordReplacer(input, user, ess);
-			
+
 			boolean spew = false;
 			final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
 			for (String kitItem : output.getLines())
-			{				
+			{
 				if (kitItem.startsWith(ess.getSettings().getCurrencySymbol()))
 				{
 					Double value = Double.parseDouble(kitItem.substring(ess.getSettings().getCurrencySymbol().length()).trim());
