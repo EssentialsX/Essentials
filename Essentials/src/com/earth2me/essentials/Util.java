@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
@@ -524,6 +525,7 @@ public class Util
 
 	public static String formatAsCurrency(final double value)
 	{
+		dFormat.setRoundingMode(RoundingMode.FLOOR);
 		String str = dFormat.format(value);
 		if (str.endsWith(".00"))
 		{
@@ -540,11 +542,6 @@ public class Util
 	public static String shortCurrency(final double value, final IEssentials ess)
 	{
 		return ess.getSettings().getCurrencySymbol() + formatAsCurrency(value);
-	}
-
-	public static double roundDouble(final double d)
-	{
-		return Math.round(d * 100.0) / 100.0;
 	}
 
 	public static boolean isInt(final String sInt)
