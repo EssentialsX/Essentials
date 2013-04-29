@@ -19,11 +19,11 @@ public class Commandeco extends EssentialsCommand
 	@Override
 	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
-
 		if (args.length < 2)
 		{
 			throw new NotEnoughArgumentsException();
 		}
+
 		Commandeco.EcoCommands cmd;
 		double startingBalance = (double)ess.getSettings().getStartingBalance();
 		double amount;
@@ -115,7 +115,7 @@ public class Commandeco extends EssentialsCommand
 		}
 	}
 
-	private void take(double amount, final User player, final CommandSender sender)
+	private void take(double amount, final User player, final CommandSender sender) throws Exception
 	{
 		double money = player.getMoney();
 		double minBalance = ess.getSettings().getMinMoney();
@@ -123,11 +123,14 @@ public class Commandeco extends EssentialsCommand
 		{
 			player.takeMoney(amount, sender);
 		}
+		else if (sender == null)
+		{
+			player.setMoney(minBalance);
+			player.sendMessage(_("takenFromAccount", Util.displayCurrency(money - minBalance, ess)));
+		}
 		else
 		{
-			player.sendMessage(_("takenFromAccount", Util.displayCurrency(money - minBalance, ess)));
-			sender.sendMessage(_("takenFromOthersAccount", Util.displayCurrency(money - minBalance, ess), player.getDisplayName(), Util.displayCurrency(player.getMoney(), ess)));
-			player.setMoney(minBalance);
+			throw new Exception(_("notEnoughMoney"));
 		}
 	}
 
