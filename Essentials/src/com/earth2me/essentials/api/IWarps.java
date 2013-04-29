@@ -2,6 +2,8 @@ package com.earth2me.essentials.api;
 
 import java.io.File;
 import java.util.Collection;
+
+import com.earth2me.essentials.commands.WarpNotFoundException;
 import org.bukkit.Location;
 
 
@@ -12,9 +14,10 @@ public interface IWarps
 	 *
 	 * @param warp - Warp name
 	 * @return - Location the warp is set to
-	 * @throws Exception
+	 * @throws WarpNotFoundException When the warp is not found
+	 * @throws InvalidWorldException When the world the warp is in is not found
 	 */
-	Location getWarp(String warp) throws Exception;
+	Location getWarp(String warp) throws WarpNotFoundException, InvalidWorldException;
 
 	/**
 	 * Gets a list of warps

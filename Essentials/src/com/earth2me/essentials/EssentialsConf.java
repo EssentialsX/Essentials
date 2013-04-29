@@ -1,6 +1,8 @@
 package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
+
+import com.earth2me.essentials.api.InvalidWorldException;
 import com.google.common.io.Files;
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -379,7 +381,7 @@ public class EssentialsConf extends YamlConfiguration
 		return isSet(path);
 	}
 
-	public Location getLocation(final String path, final Server server) throws Exception
+	public Location getLocation(final String path, final Server server) throws InvalidWorldException
 	{
 		final String worldName = getString((path == null ? "" : path + ".") + "world");
 		if (worldName == null || worldName.isEmpty())
@@ -389,7 +391,7 @@ public class EssentialsConf extends YamlConfiguration
 		final World world = server.getWorld(worldName);
 		if (world == null)
 		{
-			throw new Exception(_("invalidWorld"));
+			throw new InvalidWorldException(worldName);
 		}
 		return new Location(world,
 							getDouble((path == null ? "" : path + ".") + "x", 0),
