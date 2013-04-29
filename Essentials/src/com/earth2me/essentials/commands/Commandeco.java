@@ -130,7 +130,7 @@ public class Commandeco extends EssentialsCommand
 		}
 		else
 		{
-			throw new Exception(_("notEnoughMoney"));
+			throw new Exception(_("insufficientFunds"));
 		}
 	}
 
