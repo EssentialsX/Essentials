@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IWarps;
 import com.earth2me.essentials.api.InvalidNameException;
+import com.earth2me.essentials.api.InvalidWorldException;
 import com.earth2me.essentials.commands.WarpNotFoundException;
 import java.io.File;
 import java.io.IOException;
@@ -49,7 +50,7 @@ public class Warps implements IConf, IWarps
 	}
 
 	@Override
-	public Location getWarp(String warp) throws Exception
+	public Location getWarp(String warp) throws WarpNotFoundException, InvalidWorldException
 	{
 		EssentialsConf conf = warpPoints.get(new StringIgnoreCase(warp));
 		if (conf == null)
