@@ -16,7 +16,7 @@ public class Commandspawnmob extends EssentialsCommand
 	{
 		super("spawnmob");
 	}
-
+	
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
@@ -34,17 +34,22 @@ public class Commandspawnmob extends EssentialsCommand
 		{
 			mobCount = Integer.parseInt(args[1]);
 		}
-
+		
+		if (mobParts.size() > 1 && !user.isAuthorized("essentials.spawnmob.stack"))
+		{
+			throw new Exception(_("cannotStackMob"));
+		}
+		
 		if (args.length >= 3)
 		{
 			final User target = getPlayer(ess.getServer(), user, args, 2);
 			SpawnMob.spawnmob(ess, server, user, target, mobParts, mobData, mobCount);
 			return;
 		}
-
+		
 		SpawnMob.spawnmob(ess, server, user, mobParts, mobData, mobCount);
 	}
-
+	
 	@Override
 	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
@@ -53,11 +58,11 @@ public class Commandspawnmob extends EssentialsCommand
 			final String mobList = Util.joinList(Mob.getMobList());
 			throw new NotEnoughArgumentsException(_("mobsAvailable", mobList));
 		}
-
+		
 		List<String> mobParts = SpawnMob.mobParts(args[0]);
 		List<String> mobData = SpawnMob.mobData(args[0]);
 		int mobCount = Integer.parseInt(args[1]);
-
+		
 		final User target = getPlayer(ess.getServer(), args, 2, true, false);
 		SpawnMob.spawnmob(ess, server, sender, target, mobParts, mobData, mobCount);
 	}
