@@ -231,6 +231,7 @@ public class Teleport implements Runnable, ITeleport
 	}
 
 	//The now function is used when you want to skip tp delay when teleporting someone to a location or player.
+	@Override
 	public void now(Location loc, boolean cooldown, TeleportCause cause) throws Exception
 	{
 		if (cooldown)
@@ -387,7 +388,7 @@ public class Teleport implements Runnable, ITeleport
 		teleport(new Target(loc), chargeFor, cause);
 	}
 
-	//The back function is a wrapper used to teleport a player /back to their previous location.	
+	//The back function is a wrapper used to teleport a player /back to their previous location.
 	public void back(Trade chargeFor) throws Exception
 	{
 		teleport(new Target(user.getLastLocation()), chargeFor, TeleportCause.COMMAND);

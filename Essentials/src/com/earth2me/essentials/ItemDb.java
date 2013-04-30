@@ -74,6 +74,7 @@ public class ItemDb implements IConf, IItemDb
 		}
 	}
 
+	@Override
 	public ItemStack get(final String id, final int quantity) throws Exception
 	{
 		final ItemStack retval = get(id.toLowerCase(Locale.ENGLISH));
@@ -81,12 +82,13 @@ public class ItemDb implements IConf, IItemDb
 		return retval;
 	}
 
+	@Override
 	public ItemStack get(final String id) throws Exception
 	{
 		int itemid = 0;
 		String itemname = null;
 		short metaData = 0;
-		String[] parts = splitPattern.split(id);;
+		String[] parts = splitPattern.split(id);
 		if (id.matches("^\\d+[:+',;.]\\d+$"))
 		{
 			itemid = Integer.parseInt(parts[0]);
@@ -137,7 +139,7 @@ public class ItemDb implements IConf, IItemDb
 		retval.setDurability(metaData);
 		return retval;
 	}
-	
+
 	public String names(ItemStack item)
 	{
 		ItemData itemData = new ItemData(item.getTypeId(), item.getDurability());
