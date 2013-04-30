@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 import org.bukkit.Material;
 import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -21,17 +22,35 @@ public class Commandpowertool extends EssentialsCommand
 	@Override
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		String command = getFinalArg(args, 0);
+		final String command = getFinalArg(args, 0);
+		final ItemStack itemStack = user.getItemInHand();
+		powertool(server, user, user, commandLabel, itemStack, command);
+	}
 
+	@Override
+	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	{
+		if (args.length < 3) //running from console means inserting a player and item before the standard syntax
+		{
+			throw new Exception("When running from console, usage is: /" + commandLabel + " <player> <itemid> <command>");
+		}
+
+		final User user = getPlayer(server, args, 0, true, true);
+		final ItemStack itemStack = ess.getItemDb().get(args[1]);
+		final String command = getFinalArg(args, 2);
+		powertool(server, sender, user, commandLabel, itemStack, command);
+	}
+
+	protected void powertool(final Server server, final CommandSender sender, final User user, final String commandLabel, final ItemStack itemStack, String command) throws Exception
+	{
 		// check to see if this is a clear all command
 		if (command != null && command.equalsIgnoreCase("d:"))
 		{
 			user.clearAllPowertools();
-			user.sendMessage(_("powerToolClearAll"));
+			sender.sendMessage(_("powerToolClearAll"));
 			return;
 		}
 
-		final ItemStack itemStack = user.getItemInHand();
 		if (itemStack == null || itemStack.getType() == Material.AIR)
 		{
 			throw new Exception(_("powerToolAir"));
@@ -49,7 +68,7 @@ public class Commandpowertool extends EssentialsCommand
 				}
 				else
 				{
-					user.sendMessage(_("powerToolList", Util.joinList(powertools), itemName));
+					sender.sendMessage(_("powerToolList", Util.joinList(powertools), itemName));
 				}
 				throw new NoChargeException();
 			}
@@ -62,13 +81,13 @@ public class Commandpowertool extends EssentialsCommand
 				}
 
 				powertools.remove(command);
-				user.sendMessage(_("powerToolRemove", command, itemName));
+				sender.sendMessage(_("powerToolRemove", command, itemName));
 			}
 			else
 			{
 				if (command.startsWith("a:"))
 				{
-					if (!user.isAuthorized("essentials.powertool.append"))
+					if (sender instanceof User && !((User)sender).isAuthorized("essentials.powertool.append"))
 					{
 						throw new Exception(_("noPerm", "essentials.powertool.append"));
 					}
@@ -89,7 +108,7 @@ public class Commandpowertool extends EssentialsCommand
 				}
 
 				powertools.add(command);
-				user.sendMessage(_("powerToolAttach", Util.joinList(powertools), itemName));
+				sender.sendMessage(_("powerToolAttach", Util.joinList(powertools), itemName));
 			}
 		}
 		else
@@ -98,7 +117,7 @@ public class Commandpowertool extends EssentialsCommand
 			{
 				powertools.clear();
 			}
-			user.sendMessage(_("powerToolRemoveAll", itemName));
+			sender.sendMessage(_("powerToolRemoveAll", itemName));
 		}
 
 		if (!user.arePowerToolsEnabled())
