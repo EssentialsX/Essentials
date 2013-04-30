@@ -82,10 +82,10 @@ public class SpawnMob
 		{
 			throw new Exception(_("unableToSpawnMob"));
 		}
-        if (parts.size() > 1 && !user.isAuthorized("essentials.spawnmob.stack"))
-        {
-            throw new Exception(_("cannotStackMob"));
-        }
+		if (parts.size() > 1 && !user.isAuthorized("essentials.spawnmob.stack"))
+		{
+			throw new Exception(_("cannotStackMob"));
+		}
 		spawnmob(ess, server, user, user, block.getLocation(), parts, data, mobCount);
 	}
 
@@ -106,16 +106,27 @@ public class SpawnMob
 	{
 		final Location sloc = Util.getSafeDestination(loc);
 
-		for(int i = 0; i < parts.size(); i++)
+		for (int i = 0; i < parts.size(); i++)
 		{
 			Mob mob = Mob.fromName(parts.get(i));
 			checkSpawnable(ess, sender, mob);
 		}
 
-		int serverLimit = ess.getSettings().getSpawnMobLimit();
-		if (mobCount > serverLimit)
+		final int serverLimit = ess.getSettings().getSpawnMobLimit();
+		int effectiveLimit = serverLimit / parts.size();
+
+		if (effectiveLimit < 1)
 		{
-			mobCount = serverLimit;
+			effectiveLimit = 1;
+			while (parts.size() > serverLimit)
+			{
+				parts.remove(serverLimit);
+			}
+		}
+
+		if (mobCount > effectiveLimit)
+		{
+			mobCount = effectiveLimit;
 			sender.sendMessage(_("mobSpawnLimit"));
 		}
 
@@ -126,7 +137,7 @@ public class SpawnMob
 			{
 				spawnMob(ess, server, sender, target, sloc, parts, data);
 			}
-			sender.sendMessage(mobCount + " " + mob.name.toLowerCase(Locale.ENGLISH) + mob.suffix + " " + _("spawned"));
+			sender.sendMessage(mobCount * parts.size() + " " + mob.name.toLowerCase(Locale.ENGLISH) + mob.suffix + " " + _("spawned"));
 		}
 		catch (MobException e1)
 		{
@@ -160,7 +171,7 @@ public class SpawnMob
 					changeMobData(mob.getType(), spawnedMob, data.get(i), target);
 				}
 			}
-			
+
 			int next = (i + 1);
 			if (next < parts.size()) //If it's the last mob in the list, don't set the mount
 			{
