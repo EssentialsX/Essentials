@@ -16,7 +16,6 @@ public class Commandfireball extends EssentialsCommand
 	@Override
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		boolean small = false;
 		Class<? extends Entity> type = Fireball.class;
 		Projectile projectile;
 		int speed = 2;

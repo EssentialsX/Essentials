@@ -1,7 +1,6 @@
 package com.earth2me.essentials;
 
 import java.util.logging.Level;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -31,7 +30,7 @@ public class EssentialsPluginListener implements Listener, IConf
 		{
 			ess.getLogger().log(Level.INFO, "Payment method found (" + ess.getPaymentMethod().getMethod().getLongName() + " version: " + ess.getPaymentMethod().getMethod().getVersion() + ")");
 		}
-	}	
+	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPluginDisable(final PluginDisableEvent event)
