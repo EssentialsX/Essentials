@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 public class EssentialsTimer implements Runnable
 {
 	private final transient IEssentials ess;
-	private final transient Set<User> onlineUsers = new HashSet<User>();
+	private final transient Set<String> onlineUsers = new HashSet<String>();
 	private transient long lastPoll = System.nanoTime();
 	private final LinkedList<Double> history = new LinkedList<Double>();
 	private int skip1 = 0;
@@ -64,7 +64,7 @@ public class EssentialsTimer implements Runnable
 			try
 			{
 				final User user = ess.getUser(player);
-				onlineUsers.add(user);
+				onlineUsers.add(user.getName());
 				user.setLastOnlineActivity(currentTime);
 				user.checkActivity();
 			}
@@ -75,7 +75,7 @@ public class EssentialsTimer implements Runnable
 		}
 
 		count = 0;
-		final Iterator<User> iterator = onlineUsers.iterator();
+		final Iterator<String> iterator = onlineUsers.iterator();
 		while (iterator.hasNext())
 		{
 			count++;
@@ -92,7 +92,7 @@ public class EssentialsTimer implements Runnable
 					break;
 				}
 			}
-			final User user = iterator.next();
+			final User user = ess.getUser(iterator.next());
 			if (user.getLastOnlineActivity() < currentTime && user.getLastOnlineActivity() > user.getLastLogout())
 			{
 				user.setLastLogout(user.getLastOnlineActivity());
