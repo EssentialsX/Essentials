@@ -63,7 +63,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		arePowerToolsEnabled = _arePowerToolsEnabled();
 		kitTimestamps = _getKitTimestamps();
 		nickname = _getNickname();
-		setIgnoredPlayers(_getIgnoredPlayers());
+		ignoredPlayers = _getIgnoredPlayers();
 		logoutLocation = _getLogoutLocation();
 	}
 	private double money;
