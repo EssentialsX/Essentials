@@ -42,8 +42,8 @@ public class Teleport implements Runnable, ITeleport
 			return location;
 		}
 	}
-	private IUser user;
-	private IUser teleportUser;
+	private final IUser user;
+	private String teleportUserName;
 	private int teleTimer = -1;
 	private long started;	// time this task was initiated
 	private long tpdelay;		// how long to delay the teleport
@@ -74,7 +74,7 @@ public class Teleport implements Runnable, ITeleport
 		this.initX = Math.round(teleportUser.getLocation().getX() * MOVE_CONSTANT);
 		this.initY = Math.round(teleportUser.getLocation().getY() * MOVE_CONSTANT);
 		this.initZ = Math.round(teleportUser.getLocation().getZ() * MOVE_CONSTANT);
-		this.teleportUser = teleportUser;
+		this.teleportUserName = teleportUser.getName();
 		this.teleportTarget = target;
 		this.chargeFor = chargeFor;
 		this.cause = cause;
@@ -82,7 +82,7 @@ public class Teleport implements Runnable, ITeleport
 
 		this.canMove = user.isAuthorized("essentials.teleport.timer.move");
 
-		teleTimer = ess.scheduleSyncRepeatingTask(this, 10, 10);
+		teleTimer = ess.scheduleSyncRepeatingTask(this, 20, 20);
 	}
 
 	@Override
@@ -94,6 +94,8 @@ public class Teleport implements Runnable, ITeleport
 			cancel(false);
 			return;
 		}
+		
+		IUser teleportUser = ess.getUser(this.teleportUserName);
 
 		if (teleportUser == null || !teleportUser.isOnline())
 		{
@@ -216,9 +218,9 @@ public class Teleport implements Runnable, ITeleport
 			if (notifyUser)
 			{
 				user.sendMessage(_("pendingTeleportCancelled"));
-				if (teleportUser != user)
+				if (teleportUserName != null && !teleportUserName.equals(user.getName()))
 				{
-					teleportUser.sendMessage(_("pendingTeleportCancelled"));
+					ess.getUser(teleportUserName).sendMessage(_("pendingTeleportCancelled"));
 				}
 			}
 		}
