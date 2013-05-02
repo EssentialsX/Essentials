@@ -114,14 +114,26 @@ public class EssentialsConf extends YamlConfiguration
 			final FileInputStream inputStream = new FileInputStream(configFile);
 			try
 			{
-				final ByteBuffer buffer = ByteBuffer.allocate((int)configFile.length());
+				long startSize = configFile.length();
+				if (startSize > Integer.MAX_VALUE) {
+					throw new InvalidConfigurationException("File too big");
+				}
+				ByteBuffer buffer = ByteBuffer.allocate((int)startSize);
 				int length;
 				while ((length = inputStream.read(bytebuffer)) != -1)
 				{
+					if (length > buffer.remaining()) {
+						ByteBuffer resize = ByteBuffer.allocate(buffer.capacity()+length-buffer.remaining());
+						int resizePosition = buffer.position();
+						buffer.rewind();
+						resize.put(buffer);
+						resize.position(resizePosition);
+						buffer = resize;
+					}
 					buffer.put(bytebuffer, 0, length);
 				}
 				buffer.rewind();
-				final CharBuffer data = CharBuffer.allocate((int)configFile.length());
+				final CharBuffer data = CharBuffer.allocate(buffer.capacity());
 				CharsetDecoder decoder = UTF8.newDecoder();
 				CoderResult result = decoder.decode(buffer, data, true);
 				if (result.isError())
