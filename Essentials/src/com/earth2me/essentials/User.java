@@ -19,7 +19,7 @@ import org.bukkit.potion.PotionEffectType;
 public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 {
 	private CommandSender replyTo = null;
-	private transient User teleportRequester;
+	private transient String teleportRequester;
 	private transient boolean teleportRequestHere;
 	private transient boolean vanished;
 	private transient final Teleport teleport;
@@ -263,11 +263,11 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public void requestTeleport(final User player, final boolean here)
 	{
 		teleportRequestTime = System.currentTimeMillis();
-		teleportRequester = player;
+		teleportRequester = player.getName();
 		teleportRequestHere = here;
 	}
 
-	public User getTeleportRequest()
+	public String getTeleportRequest()
 	{
 		return teleportRequester;
 	}

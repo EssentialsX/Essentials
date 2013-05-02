@@ -29,7 +29,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf
 	private static final Logger logger = Logger.getLogger("Minecraft");
 	File databaseFile;
 	File dataFolder;
-	EssentialsConf config;
+	final EssentialsConf config;
 	private final transient IEssentials ess;
 
 	public EssentialsGeoIPPlayerListener(File dataFolder, IEssentials ess)

@@ -297,7 +297,7 @@ public class EssentialsConf extends YamlConfiguration
 		Future<?> future = EXECUTOR_SERVICE.submit(new WriteRunner(configFile, data, pendingDiskWrites));
 
 		//LOGGER.log(Level.INFO, configFile + " prepared for writing in " + (System.nanoTime() - startTime) + " nsec.");
-		
+
 		return future;
 	}
 
@@ -351,16 +351,23 @@ public class EssentialsConf extends YamlConfiguration
 						}
 					}
 
-
-					final OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(configFile), UTF8);
-
+					final FileOutputStream fos = new FileOutputStream(configFile);
 					try
 					{
-						writer.write(data);
+						final OutputStreamWriter writer = new OutputStreamWriter(fos, UTF8);
+
+						try
+						{
+							writer.write(data);
+						}
+						finally
+						{
+							writer.close();
+						}
 					}
 					finally
 					{
-						writer.close();
+						fos.close();
 					}
 				}
 				catch (IOException e)
@@ -753,4 +760,5 @@ public class EssentialsConf extends YamlConfiguration
 	{
 		super.set(path, value);
 	}
+
 }

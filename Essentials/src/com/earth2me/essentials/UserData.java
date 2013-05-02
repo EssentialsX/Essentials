@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 public abstract class UserData extends PlayerExtension implements IConf
 {
 	protected final transient IEssentials ess;
-	private EssentialsConf config;
+	private final EssentialsConf config;
 	private final File folder;
 
 	protected UserData(Player base, IEssentials ess)
@@ -31,8 +31,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 	public final void reset()
 	{
 		config.getFile().delete();
-		config = new EssentialsConf(new File(folder, Util.sanitizeFileName(base.getName()) + ".yml"));
-		reloadConfig();
+		ess.getUserMap().removeUser(this.getName());
 	}
 
 	@Override

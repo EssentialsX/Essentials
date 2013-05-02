@@ -19,7 +19,7 @@ public class Commandtpaccept extends EssentialsCommand
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 
-		final User target = user.getTeleportRequest();
+		final User target = ess.getUser(user.getTeleportRequest());
 
 		if (target == null || !target.isOnline())
 		{
