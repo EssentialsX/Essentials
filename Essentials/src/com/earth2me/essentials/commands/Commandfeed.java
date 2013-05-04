@@ -37,7 +37,7 @@ public class Commandfeed extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		feedOtherPlayers(server, sender, args[1]);
+		feedOtherPlayers(server, sender, args[0]);
 	}
 
 	private void feedOtherPlayers(final Server server, final CommandSender sender, final String name) throws NotEnoughArgumentsException, QuietAbortException

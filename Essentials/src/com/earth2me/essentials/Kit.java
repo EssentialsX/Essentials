@@ -22,22 +22,22 @@ public class Kit
 		{
 			final ConfigurationSection kits = ess.getSettings().getKits();
 			final StringBuilder list = new StringBuilder();
-			for (String kiteItem : kits.getKeys(false))
+			for (String kitItem : kits.getKeys(false))
 			{
 				if (user == null)
 				{
-					list.append(" ").append(capitalCase(kiteItem));
+					list.append(" ").append(capitalCase(kitItem));
 				}
-				else if (user.isAuthorized("essentials.kits." + kiteItem.toLowerCase(Locale.ENGLISH)))
+				else if (user.isAuthorized("essentials.kits." + kitItem.toLowerCase(Locale.ENGLISH)))
 				{
 					String cost = "";
-					Double costPrice = new Trade("kit-" + kiteItem.toLowerCase(Locale.ENGLISH), ess).getCommandCost(user);
+					Double costPrice = new Trade("kit-" + kitItem.toLowerCase(Locale.ENGLISH), ess).getCommandCost(user);
 					if (costPrice > 0d)
 					{
 						cost = _("kitCost", Util.displayCurrency(costPrice, ess));
 					}
 
-					list.append(" ").append(capitalCase(kiteItem)).append(cost);
+					list.append(" ").append(capitalCase(kitItem)).append(cost);
 				}
 			}
 			return list.toString().trim();
