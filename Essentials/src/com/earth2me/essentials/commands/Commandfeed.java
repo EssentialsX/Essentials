@@ -64,7 +64,7 @@ public class Commandfeed extends EssentialsCommand
 
 	private void feedPlayer(CommandSender sender, Player player) throws QuietAbortException
 	{
-		final int amount = 20;
+		final int amount = 100;
 
 		final FoodLevelChangeEvent flce = new FoodLevelChangeEvent(player, amount);
 		ess.getServer().getPluginManager().callEvent(flce);

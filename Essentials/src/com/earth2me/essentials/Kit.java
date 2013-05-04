@@ -24,9 +24,20 @@ public class Kit
 			final StringBuilder list = new StringBuilder();
 			for (String kiteItem : kits.getKeys(false))
 			{
-				if (user == null || user.isAuthorized("essentials.kits." + kiteItem.toLowerCase(Locale.ENGLISH)))
+				if (user == null)
 				{
 					list.append(" ").append(capitalCase(kiteItem));
+				}
+				else if (user.isAuthorized("essentials.kits." + kiteItem.toLowerCase(Locale.ENGLISH)))
+				{
+					String cost = "";
+					Double costPrice = new Trade("kit-" + kiteItem.toLowerCase(Locale.ENGLISH), ess).getCommandCost(user);
+					if (costPrice > 0d)
+					{
+						cost = _("kitCost", Util.displayCurrency(costPrice, ess));
+					}
+
+					list.append(" ").append(capitalCase(kiteItem)).append(cost);
 				}
 			}
 			return list.toString().trim();
