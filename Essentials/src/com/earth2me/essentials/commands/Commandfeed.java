@@ -6,6 +6,7 @@ import java.util.List;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 
 
 public class Commandfeed extends EssentialsCommand
@@ -24,13 +25,22 @@ public class Commandfeed extends EssentialsCommand
 		}
 		else
 		{
-			user.setFoodLevel(20);
-			user.setSaturation(10);
-			user.sendMessage(_("feed"));
+			feedPlayer(user, user);
 		}
 	}
 
-	private void feedOtherPlayers(final Server server, final CommandSender sender, final String name) throws NotEnoughArgumentsException
+	@Override
+	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	{
+		if (args.length < 1)
+		{
+			throw new NotEnoughArgumentsException();
+		}
+
+		feedOtherPlayers(server, sender, args[1]);
+	}
+
+	private void feedOtherPlayers(final Server server, final CommandSender sender, final String name) throws NotEnoughArgumentsException, QuietAbortException
 	{
 		boolean skipHidden = sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.vanish.interact");
 		boolean foundUser = false;
@@ -43,13 +53,28 @@ public class Commandfeed extends EssentialsCommand
 				continue;
 			}
 			foundUser = true;
-			matchPlayer.setFoodLevel(20);
-			matchPlayer.setSaturation(10);
-			sender.sendMessage(_("feedOther", matchPlayer.getDisplayName()));
+			feedPlayer(sender, matchPlayer);
+
 		}
 		if (!foundUser)
 		{
 			throw new NotEnoughArgumentsException(_("playerNotFound"));
 		}
+	}
+
+	private void feedPlayer(CommandSender sender, Player player) throws QuietAbortException
+	{
+		final int amount = 20;
+
+		final FoodLevelChangeEvent flce = new FoodLevelChangeEvent(player, amount);
+		ess.getServer().getPluginManager().callEvent(flce);
+		if (flce.isCancelled())
+		{
+			throw new QuietAbortException();
+		}
+
+		player.setFoodLevel(flce.getFoodLevel());
+		player.setSaturation(10);
+		sender.sendMessage(sender.equals(player) ? _("feed") : _("feedOther", player.getDisplayName()));
 	}
 }

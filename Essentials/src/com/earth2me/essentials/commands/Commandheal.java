@@ -6,6 +6,8 @@ import java.util.List;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.potion.PotionEffect;
 
 
@@ -61,8 +63,15 @@ public class Commandheal extends EssentialsCommand
 				continue;
 			}
 			foundUser = true;
-			healPlayer(matchPlayer);
-			sender.sendMessage(_("healOther", matchPlayer.getDisplayName()));
+			try
+			{
+				healPlayer(matchPlayer);
+				sender.sendMessage(_("healOther", matchPlayer.getDisplayName()));
+			}
+			catch (QuietAbortException e)
+			{
+				//Handle Quietly
+			}
 		}
 		if (!foundUser)
 		{
@@ -76,7 +85,22 @@ public class Commandheal extends EssentialsCommand
 		{
 			throw new Exception(_("healDead"));
 		}
-		player.setHealth(player.getMaxHealth());
+
+		final int amount = player.getMaxHealth() - player.getHealth();
+		final EntityRegainHealthEvent erhe = new EntityRegainHealthEvent(player, amount, RegainReason.CUSTOM);
+		ess.getServer().getPluginManager().callEvent(erhe);
+		if (erhe.isCancelled())
+		{
+			throw new QuietAbortException();
+		}
+
+		int newAmount = player.getHealth() + erhe.getAmount();
+		if (newAmount > player.getMaxHealth())
+		{
+			newAmount = player.getMaxHealth();
+		}
+
+		player.setHealth(newAmount);
 		player.setFoodLevel(20);
 		player.setFireTicks(0);
 		player.sendMessage(_("heal"));
