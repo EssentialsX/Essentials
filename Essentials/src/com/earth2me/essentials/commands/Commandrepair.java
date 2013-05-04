@@ -20,12 +20,7 @@ public class Commandrepair extends EssentialsCommand
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		if (args.length < 1)
-		{
-			throw new NotEnoughArgumentsException();
-		}
-
-		if (args[0].equalsIgnoreCase("hand"))
+		if (args.length < 1 || args[0].equalsIgnoreCase("hand") || !user.isAuthorized("essentials.repair.all"))
 		{
 			final ItemStack item = user.getItemInHand();
 			if (item == null || item.getType().isBlock() || item.getDurability() == 0)
@@ -72,7 +67,6 @@ public class Commandrepair extends EssentialsCommand
 				user.sendMessage(_("repair", Util.joinList(repaired)));
 			}
 			charge.charge(user);
-
 		}
 		else
 		{
