@@ -1,6 +1,8 @@
 package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -521,12 +523,19 @@ public class Util
 		}
 		return is;
 	}
+
+	public static double sanitizeMoney(final double value)
+	{
+		BigDecimal money = new BigDecimal(value, MathContext.DECIMAL128);
+		return money.doubleValue();
+	}
 	private static DecimalFormat dFormat = new DecimalFormat("#0.00", DecimalFormatSymbols.getInstance(Locale.US));
 
 	public static String formatAsCurrency(final double value)
 	{
+		double fvalue = sanitizeMoney(value);
 		dFormat.setRoundingMode(RoundingMode.FLOOR);
-		String str = dFormat.format(value);
+		String str = dFormat.format(fvalue);
 		if (str.endsWith(".00"))
 		{
 			str = str.substring(0, str.length() - 3);
@@ -714,10 +723,11 @@ public class Util
 		return pattern.matcher(input).replaceAll("\u00a7$1");
 	}
 	private static final Pattern IPPATTERN = Pattern.compile(
-			"^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
-			"([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
-	
-	public static boolean validIP(String ipAddress) {
+			"^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
+			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
+
+	public static boolean validIP(String ipAddress)
+	{
 		return IPPATTERN.matcher(ipAddress).matches();
 	}
 }
