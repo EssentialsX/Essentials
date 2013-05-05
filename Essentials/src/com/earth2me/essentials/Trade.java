@@ -122,6 +122,10 @@ public class Trade
 		boolean success = true;
 		if (getMoney() != null && getMoney().signum() > 0)
 		{
+			if (ess.getSettings().isDebug())
+			{
+				ess.getLogger().log(Level.INFO, "paying user " + user.getName() + " via trade " + getMoney().toPlainString());
+			}
 			user.giveMoney(getMoney());
 		}
 		if (getItemStack() != null)
@@ -167,11 +171,14 @@ public class Trade
 	{
 		if (ess.getSettings().isDebug())
 		{
-			ess.getLogger().log(Level.INFO, "charging user " + user.getName());
+			ess.getLogger().log(Level.INFO, "attempting to charge user " + user.getName());
 		}
-
 		if (getMoney() != null)
 		{
+			if (ess.getSettings().isDebug())
+			{
+				ess.getLogger().log(Level.INFO, "charging user " + user.getName() + " money " + getMoney().toPlainString());
+			}
 			if (!user.canAfford(getMoney()) && getMoney().signum() > 0)
 			{
 				throw new ChargeException(_("notEnoughMoney"));
@@ -180,7 +187,11 @@ public class Trade
 		}
 		if (getItemStack() != null)
 		{
-			if (!user.getInventory().containsAtLeast(itemStack, itemStack.getAmount()))
+			if (ess.getSettings().isDebug())
+			{
+				ess.getLogger().log(Level.INFO, "charging user " + user.getName() + " itemstack " + getItemStack().toString());
+			}
+			if (!user.getInventory().containsAtLeast(getItemStack(), getItemStack().getAmount()))
 			{
 				throw new ChargeException(_("missingItems", getItemStack().getAmount(), getItemStack().getType().toString().toLowerCase(Locale.ENGLISH).replace("_", " ")));
 			}
@@ -198,12 +209,20 @@ public class Trade
 		}
 		if (getExperience() != null)
 		{
+			if (ess.getSettings().isDebug())
+			{
+				ess.getLogger().log(Level.INFO, "charging user " + user.getName() + " exp " + getExperience());
+			}
 			final int experience = SetExpFix.getTotalExperience(user);
 			if (experience < getExperience() && getExperience() > 0)
 			{
 				throw new ChargeException(_("notEnoughExperience"));
 			}
 			SetExpFix.setTotalExperience(user, experience - getExperience());
+		}
+		if (ess.getSettings().isDebug())
+		{
+			ess.getLogger().log(Level.INFO, "charge user " + user.getName() + " completed");
 		}
 	}
 
@@ -254,7 +273,7 @@ public class Trade
 			}
 		}
 		if (cost.signum() != 0 && (user.isAuthorized("essentials.nocommandcost.all")
-													 || user.isAuthorized("essentials.nocommandcost." + command)))
+								   || user.isAuthorized("essentials.nocommandcost." + command)))
 		{
 			return BigDecimal.ZERO;
 		}
