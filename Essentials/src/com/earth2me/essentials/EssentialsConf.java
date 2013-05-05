@@ -6,7 +6,6 @@ import com.earth2me.essentials.api.InvalidWorldException;
 import com.google.common.io.Files;
 import java.io.*;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.MathContext;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
