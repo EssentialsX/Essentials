@@ -368,10 +368,10 @@ public class EssentialsSign
 		}
 	}
 
-	protected final Double getMoney(final String line) throws SignException
+	protected final BigDecimal getMoney(final String line) throws SignException
 	{
 		final boolean isMoney = line.matches("^[^0-9-\\.][\\.0-9]+$");
-		return isMoney ? getDoublePositive(line.substring(1)) : null;
+		return isMoney ? BigDecimal.valueOf(getDoublePositive(line.substring(1))) : null;
 	}
 
 	protected final Double getDoublePositive(final String line) throws SignException
@@ -409,7 +409,7 @@ public class EssentialsSign
 			return new Trade(signName.toLowerCase(Locale.ENGLISH) + "sign", ess);
 		}
 
-		final Double money = getMoney(line);
+		final BigDecimal money = getMoney(line);
 		if (money == null)
 		{
 			final String[] split = line.split("[ :]+", 2);

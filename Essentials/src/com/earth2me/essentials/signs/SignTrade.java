@@ -8,12 +8,12 @@ import org.bukkit.inventory.ItemStack;
 
 //TODO: TL exceptions
 public class SignTrade extends EssentialsSign
-{	
-
+{
 	public SignTrade()
 	{
 		super("Trade");
 	}
+	static final BigDecimal MINTRANSACTION = BigDecimal.valueOf(0.01);
 
 	@Override
 	protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException
@@ -22,7 +22,8 @@ public class SignTrade extends EssentialsSign
 		validateTrade(sign, 2, true, ess);
 		final Trade trade = getTrade(sign, 2, true, true, ess);
 		final Trade charge = getTrade(sign, 1, true, false, ess);
-		if (trade.getType() == charge.getType() && (trade.getType() != TradeType.ITEM || trade.getItemStack().getType().equals(charge.getItemStack().getType()))) {
+		if (trade.getType() == charge.getType() && (trade.getType() != TradeType.ITEM || trade.getItemStack().getType().equals(charge.getItemStack().getType())))
+		{
 			throw new SignException("You cannot trade for the same item type.");
 		}
 		trade.isAffordableFor(player);
@@ -138,7 +139,7 @@ public class SignTrade extends EssentialsSign
 
 		if (split.length == 1 && !amountNeeded)
 		{
-			final Double money = getMoney(split[0]);
+			final BigDecimal money = getMoney(split[0]);
 			if (money != null)
 			{
 				if (Util.shortCurrency(money, ess).length() * 2 > 15)
@@ -152,12 +153,12 @@ public class SignTrade extends EssentialsSign
 
 		if (split.length == 2 && amountNeeded)
 		{
-			final Double money = getMoney(split[0]);
-			Double amount = getDoublePositive(split[1]);
+			final BigDecimal money = getMoney(split[0]);
+			BigDecimal amount = BigDecimal.valueOf(getDoublePositive(split[1]));
 			if (money != null && amount != null)
 			{
-				amount -= amount % money;
-				if (amount < 0.01 || money < 0.01)
+				amount = amount.subtract(amount.remainder(money));
+				if (amount.compareTo(MINTRANSACTION) < 0 || money.compareTo(MINTRANSACTION) < 0)
 				{
 					throw new SignException(_("moreThanZero"));
 				}
@@ -221,8 +222,8 @@ public class SignTrade extends EssentialsSign
 		{
 			try
 			{
-				final Double money = getMoney(split[0]);
-				final Double amount = notEmpty ? getDoublePositive(split[1]) : getDouble(split[1]);
+				final BigDecimal money = getMoney(split[0]);
+				final BigDecimal amount = BigDecimal.valueOf(notEmpty ? getDoublePositive(split[1]) : getDouble(split[1]));
 				if (money != null && amount != null)
 				{
 					return new Trade(fullAmount ? amount : money, ess);
@@ -315,11 +316,11 @@ public class SignTrade extends EssentialsSign
 
 		if (split.length == 2)
 		{
-			final Double money = getMoney(split[0]);
-			final Double amount = getDouble(split[1]);
+			final BigDecimal money = getMoney(split[0]);
+			final BigDecimal amount = BigDecimal.valueOf(getDouble(split[1]));
 			if (money != null && amount != null)
 			{
-				final String newline = Util.shortCurrency(money, ess) + ":" + Util.shortCurrency(amount + value, ess).substring(1);
+				final String newline = Util.shortCurrency(money, ess) + ":" + Util.shortCurrency(amount.add(BigDecimal.valueOf(value)), ess).substring(1);
 				if (newline.length() > 15)
 				{
 					throw new SignException("This sign is full: Line too long!");

@@ -522,7 +522,6 @@ public class Util
 		}
 		return is;
 	}
-
 	private static DecimalFormat dFormat = new DecimalFormat("#0.00", DecimalFormatSymbols.getInstance(Locale.US));
 
 	public static String formatAsCurrency(final BigDecimal value)
@@ -540,15 +539,10 @@ public class Util
 	{
 		return _("currency", ess.getSettings().getCurrencySymbol(), formatAsCurrency(value));
 	}
-	
+
 	public static String shortCurrency(final BigDecimal value, final IEssentials ess)
 	{
 		return ess.getSettings().getCurrencySymbol() + formatAsCurrency(value);
-	}
-	
-	public static String shortCurrency(final double value, final IEssentials ess)
-	{
-		return shortCurrency(BigDecimal.valueOf(value), ess);
 	}
 
 	public static boolean isInt(final String sInt)

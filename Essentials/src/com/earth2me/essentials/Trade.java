@@ -26,14 +26,15 @@ public class Trade
 	private final transient ItemStack itemStack;
 	private final transient Integer exp;
 	private final transient IEssentials ess;
-	
+
+
 	public enum TradeType
 	{
 		MONEY,
 		EXP,
 		ITEM
 	}
-	
+
 	public Trade(final String command, final IEssentials ess)
 	{
 		this(command, null, null, null, null, ess);
@@ -47,11 +48,6 @@ public class Trade
 	public Trade(final BigDecimal money, final IEssentials ess)
 	{
 		this(null, null, money, null, null, ess);
-	}
-	
-	public Trade(final double money, final IEssentials ess)
-	{
-		this(null, null, BigDecimal.valueOf(money), null, null, ess);
 	}
 
 	public Trade(final ItemStack items, final IEssentials ess)
@@ -219,10 +215,11 @@ public class Trade
 	{
 		return exp;
 	}
-	
+
 	public TradeType getType()
 	{
-		if (getExperience() != null) {
+		if (getExperience() != null)
+		{
 			return TradeType.EXP;
 		}
 
@@ -231,7 +228,7 @@ public class Trade
 			return TradeType.ITEM;
 		}
 
-		return TradeType.MONEY;		
+		return TradeType.MONEY;
 	}
 
 	public BigDecimal getCommandCost(final IUser user)
@@ -251,7 +248,7 @@ public class Trade
 			}
 		}
 		if (cost.compareTo(BigDecimal.ZERO) != 0 && (user.isAuthorized("essentials.nocommandcost.all")
-							 || user.isAuthorized("essentials.nocommandcost." + command)))
+													 || user.isAuthorized("essentials.nocommandcost." + command)))
 		{
 			return BigDecimal.ZERO;
 		}
@@ -263,7 +260,7 @@ public class Trade
 	{
 		//isEcoLogUpdateEnabled() - This refers to log entries with no location, ie API updates #EasterEgg
 		//isEcoLogEnabled() - This refers to log entries with with location, ie /pay /sell and eco signs.
-		
+
 		if ((loc == null && !ess.getSettings().isEcoLogUpdateEnabled())
 			|| (loc != null && !ess.getSettings().isEcoLogEnabled()))
 		{
