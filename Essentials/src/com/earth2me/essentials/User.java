@@ -128,7 +128,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 	public void giveMoney(final BigDecimal value, final CommandSender initiator)
 	{
-		if (value.compareTo(BigDecimal.ZERO) == 0)
+		if (value.signum() == 0)
 		{
 			return;
 		}
@@ -142,7 +142,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 	public void payUser(final User reciever, final BigDecimal value) throws Exception
 	{
-		if (value.compareTo(BigDecimal.ZERO) == 0)
+		if (value.signum() == 0)
 		{
 			return;
 		}
@@ -167,7 +167,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 	public void takeMoney(final BigDecimal value, final CommandSender initiator)
 	{
-		if (value.compareTo(BigDecimal.ZERO) == 0)
+		if (value.signum() == 0)
 		{
 			return;
 		}

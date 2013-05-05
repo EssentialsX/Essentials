@@ -243,7 +243,7 @@ public class Trade
 		if (command != null && !command.isEmpty())
 		{
 			cost = ess.getSettings().getCommandCost(command.charAt(0) == '/' ? command.substring(1) : command);
-			if (cost.compareTo(BigDecimal.ZERO) == 0 && fallbackTrade != null)
+			if (cost.signum() == 0 && fallbackTrade != null)
 			{
 				cost = fallbackTrade.getCommandCost(user);
 			}
@@ -253,7 +253,7 @@ public class Trade
 				ess.getLogger().log(Level.INFO, "calculated command (" + command + ") cost for " + user.getName() + " as " + cost);
 			}
 		}
-		if (cost.compareTo(BigDecimal.ZERO) != 0 && (user.isAuthorized("essentials.nocommandcost.all")
+		if (cost.signum() != 0 && (user.isAuthorized("essentials.nocommandcost.all")
 													 || user.isAuthorized("essentials.nocommandcost." + command)))
 		{
 			return BigDecimal.ZERO;

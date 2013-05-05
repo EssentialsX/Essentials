@@ -49,7 +49,7 @@ public class Commandsell extends EssentialsCommand
 				{
 				}
 			}
-			if (totalWorth.compareTo(BigDecimal.ZERO) > 0)
+			if (totalWorth.signum() > 0)
 			{
 				user.sendMessage(_("totalWorthAll", type, Util.displayCurrency(totalWorth, ess)));
 			}
@@ -71,7 +71,7 @@ public class Commandsell extends EssentialsCommand
 				{
 				}
 			}
-			if (totalWorth.compareTo(BigDecimal.ZERO) > 0)
+			if (totalWorth.signum() > 0)
 			{
 				user.sendMessage(_("totalWorthBlocks", type, Util.displayCurrency(totalWorth, ess)));
 			}
