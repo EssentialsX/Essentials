@@ -26,7 +26,7 @@ public class Commandeco extends EssentialsCommand
 		}
 
 		Commandeco.EcoCommands cmd;
-		BigDecimal startingBalance = new BigDecimal(ess.getSettings().getStartingBalance());
+		BigDecimal startingBalance = ess.getSettings().getStartingBalance();
 		BigDecimal amount;
 		BigDecimal broadcast = null;
 		BigDecimal broadcastAll = null;

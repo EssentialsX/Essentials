@@ -187,7 +187,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 	public boolean canAfford(final BigDecimal cost, final boolean permcheck)
 	{
-		if (cost.compareTo(BigDecimal.ZERO) <= 0)			
+		if (cost.signum() <= 0)			
 		{
 			return true;
 		}
@@ -196,7 +196,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		{
 			return (remainingBalance.compareTo(ess.getSettings().getMinMoney()) >= 0);
 		}
-		return (remainingBalance.compareTo(BigDecimal.ZERO) >= 0);
+		return (remainingBalance.signum() >= 0);
 	}
 
 	public void dispose()

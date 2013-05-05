@@ -79,7 +79,7 @@ public interface ISettings extends IConf
 
 	int getSpawnMobLimit();
 
-	int getStartingBalance();
+	BigDecimal getStartingBalance();
 
 	double getTeleportCooldown();
 

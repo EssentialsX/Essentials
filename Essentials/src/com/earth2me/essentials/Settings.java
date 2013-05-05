@@ -113,9 +113,9 @@ public class Settings implements ISettings
 	}
 
 	@Override
-	public int getStartingBalance()
+	public BigDecimal getStartingBalance()
 	{
-		return config.getInt("starting-balance", 0);
+		return config.getBigDecimal("starting-balance", BigDecimal.ZERO);
 	}
 
 	@Override
@@ -234,7 +234,7 @@ public class Settings implements ISettings
 		name = name.replace('.', '_').replace('/', '_');
 		if (commandCosts != null)
 		{
-			return BigDecimal.valueOf(commandCosts.getDouble(name, 0.0));
+			return EssentialsConf.toBigDecimal(commandCosts.getString(name), BigDecimal.ZERO);
 		}
 		return BigDecimal.ZERO;
 	}
@@ -690,42 +690,33 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean(configName, def);
 	}
-	private final static double MAXMONEY = 10000000000000.0;
-	private BigDecimal maxMoney = BigDecimal.valueOf(MAXMONEY);
+	private final static BigDecimal MAXMONEY = new BigDecimal("10000000000000");
+	private BigDecimal maxMoney = MAXMONEY;
 
 	private BigDecimal _getMaxMoney()
 	{
-		double max = config.getDouble("max-money", MAXMONEY);
-		if (Math.abs(max) > MAXMONEY)
-		{
-			max = max < 0 ? -MAXMONEY : MAXMONEY;
-		}
-		return BigDecimal.valueOf(max);
+		return config.getBigDecimal("max-money", MAXMONEY);
 	}
-	
-		@Override
+
+	@Override
 	public BigDecimal getMaxMoney()
 	{
 		return maxMoney;
 	}
-	private final static double MINMONEY = -10000000000000.0;
-	private BigDecimal minMoney = BigDecimal.valueOf(MINMONEY);
+	private final static BigDecimal MINMONEY = new BigDecimal("-10000000000000");
+	private BigDecimal minMoney = MINMONEY;
 
 	private BigDecimal _getMinMoney()
 	{
-		double min = config.getDouble("min-money", MINMONEY);
-		if (min > 0)
+		BigDecimal min = config.getBigDecimal("min-money", MINMONEY);
+		if (min.signum() > 0)
 		{
-			min = -min;
+			min = min.negate();
 		}
-		if (min < MINMONEY)
-		{
-			min = MINMONEY;
-		}
-		return BigDecimal.valueOf(min);
+		return min;
 	}
-	
-		@Override
+
+	@Override
 	public BigDecimal getMinMoney()
 	{
 		return minMoney;

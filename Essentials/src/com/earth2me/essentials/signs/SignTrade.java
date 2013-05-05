@@ -13,7 +13,6 @@ public class SignTrade extends EssentialsSign
 	{
 		super("Trade");
 	}
-	static final BigDecimal MINTRANSACTION = BigDecimal.valueOf(0.01);
 
 	@Override
 	protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException
@@ -154,7 +153,7 @@ public class SignTrade extends EssentialsSign
 		if (split.length == 2 && amountNeeded)
 		{
 			final BigDecimal money = getMoney(split[0]);
-			BigDecimal amount = BigDecimal.valueOf(getDoublePositive(split[1]));
+			BigDecimal amount = getBigDecimalPositive(split[1]);
 			if (money != null && amount != null)
 			{
 				amount = amount.subtract(amount.remainder(money));
@@ -223,7 +222,7 @@ public class SignTrade extends EssentialsSign
 			try
 			{
 				final BigDecimal money = getMoney(split[0]);
-				final BigDecimal amount = BigDecimal.valueOf(notEmpty ? getDoublePositive(split[1]) : getDouble(split[1]));
+				final BigDecimal amount = notEmpty ? getBigDecimalPositive(split[1]) : getBigDecimal(split[1]);
 				if (money != null && amount != null)
 				{
 					return new Trade(fullAmount ? amount : money, ess);
@@ -270,17 +269,17 @@ public class SignTrade extends EssentialsSign
 		final BigDecimal money = trade.getMoney();
 		if (money != null)
 		{
-			changeAmount(sign, index, -money.doubleValue(), ess);
+			changeAmount(sign, index, money.negate(), ess);
 		}
 		final ItemStack item = trade.getItemStack();
 		if (item != null)
 		{
-			changeAmount(sign, index, -item.getAmount(), ess);
+			changeAmount(sign, index, BigDecimal.valueOf(-item.getAmount()), ess);
 		}
 		final Integer exp = trade.getExperience();
 		if (exp != null)
 		{
-			changeAmount(sign, index, -exp.intValue(), ess);
+			changeAmount(sign, index, BigDecimal.valueOf(-exp.intValue()), ess);
 		}
 	}
 
@@ -289,22 +288,22 @@ public class SignTrade extends EssentialsSign
 		final BigDecimal money = trade.getMoney();
 		if (money != null)
 		{
-			changeAmount(sign, index, money.doubleValue(), ess);
+			changeAmount(sign, index, money, ess);
 		}
 		final ItemStack item = trade.getItemStack();
 		if (item != null)
 		{
-			changeAmount(sign, index, item.getAmount(), ess);
+			changeAmount(sign, index, BigDecimal.valueOf(item.getAmount()), ess);
 		}
 		final Integer exp = trade.getExperience();
 		if (exp != null)
 		{
-			changeAmount(sign, index, exp.intValue(), ess);
+			changeAmount(sign, index, BigDecimal.valueOf(exp.intValue()), ess);
 		}
 	}
 
 	//TODO: Translate these exceptions.
-	private void changeAmount(final ISign sign, final int index, final double value, final IEssentials ess) throws SignException
+	private void changeAmount(final ISign sign, final int index, final BigDecimal value, final IEssentials ess) throws SignException
 	{
 
 		final String line = sign.getLine(index).trim();
@@ -317,10 +316,10 @@ public class SignTrade extends EssentialsSign
 		if (split.length == 2)
 		{
 			final BigDecimal money = getMoney(split[0]);
-			final BigDecimal amount = BigDecimal.valueOf(getDouble(split[1]));
+			final BigDecimal amount = getBigDecimal(split[1]);
 			if (money != null && amount != null)
 			{
-				final String newline = Util.shortCurrency(money, ess) + ":" + Util.shortCurrency(amount.add(BigDecimal.valueOf(value)), ess).substring(1);
+				final String newline = Util.shortCurrency(money, ess) + ":" + Util.shortCurrency(amount.add(value), ess).substring(1);
 				if (newline.length() > 15)
 				{
 					throw new SignException("This sign is full: Line too long!");
@@ -336,7 +335,7 @@ public class SignTrade extends EssentialsSign
 			{
 				final int stackamount = getIntegerPositive(split[0]);
 				final int amount = getInteger(split[2]);
-				final String newline = stackamount + " " + split[1] + ":" + (amount + Math.round(value));
+				final String newline = stackamount + " " + split[1] + ":" + (amount + value.intValueExact());
 				if (newline.length() > 15)
 				{
 					throw new SignException("This sign is full: Line too long!");
@@ -350,7 +349,7 @@ public class SignTrade extends EssentialsSign
 				//TODO: Unused local variable
 				final ItemStack item = getItemStack(split[1], stackamount, ess);
 				final int amount = getInteger(split[2]);
-				final String newline = stackamount + " " + split[1] + ":" + (amount + Math.round(value));
+				final String newline = stackamount + " " + split[1] + ":" + (amount + value.intValueExact());
 				if (newline.length() > 15)
 				{
 					throw new SignException("This sign is full: Line too long!");

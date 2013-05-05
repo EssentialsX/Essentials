@@ -70,13 +70,13 @@ public class UserTest extends TestCase
 	{
 		should("properly set, take, give, and get money");
 		User user = ess.getUser(base1);
-		double i = 100.5;
-		user.setMoney(BigDecimal.valueOf(i));
+		BigDecimal i = new BigDecimal("100.5");
+		user.setMoney(i);
 		user.takeMoney(new BigDecimal(50));
-		i -= 50;
+		i = i.subtract(BigDecimal.valueOf(50));
 		user.giveMoney(new BigDecimal(25));
-		i += 25;
-		assertEquals(user.getMoney().doubleValue(), i);
+		i = i.add(BigDecimal.valueOf(25));
+		assertEquals(user.getMoney(), i);
 	}
 
 	public void testGetGroup()

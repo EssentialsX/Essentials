@@ -79,7 +79,7 @@ public class Trade
 		}
 
 		if (getMoney() != null
-			&& getMoney().compareTo(BigDecimal.ZERO) > 0
+			&& getMoney().signum() > 0
 			&& !user.canAfford(getMoney()))
 		{
 			throw new ChargeException(_("notEnoughMoney"));
@@ -93,7 +93,7 @@ public class Trade
 
 		BigDecimal money;
 		if (command != null && !command.isEmpty()
-			&& (money = getCommandCost(user)).compareTo(BigDecimal.ZERO) > 0
+			&& (money = getCommandCost(user)).signum() > 0
 			&& !user.canAfford(money))
 		{
 			throw new ChargeException(_("notEnoughMoney"));
@@ -114,7 +114,7 @@ public class Trade
 	public boolean pay(final IUser user, final boolean dropItems)
 	{
 		boolean success = true;
-		if (getMoney() != null && getMoney().compareTo(BigDecimal.ZERO) > 0)
+		if (getMoney() != null && getMoney().signum() > 0)
 		{
 			user.giveMoney(getMoney());
 		}
@@ -166,7 +166,7 @@ public class Trade
 
 		if (getMoney() != null)
 		{
-			if (!user.canAfford(getMoney()) && getMoney().compareTo(BigDecimal.ZERO) > 0)
+			if (!user.canAfford(getMoney()) && getMoney().signum() > 0)
 			{
 				throw new ChargeException(_("notEnoughMoney"));
 			}

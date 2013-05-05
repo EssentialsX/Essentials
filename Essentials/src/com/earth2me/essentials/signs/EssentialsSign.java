@@ -18,7 +18,8 @@ import org.bukkit.inventory.ItemStack;
 public class EssentialsSign
 {
 	private static final Set<Material> EMPTY_SET = new HashSet<Material>();
-
+	protected static final BigDecimal MINTRANSACTION = new BigDecimal("0.01");
+	
 	protected transient final String signName;
 
 	public EssentialsSign(final String signName)
@@ -68,8 +69,9 @@ public class EssentialsSign
 	{
 		return _("signFormatTemplate", this.signName);
 	}
-	
-	public String getName() {
+
+	public String getName()
+	{
 		return this.signName;
 	}
 
@@ -89,7 +91,7 @@ public class EssentialsSign
 		try
 		{
 			return (!user.isDead() && (user.isAuthorized("essentials.signs." + signName.toLowerCase(Locale.ENGLISH) + ".use")
-					|| user.isAuthorized("essentials.signs.use." + signName.toLowerCase(Locale.ENGLISH))))
+									   || user.isAuthorized("essentials.signs.use." + signName.toLowerCase(Locale.ENGLISH))))
 				   && onSignInteract(sign, user, getUsername(user), ess);
 		}
 		catch (ChargeException ex)
@@ -264,7 +266,7 @@ public class EssentialsSign
 	{
 		return EMPTY_SET;
 	}
-	
+
 	public boolean areHeavyEventRequired()
 	{
 		return false;
@@ -371,24 +373,28 @@ public class EssentialsSign
 	protected final BigDecimal getMoney(final String line) throws SignException
 	{
 		final boolean isMoney = line.matches("^[^0-9-\\.][\\.0-9]+$");
-		return isMoney ? BigDecimal.valueOf(getDoublePositive(line.substring(1))) : null;
+		return isMoney ? getBigDecimalPositive(line.substring(1)) : null;
 	}
 
-	protected final Double getDoublePositive(final String line) throws SignException
+	protected final BigDecimal getBigDecimalPositive(final String line) throws SignException
 	{
-		final double quantity = getDouble(line);
-		if (Math.round(quantity * 100.0) < 1.0)
+		final BigDecimal quantity = getBigDecimal(line);
+		if (quantity.compareTo(MINTRANSACTION) < 0)
 		{
 			throw new SignException(_("moreThanZero"));
 		}
 		return quantity;
 	}
 
-	protected final Double getDouble(final String line) throws SignException
+	protected final BigDecimal getBigDecimal(final String line) throws SignException
 	{
 		try
 		{
-			return Double.parseDouble(line);
+			return new BigDecimal(line);
+		}
+		catch (ArithmeticException ex)
+		{
+			throw new SignException(ex.getMessage(), ex);
 		}
 		catch (NumberFormatException ex)
 		{
@@ -468,7 +474,7 @@ public class EssentialsSign
 		public final void setLine(final int index, final String text)
 		{
 			event.setLine(index, text);
-			sign.setLine(index, text);			
+			sign.setLine(index, text);
 			updateSign();
 		}
 

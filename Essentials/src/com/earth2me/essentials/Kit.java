@@ -33,7 +33,7 @@ public class Kit
 				{
 					String cost = "";
 					BigDecimal costPrice = new Trade("kit-" + kitItem.toLowerCase(Locale.ENGLISH), ess).getCommandCost(user);
-					if (costPrice.compareTo(BigDecimal.ZERO) > 0)
+					if (costPrice.signum() > 0)
 					{
 						cost = _("kitCost", Util.displayCurrency(costPrice, ess));
 					}

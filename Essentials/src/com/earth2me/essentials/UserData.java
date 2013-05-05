@@ -71,15 +71,14 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	private BigDecimal _getMoney()
 	{
-		double bal = ess.getSettings().getStartingBalance();
+		BigDecimal result = ess.getSettings().getStartingBalance();
 		BigDecimal maxMoney = ess.getSettings().getMaxMoney();
 		BigDecimal minMoney = ess.getSettings().getMinMoney();
 
 		if (config.hasProperty("money"))
 		{
-			bal = config.getDouble("money", bal);
+			result = config.getBigDecimal("money", result);
 		}
-		BigDecimal result = BigDecimal.valueOf(bal);
 		if (result.compareTo(maxMoney) > 0)
 		{
 			result = maxMoney;

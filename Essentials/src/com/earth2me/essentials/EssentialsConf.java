@@ -5,6 +5,9 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.InvalidWorldException;
 import com.google.common.io.Files;
 import java.io.*;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.MathContext;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
@@ -493,6 +496,11 @@ public class EssentialsConf extends YamlConfiguration
 	{
 		return get(path);
 	}
+	
+	public void setProperty(final String path, final BigDecimal bigDecimal)
+	{
+		set(path, bigDecimal.toString());
+	}
 
 	public void setProperty(String path, Object object)
 	{
@@ -514,6 +522,32 @@ public class EssentialsConf extends YamlConfiguration
 	public synchronized Object get(String path, Object def)
 	{
 		return super.get(path, def);
+	}
+	
+	
+	public synchronized BigDecimal getBigDecimal(final String path, final BigDecimal def)
+	{
+		final String input = super.getString(path);
+		return toBigDecimal(input, def);
+	}
+	
+	public static BigDecimal toBigDecimal(final String input, final BigDecimal def)
+	{
+		if (input == null || input.isEmpty())
+		{
+			return def;
+		}
+		else
+		{
+			try
+			{
+				return new BigDecimal(input, MathContext.DECIMAL128);
+			}
+			catch (ArithmeticException e)
+			{
+				return def;
+			}
+		}
 	}
 
 	@Override

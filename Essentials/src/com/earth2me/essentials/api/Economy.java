@@ -7,13 +7,13 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.io.File;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
 /**
- * Instead of using this api directly, we recommend to use the register plugin:
- * http://bit.ly/RegisterMethod
+ * Instead of using this api directly, we recommend to use the register plugin: http://bit.ly/RegisterMethod
  */
 public final class Economy
 {
@@ -23,6 +23,7 @@ public final class Economy
 	private static final Logger logger = Logger.getLogger("Minecraft");
 	private static IEssentials ess;
 	private static final String noCallBeforeLoad = "Essentials API is called before Essentials is loaded.";
+	public static final MathContext MATH_CONTEXT = MathContext.DECIMAL128;
 
 	/**
 	 * @param aEss the ess to set
@@ -77,100 +78,177 @@ public final class Economy
 
 	/**
 	 * Returns the balance of a user
+	 *
 	 * @param name Name of the user
 	 * @return balance
-	 * @throws UserDoesNotExistException 
+	 * @throws UserDoesNotExistException
 	 */
+	@Deprecated
 	public static double getMoney(String name) throws UserDoesNotExistException
+	{
+		return getMoneyExact(name).doubleValue();
+	}
+
+	public static BigDecimal getMoneyExact(String name) throws UserDoesNotExistException
 	{
 		User user = getUserByName(name);
 		if (user == null)
 		{
 			throw new UserDoesNotExistException(name);
 		}
-		return user.getMoney().doubleValue();
+		return user.getMoney();
 	}
 
 	/**
 	 * Sets the balance of a user
+	 *
 	 * @param name Name of the user
 	 * @param balance The balance you want to set
 	 * @throws UserDoesNotExistException If a user by that name does not exists
 	 * @throws NoLoanPermittedException If the user is not allowed to have a negative balance
 	 */
+	@Deprecated
 	public static void setMoney(String name, double balance) throws UserDoesNotExistException, NoLoanPermittedException
 	{
+		try
+		{
+			setMoney(name, BigDecimal.valueOf(balance));
+		}
+		catch (ArithmeticException e)
+		{
+			logger.log(Level.WARNING, "Failed to set balance of " + name + " to " + balance + ": " + e.getMessage(), e);
+		}
+	}
+
+	public static void setMoney(String name, BigDecimal balance) throws UserDoesNotExistException, NoLoanPermittedException
+	{
 		User user = getUserByName(name);
-		BigDecimal newBalance = BigDecimal.valueOf(balance);
 		if (user == null)
 		{
 			throw new UserDoesNotExistException(name);
 		}
-		if (newBalance.compareTo(ess.getSettings().getMinMoney()) < 0)
+		if (balance.compareTo(ess.getSettings().getMinMoney()) < 0)
 		{
 			throw new NoLoanPermittedException();
 		}
-		if (newBalance.compareTo(BigDecimal.ZERO) < 0 && !user.isAuthorized("essentials.eco.loan"))
+		if (balance.signum() < 0 && !user.isAuthorized("essentials.eco.loan"))
 		{
 			throw new NoLoanPermittedException();
 		}
-		user.setMoney(newBalance);
+		user.setMoney(balance);
 	}
 
 	/**
 	 * Adds money to the balance of a user
+	 *
 	 * @param name Name of the user
 	 * @param amount The money you want to add
 	 * @throws UserDoesNotExistException If a user by that name does not exists
 	 * @throws NoLoanPermittedException If the user is not allowed to have a negative balance
 	 */
+	@Deprecated
 	public static void add(String name, double amount) throws UserDoesNotExistException, NoLoanPermittedException
 	{
-		double result = getMoney(name) + amount;
+		try
+		{
+			add(name, BigDecimal.valueOf(amount));
+		}
+		catch (ArithmeticException e)
+		{
+			logger.log(Level.WARNING, "Failed to add " + amount + " to balance of " + name + ": " + e.getMessage(), e);
+		}
+	}
+
+	public static void add(String name, BigDecimal amount) throws UserDoesNotExistException, NoLoanPermittedException, ArithmeticException
+	{
+		BigDecimal result = getMoneyExact(name).add(amount, MATH_CONTEXT);
 		setMoney(name, result);
 	}
 
 	/**
 	 * Substracts money from the balance of a user
+	 *
 	 * @param name Name of the user
 	 * @param amount The money you want to substract
 	 * @throws UserDoesNotExistException If a user by that name does not exists
 	 * @throws NoLoanPermittedException If the user is not allowed to have a negative balance
 	 */
+	@Deprecated
 	public static void subtract(String name, double amount) throws UserDoesNotExistException, NoLoanPermittedException
 	{
-		double result = getMoney(name) - amount;
+		try
+		{
+			substract(name, BigDecimal.valueOf(amount));
+		}
+		catch (ArithmeticException e)
+		{
+			logger.log(Level.WARNING, "Failed to substract " + amount + " of balance of " + name + ": " + e.getMessage(), e);
+		}
+	}
+
+	public static void substract(String name, BigDecimal amount) throws UserDoesNotExistException, NoLoanPermittedException, ArithmeticException
+	{
+		BigDecimal result = getMoneyExact(name).subtract(amount, MATH_CONTEXT);
 		setMoney(name, result);
 	}
 
 	/**
 	 * Divides the balance of a user by a value
+	 *
 	 * @param name Name of the user
 	 * @param value The balance is divided by this value
 	 * @throws UserDoesNotExistException If a user by that name does not exists
 	 * @throws NoLoanPermittedException If the user is not allowed to have a negative balance
 	 */
-	public static void divide(String name, double value) throws UserDoesNotExistException, NoLoanPermittedException
+	@Deprecated
+	public static void divide(String name, double amount) throws UserDoesNotExistException, NoLoanPermittedException
 	{
-		double result = getMoney(name) / value;
+		try
+		{
+			divide(name, BigDecimal.valueOf(amount));
+		}
+		catch (ArithmeticException e)
+		{
+			logger.log(Level.WARNING, "Failed to divide balance of " + name + " by " + amount + ": " + e.getMessage(), e);
+		}
+	}
+
+	public static void divide(String name, BigDecimal amount) throws UserDoesNotExistException, NoLoanPermittedException, ArithmeticException
+	{
+		BigDecimal result = getMoneyExact(name).divide(amount, MATH_CONTEXT);
 		setMoney(name, result);
 	}
 
 	/**
 	 * Multiplies the balance of a user by a value
+	 *
 	 * @param name Name of the user
 	 * @param value The balance is multiplied by this value
 	 * @throws UserDoesNotExistException If a user by that name does not exists
 	 * @throws NoLoanPermittedException If the user is not allowed to have a negative balance
 	 */
-	public static void multiply(String name, double value) throws UserDoesNotExistException, NoLoanPermittedException
+	@Deprecated
+	public static void multiply(String name, double amount) throws UserDoesNotExistException, NoLoanPermittedException
 	{
-		double result = getMoney(name) * value;
+		try
+		{
+			multiply(name, BigDecimal.valueOf(amount));
+		}
+		catch (ArithmeticException e)
+		{
+			logger.log(Level.WARNING, "Failed to multiply balance of " + name + " by " + amount + ": " + e.getMessage(), e);
+		}
+	}
+
+	public static void multiply(String name, BigDecimal amount) throws UserDoesNotExistException, NoLoanPermittedException, ArithmeticException
+	{
+		BigDecimal result = getMoneyExact(name).multiply(amount, MATH_CONTEXT);
 		setMoney(name, result);
 	}
 
 	/**
 	 * Resets the balance of a user to the starting balance
+	 *
 	 * @param name Name of the user
 	 * @throws UserDoesNotExistException If a user by that name does not exists
 	 * @throws NoLoanPermittedException If the user is not allowed to have a negative balance
@@ -190,9 +268,23 @@ public final class Economy
 	 * @return true, if the user has more or an equal amount of money
 	 * @throws UserDoesNotExistException If a user by that name does not exists
 	 */
+	@Deprecated
 	public static boolean hasEnough(String name, double amount) throws UserDoesNotExistException
 	{
-		return amount <= getMoney(name);
+		try
+		{
+			return hasEnough(name, BigDecimal.valueOf(amount));
+		}
+		catch (ArithmeticException e)
+		{
+			logger.log(Level.WARNING, "Failed to compare balance of " + name + " with " + amount + ": " + e.getMessage(), e);
+			return false;
+		}
+	}
+
+	public static boolean hasEnough(String name, BigDecimal amount) throws UserDoesNotExistException, ArithmeticException
+	{
+		return amount.compareTo(getMoneyExact(name)) <= 0;
 	}
 
 	/**
@@ -201,9 +293,23 @@ public final class Economy
 	 * @return true, if the user has more money
 	 * @throws UserDoesNotExistException If a user by that name does not exists
 	 */
+	@Deprecated
 	public static boolean hasMore(String name, double amount) throws UserDoesNotExistException
 	{
-		return amount < getMoney(name);
+		try
+		{
+			return hasMore(name, BigDecimal.valueOf(amount));
+		}
+		catch (ArithmeticException e)
+		{
+			logger.log(Level.WARNING, "Failed to compare balance of " + name + " with " + amount + ": " + e.getMessage(), e);
+			return false;
+		}
+	}
+
+	public static boolean hasMore(String name, BigDecimal amount) throws UserDoesNotExistException, ArithmeticException
+	{
+		return amount.compareTo(getMoneyExact(name)) < 0;
 	}
 
 	/**
@@ -212,39 +318,69 @@ public final class Economy
 	 * @return true, if the user has less money
 	 * @throws UserDoesNotExistException If a user by that name does not exists
 	 */
+	@Deprecated
 	public static boolean hasLess(String name, double amount) throws UserDoesNotExistException
 	{
-		return amount > getMoney(name);
+		try
+		{
+			return hasLess(name, BigDecimal.valueOf(amount));
+		}
+		catch (ArithmeticException e)
+		{
+			logger.log(Level.WARNING, "Failed to compare balance of " + name + " with " + amount + ": " + e.getMessage(), e);
+			return false;
+		}
+	}
+
+	public static boolean hasLess(String name, BigDecimal amount) throws UserDoesNotExistException, ArithmeticException
+	{
+		return amount.compareTo(getMoneyExact(name)) > 0;
 	}
 
 	/**
 	 * Test if the user has a negative balance
+	 *
 	 * @param name Name of the user
 	 * @return true, if the user has a negative balance
 	 * @throws UserDoesNotExistException If a user by that name does not exists
 	 */
 	public static boolean isNegative(String name) throws UserDoesNotExistException
 	{
-		return getMoney(name) < 0.0;
+		return getMoneyExact(name).signum() < 0;
 	}
 
 	/**
-	 * Formats the amount of money like all other Essentials functions.
-	 * Example: $100000 or $12345.67
+	 * Formats the amount of money like all other Essentials functions. Example: $100000 or $12345.67
+	 *
 	 * @param amount The amount of money
 	 * @return Formatted money
 	 */
+	@Deprecated
 	public static String format(double amount)
+	{
+		try
+		{
+			return format(BigDecimal.valueOf(amount));
+		}
+		catch (NumberFormatException e)
+		{
+			logger.log(Level.WARNING, "Failed to disply " + amount + ": " + e.getMessage(), e);
+			return "NaN";
+		}
+	}
+
+	public static String format(BigDecimal amount)
 	{
 		if (ess == null)
 		{
 			throw new RuntimeException(noCallBeforeLoad);
 		}
-		return Util.displayCurrency(BigDecimal.valueOf(amount), ess);
+		return Util.displayCurrency(amount, ess);
 	}
 
 	/**
 	 * Test if a player exists to avoid the UserDoesNotExistException
+	 *
 	 * @param name Name of the user
 	 * @return true, if the user exists
 	 */
@@ -255,9 +391,10 @@ public final class Economy
 
 	/**
 	 * Test if a player is a npc
+	 *
 	 * @param name Name of the player
 	 * @return true, if it's a npc
-	 * @throws UserDoesNotExistException 
+	 * @throws UserDoesNotExistException
 	 */
 	public static boolean isNPC(String name) throws UserDoesNotExistException
 	{
@@ -271,6 +408,7 @@ public final class Economy
 
 	/**
 	 * Creates dummy files for a npc, if there is no player yet with that name.
+	 *
 	 * @param name Name of the player
 	 * @return true, if a new npc was created
 	 */
@@ -286,9 +424,10 @@ public final class Economy
 	}
 
 	/**
-	 * Deletes a user, if it is marked as npc. 
+	 * Deletes a user, if it is marked as npc.
+	 *
 	 * @param name Name of the player
-	 * @throws UserDoesNotExistException 
+	 * @throws UserDoesNotExistException
 	 */
 	public static void removeNPC(String name) throws UserDoesNotExistException
 	{
