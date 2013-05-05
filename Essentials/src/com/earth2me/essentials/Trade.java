@@ -45,6 +45,12 @@ public class Trade
 		this(command, fallback, null, null, null, ess);
 	}
 
+	@Deprecated
+	public Trade(final double money, final IEssentials ess)
+	{
+		this(null, null, BigDecimal.valueOf(money), null, null, ess);
+	}
+
 	public Trade(final BigDecimal money, final IEssentials ess)
 	{
 		this(null, null, money, null, null, ess);
