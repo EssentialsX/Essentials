@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.IEssentialsCommand;
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Set;
 import org.bukkit.Location;
@@ -23,13 +24,13 @@ public interface IUser extends Player
 
 	Player getBase();
 
-	double getMoney();
+	BigDecimal getMoney();
 
-	void takeMoney(double value);
+	void takeMoney(BigDecimal value);
 
-	void giveMoney(double value);
+	void giveMoney(BigDecimal value);
 	
-	boolean canAfford(double value);
+	boolean canAfford(BigDecimal value);
 
 	String getGroup();
 

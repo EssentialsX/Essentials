@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.textreader.IText;
+import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
@@ -30,9 +31,9 @@ public interface ISettings extends IConf
 
 	int getChatRadius();
 
-	double getCommandCost(IEssentialsCommand cmd);
+	BigDecimal getCommandCost(IEssentialsCommand cmd);
 
-	double getCommandCost(String label);
+	BigDecimal getCommandCost(String label);
 
 	String getCurrencySymbol();
 
@@ -110,9 +111,9 @@ public interface ISettings extends IConf
 
 	boolean warnOnSmite();
 
-	double getMaxMoney();
+	BigDecimal getMaxMoney();
 
-	double getMinMoney();
+	BigDecimal getMinMoney();
 
 	boolean isEcoLogEnabled();
 

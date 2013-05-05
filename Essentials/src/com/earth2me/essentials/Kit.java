@@ -7,6 +7,7 @@ import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.logging.Level;
 import org.bukkit.configuration.ConfigurationSection;
@@ -31,8 +32,8 @@ public class Kit
 				else if (user.isAuthorized("essentials.kits." + kitItem.toLowerCase(Locale.ENGLISH)))
 				{
 					String cost = "";
-					Double costPrice = new Trade("kit-" + kitItem.toLowerCase(Locale.ENGLISH), ess).getCommandCost(user);
-					if (costPrice > 0d)
+					BigDecimal costPrice = new Trade("kit-" + kitItem.toLowerCase(Locale.ENGLISH), ess).getCommandCost(user);
+					if (costPrice.compareTo(BigDecimal.ZERO) > 0)
 					{
 						cost = _("kitCost", Util.displayCurrency(costPrice, ess));
 					}
@@ -134,7 +135,7 @@ public class Kit
 			{
 				if (kitItem.startsWith(ess.getSettings().getCurrencySymbol()))
 				{
-					Double value = Double.parseDouble(kitItem.substring(ess.getSettings().getCurrencySymbol().length()).trim());
+					BigDecimal value = new BigDecimal(kitItem.substring(ess.getSettings().getCurrencySymbol().length()).trim());
 					Trade t = new Trade(value, ess);
 					t.pay(user);
 					continue;

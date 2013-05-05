@@ -6,6 +6,7 @@ import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -87,7 +88,7 @@ public final class Economy
 		{
 			throw new UserDoesNotExistException(name);
 		}
-		return user.getMoney();
+		return user.getMoney().doubleValue();
 	}
 
 	/**
@@ -100,19 +101,20 @@ public final class Economy
 	public static void setMoney(String name, double balance) throws UserDoesNotExistException, NoLoanPermittedException
 	{
 		User user = getUserByName(name);
+		BigDecimal newBalance = BigDecimal.valueOf(balance);
 		if (user == null)
 		{
 			throw new UserDoesNotExistException(name);
 		}
-		if (balance < ess.getSettings().getMinMoney())
+		if (newBalance.compareTo(ess.getSettings().getMinMoney()) < 0)
 		{
 			throw new NoLoanPermittedException();
 		}
-		if (balance < 0.0 && !user.isAuthorized("essentials.eco.loan"))
+		if (newBalance.compareTo(BigDecimal.ZERO) < 0 && !user.isAuthorized("essentials.eco.loan"))
 		{
 			throw new NoLoanPermittedException();
 		}
-		user.setMoney(balance);
+		user.setMoney(newBalance);
 	}
 
 	/**
@@ -238,7 +240,7 @@ public final class Economy
 		{
 			throw new RuntimeException(noCallBeforeLoad);
 		}
-		return Util.displayCurrency(amount, ess);
+		return Util.displayCurrency(BigDecimal.valueOf(amount), ess);
 	}
 
 	/**

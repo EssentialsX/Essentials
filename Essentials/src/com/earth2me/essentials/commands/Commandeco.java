@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import java.math.BigDecimal;
 import java.util.Locale;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -25,14 +26,14 @@ public class Commandeco extends EssentialsCommand
 		}
 
 		Commandeco.EcoCommands cmd;
-		double startingBalance = (double)ess.getSettings().getStartingBalance();
-		double amount;
-		Double broadcast = null;
-		Double broadcastAll = null;
+		BigDecimal startingBalance = new BigDecimal(ess.getSettings().getStartingBalance());
+		BigDecimal amount;
+		BigDecimal broadcast = null;
+		BigDecimal broadcastAll = null;
 		try
 		{
 			cmd = Commandeco.EcoCommands.valueOf(args[0].toUpperCase(Locale.ENGLISH));
-			amount = (cmd == Commandeco.EcoCommands.RESET) ? startingBalance : Double.parseDouble(args[2].replaceAll("[^0-9\\.]", ""));
+			amount = (cmd == Commandeco.EcoCommands.RESET) ? startingBalance : new BigDecimal(args[2].replaceAll("[^0-9\\.]", ""));
 		}
 		catch (Exception ex)
 		{
@@ -107,26 +108,26 @@ public class Commandeco extends EssentialsCommand
 
 		if (broadcast != null)
 		{
-			server.broadcastMessage(_("resetBal", Util.formatAsCurrency(broadcast)));
+			server.broadcastMessage(_("resetBal", Util.displayCurrency(broadcast, ess)));
 		}
 		if (broadcastAll != null)
 		{
-			server.broadcastMessage(_("resetBalAll", Util.formatAsCurrency(broadcastAll)));
+			server.broadcastMessage(_("resetBalAll", Util.displayCurrency(broadcastAll, ess)));
 		}
 	}
 
-	private void take(double amount, final User player, final CommandSender sender) throws Exception
+	private void take(BigDecimal amount, final User player, final CommandSender sender) throws Exception
 	{
-		double money = player.getMoney();
-		double minBalance = ess.getSettings().getMinMoney();
-		if (money - amount > minBalance)
+		BigDecimal money = player.getMoney();
+		BigDecimal minBalance = ess.getSettings().getMinMoney();
+		if (money.subtract(amount).compareTo(minBalance) > 0)
 		{
 			player.takeMoney(amount, sender);
 		}
 		else if (sender == null)
 		{
 			player.setMoney(minBalance);
-			player.sendMessage(_("takenFromAccount", Util.displayCurrency(money - minBalance, ess)));
+			player.sendMessage(_("takenFromAccount", Util.displayCurrency(player.getMoney(), ess)));
 		}
 		else
 		{
@@ -134,10 +135,10 @@ public class Commandeco extends EssentialsCommand
 		}
 	}
 
-	private void set(double amount, final User player, final CommandSender sender)
+	private void set(BigDecimal amount, final User player, final CommandSender sender)
 	{
-		double minBalance = ess.getSettings().getMinMoney();
-		boolean underMinimum = amount < minBalance;
+		BigDecimal minBalance = ess.getSettings().getMinMoney();
+		boolean underMinimum = (amount.compareTo(minBalance) < 0);
 		player.setMoney(underMinimum ? minBalance : amount);
 		player.sendMessage(_("setBal", Util.displayCurrency(player.getMoney(), ess)));
 		if (sender != null)

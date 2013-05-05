@@ -4,6 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import java.math.BigDecimal;
 import java.util.Locale;
 import java.util.logging.Level;
 import org.bukkit.Material;
@@ -21,7 +22,7 @@ public class Commandsell extends EssentialsCommand
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		double totalWorth = 0.0;
+		BigDecimal totalWorth = BigDecimal.ZERO;
 		String type = "";
 		if (args.length < 1)
 		{
@@ -42,13 +43,13 @@ public class Commandsell extends EssentialsCommand
 				}
 				try
 				{
-					totalWorth += sellItem(user, stack, args, true);				
+					totalWorth = totalWorth.add(sellItem(user, stack, args, true));
 				}
 				catch (Exception e)
 				{
 				}
 			}
-			if (totalWorth > 0)
+			if (totalWorth.compareTo(BigDecimal.ZERO) > 0)
 			{
 				user.sendMessage(_("totalWorthAll", type, Util.displayCurrency(totalWorth, ess)));
 			}
@@ -64,13 +65,13 @@ public class Commandsell extends EssentialsCommand
 				}
 				try
 				{
-					totalWorth += sellItem(user, stack, args, true);
+					totalWorth = totalWorth.add(sellItem(user, stack, args, true));
 				}
 				catch (Exception e)
 				{
 				}
 			}
-			if (totalWorth > 0)
+			if (totalWorth.compareTo(BigDecimal.ZERO) > 0)
 			{
 				user.sendMessage(_("totalWorthBlocks", type, Util.displayCurrency(totalWorth, ess)));
 			}
@@ -83,7 +84,7 @@ public class Commandsell extends EssentialsCommand
 		sellItem(user, is, args, false);
 	}
 
-	private double sellItem(User user, ItemStack is, String[] args, boolean isBulkSell) throws Exception
+	private BigDecimal sellItem(User user, ItemStack is, String[] args, boolean isBulkSell) throws Exception
 	{
 		if (is == null || is.getType() == Material.AIR)
 		{
@@ -99,11 +100,11 @@ public class Commandsell extends EssentialsCommand
 				amount = -amount;
 			}
 		}
-		double worth = ess.getWorth().getPrice(is);
+		BigDecimal worth = ess.getWorth().getPrice(is);
 		boolean stack = args.length > 1 && args[1].endsWith("s");
 		boolean requireStack = ess.getSettings().isTradeInStacks(id);
 
-		if (Double.isNaN(worth))
+		if (worth == null)
 		{
 			throw new Exception(_("itemCannotBeSold"));
 		}
@@ -146,10 +147,11 @@ public class Commandsell extends EssentialsCommand
 			}
 			else
 			{
-				return worth * amount;
+				return worth.multiply(new BigDecimal(amount));
 			}
 		}
 
+		BigDecimal result = worth.multiply(new BigDecimal(amount));
 		//TODO: Prices for Enchantments
 		final ItemStack ris = is.clone();
 		ris.setAmount(amount);
@@ -159,10 +161,10 @@ public class Commandsell extends EssentialsCommand
 		}
 		user.getInventory().removeItem(ris);
 		user.updateInventory();
-		Trade.log("Command", "Sell", "Item", user.getName(), new Trade(ris, ess), user.getName(), new Trade(worth * amount, ess), user.getLocation(), ess);
-		user.giveMoney(worth * amount);
-		user.sendMessage(_("itemSold", Util.displayCurrency(worth * amount, ess), amount, is.getType().toString().toLowerCase(Locale.ENGLISH), Util.displayCurrency(worth, ess)));
-		logger.log(Level.INFO, _("itemSoldConsole", user.getDisplayName(), is.getType().toString().toLowerCase(Locale.ENGLISH), Util.displayCurrency(worth * amount, ess), amount, Util.displayCurrency(worth, ess)));
-		return worth * amount;
+		Trade.log("Command", "Sell", "Item", user.getName(), new Trade(ris, ess), user.getName(), new Trade(result, ess), user.getLocation(), ess);
+		user.giveMoney(result);
+		user.sendMessage(_("itemSold", Util.displayCurrency(result, ess), amount, is.getType().toString().toLowerCase(Locale.ENGLISH), Util.displayCurrency(worth, ess)));
+		logger.log(Level.INFO, _("itemSoldConsole", user.getDisplayName(), is.getType().toString().toLowerCase(Locale.ENGLISH), Util.displayCurrency(result, ess), amount, Util.displayCurrency(worth, ess)));
+		return result;
 	}
 }

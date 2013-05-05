@@ -5,6 +5,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.textreader.TextPager;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.util.*;
 import java.util.Map.Entry;
@@ -106,33 +107,33 @@ public class Commandbalancetop extends EssentialsCommand
 				if (force || cacheage <= System.currentTimeMillis() - CACHETIME)
 				{
 					cache.getLines().clear();					
-					final Map<String, Double> balances = new HashMap<String, Double>();
-					double totalMoney = 0d;
+					final Map<String, BigDecimal> balances = new HashMap<String, BigDecimal>();
+					BigDecimal totalMoney = BigDecimal.ZERO;
 					for (String u : ess.getUserMap().getAllUniqueUsers())
 					{
 						final User user = ess.getUserMap().getUser(u);
 						if (user != null)
 						{
-							final double userMoney = user.getMoney();
+							final BigDecimal userMoney = user.getMoney();
 							user.updateMoneyCache(userMoney);
-							totalMoney += userMoney;
+							totalMoney = totalMoney.add(userMoney);
 							balances.put(user.getDisplayName(), userMoney);
 						}
 					}
 
-					final List<Map.Entry<String, Double>> sortedEntries = new ArrayList<Map.Entry<String, Double>>(balances.entrySet());
-					Collections.sort(sortedEntries, new Comparator<Map.Entry<String, Double>>()
+					final List<Map.Entry<String, BigDecimal>> sortedEntries = new ArrayList<Map.Entry<String, BigDecimal>>(balances.entrySet());
+					Collections.sort(sortedEntries, new Comparator<Map.Entry<String, BigDecimal>>()
 					{
 						@Override
-						public int compare(final Entry<String, Double> entry1, final Entry<String, Double> entry2)
+						public int compare(final Entry<String, BigDecimal> entry1, final Entry<String, BigDecimal> entry2)
 						{
-							return -entry1.getValue().compareTo(entry2.getValue());
+							return entry2.getValue().compareTo(entry1.getValue());
 						}
 					});
 					
 					cache.getLines().add(_("serverTotal", Util.displayCurrency(totalMoney, ess)));
 					int pos = 1;
-					for (Map.Entry<String, Double> entry : sortedEntries)
+					for (Map.Entry<String, BigDecimal> entry : sortedEntries)
 					{
 						cache.getLines().add(pos + ". " + entry.getKey() + ", " + Util.displayCurrency(entry.getValue(), ess));
 						pos++;

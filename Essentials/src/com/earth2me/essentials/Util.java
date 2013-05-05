@@ -2,7 +2,6 @@ package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -524,18 +523,12 @@ public class Util
 		return is;
 	}
 
-	public static double sanitizeMoney(final double value)
-	{
-		BigDecimal money = new BigDecimal(value, MathContext.DECIMAL128);
-		return money.doubleValue();
-	}
 	private static DecimalFormat dFormat = new DecimalFormat("#0.00", DecimalFormatSymbols.getInstance(Locale.US));
 
-	public static String formatAsCurrency(final double value)
+	public static String formatAsCurrency(final BigDecimal value)
 	{
-		double fvalue = sanitizeMoney(value);
 		dFormat.setRoundingMode(RoundingMode.FLOOR);
-		String str = dFormat.format(fvalue);
+		String str = dFormat.format(value);
 		if (str.endsWith(".00"))
 		{
 			str = str.substring(0, str.length() - 3);
@@ -543,14 +536,19 @@ public class Util
 		return str;
 	}
 
-	public static String displayCurrency(final double value, final IEssentials ess)
+	public static String displayCurrency(final BigDecimal value, final IEssentials ess)
 	{
 		return _("currency", ess.getSettings().getCurrencySymbol(), formatAsCurrency(value));
 	}
-
-	public static String shortCurrency(final double value, final IEssentials ess)
+	
+	public static String shortCurrency(final BigDecimal value, final IEssentials ess)
 	{
 		return ess.getSettings().getCurrencySymbol() + formatAsCurrency(value);
+	}
+	
+	public static String shortCurrency(final double value, final IEssentials ess)
+	{
+		return shortCurrency(BigDecimal.valueOf(value), ess);
 	}
 
 	public static boolean isInt(final String sInt)

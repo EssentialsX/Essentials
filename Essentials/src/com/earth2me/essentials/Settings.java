@@ -7,6 +7,7 @@ import com.earth2me.essentials.signs.Signs;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import java.io.File;
+import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.logging.Level;
@@ -177,12 +178,12 @@ public class Settings implements ISettings
 	private ConfigurationSection commandCosts;
 
 	@Override
-	public double getCommandCost(IEssentialsCommand cmd)
+	public BigDecimal getCommandCost(IEssentialsCommand cmd)
 	{
 		return getCommandCost(cmd.getName());
 	}
 
-	public ConfigurationSection _getCommandCosts()
+	private ConfigurationSection _getCommandCosts()
 	{
 		if (config.isConfigurationSection("command-costs"))
 		{
@@ -228,18 +229,18 @@ public class Settings implements ISettings
 	}
 
 	@Override
-	public double getCommandCost(String name)
+	public BigDecimal getCommandCost(String name)
 	{
 		name = name.replace('.', '_').replace('/', '_');
 		if (commandCosts != null)
 		{
-			return commandCosts.getDouble(name, 0.0);
+			return BigDecimal.valueOf(commandCosts.getDouble(name, 0.0));
 		}
-		return 0.0;
+		return BigDecimal.ZERO;
 	}
 	private Set<String> socialSpyCommands = new HashSet<String>();
 
-	public Set<String> _getSocialSpyCommands()
+	private Set<String> _getSocialSpyCommands()
 	{
 		Set<String> socialspyCommands = new HashSet<String>();
 
@@ -289,7 +290,7 @@ public class Settings implements ISettings
 	}
 	private ConfigurationSection kits;
 
-	public ConfigurationSection _getKits()
+	private ConfigurationSection _getKits()
 	{
 		if (config.isConfigurationSection("kits"))
 		{
@@ -507,6 +508,8 @@ public class Settings implements ISettings
 		socialSpyCommands = _getSocialSpyCommands();
 		warnOnBuildDisallow = _warnOnBuildDisallow();
 		mailsPerMinute = _getMailsPerMinute();
+		maxMoney = _getMaxMoney();
+		minMoney = _getMinMoney();
 	}
 	private List<Integer> itemSpawnBl = new ArrayList<Integer>();
 
@@ -688,21 +691,27 @@ public class Settings implements ISettings
 		return config.getBoolean(configName, def);
 	}
 	private final static double MAXMONEY = 10000000000000.0;
+	private BigDecimal maxMoney = BigDecimal.valueOf(MAXMONEY);
 
-	@Override
-	public double getMaxMoney()
+	private BigDecimal _getMaxMoney()
 	{
 		double max = config.getDouble("max-money", MAXMONEY);
 		if (Math.abs(max) > MAXMONEY)
 		{
 			max = max < 0 ? -MAXMONEY : MAXMONEY;
 		}
-		return max;
+		return BigDecimal.valueOf(max);
+	}
+	
+		@Override
+	public BigDecimal getMaxMoney()
+	{
+		return maxMoney;
 	}
 	private final static double MINMONEY = -10000000000000.0;
+	private BigDecimal minMoney = BigDecimal.valueOf(MINMONEY);
 
-	@Override
-	public double getMinMoney()
+	private BigDecimal _getMinMoney()
 	{
 		double min = config.getDouble("min-money", MINMONEY);
 		if (min > 0)
@@ -713,7 +722,13 @@ public class Settings implements ISettings
 		{
 			min = MINMONEY;
 		}
-		return min;
+		return BigDecimal.valueOf(min);
+	}
+	
+		@Override
+	public BigDecimal getMinMoney()
+	{
+		return minMoney;
 	}
 
 	@Override
@@ -974,7 +989,7 @@ public class Settings implements ISettings
 	}
 	private long teleportInvulnerabilityTime;
 
-	public long _getTeleportInvulnerability()
+	private long _getTeleportInvulnerability()
 	{
 		return config.getLong("teleport-invulnerability", 0) * 1000;
 	}

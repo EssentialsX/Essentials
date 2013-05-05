@@ -3,6 +3,7 @@ package com.earth2me.essentials.signs;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade.TradeType;
 import com.earth2me.essentials.*;
+import java.math.BigDecimal;
 import org.bukkit.inventory.ItemStack;
 
 //TODO: TL exceptions
@@ -265,10 +266,10 @@ public class SignTrade extends EssentialsSign
 
 	protected final void subtractAmount(final ISign sign, final int index, final Trade trade, final IEssentials ess) throws SignException
 	{
-		final Double money = trade.getMoney();
+		final BigDecimal money = trade.getMoney();
 		if (money != null)
 		{
-			changeAmount(sign, index, -money, ess);
+			changeAmount(sign, index, -money.doubleValue(), ess);
 		}
 		final ItemStack item = trade.getItemStack();
 		if (item != null)
@@ -284,10 +285,10 @@ public class SignTrade extends EssentialsSign
 
 	protected final void addAmount(final ISign sign, final int index, final Trade trade, final IEssentials ess) throws SignException
 	{
-		final Double money = trade.getMoney();
+		final BigDecimal money = trade.getMoney();
 		if (money != null)
 		{
-			changeAmount(sign, index, money, ess);
+			changeAmount(sign, index, money.doubleValue(), ess);
 		}
 		final ItemStack item = trade.getItemStack();
 		if (item != null)

@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import java.math.BigDecimal;
 import java.util.List;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -29,7 +30,7 @@ public class Commandpay extends EssentialsCommand
 			throw new NotEnoughArgumentsException("You need to specify a player to pay.");
 		}
 
-		double amount = Double.parseDouble(args[1].replaceAll("[^0-9\\.]", ""));
+		BigDecimal amount = new BigDecimal(args[1].replaceAll("[^0-9\\.]", ""));
 
 		boolean skipHidden = !user.isAuthorized("essentials.vanish.interact");
 		boolean foundUser = false;

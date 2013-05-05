@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import junit.framework.TestCase;
 import org.bukkit.Location;
 import org.bukkit.World.Environment;
@@ -69,13 +70,13 @@ public class UserTest extends TestCase
 	{
 		should("properly set, take, give, and get money");
 		User user = ess.getUser(base1);
-		double i;
-		user.setMoney(i = 100.5);
-		user.takeMoney(50);
+		double i = 100.5;
+		user.setMoney(BigDecimal.valueOf(i));
+		user.takeMoney(new BigDecimal(50));
 		i -= 50;
-		user.giveMoney(25);
+		user.giveMoney(new BigDecimal(25));
 		i += 25;
-		assertEquals(user.getMoney(), i);
+		assertEquals(user.getMoney().doubleValue(), i);
 	}
 
 	public void testGetGroup()

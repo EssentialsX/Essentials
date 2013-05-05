@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.Locale;
 import java.util.logging.Logger;
 import org.bukkit.inventory.ItemStack;
@@ -18,7 +19,7 @@ public class Worth implements IConf
 		config.load();
 	}
 
-	public double getPrice(ItemStack itemStack)
+	public BigDecimal getPrice(ItemStack itemStack)
 	{
 		String itemname = itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 		double result;
@@ -35,7 +36,11 @@ public class Worth implements IConf
 		{
 			result = config.getDouble("worth-" + itemStack.getTypeId(), Double.NaN);
 		}
-		return result;
+		if (Double.isNaN(result))
+		{
+			return null;
+		}
+		return BigDecimal.valueOf(result);
 	}
 
 	public void setPrice(ItemStack itemStack, double price)

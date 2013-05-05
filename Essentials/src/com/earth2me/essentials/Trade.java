@@ -6,6 +6,7 @@ import com.earth2me.essentials.craftbukkit.SetExpFix;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -21,7 +22,7 @@ public class Trade
 {
 	private final transient String command;
 	private final transient Trade fallbackTrade;
-	private final transient Double money;
+	private final transient BigDecimal money;
 	private final transient ItemStack itemStack;
 	private final transient Integer exp;
 	private final transient IEssentials ess;
@@ -43,9 +44,14 @@ public class Trade
 		this(command, fallback, null, null, null, ess);
 	}
 
-	public Trade(final double money, final IEssentials ess)
+	public Trade(final BigDecimal money, final IEssentials ess)
 	{
 		this(null, null, money, null, null, ess);
+	}
+	
+	public Trade(final double money, final IEssentials ess)
+	{
+		this(null, null, BigDecimal.valueOf(money), null, null, ess);
 	}
 
 	public Trade(final ItemStack items, final IEssentials ess)
@@ -58,7 +64,7 @@ public class Trade
 		this(null, null, null, null, exp, ess);
 	}
 
-	private Trade(final String command, final Trade fallback, final Double money, final ItemStack item, final Integer exp, final IEssentials ess)
+	private Trade(final String command, final Trade fallback, final BigDecimal money, final ItemStack item, final Integer exp, final IEssentials ess)
 	{
 		this.command = command;
 		this.fallbackTrade = fallback;
@@ -77,7 +83,7 @@ public class Trade
 		}
 
 		if (getMoney() != null
-			&& getMoney() > 0
+			&& getMoney().compareTo(BigDecimal.ZERO) > 0
 			&& !user.canAfford(getMoney()))
 		{
 			throw new ChargeException(_("notEnoughMoney"));
@@ -89,9 +95,9 @@ public class Trade
 			throw new ChargeException(_("missingItems", getItemStack().getAmount(), getItemStack().getType().toString().toLowerCase(Locale.ENGLISH).replace("_", " ")));
 		}
 
-		double money;
+		BigDecimal money;
 		if (command != null && !command.isEmpty()
-			&& 0 < (money = getCommandCost(user))
+			&& (money = getCommandCost(user)).compareTo(BigDecimal.ZERO) > 0
 			&& !user.canAfford(money))
 		{
 			throw new ChargeException(_("notEnoughMoney"));
@@ -112,7 +118,7 @@ public class Trade
 	public boolean pay(final IUser user, final boolean dropItems)
 	{
 		boolean success = true;
-		if (getMoney() != null && getMoney() > 0)
+		if (getMoney() != null && getMoney().compareTo(BigDecimal.ZERO) > 0)
 		{
 			user.giveMoney(getMoney());
 		}
@@ -164,7 +170,7 @@ public class Trade
 
 		if (getMoney() != null)
 		{
-			if (!user.canAfford(getMoney()) && getMoney() > 0.0d)
+			if (!user.canAfford(getMoney()) && getMoney().compareTo(BigDecimal.ZERO) > 0)
 			{
 				throw new ChargeException(_("notEnoughMoney"));
 			}
@@ -181,8 +187,8 @@ public class Trade
 		}
 		if (command != null)
 		{
-			final double cost = getCommandCost(user);
-			if (!user.canAfford(cost) && cost > 0.0d)
+			final BigDecimal cost = getCommandCost(user);
+			if (!user.canAfford(cost) && cost.compareTo(BigDecimal.ZERO) > 0)
 			{
 				throw new ChargeException(_("notEnoughMoney"));
 			}
@@ -199,7 +205,7 @@ public class Trade
 		}
 	}
 
-	public Double getMoney()
+	public BigDecimal getMoney()
 	{
 		return money;
 	}
@@ -228,13 +234,13 @@ public class Trade
 		return TradeType.MONEY;		
 	}
 
-	public Double getCommandCost(final IUser user)
+	public BigDecimal getCommandCost(final IUser user)
 	{
-		double cost = 0.0d;
+		BigDecimal cost = BigDecimal.ZERO;
 		if (command != null && !command.isEmpty())
 		{
 			cost = ess.getSettings().getCommandCost(command.charAt(0) == '/' ? command.substring(1) : command);
-			if (cost == 0.0d && fallbackTrade != null)
+			if (cost.compareTo(BigDecimal.ZERO) == 0 && fallbackTrade != null)
 			{
 				cost = fallbackTrade.getCommandCost(user);
 			}
@@ -244,10 +250,10 @@ public class Trade
 				ess.getLogger().log(Level.INFO, "calculated command (" + command + ") cost for " + user.getName() + " as " + cost);
 			}
 		}
-		if (cost != 0.0d && (user.isAuthorized("essentials.nocommandcost.all")
+		if (cost.compareTo(BigDecimal.ZERO) != 0 && (user.isAuthorized("essentials.nocommandcost.all")
 							 || user.isAuthorized("essentials.nocommandcost." + command)))
 		{
-			return 0.0d;
+			return BigDecimal.ZERO;
 		}
 		return cost;
 	}

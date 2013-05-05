@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
+import java.math.BigDecimal;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
@@ -32,13 +33,13 @@ public class Commandbalance extends EssentialsCommand
 
 		if (args.length < 1 || !user.isAuthorized("essentials.balance.others"))
 		{
-			final double bal = user.getMoney();
+			final BigDecimal bal = user.getMoney();
 			user.sendMessage(_("balance", Util.displayCurrency(bal, ess)));
 		}
 		else
 		{
 			final User target = getPlayer(server, args, 0, true, true);
-			final double bal = target.getMoney();
+			final BigDecimal bal = target.getMoney();
 			user.sendMessage(_("balanceOther", target.getDisplayName(), Util.displayCurrency(bal, ess)));
 		}
 	}

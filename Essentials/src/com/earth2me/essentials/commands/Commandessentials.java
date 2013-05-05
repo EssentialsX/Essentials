@@ -250,7 +250,7 @@ public class Commandessentials extends EssentialsCommand
 					long timeDiff = System.currentTimeMillis() - lastLog;
 					long milliDays = daysArg * 24L * 60L * 60L * 1000L;
 					int homeCount = user.getHomes().size();
-					double moneyCount = user.getMoney();
+					double moneyCount = user.getMoney().doubleValue();
 
 					if ((lastLog == 0) || (ban > bansArg) || (timeDiff < milliDays)
 						|| (homeCount > homesArg) || (moneyCount > moneyArg))

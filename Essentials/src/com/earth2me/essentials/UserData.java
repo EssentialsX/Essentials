@@ -2,6 +2,7 @@ package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.*;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -66,33 +67,47 @@ public abstract class UserData extends PlayerExtension implements IConf
 		ignoredPlayers = _getIgnoredPlayers();
 		logoutLocation = _getLogoutLocation();
 	}
-	private double money;
+	private BigDecimal money;
 
-	private double _getMoney()
+	private BigDecimal _getMoney()
 	{
-		double money = ess.getSettings().getStartingBalance();
+		double bal = ess.getSettings().getStartingBalance();
+		BigDecimal maxMoney = ess.getSettings().getMaxMoney();
+		BigDecimal minMoney = ess.getSettings().getMinMoney();
+
 		if (config.hasProperty("money"))
 		{
-			money = config.getDouble("money", money);
+			bal = config.getDouble("money", bal);
 		}
-		if (Math.abs(money) > ess.getSettings().getMaxMoney())
+		BigDecimal result = BigDecimal.valueOf(bal);
+		if (result.compareTo(maxMoney) > 0)
 		{
-			money = money < 0 ? -ess.getSettings().getMaxMoney() : ess.getSettings().getMaxMoney();
+			result = maxMoney;
 		}
-		return money;
+		if (result.compareTo(minMoney) < 0)
+		{
+			result = minMoney;
+		}
+		return result;
 	}
 
-	public double getMoney()
+	public BigDecimal getMoney()
 	{
 		return money;
 	}
 
-	public void setMoney(double value)
+	public void setMoney(BigDecimal value)
 	{
-		money = Util.sanitizeMoney(value);
-		if (Math.abs(money) > ess.getSettings().getMaxMoney())
+		money = value;
+		BigDecimal maxMoney = ess.getSettings().getMaxMoney();
+		BigDecimal minMoney = ess.getSettings().getMinMoney();
+		if (money.compareTo(maxMoney) > 0)
 		{
-			money = money < 0 ? -ess.getSettings().getMaxMoney() : ess.getSettings().getMaxMoney();
+			money = maxMoney;
+		}
+		if (money.compareTo(minMoney) < 0)
+		{
+			money = minMoney;
 		}
 		config.setProperty("money", money);
 		config.save();
