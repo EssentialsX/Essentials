@@ -542,6 +542,10 @@ public class EssentialsConf extends YamlConfiguration
 			{
 				return new BigDecimal(input, MathContext.DECIMAL128);
 			}
+			catch (NumberFormatException e)
+			{
+				return def;
+			}
 			catch (ArithmeticException e)
 			{
 				return def;

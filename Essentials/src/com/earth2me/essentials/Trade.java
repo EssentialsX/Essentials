@@ -184,7 +184,7 @@ public class Trade
 		if (command != null)
 		{
 			final BigDecimal cost = getCommandCost(user);
-			if (!user.canAfford(cost) && cost.compareTo(BigDecimal.ZERO) > 0)
+			if (!user.canAfford(cost) && cost.signum() > 0)
 			{
 				throw new ChargeException(_("notEnoughMoney"));
 			}

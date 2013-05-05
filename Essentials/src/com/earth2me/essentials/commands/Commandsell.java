@@ -147,11 +147,11 @@ public class Commandsell extends EssentialsCommand
 			}
 			else
 			{
-				return worth.multiply(new BigDecimal(amount));
+				return worth.multiply(BigDecimal.valueOf(amount));
 			}
 		}
 
-		BigDecimal result = worth.multiply(new BigDecimal(amount));
+		BigDecimal result = worth.multiply(BigDecimal.valueOf(amount));
 		//TODO: Prices for Enchantments
 		final ItemStack ris = is.clone();
 		ris.setAmount(amount);

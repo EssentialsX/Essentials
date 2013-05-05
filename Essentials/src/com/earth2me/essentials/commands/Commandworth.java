@@ -48,7 +48,7 @@ public class Commandworth extends EssentialsCommand
 			throw new Exception(_("itemCannotBeSold"));
 		}
 		
-		final BigDecimal result = worth.multiply(new BigDecimal(amount));
+		final BigDecimal result = worth.multiply(BigDecimal.valueOf(amount));
 
 		user.sendMessage(iStack.getDurability() != 0
 						 ? _("worthMeta",
@@ -94,7 +94,7 @@ public class Commandworth extends EssentialsCommand
 			throw new Exception(_("itemCannotBeSold"));
 		}
 		
-		final BigDecimal result = worth.multiply(new BigDecimal(amount));
+		final BigDecimal result = worth.multiply(BigDecimal.valueOf(amount));
 
 		sender.sendMessage(iStack.getDurability() != 0
 						   ? _("worthMeta",
