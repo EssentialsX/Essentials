@@ -24,19 +24,19 @@ public class Worth implements IConf
 		String itemname = itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 		BigDecimal result;
 		result = config.getBigDecimal("worth." + itemname + "." + itemStack.getDurability(), BigDecimal.ONE.negate());
-		if (result.signum() <= 0)
+		if (result.signum() < 0)
 		{
 			result = config.getBigDecimal("worth." + itemname + ".0", BigDecimal.ONE.negate());
 		}
-		if (result.signum() <= 0)
+		if (result.signum() < 0)
 		{
 			result = config.getBigDecimal("worth." + itemname, BigDecimal.ONE.negate());
 		}
-		if (result.signum() <= 0)
+		if (result.signum() < 0)
 		{
 			result = config.getBigDecimal("worth-" + itemStack.getTypeId(), BigDecimal.ONE.negate());
 		}
-		if (result.signum() <= 0)
+		if (result.signum() < 0)
 		{
 			return null;
 		}
