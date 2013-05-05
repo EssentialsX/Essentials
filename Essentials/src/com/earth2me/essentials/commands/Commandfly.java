@@ -41,12 +41,20 @@ public class Commandfly extends EssentialsCommand
 			}
 			else if (user.isAuthorized("essentials.fly.others"))
 			{
+				if (args[0].trim().length() < 2)
+				{
+					throw new Exception(_("playerNotFound"));
+				}
 				flyOtherPlayers(server, user, args);
 				return;
 			}
 		}
 		else if (args.length == 2 && user.isAuthorized("essentials.fly.others"))
 		{
+			if (args[0].trim().length() < 2)
+			{
+				throw new Exception(_("playerNotFound"));
+			}
 			flyOtherPlayers(server, user, args);
 			return;
 		}

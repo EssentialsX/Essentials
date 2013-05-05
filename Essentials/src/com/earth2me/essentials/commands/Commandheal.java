@@ -24,6 +24,10 @@ public class Commandheal extends EssentialsCommand
 
 		if (args.length > 0 && user.isAuthorized("essentials.heal.others"))
 		{
+			if (args[0].trim().length() < 2)
+			{
+				throw new Exception(_("playerNotFound"));
+			}
 			if (!user.isAuthorized("essentials.heal.cooldown.bypass"))
 			{
 				user.healCooldown();

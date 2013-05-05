@@ -29,8 +29,12 @@ public class Commandtptoggle extends EssentialsCommand
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		if (args.length > 0 && args[0].trim().length() > 2 && user.isAuthorized("essentials.tptoggle.others"))
+		if (args.length > 0 && user.isAuthorized("essentials.tptoggle.others"))
 		{
+			if (args[0].trim().length() < 2)
+			{
+				throw new Exception(_("playerNotFound"));
+			}
 			toggleOtherPlayers(server, user, args);
 			return;
 		}

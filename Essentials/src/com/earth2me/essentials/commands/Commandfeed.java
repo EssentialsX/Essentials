@@ -21,12 +21,23 @@ public class Commandfeed extends EssentialsCommand
 	{
 		if (args.length > 0 && user.isAuthorized("essentials.feed.others"))
 		{
+			if (args[0].trim().length() < 2)
+			{
+				throw new Exception(_("playerNotFound"));
+			}
+			if (!user.isAuthorized("essentials.heal.cooldown.bypass"))
+			{
+				user.healCooldown();
+			}
 			feedOtherPlayers(server, user, args[0]);
+			return;
 		}
-		else
+
+		if (!user.isAuthorized("essentials.heal.cooldown.bypass"))
 		{
-			feedPlayer(user, user);
+			user.healCooldown();
 		}
+		feedPlayer(user, user);
 	}
 
 	@Override

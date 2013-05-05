@@ -43,6 +43,11 @@ public class Commandlightning extends EssentialsCommand
 			}
 		}
 
+		if (args[0].trim().length() < 2)
+		{
+			throw new Exception(_("playerNotFound"));
+		}
+
 		final List<Player> matchedPlayers = server.matchPlayer(args[0]);
 		for (Player matchPlayer : matchedPlayers)
 		{

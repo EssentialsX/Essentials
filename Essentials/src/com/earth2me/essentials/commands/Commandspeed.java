@@ -49,6 +49,10 @@ public class Commandspeed extends EssentialsCommand
 			speed = getMoveSpeed(args[1]);
 			if (args.length > 2 && user.isAuthorized("essentials.speed.others"))
 			{
+				if (args[2].trim().length() < 2)
+				{
+					throw new Exception(_("playerNotFound"));
+				}
 				speedOtherPlayers(server, user, isFly, isBypass, speed, args[2]);
 				return;
 			}
