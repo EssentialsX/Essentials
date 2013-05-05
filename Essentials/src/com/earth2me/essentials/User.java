@@ -264,7 +264,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	public void requestTeleport(final User player, final boolean here)
 	{
 		teleportRequestTime = System.currentTimeMillis();
-		teleportRequester = player.getName();
+		teleportRequester = player == null ? null : player.getName();
 		teleportRequestHere = here;
 	}
 
