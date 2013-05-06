@@ -2,6 +2,7 @@ package com.earth2me.essentials.signs;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.*;
+import com.earth2me.essentials.Trade.OverflowType;
 import java.util.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -9,6 +10,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
+
 
 @Deprecated // This sign will be removed soon
 public class SignProtection extends EssentialsSign
@@ -81,7 +83,7 @@ public class SignProtection extends EssentialsSign
 				{
 					block.setType(Material.AIR);
 					final Trade trade = new Trade(new ItemStack(Material.SIGN, 1), ess);
-					trade.pay(player);
+					trade.pay(player, OverflowType.DROP);
 				}
 			}
 		}
@@ -241,7 +243,7 @@ public class SignProtection extends EssentialsSign
 	{
 		return protectedBlocks;
 	}
-	
+
 	@Override
 	public boolean areHeavyEventRequired()
 	{

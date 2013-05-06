@@ -35,6 +35,14 @@ public class Trade
 		ITEM
 	}
 
+
+	public enum OverflowType
+	{
+		ABORT,
+		DROP,
+		RETURN
+	}
+
 	public Trade(final String command, final IEssentials ess)
 	{
 		this(command, null, null, null, null, ess);
@@ -112,14 +120,13 @@ public class Trade
 		}
 	}
 
-	public void pay(final IUser user)
+	public boolean pay(final IUser user)
 	{
-		pay(user, true);
+		return pay(user, OverflowType.ABORT) == null;
 	}
 
-	public boolean pay(final IUser user, final boolean dropItems)
+	public Map<Integer, ItemStack> pay(final IUser user, final OverflowType type)
 	{
-		boolean success = true;
 		if (getMoney() != null && getMoney().signum() > 0)
 		{
 			if (ess.getSettings().isDebug())
@@ -130,33 +137,65 @@ public class Trade
 		}
 		if (getItemStack() != null)
 		{
-			if (dropItems)
+			// This stores the would be overflow
+			Map<Integer, ItemStack> overFlow = InventoryWorkaround.addAllItems(user.getInventory(), getItemStack());
+
+			if (overFlow != null)
 			{
-				final Map<Integer, ItemStack> leftOver = InventoryWorkaround.addItems(user.getInventory(), getItemStack());
-				final Location loc = user.getLocation();
-				for (ItemStack itemStack : leftOver.values())
+				switch (type)
 				{
-					final int maxStackSize = itemStack.getType().getMaxStackSize();
-					final int stacks = itemStack.getAmount() / maxStackSize;
-					final int leftover = itemStack.getAmount() % maxStackSize;
-					final Item[] itemStacks = new Item[stacks + (leftover > 0 ? 1 : 0)];
-					for (int i = 0; i < stacks; i++)
+				case ABORT:
+					if (ess.getSettings().isDebug())
 					{
-						final ItemStack stack = itemStack.clone();
-						stack.setAmount(maxStackSize);
-						itemStacks[i] = loc.getWorld().dropItem(loc, stack);
+						ess.getLogger().log(Level.INFO, "abort paying " + user.getName() + " itemstack " + getItemStack().toString() + " due to lack of inventory space ");
 					}
-					if (leftover > 0)
+
+					return overFlow;
+
+				case RETURN:
+					// Pay the user the items, and return overflow
+					final Map<Integer, ItemStack> returnStack = InventoryWorkaround.addItems(user.getInventory(), getItemStack());
+					user.updateInventory();
+
+					if (ess.getSettings().isDebug())
 					{
-						final ItemStack stack = itemStack.clone();
-						stack.setAmount(leftover);
-						itemStacks[stacks] = loc.getWorld().dropItem(loc, stack);
+						ess.getLogger().log(Level.INFO, "paying " + user.getName() + " partial itemstack " + getItemStack().toString() + " with overflow " + returnStack.get(0).toString());
+					}
+
+					return returnStack;
+
+				case DROP:
+					// Pay the users the items directly, and drop the rest, will always return no overflow.
+					final Map<Integer, ItemStack> leftOver = InventoryWorkaround.addItems(user.getInventory(), getItemStack());
+					final Location loc = user.getLocation();
+					for (ItemStack loStack : leftOver.values())
+					{
+						final int maxStackSize = loStack.getType().getMaxStackSize();
+						final int stacks = loStack.getAmount() / maxStackSize;
+						final int leftover = loStack.getAmount() % maxStackSize;
+						final Item[] itemStacks = new Item[stacks + (leftover > 0 ? 1 : 0)];
+						for (int i = 0; i < stacks; i++)
+						{
+							final ItemStack stack = loStack.clone();
+							stack.setAmount(maxStackSize);
+							itemStacks[i] = loc.getWorld().dropItem(loc, stack);
+						}
+						if (leftover > 0)
+						{
+							final ItemStack stack = loStack.clone();
+							stack.setAmount(leftover);
+							itemStacks[stacks] = loc.getWorld().dropItem(loc, stack);
+						}
+					}
+					if (ess.getSettings().isDebug())
+					{
+						ess.getLogger().log(Level.INFO, "paying " + user.getName() + " partial itemstack " + getItemStack().toString() + " and dropping overflow " + leftOver.get(0).toString());
 					}
 				}
 			}
-			else
+			else if (ess.getSettings().isDebug())
 			{
-				success = InventoryWorkaround.addAllItems(user.getInventory(), getItemStack());
+				ess.getLogger().log(Level.INFO, "paying " + user.getName() + " itemstack " + getItemStack().toString());
 			}
 			user.updateInventory();
 		}
@@ -164,7 +203,7 @@ public class Trade
 		{
 			SetExpFix.setTotalExperience(user, SetExpFix.getTotalExperience(user) + getExperience());
 		}
-		return success;
+		return null;
 	}
 
 	public void charge(final IUser user) throws ChargeException

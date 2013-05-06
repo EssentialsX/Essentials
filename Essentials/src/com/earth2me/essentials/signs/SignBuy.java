@@ -27,7 +27,7 @@ public class SignBuy extends EssentialsSign
 		final Trade items = getTrade(sign, 1, 2, player, ess);
 		final Trade charge = getTrade(sign, 3, ess);
 		charge.isAffordableFor(player);
-		if (!items.pay(player, false))
+		if (!items.pay(player))
 		{
 			throw new ChargeException("Inventory full"); //TODO: TL
 		}

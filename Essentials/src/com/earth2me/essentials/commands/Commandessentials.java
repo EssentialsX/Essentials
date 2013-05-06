@@ -222,6 +222,7 @@ public class Commandessentials extends EssentialsCommand
 		{
 			sender.sendMessage("This sub-command will delete users who havent logged in in the last <days> days.");
 			sender.sendMessage("Optional parameters define the minium amount required to prevent deletion.");
+			sender.sendMessage("Unless you define larger default values, this command wil ignore people who have more than 0 money/homes/bans.");
 			throw new Exception("/<command> cleanup <days> [money] [homes] [ban count]");
 		}
 		sender.sendMessage(_("cleaning"));

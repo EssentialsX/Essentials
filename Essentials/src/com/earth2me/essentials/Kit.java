@@ -2,6 +2,7 @@ package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
 import static com.earth2me.essentials.I18n.capitalCase;
+import com.earth2me.essentials.Trade.OverflowType;
 import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.textreader.IText;
@@ -137,7 +138,7 @@ public class Kit
 				{
 					BigDecimal value = new BigDecimal(kitItem.substring(ess.getSettings().getCurrencySymbol().length()).trim());
 					Trade t = new Trade(value, ess);
-					t.pay(user);
+					t.pay(user, OverflowType.DROP);
 					continue;
 				}
 
