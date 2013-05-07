@@ -162,7 +162,7 @@ public class ItemDb implements IConf, IItemDb
 	}
 
 
-	class ItemData
+	class static ItemData
 	{
 		final private int itemNo;
 		final private short itemData;
