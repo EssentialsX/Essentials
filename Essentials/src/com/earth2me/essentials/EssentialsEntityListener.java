@@ -170,12 +170,18 @@ public class EssentialsEntityListener implements Listener
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onFoodLevelChange(final FoodLevelChangeEvent event)
 	{
-		if (event.getEntity() instanceof Player && ess.getUser(event.getEntity()).isGodModeEnabled())
+		if (event.getEntity() instanceof Player)
 		{
-			final Player player = (Player)event.getEntity();
-			player.setFoodLevel(20);
-			player.setSaturation(10);
-			event.setCancelled(true);
+			final User user = ess.getUser(event.getEntity());
+			if (user.isGodModeEnabled())
+			{
+				if (user.isGodModeEnabledRaw())
+				{
+					user.setFoodLevel(20);
+					user.setSaturation(10);
+				}
+				event.setCancelled(true);
+			}
 		}
 	}
 
@@ -200,8 +206,9 @@ public class EssentialsEntityListener implements Listener
 			}
 		}
 	}
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-	public void onEntityShootBow (EntityShootBowEvent event)
+	public void onEntityShootBow(EntityShootBowEvent event)
 	{
 		if (event.getEntity() instanceof Player)
 		{
