@@ -274,7 +274,6 @@ public class Util
 		AIR_MATERIALS.add(Material.VINE.getId());
 		AIR_MATERIALS.add(Material.FENCE_GATE.getId());
 		AIR_MATERIALS.add(Material.WATER_LILY.getId());
-		AIR_MATERIALS.add(Material.NETHER_FENCE.getId());
 		AIR_MATERIALS.add(Material.NETHER_WARTS.getId());
 
 		for (Integer integer : AIR_MATERIALS)
@@ -358,7 +357,13 @@ public class Util
 				break;
 			}
 		}
-
+		
+		if (isBlockUnsafe(world, x, y, z))
+		{
+			x = Math.round(loc.getX()) == origX ? x - 1 : x + 1;
+			z = Math.round(loc.getZ()) == origZ ? z - 1 : z + 1;
+		}
+		
 		int i = 0;
 		while (isBlockUnsafe(world, x, y, z))
 		{
