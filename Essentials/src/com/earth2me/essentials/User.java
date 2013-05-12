@@ -187,7 +187,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 	public boolean canAfford(final BigDecimal cost, final boolean permcheck)
 	{
-		if (cost.signum() <= 0)			
+		if (cost.signum() <= 0)
 		{
 			return true;
 		}
@@ -393,6 +393,18 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 
 	@Override
 	public BigDecimal getMoney()
+	{
+		final long start = System.nanoTime();
+		final BigDecimal value = _getMoney();
+		final long elapsed = start - System.nanoTime();
+		if (elapsed > 20000000L)
+		{
+			ess.getLogger().log(Level.INFO, "Lag Notice - Slow Economy Response - Request took over {0}ms!", elapsed / 1000000);
+		}
+		return value;
+	}
+
+	private BigDecimal _getMoney()
 	{
 		if (ess.getPaymentMethod().hasMethod())
 		{
