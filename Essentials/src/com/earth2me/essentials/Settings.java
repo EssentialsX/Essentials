@@ -1081,7 +1081,9 @@ public class Settings implements ISettings
 
 	private long _getEconomyLagWarning()
 	{
-		return config.getLong("economy-lag-warning", 20000000L); // Default to 20ms
+		// Default to 20ms
+		final long value = (long)(config.getDouble("economy-lag-warning", 20.0) * 1000000);
+		return value;
 	}
 
 	@Override

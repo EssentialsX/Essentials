@@ -399,7 +399,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		final long elapsed = System.nanoTime() - start;
 		if (elapsed > ess.getSettings().getEconomyLagWarning())
 		{
-			ess.getLogger().log(Level.INFO, "Lag Notice - Slow Economy Response - Request took over {0}ms!", elapsed / 1000000);
+			ess.getLogger().log(Level.INFO, "Lag Notice - Slow Economy Response - Request took over {0}ms!", elapsed / 1000000.0);
 		}
 		return value;
 	}
