@@ -117,7 +117,8 @@ public class Commandbalancetop extends EssentialsCommand
 							final BigDecimal userMoney = user.getMoney();
 							user.updateMoneyCache(userMoney);
 							totalMoney = totalMoney.add(userMoney);
-							balances.put(user.getDisplayName(), userMoney);
+							final String name = user.isHidden() ? user.getName() : user.getDisplayName();
+							balances.put(name, userMoney);
 						}
 					}
 
