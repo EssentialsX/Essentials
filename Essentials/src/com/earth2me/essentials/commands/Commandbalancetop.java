@@ -106,7 +106,7 @@ public class Commandbalancetop extends EssentialsCommand
 			{
 				if (force || cacheage <= System.currentTimeMillis() - CACHETIME)
 				{
-					cache.getLines().clear();					
+					cache.getLines().clear();
 					final Map<String, BigDecimal> balances = new HashMap<String, BigDecimal>();
 					BigDecimal totalMoney = BigDecimal.ZERO;
 					for (String u : ess.getUserMap().getAllUniqueUsers())
@@ -130,7 +130,7 @@ public class Commandbalancetop extends EssentialsCommand
 							return entry2.getValue().compareTo(entry1.getValue());
 						}
 					});
-					
+
 					cache.getLines().add(_("serverTotal", Util.displayCurrency(totalMoney, ess)));
 					int pos = 1;
 					for (Map.Entry<String, BigDecimal> entry : sortedEntries)
@@ -179,7 +179,7 @@ public class Commandbalancetop extends EssentialsCommand
 			{
 				lock.readLock().unlock();
 			}
-			ess.runTaskAsynchronously(new Calculator(new Viewer(sender, page, force), force));
+			ess.runTaskAsynchronously(new Calculator(new Viewer(sender, page, false), force));
 		}
 	}
 }

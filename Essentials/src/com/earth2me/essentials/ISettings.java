@@ -44,7 +44,7 @@ public interface ISettings extends IConf
 	double getHealCooldown();
 
 	Set<String> getSocialSpyCommands();
-	
+
 	Map<String, Object> getKit(String name);
 
 	ConfigurationSection getKits();
@@ -142,7 +142,7 @@ public interface ISettings extends IConf
 	boolean getFreezeAfkPlayers();
 
 	boolean cancelAfkOnMove();
-	
+
 	boolean cancelAfkOnInteract();
 
 	boolean areDeathMessagesEnabled();
@@ -152,7 +152,7 @@ public interface ISettings extends IConf
 	Set<String> getNoGodWorlds();
 
 	boolean getUpdateBedAtDaytime();
-	
+
 	boolean allowUnsafeEnchantments();
 
 	boolean getRepairEnchanted();
@@ -187,9 +187,11 @@ public interface ISettings extends IConf
 
 	public int getMailsPerMinute();
 
+	public long getEconomyLagWarning();
+
 	public void setEssentialsChatActive(boolean b);
 
 	long getMaxTempban();
-	
+
 	public Map<String, Object> getListGroupConfig();
 }
