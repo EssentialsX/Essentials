@@ -37,7 +37,14 @@ public class Commandfeed extends EssentialsCommand
 		{
 			user.healCooldown();
 		}
-		feedPlayer(user, user);
+		try
+		{
+			feedPlayer(user, user);
+		}
+		catch (QuietAbortException e)
+		{
+			//User does not need feeding.
+		}
 	}
 
 	@Override
@@ -51,7 +58,7 @@ public class Commandfeed extends EssentialsCommand
 		feedOtherPlayers(server, sender, args[0]);
 	}
 
-	private void feedOtherPlayers(final Server server, final CommandSender sender, final String name) throws NotEnoughArgumentsException, QuietAbortException
+	private void feedOtherPlayers(final Server server, final CommandSender sender, final String name) throws NotEnoughArgumentsException
 	{
 		boolean skipHidden = sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.vanish.interact");
 		boolean foundUser = false;
@@ -64,8 +71,14 @@ public class Commandfeed extends EssentialsCommand
 				continue;
 			}
 			foundUser = true;
-			feedPlayer(sender, matchPlayer);
-
+			try
+			{
+				feedPlayer(sender, matchPlayer);
+			}
+			catch (QuietAbortException e)
+			{
+				//User does not need feeding.
+			}
 		}
 		if (!foundUser)
 		{
@@ -83,8 +96,8 @@ public class Commandfeed extends EssentialsCommand
 		{
 			throw new QuietAbortException();
 		}
-
-		player.setFoodLevel(flce.getFoodLevel());
+		
+		player.setFoodLevel(flce.getFoodLevel() > 20 ? 20 : flce.getFoodLevel());
 		player.setSaturation(10);
 		sender.sendMessage(sender.equals(player) ? _("feed") : _("feedOther", player.getDisplayName()));
 	}

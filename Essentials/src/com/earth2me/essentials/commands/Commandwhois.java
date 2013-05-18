@@ -58,6 +58,7 @@ public class Commandwhois extends EssentialsCommand
 			user.setDisplayNick();
 			sender.sendMessage(_("whoisNick", user.getDisplayName()));
 			sender.sendMessage(_("whoisHealth", user.getHealth()));
+			sender.sendMessage(_("whoisHunger", user.getFoodLevel(), user.getSaturation()));
 			sender.sendMessage(_("whoisExp", SetExpFix.getTotalExperience(user), user.getLevel()));			
 			sender.sendMessage(_("whoisLocation", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ()));
 			if (!ess.getSettings().isEcoDisabled())
