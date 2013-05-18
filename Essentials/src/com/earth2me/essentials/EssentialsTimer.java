@@ -18,12 +18,13 @@ public class EssentialsTimer implements Runnable
 	private int skip2 = 0;
 	private final long maxTime = 10 * 1000000;
 	private final long tickInterval = 50;
-
+	
 	EssentialsTimer(final IEssentials ess)
 	{
 		this.ess = ess;
+		history.add(20d);
 	}
-
+	
 	@Override
 	public void run()
 	{
@@ -39,7 +40,7 @@ public class EssentialsTimer implements Runnable
 			history.remove();
 		}
 		double tps = tickInterval * 1000000.0 / timeSpent;
-		if (tps <= 20)
+		if (tps <= 21)
 		{
 			history.add(tps);
 		}
@@ -73,7 +74,7 @@ public class EssentialsTimer implements Runnable
 				ess.getLogger().log(Level.WARNING, "EssentialsTimer Error:", e);
 			}
 		}
-
+		
 		count = 0;
 		final Iterator<String> iterator = onlineUsers.iterator();
 		while (iterator.hasNext())
@@ -104,7 +105,7 @@ public class EssentialsTimer implements Runnable
 			user.resetInvulnerabilityAfterTeleport();
 		}
 	}
-
+	
 	public double getAverageTPS()
 	{
 		double avg = 0;
@@ -114,7 +115,7 @@ public class EssentialsTimer implements Runnable
 			{
 				avg += f;
 			}
-		}
+		}		
 		return avg / history.size();
 	}
 }

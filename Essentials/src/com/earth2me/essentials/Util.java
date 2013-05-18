@@ -357,13 +357,13 @@ public class Util
 				break;
 			}
 		}
-		
+
 		if (isBlockUnsafe(world, x, y, z))
 		{
 			x = Math.round(loc.getX()) == origX ? x - 1 : x + 1;
 			z = Math.round(loc.getZ()) == origZ ? z - 1 : z + 1;
 		}
-		
+
 		int i = 0;
 		while (isBlockUnsafe(world, x, y, z))
 		{
@@ -527,12 +527,12 @@ public class Util
 		}
 		return is;
 	}
-	private static DecimalFormat dFormat = new DecimalFormat("#0.00", DecimalFormatSymbols.getInstance(Locale.US));
+	private static DecimalFormat currencyFormat = new DecimalFormat("#0.00", DecimalFormatSymbols.getInstance(Locale.US));
 
 	public static String formatAsCurrency(final BigDecimal value)
 	{
-		dFormat.setRoundingMode(RoundingMode.FLOOR);
-		String str = dFormat.format(value);
+		currencyFormat.setRoundingMode(RoundingMode.FLOOR);
+		String str = currencyFormat.format(value);
 		if (str.endsWith(".00"))
 		{
 			str = str.substring(0, str.length() - 3);
@@ -548,6 +548,13 @@ public class Util
 	public static String shortCurrency(final BigDecimal value, final IEssentials ess)
 	{
 		return ess.getSettings().getCurrencySymbol() + formatAsCurrency(value);
+	}
+	private static DecimalFormat threeDPlaces = new DecimalFormat("#,###.###");
+
+	public static String formatDouble(final double value)
+	{
+		threeDPlaces.setRoundingMode(RoundingMode.HALF_UP);
+		return threeDPlaces.format(value);
 	}
 
 	public static boolean isInt(final String sInt)
