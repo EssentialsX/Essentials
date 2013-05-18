@@ -33,13 +33,20 @@ public class Kit
 				else if (user.isAuthorized("essentials.kits." + kitItem.toLowerCase(Locale.ENGLISH)))
 				{
 					String cost = "";
+					String name = capitalCase(kitItem);
 					BigDecimal costPrice = new Trade("kit-" + kitItem.toLowerCase(Locale.ENGLISH), ess).getCommandCost(user);
 					if (costPrice.signum() > 0)
 					{
 						cost = _("kitCost", Util.displayCurrency(costPrice, ess));
 					}
+					final Map<String, Object> kit = ess.getSettings().getKit(kitItem);
 
-					list.append(" ").append(capitalCase(kitItem)).append(cost);
+					if (Kit.getNextUse(user, kitItem, kit) != 0)
+					{
+						name = _("kitDelay", name);
+					}
+
+					list.append(" ").append(name).append(cost);
 				}
 			}
 			return list.toString().trim();
@@ -53,55 +60,73 @@ public class Kit
 
 	public static void checkTime(final User user, final String kitName, final Map<String, Object> els) throws Exception
 	{
-		if (user.isAuthorized("essentials.kit.exemptdelay"))
-		{
-			return;
-		}
-
 		final Calendar time = new GregorianCalendar();
+		long nextUse = getNextUse(user, kitName, els);
 
-		// Take the current time, and remove the delay from it.
-		double delay = 0;
-		try
-		{	
-			// Also make sure delay is valid
-			delay = els.containsKey("delay") ? ((Number)els.get("delay")).doubleValue() : 0.0d;
-		}
-		catch (Exception e)
-		{
-			throw new Exception(_("kitError2"));
-		}
-		final Calendar earliestTime = new GregorianCalendar();
-		earliestTime.add(Calendar.SECOND, -(int)delay);
-		earliestTime.add(Calendar.MILLISECOND, -(int)((delay * 1000.0) % 1000.0));
-		// This value contains the most recent time a kit could have been used that would allow another use.
-		final long earliestLong = earliestTime.getTimeInMillis();
-
-		// When was the last kit used?
-		final long lastTime = user.getKitTimestamp(kitName);
-
-		if (lastTime < earliestLong || lastTime == 0L)
+		if (nextUse == 0L)
 		{
 			user.setKitTimestamp(kitName, time.getTimeInMillis());
 		}
-		else if (lastTime > time.getTimeInMillis())
-		{
-			// This is to make sure time didn't get messed up on last kit use.
-			// If this happens, let's give the user the benifit of the doubt.
-			user.setKitTimestamp(kitName, time.getTimeInMillis());
-		}
-		else if (earliestLong < 0L)
+		else if (nextUse < 0L)
 		{
 			user.sendMessage(_("kitOnce"));
 			throw new NoChargeException();
 		}
 		else
 		{
-			time.setTimeInMillis(lastTime);
-			time.add(Calendar.SECOND, (int)delay);
-			time.add(Calendar.MILLISECOND, (int)((delay * 1000.0) % 1000.0));
-			user.sendMessage(_("kitTimed", Util.formatDateDiff(time.getTimeInMillis())));
+			user.sendMessage(_("kitTimed", Util.formatDateDiff(nextUse)));
 			throw new NoChargeException();
+		}
+	}
+
+	public static long getNextUse(final User user, final String kitName, final Map<String, Object> els) throws Exception
+	{
+		if (user.isAuthorized("essentials.kit.exemptdelay"))
+		{
+			return 0L;
+		}
+
+		final Calendar time = new GregorianCalendar();
+
+		double delay = 0;
+		try
+		{
+			// Make sure delay is valid
+			delay = els.containsKey("delay") ? ((Number)els.get("delay")).doubleValue() : 0.0d;
+		}
+		catch (Exception e)
+		{
+			throw new Exception(_("kitError2"));
+		}
+
+		// When was the last kit used?
+		final long lastTime = user.getKitTimestamp(kitName);
+
+		// When can be use the kit again?
+		final Calendar delayTime = new GregorianCalendar();
+		delayTime.setTimeInMillis(lastTime);
+		delayTime.add(Calendar.SECOND, (int)delay);
+		delayTime.add(Calendar.MILLISECOND, (int)((delay * 1000.0) % 1000.0));
+
+		if (lastTime == 0L || lastTime > time.getTimeInMillis())
+		{
+			// If we have no record of kit use, or its corrupted, give them benifit of the doubt.
+			return 0L;
+		}
+		else if (delay < 0d)
+		{
+			// If the kit has a negative kit time, it can only be used once.
+			return -1;
+		}
+		else if (delayTime.before(time))
+		{
+			// If the kit was used in the past, but outside the delay time, it can be used.
+			return 0L;
+		}
+		else
+		{
+			// If the kit has been used recently, return the next time it can be used.
+			return delayTime.getTimeInMillis();
 		}
 	}
 
