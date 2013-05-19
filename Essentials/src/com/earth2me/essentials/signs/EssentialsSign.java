@@ -19,7 +19,6 @@ public class EssentialsSign
 {
 	private static final Set<Material> EMPTY_SET = new HashSet<Material>();
 	protected static final BigDecimal MINTRANSACTION = new BigDecimal("0.01");
-	
 	protected transient final String signName;
 
 	public EssentialsSign(final String signName)
@@ -232,10 +231,17 @@ public class EssentialsSign
 			final Block signblock = block.getRelative(blockFace);
 			if (signblock.getType() == Material.WALL_SIGN)
 			{
-				final org.bukkit.material.Sign signMat = (org.bukkit.material.Sign)signblock.getState().getData();
-				if (signMat != null && signMat.getFacing() == blockFace && isValidSign(new BlockSign(signblock)))
+				try
 				{
-					return true;
+					final org.bukkit.material.Sign signMat = (org.bukkit.material.Sign)signblock.getState().getData();
+					if (signMat != null && signMat.getFacing() == blockFace && isValidSign(new BlockSign(signblock)))
+					{
+						return true;
+					}
+				}
+				catch (NullPointerException ex)
+				{
+					// Sometimes signs enter a state of being semi broken, having no text or state data, usually while burning.
 				}
 			}
 		}
