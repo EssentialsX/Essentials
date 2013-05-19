@@ -410,7 +410,7 @@ public class Settings implements ISettings
 		if (mFormat == null)
 		{
 			String format = config.getString("chat.group-formats." + (group == null ? "Default" : group),
-											 config.getString("chat.format", "&7[{GROUP}]&f {DISPLAYNAME}&7:&f {MESSAGE}"));
+											 config.getString("chat.format", "&7[{GROUP}]&r {DISPLAYNAME}&7:&r {MESSAGE}"));
 			format = Util.replaceFormat(format);
 			format = format.replace("{DISPLAYNAME}", "%1$s");
 			format = format.replace("{GROUP}", "{0}");
