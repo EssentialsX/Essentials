@@ -43,17 +43,23 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 		return name;
 	}
 
+	@Deprecated
 	protected User getPlayer(final Server server, final String[] args, final int pos) throws NoSuchFieldException, NotEnoughArgumentsException
 	{
-		return getPlayer(server, args, pos, false, false);
+		return getPlayer(server, null, args, pos, false, false);
 	}
 	
 	protected User getPlayer(final Server server, final User user, final String[] args, final int pos) throws NoSuchFieldException, NotEnoughArgumentsException
 	{
-		return getPlayer(server, args, pos, user.isAuthorized("essentials.vanish.interact"), false);
+		return getPlayer(server, user, args, pos, user.isAuthorized("essentials.vanish.interact"), false);
 	}
 
 	protected User getPlayer(final Server server, final String[] args, final int pos, boolean getHidden, final boolean getOffline) throws NoSuchFieldException, NotEnoughArgumentsException
+	{
+		return getPlayer(server, null, args, pos, getHidden, getOffline);
+	}
+	
+	private User getPlayer(final Server server, final User sourceUser, final String[] args, final int pos, boolean getHidden, final boolean getOffline) throws NoSuchFieldException, NotEnoughArgumentsException
 	{
 		if (args.length <= pos)
 		{
@@ -70,7 +76,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 			{
 				throw new PlayerNotFoundException();
 			}
-			if (!getHidden && user.isHidden())
+			if (!getHidden && user.isHidden() || user.equals(sourceUser))
 			{
 				throw new PlayerNotFoundException();
 			}
@@ -83,13 +89,13 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 			for (Player player : matches)
 			{
 				final User userMatch = ess.getUser(player);
-				if (userMatch.getDisplayName().startsWith(args[pos]) && (getHidden || !userMatch.isHidden()))
+				if (userMatch.getDisplayName().startsWith(args[pos]) && (getHidden || !userMatch.isHidden() || userMatch.equals(sourceUser)))
 				{
 					return userMatch;
 				}
 			}
 			final User userMatch = ess.getUser(matches.get(0));
-			if (getHidden || !userMatch.isHidden())
+			if (getHidden || !userMatch.isHidden() || userMatch.equals(sourceUser))
 			{
 				return userMatch;
 			}
