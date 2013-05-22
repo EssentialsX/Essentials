@@ -220,3 +220,4 @@ v 2.0:
 	- Warn when adding a node where an exception already exist.
 	- Only prevent adding nodes with '/manuaddp' and '/mangaddp' if they are exact matches (not wildcards).
 	- Store worldSelection indexed on the senders name rather than the object (fixes commandblocks using manselect).
+	- Check subgroup permissions with an equal priority so no one subgroup is higher ranked than another.
