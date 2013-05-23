@@ -27,7 +27,7 @@ public class Commandspawn extends EssentialsCommand
 		charge.isAffordableFor(user);
 		if (args.length > 0 && user.isAuthorized("essentials.spawn.others"))
 		{
-			final User otherUser = getPlayer(server, args, 0);
+			final User otherUser = getPlayer(server, user, args, 0);
 			respawn(otherUser, charge);
 			if (!otherUser.equals(user))
 			{
@@ -49,7 +49,7 @@ public class Commandspawn extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		final User user = getPlayer(server, args, 0);
+		final User user = getPlayer(server, args, 0, true, false);
 		respawn(user, null);
 		user.sendMessage(_("teleportAtoB", Console.NAME, "spawn"));
 		sender.sendMessage(_("teleporting"));
