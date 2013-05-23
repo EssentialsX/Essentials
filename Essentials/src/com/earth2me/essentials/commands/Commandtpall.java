@@ -28,28 +28,29 @@ public class Commandtpall extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		final User player = getPlayer(server, args, 0);
-		teleportAllPlayers(server, sender, player);
+		final User target = getPlayer(server, sender, args, 0);
+		teleportAllPlayers(server, sender, target);
 	}
 
-	private void teleportAllPlayers(Server server, CommandSender sender, User user)
+	private void teleportAllPlayers(Server server, CommandSender sender, User target)
 	{
 		sender.sendMessage(_("teleportAll"));
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
 			final User player = ess.getUser(onlinePlayer);
-			if (user == player)
+			if (target == player)
 			{
 				continue;
 			}
-			if (user.getWorld() != player.getWorld() && ess.getSettings().isWorldTeleportPermissions()
-				&& !user.isAuthorized("essentials.worlds." + user.getWorld().getName()))
+			if (target.equals(sender)
+				&& target.getWorld() != player.getWorld() && ess.getSettings().isWorldTeleportPermissions()
+				&& !target.isAuthorized("essentials.worlds." + target.getWorld().getName()))
 			{
 				continue;
 			}
 			try
 			{
-				player.getTeleport().now(user, false, TeleportCause.COMMAND);
+				player.getTeleport().now(target, false, TeleportCause.COMMAND);
 			}
 			catch (Exception ex)
 			{

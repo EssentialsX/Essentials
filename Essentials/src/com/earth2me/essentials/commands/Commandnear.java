@@ -87,11 +87,12 @@ public class Commandnear extends EssentialsCommand
 		final World world = loc.getWorld();
 		final StringBuilder output = new StringBuilder();
 		final long radiusSquared = radius * radius;
+		boolean showHidden = user.isAuthorized("essentials.vanish.interact");
 
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
 			final User player = ess.getUser(onlinePlayer);
-			if (!player.equals(user) && !player.isHidden())
+			if (!player.equals(user) && (!player.isHidden() || showHidden))
 			{
 				final Location playerLoc = player.getLocation();
 				if (playerLoc.getWorld() != world)

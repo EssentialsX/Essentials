@@ -26,7 +26,7 @@ public class Commandtp extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 
 		case 1:
-			final User player = getPlayer(server, args, 0);
+			final User player = getPlayer(server, user, args, 0);
 			if (!player.isTeleportEnabled())
 			{
 				throw new Exception(_("teleportDisabled", player.getDisplayName()));
@@ -46,7 +46,7 @@ public class Commandtp extends EssentialsCommand
 			{
 				throw new Exception(_("noPerm", "essentials.tp.others"));
 			}
-			final User target2 = getPlayer(server, args, 0);
+			final User target2 = getPlayer(server, user, args, 0);
 			final double x = args[1].startsWith("~") ? target2.getLocation().getX() + Integer.parseInt(args[1].substring(1)) : Integer.parseInt(args[1]);
 			final double y = args[2].startsWith("~") ? target2.getLocation().getY() + Integer.parseInt(args[2].substring(1)) : Integer.parseInt(args[2]);
 			final double z = args[3].startsWith("~") ? target2.getLocation().getZ() + Integer.parseInt(args[3].substring(1)) : Integer.parseInt(args[3]);
@@ -69,8 +69,8 @@ public class Commandtp extends EssentialsCommand
 			{
 				throw new Exception(_("noPerm", "essentials.tp.others"));
 			}
-			final User target = getPlayer(server, args, 0);
-			final User toPlayer = getPlayer(server, args, 1);
+			final User target = getPlayer(server, user, args, 0);
+			final User toPlayer = getPlayer(server, user, args, 1);
 			if (!target.isTeleportEnabled())
 			{
 				throw new Exception(_("teleportDisabled", target.getDisplayName()));
@@ -99,10 +99,10 @@ public class Commandtp extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		final User target = getPlayer(server, args, 0);
+		final User target = getPlayer(server, args, 0, true, false);
 		if (args.length == 2)
 		{
-			final User toPlayer = getPlayer(server, args, 1);
+			final User toPlayer = getPlayer(server, args, 1, true, false);
 			target.getTeleport().now(toPlayer, false, TeleportCause.COMMAND);
 			target.sendMessage(_("teleportAtoB", Console.NAME, toPlayer.getDisplayName()));
 		}

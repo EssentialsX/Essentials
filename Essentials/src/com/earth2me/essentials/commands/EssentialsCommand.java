@@ -43,15 +43,14 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 		return name;
 	}
 
-	@Deprecated
-	protected User getPlayer(final Server server, final String[] args, final int pos) throws NoSuchFieldException, NotEnoughArgumentsException
-	{
-		return getPlayer(server, null, args, pos, false, false);
-	}
-	
 	protected User getPlayer(final Server server, final User user, final String[] args, final int pos) throws NoSuchFieldException, NotEnoughArgumentsException
 	{
 		return getPlayer(server, user, args, pos, user.isAuthorized("essentials.vanish.interact"), false);
+	}
+	
+	protected User getPlayer(final Server server, final CommandSender sender, final String[] args, final int pos) throws NoSuchFieldException, NotEnoughArgumentsException
+	{
+		return getPlayer(server, null, args, pos, true, false);
 	}
 
 	protected User getPlayer(final Server server, final String[] args, final int pos, boolean getHidden, final boolean getOffline) throws NoSuchFieldException, NotEnoughArgumentsException

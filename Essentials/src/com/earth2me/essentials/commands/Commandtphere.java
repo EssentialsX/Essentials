@@ -17,7 +17,7 @@ public class Commandtphere extends EssentialsCommand
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		final User player = getPlayer(server, args, 0);
+		final User player = getPlayer(server, user, args, 0);
 		if (!player.isTeleportEnabled())
 		{
 			throw new Exception(_("teleportDisabled", player.getDisplayName()));

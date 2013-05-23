@@ -42,7 +42,7 @@ public class Commandgive extends EssentialsCommand
 			throw new Exception(_("cantSpawnItem", itemname));
 		}
 
-		final User giveTo = getPlayer(server, args, 0);
+		final User giveTo = getPlayer(server, sender, args, 0);
 
 		try
 		{

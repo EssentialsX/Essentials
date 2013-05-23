@@ -39,7 +39,7 @@ public class Commandseen extends EssentialsCommand
 		}
 		try
 		{
-			User user = getPlayer(server, args, 0);
+			User user = getPlayer(server, sender, args, 0);
 			seenOnline(server, sender, user, showBan, extra);
 		}
 		catch (NoSuchFieldException e)

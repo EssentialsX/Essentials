@@ -42,7 +42,7 @@ public class Commandwarp extends EssentialsCommand
 			User otherUser = null;
 			if (args.length == 2 && (user.isAuthorized("essentials.warp.otherplayers") || user.isAuthorized("essentials.warp.others")))
 			{
-				otherUser = getPlayer(server, args, 1, user.isAuthorized("essentials.teleport.hidden"), false);
+				otherUser = getPlayer(server, user, args, 1);
 				warpUser(user, otherUser, args[0]);
 				throw new NoChargeException();
 			}

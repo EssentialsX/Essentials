@@ -29,7 +29,7 @@ public class Commandnuke extends EssentialsCommand
 			int pos = 0;
 			for (String arg : args)
 			{
-				targets.add(getPlayer(server, args, pos));
+				targets.add(getPlayer(server, sender, args, pos));
 				pos++;
 			}
 		}
