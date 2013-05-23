@@ -45,6 +45,8 @@ public class Commandfeed extends EssentialsCommand
 		{
 			//User does not need feeding.
 		}
+
+		user.sendMessage(_("feed"));
 	}
 
 	@Override
@@ -96,9 +98,13 @@ public class Commandfeed extends EssentialsCommand
 		{
 			throw new QuietAbortException();
 		}
-		
+
 		player.setFoodLevel(flce.getFoodLevel() > 20 ? 20 : flce.getFoodLevel());
 		player.setSaturation(10);
-		sender.sendMessage(sender.equals(player) ? _("feed") : _("feedOther", player.getDisplayName()));
+
+		if (!sender.equals(player))
+		{
+			sender.sendMessage(_("feedOther", player.getDisplayName()));
+		}
 	}
 }
