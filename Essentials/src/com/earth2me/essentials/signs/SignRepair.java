@@ -6,6 +6,7 @@ import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.commands.Commandrepair;
+import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 
 
 public class SignRepair extends EssentialsSign
@@ -40,18 +41,28 @@ public class SignRepair extends EssentialsSign
 
 		Commandrepair command = new Commandrepair();
 		command.setEssentials(ess);
-		String[] args = new String[]
-		{
-			sign.getLine(1)
-		};
+
 		try
 		{
-			command.run(ess.getServer(), player, "repair", args);
+			if (sign.getLine(1).equalsIgnoreCase("hand"))
+			{
+				command.repairHand(player);
+			}
+			else if (sign.getLine(1).equalsIgnoreCase("all"))
+			{
+				command.repairAll(player);
+			}
+			else
+			{
+				throw new NotEnoughArgumentsException();
+			}
+
 		}
 		catch (Exception ex)
 		{
 			throw new SignException(ex.getMessage(), ex);
 		}
+
 		charge.charge(player);
 		Trade.log("Sign", "Repair", "Interact", username, null, username, charge, sign.getBlock().getLocation(), ess);
 		return true;

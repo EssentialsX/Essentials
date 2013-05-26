@@ -22,55 +22,65 @@ public class Commandrepair extends EssentialsCommand
 	{
 		if (args.length < 1 || args[0].equalsIgnoreCase("hand") || !user.isAuthorized("essentials.repair.all"))
 		{
-			final ItemStack item = user.getItemInHand();
-			if (item == null || item.getType().isBlock() || item.getDurability() == 0)
-			{
-				throw new Exception(_("repairInvalidType"));
-			}
-
-			if (!item.getEnchantments().isEmpty()
-				&& !ess.getSettings().getRepairEnchanted()
-				&& !user.isAuthorized("essentials.repair.enchanted"))
-			{
-				throw new Exception(_("repairEnchanted"));
-			}
-
-			final String itemName = item.getType().toString().toLowerCase(Locale.ENGLISH);
-			final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), new Trade("repair-" + item.getTypeId(), new Trade("repair-item", ess), ess), ess);
-
-			charge.isAffordableFor(user);
-
-			repairItem(item);
-
-			charge.charge(user);
-
-			user.sendMessage(_("repair", itemName.replace('_', ' ')));
+			repairHand(user);
 		}
 		else if (args[0].equalsIgnoreCase("all"))
 		{
 			final Trade charge = new Trade("repair-all", ess);
 			charge.isAffordableFor(user);
-			final List<String> repaired = new ArrayList<String>();
-			repairItems(user.getInventory().getContents(), user, repaired);
-
-			if (user.isAuthorized("essentials.repair.armor"))
-			{
-				repairItems(user.getInventory().getArmorContents(), user, repaired);
-			}
-
-			if (repaired.isEmpty())
-			{
-				throw new Exception(_("repairNone"));
-			}
-			else
-			{
-				user.sendMessage(_("repair", Util.joinList(repaired)));
-			}
+			repairAll(user);
 			charge.charge(user);
 		}
 		else
 		{
 			throw new NotEnoughArgumentsException();
+		}
+	}
+
+	public void repairHand(User user) throws Exception
+	{
+		final ItemStack item = user.getItemInHand();
+		if (item == null || item.getType().isBlock() || item.getDurability() == 0)
+		{
+			throw new Exception(_("repairInvalidType"));
+		}
+
+		if (!item.getEnchantments().isEmpty()
+			&& !ess.getSettings().getRepairEnchanted()
+			&& !user.isAuthorized("essentials.repair.enchanted"))
+		{
+			throw new Exception(_("repairEnchanted"));
+		}
+
+		final String itemName = item.getType().toString().toLowerCase(Locale.ENGLISH);
+		final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), new Trade("repair-" + item.getTypeId(), new Trade("repair-item", ess), ess), ess);
+
+		charge.isAffordableFor(user);
+
+		repairItem(item);
+
+		charge.charge(user);
+
+		user.sendMessage(_("repair", itemName.replace('_', ' ')));
+	}
+
+	public void repairAll(User user) throws Exception
+	{
+		final List<String> repaired = new ArrayList<String>();
+		repairItems(user.getInventory().getContents(), user, repaired);
+
+		if (user.isAuthorized("essentials.repair.armor"))
+		{
+			repairItems(user.getInventory().getArmorContents(), user, repaired);
+		}
+
+		if (repaired.isEmpty())
+		{
+			throw new Exception(_("repairNone"));
+		}
+		else
+		{
+			user.sendMessage(_("repair", Util.joinList(repaired)));
 		}
 	}
 
