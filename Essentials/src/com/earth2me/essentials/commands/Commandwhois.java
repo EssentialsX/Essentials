@@ -27,7 +27,7 @@ public class Commandwhois extends EssentialsCommand
 		boolean showhidden = false;
 		if (sender instanceof Player)
 		{
-			if (ess.getUser(sender).isAuthorized("essentials.list.hidden"))
+			if (ess.getUser(sender).isAuthorized("essentials.vanish.interact"))
 			{
 				showhidden = true;
 			}

@@ -22,7 +22,7 @@ public class Commandlist extends EssentialsCommand
 		boolean showHidden = true;
 		if (sender instanceof Player)
 		{
-			showHidden = ess.getUser(sender).isAuthorized("essentials.list.hidden");
+			showHidden = ess.getUser(sender).isAuthorized("essentials.list.hidden") || ess.getUser(sender).isAuthorized("essentials.vanish.interact");
 		}
 
 		sender.sendMessage(listSummary(server, showHidden));
