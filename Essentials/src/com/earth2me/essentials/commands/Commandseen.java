@@ -73,24 +73,23 @@ public class Commandseen extends EssentialsCommand
 		if (user.isJailed())
 		{
 			sender.sendMessage(_("whoisJail", (user.getJailTimeout() > 0
-					? Util.formatDateDiff(user.getJailTimeout())
-					: _("true"))));
+											   ? Util.formatDateDiff(user.getJailTimeout())
+											   : _("true"))));
 		}
 		if (user.isMuted())
 		{
 			sender.sendMessage(_("whoisMuted", (user.getMuteTimeout() > 0
-					? Util.formatDateDiff(user.getMuteTimeout())
-					: _("true"))));
+												? Util.formatDateDiff(user.getMuteTimeout())
+												: _("true"))));
+		}
+		final String location = user.getGeoLocation();
+		if (location != null && (!(sender instanceof Player) || ess.getUser(sender).isAuthorized("essentials.geoip.show")))
+		{
+			sender.sendMessage(_("whoisGeoLocation", location));
 		}
 		if (extra)
 		{
 			sender.sendMessage(_("whoisIPAddress", user.getAddress().getAddress().toString()));
-			final String location = user.getGeoLocation();
-			if (location != null && (!(sender instanceof Player) || ess.getUser(sender).isAuthorized("essentials.geoip.show")))
-			{
-				sender.sendMessage(_("whoisGeoLocation", location));
-			}
-
 		}
 	}
 
@@ -109,16 +108,16 @@ public class Commandseen extends EssentialsCommand
 		{
 			sender.sendMessage(_("whoisBanned", showBan ? user.getBanReason() : _("true")));
 		}
+		final String location = user.getGeoLocation();
+		if (location != null && (!(sender instanceof Player) || ess.getUser(sender).isAuthorized("essentials.geoip.show")))
+		{
+			sender.sendMessage(_("whoisGeoLocation", location));
+		}
 		if (extra)
 		{
 			if (!user.getLastLoginAddress().isEmpty())
 			{
 				sender.sendMessage(_("whoisIPAddress", user.getLastLoginAddress()));
-			}
-			final String location = user.getGeoLocation();
-			if (location != null && (!(sender instanceof Player) || ess.getUser(sender).isAuthorized("essentials.geoip.show")))
-			{
-				sender.sendMessage(_("whoisGeoLocation", location));
 			}
 			final Location loc = user.getLogoutLocation();
 			if (loc != null)
