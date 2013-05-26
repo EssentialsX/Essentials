@@ -622,11 +622,13 @@ public class EssentialsPlayerListener implements Listener
 		{
 			final User user = ess.getUser(event.getPlayer());
 			user.setInvSee(false);
+			user.updateInventory();
 		}
 		else if (type == InventoryType.ENDER_CHEST)
 		{
 			final User user = ess.getUser(event.getPlayer());
 			user.setEnderSee(false);
+			user.updateInventory();
 		}
 		else if (type == InventoryType.WORKBENCH)
 		{
@@ -635,6 +637,7 @@ public class EssentialsPlayerListener implements Listener
 			{
 				user.setRecipeSee(false);
 				event.getView().getTopInventory().clear();
+				user.updateInventory();
 			}
 		}
 		else if (type == InventoryType.CHEST && top.getSize() == 9)
@@ -644,6 +647,7 @@ public class EssentialsPlayerListener implements Listener
 			{
 				final User user = ess.getUser(event.getPlayer());
 				user.setInvSee(false);
+				user.updateInventory();
 			}
 		}
 	}
