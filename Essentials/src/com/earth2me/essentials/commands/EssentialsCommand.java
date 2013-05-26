@@ -1,11 +1,9 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.*;
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.IEssentialsModule;
-import com.earth2me.essentials.Trade;
-import com.earth2me.essentials.User;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Logger;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
@@ -88,7 +86,23 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 		}
 		final List<Player> matches = server.matchPlayer(args[pos]);
 
-		if (!matches.isEmpty())
+		if (matches.isEmpty())
+		{
+			final String matchText = args[pos].toLowerCase(Locale.ENGLISH);
+			for (Player onlinePlayer : server.getOnlinePlayers())
+			{
+				final User userMatch = ess.getUser(onlinePlayer);
+				if (getHidden || !userMatch.isHidden() || userMatch.equals(sourceUser))
+				{
+					final String displayName = Util.stripFormat(userMatch.getDisplayName()).toLowerCase(Locale.ENGLISH);
+					if (displayName.contains(matchText))
+					{
+						return userMatch;
+					}
+				}
+			}
+		}
+		else
 		{
 			for (Player player : matches)
 			{
@@ -108,7 +122,11 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 	}
 
 	@Override
-	public final void run(final Server server, final User user, final String commandLabel, final Command cmd, final String[] args) throws Exception
+	public final void run(final Server server,
+						  final User user,
+						  final String commandLabel,
+						  final Command cmd,
+						  final String[] args) throws Exception
 	{
 		final Trade charge = new Trade(this.getName(), ess);
 		charge.isAffordableFor(user);
