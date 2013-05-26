@@ -615,11 +615,22 @@ public class Essentials extends JavaPlugin implements IEssentials
 	@Override
 	public int broadcastMessage(final IUser sender, final String message)
 	{
-		if (sender == null)
+		return broadcastMessage(sender, null, message);
+	}
+
+	@Override
+	public int broadcastMessage(final CommandSender sender, final String permission, final String message)
+	{
+		return broadcastMessage(null, permission, message);
+	}
+
+	private int broadcastMessage(final IUser sender, final String permission, final String message)
+	{
+		if (sender == null && permission == null)
 		{
 			return getServer().broadcastMessage(message);
 		}
-		if (sender.isHidden())
+		if (sender != null && sender.isHidden())
 		{
 			return 0;
 		}
@@ -628,7 +639,8 @@ public class Essentials extends JavaPlugin implements IEssentials
 		for (Player player : players)
 		{
 			final User user = getUser(player);
-			if (!user.isIgnoredPlayer(sender))
+			if ((permission == null && (sender == null || !user.isIgnoredPlayer(sender)))
+				|| (permission != null && user.isAuthorized(permission)))
 			{
 				player.sendMessage(message);
 			}

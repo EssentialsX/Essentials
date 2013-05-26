@@ -59,14 +59,7 @@ public class Commandtempban extends EssentialsCommand
 		user.setBanTimeout(banTimestamp);
 		user.setBanned(true);
 		user.kickPlayer(banReason);
-
-		for (Player onlinePlayer : server.getOnlinePlayers())
-		{
-			final User player = ess.getUser(onlinePlayer);
-			if (player.isAuthorized("essentials.ban.notify"))
-			{
-				onlinePlayer.sendMessage(_("playerBanned", senderName, user.getName(), banReason));
-			}
-		}
+		
+		ess.broadcastMessage(sender, "essentials.ban.notify", _("playerBanned", senderName, user.getName(), banReason));
 	}
 }

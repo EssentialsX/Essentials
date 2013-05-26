@@ -45,14 +45,7 @@ public class Commandunban extends EssentialsCommand
 
 		final String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
 		server.getLogger().log(Level.INFO, _("playerUnbanned", senderName, name));
-
-		for (Player onlinePlayer : server.getOnlinePlayers())
-		{
-			final User onlineUser = ess.getUser(onlinePlayer);
-			if (onlinePlayer == sender || onlineUser.isAuthorized("essentials.ban.notify"))
-			{
-				onlinePlayer.sendMessage(_("playerUnbanned", senderName, name));
-			}
-		}
+		
+		ess.broadcastMessage(sender, "essentials.ban.notify", _("playerUnbanned", senderName, name));
 	}
 }

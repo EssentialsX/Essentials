@@ -31,6 +31,8 @@ public interface IEssentials extends Plugin
 
 	int broadcastMessage(IUser sender, String message);
 
+	int broadcastMessage(CommandSender sender, String permission, String message);
+
 	ISettings getSettings();
 
 	BukkitScheduler getScheduler();
@@ -46,7 +48,7 @@ public interface IEssentials extends Plugin
 	Methods getPaymentMethod();
 
 	BukkitTask runTaskAsynchronously(Runnable run);
-	
+
 	BukkitTask runTaskLaterAsynchronously(Runnable run, long delay);
 
 	int scheduleSyncDelayedTask(Runnable run);
@@ -66,12 +68,12 @@ public interface IEssentials extends Plugin
 	ItemDb getItemDb();
 
 	UserMap getUserMap();
-	
+
 	Metrics getMetrics();
-	
+
 	void setMetrics(Metrics metrics);
-	
+
 	EssentialsTimer getTimer();
-	
+
 	List<String> getVanishedPlayers();
 }
