@@ -56,7 +56,7 @@ public class Commandkit extends EssentialsCommand
 			final String kitName = args[0].toLowerCase(Locale.ENGLISH);
 
 			final Map<String, Object> kit = ess.getSettings().getKit(kitName);
-			final List<String> items = Kit.getItems(userTo, kit);
+			final List<String> items = Kit.getItems(ess, userTo, kit);
 			Kit.expandItems(ess, userTo, items);
 
 			sender.sendMessage(_("kitGiveTo", kitName, userTo.getDisplayName()));
@@ -78,7 +78,7 @@ public class Commandkit extends EssentialsCommand
 			throw new Exception(_("noKitPermission", "essentials.kits." + kitName));
 		}
 
-		final List<String> items = Kit.getItems(userTo, kit);
+		final List<String> items = Kit.getItems(ess, userTo, kit);
 
 		Kit.checkTime(userFrom, kitName, kit);
 

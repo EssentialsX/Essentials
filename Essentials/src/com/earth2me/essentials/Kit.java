@@ -130,21 +130,35 @@ public class Kit
 		}
 	}
 
-	public static List<String> getItems(final User user, final Map<String, Object> kit) throws Exception
+	public static List<String> getItems(final IEssentials ess, final User user, final Map<String, Object> kit) throws Exception
 	{
 		if (kit == null)
 		{
 			throw new Exception(_("kitNotFound"));
 		}
-
 		try
 		{
-			return (List<String>)kit.get("items");
+			final List<String> itemList = new ArrayList<String>();
+			final Object kitItems = kit.get("items");
+			if (kitItems instanceof List)
+			{
+				for (Object item : (List)kitItems)
+				{
+					if (item instanceof String)
+					{
+						itemList.add(item.toString());
+						continue;
+					}
+					throw new Exception("Error parsing kit item: " + item.toString());
+				}
+				return itemList;
+			}
+			throw new Exception("Error parsing kit: " + kitItems.toString());
 		}
 		catch (Exception e)
 		{
-			user.sendMessage(_("kitError2"));
-			throw new Exception(_("kitErrorHelp"), e);
+			ess.getLogger().log(Level.WARNING, e.getMessage());
+			throw new Exception(_("kitError2"), e);
 		}
 	}
 
@@ -201,14 +215,7 @@ public class Kit
 		catch (Exception e)
 		{
 			user.updateInventory();
-			if (ess.getSettings().isDebug())
-			{
-				ess.getLogger().log(Level.WARNING, e.getMessage());
-			}
-			else
-			{
-				ess.getLogger().log(Level.WARNING, e.getMessage());
-			}
+			ess.getLogger().log(Level.WARNING, e.getMessage());
 			throw new Exception(_("kitError2"), e);
 		}
 	}

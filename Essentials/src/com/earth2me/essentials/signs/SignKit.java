@@ -60,7 +60,7 @@ public class SignKit extends EssentialsSign
 			{
 				final Map<String, Object> kit = ess.getSettings().getKit(kitName);
 				Kit.checkTime(player, kitName, kit);
-				final List<String> items = Kit.getItems(player, kit);
+				final List<String> items = Kit.getItems(ess, player, kit);
 				Kit.expandItems(ess, player, items);
 				charge.charge(player);
 				Trade.log("Sign", "Kit", "Interact", username, null, username, charge, sign.getBlock().getLocation(), ess);
