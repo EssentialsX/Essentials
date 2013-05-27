@@ -123,7 +123,7 @@ public class EssentialsSpawnPlayerListener implements Listener
 					try
 					{
 						final Map<String, Object> kit = ess.getSettings().getKit(kitName.toLowerCase(Locale.ENGLISH));
-						final List<String> items = Kit.getItems(user, kit);
+						final List<String> items = Kit.getItems(ess, user, kit);
 						Kit.expandItems(ess, user, items);
 					}
 					catch (Exception ex)
