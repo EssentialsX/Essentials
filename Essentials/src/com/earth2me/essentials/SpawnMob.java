@@ -10,11 +10,14 @@ import java.util.Random;
 import java.util.Set;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.*;
 import org.bukkit.entity.Skeleton.SkeletonType;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Colorable;
 
 
@@ -161,6 +164,7 @@ public class SpawnMob
 			{
 				mob = Mob.fromName(parts.get(i));
 				spawnedMob = mob.spawn(sloc.getWorld(), server, sloc);
+				defaultMobData(mob.getType(), spawnedMob);
 
 				if (data.get(i) != null)
 				{
@@ -173,6 +177,7 @@ public class SpawnMob
 			{
 				Mob mMob = Mob.fromName(parts.get(next));
 				spawnedMount = mMob.spawn(sloc.getWorld(), server, sloc);
+				defaultMobData(mMob.getType(), spawnedMount);
 
 				if (data.get(next) != null)
 				{
@@ -323,5 +328,36 @@ public class SpawnMob
 
 			}
 		}
+	}
+
+	private static void defaultMobData(final EntityType type, final Entity spawned)
+	{
+		if (type == EntityType.SKELETON)
+		{
+			final EntityEquipment invent = ((LivingEntity)spawned).getEquipment();
+			invent.setItemInHand(new ItemStack(Material.BOW, 1));
+			invent.setItemInHandDropChance(0.1f);
+
+			invent.setBoots(new ItemStack(Material.GOLD_BOOTS, 1));
+			invent.setBootsDropChance(0.0f);
+		}
+
+		if (type == EntityType.PIG_ZOMBIE)
+		{
+			final EntityEquipment invent = ((LivingEntity)spawned).getEquipment();
+			invent.setItemInHand(new ItemStack(Material.GOLD_SWORD, 1));
+			invent.setItemInHandDropChance(0.1f);
+
+			invent.setBoots(new ItemStack(Material.GOLD_BOOTS, 1));
+			invent.setBootsDropChance(0.0f);
+		}
+
+		if (type == EntityType.ZOMBIE)
+		{
+			final EntityEquipment invent = ((LivingEntity)spawned).getEquipment();
+			invent.setBoots(new ItemStack(Material.GOLD_BOOTS, 1));
+			invent.setBootsDropChance(0.0f);
+		}
+
 	}
 }
