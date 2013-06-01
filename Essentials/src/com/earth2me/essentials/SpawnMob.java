@@ -231,6 +231,48 @@ public class SpawnMob
 			data = data.replace("baby", "");
 		}
 
+		if (spawned instanceof LivingEntity)
+		{
+			//This should match all Living Entities but most mobs will just ignore the equipment.
+			if (data.contains("armor") || data.contains("armour"))
+			{
+				final EntityEquipment invent = ((LivingEntity)spawned).getEquipment();
+				if (data.contains("diamond"))
+				{
+					invent.setBoots(new ItemStack(Material.DIAMOND_BOOTS, 1));
+					invent.setLeggings(new ItemStack(Material.DIAMOND_BOOTS, 1));
+					invent.setChestplate(new ItemStack(Material.DIAMOND_BOOTS, 1));
+					invent.setHelmet(new ItemStack(Material.DIAMOND_BOOTS, 1));
+				}
+				else if (data.contains("gold"))
+				{
+					invent.setBoots(new ItemStack(Material.GOLD_BOOTS, 1));
+					invent.setLeggings(new ItemStack(Material.GOLD_BOOTS, 1));
+					invent.setChestplate(new ItemStack(Material.GOLD_BOOTS, 1));
+					invent.setHelmet(new ItemStack(Material.GOLD_BOOTS, 1));
+				}
+				else if (data.contains("leather"))
+				{
+					invent.setBoots(new ItemStack(Material.LEATHER_BOOTS, 1));
+					invent.setLeggings(new ItemStack(Material.LEATHER_BOOTS, 1));
+					invent.setChestplate(new ItemStack(Material.LEATHER_BOOTS, 1));
+					invent.setHelmet(new ItemStack(Material.LEATHER_BOOTS, 1));
+				}
+				else
+				{
+					invent.setBoots(new ItemStack(Material.IRON_BOOTS, 1));
+					invent.setLeggings(new ItemStack(Material.IRON_BOOTS, 1));
+					invent.setChestplate(new ItemStack(Material.IRON_BOOTS, 1));
+					invent.setHelmet(new ItemStack(Material.IRON_BOOTS, 1));
+				}
+				invent.setBootsDropChance(0f);
+				invent.setLeggingsDropChance(0f);
+				invent.setChestplateDropChance(0f);
+				invent.setHelmetDropChance(0f);
+			}
+
+		}
+
 		if (spawned instanceof Colorable)
 		{
 			final String color = data.toUpperCase(Locale.ENGLISH);
@@ -317,6 +359,27 @@ public class SpawnMob
 			if (data.contains("wither"))
 			{
 				((Skeleton)spawned).setSkeletonType(SkeletonType.WITHER);
+			}
+			if (data.contains("sword"))
+			{
+				final EntityEquipment invent = ((LivingEntity)spawned).getEquipment();
+				if (data.contains("diamond"))
+				{
+					invent.setItemInHand(new ItemStack(Material.DIAMOND_SWORD, 1));
+				}
+				else if (data.contains("gold"))
+				{
+					invent.setItemInHand(new ItemStack(Material.GOLD_SWORD, 1));
+				}
+				else if (data.contains("iron"))
+				{
+					invent.setItemInHand(new ItemStack(Material.IRON_SWORD, 1));
+				}
+				else
+				{
+					invent.setItemInHand(new ItemStack(Material.STONE_SWORD, 1));
+				}
+				invent.setItemInHandDropChance(0.1f);
 			}
 		}
 
