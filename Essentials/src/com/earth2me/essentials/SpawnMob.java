@@ -353,13 +353,9 @@ public class SpawnMob
 				((Zombie)spawned).setBaby(true);
 			}
 		}
-
-		if (type == EntityType.SKELETON)
+		
+		if (spawned instanceof Zombie || type == EntityType.SKELETON)
 		{
-			if (data.contains("wither"))
-			{
-				((Skeleton)spawned).setSkeletonType(SkeletonType.WITHER);
-			}
 			if (data.contains("sword"))
 			{
 				final EntityEquipment invent = ((LivingEntity)spawned).getEquipment();
@@ -380,6 +376,14 @@ public class SpawnMob
 					invent.setItemInHand(new ItemStack(Material.STONE_SWORD, 1));
 				}
 				invent.setItemInHandDropChance(0.1f);
+			}
+		}
+
+		if (type == EntityType.SKELETON)
+		{
+			if (data.contains("wither"))
+			{
+				((Skeleton)spawned).setSkeletonType(SkeletonType.WITHER);
 			}
 		}
 
