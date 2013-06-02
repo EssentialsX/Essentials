@@ -23,7 +23,7 @@ public class Commandmute extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		final User player = getPlayer(server, args, 0, true, true);
+		final User player = getPlayer(server, sender, args, 0);
 		if (sender instanceof Player && !player.isMuted() && player.isAuthorized("essentials.mute.exempt"))
 		{
 			throw new Exception(_("muteExempt"));
