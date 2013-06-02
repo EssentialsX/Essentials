@@ -287,7 +287,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 			User user = getUser(p);
 			if (user.isVanished())
 			{
-				user.toggleVanished();
+				user.setVanished(false);
 				p.sendMessage(_("unvanishedReload"));
 			}
 		}

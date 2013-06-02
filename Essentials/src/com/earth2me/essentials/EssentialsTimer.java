@@ -96,7 +96,9 @@ public class EssentialsTimer implements Runnable
 			final User user = ess.getUser(iterator.next());
 			if (user.getLastOnlineActivity() < currentTime && user.getLastOnlineActivity() > user.getLastLogout())
 			{
-				user.setLastLogout(user.getLastOnlineActivity());
+				if (!user.isHidden()) {
+					user.setLastLogout(user.getLastOnlineActivity());
+				}
 				iterator.remove();
 				continue;
 			}

@@ -40,7 +40,31 @@ public interface IUser extends Player
 
 	Location getHome(Location loc) throws Exception;
 
+	/**
+	 * 'Hidden' Represents when a player is hidden from others.
+	 * This status includes when the player is hidden via other supported plugins.
+	 * Use isVanished() if you want to check if a user is vanished by Essentials.
+	 * 
+	 * @return If the user is hidden or not
+	 * @see isVanished
+	 */
+	
 	boolean isHidden();
+	
+	void setHidden(boolean vanish);
+	
+	/**
+	 * 'Vanished' Represents when a player is hidden from others by Essentials.
+	 * This status does NOT include when the player is hidden via other plugins.
+	 * Use isHidden() if you want to check if a user is vanished by any supported plugin.
+	 * 
+	 * @return If the user is vanished or not
+	 * @see isHidden
+	 */
+	
+	boolean isVanished();
+	
+	void setVanished(boolean vanish);
 
 	Teleport getTeleport();
 

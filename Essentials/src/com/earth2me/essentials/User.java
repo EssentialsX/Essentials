@@ -44,6 +44,9 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		{
 			afkPosition = getLocation();
 		}
+		if (isOnline()) {
+			 lastOnlineActivity = System.currentTimeMillis();
+		}
 	}
 
 	User update(final Player base)
@@ -485,6 +488,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		return hidden;
 	}
 
+	@Override
 	public void setHidden(final boolean hidden)
 	{
 		this.hidden = hidden;
@@ -687,11 +691,13 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		return teleportInvulnerabilityTimestamp != 0 && teleportInvulnerabilityTimestamp >= System.currentTimeMillis();
 	}
 
+	@Override
 	public boolean isVanished()
 	{
 		return vanished;
 	}
 
+	@Override
 	public void setVanished(final boolean set)
 	{
 		vanished = set;
@@ -724,12 +730,6 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 				this.removePotionEffect(PotionEffectType.INVISIBILITY);
 			}
 		}
-	}
-
-	public void toggleVanished()
-	{
-		final boolean set = !vanished;
-		this.setVanished(set);
 	}
 
 	public boolean checkSignThrottle()

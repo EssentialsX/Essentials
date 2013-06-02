@@ -137,7 +137,7 @@ public class EssentialsPlayerListener implements Listener
 		}
 		if (user.isVanished())
 		{
-			user.toggleVanished();
+			user.setVanished(false);
 		}
 		user.setLogoutLocation();
 		if (user.isRecipeSee())

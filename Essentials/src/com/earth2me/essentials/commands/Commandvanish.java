@@ -17,14 +17,15 @@ public class Commandvanish extends EssentialsCommand
 	{
 		if (args.length < 1)
 		{
-			user.toggleVanished();
 			if (user.isVanished())
 			{
-				user.sendMessage(_("vanished"));
+				user.setVanished(false);
+				user.sendMessage(_("unvanished"));				
 			}
 			else
 			{
-				user.sendMessage(_("unvanished"));
+				user.setVanished(true);
+				user.sendMessage(_("vanished"));
 			}
 		}
 		else
