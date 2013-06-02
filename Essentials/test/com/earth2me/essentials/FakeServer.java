@@ -510,7 +510,7 @@ public class FakeServer implements Server
 			@Override
 			public boolean isOnline()
 			{
-				throw new UnsupportedOperationException("Not supported yet.");
+				return false;
 			}
 
 			@Override
