@@ -213,25 +213,7 @@ public class SpawnMob
 	{
 		data = data.toLowerCase(Locale.ENGLISH);
 
-		if (spawned instanceof Slime)
-		{
-			try
-			{
-				((Slime)spawned).setSize(Integer.parseInt(data));
-			}
-			catch (Exception e)
-			{
-				throw new Exception(_("slimeMalformedSize"), e);
-			}
-		}
-
-		if ((spawned instanceof Ageable) && data.contains("baby"))
-		{
-			((Ageable)spawned).setBaby();
-			data = data.replace("baby", "");
-		}
-
-		if (spawned instanceof LivingEntity)
+		if (spawned instanceof Zombie || type == EntityType.SKELETON)
 		{
 			//This should match all Living Entities but most mobs will just ignore the equipment.
 			if (data.contains("armor") || data.contains("armour"))
@@ -258,6 +240,10 @@ public class SpawnMob
 					invent.setChestplate(new ItemStack(Material.LEATHER_BOOTS, 1));
 					invent.setHelmet(new ItemStack(Material.LEATHER_BOOTS, 1));
 				}
+				else if (data.contains("no"))
+				{
+					invent.clear();
+				}
 				else
 				{
 					invent.setBoots(new ItemStack(Material.IRON_BOOTS, 1));
@@ -271,6 +257,24 @@ public class SpawnMob
 				invent.setHelmetDropChance(0f);
 			}
 
+		}
+		
+		if (spawned instanceof Slime)
+		{
+			try
+			{
+				((Slime)spawned).setSize(Integer.parseInt(data));
+			}
+			catch (Exception e)
+			{
+				throw new Exception(_("slimeMalformedSize"), e);
+			}
+		}
+
+		if ((spawned instanceof Ageable) && data.contains("baby"))
+		{
+			((Ageable)spawned).setBaby();
+			data = data.replace("baby", "");
 		}
 
 		if (spawned instanceof Colorable)
