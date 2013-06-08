@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.api.IJails;
+import com.earth2me.essentials.api.IWarps;
 import com.earth2me.essentials.metrics.Metrics;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
@@ -39,7 +40,7 @@ public interface IEssentials extends Plugin
 
 	IJails getJails();
 
-	Warps getWarps();
+	IWarps getWarps();
 
 	Worth getWorth();
 

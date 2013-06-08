@@ -1,5 +1,6 @@
 package com.earth2me.essentials.api;
 
+import com.earth2me.essentials.IConf;
 import java.io.File;
 import java.util.Collection;
 
@@ -7,7 +8,7 @@ import com.earth2me.essentials.commands.WarpNotFoundException;
 import org.bukkit.Location;
 
 
-public interface IWarps
+public interface IWarps extends IConf
 {
 	/**
 	 * Get a warp by name
@@ -25,6 +26,13 @@ public interface IWarps
 	 * @return - A {@link Collection} of warps
 	 */
 	Collection<String> getList();
+
+	/**
+	 * Gets the number of warps
+	 *
+	 * @return the size of the list of warps
+	 */
+	int getCount();
 
 	/**
 	 * Delete a warp from the warp DB
@@ -51,13 +59,11 @@ public interface IWarps
 	boolean isEmpty();
 
 	/**
-	 * Get a warp file
-	 * note: this is not yet implemented, as 3.x uses different storage methods
+	 * Get a warp file note: this is not yet implemented, as 3.x uses different storage methods
 	 *
 	 * @param name - name of file
 	 * @return - an instance of the file
 	 * @throws InvalidNameException - When the file is not found
 	 */
 	File getWarpFile(String name) throws InvalidNameException;
-
 }

@@ -4,7 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
-import com.earth2me.essentials.Warps;
+import com.earth2me.essentials.api.IWarps;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -60,7 +60,7 @@ public class Commandwarp extends EssentialsCommand
 			throw new NoChargeException();
 		}
 		User otherUser = getPlayer(server, args, 1, true, false);
-		otherUser.getTeleport().warp(args[0], null, TeleportCause.COMMAND);
+		otherUser.getTeleport().warp(otherUser, args[0], null, TeleportCause.COMMAND);
 		throw new NoChargeException();
 
 	}
@@ -68,12 +68,12 @@ public class Commandwarp extends EssentialsCommand
 	//TODO: Use one of the new text classes, like /help ?
 	private void warpList(final CommandSender sender, final String[] args) throws Exception
 	{
-		final Warps warps = ess.getWarps();
+		final IWarps warps = ess.getWarps();
 		if (warps.isEmpty())
 		{
 			throw new Exception(_("noWarpsDefined"));
 		}
-		final List<String> warpNameList = new ArrayList<String>(warps.getWarpNames());
+		final List<String> warpNameList = new ArrayList<String>(warps.getList());
 
 		if (sender instanceof User)
 		{
@@ -118,6 +118,6 @@ public class Commandwarp extends EssentialsCommand
 		{
 			throw new Exception(_("warpUsePermission"));
 		}
-		user.getTeleport().warp(name, charge, TeleportCause.COMMAND);
+		owner.getTeleport().warp(user, name, charge, TeleportCause.COMMAND);
 	}
 }

@@ -22,13 +22,13 @@ public class Commandspawn extends EssentialsCommand
 
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
-	{	
+	{
 		final Trade charge = new Trade(this.getName(), ess);
 		charge.isAffordableFor(user);
 		if (args.length > 0 && user.isAuthorized("essentials.spawn.others"))
 		{
 			final User otherUser = getPlayer(server, user, args, 0);
-			respawn(otherUser, charge);
+			respawn(user, otherUser, charge);
 			if (!otherUser.equals(user))
 			{
 				otherUser.sendMessage(_("teleportAtoB", user.getDisplayName(), "spawn"));
@@ -36,8 +36,8 @@ public class Commandspawn extends EssentialsCommand
 			}
 		}
 		else
-		{	
-			respawn(user, charge);
+		{
+			respawn(user, user, charge);
 		}
 		throw new NoChargeException();
 	}
@@ -50,14 +50,22 @@ public class Commandspawn extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 		final User user = getPlayer(server, args, 0, true, false);
-		respawn(user, null);
+		respawn(null, user, null);
 		user.sendMessage(_("teleportAtoB", Console.NAME, "spawn"));
 		sender.sendMessage(_("teleporting"));
 	}
-	
-	private void respawn (final User user, final Trade charge) throws Exception {
+
+	private void respawn(final User teleportOwner, final User teleportee, final Trade charge) throws Exception
+	{
 		final SpawnStorage spawns = (SpawnStorage)this.module;
-		final Location spawn = spawns.getSpawn(user.getGroup());
-		user.getTeleport().teleport(spawn, charge, TeleportCause.COMMAND);	
+		final Location spawn = spawns.getSpawn(teleportee.getGroup());
+		if (teleportOwner == null)
+		{
+			teleportee.getTeleport().now(spawn, false, TeleportCause.COMMAND);
+		}
+		else
+		{
+			teleportOwner.getTeleport().teleportPlayer(teleportee, spawn, charge, TeleportCause.COMMAND);
+		}
 	}
 }

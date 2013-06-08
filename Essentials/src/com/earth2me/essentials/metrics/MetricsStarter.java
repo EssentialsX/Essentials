@@ -115,7 +115,7 @@ public class MetricsStarter implements Runnable
 				@Override
 				public int getValue()
 				{
-					return ess.getWarps().getWarpNames().size();
+					return ess.getWarps().getCount();
 				}
 			});
 
@@ -134,7 +134,7 @@ public class MetricsStarter implements Runnable
 			{
 				enabledGraph.addPlotter(new SimplePlotter("Kits"));
 			}
-			if (ess.getWarps().getWarpNames().size() > 0)
+			if (ess.getWarps().getCount() > 0)
 			{
 				enabledGraph.addPlotter(new SimplePlotter("Warps"));
 			}

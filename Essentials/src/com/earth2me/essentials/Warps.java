@@ -38,7 +38,8 @@ public class Warps implements IConf, IWarps
 		return warpPoints.isEmpty();
 	}
 
-	public Collection<String> getWarpNames()
+	@Override
+	public Collection<String> getList()
 	{
 		final List<String> keys = new ArrayList<String>();
 		for (StringIgnoreCase stringIgnoreCase : warpPoints.keySet())
@@ -87,7 +88,8 @@ public class Warps implements IConf, IWarps
 		}
 	}
 
-	public void delWarp(String name) throws Exception
+	@Override
+	public void removeWarp(String name) throws Exception
 	{
 		EssentialsConf conf = warpPoints.get(new StringIgnoreCase(name));
 		if (conf == null)
@@ -132,25 +134,17 @@ public class Warps implements IConf, IWarps
 		}
 	}
 
-	// This is for api support, and so 3.x will not break this api
-	@Override
-	public Collection<String> getList()
-	{
-		return getWarpNames();
-	}
-
-	// This is for api support, and so 3.x will not break this api
-	@Override
-	public void removeWarp(String name) throws Exception
-	{
-		delWarp(name);
-	}
-
 	//This is here for future 3.x api support. Not implemented here becasue storage is handled differently
 	@Override
 	public File getWarpFile(String name) throws InvalidNameException
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public int getCount()
+	{
+		return getList().size();
 	}
 
 	private static class StringIgnoreCase

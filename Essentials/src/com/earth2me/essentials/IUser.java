@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.api.ITeleport;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import java.math.BigDecimal;
 import java.util.Map;
@@ -29,7 +30,7 @@ public interface IUser extends Player
 	void takeMoney(BigDecimal value);
 
 	void giveMoney(BigDecimal value);
-	
+
 	boolean canAfford(BigDecimal value);
 
 	String getGroup();
@@ -41,50 +42,47 @@ public interface IUser extends Player
 	Location getHome(Location loc) throws Exception;
 
 	/**
-	 * 'Hidden' Represents when a player is hidden from others.
-	 * This status includes when the player is hidden via other supported plugins.
-	 * Use isVanished() if you want to check if a user is vanished by Essentials.
-	 * 
+	 * 'Hidden' Represents when a player is hidden from others. This status includes when the player is hidden via other
+	 * supported plugins. Use isVanished() if you want to check if a user is vanished by Essentials.
+	 *
 	 * @return If the user is hidden or not
 	 * @see isVanished
 	 */
-	
 	boolean isHidden();
-	
+
 	void setHidden(boolean vanish);
-	
+
 	/**
-	 * 'Vanished' Represents when a player is hidden from others by Essentials.
-	 * This status does NOT include when the player is hidden via other plugins.
-	 * Use isHidden() if you want to check if a user is vanished by any supported plugin.
-	 * 
+	 * 'Vanished' Represents when a player is hidden from others by Essentials. This status does NOT include when the
+	 * player is hidden via other plugins. Use isHidden() if you want to check if a user is vanished by any supported
+	 * plugin.
+	 *
 	 * @return If the user is vanished or not
 	 * @see isHidden
 	 */
-	
 	boolean isVanished();
-	
+
 	void setVanished(boolean vanish);
 
-	Teleport getTeleport();
+	ITeleport getTeleport();
 
 	void setJail(String jail);
-	
+
 	boolean isIgnoreExempt();
 
 	boolean isAfk();
 
 	void setAfk(final boolean set);
-	
+
 	void setLogoutLocation();
-	
+
 	Location getLogoutLocation();
-	
+
 	void setConfigProperty(String node, Object object);
-	
+
 	Set<String> getConfigKeys();
-	
+
 	Map<String, Object> getConfigMap();
-	
+
 	Map<String, Object> getConfigMap(String node);
 }

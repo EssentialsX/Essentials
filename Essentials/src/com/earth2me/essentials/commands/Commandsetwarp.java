@@ -3,7 +3,7 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.Util;
-import com.earth2me.essentials.Warps;
+import com.earth2me.essentials.api.IWarps;
 import org.bukkit.Location;
 import org.bukkit.Server;
 
@@ -29,7 +29,7 @@ public class Commandsetwarp extends EssentialsCommand
 		}
 
 		final Location loc = user.getLocation();
-		final Warps warps = ess.getWarps();
+		final IWarps warps = ess.getWarps();
 		Location warpLoc = null;
 
 		try
