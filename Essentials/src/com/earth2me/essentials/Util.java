@@ -234,48 +234,48 @@ public class Util
 		return c.getTimeInMillis();
 	}
 	// The player can stand inside these materials 
-	private static final Set<Integer> UNSAFE_MATERIALS = new HashSet<Integer>();
+	private static final Set<Integer> HOLLOW_MATERIALS = new HashSet<Integer>();
 	private static final HashSet<Byte> TRANSPARENT_MATERIALS = new HashSet<Byte>();
 
 	static
 	{
-		UNSAFE_MATERIALS.add(Material.AIR.getId());
-		UNSAFE_MATERIALS.add(Material.SAPLING.getId());
-		UNSAFE_MATERIALS.add(Material.POWERED_RAIL.getId());
-		UNSAFE_MATERIALS.add(Material.DETECTOR_RAIL.getId());
-		UNSAFE_MATERIALS.add(Material.LONG_GRASS.getId());
-		UNSAFE_MATERIALS.add(Material.DEAD_BUSH.getId());
-		UNSAFE_MATERIALS.add(Material.YELLOW_FLOWER.getId());
-		UNSAFE_MATERIALS.add(Material.RED_ROSE.getId());
-		UNSAFE_MATERIALS.add(Material.BROWN_MUSHROOM.getId());
-		UNSAFE_MATERIALS.add(Material.RED_MUSHROOM.getId());
-		UNSAFE_MATERIALS.add(Material.TORCH.getId());
-		UNSAFE_MATERIALS.add(Material.REDSTONE_WIRE.getId());
-		UNSAFE_MATERIALS.add(Material.SEEDS.getId());
-		UNSAFE_MATERIALS.add(Material.SIGN_POST.getId());
-		UNSAFE_MATERIALS.add(Material.WOODEN_DOOR.getId());
-		UNSAFE_MATERIALS.add(Material.LADDER.getId());
-		UNSAFE_MATERIALS.add(Material.RAILS.getId());
-		UNSAFE_MATERIALS.add(Material.WALL_SIGN.getId());
-		UNSAFE_MATERIALS.add(Material.LEVER.getId());
-		UNSAFE_MATERIALS.add(Material.STONE_PLATE.getId());
-		UNSAFE_MATERIALS.add(Material.IRON_DOOR_BLOCK.getId());
-		UNSAFE_MATERIALS.add(Material.WOOD_PLATE.getId());
-		UNSAFE_MATERIALS.add(Material.REDSTONE_TORCH_OFF.getId());
-		UNSAFE_MATERIALS.add(Material.REDSTONE_TORCH_ON.getId());
-		UNSAFE_MATERIALS.add(Material.STONE_BUTTON.getId());
-		UNSAFE_MATERIALS.add(Material.SNOW.getId());
-		UNSAFE_MATERIALS.add(Material.SUGAR_CANE_BLOCK.getId());
-		UNSAFE_MATERIALS.add(Material.DIODE_BLOCK_OFF.getId());
-		UNSAFE_MATERIALS.add(Material.DIODE_BLOCK_ON.getId());
-		UNSAFE_MATERIALS.add(Material.PUMPKIN_STEM.getId());
-		UNSAFE_MATERIALS.add(Material.MELON_STEM.getId());
-		UNSAFE_MATERIALS.add(Material.VINE.getId());
-		UNSAFE_MATERIALS.add(Material.FENCE_GATE.getId());
-		UNSAFE_MATERIALS.add(Material.WATER_LILY.getId());
-		UNSAFE_MATERIALS.add(Material.NETHER_WARTS.getId());
+		HOLLOW_MATERIALS.add(Material.AIR.getId());
+		HOLLOW_MATERIALS.add(Material.SAPLING.getId());
+		HOLLOW_MATERIALS.add(Material.POWERED_RAIL.getId());
+		HOLLOW_MATERIALS.add(Material.DETECTOR_RAIL.getId());
+		HOLLOW_MATERIALS.add(Material.LONG_GRASS.getId());
+		HOLLOW_MATERIALS.add(Material.DEAD_BUSH.getId());
+		HOLLOW_MATERIALS.add(Material.YELLOW_FLOWER.getId());
+		HOLLOW_MATERIALS.add(Material.RED_ROSE.getId());
+		HOLLOW_MATERIALS.add(Material.BROWN_MUSHROOM.getId());
+		HOLLOW_MATERIALS.add(Material.RED_MUSHROOM.getId());
+		HOLLOW_MATERIALS.add(Material.TORCH.getId());
+		HOLLOW_MATERIALS.add(Material.REDSTONE_WIRE.getId());
+		HOLLOW_MATERIALS.add(Material.SEEDS.getId());
+		HOLLOW_MATERIALS.add(Material.SIGN_POST.getId());
+		HOLLOW_MATERIALS.add(Material.WOODEN_DOOR.getId());
+		HOLLOW_MATERIALS.add(Material.LADDER.getId());
+		HOLLOW_MATERIALS.add(Material.RAILS.getId());
+		HOLLOW_MATERIALS.add(Material.WALL_SIGN.getId());
+		HOLLOW_MATERIALS.add(Material.LEVER.getId());
+		HOLLOW_MATERIALS.add(Material.STONE_PLATE.getId());
+		HOLLOW_MATERIALS.add(Material.IRON_DOOR_BLOCK.getId());
+		HOLLOW_MATERIALS.add(Material.WOOD_PLATE.getId());
+		HOLLOW_MATERIALS.add(Material.REDSTONE_TORCH_OFF.getId());
+		HOLLOW_MATERIALS.add(Material.REDSTONE_TORCH_ON.getId());
+		HOLLOW_MATERIALS.add(Material.STONE_BUTTON.getId());
+		HOLLOW_MATERIALS.add(Material.SNOW.getId());
+		HOLLOW_MATERIALS.add(Material.SUGAR_CANE_BLOCK.getId());
+		HOLLOW_MATERIALS.add(Material.DIODE_BLOCK_OFF.getId());
+		HOLLOW_MATERIALS.add(Material.DIODE_BLOCK_ON.getId());
+		HOLLOW_MATERIALS.add(Material.PUMPKIN_STEM.getId());
+		HOLLOW_MATERIALS.add(Material.MELON_STEM.getId());
+		HOLLOW_MATERIALS.add(Material.VINE.getId());
+		HOLLOW_MATERIALS.add(Material.FENCE_GATE.getId());
+		HOLLOW_MATERIALS.add(Material.WATER_LILY.getId());
+		HOLLOW_MATERIALS.add(Material.NETHER_WARTS.getId());
 
-		for (Integer integer : UNSAFE_MATERIALS)
+		for (Integer integer : HOLLOW_MATERIALS)
 		{
 			TRANSPARENT_MATERIALS.add(integer.byteValue());
 		}
@@ -407,7 +407,7 @@ public class Util
 
 	private static boolean isBlockAboveAir(final World world, final int x, final int y, final int z)
 	{
-		return UNSAFE_MATERIALS.contains(world.getBlockAt(x, y - 1, z).getType().getId());
+		return HOLLOW_MATERIALS.contains(world.getBlockAt(x, y - 1, z).getType().getId());
 	}
 
 	public static boolean isBlockUnsafe(final World world, final int x, final int y, final int z)
@@ -437,8 +437,8 @@ public class Util
 			return true;
 		}
 
-		if ((!UNSAFE_MATERIALS.contains(world.getBlockAt(x, y, z).getType().getId()))
-			|| (!UNSAFE_MATERIALS.contains(world.getBlockAt(x, y + 1, z).getType().getId())))
+		if ((!HOLLOW_MATERIALS.contains(world.getBlockAt(x, y, z).getType().getId()))
+			|| (!HOLLOW_MATERIALS.contains(world.getBlockAt(x, y + 1, z).getType().getId())))
 		{
 			return true;
 		}

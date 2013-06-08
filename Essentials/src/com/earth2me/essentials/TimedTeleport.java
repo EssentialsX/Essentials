@@ -1,7 +1,6 @@
 package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.Teleport.Target;
 import org.bukkit.Location;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
@@ -23,16 +22,15 @@ public class TimedTeleport implements Runnable
 	private long timer_initX;
 	private long timer_initY;
 	private long timer_initZ;
-	private Target timer_teleportTarget;
+	private ITarget timer_teleportTarget;
 	private boolean timer_respawn;
 	private boolean timer_canMove;
 	private Trade timer_chargeFor;
-	
 	private TeleportCause timer_cause;
 
-	public TimedTeleport(IUser user, IEssentials ess, Teleport teleport, long delay, IUser teleportUser, Target target, Trade chargeFor, TeleportCause cause, boolean respawn)
+	public TimedTeleport(IUser user, IEssentials ess, Teleport teleport, long delay, IUser teleportUser, ITarget target, Trade chargeFor, TeleportCause cause, boolean respawn)
 	{
-	
+
 		this.teleportOwner = user;
 		this.ess = ess;
 		this.teleport = teleport;

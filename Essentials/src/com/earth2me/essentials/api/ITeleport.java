@@ -1,7 +1,6 @@
 package com.earth2me.essentials.api;
 
 import com.earth2me.essentials.IUser;
-import com.earth2me.essentials.Teleport.Target;
 import com.earth2me.essentials.Trade;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

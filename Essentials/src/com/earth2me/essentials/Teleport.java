@@ -11,34 +11,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 
 public class Teleport implements ITeleport
-{
-	public class Target
-	{
-		private final Location location;
-		private final String name;
-
-		Target(Location location)
-		{
-			this.location = location;
-			this.name = null;
-		}
-
-		Target(Player entity)
-		{
-			this.name = entity.getName();
-			this.location = null;
-		}
-
-		public Location getLocation()
-		{
-			if (this.name != null)
-			{
-
-				return ess.getServer().getPlayerExact(name).getLocation();
-			}
-			return location;
-		}
-	}
+{	
 	private final IUser teleportOwner;
 	private final IEssentials ess;
 	private TimedTeleport timedTeleport;
@@ -103,7 +76,7 @@ public class Teleport implements ITeleport
 		{
 			cooldown(false);
 		}
-		now(teleportOwner, new Target(loc), cause);
+		now(teleportOwner, new LocationTarget(loc), cause);
 	}
 
 	@Override
@@ -113,10 +86,10 @@ public class Teleport implements ITeleport
 		{
 			cooldown(false);
 		}
-		now(teleportOwner, new Target(entity), cause);
+		now(teleportOwner, new PlayerTarget(entity), cause);
 	}
 
-	protected void now(IUser teleportee, Target target, TeleportCause cause) throws Exception
+	protected void now(IUser teleportee, ITarget target, TeleportCause cause) throws Exception
 	{
 		cancel(false);
 		teleportee.setLastLocation();
@@ -134,28 +107,28 @@ public class Teleport implements ITeleport
 	@Override
 	public void teleport(Location loc, Trade chargeFor, TeleportCause cause) throws Exception
 	{
-		teleport(teleportOwner, new Target(loc), chargeFor, cause);
+		teleport(teleportOwner, new LocationTarget(loc), chargeFor, cause);
 	}
 
 	@Override
 	public void teleport(Player entity, Trade chargeFor, TeleportCause cause) throws Exception
 	{
-		teleport(teleportOwner, new Target(entity), chargeFor, cause);
+		teleport(teleportOwner, new PlayerTarget(entity), chargeFor, cause);
 	}
 
 	@Override
 	public void teleportPlayer(IUser teleportee, Location loc, Trade chargeFor, TeleportCause cause) throws Exception
 	{
-		teleport(teleportee, new Target(loc), chargeFor, cause);
+		teleport(teleportee, new LocationTarget(loc), chargeFor, cause);
 	}
 
 	@Override
 	public void teleportPlayer(IUser teleportee, Player entity, Trade chargeFor, TeleportCause cause) throws Exception
 	{
-		teleport(teleportee, new Target(entity), chargeFor, cause);
+		teleport(teleportee, new PlayerTarget(entity), chargeFor, cause);
 	}
 
-	private void teleport(IUser teleportee, Target target, Trade chargeFor, TeleportCause cause) throws Exception
+	private void teleport(IUser teleportee, ITarget target, Trade chargeFor, TeleportCause cause) throws Exception
 	{
 		double delay = ess.getSettings().getTeleportDelay();
 
@@ -185,7 +158,7 @@ public class Teleport implements ITeleport
 	@Override
 	public void teleportToMe(IUser otherUser, Trade chargeFor, TeleportCause cause) throws Exception
 	{
-		Target target = new Target(teleportOwner);
+		ITarget target = new PlayerTarget(teleportOwner);
 		teleport(otherUser, target, chargeFor, cause);
 	}
 
@@ -221,7 +194,7 @@ public class Teleport implements ITeleport
 		Location bed = player.getBedSpawnLocation();
 		if (bed != null)
 		{
-			now(teleportee, new Target(bed), cause);
+			now(teleportee, new LocationTarget(bed), cause);
 		}
 		else
 		{
@@ -231,7 +204,7 @@ public class Teleport implements ITeleport
 			}
 			final PlayerRespawnEvent pre = new PlayerRespawnEvent(player, player.getWorld().getSpawnLocation(), false);
 			ess.getServer().getPluginManager().callEvent(pre);
-			now(teleportee, new Target(pre.getRespawnLocation()), cause);
+			now(teleportee, new LocationTarget(pre.getRespawnLocation()), cause);
 		}
 	}
 
@@ -241,28 +214,28 @@ public class Teleport implements ITeleport
 	{
 		Location loc = ess.getWarps().getWarp(warp);
 		teleportee.sendMessage(_("warpingTo", warp));
-		teleport(teleportee, new Target(loc), chargeFor, cause);
+		teleport(teleportee, new LocationTarget(loc), chargeFor, cause);
 	}
 
 	//The back function is a wrapper used to teleportPlayer a player /back to their previous location.
 	@Override
 	public void back(Trade chargeFor) throws Exception
 	{
-		teleport(teleportOwner, new Target(teleportOwner.getLastLocation()), chargeFor, TeleportCause.COMMAND);
+		teleport(teleportOwner, new LocationTarget(teleportOwner.getLastLocation()), chargeFor, TeleportCause.COMMAND);
 	}
 
 	//This function is used to throw a user back after a jail sentence
 	@Override
 	public void back() throws Exception
 	{
-		now(teleportOwner, new Target(teleportOwner.getLastLocation()), TeleportCause.COMMAND);
+		now(teleportOwner, new LocationTarget(teleportOwner.getLastLocation()), TeleportCause.COMMAND);
 	}
 
 	//This function handles teleporting to /home
 	@Override
 	public void home(Location loc, Trade chargeFor) throws Exception
 	{
-		teleport(teleportOwner, new Target(loc), chargeFor, TeleportCause.COMMAND);
+		teleport(teleportOwner, new LocationTarget(loc), chargeFor, TeleportCause.COMMAND);
 	}
 
 	//If we need to cancelTimer a pending teleportPlayer call this method
@@ -275,7 +248,7 @@ public class Teleport implements ITeleport
 		}
 	}
 
-	private void initTimer(long delay, IUser teleportUser, Target target, Trade chargeFor, TeleportCause cause, boolean respawn)
+	private void initTimer(long delay, IUser teleportUser, ITarget target, Trade chargeFor, TeleportCause cause, boolean respawn)
 	{
 		timedTeleport = new TimedTeleport(teleportOwner, ess, this, delay, teleportUser, target, chargeFor, cause, respawn);
 	}
