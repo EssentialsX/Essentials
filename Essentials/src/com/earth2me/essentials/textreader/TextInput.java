@@ -2,7 +2,7 @@ package com.earth2me.essentials.textreader;
 
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
 import java.io.*;
 import java.lang.ref.SoftReference;
 import java.util.*;
@@ -25,10 +25,10 @@ public class TextInput implements IText
 		if (sender instanceof Player)
 		{
 			final User user = ess.getUser(sender);
-			file = new File(ess.getDataFolder(), filename + "_" + Util.sanitizeFileName(user.getName()) + ".txt");
+			file = new File(ess.getDataFolder(), filename + "_" + StringUtil.sanitizeFileName(user.getName()) + ".txt");
 			if (!file.exists())
 			{
-				file = new File(ess.getDataFolder(), filename + "_" + Util.sanitizeFileName(user.getGroup()) + ".txt");
+				file = new File(ess.getDataFolder(), filename + "_" + StringUtil.sanitizeFileName(user.getGroup()) + ".txt");
 			}
 		}
 		if (file == null || !file.exists())

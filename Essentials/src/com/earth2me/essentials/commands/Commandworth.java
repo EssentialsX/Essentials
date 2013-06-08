@@ -2,7 +2,8 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.NumberUtil;
 import java.math.BigDecimal;
 import java.util.Locale;
 import org.bukkit.Server;
@@ -54,14 +55,14 @@ public class Commandworth extends EssentialsCommand
 						 ? _("worthMeta",
 							 iStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""),
 							 iStack.getDurability(),
-							 Util.displayCurrency(result, ess),
+							 NumberUtil.displayCurrency(result, ess),
 							 amount,
-							 Util.displayCurrency(worth, ess))
+							 NumberUtil.displayCurrency(worth, ess))
 						 : _("worth",
 							 iStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""),
-							 Util.displayCurrency(result, ess),
+							 NumberUtil.displayCurrency(result, ess),
 							 amount,
-							 Util.displayCurrency(worth, ess)));
+							 NumberUtil.displayCurrency(worth, ess)));
 	}
 
 	@Override
@@ -100,13 +101,13 @@ public class Commandworth extends EssentialsCommand
 						   ? _("worthMeta",
 							   iStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""),
 							   iStack.getDurability(),
-							   Util.displayCurrency(result, ess),
+							   NumberUtil.displayCurrency(result, ess),
 							   amount,
-							   Util.displayCurrency(worth, ess))
+							   NumberUtil.displayCurrency(worth, ess))
 						   : _("worth",
 							   iStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""),
-							   Util.displayCurrency(result, ess),
+							   NumberUtil.displayCurrency(result, ess),
 							   amount,
-							   Util.displayCurrency(worth, ess)));
+							   NumberUtil.displayCurrency(worth, ess)));
 	}
 }

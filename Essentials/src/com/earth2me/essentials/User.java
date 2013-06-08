@@ -3,6 +3,9 @@ package com.earth2me.essentials;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.register.payment.Method;
+import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.FormatUtil;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -117,7 +120,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			cooldownTime.add(Calendar.MILLISECOND, (int)((cooldown * 1000.0) % 1000.0));
 			if (cooldownTime.after(now) && !isAuthorized("essentials.heal.cooldown.bypass"))
 			{
-				throw new Exception(_("timeBeforeHeal", Util.formatDateDiff(cooldownTime.getTimeInMillis())));
+				throw new Exception(_("timeBeforeHeal", DateUtil.formatDateDiff(cooldownTime.getTimeInMillis())));
 			}
 		}
 		setLastHealTimestamp(now.getTimeInMillis());
@@ -136,10 +139,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			return;
 		}
 		setMoney(getMoney().add(value));
-		sendMessage(_("addedToAccount", Util.displayCurrency(value, ess)));
+		sendMessage(_("addedToAccount", NumberUtil.displayCurrency(value, ess)));
 		if (initiator != null)
 		{
-			initiator.sendMessage(_("addedToOthersAccount", Util.displayCurrency(value, ess), this.getDisplayName(), Util.displayCurrency(getMoney(), ess)));
+			initiator.sendMessage(_("addedToOthersAccount", NumberUtil.displayCurrency(value, ess), this.getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess)));
 		}
 	}
 
@@ -153,8 +156,8 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		{
 			setMoney(getMoney().subtract(value));
 			reciever.setMoney(reciever.getMoney().add(value));
-			sendMessage(_("moneySentTo", Util.displayCurrency(value, ess), reciever.getDisplayName()));
-			reciever.sendMessage(_("moneyRecievedFrom", Util.displayCurrency(value, ess), getDisplayName()));
+			sendMessage(_("moneySentTo", NumberUtil.displayCurrency(value, ess), reciever.getDisplayName()));
+			reciever.sendMessage(_("moneyRecievedFrom", NumberUtil.displayCurrency(value, ess), getDisplayName()));
 		}
 		else
 		{
@@ -175,10 +178,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 			return;
 		}
 		setMoney(getMoney().subtract(value));
-		sendMessage(_("takenFromAccount", Util.displayCurrency(value, ess)));
+		sendMessage(_("takenFromAccount", NumberUtil.displayCurrency(value, ess)));
 		if (initiator != null)
 		{
-			initiator.sendMessage(_("takenFromOthersAccount", Util.displayCurrency(value, ess), this.getDisplayName(), Util.displayCurrency(getMoney(), ess)));
+			initiator.sendMessage(_("takenFromOthersAccount", NumberUtil.displayCurrency(value, ess), this.getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess)));
 		}
 	}
 
@@ -222,7 +225,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 	@Override
 	public int compareTo(final User other)
 	{
-		return Util.stripFormat(this.getDisplayName()).compareToIgnoreCase(Util.stripFormat(other.getDisplayName()));
+		return FormatUtil.stripFormat(this.getDisplayName()).compareToIgnoreCase(FormatUtil.stripFormat(other.getDisplayName()));
 	}
 
 	@Override
@@ -336,11 +339,11 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		}
 		if (!longnick && output.length() > 16)
 		{
-			output = Util.lastCode(strPrefix) + nickname;
+			output = FormatUtil.lastCode(strPrefix) + nickname;
 		}
 		if (!longnick && output.length() > 16)
 		{
-			output = Util.lastCode(strPrefix) + nickname.substring(0, 14);
+			output = FormatUtil.lastCode(strPrefix) + nickname.substring(0, 14);
 		}
 		if (output.charAt(output.length() - 1) == '§')
 		{

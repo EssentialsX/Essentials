@@ -6,6 +6,7 @@ import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.signs.Signs;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.SimpleTextInput;
+import com.earth2me.essentials.utils.FormatUtil;
 import java.io.File;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
@@ -411,7 +412,7 @@ public class Settings implements ISettings
 		{
 			String format = config.getString("chat.group-formats." + (group == null ? "Default" : group),
 											 config.getString("chat.format", "&7[{GROUP}]&r {DISPLAYNAME}&7:&r {MESSAGE}"));
-			format = Util.replaceFormat(format);
+			format = FormatUtil.replaceFormat(format);
 			format = format.replace("{DISPLAYNAME}", "%1$s");
 			format = format.replace("{GROUP}", "{0}");
 			format = format.replace("{MESSAGE}", "%2$s");
@@ -434,7 +435,7 @@ public class Settings implements ISettings
 	@Override
 	public IText getAnnounceNewPlayerFormat()
 	{
-		return new SimpleTextInput(Util.replaceFormat(config.getString("newbies.announce-format", "&dWelcome {DISPLAYNAME} to the server!")));
+		return new SimpleTextInput(FormatUtil.replaceFormat(config.getString("newbies.announce-format", "&dWelcome {DISPLAYNAME} to the server!")));
 	}
 
 	@Override

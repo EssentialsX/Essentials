@@ -4,7 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Kit;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -31,12 +31,12 @@ public class Commandkit extends EssentialsCommand
 		else if (args.length > 1 && user.isAuthorized("essentials.kit.others"))
 		{
 			final User userTo = getPlayer(server, user, args, 1);
-			final String kitName = Util.sanitizeString(args[0].toLowerCase(Locale.ENGLISH)).trim();
+			final String kitName = StringUtil.sanitizeString(args[0].toLowerCase(Locale.ENGLISH)).trim();
 			giveKit(userTo, user, kitName);
 		}
 		else
 		{
-			final String kitName = Util.sanitizeString(args[0].toLowerCase(Locale.ENGLISH)).trim();
+			final String kitName = StringUtil.sanitizeString(args[0].toLowerCase(Locale.ENGLISH)).trim();
 			giveKit(user, user, kitName);
 		}
 	}

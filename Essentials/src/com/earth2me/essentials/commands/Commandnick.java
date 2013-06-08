@@ -2,7 +2,8 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.FormatUtil;
 import java.util.Locale;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -66,11 +67,11 @@ public class Commandnick extends EssentialsCommand
 	{
 		if (user == null)
 		{
-			return Util.replaceFormat(nick);
+			return FormatUtil.replaceFormat(nick);
 		}
 		else
 		{
-			return Util.formatString(user, "essentials.nick", nick);
+			return FormatUtil.formatString(user, "essentials.nick", nick);
 		}
 	}
 

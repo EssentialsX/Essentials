@@ -2,7 +2,8 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.FormatUtil;
 import java.util.List;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -51,7 +52,7 @@ public class Commandmail extends EssentialsCommand
 			}
 			if (!u.isIgnoredPlayer(user))
 			{
-				final String mail = user.getName() + ": " + Util.sanitizeString(Util.stripFormat(getFinalArg(args, 2)));
+				final String mail = user.getName() + ": " + StringUtil.sanitizeString(FormatUtil.stripFormat(getFinalArg(args, 2)));
 				if (mail.length() > 1000)
 				{
 					throw new Exception("Mail message too long. Try to keep it below 1000");
@@ -77,7 +78,7 @@ public class Commandmail extends EssentialsCommand
 			{
 				throw new Exception(_("noPerm", "essentials.mail.sendall"));
 			}
-			ess.runTaskAsynchronously(new SendAll(user.getName() + ": " + Util.stripFormat(getFinalArg(args, 1))));
+			ess.runTaskAsynchronously(new SendAll(user.getName() + ": " + FormatUtil.stripFormat(getFinalArg(args, 1))));
 			user.sendMessage(_("mailSent"));
 			return;
 		}

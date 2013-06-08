@@ -3,6 +3,7 @@ package com.earth2me.essentials.signs;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.*;
 import com.earth2me.essentials.Trade.OverflowType;
+import com.earth2me.essentials.utils.FormatUtil;
 import java.util.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -145,7 +146,7 @@ public class SignProtection extends EssentialsSign
 		{
 			return SignProtectionState.OWNER;
 		}
-		if (Util.stripFormat(sign.getLine(3)).equalsIgnoreCase(username))
+		if (FormatUtil.stripFormat(sign.getLine(3)).equalsIgnoreCase(username))
 		{
 			return SignProtectionState.OWNER;
 		}

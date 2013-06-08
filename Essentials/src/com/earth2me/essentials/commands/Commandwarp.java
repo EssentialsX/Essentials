@@ -3,8 +3,9 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.api.IWarps;
+import com.earth2me.essentials.utils.NumberUtil;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -54,7 +55,7 @@ public class Commandwarp extends EssentialsCommand
 	@Override
 	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
-		if (args.length < 2 || Util.isInt(args[0]))
+		if (args.length < 2 || NumberUtil.isInt(args[0]))
 		{
 			warpList(sender, args);
 			throw new NoChargeException();
@@ -88,13 +89,13 @@ public class Commandwarp extends EssentialsCommand
 			}
 		}
 		int page = 1;
-		if (args.length > 0 && Util.isInt(args[0]))
+		if (args.length > 0 && NumberUtil.isInt(args[0]))
 		{
 			page = Integer.parseInt(args[0]);
 		}
 
 		final int warpPage = (page - 1) * WARPS_PER_PAGE;
-		final String warpList = Util.joinList(warpNameList.subList(warpPage, warpPage + Math.min(warpNameList.size() - warpPage, WARPS_PER_PAGE)));
+		final String warpList = StringUtil.joinList(warpNameList.subList(warpPage, warpPage + Math.min(warpNameList.size() - warpPage, WARPS_PER_PAGE)));
 
 		if (warpNameList.size() > WARPS_PER_PAGE)
 		{

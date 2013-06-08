@@ -4,6 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade.TradeType;
 import com.earth2me.essentials.*;
 import com.earth2me.essentials.Trade.OverflowType;
+import com.earth2me.essentials.utils.NumberUtil;
 import java.math.BigDecimal;
 import java.util.Map;
 import org.bukkit.inventory.ItemStack;
@@ -175,11 +176,11 @@ public class SignTrade extends EssentialsSign
 			final BigDecimal money = getMoney(split[0]);
 			if (money != null)
 			{
-				if (Util.shortCurrency(money, ess).length() * 2 > 15)
+				if (NumberUtil.shortCurrency(money, ess).length() * 2 > 15)
 				{
 					throw new SignException("Line can be too long!");
 				}
-				sign.setLine(index, Util.shortCurrency(money, ess) + ":0");
+				sign.setLine(index, NumberUtil.shortCurrency(money, ess) + ":0");
 				return;
 			}
 		}
@@ -195,7 +196,7 @@ public class SignTrade extends EssentialsSign
 				{
 					throw new SignException(_("moreThanZero"));
 				}
-				sign.setLine(index, Util.shortCurrency(money, ess) + ":" + Util.shortCurrency(amount, ess).substring(1));
+				sign.setLine(index, NumberUtil.shortCurrency(money, ess) + ":" + NumberUtil.shortCurrency(amount, ess).substring(1));
 				return;
 			}
 		}
@@ -384,7 +385,7 @@ public class SignTrade extends EssentialsSign
 			final BigDecimal amount = getBigDecimal(split[1]);
 			if (money != null && amount != null)
 			{
-				final String newline = Util.shortCurrency(money, ess) + ":" + Util.shortCurrency(value, ess).substring(1);
+				final String newline = NumberUtil.shortCurrency(money, ess) + ":" + NumberUtil.shortCurrency(value, ess).substring(1);
 				if (newline.length() > 15)
 				{
 					throw new SignException("This sign is full: Line too long!");

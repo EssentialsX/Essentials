@@ -2,7 +2,8 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.NumberUtil;
 import java.math.BigDecimal;
 import java.util.Locale;
 import org.bukkit.Server;
@@ -108,11 +109,11 @@ public class Commandeco extends EssentialsCommand
 
 		if (broadcast != null)
 		{
-			server.broadcastMessage(_("resetBal", Util.displayCurrency(broadcast, ess)));
+			server.broadcastMessage(_("resetBal", NumberUtil.displayCurrency(broadcast, ess)));
 		}
 		if (broadcastAll != null)
 		{
-			server.broadcastMessage(_("resetBalAll", Util.displayCurrency(broadcastAll, ess)));
+			server.broadcastMessage(_("resetBalAll", NumberUtil.displayCurrency(broadcastAll, ess)));
 		}
 	}
 
@@ -127,7 +128,7 @@ public class Commandeco extends EssentialsCommand
 		else if (sender == null)
 		{
 			player.setMoney(minBalance);
-			player.sendMessage(_("takenFromAccount", Util.displayCurrency(player.getMoney(), ess)));
+			player.sendMessage(_("takenFromAccount", NumberUtil.displayCurrency(player.getMoney(), ess)));
 		}
 		else
 		{
@@ -140,10 +141,10 @@ public class Commandeco extends EssentialsCommand
 		BigDecimal minBalance = ess.getSettings().getMinMoney();
 		boolean underMinimum = (amount.compareTo(minBalance) < 0);
 		player.setMoney(underMinimum ? minBalance : amount);
-		player.sendMessage(_("setBal", Util.displayCurrency(player.getMoney(), ess)));
+		player.sendMessage(_("setBal", NumberUtil.displayCurrency(player.getMoney(), ess)));
 		if (sender != null)
 		{
-			sender.sendMessage(_("setBalOthers", player.getDisplayName(), Util.displayCurrency(player.getMoney(), ess)));
+			sender.sendMessage(_("setBalOthers", player.getDisplayName(), NumberUtil.displayCurrency(player.getMoney(), ess)));
 		}
 	}
 

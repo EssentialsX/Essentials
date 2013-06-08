@@ -3,7 +3,8 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.FormatUtil;
 import java.util.logging.Level;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -25,7 +26,7 @@ public class Commandunbanip extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 		String ipAddress;
-		if (Util.validIP(args[0]))
+		if (FormatUtil.validIP(args[0]))
 		{
 			ipAddress = args[0];
 		}

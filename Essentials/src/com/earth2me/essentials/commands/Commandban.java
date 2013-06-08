@@ -4,7 +4,8 @@ import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.FormatUtil;
 import java.util.logging.Level;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -56,7 +57,7 @@ public class Commandban extends EssentialsCommand
 		String banReason;
 		if (args.length > 1)
 		{
-			banReason = Util.replaceFormat(getFinalArg(args, 1).replace("\\n", "\n").replace("|", "\n"));
+			banReason = FormatUtil.replaceFormat(getFinalArg(args, 1).replace("\\n", "\n").replace("|", "\n"));
 		}
 		else
 		{

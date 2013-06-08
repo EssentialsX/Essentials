@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.utils.StringUtil;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.craftbukkit.FakeWorld;
 import com.earth2me.essentials.settings.Spawns;
@@ -580,7 +581,7 @@ public class EssentialsUpgrade
 			{
 				continue;
 			}
-			final String sanitizedFilename = Util.sanitizeFileName(filename.substring(0, filename.length() - 4)) + ".yml";
+			final String sanitizedFilename = StringUtil.sanitizeFileName(filename.substring(0, filename.length() - 4)) + ".yml";
 			if (sanitizedFilename.equals(filename))
 			{
 				continue;

@@ -4,7 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.SpawnMob;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
 import java.util.List;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -55,7 +55,7 @@ public class Commandspawnmob extends EssentialsCommand
 	{
 		if (args.length < 3)
 		{
-			final String mobList = Util.joinList(Mob.getMobList());
+			final String mobList = StringUtil.joinList(Mob.getMobList());
 			throw new NotEnoughArgumentsException(_("mobsAvailable", mobList));
 		}
 		

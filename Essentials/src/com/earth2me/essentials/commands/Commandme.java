@@ -2,7 +2,8 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
@@ -28,7 +29,7 @@ public class Commandme extends EssentialsCommand
 		}
 
 		String message = getFinalArg(args, 0);
-		message = Util.formatMessage(user, "essentials.chat", message);	
+		message = FormatUtil.formatMessage(user, "essentials.chat", message);	
 
 		user.setDisplayNick();
 		ess.broadcastMessage(user, _("action", user.getDisplayName(), message));
@@ -43,7 +44,7 @@ public class Commandme extends EssentialsCommand
 		}
 
 		String message = getFinalArg(args, 0);
-		message = Util.replaceFormat(message);	
+		message = FormatUtil.replaceFormat(message);	
 
 		ess.getServer().broadcastMessage(_("action", "@", message));
 	}

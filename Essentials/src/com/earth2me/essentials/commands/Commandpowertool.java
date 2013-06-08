@@ -2,7 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -68,7 +68,7 @@ public class Commandpowertool extends EssentialsCommand
 				}
 				else
 				{
-					sender.sendMessage(_("powerToolList", Util.joinList(powertools), itemName));
+					sender.sendMessage(_("powerToolList", StringUtil.joinList(powertools), itemName));
 				}
 				throw new NoChargeException();
 			}
@@ -108,7 +108,7 @@ public class Commandpowertool extends EssentialsCommand
 				}
 
 				powertools.add(command);
-				sender.sendMessage(_("powerToolAttach", Util.joinList(powertools), itemName));
+				sender.sendMessage(_("powerToolAttach", StringUtil.joinList(powertools), itemName));
 			}
 		}
 		else

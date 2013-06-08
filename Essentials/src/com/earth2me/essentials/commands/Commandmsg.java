@@ -4,7 +4,8 @@ import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IReplyTo;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.FormatUtil;
 import java.util.List;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -34,11 +35,11 @@ public class Commandmsg extends EssentialsCommand
 			{
 				throw new Exception(_("voiceSilenced"));
 			}
-			message = Util.formatMessage(user, "essentials.msg", message);
+			message = FormatUtil.formatMessage(user, "essentials.msg", message);
 		}
 		else
 		{
-			message = Util.replaceFormat(message);
+			message = FormatUtil.replaceFormat(message);
 		}
 
 		final String translatedMe = _("me");

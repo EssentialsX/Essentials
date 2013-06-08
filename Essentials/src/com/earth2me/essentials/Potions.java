@@ -1,5 +1,7 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.StringUtil;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -104,7 +106,7 @@ public class Potions
 	public static PotionEffectType getByName(String name)
 	{
 		PotionEffectType peffect;
-		if (Util.isInt(name))
+		if (NumberUtil.isInt(name))
 		{
 			peffect = PotionEffectType.getById(Integer.parseInt(name));
 		}

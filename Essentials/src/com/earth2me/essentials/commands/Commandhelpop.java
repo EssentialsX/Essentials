@@ -3,7 +3,8 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -35,7 +36,7 @@ public class Commandhelpop extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		final String message = _("helpOp", from, Util.stripFormat(getFinalArg(args, 0)));
+		final String message = _("helpOp", from, FormatUtil.stripFormat(getFinalArg(args, 0)));
 		CommandSender cs = Console.getCommandSender(server);
 		cs.sendMessage(message);
 		for (Player onlinePlayer : server.getOnlinePlayers())

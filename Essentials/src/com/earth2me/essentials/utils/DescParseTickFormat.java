@@ -1,4 +1,4 @@
-package com.earth2me.essentials;
+package com.earth2me.essentials.utils;
 
 import static com.earth2me.essentials.I18n._;
 import java.text.SimpleDateFormat;

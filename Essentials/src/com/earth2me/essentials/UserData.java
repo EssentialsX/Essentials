@@ -1,6 +1,8 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.utils.StringUtil;
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.utils.NumberUtil;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.*;
@@ -25,7 +27,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		{
 			folder.mkdirs();
 		}
-		config = new EssentialsConf(new File(folder, Util.sanitizeFileName(base.getName()) + ".yml"));
+		config = new EssentialsConf(new File(folder, StringUtil.sanitizeFileName(base.getName()) + ".yml"));
 		reloadConfig();
 	}
 
@@ -124,7 +126,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	private String getHomeName(String search)
 	{
-		if (Util.isInt(search))
+		if (NumberUtil.isInt(search))
 		{
 			try
 			{
@@ -174,7 +176,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 	public void setHome(String name, Location loc)
 	{
 		//Invalid names will corrupt the yaml
-		name = Util.safeString(name);
+		name = StringUtil.safeString(name);
 		homes.put(name, loc);
 		config.setProperty("homes." + name, loc);
 		config.save();
@@ -185,7 +187,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		String search = getHomeName(name);
 		if (!homes.containsKey(search))
 		{
-			search = Util.safeString(search);
+			search = StringUtil.safeString(search);
 		}
 		if (homes.containsKey(search))
 		{
@@ -634,7 +636,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	public void setBanReason(String reason)
 	{
-		config.setProperty("ban.reason", Util.sanitizeString(reason));
+		config.setProperty("ban.reason", StringUtil.sanitizeString(reason));
 		config.save();
 	}
 

@@ -3,7 +3,9 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.UserMap;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.FormatUtil;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Location;
@@ -47,7 +49,7 @@ public class Commandseen extends EssentialsCommand
 			User player = ess.getOfflineUser(args[0]);
 			if (player == null)
 			{
-				if (ipLookup && Util.validIP(args[0]))
+				if (ipLookup && FormatUtil.validIP(args[0]))
 				{
 					seenIP(server, sender, args[0]);
 					return;
@@ -65,7 +67,7 @@ public class Commandseen extends EssentialsCommand
 	{
 
 		user.setDisplayNick();
-		sender.sendMessage(_("seenOnline", user.getDisplayName(), Util.formatDateDiff(user.getLastLogin())));
+		sender.sendMessage(_("seenOnline", user.getDisplayName(), DateUtil.formatDateDiff(user.getLastLogin())));
 		if (user.isAfk())
 		{
 			sender.sendMessage(_("whoisAFK", _("true")));
@@ -73,13 +75,13 @@ public class Commandseen extends EssentialsCommand
 		if (user.isJailed())
 		{
 			sender.sendMessage(_("whoisJail", (user.getJailTimeout() > 0
-											   ? Util.formatDateDiff(user.getJailTimeout())
+											   ? DateUtil.formatDateDiff(user.getJailTimeout())
 											   : _("true"))));
 		}
 		if (user.isMuted())
 		{
 			sender.sendMessage(_("whoisMuted", (user.getMuteTimeout() > 0
-												? Util.formatDateDiff(user.getMuteTimeout())
+												? DateUtil.formatDateDiff(user.getMuteTimeout())
 												: _("true"))));
 		}
 		final String location = user.getGeoLocation();
@@ -98,7 +100,7 @@ public class Commandseen extends EssentialsCommand
 		user.setDisplayNick();
 		if (user.getLastLogout() > 0)
 		{
-			sender.sendMessage(_("seenOffline", user.getName(), Util.formatDateDiff(user.getLastLogout())));
+			sender.sendMessage(_("seenOffline", user.getName(), DateUtil.formatDateDiff(user.getLastLogout())));
 		}
 		else
 		{
@@ -157,7 +159,7 @@ public class Commandseen extends EssentialsCommand
 				if (matches.size() > 0)
 				{
 					sender.sendMessage(_("matchingIPAddress"));
-					sender.sendMessage(Util.joinList(matches));
+					sender.sendMessage(StringUtil.joinList(matches));
 				}
 				else
 				{

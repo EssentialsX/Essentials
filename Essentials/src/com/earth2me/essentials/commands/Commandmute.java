@@ -2,7 +2,8 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.DateUtil;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -33,7 +34,7 @@ public class Commandmute extends EssentialsCommand
 		if (args.length > 1)
 		{
 			final String time = getFinalArg(args, 1);
-			muteTimestamp = Util.parseDateDiff(time, true);
+			muteTimestamp = DateUtil.parseDateDiff(time, true);
 			player.setMuted(true);
 		}
 		else
@@ -46,8 +47,8 @@ public class Commandmute extends EssentialsCommand
 		{
 			if (muteTimestamp > 0)
 			{
-				sender.sendMessage(_("mutedPlayerFor", player.getDisplayName(), Util.formatDateDiff(muteTimestamp)));
-				player.sendMessage(_("playerMutedFor", Util.formatDateDiff(muteTimestamp)));
+				sender.sendMessage(_("mutedPlayerFor", player.getDisplayName(), DateUtil.formatDateDiff(muteTimestamp)));
+				player.sendMessage(_("playerMutedFor", DateUtil.formatDateDiff(muteTimestamp)));
 			}
 			else
 			{

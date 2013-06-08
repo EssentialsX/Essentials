@@ -4,7 +4,8 @@ import com.earth2me.essentials.Console;
 import com.earth2me.essentials.EssentialsConf;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.IUser;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.FormatUtil;
 import java.io.File;
 import java.util.*;
 import java.util.logging.Handler;
@@ -64,7 +65,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 						disconnect();
 						connect();
 					}
-					chat.sendMessage(Util.stripFormat(message));
+					chat.sendMessage(FormatUtil.stripFormat(message));
 					return true;
 				}
 			}
@@ -266,7 +267,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 								for (LogRecord logRecord : copy)
 								{
 									final String message = formatter.format(logRecord);
-									if (!XMPPManager.this.sendMessage(user, Util.stripLogColorFormat(message)))
+									if (!XMPPManager.this.sendMessage(user, FormatUtil.stripLogColorFormat(message)))
 									{
 										failedUsers.add(user);
 										break;

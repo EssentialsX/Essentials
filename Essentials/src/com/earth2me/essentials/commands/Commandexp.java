@@ -2,8 +2,9 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.craftbukkit.SetExpFix;
+import com.earth2me.essentials.utils.NumberUtil;
 import java.util.List;
 import java.util.Locale;
 import org.bukkit.Server;
@@ -61,7 +62,7 @@ public class Commandexp extends EssentialsCommand
 		}
 		else
 		{
-			if (args.length >= 1 && Util.isInt(args[0].toLowerCase(Locale.ENGLISH).replace("l", "")) && user.isAuthorized("essentials.exp.give"))
+			if (args.length >= 1 && NumberUtil.isInt(args[0].toLowerCase(Locale.ENGLISH).replace("l", "")) && user.isAuthorized("essentials.exp.give"))
 			{
 				if (args.length >= 2 && user.isAuthorized("essentials.exp.give.others"))
 				{
@@ -102,7 +103,7 @@ public class Commandexp extends EssentialsCommand
 		else
 		{
 			String match = args[0].trim();
-			if (args.length >= 2 && Util.isInt(args[0].toLowerCase(Locale.ENGLISH).replace("l", "")))
+			if (args.length >= 2 && NumberUtil.isInt(args[0].toLowerCase(Locale.ENGLISH).replace("l", "")))
 			{
 				match = args[1].trim();
 				expMatch(server, sender, match, args[0], true);

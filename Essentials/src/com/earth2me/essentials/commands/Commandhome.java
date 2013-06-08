@@ -3,7 +3,7 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
 import java.util.List;
 import java.util.Locale;
 import org.bukkit.Location;
@@ -87,7 +87,7 @@ public class Commandhome extends EssentialsCommand
 						homes.add(_("bedNull"));
 					}
 				}
-				user.sendMessage(_("homes", Util.joinList(homes)));
+				user.sendMessage(_("homes", StringUtil.joinList(homes)));
 			}
 		}
 		throw new NoChargeException();

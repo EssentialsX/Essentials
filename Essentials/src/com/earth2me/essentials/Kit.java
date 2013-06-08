@@ -8,6 +8,8 @@ import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
+import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.DateUtil;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.logging.Level;
@@ -37,7 +39,7 @@ public class Kit
 					BigDecimal costPrice = new Trade("kit-" + kitItem.toLowerCase(Locale.ENGLISH), ess).getCommandCost(user);
 					if (costPrice.signum() > 0)
 					{
-						cost = _("kitCost", Util.displayCurrency(costPrice, ess));
+						cost = _("kitCost", NumberUtil.displayCurrency(costPrice, ess));
 					}
 					final Map<String, Object> kit = ess.getSettings().getKit(kitItem);
 
@@ -74,7 +76,7 @@ public class Kit
 		}
 		else
 		{
-			user.sendMessage(_("kitTimed", Util.formatDateDiff(nextUse)));
+			user.sendMessage(_("kitTimed", DateUtil.formatDateDiff(nextUse)));
 			throw new NoChargeException();
 		}
 	}

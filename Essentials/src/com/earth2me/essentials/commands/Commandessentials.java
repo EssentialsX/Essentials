@@ -3,8 +3,10 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.UserMap;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.metrics.Metrics;
+import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.NumberUtil;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -218,7 +220,7 @@ public class Commandessentials extends EssentialsCommand
 
 	private void run_cleanup(final Server server, final CommandSender sender, final String command, final String args[]) throws Exception
 	{
-		if (args.length < 2 || !Util.isInt(args[1]))
+		if (args.length < 2 || !NumberUtil.isInt(args[1]))
 		{
 			sender.sendMessage("This sub-command will delete users who havent logged in in the last <days> days.");
 			sender.sendMessage("Optional parameters define the minium amount required to prevent deletion.");
@@ -229,8 +231,8 @@ public class Commandessentials extends EssentialsCommand
 
 		final long daysArg = Long.parseLong(args[1]);
 		final double moneyArg = args.length >= 3 ? Double.parseDouble(args[2].replaceAll("[^0-9\\.]", "")) : 0;
-		final int homesArg = args.length >= 4 && Util.isInt(args[3]) ? Integer.parseInt(args[3]) : 0;
-		final int bansArg = args.length >= 5 && Util.isInt(args[4]) ? Integer.parseInt(args[4]) : 0;
+		final int homesArg = args.length >= 4 && NumberUtil.isInt(args[3]) ? Integer.parseInt(args[3]) : 0;
+		final int bansArg = args.length >= 5 && NumberUtil.isInt(args[4]) ? Integer.parseInt(args[4]) : 0;
 		final UserMap userMap = ess.getUserMap();
 
 		ess.runTaskAsynchronously(new Runnable()
@@ -272,7 +274,7 @@ public class Commandessentials extends EssentialsCommand
 
 					if (ess.getSettings().isDebug())
 					{
-						ess.getLogger().info("Deleting user: " + user.getName() + " Money: " + moneyCount + " Homes: " + homeCount + " Last seen: " + Util.formatDateDiff(lastLog));
+						ess.getLogger().info("Deleting user: " + user.getName() + " Money: " + moneyCount + " Homes: " + homeCount + " Last seen: " + DateUtil.formatDateDiff(lastLog));
 					}
 
 					user.reset();

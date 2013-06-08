@@ -3,7 +3,8 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.NumberUtil;
 import java.math.BigDecimal;
 import java.util.Locale;
 import java.util.logging.Level;
@@ -51,7 +52,7 @@ public class Commandsell extends EssentialsCommand
 			}
 			if (totalWorth.signum() > 0)
 			{
-				user.sendMessage(_("totalWorthAll", type, Util.displayCurrency(totalWorth, ess)));
+				user.sendMessage(_("totalWorthAll", type, NumberUtil.displayCurrency(totalWorth, ess)));
 			}
 			return;
 		}
@@ -73,7 +74,7 @@ public class Commandsell extends EssentialsCommand
 			}
 			if (totalWorth.signum() > 0)
 			{
-				user.sendMessage(_("totalWorthBlocks", type, Util.displayCurrency(totalWorth, ess)));
+				user.sendMessage(_("totalWorthBlocks", type, NumberUtil.displayCurrency(totalWorth, ess)));
 			}
 			return;
 		}
@@ -163,8 +164,8 @@ public class Commandsell extends EssentialsCommand
 		user.updateInventory();
 		Trade.log("Command", "Sell", "Item", user.getName(), new Trade(ris, ess), user.getName(), new Trade(result, ess), user.getLocation(), ess);
 		user.giveMoney(result);
-		user.sendMessage(_("itemSold", Util.displayCurrency(result, ess), amount, is.getType().toString().toLowerCase(Locale.ENGLISH), Util.displayCurrency(worth, ess)));
-		logger.log(Level.INFO, _("itemSoldConsole", user.getDisplayName(), is.getType().toString().toLowerCase(Locale.ENGLISH), Util.displayCurrency(result, ess), amount, Util.displayCurrency(worth, ess)));
+		user.sendMessage(_("itemSold", NumberUtil.displayCurrency(result, ess), amount, is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(worth, ess)));
+		logger.log(Level.INFO, _("itemSoldConsole", user.getDisplayName(), is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(result, ess), amount, NumberUtil.displayCurrency(worth, ess)));
 		return result;
 	}
 }

@@ -2,7 +2,8 @@ package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.FormatUtil;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Material;
@@ -90,7 +91,7 @@ public class SignBlockListener implements Listener
 
 		for (int i = 0; i < 4; i++)
 		{
-			event.setLine(i, Util.formatString(user, "essentials.signs", event.getLine(i)));
+			event.setLine(i, FormatUtil.formatString(user, "essentials.signs", event.getLine(i)));
 		}
 
 		final String topLine = event.getLine(0);
@@ -99,7 +100,7 @@ public class SignBlockListener implements Listener
 			final EssentialsSign sign = signs.getSign();
 			if (topLine.equalsIgnoreCase(sign.getSuccessName()))
 			{
-				event.setLine(0, Util.stripFormat(topLine));
+				event.setLine(0, FormatUtil.stripFormat(topLine));
 			}
 		}
 	}

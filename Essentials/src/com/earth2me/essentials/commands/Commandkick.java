@@ -3,7 +3,8 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.FormatUtil;
 import java.util.logging.Level;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -41,7 +42,7 @@ public class Commandkick extends EssentialsCommand
 		}
 
 		String kickReason = args.length > 1 ? getFinalArg(args, 1) : _("kickDefault");
-		kickReason = Util.replaceFormat(kickReason.replace("\\n", "\n").replace("|", "\n"));
+		kickReason = FormatUtil.replaceFormat(kickReason.replace("\\n", "\n").replace("|", "\n"));
 
 		target.kickPlayer(kickReason);
 		final String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;

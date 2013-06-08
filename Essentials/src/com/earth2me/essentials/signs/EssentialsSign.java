@@ -2,6 +2,7 @@ package com.earth2me.essentials.signs;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.*;
+import com.earth2me.essentials.utils.NumberUtil;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Locale;
@@ -289,7 +290,7 @@ public class EssentialsSign
 		final BigDecimal money = trade.getMoney();
 		if (money != null)
 		{
-			sign.setLine(index, Util.shortCurrency(money, ess));
+			sign.setLine(index, NumberUtil.shortCurrency(money, ess));
 		}
 	}
 

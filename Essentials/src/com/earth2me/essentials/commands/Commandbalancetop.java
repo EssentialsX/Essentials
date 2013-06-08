@@ -2,9 +2,10 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.textreader.TextPager;
+import com.earth2me.essentials.utils.NumberUtil;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.util.*;
@@ -132,11 +133,11 @@ public class Commandbalancetop extends EssentialsCommand
 						}
 					});
 
-					cache.getLines().add(_("serverTotal", Util.displayCurrency(totalMoney, ess)));
+					cache.getLines().add(_("serverTotal", NumberUtil.displayCurrency(totalMoney, ess)));
 					int pos = 1;
 					for (Map.Entry<String, BigDecimal> entry : sortedEntries)
 					{
-						cache.getLines().add(pos + ". " + entry.getKey() + ", " + Util.displayCurrency(entry.getValue(), ess));
+						cache.getLines().add(pos + ". " + entry.getKey() + ", " + NumberUtil.displayCurrency(entry.getValue(), ess));
 						pos++;
 					}
 					cacheage = System.currentTimeMillis();

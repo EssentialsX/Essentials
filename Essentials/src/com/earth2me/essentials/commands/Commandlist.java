@@ -2,7 +2,9 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.FormatUtil;
+import com.earth2me.essentials.utils.NumberUtil;
 import java.util.*;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -73,7 +75,7 @@ public class Commandlist extends EssentialsCommand
 			{
 				continue;
 			}
-			final String group = Util.stripFormat(onlineUser.getGroup().toLowerCase());
+			final String group = FormatUtil.stripFormat(onlineUser.getGroup().toLowerCase());
 			List<User> list = playerList.get(group);
 			if (list == null)
 			{
@@ -163,7 +165,7 @@ public class Commandlist extends EssentialsCommand
 			List<User> matchedList = playerList.get(configGroup);
 
 			// If the group value is an int, then we might need to truncate it
-			if (Util.isInt(groupValue))
+			if (NumberUtil.isInt(groupValue))
 			{
 				if (matchedList != null && !matchedList.isEmpty())
 				{
@@ -172,7 +174,7 @@ public class Commandlist extends EssentialsCommand
 					int limit = Integer.parseInt(groupValue);
 					if (matchedList.size() > limit)
 					{
-						sender.sendMessage(outputFormat(oConfigGroup, _("groupNumber", matchedList.size(), commandLabel, Util.stripFormat(configGroup))));
+						sender.sendMessage(outputFormat(oConfigGroup, _("groupNumber", matchedList.size(), commandLabel, FormatUtil.stripFormat(configGroup))));
 					}
 					else
 					{
@@ -262,7 +264,7 @@ public class Commandlist extends EssentialsCommand
 	private String outputFormat(String group, String message)
 	{
 		final StringBuilder outputString = new StringBuilder();
-		outputString.append(_("listGroupTag", Util.replaceFormat(group)));
+		outputString.append(_("listGroupTag", FormatUtil.replaceFormat(group)));
 		outputString.append(message);
 		outputString.setCharAt(0, Character.toTitleCase(outputString.charAt(0)));
 		return outputString.toString();

@@ -1,7 +1,10 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.utils.StringUtil;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Mob.MobException;
+import com.earth2me.essentials.utils.LocationUtil;
+import com.earth2me.essentials.utils.NumberUtil;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -38,7 +41,7 @@ public class SpawnMob
 		{
 			availableList.add(_("none"));
 		}
-		return Util.joinList(availableList);
+		return StringUtil.joinList(availableList);
 	}
 
 	public static List<String> mobParts(final String mobString)
@@ -80,7 +83,7 @@ public class SpawnMob
 	// This method spawns a mob where the user is looking, owned by user
 	public static void spawnmob(final IEssentials ess, final Server server, final User user, final List<String> parts, final List<String> data, int mobCount) throws Exception
 	{
-		final Block block = Util.getTarget(user).getBlock();
+		final Block block = LocationUtil.getTarget(user).getBlock();
 		if (block == null)
 		{
 			throw new Exception(_("unableToSpawnMob"));
@@ -103,7 +106,7 @@ public class SpawnMob
 	// This method spawns a mob at loc, owned by target
 	public static void spawnmob(final IEssentials ess, final Server server, final CommandSender sender, final User target, final Location loc, final List<String> parts, final List<String> data, int mobCount) throws Exception
 	{
-		final Location sloc = Util.getSafeDestination(loc);
+		final Location sloc = LocationUtil.getSafeDestination(loc);
 
 		for (int i = 0; i < parts.size(); i++)
 		{
@@ -393,7 +396,7 @@ public class SpawnMob
 
 		if (type == EntityType.EXPERIENCE_ORB)
 		{
-			if (Util.isInt(data))
+			if (NumberUtil.isInt(data))
 			{
 				((ExperienceOrb)spawned).setExperience(Integer.parseInt(data));
 

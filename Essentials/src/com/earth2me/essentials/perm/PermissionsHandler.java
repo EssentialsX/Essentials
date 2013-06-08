@@ -1,6 +1,7 @@
 package com.earth2me.essentials.perm;
 
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.StringUtil;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
@@ -160,7 +161,7 @@ public class PermissionsHandler implements IPermissionsHandler
 		if (bPermPlugin != null && bPermPlugin.isEnabled())
 		{
 			final String bVer = bPermPlugin.getDescription().getVersion().replace(".", "");
-			if (Util.isInt(bVer) && Integer.parseInt(bVer) < 284)
+			if (NumberUtil.isInt(bVer) && Integer.parseInt(bVer) < 284)
 			{
 				if (!(handler instanceof BPermissionsHandler))
 				{

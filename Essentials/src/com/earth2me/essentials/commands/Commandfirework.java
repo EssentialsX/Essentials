@@ -3,7 +3,8 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.StringUtil;
 import java.util.regex.Pattern;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
@@ -75,7 +76,7 @@ public class Commandfirework extends EssentialsCommand
 					boolean direction = false;
 					if (args.length > 1)
 					{
-						if (Util.isInt(args[1]))
+						if (NumberUtil.isInt(args[1]))
 						{
 							final int serverLimit = ess.getSettings().getSpawnMobLimit();
 							amount = Integer.parseInt(args[1]);

@@ -31,6 +31,7 @@ import com.earth2me.essentials.register.payment.Methods;
 import com.earth2me.essentials.signs.SignBlockListener;
 import com.earth2me.essentials.signs.SignEntityListener;
 import com.earth2me.essentials.signs.SignPlayerListener;
+import com.earth2me.essentials.utils.DateUtil;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -411,7 +412,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 			{
 				if (user.getJailTimeout() > 0)
 				{
-					user.sendMessage(_("playerJailedFor", user.getName(), Util.formatDateDiff(user.getJailTimeout())));
+					user.sendMessage(_("playerJailedFor", user.getName(), DateUtil.formatDateDiff(user.getJailTimeout())));
 				}
 				else
 				{

@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.utils.StringUtil;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.*;
 import java.util.ArrayList;
@@ -80,7 +81,7 @@ public class Commandrepair extends EssentialsCommand
 		}
 		else
 		{
-			user.sendMessage(_("repair", Util.joinList(repaired)));
+			user.sendMessage(_("repair", StringUtil.joinList(repaired)));
 		}
 	}
 

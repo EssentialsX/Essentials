@@ -5,6 +5,8 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.TextInput;
 import com.earth2me.essentials.textreader.TextPager;
+import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.LocationUtil;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
@@ -117,7 +119,7 @@ public class EssentialsPlayerListener implements Listener
 			to.setZ(from.getZ());
 			try
 			{
-				event.setTo(Util.getSafeDestination(to));
+				event.setTo(LocationUtil.getSafeDestination(to));
 			}
 			catch (Exception ex)
 			{
@@ -261,7 +263,7 @@ public class EssentialsPlayerListener implements Listener
 					final int x = user.getLocation().getBlockX();
 					int y = user.getLocation().getBlockY();
 					final int z = user.getLocation().getBlockZ();
-					while (Util.isBlockUnsafe(world, x, y, z) && y > -1)
+					while (LocationUtil.isBlockUnsafe(world, x, y, z) && y > -1)
 					{
 						y--;
 					}
@@ -322,7 +324,7 @@ public class EssentialsPlayerListener implements Listener
 				if (user.getBanTimeout() > 0)
 				{
 					//TODO: TL This
-					banReason += "\n\n" + "Expires in " + Util.formatDateDiff(user.getBanTimeout());
+					banReason += "\n\n" + "Expires in " + DateUtil.formatDateDiff(user.getBanTimeout());
 				}
 				event.disallow(Result.KICK_BANNED, banReason);
 				return;
@@ -491,7 +493,7 @@ public class EssentialsPlayerListener implements Listener
 	{
 		try
 		{
-			final Location otarget = Util.getTarget(user);
+			final Location otarget = LocationUtil.getTarget(user);
 
 			ess.scheduleSyncDelayedTask(
 					new Runnable()
@@ -502,7 +504,7 @@ public class EssentialsPlayerListener implements Listener
 							Location loc = user.getLocation();
 							loc.setX(otarget.getX());
 							loc.setZ(otarget.getZ());
-							while (Util.isBlockDamaging(loc.getWorld(), loc.getBlockX(), loc.getBlockY() - 1, loc.getBlockZ()))
+							while (LocationUtil.isBlockDamaging(loc.getWorld(), loc.getBlockX(), loc.getBlockY() - 1, loc.getBlockZ()))
 							{
 								loc.setY(loc.getY() + 1d);
 							}

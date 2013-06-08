@@ -2,8 +2,9 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.api.IWarps;
+import com.earth2me.essentials.utils.NumberUtil;
 import org.bukkit.Location;
 import org.bukkit.Server;
 
@@ -23,7 +24,7 @@ public class Commandsetwarp extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		if (Util.isInt(args[0]) || args[0].isEmpty())
+		if (NumberUtil.isInt(args[0]) || args[0].isEmpty())
 		{
 			throw new NoSuchFieldException(_("invalidWarpName"));
 		}
@@ -40,7 +41,7 @@ public class Commandsetwarp extends EssentialsCommand
 		{
 		}
 
-		if (warpLoc == null || user.isAuthorized("essentials.warp.overwrite." + Util.safeString(args[0])))
+		if (warpLoc == null || user.isAuthorized("essentials.warp.overwrite." + StringUtil.safeString(args[0])))
 		{
 			warps.setWarp(args[0], loc);
 		}

@@ -2,7 +2,8 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.StringUtil;
 import java.util.List;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -137,7 +138,7 @@ public class Commandclearinventory extends EssentialsCommand
 			final ItemStack item = ess.getItemDb().get(split[0]);
 			final int type = item.getTypeId();
 
-			if (split.length > 1 && Util.isInt(split[1]))
+			if (split.length > 1 && NumberUtil.isInt(split[1]))
 			{
 				player.getInventory().clear(type, Integer.parseInt(split[1]));
 			}
@@ -147,7 +148,7 @@ public class Commandclearinventory extends EssentialsCommand
 			}
 			else
 			{
-				if (Util.isInt(split[0]))
+				if (NumberUtil.isInt(split[0]))
 				{
 					player.getInventory().clear(type, -1);
 				}

@@ -4,7 +4,9 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.LocationUtil;
+import com.earth2me.essentials.utils.NumberUtil;
 import java.util.Locale;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -24,10 +26,10 @@ public class Commandspawner extends EssentialsCommand
 	{
 		if (args.length < 1 || args[0].length() < 2)
 		{
-			throw new NotEnoughArgumentsException(_("mobsAvailable", Util.joinList(Mob.getMobList())));
+			throw new NotEnoughArgumentsException(_("mobsAvailable", StringUtil.joinList(Mob.getMobList())));
 		}
 
-		final Location target = Util.getTarget(user);
+		final Location target = LocationUtil.getTarget(user);
 		if (target == null || target.getBlock().getType() != Material.MOB_SPAWNER)
 		{
 			throw new Exception(_("mobSpawnTarget"));
@@ -52,7 +54,7 @@ public class Commandspawner extends EssentialsCommand
 		}
 		if (args.length > 1)
 		{
-			if (Util.isInt(args[1]))
+			if (NumberUtil.isInt(args[1]))
 			{
 				delay = Integer.parseInt(args[1]);
 			}

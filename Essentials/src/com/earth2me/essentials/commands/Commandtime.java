@@ -1,9 +1,10 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.DescParseTickFormat;
+import com.earth2me.essentials.utils.DescParseTickFormat;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.StringUtil;
 import java.util.*;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -22,11 +23,11 @@ public class Commandtime extends EssentialsCommand
 	{
 		boolean add = false;
 		final List<String> argList = new ArrayList<String>(Arrays.asList(args));
-		if (argList.remove("set") && !argList.isEmpty() && Util.isInt(argList.get(0)))
+		if (argList.remove("set") && !argList.isEmpty() && NumberUtil.isInt(argList.get(0)))
 		{
 			argList.set(0, argList.get(0) + "t");
 		}
-		if (argList.remove("add") && !argList.isEmpty() && Util.isInt(argList.get(0)))
+		if (argList.remove("add") && !argList.isEmpty() && NumberUtil.isInt(argList.get(0)))
 		{
 			add = true;
 			argList.set(0, argList.get(0) + "t");

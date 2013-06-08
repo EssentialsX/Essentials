@@ -1,5 +1,7 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.utils.LocationUtil;
+import com.earth2me.essentials.utils.StringUtil;
 import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -22,7 +24,7 @@ public class EssentialsBlockListener implements Listener
 	{
 		// Do not rely on getItemInHand();
 		// http://leaky.bukkit.org/issues/663		
-		final ItemStack is = Util.convertBlockToItem(event.getBlockPlaced());
+		final ItemStack is = LocationUtil.convertBlockToItem(event.getBlockPlaced());
 		if (is == null)
 		{
 			return;

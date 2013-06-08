@@ -2,7 +2,8 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.DateUtil;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -61,11 +62,11 @@ public class Commandtogglejail extends EssentialsCommand
 			if (args.length > 2)
 			{
 				final String time = getFinalArg(args, 2);
-				timeDiff = Util.parseDateDiff(time, true);
+				timeDiff = DateUtil.parseDateDiff(time, true);
 				player.setJailTimeout(timeDiff);
 			}
 			sender.sendMessage((timeDiff > 0
-								? _("playerJailedFor", player.getName(), Util.formatDateDiff(timeDiff))
+								? _("playerJailedFor", player.getName(), DateUtil.formatDateDiff(timeDiff))
 								: _("playerJailed", player.getName())));
 			return;
 		}
@@ -79,9 +80,9 @@ public class Commandtogglejail extends EssentialsCommand
 		if (args.length >= 2 && player.isJailed() && args[1].equalsIgnoreCase(player.getJail()))
 		{
 			final String time = getFinalArg(args, 2);
-			final long timeDiff = Util.parseDateDiff(time, true);
+			final long timeDiff = DateUtil.parseDateDiff(time, true);
 			player.setJailTimeout(timeDiff);
-			sender.sendMessage(_("jailSentenceExtended", Util.formatDateDiff(timeDiff)));
+			sender.sendMessage(_("jailSentenceExtended", DateUtil.formatDateDiff(timeDiff)));
 			return;
 		}
 

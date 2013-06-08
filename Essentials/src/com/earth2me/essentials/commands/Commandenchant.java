@@ -4,7 +4,7 @@ import com.earth2me.essentials.Enchantments;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -43,7 +43,7 @@ public class Commandenchant extends EssentialsCommand
 					//enchantmentslist.add(enchantmentName);
 				}
 			}
-			throw new NotEnoughArgumentsException(_("enchantments", Util.joinList(enchantmentslist.toArray())));
+			throw new NotEnoughArgumentsException(_("enchantments", StringUtil.joinList(enchantmentslist.toArray())));
 		}
 
 		int level = -1;

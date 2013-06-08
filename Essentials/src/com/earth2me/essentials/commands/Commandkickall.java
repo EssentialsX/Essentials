@@ -1,7 +1,8 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -18,7 +19,7 @@ public class Commandkickall extends EssentialsCommand
 	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
 		String kickReason = args.length > 0 ? getFinalArg(args, 0) : _("kickDefault");
-		kickReason = Util.replaceFormat(kickReason.replace("\\n", "\n").replace("|", "\n"));
+		kickReason = FormatUtil.replaceFormat(kickReason.replace("\\n", "\n").replace("|", "\n"));
 
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{

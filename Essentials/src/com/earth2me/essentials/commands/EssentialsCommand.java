@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.*;
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.utils.FormatUtil;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Logger;
@@ -94,7 +95,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 				final User userMatch = ess.getUser(onlinePlayer);
 				if (getHidden || !userMatch.isHidden() || userMatch.equals(sourceUser))
 				{
-					final String displayName = Util.stripFormat(userMatch.getDisplayName()).toLowerCase(Locale.ENGLISH);
+					final String displayName = FormatUtil.stripFormat(userMatch.getDisplayName()).toLowerCase(Locale.ENGLISH);
 					if (displayName.contains(matchText))
 					{
 						return userMatch;

@@ -2,6 +2,8 @@ package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.ITeleport;
+import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.LocationUtil;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import org.bukkit.Location;
@@ -50,7 +52,7 @@ public class Teleport implements ITeleport
 				time.setTimeInMillis(lastTime);
 				time.add(Calendar.SECOND, (int)cooldown);
 				time.add(Calendar.MILLISECOND, (int)((cooldown * 1000.0) % 1000.0));
-				throw new Exception(_("timeBeforeTeleport", Util.formatDateDiff(time.getTimeInMillis())));
+				throw new Exception(_("timeBeforeTeleport", DateUtil.formatDateDiff(time.getTimeInMillis())));
 			}
 		}
 		// if justCheck is set, don't update lastTeleport; we're just checking
@@ -65,7 +67,7 @@ public class Teleport implements ITeleport
 		Calendar c = new GregorianCalendar();
 		c.add(Calendar.SECOND, (int)delay);
 		c.add(Calendar.MILLISECOND, (int)((delay * 1000.0) % 1000.0));
-		user.sendMessage(_("dontMoveMessage", Util.formatDateDiff(c.getTimeInMillis())));
+		user.sendMessage(_("dontMoveMessage", DateUtil.formatDateDiff(c.getTimeInMillis())));
 	}
 
 	//The now function is used when you want to skip tp delay when teleporting someone to a location or player.
@@ -93,7 +95,7 @@ public class Teleport implements ITeleport
 	{
 		cancel(false);
 		teleportee.setLastLocation();
-		teleportee.getBase().teleport(Util.getSafeDestination(target.getLocation()), cause);
+		teleportee.getBase().teleport(LocationUtil.getSafeDestination(target.getLocation()), cause);
 	}
 
 	//The teleportPlayer function is used when you want to normally teleportPlayer someone to a location or player.

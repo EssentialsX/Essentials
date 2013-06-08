@@ -2,8 +2,10 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.craftbukkit.SetExpFix;
+import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.DateUtil;
 import java.util.Locale;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -36,7 +38,7 @@ public class Commandwhois extends EssentialsCommand
 		sender.sendMessage(_("whoisLocation", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ()));
 		if (!ess.getSettings().isEcoDisabled())
 		{
-			sender.sendMessage(_("whoisMoney", Util.displayCurrency(user.getMoney(), ess)));
+			sender.sendMessage(_("whoisMoney", NumberUtil.displayCurrency(user.getMoney(), ess)));
 		}
 		sender.sendMessage(_("whoisIPAddress", user.getAddress().getAddress().toString()));
 		final String location = user.getGeoLocation();
@@ -52,12 +54,12 @@ public class Commandwhois extends EssentialsCommand
 		sender.sendMessage(_("whoisAFK", (user.isAfk() ? _("true") : _("false"))));
 		sender.sendMessage(_("whoisJail", (user.isJailed()
 										   ? user.getJailTimeout() > 0
-											 ? Util.formatDateDiff(user.getJailTimeout())
+											 ? DateUtil.formatDateDiff(user.getJailTimeout())
 											 : _("true")
 										   : _("false"))));
 		sender.sendMessage(_("whoisMuted", (user.isMuted()
 											? user.getMuteTimeout() > 0
-											  ? Util.formatDateDiff(user.getMuteTimeout())
+											  ? DateUtil.formatDateDiff(user.getMuteTimeout())
 											  : _("true")
 											: _("false"))));
 

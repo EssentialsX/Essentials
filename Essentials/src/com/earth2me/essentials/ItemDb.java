@@ -1,7 +1,9 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.utils.StringUtil;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.IItemDb;
+import com.earth2me.essentials.utils.NumberUtil;
 import java.util.*;
 import java.util.regex.Pattern;
 import org.bukkit.Material;
@@ -94,7 +96,7 @@ public class ItemDb implements IConf, IItemDb
 			itemid = Integer.parseInt(parts[0]);
 			metaData = Short.parseShort(parts[1]);
 		}
-		else if (Util.isInt(id))
+		else if (NumberUtil.isInt(id))
 		{
 			itemid = Integer.parseInt(id);
 		}
@@ -158,7 +160,7 @@ public class ItemDb implements IConf, IItemDb
 		{
 			nameList = nameList.subList(0, 14);
 		}
-		return Util.joinList(", ", nameList);
+		return StringUtil.joinList(", ", nameList);
 	}
 
 

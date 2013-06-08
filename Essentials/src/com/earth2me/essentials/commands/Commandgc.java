@@ -1,7 +1,9 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.DateUtil;
 import java.lang.management.ManagementFactory;
 import java.util.List;
 import org.bukkit.ChatColor;
@@ -35,8 +37,8 @@ public class Commandgc extends EssentialsCommand
 			color = ChatColor.RED;
 		}
 
-		sender.sendMessage(_("uptime", Util.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime())));
-		sender.sendMessage(_("tps", "" + color + Util.formatDouble(tps)));
+		sender.sendMessage(_("uptime", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime())));
+		sender.sendMessage(_("tps", "" + color + NumberUtil.formatDouble(tps)));
 		sender.sendMessage(_("gcmax", (Runtime.getRuntime().maxMemory() / 1024 / 1024)));
 		sender.sendMessage(_("gctotal", (Runtime.getRuntime().totalMemory() / 1024 / 1024)));
 		sender.sendMessage(_("gcfree", (Runtime.getRuntime().freeMemory() / 1024 / 1024)));

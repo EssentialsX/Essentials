@@ -4,7 +4,8 @@ import com.earth2me.essentials.EssentialsConf;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.NumberUtil;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -40,7 +41,7 @@ public final class Economy
 		{
 			folder.mkdirs();
 		}
-		EssentialsConf npcConfig = new EssentialsConf(new File(folder, Util.sanitizeFileName(name) + ".yml"));
+		EssentialsConf npcConfig = new EssentialsConf(new File(folder, StringUtil.sanitizeFileName(name) + ".yml"));
 		npcConfig.load();
 		npcConfig.setProperty("npc", true);
 		npcConfig.setProperty("money", ess.getSettings().getStartingBalance());
@@ -54,7 +55,7 @@ public final class Economy
 		{
 			folder.mkdirs();
 		}
-		File config = new File(folder, Util.sanitizeFileName(name) + ".yml");
+		File config = new File(folder, StringUtil.sanitizeFileName(name) + ".yml");
 		EssentialsConf npcConfig = new EssentialsConf(config);
 		npcConfig.load();
 		if (npcConfig.hasProperty("npc") && npcConfig.getBoolean("npc", false))
@@ -375,7 +376,7 @@ public final class Economy
 		{
 			throw new RuntimeException(noCallBeforeLoad);
 		}
-		return Util.displayCurrency(amount, ess);
+		return NumberUtil.displayCurrency(amount, ess);
 	}
 
 	/**

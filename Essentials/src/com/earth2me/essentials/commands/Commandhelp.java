@@ -2,8 +2,9 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.textreader.*;
+import com.earth2me.essentials.utils.NumberUtil;
 import java.util.Locale;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -27,7 +28,7 @@ public class Commandhelp extends EssentialsCommand
 
 		if (input.getLines().isEmpty())
 		{
-			if (Util.isInt(pageStr) || pageStr == null)
+			if (NumberUtil.isInt(pageStr) || pageStr == null)
 			{
 				output = new HelpInput(user, "", ess);
 			}

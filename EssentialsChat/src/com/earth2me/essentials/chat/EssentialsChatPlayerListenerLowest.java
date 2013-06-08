@@ -2,7 +2,8 @@ package com.earth2me.essentials.chat;
 
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.FormatUtil;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.Map;
@@ -44,7 +45,7 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer
 		/**
 		 * This listener should apply the general chat formatting only...then return control back the event handler
 		 */
-		event.setMessage(Util.formatMessage(user, "essentials.chat", event.getMessage()));
+		event.setMessage(FormatUtil.formatMessage(user, "essentials.chat", event.getMessage()));
 		String group = user.getGroup();
 		String world = user.getWorld().getName();
 		MessageFormat format = ess.getSettings().getChatFormat(group);

@@ -1,5 +1,7 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.StringUtil;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -142,7 +144,7 @@ public class Enchantments
 	
 	public static Enchantment getByName(String name) {
 		Enchantment enchantment;
-		if (Util.isInt(name)) {
+		if (NumberUtil.isInt(name)) {
 			enchantment = Enchantment.getById(Integer.parseInt(name));
 		} else {
 			enchantment = Enchantment.getByName(name.toUpperCase(Locale.ENGLISH));

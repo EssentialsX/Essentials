@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -46,7 +47,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 						continue;
 					}
 					final String name = string.substring(0, string.length() - 4);
-					keys.add(Util.sanitizeFileName(name));
+					keys.add(StringUtil.sanitizeFileName(name));
 				}
 			}
 		});
@@ -54,7 +55,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 
 	public boolean userExists(final String name)
 	{
-		return keys.contains(Util.sanitizeFileName(name));
+		return keys.contains(StringUtil.sanitizeFileName(name));
 	}
 
 	public User getUser(final String name)
@@ -76,7 +77,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 	@Override
 	public User load(final String name) throws Exception
 	{
-		String sanitizedName = Util.sanitizeFileName(name);
+		String sanitizedName = StringUtil.sanitizeFileName(name);
 		if (!sanitizedName.equals(name))
 		{
 			User user = getUser(sanitizedName);
@@ -114,8 +115,8 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 
 	public void removeUser(final String name)
 	{
-		keys.remove(Util.sanitizeFileName(name));
-		users.invalidate(Util.sanitizeFileName(name));
+		keys.remove(StringUtil.sanitizeFileName(name));
+		users.invalidate(StringUtil.sanitizeFileName(name));
 		users.invalidate(name);
 	}
 
@@ -131,7 +132,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 
 	public File getUserFile(final String name)
 	{
-		return getUserFile2(Util.sanitizeFileName(name));
+		return getUserFile2(StringUtil.sanitizeFileName(name));
 	}
 
 	private File getUserFile2(final String name)

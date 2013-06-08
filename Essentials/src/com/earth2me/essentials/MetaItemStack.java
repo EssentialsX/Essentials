@@ -1,9 +1,12 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.utils.StringUtil;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.textreader.BookInput;
 import com.earth2me.essentials.textreader.BookPager;
 import com.earth2me.essentials.textreader.IText;
+import com.earth2me.essentials.utils.FormatUtil;
+import com.earth2me.essentials.utils.NumberUtil;
 import java.util.*;
 import java.util.regex.Pattern;
 import org.bukkit.Color;
@@ -126,7 +129,7 @@ public class MetaItemStack
 
 		if (split.length > 1 && split[0].equalsIgnoreCase("name") && hasMetaPermission(sender, "name", false, true, ess))
 		{
-			final String displayName = Util.replaceFormat(split[1].replace('_', ' '));
+			final String displayName = FormatUtil.replaceFormat(split[1].replace('_', ' '));
 			final ItemMeta meta = stack.getItemMeta();
 			meta.setDisplayName(displayName);
 			stack.setItemMeta(meta);
@@ -136,7 +139,7 @@ public class MetaItemStack
 			final List<String> lore = new ArrayList<String>();
 			for (String line : split[1].split("\\|"))
 			{
-				lore.add(Util.replaceFormat(line.replace('_', ' ')));
+				lore.add(FormatUtil.replaceFormat(line.replace('_', ' ')));
 			}
 			final ItemMeta meta = stack.getItemMeta();
 			meta.setLore(lore);
@@ -176,14 +179,14 @@ public class MetaItemStack
 		}
 		else if (split.length > 1 && split[0].equalsIgnoreCase("title") && stack.getType() == Material.WRITTEN_BOOK && hasMetaPermission(sender, "title", false, true, ess))
 		{
-			final String title = Util.replaceFormat(split[1].replace('_', ' '));
+			final String title = FormatUtil.replaceFormat(split[1].replace('_', ' '));
 			final BookMeta meta = (BookMeta)stack.getItemMeta();
 			meta.setTitle(title);
 			stack.setItemMeta(meta);
 		}
 		else if (split.length > 1 && split[0].equalsIgnoreCase("power") && stack.getType() == Material.FIREWORK && hasMetaPermission(sender, "firework-power", false, true, ess))
 		{
-			final int power = Util.isInt(split[1]) ? Integer.parseInt(split[1]) : 0;
+			final int power = NumberUtil.isInt(split[1]) ? Integer.parseInt(split[1]) : 0;
 			final FireworkMeta meta = (FireworkMeta)stack.getItemMeta();
 			meta.setPower(power > 3 ? 4 : power);
 			stack.setItemMeta(meta);
@@ -205,9 +208,9 @@ public class MetaItemStack
 			final String[] color = split[1].split("(\\||,)");
 			if (color.length == 3)
 			{
-				final int red = Util.isInt(color[0]) ? Integer.parseInt(color[0]) : 0;
-				final int green = Util.isInt(color[1]) ? Integer.parseInt(color[1]) : 0;
-				final int blue = Util.isInt(color[2]) ? Integer.parseInt(color[2]) : 0;
+				final int red = NumberUtil.isInt(color[0]) ? Integer.parseInt(color[0]) : 0;
+				final int green = NumberUtil.isInt(color[1]) ? Integer.parseInt(color[1]) : 0;
+				final int blue = NumberUtil.isInt(color[2]) ? Integer.parseInt(color[2]) : 0;
 				final LeatherArmorMeta meta = (LeatherArmorMeta)stack.getItemMeta();
 				meta.setColor(Color.fromRGB(red, green, blue));
 				stack.setItemMeta(meta);
@@ -360,7 +363,7 @@ public class MetaItemStack
 			}
 			else if (split[0].equalsIgnoreCase("power") || (allowShortName && split[0].equalsIgnoreCase("p")))
 			{
-				if (Util.isInt(split[1]))
+				if (NumberUtil.isInt(split[1]))
 				{
 					validPotionPower = true;
 					power = Integer.parseInt(split[1]);
@@ -376,7 +379,7 @@ public class MetaItemStack
 			}
 			else if (split[0].equalsIgnoreCase("duration") || (allowShortName && split[0].equalsIgnoreCase("d")))
 			{
-				if (Util.isInt(split[1]))
+				if (NumberUtil.isInt(split[1]))
 				{
 					validPotionDuration = true;
 					duration = Integer.parseInt(split[1]) * 20; //Duration is in ticks by default, converted to seconds
