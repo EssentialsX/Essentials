@@ -49,6 +49,11 @@ public class EssentialsPlayerListener implements Listener
 		final User user = ess.getUser(event.getPlayer());
 		updateCompass(user);
 		user.setDisplayNick();
+		
+		if (ess.getSettings().isTeleportInvulnerability())
+		{
+			user.enableInvulnerabilityAfterTeleport();
+		}
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
