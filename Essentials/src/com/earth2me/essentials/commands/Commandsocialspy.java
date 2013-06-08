@@ -6,38 +6,59 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.Server;
 
 
-public class Commandsocialspy extends EssentialsCommand
+public class Commandsocialspy extends EssentialsToggleCommand
 {
 	public Commandsocialspy()
 	{
-		super("socialspy");
+		super("socialspy", "essentials.socialspy.others");
 	}
 
 	@Override
-	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
+	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
-		if (args.length > 0 && user.isAuthorized("essentials.socialspy.others"))
+		toggleOtherPlayers(server, sender, args);
+	}
+
+	@Override
+	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
+	{
+		if (args.length == 1)
 		{
-			User target = getPlayer(server, user, args, 0);
-			user.sendMessage(_("socialSpy", target.getDisplayName(), target.toggleSocialSpy() ? _("enabled") : _("disabled")));
+			Boolean toggle = matchToggleArgument(args[0]);
+			if (toggle == null && user.isAuthorized(othersPermission))
+			{
+				toggleOtherPlayers(server, user, args);
+			}
+			else
+			{
+				togglePlayer(user, user, toggle);
+			}
+		}
+		else if (args.length == 2 && user.isAuthorized(othersPermission))
+		{
+			toggleOtherPlayers(server, user, args);
 		}
 		else
 		{
-			user.sendMessage(_("socialSpy", user.getDisplayName(), user.toggleSocialSpy() ? _("enabled") : _("disabled")));
+			togglePlayer(user, user, null);
 		}
 	}
 
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	void togglePlayer(CommandSender sender, User user, Boolean enabled) throws NotEnoughArgumentsException
 	{
-		if (args.length > 0)
-		{
-			User target = getPlayer(server, args, 0, true, false);
-			sender.sendMessage(_("socialSpy", target.getDisplayName(), target.toggleSocialSpy() ? _("enabled") : _("disabled")));
-		}
-		else
+		if (enabled == null)
 		{
 			throw new NotEnoughArgumentsException();
+		}
+
+		user.setSocialSpyEnabled(enabled);
+
+
+		user.sendMessage(_("socialSpy", user.getDisplayName(), enabled ? _("enabled") : _("disabled")));
+		if (!sender.equals(user))
+		{
+			sender.sendMessage(_("socialSpy", user.getDisplayName(), enabled ? _("enabled") : _("disabled")));
 		}
 	}
 }

@@ -474,19 +474,6 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.save();
 	}
 
-	public boolean toggleTeleportEnabled()
-	{
-		boolean ret = !isTeleportEnabled();
-		setTeleportEnabled(ret);
-		return ret;
-	}
-
-	public boolean toggleSocialSpy()
-	{
-		boolean ret = !isSocialSpyEnabled();
-		setSocialSpyEnabled(ret);
-		return ret;
-	}
 	private List<String> ignoredPlayers;
 
 	public List<String> _getIgnoredPlayers()
