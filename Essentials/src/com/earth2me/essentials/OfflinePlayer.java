@@ -32,6 +32,8 @@ public class OfflinePlayer implements Player
 	private final transient UUID uniqueId = UUID.randomUUID();
 	@Delegate(types = org.bukkit.OfflinePlayer.class)
 	private transient org.bukkit.OfflinePlayer base;
+	private boolean allowFlight = false;
+	private boolean isFlying = false;
 
 	public OfflinePlayer(final String name, final IEssentials ess)
 	{
@@ -824,13 +826,13 @@ public class OfflinePlayer implements Player
 	@Override
 	public void setAllowFlight(boolean bln)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		allowFlight = bln;
 	}
 
 	@Override
 	public boolean getAllowFlight()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		return allowFlight;
 	}
 
 	@Override
@@ -1047,13 +1049,13 @@ public class OfflinePlayer implements Player
 	@Override
 	public boolean isFlying()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		return isFlying;
 	}
 
 	@Override
 	public void setFlying(boolean arg0)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		isFlying = arg0;
 	}
 	
 	@Override

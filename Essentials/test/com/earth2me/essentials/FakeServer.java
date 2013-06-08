@@ -13,11 +13,16 @@ import org.bukkit.World.Environment;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.conversations.Conversation;
+import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.help.HelpMap;
 import org.bukkit.inventory.*;
 import org.bukkit.map.MapView;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.ServicesManager;
@@ -632,7 +637,148 @@ public class FakeServer implements Server
 	@Override
 	public ConsoleCommandSender getConsoleSender()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		return new ConsoleCommandSender() {
+
+			@Override
+			public void sendMessage(String message)
+			{
+				System.out.println("Console message: " + message);
+			}
+
+			@Override
+			public void sendMessage(String[] messages)
+			{
+				for (String message : messages) {
+					System.out.println("Console message: " + message);
+				}
+			}
+
+			@Override
+			public Server getServer()
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public String getName()
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public boolean isPermissionSet(String name)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public boolean isPermissionSet(Permission perm)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public boolean hasPermission(String name)
+			{
+				return true;
+			}
+
+			@Override
+			public boolean hasPermission(Permission perm)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public PermissionAttachment addAttachment(Plugin plugin, String name, boolean value)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public PermissionAttachment addAttachment(Plugin plugin)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public PermissionAttachment addAttachment(Plugin plugin, String name, boolean value, int ticks)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public PermissionAttachment addAttachment(Plugin plugin, int ticks)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public void removeAttachment(PermissionAttachment attachment)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public void recalculatePermissions()
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public Set<PermissionAttachmentInfo> getEffectivePermissions()
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public boolean isOp()
+			{
+				return true;
+			}
+
+			@Override
+			public void setOp(boolean value)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public boolean isConversing()
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public void acceptConversationInput(String input)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public boolean beginConversation(Conversation conversation)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public void abandonConversation(Conversation conversation)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public void abandonConversation(Conversation conversation, ConversationAbandonedEvent details)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public void sendRawMessage(String message)
+			{
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+		};		
 	}
 
 	@Override
