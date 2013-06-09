@@ -8,7 +8,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 
 public interface ITeleport
-{
+{		
 	/**
 	 * Used to skip teleportPlayer delay when teleporting someone to a location or player.
 	 *
@@ -29,6 +29,9 @@ public interface ITeleport
 	 */
 	void now(Player entity, boolean cooldown, TeleportCause cause) throws Exception;
 
+	@Deprecated
+	void teleport(Location loc, Trade chargeFor) throws Exception;
+	
 	/**
 	 * Teleport a player to a specific location
 	 *
