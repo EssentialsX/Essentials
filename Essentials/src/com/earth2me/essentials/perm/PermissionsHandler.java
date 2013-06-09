@@ -1,7 +1,5 @@
 package com.earth2me.essentials.perm;
 
-import com.earth2me.essentials.utils.NumberUtil;
-import com.earth2me.essentials.utils.StringUtil;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
@@ -160,42 +158,10 @@ public class PermissionsHandler implements IPermissionsHandler
 		final Plugin bPermPlugin = pluginManager.getPlugin("bPermissions");
 		if (bPermPlugin != null && bPermPlugin.isEnabled())
 		{
-			final String bVer = bPermPlugin.getDescription().getVersion().replace(".", "");
-			if (NumberUtil.isInt(bVer) && Integer.parseInt(bVer) < 284)
-			{
-				if (!(handler instanceof BPermissionsHandler))
-				{
-					LOGGER.log(Level.INFO, "Essentials: Using bPermissions based permissions.");
-					handler = new BPermissionsHandler();
-				}
-				return;
-			}
 			if (!(handler instanceof BPermissions2Handler))
 			{
 				LOGGER.log(Level.INFO, "Essentials: Using bPermissions2 based permissions.");
 				handler = new BPermissions2Handler();
-			}
-			return;
-
-		}
-		final Plugin permPlugin = pluginManager.getPlugin("Permissions");
-		if (permPlugin != null && permPlugin.isEnabled())
-		{
-			if (permPlugin.getDescription().getVersion().charAt(0) == '3')
-			{
-				if (!(handler instanceof Permissions3Handler))
-				{
-					LOGGER.log(Level.INFO, "Essentials: Using Permissions 3 based permissions.");
-					handler = new Permissions3Handler(permPlugin);
-				}
-			}
-			else
-			{
-				if (!(handler instanceof Permissions2Handler))
-				{
-					LOGGER.log(Level.INFO, "Essentials: Using Permissions 2 based permissions.");
-					handler = new Permissions2Handler(permPlugin);
-				}
 			}
 			return;
 		}
