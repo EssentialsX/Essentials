@@ -1,9 +1,8 @@
 package com.earth2me.essentials.textreader;
 
-import com.earth2me.essentials.utils.DescParseTickFormat;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.DescParseTickFormat;
 import com.earth2me.essentials.utils.NumberUtil;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ public class KeywordReplacer implements IText
 	private final transient IText input;
 	private final transient List<String> replaced;
 	private final transient IEssentials ess;
-	
+
 	public KeywordReplacer(final IText input, final CommandSender sender, final IEssentials ess)
 	{
 		this.input = input;
@@ -29,7 +28,7 @@ public class KeywordReplacer implements IText
 		this.ess = ess;
 		replaceKeywords(sender);
 	}
-	
+
 	private void replaceKeywords(final CommandSender sender)
 	{
 		String displayName, ipAddress, balance, mails, world;

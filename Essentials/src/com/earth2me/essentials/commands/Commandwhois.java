@@ -2,10 +2,9 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.craftbukkit.SetExpFix;
-import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.NumberUtil;
 import java.util.Locale;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;

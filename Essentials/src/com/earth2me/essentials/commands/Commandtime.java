@@ -1,10 +1,9 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.utils.DescParseTickFormat;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.DescParseTickFormat;
 import com.earth2me.essentials.utils.NumberUtil;
-import com.earth2me.essentials.utils.StringUtil;
 import java.util.*;
 import org.bukkit.Server;
 import org.bukkit.World;

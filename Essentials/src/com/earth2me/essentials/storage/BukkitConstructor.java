@@ -1,7 +1,6 @@
 package com.earth2me.essentials.storage;
 
 import com.earth2me.essentials.utils.NumberUtil;
-import com.earth2me.essentials.utils.StringUtil;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Locale;

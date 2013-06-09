@@ -2,7 +2,6 @@ package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,7 +50,7 @@ public class SignBlockListener implements Listener
 			LOGGER.log(Level.INFO, "Prevented that a block was broken next to a sign.");
 			return true;
 		}
-		
+
 		final int mat = block.getTypeId();
 		if (mat == SIGN_POST || mat == WALL_SIGN)
 		{
@@ -66,7 +65,7 @@ public class SignBlockListener implements Listener
 				}
 			}
 		}
-		
+
 		for (EssentialsSign sign : ess.getSettings().enabledSigns())
 		{
 			if (sign.areHeavyEventRequired() && sign.getBlocks().contains(block.getType())

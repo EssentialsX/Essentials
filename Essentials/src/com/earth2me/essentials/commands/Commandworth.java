@@ -2,7 +2,6 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import java.math.BigDecimal;
 import java.util.Locale;
@@ -48,7 +47,7 @@ public class Commandworth extends EssentialsCommand
 		{
 			throw new Exception(_("itemCannotBeSold"));
 		}
-		
+
 		final BigDecimal result = worth.multiply(BigDecimal.valueOf(amount));
 
 		user.sendMessage(iStack.getDurability() != 0
@@ -94,7 +93,7 @@ public class Commandworth extends EssentialsCommand
 		{
 			throw new Exception(_("itemCannotBeSold"));
 		}
-		
+
 		final BigDecimal result = worth.multiply(BigDecimal.valueOf(amount));
 
 		sender.sendMessage(iStack.getDurability() != 0

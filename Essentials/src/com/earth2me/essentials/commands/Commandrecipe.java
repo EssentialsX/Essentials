@@ -3,7 +3,6 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
-import com.earth2me.essentials.utils.StringUtil;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -29,10 +28,10 @@ public class Commandrecipe extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		
+
 		final ItemStack itemType = ess.getItemDb().get(args[0]);
 		int recipeNo = 0;
-		
+
 		if (args.length > 1)
 		{
 			if (NumberUtil.isInt(args[1]))
@@ -44,21 +43,21 @@ public class Commandrecipe extends EssentialsCommand
 				throw new Exception(_("invalidNumber"));
 			}
 		}
-		
+
 		final List<Recipe> recipesOfType = ess.getServer().getRecipesFor(itemType);
 		if (recipesOfType.size() < 1)
 		{
 			throw new Exception(_("recipeNone", getMaterialName(itemType)));
 		}
-		
+
 		if (recipeNo < 0 || recipeNo >= recipesOfType.size())
 		{
 			throw new Exception(_("recipeBadIndex"));
 		}
-		
+
 		final Recipe selectedRecipe = recipesOfType.get(recipeNo);
 		sender.sendMessage(_("recipe", getMaterialName(itemType), recipeNo + 1, recipesOfType.size()));
-		
+
 		if (selectedRecipe instanceof FurnaceRecipe)
 		{
 			furnaceRecipe(sender, (FurnaceRecipe)selectedRecipe);
@@ -71,7 +70,7 @@ public class Commandrecipe extends EssentialsCommand
 		{
 			shapelessRecipe(sender, (ShapelessRecipe)selectedRecipe);
 		}
-		
+
 		if (recipesOfType.size() > 1 && args.length == 1)
 		{
 			sender.sendMessage(_("recipeMore", commandLabel, args[0], getMaterialName(itemType)));
@@ -86,7 +85,7 @@ public class Commandrecipe extends EssentialsCommand
 	public void shapedRecipe(final CommandSender sender, final ShapedRecipe recipe)
 	{
 		final Map<Character, ItemStack> recipeMap = recipe.getIngredientMap();
-		
+
 		if (sender instanceof Player)
 		{
 			final User user = ess.getUser(sender);

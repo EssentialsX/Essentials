@@ -1,7 +1,5 @@
 package com.earth2me.essentials.perm;
 
-import com.earth2me.essentials.utils.NumberUtil;
-import com.earth2me.essentials.utils.StringUtil;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
@@ -166,7 +164,6 @@ public class PermissionsHandler implements IPermissionsHandler
 				handler = new BPermissions2Handler();
 			}
 			return;
-
 		}
 
 		if (useSuperperms)

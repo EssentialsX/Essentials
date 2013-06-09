@@ -3,7 +3,6 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.UserMap;
-import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.metrics.Metrics;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.NumberUtil;
@@ -250,7 +249,7 @@ public class Commandessentials extends EssentialsCommand
 					}
 
 					int ban = user.getBanReason().equals("") ? 0 : 1;
-					
+
 					long lastLog = user.getLastLogout();
 					if (lastLog == 0)
 					{
@@ -260,7 +259,7 @@ public class Commandessentials extends EssentialsCommand
 					{
 						user.setLastLogin(currTime);
 					}
-					
+
 					long timeDiff = currTime - lastLog;
 					long milliDays = daysArg * 24L * 60L * 60L * 1000L;
 					int homeCount = user.getHomes().size();

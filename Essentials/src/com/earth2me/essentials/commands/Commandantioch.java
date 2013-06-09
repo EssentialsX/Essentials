@@ -1,7 +1,6 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -22,7 +21,7 @@ public class Commandantioch extends EssentialsCommand
 		{
 			ess.broadcastMessage(user, "...lobbest thou thy Holy Hand Grenade of Antioch towards thy foe,");
 			ess.broadcastMessage(user, "who being naughty in My sight, shall snuff it.");
-		}		
+		}
 
 		final Location loc = LocationUtil.getTarget(user);
 		loc.getWorld().spawn(loc, TNTPrimed.class);
