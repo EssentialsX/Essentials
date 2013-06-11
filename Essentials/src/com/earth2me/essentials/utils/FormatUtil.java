@@ -6,12 +6,12 @@ import java.util.regex.Pattern;
 
 public class FormatUtil
 {
-	static final transient Pattern REPLACE_COLOR_PATTERN = Pattern.compile("&([0-9a-f])");
+	static final transient Pattern REPLACE_COLOR_PATTERN = Pattern.compile("&([0-9a-fA-F])");
 	static final transient Pattern VANILLA_MAGIC_PATTERN = Pattern.compile("\u00a7+[Kk]");
 	static final transient Pattern VANILLA_FORMAT_PATTERN = Pattern.compile("\u00a7+[L-ORl-or]");
-	static final transient Pattern REPLACE_FORMAT_PATTERN = Pattern.compile("&([l-or])");
-	static final transient Pattern REPLACE_MAGIC_PATTERN = Pattern.compile("&(k)");
-	static final transient Pattern REPLACE_PATTERN = Pattern.compile("&([0-9a-fk-or])");
+	static final transient Pattern REPLACE_FORMAT_PATTERN = Pattern.compile("&([l-orL-OR])");
+	static final transient Pattern REPLACE_MAGIC_PATTERN = Pattern.compile("&([Kk])");
+	static final transient Pattern REPLACE_PATTERN = Pattern.compile("&([0-9a-fk-orA-FK-OR])");
 	static final transient Pattern LOGCOLOR_PATTERN = Pattern.compile("\\x1B\\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]");
 	static final transient Pattern VANILLA_PATTERN = Pattern.compile("\u00a7+[0-9A-FK-ORa-fk-or]?");
 	static final transient Pattern VANILLA_COLOR_PATTERN = Pattern.compile("\u00a7+[0-9A-Fa-f]");
