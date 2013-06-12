@@ -403,7 +403,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 			// Check authorization
 			if (user != null && !user.isAuthorized(cmd, permissionPrefix))
 			{
-				LOGGER.log(Level.WARNING, _("deniedAccessCommand", user.getName()));
+				LOGGER.log(Level.INFO, _("deniedAccessCommand", user.getName()));
 				user.sendMessage(_("noAccessCommand"));
 				return true;
 			}
