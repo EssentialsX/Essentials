@@ -297,6 +297,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, IUser
 		else
 		{
 			nickname = ess.getSettings().getNicknamePrefix() + nick;
+			suffix = "§r";
 		}
 
 		if (isOp())
