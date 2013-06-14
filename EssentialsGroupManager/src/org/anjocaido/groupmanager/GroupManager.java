@@ -403,7 +403,7 @@ public class GroupManager extends JavaPlugin {
 			senderPlayer = (Player) sender;
 
 			if (!lastError.isEmpty() && !commandLabel.equalsIgnoreCase("manload")) {
-				sender.sendMessage(ChatColor.RED + "All commands are locked due to an error. " + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Check the log" + ChatColor.RESET + "" + ChatColor.RED + " and then try a '/manload'.");
+				sender.sendMessage(ChatColor.RED + "All commands are locked due to an error. " + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Check plugins/groupmanager/error.log or console" + ChatColor.RESET + "" + ChatColor.RED + " and then try a '/manload'.");
 				return true;
 			}
 
@@ -414,10 +414,10 @@ public class GroupManager extends JavaPlugin {
 			if (isOpOverride || worldsHolder.getWorldPermissions(senderPlayer).has(senderPlayer, "groupmanager." + cmd.getName())) {
 				playerCanDo = true;
 			}
-		} else if ((sender instanceof ConsoleCommandSender) || (sender instanceof RemoteConsoleCommandSender) || (sender instanceof BlockCommandSender)) {
+		} else {
 
 			if (!lastError.isEmpty() && !commandLabel.equalsIgnoreCase("manload")) {
-				sender.sendMessage(ChatColor.RED + "All commands are locked due to an error. " + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Check the log" + ChatColor.RESET + "" + ChatColor.RED + " and then try a '/manload'.");
+				sender.sendMessage(ChatColor.RED + "All commands are locked due to an error. " + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Check plugins/groupmanager/error.log or console" + ChatColor.RESET + "" + ChatColor.RED + " and then try a '/manload'.");
 				return true;
 			}
 
@@ -715,15 +715,9 @@ public class GroupManager extends JavaPlugin {
 						return true;
 				}
 				// Validating arguments
-				if (args.length != 2) {
-					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/manuaddp <player> <permission>)");
+				if (args.length < 2) {
+					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/manuaddp <player> <permission> [permission2] [permission3]...)");
 					return true;
-				}
-				
-				auxString = args[1];
-				if (auxString.startsWith("'") && auxString.endsWith("'"))
-				{
-					auxString = auxString.substring(1, auxString.length() - 1);
 				}
 				
 				if ((validateOnlinePlayer) && ((match = validatePlayer(args[0], sender)) == null)) {
@@ -735,55 +729,37 @@ public class GroupManager extends JavaPlugin {
 				} else {
 					auxUser = dataHolder.getUser(args[0]);
 				}
+				
 				// Validating your permissions
 				if (!isConsole && !isOpOverride && (senderGroup != null ? permissionHandler.inGroup(auxUser.getName(), senderGroup.getName()) : false)) {
 					sender.sendMessage(ChatColor.RED + "Can't modify player with same group than you, or higher.");
 					return true;
 				}
-				permissionResult = permissionHandler.checkFullUserPermission(senderUser, args[1]);
-				if (!isConsole && !isOpOverride && (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND) || permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION))) {
-					sender.sendMessage(ChatColor.RED + "You can't add a permission you don't have.");
-					return true;
+				
+				for (int i = 1; i < args.length; i++)
+				{
+					auxString = args[i];
+					if (auxString.startsWith("'") && auxString.endsWith("'"))
+					{
+						auxString = auxString.substring(1, auxString.length() - 1);
+					}
+				
+					permissionResult = permissionHandler.checkFullUserPermission(senderUser, auxString);
+					if (!isConsole && !isOpOverride && (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND) || permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION))) {
+						sender.sendMessage(ChatColor.RED + "You can't add a permission you don't have: '" + auxString + "'");
+						continue;
+					}
+					// Validating permissions of user
+					permissionResult = permissionHandler.checkUserOnlyPermission(auxUser, auxString);
+					if (checkPermissionExists(sender, auxString, permissionResult, "user")) 
+					{
+						continue;
+					}
+					// Seems Ok
+					auxUser.addPermission(auxString);
+					sender.sendMessage(ChatColor.YELLOW + "You added '" + auxString + "' to player '" + auxUser.getName() + "' permissions.");
 				}
-				// Validating permissions of user
-				permissionResult = permissionHandler.checkUserOnlyPermission(auxUser, args[1]);
-				if (auxString.startsWith("+")) {
-					if (permissionResult.resultType.equals(PermissionCheckResult.Type.EXCEPTION)) {
-						sender.sendMessage(ChatColor.RED + "The user already has direct access to that permission.");
-						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
-						return true;
-					}
-				} else if (auxString.startsWith("-")) {
-					if (permissionResult.resultType.equals(PermissionCheckResult.Type.EXCEPTION)) {
-						sender.sendMessage(ChatColor.RED + "The user already has an exception for this node.");
-						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
-						return true;
-					} else if (permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION)) {
-						sender.sendMessage(ChatColor.RED + "The user already has a matching node.");
-						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
-						return true;
-					}
-				} else {
-					if (permissionResult.resultType.equals(PermissionCheckResult.Type.EXCEPTION)) {
-						// Warn only while still allowing you to add the node.
-						sender.sendMessage(ChatColor.RED + "The user already has an exception for this node.");
-						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
-					} else if (permissionResult.resultType.equals(PermissionCheckResult.Type.FOUND)) {
-						sender.sendMessage(ChatColor.RED + "The user already has direct access to that permission.");
-						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
-						if (permissionResult.accessLevel.equalsIgnoreCase(args[1]))
-						{
-							return true;
-						}
-					} else if (permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION)) {
-						// Warn only while still allowing you to add the node.
-						sender.sendMessage(ChatColor.RED + "The user already has a matching Negated node.");
-						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
-					}
-				}
-				// Seems OK
-				auxUser.addPermission(auxString);
-				sender.sendMessage(ChatColor.YELLOW + "You added '" + auxString + "' to player '" + auxUser.getName() + "' permissions.");
+
 
 				targetPlayer = this.getServer().getPlayer(auxUser.getName());
 				if (targetPlayer != null)
@@ -798,15 +774,9 @@ public class GroupManager extends JavaPlugin {
 						return true;
 				}
 				// Validating arguments
-				if (args.length != 2) {
-					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/manudelp <player> <permission>)");
+				if (args.length < 2) {
+					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/manudelp <player> <permission> [permission2] [permission3]...)");
 					return true;
-				}
-				
-				auxString = args[1];
-				if (auxString.startsWith("'") && auxString.endsWith("'"))
-				{
-					auxString = auxString.substring(1, auxString.length() - 1);
 				}
 				
 				if ((validateOnlinePlayer) && ((match = validatePlayer(args[0], sender)) == null)) {
@@ -818,30 +788,40 @@ public class GroupManager extends JavaPlugin {
 				} else {
 					auxUser = dataHolder.getUser(args[0]);
 				}
-				// Validating your permissions
-				if (!isConsole && !isOpOverride && (senderGroup != null ? permissionHandler.inGroup(auxUser.getName(), senderGroup.getName()) : false)) {
-					sender.sendMessage(ChatColor.RED + "You can't modify a player with same group as you, or higher.");
-					return true;
-				}
-				permissionResult = permissionHandler.checkFullUserPermission(senderUser, auxString);
-				if (!isConsole && !isOpOverride && (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND) || permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION))) {
-					sender.sendMessage(ChatColor.RED + "You can't remove a permission you don't have.");
-					return true;
-				}
-				// Validating permissions of user
-				permissionResult = permissionHandler.checkUserOnlyPermission(auxUser, auxString);
-				if (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND)) {
-					sender.sendMessage(ChatColor.RED + "The user doesn't have direct access to that permission.");
-					return true;
-				}
-				if (!auxUser.hasSamePermissionNode(auxString)) {
-					sender.sendMessage(ChatColor.RED + "This permission node doesn't match any node.");
-					sender.sendMessage(ChatColor.RED + "But might match node: " + permissionResult.accessLevel);
-					return true;
+				
+				for (int i = 1; i < args.length; i++)
+				{
+					auxString = args[i];
+					if (auxString.startsWith("'") && auxString.endsWith("'"))
+					{
+						auxString = auxString.substring(1, auxString.length() - 1);
+					}
+				
+					if (!isConsole && !isOpOverride && (senderGroup != null ? permissionHandler.inGroup(auxUser.getName(), senderGroup.getName()) : false)) {
+						sender.sendMessage(ChatColor.RED + "You can't modify a player with same group as you, or higher.");
+						continue;
+					}
+					// Validating your permissions
+					permissionResult = permissionHandler.checkFullUserPermission(senderUser, auxString);
+					if (!isConsole && !isOpOverride && (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND) || permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION))) {
+						sender.sendMessage(ChatColor.RED + "You can't remove a permission you don't have: '" + auxString + "'");
+						continue;
+					}
+					// Validating permissions of user
+					permissionResult = permissionHandler.checkUserOnlyPermission(auxUser, auxString);
+					if (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND)) {
+						sender.sendMessage(ChatColor.RED + "The user doesn't have direct access to that permission: '" + auxString + "'");
+						continue;
+					}
+					if (!auxUser.hasSamePermissionNode(auxString)) {
+						sender.sendMessage(ChatColor.RED + "This permission node doesn't match any node.");
+						sender.sendMessage(ChatColor.RED + "But might match node: " + permissionResult.accessLevel);
+						continue;
+					}
+					auxUser.removePermission(auxString);
+					sender.sendMessage(ChatColor.YELLOW + "You removed '" + auxString + "' from player '" + auxUser.getName() + "' permissions.");
 				}
 				// Seems OK
-				auxUser.removePermission(auxString);
-				sender.sendMessage(ChatColor.YELLOW + "You removed '" + auxString + "' from player '" + auxUser.getName() + "' permissions.");
 
 				targetPlayer = this.getServer().getPlayer(auxUser.getName());
 				if (targetPlayer != null)
@@ -1026,15 +1006,9 @@ public class GroupManager extends JavaPlugin {
 						return true;
 				}
 				// Validating arguments
-				if (args.length != 2) {
-					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/mangaaddp <group> <permission>)");
+				if (args.length < 2) {
+					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/mangaaddp <group> <permission> [permission2] [permission3]...)");
 					return true;
-				}
-				
-				auxString = args[1];
-				if (auxString.startsWith("'") && auxString.endsWith("'"))
-				{
-					auxString = auxString.substring(1, auxString.length() - 1);
 				}
 				
 				auxGroup = dataHolder.getGroup(args[0]);
@@ -1042,52 +1016,31 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "'" + args[0] + "' Group doesnt exist!");
 					return false;
 				}
-				// Validating your permissions
-				permissionResult = permissionHandler.checkFullUserPermission(senderUser, args[1]);
-				if (!isConsole && !isOpOverride && (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND) || permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION))) {
-					sender.sendMessage(ChatColor.RED + "You can't add a permission you don't have.");
-					return true;
+				
+				for (int i = 1; i < args.length; i++)
+				{
+					auxString = args[i];
+					if (auxString.startsWith("'") && auxString.endsWith("'"))
+					{
+						auxString = auxString.substring(1, auxString.length() - 1);
+					}
+				
+					// Validating your permissions
+					permissionResult = permissionHandler.checkFullUserPermission(senderUser, auxString);
+					if (!isConsole && !isOpOverride && (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND) || permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION))) {
+						sender.sendMessage(ChatColor.RED + "You can't add a permission you don't have: '" + auxString + "'");
+						continue;
+					}
+					// Validating permissions of user
+					permissionResult = permissionHandler.checkGroupOnlyPermission(auxGroup, auxString);
+					if (checkPermissionExists(sender, auxString, permissionResult, "group")) 
+					{
+						continue;
+					}
+					// Seems OK
+					auxGroup.addPermission(auxString);
+					sender.sendMessage(ChatColor.YELLOW + "You added '" + auxString + "' to group '" + auxGroup.getName() + "' permissions.");
 				}
-				// Validating permissions of user
-				permissionResult = permissionHandler.checkGroupOnlyPermission(auxGroup, args[1]);
-				if (auxString.startsWith("+")) {
-					if (permissionResult.resultType.equals(PermissionCheckResult.Type.EXCEPTION)) {
-						sender.sendMessage(ChatColor.RED + "The group already has direct access to that permission.");
-						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
-						return true;
-					}
-				} else if (auxString.startsWith("-")) {
-					if (permissionResult.resultType.equals(PermissionCheckResult.Type.EXCEPTION)) {
-						sender.sendMessage(ChatColor.RED + "The group already has an exception for this node.");
-						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
-						return true;
-					} else if (permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION)) {
-						sender.sendMessage(ChatColor.RED + "The group already has a matching node.");
-						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
-						return true;
-					}
-				} else {
-					if (permissionResult.resultType.equals(PermissionCheckResult.Type.EXCEPTION)) {
-						// Warn only while still allowing you to add the node.
-						sender.sendMessage(ChatColor.RED + "The group already has an exception for this node.");
-						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
-					} else if (permissionResult.resultType.equals(PermissionCheckResult.Type.FOUND)) {
-						sender.sendMessage(ChatColor.RED + "The group already has direct access to that permission.");
-						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
-						// Abort adding if the node is a direct match.
-						if (permissionResult.accessLevel.equalsIgnoreCase(args[1]))
-						{
-							return true;
-						}
-					} else if (permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION)) {
-						// Warn only while still allowing you to add the node.
-						sender.sendMessage(ChatColor.RED + "The group already has a matching Negated node.");
-						sender.sendMessage(ChatColor.RED + "Node: " + permissionResult.accessLevel);
-					}
-				}
-				// Seems OK
-				auxGroup.addPermission(auxString);
-				sender.sendMessage(ChatColor.YELLOW + "You added '" + auxString + "' to group '" + auxGroup.getName() + "' permissions.");
 
 				BukkitPermissions.updateAllPlayers();
 
@@ -1100,15 +1053,9 @@ public class GroupManager extends JavaPlugin {
 						return true;
 				}
 				// Validating arguments
-				if (args.length != 2) {
-					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/mangdelp <group> <permission>)");
+				if (args.length < 2) {
+					sender.sendMessage(ChatColor.RED + "Review your arguments count! (/mangdelp <group> <permission> [permission2] [permission3]...)");
 					return true;
-				}
-				
-				auxString = args[1];
-				if (auxString.startsWith("'") && auxString.endsWith("'"))
-				{
-					auxString = auxString.substring(1, auxString.length() - 1);
 				}
 				
 				auxGroup = dataHolder.getGroup(args[0]);
@@ -1116,26 +1063,35 @@ public class GroupManager extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "'" + args[0] + "' Group doesnt exist!");
 					return true;
 				}
-				// Validating your permissions
-				permissionResult = permissionHandler.checkFullUserPermission(senderUser, auxString);
-				if (!isConsole && !isOpOverride && (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND) || permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION))) {
-					sender.sendMessage(ChatColor.RED + "Can't remove a permission you don't have.");
-					return true;
+				for (int i = 1; i < args.length; i++)
+				{
+					auxString = args[i];
+					if (auxString.startsWith("'") && auxString.endsWith("'"))
+					{
+						auxString = auxString.substring(1, auxString.length() - 1);
+					}
+				
+					// Validating your permissions
+					permissionResult = permissionHandler.checkFullUserPermission(senderUser, auxString);
+					if (!isConsole && !isOpOverride && (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND) || permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION))) {
+						sender.sendMessage(ChatColor.RED + "Can't remove a permission you don't have: '" + auxString + "'");
+						continue;
+					}
+					// Validating permissions of user
+					permissionResult = permissionHandler.checkGroupOnlyPermission(auxGroup, auxString);
+					if (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND)) {
+						sender.sendMessage(ChatColor.YELLOW + "The group doesn't have direct access to that permission: '" + auxString + "'");
+						continue;
+					}
+					if (!auxGroup.hasSamePermissionNode(auxString)) {
+						sender.sendMessage(ChatColor.RED + "This permission node doesn't match any node.");
+						sender.sendMessage(ChatColor.RED + "But might match node: " + permissionResult.accessLevel);
+						continue;
+					}
+					// Seems OK
+					auxGroup.removePermission(auxString);
+					sender.sendMessage(ChatColor.YELLOW + "You removed '" + auxString + "' from group '" + auxGroup.getName() + "' permissions.");
 				}
-				// Validating permissions of user
-				permissionResult = permissionHandler.checkGroupOnlyPermission(auxGroup, auxString);
-				if (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND)) {
-					sender.sendMessage(ChatColor.YELLOW + "The group doesn't have direct access to that permission.");
-					return true;
-				}
-				if (!auxGroup.hasSamePermissionNode(auxString)) {
-					sender.sendMessage(ChatColor.RED + "This permission node doesn't match any node.");
-					sender.sendMessage(ChatColor.RED + "But might match node: " + permissionResult.accessLevel);
-					return true;
-				}
-				// Seems OK
-				auxGroup.removePermission(auxString);
-				sender.sendMessage(ChatColor.YELLOW + "You removed '" + auxString + "' from group '" + auxGroup.getName() + "' permissions.");
 
 				BukkitPermissions.updateAllPlayers();
 
@@ -1836,7 +1792,7 @@ public class GroupManager extends JavaPlugin {
 				if (args.length > 0) {
 
 					if (!lastError.isEmpty()) {
-						sender.sendMessage(ChatColor.RED + "All commands are locked due to an error. " + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Check the log" + ChatColor.RESET + "" + ChatColor.RED + " and then try a '/manload'.");
+						sender.sendMessage(ChatColor.RED + "All commands are locked due to an error. " + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Check plugins/groupmanager/error.log or console" + ChatColor.RESET + "" + ChatColor.RED + " and then try a '/manload'.");
 						return true;
 					}
 
@@ -2139,6 +2095,63 @@ public class GroupManager extends JavaPlugin {
 		sender.sendMessage(ChatColor.RED + "You are not allowed to use that command.");
 		return true;
 	}
+	
+	/**
+	 * Checks if a permission exists and of a lower priority.
+	 */
+	private boolean checkPermissionExists(CommandSender sender, String newPerm, PermissionCheckResult oldPerm, String type) {
+		
+		
+		if (newPerm.startsWith("+"))
+		{
+			if (oldPerm.resultType.equals(PermissionCheckResult.Type.EXCEPTION))
+			{
+				sender.sendMessage(ChatColor.RED + "The " + type + " already has direct access to that permission.");
+				sender.sendMessage(ChatColor.RED + "Node: " + oldPerm.accessLevel);
+				return true;
+			}
+		}
+		else if (newPerm.startsWith("-"))
+		{
+			if (oldPerm.resultType.equals(PermissionCheckResult.Type.EXCEPTION))
+			{
+				sender.sendMessage(ChatColor.RED + "The " + type + " already has an exception for this node.");
+				sender.sendMessage(ChatColor.RED + "Node: " + oldPerm.accessLevel);
+				return true;
+			}
+			else if (oldPerm.resultType.equals(PermissionCheckResult.Type.NEGATION))
+			{
+				sender.sendMessage(ChatColor.RED + "The " + type + " already has a matching negated node.");
+				sender.sendMessage(ChatColor.RED + "Node: " + oldPerm.accessLevel);
+				return true;
+			}
+		}
+		else
+		{
+			if (oldPerm.resultType.equals(PermissionCheckResult.Type.EXCEPTION))
+			{
+				sender.sendMessage(ChatColor.RED + "The " + type + " already has an exception for this node.");
+				sender.sendMessage(ChatColor.RED + "Node: " + oldPerm.accessLevel);
+				return true;
+			}
+			else if (oldPerm.resultType.equals(PermissionCheckResult.Type.NEGATION))
+			{
+				sender.sendMessage(ChatColor.RED + "The " + type + " already has a matching negated node.");
+				sender.sendMessage(ChatColor.RED + "Node: " + oldPerm.accessLevel);
+				return true;
+			}
+			else if (oldPerm.resultType.equals(PermissionCheckResult.Type.FOUND))
+			{
+				sender.sendMessage(ChatColor.RED + "The " + type + " already has direct access to that permission.");
+				sender.sendMessage(ChatColor.RED + "Node: " + oldPerm.accessLevel);
+				
+				// Since not all plugins define wildcard permissions, allow setting the permission anyway if the permissions dont match exactly.
+				return (oldPerm.accessLevel.equalsIgnoreCase(newPerm));
+			}
+		}
+		return false;
+	}
+
 
 	/**
 	 * Sets up the default world for use.
