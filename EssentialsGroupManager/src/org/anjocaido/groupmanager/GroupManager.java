@@ -738,11 +738,7 @@ public class GroupManager extends JavaPlugin {
 				
 				for (int i = 1; i < args.length; i++)
 				{
-					auxString = args[i];
-					if (auxString.startsWith("'") && auxString.endsWith("'"))
-					{
-						auxString = auxString.substring(1, auxString.length() - 1);
-					}
+					auxString = args[i].replace("'", "");
 				
 					permissionResult = permissionHandler.checkFullUserPermission(senderUser, auxString);
 					if (!isConsole && !isOpOverride && (permissionResult.resultType.equals(PermissionCheckResult.Type.NOTFOUND) || permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION))) {
@@ -791,11 +787,7 @@ public class GroupManager extends JavaPlugin {
 				
 				for (int i = 1; i < args.length; i++)
 				{
-					auxString = args[i];
-					if (auxString.startsWith("'") && auxString.endsWith("'"))
-					{
-						auxString = auxString.substring(1, auxString.length() - 1);
-					}
+					auxString = args[i].replace("'", "");
 				
 					if (!isConsole && !isOpOverride && (senderGroup != null ? permissionHandler.inGroup(auxUser.getName(), senderGroup.getName()) : false)) {
 						sender.sendMessage(ChatColor.RED + "You can't modify a player with same group as you, or higher.");
@@ -950,11 +942,7 @@ public class GroupManager extends JavaPlugin {
 					return true;
 				}
 				
-				auxString = args[1];
-				if (auxString.startsWith("'") && auxString.endsWith("'"))
-				{
-					auxString = auxString.substring(1, auxString.length() - 1);
-				}
+				auxString = args[1].replace("'", "");
 
 				if ((validateOnlinePlayer) && ((match = validatePlayer(args[0], sender)) == null)) {
 					return false;
@@ -1019,11 +1007,7 @@ public class GroupManager extends JavaPlugin {
 				
 				for (int i = 1; i < args.length; i++)
 				{
-					auxString = args[i];
-					if (auxString.startsWith("'") && auxString.endsWith("'"))
-					{
-						auxString = auxString.substring(1, auxString.length() - 1);
-					}
+					auxString = args[i].replace("'", "");
 				
 					// Validating your permissions
 					permissionResult = permissionHandler.checkFullUserPermission(senderUser, auxString);
@@ -1065,11 +1049,7 @@ public class GroupManager extends JavaPlugin {
 				}
 				for (int i = 1; i < args.length; i++)
 				{
-					auxString = args[i];
-					if (auxString.startsWith("'") && auxString.endsWith("'"))
-					{
-						auxString = auxString.substring(1, auxString.length() - 1);
-					}
+					auxString = args[i].replace("'", "");
 				
 					// Validating your permissions
 					permissionResult = permissionHandler.checkFullUserPermission(senderUser, auxString);
@@ -1333,10 +1313,7 @@ public class GroupManager extends JavaPlugin {
 						auxString += " ";
 					}
 				}
-				if (auxString.startsWith("'") && auxString.endsWith("'"))
-				{
-					auxString = auxString.substring(1, auxString.length() - 1);
-				}
+				auxString = auxString.replace("'", "");
 				auxUser.getVariables().addVar(args[1], Variables.parseVariableValue(auxString));
 				sender.sendMessage(ChatColor.YELLOW + "Variable " + ChatColor.GOLD + args[1] + ChatColor.YELLOW + ":'" + ChatColor.GREEN + auxString + ChatColor.YELLOW + "' added to the user " + auxUser.getName());
 
@@ -1485,10 +1462,8 @@ public class GroupManager extends JavaPlugin {
 						auxString += " ";
 					}
 				}
-				if (auxString.startsWith("'") && auxString.endsWith("'"))
-				{
-					auxString = auxString.substring(1, auxString.length() - 1);
-				}
+				
+				auxString = auxString.replace("'", "");
 				auxGroup.getVariables().addVar(args[1], Variables.parseVariableValue(auxString));
 				sender.sendMessage(ChatColor.YELLOW + "Variable " + ChatColor.GOLD + args[1] + ChatColor.YELLOW + ":'" + ChatColor.GREEN + auxString + ChatColor.YELLOW + "' added to the group " + auxGroup.getName());
 
@@ -2097,7 +2072,7 @@ public class GroupManager extends JavaPlugin {
 	}
 	
 	/**
-	 * Checks if a permission exists and of a lower priority.
+	 * Checks if a permission exists and of a lower or same priority.
 	 */
 	private boolean checkPermissionExists(CommandSender sender, String newPerm, PermissionCheckResult oldPerm, String type) {
 		
@@ -2132,13 +2107,11 @@ public class GroupManager extends JavaPlugin {
 			{
 				sender.sendMessage(ChatColor.RED + "The " + type + " already has an exception for this node.");
 				sender.sendMessage(ChatColor.RED + "Node: " + oldPerm.accessLevel);
-				return true;
 			}
 			else if (oldPerm.resultType.equals(PermissionCheckResult.Type.NEGATION))
 			{
 				sender.sendMessage(ChatColor.RED + "The " + type + " already has a matching negated node.");
 				sender.sendMessage(ChatColor.RED + "Node: " + oldPerm.accessLevel);
-				return true;
 			}
 			else if (oldPerm.resultType.equals(PermissionCheckResult.Type.FOUND))
 			{
