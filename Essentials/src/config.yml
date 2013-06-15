@@ -57,13 +57,18 @@ item-spawn-blacklist:
 
 # Set this to true if you want permission based item spawn rules.
 # Note: The blacklist above will be ignored then.
-# Permissions:
+# Example permissions (these go in your permissions manager):
 #  - essentials.itemspawn.item-all
 #  - essentials.itemspawn.item-[itemname]
 #  - essentials.itemspawn.item-[itemid]
 #  - essentials.give.item-all
 #  - essentials.give.item-[itemname]
 #  - essentials.give.item-[itemid]
+#  - essentials.unlimited.item-all
+#  - essentials.unlimited.item-[itemname]
+#  - essentials.unlimited.item-[itemid]
+#  - essentials.unlimited.item-bucket # Unlimited liquid placing
+#
 # For more information, visit http://wiki.ess3.net/wiki/Command_Reference/ICheat#Item.2FGive
 permission-based-item-spawn: false
 
