@@ -619,29 +619,29 @@ public class Essentials extends JavaPlugin implements IEssentials
 	@Override
 	public int broadcastMessage(final String message)
 	{
-		return broadcastMessage(null, null, message);
+		return broadcastMessage(null, null, message, true);
 	}
 
 	@Override
 	public int broadcastMessage(final IUser sender, final String message)
 	{
-		return broadcastMessage(sender, null, message);
+		return broadcastMessage(sender, null, message, false);
 	}
 
 	@Override
 	public int broadcastMessage(final String permission, final String message)
 	{
-		return broadcastMessage(null, permission, message);
+		return broadcastMessage(null, permission, message, false);
 	}
 
-	private int broadcastMessage(final IUser sender, final String permission, final String message)
+	private int broadcastMessage(final IUser sender, final String permission, final String message, final boolean keywords)
 	{
 		if (sender != null && sender.isHidden())
 		{
 			return 0;
 		}
 
-		final IText input = new SimpleTextInput(message);
+		IText broadcast = new SimpleTextInput(message);
 
 		final Player[] players = getServer().getOnlinePlayers();
 
@@ -651,8 +651,11 @@ public class Essentials extends JavaPlugin implements IEssentials
 			if ((permission == null && (sender == null || !user.isIgnoredPlayer(sender)))
 				|| (permission != null && user.isAuthorized(permission)))
 			{
-				final IText output = new KeywordReplacer(input, player, this, false);
-				for (String messageText : output.getLines())
+				if (keywords)
+				{
+					broadcast = new KeywordReplacer(broadcast, player, this, false);
+				}
+				for (String messageText : broadcast.getLines())
 				{
 					player.sendMessage(messageText);
 				}
