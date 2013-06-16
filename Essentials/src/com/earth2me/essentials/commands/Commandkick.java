@@ -47,6 +47,6 @@ public class Commandkick extends EssentialsCommand
 		final String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
 
 		server.getLogger().log(Level.INFO, _("playerKicked", senderName, target.getName(), kickReason));
-		ess.broadcastMessage(sender, "essentials.kick.notify", _("playerKicked", senderName, target.getName(), kickReason));
+		ess.broadcastMessage("essentials.kick.notify", _("playerKicked", senderName, target.getName(), kickReason));
 	}
 }

@@ -54,7 +54,7 @@ public class Commandmute extends EssentialsCommand
 				sender.sendMessage(_("mutedPlayer", player.getDisplayName()));
 				player.sendMessage(_("playerMuted"));
 			}
-			ess.broadcastMessage(sender, "essentials.mute.notify", _("muteNotify", sender.getName(), player.getName()));
+			ess.broadcastMessage("essentials.mute.notify", _("muteNotify", sender.getName(), player.getName()));
 		}
 		else
 		{

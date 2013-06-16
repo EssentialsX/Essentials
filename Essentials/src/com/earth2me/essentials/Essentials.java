@@ -31,6 +31,9 @@ import com.earth2me.essentials.register.payment.Methods;
 import com.earth2me.essentials.signs.SignBlockListener;
 import com.earth2me.essentials.signs.SignEntityListener;
 import com.earth2me.essentials.signs.SignPlayerListener;
+import com.earth2me.essentials.textreader.IText;
+import com.earth2me.essentials.textreader.KeywordReplacer;
+import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.DateUtil;
 import java.io.File;
 import java.io.FileReader;
@@ -614,27 +617,32 @@ public class Essentials extends JavaPlugin implements IEssentials
 	}
 
 	@Override
+	public int broadcastMessage(final String message)
+	{
+		return broadcastMessage(null, null, message);
+	}
+
+	@Override
 	public int broadcastMessage(final IUser sender, final String message)
 	{
 		return broadcastMessage(sender, null, message);
 	}
 
 	@Override
-	public int broadcastMessage(final CommandSender sender, final String permission, final String message)
+	public int broadcastMessage(final String permission, final String message)
 	{
 		return broadcastMessage(null, permission, message);
 	}
 
 	private int broadcastMessage(final IUser sender, final String permission, final String message)
 	{
-		if (sender == null && permission == null)
-		{
-			return getServer().broadcastMessage(message);
-		}
 		if (sender != null && sender.isHidden())
 		{
 			return 0;
 		}
+
+		final IText input = new SimpleTextInput(message);
+
 		final Player[] players = getServer().getOnlinePlayers();
 
 		for (Player player : players)
@@ -643,7 +651,11 @@ public class Essentials extends JavaPlugin implements IEssentials
 			if ((permission == null && (sender == null || !user.isIgnoredPlayer(sender)))
 				|| (permission != null && user.isAuthorized(permission)))
 			{
-				player.sendMessage(message);
+				final IText output = new KeywordReplacer(input, player, this, false);
+				for (String messageText : output.getLines())
+				{
+					player.sendMessage(messageText);
+				}
 			}
 		}
 

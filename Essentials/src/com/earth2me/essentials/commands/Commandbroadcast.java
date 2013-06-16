@@ -17,22 +17,22 @@ public class Commandbroadcast extends EssentialsCommand
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		if (args.length < 1)
-		{
-			throw new NotEnoughArgumentsException();
-		}
-
-		ess.broadcastMessage(null, _("broadcast", FormatUtil.replaceFormat(getFinalArg(args, 0)), user.getDisplayName()));
+		sendBroadcast(user.getDisplayName(), args);
 	}
 
 	@Override
 	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	{
+		sendBroadcast(sender.getName(), args);
+	}
+
+	private void sendBroadcast(final String name, final String[] args) throws NotEnoughArgumentsException
 	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
 
-		ess.broadcastMessage(null, _("broadcast", FormatUtil.replaceFormat(getFinalArg(args, 0)), sender.getName()));
+		ess.broadcastMessage(_("broadcast", FormatUtil.replaceFormat(getFinalArg(args, 0)), name));
 	}
 }

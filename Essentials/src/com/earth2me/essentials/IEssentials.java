@@ -30,9 +30,11 @@ public interface IEssentials extends Plugin
 
 	World getWorld(String name);
 
+	int broadcastMessage(String message);
+
 	int broadcastMessage(IUser sender, String message);
 
-	int broadcastMessage(CommandSender sender, String permission, String message);
+	int broadcastMessage(String permission, String message);
 
 	ISettings getSettings();
 
