@@ -243,7 +243,12 @@ public class Essentials extends JavaPlugin implements IEssentials
 			LOGGER.log(Level.INFO, "Essentials load " + timeroutput);
 		}
 	}
-
+	
+	@Override
+	public void saveConfig() {
+		// We don't use any of the bukkit config writing, as this breaks our config file formatting.
+	}
+	
 	private void registerListeners(PluginManager pm)
 	{
 		HandlerList.unregisterAll(this);
