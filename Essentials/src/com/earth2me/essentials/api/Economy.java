@@ -365,7 +365,7 @@ public final class Economy
 		}
 		catch (NumberFormatException e)
 		{
-			logger.log(Level.WARNING, "Failed to disply " + amount + ": " + e.getMessage(), e);
+			logger.log(Level.WARNING, "Failed to display " + amount + ": " + e.getMessage(), e);
 			return "NaN";
 		}
 	}
