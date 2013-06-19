@@ -740,13 +740,13 @@ public class OfflinePlayer implements Player
 	@Override
 	public void setPlayerListName(String name)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		
 	}
 
 	@Override
 	public String getPlayerListName()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		return getName();
 	}
 
 	@Override

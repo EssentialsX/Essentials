@@ -50,7 +50,7 @@ public class SignKit extends EssentialsSign
 	protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException
 	{
 		final String kitName = sign.getLine(1).toLowerCase(Locale.ENGLISH).trim();
-		final String group = sign.getLine(2);
+		final String group = sign.getLine(2).trim();
 		if ((!group.isEmpty() && ("§2Everyone".equals(group) || player.inGroup(group)))
 			|| (group.isEmpty() && (player.isAuthorized("essentials.kits." + kitName))))
 		{
@@ -77,7 +77,12 @@ public class SignKit extends EssentialsSign
 		}
 		else
 		{
-			throw new SignException(_("noKitPermission", "essentials.kits." + kitName));
+			if (group.isEmpty()) {
+				throw new SignException(_("noKitPermission", "essentials.kits." + kitName));
+			}
+			else {
+				throw new SignException(_("noKitGroup", group));
+			}
 		}
 	}
 }
