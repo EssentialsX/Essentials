@@ -32,7 +32,8 @@ public class SignTrade extends EssentialsSign
 		validateTrade(sign, 2, true, ess);
 		final Trade trade = getTrade(sign, 2, AmountType.ROUNDED, true, ess);
 		final Trade charge = getTrade(sign, 1, AmountType.ROUNDED, false, ess);
-		if (trade.getType() == charge.getType() && (trade.getType() != TradeType.ITEM || trade.getItemStack().getType().equals(charge.getItemStack().getType())))
+		if (trade.getType() == charge.getType()
+			&& (trade.getType() != TradeType.ITEM || trade.getItemStack().isSimilar(charge.getItemStack())))
 		{
 			throw new SignException("You cannot trade for the same item type.");
 		}
