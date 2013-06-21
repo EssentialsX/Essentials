@@ -166,6 +166,17 @@ public class PermissionsHandler implements IPermissionsHandler
 			return;
 		}
 
+		final Plugin zPermsPlugin = pluginManager.getPlugin("zPermissions");
+		if (zPermsPlugin != null && zPermsPlugin.isEnabled())
+		{
+			if (!(handler instanceof ZPermissionsHandler))
+			{
+				LOGGER.log(Level.INFO, "Essentials: Using zPermissions based permissions.");
+				handler = new ZPermissionsHandler(plugin);
+			}
+			return;
+		}
+
 		if (useSuperperms)
 		{
 			if (!(handler instanceof SuperpermsHandler))
