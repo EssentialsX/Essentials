@@ -51,7 +51,7 @@ public class Commandspeed extends EssentialsCommand
 			{
 				if (args[2].trim().length() < 2)
 				{
-					throw new Exception(_("playerNotFound"));
+					throw new PlayerNotFoundException();
 				}
 				speedOtherPlayers(server, user, isFly, isBypass, speed, args[2]);
 				return;
@@ -70,7 +70,7 @@ public class Commandspeed extends EssentialsCommand
 		}
 	}
 
-	private void speedOtherPlayers(final Server server, final CommandSender sender, final boolean isFly, final boolean isBypass, final float speed, final String name) throws NotEnoughArgumentsException
+	private void speedOtherPlayers(final Server server, final CommandSender sender, final boolean isFly, final boolean isBypass, final float speed, final String name) throws PlayerNotFoundException
 	{
 		boolean skipHidden = sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.vanish.interact");
 		boolean foundUser = false;
@@ -96,7 +96,7 @@ public class Commandspeed extends EssentialsCommand
 		}
 		if (!foundUser)
 		{
-			throw new NotEnoughArgumentsException(_("playerNotFound"));
+			throw new PlayerNotFoundException();
 		}
 	}
 

@@ -38,7 +38,7 @@ public class Commandext extends EssentialsCommand
 
 		if (args[0].trim().length() < 2)
 		{
-			throw new Exception(_("playerNotFound"));
+			throw new PlayerNotFoundException();
 		}
 
 		extinguishPlayers(server, user, args[0]);
@@ -62,7 +62,7 @@ public class Commandext extends EssentialsCommand
 		}
 		if (!foundUser)
 		{
-			throw new NotEnoughArgumentsException(_("playerNotFound"));
+			throw new PlayerNotFoundException();
 		}
 	}
 }

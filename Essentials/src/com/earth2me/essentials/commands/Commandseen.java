@@ -56,7 +56,7 @@ public class Commandseen extends EssentialsCommand
 				}
 				else
 				{
-					throw new Exception(_("playerNotFound"));
+					throw new PlayerNotFoundException();
 				}
 			}
 			seenOffline(server, sender, player, showBan, extra);

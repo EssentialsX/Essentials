@@ -42,7 +42,7 @@ public class Commandsethome extends EssentialsCommand
 					usersHome = ess.getUser(args[0]);
 					if (usersHome == null)
 					{
-						throw new NoSuchFieldException(_("playerNotFound"));
+						throw new PlayerNotFoundException();
 					}
 					name = args[1].toLowerCase(Locale.ENGLISH);
 				}

@@ -31,11 +31,11 @@ public abstract class EssentialsToggleCommand extends EssentialsCommand
 		return null;
 	}
 
-	protected void toggleOtherPlayers(final Server server, final CommandSender sender, final String[] args) throws NotEnoughArgumentsException
+	protected void toggleOtherPlayers(final Server server, final CommandSender sender, final String[] args) throws PlayerNotFoundException, NotEnoughArgumentsException
 	{
 		if (args.length < 1 || args[0].trim().length() < 2)
 		{
-			throw new NotEnoughArgumentsException(_("playerNotFound"));
+			throw new PlayerNotFoundException();
 		}
 
 		boolean skipHidden = sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.vanish.interact");
@@ -68,7 +68,7 @@ public abstract class EssentialsToggleCommand extends EssentialsCommand
 		}
 		if (!foundUser)
 		{
-			throw new NotEnoughArgumentsException(_("playerNotFound"));
+			throw new PlayerNotFoundException();
 		}
 	}
 

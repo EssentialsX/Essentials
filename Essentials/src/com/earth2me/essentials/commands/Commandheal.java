@@ -26,7 +26,7 @@ public class Commandheal extends EssentialsCommand
 		{
 			if (args[0].trim().length() < 2)
 			{
-				throw new Exception(_("playerNotFound"));
+				throw new PlayerNotFoundException();
 			}
 			if (!user.isAuthorized("essentials.heal.cooldown.bypass"))
 			{
@@ -79,7 +79,7 @@ public class Commandheal extends EssentialsCommand
 		}
 		if (!foundUser)
 		{
-			throw new NotEnoughArgumentsException(_("playerNotFound"));
+			throw new PlayerNotFoundException();
 		}
 	}
 

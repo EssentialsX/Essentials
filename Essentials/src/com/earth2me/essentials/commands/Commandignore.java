@@ -30,7 +30,7 @@ public class Commandignore extends EssentialsCommand
 		}
 		if (player == null)
 		{
-			throw new Exception(_("playerNotFound"));
+			throw new PlayerNotFoundException();
 		}
 		if (user.isIgnoredPlayer(player))
 		{

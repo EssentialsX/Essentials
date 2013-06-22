@@ -225,7 +225,7 @@ public class Commandptime extends EssentialsCommand
 		// We failed to understand the world target...
 		else
 		{
-			throw new Exception(_("playerNotFound"));
+			throw new PlayerNotFoundException();
 		}
 
 		return users;

@@ -49,7 +49,7 @@ public class Commandpay extends EssentialsCommand
 
 		if (!foundUser)
 		{
-			throw new NotEnoughArgumentsException(_("playerNotFound"));
+			throw new PlayerNotFoundException();
 		}
 	}
 }

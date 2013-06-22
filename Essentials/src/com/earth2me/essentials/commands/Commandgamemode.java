@@ -77,7 +77,7 @@ public class Commandgamemode extends EssentialsCommand
 		user.sendMessage(_("gameMode", _(user.getGameMode().toString().toLowerCase(Locale.ENGLISH)), user.getDisplayName()));
 	}
 
-	private void gamemodeOtherPlayers(final Server server, final CommandSender sender, final GameMode gameMode, final String name) throws NotEnoughArgumentsException
+	private void gamemodeOtherPlayers(final Server server, final CommandSender sender, final GameMode gameMode, final String name) throws NotEnoughArgumentsException, PlayerNotFoundException
 	{
 		//TODO: TL this
 		if (name.trim().length() < 2 || gameMode == null)
@@ -101,7 +101,7 @@ public class Commandgamemode extends EssentialsCommand
 		}
 		if (!foundUser)
 		{
-			throw new NotEnoughArgumentsException(_("playerNotFound"));
+			throw new PlayerNotFoundException();
 		}
 	}
 

@@ -87,7 +87,7 @@ public class Commandmsg extends EssentialsCommand
 
 		if (!foundUser)
 		{
-			throw new Exception(_("playerNotFound"));
+			throw new PlayerNotFoundException();
 		}
 	}
 }
