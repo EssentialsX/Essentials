@@ -3,7 +3,10 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -16,144 +19,137 @@ public class Commandclearinventory extends EssentialsCommand
 	{
 		super("clearinventory");
 	}
+	static int BASE_AMOUNT = 100000;
+	static int EXTENDED_CAP = 8;
 
-	//TODO: Cleanup
 	@Override
 	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		if (args.length > 0 && user.isAuthorized("essentials.clearinventory.others"))
-		{
-			if (args[0].contentEquals("*") && user.isAuthorized("essentials.clearinventory.all"))
-			{
-				cleanInventoryAll(server, user, args);
-			}
-			else if (args[0].trim().length() < 2)
-			{
-				cleanInventorySelf(server, user, args);
-			}
-			else
-			{
-				cleanInventoryOthers(server, user, args);
-			}
-		}
-		else
-		{
-			cleanInventorySelf(server, user, args);
-		}
+		parseCommand(server, user, args, user.isAuthorized("essentials.clearinventory.others"), user.isAuthorized("essentials.clearinventory.all"));
 	}
 
 	@Override
 	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
 	{
-		if (args.length > 0)
+		parseCommand(server, sender, args, true, true);
+	}
+
+	private void parseCommand(Server server, CommandSender sender, String[] args, boolean allowOthers, boolean allowAll) throws Exception
+	{
+		List<Player> players = new ArrayList<Player>();
+		int offset = 0;
+
+		if (sender instanceof User)
 		{
-			if (args[0].contentEquals("*"))
-			{
-				cleanInventoryAll(server, sender, args);
-			}
-			else if (args[0].trim().length() < 2)
-			{
-				throw new Exception(_("playerNotFound"));
-			}
-			else
-			{
-				cleanInventoryOthers(server, sender, args);
-			}
+			players.add((Player)sender);
 		}
-		else
+
+		if (allowAll && args.length > 0 && args[0].contentEquals("*"))
 		{
-			throw new NotEnoughArgumentsException();
+			sender.sendMessage(_("inventoryClearingFromAll"));
+			offset = 1;
+			players = Arrays.asList(server.getOnlinePlayers());
+		}
+		else if (allowOthers && args.length > 0 && args[0].trim().length() > 2)
+		{
+			offset = 1;
+			players = server.matchPlayer(args[0].trim());
+		}
+
+		if (players.size() < 1)
+		{
+			throw new PlayerNotFoundException();
+		}
+		for (Player player : players)
+		{
+			clearHandler(sender, player, args, offset, players.size() < EXTENDED_CAP);		
 		}
 	}
 
-	private void cleanInventoryAll(Server server, CommandSender sender, String[] args) throws Exception
+	protected void clearHandler(CommandSender sender, Player player, String[] args, int offset, boolean showExtended) throws Exception
 	{
-		if (args.length > 1)
+		short data = -1;
+		int type = -1;
+		int amount = -1;
+
+		if (args.length > (offset + 1) && NumberUtil.isInt(args[(offset + 1)]))
 		{
-			for (Player onlinePlayer : server.getOnlinePlayers())
+			amount = Integer.parseInt(args[(offset + 1)]);
+		}
+		if (args.length > offset)
+		{
+			if (args[offset].equalsIgnoreCase("**"))
 			{
-				clearInventory(onlinePlayer, args[1]);
+				type = -2;
 			}
-			sender.sendMessage(_("inventoryClearedAll"));
-		}
-		else
-		{
-			throw new NotEnoughArgumentsException();
-		}
-	}
-
-	private void cleanInventoryOthers(Server server, CommandSender sender, String[] args) throws Exception
-	{
-		List<Player> online = server.matchPlayer(args[0]);
-
-		if (!online.isEmpty())
-		{
-			for (Player p : online)
+			else if (!args[offset].equalsIgnoreCase("*"))
 			{
-				if (args.length > 1)
+				final String[] split = args[offset].split(":");
+				final ItemStack item = ess.getItemDb().get(split[0]);
+				type = item.getTypeId();
+
+				if (split.length > 1 && NumberUtil.isInt(split[1]))
 				{
-					clearInventory(p, args[1]);
+					data = Short.parseShort(split[1]);
 				}
 				else
 				{
-					p.getInventory().clear();
+					data = item.getDurability();
 				}
-				sender.sendMessage(_("inventoryClearedOthers", p.getDisplayName()));
 			}
 		}
-		else
-		{
-			throw new Exception(_("playerNotFound"));
-		}
-	}
 
-	private void cleanInventorySelf(Server server, User user, String[] args) throws Exception
-	{
-		if (args.length > 0)
+		if (type == -1) // type -1 represents wildcard or all items
 		{
-			clearInventory(user, args[0]);
-		}
-		else
-		{
-			user.getInventory().clear();
-		}
-		user.sendMessage(_("inventoryCleared"));
-	}
-
-	private void clearInventory(Player player, String arg) throws Exception
-	{
-		if (arg.equalsIgnoreCase("*"))
-		{
+			if (showExtended)
+			{
+				sender.sendMessage(_("inventoryClearingAllItems", player.getDisplayName()));
+			}
 			player.getInventory().clear();
 		}
-		else if (arg.equalsIgnoreCase("**"))
+		else if (type == -2) // type -2 represents double wildcard or all items and armor
 		{
+			if (showExtended)
+			{
+				sender.sendMessage(_("inventoryClearingAllArmor", player.getDisplayName()));
+			}
 			player.getInventory().clear();
 			player.getInventory().setArmorContents(null);
 		}
 		else
 		{
-			final String[] split = arg.split(":");
-			final ItemStack item = ess.getItemDb().get(split[0]);
-			final int type = item.getTypeId();
-
-			if (split.length > 1 && NumberUtil.isInt(split[1]))
+			if (data == -1) // data -1 means that all subtypes will be cleared
 			{
-				player.getInventory().clear(type, Integer.parseInt(split[1]));
+				ItemStack stack = new ItemStack(type);
+				if (showExtended) {
+					sender.sendMessage(_("inventoryClearingAllStack", stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName()));
+				}
+				player.getInventory().clear(type, data);
 			}
-			else if (split.length > 1 && split[1].equalsIgnoreCase("*"))
+			else if (amount == -1) // amount -1 means all items will be cleared
 			{
-				player.getInventory().clear(type, -1);
+				ItemStack stack = new ItemStack(type, BASE_AMOUNT, data);
+				ItemStack removedStack = player.getInventory().removeItem(stack).get(0);
+				final int removedAmount = (BASE_AMOUNT - removedStack.getAmount());
+				if (removedAmount > 0 || showExtended)
+				{
+					sender.sendMessage(_("inventoryClearingStack", removedAmount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName()));
+				}
 			}
 			else
 			{
-				if (NumberUtil.isInt(split[0]))
+				ItemStack stack = new ItemStack(type, amount, data);
+				if (player.getInventory().containsAtLeast(stack, amount))
 				{
-					player.getInventory().clear(type, -1);
+					sender.sendMessage(_("inventoryClearingStack", amount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName()));
+					player.getInventory().removeItem(stack);
 				}
 				else
 				{
-					player.getInventory().clear(type, item.getDurability());
+					if (showExtended)
+					{
+						sender.sendMessage(_("inventoryClearFail", player.getDisplayName(), amount, stack.getType().toString().toLowerCase(Locale.ENGLISH)));
+					}
 				}
 			}
 		}
