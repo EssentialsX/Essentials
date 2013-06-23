@@ -1,7 +1,12 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.LocationUtil;
+import java.util.Locale;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.CreatureSpawner;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -28,19 +33,38 @@ public class EssentialsBlockListener implements Listener
 		{
 			return;
 		}
+
+		if (is.getType() == Material.MOB_SPAWNER && event.getItemInHand() != null && event.getPlayer() != null
+			&& event.getItemInHand().getType() == Material.MOB_SPAWNER)
+		{
+			final BlockState blockState = event.getBlockPlaced().getState();
+			if (blockState instanceof CreatureSpawner)
+			{
+				final CreatureSpawner spawner = (CreatureSpawner)blockState;
+				final EntityType type = EntityType.fromId(event.getItemInHand().getData().getData());
+				if (type != null && Mob.fromBukkitType(type) != null)
+				{
+					if (ess.getUser(event.getPlayer()).isAuthorized("essentials.spawnerconvert." + Mob.fromBukkitType(type).name().toLowerCase(Locale.ENGLISH)))
+					{
+						spawner.setSpawnedType(type);
+					}
+				}
+			}
+		}
+
 		final User user = ess.getUser(event.getPlayer());
 		if (user.hasUnlimited(is) && user.getGameMode() == GameMode.SURVIVAL)
 		{
 			ess.scheduleSyncDelayedTask(
 					new Runnable()
-					{
-						@Override
-						public void run()
-						{
-							user.getInventory().addItem(is);
-							user.updateInventory();
-						}
-					});
+			{
+				@Override
+				public void run()
+				{
+					user.getInventory().addItem(is);
+					user.updateInventory();
+				}
+			});
 		}
 	}
 }
