@@ -52,6 +52,7 @@ public class KeywordReplacer implements IText
 			user.setDisplayNick();
 			displayName = user.getDisplayName();			
 			ipAddress = user.getAddress() == null || user.getAddress().getAddress() == null ? "" : user.getAddress().getAddress().toString();
+			address = user.getAddress() == null ? "" : user.getAddress().toString();
 			balance = NumberUtil.displayCurrency(user.getMoney(), ess);
 			mails = Integer.toString(user.getMails().size());
 			world = user.getLocation() == null || user.getLocation().getWorld() == null ? "" : user.getLocation().getWorld().getName();
@@ -141,7 +142,7 @@ public class KeywordReplacer implements IText
 			if (extended)
 			{
 				line = line.replace("{IP}", ipAddress);
-				line = line.replace("{ADDRESS}", ipAddress);
+				line = line.replace("{ADDRESS}", address);
 				line = line.replace("{PLUGINS}", plugins);
 				line = line.replace("{VERSION}", version);
 			}
