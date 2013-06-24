@@ -35,7 +35,8 @@ Minecraft colors:
 &&o &oItalic&r   &&r &rReset
 
 #Tags
-&6Player name:&r {PLAYER}
+&6Player's Display name:&r {PLAYER}
+&6Player's user name:&r {USERNAME}
 &6IP:&r {IP}
 &6Address:&r {ADDRESS}
 &6Balance:&r {BALANCE}
