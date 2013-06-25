@@ -66,6 +66,7 @@ public class Commandspawner extends EssentialsCommand
 			CreatureSpawner spawner = (CreatureSpawner)target.getBlock().getState();
 			spawner.setSpawnedType(mob.getType());
 			spawner.setDelay(delay);
+			spawner.update();
 		}
 		catch (Throwable ex)
 		{
