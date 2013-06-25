@@ -62,7 +62,7 @@ public class KeywordReplacer implements IText
 		}
 		else
 		{
-			displayName = ipAddress = balance = mails = world = worldTime12 = worldTime24 = worldDate = "";
+			displayName = address = ipAddress = balance = mails = world = worldTime12 = worldTime24 = worldDate = "";
 		}
 
 		userName = sender.getName();

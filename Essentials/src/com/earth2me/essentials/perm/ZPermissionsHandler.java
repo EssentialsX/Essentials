@@ -3,7 +3,6 @@ package com.earth2me.essentials.perm;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,11 +11,10 @@ import org.bukkit.event.server.ServiceRegisterEvent;
 import org.bukkit.plugin.Plugin;
 import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsService;
 
+
 public class ZPermissionsHandler extends SuperpermsHandler implements Listener
 {
-
 	private ZPermissionsService service = null;
-
 	private boolean hasGetPlayerPrimaryGroup = false; // This is a post-1.0 addition
 
 	public ZPermissionsHandler(Plugin plugin)
@@ -190,5 +188,4 @@ public class ZPermissionsHandler extends SuperpermsHandler implements Listener
 			return groups.get(0);
 		}
 	}
-
 }
