@@ -413,12 +413,13 @@ public class Settings implements ISettings
 			String format = config.getString("chat.group-formats." + (group == null ? "Default" : group),
 											 config.getString("chat.format", "&7[{GROUP}]&r {DISPLAYNAME}&7:&r {MESSAGE}"));
 			format = FormatUtil.replaceFormat(format);
+			format = format.replace("'", "''");
 			format = format.replace("{DISPLAYNAME}", "%1$s");
 			format = format.replace("{GROUP}", "{0}");
 			format = format.replace("{MESSAGE}", "%2$s");
 			format = format.replace("{WORLDNAME}", "{1}");
 			format = format.replace("{SHORTWORLDNAME}", "{2}");
-			format = format.replaceAll("\\{(\\D*?)\\}", "\\[$1\\]");
+			format = format.replaceAll("\\{(\\D*?)\\}", "'\\{$1\\}'");
 			format = "§r".concat(format);
 			mFormat = new MessageFormat(format);
 			chatFormats.put(group, mFormat);
