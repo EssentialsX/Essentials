@@ -45,7 +45,7 @@ public class KeywordReplacer implements IText
 		String displayName, ipAddress, balance, mails, world;
 		String worlds, online, unique, playerlist, date, time;
 		String worldTime12, worldTime24, worldDate, plugins;
-		String userName, version;
+		String userName, version, address;
 		if (sender instanceof Player)
 		{
 			final User user = ess.getUser(sender);
