@@ -194,7 +194,8 @@ public class Kit
 				}
 
 				final Map<Integer, ItemStack> overfilled;
-				if (user.isAuthorized("essentials.oversizedstacks"))
+				final boolean allowOversizedStacks = user.isAuthorized("essentials.oversizedstacks");
+				if (allowOversizedStacks)
 				{
 					overfilled = InventoryWorkaround.addOversizedItems(user.getInventory(), ess.getSettings().getOversizedStackSize(), metaStack.getItemStack());
 				}
@@ -204,7 +205,14 @@ public class Kit
 				}
 				for (ItemStack itemStack : overfilled.values())
 				{
-					user.getWorld().dropItemNaturally(user.getLocation(), itemStack);
+					int spillAmount = itemStack.getAmount();
+					if (!allowOversizedStacks) {
+							itemStack.setAmount(spillAmount < itemStack.getMaxStackSize() ? spillAmount : itemStack.getMaxStackSize());
+					}
+					while (spillAmount > 0) {						
+						user.getWorld().dropItemNaturally(user.getLocation(), itemStack);
+						spillAmount -= itemStack.getAmount();
+					}
 					spew = true;
 				}
 			}
