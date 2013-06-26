@@ -49,7 +49,7 @@ public class Commandsocialspy extends EssentialsToggleCommand
 	{
 		if (enabled == null)
 		{
-			throw new NotEnoughArgumentsException();
+			enabled = !user.isSocialSpyEnabled();
 		}
 
 		user.setSocialSpyEnabled(enabled);
