@@ -113,7 +113,7 @@ commands:
     aliases: [eat,eeat,efeed]
   fly:
     description: Take off, and soar!
-    usage: /<command> [player [on|off]]
+    usage: /<command> [player] [on|off]
     aliases: [efly]
   fireball:
     description: Throw a fireball.
@@ -141,7 +141,7 @@ commands:
     aliases: [egive]
   god:
     description: Enables your godly powers.
-    usage: /<command> [player [on|off]]
+    usage: /<command> [player] [on|off]
     aliases: [egod,godmode,egodmode,tgm,etgm]
   hat:
     description: Get some cool new headgear.
@@ -336,7 +336,7 @@ commands:
     aliases: [esetworth]
   socialspy:
     description: Toggles if you can see msg/mail commands in chat.
-    usage: /<command> [player]
+    usage: /<command> [player] [on|off]
     aliases: [esocialspy]
   spawner:
     description: Change the mob type of a spawner.
@@ -424,7 +424,7 @@ commands:
     aliases: [etppos]
   tptoggle:
     description: Blocks all forms of teleportation.
-    usage: /<command> [player [on|off]]
+    usage: /<command> [player] [on|off]
     aliases: [etptoggle]
   tree:
     description: Spawn a tree where you are looking.
