@@ -402,26 +402,23 @@ public class Settings implements ISettings
 	{
 		return config.getString("backup.command", null);
 	}
-	private Map<String, MessageFormat> chatFormats = Collections.synchronizedMap(new HashMap<String, MessageFormat>());
+	private Map<String, String> chatFormats = Collections.synchronizedMap(new HashMap<String, String>());
 
 	@Override
-	public MessageFormat getChatFormat(String group)
+	public String getChatFormat(String group)
 	{
-		MessageFormat mFormat = chatFormats.get(group);
+		String mFormat = chatFormats.get(group);
 		if (mFormat == null)
 		{
-			String format = config.getString("chat.group-formats." + (group == null ? "Default" : group),
+			mFormat = config.getString("chat.group-formats." + (group == null ? "Default" : group),
 											 config.getString("chat.format", "&7[{GROUP}]&r {DISPLAYNAME}&7:&r {MESSAGE}"));
-			format = FormatUtil.replaceFormat(format);
-			format = format.replace("'", "''");
-			format = format.replace("{DISPLAYNAME}", "%1$s");
-			format = format.replace("{GROUP}", "{0}");
-			format = format.replace("{MESSAGE}", "%2$s");
-			format = format.replace("{WORLDNAME}", "{1}");
-			format = format.replace("{SHORTWORLDNAME}", "{2}");
-			format = format.replaceAll("\\{(\\D*?)\\}", "'\\{$1\\}'");
-			format = "§r".concat(format);
-			mFormat = new MessageFormat(format);
+			mFormat = FormatUtil.replaceFormat(mFormat);
+			mFormat = mFormat.replace("{DISPLAYNAME}", "%1$s");
+			mFormat = mFormat.replace("{MESSAGE}", "%2$s");
+			mFormat = mFormat.replace("{GROUP}", "{0}");
+			mFormat = mFormat.replace("{WORLDNAME}", "{1}");
+			mFormat = mFormat.replace("{SHORTWORLDNAME}", "{2}");
+			mFormat = "§r".concat(mFormat);
 			chatFormats.put(group, mFormat);
 		}
 		return mFormat;

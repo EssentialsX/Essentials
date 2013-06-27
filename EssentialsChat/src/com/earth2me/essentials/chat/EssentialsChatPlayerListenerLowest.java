@@ -48,13 +48,13 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer
 		event.setMessage(FormatUtil.formatMessage(user, "essentials.chat", event.getMessage()));
 		String group = user.getGroup();
 		String world = user.getWorld().getName();
-		MessageFormat format = ess.getSettings().getChatFormat(group);
+		String format = ess.getSettings().getChatFormat(group);
+		format = format.replace("{0}", group);
+		format = format.replace("{1}", world);
+		format = format.replace("{2}", world.substring(0, 1).toUpperCase(Locale.ENGLISH));
 		synchronized (format)
-		{
-			event.setFormat(format.format(new Object[]
-					{
-						group, world, world.substring(0, 1).toUpperCase(Locale.ENGLISH)
-					}));
+		{			
+			event.setFormat(format);
 		}
 	}
 }

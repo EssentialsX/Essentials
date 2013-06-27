@@ -27,7 +27,7 @@ public interface ISettings extends IConf
 
 	long getBackupInterval();
 
-	MessageFormat getChatFormat(String group);
+	String getChatFormat(String group);
 
 	int getChatRadius();
 
