@@ -61,7 +61,7 @@ public class Commandrepair extends EssentialsCommand
 		repairItem(item);
 
 		charge.charge(user);
-
+		user.updateInventory();
 		user.sendMessage(_("repair", itemName.replace('_', ' ')));
 	}
 
@@ -74,7 +74,8 @@ public class Commandrepair extends EssentialsCommand
 		{
 			repairItems(user.getInventory().getArmorContents(), user, repaired);
 		}
-
+		
+		user.updateInventory();
 		if (repaired.isEmpty())
 		{
 			throw new Exception(_("repairNone"));
