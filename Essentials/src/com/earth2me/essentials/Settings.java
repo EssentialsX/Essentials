@@ -418,6 +418,9 @@ public class Settings implements ISettings
 			mFormat = mFormat.replace("{GROUP}", "{0}");
 			mFormat = mFormat.replace("{WORLDNAME}", "{1}");
 			mFormat = mFormat.replace("{SHORTWORLDNAME}", "{2}");
+			mFormat = mFormat.replace("{TEAMPREFIX}", "{3}");
+			mFormat = mFormat.replace("{TEAMSUFFIX}", "{4}");
+			mFormat = mFormat.replace("{TEAMNAME}", "{5}");
 			mFormat = "§r".concat(mFormat);
 			chatFormats.put(group, mFormat);
 		}
