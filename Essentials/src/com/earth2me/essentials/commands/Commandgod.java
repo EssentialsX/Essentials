@@ -53,20 +53,27 @@ public class Commandgod extends EssentialsToggleCommand
 			enabled = !user.isGodModeEnabled();
 		}
 
-		user.setGodModeEnabled(enabled);
 		UserToggleGodmodeEvent event = new UserToggleGodmodeEvent(user, enabled);
 		ess.getServer().getPluginManager().callEvent(event);
-
-		if (enabled && user.getHealth() != 0)
+		if (!event.isCancelled())
 		{
-			user.setHealth(user.getMaxHealth());
-			user.setFoodLevel(20);
+			user.setGodModeEnabled(enabled);
+
+			if (enabled && user.getHealth() != 0)
+			{
+				user.setHealth(user.getMaxHealth());
+				user.setFoodLevel(20);
+			}
+
+			user.sendMessage(_("godMode", enabled ? _("enabled") : _("disabled")));
+			if (!sender.equals(user))
+			{
+				sender.sendMessage(_("godMode", _(enabled ? "godEnabledFor" : "godDisabledFor", user.getDisplayName())));
+			}
 		}
-
-		user.sendMessage(_("godMode", enabled ? _("enabled") : _("disabled")));
-		if (!sender.equals(user))
+		else
 		{
-			sender.sendMessage(_("godMode", _(enabled ? "godEnabledFor" : "godDisabledFor", user.getDisplayName())));
+			sender.sendMessage("Could not enable godmode, UserToggleGodmodeEvent was cancelled"); //TODO: a better message
 		}
 	}
 }
