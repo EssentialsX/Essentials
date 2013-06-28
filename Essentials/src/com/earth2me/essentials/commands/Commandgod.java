@@ -2,7 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import net.ess3.essentials.api.events.UserToggleGodmodeEvent;
+import net.ess3.api.events.UserToggleGodmodeEvent;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 

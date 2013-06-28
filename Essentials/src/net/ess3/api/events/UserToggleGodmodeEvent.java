@@ -1,4 +1,4 @@
-package net.ess3.essentials.api.events;
+package net.ess3.api.events;
 
 import com.earth2me.essentials.User;
 import org.bukkit.event.Cancellable;
