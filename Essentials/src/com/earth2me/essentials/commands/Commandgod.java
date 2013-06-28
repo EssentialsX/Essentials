@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.events.UserToggleGodmodeEvent;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
@@ -35,7 +36,7 @@ public class Commandgod extends EssentialsToggleCommand
 			}
 		}
 		else if (args.length == 2 && user.isAuthorized(othersPermission))
-		{			
+		{
 			toggleOtherPlayers(server, user, args);
 		}
 		else
@@ -51,8 +52,10 @@ public class Commandgod extends EssentialsToggleCommand
 		{
 			enabled = !user.isGodModeEnabled();
 		}
-		
+
 		user.setGodModeEnabled(enabled);
+		UserToggleGodmodeEvent event = new UserToggleGodmodeEvent(user, enabled);
+		ess.getServer().getPluginManager().callEvent(event);
 
 		if (enabled && user.getHealth() != 0)
 		{
