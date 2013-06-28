@@ -55,14 +55,31 @@ public class BookPager
 			while (pointer < lineLength)
 			{
 				Character letter = pageLine.charAt(pointer);
-				
+
+				if (pageLine.charAt(start) == ' ')
+				{
+					start++;
+					pointer++;
+					continue;
+				}
+
 				if (length >= max || (letter == '\u00a7' && length + 1 >= max))
 				{
+					int pos = pointer;
+					while (pos > start && pageLine.charAt(pos) != ' ' && pageLine.charAt(pos) != "\n".charAt(0))
+					{
+						pos--;
+					}
+					if (pos != start)
+					{
+						pointer = pos;
+					}
+
 					tempLine = pageLine.substring(start, pointer);
 					pageLines.add(tempLine);
 					start = pointer;
 					length = 0;
-				}	
+				}
 
 				if (letter == '\u00a7' && pointer + 1 < lineLength)
 				{
@@ -77,7 +94,15 @@ public class BookPager
 					}
 					pointer++;
 				}
-				else if (letter == ' ')
+				else if (letter == 'i' || letter == '.' || letter == ',')
+				{
+					length += (0.4 * weight);
+				}
+				else if (letter == 'l')
+				{
+					length += (0.6 * weight);
+				}
+				else if (letter == ' ' || letter == 't')
 				{
 					length += (0.7 * weight);
 				}
@@ -87,6 +112,7 @@ public class BookPager
 				}
 				pointer++;
 			}
+
 			if (length > 0)
 			{
 				tempLine = pageLine.substring(start, lineLength);
@@ -100,7 +126,7 @@ public class BookPager
 			StringBuilder newPage = new StringBuilder();
 			for (int i = count; i < count + 12 && i < pageLines.size(); i++)
 			{
-				newPage.append("\n").append(pageLines.get(i));
+				newPage.append(pageLines.get(i)).append("\n");
 			}
 
 			pages.add(newPage.toString());
