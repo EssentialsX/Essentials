@@ -84,6 +84,7 @@ public class TextInput implements IText
 				}
 				finally
 				{
+					reader.close();
 					bufferedReader.close();
 				}
 			}

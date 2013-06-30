@@ -103,6 +103,7 @@ public class BookInput implements IText
 				}
 				finally
 				{
+					reader.close();
 					bufferedReader.close();
 				}
 			}
