@@ -15,7 +15,7 @@ public class TimedTeleport implements Runnable
 	private int timer_task = -1;
 	private long timer_started;	// time this task was initiated
 	private long timer_delay;		// how long to delay the teleportPlayer
-	private int timer_health;
+	private double timer_health;
 	// note that I initially stored a clone of the location for reference, but...
 	// when comparing locations, I got incorrect mismatches (rounding errors, looked like)
 	// so, the X/Y/Z values are stored instead and rounded off

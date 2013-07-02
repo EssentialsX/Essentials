@@ -21,6 +21,7 @@ public enum Mob
 	CREEPER("Creeper", Enemies.ENEMY, EntityType.CREEPER),
 	GHAST("Ghast", Enemies.ENEMY, EntityType.GHAST),
 	GIANT("Giant", Enemies.ENEMY, EntityType.GIANT),
+	HORSE("Horse", Enemies.FRIENDLY, EntityType.HORSE),
 	PIG("Pig", Enemies.FRIENDLY, EntityType.PIG),
 	PIGZOMB("PigZombie", Enemies.NEUTRAL, EntityType.PIG_ZOMBIE),
 	SHEEP("Sheep", Enemies.FRIENDLY, "", EntityType.SHEEP),
