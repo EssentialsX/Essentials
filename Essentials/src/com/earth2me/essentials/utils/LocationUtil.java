@@ -58,6 +58,7 @@ public class LocationUtil
 		HOLLOW_MATERIALS.add(Material.FENCE_GATE.getId());
 		HOLLOW_MATERIALS.add(Material.WATER_LILY.getId());
 		HOLLOW_MATERIALS.add(Material.NETHER_WARTS.getId());
+		HOLLOW_MATERIALS.add(Material.CARPET.getId());
 
 		for (Integer integer : HOLLOW_MATERIALS)
 		{
