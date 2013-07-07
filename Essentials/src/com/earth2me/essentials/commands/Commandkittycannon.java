@@ -21,7 +21,7 @@ public class Commandkittycannon extends EssentialsCommand
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		final Mob cat = Mob.OCELOT;
-		final Ocelot ocelot = (Ocelot)cat.spawn(user, server, user.getEyeLocation());
+		final Ocelot ocelot = (Ocelot)cat.spawn(user.getWorld(), server, user.getEyeLocation());
 		if (ocelot == null)
 		{
 			return;

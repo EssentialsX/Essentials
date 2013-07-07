@@ -40,7 +40,7 @@ public class Commandheal extends EssentialsCommand
 		{
 			user.healCooldown();
 		}
-		healPlayer(user);
+		healPlayer(user.getBase());
 	}
 
 	@Override

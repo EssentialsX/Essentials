@@ -39,7 +39,7 @@ public class Commandfeed extends EssentialsCommand
 		}
 		try
 		{
-			feedPlayer(user, user);
+			feedPlayer(user, user.getBase());
 		}
 		catch (QuietAbortException e)
 		{

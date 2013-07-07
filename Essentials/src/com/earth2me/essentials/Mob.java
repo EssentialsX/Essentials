@@ -91,11 +91,6 @@ public enum Mob
 		return Collections.unmodifiableSet(hashMap.keySet());
 	}
 
-	public Entity spawn(final Player player, final Server server, final Location loc) throws MobException
-	{
-		return spawn(player.getWorld(), server, loc);
-	}
-
 	public Entity spawn(final World world, final Server server, final Location loc) throws MobException
 	{
 		final Entity entity = world.spawn(loc, (Class<? extends Entity>)this.bukkitType.getEntityClass());
