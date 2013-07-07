@@ -88,7 +88,7 @@ public class SpawnMob
 		{
 			throw new Exception(_("unableToSpawnMob"));
 		}
-		spawnmob(ess, server, user, user, block.getLocation(), parts, data, mobCount);
+		spawnmob(ess, server, user.getBase(), user, block.getLocation(), parts, data, mobCount);
 	}
 
 	// This method spawns a mob at loc, owned by noone

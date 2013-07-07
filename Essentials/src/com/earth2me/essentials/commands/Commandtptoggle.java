@@ -27,20 +27,20 @@ public class Commandtptoggle extends EssentialsToggleCommand
 			Boolean toggle = matchToggleArgument(args[0]);
 			if (toggle == null && user.isAuthorized(othersPermission))
 			{
-				toggleOtherPlayers(server, user, args);
+				toggleOtherPlayers(server, user.getBase(), args);
 			}
 			else
 			{
-				togglePlayer(user, user, toggle);
+				togglePlayer(user.getBase(), user, toggle);
 			}
 		}
 		else if (args.length == 2 && user.isAuthorized(othersPermission))
 		{
-			toggleOtherPlayers(server, user, args);
+			toggleOtherPlayers(server, user.getBase(), args);
 		}
 		else
 		{
-			togglePlayer(user, user, null);
+			togglePlayer(user.getBase(), user, null);
 		}
 	}
 

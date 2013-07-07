@@ -32,7 +32,7 @@ public class Commandheal extends EssentialsCommand
 			{
 				user.healCooldown();
 			}
-			healOtherPlayers(server, user, args[0]);
+			healOtherPlayers(server, user.getBase(), args[0]);
 			return;
 		}
 

@@ -37,10 +37,10 @@ public class SignInfo extends EssentialsSign
 		final IText input;
 		try
 		{
-			input = new TextInput(player, "info", true, ess);
-			final IText output = new KeywordReplacer(input, player, ess);
+			input = new TextInput(player.getBase(), "info", true, ess);
+			final IText output = new KeywordReplacer(input, player.getBase(), ess);
 			final TextPager pager = new TextPager(output);
-			pager.showPage(chapter, page, null, player);
+			pager.showPage(chapter, page, null, player.getBase());
 
 		}
 		catch (IOException ex)

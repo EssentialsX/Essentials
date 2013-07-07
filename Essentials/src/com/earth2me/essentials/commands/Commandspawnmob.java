@@ -43,7 +43,7 @@ public class Commandspawnmob extends EssentialsCommand
 		if (args.length >= 3)
 		{
 			final User target = getPlayer(ess.getServer(), user, args, 2);
-			SpawnMob.spawnmob(ess, server, user, target, mobParts, mobData, mobCount);
+			SpawnMob.spawnmob(ess, server, user.getBase(), target, mobParts, mobData, mobCount);
 			return;
 		}
 		

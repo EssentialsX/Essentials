@@ -222,10 +222,10 @@ public class EssentialsPlayerListener implements Listener
 				{
 					try
 					{
-						final IText input = new TextInput(user, "motd", true, ess);
-						final IText output = new KeywordReplacer(input, user, ess);
+						final IText input = new TextInput(user.getBase(), "motd", true, ess);
+						final IText output = new KeywordReplacer(input, user.getBase(), ess);
 						final TextPager pager = new TextPager(output, true);
-						pager.showPage("1", null, "motd", user);
+						pager.showPage("1", null, "motd", user.getBase());
 					}
 					catch (IOException ex)
 					{

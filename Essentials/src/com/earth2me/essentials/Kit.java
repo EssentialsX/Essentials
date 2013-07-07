@@ -169,7 +169,7 @@ public class Kit
 		try
 		{
 			IText input = new SimpleTextInput(items);
-			IText output = new KeywordReplacer(input, user, ess);
+			IText output = new KeywordReplacer(input, user.getBase(), ess);
 
 			boolean spew = false;
 			final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();

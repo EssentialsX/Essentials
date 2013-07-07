@@ -24,7 +24,7 @@ public class Commandpowertool extends EssentialsCommand
 	{
 		final String command = getFinalArg(args, 0);
 		final ItemStack itemStack = user.getItemInHand();
-		powertool(server, user, user, commandLabel, itemStack, command);
+		powertool(server, user.getBase(), user, commandLabel, itemStack, command);
 	}
 
 	@Override

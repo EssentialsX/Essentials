@@ -113,7 +113,7 @@ public class Commandfirework extends EssentialsCommand
 					{
 						try
 						{
-							mStack.addFireworkMeta(user, true, arg, ess);
+							mStack.addFireworkMeta(user.getBase(), true, arg, ess);
 						}
 						catch (Exception e)
 						{

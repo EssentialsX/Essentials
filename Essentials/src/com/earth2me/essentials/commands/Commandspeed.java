@@ -53,7 +53,7 @@ public class Commandspeed extends EssentialsCommand
 				{
 					throw new PlayerNotFoundException();
 				}
-				speedOtherPlayers(server, user, isFly, isBypass, speed, args[2]);
+				speedOtherPlayers(server, user.getBase(), isFly, isBypass, speed, args[2]);
 				return;
 			}
 		}

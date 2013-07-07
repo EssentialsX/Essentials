@@ -23,28 +23,28 @@ public class Commandexp extends EssentialsCommand
 	{
 		if (args.length == 0)
 		{
-			showExp(user, user);
+			showExp(user.getBase(), user);
 		}
 		else if (args.length > 1 && args[0].equalsIgnoreCase("set") && user.isAuthorized("essentials.exp.set"))
 		{
 			if (args.length == 3 && user.isAuthorized("essentials.exp.set.others"))
 			{
-				expMatch(server, user, args[1], args[2], false);
+				expMatch(server, user.getBase(), args[1], args[2], false);
 			}
 			else
 			{
-				setExp(user, user, args[1], false);
+				setExp(user.getBase(), user, args[1], false);
 			}
 		}
 		else if (args.length > 1 && args[0].equalsIgnoreCase("give") && user.isAuthorized("essentials.exp.give"))
 		{
 			if (args.length == 3 && user.isAuthorized("essentials.exp.give.others"))
 			{
-				expMatch(server, user, args[1], args[2], true);
+				expMatch(server, user.getBase(), args[1], args[2], true);
 			}
 			else
 			{
-				setExp(user, user, args[1], true);
+				setExp(user.getBase(), user, args[1], true);
 			}
 		}
 		else if (args[0].equalsIgnoreCase("show"))
@@ -52,11 +52,11 @@ public class Commandexp extends EssentialsCommand
 			if (args.length >= 2 && user.isAuthorized("essentials.exp.others"))
 			{
 				String match = args[1].trim();
-				showMatch(server, user, match);
+				showMatch(server, user.getBase(), match);
 			}
 			else
 			{
-				showExp(user, user);
+				showExp(user.getBase(), user);
 			}
 		}
 		else
@@ -65,21 +65,21 @@ public class Commandexp extends EssentialsCommand
 			{
 				if (args.length >= 2 && user.isAuthorized("essentials.exp.give.others"))
 				{
-					expMatch(server, user, args[1], args[0], true);
+					expMatch(server, user.getBase(), args[1], args[0], true);
 				}
 				else
 				{
-					setExp(user, user, args[0], true);
+					setExp(user.getBase(), user, args[0], true);
 				}
 			}
 			else if (args.length >= 1 && user.isAuthorized("essentials.exp.others"))
 			{
 				String match = args[0].trim();
-				showMatch(server, user, match);
+				showMatch(server, user.getBase(), match);
 			}
 			else
 			{
-				showExp(user, user);
+				showExp(user.getBase(), user);
 			}
 		}
 	}

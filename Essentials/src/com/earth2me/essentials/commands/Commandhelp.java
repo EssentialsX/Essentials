@@ -23,7 +23,7 @@ public class Commandhelp extends EssentialsCommand
 		String pageStr = args.length > 0 ? args[0] : null;
 		String chapterPageStr = args.length > 1 ? args[1] : null;
 		String command = commandLabel;
-		final IText input = new TextInput(user, "help", false, ess);
+		final IText input = new TextInput(user.getBase(), "help", false, ess);
 
 		if (input.getLines().isEmpty())
 		{
@@ -45,10 +45,10 @@ public class Commandhelp extends EssentialsCommand
 		}
 		else
 		{
-			output = new KeywordReplacer(input, user, ess);
+			output = new KeywordReplacer(input, user.getBase(), ess);
 		}
 		final TextPager pager = new TextPager(output);
-		pager.showPage(pageStr, chapterPageStr, command, user);
+		pager.showPage(pageStr, chapterPageStr, command, user.getBase());
 	}
 
 	@Override

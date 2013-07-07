@@ -20,7 +20,7 @@ public class Commandhelpop extends EssentialsCommand
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		user.setDisplayNick();
-		sendMessage(server, user, user.getDisplayName(), args);
+		sendMessage(server, user.getBase(), user.getDisplayName(), args);
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.StringUtil;
@@ -34,7 +35,7 @@ public class Commandwarp extends EssentialsCommand
 			{
 				throw new Exception(_("warpListPermission"));
 			}
-			warpList(user, args);
+			warpList(user.getBase(), args, user);
 			throw new NoChargeException();
 		}
 		if (args.length > 0)
@@ -57,7 +58,7 @@ public class Commandwarp extends EssentialsCommand
 	{
 		if (args.length < 2 || NumberUtil.isInt(args[0]))
 		{
-			warpList(sender, args);
+			warpList(sender, args, null);
 			throw new NoChargeException();
 		}
 		User otherUser = getPlayer(server, args, 1, true, false);
@@ -67,7 +68,7 @@ public class Commandwarp extends EssentialsCommand
 	}
 
 	//TODO: Use one of the new text classes, like /help ?
-	private void warpList(final CommandSender sender, final String[] args) throws Exception
+	private void warpList(final CommandSender sender, final String[] args, final IUser user) throws Exception
 	{
 		final IWarps warps = ess.getWarps();
 		if (warps.isEmpty())
@@ -76,13 +77,13 @@ public class Commandwarp extends EssentialsCommand
 		}
 		final List<String> warpNameList = new ArrayList<String>(warps.getList());
 
-		if (sender instanceof User)
+		if (user != null)
 		{
 			final Iterator<String> iterator = warpNameList.iterator();
 			while (iterator.hasNext())
 			{
 				final String warpName = iterator.next();
-				if (ess.getSettings().getPerWarpPermission() && !((User)sender).isAuthorized("essentials.warps." + warpName))
+				if (ess.getSettings().getPerWarpPermission() && !user.isAuthorized("essentials.warps." + warpName))
 				{
 					iterator.remove();
 				}

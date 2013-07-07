@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
-public interface IUser extends CommandSender
+public interface IUser
 {
 	long getLastTeleportTimestamp();
 
@@ -86,4 +86,8 @@ public interface IUser extends CommandSender
 	Map<String, Object> getConfigMap();
 
 	Map<String, Object> getConfigMap(String node);
+	
+	public void sendMessage(String message);
+	
+	public String getName();
 }
