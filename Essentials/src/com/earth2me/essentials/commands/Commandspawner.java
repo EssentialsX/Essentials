@@ -29,7 +29,7 @@ public class Commandspawner extends EssentialsCommand
 			throw new NotEnoughArgumentsException(_("mobsAvailable", StringUtil.joinList(Mob.getMobList())));
 		}
 
-		final Location target = LocationUtil.getTarget(user);
+		final Location target = LocationUtil.getTarget(user.getBase());
 		if (target == null || target.getBlock().getType() != Material.MOB_SPAWNER)
 		{
 			throw new Exception(_("mobSpawnTarget"));

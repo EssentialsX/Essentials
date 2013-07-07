@@ -149,7 +149,7 @@ public class EssentialsPlayerListener implements Listener
 		user.setLogoutLocation();
 		if (user.isRecipeSee())
 		{
-			user.getPlayer().getOpenInventory().getTopInventory().clear();
+			user.getBase().getOpenInventory().getTopInventory().clear();
 		}
 		user.updateActivity(false);
 		user.dispose();
@@ -493,7 +493,7 @@ public class EssentialsPlayerListener implements Listener
 	{
 		try
 		{
-			final Location otarget = LocationUtil.getTarget(user);
+			final Location otarget = LocationUtil.getTarget(user.getBase());
 
 			ess.scheduleSyncDelayedTask(
 					new Runnable()

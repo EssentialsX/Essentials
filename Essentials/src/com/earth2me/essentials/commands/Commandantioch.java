@@ -23,7 +23,7 @@ public class Commandantioch extends EssentialsCommand
 			ess.broadcastMessage(user, "who being naughty in My sight, shall snuff it.");
 		}
 
-		final Location loc = LocationUtil.getTarget(user);
+		final Location loc = LocationUtil.getTarget(user.getBase());
 		loc.getWorld().spawn(loc, TNTPrimed.class);
 	}
 }

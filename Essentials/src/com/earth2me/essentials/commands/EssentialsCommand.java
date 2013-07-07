@@ -137,7 +137,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		run(server, (CommandSender)user.getBase(), commandLabel, args);
+		run(server, (CommandSender)(user.getBase()), commandLabel, args);
 	}
 
 	@Override

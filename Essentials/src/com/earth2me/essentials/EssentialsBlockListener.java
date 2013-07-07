@@ -61,8 +61,8 @@ public class EssentialsBlockListener implements Listener
 				@Override
 				public void run()
 				{
-					user.getInventory().addItem(is);
-					user.updateInventory();
+					user.getBase().getInventory().addItem(is);
+					user.getBase().updateInventory();
 				}
 			});
 		}

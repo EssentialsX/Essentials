@@ -27,7 +27,7 @@ public class Commandinvsee extends EssentialsCommand
 
 		if (args.length > 1 && user.isAuthorized("essentials.invsee.equip"))
 		{
-			inv = server.createInventory(invUser, 9, "Equipped");
+			inv = server.createInventory(invUser.getBase(), 9, "Equipped");
 			inv.setContents(invUser.getInventory().getArmorContents());
 		}
 		else

@@ -83,7 +83,7 @@ public class SpawnMob
 	// This method spawns a mob where the user is looking, owned by user
 	public static void spawnmob(final IEssentials ess, final Server server, final User user, final List<String> parts, final List<String> data, int mobCount) throws Exception
 	{
-		final Block block = LocationUtil.getTarget(user).getBlock();
+		final Block block = LocationUtil.getTarget(user.getBase()).getBlock();
 		if (block == null)
 		{
 			throw new Exception(_("unableToSpawnMob"));

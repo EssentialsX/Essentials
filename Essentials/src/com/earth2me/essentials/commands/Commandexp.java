@@ -159,7 +159,7 @@ public class Commandexp extends EssentialsCommand
 
 	private void showExp(final CommandSender sender, final User target)
 	{
-		sender.sendMessage(_("exp", target.getDisplayName(), SetExpFix.getTotalExperience(target), target.getLevel(), SetExpFix.getExpUntilNextLevel(target)));
+		sender.sendMessage(_("exp", target.getDisplayName(), SetExpFix.getTotalExperience(target.getBase()), target.getLevel(), SetExpFix.getExpUntilNextLevel(target.getBase())));
 	}
 
 	//TODO: Limit who can give negative exp?
@@ -176,7 +176,7 @@ public class Commandexp extends EssentialsCommand
 				neededLevel += target.getLevel();
 			}
 			amount = (long)SetExpFix.getExpToLevel(neededLevel);
-			SetExpFix.setTotalExperience(target, 0);
+			SetExpFix.setTotalExperience(target.getBase(), 0);
 		}
 		else
 		{
@@ -189,7 +189,7 @@ public class Commandexp extends EssentialsCommand
 
 		if (give)
 		{
-			amount += SetExpFix.getTotalExperience(target);
+			amount += SetExpFix.getTotalExperience(target.getBase());
 		}
 		if (amount > Integer.MAX_VALUE)
 		{
@@ -199,7 +199,7 @@ public class Commandexp extends EssentialsCommand
 		{
 			amount = 0l;
 		}
-		SetExpFix.setTotalExperience(target, (int)amount);
+		SetExpFix.setTotalExperience(target.getBase(), (int)amount);
 		sender.sendMessage(_("expSet", target.getDisplayName(), amount));
 	}
 }

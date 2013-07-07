@@ -57,7 +57,7 @@ public class Commandpotion extends EssentialsCommand
 				{
 					for (PotionEffect effect : pmeta.getCustomEffects())
 					{
-						effect.apply(user);
+						effect.apply(user.getBase());
 					}
 				}
 				else if (args.length < 3)

@@ -100,7 +100,7 @@ public class Trade
 		}
 
 		if (getItemStack() != null
-			&& !user.getInventory().containsAtLeast(itemStack, itemStack.getAmount()))
+			&& !user.getBase().getInventory().containsAtLeast(itemStack, itemStack.getAmount()))
 		{
 			throw new ChargeException(_("missingItems", getItemStack().getAmount(), getItemStack().getType().toString().toLowerCase(Locale.ENGLISH).replace("_", " ")));
 		}
@@ -114,7 +114,7 @@ public class Trade
 		}
 
 		if (exp != null && exp > 0
-			&& SetExpFix.getTotalExperience(user) < exp)
+			&& SetExpFix.getTotalExperience(user.getBase()) < exp)
 		{
 			throw new ChargeException(_("notEnoughExperience"));
 		}
@@ -138,7 +138,7 @@ public class Trade
 		if (getItemStack() != null)
 		{
 			// This stores the would be overflow
-			Map<Integer, ItemStack> overFlow = InventoryWorkaround.addAllItems(user.getInventory(), getItemStack());
+			Map<Integer, ItemStack> overFlow = InventoryWorkaround.addAllItems(user.getBase().getInventory(), getItemStack());
 
 			if (overFlow != null)
 			{
@@ -154,8 +154,8 @@ public class Trade
 
 				case RETURN:
 					// Pay the user the items, and return overflow
-					final Map<Integer, ItemStack> returnStack = InventoryWorkaround.addItems(user.getInventory(), getItemStack());
-					user.updateInventory();
+					final Map<Integer, ItemStack> returnStack = InventoryWorkaround.addItems(user.getBase().getInventory(), getItemStack());
+					user.getBase().updateInventory();
 
 					if (ess.getSettings().isDebug())
 					{
@@ -166,8 +166,8 @@ public class Trade
 
 				case DROP:
 					// Pay the users the items directly, and drop the rest, will always return no overflow.
-					final Map<Integer, ItemStack> leftOver = InventoryWorkaround.addItems(user.getInventory(), getItemStack());
-					final Location loc = user.getLocation();
+					final Map<Integer, ItemStack> leftOver = InventoryWorkaround.addItems(user.getBase().getInventory(), getItemStack());
+					final Location loc = user.getBase().getLocation();
 					for (ItemStack loStack : leftOver.values())
 					{
 						final int maxStackSize = loStack.getType().getMaxStackSize();
@@ -197,11 +197,11 @@ public class Trade
 			{
 				ess.getLogger().log(Level.INFO, "paying " + user.getName() + " itemstack " + getItemStack().toString());
 			}
-			user.updateInventory();
+			user.getBase().updateInventory();
 		}
 		if (getExperience() != null)
 		{
-			SetExpFix.setTotalExperience(user, SetExpFix.getTotalExperience(user) + getExperience());
+			SetExpFix.setTotalExperience(user.getBase(), SetExpFix.getTotalExperience(user.getBase()) + getExperience());
 		}
 		return null;
 	}
@@ -230,12 +230,12 @@ public class Trade
 			{
 				ess.getLogger().log(Level.INFO, "charging user " + user.getName() + " itemstack " + getItemStack().toString());
 			}
-			if (!user.getInventory().containsAtLeast(getItemStack(), getItemStack().getAmount()))
+			if (!user.getBase().getInventory().containsAtLeast(getItemStack(), getItemStack().getAmount()))
 			{
 				throw new ChargeException(_("missingItems", getItemStack().getAmount(), getItemStack().getType().toString().toLowerCase(Locale.ENGLISH).replace("_", " ")));
 			}
-			user.getInventory().removeItem(getItemStack());
-			user.updateInventory();
+			user.getBase().getInventory().removeItem(getItemStack());
+			user.getBase().updateInventory();
 		}
 		if (command != null)
 		{
@@ -252,12 +252,12 @@ public class Trade
 			{
 				ess.getLogger().log(Level.INFO, "charging user " + user.getName() + " exp " + getExperience());
 			}
-			final int experience = SetExpFix.getTotalExperience(user);
+			final int experience = SetExpFix.getTotalExperience(user.getBase());
 			if (experience < getExperience() && getExperience() > 0)
 			{
 				throw new ChargeException(_("notEnoughExperience"));
 			}
-			SetExpFix.setTotalExperience(user, experience - getExperience());
+			SetExpFix.setTotalExperience(user.getBase(), experience - getExperience());
 		}
 		if (ess.getSettings().isDebug())
 		{

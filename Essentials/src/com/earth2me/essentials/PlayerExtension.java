@@ -11,7 +11,7 @@ import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.ServerOperator;
 
 
-public class PlayerExtension implements Player
+public class PlayerExtension
 {
 	@Delegate(types =
 	{

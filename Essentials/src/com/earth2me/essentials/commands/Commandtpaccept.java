@@ -63,7 +63,7 @@ public class Commandtpaccept extends EssentialsCommand
 			}
 			else
 			{
-				target.getTeleport().teleport(user, charge, TeleportCause.COMMAND);
+				target.getTeleport().teleport(user.getBase(), charge, TeleportCause.COMMAND);
 			}
 		}
 		catch (Exception ex)

@@ -41,7 +41,7 @@ public class Commandclearinventory extends EssentialsCommand
 
 		if (sender instanceof User)
 		{
-			players.add((Player)sender);
+			players.add(((User)sender).getBase());
 		}
 
 		if (allowAll && args.length > 0 && args[0].contentEquals("*"))

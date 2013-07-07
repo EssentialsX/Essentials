@@ -81,7 +81,7 @@ public class Commandmsg extends EssentialsCommand
 			}
 
 			matchPlayer.sendMessage(_("msgFormat", senderName, translatedMe, message));
-			replyTo.setReplyTo(matchedUser);
+			replyTo.setReplyTo(matchPlayer);
 			ess.getUser(matchPlayer).setReplyTo(sender);
 		}
 

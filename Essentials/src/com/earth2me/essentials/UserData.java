@@ -502,7 +502,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 	public boolean isIgnoredPlayer(final String userName)
 	{
 		final IUser user = ess.getUser(userName);
-		if (user == null || !user.isOnline())
+		if (user == null || !user.getBase().isOnline())
 		{
 			return false;
 		}

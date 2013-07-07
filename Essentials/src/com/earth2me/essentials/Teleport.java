@@ -160,7 +160,7 @@ public class Teleport implements ITeleport
 	@Override
 	public void teleportToMe(IUser otherUser, Trade chargeFor, TeleportCause cause) throws Exception
 	{
-		ITarget target = new PlayerTarget(teleportOwner);
+		ITarget target = new PlayerTarget(teleportOwner.getBase());
 		teleport(otherUser, target, chargeFor, cause);
 	}
 

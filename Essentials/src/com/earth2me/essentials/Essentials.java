@@ -502,13 +502,13 @@ public class Essentials extends JavaPlugin implements IEssentials
 			User user = getUser(player);
 			if (user.isRecipeSee())
 			{
-				user.getPlayer().getOpenInventory().getTopInventory().clear();
-				user.getPlayer().getOpenInventory().close();
+				user.getBase().getOpenInventory().getTopInventory().clear();
+				user.getBase().getOpenInventory().close();
 				user.setRecipeSee(false);
 			}
 			if (user.isInvSee() || user.isEnderSee())
 			{
-				user.getPlayer().getOpenInventory().close();
+				user.getBase().getOpenInventory().close();
 				user.setInvSee(false);
 				user.setEnderSee(false);
 			}

@@ -50,7 +50,7 @@ public class Commandtpall extends EssentialsCommand
 			}
 			try
 			{
-				player.getTeleport().now(target, false, TeleportCause.COMMAND);
+				player.getTeleport().now(target.getBase(), false, TeleportCause.COMMAND);
 			}
 			catch (Exception ex)
 			{
