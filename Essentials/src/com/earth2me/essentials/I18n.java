@@ -11,6 +11,7 @@ import java.text.MessageFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 
 public class I18n implements II18n
@@ -24,6 +25,7 @@ public class I18n implements II18n
 	private final transient ResourceBundle defaultBundle;
 	private final transient Map<String, MessageFormat> messageFormatCache = new HashMap<String, MessageFormat>();
 	private final transient IEssentials ess;
+	private final static Pattern NODOUBLEMARK = Pattern.compile("''");
 
 	public I18n(final IEssentials ess)
 	{
@@ -55,11 +57,11 @@ public class I18n implements II18n
 		{
 			try
 			{
-				return customBundle.getString(string);
+				return NODOUBLEMARK.matcher(customBundle.getString(string)).replaceAll("'");
 			}
 			catch (MissingResourceException ex)
 			{
-				return localeBundle.getString(string);
+				return NODOUBLEMARK.matcher(localeBundle.getString(string)).replaceAll("'");
 			}
 		}
 		catch (MissingResourceException ex)
