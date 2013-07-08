@@ -187,7 +187,7 @@ public class WorldsHolder {
 					// These worlds fully mirror their parent
 					for (Object o : mirrorList) {
 						String world = o.toString().toLowerCase();
-						if (world != serverDefaultWorldName) {
+						if (!world.equalsIgnoreCase(serverDefaultWorldName)) {
 							try {
 								mirrorsGroup.remove(world);
 								mirrorsUser.remove(world);
@@ -207,7 +207,7 @@ public class WorldsHolder {
 
 					for (Object key : subSection.keySet()) {
 
-						if (((String)key).toLowerCase() != serverDefaultWorldName) {
+						if (!((String)key).equalsIgnoreCase(serverDefaultWorldName)) {
 
 							if (subSection.get(key) instanceof ArrayList) {
 								ArrayList mirrorList = (ArrayList) subSection.get(key);
