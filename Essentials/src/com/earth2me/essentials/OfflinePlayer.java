@@ -1279,4 +1279,16 @@ public class OfflinePlayer implements Player
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
+	@Override
+	public boolean isScaledHealth()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setScaleHealth(boolean bln)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }
