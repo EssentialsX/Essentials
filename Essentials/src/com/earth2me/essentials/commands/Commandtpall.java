@@ -42,7 +42,7 @@ public class Commandtpall extends EssentialsCommand
 			{
 				continue;
 			}
-			if (target.equals(sender)
+			if (sender.equals(target.getBase())
 				&& target.getWorld() != player.getWorld() && ess.getSettings().isWorldTeleportPermissions()
 				&& !target.isAuthorized("essentials.worlds." + target.getWorld().getName()))
 			{

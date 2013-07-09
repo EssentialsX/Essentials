@@ -61,7 +61,7 @@ public class Commandgod extends EssentialsToggleCommand
 		}
 
 		user.sendMessage(_("godMode", enabled ? _("enabled") : _("disabled")));
-		if (!sender.equals(user))
+		if (!sender.equals(user.getBase()))
 		{
 			sender.sendMessage(_("godMode", _(enabled ? "godEnabledFor" : "godDisabledFor", user.getDisplayName())));
 		}

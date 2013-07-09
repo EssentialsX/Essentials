@@ -56,7 +56,7 @@ public class Commandsocialspy extends EssentialsToggleCommand
 
 
 		user.sendMessage(_("socialSpy", user.getDisplayName(), enabled ? _("enabled") : _("disabled")));
-		if (!sender.equals(user))
+		if (!sender.equals(user.getBase()))
 		{
 			sender.sendMessage(_("socialSpy", user.getDisplayName(), enabled ? _("enabled") : _("disabled")));
 		}

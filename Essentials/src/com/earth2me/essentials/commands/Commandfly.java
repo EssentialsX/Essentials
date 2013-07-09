@@ -60,7 +60,7 @@ public class Commandfly extends EssentialsToggleCommand
 		}
 
 		user.sendMessage(_("flyMode", _(enabled ? "enabled" : "disabled"), user.getDisplayName()));
-		if (!sender.equals(user))
+		if (!sender.equals(user.getBase()))
 		{
 			sender.sendMessage(_("flyMode", _(enabled ? "enabled" : "disabled"), user.getDisplayName()));
 		}
