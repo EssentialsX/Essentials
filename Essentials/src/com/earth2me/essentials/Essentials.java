@@ -76,7 +76,7 @@ import org.yaml.snakeyaml.error.YAMLException;
 
 public class Essentials extends JavaPlugin implements IEssentials
 {
-	public static final int BUKKIT_VERSION = 2794;
+	public static final int BUKKIT_VERSION = 2808;
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private transient ISettings settings;
 	private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
@@ -370,7 +370,7 @@ public class Essentials extends JavaPlugin implements IEssentials
 				BlockCommandSender bsender = (BlockCommandSender)sender;
 				bSenderBlock = bsender.getBlock();
 			}
-			
+
 			if (bSenderBlock != null)
 			{
 				Bukkit.getLogger().log(Level.INFO, "CommandBlock at {0},{1},{2} issued server command: /{3} {4}", new Object[]
