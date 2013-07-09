@@ -51,17 +51,17 @@ public class I18n implements II18n
 		return currentLocale;
 	}
 
-	public String translate(final String string)
+	private String translate(final String string)
 	{
 		try
 		{
 			try
 			{
-				return NODOUBLEMARK.matcher(customBundle.getString(string)).replaceAll("'");
+				return customBundle.getString(string);
 			}
 			catch (MissingResourceException ex)
 			{
-				return NODOUBLEMARK.matcher(localeBundle.getString(string)).replaceAll("'");
+				return localeBundle.getString(string);
 			}
 		}
 		catch (MissingResourceException ex)
@@ -79,7 +79,7 @@ public class I18n implements II18n
 		}
 		if (objects.length == 0)
 		{
-			return instance.translate(string);
+			return NODOUBLEMARK.matcher(instance.translate(string)).replaceAll("'");
 		}
 		else
 		{
