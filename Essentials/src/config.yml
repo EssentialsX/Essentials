@@ -25,8 +25,8 @@ ops-name-color: '4'
 # The character(s) to prefix all nicknames, so that you know they are not true usernames.
 nickname-prefix: '~'
 
-# The maximum length allowed in nicknames. The prefix is not included in this.
-max-nick-length: 16
+# The maximum length allowed in nicknames. The nickname prefix is included in this.
+max-nick-length: 15
 
 # Disable this if you have any other plugin, that modifies the displayname of a user.
 change-displayname: true

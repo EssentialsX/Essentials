@@ -1103,6 +1103,6 @@ public class Settings implements ISettings
 	@Override
 	public int getMaxNickLength()
 	{
-		return config.getInt("max-nick-length", 16);
+		return config.getInt("max-nick-length", 30);
 	}
 }
