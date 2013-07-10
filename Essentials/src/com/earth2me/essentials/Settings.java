@@ -743,7 +743,7 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("economy-log-enabled", false);
 	}
-	// #easteregg	
+	// #easteregg
 	private boolean economyLogUpdate = false;
 
 	@Override
@@ -1098,5 +1098,11 @@ public class Settings implements ISettings
 	public long getMaxTempban()
 	{
 		return config.getLong("max-tempban-time", -1);
+	}
+
+	@Override
+	public int getMaxNickLength()
+	{
+		return config.getInt("max-nick-length", 16);
 	}
 }
