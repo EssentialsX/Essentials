@@ -206,7 +206,7 @@ public class SpawnMob
 			throw new Exception(_("disabledToSpawnMob"));
 		}
 
-		if (sender instanceof User && !((User)sender).isAuthorized("essentials.spawnmob." + mob.name.toLowerCase(Locale.ENGLISH)))
+		if (sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.spawnmob." + mob.name.toLowerCase(Locale.ENGLISH)))
 		{
 			throw new Exception(_("noPermToSpawnMob"));
 		}

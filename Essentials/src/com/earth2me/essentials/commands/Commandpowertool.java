@@ -9,6 +9,7 @@ import java.util.Locale;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -87,7 +88,7 @@ public class Commandpowertool extends EssentialsCommand
 			{
 				if (command.startsWith("a:"))
 				{
-					if (sender instanceof User && !((User)sender).isAuthorized("essentials.powertool.append"))
+					if (sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.powertool.append"))
 					{
 						throw new Exception(_("noPerm", "essentials.powertool.append"));
 					}
