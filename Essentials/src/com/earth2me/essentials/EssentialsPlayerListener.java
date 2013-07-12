@@ -65,7 +65,7 @@ public class EssentialsPlayerListener implements Listener
 		if (user.isMuted())
 		{
 			event.setCancelled(true);
-			user.sendMessage(_("playerMuted"));
+			user.sendMessage(_("voiceSilenced"));
 			LOGGER.info(_("mutedUserSpeaks", user.getName()));
 		}
 		final Iterator<Player> it = event.getRecipients().iterator();
