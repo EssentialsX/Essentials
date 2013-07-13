@@ -2,16 +2,13 @@ package com.earth2me.essentials.chat;
 
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.utils.FormatUtil;
-import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.Map;
 import org.bukkit.Server;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 
