@@ -146,7 +146,7 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer
 		{
 			for (Player onlinePlayer : spyEvent.getRecipients())
 			{
-				onlinePlayer.sendMessage(String.format(event.getFormat(), user.getDisplayName(), event.getMessage()));
+				onlinePlayer.sendMessage(String.format(spyEvent.getFormat(), user.getDisplayName(), spyEvent.getMessage()));
 			}
 		}
 	}
