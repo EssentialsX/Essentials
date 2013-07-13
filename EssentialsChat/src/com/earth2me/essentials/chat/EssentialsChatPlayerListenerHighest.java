@@ -12,10 +12,9 @@ public class EssentialsChatPlayerListenerHighest extends EssentialsChatPlayer
 {
 	public EssentialsChatPlayerListenerHighest(final Server server,
 											   final IEssentials ess,
-											   final Map<String, IEssentialsChatListener> listeners,
 											   final Map<AsyncPlayerChatEvent, ChatStore> chatStorage)
 	{
-		super(server, ess, listeners, chatStorage);
+		super(server, ess, chatStorage);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)

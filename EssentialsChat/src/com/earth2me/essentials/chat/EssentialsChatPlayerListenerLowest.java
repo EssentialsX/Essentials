@@ -19,10 +19,9 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer
 {
 	public EssentialsChatPlayerListenerLowest(final Server server,
 											  final IEssentials ess,
-											  final Map<String, IEssentialsChatListener> listeners,
 											  final Map<AsyncPlayerChatEvent, ChatStore> chatStorage)
 	{
-		super(server, ess, listeners, chatStorage);
+		super(server, ess, chatStorage);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -36,11 +35,12 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer
 
 		final User user = ess.getUser(event.getPlayer());
 
-		if (user == null) {
+		if (user == null)
+		{
 			event.setCancelled(true);
 			return;
 		}
-		
+
 		final ChatStore chatStore = new ChatStore(ess, user, getChatType(event.getMessage()));
 		setChatStore(event, chatStore);
 
@@ -51,16 +51,16 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer
 		String group = user.getGroup();
 		String world = user.getWorld().getName();
 		Team team = user.getScoreboard().getPlayerTeam(user.getBase());
-		
+
 		String format = ess.getSettings().getChatFormat(group);
 		format = format.replace("{0}", group);
 		format = format.replace("{1}", world);
 		format = format.replace("{2}", world.substring(0, 1).toUpperCase(Locale.ENGLISH));
-			format = format.replace("{3}", team == null ? "" : team.getPrefix());
-			format = format.replace("{4}", team == null ? "" : team.getSuffix());
-			format = format.replace("{5}", team == null ? "" : team.getDisplayName());
+		format = format.replace("{3}", team == null ? "" : team.getPrefix());
+		format = format.replace("{4}", team == null ? "" : team.getSuffix());
+		format = format.replace("{5}", team == null ? "" : team.getDisplayName());
 		synchronized (format)
-		{			
+		{
 			event.setFormat(format);
 		}
 	}

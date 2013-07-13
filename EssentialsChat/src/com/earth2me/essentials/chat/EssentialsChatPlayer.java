@@ -19,17 +19,14 @@ public abstract class EssentialsChatPlayer implements Listener
 {
 	protected transient IEssentials ess;
 	protected final static Logger logger = Logger.getLogger("Minecraft");
-	protected final transient Map<String, IEssentialsChatListener> listeners;
 	protected final transient Server server;
 	protected final transient Map<AsyncPlayerChatEvent, ChatStore> chatStorage;
 
 	public EssentialsChatPlayer(final Server server,
-								final IEssentials ess,
-								final Map<String, IEssentialsChatListener> listeners,
+								final IEssentials ess,								
 								final Map<AsyncPlayerChatEvent, ChatStore> chatStorage)
 	{
 		this.ess = ess;
-		this.listeners = listeners;
 		this.server = server;
 		this.chatStorage = chatStorage;
 	}
@@ -43,31 +40,7 @@ public abstract class EssentialsChatPlayer implements Listener
 		if (event.isCancelled())
 		{
 			return true;
-		}
-		synchronized (listeners)
-		{
-			for (Map.Entry<String, IEssentialsChatListener> listener : listeners.entrySet())
-			{
-				try
-				{
-					if (listener.getValue().shouldHandleThisChat(event))
-					{
-						return true;
-					}
-				}
-				catch (Throwable t)
-				{
-					if (ess.getSettings().isDebug())
-					{
-						logger.log(Level.WARNING, "Error with EssentialsChat listener of " + listener.getKey() + ": " + t.getMessage(), t);
-					}
-					else
-					{
-						logger.log(Level.WARNING, "Error with EssentialsChat listener of " + listener.getKey() + ": " + t.getMessage());
-					}
-				}
-			}
-		}
+		}		
 		return false;
 	}
 
@@ -119,77 +92,5 @@ public abstract class EssentialsChatPlayer implements Listener
 			return false;
 		}
 		return true;
-	}
-
-	protected void sendLocalChat(final AsyncPlayerChatEvent event, final ChatStore chatStore)
-	{
-		event.setCancelled(true);
-		final User sender = chatStore.getUser();
-		logger.info(_("localFormat", sender.getName(), event.getMessage()));
-		final Location loc = sender.getLocation();
-		final World world = loc.getWorld();
-
-		if (charge(event, chatStore) == false)
-		{
-			return;
-		}
-
-		for (Player onlinePlayer : event.getRecipients())
-		{
-			String type = _("chatTypeLocal");
-			final User onlineUser = ess.getUser(onlinePlayer);
-			if (!onlineUser.equals(sender))
-			{
-				boolean abort = false;
-				final Location playerLoc = onlineUser.getLocation();
-				if (playerLoc.getWorld() != world)
-				{
-					abort = true;
-				}
-				else
-				{
-					final double delta = playerLoc.distanceSquared(loc);
-					if (delta > chatStore.getRadius())
-					{
-						abort = true;
-					}
-				}
-				if (abort)
-				{
-					if (onlineUser.isAuthorized("essentials.chat.spy"))
-					{
-						type = type.concat(_("chatTypeSpy"));
-					}
-					else
-					{
-						continue;
-					}
-				}
-			}
-
-			String message = type.concat(String.format(event.getFormat(), sender.getDisplayName(), event.getMessage()));
-			synchronized (listeners)
-			{
-				for (Map.Entry<String, IEssentialsChatListener> listener : listeners.entrySet())
-				{
-					try
-					{
-						message = listener.getValue().modifyMessage(event, onlinePlayer, message);
-					}
-					catch (Throwable t)
-					{
-						if (ess.getSettings().isDebug())
-						{
-							logger.log(Level.WARNING, "Error with EssentialsChat listener of " + listener.getKey() + ": " + t.getMessage(), t);
-						}
-						else
-						{
-							logger.log(Level.WARNING, "Error with EssentialsChat listener of " + listener.getKey() + ": " + t.getMessage());
-						}
-					}
-				}
-			}
-			onlineUser.sendMessage(message);
-		}
 	}
 }
