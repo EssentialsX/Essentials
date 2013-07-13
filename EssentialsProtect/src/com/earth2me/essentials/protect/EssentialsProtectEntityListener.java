@@ -1,7 +1,7 @@
 package com.earth2me.essentials.protect;
 
-import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
+import net.ess3.api.IEssentials;
 import java.util.Locale;
 import org.bukkit.entity.*;
 import org.bukkit.entity.minecart.ExplosiveMinecart;

@@ -1,9 +1,9 @@
 package com.earth2me.essentials.spawn;
 
-import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.settings.Spawns;
 import com.earth2me.essentials.storage.AsyncStorageObjectHolder;
+import net.ess3.api.IEssentials;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Locale;
@@ -25,12 +25,12 @@ public class SpawnStorage extends AsyncStorageObjectHolder<Spawns> implements IE
 	{
 		return new File(ess.getDataFolder(), "spawn.yml");
 	}
-	
+
 	@Override
 	public void finishRead()
 	{
 	}
-	
+
 	@Override
 	public void finishWrite()
 	{

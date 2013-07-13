@@ -2,7 +2,7 @@ package com.earth2me.essentials.protect;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IConf;
-import com.earth2me.essentials.IEssentials;
+import net.ess3.api.IEssentials;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.plugin.Plugin;

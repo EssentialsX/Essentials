@@ -1,8 +1,8 @@
 package com.earth2me.essentials.chat;
 
-import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import net.ess3.api.IEssentials;
 
 
 public class ChatStore

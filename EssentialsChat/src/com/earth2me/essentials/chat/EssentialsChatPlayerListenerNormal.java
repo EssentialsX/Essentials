@@ -1,9 +1,9 @@
 package com.earth2me.essentials.chat;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import static com.earth2me.essentials.chat.EssentialsChatPlayer.logger;
+import net.ess3.api.IEssentials;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
@@ -134,7 +134,7 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer
 				}
 			}
 		}
-		
+
 		if (outList.size() < 2) {
 			event.getPlayer().sendMessage(_("localNoOne"));
 		}

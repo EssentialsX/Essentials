@@ -1,8 +1,8 @@
 package com.earth2me.essentials.antibuild;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
+import net.ess3.api.IEssentials;
 import java.util.logging.Level;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -313,14 +313,14 @@ public class EssentialsAntiBuildListener implements Listener
 			}
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockDispense(final BlockDispenseEvent event)
 	{
 		final ItemStack item = event.getItem();
 		if (prot.checkProtectionItems(AntiBuildConfig.blacklist_dispenser, item.getTypeId()))
 		{
-			event.setCancelled(true);		
+			event.setCancelled(true);
 		}
 	}
 }

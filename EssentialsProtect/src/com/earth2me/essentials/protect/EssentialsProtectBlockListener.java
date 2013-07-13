@@ -1,6 +1,6 @@
 package com.earth2me.essentials.protect;
 
-import com.earth2me.essentials.IEssentials;
+import net.ess3.api.IEssentials;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -20,7 +20,7 @@ public class EssentialsProtectBlockListener implements Listener
 		this.prot = parent;
 		this.ess = prot.getEssentialsConnect().getEssentials();
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockIgnite(BlockIgniteEvent event)
 	{
@@ -58,7 +58,7 @@ public class EssentialsProtectBlockListener implements Listener
 	public void onBlockFromTo(final BlockFromToEvent event)
 	{
 		final Block block = event.getBlock();
-		
+
 		if (block.getType() == Material.WATER || block.getType() == Material.STATIONARY_WATER)
 		{
 			event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_water_flow));
@@ -79,11 +79,10 @@ public class EssentialsProtectBlockListener implements Listener
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockBurn(final BlockBurnEvent event)
-	{		
+	{
 		if (prot.getSettingBool(ProtectConfig.prevent_fire_spread))
 		{
 			event.setCancelled(true);
 		}
 	}
 }
-	

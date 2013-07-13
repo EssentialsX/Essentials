@@ -1,6 +1,6 @@
 package com.earth2me.essentials.chat;
 
-import com.earth2me.essentials.IEssentials;
+import net.ess3.api.IEssentials;
 import java.util.Map;
 import org.bukkit.Server;
 import org.bukkit.event.EventHandler;

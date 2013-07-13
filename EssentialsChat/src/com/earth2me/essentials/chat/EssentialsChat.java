@@ -1,7 +1,7 @@
 package com.earth2me.essentials.chat;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.IEssentials;
+import net.ess3.api.IEssentials;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,5 +43,5 @@ public class EssentialsChat extends JavaPlugin
 		pluginManager.registerEvents(playerListenerHighest, this);
 
 	}
-	
+
 }

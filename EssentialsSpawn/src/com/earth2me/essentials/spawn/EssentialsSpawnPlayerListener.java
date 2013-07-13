@@ -1,13 +1,13 @@
 package com.earth2me.essentials.spawn;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.Kit;
 import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextPager;
+import net.ess3.api.IEssentials;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -104,7 +104,7 @@ public class EssentialsSpawnPlayerListener implements Listener
 				if (!user.isOnline()) {
 					return;
 				}
-				
+
 				//This method allows for multiple line player announce messages using multiline yaml syntax #EasterEgg
 				if (ess.getSettings().getAnnounceNewPlayers())
 				{

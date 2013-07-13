@@ -1,8 +1,8 @@
 package com.earth2me.essentials.chat;
 
-import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
+import net.ess3.api.IEssentials;
 import java.util.Locale;
 import java.util.Map;
 import org.bukkit.Server;

@@ -1,17 +1,12 @@
 package com.earth2me.essentials.chat;
 
 import com.earth2me.essentials.ChargeException;
-import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import net.ess3.api.IEssentials;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.bukkit.Location;
 import org.bukkit.Server;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
@@ -23,7 +18,7 @@ public abstract class EssentialsChatPlayer implements Listener
 	protected final transient Map<AsyncPlayerChatEvent, ChatStore> chatStorage;
 
 	public EssentialsChatPlayer(final Server server,
-								final IEssentials ess,								
+								final IEssentials ess,
 								final Map<AsyncPlayerChatEvent, ChatStore> chatStorage)
 	{
 		this.ess = ess;
@@ -40,7 +35,7 @@ public abstract class EssentialsChatPlayer implements Listener
 		if (event.isCancelled())
 		{
 			return true;
-		}		
+		}
 		return false;
 	}
 

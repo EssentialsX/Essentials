@@ -1,9 +1,9 @@
 package com.earth2me.essentials.antibuild;
 
 import com.earth2me.essentials.IConf;
-import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import static com.earth2me.essentials.I18n._;
+import net.ess3.api.IEssentials;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Location;
