@@ -1,6 +1,6 @@
 package com.earth2me.essentials.utils;
 
-import com.earth2me.essentials.IUser;
+import net.ess3.api.IUser;
 import java.util.regex.Pattern;
 
 

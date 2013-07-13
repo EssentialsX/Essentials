@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import net.ess3.api.IEssentials;
 import com.earth2me.essentials.utils.LocationUtil;
 import java.util.Locale;
 import org.bukkit.GameMode;

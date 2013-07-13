@@ -1,6 +1,6 @@
 package com.earth2me.essentials.textreader;
 
-import com.earth2me.essentials.IEssentials;
+import net.ess3.api.IEssentials;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.StringUtil;
 import java.io.*;

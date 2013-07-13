@@ -1,8 +1,8 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.api.Economy;
-import com.earth2me.essentials.api.NoLoanPermittedException;
-import com.earth2me.essentials.api.UserDoesNotExistException;
+import net.ess3.api.Economy;
+import net.ess3.api.NoLoanPermittedException;
+import net.ess3.api.UserDoesNotExistException;
 import java.io.IOException;
 import junit.framework.TestCase;
 import org.bukkit.World.Environment;

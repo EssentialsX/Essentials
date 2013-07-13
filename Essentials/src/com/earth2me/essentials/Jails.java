@@ -1,7 +1,9 @@
 package com.earth2me.essentials;
 
+import net.ess3.api.IEssentials;
+import net.ess3.api.IUser;
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.api.IJails;
+import net.ess3.api.IJails;
 import com.earth2me.essentials.storage.AsyncStorageObjectHolder;
 import java.io.File;
 import java.util.*;

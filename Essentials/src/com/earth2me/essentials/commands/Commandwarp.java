@@ -1,11 +1,11 @@
 package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.IUser;
+import net.ess3.api.IUser;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.StringUtil;
-import com.earth2me.essentials.api.IWarps;
+import net.ess3.api.IWarps;
 import com.earth2me.essentials.utils.NumberUtil;
 import java.math.BigDecimal;
 import java.util.ArrayList;

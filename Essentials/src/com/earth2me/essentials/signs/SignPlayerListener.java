@@ -1,6 +1,6 @@
 package com.earth2me.essentials.signs;
 
-import com.earth2me.essentials.IEssentials;
+import net.ess3.api.IEssentials;
 import java.util.logging.Level;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

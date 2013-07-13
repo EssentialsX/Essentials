@@ -1,6 +1,6 @@
 package com.earth2me.essentials.storage;
 
-import com.earth2me.essentials.IEssentials;
+import net.ess3.api.IEssentials;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;

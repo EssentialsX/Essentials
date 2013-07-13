@@ -1,6 +1,6 @@
 package com.earth2me.essentials.metrics;
 
-import com.earth2me.essentials.IEssentials;
+import net.ess3.api.IEssentials;
 import com.earth2me.essentials.metrics.Metrics.Graph;
 import com.earth2me.essentials.metrics.Metrics.Plotter;
 import com.earth2me.essentials.register.payment.Method;

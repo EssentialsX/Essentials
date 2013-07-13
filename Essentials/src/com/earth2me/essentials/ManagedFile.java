@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import net.ess3.api.IEssentials;
 import static com.earth2me.essentials.I18n._;
 import java.io.*;
 import java.math.BigInteger;

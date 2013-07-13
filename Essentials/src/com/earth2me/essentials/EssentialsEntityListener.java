@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import net.ess3.api.IEssentials;
 import static com.earth2me.essentials.I18n._;
 import java.util.List;
 import java.util.logging.Level;

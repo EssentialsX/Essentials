@@ -2,7 +2,7 @@ package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.ChargeException;
 import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.IEssentials;
+import net.ess3.api.IEssentials;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import java.util.Locale;

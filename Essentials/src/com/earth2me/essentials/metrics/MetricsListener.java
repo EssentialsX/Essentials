@@ -1,6 +1,6 @@
 package com.earth2me.essentials.metrics;
 
-import com.earth2me.essentials.IEssentials;
+import net.ess3.api.IEssentials;
 import com.earth2me.essentials.User;
 import java.util.logging.Level;
 import org.bukkit.Server;

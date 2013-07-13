@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import net.ess3.api.IEssentials;
 import java.util.logging.Level;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

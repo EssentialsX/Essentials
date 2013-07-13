@@ -2,7 +2,7 @@ package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
 
-import com.earth2me.essentials.api.InvalidWorldException;
+import net.ess3.api.InvalidWorldException;
 import com.google.common.io.Files;
 import java.io.*;
 import java.math.BigDecimal;

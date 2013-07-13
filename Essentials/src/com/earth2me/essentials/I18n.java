@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.api.II18n;
+import net.ess3.api.IEssentials;
+import net.ess3.api.II18n;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

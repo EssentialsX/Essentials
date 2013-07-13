@@ -1,5 +1,7 @@
 package com.earth2me.essentials;
 
+import net.ess3.api.ISettings;
+import net.ess3.api.IEssentials;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.signs.EssentialsSign;

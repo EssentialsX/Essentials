@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import net.ess3.api.IEssentials;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
