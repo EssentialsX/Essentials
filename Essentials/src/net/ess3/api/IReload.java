@@ -1,7 +1,7 @@
 package net.ess3.api;
 
 
-public interface IReload
+public interface IReload extends com.earth2me.essentials.api.IReload
 {
-	void onReload();
+
 }

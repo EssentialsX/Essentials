@@ -1,11 +1,7 @@
 package net.ess3.api;
 
-import org.bukkit.inventory.ItemStack;
 
-
-public interface IItemDb
+public interface IItemDb extends com.earth2me.essentials.api.IItemDb
 {
-	ItemStack get(final String name, final int quantity) throws Exception;
 
-	ItemStack get(final String name) throws Exception;
 }

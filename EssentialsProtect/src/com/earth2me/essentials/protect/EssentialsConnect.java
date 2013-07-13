@@ -51,7 +51,6 @@ public class EssentialsConnect
 				{
 					protect.getSettingsBoolean().put(protectConfig, ess.getSettings().getProtectBoolean(protectConfig.getConfigName(), protectConfig.getDefaultValueBoolean()));
 				}
-
 			}
 		}
 	}
