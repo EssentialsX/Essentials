@@ -100,6 +100,14 @@ public class Potions
 
 		POTIONS.put("wither", PotionEffectType.WITHER);
 		ALIASPOTIONS.put("decay", PotionEffectType.WITHER);
+
+		POTIONS.put("healthboost", PotionEffectType.HEALTH_BOOST);
+		ALIASPOTIONS.put("boost", PotionEffectType.HEALTH_BOOST);
+
+		POTIONS.put("absorption", PotionEffectType.ABSORPTION);
+		ALIASPOTIONS.put("absorb", PotionEffectType.ABSORPTION);
+
+		POTIONS.put("saturation", PotionEffectType.SATURATION);
 	}
 
 	public static PotionEffectType getByName(String name)

@@ -25,6 +25,9 @@ ops-name-color: '4'
 # The character(s) to prefix all nicknames, so that you know they are not true usernames.
 nickname-prefix: '~'
 
+# The maximum length allowed in nicknames. The nickname prefix is included in this.
+max-nick-length: 15
+
 # Disable this if you have any other plugin, that modifies the displayname of a user.
 change-displayname: true
 
@@ -83,7 +86,7 @@ warn-on-smite: true
 # When a command conflicts with another plugin, by default, Essentials will try to force the OTHER plugin to take priority.
 # Commands in this list, will tell Essentials to 'not give up' the command to other plugins.
 # In this state, which plugin 'wins' appears to be almost random.
-# 
+#
 # If you have two plugin with the same command and you wish to force Essentials to take over, you need an alias.
 # To force essentials to take 'god' alias 'god' to 'egod'.
 # See http://wiki.bukkit.org/Bukkit.yml#aliases for more information
@@ -100,7 +103,7 @@ disabled-commands:
 #  - clear
 
 # These commands will be shown to players with socialSpy enabled.
-# You can add commands from other plugins you may want to track or 
+# You can add commands from other plugins you may want to track or
 # remove commands that are used for something you dont want to spy on.
 socialspy-commands:
   - msg
@@ -272,7 +275,7 @@ enabledSigns:
   #- repair
   #- time
   #- weather
-  
+
 # How many times per second can Essentials signs be interacted with per player.
 # Values should be between 1-20, 20 being virtually no lag protection.
 # Lower numbers will reduce the possibility of lag, but may annoy players.
@@ -302,7 +305,7 @@ list:
     #default: hidden
     # Uncomment the line below to simply list all players with no grouping
     #Players: '*'
-  
+
 # More output to the console.
 debug: false
 
@@ -383,7 +386,7 @@ unsafe-enchantments: false
 #If you set this to true any plugin that uses teleport will have the previous location registered.
 register-back-in-listener: false
 
-#Delay to wait before people can cause attack damage after logging in. 
+#Delay to wait before people can cause attack damage after logging in.
 login-attack-delay: 5
 
 #Set the max fly speed, values range from 0.1 to 1.0
@@ -418,7 +421,7 @@ world-home-permissions: false
 # Define different amounts of multiple homes for different permissions, e.g. essentials.sethome.multiple.vip
 # People with essentials.sethome.multiple.unlimited are not limited by these numbers.
 # For more information, visit http://wiki.ess3.net/wiki/Multihome
-sethome-multiple:  
+sethome-multiple:
   default: 3
   # essentials.sethome.multiple.vip
   vip: 5
@@ -498,7 +501,7 @@ chat:
   # Chat formatting can be done in two ways, you can either define a standard format for all chat.
   # Or you can give a group specific chat format, to give some extra variation.
   # If set to the default chat format which "should" be compatible with ichat.
-  # For more information of chat formatting, check out the wiki: http://wiki.ess3.net/wiki/Chat_Formatting  
+  # For more information of chat formatting, check out the wiki: http://wiki.ess3.net/wiki/Chat_Formatting
 
   format: '<{DISPLAYNAME}> {MESSAGE}'
   #format: '&7[{GROUP}]&r {DISPLAYNAME}&7:&r {MESSAGE}'
@@ -516,7 +519,7 @@ chat:
 ############################################################
 
 protect:
-  
+
   # General physics/behavior modifications.
   prevent:
     lava-flow: false
@@ -577,7 +580,8 @@ protect:
       wither: false
       bat: false
       witch: false
-      
+      horse: false
+
   # Maximum height the creeper should explode. -1 allows them to explode everywhere.
   # Set prevent.creeper-explosion to true, if you want to disable creeper explosions.
   creeper:
@@ -611,7 +615,7 @@ protect:
 
     # Should the damage after hit by a lightning be disabled?
     lightning: false
-    
+
     # Should Wither damage be disabled?
     wither: false
 
@@ -619,7 +623,7 @@ protect:
     weather:
       storm: false
       thunder: false
-      lightning: false     
+      lightning: false
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -664,7 +668,7 @@ protect:
 
     # Which blocks should not be pushed by pistons?
     piston:
-          
+
     # Which blocks should not be dispensed by dispensers
     dispenser:
 

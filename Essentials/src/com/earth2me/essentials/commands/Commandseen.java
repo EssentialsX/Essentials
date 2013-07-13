@@ -30,7 +30,7 @@ public class Commandseen extends EssentialsCommand
 	@Override
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		seen(server, user, args, user.isAuthorized("essentials.seen.banreason"), user.isAuthorized("essentials.seen.extra"), user.isAuthorized("essentials.seen.ipsearch"));
+		seen(server, user.getBase(), args, user.isAuthorized("essentials.seen.banreason"), user.isAuthorized("essentials.seen.extra"), user.isAuthorized("essentials.seen.ipsearch"));
 	}
 
 	protected void seen(final Server server, final CommandSender sender, final String[] args, final boolean showBan, final boolean extra, final boolean ipLookup) throws Exception

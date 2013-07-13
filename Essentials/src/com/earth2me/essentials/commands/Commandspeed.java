@@ -53,7 +53,7 @@ public class Commandspeed extends EssentialsCommand
 				{
 					throw new PlayerNotFoundException();
 				}
-				speedOtherPlayers(server, user, isFly, isBypass, speed, args[2]);
+				speedOtherPlayers(server, user.getBase(), isFly, isBypass, speed, args[2]);
 				return;
 			}
 		}
@@ -144,9 +144,9 @@ public class Commandspeed extends EssentialsCommand
 			{
 				userSpeed = 10f;
 			}
-			else if (userSpeed < 0f)
+			else if (userSpeed < 0.0001f)
 			{
-				userSpeed = 0f;
+				userSpeed = 0.0001f;
 			}
 		}
 		catch (NumberFormatException e)

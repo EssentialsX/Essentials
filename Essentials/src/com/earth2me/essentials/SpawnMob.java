@@ -83,12 +83,12 @@ public class SpawnMob
 	// This method spawns a mob where the user is looking, owned by user
 	public static void spawnmob(final IEssentials ess, final Server server, final User user, final List<String> parts, final List<String> data, int mobCount) throws Exception
 	{
-		final Block block = LocationUtil.getTarget(user).getBlock();
+		final Block block = LocationUtil.getTarget(user.getBase()).getBlock();
 		if (block == null)
 		{
 			throw new Exception(_("unableToSpawnMob"));
 		}
-		spawnmob(ess, server, user, user, block.getLocation(), parts, data, mobCount);
+		spawnmob(ess, server, user.getBase(), user, block.getLocation(), parts, data, mobCount);
 	}
 
 	// This method spawns a mob at loc, owned by noone
@@ -206,7 +206,7 @@ public class SpawnMob
 			throw new Exception(_("disabledToSpawnMob"));
 		}
 
-		if (sender instanceof User && !((User)sender).isAuthorized("essentials.spawnmob." + mob.name.toLowerCase(Locale.ENGLISH)))
+		if (sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.spawnmob." + mob.name.toLowerCase(Locale.ENGLISH)))
 		{
 			throw new Exception(_("noPermToSpawnMob"));
 		}

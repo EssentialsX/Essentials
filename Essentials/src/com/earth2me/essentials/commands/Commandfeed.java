@@ -29,7 +29,7 @@ public class Commandfeed extends EssentialsCommand
 			{
 				user.healCooldown();
 			}
-			feedOtherPlayers(server, user, args[0]);
+			feedOtherPlayers(server, user.getBase(), args[0]);
 			return;
 		}
 
@@ -39,7 +39,7 @@ public class Commandfeed extends EssentialsCommand
 		}
 		try
 		{
-			feedPlayer(user, user);
+			feedPlayer(user.getBase(), user.getBase());
 		}
 		catch (QuietAbortException e)
 		{

@@ -32,7 +32,7 @@ public class Commandheal extends EssentialsCommand
 			{
 				user.healCooldown();
 			}
-			healOtherPlayers(server, user, args[0]);
+			healOtherPlayers(server, user.getBase(), args[0]);
 			return;
 		}
 
@@ -40,7 +40,7 @@ public class Commandheal extends EssentialsCommand
 		{
 			user.healCooldown();
 		}
-		healPlayer(user);
+		healPlayer(user.getBase());
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class Commandheal extends EssentialsCommand
 			throw new Exception(_("healDead"));
 		}
 
-		final int amount = player.getMaxHealth() - player.getHealth();
+		final double amount = player.getMaxHealth() - player.getHealth();
 		final EntityRegainHealthEvent erhe = new EntityRegainHealthEvent(player, amount, RegainReason.CUSTOM);
 		ess.getServer().getPluginManager().callEvent(erhe);
 		if (erhe.isCancelled())
@@ -98,7 +98,7 @@ public class Commandheal extends EssentialsCommand
 			throw new QuietAbortException();
 		}
 
-		int newAmount = player.getHealth() + erhe.getAmount();
+		double newAmount = player.getHealth() + erhe.getAmount();
 		if (newAmount > player.getMaxHealth())
 		{
 			newAmount = player.getMaxHealth();

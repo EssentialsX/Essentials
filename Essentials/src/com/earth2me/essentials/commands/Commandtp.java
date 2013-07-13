@@ -39,7 +39,7 @@ public class Commandtp extends EssentialsCommand
 			user.sendMessage(_("teleporting"));
 			final Trade charge = new Trade(this.getName(), ess);
 			charge.isAffordableFor(user);
-			user.getTeleport().teleport(player, charge, TeleportCause.COMMAND);
+			user.getTeleport().teleport(player.getBase(), charge, TeleportCause.COMMAND);
 			throw new NoChargeException();
 		case 4:
 			if (!user.isAuthorized("essentials.tp.others"))
@@ -84,7 +84,7 @@ public class Commandtp extends EssentialsCommand
 			{
 				throw new Exception(_("noPerm", "essentials.worlds." + toPlayer.getWorld().getName()));
 			}
-			target.getTeleport().now(toPlayer, false, TeleportCause.COMMAND);
+			target.getTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND);
 			user.sendMessage(_("teleporting"));
 			target.sendMessage(_("teleportAtoB", user.getDisplayName(), toPlayer.getDisplayName()));
 			break;
@@ -103,7 +103,7 @@ public class Commandtp extends EssentialsCommand
 		if (args.length == 2)
 		{
 			final User toPlayer = getPlayer(server, args, 1, true, false);
-			target.getTeleport().now(toPlayer, false, TeleportCause.COMMAND);
+			target.getTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND);
 			target.sendMessage(_("teleportAtoB", Console.NAME, toPlayer.getDisplayName()));
 		}
 		else if (args.length > 3)

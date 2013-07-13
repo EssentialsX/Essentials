@@ -6,10 +6,11 @@ import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Set;
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
-public interface IUser extends Player
+public interface IUser
 {
 	long getLastTeleportTimestamp();
 
@@ -85,4 +86,8 @@ public interface IUser extends Player
 	Map<String, Object> getConfigMap();
 
 	Map<String, Object> getConfigMap(String node);
+	
+	public void sendMessage(String message);
+	
+	public String getName();
 }

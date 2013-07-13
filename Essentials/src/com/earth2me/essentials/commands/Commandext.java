@@ -41,7 +41,7 @@ public class Commandext extends EssentialsCommand
 			throw new PlayerNotFoundException();
 		}
 
-		extinguishPlayers(server, user, args[0]);
+		extinguishPlayers(server, user.getBase(), args[0]);
 	}
 
 	private void extinguishPlayers(final Server server, final CommandSender sender, final String name) throws Exception

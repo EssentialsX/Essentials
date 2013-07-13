@@ -65,7 +65,7 @@ public class EssentialsPlayerListener implements Listener
 		if (user.isMuted())
 		{
 			event.setCancelled(true);
-			user.sendMessage(_("playerMuted"));
+			user.sendMessage(_("voiceSilenced"));
 			LOGGER.info(_("mutedUserSpeaks", user.getName()));
 		}
 		final Iterator<Player> it = event.getRecipients().iterator();
@@ -149,7 +149,7 @@ public class EssentialsPlayerListener implements Listener
 		user.setLogoutLocation();
 		if (user.isRecipeSee())
 		{
-			user.getPlayer().getOpenInventory().getTopInventory().clear();
+			user.getBase().getOpenInventory().getTopInventory().clear();
 		}
 		user.updateActivity(false);
 		user.dispose();
@@ -222,10 +222,10 @@ public class EssentialsPlayerListener implements Listener
 				{
 					try
 					{
-						final IText input = new TextInput(user, "motd", true, ess);
-						final IText output = new KeywordReplacer(input, user, ess);
+						final IText input = new TextInput(user.getBase(), "motd", true, ess);
+						final IText output = new KeywordReplacer(input, user.getBase(), ess);
 						final TextPager pager = new TextPager(output, true);
-						pager.showPage("1", null, "motd", user);
+						pager.showPage("1", null, "motd", user.getBase());
 					}
 					catch (IOException ex)
 					{
@@ -493,7 +493,7 @@ public class EssentialsPlayerListener implements Listener
 	{
 		try
 		{
-			final Location otarget = LocationUtil.getTarget(user);
+			final Location otarget = LocationUtil.getTarget(user.getBase());
 
 			ess.scheduleSyncDelayedTask(
 					new Runnable()

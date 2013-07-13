@@ -20,10 +20,10 @@ public class Commandgetpos extends EssentialsCommand
 		if (args.length > 0 && user.isAuthorized("essentials.getpos.others"))
 		{
 			final User otherUser = getPlayer(server, user, args, 0);
-			outputPosition(user, otherUser.getLocation(), user.getLocation());
+			outputPosition(user.getBase(), otherUser.getLocation(), user.getLocation());
 			return;
 		}
-		outputPosition(user, user.getLocation(), null);
+		outputPosition(user.getBase(), user.getLocation(), null);
 	}
 
 	@Override

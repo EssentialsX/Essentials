@@ -418,6 +418,9 @@ public class Settings implements ISettings
 			mFormat = mFormat.replace("{GROUP}", "{0}");
 			mFormat = mFormat.replace("{WORLDNAME}", "{1}");
 			mFormat = mFormat.replace("{SHORTWORLDNAME}", "{2}");
+			mFormat = mFormat.replace("{TEAMPREFIX}", "{3}");
+			mFormat = mFormat.replace("{TEAMSUFFIX}", "{4}");
+			mFormat = mFormat.replace("{TEAMNAME}", "{5}");
 			mFormat = "§r".concat(mFormat);
 			chatFormats.put(group, mFormat);
 		}
@@ -740,7 +743,7 @@ public class Settings implements ISettings
 	{
 		return config.getBoolean("economy-log-enabled", false);
 	}
-	// #easteregg	
+	// #easteregg
 	private boolean economyLogUpdate = false;
 
 	@Override
@@ -1095,5 +1098,11 @@ public class Settings implements ISettings
 	public long getMaxTempban()
 	{
 		return config.getLong("max-tempban-time", -1);
+	}
+
+	@Override
+	public int getMaxNickLength()
+	{
+		return config.getInt("max-nick-length", 30);
 	}
 }

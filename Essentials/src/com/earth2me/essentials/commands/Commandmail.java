@@ -44,6 +44,11 @@ public class Commandmail extends EssentialsCommand
 			{
 				throw new Exception(_("noPerm", "essentials.mail.send"));
 			}
+			
+			if (user.isMuted())
+			{
+				throw new Exception(_("voiceSilenced"));
+			}
 
 			User u = ess.getUser(args[1]);
 			if (u == null)

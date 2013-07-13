@@ -39,7 +39,7 @@ public class Commandjump extends EssentialsCommand
 
 		try
 		{
-			loc = LocationUtil.getTarget(user);
+			loc = LocationUtil.getTarget(user.getBase());
 			loc.setYaw(cloc.getYaw());
 			loc.setPitch(cloc.getPitch());
 			loc.setY(loc.getY() + 1);

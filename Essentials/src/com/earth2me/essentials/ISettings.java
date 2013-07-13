@@ -194,4 +194,6 @@ public interface ISettings extends IConf
 	long getMaxTempban();
 
 	public Map<String, Object> getListGroupConfig();
+
+	public int getMaxNickLength();
 }

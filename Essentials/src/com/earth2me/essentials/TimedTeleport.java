@@ -15,7 +15,7 @@ public class TimedTeleport implements Runnable
 	private int timer_task = -1;
 	private long timer_started;	// time this task was initiated
 	private long timer_delay;		// how long to delay the teleportPlayer
-	private int timer_health;
+	private double timer_health;
 	// note that I initially stored a clone of the location for reference, but...
 	// when comparing locations, I got incorrect mismatches (rounding errors, looked like)
 	// so, the X/Y/Z values are stored instead and rounded off
@@ -36,10 +36,10 @@ public class TimedTeleport implements Runnable
 		this.teleport = teleport;
 		this.timer_started = System.currentTimeMillis();
 		this.timer_delay = delay;
-		this.timer_health = teleportUser.getHealth();
-		this.timer_initX = Math.round(teleportUser.getLocation().getX() * MOVE_CONSTANT);
-		this.timer_initY = Math.round(teleportUser.getLocation().getY() * MOVE_CONSTANT);
-		this.timer_initZ = Math.round(teleportUser.getLocation().getZ() * MOVE_CONSTANT);
+		this.timer_health = teleportUser.getBase().getHealth();
+		this.timer_initX = Math.round(teleportUser.getBase().getLocation().getX() * MOVE_CONSTANT);
+		this.timer_initY = Math.round(teleportUser.getBase().getLocation().getY() * MOVE_CONSTANT);
+		this.timer_initZ = Math.round(teleportUser.getBase().getLocation().getZ() * MOVE_CONSTANT);
 		this.timer_teleportee = teleportUser.getName();
 		this.timer_teleportTarget = target;
 		this.timer_chargeFor = chargeFor;
@@ -54,7 +54,7 @@ public class TimedTeleport implements Runnable
 	public void run()
 	{
 
-		if (teleportOwner == null || !teleportOwner.isOnline() || teleportOwner.getLocation() == null)
+		if (teleportOwner == null || !teleportOwner.getBase().isOnline() || teleportOwner.getBase().getLocation() == null)
 		{
 			cancelTimer(false);
 			return;
@@ -62,13 +62,13 @@ public class TimedTeleport implements Runnable
 
 		IUser teleportUser = ess.getUser(this.timer_teleportee);
 
-		if (teleportUser == null || !teleportUser.isOnline())
+		if (teleportUser == null || !teleportUser.getBase().isOnline())
 		{
 			cancelTimer(false);
 			return;
 		}
 
-		final Location currLocation = teleportUser.getLocation();
+		final Location currLocation = teleportUser.getBase().getLocation();
 		if (currLocation == null)
 		{
 			cancelTimer(false);
@@ -79,14 +79,14 @@ public class TimedTeleport implements Runnable
 			&& (Math.round(currLocation.getX() * MOVE_CONSTANT) != timer_initX
 				|| Math.round(currLocation.getY() * MOVE_CONSTANT) != timer_initY
 				|| Math.round(currLocation.getZ() * MOVE_CONSTANT) != timer_initZ
-				|| teleportUser.getHealth() < timer_health))
+				|| teleportUser.getBase().getHealth() < timer_health))
 		{
 			// user moved, cancelTimer teleportPlayer
 			cancelTimer(true);
 			return;
 		}
 
-		timer_health = teleportUser.getHealth();  // in case user healed, then later gets injured
+		timer_health = teleportUser.getBase().getHealth();  // in case user healed, then later gets injured
 		final long now = System.currentTimeMillis();
 		if (now > timer_started + timer_delay)
 		{

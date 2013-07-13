@@ -49,7 +49,7 @@ public class Commandgamemode extends EssentialsCommand
 		else if (args.length > 1 && args[1].trim().length() > 2 && user.isAuthorized("essentials.gamemode.others"))
 		{
 			gameMode = matchGameMode(args[0].toLowerCase(Locale.ENGLISH));
-			gamemodeOtherPlayers(server, user, gameMode, args[1]);
+			gamemodeOtherPlayers(server, user.getBase(), gameMode, args[1]);
 			return;
 		}
 		else
@@ -63,7 +63,7 @@ public class Commandgamemode extends EssentialsCommand
 				if (user.isAuthorized("essentials.gamemode.others"))
 				{
 					gameMode = matchGameMode(commandLabel);
-					gamemodeOtherPlayers(server, user, gameMode, args[0]);
+					gamemodeOtherPlayers(server, user.getBase(), gameMode, args[0]);
 					return;
 				}
 				throw new NotEnoughArgumentsException();

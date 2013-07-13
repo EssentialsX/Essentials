@@ -25,7 +25,7 @@ public class Commandclearinventory extends EssentialsCommand
 	@Override
 	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		parseCommand(server, user, args, user.isAuthorized("essentials.clearinventory.others"), user.isAuthorized("essentials.clearinventory.all"));
+		parseCommand(server, user.getBase(), args, user.isAuthorized("essentials.clearinventory.others"), user.isAuthorized("essentials.clearinventory.all"));
 	}
 
 	@Override
@@ -39,7 +39,7 @@ public class Commandclearinventory extends EssentialsCommand
 		List<Player> players = new ArrayList<Player>();
 		int offset = 0;
 
-		if (sender instanceof User)
+		if (sender instanceof Player)
 		{
 			players.add((Player)sender);
 		}

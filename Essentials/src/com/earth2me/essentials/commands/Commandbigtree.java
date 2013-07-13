@@ -36,7 +36,7 @@ public class Commandbigtree extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		final Location loc = LocationUtil.getTarget(user);
+		final Location loc = LocationUtil.getTarget(user.getBase());
 		final Location safeLocation = LocationUtil.getSafeDestination(loc);
 		final boolean success = user.getWorld().generateTree(safeLocation, tree);
 		if (success)

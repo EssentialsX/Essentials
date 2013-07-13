@@ -29,7 +29,7 @@ public class Commandtpo extends EssentialsCommand
 				throw new Exception(_("noPerm", "essentials.worlds." + player.getWorld().getName()));
 			}
 			user.sendMessage(_("teleporting"));
-			user.getTeleport().now(player, false, TeleportCause.COMMAND);
+			user.getTeleport().now(player.getBase(), false, TeleportCause.COMMAND);
 			break;
 
 		default:
@@ -47,7 +47,7 @@ public class Commandtpo extends EssentialsCommand
 				throw new Exception(_("noPerm", "essentials.worlds." + toPlayer.getWorld().getName()));
 			}
 
-			target.getTeleport().now(toPlayer, false, TeleportCause.COMMAND);
+			target.getTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND);
 			target.sendMessage(_("teleportAtoB", user.getDisplayName(), toPlayer.getDisplayName()));
 			break;
 		}

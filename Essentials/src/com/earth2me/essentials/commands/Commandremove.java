@@ -73,7 +73,7 @@ public class Commandremove extends EssentialsCommand
 			}
 		}
 
-		removeEntities(user, world, toRemove, radius);
+		removeEntities(user.getBase(), world, toRemove, radius);
 	}
 
 	@Override

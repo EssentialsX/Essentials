@@ -20,6 +20,7 @@ package com.earth2me.essentials;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.api.Economy;
 import com.earth2me.essentials.api.IJails;
+import com.earth2me.essentials.commands.EssentialsCommand;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
@@ -48,6 +49,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
@@ -73,7 +76,7 @@ import org.yaml.snakeyaml.error.YAMLException;
 
 public class Essentials extends JavaPlugin implements IEssentials
 {
-	public static final int BUKKIT_VERSION = 2763;
+	public static final int BUKKIT_VERSION = 2808;
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private transient ISettings settings;
 	private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
@@ -243,12 +246,13 @@ public class Essentials extends JavaPlugin implements IEssentials
 			LOGGER.log(Level.INFO, "Essentials load " + timeroutput);
 		}
 	}
-	
+
 	@Override
-	public void saveConfig() {
+	public void saveConfig()
+	{
 		// We don't use any of the bukkit config writing, as this breaks our config file formatting.
 	}
-	
+
 	private void registerListeners(PluginManager pm)
 	{
 		HandlerList.unregisterAll(this);
@@ -356,10 +360,32 @@ public class Essentials extends JavaPlugin implements IEssentials
 		try
 		{
 			User user = null;
+			Block bSenderBlock = null;
 			if (sender instanceof Player)
 			{
 				user = getUser(sender);
 			}
+			else if (sender instanceof BlockCommandSender)
+			{
+				BlockCommandSender bsender = (BlockCommandSender)sender;
+				bSenderBlock = bsender.getBlock();
+			}
+
+			if (bSenderBlock != null)
+			{
+				Bukkit.getLogger().log(Level.INFO, "CommandBlock at {0},{1},{2} issued server command: /{3} {4}", new Object[]
+				{
+					bSenderBlock.getX(), bSenderBlock.getY(), bSenderBlock.getZ(), commandLabel, EssentialsCommand.getFinalArg(args, 0)
+				});
+			}
+			else if (user == null)
+			{
+				Bukkit.getLogger().log(Level.INFO, "{0} issued server command: /{1} {2}", new Object[]
+				{
+					sender.getName(), commandLabel, EssentialsCommand.getFinalArg(args, 0)
+				});
+			}
+
 
 			// New mail notification
 			if (user != null && !getSettings().isCommandDisabled("mail") && !command.getName().equals("mail") && user.isAuthorized("essentials.mail"))
@@ -476,13 +502,13 @@ public class Essentials extends JavaPlugin implements IEssentials
 			User user = getUser(player);
 			if (user.isRecipeSee())
 			{
-				user.getPlayer().getOpenInventory().getTopInventory().clear();
-				user.getPlayer().getOpenInventory().close();
+				user.getBase().getOpenInventory().getTopInventory().clear();
+				user.getBase().getOpenInventory().close();
 				user.setRecipeSee(false);
 			}
 			if (user.isInvSee() || user.isEnderSee())
 			{
-				user.getPlayer().getOpenInventory().close();
+				user.getBase().getOpenInventory().close();
 				user.setInvSee(false);
 				user.setEnderSee(false);
 			}
