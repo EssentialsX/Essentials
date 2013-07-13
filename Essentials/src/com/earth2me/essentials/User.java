@@ -1,7 +1,6 @@
 package com.earth2me.essentials;
 
 import net.ess3.api.IEssentials;
-import net.ess3.api.IUser;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.register.payment.Method;
@@ -22,7 +21,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 
-public class User extends UserData implements Comparable<User>, IReplyTo, IUser
+public class User extends UserData implements Comparable<User>, IReplyTo, net.ess3.api.IUser
 {
 	private CommandSender replyTo = null;
 	private transient String teleportRequester;

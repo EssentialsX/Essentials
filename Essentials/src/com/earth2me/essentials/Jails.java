@@ -3,7 +3,6 @@ package com.earth2me.essentials;
 import net.ess3.api.IEssentials;
 import net.ess3.api.IUser;
 import static com.earth2me.essentials.I18n._;
-import net.ess3.api.IJails;
 import com.earth2me.essentials.storage.AsyncStorageObjectHolder;
 import java.io.File;
 import java.util.*;
@@ -29,7 +28,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.plugin.PluginManager;
 
 
-public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.settings.Jails> implements IJails
+public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.settings.Jails> implements net.ess3.api.IJails
 {
 	private static final transient Logger LOGGER = Bukkit.getLogger();
 	private static transient boolean enabled = false;

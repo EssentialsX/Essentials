@@ -3,7 +3,6 @@ package com.earth2me.essentials;
 import net.ess3.api.IEssentials;
 import com.earth2me.essentials.utils.StringUtil;
 import static com.earth2me.essentials.I18n._;
-import net.ess3.api.IItemDb;
 import com.earth2me.essentials.utils.NumberUtil;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -11,7 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 
-public class ItemDb implements IConf, IItemDb
+public class ItemDb implements IConf, net.ess3.api.IItemDb
 {
 	private final transient IEssentials ess;
 

@@ -1,7 +1,6 @@
 package com.earth2me.essentials;
 
 import net.ess3.api.IEssentials;
-import net.ess3.api.II18n;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -15,7 +14,7 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 
-public class I18n implements II18n
+public class I18n implements net.ess3.api.II18n
 {
 	private static I18n instance;
 	private static final String MESSAGES = "messages";

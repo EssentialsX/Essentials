@@ -1,6 +1,5 @@
 package com.earth2me.essentials;
 
-import net.ess3.api.ISettings;
 import net.ess3.api.IEssentials;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.commands.IEssentialsCommand;
@@ -11,7 +10,6 @@ import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.FormatUtil;
 import java.io.File;
 import java.math.BigDecimal;
-import java.text.MessageFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,7 +21,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
 
 
-public class Settings implements ISettings
+public class Settings implements net.ess3.api.ISettings
 {
 	private final transient EssentialsConf config;
 	private final static Logger logger = Logger.getLogger("Minecraft");

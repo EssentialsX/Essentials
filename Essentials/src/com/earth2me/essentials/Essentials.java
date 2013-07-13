@@ -77,7 +77,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.yaml.snakeyaml.error.YAMLException;
 
 
-public class Essentials extends JavaPlugin implements IEssentials
+public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 {
 	public static final int BUKKIT_VERSION = 2808;
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
