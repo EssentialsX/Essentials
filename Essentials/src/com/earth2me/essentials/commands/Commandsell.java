@@ -5,6 +5,7 @@ import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import org.bukkit.Material;
@@ -28,60 +29,31 @@ public class Commandsell extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		ItemStack is = null;
-		if (args[0].equalsIgnoreCase("hand"))
+		List<ItemStack> is = ess.getItemDb().getMatching(user, args);
+		int count = 0;
+
+		for (ItemStack stack : is)
 		{
-			is = user.getItemInHand();
+			try
+			{
+				totalWorth = totalWorth.add(sellItem(user, stack, args, is.size() > 1));
+				count++;
+			}
+			catch (Exception e)
+			{
+			}
 		}
-		else if (args[0].equalsIgnoreCase("inventory") || args[0].equalsIgnoreCase("invent") || args[0].equalsIgnoreCase("all"))
+		if (count > 1 && totalWorth.signum() > 0)
 		{
-			for (ItemStack stack : user.getInventory().getContents())
-			{
-				if (stack == null || stack.getType() == Material.AIR)
-				{
-					continue;
-				}
-				try
-				{
-					totalWorth = totalWorth.add(sellItem(user, stack, args, true));
-				}
-				catch (Exception e)
-				{
-				}
-			}
-			if (totalWorth.signum() > 0)
-			{
-				user.sendMessage(_("totalWorthAll", type, NumberUtil.displayCurrency(totalWorth, ess)));
-			}
-			return;
-		}
-		else if (args[0].equalsIgnoreCase("blocks"))
-		{
-			for (ItemStack stack : user.getInventory().getContents())
-			{
-				if (stack == null || stack.getTypeId() > 255 || stack.getType() == Material.AIR)
-				{
-					continue;
-				}
-				try
-				{
-					totalWorth = totalWorth.add(sellItem(user, stack, args, true));
-				}
-				catch (Exception e)
-				{
-				}
-			}
-			if (totalWorth.signum() > 0)
+			if (args[0].equalsIgnoreCase("blocks"))
 			{
 				user.sendMessage(_("totalWorthBlocks", type, NumberUtil.displayCurrency(totalWorth, ess)));
 			}
-			return;
+			else
+			{
+				user.sendMessage(_("totalWorthAll", type, NumberUtil.displayCurrency(totalWorth, ess)));
+			}
 		}
-		if (is == null)
-		{
-			is = ess.getItemDb().get(args[0]);
-		}
-		sellItem(user, is, args, false);
 	}
 
 	private BigDecimal sellItem(User user, ItemStack is, String[] args, boolean isBulkSell) throws Exception
@@ -155,7 +127,8 @@ public class Commandsell extends EssentialsCommand
 		//TODO: Prices for Enchantments
 		final ItemStack ris = is.clone();
 		ris.setAmount(amount);
-		if (!user.getInventory().containsAtLeast(ris, amount)) {
+		if (!user.getInventory().containsAtLeast(ris, amount))
+		{
 			// This should never happen.
 			throw new IllegalStateException("Trying to remove more items than are available.");
 		}

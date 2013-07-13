@@ -4,6 +4,7 @@ import com.earth2me.essentials.metrics.Metrics;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
 import java.util.List;
+import net.ess3.api.IItemDb;
 import net.ess3.api.IJails;
 import net.ess3.api.IWarps;
 import org.bukkit.World;
@@ -68,7 +69,7 @@ public interface IEssentials extends Plugin
 
 	void showError(final CommandSender sender, final Throwable exception, final String commandLabel);
 
-	ItemDb getItemDb();
+	IItemDb getItemDb();
 
 	UserMap getUserMap();
 

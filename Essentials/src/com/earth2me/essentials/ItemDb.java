@@ -141,6 +141,42 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb
 		retval.setDurability(metaData);
 		return retval;
 	}
+	
+	public List<ItemStack> getMatching (User user, String[] args) throws Exception {
+		List<ItemStack> is = new ArrayList<ItemStack>();
+		
+		if (args[0].equalsIgnoreCase("hand"))
+		{
+			is.add(user.getItemInHand());
+		}
+		else if (args[0].equalsIgnoreCase("inventory") || args[0].equalsIgnoreCase("invent") || args[0].equalsIgnoreCase("all"))
+		{
+			for (ItemStack stack : user.getInventory().getContents())
+			{
+				if (stack == null || stack.getType() == Material.AIR)
+				{
+					continue;
+				}
+				is.add(stack);
+			}			
+		}
+		else if (args[0].equalsIgnoreCase("blocks"))
+		{
+			for (ItemStack stack : user.getInventory().getContents())
+			{
+				if (stack == null || stack.getTypeId() > 255 || stack.getType() == Material.AIR)
+				{
+					continue;
+				}
+				is.add(stack);
+			}
+		}
+		else
+		{
+			is.add(get(args[0]));
+		}
+		return is;
+	}
 
 	public String names(ItemStack item)
 	{
