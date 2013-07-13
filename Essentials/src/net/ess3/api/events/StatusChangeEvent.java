@@ -22,19 +22,9 @@ public class StatusChangeEvent extends Event implements Cancellable
 		return this.affected;
 	}
 
-	public void setAffected(User user)
-	{
-		this.affected = user;
-	}
-
 	public User getController()
 	{
 		return controller;
-	}
-
-	public void setController(User user)
-	{
-		this.controller = user;
 	}
 
 	@Override
