@@ -130,13 +130,13 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer
 					{
 						spyList.add(onlinePlayer);
 					}
-					outList.remove(onlinePlayer);
+					it.remove();
 				}
 			}
 		}
 
 		if (outList.size() < 2) {
-			event.getPlayer().sendMessage(_("localNoOne"));
+			user.sendMessage(_("localNoOne"));
 		}
 
 		LocalChatSpyEvent spyEvent = new LocalChatSpyEvent(event.isAsynchronous(), event.getPlayer(), event.getFormat(), event.getMessage(), spyList);

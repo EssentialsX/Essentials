@@ -783,4 +783,11 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	{
 		this.recipeSee = recipeSee;
 	}
+	
+	@Override
+	public void sendMessage(String message) {
+		if (!message.isEmpty()) {
+			base.sendMessage(message);
+		}
+	}
 }
