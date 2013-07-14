@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
-import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 
@@ -32,15 +31,31 @@ public class Commandsell extends EssentialsCommand
 		List<ItemStack> is = ess.getItemDb().getMatching(user, args);
 		int count = 0;
 
+		boolean isBulk = is.size() > 1;
+
 		for (ItemStack stack : is)
 		{
 			try
 			{
-				totalWorth = totalWorth.add(sellItem(user, stack, args, is.size() > 1));
-				count++;
+				if (stack.getAmount() > 0)
+				{
+					totalWorth = totalWorth.add(sellItem(user, stack, args, isBulk));
+					count++;
+					for (ItemStack zeroStack : is)
+					{
+						if (!zeroStack.equals(stack) && zeroStack.isSimilar(stack))
+						{
+							zeroStack.setAmount(0);
+						}
+					}
+				}
 			}
 			catch (Exception e)
 			{
+				if (!isBulk)
+				{
+					throw e;
+				}
 			}
 		}
 		if (count > 1 && totalWorth.signum() > 0)
@@ -58,72 +73,21 @@ public class Commandsell extends EssentialsCommand
 
 	private BigDecimal sellItem(User user, ItemStack is, String[] args, boolean isBulkSell) throws Exception
 	{
-		if (is == null || is.getType() == Material.AIR)
-		{
-			throw new Exception(_("itemSellAir"));
-		}
-		int id = is.getTypeId();
-		int amount = 0;
-		if (args.length > 1)
-		{
-			amount = Integer.parseInt(args[1].replaceAll("[^0-9]", ""));
-			if (args[1].startsWith("-"))
-			{
-				amount = -amount;
-			}
-		}
+		int amount = ess.getWorth().getAmount(ess, user, is, args, isBulkSell);
 		BigDecimal worth = ess.getWorth().getPrice(is);
-		boolean stack = args.length > 1 && args[1].endsWith("s");
-		boolean requireStack = ess.getSettings().isTradeInStacks(id);
 
 		if (worth == null)
 		{
 			throw new Exception(_("itemCannotBeSold"));
 		}
-		if (requireStack && !stack)
-		{
-			throw new Exception(_("itemMustBeStacked"));
-		}
-
-
-		int max = 0;
-		for (ItemStack s : user.getInventory().getContents())
-		{
-			if (s == null || !s.isSimilar(is))
-			{
-				continue;
-			}
-			max += s.getAmount();
-		}
-
-		if (stack)
-		{
-			amount *= is.getType().getMaxStackSize();
-		}
-		if (amount < 1)
-		{
-			amount += max;
-		}
-
-		if (requireStack)
-		{
-			amount -= amount % is.getType().getMaxStackSize();
-		}
-		if (amount > max || amount < 1)
-		{
-			if (!isBulkSell)
-			{
-				user.sendMessage(_("itemNotEnough1"));
-				user.sendMessage(_("itemNotEnough2"));
-				throw new Exception(_("itemNotEnough3"));
-			}
-			else
-			{
-				return worth.multiply(BigDecimal.valueOf(amount));
-			}
-		}
 
 		BigDecimal result = worth.multiply(BigDecimal.valueOf(amount));
+
+		if (amount == 0)
+		{
+			return result;
+		}
+
 		//TODO: Prices for Enchantments
 		final ItemStack ris = is.clone();
 		ris.setAmount(amount);

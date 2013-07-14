@@ -4,6 +4,7 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Locale;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -16,97 +17,108 @@ public class Commandworth extends EssentialsCommand
 	{
 		super("worth");
 	}
-
-	//TODO: Remove duplication
+	
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		ItemStack iStack = user.getInventory().getItemInHand();
-		int amount = iStack.getAmount();
-
-		if (args.length > 0)
+		BigDecimal totalWorth = BigDecimal.ZERO;
+		String type = "";
+		
+		List<ItemStack> is = ess.getItemDb().getMatching(user, args);
+		int count = 0;
+		
+		boolean isBulk = is.size() > 1;
+		
+		for (ItemStack stack : is)
 		{
-			iStack = ess.getItemDb().get(args[0]);
-		}
-
-		try
-		{
-			if (args.length > 1)
+			try
 			{
-				amount = Integer.parseInt(args[1]);
+				if (stack.getAmount() > 0)
+				{
+					totalWorth = totalWorth.add(itemWorth(user.getBase(), user, stack, args));
+					count++;
+					for (ItemStack zeroStack : is)
+					{
+						if (!zeroStack.equals(stack) && zeroStack.isSimilar(stack))
+						{
+							zeroStack.setAmount(0);
+						}
+					}
+				}
+				
+			}
+			catch (Exception e)
+			{
+				if (!isBulk)
+				{
+					throw e;
+				}
 			}
 		}
-		catch (NumberFormatException ex)
+		if (count > 1 && totalWorth.signum() > 0)
 		{
-			amount = iStack.getType().getMaxStackSize();
+			if (args[0].equalsIgnoreCase("blocks"))
+			{
+				user.sendMessage(_("totalSellableBlocks", type, NumberUtil.displayCurrency(totalWorth, ess)));
+			}
+			else
+			{
+				user.sendMessage(_("totalSellableAll", type, NumberUtil.displayCurrency(totalWorth, ess)));
+			}
 		}
-
-		iStack.setAmount(amount);
-		final BigDecimal worth = ess.getWorth().getPrice(iStack);
-		if (worth == null)
-		{
-			throw new Exception(_("itemCannotBeSold"));
-		}
-
-		final BigDecimal result = worth.multiply(BigDecimal.valueOf(amount));
-
-		user.sendMessage(iStack.getDurability() != 0
-						 ? _("worthMeta",
-							 iStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""),
-							 iStack.getDurability(),
-							 NumberUtil.displayCurrency(result, ess),
-							 amount,
-							 NumberUtil.displayCurrency(worth, ess))
-						 : _("worth",
-							 iStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""),
-							 NumberUtil.displayCurrency(result, ess),
-							 amount,
-							 NumberUtil.displayCurrency(worth, ess)));
 	}
-
+	
 	@Override
-	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
+		String type = "";
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
-
-		ItemStack iStack = ess.getItemDb().get(args[0]);
-		int amount = iStack.getAmount();
-
-		try
+		
+		ItemStack stack = ess.getItemDb().get(args[0]);
+		
+		itemWorth(sender, null, stack, args);
+	}
+	
+	private BigDecimal itemWorth(CommandSender sender, User user, ItemStack is, String[] args) throws Exception
+	{
+		int amount = 1;
+		if (user == null)
 		{
 			if (args.length > 1)
 			{
-				amount = Integer.parseInt(args[1]);
+				amount = Integer.parseInt(args[1].replaceAll("[^0-9]", ""));
 			}
 		}
-		catch (NumberFormatException ex)
+		else
 		{
-			amount = iStack.getType().getMaxStackSize();
+			amount = ess.getWorth().getAmount(ess, user, is, args, true);
 		}
-
-		iStack.setAmount(amount);
-		final BigDecimal worth = ess.getWorth().getPrice(iStack);
+		
+		BigDecimal worth = ess.getWorth().getPrice(is);
+		
 		if (worth == null)
 		{
 			throw new Exception(_("itemCannotBeSold"));
 		}
-
-		final BigDecimal result = worth.multiply(BigDecimal.valueOf(amount));
-
-		sender.sendMessage(iStack.getDurability() != 0
+		
+		BigDecimal result = worth.multiply(BigDecimal.valueOf(amount));
+		
+		sender.sendMessage(is.getDurability() != 0
 						   ? _("worthMeta",
-							   iStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""),
-							   iStack.getDurability(),
+							   is.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""),
+							   is.getDurability(),
 							   NumberUtil.displayCurrency(result, ess),
 							   amount,
 							   NumberUtil.displayCurrency(worth, ess))
 						   : _("worth",
-							   iStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""),
+							   is.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""),
 							   NumberUtil.displayCurrency(result, ess),
 							   amount,
 							   NumberUtil.displayCurrency(worth, ess)));
+		
+		return result;
 	}
 }

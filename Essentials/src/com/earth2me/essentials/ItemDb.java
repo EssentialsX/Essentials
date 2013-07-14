@@ -141,10 +141,12 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb
 		retval.setDurability(metaData);
 		return retval;
 	}
-	
-	public List<ItemStack> getMatching (User user, String[] args) throws Exception {
+
+	@Override
+	public List<ItemStack> getMatching(User user, String[] args) throws Exception
+	{
 		List<ItemStack> is = new ArrayList<ItemStack>();
-		
+
 		if (args[0].equalsIgnoreCase("hand"))
 		{
 			is.add(user.getItemInHand());
@@ -158,7 +160,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb
 					continue;
 				}
 				is.add(stack);
-			}			
+			}
 		}
 		else if (args[0].equalsIgnoreCase("blocks"))
 		{
@@ -171,13 +173,18 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb
 				is.add(stack);
 			}
 		}
-		else
+		else if (args.length > 0)
 		{
 			is.add(get(args[0]));
 		}
+		else {
+			is.add(user.getItemInHand());
+		}
+		
 		return is;
 	}
 
+	@Override
 	public String names(ItemStack item)
 	{
 		ItemData itemData = new ItemData(item.getTypeId(), item.getDurability());
