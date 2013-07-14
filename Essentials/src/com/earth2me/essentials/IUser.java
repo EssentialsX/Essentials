@@ -2,44 +2,52 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import net.ess3.api.ITeleport;
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
 public interface IUser
 {
-	long getLastTeleportTimestamp();
-
 	boolean isAuthorized(String node);
 
 	boolean isAuthorized(IEssentialsCommand cmd);
 
 	boolean isAuthorized(IEssentialsCommand cmd, String permissionPrefix);
 
-	void setLastTeleportTimestamp(long time);
-
-	Location getLastLocation();
-
-	Player getBase();
-
-	BigDecimal getMoney();
-
-	void takeMoney(BigDecimal value);
+	void healCooldown() throws Exception;
 
 	void giveMoney(BigDecimal value);
 
+	void giveMoney(final BigDecimal value, final CommandSender initiator);
+
+	void payUser(final User reciever, final BigDecimal value) throws Exception;
+
+	void takeMoney(BigDecimal value);
+
+	void takeMoney(final BigDecimal value, final CommandSender initiator);
+
 	boolean canAfford(BigDecimal value);
 
-	String getGroup();
+	Boolean canSpawnItem(final int itemId);
 
 	void setLastLocation();
 
-	Location getHome(String name) throws Exception;
+	void setLogoutLocation();
 
-	Location getHome(Location loc) throws Exception;
+	void requestTeleport(final User player, final boolean here);
+
+	ITeleport getTeleport();
+
+	BigDecimal getMoney();
+
+	void setMoney(final BigDecimal value);
+
+	void setAfk(final boolean set);
 
 	/**
 	 * 'Hidden' Represents when a player is hidden from others. This status includes when the player is hidden via other
@@ -51,6 +59,22 @@ public interface IUser
 	boolean isHidden();
 
 	void setHidden(boolean vanish);
+
+	boolean isGodModeEnabled();
+
+	String getGroup();
+
+	boolean inGroup(final String group);
+
+	boolean canBuild();
+
+	long getTeleportRequestTime();
+
+	void enableInvulnerabilityAfterTeleport();
+
+	void resetInvulnerabilityAfterTeleport();
+
+	boolean hasInvulnerabilityAfterTeleport();
 
 	/**
 	 * 'Vanished' Represents when a player is hidden from others by Essentials. This status does NOT include when the
@@ -64,20 +88,44 @@ public interface IUser
 
 	void setVanished(boolean vanish);
 
-	ITeleport getTeleport();
-
-	void setJail(String jail);
-
 	boolean isIgnoreExempt();
 
-	boolean isAfk();
+	public void sendMessage(String message);
 
-	void setAfk(final boolean set);
+	/*
+	* UserData
+	*/ 
+		
+	Location getHome(String name) throws Exception;
 
-	void setLogoutLocation();
+	Location getHome(Location loc) throws Exception;
 
+	List<String> getHomes();
+
+	void setHome(String name, Location loc);
+
+	void delHome(String name) throws Exception;
+
+	boolean hasHome();
+	
+	Location getLastLocation();
+	
 	Location getLogoutLocation();
+	
+	long getLastTeleportTimestamp();
 
+	void setLastTeleportTimestamp(long time);
+	
+	String getJail();
+
+	void setJail(String jail);
+	
+	List<String> getMails();
+			
+	void addMail(String mail);
+	
+	boolean isAfk();
+	
 	void setConfigProperty(String node, Object object);
 
 	Set<String> getConfigKeys();
@@ -85,8 +133,12 @@ public interface IUser
 	Map<String, Object> getConfigMap();
 
 	Map<String, Object> getConfigMap(String node);
-
-	public void sendMessage(String message);
+	
+	/*
+	 *  PlayerExtension
+	 */
+	
+	Player getBase();
 
 	public String getName();
 }

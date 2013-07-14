@@ -109,6 +109,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		}
 	}
 
+	@Override
 	public void healCooldown() throws Exception
 	{
 		final Calendar now = new GregorianCalendar();
@@ -133,6 +134,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		giveMoney(value, null);
 	}
 
+	@Override
 	public void giveMoney(final BigDecimal value, final CommandSender initiator)
 	{
 		if (value.signum() == 0)
@@ -147,6 +149,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		}
 	}
 
+	@Override
 	public void payUser(final User reciever, final BigDecimal value) throws Exception
 	{
 		if (value.signum() == 0)
@@ -172,6 +175,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		takeMoney(value, null);
 	}
 
+	@Override
 	public void takeMoney(final BigDecimal value, final CommandSender initiator)
 	{
 		if (value.signum() == 0)
@@ -212,48 +216,9 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	}
 
 	@Override
-	public void setReplyTo(final CommandSender user)
-	{
-		replyTo = user;
-	}
-
-	@Override
-	public CommandSender getReplyTo()
-	{
-		return replyTo;
-	}
-
-	@Override
-	public int compareTo(final User other)
-	{
-		return FormatUtil.stripFormat(this.getDisplayName()).compareToIgnoreCase(FormatUtil.stripFormat(other.getDisplayName()));
-	}
-
-	@Override
-	public boolean equals(final Object object)
-	{
-		if (!(object instanceof User))
-		{
-			return false;
-		}
-		return this.getName().equalsIgnoreCase(((User)object).getName());
-
-	}
-
-	@Override
-	public int hashCode()
-	{
-		return this.getName().hashCode();
-	}
-
 	public Boolean canSpawnItem(final int itemId)
 	{
 		return !ess.getSettings().itemSpawnBlacklist().contains(itemId);
-	}
-
-	public Location getHome() throws Exception
-	{
-		return getHome(getHomes().get(0));
 	}
 
 	@Override
@@ -633,11 +598,13 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		return ess.getPermissionsHandler().getGroup(base);
 	}
 
+	@Override
 	public boolean inGroup(final String group)
 	{
 		return ess.getPermissionsHandler().inGroup(base, group);
 	}
 
+	@Override
 	public boolean canBuild()
 	{
 		if (isOp())
@@ -673,6 +640,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	}
 	private transient long teleportInvulnerabilityTimestamp = 0;
 
+	@Override
 	public void enableInvulnerabilityAfterTeleport()
 	{
 		final long time = ess.getSettings().getTeleportInvulnerability();
@@ -682,6 +650,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		}
 	}
 
+	@Override
 	public void resetInvulnerabilityAfterTeleport()
 	{
 		if (teleportInvulnerabilityTimestamp != 0
@@ -789,5 +758,40 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		if (!message.isEmpty()) {
 			base.sendMessage(message);
 		}
+	}
+	
+	@Override
+	public void setReplyTo(final CommandSender user)
+	{
+		replyTo = user;
+	}
+
+	@Override
+	public CommandSender getReplyTo()
+	{
+		return replyTo;
+	}
+
+	@Override
+	public int compareTo(final User other)
+	{
+		return FormatUtil.stripFormat(this.getDisplayName()).compareToIgnoreCase(FormatUtil.stripFormat(other.getDisplayName()));
+	}
+
+	@Override
+	public boolean equals(final Object object)
+	{
+		if (!(object instanceof User))
+		{
+			return false;
+		}
+		return this.getName().equalsIgnoreCase(((User)object).getName());
+
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return this.getName().hashCode();
 	}
 }
