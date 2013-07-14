@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.Locale;
@@ -56,7 +57,12 @@ public class Worth implements IConf
 
 		if (args.length > 1)
 		{
-			amount = Integer.parseInt(args[1].replaceAll("[^0-9]", ""));
+			try {
+				amount = Integer.parseInt(args[1].replaceAll("[^0-9]", ""));
+			}
+			catch (NumberFormatException ex) {
+				throw new NotEnoughArgumentsException(ex);
+			}
 			if (args[1].startsWith("-"))
 			{
 				amount = -amount;

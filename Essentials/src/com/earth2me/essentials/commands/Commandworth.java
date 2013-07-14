@@ -17,18 +17,18 @@ public class Commandworth extends EssentialsCommand
 	{
 		super("worth");
 	}
-	
+
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		BigDecimal totalWorth = BigDecimal.ZERO;
 		String type = "";
-		
+
 		List<ItemStack> is = ess.getItemDb().getMatching(user, args);
 		int count = 0;
-		
+
 		boolean isBulk = is.size() > 1;
-		
+
 		for (ItemStack stack : is)
 		{
 			try
@@ -45,7 +45,7 @@ public class Commandworth extends EssentialsCommand
 						}
 					}
 				}
-				
+
 			}
 			catch (Exception e)
 			{
@@ -67,7 +67,7 @@ public class Commandworth extends EssentialsCommand
 			}
 		}
 	}
-	
+
 	@Override
 	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
 	{
@@ -76,12 +76,12 @@ public class Commandworth extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		
+
 		ItemStack stack = ess.getItemDb().get(args[0]);
-		
+
 		itemWorth(sender, null, stack, args);
 	}
-	
+
 	private BigDecimal itemWorth(CommandSender sender, User user, ItemStack is, String[] args) throws Exception
 	{
 		int amount = 1;
@@ -89,23 +89,31 @@ public class Commandworth extends EssentialsCommand
 		{
 			if (args.length > 1)
 			{
-				amount = Integer.parseInt(args[1].replaceAll("[^0-9]", ""));
+				try
+				{
+					amount = Integer.parseInt(args[1].replaceAll("[^0-9]", ""));
+				}
+				catch (NumberFormatException ex)
+				{
+					throw new NotEnoughArgumentsException(ex);
+				}
+
 			}
 		}
 		else
 		{
 			amount = ess.getWorth().getAmount(ess, user, is, args, true);
 		}
-		
+
 		BigDecimal worth = ess.getWorth().getPrice(is);
-		
+
 		if (worth == null)
 		{
 			throw new Exception(_("itemCannotBeSold"));
 		}
-		
+
 		BigDecimal result = worth.multiply(BigDecimal.valueOf(amount));
-		
+
 		sender.sendMessage(is.getDurability() != 0
 						   ? _("worthMeta",
 							   is.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""),
@@ -118,7 +126,7 @@ public class Commandworth extends EssentialsCommand
 							   NumberUtil.displayCurrency(result, ess),
 							   amount,
 							   NumberUtil.displayCurrency(worth, ess)));
-		
+
 		return result;
 	}
 }
