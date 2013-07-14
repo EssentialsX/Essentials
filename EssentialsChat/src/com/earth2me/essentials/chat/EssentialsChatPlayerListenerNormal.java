@@ -97,9 +97,9 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer
 			}
 			return;
 		}
-
-		String type = _("chatTypeLocal");
-		event.setFormat(type.concat(event.getFormat()));
+		
+		final String format = event.getFormat();
+		event.setFormat(_("chatTypeLocal").concat(event.getFormat()));
 
 		logger.info(_("localFormat", user.getName(), event.getMessage()));
 
@@ -139,7 +139,7 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer
 			user.sendMessage(_("localNoOne"));
 		}
 
-		LocalChatSpyEvent spyEvent = new LocalChatSpyEvent(event.isAsynchronous(), event.getPlayer(), event.getFormat(), event.getMessage(), spyList);
+		LocalChatSpyEvent spyEvent = new LocalChatSpyEvent(event.isAsynchronous(), event.getPlayer(), format, event.getMessage(), spyList);
 		server.getPluginManager().callEvent(spyEvent);
 
 		if (!spyEvent.isCancelled())

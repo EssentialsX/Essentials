@@ -21,7 +21,7 @@ public class LocalChatSpyEvent extends Event implements Cancellable
 	public LocalChatSpyEvent(final boolean async, final Player who, final String format, final String message, final Set<Player> players)
 	{
 		super(async);
-		this.format = _("chatTypeSpy").concat(format);
+		this.format = _("chatTypeLocal").concat(_("chatTypeSpy")).concat(format);
 		this.message = message;
 		recipients = players;
 		player = who;
