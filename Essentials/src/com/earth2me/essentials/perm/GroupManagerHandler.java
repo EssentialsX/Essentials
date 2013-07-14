@@ -102,6 +102,13 @@ public class GroupManagerHandler implements IPermissionsHandler
 		{
 			return null;
 		}
-		return holder.getWorldPermissions(base);
+		try
+		{
+			return holder.getWorldPermissions(base);
+		}
+		catch (NullPointerException ex)
+		{
+			return null;
+		}
 	}
 }
