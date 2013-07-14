@@ -1,12 +1,12 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.api.IItemDb;
+import com.earth2me.essentials.api.IJails;
+import com.earth2me.essentials.api.IWarps;
 import com.earth2me.essentials.metrics.Metrics;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
 import java.util.List;
-import net.ess3.api.IItemDb;
-import net.ess3.api.IJails;
-import net.ess3.api.IWarps;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -33,7 +33,7 @@ public interface IEssentials extends Plugin
 
 	int broadcastMessage(String message);
 
-	int broadcastMessage(net.ess3.api.IUser sender, String message);
+	int broadcastMessage(IUser sender, String message);
 
 	int broadcastMessage(String permission, String message);
 
