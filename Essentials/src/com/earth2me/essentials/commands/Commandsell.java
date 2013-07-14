@@ -40,10 +40,11 @@ public class Commandsell extends EssentialsCommand
 				if (stack.getAmount() > 0)
 				{
 					totalWorth = totalWorth.add(sellItem(user, stack, args, isBulk));
+					stack = stack.clone();
 					count++;
 					for (ItemStack zeroStack : is)
 					{
-						if (!zeroStack.equals(stack) && zeroStack.isSimilar(stack))
+						if (zeroStack.isSimilar(stack))
 						{
 							zeroStack.setAmount(0);
 						}

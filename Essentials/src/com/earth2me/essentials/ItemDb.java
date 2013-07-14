@@ -147,7 +147,11 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb
 	{
 		List<ItemStack> is = new ArrayList<ItemStack>();
 
-		if (args[0].equalsIgnoreCase("hand"))
+		if (args.length < 1)
+		{
+			is.add(user.getItemInHand());
+		}
+		else if (args[0].equalsIgnoreCase("hand"))
 		{
 			is.add(user.getItemInHand());
 		}
@@ -173,14 +177,11 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb
 				is.add(stack);
 			}
 		}
-		else if (args.length > 0)
+		else
 		{
 			is.add(get(args[0]));
 		}
-		else {
-			is.add(user.getItemInHand());
-		}
-		
+
 		return is;
 	}
 

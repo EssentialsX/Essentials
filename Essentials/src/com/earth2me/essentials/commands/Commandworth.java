@@ -36,10 +36,11 @@ public class Commandworth extends EssentialsCommand
 				if (stack.getAmount() > 0)
 				{
 					totalWorth = totalWorth.add(itemWorth(user.getBase(), user, stack, args));
+					stack = stack.clone();
 					count++;
 					for (ItemStack zeroStack : is)
 					{
-						if (!zeroStack.equals(stack) && zeroStack.isSimilar(stack))
+						if (zeroStack.isSimilar(stack))
 						{
 							zeroStack.setAmount(0);
 						}
