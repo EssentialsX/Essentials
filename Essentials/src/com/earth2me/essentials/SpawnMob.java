@@ -471,6 +471,20 @@ public class SpawnMob
 				((Horse)spawned).setTamed(true);
 				((Horse)spawned).setCarryingChest(true);
 			}
+			
+			if (data.contains("saddle"))
+			{
+				((Horse)spawned).setTamed(true);
+				((Horse)spawned).getInventory().setSaddle(new ItemStack(Material.SADDLE, 1));
+			}
+		}
+		
+		if (type == EntityType.PIG)
+		{
+			if (data.contains("saddle"))
+			{
+				((Pig)spawned).setSaddle(true);
+			}
 		}
 	}
 
