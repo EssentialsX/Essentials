@@ -146,7 +146,7 @@ public interface ISettings extends IConf
 
 	boolean areDeathMessagesEnabled();
 
-	public void setDebug(boolean debug);
+	void setDebug(boolean debug);
 
 	Set<String> getNoGodWorlds();
 
@@ -184,15 +184,17 @@ public interface ISettings extends IConf
 
 	double getMaxWalkSpeed();
 
-	public int getMailsPerMinute();
+	int getMailsPerMinute();
 
-	public long getEconomyLagWarning();
+	long getEconomyLagWarning();
 
-	public void setEssentialsChatActive(boolean b);
+	void setEssentialsChatActive(boolean b);
 
 	long getMaxTempban();
 
-	public Map<String, Object> getListGroupConfig();
+	Map<String, Object> getListGroupConfig();
 
-	public int getMaxNickLength();
+	int getMaxNickLength();
+	
+	int getMaxUserCacheCount();
 }

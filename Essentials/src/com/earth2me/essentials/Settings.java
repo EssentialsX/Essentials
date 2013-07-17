@@ -1105,4 +1105,11 @@ public class Settings implements net.ess3.api.ISettings
 	{
 		return config.getInt("max-nick-length", 30);
 	}
+	
+	
+	public int getMaxUserCacheCount()
+	{
+		long count = Runtime.getRuntime().maxMemory() / 1024 / 96;
+		return config.getInt("max-user-cache-count", (int)count);
+	}
 }

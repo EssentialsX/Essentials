@@ -17,13 +17,14 @@ import org.bukkit.entity.Player;
 public class UserMap extends CacheLoader<String, User> implements IConf
 {
 	private final transient IEssentials ess;
-	private final transient Cache<String, User> users = CacheBuilder.newBuilder().softValues().build(this);
+	private final transient Cache<String, User> users;
 	private final transient ConcurrentSkipListSet<String> keys = new ConcurrentSkipListSet<String>();
 
 	public UserMap(final IEssentials ess)
 	{
 		super();
 		this.ess = ess;
+		users = CacheBuilder.newBuilder().maximumSize(ess.getSettings().getMaxUserCacheCount()).softValues().build(this);		
 		loadAllUsersAsync(ess);
 	}
 
