@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 import net.ess3.api.events.LocalChatSpyEvent;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -93,7 +94,7 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer
 		{
 			if (ess.getSettings().isDebug())
 			{
-				ess.getLogger().info("Plugin triggered custom chat event, local chat handling aborted.");
+				ess.getLogger().log(Level.INFO, "Plugin triggered custom chat event, local chat handling aborted.", ex);
 			}
 			return;
 		}

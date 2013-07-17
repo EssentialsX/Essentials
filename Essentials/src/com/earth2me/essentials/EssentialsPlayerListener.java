@@ -52,7 +52,7 @@ public class EssentialsPlayerListener implements Listener
 		final User user = ess.getUser(event.getPlayer());
 		updateCompass(user);
 		user.setDisplayNick();
-		
+
 		if (ess.getSettings().isTeleportInvulnerability())
 		{
 			user.enableInvulnerabilityAfterTeleport();
@@ -69,15 +69,30 @@ public class EssentialsPlayerListener implements Listener
 			user.sendMessage(_("voiceSilenced"));
 			LOGGER.info(_("mutedUserSpeaks", user.getName()));
 		}
-		final Iterator<Player> it = event.getRecipients().iterator();
-		while (it.hasNext())
+		try
 		{
-			final User u = ess.getUser(it.next());
-			if (u.isIgnoredPlayer(user))
+			final Iterator<Player> it = event.getRecipients().iterator();
+			while (it.hasNext())
 			{
-				it.remove();
+				final User u = ess.getUser(it.next());
+				if (u.isIgnoredPlayer(user))
+				{
+					it.remove();
+				}
 			}
 		}
+		catch (UnsupportedOperationException ex)
+		{
+			if (ess.getSettings().isDebug())
+			{
+				ess.getLogger().log(Level.INFO, "Ignore could not block chat due to custom chat plugin event.", ex);
+			}
+			else
+			{
+				ess.getLogger().info("Ignore could not block chat due to custom chat plugin event.");
+			}
+		}
+		
 		user.updateActivity(true);
 		user.setDisplayNick();
 	}
@@ -494,20 +509,20 @@ public class EssentialsPlayerListener implements Listener
 
 			ess.scheduleSyncDelayedTask(
 					new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					Location loc = user.getLocation();
+					loc.setX(otarget.getX());
+					loc.setZ(otarget.getZ());
+					while (LocationUtil.isBlockDamaging(loc.getWorld(), loc.getBlockX(), loc.getBlockY() - 1, loc.getBlockZ()))
 					{
-						@Override
-						public void run()
-						{
-							Location loc = user.getLocation();
-							loc.setX(otarget.getX());
-							loc.setZ(otarget.getZ());
-							while (LocationUtil.isBlockDamaging(loc.getWorld(), loc.getBlockX(), loc.getBlockY() - 1, loc.getBlockZ()))
-							{
-								loc.setY(loc.getY() + 1d);
-							}
-							user.getBase().teleport(loc, TeleportCause.PLUGIN);
-						}
-					});
+						loc.setY(loc.getY() + 1d);
+					}
+					user.getBase().teleport(loc, TeleportCause.PLUGIN);
+				}
+			});
 		}
 		catch (Exception ex)
 		{
@@ -543,14 +558,14 @@ public class EssentialsPlayerListener implements Listener
 				used = true;
 				ess.scheduleSyncDelayedTask(
 						new Runnable()
-						{
-							@Override
-							public void run()
-							{
-								user.getServer().dispatchCommand(user.getBase(), command);
-								LOGGER.log(Level.INFO, String.format("[PT] %s issued server command: /%s", user.getName(), command));
-							}
-						});
+				{
+					@Override
+					public void run()
+					{
+						user.getServer().dispatchCommand(user.getBase(), command);
+						LOGGER.log(Level.INFO, String.format("[PT] %s issued server command: /%s", user.getName(), command));
+					}
+				});
 			}
 		}
 		return used;
