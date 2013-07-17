@@ -21,6 +21,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.*;
 import org.bukkit.entity.Skeleton.SkeletonType;
 import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.HorseInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Colorable;
 
@@ -476,6 +477,23 @@ public class SpawnMob
 			{
 				((Horse)spawned).setTamed(true);
 				((Horse)spawned).getInventory().setSaddle(new ItemStack(Material.SADDLE, 1));
+			}
+			
+			if (data.contains("armor"))
+			{
+				((Horse)spawned).setTamed(true);
+				HorseInventory invent = ((Horse)spawned).getInventory();
+				if (data.contains("gold")) {
+					invent.setArmor(new ItemStack(Material.GOLD_BARDING, 1));
+				}
+				else if (data.contains("diamond"))
+				{
+					invent.setArmor(new ItemStack(Material.DIAMOND_BARDING, 1));
+				}
+				else
+				{
+					invent.setArmor(new ItemStack(Material.IRON_BARDING, 1));
+				}
 			}
 		}
 		

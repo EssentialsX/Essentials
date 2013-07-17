@@ -400,7 +400,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 				}
 			}
 
-			//Print version even if admin command is not available
+			//Print version even if admin command is not available #easteregg
 			if (commandLabel.equalsIgnoreCase("essversion"))
 			{
 				sender.sendMessage("This server is running Essentials " + getDescription().getVersion());
