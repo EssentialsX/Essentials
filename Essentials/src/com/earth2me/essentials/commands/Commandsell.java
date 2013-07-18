@@ -82,12 +82,12 @@ public class Commandsell extends EssentialsCommand
 			throw new Exception(_("itemCannotBeSold"));
 		}
 
-		BigDecimal result = worth.multiply(BigDecimal.valueOf(amount));
-
-		if (amount == 0)
+		if (amount <= 0)
 		{
-			return result;
+			return BigDecimal.ZERO;
 		}
+		
+		BigDecimal result = worth.multiply(BigDecimal.valueOf(amount));
 
 		//TODO: Prices for Enchantments
 		final ItemStack ris = is.clone();
