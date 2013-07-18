@@ -56,9 +56,9 @@ public class Commandworth extends EssentialsCommand
 				}
 			}
 		}
-		if (count > 1 && totalWorth.signum() > 0)
+		if (count > 1)
 		{
-			if (args[0].equalsIgnoreCase("blocks"))
+			if (args.length > 0 && args[0].equalsIgnoreCase("blocks"))
 			{
 				user.sendMessage(_("totalSellableBlocks", type, NumberUtil.displayCurrency(totalWorth, ess)));
 			}
@@ -111,6 +111,11 @@ public class Commandworth extends EssentialsCommand
 		if (worth == null)
 		{
 			throw new Exception(_("itemCannotBeSold"));
+		}
+
+		if (amount < 0)
+		{
+			amount = 0;
 		}
 
 		BigDecimal result = worth.multiply(BigDecimal.valueOf(amount));

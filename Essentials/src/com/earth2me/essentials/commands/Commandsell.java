@@ -59,7 +59,7 @@ public class Commandsell extends EssentialsCommand
 				}
 			}
 		}
-		if (count > 1 && totalWorth.signum() > 0)
+		if (count != 1)
 		{
 			if (args[0].equalsIgnoreCase("blocks"))
 			{
@@ -84,6 +84,9 @@ public class Commandsell extends EssentialsCommand
 
 		if (amount <= 0)
 		{
+			if (!isBulkSell) {
+				user.sendMessage(_("itemSold", NumberUtil.displayCurrency(BigDecimal.ZERO, ess), BigDecimal.ZERO, is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(worth, ess)));
+			}
 			return BigDecimal.ZERO;
 		}
 		

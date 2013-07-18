@@ -181,7 +181,12 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb
 		{
 			is.add(get(args[0]));
 		}
-
+		
+		if (is.isEmpty() || is.get(0).getType() == Material.AIR)
+		{
+			throw new Exception(_("itemSellAir"));
+		}
+		
 		return is;
 	}
 
