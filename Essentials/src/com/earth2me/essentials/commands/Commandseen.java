@@ -54,6 +54,10 @@ public class Commandseen extends EssentialsCommand
 					seenIP(server, sender, args[0]);
 					return;
 				}
+				else if (FormatUtil.validIP(args[0]) && (server.getIPBans().contains(args[0]))) {
+					sender.sendMessage(_("isIpBanned", args[0]));
+					return;
+				}
 				else
 				{
 					throw new PlayerNotFoundException();
@@ -132,6 +136,12 @@ public class Commandseen extends EssentialsCommand
 	private void seenIP(final Server server, final CommandSender sender, final String ipAddress) throws Exception
 	{
 		final UserMap userMap = ess.getUserMap();
+
+		if (server.getIPBans().contains(ipAddress))
+		{
+			sender.sendMessage(_("isIpBanned", ipAddress));
+		}
+
 		sender.sendMessage(_("runningPlayerMatch", ipAddress));
 
 		ess.runTaskAsynchronously(new Runnable()
