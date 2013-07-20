@@ -1,29 +1,23 @@
 package com.earth2me.essentials;
 
+import static com.earth2me.essentials.I18n._;
 import net.ess3.api.IEssentials;
 import com.earth2me.essentials.utils.StringUtil;
-import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Mob.MobException;
 import com.earth2me.essentials.utils.LocationUtil;
-import com.earth2me.essentials.utils.NumberUtil;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 import java.util.Set;
-import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.*;
-import org.bukkit.entity.Skeleton.SkeletonType;
 import org.bukkit.inventory.EntityEquipment;
-import org.bukkit.inventory.HorseInventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.Colorable;
 
 
 public class SpawnMob
@@ -71,7 +65,14 @@ public class SpawnMob
 			String[] mobDatas = mobPart.split(":");
 			if (mobDatas.length == 1)
 			{
-				mobData.add(null);
+				if (mobPart.contains(":"))
+				{
+					mobData.add("");
+				}
+				else
+				{
+					mobData.add(null);
+				}
 			}
 			else
 			{
@@ -91,12 +92,6 @@ public class SpawnMob
 			throw new Exception(_("unableToSpawnMob"));
 		}
 		spawnmob(ess, server, user.getBase(), user, block.getLocation(), parts, data, mobCount);
-	}
-
-	// This method spawns a mob at loc, owned by noone
-	public static void spawnmob(final IEssentials ess, final Server server, final CommandSender sender, final Location loc, final List<String> parts, final List<String> data, int mobCount) throws Exception
-	{
-		spawnmob(ess, server, sender, null, loc, parts, data, mobCount);
 	}
 
 	// This method spawns a mob at target, owned by target
@@ -173,7 +168,7 @@ public class SpawnMob
 
 				if (data.get(i) != null)
 				{
-					changeMobData(mob.getType(), spawnedMob, data.get(i), target);
+					changeMobData(sender, mob.getType(), spawnedMob, data.get(i).toLowerCase(Locale.ENGLISH), target);
 				}
 			}
 
@@ -186,7 +181,7 @@ public class SpawnMob
 
 				if (data.get(next) != null)
 				{
-					changeMobData(mMob.getType(), spawnedMount, data.get(next), target);
+					changeMobData(sender, mMob.getType(), spawnedMount, data.get(next).toLowerCase(Locale.ENGLISH), target);
 				}
 
 				spawnedMob.setPassenger(spawnedMount);
@@ -214,47 +209,58 @@ public class SpawnMob
 		}
 	}
 
-	private static void changeMobData(final EntityType type, final Entity spawned, String data, final User target) throws Exception
+	private static void changeMobData(final CommandSender sender, final EntityType type, final Entity spawned, final String inputData, final User target) throws Exception
 	{
-		data = data.toLowerCase(Locale.ENGLISH);
+		String data = inputData;
 
+		if (data.equals(""))
+		{
+			sender.sendMessage(_("mobDataList", StringUtil.joinList(MobData.getValidHelp(spawned))));
+		}
+		
+		MobData newData = MobData.fromData(spawned, data);
+		while (newData != null) {
+			newData.setData(spawned, target.getBase(), data);
+			data = data.replace(newData.getMatched(), "");
+			newData = MobData.fromData(spawned, data);
+		}
+		
 		if (spawned instanceof Zombie || type == EntityType.SKELETON)
 		{
-			//This should match all Living Entities but most mobs will just ignore the equipment.
-			if (data.contains("armor") || data.contains("armour"))
+			if (inputData.contains("armor") || inputData.contains("armour"))
 			{
 				final EntityEquipment invent = ((LivingEntity)spawned).getEquipment();
-				if (data.contains("diamond"))
+				if (inputData.contains("diamond"))
 				{
 					invent.setBoots(new ItemStack(Material.DIAMOND_BOOTS, 1));
-					invent.setLeggings(new ItemStack(Material.DIAMOND_BOOTS, 1));
-					invent.setChestplate(new ItemStack(Material.DIAMOND_BOOTS, 1));
-					invent.setHelmet(new ItemStack(Material.DIAMOND_BOOTS, 1));
+					invent.setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS, 1));
+					invent.setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE, 1));
+					invent.setHelmet(new ItemStack(Material.DIAMOND_HELMET, 1));
 				}
-				else if (data.contains("gold"))
+				else if (inputData.contains("gold"))
 				{
 					invent.setBoots(new ItemStack(Material.GOLD_BOOTS, 1));
-					invent.setLeggings(new ItemStack(Material.GOLD_BOOTS, 1));
-					invent.setChestplate(new ItemStack(Material.GOLD_BOOTS, 1));
-					invent.setHelmet(new ItemStack(Material.GOLD_BOOTS, 1));
+					invent.setLeggings(new ItemStack(Material.GOLD_LEGGINGS, 1));
+					invent.setChestplate(new ItemStack(Material.GOLD_CHESTPLATE, 1));
+					invent.setHelmet(new ItemStack(Material.GOLD_HELMET, 1));
 				}
-				else if (data.contains("leather"))
+				else if (inputData.contains("leather"))
 				{
 					invent.setBoots(new ItemStack(Material.LEATHER_BOOTS, 1));
-					invent.setLeggings(new ItemStack(Material.LEATHER_BOOTS, 1));
-					invent.setChestplate(new ItemStack(Material.LEATHER_BOOTS, 1));
-					invent.setHelmet(new ItemStack(Material.LEATHER_BOOTS, 1));
+					invent.setLeggings(new ItemStack(Material.LEATHER_LEGGINGS, 1));
+					invent.setChestplate(new ItemStack(Material.LEATHER_CHESTPLATE, 1));
+					invent.setHelmet(new ItemStack(Material.LEATHER_HELMET, 1));
 				}
-				else if (data.contains("no"))
+				else if (inputData.contains("no"))
 				{
 					invent.clear();
 				}
 				else
 				{
 					invent.setBoots(new ItemStack(Material.IRON_BOOTS, 1));
-					invent.setLeggings(new ItemStack(Material.IRON_BOOTS, 1));
-					invent.setChestplate(new ItemStack(Material.IRON_BOOTS, 1));
-					invent.setHelmet(new ItemStack(Material.IRON_BOOTS, 1));
+					invent.setLeggings(new ItemStack(Material.IRON_LEGGINGS, 1));
+					invent.setChestplate(new ItemStack(Material.IRON_CHESTPLATE, 1));
+					invent.setHelmet(new ItemStack(Material.IRON_HELMET, 1));
 				}
 				invent.setBootsDropChance(0f);
 				invent.setLeggingsDropChance(0f);
@@ -262,247 +268,6 @@ public class SpawnMob
 				invent.setHelmetDropChance(0f);
 			}
 
-		}
-		
-		if (spawned instanceof Slime)
-		{
-			try
-			{
-				((Slime)spawned).setSize(Integer.parseInt(data));
-			}
-			catch (Exception e)
-			{
-				throw new Exception(_("slimeMalformedSize"), e);
-			}
-		}
-
-		if ((spawned instanceof Ageable) && data.contains("baby"))
-		{
-			((Ageable)spawned).setBaby();
-			data = data.replace("baby", "");
-		}
-
-		if (spawned instanceof Colorable)
-		{
-			final String color = data.toUpperCase(Locale.ENGLISH);
-			try
-			{
-				if (color.equals("RANDOM"))
-				{
-					final Random rand = new Random();
-					((Colorable)spawned).setColor(DyeColor.values()[rand.nextInt(DyeColor.values().length)]);
-				}
-				else if (color.length() > 1)
-				{
-					((Colorable)spawned).setColor(DyeColor.valueOf(color));
-				}
-			}
-			catch (Exception e)
-			{
-				throw new Exception(_("sheepMalformedColor"), e);
-			}
-		}
-
-		if (spawned instanceof Tameable && data.contains("tamed") && target != null)
-		{
-			final Tameable tameable = ((Tameable)spawned);
-			tameable.setTamed(true);
-			tameable.setOwner(target.getBase());
-			data = data.replace("tamed", "");
-		}
-
-		if (type == EntityType.WOLF)
-		{
-			if (data.contains("angry"))
-			{
-				((Wolf)spawned).setAngry(true);
-			}
-		}
-
-		if (type == EntityType.CREEPER && data.contains("powered"))
-		{
-			((Creeper)spawned).setPowered(true);
-		}
-
-		if (type == EntityType.OCELOT)
-		{
-			if (data.contains("siamese") || data.contains("white"))
-			{
-				((Ocelot)spawned).setCatType(Ocelot.Type.SIAMESE_CAT);
-			}
-			else if (data.contains("red") || data.contains("orange") || data.contains("tabby"))
-			{
-				((Ocelot)spawned).setCatType(Ocelot.Type.RED_CAT);
-			}
-			else if (data.contains("black") || data.contains("tuxedo"))
-			{
-				((Ocelot)spawned).setCatType(Ocelot.Type.BLACK_CAT);
-			}
-		}
-
-		if (type == EntityType.VILLAGER)
-		{
-			for (Villager.Profession prof : Villager.Profession.values())
-			{
-				if (data.contains(prof.toString().toLowerCase(Locale.ENGLISH)))
-				{
-					((Villager)spawned).setProfession(prof);
-				}
-			}
-		}
-
-		if (spawned instanceof Zombie)
-		{
-			if (data.contains("villager"))
-			{
-				((Zombie)spawned).setVillager(true);
-			}
-			if (data.contains("baby"))
-			{
-				((Zombie)spawned).setBaby(true);
-			}
-		}
-		
-		if (spawned instanceof Zombie || type == EntityType.SKELETON)
-		{
-			if (data.contains("sword"))
-			{
-				final EntityEquipment invent = ((LivingEntity)spawned).getEquipment();
-				if (data.contains("diamond"))
-				{
-					invent.setItemInHand(new ItemStack(Material.DIAMOND_SWORD, 1));
-				}
-				else if (data.contains("gold"))
-				{
-					invent.setItemInHand(new ItemStack(Material.GOLD_SWORD, 1));
-				}
-				else if (data.contains("iron"))
-				{
-					invent.setItemInHand(new ItemStack(Material.IRON_SWORD, 1));
-				}
-				else
-				{
-					invent.setItemInHand(new ItemStack(Material.STONE_SWORD, 1));
-				}
-				invent.setItemInHandDropChance(0.1f);
-			}
-		}
-
-		if (type == EntityType.SKELETON)
-		{
-			if (data.contains("wither"))
-			{
-				((Skeleton)spawned).setSkeletonType(SkeletonType.WITHER);
-			}
-		}
-
-		if (type == EntityType.EXPERIENCE_ORB)
-		{
-			if (NumberUtil.isInt(data))
-			{
-				((ExperienceOrb)spawned).setExperience(Integer.parseInt(data));
-
-			}
-		}
-		
-		if (type == EntityType.HORSE)
-		{
-			if (data.contains("donkey"))
-			{
-				((Horse)spawned).setVariant(Horse.Variant.DONKEY);
-			}
-			else if (data.contains("mule"))
-			{
-				((Horse)spawned).setVariant(Horse.Variant.MULE);
-			}
-			else if (data.contains("skeleton"))
-			{
-				((Horse)spawned).setVariant(Horse.Variant.SKELETON_HORSE);
-			}
-			else if (data.contains("undead"))
-			{
-				((Horse)spawned).setVariant(Horse.Variant.UNDEAD_HORSE);
-			}
-			
-			if (data.contains("polka") || data.contains("sooty"))
-			{
-				((Horse)spawned).setStyle(Horse.Style.BLACK_DOTS);
-			}
-			else if (data.contains("socks") || data.contains("blaze"))
-			{
-				((Horse)spawned).setStyle(Horse.Style.WHITE);
-			}
-			else if (data.contains("leopard") || data.contains("appaloosa"))
-			{
-				((Horse)spawned).setStyle(Horse.Style.WHITE_DOTS);
-			}
-			else if (data.contains("splotchy") || data.contains("milky") || data.contains("paint"))
-			{
-				((Horse)spawned).setStyle(Horse.Style.WHITEFIELD);
-			}
-			
-			if (data.contains("black"))
-			{
-				((Horse)spawned).setColor(Horse.Color.BLACK);
-			}
-			else if (data.contains("chestnut") || data.contains("liver"))
-			{
-				((Horse)spawned).setColor(Horse.Color.CHESTNUT);
-				data = data.replace("chestnut", "");
-			}
-			else if (data.contains("creamy") || data.contains("flaxen"))
-			{
-				((Horse)spawned).setColor(Horse.Color.CREAMY);
-			}
-			else if (data.contains("gray") || data.contains("dapple"))
-			{
-				((Horse)spawned).setColor(Horse.Color.GRAY);
-			}
-			else if (data.contains("dark") || data.contains("darkbrown") || data.contains("dbrown") || data.contains("buckskin"))
-			{
-				((Horse)spawned).setColor(Horse.Color.DARK_BROWN);
-			}
-			else if (data.contains("brown") || data.contains("bay"))
-			{
-				((Horse)spawned).setColor(Horse.Color.BROWN);
-			}
-			
-			if (data.contains("chest"))
-			{
-				((Horse)spawned).setTamed(true);
-				((Horse)spawned).setCarryingChest(true);
-			}
-			
-			if (data.contains("saddle"))
-			{
-				((Horse)spawned).setTamed(true);
-				((Horse)spawned).getInventory().setSaddle(new ItemStack(Material.SADDLE, 1));
-			}
-			
-			if (data.contains("armor"))
-			{
-				((Horse)spawned).setTamed(true);
-				HorseInventory invent = ((Horse)spawned).getInventory();
-				if (data.contains("gold")) {
-					invent.setArmor(new ItemStack(Material.GOLD_BARDING, 1));
-				}
-				else if (data.contains("diamond"))
-				{
-					invent.setArmor(new ItemStack(Material.DIAMOND_BARDING, 1));
-				}
-				else
-				{
-					invent.setArmor(new ItemStack(Material.IRON_BARDING, 1));
-				}
-			}
-		}
-		
-		if (type == EntityType.PIG)
-		{
-			if (data.contains("saddle"))
-			{
-				((Pig)spawned).setSaddle(true);
-			}
 		}
 	}
 
@@ -535,5 +300,9 @@ public class SpawnMob
 			invent.setBootsDropChance(0.0f);
 		}
 
+		if (type == EntityType.HORSE)
+		{
+			((Horse)spawned).setJumpStrength(1.2);
+		}
 	}
 }
