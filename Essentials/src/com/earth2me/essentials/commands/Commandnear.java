@@ -61,6 +61,7 @@ public class Commandnear extends EssentialsCommand
 		if (radius > maxRadius && !user.isAuthorized("essentials.near.maxexempt"))
 		{
 			user.sendMessage(_("radiusTooBig", maxRadius));
+			radius = maxRadius;
 		}
 		
 		if (otherUser == null || user.isAuthorized("essentials.near.others"))
@@ -69,7 +70,7 @@ public class Commandnear extends EssentialsCommand
 		}
 		else
 		{
-			user.sendMessage(_("noAccessCommand"));
+			throw new NotEnoughArgumentsException(_("noPerm", "essentials.near.others"));
 		}
 	}
 
