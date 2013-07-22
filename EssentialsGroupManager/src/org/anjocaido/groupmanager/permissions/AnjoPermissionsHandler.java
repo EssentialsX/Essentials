@@ -151,6 +151,10 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 					// or It's a negated perm where a normal perm doesn't exists (don't allow inheritance to negate higher perms)
 					if ((!negated && !playerPermArray.contains(perm) && !wildcardNegation(playerPermArray, perm)) || (negated && !playerPermArray.contains(perm.substring(1)) && !wildcardNegation(playerPermArray, perm.substring(1))))
 						playerPermArray.add(perm);
+					
+					if (perm.startsWith("+") && wildcardNegation(groupPermArray, perm.substring(1))) {
+						playerPermArray.add(perm.substring(1));
+					}
 				}
 			}
 
