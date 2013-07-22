@@ -167,6 +167,7 @@ public abstract class DataUnit {
 	 * @return a copy of the permission list
 	 */
 	public List<String> getPermissionList() {
+		sortPermissions();
 		return permissions;
 	}
 
