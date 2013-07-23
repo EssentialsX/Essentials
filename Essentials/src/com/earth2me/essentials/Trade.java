@@ -27,7 +27,7 @@ public class Trade
 	private final transient BigDecimal money;
 	private final transient ItemStack itemStack;
 	private final transient Integer exp;
-	private final transient IEssentials ess;
+	private final transient com.earth2me.essentials.IEssentials ess;
 
 
 	public enum TradeType
@@ -56,7 +56,7 @@ public class Trade
 	}
 
 	@Deprecated
-	public Trade(final double money, final IEssentials ess)
+	public Trade(final double money, final com.earth2me.essentials.IEssentials ess)
 	{
 		this(null, null, BigDecimal.valueOf(money), null, null, ess);
 	}
@@ -76,7 +76,7 @@ public class Trade
 		this(null, null, null, null, exp, ess);
 	}
 
-	private Trade(final String command, final Trade fallback, final BigDecimal money, final ItemStack item, final Integer exp, final IEssentials ess)
+	private Trade(final String command, final Trade fallback, final BigDecimal money, final ItemStack item, final Integer exp, final com.earth2me.essentials.IEssentials ess)
 	{
 		this.command = command;
 		this.fallbackTrade = fallback;
