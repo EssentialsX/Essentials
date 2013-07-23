@@ -37,14 +37,14 @@ public class Commandsethome extends EssentialsCommand
 			}
 			else
 			{
+				name = args[1].toLowerCase(Locale.ENGLISH);
 				if (user.isAuthorized("essentials.sethome.others"))
 				{
 					usersHome = ess.getUser(args[0]);
 					if (usersHome == null)
 					{
 						throw new PlayerNotFoundException();
-					}
-					name = args[1].toLowerCase(Locale.ENGLISH);
+					}					
 				}
 			}
 		}
