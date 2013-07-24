@@ -11,9 +11,8 @@ public class Commandinvsee extends EssentialsCommand
 	{
 		super("invsee");
 	}
-	
-	//This method has a hidden param, which if given will display the equip slots. #easteregg
 
+	//This method has a hidden param, which if given will display the equip slots. #easteregg
 	@Override
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
@@ -34,6 +33,7 @@ public class Commandinvsee extends EssentialsCommand
 		{
 			inv = invUser.getInventory();
 		}
+		user.closeInventory();
 		user.openInventory(inv);
 		user.setInvSee(true);
 	}

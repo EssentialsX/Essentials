@@ -13,15 +13,17 @@ public class Commandenderchest extends EssentialsCommand
 
 	@Override
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
-	{		
+	{
 		if (args.length > 0 && user.isAuthorized("essentials.enderchest.others"))
 		{
 			final User invUser = getPlayer(server, user, args, 0);
+			user.closeInventory();
 			user.openInventory(invUser.getEnderChest());
 			user.setEnderSee(true);
 		}
 		else
 		{
+			user.closeInventory();
 			user.openInventory(user.getEnderChest());
 			user.setEnderSee(false);
 		}
