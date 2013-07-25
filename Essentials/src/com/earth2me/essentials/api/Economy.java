@@ -95,17 +95,17 @@ public class Economy
 	 * @throws UserDoesNotExistException
 	 */
 	@Deprecated
-	public static double getMoney(String name) throws net.ess3.api.UserDoesNotExistException
+	public static double getMoney(String name) throws UserDoesNotExistException
 	{
 		return getMoneyExact(name).doubleValue();
 	}
 
-	public static BigDecimal getMoneyExact(String name) throws net.ess3.api.UserDoesNotExistException
+	public static BigDecimal getMoneyExact(String name) throws UserDoesNotExistException
 	{
 		User user = getUserByName(name);
 		if (user == null)
 		{
-			throw new net.ess3.api.UserDoesNotExistException(name);
+			throw new UserDoesNotExistException(name);
 		}
 		return user.getMoney();
 	}
@@ -119,7 +119,7 @@ public class Economy
 	 * @throws NoLoanPermittedException If the user is not allowed to have a negative balance
 	 */
 	@Deprecated
-	public static void setMoney(String name, double balance) throws net.ess3.api.UserDoesNotExistException, net.ess3.api.NoLoanPermittedException
+	public static void setMoney(String name, double balance) throws UserDoesNotExistException, NoLoanPermittedException
 	{
 		try
 		{
@@ -131,20 +131,20 @@ public class Economy
 		}
 	}
 
-	public static void setMoney(String name, BigDecimal balance) throws net.ess3.api.UserDoesNotExistException, net.ess3.api.NoLoanPermittedException
+	public static void setMoney(String name, BigDecimal balance) throws UserDoesNotExistException, NoLoanPermittedException
 	{
 		User user = getUserByName(name);
 		if (user == null)
 		{
-			throw new net.ess3.api.UserDoesNotExistException(name);
+			throw new UserDoesNotExistException(name);
 		}
 		if (balance.compareTo(ess.getSettings().getMinMoney()) < 0)
 		{
-			throw new net.ess3.api.NoLoanPermittedException();
+			throw new NoLoanPermittedException();
 		}
 		if (balance.signum() < 0 && !user.isAuthorized("essentials.eco.loan"))
 		{
-			throw new net.ess3.api.NoLoanPermittedException();
+			throw new NoLoanPermittedException();
 		}
 		user.setMoney(balance);
 	}
@@ -158,7 +158,7 @@ public class Economy
 	 * @throws NoLoanPermittedException If the user is not allowed to have a negative balance
 	 */
 	@Deprecated
-	public static void add(String name, double amount) throws net.ess3.api.UserDoesNotExistException, net.ess3.api.NoLoanPermittedException
+	public static void add(String name, double amount) throws UserDoesNotExistException, NoLoanPermittedException
 	{
 		try
 		{
@@ -170,7 +170,7 @@ public class Economy
 		}
 	}
 
-	public static void add(String name, BigDecimal amount) throws net.ess3.api.UserDoesNotExistException, net.ess3.api.NoLoanPermittedException, ArithmeticException
+	public static void add(String name, BigDecimal amount) throws UserDoesNotExistException, NoLoanPermittedException, ArithmeticException
 	{
 		BigDecimal result = getMoneyExact(name).add(amount, MATH_CONTEXT);
 		setMoney(name, result);
@@ -185,7 +185,7 @@ public class Economy
 	 * @throws NoLoanPermittedException If the user is not allowed to have a negative balance
 	 */
 	@Deprecated
-	public static void subtract(String name, double amount) throws net.ess3.api.UserDoesNotExistException, net.ess3.api.NoLoanPermittedException
+	public static void subtract(String name, double amount) throws UserDoesNotExistException, NoLoanPermittedException
 	{
 		try
 		{
@@ -197,7 +197,7 @@ public class Economy
 		}
 	}
 
-	public static void substract(String name, BigDecimal amount) throws net.ess3.api.UserDoesNotExistException, net.ess3.api.NoLoanPermittedException, ArithmeticException
+	public static void substract(String name, BigDecimal amount) throws UserDoesNotExistException, NoLoanPermittedException, ArithmeticException
 	{
 		BigDecimal result = getMoneyExact(name).subtract(amount, MATH_CONTEXT);
 		setMoney(name, result);
@@ -212,7 +212,7 @@ public class Economy
 	 * @throws NoLoanPermittedException If the user is not allowed to have a negative balance
 	 */
 	@Deprecated
-	public static void divide(String name, double amount) throws net.ess3.api.UserDoesNotExistException, net.ess3.api.NoLoanPermittedException
+	public static void divide(String name, double amount) throws UserDoesNotExistException, NoLoanPermittedException
 	{
 		try
 		{
@@ -224,7 +224,7 @@ public class Economy
 		}
 	}
 
-	public static void divide(String name, BigDecimal amount) throws net.ess3.api.UserDoesNotExistException, net.ess3.api.NoLoanPermittedException, ArithmeticException
+	public static void divide(String name, BigDecimal amount) throws UserDoesNotExistException, NoLoanPermittedException, ArithmeticException
 	{
 		BigDecimal result = getMoneyExact(name).divide(amount, MATH_CONTEXT);
 		setMoney(name, result);
@@ -239,7 +239,7 @@ public class Economy
 	 * @throws NoLoanPermittedException If the user is not allowed to have a negative balance
 	 */
 	@Deprecated
-	public static void multiply(String name, double amount) throws net.ess3.api.UserDoesNotExistException, net.ess3.api.NoLoanPermittedException
+	public static void multiply(String name, double amount) throws UserDoesNotExistException, NoLoanPermittedException
 	{
 		try
 		{
@@ -251,7 +251,7 @@ public class Economy
 		}
 	}
 
-	public static void multiply(String name, BigDecimal amount) throws net.ess3.api.UserDoesNotExistException, net.ess3.api.NoLoanPermittedException, ArithmeticException
+	public static void multiply(String name, BigDecimal amount) throws UserDoesNotExistException, NoLoanPermittedException, ArithmeticException
 	{
 		BigDecimal result = getMoneyExact(name).multiply(amount, MATH_CONTEXT);
 		setMoney(name, result);
@@ -264,7 +264,7 @@ public class Economy
 	 * @throws UserDoesNotExistException If a user by that name does not exists
 	 * @throws NoLoanPermittedException If the user is not allowed to have a negative balance
 	 */
-	public static void resetBalance(String name) throws net.ess3.api.UserDoesNotExistException, net.ess3.api.NoLoanPermittedException
+	public static void resetBalance(String name) throws UserDoesNotExistException, NoLoanPermittedException
 	{
 		if (ess == null)
 		{
@@ -280,7 +280,7 @@ public class Economy
 	 * @throws UserDoesNotExistException If a user by that name does not exists
 	 */
 	@Deprecated
-	public static boolean hasEnough(String name, double amount) throws net.ess3.api.UserDoesNotExistException
+	public static boolean hasEnough(String name, double amount) throws UserDoesNotExistException
 	{
 		try
 		{
@@ -293,7 +293,7 @@ public class Economy
 		}
 	}
 
-	public static boolean hasEnough(String name, BigDecimal amount) throws net.ess3.api.UserDoesNotExistException, ArithmeticException
+	public static boolean hasEnough(String name, BigDecimal amount) throws UserDoesNotExistException, ArithmeticException
 	{
 		return amount.compareTo(getMoneyExact(name)) <= 0;
 	}
@@ -305,7 +305,7 @@ public class Economy
 	 * @throws UserDoesNotExistException If a user by that name does not exists
 	 */
 	@Deprecated
-	public static boolean hasMore(String name, double amount) throws net.ess3.api.UserDoesNotExistException
+	public static boolean hasMore(String name, double amount) throws UserDoesNotExistException
 	{
 		try
 		{
@@ -318,7 +318,7 @@ public class Economy
 		}
 	}
 
-	public static boolean hasMore(String name, BigDecimal amount) throws net.ess3.api.UserDoesNotExistException, ArithmeticException
+	public static boolean hasMore(String name, BigDecimal amount) throws UserDoesNotExistException, ArithmeticException
 	{
 		return amount.compareTo(getMoneyExact(name)) < 0;
 	}
@@ -330,7 +330,7 @@ public class Economy
 	 * @throws UserDoesNotExistException If a user by that name does not exists
 	 */
 	@Deprecated
-	public static boolean hasLess(String name, double amount) throws net.ess3.api.UserDoesNotExistException
+	public static boolean hasLess(String name, double amount) throws UserDoesNotExistException
 	{
 		try
 		{
@@ -343,7 +343,7 @@ public class Economy
 		}
 	}
 
-	public static boolean hasLess(String name, BigDecimal amount) throws net.ess3.api.UserDoesNotExistException, ArithmeticException
+	public static boolean hasLess(String name, BigDecimal amount) throws UserDoesNotExistException, ArithmeticException
 	{
 		return amount.compareTo(getMoneyExact(name)) > 0;
 	}
@@ -355,7 +355,7 @@ public class Economy
 	 * @return true, if the user has a negative balance
 	 * @throws UserDoesNotExistException If a user by that name does not exists
 	 */
-	public static boolean isNegative(String name) throws net.ess3.api.UserDoesNotExistException
+	public static boolean isNegative(String name) throws UserDoesNotExistException
 	{
 		return getMoneyExact(name).signum() < 0;
 	}
@@ -407,12 +407,12 @@ public class Economy
 	 * @return true, if it's a npc
 	 * @throws UserDoesNotExistException
 	 */
-	public static boolean isNPC(String name) throws net.ess3.api.UserDoesNotExistException
+	public static boolean isNPC(String name) throws UserDoesNotExistException
 	{
 		User user = getUserByName(name);
 		if (user == null)
 		{
-			throw new net.ess3.api.UserDoesNotExistException(name);
+			throw new UserDoesNotExistException(name);
 		}
 		return user.isNPC();
 	}
@@ -440,12 +440,12 @@ public class Economy
 	 * @param name Name of the player
 	 * @throws UserDoesNotExistException
 	 */
-	public static void removeNPC(String name) throws net.ess3.api.UserDoesNotExistException
+	public static void removeNPC(String name) throws UserDoesNotExistException
 	{
 		User user = getUserByName(name);
 		if (user == null)
 		{
-			throw new net.ess3.api.UserDoesNotExistException(name);
+			throw new UserDoesNotExistException(name);
 		}
 		deleteNPC(name);
 	}
