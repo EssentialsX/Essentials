@@ -121,6 +121,13 @@ public class Commandkillall extends EssentialsCommand
 						continue;
 					}
 				}
+				if (entity instanceof Horse)
+				{
+					if (((Horse)entity).isTamed())
+					{
+						continue;
+					}
+				}
 				if (animals)
 				{
 					if (entity instanceof Animals || entity instanceof NPC || entity instanceof Snowman || entity instanceof WaterMob)
