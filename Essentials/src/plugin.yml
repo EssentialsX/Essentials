@@ -236,7 +236,7 @@ commands:
     aliases: [emore]
   motd:
     description: Views the Message Of The Day.
-    usage: /<command>
+    usage: /<command> [chapter] [page]
     aliases: [emotd]
   msg:
     description: Sends a private message to the specified player.
@@ -308,7 +308,7 @@ commands:
     aliases: [fix,efix,erepair]
   rules:
     description: Views the server rules.
-    usage: /<command>
+    usage: /<command> [chapter] [page]
     aliases: [erules]
   seen:
     description: Shows the last logout time of a player.
