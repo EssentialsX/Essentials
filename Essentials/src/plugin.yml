@@ -340,7 +340,7 @@ commands:
     aliases: [esocialspy]
   spawner:
     description: Change the mob type of a spawner.
-    usage: /<command> <mob>
+    usage: /<command> <mob> [delay]
     aliases: [changems,echangems,espawner]
   spawnmob:
     description: Spawns a mob.

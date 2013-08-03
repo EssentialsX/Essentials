@@ -26,7 +26,7 @@ public final class DescParseTickFormat
 	public static final double ticksPerMinute = 1000d / 60d;
 	public static final double ticksPerSecond = 1000d / 60d / 60d;
 	private static final SimpleDateFormat SDFTwentyFour = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
-	private static final SimpleDateFormat SDFTwelve = new SimpleDateFormat("h:mmaa", Locale.ENGLISH);
+	private static final SimpleDateFormat SDFTwelve = new SimpleDateFormat("h:mm aa", Locale.ENGLISH);
 
 	static
 	{
