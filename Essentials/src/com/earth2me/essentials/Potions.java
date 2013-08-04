@@ -67,7 +67,6 @@ public class Potions
 		POTIONS.put("resistance", PotionEffectType.DAMAGE_RESISTANCE);
 		ALIASPOTIONS.put("dmgresist", PotionEffectType.DAMAGE_RESISTANCE);
 		ALIASPOTIONS.put("armor", PotionEffectType.DAMAGE_RESISTANCE);
-		ALIASPOTIONS.put("dmgresist", PotionEffectType.DAMAGE_RESISTANCE);
 
 		POTIONS.put("fireresist", PotionEffectType.FIRE_RESISTANCE);
 		ALIASPOTIONS.put("fireresistance", PotionEffectType.FIRE_RESISTANCE);
