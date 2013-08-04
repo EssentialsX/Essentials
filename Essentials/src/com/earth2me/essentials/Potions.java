@@ -108,6 +108,7 @@ public class Potions
 		ALIASPOTIONS.put("absorb", PotionEffectType.ABSORPTION);
 
 		POTIONS.put("saturation", PotionEffectType.SATURATION);
+		ALIASPOTIONS.put("food", PotionEffectType.SATURATION);
 	}
 
 	public static PotionEffectType getByName(String name)
