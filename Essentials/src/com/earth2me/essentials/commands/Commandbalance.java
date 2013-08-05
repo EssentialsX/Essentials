@@ -30,17 +30,20 @@ public class Commandbalance extends EssentialsCommand
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-
-		if (args.length < 1 || !user.isAuthorized("essentials.balance.others"))
+		if (args.length == 1 && user.isAuthorized("essentials.balance.others"))
+		{
+			final User target = getPlayer(server, args, 0, true, true);
+			final BigDecimal bal = target.getMoney();
+			user.sendMessage(_("balanceOther", target.getDisplayName(), NumberUtil.displayCurrency(bal, ess)));
+		}
+		else if (args.length < 2)
 		{
 			final BigDecimal bal = user.getMoney();
 			user.sendMessage(_("balance", NumberUtil.displayCurrency(bal, ess)));
 		}
 		else
 		{
-			final User target = getPlayer(server, args, 0, true, true);
-			final BigDecimal bal = target.getMoney();
-			user.sendMessage(_("balanceOther", target.getDisplayName(), NumberUtil.displayCurrency(bal, ess)));
+			throw new NotEnoughArgumentsException();
 		}
 	}
 }
