@@ -1282,14 +1282,50 @@ public class OfflinePlayer implements Player
 	}
 
 	@Override
-	public boolean isScaledHealth()
+	public void playSound(Location arg0, String arg1, float arg2, float arg3)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	public void setScaleHealth(boolean bln)
+	public boolean isHealthScaled()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public void setHealthScaled(boolean arg0)
+	{
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public void setHealthScale(double arg0) throws IllegalArgumentException
+	{
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public double getHealthScale()
+	{
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public boolean isLeashed()
+	{
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public Entity getLeashHolder() throws IllegalStateException
+	{
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public boolean setLeashHolder(Entity arg0)
+	{
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 }
