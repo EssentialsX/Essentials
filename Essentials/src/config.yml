@@ -51,7 +51,7 @@ teleport-delay: 0
 # This will also prevent the player attacking other players.
 teleport-invulnerability: 4
 
-# The delay, in seconds, required between /heal attempts.
+# The delay, in seconds, required between /heal or /feed attempts.
 heal-cooldown: 60
 
 # What to prevent from /i /give.
