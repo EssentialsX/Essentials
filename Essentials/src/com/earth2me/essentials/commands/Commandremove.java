@@ -173,7 +173,7 @@ public class Commandremove extends EssentialsCommand
 				}
 				else if (toRemove == ToRemove.ITEMFRAMES)
 				{
-					if (e instanceof Painting)
+					if (e instanceof ItemFrame)
 					{
 						e.remove();
 						removed++;
