@@ -30,7 +30,7 @@ public enum Mob
 	SPIDER("Spider", Enemies.ENEMY, EntityType.SPIDER),
 	SQUID("Squid", Enemies.FRIENDLY, EntityType.SQUID),
 	ZOMBIE("Zombie", Enemies.ENEMY, EntityType.ZOMBIE),
-	WOLF("Wolf", Enemies.NEUTRAL, EntityType.WOLF),
+	WOLF("Wolf", Enemies.NEUTRAL, "", EntityType.WOLF),
 	CAVESPIDER("CaveSpider", Enemies.ENEMY, EntityType.CAVE_SPIDER),
 	ENDERMAN("Enderman", Enemies.ENEMY, "", EntityType.ENDERMAN),
 	SILVERFISH("Silverfish", Enemies.ENEMY, "", EntityType.SILVERFISH),
