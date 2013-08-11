@@ -72,5 +72,6 @@ public abstract class EssentialsToggleCommand extends EssentialsCommand
 		}
 	}
 
+	// Make sure when implementing this method that all 3 Boolean states are handled, 'null' should toggle the existing state.
 	abstract void togglePlayer(CommandSender sender, User user, Boolean enabled) throws NotEnoughArgumentsException;
 }

@@ -271,16 +271,7 @@ public class EssentialsPlayerListener implements Listener
 
 				if (user.isAuthorized("essentials.fly.safelogin"))
 				{
-					final World world = user.getLocation().getWorld();
-					final int x = user.getLocation().getBlockX();
-					int y = user.getLocation().getBlockY();
-					final int z = user.getLocation().getBlockZ();
-					while (LocationUtil.isBlockUnsafe(world, x, y, z) && y > -1)
-					{
-						y--;
-					}
-
-					if (user.getLocation().getBlockY() - y > 1 || y < 0)
+					if (LocationUtil.shouldFly(user.getLocation()))
 					{
 						user.setAllowFlight(true);
 						user.setFlying(true);

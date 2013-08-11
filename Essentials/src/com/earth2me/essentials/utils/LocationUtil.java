@@ -7,6 +7,8 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import net.ess3.api.IUser;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -20,7 +22,7 @@ public class LocationUtil
 	// The player can stand inside these materials
 	public static final Set<Integer> HOLLOW_MATERIALS = new HashSet<Integer>();
 	private static final HashSet<Byte> TRANSPARENT_MATERIALS = new HashSet<Byte>();
-	
+
 	static
 	{
 		HOLLOW_MATERIALS.add(Material.AIR.getId());
@@ -67,7 +69,6 @@ public class LocationUtil
 		TRANSPARENT_MATERIALS.add((byte)Material.WATER.getId());
 		TRANSPARENT_MATERIALS.add((byte)Material.STATIONARY_WATER.getId());
 	}
-	
 	public final static int RADIUS = 3;
 	public final static Vector3D[] VOLUME;
 
@@ -153,6 +154,7 @@ public class LocationUtil
 		return is;
 	}
 
+
 	public static class Vector3D
 	{
 		public Vector3D(int x, int y, int z)
@@ -190,7 +192,6 @@ public class LocationUtil
 		});
 		VOLUME = pos.toArray(new Vector3D[0]);
 	}
-	
 
 	public static Location getTarget(final LivingEntity entity) throws Exception
 	{
@@ -236,6 +237,21 @@ public class LocationUtil
 			return true;
 		}
 		return false;
+	}
+
+	public static Location getSafeDestination(final IUser user, final Location loc) throws Exception
+	{
+		if (loc.getWorld().equals(user.getBase().getWorld())
+			&& (user.getBase().getGameMode() == GameMode.CREATIVE
+				|| (user.isGodModeEnabled() && user.getBase().getAllowFlight())))
+		{
+			if (shouldFly(loc))
+			{
+				user.getBase().setFlying(true);
+			}
+			return loc;
+		}
+		return getSafeDestination(loc);
 	}
 
 	public static Location getSafeDestination(final Location loc) throws Exception
@@ -303,5 +319,23 @@ public class LocationUtil
 			}
 		}
 		return new Location(world, x + 0.5, y, z + 0.5, loc.getYaw(), loc.getPitch());
-	}	
+	}
+
+	public static boolean shouldFly(Location loc)
+	{
+		final World world = loc.getWorld();
+		final int x = loc.getBlockX();
+		int y = loc.getBlockY();
+		final int z = loc.getBlockZ();
+		while (LocationUtil.isBlockUnsafe(world, x, y, z) && y > -1)
+		{
+			y--;
+		}
+
+		if (loc.getBlockY() - y > 1 || y < 0)
+		{
+			return true;
+		}
+		return false;
+	}
 }

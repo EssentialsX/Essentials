@@ -97,7 +97,7 @@ public class Teleport implements net.ess3.api.ITeleport
 		cancel(false);
 		teleportee.setLastLocation();
 		teleportee.requestTeleport(null, false);
-		teleportee.getBase().teleport(LocationUtil.getSafeDestination(target.getLocation()), cause);
+		teleportee.getBase().teleport(LocationUtil.getSafeDestination(teleportee, target.getLocation()), cause);
 	}
 
 	//The teleportPlayer function is used when you want to normally teleportPlayer someone to a location or player.
