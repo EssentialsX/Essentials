@@ -37,6 +37,18 @@ public class Worth implements IConf
 		}
 		if (result.signum() < 0)
 		{
+			result = config.getBigDecimal("worth." + itemStack.getTypeId() + "." + itemStack.getDurability(), BigDecimal.ONE.negate());
+		}		
+		if (result.signum() < 0)
+		{
+			result = config.getBigDecimal("worth." + itemStack.getTypeId() + ".0", BigDecimal.ONE.negate());
+		}
+		if (result.signum() < 0)
+		{
+			result = config.getBigDecimal("worth." + itemStack.getTypeId(), BigDecimal.ONE.negate());
+		}		
+		if (result.signum() < 0)
+		{
 			result = config.getBigDecimal("worth-" + itemStack.getTypeId(), BigDecimal.ONE.negate());
 		}
 		if (result.signum() < 0)
