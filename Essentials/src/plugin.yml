@@ -10,7 +10,7 @@ commands:
   afk:
     description: Marks you as away-from-keyboard.
     usage: /<command> [player]
-    aliases: [eafk]
+    aliases: [eafk,away,eaway]
   antioch:
     description: 'A little surprise for operators.'
     usage: /<command> [message]
@@ -54,7 +54,7 @@ commands:
   bigtree:
     description: Spawn a big tree where you are looking.
     usage: /<command> <tree|redwood|jungle>
-    aliases: [ebigtree]
+    aliases: [ebigtree,largetree,elargetree]
   burn:
     description: Set a player on fire.
     usage: /<command> <player> <seconds>
@@ -74,7 +74,7 @@ commands:
   deljail:
     description: Removes a jail.
     usage: /<command> <jailname>
-    aliases: [edeljail]
+    aliases: [edeljail,remjail,eremjail,rmjail,ermjail]
   delwarp:
     description: Deletes the specified warp.
     usage: /<command> <warp>
@@ -82,7 +82,7 @@ commands:
   depth:
     description: States current depth, relative to sea level.
     usage: /depth
-    aliases: [edepth]
+    aliases: [edepth,height,eheight]
   eco:
     description: Manages the server economy.
     usage: /<command> <give|take|set|reset> <player> <amount>
@@ -94,7 +94,7 @@ commands:
   enderchest:
     description: Lets you see inside an enderchest.
     usage: /<command> [player]
-    aliases: [echest,eechest,eenderchest,endersee,eendersee]
+    aliases: [echest,eechest,eenderchest,endersee,eendersee,ec,eec]
   essentials:
     description: Reloads essentials.
     usage: /<command>
@@ -130,11 +130,11 @@ commands:
   gc:
     description: Reports memory, uptime and tick info.
     usage: /<command> [all]
-    aliases: [lag,elag,egc,mem,emem,memory,ememory,uptime,euptime]
+    aliases: [lag,elag,egc,mem,emem,memory,ememory,uptime,euptime,tps,etps,entities,eentities]
   getpos:
     description: Get your current coordinates or those of a player.
     usage: /<command> [player]
-    aliases: [coords,egetpos,position,eposition,whereami,ewhereami]
+    aliases: [coords,egetpos,position,eposition,whereami,ewhereami,getlocation,egetlocation,getloc,egetloc]
   give:
     description: Give a player an item.
     usage: /<command> <player> <item|numeric> [amount [itemmeta...]]
@@ -146,7 +146,7 @@ commands:
   hat:
     description: Get some cool new headgear.
     usage: /<command> [remove]
-    aliases: [ehat]
+    aliases: [ehat,head,ehead]
   heal:
     description: Heals you or the given player.
     usage: /<command> [player]
@@ -178,7 +178,7 @@ commands:
   item:
     description: Spawn an item.
     usage: /<command> <item|numeric> [amount [itemmeta...]]
-    aliases: [i,eitem]
+    aliases: [i,eitem,ei]
   itemdb:
     description: Searches for an item.
     usage: /<command> <item>
@@ -214,6 +214,7 @@ commands:
   kittycannon:
     description: Throw an exploding kitten at your opponent.
     usage: /<command>
+    aliases: [ekittycannon]
   lightning:
     description: The power of Thor. Strike at cursor or player.
     usage: /<command> [player] [power]
@@ -225,7 +226,7 @@ commands:
   mail:
     description: Manages inter-player, intra-server mail.
     usage: /<command> [read|clear|send [to] [message]|sendall [message]]
-    aliases: [email]
+    aliases: [email,eemail]
   me:
     description: Describes an action in the context of the player.
     usage: /<command> <description>
@@ -245,7 +246,7 @@ commands:
   mute:
     description: Mutes or unmutes a player.
     usage: /<command> <player> [datediff]
-    aliases: [emute]
+    aliases: [emute,silence,esilence]
   near:
     description: Lists the players near by or around a player.
     usage: /<command> [playername] [radius]
@@ -253,7 +254,7 @@ commands:
   nick:
     description: Change your nickname or that of another player.
     usage: /<command> [player] <nickname|off>
-    aliases: [enick]
+    aliases: [enick,nickname,enickname]
   nuke:
     description: May death rain upon them.
     usage: /<command> [player]
@@ -321,11 +322,11 @@ commands:
   sethome:
     description: Set your home to your current location.
     usage: /<command> [[player:]name]
-    aliases: [esethome]
+    aliases: [esethome,createhome,ecreatehome]
   setjail:
     description: Creates a jail where you specified named [jailname].
     usage: /<command> <jailname>
-    aliases: [esetjail]
+    aliases: [esetjail,createjail,ecreatejail]
   setwarp:
     description: Creates a new warp.
     usage: /<command> <warp>
@@ -341,7 +342,7 @@ commands:
   spawner:
     description: Change the mob type of a spawner.
     usage: /<command> <mob> [delay]
-    aliases: [changems,echangems,espawner]
+    aliases: [changems,echangems,espawner,mobspawner,emobspawner]
   spawnmob:
     description: Spawns a mob.
     usage: /<command> <mob>[:data][,<mount>[:data]] [amount] [player]
@@ -444,7 +445,7 @@ commands:
     aliases: [eunlimited,ul,unl,eul,eunl]
   vanish:
     description: Hide yourself from other players.
-    usage: /<command> [on|off]
+    usage: /<command> [player] [on|off]
     aliases: [v,ev,evanish]
   warp:
     description: List all warps or warp to the specified location.
