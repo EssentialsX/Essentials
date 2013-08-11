@@ -42,19 +42,21 @@ public class Commandmute extends EssentialsCommand
 		}
 		player.setMuteTimeout(muteTimestamp);
 		final boolean muted = player.getMuted();
+		String muteTime = DateUtil.formatDateDiff(muteTimestamp);
+		
 		if (muted)
 		{
 			if (muteTimestamp > 0)
 			{
-				sender.sendMessage(_("mutedPlayerFor", player.getDisplayName(), DateUtil.formatDateDiff(muteTimestamp)));
-				player.sendMessage(_("playerMutedFor", DateUtil.formatDateDiff(muteTimestamp)));
+				sender.sendMessage(_("mutedPlayerFor", player.getDisplayName(), muteTime));
+				player.sendMessage(_("playerMutedFor", muteTime));
 			}
 			else
 			{
 				sender.sendMessage(_("mutedPlayer", player.getDisplayName()));
 				player.sendMessage(_("playerMuted"));
 			}
-			ess.broadcastMessage("essentials.mute.notify", _("muteNotify", sender.getName(), player.getName()));
+			ess.broadcastMessage("essentials.mute.notify", _("muteNotify", sender.getName(), player.getName(), muteTime));
 		}
 		else
 		{

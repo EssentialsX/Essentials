@@ -21,10 +21,9 @@ public class Commandburn extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		//TODO: TL this
 		if (args[0].trim().length() < 2)
 		{
-			throw new NotEnoughArgumentsException("You need to specify a player to burn.");
+			throw new NotEnoughArgumentsException();
 		}
 
 		User user = getPlayer(server, sender, args, 0);

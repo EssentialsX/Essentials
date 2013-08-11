@@ -50,10 +50,12 @@ public class Commanddelhome extends EssentialsCommand
 		{
 			name = expandedArg[0];
 		}
-		
-		
-		if (name.equalsIgnoreCase("bed")) { throw new Exception(_("invalidHomeName")); }
-		
+
+		if (name.equalsIgnoreCase("bed"))
+		{
+			throw new Exception(_("invalidHomeName"));
+		}
+
 		user.delHome(name.toLowerCase(Locale.ENGLISH));
 		sender.sendMessage(_("deleteHome", name));
 	}

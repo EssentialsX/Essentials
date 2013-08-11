@@ -60,6 +60,6 @@ public class Commandtempban extends EssentialsCommand
 		user.setBanned(true);
 		user.kickPlayer(banReason);
 
-		ess.broadcastMessage("essentials.ban.notify", _("playerBanned", senderName, user.getName(), banReason));
+		ess.broadcastMessage("essentials.ban.notify", _("playerBanned", senderName, user.getName(), banReason, DateUtil.formatDateDiff(banTimestamp)));
 	}
 }

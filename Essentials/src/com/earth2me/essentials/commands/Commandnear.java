@@ -64,14 +64,11 @@ public class Commandnear extends EssentialsCommand
 			radius = maxRadius;
 		}
 		
-		if (otherUser == null || user.isAuthorized("essentials.near.others"))
+		if (otherUser == null || !user.isAuthorized("essentials.near.others"))
 		{
-			user.sendMessage(_("nearbyPlayers", getLocal(server, otherUser == null ? user : otherUser, radius)));
+			otherUser = user;
 		}
-		else
-		{
-			throw new NotEnoughArgumentsException(_("noPerm", "essentials.near.others"));
-		}
+		user.sendMessage(_("nearbyPlayers", getLocal(server, otherUser, radius)));
 	}
 
 	@Override

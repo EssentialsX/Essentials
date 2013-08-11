@@ -27,17 +27,15 @@ public class Commandnick extends EssentialsCommand
 		{
 			throw new Exception(_("nickDisplayName"));
 		}
-		if (args.length > 1)
+		if (args.length > 1 && user.isAuthorized("essentials.nick.others"))
 		{
-			if (!user.isAuthorized("essentials.nick.others"))
-			{
-				throw new Exception(_("nickOthersPermission"));
-			}
 			setNickname(server, getPlayer(server, user, args, 0), formatNickname(user, args[1]));
 			user.sendMessage(_("nickChanged"));
-			return;
 		}
-		setNickname(server, user, formatNickname(user, args[0]));
+		else
+		{
+			setNickname(server, user, formatNickname(user, args[0]));
+		}
 	}
 
 	@Override
