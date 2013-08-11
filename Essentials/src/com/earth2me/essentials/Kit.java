@@ -186,6 +186,11 @@ public class Kit
 
 				final String[] parts = kitItem.split(" +");
 				final ItemStack parseStack = ess.getItemDb().get(parts[0], parts.length > 1 ? Integer.parseInt(parts[1]) : 1);
+				
+				if (parseStack.getTypeId() == 0) {
+					continue;
+				}
+				
 				final MetaItemStack metaStack = new MetaItemStack(parseStack);
 
 				if (parts.length > 2)

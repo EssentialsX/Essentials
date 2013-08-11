@@ -150,6 +150,10 @@ public abstract class UserData extends PlayerExtension implements IConf
 	{
 		try
 		{
+			if (getHomes().isEmpty())
+			{
+				return null;
+			}
 			Location loc;
 			for (String home : getHomes())
 			{
@@ -476,7 +480,6 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.setProperty("teleportenabled", set);
 		config.save();
 	}
-
 	private List<String> ignoredPlayers;
 
 	public List<String> _getIgnoredPlayers()

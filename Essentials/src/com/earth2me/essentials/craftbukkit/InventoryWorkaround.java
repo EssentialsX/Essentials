@@ -94,7 +94,7 @@ public final class InventoryWorkaround
 		for (int i = 0; i < combined.length; i++)
 		{
 			final ItemStack item = combined[i];
-			if (item == null)
+			if (item == null || item.getTypeId() == 0)
 			{
 				continue;
 			}
