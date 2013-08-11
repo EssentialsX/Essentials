@@ -92,7 +92,7 @@ public class EssentialsPlayerListener implements Listener
 				ess.getLogger().info("Ignore could not block chat due to custom chat plugin event.");
 			}
 		}
-		
+
 		user.updateActivity(true);
 		user.setDisplayNick();
 	}

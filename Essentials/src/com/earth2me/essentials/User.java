@@ -26,6 +26,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	private CommandSender replyTo = null;
 	private transient String teleportRequester;
 	private transient boolean teleportRequestHere;
+	private transient Location teleportLocation;
 	private transient boolean vanished;
 	private transient final Teleport teleport;
 	private transient long teleportRequestTime;
@@ -233,11 +234,18 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		setLogoutLocation(getLocation());
 	}
 
+	@Override
 	public void requestTeleport(final User player, final boolean here)
 	{
 		teleportRequestTime = System.currentTimeMillis();
 		teleportRequester = player == null ? null : player.getName();
 		teleportRequestHere = here;
+		if (player == null) {
+			teleportLocation = null;
+		}
+		else {
+			teleportLocation = here ? player.getLocation() : this.getLocation();
+		}		
 	}
 
 	public String getTeleportRequest()
@@ -248,6 +256,11 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	public boolean isTpRequestHere()
 	{
 		return teleportRequestHere;
+	}
+	
+	public Location getTpRequestLocation()
+	{
+		return teleportLocation;
 	}
 
 	public String getNick(final boolean longnick)

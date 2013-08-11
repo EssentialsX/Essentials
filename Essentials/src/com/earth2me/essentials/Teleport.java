@@ -96,6 +96,7 @@ public class Teleport implements net.ess3.api.ITeleport
 	{
 		cancel(false);
 		teleportee.setLastLocation();
+		teleportee.requestTeleport(null, false);
 		teleportee.getBase().teleport(LocationUtil.getSafeDestination(target.getLocation()), cause);
 	}
 
@@ -155,14 +156,6 @@ public class Teleport implements net.ess3.api.ITeleport
 		cancel(false);
 		warnUser(teleportee, delay);
 		initTimer((long)(delay * 1000.0), teleportee, target, chargeFor, cause, false);
-	}
-
-	//The teleportToMe function is a wrapper used to handle teleporting players to them, like /tphere
-	@Override
-	public void teleportToMe(IUser otherUser, Trade chargeFor, TeleportCause cause) throws Exception
-	{
-		ITarget target = new PlayerTarget(teleportOwner.getBase());
-		teleport(otherUser, target, chargeFor, cause);
 	}
 
 	//The respawn function is a wrapper used to handle tp fallback, on /jail and /home

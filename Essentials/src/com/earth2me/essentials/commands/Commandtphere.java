@@ -27,7 +27,7 @@ public class Commandtphere extends EssentialsCommand
 		{
 			throw new Exception(_("noPerm", "essentials.worlds." + user.getWorld().getName()));
 		}
-		user.getTeleport().teleportToMe(player, new Trade(this.getName(), ess), TeleportCause.COMMAND);
+		user.getTeleport().teleportPlayer(player, user.getBase(), new Trade(this.getName(), ess), TeleportCause.COMMAND);
 		user.sendMessage(_("teleporting"));
 		player.sendMessage(_("teleporting"));
 		throw new NoChargeException();

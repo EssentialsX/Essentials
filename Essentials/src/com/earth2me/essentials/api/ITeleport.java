@@ -52,7 +52,7 @@ public interface ITeleport
 	 */
 	void teleport(Player entity, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause) throws Exception;
 
-		/**
+	/**
 	 * Teleport a player to a specific location
 	 *
 	 * @param otherUser - Which user will be teleported
@@ -73,16 +73,6 @@ public interface ITeleport
 	 * @throws Exception
 	 */
 	void teleportPlayer(IUser otherUser, Player entity, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause) throws Exception;
-
-	/**
-	 * Teleport wrapper used to handle teleporting players to them, like /tphere
-	 *
-	 * @param otherUser - Which user will be teleported
-	 * @param chargeFor - What the user will be charged if teleportPlayer is successful
-	 * @param cause - The reported teleportPlayer cause
-	 * @throws Exception
-	 */
-	public void teleportToMe(IUser otherUser, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause) throws Exception;
 
 	/**
 	 * Teleport wrapper used to handle tp fallback on /jail and /home

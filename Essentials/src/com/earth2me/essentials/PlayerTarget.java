@@ -9,7 +9,7 @@ public class PlayerTarget implements ITarget
 {
 	private final String name;
 
-	PlayerTarget(Player entity)
+	public PlayerTarget(Player entity)
 	{
 		this.name = entity.getName();
 	}
