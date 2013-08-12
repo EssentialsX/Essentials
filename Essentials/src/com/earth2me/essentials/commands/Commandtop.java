@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.LocationUtil;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -22,7 +23,7 @@ public class Commandtop extends EssentialsCommand
 		final int topZ = user.getLocation().getBlockZ();
 		final float pitch = user.getLocation().getPitch();
 		final float yaw = user.getLocation().getYaw();
-		final Location location = new Location(user.getWorld(), topX, user.getWorld().getMaxHeight(), topZ, yaw, pitch);		
+		final Location location = LocationUtil.getSafeDestination(new Location(user.getWorld(), topX, user.getWorld().getMaxHeight(), topZ, yaw, pitch));
 		user.getTeleport().teleport(location, new Trade(this.getName(), ess), TeleportCause.COMMAND);
 		user.sendMessage(_("teleportTop"));
 	}
