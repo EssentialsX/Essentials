@@ -227,13 +227,6 @@ public class Teleport implements net.ess3.api.ITeleport
 		now(teleportOwner, new LocationTarget(teleportOwner.getLastLocation()), TeleportCause.COMMAND);
 	}
 
-	//This function handles teleporting to /home
-	@Override
-	public void home(Location loc, Trade chargeFor) throws Exception
-	{
-		teleport(teleportOwner, new LocationTarget(loc), chargeFor, TeleportCause.COMMAND);
-	}
-
 	//If we need to cancelTimer a pending teleportPlayer call this method
 	private void cancel(boolean notifyUser)
 	{

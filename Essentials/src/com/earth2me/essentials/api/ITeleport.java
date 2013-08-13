@@ -109,12 +109,4 @@ public interface ITeleport
 	 */
 	public void back() throws Exception;
 
-	/**
-	 * Teleport wrapper used to handle /home teleports
-	 *
-	 * @param loc - Location where player will be teleported too
-	 * @param chargeFor - What the user will be charged if teleportPlayer is successful
-	 * @throws Exception
-	 */
-	public void home(Location loc, Trade chargeFor) throws Exception;
 }
