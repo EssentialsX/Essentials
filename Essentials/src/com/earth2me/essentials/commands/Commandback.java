@@ -16,6 +16,10 @@ public class Commandback extends EssentialsCommand
 	@Override
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
+		if (user.getLastLocation() == null)
+		{
+			throw new Exception(_("noLocationFound"));
+		}
 		if (user.getWorld() != user.getLastLocation().getWorld() && ess.getSettings().isWorldTeleportPermissions()
 			&& !user.isAuthorized("essentials.worlds." + user.getLastLocation().getWorld().getName()))
 		{
