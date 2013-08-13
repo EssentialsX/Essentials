@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.perm.PermissionsHandler;
 import net.ess3.api.IEssentials;
 import java.util.logging.Level;
 import org.bukkit.event.EventHandler;
@@ -40,7 +41,11 @@ public class EssentialsPluginListener implements Listener, IConf
 		{
 			ess.getSettings().setEssentialsChatActive(false);
 		}
-		ess.getPermissionsHandler().checkPermissions();
+		PermissionsHandler permHandler = ess.getPermissionsHandler();
+		if (permHandler != null)
+		{
+			permHandler.checkPermissions();
+		}
 		ess.getAlternativeCommandsHandler().removePlugin(event.getPlugin());
 		// Check to see if the plugin thats being disabled is the one we are using
 		if (ess.getPaymentMethod() != null && ess.getPaymentMethod().hasMethod() && ess.getPaymentMethod().checkDisabled(event.getPlugin()))
