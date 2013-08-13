@@ -118,9 +118,9 @@ public class Commandmail extends EssentialsCommand
 			sender.sendMessage(_("mailSent"));
 			return;
 		}
-		else if (args.length >= 1 && "sendall".equalsIgnoreCase(args[0]))
+		else if (args.length >= 2 && "sendall".equalsIgnoreCase(args[0]))
 		{
-			ess.runTaskAsynchronously(new SendAll("Server: " + getFinalArg(args, 2)));
+			ess.runTaskAsynchronously(new SendAll("Server: " + getFinalArg(args, 1)));
 			sender.sendMessage(_("mailSent"));
 			return;
 		}
