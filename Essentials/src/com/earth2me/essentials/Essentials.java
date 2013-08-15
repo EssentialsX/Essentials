@@ -58,6 +58,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.command.defaults.VanillaCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -334,6 +335,35 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 
 		final PluginManager pm = getServer().getPluginManager();
 		registerListeners(pm);
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender,
+									  Command command,
+									  String commandLabel,
+									  String[] args)
+	{
+		// Allow plugins to override the command via onCommand
+		if (!getSettings().isCommandOverridden(command.getName()) && (!commandLabel.startsWith("e") || commandLabel.equalsIgnoreCase(command.getName())))
+		{
+			final PluginCommand pc = alternativeCommandsHandler.getAlternative(commandLabel);
+			if (pc != null)
+			{
+				try
+				{
+					TabCompleter completer = pc.getTabCompleter();
+					if (completer != null)
+					{
+						return completer.onTabComplete(sender, command, commandLabel, args);
+					}
+				}
+				catch (final Exception ex)
+				{
+					Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+				}
+			}
+		}
+		return null;
 	}
 
 	@Override
