@@ -80,9 +80,9 @@ public class Commandmsg extends EssentialsCommand
 				continue;
 			}
 
-			matchPlayer.sendMessage(_("msgFormat", senderName, translatedMe, message));
+			matchedUser.sendMessage(_("msgFormat", senderName, translatedMe, message));
 			replyTo.setReplyTo(matchPlayer);
-			ess.getUser(matchPlayer).setReplyTo(sender);
+			matchedUser.setReplyTo(sender);
 		}
 
 		if (!foundUser)

@@ -568,7 +568,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 				final User user = ess.getUser(player);
 				if (user.isAuthorized("essentials.kick.notify"))
 				{
-					player.sendMessage(_("playerKicked", Console.NAME, getName(), kickReason));
+					user.sendMessage(_("playerKicked", Console.NAME, getName(), kickReason));
 				}
 			}
 		}

@@ -303,7 +303,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 			if (user.isVanished())
 			{
 				user.setVanished(false);
-				p.sendMessage(_("unvanishedReload"));
+				user.sendMessage(_("unvanishedReload"));
 			}
 		}
 		cleanupOpenInventories();
@@ -715,7 +715,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 				}
 				for (String messageText : broadcast.getLines())
 				{
-					player.sendMessage(messageText);
+					user.sendMessage(messageText);
 				}
 			}
 		}

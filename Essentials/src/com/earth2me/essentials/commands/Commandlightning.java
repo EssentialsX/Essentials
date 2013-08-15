@@ -51,17 +51,18 @@ public class Commandlightning extends EssentialsCommand
 		final List<Player> matchedPlayers = server.matchPlayer(args[0]);
 		for (Player matchPlayer : matchedPlayers)
 		{
+			User matchUser = ess.getUser(matchPlayer);
 			sender.sendMessage(_("lightningUse", matchPlayer.getDisplayName()));
 
 			final LightningStrike strike = matchPlayer.getWorld().strikeLightningEffect(matchPlayer.getLocation());
 
-			if (!ess.getUser(matchPlayer).isGodModeEnabled())
+			if (!matchUser.isGodModeEnabled())
 			{
 				matchPlayer.damage(power, strike);
 			}
 			if (ess.getSettings().warnOnSmite())
 			{
-				matchPlayer.sendMessage(_("lightningSmited"));
+				matchUser.sendMessage(_("lightningSmited"));
 			}
 		}
 	}
