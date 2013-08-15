@@ -104,7 +104,7 @@ public class Trade
 		if (getItemStack() != null
 			&& !user.getBase().getInventory().containsAtLeast(itemStack, itemStack.getAmount()))
 		{
-			throw new ChargeException(_("missingItems", getItemStack().getAmount(), getItemStack().getType().toString().toLowerCase(Locale.ENGLISH).replace("_", " ")));
+			throw new ChargeException(_("missingItems", getItemStack().getAmount(), ess.getItemDb().name(getItemStack())));
 		}
 
 		BigDecimal money;

@@ -21,6 +21,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb
 	}
 	private final transient Map<String, Integer> items = new HashMap<String, Integer>();
 	private final transient Map<ItemData, List<String>> names = new HashMap<ItemData, List<String>>();
+	private final transient Map<ItemData, String> primaryName = new HashMap<ItemData, String>();
 	private final transient Map<String, Short> durabilities = new HashMap<String, Short>();
 	private final transient ManagedFile file;
 	private final transient Pattern splitPattern = Pattern.compile("[:+',;.]");
@@ -38,6 +39,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb
 		durabilities.clear();
 		items.clear();
 		names.clear();
+		primaryName.clear();
 
 		for (String line : lines)
 		{
@@ -68,10 +70,11 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb
 				Collections.sort(nameList, new LengthCompare());
 			}
 			else
-			{
+			{				
 				List<String> nameList = new ArrayList<String>();
 				nameList.add(itemName);
 				names.put(itemData, nameList);
+				primaryName.put(itemData, itemName);
 			}
 		}
 	}
@@ -211,8 +214,24 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb
 		}
 		return StringUtil.joinList(", ", nameList);
 	}
-
-
+	
+@Override
+	public String name(ItemStack item)
+	{
+		ItemData itemData = new ItemData(item.getTypeId(), item.getDurability());
+		String name = primaryName.get(itemData);
+		if (name == null)
+		{
+			itemData = new ItemData(item.getTypeId(), (short)0);
+			name = primaryName.get(itemData);
+			if (name == null)
+			{
+				return null;
+			}
+		}
+		return name;
+	}
+	
 	static class ItemData
 	{
 		final private int itemNo;

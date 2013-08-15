@@ -14,5 +14,7 @@ public interface IItemDb
 	
 	public String names(ItemStack item);
 	
+	public String name(ItemStack item);
+	
 	List<ItemStack> getMatching(User user, String[] args) throws Exception;
 }
