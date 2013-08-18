@@ -454,7 +454,6 @@ public class OfflinePlayer implements Player
 	@Override
 	public void setFallDistance(float f)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
 	}
 
 	@Override
