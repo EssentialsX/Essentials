@@ -27,7 +27,7 @@ public class Commandlist extends EssentialsCommand
 		}
 
 		sender.sendMessage(listSummary(server, showHidden));
-		Map<String, List<User>> playerList = getPlayerLists(server, showHidden);
+		final Map<String, List<User>> playerList = getPlayerLists(server, showHidden);
 
 		if (args.length > 0)
 		{
@@ -66,7 +66,7 @@ public class Commandlist extends EssentialsCommand
 	// Build the basic player list, divided by groups.
 	private Map<String, List<User>> getPlayerLists(final Server server, final boolean showHidden)
 	{
-		Map<String, List<User>> playerList = new HashMap<String, List<User>>();
+		final Map<String, List<User>> playerList = new HashMap<String, List<User>>();
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
 			final User onlineUser = ess.getUser(onlinePlayer);
@@ -74,7 +74,7 @@ public class Commandlist extends EssentialsCommand
 			{
 				continue;
 			}
-			final String group = FormatUtil.stripFormat(onlineUser.getGroup().toLowerCase());
+			final String group = FormatUtil.stripFormat(FormatUtil.stripEssentialsFormat(onlineUser.getGroup().toLowerCase()));
 			List<User> list = playerList.get(group);
 			if (list == null)
 			{
@@ -91,7 +91,7 @@ public class Commandlist extends EssentialsCommand
 	{
 		final List<User> users = getMergedList(playerList, groupName);
 
-		List<User> groupUsers = playerList.get(groupName);
+		final List<User> groupUsers = playerList.get(groupName);
 		if (groupUsers != null && !groupUsers.isEmpty())
 		{
 			users.addAll(groupUsers);
@@ -101,13 +101,16 @@ public class Commandlist extends EssentialsCommand
 			throw new Exception(_("groupDoesNotExist"));
 		}
 
-		return outputFormat(groupName, listUsers(users));
+		final StringBuilder displayGroupName = new StringBuilder();
+		displayGroupName.append(Character.toTitleCase(groupName.charAt(0)));
+		displayGroupName.append(groupName.substring(1));
+		return outputFormat(displayGroupName.toString(), listUsers(users));
 	}
 
 	// Handle the merging of groups
 	private List<User> getMergedList(final Map<String, List<User>> playerList, final String groupName)
 	{
-		Set<String> configGroups = ess.getSettings().getListGroupConfig().keySet();
+		final Set<String> configGroups = ess.getSettings().getListGroupConfig().keySet();
 		final List<User> users = new ArrayList<User>();
 
 		for (String configGroup : configGroups)
@@ -117,6 +120,7 @@ public class Commandlist extends EssentialsCommand
 				String[] groupValues = ess.getSettings().getListGroupConfig().get(configGroup).toString().trim().split(" ");
 				for (String groupValue : groupValues)
 				{
+					groupValue = groupValue.toLowerCase(Locale.ENGLISH);
 					if (groupValue == null || groupValue.equals(""))
 					{
 						continue;
@@ -137,8 +141,8 @@ public class Commandlist extends EssentialsCommand
 	// Output the standard /list output, when no group is specified
 	private void sendGroupedList(CommandSender sender, String commandLabel, Map<String, List<User>> playerList)
 	{
-		Set<String> configGroups = ess.getSettings().getListGroupConfig().keySet();
-		List<String> asterisk = new ArrayList<String>();
+		final Set<String> configGroups = ess.getSettings().getListGroupConfig().keySet();
+		final List<String> asterisk = new ArrayList<String>();
 
 		// Loop through the custom defined groups and display them
 		for (String oConfigGroup : configGroups)
@@ -161,7 +165,7 @@ public class Commandlist extends EssentialsCommand
 			}
 
 			List<User> outputUserList = new ArrayList<User>();
-			List<User> matchedList = playerList.get(configGroup);
+			final List<User> matchedList = playerList.get(configGroup);
 
 			// If the group value is an int, then we might need to truncate it
 			if (NumberUtil.isInt(groupValue))
@@ -265,7 +269,6 @@ public class Commandlist extends EssentialsCommand
 		final StringBuilder outputString = new StringBuilder();
 		outputString.append(_("listGroupTag", FormatUtil.replaceFormat(group)));
 		outputString.append(message);
-		outputString.setCharAt(0, Character.toTitleCase(outputString.charAt(0)));
 		return outputString.toString();
 	}
 }

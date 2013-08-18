@@ -25,7 +25,17 @@ public class FormatUtil
 		{
 			return null;
 		}
-		return VANILLA_PATTERN.matcher(input).replaceAll("");
+		return stripColor(input, VANILLA_PATTERN);
+	}
+	
+	//This method is used to simply strip the & convention colour codes
+	public static String stripEssentialsFormat(final String input)
+	{
+		if (input == null)
+		{
+			return null;
+		}
+		return stripColor(input, REPLACE_PATTERN);
 	}
 
 	//This is the general permission sensitive message format function, checks for urls.
