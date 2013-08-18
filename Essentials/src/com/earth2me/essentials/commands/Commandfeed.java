@@ -25,7 +25,7 @@ public class Commandfeed extends EssentialsCommand
 			{
 				throw new PlayerNotFoundException();
 			}
-			if (!user.isAuthorized("essentials.heal.cooldown.bypass"))
+			if (!user.isAuthorized("essentials.feed.cooldown.bypass"))
 			{
 				user.healCooldown();
 			}
@@ -33,7 +33,7 @@ public class Commandfeed extends EssentialsCommand
 			return;
 		}
 
-		if (!user.isAuthorized("essentials.heal.cooldown.bypass"))
+		if (!user.isAuthorized("essentials.feed.cooldown.bypass"))
 		{
 			user.healCooldown();
 		}
