@@ -32,7 +32,7 @@ public class Commandkill extends EssentialsCommand
 		final List<Player> matchedPlayers = server.matchPlayer(args[0]);
 		for (Player matchPlayer : matchedPlayers)
 		{
-			if (ess.getUser(matchPlayer).isAuthorized("essentials.kill.exempt") && !ess.getUser(sender).isAuthorized("essentials.kill.force"))
+			if (sender instanceof Player && ess.getUser(matchPlayer).isAuthorized("essentials.kill.exempt") && !ess.getUser(sender).isAuthorized("essentials.kill.force"))
 			{
 				throw new Exception(_("killExempt", matchPlayer.getDisplayName()));
 			}
