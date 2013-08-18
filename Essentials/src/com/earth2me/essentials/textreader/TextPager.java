@@ -95,11 +95,6 @@ public class TextPager
 						content.append(I18n.capitalCase(title[0])).append(": ");
 						content.append(title[1]);
 					}
-					else if (chapterPageStr != null)
-					{
-						content.append(I18n.capitalCase(commandName)).append(": ");
-						content.append(chapterPageStr);
-					}
 					else
 					{
 						content.append(I18n.capitalCase(commandName));
@@ -161,7 +156,10 @@ public class TextPager
 		final int pages = (chapterend - chapterstart) / 9 + ((chapterend - chapterstart) % 9 > 0 ? 1 : 0);
 		if (!onePage && commandName != null)
 		{
-			sender.sendMessage(_("infoChapterPages", pageStr, page, pages));
+			StringBuilder content = new StringBuilder();
+			content.append(I18n.capitalCase(commandName)).append(": ");
+			content.append(pageStr);
+			sender.sendMessage(_("infoChapterPages", content, page, pages));
 		}
 		for (int i = start; i < chapterend && i < start + (onePage ? 20 : 9); i++)
 		{

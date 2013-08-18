@@ -2,6 +2,7 @@ package com.earth2me.essentials.textreader;
 
 import net.ess3.api.IEssentials;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import java.io.*;
 import java.lang.ref.SoftReference;
@@ -73,12 +74,15 @@ public class TextInput implements IText
 						{
 							break;
 						}
-						if (line.length() > 0 && line.charAt(0) == '#')
+						if (line.length() > 1 && line.charAt(0) == '#')
 						{
-							bookmarks.put(line.substring(1).toLowerCase(Locale.ENGLISH).replaceAll("&[0-9a-fk]", ""), lineNumber);
-							chapters.add(line.substring(1).replace('&', '§').replace("§§", "&").trim().replace(" ", "_"));
+							String[] titles = line.substring(1).trim().replace(" ", "_").split(",");
+							chapters.add(FormatUtil.replaceFormat(titles[0]));
+							for (String title : titles) {							
+								bookmarks.put(FormatUtil.stripEssentialsFormat(title.toLowerCase(Locale.ENGLISH)), lineNumber);
+							}
 						}
-						lines.add(line.replace('&', '§').replace("§§", "&"));
+						lines.add(FormatUtil.replaceFormat(line));
 						lineNumber++;
 					}
 				}
