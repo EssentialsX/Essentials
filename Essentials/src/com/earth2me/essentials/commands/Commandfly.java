@@ -52,8 +52,9 @@ public class Commandfly extends EssentialsToggleCommand
 			enabled = !user.getAllowFlight();
 		}
 
+		user.setFallDistance(0f);
 		user.setAllowFlight(enabled);
-
+		
 		if (!user.getAllowFlight())
 		{
 			user.setFlying(false);

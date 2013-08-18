@@ -421,6 +421,7 @@ public class EssentialsPlayerListener implements Listener
 		final User user = ess.getUser(event.getPlayer());
 		if (user.getGameMode() != GameMode.CREATIVE && !user.isAuthorized("essentials.fly"))
 		{
+			user.setFallDistance(0f);
 			user.setAllowFlight(false);
 		}
 		user.setFlySpeed(0.1f);
