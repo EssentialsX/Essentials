@@ -1,0 +1,29 @@
+#Customtext
+&6This is the custom text commands file.
+
+&6This file allows you to define custom text commands.
+
+&6You can create a specific file for a user or a group:
+&6Name it custom_username.txt or custom_groupname.txt
+
+&6You can use multiple pages, for example type:
+&c/customtext 2
+
+&6To add a custom command you need to do two things:
+&e-&9 Add a section below in the custom.txt
+&e-&9 Add a line to the bukkit.yml aliases section
+&e-&9 Give players access to 'essentials.customtext'
+
+&6If you don't yet have an 'aliases' section, add it like this:
+aliases:
+  vote: customtext
+
+&6The following commands can also be customized:
+&c/rules /motd /news /help
+
+&6These support chapter customization such as:&c /rules grief
+&6You can use custom aliases with these commands too.
+
+#vote
+If you add the correct alias to bukkit.yml
+This text here will be shown if you type /vote

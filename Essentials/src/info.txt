@@ -1,11 +1,12 @@
 This is the info file.
 
-This file format works for the info.txt, motd.txt and rules.txt
+This file format works with the following files:
+info.txt, motd.txt, help.txt, custom.txt and rules.txt
 
 You can create a specific file for a user or a group:
 Name it info_username.txt or info_groupname.txt
 
-This also works with motd and rules.
+This also works with the other files.
 
 Extra pages:
 Type /info Colors

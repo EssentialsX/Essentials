@@ -67,6 +67,9 @@ commands:
     description: Describes your current bearing.
     usage: /<command>
     aliases: [ecompass,direction,edirection]
+  customtext:
+    description: Allows you to create custom text commands.
+    usage: /<alias> - Define in bukkit.yml
   delhome:
     description: Removes a home.
     usage: /<command> [player:]<name>
