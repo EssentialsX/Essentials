@@ -9,7 +9,7 @@
 &6You can use multiple pages, for example type:
 &c/customtext 2
 
-&6To add a custom command you need to do two things:
+&6To add a custom command you need to do three things:
 &e-&9 Add a section below in the custom.txt
 &e-&9 Add a line to the bukkit.yml aliases section
 &e-&9 Give players access to 'essentials.customtext'
