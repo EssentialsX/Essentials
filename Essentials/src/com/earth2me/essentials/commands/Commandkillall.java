@@ -107,23 +107,9 @@ public class Commandkillall extends EssentialsCommand
 				{
 					continue;
 				}
-				if (entity instanceof Wolf)
+				if (entity instanceof Tameable)
 				{
-					if (((Wolf)entity).isTamed())
-					{
-						continue;
-					}
-				}
-				if (entity instanceof Ocelot)
-				{
-					if (((Ocelot)entity).isTamed())
-					{
-						continue;
-					}
-				}
-				if (entity instanceof Horse)
-				{
-					if (((Horse)entity).isTamed())
+					if (((Tameable)entity).isTamed())
 					{
 						continue;
 					}
