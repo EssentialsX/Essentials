@@ -80,7 +80,7 @@ public class FormatUtil
 			return null;
 		}
 		String message;
-		if (user.isAuthorized(permBase + ".color"))
+		if (user.isAuthorized(permBase + ".color") || user.isAuthorized(permBase + ".colour"))
 		{
 			message = replaceColor(input, REPLACE_COLOR_PATTERN);
 		}
