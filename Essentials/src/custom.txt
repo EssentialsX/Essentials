@@ -27,3 +27,7 @@ aliases:
 #vote
 If you add the correct alias to bukkit.yml
 This text here will be shown if you type /vote
+
+#stafflist,onlinestaff
+&6Online Staff:
+{PLAYERLIST:MODERATOR} {PLAYERLIST:ADMIN} {PLAYERLIST:OWNER}
