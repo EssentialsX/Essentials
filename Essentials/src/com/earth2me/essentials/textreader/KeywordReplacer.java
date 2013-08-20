@@ -2,17 +2,22 @@ package com.earth2me.essentials.textreader;
 
 import net.ess3.api.IEssentials;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.DescParseTickFormat;
 import com.earth2me.essentials.utils.NumberUtil;
+import java.lang.management.ManagementFactory;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+
+import static com.earth2me.essentials.I18n._;
 
 
 public class KeywordReplacer implements IText
@@ -45,7 +50,8 @@ public class KeywordReplacer implements IText
 		String displayName, ipAddress, balance, mails, world;
 		String worlds, online, unique, playerlist, date, time;
 		String worldTime12, worldTime24, worldDate, plugins;
-		String userName, version, address;
+		String userName, version, address, tps, uptime;
+		String coords;
 		if (sender instanceof Player)
 		{
 			final User user = ess.getUser(sender);
@@ -55,14 +61,16 @@ public class KeywordReplacer implements IText
 			address = user.getAddress() == null ? "" : user.getAddress().toString();
 			balance = NumberUtil.displayCurrency(user.getMoney(), ess);
 			mails = Integer.toString(user.getMails().size());
-			world = user.getLocation() == null || user.getLocation().getWorld() == null ? "" : user.getLocation().getWorld().getName();
+			final Location location = user.getLocation();
+			world = location == null || location.getWorld() == null ? "" : location.getWorld().getName();
 			worldTime12 = DescParseTickFormat.format12(user.getWorld() == null ? 0 : user.getWorld().getTime());
 			worldTime24 = DescParseTickFormat.format24(user.getWorld() == null ? 0 : user.getWorld().getTime());
 			worldDate = DateFormat.getDateInstance(DateFormat.MEDIUM, ess.getI18n().getCurrentLocale()).format(DescParseTickFormat.ticksToDate(user.getWorld() == null ? 0 : user.getWorld().getFullTime()));
+			coords = _("coordsKeyword", location.getBlockX(), location.getBlockY(), location.getBlockZ());
 		}
 		else
 		{
-			displayName = address = ipAddress = balance = mails = world = worldTime12 = worldTime24 = worldDate = "";
+			displayName = address = ipAddress = balance = mails = world = worldTime12 = worldTime24 = worldDate = coords = "";
 		}
 
 		userName = sender.getName();
@@ -118,6 +126,9 @@ public class KeywordReplacer implements IText
 		time = DateFormat.getTimeInstance(DateFormat.MEDIUM, ess.getI18n().getCurrentLocale()).format(new Date());
 
 		version = ess.getServer().getVersion();
+		
+		tps = Double.toString(ess.getTimer().getAverageTPS());
+		uptime = DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime());
 
 		for (int i = 0; i < input.getLines().size(); i++)
 		{
@@ -138,6 +149,9 @@ public class KeywordReplacer implements IText
 			line = line.replace("{WORLDTIME12}", worldTime12);
 			line = line.replace("{WORLDTIME24}", worldTime24);
 			line = line.replace("{WORLDDATE}", worldDate);
+			line = line.replace("{COORDS}", coords);
+			line = line.replace("{TPS}", tps);
+			line = line.replace("{UPTIME}", uptime);
 			
 			if (extended)
 			{
