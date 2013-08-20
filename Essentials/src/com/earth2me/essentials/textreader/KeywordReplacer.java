@@ -18,6 +18,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.PlayerList;
+import static com.earth2me.essentials.PlayerList.getMergedList;
 
 
 public class KeywordReplacer implements IText
@@ -72,6 +74,7 @@ public class KeywordReplacer implements IText
 		{
 			displayName = address = ipAddress = balance = mails = world = worldTime12 = worldTime24 = worldDate = coords = "";
 		}
+		Map<String, List<User>> playerList = PlayerList.getPlayerLists(ess, extended);
 
 		userName = sender.getName();
 		int playerHidden = 0;
@@ -159,6 +162,24 @@ public class KeywordReplacer implements IText
 				line = line.replace("{ADDRESS}", address);
 				line = line.replace("{PLUGINS}", plugins);
 				line = line.replace("{VERSION}", version);
+			}
+			
+			for (String groupName : playerList.keySet()) {
+				final List<User> groupUsers = playerList.get(groupName);
+				if (groupUsers != null && !groupUsers.isEmpty())
+				{
+					line = line.replaceAll("\\{PLAYERLIST\\:" + groupName.toUpperCase() + "(?:\\:([^\\{\\}]*))?\\}",
+										   PlayerList.listUsers(ess, groupUsers, " "));
+				}				
+			}
+			
+			boolean doReplace = true;
+			while (doReplace) {
+				final String newLine = line.replaceAll("\\{PLAYERLIST\\:\\w*(?:\\:([^\\{\\}]*))?\\}", "$1");
+				if (newLine.equals(line)) {
+					doReplace = false;
+				}
+				line = newLine;
 			}
 
 			replaced.add(line);
