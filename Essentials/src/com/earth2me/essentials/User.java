@@ -457,10 +457,6 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	{
 		if (ess.getSettings().isEcoDisabled())
 		{
-			if (ess.getSettings().isDebug())
-			{
-				ess.getLogger().info("Internal economy functions disabled, aborting balance sync.");
-			}
 			return;
 		}
 		if (ess.getPaymentMethod().hasMethod() && super.getMoney() != value)

@@ -109,16 +109,26 @@ public class Commandbalancetop extends EssentialsCommand
 					cache.getLines().clear();
 					final Map<String, BigDecimal> balances = new HashMap<String, BigDecimal>();
 					BigDecimal totalMoney = BigDecimal.ZERO;
-					for (String u : ess.getUserMap().getAllUniqueUsers())
+					if (ess.getSettings().isEcoDisabled())
 					{
-						final User user = ess.getUserMap().getUser(u);
-						if (user != null)
+						if (ess.getSettings().isDebug())
 						{
-							final BigDecimal userMoney = user.getMoney();
-							user.updateMoneyCache(userMoney);
-							totalMoney = totalMoney.add(userMoney);
-							final String name = user.isHidden() ? user.getName() : user.getDisplayName();
-							balances.put(name, userMoney);
+							ess.getLogger().info("Internal economy functions disabled, aborting baltop.");
+						}
+					}
+					else
+					{
+						for (String u : ess.getUserMap().getAllUniqueUsers())
+						{
+							final User user = ess.getUserMap().getUser(u);
+							if (user != null)
+							{
+								final BigDecimal userMoney = user.getMoney();
+								user.updateMoneyCache(userMoney);
+								totalMoney = totalMoney.add(userMoney);
+								final String name = user.isHidden() ? user.getName() : user.getDisplayName();
+								balances.put(name, userMoney);
+							}
 						}
 					}
 
