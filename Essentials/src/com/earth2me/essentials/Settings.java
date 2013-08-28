@@ -518,6 +518,7 @@ public class Settings implements net.ess3.api.ISettings
 		economyLagWarning = _getEconomyLagWarning();
 		economyLog = _isEcoLogEnabled();
 		economyLogUpdate = _isEcoLogUpdateEnabled();
+		economyDisabled = _isEcoDisabled();
 	}
 	private List<Integer> itemSpawnBl = new ArrayList<Integer>();
 
@@ -650,12 +651,18 @@ public class Settings implements net.ess3.api.ISettings
 	{
 		return config.getBoolean("trade-in-stacks-" + id, false);
 	}
-
+	
 	// #easteregg
+	private boolean economyDisabled = false;
+	public boolean _isEcoDisabled()
+	{
+		return config.getBoolean("disable-eco", false);
+	}
+	
 	@Override
 	public boolean isEcoDisabled()
 	{
-		return config.getBoolean("disable-eco", false);
+		return economyDisabled;
 	}
 
 	@Override

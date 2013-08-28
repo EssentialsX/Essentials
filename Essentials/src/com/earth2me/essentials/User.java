@@ -49,8 +49,9 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		{
 			afkPosition = getLocation();
 		}
-		if (isOnline()) {
-			 lastOnlineActivity = System.currentTimeMillis();
+		if (isOnline())
+		{
+			lastOnlineActivity = System.currentTimeMillis();
 		}
 	}
 
@@ -240,12 +241,14 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		teleportRequestTime = System.currentTimeMillis();
 		teleportRequester = player == null ? null : player.getName();
 		teleportRequestHere = here;
-		if (player == null) {
+		if (player == null)
+		{
 			teleportLocation = null;
 		}
-		else {
+		else
+		{
 			teleportLocation = here ? player.getLocation() : this.getLocation();
-		}		
+		}
 	}
 
 	public String getTeleportRequest()
@@ -257,7 +260,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	{
 		return teleportRequestHere;
 	}
-	
+
 	public Location getTpRequestLocation()
 	{
 		return teleportLocation;
@@ -392,6 +395,14 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 
 	private BigDecimal _getMoney()
 	{
+		if (ess.getSettings().isEcoDisabled())
+		{
+			if (ess.getSettings().isDebug())
+			{
+				ess.getLogger().info("Internal economy functions disabled, aborting balance check.");
+			}
+			return BigDecimal.ZERO;
+		}
 		if (ess.getPaymentMethod().hasMethod())
 		{
 			try
@@ -414,6 +425,14 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	@Override
 	public void setMoney(final BigDecimal value)
 	{
+		if (ess.getSettings().isEcoDisabled())
+		{
+			if (ess.getSettings().isDebug())
+			{
+				ess.getLogger().info("Internal economy functions disabled, aborting balance change.");
+			}
+			return;
+		}
 		if (ess.getPaymentMethod().hasMethod())
 		{
 			try
@@ -436,6 +455,14 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 
 	public void updateMoneyCache(final BigDecimal value)
 	{
+		if (ess.getSettings().isEcoDisabled())
+		{
+			if (ess.getSettings().isDebug())
+			{
+				ess.getLogger().info("Internal economy functions disabled, aborting balance sync.");
+			}
+			return;
+		}
 		if (ess.getPaymentMethod().hasMethod() && super.getMoney() != value)
 		{
 			super.setMoney(value);
@@ -765,14 +792,16 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	{
 		this.recipeSee = recipeSee;
 	}
-	
+
 	@Override
-	public void sendMessage(String message) {
-		if (!message.isEmpty()) {
+	public void sendMessage(String message)
+	{
+		if (!message.isEmpty())
+		{
 			base.sendMessage(message);
 		}
 	}
-	
+
 	@Override
 	public void setReplyTo(final CommandSender user)
 	{
