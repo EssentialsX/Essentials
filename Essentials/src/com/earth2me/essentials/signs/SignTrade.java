@@ -296,7 +296,7 @@ public class SignTrade extends EssentialsSign
 				{
 					amount -= amount % stackamount;
 				}
-				if (notEmpty && (amount < 1 || stackamount < 1 || item.getTypeId() == 0))
+				if (notEmpty && (amount < 1 || stackamount < 1 || item.getTypeId() == 0 || amount < stackamount))
 				{
 					throw new SignException(_("tradeSignEmpty"));
 				}
