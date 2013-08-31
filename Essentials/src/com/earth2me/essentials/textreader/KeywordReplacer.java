@@ -34,7 +34,7 @@ public class KeywordReplacer implements IText
 	private final transient IText input;
 	private final transient List<String> replaced;
 	private final transient IEssentials ess;
-	private final transient boolean extended;
+	private final transient boolean includePrivate;
 	private transient ExecuteTimer execTimer;
 	private final static Pattern KEYWORD = Pattern.compile("\\{([^\\{\\}]+)\\}");
 	private final static Pattern KEYWORDSPLIT = Pattern.compile("\\:");
@@ -45,16 +45,16 @@ public class KeywordReplacer implements IText
 		this.input = input;
 		this.replaced = new ArrayList<String>(this.input.getLines().size());
 		this.ess = ess;
-		this.extended = true;
+		this.includePrivate = true;
 		replaceKeywords(sender);
 	}
 
-	public KeywordReplacer(final IText input, final CommandSender sender, final IEssentials ess, final boolean extended)
+	public KeywordReplacer(final IText input, final CommandSender sender, final IEssentials ess, final boolean showPrivate)
 	{
 		this.input = input;
 		this.replaced = new ArrayList<String>(this.input.getLines().size());
 		this.ess = ess;
-		this.extended = extended;
+		this.includePrivate = showPrivate;
 		replaceKeywords(sender);
 	}
 
@@ -121,6 +121,10 @@ public class KeywordReplacer implements IText
 						replacer = values.get(subKeyword);
 					}
 				}
+			}
+			
+			if (validKeyword.isPrivate() && !includePrivate) {
+				replacer = "";
 			}
 
 			if (replacer == null)
@@ -194,8 +198,16 @@ public class KeywordReplacer implements IText
 					}
 					else
 					{
+						final boolean showHidden;
+						if (user == null) {
+							showHidden = true;
+						}
+						else {
+							showHidden = user.isAuthorized("essentials.list.hidden") || user.isAuthorized("essentials.vanish.interact");
+						}
+
 						//First lets build the per group playerlist
-						final Map<String, List<User>> playerList = PlayerList.getPlayerLists(ess, extended);
+						final Map<String, List<User>> playerList = PlayerList.getPlayerLists(ess, showHidden);
 						outputList = new HashMap<String, String>();
 						for (String groupName : playerList.keySet())
 						{
@@ -356,7 +368,7 @@ enum KeywordType
 	ONLINE(KeywordCachable.CACHEABLE),
 	UNIQUE(KeywordCachable.CACHEABLE),
 	WORLDS(KeywordCachable.CACHEABLE),
-	PLAYERLIST(KeywordCachable.SUBVALUE),
+	PLAYERLIST(KeywordCachable.SUBVALUE, true),
 	TIME(KeywordCachable.CACHEABLE),
 	DATE(KeywordCachable.CACHEABLE),
 	WORLDTIME12(KeywordCachable.CACHEABLE),
@@ -365,20 +377,33 @@ enum KeywordType
 	COORDS(KeywordCachable.CACHEABLE),
 	TPS(KeywordCachable.CACHEABLE),
 	UPTIME(KeywordCachable.CACHEABLE),
-	IP(KeywordCachable.CACHEABLE),
-	ADDRESS(KeywordCachable.CACHEABLE),
-	PLUGINS(KeywordCachable.CACHEABLE),
-	VERSION(KeywordCachable.CACHEABLE);
+	IP(KeywordCachable.CACHEABLE, true),
+	ADDRESS(KeywordCachable.CACHEABLE, true),
+	PLUGINS(KeywordCachable.CACHEABLE, true),
+	VERSION(KeywordCachable.CACHEABLE, true);
+	
 	private final KeywordCachable type;
-
+	private final boolean isPrivate;
+	
 	KeywordType(KeywordCachable type)
 	{
 		this.type = type;
+		this.isPrivate = false;
+	}
+
+	KeywordType(KeywordCachable type, boolean isPrivate)
+	{
+		this.type = type;
+		this.isPrivate = isPrivate;
 	}
 
 	public KeywordCachable getType()
 	{
 		return type;
+	}
+	
+	public boolean isPrivate() {
+		return isPrivate;
 	}
 }
 
