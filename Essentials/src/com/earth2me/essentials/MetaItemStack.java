@@ -172,7 +172,7 @@ public class MetaItemStack
 		}
 		else if (split.length > 1 && split[0].equalsIgnoreCase("author") && stack.getType() == Material.WRITTEN_BOOK && hasMetaPermission(sender, "author", false, true, ess))
 		{
-			final String author = split[1];
+			final String author = FormatUtil.replaceFormat(split[1]);
 			final BookMeta meta = (BookMeta)stack.getItemMeta();
 			meta.setAuthor(author);
 			stack.setItemMeta(meta);
