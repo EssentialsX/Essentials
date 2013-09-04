@@ -62,7 +62,7 @@ public class Commandclearinventory extends EssentialsCommand
 		}
 		for (Player player : players)
 		{
-			clearHandler(sender, player, args, offset, players.size() < EXTENDED_CAP);		
+			clearHandler(sender, player, args, offset, players.size() < EXTENDED_CAP);
 		}
 	}
 
@@ -121,7 +121,8 @@ public class Commandclearinventory extends EssentialsCommand
 			if (data == -1) // data -1 means that all subtypes will be cleared
 			{
 				ItemStack stack = new ItemStack(type);
-				if (showExtended) {
+				if (showExtended)
+				{
 					sender.sendMessage(_("inventoryClearingAllStack", stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName()));
 				}
 				player.getInventory().clear(type, data);
@@ -138,6 +139,10 @@ public class Commandclearinventory extends EssentialsCommand
 			}
 			else
 			{
+				if (amount < 0)
+				{
+					amount = 1;
+				}
 				ItemStack stack = new ItemStack(type, amount, data);
 				if (player.getInventory().containsAtLeast(stack, amount))
 				{
