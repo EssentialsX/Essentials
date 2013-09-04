@@ -299,6 +299,21 @@ public class EssentialsPlayerListener implements Listener
 			user.setCompassTarget(updateLoc);
 		}
 	}
+	
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onPlayerLogin2(final PlayerLoginEvent event)
+	{
+		switch (event.getResult())
+		{
+		case KICK_BANNED:
+			break;
+		default:
+			return;
+		}
+		
+		final String banReason = _("banFormat", _("defaultBanReason"), "Console");
+		event.disallow(Result.KICK_BANNED, banReason);
+	}
 
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerLogin(final PlayerLoginEvent event)
@@ -322,7 +337,7 @@ public class EssentialsPlayerListener implements Listener
 				String banReason = user.getBanReason();
 				if (banReason == null || banReason.isEmpty() || banReason.equalsIgnoreCase("ban"))
 				{
-					banReason = _("defaultBanReason");
+					banReason = event.getKickMessage();
 				}
 				if (user.getBanTimeout() > 0)
 				{
