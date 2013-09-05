@@ -133,7 +133,7 @@ public class Kit
 		}
 	}
 
-	public static List<String> getItems(final IEssentials ess, final User user, final Map<String, Object> kit) throws Exception
+	public static List<String> getItems(final IEssentials ess, final User user, final String kitName, final Map<String, Object> kit) throws Exception
 	{
 		if (kit == null)
 		{
@@ -152,15 +152,15 @@ public class Kit
 						itemList.add(item.toString());
 						continue;
 					}
-					throw new Exception("Error parsing kit item: " + item.toString());
+					throw new Exception("Invalid kit item: " + item.toString());
 				}
 				return itemList;
 			}
-			throw new Exception("Error parsing kit: " + kitItems.toString());
+			throw new Exception("Invalid item list");
 		}
 		catch (Exception e)
 		{
-			ess.getLogger().log(Level.WARNING, e.getMessage());
+			ess.getLogger().log(Level.WARNING, "Error parsing kit " + kitName + ": " + e.getMessage());
 			throw new Exception(_("kitError2"), e);
 		}
 	}
