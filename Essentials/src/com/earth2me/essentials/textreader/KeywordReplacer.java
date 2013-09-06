@@ -24,6 +24,7 @@ import static com.earth2me.essentials.textreader.KeywordType.DISPLAYNAME;
 import static com.earth2me.essentials.textreader.KeywordType.PLAYER;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -110,7 +111,7 @@ public class KeywordReplacer implements IText
 				String subKeyword = "";
 				if (matchTokens.length > 1)
 				{
-					subKeyword = matchTokens[1];
+					subKeyword = matchTokens[1].toLowerCase(Locale.ENGLISH);
 				}
 
 				if (keywordCache.containsKey(validKeyword))
@@ -241,9 +242,9 @@ public class KeywordReplacer implements IText
 					{
 						replacer = outputList.get("");
 					}
-					else if (outputList.containsKey(matchTokens[1]))
+					else if (outputList.containsKey(matchTokens[1].toLowerCase(Locale.ENGLISH)))
 					{
-						replacer = outputList.get(matchTokens[1]);
+						replacer = outputList.get(matchTokens[1].toLowerCase(Locale.ENGLISH));
 					}
 					else if (matchTokens.length > 2)
 					{
