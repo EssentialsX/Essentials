@@ -8,6 +8,7 @@ import com.earth2me.essentials.Trade.OverflowType;
 import com.earth2me.essentials.utils.NumberUtil;
 import java.math.BigDecimal;
 import java.util.Map;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 //TODO: TL exceptions
@@ -102,7 +103,7 @@ public class SignTrade extends EssentialsSign
 	{
 		final Trade trade = getTrade(sign, 2, AmountType.COST, false, ess);
 		if (trade.getItemStack() != null && player.getItemInHand() != null
-			&& trade.getItemStack().getTypeId() == player.getItemInHand().getTypeId()
+			&& trade.getItemStack().getType() == player.getItemInHand().getType()
 			&& trade.getItemStack().getDurability() == player.getItemInHand().getDurability()
 			&& trade.getItemStack().getEnchantments().equals(player.getItemInHand().getEnchantments()))
 		{
@@ -212,7 +213,7 @@ public class SignTrade extends EssentialsSign
 				throw new SignException(_("moreThanZero"));
 			}
 			if (!(split[1].equalsIgnoreCase("exp") || split[1].equalsIgnoreCase("xp"))
-				&& getItemStack(split[1], amount, ess).getTypeId() == 0)
+				&& getItemStack(split[1], amount, ess).getType() == Material.AIR)
 			{
 				throw new SignException(_("moreThanZero"));
 			}
@@ -235,7 +236,7 @@ public class SignTrade extends EssentialsSign
 				throw new SignException(_("moreThanZero"));
 			}
 			if (!(split[1].equalsIgnoreCase("exp") || split[1].equalsIgnoreCase("xp"))
-				&& getItemStack(split[1], stackamount, ess).getTypeId() == 0)
+				&& getItemStack(split[1], stackamount, ess).getType() == Material.AIR)
 			{
 				throw new SignException(_("moreThanZero"));
 			}
@@ -296,7 +297,7 @@ public class SignTrade extends EssentialsSign
 				{
 					amount -= amount % stackamount;
 				}
-				if (notEmpty && (amount < 1 || stackamount < 1 || item.getTypeId() == 0 || amount < stackamount))
+				if (notEmpty && (amount < 1 || stackamount < 1 || item.getType() == Material.AIR || amount < stackamount))
 				{
 					throw new SignException(_("tradeSignEmpty"));
 				}

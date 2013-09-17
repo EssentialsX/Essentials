@@ -3,6 +3,7 @@ package com.earth2me.essentials.craftbukkit;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -94,7 +95,7 @@ public final class InventoryWorkaround
 		for (int i = 0; i < combined.length; i++)
 		{
 			final ItemStack item = combined[i];
-			if (item == null || item.getTypeId() == 0)
+			if (item == null || item.getType() == Material.AIR)
 			{
 				continue;
 			}

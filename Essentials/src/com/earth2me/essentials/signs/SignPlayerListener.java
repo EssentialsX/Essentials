@@ -63,8 +63,8 @@ public class SignPlayerListener implements Listener
 			return;
 		}
 
-		final int mat = block.getTypeId();
-		if (mat == Material.SIGN_POST.getId() || mat == Material.WALL_SIGN.getId())
+		final Material mat = block.getType();
+		if (mat == Material.SIGN_POST || mat == Material.WALL_SIGN)
 		{
 			final String csign = ((Sign)block.getState()).getLine(0);
 			for (EssentialsSign sign : ess.getSettings().enabledSigns())

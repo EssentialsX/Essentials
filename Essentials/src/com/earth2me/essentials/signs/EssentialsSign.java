@@ -321,7 +321,7 @@ public class EssentialsSign
 		}
 		final ItemStack item = getItemStack(sign.getLine(itemIndex), 1, ess);
 		final int amount = Math.min(getIntegerPositive(sign.getLine(amountIndex)), item.getType().getMaxStackSize() * player.getInventory().getSize());
-		if (item.getTypeId() == 0 || amount < 1)
+		if (item.getType() == Material.AIR || amount < 1)
 		{
 			throw new SignException(_("moreThanZero"));
 		}

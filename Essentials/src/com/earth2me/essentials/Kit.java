@@ -14,6 +14,7 @@ import com.earth2me.essentials.utils.DateUtil;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.logging.Level;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
@@ -187,7 +188,7 @@ public class Kit
 				final String[] parts = kitItem.split(" +");
 				final ItemStack parseStack = ess.getItemDb().get(parts[0], parts.length > 1 ? Integer.parseInt(parts[1]) : 1);
 				
-				if (parseStack.getTypeId() == 0) {
+				if (parseStack.getType() == Material.AIR) {
 					continue;
 				}
 				
