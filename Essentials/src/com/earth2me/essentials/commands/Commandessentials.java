@@ -175,23 +175,52 @@ public class Commandessentials extends EssentialsCommand
 		noteBlocks.clear();
 	}
 
+
+	private final String[] consoleMoo = new String[] {
+					"         (__)",
+					"         (oo)",
+					"   /------\\/",
+					"  / |    ||",
+					" *  /\\---/\\",
+					"    ~~   ~~",
+					"....\"Have you mooed today?\"..."
+			};
+
+	private final String[] playerMoo = new String[] {
+					"            (__)",
+					"            (oo)",
+					"   /------\\/",
+					"  /  |      | |",
+					" *  /\\---/\\",
+					"    ~~    ~~",
+					"....\"Have you mooed today?\"..."
+			};
 	private void run_moo(final Server server, final CommandSender sender, final String command, final String args[])
 	{
-		if (sender instanceof ConsoleCommandSender)
+		if(args.length == 2 && args[1].equals("moo"))
 		{
-			sender.sendMessage(new String[]
-					{
-						"         (__)", "         (oo)", "   /------\\/", "  / |    ||", " *  /\\---/\\", "    ~~   ~~", "....\"Have you mooed today?\"..."
-					});
+			for(String s : consoleMoo)
+			{
+				logger.info(s);
+			}
+			for(Player player : ess.getServer().getOnlinePlayers())
+			{
+				player.sendMessage(playerMoo);
+				player.playSound(player.getLocation(), Sound.COW_IDLE, 1, 1.0f);
+			}
 		}
 		else
 		{
-			sender.sendMessage(new String[]
-					{
-						"            (__)", "            (oo)", "   /------\\/", "  /  |      | |", " *  /\\---/\\", "    ~~    ~~", "....\"Have you mooed today?\"..."
-					});
-			final Player player = (Player)sender;
-			player.playSound(player.getLocation(), Sound.COW_IDLE, 1, 1.0f);
+			if (sender instanceof ConsoleCommandSender)
+			{
+				sender.sendMessage(consoleMoo);
+			}
+			else
+			{
+				sender.sendMessage(playerMoo);
+				final Player player = (Player)sender;
+				player.playSound(player.getLocation(), Sound.COW_IDLE, 1, 1.0f);
+			}
 		}
 	}
 
