@@ -17,9 +17,17 @@ public class Commandignore extends EssentialsCommand
 	{
 		if (args.length < 1)
 		{
-			throw new NotEnoughArgumentsException();
+			StringBuilder sb = new StringBuilder();
+			for (String s : user._getIgnoredPlayers())
+			{
+				sb.append(s).append(" ");
+			}
+			String ignoredList = sb.toString().trim();
+			user.sendMessage(ignoredList.length() > 0 ? _("ignoredList", ignoredList) : _("noIgnored"));
 		}
-		User player;
+		else
+		{
+			User player;
 		try
 		{
 			player = getPlayer(server, args, 0, true, true);
@@ -41,6 +49,7 @@ public class Commandignore extends EssentialsCommand
 		{
 			user.setIgnoredPlayer(player, true);
 			user.sendMessage(_("ignorePlayer", player.getName()));
+		}
 		}
 	}
 }

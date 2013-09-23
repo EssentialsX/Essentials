@@ -21,6 +21,10 @@ public class Commandtpahere extends EssentialsCommand
 		}
 
 		final User player = getPlayer(server, user, args, 0);
+		if (user.getName().equalsIgnoreCase(player.getName()))
+		{
+			throw new NotEnoughArgumentsException();
+		}
 		if (!player.isTeleportEnabled())
 		{
 			throw new Exception(_("teleportDisabled", player.getDisplayName()));
