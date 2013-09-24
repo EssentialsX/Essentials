@@ -47,7 +47,7 @@ public class MetricsStarter implements Runnable
 				else
 				{
 					ess.getLogger().info("This plugin collects minimal statistic data and sends it to http://metrics.essentials3.net.");
-					ess.getLogger().info("You can opt out by running /essentials opt-out");
+					ess.getLogger().info("You can opt out, disabling metrics for all plugins, by running /essentials opt-out");
 					ess.getLogger().info("This will start 5 minutes after the first admin/op joins.");
 					start = false;
 				}
