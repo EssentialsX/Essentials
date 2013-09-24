@@ -238,7 +238,7 @@ public class Commandessentials extends EssentialsCommand
 			{
 				metrics.disable();
 			}
-			sender.sendMessage("Anonymous Metrics are now: " + (metrics.isOptOut() ? "disabled" : "enabled"));
+			sender.sendMessage("Anonymous Metrics are now " + (metrics.isOptOut() ? "disabled" : "enabled") + " for all plugins.");
 		}
 		catch (IOException ex)
 		{
