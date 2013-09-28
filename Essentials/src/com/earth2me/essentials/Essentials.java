@@ -26,6 +26,7 @@ import com.earth2me.essentials.commands.EssentialsCommand;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
+import com.earth2me.essentials.commands.QuietAbortException;
 import com.earth2me.essentials.metrics.Metrics;
 import com.earth2me.essentials.metrics.MetricsListener;
 import com.earth2me.essentials.metrics.MetricsStarter;
@@ -507,6 +508,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 				return true;
 			}
 			catch (NoChargeException ex)
+			{
+				return true;
+			}
+			catch (QuietAbortException ex)
 			{
 				return true;
 			}

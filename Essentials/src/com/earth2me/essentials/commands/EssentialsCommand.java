@@ -43,27 +43,30 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 		return name;
 	}
 
-	protected User getPlayer(final Server server, final User user, final String[] args, final int pos) throws NoSuchFieldException, NotEnoughArgumentsException
-	{
-		return getPlayer(server, user, args, pos, user.isAuthorized("essentials.vanish.interact"), false);
-	}
-
-	protected User getPlayer(final Server server, final CommandSender sender, final String[] args, final int pos) throws NoSuchFieldException, NotEnoughArgumentsException
+	// Get online players - only show vanished if source has permission
+	protected User getPlayer(final Server server, final CommandSender sender, final String[] args, final int pos) throws PlayerNotFoundException, NotEnoughArgumentsException
 	{
 		if (sender instanceof Player)
 		{
 			User user = ess.getUser(sender);
 			return getPlayer(server, user, args, pos);
 		}
-		return getPlayer(server, null, args, pos, true, false);
+		return getPlayer(server, args, pos, true, false);
 	}
 
-	protected User getPlayer(final Server server, final String[] args, final int pos, boolean getHidden, final boolean getOffline) throws NoSuchFieldException, NotEnoughArgumentsException
+	// Get online players - only show vanished if source has permission
+	protected User getPlayer(final Server server, final User user, final String[] args, final int pos) throws PlayerNotFoundException, NotEnoughArgumentsException
+	{
+		return getPlayer(server, user, args, pos, user.isAuthorized("essentials.vanish.interact"), false);
+	}
+
+	// Get online or offline players, this method allows for raw access
+	protected User getPlayer(final Server server, final String[] args, final int pos, boolean getHidden, final boolean getOffline) throws PlayerNotFoundException, NotEnoughArgumentsException
 	{
 		return getPlayer(server, null, args, pos, getHidden, getOffline);
 	}
 
-	private User getPlayer(final Server server, final User sourceUser, final String[] args, final int pos, boolean getHidden, final boolean getOffline) throws NoSuchFieldException, NotEnoughArgumentsException
+	private User getPlayer(final Server server, final User sourceUser, final String[] args, final int pos, boolean getHidden, final boolean getOffline) throws PlayerNotFoundException, NotEnoughArgumentsException
 	{
 		if (args.length <= pos)
 		{
@@ -73,7 +76,19 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 		{
 			throw new PlayerNotFoundException();
 		}
-		final User user = ess.getUser(args[pos]);
+		return getPlayer(server, sourceUser, args[pos], getHidden, getOffline);
+	}
+
+	// Get online or offline players, this method allows for raw access
+	protected User getPlayer(final Server server, final String searchTerm, boolean getHidden, final boolean getOffline) throws PlayerNotFoundException
+	{
+		return getPlayer(server, null, searchTerm, getHidden, getOffline);
+	}
+
+	private User getPlayer(final Server server, final User sourceUser, final String searchTerm, boolean getHidden, final boolean getOffline) throws PlayerNotFoundException
+	{
+
+		final User user = ess.getUser(searchTerm);
 		if (user != null)
 		{
 			if (!getOffline && !user.isOnline())
@@ -86,11 +101,11 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 			}
 			return user;
 		}
-		final List<Player> matches = server.matchPlayer(args[pos]);
+		final List<Player> matches = server.matchPlayer(searchTerm);
 
 		if (matches.isEmpty())
 		{
-			final String matchText = args[pos].toLowerCase(Locale.ENGLISH);
+			final String matchText = searchTerm.toLowerCase(Locale.ENGLISH);
 			for (Player onlinePlayer : server.getOnlinePlayers())
 			{
 				final User userMatch = ess.getUser(onlinePlayer);
@@ -109,7 +124,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 			for (Player player : matches)
 			{
 				final User userMatch = ess.getUser(player);
-				if (userMatch.getDisplayName().startsWith(args[pos]) && (getHidden || !userMatch.isHidden() || userMatch.equals(sourceUser)))
+				if (userMatch.getDisplayName().startsWith(searchTerm) && (getHidden || !userMatch.isHidden() || userMatch.equals(sourceUser)))
 				{
 					return userMatch;
 				}

@@ -4,15 +4,17 @@ import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IReplyTo;
 import com.earth2me.essentials.User;
+import static com.earth2me.essentials.commands.EssentialsCommand.getFinalArg;
 import com.earth2me.essentials.utils.FormatUtil;
-import java.util.List;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
-public class Commandmsg extends EssentialsCommand
+public class Commandmsg extends EssentialsLoopCommand
 {
+	final String translatedMe = _("me");
+
 	public Commandmsg()
 	{
 		super("msg");
@@ -41,13 +43,11 @@ public class Commandmsg extends EssentialsCommand
 			message = FormatUtil.replaceFormat(message);
 		}
 
-		final String translatedMe = _("me");
-
-		final IReplyTo replyTo = sender instanceof Player ? ess.getUser((Player)sender) : Console.getConsoleReplyTo();
-		final String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
-
 		if (args[0].equalsIgnoreCase(Console.NAME))
 		{
+			final IReplyTo replyTo = sender instanceof Player ? ess.getUser(sender) : Console.getConsoleReplyTo();
+			final String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
+			
 			sender.sendMessage(_("msgFormat", translatedMe, Console.NAME, message));
 			CommandSender cs = Console.getCommandSender(server);
 			cs.sendMessage(_("msgFormat", senderName, translatedMe, message));
@@ -56,38 +56,28 @@ public class Commandmsg extends EssentialsCommand
 			return;
 		}
 
-		boolean skipHidden = sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.vanish.interact");
-		boolean foundUser = false;
-		final List<Player> matchedPlayers = server.matchPlayer(args[0]);
+		loopOnlinePlayers(server, sender, true, args[0], new String[]{message});
+	}
 
-		for (Player matchPlayer : matchedPlayers)
+	@Override
+	protected void updatePlayer(final Server server, final CommandSender sender, final User matchedUser, final String[] args)
+	{		
+		final IReplyTo replyTo = sender instanceof Player ? ess.getUser(sender) : Console.getConsoleReplyTo();
+		final String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
+
+		if (matchedUser.isAfk())
 		{
-			final User matchedUser = ess.getUser(matchPlayer);
-
-			if (skipHidden && matchedUser.isHidden())
-			{
-				continue;
-			}
-			foundUser = true;
-			if (matchedUser.isAfk())
-			{
-				sender.sendMessage(_("userAFK", matchPlayer.getDisplayName()));
-			}
-
-			sender.sendMessage(_("msgFormat", translatedMe, matchPlayer.getDisplayName(), message));
-			if (sender instanceof Player && matchedUser.isIgnoredPlayer(ess.getUser(sender)))
-			{
-				continue;
-			}
-
-			matchedUser.sendMessage(_("msgFormat", senderName, translatedMe, message));
-			replyTo.setReplyTo(matchPlayer);
-			matchedUser.setReplyTo(sender);
+			sender.sendMessage(_("userAFK", matchedUser.getDisplayName()));
 		}
 
-		if (!foundUser)
+		sender.sendMessage(_("msgFormat", translatedMe, matchedUser.getDisplayName(), args[0]));
+		if (sender instanceof Player && matchedUser.isIgnoredPlayer(ess.getUser(sender)))
 		{
-			throw new PlayerNotFoundException();
+			return;
 		}
+
+		matchedUser.sendMessage(_("msgFormat", senderName, translatedMe, args[0]));
+		replyTo.setReplyTo(matchedUser.getBase());
+		matchedUser.setReplyTo(sender);
 	}
 }

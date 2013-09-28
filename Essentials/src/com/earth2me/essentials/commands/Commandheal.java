@@ -2,7 +2,6 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import java.util.List;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -11,7 +10,7 @@ import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.potion.PotionEffect;
 
 
-public class Commandheal extends EssentialsCommand
+public class Commandheal extends EssentialsLoopCommand
 {
 	public Commandheal()
 	{
@@ -21,26 +20,18 @@ public class Commandheal extends EssentialsCommand
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-
-		if (args.length > 0 && user.isAuthorized("essentials.heal.others"))
-		{
-			if (args[0].trim().length() < 2)
-			{
-				throw new PlayerNotFoundException();
-			}
-			if (!user.isAuthorized("essentials.heal.cooldown.bypass"))
-			{
-				user.healCooldown();
-			}
-			healOtherPlayers(server, user.getBase(), args[0]);
-			return;
-		}
-
 		if (!user.isAuthorized("essentials.heal.cooldown.bypass"))
 		{
 			user.healCooldown();
 		}
-		healPlayer(user.getBase());
+
+		if (args.length > 0 && user.isAuthorized("essentials.heal.others"))
+		{
+			loopOnlinePlayers(server, user.getBase(), true, args[0], null);
+			return;
+		}
+
+		healPlayer(user);
 	}
 
 	@Override
@@ -51,43 +42,30 @@ public class Commandheal extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		healOtherPlayers(server, sender, args[0]);
+		loopOnlinePlayers(server, sender, true, args[0], null);
 	}
 
-	private void healOtherPlayers(final Server server, final CommandSender sender, final String name) throws Exception
+	@Override
+	protected void updatePlayer(final Server server, final CommandSender sender, final User player, final String[] args) throws PlayerExemptException
 	{
-		boolean skipHidden = sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.vanish.interact");
-		boolean foundUser = false;
-		final List<Player> matchedPlayers = server.matchPlayer(name);
-		for (Player matchPlayer : matchedPlayers)
+		try
 		{
-			final User player = ess.getUser(matchPlayer);
-			if (skipHidden && player.isHidden())
-			{
-				continue;
-			}
-			foundUser = true;
-			try
-			{
-				healPlayer(matchPlayer);
-				sender.sendMessage(_("healOther", matchPlayer.getDisplayName()));
-			}
-			catch (QuietAbortException e)
-			{
-				//Handle Quietly
-			}
+			healPlayer(player);
+			sender.sendMessage(_("healOther", player.getDisplayName()));
 		}
-		if (!foundUser)
+		catch (QuietAbortException e)
 		{
-			throw new PlayerNotFoundException();
+			//Handle Quietly
 		}
 	}
 
-	private void healPlayer(final Player player) throws Exception
+	private void healPlayer(final User user) throws PlayerExemptException, QuietAbortException
 	{
+		final Player player = user.getBase();
+
 		if (player.getHealth() == 0)
 		{
-			throw new Exception(_("healDead"));
+			throw new PlayerExemptException(_("healDead"));
 		}
 
 		final double amount = player.getMaxHealth() - player.getHealth();
@@ -107,7 +85,7 @@ public class Commandheal extends EssentialsCommand
 		player.setHealth(newAmount);
 		player.setFoodLevel(20);
 		player.setFireTicks(0);
-		player.sendMessage(_("heal"));
+		user.sendMessage(_("heal"));
 		for (PotionEffect effect : player.getActivePotionEffects())
 		{
 			player.removePotionEffect(effect.getType());

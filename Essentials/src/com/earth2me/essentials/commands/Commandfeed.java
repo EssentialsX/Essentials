@@ -2,14 +2,13 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import java.util.List;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 
 
-public class Commandfeed extends EssentialsCommand
+public class Commandfeed extends EssentialsLoopCommand
 {
 	public Commandfeed()
 	{
@@ -19,33 +18,18 @@ public class Commandfeed extends EssentialsCommand
 	@Override
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		if (args.length > 0 && user.isAuthorized("essentials.feed.others"))
-		{
-			if (args[0].trim().length() < 2)
-			{
-				throw new PlayerNotFoundException();
-			}
-			if (!user.isAuthorized("essentials.feed.cooldown.bypass"))
-			{
-				user.healCooldown();
-			}
-			feedOtherPlayers(server, user.getBase(), args[0]);
-			return;
-		}
-
 		if (!user.isAuthorized("essentials.feed.cooldown.bypass"))
 		{
 			user.healCooldown();
 		}
-		try
+
+		if (args.length > 0 && user.isAuthorized("essentials.feed.others"))
 		{
-			feedPlayer(user.getBase(), user.getBase());
-		}
-		catch (QuietAbortException e)
-		{
-			//User does not need feeding.
+			loopOnlinePlayers(server, user.getBase(), true, args[0], null);
+			return;
 		}
 
+		feedPlayer(user.getBase());
 		user.sendMessage(_("feed"));
 	}
 
@@ -57,38 +41,24 @@ public class Commandfeed extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		feedOtherPlayers(server, sender, args[0]);
+		loopOnlinePlayers(server, sender, true, args[0], null);
 	}
 
-	private void feedOtherPlayers(final Server server, final CommandSender sender, final String name) throws PlayerNotFoundException
+	@Override
+	protected void updatePlayer(final Server server, final CommandSender sender, final User player, final String[] args) throws PlayerExemptException
 	{
-		boolean skipHidden = sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.vanish.interact");
-		boolean foundUser = false;
-		final List<Player> matchedPlayers = server.matchPlayer(name);
-		for (Player matchPlayer : matchedPlayers)
+		try
 		{
-			final User player = ess.getUser(matchPlayer);
-			if (skipHidden && player.isHidden())
-			{
-				continue;
-			}
-			foundUser = true;
-			try
-			{
-				feedPlayer(sender, matchPlayer);
-			}
-			catch (QuietAbortException e)
-			{
-				//User does not need feeding.
-			}
+			feedPlayer(player.getBase());
+			sender.sendMessage(_("feedOther", player.getDisplayName()));
 		}
-		if (!foundUser)
+		catch (QuietAbortException e)
 		{
-			throw new PlayerNotFoundException();
+			//Handle Quietly
 		}
 	}
 
-	private void feedPlayer(CommandSender sender, Player player) throws QuietAbortException
+	private void feedPlayer(final Player player) throws QuietAbortException
 	{
 		final int amount = 30;
 
@@ -101,10 +71,5 @@ public class Commandfeed extends EssentialsCommand
 
 		player.setFoodLevel(flce.getFoodLevel() > 20 ? 20 : flce.getFoodLevel());
 		player.setSaturation(10);
-
-		if (!sender.equals(player))
-		{
-			sender.sendMessage(_("feedOther", player.getDisplayName()));
-		}
 	}
 }

@@ -152,7 +152,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	}
 
 	@Override
-	public void payUser(final User reciever, final BigDecimal value) throws Exception
+	public void payUser(final User reciever, final BigDecimal value) throws ChargeException
 	{
 		if (value.signum() == 0)
 		{
@@ -167,7 +167,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		}
 		else
 		{
-			throw new Exception(_("notEnoughMoney"));
+			throw new ChargeException(_("notEnoughMoney"));
 		}
 	}
 

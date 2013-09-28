@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.ChargeException;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
@@ -7,11 +8,13 @@ import java.math.BigDecimal;
 import java.util.Locale;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 
-public class Commandeco extends EssentialsCommand
+public class Commandeco extends EssentialsLoopCommand
 {
+	Commandeco.EcoCommands cmd;
+	BigDecimal amount;
+
 	public Commandeco()
 	{
 		super("eco");
@@ -25,11 +28,8 @@ public class Commandeco extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		Commandeco.EcoCommands cmd;
 		BigDecimal startingBalance = ess.getSettings().getStartingBalance();
-		BigDecimal amount;
-		BigDecimal broadcast = null;
-		BigDecimal broadcastAll = null;
+
 		try
 		{
 			cmd = Commandeco.EcoCommands.valueOf(args[0].toUpperCase(Locale.ENGLISH));
@@ -40,83 +40,42 @@ public class Commandeco extends EssentialsCommand
 			throw new NotEnoughArgumentsException(ex);
 		}
 
-		if (args[1].contentEquals("**"))
+		loopOfflinePlayers(server, sender, false, args[1], args);
+
+		if (cmd == Commandeco.EcoCommands.RESET || cmd == Commandeco.EcoCommands.SET)
 		{
-			for (String sUser : ess.getUserMap().getAllUniqueUsers())
+			if (args[1].contentEquals("**"))
 			{
-				final User player = ess.getUser(sUser);
-				switch (cmd)
-				{
-				case GIVE:
-					player.giveMoney(amount);
-					break;
-
-				case TAKE:
-					take(amount, player, null);
-					break;
-
-				case RESET:
-				case SET:
-					set(amount, player, null);
-					broadcastAll = amount;
-					break;
-				}
+				server.broadcastMessage(_("resetBalAll", NumberUtil.displayCurrency(amount, ess)));
 			}
-		}
-		else if (args[1].contentEquals("*"))
-		{
-			for (Player onlinePlayer : server.getOnlinePlayers())
+			else if (args[1].contentEquals("*"))
 			{
-				final User player = ess.getUser(onlinePlayer);
-				switch (cmd)
-				{
-				case GIVE:
-					player.giveMoney(amount);
-					break;
-
-				case TAKE:
-					take(amount, player, null);
-					break;
-
-				case RESET:
-				case SET:
-					set(amount, player, null);
-					broadcast = amount;
-					break;
-				}
+				server.broadcastMessage(_("resetBal", NumberUtil.displayCurrency(amount, ess)));
 			}
-		}
-		else
-		{
-			final User player = getPlayer(server, args, 1, true, true);
-			switch (cmd)
-			{
-			case GIVE:
-				player.giveMoney(amount, sender);
-				break;
-
-			case TAKE:
-				take(amount, player, sender);
-				break;
-
-			case RESET:
-			case SET:
-				set(amount, player, sender);
-				break;
-			}
-		}
-
-		if (broadcast != null)
-		{
-			server.broadcastMessage(_("resetBal", NumberUtil.displayCurrency(broadcast, ess)));
-		}
-		if (broadcastAll != null)
-		{
-			server.broadcastMessage(_("resetBalAll", NumberUtil.displayCurrency(broadcastAll, ess)));
 		}
 	}
 
-	private void take(BigDecimal amount, final User player, final CommandSender sender) throws Exception
+	@Override
+	protected void updatePlayer(final Server server, final CommandSender sender, final User player, final String[] args) throws NotEnoughArgumentsException, ChargeException
+	{
+		switch (cmd)
+		{
+		case GIVE:
+			player.giveMoney(amount, sender);
+			break;
+
+		case TAKE:
+			take(amount, player, sender);
+			break;
+
+		case RESET:
+		case SET:
+			set(amount, player, sender);
+			break;
+		}
+	}
+
+	private void take(BigDecimal amount, final User player, final CommandSender sender) throws ChargeException
 	{
 		BigDecimal money = player.getMoney();
 		BigDecimal minBalance = ess.getSettings().getMinMoney();
@@ -131,7 +90,7 @@ public class Commandeco extends EssentialsCommand
 		}
 		else
 		{
-			throw new Exception(_("insufficientFunds"));
+			throw new ChargeException(_("insufficientFunds"));
 		}
 	}
 

@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
-public class Commandnick extends EssentialsCommand
+public class Commandnick extends EssentialsLoopCommand
 {
 	public Commandnick()
 	{
@@ -27,14 +27,16 @@ public class Commandnick extends EssentialsCommand
 		{
 			throw new Exception(_("nickDisplayName"));
 		}
+
+		final String[] nickname = formatNickname(user, args[1]).split(" ");
 		if (args.length > 1 && user.isAuthorized("essentials.nick.others"))
 		{
-			setNickname(server, getPlayer(server, user, args, 0), formatNickname(user, args[1]));
+			loopOfflinePlayers(server, user.getBase(), false, args[0], nickname);
 			user.sendMessage(_("nickChanged"));
 		}
 		else
 		{
-			setNickname(server, user, formatNickname(user, args[0]));
+			updatePlayer(server, user.getBase(), user, nickname);
 		}
 	}
 
@@ -49,54 +51,16 @@ public class Commandnick extends EssentialsCommand
 		{
 			throw new Exception(_("nickDisplayName"));
 		}
-		if ((args[0].equalsIgnoreCase("*") || args[0].equalsIgnoreCase("all")) && args[1].equalsIgnoreCase("off"))
-		{
-			resetAllNicknames(server);
-		}
-		else
-		{
-			setNickname(server, getPlayer(server, args, 0, true, false), formatNickname(null, args[1]));
-		}
+		final String[] nickname = formatNickname(null, args[1]).split(" ");
+		loopOfflinePlayers(server, sender, false, args[0], nickname);
 		sender.sendMessage(_("nickChanged"));
 	}
 
-	private String formatNickname(final User user, final String nick)
+	@Override
+	protected void updatePlayer(final Server server, final CommandSender sender, final User target, final String[] args) throws NotEnoughArgumentsException
 	{
-		if (user == null)
-		{
-			return FormatUtil.replaceFormat(nick);
-		}
-		else
-		{
-			return FormatUtil.formatString(user, "essentials.nick", nick);
-		}
-	}
-
-	private void resetAllNicknames(final Server server)
-	{
-		for (Player player : server.getOnlinePlayers())
-		{
-			try
-			{
-				setNickname(server, ess.getUser(player), "off");
-			}
-			catch (Exception ex)
-			{
-			}
-		}
-	}
-
-	private void setNickname(final Server server, final User target, final String nick) throws Exception
-	{
-		if (!nick.matches("^[a-zA-Z_0-9\u00a7]+$"))
-		{
-			throw new Exception(_("nickNamesAlpha"));
-		}
-		else if (nick.length() > ess.getSettings().getMaxNickLength())
-		{
-			throw new Exception(_("nickTooLong"));
-		}
-		else if (target.getName().equalsIgnoreCase(nick))
+		final String nick = args[0];
+		if (target.getName().equalsIgnoreCase(nick))
 		{
 			target.setNickname(nick);
 			target.setDisplayNick();
@@ -108,26 +72,47 @@ public class Commandnick extends EssentialsCommand
 			target.setDisplayNick();
 			target.sendMessage(_("nickNoMore"));
 		}
+		else if (nickInUse(server, target, nick))
+		{
+			throw new NotEnoughArgumentsException(_("nickInUse"));
+		}
 		else
 		{
-			for (Player onlinePlayer : server.getOnlinePlayers())
-			{
-				if (target.getBase() == onlinePlayer)
-				{
-					continue;
-				}
-				String displayName = onlinePlayer.getDisplayName().toLowerCase(Locale.ENGLISH);
-				String name = onlinePlayer.getName().toLowerCase(Locale.ENGLISH);
-				String lowerNick = nick.toLowerCase(Locale.ENGLISH);
-				if (lowerNick.equals(displayName) || lowerNick.equals(name))
-				{
-					throw new Exception(_("nickInUse"));
-				}
-			}
-
 			target.setNickname(nick);
 			target.setDisplayNick();
-			target.sendMessage(_("nickSet", target.getDisplayName() + "§7."));
+			target.sendMessage(_("nickSet", target.getDisplayName()));
 		}
+	}
+
+	private String formatNickname(final User user, final String nick) throws Exception
+	{
+		String newNick = user == null ? FormatUtil.replaceFormat(nick) : FormatUtil.formatString(user, "essentials.nick", nick);
+		if (!newNick.matches("^[a-zA-Z_0-9\u00a7]+$"))
+		{
+			throw new Exception(_("nickNamesAlpha"));
+		}
+		else if (newNick.length() > ess.getSettings().getMaxNickLength())
+		{
+			throw new Exception(_("nickTooLong"));
+		}
+		return newNick;
+	}
+
+	private boolean nickInUse(final Server server, final User target, String nick)
+	{
+		final String lowerNick = nick.toLowerCase(Locale.ENGLISH);
+		for (final Player onlinePlayer : server.getOnlinePlayers())
+		{
+			if (target.getBase() == onlinePlayer)
+			{
+				continue;
+			}
+			if (lowerNick.equals(onlinePlayer.getDisplayName().toLowerCase(Locale.ENGLISH))
+				|| lowerNick.equals(onlinePlayer.getName().toLowerCase(Locale.ENGLISH)))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 }
