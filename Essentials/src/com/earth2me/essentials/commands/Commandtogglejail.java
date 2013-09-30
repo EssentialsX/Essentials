@@ -31,7 +31,7 @@ public class Commandtogglejail extends EssentialsCommand
 				if (sender.isPlayer()
 					&& !ess.getUser(sender.getPlayer()).isAuthorized("essentials.togglejail.offline"))
 				{
-					sender.sendMessage(_("mayNotJail"));
+					sender.sendMessage(_("mayNotJailOffline"));
 					return;
 				}
 			}
