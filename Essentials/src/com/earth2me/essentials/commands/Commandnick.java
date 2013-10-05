@@ -4,6 +4,8 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import java.util.Locale;
+import net.ess3.api.events.LocalChatSpyEvent;
+import net.ess3.api.events.NickChangeEvent;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -62,14 +64,12 @@ public class Commandnick extends EssentialsLoopCommand
 		final String nick = args[0];
 		if (target.getName().equalsIgnoreCase(nick))
 		{
-			target.setNickname(nick);
-			target.setDisplayNick();
+			setNickname(server, sender, target, nick);
 			target.sendMessage(_("nickNoMore"));
 		}
 		else if ("off".equalsIgnoreCase(nick))
 		{
-			target.setNickname(null);
-			target.setDisplayNick();
+			setNickname(server, sender, target, null);
 			target.sendMessage(_("nickNoMore"));
 		}
 		else if (nickInUse(server, target, nick))
@@ -78,8 +78,7 @@ public class Commandnick extends EssentialsLoopCommand
 		}
 		else
 		{
-			target.setNickname(nick);
-			target.setDisplayNick();
+			setNickname(server, sender, target, nick);
 			target.sendMessage(_("nickSet", target.getDisplayName()));
 		}
 	}
@@ -114,5 +113,17 @@ public class Commandnick extends EssentialsLoopCommand
 			}
 		}
 		return false;
+	}
+
+	private void setNickname(final Server server, final CommandSender sender, final User target, final String nickname)
+	{
+		final User controller = sender instanceof Player ? ess.getUser(sender) : null;
+		final NickChangeEvent nickEvent = new NickChangeEvent(controller, target, nickname);
+		server.getPluginManager().callEvent(nickEvent);
+		if (!nickEvent.isCancelled())
+		{
+			target.setNickname(nickname);
+			target.setDisplayNick();
+		}
 	}
 }
