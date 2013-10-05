@@ -117,7 +117,7 @@ public class Commandnick extends EssentialsLoopCommand
 				return true;
 			}			
 		}
-		if (ess.getUser(lowerNick) != null) {
+		if (ess.getUser(lowerNick) != null && ess.getUser(lowerNick) != target) {
 				return true;
 		}
 		return false;
