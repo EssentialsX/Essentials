@@ -16,18 +16,20 @@ public class StateChangeEvent extends Event implements Cancellable
 	private boolean cancelled = false;
 	IUser affected;
 	IUser controller;
-	
-	public StateChangeEvent(IUser affected, IUser controller) {
+
+	public StateChangeEvent(IUser affected, IUser controller)
+	{
 		super();
 		this.affected = affected;
 		this.controller = controller;
-    }
-	
-	public StateChangeEvent(boolean isAsync, IUser affected, IUser controller) {
+	}
+
+	public StateChangeEvent(boolean isAsync, IUser affected, IUser controller)
+	{
 		super(isAsync);
 		this.affected = affected;
 		this.controller = controller;
-    }
+	}
 
 	public IUser getAffected()
 	{
@@ -61,5 +63,4 @@ public class StateChangeEvent extends Event implements Cancellable
 	{
 		this.cancelled = cancelled;
 	}
-
 }

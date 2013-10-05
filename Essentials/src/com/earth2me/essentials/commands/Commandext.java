@@ -35,11 +35,6 @@ public class Commandext extends EssentialsLoopCommand
 			return;
 		}
 
-		if (args[0].trim().length() < 2)
-		{
-			throw new PlayerNotFoundException();
-		}
-
 		loopOnlinePlayers(server, user.getBase(), true, args[0], null);
 	}
 

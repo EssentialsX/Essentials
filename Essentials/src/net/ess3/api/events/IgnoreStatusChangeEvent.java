@@ -9,5 +9,4 @@ public class IgnoreStatusChangeEvent extends StatusChangeEvent
 	{
 		super(affected, controller, value);
 	}
-
 }
