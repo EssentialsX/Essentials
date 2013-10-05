@@ -30,14 +30,15 @@ public class Commandnick extends EssentialsLoopCommand
 			throw new Exception(_("nickDisplayName"));
 		}
 
-		final String[] nickname = formatNickname(user, args[1]).split(" ");
 		if (args.length > 1 && user.isAuthorized("essentials.nick.others"))
 		{
+			final String[] nickname = formatNickname(user, args[1]).split(" ");
 			loopOfflinePlayers(server, user.getBase(), false, args[0], nickname);
 			user.sendMessage(_("nickChanged"));
 		}
 		else
 		{
+			final String[] nickname = formatNickname(user, args[0]).split(" ");
 			updatePlayer(server, user.getBase(), user, nickname);
 		}
 	}
@@ -94,23 +95,30 @@ public class Commandnick extends EssentialsLoopCommand
 		{
 			throw new Exception(_("nickTooLong"));
 		}
+		else if (FormatUtil.stripFormat(newNick).length() < 1)
+		{
+			throw new Exception(_("nickNamesAlpha"));
+		}
 		return newNick;
 	}
 
 	private boolean nickInUse(final Server server, final User target, String nick)
 	{
-		final String lowerNick = nick.toLowerCase(Locale.ENGLISH);
+		final String lowerNick = FormatUtil.stripFormat(nick.toLowerCase(Locale.ENGLISH));
 		for (final Player onlinePlayer : server.getOnlinePlayers())
 		{
 			if (target.getBase() == onlinePlayer)
 			{
 				continue;
 			}
-			if (lowerNick.equals(onlinePlayer.getDisplayName().toLowerCase(Locale.ENGLISH))
+			if (lowerNick.equals(FormatUtil.stripFormat(onlinePlayer.getDisplayName().toLowerCase(Locale.ENGLISH)))
 				|| lowerNick.equals(onlinePlayer.getName().toLowerCase(Locale.ENGLISH)))
 			{
 				return true;
-			}
+			}			
+		}
+		if (ess.getUser(lowerNick) != null) {
+				return true;
 		}
 		return false;
 	}
