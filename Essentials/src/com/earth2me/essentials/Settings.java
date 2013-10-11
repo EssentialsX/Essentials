@@ -1,6 +1,5 @@
 package com.earth2me.essentials;
 
-import net.ess3.api.IEssentials;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.signs.EssentialsSign;
@@ -13,6 +12,7 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.ess3.api.IEssentials;
 import org.bukkit.ChatColor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.ConfigurationSection;
@@ -411,7 +411,7 @@ public class Settings implements net.ess3.api.ISettings
 		if (mFormat == null)
 		{
 			mFormat = config.getString("chat.group-formats." + (group == null ? "Default" : group),
-											 config.getString("chat.format", "&7[{GROUP}]&r {DISPLAYNAME}&7:&r {MESSAGE}"));
+									   config.getString("chat.format", "&7[{GROUP}]&r {DISPLAYNAME}&7:&r {MESSAGE}"));
 			mFormat = FormatUtil.replaceFormat(mFormat);
 			mFormat = mFormat.replace("{DISPLAYNAME}", "%1$s");
 			mFormat = mFormat.replace("{MESSAGE}", "%2$s");
@@ -651,14 +651,14 @@ public class Settings implements net.ess3.api.ISettings
 	{
 		return config.getBoolean("trade-in-stacks-" + id, false);
 	}
-	
 	// #easteregg
 	private boolean economyDisabled = false;
+
 	public boolean _isEcoDisabled()
 	{
 		return config.getBoolean("disable-eco", false);
 	}
-	
+
 	@Override
 	public boolean isEcoDisabled()
 	{
@@ -1112,7 +1112,7 @@ public class Settings implements net.ess3.api.ISettings
 	{
 		return config.getInt("max-nick-length", 30);
 	}
-	
+
 	// #easteregg
 	public int getMaxUserCacheCount()
 	{

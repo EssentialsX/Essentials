@@ -1,10 +1,10 @@
 package com.earth2me.essentials;
 
-import net.ess3.api.IEssentials;
 import static com.earth2me.essentials.I18n._;
 import java.net.InetSocketAddress;
 import java.util.*;
 import lombok.Delegate;
+import net.ess3.api.IEssentials;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.conversations.Conversation;

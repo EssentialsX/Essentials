@@ -1,11 +1,11 @@
 package com.earth2me.essentials;
 
-import net.ess3.api.IEssentials;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.logging.Level;
+import net.ess3.api.IEssentials;
 import org.bukkit.entity.Player;
 
 

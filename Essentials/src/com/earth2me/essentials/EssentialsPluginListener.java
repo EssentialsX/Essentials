@@ -1,8 +1,8 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.perm.PermissionsHandler;
-import net.ess3.api.IEssentials;
 import java.util.logging.Level;
+import net.ess3.api.IEssentials;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;

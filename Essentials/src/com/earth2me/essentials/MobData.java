@@ -1,9 +1,9 @@
 package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.utils.StringUtil;
 import java.util.*;
 import java.util.logging.Logger;
-import com.earth2me.essentials.utils.StringUtil;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Ageable;
@@ -38,13 +38,10 @@ public enum MobData
 	BABY_SHEEP("lamb", EntityType.SHEEP, Data.BABY, false),
 	BABY_COW("calf", EntityType.COW.getEntityClass(), Data.BABY, false),
 	BABY_VILLAGER("child", EntityType.VILLAGER, Data.BABY, false),
-	
 	TAMED_TAMEABLE("tamed", Tameable.class, Data.TAMED, true),
 	TAME_TAMEABLE("tame", Tameable.class, Data.TAMED, false),
-	
 	RANDOM_SHEEP("random", EntityType.SHEEP, Data.COLORABLE, true),
 	COLORABLE_SHEEP("", StringUtil.joinList(DyeColor.values()).toLowerCase(Locale.ENGLISH), EntityType.SHEEP, Data.COLORABLE, true),
-	
 	DONKEY_HORSE("donkey", EntityType.HORSE, Horse.Variant.DONKEY, true),
 	MULE_HORSE("mule", EntityType.HORSE, Horse.Variant.MULE, true),
 	SKELETON_HORSE("skeleton", EntityType.HORSE, Horse.Variant.SKELETON_HORSE, true),
@@ -77,7 +74,6 @@ public enum MobData
 	GOLD_ARMOR_HORSE("goldarmor", EntityType.HORSE, Material.GOLD_BARDING, true),
 	DIAMOND_ARMOR_HORSE("diamondarmor", EntityType.HORSE, Material.DIAMOND_BARDING, true),
 	ARMOR_HORSE("armor", EntityType.HORSE, Material.IRON_BARDING, true),
-	
 	SIAMESE_CAT("siamese", EntityType.OCELOT, Ocelot.Type.SIAMESE_CAT, true),
 	WHITE_CAT("white", EntityType.OCELOT, Ocelot.Type.SIAMESE_CAT, false),
 	RED_CAT("red", EntityType.OCELOT, Ocelot.Type.RED_CAT, true),
@@ -85,41 +81,34 @@ public enum MobData
 	TABBY_CAT("tabby", EntityType.OCELOT, Ocelot.Type.RED_CAT, false),
 	BLACK_CAT("black", EntityType.OCELOT, Ocelot.Type.BLACK_CAT, true),
 	TUXEDO_CAT("tuxedo", EntityType.OCELOT, Ocelot.Type.BLACK_CAT, false),
-	
 	VILLAGER_ZOMBIE("villager", EntityType.ZOMBIE.getEntityClass(), Data.VILLAGER, true),
 	BABY_ZOMBIE("baby", EntityType.ZOMBIE.getEntityClass(), Data.BABYZOMBIE, true),
-	
 	DIAMOND_SWORD_ZOMBIE("diamondsword", EntityType.ZOMBIE.getEntityClass(), Material.DIAMOND_SWORD, true),
 	GOLD_SWORD_ZOMBIE("goldsword", EntityType.ZOMBIE.getEntityClass(), Material.GOLD_SWORD, true),
 	IRON_SWORD_ZOMBIE("ironsword", EntityType.ZOMBIE.getEntityClass(), Material.IRON_SWORD, true),
 	STONE_SWORD_ZOMBIE("stonesword", EntityType.ZOMBIE.getEntityClass(), Material.STONE_SWORD, false),
 	SWORD_ZOMBIE("sword", EntityType.ZOMBIE.getEntityClass(), Material.STONE_SWORD, true),
-	
 	DIAMOND_SWORD_SKELETON("diamondsword", EntityType.SKELETON, Material.DIAMOND_SWORD, true),
 	GOLD_SWORD_SKELETON("goldsword", EntityType.SKELETON, Material.GOLD_SWORD, true),
 	IRON_SWORD_SKELETON("ironsword", EntityType.SKELETON, Material.IRON_SWORD, true),
 	STONE_SWORD_SKELETON("stonesword", EntityType.SKELETON, Material.STONE_SWORD, false),
 	SWORD_SKELETON("sword", EntityType.SKELETON, Material.STONE_SWORD, true),
 	WHITHER_SKELETON("wither", EntityType.SKELETON, Data.WITHER, true),
-	
 	POWERED_CREEPER("powered", EntityType.CREEPER, Data.ELECTRIFIED, true),
 	ELECTRIC_CREEPER("electric", EntityType.CREEPER, Data.ELECTRIFIED, false),
 	CHARGED_CREEPER("charged", EntityType.CREEPER, Data.ELECTRIFIED, false),
-	
 	SADDLE_PIG("saddle", EntityType.PIG, Data.PIGSADDLE, true),
-	
 	ANGRY_WOLF("angry", EntityType.WOLF, Data.ANGRY, true),
 	RABID_WOLF("rabid", EntityType.WOLF, Data.ANGRY, false),
-	
 	FARMER_VILLAGER("farmer", EntityType.VILLAGER, Villager.Profession.FARMER, true),
 	LIBRARIAN_VILLAGER("librarian", EntityType.VILLAGER, Villager.Profession.LIBRARIAN, true),
 	PRIEST_VILLAGER("priest", EntityType.VILLAGER, Villager.Profession.PRIEST, true),
 	FATHER_VILLAGER("father", EntityType.VILLAGER, Villager.Profession.PRIEST, false),
 	SMITH_VILLAGER("smith", EntityType.VILLAGER, Villager.Profession.BLACKSMITH, true),
 	BUTCHER_VILLAGER("butcher", EntityType.VILLAGER, Villager.Profession.BUTCHER, true),
-	
 	SIZE_SLIME("", "<1-100>", EntityType.SLIME.getEntityClass(), Data.SIZE, true),
 	NUM_EXPERIENCE_ORB("", "<1-2000000000>", EntityType.EXPERIENCE_ORB, Data.EXP, true);
+
 
 	public enum Data
 	{
@@ -148,7 +137,7 @@ public enum MobData
 		this.value = value;
 		this.isPublic = isPublic;
 	}
-	
+
 	private MobData(String n, String h, Object type, Object value, boolean isPublic)
 	{
 		this.nickname = n;
@@ -158,13 +147,11 @@ public enum MobData
 		this.value = value;
 		this.isPublic = isPublic;
 	}
-
 	final private String nickname;
 	final private String helpMessage;
 	final private Object type;
 	final private Object value;
 	final private boolean isPublic;
-	
 	private String matched;
 
 	public static LinkedHashMap<String, MobData> getPossibleData(final Entity spawned, boolean publicOnly)
@@ -184,12 +171,12 @@ public enum MobData
 
 		return mobList;
 	}
-	
-	public static List<String> getValidHelp(final Entity spawned) 
+
+	public static List<String> getValidHelp(final Entity spawned)
 	{
 		List<String> output = new ArrayList<String>();
 		LinkedHashMap<String, MobData> posData = getPossibleData(spawned, true);
-		
+
 		for (MobData data : posData.values())
 		{
 			output.add(data.helpMessage);
@@ -310,7 +297,7 @@ public enum MobData
 			{
 				throw new Exception(_("slimeMalformedSize"), e);
 			}
-		}		
+		}
 		else if (this.value instanceof Horse.Color)
 		{
 			((Horse)spawned).setColor((Horse.Color)this.value);

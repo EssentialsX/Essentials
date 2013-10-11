@@ -1,8 +1,8 @@
 package com.earth2me.essentials.metrics;
 
-import net.ess3.api.IEssentials;
 import com.earth2me.essentials.User;
 import java.util.logging.Level;
+import net.ess3.api.IEssentials;
 import org.bukkit.Server;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

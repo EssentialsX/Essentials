@@ -1,11 +1,11 @@
 package com.earth2me.essentials;
 
-import net.ess3.api.IEssentials;
 import static com.earth2me.essentials.I18n._;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import net.ess3.api.IEssentials;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -105,14 +105,14 @@ public class EssentialsEntityListener implements Listener
 				{
 					ess.scheduleSyncDelayedTask(
 							new Runnable()
-							{
-								@Override
-								public void run()
-								{
-									attacker.getServer().dispatchCommand(attacker.getBase(), command);
-									LOGGER.log(Level.INFO, String.format("[PT] %s issued server command: /%s", attacker.getName(), command));
-								}
-							});
+					{
+						@Override
+						public void run()
+						{
+							attacker.getServer().dispatchCommand(attacker.getBase(), command);
+							LOGGER.log(Level.INFO, String.format("[PT] %s issued server command: /%s", attacker.getName(), command));
+						}
+					});
 
 					event.setCancelled(true);
 					return;

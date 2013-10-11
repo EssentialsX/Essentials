@@ -1,6 +1,5 @@
 package com.earth2me.essentials.metrics;
 
-import net.ess3.api.IEssentials;
 import com.earth2me.essentials.metrics.Metrics.Graph;
 import com.earth2me.essentials.metrics.Metrics.Plotter;
 import com.earth2me.essentials.register.payment.Method;
@@ -8,6 +7,7 @@ import com.earth2me.essentials.register.payment.methods.VaultEco;
 import com.earth2me.essentials.signs.EssentialsSign;
 import java.util.Locale;
 import java.util.logging.Level;
+import net.ess3.api.IEssentials;
 import org.bukkit.configuration.ConfigurationSection;
 
 

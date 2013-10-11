@@ -17,11 +17,7 @@
  */
 package com.earth2me.essentials;
 
-import net.ess3.api.ISettings;
-import net.ess3.api.IEssentials;
 import static com.earth2me.essentials.I18n._;
-import net.ess3.api.Economy;
-import net.ess3.api.IJails;
 import com.earth2me.essentials.commands.EssentialsCommand;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
@@ -48,7 +44,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import net.ess3.api.Economy;
+import net.ess3.api.IEssentials;
 import net.ess3.api.IItemDb;
+import net.ess3.api.IJails;
+import net.ess3.api.ISettings;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;

@@ -1,11 +1,10 @@
 package com.earth2me.essentials;
 
-import net.ess3.api.IEssentials;
-import com.earth2me.essentials.utils.StringUtil;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.craftbukkit.FakeWorld;
 import com.earth2me.essentials.settings.Spawns;
 import com.earth2me.essentials.storage.YamlStorageWriter;
+import com.earth2me.essentials.utils.StringUtil;
 import java.io.*;
 import java.math.BigInteger;
 import java.security.DigestInputStream;
@@ -13,6 +12,7 @@ import java.security.MessageDigest;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.ess3.api.IEssentials;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;

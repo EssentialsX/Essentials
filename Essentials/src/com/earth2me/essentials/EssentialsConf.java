@@ -1,8 +1,6 @@
 package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
-
-import net.ess3.api.InvalidWorldException;
 import com.google.common.io.Files;
 import java.io.*;
 import java.math.BigDecimal;
@@ -20,6 +18,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.ess3.api.InvalidWorldException;
 import org.bukkit.*;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
@@ -117,15 +116,17 @@ public class EssentialsConf extends YamlConfiguration
 			try
 			{
 				long startSize = configFile.length();
-				if (startSize > Integer.MAX_VALUE) {
+				if (startSize > Integer.MAX_VALUE)
+				{
 					throw new InvalidConfigurationException("File too big");
 				}
 				ByteBuffer buffer = ByteBuffer.allocate((int)startSize);
 				int length;
 				while ((length = inputStream.read(bytebuffer)) != -1)
 				{
-					if (length > buffer.remaining()) {
-						ByteBuffer resize = ByteBuffer.allocate(buffer.capacity()+length-buffer.remaining());
+					if (length > buffer.remaining())
+					{
+						ByteBuffer resize = ByteBuffer.allocate(buffer.capacity() + length - buffer.remaining());
 						int resizePosition = buffer.position();
 						buffer.rewind();
 						resize.put(buffer);
@@ -495,7 +496,7 @@ public class EssentialsConf extends YamlConfiguration
 	{
 		return get(path);
 	}
-	
+
 	public void setProperty(final String path, final BigDecimal bigDecimal)
 	{
 		set(path, bigDecimal.toString());
@@ -522,14 +523,13 @@ public class EssentialsConf extends YamlConfiguration
 	{
 		return super.get(path, def);
 	}
-	
-	
+
 	public synchronized BigDecimal getBigDecimal(final String path, final BigDecimal def)
 	{
 		final String input = super.getString(path);
 		return toBigDecimal(input, def);
 	}
-	
+
 	public static BigDecimal toBigDecimal(final String input, final BigDecimal def)
 	{
 		if (input == null || input.isEmpty())
@@ -809,5 +809,4 @@ public class EssentialsConf extends YamlConfiguration
 	{
 		super.set(path, value);
 	}
-
 }

@@ -1,8 +1,8 @@
 package com.earth2me.essentials;
 
+import static com.earth2me.essentials.I18n._;
 import net.ess3.api.IEssentials;
 import net.ess3.api.IUser;
-import static com.earth2me.essentials.I18n._;
 import org.bukkit.Location;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 

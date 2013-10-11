@@ -1,12 +1,12 @@
 package com.earth2me.essentials.utils;
 
 import static com.earth2me.essentials.I18n._;
-import net.ess3.api.IEssentials;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
+import net.ess3.api.IEssentials;
 
 
 public class NumberUtil

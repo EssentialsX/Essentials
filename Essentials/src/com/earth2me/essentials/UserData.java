@@ -1,12 +1,12 @@
 package com.earth2me.essentials;
 
-import net.ess3.api.IEssentials;
-import com.earth2me.essentials.utils.StringUtil;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.StringUtil;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.*;
+import net.ess3.api.IEssentials;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;

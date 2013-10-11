@@ -1,6 +1,5 @@
 package com.earth2me.essentials;
 
-import net.ess3.api.IEssentials;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,6 +11,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import net.ess3.api.IEssentials;
 
 
 public class I18n implements net.ess3.api.II18n

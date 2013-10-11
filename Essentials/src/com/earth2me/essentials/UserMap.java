@@ -1,6 +1,5 @@
 package com.earth2me.essentials;
 
-import net.ess3.api.IEssentials;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -11,6 +10,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutionException;
+import net.ess3.api.IEssentials;
 import org.bukkit.entity.Player;
 
 

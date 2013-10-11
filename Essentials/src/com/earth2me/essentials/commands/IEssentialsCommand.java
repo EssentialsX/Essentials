@@ -1,8 +1,8 @@
 package com.earth2me.essentials.commands;
 
-import net.ess3.api.IEssentials;
 import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.User;
+import net.ess3.api.IEssentials;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

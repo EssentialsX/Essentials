@@ -1,13 +1,13 @@
 package com.earth2me.essentials.signs;
 
-import net.ess3.api.IEssentials;
-import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.Trade.TradeType;
 import com.earth2me.essentials.*;
+import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade.OverflowType;
+import com.earth2me.essentials.Trade.TradeType;
 import com.earth2me.essentials.utils.NumberUtil;
 import java.math.BigDecimal;
 import java.util.Map;
+import net.ess3.api.IEssentials;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 

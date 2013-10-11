@@ -1,12 +1,12 @@
 package com.earth2me.essentials;
 
-import net.ess3.api.IEssentials;
-import net.ess3.api.IUser;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import net.ess3.api.IEssentials;
+import net.ess3.api.IUser;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRespawnEvent;

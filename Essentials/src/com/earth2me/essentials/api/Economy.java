@@ -1,26 +1,26 @@
 package com.earth2me.essentials.api;
 
-import static net.ess3.api.Economy.add;
-import static net.ess3.api.Economy.divide;
-import static net.ess3.api.Economy.format;
-import static net.ess3.api.Economy.getMoneyExact;
-import static net.ess3.api.Economy.hasEnough;
-import static net.ess3.api.Economy.hasLess;
-import static net.ess3.api.Economy.hasMore;
-import static net.ess3.api.Economy.multiply;
-import static net.ess3.api.Economy.setMoney;
-import static net.ess3.api.Economy.substract;
-import net.ess3.api.IEssentials;
 import com.earth2me.essentials.EssentialsConf;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.StringUtil;
+import static com.earth2me.essentials.api.Economy.add;
+import static com.earth2me.essentials.api.Economy.divide;
+import static com.earth2me.essentials.api.Economy.format;
+import static com.earth2me.essentials.api.Economy.getMoneyExact;
+import static com.earth2me.essentials.api.Economy.hasEnough;
+import static com.earth2me.essentials.api.Economy.hasLess;
+import static com.earth2me.essentials.api.Economy.hasMore;
+import static com.earth2me.essentials.api.Economy.multiply;
+import static com.earth2me.essentials.api.Economy.setMoney;
+import static com.earth2me.essentials.api.Economy.substract;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.StringUtil;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.ess3.api.IEssentials;
 
 
 /**

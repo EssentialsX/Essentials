@@ -1,12 +1,12 @@
 package com.earth2me.essentials.textreader;
 
-import net.ess3.api.IEssentials;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import java.io.*;
 import java.lang.ref.SoftReference;
 import java.util.*;
+import net.ess3.api.IEssentials;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

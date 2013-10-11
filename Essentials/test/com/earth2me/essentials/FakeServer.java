@@ -1,13 +1,14 @@
 package com.earth2me.essentials;
 
-import net.ess3.api.IEssentials;
 import com.avaje.ebean.config.ServerConfig;
+import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.craftbukkit.FakeWorld;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Logger;
+import net.ess3.api.IEssentials;
 import org.bukkit.*;
 import org.bukkit.Warning.WarningState;
 import org.bukkit.World.Environment;
@@ -228,8 +229,7 @@ public class FakeServer implements Server
 			@Override
 			public void callEvent(Event event) throws IllegalStateException
 			{
-				Logger.getGlobal().info("Called event " + event.getEventName());
-				return;
+				Logger.getLogger("Minecraft").info("Called event " + event.getEventName());
 			}
 
 			@Override

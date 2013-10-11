@@ -1,12 +1,12 @@
 package com.earth2me.essentials.commands;
 
-import net.ess3.api.IEssentials;
 import com.earth2me.essentials.*;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.utils.FormatUtil;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Logger;
+import net.ess3.api.IEssentials;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

@@ -1,10 +1,10 @@
 package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.ChargeException;
-import net.ess3.api.IEssentials;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.Trade.OverflowType;
 import com.earth2me.essentials.User;
+import net.ess3.api.IEssentials;
 
 
 public class SignSell extends EssentialsSign

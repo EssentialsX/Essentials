@@ -1,8 +1,11 @@
 package com.earth2me.essentials.textreader;
 
 import com.earth2me.essentials.ExecuteTimer;
-import net.ess3.api.IEssentials;
+import static com.earth2me.essentials.I18n._;
+import com.earth2me.essentials.PlayerList;
 import com.earth2me.essentials.User;
+import static com.earth2me.essentials.textreader.KeywordType.DISPLAYNAME;
+import static com.earth2me.essentials.textreader.KeywordType.PLAYER;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.DescParseTickFormat;
 import com.earth2me.essentials.utils.NumberUtil;
@@ -10,24 +13,20 @@ import java.lang.management.ManagementFactory;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import net.ess3.api.IEssentials;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-
-import static com.earth2me.essentials.I18n._;
-import com.earth2me.essentials.PlayerList;
-import static com.earth2me.essentials.textreader.KeywordType.DISPLAYNAME;
-import static com.earth2me.essentials.textreader.KeywordType.PLAYER;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.logging.Level;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 public class KeywordReplacer implements IText

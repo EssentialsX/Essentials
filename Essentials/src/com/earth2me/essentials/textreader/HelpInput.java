@@ -1,12 +1,12 @@
 package com.earth2me.essentials.textreader;
 
 import static com.earth2me.essentials.I18n._;
-import net.ess3.api.IEssentials;
 import com.earth2me.essentials.User;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.ess3.api.IEssentials;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 

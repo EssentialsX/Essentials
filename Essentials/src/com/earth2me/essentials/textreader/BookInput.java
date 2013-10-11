@@ -1,9 +1,9 @@
 package com.earth2me.essentials.textreader;
 
-import net.ess3.api.IEssentials;
 import java.io.*;
 import java.lang.ref.SoftReference;
 import java.util.*;
+import net.ess3.api.IEssentials;
 
 
 public class BookInput implements IText
