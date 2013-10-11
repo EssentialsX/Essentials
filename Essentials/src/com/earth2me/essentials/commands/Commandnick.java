@@ -4,7 +4,6 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import java.util.Locale;
-import net.ess3.api.events.LocalChatSpyEvent;
 import net.ess3.api.events.NickChangeEvent;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -115,7 +114,7 @@ public class Commandnick extends EssentialsLoopCommand
 				|| lowerNick.equals(onlinePlayer.getName().toLowerCase(Locale.ENGLISH)))
 			{
 				return true;
-			}			
+			}
 		}
 		if (ess.getUser(lowerNick) != null && ess.getUser(lowerNick) != target) {
 				return true;
