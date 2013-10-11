@@ -49,16 +49,16 @@ public class Commandgod extends EssentialsToggleCommand
 	@Override
 	void togglePlayer(CommandSender sender, User user, Boolean enabled)
 	{
+		if (enabled == null)
+		{
+			enabled = !user.isGodModeEnabled();
+		}
+
 		final User controller = sender instanceof Player ? ess.getUser(sender) : null;
 		final GodStatusChangeEvent godEvent = new GodStatusChangeEvent(controller, user, enabled);
 		ess.getServer().getPluginManager().callEvent(godEvent);
 		if (!godEvent.isCancelled())
 		{
-			if (enabled == null)
-			{
-				enabled = !user.isGodModeEnabled();
-			}
-
 			user.setGodModeEnabled(enabled);
 
 			if (enabled && user.getHealth() != 0)
