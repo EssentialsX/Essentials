@@ -374,7 +374,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 	}
 
 	@Override
-	public boolean onCommandEssentials(final CommandSender sender, final Command command, final String commandLabel, final String[] args, final ClassLoader classLoader, final String commandPath, final String permissionPrefix, final IEssentialsModule module)
+	public boolean onCommandEssentials(final CommandSender cSender, final Command command, final String commandLabel, final String[] args, final ClassLoader classLoader, final String commandPath, final String permissionPrefix, final IEssentialsModule module)
 	{
 		// Allow plugins to override the command via onCommand
 		if (!getSettings().isCommandOverridden(command.getName()) && (!commandLabel.startsWith("e") || commandLabel.equalsIgnoreCase(command.getName())))
@@ -385,12 +385,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 				alternativeCommandsHandler.executed(commandLabel, pc);
 				try
 				{
-					return pc.execute(sender, commandLabel, args);
+					return pc.execute(cSender, commandLabel, args);
 				}
 				catch (final Exception ex)
 				{
 					Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
-					sender.sendMessage(ChatColor.RED + "An internal error occurred while attempting to perform this command");
+					cSender.sendMessage(ChatColor.RED + "An internal error occurred while attempting to perform this command");
 					return true;
 				}
 			}
@@ -398,15 +398,16 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 
 		try
 		{
+
 			User user = null;
 			Block bSenderBlock = null;
-			if (sender instanceof Player)
+			if (cSender instanceof Player)
 			{
-				user = getUser(sender);
+				user = getUser((Player)cSender);
 			}
-			else if (sender instanceof BlockCommandSender)
+			else if (cSender instanceof BlockCommandSender)
 			{
-				BlockCommandSender bsender = (BlockCommandSender)sender;
+				BlockCommandSender bsender = (BlockCommandSender)cSender;
 				bSenderBlock = bsender.getBlock();
 			}
 
@@ -421,10 +422,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 			{
 				Bukkit.getLogger().log(Level.INFO, "{0} issued server command: /{1} {2}", new Object[]
 				{
-					sender.getName(), commandLabel, EssentialsCommand.getFinalArg(args, 0)
+					cSender.getName(), commandLabel, EssentialsCommand.getFinalArg(args, 0)
 				});
 			}
 
+			CommandSource sender = new CommandSource(cSender);
 
 			// New mail notification
 			if (user != null && !getSettings().isCommandDisabled("mail") && !command.getName().equals("mail") && user.isAuthorized("essentials.mail"))
@@ -452,7 +454,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 					{
 						if (cmd.matches(commandLabel))
 						{
-							cmd.execute(sender, commandLabel, args);
+							cmd.execute(cSender, commandLabel, args);
 						}
 					}
 				}
@@ -559,7 +561,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 	}
 
 	@Override
-	public void showError(final CommandSender sender, final Throwable exception, final String commandLabel)
+	public void showError(final CommandSource sender, final Throwable exception, final String commandLabel)
 	{
 		sender.sendMessage(_("errorWithMessage", exception.getMessage()));
 		if (getSettings().isDebug())
@@ -608,18 +610,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 		this.metrics = metrics;
 	}
 
+
 	@Override
-	public User getUser(final Object base)
-	{
-		if (base instanceof Player)
-		{
-			return getUser((Player)base);
-		}
-		if (base instanceof String)
-		{
-			return getOfflineUser((String)base);
-		}
-		return null;
+	public User getUser(final String base)
+	{	
+		return getOfflineUser((String)base);		
 	}
 
 	@Override
@@ -633,16 +628,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 		return user;
 	}
 
-	private <T extends Player> User getUser(final T base)
+	@Override
+	public User getUser(final Player base)
 	{
 		if (base == null)
 		{
 			return null;
-		}
-
-		if (base instanceof User)
-		{
-			return (User)base;
 		}
 
 		if (userMap == null)
@@ -746,7 +737,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 			{
 				if (keywords)
 				{
-					broadcast = new KeywordReplacer(broadcast, player, this, false);
+					broadcast = new KeywordReplacer(broadcast, new CommandSource(player), this, false);
 				}
 				for (String messageText : broadcast.getLines())
 				{

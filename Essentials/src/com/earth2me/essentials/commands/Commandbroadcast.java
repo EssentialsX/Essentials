@@ -1,10 +1,10 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.CommandSource;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 
 
 public class Commandbroadcast extends EssentialsCommand
@@ -21,9 +21,9 @@ public class Commandbroadcast extends EssentialsCommand
 	}
 
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
-		sendBroadcast(sender.getName(), args);
+		sendBroadcast(sender.getSender().getName(), args);
 	}
 
 	private void sendBroadcast(final String name, final String[] args) throws NotEnoughArgumentsException

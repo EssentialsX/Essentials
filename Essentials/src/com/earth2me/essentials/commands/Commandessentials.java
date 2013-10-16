@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.CommandSource;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.UserMap;
@@ -13,8 +14,6 @@ import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 // This command has 4 undocumented behaviours #EasterEgg
@@ -28,7 +27,7 @@ public class Commandessentials extends EssentialsCommand
 	private final transient Map<Player, Block> noteBlocks = new HashMap<Player, Block>();
 
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length == 0)
 		{
@@ -65,7 +64,7 @@ public class Commandessentials extends EssentialsCommand
 	}
 
 	//If you do not supply an argument this command will list 'overridden' commands.
-	private void run_disabled(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	private void run_disabled(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
 		sender.sendMessage("/<command> <reload/debug>");
 
@@ -85,7 +84,7 @@ public class Commandessentials extends EssentialsCommand
 		}
 	}
 
-	private void run_reset(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	private void run_reset(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 2)
 		{
@@ -96,19 +95,19 @@ public class Commandessentials extends EssentialsCommand
 		sender.sendMessage("Reset Essentials userdata for player: " + user.getDisplayName());
 	}
 
-	private void run_debug(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	private void run_debug(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
 		ess.getSettings().setDebug(!ess.getSettings().isDebug());
 		sender.sendMessage("Essentials " + ess.getDescription().getVersion() + " debug mode " + (ess.getSettings().isDebug() ? "enabled" : "disabled"));
 	}
 
-	private void run_reload(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	private void run_reload(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
 		ess.reload();
 		sender.sendMessage(_("essentialsReload", ess.getDescription().getVersion()));
 	}
 
-	private void run_nya(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	private void run_nya(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
 		final Map<String, Float> noteMap = new HashMap<String, Float>();
 		noteMap.put("1F#", 0.5f);
@@ -174,36 +173,36 @@ public class Commandessentials extends EssentialsCommand
 		}
 		noteBlocks.clear();
 	}
-
-
-	private final String[] consoleMoo = new String[] {
-					"         (__)",
-					"         (oo)",
-					"   /------\\/",
-					"  / |    ||",
-					" *  /\\---/\\",
-					"    ~~   ~~",
-					"....\"Have you mooed today?\"..."
-			};
-
-	private final String[] playerMoo = new String[] {
-					"            (__)",
-					"            (oo)",
-					"   /------\\/",
-					"  /  |      | |",
-					" *  /\\---/\\",
-					"    ~~    ~~",
-					"....\"Have you mooed today?\"..."
-			};
-	private void run_moo(final Server server, final CommandSender sender, final String command, final String args[])
+	private final String[] consoleMoo = new String[]
 	{
-		if(args.length == 2 && args[1].equals("moo"))
+		"         (__)",
+		"         (oo)",
+		"   /------\\/",
+		"  / |    ||",
+		" *  /\\---/\\",
+		"    ~~   ~~",
+		"....\"Have you mooed today?\"..."
+	};
+	private final String[] playerMoo = new String[]
+	{
+		"            (__)",
+		"            (oo)",
+		"   /------\\/",
+		"  /  |      | |",
+		" *  /\\---/\\",
+		"    ~~    ~~",
+		"....\"Have you mooed today?\"..."
+	};
+
+	private void run_moo(final Server server, final CommandSource sender, final String command, final String args[])
+	{
+		if (args.length == 2 && args[1].equals("moo"))
 		{
-			for(String s : consoleMoo)
+			for (String s : consoleMoo)
 			{
 				logger.info(s);
 			}
-			for(Player player : ess.getServer().getOnlinePlayers())
+			for (Player player : ess.getServer().getOnlinePlayers())
 			{
 				player.sendMessage(playerMoo);
 				player.playSound(player.getLocation(), Sound.COW_IDLE, 1, 1.0f);
@@ -211,20 +210,21 @@ public class Commandessentials extends EssentialsCommand
 		}
 		else
 		{
-			if (sender instanceof ConsoleCommandSender)
+			if (sender.isPlayer())
 			{
-				sender.sendMessage(consoleMoo);
+				sender.getSender().sendMessage(playerMoo);
+				final Player player = (Player)sender;
+				player.playSound(player.getLocation(), Sound.COW_IDLE, 1, 1.0f);
+
 			}
 			else
 			{
-				sender.sendMessage(playerMoo);
-				final Player player = (Player)sender;
-				player.playSound(player.getLocation(), Sound.COW_IDLE, 1, 1.0f);
+				sender.getSender().sendMessage(consoleMoo);
 			}
 		}
 	}
 
-	private void run_optout(final Server server, final CommandSender sender, final String command, final String args[])
+	private void run_optout(final Server server, final CommandSource sender, final String command, final String args[])
 	{
 		final Metrics metrics = ess.getMetrics();
 		try
@@ -246,7 +246,7 @@ public class Commandessentials extends EssentialsCommand
 		}
 	}
 
-	private void run_cleanup(final Server server, final CommandSender sender, final String command, final String args[]) throws Exception
+	private void run_cleanup(final Server server, final CommandSource sender, final String command, final String args[]) throws Exception
 	{
 		if (args.length < 2 || !NumberUtil.isInt(args[1]))
 		{

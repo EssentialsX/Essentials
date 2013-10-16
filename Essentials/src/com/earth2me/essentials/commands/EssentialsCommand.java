@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 import net.ess3.api.IEssentials;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
@@ -44,11 +43,11 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 	}
 
 	// Get online players - only show vanished if source has permission
-	protected User getPlayer(final Server server, final CommandSender sender, final String[] args, final int pos) throws PlayerNotFoundException, NotEnoughArgumentsException
+	protected User getPlayer(final Server server, final CommandSource sender, final String[] args, final int pos) throws PlayerNotFoundException, NotEnoughArgumentsException
 	{
-		if (sender instanceof Player)
+		if (sender.isPlayer())
 		{
-			User user = ess.getUser(sender);
+			User user = ess.getUser(sender.getPlayer());
 			return getPlayer(server, user, args, pos);
 		}
 		return getPlayer(server, args, pos, true, false);
@@ -153,16 +152,16 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		run(server, (CommandSender)(user.getBase()), commandLabel, args);
+		run(server, user.getSource(), commandLabel, args);
 	}
 
 	@Override
-	public final void run(final Server server, final CommandSender sender, final String commandLabel, final Command cmd, final String[] args) throws Exception
+	public final void run(final Server server, final CommandSource sender, final String commandLabel, final Command cmd, final String[] args) throws Exception
 	{
 		run(server, sender, commandLabel, args);
 	}
 
-	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
 		throw new Exception(_("onlyPlayers", commandLabel));
 	}

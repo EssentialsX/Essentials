@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 public final class Console implements IReplyTo
 {
 	private static Console instance = new Console();
-	private CommandSender replyTo;
+	private CommandSource replyTo;
 	public final static String NAME = "Console";
 
 	private Console()
@@ -20,13 +20,13 @@ public final class Console implements IReplyTo
 	}
 
 	@Override
-	public void setReplyTo(CommandSender user)
+	public void setReplyTo(CommandSource user)
 	{
 		replyTo = user;
 	}
 
 	@Override
-	public CommandSender getReplyTo()
+	public CommandSource getReplyTo()
 	{
 		return replyTo;
 	}

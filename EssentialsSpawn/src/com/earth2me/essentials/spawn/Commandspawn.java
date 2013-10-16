@@ -1,5 +1,6 @@
 package com.earth2me.essentials.spawn;
 
+import com.earth2me.essentials.CommandSource;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.Trade;
@@ -9,7 +10,6 @@ import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import org.bukkit.Location;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 
@@ -43,7 +43,7 @@ public class Commandspawn extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{

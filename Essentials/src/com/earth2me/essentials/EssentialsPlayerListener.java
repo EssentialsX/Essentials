@@ -235,10 +235,10 @@ public class EssentialsPlayerListener implements Listener
 				{
 					try
 					{
-						final IText input = new TextInput(user.getBase(), "motd", true, ess);
-						final IText output = new KeywordReplacer(input, user.getBase(), ess);
+						final IText input = new TextInput(user.getSource(), "motd", true, ess);
+						final IText output = new KeywordReplacer(input, user.getSource(), ess);
 						final TextPager pager = new TextPager(output, true);
-						pager.showPage("1", null, "motd", user.getBase());
+						pager.showPage("1", null, "motd", user.getSource());
 					}
 					catch (IOException ex)
 					{
@@ -595,11 +595,11 @@ public class EssentialsPlayerListener implements Listener
 
 		if (type == InventoryType.PLAYER)
 		{
-			final User user = ess.getUser(event.getWhoClicked());
+			final User user = ess.getUser((Player)event.getWhoClicked());
 			final InventoryHolder invHolder = top.getHolder();
 			if (invHolder != null && invHolder instanceof HumanEntity)
 			{
-				final User invOwner = ess.getUser((HumanEntity)invHolder);
+				final User invOwner = ess.getUser((Player)invHolder);
 				if (user.isInvSee() && (!user.isAuthorized("essentials.invsee.modify")
 										|| invOwner.isAuthorized("essentials.invsee.preventmodify")
 										|| !invOwner.isOnline()))
@@ -611,7 +611,7 @@ public class EssentialsPlayerListener implements Listener
 		}
 		else if (type == InventoryType.ENDER_CHEST)
 		{
-			final User user = ess.getUser(event.getWhoClicked());
+			final User user = ess.getUser((Player)event.getWhoClicked());
 			if (user.isEnderSee() && (!user.isAuthorized("essentials.enderchest.modify")))
 			{
 				event.setCancelled(true);
@@ -619,7 +619,7 @@ public class EssentialsPlayerListener implements Listener
 		}
 		else if (type == InventoryType.WORKBENCH)
 		{
-			User user = ess.getUser(event.getWhoClicked());
+			User user = ess.getUser((Player)event.getWhoClicked());
 			if (user.isRecipeSee())
 			{
 				event.setCancelled(true);
@@ -627,7 +627,7 @@ public class EssentialsPlayerListener implements Listener
 		}
 		else if (type == InventoryType.CHEST && top.getSize() == 9)
 		{
-			final User user = ess.getUser(event.getWhoClicked());
+			final User user = ess.getUser((Player)event.getWhoClicked());
 			final InventoryHolder invHolder = top.getHolder();
 			if (invHolder != null && invHolder instanceof HumanEntity && user.isInvSee())
 			{
@@ -643,19 +643,19 @@ public class EssentialsPlayerListener implements Listener
 		final InventoryType type = top.getType();
 		if (type == InventoryType.PLAYER)
 		{
-			final User user = ess.getUser(event.getPlayer());
+			final User user = ess.getUser((Player)event.getPlayer());
 			user.setInvSee(false);
 			user.updateInventory();
 		}
 		else if (type == InventoryType.ENDER_CHEST)
 		{
-			final User user = ess.getUser(event.getPlayer());
+			final User user = ess.getUser((Player)event.getPlayer());
 			user.setEnderSee(false);
 			user.updateInventory();
 		}
 		else if (type == InventoryType.WORKBENCH)
 		{
-			final User user = ess.getUser(event.getPlayer());
+			final User user = ess.getUser((Player)event.getPlayer());
 			if (user.isRecipeSee())
 			{
 				user.setRecipeSee(false);
@@ -668,7 +668,7 @@ public class EssentialsPlayerListener implements Listener
 			final InventoryHolder invHolder = top.getHolder();
 			if (invHolder != null && invHolder instanceof HumanEntity)
 			{
-				final User user = ess.getUser(event.getPlayer());
+				final User user = ess.getUser((Player)event.getPlayer());
 				user.setInvSee(false);
 				user.updateInventory();
 			}

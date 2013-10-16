@@ -36,8 +36,6 @@
 /EssentialsUpdate/build/
 /WebPush/apikey.php
 /WebPush/nbproject/private
-/.idea
-*.iml
 /EssentialsGroupManager/bin
 /EssentialsGroupManager/.externalToolBuilders
 /EssentialsAntiBuild/nbproject/private/

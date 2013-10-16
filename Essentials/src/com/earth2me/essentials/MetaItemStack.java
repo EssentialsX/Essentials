@@ -13,7 +13,6 @@ import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
-import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
@@ -95,7 +94,7 @@ public class MetaItemStack
 		completePotion = true;
 	}
 
-	public void parseStringMeta(final CommandSender sender, final boolean allowUnsafe, String[] string, int fromArg, final IEssentials ess) throws Exception
+	public void parseStringMeta(final CommandSource sender, final boolean allowUnsafe, String[] string, int fromArg, final IEssentials ess) throws Exception
 	{
 
 		for (int i = fromArg; i < string.length; i++)
@@ -119,7 +118,7 @@ public class MetaItemStack
 		}
 	}
 
-	private void addStringMeta(final CommandSender sender, final boolean allowUnsafe, final String string, final IEssentials ess) throws Exception
+	private void addStringMeta(final CommandSource sender, final boolean allowUnsafe, final String string, final IEssentials ess) throws Exception
 	{
 		final String[] split = splitPattern.split(string, 2);
 		if (split.length < 1)
@@ -226,7 +225,7 @@ public class MetaItemStack
 		}
 	}
 
-	public void addFireworkMeta(final CommandSender sender, final boolean allowShortName, final String string, final IEssentials ess) throws Exception
+	public void addFireworkMeta(final CommandSource sender, final boolean allowShortName, final String string, final IEssentials ess) throws Exception
 	{
 		if (stack.getType() == Material.FIREWORK)
 		{
@@ -331,7 +330,7 @@ public class MetaItemStack
 		}
 	}
 
-	public void addPotionMeta(final CommandSender sender, final boolean allowShortName, final String string, final IEssentials ess) throws Exception
+	public void addPotionMeta(final CommandSource sender, final boolean allowShortName, final String string, final IEssentials ess) throws Exception
 	{
 		if (stack.getType() == Material.POTION)
 		{
@@ -405,7 +404,7 @@ public class MetaItemStack
 		}
 	}
 
-	private void parseEnchantmentStrings(final CommandSender sender, final boolean allowUnsafe, final String[] split, final IEssentials ess) throws Exception
+	private void parseEnchantmentStrings(final CommandSource sender, final boolean allowUnsafe, final String[] split, final IEssentials ess) throws Exception
 	{
 		final Enchantment enchantment = Enchantments.getByName(split[0]);
 		if (enchantment == null || !hasMetaPermission(sender, "enchantments." + enchantment.getName().toLowerCase(Locale.ENGLISH), false, false, ess))
@@ -433,7 +432,7 @@ public class MetaItemStack
 		addEnchantment(sender, allowUnsafe, enchantment, level);
 	}
 
-	public void addEnchantment(final CommandSender sender, final boolean allowUnsafe, final Enchantment enchantment, final int level) throws Exception
+	public void addEnchantment(final CommandSource sender, final boolean allowUnsafe, final Enchantment enchantment, final int level) throws Exception
 	{
 		if (enchantment == null)
 		{
@@ -496,9 +495,9 @@ public class MetaItemStack
 		return enchantment;
 	}
 
-	private boolean hasMetaPermission(final CommandSender sender, final String metaPerm, final boolean graceful, final boolean includeBase, final IEssentials ess) throws Exception
+	private boolean hasMetaPermission(final CommandSource sender, final String metaPerm, final boolean graceful, final boolean includeBase, final IEssentials ess) throws Exception
 	{
-		final User user = ess.getUser(sender);
+		final User user = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null;
 		return hasMetaPermission(user, metaPerm, graceful, includeBase);
 	}
 

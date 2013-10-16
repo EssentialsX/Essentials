@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: me.ashtheking:MultiCurrency:0.05">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/me/ashtheking/MultiCurrency/0.05/MultiCurrency-0.05.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/me/ashtheking/MultiCurrency/0.05/MultiCurrency-0.05-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/me/ashtheking/MultiCurrency/0.05/MultiCurrency-0.05-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 import net.ess3.api.IEssentials;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.potion.PotionEffect;
@@ -23,7 +22,7 @@ import org.bukkit.potion.PotionEffectType;
 
 public class User extends UserData implements Comparable<User>, IReplyTo, net.ess3.api.IUser
 {
-	private CommandSender replyTo = null;
+	private CommandSource replyTo = null;
 	private transient String teleportRequester;
 	private transient boolean teleportRequestHere;
 	private transient Location teleportLocation;
@@ -137,7 +136,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	}
 
 	@Override
-	public void giveMoney(final BigDecimal value, final CommandSender initiator)
+	public void giveMoney(final BigDecimal value, final CommandSource initiator)
 	{
 		if (value.signum() == 0)
 		{
@@ -178,7 +177,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	}
 
 	@Override
-	public void takeMoney(final BigDecimal value, final CommandSender initiator)
+	public void takeMoney(final BigDecimal value, final CommandSource initiator)
 	{
 		if (value.signum() == 0)
 		{
@@ -799,13 +798,13 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	}
 
 	@Override
-	public void setReplyTo(final CommandSender user)
+	public void setReplyTo(final CommandSource user)
 	{
 		replyTo = user;
 	}
 
 	@Override
-	public CommandSender getReplyTo()
+	public CommandSource getReplyTo()
 	{
 		return replyTo;
 	}
@@ -831,5 +830,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	public int hashCode()
 	{
 		return this.getName().hashCode();
+	}
+
+	public CommandSource getSource()
+	{
+		return new CommandSource(getBase());
 	}
 }

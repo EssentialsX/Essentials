@@ -1,11 +1,11 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.CommandSource;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DateUtil;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
@@ -17,7 +17,7 @@ public class Commandmute extends EssentialsCommand
 	}
 
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
 		boolean nomatch = false;
 		if (args.length < 1)
@@ -36,8 +36,7 @@ public class Commandmute extends EssentialsCommand
 		}
 		if (!user.isOnline())
 		{
-			if (sender instanceof Player
-				&& !ess.getUser(sender).isAuthorized("essentials.mute.offline"))
+			if (sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.mute.offline"))
 			{
 				throw new Exception(_("muteExempt"));
 			}
@@ -83,7 +82,7 @@ public class Commandmute extends EssentialsCommand
 				sender.sendMessage(_("mutedPlayer", user.getDisplayName()));
 				user.sendMessage(_("playerMuted"));
 			}
-			ess.broadcastMessage("essentials.mute.notify", _("muteNotify", sender.getName(), user.getName(), muteTime));
+			ess.broadcastMessage("essentials.mute.notify", _("muteNotify", sender.getSender().getName(), user.getName(), muteTime));
 		}
 		else
 		{

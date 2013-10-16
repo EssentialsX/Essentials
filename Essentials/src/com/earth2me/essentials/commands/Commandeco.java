@@ -1,13 +1,13 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.ChargeException;
+import com.earth2me.essentials.CommandSource;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
 import java.math.BigDecimal;
 import java.util.Locale;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 
 
 public class Commandeco extends EssentialsLoopCommand
@@ -21,7 +21,7 @@ public class Commandeco extends EssentialsLoopCommand
 	}
 
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 2)
 		{
@@ -56,7 +56,7 @@ public class Commandeco extends EssentialsLoopCommand
 	}
 
 	@Override
-	protected void updatePlayer(final Server server, final CommandSender sender, final User player, final String[] args) throws NotEnoughArgumentsException, ChargeException
+	protected void updatePlayer(final Server server, final CommandSource sender, final User player, final String[] args) throws NotEnoughArgumentsException, ChargeException
 	{
 		switch (cmd)
 		{
@@ -75,7 +75,7 @@ public class Commandeco extends EssentialsLoopCommand
 		}
 	}
 
-	private void take(BigDecimal amount, final User player, final CommandSender sender) throws ChargeException
+	private void take(BigDecimal amount, final User player, final CommandSource sender) throws ChargeException
 	{
 		BigDecimal money = player.getMoney();
 		BigDecimal minBalance = ess.getSettings().getMinMoney();
@@ -94,7 +94,7 @@ public class Commandeco extends EssentialsLoopCommand
 		}
 	}
 
-	private void set(BigDecimal amount, final User player, final CommandSender sender)
+	private void set(BigDecimal amount, final User player, final CommandSource sender)
 	{
 		BigDecimal minBalance = ess.getSettings().getMinMoney();
 		boolean underMinimum = (amount.compareTo(minBalance) < 0);

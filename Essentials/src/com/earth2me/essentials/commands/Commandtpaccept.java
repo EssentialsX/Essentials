@@ -69,7 +69,7 @@ public class Commandtpaccept extends EssentialsCommand
 		catch (Exception ex)
 		{
 			user.sendMessage(_("pendingTeleportCancelled"));
-			ess.showError(requester.getBase(), ex, commandLabel);
+			ess.showError(requester.getSource(), ex, commandLabel);
 		}
 		user.requestTeleport(null, false);
 		throw new NoChargeException();

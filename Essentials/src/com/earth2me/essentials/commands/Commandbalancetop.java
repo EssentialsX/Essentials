@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.CommandSource;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.textreader.SimpleTextInput;
@@ -11,7 +12,6 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 
 //TODO: Remove op and replace with perm
 public class Commandbalancetop extends EssentialsCommand
@@ -27,7 +27,7 @@ public class Commandbalancetop extends EssentialsCommand
 	private static ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
 	@Override
-	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
 		int page = 0;
 		boolean force = false;
@@ -39,7 +39,7 @@ public class Commandbalancetop extends EssentialsCommand
 			}
 			catch (NumberFormatException ex)
 			{
-				if (args[0].equalsIgnoreCase("force") && sender.isOp())
+				if (args[0].equalsIgnoreCase("force") && sender.getSender().isOp())
 				{
 					force = true;
 				}
@@ -77,7 +77,7 @@ public class Commandbalancetop extends EssentialsCommand
 
 	}
 
-	private static void outputCache(final CommandSender sender, int page)
+	private static void outputCache(final CommandSource sender, int page)
 	{
 		final Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(cacheage);
@@ -163,11 +163,11 @@ public class Commandbalancetop extends EssentialsCommand
 
 	private class Viewer implements Runnable
 	{
-		private final transient CommandSender sender;
+		private final transient CommandSource sender;
 		private final transient int page;
 		private final transient boolean force;
 
-		public Viewer(final CommandSender sender, final int page, final boolean force)
+		public Viewer(final CommandSource sender, final int page, final boolean force)
 		{
 			this.sender = sender;
 			this.page = page;

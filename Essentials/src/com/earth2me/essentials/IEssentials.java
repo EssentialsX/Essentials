@@ -10,6 +10,7 @@ import java.util.List;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
@@ -23,7 +24,9 @@ public interface IEssentials extends Plugin
 
 	boolean onCommandEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath, String permissionPrefix, IEssentialsModule module);
 
-	User getUser(Object base);
+	User getUser(String base);
+	
+	User getUser(Player base);
 
 	I18n getI18n();
 
@@ -67,7 +70,7 @@ public interface IEssentials extends Plugin
 
 	AlternativeCommandsHandler getAlternativeCommandsHandler();
 
-	void showError(final CommandSender sender, final Throwable exception, final String commandLabel);
+	void showError(final CommandSource sender, final Throwable exception, final String commandLabel);
 
 	IItemDb getItemDb();
 

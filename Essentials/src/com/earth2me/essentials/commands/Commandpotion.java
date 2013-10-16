@@ -69,7 +69,7 @@ public class Commandpotion extends EssentialsCommand
 					final MetaItemStack mStack = new MetaItemStack(stack);
 					for (String arg : args)
 					{
-						mStack.addPotionMeta(user.getBase(), true, arg, ess);
+						mStack.addPotionMeta(user.getSource(), true, arg, ess);
 					}
 					if (mStack.completePotion())
 					{

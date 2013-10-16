@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IReplyTo;
@@ -8,7 +9,6 @@ import static com.earth2me.essentials.commands.EssentialsCommand.getFinalArg;
 import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 
 public class Commandmsg extends EssentialsLoopCommand
@@ -21,7 +21,7 @@ public class Commandmsg extends EssentialsLoopCommand
 	}
 
 	@Override
-	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	public void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception
 	{
 		if (args.length < 2 || args[0].trim().length() < 2 || args[1].trim().isEmpty())
 		{
@@ -29,9 +29,9 @@ public class Commandmsg extends EssentialsLoopCommand
 		}
 
 		String message = getFinalArg(args, 1);
-		if (sender instanceof Player)
+		if (sender.isPlayer())
 		{
-			User user = ess.getUser(sender);
+			User user = ess.getUser(sender.getPlayer());
 			if (user.isMuted())
 			{
 				throw new Exception(_("voiceSilenced"));
@@ -45,13 +45,13 @@ public class Commandmsg extends EssentialsLoopCommand
 
 		if (args[0].equalsIgnoreCase(Console.NAME))
 		{
-			final IReplyTo replyTo = sender instanceof Player ? ess.getUser(sender) : Console.getConsoleReplyTo();
-			final String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
+			final IReplyTo replyTo = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : Console.getConsoleReplyTo();
+			final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
 			
 			sender.sendMessage(_("msgFormat", translatedMe, Console.NAME, message));
 			CommandSender cs = Console.getCommandSender(server);
 			cs.sendMessage(_("msgFormat", senderName, translatedMe, message));
-			replyTo.setReplyTo(cs);
+			replyTo.setReplyTo(new CommandSource(cs));
 			Console.getConsoleReplyTo().setReplyTo(sender);
 			return;
 		}
@@ -60,10 +60,10 @@ public class Commandmsg extends EssentialsLoopCommand
 	}
 
 	@Override
-	protected void updatePlayer(final Server server, final CommandSender sender, final User matchedUser, final String[] args)
+	protected void updatePlayer(final Server server, final CommandSource sender, final User matchedUser, final String[] args)
 	{		
-		final IReplyTo replyTo = sender instanceof Player ? ess.getUser(sender) : Console.getConsoleReplyTo();
-		final String senderName = sender instanceof Player ? ((Player)sender).getDisplayName() : Console.NAME;
+		final IReplyTo replyTo = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : Console.getConsoleReplyTo();
+		final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
 
 		if (matchedUser.isAfk())
 		{
@@ -71,13 +71,13 @@ public class Commandmsg extends EssentialsLoopCommand
 		}
 
 		sender.sendMessage(_("msgFormat", translatedMe, matchedUser.getDisplayName(), args[0]));
-		if (sender instanceof Player && matchedUser.isIgnoredPlayer(ess.getUser(sender)))
+		if (sender.isPlayer() && matchedUser.isIgnoredPlayer(ess.getUser(sender.getPlayer())))
 		{
 			return;
 		}
 
 		matchedUser.sendMessage(_("msgFormat", senderName, translatedMe, args[0]));
-		replyTo.setReplyTo(matchedUser.getBase());
+		replyTo.setReplyTo(matchedUser.getSource());
 		matchedUser.setReplyTo(sender);
 	}
 }

@@ -1,9 +1,9 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.CommandSource;
 import static com.earth2me.essentials.I18n._;
 import org.bukkit.Material;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -16,13 +16,13 @@ public class Commanditemdb extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	protected void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception
 	{
 		ItemStack itemStack = null;
 		boolean itemHeld = false;
 		if (args.length < 1)
 		{
-			if (sender instanceof Player)
+			if (sender.isPlayer())
 			{
 				itemHeld = true;
 				itemStack = ((Player)sender).getItemInHand();

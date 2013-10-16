@@ -1,8 +1,8 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.CommandSource;
 import static com.earth2me.essentials.I18n._;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 
 
 public class Commanddeljail extends EssentialsCommand
@@ -13,7 +13,7 @@ public class Commanddeljail extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{

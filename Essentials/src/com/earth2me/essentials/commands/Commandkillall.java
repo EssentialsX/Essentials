@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.CommandSource;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Mob;
 import java.util.ArrayList;
@@ -7,7 +8,6 @@ import java.util.Locale;
 import org.bukkit.Chunk;
 import org.bukkit.Server;
 import org.bukkit.World;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
@@ -22,12 +22,12 @@ public class Commandkillall extends EssentialsCommand
 
 	//TODO: Tidy - missed this during command cleanup
 	@Override
-	public void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	public void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception
 	{
 		String type = "all";
 		int radius = -1;
 		World world;
-		if (sender instanceof Player)
+		if (sender.isPlayer())
 		{
 			world = ((Player)sender).getWorld();
 			if (args.length == 1)
@@ -96,7 +96,7 @@ public class Commandkillall extends EssentialsCommand
 		{
 			for (Entity entity : chunk.getEntities())
 			{
-				if (sender instanceof Player)
+				if (sender.isPlayer())
 				{
 					if (radius >= 0 && ((Player)sender).getLocation().distanceSquared(entity.getLocation()) > radius)
 					{

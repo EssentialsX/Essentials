@@ -1,9 +1,9 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.CommandSource;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
@@ -15,13 +15,13 @@ public class Commandtpaall extends EssentialsCommand
 	}
 
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
-			if (sender instanceof Player)
+			if (sender.isPlayer())
 			{
-				teleportAAllPlayers(server, sender, ess.getUser(sender));
+				teleportAAllPlayers(server, sender, ess.getUser(sender.getPlayer()));
 				return;
 			}
 			throw new NotEnoughArgumentsException();
@@ -31,7 +31,7 @@ public class Commandtpaall extends EssentialsCommand
 		teleportAAllPlayers(server, sender, target);
 	}
 
-	private void teleportAAllPlayers(final Server server, final CommandSender sender, final User target)
+	private void teleportAAllPlayers(final Server server, final CommandSource sender, final User target)
 	{
 		sender.sendMessage(_("teleportAAll"));
 		for (Player onlinePlayer : server.getOnlinePlayers())

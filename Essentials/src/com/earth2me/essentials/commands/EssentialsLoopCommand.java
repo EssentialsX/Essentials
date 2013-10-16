@@ -1,10 +1,10 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.ChargeException;
+import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import java.util.List;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
@@ -15,7 +15,7 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand
 		super(command);
 	}
 
-	protected void loopOfflinePlayers(final Server server, final CommandSender sender, final boolean multipleStringMatches, final String searchTerm, final String[] commandArgs)
+	protected void loopOfflinePlayers(final Server server, final CommandSource sender, final boolean multipleStringMatches, final String searchTerm, final String[] commandArgs)
 			throws PlayerNotFoundException, NotEnoughArgumentsException, PlayerExemptException, ChargeException
 	{
 		if (searchTerm.isEmpty())
@@ -33,7 +33,7 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand
 		}
 		else if (searchTerm.contentEquals("*"))
 		{
-			boolean skipHidden = sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.vanish.interact");
+			boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.vanish.interact");
 			for (Player onlinePlayer : server.getOnlinePlayers())
 			{
 				final User onlineUser = ess.getUser(onlinePlayer);
@@ -69,7 +69,7 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand
 		}
 	}
 
-	protected void loopOnlinePlayers(final Server server, final CommandSender sender, final boolean multipleStringMatches, final String searchTerm, final String[] commandArgs)
+	protected void loopOnlinePlayers(final Server server, final CommandSource sender, final boolean multipleStringMatches, final String searchTerm, final String[] commandArgs)
 			throws PlayerNotFoundException, NotEnoughArgumentsException, PlayerExemptException, ChargeException
 	{
 		if (searchTerm.isEmpty())
@@ -77,7 +77,7 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand
 			throw new PlayerNotFoundException();
 		}
 
-		boolean skipHidden = sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.vanish.interact");
+		boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.vanish.interact");
 
 		if (searchTerm.contentEquals("**") || searchTerm.contentEquals("*"))
 		{
@@ -121,6 +121,6 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand
 		}
 	}
 
-	protected abstract void updatePlayer(Server server, CommandSender sender, User user, String[] args)
+	protected abstract void updatePlayer(Server server, CommandSource sender, User user, String[] args)
 			throws NotEnoughArgumentsException, PlayerExemptException, ChargeException;
 }

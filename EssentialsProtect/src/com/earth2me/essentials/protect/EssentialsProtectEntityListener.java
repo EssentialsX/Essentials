@@ -37,7 +37,12 @@ public class EssentialsProtectEntityListener implements Listener
 			return;
 		}
 
-		final User user = ess.getUser(target);
+		User user = null;
+		if (target instanceof Player)
+		{
+			user = ess.getUser((Player)target);
+		}
+
 		final DamageCause cause = event.getCause();
 
 		if (event instanceof EntityDamageByBlockEvent)
@@ -69,7 +74,12 @@ public class EssentialsProtectEntityListener implements Listener
 		{
 			final EntityDamageByEntityEvent edEvent = (EntityDamageByEntityEvent)event;
 			final Entity eAttack = edEvent.getDamager();
-			final User attacker = ess.getUser(eAttack);
+
+			User attacker = null;
+			if (eAttack instanceof Player)
+			{
+				attacker = ess.getUser((Player)eAttack);
+			}
 
 			//Creeper explode prevention
 			if (eAttack instanceof Creeper
@@ -126,7 +136,7 @@ public class EssentialsProtectEntityListener implements Listener
 					|| (((Projectile)edEvent.getDamager()).getShooter() instanceof Player
 						&& prot.getSettingBool(ProtectConfig.disable_pvp)
 						&& (!user.isAuthorized("essentials.protect.pvp")
-							|| !ess.getUser(((Projectile)edEvent.getDamager()).getShooter()).isAuthorized("essentials.protect.pvp")))))
+							|| !ess.getUser((Player)((Projectile)edEvent.getDamager()).getShooter()).isAuthorized("essentials.protect.pvp")))))
 			{
 				event.setCancelled(true);
 				return;
@@ -275,7 +285,7 @@ public class EssentialsProtectEntityListener implements Listener
 		{
 			return;
 		}
-		final User user = ess.getUser(event.getTarget());
+		final User user = ess.getUser((Player)event.getTarget());
 		if ((event.getReason() == TargetReason.CLOSEST_PLAYER
 			 || event.getReason() == TargetReason.TARGET_ATTACKED_ENTITY
 			 || event.getReason() == TargetReason.PIG_ZOMBIE_TARGET

@@ -151,7 +151,7 @@ public class EssentialsAntiBuildListener implements Listener
 		final Entity entity = event.getRemover();
 		if (entity instanceof Player)
 		{
-			final User user = ess.getUser(entity);
+			final User user = ess.getUser((Player)entity);
 			final EntityType type = event.getEntity().getType();
 			final boolean warn = ess.getSettings().warnOnBuildDisallow();
 			if (prot.getSettingBool(AntiBuildConfig.disable_build) && !user.canBuild() && !user.isAuthorized("essentials.build"))
@@ -259,7 +259,7 @@ public class EssentialsAntiBuildListener implements Listener
 
 		if (entity instanceof Player)
 		{
-			final User user = ess.getUser(entity);
+			final User user = ess.getUser((Player)entity);
 			final ItemStack item = event.getRecipe().getResult();
 
 			if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild() && !user.isAuthorized("essentials.build"))

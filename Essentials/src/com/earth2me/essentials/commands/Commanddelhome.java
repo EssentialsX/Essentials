@@ -1,10 +1,10 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.CommandSource;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import java.util.Locale;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 
 
 public class Commanddelhome extends EssentialsCommand
@@ -15,14 +15,14 @@ public class Commanddelhome extends EssentialsCommand
 	}
 
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, String[] args) throws Exception
+	public void run(final Server server, final CommandSource sender, final String commandLabel, String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
 
-		User user = ess.getUser(sender);
+		User user = ess.getUser(sender.getPlayer());
 		String name;
 		String[] expandedArg;
 

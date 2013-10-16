@@ -1,12 +1,12 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.IReplyTo;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
@@ -18,7 +18,7 @@ public class Commandr extends EssentialsCommand
 	}
 
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -29,9 +29,9 @@ public class Commandr extends EssentialsCommand
 		IReplyTo replyTo;
 		String senderName;
 
-		if (sender instanceof Player)
+		if (sender.isPlayer())
 		{
-			User user = ess.getUser(sender);
+			User user = ess.getUser(sender.getPlayer());
 			message = FormatUtil.formatMessage(user, "essentials.msg", message);
 			replyTo = user;
 			senderName = user.getDisplayName();
@@ -43,7 +43,7 @@ public class Commandr extends EssentialsCommand
 			senderName = Console.NAME;
 		}
 
-		final CommandSender target = replyTo.getReplyTo();
+		final CommandSource target = replyTo.getReplyTo();
 		final String targetName = target instanceof Player ? ((Player)target).getDisplayName() : Console.NAME;
 
 		if (target == null || ((target instanceof Player) && !((Player)target).isOnline()))
@@ -52,10 +52,10 @@ public class Commandr extends EssentialsCommand
 		}
 
 		sender.sendMessage(_("msgFormat", _("me"), targetName, message));
-		if (target instanceof Player)
+		if (target.isPlayer())
 		{
-			User player = ess.getUser(target);
-			if (sender instanceof Player && player.isIgnoredPlayer(ess.getUser(sender)))
+			User player = ess.getUser(target.getPlayer());
+			if (sender.isPlayer() && player.isIgnoredPlayer(ess.getUser(sender.getPlayer())))
 			{
 				return;
 			}

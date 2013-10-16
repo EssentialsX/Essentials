@@ -1,5 +1,6 @@
 package com.earth2me.essentials.textreader;
 
+import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.ExecuteTimer;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.PlayerList;
@@ -24,7 +25,6 @@ import java.util.regex.Pattern;
 import net.ess3.api.IEssentials;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -40,7 +40,7 @@ public class KeywordReplacer implements IText
 	private final static Pattern KEYWORDSPLIT = Pattern.compile("\\:");
 	private final EnumMap<KeywordType, Object> keywordCache = new EnumMap<KeywordType, Object>(KeywordType.class);
 
-	public KeywordReplacer(final IText input, final CommandSender sender, final IEssentials ess)
+	public KeywordReplacer(final IText input, final CommandSource sender, final IEssentials ess)
 	{
 		this.input = input;
 		this.replaced = new ArrayList<String>(this.input.getLines().size());
@@ -49,7 +49,7 @@ public class KeywordReplacer implements IText
 		replaceKeywords(sender);
 	}
 
-	public KeywordReplacer(final IText input, final CommandSender sender, final IEssentials ess, final boolean showPrivate)
+	public KeywordReplacer(final IText input, final CommandSource sender, final IEssentials ess, final boolean showPrivate)
 	{
 		this.input = input;
 		this.replaced = new ArrayList<String>(this.input.getLines().size());
@@ -58,14 +58,14 @@ public class KeywordReplacer implements IText
 		replaceKeywords(sender);
 	}
 
-	private void replaceKeywords(final CommandSender sender)
+	private void replaceKeywords(final CommandSource sender)
 	{
 		execTimer = new ExecuteTimer();
 		execTimer.start();
 		User user = null;
-		if (sender instanceof Player)
+		if (sender.isPlayer())
 		{
-			user = ess.getUser(sender);
+			user = ess.getUser(sender.getPlayer());
 			//This is just so any displayname lookups below show the correct nickname
 			user.setDisplayNick();
 		}
@@ -122,8 +122,9 @@ public class KeywordReplacer implements IText
 					}
 				}
 			}
-			
-			if (validKeyword.isPrivate() && !includePrivate) {
+
+			if (validKeyword.isPrivate() && !includePrivate)
+			{
 				replacer = "";
 			}
 
@@ -199,10 +200,12 @@ public class KeywordReplacer implements IText
 					else
 					{
 						final boolean showHidden;
-						if (user == null) {
+						if (user == null)
+						{
 							showHidden = true;
 						}
-						else {
+						else
+						{
 							showHidden = user.isAuthorized("essentials.list.hidden") || user.isAuthorized("essentials.vanish.interact");
 						}
 
@@ -381,10 +384,9 @@ enum KeywordType
 	ADDRESS(KeywordCachable.CACHEABLE, true),
 	PLUGINS(KeywordCachable.CACHEABLE, true),
 	VERSION(KeywordCachable.CACHEABLE, true);
-	
 	private final KeywordCachable type;
 	private final boolean isPrivate;
-	
+
 	KeywordType(KeywordCachable type)
 	{
 		this.type = type;
@@ -401,11 +403,13 @@ enum KeywordType
 	{
 		return type;
 	}
-	
-	public boolean isPrivate() {
+
+	public boolean isPrivate()
+	{
 		return isPrivate;
 	}
 }
+
 
 enum KeywordCachable
 {

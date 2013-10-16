@@ -35,7 +35,7 @@ public class EssentialsEntityListener implements Listener
 		final Entity eDefend = event.getEntity();
 		if (eAttack instanceof Player)
 		{
-			final User attacker = ess.getUser(eAttack);
+			final User attacker = ess.getUser((Player)eAttack);
 			if (eDefend instanceof Player)
 			{
 				onPlayerVsPlayerDamage(event, (Player)eDefend, attacker);
@@ -59,7 +59,7 @@ public class EssentialsEntityListener implements Listener
 			Entity shooter = ((Projectile)event.getDamager()).getShooter();
 			if (shooter instanceof Player)
 			{
-				final User attacker = ess.getUser(shooter);
+				final User attacker = ess.getUser((Player)shooter);
 				onPlayerVsPlayerDamage(event, (Player)eDefend, attacker);
 				attacker.updateActivity(true);
 			}
@@ -124,7 +124,7 @@ public class EssentialsEntityListener implements Listener
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onEntityDamage(final EntityDamageEvent event)
 	{
-		if (event.getEntity() instanceof Player && ess.getUser(event.getEntity()).isGodModeEnabled())
+		if (event.getEntity() instanceof Player && ess.getUser((Player)event.getEntity()).isGodModeEnabled())
 		{
 			final Player player = (Player)event.getEntity();
 			player.setFireTicks(0);
@@ -136,7 +136,7 @@ public class EssentialsEntityListener implements Listener
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onEntityCombust(final EntityCombustEvent event)
 	{
-		if (event.getEntity() instanceof Player && ess.getUser(event.getEntity()).isGodModeEnabled())
+		if (event.getEntity() instanceof Player && ess.getUser((Player)event.getEntity()).isGodModeEnabled())
 		{
 			event.setCancelled(true);
 		}
@@ -173,7 +173,7 @@ public class EssentialsEntityListener implements Listener
 	{
 		if (event.getEntity() instanceof Player)
 		{
-			final User user = ess.getUser(event.getEntity());
+			final User user = ess.getUser((Player)event.getEntity());
 			if (user.isGodModeEnabled())
 			{
 				if (user.isGodModeEnabledRaw())
@@ -190,7 +190,7 @@ public class EssentialsEntityListener implements Listener
 	public void onEntityRegainHealth(final EntityRegainHealthEvent event)
 	{
 		if (event.getRegainReason() == RegainReason.SATIATED && event.getEntity() instanceof Player
-			&& ess.getUser(event.getEntity()).isAfk() && ess.getSettings().getFreezeAfkPlayers())
+			&& ess.getUser((Player)event.getEntity()).isAfk() && ess.getSettings().getFreezeAfkPlayers())
 		{
 			event.setCancelled(true);
 		}
@@ -201,7 +201,7 @@ public class EssentialsEntityListener implements Listener
 	{
 		for (LivingEntity entity : event.getAffectedEntities())
 		{
-			if (entity instanceof Player && ess.getUser(entity).isGodModeEnabled())
+			if (entity instanceof Player && ess.getUser((Player)entity).isGodModeEnabled())
 			{
 				event.setIntensity(entity, 0d);
 			}
@@ -213,7 +213,7 @@ public class EssentialsEntityListener implements Listener
 	{
 		if (event.getEntity() instanceof Player)
 		{
-			final User user = ess.getUser(event.getEntity());
+			final User user = ess.getUser((Player)event.getEntity());
 			if (user.isAfk())
 			{
 				user.updateActivity(true);

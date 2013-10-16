@@ -1,11 +1,11 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.ChargeException;
+import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import java.math.BigDecimal;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 
 
 public class Commandpay extends EssentialsLoopCommand
@@ -26,13 +26,13 @@ public class Commandpay extends EssentialsLoopCommand
 		}
 
 		amount = new BigDecimal(args[1].replaceAll("[^0-9\\.]", ""));
-		loopOnlinePlayers(server, user.getBase(), false, args[0], args);
+		loopOnlinePlayers(server, user.getSource(), false, args[0], args);
 	}
 
 	@Override
-	protected void updatePlayer(final Server server, final CommandSender sender, final User player, final String[] args) throws ChargeException
+	protected void updatePlayer(final Server server, final CommandSource sender, final User player, final String[] args) throws ChargeException
 	{
-		User user = ess.getUser(sender);
+		User user = ess.getUser(sender.getPlayer());
 		user.payUser(player, amount);
 		Trade.log("Command", "Pay", "Player", user.getName(), new Trade(amount, ess), player.getName(), new Trade(amount, ess), user.getLocation(), ess);
 	}

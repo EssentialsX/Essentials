@@ -1,10 +1,10 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.CommandSource;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import java.util.List;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
@@ -16,7 +16,7 @@ public class Commandspeed extends EssentialsCommand
 	}
 
 	@Override
-	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 2)
 		{
@@ -53,7 +53,7 @@ public class Commandspeed extends EssentialsCommand
 				{
 					throw new PlayerNotFoundException();
 				}
-				speedOtherPlayers(server, user.getBase(), isFly, isBypass, speed, args[2]);
+				speedOtherPlayers(server, user.getSource(), isFly, isBypass, speed, args[2]);
 				return;
 			}
 		}
@@ -70,9 +70,9 @@ public class Commandspeed extends EssentialsCommand
 		}
 	}
 
-	private void speedOtherPlayers(final Server server, final CommandSender sender, final boolean isFly, final boolean isBypass, final float speed, final String name) throws PlayerNotFoundException
+	private void speedOtherPlayers(final Server server, final CommandSource sender, final boolean isFly, final boolean isBypass, final float speed, final String name) throws PlayerNotFoundException
 	{
-		boolean skipHidden = sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.vanish.interact");
+		boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.vanish.interact");
 		boolean foundUser = false;
 		final List<Player> matchedPlayers = server.matchPlayer(name);
 		for (Player matchPlayer : matchedPlayers)

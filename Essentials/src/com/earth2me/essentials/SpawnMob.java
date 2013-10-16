@@ -14,7 +14,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
@@ -91,17 +90,17 @@ public class SpawnMob
 		{
 			throw new Exception(_("unableToSpawnMob"));
 		}
-		spawnmob(ess, server, user.getBase(), user, block.getLocation(), parts, data, mobCount);
+		spawnmob(ess, server, user.getSource(), user, block.getLocation(), parts, data, mobCount);
 	}
 
 	// This method spawns a mob at target, owned by target
-	public static void spawnmob(final IEssentials ess, final Server server, final CommandSender sender, final User target, final List<String> parts, final List<String> data, int mobCount) throws Exception
+	public static void spawnmob(final IEssentials ess, final Server server, final CommandSource sender, final User target, final List<String> parts, final List<String> data, int mobCount) throws Exception
 	{
 		spawnmob(ess, server, sender, target, target.getLocation(), parts, data, mobCount);
 	}
 
 	// This method spawns a mob at loc, owned by target
-	public static void spawnmob(final IEssentials ess, final Server server, final CommandSender sender, final User target, final Location loc, final List<String> parts, final List<String> data, int mobCount) throws Exception
+	public static void spawnmob(final IEssentials ess, final Server server, final CommandSource sender, final User target, final Location loc, final List<String> parts, final List<String> data, int mobCount) throws Exception
 	{
 		final Location sloc = LocationUtil.getSafeDestination(loc);
 
@@ -152,7 +151,7 @@ public class SpawnMob
 		}
 	}
 
-	private static void spawnMob(final IEssentials ess, final Server server, final CommandSender sender, final User target, final Location sloc, List<String> parts, List<String> data) throws Exception
+	private static void spawnMob(final IEssentials ess, final Server server, final CommandSource sender, final User target, final Location sloc, List<String> parts, List<String> data) throws Exception
 	{
 		Mob mob;
 		Entity spawnedMob = null;
@@ -191,7 +190,7 @@ public class SpawnMob
 		}
 	}
 
-	private static void checkSpawnable(IEssentials ess, CommandSender sender, Mob mob) throws Exception
+	private static void checkSpawnable(IEssentials ess, CommandSource sender, Mob mob) throws Exception
 	{
 		if (mob == null)
 		{
@@ -203,13 +202,13 @@ public class SpawnMob
 			throw new Exception(_("disabledToSpawnMob"));
 		}
 
-		if (sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.spawnmob." + mob.name.toLowerCase(Locale.ENGLISH)))
+		if (sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.spawnmob." + mob.name.toLowerCase(Locale.ENGLISH)))
 		{
 			throw new Exception(_("noPermToSpawnMob"));
 		}
 	}
 
-	private static void changeMobData(final CommandSender sender, final EntityType type, final Entity spawned, final String inputData, final User target) throws Exception
+	private static void changeMobData(final CommandSource sender, final EntityType type, final Entity spawned, final String inputData, final User target) throws Exception
 	{
 		String data = inputData;
 
@@ -217,14 +216,15 @@ public class SpawnMob
 		{
 			sender.sendMessage(_("mobDataList", StringUtil.joinList(MobData.getValidHelp(spawned))));
 		}
-		
+
 		MobData newData = MobData.fromData(spawned, data);
-		while (newData != null) {
+		while (newData != null)
+		{
 			newData.setData(spawned, target.getBase(), data);
 			data = data.replace(newData.getMatched(), "");
 			newData = MobData.fromData(spawned, data);
 		}
-		
+
 		if (spawned instanceof Zombie || type == EntityType.SKELETON)
 		{
 			if (inputData.contains("armor") || inputData.contains("armour"))

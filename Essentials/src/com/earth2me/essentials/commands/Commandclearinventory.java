@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.CommandSource;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
@@ -8,7 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -25,23 +25,23 @@ public class Commandclearinventory extends EssentialsCommand
 	@Override
 	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		parseCommand(server, user.getBase(), args, user.isAuthorized("essentials.clearinventory.others"), user.isAuthorized("essentials.clearinventory.all"));
+		parseCommand(server, user.getSource(), args, user.isAuthorized("essentials.clearinventory.others"), user.isAuthorized("essentials.clearinventory.all"));
 	}
 
 	@Override
-	protected void run(Server server, CommandSender sender, String commandLabel, String[] args) throws Exception
+	protected void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception
 	{
 		parseCommand(server, sender, args, true, true);
 	}
 
-	private void parseCommand(Server server, CommandSender sender, String[] args, boolean allowOthers, boolean allowAll) throws Exception
+	private void parseCommand(Server server, CommandSource sender, String[] args, boolean allowOthers, boolean allowAll) throws Exception
 	{
 		List<Player> players = new ArrayList<Player>();
 		int offset = 0;
 
-		if (sender instanceof Player)
+		if (sender.isPlayer())
 		{
-			players.add((Player)sender);
+			players.add(sender.getPlayer());
 		}
 
 		if (allowAll && args.length > 0 && args[0].contentEquals("*"))
@@ -66,7 +66,7 @@ public class Commandclearinventory extends EssentialsCommand
 		}
 	}
 
-	protected void clearHandler(CommandSender sender, Player player, String[] args, int offset, boolean showExtended) throws Exception
+	protected void clearHandler(CommandSource sender, Player player, String[] args, int offset, boolean showExtended) throws Exception
 	{
 		short data = -1;
 		int type = -1;

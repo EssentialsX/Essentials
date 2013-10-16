@@ -114,7 +114,7 @@ public class TimedTeleport implements Runnable
 				}
 				catch (Throwable ex)
 				{
-					ess.showError(teleportOwner.getBase(), ex, "teleport");
+					ess.showError(teleportOwner.getSource(), ex, "teleport");
 				}
 			}
 			catch (Exception ex)

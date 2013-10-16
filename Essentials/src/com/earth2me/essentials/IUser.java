@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Set;
 import net.ess3.api.ITeleport;
 import org.bukkit.Location;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
@@ -23,13 +22,13 @@ public interface IUser
 
 	void giveMoney(BigDecimal value);
 
-	void giveMoney(final BigDecimal value, final CommandSender initiator);
+	void giveMoney(final BigDecimal value, final CommandSource initiator);
 
 	void payUser(final User reciever, final BigDecimal value) throws Exception;
 
 	void takeMoney(BigDecimal value);
 
-	void takeMoney(final BigDecimal value, final CommandSender initiator);
+	void takeMoney(final BigDecimal value, final CommandSource initiator);
 
 	boolean canAfford(BigDecimal value);
 
@@ -93,9 +92,8 @@ public interface IUser
 	public void sendMessage(String message);
 
 	/*
-	* UserData
-	*/ 
-		
+	 * UserData
+	 */
 	Location getHome(String name) throws Exception;
 
 	Location getHome(Location loc) throws Exception;
@@ -107,25 +105,25 @@ public interface IUser
 	void delHome(String name) throws Exception;
 
 	boolean hasHome();
-	
+
 	Location getLastLocation();
-	
+
 	Location getLogoutLocation();
-	
+
 	long getLastTeleportTimestamp();
 
 	void setLastTeleportTimestamp(long time);
-	
+
 	String getJail();
 
 	void setJail(String jail);
-	
+
 	List<String> getMails();
-			
+
 	void addMail(String mail);
-	
+
 	boolean isAfk();
-	
+
 	void setConfigProperty(String node, Object object);
 
 	Set<String> getConfigKeys();
@@ -133,12 +131,13 @@ public interface IUser
 	Map<String, Object> getConfigMap();
 
 	Map<String, Object> getConfigMap(String node);
-	
+
 	/*
 	 *  PlayerExtension
 	 */
-	
 	Player getBase();
+
+	CommandSource getSource();
 
 	public String getName();
 }

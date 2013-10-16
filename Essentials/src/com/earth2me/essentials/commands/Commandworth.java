@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.CommandSource;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
@@ -7,7 +8,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Locale;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -35,7 +35,7 @@ public class Commandworth extends EssentialsCommand
 			{
 				if (stack.getAmount() > 0)
 				{
-					totalWorth = totalWorth.add(itemWorth(user.getBase(), user, stack, args));
+					totalWorth = totalWorth.add(itemWorth(user.getSource(), user, stack, args));
 					stack = stack.clone();
 					count++;
 					for (ItemStack zeroStack : is)
@@ -70,7 +70,7 @@ public class Commandworth extends EssentialsCommand
 	}
 
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
 		String type = "";
 		if (args.length < 1)
@@ -83,7 +83,7 @@ public class Commandworth extends EssentialsCommand
 		itemWorth(sender, null, stack, args);
 	}
 
-	private BigDecimal itemWorth(CommandSender sender, User user, ItemStack is, String[] args) throws Exception
+	private BigDecimal itemWorth(CommandSource sender, User user, ItemStack is, String[] args) throws Exception
 	{
 		int amount = 1;
 		if (user == null)

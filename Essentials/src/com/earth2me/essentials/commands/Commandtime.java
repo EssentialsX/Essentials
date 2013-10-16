@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.CommandSource;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DescParseTickFormat;
@@ -7,7 +8,6 @@ import com.earth2me.essentials.utils.NumberUtil;
 import java.util.*;
 import org.bukkit.Server;
 import org.bukkit.World;
-import org.bukkit.command.CommandSender;
 
 
 public class Commandtime extends EssentialsCommand
@@ -18,7 +18,7 @@ public class Commandtime extends EssentialsCommand
 	}
 
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
 		boolean add = false;
 		final List<String> argList = new ArrayList<String>(Arrays.asList(args));
@@ -59,11 +59,12 @@ public class Commandtime extends EssentialsCommand
 				return;
 			}
 		}
-		else {
+		else
+		{
 			setTime = validArgs[0];
 		}
 
-		final User user = ess.getUser(sender);
+		final User user = ess.getUser(sender.getPlayer());
 		if (user != null && !user.isAuthorized("essentials.time.set"))
 		{
 			user.sendMessage(_("timeSetPermission"));
@@ -87,7 +88,7 @@ public class Commandtime extends EssentialsCommand
 	/**
 	 * Used to get the time and inform
 	 */
-	private void getWorldsTime(final CommandSender sender, final Collection<World> worlds)
+	private void getWorldsTime(final CommandSource sender, final Collection<World> worlds)
 	{
 		if (worlds.size() == 1)
 		{
@@ -105,7 +106,7 @@ public class Commandtime extends EssentialsCommand
 	/**
 	 * Used to set the time and inform of the change
 	 */
-	private void setWorldsTime(final CommandSender sender, final Collection<World> worlds, final long ticks, final boolean add)
+	private void setWorldsTime(final CommandSource sender, final Collection<World> worlds, final long ticks, final boolean add)
 	{
 		// Update the time
 		for (World world : worlds)
@@ -135,21 +136,22 @@ public class Commandtime extends EssentialsCommand
 	/**
 	 * Used to parse an argument of the type "world(s) selector"
 	 */
-	private Set<World> getWorlds(final Server server, final CommandSender sender, final String selector) throws Exception
+	private Set<World> getWorlds(final Server server, final CommandSource sender, final String selector) throws Exception
 	{
 		final Set<World> worlds = new TreeSet<World>(new WorldNameComparator());
 
 		// If there is no selector we want the world the user is currently in. Or all worlds if it isn't a user.
 		if (selector == null)
 		{
-			final User user = ess.getUser(sender);
-			if (user == null)
+			if (sender.isPlayer())
 			{
-				worlds.addAll(server.getWorlds());
+
+				final User user = ess.getUser(sender.getPlayer());
+				worlds.add(user.getWorld());
 			}
 			else
 			{
-				worlds.add(user.getWorld());
+				worlds.addAll(server.getWorlds());
 			}
 			return worlds;
 		}

@@ -1,10 +1,10 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.CommandSource;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import org.bukkit.Location;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 
 
 public class Commandgetpos extends EssentialsCommand
@@ -20,14 +20,14 @@ public class Commandgetpos extends EssentialsCommand
 		if (args.length > 0 && user.isAuthorized("essentials.getpos.others"))
 		{
 			final User otherUser = getPlayer(server, user, args, 0);
-			outputPosition(user.getBase(), otherUser.getLocation(), user.getLocation());
+			outputPosition(user.getSource(), otherUser.getLocation(), user.getLocation());
 			return;
 		}
-		outputPosition(user.getBase(), user.getLocation(), null);
+		outputPosition(user.getSource(), user.getLocation(), null);
 	}
 
 	@Override
-	protected void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -37,7 +37,7 @@ public class Commandgetpos extends EssentialsCommand
 		outputPosition(sender, user.getLocation(), null);
 	}
 
-	private void outputPosition(final CommandSender sender, final Location coords, final Location distance)
+	private void outputPosition(final CommandSource sender, final Location coords, final Location distance)
 	{
 		sender.sendMessage(_("currentWorld", coords.getWorld().getName()));
 		sender.sendMessage(_("posX", coords.getBlockX()));

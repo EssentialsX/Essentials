@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
@@ -20,16 +21,16 @@ public class Commandhelpop extends EssentialsCommand
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		user.setDisplayNick();
-		sendMessage(server, user.getBase(), user.getDisplayName(), args);
+		sendMessage(server, user.getSource(), user.getDisplayName(), args);
 	}
 
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
 		sendMessage(server, sender, Console.NAME, args);
 	}
 
-	private void sendMessage(final Server server, final CommandSender sender, final String from, final String[] args) throws Exception
+	private void sendMessage(final Server server, final CommandSource sender, final String from, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{

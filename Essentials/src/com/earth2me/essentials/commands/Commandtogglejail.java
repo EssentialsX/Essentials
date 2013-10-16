@@ -1,11 +1,10 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.CommandSource;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DateUtil;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 
 public class Commandtogglejail extends EssentialsCommand
@@ -16,7 +15,7 @@ public class Commandtogglejail extends EssentialsCommand
 	}
 
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -29,8 +28,8 @@ public class Commandtogglejail extends EssentialsCommand
 		{
 			if (!player.isOnline())
 			{
-				if (sender instanceof Player
-					&& !ess.getUser(sender).isAuthorized("essentials.togglejail.offline"))
+				if (sender.isPlayer()
+					&& !ess.getUser(sender.getPlayer()).isAuthorized("essentials.togglejail.offline"))
 				{
 					sender.sendMessage(_("mayNotJail"));
 					return;

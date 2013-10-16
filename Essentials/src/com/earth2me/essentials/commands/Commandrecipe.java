@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.CommandSource;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
@@ -9,8 +10,6 @@ import java.util.Locale;
 import java.util.Map;
 import org.bukkit.Material;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.*;
 
 
@@ -22,7 +21,7 @@ public class Commandrecipe extends EssentialsCommand
 	}
 
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -77,18 +76,18 @@ public class Commandrecipe extends EssentialsCommand
 		}
 	}
 
-	public void furnaceRecipe(final CommandSender sender, final FurnaceRecipe recipe)
+	public void furnaceRecipe(final CommandSource sender, final FurnaceRecipe recipe)
 	{
 		sender.sendMessage(_("recipeFurnace", getMaterialName(recipe.getInput())));
 	}
 
-	public void shapedRecipe(final CommandSender sender, final ShapedRecipe recipe)
+	public void shapedRecipe(final CommandSource sender, final ShapedRecipe recipe)
 	{
 		final Map<Character, ItemStack> recipeMap = recipe.getIngredientMap();
 
-		if (sender instanceof Player)
+		if (sender.isPlayer())
 		{
-			final User user = ess.getUser(sender);
+			final User user = ess.getUser(sender.getPlayer());
 			user.closeInventory();
 			user.setRecipeSee(true);
 			final InventoryView view = user.openWorkbench(null, true);
@@ -142,12 +141,12 @@ public class Commandrecipe extends EssentialsCommand
 		}
 	}
 
-	public void shapelessRecipe(final CommandSender sender, final ShapelessRecipe recipe)
+	public void shapelessRecipe(final CommandSource sender, final ShapelessRecipe recipe)
 	{
 		final List<ItemStack> ingredients = recipe.getIngredientList();
-		if (sender instanceof Player)
+		if (sender.isPlayer())
 		{
-			final User user = ess.getUser(sender);
+			final User user = ess.getUser(sender.getPlayer());
 			user.setRecipeSee(true);
 			final InventoryView view = user.openWorkbench(null, true);
 			for (int i = 0; i < ingredients.size(); i++)

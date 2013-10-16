@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.CommandSource;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.SetExpFix;
@@ -7,7 +8,6 @@ import com.earth2me.essentials.utils.NumberUtil;
 import java.util.List;
 import java.util.Locale;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
@@ -23,28 +23,28 @@ public class Commandexp extends EssentialsCommand
 	{
 		if (args.length == 0)
 		{
-			showExp(user.getBase(), user);
+			showExp(user.getSource(), user);
 		}
 		else if (args.length > 1 && args[0].equalsIgnoreCase("set") && user.isAuthorized("essentials.exp.set"))
 		{
 			if (args.length == 3 && user.isAuthorized("essentials.exp.set.others"))
 			{
-				expMatch(server, user.getBase(), args[1], args[2], false);
+				expMatch(server, user.getSource(), args[1], args[2], false);
 			}
 			else
 			{
-				setExp(user.getBase(), user, args[1], false);
+				setExp(user.getSource(), user, args[1], false);
 			}
 		}
 		else if (args.length > 1 && args[0].equalsIgnoreCase("give") && user.isAuthorized("essentials.exp.give"))
 		{
 			if (args.length == 3 && user.isAuthorized("essentials.exp.give.others"))
 			{
-				expMatch(server, user.getBase(), args[1], args[2], true);
+				expMatch(server, user.getSource(), args[1], args[2], true);
 			}
 			else
 			{
-				setExp(user.getBase(), user, args[1], true);
+				setExp(user.getSource(), user, args[1], true);
 			}
 		}
 		else if (args[0].equalsIgnoreCase("show"))
@@ -52,11 +52,11 @@ public class Commandexp extends EssentialsCommand
 			if (args.length >= 2 && user.isAuthorized("essentials.exp.others"))
 			{
 				String match = args[1].trim();
-				showMatch(server, user.getBase(), match);
+				showMatch(server, user.getSource(), match);
 			}
 			else
 			{
-				showExp(user.getBase(), user);
+				showExp(user.getSource(), user);
 			}
 		}
 		else
@@ -65,27 +65,27 @@ public class Commandexp extends EssentialsCommand
 			{
 				if (args.length >= 2 && user.isAuthorized("essentials.exp.give.others"))
 				{
-					expMatch(server, user.getBase(), args[1], args[0], true);
+					expMatch(server, user.getSource(), args[1], args[0], true);
 				}
 				else
 				{
-					setExp(user.getBase(), user, args[0], true);
+					setExp(user.getSource(), user, args[0], true);
 				}
 			}
 			else if (args.length >= 1 && user.isAuthorized("essentials.exp.others"))
 			{
 				String match = args[0].trim();
-				showMatch(server, user.getBase(), match);
+				showMatch(server, user.getSource(), match);
 			}
 			else
 			{
-				showExp(user.getBase(), user);
+				showExp(user.getSource(), user);
 			}
 		}
 	}
 
 	@Override
-	public void run(final Server server, final CommandSender sender, final String commandLabel, final String[] args) throws Exception
+	public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
@@ -115,9 +115,9 @@ public class Commandexp extends EssentialsCommand
 		}
 	}
 
-	private void showMatch(final Server server, final CommandSender sender, final String match) throws PlayerNotFoundException
+	private void showMatch(final Server server, final CommandSource sender, final String match) throws PlayerNotFoundException
 	{
-		boolean skipHidden = sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.vanish.interact");
+		boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.vanish.interact");
 		boolean foundUser = false;
 		final List<Player> matchedPlayers = server.matchPlayer(match);
 		for (Player matchPlayer : matchedPlayers)
@@ -136,9 +136,9 @@ public class Commandexp extends EssentialsCommand
 		}
 	}
 
-	private void expMatch(final Server server, final CommandSender sender, final String match, String amount, final boolean give) throws NotEnoughArgumentsException, PlayerNotFoundException
+	private void expMatch(final Server server, final CommandSource sender, final String match, String amount, final boolean give) throws NotEnoughArgumentsException, PlayerNotFoundException
 	{
-		boolean skipHidden = sender instanceof Player && !ess.getUser(sender).isAuthorized("essentials.vanish.interact");
+		boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.vanish.interact");
 		boolean foundUser = false;
 		final List<Player> matchedPlayers = server.matchPlayer(match);
 		for (Player matchPlayer : matchedPlayers)
@@ -157,13 +157,13 @@ public class Commandexp extends EssentialsCommand
 		}
 	}
 
-	private void showExp(final CommandSender sender, final User target)
+	private void showExp(final CommandSource sender, final User target)
 	{
 		sender.sendMessage(_("exp", target.getDisplayName(), SetExpFix.getTotalExperience(target.getBase()), target.getLevel(), SetExpFix.getExpUntilNextLevel(target.getBase())));
 	}
 
 	//TODO: Limit who can give negative exp?
-	private void setExp(final CommandSender sender, final User target, String strAmount, final boolean give) throws NotEnoughArgumentsException
+	private void setExp(final CommandSource sender, final User target, String strAmount, final boolean give) throws NotEnoughArgumentsException
 	{
 		long amount;
 		strAmount = strAmount.toLowerCase(Locale.ENGLISH);

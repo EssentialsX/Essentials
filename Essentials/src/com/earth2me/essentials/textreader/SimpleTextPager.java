@@ -1,8 +1,7 @@
 package com.earth2me.essentials.textreader;
 
+import com.earth2me.essentials.CommandSource;
 import java.util.List;
-import org.bukkit.command.CommandSender;
-
 
 public class SimpleTextPager
 {
@@ -13,7 +12,7 @@ public class SimpleTextPager
 		this.text = text;
 	}
 
-	public void showPage(final CommandSender sender)
+	public void showPage(final CommandSource sender)
 	{
 		for (String line : text.getLines())
 		{
