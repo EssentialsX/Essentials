@@ -610,11 +610,25 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 		this.metrics = metrics;
 	}
 
+	@Deprecated
+	@Override
+	public User getUser(final Object base)
+	{
+		if (base instanceof Player)
+		{
+			return getUser((Player)base);
+		}
+		if (base instanceof String)
+		{
+			return getOfflineUser((String)base);
+		}
+		return null;
+	}
 
 	@Override
 	public User getUser(final String base)
-	{	
-		return getOfflineUser((String)base);		
+	{
+		return getOfflineUser((String)base);
 	}
 
 	@Override

@@ -24,6 +24,9 @@ public interface IEssentials extends Plugin
 
 	boolean onCommandEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath, String permissionPrefix, IEssentialsModule module);
 
+	@Deprecated
+	User getUser(Object base);
+	
 	User getUser(String base);
 	
 	User getUser(Player base);
