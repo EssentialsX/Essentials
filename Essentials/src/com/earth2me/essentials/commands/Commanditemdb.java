@@ -25,7 +25,7 @@ public class Commanditemdb extends EssentialsCommand
 			if (sender.isPlayer())
 			{
 				itemHeld = true;
-				itemStack = ((Player)sender).getItemInHand();
+				itemStack = sender.getPlayer().getItemInHand();
 			}
 			if (itemStack == null)
 			{

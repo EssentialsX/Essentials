@@ -43,7 +43,7 @@ public class Commandmute extends EssentialsCommand
 		}
 		else
 		{
-			if (user.isAuthorized("essentials.mute.exempt") && sender instanceof Player)
+			if (user.isAuthorized("essentials.mute.exempt") && sender.isPlayer())
 			{
 				throw new Exception(_("muteExempt"));
 			}

@@ -30,7 +30,7 @@ public class Commandsudo extends EssentialsCommand
 		final User user = getPlayer(server, sender, args, 0);
 		if(args[1].toLowerCase(Locale.ENGLISH).startsWith("c:"))
 		{
-			if (user.isAuthorized("essentials.sudo.exempt") && sender instanceof Player)
+			if (user.isAuthorized("essentials.sudo.exempt") && sender.isPlayer())
 			{
 				throw new Exception(_("sudoExempt"));
 			}
@@ -44,7 +44,7 @@ public class Commandsudo extends EssentialsCommand
 			System.arraycopy(args, 2, arguments, 0, args.length - 2);
 		}
 
-		if (user.isAuthorized("essentials.sudo.exempt") && sender instanceof Player)
+		if (user.isAuthorized("essentials.sudo.exempt") && sender.isPlayer())
 		{
 			throw new Exception(_("sudoExempt"));
 		}

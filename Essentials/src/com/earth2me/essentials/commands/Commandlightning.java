@@ -23,7 +23,7 @@ public class Commandlightning extends EssentialsLoopCommand
 		User user = null;
 		if (sender.isPlayer())
 		{
-			user = ess.getUser(((Player)sender));
+			user = ess.getUser(sender.getPlayer());
 			if ((args.length < 1 || user != null && !user.isAuthorized("essentials.lightning.others")))
 			{
 				user.getWorld().strikeLightning(user.getTargetBlock(null, 600).getLocation());

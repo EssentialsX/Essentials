@@ -118,7 +118,7 @@ public class Commandremove extends EssentialsCommand
 			{
 				if (radius > 0)
 				{
-					if (((Player)sender).getLocation().distanceSquared(e.getLocation()) > radius)
+					if (sender.getPlayer().getLocation().distanceSquared(e.getLocation()) > radius)
 					{
 						continue;
 					}

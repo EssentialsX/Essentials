@@ -22,7 +22,7 @@ public class Commandkickall extends EssentialsCommand
 
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
-			if (sender.isPlayer() && onlinePlayer.getName().equalsIgnoreCase(((Player)sender).getName()))
+			if (sender.isPlayer() && onlinePlayer.getName().equalsIgnoreCase(sender.getPlayer().getName()))
 			{
 				continue;
 			}

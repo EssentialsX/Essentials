@@ -64,9 +64,9 @@ public class Commandr extends EssentialsCommand
 		replyTo.setReplyTo(target);
 		if (target != sender)
 		{
-			if (target instanceof Player)
+			if (target.isPlayer())
 			{
-				ess.getUser((Player)target).setReplyTo(sender);
+				ess.getUser(target.isPlayer()).setReplyTo(sender);
 			}
 			else
 			{

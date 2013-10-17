@@ -29,7 +29,7 @@ public class Commandkillall extends EssentialsCommand
 		World world;
 		if (sender.isPlayer())
 		{
-			world = ((Player)sender).getWorld();
+			world = sender.getPlayer().getWorld();
 			if (args.length == 1)
 			{
 				try
@@ -98,7 +98,7 @@ public class Commandkillall extends EssentialsCommand
 			{
 				if (sender.isPlayer())
 				{
-					if (radius >= 0 && ((Player)sender).getLocation().distanceSquared(entity.getLocation()) > radius)
+					if (radius >= 0 && sender.getPlayer().getLocation().distanceSquared(entity.getLocation()) > radius)
 					{
 						continue;
 					}

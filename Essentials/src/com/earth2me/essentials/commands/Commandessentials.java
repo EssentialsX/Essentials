@@ -213,7 +213,7 @@ public class Commandessentials extends EssentialsCommand
 			if (sender.isPlayer())
 			{
 				sender.getSender().sendMessage(playerMoo);
-				final Player player = (Player)sender;
+				final Player player = sender.getPlayer();
 				player.playSound(player.getLocation(), Sound.COW_IDLE, 1, 1.0f);
 
 			}
