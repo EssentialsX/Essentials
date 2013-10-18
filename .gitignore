@@ -45,3 +45,5 @@
 /out
 .idea/
 *.iml
+target/
+dependency-reduced-pom.xml

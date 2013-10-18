@@ -4,6 +4,7 @@ jdk:
   - openjdk7
   - openjdk6
 script: ant collect
+install: true
 notifications:
   irc: 
     channels: 

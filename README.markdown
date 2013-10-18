@@ -11,6 +11,21 @@ Recommended NetBeans plugins:
 * Git
 * PMD & FindBugs ( http://kenai.com/projects/sqe/pages/Home )
 
+Building
+--------
+To build with Maven, use the command
+```
+mvn package dependency:copy
+```
+
+To build with Ant, use the command
+```
+ant
+```
+
+Jar files can then be found in the /jars folder
+
+
 Commit Guidelines
 -----------------
 
