@@ -59,7 +59,7 @@ public class Commandvanish extends EssentialsToggleCommand
 		{
 			user.sendMessage(_("vanished"));
 		}
-		if (!sender.equals(user.getBase()))
+		if (!sender.isPlayer() || !sender.getPlayer().equals(user.getBase()))
 		{
 			sender.sendMessage(_("vanish", user.getDisplayName(), enabled ? _("enabled") : _("disabled")));
 		}

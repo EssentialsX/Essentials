@@ -66,7 +66,7 @@ public class Commandr extends EssentialsCommand
 		{
 			if (target.isPlayer())
 			{
-				(target.isPlayer() ? ess.getUser(target.getPlayer()) : ess.getUser(Console.NAME)).setReplyTo(sender);
+				ess.getUser(target.getPlayer()).setReplyTo(sender);
 			}
 			else
 			{
