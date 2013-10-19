@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import net.ess3.api.IEssentials;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.potion.PotionEffect;
@@ -132,7 +133,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	@Override
 	public void giveMoney(final BigDecimal value)
 	{
-		giveMoney(value, null);
+		giveMoney(value, (CommandSource) null);
 	}
 
 	@Override
@@ -148,6 +149,13 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		{
 			initiator.sendMessage(_("addedToOthersAccount", NumberUtil.displayCurrency(value, ess), this.getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess)));
 		}
+	}
+	
+	@Override
+	@Deprecated
+	public void giveMoney(final BigDecimal value, final CommandSender initiator)
+	{
+		giveMoney(value, new CommandSource(initiator));
 	}
 
 	@Override
@@ -173,7 +181,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	@Override
 	public void takeMoney(final BigDecimal value)
 	{
-		takeMoney(value, null);
+		takeMoney(value, (CommandSource) null);
 	}
 
 	@Override
@@ -189,6 +197,13 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		{
 			initiator.sendMessage(_("takenFromOthersAccount", NumberUtil.displayCurrency(value, ess), this.getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess)));
 		}
+	}
+	
+	@Override
+	@Deprecated
+	public void takeMoney(final BigDecimal value, final CommandSender initiator)
+	{
+		takeMoney(value, new CommandSource(initiator));
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import net.ess3.api.ITeleport;
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
@@ -23,12 +24,16 @@ public interface IUser
 	void giveMoney(BigDecimal value);
 
 	void giveMoney(final BigDecimal value, final CommandSource initiator);
+	@Deprecated
+	void giveMoney(final BigDecimal value, final CommandSender initiator);
 
 	void payUser(final User reciever, final BigDecimal value) throws Exception;
 
 	void takeMoney(BigDecimal value);
 
 	void takeMoney(final BigDecimal value, final CommandSource initiator);
+	@Deprecated
+	void takeMoney(final BigDecimal value, final CommandSender initiator);
 
 	boolean canAfford(BigDecimal value);
 
