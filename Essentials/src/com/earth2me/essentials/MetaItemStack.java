@@ -497,7 +497,7 @@ public class MetaItemStack
 
 	private boolean hasMetaPermission(final CommandSource sender, final String metaPerm, final boolean graceful, final boolean includeBase, final IEssentials ess) throws Exception
 	{
-		final User user = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null;
+		final User user = sender != null && sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null;
 		return hasMetaPermission(user, metaPerm, graceful, includeBase);
 	}
 
