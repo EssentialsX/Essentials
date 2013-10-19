@@ -106,7 +106,7 @@ public class Commandnick extends EssentialsLoopCommand
 		final String lowerNick = FormatUtil.stripFormat(nick.toLowerCase(Locale.ENGLISH));
 		for (final Player onlinePlayer : server.getOnlinePlayers())
 		{
-			if (target.getBase() == onlinePlayer)
+			if (target.getBase().getName().equals(onlinePlayer.getName()))
 			{
 				continue;
 			}
