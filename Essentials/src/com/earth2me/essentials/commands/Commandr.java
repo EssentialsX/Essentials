@@ -44,12 +44,13 @@ public class Commandr extends EssentialsCommand
 		}
 
 		final CommandSource target = replyTo.getReplyTo();
-		final String targetName = target.isPlayer() ? target.getPlayer().getDisplayName() : Console.NAME;
 
 		if (target == null || (target.isPlayer() && !target.getPlayer().isOnline()))
 		{
 			throw new Exception(_("foreverAlone"));
 		}
+
+		final String targetName = target.isPlayer() ? target.getPlayer().getDisplayName() : Console.NAME;
 
 		sender.sendMessage(_("msgFormat", _("me"), targetName, message));
 		if (target.isPlayer())

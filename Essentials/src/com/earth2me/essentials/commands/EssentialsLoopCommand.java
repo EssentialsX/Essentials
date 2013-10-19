@@ -116,7 +116,7 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand
 		}
 		else
 		{
-			final User player = getPlayer(server, searchTerm, skipHidden, false);
+			final User player = getPlayer(server, searchTerm, !skipHidden, false);
 			updatePlayer(server, sender, player, commandArgs);
 		}
 	}
