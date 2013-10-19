@@ -24,7 +24,7 @@ public class Commandbalance extends EssentialsCommand
 		}
 
 		User target = getPlayer(server, args, 0, true, true);
-		sender.sendMessage(_("balanceOther", target.getDisplayName(), NumberUtil.displayCurrency(target.getMoney(), ess)));
+		sender.sendMessage(_("balanceOther", target.isHidden() ? target.getName() : target.getDisplayName(), NumberUtil.displayCurrency(target.getMoney(), ess)));
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class Commandbalance extends EssentialsCommand
 		{
 			final User target = getPlayer(server, args, 0, true, true);
 			final BigDecimal bal = target.getMoney();
-			user.sendMessage(_("balanceOther", target.getDisplayName(), NumberUtil.displayCurrency(bal, ess)));
+			user.sendMessage(_("balanceOther", target.isHidden() ? target.getName() : target.getDisplayName(), NumberUtil.displayCurrency(bal, ess)));
 		}
 		else if (args.length < 2)
 		{
