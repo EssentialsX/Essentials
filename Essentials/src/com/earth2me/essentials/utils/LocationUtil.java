@@ -325,7 +325,7 @@ public class LocationUtil
 	{
 		final World world = loc.getWorld();
 		final int x = loc.getBlockX();
-		int y = loc.getBlockY();
+		int y = (int)Math.round(loc.getY());
 		final int z = loc.getBlockZ();
 		while (LocationUtil.isBlockUnsafe(world, x, y, z) && y > -1)
 		{
