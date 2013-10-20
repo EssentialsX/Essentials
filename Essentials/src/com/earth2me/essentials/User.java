@@ -651,7 +651,12 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	@Override
 	public boolean inGroup(final String group)
 	{
-		return ess.getPermissionsHandler().inGroup(base, group);
+		final boolean result = ess.getPermissionsHandler().inGroup(base, group);
+		if (ess.getSettings().isDebug())
+		{
+			ess.getLogger().log(Level.INFO, "checking if " + base.getName() + " is in " + group + " - " + result);
+		}
+		return result;
 	}
 
 	@Override
