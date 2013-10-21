@@ -645,7 +645,12 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	@Override
 	public String getGroup()
 	{
-		return ess.getPermissionsHandler().getGroup(base);
+		final String result = ess.getPermissionsHandler().getGroup(base);
+		if (ess.getSettings().isDebug())
+		{
+			ess.getLogger().log(Level.INFO, "looking up groupname of " + base.getName() + " - " + result);
+		}
+		return result;
 	}
 
 	@Override
@@ -654,7 +659,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		final boolean result = ess.getPermissionsHandler().inGroup(base, group);
 		if (ess.getSettings().isDebug())
 		{
-			ess.getLogger().log(Level.INFO, "checking if " + base.getName() + " is in " + group + " - " + result);
+			ess.getLogger().log(Level.INFO, "checking if " + base.getName() + " is in group " + group + " - " + result);
 		}
 		return result;
 	}
