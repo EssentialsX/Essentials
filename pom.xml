@@ -218,7 +218,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<filesToInclude>src/*</filesToInclude>
+					<filesToInclude>**/src/*</filesToInclude>
 					<replacements>
 						<replacement>
 							<token>TeamCity</token>
@@ -238,6 +238,7 @@
 						</replacement>
 					</replacements>
 				</configuration>
+				<inherited>false</inherited>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
