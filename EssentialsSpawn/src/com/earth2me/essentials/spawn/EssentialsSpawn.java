@@ -5,6 +5,7 @@ import net.ess3.api.IEssentials;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Event;
@@ -17,7 +18,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
-public class EssentialsSpawn extends JavaPlugin
+public class EssentialsSpawn extends JavaPlugin implements IEssentialsSpawn
 {
 	private static final Logger LOGGER = Bukkit.getLogger();
 	private transient IEssentials ess;
@@ -69,5 +70,25 @@ public class EssentialsSpawn extends JavaPlugin
 	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args)
 	{
 		return ess.onCommandEssentials(sender, command, commandLabel, args, EssentialsSpawn.class.getClassLoader(), "com.earth2me.essentials.spawn.Command", "essentials.", spawns);
+	}
+
+	@Override
+	public void setSpawn(Location loc, String group)
+	{
+		if (group == null)
+		{
+			throw new IllegalArgumentException("Null group");
+		}
+		spawns.setSpawn(loc, group);
+	}
+
+	@Override
+	public Location getSpawn(String group)
+	{
+		if (group == null)
+		{
+			throw new IllegalArgumentException("Null group");
+		}
+		return spawns.getSpawn(group);
 	}
 }
