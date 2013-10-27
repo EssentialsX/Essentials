@@ -167,9 +167,9 @@ commands:
     usage: /<command> [player:][name]
     aliases: [ehome,homes,ehomes]
   ignore:
-    description: Ignore other players.
+    description: Ignore or unignore other players.
     usage: /<command> <player>
-    aliases: [eignore]
+    aliases: [eignore,unignore,eunignore,delignore,edelignore,remignore,eremignore,rmignore,ermignore]
   info:
     description: Shows information set by the server owner.
     usage: /<command> [chapter] [page]
