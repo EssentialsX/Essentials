@@ -164,6 +164,10 @@ public class EssentialsPlayerListener implements Listener
 		{
 			user.getBase().getOpenInventory().getTopInventory().clear();
 		}
+		if (user.hasPermission("essentials.silentquit"))
+		{
+			event.setQuitMessage(null);
+		}
 		user.updateActivity(false);
 		user.dispose();
 	}
@@ -171,6 +175,10 @@ public class EssentialsPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
+		if (event.getPlayer().hasPermission("essentials.silentjoin"))
+		{
+			event.setJoinMessage(null);
+		}
 		ess.runTaskAsynchronously(new Runnable()
 		{
 			@Override
