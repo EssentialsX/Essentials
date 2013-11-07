@@ -10,7 +10,7 @@ import org.bukkit.entity.Ocelot;
 // This command is not documented on the wiki #EasterEgg
 public class Commandkittycannon extends EssentialsCommand
 {
-	private static Random random = new Random();
+	private static final Random random = new Random();
 
 	public Commandkittycannon()
 	{

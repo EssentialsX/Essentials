@@ -19,8 +19,8 @@ import org.bukkit.inventory.ItemStack;
 public class EssentialsEntityListener implements Listener
 {
 	private static final Logger LOGGER = Logger.getLogger("Minecraft");
-	private final IEssentials ess;
 	private static final transient Pattern powertoolPlayer = Pattern.compile("\\{player\\}");
+	private final IEssentials ess;
 
 	public EssentialsEntityListener(IEssentials ess)
 	{

@@ -64,7 +64,7 @@ public class TextPager
 				{
 					page = Integer.parseInt(pageStr);
 				}
-				catch (Exception ex)
+				catch (NumberFormatException ex)
 				{
 					page = 1;
 				}
@@ -121,7 +121,7 @@ public class TextPager
 			{
 				chapterpage = Integer.parseInt(chapterPageStr) - 1;
 			}
-			catch (Exception ex)
+			catch (NumberFormatException ex)
 			{
 				chapterpage = 0;
 			}
@@ -137,7 +137,7 @@ public class TextPager
 			sender.sendMessage(_("infoUnknownChapter"));
 			return;
 		}
-		
+
 		//Since we have a valid chapter, count the number of lines in the chapter
 		final int chapterstart = bookmarks.get(pageStr.toLowerCase(Locale.ENGLISH)) + 1;
 		int chapterend;
@@ -149,7 +149,7 @@ public class TextPager
 				break;
 			}
 		}
-		
+
 		//Display the chapter from the starting position
 		final int start = chapterstart + (onePage ? 0 : chapterpage * 9);
 		final int page = chapterpage + 1;

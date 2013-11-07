@@ -7,7 +7,6 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DateUtil;
 import java.util.GregorianCalendar;
 import org.bukkit.Server;
-import org.bukkit.entity.Player;
 
 
 public class Commandtempban extends EssentialsCommand

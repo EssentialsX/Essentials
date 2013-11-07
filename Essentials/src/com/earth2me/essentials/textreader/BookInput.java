@@ -8,11 +8,11 @@ import net.ess3.api.IEssentials;
 
 public class BookInput implements IText
 {
+	private final static HashMap<String, SoftReference<BookInput>> cache = new HashMap<String, SoftReference<BookInput>>();
 	private final transient List<String> lines;
 	private final transient List<String> chapters;
 	private final transient Map<String, Integer> bookmarks;
 	private final transient long lastChange;
-	private final static HashMap<String, SoftReference<BookInput>> cache = new HashMap<String, SoftReference<BookInput>>();
 
 	public BookInput(final String filename, final boolean createFile, final IEssentials ess) throws IOException
 	{

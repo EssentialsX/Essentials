@@ -22,21 +22,8 @@ import org.bukkit.potion.PotionEffectType;
 
 public class MetaItemStack
 {
-	private final transient Pattern splitPattern = Pattern.compile("[:+',;.]");
-	private final ItemStack stack;
 	private final static Map<String, DyeColor> colorMap = new HashMap<String, DyeColor>();
 	private final static Map<String, FireworkEffect.Type> fireworkShape = new HashMap<String, FireworkEffect.Type>();
-	private FireworkEffect.Builder builder = FireworkEffect.builder();
-	private PotionEffectType pEffectType;
-	private PotionEffect pEffect;
-	private boolean validFirework = false;
-	private boolean validPotionEffect = false;
-	private boolean validPotionDuration = false;
-	private boolean validPotionPower = false;
-	private boolean completePotion = false;
-	private int power = 1;
-	private int duration = 120;
-
 	static
 	{
 		for (DyeColor color : DyeColor.values())
@@ -48,6 +35,18 @@ public class MetaItemStack
 			fireworkShape.put(type.name(), type);
 		}
 	}
+	private final transient Pattern splitPattern = Pattern.compile("[:+',;.]");
+	private final ItemStack stack;
+	private FireworkEffect.Builder builder = FireworkEffect.builder();
+	private PotionEffectType pEffectType;
+	private PotionEffect pEffect;
+	private boolean validFirework = false;
+	private boolean validPotionEffect = false;
+	private boolean validPotionDuration = false;
+	private boolean validPotionPower = false;
+	private boolean completePotion = false;
+	private int power = 1;
+	private int duration = 120;
 
 	public MetaItemStack(final ItemStack stack)
 	{
@@ -150,7 +149,7 @@ public class MetaItemStack
 			{
 				final String owner = split[1];
 				final SkullMeta meta = (SkullMeta)stack.getItemMeta();
-				boolean result = meta.setOwner(owner);
+				meta.setOwner(owner);
 				stack.setItemMeta(meta);
 			}
 			else

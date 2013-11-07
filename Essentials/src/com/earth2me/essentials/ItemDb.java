@@ -13,18 +13,18 @@ import org.bukkit.inventory.ItemStack;
 public class ItemDb implements IConf, net.ess3.api.IItemDb
 {
 	private final transient IEssentials ess;
-
-	public ItemDb(final IEssentials ess)
-	{
-		this.ess = ess;
-		file = new ManagedFile("items.csv", ess);
-	}
 	private final transient Map<String, Integer> items = new HashMap<String, Integer>();
 	private final transient Map<ItemData, List<String>> names = new HashMap<ItemData, List<String>>();
 	private final transient Map<ItemData, String> primaryName = new HashMap<ItemData, String>();
 	private final transient Map<String, Short> durabilities = new HashMap<String, Short>();
 	private final transient ManagedFile file;
 	private final transient Pattern splitPattern = Pattern.compile("[:+',;.]");
+
+		public ItemDb(final IEssentials ess)
+		{
+			this.ess = ess;
+			file = new ManagedFile("items.csv", ess);
+		}
 
 	@Override
 	public void reloadConfig()
@@ -70,7 +70,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb
 				Collections.sort(nameList, new LengthCompare());
 			}
 			else
-			{				
+			{
 				List<String> nameList = new ArrayList<String>();
 				nameList.add(itemName);
 				names.put(itemData, nameList);
@@ -184,16 +184,16 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb
 		{
 			is.add(get(args[0]));
 		}
-		
+
 		if (is.isEmpty() || is.get(0).getType() == Material.AIR)
 		{
 			throw new Exception(_("itemSellAir"));
 		}
-		
+
 		return is;
 	}
 
-	@Override
+@Override
 	public String names(ItemStack item)
 	{
 		ItemData itemData = new ItemData(item.getTypeId(), item.getDurability());
@@ -214,7 +214,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb
 		}
 		return StringUtil.joinList(", ", nameList);
 	}
-	
+
 @Override
 	public String name(ItemStack item)
 	{
@@ -231,7 +231,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb
 		}
 		return name;
 	}
-	
+
 	static class ItemData
 	{
 		final private int itemNo;

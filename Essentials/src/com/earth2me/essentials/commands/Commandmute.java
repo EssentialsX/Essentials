@@ -6,7 +6,6 @@ import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DateUtil;
 import org.bukkit.Server;
-import org.bukkit.entity.Player;
 
 
 public class Commandmute extends EssentialsCommand
@@ -29,7 +28,7 @@ public class Commandmute extends EssentialsCommand
 		{
 			user = getPlayer(server, args, 0, true, true);
 		}
-		catch (NoSuchFieldException e)
+		catch (PlayerNotFoundException e)
 		{
 			nomatch = true;
 			user = ess.getUser(new OfflinePlayer(args[0], ess));
@@ -48,7 +47,7 @@ public class Commandmute extends EssentialsCommand
 				throw new Exception(_("muteExempt"));
 			}
 		}
-		
+
 		long muteTimestamp = 0;
 
 		if (args.length > 1)
@@ -64,12 +63,12 @@ public class Commandmute extends EssentialsCommand
 		user.setMuteTimeout(muteTimestamp);
 		final boolean muted = user.getMuted();
 		String muteTime = DateUtil.formatDateDiff(muteTimestamp);
-		
+
 		if (nomatch)
 		{
 			sender.sendMessage(_("userUnknown", user.getName()));
 		}
-		
+
 		if (muted)
 		{
 			if (muteTimestamp > 0)

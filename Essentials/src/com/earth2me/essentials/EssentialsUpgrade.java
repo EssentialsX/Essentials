@@ -71,7 +71,7 @@ public class EssentialsUpgrade
 			doneFile.setProperty("moveWorthValuesToWorthYml", true);
 			doneFile.save();
 		}
-		catch (Throwable e)
+		catch (Exception e)
 		{
 			LOGGER.log(Level.SEVERE, _("upgradingFilesError"), e);
 		}
@@ -115,7 +115,7 @@ public class EssentialsUpgrade
 			doneFile.setProperty("move" + name + "ToFile", true);
 			doneFile.save();
 		}
-		catch (Throwable e)
+		catch (IOException e)
 		{
 			LOGGER.log(Level.SEVERE, _("upgradingFilesError"), e);
 		}
@@ -575,10 +575,10 @@ public class EssentialsUpgrade
 			return;
 		}
 		final File[] listOfFiles = usersFolder.listFiles();
-		for (int i = 0; i < listOfFiles.length; i++)
+		for (File listOfFile : listOfFiles)
 		{
-			final String filename = listOfFiles[i].getName();
-			if (!listOfFiles[i].isFile() || !filename.endsWith(".yml"))
+			final String filename = listOfFile.getName();
+			if (!listOfFile.isFile() || !filename.endsWith(".yml"))
 			{
 				continue;
 			}
@@ -587,9 +587,9 @@ public class EssentialsUpgrade
 			{
 				continue;
 			}
-			final File tmpFile = new File(listOfFiles[i].getParentFile(), sanitizedFilename + ".tmp");
-			final File newFile = new File(listOfFiles[i].getParentFile(), sanitizedFilename);
-			if (!listOfFiles[i].renameTo(tmpFile))
+			final File tmpFile = new File(listOfFile.getParentFile(), sanitizedFilename + ".tmp");
+			final File newFile = new File(listOfFile.getParentFile(), sanitizedFilename);
+			if (!listOfFile.renameTo(tmpFile))
 			{
 				LOGGER.log(Level.WARNING, _("userdataMoveError", filename, sanitizedFilename));
 				continue;

@@ -16,10 +16,10 @@ public class HelpInput implements IText
 	private static final String DESCRIPTION = "description";
 	private static final String PERMISSION = "permission";
 	private static final String PERMISSIONS = "permissions";
+	private final static Logger logger = Logger.getLogger("Minecraft");
 	private final transient List<String> lines = new ArrayList<String>();
 	private final transient List<String> chapters = new ArrayList<String>();
 	private final transient Map<String, Integer> bookmarks = new HashMap<String, Integer>();
-	private final static Logger logger = Logger.getLogger("Minecraft");
 
 	public HelpInput(final User user, final String match, final IEssentials ess) throws IOException
 	{
@@ -121,7 +121,6 @@ public class HelpInput implements IText
 					}
 					catch (NullPointerException ex)
 					{
-						continue;
 					}
 				}
 				if (!pluginLines.isEmpty())
@@ -139,7 +138,6 @@ public class HelpInput implements IText
 			}
 			catch (NullPointerException ex)
 			{
-				continue;
 			}
 			catch (Exception ex)
 			{
@@ -148,7 +146,6 @@ public class HelpInput implements IText
 					logger.log(Level.WARNING, _("commandHelpFailedForPlugin", pluginNameLow), ex);
 				}
 				reported = true;
-				continue;
 			}
 		}
 		lines.addAll(newLines);

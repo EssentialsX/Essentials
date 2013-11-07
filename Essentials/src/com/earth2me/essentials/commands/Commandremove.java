@@ -17,19 +17,6 @@ public class Commandremove extends EssentialsCommand
 		super("remove");
 	}
 
-
-	private enum ToRemove
-	{
-		DROPS,
-		ARROWS,
-		BOATS,
-		MINECARTS,
-		XP,
-		PAINTINGS,
-		ITEMFRAMES,
-		ENDERCRYSTALS
-	}
-
 	@Override
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
@@ -105,7 +92,7 @@ public class Commandremove extends EssentialsCommand
 		removeEntities(sender, world, toRemove, 0);
 	}
 
-	protected void removeEntities(final CommandSource sender, final World world, final ToRemove toRemove, int radius) throws Exception
+	private void removeEntities(final CommandSource sender, final World world, final ToRemove toRemove, int radius) throws Exception
 	{
 		int removed = 0;
 		if (radius > 0)
@@ -190,5 +177,18 @@ public class Commandremove extends EssentialsCommand
 			}
 		}
 		sender.sendMessage(_("removed", removed));
+	}
+
+
+	private enum ToRemove
+	{
+		DROPS,
+		ARROWS,
+		BOATS,
+		MINECARTS,
+		XP,
+		PAINTINGS,
+		ITEMFRAMES,
+		ENDERCRYSTALS
 	}
 }

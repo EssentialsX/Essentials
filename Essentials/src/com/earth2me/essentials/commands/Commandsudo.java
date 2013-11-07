@@ -8,7 +8,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Server;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.entity.Player;
 
 
 public class Commandsudo extends EssentialsCommand
@@ -61,7 +60,7 @@ public class Commandsudo extends EssentialsCommand
 						public void run()
 						{
 							LOGGER.log(Level.INFO, String.format("[Sudo] %s issued server command: /%s %s", user.getName(), command, getFinalArg(arguments, 0)));
-							execCommand.execute(user.getBase(), command, arguments);							
+							execCommand.execute(user.getBase(), command, arguments);
 						}
 					});
 		}

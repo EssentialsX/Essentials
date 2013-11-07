@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.perm.PermissionsHandler;
+import com.earth2me.essentials.register.payment.Methods;
 import java.util.logging.Level;
 import net.ess3.api.IEssentials;
 import org.bukkit.event.EventHandler;
@@ -28,9 +29,9 @@ public class EssentialsPluginListener implements Listener, IConf
 		}
 		ess.getPermissionsHandler().checkPermissions();
 		ess.getAlternativeCommandsHandler().addPlugin(event.getPlugin());
-		if (!ess.getPaymentMethod().hasMethod() && ess.getPaymentMethod().setMethod(ess.getServer().getPluginManager()))
+		if (!Methods.hasMethod() && Methods.setMethod(ess.getServer().getPluginManager()))
 		{
-			ess.getLogger().log(Level.INFO, "Payment method found (" + ess.getPaymentMethod().getMethod().getLongName() + " version: " + ess.getPaymentMethod().getMethod().getVersion() + ")");
+			ess.getLogger().log(Level.INFO, "Payment method found (" + Methods.getMethod().getLongName() + " version: " + ess.getPaymentMethod().getMethod().getVersion() + ")");
 		}
 	}
 
@@ -48,7 +49,7 @@ public class EssentialsPluginListener implements Listener, IConf
 		}
 		ess.getAlternativeCommandsHandler().removePlugin(event.getPlugin());
 		// Check to see if the plugin thats being disabled is the one we are using
-		if (ess.getPaymentMethod() != null && ess.getPaymentMethod().hasMethod() && ess.getPaymentMethod().checkDisabled(event.getPlugin()))
+		if (ess.getPaymentMethod() != null && Methods.hasMethod() && Methods.checkDisabled(event.getPlugin()))
 		{
 			ess.getPaymentMethod().reset();
 			ess.getLogger().log(Level.INFO, "Payment method was disabled. No longer accepting payments.");

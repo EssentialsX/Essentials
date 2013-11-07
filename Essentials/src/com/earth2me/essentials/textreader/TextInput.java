@@ -12,11 +12,11 @@ import net.ess3.api.IEssentials;
 
 public class TextInput implements IText
 {
+	private final static HashMap<String, SoftReference<TextInput>> cache = new HashMap<String, SoftReference<TextInput>>();
 	private final transient List<String> lines;
 	private final transient List<String> chapters;
 	private final transient Map<String, Integer> bookmarks;
 	private final transient long lastChange;
-	private final static HashMap<String, SoftReference<TextInput>> cache = new HashMap<String, SoftReference<TextInput>>();
 
 	public TextInput(final CommandSource sender, final String filename, final boolean createFile, final IEssentials ess) throws IOException
 	{

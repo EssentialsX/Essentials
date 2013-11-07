@@ -50,7 +50,11 @@ public class YamlStorageReader implements IStorageReader
 			}
 			return object;
 		}
-		catch (Exception ex)
+		catch (IllegalAccessException ex)
+		{
+			throw new ObjectLoadException(ex);
+		}
+		catch (InstantiationException ex)
 		{
 			throw new ObjectLoadException(ex);
 		}

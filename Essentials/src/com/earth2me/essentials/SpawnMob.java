@@ -212,7 +212,7 @@ public class SpawnMob
 	{
 		String data = inputData;
 
-		if (data.equals(""))
+		if (data.isEmpty())
 		{
 			sender.sendMessage(_("mobDataList", StringUtil.joinList(MobData.getValidHelp(spawned))));
 		}

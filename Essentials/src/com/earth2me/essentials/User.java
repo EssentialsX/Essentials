@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.register.payment.Method;
+import com.earth2me.essentials.register.payment.Methods;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
@@ -23,6 +24,7 @@ import org.bukkit.potion.PotionEffectType;
 
 public class User extends UserData implements Comparable<User>, IReplyTo, net.ess3.api.IUser
 {
+	private static final Logger logger = Logger.getLogger("Minecraft");
 	private CommandSource replyTo = null;
 	private transient String teleportRequester;
 	private transient boolean teleportRequestHere;
@@ -39,7 +41,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	private boolean invSee = false;
 	private boolean recipeSee = false;
 	private boolean enderSee = false;
-	private static final Logger logger = Logger.getLogger("Minecraft");
+	private transient long teleportInvulnerabilityTimestamp = 0;
 
 	User(final Player base, final IEssentials ess)
 	{
@@ -150,7 +152,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 			initiator.sendMessage(_("addedToOthersAccount", NumberUtil.displayCurrency(value, ess), this.getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess)));
 		}
 	}
-	
+
 	@Override
 	@Deprecated
 	public void giveMoney(final BigDecimal value, final CommandSender initiator)
@@ -198,7 +200,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 			initiator.sendMessage(_("takenFromOthersAccount", NumberUtil.displayCurrency(value, ess), this.getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess)));
 		}
 	}
-	
+
 	@Override
 	@Deprecated
 	public void takeMoney(final BigDecimal value, final CommandSender initiator)
@@ -417,19 +419,19 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 			}
 			return BigDecimal.ZERO;
 		}
-		if (ess.getPaymentMethod().hasMethod())
+		if (Methods.hasMethod())
 		{
 			try
 			{
-				final Method method = ess.getPaymentMethod().getMethod();
+				final Method method = Methods.getMethod();
 				if (!method.hasAccount(this.getName()))
 				{
 					throw new Exception();
 				}
-				final Method.MethodAccount account = ess.getPaymentMethod().getMethod().getAccount(this.getName());
+				final Method.MethodAccount account = Methods.getMethod().getAccount(this.getName());
 				return BigDecimal.valueOf(account.balance());
 			}
-			catch (Throwable ex)
+			catch (Exception ex)
 			{
 			}
 		}
@@ -447,19 +449,19 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 			}
 			return;
 		}
-		if (ess.getPaymentMethod().hasMethod())
+		if (Methods.hasMethod())
 		{
 			try
 			{
-				final Method method = ess.getPaymentMethod().getMethod();
+				final Method method = Methods.getMethod();
 				if (!method.hasAccount(this.getName()))
 				{
 					throw new Exception();
 				}
-				final Method.MethodAccount account = ess.getPaymentMethod().getMethod().getAccount(this.getName());
+				final Method.MethodAccount account = Methods.getMethod().getAccount(this.getName());
 				account.set(value.doubleValue());
 			}
-			catch (Throwable ex)
+			catch (Exception ex)
 			{
 			}
 		}
@@ -473,7 +475,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		{
 			return;
 		}
-		if (ess.getPaymentMethod().hasMethod() && super.getMoney() != value)
+		if (Methods.hasMethod() && super.getMoney() != value)
 		{
 			super.setMoney(value);
 		}
@@ -698,7 +700,6 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	{
 		enderSee = set;
 	}
-	private transient long teleportInvulnerabilityTimestamp = 0;
 
 	@Override
 	public void enableInvulnerabilityAfterTeleport()
@@ -720,6 +721,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		}
 	}
 
+	@Override
 	public boolean hasInvulnerabilityAfterTeleport()
 	{
 		return teleportInvulnerabilityTimestamp != 0 && teleportInvulnerabilityTimestamp >= System.currentTimeMillis();
@@ -857,6 +859,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		return this.getName().hashCode();
 	}
 
+	@Override
 	public CommandSource getSource()
 	{
 		return new CommandSource(getBase());

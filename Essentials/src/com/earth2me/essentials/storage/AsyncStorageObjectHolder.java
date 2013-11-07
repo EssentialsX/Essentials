@@ -24,22 +24,29 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
 		{
 			this.data = clazz.newInstance();
 		}
-		catch (Exception ex)
+		catch (IllegalAccessException ex)
+		{
+			Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+		}
+		catch (InstantiationException ex)
 		{
 			Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
 		}
 	}
 
+	@Override
 	public T getData()
 	{
 		return data;
 	}
 
+	@Override
 	public void acquireReadLock()
 	{
 		rwl.readLock().lock();
 	}
 
+	@Override
 	public void acquireWriteLock()
 	{
 		while (rwl.getReadHoldCount() > 0)
@@ -50,11 +57,13 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
 		rwl.readLock().lock();
 	}
 
+	@Override
 	public void close()
 	{
 		unlock();
 	}
 
+	@Override
 	public void unlock()
 	{
 		if (rwl.isWriteLockedByCurrentThread())
@@ -79,11 +88,11 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
 	{
 		new StorageObjectDataReader();
 	}
-	
+
 	public abstract void finishRead();
-	
+
 	public abstract void finishWrite();
-	
+
 	public abstract File getStorageFile();
 
 
@@ -143,7 +152,11 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
 				{
 					data = clazz.newInstance();
 				}
-				catch (Exception ex)
+				catch (IllegalAccessException ex)
+				{
+					Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+				}
+				catch (InstantiationException ex)
 				{
 					Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
 				}

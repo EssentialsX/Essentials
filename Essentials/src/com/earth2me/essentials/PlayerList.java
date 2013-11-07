@@ -104,7 +104,7 @@ public class PlayerList
 				for (String groupValue : groupValues)
 				{
 					groupValue = groupValue.toLowerCase(Locale.ENGLISH);
-					if (groupValue == null || groupValue.equals(""))
+					if (groupValue == null || groupValue.isEmpty())
 					{
 						continue;
 					}

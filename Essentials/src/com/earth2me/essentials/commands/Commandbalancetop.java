@@ -22,9 +22,9 @@ public class Commandbalancetop extends EssentialsCommand
 	}
 	private static final int CACHETIME = 2 * 60 * 1000;
 	public static final int MINUSERS = 50;
-	private static SimpleTextInput cache = new SimpleTextInput();
+	private static final SimpleTextInput cache = new SimpleTextInput();
 	private static long cacheage = 0;
-	private static ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+	private static final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
 	@Override
 	protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception

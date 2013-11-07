@@ -137,8 +137,8 @@ public class iCo5 implements Method
 
 	public class iCoAccount implements MethodAccount
 	{
-		private Account account;
-		private Holdings holdings;
+		private final Account account;
+		private final Holdings holdings;
 
 		public iCoAccount(Account account)
 		{
@@ -251,8 +251,8 @@ public class iCo5 implements Method
 
 	public class iCoBankAccount implements MethodBankAccount
 	{
-		private BankAccount account;
-		private Holdings holdings;
+		private final BankAccount account;
+		private final Holdings holdings;
 
 		public iCoBankAccount(BankAccount account)
 		{

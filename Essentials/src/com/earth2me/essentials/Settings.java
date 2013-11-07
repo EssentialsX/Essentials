@@ -402,7 +402,7 @@ public class Settings implements net.ess3.api.ISettings
 	{
 		return config.getString("backup.command", null);
 	}
-	private Map<String, String> chatFormats = Collections.synchronizedMap(new HashMap<String, String>());
+	private final Map<String, String> chatFormats = Collections.synchronizedMap(new HashMap<String, String>());
 
 	@Override
 	public String getChatFormat(String group)
@@ -1114,6 +1114,7 @@ public class Settings implements net.ess3.api.ISettings
 	}
 
 	// #easteregg
+	@Override
 	public int getMaxUserCacheCount()
 	{
 		long count = Runtime.getRuntime().maxMemory() / 1024 / 96;

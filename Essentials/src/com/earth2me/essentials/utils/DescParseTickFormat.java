@@ -61,13 +61,7 @@ public final class DescParseTickFormat
 		resetAliases.add("default");
 	}
 
-	private DescParseTickFormat()
-	{
-	}
-
 	// ============================================
-	// PARSE. From describing String to int
-	// --------------------------------------------
 	public static long parse(String desc) throws NumberFormatException
 	{
 		// Only look at alphanumeric and lowercase and : for 24:00
@@ -78,7 +72,7 @@ public final class DescParseTickFormat
 		{
 			return parseTicks(desc);
 		}
-		catch (Exception e)
+		catch (NumberFormatException e)
 		{
 		}
 
@@ -87,7 +81,7 @@ public final class DescParseTickFormat
 		{
 			return parse24(desc);
 		}
-		catch (Exception e)
+		catch (NumberFormatException e)
 		{
 		}
 
@@ -96,7 +90,7 @@ public final class DescParseTickFormat
 		{
 			return parse12(desc);
 		}
-		catch (Exception e)
+		catch (NumberFormatException e)
 		{
 		}
 
@@ -105,14 +99,13 @@ public final class DescParseTickFormat
 		{
 			return parseAlias(desc);
 		}
-		catch (Exception e)
+		catch (NumberFormatException e)
 		{
 		}
 
 		// Well we failed to understand...
 		throw new NumberFormatException();
 	}
-
 	public static long parseTicks(String desc) throws NumberFormatException
 	{
 		if (!desc.matches("^[0-9]+ti?c?k?s?$"))
@@ -227,13 +220,10 @@ public final class DescParseTickFormat
 	}
 
 	// ============================================
-	// FORMAT. From int to describing String
-	// --------------------------------------------
 	public static String format(final long ticks)
 	{
 		return _("timeFormat", format24(ticks), format12(ticks), formatTicks(ticks));
 	}
-
 	public static String formatTicks(final long ticks)
 	{
 		return (ticks % ticksPerDay) + "ticks";
@@ -294,5 +284,9 @@ public final class DescParseTickFormat
 		cal.add(Calendar.SECOND, (int)seconds + 1); // To solve rounding errors.
 
 		return cal.getTime();
+	}
+
+	private DescParseTickFormat()
+	{
 	}
 }

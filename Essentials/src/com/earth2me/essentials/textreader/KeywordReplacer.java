@@ -31,13 +31,13 @@ import org.bukkit.plugin.Plugin;
 
 public class KeywordReplacer implements IText
 {
+	private final static Pattern KEYWORD = Pattern.compile("\\{([^\\{\\}]+)\\}");
+	private final static Pattern KEYWORDSPLIT = Pattern.compile("\\:");
 	private final transient IText input;
 	private final transient List<String> replaced;
 	private final transient IEssentials ess;
 	private final transient boolean includePrivate;
 	private transient ExecuteTimer execTimer;
-	private final static Pattern KEYWORD = Pattern.compile("\\{([^\\{\\}]+)\\}");
-	private final static Pattern KEYWORDSPLIT = Pattern.compile("\\:");
 	private final EnumMap<KeywordType, Object> keywordCache = new EnumMap<KeywordType, Object>(KeywordType.class);
 
 	public KeywordReplacer(final IText input, final CommandSource sender, final IEssentials ess)

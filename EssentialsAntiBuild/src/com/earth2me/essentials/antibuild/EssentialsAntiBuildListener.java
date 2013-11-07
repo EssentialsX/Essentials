@@ -200,7 +200,6 @@ public class EssentialsAntiBuildListener implements Listener
 		if (prot.checkProtectionItems(AntiBuildConfig.blacklist_piston, block.getTypeId()))
 		{
 			event.setCancelled(true);
-			return;
 		}
 	}
 

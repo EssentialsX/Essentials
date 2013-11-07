@@ -22,8 +22,8 @@ import org.yaml.snakeyaml.Yaml;
 public class YamlStorageWriter implements IStorageWriter
 {
 	private transient static final Pattern NON_WORD_PATTERN = Pattern.compile("\\W");
-	private transient final PrintWriter writer;
 	private transient static final Yaml YAML = new Yaml();
+	private transient final PrintWriter writer;
 
 	public YamlStorageWriter(final PrintWriter writer)
 	{

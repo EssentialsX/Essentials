@@ -19,14 +19,6 @@ public class SignTrade extends EssentialsSign
 		super("Trade");
 	}
 
-
-	public enum AmountType
-	{
-		TOTAL,
-		ROUNDED,
-		COST
-	}
-
 	@Override
 	protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException
 	{
@@ -52,7 +44,7 @@ public class SignTrade extends EssentialsSign
 		if (sign.getLine(3).substring(2).equalsIgnoreCase(username))
 		{
 			final Trade store = rechargeSign(sign, ess, player);
-			Trade stored = null;
+			Trade stored;
 			try
 			{
 				stored = getTrade(sign, 1, AmountType.TOTAL, true, ess);
@@ -425,5 +417,13 @@ public class SignTrade extends EssentialsSign
 			}
 		}
 		throw new SignException(_("invalidSignLine", index + 1));
+	}
+
+
+	public enum AmountType
+	{
+		TOTAL,
+		ROUNDED,
+		COST
 	}
 }

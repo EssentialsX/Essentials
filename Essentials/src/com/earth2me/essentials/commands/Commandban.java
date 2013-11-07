@@ -8,7 +8,6 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import java.util.logging.Level;
 import org.bukkit.Server;
-import org.bukkit.entity.Player;
 
 
 public class Commandban extends EssentialsCommand
@@ -31,7 +30,7 @@ public class Commandban extends EssentialsCommand
 		{
 			user = getPlayer(server, args, 0, true, true);
 		}
-		catch (NoSuchFieldException e)
+		catch (PlayerNotFoundException e)
 		{
 			nomatch = true;
 			user = ess.getUser(new OfflinePlayer(args[0], ess));

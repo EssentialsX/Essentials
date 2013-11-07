@@ -66,7 +66,7 @@ public class FormatUtil
 		}
 		return replaceColor(input, REPLACE_ALL_PATTERN);
 	}
-	
+
 	static String replaceColor(final String input, final Pattern pattern)
 	{
 		return REPLACE_PATTERN.matcher(pattern.matcher(input).replaceAll("\u00a7$1")).replaceAll("&");
@@ -106,7 +106,7 @@ public class FormatUtil
 		}
 		return message;
 	}
-	
+
 	public static String stripLogColorFormat(final String input)
 	{
 		if (input == null)
@@ -115,22 +115,22 @@ public class FormatUtil
 		}
 		return stripColor(input, LOGCOLOR_PATTERN);
 	}
-	
+
 	static String stripColor(final String input, final Pattern pattern)
 	{
 		return pattern.matcher(input).replaceAll("");
 	}
-	
+
 	public static String lastCode(final String input)
 	{
-		int pos = input.lastIndexOf("\u00a7");
+		int pos = input.lastIndexOf('\u00a7');
 		if (pos == -1 || (pos + 1) == input.length())
 		{
 			return "";
 		}
 		return input.substring(pos, pos + 2);
 	}
-	
+
 	static String blockURL(final String input)
 	{
 		if (input == null)
@@ -144,7 +144,7 @@ public class FormatUtil
 		}
 		return text;
 	}
-	
+
 	public static boolean validIP(String ipAddress)
 	{
 		return IPPATTERN.matcher(ipAddress).matches();

@@ -149,7 +149,7 @@ public class Commandessentials extends EssentialsCommand
 				{
 					Commandessentials.this.stopTune();
 				}
-				if (note.isEmpty() || note == null)
+				if (note == null || note.isEmpty())
 				{
 					return;
 				}
@@ -277,7 +277,7 @@ public class Commandessentials extends EssentialsCommand
 						continue;
 					}
 
-					int ban = user.getBanReason().equals("") ? 0 : 1;
+					int ban = user.getBanReason().isEmpty() ? 0 : 1;
 
 					long lastLog = user.getLastLogout();
 					if (lastLog == 0)

@@ -7,7 +7,6 @@ import com.earth2me.essentials.IReplyTo;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.Server;
-import org.bukkit.entity.Player;
 
 
 public class Commandr extends EssentialsCommand

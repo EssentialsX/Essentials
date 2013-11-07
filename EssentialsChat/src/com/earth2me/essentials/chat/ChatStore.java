@@ -34,7 +34,7 @@ public class ChatStore
 		return type;
 	}
 
-	public String getLongType()
+	public final String getLongType()
 	{
 		return type.length() == 0 ? "chat" : "chat-" + type;
 	}

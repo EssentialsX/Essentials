@@ -7,6 +7,7 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.util.*;
 import net.ess3.api.IEssentials;
+import net.ess3.api.InvalidWorldException;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -133,7 +134,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 			{
 				search = getHomes().get(Integer.parseInt(search) - 1);
 			}
-			catch (Exception e)
+			catch (NumberFormatException e)
 			{
 			}
 		}
@@ -167,7 +168,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 			loc = config.getLocation("homes." + getHomes().get(0), getServer());
 			return loc;
 		}
-		catch (Exception ex)
+		catch (InvalidWorldException ex)
 		{
 			return null;
 		}
@@ -318,7 +319,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		{
 			return config.getLocation("lastlocation", getServer());
 		}
-		catch (Exception e)
+		catch (InvalidWorldException e)
 		{
 			return null;
 		}
@@ -347,7 +348,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		{
 			return config.getLocation("logoutlocation", getServer());
 		}
-		catch (Exception e)
+		catch (InvalidWorldException e)
 		{
 			return null;
 		}

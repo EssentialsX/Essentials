@@ -281,7 +281,7 @@ public enum MobData
 				((ExperienceOrb)spawned).setExperience(Integer.parseInt(rawData));
 				this.matched = rawData;
 			}
-			catch (Exception e)
+			catch (NumberFormatException e)
 			{
 				throw new Exception(_("invalidNumber"), e);
 			}
@@ -293,7 +293,7 @@ public enum MobData
 				((Slime)spawned).setSize(Integer.parseInt(rawData));
 				this.matched = rawData;
 			}
-			catch (Exception e)
+			catch (NumberFormatException e)
 			{
 				throw new Exception(_("slimeMalformedSize"), e);
 			}

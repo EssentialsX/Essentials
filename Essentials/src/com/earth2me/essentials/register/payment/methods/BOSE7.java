@@ -147,8 +147,8 @@ public class BOSE7 implements Method
 
 	public class BOSEAccount implements MethodAccount
 	{
-		private String name;
-		private BOSEconomy BOSEconomy;
+		private final String name;
+		private final BOSEconomy BOSEconomy;
 
 		public BOSEAccount(String name, BOSEconomy bOSEconomy)
 		{
@@ -229,8 +229,8 @@ public class BOSE7 implements Method
 
 	public class BOSEBankAccount implements MethodBankAccount
 	{
-		private String bank;
-		private BOSEconomy BOSEconomy;
+		private final String bank;
+		private final BOSEconomy BOSEconomy;
 
 		public BOSEBankAccount(String bank, BOSEconomy bOSEconomy)
 		{

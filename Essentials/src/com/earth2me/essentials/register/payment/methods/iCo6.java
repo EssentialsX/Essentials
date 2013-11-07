@@ -129,8 +129,8 @@ public class iCo6 implements Method
 
 	public class iCoAccount implements MethodAccount
 	{
-		private Account account;
-		private Holdings holdings;
+		private final Account account;
+		private final Holdings holdings;
 
 		public iCoAccount(Account account)
 		{

@@ -118,7 +118,7 @@ public class MCUR implements Method
 
 	public class MCurrencyAccount implements MethodAccount
 	{
-		private String name;
+		private final String name;
 
 		public MCurrencyAccount(String name)
 		{

@@ -13,22 +13,22 @@ public class TimedTeleport implements Runnable
 	private final IUser teleportOwner;
 	private final IEssentials ess;
 	private final Teleport teleport;
-	private String timer_teleportee;
+	private final String timer_teleportee;
 	private int timer_task = -1;
-	private long timer_started;	// time this task was initiated
-	private long timer_delay;		// how long to delay the teleportPlayer
+	private final long timer_started;	// time this task was initiated
+	private final long timer_delay;		// how long to delay the teleportPlayer
 	private double timer_health;
 	// note that I initially stored a clone of the location for reference, but...
 	// when comparing locations, I got incorrect mismatches (rounding errors, looked like)
 	// so, the X/Y/Z values are stored instead and rounded off
-	private long timer_initX;
-	private long timer_initY;
-	private long timer_initZ;
-	private ITarget timer_teleportTarget;
-	private boolean timer_respawn;
-	private boolean timer_canMove;
-	private Trade timer_chargeFor;
-	private TeleportCause timer_cause;
+	private final long timer_initX;
+	private final long timer_initY;
+	private final long timer_initZ;
+	private final ITarget timer_teleportTarget;
+	private final boolean timer_respawn;
+	private final boolean timer_canMove;
+	private final Trade timer_chargeFor;
+	private final TeleportCause timer_cause;
 
 	public TimedTeleport(IUser user, IEssentials ess, Teleport teleport, long delay, IUser teleportUser, ITarget target, Trade chargeFor, TeleportCause cause, boolean respawn)
 	{
@@ -112,7 +112,7 @@ public class TimedTeleport implements Runnable
 						timer_chargeFor.charge(teleportOwner);
 					}
 				}
-				catch (Throwable ex)
+				catch (Exception ex)
 				{
 					ess.showError(teleportOwner.getSource(), ex, "teleport");
 				}

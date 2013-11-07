@@ -62,7 +62,6 @@ public class SignProtection extends EssentialsSign
 			{
 				if (b.getLocation().equals(ignoredBlock.getLocation()))
 				{
-					continue;
 				}
 			}
 			if (protectedBlocks.contains(b.getType()))
@@ -116,12 +115,6 @@ public class SignProtection extends EssentialsSign
 				getConnectedSigns(b, signs, user, username, depth - 1);
 			}
 		}
-	}
-
-
-	public enum SignProtectionState
-	{
-		NOT_ALLOWED, ALLOWED, NOSIGN, OWNER
 	}
 
 	private SignProtectionState checkProtectionSign(final Block block, final User user, final String username)
@@ -352,5 +345,10 @@ public class SignProtection extends EssentialsSign
 		final SignProtectionState state = isBlockProtected(block, null, null, false);
 
 		return state == SignProtectionState.NOSIGN;
+	}
+
+	public enum SignProtectionState
+	{
+		NOT_ALLOWED, ALLOWED, NOSIGN, OWNER
 	}
 }

@@ -24,9 +24,9 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 public class EssentialsSpawnPlayerListener implements Listener
 {
+	private static final Logger LOGGER = Bukkit.getLogger();
 	private final transient IEssentials ess;
 	private final transient SpawnStorage spawns;
-	private static final Logger LOGGER = Bukkit.getLogger();
 
 	public EssentialsSpawnPlayerListener(final IEssentials ess, final SpawnStorage spawns)
 	{

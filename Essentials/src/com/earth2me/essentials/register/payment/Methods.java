@@ -31,9 +31,9 @@ public class Methods
 	private static boolean self = false;
 	private static Method Method = null;
 	private static String preferred = "";
-	private static Set<Method> Methods = new HashSet<Method>();
-	private static Set<String> Dependencies = new HashSet<String>();
-	private static Set<Method> Attachables = new HashSet<Method>();
+	private static final Set<Method> Methods = new HashSet<Method>();
+	private static final Set<String> Dependencies = new HashSet<String>();
+	private static final Set<Method> Attachables = new HashSet<Method>();
 
 	static
 	{

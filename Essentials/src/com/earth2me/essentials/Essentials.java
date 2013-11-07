@@ -240,7 +240,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 				LOGGER.log(Level.INFO, "Essentials load " + timeroutput);
 			}
 		}
-		catch (Exception ex)
+		catch (NumberFormatException ex)
 		{
 			handleCrash(ex);
 		}
@@ -527,7 +527,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 				}
 				return true;
 			}
-			catch (Throwable ex)
+			catch (Exception ex)
 			{
 				showError(sender, ex, commandLabel);
 				return true;
@@ -600,11 +600,13 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 		return backup;
 	}
 
+	@Override
 	public Metrics getMetrics()
 	{
 		return metrics;
 	}
 
+	@Override
 	public void setMetrics(Metrics metrics)
 	{
 		this.metrics = metrics;

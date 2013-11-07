@@ -102,6 +102,7 @@ public class Teleport implements net.ess3.api.ITeleport
 	//The teleportPlayer function is used when you want to normally teleportPlayer someone to a location or player.
 	//This method is nolonger used internally and will be removed.
 	@Deprecated
+	@Override
 	public void teleport(Location loc, Trade chargeFor) throws Exception
 	{
 		teleport(loc, chargeFor, TeleportCause.PLUGIN);

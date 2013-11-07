@@ -338,7 +338,7 @@ public class EssentialsConf extends YamlConfiguration
 			{
 				if (pendingDiskWrites.get() > 1)
 				{
-					// Writes can be skipped, because they are stored in a queue (in the executor). 
+					// Writes can be skipped, because they are stored in a queue (in the executor).
 					// Only the last is actually written.
 					pendingDiskWrites.decrementAndGet();
 					//LOGGER.log(Level.INFO, configFile + " skipped writing in " + (System.nanoTime() - startTime) + " nsec.");
