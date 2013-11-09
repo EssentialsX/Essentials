@@ -34,13 +34,16 @@ public class Commandtpahere extends EssentialsCommand
 		{
 			throw new Exception(_("noPerm", "essentials.worlds." + user.getWorld().getName()));
 		}
-		player.requestTeleport(user, true);
-		player.sendMessage(_("teleportHereRequest", user.getDisplayName()));
-		player.sendMessage(_("typeTpaccept"));
-		player.sendMessage(_("typeTpdeny"));
-		if (ess.getSettings().getTpaAcceptCancellation() != 0)
+		if (!player.isIgnoredPlayer(user))
 		{
-			player.sendMessage(_("teleportRequestTimeoutInfo", ess.getSettings().getTpaAcceptCancellation()));
+			player.requestTeleport(user, true);
+			player.sendMessage(_("teleportHereRequest", user.getDisplayName()));
+			player.sendMessage(_("typeTpaccept"));
+			player.sendMessage(_("typeTpdeny"));
+			if (ess.getSettings().getTpaAcceptCancellation() != 0)
+			{
+				player.sendMessage(_("teleportRequestTimeoutInfo", ess.getSettings().getTpaAcceptCancellation()));
+			}
 		}
 		user.sendMessage(_("requestSent", player.getDisplayName()));
 	}
