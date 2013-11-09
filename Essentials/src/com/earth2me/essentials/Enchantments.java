@@ -86,6 +86,8 @@ public class Enchantments
 		ALIASENCHANTMENTS.put("explosionprotection", Enchantment.PROTECTION_EXPLOSIONS);
 		ALIASENCHANTMENTS.put("expprot", Enchantment.PROTECTION_EXPLOSIONS);
 		ALIASENCHANTMENTS.put("blastprotection", Enchantment.PROTECTION_EXPLOSIONS);
+		ALIASENCHANTMENTS.put("bprotection", Enchantment.PROTECTION_EXPLOSIONS);
+		ALIASENCHANTMENTS.put("bprotect", Enchantment.PROTECTION_EXPLOSIONS);
 		ENCHANTMENTS.put("blastprotect", Enchantment.PROTECTION_EXPLOSIONS);
 		ALIASENCHANTMENTS.put("pe", Enchantment.PROTECTION_EXPLOSIONS);
 
