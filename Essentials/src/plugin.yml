@@ -304,7 +304,7 @@ commands:
     aliases: [formula,eformula,method,emethod,erecipe,recipes,erecipes]
   remove:
     description: Removes entities in your world.
-    usage: /<command> <drops|arrows|boats|minecarts|xp|paintings|itemframes|endercrystals> [radius] [world]
+    usage: /<command> <drops|arrows|boats|minecarts|xp|paintings|itemframes|endercrystals|hostile|monsters|passive|animals|ambient|mobs|entities> [radius] [world]
     aliases: [eremove]
   repair:
     description: Repairs the durability of one or all items.

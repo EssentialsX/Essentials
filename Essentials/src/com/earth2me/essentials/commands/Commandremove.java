@@ -10,6 +10,7 @@ import org.bukkit.World;
 import org.bukkit.entity.*;
 
 //Todo: Fix this up
+//Todo: now overlaps some functions of killall, which should be deprecated and removed once all functions are covered
 public class Commandremove extends EssentialsCommand
 {
 	public Commandremove()
@@ -60,7 +61,6 @@ public class Commandremove extends EssentialsCommand
 				throw new NotEnoughArgumentsException(ee); //TODO: translate and list types
 			}
 		}
-
 		removeEntities(user.getSource(), world, toRemove, radius);
 	}
 
@@ -110,6 +110,7 @@ public class Commandremove extends EssentialsCommand
 						continue;
 					}
 				}
+				//TODO: this would probably be better as a case statement instead of all the ifs
 				if (toRemove == ToRemove.DROPS)
 				{
 					if (e instanceof Item)
@@ -174,6 +175,51 @@ public class Commandremove extends EssentialsCommand
 						removed++;
 					}
 				}
+				else if (toRemove == ToRemove.AMBIENT)
+				{
+					if (e instanceof Flying)
+					{
+						e.remove();
+						removed++;
+					}
+				}
+				else if (toRemove == ToRemove.HOSTILE || toRemove == ToRemove.MONSTERS)
+				{
+					if (e instanceof Monster || e instanceof ComplexLivingEntity || e instanceof Flying || e instanceof Slime)
+					{
+						e.remove();
+						removed++;
+					}
+				}
+				else if (toRemove == ToRemove.PASSIVE || toRemove == ToRemove.ANIMALS)
+				{
+					if (e instanceof Animals || e instanceof NPC || e instanceof Snowman || e instanceof WaterMob)
+					{
+						e.remove();
+						removed++;
+					}
+				}
+				else if (toRemove == ToRemove.MOBS)
+				{
+					if (e instanceof Animals || e instanceof NPC || e instanceof Snowman || e instanceof WaterMob
+						|| e instanceof Monster || e instanceof ComplexLivingEntity || e instanceof Flying || e instanceof Slime)
+					{
+						e.remove();
+						removed++;
+					}
+				}
+				else if (toRemove == ToRemove.ENTITIES)
+				{
+					if (e instanceof Entity)
+					{
+						if  (e instanceof HumanEntity)
+						{
+							continue;
+						}
+						e.remove();
+						removed++;
+					}
+				}
 			}
 		}
 		sender.sendMessage(_("removed", removed));
@@ -189,6 +235,13 @@ public class Commandremove extends EssentialsCommand
 		XP,
 		PAINTINGS,
 		ITEMFRAMES,
-		ENDERCRYSTALS
+		ENDERCRYSTALS,
+		HOSTILE,
+		MONSTERS,
+		PASSIVE,
+		ANIMALS,
+		AMBIENT,
+		MOBS,
+		ENTITIES
 	}
 }
