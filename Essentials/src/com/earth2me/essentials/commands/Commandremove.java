@@ -110,115 +110,114 @@ public class Commandremove extends EssentialsCommand
 						continue;
 					}
 				}
-				//TODO: this would probably be better as a case statement instead of all the ifs
-				if (toRemove == ToRemove.DROPS)
+				if (e instanceof Tameable)
 				{
+					if (((Tameable)e).isTamed())
+					{
+						continue;
+					}
+				}
+				switch (toRemove)
+				{
+				case DROPS:
 					if (e instanceof Item)
 					{
 						e.remove();
 						removed++;
 					}
-				}
-				else if (toRemove == ToRemove.ARROWS)
-				{
+					;
+					break;
+				case ARROWS:
 					if (e instanceof Projectile)
 					{
 						e.remove();
 						removed++;
 					}
-				}
-				else if (toRemove == ToRemove.BOATS)
-				{
+					break;
+				case BOATS:
 					if (e instanceof Boat)
 					{
 						e.remove();
 						removed++;
 					}
-				}
-				else if (toRemove == ToRemove.MINECARTS)
-				{
+					break;
+				case MINECARTS:
 					if (e instanceof Minecart)
 					{
 						e.remove();
 						removed++;
 					}
-				}
-				else if (toRemove == ToRemove.XP)
-				{
+					break;
+				case XP:
 					if (e instanceof ExperienceOrb)
 					{
 						e.remove();
 						removed++;
 					}
-				}
-				else if (toRemove == ToRemove.PAINTINGS)
-				{
+					break;
+				case PAINTINGS:
 					if (e instanceof Painting)
 					{
 						e.remove();
 						removed++;
 					}
-				}
-				else if (toRemove == ToRemove.ITEMFRAMES)
-				{
+					break;
+				case ITEMFRAMES:
 					if (e instanceof ItemFrame)
 					{
 						e.remove();
 						removed++;
 					}
-				}
-				else if (toRemove == ToRemove.ENDERCRYSTALS)
-				{
+					break;
+				case ENDERCRYSTALS:
 					if (e instanceof EnderCrystal)
 					{
 						e.remove();
 						removed++;
 					}
-				}
-				else if (toRemove == ToRemove.AMBIENT)
-				{
+					break;
+				case AMBIENT:
 					if (e instanceof Flying)
 					{
 						e.remove();
 						removed++;
 					}
-				}
-				else if (toRemove == ToRemove.HOSTILE || toRemove == ToRemove.MONSTERS)
-				{
+					break;
+				case HOSTILE:
+				case MONSTERS:
 					if (e instanceof Monster || e instanceof ComplexLivingEntity || e instanceof Flying || e instanceof Slime)
 					{
 						e.remove();
 						removed++;
 					}
-				}
-				else if (toRemove == ToRemove.PASSIVE || toRemove == ToRemove.ANIMALS)
-				{
+					break;
+				case PASSIVE:
+				case ANIMALS:
 					if (e instanceof Animals || e instanceof NPC || e instanceof Snowman || e instanceof WaterMob)
 					{
 						e.remove();
 						removed++;
 					}
-				}
-				else if (toRemove == ToRemove.MOBS)
-				{
+					break;
+				case MOBS:
 					if (e instanceof Animals || e instanceof NPC || e instanceof Snowman || e instanceof WaterMob
 						|| e instanceof Monster || e instanceof ComplexLivingEntity || e instanceof Flying || e instanceof Slime)
 					{
 						e.remove();
 						removed++;
 					}
-				}
-				else if (toRemove == ToRemove.ENTITIES)
-				{
+					break;
+				case ENTITIES:
 					if (e instanceof Entity)
 					{
-						if  (e instanceof HumanEntity)
+						if (e instanceof HumanEntity)
 						{
 							continue;
 						}
 						e.remove();
 						removed++;
 					}
+					break;
 				}
 			}
 		}
