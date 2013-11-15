@@ -158,10 +158,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 				final int versionNumber = Integer.parseInt(versionMatch.group(1));
 				if (versionNumber < BUKKIT_VERSION && versionNumber > 100)
 				{
-					LOGGER.log(Level.SEVERE, " * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! *");
-					LOGGER.log(Level.SEVERE, _("notRecommendedBukkit"));
-					LOGGER.log(Level.SEVERE, _("requiredBukkit", Integer.toString(BUKKIT_VERSION)));
-					LOGGER.log(Level.SEVERE, " * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! *");
+					wrongVersion();
 					this.setEnabled(false);
 					return;
 				}
@@ -568,6 +565,14 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 		{
 			LOGGER.log(Level.WARNING, _("errorCallingCommand", commandLabel), exception);
 		}
+	}
+
+	static public void wrongVersion()
+	{
+		LOGGER.log(Level.SEVERE, " * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! *");
+		LOGGER.log(Level.SEVERE, _("notRecommendedBukkit"));
+		LOGGER.log(Level.SEVERE, _("requiredBukkit", Integer.toString(BUKKIT_VERSION)));
+		LOGGER.log(Level.SEVERE, " * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! *");
 	}
 
 	@Override

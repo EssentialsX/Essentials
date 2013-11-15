@@ -1,5 +1,6 @@
 package com.earth2me.essentials.utils;
 
+import com.earth2me.essentials.Essentials;
 import static com.earth2me.essentials.I18n._;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -60,7 +61,15 @@ public class LocationUtil
 		HOLLOW_MATERIALS.add(Material.FENCE_GATE.getId());
 		HOLLOW_MATERIALS.add(Material.WATER_LILY.getId());
 		HOLLOW_MATERIALS.add(Material.NETHER_WARTS.getId());
-		HOLLOW_MATERIALS.add(Material.CARPET.getId());
+
+		try // 1.6 update
+		{
+			HOLLOW_MATERIALS.add(Material.CARPET.getId());
+		}
+		catch (java.lang.NoSuchFieldError e)
+		{
+			Essentials.wrongVersion();
+		}
 
 		for (Integer integer : HOLLOW_MATERIALS)
 		{
@@ -160,6 +169,7 @@ public class LocationUtil
 		public int x;
 		public int y;
 		public int z;
+
 		public Vector3D(int x, int y, int z)
 		{
 			this.x = x;

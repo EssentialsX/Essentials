@@ -100,14 +100,22 @@ public class Potions
 		POTIONS.put("wither", PotionEffectType.WITHER);
 		ALIASPOTIONS.put("decay", PotionEffectType.WITHER);
 
-		POTIONS.put("healthboost", PotionEffectType.HEALTH_BOOST);
-		ALIASPOTIONS.put("boost", PotionEffectType.HEALTH_BOOST);
 
-		POTIONS.put("absorption", PotionEffectType.ABSORPTION);
-		ALIASPOTIONS.put("absorb", PotionEffectType.ABSORPTION);
+		try // 1.6 update
+		{
+			POTIONS.put("healthboost", PotionEffectType.HEALTH_BOOST);
+			ALIASPOTIONS.put("boost", PotionEffectType.HEALTH_BOOST);
 
-		POTIONS.put("saturation", PotionEffectType.SATURATION);
-		ALIASPOTIONS.put("food", PotionEffectType.SATURATION);
+			POTIONS.put("absorption", PotionEffectType.ABSORPTION);
+			ALIASPOTIONS.put("absorb", PotionEffectType.ABSORPTION);
+
+			POTIONS.put("saturation", PotionEffectType.SATURATION);
+			ALIASPOTIONS.put("food", PotionEffectType.SATURATION);
+		}
+		catch (java.lang.NoSuchFieldError e)
+		{
+			Essentials.wrongVersion();
+		}
 	}
 
 	public static PotionEffectType getByName(String name)
