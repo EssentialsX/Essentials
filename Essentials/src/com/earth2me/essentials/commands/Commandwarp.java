@@ -71,10 +71,6 @@ public class Commandwarp extends EssentialsCommand
 	private void warpList(final CommandSource sender, final String[] args, final IUser user) throws Exception
 	{
 		final IWarps warps = ess.getWarps();
-		if (warps.isEmpty())
-		{
-			throw new Exception(_("noWarpsDefined"));
-		}
 		final List<String> warpNameList = new ArrayList<String>(warps.getList());
 
 		if (user != null)
@@ -88,6 +84,10 @@ public class Commandwarp extends EssentialsCommand
 					iterator.remove();
 				}
 			}
+		}
+		if (warpNameList.isEmpty())
+		{
+			throw new Exception(_("noWarpsDefined"));
 		}
 		int page = 1;
 		if (args.length > 0 && NumberUtil.isInt(args[0]))
