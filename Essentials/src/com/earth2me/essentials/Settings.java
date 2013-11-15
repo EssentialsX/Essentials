@@ -519,6 +519,7 @@ public class Settings implements net.ess3.api.ISettings
 		economyLog = _isEcoLogEnabled();
 		economyLogUpdate = _isEcoLogUpdateEnabled();
 		economyDisabled = _isEcoDisabled();
+		joinQuitMessagesDisabled = _isJoinQuitMessagesDisabled();
 	}
 	private List<Integer> itemSpawnBl = new ArrayList<Integer>();
 
@@ -1111,6 +1112,31 @@ public class Settings implements net.ess3.api.ISettings
 	public int getMaxNickLength()
 	{
 		return config.getInt("max-nick-length", 30);
+	}
+
+	private boolean joinQuitMessagesDisabled;
+
+	public boolean _isJoinQuitMessagesDisabled()
+	{
+		return config.getBoolean("allow-silent-join-quit");
+	}
+
+	@Override
+	public boolean isJoinQuitMessagesDisabled()
+	{
+		return joinQuitMessagesDisabled;
+	}
+
+	@Override
+	public String customJoinMessage()
+	{
+		return config.getString("custom-join-message");
+	}
+
+	@Override
+	public String customQuitMessage()
+	{
+		return config.getString("custom-quit-message");
 	}
 
 	// #easteregg

@@ -353,6 +353,15 @@ cancel-afk-on-move: true
 # You can disable the death messages of Minecraft here.
 death-messages: true
 
+# You can disable join and quit messages here.
+allow-silent-join-quit: false
+
+# You can set a custom join message here, set to "none" to disable.
+custom-join-message: none
+
+# You can set a custom quit message here, set to "none" to disable.
+custom-quit-message: none
+
 # Add worlds to this list, if you want to automatically disable god mode there.
 no-god-in-worlds:
 #  - world_nether

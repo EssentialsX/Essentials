@@ -195,6 +195,12 @@ public interface ISettings extends IConf
 	Map<String, Object> getListGroupConfig();
 
 	int getMaxNickLength();
-	
+
 	int getMaxUserCacheCount();
+
+	boolean isJoinQuitMessagesDisabled();
+
+	String customJoinMessage();
+
+	String customQuitMessage();
 }
