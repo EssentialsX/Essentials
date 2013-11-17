@@ -124,6 +124,7 @@ public class EssentialsProtectEntityListener implements Listener
 			// PVP Settings
 			if (target instanceof Player && eAttack instanceof Player
 				&& prot.getSettingBool(ProtectConfig.disable_pvp)
+				&& !user.getName().equalsIgnoreCase(attacker.getName())
 				&& (!user.isAuthorized("essentials.protect.pvp") || !attacker.isAuthorized("essentials.protect.pvp")))
 			{
 				event.setCancelled(true);
