@@ -82,7 +82,7 @@ public abstract class EssentialsChatPlayer implements Listener
 		}
 		catch (ChargeException e)
 		{
-			ess.showError(chatStore.getUser().getSource(), e, chatStore.getLongType());
+			ess.showError(chatStore.getUser().getSource(), e, "\\ chat " + chatStore.getLongType());
 			event.setCancelled(true);
 			return false;
 		}
