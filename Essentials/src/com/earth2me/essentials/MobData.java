@@ -232,8 +232,10 @@ public enum MobData
 		}
 		else if (this.value.equals(Data.HORSESADDLE))
 		{
-			((Horse)spawned).setTamed(true);
-			((Horse)spawned).getInventory().setSaddle(new ItemStack(Material.SADDLE, 1));
+			final Horse horse = ((Horse)spawned);
+			horse.setTamed(true);
+			horse.setOwner(target);
+			horse.getInventory().setSaddle(new ItemStack(Material.SADDLE, 1));
 		}
 		else if (this.value.equals(Data.PIGSADDLE))
 		{
