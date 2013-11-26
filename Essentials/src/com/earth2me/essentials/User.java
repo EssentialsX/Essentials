@@ -13,6 +13,7 @@ import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.ess3.api.IEssentials;
+import net.ess3.api.events.UserBalanceUpdateEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -135,7 +136,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	@Override
 	public void giveMoney(final BigDecimal value)
 	{
-		giveMoney(value, (CommandSource) null);
+		giveMoney(value, (CommandSource)null);
 	}
 
 	@Override
@@ -183,7 +184,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	@Override
 	public void takeMoney(final BigDecimal value)
 	{
-		takeMoney(value, (CommandSource) null);
+		takeMoney(value, (CommandSource)null);
 	}
 
 	@Override
@@ -466,6 +467,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 			}
 		}
 		super.setMoney(value);
+		ess.getServer().getPluginManager().callEvent(new UserBalanceUpdateEvent(this.getBase(), value));
 		Trade.log("Update", "Set", "API", getName(), new Trade(value, ess), null, null, null, ess);
 	}
 
