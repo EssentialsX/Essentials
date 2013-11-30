@@ -40,7 +40,7 @@ public class SignFree extends EssentialsSign
 		}
 
 		item.setAmount(item.getType().getMaxStackSize());
-		Inventory invent = ess.getServer().createInventory(player.getBase(), 36);
+		Inventory invent = ess.getServer().createInventory(player.getBase(), 36, item.getItemMeta().getDisplayName());
 		for (int i = 0; i < 36; i++) {
 			invent.addItem(item);
 		}
