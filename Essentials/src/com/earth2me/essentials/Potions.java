@@ -116,6 +116,19 @@ public class Potions
 		{
 			Essentials.wrongVersion();
 		}
+		
+		try // 1.7 update
+		{
+			POTIONS.put("waterbreathing", PotionEffectType.WATER_BREATHING);
+			ALIASPOTIONS.put("underwaterbreathing", PotionEffectType.WATER_BREATHING);
+			ALIASPOTIONS.put("waterbreath", PotionEffectType.WATER_BREATHING);
+			ALIASPOTIONS.put("underwaterbreath", PotionEffectType.WATER_BREATHING);
+			ALIASPOTIONS.put("air", PotionEffectType.WATER_BREATHING);
+		}
+		catch (java.lang.NoSuchFieldError e)
+		{
+			Essentials.wrongVersion();
+		}
 	}
 
 	public static PotionEffectType getByName(String name)
