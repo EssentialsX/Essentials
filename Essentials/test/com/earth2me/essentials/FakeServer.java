@@ -3,6 +3,8 @@ package com.earth2me.essentials;
 import com.avaje.ebean.config.ServerConfig;
 import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.craftbukkit.FakeWorld;
+
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.Callable;
@@ -42,6 +44,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scheduler.BukkitWorker;
 import org.bukkit.scoreboard.ScoreboardManager;
+import org.bukkit.util.CachedServerIcon;
 
 
 public class FakeServer implements Server
@@ -1157,6 +1160,21 @@ public class FakeServer implements Server
 	@Override
 	public ScoreboardManager getScoreboardManager()
 	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public CachedServerIcon getServerIcon() {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public CachedServerIcon loadServerIcon(File file) throws IllegalArgumentException, Exception {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public CachedServerIcon loadServerIcon(BufferedImage bufferedImage) throws IllegalArgumentException, Exception {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }
