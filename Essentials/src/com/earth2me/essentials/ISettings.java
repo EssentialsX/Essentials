@@ -198,9 +198,13 @@ public interface ISettings extends IConf
 
 	int getMaxUserCacheCount();
 
-	boolean isJoinQuitMessagesDisabled();
+	boolean allowSilentJoinQuit();
 
-	String customJoinMessage();
+	boolean isCustomJoinMessage();
 
-	String customQuitMessage();
+	String getCustomJoinMessage();
+
+	boolean isCustomQuitMessage();
+
+	String getCustomQuitMessage();
 }

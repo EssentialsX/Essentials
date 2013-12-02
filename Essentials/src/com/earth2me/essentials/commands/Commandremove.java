@@ -7,7 +7,6 @@ import com.earth2me.essentials.User;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -27,7 +26,6 @@ public class Commandremove extends EssentialsCommand
 	{
 		World world = user.getWorld();
 		int radius = 0;
-		Bukkit.broadcastMessage("len: " + args.length);
 		if (args.length >= 2)
 		{
 			try

@@ -164,15 +164,16 @@ public class EssentialsPlayerListener implements Listener
 		{
 			user.getBase().getOpenInventory().getTopInventory().clear();
 		}
-		if (ess.getSettings().isJoinQuitMessagesDisabled())
+
+		if (ess.getSettings().allowSilentJoinQuit())
 		{
 			event.setQuitMessage(null);
 
 		}
-		if (!ess.getSettings().customQuitMessage().equals("none"))
+		if (ess.getSettings().isCustomQuitMessage())
 		{
 			event.setQuitMessage(null);
-			ess.broadcastMessage(ess.getSettings().customQuitMessage());
+			ess.broadcastMessage(ess.getSettings().getCustomQuitMessage());
 		}
 		user.updateActivity(false);
 		user.dispose();
@@ -181,11 +182,11 @@ public class EssentialsPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
-		if (ess.getSettings().isJoinQuitMessagesDisabled())
+		if (ess.getSettings().allowSilentJoinQuit())
 		{
 			event.setJoinMessage(null);
 		}
-		if (!ess.getSettings().customJoinMessage().equals("none"))
+		if (ess.getSettings().isCustomJoinMessage())
 		{
 			event.setJoinMessage(null);
 		}
@@ -201,14 +202,15 @@ public class EssentialsPlayerListener implements Listener
 
 	public void delayedJoin(final Player player, final String message)
 	{
-		if (!ess.getSettings().customJoinMessage().equals("none"))
+		if (ess.getSettings().isCustomJoinMessage())
 		{
-			ess.broadcastMessage(ess.getSettings().customJoinMessage());
+			ess.broadcastMessage(ess.getSettings().getCustomJoinMessage());
 		}
 		else
 		{
 			ess.broadcastMessage(message);
 		}
+
 		if (!player.isOnline())
 		{
 			return;

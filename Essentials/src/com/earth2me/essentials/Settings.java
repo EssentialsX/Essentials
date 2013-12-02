@@ -519,7 +519,11 @@ public class Settings implements net.ess3.api.ISettings
 		economyLog = _isEcoLogEnabled();
 		economyLogUpdate = _isEcoLogUpdateEnabled();
 		economyDisabled = _isEcoDisabled();
-		joinQuitMessagesDisabled = _isJoinQuitMessagesDisabled();
+		allowSilentJoin = _isJoinQuitMessagesDisabled();
+		customJoinMessage = _getCustomJoinMessage();
+		isCustomJoinMessage = !customJoinMessage.equals("none");
+		customQuitMessage = _getCustomQuitMessage();
+		isCustomQuitMessage = !customQuitMessage.equals("none");
 	}
 	private List<Integer> itemSpawnBl = new ArrayList<Integer>();
 
@@ -1113,8 +1117,7 @@ public class Settings implements net.ess3.api.ISettings
 	{
 		return config.getInt("max-nick-length", 30);
 	}
-
-	private boolean joinQuitMessagesDisabled;
+	private boolean allowSilentJoin;
 
 	public boolean _isJoinQuitMessagesDisabled()
 	{
@@ -1122,21 +1125,47 @@ public class Settings implements net.ess3.api.ISettings
 	}
 
 	@Override
-	public boolean isJoinQuitMessagesDisabled()
+	public boolean allowSilentJoinQuit()
 	{
-		return joinQuitMessagesDisabled;
+		return allowSilentJoin;
+	}
+	private String customJoinMessage;
+	private boolean isCustomJoinMessage;
+
+	public String _getCustomJoinMessage()
+	{
+		return config.getString("custom-join-message", "none");
 	}
 
 	@Override
-	public String customJoinMessage()
+	public String getCustomJoinMessage()
 	{
-		return config.getString("custom-join-message");
+		return customJoinMessage;
 	}
 
 	@Override
-	public String customQuitMessage()
+	public boolean isCustomJoinMessage()
 	{
-		return config.getString("custom-quit-message");
+		return isCustomJoinMessage;
+	}
+	private String customQuitMessage;
+	private boolean isCustomQuitMessage;
+
+	public String _getCustomQuitMessage()
+	{
+		return config.getString("custom-quit-message", "none");
+	}
+
+	@Override
+	public String getCustomQuitMessage()
+	{
+		return customQuitMessage;
+	}
+
+	@Override
+	public boolean isCustomQuitMessage()
+	{
+		return isCustomQuitMessage;
 	}
 
 	// #easteregg
