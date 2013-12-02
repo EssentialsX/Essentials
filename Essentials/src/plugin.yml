@@ -206,10 +206,6 @@ commands:
     description: Kills specified player.
     usage: /<command> <player>
     aliases: [ekill]
-  killall:
-    description: Kill all mobs in a world.
-    usage: /<command> [mobType] [radius] [world]
-    aliases: [butcher,ebutcher,ekillall,mobkill,emobkill]
   kit:
     description: Obtains the specified kit or views all available kits.
     usage: /<command> [kit] [player]
@@ -305,7 +301,7 @@ commands:
   remove:
     description: Removes entities in your world.
     usage: /<command> <drops|arrows|boats|minecarts|xp|paintings|itemframes|endercrystals|hostile|monsters|passive|animals|ambient|mobs|entities> [radius] [world]
-    aliases: [eremove]
+    aliases: [eremove,butcher,ebutcher,killall,ekillall,mobkill,emobkill]
   repair:
     description: Repairs the durability of one or all items.
     usage: /<command> [hand|all]
