@@ -148,13 +148,15 @@ public class EssentialsPlayerListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onPlayerQuitHighest(final PlayerQuitEvent event)
+	public void onPlayerQuit(final PlayerQuitEvent event)
 	{
-		if (ess.getSettings().allowSilentJoinQuit() && event.getPlayer().hasPermission("essentials.silentquit"))
+		final User user = ess.getUser(event.getPlayer());
+
+		if (ess.getSettings().allowSilentJoinQuit() && user.isAuthorized("essentials.silentquit"))
 		{
 			event.setQuitMessage(null);
 		}
-		else if (ess.getSettings().isCustomQuitMessage())
+		else if (ess.getSettings().isCustomQuitMessage() && event.getQuitMessage() != null)
 		{
 			final Player player = event.getPlayer();
 			event.setQuitMessage(
@@ -163,12 +165,7 @@ public class EssentialsPlayerListener implements Listener
 							.replace("{USERNAME}", player.getName())
 			);
 		}
-	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPlayerQuit(final PlayerQuitEvent event)
-	{
-		final User user = ess.getUser(event.getPlayer());
 		if (ess.getSettings().removeGodOnDisconnect() && user.isGodModeEnabled())
 		{
 			user.setGodModeEnabled(false);
@@ -187,34 +184,18 @@ public class EssentialsPlayerListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onPlayerJoinHighest(final PlayerJoinEvent event)
-	{
-		if(ess.getSettings().allowSilentJoinQuit() && event.getPlayer().hasPermission("essentials.silentjoin"))
-		{
-			event.setJoinMessage(null);
-		}
-		else if (ess.getSettings().isCustomJoinMessage())
-		{
-			final Player player = event.getPlayer();
-			event.setJoinMessage(
-					ess.getSettings().getCustomJoinMessage()
-						.replace("{PLAYER}", player.getDisplayName())
-						.replace("{USERNAME}", player.getName())
-			);
-		}
-	}
-
-	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
+		final String joinMessage = event.getJoinMessage();
 		ess.runTaskAsynchronously(new Runnable()
 		{
 			@Override
 			public void run()
 			{
-				delayedJoin(event.getPlayer(), event.getJoinMessage());
+				delayedJoin(event.getPlayer(), joinMessage);
 			}
 		});
+		event.setJoinMessage(null);
 	}
 
 	public void delayedJoin(final Player player, final String message)
@@ -226,6 +207,7 @@ public class EssentialsPlayerListener implements Listener
 
 		ess.getBackup().onPlayerJoin();
 		final User user = ess.getUser(player);
+
 
 		if (user.isNPC())
 		{
@@ -265,6 +247,19 @@ public class EssentialsPlayerListener implements Listener
 				if (user.isAuthorized("essentials.sleepingignored"))
 				{
 					user.setSleepingIgnored(true);
+				}
+
+				if (ess.getSettings().isCustomJoinMessage())
+				{
+					ess.getServer().broadcastMessage(
+							ess.getSettings().getCustomJoinMessage()
+									.replace("{PLAYER}", player.getDisplayName())
+									.replace("{USERNAME}", player.getName())
+					);
+				}
+				else if (!(ess.getSettings().allowSilentJoinQuit() && user.isAuthorized("esentials.silentjoin")))
+				{
+					ess.getServer().broadcastMessage(message);
 				}
 
 				if (!ess.getSettings().isCommandDisabled("motd") && user.isAuthorized("essentials.motd"))
