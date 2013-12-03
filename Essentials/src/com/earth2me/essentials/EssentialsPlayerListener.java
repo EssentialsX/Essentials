@@ -147,6 +147,24 @@ public class EssentialsPlayerListener implements Listener
 		}
 	}
 
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onPlayerQuitHighest(final PlayerQuitEvent event)
+	{
+		if (ess.getSettings().allowSilentJoinQuit() && event.getPlayer().hasPermission("essentials.silentquit"))
+		{
+			event.setQuitMessage(null);
+		}
+		else if (ess.getSettings().isCustomQuitMessage())
+		{
+			final Player player = event.getPlayer();
+			event.setQuitMessage(
+					ess.getSettings().getCustomQuitMessage()
+							.replace("{PLAYER}", player.getDisplayName())
+							.replace("{USERNAME}", player.getName())
+			);
+		}
+	}
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerQuit(final PlayerQuitEvent event)
 	{
@@ -164,32 +182,31 @@ public class EssentialsPlayerListener implements Listener
 		{
 			user.getBase().getOpenInventory().getTopInventory().clear();
 		}
-
-		if (ess.getSettings().allowSilentJoinQuit())
-		{
-			event.setQuitMessage(null);
-
-		}
-		if (ess.getSettings().isCustomQuitMessage())
-		{
-			event.setQuitMessage(null);
-			ess.broadcastMessage(ess.getSettings().getCustomQuitMessage());
-		}
 		user.updateActivity(false);
 		user.dispose();
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onPlayerJoinHighest(final PlayerJoinEvent event)
+	{
+		if(ess.getSettings().allowSilentJoinQuit() && event.getPlayer().hasPermission("essentials.silentjoin"))
+		{
+			event.setJoinMessage(null);
+		}
+		else if (ess.getSettings().isCustomJoinMessage())
+		{
+			final Player player = event.getPlayer();
+			event.setJoinMessage(
+					ess.getSettings().getCustomJoinMessage()
+						.replace("{PLAYER}", player.getDisplayName())
+						.replace("{USERNAME}", player.getName())
+			);
+		}
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
-		if (ess.getSettings().allowSilentJoinQuit())
-		{
-			event.setJoinMessage(null);
-		}
-		if (ess.getSettings().isCustomJoinMessage())
-		{
-			event.setJoinMessage(null);
-		}
 		ess.runTaskAsynchronously(new Runnable()
 		{
 			@Override
@@ -202,15 +219,6 @@ public class EssentialsPlayerListener implements Listener
 
 	public void delayedJoin(final Player player, final String message)
 	{
-		if (ess.getSettings().isCustomJoinMessage())
-		{
-			ess.broadcastMessage(ess.getSettings().getCustomJoinMessage());
-		}
-		else
-		{
-			ess.broadcastMessage(message);
-		}
-
 		if (!player.isOnline())
 		{
 			return;

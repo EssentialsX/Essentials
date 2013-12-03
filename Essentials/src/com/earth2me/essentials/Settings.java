@@ -1134,7 +1134,7 @@ public class Settings implements net.ess3.api.ISettings
 
 	public String _getCustomJoinMessage()
 	{
-		return config.getString("custom-join-message", "none");
+		return ChatColor.translateAlternateColorCodes('&', config.getString("custom-join-message", "none"));
 	}
 
 	@Override
@@ -1153,7 +1153,7 @@ public class Settings implements net.ess3.api.ISettings
 
 	public String _getCustomQuitMessage()
 	{
-		return config.getString("custom-quit-message", "none");
+		return ChatColor.translateAlternateColorCodes('&', config.getString("custom-quit-message", "none"));
 	}
 
 	@Override
