@@ -43,7 +43,7 @@ public class Commandweather extends EssentialsCommand
 		if (args.length > 1)
 		{
 
-			world.setStorm(isStorm ? true : false);
+			world.setStorm(isStorm);
 			world.setWeatherDuration(Integer.parseInt(args[1]) * 20);
 			user.sendMessage(isStorm
 							 ? _("weatherStormFor", world.getName(), args[1])
@@ -51,7 +51,7 @@ public class Commandweather extends EssentialsCommand
 		}
 		else
 		{
-			world.setStorm(isStorm ? true : false);
+			world.setStorm(isStorm);
 			user.sendMessage(isStorm
 							 ? _("weatherStorm", world.getName())
 							 : _("weatherSun", world.getName()));
@@ -76,7 +76,7 @@ public class Commandweather extends EssentialsCommand
 		if (args.length > 2)
 		{
 
-			world.setStorm(isStorm ? true : false);
+			world.setStorm(isStorm);
 			world.setWeatherDuration(Integer.parseInt(args[2]) * 20);
 			sender.sendMessage(isStorm
 							   ? _("weatherStormFor", world.getName(), args[2])
@@ -84,7 +84,7 @@ public class Commandweather extends EssentialsCommand
 		}
 		else
 		{
-			world.setStorm(isStorm ? true : false);
+			world.setStorm(isStorm);
 			sender.sendMessage(isStorm
 							   ? _("weatherStorm", world.getName())
 							   : _("weatherSun", world.getName()));
