@@ -42,5 +42,4 @@ public class EssentialsChat extends JavaPlugin
 		pluginManager.registerEvents(playerListenerHighest, this);
 
 	}
-
 }
