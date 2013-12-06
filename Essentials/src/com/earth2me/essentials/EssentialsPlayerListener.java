@@ -257,7 +257,7 @@ public class EssentialsPlayerListener implements Listener
 									.replace("{USERNAME}", player.getName())
 					);
 				}
-				else if (!(ess.getSettings().allowSilentJoinQuit() && user.isAuthorized("esentials.silentjoin")))
+				else if (!(ess.getSettings().allowSilentJoinQuit() && user.isAuthorized("esentials.silentjoin")) && message != null)
 				{
 					ess.getServer().broadcastMessage(message);
 				}
