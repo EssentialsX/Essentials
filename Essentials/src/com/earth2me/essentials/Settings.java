@@ -416,6 +416,7 @@ public class Settings implements net.ess3.api.ISettings
 			mFormat = mFormat.replace("{DISPLAYNAME}", "%1$s");
 			mFormat = mFormat.replace("{MESSAGE}", "%2$s");
 			mFormat = mFormat.replace("{GROUP}", "{0}");
+			mFormat = mFormat.replace("{WORLD}", "{1}");
 			mFormat = mFormat.replace("{WORLDNAME}", "{1}");
 			mFormat = mFormat.replace("{SHORTWORLDNAME}", "{2}");
 			mFormat = mFormat.replace("{TEAMPREFIX}", "{3}");

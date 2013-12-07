@@ -159,6 +159,7 @@ public class KeywordReplacer implements IText
 					}
 					break;
 				case WORLD:
+				case WORLDNAME:
 					if (user != null)
 					{
 						final Location location = user.getLocation();
@@ -368,6 +369,7 @@ enum KeywordType
 	BALANCE(KeywordCachable.CACHEABLE),
 	MAILS(KeywordCachable.CACHEABLE),
 	WORLD(KeywordCachable.CACHEABLE),
+	WORLDNAME(KeywordCachable.CACHEABLE),
 	ONLINE(KeywordCachable.CACHEABLE),
 	UNIQUE(KeywordCachable.CACHEABLE),
 	WORLDS(KeywordCachable.CACHEABLE),
