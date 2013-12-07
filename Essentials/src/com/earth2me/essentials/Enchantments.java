@@ -141,13 +141,32 @@ public class Enchantments
 		ALIASENCHANTMENTS.put("unlimited", Enchantment.ARROW_INFINITE);
 		ALIASENCHANTMENTS.put("unlimitedarrows", Enchantment.ARROW_INFINITE);
 		ALIASENCHANTMENTS.put("ai", Enchantment.ARROW_INFINITE);
+
+		try // 1.7 update
+		{
+			ENCHANTMENTS.put("luck", Enchantment.LUCK);
+			ALIASENCHANTMENTS.put("luckofsea", Enchantment.LUCK);
+			ALIASENCHANTMENTS.put("luckofseas", Enchantment.LUCK);
+			ALIASENCHANTMENTS.put("rodluck", Enchantment.LUCK);
+
+			ENCHANTMENTS.put("lure", Enchantment.LURE);
+			ALIASENCHANTMENTS.put("rodlure", Enchantment.LURE);
+		}
+		catch (java.lang.NoSuchFieldError e)
+		{
+			Essentials.wrongVersion();
+		}
 	}
 
-	public static Enchantment getByName(String name) {
+	public static Enchantment getByName(String name)
+	{
 		Enchantment enchantment;
-		if (NumberUtil.isInt(name)) {
+		if (NumberUtil.isInt(name))
+		{
 			enchantment = Enchantment.getById(Integer.parseInt(name));
-		} else {
+		}
+		else
+		{
 			enchantment = Enchantment.getByName(name.toUpperCase(Locale.ENGLISH));
 		}
 		if (enchantment == null)
