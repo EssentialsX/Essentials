@@ -14,7 +14,7 @@ public class PermissionsHandler implements IPermissionsHandler
 	private transient IPermissionsHandler handler = new NullPermissionsHandler();
 	private transient String defaultGroup = "default";
 	private final transient Plugin plugin;
-	private final static Logger LOGGER = Logger.getLogger("Minecraft");
+	private final static Logger LOGGER = Logger.getLogger("Essentials");
 	private transient boolean useSuperperms = false;
 
 	public PermissionsHandler(final Plugin plugin)

@@ -13,7 +13,7 @@ import org.bukkit.command.CommandSender;
 
 public class Backup implements Runnable
 {
-	private static final Logger LOGGER = Logger.getLogger("Minecraft");
+	private static final Logger LOGGER = Logger.getLogger("Essentials");
 	private transient final Server server;
 	private transient final IEssentials ess;
 	private transient boolean running = false;

@@ -35,7 +35,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class EssentialsPlayerListener implements Listener
 {
-	private static final Logger LOGGER = Logger.getLogger("Minecraft");
+	private static final Logger LOGGER = Logger.getLogger("Essentials");
 	private final transient IEssentials ess;
 
 	public EssentialsPlayerListener(final IEssentials parent)

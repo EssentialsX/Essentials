@@ -340,7 +340,7 @@ public class Trade
 			}
 			catch (IOException ex)
 			{
-				Logger.getLogger("Minecraft").log(Level.SEVERE, null, ex);
+				Logger.getLogger("Essentials").log(Level.SEVERE, null, ex);
 			}
 		}
 		StringBuilder sb = new StringBuilder();
@@ -428,7 +428,7 @@ public class Trade
 		}
 		catch (IOException ex)
 		{
-			Logger.getLogger("Minecraft").log(Level.SEVERE, null, ex);
+			Logger.getLogger("Essentials").log(Level.SEVERE, null, ex);
 		}
 	}
 
@@ -442,7 +442,7 @@ public class Trade
 			}
 			catch (IOException ex)
 			{
-				Logger.getLogger("Minecraft").log(Level.SEVERE, null, ex);
+				Logger.getLogger("Essentials").log(Level.SEVERE, null, ex);
 			}
 			fw = null;
 		}

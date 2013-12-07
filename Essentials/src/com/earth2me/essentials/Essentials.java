@@ -82,7 +82,7 @@ import org.yaml.snakeyaml.error.YAMLException;
 public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 {
 	public static final int BUKKIT_VERSION = 2882;
-	private static final Logger LOGGER = Logger.getLogger("Minecraft");
+	private static final Logger LOGGER = Logger.getLogger("Essentials");
 	private transient ISettings settings;
 	private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
 	private transient Jails jails;
@@ -136,6 +136,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 	{
 		try
 		{
+			LOGGER.setParent(this.getLogger());
 			execTimer = new ExecuteTimer();
 			execTimer.start();
 			i18n = new I18n(this);

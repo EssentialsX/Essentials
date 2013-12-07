@@ -31,7 +31,7 @@ public class Economy
 	public Economy()
 	{
 	}
-	private static final Logger logger = Logger.getLogger("Minecraft");
+	private static final Logger logger = Logger.getLogger("Essentials");
 	private static IEssentials ess;
 	private static final String noCallBeforeLoad = "Essentials API is called before Essentials is loaded.";
 	public static final MathContext MATH_CONTEXT = MathContext.DECIMAL128;

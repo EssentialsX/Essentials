@@ -12,7 +12,7 @@ import org.bukkit.plugin.Plugin;
 
 public class AlternativeCommandsHandler
 {
-	private static final Logger LOGGER = Logger.getLogger("Minecraft");
+	private static final Logger LOGGER = Logger.getLogger("Essentials");
 	private final transient Map<String, List<PluginCommand>> altcommands = new HashMap<String, List<PluginCommand>>();
 	private final transient Map<String, String> disabledList = new HashMap<String, String>();
 	private final transient IEssentials ess;

@@ -126,7 +126,7 @@ public enum MobData
 		EXP,
 		SIZE;
 	}
-	public static final Logger logger = Logger.getLogger("Minecraft");
+	public static final Logger logger = Logger.getLogger("Essentials");
 
 	private MobData(String n, Object type, Object value, boolean isPublic)
 	{

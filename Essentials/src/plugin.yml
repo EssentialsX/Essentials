@@ -61,7 +61,7 @@ commands:
     aliases: [eburn]
   clearinventory:
     description: Clear all items in your inventory.
-    usage: /<command> [player|*] [item[:<data>]|*|**]
+    usage: /<command> [player|*] [item[:<data>]|*|**] [amount]
     aliases: [ci,eci,clean,eclean,clear,eclear,clearinvent,eclearinvent,eclearinventory]
   compass:
     description: Describes your current bearing.

@@ -16,7 +16,7 @@ public class Commandsudo extends EssentialsCommand
 	{
 		super("sudo");
 	}
-	private static final Logger LOGGER = Logger.getLogger("Minecraft");
+	private static final Logger LOGGER = Logger.getLogger("Essentials");
 
 	@Override
 	public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception

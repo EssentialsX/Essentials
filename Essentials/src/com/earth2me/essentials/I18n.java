@@ -66,7 +66,7 @@ public class I18n implements net.ess3.api.II18n
 		}
 		catch (MissingResourceException ex)
 		{
-			Logger.getLogger("Minecraft").log(Level.WARNING, String.format("Missing translation key \"%s\" in translation file %s", ex.getKey(), localeBundle.getLocale().toString()), ex);
+			Logger.getLogger("Essentials").log(Level.WARNING, String.format("Missing translation key \"%s\" in translation file %s", ex.getKey(), localeBundle.getLocale().toString()), ex);
 			return defaultBundle.getString(string);
 		}
 	}
@@ -128,7 +128,7 @@ public class I18n implements net.ess3.api.II18n
 			currentLocale = new Locale(parts[0], parts[1], parts[2]);
 		}
 		ResourceBundle.clearCache();
-		Logger.getLogger("Minecraft").log(Level.INFO, String.format("Using locale %s", currentLocale.toString()));
+		Logger.getLogger("Essentials").log(Level.INFO, String.format("Using locale %s", currentLocale.toString()));
 		customBundle = ResourceBundle.getBundle(MESSAGES, currentLocale, new FileResClassLoader(I18n.class.getClassLoader(), ess));
 		localeBundle = ResourceBundle.getBundle(MESSAGES, currentLocale);
 	}

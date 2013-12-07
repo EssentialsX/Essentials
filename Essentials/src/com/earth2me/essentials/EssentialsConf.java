@@ -31,7 +31,7 @@ import org.bukkit.util.Vector;
 
 public class EssentialsConf extends YamlConfiguration
 {
-	private static final Logger LOGGER = Logger.getLogger("Minecraft");
+	private static final Logger LOGGER = Logger.getLogger("Essentials");
 	private final File configFile;
 	private String templateName = null;
 	private Class<?> resourceClass = EssentialsConf.class;

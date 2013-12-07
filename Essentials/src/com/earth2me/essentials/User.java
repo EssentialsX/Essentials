@@ -25,7 +25,7 @@ import org.bukkit.potion.PotionEffectType;
 
 public class User extends UserData implements Comparable<User>, IReplyTo, net.ess3.api.IUser
 {
-	private static final Logger logger = Logger.getLogger("Minecraft");
+	private static final Logger logger = Logger.getLogger("Essentials");
 	private CommandSource replyTo = null;
 	private transient String teleportRequester;
 	private transient boolean teleportRequestHere;

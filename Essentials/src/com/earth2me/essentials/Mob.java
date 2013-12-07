@@ -53,7 +53,7 @@ public enum Mob
 	MINECART_MOB_SPAWNER("SpawnerMinecart", Enemies.NEUTRAL, EntityType.MINECART_MOB_SPAWNER),
 	ENDERCRYSTAL("EnderCrystal", Enemies.NEUTRAL, EntityType.ENDER_CRYSTAL),
 	EXPERIENCEORB("ExperienceOrb", Enemies.NEUTRAL, EntityType.EXPERIENCE_ORB);
-	public static final Logger logger = Logger.getLogger("Minecraft");
+	public static final Logger logger = Logger.getLogger("Essentials");
 
 	private Mob(String n, Enemies en, String s, EntityType type)
 	{

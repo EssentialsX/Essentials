@@ -22,7 +22,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class EssentialsUpgrade
 {
-	private final static Logger LOGGER = Logger.getLogger("Minecraft");
+	private final static Logger LOGGER = Logger.getLogger("Essentials");
 	private final transient IEssentials ess;
 	private final transient EssentialsConf doneFile;
 
