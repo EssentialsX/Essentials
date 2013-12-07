@@ -249,15 +249,19 @@ public class EssentialsPlayerListener implements Listener
 					user.setSleepingIgnored(true);
 				}
 
-				if (ess.getSettings().isCustomJoinMessage())
+				if ((ess.getSettings().allowSilentJoinQuit() && user.isAuthorized("essentials.silentjoin")) || message == null)
+				{
+					// Do nothing - silently join
+				}
+				else if (ess.getSettings().isCustomJoinMessage())
 				{
 					ess.getServer().broadcastMessage(
 							ess.getSettings().getCustomJoinMessage()
-									.replace("{PLAYER}", player.getDisplayName())
-									.replace("{USERNAME}", player.getName())
+								.replace("{PLAYER}", player.getDisplayName())
+								.replace("{USERNAME}", player.getName())
 					);
 				}
-				else if (!(ess.getSettings().allowSilentJoinQuit() && user.isAuthorized("esentials.silentjoin")) && message != null)
+				else
 				{
 					ess.getServer().broadcastMessage(message);
 				}
