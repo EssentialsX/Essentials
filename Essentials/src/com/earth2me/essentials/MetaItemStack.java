@@ -117,7 +117,7 @@ public class MetaItemStack
 		}
 	}
 
-	private void addStringMeta(final CommandSource sender, final boolean allowUnsafe, final String string, final IEssentials ess) throws Exception
+	public void addStringMeta(final CommandSource sender, final boolean allowUnsafe, final String string, final IEssentials ess) throws Exception
 	{
 		final String[] split = splitPattern.split(string, 2);
 		if (split.length < 1)

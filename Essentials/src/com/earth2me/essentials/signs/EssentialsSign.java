@@ -100,7 +100,7 @@ public class EssentialsSign
 			showError(ess, user.getSource(), ex, signName);
 			return false;
 		}
-		catch (SignException ex)
+		catch (Exception ex)
 		{
 			showError(ess, user.getSource(), ex, signName);
 			return false;
@@ -383,6 +383,26 @@ public class EssentialsSign
 		{
 			throw new SignException(ex.getMessage(), ex);
 		}
+	}
+
+	protected final ItemStack getItemMeta(final ItemStack item, final String meta, final IEssentials ess) throws SignException
+	{
+		ItemStack stack = item;
+		try
+		{
+			if (!meta.isEmpty())
+			{
+				MetaItemStack metaStack = new MetaItemStack(stack);
+				final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
+				metaStack.addStringMeta(null, allowUnsafe, meta, ess);
+				stack = metaStack.getItemStack();
+			}
+		}
+		catch (Exception ex)
+		{
+			throw new SignException(ex.getMessage(), ex);
+		}
+		return stack;
 	}
 
 	protected final BigDecimal getMoney(final String line) throws SignException
