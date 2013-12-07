@@ -264,6 +264,10 @@ public class EssentialsPlayerListener implements Listener
 								.replace("{USERNAME}", player.getName())
 					);
 				}
+				else if(ess.getSettings().allowSilentJoinQuit())
+				{
+					ess.getServer().broadcastMessage(message);
+				}
 
 				if (!ess.getSettings().isCommandDisabled("motd") && user.isAuthorized("essentials.motd"))
 				{
