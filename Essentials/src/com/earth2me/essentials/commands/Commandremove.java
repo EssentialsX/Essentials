@@ -26,6 +26,10 @@ public class Commandremove extends EssentialsCommand
 	{
 		World world = user.getWorld();
 		int radius = 0;
+		if (args.length < 1)
+		{
+			throw new NotEnoughArgumentsException();
+		}
 		if (args.length >= 2)
 		{
 			try
@@ -61,7 +65,7 @@ public class Commandremove extends EssentialsCommand
 		List<String> types = new ArrayList<String>();
 		List<String> customTypes = new ArrayList<String>();
 
-		if (args.length > 0 && (args[0].contentEquals("*") || args[0].contentEquals("all")))
+		if (args[0].contentEquals("*") || args[0].contentEquals("all"))
 		{
 			types.add(0, "ALL");
 		}
