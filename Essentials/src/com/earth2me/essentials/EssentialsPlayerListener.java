@@ -195,7 +195,10 @@ public class EssentialsPlayerListener implements Listener
 				delayedJoin(event.getPlayer(), joinMessage);
 			}
 		});
-		event.setJoinMessage(null);
+		if(ess.getSettings().allowSilentJoinQuit() || ess.getSettings().isCustomJoinMessage())
+		{
+			event.setJoinMessage(null);
+		}
 	}
 
 	public void delayedJoin(final Player player, final String message)
@@ -260,10 +263,6 @@ public class EssentialsPlayerListener implements Listener
 								.replace("{PLAYER}", player.getDisplayName())
 								.replace("{USERNAME}", player.getName())
 					);
-				}
-				else
-				{
-					ess.getServer().broadcastMessage(message);
 				}
 
 				if (!ess.getSettings().isCommandDisabled("motd") && user.isAuthorized("essentials.motd"))
