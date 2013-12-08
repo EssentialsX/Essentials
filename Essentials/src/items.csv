@@ -7547,12 +7547,16 @@ flowerpot,390,0
 pot,390,0
 carrot,391,0
 potato,392,0
+rawpotato,392,0
 bakedpotato,393,0
 roastedpotato,393,0
 cookedpotato,393,0
 bakepotato,393,0
 roastpotato,393,0
 cookpotato,393,0
+bpotato,393,0
+rpotato,393,0
+cpotato,393,0
 poisonouspotato,394,0
 poisonpotato,394,0
 ppotato,394,0
