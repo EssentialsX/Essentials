@@ -507,7 +507,7 @@ public class EssentialsSign
 		@Override
 		public final String getLine(final int index)
 		{
-			return event.getLine(index);
+			return event.getLine(index).replaceAll( "\uF700", "" ).replaceAll( "\uF701", "" ); // Mac OSX sends weird chars, ie up and down arrow symbols;
 		}
 
 		@Override
@@ -546,7 +546,7 @@ public class EssentialsSign
 		@Override
 		public final String getLine(final int index)
 		{
-			return sign.getLine(index);
+			return sign.getLine(index).replaceAll( "\uF700", "" ).replaceAll( "\uF701", "" ); // Mac OSX sends weird chars, ie up and down arrow symbols
 		}
 
 		@Override
