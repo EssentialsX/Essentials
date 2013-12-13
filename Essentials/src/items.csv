@@ -706,7 +706,9 @@ pistons,29,0
 psticky,29,0
 pstick,29,0
 spiderweb,30,0
+cobweb,30,0
 sweb,30,0
+cweb,30,0
 web,30,0
 longgrass,31,1
 tallgrass,31,1
