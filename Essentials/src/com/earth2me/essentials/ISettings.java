@@ -80,6 +80,8 @@ public interface ISettings extends IConf
 
 	BigDecimal getStartingBalance();
 
+	boolean isTeleportSafetyEnabled();
+
 	double getTeleportCooldown();
 
 	double getTeleportDelay();

@@ -95,6 +95,19 @@ public class Settings implements net.ess3.api.ISettings
 		return chatRadius;
 	}
 
+	private boolean teleportSafety;
+
+	public boolean _isTeleportSafetyEnabled()
+	{
+		return config.getBoolean("teleport-safety", true);
+	}
+
+	@Override
+	public boolean isTeleportSafetyEnabled()
+	{
+		return teleportSafety;
+	}
+
 	@Override
 	public double getTeleportDelay()
 	{
@@ -487,6 +500,7 @@ public class Settings implements net.ess3.api.ISettings
 		config.load();
 		noGodWorlds = new HashSet<String>(config.getStringList("no-god-in-worlds"));
 		enabledSigns = _getEnabledSigns();
+		teleportSafety = _isTeleportSafetyEnabled();
 		teleportInvulnerabilityTime = _getTeleportInvulnerability();
 		teleportInvulnerability = _isTeleportInvulnerability();
 		disableItemPickupWhileAfk = _getDisableItemPickupWhileAfk();

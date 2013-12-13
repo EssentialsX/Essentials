@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import net.ess3.api.IEssentials;
 import net.ess3.api.IUser;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -96,7 +97,15 @@ public class Teleport implements net.ess3.api.ITeleport
 	{
 		cancel(false);
 		teleportee.setLastLocation();
-		teleportee.getBase().teleport(LocationUtil.getSafeDestination(teleportee, target.getLocation()), cause);
+		Location safeDestination = LocationUtil.getSafeDestination(teleportee, target.getLocation());
+		if (ess.getSettings().isTeleportSafetyEnabled() || (target.getLocation().getBlockX() == safeDestination.getBlockX() && target.getLocation().getBlockY() == safeDestination.getBlockY() && target.getLocation().getBlockZ() == safeDestination.getBlockZ()))
+		{
+			teleportee.getBase().teleport(safeDestination, cause);
+		}
+		else
+		{
+			throw new Exception(_("unsafeTeleportDestination"));
+		}
 	}
 
 	//The teleportPlayer function is used when you want to normally teleportPlayer someone to a location or player.
