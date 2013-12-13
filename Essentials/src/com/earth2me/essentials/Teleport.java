@@ -97,14 +97,22 @@ public class Teleport implements net.ess3.api.ITeleport
 	{
 		cancel(false);
 		teleportee.setLastLocation();
-		Location safeDestination = LocationUtil.getSafeDestination(teleportee, target.getLocation());
-		if (ess.getSettings().isTeleportSafetyEnabled() || (target.getLocation().getBlockX() == safeDestination.getBlockX() && target.getLocation().getBlockY() == safeDestination.getBlockY() && target.getLocation().getBlockZ() == safeDestination.getBlockZ()))
+		final Location location = target.getLocation();
+
+		if (LocationUtil.isBlockUnsafe(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ()))
 		{
-			teleportee.getBase().teleport(safeDestination, cause);
+			if (ess.getSettings().isTeleportSafetyEnabled())
+			{
+				teleportee.getBase().teleport(LocationUtil.getSafeDestination(teleportee, location));
+			}
+			else
+			{
+				throw new Exception(_("unsafeTeleportDestination"));
+			}
 		}
 		else
 		{
-			throw new Exception(_("unsafeTeleportDestination"));
+			teleportee.getBase().teleport(location);
 		}
 	}
 
