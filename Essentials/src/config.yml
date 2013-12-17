@@ -433,16 +433,18 @@ update-bed-at-daytime: true
 world-home-permissions: false
 
 # Allow players to have multiple homes.
-# Players need essentials.sethome.multiple before they can have more than 1 home, defaults to 'default' below.
-# Define different amounts of multiple homes for different permissions, e.g. essentials.sethome.multiple.vip
-# People with essentials.sethome.multiple.unlimited are not limited by these numbers.
+# Players need essentials.sethome.multiple before they can have more than 1 home.
+# You can set the default number of multiple homes using the 'default' rank below.
+# To remove the home limit entirely, give people 'essentials.sethome.multiple.unlimited'.
+# To grant different home amounts to different people, you need to define a 'home-rank' below.
+# Create the 'home-rank' below, and give the matching permission: essentials.sethome.multiple.<home-rank>
 # For more information, visit http://wiki.ess3.net/wiki/Multihome
 sethome-multiple:
   default: 3
-  # essentials.sethome.multiple.vip
   vip: 5
-  # essentials.sethome.multiple.staff
   staff: 10
+
+# In this example someone with 'essentials.sethome.multiple' and 'essentials.sethome.multiple.vip' will have 5 homes.
 
 # Set timeout in seconds for players to accept tpa before request is cancelled.
 # Set to 0 for no timeout.
