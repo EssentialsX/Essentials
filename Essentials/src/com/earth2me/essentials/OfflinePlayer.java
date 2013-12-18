@@ -1161,6 +1161,11 @@ public class OfflinePlayer implements Player
 	}
 
 	@Override
+	public void setResourcePack(String s) {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
 	public void setMaxHealth(double i)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");

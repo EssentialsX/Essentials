@@ -60,7 +60,7 @@
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.7.2-R0.1-SNAPSHOT</version>
+			<version>1.7.2-R0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
