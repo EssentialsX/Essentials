@@ -7,7 +7,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import net.ess3.api.IEssentials;
 import net.ess3.api.IUser;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -153,26 +152,29 @@ public class Teleport implements net.ess3.api.ITeleport
 	{
 		double delay = ess.getSettings().getTeleportDelay();
 
+		Trade cashCharge = null;
 		if (chargeFor != null)
 		{
 			chargeFor.isAffordableFor(teleportOwner);
+			cashCharge = new Trade(chargeFor.getCommandCost(teleportOwner), ess);
 		}
+
 		cooldown(true);
 		if (delay <= 0 || teleportOwner.isAuthorized("essentials.teleport.timer.bypass")
 			|| teleportee.isAuthorized("essentials.teleport.timer.bypass"))
 		{
 			cooldown(false);
 			now(teleportee, target, cause);
-			if (chargeFor != null)
+			if (cashCharge != null)
 			{
-				chargeFor.charge(teleportOwner);
+				cashCharge.charge(teleportOwner);
 			}
 			return;
 		}
 
 		cancel(false);
 		warnUser(teleportee, delay);
-		initTimer((long)(delay * 1000.0), teleportee, target, chargeFor, cause, false);
+		initTimer((long)(delay * 1000.0), teleportee, target, cashCharge, cause, false);
 	}
 
 	//The respawn function is a wrapper used to handle tp fallback, on /jail and /home
