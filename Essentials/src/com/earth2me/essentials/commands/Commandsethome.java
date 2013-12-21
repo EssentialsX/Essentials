@@ -57,7 +57,7 @@ public class Commandsethome extends EssentialsCommand
 			throw new NoSuchFieldException(_("invalidHomeName"));
 		}
 		usersHome.setHome(name, location);
-		user.sendMessage(_("homeSet", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ()));
+		user.sendMessage(_("homeSet", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ(), name));
 
 	}
 
