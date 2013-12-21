@@ -18,6 +18,7 @@ public class Commandhome extends EssentialsCommand
 		super("home");
 	}
 
+	// This method contains an undocumented translation parameters #EasterEgg
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
@@ -76,6 +77,7 @@ public class Commandhome extends EssentialsCommand
 			}
 			else
 			{
+				final int count = homes.size();
 				if (user.isAuthorized("essentials.home.bed"))
 				{
 					if (bed != null)
@@ -87,10 +89,23 @@ public class Commandhome extends EssentialsCommand
 						homes.add(_("bedNull"));
 					}
 				}
-				user.sendMessage(_("homes", StringUtil.joinList(homes)));
+				user.sendMessage(_("homes", StringUtil.joinList(homes), count, getHomeLimit(player)));
 			}
 		}
 		throw new NoChargeException();
+	}
+
+	private String getHomeLimit(final User player)
+	{
+		if (!player.isOnline())
+		{
+			return "?";
+		}
+		if (player.isAuthorized("essentials.sethome.multiple.unlimited"))
+		{
+			return "*";
+		}
+		return Integer.toString(ess.getSettings().getHomeLimit(player));
 	}
 
 	private void goHome(final User user, final User player, final String home, final Trade charge) throws Exception
