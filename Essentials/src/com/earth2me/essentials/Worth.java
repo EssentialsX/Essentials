@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.Locale;
 import java.util.logging.Logger;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -26,27 +27,49 @@ public class Worth implements IConf
 	{
 		String itemname = itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 		BigDecimal result;
+
+		//First check for matches with item name
 		result = config.getBigDecimal("worth." + itemname + "." + itemStack.getDurability(), BigDecimal.ONE.negate());
 		if (result.signum() < 0)
 		{
-			result = config.getBigDecimal("worth." + itemname + ".0", BigDecimal.ONE.negate());
+			final ConfigurationSection itemNameMatch = config.getConfigurationSection("worth." + itemname);
+			if (itemNameMatch != null && itemNameMatch.getKeys(false).size() == 1)
+			{
+				result = config.getBigDecimal("worth." + itemname + ".0", BigDecimal.ONE.negate());
+			}
+		}
+		if (result.signum() < 0)
+		{
+			result = config.getBigDecimal("worth." + itemname + ".*", BigDecimal.ONE.negate());
 		}
 		if (result.signum() < 0)
 		{
 			result = config.getBigDecimal("worth." + itemname, BigDecimal.ONE.negate());
 		}
+
+		//Now we should check for item ID
 		if (result.signum() < 0)
 		{
 			result = config.getBigDecimal("worth." + itemStack.getTypeId() + "." + itemStack.getDurability(), BigDecimal.ONE.negate());
-		}		
+		}
 		if (result.signum() < 0)
 		{
-			result = config.getBigDecimal("worth." + itemStack.getTypeId() + ".0", BigDecimal.ONE.negate());
+			final ConfigurationSection itemNumberMatch = config.getConfigurationSection("worth." + itemStack.getTypeId());
+			if (itemNumberMatch != null && itemNumberMatch.getKeys(false).size() == 1)
+			{
+				result = config.getBigDecimal("worth." + itemStack.getTypeId() + ".0", BigDecimal.ONE.negate());
+			}
+		}
+		if (result.signum() < 0)
+		{
+			result = config.getBigDecimal("worth." + itemStack.getTypeId() + ".*", BigDecimal.ONE.negate());
 		}
 		if (result.signum() < 0)
 		{
 			result = config.getBigDecimal("worth." + itemStack.getTypeId(), BigDecimal.ONE.negate());
-		}		
+		}
+
+		//This is to match the old worth syntax
 		if (result.signum() < 0)
 		{
 			result = config.getBigDecimal("worth-" + itemStack.getTypeId(), BigDecimal.ONE.negate());
@@ -69,10 +92,12 @@ public class Worth implements IConf
 
 		if (args.length > 1)
 		{
-			try {
+			try
+			{
 				amount = Integer.parseInt(args[1].replaceAll("[^0-9]", ""));
 			}
-			catch (NumberFormatException ex) {
+			catch (NumberFormatException ex)
+			{
 				throw new NotEnoughArgumentsException(ex);
 			}
 			if (args[1].startsWith("-"))
