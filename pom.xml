@@ -117,6 +117,7 @@
 				</dependencies>
 				<configuration>
 					<target name="buildgm">
+						<replace dir="EssentialsGroupManager/src" includes="plugin.yml" token="version: GMBuildVer" value="version: ${GMVer}"/>
 						<ant dir="EssentialsGroupManager" antfile="build.xml"/>
 					</target>
 				</configuration>
