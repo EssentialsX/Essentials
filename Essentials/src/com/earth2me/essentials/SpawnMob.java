@@ -217,20 +217,16 @@ public class SpawnMob
 			sender.sendMessage(_("mobDataList", StringUtil.joinList(MobData.getValidHelp(spawned))));
 		}
 
-		MobData newData = MobData.fromData(spawned, data);
-		while (newData != null)
-		{
-			newData.setData(spawned, target.getBase(), data);
-			data = data.replace(newData.getMatched(), "");
-			newData = MobData.fromData(spawned, data);
-		}
-
 		if (spawned instanceof Zombie || type == EntityType.SKELETON)
 		{
 			if (inputData.contains("armor") || inputData.contains("armour"))
 			{
 				final EntityEquipment invent = ((LivingEntity)spawned).getEquipment();
-				if (inputData.contains("diamond"))
+				if (inputData.contains("noarmor") || inputData.contains("noarmour"))
+				{
+					invent.clear();
+				}
+				else if (inputData.contains("diamond"))
 				{
 					invent.setBoots(new ItemStack(Material.DIAMOND_BOOTS, 1));
 					invent.setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS, 1));
@@ -251,10 +247,6 @@ public class SpawnMob
 					invent.setChestplate(new ItemStack(Material.LEATHER_CHESTPLATE, 1));
 					invent.setHelmet(new ItemStack(Material.LEATHER_HELMET, 1));
 				}
-				else if (inputData.contains("no"))
-				{
-					invent.clear();
-				}
 				else
 				{
 					invent.setBoots(new ItemStack(Material.IRON_BOOTS, 1));
@@ -268,6 +260,14 @@ public class SpawnMob
 				invent.setHelmetDropChance(0f);
 			}
 
+		}
+
+		MobData newData = MobData.fromData(spawned, data);
+		while (newData != null)
+		{
+			newData.setData(spawned, target.getBase(), data);
+			data = data.replace(newData.getMatched(), "");
+			newData = MobData.fromData(spawned, data);
 		}
 	}
 
