@@ -1,7 +1,0 @@
-<target name="-post-jar">
-	<jar destfile="${dist.jar}" update="true">
-		<manifest>
-			<attribute name="Classpath" value="Essentials.jar"/>
-		</manifest>
-	</jar>
-</target>
