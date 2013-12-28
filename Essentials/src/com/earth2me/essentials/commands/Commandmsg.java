@@ -29,6 +29,7 @@ public class Commandmsg extends EssentialsLoopCommand
 		}
 
 		String message = getFinalArg(args, 1);
+		boolean canWildcard;
 		if (sender.isPlayer())
 		{
 			User user = ess.getUser(sender.getPlayer());
@@ -37,10 +38,12 @@ public class Commandmsg extends EssentialsLoopCommand
 				throw new Exception(_("voiceSilenced"));
 			}
 			message = FormatUtil.formatMessage(user, "essentials.msg", message);
+			canWildcard = user.isAuthorized("essentials.msg.multiple");
 		}
 		else
 		{
 			message = FormatUtil.replaceFormat(message);
+			canWildcard = true;
 		}
 
 		if (args[0].equalsIgnoreCase(Console.NAME))
@@ -56,7 +59,7 @@ public class Commandmsg extends EssentialsLoopCommand
 			return;
 		}
 
-		loopOnlinePlayers(server, sender, false, args[0], new String[]{message});
+		loopOnlinePlayers(server, sender, canWildcard, canWildcard, args[0], new String[]{message});
 	}
 
 	@Override

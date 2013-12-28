@@ -22,7 +22,7 @@ public class Commandext extends EssentialsLoopCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		loopOnlinePlayers(server, sender, true, args[0], null);
+		loopOnlinePlayers(server, sender, true, true, args[0], null);
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class Commandext extends EssentialsLoopCommand
 			return;
 		}
 
-		loopOnlinePlayers(server, user.getSource(), true, args[0], null);
+		loopOnlinePlayers(server, user.getSource(), true, true, args[0], null);
 	}
 
 	@Override

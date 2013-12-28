@@ -26,7 +26,7 @@ public class Commandpay extends EssentialsLoopCommand
 		}
 
 		amount = new BigDecimal(args[1].replaceAll("[^0-9\\.]", ""));
-		loopOnlinePlayers(server, user.getSource(), false, args[0], args);
+		loopOnlinePlayers(server, user.getSource(), false, user.isAuthorized("essentials.pay.multiple"), args[0], args);
 	}
 
 	@Override

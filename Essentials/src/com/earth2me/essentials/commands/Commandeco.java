@@ -40,7 +40,7 @@ public class Commandeco extends EssentialsLoopCommand
 			throw new NotEnoughArgumentsException(ex);
 		}
 
-		loopOfflinePlayers(server, sender, false, args[1], args);
+		loopOfflinePlayers(server, sender, false, true, args[1], args);
 
 		if (cmd == Commandeco.EcoCommands.RESET || cmd == Commandeco.EcoCommands.SET)
 		{

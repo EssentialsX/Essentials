@@ -32,7 +32,7 @@ public class Commandnick extends EssentialsLoopCommand
 		if (args.length > 1 && user.isAuthorized("essentials.nick.others"))
 		{
 			final String[] nickname = formatNickname(user, args[1]).split(" ");
-			loopOfflinePlayers(server, user.getSource(), false, args[0], nickname);
+			loopOfflinePlayers(server, user.getSource(), false, true, args[0], nickname);
 			user.sendMessage(_("nickChanged"));
 		}
 		else
@@ -54,7 +54,7 @@ public class Commandnick extends EssentialsLoopCommand
 			throw new Exception(_("nickDisplayName"));
 		}
 		final String[] nickname = formatNickname(null, args[1]).split(" ");
-		loopOfflinePlayers(server, sender, false, args[0], nickname);
+		loopOfflinePlayers(server, sender, false, true, args[0], nickname);
 		sender.sendMessage(_("nickChanged"));
 	}
 

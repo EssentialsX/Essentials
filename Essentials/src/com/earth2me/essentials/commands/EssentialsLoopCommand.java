@@ -15,7 +15,7 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand
 		super(command);
 	}
 
-	protected void loopOfflinePlayers(final Server server, final CommandSource sender, final boolean multipleStringMatches, final String searchTerm, final String[] commandArgs)
+	protected void loopOfflinePlayers(final Server server, final CommandSource sender, final boolean multipleStringMatches, boolean matchWildcards, final String searchTerm, final String[] commandArgs)
 			throws PlayerNotFoundException, NotEnoughArgumentsException, PlayerExemptException, ChargeException
 	{
 		if (searchTerm.isEmpty())
@@ -23,7 +23,7 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand
 			throw new PlayerNotFoundException();
 		}
 
-		if (searchTerm.contentEquals("**"))
+		if (matchWildcards && searchTerm.contentEquals("**"))
 		{
 			for (String sUser : ess.getUserMap().getAllUniqueUsers())
 			{
@@ -31,7 +31,7 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand
 				updatePlayer(server, sender, matchedUser, commandArgs);
 			}
 		}
-		else if (searchTerm.contentEquals("*"))
+		else if (matchWildcards && searchTerm.contentEquals("*"))
 		{
 			boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.vanish.interact");
 			for (Player onlinePlayer : server.getOnlinePlayers())
@@ -69,7 +69,7 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand
 		}
 	}
 
-	protected void loopOnlinePlayers(final Server server, final CommandSource sender, final boolean multipleStringMatches, final String searchTerm, final String[] commandArgs)
+	protected void loopOnlinePlayers(final Server server, final CommandSource sender, final boolean multipleStringMatches, boolean matchWildcards, final String searchTerm, final String[] commandArgs)
 			throws PlayerNotFoundException, NotEnoughArgumentsException, PlayerExemptException, ChargeException
 	{
 		if (searchTerm.isEmpty())
@@ -79,7 +79,7 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand
 
 		boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.vanish.interact");
 
-		if (searchTerm.contentEquals("**") || searchTerm.contentEquals("*"))
+		if (matchWildcards && (searchTerm.contentEquals("**") || searchTerm.contentEquals("*")))
 		{
 			for (Player onlinePlayer : server.getOnlinePlayers())
 			{

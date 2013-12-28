@@ -40,7 +40,7 @@ public class Commandlightning extends EssentialsLoopCommand
 			{
 			}
 		}
-		loopOnlinePlayers(server, sender, true, args[0], null);
+		loopOnlinePlayers(server, sender, true, true, args[0], null);
 	}
 
 	@Override

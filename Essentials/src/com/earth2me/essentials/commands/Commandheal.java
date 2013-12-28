@@ -27,7 +27,7 @@ public class Commandheal extends EssentialsLoopCommand
 
 		if (args.length > 0 && user.isAuthorized("essentials.heal.others"))
 		{
-			loopOnlinePlayers(server, user.getSource(), true, args[0], null);
+			loopOnlinePlayers(server, user.getSource(), true, true, args[0], null);
 			return;
 		}
 
@@ -42,7 +42,7 @@ public class Commandheal extends EssentialsLoopCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		loopOnlinePlayers(server, sender, true, args[0], null);
+		loopOnlinePlayers(server, sender, true, true, args[0], null);
 	}
 
 	@Override

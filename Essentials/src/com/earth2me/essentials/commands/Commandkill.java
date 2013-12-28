@@ -23,7 +23,7 @@ public class Commandkill extends EssentialsLoopCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		loopOnlinePlayers(server, sender, true, args[0], null);
+		loopOnlinePlayers(server, sender, true, true, args[0], null);
 	}
 
 	@Override
