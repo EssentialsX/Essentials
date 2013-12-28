@@ -41,8 +41,8 @@
 
 	<repositories>
 		<repository>
-			<id>bukkit-repo</id>
-			<url>http://repo.bukkit.org/content/groups/public</url>
+			<id>ess-repo</id>
+			<url>http://repo.ess3.net/content/groups/public</url>
 		</repository>
 	</repositories>
 

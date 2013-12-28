@@ -41,17 +41,6 @@
 		<url>http://ci.ess3.net/</url>
 	</ciManagement>
 
-	<repositories>
-		<repository>
-			<id>vault-repo</id>
-			<url>http://ci.herocraftonline.com/plugin/repository/everything</url>
-		</repository>
-		<repository>
-			<id>kitteh-repo</id>
-			<url>http://repo.kitteh.org/content/groups/public/</url>
-		</repository>
-	</repositories>
-
 	<dependencies>
 		<dependency>
 			<groupId>BOSEconomy</groupId>
