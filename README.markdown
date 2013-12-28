@@ -18,11 +18,6 @@ To build with Maven, use the command
 mvn package dependency:copy
 ```
 
-To build with Ant, use the command
-```
-ant
-```
-
 Jar files can then be found in the /jars folder
 
 
@@ -50,7 +45,7 @@ To build all jars, select the EssentialsParent project and build that. You'll fi
 
 Please only submit pull requests for the 2.x branch.
 
-Bugs and issues can be submitted at https://essentials3.atlassian.net/
+Bugs and issues can be submitted/found at https://essentials3.atlassian.net/
 
 
 Other advice
