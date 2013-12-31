@@ -14,12 +14,6 @@ public class NickChangeEvent extends StateChangeEvent implements Cancellable
 		this.newValue = value;
 	}
 
-	public NickChangeEvent(boolean isAsync, IUser affected, IUser controller, String value)
-	{
-		super(isAsync, affected, controller);
-		this.newValue = value;
-	}
-
 	public String getValue()
 	{
 		return newValue;

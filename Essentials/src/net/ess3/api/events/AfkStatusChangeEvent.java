@@ -5,8 +5,8 @@ import net.ess3.api.IUser;
 
 public class AfkStatusChangeEvent extends StatusChangeEvent
 {
-	public AfkStatusChangeEvent(IUser affected, IUser controller, boolean value)
+	public AfkStatusChangeEvent(IUser affected, boolean value)
 	{
-		super(affected, controller, value);
+		super(affected, affected, value);
 	}
 }

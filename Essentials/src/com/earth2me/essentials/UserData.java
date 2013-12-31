@@ -729,19 +729,13 @@ public abstract class UserData extends PlayerExtension implements IConf
 		return afk;
 	}
 
-	public void setAfk(boolean set)
+	public void  _setAfk(boolean set)
 	{
 		afk = set;
 		config.setProperty("afk", set);
 		config.save();
 	}
 
-	public boolean toggleAfk()
-	{
-		boolean ret = !isAfk();
-		setAfk(ret);
-		return ret;
-	}
 	private boolean newplayer;
 	private String geolocation;
 

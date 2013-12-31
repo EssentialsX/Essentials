@@ -94,6 +94,7 @@ public class SignBlockListener implements Listener
 		}
 
 		final String topLine = event.getLine(0);
+		//We loop through all sign types here to prevent clashes with preexisting signs later
 		for (Signs signs : Signs.values())
 		{
 			final EssentialsSign sign = signs.getSign();

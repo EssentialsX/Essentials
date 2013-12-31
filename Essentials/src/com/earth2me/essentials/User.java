@@ -13,6 +13,7 @@ import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.ess3.api.IEssentials;
+import net.ess3.api.events.AfkStatusChangeEvent;
 import net.ess3.api.events.UserBalanceUpdateEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -486,6 +487,13 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	@Override
 	public void setAfk(final boolean set)
 	{
+		final AfkStatusChangeEvent afkEvent = new AfkStatusChangeEvent(this, set);
+		ess.getServer().getPluginManager().callEvent(afkEvent);
+		if (afkEvent.isCancelled())
+		{
+			return;
+		}
+		
 		this.setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") ? true : set);
 		if (set && !isAfk())
 		{
@@ -495,15 +503,13 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		{
 			afkPosition = null;
 		}
-		super.setAfk(set);
+		_setAfk(set);
 	}
-
-	@Override
+	
 	public boolean toggleAfk()
 	{
-		final boolean now = super.toggleAfk();
-		this.setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") ? true : now);
-		return now;
+		setAfk(!isAfk());
+		return isAfk();
 	}
 
 	@Override

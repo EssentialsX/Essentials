@@ -1,5 +1,7 @@
 package net.ess3.api.events;
 
+import com.earth2me.essentials.signs.EssentialsSign;
+import com.earth2me.essentials.signs.EssentialsSign.ISign;
 import net.ess3.api.IUser;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -7,38 +9,38 @@ import org.bukkit.event.HandlerList;
 
 
 /**
- * This handles common boilerplate for other StateChangeEvents
+ * This handles common boilerplate for other SignEvent
  *
  */
-public class StateChangeEvent extends Event implements Cancellable
+public class SignEvent extends Event implements Cancellable
 {
 	private static final HandlerList handlers = new HandlerList();
 	private boolean cancelled = false;
-	IUser affected;
-	IUser controller;
+	ISign sign;
+	EssentialsSign essSign;
+	IUser user;
 
-	public StateChangeEvent(IUser affected, IUser controller)
+	public SignEvent(final ISign sign, final EssentialsSign essSign, final IUser user)
 	{
 		super();
-		this.affected = affected;
-		this.controller = controller;
+		this.sign = sign;
+		this.essSign = essSign;
+		this.user = user;
 	}
 
-	public StateChangeEvent(boolean isAsync, IUser affected, IUser controller)
+	public ISign getSign()
 	{
-		super(isAsync);
-		this.affected = affected;
-		this.controller = controller;
+		return sign;
 	}
 
-	public IUser getAffected()
+	public EssentialsSign getEssentialsSign()
 	{
-		return this.affected;
+		return essSign;
 	}
 
-	public IUser getController()
+	public IUser getUser()
 	{
-		return controller;
+		return user;
 	}
 
 	@Override

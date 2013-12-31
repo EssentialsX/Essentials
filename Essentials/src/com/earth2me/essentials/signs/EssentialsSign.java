@@ -8,6 +8,9 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import net.ess3.api.IEssentials;
+import net.ess3.api.events.SignBreakEvent;
+import net.ess3.api.events.SignCreateEvent;
+import net.ess3.api.events.SignInteractEvent;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -28,7 +31,7 @@ public class EssentialsSign
 		this.signName = signName;
 	}
 
-	public final boolean onSignCreate(final SignChangeEvent event, final IEssentials ess)
+	protected final boolean onSignCreate(final SignChangeEvent event, final IEssentials ess)
 	{
 		final ISign sign = new EventSign(event);
 		final User user = ess.getUser(event.getPlayer());
@@ -40,6 +43,14 @@ public class EssentialsSign
 			return true;
 		}
 		sign.setLine(0, _("signFormatFail", this.signName));
+
+		final SignCreateEvent signEvent = new SignCreateEvent(sign, this, user);
+		ess.getServer().getPluginManager().callEvent(signEvent);
+		if (signEvent.isCancelled())
+		{
+			return false;
+		}
+
 		try
 		{
 			final boolean ret = onSignCreate(sign, user, getUsername(user), ess);
@@ -76,12 +87,12 @@ public class EssentialsSign
 		return this.signName;
 	}
 
-	private String getUsername(final User user)
+	public String getUsername(final User user)
 	{
 		return user.getName().substring(0, user.getName().length() > 13 ? 13 : user.getName().length());
 	}
 
-	public final boolean onSignInteract(final Block block, final Player player, final IEssentials ess)
+	protected final boolean onSignInteract(final Block block, final Player player, final IEssentials ess)
 	{
 		final ISign sign = new BlockSign(block);
 		final User user = ess.getUser(player);
@@ -91,9 +102,20 @@ public class EssentialsSign
 		}
 		try
 		{
-			return (!user.isDead() && (user.isAuthorized("essentials.signs." + signName.toLowerCase(Locale.ENGLISH) + ".use")
-									   || user.isAuthorized("essentials.signs.use." + signName.toLowerCase(Locale.ENGLISH))))
-				   && onSignInteract(sign, user, getUsername(user), ess);
+			if (user.isDead() || !(user.isAuthorized("essentials.signs." + signName.toLowerCase(Locale.ENGLISH) + ".use")
+								   || user.isAuthorized("essentials.signs.use." + signName.toLowerCase(Locale.ENGLISH))))
+			{
+				return false;
+			}
+
+			final SignInteractEvent signEvent = new SignInteractEvent(sign, this, user);
+			ess.getServer().getPluginManager().callEvent(signEvent);
+			if (signEvent.isCancelled())
+			{
+				return false;
+			}
+
+			return onSignInteract(sign, user, getUsername(user), ess);
 		}
 		catch (ChargeException ex)
 		{
@@ -107,15 +129,26 @@ public class EssentialsSign
 		}
 	}
 
-	public final boolean onSignBreak(final Block block, final Player player, final IEssentials ess)
+	protected final boolean onSignBreak(final Block block, final Player player, final IEssentials ess)
 	{
 		final ISign sign = new BlockSign(block);
 		final User user = ess.getUser(player);
 		try
 		{
-			return (user.isAuthorized("essentials.signs." + signName.toLowerCase(Locale.ENGLISH) + ".break")
-					|| user.isAuthorized("essentials.signs.break." + signName.toLowerCase(Locale.ENGLISH)))
-				   && onSignBreak(sign, user, getUsername(user), ess);
+			if (!(user.isAuthorized("essentials.signs." + signName.toLowerCase(Locale.ENGLISH) + ".break")
+				  || user.isAuthorized("essentials.signs.break." + signName.toLowerCase(Locale.ENGLISH))))
+			{
+				return false;
+			}
+
+			final SignBreakEvent signEvent = new SignBreakEvent(sign, this, user);
+			ess.getServer().getPluginManager().callEvent(signEvent);
+			if (signEvent.isCancelled())
+			{
+				return false;
+			}
+
+			return onSignBreak(sign, user, getUsername(user), ess);
 		}
 		catch (SignException ex)
 		{
@@ -139,7 +172,7 @@ public class EssentialsSign
 		return true;
 	}
 
-	public final boolean onBlockPlace(final Block block, final Player player, final IEssentials ess)
+	protected final boolean onBlockPlace(final Block block, final Player player, final IEssentials ess)
 	{
 		User user = ess.getUser(player);
 		try
@@ -157,7 +190,7 @@ public class EssentialsSign
 		return false;
 	}
 
-	public final boolean onBlockInteract(final Block block, final Player player, final IEssentials ess)
+	protected final boolean onBlockInteract(final Block block, final Player player, final IEssentials ess)
 	{
 		User user = ess.getUser(player);
 		try
@@ -175,7 +208,7 @@ public class EssentialsSign
 		return false;
 	}
 
-	public final boolean onBlockBreak(final Block block, final Player player, final IEssentials ess)
+	protected final boolean onBlockBreak(final Block block, final Player player, final IEssentials ess)
 	{
 		User user = ess.getUser(player);
 		try
@@ -189,32 +222,32 @@ public class EssentialsSign
 		return false;
 	}
 
-	public boolean onBlockBreak(final Block block, final IEssentials ess)
+	protected boolean onBlockBreak(final Block block, final IEssentials ess)
 	{
 		return true;
 	}
 
-	public boolean onBlockExplode(final Block block, final IEssentials ess)
+	protected boolean onBlockExplode(final Block block, final IEssentials ess)
 	{
 		return true;
 	}
 
-	public boolean onBlockBurn(final Block block, final IEssentials ess)
+	protected boolean onBlockBurn(final Block block, final IEssentials ess)
 	{
 		return true;
 	}
 
-	public boolean onBlockIgnite(final Block block, final IEssentials ess)
+	protected boolean onBlockIgnite(final Block block, final IEssentials ess)
 	{
 		return true;
 	}
 
-	public boolean onBlockPush(final Block block, final IEssentials ess)
+	protected boolean onBlockPush(final Block block, final IEssentials ess)
 	{
 		return true;
 	}
 
-	public static boolean checkIfBlockBreaksSigns(final Block block)
+	protected static boolean checkIfBlockBreaksSigns(final Block block)
 	{
 		final Block sign = block.getRelative(BlockFace.UP);
 		if (sign.getType() == Material.SIGN_POST && isValidSign(new BlockSign(sign)))
@@ -508,8 +541,10 @@ public class EssentialsSign
 		public final String getLine(final int index)
 		{
 			StringBuilder builder = new StringBuilder();
-			for (char c : event.getLine(index).toCharArray()) {
-				if (c < 0xF700 || c > 0xF747) {
+			for (char c : event.getLine(index).toCharArray())
+			{
+				if (c < 0xF700 || c > 0xF747)
+				{
 					builder.append(c);
 				}
 			}
@@ -578,12 +613,12 @@ public class EssentialsSign
 
 	public interface ISign
 	{
-		String getLine(final int index);
+		public String getLine(final int index);
 
-		void setLine(final int index, final String text);
+		public void setLine(final int index, final String text);
 
 		public Block getBlock();
 
-		void updateSign();
+		public void updateSign();
 	}
 }
