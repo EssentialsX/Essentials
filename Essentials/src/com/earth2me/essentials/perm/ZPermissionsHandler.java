@@ -110,12 +110,6 @@ public class ZPermissionsHandler extends SuperpermsHandler implements Listener
 		}
 	}
 
-	@Override
-	public boolean canBuild(Player base, String group)
-	{
-		return hasPermission(base, "essentials.build");
-	}
-
 	private String getPrefixSuffix(Player base, String metadataName)
 	{
 		String playerPrefixSuffix;

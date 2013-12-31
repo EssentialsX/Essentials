@@ -75,9 +75,4 @@ public class PermissionsBukkitHandler extends SuperpermsHandler
 		return false;
 	}
 
-	@Override
-	public boolean canBuild(Player base, String group)
-	{
-		return false;
-	}
 }
