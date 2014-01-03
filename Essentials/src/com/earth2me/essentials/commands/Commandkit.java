@@ -80,11 +80,10 @@ public class Commandkit extends EssentialsCommand
 
 		final List<String> items = Kit.getItems(ess, userTo, kitName, kit);
 
-		Kit.checkTime(userFrom, kitName, kit);
-
 		final Trade charge = new Trade("kit-" + kitName, ess);
 		charge.isAffordableFor(userFrom);
 
+		Kit.checkTime(userFrom, kitName, kit);
 		Kit.expandItems(ess, userTo, items);
 
 		charge.charge(userFrom);
