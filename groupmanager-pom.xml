@@ -1,0 +1,43 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>net.ess3</groupId>
+		<artifactId>EssentialsParent</artifactId>
+		<version>2.x-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>EssentialsGroupManager</artifactId>
+
+	<url>http://ess3.net/</url>
+
+	<organization>
+		<name>Essentials Team</name>
+		<url>http://ess3.net/</url>
+	</organization>
+
+	<licenses>
+		<license>
+			<name>GPLv3</name>
+			<url>http://www.gnu.org/copyleft/gpl.html</url>
+		</license>
+	</licenses>
+
+	<scm>
+		<connection>scm:git:https://github.com/essentials/Essentials.git</connection>
+		<developerConnection>scm:git:https://github.com/essentials/Essentials.git</developerConnection>
+		<url>https://github.com/essentials/Essentials</url>
+	</scm>
+
+	<issueManagement>
+		<system>JIRA</system>
+		<url>http://essentials3.atlassian.net</url>
+	</issueManagement>
+
+	<ciManagement>
+		<system>TeamCity</system>
+		<url>http://ci.ess3.net/</url>
+	</ciManagement>
+</project>
