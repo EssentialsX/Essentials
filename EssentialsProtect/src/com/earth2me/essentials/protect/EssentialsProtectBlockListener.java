@@ -51,6 +51,12 @@ public class EssentialsProtectBlockListener implements Listener
 		if (event.getCause().equals(BlockIgniteEvent.IgniteCause.LIGHTNING))
 		{
 			event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_lightning_fire_spread));
+			return;
+		}
+		
+		if (event.getCause().equals(BlockIgniteEvent.IgniteCause.FIREBALL))
+		{
+			event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_fireball_fire));
 		}
 	}
 
