@@ -23,8 +23,9 @@ public class Commandtop extends EssentialsCommand
 		final int topZ = user.getLocation().getBlockZ();
 		final float pitch = user.getLocation().getPitch();
 		final float yaw = user.getLocation().getYaw();
-		final Location location = LocationUtil.getSafeDestination(new Location(user.getWorld(), topX, user.getWorld().getMaxHeight(), topZ, yaw, pitch));
-		user.getTeleport().teleport(location, new Trade(this.getName(), ess), TeleportCause.COMMAND);
-		user.sendMessage(_("teleportTop"));
+		final Location loc = LocationUtil.getSafeDestination(new Location(user.getWorld(), topX, user.getWorld().getMaxHeight(), topZ, yaw, pitch));
+		user.getTeleport().teleport(loc, new Trade(this.getName(), ess), TeleportCause.COMMAND);
+		user.sendMessage(_("teleportTop", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+		
 	}
 }

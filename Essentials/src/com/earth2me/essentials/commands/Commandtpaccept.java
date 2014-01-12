@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
@@ -59,7 +60,9 @@ public class Commandtpaccept extends EssentialsCommand
 		{
 			if (user.isTpRequestHere())
 			{
+				final Location loc = user.getTpRequestLocation();
 				requester.getTeleport().teleportPlayer(user, user.getTpRequestLocation(), charge, TeleportCause.COMMAND);
+				requester.sendMessage(_("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
 			}
 			else
 			{
@@ -70,7 +73,7 @@ public class Commandtpaccept extends EssentialsCommand
 		{
 			user.sendMessage(_("pendingTeleportCancelled"));
 			ess.showError(requester.getSource(), ex, commandLabel);
-		}
+		}		
 		user.requestTeleport(null, false);
 		throw new NoChargeException();
 	}

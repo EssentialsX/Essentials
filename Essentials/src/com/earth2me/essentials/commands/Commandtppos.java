@@ -27,14 +27,14 @@ public class Commandtppos extends EssentialsCommand
 		final double x = args[0].startsWith("~") ? user.getLocation().getX() + Integer.parseInt(args[0].substring(1)) : Integer.parseInt(args[0]);
 		final double y = args[1].startsWith("~") ? user.getLocation().getY() + Integer.parseInt(args[1].substring(1)) : Integer.parseInt(args[1]);
 		final double z = args[2].startsWith("~") ? user.getLocation().getZ() + Integer.parseInt(args[2].substring(1)) : Integer.parseInt(args[2]);
-		final Location location = new Location(user.getWorld(), x, y, z, user.getLocation().getYaw(), user.getLocation().getPitch());
+		final Location loc = new Location(user.getWorld(), x, y, z, user.getLocation().getYaw(), user.getLocation().getPitch());
 		if (args.length > 3)
 		{
-			location.setYaw((Float.parseFloat(args[3]) + 180 + 360) % 360);
+			loc.setYaw((Float.parseFloat(args[3]) + 180 + 360) % 360);
 		}
 		if (args.length > 4)
 		{
-			location.setPitch(Float.parseFloat(args[4]));
+			loc.setPitch(Float.parseFloat(args[4]));
 		}
 		if (x > 30000000 || y > 30000000 || z > 30000000 || x < -30000000 || y < -30000000 || z < -30000000)
 		{
@@ -42,8 +42,8 @@ public class Commandtppos extends EssentialsCommand
 		}
 		final Trade charge = new Trade(this.getName(), ess);
 		charge.isAffordableFor(user);
-		user.sendMessage(_("teleporting"));
-		user.getTeleport().teleport(location, charge, TeleportCause.COMMAND);
+		user.sendMessage(_("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+		user.getTeleport().teleport(loc, charge, TeleportCause.COMMAND);
 		throw new NoChargeException();
 	}
 
@@ -59,22 +59,22 @@ public class Commandtppos extends EssentialsCommand
 		final double x = args[1].startsWith("~") ? user.getLocation().getX() + Integer.parseInt(args[1].substring(1)) : Integer.parseInt(args[1]);
 		final double y = args[2].startsWith("~") ? user.getLocation().getY() + Integer.parseInt(args[2].substring(1)) : Integer.parseInt(args[2]);
 		final double z = args[3].startsWith("~") ? user.getLocation().getZ() + Integer.parseInt(args[3].substring(1)) : Integer.parseInt(args[3]);
-		final Location location = new Location(user.getWorld(), x, y, z, user.getLocation().getYaw(), user.getLocation().getPitch());
+		final Location loc = new Location(user.getWorld(), x, y, z, user.getLocation().getYaw(), user.getLocation().getPitch());
 		if (args.length > 4)
 		{
-			location.setYaw((Float.parseFloat(args[4]) + 180 + 360) % 360);
+			loc.setYaw((Float.parseFloat(args[4]) + 180 + 360) % 360);
 		}
 		if (args.length > 5)
 		{
-			location.setPitch(Float.parseFloat(args[5]));
+			loc.setPitch(Float.parseFloat(args[5]));
 		}
 		if (x > 30000000 || y > 30000000 || z > 30000000 || x < -30000000 || y < -30000000 || z < -30000000)
 		{
 			throw new NotEnoughArgumentsException("Value of coordinates cannot be over 30000000"); //TODO: I18n
 		}
-		sender.sendMessage(_("teleporting"));
-		user.sendMessage(_("teleporting"));
-		user.getTeleport().teleport(location, null, TeleportCause.COMMAND);
+		sender.sendMessage(_("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+		user.sendMessage(_("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+		user.getTeleport().teleport(loc, null, TeleportCause.COMMAND);
 
 	}
 }

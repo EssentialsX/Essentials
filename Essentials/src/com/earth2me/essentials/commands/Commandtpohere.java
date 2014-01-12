@@ -32,7 +32,5 @@ public class Commandtpohere extends EssentialsCommand
 
 		// Verify permission
 		player.getTeleport().now(user.getBase(), false, TeleportCause.COMMAND);
-		user.sendMessage(_("teleporting"));
-
 	}
 }

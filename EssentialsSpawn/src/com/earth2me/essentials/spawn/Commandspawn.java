@@ -28,16 +28,15 @@ public class Commandspawn extends EssentialsCommand
 		if (args.length > 0 && user.isAuthorized("essentials.spawn.others"))
 		{
 			final User otherUser = getPlayer(server, user, args, 0);
-			respawn(user, otherUser, charge);
+			respawn(user.getSource(), user, otherUser, charge);
 			if (!otherUser.equals(user))
 			{
 				otherUser.sendMessage(_("teleportAtoB", user.getDisplayName(), "spawn"));
-				user.sendMessage(_("teleporting"));
 			}
 		}
 		else
 		{
-			respawn(user, user, charge);
+			respawn(user.getSource(), user, user, charge);
 		}
 		throw new NoChargeException();
 	}
@@ -50,15 +49,16 @@ public class Commandspawn extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 		final User user = getPlayer(server, args, 0, true, false);
-		respawn(null, user, null);
+		respawn(sender, null, user, null);
 		user.sendMessage(_("teleportAtoB", Console.NAME, "spawn"));
-		sender.sendMessage(_("teleporting"));
+
 	}
 
-	private void respawn(final User teleportOwner, final User teleportee, final Trade charge) throws Exception
+	private void respawn(final CommandSource sender, final User teleportOwner, final User teleportee, final Trade charge) throws Exception
 	{
 		final SpawnStorage spawns = (SpawnStorage)this.module;
 		final Location spawn = spawns.getSpawn(teleportee.getGroup());
+		sender.sendMessage(_("teleporting", spawn.getWorld().getName(), spawn.getBlockX(), spawn.getBlockY(), spawn.getBlockZ()));
 		if (teleportOwner == null)
 		{
 			teleportee.getTeleport().now(spawn, false, TeleportCause.COMMAND);

@@ -36,7 +36,6 @@ public class Commandtp extends EssentialsCommand
 			{
 				throw new Exception(_("noPerm", "essentials.worlds." + player.getWorld().getName()));
 			}
-			user.sendMessage(_("teleporting"));
 			final Trade charge = new Trade(this.getName(), ess);
 			charge.isAffordableFor(user);
 			user.getTeleport().teleport(player.getBase(), charge, TeleportCause.COMMAND);
@@ -54,14 +53,14 @@ public class Commandtp extends EssentialsCommand
 			{
 				throw new NotEnoughArgumentsException("Value of coordinates cannot be over 30000000"); //TODO: I18n
 			}
-			final Location location = new Location(target2.getWorld(), x, y, z, target2.getLocation().getYaw(), target2.getLocation().getPitch());
+			final Location loc = new Location(target2.getWorld(), x, y, z, target2.getLocation().getYaw(), target2.getLocation().getPitch());
 			if (!target2.isTeleportEnabled())
 			{
 				throw new Exception(_("teleportDisabled", target2.getDisplayName()));
 			}
-			target2.getTeleport().now(location, false, TeleportCause.COMMAND);
-			user.sendMessage(_("teleporting"));
-			target2.sendMessage(_("teleporting"));
+			target2.getTeleport().now(loc, false, TeleportCause.COMMAND);
+			user.sendMessage(_("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+			target2.sendMessage(_("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
 			break;
 		case 2:
 		default:
@@ -85,7 +84,6 @@ public class Commandtp extends EssentialsCommand
 				throw new Exception(_("noPerm", "essentials.worlds." + toPlayer.getWorld().getName()));
 			}
 			target.getTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND);
-			user.sendMessage(_("teleporting"));
 			target.sendMessage(_("teleportAtoB", user.getDisplayName(), toPlayer.getDisplayName()));
 			break;
 		}
@@ -115,12 +113,14 @@ public class Commandtp extends EssentialsCommand
 			{
 				throw new NotEnoughArgumentsException("Value of coordinates cannot be over 30000000"); //TODO: I18n
 			}
-			final Location location = new Location(target.getWorld(), x, y, z, target.getLocation().getYaw(), target.getLocation().getPitch());
-			target.getTeleport().now(location, false, TeleportCause.COMMAND);
-			target.sendMessage(_("teleporting"));
-		} else {
+			final Location loc = new Location(target.getWorld(), x, y, z, target.getLocation().getYaw(), target.getLocation().getPitch());
+			target.getTeleport().now(loc, false, TeleportCause.COMMAND);
+			target.sendMessage(_("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+			sender.sendMessage(_("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+		}
+		else
+		{
 			throw new NotEnoughArgumentsException();
 		}
-		sender.sendMessage(_("teleporting"));
 	}
 }

@@ -27,7 +27,6 @@ public class Commandback extends EssentialsCommand
 		}
 		final Trade charge = new Trade(this.getName(), ess);
 		charge.isAffordableFor(user);
-		user.sendMessage(_("backUsageMsg"));
 		user.getTeleport().back(charge);
 		throw new NoChargeException();
 	}

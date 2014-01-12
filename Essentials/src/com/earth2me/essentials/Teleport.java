@@ -79,7 +79,8 @@ public class Teleport implements net.ess3.api.ITeleport
 		{
 			cooldown(false);
 		}
-		now(teleportOwner, new LocationTarget(loc), cause);
+		final ITarget target = new LocationTarget(loc);
+		now(teleportOwner, target, cause);
 	}
 
 	@Override
@@ -89,29 +90,31 @@ public class Teleport implements net.ess3.api.ITeleport
 		{
 			cooldown(false);
 		}
-		now(teleportOwner, new PlayerTarget(entity), cause);
+		final ITarget target = new PlayerTarget(entity);
+		now(teleportOwner, target, cause);
+		teleportOwner.sendMessage(_("teleporting", target.getLocation().getWorld().getName(), target.getLocation().getBlockX(), target.getLocation().getBlockY(), target.getLocation().getBlockZ()));
 	}
 
 	protected void now(IUser teleportee, ITarget target, TeleportCause cause) throws Exception
 	{
 		cancel(false);
 		teleportee.setLastLocation();
-		final Location location = target.getLocation();
+		final Location loc = target.getLocation();
 
-		if (LocationUtil.isBlockUnsafe(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ()))
+		if (LocationUtil.isBlockUnsafe(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()))
 		{
 			if (ess.getSettings().isTeleportSafetyEnabled())
 			{
-				teleportee.getBase().teleport(LocationUtil.getSafeDestination(teleportee, location));
+				teleportee.getBase().teleport(LocationUtil.getSafeDestination(teleportee, loc));
 			}
 			else
 			{
-				throw new Exception(_("unsafeTeleportDestination"));
+				throw new Exception(_("unsafeTeleportDestination", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
 			}
 		}
 		else
 		{
-			teleportee.getBase().teleport(location);
+			teleportee.getBase().teleport(loc);
 		}
 	}
 
@@ -130,22 +133,30 @@ public class Teleport implements net.ess3.api.ITeleport
 		teleport(teleportOwner, new LocationTarget(loc), chargeFor, cause);
 	}
 
+	//This is used when teleporting to a player
 	@Override
 	public void teleport(Player entity, Trade chargeFor, TeleportCause cause) throws Exception
 	{
-		teleport(teleportOwner, new PlayerTarget(entity), chargeFor, cause);
+		ITarget target = new PlayerTarget(entity);
+		teleport(teleportOwner, target, chargeFor, cause);
+		teleportOwner.sendMessage(_("teleporting", target.getLocation().getWorld().getName(), target.getLocation().getBlockX(), target.getLocation().getBlockY(), target.getLocation().getBlockZ()));
 	}
 
+	//This is used when teleporting to stored location
 	@Override
 	public void teleportPlayer(IUser teleportee, Location loc, Trade chargeFor, TeleportCause cause) throws Exception
 	{
 		teleport(teleportee, new LocationTarget(loc), chargeFor, cause);
 	}
 
+	//This is used on /tphere
 	@Override
 	public void teleportPlayer(IUser teleportee, Player entity, Trade chargeFor, TeleportCause cause) throws Exception
 	{
-		teleport(teleportee, new PlayerTarget(entity), chargeFor, cause);
+		ITarget target = new PlayerTarget(entity);
+		teleport(teleportee, target, chargeFor, cause);
+		teleportee.sendMessage(_("teleporting", target.getLocation().getWorld().getName(), target.getLocation().getBlockX(), target.getLocation().getBlockY(), target.getLocation().getBlockZ()));
+		teleportOwner.sendMessage(_("teleporting", target.getLocation().getWorld().getName(), target.getLocation().getBlockX(), target.getLocation().getBlockY(), target.getLocation().getBlockZ()));
 	}
 
 	private void teleport(IUser teleportee, ITarget target, Trade chargeFor, TeleportCause cause) throws Exception
@@ -228,7 +239,7 @@ public class Teleport implements net.ess3.api.ITeleport
 	public void warp(IUser teleportee, String warp, Trade chargeFor, TeleportCause cause) throws Exception
 	{
 		Location loc = ess.getWarps().getWarp(warp);
-		teleportee.sendMessage(_("warpingTo", warp));
+		teleportee.sendMessage(_("warpingTo", warp, loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
 		teleport(teleportee, new LocationTarget(loc), chargeFor, cause);
 	}
 
@@ -236,7 +247,9 @@ public class Teleport implements net.ess3.api.ITeleport
 	@Override
 	public void back(Trade chargeFor) throws Exception
 	{
-		teleport(teleportOwner, new LocationTarget(teleportOwner.getLastLocation()), chargeFor, TeleportCause.COMMAND);
+		final Location loc = teleportOwner.getLastLocation();
+		teleportOwner.sendMessage(_("backUsageMsg", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+		teleport(teleportOwner, new LocationTarget(loc), chargeFor, TeleportCause.COMMAND);
 	}
 
 	//This function is used to throw a user back after a jail sentence
