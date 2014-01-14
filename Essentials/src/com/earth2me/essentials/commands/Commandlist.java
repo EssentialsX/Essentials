@@ -60,7 +60,7 @@ public class Commandlist extends EssentialsCommand
 			// If the group value is hidden, we don't need to display it
 			if (groupValue.equalsIgnoreCase("hidden"))
 			{
-				playerList.remove(groupValue);
+				playerList.remove(configGroup);
 				continue;
 			}
 
