@@ -8,6 +8,8 @@ import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import java.util.*;
 import java.util.regex.Pattern;
+
+import com.google.common.base.Joiner;
 import net.ess3.api.IEssentials;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
@@ -36,7 +38,7 @@ public class MetaItemStack
 		}
 	}
 	private final transient Pattern splitPattern = Pattern.compile("[:+',;.]");
-	private final ItemStack stack;
+	private ItemStack stack;
 	private FireworkEffect.Builder builder = FireworkEffect.builder();
 	private PotionEffectType pEffectType;
 	private PotionEffect pEffect;
@@ -95,25 +97,42 @@ public class MetaItemStack
 
 	public void parseStringMeta(final CommandSource sender, final boolean allowUnsafe, String[] string, int fromArg, final IEssentials ess) throws Exception
 	{
-
-		for (int i = fromArg; i < string.length; i++)
+		if (string[fromArg].startsWith("{"))
 		{
-			addStringMeta(sender, allowUnsafe, string[i], ess);
+			try
+			{
+				stack = ess.getServer().getUnsafe().modifyItemStack(stack, Joiner.on(' ').join(Arrays.asList(string).subList(fromArg, string.length)));
+			}
+			catch (NoSuchMethodError nsme)
+			{
+				throw new Exception(_("noMetaJson"), nsme);
+			}
+			catch (Throwable throwable)
+			{
+				throw new Exception(throwable.getMessage(), throwable);
+			}
 		}
-		if (validFirework)
+		else
 		{
-			if (!hasMetaPermission(sender, "firework", true, true, ess))
+			for (int i = fromArg; i < string.length; i++)
 			{
-				throw new Exception(_("noMetaFirework"));
+				addStringMeta(sender, allowUnsafe, string[i], ess);
 			}
-			FireworkEffect effect = builder.build();
-			FireworkMeta fmeta = (FireworkMeta)stack.getItemMeta();
-			fmeta.addEffect(effect);
-			if (fmeta.getEffects().size() > 1 && !hasMetaPermission(sender, "firework-multiple", true, true, ess))
+			if (validFirework)
 			{
-				throw new Exception(_("multipleCharges"));
+				if (!hasMetaPermission(sender, "firework", true, true, ess))
+				{
+					throw new Exception(_("noMetaFirework"));
+				}
+				FireworkEffect effect = builder.build();
+				FireworkMeta fmeta = (FireworkMeta)stack.getItemMeta();
+				fmeta.addEffect(effect);
+				if (fmeta.getEffects().size() > 1 && !hasMetaPermission(sender, "firework-multiple", true, true, ess))
+				{
+					throw new Exception(_("multipleCharges"));
+				}
+				stack.setItemMeta(fmeta);
 			}
-			stack.setItemMeta(fmeta);
 		}
 	}
 
