@@ -17,9 +17,9 @@ public class StorageTest extends TestCase
 
 	public StorageTest()
 	{
-		ess = new Essentials();
 		server = new FakeServer();
 		world = server.createWorld("testWorld", Environment.NORMAL);
+		ess = new Essentials(server);
 		try
 		{
 			ess.setupForTesting(server);

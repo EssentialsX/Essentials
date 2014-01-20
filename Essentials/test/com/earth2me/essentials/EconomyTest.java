@@ -19,9 +19,9 @@ public class EconomyTest extends TestCase
 	public EconomyTest(final String testName)
 	{
 		super(testName);
-		ess = new Essentials();
 		final FakeServer server = new FakeServer();
 		server.createWorld("testWorld", Environment.NORMAL);
+		ess = new Essentials(server);
 		try
 		{
 			ess.setupForTesting(server);

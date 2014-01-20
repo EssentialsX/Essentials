@@ -17,9 +17,9 @@ public class UserTest extends TestCase
 	public UserTest(String testName)
 	{
 		super(testName);
-		ess = new Essentials();
 		server = new FakeServer();
 		server.createWorld("testWorld", Environment.NORMAL);
+		ess = new Essentials(server);
 		try
 		{
 			ess.setupForTesting(server);

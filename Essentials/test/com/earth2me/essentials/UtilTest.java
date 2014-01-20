@@ -19,9 +19,9 @@ public class UtilTest extends TestCase
 
 	public UtilTest()
 	{
-		ess = new Essentials();
 		server = new FakeServer();
 		server.createWorld("testWorld", Environment.NORMAL);
+		ess = new Essentials(server);
 		try
 		{
 			ess.setupForTesting(server);

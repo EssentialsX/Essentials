@@ -74,6 +74,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.JavaPluginLoader;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 import org.yaml.snakeyaml.error.YAMLException;
@@ -81,7 +82,7 @@ import org.yaml.snakeyaml.error.YAMLException;
 
 public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 {
-	public static final int BUKKIT_VERSION = 2882;
+	public static final int BUKKIT_VERSION = 2985;
 	private static final Logger LOGGER = Logger.getLogger("Essentials");
 	private transient ISettings settings;
 	private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
@@ -101,6 +102,16 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 	private transient EssentialsTimer timer;
 	private transient List<String> vanishedPlayers = new ArrayList<String>();
 	private transient SimpleCommandMap scm;
+
+	public Essentials()
+	{
+
+	}
+
+	public Essentials(final Server server)
+	{
+		super(new JavaPluginLoader(server), new PluginDescriptionFile("Essentials", "", "com.earth2me.essentials.Essentials"), null, null);
+	}
 
 	@Override
 	public ISettings getSettings()

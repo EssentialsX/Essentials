@@ -1136,7 +1136,7 @@ public class FakeServer implements Server
 	@Override
 	public WarningState getWarningState()
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		return WarningState.DEFAULT;
 	}
 
 	@Override
@@ -1175,6 +1175,24 @@ public class FakeServer implements Server
 
 	@Override
 	public CachedServerIcon loadServerIcon(BufferedImage bufferedImage) throws IllegalArgumentException, Exception {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void setIdleTimeout(int i)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public int getIdleTimeout()
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public UnsafeValues getUnsafe()
+	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }
