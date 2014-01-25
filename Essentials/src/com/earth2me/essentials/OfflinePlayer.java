@@ -474,49 +474,41 @@ public class OfflinePlayer implements Player
 		throw new UnsupportedOperationException(_("notSupportedYet"));
 	}
 
-	@Override
 	public void removeAchievement(Achievement achievement)
 	{
 		throw new UnsupportedOperationException(_("notSupportedYet"));
 	}
 
-	@Override
 	public boolean hasAchievement(Achievement achievement)
 	{
 		throw new UnsupportedOperationException(_("notSupportedYet"));
 	}
 
-	@Override
 	public void incrementStatistic(Statistic ststc)
 	{
 		throw new UnsupportedOperationException(_("notSupportedYet"));
 	}
 
-	@Override
 	public void decrementStatistic(Statistic statistic) throws IllegalArgumentException
 	{
 		throw new UnsupportedOperationException(_("notSupportedYet"));
 	}
 
-	@Override
 	public void incrementStatistic(Statistic ststc, int i)
 	{
 		throw new UnsupportedOperationException(_("notSupportedYet"));
 	}
 
-	@Override
 	public void decrementStatistic(Statistic statistic, int i) throws IllegalArgumentException
 	{
 		throw new UnsupportedOperationException(_("notSupportedYet"));
 	}
 
-	@Override
 	public void setStatistic(Statistic statistic, int i) throws IllegalArgumentException
 	{
 		throw new UnsupportedOperationException(_("notSupportedYet"));
 	}
 
-	@Override
 	public int getStatistic(Statistic statistic) throws IllegalArgumentException
 	{
 		throw new UnsupportedOperationException(_("notSupportedYet"));
@@ -528,67 +520,56 @@ public class OfflinePlayer implements Player
 		throw new UnsupportedOperationException(_("notSupportedYet"));
 	}
 
-	@Override
 	public void decrementStatistic(Statistic statistic, Material material) throws IllegalArgumentException
 	{
 		throw new UnsupportedOperationException(_("notSupportedYet"));
 	}
 
-	@Override
 	public int getStatistic(Statistic statistic, Material material) throws IllegalArgumentException
 	{
 		throw new UnsupportedOperationException(_("notSupportedYet"));
 	}
 
-	@Override
 	public void incrementStatistic(Statistic ststc, Material mtrl, int i)
 	{
 		throw new UnsupportedOperationException(_("notSupportedYet"));
 	}
 
-	@Override
 	public void decrementStatistic(Statistic statistic, Material material, int i) throws IllegalArgumentException
 	{
 		throw new UnsupportedOperationException(_("notSupportedYet"));
 	}
 
-	@Override
 	public void setStatistic(Statistic statistic, Material material, int i) throws IllegalArgumentException
 	{
 		throw new UnsupportedOperationException(_("notSupportedYet"));
 	}
 
-	@Override
 	public void incrementStatistic(Statistic statistic, EntityType entityType) throws IllegalArgumentException
 	{
 		throw new UnsupportedOperationException(_("notSupportedYet"));
 	}
 
-	@Override
 	public void decrementStatistic(Statistic statistic, EntityType entityType) throws IllegalArgumentException
 	{
 		throw new UnsupportedOperationException(_("notSupportedYet"));
 	}
 
-	@Override
 	public int getStatistic(Statistic statistic, EntityType entityType) throws IllegalArgumentException
 	{
 		throw new UnsupportedOperationException(_("notSupportedYet"));
 	}
 
-	@Override
 	public void incrementStatistic(Statistic statistic, EntityType entityType, int i) throws IllegalArgumentException
 	{
 		throw new UnsupportedOperationException(_("notSupportedYet"));
 	}
 
-	@Override
 	public void decrementStatistic(Statistic statistic, EntityType entityType, int i)
 	{
 		throw new UnsupportedOperationException(_("notSupportedYet"));
 	}
 
-	@Override
 	public void setStatistic(Statistic statistic, EntityType entityType, int i)
 	{
 		throw new UnsupportedOperationException(_("notSupportedYet"));
