@@ -91,65 +91,77 @@ public class Backup implements Runnable
 		server.dispatchCommand(cs, "save-all");
 		server.dispatchCommand(cs, "save-off");
 
-		ess.runTaskAsynchronously(
-				new Runnable()
+		ess.runTaskAsynchronously(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				try
 				{
-					@Override
-					public void run()
+					final ProcessBuilder childBuilder = new ProcessBuilder(command);
+					childBuilder.redirectErrorStream(true);
+					childBuilder.directory(ess.getDataFolder().getParentFile().getParentFile());
+					final Process child = childBuilder.start();
+					ess.runTaskAsynchronously(new Runnable()
 					{
-						try
+						@Override
+						public void run()
 						{
-							final ProcessBuilder childBuilder = new ProcessBuilder(command);
-							childBuilder.redirectErrorStream(true);
-							childBuilder.directory(ess.getDataFolder().getParentFile().getParentFile());
-							final Process child = childBuilder.start();
-							final BufferedReader reader = new BufferedReader(new InputStreamReader(child.getInputStream()));
 							try
 							{
-								child.waitFor();
-								String line;
-								do
+								final BufferedReader reader = new BufferedReader(new InputStreamReader(child.getInputStream()));
+								try
 								{
-									line = reader.readLine();
-									if (line != null)
+									String line;
+									do
 									{
-										LOGGER.log(Level.INFO, line);
-									}
-								}
-								while (line != null);
-							}
-							finally
-							{
-								reader.close();
-							}
-						}
-						catch (InterruptedException ex)
-						{
-							LOGGER.log(Level.SEVERE, null, ex);
-						}
-						catch (IOException ex)
-						{
-							LOGGER.log(Level.SEVERE, null, ex);
-						}
-						finally
-						{
-							ess.scheduleSyncDelayedTask(
-									new Runnable()
-									{
-										@Override
-										public void run()
+										line = reader.readLine();
+										if (line != null)
 										{
-											server.dispatchCommand(cs, "save-on");
-											if (server.getOnlinePlayers().length == 0)
-											{
-												stopTask();
-											}
-											active = false;
-											LOGGER.log(Level.INFO, _("backupFinished"));
+											LOGGER.log(Level.INFO, line);
 										}
-									});
+									}
+									while (line != null);
+								}
+								finally
+								{
+									reader.close();
+								}
+							}
+							catch (IOException ex)
+							{
+								LOGGER.log(Level.SEVERE, null, ex);
+							}
 						}
-					}
-				});
+					});
+					child.waitFor();
+				}
+				catch (InterruptedException ex)
+				{
+					LOGGER.log(Level.SEVERE, null, ex);
+				}
+				catch (IOException ex)
+				{
+					LOGGER.log(Level.SEVERE, null, ex);
+				}
+				finally
+				{
+					ess.scheduleSyncDelayedTask(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							server.dispatchCommand(cs, "save-on");
+							if (server.getOnlinePlayers().length == 0)
+							{
+								stopTask();
+							}
+							active = false;
+							LOGGER.log(Level.INFO, _("backupFinished"));
+						}
+					});
+				}
+			}
+		});
 	}
 }
