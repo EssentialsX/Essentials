@@ -588,9 +588,18 @@ public class EssentialsSign
 		@Override
 		public final String getLine(final int index)
 		{
-			return sign.getLine(index).replaceAll("\uF700", "").replaceAll("\uF701", ""); // Mac OSX sends weird chars, ie up and down arrow symbols
+			StringBuilder builder = new StringBuilder();
+			for (char c : sign.getLine(index).toCharArray())
+			{
+				if (c < 0xF700 || c > 0xF747)
+				{
+					builder.append(c);
+				}
+			}
+			return builder.toString();
+			//return event.getLine(index); // Above code can be removed and replaced with this line when https://github.com/Bukkit/Bukkit/pull/982 is merged.
 		}
-
+		
 		@Override
 		public final void setLine(final int index, final String text)
 		{
