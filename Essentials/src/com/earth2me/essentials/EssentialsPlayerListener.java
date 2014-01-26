@@ -161,9 +161,8 @@ public class EssentialsPlayerListener implements Listener
 			final Player player = event.getPlayer();
 			event.setQuitMessage(
 					ess.getSettings().getCustomQuitMessage()
-							.replace("{PLAYER}", player.getDisplayName())
-							.replace("{USERNAME}", player.getName())
-			);
+					.replace("{PLAYER}", player.getDisplayName())
+					.replace("{USERNAME}", player.getName()));
 		}
 
 		if (ess.getSettings().removeGodOnDisconnect() && user.isGodModeEnabled())
@@ -195,7 +194,7 @@ public class EssentialsPlayerListener implements Listener
 				delayedJoin(event.getPlayer(), joinMessage);
 			}
 		});
-		if(ess.getSettings().allowSilentJoinQuit() || ess.getSettings().isCustomJoinMessage())
+		if (ess.getSettings().allowSilentJoinQuit() || ess.getSettings().isCustomJoinMessage())
 		{
 			event.setJoinMessage(null);
 		}
@@ -260,11 +259,10 @@ public class EssentialsPlayerListener implements Listener
 				{
 					ess.getServer().broadcastMessage(
 							ess.getSettings().getCustomJoinMessage()
-								.replace("{PLAYER}", player.getDisplayName())
-								.replace("{USERNAME}", player.getName())
-					);
+							.replace("{PLAYER}", player.getDisplayName())
+							.replace("{USERNAME}", player.getName()));
 				}
-				else if(ess.getSettings().allowSilentJoinQuit())
+				else if (ess.getSettings().allowSilentJoinQuit())
 				{
 					ess.getServer().broadcastMessage(message);
 				}
@@ -474,8 +472,23 @@ public class EssentialsPlayerListener implements Listener
 			user.setFallDistance(0f);
 			user.setAllowFlight(false);
 		}
-		user.setFlySpeed(0.1f);
-		user.setWalkSpeed(0.2f);
+		if (!user.isAuthorized("essentials.speed"))
+		{
+			user.setFlySpeed(0.1f);
+			user.setWalkSpeed(0.2f);
+		}
+		else
+		{
+			if (user.getFlySpeed() > ess.getSettings().getMaxFlySpeed() && !user.isAuthorized("essentials.speed.bypass"))
+			{
+				user.setFlySpeed((float)ess.getSettings().getMaxFlySpeed());
+			}
+
+			if (user.getWalkSpeed() > ess.getSettings().getMaxWalkSpeed() && !user.isAuthorized("essentials.speed.bypass"))
+			{
+				user.setWalkSpeed((float)ess.getSettings().getMaxWalkSpeed());
+			}
+		}
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
