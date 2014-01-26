@@ -483,10 +483,18 @@ public class EssentialsPlayerListener implements Listener
 			{
 				user.setFlySpeed((float)ess.getSettings().getMaxFlySpeed());
 			}
+			else
+			{
+				user.setFlySpeed(user.getFlySpeed() * 0.99999f);
+			}
 
 			if (user.getWalkSpeed() > ess.getSettings().getMaxWalkSpeed() && !user.isAuthorized("essentials.speed.bypass"))
 			{
 				user.setWalkSpeed((float)ess.getSettings().getMaxWalkSpeed());
+			}
+			else
+			{
+				user.setWalkSpeed(user.getWalkSpeed() * 0.99999f);
 			}
 		}
 	}
