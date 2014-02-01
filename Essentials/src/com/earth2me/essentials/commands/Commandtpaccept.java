@@ -18,10 +18,17 @@ public class Commandtpaccept extends EssentialsCommand
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
+		final User requester;
+		try
+		{
+			requester = ess.getUser(user.getTeleportRequest());
+		}
+		catch (Exception ex)
+		{
+			throw new Exception(_("noPendingRequest"));
+		}
 
-		final User requester = ess.getUser(user.getTeleportRequest());
-
-		if (requester == null || !requester.isOnline())
+		if (!requester.isOnline())
 		{
 			throw new Exception(_("noPendingRequest"));
 		}
@@ -73,8 +80,9 @@ public class Commandtpaccept extends EssentialsCommand
 		{
 			user.sendMessage(_("pendingTeleportCancelled"));
 			ess.showError(requester.getSource(), ex, commandLabel);
-		}		
+		}
 		user.requestTeleport(null, false);
 		throw new NoChargeException();
 	}
+
 }
