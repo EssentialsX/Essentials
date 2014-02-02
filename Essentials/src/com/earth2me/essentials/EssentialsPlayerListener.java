@@ -230,6 +230,7 @@ public class EssentialsPlayerListener implements Listener
 					return;
 				}
 
+				user.trackUUID();
 				user.setLastLogin(currentTime);
 				user.setDisplayNick();
 				updateCompass(user);

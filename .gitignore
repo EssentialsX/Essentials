@@ -47,3 +47,5 @@
 *.iml
 target/
 dependency-reduced-pom.xml
+/Essentials/config.yml
+/Essentials/userdata/testplayer1.yml
