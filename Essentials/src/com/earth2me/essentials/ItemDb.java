@@ -4,8 +4,10 @@ import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.ess3.api.IEssentials;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -18,13 +20,13 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb
 	private final transient Map<ItemData, String> primaryName = new HashMap<ItemData, String>();
 	private final transient Map<String, Short> durabilities = new HashMap<String, Short>();
 	private final transient ManagedFile file;
-	private final transient Pattern splitPattern = Pattern.compile("[:+',;.]");
+	private final transient Pattern splitPattern = Pattern.compile("((.*)[:+',;.](\\d+))");
 
-		public ItemDb(final IEssentials ess)
-		{
-			this.ess = ess;
-			file = new ManagedFile("items.csv", ess);
-		}
+	public ItemDb(final IEssentials ess)
+	{
+		this.ess = ess;
+		file = new ManagedFile("items.csv", ess);
+	}
 
 	@Override
 	public void reloadConfig()
@@ -93,27 +95,31 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb
 		int itemid = 0;
 		String itemname = null;
 		short metaData = 0;
-		String[] parts = splitPattern.split(id);
-		if (id.matches("^\\d+[:+',;.]\\d+$"))
+		Matcher parts = splitPattern.matcher(id);
+		if (parts.matches())
 		{
-			itemid = Integer.parseInt(parts[0]);
-			metaData = Short.parseShort(parts[1]);
+			itemname = parts.group(2);
+			metaData = Short.parseShort(parts.group(3));
+		}
+		else
+		{
+			itemname = id;
+		}
+
+		if (NumberUtil.isInt(itemname))
+		{
+			itemid = Integer.parseInt(itemname);
 		}
 		else if (NumberUtil.isInt(id))
 		{
 			itemid = Integer.parseInt(id);
 		}
-		else if (id.matches("^[^:+',;.]+[:+',;.]\\d+$"))
-		{
-			itemname = parts[0].toLowerCase(Locale.ENGLISH);
-			metaData = Short.parseShort(parts[1]);
-		}
 		else
 		{
-			itemname = id.toLowerCase(Locale.ENGLISH);
+			itemname = itemname.toLowerCase(Locale.ENGLISH);
 		}
 
-		if (itemname != null)
+		if (itemid < 1)
 		{
 			if (items.containsKey(itemname))
 			{
@@ -125,13 +131,26 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb
 			}
 			else if (Material.getMaterial(itemname.toUpperCase(Locale.ENGLISH)) != null)
 			{
-				itemid = Material.getMaterial(itemname.toUpperCase(Locale.ENGLISH)).getId();
-				metaData = 0;
+				Material bMaterial = Material.getMaterial(itemname.toUpperCase(Locale.ENGLISH));
+				itemid = bMaterial.getId();
 			}
 			else
 			{
-				throw new Exception(_("unknownItemName", id));
+				try
+				{
+					Material bMaterial = Bukkit.getUnsafe().getMaterialFromInternalName(itemname.toLowerCase(Locale.ENGLISH));
+					itemid = bMaterial.getId();
+				}
+				catch (Throwable throwable)
+				{
+					throw new Exception(_("unknownItemName", itemname), throwable);
+				}
 			}
+		}
+
+		if (itemid < 1)
+		{
+			throw new Exception(_("unknownItemName", itemname));
 		}
 
 		final Material mat = Material.getMaterial(itemid);
@@ -193,7 +212,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb
 		return is;
 	}
 
-@Override
+	@Override
 	public String names(ItemStack item)
 	{
 		ItemData itemData = new ItemData(item.getTypeId(), item.getDurability());
@@ -215,7 +234,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb
 		return StringUtil.joinList(", ", nameList);
 	}
 
-@Override
+	@Override
 	public String name(ItemStack item)
 	{
 		ItemData itemData = new ItemData(item.getTypeId(), item.getDurability());
@@ -231,6 +250,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb
 		}
 		return name;
 	}
+
 
 	static class ItemData
 	{
