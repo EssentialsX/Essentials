@@ -122,7 +122,7 @@ public class Teleport implements net.ess3.api.ITeleport
 			{
 				teleportee.getBase().leaveVehicle();
 			}
-			teleportee.getBase().teleport(loc);
+			teleportee.getBase().teleport(LocationUtil.getRoundedDestination(loc));
 		}
 	}
 

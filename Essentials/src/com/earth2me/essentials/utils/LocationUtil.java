@@ -248,6 +248,16 @@ public class LocationUtil
 		}
 		return false;
 	}
+	
+	// Not needed if using getSafeDestination(loc)
+	public static Location getRoundedDestination(final Location loc)
+	{
+		final World world = loc.getWorld();
+		int x = loc.getBlockX();
+		int y = (int)Math.round(loc.getY());
+		int z = loc.getBlockZ();
+		return new Location(world, x + 0.5, y, z + 0.5, loc.getYaw(), loc.getPitch());
+	}
 
 	public static Location getSafeDestination(final IUser user, final Location loc) throws Exception
 	{
@@ -259,11 +269,11 @@ public class LocationUtil
 			{
 				user.getBase().setFlying(true);
 			}
-			return loc;
+			return getRoundedDestination(loc);
 		}
 		return getSafeDestination(loc);
 	}
-
+	
 	public static Location getSafeDestination(final Location loc) throws Exception
 	{
 		if (loc == null || loc.getWorld() == null)
