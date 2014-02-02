@@ -6,6 +6,7 @@ import com.earth2me.essentials.Trade.OverflowType;
 import com.earth2me.essentials.utils.FormatUtil;
 import java.util.*;
 import net.ess3.api.IEssentials;
+import net.ess3.api.MaxMoneyException;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -72,7 +73,7 @@ public class SignProtection extends EssentialsSign
 		return false;
 	}
 
-	private void checkIfSignsAreBroken(final Block block, final User player, final String username, final IEssentials ess)
+	private void checkIfSignsAreBroken(final Block block, final User player, final String username, final IEssentials ess) throws MaxMoneyException
 	{
 		final Map<Location, SignProtectionState> signs = getConnectedSigns(block, player, username, false);
 		for (Map.Entry<Location, SignProtectionState> entry : signs.entrySet())
@@ -285,7 +286,7 @@ public class SignProtection extends EssentialsSign
 	}
 
 	@Override
-	protected boolean onBlockBreak(final Block block, final User player, final String username, final IEssentials ess) throws SignException
+	protected boolean onBlockBreak(final Block block, final User player, final String username, final IEssentials ess) throws SignException, MaxMoneyException
 	{
 		final SignProtectionState state = isBlockProtected(block, player, username, false);
 

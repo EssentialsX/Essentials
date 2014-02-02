@@ -5,6 +5,7 @@ import com.earth2me.essentials.utils.FormatUtil;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.ess3.api.IEssentials;
+import net.ess3.api.MaxMoneyException;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -35,14 +36,20 @@ public class SignBlockListener implements Listener
 			event.getHandlers().unregister(this);
 			return;
 		}
-
-		if (protectSignsAndBlocks(event.getBlock(), event.getPlayer()))
+		try
+		{
+			if (protectSignsAndBlocks(event.getBlock(), event.getPlayer()))
+			{
+				event.setCancelled(true);
+			}
+		}
+		catch (MaxMoneyException ex)
 		{
 			event.setCancelled(true);
 		}
 	}
 
-	public boolean protectSignsAndBlocks(final Block block, final Player player)
+	public boolean protectSignsAndBlocks(final Block block, final Player player) throws MaxMoneyException
 	{
 		// prevent any signs be broken by destroying the block they are attached to
 		if (EssentialsSign.checkIfBlockBreaksSigns(block))

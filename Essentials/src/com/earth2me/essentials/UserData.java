@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.util.*;
 import net.ess3.api.IEssentials;
 import net.ess3.api.InvalidWorldException;
+import net.ess3.api.MaxMoneyException;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -99,7 +100,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		return money;
 	}
 
-	public void setMoney(BigDecimal value)
+	public void setMoney(BigDecimal value, boolean throwError) throws MaxMoneyException
 	{
 		money = value;
 		BigDecimal maxMoney = ess.getSettings().getMaxMoney();
@@ -107,6 +108,10 @@ public abstract class UserData extends PlayerExtension implements IConf
 		if (money.compareTo(maxMoney) > 0)
 		{
 			money = maxMoney;
+			if (throwError)
+			{
+				throw new MaxMoneyException();
+			}
 		}
 		if (money.compareTo(minMoney) < 0)
 		{
@@ -729,13 +734,12 @@ public abstract class UserData extends PlayerExtension implements IConf
 		return afk;
 	}
 
-	public void  _setAfk(boolean set)
+	public void _setAfk(boolean set)
 	{
 		afk = set;
 		config.setProperty("afk", set);
 		config.save();
 	}
-
 	private boolean newplayer;
 	private String geolocation;
 

@@ -107,7 +107,7 @@ public class Teleport implements net.ess3.api.ITeleport
 			{
 				if (teleportee.getBase().isInsideVehicle())
 				{
-					teleportee.getBase().leaveVehicle();;
+					teleportee.getBase().leaveVehicle();
 				}
 				teleportee.getBase().teleport(LocationUtil.getSafeDestination(teleportee, loc));
 			}
@@ -120,7 +120,7 @@ public class Teleport implements net.ess3.api.ITeleport
 		{
 			if (teleportee.getBase().isInsideVehicle())
 			{
-				teleportee.getBase().leaveVehicle();;
+				teleportee.getBase().leaveVehicle();
 			}
 			teleportee.getBase().teleport(loc);
 		}

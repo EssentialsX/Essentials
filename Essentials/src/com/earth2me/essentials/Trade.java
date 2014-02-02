@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.ess3.api.IEssentials;
 import net.ess3.api.IUser;
+import net.ess3.api.MaxMoneyException;
 import org.bukkit.Location;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
@@ -122,12 +123,12 @@ public class Trade
 		}
 	}
 
-	public boolean pay(final IUser user)
+	public boolean pay(final IUser user) throws MaxMoneyException
 	{
 		return pay(user, OverflowType.ABORT) == null;
 	}
 
-	public Map<Integer, ItemStack> pay(final IUser user, final OverflowType type)
+	public Map<Integer, ItemStack> pay(final IUser user, final OverflowType type) throws MaxMoneyException
 	{
 		if (getMoney() != null && getMoney().signum() > 0)
 		{

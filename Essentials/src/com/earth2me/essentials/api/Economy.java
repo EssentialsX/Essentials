@@ -21,6 +21,7 @@ import java.math.MathContext;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.ess3.api.IEssentials;
+import net.ess3.api.MaxMoneyException;
 
 
 /**
@@ -146,7 +147,14 @@ public class Economy
 		{
 			throw new NoLoanPermittedException();
 		}
-		user.setMoney(balance);
+		try
+		{
+			user.setMoney(balance);
+		}
+		catch (MaxMoneyException ex)
+		{
+			//TODO: Update API to show max balance errors
+		}
 	}
 
 	/**

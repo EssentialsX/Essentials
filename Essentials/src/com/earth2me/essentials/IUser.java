@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import net.ess3.api.ITeleport;
+import net.ess3.api.MaxMoneyException;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,19 +22,15 @@ public interface IUser
 
 	void healCooldown() throws Exception;
 
-	void giveMoney(BigDecimal value);
+	void giveMoney(BigDecimal value) throws MaxMoneyException;
 
-	void giveMoney(final BigDecimal value, final CommandSource initiator);
-	@Deprecated
-	void giveMoney(final BigDecimal value, final CommandSender initiator);
-
+	void giveMoney(final BigDecimal value, final CommandSource initiator) throws MaxMoneyException;
+	
 	void payUser(final User reciever, final BigDecimal value) throws Exception;
 
 	void takeMoney(BigDecimal value);
 
 	void takeMoney(final BigDecimal value, final CommandSource initiator);
-	@Deprecated
-	void takeMoney(final BigDecimal value, final CommandSender initiator);
 
 	boolean canAfford(BigDecimal value);
 
@@ -49,7 +46,7 @@ public interface IUser
 
 	BigDecimal getMoney();
 
-	void setMoney(final BigDecimal value);
+	void setMoney(final BigDecimal value) throws MaxMoneyException;
 
 	void setAfk(final boolean set);
 

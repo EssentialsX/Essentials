@@ -5,6 +5,7 @@ import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.Trade.OverflowType;
 import com.earth2me.essentials.User;
 import net.ess3.api.IEssentials;
+import net.ess3.api.MaxMoneyException;
 
 
 public class SignSell extends EssentialsSign
@@ -23,7 +24,7 @@ public class SignSell extends EssentialsSign
 	}
 
 	@Override
-	protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException
+	protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException, MaxMoneyException
 	{
 		final Trade charge = getTrade(sign, 1, 2, player, ess);
 		final Trade money = getTrade(sign, 3, ess);

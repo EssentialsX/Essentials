@@ -7,6 +7,9 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
 import java.math.BigDecimal;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import net.ess3.api.MaxMoneyException;
 import org.bukkit.Server;
 
 
@@ -56,7 +59,7 @@ public class Commandeco extends EssentialsLoopCommand
 	}
 
 	@Override
-	protected void updatePlayer(final Server server, final CommandSource sender, final User player, final String[] args) throws NotEnoughArgumentsException, ChargeException
+	protected void updatePlayer(final Server server, final CommandSource sender, final User player, final String[] args) throws NotEnoughArgumentsException, ChargeException, MaxMoneyException
 	{
 		switch (cmd)
 		{
@@ -85,7 +88,14 @@ public class Commandeco extends EssentialsLoopCommand
 		}
 		else if (sender == null)
 		{
-			player.setMoney(minBalance);
+			try
+			{
+				player.setMoney(minBalance);
+			}
+			catch (MaxMoneyException ex)
+			{
+				// Take shouldn't be able to throw a max money exception
+			}
 			player.sendMessage(_("takenFromAccount", NumberUtil.displayCurrency(player.getMoney(), ess)));
 		}
 		else
@@ -94,7 +104,7 @@ public class Commandeco extends EssentialsLoopCommand
 		}
 	}
 
-	private void set(BigDecimal amount, final User player, final CommandSource sender)
+	private void set(BigDecimal amount, final User player, final CommandSource sender) throws MaxMoneyException
 	{
 		BigDecimal minBalance = ess.getSettings().getMinMoney();
 		boolean underMinimum = (amount.compareTo(minBalance) < 0);

@@ -8,6 +8,7 @@ import com.earth2me.essentials.utils.NumberUtil;
 import java.math.BigDecimal;
 import java.util.Map;
 import net.ess3.api.IEssentials;
+import net.ess3.api.MaxMoneyException;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -39,7 +40,7 @@ public class SignTrade extends EssentialsSign
 	}
 
 	@Override
-	protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException
+	protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException, MaxMoneyException
 	{
 		if (sign.getLine(3).substring(2).equalsIgnoreCase(username))
 		{
@@ -115,7 +116,7 @@ public class SignTrade extends EssentialsSign
 	}
 
 	@Override
-	protected boolean onSignBreak(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException
+	protected boolean onSignBreak(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, MaxMoneyException
 	{
 		if ((sign.getLine(3).length() > 3 && sign.getLine(3).substring(2).equalsIgnoreCase(username))
 			|| player.isAuthorized("essentials.signs.trade.override"))

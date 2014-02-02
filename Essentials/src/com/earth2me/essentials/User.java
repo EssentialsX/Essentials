@@ -13,6 +13,7 @@ import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.ess3.api.IEssentials;
+import net.ess3.api.MaxMoneyException;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import net.ess3.api.events.UserBalanceUpdateEvent;
 import org.bukkit.ChatColor;
@@ -135,13 +136,13 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	}
 
 	@Override
-	public void giveMoney(final BigDecimal value)
+	public void giveMoney(final BigDecimal value)  throws MaxMoneyException
 	{
 		giveMoney(value, (CommandSource)null);
 	}
 
 	@Override
-	public void giveMoney(final BigDecimal value, final CommandSource initiator)
+	public void giveMoney(final BigDecimal value, final CommandSource initiator) throws MaxMoneyException
 	{
 		if (value.signum() == 0)
 		{
@@ -156,14 +157,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	}
 
 	@Override
-	@Deprecated
-	public void giveMoney(final BigDecimal value, final CommandSender initiator)
-	{
-		giveMoney(value, new CommandSource(initiator));
-	}
-
-	@Override
-	public void payUser(final User reciever, final BigDecimal value) throws ChargeException
+	public void payUser(final User reciever, final BigDecimal value) throws ChargeException, MaxMoneyException
 	{
 		if (value.signum() == 0)
 		{
@@ -195,19 +189,19 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		{
 			return;
 		}
-		setMoney(getMoney().subtract(value));
+		try
+		{
+			setMoney(getMoney().subtract(value));
+		}
+		catch (MaxMoneyException ex)
+		{
+			//We shouldn't be able to throw an exception on subtract money
+		}
 		sendMessage(_("takenFromAccount", NumberUtil.displayCurrency(value, ess)));
 		if (initiator != null)
 		{
 			initiator.sendMessage(_("takenFromOthersAccount", NumberUtil.displayCurrency(value, ess), this.getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess)));
 		}
-	}
-
-	@Override
-	@Deprecated
-	public void takeMoney(final BigDecimal value, final CommandSender initiator)
-	{
-		takeMoney(value, new CommandSource(initiator));
 	}
 
 	@Override
@@ -441,7 +435,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	}
 
 	@Override
-	public void setMoney(final BigDecimal value)
+	public void setMoney(final BigDecimal value) throws MaxMoneyException
 	{
 		if (ess.getSettings().isEcoDisabled())
 		{
@@ -467,7 +461,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 			{
 			}
 		}
-		super.setMoney(value);
+		super.setMoney(value, true);
 		ess.getServer().getPluginManager().callEvent(new UserBalanceUpdateEvent(this.getBase(), value));
 		Trade.log("Update", "Set", "API", getName(), new Trade(value, ess), null, null, null, ess);
 	}
@@ -480,7 +474,14 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		}
 		if (Methods.hasMethod() && super.getMoney() != value)
 		{
-			super.setMoney(value);
+			try
+			{
+				super.setMoney(value, false);
+			}
+			catch (MaxMoneyException ex)
+			{
+				// We don't want to throw any errors here, just updating a cache
+			}
 		}
 	}
 

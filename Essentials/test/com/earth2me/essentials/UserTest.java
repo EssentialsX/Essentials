@@ -2,7 +2,10 @@ package com.earth2me.essentials;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import junit.framework.TestCase;
+import net.ess3.api.MaxMoneyException;
 import org.bukkit.Location;
 import org.bukkit.World.Environment;
 import org.bukkit.plugin.InvalidDescriptionException;
@@ -71,11 +74,19 @@ public class UserTest extends TestCase
 		should("properly set, take, give, and get money");
 		User user = ess.getUser(base1);
 		BigDecimal i = new BigDecimal("100.5");
-		user.setMoney(i);
-		user.takeMoney(new BigDecimal(50));
-		i = i.subtract(BigDecimal.valueOf(50));
-		user.giveMoney(new BigDecimal(25));
-		i = i.add(BigDecimal.valueOf(25));
+		try
+		{
+			user.setMoney(i);
+			user.takeMoney(new BigDecimal(50));
+			i = i.subtract(BigDecimal.valueOf(50));
+			user.giveMoney(new BigDecimal(25));
+			i = i.add(BigDecimal.valueOf(25));
+		}
+		catch (MaxMoneyException ex)
+		{
+			fail();
+		}
+		
 		assertEquals(user.getMoney(), i);
 	}
 

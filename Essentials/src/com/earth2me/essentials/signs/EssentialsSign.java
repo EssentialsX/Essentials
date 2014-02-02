@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import net.ess3.api.IEssentials;
+import net.ess3.api.MaxMoneyException;
 import net.ess3.api.events.SignBreakEvent;
 import net.ess3.api.events.SignCreateEvent;
 import net.ess3.api.events.SignInteractEvent;
@@ -129,7 +130,7 @@ public class EssentialsSign
 		}
 	}
 
-	protected final boolean onSignBreak(final Block block, final Player player, final IEssentials ess)
+	protected final boolean onSignBreak(final Block block, final Player player, final IEssentials ess) throws MaxMoneyException
 	{
 		final ISign sign = new BlockSign(block);
 		final User user = ess.getUser(player);
@@ -162,12 +163,12 @@ public class EssentialsSign
 		return true;
 	}
 
-	protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException
+	protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException, MaxMoneyException
 	{
 		return true;
 	}
 
-	protected boolean onSignBreak(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException
+	protected boolean onSignBreak(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, MaxMoneyException
 	{
 		return true;
 	}
@@ -208,7 +209,7 @@ public class EssentialsSign
 		return false;
 	}
 
-	protected final boolean onBlockBreak(final Block block, final Player player, final IEssentials ess)
+	protected final boolean onBlockBreak(final Block block, final Player player, final IEssentials ess) throws MaxMoneyException
 	{
 		User user = ess.getUser(player);
 		try
@@ -298,7 +299,7 @@ public class EssentialsSign
 		return true;
 	}
 
-	protected boolean onBlockBreak(final Block block, final User player, final String username, final IEssentials ess) throws SignException
+	protected boolean onBlockBreak(final Block block, final User player, final String username, final IEssentials ess) throws SignException, MaxMoneyException
 	{
 		return true;
 	}
