@@ -872,7 +872,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	public void trackUUID()
 	{
-		config.setProperty("uuid", base.getUniqueId());
+		config.setProperty("uuid", base.getUniqueId().toString());
 		config.save();
 	}
 
