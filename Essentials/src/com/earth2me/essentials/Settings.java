@@ -24,7 +24,7 @@ import org.bukkit.inventory.ItemStack;
 public class Settings implements net.ess3.api.ISettings
 {
 	private final transient EssentialsConf config;
-	private final static Logger logger = Logger.getLogger("Essentials");
+	private static final Logger logger = Logger.getLogger("Essentials");
 	private final transient IEssentials ess;
 	private boolean metricsEnabled = true;
 
@@ -727,7 +727,7 @@ public class Settings implements net.ess3.api.ISettings
 	{
 		return config.getBoolean(configName, def);
 	}
-	private final static BigDecimal MAXMONEY = new BigDecimal("10000000000000");
+	private static final BigDecimal MAXMONEY = new BigDecimal("10000000000000");
 	private BigDecimal maxMoney = MAXMONEY;
 
 	private BigDecimal _getMaxMoney()
@@ -740,7 +740,7 @@ public class Settings implements net.ess3.api.ISettings
 	{
 		return maxMoney;
 	}
-	private final static BigDecimal MINMONEY = new BigDecimal("-10000000000000");
+	private static final BigDecimal MINMONEY = new BigDecimal("-10000000000000");
 	private BigDecimal minMoney = MINMONEY;
 
 	private BigDecimal _getMinMoney()

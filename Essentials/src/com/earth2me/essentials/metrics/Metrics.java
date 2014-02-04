@@ -45,7 +45,7 @@ public class Metrics
 	/**
 	 * The current revision number
 	 */
-	private final static int REVISION = 7;
+	private static final int REVISION = 7;
 
 	/**
 	 * The base url of the metrics domain

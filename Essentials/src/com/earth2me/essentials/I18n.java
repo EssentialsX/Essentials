@@ -25,7 +25,7 @@ public class I18n implements net.ess3.api.II18n
 	private final transient ResourceBundle defaultBundle;
 	private final transient Map<String, MessageFormat> messageFormatCache = new HashMap<String, MessageFormat>();
 	private final transient IEssentials ess;
-	private final static Pattern NODOUBLEMARK = Pattern.compile("''");
+	private static final Pattern NODOUBLEMARK = Pattern.compile("''");
 
 	public I18n(final IEssentials ess)
 	{

@@ -19,7 +19,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 public class Commandwarp extends EssentialsCommand
 {
-	private final static int WARPS_PER_PAGE = 20;
+	private static final int WARPS_PER_PAGE = 20;
 
 	public Commandwarp()
 	{

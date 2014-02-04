@@ -65,7 +65,7 @@ public class ExecuteTimer
 	}
 
 
-	static private class ExecuteRecord
+	private static class ExecuteRecord
 	{
 		private final String mark;
 		private final long time;

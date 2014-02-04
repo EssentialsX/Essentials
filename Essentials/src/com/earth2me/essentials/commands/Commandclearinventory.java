@@ -19,8 +19,8 @@ public class Commandclearinventory extends EssentialsCommand
 	{
 		super("clearinventory");
 	}
-	static int BASE_AMOUNT = 100000;
-	static int EXTENDED_CAP = 8;
+	private static final int BASE_AMOUNT = 100000;
+	private static final int EXTENDED_CAP = 8;
 
 	@Override
 	public void run(Server server, User user, String commandLabel, String[] args) throws Exception

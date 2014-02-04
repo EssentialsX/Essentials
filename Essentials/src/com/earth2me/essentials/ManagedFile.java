@@ -17,7 +17,7 @@ import org.bukkit.Bukkit;
 
 public class ManagedFile
 {
-	private final static int BUFFERSIZE = 1024 * 8;
+	private static final int BUFFERSIZE = 1024 * 8;
 	private final transient File file;
 
 	public ManagedFile(final String filename, final IEssentials ess)

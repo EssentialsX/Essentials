@@ -24,8 +24,8 @@ import org.bukkit.potion.PotionEffectType;
 
 public class MetaItemStack
 {
-	private final static Map<String, DyeColor> colorMap = new HashMap<String, DyeColor>();
-	private final static Map<String, FireworkEffect.Type> fireworkShape = new HashMap<String, FireworkEffect.Type>();
+	private static final Map<String, DyeColor> colorMap = new HashMap<String, DyeColor>();
+	private static final Map<String, FireworkEffect.Type> fireworkShape = new HashMap<String, FireworkEffect.Type>();
 	static
 	{
 		for (DyeColor color : DyeColor.values())

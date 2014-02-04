@@ -78,8 +78,8 @@ public class LocationUtil
 		TRANSPARENT_MATERIALS.add((byte)Material.WATER.getId());
 		TRANSPARENT_MATERIALS.add((byte)Material.STATIONARY_WATER.getId());
 	}
-	public final static int RADIUS = 3;
-	public final static Vector3D[] VOLUME;
+	public static final int RADIUS = 3;
+	public static final Vector3D[] VOLUME;
 
 	public static ItemStack convertBlockToItem(final Block block)
 	{

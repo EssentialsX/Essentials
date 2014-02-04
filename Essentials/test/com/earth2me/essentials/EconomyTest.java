@@ -13,8 +13,8 @@ import org.junit.Test;
 public class EconomyTest extends TestCase
 {
 	private final transient Essentials ess;
-	private final static String NPCNAME = "npc1";
-	private final static String PLAYERNAME = "TestPlayer1";
+	private static final String NPCNAME = "npc1";
+	private static final String PLAYERNAME = "TestPlayer1";
 
 	public EconomyTest(final String testName)
 	{

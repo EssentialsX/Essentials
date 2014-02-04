@@ -18,9 +18,9 @@ import org.bukkit.event.block.*;
 
 public class SignBlockListener implements Listener
 {
-	private final static Logger LOGGER = Logger.getLogger("Essentials");
-	private final static Material WALL_SIGN = Material.WALL_SIGN;
-	private final static Material SIGN_POST = Material.SIGN_POST;
+	private static final Logger LOGGER = Logger.getLogger("Essentials");
+	private static final Material WALL_SIGN = Material.WALL_SIGN;
+	private static final Material SIGN_POST = Material.SIGN_POST;
 	private final transient IEssentials ess;
 
 	public SignBlockListener(IEssentials ess)

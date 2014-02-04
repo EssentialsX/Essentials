@@ -31,8 +31,8 @@ import org.bukkit.plugin.Plugin;
 
 public class KeywordReplacer implements IText
 {
-	private final static Pattern KEYWORD = Pattern.compile("\\{([^\\{\\}]+)\\}");
-	private final static Pattern KEYWORDSPLIT = Pattern.compile("\\:");
+	private static final Pattern KEYWORD = Pattern.compile("\\{([^\\{\\}]+)\\}");
+	private static final Pattern KEYWORDSPLIT = Pattern.compile("\\:");
 	private final transient IText input;
 	private final transient List<String> replaced;
 	private final transient IEssentials ess;

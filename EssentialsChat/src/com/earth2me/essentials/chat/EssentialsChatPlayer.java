@@ -13,7 +13,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public abstract class EssentialsChatPlayer implements Listener
 {
-	protected final static Logger logger = Logger.getLogger("Minecraft");
+	protected static final Logger logger = Logger.getLogger("Minecraft");
 	protected transient IEssentials ess;
 	protected final transient Server server;
 	protected final transient Map<AsyncPlayerChatEvent, ChatStore> chatStorage;

@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 public class Commandptime extends EssentialsCommand
 {
-	public static final Set<String> getAliases = new HashSet<String>();
+	private static final Set<String> getAliases = new HashSet<String>();
 
 	static
 	{

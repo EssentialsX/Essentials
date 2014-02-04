@@ -6,8 +6,8 @@ import java.util.regex.Pattern;
 
 public class StringUtil
 {
-	private final static Pattern INVALIDFILECHARS = Pattern.compile("[^a-z0-9]");
-	private final static Pattern INVALIDCHARS = Pattern.compile("[^\t\n\r\u0020-\u007E\u0085\u00A0-\uD7FF\uE000-\uFFFC]");
+	private static final Pattern INVALIDFILECHARS = Pattern.compile("[^a-z0-9]");
+	private static final Pattern INVALIDCHARS = Pattern.compile("[^\t\n\r\u0020-\u007E\u0085\u00A0-\uD7FF\uE000-\uFFFC]");
 
 	//Used to clean file names before saving to disk
 	public static String sanitizeFileName(final String name)

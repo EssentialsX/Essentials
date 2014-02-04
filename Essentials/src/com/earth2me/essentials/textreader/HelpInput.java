@@ -16,7 +16,7 @@ public class HelpInput implements IText
 	private static final String DESCRIPTION = "description";
 	private static final String PERMISSION = "permission";
 	private static final String PERMISSIONS = "permissions";
-	private final static Logger logger = Logger.getLogger("Essentials");
+	private static final Logger logger = Logger.getLogger("Essentials");
 	private final transient List<String> lines = new ArrayList<String>();
 	private final transient List<String> chapters = new ArrayList<String>();
 	private final transient Map<String, Integer> bookmarks = new HashMap<String, Integer>();

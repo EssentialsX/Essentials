@@ -579,7 +579,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 		}
 	}
 
-	static public void wrongVersion()
+	public static void wrongVersion()
 	{
 		LOGGER.log(Level.SEVERE, " * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! *");
 		LOGGER.log(Level.SEVERE, _("notRecommendedBukkit"));

@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 public class PlayerList
 {
 	// Cosmetic list formatting
-	static public String listUsers(final IEssentials ess, final List<User> users, final String seperator)
+	public static String listUsers(final IEssentials ess, final List<User> users, final String seperator)
 	{
 		final StringBuilder groupString = new StringBuilder();
 		Collections.sort(users);
@@ -44,7 +44,7 @@ public class PlayerList
 	}
 
 	// Produce a user summary: There are 5 out of maximum 10 players online.
-	static public String listSummary(final IEssentials ess, final boolean showHidden)
+	public static String listSummary(final IEssentials ess, final boolean showHidden)
 	{
 		Server server = ess.getServer();
 		int playerHidden = 0;
@@ -68,7 +68,7 @@ public class PlayerList
 	}
 
 	// Build the basic player list, divided by groups.
-	static public Map<String, List<User>> getPlayerLists(final IEssentials ess, final boolean showHidden)
+	public static Map<String, List<User>> getPlayerLists(final IEssentials ess, final boolean showHidden)
 	{
 		Server server = ess.getServer();
 		final Map<String, List<User>> playerList = new HashMap<String, List<User>>();
@@ -92,7 +92,7 @@ public class PlayerList
 	}
 
 	// Handle the merging of groups
-	static public List<User> getMergedList(final IEssentials ess, final Map<String, List<User>> playerList, final String groupName)
+	public static List<User> getMergedList(final IEssentials ess, final Map<String, List<User>> playerList, final String groupName)
 	{
 		final Set<String> configGroups = ess.getSettings().getListGroupConfig().keySet();
 		final List<User> users = new ArrayList<User>();
@@ -122,7 +122,7 @@ public class PlayerList
 	}
 
 	// Output a playerlist of just a single group, /list <groupname>
-	static public String listGroupUsers(final IEssentials ess, final Map<String, List<User>> playerList, final String groupName) throws Exception
+	public static String listGroupUsers(final IEssentials ess, final Map<String, List<User>> playerList, final String groupName) throws Exception
 	{
 		final List<User> users = getMergedList(ess, playerList, groupName);
 		final List<User> groupUsers = playerList.get(groupName);
@@ -141,7 +141,7 @@ public class PlayerList
 	}
 
 	// Build the output string
-	static public String outputFormat(final String group, final String message)
+	public static String outputFormat(final String group, final String message)
 	{
 		final StringBuilder outputString = new StringBuilder();
 		outputString.append(_("listGroupTag", FormatUtil.replaceFormat(group)));

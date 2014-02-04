@@ -10,8 +10,8 @@ public class UserManager implements IConf
 {
 	private final transient EssentialsConf users;
 	private final transient List<String> spyusers = Collections.synchronizedList(new ArrayList<String>());
-	private final static String ADDRESS = "address";
-	private final static String SPY = "spy";
+	private static final String ADDRESS = "address";
+	private static final String SPY = "spy";
 
 	public UserManager(final File folder)
 	{
