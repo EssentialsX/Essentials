@@ -326,10 +326,6 @@ commands:
     description: Creates a jail where you specified named [jailname].
     usage: /<command> <jailname>
     aliases: [esetjail,createjail,ecreatejail]
-  skull:
-    description: Give yourself or change the owner of a Skull.
-    usage: /<command> [owner]
-    aliases: [eskull, egiveskull, giveskull]
   setwarp:
     description: Creates a new warp.
     usage: /<command> <warp>
@@ -338,6 +334,10 @@ commands:
     description: Set the sell value of an item.
     usage: /<command> [itemname|id] <price>
     aliases: [esetworth]
+  skull:
+    description: Set the owner of a player skull
+    usage: /<command> [owner]
+    aliases: [eskull, playerskull, eplayerskull, head, ehead]
   socialspy:
     description: Toggles if you can see msg/mail commands in chat.
     usage: /<command> [player] [on|off]

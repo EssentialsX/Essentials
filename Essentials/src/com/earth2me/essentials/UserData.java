@@ -37,7 +37,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 	public final void reset()
 	{
 		config.getFile().delete();
-		ess.getUserMap().removeUser(this.getName());
+		ess.getUserMap().removeUser(this.getBase().getName());
 	}
 
 	@Override
@@ -149,7 +149,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 	public Location getHome(String name) throws Exception
 	{
 		String search = getHomeName(name);
-		return config.getLocation("homes." + search, getServer());
+		return config.getLocation("homes." + search, this.getBase().getServer());
 	}
 
 	public Location getHome(final Location world)
@@ -163,14 +163,14 @@ public abstract class UserData extends PlayerExtension implements IConf
 			Location loc;
 			for (String home : getHomes())
 			{
-				loc = config.getLocation("homes." + home, getServer());
+				loc = config.getLocation("homes." + home, this.getBase().getServer());
 				if (world.getWorld() == loc.getWorld())
 				{
 					return loc;
 				}
 
 			}
-			loc = config.getLocation("homes." + getHomes().get(0), getServer());
+			loc = config.getLocation("homes." + getHomes().get(0), this.getBase().getServer());
 			return loc;
 		}
 		catch (InvalidWorldException ex)
@@ -322,7 +322,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 	{
 		try
 		{
-			return config.getLocation("lastlocation", getServer());
+			return config.getLocation("lastlocation", this.getBase().getServer());
 		}
 		catch (InvalidWorldException e)
 		{
@@ -351,7 +351,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 	{
 		try
 		{
-			return config.getLocation("logoutlocation", getServer());
+			return config.getLocation("logoutlocation", this.getBase().getServer());
 		}
 		catch (InvalidWorldException e)
 		{

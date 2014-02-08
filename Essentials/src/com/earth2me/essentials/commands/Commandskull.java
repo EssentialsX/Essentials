@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.utils.LocationUtil;
 
 import org.bukkit.Location;
@@ -22,63 +23,52 @@ public class Commandskull extends EssentialsCommand
 	@Override
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		if (args.length < 1)
-		{
-			user.getInventory().addItem(spawnSkull(user.getName(), 1));
-			user.sendMessage(_("givenSkull", user.getName()));
-		} else {
-			// Alphanumeric and underscores only
+		String owner;
+
+		if (args.length > 0 && user.isAuthorized("essentials.skull.others")) {
 			if (!args[0].matches("^[A-Za-z0-9_]+$")) {
-				throw new IllegalArgumentException(_("invalidSkullOwner"));
+				throw new IllegalArgumentException(_("alphaNames"));
 			}
+			owner = args[0];
+		}
+		else {
+			owner = user.getName();
+		}
 
-			final Location target = LocationUtil.getTarget(user.getBase());
-			BlockState state = target.getBlock().getState();
-			Skull skull = null;
+		ItemStack itemSkull = user.getBase().getItemInHand();
+		SkullMeta metaSkull = null;
+		boolean spawn = false;
 
-			if (state instanceof Skull)
-			{
-				skull = (Skull) state;
-				if (skull.hasOwner() && !user.isAuthorized("essentials.skull.change"))
-				{
-					throw new Exception(_("noPermissionSkull"));
-				}
-				
-				user.sendMessage(_("skullChanged", args[0]));
+		if (itemSkull != null && itemSkull.getType() == Material.SKULL_ITEM && itemSkull.getDurability() == 3) {
+			metaSkull = (SkullMeta) itemSkull.getItemMeta();
+		}
+		else if (user.isAuthorized("essentials.skull.spawn"))
+		{
+			itemSkull = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
+			metaSkull = (SkullMeta) itemSkull.getItemMeta();
+			spawn = true;
+		}
+		else {
+			throw new Exception(_("invalidSkull"));
+		}
 
-				skull.setOwner(args[0]);
-				skull.update(true);
-				return;
-			}
+		if (metaSkull.hasOwner() && !user.isAuthorized("essentials.skull.modify"))
+		{
+			throw new Exception(_("noPermissionSkull"));
+		}
 
-			if (skull == null) 
-			{
-				ItemStack cSkull = user.getItemInHand();
-				if (cSkull.getType() == Material.SKULL_ITEM && cSkull.getDurability() == 3) {
-					SkullMeta cSkullMeta = (SkullMeta) cSkull.getItemMeta();
-					if (cSkullMeta.hasOwner() && !user.isAuthorized("essentials.skull.change"))
-					{
-						throw new Exception(_("noPermissionSkull"));
-					}
+		metaSkull.setDisplayName("§fSkull of " + owner);
+		metaSkull.setOwner(owner);
 
-					user.sendMessage(_("skullChanged", args[0]));
-					user.setItemInHand(spawnSkull(args[0], cSkull.getAmount()));
-				} else {
-					throw new Exception(_("invalidSkull"));
-				}
-			}
+		itemSkull.setItemMeta(metaSkull);
+
+		if (spawn) {
+			InventoryWorkaround.addItems(user.getBase().getInventory(), itemSkull);
+			user.sendMessage(_("givenSkull", owner));
+		}
+		else {
+			user.sendMessage(_("skullChanged", owner));
 		}
 	}
-	
-	private ItemStack spawnSkull(String owner, int amount) {
-		if (amount < 1 || amount > 64) {
-			amount = 1;
-		}
-		ItemStack skull = new ItemStack(Material.SKULL_ITEM, amount, (byte) 3);
-		SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
-		skullMeta.setDisplayName("§fSkull of " + owner);
-		skullMeta.setOwner(owner);
-		skull.setItemMeta(skullMeta);
-		return skull;
-	}
+
 }

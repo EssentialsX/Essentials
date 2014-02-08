@@ -52,9 +52,9 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		teleport = new Teleport(this, ess);
 		if (isAfk())
 		{
-			afkPosition = getLocation();
+			afkPosition = this.getBase().getLocation();
 		}
-		if (isOnline())
+		if (this.getBase().isOnline())
 		{
 			lastOnlineActivity = System.currentTimeMillis();
 		}
@@ -238,13 +238,13 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	@Override
 	public void setLastLocation()
 	{
-		setLastLocation(getLocation());
+		setLastLocation(this.getBase().getLocation());
 	}
 
 	@Override
 	public void setLogoutLocation()
 	{
-		setLogoutLocation(getLocation());
+		setLogoutLocation(this.getBase().getLocation());
 	}
 
 	@Override
@@ -259,7 +259,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		}
 		else
 		{
-			teleportLocation = here ? player.getLocation() : this.getLocation();
+			teleportLocation = here ? player.getBase().getLocation() : this.getBase().getLocation();
 		}
 	}
 
@@ -294,7 +294,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 			suffix = "§r";
 		}
 
-		if (isOp())
+		if (this.getBase().isOp())
 		{
 			try
 			{
@@ -351,13 +351,13 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	{
 		if (base.isOnline() && ess.getSettings().changeDisplayName())
 		{
-			setDisplayName(getNick(true));
+			this.getBase().setDisplayName(getNick(true));
 			if (ess.getSettings().changePlayerListName())
 			{
 				String name = getNick(false);
 				try
 				{
-					setPlayerListName(name);
+					this.getBase().setPlayerListName(name);
 				}
 				catch (IllegalArgumentException e)
 				{
@@ -370,10 +370,9 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		}
 	}
 
-	@Override
 	public String getDisplayName()
 	{
-		return super.getDisplayName() == null ? super.getName() : super.getDisplayName();
+		return super.getBase().getDisplayName() == null ? super.getBase().getName() : super.getBase().getDisplayName();
 	}
 
 	@Override
@@ -495,10 +494,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 			return;
 		}
 		
-		this.setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") ? true : set);
+		this.getBase().setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") ? true : set);
 		if (set && !isAfk())
 		{
-			afkPosition = getLocation();
+			afkPosition = this.getBase().getLocation();
 		}
 		else if (!set && isAfk())
 		{
@@ -573,10 +572,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	//Returns true if status expired during this check
 	public boolean checkBanTimeout(final long currentTime)
 	{
-		if (getBanTimeout() > 0 && getBanTimeout() < currentTime && isBanned())
+		if (getBanTimeout() > 0 && getBanTimeout() < currentTime && this.getBase().isBanned())
 		{
 			setBanTimeout(0);
-			setBanned(false);
+			this.getBase().setBanned(false);
 			return true;
 		}
 		return false;
@@ -608,7 +607,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		{
 			final String kickReason = _("autoAfkKickReason", autoafkkick / 60.0);
 			lastActivity = 0;
-			kickPlayer(kickReason);
+			this.getBase().kickPlayer(kickReason);
 
 
 			for (Player player : ess.getServer().getOnlinePlayers())
@@ -644,7 +643,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	@Override
 	public boolean isGodModeEnabled()
 	{
-		return (super.isGodModeEnabled() && !ess.getSettings().getNoGodWorlds().contains(getLocation().getWorld().getName()))
+		return (super.isGodModeEnabled() && !ess.getSettings().getNoGodWorlds().contains(this.getBase().getLocation().getWorld().getName()))
 			   || (isAfk() && ess.getSettings().getFreezeAfkPlayers());
 	}
 
@@ -678,7 +677,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	@Override
 	public boolean canBuild()
 	{
-		if (isOp())
+		if (this.getBase().isOp())
 		{
 			return true;
 		}
@@ -759,7 +758,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 			ess.getVanishedPlayers().add(getName());
 			if (isAuthorized("essentials.vanish.effect"))
 			{
-				this.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false));
+				this.getBase().addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false));
 			}
 		}
 		else
@@ -772,7 +771,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 			ess.getVanishedPlayers().remove(getName());
 			if (isAuthorized("essentials.vanish.effect"))
 			{
-				this.removePotionEffect(PotionEffectType.INVISIBILITY);
+				this.getBase().removePotionEffect(PotionEffectType.INVISIBILITY);
 			}
 		}
 	}
@@ -848,7 +847,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	@Override
 	public int compareTo(final User other)
 	{
-		return FormatUtil.stripFormat(this.getDisplayName()).compareToIgnoreCase(FormatUtil.stripFormat(other.getDisplayName()));
+		return FormatUtil.stripFormat(getDisplayName()).compareToIgnoreCase(FormatUtil.stripFormat(other.getDisplayName()));
 	}
 
 	@Override
@@ -872,5 +871,11 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	public CommandSource getSource()
 	{
 		return new CommandSource(getBase());
+	}
+
+	@Override
+	public String getName()
+	{
+		return this.getBase().getName();
 	}
 }
