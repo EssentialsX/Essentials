@@ -20,7 +20,7 @@ public class Commandremove extends EssentialsCommand
 	{
 		super("remove");
 	}
-	
+
 	@Override
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
@@ -38,17 +38,19 @@ public class Commandremove extends EssentialsCommand
 			}
 			catch (NumberFormatException e)
 			{
-				throw new Exception(_("numberRequired"), e);
+				world = ess.getWorld(args[1]);
 			}
 		}
 		if (args.length >= 3)
 		{
+			// This is to prevent breaking the old syntax
+			radius = 0;
 			world = ess.getWorld(args[2]);
 		}
 		parseCommand(server, user.getSource(), args, world, radius);
-		
+
 	}
-	
+
 	@Override
 	protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
@@ -59,12 +61,17 @@ public class Commandremove extends EssentialsCommand
 		World world = ess.getWorld(args[1]);
 		parseCommand(server, sender, args, world, 0);
 	}
-	
+
 	private void parseCommand(Server server, CommandSource sender, String[] args, World world, int radius) throws Exception
 	{
 		List<String> types = new ArrayList<String>();
 		List<String> customTypes = new ArrayList<String>();
-		
+
+		if (world == null)
+		{
+			throw new Exception(_("invalidWorld"));
+		}
+
 		if (args[0].contentEquals("*") || args[0].contentEquals("all"))
 		{
 			types.add(0, "ALL");
@@ -95,7 +102,7 @@ public class Commandremove extends EssentialsCommand
 		}
 		removeHandler(sender, types, customTypes, world, radius);
 	}
-	
+
 	private void removeHandler(CommandSource sender, List<String> types, List<String> customTypes, World world, int radius)
 	{
 		int removed = 0;
@@ -103,17 +110,17 @@ public class Commandremove extends EssentialsCommand
 		{
 			radius *= radius;
 		}
-		
+
 		ArrayList<ToRemove> removeTypes = new ArrayList<ToRemove>();
 		ArrayList<Mob> customRemoveTypes = new ArrayList<Mob>();
-		
+
 		for (String s : types)
 		{
 			removeTypes.add(ToRemove.valueOf(s));
 		}
-		
+
 		boolean warnUser = false;
-		
+
 		for (String s : customTypes)
 		{
 			Mob mobType = Mob.fromName(s);
@@ -126,12 +133,12 @@ public class Commandremove extends EssentialsCommand
 				customRemoveTypes.add(mobType);
 			}
 		}
-		
+
 		if (warnUser)
 		{
 			sender.sendMessage(_("invalidMob"));
 		}
-		
+
 		for (Chunk chunk : world.getLoadedChunks())
 		{
 			for (Entity e : chunk.getEntities())
@@ -147,10 +154,10 @@ public class Commandremove extends EssentialsCommand
 				{
 					continue;
 				}
-				
+
 				for (ToRemove toRemove : removeTypes)
 				{
-					
+
 					if (e instanceof Tameable && ((Tameable)e).isTamed())
 					{
 						if (toRemove == ToRemove.TAMED)
@@ -163,7 +170,7 @@ public class Commandremove extends EssentialsCommand
 							continue;
 						}
 					}
-					
+
 					switch (toRemove)
 					{
 					case DROPS:
@@ -278,8 +285,8 @@ public class Commandremove extends EssentialsCommand
 		}
 		sender.sendMessage(_("removed", removed));
 	}
-	
-	
+
+
 	private enum ToRemove
 	{
 		DROPS,

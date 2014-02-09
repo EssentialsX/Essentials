@@ -300,7 +300,7 @@ commands:
     aliases: [formula,eformula,method,emethod,erecipe,recipes,erecipes]
   remove:
     description: Removes entities in your world.
-    usage: /<command> <all|tamed|drops|arrows|boats|minecarts|xp|paintings|itemframes|endercrystals|monsters|animals|ambient|mobs|[mobType]> [radius] [world]
+    usage: /<command> <all|tamed|drops|arrows|boats|minecarts|xp|paintings|itemframes|endercrystals|monsters|animals|ambient|mobs|[mobType]> [radius|world]
     aliases: [eremove,butcher,ebutcher,killall,ekillall,mobkill,emobkill]
   repair:
     description: Repairs the durability of one or all items.
