@@ -650,6 +650,7 @@ public class EssentialsPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onInventoryClickEvent(final InventoryClickEvent event)
 	{
+		Player refreshPlayer = null;
 		final Inventory top = event.getView().getTopInventory();
 		final InventoryType type = top.getType();
 
@@ -665,7 +666,7 @@ public class EssentialsPlayerListener implements Listener
 										|| !invOwner.isOnline()))
 				{
 					event.setCancelled(true);
-					user.updateInventory();
+					refreshPlayer = user.getBase();
 				}
 			}
 		}
@@ -675,6 +676,7 @@ public class EssentialsPlayerListener implements Listener
 			if (user.isEnderSee() && (!user.isAuthorized("essentials.enderchest.modify")))
 			{
 				event.setCancelled(true);
+				refreshPlayer = user.getBase();
 			}
 		}
 		else if (type == InventoryType.WORKBENCH)
@@ -683,6 +685,7 @@ public class EssentialsPlayerListener implements Listener
 			if (user.isRecipeSee())
 			{
 				event.setCancelled(true);
+				refreshPlayer = user.getBase();
 			}
 		}
 		else if (type == InventoryType.CHEST && top.getSize() == 9)
@@ -692,26 +695,41 @@ public class EssentialsPlayerListener implements Listener
 			if (invHolder != null && invHolder instanceof HumanEntity && user.isInvSee())
 			{
 				event.setCancelled(true);
+				refreshPlayer = user.getBase();
 			}
+		}
+
+		if (refreshPlayer != null)
+		{
+			final Player player = refreshPlayer;
+			ess.scheduleSyncDelayedTask(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					player.updateInventory();
+				}
+			}, 1);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onInventoryCloseEvent(final InventoryCloseEvent event)
 	{
+		Player refreshPlayer = null;
 		final Inventory top = event.getView().getTopInventory();
 		final InventoryType type = top.getType();
 		if (type == InventoryType.PLAYER)
 		{
 			final User user = ess.getUser((Player)event.getPlayer());
 			user.setInvSee(false);
-			user.updateInventory();
+			refreshPlayer = user.getBase();
 		}
 		else if (type == InventoryType.ENDER_CHEST)
 		{
 			final User user = ess.getUser((Player)event.getPlayer());
 			user.setEnderSee(false);
-			user.updateInventory();
+			refreshPlayer = user.getBase();
 		}
 		else if (type == InventoryType.WORKBENCH)
 		{
@@ -720,7 +738,7 @@ public class EssentialsPlayerListener implements Listener
 			{
 				user.setRecipeSee(false);
 				event.getView().getTopInventory().clear();
-				user.updateInventory();
+				refreshPlayer = user.getBase();
 			}
 		}
 		else if (type == InventoryType.CHEST && top.getSize() == 9)
@@ -730,8 +748,21 @@ public class EssentialsPlayerListener implements Listener
 			{
 				final User user = ess.getUser((Player)event.getPlayer());
 				user.setInvSee(false);
-				user.updateInventory();
+				refreshPlayer = user.getBase();
 			}
+		}
+
+		if (refreshPlayer != null)
+		{
+			final Player player = refreshPlayer;
+			ess.scheduleSyncDelayedTask(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					player.updateInventory();
+				}
+			}, 1);
 		}
 	}
 
