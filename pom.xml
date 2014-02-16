@@ -48,12 +48,12 @@
 
 	<distributionManagement>
 		<snapshotRepository>
-			<id>esssnapshot</id>
-			<url>http://repo.ess3.net/content/repositories/esssnapshot</url>
+			<id>essdev</id>
+			<url>http://repo.ess3.net/content/repositories/essdev</url>
 		</snapshotRepository>
 		<repository>
-			<id>essrelease</id>
-			<url>http://repo.ess3.net/content/repositories/essrelease</url>
+			<id>essrel</id>
+			<url>http://repo.ess3.net/content/repositories/essrel</url>
 		</repository>
 	</distributionManagement>
 
