@@ -58,6 +58,8 @@ public class Commandnear extends EssentialsCommand
 			}
 		}
 		
+		radius = Math.abs(radius);
+		
 		if (radius > maxRadius && !user.isAuthorized("essentials.near.maxexempt"))
 		{
 			user.sendMessage(_("radiusTooBig", maxRadius));
