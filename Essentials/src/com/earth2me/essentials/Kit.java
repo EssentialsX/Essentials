@@ -174,7 +174,7 @@ public class Kit
 			IText output = new KeywordReplacer(input, user.getSource(), ess);
 
 			boolean spew = false;
-			final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
+			final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantmentsInKits();
 			for (String kitItem : output.getLines())
 			{
 				if (kitItem.startsWith(ess.getSettings().getCurrencySymbol()))

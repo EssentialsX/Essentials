@@ -155,6 +155,8 @@ public interface ISettings extends IConf
 	boolean getUpdateBedAtDaytime();
 
 	boolean allowUnsafeEnchantments();
+	
+	boolean allowUnsafeEnchantmentsInKits();
 
 	boolean getRepairEnchanted();
 

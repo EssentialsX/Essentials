@@ -945,6 +945,12 @@ public class Settings implements net.ess3.api.ISettings
 	}
 
 	@Override
+	public boolean allowUnsafeEnchantmentsInKits()
+	{
+		return config.getBoolean("unsafe-enchantments-in-kits", config.getBoolean("unsafe-enchantments", false));
+	}
+	
+	@Override
 	public boolean allowUnsafeEnchantments()
 	{
 		return config.getBoolean("unsafe-enchantments", false);
