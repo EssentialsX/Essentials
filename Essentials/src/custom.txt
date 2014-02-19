@@ -11,12 +11,12 @@
 
 &6To add a custom command you need to do three things:
 &e-&9 Add a section below in the custom.txt
-&e-&9 Add a line to the bukkit.yml aliases section
+&e-&9 Add a line to the commands.yml aliases section
 &e-&9 Give players access to 'essentials.customtext'
 
-&6If you don't yet have an 'aliases' section, add it like this:
-aliases:
-  vote: customtext
+To add /vote, add this to commands.yml:
+  vote: 
+  - customtext vote $1-
 
 &6The following commands can also be customized:
 &c/rules /motd /news /help
@@ -25,7 +25,7 @@ aliases:
 &6You can use custom aliases with these commands too.
 
 #vote
-If you add the correct alias to bukkit.yml
+If you add the correct alias to commands.yml
 This text here will be shown if you type /vote
 
 #stafflist,onlinestaff
