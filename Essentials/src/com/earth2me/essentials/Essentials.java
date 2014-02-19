@@ -101,7 +101,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 	private transient Metrics metrics;
 	private transient EssentialsTimer timer;
 	private transient List<String> vanishedPlayers = new ArrayList<String>();
-	private transient SimpleCommandMap scm;
 
 	public Essentials()
 	{
@@ -153,7 +152,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 			i18n = new I18n(this);
 			i18n.onEnable();
 			execTimer.mark("I18n1");
-			scm = new SimpleCommandMap(this.getServer());
 			final PluginManager pm = getServer().getPluginManager();
 			for (Plugin plugin : pm.getPlugins())
 			{
@@ -457,16 +455,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 			// Check for disabled commands
 			if (getSettings().isCommandDisabled(commandLabel))
 			{
-				if (scm != null)
-				{
-					for (VanillaCommand cmd : scm.getFallbackCommands())
-					{
-						if (cmd.matches(commandLabel))
-						{
-							cmd.execute(cSender, commandLabel, args);
-						}
-					}
-				}
 				return true;
 			}
 
