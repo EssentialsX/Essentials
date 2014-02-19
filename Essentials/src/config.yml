@@ -395,11 +395,7 @@ oversized-stacksize: 64
 # essentials.repair.enchanted
 repair-enchanted: true
 
-# Allow 'unsafe' enchantments in kits.
-# Warning: Mixing and overleveling some enchantments can cause issues with clients, servers and plugins.
-unsafe-enchantments-in-kits: false
-
-# Allow 'unsafe' enchantments in item spawning.
+# Allow 'unsafe' enchantments in kits and item spawning.
 # Warning: Mixing and overleveling some enchantments can cause issues with clients, servers and plugins.
 unsafe-enchantments: false
 

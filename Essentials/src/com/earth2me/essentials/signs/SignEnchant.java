@@ -50,7 +50,8 @@ public class SignEnchant extends EssentialsSign
 			sign.setLine(2, "§c<enchant>");
 			throw new SignException(ex.getMessage(), ex);
 		}
-		final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments() && player.isAuthorized("essentials.enchantments.allowunsafe");
+		final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments() 
+									&& player.isAuthorized("essentials.enchantments.allowunsafe") && player.isAuthorized("essentials.signs.enchant.allowunsafe");
 		if (level < 0 || (!allowUnsafe && level > enchantment.getMaxLevel()))
 		{
 			level = enchantment.getMaxLevel();
@@ -127,7 +128,7 @@ public class SignEnchant extends EssentialsSign
 			}
 			else
 			{
-				if (ess.getSettings().allowUnsafeEnchantments())
+				if (ess.getSettings().allowUnsafeEnchantments() && player.isAuthorized("essentials.signs.enchant.allowunsafe"))
 				{
 					toEnchant.addUnsafeEnchantment(enchantment, level);
 				}
