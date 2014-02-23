@@ -215,6 +215,10 @@ public class LocationUtil
 
 	static boolean isBlockAboveAir(final World world, final int x, final int y, final int z)
 	{
+		if (y > world.getMaxHeight())
+		{
+			return true;
+		}
 		return HOLLOW_MATERIALS.contains(world.getBlockAt(x, y - 1, z).getType().getId());
 	}
 
@@ -248,7 +252,7 @@ public class LocationUtil
 		}
 		return false;
 	}
-	
+
 	// Not needed if using getSafeDestination(loc)
 	public static Location getRoundedDestination(final Location loc)
 	{
@@ -273,7 +277,7 @@ public class LocationUtil
 		}
 		return getSafeDestination(loc);
 	}
-	
+
 	public static Location getSafeDestination(final Location loc) throws Exception
 	{
 		if (loc == null || loc.getWorld() == null)
@@ -347,15 +351,17 @@ public class LocationUtil
 		final int x = loc.getBlockX();
 		int y = (int)Math.round(loc.getY());
 		final int z = loc.getBlockZ();
+		int count = 0;
 		while (LocationUtil.isBlockUnsafe(world, x, y, z) && y > -1)
 		{
 			y--;
+			count++;
+			if (count > 2)
+			{
+				return true;
+			}
 		}
 
-		if (loc.getBlockY() - y > 1 || y < 0)
-		{
-			return true;
-		}
-		return false;
+		return y < 0 ? true : false;
 	}
 }
