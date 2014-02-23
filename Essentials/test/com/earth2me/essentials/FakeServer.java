@@ -178,55 +178,55 @@ public class FakeServer implements Server
 			@Override
 			public void registerInterface(Class<? extends PluginLoader> loader) throws IllegalArgumentException
 			{
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
 			@Override
 			public Plugin getPlugin(String name)
 			{
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
 			@Override
 			public Plugin[] getPlugins()
 			{
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
 			@Override
 			public boolean isPluginEnabled(String name)
 			{
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
 			@Override
 			public boolean isPluginEnabled(Plugin plugin)
 			{
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
 			@Override
 			public Plugin loadPlugin(File file) throws InvalidPluginException, InvalidDescriptionException, UnknownDependencyException
 			{
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
 			@Override
 			public Plugin[] loadPlugins(File directory)
 			{
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
 			@Override
 			public void disablePlugins()
 			{
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
 			@Override
 			public void clearPlugins()
 			{
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
 			@Override
@@ -238,115 +238,115 @@ public class FakeServer implements Server
 			@Override
 			public void registerEvents(Listener listener, Plugin plugin)
 			{
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
 			@Override
 			public void registerEvent(Class<? extends Event> event, Listener listener, EventPriority priority, EventExecutor executor, Plugin plugin)
 			{
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
 			@Override
 			public void registerEvent(Class<? extends Event> event, Listener listener, EventPriority priority, EventExecutor executor, Plugin plugin, boolean ignoreCancelled)
 			{
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
 			@Override
 			public void enablePlugin(Plugin plugin)
 			{
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
 			@Override
 			public void disablePlugin(Plugin plugin)
 			{
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
 			@Override
 			public Permission getPermission(String name)
 			{
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
 			@Override
 			public void addPermission(Permission perm)
 			{
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
 			@Override
 			public void removePermission(Permission perm)
 			{
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
 			@Override
 			public void removePermission(String name)
 			{
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
 			@Override
 			public Set<Permission> getDefaultPermissions(boolean op)
 			{
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
 			@Override
 			public void recalculatePermissionDefaults(Permission perm)
 			{
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
 			@Override
 			public void subscribeToPermission(String permission, Permissible permissible)
 			{
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
 			@Override
 			public void unsubscribeFromPermission(String permission, Permissible permissible)
 			{
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
 			@Override
 			public Set<Permissible> getPermissionSubscriptions(String permission)
 			{
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
 			@Override
 			public void subscribeToDefaultPerms(boolean op, Permissible permissible)
 			{
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
 			@Override
 			public void unsubscribeFromDefaultPerms(boolean op, Permissible permissible)
 			{
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
 			@Override
 			public Set<Permissible> getDefaultPermSubscriptions(boolean op)
 			{
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
 			@Override
 			public Set<Permission> getPermissions()
 			{
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
 			@Override
 			public boolean useTimings()
 			{
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 		};
 	}
@@ -1199,6 +1199,6 @@ public class FakeServer implements Server
 	@Override
 	public BanList getBanList(BanList.Type arg0)
 	{
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }
