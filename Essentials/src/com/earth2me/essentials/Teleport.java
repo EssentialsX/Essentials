@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.LocationUtil;
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import net.ess3.api.IEssentials;
@@ -171,8 +172,8 @@ public class Teleport implements net.ess3.api.ITeleport
 	{
 		double delay = ess.getSettings().getTeleportDelay();
 
-		Trade cashCharge = null;
-		if (chargeFor != null)
+		Trade cashCharge = chargeFor;
+		if (chargeFor != null && !chargeFor.getCommandCost(teleportOwner).equals(BigDecimal.ZERO))
 		{
 			chargeFor.isAffordableFor(teleportOwner);
 			cashCharge = new Trade(chargeFor.getCommandCost(teleportOwner), ess);

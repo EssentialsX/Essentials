@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import java.util.logging.Level;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
 import net.ess3.api.events.SignBreakEvent;
@@ -600,7 +601,7 @@ public class EssentialsSign
 			return builder.toString();
 			//return event.getLine(index); // Above code can be removed and replaced with this line when https://github.com/Bukkit/Bukkit/pull/982 is merged.
 		}
-		
+
 		@Override
 		public final void setLine(final int index, final String text)
 		{
