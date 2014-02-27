@@ -64,7 +64,8 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 	{
 		try
 		{
-			return users.get(name);
+			String sanitizedName = StringUtil.sanitizeFileName(name);
+			return users.get(sanitizedName);
 		}
 		catch (ExecutionException ex)
 		{
@@ -104,7 +105,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 		if (userFile.exists())
 		{
 			keys.add(sanitizedName);
-			return new User(new OfflinePlayer(name, ess), ess);
+			return new User(new OfflinePlayer(sanitizedName, ess), ess);
 		}
 		throw new Exception("User not found!");
 	}
