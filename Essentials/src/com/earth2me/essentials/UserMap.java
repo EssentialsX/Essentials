@@ -78,24 +78,12 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 	}
 
 	@Override
-	public User load(final String name) throws Exception
+	public User load(final String sanitizedName) throws Exception
 	{
-		String sanitizedName = StringUtil.sanitizeFileName(name);
-		if (!sanitizedName.equals(name))
-		{
-			User user = getUser(sanitizedName);
-			if (user == null)
-			{
-				throw new Exception("User not found!");
-			}
-			else
-			{
-				return user;
-			}
-		}
 		for (Player player : ess.getServer().getOnlinePlayers())
-		{
-			if (player.getName().equalsIgnoreCase(name))
+		{			
+			String sanitizedPlayer = StringUtil.sanitizeFileName(player.getName());
+			if (sanitizedPlayer.equalsIgnoreCase(sanitizedName))
 			{
 				keys.add(sanitizedName);
 				return new User(player, ess);

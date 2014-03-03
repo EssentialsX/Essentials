@@ -632,12 +632,14 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 		return null;
 	}
 
+	//This will return null if there is not a match.
 	@Override
 	public User getUser(final String base)
 	{
 		return getOfflineUser((String)base);
 	}
 
+	//This will return null if there is not a match.
 	@Override
 	public User getOfflineUser(final String name)
 	{
@@ -649,6 +651,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 		return user;
 	}
 
+	//This will create a new user if there is not a match.
 	@Override
 	public User getUser(final Player base)
 	{
