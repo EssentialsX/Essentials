@@ -11,11 +11,13 @@ public class UserBalanceUpdateEvent extends Event
 {
 	private static final HandlerList handlers = new HandlerList();
 	private final Player player;
+	private final BigDecimal originalBalance;
 	private final BigDecimal balance;
 
-	public UserBalanceUpdateEvent(Player player, BigDecimal balance)
+	public UserBalanceUpdateEvent(Player player, BigDecimal originalBalance, BigDecimal balance)
 	{
 		this.player = player;
+		this.originalBalance = originalBalance;
 		this.balance = balance;
 	}
 
@@ -39,4 +41,9 @@ public class UserBalanceUpdateEvent extends Event
 	{
 		return balance;
 	}
+	
+	public BigDecimal getOldBalance()
+ 	{
+ 		return originalBalance;
+ 	}
 }
