@@ -12,8 +12,9 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.bukkit.Server;
+import org.bukkit.entity.Player;
 
-//TODO: Remove op and replace with perm
+
 public class Commandbalancetop extends EssentialsCommand
 {
 	public Commandbalancetop()
@@ -39,7 +40,8 @@ public class Commandbalancetop extends EssentialsCommand
 			}
 			catch (NumberFormatException ex)
 			{
-				if (args[0].equalsIgnoreCase("force") && sender.getSender().isOp())
+				if (args[0].equalsIgnoreCase("force")
+					&& (!sender.isPlayer() || ess.getUser(sender.getPlayer()).isAuthorized("essentials.balancetop.force")))
 				{
 					force = true;
 				}
