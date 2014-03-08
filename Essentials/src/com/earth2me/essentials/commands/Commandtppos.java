@@ -38,7 +38,7 @@ public class Commandtppos extends EssentialsCommand
 		}
 		if (x > 30000000 || y > 30000000 || z > 30000000 || x < -30000000 || y < -30000000 || z < -30000000)
 		{
-			throw new NotEnoughArgumentsException("Value of coordinates cannot be over 30000000"); //TODO: I18n
+			throw new NotEnoughArgumentsException(_("teleportInvalidLocation"));
 		}
 		final Trade charge = new Trade(this.getName(), ess);
 		charge.isAffordableFor(user);
@@ -70,7 +70,7 @@ public class Commandtppos extends EssentialsCommand
 		}
 		if (x > 30000000 || y > 30000000 || z > 30000000 || x < -30000000 || y < -30000000 || z < -30000000)
 		{
-			throw new NotEnoughArgumentsException("Value of coordinates cannot be over 30000000"); //TODO: I18n
+			throw new NotEnoughArgumentsException(_("teleportInvalidLocation"));
 		}
 		sender.sendMessage(_("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
 		user.sendMessage(_("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));

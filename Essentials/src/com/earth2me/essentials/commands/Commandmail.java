@@ -1,12 +1,14 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.StringUtil;
-import java.util.List;
 import org.bukkit.Server;
+
+import java.util.List;
+
+import static com.earth2me.essentials.I18n._;
 
 
 public class Commandmail extends EssentialsCommand
@@ -60,7 +62,7 @@ public class Commandmail extends EssentialsCommand
 				final String mail = user.getName() + ": " + StringUtil.sanitizeString(FormatUtil.stripFormat(getFinalArg(args, 2)));
 				if (mail.length() > 1000)
 				{
-					throw new Exception("Mail message too long. Try to keep it below 1000");
+					throw new Exception(_("mailTooLong"));
 				}
 				if (Math.abs(System.currentTimeMillis() - timestamp) > 60000)
 				{
@@ -70,7 +72,7 @@ public class Commandmail extends EssentialsCommand
 				mailsPerMinute++;
 				if (mailsPerMinute > ess.getSettings().getMailsPerMinute())
 				{
-					throw new Exception("Too many mails have been send within the last minute. Maximum: " + ess.getSettings().getMailsPerMinute());
+					throw new Exception(_("mailDelay", ess.getSettings().getMailsPerMinute()));
 				}
 				u.addMail(mail);
 			}

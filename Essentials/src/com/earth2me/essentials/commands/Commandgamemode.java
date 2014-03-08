@@ -79,10 +79,9 @@ public class Commandgamemode extends EssentialsCommand
 
 	private void gamemodeOtherPlayers(final Server server, final CommandSource sender, final GameMode gameMode, final String name) throws NotEnoughArgumentsException, PlayerNotFoundException
 	{
-		//TODO: TL this
 		if (name.trim().length() < 2 || gameMode == null)
 		{
-			throw new NotEnoughArgumentsException("You need to specify a valid player/mode.");
+			throw new NotEnoughArgumentsException(_("gameModeInvalid"));
 		}
 
 		boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.vanish.interact");

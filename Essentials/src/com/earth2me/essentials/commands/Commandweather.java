@@ -58,7 +58,6 @@ public class Commandweather extends EssentialsCommand
 		}
 	}
 
-	//TODO: Translate these
 	@Override
 	protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
@@ -71,7 +70,7 @@ public class Commandweather extends EssentialsCommand
 		final World world = server.getWorld(args[0]);
 		if (world == null)
 		{
-			throw new Exception("World named " + args[0] + " not found!");
+			throw new Exception(_("weatherInvalidWorldWorld", args[0]));
 		}
 		if (args.length > 2)
 		{
