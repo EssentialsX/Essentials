@@ -405,7 +405,7 @@ public class EssentialsPlayerListener implements Listener
 			{
 				user.setLastLocation();
 			}
-			if (teleportInvulnerability)
+			if (teleportInvulnerability && (event.getCause() == TeleportCause.PLUGIN || event.getCause() == TeleportCause.COMMAND))
 			{
 				user.enableInvulnerabilityAfterTeleport();
 			}
