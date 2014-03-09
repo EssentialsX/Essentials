@@ -142,6 +142,9 @@ public abstract class UserData extends PlayerExtension implements IConf
 			catch (NumberFormatException e)
 			{
 			}
+			catch (IndexOutOfBoundsException e)
+			{
+			}
 		}
 		return search;
 	}

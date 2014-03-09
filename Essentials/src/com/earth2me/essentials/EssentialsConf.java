@@ -405,7 +405,8 @@ public class EssentialsConf extends YamlConfiguration
 
 	public Location getLocation(final String path, final Server server) throws InvalidWorldException
 	{
-		final String worldName = getString((path == null ? "" : path + ".") + "world");
+		final String worldString = (path == null ? "" : path + ".") + "world";
+		final String worldName = getString(worldString);
 		if (worldName == null || worldName.isEmpty())
 		{
 			return null;

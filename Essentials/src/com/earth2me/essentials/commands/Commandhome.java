@@ -109,7 +109,11 @@ public class Commandhome extends EssentialsCommand
 	}
 
 	private void goHome(final User user, final User player, final String home, final Trade charge) throws Exception
-	{
+	{		
+		if (home.length() < 1)
+		{
+			throw new NotEnoughArgumentsException();
+		}
 		final Location loc = player.getHome(home);
 		if (loc == null)
 		{
