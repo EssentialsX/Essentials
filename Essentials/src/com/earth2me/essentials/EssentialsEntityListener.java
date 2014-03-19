@@ -55,9 +55,10 @@ public class EssentialsEntityListener implements Listener
 			attacker.updateActivity(true);
 		}
 		else if (eAttack instanceof Projectile && eDefend instanceof Player)
-		{
+		{			
+			final Projectile projectile = (Projectile)event.getDamager();
 			//This should return a ProjectileSource on 1.7.3 beta +
-			Object shooter = ((Projectile)event.getDamager()).getShooter();
+			final Object shooter = projectile.getShooter();
 			if (shooter instanceof Player)
 			{
 				final User attacker = ess.getUser((Player)shooter);

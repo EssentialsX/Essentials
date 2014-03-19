@@ -1,6 +1,8 @@
 package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n._;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.ess3.api.IEssentials;
 import net.ess3.api.IUser;
 import org.bukkit.Location;
@@ -95,27 +97,6 @@ public class TimedTeleport implements Runnable
 			try
 			{
 				teleport.cooldown(false);
-				teleportUser.sendMessage(_("teleportationCommencing"));
-				try
-				{
-					if (timer_respawn)
-					{
-						teleport.respawnNow(teleportUser, timer_cause);
-					}
-					else
-					{
-						teleport.now(teleportUser, timer_teleportTarget, timer_cause);
-					}
-					cancelTimer(false);
-					if (timer_chargeFor != null)
-					{
-						timer_chargeFor.charge(teleportOwner);
-					}
-				}
-				catch (Exception ex)
-				{
-					ess.showError(teleportOwner.getSource(), ex, "\\ teleport");
-				}
 			}
 			catch (Exception ex)
 			{
@@ -125,6 +106,29 @@ public class TimedTeleport implements Runnable
 					teleportUser.sendMessage(_("cooldownWithMessage", ex.getMessage()));
 				}
 			}
+			try
+			{
+				cancelTimer(false);
+				teleportUser.sendMessage(_("teleportationCommencing"));
+				timer_chargeFor.isAffordableFor(teleportOwner);
+				if (timer_respawn)
+				{
+					teleport.respawnNow(teleportUser, timer_cause);
+				}
+				else
+				{
+					teleport.now(teleportUser, timer_teleportTarget, timer_cause);
+				}
+				if (timer_chargeFor != null)
+				{
+					timer_chargeFor.charge(teleportOwner);
+				}
+			}
+			catch (Exception ex)
+			{
+				ess.showError(teleportOwner.getSource(), ex, "\\ teleport");
+			}
+
 		}
 	}
 

@@ -173,10 +173,17 @@ public class Teleport implements net.ess3.api.ITeleport
 		double delay = ess.getSettings().getTeleportDelay();
 
 		Trade cashCharge = chargeFor;
-		if (chargeFor != null && !chargeFor.getCommandCost(teleportOwner).equals(BigDecimal.ZERO))
+
+		if (chargeFor != null)
 		{
 			chargeFor.isAffordableFor(teleportOwner);
-			cashCharge = new Trade(chargeFor.getCommandCost(teleportOwner), ess);
+			
+			//This code is to make sure that commandcosts are checked in the initial world, and not in the resulting world.
+			if (!chargeFor.getCommandCost(teleportOwner).equals(BigDecimal.ZERO))
+			{
+				//By converting a command cost to a regular cost, the command cost permission isn't checked when executing the charge after teleport.
+				cashCharge = new Trade(chargeFor.getCommandCost(teleportOwner), ess);
+			}
 		}
 
 		cooldown(true);
