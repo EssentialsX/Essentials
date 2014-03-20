@@ -1,6 +1,6 @@
 package com.earth2me.essentials.xmpp;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.IEssentials;
 import net.ess3.api.IUser;
 import java.util.List;
@@ -36,7 +36,7 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 		ess = (IEssentials)pluginManager.getPlugin("Essentials");
 		if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion()))
 		{
-			LOGGER.log(Level.WARNING, _("versionMismatchAll"));
+			LOGGER.log(Level.WARNING, tl("versionMismatchAll"));
 		}
 		if (!ess.isEnabled())
 		{

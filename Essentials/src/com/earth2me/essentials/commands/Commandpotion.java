@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.Potions;
 import com.earth2me.essentials.User;
@@ -40,7 +40,7 @@ public class Commandpotion extends EssentialsCommand
 					potionslist.add(entry.getKey());
 				}
 			}
-			throw new NotEnoughArgumentsException(_("potions", StringUtil.joinList(potionslist.toArray())));
+			throw new NotEnoughArgumentsException(tl("potions", StringUtil.joinList(potionslist.toArray())));
 		}
 
 		if (stack.getType() == Material.POTION)
@@ -78,7 +78,7 @@ public class Commandpotion extends EssentialsCommand
 					}
 					else
 					{
-						user.sendMessage(_("invalidPotion"));
+						user.sendMessage(tl("invalidPotion"));
 						throw new NotEnoughArgumentsException();
 					}
 				}
@@ -87,7 +87,7 @@ public class Commandpotion extends EssentialsCommand
 		}
 		else
 		{
-			throw new Exception(_("holdPotion"));
+			throw new Exception(tl("holdPotion"));
 		}
 	}
 }

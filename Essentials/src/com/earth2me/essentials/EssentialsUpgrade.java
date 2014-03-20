@@ -1,6 +1,6 @@
 package com.earth2me.essentials;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.craftbukkit.FakeWorld;
 import com.earth2me.essentials.settings.Spawns;
 import com.earth2me.essentials.storage.YamlStorageWriter;
@@ -73,7 +73,7 @@ public class EssentialsUpgrade
 		}
 		catch (Exception e)
 		{
-			LOGGER.log(Level.SEVERE, _("upgradingFilesError"), e);
+			LOGGER.log(Level.SEVERE, tl("upgradingFilesError"), e);
 		}
 	}
 
@@ -117,7 +117,7 @@ public class EssentialsUpgrade
 		}
 		catch (IOException e)
 		{
-			LOGGER.log(Level.SEVERE, _("upgradingFilesError"), e);
+			LOGGER.log(Level.SEVERE, tl("upgradingFilesError"), e);
 		}
 	}
 
@@ -167,11 +167,11 @@ public class EssentialsUpgrade
 		{
 			if (!file.renameTo(new File(file.getParentFile(), file.getName().concat("." + System.currentTimeMillis() + ".upgradebackup"))))
 			{
-				throw new Exception(_("configFileMoveError"));
+				throw new Exception(tl("configFileMoveError"));
 			}
 			if (!tempFile.renameTo(file))
 			{
-				throw new Exception(_("configFileRenameError"));
+				throw new Exception(tl("configFileRenameError"));
 			}
 		}
 		else
@@ -499,7 +499,7 @@ public class EssentialsUpgrade
 						ess.getWarps().setWarp(filename.substring(0, filename.length() - 4), loc);
 						if (!listOfFiles[i].renameTo(new File(warpsFolder, filename + ".old")))
 						{
-							throw new Exception(_("fileRenameError", filename));
+							throw new Exception(tl("fileRenameError", filename));
 						}
 					}
 					catch (Exception ex)
@@ -547,7 +547,7 @@ public class EssentialsUpgrade
 						ess.getWarps().setWarp(name, loc);
 						if (!warpFile.renameTo(new File(ess.getDataFolder(), "warps.txt.old")))
 						{
-							throw new Exception(_("fileRenameError", "warps.txt"));
+							throw new Exception(tl("fileRenameError", "warps.txt"));
 						}
 					}
 				}
@@ -591,17 +591,17 @@ public class EssentialsUpgrade
 			final File newFile = new File(listOfFile.getParentFile(), sanitizedFilename);
 			if (!listOfFile.renameTo(tmpFile))
 			{
-				LOGGER.log(Level.WARNING, _("userdataMoveError", filename, sanitizedFilename));
+				LOGGER.log(Level.WARNING, tl("userdataMoveError", filename, sanitizedFilename));
 				continue;
 			}
 			if (newFile.exists())
 			{
-				LOGGER.log(Level.WARNING, _("duplicatedUserdata", filename, sanitizedFilename));
+				LOGGER.log(Level.WARNING, tl("duplicatedUserdata", filename, sanitizedFilename));
 				continue;
 			}
 			if (!tmpFile.renameTo(newFile))
 			{
-				LOGGER.log(Level.WARNING, _("userdataMoveBackError", sanitizedFilename, sanitizedFilename));
+				LOGGER.log(Level.WARNING, tl("userdataMoveBackError", sanitizedFilename, sanitizedFilename));
 			}
 		}
 		doneFile.setProperty("sanitizeAllUserFilenames", true);
@@ -711,7 +711,7 @@ public class EssentialsUpgrade
 					}
 					if (!configFile.renameTo(new File(ess.getDataFolder(), "spawn.yml.old")))
 					{
-						throw new Exception(_("fileRenameError", "spawn.yml"));
+						throw new Exception(tl("fileRenameError", "spawn.yml"));
 					}
 					PrintWriter writer = new PrintWriter(configFile);
 					try
@@ -758,7 +758,7 @@ public class EssentialsUpgrade
 					}
 					if (!configFile.renameTo(new File(ess.getDataFolder(), "jail.yml.old")))
 					{
-						throw new Exception(_("fileRenameError", "jail.yml"));
+						throw new Exception(tl("fileRenameError", "jail.yml"));
 					}
 					PrintWriter writer = new PrintWriter(configFile);
 					try

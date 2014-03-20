@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import org.bukkit.Material;
@@ -25,14 +25,14 @@ public class Commandhat extends EssentialsCommand
 			final ItemStack head = inv.getHelmet();
 			if (head == null || head.getType() == Material.AIR)
 			{
-				user.sendMessage(_("hatEmpty"));
+				user.sendMessage(tl("hatEmpty"));
 			}
 			else
 			{
 				final ItemStack air = new ItemStack(Material.AIR);
 				inv.setHelmet(air);
 				InventoryWorkaround.addItems(user.getInventory(), head);
-				user.sendMessage(_("hatRemoved"));
+				user.sendMessage(tl("hatRemoved"));
 			}
 		}
 		else
@@ -46,16 +46,16 @@ public class Commandhat extends EssentialsCommand
 					final ItemStack head = inv.getHelmet();
 					inv.setHelmet(hand);
 					inv.setItemInHand(head);
-					user.sendMessage(_("hatPlaced"));
+					user.sendMessage(tl("hatPlaced"));
 				}
 				else
 				{
-					user.sendMessage(_("hatArmor"));
+					user.sendMessage(tl("hatArmor"));
 				}
 			}
 			else
 			{
-				user.sendMessage(_("hatFail"));
+				user.sendMessage(tl("hatFail"));
 			}
 		}
 	}

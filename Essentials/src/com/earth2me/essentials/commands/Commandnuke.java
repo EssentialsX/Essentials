@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,7 +44,7 @@ public class Commandnuke extends EssentialsCommand
 			{
 				continue;
 			}
-			player.sendMessage(_("nuke"));
+			player.sendMessage(tl("nuke"));
 			final Location loc = player.getLocation();
 			final World world = loc.getWorld();
 			for (int x = -10; x <= 10; x += 5)

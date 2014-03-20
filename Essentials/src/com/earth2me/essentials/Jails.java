@@ -1,6 +1,6 @@
 package com.earth2me.essentials;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.storage.AsyncStorageObjectHolder;
 import java.io.File;
 import java.util.*;
@@ -93,12 +93,12 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 			if (getData().getJails() == null || jailName == null
 				|| !getData().getJails().containsKey(jailName.toLowerCase(Locale.ENGLISH)))
 			{
-				throw new Exception(_("jailNotExist"));
+				throw new Exception(tl("jailNotExist"));
 			}
 			Location loc = getData().getJails().get(jailName.toLowerCase(Locale.ENGLISH));
 			if (loc == null || loc.getWorld() == null)
 			{
-				throw new Exception(_("jailNotExist"));
+				throw new Exception(tl("jailNotExist"));
 			}
 			return loc;
 		}
@@ -272,11 +272,11 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 			{
 				if (ess.getSettings().isDebug())
 				{
-					LOGGER.log(Level.INFO, _("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
+					LOGGER.log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
 				}
 				else
 				{
-					LOGGER.log(Level.INFO, _("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()));
+					LOGGER.log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()));
 				}
 			}
 		}
@@ -298,14 +298,14 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 			{
 				if (ess.getSettings().isDebug())
 				{
-					LOGGER.log(Level.INFO, _("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
+					LOGGER.log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
 				}
 				else
 				{
-					LOGGER.log(Level.INFO, _("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()));
+					LOGGER.log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()));
 				}
 			}
-			user.sendMessage(_("jailMessage"));
+			user.sendMessage(tl("jailMessage"));
 		}
 
 		@EventHandler(priority = EventPriority.HIGHEST)
@@ -327,14 +327,14 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 			{
 				if (ess.getSettings().isDebug())
 				{
-					LOGGER.log(Level.INFO, _("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
+					LOGGER.log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
 				}
 				else
 				{
-					LOGGER.log(Level.INFO, _("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()));
+					LOGGER.log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()));
 				}
 			}
-			user.sendMessage(_("jailMessage"));
+			user.sendMessage(tl("jailMessage"));
 		}
 	}
 }

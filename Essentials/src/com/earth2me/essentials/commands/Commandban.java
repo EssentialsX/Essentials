@@ -2,7 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
@@ -39,14 +39,14 @@ public class Commandban extends EssentialsCommand
 		{
 			if (sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.ban.offline"))
 			{
-				throw new Exception(_("banExemptOffline"));
+				throw new Exception(tl("banExemptOffline"));
 			}
 		}
 		else
 		{
 			if (user.isAuthorized("essentials.ban.exempt") && sender.isPlayer())
 			{
-				throw new Exception(_("banExempt"));
+				throw new Exception(tl("banExempt"));
 			}
 		}
 
@@ -58,21 +58,21 @@ public class Commandban extends EssentialsCommand
 		}
 		else
 		{
-			banReason = _("defaultBanReason");
+			banReason = tl("defaultBanReason");
 		}
 
-		user.setBanReason(_("banFormat", banReason, senderName));
+		user.setBanReason(tl("banFormat", banReason, senderName));
 		user.setBanned(true);
 		user.setBanTimeout(0);
-		user.kickPlayer(_("banFormat", banReason, senderName));
+		user.kickPlayer(tl("banFormat", banReason, senderName));
 
-		server.getLogger().log(Level.INFO, _("playerBanned", senderName, user.getName(), banReason));
+		server.getLogger().log(Level.INFO, tl("playerBanned", senderName, user.getName(), banReason));
 
 		if (nomatch)
 		{
-			sender.sendMessage(_("userUnknown", user.getName()));
+			sender.sendMessage(tl("userUnknown", user.getName()));
 		}
 
-		ess.broadcastMessage("essentials.ban.notify", _("playerBanned", senderName, user.getName(), banReason));
+		ess.broadcastMessage("essentials.ban.notify", tl("playerBanned", senderName, user.getName(), banReason));
 	}
 }

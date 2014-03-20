@@ -1,6 +1,6 @@
 package com.earth2me.essentials;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import java.util.*;
@@ -143,20 +143,20 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb
 				}
 				catch (Throwable throwable)
 				{
-					throw new Exception(_("unknownItemName", itemname), throwable);
+					throw new Exception(tl("unknownItemName", itemname), throwable);
 				}
 			}
 		}
 
 		if (itemid < 1)
 		{
-			throw new Exception(_("unknownItemName", itemname));
+			throw new Exception(tl("unknownItemName", itemname));
 		}
 
 		final Material mat = Material.getMaterial(itemid);
 		if (mat == null)
 		{
-			throw new Exception(_("unknownItemId", itemid));
+			throw new Exception(tl("unknownItemId", itemid));
 		}
 		final ItemStack retval = new ItemStack(mat);
 		retval.setAmount(mat.getMaxStackSize());
@@ -206,7 +206,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb
 
 		if (is.isEmpty() || is.get(0).getType() == Material.AIR)
 		{
-			throw new Exception(_("itemSellAir"));
+			throw new Exception(tl("itemSellAir"));
 		}
 
 		return is;

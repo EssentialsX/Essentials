@@ -1,6 +1,6 @@
 package com.earth2me.essentials;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.signs.Signs;
@@ -570,7 +570,7 @@ public class Settings implements net.ess3.api.ISettings
 			}
 			catch (Exception ex)
 			{
-				logger.log(Level.SEVERE, _("unknownItemInList", itemName, "item-spawn-blacklist"));
+				logger.log(Level.SEVERE, tl("unknownItemInList", itemName, "item-spawn-blacklist"));
 			}
 		}
 		return epItemSpwn;
@@ -606,7 +606,7 @@ public class Settings implements net.ess3.api.ISettings
 			}
 			catch (Exception ex)
 			{
-				logger.log(Level.SEVERE, _("unknownItemInList", signName, "enabledSigns"));
+				logger.log(Level.SEVERE, tl("unknownItemInList", signName, "enabledSigns"));
 				continue;
 			}
 			signsEnabled = true;
@@ -710,7 +710,7 @@ public class Settings implements net.ess3.api.ISettings
 			}
 			catch (Exception ex)
 			{
-				logger.log(Level.SEVERE, _("unknownItemInList", itemName, configName));
+				logger.log(Level.SEVERE, tl("unknownItemInList", itemName, configName));
 			}
 		}
 		return list;

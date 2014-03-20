@@ -1,6 +1,6 @@
 package com.earth2me.essentials.utils;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -38,7 +38,7 @@ public class NumberUtil
 
 	public static String displayCurrency(final BigDecimal value, final IEssentials ess)
 	{
-		return _("currency", ess.getSettings().getCurrencySymbol(), formatAsCurrency(value));
+		return tl("currency", ess.getSettings().getCurrencySymbol(), formatAsCurrency(value));
 	}
 
 	public static boolean isInt(final String sInt)

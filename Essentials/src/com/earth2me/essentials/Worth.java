@@ -1,6 +1,6 @@
 package com.earth2me.essentials;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import java.io.File;
 import java.math.BigDecimal;
@@ -85,7 +85,7 @@ public class Worth implements IConf
 	{
 		if (is == null || is.getType() == Material.AIR)
 		{
-			throw new Exception(_("itemSellAir"));
+			throw new Exception(tl("itemSellAir"));
 		}
 		int id = is.getTypeId();
 		int amount = 0;
@@ -111,7 +111,7 @@ public class Worth implements IConf
 
 		if (requireStack && !stack)
 		{
-			throw new Exception(_("itemMustBeStacked"));
+			throw new Exception(tl("itemMustBeStacked"));
 		}
 
 		int max = 0;
@@ -141,9 +141,9 @@ public class Worth implements IConf
 		{
 			if (!isBulkSell)
 			{
-				user.sendMessage(_("itemNotEnough2"));
-				user.sendMessage(_("itemNotEnough3"));
-				throw new Exception(_("itemNotEnough1"));
+				user.sendMessage(tl("itemNotEnough2"));
+				user.sendMessage(tl("itemNotEnough3"));
+				throw new Exception(tl("itemNotEnough1"));
 			}
 			else
 			{

@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
@@ -34,7 +34,7 @@ public class Commanditem extends EssentialsCommand
 			: (!user.isAuthorized("essentials.itemspawn.exempt")
 			   && !user.canSpawnItem(stack.getTypeId())))
 		{
-			throw new Exception(_("cantSpawnItem", itemname));
+			throw new Exception(tl("cantSpawnItem", itemname));
 		}
 		try
 		{
@@ -68,11 +68,11 @@ public class Commanditem extends EssentialsCommand
 
 		if (stack.getType() == Material.AIR)
 		{
-			throw new Exception(_("cantSpawnItem", "Air"));
+			throw new Exception(tl("cantSpawnItem", "Air"));
 		}
 
 		final String displayName = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ');
-		user.sendMessage(_("itemSpawn", stack.getAmount(), displayName));
+		user.sendMessage(tl("itemSpawn", stack.getAmount(), displayName));
 		if (user.isAuthorized("essentials.oversizedstacks"))
 		{
 			InventoryWorkaround.addOversizedItems(user.getInventory(), ess.getSettings().getOversizedStackSize(), stack);

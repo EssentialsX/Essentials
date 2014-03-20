@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -32,7 +32,7 @@ public class Commandkill extends EssentialsLoopCommand
 		final Player matchPlayer = user.getBase();
 		if (sender.isPlayer() && user.isAuthorized("essentials.kill.exempt") && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.kill.force"))
 		{
-			throw new PlayerExemptException(_("killExempt", matchPlayer.getDisplayName()));
+			throw new PlayerExemptException(tl("killExempt", matchPlayer.getDisplayName()));
 		}
 		final EntityDamageEvent ede = new EntityDamageEvent(matchPlayer, sender.isPlayer() && sender.getPlayer().getName().equals(matchPlayer.getName()) ? EntityDamageEvent.DamageCause.SUICIDE : EntityDamageEvent.DamageCause.CUSTOM, Short.MAX_VALUE);
 		server.getPluginManager().callEvent(ede);
@@ -47,6 +47,6 @@ public class Commandkill extends EssentialsLoopCommand
 			matchPlayer.setHealth(0);
 		}
 
-		sender.sendMessage(_("kill", matchPlayer.getDisplayName()));
+		sender.sendMessage(tl("kill", matchPlayer.getDisplayName()));
 	}
 }

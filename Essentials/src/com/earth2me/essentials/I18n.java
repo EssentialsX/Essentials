@@ -71,7 +71,7 @@ public class I18n implements net.ess3.api.II18n
 		}
 	}
 
-	public static String _(final String string, final Object... objects)
+	public static String tl(final String string, final Object... objects)
 	{
 		if (instance == null)
 		{

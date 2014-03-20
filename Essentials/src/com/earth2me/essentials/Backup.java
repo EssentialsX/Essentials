@@ -1,6 +1,6 @@
 package com.earth2me.essentials;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -86,7 +86,7 @@ public class Backup implements Runnable
 			active = false;
 			return;
 		}
-		LOGGER.log(Level.INFO, _("backupStarted"));
+		LOGGER.log(Level.INFO, tl("backupStarted"));
 		final CommandSender cs = server.getConsoleSender();
 		server.dispatchCommand(cs, "save-all");
 		server.dispatchCommand(cs, "save-off");
@@ -157,7 +157,7 @@ public class Backup implements Runnable
 								stopTask();
 							}
 							active = false;
-							LOGGER.log(Level.INFO, _("backupFinished"));
+							LOGGER.log(Level.INFO, tl("backupFinished"));
 						}
 					});
 				}

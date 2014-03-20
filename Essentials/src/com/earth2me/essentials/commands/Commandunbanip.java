@@ -2,7 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import java.util.logging.Level;
@@ -49,8 +49,8 @@ public class Commandunbanip extends EssentialsCommand
 
 		ess.getServer().unbanIP(ipAddress);
 		final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
-		server.getLogger().log(Level.INFO, _("playerUnbanIpAddress", senderName, ipAddress));
+		server.getLogger().log(Level.INFO, tl("playerUnbanIpAddress", senderName, ipAddress));
 
-		ess.broadcastMessage("essentials.ban.notify", _("playerUnbanIpAddress", senderName, ipAddress));
+		ess.broadcastMessage("essentials.ban.notify", tl("playerUnbanIpAddress", senderName, ipAddress));
 	}
 }

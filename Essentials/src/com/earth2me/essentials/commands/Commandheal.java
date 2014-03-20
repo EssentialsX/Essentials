@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -51,7 +51,7 @@ public class Commandheal extends EssentialsLoopCommand
 		try
 		{
 			healPlayer(player);
-			sender.sendMessage(_("healOther", player.getDisplayName()));
+			sender.sendMessage(tl("healOther", player.getDisplayName()));
 		}
 		catch (QuietAbortException e)
 		{
@@ -65,7 +65,7 @@ public class Commandheal extends EssentialsLoopCommand
 
 		if (player.getHealth() == 0)
 		{
-			throw new PlayerExemptException(_("healDead"));
+			throw new PlayerExemptException(tl("healDead"));
 		}
 
 		final double amount = player.getMaxHealth() - player.getHealth();
@@ -85,7 +85,7 @@ public class Commandheal extends EssentialsLoopCommand
 		player.setHealth(newAmount);
 		player.setFoodLevel(20);
 		player.setFireTicks(0);
-		user.sendMessage(_("heal"));
+		user.sendMessage(tl("heal"));
 		for (PotionEffect effect : player.getActivePotionEffects())
 		{
 			player.removePotionEffect(effect.getType());

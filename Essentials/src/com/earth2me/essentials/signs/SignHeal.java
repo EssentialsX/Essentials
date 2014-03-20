@@ -1,7 +1,7 @@
 package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.ChargeException;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import net.ess3.api.IEssentials;
@@ -26,14 +26,14 @@ public class SignHeal extends EssentialsSign
 	{
 		if (player.getHealth() == 0)
 		{
-			throw new SignException(_("healDead"));
+			throw new SignException(tl("healDead"));
 		}
 		final Trade charge = getTrade(sign, 1, ess);
 		charge.isAffordableFor(player);
 		player.setHealth(20);
 		player.setFoodLevel(20);
 		player.setFireTicks(0);
-		player.sendMessage(_("youAreHealed"));
+		player.sendMessage(tl("youAreHealed"));
 		charge.charge(player);
 		Trade.log("Sign", "Heal", "Interact", username, null, username, charge, sign.getBlock().getLocation(), ess);
 		return true;

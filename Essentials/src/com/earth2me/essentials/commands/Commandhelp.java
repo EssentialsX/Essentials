@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.textreader.*;
 import com.earth2me.essentials.utils.NumberUtil;
@@ -54,6 +54,6 @@ public class Commandhelp extends EssentialsCommand
 	@Override
 	protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
-		sender.sendMessage(_("helpConsole"));
+		sender.sendMessage(tl("helpConsole"));
 	}
 }

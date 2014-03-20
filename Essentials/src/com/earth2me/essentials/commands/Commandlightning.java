@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 import org.bukkit.entity.LightningStrike;
@@ -46,7 +46,7 @@ public class Commandlightning extends EssentialsLoopCommand
 	@Override
 	protected void updatePlayer(final Server server, final CommandSource sender, final User matchUser, final String[] args)
 	{
-		sender.sendMessage(_("lightningUse", matchUser.getDisplayName()));
+		sender.sendMessage(tl("lightningUse", matchUser.getDisplayName()));
 		final LightningStrike strike = matchUser.getBase().getWorld().strikeLightningEffect(matchUser.getBase().getLocation());
 
 		if (!matchUser.isGodModeEnabled())
@@ -55,7 +55,7 @@ public class Commandlightning extends EssentialsLoopCommand
 		}
 		if (ess.getSettings().warnOnSmite())
 		{
-			matchUser.sendMessage(_("lightningSmited"));
+			matchUser.sendMessage(tl("lightningSmited"));
 		}
 	}
 }

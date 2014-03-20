@@ -2,7 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.IReplyTo;
 import com.earth2me.essentials.User;
 import static com.earth2me.essentials.commands.EssentialsCommand.getFinalArg;
@@ -13,7 +13,7 @@ import org.bukkit.command.CommandSender;
 
 public class Commandmsg extends EssentialsLoopCommand
 {
-	final String translatedMe = _("me");
+	final String translatedMe = tl("me");
 
 	public Commandmsg()
 	{
@@ -35,7 +35,7 @@ public class Commandmsg extends EssentialsLoopCommand
 			User user = ess.getUser(sender.getPlayer());
 			if (user.isMuted())
 			{
-				throw new Exception(_("voiceSilenced"));
+				throw new Exception(tl("voiceSilenced"));
 			}
 			message = FormatUtil.formatMessage(user, "essentials.msg", message);
 			canWildcard = user.isAuthorized("essentials.msg.multiple");
@@ -51,9 +51,9 @@ public class Commandmsg extends EssentialsLoopCommand
 			final IReplyTo replyTo = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : Console.getConsoleReplyTo();
 			final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
 			
-			sender.sendMessage(_("msgFormat", translatedMe, Console.NAME, message));
+			sender.sendMessage(tl("msgFormat", translatedMe, Console.NAME, message));
 			CommandSender cs = Console.getCommandSender(server);
-			cs.sendMessage(_("msgFormat", senderName, translatedMe, message));
+			cs.sendMessage(tl("msgFormat", senderName, translatedMe, message));
 			replyTo.setReplyTo(new CommandSource(cs));
 			Console.getConsoleReplyTo().setReplyTo(sender);
 			return;
@@ -70,16 +70,16 @@ public class Commandmsg extends EssentialsLoopCommand
 
 		if (matchedUser.isAfk())
 		{
-			sender.sendMessage(_("userAFK", matchedUser.getDisplayName()));
+			sender.sendMessage(tl("userAFK", matchedUser.getDisplayName()));
 		}
 
-		sender.sendMessage(_("msgFormat", translatedMe, matchedUser.getDisplayName(), args[0]));
+		sender.sendMessage(tl("msgFormat", translatedMe, matchedUser.getDisplayName(), args[0]));
 		if (sender.isPlayer() && matchedUser.isIgnoredPlayer(ess.getUser(sender.getPlayer())))
 		{
 			return;
 		}
 
-		matchedUser.sendMessage(_("msgFormat", senderName, translatedMe, args[0]));
+		matchedUser.sendMessage(tl("msgFormat", senderName, translatedMe, args[0]));
 		replyTo.setReplyTo(matchedUser.getSource());
 		matchedUser.setReplyTo(sender);
 	}

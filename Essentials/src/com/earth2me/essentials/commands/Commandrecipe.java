@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
 import java.util.HashMap;
@@ -39,23 +39,23 @@ public class Commandrecipe extends EssentialsCommand
 			}
 			else
 			{
-				throw new Exception(_("invalidNumber"));
+				throw new Exception(tl("invalidNumber"));
 			}
 		}
 
 		final List<Recipe> recipesOfType = ess.getServer().getRecipesFor(itemType);
 		if (recipesOfType.size() < 1)
 		{
-			throw new Exception(_("recipeNone", getMaterialName(itemType)));
+			throw new Exception(tl("recipeNone", getMaterialName(itemType)));
 		}
 
 		if (recipeNo < 0 || recipeNo >= recipesOfType.size())
 		{
-			throw new Exception(_("recipeBadIndex"));
+			throw new Exception(tl("recipeBadIndex"));
 		}
 
 		final Recipe selectedRecipe = recipesOfType.get(recipeNo);
-		sender.sendMessage(_("recipe", getMaterialName(itemType), recipeNo + 1, recipesOfType.size()));
+		sender.sendMessage(tl("recipe", getMaterialName(itemType), recipeNo + 1, recipesOfType.size()));
 
 		if (selectedRecipe instanceof FurnaceRecipe)
 		{
@@ -72,13 +72,13 @@ public class Commandrecipe extends EssentialsCommand
 
 		if (recipesOfType.size() > 1 && args.length == 1)
 		{
-			sender.sendMessage(_("recipeMore", commandLabel, args[0], getMaterialName(itemType)));
+			sender.sendMessage(tl("recipeMore", commandLabel, args[0], getMaterialName(itemType)));
 		}
 	}
 
 	public void furnaceRecipe(final CommandSource sender, final FurnaceRecipe recipe)
 	{
-		sender.sendMessage(_("recipeFurnace", getMaterialName(recipe.getInput())));
+		sender.sendMessage(tl("recipeFurnace", getMaterialName(recipe.getInput())));
 	}
 
 	public void shapedRecipe(final CommandSource sender, final ShapedRecipe recipe)
@@ -128,16 +128,16 @@ public class Commandrecipe extends EssentialsCommand
 					materials[j][k] = item == null ? null : item.getType();
 				}
 			}
-			sender.sendMessage(_("recipeGrid", colorMap.get(materials[0][0]), colorMap.get(materials[0][1]), colorMap.get(materials[0][2])));
-			sender.sendMessage(_("recipeGrid", colorMap.get(materials[1][0]), colorMap.get(materials[1][1]), colorMap.get(materials[1][2])));
-			sender.sendMessage(_("recipeGrid", colorMap.get(materials[2][0]), colorMap.get(materials[2][1]), colorMap.get(materials[2][2])));
+			sender.sendMessage(tl("recipeGrid", colorMap.get(materials[0][0]), colorMap.get(materials[0][1]), colorMap.get(materials[0][2])));
+			sender.sendMessage(tl("recipeGrid", colorMap.get(materials[1][0]), colorMap.get(materials[1][1]), colorMap.get(materials[1][2])));
+			sender.sendMessage(tl("recipeGrid", colorMap.get(materials[2][0]), colorMap.get(materials[2][1]), colorMap.get(materials[2][2])));
 
 			StringBuilder s = new StringBuilder();
 			for (Material items : colorMap.keySet().toArray(new Material[colorMap.size()]))
 			{
-				s.append(_("recipeGridItem", colorMap.get(items), getMaterialName(items)));
+				s.append(tl("recipeGridItem", colorMap.get(items), getMaterialName(items)));
 			}
-			sender.sendMessage(_("recipeWhere", s.toString()));
+			sender.sendMessage(tl("recipeWhere", s.toString()));
 		}
 	}
 
@@ -167,7 +167,7 @@ public class Commandrecipe extends EssentialsCommand
 				}
 				s.append(" ");
 			}
-			sender.sendMessage(_("recipeShapeless", s.toString()));
+			sender.sendMessage(tl("recipeShapeless", s.toString()));
 		}
 	}
 
@@ -175,7 +175,7 @@ public class Commandrecipe extends EssentialsCommand
 	{
 		if (stack == null)
 		{
-			return _("recipeNothing");
+			return tl("recipeNothing");
 		}
 		return getMaterialName(stack.getType());
 	}
@@ -184,7 +184,7 @@ public class Commandrecipe extends EssentialsCommand
 	{
 		if (type == null)
 		{
-			return _("recipeNothing");
+			return tl("recipeNothing");
 		}
 		return type.toString().replace("_", " ").toLowerCase(Locale.ENGLISH);
 	}

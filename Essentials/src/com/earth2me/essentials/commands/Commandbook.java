@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -31,11 +31,11 @@ public class Commandbook extends EssentialsCommand
 				{
 					bmeta.setAuthor(args[1]);
 					item.setItemMeta(bmeta);
-					user.sendMessage(_("bookAuthorSet", getFinalArg(args, 1)));
+					user.sendMessage(tl("bookAuthorSet", getFinalArg(args, 1)));
 				}
 				else
 				{
-					throw new Exception(_("denyChangeAuthor"));
+					throw new Exception(tl("denyChangeAuthor"));
 				}
 			}
 			else if (args.length > 1 && args[0].equalsIgnoreCase("title"))
@@ -44,11 +44,11 @@ public class Commandbook extends EssentialsCommand
 				{
 					bmeta.setTitle(args[1]);
 					item.setItemMeta(bmeta);
-					user.sendMessage(_("bookTitleSet", getFinalArg(args, 1)));
+					user.sendMessage(tl("bookTitleSet", getFinalArg(args, 1)));
 				}
 				else
 				{
-					throw new Exception(_("denyChangeTitle"));
+					throw new Exception(tl("denyChangeTitle"));
 				}
 			}
 			else
@@ -58,11 +58,11 @@ public class Commandbook extends EssentialsCommand
 					ItemStack newItem = new ItemStack(Material.BOOK_AND_QUILL, item.getAmount());
 					newItem.setItemMeta(bmeta);
 					user.setItemInHand(newItem);
-					user.sendMessage(_("editBookContents"));
+					user.sendMessage(tl("editBookContents"));
 				}
 				else
 				{
-					throw new Exception(_("denyBookEdit"));
+					throw new Exception(tl("denyBookEdit"));
 				}
 			}
 		}
@@ -76,11 +76,11 @@ public class Commandbook extends EssentialsCommand
 			ItemStack newItem = new ItemStack(Material.WRITTEN_BOOK, item.getAmount());
 			newItem.setItemMeta(bmeta);
 			user.setItemInHand(newItem);
-			user.sendMessage(_("bookLocked"));
+			user.sendMessage(tl("bookLocked"));
 		}
 		else
 		{
-			throw new Exception(_("holdBook"));
+			throw new Exception(tl("holdBook"));
 		}
 	}
 

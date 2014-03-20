@@ -2,7 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import java.util.logging.Level;
@@ -35,17 +35,17 @@ public class Commandkick extends EssentialsCommand
 
 			if (target.isAuthorized("essentials.kick.exempt"))
 			{
-				throw new Exception(_("kickExempt"));
+				throw new Exception(tl("kickExempt"));
 			}
 		}
 
-		String kickReason = args.length > 1 ? getFinalArg(args, 1) : _("kickDefault");
+		String kickReason = args.length > 1 ? getFinalArg(args, 1) : tl("kickDefault");
 		kickReason = FormatUtil.replaceFormat(kickReason.replace("\\n", "\n").replace("|", "\n"));
 
 		target.kickPlayer(kickReason);
 		final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
 
-		server.getLogger().log(Level.INFO, _("playerKicked", senderName, target.getName(), kickReason));
-		ess.broadcastMessage("essentials.kick.notify", _("playerKicked", senderName, target.getName(), kickReason));
+		server.getLogger().log(Level.INFO, tl("playerKicked", senderName, target.getName(), kickReason));
+		ess.broadcastMessage("essentials.kick.notify", tl("playerKicked", senderName, target.getName(), kickReason));
 	}
 }

@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -30,7 +30,7 @@ public class Commandfeed extends EssentialsLoopCommand
 		}
 
 		feedPlayer(user.getBase());
-		user.sendMessage(_("feed"));
+		user.sendMessage(tl("feed"));
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class Commandfeed extends EssentialsLoopCommand
 		try
 		{
 			feedPlayer(player.getBase());
-			sender.sendMessage(_("feedOther", player.getDisplayName()));
+			sender.sendMessage(tl("feedOther", player.getDisplayName()));
 		}
 		catch (QuietAbortException e)
 		{

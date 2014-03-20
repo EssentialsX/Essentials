@@ -1,6 +1,6 @@
 package com.earth2me.essentials.spawn;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.commands.EssentialsCommand;
 import org.bukkit.Server;
@@ -18,6 +18,6 @@ public class Commandsetspawn extends EssentialsCommand
 	{
 		final String group = args.length > 0 ? getFinalArg(args, 0) : "default";
 		((SpawnStorage)module).setSpawn(user.getLocation(), group);
-		user.sendMessage(_("spawnSet", group));
+		user.sendMessage(tl("spawnSet", group));
 	}
 }

@@ -1,6 +1,6 @@
 package com.earth2me.essentials;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.craftbukkit.SetExpFix;
 import java.io.File;
@@ -99,13 +99,13 @@ public class Trade
 			&& getMoney().signum() > 0
 			&& !user.canAfford(getMoney()))
 		{
-			throw new ChargeException(_("notEnoughMoney"));
+			throw new ChargeException(tl("notEnoughMoney"));
 		}
 
 		if (getItemStack() != null
 			&& !user.getBase().getInventory().containsAtLeast(itemStack, itemStack.getAmount()))
 		{
-			throw new ChargeException(_("missingItems", getItemStack().getAmount(), ess.getItemDb().name(getItemStack())));
+			throw new ChargeException(tl("missingItems", getItemStack().getAmount(), ess.getItemDb().name(getItemStack())));
 		}
 
 		BigDecimal money;
@@ -113,13 +113,13 @@ public class Trade
 			&& (money = getCommandCost(user)).signum() > 0
 			&& !user.canAfford(money))
 		{
-			throw new ChargeException(_("notEnoughMoney"));
+			throw new ChargeException(tl("notEnoughMoney"));
 		}
 
 		if (exp != null && exp > 0
 			&& SetExpFix.getTotalExperience(user.getBase()) < exp)
 		{
-			throw new ChargeException(_("notEnoughExperience"));
+			throw new ChargeException(tl("notEnoughExperience"));
 		}
 	}
 
@@ -223,7 +223,7 @@ public class Trade
 			}
 			if (!user.canAfford(getMoney()) && getMoney().signum() > 0)
 			{
-				throw new ChargeException(_("notEnoughMoney"));
+				throw new ChargeException(tl("notEnoughMoney"));
 			}
 			user.takeMoney(getMoney());
 		}
@@ -235,7 +235,7 @@ public class Trade
 			}
 			if (!user.getBase().getInventory().containsAtLeast(getItemStack(), getItemStack().getAmount()))
 			{
-				throw new ChargeException(_("missingItems", getItemStack().getAmount(), getItemStack().getType().toString().toLowerCase(Locale.ENGLISH).replace("_", " ")));
+				throw new ChargeException(tl("missingItems", getItemStack().getAmount(), getItemStack().getType().toString().toLowerCase(Locale.ENGLISH).replace("_", " ")));
 			}
 			user.getBase().getInventory().removeItem(getItemStack());
 			user.getBase().updateInventory();
@@ -245,7 +245,7 @@ public class Trade
 			final BigDecimal cost = getCommandCost(user);
 			if (!user.canAfford(cost) && cost.signum() > 0)
 			{
-				throw new ChargeException(_("notEnoughMoney"));
+				throw new ChargeException(tl("notEnoughMoney"));
 			}
 			user.takeMoney(cost);
 		}
@@ -258,7 +258,7 @@ public class Trade
 			final int experience = SetExpFix.getTotalExperience(user.getBase());
 			if (experience < getExperience() && getExperience() > 0)
 			{
-				throw new ChargeException(_("notEnoughExperience"));
+				throw new ChargeException(tl("notEnoughExperience"));
 			}
 			SetExpFix.setTotalExperience(user.getBase(), experience - getExperience());
 		}

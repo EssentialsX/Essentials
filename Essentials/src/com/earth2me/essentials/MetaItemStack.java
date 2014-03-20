@@ -1,6 +1,6 @@
 package com.earth2me.essentials;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.textreader.BookInput;
 import com.earth2me.essentials.textreader.BookPager;
 import com.earth2me.essentials.textreader.IText;
@@ -105,7 +105,7 @@ public class MetaItemStack
 			}
 			catch (NoSuchMethodError nsme)
 			{
-				throw new Exception(_("noMetaJson"), nsme);
+				throw new Exception(tl("noMetaJson"), nsme);
 			}
 			catch (Throwable throwable)
 			{
@@ -122,14 +122,14 @@ public class MetaItemStack
 			{
 				if (!hasMetaPermission(sender, "firework", true, true, ess))
 				{
-					throw new Exception(_("noMetaFirework"));
+					throw new Exception(tl("noMetaFirework"));
 				}
 				FireworkEffect effect = builder.build();
 				FireworkMeta fmeta = (FireworkMeta)stack.getItemMeta();
 				fmeta.addEffect(effect);
 				if (fmeta.getEffects().size() > 1 && !hasMetaPermission(sender, "firework-multiple", true, true, ess))
 				{
-					throw new Exception(_("multipleCharges"));
+					throw new Exception(tl("multipleCharges"));
 				}
 				stack.setItemMeta(fmeta);
 			}
@@ -173,7 +173,7 @@ public class MetaItemStack
 			}
 			else
 			{
-				throw new Exception(_("onlyPlayerSkulls"));
+				throw new Exception(tl("onlyPlayerSkulls"));
 			}
 		}
 		else if (split.length > 1 && split[0].equalsIgnoreCase("book") && stack.getType() == Material.WRITTEN_BOOK
@@ -234,7 +234,7 @@ public class MetaItemStack
 			}
 			else
 			{
-				throw new Exception(_("leatherSyntax"));
+				throw new Exception(tl("leatherSyntax"));
 			}
 		}
 		else
@@ -260,14 +260,14 @@ public class MetaItemStack
 				{
 					if (!hasMetaPermission(sender, "firework", true, true, ess))
 					{
-						throw new Exception(_("noMetaFirework"));
+						throw new Exception(tl("noMetaFirework"));
 					}
 					FireworkEffect effect = builder.build();
 					FireworkMeta fmeta = (FireworkMeta)stack.getItemMeta();
 					fmeta.addEffect(effect);
 					if (fmeta.getEffects().size() > 1 && !hasMetaPermission(sender, "firework-multiple", true, true, ess))
 					{
-						throw new Exception(_("multipleCharges"));
+						throw new Exception(tl("multipleCharges"));
 					}
 					stack.setItemMeta(fmeta);
 					builder = FireworkEffect.builder();
@@ -284,7 +284,7 @@ public class MetaItemStack
 					}
 					else
 					{
-						throw new Exception(_("invalidFireworkFormat", split[1], split[0]));
+						throw new Exception(tl("invalidFireworkFormat", split[1], split[0]));
 					}
 				}
 				builder.withColor(primaryColors);
@@ -299,7 +299,7 @@ public class MetaItemStack
 				}
 				else
 				{
-					throw new Exception(_("invalidFireworkFormat", split[1], split[0]));
+					throw new Exception(tl("invalidFireworkFormat", split[1], split[0]));
 				}
 				if (finalEffect != null)
 				{
@@ -318,7 +318,7 @@ public class MetaItemStack
 					}
 					else
 					{
-						throw new Exception(_("invalidFireworkFormat", split[1], split[0]));
+						throw new Exception(tl("invalidFireworkFormat", split[1], split[0]));
 					}
 				}
 				if (!fadeColors.isEmpty())
@@ -341,7 +341,7 @@ public class MetaItemStack
 					}
 					else
 					{
-						throw new Exception(_("invalidFireworkFormat", split[1], split[0]));
+						throw new Exception(tl("invalidFireworkFormat", split[1], split[0]));
 					}
 				}
 			}
@@ -370,12 +370,12 @@ public class MetaItemStack
 					}
 					else
 					{
-						throw new Exception(_("noPotionEffectPerm", pEffectType.getName().toLowerCase(Locale.ENGLISH)));
+						throw new Exception(tl("noPotionEffectPerm", pEffectType.getName().toLowerCase(Locale.ENGLISH)));
 					}
 				}
 				else
 				{
-					throw new Exception(_("invalidPotionMeta", split[1]));
+					throw new Exception(tl("invalidPotionMeta", split[1]));
 				}
 			}
 			else if (split[0].equalsIgnoreCase("power") || (allowShortName && split[0].equalsIgnoreCase("p")))
@@ -391,7 +391,7 @@ public class MetaItemStack
 				}
 				else
 				{
-					throw new Exception(_("invalidPotionMeta", split[1]));
+					throw new Exception(tl("invalidPotionMeta", split[1]));
 				}
 			}
 			else if (split[0].equalsIgnoreCase("duration") || (allowShortName && split[0].equalsIgnoreCase("d")))
@@ -403,7 +403,7 @@ public class MetaItemStack
 				}
 				else
 				{
-					throw new Exception(_("invalidPotionMeta", split[1]));
+					throw new Exception(tl("invalidPotionMeta", split[1]));
 				}
 			}
 
@@ -413,7 +413,7 @@ public class MetaItemStack
 				pEffect = pEffectType.createEffect(duration, power);
 				if (pmeta.getCustomEffects().size() > 1 && !hasMetaPermission(sender, "potions.multiple", true, false, ess))
 				{
-					throw new Exception(_("multiplePotionEffects"));
+					throw new Exception(tl("multiplePotionEffects"));
 				}
 				pmeta.addCustomEffect(pEffect, true);
 				stack.setItemMeta(pmeta);
@@ -454,7 +454,7 @@ public class MetaItemStack
 	{
 		if (enchantment == null)
 		{
-			throw new Exception(_("enchantmentNotFound"));
+			throw new Exception(tl("enchantmentNotFound"));
 		}
 		try
 		{
@@ -508,7 +508,7 @@ public class MetaItemStack
 
 		if (!hasMetaPermission(user, "enchantments." + enchantmentName, true, false))
 		{
-			throw new Exception(_("enchantmentPerm", enchantmentName));
+			throw new Exception(tl("enchantmentPerm", enchantmentName));
 		}
 		return enchantment;
 	}
@@ -533,7 +533,7 @@ public class MetaItemStack
 		}
 		else
 		{
-			throw new Exception(_("noMetaPerm", metaPerm));
+			throw new Exception(tl("noMetaPerm", metaPerm));
 		}
 	}
 }

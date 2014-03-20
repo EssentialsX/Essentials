@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
@@ -35,7 +35,7 @@ public class Commanditemdb extends EssentialsCommand
 		{
 			itemStack = ess.getItemDb().get(args[0]);
 		}
-		sender.sendMessage(_("itemType", itemStack.getType().toString(), itemStack.getTypeId() + ":" + Integer.toString(itemStack.getDurability())));
+		sender.sendMessage(tl("itemType", itemStack.getType().toString(), itemStack.getTypeId() + ":" + Integer.toString(itemStack.getDurability())));
 
 		if (itemHeld && itemStack.getType() != Material.AIR)
 		{
@@ -43,13 +43,13 @@ public class Commanditemdb extends EssentialsCommand
 			int durability = ((maxuses + 1) - itemStack.getDurability());
 			if (maxuses != 0)
 			{
-				sender.sendMessage(_("durability", Integer.toString(durability)));
+				sender.sendMessage(tl("durability", Integer.toString(durability)));
 			}
 		}
 		final String itemNameList = ess.getItemDb().names(itemStack);
 		if (itemNameList != null)
 		{
-			sender.sendMessage(_("itemNames", ess.getItemDb().names(itemStack)));
+			sender.sendMessage(tl("itemNames", ess.getItemDb().names(itemStack)));
 		}
 	}
 }

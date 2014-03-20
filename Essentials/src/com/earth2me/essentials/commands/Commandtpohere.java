@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -27,7 +27,7 @@ public class Commandtpohere extends EssentialsCommand
 		if (user.getWorld() != player.getWorld() && ess.getSettings().isWorldTeleportPermissions()
 			&& !user.isAuthorized("essentials.worlds." + user.getWorld().getName()))
 		{
-			throw new Exception(_("noPerm", "essentials.worlds." + user.getWorld().getName()));
+			throw new Exception(tl("noPerm", "essentials.worlds." + user.getWorld().getName()));
 		}
 
 		// Verify permission

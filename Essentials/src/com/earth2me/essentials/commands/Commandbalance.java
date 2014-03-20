@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
 import java.math.BigDecimal;
@@ -24,7 +24,7 @@ public class Commandbalance extends EssentialsCommand
 		}
 
 		User target = getPlayer(server, args, 0, true, true);
-		sender.sendMessage(_("balanceOther", target.isHidden() ? target.getName() : target.getDisplayName(), NumberUtil.displayCurrency(target.getMoney(), ess)));
+		sender.sendMessage(tl("balanceOther", target.isHidden() ? target.getName() : target.getDisplayName(), NumberUtil.displayCurrency(target.getMoney(), ess)));
 	}
 
 	@Override
@@ -34,12 +34,12 @@ public class Commandbalance extends EssentialsCommand
 		{
 			final User target = getPlayer(server, args, 0, true, true);
 			final BigDecimal bal = target.getMoney();
-			user.sendMessage(_("balanceOther", target.isHidden() ? target.getName() : target.getDisplayName(), NumberUtil.displayCurrency(bal, ess)));
+			user.sendMessage(tl("balanceOther", target.isHidden() ? target.getName() : target.getDisplayName(), NumberUtil.displayCurrency(bal, ess)));
 		}
 		else if (args.length < 2)
 		{
 			final BigDecimal bal = user.getMoney();
-			user.sendMessage(_("balance", NumberUtil.displayCurrency(bal, ess)));
+			user.sendMessage(tl("balance", NumberUtil.displayCurrency(bal, ess)));
 		}
 		else
 		{

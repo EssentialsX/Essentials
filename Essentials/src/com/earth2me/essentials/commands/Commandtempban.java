@@ -2,7 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DateUtil;
 import java.util.GregorianCalendar;
@@ -29,7 +29,7 @@ public class Commandtempban extends EssentialsCommand
 			if (sender.isPlayer()
 				&& !ess.getUser(sender.getPlayer()).isAuthorized("essentials.tempban.offline"))
 			{
-				sender.sendMessage(_("tempbanExemptOffline"));
+				sender.sendMessage(tl("tempbanExemptOffline"));
 				return;
 			}
 		}
@@ -37,7 +37,7 @@ public class Commandtempban extends EssentialsCommand
 		{
 			if (user.isAuthorized("essentials.tempban.exempt") && sender.isPlayer())
 			{
-				sender.sendMessage(_("tempbanExempt"));
+				sender.sendMessage(tl("tempbanExempt"));
 				return;
 			}
 		}
@@ -48,17 +48,17 @@ public class Commandtempban extends EssentialsCommand
 		if (maxBanLength > 0 && ((banTimestamp - GregorianCalendar.getInstance().getTimeInMillis()) > maxBanLength)
 			&& sender.isPlayer() && !(ess.getUser(sender.getPlayer()).isAuthorized("essentials.tempban.unlimited")))
 		{
-			sender.sendMessage(_("oversizedTempban"));
+			sender.sendMessage(tl("oversizedTempban"));
 			throw new NoChargeException();
 		}
 
 		final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
-		final String banReason = _("tempBanned", DateUtil.formatDateDiff(banTimestamp), senderName);
+		final String banReason = tl("tempBanned", DateUtil.formatDateDiff(banTimestamp), senderName);
 		user.setBanReason(banReason);
 		user.setBanTimeout(banTimestamp);
 		user.setBanned(true);
 		user.kickPlayer(banReason);
 
-		ess.broadcastMessage("essentials.ban.notify", _("playerBanned", senderName, user.getName(), banReason, DateUtil.formatDateDiff(banTimestamp)));
+		ess.broadcastMessage("essentials.ban.notify", tl("playerBanned", senderName, user.getName(), banReason, DateUtil.formatDateDiff(banTimestamp)));
 	}
 }

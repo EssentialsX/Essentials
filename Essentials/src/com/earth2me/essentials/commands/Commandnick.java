@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import java.util.Locale;
@@ -26,14 +26,14 @@ public class Commandnick extends EssentialsLoopCommand
 		}
 		if (!ess.getSettings().changeDisplayName())
 		{
-			throw new Exception(_("nickDisplayName"));
+			throw new Exception(tl("nickDisplayName"));
 		}
 
 		if (args.length > 1 && user.isAuthorized("essentials.nick.others"))
 		{
 			final String[] nickname = formatNickname(user, args[1]).split(" ");
 			loopOfflinePlayers(server, user.getSource(), false, true, args[0], nickname);
-			user.sendMessage(_("nickChanged"));
+			user.sendMessage(tl("nickChanged"));
 		}
 		else
 		{
@@ -51,11 +51,11 @@ public class Commandnick extends EssentialsLoopCommand
 		}
 		if (!ess.getSettings().changeDisplayName())
 		{
-			throw new Exception(_("nickDisplayName"));
+			throw new Exception(tl("nickDisplayName"));
 		}
 		final String[] nickname = formatNickname(null, args[1]).split(" ");
 		loopOfflinePlayers(server, sender, false, true, args[0], nickname);
-		sender.sendMessage(_("nickChanged"));
+		sender.sendMessage(tl("nickChanged"));
 	}
 
 	@Override
@@ -65,21 +65,21 @@ public class Commandnick extends EssentialsLoopCommand
 		if (target.getName().equalsIgnoreCase(nick))
 		{
 			setNickname(server, sender, target, nick);
-			target.sendMessage(_("nickNoMore"));
+			target.sendMessage(tl("nickNoMore"));
 		}
 		else if ("off".equalsIgnoreCase(nick))
 		{
 			setNickname(server, sender, target, null);
-			target.sendMessage(_("nickNoMore"));
+			target.sendMessage(tl("nickNoMore"));
 		}
 		else if (nickInUse(server, target, nick))
 		{
-			throw new NotEnoughArgumentsException(_("nickInUse"));
+			throw new NotEnoughArgumentsException(tl("nickInUse"));
 		}
 		else
 		{
 			setNickname(server, sender, target, nick);
-			target.sendMessage(_("nickSet", target.getDisplayName()));
+			target.sendMessage(tl("nickSet", target.getDisplayName()));
 		}
 	}
 
@@ -88,15 +88,15 @@ public class Commandnick extends EssentialsLoopCommand
 		String newNick = user == null ? FormatUtil.replaceFormat(nick) : FormatUtil.formatString(user, "essentials.nick", nick);
 		if (!newNick.matches("^[a-zA-Z_0-9\u00a7]+$"))
 		{
-			throw new Exception(_("nickNamesAlpha"));
+			throw new Exception(tl("nickNamesAlpha"));
 		}
 		else if (newNick.length() > ess.getSettings().getMaxNickLength())
 		{
-			throw new Exception(_("nickTooLong"));
+			throw new Exception(tl("nickTooLong"));
 		}
 		else if (FormatUtil.stripFormat(newNick).length() < 1)
 		{
-			throw new Exception(_("nickNamesAlpha"));
+			throw new Exception(tl("nickNamesAlpha"));
 		}
 		return newNick;
 	}

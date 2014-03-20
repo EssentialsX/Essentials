@@ -2,7 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.IReplyTo;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
@@ -46,12 +46,12 @@ public class Commandr extends EssentialsCommand
 
 		if (target == null || (target.isPlayer() && !target.getPlayer().isOnline()))
 		{
-			throw new Exception(_("foreverAlone"));
+			throw new Exception(tl("foreverAlone"));
 		}
 
 		final String targetName = target.isPlayer() ? target.getPlayer().getDisplayName() : Console.NAME;
 
-		sender.sendMessage(_("msgFormat", _("me"), targetName, message));
+		sender.sendMessage(tl("msgFormat", tl("me"), targetName, message));
 		if (target.isPlayer())
 		{
 			User player = ess.getUser(target.getPlayer());
@@ -60,7 +60,7 @@ public class Commandr extends EssentialsCommand
 				return;
 			}
 		}
-		target.sendMessage(_("msgFormat", senderName, _("me"), message));
+		target.sendMessage(tl("msgFormat", senderName, tl("me"), message));
 		replyTo.setReplyTo(target);
 		if (target != sender)
 		{

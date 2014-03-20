@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.User;
 import java.util.ArrayList;
@@ -69,7 +69,7 @@ public class Commandremove extends EssentialsCommand
 
 		if (world == null)
 		{
-			throw new Exception(_("invalidWorld"));
+			throw new Exception(tl("invalidWorld"));
 		}
 
 		if (args[0].contentEquals("*") || args[0].contentEquals("all"))
@@ -136,7 +136,7 @@ public class Commandremove extends EssentialsCommand
 
 		if (warnUser)
 		{
-			sender.sendMessage(_("invalidMob"));
+			sender.sendMessage(tl("invalidMob"));
 		}
 
 		for (Chunk chunk : world.getLoadedChunks())
@@ -283,7 +283,7 @@ public class Commandremove extends EssentialsCommand
 				}
 			}
 		}
-		sender.sendMessage(_("removed", removed));
+		sender.sendMessage(tl("removed", removed));
 	}
 
 

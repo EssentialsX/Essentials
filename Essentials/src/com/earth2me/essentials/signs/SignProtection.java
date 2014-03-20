@@ -1,7 +1,7 @@
 package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.*;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.Trade.OverflowType;
 import com.earth2me.essentials.utils.FormatUtil;
 import java.util.*;
@@ -43,7 +43,7 @@ public class SignProtection extends EssentialsSign
 				return true;
 			}
 		}
-		player.sendMessage(_("signProtectInvalidLocation"));
+		player.sendMessage(tl("signProtectInvalidLocation"));
 		return false;
 	}
 
@@ -256,7 +256,7 @@ public class SignProtection extends EssentialsSign
 			if ((state == SignProtectionState.ALLOWED || state == SignProtectionState.NOT_ALLOWED)
 				&& !player.isAuthorized("essentials.signs.protection.override"))
 			{
-				player.sendMessage(_("noPlacePermission", block.getType().toString().toLowerCase(Locale.ENGLISH)));
+				player.sendMessage(tl("noPlacePermission", block.getType().toString().toLowerCase(Locale.ENGLISH)));
 				return false;
 			}
 		}
@@ -281,7 +281,7 @@ public class SignProtection extends EssentialsSign
 		}
 
 
-		player.sendMessage(_("noAccessPermission", block.getType().toString().toLowerCase(Locale.ENGLISH)));
+		player.sendMessage(tl("noAccessPermission", block.getType().toString().toLowerCase(Locale.ENGLISH)));
 		return false;
 	}
 
@@ -304,7 +304,7 @@ public class SignProtection extends EssentialsSign
 		}
 
 
-		player.sendMessage(_("noDestroyPermission", block.getType().toString().toLowerCase(Locale.ENGLISH)));
+		player.sendMessage(tl("noDestroyPermission", block.getType().toString().toLowerCase(Locale.ENGLISH)));
 		return false;
 	}
 

@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 
@@ -23,7 +23,7 @@ public class Commandignore extends EssentialsCommand
 				sb.append(s).append(" ");
 			}
 			String ignoredList = sb.toString().trim();
-			user.sendMessage(ignoredList.length() > 0 ? _("ignoredList", ignoredList) : _("noIgnored"));
+			user.sendMessage(ignoredList.length() > 0 ? tl("ignoredList", ignoredList) : tl("noIgnored"));
 		}
 		else
 		{
@@ -41,17 +41,17 @@ public class Commandignore extends EssentialsCommand
 				throw new PlayerNotFoundException();
 			}
 			if (player.isIgnoreExempt()) {
-				user.sendMessage(_("ignoreExempt"));
+				user.sendMessage(tl("ignoreExempt"));
 			}
 			else if (user.isIgnoredPlayer(player))
 			{
 				user.setIgnoredPlayer(player, false);
-				user.sendMessage(_("unignorePlayer", player.getName()));
+				user.sendMessage(tl("unignorePlayer", player.getName()));
 			}
 			else
 			{
 				user.setIgnoredPlayer(player, true);
-				user.sendMessage(_("ignorePlayer", player.getName()));
+				user.sendMessage(tl("ignorePlayer", player.getName()));
 			}
 		}
 	}

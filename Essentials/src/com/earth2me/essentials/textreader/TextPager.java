@@ -2,7 +2,7 @@ package com.earth2me.essentials.textreader;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.I18n;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -42,7 +42,7 @@ public class TextPager
 				{
 					return;
 				}
-				sender.sendMessage(_("infoChapter"));
+				sender.sendMessage(tl("infoChapter"));
 				final StringBuilder sb = new StringBuilder();
 				boolean first = true;
 				for (String string : chapters)
@@ -99,7 +99,7 @@ public class TextPager
 					{
 						content.append(I18n.capitalCase(commandName));
 					}
-					sender.sendMessage(_("infoPages", page, pages, content));
+					sender.sendMessage(tl("infoPages", page, pages, content));
 				}
 				for (int i = start; i < end && i < start + (onePage ? 20 : 9); i++)
 				{
@@ -107,7 +107,7 @@ public class TextPager
 				}
 				if (!onePage && page < pages && commandName != null)
 				{
-					sender.sendMessage(_("readNextPage", commandName, page + 1));
+					sender.sendMessage(tl("readNextPage", commandName, page + 1));
 				}
 				return;
 			}
@@ -134,7 +134,7 @@ public class TextPager
 		//This checks to see if we have the chapter in the index
 		if (!bookmarks.containsKey(pageStr.toLowerCase(Locale.ENGLISH)))
 		{
-			sender.sendMessage(_("infoUnknownChapter"));
+			sender.sendMessage(tl("infoUnknownChapter"));
 			return;
 		}
 
@@ -159,7 +159,7 @@ public class TextPager
 			StringBuilder content = new StringBuilder();
 			content.append(I18n.capitalCase(commandName)).append(": ");
 			content.append(pageStr);
-			sender.sendMessage(_("infoChapterPages", content, page, pages));
+			sender.sendMessage(tl("infoChapterPages", content, page, pages));
 		}
 		for (int i = start; i < chapterend && i < start + (onePage ? 20 : 9); i++)
 		{
@@ -167,7 +167,7 @@ public class TextPager
 		}
 		if (!onePage && page < pages && commandName != null)
 		{
-			sender.sendMessage(_("readNextPage", commandName, pageStr + " " + (page + 1)));
+			sender.sendMessage(tl("readNextPage", commandName, pageStr + " " + (page + 1)));
 		}
 	}
 }

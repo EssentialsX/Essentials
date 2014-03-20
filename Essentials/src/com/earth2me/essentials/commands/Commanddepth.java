@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 
@@ -18,15 +18,15 @@ public class Commanddepth extends EssentialsCommand
 		final int depth = user.getLocation().getBlockY() - 63;
 		if (depth > 0)
 		{
-			user.sendMessage(_("depthAboveSea", depth));
+			user.sendMessage(tl("depthAboveSea", depth));
 		}
 		else if (depth < 0)
 		{
-			user.sendMessage(_("depthBelowSea", (-depth)));
+			user.sendMessage(tl("depthBelowSea", (-depth)));
 		}
 		else
 		{
-			user.sendMessage(_("depth"));
+			user.sendMessage(tl("depth"));
 		}
 	}
 }

@@ -1,6 +1,6 @@
 package com.earth2me.essentials.spawn;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.Kit;
 import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
@@ -165,7 +165,7 @@ public class EssentialsSpawnPlayerListener implements Listener
 			}
 			catch (Exception ex)
 			{
-				Bukkit.getLogger().log(Level.WARNING, _("teleportNewPlayerError"), ex);
+				Bukkit.getLogger().log(Level.WARNING, tl("teleportNewPlayerError"), ex);
 			}
 		}
 	}

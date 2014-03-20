@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.Server;
 
@@ -19,7 +19,7 @@ public class Commandping extends EssentialsCommand
 		if (args.length < 1)
 		{
 
-			sender.sendMessage(_("pong"));
+			sender.sendMessage(tl("pong"));
 		}
 		else
 		{

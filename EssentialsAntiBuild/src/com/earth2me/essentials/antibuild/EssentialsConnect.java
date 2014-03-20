@@ -2,7 +2,7 @@ package com.earth2me.essentials.antibuild;
 
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.User;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import net.ess3.api.IEssentials;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,7 +21,7 @@ public class EssentialsConnect
 	{
 		if (!essProtect.getDescription().getVersion().equals(essPlugin.getDescription().getVersion()))
 		{
-			LOGGER.log(Level.WARNING, _("versionMismatchAll"));
+			LOGGER.log(Level.WARNING, tl("versionMismatchAll"));
 		}
 		ess = (IEssentials)essPlugin;
 		protect = (IAntiBuild)essProtect;
@@ -42,7 +42,7 @@ public class EssentialsConnect
 	public void alert(final User user, final String item, final String type)
 	{
 		final Location loc = user.getLocation();
-		final String warnMessage = _("alertFormat", user.getName(), type, item,
+		final String warnMessage = tl("alertFormat", user.getName(), type, item,
 									 loc.getWorld().getName() + "," + loc.getBlockX() + ","
 									 + loc.getBlockY() + "," + loc.getBlockZ());
 		LOGGER.log(Level.WARNING, warnMessage);

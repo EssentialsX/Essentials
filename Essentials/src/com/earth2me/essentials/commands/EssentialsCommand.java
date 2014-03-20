@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.*;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.utils.FormatUtil;
 import java.util.List;
 import java.util.Locale;
@@ -163,7 +163,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 
 	protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
-		throw new Exception(_("onlyPlayers", commandLabel));
+		throw new Exception(tl("onlyPlayers", commandLabel));
 	}
 
 	public static String getFinalArg(final String[] args, final int start)

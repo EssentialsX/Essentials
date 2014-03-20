@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DescParseTickFormat;
 import com.earth2me.essentials.utils.NumberUtil;
@@ -67,7 +67,7 @@ public class Commandtime extends EssentialsCommand
 		final User user = ess.getUser(sender.getPlayer());
 		if (user != null && !user.isAuthorized("essentials.time.set"))
 		{
-			user.sendMessage(_("timeSetPermission"));
+			user.sendMessage(tl("timeSetPermission"));
 			return;
 		}
 
@@ -99,7 +99,7 @@ public class Commandtime extends EssentialsCommand
 
 		for (World world : worlds)
 		{
-			sender.sendMessage(_("timeWorldCurrent", world.getName(), DescParseTickFormat.format(world.getTime())));
+			sender.sendMessage(tl("timeWorldCurrent", world.getName(), DescParseTickFormat.format(world.getTime())));
 		}
 	}
 
@@ -130,7 +130,7 @@ public class Commandtime extends EssentialsCommand
 			output.append(world.getName());
 		}
 
-		sender.sendMessage(_("timeWorldSet", DescParseTickFormat.format(ticks), output.toString()));
+		sender.sendMessage(tl("timeWorldSet", DescParseTickFormat.format(ticks), output.toString()));
 	}
 
 	/**
@@ -170,7 +170,7 @@ public class Commandtime extends EssentialsCommand
 		// We failed to understand the world target...
 		else
 		{
-			throw new Exception(_("invalidWorld"));
+			throw new Exception(tl("invalidWorld"));
 		}
 
 		return worlds;
