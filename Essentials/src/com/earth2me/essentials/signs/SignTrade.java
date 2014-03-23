@@ -1,7 +1,7 @@
 package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.*;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.Trade.OverflowType;
 import com.earth2me.essentials.Trade.TradeType;
 import com.earth2me.essentials.utils.NumberUtil;
@@ -67,7 +67,7 @@ public class SignTrade extends EssentialsSign
 			{
 				if (store == null)
 				{
-					throw new SignException(_("tradeSignEmptyOwner"), e);
+					throw new SignException(tl("tradeSignEmptyOwner"), e);
 				}
 			}
 			Trade.log("Sign", "Trade", "Deposit", username, store, username, null, sign.getBlock().getLocation(), ess);
@@ -190,7 +190,7 @@ public class SignTrade extends EssentialsSign
 				amount = amount.subtract(amount.remainder(money));
 				if (amount.compareTo(MINTRANSACTION) < 0 || money.compareTo(MINTRANSACTION) < 0)
 				{
-					throw new SignException(_("moreThanZero"));
+					throw new SignException(tl("moreThanZero"));
 				}
 				sign.setLine(index, NumberUtil.shortCurrency(money, ess) + ":" + NumberUtil.shortCurrency(amount, ess).substring(1));
 				return;
@@ -203,12 +203,12 @@ public class SignTrade extends EssentialsSign
 
 			if (amount < 1)
 			{
-				throw new SignException(_("moreThanZero"));
+				throw new SignException(tl("moreThanZero"));
 			}
 			if (!(split[1].equalsIgnoreCase("exp") || split[1].equalsIgnoreCase("xp"))
 				&& getItemStack(split[1], amount, ess).getType() == Material.AIR)
 			{
-				throw new SignException(_("moreThanZero"));
+				throw new SignException(tl("moreThanZero"));
 			}
 			String newline = amount + " " + split[1] + ":0";
 			if ((newline + amount).length() > 15)
@@ -226,17 +226,17 @@ public class SignTrade extends EssentialsSign
 			amount -= amount % stackamount;
 			if (amount < 1 || stackamount < 1)
 			{
-				throw new SignException(_("moreThanZero"));
+				throw new SignException(tl("moreThanZero"));
 			}
 			if (!(split[1].equalsIgnoreCase("exp") || split[1].equalsIgnoreCase("xp"))
 				&& getItemStack(split[1], stackamount, ess).getType() == Material.AIR)
 			{
-				throw new SignException(_("moreThanZero"));
+				throw new SignException(tl("moreThanZero"));
 			}
 			sign.setLine(index, stackamount + " " + split[1] + ":" + amount);
 			return;
 		}
-		throw new SignException(_("invalidSignLine", index + 1));
+		throw new SignException(tl("invalidSignLine", index + 1));
 	}
 
 	protected final Trade getTrade(final ISign sign, final int index, final AmountType amountType, final boolean notEmpty, final IEssentials ess) throws SignException
@@ -261,7 +261,7 @@ public class SignTrade extends EssentialsSign
 			}
 			catch (SignException e)
 			{
-				throw new SignException(_("tradeSignEmpty"), e);
+				throw new SignException(tl("tradeSignEmpty"), e);
 			}
 		}
 
@@ -277,7 +277,7 @@ public class SignTrade extends EssentialsSign
 				}
 				if (notEmpty && (amount < 1 || stackamount < 1))
 				{
-					throw new SignException(_("tradeSignEmpty"));
+					throw new SignException(tl("tradeSignEmpty"));
 				}
 				return new Trade((amountType == AmountType.COST ? stackamount : amount), ess);
 			}
@@ -292,13 +292,13 @@ public class SignTrade extends EssentialsSign
 				}
 				if (notEmpty && (amount < 1 || stackamount < 1 || item.getType() == Material.AIR || amount < stackamount))
 				{
-					throw new SignException(_("tradeSignEmpty"));
+					throw new SignException(tl("tradeSignEmpty"));
 				}
 				item.setAmount(amountType == AmountType.COST ? stackamount : amount);
 				return new Trade(item, ess);
 			}
 		}
-		throw new SignException(_("invalidSignLine", index + 1));
+		throw new SignException(tl("invalidSignLine", index + 1));
 	}
 
 	protected final void subtractAmount(final ISign sign, final int index, final Trade trade, final IEssentials ess) throws SignException
@@ -361,7 +361,7 @@ public class SignTrade extends EssentialsSign
 			setAmount(sign, index, amount, ess);
 			return;
 		}
-		throw new SignException(_("invalidSignLine", index + 1));
+		throw new SignException(tl("invalidSignLine", index + 1));
 	}
 
 	//TODO: Translate these exceptions.
@@ -417,7 +417,7 @@ public class SignTrade extends EssentialsSign
 				return;
 			}
 		}
-		throw new SignException(_("invalidSignLine", index + 1));
+		throw new SignException(tl("invalidSignLine", index + 1));
 	}
 
 

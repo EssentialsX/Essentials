@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DescParseTickFormat;
 import java.util.*;
@@ -50,7 +50,7 @@ public class Commandptime extends EssentialsCommand
 			User user = ess.getUser(sender.getPlayer());
 			if (user != null && (!users.contains(user) || users.size() > 1) && !user.isAuthorized("essentials.ptime.others"))
 			{
-				user.sendMessage(_("pTimeOthersPermission"));
+				user.sendMessage(tl("pTimeOthersPermission"));
 				return;
 			}
 		}
@@ -96,25 +96,25 @@ public class Commandptime extends EssentialsCommand
 	{
 		if (users.size() > 1)
 		{
-			sender.sendMessage(_("pTimePlayers"));
+			sender.sendMessage(tl("pTimePlayers"));
 		}
 
 		for (User user : users)
 		{
 			if (user.getPlayerTimeOffset() == 0)
 			{
-				sender.sendMessage(_("pTimeNormal", user.getName()));
+				sender.sendMessage(tl("pTimeNormal", user.getName()));
 			}
 			else
 			{
 				String time = DescParseTickFormat.format(user.getPlayerTime());
 				if (!user.isPlayerTimeRelative())
 				{
-					sender.sendMessage(_("pTimeCurrentFixed", user.getName(), time));
+					sender.sendMessage(tl("pTimeCurrentFixed", user.getName(), time));
 				}
 				else
 				{
-					sender.sendMessage(_("pTimeCurrent", user.getName(), time));
+					sender.sendMessage(tl("pTimeCurrent", user.getName(), time));
 				}
 			}
 		}
@@ -165,18 +165,18 @@ public class Commandptime extends EssentialsCommand
 		// Inform the sender of the change
 		if (ticks == null)
 		{
-			sender.sendMessage(_("pTimeReset", msg.toString()));
+			sender.sendMessage(tl("pTimeReset", msg.toString()));
 		}
 		else
 		{
 			String time = DescParseTickFormat.format(ticks);
 			if (!relative)
 			{
-				sender.sendMessage(_("pTimeSetFixed", time, msg.toString()));
+				sender.sendMessage(tl("pTimeSetFixed", time, msg.toString()));
 			}
 			else
 			{
-				sender.sendMessage(_("pTimeSet", time, msg.toString()));
+				sender.sendMessage(tl("pTimeSet", time, msg.toString()));
 			}
 		}
 	}

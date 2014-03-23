@@ -1,6 +1,6 @@
 package com.earth2me.essentials.geoip;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import net.ess3.api.IEssentials;
 import java.util.logging.Level;
 import org.bukkit.plugin.PluginManager;
@@ -25,7 +25,7 @@ public class EssentialsGeoIP extends JavaPlugin
 		final IEssentials ess = (IEssentials)pm.getPlugin("Essentials");
 		if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion()))
 		{
-			getLogger().log(Level.WARNING, _("versionMismatchAll"));
+			getLogger().log(Level.WARNING, tl("versionMismatchAll"));
 		}
 		if (!ess.isEnabled()) {
 			this.setEnabled(false);

@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.UserMap;
 import com.earth2me.essentials.utils.DateUtil;
@@ -54,7 +54,7 @@ public class Commandseen extends EssentialsCommand
 					return;
 				}
 				else if (FormatUtil.validIP(args[0]) && (server.getIPBans().contains(args[0]))) {
-					sender.sendMessage(_("isIpBanned", args[0]));
+					sender.sendMessage(tl("isIpBanned", args[0]));
 					return;
 				}
 				else
@@ -70,31 +70,31 @@ public class Commandseen extends EssentialsCommand
 	{
 
 		user.setDisplayNick();
-		sender.sendMessage(_("seenOnline", user.getDisplayName(), DateUtil.formatDateDiff(user.getLastLogin())));
+		sender.sendMessage(tl("seenOnline", user.getDisplayName(), DateUtil.formatDateDiff(user.getLastLogin())));
 		if (user.isAfk())
 		{
-			sender.sendMessage(_("whoisAFK", _("true")));
+			sender.sendMessage(tl("whoisAFK", tl("true")));
 		}
 		if (user.isJailed())
 		{
-			sender.sendMessage(_("whoisJail", (user.getJailTimeout() > 0
+			sender.sendMessage(tl("whoisJail", (user.getJailTimeout() > 0
 											   ? DateUtil.formatDateDiff(user.getJailTimeout())
-											   : _("true"))));
+											   : tl("true"))));
 		}
 		if (user.isMuted())
 		{
-			sender.sendMessage(_("whoisMuted", (user.getMuteTimeout() > 0
+			sender.sendMessage(tl("whoisMuted", (user.getMuteTimeout() > 0
 												? DateUtil.formatDateDiff(user.getMuteTimeout())
-												: _("true"))));
+												: tl("true"))));
 		}
 		final String location = user.getGeoLocation();
 		if (location != null && (!(sender.isPlayer()) || ess.getUser(sender.getPlayer()).isAuthorized("essentials.geoip.show")))
 		{
-			sender.sendMessage(_("whoisGeoLocation", location));
+			sender.sendMessage(tl("whoisGeoLocation", location));
 		}
 		if (extra)
 		{
-			sender.sendMessage(_("whoisIPAddress", user.getAddress().getAddress().toString()));
+			sender.sendMessage(tl("whoisIPAddress", user.getAddress().getAddress().toString()));
 		}
 	}
 
@@ -103,31 +103,31 @@ public class Commandseen extends EssentialsCommand
 		user.setDisplayNick();
 		if (user.getLastLogout() > 0)
 		{
-			sender.sendMessage(_("seenOffline", user.getName(), DateUtil.formatDateDiff(user.getLastLogout())));
+			sender.sendMessage(tl("seenOffline", user.getName(), DateUtil.formatDateDiff(user.getLastLogout())));
 		}
 		else
 		{
-			sender.sendMessage(_("userUnknown", user.getName()));
+			sender.sendMessage(tl("userUnknown", user.getName()));
 		}
 		if (user.isBanned())
 		{
-			sender.sendMessage(_("whoisBanned", showBan ? user.getBanReason() : _("true")));
+			sender.sendMessage(tl("whoisBanned", showBan ? user.getBanReason() : tl("true")));
 		}
 		final String location = user.getGeoLocation();
 		if (location != null && (!(sender.isPlayer()) || ess.getUser(sender.getPlayer()).isAuthorized("essentials.geoip.show")))
 		{
-			sender.sendMessage(_("whoisGeoLocation", location));
+			sender.sendMessage(tl("whoisGeoLocation", location));
 		}
 		if (extra)
 		{
 			if (!user.getLastLoginAddress().isEmpty())
 			{
-				sender.sendMessage(_("whoisIPAddress", user.getLastLoginAddress()));
+				sender.sendMessage(tl("whoisIPAddress", user.getLastLoginAddress()));
 			}
 			final Location loc = user.getLogoutLocation();
 			if (loc != null)
 			{
-				sender.sendMessage(_("whoisLocation", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+				sender.sendMessage(tl("whoisLocation", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
 			}
 		}
 	}
@@ -138,10 +138,10 @@ public class Commandseen extends EssentialsCommand
 
 		if (server.getIPBans().contains(ipAddress))
 		{
-			sender.sendMessage(_("isIpBanned", ipAddress));
+			sender.sendMessage(tl("isIpBanned", ipAddress));
 		}
 
-		sender.sendMessage(_("runningPlayerMatch", ipAddress));
+		sender.sendMessage(tl("runningPlayerMatch", ipAddress));
 
 		ess.runTaskAsynchronously(new Runnable()
 		{
@@ -167,12 +167,12 @@ public class Commandseen extends EssentialsCommand
 
 				if (matches.size() > 0)
 				{
-					sender.sendMessage(_("matchingIPAddress"));
+					sender.sendMessage(tl("matchingIPAddress"));
 					sender.sendMessage(StringUtil.joinList(matches));
 				}
 				else
 				{
-					sender.sendMessage(_("noMatchingPlayers"));
+					sender.sendMessage(tl("noMatchingPlayers"));
 				}
 
 			}

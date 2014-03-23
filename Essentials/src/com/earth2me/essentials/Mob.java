@@ -1,6 +1,6 @@
 package com.earth2me.essentials;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -95,7 +95,7 @@ public enum Mob
 		final Entity entity = world.spawn(loc, (Class<? extends Entity>)this.bukkitType.getEntityClass());
 		if (entity == null)
 		{
-			logger.log(Level.WARNING, _("unableToSpawnMob"));
+			logger.log(Level.WARNING, tl("unableToSpawnMob"));
 			throw new MobException();
 		}
 		return entity;

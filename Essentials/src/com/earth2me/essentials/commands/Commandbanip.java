@@ -2,7 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import java.util.logging.Level;
@@ -50,8 +50,8 @@ public class Commandbanip extends EssentialsCommand
 		}
 
 		ess.getServer().banIP(ipAddress);
-		server.getLogger().log(Level.INFO, _("playerBanIpAddress", senderName, ipAddress));
+		server.getLogger().log(Level.INFO, tl("playerBanIpAddress", senderName, ipAddress));
 
-		ess.broadcastMessage("essentials.ban.notify", _("playerBanIpAddress", senderName, ipAddress));
+		ess.broadcastMessage("essentials.ban.notify", tl("playerBanIpAddress", senderName, ipAddress));
 	}
 }

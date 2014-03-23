@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -31,7 +31,7 @@ public class Commandext extends EssentialsLoopCommand
 		if (args.length < 1)
 		{
 			extPlayer(user.getBase());
-			user.sendMessage(_("extinguish"));
+			user.sendMessage(tl("extinguish"));
 			return;
 		}
 
@@ -42,7 +42,7 @@ public class Commandext extends EssentialsLoopCommand
 	protected void updatePlayer(final Server server, final CommandSource sender, final User player, final String[] args)
 	{
 		extPlayer(player.getBase());
-		sender.sendMessage(_("extinguishOthers", player.getDisplayName()));
+		sender.sendMessage(tl("extinguishOthers", player.getDisplayName()));
 	}
 
 	private void extPlayer(final Player player)

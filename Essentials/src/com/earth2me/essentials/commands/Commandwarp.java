@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.api.IWarps;
@@ -33,7 +33,7 @@ public class Commandwarp extends EssentialsCommand
 		{
 			if (!user.isAuthorized("essentials.warp.list"))
 			{
-				throw new Exception(_("warpListPermission"));
+				throw new Exception(tl("warpListPermission"));
 			}
 			warpList(user.getSource(), args, user);
 			throw new NoChargeException();
@@ -87,7 +87,7 @@ public class Commandwarp extends EssentialsCommand
 		}
 		if (warpNameList.isEmpty())
 		{
-			throw new Exception(_("noWarpsDefined"));
+			throw new Exception(tl("noWarpsDefined"));
 		}
 		int page = 1;
 		if (args.length > 0 && NumberUtil.isInt(args[0]))
@@ -107,12 +107,12 @@ public class Commandwarp extends EssentialsCommand
 
 		if (warpNameList.size() > WARPS_PER_PAGE)
 		{
-			sender.sendMessage(_("warpsCount", warpNameList.size(), page, maxPages));
-			sender.sendMessage(_("warpList", warpList));
+			sender.sendMessage(tl("warpsCount", warpNameList.size(), page, maxPages));
+			sender.sendMessage(tl("warpList", warpList));
 		}
 		else
 		{
-			sender.sendMessage(_("warps", warpList));
+			sender.sendMessage(tl("warps", warpList));
 		}
 	}
 
@@ -125,7 +125,7 @@ public class Commandwarp extends EssentialsCommand
 		charge.isAffordableFor(owner);
 		if (ess.getSettings().getPerWarpPermission() && !owner.isAuthorized("essentials.warps." + name))
 		{
-			throw new Exception(_("warpUsePermission"));
+			throw new Exception(tl("warpUsePermission"));
 		}
 		owner.getTeleport().warp(user, name, charge, TeleportCause.COMMAND);
 	}

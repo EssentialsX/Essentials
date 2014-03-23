@@ -1,6 +1,6 @@
 package com.earth2me.essentials;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import java.io.*;
 import java.math.BigInteger;
 import java.security.DigestInputStream;
@@ -47,7 +47,7 @@ public class ManagedFile
 			}
 			catch (IOException ex)
 			{
-				Bukkit.getLogger().log(Level.SEVERE, _("itemsCsvNotLoaded"), ex);
+				Bukkit.getLogger().log(Level.SEVERE, tl("itemsCsvNotLoaded"), ex);
 			}
 		}
 	}

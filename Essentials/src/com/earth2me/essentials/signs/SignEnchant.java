@@ -1,7 +1,7 @@
 package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.*;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import java.util.Locale;
 import net.ess3.api.IEssentials;
 import org.bukkit.enchantments.Enchantment;
@@ -32,13 +32,13 @@ public class SignEnchant extends EssentialsSign
 		if (enchantLevel.length != 2)
 		{
 			sign.setLine(2, "§c<enchant>");
-			throw new SignException(_("invalidSignLine", 3));
+			throw new SignException(tl("invalidSignLine", 3));
 		}
 		final Enchantment enchantment = Enchantments.getByName(enchantLevel[0]);
 		if (enchantment == null)
 		{
 			sign.setLine(2, "§c<enchant>");
-			throw new SignException(_("enchantmentNotFound"));
+			throw new SignException(tl("enchantmentNotFound"));
 		}
 		int level;
 		try
@@ -89,12 +89,12 @@ public class SignEnchant extends EssentialsSign
 		final String[] enchantLevel = sign.getLine(2).split(":");
 		if (enchantLevel.length != 2)
 		{
-			throw new SignException(_("invalidSignLine", 3));
+			throw new SignException(tl("invalidSignLine", 3));
 		}
 		final Enchantment enchantment = Enchantments.getByName(enchantLevel[0]);
 		if (enchantment == null)
 		{
-			throw new SignException(_("enchantmentNotFound"));
+			throw new SignException(tl("enchantmentNotFound"));
 		}
 		int level;
 		try
@@ -112,11 +112,11 @@ public class SignEnchant extends EssentialsSign
 			|| (playerHand.containsEnchantment(enchantment)
 				&& playerHand.getEnchantmentLevel(enchantment) == level))
 		{
-			throw new SignException(_("missingItems", 1, sign.getLine(1)));
+			throw new SignException(tl("missingItems", 1, sign.getLine(1)));
 		}
 		if (search != null && playerHand.getType() != search.getType())
 		{
-			throw new SignException(_("missingItems", 1, search.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ')));
+			throw new SignException(tl("missingItems", 1, search.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ')));
 		}
 
 		final ItemStack toEnchant = playerHand;
@@ -146,11 +146,11 @@ public class SignEnchant extends EssentialsSign
 		final String enchantmentName = enchantment.getName().toLowerCase(Locale.ENGLISH);
 		if (level == 0)
 		{
-			player.sendMessage(_("enchantmentRemoved", enchantmentName.replace('_', ' ')));
+			player.sendMessage(tl("enchantmentRemoved", enchantmentName.replace('_', ' ')));
 		}
 		else
 		{
-			player.sendMessage(_("enchantmentApplied", enchantmentName.replace('_', ' ')));
+			player.sendMessage(tl("enchantmentApplied", enchantmentName.replace('_', ' ')));
 		}
 
 		charge.charge(player);

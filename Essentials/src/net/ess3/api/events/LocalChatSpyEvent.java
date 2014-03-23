@@ -1,6 +1,6 @@
 package net.ess3.api.events;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import java.util.IllegalFormatException;
 import java.util.Set;
 import org.bukkit.entity.Player;
@@ -21,7 +21,7 @@ public class LocalChatSpyEvent extends Event implements Cancellable
 	public LocalChatSpyEvent(final boolean async, final Player who, final String format, final String message, final Set<Player> players)
 	{
 		super(async);
-		this.format = _("chatTypeLocal").concat(_("chatTypeSpy")).concat(format);
+		this.format = tl("chatTypeLocal").concat(tl("chatTypeSpy")).concat(format);
 		this.message = message;
 		recipients = players;
 		player = who;

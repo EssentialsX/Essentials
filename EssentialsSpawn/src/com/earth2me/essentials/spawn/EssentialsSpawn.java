@@ -1,6 +1,6 @@
 package com.earth2me.essentials.spawn;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import net.ess3.api.IEssentials;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,7 +31,7 @@ public class EssentialsSpawn extends JavaPlugin implements IEssentialsSpawn
 		ess = (IEssentials)pluginManager.getPlugin("Essentials");
 		if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion()))
 		{
-			LOGGER.log(Level.WARNING, _("versionMismatchAll"));
+			LOGGER.log(Level.WARNING, tl("versionMismatchAll"));
 		}
 		if (!ess.isEnabled())
 		{

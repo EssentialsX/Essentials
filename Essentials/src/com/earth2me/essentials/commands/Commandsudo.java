@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import java.util.Locale;
 import java.util.logging.Level;
@@ -31,7 +31,7 @@ public class Commandsudo extends EssentialsCommand
 		{
 			if (user.isAuthorized("essentials.sudo.exempt") && sender.isPlayer())
 			{
-				throw new Exception(_("sudoExempt"));
+				throw new Exception(tl("sudoExempt"));
 			}
 			user.chat(getFinalArg(args, 1).substring(2));
 			return;
@@ -45,10 +45,10 @@ public class Commandsudo extends EssentialsCommand
 
 		if (user.isAuthorized("essentials.sudo.exempt") && sender.isPlayer())
 		{
-			throw new Exception(_("sudoExempt"));
+			throw new Exception(tl("sudoExempt"));
 		}
 
-		sender.sendMessage(_("sudoRun", user.getDisplayName(), command, getFinalArg(arguments, 0)));
+		sender.sendMessage(tl("sudoRun", user.getDisplayName(), command, getFinalArg(arguments, 0)));
 
 		final PluginCommand execCommand = ess.getServer().getPluginCommand(command);
 		if (execCommand != null)
@@ -65,7 +65,7 @@ public class Commandsudo extends EssentialsCommand
 					});
 		}
 		else {
-			sender.sendMessage(_("errorCallingCommand", command));
+			sender.sendMessage(tl("errorCallingCommand", command));
 		}
 	}
 }

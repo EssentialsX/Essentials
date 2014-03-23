@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import java.util.Locale;
@@ -38,7 +38,7 @@ public class Commandrealname extends EssentialsCommand
 			if (displayName.contains(whois))
 			{
 				foundUser = true;
-				sender.sendMessage(u.getDisplayName() + " " + _("is") + " " + u.getName());
+				sender.sendMessage(u.getDisplayName() + " " + tl("is") + " " + u.getName());
 			}
 		}
 		if (!foundUser)

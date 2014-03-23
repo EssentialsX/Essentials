@@ -1,7 +1,7 @@
 package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.*;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.commands.NoChargeException;
 import java.util.List;
 import java.util.Locale;
@@ -79,10 +79,10 @@ public class SignKit extends EssentialsSign
 		else
 		{
 			if (group.isEmpty()) {
-				throw new SignException(_("noKitPermission", "essentials.kits." + kitName));
+				throw new SignException(tl("noKitPermission", "essentials.kits." + kitName));
 			}
 			else {
-				throw new SignException(_("noKitGroup", group));
+				throw new SignException(tl("noKitGroup", group));
 			}
 		}
 	}

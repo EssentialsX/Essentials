@@ -1,13 +1,12 @@
 package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.*;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.utils.NumberUtil;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
-import java.util.logging.Level;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
 import net.ess3.api.events.SignBreakEvent;
@@ -44,7 +43,7 @@ public class EssentialsSign
 			// they won't change it to §1[Signname]
 			return true;
 		}
-		sign.setLine(0, _("signFormatFail", this.signName));
+		sign.setLine(0, tl("signFormatFail", this.signName));
 
 		final SignCreateEvent signEvent = new SignCreateEvent(sign, this, user);
 		ess.getServer().getPluginManager().callEvent(signEvent);
@@ -76,12 +75,12 @@ public class EssentialsSign
 
 	public String getSuccessName()
 	{
-		return _("signFormatSuccess", this.signName);
+		return tl("signFormatSuccess", this.signName);
 	}
 
 	public String getTemplateName()
 	{
-		return _("signFormatTemplate", this.signName);
+		return tl("signFormatTemplate", this.signName);
 	}
 
 	public String getName()
@@ -365,7 +364,7 @@ public class EssentialsSign
 		final int amount = Math.min(getIntegerPositive(getSignText(sign, amountIndex)), item.getType().getMaxStackSize() * player.getInventory().getSize());
 		if (item.getType() == Material.AIR || amount < 1)
 		{
-			throw new SignException(_("moreThanZero"));
+			throw new SignException(tl("moreThanZero"));
 		}
 		item.setAmount(amount);
 		return new Trade(item, ess);
@@ -387,7 +386,7 @@ public class EssentialsSign
 		final int quantity = getInteger(line);
 		if (quantity < 1)
 		{
-			throw new SignException(_("moreThanZero"));
+			throw new SignException(tl("moreThanZero"));
 		}
 		return quantity;
 	}
@@ -451,7 +450,7 @@ public class EssentialsSign
 		final BigDecimal quantity = getBigDecimal(line);
 		if (quantity.compareTo(MINTRANSACTION) < 0)
 		{
-			throw new SignException(_("moreThanZero"));
+			throw new SignException(tl("moreThanZero"));
 		}
 		return quantity;
 	}
@@ -491,7 +490,7 @@ public class EssentialsSign
 			final String[] split = line.split("[ :]+", 2);
 			if (split.length != 2)
 			{
-				throw new SignException(_("invalidCharge"));
+				throw new SignException(tl("invalidCharge"));
 			}
 			final int quantity = getIntegerPositive(split[0]);
 

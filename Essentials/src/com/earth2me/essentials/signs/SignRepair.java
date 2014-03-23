@@ -1,7 +1,7 @@
 package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.ChargeException;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.commands.Commandrepair;
@@ -27,7 +27,7 @@ public class SignRepair extends EssentialsSign
 		else if (!repairTarget.equalsIgnoreCase("all") && !repairTarget.equalsIgnoreCase("hand"))
 		{
 			sign.setLine(1, "§c<hand|all>");
-			throw new SignException(_("invalidSignLine", 2));
+			throw new SignException(tl("invalidSignLine", 2));
 		}
 		validateTrade(sign, 2, ess);
 		return true;

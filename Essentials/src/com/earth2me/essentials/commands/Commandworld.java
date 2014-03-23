@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import java.util.List;
@@ -47,16 +47,16 @@ public class Commandworld extends EssentialsCommand
 			world = ess.getWorld(getFinalArg(args, 0));
 			if (world == null)
 			{
-				user.sendMessage(_("invalidWorld"));
-				user.sendMessage(_("possibleWorlds", server.getWorlds().size() - 1));
-				user.sendMessage(_("typeWorldName"));
+				user.sendMessage(tl("invalidWorld"));
+				user.sendMessage(tl("possibleWorlds", server.getWorlds().size() - 1));
+				user.sendMessage(tl("typeWorldName"));
 				throw new NoChargeException();
 			}
 		}
 
 		if (ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + world.getName()))
 		{
-			throw new Exception(_("noPerm", "essentials.worlds." + world.getName()));
+			throw new Exception(tl("noPerm", "essentials.worlds." + world.getName()));
 		}
 
 		double factor;

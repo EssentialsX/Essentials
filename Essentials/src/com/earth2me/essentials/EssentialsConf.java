@@ -1,6 +1,6 @@
 package com.earth2me.essentials;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.google.common.io.Files;
 import java.io.*;
 import java.math.BigDecimal;
@@ -50,14 +50,14 @@ public class EssentialsConf extends YamlConfiguration
 	{
 		if (pendingDiskWrites.get() != 0)
 		{
-			LOGGER.log(Level.INFO, "File " + configFile + " not read, because it's not yet written to disk.");
+			LOGGER.log(Level.INFO, "File {0} not read, because it''s not yet written to disk.", configFile);
 			return;
 		}
 		if (!configFile.getParentFile().exists())
 		{
 			if (!configFile.getParentFile().mkdirs())
 			{
-				LOGGER.log(Level.SEVERE, _("failedToCreateConfig", configFile.toString()));
+				LOGGER.log(Level.SEVERE, tl("failedToCreateConfig", configFile.toString()));
 			}
 		}
 		// This will delete files where the first character is 0. In most cases they are broken.
@@ -100,7 +100,7 @@ public class EssentialsConf extends YamlConfiguration
 		{
 			if (templateName != null)
 			{
-				LOGGER.log(Level.INFO, _("creatingConfigFromTemplate", configFile.toString()));
+				LOGGER.log(Level.INFO, tl("creatingConfigFromTemplate", configFile.toString()));
 				createFromTemplate();
 			}
 			else
@@ -189,7 +189,7 @@ public class EssentialsConf extends YamlConfiguration
 			istr = resourceClass.getResourceAsStream(templateName);
 			if (istr == null)
 			{
-				LOGGER.log(Level.SEVERE, _("couldNotFindTemplate", templateName));
+				LOGGER.log(Level.SEVERE, tl("couldNotFindTemplate", templateName));
 				return;
 			}
 			ostr = new FileOutputStream(configFile);
@@ -204,7 +204,7 @@ public class EssentialsConf extends YamlConfiguration
 		}
 		catch (IOException ex)
 		{
-			LOGGER.log(Level.SEVERE, _("failedToWriteConfig", configFile.toString()), ex);
+			LOGGER.log(Level.SEVERE, tl("failedToWriteConfig", configFile.toString()), ex);
 		}
 		finally
 		{
@@ -228,7 +228,7 @@ public class EssentialsConf extends YamlConfiguration
 			}
 			catch (IOException ex)
 			{
-				LOGGER.log(Level.SEVERE, _("failedToCloseConfig", configFile.toString()), ex);
+				LOGGER.log(Level.SEVERE, tl("failedToCloseConfig", configFile.toString()), ex);
 			}
 		}
 	}
@@ -352,16 +352,16 @@ public class EssentialsConf extends YamlConfiguration
 					{
 						try
 						{
-							LOGGER.log(Level.INFO, _("creatingEmptyConfig", configFile.toString()));
+							LOGGER.log(Level.INFO, tl("creatingEmptyConfig", configFile.toString()));
 							if (!configFile.createNewFile())
 							{
-								LOGGER.log(Level.SEVERE, _("failedToCreateConfig", configFile.toString()));
+								LOGGER.log(Level.SEVERE, tl("failedToCreateConfig", configFile.toString()));
 								return;
 							}
 						}
 						catch (IOException ex)
 						{
-							LOGGER.log(Level.SEVERE, _("failedToCreateConfig", configFile.toString()), ex);
+							LOGGER.log(Level.SEVERE, tl("failedToCreateConfig", configFile.toString()), ex);
 							return;
 						}
 					}

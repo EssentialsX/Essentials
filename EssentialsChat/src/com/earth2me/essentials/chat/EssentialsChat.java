@@ -1,6 +1,6 @@
 package com.earth2me.essentials.chat;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import net.ess3.api.IEssentials;
 import java.util.Collections;
 import java.util.HashMap;
@@ -23,7 +23,7 @@ public class EssentialsChat extends JavaPlugin
 		final IEssentials ess = (IEssentials)pluginManager.getPlugin("Essentials");
 		if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion()))
 		{
-			LOGGER.log(Level.WARNING, _("versionMismatchAll"));
+			LOGGER.log(Level.WARNING, tl("versionMismatchAll"));
 		}
 		if (!ess.isEnabled())
 		{

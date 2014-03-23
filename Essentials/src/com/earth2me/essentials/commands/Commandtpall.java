@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -35,7 +35,7 @@ public class Commandtpall extends EssentialsCommand
 
 	private void teleportAllPlayers(Server server, CommandSource sender, User target)
 	{
-		sender.sendMessage(_("teleportAll"));
+		sender.sendMessage(tl("teleportAll"));
 		final Location loc = target.getLocation();
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{

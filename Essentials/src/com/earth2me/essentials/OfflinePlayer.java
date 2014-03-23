@@ -1,6 +1,6 @@
 package com.earth2me.essentials;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import java.net.InetSocketAddress;
 import java.util.*;
 import lombok.Delegate;
@@ -180,25 +180,25 @@ public class OfflinePlayer implements Player
 	@Override
 	public int getRemainingAir()
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public void setRemainingAir(int i)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public int getMaximumAir()
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public void setMaximumAir(int i)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
@@ -210,73 +210,73 @@ public class OfflinePlayer implements Player
 	@Override
 	public void setSneaking(boolean bln)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public void updateInventory()
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public void chat(String string)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public double getEyeHeight()
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public double getEyeHeight(boolean bln)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public List<Block> getLineOfSight(HashSet<Byte> hs, int i)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public Block getTargetBlock(HashSet<Byte> hs, int i)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public List<Block> getLastTwoTargetBlocks(HashSet<Byte> hs, int i)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public int getFireTicks()
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public int getMaxFireTicks()
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public void setFireTicks(int i)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public void remove()
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
@@ -287,168 +287,168 @@ public class OfflinePlayer implements Player
 
 	public Vector getMomentum()
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	public void setMomentum(Vector vector)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public void setVelocity(Vector vector)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public Vector getVelocity()
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public void damage(double d)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public void damage(double d, Entity entity)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public Location getEyeLocation()
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public void sendRawMessage(String string)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public Location getCompassTarget()
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public int getMaximumNoDamageTicks()
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public void setMaximumNoDamageTicks(int i)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public double getLastDamage()
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public void setLastDamage(double d)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public int getNoDamageTicks()
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public void setNoDamageTicks(int i)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public boolean teleport(Location lctn)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public boolean teleport(Entity entity)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public Entity getPassenger()
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public boolean setPassenger(Entity entity)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public boolean isEmpty()
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public boolean eject()
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public void saveData()
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public void loadData()
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public boolean isSleeping()
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public int getSleepTicks()
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public List<Entity> getNearbyEntities(double d, double d1, double d2)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public boolean isDead()
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public float getFallDistance()
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
@@ -459,156 +459,175 @@ public class OfflinePlayer implements Player
 	@Override
 	public void setSleepingIgnored(boolean bln)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public boolean isSleepingIgnored()
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public void awardAchievement(Achievement a)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
+	@Override
 	public void removeAchievement(Achievement achievement)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
+	@Override
 	public boolean hasAchievement(Achievement achievement)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
+	@Override
 	public void incrementStatistic(Statistic ststc)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
+	@Override
 	public void decrementStatistic(Statistic statistic) throws IllegalArgumentException
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
+	@Override
 	public void incrementStatistic(Statistic ststc, int i)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
+	@Override
 	public void decrementStatistic(Statistic statistic, int i) throws IllegalArgumentException
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
+	@Override
 	public void setStatistic(Statistic statistic, int i) throws IllegalArgumentException
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
+	@Override
 	public int getStatistic(Statistic statistic) throws IllegalArgumentException
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public void incrementStatistic(Statistic ststc, Material mtrl)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
+	@Override
 	public void decrementStatistic(Statistic statistic, Material material) throws IllegalArgumentException
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
+	@Override
 	public int getStatistic(Statistic statistic, Material material) throws IllegalArgumentException
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
+	@Override
 	public void incrementStatistic(Statistic ststc, Material mtrl, int i)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
+	@Override
 	public void decrementStatistic(Statistic statistic, Material material, int i) throws IllegalArgumentException
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
+	@Override
 	public void setStatistic(Statistic statistic, Material material, int i) throws IllegalArgumentException
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
+	@Override
 	public void incrementStatistic(Statistic statistic, EntityType entityType) throws IllegalArgumentException
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
+	@Override
 	public void decrementStatistic(Statistic statistic, EntityType entityType) throws IllegalArgumentException
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
+	@Override
 	public int getStatistic(Statistic statistic, EntityType entityType) throws IllegalArgumentException
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
+	@Override
 	public void incrementStatistic(Statistic statistic, EntityType entityType, int i) throws IllegalArgumentException
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
+	@Override
 	public void decrementStatistic(Statistic statistic, EntityType entityType, int i)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
+	@Override
 	public void setStatistic(Statistic statistic, EntityType entityType, int i)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public void playNote(Location lctn, byte b, byte b1)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public void sendBlockChange(Location lctn, Material mtrl, byte b)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public void sendBlockChange(Location lctn, int i, byte b)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public void setLastDamageCause(EntityDamageEvent ede)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public EntityDamageEvent getLastDamageCause()
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override
 	public void playEffect(Location lctn, Effect effect, int i)
 	{
-		throw new UnsupportedOperationException(_("notSupportedYet"));
+		throw new UnsupportedOperationException(tl("notSupportedYet"));
 	}
 
 	@Override

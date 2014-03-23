@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.UserMap;
 import com.earth2me.essentials.metrics.Metrics;
@@ -79,7 +79,7 @@ public class Commandessentials extends EssentialsCommand
 		}
 		if (disabledCommands.length() > 0)
 		{
-			sender.sendMessage(_("blockList"));
+			sender.sendMessage(tl("blockList"));
 			sender.sendMessage(disabledCommands.toString());
 		}
 	}
@@ -104,7 +104,7 @@ public class Commandessentials extends EssentialsCommand
 	private void run_reload(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
 		ess.reload();
-		sender.sendMessage(_("essentialsReload", ess.getDescription().getVersion()));
+		sender.sendMessage(tl("essentialsReload", ess.getDescription().getVersion()));
 	}
 
 	private void run_nya(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
@@ -255,7 +255,7 @@ public class Commandessentials extends EssentialsCommand
 			sender.sendMessage("Unless you define larger default values, this command wil ignore people who have more than 0 money/homes/bans.");
 			throw new Exception("/<command> cleanup <days> [money] [homes] [ban count]");
 		}
-		sender.sendMessage(_("cleaning"));
+		sender.sendMessage(tl("cleaning"));
 
 		final long daysArg = Long.parseLong(args[1]);
 		final double moneyArg = args.length >= 3 ? Double.parseDouble(args[2].replaceAll("[^0-9\\.]", "")) : 0;
@@ -307,7 +307,7 @@ public class Commandessentials extends EssentialsCommand
 
 					user.reset();
 				}
-				sender.sendMessage(_("cleaned"));
+				sender.sendMessage(tl("cleaned"));
 			}
 		});
 

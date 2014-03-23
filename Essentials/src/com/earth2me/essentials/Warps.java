@@ -1,6 +1,6 @@
 package com.earth2me.essentials;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.commands.WarpNotFoundException;
 import com.earth2me.essentials.utils.StringUtil;
 import java.io.File;
@@ -71,7 +71,7 @@ public class Warps implements IConf, net.ess3.api.IWarps
 			File confFile = new File(warpsFolder, filename + ".yml");
 			if (confFile.exists())
 			{
-				throw new Exception(_("similarWarpExist"));
+				throw new Exception(tl("similarWarpExist"));
 			}
 			conf = new EssentialsConf(confFile);
 			warpPoints.put(new StringIgnoreCase(name), conf);
@@ -84,7 +84,7 @@ public class Warps implements IConf, net.ess3.api.IWarps
 		}
 		catch (IOException ex)
 		{
-			throw new IOException(_("invalidWarpName"));
+			throw new IOException(tl("invalidWarpName"));
 		}
 	}
 
@@ -94,11 +94,11 @@ public class Warps implements IConf, net.ess3.api.IWarps
 		EssentialsConf conf = warpPoints.get(new StringIgnoreCase(name));
 		if (conf == null)
 		{
-			throw new Exception(_("warpNotExist"));
+			throw new Exception(tl("warpNotExist"));
 		}
 		if (!conf.getFile().delete())
 		{
-			throw new Exception(_("warpDeleteError"));
+			throw new Exception(tl("warpDeleteError"));
 		}
 		warpPoints.remove(new StringIgnoreCase(name));
 	}
@@ -127,7 +127,7 @@ public class Warps implements IConf, net.ess3.api.IWarps
 					}
 					catch (Exception ex)
 					{
-						logger.log(Level.WARNING, _("loadWarpError", filename), ex);
+						logger.log(Level.WARNING, tl("loadWarpError", filename), ex);
 					}
 				}
 			}

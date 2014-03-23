@@ -1,6 +1,6 @@
 package com.earth2me.essentials;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.register.payment.Method;
 import com.earth2me.essentials.register.payment.Methods;
@@ -18,7 +18,6 @@ import net.ess3.api.events.AfkStatusChangeEvent;
 import net.ess3.api.events.UserBalanceUpdateEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.potion.PotionEffect;
@@ -129,7 +128,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 			cooldownTime.add(Calendar.MILLISECOND, (int)((cooldown * 1000.0) % 1000.0));
 			if (cooldownTime.after(now) && !isAuthorized("essentials.heal.cooldown.bypass"))
 			{
-				throw new Exception(_("timeBeforeHeal", DateUtil.formatDateDiff(cooldownTime.getTimeInMillis())));
+				throw new Exception(tl("timeBeforeHeal", DateUtil.formatDateDiff(cooldownTime.getTimeInMillis())));
 			}
 		}
 		setLastHealTimestamp(now.getTimeInMillis());
@@ -149,10 +148,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 			return;
 		}
 		setMoney(getMoney().add(value));
-		sendMessage(_("addedToAccount", NumberUtil.displayCurrency(value, ess)));
+		sendMessage(tl("addedToAccount", NumberUtil.displayCurrency(value, ess)));
 		if (initiator != null)
 		{
-			initiator.sendMessage(_("addedToOthersAccount", NumberUtil.displayCurrency(value, ess), this.getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess)));
+			initiator.sendMessage(tl("addedToOthersAccount", NumberUtil.displayCurrency(value, ess), this.getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess)));
 		}
 	}
 
@@ -167,12 +166,12 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		{
 			setMoney(getMoney().subtract(value));
 			reciever.setMoney(reciever.getMoney().add(value));
-			sendMessage(_("moneySentTo", NumberUtil.displayCurrency(value, ess), reciever.getDisplayName()));
-			reciever.sendMessage(_("moneyRecievedFrom", NumberUtil.displayCurrency(value, ess), getDisplayName()));
+			sendMessage(tl("moneySentTo", NumberUtil.displayCurrency(value, ess), reciever.getDisplayName()));
+			reciever.sendMessage(tl("moneyRecievedFrom", NumberUtil.displayCurrency(value, ess), getDisplayName()));
 		}
 		else
 		{
-			throw new ChargeException(_("notEnoughMoney"));
+			throw new ChargeException(tl("notEnoughMoney"));
 		}
 	}
 
@@ -197,10 +196,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		{
 			//We shouldn't be able to throw an exception on subtract money
 		}
-		sendMessage(_("takenFromAccount", NumberUtil.displayCurrency(value, ess)));
+		sendMessage(tl("takenFromAccount", NumberUtil.displayCurrency(value, ess)));
 		if (initiator != null)
 		{
-			initiator.sendMessage(_("takenFromOthersAccount", NumberUtil.displayCurrency(value, ess), this.getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess)));
+			initiator.sendMessage(tl("takenFromOthersAccount", NumberUtil.displayCurrency(value, ess), this.getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess)));
 		}
 	}
 
@@ -536,7 +535,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		{
 			setJailTimeout(0);
 			setJailed(false);
-			sendMessage(_("haveBeenReleased"));
+			sendMessage(tl("haveBeenReleased"));
 			setJail(null);
 			try
 			{
@@ -563,7 +562,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		if (getMuteTimeout() > 0 && getMuteTimeout() < currentTime && isMuted())
 		{
 			setMuteTimeout(0);
-			sendMessage(_("canTalkAgain"));
+			sendMessage(tl("canTalkAgain"));
 			setMuted(false);
 			return true;
 		}
@@ -590,7 +589,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 			if (broadcast && !isHidden())
 			{
 				setDisplayNick();
-				final String msg = _("userIsNotAway", getDisplayName());
+				final String msg = tl("userIsNotAway", getDisplayName());
 				if (!msg.isEmpty())
 				{
 					ess.broadcastMessage(this, msg);
@@ -606,7 +605,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		if (autoafkkick > 0 && lastActivity > 0 && (lastActivity + (autoafkkick * 1000)) < System.currentTimeMillis()
 			&& !isHidden() && !isAuthorized("essentials.kick.exempt") && !isAuthorized("essentials.afk.kickexempt"))
 		{
-			final String kickReason = _("autoAfkKickReason", autoafkkick / 60.0);
+			final String kickReason = tl("autoAfkKickReason", autoafkkick / 60.0);
 			lastActivity = 0;
 			this.getBase().kickPlayer(kickReason);
 
@@ -616,7 +615,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 				final User user = ess.getUser(player);
 				if (user.isAuthorized("essentials.kick.notify"))
 				{
-					user.sendMessage(_("playerKicked", Console.NAME, getName(), kickReason));
+					user.sendMessage(tl("playerKicked", Console.NAME, getName(), kickReason));
 				}
 			}
 		}
@@ -627,7 +626,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 			if (!isHidden())
 			{
 				setDisplayNick();
-				final String msg = _("userIsAway", getDisplayName());
+				final String msg = tl("userIsAway", getDisplayName());
 				if (!msg.isEmpty())
 				{
 					ess.broadcastMessage(this, msg);

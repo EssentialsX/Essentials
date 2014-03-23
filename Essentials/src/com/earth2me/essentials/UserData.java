@@ -1,6 +1,6 @@
 package com.earth2me.essentials;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import java.io.File;
@@ -211,7 +211,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		}
 		else
 		{
-			throw new Exception(_("invalidHome", search));
+			throw new Exception(tl("invalidHome", search));
 		}
 	}
 

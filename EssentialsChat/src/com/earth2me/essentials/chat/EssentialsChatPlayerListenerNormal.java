@@ -1,6 +1,6 @@
 package com.earth2me.essentials.chat;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import static com.earth2me.essentials.chat.EssentialsChatPlayer.logger;
 import net.ess3.api.IEssentials;
@@ -63,14 +63,14 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer
 				final StringBuilder format = new StringBuilder();
 				format.append(chatStore.getType()).append("Format");
 				event.setMessage(event.getMessage().substring(1));
-				event.setFormat(_(format.toString(), event.getFormat()));
+				event.setFormat(tl(format.toString(), event.getFormat()));
 				return;
 			}
 
 			final StringBuilder errorMsg = new StringBuilder();
 			errorMsg.append("notAllowedTo").append(chatStore.getType().substring(0, 1).toUpperCase(Locale.ENGLISH)).append(chatStore.getType().substring(1));
 
-			user.sendMessage(_(errorMsg.toString()));
+			user.sendMessage(tl(errorMsg.toString()));
 			event.setCancelled(true);
 			return;
 		}
@@ -100,9 +100,9 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer
 		}
 		
 		final String format = event.getFormat();
-		event.setFormat(_("chatTypeLocal").concat(event.getFormat()));
+		event.setFormat(tl("chatTypeLocal").concat(event.getFormat()));
 
-		logger.info(_("localFormat", user.getName(), event.getMessage()));
+		logger.info(tl("localFormat", user.getName(), event.getMessage()));
 
 		final Iterator<Player> it = outList.iterator();
 		while (it.hasNext())
@@ -137,7 +137,7 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer
 		}
 
 		if (outList.size() < 2) {
-			user.sendMessage(_("localNoOne"));
+			user.sendMessage(tl("localNoOne"));
 		}
 
 		LocalChatSpyEvent spyEvent = new LocalChatSpyEvent(event.isAsynchronous(), event.getPlayer(), format, event.getMessage(), spyList);

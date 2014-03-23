@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.*;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.utils.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,14 +44,14 @@ public class Commandrepair extends EssentialsCommand
 		final ItemStack item = user.getItemInHand();
 		if (item == null || item.getType().isBlock() || item.getDurability() == 0)
 		{
-			throw new Exception(_("repairInvalidType"));
+			throw new Exception(tl("repairInvalidType"));
 		}
 
 		if (!item.getEnchantments().isEmpty()
 			&& !ess.getSettings().getRepairEnchanted()
 			&& !user.isAuthorized("essentials.repair.enchanted"))
 		{
-			throw new Exception(_("repairEnchanted"));
+			throw new Exception(tl("repairEnchanted"));
 		}
 
 		final String itemName = item.getType().toString().toLowerCase(Locale.ENGLISH);
@@ -63,7 +63,7 @@ public class Commandrepair extends EssentialsCommand
 
 		charge.charge(user);
 		user.updateInventory();
-		user.sendMessage(_("repair", itemName.replace('_', ' ')));
+		user.sendMessage(tl("repair", itemName.replace('_', ' ')));
 	}
 
 	public void repairAll(User user) throws Exception
@@ -79,11 +79,11 @@ public class Commandrepair extends EssentialsCommand
 		user.updateInventory();
 		if (repaired.isEmpty())
 		{
-			throw new Exception(_("repairNone"));
+			throw new Exception(tl("repairNone"));
 		}
 		else
 		{
-			user.sendMessage(_("repair", StringUtil.joinList(repaired)));
+			user.sendMessage(tl("repair", StringUtil.joinList(repaired)));
 		}
 	}
 
@@ -92,12 +92,12 @@ public class Commandrepair extends EssentialsCommand
 		final Material material = Material.getMaterial(item.getTypeId());
 		if (material.isBlock() || material.getMaxDurability() < 1)
 		{
-			throw new Exception(_("repairInvalidType"));
+			throw new Exception(tl("repairInvalidType"));
 		}
 
 		if (item.getDurability() == 0)
 		{
-			throw new Exception(_("repairAlreadyFixed"));
+			throw new Exception(tl("repairAlreadyFixed"));
 		}
 
 		item.setDurability((short)0);

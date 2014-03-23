@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.LocationUtil;
@@ -46,7 +46,7 @@ public class Commandjump extends EssentialsCommand
 		}
 		catch (NullPointerException ex)
 		{
-			throw new Exception(_("jumpError"), ex);
+			throw new Exception(tl("jumpError"), ex);
 		}
 
 		final Trade charge = new Trade(this.getName(), ess);

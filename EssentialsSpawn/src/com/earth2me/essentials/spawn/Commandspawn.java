@@ -1,7 +1,7 @@
 package com.earth2me.essentials.spawn;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
@@ -31,7 +31,7 @@ public class Commandspawn extends EssentialsCommand
 			respawn(user.getSource(), user, otherUser, charge);
 			if (!otherUser.equals(user))
 			{
-				otherUser.sendMessage(_("teleportAtoB", user.getDisplayName(), "spawn"));
+				otherUser.sendMessage(tl("teleportAtoB", user.getDisplayName(), "spawn"));
 			}
 		}
 		else
@@ -50,7 +50,7 @@ public class Commandspawn extends EssentialsCommand
 		}
 		final User user = getPlayer(server, args, 0, true, false);
 		respawn(sender, null, user, null);
-		user.sendMessage(_("teleportAtoB", Console.NAME, "spawn"));
+		user.sendMessage(tl("teleportAtoB", Console.NAME, "spawn"));
 
 	}
 
@@ -58,7 +58,7 @@ public class Commandspawn extends EssentialsCommand
 	{
 		final SpawnStorage spawns = (SpawnStorage)this.module;
 		final Location spawn = spawns.getSpawn(teleportee.getGroup());
-		sender.sendMessage(_("teleporting", spawn.getWorld().getName(), spawn.getBlockX(), spawn.getBlockY(), spawn.getBlockZ()));
+		sender.sendMessage(tl("teleporting", spawn.getWorld().getName(), spawn.getBlockX(), spawn.getBlockY(), spawn.getBlockZ()));
 		if (teleportOwner == null)
 		{
 			teleportee.getTeleport().now(spawn, false, TeleportCause.COMMAND);

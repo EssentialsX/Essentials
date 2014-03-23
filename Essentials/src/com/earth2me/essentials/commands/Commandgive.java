@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
@@ -39,7 +39,7 @@ public class Commandgive extends EssentialsCommand
 				: (!ess.getUser(sender.getPlayer()).isAuthorized("essentials.itemspawn.exempt")
 				   && !ess.getUser(sender.getPlayer()).canSpawnItem(stack.getTypeId()))))
 		{
-			throw new Exception(_("cantSpawnItem", itemname));
+			throw new Exception(tl("cantSpawnItem", itemname));
 		}
 
 		final User giveTo = getPlayer(server, sender, args, 0);
@@ -90,11 +90,11 @@ public class Commandgive extends EssentialsCommand
 
 		if (stack.getType() == Material.AIR)
 		{
-			throw new Exception(_("cantSpawnItem", "Air"));
+			throw new Exception(tl("cantSpawnItem", "Air"));
 		}
 
 		final String itemName = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ');
-		sender.sendMessage(_("giveSpawn", stack.getAmount(), itemName, giveTo.getDisplayName()));
+		sender.sendMessage(tl("giveSpawn", stack.getAmount(), itemName, giveTo.getDisplayName()));
 
 		Map<Integer, ItemStack> leftovers;
 
@@ -109,7 +109,7 @@ public class Commandgive extends EssentialsCommand
 
 		for (ItemStack item : leftovers.values())
 		{
-			sender.sendMessage(_("giveSpawnFailure", item.getAmount(), itemName, giveTo.getDisplayName()));
+			sender.sendMessage(tl("giveSpawnFailure", item.getAmount(), itemName, giveTo.getDisplayName()));
 		}
 
 		giveTo.updateInventory();

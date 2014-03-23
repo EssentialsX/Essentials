@@ -2,7 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import org.bukkit.Location;
@@ -29,12 +29,12 @@ public class Commandtp extends EssentialsCommand
 			final User player = getPlayer(server, user, args, 0);
 			if (!player.isTeleportEnabled())
 			{
-				throw new Exception(_("teleportDisabled", player.getDisplayName()));
+				throw new Exception(tl("teleportDisabled", player.getDisplayName()));
 			}
 			if (user.getWorld() != player.getWorld() && ess.getSettings().isWorldTeleportPermissions()
 				&& !user.isAuthorized("essentials.worlds." + player.getWorld().getName()))
 			{
-				throw new Exception(_("noPerm", "essentials.worlds." + player.getWorld().getName()));
+				throw new Exception(tl("noPerm", "essentials.worlds." + player.getWorld().getName()));
 			}
 			final Trade charge = new Trade(this.getName(), ess);
 			charge.isAffordableFor(user);
@@ -43,7 +43,7 @@ public class Commandtp extends EssentialsCommand
 		case 4:
 			if (!user.isAuthorized("essentials.tp.others"))
 			{
-				throw new Exception(_("noPerm", "essentials.tp.others"));
+				throw new Exception(tl("noPerm", "essentials.tp.others"));
 			}
 			final User target2 = getPlayer(server, user, args, 0);
 			final double x = args[1].startsWith("~") ? target2.getLocation().getX() + Integer.parseInt(args[1].substring(1)) : Integer.parseInt(args[1]);
@@ -51,40 +51,40 @@ public class Commandtp extends EssentialsCommand
 			final double z = args[3].startsWith("~") ? target2.getLocation().getZ() + Integer.parseInt(args[3].substring(1)) : Integer.parseInt(args[3]);
 			if (x > 30000000 || y > 30000000 || z > 30000000 || x < -30000000 || y < -30000000 || z < -30000000)
 			{
-				throw new NotEnoughArgumentsException(_("teleportInvalidLocation"));
+				throw new NotEnoughArgumentsException(tl("teleportInvalidLocation"));
 			}
 			final Location loc = new Location(target2.getWorld(), x, y, z, target2.getLocation().getYaw(), target2.getLocation().getPitch());
 			if (!target2.isTeleportEnabled())
 			{
-				throw new Exception(_("teleportDisabled", target2.getDisplayName()));
+				throw new Exception(tl("teleportDisabled", target2.getDisplayName()));
 			}
 			target2.getTeleport().now(loc, false, TeleportCause.COMMAND);
-			user.sendMessage(_("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
-			target2.sendMessage(_("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+			user.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+			target2.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
 			break;
 		case 2:
 		default:
 			if (!user.isAuthorized("essentials.tp.others"))
 			{
-				throw new Exception(_("noPerm", "essentials.tp.others"));
+				throw new Exception(tl("noPerm", "essentials.tp.others"));
 			}
 			final User target = getPlayer(server, user, args, 0);
 			final User toPlayer = getPlayer(server, user, args, 1);
 			if (!target.isTeleportEnabled())
 			{
-				throw new Exception(_("teleportDisabled", target.getDisplayName()));
+				throw new Exception(tl("teleportDisabled", target.getDisplayName()));
 			}
 			if (!toPlayer.isTeleportEnabled())
 			{
-				throw new Exception(_("teleportDisabled", toPlayer.getDisplayName()));
+				throw new Exception(tl("teleportDisabled", toPlayer.getDisplayName()));
 			}
 			if (target.getWorld() != toPlayer.getWorld() && ess.getSettings().isWorldTeleportPermissions()
 				&& !user.isAuthorized("essentials.worlds." + toPlayer.getWorld().getName()))
 			{
-				throw new Exception(_("noPerm", "essentials.worlds." + toPlayer.getWorld().getName()));
+				throw new Exception(tl("noPerm", "essentials.worlds." + toPlayer.getWorld().getName()));
 			}
 			target.getTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND);
-			target.sendMessage(_("teleportAtoB", user.getDisplayName(), toPlayer.getDisplayName()));
+			target.sendMessage(tl("teleportAtoB", user.getDisplayName(), toPlayer.getDisplayName()));
 			break;
 		}
 	}
@@ -102,7 +102,7 @@ public class Commandtp extends EssentialsCommand
 		{
 			final User toPlayer = getPlayer(server, args, 1, true, false);
 			target.getTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND);
-			target.sendMessage(_("teleportAtoB", Console.NAME, toPlayer.getDisplayName()));
+			target.sendMessage(tl("teleportAtoB", Console.NAME, toPlayer.getDisplayName()));
 		}
 		else if (args.length > 3)
 		{
@@ -111,12 +111,12 @@ public class Commandtp extends EssentialsCommand
 			final double z = args[3].startsWith("~") ? target.getLocation().getZ() + Integer.parseInt(args[3].substring(1)) : Integer.parseInt(args[3]);
 			if (x > 30000000 || y > 30000000 || z > 30000000 || x < -30000000 || y < -30000000 || z < -30000000)
 			{
-				throw new NotEnoughArgumentsException(_("teleportInvalidLocation"));
+				throw new NotEnoughArgumentsException(tl("teleportInvalidLocation"));
 			}
 			final Location loc = new Location(target.getWorld(), x, y, z, target.getLocation().getYaw(), target.getLocation().getPitch());
 			target.getTeleport().now(loc, false, TeleportCause.COMMAND);
-			target.sendMessage(_("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
-			sender.sendMessage(_("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+			target.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+			sender.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
 		}
 		else
 		{

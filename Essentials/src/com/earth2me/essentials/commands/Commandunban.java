@@ -2,7 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import java.util.logging.Level;
 import org.bukkit.OfflinePlayer;
@@ -37,14 +37,14 @@ public class Commandunban extends EssentialsCommand
 			name = player.getName();
 			if (!player.isBanned())
 			{
-				throw new Exception(_("playerNotFound"), e);
+				throw new Exception(tl("playerNotFound"), e);
 			}
 			player.setBanned(false);
 		}
 
 		final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
-		server.getLogger().log(Level.INFO, _("playerUnbanned", senderName, name));
+		server.getLogger().log(Level.INFO, tl("playerUnbanned", senderName, name));
 		
-		ess.broadcastMessage("essentials.ban.notify", _("playerUnbanned", senderName, name));
+		ess.broadcastMessage("essentials.ban.notify", tl("playerUnbanned", senderName, name));
 	}
 }

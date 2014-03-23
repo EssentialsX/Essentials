@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.textreader.TextPager;
@@ -12,7 +12,6 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.bukkit.Server;
-import org.bukkit.entity.Player;
 
 
 public class Commandbalancetop extends EssentialsCommand
@@ -59,7 +58,7 @@ public class Commandbalancetop extends EssentialsCommand
 				}
 				if (ess.getUserMap().getUniqueUsers() > MINUSERS)
 				{
-					sender.sendMessage(_("orderBalances", ess.getUserMap().getUniqueUsers()));
+					sender.sendMessage(tl("orderBalances", ess.getUserMap().getUniqueUsers()));
 				}
 			}
 			finally
@@ -72,7 +71,7 @@ public class Commandbalancetop extends EssentialsCommand
 		{
 			if (ess.getUserMap().getUniqueUsers() > MINUSERS)
 			{
-				sender.sendMessage(_("orderBalances", ess.getUserMap().getUniqueUsers()));
+				sender.sendMessage(tl("orderBalances", ess.getUserMap().getUniqueUsers()));
 			}
 			ess.runTaskAsynchronously(new Viewer(sender, page, force));
 		}
@@ -84,7 +83,7 @@ public class Commandbalancetop extends EssentialsCommand
 		final Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(cacheage);
 		final DateFormat format = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
-		sender.sendMessage(_("balanceTop", format.format(cal.getTime())));
+		sender.sendMessage(tl("balanceTop", format.format(cal.getTime())));
 		new TextPager(cache).showPage(Integer.toString(page), null, "balancetop", sender);
 	}
 
@@ -144,7 +143,7 @@ public class Commandbalancetop extends EssentialsCommand
 						}
 					});
 
-					cache.getLines().add(_("serverTotal", NumberUtil.displayCurrency(totalMoney, ess)));
+					cache.getLines().add(tl("serverTotal", NumberUtil.displayCurrency(totalMoney, ess)));
 					int pos = 1;
 					for (Map.Entry<String, BigDecimal> entry : sortedEntries)
 					{

@@ -1,6 +1,6 @@
 package com.earth2me.essentials;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -151,7 +151,7 @@ public class EssentialsEntityListener implements Listener
 		if (user.isAuthorized("essentials.back.ondeath") && !ess.getSettings().isCommandDisabled("back"))
 		{
 			user.setLastLocation();
-			user.sendMessage(_("backAfterDeath"));
+			user.sendMessage(tl("backAfterDeath"));
 		}
 		if (!ess.getSettings().areDeathMessagesEnabled())
 		{

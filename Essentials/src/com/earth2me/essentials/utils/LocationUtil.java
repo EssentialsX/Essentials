@@ -1,7 +1,7 @@
 package com.earth2me.essentials.utils;
 
 import com.earth2me.essentials.Essentials;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -282,7 +282,7 @@ public class LocationUtil
 	{
 		if (loc == null || loc.getWorld() == null)
 		{
-			throw new Exception(_("destinationNotSet"));
+			throw new Exception(tl("destinationNotSet"));
 		}
 		final World world = loc.getWorld();
 		int x = loc.getBlockX();
@@ -338,7 +338,7 @@ public class LocationUtil
 				y = world.getHighestBlockYAt(x, z);
 				if (x - 48 > loc.getBlockX())
 				{
-					throw new Exception(_("holeInFloor"));
+					throw new Exception(tl("holeInFloor"));
 				}
 			}
 		}

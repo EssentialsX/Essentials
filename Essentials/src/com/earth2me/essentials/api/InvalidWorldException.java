@@ -1,6 +1,6 @@
 package com.earth2me.essentials.api;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 
 
 public class InvalidWorldException extends Exception
@@ -9,7 +9,7 @@ public class InvalidWorldException extends Exception
 
 	public InvalidWorldException(final String world)
 	{
-		super(_("invalidWorld"));
+		super(tl("invalidWorld"));
 		this.world = world;
 	}
 

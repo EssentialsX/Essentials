@@ -1,6 +1,6 @@
 package com.earth2me.essentials.protect;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.IConf;
 import net.ess3.api.IEssentials;
 import java.util.logging.Level;
@@ -18,7 +18,7 @@ public class EssentialsConnect
 	{
 		if (!essProtect.getDescription().getVersion().equals(essPlugin.getDescription().getVersion()))
 		{
-			LOGGER.log(Level.WARNING, _("versionMismatchAll"));
+			LOGGER.log(Level.WARNING, tl("versionMismatchAll"));
 		}
 		ess = (IEssentials)essPlugin;
 		protect = (IProtect)essProtect;

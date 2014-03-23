@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.PlayerList;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
@@ -77,7 +77,7 @@ public class Commandlist extends EssentialsCommand
 					int limit = Integer.parseInt(groupValue);
 					if (matchedList.size() > limit)
 					{
-						sender.sendMessage(PlayerList.outputFormat(oConfigGroup, _("groupNumber", matchedList.size(), commandLabel, FormatUtil.stripFormat(configGroup))));
+						sender.sendMessage(PlayerList.outputFormat(oConfigGroup, tl("groupNumber", matchedList.size(), commandLabel, FormatUtil.stripFormat(configGroup))));
 					}
 					else
 					{
@@ -124,7 +124,7 @@ public class Commandlist extends EssentialsCommand
 
 			if (ess.getPermissionsHandler().getName().equals("ConfigPermissions"))
 			{
-				groupName = _("connectedPlayers");
+				groupName = tl("connectedPlayers");
 			}
 			if (users == null || users.isEmpty())
 			{

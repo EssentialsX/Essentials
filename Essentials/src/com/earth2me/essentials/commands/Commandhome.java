@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.StringUtil;
@@ -54,7 +54,7 @@ public class Commandhome extends EssentialsCommand
 				}
 				else
 				{
-					throw new Exception(_("bedMissing"));
+					throw new Exception(tl("bedMissing"));
 				}
 			}
 			goHome(user, player, homeName.toLowerCase(Locale.ENGLISH), charge);
@@ -69,7 +69,7 @@ public class Commandhome extends EssentialsCommand
 			}
 			else if (homes.isEmpty())
 			{
-				throw new Exception(_("noHomeSetPlayer"));
+				throw new Exception(tl("noHomeSetPlayer"));
 			}
 			else if (homes.size() == 1 && player.equals(user))
 			{
@@ -82,14 +82,14 @@ public class Commandhome extends EssentialsCommand
 				{
 					if (bed != null)
 					{
-						homes.add(_("bed"));
+						homes.add(tl("bed"));
 					}
 					else
 					{
-						homes.add(_("bedNull"));
+						homes.add(tl("bedNull"));
 					}
 				}
-				user.sendMessage(_("homes", StringUtil.joinList(homes), count, getHomeLimit(player)));
+				user.sendMessage(tl("homes", StringUtil.joinList(homes), count, getHomeLimit(player)));
 			}
 		}
 		throw new NoChargeException();
@@ -122,7 +122,7 @@ public class Commandhome extends EssentialsCommand
 		if (user.getWorld() != loc.getWorld() && ess.getSettings().isWorldHomePermissions()
 			&& !user.isAuthorized("essentials.worlds." + loc.getWorld().getName()))
 		{
-			throw new Exception(_("noPerm", "essentials.worlds." + loc.getWorld().getName()));
+			throw new Exception(tl("noPerm", "essentials.worlds." + loc.getWorld().getName()));
 		}
 		user.getTeleport().teleport(loc, charge, TeleportCause.COMMAND);
 	}

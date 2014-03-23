@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
@@ -63,11 +63,11 @@ public class Commandsell extends EssentialsCommand
 		{
 			if (args[0].equalsIgnoreCase("blocks"))
 			{
-				user.sendMessage(_("totalWorthBlocks", type, NumberUtil.displayCurrency(totalWorth, ess)));
+				user.sendMessage(tl("totalWorthBlocks", type, NumberUtil.displayCurrency(totalWorth, ess)));
 			}
 			else
 			{
-				user.sendMessage(_("totalWorthAll", type, NumberUtil.displayCurrency(totalWorth, ess)));
+				user.sendMessage(tl("totalWorthAll", type, NumberUtil.displayCurrency(totalWorth, ess)));
 			}
 		}
 	}
@@ -79,13 +79,13 @@ public class Commandsell extends EssentialsCommand
 
 		if (worth == null)
 		{
-			throw new Exception(_("itemCannotBeSold"));
+			throw new Exception(tl("itemCannotBeSold"));
 		}
 
 		if (amount <= 0)
 		{
 			if (!isBulkSell) {
-				user.sendMessage(_("itemSold", NumberUtil.displayCurrency(BigDecimal.ZERO, ess), BigDecimal.ZERO, is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(worth, ess)));
+				user.sendMessage(tl("itemSold", NumberUtil.displayCurrency(BigDecimal.ZERO, ess), BigDecimal.ZERO, is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(worth, ess)));
 			}
 			return BigDecimal.ZERO;
 		}
@@ -104,8 +104,8 @@ public class Commandsell extends EssentialsCommand
 		user.updateInventory();
 		Trade.log("Command", "Sell", "Item", user.getName(), new Trade(ris, ess), user.getName(), new Trade(result, ess), user.getLocation(), ess);
 		user.giveMoney(result);
-		user.sendMessage(_("itemSold", NumberUtil.displayCurrency(result, ess), amount, is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(worth, ess)));
-		logger.log(Level.INFO, _("itemSoldConsole", user.getDisplayName(), is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(result, ess), amount, NumberUtil.displayCurrency(worth, ess)));
+		user.sendMessage(tl("itemSold", NumberUtil.displayCurrency(result, ess), amount, is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(worth, ess)));
+		logger.log(Level.INFO, tl("itemSoldConsole", user.getDisplayName(), is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(result, ess), amount, NumberUtil.displayCurrency(worth, ess)));
 		return result;
 	}
 }

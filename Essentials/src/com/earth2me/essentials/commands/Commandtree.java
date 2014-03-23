@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Essentials;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.LocationUtil;
 import org.bukkit.Location;
@@ -82,11 +82,11 @@ public class Commandtree extends EssentialsCommand
 		final boolean success = user.getWorld().generateTree(safeLocation, tree);
 		if (success)
 		{
-			user.sendMessage(_("treeSpawned"));
+			user.sendMessage(tl("treeSpawned"));
 		}
 		else
 		{
-			user.sendMessage(_("treeFailure"));
+			user.sendMessage(tl("treeFailure"));
 		}
 	}
 }

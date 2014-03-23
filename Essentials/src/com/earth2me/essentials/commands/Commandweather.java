@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -46,15 +46,15 @@ public class Commandweather extends EssentialsCommand
 			world.setStorm(isStorm);
 			world.setWeatherDuration(Integer.parseInt(args[1]) * 20);
 			user.sendMessage(isStorm
-							 ? _("weatherStormFor", world.getName(), args[1])
-							 : _("weatherSunFor", world.getName(), args[1]));
+							 ? tl("weatherStormFor", world.getName(), args[1])
+							 : tl("weatherSunFor", world.getName(), args[1]));
 		}
 		else
 		{
 			world.setStorm(isStorm);
 			user.sendMessage(isStorm
-							 ? _("weatherStorm", world.getName())
-							 : _("weatherSun", world.getName()));
+							 ? tl("weatherStorm", world.getName())
+							 : tl("weatherSun", world.getName()));
 		}
 	}
 
@@ -70,7 +70,7 @@ public class Commandweather extends EssentialsCommand
 		final World world = server.getWorld(args[0]);
 		if (world == null)
 		{
-			throw new Exception(_("weatherInvalidWorldWorld", args[0]));
+			throw new Exception(tl("weatherInvalidWorldWorld", args[0]));
 		}
 		if (args.length > 2)
 		{
@@ -78,15 +78,15 @@ public class Commandweather extends EssentialsCommand
 			world.setStorm(isStorm);
 			world.setWeatherDuration(Integer.parseInt(args[2]) * 20);
 			sender.sendMessage(isStorm
-							   ? _("weatherStormFor", world.getName(), args[2])
-							   : _("weatherSunFor", world.getName(), args[2]));
+							   ? tl("weatherStormFor", world.getName(), args[2])
+							   : tl("weatherSunFor", world.getName(), args[2]));
 		}
 		else
 		{
 			world.setStorm(isStorm);
 			sender.sendMessage(isStorm
-							   ? _("weatherStorm", world.getName())
-							   : _("weatherSun", world.getName()));
+							   ? tl("weatherStorm", world.getName())
+							   : tl("weatherSun", world.getName()));
 		}
 	}
 }

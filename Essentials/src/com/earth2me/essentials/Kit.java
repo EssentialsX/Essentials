@@ -1,6 +1,6 @@
 package com.earth2me.essentials;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import static com.earth2me.essentials.I18n.capitalCase;
 import com.earth2me.essentials.Trade.OverflowType;
 import com.earth2me.essentials.commands.NoChargeException;
@@ -41,13 +41,13 @@ public class Kit
 					BigDecimal costPrice = new Trade("kit-" + kitItem.toLowerCase(Locale.ENGLISH), ess).getCommandCost(user);
 					if (costPrice.signum() > 0)
 					{
-						cost = _("kitCost", NumberUtil.displayCurrency(costPrice, ess));
+						cost = tl("kitCost", NumberUtil.displayCurrency(costPrice, ess));
 					}
 					final Map<String, Object> kit = ess.getSettings().getKit(kitItem);
 
 					if (Kit.getNextUse(user, kitItem, kit) != 0)
 					{
-						name = _("kitDelay", name);
+						name = tl("kitDelay", name);
 					}
 
 					list.append(" ").append(name).append(cost);
@@ -57,7 +57,7 @@ public class Kit
 		}
 		catch (Exception ex)
 		{
-			throw new Exception(_("kitError"), ex);
+			throw new Exception(tl("kitError"), ex);
 		}
 
 	}
@@ -73,12 +73,12 @@ public class Kit
 		}
 		else if (nextUse < 0L)
 		{
-			user.sendMessage(_("kitOnce"));
+			user.sendMessage(tl("kitOnce"));
 			throw new NoChargeException();
 		}
 		else
 		{
-			user.sendMessage(_("kitTimed", DateUtil.formatDateDiff(nextUse)));
+			user.sendMessage(tl("kitTimed", DateUtil.formatDateDiff(nextUse)));
 			throw new NoChargeException();
 		}
 	}
@@ -100,7 +100,7 @@ public class Kit
 		}
 		catch (Exception e)
 		{
-			throw new Exception(_("kitError2"));
+			throw new Exception(tl("kitError2"));
 		}
 
 		// When was the last kit used?
@@ -138,7 +138,7 @@ public class Kit
 	{
 		if (kit == null)
 		{
-			throw new Exception(_("kitNotFound"));
+			throw new Exception(tl("kitNotFound"));
 		}
 		try
 		{
@@ -162,7 +162,7 @@ public class Kit
 		catch (Exception e)
 		{
 			ess.getLogger().log(Level.WARNING, "Error parsing kit " + kitName + ": " + e.getMessage());
-			throw new Exception(_("kitError2"), e);
+			throw new Exception(tl("kitError2"), e);
 		}
 	}
 
@@ -226,14 +226,14 @@ public class Kit
 			user.updateInventory();
 			if (spew)
 			{
-				user.sendMessage(_("kitInvFull"));
+				user.sendMessage(tl("kitInvFull"));
 			}
 		}
 		catch (Exception e)
 		{
 			user.updateInventory();
 			ess.getLogger().log(Level.WARNING, e.getMessage());
-			throw new Exception(_("kitError2"), e);
+			throw new Exception(tl("kitError2"), e);
 		}
 	}
 }

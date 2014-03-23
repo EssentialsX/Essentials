@@ -1,7 +1,7 @@
 package com.earth2me.essentials.geoip;
 
 import com.earth2me.essentials.EssentialsConf;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.User;
 import net.ess3.api.IEssentials;
@@ -96,7 +96,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf
 				User user = ess.getUser(onlinePlayer);
 				if (user.isAuthorized("essentials.geoip.show"))
 				{
-					user.sendMessage(_("geoipJoinFormat", u.getDisplayName(), sb.toString()));
+					user.sendMessage(tl("geoipJoinFormat", u.getDisplayName(), sb.toString()));
 				}
 			}
 		}
@@ -123,7 +123,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf
 			}
 			else
 			{
-				logger.log(Level.SEVERE, _("cantFindGeoIpDB"));
+				logger.log(Level.SEVERE, tl("cantFindGeoIpDB"));
 				return;
 			}
 		}
@@ -133,7 +133,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf
 		}
 		catch (IOException ex)
 		{
-			logger.log(Level.SEVERE, _("cantReadGeoIpDB"), ex);
+			logger.log(Level.SEVERE, tl("cantReadGeoIpDB"), ex);
 		}
 	}
 
@@ -152,10 +152,10 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf
 			}
 			if (url == null || url.isEmpty())
 			{
-				logger.log(Level.SEVERE, _("geoIpUrlEmpty"));
+				logger.log(Level.SEVERE, tl("geoIpUrlEmpty"));
 				return;
 			}
-			logger.log(Level.INFO, _("downloadingGeoIp"));
+			logger.log(Level.INFO, tl("downloadingGeoIp"));
 			URL downloadUrl = new URL(url);
 			URLConnection conn = downloadUrl.openConnection();
 			conn.setConnectTimeout(10000);
@@ -178,12 +178,12 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf
 		}
 		catch (MalformedURLException ex)
 		{
-			logger.log(Level.SEVERE, _("geoIpUrlInvalid"), ex);
+			logger.log(Level.SEVERE, tl("geoIpUrlInvalid"), ex);
 			return;
 		}
 		catch (IOException ex)
 		{
-			logger.log(Level.SEVERE, _("connectionFailed"), ex);
+			logger.log(Level.SEVERE, tl("connectionFailed"), ex);
 		}
 	}
 }

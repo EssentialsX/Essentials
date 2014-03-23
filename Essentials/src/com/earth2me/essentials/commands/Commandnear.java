@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -62,7 +62,7 @@ public class Commandnear extends EssentialsCommand
 		
 		if (radius > maxRadius && !user.isAuthorized("essentials.near.maxexempt"))
 		{
-			user.sendMessage(_("radiusTooBig", maxRadius));
+			user.sendMessage(tl("radiusTooBig", maxRadius));
 			radius = maxRadius;
 		}
 		
@@ -70,7 +70,7 @@ public class Commandnear extends EssentialsCommand
 		{
 			otherUser = user;
 		}
-		user.sendMessage(_("nearbyPlayers", getLocal(server, otherUser, radius)));
+		user.sendMessage(tl("nearbyPlayers", getLocal(server, otherUser, radius)));
 	}
 
 	@Override
@@ -92,7 +92,7 @@ public class Commandnear extends EssentialsCommand
 			{
 			}
 		}
-		sender.sendMessage(_("nearbyPlayers", getLocal(server, otherUser, radius)));
+		sender.sendMessage(tl("nearbyPlayers", getLocal(server, otherUser, radius)));
 	}
 
 	private String getLocal(final Server server, final User user, final long radius)
@@ -125,6 +125,6 @@ public class Commandnear extends EssentialsCommand
 				}
 			}
 		}
-		return output.length() > 1 ? output.toString() : _("none");
+		return output.length() > 1 ? output.toString() : tl("none");
 	}
 }

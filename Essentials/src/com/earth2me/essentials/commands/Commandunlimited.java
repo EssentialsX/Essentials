@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import java.util.List;
 import java.util.Locale;
@@ -59,12 +59,12 @@ public class Commandunlimited extends EssentialsCommand
 	private String getList(final User target)
 	{
 		final StringBuilder output = new StringBuilder();
-		output.append(_("unlimitedItems")).append(" ");
+		output.append(tl("unlimitedItems")).append(" ");
 		boolean first = true;
 		final List<Integer> items = target.getUnlimited();
 		if (items.isEmpty())
 		{
-			output.append(_("none"));
+			output.append(tl("none"));
 		}
 		for (Integer integer : items)
 		{
@@ -93,7 +93,7 @@ public class Commandunlimited extends EssentialsCommand
 				&& !((stack.getType() == Material.WATER_BUCKET || stack.getType() == Material.LAVA_BUCKET)
 					 && user.isAuthorized("essentials.unlimited.item-bucket"))))
 		{
-			throw new Exception(_("unlimitedItemPermission", itemname));
+			throw new Exception(tl("unlimitedItemPermission", itemname));
 		}
 
 		String message = "disableUnlimited";
@@ -110,9 +110,9 @@ public class Commandunlimited extends EssentialsCommand
 
 		if (user != target)
 		{
-			user.sendMessage(_(message, itemname, target.getDisplayName()));
+			user.sendMessage(tl(message, itemname, target.getDisplayName()));
 		}
-		target.sendMessage(_(message, itemname, target.getDisplayName()));
+		target.sendMessage(tl(message, itemname, target.getDisplayName()));
 		target.setUnlimited(stack, enableUnlimited);
 
 		return true;

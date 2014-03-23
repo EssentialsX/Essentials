@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.SpawnMob;
 import com.earth2me.essentials.User;
@@ -23,7 +23,7 @@ public class Commandspawnmob extends EssentialsCommand
 		if (args.length < 1)
 		{
 			final String mobList = SpawnMob.mobList(user);
-			throw new NotEnoughArgumentsException(_("mobsAvailable", mobList));
+			throw new NotEnoughArgumentsException(tl("mobsAvailable", mobList));
 		}
 		
 		List<String> mobParts = SpawnMob.mobParts(args[0]);
@@ -37,7 +37,7 @@ public class Commandspawnmob extends EssentialsCommand
 		
 		if (mobParts.size() > 1 && !user.isAuthorized("essentials.spawnmob.stack"))
 		{
-			throw new Exception(_("cannotStackMob"));
+			throw new Exception(tl("cannotStackMob"));
 		}
 		
 		if (args.length >= 3)
@@ -56,7 +56,7 @@ public class Commandspawnmob extends EssentialsCommand
 		if (args.length < 3)
 		{
 			final String mobList = StringUtil.joinList(Mob.getMobList());
-			throw new NotEnoughArgumentsException(_("mobsAvailable", mobList));
+			throw new NotEnoughArgumentsException(tl("mobsAvailable", mobList));
 		}
 		
 		List<String> mobParts = SpawnMob.mobParts(args[0]);

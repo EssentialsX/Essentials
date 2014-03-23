@@ -2,7 +2,7 @@ package com.earth2me.essentials.textreader;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.ExecuteTimer;
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.PlayerList;
 import com.earth2me.essentials.User;
 import static com.earth2me.essentials.textreader.KeywordType.DISPLAYNAME;
@@ -284,7 +284,7 @@ public class KeywordReplacer implements IText
 					if (user != null)
 					{
 						final Location location = user.getLocation();
-						replacer = _("coordsKeyword", location.getBlockX(), location.getBlockY(), location.getBlockZ());
+						replacer = tl("coordsKeyword", location.getBlockX(), location.getBlockY(), location.getBlockZ());
 					}
 					break;
 				case TPS:

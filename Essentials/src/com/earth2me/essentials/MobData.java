@@ -1,6 +1,6 @@
 package com.earth2me.essentials;
 
-import static com.earth2me.essentials.I18n._;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.utils.StringUtil;
 import java.util.*;
 import java.util.logging.Logger;
@@ -274,7 +274,7 @@ public enum MobData
 			}
 			catch (Exception e)
 			{
-				throw new Exception(_("sheepMalformedColor"), e);
+				throw new Exception(tl("sheepMalformedColor"), e);
 			}
 		}
 		else if (this.value.equals(Data.EXP))
@@ -286,7 +286,7 @@ public enum MobData
 			}
 			catch (NumberFormatException e)
 			{
-				throw new Exception(_("invalidNumber"), e);
+				throw new Exception(tl("invalidNumber"), e);
 			}
 		}
 		else if (this.value.equals(Data.SIZE))
@@ -298,7 +298,7 @@ public enum MobData
 			}
 			catch (NumberFormatException e)
 			{
-				throw new Exception(_("slimeMalformedSize"), e);
+				throw new Exception(tl("slimeMalformedSize"), e);
 			}
 		}
 		else if (this.value instanceof Horse.Color)
