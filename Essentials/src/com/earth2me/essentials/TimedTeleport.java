@@ -110,7 +110,10 @@ public class TimedTeleport implements Runnable
 			{
 				cancelTimer(false);
 				teleportUser.sendMessage(_("teleportationCommencing"));
-				timer_chargeFor.isAffordableFor(teleportOwner);
+				if (timer_chargeFor != null)
+				{
+					timer_chargeFor.isAffordableFor(teleportOwner);
+				}
 				if (timer_respawn)
 				{
 					teleport.respawnNow(teleportUser, timer_cause);
