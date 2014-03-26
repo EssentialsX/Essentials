@@ -6,6 +6,7 @@ import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DateUtil;
 import java.util.GregorianCalendar;
+import java.util.logging.Level;
 import org.bukkit.Server;
 
 
@@ -59,6 +60,8 @@ public class Commandtempban extends EssentialsCommand
 		user.setBanned(true);
 		user.kickPlayer(banReason);
 
-		ess.broadcastMessage("essentials.ban.notify", tl("playerBanned", senderName, user.getName(), banReason, DateUtil.formatDateDiff(banTimestamp)));
+		final String message = tl("playerBanned", senderName, user.getName(), banReason, DateUtil.formatDateDiff(banTimestamp));
+		server.getLogger().log(Level.INFO, message);
+		ess.broadcastMessage("essentials.ban.notify", message);
 	}
 }
