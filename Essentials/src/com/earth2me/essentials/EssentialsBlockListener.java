@@ -1,17 +1,16 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.utils.LocationUtil;
 import java.util.Locale;
 import net.ess3.api.IEssentials;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.block.*;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -67,28 +66,6 @@ public class EssentialsBlockListener implements Listener
 					user.getBase().updateInventory();
 				}
 			});
-		}
-	}
-
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onBlockPistonRetract(BlockPistonRetractEvent event)
-	{
-		final Block block = event.getRetractLocation().getBlock();
-		for (BlockFace face : new BlockFace[] { BlockFace.NORTH, BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH, BlockFace.UP })
-		{
-			final Block search = block.getRelative(face, 1);
-			final Material type = search.getType();
-			if (type == Material.SIGN || type == Material.SIGN_POST)
-			{
-				final Sign sign = (Sign)(search.getState());
-				for (final EssentialsSign esign : ess.getSettings().enabledSigns())
-				{
-					if (sign.getLine(0).equalsIgnoreCase(esign.getSuccessName()))
-					{
-						event.setCancelled(true);
-					}
-				}
-			}
 		}
 	}
 }
