@@ -447,7 +447,7 @@ public class EssentialsPlayerListener implements Listener
 	{
 		final Player player = event.getPlayer();
 		final String cmd = event.getMessage().toLowerCase(Locale.ENGLISH).split(" ")[0].replace("/", "").toLowerCase(Locale.ENGLISH);
-		if (ess.getSettings().getSocialSpyCommands().contains(cmd))
+		if (ess.getSettings().getSocialSpyCommands().contains(cmd) || ess.getSettings().getSocialSpyCommands().contains("*"))
 		{
 			for (Player onlinePlayer : ess.getServer().getOnlinePlayers())
 			{
