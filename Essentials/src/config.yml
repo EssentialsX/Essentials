@@ -59,7 +59,7 @@ teleport-invulnerability: 4
 # The delay, in seconds, required between /heal or /feed attempts.
 heal-cooldown: 60
 
-# What to prevent from /i /give.
+# What to prevent from /item and /give.
 # e.g item-spawn-blacklist: 46,11,10
 item-spawn-blacklist:
 
@@ -94,7 +94,7 @@ warn-on-smite: true
 #
 # If you have two plugin with the same command and you wish to force Essentials to take over, you need an alias.
 # To force essentials to take 'god' alias 'god' to 'egod'.
-# See http://wiki.bukkit.org/Bukkit.yml#aliases for more information
+# See http://wiki.bukkit.org/Commands.yml#aliases for more information
 
 overridden-commands:
 #  - god
@@ -508,6 +508,8 @@ hide-permissionless-help: true
 # +------------------------------------------------------+ #
 ############################################################
 
+# This section requires essentialschat.jar to work.
+
 chat:
 
   # If EssentialsChat is installed, this will define how far a player's voice travels, in blocks.  Set to 0 to make all chat global.
@@ -536,6 +538,8 @@ chat:
 # |                 EssentialsProtect                    | #
 # +------------------------------------------------------+ #
 ############################################################
+
+# This section requires essentialsprotect.jar to work.
 
 protect:
 
@@ -650,6 +654,8 @@ protect:
 # +------------------------------------------------------+ #
 ############################################################
 
+  # This section requires essentialsantibuild.jar to work.
+
   # Disable various default physics and behaviors
   # For more information, visit http://wiki.ess3.net/wiki/AntiBuild
 
@@ -697,6 +703,8 @@ protect:
 # +------------------------------------------------------+ #
 ############################################################
 
+# This section requires essentialsspawn.jar to work.
+
 newbies:
   # Should we announce to the server when someone logs in for the first time?
   # If so, use this format, replacing {DISPLAYNAME} with the player name.
@@ -709,7 +717,7 @@ newbies:
   spawnpoint: newbies
 
   # Do we want to give users anything on first join? Set to '' to disable
-  # This kit will be given regardless of cost, and permissions.
+  # This kit will be given regardless of cost and permissions, and will not trigger the kit delay.
   #kit: ''
   kit: tools
 
