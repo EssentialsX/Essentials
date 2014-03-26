@@ -25,7 +25,7 @@ public class Commandclearinventory extends EssentialsCommand
 	@Override
 	public void run(Server server, User user, String commandLabel, String[] args) throws Exception
 	{
-		parseCommand(server, user.getSource(), args, user.isAuthorized("essentials.clearinventory.others"), user.isAuthorized("essentials.clearinventory.all"));
+		parseCommand(server, user.getSource(), args, user.isAuthorized("essentials.clearinventory.others"), user.isAuthorized("essentials.clearinventory.all") || user.isAuthorized("essentials.clearinventory.multiple"));
 	}
 
 	@Override
