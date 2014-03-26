@@ -5,6 +5,7 @@ import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DateUtil;
+import java.util.logging.Level;
 import org.bukkit.Server;
 
 
@@ -81,7 +82,9 @@ public class Commandmute extends EssentialsCommand
 				sender.sendMessage(tl("mutedPlayer", user.getDisplayName()));
 				user.sendMessage(tl("playerMuted"));
 			}
-			ess.broadcastMessage("essentials.mute.notify", tl("muteNotify", sender.getSender().getName(), user.getName(), muteTime));
+			final String message = tl("muteNotify", sender.getSender().getName(), user.getName(), muteTime);
+			server.getLogger().log(Level.INFO, message);
+			ess.broadcastMessage("essentials.mute.notify", message);
 		}
 		else
 		{

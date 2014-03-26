@@ -5,9 +5,8 @@ import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
+import java.util.logging.Level;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 
 public class Commandhelpop extends EssentialsCommand
@@ -21,7 +20,11 @@ public class Commandhelpop extends EssentialsCommand
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		user.setDisplayNick();
-		sendMessage(server, user.getSource(), user.getDisplayName(), args);
+		final String message = sendMessage(server, user.getSource(), user.getDisplayName(), args);
+		if (!user.isAuthorized("essentials.helpop.receive"))
+		{
+			user.sendMessage(message);
+		}
 	}
 
 	@Override
@@ -30,23 +33,15 @@ public class Commandhelpop extends EssentialsCommand
 		sendMessage(server, sender, Console.NAME, args);
 	}
 
-	private void sendMessage(final Server server, final CommandSource sender, final String from, final String[] args) throws Exception
+	private String sendMessage(final Server server, final CommandSource sender, final String from, final String[] args) throws Exception
 	{
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();
 		}
 		final String message = tl("helpOp", from, FormatUtil.stripFormat(getFinalArg(args, 0)));
-		CommandSender cs = Console.getCommandSender(server);
-		cs.sendMessage(message);
-		for (Player onlinePlayer : server.getOnlinePlayers())
-		{
-			final User player = ess.getUser(onlinePlayer);
-			if (!player.isAuthorized("essentials.helpop.receive"))
-			{
-				continue;
-			}
-			player.sendMessage(message);
-		}
+		server.getLogger().log(Level.INFO, message);
+		ess.broadcastMessage("essentials.helpop.receive", message);
+		return message;
 	}
 }
