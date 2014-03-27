@@ -919,9 +919,15 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 				return resultGroup;
 			}
 			
-			result = resultGroup;
+			// Do not override higher level permissions with negations.
+			if (result.resultType == PermissionCheckResult.Type.NOTFOUND) {
+				result = resultGroup;
+			}
 			
 		}
+		
+		// Do we have a high level negation?
+		boolean negated = (result.resultType == PermissionCheckResult.Type.NEGATION);
 
 		// SUBGROUPS CHECK
 		for (Group subGroup : user.subGroupListCopy()) {
@@ -931,15 +937,17 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 				
 				resultSubGroup.accessLevel = targetPermission;
 				
+				// Allow exceptions to override higher level negations
+				// but low level negations can not remove higher level permissions.
 				if (resultSubGroup.resultType == PermissionCheckResult.Type.EXCEPTION) {
 					
 					return resultSubGroup;
 					
-				} else if ((resultSubGroup.resultType == PermissionCheckResult.Type.FOUND) && (result.resultType != PermissionCheckResult.Type.NEGATION)) {
+				} else if ((resultSubGroup.resultType == PermissionCheckResult.Type.FOUND) && (result.resultType != PermissionCheckResult.Type.NEGATION) && !negated) {
 					
 					result = resultSubGroup;
 					
-				} else if (resultSubGroup.resultType == PermissionCheckResult.Type.NEGATION) {
+				} else if ((resultSubGroup.resultType == PermissionCheckResult.Type.NEGATION) && !negated) {
 					
 					result = resultSubGroup;
 				}
