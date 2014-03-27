@@ -16,7 +16,7 @@
 			<arguments>
 				<dictionary>
 					<key>LaunchConfigHandle</key>
-					<value>&lt;project&gt;/.externalToolBuilders/GroupManager.launch</value>
+					<value>&lt;project&gt;/.externalToolBuilders/GroupManager_Builder.launch</value>
 				</dictionary>
 			</arguments>
 		</buildCommand>

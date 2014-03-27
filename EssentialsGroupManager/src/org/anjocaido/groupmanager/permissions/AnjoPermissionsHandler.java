@@ -5,6 +5,7 @@
 package org.anjocaido.groupmanager.permissions;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,8 +14,8 @@ import java.util.Set;
 
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.data.Group;
-import org.anjocaido.groupmanager.dataholder.WorldDataHolder;
 import org.anjocaido.groupmanager.data.User;
+import org.anjocaido.groupmanager.dataholder.WorldDataHolder;
 import org.anjocaido.groupmanager.utils.PermissionCheckResult;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -121,6 +122,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 	public Set<String> getAllPlayersPermissions(String userName, Boolean includeChildren) {
 
 		Set<String> playerPermArray = new LinkedHashSet<String>();
+		Set<String> overrides = new LinkedHashSet<String>();
 
 		// Add the players own permissions.
 		playerPermArray.addAll(populatePerms(ph.getUser(userName).getPermissionList(), includeChildren));
@@ -147,18 +149,39 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 				// Add all group permissions, unless negated by earlier permissions.
 				for (String perm : groupPermArray) {
 					boolean negated = (perm.startsWith("-"));
+					
+					// Overridden (Exception) permission defeats negation.
+					if (perm.startsWith("+")) {
+						overrides.add(perm.substring(1));
+						continue;
+					}
+					
 					// Perm doesn't already exists and there is no negation for it
 					// or It's a negated perm where a normal perm doesn't exists (don't allow inheritance to negate higher perms)
 					if ((!negated && !playerPermArray.contains(perm) && !wildcardNegation(playerPermArray, perm)) || (negated && !playerPermArray.contains(perm.substring(1)) && !wildcardNegation(playerPermArray, perm.substring(1))))
 						playerPermArray.add(perm);
 					
-					if (perm.startsWith("+") && wildcardNegation(groupPermArray, perm.substring(1))) {
-						playerPermArray.add(perm.substring(1));
-					}
 				}
 			}
 
 		}
+		
+		// Process overridden permissions
+		
+		Iterator<String> itr = overrides.iterator();
+		
+		while (itr.hasNext()) {
+			
+			String node = itr.next();
+
+			if (playerPermArray.contains("-" + node)) {
+				playerPermArray.remove("-" + node);
+			}
+			
+			playerPermArray.add(node);
+			
+		}
+		
 		// Collections.sort(playerPermArray, StringPermissionComparator.getInstance());
 
 		return playerPermArray;
@@ -1001,17 +1024,34 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 		if (start == null || targetPermission == null) {
 			return null;
 		}
+		
 		LinkedList<Group> stack = new LinkedList<Group>();
 		List<Group> alreadyVisited = new ArrayList<Group>();
+		PermissionCheckResult result = new PermissionCheckResult();
+		
 		stack.push(start);
 		alreadyVisited.add(start);
+		
+		// Set defaults.
+		result.askedPermission = targetPermission;
+		result.resultType = PermissionCheckResult.Type.NOTFOUND;
+		
 		while (!stack.isEmpty()) {
 			Group now = stack.pop();
 			PermissionCheckResult resultNow = checkGroupOnlyPermission(now, targetPermission);
+			
 			if (!resultNow.resultType.equals(PermissionCheckResult.Type.NOTFOUND)) {
-				resultNow.accessLevel = targetPermission;
-				return resultNow;
+				
+				if (resultNow.resultType.equals(PermissionCheckResult.Type.EXCEPTION)) {
+					resultNow.accessLevel = targetPermission;
+					return resultNow;
+				}
+				
+				// Negation found so store for later
+				// as we need to continue looking for an Exception.
+				result = resultNow;
 			}
+			
 			for (String sonName : now.getInherits()) {
 				Group son = ph.getGroup(sonName);
 				if (son != null && !alreadyVisited.contains(son)) {
@@ -1021,9 +1061,7 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 				}
 			}
 		}
-		PermissionCheckResult result = new PermissionCheckResult();
-		result.askedPermission = targetPermission;
-		result.resultType = PermissionCheckResult.Type.NOTFOUND;
+		
 		return result;
 	}
 

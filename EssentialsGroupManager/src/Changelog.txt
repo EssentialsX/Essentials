@@ -223,3 +223,4 @@ v 2.0:
 	- Check subgroup permissions with an equal priority so no one subgroup is higher ranked than another.
 	- add recursive permission adding/deleting
 	- Prevent adding sub groups for ranks the granting player doesn't have access to.
+	- Allow Exceptions in any inherited group to override negation of permissions.
