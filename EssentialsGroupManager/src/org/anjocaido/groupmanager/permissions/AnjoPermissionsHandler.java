@@ -898,32 +898,49 @@ public class AnjoPermissionsHandler extends PermissionsReaderInterface {
 
 		PermissionCheckResult resultUser = checkUserOnlyPermission(user, targetPermission);
 		if (resultUser.resultType != PermissionCheckResult.Type.NOTFOUND) {
+			
 			resultUser.accessLevel = targetPermission;
-			return resultUser;
+			
+			if (resultUser.resultType == PermissionCheckResult.Type.EXCEPTION) {
+				return resultUser;
+			}
+			
+			result = resultUser;
+			
 		}
 
-		// IT ONLY CHECKS GROUPS PERMISSIONS IF RESULT FOR USER IS NOT FOUND
+		// IT ONLY CHECKS GROUPS PERMISSIONS IF RESULT FOR USER IS NOT AN EXCEPTION
 		PermissionCheckResult resultGroup = checkGroupPermissionWithInheritance(user.getGroup(), targetPermission);
 		if (resultGroup.resultType != PermissionCheckResult.Type.NOTFOUND) {
+			
 			resultGroup.accessLevel = targetPermission;
-			return resultGroup;
+			
+			if (resultGroup.resultType == PermissionCheckResult.Type.EXCEPTION) {
+				return resultGroup;
+			}
+			
+			result = resultGroup;
+			
 		}
 
 		// SUBGROUPS CHECK
 		for (Group subGroup : user.subGroupListCopy()) {
+			
 			PermissionCheckResult resultSubGroup = checkGroupPermissionWithInheritance(subGroup, targetPermission);
-			
-			
 			if (resultSubGroup.resultType != PermissionCheckResult.Type.NOTFOUND) {
 				
-				if ((resultSubGroup.resultType == PermissionCheckResult.Type.FOUND) && (result.resultType != PermissionCheckResult.Type.NEGATION)) {
-					resultSubGroup.accessLevel = targetPermission;
-					result = resultSubGroup;
-				} else if (resultSubGroup.resultType == PermissionCheckResult.Type.EXCEPTION) {
-					resultSubGroup.accessLevel = targetPermission;
+				resultSubGroup.accessLevel = targetPermission;
+				
+				if (resultSubGroup.resultType == PermissionCheckResult.Type.EXCEPTION) {
+					
 					return resultSubGroup;
+					
+				} else if ((resultSubGroup.resultType == PermissionCheckResult.Type.FOUND) && (result.resultType != PermissionCheckResult.Type.NEGATION)) {
+					
+					result = resultSubGroup;
+					
 				} else if (resultSubGroup.resultType == PermissionCheckResult.Type.NEGATION) {
-					resultSubGroup.accessLevel = targetPermission;
+					
 					result = resultSubGroup;
 				}
 				

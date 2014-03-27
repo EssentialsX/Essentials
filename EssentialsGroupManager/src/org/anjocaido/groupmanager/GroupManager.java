@@ -972,6 +972,8 @@ public class GroupManager extends JavaPlugin {
 					if (permissionResult.owner instanceof User) {
 						if (permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION)) {
 							sender.sendMessage(ChatColor.YELLOW + "The user has directly a negation node for that permission.");
+						} else if (permissionResult.resultType.equals(PermissionCheckResult.Type.EXCEPTION)) {
+							sender.sendMessage(ChatColor.YELLOW + "The user has directly an Exception node for that permission.");
 						} else {
 							sender.sendMessage(ChatColor.YELLOW + "The user has directly this permission.");
 						}
@@ -979,6 +981,8 @@ public class GroupManager extends JavaPlugin {
 					} else if (permissionResult.owner instanceof Group) {
 						if (permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION)) {
 							sender.sendMessage(ChatColor.YELLOW + "The user inherits a negation permission from group: " + permissionResult.owner.getName());
+						} else if (permissionResult.resultType.equals(PermissionCheckResult.Type.EXCEPTION)) {
+							sender.sendMessage(ChatColor.YELLOW + "The user inherits an Exception permission from group: " + permissionResult.owner.getName());
 						} else {
 							sender.sendMessage(ChatColor.YELLOW + "The user inherits the permission from group: " + permissionResult.owner.getName());
 						}
