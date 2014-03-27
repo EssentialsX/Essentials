@@ -1204,6 +1204,8 @@ public class GroupManager extends JavaPlugin {
 				if (permissionResult.owner instanceof Group) {
 					if (permissionResult.resultType.equals(PermissionCheckResult.Type.NEGATION)) {
 						sender.sendMessage(ChatColor.YELLOW + "The group inherits the negation permission from group: " + permissionResult.owner.getName());
+					} else if (permissionResult.resultType.equals(PermissionCheckResult.Type.EXCEPTION)) {
+						sender.sendMessage(ChatColor.YELLOW + "The group inherits an Exception permission from group: " + permissionResult.owner.getName());
 					} else {
 						sender.sendMessage(ChatColor.YELLOW + "The user inherits the permission from group: " + permissionResult.owner.getName());
 					}
