@@ -10,6 +10,9 @@ import java.util.Map;
 public class BookPager
 {
 	private final transient IText text;
+	final double pageMax = 254;
+	final double charMax = 18.5;
+	final int lineMax = 12;
 
 	public BookPager(final IText text)
 	{
@@ -41,16 +44,20 @@ public class BookPager
 			}
 		}
 
+		List<String> pages = new ArrayList<String>();
+		double pageLength = 0;
+
 		for (int lineNo = chapterstart; lineNo < chapterend; lineNo += 1)
 		{
-			String pageLine = "\u00a70" + lines.get(lineNo);
+			String pageLine = lines.get(lineNo);
 			String tempLine;
-			final double max = 18;
+
 			final int lineLength = pageLine.length();
 			double length = 0;
 			int pointer = 0;
 			int start = 0;
 			double weight = 1;
+			boolean forcePageEnd = false;
 
 			while (pointer < lineLength)
 			{
@@ -63,23 +70,39 @@ public class BookPager
 					continue;
 				}
 
-				if (length >= max || (letter == '\u00a7' && length + 1 >= max))
+				if (pageLength >= pageMax)
+				{
+					length = charMax;
+					pageLength = 0;
+					forcePageEnd = true;
+				}
+
+				if (length >= charMax || (letter == '\u00a7' && length + 1 >= charMax))
 				{
 					int pos = pointer;
+					int rollback = 0;
 					while (pos > start && pageLine.charAt(pos) != ' ' && pageLine.charAt(pos) != "\n".charAt(0))
 					{
+						rollback++;
 						pos--;
 					}
 					if (pos != start)
 					{
 						pointer = pos;
+						pageLength -= rollback;
 					}
 
 					tempLine = pageLine.substring(start, pointer);
 					pageLines.add(tempLine);
+					buildPage(pages, pageLines, forcePageEnd);
+					forcePageEnd = false;
+
 					start = pointer;
 					length = 0;
+					pageLength += 1;
 				}
+
+				pageLength++;
 
 				if (letter == '\u00a7' && pointer + 1 < lineLength)
 				{
@@ -94,17 +117,26 @@ public class BookPager
 					}
 					pointer++;
 				}
-				else if (letter == 'i' || letter == '.' || letter == ',')
+				else if (letter == 'i' || letter == '.' || letter == ',' || letter == '!' || letter == ':' || letter == ';' || letter == '|')
 				{
-					length += (0.4 * weight);
+					length += (0.34 * weight);
 				}
-				else if (letter == 'l')
+				else if (letter == 'l' || letter == '\'' || letter == '`')
 				{
-					length += (0.6 * weight);
+					length += (0.53 * weight);
 				}
-				else if (letter == ' ' || letter == 't')
+				else if (letter == ' ' || letter == 't' || letter == 'I' || letter == '[' || letter == ']')
 				{
-					length += (0.7 * weight);
+					length += (0.69 * weight);
+				}
+				else if (letter == 'f' || letter == 'k' || letter == '"' || letter == '*'
+						 || letter == '(' || letter == ')' || letter == '{' || letter == '}' || letter == '<' || letter == '>')
+				{
+					length += (0.85 * weight);
+				}
+				else if (letter == '@' || letter == '~')
+				{
+					length += (1.2 * weight);
 				}
 				else
 				{
@@ -117,21 +149,25 @@ public class BookPager
 			{
 				tempLine = pageLine.substring(start, lineLength);
 				pageLines.add(tempLine);
+				buildPage(pages, pageLines, false);
 			}
 		}
 
-		List<String> pages = new ArrayList<String>();
-		for (int count = 0; count < pageLines.size(); count += 12)
+		buildPage(pages, pageLines, true);
+		return pages;
+	}
+
+	void buildPage(List<String> pages, List<String> lines, boolean override)
+	{
+		if (override || lines.size() > lineMax)
 		{
 			StringBuilder newPage = new StringBuilder();
-			for (int i = count; i < count + 12 && i < pageLines.size(); i++)
+			for (String aline : lines)
 			{
-				newPage.append(pageLines.get(i)).append("\n");
+				newPage.append(aline).append("\n");
 			}
-
 			pages.add(newPage.toString());
+			lines.clear();
 		}
-
-		return pages;
 	}
 }
