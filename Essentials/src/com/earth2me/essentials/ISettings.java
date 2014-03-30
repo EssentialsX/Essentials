@@ -29,6 +29,10 @@ public interface ISettings extends IConf
 	String getChatFormat(String group);
 
 	int getChatRadius();
+	
+	char getChatShout();
+	
+	char getChatQuestion();
 
 	BigDecimal getCommandCost(IEssentialsCommand cmd);
 

@@ -94,6 +94,34 @@ public class Settings implements net.ess3.api.ISettings
 	{
 		return chatRadius;
 	}
+	
+	// #easteregg
+	private char chatShout = '!';
+
+	private char _getChatShout()
+	{
+		return config.getString("chat.shout", "!").charAt(0);
+	}
+
+	@Override
+	public char getChatShout()
+	{
+		return chatShout;
+	}
+	
+	// #easteregg
+	private char chatQuestion = '?';
+
+	private char _getChatQuestion()
+	{
+		return config.getString("chat.question", "?").charAt(0);
+	}
+
+	@Override
+	public char getChatQuestion()
+	{
+		return chatQuestion;
+	}
 
 	private boolean teleportSafety;
 
@@ -524,6 +552,8 @@ public class Settings implements net.ess3.api.ISettings
 		disablePrefix = _disablePrefix();
 		disableSuffix = _disableSuffix();
 		chatRadius = _getChatRadius();
+		chatShout = _getChatShout();
+		chatQuestion = _getChatQuestion();
 		commandCosts = _getCommandCosts();
 		socialSpyCommands = _getSocialSpyCommands();
 		warnOnBuildDisallow = _warnOnBuildDisallow();
