@@ -266,8 +266,8 @@ public class LocationUtil
 	public static Location getSafeDestination(final IUser user, final Location loc) throws Exception
 	{
 		if (loc.getWorld().equals(user.getBase().getWorld())
-			&& (user.getBase().getGameMode() == GameMode.CREATIVE
-				|| (user.isGodModeEnabled() && user.getBase().getAllowFlight())))
+			&& ((user.getBase().getGameMode() == GameMode.CREATIVE
+				|| user.isGodModeEnabled()) && user.getBase().getAllowFlight()))
 		{
 			if (shouldFly(loc))
 			{
