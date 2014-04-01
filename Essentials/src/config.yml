@@ -35,8 +35,8 @@ change-displayname: true
 # The value of change-displayname (above) has to be true.
 #change-playerlist: true
 
-# When essentialschat.jar isn't used, force essentials to add the prefix and suffix from permission plugins to displayname.
-# This setting is ignored if essentialschat.jar is used, and defaults to 'true'.
+# When EssentialsChat.jar isn't used, force essentials to add the prefix and suffix from permission plugins to displayname.
+# This setting is ignored if EssentialsChat.jar is used, and defaults to 'true'.
 # The value of change-displayname (above) has to be true.
 # Do not edit this setting unless you know what you are doing!
 #add-prefix-suffix: false
@@ -60,7 +60,7 @@ teleport-invulnerability: 4
 heal-cooldown: 60
 
 # What to prevent from /item and /give.
-# e.g item-spawn-blacklist: 46,11,10
+# e.g item-spawn-blacklist: 10,11,46
 item-spawn-blacklist:
 
 # Set this to true if you want permission based item spawn rules.
@@ -86,7 +86,7 @@ spawnmob-limit: 10
 # Shall we notify users when using /lightning?
 warn-on-smite: true
 
-# motd and rules are now configured in the files motd.txt and rules.txt.
+# The motd and rules are now configured in the files motd.txt and rules.txt.
 
 # When a command conflicts with another plugin, by default, Essentials will try to force the OTHER plugin to take priority.
 # Commands in this list, will tell Essentials to 'not give up' the command to other plugins.
@@ -94,7 +94,7 @@ warn-on-smite: true
 #
 # If you have two plugin with the same command and you wish to force Essentials to take over, you need an alias.
 # To force essentials to take 'god' alias 'god' to 'egod'.
-# See http://wiki.bukkit.org/Commands.yml#aliases for more information
+# See http://wiki.bukkit.org/Commands.yml#aliases for more information.
 
 overridden-commands:
 #  - god
@@ -222,7 +222,7 @@ player-commands:
 # Note: All items MUST be followed by a quantity!
 # All kit names should be lower case, and will be treated as lower in permissions/costs.
 # Syntax: - itemID[:DataValue/Durability] Amount [Enchantment:Level].. [itemmeta:value]...
-# For Item meta information visit http://wiki.ess3.net/wiki/Item_Meta
+# For Item Meta information visit http://wiki.ess3.net/wiki/Item_Meta
 # 'delay' refers to the cooldown between how often you can use each kit, measured in seconds.
 # For more information, visit http://wiki.ess3.net/wiki/Kits
 kits:
@@ -258,7 +258,7 @@ kits:
 # Essentials Sign Control
 # See http://wiki.ess3.net/wiki/Sign_Tutorial for instructions on how to use these.
 # To enable signs, remove # symbol. To disable all signs, comment/remove each sign.
-# Essentials Colored sign support will be enabled when any sign types are enabled.
+# Essentials colored sign support will be enabled when any sign types are enabled.
 # Color is not an actual sign, it's for enabling using color codes on signs, when the correct permissions are given.
 
 enabledSigns:
@@ -321,11 +321,11 @@ debug: false
 # For more information, visit http://wiki.ess3.net/wiki/Locale
 #locale: en
 
-# Turn off god mode when people exit.
+# Turn off god mode when people leave the server.
 remove-god-on-disconnect: false
 
 # Auto-AFK
-# After this timeout in seconds, the user will be set as afk.
+# After this timeout in seconds, the user will be set as AFK.
 # This feature requires the player to have essentials.afk.auto node.
 # Set to -1 for no timeout.
 auto-afk: 300
@@ -336,21 +336,21 @@ auto-afk: 300
 # Set to -1 for no timeout.
 auto-afk-kick: -1
 
-# Set this to true, if you want to freeze the player, if he is afk.
-# Other players or monsters can't push him out of afk mode then.
-# This will also enable temporary god mode for the afk player.
-# The player has to use the command /afk to leave the afk mode.
+# Set this to true, if you want to freeze the player, if the player is AFK.
+# Other players or monsters can't push the player out of AFK mode then.
+# This will also enable temporary god mode for the AFK player.
+# The player has to use the command /afk to leave the AFK mode.
 freeze-afk-players: false
 
-# When the player is afk, should he be able to pickup items?
+# When the player is AFK, should he be able to pickup items?
 # Enable this, when you don't want people idling in mob traps.
 disable-item-pickup-while-afk: false
 
 # This setting controls if a player is marked as active on interaction.
-# When this setting is false, you will need to manually un-AFK using the /afk command.
+# When this setting is false, the player would need to manually un-AFK using the /afk command.
 cancel-afk-on-interact: true
 
-# Should we automatically remove afk status when the player moves?
+# Should we automatically remove afk status when a player moves?
 # Player will be removed from AFK on chat/command regardless of this setting.
 # Disable this to reduce server lag.
 cancel-afk-on-move: true
@@ -358,7 +358,7 @@ cancel-afk-on-move: true
 # You can disable the death messages of Minecraft here.
 death-messages: true
 
-# Should operators be able to join and part silently.
+# Should operators be able to join and part silently?
 # You can control this with permissions if it is enabled.
 allow-silent-join-quit: false
 
@@ -399,7 +399,7 @@ repair-enchanted: true
 # Warning: Mixing and overleveling some enchantments can cause issues with clients, servers and plugins.
 unsafe-enchantments: false
 
-#Do you want essentials to keep track of previous location for /back in the teleport listener?
+#Do you want Essentials to keep track of previous location for /back in the teleport listener?
 #If you set this to true any plugin that uses teleport will have the previous location registered.
 register-back-in-listener: false
 
@@ -446,8 +446,9 @@ sethome-multiple:
   staff: 10
 
 # In this example someone with 'essentials.sethome.multiple' and 'essentials.sethome.multiple.vip' will have 5 homes.
+# Remember, they MUST have both permission nodes in order to be able to set multiple homes.
 
-# Set timeout in seconds for players to accept tpa before request is cancelled.
+# Set the timeout, in seconds for players to accept a tpa before the request is cancelled.
 # Set to 0 for no timeout.
 tpa-accept-cancellation: 120
 
@@ -459,7 +460,7 @@ tpa-accept-cancellation: 120
 
 # For more information, visit http://wiki.ess3.net/wiki/Essentials_Economy
 
-# Defines the balance with which new players begin.  Defaults to 0.
+# Defines the balance with which new players begin. Defaults to 0.
 starting-balance: 0
 
 # worth-# defines the value of an item when it is sold to the server via /sell.
@@ -474,6 +475,8 @@ command-costs:
   #kit-tools: 1500
 
 # Set this to a currency symbol you want to use.
+# Remember, if you want to use special characters in this document, 
+# such as accented letters, you MUST save the file as UTF-8, not ANSI.
 currency-symbol: '$'
 
 # Set the maximum amount of money a player can have.
@@ -508,7 +511,7 @@ hide-permissionless-help: true
 # +------------------------------------------------------+ #
 ############################################################
 
-# This section requires essentialschat.jar to work.
+# This section requires the EssentialsChat.jar to work.
 
 chat:
 
@@ -521,7 +524,6 @@ chat:
 
   # Chat formatting can be done in two ways, you can either define a standard format for all chat.
   # Or you can give a group specific chat format, to give some extra variation.
-  # If set to the default chat format which "should" be compatible with ichat.
   # For more information of chat formatting, check out the wiki: http://wiki.ess3.net/wiki/Chat_Formatting
 
   format: '<{DISPLAYNAME}> {MESSAGE}'
@@ -539,7 +541,7 @@ chat:
 # +------------------------------------------------------+ #
 ############################################################
 
-# This section requires essentialsprotect.jar to work.
+# This section requires the EssentialsProtect.jar to work.
 
 protect:
 
@@ -654,7 +656,7 @@ protect:
 # +------------------------------------------------------+ #
 ############################################################
 
-  # This section requires essentialsantibuild.jar to work.
+  # This section requires the EssentialsAntiBuild.jar to work.
 
   # Disable various default physics and behaviors
   # For more information, visit http://wiki.ess3.net/wiki/AntiBuild
@@ -729,4 +731,4 @@ respawn-listener-priority: high
 # When users die, should they respawn at their first home or bed, instead of the spawnpoint?
 respawn-at-home: false
 
-# End of File <-- No seriously, you're done with configuration.
+# End of file <-- No seriously, you're done with configuration.
