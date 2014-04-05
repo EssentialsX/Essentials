@@ -4,9 +4,9 @@
             <actionName>build-with-dependencies</actionName>
             <reactor>also-make</reactor>
             <goals>
-                <goal>clean</goal>
                 <goal>package</goal>
                 <goal>dependency:copy</goal>
+                
                 
                 
             </goals>
