@@ -30,7 +30,6 @@ public class OfflinePlayer implements Player
 	private final transient IEssentials ess;
 	private transient Location location = new Location(null, 0, 0, 0, 0, 0);
 	private transient World world;
-	private final transient UUID uniqueId = UUID.randomUUID();
 	@Delegate(types = org.bukkit.OfflinePlayer.class)
 	private transient org.bukkit.OfflinePlayer base;
 	private boolean allowFlight = false;
@@ -634,12 +633,6 @@ public class OfflinePlayer implements Player
 	public boolean sendChunkChange(Location lctn, int i, int i1, int i2, byte[] bytes)
 	{
 		return true;
-	}
-
-	@Override
-	public UUID getUniqueId()
-	{
-		return uniqueId;
 	}
 
 	@Override
@@ -1431,6 +1424,12 @@ public class OfflinePlayer implements Player
 
 	@Override
 	public <T extends Projectile> T launchProjectile(Class<? extends T> type, Vector vector)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void sendSignChange(Location arg0, String[] arg1) throws IllegalArgumentException
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}

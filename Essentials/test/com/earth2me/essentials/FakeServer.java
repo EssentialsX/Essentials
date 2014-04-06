@@ -784,6 +784,12 @@ public class FakeServer implements Server
 			{
 				throw new UnsupportedOperationException("Not supported yet.");
 			}
+
+			@Override
+			public UUID getUniqueId()
+			{
+				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+			}
 		};
 	}
 
@@ -1200,5 +1206,17 @@ public class FakeServer implements Server
 	public BanList getBanList(BanList.Type arg0)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public Player getPlayer(UUID arg0)
+	{
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public OfflinePlayer getOfflinePlayer(UUID arg0)
+	{
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 }
