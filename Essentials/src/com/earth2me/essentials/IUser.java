@@ -8,7 +8,6 @@ import java.util.Set;
 import net.ess3.api.ITeleport;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.Location;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 

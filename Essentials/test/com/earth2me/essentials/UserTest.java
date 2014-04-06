@@ -2,8 +2,6 @@ package com.earth2me.essentials;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import junit.framework.TestCase;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.Location;

@@ -83,7 +83,6 @@ public class SignEnchant extends EssentialsSign
 	protected boolean onSignInteract(ISign sign, User player, String username, IEssentials ess) throws SignException, ChargeException
 	{
 		final ItemStack search = sign.getLine(1).equals("*") || sign.getLine(1).equalsIgnoreCase("any") ? null : getItemStack(sign.getLine(1), 1, ess);
-		int slot = -1;
 		final Trade charge = getTrade(sign, 3, ess);
 		charge.isAffordableFor(player);
 		final String[] enchantLevel = sign.getLine(2).split(":");

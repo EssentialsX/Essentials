@@ -233,7 +233,6 @@ public class Settings implements net.ess3.api.ISettings
 			final ConfigurationSection newSection = new MemoryConfiguration();
 			for (String command : section.getKeys(false))
 			{
-				PluginCommand cmd = ess.getServer().getPluginCommand(command);
 				if (command.charAt(0) == '/')
 				{
 					ess.getLogger().warning("Invalid command cost. '" + command + "' should not start with '/'.");

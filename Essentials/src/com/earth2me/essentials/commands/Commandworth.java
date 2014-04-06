@@ -72,7 +72,6 @@ public class Commandworth extends EssentialsCommand
 	@Override
 	public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
-		String type = "";
 		if (args.length < 1)
 		{
 			throw new NotEnoughArgumentsException();

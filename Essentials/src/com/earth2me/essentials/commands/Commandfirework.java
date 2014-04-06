@@ -32,7 +32,6 @@ import org.bukkit.util.Vector;
 
 public class Commandfirework extends EssentialsCommand
 {
-	private final transient Pattern splitPattern = Pattern.compile("[:+',;.]");
 
 	public Commandfirework()
 	{

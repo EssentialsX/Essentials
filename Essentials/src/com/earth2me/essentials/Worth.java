@@ -13,7 +13,6 @@ import org.bukkit.inventory.ItemStack;
 
 public class Worth implements IConf
 {
-	private static final Logger logger = Logger.getLogger("Essentials");
 	private final EssentialsConf config;
 
 	public Worth(File dataFolder)

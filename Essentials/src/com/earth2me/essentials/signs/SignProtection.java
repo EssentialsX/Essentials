@@ -63,6 +63,7 @@ public class SignProtection extends EssentialsSign
 			{
 				if (b.getLocation().equals(ignoredBlock.getLocation()))
 				{
+					//TODO: What?
 				}
 			}
 			if (protectedBlocks.contains(b.getType()))

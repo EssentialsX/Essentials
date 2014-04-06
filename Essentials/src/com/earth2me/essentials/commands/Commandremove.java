@@ -179,7 +179,6 @@ public class Commandremove extends EssentialsCommand
 							e.remove();
 							removed++;
 						}
-						;
 						break;
 					case ARROWS:
 						if (e instanceof Projectile)

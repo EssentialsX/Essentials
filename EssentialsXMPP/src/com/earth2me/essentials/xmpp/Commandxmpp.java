@@ -5,7 +5,6 @@ import com.earth2me.essentials.Console;
 import com.earth2me.essentials.commands.EssentialsCommand;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import org.bukkit.Server;
-import org.bukkit.entity.Player;
 
 
 public class Commandxmpp extends EssentialsCommand

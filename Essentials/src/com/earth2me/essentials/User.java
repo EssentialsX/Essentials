@@ -794,7 +794,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 
 	public void updateThrottle()
 	{
-		lastThrottledAction = System.currentTimeMillis();;
+		lastThrottledAction = System.currentTimeMillis();
 	}
 
 	public boolean isFlyClickJump()

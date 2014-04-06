@@ -3,7 +3,6 @@ package com.earth2me.essentials.antibuild;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -11,7 +10,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class EssentialsAntiBuild extends JavaPlugin implements IAntiBuild
 {
-	private static final Logger LOGGER = Logger.getLogger("Minecraft");
 	private final transient Map<AntiBuildConfig, Boolean> settingsBoolean = new EnumMap<AntiBuildConfig, Boolean>(AntiBuildConfig.class);
 	private final transient Map<AntiBuildConfig, List<Integer>> settingsList = new EnumMap<AntiBuildConfig, List<Integer>>(AntiBuildConfig.class);
 	private transient EssentialsConnect ess = null;
