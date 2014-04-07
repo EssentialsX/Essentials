@@ -3944,6 +3944,10 @@ hardclay,172,0
 hclay,172,0
 coalblock,173,0
 blockcoal,173,0
+coblock,173,0
+blockco,173,0
+coalb,173,0
+bcoal,173,0
 packedice,174,0
 packice,174,0
 solidice,174,0
