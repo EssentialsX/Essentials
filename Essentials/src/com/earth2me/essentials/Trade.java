@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.craftbukkit.SetExpFix;
+import com.earth2me.essentials.utils.NumberUtil;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -28,7 +29,7 @@ public class Trade
 	private final transient BigDecimal money;
 	private final transient ItemStack itemStack;
 	private final transient Integer exp;
-	private final transient com.earth2me.essentials.IEssentials ess;
+	private final transient IEssentials ess;
 
 
 	public enum TradeType
@@ -59,7 +60,7 @@ public class Trade
 	@Deprecated
 	public Trade(final double money, final com.earth2me.essentials.IEssentials ess)
 	{
-		this(null, null, BigDecimal.valueOf(money), null, null, ess);
+		this(null, null, BigDecimal.valueOf(money), null, null, (IEssentials)ess);
 	}
 
 	public Trade(final BigDecimal money, final IEssentials ess)
@@ -77,7 +78,7 @@ public class Trade
 		this(null, null, null, null, exp, ess);
 	}
 
-	private Trade(final String command, final Trade fallback, final BigDecimal money, final ItemStack item, final Integer exp, final com.earth2me.essentials.IEssentials ess)
+	private Trade(final String command, final Trade fallback, final BigDecimal money, final ItemStack item, final Integer exp, final IEssentials ess)
 	{
 		this.command = command;
 		this.fallbackTrade = fallback;
@@ -99,7 +100,7 @@ public class Trade
 			&& getMoney().signum() > 0
 			&& !user.canAfford(getMoney()))
 		{
-			throw new ChargeException(tl("notEnoughMoney"));
+			throw new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(getMoney(), ess)));
 		}
 
 		if (getItemStack() != null
@@ -113,7 +114,7 @@ public class Trade
 			&& (money = getCommandCost(user)).signum() > 0
 			&& !user.canAfford(money))
 		{
-			throw new ChargeException(tl("notEnoughMoney"));
+			throw new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(money, ess)));
 		}
 
 		if (exp != null && exp > 0
@@ -223,7 +224,7 @@ public class Trade
 			}
 			if (!user.canAfford(getMoney()) && getMoney().signum() > 0)
 			{
-				throw new ChargeException(tl("notEnoughMoney"));
+				throw new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(getMoney(), ess)));
 			}
 			user.takeMoney(getMoney());
 		}
@@ -245,7 +246,7 @@ public class Trade
 			final BigDecimal cost = getCommandCost(user);
 			if (!user.canAfford(cost) && cost.signum() > 0)
 			{
-				throw new ChargeException(tl("notEnoughMoney"));
+				throw new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(cost, ess)));
 			}
 			user.takeMoney(cost);
 		}

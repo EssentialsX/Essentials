@@ -172,7 +172,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		}
 		else
 		{
-			throw new ChargeException(tl("notEnoughMoney"));
+			throw new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(value, ess)));
 		}
 	}
 
