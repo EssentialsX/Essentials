@@ -31,11 +31,11 @@ import org.bukkit.util.Vector;
 
 public class EssentialsConf extends YamlConfiguration
 {
-	private static final Logger LOGGER = Logger.getLogger("Essentials");
-	private final File configFile;
-	private String templateName = null;
-	private Class<?> resourceClass = EssentialsConf.class;
-	private static final Charset UTF8 = Charset.forName("UTF-8");
+	protected static final Logger LOGGER = Logger.getLogger("Essentials");
+	protected final File configFile;
+	protected String templateName = null;
+	protected static final Charset UTF8 = Charset.forName("UTF-8");
+	private Class<?> resourceClass = EssentialsConf.class;	
 	private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
 	private final AtomicInteger pendingDiskWrites = new AtomicInteger(0);
 
@@ -95,10 +95,14 @@ public class EssentialsConf extends YamlConfiguration
 				LOGGER.log(Level.SEVERE, null, ex);
 			}
 		}
-
+				
 		if (!configFile.exists())
 		{
-			if (templateName != null)
+			if (legacyFileExists())
+			{
+				convertLegacyFile();
+			}
+			else if (templateName != null)
 			{
 				LOGGER.log(Level.INFO, tl("creatingConfigFromTemplate", configFile.toString()));
 				createFromTemplate();
@@ -166,6 +170,7 @@ public class EssentialsConf extends YamlConfiguration
 			finally
 			{
 				inputStream.close();
+				save();
 			}
 		}
 		catch (IOException ex)
@@ -178,6 +183,16 @@ public class EssentialsConf extends YamlConfiguration
 			configFile.renameTo(broken);
 			LOGGER.log(Level.SEVERE, "The file " + configFile.toString() + " is broken, it has been renamed to " + broken.toString(), ex.getCause());
 		}
+	}
+	
+	public boolean legacyFileExists()
+	{
+		return false;
+	}
+	
+	public void convertLegacyFile()
+	{
+		LOGGER.log(Level.SEVERE, "Unable to import legacy config file.");
 	}
 
 	private void createFromTemplate()

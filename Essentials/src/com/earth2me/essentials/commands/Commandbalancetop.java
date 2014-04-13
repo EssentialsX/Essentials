@@ -119,7 +119,7 @@ public class Commandbalancetop extends EssentialsCommand
 					}
 					else
 					{
-						for (String u : ess.getUserMap().getAllUniqueUsers())
+						for (UUID u : ess.getUserMap().getAllUniqueUsers())
 						{
 							final User user = ess.getUserMap().getUser(u);
 							if (user != null)

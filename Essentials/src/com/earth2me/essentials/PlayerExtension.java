@@ -1,6 +1,9 @@
 package com.earth2me.essentials;
 
 import lombok.Delegate;
+import org.bukkit.Location;
+import org.bukkit.Server;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Entity;
@@ -13,12 +16,6 @@ import org.bukkit.permissions.ServerOperator;
 
 public class PlayerExtension
 {
-	@Delegate(types =
-	{
-		Player.class, Entity.class, CommandSender.class, ServerOperator.class,
-		HumanEntity.class, ConfigurationSerializable.class, LivingEntity.class,
-		Permissible.class
-	})
 	protected Player base;
 
 	public PlayerExtension(final Player base)
@@ -34,5 +31,18 @@ public class PlayerExtension
 	public final Player setBase(final Player base)
 	{
 		return this.base = base;
+	}
+	
+	public Server getServer()
+	{
+		return base.getServer();
+	}
+	
+	public World getWorld() {
+		return base.getWorld();
+	}
+	
+	public Location getLocation() {
+		return base.getLocation();
 	}
 }

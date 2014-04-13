@@ -4,6 +4,7 @@ import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import java.util.List;
+import java.util.UUID;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -26,7 +27,7 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand
 
 		if (matchWildcards && searchTerm.contentEquals("**"))
 		{
-			for (String sUser : ess.getUserMap().getAllUniqueUsers())
+			for (UUID sUser : ess.getUserMap().getAllUniqueUsers())
 			{
 				final User matchedUser = ess.getUser(sUser);
 				updatePlayer(server, sender, matchedUser, commandArgs);

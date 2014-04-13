@@ -9,6 +9,7 @@ import org.bukkit.Server;
 import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
+import java.util.UUID;
 
 
 public class Commandmail extends EssentialsCommand
@@ -154,9 +155,9 @@ public class Commandmail extends EssentialsCommand
 		@Override
 		public void run()
 		{
-			for (String username : ess.getUserMap().getAllUniqueUsers())
+			for (UUID userid : ess.getUserMap().getAllUniqueUsers())
 			{
-				User user = ess.getUserMap().getUser(username);
+				User user = ess.getUserMap().getUser(userid);
 				if (user != null)
 				{
 					user.addMail(message);

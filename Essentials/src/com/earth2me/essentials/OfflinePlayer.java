@@ -35,6 +35,13 @@ public class OfflinePlayer implements Player
 	private boolean allowFlight = false;
 	private boolean isFlying = false;
 
+	public OfflinePlayer(final UUID uuid, final IEssentials ess)
+	{
+		this.ess = ess;
+		this.world = ess.getServer().getWorlds().get(0);
+		this.base = ess.getServer().getOfflinePlayer(uuid);
+	}
+	
 	public OfflinePlayer(final String name, final IEssentials ess)
 	{
 		this.ess = ess;

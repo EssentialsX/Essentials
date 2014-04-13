@@ -135,7 +135,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	}
 
 	@Override
-	public void giveMoney(final BigDecimal value)  throws MaxMoneyException
+	public void giveMoney(final BigDecimal value) throws MaxMoneyException
 	{
 		giveMoney(value, (CommandSource)null);
 	}
@@ -225,7 +225,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 
 	public void dispose()
 	{
-		this.base = new OfflinePlayer(getName(), ess);
+		this.base = new OfflinePlayer(base.getUniqueId(), ess);
 	}
 
 	@Override
@@ -493,7 +493,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		{
 			return;
 		}
-		
+
 		this.getBase().setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") ? true : set);
 		if (set && !isAfk())
 		{
@@ -505,7 +505,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		}
 		_setAfk(set);
 	}
-	
+
 	public boolean toggleAfk()
 	{
 		setAfk(!isAfk());

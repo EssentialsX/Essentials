@@ -40,6 +40,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -102,7 +103,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 
 	public Essentials()
 	{
-
 	}
 
 	public Essentials(final Server server)
@@ -187,12 +187,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 				settings = new Settings(this);
 				confList.add(settings);
 				execTimer.mark("Settings");
-				upgrade.afterSettings();
-				execTimer.mark("Upgrade2");
-				i18n.updateLocale(settings.getLocale());
 				userMap = new UserMap(this);
 				confList.add(userMap);
 				execTimer.mark("Init(Usermap)");
+				upgrade.afterSettings();
+				execTimer.mark("Upgrade2");
+				i18n.updateLocale(settings.getLocale());
 				warps = new Warps(getServer(), this.getDataFolder());
 				confList.add(warps);
 				execTimer.mark("Init(Spawn/Warp)");
@@ -634,7 +634,14 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 	@Override
 	public User getUser(final String base)
 	{
-		return getOfflineUser((String)base);
+		return getOfflineUser(base);
+	}
+
+	//This will return null if there is not a match.
+	@Override
+	public User getUser(final UUID base)
+	{
+		return userMap.getUser(base);
 	}
 
 	//This will return null if there is not a match.
@@ -664,7 +671,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 			return null;
 		}
 
-		User user = userMap.getUser(base.getName());
+		User user = userMap.getUser(base.getUniqueId());
 
 		if (user == null)
 		{

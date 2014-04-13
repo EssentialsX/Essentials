@@ -18,7 +18,7 @@ import org.bukkit.inventory.ItemStack;
 public abstract class UserData extends PlayerExtension implements IConf
 {
 	protected final transient IEssentials ess;
-	private final EssentialsConf config;
+	private final EssentialsUserConf config;
 	private final File folder;
 
 	protected UserData(Player base, IEssentials ess)
@@ -30,7 +30,20 @@ public abstract class UserData extends PlayerExtension implements IConf
 		{
 			folder.mkdirs();
 		}
-		config = new EssentialsConf(new File(folder, StringUtil.sanitizeFileName(base.getName()) + ".yml"));
+
+		String filename;
+		try
+		{
+			filename = base.getUniqueId().toString();
+		}
+		catch (Throwable ex)
+		{
+			ess.getLogger().warning("Falling back to old username system for " + base.getName());
+			filename = base.getName();
+		}
+
+		ess.getLogger().info("Loading yml: " + filename + ".yml");
+		config = new EssentialsUserConf(base.getName(), base.getUniqueId(), new File(folder, filename + ".yml"));
 		reloadConfig();
 	}
 
@@ -71,6 +84,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		nickname = _getNickname();
 		ignoredPlayers = _getIgnoredPlayers();
 		logoutLocation = _getLogoutLocation();
+		lastAccountName = _getLastAccountName();
 	}
 	private BigDecimal money;
 
@@ -799,6 +813,25 @@ public abstract class UserData extends PlayerExtension implements IConf
 	{
 		return isNPC;
 	}
+	private String lastAccountName = null;
+
+	public String getLastAccountName()
+	{
+		return lastAccountName;
+	}
+
+	public String _getLastAccountName()
+	{
+		return config.getString("lastAccountName", null);
+	}
+
+	public void setLastAccountName(String lastAccountName)
+	{
+		this.lastAccountName = lastAccountName;
+		config.setProperty("lastAccountName", lastAccountName);
+		config.save();
+		ess.getUserMap().trackUUID(base.getUniqueId(), lastAccountName);
+	}
 
 	public void setNPC(boolean set)
 	{
@@ -870,12 +903,6 @@ public abstract class UserData extends PlayerExtension implements IConf
 	{
 		kitTimestamps.put(name.toLowerCase(Locale.ENGLISH), time);
 		config.setProperty("timestamps.kits", kitTimestamps);
-		config.save();
-	}
-
-	public void trackUUID()
-	{
-		config.setProperty("uuid", base.getUniqueId().toString());
 		config.save();
 	}
 

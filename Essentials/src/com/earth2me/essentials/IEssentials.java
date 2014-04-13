@@ -7,6 +7,7 @@ import com.earth2me.essentials.metrics.Metrics;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
 import java.util.List;
+import java.util.UUID;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -26,6 +27,8 @@ public interface IEssentials extends Plugin
 
 	@Deprecated
 	User getUser(Object base);
+	
+	User getUser(UUID base);
 	
 	User getUser(String base);
 	

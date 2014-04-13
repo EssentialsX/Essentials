@@ -10,6 +10,7 @@ import com.earth2me.essentials.utils.NumberUtil;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.Sound;
@@ -269,7 +270,7 @@ public class Commandessentials extends EssentialsCommand
 			public void run()
 			{
 				Long currTime = System.currentTimeMillis();
-				for (String u : userMap.getAllUniqueUsers())
+				for (UUID u : userMap.getAllUniqueUsers())
 				{
 					final User user = ess.getUserMap().getUser(u);
 					if (user == null)
