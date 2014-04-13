@@ -41,7 +41,7 @@ public class Commandfirework extends EssentialsCommand
 	@Override
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		final ItemStack stack = user.getItemInHand();
+		final ItemStack stack = user.getBase().getItemInHand();
 		if (stack.getType() == Material.FIREWORK)
 		{
 			if (args.length > 0)
@@ -95,7 +95,7 @@ public class Commandfirework extends EssentialsCommand
 						FireworkMeta fmeta = (FireworkMeta)stack.getItemMeta();
 						if (direction)
 						{
-							final Vector vector = user.getEyeLocation().getDirection().multiply(0.070);
+							final Vector vector = user.getBase().getEyeLocation().getDirection().multiply(0.070);
 							if (fmeta.getPower() > 1)
 							{
 								fmeta.setPower(1);

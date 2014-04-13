@@ -60,10 +60,10 @@ public class Commandgod extends EssentialsToggleCommand
 		{
 			user.setGodModeEnabled(enabled);
 
-			if (enabled && user.getHealth() != 0)
+			if (enabled && user.getBase().getHealth() != 0)
 			{
-				user.setHealth(user.getMaxHealth());
-				user.setFoodLevel(20);
+				user.getBase().setHealth(user.getBase().getMaxHealth());
+				user.getBase().setFoodLevel(20);
 			}
 
 			user.sendMessage(tl("godMode", enabled ? tl("enabled") : tl("disabled")));

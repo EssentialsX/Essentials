@@ -76,55 +76,55 @@ public class ToggleTest extends TestCase
 	{
 		User user = ess.getUser(base1);
 
-		assertFalse(user.getAllowFlight());
+		assertFalse(user.getBase().getAllowFlight());
 
 		runCommand("fly", user, new String[]
 				{
 					"on"
 				});
-		assertTrue(user.getAllowFlight());
+		assertTrue(user.getBase().getAllowFlight());
 
 		runCommand("fly", user, new String[]
 				{
 					"on"
 				});
-		assertTrue(user.getAllowFlight());
+		assertTrue(user.getBase().getAllowFlight());
 
 		runCommand("fly", user, new String[]
 				{
 					"off"
 				});
-		assertFalse(user.getAllowFlight());
+		assertFalse(user.getBase().getAllowFlight());
 
 		runCommand("fly", user, new String[]
 				{
 					"off"
 				});
-		assertFalse(user.getAllowFlight());
+		assertFalse(user.getBase().getAllowFlight());
 
 		runCommand("fly", user, new String[]
 				{
 				});
-		assertTrue(user.getAllowFlight());
+		assertTrue(user.getBase().getAllowFlight());
 
 		runCommand("fly", user, new String[]
 				{
 				});
-		assertFalse(user.getAllowFlight());
+		assertFalse(user.getBase().getAllowFlight());
 	}
 
 	public void testFlyDisOnToggle() throws Exception
 	{
 		User user = ess.getUser(base1);
 
-		user.setAllowFlight(true);
-		user.setFlying(true);
-		assertTrue(user.isFlying());
+		user.getBase().setAllowFlight(true);
+		user.getBase().setFlying(true);
+		assertTrue(user.getBase().isFlying());
 		runCommand("fly", user, new String[]
 				{
 				});
-		assertFalse(user.getAllowFlight());
-		assertFalse(user.isFlying());
+		assertFalse(user.getBase().getAllowFlight());
+		assertFalse(user.getBase().isFlying());
 	}
 
 	public void testGodToggle() throws Exception
@@ -172,98 +172,98 @@ public class ToggleTest extends TestCase
 	{
 		User user = ess.getUser(base1);
 
-		assertFalse(user.getAllowFlight());
+		assertFalse(user.getBase().getAllowFlight());
 
 		runConsoleCommand("fly", new String[]
 				{
 					base1.getName(), "on"
 				});
-		assertTrue(user.getAllowFlight());
+		assertTrue(user.getBase().getAllowFlight());
 
 		runConsoleCommand("fly", new String[]
 				{
 					base1.getName(), "on"
 				});
-		assertTrue(user.getAllowFlight());
+		assertTrue(user.getBase().getAllowFlight());
 
 		runConsoleCommand("fly", new String[]
 				{
 					base1.getName(), "off"
 				});
-		assertFalse(user.getAllowFlight());
+		assertFalse(user.getBase().getAllowFlight());
 
 		runConsoleCommand("fly", new String[]
 				{
 					base1.getName(), "off"
 				});
-		assertFalse(user.getAllowFlight());
+		assertFalse(user.getBase().getAllowFlight());
 
 		runConsoleCommand("fly", new String[]
 				{
 					base1.getName()
 				});
-		assertTrue(user.getAllowFlight());
+		assertTrue(user.getBase().getAllowFlight());
 
 		runConsoleCommand("fly", new String[]
 				{
 					base1.getName()
 				});
-		assertFalse(user.getAllowFlight());
+		assertFalse(user.getBase().getAllowFlight());
 	}
 
 	public void testAliasesToggle() throws Exception
 	{
 		User user = ess.getUser(base1);
 
-		assertFalse(user.getAllowFlight());
+		assertFalse(user.getBase().getAllowFlight());
 
 		runConsoleCommand("fly", new String[]
 				{
 					base1.getName(), "enable"
 				});
-		assertTrue(user.getAllowFlight());
+		assertTrue(user.getBase().getAllowFlight());
 
 		runConsoleCommand("fly", new String[]
 				{
 					base1.getName(), "enable"
 				});
-		assertTrue(user.getAllowFlight());
+		assertTrue(user.getBase().getAllowFlight());
 
 		runConsoleCommand("fly", new String[]
 				{
 					base1.getName(), "disable"
 				});
-		assertFalse(user.getAllowFlight());
+		assertFalse(user.getBase().getAllowFlight());
 
 		runConsoleCommand("fly", new String[]
 				{
 					base1.getName(), "disable"
 				});
-		assertFalse(user.getAllowFlight());
+		assertFalse(user.getBase().getAllowFlight());
 
 		runConsoleCommand("fly", new String[]
 				{
 					base1.getName(), "1"
 				});
-		assertTrue(user.getAllowFlight());
+		assertTrue(user.getBase().getAllowFlight());
 
 		runConsoleCommand("fly", new String[]
 				{
 					base1.getName(), "1"
 				});
-		assertTrue(user.getAllowFlight());
+		assertTrue(user.getBase().getAllowFlight());
 
 		runConsoleCommand("fly", new String[]
 				{
 					base1.getName(), "0"
 				});
-		assertFalse(user.getAllowFlight());
+		assertFalse(user.getBase().getAllowFlight());
 
 		runConsoleCommand("fly", new String[]
 				{
 					base1.getName(), "0"
 				});
-		assertFalse(user.getAllowFlight());
+		assertFalse(user.getBase().getAllowFlight());
 
 	}
 }

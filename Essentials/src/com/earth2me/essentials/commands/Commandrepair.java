@@ -41,7 +41,7 @@ public class Commandrepair extends EssentialsCommand
 
 	public void repairHand(User user) throws Exception
 	{
-		final ItemStack item = user.getItemInHand();
+		final ItemStack item = user.getBase().getItemInHand();
 		if (item == null || item.getType().isBlock() || item.getDurability() == 0)
 		{
 			throw new Exception(tl("repairInvalidType"));
@@ -62,21 +62,21 @@ public class Commandrepair extends EssentialsCommand
 		repairItem(item);
 
 		charge.charge(user);
-		user.updateInventory();
+		user.getBase().updateInventory();
 		user.sendMessage(tl("repair", itemName.replace('_', ' ')));
 	}
 
 	public void repairAll(User user) throws Exception
 	{
 		final List<String> repaired = new ArrayList<String>();
-		repairItems(user.getInventory().getContents(), user, repaired);
+		repairItems(user.getBase().getInventory().getContents(), user, repaired);
 
 		if (user.isAuthorized("essentials.repair.armor"))
 		{
-			repairItems(user.getInventory().getArmorContents(), user, repaired);
+			repairItems(user.getBase().getInventory().getArmorContents(), user, repaired);
 		}
 		
-		user.updateInventory();
+		user.getBase().updateInventory();
 		if (repaired.isEmpty())
 		{
 			throw new Exception(tl("repairNone"));

@@ -296,13 +296,13 @@ public class KeywordReplacer implements IText
 				case IP:
 					if (user != null)
 					{
-						replacer = user.getAddress() == null || user.getAddress().getAddress() == null ? "" : user.getAddress().getAddress().toString();
+						replacer = user.getBase().getAddress() == null || user.getBase().getAddress().getAddress() == null ? "" : user.getBase().getAddress().getAddress().toString();
 					}
 					break;
 				case ADDRESS:
 					if (user != null)
 					{
-						replacer = user.getAddress() == null ? "" : user.getAddress().toString();
+						replacer = user.getBase().getAddress() == null ? "" : user.getBase().getAddress().toString();
 					}
 					break;
 				case PLUGINS:

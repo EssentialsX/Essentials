@@ -33,7 +33,7 @@ public class Commandsudo extends EssentialsCommand
 			{
 				throw new Exception(tl("sudoExempt"));
 			}
-			user.chat(getFinalArg(args, 1).substring(2));
+			user.getBase().chat(getFinalArg(args, 1).substring(2));
 			return;
 		}
 		final String command = args[1];

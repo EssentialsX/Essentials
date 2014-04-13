@@ -27,14 +27,14 @@ public class Commandinvsee extends EssentialsCommand
 		if (args.length > 1 && user.isAuthorized("essentials.invsee.equip"))
 		{
 			inv = server.createInventory(invUser.getBase(), 9, "Equipped");
-			inv.setContents(invUser.getInventory().getArmorContents());
+			inv.setContents(invUser.getBase().getInventory().getArmorContents());
 		}
 		else
 		{
-			inv = invUser.getInventory();
+			inv = invUser.getBase().getInventory();
 		}
-		user.closeInventory();
-		user.openInventory(inv);
+		user.getBase().closeInventory();
+		user.getBase().openInventory(inv);
 		user.setInvSee(true);
 	}
 }

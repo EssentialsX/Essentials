@@ -25,7 +25,7 @@ public class Commandtempban extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 		final User user = getPlayer(server, args, 0, true, true);
-		if (!user.isOnline())
+		if (!user.getBase().isOnline())
 		{
 			if (sender.isPlayer()
 				&& !ess.getUser(sender.getPlayer()).isAuthorized("essentials.tempban.offline"))
@@ -57,8 +57,8 @@ public class Commandtempban extends EssentialsCommand
 		final String banReason = tl("tempBanned", DateUtil.formatDateDiff(banTimestamp), senderName);
 		user.setBanReason(banReason);
 		user.setBanTimeout(banTimestamp);
-		user.setBanned(true);
-		user.kickPlayer(banReason);
+		user.getBase().setBanned(true);
+		user.getBase().kickPlayer(banReason);
 
 		final String message = tl("playerBanned", senderName, user.getName(), banReason, DateUtil.formatDateDiff(banTimestamp));
 		server.getLogger().log(Level.INFO, message);

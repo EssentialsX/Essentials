@@ -47,7 +47,7 @@ public class EssentialsSpawnPlayerListener implements Listener
 		if (ess.getSettings().getRespawnAtHome())
 		{
 			Location home;
-			final Location bed = user.getBedSpawnLocation();
+			final Location bed = user.getBase().getBedSpawnLocation();
 			if (bed != null)
 			{
 				home = bed;
@@ -101,7 +101,7 @@ public class EssentialsSpawnPlayerListener implements Listener
 			@Override
 			public void run()
 			{
-				if (!user.isOnline()) {
+				if (!user.getBase().isOnline()) {
 					return;
 				}
 

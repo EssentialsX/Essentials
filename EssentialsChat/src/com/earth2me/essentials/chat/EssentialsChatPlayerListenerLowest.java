@@ -47,7 +47,7 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer
 		event.setMessage(FormatUtil.formatMessage(user, "essentials.chat", event.getMessage()));
 		String group = user.getGroup();
 		String world = user.getWorld().getName();
-		Team team = user.getScoreboard().getPlayerTeam(user.getBase());
+		Team team = user.getBase().getScoreboard().getPlayerTeam(user.getBase());
 
 		String format = ess.getSettings().getChatFormat(group);
 		format = format.replace("{0}", group);

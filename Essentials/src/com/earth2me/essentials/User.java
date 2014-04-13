@@ -51,7 +51,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		teleport = new Teleport(this, ess);
 		if (isAfk())
 		{
-			afkPosition = this.getBase().getLocation();
+			afkPosition = this.getLocation();
 		}
 		if (this.getBase().isOnline())
 		{
@@ -237,13 +237,13 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	@Override
 	public void setLastLocation()
 	{
-		setLastLocation(this.getBase().getLocation());
+		setLastLocation(this.getLocation());
 	}
 
 	@Override
 	public void setLogoutLocation()
 	{
-		setLogoutLocation(this.getBase().getLocation());
+		setLogoutLocation(this.getLocation());
 	}
 
 	@Override
@@ -258,7 +258,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		}
 		else
 		{
-			teleportLocation = here ? player.getBase().getLocation() : this.getBase().getLocation();
+			teleportLocation = here ? player.getLocation() : this.getLocation();
 		}
 	}
 
@@ -497,7 +497,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		this.getBase().setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") ? true : set);
 		if (set && !isAfk())
 		{
-			afkPosition = this.getBase().getLocation();
+			afkPosition = this.getLocation();
 		}
 		else if (!set && isAfk())
 		{
@@ -643,7 +643,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	@Override
 	public boolean isGodModeEnabled()
 	{
-		return (super.isGodModeEnabled() && !ess.getSettings().getNoGodWorlds().contains(this.getBase().getLocation().getWorld().getName()))
+		return (super.isGodModeEnabled() && !ess.getSettings().getNoGodWorlds().contains(this.getLocation().getWorld().getName()))
 			   || (isAfk() && ess.getSettings().getFreezeAfkPlayers());
 	}
 

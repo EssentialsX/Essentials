@@ -114,7 +114,7 @@ public class Worth implements IConf
 		}
 
 		int max = 0;
-		for (ItemStack s : user.getInventory().getContents())
+		for (ItemStack s : user.getBase().getInventory().getContents())
 		{
 			if (s == null || !s.isSimilar(is))
 			{

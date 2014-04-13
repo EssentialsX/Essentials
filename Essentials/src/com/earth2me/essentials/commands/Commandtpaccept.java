@@ -28,7 +28,7 @@ public class Commandtpaccept extends EssentialsCommand
 			throw new Exception(tl("noPendingRequest"));
 		}
 
-		if (!requester.isOnline())
+		if (!requester.getBase().isOnline())
 		{
 			throw new Exception(tl("noPendingRequest"));
 		}

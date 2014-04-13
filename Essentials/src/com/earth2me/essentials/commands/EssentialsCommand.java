@@ -90,7 +90,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 		final User user = ess.getUser(searchTerm);
 		if (user != null)
 		{
-			if (!getOffline && !user.isOnline())
+			if (!getOffline && !user.getBase().isOnline())
 			{
 				throw new PlayerNotFoundException();
 			}

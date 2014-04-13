@@ -40,7 +40,7 @@ public class Commandspeed extends EssentialsCommand
 		boolean isBypass = user.isAuthorized("essentials.speed.bypass");
 		if (args.length == 1)
 		{
-			isFly = flyPermCheck(user, user.isFlying());
+			isFly = flyPermCheck(user, user.getBase().isFlying());
 			speed = getMoveSpeed(args[0]);
 		}
 		else
@@ -60,12 +60,12 @@ public class Commandspeed extends EssentialsCommand
 
 		if (isFly)
 		{
-			user.setFlySpeed(getRealMoveSpeed(speed, isFly, isBypass));
+			user.getBase().setFlySpeed(getRealMoveSpeed(speed, isFly, isBypass));
 			user.sendMessage(tl("moveSpeed", tl("flying"), speed, user.getDisplayName()));
 		}
 		else
 		{
-			user.setWalkSpeed(getRealMoveSpeed(speed, isFly, isBypass));
+			user.getBase().setWalkSpeed(getRealMoveSpeed(speed, isFly, isBypass));
 			user.sendMessage(tl("moveSpeed", tl("walking"), speed, user.getDisplayName()));
 		}
 	}

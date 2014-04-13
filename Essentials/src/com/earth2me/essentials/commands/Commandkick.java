@@ -42,7 +42,7 @@ public class Commandkick extends EssentialsCommand
 		String kickReason = args.length > 1 ? getFinalArg(args, 1) : tl("kickDefault");
 		kickReason = FormatUtil.replaceFormat(kickReason.replace("\\n", "\n").replace("|", "\n"));
 
-		target.kickPlayer(kickReason);
+		target.getBase().kickPlayer(kickReason);
 		final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
 
 		server.getLogger().log(Level.INFO, tl("playerKicked", senderName, target.getName(), kickReason));

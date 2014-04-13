@@ -204,11 +204,11 @@ public class Kit
 				final boolean allowOversizedStacks = user.isAuthorized("essentials.oversizedstacks");
 				if (allowOversizedStacks)
 				{
-					overfilled = InventoryWorkaround.addOversizedItems(user.getInventory(), ess.getSettings().getOversizedStackSize(), metaStack.getItemStack());
+					overfilled = InventoryWorkaround.addOversizedItems(user.getBase().getInventory(), ess.getSettings().getOversizedStackSize(), metaStack.getItemStack());
 				}
 				else
 				{
-					overfilled = InventoryWorkaround.addItems(user.getInventory(), metaStack.getItemStack());
+					overfilled = InventoryWorkaround.addItems(user.getBase().getInventory(), metaStack.getItemStack());
 				}
 				for (ItemStack itemStack : overfilled.values())
 				{
@@ -223,7 +223,7 @@ public class Kit
 					spew = true;
 				}
 			}
-			user.updateInventory();
+			user.getBase().updateInventory();
 			if (spew)
 			{
 				user.sendMessage(tl("kitInvFull"));
@@ -231,7 +231,7 @@ public class Kit
 		}
 		catch (Exception e)
 		{
-			user.updateInventory();
+			user.getBase().updateInventory();
 			ess.getLogger().log(Level.WARNING, e.getMessage());
 			throw new Exception(tl("kitError2"), e);
 		}

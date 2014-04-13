@@ -15,6 +15,6 @@ public class Commandworkbench extends EssentialsCommand
 	@Override
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
-		user.openWorkbench(null, true);
+		user.getBase().openWorkbench(null, true);
 	}
 }

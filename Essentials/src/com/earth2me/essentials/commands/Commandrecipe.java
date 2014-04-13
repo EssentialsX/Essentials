@@ -88,9 +88,9 @@ public class Commandrecipe extends EssentialsCommand
 		if (sender.isPlayer())
 		{
 			final User user = ess.getUser(sender.getPlayer());
-			user.closeInventory();
+			user.getBase().closeInventory();
 			user.setRecipeSee(true);
-			final InventoryView view = user.openWorkbench(null, true);
+			final InventoryView view = user.getBase().openWorkbench(null, true);
 			final String[] recipeShape = recipe.getShape();
 			final Map<Character, ItemStack> ingredientMap = recipe.getIngredientMap();
 			for (int j = 0; j < recipeShape.length; j++)
@@ -148,7 +148,7 @@ public class Commandrecipe extends EssentialsCommand
 		{
 			final User user = ess.getUser(sender.getPlayer());
 			user.setRecipeSee(true);
-			final InventoryView view = user.openWorkbench(null, true);
+			final InventoryView view = user.getBase().openWorkbench(null, true);
 			for (int i = 0; i < ingredients.size(); i++)
 			{
 				view.setItem(i + 1, ingredients.get(i));

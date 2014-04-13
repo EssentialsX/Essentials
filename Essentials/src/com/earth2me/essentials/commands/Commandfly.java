@@ -49,15 +49,15 @@ public class Commandfly extends EssentialsToggleCommand
 	{
 		if (enabled == null)
 		{
-			enabled = !user.getAllowFlight();
+			enabled = !user.getBase().getAllowFlight();
 		}
 
-		user.setFallDistance(0f);
-		user.setAllowFlight(enabled);
+		user.getBase().setFallDistance(0f);
+		user.getBase().setAllowFlight(enabled);
 		
-		if (!user.getAllowFlight())
+		if (!user.getBase().getAllowFlight())
 		{
-			user.setFlying(false);
+			user.getBase().setFlying(false);
 		}
 
 		user.sendMessage(tl("flyMode", tl(enabled ? "enabled" : "disabled"), user.getDisplayName()));

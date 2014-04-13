@@ -50,8 +50,8 @@ public class Commandfireball extends EssentialsCommand
 				type = LargeFireball.class;
 			}
 		}
-		final Vector direction = user.getEyeLocation().getDirection().multiply(speed);
-		projectile = (Projectile)user.getWorld().spawn(user.getEyeLocation().add(direction.getX(), direction.getY(), direction.getZ()), type);
+		final Vector direction = user.getBase().getEyeLocation().getDirection().multiply(speed);
+		projectile = (Projectile)user.getWorld().spawn(user.getBase().getEyeLocation().add(direction.getX(), direction.getY(), direction.getZ()), type);
 		projectile.setShooter(user.getBase());
 		projectile.setVelocity(direction);
 	}

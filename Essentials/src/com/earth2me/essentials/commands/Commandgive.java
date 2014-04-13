@@ -100,11 +100,11 @@ public class Commandgive extends EssentialsCommand
 
 		if (giveTo.isAuthorized("essentials.oversizedstacks"))
 		{
-			leftovers = InventoryWorkaround.addOversizedItems(giveTo.getInventory(), ess.getSettings().getOversizedStackSize(), stack);
+			leftovers = InventoryWorkaround.addOversizedItems(giveTo.getBase().getInventory(), ess.getSettings().getOversizedStackSize(), stack);
 		}
 		else
 		{
-			leftovers = InventoryWorkaround.addItems(giveTo.getInventory(), stack);
+			leftovers = InventoryWorkaround.addItems(giveTo.getBase().getInventory(), stack);
 		}
 
 		for (ItemStack item : leftovers.values())
@@ -112,6 +112,6 @@ public class Commandgive extends EssentialsCommand
 			sender.sendMessage(tl("giveSpawnFailure", item.getAmount(), itemName, giveTo.getDisplayName()));
 		}
 
-		giveTo.updateInventory();
+		giveTo.getBase().updateInventory();
 	}
 }

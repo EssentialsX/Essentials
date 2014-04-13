@@ -57,7 +57,7 @@ public class EssentialsAntiBuildListener implements Listener
 		final String blockPerm = "essentials.build." + action + "." + blockId;
 		final String dataPerm = blockPerm + ":" + data;
 
-		if (user.isPermissionSet(dataPerm))
+		if (user.getBase().isPermissionSet(dataPerm))
 		{
 			return user.isAuthorized(dataPerm);
 		}
@@ -304,7 +304,7 @@ public class EssentialsAntiBuildListener implements Listener
 			if (!metaPermCheck(user, "drop", item.getTypeId(), item.getDurability()))
 			{
 				event.setCancelled(true);
-				user.updateInventory();
+				user.getBase().updateInventory();
 				if (ess.getSettings().warnOnBuildDisallow())
 				{
 					user.sendMessage(tl("antiBuildDrop", item.getType().toString()));

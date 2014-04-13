@@ -71,10 +71,10 @@ public class Commandgamemode extends EssentialsCommand
 		}
 		if (gameMode == null)
 		{
-			gameMode = user.getGameMode() == GameMode.SURVIVAL ? GameMode.CREATIVE : user.getGameMode() == GameMode.CREATIVE ? GameMode.ADVENTURE : GameMode.SURVIVAL;
+			gameMode = user.getBase().getGameMode() == GameMode.SURVIVAL ? GameMode.CREATIVE : user.getBase().getGameMode() == GameMode.CREATIVE ? GameMode.ADVENTURE : GameMode.SURVIVAL;
 		}
-		user.setGameMode(gameMode);
-		user.sendMessage(tl("gameMode", tl(user.getGameMode().toString().toLowerCase(Locale.ENGLISH)), user.getDisplayName()));
+		user.getBase().setGameMode(gameMode);
+		user.sendMessage(tl("gameMode", tl(user.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH)), user.getDisplayName()));
 	}
 
 	private void gamemodeOtherPlayers(final Server server, final CommandSource sender, final GameMode gameMode, final String name) throws NotEnoughArgumentsException, PlayerNotFoundException
@@ -95,8 +95,8 @@ public class Commandgamemode extends EssentialsCommand
 				continue;
 			}
 			foundUser = true;
-			player.setGameMode(gameMode);
-			sender.sendMessage(tl("gameMode", tl(player.getGameMode().toString().toLowerCase(Locale.ENGLISH)), player.getDisplayName()));
+			player.getBase().setGameMode(gameMode);
+			sender.sendMessage(tl("gameMode", tl(player.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH)), player.getDisplayName()));
 		}
 		if (!foundUser)
 		{

@@ -24,15 +24,15 @@ public class SignHeal extends EssentialsSign
 	@Override
 	protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException
 	{
-		if (player.getHealth() == 0)
+		if (player.getBase().getHealth() == 0)
 		{
 			throw new SignException(tl("healDead"));
 		}
 		final Trade charge = getTrade(sign, 1, ess);
 		charge.isAffordableFor(player);
-		player.setHealth(20);
-		player.setFoodLevel(20);
-		player.setFireTicks(0);
+		player.getBase().setHealth(20);
+		player.getBase().setFoodLevel(20);
+		player.getBase().setFireTicks(0);
 		player.sendMessage(tl("youAreHealed"));
 		charge.charge(player);
 		Trade.log("Sign", "Heal", "Interact", username, null, username, charge, sign.getBlock().getLocation(), ess);

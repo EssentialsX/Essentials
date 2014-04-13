@@ -225,7 +225,7 @@ public class EssentialsPlayerListener implements Listener
 			@Override
 			public void run()
 			{
-				if (!user.isOnline())
+				if (!user.getBase().isOnline())
 				{
 					return;
 				}
@@ -242,14 +242,14 @@ public class EssentialsPlayerListener implements Listener
 						Player toVanish = ess.getServer().getPlayerExact(p);
 						if (toVanish != null && toVanish.isOnline())
 						{
-							user.hidePlayer(toVanish);
+							user.getBase().hidePlayer(toVanish);
 						}
 					}
 				}
 				
 				if (user.isAuthorized("essentials.sleepingignored"))
 				{
-					user.setSleepingIgnored(true);
+					user.getBase().setSleepingIgnored(true);
 				}
 				
 				if ((ess.getSettings().allowSilentJoinQuit() && user.isAuthorized("essentials.silentjoin")) || message == null)
@@ -305,16 +305,16 @@ public class EssentialsPlayerListener implements Listener
 				
 				if (user.isAuthorized("essentials.fly.safelogin"))
 				{
-					user.setFallDistance(0);
+					user.getBase().setFallDistance(0);
 					if (LocationUtil.shouldFly(user.getLocation()))
 					{
-						user.setAllowFlight(true);
-						user.setFlying(true);
-						user.sendMessage(tl("flyMode", tl("enabled"), user.getDisplayName()));
+						user.getBase().setAllowFlight(true);
+						user.getBase().setFlying(true);
+						user.getBase().sendMessage(tl("flyMode", tl("enabled"), user.getDisplayName()));
 					}					
 				}
-				user.setFlySpeed(0.1f);
-				user.setWalkSpeed(0.2f);
+				user.getBase().setFlySpeed(0.1f);
+				user.getBase().setWalkSpeed(0.2f);
 				
 			}
 		});
@@ -326,12 +326,12 @@ public class EssentialsPlayerListener implements Listener
 		Location loc = user.getHome(user.getLocation());
 		if (loc == null)
 		{
-			loc = user.getBedSpawnLocation();
+			loc = user.getBase().getBedSpawnLocation();
 		}
 		if (loc != null)
 		{
 			final Location updateLoc = loc;
-			user.setCompassTarget(updateLoc);
+			user.getBase().setCompassTarget(updateLoc);
 		}
 	}
 	
@@ -364,7 +364,7 @@ public class EssentialsPlayerListener implements Listener
 		
 		final User user = ess.getUser(event.getPlayer());
 		
-		if (event.getResult() == Result.KICK_BANNED || user.isBanned())
+		if (event.getResult() == Result.KICK_BANNED || user.getBase().isBanned())
 		{
 			final boolean banExpired = user.checkBanTimeout(System.currentTimeMillis());
 			if (!banExpired)
@@ -419,8 +419,8 @@ public class EssentialsPlayerListener implements Listener
 		final ItemStack stack = new ItemStack(Material.EGG, 1);
 		if (user.hasUnlimited(stack))
 		{
-			user.getInventory().addItem(stack);
-			user.updateInventory();
+			user.getBase().getInventory().addItem(stack);
+			user.getBase().updateInventory();
 		}
 	}
 	
@@ -436,7 +436,7 @@ public class EssentialsPlayerListener implements Listener
 				@Override
 				public void run()
 				{
-					user.updateInventory();
+					user.getBase().updateInventory();
 				}
 			});
 		}
@@ -469,34 +469,34 @@ public class EssentialsPlayerListener implements Listener
 	public void onPlayerChangedWorldFlyReset(final PlayerChangedWorldEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
-		if (user.getGameMode() != GameMode.CREATIVE && !user.isAuthorized("essentials.fly"))
+		if (user.getBase().getGameMode() != GameMode.CREATIVE && !user.isAuthorized("essentials.fly"))
 		{
-			user.setFallDistance(0f);
-			user.setAllowFlight(false);
+			user.getBase().setFallDistance(0f);
+			user.getBase().setAllowFlight(false);
 		}
 		if (!user.isAuthorized("essentials.speed"))
 		{
-			user.setFlySpeed(0.1f);
-			user.setWalkSpeed(0.2f);
+			user.getBase().setFlySpeed(0.1f);
+			user.getBase().setWalkSpeed(0.2f);
 		}
 		else
 		{
-			if (user.getFlySpeed() > ess.getSettings().getMaxFlySpeed() && !user.isAuthorized("essentials.speed.bypass"))
+			if (user.getBase().getFlySpeed() > ess.getSettings().getMaxFlySpeed() && !user.isAuthorized("essentials.speed.bypass"))
 			{
-				user.setFlySpeed((float)ess.getSettings().getMaxFlySpeed());
+				user.getBase().setFlySpeed((float)ess.getSettings().getMaxFlySpeed());
 			}
 			else
 			{
-				user.setFlySpeed(user.getFlySpeed() * 0.99999f);
+				user.getBase().setFlySpeed(user.getBase().getFlySpeed() * 0.99999f);
 			}
 			
-			if (user.getWalkSpeed() > ess.getSettings().getMaxWalkSpeed() && !user.isAuthorized("essentials.speed.bypass"))
+			if (user.getBase().getWalkSpeed() > ess.getSettings().getMaxWalkSpeed() && !user.isAuthorized("essentials.speed.bypass"))
 			{
-				user.setWalkSpeed((float)ess.getSettings().getMaxWalkSpeed());
+				user.getBase().setWalkSpeed((float)ess.getSettings().getMaxWalkSpeed());
 			}
 			else
 			{
-				user.setWalkSpeed(user.getWalkSpeed() * 0.99999f);
+				user.getBase().setWalkSpeed(user.getBase().getWalkSpeed() * 0.99999f);
 			}
 		}
 	}
@@ -534,7 +534,7 @@ public class EssentialsPlayerListener implements Listener
 				User player = ess.getUser(event.getPlayer());
 				if (player.isAuthorized("essentials.sethome.bed"))
 				{
-					player.setBedSpawnLocation(event.getClickedBlock().getLocation());
+					player.getBase().setBedSpawnLocation(event.getClickedBlock().getLocation());
 					player.sendMessage(tl("bedSet", player.getLocation().getWorld().getName(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ()));
 				}
 			}
@@ -616,7 +616,7 @@ public class EssentialsPlayerListener implements Listener
 			else if (command.startsWith("c:"))
 			{
 				used = true;
-				user.chat(command.substring(2));
+				user.getBase().chat(command.substring(2));
 			}
 			else
 			{
@@ -664,7 +664,7 @@ public class EssentialsPlayerListener implements Listener
 				final User invOwner = ess.getUser((Player)invHolder);
 				if (user.isInvSee() && (!user.isAuthorized("essentials.invsee.modify")
 										|| invOwner.isAuthorized("essentials.invsee.preventmodify")
-										|| !invOwner.isOnline()))
+										|| !invOwner.getBase().isOnline()))
 				{
 					event.setCancelled(true);
 					refreshPlayer = user.getBase();

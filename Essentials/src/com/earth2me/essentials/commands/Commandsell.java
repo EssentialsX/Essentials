@@ -95,13 +95,13 @@ public class Commandsell extends EssentialsCommand
 		//TODO: Prices for Enchantments
 		final ItemStack ris = is.clone();
 		ris.setAmount(amount);
-		if (!user.getInventory().containsAtLeast(ris, amount))
+		if (!user.getBase().getInventory().containsAtLeast(ris, amount))
 		{
 			// This should never happen.
 			throw new IllegalStateException("Trying to remove more items than are available.");
 		}
-		user.getInventory().removeItem(ris);
-		user.updateInventory();
+		user.getBase().getInventory().removeItem(ris);
+		user.getBase().updateInventory();
 		Trade.log("Command", "Sell", "Item", user.getName(), new Trade(ris, ess), user.getName(), new Trade(result, ess), user.getLocation(), ess);
 		user.giveMoney(result);
 		user.sendMessage(tl("itemSold", NumberUtil.displayCurrency(result, ess), amount, is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(worth, ess)));

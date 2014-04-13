@@ -23,7 +23,7 @@ public class Commandpowertool extends EssentialsCommand
 	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		final String command = getFinalArg(args, 0);
-		final ItemStack itemStack = user.getItemInHand();
+		final ItemStack itemStack = user.getBase().getItemInHand();
 		powertool(server, user.getSource(), user, commandLabel, itemStack, command);
 	}
 

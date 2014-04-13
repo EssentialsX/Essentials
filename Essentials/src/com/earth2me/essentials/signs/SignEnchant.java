@@ -105,7 +105,7 @@ public class SignEnchant extends EssentialsSign
 			level = enchantment.getMaxLevel();
 		}
 
-		final ItemStack playerHand = player.getItemInHand();
+		final ItemStack playerHand = player.getBase().getItemInHand();
 		if (playerHand == null
 			|| playerHand.getAmount() != 1
 			|| (playerHand.containsEnchantment(enchantment)
@@ -154,7 +154,7 @@ public class SignEnchant extends EssentialsSign
 
 		charge.charge(player);
 		Trade.log("Sign", "Enchant", "Interact", username, charge, username, charge, sign.getBlock().getLocation(), ess);
-		player.updateInventory();
+		player.getBase().updateInventory();
 		return true;
 	}
 }

@@ -171,15 +171,15 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb
 
 		if (args.length < 1)
 		{
-			is.add(user.getItemInHand());
+			is.add(user.getBase().getItemInHand());
 		}
 		else if (args[0].equalsIgnoreCase("hand"))
 		{
-			is.add(user.getItemInHand());
+			is.add(user.getBase().getItemInHand());
 		}
 		else if (args[0].equalsIgnoreCase("inventory") || args[0].equalsIgnoreCase("invent") || args[0].equalsIgnoreCase("all"))
 		{
-			for (ItemStack stack : user.getInventory().getContents())
+			for (ItemStack stack : user.getBase().getInventory().getContents())
 			{
 				if (stack == null || stack.getType() == Material.AIR)
 				{
@@ -190,7 +190,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb
 		}
 		else if (args[0].equalsIgnoreCase("blocks"))
 		{
-			for (ItemStack stack : user.getInventory().getContents())
+			for (ItemStack stack : user.getBase().getInventory().getContents())
 			{
 				if (stack == null || stack.getTypeId() > 255 || stack.getType() == Material.AIR)
 				{

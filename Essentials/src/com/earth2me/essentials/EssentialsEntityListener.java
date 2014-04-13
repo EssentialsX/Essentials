@@ -42,13 +42,13 @@ public class EssentialsEntityListener implements Listener
 			}
 			else if (eDefend instanceof Ageable)
 			{
-				final ItemStack hand = attacker.getItemInHand();
+				final ItemStack hand = attacker.getBase().getItemInHand();
 				if (hand != null && hand.getType() == Material.MILK_BUCKET)
 				{
 					((Ageable)eDefend).setBaby();
 					hand.setType(Material.BUCKET);
-					attacker.setItemInHand(hand);
-					attacker.updateInventory();
+					attacker.getBase().setItemInHand(hand);
+					attacker.getBase().updateInventory();
 					event.setCancelled(true);
 				}
 			}
@@ -97,7 +97,7 @@ public class EssentialsEntityListener implements Listener
 
 	private void onPlayerVsPlayerPowertool(final EntityDamageByEntityEvent event, final Player defender, final User attacker)
 	{
-		final List<String> commandList = attacker.getPowertool(attacker.getItemInHand());
+		final List<String> commandList = attacker.getPowertool(attacker.getBase().getItemInHand());
 		if (commandList != null && !commandList.isEmpty())
 		{
 			for (final String tempCommand : commandList)
@@ -180,8 +180,8 @@ public class EssentialsEntityListener implements Listener
 			{
 				if (user.isGodModeEnabledRaw())
 				{
-					user.setFoodLevel(20);
-					user.setSaturation(10);
+					user.getBase().setFoodLevel(20);
+					user.getBase().setSaturation(10);
 				}
 				event.setCancelled(true);
 			}

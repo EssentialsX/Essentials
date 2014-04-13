@@ -46,7 +46,7 @@ public class Commandhome extends EssentialsCommand
 		{
 			if ("bed".equalsIgnoreCase(homeName) && user.isAuthorized("essentials.home.bed"))
 			{
-				final Location bed = player.getBedSpawnLocation();
+				final Location bed = player.getBase().getBedSpawnLocation();
 				if (bed != null)
 				{
 					user.getTeleport().teleport(bed, charge, TeleportCause.COMMAND);
@@ -61,7 +61,7 @@ public class Commandhome extends EssentialsCommand
 		}
 		catch (NotEnoughArgumentsException e)
 		{
-			Location bed = player.getBedSpawnLocation();
+			Location bed = player.getBase().getBedSpawnLocation();
 			final List<String> homes = player.getHomes();
 			if (homes.isEmpty() && player.equals(user))
 			{
@@ -97,7 +97,7 @@ public class Commandhome extends EssentialsCommand
 
 	private String getHomeLimit(final User player)
 	{
-		if (!player.isOnline())
+		if (!player.getBase().isOnline())
 		{
 			return "?";
 		}

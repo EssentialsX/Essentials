@@ -101,14 +101,14 @@ public class Commandptime extends EssentialsCommand
 
 		for (User user : users)
 		{
-			if (user.getPlayerTimeOffset() == 0)
+			if (user.getBase().getPlayerTimeOffset() == 0)
 			{
 				sender.sendMessage(tl("pTimeNormal", user.getName()));
 			}
 			else
 			{
-				String time = DescParseTickFormat.format(user.getPlayerTime());
-				if (!user.isPlayerTimeRelative())
+				String time = DescParseTickFormat.format(user.getBase().getPlayerTime());
+				if (!user.getBase().isPlayerTimeRelative())
 				{
 					sender.sendMessage(tl("pTimeCurrentFixed", user.getName(), time));
 				}
@@ -131,7 +131,7 @@ public class Commandptime extends EssentialsCommand
 			// Reset
 			for (User user : users)
 			{
-				user.resetPlayerTime();
+				user.getBase().resetPlayerTime();
 			}
 		}
 		else
@@ -140,14 +140,14 @@ public class Commandptime extends EssentialsCommand
 			for (User user : users)
 			{
 				final World world = user.getWorld();
-				long time = user.getPlayerTime();
+				long time = user.getBase().getPlayerTime();
 				time -= time % 24000;
 				time += 24000 + ticks;
 				if (relative)
 				{
 					time -= world.getTime();
 				}
-				user.setPlayerTime(time, relative);
+				user.getBase().setPlayerTime(time, relative);
 			}
 		}
 

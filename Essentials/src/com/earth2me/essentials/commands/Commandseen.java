@@ -94,7 +94,7 @@ public class Commandseen extends EssentialsCommand
 		}
 		if (extra)
 		{
-			sender.sendMessage(tl("whoisIPAddress", user.getAddress().getAddress().toString()));
+			sender.sendMessage(tl("whoisIPAddress", user.getBase().getAddress().getAddress().toString()));
 		}
 	}
 
@@ -109,7 +109,7 @@ public class Commandseen extends EssentialsCommand
 		{
 			sender.sendMessage(tl("userUnknown", user.getName()));
 		}
-		if (user.isBanned())
+		if (user.getBase().isBanned())
 		{
 			sender.sendMessage(tl("whoisBanned", showBan ? user.getBanReason() : tl("true")));
 		}

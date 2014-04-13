@@ -55,7 +55,7 @@ public class SignFree extends EssentialsSign
 		for (int i = 0; i < 36; i++) {
 			invent.addItem(item);
 		}
-		player.openInventory(invent);
+		player.getBase().openInventory(invent);
 		Trade.log("Sign", "Free", "Interact", username, null, username, new Trade(item, ess), sign.getBlock().getLocation(), ess);
 		return true;
 	}

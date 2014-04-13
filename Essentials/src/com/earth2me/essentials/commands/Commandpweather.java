@@ -79,13 +79,13 @@ public class Commandpweather extends EssentialsCommand
 
 		for (User user : users)
 		{
-			if (user.getPlayerWeather() == null)
+			if (user.getBase().getPlayerWeather() == null)
 			{
 				sender.sendMessage(tl("pWeatherNormal", user.getName()));
 			}
 			else
 			{
-				sender.sendMessage(tl("pWeatherCurrent", user.getName(), user.getPlayerWeather().toString().toLowerCase(Locale.ENGLISH)));
+				sender.sendMessage(tl("pWeatherCurrent", user.getName(), user.getBase().getPlayerWeather().toString().toLowerCase(Locale.ENGLISH)));
 			}
 		}
 	}
@@ -111,7 +111,7 @@ public class Commandpweather extends EssentialsCommand
 		{
 			for (User user : users)
 			{
-				user.resetPlayerWeather();
+				user.getBase().resetPlayerWeather();
 			}
 
 			sender.sendMessage(tl("pWeatherReset", msg));
@@ -125,7 +125,7 @@ public class Commandpweather extends EssentialsCommand
 
 			for (User user : users)
 			{
-				user.setPlayerWeather(weatherAliases.get(weatherType));
+				user.getBase().setPlayerWeather(weatherAliases.get(weatherType));
 			}
 			sender.sendMessage(tl("pWeatherSet", weatherType, msg.toString()));
 		}

@@ -103,7 +103,7 @@ public class EssentialsSign
 		}
 		try
 		{
-			if (user.isDead() || !(user.isAuthorized("essentials.signs." + signName.toLowerCase(Locale.ENGLISH) + ".use")
+			if (user.getBase().isDead() || !(user.isAuthorized("essentials.signs." + signName.toLowerCase(Locale.ENGLISH) + ".use")
 								   || user.isAuthorized("essentials.signs.use." + signName.toLowerCase(Locale.ENGLISH))))
 			{
 				return false;
@@ -361,7 +361,7 @@ public class EssentialsSign
 			return new Trade(amount, ess);
 		}
 		final ItemStack item = getItemStack(itemType, 1, ess);
-		final int amount = Math.min(getIntegerPositive(getSignText(sign, amountIndex)), item.getType().getMaxStackSize() * player.getInventory().getSize());
+		final int amount = Math.min(getIntegerPositive(getSignText(sign, amountIndex)), item.getType().getMaxStackSize() * player.getBase().getInventory().getSize());
 		if (item.getType() == Material.AIR || amount < 1)
 		{
 			throw new SignException(tl("moreThanZero"));
