@@ -564,9 +564,9 @@ public class FakeServer implements Server
 		players.add(base1);
 	}
 
-	public OfflinePlayer createPlayer(String name, IEssentials ess)
+	public OfflinePlayer createPlayer(String name)
 	{
-		OfflinePlayer player = new OfflinePlayer(name, ess);
+		OfflinePlayer player = new OfflinePlayer(name, this);
 		player.setLocation(new Location(worlds.get(0), 0, 0, 0, 0, 0));
 		return player;
 	}

@@ -680,6 +680,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 				LOGGER.log(Level.INFO, "Constructing new userfile from base player {0}", base.getName());
 			}
 			user = new User(base, this);
+			user.setLastAccountName(base.getName());
 		}
 		else
 		{

@@ -45,7 +45,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	private boolean enderSee = false;
 	private transient long teleportInvulnerabilityTimestamp = 0;
 
-	User(final Player base, final IEssentials ess)
+	public User(final Player base, final IEssentials ess)
 	{
 		super(base, ess);
 		teleport = new Teleport(this, ess);
@@ -225,7 +225,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 
 	public void dispose()
 	{
-		this.base = new OfflinePlayer(base.getUniqueId(), ess);
+		this.base = new OfflinePlayer(base.getUniqueId(), ess.getServer());
 	}
 
 	@Override

@@ -4,7 +4,6 @@ import static com.earth2me.essentials.I18n.tl;
 import java.net.InetSocketAddress;
 import java.util.*;
 import lombok.Delegate;
-import net.ess3.api.IEssentials;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.conversations.Conversation;
@@ -27,7 +26,7 @@ import org.bukkit.util.Vector;
 
 public class OfflinePlayer implements Player
 {
-	private final transient IEssentials ess;
+	private final transient Server server;
 	private transient Location location = new Location(null, 0, 0, 0, 0, 0);
 	private transient World world;
 	@Delegate(types = org.bukkit.OfflinePlayer.class)
@@ -35,18 +34,18 @@ public class OfflinePlayer implements Player
 	private boolean allowFlight = false;
 	private boolean isFlying = false;
 
-	public OfflinePlayer(final UUID uuid, final IEssentials ess)
+	public OfflinePlayer(final UUID uuid, final Server server)
 	{
-		this.ess = ess;
-		this.world = ess.getServer().getWorlds().get(0);
-		this.base = ess.getServer().getOfflinePlayer(uuid);
+		this.server = server;
+		this.world = server.getWorlds().get(0);
+		this.base = server.getOfflinePlayer(uuid);
 	}
 	
-	public OfflinePlayer(final String name, final IEssentials ess)
+	public OfflinePlayer(final String name, final Server server)
 	{
-		this.ess = ess;
-		this.world = ess.getServer().getWorlds().get(0);
-		this.base = ess.getServer().getOfflinePlayer(name);
+		this.server = server;
+		this.world = server.getWorlds().get(0);
+		this.base = server.getOfflinePlayer(name);
 	}
 
 	@Override
@@ -288,7 +287,7 @@ public class OfflinePlayer implements Player
 	@Override
 	public Server getServer()
 	{
-		return ess == null ? null : ess.getServer();
+		return server;
 	}
 
 	public Vector getMomentum()
@@ -903,7 +902,7 @@ public class OfflinePlayer implements Player
 	{
 		if (!this.base.getName().equalsIgnoreCase(name))
 		{
-			this.base = ess.getServer().getOfflinePlayer(name);
+			this.base = server.getOfflinePlayer(name);
 		}
 	}
 

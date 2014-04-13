@@ -33,7 +33,7 @@ public class Commandban extends EssentialsCommand
 		catch (PlayerNotFoundException e)
 		{
 			nomatch = true;
-			user = ess.getUser(new OfflinePlayer(args[0], ess));
+			user = ess.getUser(new OfflinePlayer(args[0], ess.getServer()));
 		}
 		if (!user.getBase().isOnline())
 		{

@@ -33,7 +33,7 @@ public class ToggleTest extends TestCase
 		{
 			fail("IOException");
 		}
-		base1 = server.createPlayer("testPlayer1", ess);
+		base1 = server.createPlayer("testPlayer1");
 		server.addPlayer(base1);
 		ess.getUser(base1);
 	}
