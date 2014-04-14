@@ -133,7 +133,7 @@ public class User extends DataUnit implements Cloneable {
 	/**
 	 * Place holder to let people know to stop using this method.
 	 * 
-	 * @deprecated use {@link getLastName()} and {@link getUUID()}.
+	 * @deprecated use {@link #getLastName()} and {@link #getUUID()}.
 	 * @return a string containing the players last known name.
 	 */
 	@Deprecated

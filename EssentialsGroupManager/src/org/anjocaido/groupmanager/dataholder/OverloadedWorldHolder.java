@@ -168,7 +168,7 @@ public class OverloadedWorldHolder extends WorldDataHolder {
 
 	/**
 	 * 
-	 * @param userName
+	 * @param userId
 	 * @return true if user is overloaded.
 	 */
 	public boolean isOverloaded(String userId) {
