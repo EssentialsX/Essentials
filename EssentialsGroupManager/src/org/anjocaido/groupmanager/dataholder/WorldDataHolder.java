@@ -119,8 +119,9 @@ public class WorldDataHolder {
 			// Search for a LastName match
 			for (User user : getUserList()) {
 				
-				if (user.getLastName().equalsIgnoreCase(userId))
+				if (user.getLastName().equalsIgnoreCase(userId)) {
 					return user;
+				}
 			}
 			
 		}
@@ -157,14 +158,13 @@ public class WorldDataHolder {
 			if (usr.getLastName().equalsIgnoreCase(currentName)) {
 				
 				// Clone this user so we can set it's uUID
-				user = usr.clone(uUID);
+				user = usr.clone(uUID, currentName);
 				
 				// Delete it and replace with the new clone.
 				this.removeUser(usr.getUUID());
-				user.setLastName(currentName);
 				this.addUser(user);
 				
-				return user;
+				return getUsers().get(uUID.toLowerCase());
 			}
 			
 		}

@@ -49,12 +49,8 @@ public class OverloadedWorldHolder extends WorldDataHolder {
 			return overloadedUsers.get(userNameLowered);
 		}
 		//END CODE
-		if (getUsers().containsKey(userNameLowered)) {
-			return getUsers().get(userNameLowered);
-		}
-		User newUser = createUser(userName);
-		setUsersChanged(true);
-		return newUser;
+
+		return super.getUser(userName);
 	}
 
 	/**

@@ -69,10 +69,10 @@ public class User extends DataUnit implements Cloneable {
 	 */
 	public User clone(WorldDataHolder dataSource) {
 
-		if (dataSource.isUserDeclared(this.getLastName())) {
+		if (dataSource.isUserDeclared(this.getUUID())) {
 			return null;
 		}
-		User clone = dataSource.createUser(this.getLastName());
+		User clone = dataSource.createUser(this.getUUID());
 		if (dataSource.getGroup(group) == null) {
 			clone.setGroup(dataSource.getDefaultGroup());
 		} else {
@@ -86,17 +86,14 @@ public class User extends DataUnit implements Cloneable {
 		return clone;
 	}
 	
-	public User clone(String uUID) {
+	public User clone(String uUID, String CurrentName) {
 
 		User clone = this.getDataSource().createUser(uUID);
 		
-		if (this.getDataSource().getGroup(group) == null) {
-			clone.setGroup(this.getDataSource().getDefaultGroup());
-		} else {
-			clone.setGroup(this.getDataSource().getGroup(this.getGroupName()));
-		}
+		clone.setLastName(CurrentName);
 		
-		clone.setLastName(this.getLastName());
+		// Set the group silently.
+		clone.setGroup(this.getDataSource().getGroup(this.getGroupName()), false);
 		
 		for (String perm : this.getPermissionList()) {
 			clone.addPermission(perm);
@@ -181,7 +178,8 @@ public class User extends DataUnit implements Cloneable {
 			if (notify)
 				GroupManager.notify(this.getLastName(), String.format(" moved to the group %s in %s.", group.getName(), this.getDataSource().getName()));
 
-			GroupManager.getGMEventHandler().callEvent(this, Action.USER_GROUP_CHANGED);
+			if (updatePerms)
+				GroupManager.getGMEventHandler().callEvent(this, Action.USER_GROUP_CHANGED);
 		}
 	}
 

@@ -100,14 +100,14 @@ public abstract class DataUnit {
 	public String getLastName() {
 
 		if (uUID.length() < 36)
-			return uUID;
+			return this.uUID;
 		
-		return lastName;
+		return this.lastName;
 	}
 	
 	public void setLastName(String lastName) {
 
-		if (!this.lastName.equals(lastName)) {
+		if (!lastName.equals(this.lastName)) {
 			
 			this.lastName = lastName;
 			changed = true;
