@@ -127,16 +127,33 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 	public User getUser(final String name)
 	{
 		try
-		{			
+		{
 			final String sanitizedName = StringUtil.sanitizeFileName(name);
 			if (names.containsKey(sanitizedName))
 			{
-				ess.getLogger().info("Trying to grab user via string, found matching key.");
 				final UUID uuid = names.get(sanitizedName);
 				return users.get(uuid);
 			}
-			ess.getLogger().info("Trying to grab user via string, failed, returning null.");
-			return null; // TODO: THIS IS PROBABLY NOT RIGHT
+
+			for (Player player : ess.getServer().getOnlinePlayers())
+			{
+				String sanitizedPlayer = StringUtil.sanitizeFileName(player.getName());
+				if (sanitizedPlayer.equalsIgnoreCase(sanitizedName))
+				{
+					User user = new User(player, ess);
+					trackUUID(user.getBase().getUniqueId(), user.getName());
+					return new User(player, ess);
+				}
+			}
+
+			final File userFile = getUserFileFromString(sanitizedName);
+			if (userFile.exists())
+			{
+				User user = new User(new OfflinePlayer(sanitizedName, ess.getServer()), ess);
+				trackUUID(user.getBase().getUniqueId(), user.getName());
+				return user;
+			}
+			return null;
 		}
 		catch (ExecutionException ex)
 		{
@@ -166,8 +183,12 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 
 	public void trackUUID(final UUID uuid, final String name)
 	{
-		names.put(StringUtil.sanitizeFileName(name), uuid);
-		writeUUIDMap();
+		if (uuid != null)
+		{
+			names.put(StringUtil.sanitizeFileName(name), uuid);
+			keys.add(uuid);
+			writeUUIDMap();
+		}
 	}
 
 	public void writeUUIDMap()
@@ -221,8 +242,11 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 	public void removeUser(final String name)
 	{
 		UUID uuid = names.get(name);
-		keys.remove(uuid);
-		users.invalidate(uuid);
+		if (uuid != null)
+		{
+			keys.remove(uuid);
+			users.invalidate(uuid);
+		}
 		names.remove(name);
 		names.remove(StringUtil.sanitizeFileName(name));
 	}
@@ -241,5 +265,11 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 	{
 		final File userFolder = new File(ess.getDataFolder(), "userdata");
 		return new File(userFolder, uuid.toString() + ".yml");
+	}
+
+	public File getUserFileFromString(final String name)
+	{
+		final File userFolder = new File(ess.getDataFolder(), "userdata");
+		return new File(userFolder, StringUtil.sanitizeFileName(name) + ".yml");
 	}
 }
