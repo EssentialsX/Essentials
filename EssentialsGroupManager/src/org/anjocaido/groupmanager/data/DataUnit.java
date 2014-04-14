@@ -19,19 +19,20 @@ import org.anjocaido.groupmanager.utils.StringPermissionComparator;
 public abstract class DataUnit {
 
 	private WorldDataHolder dataSource;
-	private String name;
+	private String uUID;
+	private String lastName;
 	private boolean changed, sorted = false;
 	private List<String> permissions = Collections.unmodifiableList(Collections.<String>emptyList());
 
 	public DataUnit(WorldDataHolder dataSource, String name) {
 
 		this.dataSource = dataSource;
-		this.name = name;
+		this.uUID = name;
 	}
 
 	public DataUnit(String name) {
 
-		this.name = name;
+		this.uUID = name;
 	}
 
 	/**
@@ -45,7 +46,7 @@ public abstract class DataUnit {
 
 		if (o instanceof DataUnit) {
 			DataUnit go = (DataUnit) o;
-			if (this.getName().equalsIgnoreCase(go.getName())) {
+			if (this.getUUID().equalsIgnoreCase(go.getUUID())) {
 				// Global Group match.
 				if (this.dataSource == null && go.getDataSource() == null)
 					return true;
@@ -67,7 +68,7 @@ public abstract class DataUnit {
 	public int hashCode() {
 
 		int hash = 5;
-		hash = 71 * hash + (this.name != null ? this.name.toLowerCase().hashCode() : 0);
+		hash = 71 * hash + (this.uUID != null ? this.uUID.toLowerCase().hashCode() : 0);
 		return hash;
 	}
 
@@ -90,13 +91,29 @@ public abstract class DataUnit {
 
 		return dataSource;
 	}
+	
+	public String getUUID() {
 
-	/**
-	 * @return the name
-	 */
-	public String getName() {
+		return uUID;
+	}
+	
+	public String getLastName() {
 
-		return name;
+		if (uUID.length() < 36)
+			return uUID;
+		
+		return lastName;
+	}
+	
+	public void setLastName(String lastName) {
+
+		if (!this.lastName.equals(lastName)) {
+			
+			this.lastName = lastName;
+			changed = true;
+			
+		}
+		
 	}
 
 	public void flagAsChanged() {
@@ -109,7 +126,7 @@ public abstract class DataUnit {
 		else
 			source = testSource.getName();
 
-		GroupManager.logger.finest("DataSource: " + source + " - DataUnit: " + getName() + " flagged as changed!");
+		GroupManager.logger.finest("DataSource: " + source + " - DataUnit: " + getUUID() + " flagged as changed!");
 		// for(StackTraceElement st: Thread.currentThread().getStackTrace()){
 		// GroupManager.logger.finest(st.toString());
 		// }
@@ -132,7 +149,7 @@ public abstract class DataUnit {
 		else
 			source = testSource.getName();
 
-		GroupManager.logger.finest("DataSource: " + source + " - DataUnit: " + getName() + " flagged as saved!");
+		GroupManager.logger.finest("DataSource: " + source + " - DataUnit: " + getUUID() + " flagged as saved!");
 		changed = false;
 	}
 

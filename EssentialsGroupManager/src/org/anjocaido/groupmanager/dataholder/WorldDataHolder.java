@@ -104,15 +104,76 @@ public class WorldDataHolder {
 	 * Search for a user. If it doesn't exist, create a new one with default
 	 * group.
 	 * 
-	 * @param userName the name of the user
+	 * @param userId the UUID String or name of the user
 	 * @return class that manage that user permission
 	 */
-	public User getUser(String userName) {
-
-		if (getUsers().containsKey(userName.toLowerCase())) {
-			return getUsers().get(userName.toLowerCase());
+	public User getUser(String userId) {
+		
+		if (getUsers().containsKey(userId.toLowerCase())) {
+			return getUsers().get(userId.toLowerCase());
 		}
-		User newUser = createUser(userName);
+		
+		// Legacy name matching
+		if (userId.length() < 36) {
+
+			// Search for a LastName match
+			for (User user : getUserList()) {
+				
+				if (user.getLastName().equalsIgnoreCase(userId))
+					return user;
+			}
+			
+		}
+		
+		// No user account found so create a new one.
+		User newUser = createUser(userId);
+		
+		return newUser;
+	}
+	
+	/**
+	 * *** Internal GM use only ***
+	 * This is called when a player joins to update/add their UUID.
+	 * 
+	 * @param uUID the player objects UUID.
+	 * @param currentName the name they have just logged in with.
+	 * @return the user object for this player.
+	 */
+	public User getUser(String uUID, String currentName) {
+		
+		// Check for a UUID account
+		User user = getUsers().get(uUID.toLowerCase());
+		
+		if (user != null) {
+			
+			user.setLastName(currentName);
+			return user;
+			
+		}
+		
+		// Search for a LastName match
+		for (User usr : getUserList()) {
+			
+			if (usr.getLastName().equalsIgnoreCase(currentName)) {
+				
+				// Clone this user so we can set it's uUID
+				user = usr.clone(uUID);
+				
+				// Delete it and replace with the new clone.
+				this.removeUser(usr.getUUID());
+				user.setLastName(currentName);
+				this.addUser(user);
+				
+				return user;
+			}
+			
+		}
+			
+		
+		// No user account found so create a new one.
+		User newUser = createUser(uUID);
+		newUser.setLastName(currentName);
+		
 		return newUser;
 	}
 
@@ -132,8 +193,8 @@ public class WorldDataHolder {
 		if ((theUser.getGroup() == null)) {
 			theUser.setGroup(groups.getDefaultGroup());
 		}
-		removeUser(theUser.getName());
-		getUsers().put(theUser.getName().toLowerCase(), theUser);
+		removeUser(theUser.getUUID());
+		getUsers().put(theUser.getUUID().toLowerCase(), theUser);
 		setUsersChanged(true);
 		if (GroupManager.isLoaded())
 			GroupManager.getGMEventHandler().callEvent(theUser, Action.USER_ADDED);
@@ -142,16 +203,16 @@ public class WorldDataHolder {
 	/**
 	 * Removes the user from the list. (he might become a default user)
 	 * 
-	 * @param userName the username from the user to remove
+	 * @param userId the UUID or username for the user to remove
 	 * @return true if it had something to remove
 	 */
-	public boolean removeUser(String userName) {
+	public boolean removeUser(String userId) {
 
-		if (getUsers().containsKey(userName.toLowerCase())) {
-			getUsers().remove(userName.toLowerCase());
+		if (getUsers().containsKey(userId.toLowerCase())) {
+			getUsers().remove(userId.toLowerCase());
 			setUsersChanged(true);
 			if (GroupManager.isLoaded())
-				GroupManager.getGMEventHandler().callEvent(userName, GMUserEvent.Action.USER_REMOVED);
+				GroupManager.getGMEventHandler().callEvent(userId, GMUserEvent.Action.USER_REMOVED);
 			return true;
 		}
 		return false;
@@ -159,12 +220,12 @@ public class WorldDataHolder {
 
 	/**
 	 * 
-	 * @param userName
+	 * @param userId
 	 * @return true if we have data for this player.
 	 */
-	public boolean isUserDeclared(String userName) {
+	public boolean isUserDeclared(String userId) {
 
-		return getUsers().containsKey(userName.toLowerCase());
+		return getUsers().containsKey(userId.toLowerCase());
 	}
 
 	/**
@@ -275,15 +336,15 @@ public class WorldDataHolder {
 	/**
 	 * Creates a new User with the given name and adds it to this holder.
 	 * 
-	 * @param userName the username you want
+	 * @param userId the UUID or username you want
 	 * @return null if user already exists. or new User
 	 */
-	public User createUser(String userName) {
+	public User createUser(String userId) {
 
-		if (getUsers().containsKey(userName.toLowerCase())) {
+		if (getUsers().containsKey(userId.toLowerCase())) {
 			return null;
 		}
-		User newUser = new User(this, userName);
+		User newUser = new User(this, userId);
 		newUser.setGroup(groups.getDefaultGroup(), false);
 		addUser(newUser);
 		setUsersChanged(true);
@@ -808,9 +869,26 @@ public class WorldDataHolder {
 					throw new IllegalArgumentException("I think this user was declared more than once: " + usersKey + " in file: " + usersFile.getPath());
 				}
 
-				// USER PERMISSIONS NODES
+				// LASTNAME NODES
 
 				Object nodeData = null;
+				try {
+					
+					nodeData = thisUserNode.get("lastname");
+					
+				} catch (Exception ex) {
+					throw new IllegalArgumentException("Bad format found in 'subgroups' for user: " + usersKey + " in file: " + usersFile.getPath());
+				}
+				
+				if ((nodeData != null) && (nodeData instanceof String)) {
+					
+					thisUser.setLastName((String) nodeData);
+					
+				}
+				
+				// USER PERMISSIONS NODES
+
+				nodeData = null;
 				try {
 					nodeData = thisUserNode.get("permissions");
 				} catch (Exception ex) {
@@ -848,6 +926,7 @@ public class WorldDataHolder {
 					}
 					thisUser.sortPermissions();
 				}
+				
 
 				// SUBGROUPS NODES
 
@@ -865,13 +944,13 @@ public class WorldDataHolder {
 				} else if (nodeData instanceof List) {
 					for (Object o : ((List) nodeData)) {
 						if (o == null) {
-							GroupManager.logger.warning("Invalid Subgroup data for user: " + thisUser.getName() + ". Ignoring entry in file: " + usersFile.getPath());
+							GroupManager.logger.warning("Invalid Subgroup data for user: " + thisUser.getLastName() + ". Ignoring entry in file: " + usersFile.getPath());
 						} else {
 							Group subGrp = ph.getGroup(o.toString());
 							if (subGrp != null) {
 								thisUser.addSubGroup(subGrp);
 							} else {
-								GroupManager.logger.warning("Subgroup '" + o.toString() + "' not found for user: " + thisUser.getName() + ". Ignoring entry in file: " + usersFile.getPath());
+								GroupManager.logger.warning("Subgroup '" + o.toString() + "' not found for user: " + thisUser.getLastName() + ". Ignoring entry in file: " + usersFile.getPath());
 							}
 						}
 					}
@@ -880,7 +959,7 @@ public class WorldDataHolder {
 					if (subGrp != null) {
 						thisUser.addSubGroup(subGrp);
 					} else {
-						GroupManager.logger.warning("Subgroup '" + nodeData.toString() + "' not found for user: " + thisUser.getName() + ". Ignoring entry in file: " + usersFile.getPath());
+						GroupManager.logger.warning("Subgroup '" + nodeData.toString() + "' not found for user: " + thisUser.getLastName() + ". Ignoring entry in file: " + usersFile.getPath());
 					}
 				}
 
@@ -901,7 +980,7 @@ public class WorldDataHolder {
 					thisUser.setVariables((Map<String, Object>) nodeData);
 
 				} else
-					throw new IllegalArgumentException("Unknown entry found in 'info' section for user: " + thisUser.getName() + " in file: " + usersFile.getPath());
+					throw new IllegalArgumentException("Unknown entry found in 'info' section for user: " + thisUser.getLastName() + " in file: " + usersFile.getPath());
 
 				// END INFO NODE
 
@@ -917,7 +996,7 @@ public class WorldDataHolder {
 				if (nodeData != null) {
 					Group hisGroup = ph.getGroup(nodeData.toString());
 					if (hisGroup == null) {
-						GroupManager.logger.warning("There is no group " + thisUserNode.get("group").toString() + ", as stated for player " + thisUser.getName() + ": Set to '" + ph.getDefaultGroup().getName() + "' for file: " + usersFile.getPath());
+						GroupManager.logger.warning("There is no group " + thisUserNode.get("group").toString() + ", as stated for player " + thisUser.getLastName() + ": Set to '" + ph.getDefaultGroup().getName() + "' for file: " + usersFile.getPath());
 						hisGroup = ph.getDefaultGroup();
 					}
 					thisUser.setGroup(hisGroup);
@@ -1036,8 +1115,12 @@ public class WorldDataHolder {
 				}
 
 				LinkedHashMap<String, Object> aUserMap = new LinkedHashMap<String, Object>();
-				usersMap.put(user.getName(), aUserMap);
+				usersMap.put(user.getUUID(), aUserMap);
 
+				if (!user.getUUID().equalsIgnoreCase(user.getLastName())) {
+					aUserMap.put("lastname", user.getLastName());
+				}
+				
 				// GROUP NODE
 				if (user.getGroup() == null) {
 					aUserMap.put("group", ph.getDefaultGroup().getName());

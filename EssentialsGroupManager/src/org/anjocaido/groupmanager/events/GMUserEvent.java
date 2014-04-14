@@ -41,7 +41,7 @@ public class GMUserEvent extends Event {
 
 		this.user = user;
 		this.action = action;
-		this.userName = user.getName();
+		this.userName = user.getLastName();
 	}
 
 	public GMUserEvent(String userName, Action action) {

@@ -48,6 +48,14 @@ public class Group extends DataUnit implements Cloneable {
 
 		super(name);
 	}
+	
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+
+		return this.getUUID();
+	}
 
 	/**
 	 * Is this a GlobalGroup

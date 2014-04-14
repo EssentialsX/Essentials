@@ -224,3 +224,7 @@ v 2.0:
 	- add recursive permission adding/deleting
 	- Prevent adding sub groups for ranks the granting player doesn't have access to.
 	- Allow Exceptions in any inherited group to override negation of permissions.
+v2.1:
+	- Update for CraftBukkit 1.7.8-R0.1(3050).
+	- Add UUID support.
+	  Plugins can still query by player name but a UUID is faster and preferable.
