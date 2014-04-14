@@ -42,7 +42,6 @@ public abstract class UserData extends PlayerExtension implements IConf
 			filename = base.getName();
 		}
 
-		ess.getLogger().info("Loading yml: " + filename + ".yml");
 		config = new EssentialsUserConf(base.getName(), base.getUniqueId(), new File(folder, filename + ".yml"));
 		reloadConfig();
 	}
