@@ -1,6 +1,7 @@
 package com.earth2me.essentials.api;
 
 import com.earth2me.essentials.EssentialsConf;
+import com.earth2me.essentials.EssentialsUserConf;
 import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import static com.earth2me.essentials.api.Economy.add;
@@ -52,7 +53,7 @@ public class Economy
 		{
 			folder.mkdirs();
 		}
-		EssentialsConf npcConfig = new EssentialsConf(new File(folder, StringUtil.sanitizeFileName(name) + ".yml"));
+		EssentialsUserConf npcConfig = new EssentialsUserConf(name, null, new File(folder, name + ".yml"));
 		npcConfig.load();
 		npcConfig.setProperty("npc", true);
 		npcConfig.setProperty("money", ess.getSettings().getStartingBalance());
@@ -61,22 +62,8 @@ public class Economy
 
 	private static void deleteNPC(String name)
 	{
-		File folder = new File(ess.getDataFolder(), "userdata");
-		if (!folder.exists())
-		{
-			folder.mkdirs();
-		}
-		File config = new File(folder, StringUtil.sanitizeFileName(name) + ".yml");
-		EssentialsConf npcConfig = new EssentialsConf(config);
-		npcConfig.load();
-		if (npcConfig.hasProperty("npc") && npcConfig.getBoolean("npc", false))
-		{
-			if (!config.delete())
-			{
-				logger.log(Level.WARNING, tl("deleteFileError", config));
-			}
-			ess.getUserMap().removeUser(name);
-		}
+		User user = ess.getUser(name);
+		user.reset();
 	}
 
 	private static User getUserByName(String name)
