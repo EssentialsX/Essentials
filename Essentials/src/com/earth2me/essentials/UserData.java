@@ -49,6 +49,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 
 	public final void reset()
 	{
+		config.forceSave();
 		config.getFile().delete();
 		ess.getUserMap().removeUser(this.getBase().getName());
 	}
