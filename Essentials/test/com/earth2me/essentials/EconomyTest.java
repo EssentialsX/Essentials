@@ -4,6 +4,8 @@ import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
 import java.io.IOException;
 import junit.framework.TestCase;
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.fail;
 import net.ess3.api.Economy;
 import org.bukkit.World.Environment;
 import org.bukkit.plugin.InvalidDescriptionException;
@@ -14,7 +16,7 @@ public class EconomyTest extends TestCase
 {
 	private final transient Essentials ess;
 	private static final String NPCNAME = "npc1";
-	private static final String PLAYERNAME = "TestPlayer1";
+	private static final String PLAYERNAME = "testPlayer1";
 
 	public EconomyTest(final String testName)
 	{
@@ -34,7 +36,7 @@ public class EconomyTest extends TestCase
 		{
 			fail("IOException");
 		}
-		server.addPlayer(new OfflinePlayer(PLAYERNAME, ess.getServer()));		
+		server.addPlayer(new OfflinePlayer(PLAYERNAME, ess.getServer()));
 	}
 
 	// only one big test, since we use static instances

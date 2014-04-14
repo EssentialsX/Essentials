@@ -699,6 +699,11 @@ public class FakeServer implements Server
 	@Override
 	public org.bukkit.OfflinePlayer getOfflinePlayer(final String string)
 	{
+		return createOPlayer(string);
+	}
+
+	private org.bukkit.OfflinePlayer createOPlayer(final String string)
+	{
 		return new org.bukkit.OfflinePlayer()
 		{
 			@Override
@@ -788,6 +793,14 @@ public class FakeServer implements Server
 			@Override
 			public UUID getUniqueId()
 			{
+				if (string == "testPlayer1")
+				{
+					return UUID.fromString("3c9ebe1a-9098-43fd-bc0c-a369b76817ba");
+				}
+				else if (string == "npc1")
+				{
+					return null;
+				}
 				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 			}
 		};
@@ -1170,17 +1183,20 @@ public class FakeServer implements Server
 	}
 
 	@Override
-	public CachedServerIcon getServerIcon() {
+	public CachedServerIcon getServerIcon()
+	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override
-	public CachedServerIcon loadServerIcon(File file) throws IllegalArgumentException, Exception {
+	public CachedServerIcon loadServerIcon(File file) throws IllegalArgumentException, Exception
+	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override
-	public CachedServerIcon loadServerIcon(BufferedImage bufferedImage) throws IllegalArgumentException, Exception {
+	public CachedServerIcon loadServerIcon(BufferedImage bufferedImage) throws IllegalArgumentException, Exception
+	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
@@ -1211,12 +1227,23 @@ public class FakeServer implements Server
 	@Override
 	public Player getPlayer(UUID arg0)
 	{
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		for (Player player : players)
+		{
+			if (player.getUniqueId().equals(arg0))
+			{
+				return player;
+			}
+		}
+		return null;
 	}
 
 	@Override
-	public OfflinePlayer getOfflinePlayer(UUID arg0)
+	public org.bukkit.OfflinePlayer getOfflinePlayer(UUID arg0)
 	{
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		if (arg0.toString().equalsIgnoreCase("3c9ebe1a-9098-43fd-bc0c-a369b76817ba"))
+		{
+			return createOPlayer("testPlayer1");
+		}
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }
