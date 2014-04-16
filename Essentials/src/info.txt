@@ -53,4 +53,4 @@ Minecraft colors:
 &6Time of world:&r {WORLDTIME24}
 &6Date of world:&r {WORLDDATE}
 &6Plugin list:&r {PLUGINS}
-&6Version of Craftbukkit:&r {VERSION}
+&6Version of CraftBukkit:&r {VERSION}

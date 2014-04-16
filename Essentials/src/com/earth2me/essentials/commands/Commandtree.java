@@ -22,7 +22,6 @@ public class Commandtree extends EssentialsCommand
 		TreeType tree = TreeType.BIRCH;
 		try // update check
 		{
-			
 			if (args.length < 1)
 			{
 				throw new NotEnoughArgumentsException();

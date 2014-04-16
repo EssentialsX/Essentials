@@ -148,7 +148,7 @@ public class Teleport implements net.ess3.api.ITeleport
 	{
 		ITarget target = new PlayerTarget(entity);
 		teleport(teleportOwner, target, chargeFor, cause);
-		teleportOwner.sendMessage(tl("teleporting", target.getLocation().getWorld().getName(), target.getLocation().getBlockX(), target.getLocation().getBlockY(), target.getLocation().getBlockZ()));
+		teleportOwner.sendMessage(tl("teleportToPlayer", entity.getDisplayName()));
 	}
 
 	//This is used when teleporting to stored location
