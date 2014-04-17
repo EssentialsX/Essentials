@@ -107,7 +107,6 @@ public class UUIDMap
 	public Future<?> _writeUUIDMap()
 	{
 		final ConcurrentSkipListMap<String, UUID> names = ess.getUserMap().getNames().clone();
-		ess.getLogger().info("I see " + names.size() + " in my name map!");
 		pendingDiskWrites.incrementAndGet();
 		Future<?> future = EXECUTOR_SERVICE.submit(new WriteRunner(ess.getDataFolder(), userList, names, pendingDiskWrites));
 		return future;

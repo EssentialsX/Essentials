@@ -161,7 +161,9 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 
 		if (userFile.exists())
 		{
-			final User user = new User(new OfflinePlayer(uuid, ess.getServer()), ess);
+			player = new OfflinePlayer(uuid, ess.getServer());			
+			final User user = new User(player, ess);
+			((OfflinePlayer)player).setName(user.getLastAccountName());
 			trackUUID(uuid, user.getName());
 			return user;
 		}

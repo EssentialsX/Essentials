@@ -3,7 +3,6 @@ package com.earth2me.essentials;
 import static com.earth2me.essentials.I18n.tl;
 import java.net.InetSocketAddress;
 import java.util.*;
-import lombok.Delegate;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.conversations.Conversation;
@@ -24,28 +23,31 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.util.Vector;
 
+
 public class OfflinePlayer implements Player
 {
 	private final transient Server server;
 	private transient Location location = new Location(null, 0, 0, 0, 0, 0);
 	private transient World world;
-	@Delegate(types = org.bukkit.OfflinePlayer.class)
 	private transient org.bukkit.OfflinePlayer base;
 	private boolean allowFlight = false;
 	private boolean isFlying = false;
+	private String name = null;
 
 	public OfflinePlayer(final UUID uuid, final Server server)
 	{
 		this.server = server;
 		this.world = server.getWorlds().get(0);
 		this.base = server.getOfflinePlayer(uuid);
+		this.name = base.getName();
 	}
-	
+
 	public OfflinePlayer(final String name, final Server server)
 	{
 		this.server = server;
 		this.world = server.getWorlds().get(0);
 		this.base = server.getOfflinePlayer(name);
+		this.name = name;
 	}
 
 	@Override
@@ -835,13 +837,12 @@ public class OfflinePlayer implements Player
 	@Override
 	public void setPlayerListName(String name)
 	{
-		
 	}
 
 	@Override
 	public String getPlayerListName()
 	{
-		return getName();
+		return name;
 	}
 
 	@Override
@@ -900,9 +901,10 @@ public class OfflinePlayer implements Player
 
 	void setName(final String name)
 	{
-		if (!this.base.getName().equalsIgnoreCase(name))
+		this.name = base.getName();
+		if (this.name == null)
 		{
-			this.base = server.getOfflinePlayer(name);
+			this.name = name;
 		}
 	}
 
@@ -941,7 +943,7 @@ public class OfflinePlayer implements Player
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
-	
+
 	@Override
 	public void playEffect(EntityEffect ee)
 	{
@@ -1098,7 +1100,6 @@ public class OfflinePlayer implements Player
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
-
 	@Override
 	public boolean isConversing()
 	{
@@ -1152,7 +1153,7 @@ public class OfflinePlayer implements Player
 	{
 		isFlying = arg0;
 	}
-	
+
 	@Override
 	public int getExpToLevel()
 	{
@@ -1256,7 +1257,8 @@ public class OfflinePlayer implements Player
 	}
 
 	@Override
-	public void setResourcePack(String s) {
+	public void setResourcePack(String s)
+	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
@@ -1438,5 +1440,95 @@ public class OfflinePlayer implements Player
 	public void sendSignChange(Location arg0, String[] arg1) throws IllegalArgumentException
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public Location getBedSpawnLocation()
+	{
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public String getName()
+	{
+		return name;
+	}
+
+	@Override
+	public UUID getUniqueId()
+	{
+		return base.getUniqueId();
+	}
+
+	@Override
+	public boolean isOp()
+	{
+		return base.isOp();
+	}
+
+	@Override
+	public void setOp(boolean value)
+	{
+		base.setOp(value);
+	}
+
+	@Override
+	public boolean isOnline()
+	{
+		return base.isOnline();
+	}
+
+	@Override
+	public boolean isBanned()
+	{
+		return base.isBanned();
+	}
+
+	@Override
+	public void setBanned(boolean banned)
+	{
+		base.setBanned(banned);
+	}
+
+	@Override
+	public boolean isWhitelisted()
+	{
+		return base.isWhitelisted();
+	}
+
+	@Override
+	public void setWhitelisted(boolean value)
+	{
+		base.setWhitelisted(value);
+	}
+
+	@Override
+	public Player getPlayer()
+	{
+		return base.getPlayer();
+	}
+
+	@Override
+	public long getFirstPlayed()
+	{
+		return base.getFirstPlayed();
+	}
+
+	@Override
+	public long getLastPlayed()
+	{
+		return base.getLastPlayed();
+	}
+
+	@Override
+	public boolean hasPlayedBefore()
+	{
+		return base.hasPlayedBefore();
+	}
+
+	@Override
+	public Map<String, Object> serialize()
+	{
+		return base.serialize();
 	}
 }
