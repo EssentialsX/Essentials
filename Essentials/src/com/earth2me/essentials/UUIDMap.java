@@ -1,0 +1,168 @@
+package com.earth2me.essentials;
+
+import com.google.common.io.Files;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
+import org.bukkit.Bukkit;
+
+
+public class UUIDMap
+{
+	private final transient net.ess3.api.IEssentials ess;
+	private File userList;
+	private final transient Pattern splitPattern = Pattern.compile(",");
+	private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
+	private final AtomicInteger pendingDiskWrites = new AtomicInteger(0);
+
+	public UUIDMap(final net.ess3.api.IEssentials ess)
+	{
+		this.ess = ess;
+		userList = new File(ess.getDataFolder(), "usermap.csv");
+
+	}
+
+	public void loadAllUsers(final ConcurrentSkipListMap<String, UUID> names)
+	{
+
+		try
+		{
+			if (!userList.exists())
+			{
+				userList.createNewFile();
+			}
+
+			final BufferedReader reader = new BufferedReader(new FileReader(userList));
+			try
+			{
+				do
+				{
+					final String line = reader.readLine();
+					if (line == null)
+					{
+						break;
+					}
+					else
+					{
+						String[] values = splitPattern.split(line);
+						if (values.length == 2)
+						{
+							names.put(values[0], UUID.fromString(values[1]));
+						}
+					}
+				}
+				while (true);
+			}
+			finally
+			{
+				reader.close();
+			}
+		}
+		catch (IOException ex)
+		{
+			Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+		}
+
+	}
+
+	public void writeUUIDMap()
+	{
+		_writeUUIDMap();
+	}
+
+	public void forceWriteUUIDMap()
+	{
+		try
+		{
+			Future<?> future = _writeUUIDMap();;
+			if (future != null)
+			{
+				future.get();
+			}
+		}
+		catch (InterruptedException ex)
+		{
+			ess.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+		}
+		catch (ExecutionException ex)
+		{
+			ess.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+		}
+	}
+
+	public Future<?> _writeUUIDMap()
+	{
+		final ConcurrentSkipListMap<String, UUID> names = ess.getUserMap().getNames().clone();
+		ess.getLogger().info("I see " + names.size() + " in my name map!");
+		pendingDiskWrites.incrementAndGet();
+		Future<?> future = EXECUTOR_SERVICE.submit(new WriteRunner(ess.getDataFolder(), userList, names, pendingDiskWrites));
+		return future;
+	}
+
+
+	private static class WriteRunner implements Runnable
+	{
+		private final File location;
+		private final File endFile;
+		private final ConcurrentSkipListMap<String, UUID> names;
+		private final AtomicInteger pendingDiskWrites;
+
+		private WriteRunner(final File location, final File endFile, final ConcurrentSkipListMap<String, UUID> names, final AtomicInteger pendingDiskWrites)
+		{
+			this.location = location;
+			this.endFile = endFile;
+			this.names = names;
+			this.pendingDiskWrites = pendingDiskWrites;
+		}
+
+		@Override
+		public void run()
+		{
+			synchronized (location)
+			{
+				if (pendingDiskWrites.get() > 1)
+				{
+					pendingDiskWrites.decrementAndGet();
+					return;
+				}
+
+				try
+				{
+					File configFile = File.createTempFile("usermap", ".tmp.yml", location);
+
+					final BufferedWriter bWriter = new BufferedWriter(new FileWriter(configFile));
+					for (Map.Entry<String, UUID> entry : names.entrySet())
+					{
+						bWriter.write(entry.getKey() + "," + entry.getValue().toString());
+						bWriter.newLine();
+					}
+
+					bWriter.close();
+					Files.move(configFile, endFile);
+				}
+				catch (IOException ex)
+				{
+					Logger.getLogger(UserMap.class.getName()).log(Level.SEVERE, null, ex);
+				}
+				finally
+				{
+					pendingDiskWrites.decrementAndGet();
+				}
+			}
+		}
+	}
+}

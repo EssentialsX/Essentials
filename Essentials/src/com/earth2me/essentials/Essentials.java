@@ -324,6 +324,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 		}
 		Economy.setEss(null);
 		Trade.closeLog();
+		getUserMap().getUUIDMap().forceWriteUUIDMap();
 	}
 
 	@Override

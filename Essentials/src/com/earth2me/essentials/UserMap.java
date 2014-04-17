@@ -4,26 +4,15 @@ import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
-import com.google.common.io.Files;
 import com.google.common.util.concurrent.UncheckedExecutionException;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Collections;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Pattern;
 import net.ess3.api.IEssentials;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 
@@ -33,14 +22,13 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 	private final transient Cache<UUID, User> users;
 	private final transient ConcurrentSkipListSet<UUID> keys = new ConcurrentSkipListSet<UUID>();
 	private final transient ConcurrentSkipListMap<String, UUID> names = new ConcurrentSkipListMap<String, UUID>();
-	private final transient Pattern splitPattern = Pattern.compile(",");
-	private File userList;
+	private UUIDMap uuidMap;
 
 	public UserMap(final IEssentials ess)
 	{
 		super();
 		this.ess = ess;
-		userList = new File(ess.getDataFolder(), "usermap.csv");
+		uuidMap = new UUIDMap(ess);
 		users = CacheBuilder.newBuilder().maximumSize(ess.getSettings().getMaxUserCacheCount()).softValues().build(this);
 		loadAllUsersAsync(ess);
 	}
@@ -77,43 +65,7 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 					}
 				}
 
-				try
-				{
-					if (!userList.exists())
-					{
-						userList.createNewFile();
-					}
-
-					final BufferedReader reader = new BufferedReader(new FileReader(userList));
-					try
-					{
-						do
-						{
-							final String line = reader.readLine();
-							if (line == null)
-							{
-								break;
-							}
-							else
-							{
-								String[] values = splitPattern.split(line);
-								if (values.length == 2)
-								{
-									names.put(values[0], UUID.fromString(values[1]));
-								}
-							}
-						}
-						while (true);
-					}
-					finally
-					{
-						reader.close();
-					}
-				}
-				catch (IOException ex)
-				{
-					Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
-				}
+				uuidMap.loadAllUsers(names);
 
 			}
 		});
@@ -185,31 +137,12 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 	{
 		if (uuid != null)
 		{
-			names.put(StringUtil.sanitizeFileName(name), uuid);
 			keys.add(uuid);
-			writeUUIDMap();
-		}
-	}
-
-	public void writeUUIDMap()
-	{
-		try
-		{
-			final File tempFile = File.createTempFile("usermap", ".tmp.yml", ess.getDataFolder());
-			final BufferedWriter bWriter = new BufferedWriter(new FileWriter(tempFile));
-
-			for (Map.Entry<String, UUID> entry : names.entrySet())
+			if (name != null && name.length() > 0)
 			{
-				bWriter.write(entry.getKey() + "," + entry.getValue().toString());
-				bWriter.newLine();
+				names.put(StringUtil.sanitizeFileName(name), uuid);
+				uuidMap.writeUUIDMap();
 			}
-
-			bWriter.close();
-			Files.move(tempFile, userList);
-		}
-		catch (IOException ex)
-		{
-			Logger.getLogger(UserMap.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 
@@ -219,15 +152,18 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 		Player player = ess.getServer().getPlayer(uuid);
 		if (player != null)
 		{
-			return new User(player, ess);
+			final User user = new User(player, ess);
+			trackUUID(uuid, user.getName());
+			return user;
 		}
 
 		final File userFile = getUserFileFromID(uuid);
 
 		if (userFile.exists())
 		{
-			keys.add(uuid);
-			return new User(new OfflinePlayer(uuid, ess.getServer()), ess);
+			final User user = new User(new OfflinePlayer(uuid, ess.getServer()), ess);
+			trackUUID(uuid, user.getName());
+			return user;
 		}
 
 		throw new Exception("User not found!");
@@ -236,6 +172,7 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 	@Override
 	public void reloadConfig()
 	{
+		getUUIDMap().forceWriteUUIDMap();
 		loadAllUsersAsync(ess);
 	}
 
@@ -259,6 +196,16 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 	public int getUniqueUsers()
 	{
 		return keys.size();
+	}
+
+	public ConcurrentSkipListMap<String, UUID> getNames()
+	{
+		return names;
+	}
+
+	public UUIDMap getUUIDMap()
+	{
+		return uuidMap;
 	}
 
 	private File getUserFileFromID(final UUID uuid)

@@ -499,7 +499,7 @@ public class EssentialsUpgrade
 		{
 			return;
 		}
-		
+
 		uuidFileConvert(ess);
 
 		doneFile.setProperty("uuidFileChange", true);
@@ -518,20 +518,23 @@ public class EssentialsUpgrade
 
 		int countFiles = 0;
 		int countFails = 0;
-		
+		int countEssCache = 0;
+		int countBukkit = 0;
+
 		ess.getLogger().info("Found " + userdir.list().length + " files to convert...");
-				
+
 		for (String string : userdir.list())
 		{
 			if (!string.endsWith(".yml"))
 			{
 				continue;
 			}
-			
-			final int showProgress = countFiles % 1000;
-			
+
+			final int showProgress = countFiles % 250;
+
 			if (showProgress == 0)
 			{
+				ess.getUserMap().getUUIDMap().forceWriteUUIDMap();
 				ess.getLogger().info("Converted " + countFiles + "/" + userdir.list().length);
 			}
 
@@ -550,7 +553,7 @@ public class EssentialsUpgrade
 				EssentialsConf conf = new EssentialsConf(file);
 				conf.load();
 				conf.setProperty("lastAccountName", name);
-				conf.forceSave();
+				conf.save();
 
 				String uuidString = conf.getString("uuid", null);
 
@@ -559,6 +562,7 @@ public class EssentialsUpgrade
 					try
 					{
 						uuid = UUID.fromString(uuidString);
+						countEssCache++;
 						break;
 					}
 					catch (Exception ex2)
@@ -569,6 +573,7 @@ public class EssentialsUpgrade
 
 					if (uuid != null)
 					{
+						countBukkit++;
 						break;
 					}
 
@@ -582,6 +587,7 @@ public class EssentialsUpgrade
 
 				if (uuid != null)
 				{
+					conf.forceSave();
 					config = new EssentialsUserConf(name, uuid, new File(userdir, uuid + ".yml"));
 					config.convertLegacyFile();
 					ess.getUserMap().trackUUID(uuid, name);
@@ -590,11 +596,11 @@ public class EssentialsUpgrade
 				countFails++;
 			}
 		}
+		ess.getUserMap().getUUIDMap().forceWriteUUIDMap();
 
-		ess.getLogger().info("Completed Essentials UUID userdata conversion.");
-		ess.getLogger().info("Attempted to convert " + countFiles + " users. Failed to convert: " + countFails);
+		ess.getLogger().info("Completed Essentials UUID userdata conversion.  Attempted to convert " + countFiles + " users.");
+		ess.getLogger().info("Converted via cache: " + countEssCache + " :: Converted via lookup: " + countBukkit + " :: Failed to convert: " + countFails);
 		ess.getLogger().info("To rerun the conversion type /essentials uuidconvert");
-
 	}
 
 	public void beforeSettings()
