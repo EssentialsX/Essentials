@@ -499,18 +499,44 @@ public class EssentialsUpgrade
 		{
 			return;
 		}
+		
+		uuidFileConvert(ess);
+
+		doneFile.setProperty("uuidFileChange", true);
+		doneFile.save();
+	}
+
+	public static void uuidFileConvert(IEssentials ess)
+	{
+		ess.getLogger().info("Starting Essentials UUID userdata conversion");
 
 		final File userdir = new File(ess.getDataFolder(), "userdata");
 		if (!userdir.exists())
 		{
 			return;
 		}
+
+		int countFiles = 0;
+		int countFails = 0;
+		
+		ess.getLogger().info("Found " + userdir.list().length + " files to convert...");
+				
 		for (String string : userdir.list())
 		{
 			if (!string.endsWith(".yml"))
 			{
 				continue;
 			}
+			
+			final int showProgress = countFiles % 1000;
+			
+			if (showProgress == 0)
+			{
+				ess.getLogger().info("Converted " + countFiles + "/" + userdir.list().length);
+			}
+
+			countFiles++;
+
 			final String name = string.substring(0, string.length() - 4);
 			EssentialsUserConf config;
 			UUID uuid = null;
@@ -528,31 +554,47 @@ public class EssentialsUpgrade
 
 				String uuidString = conf.getString("uuid", null);
 
-				try
+				for (int i = 0; i < 4; i++)
 				{
-					uuid = UUID.fromString(uuidString);
+					try
+					{
+						uuid = UUID.fromString(uuidString);
+						break;
+					}
+					catch (Exception ex2)
+					{
+						org.bukkit.OfflinePlayer player = ess.getServer().getOfflinePlayer(name);
+						uuid = player.getUniqueId();
+					}
+
+					if (uuid != null)
+					{
+						break;
+					}
+
+					if (uuid == null && conf.getBoolean("npc", false))
+					{
+						uuid = UUID.randomUUID();
+						break;
+					}
 				}
-				catch (Exception ex2)
-				{
-					org.bukkit.OfflinePlayer player = ess.getServer().getOfflinePlayer(name);
-					uuid = player.getUniqueId();
-				}
-				
-				if (uuid == null && conf.getBoolean("npc", false))
-				{
-					uuid = UUID.randomUUID();
-				}
+
 
 				if (uuid != null)
 				{
 					config = new EssentialsUserConf(name, uuid, new File(userdir, uuid + ".yml"));
 					config.convertLegacyFile();
 					ess.getUserMap().trackUUID(uuid, name);
+					continue;
 				}
+				countFails++;
 			}
 		}
-		doneFile.setProperty("uuidFileChange", true);
-		doneFile.save();
+
+		ess.getLogger().info("Completed Essentials UUID userdata conversion.");
+		ess.getLogger().info("Attempted to convert " + countFiles + " users. Failed to convert: " + countFails);
+		ess.getLogger().info("To rerun the conversion type /essentials uuidconvert");
+
 	}
 
 	public void beforeSettings()
