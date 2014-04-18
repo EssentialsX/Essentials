@@ -72,7 +72,11 @@ public class UUIDMap
 							}
 							else
 							{
-								history.get(uuid).add(name);
+								final ArrayList<String> list = history.get(uuid);
+								if (!list.contains(name))
+								{
+									list.add(name);
+								}
 							}
 						}
 					}
@@ -145,7 +149,7 @@ public class UUIDMap
 		@Override
 		public void run()
 		{
-			synchronized (location)
+			synchronized (pendingDiskWrites)
 			{
 				if (pendingDiskWrites.get() > 1)
 				{
