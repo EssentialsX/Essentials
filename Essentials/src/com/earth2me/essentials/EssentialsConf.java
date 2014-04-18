@@ -170,7 +170,6 @@ public class EssentialsConf extends YamlConfiguration
 			finally
 			{
 				inputStream.close();
-				save();
 			}
 		}
 		catch (IOException ex)
