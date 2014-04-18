@@ -6,7 +6,9 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.util.concurrent.UncheckedExecutionException;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentSkipListMap;
@@ -22,6 +24,7 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 	private final transient Cache<UUID, User> users;
 	private final transient ConcurrentSkipListSet<UUID> keys = new ConcurrentSkipListSet<UUID>();
 	private final transient ConcurrentSkipListMap<String, UUID> names = new ConcurrentSkipListMap<String, UUID>();
+	private final transient ConcurrentSkipListMap<UUID, ArrayList<String>> history = new ConcurrentSkipListMap<UUID, ArrayList<String>>();
 	private UUIDMap uuidMap;
 
 	public UserMap(final IEssentials ess)
@@ -65,7 +68,7 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 					}
 				}
 
-				uuidMap.loadAllUsers(names);
+				uuidMap.loadAllUsers(names, history);
 
 			}
 		});
@@ -203,6 +206,16 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 	public ConcurrentSkipListMap<String, UUID> getNames()
 	{
 		return names;
+	}
+
+	public ConcurrentSkipListMap<UUID, ArrayList<String>> getHistory()
+	{
+		return history;
+	}
+	
+	public List<String> getUserHistory(final UUID uuid)
+	{
+		return history.get(uuid);
 	}
 
 	public UUIDMap getUUIDMap()

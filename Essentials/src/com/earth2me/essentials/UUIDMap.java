@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentSkipListMap;
@@ -36,9 +37,8 @@ public class UUIDMap
 
 	}
 
-	public void loadAllUsers(final ConcurrentSkipListMap<String, UUID> names)
+	public void loadAllUsers(final ConcurrentSkipListMap<String, UUID> names, final ConcurrentSkipListMap<UUID, ArrayList<String>> history)
 	{
-
 		try
 		{
 			if (!userList.exists())
@@ -49,7 +49,7 @@ public class UUIDMap
 			final BufferedReader reader = new BufferedReader(new FileReader(userList));
 			try
 			{
-				do
+				while (true)
 				{
 					final String line = reader.readLine();
 					if (line == null)
@@ -58,14 +58,25 @@ public class UUIDMap
 					}
 					else
 					{
-						String[] values = splitPattern.split(line);
+						final String[] values = splitPattern.split(line);
 						if (values.length == 2)
 						{
-							names.put(values[0], UUID.fromString(values[1]));
+							final String name = values[0];
+							final UUID uuid = UUID.fromString(values[1]);
+							names.put(name, uuid);
+							if (!history.containsKey(uuid))
+							{
+								final ArrayList<String> list = new ArrayList<String>();
+								list.add(name);
+								history.put(uuid, list);
+							}
+							else
+							{
+								history.get(uuid).add(name);
+							}
 						}
 					}
 				}
-				while (true);
 			}
 			finally
 			{
@@ -76,7 +87,6 @@ public class UUIDMap
 		{
 			Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
 		}
-
 	}
 
 	public void writeUUIDMap()

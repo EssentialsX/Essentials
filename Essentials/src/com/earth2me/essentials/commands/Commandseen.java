@@ -72,6 +72,13 @@ public class Commandseen extends EssentialsCommand
 
 		user.setDisplayNick();
 		sender.sendMessage(tl("seenOnline", user.getDisplayName(), DateUtil.formatDateDiff(user.getLastLogin())));
+		
+		List<String> history = ess.getUserMap().getUserHistory(user.getBase().getUniqueId());
+		if (history.size() > 1)
+		{
+			sender.sendMessage("User has also been known as: " + StringUtil.joinList(history));  //TODO: TL
+		}
+		
 		if (user.isAfk())
 		{
 			sender.sendMessage(tl("whoisAFK", tl("true")));
@@ -110,6 +117,13 @@ public class Commandseen extends EssentialsCommand
 		{
 			sender.sendMessage(tl("userUnknown", user.getName()));
 		}
+		
+		List<String> history = ess.getUserMap().getUserHistory(user.getBase().getUniqueId());
+		if (history.size() > 1)
+		{
+			sender.sendMessage("User has also been known as: " + StringUtil.joinList(history)); //TODO: TL
+		}
+				
 		if (user.getBase().isBanned())
 		{
 			sender.sendMessage(tl("whoisBanned", showBan ? user.getBanReason() : tl("true")));
