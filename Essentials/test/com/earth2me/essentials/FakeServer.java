@@ -1244,6 +1244,10 @@ public class FakeServer implements Server
 		{
 			return createOPlayer("testPlayer1");
 		}
+		if (arg0.toString().equalsIgnoreCase("f4a37409-5c40-3b2c-9cd6-57d3c5abdc76"))
+		{
+			return createOPlayer("npc1");
+		}
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }

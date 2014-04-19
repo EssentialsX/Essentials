@@ -5,6 +5,7 @@ import com.earth2me.essentials.craftbukkit.FakeWorld;
 import com.earth2me.essentials.settings.Spawns;
 import com.earth2me.essentials.storage.YamlStorageWriter;
 import com.earth2me.essentials.utils.StringUtil;
+import com.google.common.base.Charsets;
 import java.io.*;
 import java.math.BigInteger;
 import java.security.DigestInputStream;
@@ -567,6 +568,12 @@ public class EssentialsUpgrade
 					}
 					catch (Exception ex2)
 					{
+						if (conf.getBoolean("npc", false))
+						{
+							uuid = UUID.nameUUIDFromBytes(("NPC:" + name).getBytes(Charsets.UTF_8));
+							break;
+						}
+						
 						org.bukkit.OfflinePlayer player = ess.getServer().getOfflinePlayer(name);
 						uuid = player.getUniqueId();
 					}
@@ -575,15 +582,8 @@ public class EssentialsUpgrade
 					{
 						countBukkit++;
 						break;
-					}
-
-					if (uuid == null && conf.getBoolean("npc", false))
-					{
-						uuid = UUID.randomUUID();
-						break;
-					}
+					}					
 				}
-
 
 				if (uuid != null)
 				{

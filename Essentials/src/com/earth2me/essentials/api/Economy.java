@@ -16,9 +16,11 @@ import static com.earth2me.essentials.api.Economy.setMoney;
 import static com.earth2me.essentials.api.Economy.substract;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
+import com.google.common.base.Charsets;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.ess3.api.IEssentials;
@@ -53,11 +55,14 @@ public class Economy
 		{
 			folder.mkdirs();
 		}
-		EssentialsUserConf npcConfig = new EssentialsUserConf(name, null, new File(folder, name + ".yml"));
+		UUID npcUUID = UUID.nameUUIDFromBytes(("NPC:" + name).getBytes(Charsets.UTF_8));
+		EssentialsUserConf npcConfig = new EssentialsUserConf(name, npcUUID, new File(folder, npcUUID.toString() + ".yml"));
 		npcConfig.load();
 		npcConfig.setProperty("npc", true);
+		npcConfig.setProperty("lastAccountName", name);
 		npcConfig.setProperty("money", ess.getSettings().getStartingBalance());
 		npcConfig.forceSave();
+		ess.getUserMap().trackUUID(npcUUID, name);
 	}
 
 	private static void deleteNPC(String name)
