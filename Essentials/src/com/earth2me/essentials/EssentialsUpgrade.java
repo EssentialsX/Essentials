@@ -526,7 +526,7 @@ public class EssentialsUpgrade
 
 		for (String string : userdir.list())
 		{
-			if (!string.endsWith(".yml"))
+			if (!string.endsWith(".yml") || string.length() < 5)
 			{
 				continue;
 			}
