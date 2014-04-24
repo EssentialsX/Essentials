@@ -56,7 +56,7 @@ public class Commandtime extends EssentialsCommand
 			else
 			{
 				getWorldsTime(sender, worlds);
-				return;
+				throw new NoChargeException();
 			}
 		}
 		else
@@ -67,8 +67,7 @@ public class Commandtime extends EssentialsCommand
 		final User user = ess.getUser(sender.getPlayer());
 		if (user != null && !user.isAuthorized("essentials.time.set"))
 		{
-			user.sendMessage(tl("timeSetPermission"));
-			return;
+			throw new Exception(tl("timeSetPermission"));
 		}
 
 		// Parse the target time int ticks from args[0]
