@@ -500,6 +500,58 @@ public class EssentialsUpgrade
 		{
 			return;
 		}
+		
+		final File userdir = new File(ess.getDataFolder(), "userdata");
+		if (!userdir.exists())
+		{
+			return;
+		}
+		
+		int countFiles = 0;
+		int countReqFiles = 0;
+		for (String string : userdir.list())
+		{
+			if (!string.endsWith(".yml") || string.length() < 5)
+			{
+				continue;
+			}
+			
+			countFiles++;
+			
+			final String name = string.substring(0, string.length() - 4);
+			UUID uuid = null;
+			
+			try
+			{
+				uuid = UUID.fromString(name);
+			}
+			catch (IllegalArgumentException ex)
+			{
+				countReqFiles++;
+			}
+			
+			if (countFiles > 100)
+			{
+				break;
+			}			
+		}
+		
+		if (countReqFiles < 1)
+		{
+			return;
+		}
+				
+		ess.getLogger().info("#### Starting Essentials UUID userdata conversion in a few seconds. ####");
+		ess.getLogger().info("We recommend you take a backup of your server before upgrading from the old username system.");
+		
+		try
+		{
+			Thread.sleep(10000);
+		}
+		catch (InterruptedException ex)
+		{
+			// NOOP
+		}
 
 		uuidFileConvert(ess);
 
@@ -597,8 +649,8 @@ public class EssentialsUpgrade
 			}
 		}
 		ess.getUserMap().getUUIDMap().forceWriteUUIDMap();
-
-		ess.getLogger().info("Completed Essentials UUID userdata conversion.  Attempted to convert " + countFiles + " users.");
+        
+		ess.getLogger().info("Converted " + countFiles + "/" + countFiles + ".  Conversion complete.");
 		ess.getLogger().info("Converted via cache: " + countEssCache + " :: Converted via lookup: " + countBukkit + " :: Failed to convert: " + countFails);
 		ess.getLogger().info("To rerun the conversion type /essentials uuidconvert");
 	}

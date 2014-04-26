@@ -102,6 +102,10 @@ public class EssentialsConf extends YamlConfiguration
 			{
 				convertLegacyFile();
 			}
+			else if (altFileExists())
+			{
+				convertAltFile();
+			}
 			else if (templateName != null)
 			{
 				LOGGER.log(Level.INFO, tl("creatingConfigFromTemplate", configFile.toString()));
@@ -192,6 +196,16 @@ public class EssentialsConf extends YamlConfiguration
 	public void convertLegacyFile()
 	{
 		LOGGER.log(Level.SEVERE, "Unable to import legacy config file.");
+	}
+	
+	public boolean altFileExists()
+	{
+		return false;
+	}
+	
+	public void convertAltFile()
+	{
+		LOGGER.log(Level.SEVERE, "Unable to import alt config file.");
 	}
 
 	private void createFromTemplate()
