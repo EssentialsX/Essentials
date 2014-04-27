@@ -145,7 +145,7 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 			if (name != null && name.length() > 0)
 			{
 				final String keyName = StringUtil.sanitizeFileName(name);
-				if (!names.containsKey(keyName))
+				if (!names.containsKey(keyName) || !names.get(keyName).equals(uuid))
 				{
 					names.put(keyName, uuid);
 					uuidMap.writeUUIDMap();
