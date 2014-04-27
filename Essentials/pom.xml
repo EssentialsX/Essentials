@@ -129,9 +129,9 @@
 			<systemPath>${project.basedir}/../lib/SimplyPerms.jar</systemPath>
 		</dependency>
 		<dependency>
-			<groupId>net.milkbowl</groupId>
-			<artifactId>vault</artifactId>
-			<version>1.2.27</version>
+			<groupId>net.milkbowl.vault</groupId>
+			<artifactId>Vault</artifactId>
+			<version>1.2.32</version>
 		</dependency>
 		<dependency>
 			<groupId>zPermissions</groupId>
