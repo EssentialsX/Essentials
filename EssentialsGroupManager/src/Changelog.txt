@@ -228,3 +228,4 @@ v2.1:
 	- Update for CraftBukkit 1.7.8-R0.1(3050).
 	- Add UUID support.
 	  Plugins can still query by player name but a UUID is faster and preferable.
+	- Set a default mirror map if none is found in the config.

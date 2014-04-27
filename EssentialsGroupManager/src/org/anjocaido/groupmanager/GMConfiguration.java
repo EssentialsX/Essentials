@@ -80,7 +80,7 @@ public class GMConfiguration {
 		}
 
 		/*
-		 * Read our config settings ands store them for reading later.
+		 * Read our config settings and store them for reading later.
 		 */
 		try {
 			Map<String, Object> config = getElement("config", getElement("settings", GMconfig));
@@ -135,6 +135,9 @@ public class GMConfiguration {
 			 * Store our mirrors map for parsing later.
 			 */
 			mirrorsMap = (Map<String, Object>) ((Map<String, Object>) GMconfig.get("settings")).get("mirrors");
+			
+			if (mirrorsMap == null)
+				throw new Exception();
 
 		} catch (Exception ex) {
 			/*
