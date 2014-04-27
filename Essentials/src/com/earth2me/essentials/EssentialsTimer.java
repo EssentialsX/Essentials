@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
+import java.util.UUID;
 import java.util.logging.Level;
 import net.ess3.api.IEssentials;
 import org.bukkit.entity.Player;
@@ -12,7 +13,7 @@ import org.bukkit.entity.Player;
 public class EssentialsTimer implements Runnable
 {
 	private final transient IEssentials ess;
-	private final transient Set<String> onlineUsers = new HashSet<String>();
+	private final transient Set<UUID> onlineUsers = new HashSet<UUID>();
 	private transient long lastPoll = System.nanoTime();
 	private final LinkedList<Double> history = new LinkedList<Double>();
 	private int skip1 = 0;
@@ -66,7 +67,7 @@ public class EssentialsTimer implements Runnable
 			try
 			{
 				final User user = ess.getUser(player);
-				onlineUsers.add(user.getName());
+				onlineUsers.add(user.getBase().getUniqueId());
 				user.setLastOnlineActivity(currentTime);
 				user.checkActivity();
 			}
@@ -77,7 +78,7 @@ public class EssentialsTimer implements Runnable
 		}
 		
 		count = 0;
-		final Iterator<String> iterator = onlineUsers.iterator();
+		final Iterator<UUID> iterator = onlineUsers.iterator();
 		while (iterator.hasNext())
 		{
 			count++;

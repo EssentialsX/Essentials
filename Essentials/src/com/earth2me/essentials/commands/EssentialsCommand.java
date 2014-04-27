@@ -5,6 +5,7 @@ import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.utils.FormatUtil;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 import java.util.logging.Logger;
 import net.ess3.api.IEssentials;
 import org.bukkit.Server;
@@ -86,8 +87,27 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 
 	private User getPlayer(final Server server, final User sourceUser, final String searchTerm, boolean getHidden, final boolean getOffline) throws PlayerNotFoundException
 	{
+		final User user;
+		Player exPlayer;
 
-		final User user = ess.getUser(searchTerm);
+		try
+		{
+			exPlayer = server.getPlayer(UUID.fromString(searchTerm));
+		}
+		catch (IllegalArgumentException ex)
+		{
+			exPlayer = server.getPlayer(searchTerm);
+		}
+
+		if (exPlayer != null)
+		{
+			user = ess.getUser(exPlayer);
+		}
+		else
+		{
+			user = ess.getUser(searchTerm);
+		}
+
 		if (user != null)
 		{
 			if (!getOffline && !user.getBase().isOnline())
