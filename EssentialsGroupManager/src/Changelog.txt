@@ -229,3 +229,4 @@ v2.1:
 	- Add UUID support.
 	  Plugins can still query by player name but a UUID is faster and preferable.
 	- Set a default mirror map if none is found in the config.
+	- Fix clones forgetting sub groups.

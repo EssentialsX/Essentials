@@ -53,6 +53,10 @@ public class User extends DataUnit implements Cloneable {
 
 		User clone = new User(getDataSource(), this.getLastName());
 		clone.group = this.group;
+		
+		// Clone all subgroups.
+		clone.subGroups.addAll(this.subGroupListStringCopy());
+		
 		for (String perm : this.getPermissionList()) {
 			clone.addPermission(perm);
 		}
@@ -72,15 +76,22 @@ public class User extends DataUnit implements Cloneable {
 		if (dataSource.isUserDeclared(this.getUUID())) {
 			return null;
 		}
+		
 		User clone = dataSource.createUser(this.getUUID());
+		
 		if (dataSource.getGroup(group) == null) {
 			clone.setGroup(dataSource.getDefaultGroup());
 		} else {
 			clone.setGroup(dataSource.getGroup(this.getGroupName()));
 		}
+		
+		// Clone all subgroups.
+		clone.subGroups.addAll(this.subGroupListStringCopy());
+				
 		for (String perm : this.getPermissionList()) {
 			clone.addPermission(perm);
 		}
+		
 		clone.variables = this.variables.clone(this);
 		clone.flagAsChanged();
 		return clone;
@@ -94,6 +105,9 @@ public class User extends DataUnit implements Cloneable {
 		
 		// Set the group silently.
 		clone.setGroup(this.getDataSource().getGroup(this.getGroupName()), false);
+		
+		// Clone all subgroups.
+		clone.subGroups.addAll(this.subGroupListStringCopy());
 		
 		for (String perm : this.getPermissionList()) {
 			clone.addPermission(perm);
