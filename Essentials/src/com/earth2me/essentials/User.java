@@ -225,6 +225,18 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 
 	public void dispose()
 	{
+		ess.runTaskAsynchronously(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				_dispose();
+			}
+		});
+	}
+
+	private void _dispose()
+	{
 		this.base = new OfflinePlayer(base.getUniqueId(), ess.getServer());
 	}
 
