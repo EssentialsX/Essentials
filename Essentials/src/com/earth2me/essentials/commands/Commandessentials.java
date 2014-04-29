@@ -299,6 +299,11 @@ public class Commandessentials extends EssentialsCommand
 					{
 						user.setLastLogin(currTime);
 					}
+					
+					if (user.isNPC())
+					{
+						continue;
+					}
 
 					long timeDiff = currTime - lastLog;
 					long milliDays = daysArg * 24L * 60L * 60L * 1000L;
