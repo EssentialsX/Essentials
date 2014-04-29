@@ -17,7 +17,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import org.bukkit.Bukkit;
 
@@ -157,9 +156,11 @@ public class UUIDMap
 					return;
 				}
 
+				File configFile = null;
+
 				try
 				{
-					File configFile = File.createTempFile("usermap", ".tmp.yml", location);
+					configFile = File.createTempFile("usermap", ".tmp.csv", location);
 
 					final BufferedWriter bWriter = new BufferedWriter(new FileWriter(configFile));
 					for (Map.Entry<String, UUID> entry : names.entrySet())
@@ -173,7 +174,18 @@ public class UUIDMap
 				}
 				catch (IOException ex)
 				{
-					Logger.getLogger(UserMap.class.getName()).log(Level.SEVERE, null, ex);
+					try
+					{
+						if (configFile != null && configFile.exists())
+						{
+							Files.move(configFile, new File(endFile.getParentFile(), "usermap.bak.csv"));
+						}
+					}
+					catch (Exception ex2)
+					{
+						Bukkit.getLogger().log(Level.SEVERE, ex2.getMessage(), ex2);
+					}
+					Bukkit.getLogger().log(Level.WARNING, ex.getMessage(), ex);
 				}
 				finally
 				{
