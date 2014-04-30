@@ -10,6 +10,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 import com.google.common.base.Joiner;
+import java.util.logging.Level;
 import net.ess3.api.IEssentials;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
@@ -26,6 +27,7 @@ public class MetaItemStack
 {
 	private static final Map<String, DyeColor> colorMap = new HashMap<String, DyeColor>();
 	private static final Map<String, FireworkEffect.Type> fireworkShape = new HashMap<String, FireworkEffect.Type>();
+
 	static
 	{
 		for (DyeColor color : DyeColor.values())
@@ -95,6 +97,35 @@ public class MetaItemStack
 		completePotion = true;
 	}
 
+	public boolean canSpawn(final IEssentials ess)
+	{
+		try
+		{
+			ess.getServer().getUnsafe().modifyItemStack(stack, "{}");
+			return true;
+		}
+		catch (NullPointerException npe)
+		{
+			if (ess.getSettings().isDebug())
+			{
+				ess.getLogger().log(Level.INFO, "Itemstack is invalid", npe);
+			}
+			return false;
+		}
+		catch (NoSuchMethodError nsme)
+		{
+			return true;
+		}
+		catch (Throwable throwable)
+		{
+			if (ess.getSettings().isDebug())
+			{
+				ess.getLogger().log(Level.INFO, "Itemstack is invalid", throwable);
+			}
+			return false;
+		}
+	}
+
 	public void parseStringMeta(final CommandSource sender, final boolean allowUnsafe, String[] string, int fromArg, final IEssentials ess) throws Exception
 	{
 		if (string[fromArg].startsWith("{"))
@@ -102,6 +133,13 @@ public class MetaItemStack
 			try
 			{
 				stack = ess.getServer().getUnsafe().modifyItemStack(stack, Joiner.on(' ').join(Arrays.asList(string).subList(fromArg, string.length)));
+			}
+			catch (NullPointerException npe)
+			{
+				if (ess.getSettings().isDebug())
+				{
+					ess.getLogger().log(Level.INFO, "Itemstack is invalid", npe);
+				}
 			}
 			catch (NoSuchMethodError nsme)
 			{
