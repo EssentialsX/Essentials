@@ -6,6 +6,8 @@ import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import java.lang.management.ManagementFactory;
 import java.util.List;
+import java.util.logging.Level;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Server;
@@ -56,11 +58,19 @@ public class Commandgc extends EssentialsCommand
 				worldType = "The End";
 				break;
 			}
-			
+
 			int tileEntities = 0;
-			
-			for (Chunk chunk : w.getLoadedChunks()) {
-				tileEntities += chunk.getTileEntities().length;
+
+			try
+			{
+				for (Chunk chunk : w.getLoadedChunks())
+				{
+					tileEntities += chunk.getTileEntities().length;
+				}
+			}
+			catch (java.lang.ClassCastException ex)
+			{
+				Bukkit.getLogger().log(Level.SEVERE, "Corrupted chunk data on world " + w, ex);
 			}
 
 			sender.sendMessage(tl("gcWorld", worldType, w.getName(), w.getLoadedChunks().length, w.getEntities().size(), tileEntities));
