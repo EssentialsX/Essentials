@@ -500,13 +500,15 @@ public class EssentialsUpgrade
 		{
 			return;
 		}
-		
+
+		Boolean ignoreUFCache = doneFile.getBoolean("ignore-userfiles-cache", false);
+
 		final File userdir = new File(ess.getDataFolder(), "userdata");
 		if (!userdir.exists())
 		{
 			return;
 		}
-		
+
 		int countFiles = 0;
 		int countReqFiles = 0;
 		for (String string : userdir.list())
@@ -515,12 +517,12 @@ public class EssentialsUpgrade
 			{
 				continue;
 			}
-			
+
 			countFiles++;
-			
+
 			final String name = string.substring(0, string.length() - 4);
 			UUID uuid = null;
-			
+
 			try
 			{
 				uuid = UUID.fromString(name);
@@ -529,21 +531,21 @@ public class EssentialsUpgrade
 			{
 				countReqFiles++;
 			}
-			
+
 			if (countFiles > 100)
 			{
 				break;
-			}			
+			}
 		}
-		
+
 		if (countReqFiles < 1)
 		{
 			return;
 		}
-				
+
 		ess.getLogger().info("#### Starting Essentials UUID userdata conversion in a few seconds. ####");
 		ess.getLogger().info("We recommend you take a backup of your server before upgrading from the old username system.");
-		
+
 		try
 		{
 			Thread.sleep(10000);
@@ -553,13 +555,13 @@ public class EssentialsUpgrade
 			// NOOP
 		}
 
-		uuidFileConvert(ess);
+		uuidFileConvert(ess, ignoreUFCache);
 
 		doneFile.setProperty("uuidFileChange", true);
 		doneFile.save();
 	}
 
-	public static void uuidFileConvert(IEssentials ess)
+	public static void uuidFileConvert(IEssentials ess, Boolean ignoreUFCache)
 	{
 		ess.getLogger().info("Starting Essentials UUID userdata conversion");
 
@@ -607,8 +609,10 @@ public class EssentialsUpgrade
 				conf.load();
 				conf.setProperty("lastAccountName", name);
 				conf.save();
+				
+				String uuidConf = ignoreUFCache ? "force-uuid" : "uuid";
 
-				String uuidString = conf.getString("uuid", null);
+				String uuidString = conf.getString(uuidConf, null);
 
 				for (int i = 0; i < 4; i++)
 				{
@@ -625,7 +629,7 @@ public class EssentialsUpgrade
 							uuid = UUID.nameUUIDFromBytes(("NPC:" + name).getBytes(Charsets.UTF_8));
 							break;
 						}
-						
+
 						org.bukkit.OfflinePlayer player = ess.getServer().getOfflinePlayer(name);
 						uuid = player.getUniqueId();
 					}
@@ -634,7 +638,7 @@ public class EssentialsUpgrade
 					{
 						countBukkit++;
 						break;
-					}					
+					}
 				}
 
 				if (uuid != null)
@@ -649,7 +653,7 @@ public class EssentialsUpgrade
 			}
 		}
 		ess.getUserMap().getUUIDMap().forceWriteUUIDMap();
-        
+
 		ess.getLogger().info("Converted " + countFiles + "/" + countFiles + ".  Conversion complete.");
 		ess.getLogger().info("Converted via cache: " + countEssCache + " :: Converted via lookup: " + countBukkit + " :: Failed to convert: " + countFails);
 		ess.getLogger().info("To rerun the conversion type /essentials uuidconvert");

@@ -11,6 +11,7 @@ import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.base.Charsets;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import org.bukkit.Material;
@@ -299,7 +300,7 @@ public class Commandessentials extends EssentialsCommand
 					{
 						user.setLastLogin(currTime);
 					}
-					
+
 					if (user.isNPC())
 					{
 						continue;
@@ -328,14 +329,17 @@ public class Commandessentials extends EssentialsCommand
 		});
 
 	}
-	
+
 	private void run_uuidconvert(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
 		sender.sendMessage("Starting Essentials UUID userdata conversion, this may lag the server.");
-		EssentialsUpgrade.uuidFileConvert(ess);
+
+		Boolean ignoreUFCache = (args.length > 2 && args[1].toLowerCase(Locale.ENGLISH).contains("ignore"));
+		EssentialsUpgrade.uuidFileConvert(ess, ignoreUFCache);
+
 		sender.sendMessage("UUID conversion complete, check your server log for more information.");
 	}
-	
+
 	private void run_uuidtest(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
 		if (args.length < 2)
@@ -344,7 +348,7 @@ public class Commandessentials extends EssentialsCommand
 		}
 		String name = args[1];
 		sender.sendMessage("Looking up UUID for " + name);
-		
+
 		for (Player player : server.getOnlinePlayers())
 		{
 			if (player.getName().equalsIgnoreCase(name))
@@ -352,15 +356,15 @@ public class Commandessentials extends EssentialsCommand
 				sender.sendMessage("Online player: " + player.getUniqueId().toString());
 			}
 		}
-		
+
 		org.bukkit.OfflinePlayer player = ess.getServer().getOfflinePlayer(name);
 		UUID bukkituuid = player.getUniqueId();
 		sender.sendMessage("Bukkit Lookup: " + bukkituuid.toString());
-		
-		UUID npcuuid = UUID.nameUUIDFromBytes(("NPC:" + name).getBytes(Charsets.UTF_8));		
+
+		UUID npcuuid = UUID.nameUUIDFromBytes(("NPC:" + name).getBytes(Charsets.UTF_8));
 		sender.sendMessage("NPC UUID: " + npcuuid.toString());
-		
+
 		UUID offlineuuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8));
-		sender.sendMessage("Offline Mode UUID: " + offlineuuid.toString());		
+		sender.sendMessage("Offline Mode UUID: " + offlineuuid.toString());
 	}
 }
