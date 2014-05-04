@@ -155,7 +155,7 @@ public class WorldDataHolder {
 		// Search for a LastName match
 		for (User usr : getUserList()) {
 			
-			if (usr.getLastName().equalsIgnoreCase(currentName)) {
+			if (usr.getLastName().equalsIgnoreCase(currentName) && !usr.getUUID().equalsIgnoreCase(usr.getLastName())) {
 				
 				// Clone this user so we can set it's uUID
 				user = usr.clone(uUID, currentName);
