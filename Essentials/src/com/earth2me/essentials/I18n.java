@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import net.ess3.api.IEssentials;
+import org.bukkit.Bukkit;
 
 
 public class I18n implements net.ess3.api.II18n
@@ -23,15 +24,27 @@ public class I18n implements net.ess3.api.II18n
 	private transient ResourceBundle customBundle;
 	private transient ResourceBundle localeBundle;
 	private final transient ResourceBundle defaultBundle;
-	private final transient Map<String, MessageFormat> messageFormatCache = new HashMap<String, MessageFormat>();
+	private transient Map<String, MessageFormat> messageFormatCache = new HashMap<String, MessageFormat>();
 	private final transient IEssentials ess;
 	private static final Pattern NODOUBLEMARK = Pattern.compile("''");
+	private static final ResourceBundle NULL_BUNDLE = new ResourceBundle()
+	{
+		public Enumeration<String> getKeys()
+		{
+			return null;
+		}
+
+		protected Object handleGetObject(String key)
+		{
+			return null;
+		}
+	};
 
 	public I18n(final IEssentials ess)
 	{
 		this.ess = ess;
-		customBundle = ResourceBundle.getBundle(MESSAGES, defaultLocale, new FileResClassLoader(I18n.class.getClassLoader(), ess));
-		localeBundle = ResourceBundle.getBundle(MESSAGES, defaultLocale);
+		customBundle = NULL_BUNDLE;
+		localeBundle = NULL_BUNDLE;
 		defaultBundle = ResourceBundle.getBundle(MESSAGES, Locale.ENGLISH);
 	}
 
@@ -128,9 +141,26 @@ public class I18n implements net.ess3.api.II18n
 			currentLocale = new Locale(parts[0], parts[1], parts[2]);
 		}
 		ResourceBundle.clearCache();
+		messageFormatCache = new HashMap<String, MessageFormat>();
 		Logger.getLogger("Essentials").log(Level.INFO, String.format("Using locale %s", currentLocale.toString()));
-		customBundle = ResourceBundle.getBundle(MESSAGES, currentLocale, new FileResClassLoader(I18n.class.getClassLoader(), ess));
-		localeBundle = ResourceBundle.getBundle(MESSAGES, currentLocale);
+
+		try
+		{
+			localeBundle = ResourceBundle.getBundle(MESSAGES, currentLocale);
+		}
+		catch (MissingResourceException ex)
+		{
+			localeBundle = NULL_BUNDLE;
+		}
+
+		try
+		{
+			customBundle = ResourceBundle.getBundle(MESSAGES, currentLocale, new FileResClassLoader(I18n.class.getClassLoader(), ess));
+		}
+		catch (MissingResourceException ex)
+		{
+			customBundle = NULL_BUNDLE;
+		}
 	}
 
 	public static String capitalCase(final String input)
@@ -166,7 +196,7 @@ public class I18n implements net.ess3.api.II18n
 				{
 				}
 			}
-			return super.getResource(string);
+			return null;
 		}
 
 		@Override
@@ -183,7 +213,7 @@ public class I18n implements net.ess3.api.II18n
 				{
 				}
 			}
-			return super.getResourceAsStream(string);
+			return null;
 		}
 	}
 }

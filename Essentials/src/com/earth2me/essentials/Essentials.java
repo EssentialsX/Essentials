@@ -129,11 +129,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 		}
 		i18n = new I18n(this);
 		i18n.onEnable();
+		i18n.updateLocale("en");
 		LOGGER.log(Level.INFO, tl("usingTempFolderForTesting"));
 		LOGGER.log(Level.INFO, dataFolder.toString());
 		this.initialize(null, server, new PluginDescriptionFile(new FileReader(new File("src" + File.separator + "plugin.yml"))), dataFolder, null, null);
 		settings = new Settings(this);
-		i18n.updateLocale("en");
 		userMap = new UserMap(this);
 		permissionsHandler = new PermissionsHandler(this, false);
 		Economy.setEss(this);
@@ -649,7 +649,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 	@Override
 	public User getOfflineUser(final String name)
 	{
-		final User user = userMap.getUser(name);		
+		final User user = userMap.getUser(name);
 		if (user != null && user.getBase() instanceof OfflinePlayer)
 		{
 			//This code should attempt to use the last known name of a user, if Bukkit returns name as null.
