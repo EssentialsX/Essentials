@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n.tl;
+import java.util.UUID;
 import net.ess3.api.IEssentials;
 import net.ess3.api.IUser;
 import org.bukkit.Location;
@@ -13,7 +14,7 @@ public class TimedTeleport implements Runnable
 	private final IUser teleportOwner;
 	private final IEssentials ess;
 	private final Teleport teleport;
-	private final String timer_teleportee;
+	private final UUID timer_teleportee;
 	private int timer_task = -1;
 	private final long timer_started;	// time this task was initiated
 	private final long timer_delay;		// how long to delay the teleportPlayer
@@ -42,7 +43,7 @@ public class TimedTeleport implements Runnable
 		this.timer_initX = Math.round(teleportUser.getBase().getLocation().getX() * MOVE_CONSTANT);
 		this.timer_initY = Math.round(teleportUser.getBase().getLocation().getY() * MOVE_CONSTANT);
 		this.timer_initZ = Math.round(teleportUser.getBase().getLocation().getZ() * MOVE_CONSTANT);
-		this.timer_teleportee = teleportUser.getName();
+		this.timer_teleportee = teleportUser.getBase().getUniqueId();
 		this.timer_teleportTarget = target;
 		this.timer_chargeFor = chargeFor;
 		this.timer_cause = cause;
@@ -146,7 +147,7 @@ public class TimedTeleport implements Runnable
 			if (notifyUser)
 			{
 				teleportOwner.sendMessage(tl("pendingTeleportCancelled"));
-				if (timer_teleportee != null && !timer_teleportee.equals(teleportOwner.getName()))
+				if (timer_teleportee != null && !timer_teleportee.equals(teleportOwner.getBase().getUniqueId()))
 				{
 					ess.getUser(timer_teleportee).sendMessage(tl("pendingTeleportCancelled"));
 				}
