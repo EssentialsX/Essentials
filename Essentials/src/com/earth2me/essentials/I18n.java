@@ -123,22 +123,21 @@ public class I18n implements net.ess3.api.II18n
 
 	public void updateLocale(final String loc)
 	{
-		if (loc == null || loc.isEmpty())
+		if (loc != null && !loc.isEmpty())
 		{
-			return;
-		}
-		final String[] parts = loc.split("[_\\.]");
-		if (parts.length == 1)
-		{
-			currentLocale = new Locale(parts[0]);
-		}
-		if (parts.length == 2)
-		{
-			currentLocale = new Locale(parts[0], parts[1]);
-		}
-		if (parts.length == 3)
-		{
-			currentLocale = new Locale(parts[0], parts[1], parts[2]);
+			final String[] parts = loc.split("[_\\.]");
+			if (parts.length == 1)
+			{
+				currentLocale = new Locale(parts[0]);
+			}
+			if (parts.length == 2)
+			{
+				currentLocale = new Locale(parts[0], parts[1]);
+			}
+			if (parts.length == 3)
+			{
+				currentLocale = new Locale(parts[0], parts[1], parts[2]);
+			}
 		}
 		ResourceBundle.clearCache();
 		messageFormatCache = new HashMap<String, MessageFormat>();
