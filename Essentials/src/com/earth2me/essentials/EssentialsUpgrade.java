@@ -548,7 +548,7 @@ public class EssentialsUpgrade
 
 		try
 		{
-			Thread.sleep(10000);
+			Thread.sleep(15000);
 		}
 		catch (InterruptedException ex)
 		{
@@ -595,7 +595,7 @@ public class EssentialsUpgrade
 
 			countFiles++;
 
-			final String name = string.substring(0, string.length() - 4);
+			String name = string.substring(0, string.length() - 4);
 			EssentialsUserConf config;
 			UUID uuid = null;
 			try
@@ -609,7 +609,7 @@ public class EssentialsUpgrade
 				conf.load();
 				conf.setProperty("lastAccountName", name);
 				conf.save();
-				
+
 				String uuidConf = ignoreUFCache ? "force-uuid" : "uuid";
 
 				String uuidString = conf.getString(uuidConf, null);

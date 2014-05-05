@@ -84,7 +84,7 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 	{
 		try
 		{
-			final String sanitizedName = StringUtil.sanitizeFileName(name);
+			final String sanitizedName = StringUtil.safeString(name);
 			if (names.containsKey(sanitizedName))
 			{
 				final UUID uuid = names.get(sanitizedName);
@@ -93,7 +93,7 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 
 			for (Player player : ess.getServer().getOnlinePlayers())
 			{
-				String sanitizedPlayer = StringUtil.sanitizeFileName(player.getName());
+				String sanitizedPlayer = StringUtil.safeString(player.getName());
 				if (sanitizedPlayer.equalsIgnoreCase(sanitizedName))
 				{
 					User user = new User(player, ess);
@@ -144,7 +144,7 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 			keys.add(uuid);
 			if (name != null && name.length() > 0)
 			{
-				final String keyName = StringUtil.sanitizeFileName(name);
+				final String keyName = StringUtil.safeString(name);
 				if (!names.containsKey(keyName) || !names.get(keyName).equals(uuid))
 				{
 					names.put(keyName, uuid);
@@ -195,7 +195,7 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 			users.invalidate(uuid);
 		}
 		names.remove(name);
-		names.remove(StringUtil.sanitizeFileName(name));
+		names.remove(StringUtil.safeString(name));
 	}
 
 	public Set<UUID> getAllUniqueUsers()

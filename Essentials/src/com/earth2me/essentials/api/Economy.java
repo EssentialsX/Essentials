@@ -51,6 +51,7 @@ public class Economy
 	private static void createNPCFile(String name)
 	{
 		File folder = new File(ess.getDataFolder(), "userdata");
+		name = StringUtil.safeString(name);
 		if (!folder.exists())
 		{
 			folder.mkdirs();
@@ -450,4 +451,3 @@ public class Economy
 		deleteNPC(name);
 	}
 }
-
