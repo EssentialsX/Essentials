@@ -43,9 +43,9 @@ public class I18n implements net.ess3.api.II18n
 	public I18n(final IEssentials ess)
 	{
 		this.ess = ess;
-		customBundle = NULL_BUNDLE;
-		localeBundle = NULL_BUNDLE;
 		defaultBundle = ResourceBundle.getBundle(MESSAGES, Locale.ENGLISH);
+		localeBundle = defaultBundle;
+		customBundle = NULL_BUNDLE;		
 	}
 
 	public void onEnable()
