@@ -237,7 +237,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 
 	private void _dispose()
 	{
-		this.base = new OfflinePlayer(base.getUniqueId(), ess.getServer());
+		if (!base.isOnline())
+		{
+			this.base = new OfflinePlayer(base.getUniqueId(), ess.getServer());
+		}
 	}
 
 	@Override

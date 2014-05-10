@@ -37,25 +37,25 @@ public class EssentialsPlayerListener implements Listener
 {
 	private static final Logger LOGGER = Logger.getLogger("Essentials");
 	private final transient IEssentials ess;
-	
+
 	public EssentialsPlayerListener(final IEssentials parent)
 	{
 		this.ess = parent;
 	}
-	
+
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerRespawn(final PlayerRespawnEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
 		updateCompass(user);
 		user.setDisplayNick();
-		
+
 		if (ess.getSettings().isTeleportInvulnerability())
 		{
 			user.enableInvulnerabilityAfterTeleport();
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerChat(final AsyncPlayerChatEvent event)
 	{
@@ -89,11 +89,11 @@ public class EssentialsPlayerListener implements Listener
 				ess.getLogger().info("Ignore could not block chat due to custom chat plugin event.");
 			}
 		}
-		
+
 		user.updateActivity(true);
 		user.setDisplayNick();
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerMove(final PlayerMoveEvent event)
 	{
@@ -103,19 +103,19 @@ public class EssentialsPlayerListener implements Listener
 		{
 			return;
 		}
-		
+
 		if (!ess.getSettings().cancelAfkOnMove() && !ess.getSettings().getFreezeAfkPlayers())
 		{
 			event.getHandlers().unregister(this);
-			
+
 			if (ess.getSettings().isDebug())
 			{
 				LOGGER.log(Level.INFO, "Unregistering move listener");
 			}
-			
+
 			return;
 		}
-		
+
 		final User user = ess.getUser(event.getPlayer());
 		if (user.isAfk() && ess.getSettings().getFreezeAfkPlayers())
 		{
@@ -146,12 +146,12 @@ public class EssentialsPlayerListener implements Listener
 			user.updateActivity(true);
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerQuit(final PlayerQuitEvent event)
 	{
 		final User user = ess.getUser(event.getPlayer());
-		
+
 		if (ess.getSettings().allowSilentJoinQuit() && user.isAuthorized("essentials.silentquit"))
 		{
 			event.setQuitMessage(null);
@@ -164,7 +164,7 @@ public class EssentialsPlayerListener implements Listener
 					.replace("{PLAYER}", player.getDisplayName())
 					.replace("{USERNAME}", player.getName()));
 		}
-		
+
 		if (ess.getSettings().removeGodOnDisconnect() && user.isGodModeEnabled())
 		{
 			user.setGodModeEnabled(false);
@@ -181,7 +181,7 @@ public class EssentialsPlayerListener implements Listener
 		user.updateActivity(false);
 		user.dispose();
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerJoin(final PlayerJoinEvent event)
 	{
@@ -199,42 +199,44 @@ public class EssentialsPlayerListener implements Listener
 			event.setJoinMessage(null);
 		}
 	}
-	
+
 	public void delayedJoin(final Player player, final String message)
 	{
 		if (!player.isOnline())
 		{
 			return;
 		}
-		
+
 		ess.getBackup().onPlayerJoin();
-		final User user = ess.getUser(player);
-		
-		
-		if (user.isNPC())
+		final User dUser = ess.getUser(player);
+
+
+		if (dUser.isNPC())
 		{
-			user.setNPC(false);
+			dUser.setNPC(false);
 		}
-		
+
 		final long currentTime = System.currentTimeMillis();
-		user.checkMuteTimeout(currentTime);
-		user.updateActivity(false);
-		
+		dUser.checkMuteTimeout(currentTime);
+		dUser.updateActivity(false);
+
 		ess.scheduleSyncDelayedTask(new Runnable()
 		{
 			@Override
 			public void run()
 			{
+				final User user = ess.getUser(player);
+
 				if (!user.getBase().isOnline())
 				{
 					return;
 				}
-				
+
 				user.setLastAccountName(user.getBase().getName());
 				user.setLastLogin(currentTime);
 				user.setDisplayNick();
 				updateCompass(user);
-				
+
 				if (!ess.getVanishedPlayers().isEmpty() && !user.isAuthorized("essentials.vanish.see"))
 				{
 					for (String p : ess.getVanishedPlayers())
@@ -246,12 +248,12 @@ public class EssentialsPlayerListener implements Listener
 						}
 					}
 				}
-				
+
 				if (user.isAuthorized("essentials.sleepingignored"))
 				{
 					user.getBase().setSleepingIgnored(true);
 				}
-				
+
 				if ((ess.getSettings().allowSilentJoinQuit() && user.isAuthorized("essentials.silentjoin")) || message == null)
 				{
 					// Do nothing - silently join
@@ -267,7 +269,7 @@ public class EssentialsPlayerListener implements Listener
 				{
 					ess.getServer().broadcastMessage(message);
 				}
-				
+
 				if (!ess.getSettings().isCommandDisabled("motd") && user.isAuthorized("essentials.motd"))
 				{
 					try
@@ -289,7 +291,7 @@ public class EssentialsPlayerListener implements Listener
 						}
 					}
 				}
-				
+
 				if (!ess.getSettings().isCommandDisabled("mail") && user.isAuthorized("essentials.mail"))
 				{
 					final List<String> mail = user.getMails();
@@ -302,7 +304,7 @@ public class EssentialsPlayerListener implements Listener
 						user.sendMessage(tl("youHaveNewMail", mail.size()));
 					}
 				}
-				
+
 				if (user.isAuthorized("essentials.fly.safelogin"))
 				{
 					user.getBase().setFallDistance(0);
@@ -311,11 +313,11 @@ public class EssentialsPlayerListener implements Listener
 						user.getBase().setAllowFlight(true);
 						user.getBase().setFlying(true);
 						user.getBase().sendMessage(tl("flyMode", tl("enabled"), user.getDisplayName()));
-					}					
+					}
 				}
 				user.getBase().setFlySpeed(0.1f);
 				user.getBase().setWalkSpeed(0.2f);
-				
+
 			}
 		});
 	}
@@ -334,7 +336,7 @@ public class EssentialsPlayerListener implements Listener
 			user.getBase().setCompassTarget(updateLoc);
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerLogin2(final PlayerLoginEvent event)
 	{
@@ -345,11 +347,11 @@ public class EssentialsPlayerListener implements Listener
 		default:
 			return;
 		}
-		
+
 		final String banReason = tl("banFormat", tl("defaultBanReason"), "Console");
 		event.disallow(Result.KICK_BANNED, banReason);
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerLogin(final PlayerLoginEvent event)
 	{
@@ -361,9 +363,9 @@ public class EssentialsPlayerListener implements Listener
 		default:
 			return;
 		}
-		
+
 		final User user = ess.getUser(event.getPlayer());
-		
+
 		if (event.getResult() == Result.KICK_BANNED || user.getBase().isBanned())
 		{
 			final boolean banExpired = user.checkBanTimeout(System.currentTimeMillis());
@@ -383,7 +385,7 @@ public class EssentialsPlayerListener implements Listener
 				return;
 			}
 		}
-		
+
 		if (event.getResult() == Result.KICK_FULL && !user.isAuthorized("essentials.joinfullserver"))
 		{
 			event.disallow(Result.KICK_FULL, tl("serverFull"));
@@ -391,7 +393,7 @@ public class EssentialsPlayerListener implements Listener
 		}
 		event.allow();
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerTeleport(final PlayerTeleportEvent event)
 	{
@@ -411,7 +413,7 @@ public class EssentialsPlayerListener implements Listener
 			}
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerEggThrow(final PlayerEggThrowEvent event)
 	{
@@ -423,7 +425,7 @@ public class EssentialsPlayerListener implements Listener
 			user.getBase().updateInventory();
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerBucketEmpty(final PlayerBucketEmptyEvent event)
 	{
@@ -441,7 +443,7 @@ public class EssentialsPlayerListener implements Listener
 			});
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerCommandPreprocess(final PlayerCommandPreprocessEvent event)
 	{
@@ -464,7 +466,7 @@ public class EssentialsPlayerListener implements Listener
 			user.updateActivity(true);
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerChangedWorldFlyReset(final PlayerChangedWorldEvent event)
 	{
@@ -489,7 +491,7 @@ public class EssentialsPlayerListener implements Listener
 			{
 				user.getBase().setFlySpeed(user.getBase().getFlySpeed() * 0.99999f);
 			}
-			
+
 			if (user.getBase().getWalkSpeed() > ess.getSettings().getMaxWalkSpeed() && !user.isAuthorized("essentials.speed.bypass"))
 			{
 				user.getBase().setWalkSpeed((float)ess.getSettings().getMaxWalkSpeed());
@@ -500,7 +502,7 @@ public class EssentialsPlayerListener implements Listener
 			}
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerChangedWorld(final PlayerChangedWorldEvent event)
 	{
@@ -512,7 +514,7 @@ public class EssentialsPlayerListener implements Listener
 		{
 			user.sendMessage(tl("noGodWorldWarning"));
 		}
-		
+
 		if (!user.getWorld().getName().equals(newWorld))
 		{
 			user.sendMessage(tl("currentWorld", newWorld));
@@ -522,7 +524,7 @@ public class EssentialsPlayerListener implements Listener
 			user.setVanished(user.isAuthorized("essentials.vanish"));
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerInteract(final PlayerInteractEvent event)
 	{
@@ -571,7 +573,7 @@ public class EssentialsPlayerListener implements Listener
 		try
 		{
 			final Location otarget = LocationUtil.getTarget(user.getBase());
-			
+
 			ess.scheduleSyncDelayedTask(
 					new Runnable()
 			{
@@ -597,7 +599,7 @@ public class EssentialsPlayerListener implements Listener
 			}
 		}
 	}
-	
+
 	private boolean usePowertools(final User user, final int id)
 	{
 		final List<String> commandList = user.getPowertool(id);
@@ -635,7 +637,7 @@ public class EssentialsPlayerListener implements Listener
 		}
 		return used;
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerPickupItem(final PlayerPickupItemEvent event)
 	{
@@ -647,14 +649,14 @@ public class EssentialsPlayerListener implements Listener
 			}
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onInventoryClickEvent(final InventoryClickEvent event)
 	{
 		Player refreshPlayer = null;
 		final Inventory top = event.getView().getTopInventory();
 		final InventoryType type = top.getType();
-		
+
 		if (type == InventoryType.PLAYER)
 		{
 			final User user = ess.getUser((Player)event.getWhoClicked());
@@ -699,7 +701,7 @@ public class EssentialsPlayerListener implements Listener
 				refreshPlayer = user.getBase();
 			}
 		}
-		
+
 		if (refreshPlayer != null)
 		{
 			final Player player = refreshPlayer;
@@ -713,7 +715,7 @@ public class EssentialsPlayerListener implements Listener
 			}, 1);
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onInventoryCloseEvent(final InventoryCloseEvent event)
 	{
@@ -752,7 +754,7 @@ public class EssentialsPlayerListener implements Listener
 				refreshPlayer = user.getBase();
 			}
 		}
-		
+
 		if (refreshPlayer != null)
 		{
 			final Player player = refreshPlayer;
@@ -766,7 +768,7 @@ public class EssentialsPlayerListener implements Listener
 			}, 1);
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerFishEvent(final PlayerFishEvent event)
 	{
