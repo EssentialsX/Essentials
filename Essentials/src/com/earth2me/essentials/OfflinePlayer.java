@@ -1481,12 +1481,27 @@ public class OfflinePlayer implements Player
 	@Override
 	public boolean isBanned()
 	{
+		if (base.getName() == null && getName() != null)
+		{
+			return server.getBanList(BanList.Type.NAME).isBanned(getName());
+		}
 		return base.isBanned();
 	}
 
 	@Override
 	public void setBanned(boolean banned)
 	{
+		if (base.getName() == null && getName() != null)
+		{
+			if (banned)
+			{
+				server.getBanList(BanList.Type.NAME).addBan(getName(), null, null, null);
+			}
+			else
+			{
+				server.getBanList(BanList.Type.NAME).pardon(getName());
+			}
+		}
 		base.setBanned(banned);
 	}
 
