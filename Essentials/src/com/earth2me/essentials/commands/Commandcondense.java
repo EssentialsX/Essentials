@@ -1,23 +1,19 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.ChargeException;
-import com.earth2me.essentials.Trade;
-import com.earth2me.essentials.Trade.OverflowType;
-import com.earth2me.essentials.User;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import net.ess3.api.MaxMoneyException;
-import org.bukkit.Bukkit;
+import static com.earth2me.essentials.I18n.tl;
+import java.util.*;
 import org.bukkit.Material;
 import org.bukkit.Server;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
+import com.earth2me.essentials.ChargeException;
+import com.earth2me.essentials.Trade;
+import com.earth2me.essentials.Trade.OverflowType;
+import com.earth2me.essentials.User;
+import net.ess3.api.MaxMoneyException;
 
 
 public class Commandcondense extends EssentialsCommand
@@ -32,12 +28,11 @@ public class Commandcondense extends EssentialsCommand
 	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
 	{
 		List<ItemStack> is = new ArrayList<ItemStack>();
-		boolean validateReverse;
 
+		boolean validateReverse = false;
 		if (args.length > 0)
 		{
 			is = ess.getItemDb().getMatching(user, args);
-			validateReverse = false;
 		}
 		else
 		{
@@ -52,14 +47,28 @@ public class Commandcondense extends EssentialsCommand
 			validateReverse = true;
 		}
 
+		boolean didConvert = false;
 		for (final ItemStack itemStack : is)
 		{
-			condenseStack(user, itemStack, validateReverse);
+			if (condenseStack(user, itemStack, validateReverse))
+			{
+				didConvert = true;
+			}
 		}
 		user.getBase().updateInventory();
+
+		if (didConvert)
+		{
+			user.sendMessage(tl("itemsConverted"));
+		}
+		else
+		{
+			user.sendMessage(tl("itemsNotConverted"));
+			throw new NoChargeException();
+		}
 	}
 
-	private void condenseStack(final User user, final ItemStack stack, final boolean validateReverse) throws ChargeException, MaxMoneyException
+	private boolean condenseStack(final User user, final ItemStack stack, final boolean validateReverse) throws ChargeException, MaxMoneyException
 	{
 		final SimpleRecipe condenseType = getCondenseType(stack);
 		if (condenseType != null)
@@ -72,7 +81,6 @@ public class Commandcondense extends EssentialsCommand
 				boolean pass = false;
 				for (Recipe revRecipe : ess.getServer().getRecipesFor(input))
 				{
-
 					if (getStackOnRecipeMatch(revRecipe, result) != null)
 					{
 						pass = true;
@@ -81,7 +89,7 @@ public class Commandcondense extends EssentialsCommand
 				}
 				if (!pass)
 				{
-					return;
+					return false;
 				}
 			}
 
@@ -106,8 +114,10 @@ public class Commandcondense extends EssentialsCommand
 				final Trade add = new Trade(result, ess);
 				remove.charge(user);
 				add.pay(user, OverflowType.DROP);
+				return true;
 			}
 		}
+		return false;
 	}
 
 	private SimpleRecipe getCondenseType(final ItemStack stack)
@@ -186,12 +196,12 @@ public class Commandcondense extends EssentialsCommand
 	}
 
 
-	class SimpleRecipe implements Recipe
+	private class SimpleRecipe implements Recipe
 	{
 		private ItemStack result;
 		private ItemStack input;
 
-		SimpleRecipe(ItemStack result, ItemStack input)
+		private SimpleRecipe(ItemStack result, ItemStack input)
 		{
 			this.result = result;
 			this.input = input;
