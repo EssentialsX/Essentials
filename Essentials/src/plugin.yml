@@ -63,6 +63,10 @@ commands:
     description: Clear all items in your inventory.
     usage: /<command> [player|*] [item[:<data>]|*|**] [amount]
     aliases: [ci,eci,clean,eclean,clear,eclear,clearinvent,eclearinvent,eclearinventory]
+  condense:
+    description: Condenses items into a more compact form.
+    usage: /<command>
+    aliases: [econdense,compact,ecompact,blocks,eblocks,toblocks,etoblocks]
   compass:
     description: Describes your current bearing.
     usage: /<command>
