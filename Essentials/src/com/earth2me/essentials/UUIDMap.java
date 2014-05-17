@@ -45,45 +45,56 @@ public class UUIDMap
 				userList.createNewFile();
 			}
 
-			final BufferedReader reader = new BufferedReader(new FileReader(userList));
-			try
+			synchronized (pendingDiskWrites)
 			{
-				while (true)
+				if (ess.getSettings().isDebug())
 				{
-					final String line = reader.readLine();
-					if (line == null)
+					ess.getLogger().log(Level.INFO, "Reading usermap from disk");
+				}
+
+				names.clear();
+				history.clear();
+
+				final BufferedReader reader = new BufferedReader(new FileReader(userList));
+				try
+				{
+					while (true)
 					{
-						break;
-					}
-					else
-					{
-						final String[] values = splitPattern.split(line);
-						if (values.length == 2)
+						final String line = reader.readLine();
+						if (line == null)
 						{
-							final String name = values[0];
-							final UUID uuid = UUID.fromString(values[1]);
-							names.put(name, uuid);
-							if (!history.containsKey(uuid))
+							break;
+						}
+						else
+						{
+							final String[] values = splitPattern.split(line);
+							if (values.length == 2)
 							{
-								final ArrayList<String> list = new ArrayList<String>();
-								list.add(name);
-								history.put(uuid, list);
-							}
-							else
-							{
-								final ArrayList<String> list = history.get(uuid);
-								if (!list.contains(name))
+								final String name = values[0];
+								final UUID uuid = UUID.fromString(values[1]);
+								names.put(name, uuid);
+								if (!history.containsKey(uuid))
 								{
+									final ArrayList<String> list = new ArrayList<String>();
 									list.add(name);
+									history.put(uuid, list);
+								}
+								else
+								{
+									final ArrayList<String> list = history.get(uuid);
+									if (!list.contains(name))
+									{
+										list.add(name);
+									}
 								}
 							}
 						}
 					}
 				}
-			}
-			finally
-			{
-				reader.close();
+				finally
+				{
+					reader.close();
+				}
 			}
 		}
 		catch (IOException ex)
@@ -99,6 +110,10 @@ public class UUIDMap
 
 	public void forceWriteUUIDMap()
 	{
+		if (ess.getSettings().isDebug())
+		{
+			ess.getLogger().log(Level.INFO, "Forcing usermap write to disk");
+		}
 		try
 		{
 			Future<?> future = _writeUUIDMap();;
@@ -119,7 +134,7 @@ public class UUIDMap
 
 	public Future<?> _writeUUIDMap()
 	{
-		final ConcurrentSkipListMap<String, UUID> names = ess.getUserMap().getNames().clone();
+		final ConcurrentSkipListMap<String, UUID> names = ess.getUserMap().getNames();
 		if (names.size() < 1)
 		{
 			return null;

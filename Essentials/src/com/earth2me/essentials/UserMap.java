@@ -51,7 +51,6 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 						return;
 					}
 					keys.clear();
-					names.clear();
 					users.invalidateAll();
 					for (String string : userdir.list())
 					{
@@ -200,7 +199,7 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 
 	public Set<UUID> getAllUniqueUsers()
 	{
-		return Collections.unmodifiableSet(keys);
+		return Collections.unmodifiableSet(keys.clone());
 	}
 
 	public int getUniqueUsers()
@@ -208,12 +207,12 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 		return keys.size();
 	}
 
-	public ConcurrentSkipListMap<String, UUID> getNames()
+	protected ConcurrentSkipListMap<String, UUID> getNames()
 	{
 		return names;
 	}
 
-	public ConcurrentSkipListMap<UUID, ArrayList<String>> getHistory()
+	protected ConcurrentSkipListMap<UUID, ArrayList<String>> getHistory()
 	{
 		return history;
 	}
