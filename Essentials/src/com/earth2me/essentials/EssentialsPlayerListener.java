@@ -340,11 +340,8 @@ public class EssentialsPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerLogin2(final PlayerLoginEvent event)
 	{
-		switch (event.getResult())
+		if (event.getResult() != Result.KICK_BANNED)
 		{
-		case KICK_BANNED:
-			break;
-		default:
 			return;
 		}
 
@@ -355,43 +352,39 @@ public class EssentialsPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerLogin(final PlayerLoginEvent event)
 	{
-		switch (event.getResult())
+		if (event.getResult() == Result.KICK_FULL)
 		{
-		case KICK_FULL:
-		case KICK_BANNED:
-			break;
-		default:
-			return;
-		}
-
-		final User user = ess.getUser(event.getPlayer());
-
-		if (event.getResult() == Result.KICK_BANNED || user.getBase().isBanned())
-		{
-			final boolean banExpired = user.checkBanTimeout(System.currentTimeMillis());
-			if (!banExpired)
+			final User user = ess.getUser(event.getPlayer());
+			if (user.isAuthorized("essentials.joinfullserver"))
 			{
-				String banReason = user.getBanReason();
-				if (banReason == null || banReason.isEmpty() || banReason.equalsIgnoreCase("ban"))
-				{
-					banReason = event.getKickMessage();
-				}
-				if (user.getBanTimeout() > 0)
-				{
-					//TODO: TL This
-					banReason += "\n\n" + "Expires in " + DateUtil.formatDateDiff(user.getBanTimeout());
-				}
-				event.disallow(Result.KICK_BANNED, banReason);
+				event.allow();
 				return;
 			}
-		}
-
-		if (event.getResult() == Result.KICK_FULL && !user.isAuthorized("essentials.joinfullserver"))
-		{
 			event.disallow(Result.KICK_FULL, tl("serverFull"));
 			return;
 		}
-		event.allow();
+
+		if (event.getResult() == Result.KICK_BANNED || event.getPlayer().isBanned())
+		{
+			final User user = ess.getUser(event.getPlayer());
+			final boolean banExpired = user.checkBanTimeout(System.currentTimeMillis());
+			if (banExpired)
+			{
+				event.allow();
+				return;
+			}
+			String banReason = user.getBanReason();
+			if (banReason == null || banReason.isEmpty() || banReason.equalsIgnoreCase("ban"))
+			{
+				banReason = event.getKickMessage();
+			}
+			if (user.getBanTimeout() > 0)
+			{
+				//TODO: TL This
+				banReason += "\n\n" + "Expires in " + DateUtil.formatDateDiff(user.getBanTimeout());
+			}
+			event.disallow(Result.KICK_BANNED, banReason);
+		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
