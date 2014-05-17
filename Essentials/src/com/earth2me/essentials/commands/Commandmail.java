@@ -47,13 +47,13 @@ public class Commandmail extends EssentialsCommand
 			{
 				throw new Exception(tl("noPerm", "essentials.mail.send"));
 			}
-			
+
 			if (user.isMuted())
 			{
 				throw new Exception(tl("voiceSilenced"));
 			}
 
-			User u = ess.getUser(args[1]);
+			User u = getPlayer(server, args[1], true, true);
 			if (u == null)
 			{
 				throw new Exception(tl("playerNeverOnServer", args[1]));
@@ -112,7 +112,7 @@ public class Commandmail extends EssentialsCommand
 		}
 		else if (args.length >= 3 && "send".equalsIgnoreCase(args[0]))
 		{
-			User u = ess.getUser(args[1]);
+			User u = getPlayer(server, args[1], true, true);
 			if (u == null)
 			{
 				throw new Exception(tl("playerNeverOnServer", args[1]));
@@ -130,7 +130,7 @@ public class Commandmail extends EssentialsCommand
 		else if (args.length >= 2)
 		{
 			//allow sending from console without "send" argument, since it's the only thing the console can do
-			User u = ess.getUser(args[0]);
+			User u = getPlayer(server, args[0], true, true);
 			if (u == null)
 			{
 				throw new Exception(tl("playerNeverOnServer", args[0]));

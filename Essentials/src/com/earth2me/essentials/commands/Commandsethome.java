@@ -40,7 +40,7 @@ public class Commandsethome extends EssentialsCommand
 				name = args[1].toLowerCase(Locale.ENGLISH);
 				if (user.isAuthorized("essentials.sethome.others"))
 				{
-					usersHome = ess.getUser(args[0]);
+					usersHome = getPlayer(server, args[0], true, true);
 					if (usersHome == null)
 					{
 						throw new PlayerNotFoundException();

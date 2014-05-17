@@ -10,6 +10,7 @@ import com.earth2me.essentials.utils.NumberUtil;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.ess3.api.IEssentials;
@@ -28,7 +29,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 {
 	private static final Logger logger = Logger.getLogger("Essentials");
 	private CommandSource replyTo = null;
-	private transient String teleportRequester;
+	private transient UUID teleportRequester;
 	private transient boolean teleportRequestHere;
 	private transient Location teleportLocation;
 	private transient boolean vanished;
@@ -265,7 +266,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	public void requestTeleport(final User player, final boolean here)
 	{
 		teleportRequestTime = System.currentTimeMillis();
-		teleportRequester = player == null ? null : player.getName();
+		teleportRequester = player == null ? null : player.getBase().getUniqueId();
 		teleportRequestHere = here;
 		if (player == null)
 		{
@@ -277,7 +278,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		}
 	}
 
-	public String getTeleportRequest()
+	public UUID getTeleportRequest()
 	{
 		return teleportRequester;
 	}
