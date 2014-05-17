@@ -803,6 +803,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 	{
 		return this.getScheduler().runTaskLaterAsynchronously(this, run, delay);
 	}
+	
+	@Override
+	public BukkitTask runTaskTimerAsynchronously(final Runnable run, final long delay, final long period)
+	{
+		return this.getScheduler().runTaskTimerAsynchronously(this, run, delay, period);
+	}
 
 	@Override
 	public int scheduleSyncDelayedTask(final Runnable run)

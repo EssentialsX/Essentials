@@ -50,7 +50,7 @@ public class TimedTeleport implements Runnable
 		this.timer_respawn = respawn;
 		this.timer_canMove = user.isAuthorized("essentials.teleport.timer.move");
 
-		timer_task = ess.scheduleSyncRepeatingTask(this, 20, 20);
+		timer_task = ess.runTaskTimerAsynchronously(this, 20, 20).getTaskId();
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class TimedTeleport implements Runnable
 			return;
 		}
 
-		IUser teleportUser = ess.getUser(this.timer_teleportee);
+		final IUser teleportUser = ess.getUser(this.timer_teleportee);
 
 		if (teleportUser == null || !teleportUser.getBase().isOnline())
 		{
@@ -89,49 +89,64 @@ public class TimedTeleport implements Runnable
 			return;
 		}
 
-		timer_health = teleportUser.getBase().getHealth();  // in case user healed, then later gets injured
-		final long now = System.currentTimeMillis();
-		if (now > timer_started + timer_delay)
+		ess.scheduleSyncDelayedTask(new Runnable()
 		{
-			try
+			@Override
+			public void run()
 			{
-				teleport.cooldown(false);
-			}
-			catch (Exception ex)
-			{
-				teleportOwner.sendMessage(tl("cooldownWithMessage", ex.getMessage()));
-				if (teleportOwner != teleportUser)
-				{
-					teleportUser.sendMessage(tl("cooldownWithMessage", ex.getMessage()));
-				}
-			}
-			try
-			{
-				cancelTimer(false);
-				teleportUser.sendMessage(tl("teleportationCommencing"));
-				if (timer_chargeFor != null)
-				{
-					timer_chargeFor.isAffordableFor(teleportOwner);
-				}
-				if (timer_respawn)
-				{
-					teleport.respawnNow(teleportUser, timer_cause);
-				}
-				else
-				{
-					teleport.now(teleportUser, timer_teleportTarget, timer_cause);
-				}
-				if (timer_chargeFor != null)
-				{
-					timer_chargeFor.charge(teleportOwner);
-				}
-			}
-			catch (Exception ex)
-			{
-				ess.showError(teleportOwner.getSource(), ex, "\\ teleport");
-			}
 
-		}
+				timer_health = teleportUser.getBase().getHealth();  // in case user healed, then later gets injured
+				final long now = System.currentTimeMillis();
+				if (now > timer_started + timer_delay)
+				{
+					try
+					{
+						teleport.cooldown(false);
+					}
+					catch (Exception ex)
+					{
+						teleportOwner.sendMessage(tl("cooldownWithMessage", ex.getMessage()));
+						if (teleportOwner != teleportUser)
+						{
+							teleportUser.sendMessage(tl("cooldownWithMessage", ex.getMessage()));
+						}
+					}
+					try
+					{
+						cancelTimer(false);
+						teleportUser.sendMessage(tl("teleportationCommencing"));
+
+						try
+						{
+							if (timer_chargeFor != null)
+							{
+								timer_chargeFor.isAffordableFor(teleportOwner);
+							}
+							if (timer_respawn)
+							{
+								teleport.respawnNow(teleportUser, timer_cause);
+							}
+							else
+							{
+								teleport.now(teleportUser, timer_teleportTarget, timer_cause);
+							}
+							if (timer_chargeFor != null)
+							{
+								timer_chargeFor.charge(teleportOwner);
+							}
+						}
+						catch (Exception ex)
+						{
+						}
+
+					}
+					catch (Exception ex)
+					{
+						ess.showError(teleportOwner.getSource(), ex, "\\ teleport");
+					}
+				}
+			}
+		});
 	}
 
 	//If we need to cancelTimer a pending teleportPlayer call this method

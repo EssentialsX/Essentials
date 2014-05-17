@@ -63,12 +63,14 @@ public interface IEssentials extends Plugin
 	BukkitTask runTaskAsynchronously(Runnable run);
 
 	BukkitTask runTaskLaterAsynchronously(Runnable run, long delay);
+	
+	BukkitTask runTaskTimerAsynchronously(Runnable run, long delay, long period);
 
 	int scheduleSyncDelayedTask(Runnable run);
 
 	int scheduleSyncDelayedTask(Runnable run, long delay);
 
-	int scheduleSyncRepeatingTask(final Runnable run, long delay, long period);
+	int scheduleSyncRepeatingTask(Runnable run, long delay, long period);
 
 	TNTExplodeListener getTNTListener();
 
@@ -76,7 +78,7 @@ public interface IEssentials extends Plugin
 
 	AlternativeCommandsHandler getAlternativeCommandsHandler();
 
-	void showError(final CommandSource sender, final Throwable exception, final String commandLabel);
+	void showError(CommandSource sender, Throwable exception, String commandLabel);
 
 	IItemDb getItemDb();
 
