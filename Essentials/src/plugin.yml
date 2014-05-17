@@ -64,8 +64,8 @@ commands:
     usage: /<command> [player|*] [item[:<data>]|*|**] [amount]
     aliases: [ci,eci,clean,eclean,clear,eclear,clearinvent,eclearinvent,eclearinventory]
   condense:
-    description: Condenses items into a more compact form.
-    usage: /<command>
+    description: Condenses items into a more compact blocks.
+    usage: /<command> [<itemname>|<id>|hand|inventory]
     aliases: [econdense,compact,ecompact,blocks,eblocks,toblocks,etoblocks]
   compass:
     description: Describes your current bearing.
@@ -320,7 +320,7 @@ commands:
     aliases: [eseen]
   sell:
     description: Sells the item currently in your hand.
-    usage: /<command> <itemname|id|hand|inventory|blocks> [-][amount]
+    usage: /<command> <<itemname>|<id>|hand|inventory|blocks> [-][amount]
     aliases: [esell]
   sethome:
     description: Set your home to your current location.
@@ -476,7 +476,7 @@ commands:
     aliases: [eworld]
   worth:
     description: Calculates the worth of items in hand or as specified.
-    usage: /<command> [item] [amount]
+    usage: /<command> <<itemname>|<id>|hand|inventory|blocks> [-][amount]
     aliases: [eprice,price,eworth]
 
 permissions:
