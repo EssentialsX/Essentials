@@ -158,21 +158,36 @@ public class Commandremove extends EssentialsCommand
 				for (ToRemove toRemove : removeTypes)
 				{
 
-					if (e instanceof Tameable && ((Tameable)e).isTamed())
+					// We should skip any TAMED animals unless we are specifially targetting them.
+					if (e instanceof Tameable && ((Tameable)e).isTamed() 
+						&& !removeTypes.contains(ToRemove.TAMED))
 					{
-						if (toRemove == ToRemove.TAMED)
-						{
-							e.remove();
-							removed++;
-						}
-						else
-						{
-							continue;
-						}
+						continue;
+					}
+
+					// We should skip any NAMED animals unless we are specifially targetting them.
+					if (e instanceof LivingEntity && ((LivingEntity)e).getCustomName() != null 
+						&& !removeTypes.contains(ToRemove.NAMED))
+					{
+						continue;
 					}
 
 					switch (toRemove)
 					{
+					case TAMED:
+						if (e instanceof Tameable && ((Tameable)e).isTamed())
+						{
+							e.remove();
+							removed++;
+						}
+						break;
+					case NAMED:
+						if (e instanceof LivingEntity && ((LivingEntity)e).getCustomName() != null)
+						{
+							e.remove();
+							removed++;
+						}
+						break;
 					case DROPS:
 						if (e instanceof Item)
 						{
@@ -305,6 +320,7 @@ public class Commandremove extends EssentialsCommand
 		ENTITIES,
 		ALL,
 		CUSTOM,
-		TAMED
+		TAMED,
+		NAMED
 	}
 }
