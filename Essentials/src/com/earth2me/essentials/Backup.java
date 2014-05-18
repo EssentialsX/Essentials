@@ -146,7 +146,7 @@ public class Backup implements Runnable
 				}
 				finally
 				{
-					ess.scheduleSyncDelayedTask(new Runnable()
+					class BackupEnableSaveTask implements Runnable
 					{
 						@Override
 						public void run()
@@ -159,7 +159,8 @@ public class Backup implements Runnable
 							active = false;
 							LOGGER.log(Level.INFO, tl("backupFinished"));
 						}
-					});
+					}
+					ess.scheduleSyncDelayedTask(new BackupEnableSaveTask());
 				}
 			}
 		});

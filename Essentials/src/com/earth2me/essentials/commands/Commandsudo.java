@@ -27,7 +27,7 @@ public class Commandsudo extends EssentialsCommand
 		}
 
 		final User user = getPlayer(server, sender, args, 0);
-		if(args[1].toLowerCase(Locale.ENGLISH).startsWith("c:"))
+		if (args[1].toLowerCase(Locale.ENGLISH).startsWith("c:"))
 		{
 			if (user.isAuthorized("essentials.sudo.exempt") && sender.isPlayer())
 			{
@@ -53,18 +53,19 @@ public class Commandsudo extends EssentialsCommand
 		final PluginCommand execCommand = ess.getServer().getPluginCommand(command);
 		if (execCommand != null)
 		{
-			ess.scheduleSyncDelayedTask(
-					new Runnable()
-					{
-						@Override
-						public void run()
-						{
-							LOGGER.log(Level.INFO, String.format("[Sudo] %s issued server command: /%s %s", user.getName(), command, getFinalArg(arguments, 0)));
-							execCommand.execute(user.getBase(), command, arguments);
-						}
-					});
+			class SudoCommandTask implements Runnable
+			{
+				@Override
+				public void run()
+				{
+					LOGGER.log(Level.INFO, String.format("[Sudo] %s issued server command: /%s %s", user.getName(), command, getFinalArg(arguments, 0)));
+					execCommand.execute(user.getBase(), command, arguments);
+				}
+			}
+			ess.scheduleSyncDelayedTask(new SudoCommandTask());
 		}
-		else {
+		else
+		{
 			sender.sendMessage(tl("errorCallingCommand", command));
 		}
 	}

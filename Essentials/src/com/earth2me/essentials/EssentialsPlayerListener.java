@@ -220,7 +220,7 @@ public class EssentialsPlayerListener implements Listener
 		dUser.checkMuteTimeout(currentTime);
 		dUser.updateActivity(false);
 
-		ess.scheduleSyncDelayedTask(new Runnable()
+		class DelayJoinTask implements Runnable
 		{
 			@Override
 			public void run()
@@ -319,7 +319,9 @@ public class EssentialsPlayerListener implements Listener
 				user.getBase().setWalkSpeed(0.2f);
 
 			}
-		});
+		}
+
+		ess.scheduleSyncDelayedTask(new DelayJoinTask());
 	}
 
 	// Makes the compass item ingame always point to the first essentials home.  #EasterEgg
@@ -573,8 +575,7 @@ public class EssentialsPlayerListener implements Listener
 		{
 			final Location otarget = LocationUtil.getTarget(user.getBase());
 
-			ess.scheduleSyncDelayedTask(
-					new Runnable()
+			class DelayedClickJumpTask implements Runnable
 			{
 				@Override
 				public void run()
@@ -588,7 +589,8 @@ public class EssentialsPlayerListener implements Listener
 					}
 					user.getBase().teleport(loc, TeleportCause.PLUGIN);
 				}
-			});
+			}
+			ess.scheduleSyncDelayedTask(new DelayedClickJumpTask());
 		}
 		catch (Exception ex)
 		{
@@ -622,8 +624,8 @@ public class EssentialsPlayerListener implements Listener
 			else
 			{
 				used = true;
-				ess.scheduleSyncDelayedTask(
-						new Runnable()
+
+				class PowerToolUseTask implements Runnable
 				{
 					@Override
 					public void run()
@@ -631,7 +633,9 @@ public class EssentialsPlayerListener implements Listener
 						user.getServer().dispatchCommand(user.getBase(), command);
 						LOGGER.log(Level.INFO, String.format("[PT] %s issued server command: /%s", user.getName(), command));
 					}
-				});
+				}
+				ess.scheduleSyncDelayedTask(new PowerToolUseTask());
+
 			}
 		}
 		return used;

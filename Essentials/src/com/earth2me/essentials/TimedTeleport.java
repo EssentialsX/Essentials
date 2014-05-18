@@ -89,7 +89,7 @@ public class TimedTeleport implements Runnable
 			return;
 		}
 
-		ess.scheduleSyncDelayedTask(new Runnable()
+		class DelayedTeleportTask implements Runnable
 		{
 			@Override
 			public void run()
@@ -146,7 +146,8 @@ public class TimedTeleport implements Runnable
 					}
 				}
 			}
-		});
+		}
+		ess.scheduleSyncDelayedTask(new DelayedTeleportTask());
 	}
 
 	//If we need to cancelTimer a pending teleportPlayer call this method

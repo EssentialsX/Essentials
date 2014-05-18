@@ -55,7 +55,7 @@ public class EssentialsEntityListener implements Listener
 			attacker.updateActivity(true);
 		}
 		else if (eAttack instanceof Projectile && eDefend instanceof Player)
-		{			
+		{
 			final Projectile projectile = (Projectile)event.getDamager();
 			//This should return a ProjectileSource on 1.7.3 beta +
 			final Object shooter = projectile.getShooter();
@@ -105,8 +105,8 @@ public class EssentialsEntityListener implements Listener
 				final String command = powertoolPlayer.matcher(tempCommand).replaceAll(defender.getName());
 				if (command != null && !command.isEmpty() && !command.equals(tempCommand))
 				{
-					ess.scheduleSyncDelayedTask(
-							new Runnable()
+
+					class PowerToolInteractTask implements Runnable
 					{
 						@Override
 						public void run()
@@ -114,7 +114,8 @@ public class EssentialsEntityListener implements Listener
 							attacker.getServer().dispatchCommand(attacker.getBase(), command);
 							LOGGER.log(Level.INFO, String.format("[PT] %s issued server command: /%s", attacker.getName(), command));
 						}
-					});
+					}
+					ess.scheduleSyncDelayedTask(new PowerToolInteractTask());
 
 					event.setCancelled(true);
 					return;

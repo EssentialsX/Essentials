@@ -31,7 +31,8 @@ public class Commandkittycannon extends EssentialsCommand
 		ocelot.setTamed(true);
 		ocelot.setBaby();
 		ocelot.setVelocity(user.getBase().getEyeLocation().getDirection().multiply(2));
-		ess.scheduleSyncDelayedTask(new Runnable()
+
+		class KittyCannonExplodeTask implements Runnable
 		{
 			@Override
 			public void run()
@@ -40,6 +41,8 @@ public class Commandkittycannon extends EssentialsCommand
 				ocelot.remove();
 				loc.getWorld().createExplosion(loc, 0F);
 			}
-		}, 20);
+		}
+		ess.scheduleSyncDelayedTask(new KittyCannonExplodeTask(), 20);
+
 	}
 }
