@@ -340,8 +340,11 @@ public class EssentialsPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerLogin2(final PlayerLoginEvent event)
 	{
-		if (event.getResult() != Result.KICK_BANNED)
+		switch (event.getResult())
 		{
+		case KICK_BANNED:
+			break;
+		default:
 			return;
 		}
 
@@ -352,20 +355,19 @@ public class EssentialsPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerLogin(final PlayerLoginEvent event)
 	{
-		if (event.getResult() == Result.KICK_FULL)
+		switch (event.getResult())
 		{
-			final User user = ess.getUser(event.getPlayer());
-			if (user.isAuthorized("essentials.joinfullserver"))
+		case KICK_FULL:
+			final User kfuser = ess.getUser(event.getPlayer());
+			if (kfuser.isAuthorized("essentials.joinfullserver"))
 			{
 				event.allow();
 				return;
 			}
 			event.disallow(Result.KICK_FULL, tl("serverFull"));
-			return;
-		}
+			break;
 
-		if (event.getResult() == Result.KICK_BANNED || event.getPlayer().isBanned())
-		{
+		case KICK_BANNED:
 			final User user = ess.getUser(event.getPlayer());
 			final boolean banExpired = user.checkBanTimeout(System.currentTimeMillis());
 			if (banExpired)
@@ -384,6 +386,10 @@ public class EssentialsPlayerListener implements Listener
 				banReason += "\n\n" + "Expires in " + DateUtil.formatDateDiff(user.getBanTimeout());
 			}
 			event.disallow(Result.KICK_BANNED, banReason);
+			break;
+
+		default:
+			break;
 		}
 	}
 
