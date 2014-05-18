@@ -70,7 +70,7 @@ public class Commandweather extends EssentialsCommand
 		final World world = server.getWorld(args[0]);
 		if (world == null)
 		{
-			throw new Exception(tl("weatherInvalidWorldWorld", args[0]));
+			throw new Exception(tl("weatherInvalidWorld", args[0]));
 		}
 		if (args.length > 2)
 		{
