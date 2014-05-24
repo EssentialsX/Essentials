@@ -26,7 +26,7 @@ public class SignPlayerListener implements Listener
 	//This is because when the block place is cancelled (for example not enough space for the block to be placed),
 	//the event will be marked as cancelled, thus preventing 30% of sign purchases.
 	@EventHandler(priority = EventPriority.LOW)
-	public void onPlayerInteract(final PlayerInteractEvent event)
+	public void onSignPlayerInteract(final PlayerInteractEvent event)
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{

@@ -29,7 +29,7 @@ public class SignBlockListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onBlockBreak(final BlockBreakEvent event)
+	public void onSignBlockBreak(final BlockBreakEvent event)
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
@@ -86,7 +86,7 @@ public class SignBlockListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onSignChange2(final SignChangeEvent event)
+	public void onSignSignChange2(final SignChangeEvent event)
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
@@ -113,7 +113,7 @@ public class SignBlockListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onSignChange(final SignChangeEvent event)
+	public void onSignSignChange(final SignChangeEvent event)
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
@@ -138,7 +138,7 @@ public class SignBlockListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-	public void onBlockPlace(final BlockPlaceEvent event)
+	public void onSignBlockPlace(final BlockPlaceEvent event)
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
@@ -172,7 +172,7 @@ public class SignBlockListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-	public void onBlockBurn(final BlockBurnEvent event)
+	public void onSignBlockBurn(final BlockBurnEvent event)
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
@@ -201,7 +201,7 @@ public class SignBlockListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-	public void onBlockIgnite(final BlockIgniteEvent event)
+	public void onSignBlockIgnite(final BlockIgniteEvent event)
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
@@ -230,7 +230,7 @@ public class SignBlockListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
-	public void onBlockPistonExtend(final BlockPistonExtendEvent event)
+	public void onSignBlockPistonExtend(final BlockPistonExtendEvent event)
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
@@ -261,7 +261,7 @@ public class SignBlockListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
-	public void onBlockPistonRetract(final BlockPistonRetractEvent event)
+	public void onSignBlockPistonRetract(final BlockPistonRetractEvent event)
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{

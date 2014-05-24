@@ -198,7 +198,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 	private class JailListener implements Listener
 	{
 		@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-		public void onBlockBreak(final BlockBreakEvent event)
+		public void onJailBlockBreak(final BlockBreakEvent event)
 		{
 			final User user = ess.getUser(event.getPlayer());
 			if (user.isJailed())
@@ -208,7 +208,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 		}
 
 		@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-		public void onBlockPlace(final BlockPlaceEvent event)
+		public void onJailBlockPlace(final BlockPlaceEvent event)
 		{
 			final User user = ess.getUser(event.getPlayer());
 			if (user.isJailed())
@@ -218,7 +218,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 		}
 
 		@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-		public void onBlockDamage(final BlockDamageEvent event)
+		public void onJailBlockDamage(final BlockDamageEvent event)
 		{
 			final User user = ess.getUser(event.getPlayer());
 			if (user.isJailed())
@@ -228,7 +228,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 		}
 
 		@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-		public void onEntityDamageByEntity(final EntityDamageByEntityEvent event)
+		public void onJailEntityDamageByEntity(final EntityDamageByEntityEvent event)
 		{
 			if (event.getCause() != DamageCause.ENTITY_ATTACK || event.getEntity().getType() != EntityType.PLAYER)
 			{
@@ -246,7 +246,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 		}
 
 		@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-		public void onPlayerInteract(final PlayerInteractEvent event)
+		public void onJailPlayerInteract(final PlayerInteractEvent event)
 		{
 			final User user = ess.getUser(event.getPlayer());
 			if (user.isJailed())
@@ -256,7 +256,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 		}
 
 		@EventHandler(priority = EventPriority.HIGHEST)
-		public void onPlayerRespawn(final PlayerRespawnEvent event)
+		public void onJailPlayerRespawn(final PlayerRespawnEvent event)
 		{
 			final User user = ess.getUser(event.getPlayer());
 			if (!user.isJailed() || user.getJail() == null || user.getJail().isEmpty())
@@ -282,7 +282,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 		}
 
 		@EventHandler(priority = EventPriority.HIGH)
-		public void onPlayerTeleport(final PlayerTeleportEvent event)
+		public void onJailPlayerTeleport(final PlayerTeleportEvent event)
 		{
 			final User user = ess.getUser(event.getPlayer());
 			if (!user.isJailed() || user.getJail() == null || user.getJail().isEmpty())
@@ -309,7 +309,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 		}
 
 		@EventHandler(priority = EventPriority.HIGHEST)
-		public void onPlayerJoin(final PlayerJoinEvent event)
+		public void onJailPlayerJoin(final PlayerJoinEvent event)
 		{
 			final User user = ess.getUser(event.getPlayer());
 			final long currentTime = System.currentTimeMillis();

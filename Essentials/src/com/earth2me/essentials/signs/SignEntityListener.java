@@ -20,7 +20,7 @@ public class SignEntityListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
-	public void onEntityExplode(final EntityExplodeEvent event)
+	public void onSignEntityExplode(final EntityExplodeEvent event)
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
@@ -50,7 +50,7 @@ public class SignEntityListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-	public void onEntityChangeBlock(final EntityChangeBlockEvent event)
+	public void onSignEntityChangeBlock(final EntityChangeBlockEvent event)
 	{
 		if (ess.getSettings().areSignsDisabled())
 		{
