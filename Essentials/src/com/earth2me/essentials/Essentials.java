@@ -312,6 +312,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 				user.setVanished(false);
 				user.sendMessage(tl("unvanishedReload"));
 			}
+			user.stopTransaction();
 		}
 		cleanupOpenInventories();
 		if (i18n != null)

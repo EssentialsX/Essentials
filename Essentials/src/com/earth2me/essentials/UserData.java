@@ -964,4 +964,14 @@ public abstract class UserData extends PlayerExtension implements IConf
 	{
 		config.save();
 	}
+
+	public void startTransaction()
+	{
+		config.startTransaction();
+	}
+
+	public void stopTransaction()
+	{
+		config.stopTransaction();
+	}
 }

@@ -15,6 +15,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,9 +36,10 @@ public class EssentialsConf extends YamlConfiguration
 	protected final File configFile;
 	protected String templateName = null;
 	protected static final Charset UTF8 = Charset.forName("UTF-8");
-	private Class<?> resourceClass = EssentialsConf.class;	
+	private Class<?> resourceClass = EssentialsConf.class;
 	private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
 	private final AtomicInteger pendingDiskWrites = new AtomicInteger(0);
+	private final AtomicBoolean transaction = new AtomicBoolean(false);
 
 	public EssentialsConf(final File configFile)
 	{
@@ -95,7 +97,7 @@ public class EssentialsConf extends YamlConfiguration
 				LOGGER.log(Level.SEVERE, null, ex);
 			}
 		}
-				
+
 		if (!configFile.exists())
 		{
 			if (legacyFileExists())
@@ -187,22 +189,22 @@ public class EssentialsConf extends YamlConfiguration
 			LOGGER.log(Level.SEVERE, "The file " + configFile.toString() + " is broken, it has been renamed to " + broken.toString(), ex.getCause());
 		}
 	}
-	
+
 	public boolean legacyFileExists()
 	{
 		return false;
 	}
-	
+
 	public void convertLegacyFile()
 	{
 		LOGGER.log(Level.SEVERE, "Unable to import legacy config file.");
 	}
-	
+
 	public boolean altFileExists()
 	{
 		return false;
 	}
-	
+
 	public void convertAltFile()
 	{
 		LOGGER.log(Level.SEVERE, "Unable to import alt config file.");
@@ -277,6 +279,17 @@ public class EssentialsConf extends YamlConfiguration
 		this.resourceClass = resClass;
 	}
 
+	public void startTransaction()
+	{
+		transaction.set(true);
+	}
+
+	public void stopTransaction()
+	{
+		transaction.set(false);
+		save();
+	}
+
 	public void save()
 	{
 		try
@@ -297,7 +310,10 @@ public class EssentialsConf extends YamlConfiguration
 	@Override
 	public synchronized void save(final File file) throws IOException
 	{
-		delayedSave(file);
+		if (!transaction.get())
+		{
+			delayedSave(file);
+		}
 	}
 
 	public synchronized void forceSave()
@@ -322,7 +338,6 @@ public class EssentialsConf extends YamlConfiguration
 
 	private Future<?> delayedSave(final File file)
 	{
-		//long startTime = System.nanoTime();
 		if (file == null)
 		{
 			throw new IllegalArgumentException("File cannot be null");
@@ -338,8 +353,6 @@ public class EssentialsConf extends YamlConfiguration
 		pendingDiskWrites.incrementAndGet();
 
 		Future<?> future = EXECUTOR_SERVICE.submit(new WriteRunner(configFile, data, pendingDiskWrites));
-
-		//LOGGER.log(Level.INFO, configFile + " prepared for writing in " + (System.nanoTime() - startTime) + " nsec.");
 
 		return future;
 	}

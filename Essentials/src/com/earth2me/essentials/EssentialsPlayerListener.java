@@ -220,6 +220,29 @@ public class EssentialsPlayerListener implements Listener
 		dUser.checkMuteTimeout(currentTime);
 		dUser.updateActivity(false);
 
+		IText tempInput = null;
+
+		if (!ess.getSettings().isCommandDisabled("motd"))
+		{
+			try
+			{
+				tempInput = new TextInput(dUser.getSource(), "motd", true, ess);
+			}
+			catch (IOException ex)
+			{
+				if (ess.getSettings().isDebug())
+				{
+					LOGGER.log(Level.WARNING, ex.getMessage(), ex);
+				}
+				else
+				{
+					LOGGER.log(Level.WARNING, ex.getMessage());
+				}
+			}
+		}
+
+		final IText input = tempInput;
+
 		class DelayJoinTask implements Runnable
 		{
 			@Override
@@ -231,6 +254,8 @@ public class EssentialsPlayerListener implements Listener
 				{
 					return;
 				}
+
+				user.startTransaction();
 
 				user.setLastAccountName(user.getBase().getName());
 				user.setLastLogin(currentTime);
@@ -270,26 +295,11 @@ public class EssentialsPlayerListener implements Listener
 					ess.getServer().broadcastMessage(message);
 				}
 
-				if (!ess.getSettings().isCommandDisabled("motd") && user.isAuthorized("essentials.motd"))
+				if (input != null && user.isAuthorized("essentials.motd"))
 				{
-					try
-					{
-						final IText input = new TextInput(user.getSource(), "motd", true, ess);
-						final IText output = new KeywordReplacer(input, user.getSource(), ess);
-						final TextPager pager = new TextPager(output, true);
-						pager.showPage("1", null, "motd", user.getSource());
-					}
-					catch (IOException ex)
-					{
-						if (ess.getSettings().isDebug())
-						{
-							LOGGER.log(Level.WARNING, ex.getMessage(), ex);
-						}
-						else
-						{
-							LOGGER.log(Level.WARNING, ex.getMessage());
-						}
-					}
+					final IText output = new KeywordReplacer(input, user.getSource(), ess);
+					final TextPager pager = new TextPager(output, true);
+					pager.showPage("1", null, "motd", user.getSource());
 				}
 
 				if (!ess.getSettings().isCommandDisabled("mail") && user.isAuthorized("essentials.mail"))
@@ -318,6 +328,7 @@ public class EssentialsPlayerListener implements Listener
 				user.getBase().setFlySpeed(0.1f);
 				user.getBase().setWalkSpeed(0.2f);
 
+				user.stopTransaction();
 			}
 		}
 
