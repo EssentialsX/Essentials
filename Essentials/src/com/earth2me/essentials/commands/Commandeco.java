@@ -105,8 +105,10 @@ public class Commandeco extends EssentialsLoopCommand
 	private void set(BigDecimal amount, final User player, final CommandSource sender) throws MaxMoneyException
 	{
 		BigDecimal minBalance = ess.getSettings().getMinMoney();
+		BigDecimal maxBalance = ess.getSettings().getMaxMoney();
 		boolean underMinimum = (amount.compareTo(minBalance) < 0);
-		player.setMoney(underMinimum ? minBalance : amount);
+		boolean aboveMax = (amount.compareTo(maxBalance) > 0);
+		player.setMoney(underMinimum ? minBalance : aboveMax ? maxBalance : amount);
 		player.sendMessage(tl("setBal", NumberUtil.displayCurrency(player.getMoney(), ess)));
 		if (sender != null)
 		{
