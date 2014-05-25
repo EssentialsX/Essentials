@@ -279,9 +279,12 @@ public class EssentialsPlayerListener implements Listener
 					user.getBase().setSleepingIgnored(true);
 				}
 
-				if ((ess.getSettings().allowSilentJoinQuit() && user.isAuthorized("essentials.silentjoin")) || message == null)
+				if ((ess.getSettings().allowSilentJoinQuit() && (user.isAuthorized("essentials.silentjoin") || user.isAuthorized("essentials.silentjoin.vanish"))) || message == null)
 				{
-					// Do nothing - silently join
+					if (user.isAuthorized("essentials.silentjoin.vanish"))
+					{
+						user.setVanished(true);
+					}
 				}
 				else if (ess.getSettings().isCustomJoinMessage())
 				{

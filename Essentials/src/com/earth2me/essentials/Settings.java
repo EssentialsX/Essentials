@@ -94,7 +94,6 @@ public class Settings implements net.ess3.api.ISettings
 	{
 		return chatRadius;
 	}
-	
 	// #easteregg
 	private char chatShout = '!';
 
@@ -108,7 +107,6 @@ public class Settings implements net.ess3.api.ISettings
 	{
 		return chatShout;
 	}
-	
 	// #easteregg
 	private char chatQuestion = '?';
 
@@ -122,7 +120,6 @@ public class Settings implements net.ess3.api.ISettings
 	{
 		return chatQuestion;
 	}
-
 	private boolean teleportSafety;
 
 	public boolean _isTeleportSafetyEnabled()
@@ -563,7 +560,7 @@ public class Settings implements net.ess3.api.ISettings
 		economyLog = _isEcoLogEnabled();
 		economyLogUpdate = _isEcoLogUpdateEnabled();
 		economyDisabled = _isEcoDisabled();
-		allowSilentJoin = _isJoinQuitMessagesDisabled();
+		allowSilentJoin = _allowSilentJoinQuit();
 		customJoinMessage = _getCustomJoinMessage();
 		isCustomJoinMessage = !customJoinMessage.equals("none");
 		customQuitMessage = _getCustomQuitMessage();
@@ -1163,9 +1160,9 @@ public class Settings implements net.ess3.api.ISettings
 	}
 	private boolean allowSilentJoin;
 
-	public boolean _isJoinQuitMessagesDisabled()
+	public boolean _allowSilentJoinQuit()
 	{
-		return config.getBoolean("allow-silent-join-quit");
+		return config.getBoolean("allow-silent-join-quit", false);
 	}
 
 	@Override
