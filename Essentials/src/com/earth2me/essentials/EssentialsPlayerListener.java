@@ -279,12 +279,16 @@ public class EssentialsPlayerListener implements Listener
 					user.getBase().setSleepingIgnored(true);
 				}
 
-				if ((ess.getSettings().allowSilentJoinQuit() && (user.isAuthorized("essentials.silentjoin") || user.isAuthorized("essentials.silentjoin.vanish"))) || message == null)
+				if (ess.getSettings().allowSilentJoinQuit() && (user.isAuthorized("essentials.silentjoin") || user.isAuthorized("essentials.silentjoin.vanish")))
 				{
 					if (user.isAuthorized("essentials.silentjoin.vanish"))
 					{
 						user.setVanished(true);
 					}
+				}
+				else if (message == null)
+				{
+					//NOOP
 				}
 				else if (ess.getSettings().isCustomJoinMessage())
 				{
