@@ -242,6 +242,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		{
 			this.base = new OfflinePlayer(base.getUniqueId(), ess.getServer());
 		}
+		cleanup();
 	}
 
 	@Override

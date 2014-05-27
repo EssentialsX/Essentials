@@ -53,6 +53,11 @@ public abstract class UserData extends PlayerExtension implements IConf
 		ess.getUserMap().removeUser(this.getBase().getName());
 	}
 
+	public final void cleanup()
+	{
+		config.cleanup();
+	}
+
 	@Override
 	public final void reloadConfig()
 	{

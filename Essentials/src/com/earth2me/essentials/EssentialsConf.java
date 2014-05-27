@@ -320,6 +320,10 @@ public class EssentialsConf extends YamlConfiguration
 	{
 		try
 		{
+			if (pendingDiskWrites.get() > 0)
+			{
+				pendingDiskWrites.set(0);
+			}
 			Future<?> future = delayedSave(configFile);
 			if (future != null)
 			{
@@ -333,6 +337,14 @@ public class EssentialsConf extends YamlConfiguration
 		catch (ExecutionException ex)
 		{
 			LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+		}
+	}
+
+	public synchronized void cleanup()
+	{
+		if (pendingDiskWrites.get() > 0)
+		{
+			forceSave();
 		}
 	}
 
@@ -350,7 +362,10 @@ public class EssentialsConf extends YamlConfiguration
 			return null;
 		}
 
-		pendingDiskWrites.incrementAndGet();
+		if (pendingDiskWrites.incrementAndGet() < 0)
+		{
+			pendingDiskWrites.set(1);
+		}
 
 		Future<?> future = EXECUTOR_SERVICE.submit(new WriteRunner(configFile, data, pendingDiskWrites));
 
