@@ -4,6 +4,9 @@ import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
+import com.google.common.cache.RemovalCause;
+import com.google.common.cache.RemovalListener;
+import com.google.common.cache.RemovalNotification;
 import com.google.common.util.concurrent.UncheckedExecutionException;
 import java.io.File;
 import java.util.ArrayList;
@@ -33,6 +36,8 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 		super();
 		this.ess = ess;
 		uuidMap = new UUIDMap(ess);
+		//RemovalListener<UUID, User> remListener = new UserMapRemovalListener();
+		//users = CacheBuilder.newBuilder().maximumSize(ess.getSettings().getMaxUserCacheCount()).softValues().removalListener(remListener).build(this);
 		users = CacheBuilder.newBuilder().maximumSize(ess.getSettings().getMaxUserCacheCount()).softValues().build(this);
 	}
 
@@ -89,21 +94,11 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 				final UUID uuid = names.get(sanitizedName);
 				return users.get(uuid);
 			}
-
-			for (Player player : ess.getServer().getOnlinePlayers())
-			{
-				String sanitizedPlayer = StringUtil.safeString(player.getName());
-				if (sanitizedPlayer.equalsIgnoreCase(sanitizedName))
-				{
-					User user = new User(player, ess);
-					trackUUID(user.getBase().getUniqueId(), user.getName());
-					return new User(player, ess);
-				}
-			}
-
+			
 			final File userFile = getUserFileFromString(sanitizedName);
 			if (userFile.exists())
 			{
+				ess.getLogger().info("Importing user " + name + " to usermap.");
 				User user = new User(new OfflinePlayer(sanitizedName, ess.getServer()), ess);
 				trackUUID(user.getBase().getUniqueId(), user.getName());
 				return user;
@@ -185,6 +180,11 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 		loadAllUsersAsync(ess);
 	}
 
+	public void invalidateAll()
+	{
+		users.invalidateAll();
+	}
+
 	public void removeUser(final String name)
 	{
 		UUID uuid = names.get(name);
@@ -238,4 +238,16 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 		final File userFolder = new File(ess.getDataFolder(), "userdata");
 		return new File(userFolder, StringUtil.sanitizeFileName(name) + ".yml");
 	}
+//	class UserMapRemovalListener implements RemovalListener
+//	{
+//		@Override
+//		public void onRemoval(final RemovalNotification notification)
+//		{
+//			Object value = notification.getValue();
+//			if (value != null)
+//			{
+//				((User)value).cleanup();
+//			}
+//		}
+//	}
 }
