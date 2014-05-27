@@ -1141,6 +1141,21 @@ public class FakeServer implements Server
 		public void callEvent(Event event) throws IllegalStateException
 		{
 			Logger.getLogger("Minecraft").info("Called event " + event.getEventName());
+			if (event instanceof PlayerJoinEvent)
+			{
+				for (RegisteredListener listener : listeners)
+				{
+					if (listener.getListener() instanceof EssentialsPlayerListener)
+					{						
+						PlayerJoinEvent jEvent = (PlayerJoinEvent)event;
+						EssentialsPlayerListener epl = (EssentialsPlayerListener)listener.getListener();
+						epl.onPlayerJoin(jEvent);
+						Essentials ess = (Essentials)listener.getPlugin();
+						ess.getLogger().info("Sending join event to Essentials");
+						ess.getUser(jEvent.getPlayer());
+					}
+				}
+			}
 		}
 
 		@Override
