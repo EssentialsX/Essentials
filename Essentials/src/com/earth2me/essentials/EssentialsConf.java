@@ -316,14 +316,12 @@ public class EssentialsConf extends YamlConfiguration
 		}
 	}
 
+	//This may be aborted if there are stagnant requests sitting in queue.
+	//This needs fixed to discard outstanding save requests.
 	public synchronized void forceSave()
 	{
 		try
 		{
-			if (pendingDiskWrites.get() > 0)
-			{
-				pendingDiskWrites.set(0);
-			}
 			Future<?> future = delayedSave(configFile);
 			if (future != null)
 			{
@@ -342,10 +340,7 @@ public class EssentialsConf extends YamlConfiguration
 
 	public synchronized void cleanup()
 	{
-		if (pendingDiskWrites.get() > 0)
-		{
-			forceSave();
-		}
+		forceSave();
 	}
 
 	private Future<?> delayedSave(final File file)
@@ -360,11 +355,6 @@ public class EssentialsConf extends YamlConfiguration
 		if (data.length() == 0)
 		{
 			return null;
-		}
-
-		if (pendingDiskWrites.incrementAndGet() < 0)
-		{
-			pendingDiskWrites.set(1);
 		}
 
 		Future<?> future = EXECUTOR_SERVICE.submit(new WriteRunner(configFile, data, pendingDiskWrites));
