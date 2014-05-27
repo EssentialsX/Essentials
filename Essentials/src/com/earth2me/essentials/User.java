@@ -195,7 +195,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		}
 		catch (MaxMoneyException ex)
 		{
-			//We shouldn't be able to throw an exception on subtract money
+			ess.getLogger().log(Level.WARNING, "Invalid call to takeMoney, total balance can't be more than the max-money limit.", ex);
 		}
 		sendMessage(tl("takenFromAccount", NumberUtil.displayCurrency(value, ess)));
 		if (initiator != null)
