@@ -137,6 +137,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 		userMap = new UserMap(this);
 		permissionsHandler = new PermissionsHandler(this, false);
 		Economy.setEss(this);
+		confList = new ArrayList<IConf>();
+		jails = new Jails(this);
+		registerListeners(server.getPluginManager());
 	}
 
 	@Override
