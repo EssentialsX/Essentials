@@ -115,18 +115,19 @@ public abstract class UserData extends PlayerExtension implements IConf
 	}
 
 	public void setMoney(BigDecimal value, boolean throwError) throws MaxMoneyException
-	{		
+	{
 		BigDecimal maxMoney = ess.getSettings().getMaxMoney();
 		BigDecimal minMoney = ess.getSettings().getMinMoney();
 		if (value.compareTo(maxMoney) > 0)
-		{			
+		{
 			if (throwError)
 			{
 				throw new MaxMoneyException();
 			}
 			money = maxMoney;
 		}
-		else {
+		else
+		{
 			money = value;
 		}
 		if (money.compareTo(minMoney) < 0)
@@ -134,7 +135,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 			money = minMoney;
 		}
 		config.setProperty("money", money);
-		config.save();
+		stopTransaction();
 	}
 	private Map<String, Object> homes;
 
