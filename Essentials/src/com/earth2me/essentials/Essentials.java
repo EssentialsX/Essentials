@@ -628,6 +628,14 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 		{
 			return getUser((Player)base);
 		}
+		if (base instanceof org.bukkit.OfflinePlayer)
+		{
+			return getUser(((org.bukkit.OfflinePlayer)base).getUniqueId());
+		}
+		if (base instanceof UUID)
+		{
+			return getUser((UUID)base);
+		}
 		if (base instanceof String)
 		{
 			return getOfflineUser((String)base);

@@ -349,11 +349,14 @@ public class Commandessentials extends EssentialsCommand
 		String name = args[1];
 		sender.sendMessage("Looking up UUID for " + name);
 
+		UUID onlineUUID = null;
+
 		for (Player player : server.getOnlinePlayers())
 		{
 			if (player.getName().equalsIgnoreCase(name))
 			{
 				sender.sendMessage("Online player: " + player.getUniqueId().toString());
+				onlineUUID = player.getUniqueId();
 			}
 		}
 
