@@ -3,6 +3,7 @@ package com.earth2me.essentials.api;
 import com.earth2me.essentials.EssentialsConf;
 import com.earth2me.essentials.EssentialsUserConf;
 import static com.earth2me.essentials.I18n.tl;
+import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import static com.earth2me.essentials.api.Economy.add;
 import static com.earth2me.essentials.api.Economy.divide;
@@ -148,6 +149,7 @@ public class Economy
 		{
 			//TODO: Update API to show max balance errors
 		}
+		Trade.log("API", "Set", "API", name, new Trade(balance, ess), null, null, null, ess);
 	}
 
 	/**
@@ -175,6 +177,7 @@ public class Economy
 	{
 		BigDecimal result = getMoneyExact(name).add(amount, MATH_CONTEXT);
 		setMoney(name, result);
+		Trade.log("API", "Add", "API", name, new Trade(amount, ess), null, null, null, ess);
 	}
 
 	/**
@@ -202,6 +205,7 @@ public class Economy
 	{
 		BigDecimal result = getMoneyExact(name).subtract(amount, MATH_CONTEXT);
 		setMoney(name, result);
+		Trade.log("API", "Subtract", "API", name, new Trade(amount, ess), null, null, null, ess);
 	}
 
 	/**
@@ -229,6 +233,7 @@ public class Economy
 	{
 		BigDecimal result = getMoneyExact(name).divide(amount, MATH_CONTEXT);
 		setMoney(name, result);
+		Trade.log("API", "Divide", "API", name, new Trade(amount, ess), null, null, null, ess);
 	}
 
 	/**
@@ -256,6 +261,7 @@ public class Economy
 	{
 		BigDecimal result = getMoneyExact(name).multiply(amount, MATH_CONTEXT);
 		setMoney(name, result);
+		Trade.log("API", "Multiply", "API", name, new Trade(amount, ess), null, null, null, ess);
 	}
 
 	/**
@@ -272,6 +278,7 @@ public class Economy
 			throw new RuntimeException(noCallBeforeLoad);
 		}
 		setMoney(name, ess.getSettings().getStartingBalance());
+		Trade.log("API", "Reset", "API", name, new Trade(BigDecimal.ZERO, ess), null, null, null, ess);
 	}
 
 	/**
