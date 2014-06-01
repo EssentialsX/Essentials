@@ -18,14 +18,13 @@ import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutionException;
 import net.ess3.api.IEssentials;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 
-public class UserMap extends CacheLoader<UUID, User> implements IConf
+public class UserMap extends CacheLoader<String, User> implements IConf
 {
 	private final transient IEssentials ess;
-	private final transient Cache<UUID, User> users;
+	private final transient Cache<String, User> users;
 	private final transient ConcurrentSkipListSet<UUID> keys = new ConcurrentSkipListSet<UUID>();
 	private final transient ConcurrentSkipListMap<String, UUID> names = new ConcurrentSkipListMap<String, UUID>();
 	private final transient ConcurrentSkipListMap<UUID, ArrayList<String>> history = new ConcurrentSkipListMap<UUID, ArrayList<String>>();
@@ -92,7 +91,7 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 			if (names.containsKey(sanitizedName))
 			{
 				final UUID uuid = names.get(sanitizedName);
-				return users.get(uuid);
+				return getUser(uuid);
 			}
 			
 			final File userFile = getUserFileFromString(sanitizedName);
@@ -105,10 +104,6 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 			}
 			return null;
 		}
-		catch (ExecutionException ex)
-		{
-			return null;
-		}
 		catch (UncheckedExecutionException ex)
 		{
 			return null;
@@ -119,7 +114,7 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 	{
 		try
 		{
-			return users.get(uuid);
+			return users.get(uuid.toString());
 		}
 		catch (ExecutionException ex)
 		{
@@ -149,8 +144,9 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 	}
 
 	@Override
-	public User load(final UUID uuid) throws Exception
+	public User load(final String stringUUID) throws Exception
 	{
+		UUID uuid = UUID.fromString(stringUUID);
 		Player player = ess.getServer().getPlayer(uuid);
 		if (player != null)
 		{
@@ -206,7 +202,7 @@ public class UserMap extends CacheLoader<UUID, User> implements IConf
 	{
 		return keys.size();
 	}
-
+	
 	protected ConcurrentSkipListMap<String, UUID> getNames()
 	{
 		return names;
