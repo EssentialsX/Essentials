@@ -63,11 +63,22 @@ public class Commandrecipe extends EssentialsCommand
 		}
 		else if (selectedRecipe instanceof ShapedRecipe)
 		{
-			shapedRecipe(sender, (ShapedRecipe)selectedRecipe);
+			shapedRecipe(sender, (ShapedRecipe)selectedRecipe, sender.isPlayer());
 		}
 		else if (selectedRecipe instanceof ShapelessRecipe)
 		{
-			shapelessRecipe(sender, (ShapelessRecipe)selectedRecipe);
+			if (recipesOfType.size() == 1 && itemType.getType() == Material.FIREWORK)
+			{
+				ShapelessRecipe shapelessRecipe = new ShapelessRecipe(itemType);
+				shapelessRecipe.addIngredient(Material.SULPHUR);
+				shapelessRecipe.addIngredient(Material.PAPER);
+				shapelessRecipe.addIngredient(Material.FIREWORK_CHARGE);
+				shapelessRecipe(sender, shapelessRecipe, sender.isPlayer());
+			}
+			else
+			{
+				shapelessRecipe(sender, (ShapelessRecipe)selectedRecipe, sender.isPlayer());
+			}
 		}
 
 		if (recipesOfType.size() > 1 && args.length == 1)
@@ -81,11 +92,11 @@ public class Commandrecipe extends EssentialsCommand
 		sender.sendMessage(tl("recipeFurnace", getMaterialName(recipe.getInput())));
 	}
 
-	public void shapedRecipe(final CommandSource sender, final ShapedRecipe recipe)
+	public void shapedRecipe(final CommandSource sender, final ShapedRecipe recipe, final boolean showWindow)
 	{
 		final Map<Character, ItemStack> recipeMap = recipe.getIngredientMap();
 
-		if (sender.isPlayer())
+		if (showWindow)
 		{
 			final User user = ess.getUser(sender.getPlayer());
 			user.getBase().closeInventory();
@@ -141,10 +152,10 @@ public class Commandrecipe extends EssentialsCommand
 		}
 	}
 
-	public void shapelessRecipe(final CommandSource sender, final ShapelessRecipe recipe)
+	public void shapelessRecipe(final CommandSource sender, final ShapelessRecipe recipe, final boolean showWindow)
 	{
 		final List<ItemStack> ingredients = recipe.getIngredientList();
-		if (sender.isPlayer())
+		if (showWindow)
 		{
 			final User user = ess.getUser(sender.getPlayer());
 			user.setRecipeSee(true);
