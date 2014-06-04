@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.StringUtil;
@@ -8,7 +9,6 @@ import org.bukkit.Server;
 
 import java.util.List;
 
-import static com.earth2me.essentials.I18n.tl;
 import java.util.UUID;
 
 
@@ -58,13 +58,15 @@ public class Commandmail extends EssentialsCommand
 			{
 				throw new Exception(tl("playerNeverOnServer", args[1]));
 			}
+
+			final String mail = user.getName() + ": " + StringUtil.sanitizeString(FormatUtil.stripFormat(getFinalArg(args, 2)));
+			if (mail.length() > 1000)
+			{
+				throw new Exception(tl("mailTooLong"));
+			}
+
 			if (!u.isIgnoredPlayer(user))
 			{
-				final String mail = user.getName() + ": " + StringUtil.sanitizeString(FormatUtil.stripFormat(getFinalArg(args, 2)));
-				if (mail.length() > 1000)
-				{
-					throw new Exception(tl("mailTooLong"));
-				}
 				if (Math.abs(System.currentTimeMillis() - timestamp) > 60000)
 				{
 					timestamp = System.currentTimeMillis();
@@ -75,9 +77,11 @@ public class Commandmail extends EssentialsCommand
 				{
 					throw new Exception(tl("mailDelay", ess.getSettings().getMailsPerMinute()));
 				}
-				u.addMail(mail);
+				u.addMail(tl("mailMessage", mail));
 			}
-			user.sendMessage(tl("mailSent"));
+
+			user.sendMessage(tl("mailSentTo", u.getDisplayName(), u.getName()));
+			user.sendMessage(mail);
 			return;
 		}
 		if (args.length > 1 && "sendall".equalsIgnoreCase(args[0]))
