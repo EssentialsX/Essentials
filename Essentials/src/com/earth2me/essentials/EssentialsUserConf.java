@@ -12,8 +12,8 @@ import org.bukkit.Bukkit;
 
 public class EssentialsUserConf extends EssentialsConf
 {
-	final String username;
-	final UUID uuid;
+	public final String username;
+	public final UUID uuid;
 
 	public EssentialsUserConf(final String username, final UUID uuid, final File configFile)
 	{

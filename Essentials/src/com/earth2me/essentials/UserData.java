@@ -50,7 +50,10 @@ public abstract class UserData extends PlayerExtension implements IConf
 	{
 		config.forceSave();
 		config.getFile().delete();
-		ess.getUserMap().removeUser(this.getBase().getName());
+		if (config.username != null)
+		{
+			ess.getUserMap().removeUser(config.username);
+		}
 	}
 
 	public final void cleanup()
@@ -838,7 +841,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		this.lastAccountName = lastAccountName;
 		config.setProperty("lastAccountName", lastAccountName);
 		config.save();
-		ess.getUserMap().trackUUID(base.getUniqueId(), lastAccountName);
+		ess.getUserMap().trackUUID(getConfigUUID(), lastAccountName);
 	}
 
 	public void setNPC(boolean set)
@@ -966,6 +969,11 @@ public abstract class UserData extends PlayerExtension implements IConf
 			return config.getConfigurationSection("info." + node).getValues(true);
 		}
 		return new HashMap<String, Object>();
+	}
+
+	public UUID getConfigUUID()
+	{
+		return config.uuid;
 	}
 
 	public void save()

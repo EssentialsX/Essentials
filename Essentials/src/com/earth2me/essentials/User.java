@@ -240,7 +240,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	{
 		if (!base.isOnline())
 		{
-			this.base = new OfflinePlayer(base.getUniqueId(), ess.getServer());
+			this.base = new OfflinePlayer(getConfigUUID(), ess.getServer());
 		}
 		cleanup();
 	}
