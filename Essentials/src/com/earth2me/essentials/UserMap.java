@@ -151,7 +151,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf
 					{
 						if (ess.getSettings().isDebug())
 						{
-							ess.getLogger().info("Found old UUID for " + name + ". Not adding to usermap.");
+							ess.getLogger().info("Found old UUID for " + name + " (" + uuid.toString() + "). Not adding to usermap.");
 						}
 					}
 				}
