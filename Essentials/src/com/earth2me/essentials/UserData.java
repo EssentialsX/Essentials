@@ -841,7 +841,7 @@ public abstract class UserData extends PlayerExtension implements IConf
 		this.lastAccountName = lastAccountName;
 		config.setProperty("lastAccountName", lastAccountName);
 		config.save();
-		ess.getUserMap().trackUUID(getConfigUUID(), lastAccountName);
+		ess.getUserMap().trackUUID(getConfigUUID(), lastAccountName, true);
 	}
 
 	public void setNPC(boolean set)

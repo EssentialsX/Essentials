@@ -646,7 +646,7 @@ public class EssentialsUpgrade
 					conf.forceSave();
 					config = new EssentialsUserConf(name, uuid, new File(userdir, uuid + ".yml"));
 					config.convertLegacyFile();
-					ess.getUserMap().trackUUID(uuid, name);
+					ess.getUserMap().trackUUID(uuid, name, false);
 					continue;
 				}
 				countFails++;

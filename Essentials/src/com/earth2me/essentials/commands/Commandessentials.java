@@ -355,14 +355,26 @@ public class Commandessentials extends EssentialsCommand
 		{
 			if (player.getName().equalsIgnoreCase(name))
 			{
-				sender.sendMessage("Online player: " + player.getUniqueId().toString());
 				onlineUUID = player.getUniqueId();
+				break;
 			}
 		}
+
+		UUID essUUID = ess.getUserMap().getUser(name).getConfigUUID();
 
 		org.bukkit.OfflinePlayer player = ess.getServer().getOfflinePlayer(name);
 		UUID bukkituuid = player.getUniqueId();
 		sender.sendMessage("Bukkit Lookup: " + bukkituuid.toString());
+
+		if (onlineUUID != null && onlineUUID != bukkituuid)
+		{
+			sender.sendMessage("Online player: " + onlineUUID.toString());
+		}
+
+		if (essUUID != null && essUUID != bukkituuid)
+		{
+			sender.sendMessage("Essentials config: " + essUUID.toString());
+		}
 
 		UUID npcuuid = UUID.nameUUIDFromBytes(("NPC:" + name).getBytes(Charsets.UTF_8));
 		sender.sendMessage("NPC UUID: " + npcuuid.toString());
