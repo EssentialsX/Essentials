@@ -128,7 +128,7 @@ public class MetaItemStack
 
 	public void parseStringMeta(final CommandSource sender, final boolean allowUnsafe, String[] string, int fromArg, final IEssentials ess) throws Exception
 	{
-		if (string[fromArg].startsWith("{"))
+		if (string[fromArg].startsWith("{") && hasMetaPermission(sender, "vanilla", false, true, ess))
 		{
 			try
 			{
