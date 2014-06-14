@@ -25,7 +25,14 @@ public class PermissionsExHandler extends SuperpermsHandler
 		{
 			return null;
 		}
-		return user.getGroupsNames()[0];
+
+		String[] groupsNames = user.getGroupsNames();
+		if (groupsNames == null)
+		{
+			return null;
+		}
+
+		return groupsNames[0];
 	}
 
 	@Override
@@ -36,7 +43,14 @@ public class PermissionsExHandler extends SuperpermsHandler
 		{
 			return null;
 		}
-		return Arrays.asList(user.getGroupsNames());
+		
+		String[] groupsNames = user.getGroupsNames();
+		if (groupsNames == null)
+		{
+			return null;
+		}
+		
+		return Arrays.asList(groupsNames);
 	}
 
 	@Override
