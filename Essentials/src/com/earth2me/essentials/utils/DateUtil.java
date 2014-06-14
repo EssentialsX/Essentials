@@ -13,7 +13,7 @@ public class DateUtil
 
 	public static String removeTimePattern(String input)
 	{
-		return timePattern.matcher(input).replaceAll("").trim();
+		return timePattern.matcher(input).replaceFirst("").trim();
 	}
 
 	public static long parseDateDiff(String time, boolean future) throws Exception
