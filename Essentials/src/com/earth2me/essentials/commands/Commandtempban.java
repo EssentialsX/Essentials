@@ -44,13 +44,19 @@ public class Commandtempban extends EssentialsCommand
 		}
 		final String time = getFinalArg(args, 1);
 		final long banTimestamp = DateUtil.parseDateDiff(time, true);
-		final String stringDregs = DateUtil.removeTimePattern(time);
+		String stringDregs = DateUtil.removeTimePattern(time);
+		
 		final long maxBanLength = ess.getSettings().getMaxTempban() * 1000;
 		if (maxBanLength > 0 && ((banTimestamp - GregorianCalendar.getInstance().getTimeInMillis()) > maxBanLength)
 			&& sender.isPlayer() && !(ess.getUser(sender.getPlayer()).isAuthorized("essentials.tempban.unlimited")))
 		{
 			sender.sendMessage(tl("oversizedTempban"));
 			throw new NoChargeException();
+		}
+		
+		if (stringDregs.length() < 2) 
+		{
+			stringDregs = tl("defaultBanReason");
 		}
 
 		final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
