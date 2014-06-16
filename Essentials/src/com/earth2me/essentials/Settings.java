@@ -51,7 +51,8 @@ public class Settings implements net.ess3.api.ISettings
 	@Override
 	public Set<String> getMultipleHomes()
 	{
-		return config.getConfigurationSection("sethome-multiple").getKeys(false);
+		final ConfigurationSection section = config.getConfigurationSection("sethome-multiple");
+		return section == null ? null : section.getKeys(false);
 	}
 
 	@Override
