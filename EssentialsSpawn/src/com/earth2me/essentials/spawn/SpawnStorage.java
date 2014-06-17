@@ -8,27 +8,16 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import org.bukkit.Location;
 import org.bukkit.World;
 
 
 public class SpawnStorage extends AsyncStorageObjectHolder<Spawns> implements IEssentialsModule
 {
-	private ConcurrentMap<String, Location> spawns;
-
 	public SpawnStorage(final IEssentials ess)
 	{
 		super(ess, Spawns.class);
 		reloadConfig();
-	}
-
-	@Override
-	public final void reloadConfig()
-	{
-		super.reloadConfig();
-		spawns = new ConcurrentHashMap<String, Location>();
 	}
 
 	@Override
@@ -63,8 +52,6 @@ public class SpawnStorage extends AsyncStorageObjectHolder<Spawns> implements IE
 			unlock();
 		}
 
-		spawns.clear();
-
 		if ("default".equalsIgnoreCase(group))
 		{
 			loc.getWorld().setSpawnLocation(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
@@ -73,43 +60,29 @@ public class SpawnStorage extends AsyncStorageObjectHolder<Spawns> implements IE
 
 	public Location getSpawn(final String group)
 	{
-		Location spawnLocation;
-		if (spawns.containsKey(group))
+		acquireReadLock();
+		try
 		{
-			spawnLocation = spawns.get(group);
+			if (getData().getSpawns() == null || group == null)
+			{
+				return getWorldSpawn();
+			}
+			final Map<String, Location> spawnMap = getData().getSpawns();
+			String groupName = group.toLowerCase(Locale.ENGLISH);
+			if (!spawnMap.containsKey(groupName))
+			{
+				groupName = "default";
+			}
+			if (!spawnMap.containsKey(groupName))
+			{
+				return getWorldSpawn();
+			}
+			return spawnMap.get(groupName);
 		}
-		else
+		finally
 		{
-			acquireReadLock();
-			try
-			{
-				if (getData().getSpawns() == null || group == null)
-				{
-					return getWorldSpawn();
-				}
-				final Map<String, Location> spawnMap = getData().getSpawns();
-				String groupName = group.toLowerCase(Locale.ENGLISH);
-				if (!spawnMap.containsKey(groupName))
-				{
-					groupName = "default";
-				}
-				if (!spawnMap.containsKey(groupName))
-				{
-					spawnLocation = getWorldSpawn();
-				}
-				else
-				{
-					spawnLocation = spawnMap.get(groupName);
-				}
-			}
-			finally
-			{
-				unlock();
-			}
-
-			spawns.put(group, spawnLocation);
+			unlock();
 		}
-		return spawnLocation;
 	}
 
 	private Location getWorldSpawn()
