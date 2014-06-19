@@ -193,6 +193,8 @@ public interface ISettings extends IConf
 	int getMailsPerMinute();
 
 	long getEconomyLagWarning();
+	
+	long getPermissionsLagWarning();
 
 	void setEssentialsChatActive(boolean b);
 

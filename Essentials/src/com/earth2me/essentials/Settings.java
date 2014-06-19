@@ -557,6 +557,7 @@ public class Settings implements net.ess3.api.ISettings
 		mailsPerMinute = _getMailsPerMinute();
 		maxMoney = _getMaxMoney();
 		minMoney = _getMinMoney();
+		permissionsLagWarning = _getPermissionsLagWarning();
 		economyLagWarning = _getEconomyLagWarning();
 		economyLog = _isEcoLogEnabled();
 		economyLogUpdate = _isEcoLogUpdateEnabled();
@@ -1137,8 +1138,8 @@ public class Settings implements net.ess3.api.ISettings
 
 	private long _getEconomyLagWarning()
 	{
-		// Default to 20ms
-		final long value = (long)(config.getDouble("economy-lag-warning", 20.0) * 1000000);
+		// Default to 25ms
+		final long value = (long)(config.getDouble("economy-lag-warning", 25.0) * 1000000);
 		return value;
 	}
 
@@ -1146,6 +1147,22 @@ public class Settings implements net.ess3.api.ISettings
 	public long getEconomyLagWarning()
 	{
 		return economyLagWarning;
+	}
+	
+	// #easteregg
+	private long permissionsLagWarning;
+
+	private long _getPermissionsLagWarning()
+	{
+		// Default to 25ms
+		final long value = (long)(config.getDouble("permissions-lag-warning", 25.0) * 1000000);
+		return value;
+	}
+
+	@Override
+	public long getPermissionsLagWarning()
+	{
+		return permissionsLagWarning;
 	}
 
 	@Override
