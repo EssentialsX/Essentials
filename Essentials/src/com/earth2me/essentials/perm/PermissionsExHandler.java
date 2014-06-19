@@ -27,7 +27,7 @@ public class PermissionsExHandler extends SuperpermsHandler
 		}
 
 		String[] groupsNames = user.getGroupsNames();
-		if (groupsNames == null)
+		if (groupsNames == null || groupsNames.length == 0)
 		{
 			return null;
 		}
