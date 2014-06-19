@@ -37,6 +37,7 @@ public class SignInfo extends EssentialsSign
 		final IText input;
 		try
 		{
+			player.setDisplayNick();
 			input = new TextInput(player.getSource(), "info", true, ess);
 			final IText output = new KeywordReplacer(input, player.getSource(), ess);
 			final TextPager pager = new TextPager(output);

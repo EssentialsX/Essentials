@@ -45,6 +45,7 @@ public class Commandhelp extends EssentialsCommand
 		}
 		else
 		{
+			user.setDisplayNick();
 			output = new KeywordReplacer(input, user.getSource(), ess);
 		}
 		final TextPager pager = new TextPager(output);

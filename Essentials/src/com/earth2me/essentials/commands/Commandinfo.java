@@ -18,6 +18,11 @@ public class Commandinfo extends EssentialsCommand
 	@Override
 	protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
+		if (sender.isPlayer())
+		{
+			ess.getUser(sender.getPlayer()).setDisplayNick();
+		}
+		
 		final IText input = new TextInput(sender, "info", true, ess);
 		final IText output = new KeywordReplacer(input, sender, ess);
 		final TextPager pager = new TextPager(output);

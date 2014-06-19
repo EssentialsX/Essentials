@@ -134,7 +134,7 @@ public class EssentialsSpawnPlayerListener implements Listener
 
 				LOGGER.log(Level.FINE, "New player join");
 			}
-		});
+		}, 2L);
 	}
 
 
@@ -150,7 +150,7 @@ public class EssentialsSpawnPlayerListener implements Listener
 		@Override
 		public void run()
 		{
-			if (user.getBase() instanceof OfflinePlayer)
+			if (user.getBase() instanceof OfflinePlayer || !user.getBase().isOnline())
 			{
 				return;
 			}

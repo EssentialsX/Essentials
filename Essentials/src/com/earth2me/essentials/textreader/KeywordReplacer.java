@@ -66,8 +66,6 @@ public class KeywordReplacer implements IText
 		if (sender.isPlayer())
 		{
 			user = ess.getUser(sender.getPlayer());
-			//This is just so any displayname lookups below show the correct nickname
-			user.setDisplayNick();
 		}
 		execTimer.mark("User Grab");
 
