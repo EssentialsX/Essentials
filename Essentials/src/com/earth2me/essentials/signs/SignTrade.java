@@ -118,27 +118,39 @@ public class SignTrade extends EssentialsSign
 	@Override
 	protected boolean onSignBreak(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, MaxMoneyException
 	{
-		if ((sign.getLine(3).length() > 3 && sign.getLine(3).substring(2).equalsIgnoreCase(username))
-			|| player.isAuthorized("essentials.signs.trade.override"))
+		final String signOwner = sign.getLine(3);
+		
+		final boolean isOwner = (signOwner.length() > 3 && signOwner.substring(2).equalsIgnoreCase(username));
+		final boolean canBreak = isOwner ? true : player.isAuthorized("essentials.signs.trade.override");
+		final boolean canCollect = isOwner ? true : player.isAuthorized("essentials.signs.trade.override.collect");
+				
+		if (canBreak)
 		{
 			try
 			{
 				final Trade stored1 = getTrade(sign, 1, AmountType.TOTAL, false, ess);
 				final Trade stored2 = getTrade(sign, 2, AmountType.TOTAL, false, ess);
-				Map<Integer, ItemStack> withdraw1 = stored1.pay(player, OverflowType.RETURN);
-				Map<Integer, ItemStack> withdraw2 = stored2.pay(player, OverflowType.RETURN);
+				
+				if (!canCollect)
+				{
+					Trade.log("Sign", "Trade", "Destroy", signOwner, stored2, username, stored1, sign.getBlock().getLocation(), ess);
+					return true;
+				}				
+				
+				final Map<Integer, ItemStack> withdraw1 = stored1.pay(player, OverflowType.RETURN);
+				final Map<Integer, ItemStack> withdraw2 = stored2.pay(player, OverflowType.RETURN);
 
 				if (withdraw1 == null && withdraw2 == null)
 				{
-					Trade.log("Sign", "Trade", "Break", username, stored2, username, stored1, sign.getBlock().getLocation(), ess);
+					Trade.log("Sign", "Trade", "Break", signOwner, stored2, username, stored1, sign.getBlock().getLocation(), ess);
 					return true;
 				}
 
 				setAmount(sign, 1, BigDecimal.valueOf(withdraw1 == null ? 0L : withdraw1.get(0).getAmount()), ess);
-				Trade.log("Sign", "Trade", "Withdraw", username, stored1, username, withdraw1 == null ? null : new Trade(withdraw1.get(0), ess), sign.getBlock().getLocation(), ess);
+				Trade.log("Sign", "Trade", "Withdraw", signOwner, stored1, username, withdraw1 == null ? null : new Trade(withdraw1.get(0), ess), sign.getBlock().getLocation(), ess);
 
 				setAmount(sign, 2, BigDecimal.valueOf(withdraw2 == null ? 0L : withdraw2.get(0).getAmount()), ess);
-				Trade.log("Sign", "Trade", "Withdraw", username, stored2, username, withdraw2 == null ? null : new Trade(withdraw2.get(0), ess), sign.getBlock().getLocation(), ess);
+				Trade.log("Sign", "Trade", "Withdraw", signOwner, stored2, username, withdraw2 == null ? null : new Trade(withdraw2.get(0), ess), sign.getBlock().getLocation(), ess);
 
 				sign.updateSign();
 			}
