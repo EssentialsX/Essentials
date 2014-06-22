@@ -31,13 +31,13 @@ public class Commandkit extends EssentialsCommand
 		else if (args.length > 1 && user.isAuthorized("essentials.kit.others"))
 		{
 			final User userTo = getPlayer(server, user, args, 1);
-			final String kitName = StringUtil.sanitizeString(args[0].toLowerCase(Locale.ENGLISH)).trim();
-			giveKit(userTo, user, kitName);
+			final String kitNames = StringUtil.sanitizeString(args[0].toLowerCase(Locale.ENGLISH)).trim();
+			giveKits(userTo, user, kitNames);
 		}
 		else
 		{
-			final String kitName = StringUtil.sanitizeString(args[0].toLowerCase(Locale.ENGLISH)).trim();
-			giveKit(user, user, kitName);
+			final String kitNames = StringUtil.sanitizeString(args[0].toLowerCase(Locale.ENGLISH)).trim();
+			giveKits(user, user, kitNames);
 		}
 	}
 
@@ -53,24 +53,41 @@ public class Commandkit extends EssentialsCommand
 		else
 		{
 			final User userTo = getPlayer(server, args, 1, true, false);
-			final String kitName = args[0].toLowerCase(Locale.ENGLISH);
+			final String[] kits = args[0].toLowerCase(Locale.ENGLISH).split(",");
 
-			final Map<String, Object> kit = ess.getSettings().getKit(kitName);
-			final List<String> items = Kit.getItems(ess, userTo, kitName, kit);
-			Kit.expandItems(ess, userTo, items);
+			for (final String kitName : kits)
+			{
+				final Map<String, Object> kit = ess.getSettings().getKit(kitName);
+				final List<String> items = Kit.getItems(ess, userTo, kitName, kit);
+				Kit.expandItems(ess, userTo, items);
 
-			sender.sendMessage(tl("kitGiveTo", kitName, userTo.getDisplayName()));
-			userTo.sendMessage(tl("kitReceive", kitName));
+				sender.sendMessage(tl("kitGiveTo", kitName, userTo.getDisplayName()));
+				userTo.sendMessage(tl("kitReceive", kitName));
+			}
+		}
+	}
+
+	private void giveKits(User userTo, User userFrom, String kitNames) throws Exception
+	{
+		if (kitNames.isEmpty())
+		{
+			throw new Exception(tl("kitError2"));
+		}
+		String[] kits = kitNames.split(",");
+
+		for (final String kitName : kits)
+		{
+			giveKit(userTo, userFrom, kitName);
 		}
 	}
 
 	private void giveKit(User userTo, User userFrom, String kitName) throws Exception
-	{		
+	{
 		if (kitName.isEmpty())
 		{
 			throw new Exception(tl("kitError2"));
 		}
-		
+
 		final Map<String, Object> kit = ess.getSettings().getKit(kitName);
 
 		if (!userFrom.isAuthorized("essentials.kits." + kitName))
@@ -80,14 +97,19 @@ public class Commandkit extends EssentialsCommand
 
 		final List<String> items = Kit.getItems(ess, userTo, kitName, kit);
 
-		final Trade charge = new Trade("kit-" + kitName, ess);
+		final Trade charge = new Trade("kit-" + kitName, new Trade("kit-kit", ess), ess);
 		charge.isAffordableFor(userFrom);
 
 		Kit.checkTime(userFrom, kitName, kit);
 		Kit.expandItems(ess, userTo, items);
 
 		charge.charge(userFrom);
-		userFrom.sendMessage(tl("kitGiveTo", kitName, userTo.getDisplayName()));
+
+		if (!userFrom.equals(userTo))
+		{
+			userFrom.sendMessage(tl("kitGiveTo", kitName, userTo.getDisplayName()));
+		}
+
 		userTo.sendMessage(tl("kitReceive", kitName));
 	}
 }
