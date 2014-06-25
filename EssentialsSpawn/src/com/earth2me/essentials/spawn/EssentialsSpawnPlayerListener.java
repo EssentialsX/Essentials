@@ -122,9 +122,8 @@ public class EssentialsSpawnPlayerListener implements Listener
 				{
 					try
 					{
-						final Map<String, Object> kit = ess.getSettings().getKit(kitName.toLowerCase(Locale.ENGLISH));
-						final List<String> items = Kit.getItems(ess, user, kitName, kit);
-						Kit.expandItems(ess, user, items);
+						final Kit kit = new Kit(kitName.toLowerCase(Locale.ENGLISH), ess);
+						kit.expandItems(user);
 					}
 					catch (Exception ex)
 					{

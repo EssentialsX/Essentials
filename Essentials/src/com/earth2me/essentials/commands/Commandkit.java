@@ -3,12 +3,11 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.Kit;
-import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.StringUtil;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import org.bukkit.Server;
 
 
@@ -57,9 +56,8 @@ public class Commandkit extends EssentialsCommand
 
 			for (final String kitName : kits)
 			{
-				final Map<String, Object> kit = ess.getSettings().getKit(kitName);
-				final List<String> items = Kit.getItems(ess, userTo, kitName, kit);
-				Kit.expandItems(ess, userTo, items);
+				final Kit kit = new Kit(kitName, ess);
+				kit.expandItems(userTo);
 
 				sender.sendMessage(tl("kitGiveTo", kitName, userTo.getDisplayName()));
 				userTo.sendMessage(tl("kitReceive", kitName));
@@ -67,49 +65,42 @@ public class Commandkit extends EssentialsCommand
 		}
 	}
 
-	private void giveKits(User userTo, User userFrom, String kitNames) throws Exception
+	private void giveKits(final User userTo, final User userFrom, final String kitNames) throws Exception
 	{
 		if (kitNames.isEmpty())
 		{
-			throw new Exception(tl("kitError2"));
+			throw new Exception(tl("kitNotFound"));
 		}
-		String[] kits = kitNames.split(",");
+		String[] kitList = kitNames.split(",");
 
-		for (final String kitName : kits)
+		List<Kit> kits = new ArrayList<Kit>();
+
+		for (final String kitName : kitList)
 		{
-			giveKit(userTo, userFrom, kitName);
-		}
-	}
+			if (kitName.isEmpty())
+			{
+				throw new Exception(tl("kitNotFound"));
+			}
 
-	private void giveKit(User userTo, User userFrom, String kitName) throws Exception
-	{
-		if (kitName.isEmpty())
+			Kit kit = new Kit(kitName, ess);
+			kit.checkPerms(userFrom);
+			kit.checkDelay(userFrom);
+			kit.checkAffordable(userFrom);
+			kits.add(kit);
+		}
+
+		for (final Kit kit : kits)
 		{
-			throw new Exception(tl("kitError2"));
+			kit.setTime(userFrom);
+			kit.expandItems(userTo);
+			kit.chargeUser(userTo);
+
+			if (!userFrom.equals(userTo))
+			{
+				userFrom.sendMessage(tl("kitGiveTo", kit.getName(), userTo.getDisplayName()));
+			}
+
+			userTo.sendMessage(tl("kitReceive", kit.getName()));
 		}
-
-		final Map<String, Object> kit = ess.getSettings().getKit(kitName);
-
-		if (!userFrom.isAuthorized("essentials.kits." + kitName))
-		{
-			throw new Exception(tl("noKitPermission", "essentials.kits." + kitName));
-		}
-
-		final List<String> items = Kit.getItems(ess, userTo, kitName, kit);
-
-		final Trade charge = new Trade("kit-" + kitName, new Trade("kit-kit", ess), ess);
-		charge.isAffordableFor(userFrom);
-
-		Kit.checkTime(userFrom, kitName, kit);
-		Kit.expandItems(ess, userTo, items);
-
-		charge.charge(userFrom);
-
-		if (!userFrom.equals(userTo))
-		{
-			userFrom.sendMessage(tl("kitGiveTo", kitName, userTo.getDisplayName()));
-		}
-
-		userTo.sendMessage(tl("kitReceive", kitName));
 	}
 }

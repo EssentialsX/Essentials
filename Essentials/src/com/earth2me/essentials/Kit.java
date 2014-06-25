@@ -21,6 +21,24 @@ import org.bukkit.inventory.ItemStack;
 
 public class Kit
 {
+	final IEssentials ess;
+	final String kitName;
+	final Map<String, Object> kit;
+	final Trade charge;
+
+	public Kit(final String kitName, final IEssentials ess) throws Exception
+	{
+		this.kitName = kitName;
+		this.ess = ess;
+		this.kit = ess.getSettings().getKit(kitName);
+		this.charge = new Trade("kit-" + kitName, new Trade("kit-kit", ess), ess);
+
+		if (kit == null)
+		{
+			throw new Exception(tl("kitNotFound"));
+		}
+	}
+
 	//TODO: Convert this to use one of the new text classes?
 	public static String listKits(final IEssentials ess, final User user) throws Exception
 	{
@@ -43,9 +61,9 @@ public class Kit
 					{
 						cost = tl("kitCost", NumberUtil.displayCurrency(costPrice, ess));
 					}
-					final Map<String, Object> kit = ess.getSettings().getKit(kitItem);
 
-					if (Kit.getNextUse(user, kitItem, kit) != 0)
+					Kit kit = new Kit(kitItem, ess);
+					if (kit.getNextUse(user) != 0)
 					{
 						name = tl("kitDelay", name);
 					}
@@ -62,14 +80,26 @@ public class Kit
 
 	}
 
-	public static void checkTime(final User user, final String kitName, final Map<String, Object> els) throws Exception
+	public String getName()
 	{
-		final Calendar time = new GregorianCalendar();
-		long nextUse = getNextUse(user, kitName, els);
+		return kitName;
+	}
+
+	public void checkPerms(final User user) throws Exception
+	{
+		if (!user.isAuthorized("essentials.kits." + kitName))
+		{
+			throw new Exception(tl("noKitPermission", "essentials.kits." + kitName));
+		}
+	}
+
+	public void checkDelay(final User user) throws Exception
+	{
+		long nextUse = getNextUse(user);
 
 		if (nextUse == 0L)
 		{
-			user.setKitTimestamp(kitName, time.getTimeInMillis());
+			return;
 		}
 		else if (nextUse < 0L)
 		{
@@ -83,7 +113,23 @@ public class Kit
 		}
 	}
 
-	public static long getNextUse(final User user, final String kitName, final Map<String, Object> els) throws Exception
+	public void checkAffordable(final User user) throws Exception
+	{
+		charge.isAffordableFor(user);
+	}
+
+	public void setTime(final User user) throws Exception
+	{
+		final Calendar time = new GregorianCalendar();
+		user.setKitTimestamp(kitName, time.getTimeInMillis());
+	}
+
+	public void chargeUser(final User user) throws Exception
+	{
+		charge.charge(user);
+	}
+
+	public long getNextUse(final User user) throws Exception
 	{
 		if (user.isAuthorized("essentials.kit.exemptdelay"))
 		{
@@ -96,7 +142,7 @@ public class Kit
 		try
 		{
 			// Make sure delay is valid
-			delay = els.containsKey("delay") ? ((Number)els.get("delay")).doubleValue() : 0.0d;
+			delay = kit.containsKey("delay") ? ((Number)kit.get("delay")).doubleValue() : 0.0d;
 		}
 		catch (Exception e)
 		{
@@ -134,7 +180,7 @@ public class Kit
 		}
 	}
 
-	public static List<String> getItems(final IEssentials ess, final User user, final String kitName, final Map<String, Object> kit) throws Exception
+	public List<String> getItems(final User user) throws Exception
 	{
 		if (kit == null)
 		{
@@ -166,7 +212,12 @@ public class Kit
 		}
 	}
 
-	public static void expandItems(final IEssentials ess, final User user, final List<String> items) throws Exception
+	public void expandItems(final User user) throws Exception
+	{
+		expandItems(user, getItems(user));
+	}
+
+	public void expandItems(final User user, final List<String> items) throws Exception
 	{
 		try
 		{
@@ -187,11 +238,12 @@ public class Kit
 
 				final String[] parts = kitItem.split(" +");
 				final ItemStack parseStack = ess.getItemDb().get(parts[0], parts.length > 1 ? Integer.parseInt(parts[1]) : 1);
-				
-				if (parseStack.getType() == Material.AIR) {
+
+				if (parseStack.getType() == Material.AIR)
+				{
 					continue;
 				}
-				
+
 				final MetaItemStack metaStack = new MetaItemStack(parseStack);
 
 				if (parts.length > 2)
@@ -213,10 +265,12 @@ public class Kit
 				for (ItemStack itemStack : overfilled.values())
 				{
 					int spillAmount = itemStack.getAmount();
-					if (!allowOversizedStacks) {
-							itemStack.setAmount(spillAmount < itemStack.getMaxStackSize() ? spillAmount : itemStack.getMaxStackSize());
+					if (!allowOversizedStacks)
+					{
+						itemStack.setAmount(spillAmount < itemStack.getMaxStackSize() ? spillAmount : itemStack.getMaxStackSize());
 					}
-					while (spillAmount > 0) {						
+					while (spillAmount > 0)
+					{
 						user.getWorld().dropItemNaturally(user.getLocation(), itemStack);
 						spillAmount -= itemStack.getAmount();
 					}

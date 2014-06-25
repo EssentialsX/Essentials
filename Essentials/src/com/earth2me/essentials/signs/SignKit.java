@@ -59,10 +59,11 @@ public class SignKit extends EssentialsSign
 			charge.isAffordableFor(player);
 			try
 			{
-				final Map<String, Object> kit = ess.getSettings().getKit(kitName);
-				Kit.checkTime(player, kitName, kit);
-				final List<String> items = Kit.getItems(ess, player, kitName, kit);
-				Kit.expandItems(ess, player, items);
+				final Kit kit = new Kit(kitName, ess);
+				kit.checkDelay(player);
+				kit.setTime(player);
+				kit.expandItems(player);
+
 				charge.charge(player);
 				Trade.log("Sign", "Kit", "Interact", username, null, username, charge, sign.getBlock().getLocation(), ess);
 			}
