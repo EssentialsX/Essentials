@@ -55,9 +55,20 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 	}
 
 	// Get online players - only show vanished if source has permission
+	protected User getPlayer(final Server server, final CommandSource sender, final String searchTerm) throws PlayerNotFoundException, NotEnoughArgumentsException
+	{
+		if (sender.isPlayer())
+		{
+			User user = ess.getUser(sender.getPlayer());
+			return getPlayer(server, user, searchTerm, user.canInteractVanished(), false);
+		}
+		return getPlayer(server, searchTerm, true, false);
+	}
+
+	// Get online players - only show vanished if source has permission
 	protected User getPlayer(final Server server, final User user, final String[] args, final int pos) throws PlayerNotFoundException, NotEnoughArgumentsException
 	{
-		return getPlayer(server, user, args, pos, user.isAuthorized("essentials.vanish.interact"), false);
+		return getPlayer(server, user, args, pos, user.canInteractVanished(), false);
 	}
 
 	// Get online or offline players, this method allows for raw access
@@ -114,11 +125,12 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 			{
 				throw new PlayerNotFoundException();
 			}
-			if (!getHidden && user.isHidden() && !user.equals(sourceUser))
+
+			if (getHidden || canInteractWith(sourceUser, user))
 			{
-				throw new PlayerNotFoundException();
+				return user;
 			}
-			return user;
+			throw new PlayerNotFoundException();
 		}
 		final List<Player> matches = server.matchPlayer(searchTerm);
 
@@ -128,7 +140,8 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 			for (Player onlinePlayer : server.getOnlinePlayers())
 			{
 				final User userMatch = ess.getUser(onlinePlayer);
-				if (getHidden || !userMatch.isHidden() || userMatch.equals(sourceUser))
+
+				if (getHidden || canInteractWith(sourceUser, userMatch))
 				{
 					final String displayName = FormatUtil.stripFormat(userMatch.getDisplayName()).toLowerCase(Locale.ENGLISH);
 					if (displayName.contains(matchText))
@@ -143,13 +156,13 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 			for (Player player : matches)
 			{
 				final User userMatch = ess.getUser(player);
-				if (userMatch.getDisplayName().startsWith(searchTerm) && (getHidden || !userMatch.isHidden() || userMatch.equals(sourceUser)))
+				if (userMatch.getDisplayName().startsWith(searchTerm) && (getHidden || canInteractWith(sourceUser, userMatch)))
 				{
 					return userMatch;
 				}
 			}
 			final User userMatch = ess.getUser(matches.get(0));
-			if (getHidden || !userMatch.isHidden() || userMatch.equals(sourceUser))
+			if (getHidden || canInteractWith(sourceUser, userMatch))
 			{
 				return userMatch;
 			}
@@ -198,5 +211,20 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 			bldr.append(args[i]);
 		}
 		return bldr.toString();
+	}
+
+	private static boolean canInteractWith(User interactor, User interactee)
+	{
+		if (interactor == null)
+		{
+			return !interactee.isHidden();
+		}
+
+		if (interactor.equals(interactee))
+		{
+			return true;
+		}
+
+		return interactor.getBase().canSee(interactee.getBase());
 	}
 }

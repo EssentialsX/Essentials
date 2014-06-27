@@ -205,11 +205,11 @@ public class KeywordReplacer implements IText
 						}
 						else
 						{
-							showHidden = user.isAuthorized("essentials.list.hidden") || user.isAuthorized("essentials.vanish.interact");
+							showHidden = user.isAuthorized("essentials.list.hidden") || user.canInteractVanished();
 						}
 
 						//First lets build the per group playerlist
-						final Map<String, List<User>> playerList = PlayerList.getPlayerLists(ess, showHidden);
+						final Map<String, List<User>> playerList = PlayerList.getPlayerLists(ess, user, showHidden);
 						outputList = new HashMap<String, String>();
 						for (String groupName : playerList.keySet())
 						{

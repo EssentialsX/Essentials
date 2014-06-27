@@ -3,7 +3,9 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.FormatUtil;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.Server;
@@ -35,11 +37,11 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand
 		}
 		else if (matchWildcards && searchTerm.contentEquals("*"))
 		{
-			boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.vanish.interact");
+			boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).canInteractVanished();
 			for (Player onlinePlayer : server.getOnlinePlayers())
 			{
 				final User onlineUser = ess.getUser(onlinePlayer);
-				if (skipHidden && onlineUser.isHidden())
+				if (skipHidden && onlineUser.isHidden(sender.getPlayer()) && !sender.getPlayer().canSee(onlinePlayer))
 				{
 					continue;
 				}
@@ -79,14 +81,14 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand
 			throw new PlayerNotFoundException();
 		}
 
-		boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.vanish.interact");
+		boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).canInteractVanished();
 
 		if (matchWildcards && (searchTerm.contentEquals("**") || searchTerm.contentEquals("*")))
 		{
 			for (Player onlinePlayer : server.getOnlinePlayers())
 			{
 				final User onlineUser = ess.getUser(onlinePlayer);
-				if (skipHidden && onlineUser.isHidden())
+				if (skipHidden && onlineUser.isHidden(sender.getPlayer()) && !sender.getPlayer().canSee(onlinePlayer))
 				{
 					continue;
 				}
@@ -101,15 +103,37 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand
 			}
 			boolean foundUser = false;
 			final List<Player> matchedPlayers = server.matchPlayer(searchTerm);
-			for (Player matchPlayer : matchedPlayers)
+
+			if (matchedPlayers.isEmpty())
 			{
-				final User player = ess.getUser(matchPlayer);
-				if (skipHidden && player.isHidden())
+				final String matchText = searchTerm.toLowerCase(Locale.ENGLISH);
+				for (Player onlinePlayer : server.getOnlinePlayers())
 				{
-					continue;
+					final User player = ess.getUser(onlinePlayer);
+					if (skipHidden && player.isHidden(sender.getPlayer()) && !sender.getPlayer().canSee(onlinePlayer))
+					{
+						continue;
+					}
+					final String displayName = FormatUtil.stripFormat(player.getDisplayName()).toLowerCase(Locale.ENGLISH);
+					if (displayName.contains(matchText))
+					{
+						foundUser = true;
+						updatePlayer(server, sender, player, commandArgs);
+					}
 				}
-				foundUser = true;
-				updatePlayer(server, sender, player, commandArgs);
+			}
+			else
+			{
+				for (Player matchPlayer : matchedPlayers)
+				{
+					final User player = ess.getUser(matchPlayer);
+					if (skipHidden && player.isHidden(sender.getPlayer()) && !sender.getPlayer().canSee(matchPlayer))
+					{
+						continue;
+					}
+					foundUser = true;
+					updatePlayer(server, sender, player, commandArgs);
+				}
 			}
 			if (!foundUser)
 			{
@@ -118,7 +142,7 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand
 		}
 		else
 		{
-			final User player = getPlayer(server, searchTerm, !skipHidden, false);
+			final User player = getPlayer(server, sender, searchTerm);
 			updatePlayer(server, sender, player, commandArgs);
 		}
 	}

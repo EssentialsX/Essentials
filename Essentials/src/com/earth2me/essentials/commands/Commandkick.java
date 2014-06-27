@@ -28,7 +28,7 @@ public class Commandkick extends EssentialsCommand
 		if (sender.isPlayer())
 		{
 			User user = ess.getUser(sender.getPlayer());
-			if (target.isHidden() && !user.isAuthorized("essentials.vanish.interact"))
+			if (target.isHidden(sender.getPlayer()) && !user.canInteractVanished() && !sender.getPlayer().canSee(target.getBase()))
 			{
 				throw new PlayerNotFoundException();
 			}

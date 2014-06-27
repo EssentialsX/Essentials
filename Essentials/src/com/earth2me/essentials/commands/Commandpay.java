@@ -27,7 +27,14 @@ public class Commandpay extends EssentialsLoopCommand
 			throw new NotEnoughArgumentsException();
 		}
 
-		amount = new BigDecimal(args[1].replaceAll("[^0-9\\.]", ""));
+		String stringAmount = args[1].replaceAll("[^0-9\\.]", "");
+
+		if (stringAmount.length() < 1)
+		{
+			throw new NotEnoughArgumentsException();
+		}
+
+		amount = new BigDecimal(stringAmount);
 		loopOnlinePlayers(server, user.getSource(), false, user.isAuthorized("essentials.pay.multiple"), args[0], args);
 	}
 
@@ -43,6 +50,6 @@ public class Commandpay extends EssentialsLoopCommand
 		catch (MaxMoneyException ex)
 		{
 			sender.sendMessage(tl("maxMoney"));
-		}		
+		}
 	}
 }

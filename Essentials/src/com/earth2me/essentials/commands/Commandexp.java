@@ -117,13 +117,13 @@ public class Commandexp extends EssentialsCommand
 
 	private void showMatch(final Server server, final CommandSource sender, final String match) throws PlayerNotFoundException
 	{
-		boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.vanish.interact");
+		boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).canInteractVanished();
 		boolean foundUser = false;
 		final List<Player> matchedPlayers = server.matchPlayer(match);
 		for (Player matchPlayer : matchedPlayers)
 		{
 			final User player = ess.getUser(matchPlayer);
-			if (skipHidden && player.isHidden())
+			if (skipHidden && player.isHidden(sender.getPlayer()) && !sender.getPlayer().canSee(matchPlayer))
 			{
 				continue;
 			}
@@ -138,13 +138,13 @@ public class Commandexp extends EssentialsCommand
 
 	private void expMatch(final Server server, final CommandSource sender, final String match, String amount, final boolean give) throws NotEnoughArgumentsException, PlayerNotFoundException
 	{
-		boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.vanish.interact");
+		boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).canInteractVanished();
 		boolean foundUser = false;
 		final List<Player> matchedPlayers = server.matchPlayer(match);
 		for (Player matchPlayer : matchedPlayers)
 		{
 			final User player = ess.getUser(matchPlayer);
-			if (skipHidden && player.isHidden())
+			if (skipHidden && player.isHidden(sender.getPlayer()) && !sender.getPlayer().canSee(matchPlayer))
 			{
 				continue;
 			}

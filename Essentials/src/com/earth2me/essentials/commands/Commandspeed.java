@@ -72,13 +72,13 @@ public class Commandspeed extends EssentialsCommand
 
 	private void speedOtherPlayers(final Server server, final CommandSource sender, final boolean isFly, final boolean isBypass, final float speed, final String name) throws PlayerNotFoundException
 	{
-		boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.vanish.interact");
+		boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).canInteractVanished();
 		boolean foundUser = false;
 		final List<Player> matchedPlayers = server.matchPlayer(name);
 		for (Player matchPlayer : matchedPlayers)
 		{
 			final User player = ess.getUser(matchPlayer);
-			if (skipHidden && player.isHidden())
+			if (skipHidden && player.isHidden(sender.getPlayer()) && !sender.getPlayer().canSee(matchPlayer))
 			{
 				continue;
 			}

@@ -21,12 +21,14 @@ public class Commandlist extends EssentialsCommand
 	public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception
 	{
 		boolean showHidden = true;
+		User user = null;
 		if (sender.isPlayer())
 		{
-			showHidden = ess.getUser(sender.getPlayer()).isAuthorized("essentials.list.hidden") || ess.getUser(sender.getPlayer()).isAuthorized("essentials.vanish.interact");
+			user = ess.getUser(sender.getPlayer());
+			showHidden = user.isAuthorized("essentials.list.hidden") || user.canInteractVanished();
 		}
-		sender.sendMessage(PlayerList.listSummary(ess, showHidden));
-		final Map<String, List<User>> playerList = PlayerList.getPlayerLists(ess, showHidden);
+		sender.sendMessage(PlayerList.listSummary(ess, user, showHidden));
+		final Map<String, List<User>> playerList = PlayerList.getPlayerLists(ess, user, showHidden);
 
 		if (args.length > 0)
 		{

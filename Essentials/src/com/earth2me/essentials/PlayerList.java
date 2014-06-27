@@ -44,21 +44,26 @@ public class PlayerList
 	}
 
 	// Produce a user summary: There are 5 out of maximum 10 players online.
-	public static String listSummary(final IEssentials ess, final boolean showHidden)
+	public static String listSummary(final IEssentials ess, final User user, final boolean showHidden)
 	{
 		Server server = ess.getServer();
 		int playerHidden = 0;
+		int hiddenCount = 0;
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
-			if (ess.getUser(onlinePlayer).isHidden())
+			if (ess.getUser(onlinePlayer).isHidden(user.getBase()))
 			{
 				playerHidden++;
+				if (showHidden || user.getBase().canSee(onlinePlayer))
+				{
+					hiddenCount++;
+				}
 			}
 		}
 		String online;
-		if (showHidden && playerHidden > 0)
+		if (hiddenCount > 0)
 		{
-			online = tl("listAmountHidden", server.getOnlinePlayers().length - playerHidden, playerHidden, server.getMaxPlayers());
+			online = tl("listAmountHidden", server.getOnlinePlayers().length - playerHidden, hiddenCount, server.getMaxPlayers());
 		}
 		else
 		{
@@ -68,14 +73,14 @@ public class PlayerList
 	}
 
 	// Build the basic player list, divided by groups.
-	public static Map<String, List<User>> getPlayerLists(final IEssentials ess, final boolean showHidden)
+	public static Map<String, List<User>> getPlayerLists(final IEssentials ess, final User sender, final boolean showHidden)
 	{
 		Server server = ess.getServer();
 		final Map<String, List<User>> playerList = new HashMap<String, List<User>>();
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
 			final User onlineUser = ess.getUser(onlinePlayer);
-			if (onlineUser.isHidden() && !showHidden)
+			if (onlineUser.isHidden(sender.getBase()) && !showHidden && (sender != null && !sender.getBase().canSee(onlinePlayer)))
 			{
 				continue;
 			}

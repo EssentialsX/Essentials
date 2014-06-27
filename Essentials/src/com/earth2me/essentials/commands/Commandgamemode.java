@@ -84,13 +84,13 @@ public class Commandgamemode extends EssentialsCommand
 			throw new NotEnoughArgumentsException(tl("gameModeInvalid"));
 		}
 
-		boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.vanish.interact");
+		boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).canInteractVanished();
 		boolean foundUser = false;
 		final List<Player> matchedPlayers = server.matchPlayer(name);
 		for (Player matchPlayer : matchedPlayers)
 		{
 			final User player = ess.getUser(matchPlayer);
-			if (skipHidden && player.isHidden())
+			if (skipHidden && player.isHidden(sender.getPlayer()) && !sender.getPlayer().canSee(matchPlayer))
 			{
 				continue;
 			}

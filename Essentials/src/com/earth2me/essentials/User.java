@@ -534,6 +534,11 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	{
 		return hidden;
 	}
+	
+	public boolean isHidden(final Player player)
+	{
+		return hidden || !player.canSee(getBase());
+	}
 
 	@Override
 	public void setHidden(final boolean hidden)
@@ -750,6 +755,11 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 	public boolean hasInvulnerabilityAfterTeleport()
 	{
 		return teleportInvulnerabilityTimestamp != 0 && teleportInvulnerabilityTimestamp >= System.currentTimeMillis();
+	}
+	
+	public boolean canInteractVanished()
+	{
+		return isAuthorized("essentials.vanish.interact");
 	}
 
 	@Override

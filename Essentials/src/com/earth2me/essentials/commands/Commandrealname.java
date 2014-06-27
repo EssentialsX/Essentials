@@ -24,12 +24,12 @@ public class Commandrealname extends EssentialsCommand
 			throw new NotEnoughArgumentsException();
 		}
 		final String whois = args[0].toLowerCase(Locale.ENGLISH);
-		boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.vanish.interact");
+		boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).canInteractVanished();
 		boolean foundUser = false;
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
 			final User u = ess.getUser(onlinePlayer);
-			if (skipHidden && u.isHidden())
+			if (skipHidden && u.isHidden(sender.getPlayer()) && !sender.getPlayer().canSee(onlinePlayer))
 			{
 				continue;
 			}
