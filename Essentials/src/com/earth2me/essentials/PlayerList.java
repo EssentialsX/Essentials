@@ -51,7 +51,7 @@ public class PlayerList
 		int hiddenCount = 0;
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
-			if (ess.getUser(onlinePlayer).isHidden(user.getBase()))
+			if (ess.getUser(onlinePlayer).isHidden() || (user != null && !user.getBase().canSee(onlinePlayer)))
 			{
 				playerHidden++;
 				if (showHidden || user.getBase().canSee(onlinePlayer))
@@ -80,7 +80,8 @@ public class PlayerList
 		for (Player onlinePlayer : server.getOnlinePlayers())
 		{
 			final User onlineUser = ess.getUser(onlinePlayer);
-			if (onlineUser.isHidden(sender.getBase()) && !showHidden && (sender != null && !sender.getBase().canSee(onlinePlayer)))
+			if ((sender == null && !showHidden && onlineUser.isHidden()) ||
+				(sender != null && !showHidden && !sender.getBase().canSee(onlinePlayer)))
 			{
 				continue;
 			}
