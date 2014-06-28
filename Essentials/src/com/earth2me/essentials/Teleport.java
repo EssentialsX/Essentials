@@ -147,8 +147,8 @@ public class Teleport implements net.ess3.api.ITeleport
 	public void teleport(Player entity, Trade chargeFor, TeleportCause cause) throws Exception
 	{
 		ITarget target = new PlayerTarget(entity);
-		teleport(teleportOwner, target, chargeFor, cause);
 		teleportOwner.sendMessage(tl("teleportToPlayer", entity.getDisplayName()));
+		teleport(teleportOwner, target, chargeFor, cause);
 	}
 
 	//This is used when teleporting to stored location
@@ -177,7 +177,7 @@ public class Teleport implements net.ess3.api.ITeleport
 		if (chargeFor != null)
 		{
 			chargeFor.isAffordableFor(teleportOwner);
-			
+
 			//This code is to make sure that commandcosts are checked in the initial world, and not in the resulting world.
 			if (!chargeFor.getCommandCost(teleportOwner).equals(BigDecimal.ZERO))
 			{
