@@ -40,6 +40,22 @@ public class Commandtp extends EssentialsCommand
 			charge.isAffordableFor(user);
 			user.getTeleport().teleport(player.getBase(), charge, TeleportCause.COMMAND);
 			throw new NoChargeException();
+		case 3:
+			final double x2 = args[0].startsWith("~") ? user.getLocation().getX() + Integer.parseInt(args[0].substring(1)) : Integer.parseInt(args[0]);
+			final double y2 = args[1].startsWith("~") ? user.getLocation().getY() + Integer.parseInt(args[1].substring(1)) : Integer.parseInt(args[1]);
+			final double z2 = args[2].startsWith("~") ? user.getLocation().getZ() + Integer.parseInt(args[2].substring(1)) : Integer.parseInt(args[2]);
+			if (x2 > 30000000 || y2 > 30000000 || z2 > 30000000 || x2 < -30000000 || y2 < -30000000 || z2 < -30000000)
+			{
+				throw new NotEnoughArgumentsException(tl("teleportInvalidLocation"));
+			}
+			final Location loc2 = new Location(user.getWorld(), x2, y2, z2, user.getLocation().getYaw(), user.getLocation().getPitch());
+			if (!user.isTeleportEnabled())
+			{
+				throw new Exception(tl("teleportDisabled", user.getDisplayName()));
+			}
+			user.getTeleport().now(loc2, false, TeleportCause.COMMAND);
+			user.sendMessage(tl("teleporting", loc2.getWorld().getName(), loc2.getBlockX(), loc2.getBlockY(), loc2.getBlockZ()));
+			break;
 		case 4:
 			if (!user.isAuthorized("essentials.tp.others"))
 			{
