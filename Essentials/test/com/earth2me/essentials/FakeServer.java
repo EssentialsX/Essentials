@@ -1078,6 +1078,12 @@ public class FakeServer implements Server
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
+	public Inventory createInventory(InventoryHolder arg0, InventoryType arg1, String arg2)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
 
 	class FakePluginManager implements PluginManager
 	{
