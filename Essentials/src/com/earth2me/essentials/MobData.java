@@ -30,6 +30,7 @@ import org.bukkit.material.Colorable;
 public enum MobData
 {
 	BABY_AGEABLE("baby", Ageable.class, Data.BABY, true),
+	ADULT_AGEABLE("adult", Ageable.class, Data.ADULT, true),
 	BABY_PIG("piglet", EntityType.PIG, Data.BABY, false),
 	BABY_WOLF("puppy", EntityType.WOLF, Data.BABY, false),
 	BABY_CHICKEN("chick", EntityType.CHICKEN, Data.BABY, false),
@@ -83,6 +84,7 @@ public enum MobData
 	TUXEDO_CAT("tuxedo", EntityType.OCELOT, Ocelot.Type.BLACK_CAT, false),
 	VILLAGER_ZOMBIE("villager", EntityType.ZOMBIE.getEntityClass(), Data.VILLAGER, true),
 	BABY_ZOMBIE("baby", EntityType.ZOMBIE.getEntityClass(), Data.BABYZOMBIE, true),
+	ADULT_ZOMBIE("adult", EntityType.ZOMBIE.getEntityClass(), Data.ADULTZOMBIE, true),
 	DIAMOND_SWORD_ZOMBIE("diamondsword", EntityType.ZOMBIE.getEntityClass(), Material.DIAMOND_SWORD, true),
 	GOLD_SWORD_ZOMBIE("goldsword", EntityType.ZOMBIE.getEntityClass(), Material.GOLD_SWORD, true),
 	IRON_SWORD_ZOMBIE("ironsword", EntityType.ZOMBIE.getEntityClass(), Material.IRON_SWORD, true),
@@ -113,8 +115,10 @@ public enum MobData
 
 	public enum Data
 	{
+		ADULT,
 		BABY,
 		CHEST,
+		ADULTZOMBIE,
 		BABYZOMBIE,
 		VILLAGER,
 		HORSESADDLE,
@@ -214,9 +218,17 @@ public enum MobData
 		{
 			((Wolf)spawned).setAngry(true);
 		}
+		else if (this.value.equals(Data.ADULT))
+		{
+			((Ageable)spawned).setAdult();
+		}
 		else if (this.value.equals(Data.BABY))
 		{
 			((Ageable)spawned).setBaby();
+		}
+		else if (this.value.equals(Data.ADULTZOMBIE))
+		{
+			((Zombie)spawned).setBaby(false);
 		}
 		else if (this.value.equals(Data.BABYZOMBIE))
 		{

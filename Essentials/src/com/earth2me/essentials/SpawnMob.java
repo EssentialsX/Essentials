@@ -216,6 +216,15 @@ public class SpawnMob
 		{
 			sender.sendMessage(tl("mobDataList", StringUtil.joinList(MobData.getValidHelp(spawned))));
 		}
+		
+		if (spawned instanceof Zombie)
+		{
+			((Zombie)spawned).setBaby(false);
+		}
+		else if(spawned instanceof Ageable)				
+		{
+			((Ageable)spawned).setAdult();
+		}
 
 		if (spawned instanceof Zombie || type == EntityType.SKELETON)
 		{
@@ -285,7 +294,10 @@ public class SpawnMob
 
 		if (type == EntityType.PIG_ZOMBIE)
 		{
-			final EntityEquipment invent = ((LivingEntity)spawned).getEquipment();
+			final PigZombie zombie = ((PigZombie)spawned);
+			zombie.setVillager(false);
+			
+			final EntityEquipment invent = zombie.getEquipment();	
 			invent.setItemInHand(new ItemStack(Material.GOLD_SWORD, 1));
 			invent.setItemInHandDropChance(0.1f);
 
@@ -295,7 +307,10 @@ public class SpawnMob
 
 		if (type == EntityType.ZOMBIE)
 		{
-			final EntityEquipment invent = ((LivingEntity)spawned).getEquipment();
+			final Zombie zombie = ((Zombie)spawned);
+			zombie.setVillager(false);
+			
+			final EntityEquipment invent = zombie.getEquipment();						
 			invent.setBoots(new ItemStack(Material.GOLD_BOOTS, 1));
 			invent.setBootsDropChance(0.0f);
 		}
