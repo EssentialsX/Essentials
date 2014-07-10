@@ -79,6 +79,10 @@ public class Economy
 		{
 			throw new RuntimeException(noCallBeforeLoad);
 		}
+		if (name == null)
+		{
+			throw new RuntimeException("Economy username cannot be null");
+		}
 		return ess.getUser(name);
 	}
 
