@@ -5,6 +5,8 @@ import com.earth2me.essentials.Console;
 import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import java.util.logging.Level;
+import org.bukkit.BanList;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 
@@ -28,8 +30,7 @@ public class Commandunban extends EssentialsCommand
 		{
 			final User user = getPlayer(server, args, 0, true, true);
 			name = user.getName();
-			user.getBase().setBanned(false);
-			user.setBanTimeout(0);
+			Bukkit.getBanList(BanList.Type.NAME).pardon(name);
 		}
 		catch (NoSuchFieldException e)
 		{
@@ -39,7 +40,7 @@ public class Commandunban extends EssentialsCommand
 			{
 				throw new Exception(tl("playerNotFound"), e);
 			}
-			player.setBanned(false);
+			Bukkit.getBanList(BanList.Type.NAME).pardon(name);
 		}
 
 		final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;

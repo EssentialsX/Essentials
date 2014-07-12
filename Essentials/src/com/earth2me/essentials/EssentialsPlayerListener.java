@@ -5,7 +5,6 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.TextInput;
 import com.earth2me.essentials.textreader.TextPager;
-import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import java.io.IOException;
 import java.util.Iterator;
@@ -357,21 +356,6 @@ public class EssentialsPlayerListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerLogin2(final PlayerLoginEvent event)
-	{
-		switch (event.getResult())
-		{
-		case KICK_BANNED:
-			break;
-		default:
-			return;
-		}
-
-		final String banReason = tl("banFormat", tl("defaultBanReason"), "Console");
-		event.disallow(Result.KICK_BANNED, banReason);
-	}
-
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerLogin(final PlayerLoginEvent event)
 	{
@@ -386,28 +370,6 @@ public class EssentialsPlayerListener implements Listener
 			}
 			event.disallow(Result.KICK_FULL, tl("serverFull"));
 			break;
-
-		case KICK_BANNED:
-			final User user = ess.getUser(event.getPlayer());
-			final boolean banExpired = user.checkBanTimeout(System.currentTimeMillis());
-			if (banExpired)
-			{
-				event.allow();
-				return;
-			}
-			String banReason = user.getBanReason();
-			if (banReason == null || banReason.isEmpty() || banReason.equalsIgnoreCase("ban"))
-			{
-				banReason = event.getKickMessage();
-			}
-			if (user.getBanTimeout() > 0)
-			{
-				//TODO: TL This
-				banReason += "\n\n" + "Expires in " + DateUtil.formatDateDiff(user.getBanTimeout());
-			}
-			event.disallow(Result.KICK_BANNED, banReason);
-			break;
-
 		default:
 			break;
 		}

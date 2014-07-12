@@ -594,18 +594,6 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		return false;
 	}
 
-	//Returns true if status expired during this check
-	public boolean checkBanTimeout(final long currentTime)
-	{
-		if (getBanTimeout() > 0 && getBanTimeout() < currentTime && this.getBase().isBanned())
-		{
-			setBanTimeout(0);
-			this.getBase().setBanned(false);
-			return true;
-		}
-		return false;
-	}
-
 	public void updateActivity(final boolean broadcast)
 	{
 		if (isAfk() && ess.getSettings().cancelAfkOnInteract())

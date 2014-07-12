@@ -9,6 +9,8 @@ import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.BanList;
+import org.bukkit.Bukkit;
 import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -57,6 +59,10 @@ public class Commandseen extends EssentialsCommand
 				else if (FormatUtil.validIP(args[0]) && (server.getIPBans().contains(args[0])))
 				{
 					sender.sendMessage(tl("isIpBanned", args[0]));
+					return;
+				}
+				else if (Bukkit.getBannedPlayers().contains(Bukkit.getOfflinePlayer(args[0]))) {
+					sender.sendMessage(tl("whoisBanned", showBan ? Bukkit.getBanList(BanList.Type.NAME).getBanEntry(Bukkit.getOfflinePlayer(args[0]).getName()).getReason() : tl("true")));
 					return;
 				}
 				else
@@ -137,7 +143,7 @@ public class Commandseen extends EssentialsCommand
 
 		if (user.getBase().isBanned())
 		{
-			sender.sendMessage(tl("whoisBanned", showBan ? user.getBanReason() : tl("true")));
+			sender.sendMessage(tl("whoisBanned", showBan ? Bukkit.getBanList(BanList.Type.NAME).getBanEntry(user.getName()).getReason() : tl("true")));
 		}
 		final String location = user.getGeoLocation();
 		if (location != null && (!(sender.isPlayer()) || ess.getUser(sender.getPlayer()).isAuthorized("essentials.geoip.show")))

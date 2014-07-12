@@ -289,7 +289,7 @@ public class Commandessentials extends EssentialsCommand
 						continue;
 					}
 
-					int ban = user.getBanReason().isEmpty() ? 0 : 1;
+					int ban = user.getBase().isBanned() ? 0 : 1;
 
 					long lastLog = user.getLastLogout();
 					if (lastLog == 0)

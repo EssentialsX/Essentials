@@ -667,27 +667,6 @@ public abstract class UserData extends PlayerExtension implements IConf
 		config.save();
 	}
 
-	public String getBanReason()
-	{
-		return config.getString("ban.reason", "");
-	}
-
-	public void setBanReason(String reason)
-	{
-		config.setProperty("ban.reason", StringUtil.sanitizeString(reason));
-		config.save();
-	}
-
-	public long getBanTimeout()
-	{
-		return config.getLong("ban.timeout", 0);
-	}
-
-	public void setBanTimeout(long time)
-	{
-		config.setProperty("ban.timeout", time);
-		config.save();
-	}
 	private long lastLogin;
 
 	private long _getLastLogin()
