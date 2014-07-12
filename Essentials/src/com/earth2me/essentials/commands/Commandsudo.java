@@ -4,10 +4,8 @@ import com.earth2me.essentials.CommandSource;
 import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import java.util.Locale;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Server;
-import org.bukkit.command.PluginCommand;
 
 
 public class Commandsudo extends EssentialsCommand
@@ -36,11 +34,10 @@ public class Commandsudo extends EssentialsCommand
 			user.getBase().chat(getFinalArg(args, 1).substring(2));
 			return;
 		}
-		final String command = args[1];
-		final String[] arguments = new String[args.length - 2];
+		final String[] arguments = new String[args.length - 1];
 		if (arguments.length > 0)
 		{
-			System.arraycopy(args, 2, arguments, 0, args.length - 2);
+			System.arraycopy(args, 1, arguments, 0, args.length - 1);
 		}
 
 		if (user.isAuthorized("essentials.sudo.exempt") && sender.isPlayer())
@@ -48,25 +45,28 @@ public class Commandsudo extends EssentialsCommand
 			throw new Exception(tl("sudoExempt"));
 		}
 
-		sender.sendMessage(tl("sudoRun", user.getDisplayName(), command, getFinalArg(arguments, 0)));
+		final String command = getFinalArg(arguments, 0);
 
-		final PluginCommand execCommand = ess.getServer().getPluginCommand(command);
-		if (execCommand != null)
+		sender.sendMessage(tl("sudoRun", user.getDisplayName(), command, ""));
+
+		if (command != null && command.length() > 0)
 		{
 			class SudoCommandTask implements Runnable
 			{
 				@Override
 				public void run()
 				{
-					LOGGER.log(Level.INFO, String.format("[Sudo] %s issued server command: /%s %s", user.getName(), command, getFinalArg(arguments, 0)));
-					execCommand.execute(user.getBase(), command, arguments);
+					try
+					{
+						ess.getServer().dispatchCommand(user.getBase(), command);
+					}
+					catch (Exception e)
+					{
+						sender.sendMessage(tl("errorCallingCommand", command));
+					}
 				}
 			}
 			ess.scheduleSyncDelayedTask(new SudoCommandTask());
-		}
-		else
-		{
-			sender.sendMessage(tl("errorCallingCommand", command));
 		}
 	}
 }
