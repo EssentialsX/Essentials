@@ -48,7 +48,7 @@ public class EssentialsTimer implements Runnable
 		}
 		lastPoll = startTime;
 		int count = 0;
-		for (Player player : ess.getServer().getOnlinePlayers())
+		for (Player player : ess.getOnlinePlayers())
 		{
 			count++;
 			if (skip1 > 0)

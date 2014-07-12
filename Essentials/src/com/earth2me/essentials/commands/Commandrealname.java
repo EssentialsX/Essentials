@@ -26,10 +26,9 @@ public class Commandrealname extends EssentialsCommand
 		final String whois = args[0].toLowerCase(Locale.ENGLISH);
 		boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).canInteractVanished();
 		boolean foundUser = false;
-		for (Player onlinePlayer : server.getOnlinePlayers())
+		for (User u: ess.getOnlineUsers())
 		{
-			final User u = ess.getUser(onlinePlayer);
-			if (skipHidden && u.isHidden(sender.getPlayer()) && !sender.getPlayer().canSee(onlinePlayer))
+			if (skipHidden && u.isHidden(sender.getPlayer()) && !sender.getPlayer().canSee(u.getBase()))
 			{
 				continue;
 			}

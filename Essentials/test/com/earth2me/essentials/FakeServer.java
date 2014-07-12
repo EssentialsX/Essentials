@@ -74,9 +74,15 @@ public class FakeServer implements Server
 	}
 
 	@Override
-	public Player[] getOnlinePlayers()
+	public Player[] _INVALID_getOnlinePlayers()
 	{
 		return players.toArray(new Player[0]);
+	}
+
+	@Override
+	public Collection<? extends Player> getOnlinePlayers()
+	{
+		return players;
 	}
 
 	public void setOnlinePlayers(List<Player> players)

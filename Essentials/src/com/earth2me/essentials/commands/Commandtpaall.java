@@ -34,9 +34,8 @@ public class Commandtpaall extends EssentialsCommand
 	private void teleportAAllPlayers(final Server server, final CommandSource sender, final User target)
 	{
 		sender.sendMessage(tl("teleportAAll"));
-		for (Player onlinePlayer : server.getOnlinePlayers())
+		for (User player : ess.getOnlineUsers())
 		{
-			final User player = ess.getUser(onlinePlayer);
 			if (target == player)
 			{
 				continue;

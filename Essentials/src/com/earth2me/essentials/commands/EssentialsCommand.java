@@ -137,10 +137,8 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 		if (matches.isEmpty())
 		{
 			final String matchText = searchTerm.toLowerCase(Locale.ENGLISH);
-			for (Player onlinePlayer : server.getOnlinePlayers())
+			for (User userMatch : ess.getOnlineUsers())
 			{
-				final User userMatch = ess.getUser(onlinePlayer);
-
 				if (getHidden || canInteractWith(sourceUser, userMatch))
 				{
 					final String displayName = FormatUtil.stripFormat(userMatch.getDisplayName()).toLowerCase(Locale.ENGLISH);

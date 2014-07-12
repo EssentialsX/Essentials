@@ -24,7 +24,7 @@ public class Backup implements Runnable
 	{
 		this.ess = ess;
 		server = ess.getServer();
-		if (server.getOnlinePlayers().length > 0)
+		if (!ess.getOnlinePlayers().isEmpty())
 		{
 			ess.runTaskAsynchronously(new Runnable()
 			{
@@ -152,7 +152,7 @@ public class Backup implements Runnable
 						public void run()
 						{
 							server.dispatchCommand(cs, "save-on");
-							if (server.getOnlinePlayers().length == 0)
+							if (ess.getOnlinePlayers().isEmpty())
 							{
 								stopTask();
 							}

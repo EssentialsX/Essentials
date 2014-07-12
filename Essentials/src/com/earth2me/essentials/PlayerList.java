@@ -49,12 +49,12 @@ public class PlayerList
 		Server server = ess.getServer();
 		int playerHidden = 0;
 		int hiddenCount = 0;
-		for (Player onlinePlayer : server.getOnlinePlayers())
+		for (User onlinePlayer : ess.getOnlineUsers())
 		{
-			if (ess.getUser(onlinePlayer).isHidden() || (user != null && !user.getBase().canSee(onlinePlayer)))
+			if (onlinePlayer.isHidden() || (user != null && !user.getBase().canSee(onlinePlayer.getBase())))
 			{
 				playerHidden++;
-				if (showHidden || user.getBase().canSee(onlinePlayer))
+				if (showHidden || user.getBase().canSee(onlinePlayer.getBase()))
 				{
 					hiddenCount++;
 				}
@@ -63,11 +63,11 @@ public class PlayerList
 		String online;
 		if (hiddenCount > 0)
 		{
-			online = tl("listAmountHidden", server.getOnlinePlayers().length - playerHidden, hiddenCount, server.getMaxPlayers());
+			online = tl("listAmountHidden", ess.getOnlinePlayers().size() - playerHidden, hiddenCount, server.getMaxPlayers());
 		}
 		else
 		{
-			online = tl("listAmount", server.getOnlinePlayers().length - playerHidden, server.getMaxPlayers());
+			online = tl("listAmount", ess.getOnlinePlayers().size() - playerHidden, server.getMaxPlayers());
 		}
 		return online;
 	}
@@ -77,11 +77,10 @@ public class PlayerList
 	{
 		Server server = ess.getServer();
 		final Map<String, List<User>> playerList = new HashMap<String, List<User>>();
-		for (Player onlinePlayer : server.getOnlinePlayers())
+		for (User onlineUser : ess.getOnlineUsers())
 		{
-			final User onlineUser = ess.getUser(onlinePlayer);
 			if ((sender == null && !showHidden && onlineUser.isHidden()) ||
-				(sender != null && !showHidden && !sender.getBase().canSee(onlinePlayer)))
+				(sender != null && !showHidden && !sender.getBase().canSee(onlineUser.getBase())))
 			{
 				continue;
 			}

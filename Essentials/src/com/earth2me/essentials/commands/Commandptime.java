@@ -197,9 +197,9 @@ public class Commandptime extends EssentialsCommand
 			}
 			else
 			{
-				for (Player player : server.getOnlinePlayers())
+				for (User user : ess.getOnlineUsers())
 				{
-					users.add(ess.getUser(player));
+					users.add(user);
 				}
 			}
 			return users;

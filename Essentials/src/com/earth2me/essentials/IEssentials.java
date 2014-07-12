@@ -6,6 +6,7 @@ import com.earth2me.essentials.api.IWarps;
 import com.earth2me.essentials.metrics.Metrics;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import org.bukkit.World;
@@ -91,4 +92,8 @@ public interface IEssentials extends Plugin
 	EssentialsTimer getTimer();
 
 	List<String> getVanishedPlayers();
+
+	Collection<Player> getOnlinePlayers();
+
+	Iterable<User> getOnlineUsers();
 }

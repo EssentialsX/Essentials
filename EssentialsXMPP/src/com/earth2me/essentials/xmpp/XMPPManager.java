@@ -163,7 +163,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 		final int usercount;
 		final StringBuilder stringBuilder = new StringBuilder();
 
-		usercount = parent.getServer().getOnlinePlayers().length;
+		usercount = parent.getEss().getOnlinePlayers().size();
 
 		if (usercount == 0)
 		{

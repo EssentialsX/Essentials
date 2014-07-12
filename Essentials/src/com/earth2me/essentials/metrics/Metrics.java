@@ -24,6 +24,7 @@ package com.earth2me.essentials.metrics;
  * should not be interpreted as representing official policies, either expressed or implied, of anybody else.
  */
 
+import com.earth2me.essentials.IEssentials;
 import java.io.*;
 import java.net.Proxy;
 import java.net.URL;
@@ -352,7 +353,7 @@ public class Metrics
 		boolean onlineMode = Bukkit.getServer().getOnlineMode(); // TRUE if online mode is enabled
 		String pluginVersion = description.getVersion();
 		String serverVersion = Bukkit.getVersion();
-		int playersOnline = Bukkit.getServer().getOnlinePlayers().length;
+		int playersOnline = ((IEssentials)plugin).getOnlinePlayers().size();
 
 		// END server software specific section -- all code below does not use any code outside of this class / Java
 

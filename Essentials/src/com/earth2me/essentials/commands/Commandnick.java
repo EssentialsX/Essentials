@@ -109,7 +109,7 @@ public class Commandnick extends EssentialsLoopCommand
 	private boolean nickInUse(final Server server, final User target, String nick)
 	{
 		final String lowerNick = FormatUtil.stripFormat(nick.toLowerCase(Locale.ENGLISH));
-		for (final Player onlinePlayer : server.getOnlinePlayers())
+		for (final Player onlinePlayer : ess.getOnlinePlayers())
 		{
 			if (target.getBase().getName().equals(onlinePlayer.getName()))
 			{

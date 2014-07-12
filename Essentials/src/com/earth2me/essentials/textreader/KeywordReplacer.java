@@ -166,14 +166,14 @@ public class KeywordReplacer implements IText
 					break;
 				case ONLINE:
 					int playerHidden = 0;
-					for (Player p : ess.getServer().getOnlinePlayers())
+					for (User u : ess.getOnlineUsers())
 					{
-						if (ess.getUser(p).isHidden())
+						if (u.isHidden())
 						{
 							playerHidden++;
 						}
 					}
-					replacer = Integer.toString(ess.getServer().getOnlinePlayers().length - playerHidden);
+					replacer = Integer.toString(ess.getOnlinePlayers().size() - playerHidden);
 					break;
 				case UNIQUE:
 					replacer = Integer.toString(ess.getUserMap().getUniqueUsers());

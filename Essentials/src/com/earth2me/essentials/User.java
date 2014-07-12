@@ -623,9 +623,8 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 			this.getBase().kickPlayer(kickReason);
 
 
-			for (Player player : ess.getServer().getOnlinePlayers())
+			for (User user : ess.getOnlineUsers())
 			{
-				final User user = ess.getUser(player);
 				if (user.isAuthorized("essentials.kick.notify"))
 				{
 					user.sendMessage(tl("playerKicked", Console.NAME, getName(), kickReason));
@@ -765,11 +764,11 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		vanished = set;
 		if (set)
 		{
-			for (Player p : ess.getServer().getOnlinePlayers())
+			for (User user : ess.getOnlineUsers())
 			{
-				if (!ess.getUser(p).isAuthorized("essentials.vanish.see"))
+				if (!user.isAuthorized("essentials.vanish.see"))
 				{
-					p.hidePlayer(getBase());
+					user.getBase().hidePlayer(getBase());
 				}
 			}
 			setHidden(true);

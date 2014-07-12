@@ -149,4 +149,10 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP
 			// Ignore exceptions
 		}
 	}
+
+	@Override
+	public IEssentials getEss()
+	{
+		return ess;
+	}
 }

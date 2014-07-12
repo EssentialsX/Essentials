@@ -37,9 +37,8 @@ public class Commandtpall extends EssentialsCommand
 	{
 		sender.sendMessage(tl("teleportAll"));
 		final Location loc = target.getLocation();
-		for (Player onlinePlayer : server.getOnlinePlayers())
+		for (User player : ess.getOnlineUsers())
 		{
-			final User player = ess.getUser(onlinePlayer);
 			if (target == player)
 			{
 				continue;

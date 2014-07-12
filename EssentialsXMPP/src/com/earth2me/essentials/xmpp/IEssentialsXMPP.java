@@ -1,5 +1,6 @@
 package com.earth2me.essentials.xmpp;
 
+import com.earth2me.essentials.IEssentials;
 import net.ess3.api.IUser;
 import java.util.List;
 import org.bukkit.entity.Player;
@@ -25,4 +26,6 @@ public interface IEssentialsXMPP extends Plugin
 	boolean toggleSpy(final Player user);
 
 	void broadcastMessage(final IUser sender, final String message, final String xmppAddress);
+
+	IEssentials getEss();
 }

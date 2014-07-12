@@ -165,7 +165,7 @@ public class Commandessentials extends EssentialsCommand
 				{
 					return;
 				}
-				for (Player onlinePlayer : server.getOnlinePlayers())
+				for (Player onlinePlayer : ess.getOnlinePlayers())
 				{
 					onlinePlayer.playSound(onlinePlayer.getLocation(), Sound.NOTE_PIANO, 1, noteMap.get(note));
 				}
@@ -214,7 +214,7 @@ public class Commandessentials extends EssentialsCommand
 			{
 				logger.info(s);
 			}
-			for (Player player : ess.getServer().getOnlinePlayers())
+			for (Player player : ess.getOnlinePlayers())
 			{
 				player.sendMessage(playerMoo);
 				player.playSound(player.getLocation(), Sound.COW_IDLE, 1, 1.0f);
@@ -348,7 +348,7 @@ public class Commandessentials extends EssentialsCommand
 
 		UUID onlineUUID = null;
 
-		for (Player player : server.getOnlinePlayers())
+		for (Player player : ess.getOnlinePlayers())
 		{
 			if (player.getName().equalsIgnoreCase(name))
 			{
