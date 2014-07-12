@@ -47,8 +47,8 @@ public class Commandtempban extends EssentialsCommand
 		}
 		final String time = getFinalArg(args, 1);
 		final long banTimestamp = DateUtil.parseDateDiff(time, true);
-		String stringDregs = DateUtil.removeTimePattern(time);
-		
+		String banReason = DateUtil.removeTimePattern(time);
+
 		final long maxBanLength = ess.getSettings().getMaxTempban() * 1000;
 		if (maxBanLength > 0 && ((banTimestamp - GregorianCalendar.getInstance().getTimeInMillis()) > maxBanLength)
 			&& sender.isPlayer() && !(ess.getUser(sender.getPlayer()).isAuthorized("essentials.tempban.unlimited")))
@@ -56,17 +56,18 @@ public class Commandtempban extends EssentialsCommand
 			sender.sendMessage(tl("oversizedTempban"));
 			throw new NoChargeException();
 		}
-		
-		if (stringDregs.length() < 2) 
+
+		if (banReason.length() < 2)
 		{
-			stringDregs = tl("defaultBanReason");
+			banReason = tl("defaultBanReason");
 		}
 
 		final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
-		final String banReason = tl("tempBanned", DateUtil.formatDateDiff(banTimestamp), senderName, stringDregs);
-
 		Bukkit.getBanList(BanList.Type.NAME).addBan(user.getName(), banReason, new Date(banTimestamp), senderName);
-		user.getBase().kickPlayer(banReason);
+
+		String banDisplay = tl("tempBanned", DateUtil.formatDateDiff(banTimestamp), senderName, banReason);
+		user.getBase().kickPlayer(banDisplay);
+		server.getLogger().log(Level.INFO, tl("playerBanned", senderName, user.getName(), banDisplay));
 
 		final String message = tl("playerBanned", senderName, user.getName(), banReason, DateUtil.formatDateDiff(banTimestamp));
 		server.getLogger().log(Level.INFO, message);

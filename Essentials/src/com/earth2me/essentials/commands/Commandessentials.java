@@ -264,15 +264,14 @@ public class Commandessentials extends EssentialsCommand
 		{
 			sender.sendMessage("This sub-command will delete users who havent logged in in the last <days> days.");
 			sender.sendMessage("Optional parameters define the minium amount required to prevent deletion.");
-			sender.sendMessage("Unless you define larger default values, this command wil ignore people who have more than 0 money/homes/bans.");
-			throw new Exception("/<command> cleanup <days> [money] [homes] [ban count]");
+			sender.sendMessage("Unless you define larger default values, this command wil ignore people who have more than 0 money/homes.");
+			throw new Exception("/<command> cleanup <days> [money] [homes]");
 		}
 		sender.sendMessage(tl("cleaning"));
 
 		final long daysArg = Long.parseLong(args[1]);
 		final double moneyArg = args.length >= 3 ? Double.parseDouble(args[2].replaceAll("[^0-9\\.]", "")) : 0;
 		final int homesArg = args.length >= 4 && NumberUtil.isInt(args[3]) ? Integer.parseInt(args[3]) : 0;
-		final int bansArg = args.length >= 5 && NumberUtil.isInt(args[4]) ? Integer.parseInt(args[4]) : 0;
 		final UserMap userMap = ess.getUserMap();
 
 		ess.runTaskAsynchronously(new Runnable()
@@ -288,8 +287,6 @@ public class Commandessentials extends EssentialsCommand
 					{
 						continue;
 					}
-
-					int ban = user.getBase().isBanned() ? 0 : 1;
 
 					long lastLog = user.getLastLogout();
 					if (lastLog == 0)
@@ -311,7 +308,7 @@ public class Commandessentials extends EssentialsCommand
 					int homeCount = user.getHomes().size();
 					double moneyCount = user.getMoney().doubleValue();
 
-					if ((lastLog == 0) || (ban > bansArg) || (timeDiff < milliDays)
+					if ((lastLog == 0) || (timeDiff < milliDays)
 						|| (homeCount > homesArg) || (moneyCount > moneyArg))
 					{
 						continue;

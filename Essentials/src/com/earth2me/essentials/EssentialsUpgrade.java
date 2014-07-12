@@ -25,8 +25,6 @@ public class EssentialsUpgrade
 	private final static Logger LOGGER = Logger.getLogger("Essentials");
 	private final transient IEssentials ess;
 	private final transient EssentialsConf doneFile;
-	private String banReason;
-	private Long banTimeout;
 
 	EssentialsUpgrade(final IEssentials essentials)
 	{
@@ -676,36 +674,62 @@ public class EssentialsUpgrade
 		{
 			return;
 		}
-		File[] playerFiles = userdir.listFiles();
 
-		for (File pFile : playerFiles)
+		int countFiles = 0;
+
+		ess.getLogger().info("Found " + userdir.list().length + " files to convert...");
+
+		for (String string : userdir.list())
 		{
-			EssentialsConf conf = new EssentialsConf(pFile);
+			if (!string.endsWith(".yml") || string.length() < 5)
+			{
+				continue;
+			}
+
+			final int showProgress = countFiles % 250;
+
+			if (showProgress == 0)
+			{
+				ess.getLogger().info("Converted " + countFiles + "/" + userdir.list().length);
+			}
+
+			countFiles++;
+			final File pFile = new File(userdir, string);
+			final EssentialsConf conf = new EssentialsConf(pFile);
 			conf.load();
+			
+			String banReason;
+			Long banTimeout;
+
 			try
 			{
 				banReason = conf.getConfigurationSection("ban").getString("reason");
 			}
 			catch (NullPointerException n)
 			{
-				//No ban in userfile
-				banReason = "";
+				banReason = null;
 			}
 
-			String playerName = conf.getString("lastAccountName");
-			if (!banReason.equals(""))
+			final String playerName = conf.getString("lastAccountName");
+			if (playerName != null && playerName.length() > 1 && banReason != null && banReason.length() > 1)
 			{
 				try
 				{
-					banTimeout = Long.parseLong(conf.getConfigurationSection("ban").getString("timeout"));
+					if (conf.getConfigurationSection("ban").contains("timeout"))
+					{
+						banTimeout = Long.parseLong(conf.getConfigurationSection("ban").getString("timeout"));
+					}
+					else
+					{
+						banTimeout = 0L;
+					}
 				}
 				catch (NumberFormatException n)
 				{
-					//No ban timeout set, or malformed timeout.
 					banTimeout = 0L;
 				}
-				org.bukkit.OfflinePlayer player = ess.getServer().getOfflinePlayer(playerName);
-				if (player.isBanned())
+				
+				if (ess.getServer().getBanList(BanList.Type.NAME).isBanned(playerName))
 				{
 					updateBan(playerName, banReason, banTimeout);
 				}

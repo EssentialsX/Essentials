@@ -56,13 +56,15 @@ public class Commandseen extends EssentialsCommand
 					seenIP(server, sender, args[0]);
 					return;
 				}
-				else if (FormatUtil.validIP(args[0]) && (server.getIPBans().contains(args[0])))
+				else if (Bukkit.getBanList(BanList.Type.IP).isBanned(args[0]))
 				{
 					sender.sendMessage(tl("isIpBanned", args[0]));
 					return;
 				}
-				else if (Bukkit.getBannedPlayers().contains(Bukkit.getOfflinePlayer(args[0]))) {
-					sender.sendMessage(tl("whoisBanned", showBan ? Bukkit.getBanList(BanList.Type.NAME).getBanEntry(Bukkit.getOfflinePlayer(args[0]).getName()).getReason() : tl("true")));
+				
+				else if (Bukkit.getBanList(BanList.Type.NAME).isBanned(args[0]))
+				{
+					sender.sendMessage(tl("whoisBanned", showBan ? Bukkit.getBanList(BanList.Type.NAME).getBanEntry(args[0]).getReason() : tl("true")));
 					return;
 				}
 				else
@@ -168,7 +170,7 @@ public class Commandseen extends EssentialsCommand
 	{
 		final UserMap userMap = ess.getUserMap();
 
-		if (server.getIPBans().contains(ipAddress))
+		if (Bukkit.getBanList(BanList.Type.IP).isBanned(ipAddress))
 		{
 			sender.sendMessage(tl("isIpBanned", ipAddress));
 		}

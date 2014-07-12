@@ -62,11 +62,13 @@ public class Commandban extends EssentialsCommand
 		{
 			banReason = tl("defaultBanReason");
 		}
-
+		
 		Bukkit.getBanList(BanList.Type.NAME).addBan(user.getName(), banReason, null, senderName);
-		user.getBase().kickPlayer(tl("banFormat", banReason, senderName));
 
-		server.getLogger().log(Level.INFO, tl("playerBanned", senderName, user.getName(), banReason));
+		String banDisplay = tl("banFormat",  banReason, senderName);
+		
+		user.getBase().kickPlayer(banDisplay);
+		server.getLogger().log(Level.INFO, tl("playerBanned", senderName, user.getName(), banDisplay));
 
 		if (nomatch)
 		{
