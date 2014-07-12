@@ -102,7 +102,7 @@ public class Teleport implements net.ess3.api.ITeleport
 		teleportee.setLastLocation();
 		final Location loc = target.getLocation();
 
-		if (LocationUtil.isBlockUnsafe(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()))
+		if (LocationUtil.isBlockUnsafeForUser(teleportee, loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()))
 		{
 			if (ess.getSettings().isTeleportSafetyEnabled())
 			{

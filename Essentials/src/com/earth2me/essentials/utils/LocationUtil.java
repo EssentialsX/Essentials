@@ -222,6 +222,22 @@ public class LocationUtil
 		return HOLLOW_MATERIALS.contains(world.getBlockAt(x, y - 1, z).getType().getId());
 	}
 
+	public static boolean isBlockUnsafeForUser(final IUser user, final World world, final int x, final int y, final int z)
+	{
+		if (user.getBase().isOnline() && world.equals(user.getBase().getWorld())
+			&& (user.getBase().getGameMode() == GameMode.CREATIVE || user.isGodModeEnabled())
+			&& user.getBase().getAllowFlight())
+		{
+			return false;
+		}
+
+		if (isBlockDamaging(world, x, y, z))
+		{
+			return true;
+		}
+		return isBlockAboveAir(world, x, y, z);
+	}
+
 	public static boolean isBlockUnsafe(final World world, final int x, final int y, final int z)
 	{
 		if (isBlockDamaging(world, x, y, z))
@@ -265,9 +281,9 @@ public class LocationUtil
 
 	public static Location getSafeDestination(final IUser user, final Location loc) throws Exception
 	{
-		if (loc.getWorld().equals(user.getBase().getWorld())
-			&& ((user.getBase().getGameMode() == GameMode.CREATIVE
-				|| user.isGodModeEnabled()) && user.getBase().getAllowFlight()))
+		if (user.getBase().isOnline() && loc.getWorld().equals(user.getBase().getWorld())
+			&& (user.getBase().getGameMode() == GameMode.CREATIVE || user.isGodModeEnabled())
+			&& user.getBase().getAllowFlight())
 		{
 			if (shouldFly(loc))
 			{
