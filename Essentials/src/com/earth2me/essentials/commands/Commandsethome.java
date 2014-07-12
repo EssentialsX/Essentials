@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import java.util.Locale;
 import org.bukkit.Location;
@@ -44,7 +45,7 @@ public class Commandsethome extends EssentialsCommand
 					if (usersHome == null)
 					{
 						throw new PlayerNotFoundException();
-					}					
+					}
 				}
 			}
 		}
@@ -56,6 +57,12 @@ public class Commandsethome extends EssentialsCommand
 		{
 			throw new NoSuchFieldException(tl("invalidHomeName"));
 		}
+
+		if (!ess.getSettings().isTeleportSafetyEnabled() && LocationUtil.isBlockUnsafeForUser(usersHome, location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ()))
+		{
+			throw new Exception(tl("unsafeTeleportDestination", location.getWorld().getName(), location.getBlockX(), location.getBlockY(), location.getBlockZ()));
+		}
+
 		usersHome.setHome(name, location);
 		user.sendMessage(tl("homeSet", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ(), name));
 
