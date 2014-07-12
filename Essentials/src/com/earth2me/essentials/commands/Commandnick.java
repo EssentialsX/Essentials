@@ -65,7 +65,7 @@ public class Commandnick extends EssentialsLoopCommand
 		if (target.getName().equalsIgnoreCase(nick))
 		{
 			setNickname(server, sender, target, nick);
-			target.sendMessage(tl("nickNoMore"));
+			target.sendMessage(tl("nickSet", target.getDisplayName()));
 		}
 		else if ("off".equalsIgnoreCase(nick))
 		{
