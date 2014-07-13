@@ -331,8 +331,11 @@ public class EssentialsPlayerListener implements Listener
 						user.getBase().sendMessage(tl("flyMode", tl("enabled"), user.getDisplayName()));
 					}
 				}
-				user.getBase().setFlySpeed(0.1f);
-				user.getBase().setWalkSpeed(0.2f);
+
+				if (!user.isAuthorized("essentials.speed")) {
+					user.getBase().setFlySpeed(0.1f);
+					user.getBase().setWalkSpeed(0.2f);
+				}
 
 				user.stopTransaction();
 			}
