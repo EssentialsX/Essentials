@@ -25,7 +25,7 @@ public class Commandunbanip extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		
+
 		String ipAddress;
 		if (FormatUtil.validIP(args[0]))
 		{
@@ -48,9 +48,9 @@ public class Commandunbanip extends EssentialsCommand
 		{
 			throw new PlayerNotFoundException();
 		}
-		
 
-		Bukkit.getBanList(BanList.Type.IP).pardon(ipAddress);
+
+		ess.getServer().getBanList(BanList.Type.IP).pardon(ipAddress);
 		final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
 		server.getLogger().log(Level.INFO, tl("playerUnbanIpAddress", senderName, ipAddress));
 

@@ -63,7 +63,7 @@ public class Commandban extends EssentialsCommand
 			banReason = tl("defaultBanReason");
 		}
 		
-		Bukkit.getBanList(BanList.Type.NAME).addBan(user.getName(), banReason, null, senderName);
+		ess.getServer().getBanList(BanList.Type.NAME).addBan(user.getName(), banReason, null, senderName);
 
 		String banDisplay = tl("banFormat",  banReason, senderName);
 		

@@ -7,11 +7,14 @@ import com.earth2me.essentials.UserMap;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.StringUtil;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import java.util.UUID;
+import org.bukkit.BanEntry;
 import org.bukkit.Location;
 import org.bukkit.Server;
 
@@ -56,15 +59,14 @@ public class Commandseen extends EssentialsCommand
 					seenIP(server, sender, args[0]);
 					return;
 				}
-				else if (Bukkit.getBanList(BanList.Type.IP).isBanned(args[0]))
+				else if (ess.getServer().getBanList(BanList.Type.IP).isBanned(args[0]))
 				{
 					sender.sendMessage(tl("isIpBanned", args[0]));
 					return;
 				}
-				
-				else if (Bukkit.getBanList(BanList.Type.NAME).isBanned(args[0]))
+				else if (ess.getServer().getBanList(BanList.Type.NAME).isBanned(args[0]))
 				{
-					sender.sendMessage(tl("whoisBanned", showBan ? Bukkit.getBanList(BanList.Type.NAME).getBanEntry(args[0]).getReason() : tl("true")));
+					sender.sendMessage(tl("whoisBanned", showBan ? ess.getServer().getBanList(BanList.Type.NAME).getBanEntry(args[0]).getReason() : tl("true")));
 					return;
 				}
 				else
@@ -145,7 +147,19 @@ public class Commandseen extends EssentialsCommand
 
 		if (user.getBase().isBanned())
 		{
-			sender.sendMessage(tl("whoisBanned", showBan ? Bukkit.getBanList(BanList.Type.NAME).getBanEntry(user.getName()).getReason() : tl("true")));
+			final BanEntry banEntry = ess.getServer().getBanList(BanList.Type.NAME).getBanEntry(user.getName());
+			final String reason = showBan ? banEntry.getReason() : tl("true");
+			sender.sendMessage(tl("whoisBanned", reason));
+			if (banEntry.getExpiration() != null)
+			{
+				Date expiry = banEntry.getExpiration();
+				String expireString = tl("now");
+				if (expiry.after(new Date()))
+				{
+					expireString = DateUtil.formatDateDiff(expiry.getTime());
+				}
+				sender.sendMessage(tl("whoisTempBanned", expireString));
+			}
 		}
 		final String location = user.getGeoLocation();
 		if (location != null && (!(sender.isPlayer()) || ess.getUser(sender.getPlayer()).isAuthorized("essentials.geoip.show")))
@@ -170,7 +184,7 @@ public class Commandseen extends EssentialsCommand
 	{
 		final UserMap userMap = ess.getUserMap();
 
-		if (Bukkit.getBanList(BanList.Type.IP).isBanned(ipAddress))
+		if (ess.getServer().getBanList(BanList.Type.IP).isBanned(ipAddress))
 		{
 			sender.sendMessage(tl("isIpBanned", ipAddress));
 		}

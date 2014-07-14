@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import org.bukkit.BanList;
-import org.bukkit.Bukkit;
 import org.bukkit.Server;
 
 
@@ -63,13 +62,13 @@ public class Commandtempban extends EssentialsCommand
 		}
 
 		final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
-		Bukkit.getBanList(BanList.Type.NAME).addBan(user.getName(), banReason, new Date(banTimestamp), senderName);
+		ess.getServer().getBanList(BanList.Type.NAME).addBan(user.getName(), banReason, new Date(banTimestamp), senderName);
+		final String expiry = DateUtil.formatDateDiff(banTimestamp);
 
-		String banDisplay = tl("tempBanned", DateUtil.formatDateDiff(banTimestamp), senderName, banReason);
+		final String banDisplay = tl("tempBanned", expiry, senderName, banReason);
 		user.getBase().kickPlayer(banDisplay);
-		server.getLogger().log(Level.INFO, tl("playerBanned", senderName, user.getName(), banDisplay));
 
-		final String message = tl("playerBanned", senderName, user.getName(), banReason, DateUtil.formatDateDiff(banTimestamp));
+		final String message = tl("playerTempBanned", senderName, user.getName(), expiry, banReason);
 		server.getLogger().log(Level.INFO, message);
 		ess.broadcastMessage("essentials.ban.notify", message);
 	}

@@ -30,7 +30,7 @@ public class Commandunban extends EssentialsCommand
 		{
 			final User user = getPlayer(server, args, 0, true, true);
 			name = user.getName();
-			Bukkit.getBanList(BanList.Type.NAME).pardon(name);
+			ess.getServer().getBanList(BanList.Type.NAME).pardon(name);
 		}
 		catch (NoSuchFieldException e)
 		{
@@ -40,12 +40,12 @@ public class Commandunban extends EssentialsCommand
 			{
 				throw new Exception(tl("playerNotFound"), e);
 			}
-			Bukkit.getBanList(BanList.Type.NAME).pardon(name);
+			ess.getServer().getBanList(BanList.Type.NAME).pardon(name);
 		}
 
 		final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
 		server.getLogger().log(Level.INFO, tl("playerUnbanned", senderName, name));
-		
+
 		ess.broadcastMessage("essentials.ban.notify", tl("playerUnbanned", senderName, name));
 	}
 }

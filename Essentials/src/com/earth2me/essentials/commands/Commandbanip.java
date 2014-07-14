@@ -62,7 +62,7 @@ public class Commandbanip extends EssentialsCommand
 			banReason = tl("defaultBanReason");
 		}
 
-		Bukkit.getBanList(BanList.Type.IP).addBan(ipAddress, banReason, null, senderName);
+		ess.getServer().getBanList(BanList.Type.IP).addBan(ipAddress, banReason, null, senderName);
 		server.getLogger().log(Level.INFO, tl("playerBanIpAddress", senderName, ipAddress, banReason));
 
 		ess.broadcastMessage("essentials.ban.notify", tl("playerBanIpAddress", senderName, ipAddress, banReason));
