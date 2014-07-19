@@ -64,7 +64,7 @@ public class Economy
 		npcConfig.setProperty("lastAccountName", name);
 		npcConfig.setProperty("money", ess.getSettings().getStartingBalance());
 		npcConfig.forceSave();
-		ess.getUserMap().trackUUID(npcUUID, name, true);
+		ess.getUserMap().trackUUID(npcUUID, name, false);
 	}
 
 	private static void deleteNPC(String name)
