@@ -273,12 +273,12 @@ public class SignBlockListener implements Listener
 		{
 			final Block pistonBaseBlock = event.getBlock();
 			final Block[] affectedBlocks = new Block[]
-				{
-					pistonBaseBlock,
-					pistonBaseBlock.getRelative(event.getDirection()),
-					event.getRetractLocation().getBlock()
-				};
-			
+			{
+				pistonBaseBlock,
+				pistonBaseBlock.getRelative(event.getDirection()),
+				event.getRetractLocation().getBlock()
+			};
+
 			for (Block block : affectedBlocks)
 			{
 				if (((block.getType() == WALL_SIGN

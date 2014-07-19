@@ -332,7 +332,8 @@ public class EssentialsPlayerListener implements Listener
 					}
 				}
 
-				if (!user.isAuthorized("essentials.speed")) {
+				if (!user.isAuthorized("essentials.speed"))
+				{
 					user.getBase().setFlySpeed(0.1f);
 					user.getBase().setWalkSpeed(0.2f);
 				}
