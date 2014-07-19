@@ -271,22 +271,32 @@ public class SignBlockListener implements Listener
 
 		if (event.isSticky())
 		{
-			final Block block = event.getBlock();
-			if (((block.getType() == WALL_SIGN
-				  || block.getType() == SIGN_POST)
-				 && EssentialsSign.isValidSign(new EssentialsSign.BlockSign(block)))
-				|| EssentialsSign.checkIfBlockBreaksSigns(block))
+			final Block pistonBaseBlock = event.getBlock();
+			final Block[] affectedBlocks = new Block[]
+				{
+					pistonBaseBlock,
+					pistonBaseBlock.getRelative(event.getDirection()),
+					event.getRetractLocation().getBlock()
+				};
+			
+			for (Block block : affectedBlocks)
 			{
-				event.setCancelled(true);
-				return;
-			}
-			for (EssentialsSign sign : ess.getSettings().enabledSigns())
-			{
-				if (sign.areHeavyEventRequired() && sign.getBlocks().contains(block.getType())
-					&& !sign.onBlockPush(block, ess))
+				if (((block.getType() == WALL_SIGN
+					  || block.getType() == SIGN_POST)
+					 && EssentialsSign.isValidSign(new EssentialsSign.BlockSign(block)))
+					|| EssentialsSign.checkIfBlockBreaksSigns(block))
 				{
 					event.setCancelled(true);
 					return;
+				}
+				for (EssentialsSign sign : ess.getSettings().enabledSigns())
+				{
+					if (sign.areHeavyEventRequired() && sign.getBlocks().contains(block.getType())
+						&& !sign.onBlockPush(block, ess))
+					{
+						event.setCancelled(true);
+						return;
+					}
 				}
 			}
 		}
