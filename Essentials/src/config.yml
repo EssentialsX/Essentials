@@ -110,6 +110,7 @@ disabled-commands:
 # These commands will be shown to players with socialSpy enabled.
 # You can add commands from other plugins you may want to track or
 # remove commands that are used for something you dont want to spy on.
+# Set - '*' in order to listen on all possible commands.
 socialspy-commands:
   - msg
   - w
@@ -224,6 +225,7 @@ player-commands:
 # Syntax: - itemID[:DataValue/Durability] Amount [Enchantment:Level].. [itemmeta:value]...
 # For Item Meta information visit http://wiki.ess3.net/wiki/Item_Meta
 # 'delay' refers to the cooldown between how often you can use each kit, measured in seconds.
+# Set delay to -1 for a one time kit.
 # For more information, visit http://wiki.ess3.net/wiki/Kits
 kits:
   tools:
@@ -358,8 +360,9 @@ cancel-afk-on-move: true
 # You can disable the death messages of Minecraft here.
 death-messages: true
 
-# Should operators be able to join and part silently?
-# You can control this with permissions if it is enabled.
+# Should players with permissions be able to join and part silently?
+# You can control this with essentials.silentjoin and essentials.silentquit permissions if it is enabled.
+# In addition, people with essentials.silentjoin.vanish will be vanished on join.
 allow-silent-join-quit: false
 
 # You can set a custom join message here, set to "none" to disable.
