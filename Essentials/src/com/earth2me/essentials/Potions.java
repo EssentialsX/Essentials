@@ -100,35 +100,20 @@ public class Potions
 		POTIONS.put("wither", PotionEffectType.WITHER);
 		ALIASPOTIONS.put("decay", PotionEffectType.WITHER);
 
+		POTIONS.put("healthboost", PotionEffectType.HEALTH_BOOST);
+		ALIASPOTIONS.put("boost", PotionEffectType.HEALTH_BOOST);
 
-		try // 1.6 update
-		{
-			POTIONS.put("healthboost", PotionEffectType.HEALTH_BOOST);
-			ALIASPOTIONS.put("boost", PotionEffectType.HEALTH_BOOST);
+		POTIONS.put("absorption", PotionEffectType.ABSORPTION);
+		ALIASPOTIONS.put("absorb", PotionEffectType.ABSORPTION);
 
-			POTIONS.put("absorption", PotionEffectType.ABSORPTION);
-			ALIASPOTIONS.put("absorb", PotionEffectType.ABSORPTION);
-
-			POTIONS.put("saturation", PotionEffectType.SATURATION);
-			ALIASPOTIONS.put("food", PotionEffectType.SATURATION);
-		}
-		catch (java.lang.NoSuchFieldError e)
-		{
-			Essentials.wrongVersion();
-		}
+		POTIONS.put("saturation", PotionEffectType.SATURATION);
+		ALIASPOTIONS.put("food", PotionEffectType.SATURATION);
 		
-		try // 1.7 update
-		{
-			POTIONS.put("waterbreathing", PotionEffectType.WATER_BREATHING);
-			ALIASPOTIONS.put("underwaterbreathing", PotionEffectType.WATER_BREATHING);
-			ALIASPOTIONS.put("waterbreath", PotionEffectType.WATER_BREATHING);
-			ALIASPOTIONS.put("underwaterbreath", PotionEffectType.WATER_BREATHING);
-			ALIASPOTIONS.put("air", PotionEffectType.WATER_BREATHING);
-		}
-		catch (java.lang.NoSuchFieldError e)
-		{
-			Essentials.wrongVersion();
-		}
+		POTIONS.put("waterbreathing", PotionEffectType.WATER_BREATHING);
+		ALIASPOTIONS.put("underwaterbreathing", PotionEffectType.WATER_BREATHING);
+		ALIASPOTIONS.put("waterbreath", PotionEffectType.WATER_BREATHING);
+		ALIASPOTIONS.put("underwaterbreath", PotionEffectType.WATER_BREATHING);
+		ALIASPOTIONS.put("air", PotionEffectType.WATER_BREATHING);
 	}
 
 	public static PotionEffectType getByName(String name)

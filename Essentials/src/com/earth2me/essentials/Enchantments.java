@@ -142,20 +142,13 @@ public class Enchantments
 		ALIASENCHANTMENTS.put("unlimitedarrows", Enchantment.ARROW_INFINITE);
 		ALIASENCHANTMENTS.put("ai", Enchantment.ARROW_INFINITE);
 
-		try // 1.7 update
-		{
-			ENCHANTMENTS.put("luck", Enchantment.LUCK);
-			ALIASENCHANTMENTS.put("luckofsea", Enchantment.LUCK);
-			ALIASENCHANTMENTS.put("luckofseas", Enchantment.LUCK);
-			ALIASENCHANTMENTS.put("rodluck", Enchantment.LUCK);
+		ENCHANTMENTS.put("luck", Enchantment.LUCK);
+		ALIASENCHANTMENTS.put("luckofsea", Enchantment.LUCK);
+		ALIASENCHANTMENTS.put("luckofseas", Enchantment.LUCK);
+		ALIASENCHANTMENTS.put("rodluck", Enchantment.LUCK);
 
-			ENCHANTMENTS.put("lure", Enchantment.LURE);
-			ALIASENCHANTMENTS.put("rodlure", Enchantment.LURE);
-		}
-		catch (java.lang.NoSuchFieldError e)
-		{
-			Essentials.wrongVersion();
-		}
+		ENCHANTMENTS.put("lure", Enchantment.LURE);
+		ALIASENCHANTMENTS.put("rodlure", Enchantment.LURE);
 	}
 
 	public static Enchantment getByName(String name)
