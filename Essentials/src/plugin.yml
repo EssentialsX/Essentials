@@ -368,7 +368,7 @@ commands:
     aliases: [esuicide]
   tempban:
     description: Temporary ban a user.
-    usage: /<command> <playername> <datediff>
+    usage: /<command> <playername> <datediff> <reason>
     aliases: [etempban]
   thunder:
     description: Enable/disable thunder.
