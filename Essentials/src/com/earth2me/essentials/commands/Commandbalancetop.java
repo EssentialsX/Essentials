@@ -53,7 +53,7 @@ public class Commandbalancetop extends EssentialsCommand
 			{
 				if (cacheage > System.currentTimeMillis() - CACHETIME)
 				{
-					outputCache(sender, page);
+					outputCache(sender, commandLabel, page);
 					return;
 				}
 				if (ess.getUserMap().getUniqueUsers() > MINUSERS)
@@ -65,7 +65,7 @@ public class Commandbalancetop extends EssentialsCommand
 			{
 				lock.readLock().unlock();
 			}
-			ess.runTaskAsynchronously(new Viewer(sender, page, force));
+			ess.runTaskAsynchronously(new Viewer(sender, commandLabel, page, force));
 		}
 		else
 		{
@@ -73,12 +73,12 @@ public class Commandbalancetop extends EssentialsCommand
 			{
 				sender.sendMessage(tl("orderBalances", ess.getUserMap().getUniqueUsers()));
 			}
-			ess.runTaskAsynchronously(new Viewer(sender, page, force));
+			ess.runTaskAsynchronously(new Viewer(sender, commandLabel, page, force));
 		}
 
 	}
 
-	private static void outputCache(final CommandSource sender, int page)
+	private static void outputCache(final CommandSource sender, String command,  int page)
 	{
 		final Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(cacheage);
@@ -167,12 +167,14 @@ public class Commandbalancetop extends EssentialsCommand
 		private final transient CommandSource sender;
 		private final transient int page;
 		private final transient boolean force;
+		private final transient String commandLabel;
 
-		public Viewer(final CommandSource sender, final int page, final boolean force)
+		public Viewer(final CommandSource sender, final String commandLabel, final int page, final boolean force)
 		{
 			this.sender = sender;
 			this.page = page;
 			this.force = force;
+			this.commandLabel = commandLabel;
 		}
 
 		@Override
@@ -183,7 +185,7 @@ public class Commandbalancetop extends EssentialsCommand
 			{
 				if (!force && cacheage > System.currentTimeMillis() - CACHETIME)
 				{
-					outputCache(sender, page);
+					outputCache(sender, commandLabel, page);
 					return;
 				}
 			}
@@ -191,7 +193,7 @@ public class Commandbalancetop extends EssentialsCommand
 			{
 				lock.readLock().unlock();
 			}
-			ess.runTaskAsynchronously(new Calculator(new Viewer(sender, page, false), force));
+			ess.runTaskAsynchronously(new Calculator(new Viewer(sender, commandLabel, page, false), force));
 		}
 	}
 }

@@ -3,6 +3,10 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.textreader.IText;
+import com.earth2me.essentials.textreader.SimpleTextInput;
+import com.earth2me.essentials.textreader.SimpleTextPager;
+import com.earth2me.essentials.textreader.TextPager;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import org.bukkit.Server;
@@ -34,10 +38,11 @@ public class Commandmail extends EssentialsCommand
 				user.sendMessage(tl("noMail"));
 				throw new NoChargeException();
 			}
-			for (String messages : mail)
-			{
-				user.sendMessage(messages);
-			}
+			
+			IText input = new SimpleTextInput(mail);
+			final TextPager pager = new TextPager(input);			
+			pager.showPage(args.length > 1 ? args[1] : null, null, commandLabel + " " + args[0], user.getSource());
+			
 			user.sendMessage(tl("mailClear"));
 			return;
 		}
