@@ -59,7 +59,7 @@ public class Commandmail extends EssentialsCommand
 				throw new Exception(tl("playerNeverOnServer", args[1]));
 			}
 
-			final String mail = user.getName() + ": " + StringUtil.sanitizeString(FormatUtil.stripFormat(getFinalArg(args, 2)));
+			final String mail = tl("mailFormat", user.getName(), StringUtil.sanitizeString(FormatUtil.stripFormat(getFinalArg(args, 2))));
 			if (mail.length() > 1000)
 			{
 				throw new Exception(tl("mailTooLong"));
@@ -90,7 +90,7 @@ public class Commandmail extends EssentialsCommand
 			{
 				throw new Exception(tl("noPerm", "essentials.mail.sendall"));
 			}
-			ess.runTaskAsynchronously(new SendAll(user.getName() + ": " + FormatUtil.stripFormat(getFinalArg(args, 1))));
+			ess.runTaskAsynchronously(new SendAll(tl("mailFormat", user.getName(), FormatUtil.stripFormat(getFinalArg(args, 1)))));
 			user.sendMessage(tl("mailSent"));
 			return;
 		}
@@ -121,13 +121,13 @@ public class Commandmail extends EssentialsCommand
 			{
 				throw new Exception(tl("playerNeverOnServer", args[1]));
 			}
-			u.addMail("Server: " + getFinalArg(args, 2));
+			u.addMail(tl("mailFormat", "Server", getFinalArg(args, 2)));
 			sender.sendMessage(tl("mailSent"));
 			return;
 		}
 		else if (args.length >= 2 && "sendall".equalsIgnoreCase(args[0]))
 		{
-			ess.runTaskAsynchronously(new SendAll("Server: " + getFinalArg(args, 1)));
+			ess.runTaskAsynchronously(new SendAll(tl("mailFormat", "Server", getFinalArg(args, 1))));
 			sender.sendMessage(tl("mailSent"));
 			return;
 		}
@@ -139,7 +139,7 @@ public class Commandmail extends EssentialsCommand
 			{
 				throw new Exception(tl("playerNeverOnServer", args[0]));
 			}
-			u.addMail("Server: " + getFinalArg(args, 1));
+			u.addMail(tl("mailFormat", "Server", getFinalArg(args, 1)));
 			sender.sendMessage(tl("mailSent"));
 			return;
 		}
