@@ -4,15 +4,14 @@ import com.earth2me.essentials.CommandSource;
 import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.UserMap;
+import com.earth2me.essentials.craftbukkit.BanLookup;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.StringUtil;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.bukkit.BanList;
-import org.bukkit.Bukkit;
 import java.util.UUID;
 import org.bukkit.BanEntry;
 import org.bukkit.Location;
@@ -64,9 +63,9 @@ public class Commandseen extends EssentialsCommand
 					sender.sendMessage(tl("isIpBanned", args[0]));
 					return;
 				}
-				else if (ess.getServer().getBanList(BanList.Type.NAME).isBanned(args[0]))
+				else if (BanLookup.isBanned(ess, args[0]))
 				{
-					sender.sendMessage(tl("whoisBanned", showBan ? ess.getServer().getBanList(BanList.Type.NAME).getBanEntry(args[0]).getReason() : tl("true")));
+					sender.sendMessage(tl("whoisBanned", showBan ? BanLookup.getBanEntry(ess, args[0]).getReason() : tl("true")));
 					return;
 				}
 				else
@@ -145,9 +144,9 @@ public class Commandseen extends EssentialsCommand
 			sender.sendMessage(tl("seenAccounts", StringUtil.joinListSkip(", ", user.getName(), history)));
 		}
 
-		if (user.getBase().isBanned())
+		if (BanLookup.isBanned(ess, user))
 		{
-			final BanEntry banEntry = ess.getServer().getBanList(BanList.Type.NAME).getBanEntry(user.getName());
+			final BanEntry banEntry = BanLookup.getBanEntry(ess, user.getName());
 			final String reason = showBan ? banEntry.getReason() : tl("true");
 			sender.sendMessage(tl("whoisBanned", reason));
 			if (banEntry.getExpiration() != null)
@@ -161,6 +160,7 @@ public class Commandseen extends EssentialsCommand
 				sender.sendMessage(tl("whoisTempBanned", expireString));
 			}
 		}
+
 		final String location = user.getGeoLocation();
 		if (location != null && (!(sender.isPlayer()) || ess.getUser(sender.getPlayer()).isAuthorized("essentials.geoip.show")))
 		{

@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n.tl;
+import com.earth2me.essentials.craftbukkit.BanLookup;
 import com.earth2me.essentials.craftbukkit.FakeWorld;
 import com.earth2me.essentials.settings.Spawns;
 import com.earth2me.essentials.storage.YamlStorageWriter;
@@ -729,7 +730,7 @@ public class EssentialsUpgrade
 					banTimeout = 0L;
 				}
 				
-				if (ess.getServer().getBanList(BanList.Type.NAME).isBanned(playerName))
+				if (BanLookup.isBanned(ess, playerName))
 				{
 					updateBan(playerName, banReason, banTimeout);
 				}
