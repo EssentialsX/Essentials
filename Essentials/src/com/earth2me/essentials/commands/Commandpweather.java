@@ -170,9 +170,9 @@ public class Commandpweather extends EssentialsCommand
 		// If that fails, Is the argument something like "*" or "all"?
 		else if (selector.equalsIgnoreCase("*") || selector.equalsIgnoreCase("all"))
 		{
-			for (Player player : server.getOnlinePlayers())
+			for (User u : ess.getOnlineUsers())
 			{
-				users.add(ess.getUser(player));
+				users.add(u);
 			}
 		}
 		// We failed to understand the world target...
