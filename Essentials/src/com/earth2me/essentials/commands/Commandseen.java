@@ -43,38 +43,45 @@ public class Commandseen extends EssentialsCommand
 		{
 			throw new NotEnoughArgumentsException();
 		}
-		try
+		User player = ess.getOfflineUser(args[0]);
+		if (player == null)
 		{
-			User user = getPlayer(server, sender, args, 0);
-			seenOnline(server, sender, user, showBan, extra);
-		}
-		catch (NoSuchFieldException e)
-		{
-			User player = ess.getOfflineUser(args[0]);
-			if (player == null)
+			if (ipLookup && FormatUtil.validIP(args[0]))
 			{
-				if (ipLookup && FormatUtil.validIP(args[0]))
+				seenIP(server, sender, args[0]);
+				return;
+			}
+			else if (ess.getServer().getBanList(BanList.Type.IP).isBanned(args[0]))
+			{
+				sender.sendMessage(tl("isIpBanned", args[0]));
+				return;
+			}
+			else if (BanLookup.isBanned(ess, args[0]))
+			{
+				sender.sendMessage(tl("whoisBanned", showBan ? BanLookup.getBanEntry(ess, args[0]).getReason() : tl("true")));
+				return;
+			}
+			else
+			{
+				try
 				{
-					seenIP(server, sender, args[0]);
-					return;
+					player = getPlayer(server, sender, args, 0);
 				}
-				else if (ess.getServer().getBanList(BanList.Type.IP).isBanned(args[0]))
-				{
-					sender.sendMessage(tl("isIpBanned", args[0]));
-					return;
-				}
-				else if (BanLookup.isBanned(ess, args[0]))
-				{
-					sender.sendMessage(tl("whoisBanned", showBan ? BanLookup.getBanEntry(ess, args[0]).getReason() : tl("true")));
-					return;
-				}
-				else
+				catch (NoSuchFieldException e)
 				{
 					throw new PlayerNotFoundException();
 				}
 			}
+		}
+		if (player.getBase().isOnline() && canInteractWith(sender, player))
+		{
+			seenOnline(server, sender, player, showBan, extra);
+		}
+		else
+		{
 			seenOffline(server, sender, player, showBan, extra);
 		}
+
 	}
 
 	private void seenOnline(final Server server, final CommandSource sender, final User user, final boolean showBan, final boolean extra) throws Exception

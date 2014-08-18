@@ -211,6 +211,21 @@ public abstract class EssentialsCommand implements IEssentialsCommand
 		return bldr.toString();
 	}
 
+	boolean canInteractWith(CommandSource interactor, User interactee)
+	{
+		if (interactor == null)
+		{
+			return !interactee.isHidden();
+		}
+
+		if (interactor.isPlayer())
+		{
+			return canInteractWith(ess.getUser(interactor.getPlayer()), interactee);
+		}
+
+		return true; // console
+	}
+
 	private static boolean canInteractWith(User interactor, User interactee)
 	{
 		if (interactor == null)
