@@ -780,7 +780,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 		}
 		else
 		{
-			for (Player p : ess.getServer().getOnlinePlayers())
+			for (Player p : ess.getOnlinePlayers())
 			{
 				p.showPlayer(getBase());
 			}

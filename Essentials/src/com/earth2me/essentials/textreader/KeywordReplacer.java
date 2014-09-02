@@ -222,7 +222,7 @@ public class KeywordReplacer implements IText
 
 						//Now lets build the all user playerlist
 						final StringBuilder playerlistBuilder = new StringBuilder();
-						for (Player p : ess.getServer().getOnlinePlayers())
+						for (Player p : ess.getOnlinePlayers())
 						{
 							if (ess.getUser(p).isHidden())
 							{

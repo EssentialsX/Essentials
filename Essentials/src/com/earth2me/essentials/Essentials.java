@@ -325,9 +325,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 	@Override
 	public void onDisable()
 	{
-		for (Player p : getServer().getOnlinePlayers())
+		for (User user : getOnlineUsers())
 		{
-			User user = getUser(p);
 			if (user.isVanished())
 			{
 				user.setVanished(false);
@@ -562,9 +561,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 
 	public void cleanupOpenInventories()
 	{
-		for (Player player : getServer().getOnlinePlayers())
+		for (User user : getOnlineUsers())
 		{
-			User user = getUser(player);
 			if (user.isRecipeSee())
 			{
 				user.getBase().getOpenInventory().getTopInventory().clear();
@@ -742,7 +740,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials
 				event.getPlayer().sendMessage("Essentials failed to load, read the log file.");
 			}
 		}, this);
-		for (Player player : getServer().getOnlinePlayers())
+		for (Player player : getOnlinePlayers())
 		{
 			player.sendMessage("Essentials failed to load, read the log file.");
 		}
