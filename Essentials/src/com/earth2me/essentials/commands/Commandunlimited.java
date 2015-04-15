@@ -1,120 +1,96 @@
 package com.earth2me.essentials.commands;
 
-import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.User;
-import java.util.List;
-import java.util.Locale;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
+import java.util.Locale;
 
-public class Commandunlimited extends EssentialsCommand
-{
-	public Commandunlimited()
-	{
-		super("unlimited");
-	}
+import static com.earth2me.essentials.I18n.tl;
 
-	@Override
-	public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception
-	{
-		if (args.length < 1)
-		{
-			throw new NotEnoughArgumentsException();
-		}
 
-		User target = user;
+public class Commandunlimited extends EssentialsCommand {
+    public Commandunlimited() {
+        super("unlimited");
+    }
 
-		if (args.length > 1 && user.isAuthorized("essentials.unlimited.others"))
-		{
-			target = getPlayer(server, user, args, 1);
-		}
+    @Override
+    public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
+        if (args.length < 1) {
+            throw new NotEnoughArgumentsException();
+        }
 
-		if (args[0].equalsIgnoreCase("list"))
-		{
-			final String list = getList(target);
-			user.sendMessage(list);
-		}
-		else if (args[0].equalsIgnoreCase("clear"))
-		{
-			final List<Integer> itemList = target.getUnlimited();
+        User target = user;
 
-			int index = 0;
-			while (itemList.size() > index)
-			{
-				final Integer item = itemList.get(index);
-				if (toggleUnlimited(user, target, item.toString()) == false)
-				{
-					index++;
-				}
-			}
-		}
-		else
-		{
-			toggleUnlimited(user, target, args[0]);
-		}
-	}
+        if (args.length > 1 && user.isAuthorized("essentials.unlimited.others")) {
+            target = getPlayer(server, user, args, 1);
+        }
 
-	private String getList(final User target)
-	{
-		final StringBuilder output = new StringBuilder();
-		output.append(tl("unlimitedItems")).append(" ");
-		boolean first = true;
-		final List<Integer> items = target.getUnlimited();
-		if (items.isEmpty())
-		{
-			output.append(tl("none"));
-		}
-		for (Integer integer : items)
-		{
-			if (!first)
-			{
-				output.append(", ");
-			}
-			first = false;
-			final String matname = Material.getMaterial(integer).toString().toLowerCase(Locale.ENGLISH).replace("_", "");
-			output.append(matname);
-		}
+        if (args[0].equalsIgnoreCase("list")) {
+            final String list = getList(target);
+            user.sendMessage(list);
+        } else if (args[0].equalsIgnoreCase("clear")) {
+            final List<Integer> itemList = target.getUnlimited();
 
-		return output.toString();
-	}
+            int index = 0;
+            while (itemList.size() > index) {
+                final Integer item = itemList.get(index);
+                if (toggleUnlimited(user, target, item.toString()) == false) {
+                    index++;
+                }
+            }
+        } else {
+            toggleUnlimited(user, target, args[0]);
+        }
+    }
 
-	private Boolean toggleUnlimited(final User user, final User target, final String item) throws Exception
-	{
-		final ItemStack stack = ess.getItemDb().get(item, 1);
-		stack.setAmount(Math.min(stack.getType().getMaxStackSize(), 2));
+    private String getList(final User target) {
+        final StringBuilder output = new StringBuilder();
+        output.append(tl("unlimitedItems")).append(" ");
+        boolean first = true;
+        final List<Integer> items = target.getUnlimited();
+        if (items.isEmpty()) {
+            output.append(tl("none"));
+        }
+        for (Integer integer : items) {
+            if (!first) {
+                output.append(", ");
+            }
+            first = false;
+            final String matname = Material.getMaterial(integer).toString().toLowerCase(Locale.ENGLISH).replace("_", "");
+            output.append(matname);
+        }
 
-		final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
-		if (ess.getSettings().permissionBasedItemSpawn()
-			&& (!user.isAuthorized("essentials.unlimited.item-all")
-				&& !user.isAuthorized("essentials.unlimited.item-" + itemname)
-				&& !user.isAuthorized("essentials.unlimited.item-" + stack.getTypeId())
-				&& !((stack.getType() == Material.WATER_BUCKET || stack.getType() == Material.LAVA_BUCKET)
-					 && user.isAuthorized("essentials.unlimited.item-bucket"))))
-		{
-			throw new Exception(tl("unlimitedItemPermission", itemname));
-		}
+        return output.toString();
+    }
 
-		String message = "disableUnlimited";
-		boolean enableUnlimited = false;
-		if (!target.hasUnlimited(stack))
-		{
-			message = "enableUnlimited";
-			enableUnlimited = true;
-			if (!target.getBase().getInventory().containsAtLeast(stack, stack.getAmount()))
-			{
-				target.getBase().getInventory().addItem(stack);
-			}
-		}
+    private Boolean toggleUnlimited(final User user, final User target, final String item) throws Exception {
+        final ItemStack stack = ess.getItemDb().get(item, 1);
+        stack.setAmount(Math.min(stack.getType().getMaxStackSize(), 2));
 
-		if (user != target)
-		{
-			user.sendMessage(tl(message, itemname, target.getDisplayName()));
-		}
-		target.sendMessage(tl(message, itemname, target.getDisplayName()));
-		target.setUnlimited(stack, enableUnlimited);
+        final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
+        if (ess.getSettings().permissionBasedItemSpawn() && (!user.isAuthorized("essentials.unlimited.item-all") && !user.isAuthorized("essentials.unlimited.item-" + itemname) && !user.isAuthorized("essentials.unlimited.item-" + stack.getTypeId()) && !((stack.getType() == Material.WATER_BUCKET || stack.getType() == Material.LAVA_BUCKET) && user.isAuthorized("essentials.unlimited.item-bucket")))) {
+            throw new Exception(tl("unlimitedItemPermission", itemname));
+        }
 
-		return true;
-	}
+        String message = "disableUnlimited";
+        boolean enableUnlimited = false;
+        if (!target.hasUnlimited(stack)) {
+            message = "enableUnlimited";
+            enableUnlimited = true;
+            if (!target.getBase().getInventory().containsAtLeast(stack, stack.getAmount())) {
+                target.getBase().getInventory().addItem(stack);
+            }
+        }
+
+        if (user != target) {
+            user.sendMessage(tl(message, itemname, target.getDisplayName()));
+        }
+        target.sendMessage(tl(message, itemname, target.getDisplayName()));
+        target.setUnlimited(stack, enableUnlimited);
+
+        return true;
+    }
 }

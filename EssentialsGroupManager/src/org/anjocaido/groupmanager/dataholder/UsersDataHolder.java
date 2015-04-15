@@ -1,114 +1,115 @@
 package org.anjocaido.groupmanager.dataholder;
 
+import org.anjocaido.groupmanager.data.User;
+
 import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.anjocaido.groupmanager.data.User;
-
 /**
  * This container holds all Users loaded from the relevant usersFile.
- * 
+ *
  * @author ElgarL
- * 
  */
 public class UsersDataHolder {
 
-	private WorldDataHolder dataSource;
-	private File usersFile;
-	private boolean haveUsersChanged = false;
-	private long timeStampUsers = 0;
+    private WorldDataHolder dataSource;
+    private File usersFile;
+    private boolean haveUsersChanged = false;
+    private long timeStampUsers = 0;
 
-	/**
-	 * The actual groups holder
-	 */
-	private final Map<String, User> users = Collections.synchronizedMap(new HashMap<String, User>());
+    /**
+     * The actual groups holder
+     */
+    private final Map<String, User> users = Collections.synchronizedMap(new HashMap<String, User>());
 
-	/**
-	 * Constructor
-	 */
-	protected UsersDataHolder() {
+    /**
+     * Constructor
+     */
+    protected UsersDataHolder() {
 
-	}
+    }
 
-	public void setDataSource(WorldDataHolder dataSource) {
+    public void setDataSource(WorldDataHolder dataSource) {
 
-		this.dataSource = dataSource;
-		//push this data source to the users, so they pull the correct groups data.
-		synchronized(users) {
-		for (User user : users.values())
-			user.setDataSource(this.dataSource);
-		}
-	}
+        this.dataSource = dataSource;
+        //push this data source to the users, so they pull the correct groups data.
+        synchronized (users) {
+            for (User user : users.values()) {
+                user.setDataSource(this.dataSource);
+            }
+        }
+    }
 
-	/**
-	 * Note: Iteration over this object has to be synchronized!
-	 * @return the users
-	 */
-	public Map<String, User> getUsers() {
+    /**
+     * Note: Iteration over this object has to be synchronized!
+     *
+     * @return the users
+     */
+    public Map<String, User> getUsers() {
 
-		return users;
-	}
-	
-	public WorldDataHolder getDataSource() {
-		
-		return this.dataSource;
-	}
+        return users;
+    }
 
-	/**
-	 * Resets the Users
-	 */
-	public void resetUsers() {
-		this.users.clear();
-	}
+    public WorldDataHolder getDataSource() {
 
-	/**
-	 * @return the usersFile
-	 */
-	public File getUsersFile() {
+        return this.dataSource;
+    }
 
-		return usersFile;
-	}
+    /**
+     * Resets the Users
+     */
+    public void resetUsers() {
+        this.users.clear();
+    }
 
-	/**
-	 * @param usersFile the usersFile to set
-	 */
-	public void setUsersFile(File usersFile) {
+    /**
+     * @return the usersFile
+     */
+    public File getUsersFile() {
 
-		this.usersFile = usersFile;
-	}
+        return usersFile;
+    }
 
-	/**
-	 * @return the haveUsersChanged
-	 */
-	public boolean HaveUsersChanged() {
+    /**
+     * @param usersFile the usersFile to set
+     */
+    public void setUsersFile(File usersFile) {
 
-		return haveUsersChanged;
-	}
+        this.usersFile = usersFile;
+    }
 
-	/**
-	 * @param haveUsersChanged the haveUsersChanged to set
-	 */
-	public void setUsersChanged(boolean haveUsersChanged) {
+    /**
+     * @return the haveUsersChanged
+     */
+    public boolean HaveUsersChanged() {
 
-		this.haveUsersChanged = haveUsersChanged;
-	}
+        return haveUsersChanged;
+    }
 
-	/**
-	 * @return the timeStampUsers
-	 */
-	public long getTimeStampUsers() {
+    /**
+     * @param haveUsersChanged the haveUsersChanged to set
+     */
+    public void setUsersChanged(boolean haveUsersChanged) {
 
-		return timeStampUsers;
-	}
+        this.haveUsersChanged = haveUsersChanged;
+    }
 
-	/**
-	 * @param timeStampUsers the timeStampUsers to set
-	 */
-	public void setTimeStampUsers(long timeStampUsers) {
+    /**
+     * @return the timeStampUsers
+     */
+    public long getTimeStampUsers() {
 
-		this.timeStampUsers = timeStampUsers;
-	}
+        return timeStampUsers;
+    }
+
+    /**
+     * @param timeStampUsers the timeStampUsers to set
+     */
+    public void setTimeStampUsers(long timeStampUsers) {
+
+        this.timeStampUsers = timeStampUsers;
+    }
 
 }

@@ -1,15 +1,14 @@
 package com.earth2me.essentials.storage;
 
 
-public interface IStorageObjectHolder<T extends StorageObject>
-{
-	T getData();
+public interface IStorageObjectHolder<T extends StorageObject> {
+    T getData();
 
-	void acquireReadLock();
+    void acquireReadLock();
 
-	void acquireWriteLock();
+    void acquireWriteLock();
 
-	void close();
+    void close();
 
-	void unlock();
+    void unlock();
 }

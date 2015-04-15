@@ -7,82 +7,82 @@ import org.bukkit.event.HandlerList;
 
 /**
  * @author ElgarL
- * 
  */
 public class GMUserEvent extends Event {
 
-	/**
-	 * 
-	 */
-	private static final HandlerList handlers = new HandlerList();
+    /**
+     *
+     */
+    private static final HandlerList handlers = new HandlerList();
 
-	@Override
-	public HandlerList getHandlers() {
+    @Override
+    public HandlerList getHandlers() {
 
-		return handlers;
-	}
+        return handlers;
+    }
 
-	public static HandlerList getHandlerList() {
+    public static HandlerList getHandlerList() {
 
-		return handlers;
-	}
+        return handlers;
+    }
 
-	//////////////////////////////
+    //////////////////////////////
 
-	protected User user;
+    protected User user;
 
-	protected String userName;
+    protected String userName;
 
-	protected Action action;
+    protected Action action;
 
-	public GMUserEvent(User user, Action action) {
+    public GMUserEvent(User user, Action action) {
 
-		super();
+        super();
 
-		this.user = user;
-		this.action = action;
-		this.userName = user.getLastName();
-	}
+        this.user = user;
+        this.action = action;
+        this.userName = user.getLastName();
+    }
 
-	public GMUserEvent(String userName, Action action) {
+    public GMUserEvent(String userName, Action action) {
 
-		super();
+        super();
 
-		this.userName = userName;
-		this.action = action;
-	}
+        this.userName = userName;
+        this.action = action;
+    }
 
-	public Action getAction() {
+    public Action getAction() {
 
-		return this.action;
-	}
+        return this.action;
+    }
 
-	public User getUser() {
+    public User getUser() {
 
-		return user;
-	}
+        return user;
+    }
 
-	public String getUserName() {
+    public String getUserName() {
 
-		return userName;
-	}
+        return userName;
+    }
 
-	public enum Action {
-		USER_PERMISSIONS_CHANGED, USER_INHERITANCE_CHANGED, USER_INFO_CHANGED, USER_GROUP_CHANGED, USER_SUBGROUP_CHANGED, USER_ADDED, USER_REMOVED,
-	}
+    public enum Action {
+        USER_PERMISSIONS_CHANGED, USER_INHERITANCE_CHANGED, USER_INFO_CHANGED, USER_GROUP_CHANGED, USER_SUBGROUP_CHANGED, USER_ADDED, USER_REMOVED,
+    }
 
-	public void schedule(final GMUserEvent event) {
+    public void schedule(final GMUserEvent event) {
 
-		synchronized (GroupManager.getGMEventHandler().getServer()) {
-			if (GroupManager.getGMEventHandler().getServer().getScheduler().scheduleSyncDelayedTask(GroupManager.getGMEventHandler().getPlugin(), new Runnable() {
-	
-				@Override
-				public void run() {
-	
-					GroupManager.getGMEventHandler().getServer().getPluginManager().callEvent(event);
-				}
-			}, 1) == -1)
-				GroupManager.logger.warning("Could not schedule GM Event.");
-		}
-	}
+        synchronized (GroupManager.getGMEventHandler().getServer()) {
+            if (GroupManager.getGMEventHandler().getServer().getScheduler().scheduleSyncDelayedTask(GroupManager.getGMEventHandler().getPlugin(), new Runnable() {
+
+                @Override
+                public void run() {
+
+                    GroupManager.getGMEventHandler().getServer().getPluginManager().callEvent(event);
+                }
+            }, 1) == -1) {
+                GroupManager.logger.warning("Could not schedule GM Event.");
+            }
+        }
+    }
 }

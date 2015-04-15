@@ -1,19 +1,19 @@
 package com.earth2me.essentials.antibuild;
 
-import java.util.List;
-import java.util.Map;
 import org.bukkit.plugin.Plugin;
 
+import java.util.List;
+import java.util.Map;
 
-public interface IAntiBuild extends Plugin
-{
-	boolean checkProtectionItems(final AntiBuildConfig list, final int id);
 
-	boolean getSettingBool(final AntiBuildConfig protectConfig);
+public interface IAntiBuild extends Plugin {
+    boolean checkProtectionItems(final AntiBuildConfig list, final int id);
 
-	EssentialsConnect getEssentialsConnect();
+    boolean getSettingBool(final AntiBuildConfig protectConfig);
 
-	Map<AntiBuildConfig, Boolean> getSettingsBoolean();
+    EssentialsConnect getEssentialsConnect();
 
-	Map<AntiBuildConfig, List<Integer>> getSettingsList();
+    Map<AntiBuildConfig, Boolean> getSettingsBoolean();
+
+    Map<AntiBuildConfig, List<Integer>> getSettingsList();
 }

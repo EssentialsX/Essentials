@@ -4,6 +4,11 @@
  */
 package org.anjocaido.groupmanager;
 
+import org.anjocaido.groupmanager.utils.Tasks;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.SafeConstructor;
+import org.yaml.snakeyaml.reader.UnicodeReader;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -11,200 +16,196 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
-import org.anjocaido.groupmanager.utils.Tasks;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.SafeConstructor;
-import org.yaml.snakeyaml.reader.UnicodeReader;
-
 /**
- * 
  * @author gabrielcouto
  */
 public class GMConfiguration {
-	
-	private boolean allowCommandBlocks = false;
-	private boolean opOverride = true;
-	private boolean toggleValidate = true;
-	private Integer saveInterval = 10;
-	private Integer backupDuration = 24;
-	private String loggerLevel = "OFF";
-	private Map<String, Object> mirrorsMap;
-	
 
-	private GroupManager plugin;
-	private Map<String, Object> GMconfig;
+    private boolean allowCommandBlocks = false;
+    private boolean opOverride = true;
+    private boolean toggleValidate = true;
+    private Integer saveInterval = 10;
+    private Integer backupDuration = 24;
+    private String loggerLevel = "OFF";
+    private Map<String, Object> mirrorsMap;
 
-	public GMConfiguration(GroupManager plugin) {
 
-		this.plugin = plugin;
-		
+    private GroupManager plugin;
+    private Map<String, Object> GMconfig;
+
+    public GMConfiguration(GroupManager plugin) {
+
+        this.plugin = plugin;
+
 		/*
 		 * Set defaults
 		 */
-		allowCommandBlocks = false;
-		opOverride = true;
-		toggleValidate = true;
-		saveInterval = 10;
-		backupDuration = 24;
-		loggerLevel = "OFF";
-				
-		load();
-	}
+        allowCommandBlocks = false;
+        opOverride = true;
+        toggleValidate = true;
+        saveInterval = 10;
+        backupDuration = 24;
+        loggerLevel = "OFF";
 
-	@SuppressWarnings("unchecked")
-	public void load() {
+        load();
+    }
 
-		if (!plugin.getDataFolder().exists()) {
-			plugin.getDataFolder().mkdirs();
-		}
+    @SuppressWarnings("unchecked")
+    public void load() {
 
-		File configFile = new File(plugin.getDataFolder(), "config.yml");
+        if (!plugin.getDataFolder().exists()) {
+            plugin.getDataFolder().mkdirs();
+        }
 
-		if (!configFile.exists()) {
-			try {
-				Tasks.copy(plugin.getResourceAsStream("config.yml"), configFile);
-			} catch (IOException ex) {
-				GroupManager.logger.log(Level.SEVERE, "Error creating a new config.yml", ex);
-			}
-		}
+        File configFile = new File(plugin.getDataFolder(), "config.yml");
 
-		Yaml configYAML = new Yaml(new SafeConstructor());
+        if (!configFile.exists()) {
+            try {
+                Tasks.copy(plugin.getResourceAsStream("config.yml"), configFile);
+            } catch (IOException ex) {
+                GroupManager.logger.log(Level.SEVERE, "Error creating a new config.yml", ex);
+            }
+        }
 
-		try {
-			FileInputStream configInputStream = new FileInputStream(configFile);
-			GMconfig = (Map<String, Object>) configYAML.load(new UnicodeReader(configInputStream));
-			configInputStream.close();
+        Yaml configYAML = new Yaml(new SafeConstructor());
 
-		} catch (Exception ex) {
-			throw new IllegalArgumentException("The following file couldn't pass on Parser.\n" + configFile.getPath(), ex);
-		}
+        try {
+            FileInputStream configInputStream = new FileInputStream(configFile);
+            GMconfig = (Map<String, Object>) configYAML.load(new UnicodeReader(configInputStream));
+            configInputStream.close();
+
+        } catch (Exception ex) {
+            throw new IllegalArgumentException("The following file couldn't pass on Parser.\n" + configFile.getPath(), ex);
+        }
 
 		/*
 		 * Read our config settings and store them for reading later.
 		 */
-		try {
-			Map<String, Object> config = getElement("config", getElement("settings", GMconfig));
+        try {
+            Map<String, Object> config = getElement("config", getElement("settings", GMconfig));
 
-			try {
-				allowCommandBlocks = (Boolean) config.get("allow_commandblocks");
-			} catch (Exception ex) {
-				GroupManager.logger.log(Level.SEVERE, "Missing or corrupt 'allow_commandblocks' node. Using default settings", ex);
-			}
-			
-			try {
-				opOverride = (Boolean) config.get("opOverrides");
-			} catch (Exception ex) {
-				GroupManager.logger.log(Level.SEVERE, "Missing or corrupt 'opOverrides' node. Using default settings", ex);
-			}
-			
-			try {
-				toggleValidate = (Boolean) config.get("validate_toggle");
-			} catch (Exception ex) {
-				GroupManager.logger.log(Level.SEVERE, "Missing or corrupt 'validate_toggle' node. Using default settings", ex);
-			}
+            try {
+                allowCommandBlocks = (Boolean) config.get("allow_commandblocks");
+            } catch (Exception ex) {
+                GroupManager.logger.log(Level.SEVERE, "Missing or corrupt 'allow_commandblocks' node. Using default settings", ex);
+            }
+
+            try {
+                opOverride = (Boolean) config.get("opOverrides");
+            } catch (Exception ex) {
+                GroupManager.logger.log(Level.SEVERE, "Missing or corrupt 'opOverrides' node. Using default settings", ex);
+            }
+
+            try {
+                toggleValidate = (Boolean) config.get("validate_toggle");
+            } catch (Exception ex) {
+                GroupManager.logger.log(Level.SEVERE, "Missing or corrupt 'validate_toggle' node. Using default settings", ex);
+            }
 
 			/*
 			 * data node for save/backup timers.
 			 */
-			try {
-				Map<String, Object> save = getElement("save", getElement("data", getElement("settings", GMconfig)));
-				
-				try {
-					saveInterval = (Integer) save.get("minutes");
-				} catch (Exception ex) {
-					GroupManager.logger.log(Level.SEVERE, "Missing or corrupt 'minutes' node. Using default setting", ex);
-				}
-				
-				try {
-					backupDuration = (Integer) save.get("hours");
-				} catch (Exception ex) {
-					GroupManager.logger.log(Level.SEVERE, "Missing or corrupt 'hours' node. Using default setting", ex);
-				}
-				
-			} catch (Exception ex) {
-				GroupManager.logger.log(Level.SEVERE, "Missing or corrupt 'data' node. Using default settings", ex);
-			}
+            try {
+                Map<String, Object> save = getElement("save", getElement("data", getElement("settings", GMconfig)));
 
-			
+                try {
+                    saveInterval = (Integer) save.get("minutes");
+                } catch (Exception ex) {
+                    GroupManager.logger.log(Level.SEVERE, "Missing or corrupt 'minutes' node. Using default setting", ex);
+                }
 
-			Object level = ((Map<String, String>) getElement("settings", GMconfig).get("logging")).get("level");
-			if (level instanceof String)
-				loggerLevel = (String) level;
+                try {
+                    backupDuration = (Integer) save.get("hours");
+                } catch (Exception ex) {
+                    GroupManager.logger.log(Level.SEVERE, "Missing or corrupt 'hours' node. Using default setting", ex);
+                }
+
+            } catch (Exception ex) {
+                GroupManager.logger.log(Level.SEVERE, "Missing or corrupt 'data' node. Using default settings", ex);
+            }
+
+
+            Object level = ((Map<String, String>) getElement("settings", GMconfig).get("logging")).get("level");
+            if (level instanceof String) {
+                loggerLevel = (String) level;
+            }
 
 			/*
 			 * Store our mirrors map for parsing later.
 			 */
-			mirrorsMap = (Map<String, Object>) ((Map<String, Object>) GMconfig.get("settings")).get("mirrors");
-			
-			if (mirrorsMap == null)
-				throw new Exception();
+            mirrorsMap = (Map<String, Object>) ((Map<String, Object>) GMconfig.get("settings")).get("mirrors");
 
-		} catch (Exception ex) {
+            if (mirrorsMap == null) {
+                throw new Exception();
+            }
+
+        } catch (Exception ex) {
 			/*
 			 * Flag the error and use defaults
 			 */
-			GroupManager.logger.log(Level.SEVERE, "There are errors in your config.yml. Using default settings", ex);
-			
-			mirrorsMap = new HashMap<String, Object>();
-		}
-		// Setup defaults
-		adjustLoggerLevel();
-		plugin.setValidateOnlinePlayer(isToggleValidate());
-	}
-	
-	@SuppressWarnings("unchecked")
-	private Map<String, Object> getElement(String element, Map<String, Object> map) {
-		
-		if (!map.containsKey(element)) {
-			throw new IllegalArgumentException("The config.yml has no '" + element + ".\n");
-		}
-		
-		return (Map<String, Object>) map.get(element);
-		
-	}
-	public boolean isAllowCommandBlocks() {
+            GroupManager.logger.log(Level.SEVERE, "There are errors in your config.yml. Using default settings", ex);
 
-		return allowCommandBlocks;
-	}
+            mirrorsMap = new HashMap<String, Object>();
+        }
+        // Setup defaults
+        adjustLoggerLevel();
+        plugin.setValidateOnlinePlayer(isToggleValidate());
+    }
 
-	public boolean isOpOverride() {
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> getElement(String element, Map<String, Object> map) {
 
-		return opOverride;
-	}
+        if (!map.containsKey(element)) {
+            throw new IllegalArgumentException("The config.yml has no '" + element + ".\n");
+        }
 
-	public boolean isToggleValidate() {
-		
-		return toggleValidate;
-	}
+        return (Map<String, Object>) map.get(element);
 
-	public Integer getSaveInterval() {
+    }
 
-		return saveInterval;
-	}
+    public boolean isAllowCommandBlocks() {
 
-	public Integer getBackupDuration() {
+        return allowCommandBlocks;
+    }
 
-		return backupDuration;
-	}
+    public boolean isOpOverride() {
 
-	public void adjustLoggerLevel() {
+        return opOverride;
+    }
 
-		try {
-			GroupManager.logger.setLevel(Level.parse(loggerLevel));
-			return;
-		} catch (Exception e) {
-		}
+    public boolean isToggleValidate() {
 
-		GroupManager.logger.setLevel(Level.INFO);
-	}
-	
-	public Map<String, Object> getMirrorsMap() {
+        return toggleValidate;
+    }
 
-		if (!mirrorsMap.isEmpty()) {
-			return mirrorsMap;
-		}
-		return null;
+    public Integer getSaveInterval() {
 
-	}
+        return saveInterval;
+    }
+
+    public Integer getBackupDuration() {
+
+        return backupDuration;
+    }
+
+    public void adjustLoggerLevel() {
+
+        try {
+            GroupManager.logger.setLevel(Level.parse(loggerLevel));
+            return;
+        } catch (Exception e) {
+        }
+
+        GroupManager.logger.setLevel(Level.INFO);
+    }
+
+    public Map<String, Object> getMirrorsMap() {
+
+        if (!mirrorsMap.isEmpty()) {
+            return mirrorsMap;
+        }
+        return null;
+
+    }
 
 }

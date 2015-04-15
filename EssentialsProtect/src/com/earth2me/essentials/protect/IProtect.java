@@ -1,21 +1,21 @@
 package com.earth2me.essentials.protect;
 
-import java.util.List;
-import java.util.Map;
 import org.bukkit.plugin.Plugin;
 
+import java.util.List;
+import java.util.Map;
 
-public interface IProtect extends Plugin
-{
-	boolean getSettingBool(final ProtectConfig protectConfig);
 
-	String getSettingString(final ProtectConfig protectConfig);
-	
-	EssentialsConnect getEssentialsConnect();
+public interface IProtect extends Plugin {
+    boolean getSettingBool(final ProtectConfig protectConfig);
 
-	Map<ProtectConfig, Boolean> getSettingsBoolean();
+    String getSettingString(final ProtectConfig protectConfig);
 
-	Map<ProtectConfig, String> getSettingsString();
+    EssentialsConnect getEssentialsConnect();
 
-	Map<ProtectConfig, List<Integer>> getSettingsList();
+    Map<ProtectConfig, Boolean> getSettingsBoolean();
+
+    Map<ProtectConfig, String> getSettingsString();
+
+    Map<ProtectConfig, List<Integer>> getSettingsList();
 }

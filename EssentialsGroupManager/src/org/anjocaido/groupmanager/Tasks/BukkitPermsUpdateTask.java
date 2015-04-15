@@ -9,21 +9,21 @@ import org.anjocaido.groupmanager.GroupManager;
 
 public class BukkitPermsUpdateTask implements Runnable {
 
-	public BukkitPermsUpdateTask() {
+    public BukkitPermsUpdateTask() {
 
-		super();
-	}
+        super();
+    }
 
-	@Override
-	public void run() {
+    @Override
+    public void run() {
 
-		// Signal loaded and update BukkitPermissions.
-		GroupManager.setLoaded(true);
-		GroupManager.BukkitPermissions.collectPermissions();
-		GroupManager.BukkitPermissions.updateAllPlayers();
+        // Signal loaded and update BukkitPermissions.
+        GroupManager.setLoaded(true);
+        GroupManager.BukkitPermissions.collectPermissions();
+        GroupManager.BukkitPermissions.updateAllPlayers();
 
-		GroupManager.logger.info("Bukkit Permissions Updated!");
+        GroupManager.logger.info("Bukkit Permissions Updated!");
 
-	}
+    }
 
 }

@@ -6,9 +6,6 @@ import com.earth2me.essentials.api.IWarps;
 import com.earth2me.essentials.metrics.Metrics;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -17,83 +14,86 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
-public interface IEssentials extends Plugin
-{
-	void addReloadListener(IConf listener);
 
-	void reload();
+public interface IEssentials extends Plugin {
+    void addReloadListener(IConf listener);
 
-	boolean onCommandEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath, String permissionPrefix, IEssentialsModule module);
+    void reload();
 
-	@Deprecated
-	User getUser(Object base);
-	
-	User getUser(UUID base);
-	
-	User getUser(String base);
-	
-	User getUser(Player base);
+    boolean onCommandEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath, String permissionPrefix, IEssentialsModule module);
 
-	I18n getI18n();
+    @Deprecated
+    User getUser(Object base);
 
-	User getOfflineUser(String name);
+    User getUser(UUID base);
 
-	World getWorld(String name);
+    User getUser(String base);
 
-	int broadcastMessage(String message);
+    User getUser(Player base);
 
-	int broadcastMessage(IUser sender, String message);
+    I18n getI18n();
 
-	int broadcastMessage(String permission, String message);
+    User getOfflineUser(String name);
 
-	ISettings getSettings();
+    World getWorld(String name);
 
-	BukkitScheduler getScheduler();
+    int broadcastMessage(String message);
 
-	IJails getJails();
+    int broadcastMessage(IUser sender, String message);
 
-	IWarps getWarps();
+    int broadcastMessage(String permission, String message);
 
-	Worth getWorth();
+    ISettings getSettings();
 
-	Backup getBackup();
+    BukkitScheduler getScheduler();
 
-	Methods getPaymentMethod();
+    IJails getJails();
 
-	BukkitTask runTaskAsynchronously(Runnable run);
+    IWarps getWarps();
 
-	BukkitTask runTaskLaterAsynchronously(Runnable run, long delay);
-	
-	BukkitTask runTaskTimerAsynchronously(Runnable run, long delay, long period);
+    Worth getWorth();
 
-	int scheduleSyncDelayedTask(Runnable run);
+    Backup getBackup();
 
-	int scheduleSyncDelayedTask(Runnable run, long delay);
+    Methods getPaymentMethod();
 
-	int scheduleSyncRepeatingTask(Runnable run, long delay, long period);
+    BukkitTask runTaskAsynchronously(Runnable run);
 
-	TNTExplodeListener getTNTListener();
+    BukkitTask runTaskLaterAsynchronously(Runnable run, long delay);
 
-	PermissionsHandler getPermissionsHandler();
+    BukkitTask runTaskTimerAsynchronously(Runnable run, long delay, long period);
 
-	AlternativeCommandsHandler getAlternativeCommandsHandler();
+    int scheduleSyncDelayedTask(Runnable run);
 
-	void showError(CommandSource sender, Throwable exception, String commandLabel);
+    int scheduleSyncDelayedTask(Runnable run, long delay);
 
-	IItemDb getItemDb();
+    int scheduleSyncRepeatingTask(Runnable run, long delay, long period);
 
-	UserMap getUserMap();
+    TNTExplodeListener getTNTListener();
 
-	Metrics getMetrics();
+    PermissionsHandler getPermissionsHandler();
 
-	void setMetrics(Metrics metrics);
+    AlternativeCommandsHandler getAlternativeCommandsHandler();
 
-	EssentialsTimer getTimer();
+    void showError(CommandSource sender, Throwable exception, String commandLabel);
 
-	List<String> getVanishedPlayers();
+    IItemDb getItemDb();
 
-	Collection<Player> getOnlinePlayers();
+    UserMap getUserMap();
 
-	Iterable<User> getOnlineUsers();
+    Metrics getMetrics();
+
+    void setMetrics(Metrics metrics);
+
+    EssentialsTimer getTimer();
+
+    List<String> getVanishedPlayers();
+
+    Collection<Player> getOnlinePlayers();
+
+    Iterable<User> getOnlineUsers();
 }

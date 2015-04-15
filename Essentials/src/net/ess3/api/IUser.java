@@ -1,8 +1,6 @@
 package net.ess3.api;
 
 
-
-public interface IUser extends com.earth2me.essentials.IUser
-{
+public interface IUser extends com.earth2me.essentials.IUser {
 
 }

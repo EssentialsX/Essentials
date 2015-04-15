@@ -6,22 +6,18 @@ import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import org.bukkit.Server;
 
 
-public class Commandsetxmpp extends EssentialsCommand
-{
-	public Commandsetxmpp()
-	{
-		super("setxmpp");
-	}
+public class Commandsetxmpp extends EssentialsCommand {
+    public Commandsetxmpp() {
+        super("setxmpp");
+    }
 
-	@Override
-	protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws NotEnoughArgumentsException
-	{
-		if (args.length < 1)
-		{
-			throw new NotEnoughArgumentsException();
-		}
+    @Override
+    protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws NotEnoughArgumentsException {
+        if (args.length < 1) {
+            throw new NotEnoughArgumentsException();
+        }
 
-		EssentialsXMPP.getInstance().setAddress(user.getBase(), args[0]);
-		user.sendMessage("XMPP address set to " + args[0]);
-	}
+        EssentialsXMPP.getInstance().setAddress(user.getBase(), args[0]);
+        user.sendMessage("XMPP address set to " + args[0]);
+    }
 }

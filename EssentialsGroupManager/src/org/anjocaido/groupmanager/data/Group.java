@@ -7,194 +7,187 @@ package org.anjocaido.groupmanager.data;
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.dataholder.WorldDataHolder;
 import org.anjocaido.groupmanager.events.GMGroupEvent.Action;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 /**
- * 
  * @author gabrielcouto/ElgarL
  */
 public class Group extends DataUnit implements Cloneable {
 
-	/**
-	 * The group it inherits DIRECTLY!
-	 */
-	private List<String> inherits = Collections.unmodifiableList(Collections.<String>emptyList());
-	/**
-	 * This one holds the fields in INFO node.
-	 * like prefix = 'c'
-	 * or build = false
-	 */
-	private GroupVariables variables = new GroupVariables(this);
+    /**
+     * The group it inherits DIRECTLY!
+     */
+    private List<String> inherits = Collections.unmodifiableList(Collections.<String>emptyList());
+    /**
+     * This one holds the fields in INFO node. like prefix = 'c' or build = false
+     */
+    private GroupVariables variables = new GroupVariables(this);
 
-	/**
-	 * Constructor for individual World Groups.
-	 * 
-	 * @param name
-	 */
-	public Group(WorldDataHolder source, String name) {
+    /**
+     * Constructor for individual World Groups.
+     *
+     * @param name
+     */
+    public Group(WorldDataHolder source, String name) {
 
-		super(source, name);
-	}
+        super(source, name);
+    }
 
-	/**
-	 * Constructor for Global Groups.
-	 * 
-	 * @param name
-	 */
-	public Group(String name) {
+    /**
+     * Constructor for Global Groups.
+     *
+     * @param name
+     */
+    public Group(String name) {
 
-		super(name);
-	}
-	
-	/**
-	 * @return the name
-	 */
-	public String getName() {
+        super(name);
+    }
 
-		return this.getUUID();
-	}
+    /**
+     * @return the name
+     */
+    public String getName() {
 
-	/**
-	 * Is this a GlobalGroup
-	 * 
-	 * @return true if this is a global group
-	 */
-	public boolean isGlobal() {
+        return this.getUUID();
+    }
 
-		return (getDataSource() == null);
-	}
+    /**
+     * Is this a GlobalGroup
+     *
+     * @return true if this is a global group
+     */
+    public boolean isGlobal() {
 
-	/**
-	 * Clone this group
-	 * 
-	 * @return a clone of this group
-	 */
-	@Override
-	public Group clone() {
+        return (getDataSource() == null);
+    }
 
-		Group clone;
+    /**
+     * Clone this group
+     *
+     * @return a clone of this group
+     */
+    @Override
+    public Group clone() {
 
-		if (isGlobal()) {
-			clone = new Group(this.getName());
-		} else {
-			clone = new Group(getDataSource(), this.getName());
-			clone.inherits = this.getInherits().isEmpty() ?
-					Collections.unmodifiableList(Collections.<String>emptyList())
-					: Collections.unmodifiableList(new ArrayList<String>(this.getInherits()));
-		}
+        Group clone;
 
-		for (String perm : this.getPermissionList()) {
-			clone.addPermission(perm);
-		}
-		clone.variables = ((GroupVariables) variables).clone(clone);
-		//clone.flagAsChanged();
-		return clone;
-	}
+        if (isGlobal()) {
+            clone = new Group(this.getName());
+        } else {
+            clone = new Group(getDataSource(), this.getName());
+            clone.inherits = this.getInherits().isEmpty() ? Collections.unmodifiableList(Collections.<String>emptyList()) : Collections.unmodifiableList(new ArrayList<String>(this.getInherits()));
+        }
 
-	/**
-	 * Use this to deliver a group from a different dataSource to another
-	 * 
-	 * @param dataSource
-	 * @return Null or Clone
-	 */
-	public Group clone(WorldDataHolder dataSource) {
+        for (String perm : this.getPermissionList()) {
+            clone.addPermission(perm);
+        }
+        clone.variables = ((GroupVariables) variables).clone(clone);
+        //clone.flagAsChanged();
+        return clone;
+    }
 
-		if (dataSource.groupExists(this.getName())) {
-			return null;
-		}
+    /**
+     * Use this to deliver a group from a different dataSource to another
+     *
+     * @param dataSource
+     *
+     * @return Null or Clone
+     */
+    public Group clone(WorldDataHolder dataSource) {
 
-		Group clone = dataSource.createGroup(this.getName());
+        if (dataSource.groupExists(this.getName())) {
+            return null;
+        }
 
-		// Don't add inheritance for GlobalGroups
-		if (!isGlobal()) {
-			clone.inherits = this.getInherits().isEmpty() ?
-					Collections.unmodifiableList(Collections.<String>emptyList())
-					: Collections.unmodifiableList(new ArrayList<String>(this.getInherits()));
-		}
-		for (String perm : this.getPermissionList()) {
-			clone.addPermission(perm);
-		}
-		clone.variables = variables.clone(clone);
-		clone.flagAsChanged(); //use this to make the new dataSource save the new group
-		return clone;
-	}
+        Group clone = dataSource.createGroup(this.getName());
 
-	/**
-	 * an unmodifiable list of inherits list
-	 * You can't manage the list by here
-	 * Lol... version 0.6 had a problem because this.
-	 * 
-	 * @return the inherits
-	 */
-	public List<String> getInherits() {
-		return inherits;
-	}
+        // Don't add inheritance for GlobalGroups
+        if (!isGlobal()) {
+            clone.inherits = this.getInherits().isEmpty() ? Collections.unmodifiableList(Collections.<String>emptyList()) : Collections.unmodifiableList(new ArrayList<String>(this.getInherits()));
+        }
+        for (String perm : this.getPermissionList()) {
+            clone.addPermission(perm);
+        }
+        clone.variables = variables.clone(clone);
+        clone.flagAsChanged(); //use this to make the new dataSource save the new group
+        return clone;
+    }
 
-	/**
-	 * @param inherit the inherits to set
-	 */
-	public void addInherits(Group inherit) {
+    /**
+     * an unmodifiable list of inherits list You can't manage the list by here Lol... version 0.6 had a problem because
+     * this.
+     *
+     * @return the inherits
+     */
+    public List<String> getInherits() {
+        return inherits;
+    }
 
-		if (!isGlobal()) {
-			if (!this.getDataSource().groupExists(inherit.getName())) {
-				getDataSource().addGroup(inherit);
-			}
-			if (!inherits.contains(inherit.getName().toLowerCase())) {
-				List<String> clone = new ArrayList<String>(inherits);
-				clone.add(inherit.getName().toLowerCase());
-				inherits = Collections.unmodifiableList(clone);
-			}
-			flagAsChanged();
-			if (GroupManager.isLoaded()) {
-				GroupManager.BukkitPermissions.updateAllPlayers();
-				GroupManager.getGMEventHandler().callEvent(this, Action.GROUP_INHERITANCE_CHANGED);
-			}
-		}
-	}
+    /**
+     * @param inherit the inherits to set
+     */
+    public void addInherits(Group inherit) {
 
-	public boolean removeInherits(String inherit) {
+        if (!isGlobal()) {
+            if (!this.getDataSource().groupExists(inherit.getName())) {
+                getDataSource().addGroup(inherit);
+            }
+            if (!inherits.contains(inherit.getName().toLowerCase())) {
+                List<String> clone = new ArrayList<String>(inherits);
+                clone.add(inherit.getName().toLowerCase());
+                inherits = Collections.unmodifiableList(clone);
+            }
+            flagAsChanged();
+            if (GroupManager.isLoaded()) {
+                GroupManager.BukkitPermissions.updateAllPlayers();
+                GroupManager.getGMEventHandler().callEvent(this, Action.GROUP_INHERITANCE_CHANGED);
+            }
+        }
+    }
 
-		if (!isGlobal()) {
-			if (this.inherits.contains(inherit.toLowerCase())) {
-				List<String> clone = new ArrayList<String>(inherits);
-				clone.remove(inherit.toLowerCase());
-				inherits = Collections.unmodifiableList(clone);
-				flagAsChanged();
-				GroupManager.getGMEventHandler().callEvent(this, Action.GROUP_INHERITANCE_CHANGED);
-				return true;
-			}
-		}
-		return false;
-	}
+    public boolean removeInherits(String inherit) {
 
-	/**
-	 * @return the variables
-	 */
-	public GroupVariables getVariables() {
+        if (!isGlobal()) {
+            if (this.inherits.contains(inherit.toLowerCase())) {
+                List<String> clone = new ArrayList<String>(inherits);
+                clone.remove(inherit.toLowerCase());
+                inherits = Collections.unmodifiableList(clone);
+                flagAsChanged();
+                GroupManager.getGMEventHandler().callEvent(this, Action.GROUP_INHERITANCE_CHANGED);
+                return true;
+            }
+        }
+        return false;
+    }
 
-		return variables;
-	}
+    /**
+     * @return the variables
+     */
+    public GroupVariables getVariables() {
 
-	/**
-	 * 
-	 * @param varList
-	 */
-	public void setVariables(Map<String, Object> varList) {
+        return variables;
+    }
 
-		if (!isGlobal()) {
-			GroupVariables temp = new GroupVariables(this, varList);
-			variables.clearVars();
-			for (String key : temp.getVarKeyList()) {
-				variables.addVar(key, temp.getVarObject(key));
-			}
-			flagAsChanged();
-			if (GroupManager.isLoaded()) {
-				GroupManager.BukkitPermissions.updateAllPlayers();
-				GroupManager.getGMEventHandler().callEvent(this, Action.GROUP_INFO_CHANGED);
-			}
-		}
-	}
+    /**
+     * @param varList
+     */
+    public void setVariables(Map<String, Object> varList) {
+
+        if (!isGlobal()) {
+            GroupVariables temp = new GroupVariables(this, varList);
+            variables.clearVars();
+            for (String key : temp.getVarKeyList()) {
+                variables.addVar(key, temp.getVarObject(key));
+            }
+            flagAsChanged();
+            if (GroupManager.isLoaded()) {
+                GroupManager.BukkitPermissions.updateAllPlayers();
+                GroupManager.getGMEventHandler().callEvent(this, Action.GROUP_INFO_CHANGED);
+            }
+        }
+    }
 }

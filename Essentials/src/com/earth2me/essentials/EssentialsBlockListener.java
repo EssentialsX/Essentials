@@ -1,7 +1,6 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.LocationUtil;
-import java.util.Locale;
 import net.ess3.api.IEssentials;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -14,58 +13,48 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Locale;
 
-public class EssentialsBlockListener implements Listener
-{
-	private final transient IEssentials ess;
 
-	public EssentialsBlockListener(final IEssentials ess)
-	{
-		this.ess = ess;
-	}
+public class EssentialsBlockListener implements Listener {
+    private final transient IEssentials ess;
 
-	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-	public void onBlockPlace(final BlockPlaceEvent event)
-	{
-		// Do not rely on getItemInHand();
-		// http://leaky.bukkit.org/issues/663
-		final ItemStack is = LocationUtil.convertBlockToItem(event.getBlockPlaced());
-		if (is == null)
-		{
-			return;
-		}
+    public EssentialsBlockListener(final IEssentials ess) {
+        this.ess = ess;
+    }
 
-		if (is.getType() == Material.MOB_SPAWNER && event.getItemInHand() != null && event.getPlayer() != null
-			&& event.getItemInHand().getType() == Material.MOB_SPAWNER)
-		{
-			final BlockState blockState = event.getBlockPlaced().getState();
-			if (blockState instanceof CreatureSpawner)
-			{
-				final CreatureSpawner spawner = (CreatureSpawner)blockState;
-				final EntityType type = EntityType.fromId(event.getItemInHand().getData().getData());
-				if (type != null && Mob.fromBukkitType(type) != null)
-				{
-					if (ess.getUser(event.getPlayer()).isAuthorized("essentials.spawnerconvert." + Mob.fromBukkitType(type).name().toLowerCase(Locale.ENGLISH)))
-					{
-						spawner.setSpawnedType(type);
-					}
-				}
-			}
-		}
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    public void onBlockPlace(final BlockPlaceEvent event) {
+        // Do not rely on getItemInHand();
+        // http://leaky.bukkit.org/issues/663
+        final ItemStack is = LocationUtil.convertBlockToItem(event.getBlockPlaced());
+        if (is == null) {
+            return;
+        }
 
-		final User user = ess.getUser(event.getPlayer());
-		if (user.hasUnlimited(is) && user.getBase().getGameMode() == GameMode.SURVIVAL)
-		{
-			class UnlimitedItemSpawnTask implements Runnable
-			{
-				@Override
-				public void run()
-				{
-					user.getBase().getInventory().addItem(is);
-					user.getBase().updateInventory();
-				}
-			}
-			ess.scheduleSyncDelayedTask(new UnlimitedItemSpawnTask());
-		}
-	}
+        if (is.getType() == Material.MOB_SPAWNER && event.getItemInHand() != null && event.getPlayer() != null && event.getItemInHand().getType() == Material.MOB_SPAWNER) {
+            final BlockState blockState = event.getBlockPlaced().getState();
+            if (blockState instanceof CreatureSpawner) {
+                final CreatureSpawner spawner = (CreatureSpawner) blockState;
+                final EntityType type = EntityType.fromId(event.getItemInHand().getData().getData());
+                if (type != null && Mob.fromBukkitType(type) != null) {
+                    if (ess.getUser(event.getPlayer()).isAuthorized("essentials.spawnerconvert." + Mob.fromBukkitType(type).name().toLowerCase(Locale.ENGLISH))) {
+                        spawner.setSpawnedType(type);
+                    }
+                }
+            }
+        }
+
+        final User user = ess.getUser(event.getPlayer());
+        if (user.hasUnlimited(is) && user.getBase().getGameMode() == GameMode.SURVIVAL) {
+            class UnlimitedItemSpawnTask implements Runnable {
+                @Override
+                public void run() {
+                    user.getBase().getInventory().addItem(is);
+                    user.getBase().updateInventory();
+                }
+            }
+            ess.scheduleSyncDelayedTask(new UnlimitedItemSpawnTask());
+        }
+    }
 }
