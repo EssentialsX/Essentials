@@ -40,17 +40,6 @@
         </repository>
     </repositories>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>essdev</id>
-            <url>http://repo.ess3.net/content/repositories/essdev</url>
-        </snapshotRepository>
-        <repository>
-            <id>essrel</id>
-            <url>http://repo.ess3.net/content/repositories/essrel</url>
-        </repository>
-    </distributionManagement>
-
     <modules>
         <module>Essentials</module>
         <module>EssentialsAntiBuild</module>
@@ -63,9 +52,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.8-R0.1-SNAPSHOT</version>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.8.3-R0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
