@@ -53,7 +53,12 @@ public enum Mob {
     MINECART_HOPPER("HopperMinecart", Enemies.NEUTRAL, EntityType.MINECART_HOPPER),
     MINECART_MOB_SPAWNER("SpawnerMinecart", Enemies.NEUTRAL, EntityType.MINECART_MOB_SPAWNER),
     ENDERCRYSTAL("EnderCrystal", Enemies.NEUTRAL, EntityType.ENDER_CRYSTAL),
-    EXPERIENCEORB("ExperienceOrb", Enemies.NEUTRAL, EntityType.EXPERIENCE_ORB);
+    EXPERIENCEORB("ExperienceOrb", Enemies.NEUTRAL, EntityType.EXPERIENCE_ORB),
+    ARMOR_STAND("ArmorStand", Enemies.NEUTRAL, EntityType.ARMOR_STAND),
+    ENDERMITE("Endermite", Enemies.ENEMY, EntityType.ENDERMITE),
+    GUARDIAN("Guradian", Enemies.ENEMY, EntityType.GUARDIAN),
+    RABBIT("Rabbit", Enemies.FRIENDLY, EntityType.RABBIT);
+
     public static final Logger logger = Logger.getLogger("Essentials");
 
     private Mob(String n, Enemies en, String s, EntityType type) {
