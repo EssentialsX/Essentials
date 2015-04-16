@@ -215,12 +215,27 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public List<Block> getLineOfSight(Set<Material> mat, int i) {
+        throw new UnsupportedOperationException(tl("notSupportedYet"));
+    }
+
+    @Override
     public Block getTargetBlock(HashSet<Byte> hs, int i) {
         throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
+    public Block getTargetBlock(Set<Material> mat, int i) {
+        throw new UnsupportedOperationException(tl("notSupportedYet"));
+    }
+
+    @Override
     public List<Block> getLastTwoTargetBlocks(HashSet<Byte> hs, int i) {
+        throw new UnsupportedOperationException(tl("notSupportedYet"));
+    }
+
+    @Override
+    public List<Block> getLastTwoTargetBlocks(Set<Material> mat, int i) {
         throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
@@ -1269,6 +1284,11 @@ public class OfflinePlayer implements Player {
     @Override
     public Player getPlayer() {
         return base.getPlayer();
+    }
+
+    @Override
+    public Spigot spigot() {
+        return base.getPlayer().spigot();
     }
 
     @Override

@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import java.util.HashSet;
 import java.util.logging.Level;
 
 
@@ -37,7 +38,7 @@ public class SignPlayerListener implements Listener {
         if (event.isCancelled() && event.getAction() == Action.RIGHT_CLICK_AIR) {
             Block targetBlock = null;
             try {
-                targetBlock = event.getPlayer().getTargetBlock(null, 5);
+                targetBlock = event.getPlayer().getTargetBlock((HashSet<Byte>) null, 5);
             } catch (IllegalStateException ex) {
                 if (ess.getSettings().isDebug()) {
                     ess.getLogger().log(Level.WARNING, ex.getMessage(), ex);

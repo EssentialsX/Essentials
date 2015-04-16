@@ -621,4 +621,19 @@ public class FakeWorld implements World {
     public boolean createExplosion(double d, double d1, double d2, float f, boolean bln, boolean bln1) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @Override
+    public WorldBorder getWorldBorder() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Spigot spigot() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public List<Entity> getNearbyEntities(Location loc, double x, double y, double z) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }
