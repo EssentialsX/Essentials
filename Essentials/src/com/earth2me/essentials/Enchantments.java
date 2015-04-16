@@ -148,6 +148,10 @@ public class Enchantments {
 
         ENCHANTMENTS.put("lure", Enchantment.LURE);
         ALIASENCHANTMENTS.put("rodlure", Enchantment.LURE);
+
+        ENCHANTMENTS.put("depthstrider", Enchantment.DEPTH_STRIDER);
+        ALIASENCHANTMENTS.put("depth", Enchantment.DEPTH_STRIDER);
+        ALIASENCHANTMENTS.put("strider", Enchantment.DEPTH_STRIDER);
     }
 
     public static Enchantment getByName(String name) {
