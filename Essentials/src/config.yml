@@ -86,6 +86,10 @@ spawnmob-limit: 10
 # Shall we notify users when using /lightning?
 warn-on-smite: true
 
+# Essentials Mail Notification
+# Should we notify players if they have no new mail?
+notify-no-new-mail: true
+
 # The motd and rules are now configured in the files motd.txt and rules.txt.
 
 # When a command conflicts with another plugin, by default, Essentials will try to force the OTHER plugin to take priority.

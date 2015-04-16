@@ -1056,6 +1056,11 @@ public class Settings implements net.ess3.api.ISettings {
         return isCustomQuitMessage;
     }
 
+    @Override
+    public boolean isNotifyNoNewMail() {
+        return config.getBoolean("notify-no-new-mail", true);
+    }
+
     // #easteregg
     @Override
     public int getMaxUserCacheCount() {
