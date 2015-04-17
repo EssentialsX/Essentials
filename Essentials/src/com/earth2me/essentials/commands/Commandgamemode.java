@@ -65,6 +65,11 @@ public class Commandgamemode extends EssentialsCommand {
             throw new NotEnoughArgumentsException(tl("gameModeInvalid"));
         }
 
+        if(sender.isPlayer() && canChangeToMode(sender.getPlayer(), gameMode)) {
+            sender.sendMessage(tl("cantGamemode", gameMode.name()));
+            return;
+        }
+
         boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).canInteractVanished();
         boolean foundUser = false;
         final List<Player> matchedPlayers = server.matchPlayer(name);
@@ -80,6 +85,11 @@ public class Commandgamemode extends EssentialsCommand {
         if (!foundUser) {
             throw new PlayerNotFoundException();
         }
+    }
+
+    // essentials.gamemode will let them change to any but essentials.gamemode.survival would only let them change to survival.
+    private boolean canChangeToMode(Player player, GameMode to) {
+        return player.hasPermission("essentials.gamemode") || player.hasPermission("essentials.gamemode." + to.name().toLowerCase());
     }
 
     private GameMode matchGameMode(String modeString) throws NotEnoughArgumentsException {
