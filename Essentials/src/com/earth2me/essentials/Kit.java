@@ -9,6 +9,7 @@ import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
@@ -131,7 +132,7 @@ public class Kit {
         delayTime.add(Calendar.MILLISECOND, (int) ((delay * 1000.0) % 1000.0));
 
         if (lastTime == 0L || lastTime > time.getTimeInMillis()) {
-            // If we have no record of kit use, or its corrupted, give them benifit of the doubt.
+            // If we have no record of kit use, or its corrupted, give them benefit of the doubt.
             return 0L;
         } else if (delay < 0d) {
             // If the kit has a negative kit time, it can only be used once.
@@ -185,6 +186,14 @@ public class Kit {
                     BigDecimal value = new BigDecimal(kitItem.substring(ess.getSettings().getCurrencySymbol().length()).trim());
                     Trade t = new Trade(value, ess);
                     t.pay(user, OverflowType.DROP);
+                    continue;
+                }
+
+                if(kitItem.startsWith("/")) {
+                    String command = kitItem.substring(1);
+                    String name = user.getName();
+                    command = command.replace("{player}", name);
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
                     continue;
                 }
 
