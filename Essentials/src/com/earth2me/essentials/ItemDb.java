@@ -320,6 +320,18 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
                 int rgb = leatherArmorMeta.getColor().asRGB();
                 sb.append("color:").append(rgb).append(" ");
                 break;
+            case BANNER:
+                BannerMeta bannerMeta = (BannerMeta) is.getItemMeta();
+                if (bannerMeta != null) {
+                    int basecolor = bannerMeta.getBaseColor().getColor().asRGB();
+                    sb.append("basecolor:").append(basecolor).append(" ");
+                    for (org.bukkit.block.banner.Pattern p : bannerMeta.getPatterns()) {
+                        String type = p.getPattern().getIdentifier();
+                        int color = p.getColor().getColor().asRGB();
+                        sb.append(type).append(",").append(color).append(" ");
+                    }
+                }
+                break;
         }
 
         return sb.toString().trim().replaceAll("§", "&");
