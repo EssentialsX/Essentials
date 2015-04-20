@@ -146,7 +146,12 @@ public class Kit {
         }
     }
 
+    @Deprecated
     public List<String> getItems(final User user) throws Exception {
+        return getItems();
+    }
+
+    public List<String> getItems() throws Exception {
         if (kit == null) {
             throw new Exception(tl("kitNotFound"));
         }

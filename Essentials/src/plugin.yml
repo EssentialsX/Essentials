@@ -342,6 +342,10 @@ commands:
     description: Set the sell value of an item.
     usage: /<command> [itemname|id] <price>
     aliases: [esetworth]
+  showkit:
+    description: Show contents of a kit.
+    usage: /<command> <kitname>
+    aliases: [kitpreview,preview,kitshow]
   skull:
     description: Set the owner of a player skull
     usage: /<command> [owner]
