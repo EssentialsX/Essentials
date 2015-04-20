@@ -29,13 +29,10 @@ Commits should fall into one of 3 areas:
 - Commits which fix bugs caused by previous commits (since last release), or otherwise make no functionality changes, should have no prefix.  These will not be added to the project change log.
 
 
-Other advice
+Other Info
 -----------------
 
-Not all features are 'EssentialsX Ready'.  EssentialsX is designed to cover the basic needs of Minecraft server administration, thus, we reject over 80% of feature requests that we deem are unsuitable.
-
-Before developing an EssentialsX feature, we would recommend speaking to a developer in the EssentialsX IRC channel ([#drtshock on irc.esper.net](http://webchat.esper.net/?channels=drtshock&prompt=1)). Click [here](irc://irc.esper.net/#drtshock) if you have a IRC client.
-
+This is an unofficial fork of Essentials. It will be consistently updated and maintained with the latest Minecraft and Spigot versions.
 
 Support
 -----------------
