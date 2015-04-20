@@ -1,15 +1,11 @@
-Essentials Development Readme
+EssentialsX Development Readme
 =============================
 
-The official repository is at:
-https://github.com/essentials/Essentials
+This is a fork of Essentials called EssentialsX.
 
-We use NetBeans 7.3 for development.
+If you are using this, do **NOT** ask Essentials for support.
 
-Recommended NetBeans plugins:
-
-* Git
-* PMD & FindBugs ( http://kenai.com/projects/sqe/pages/Home )
+The official upstream repository is at https://github.com/Essentials/Essentials
 
 Building
 --------
@@ -32,25 +28,17 @@ Commits should fall into one of 3 areas:
 
 - Commits which fix bugs caused by previous commits (since last release), or otherwise make no functionality changes, should have no prefix.  These will not be added to the project change log.
 
-Coding Guidelines
------------------
-
-
-Please follow the format guidelines that are saved in the project properties.
-
-Windows users, please read this: http://help.github.com/line-endings/
-The default line ending is **LF**.
-
-To build all jars, select the EssentialsParent project and build that. You'll find all jars inside the jars folder.
-
-Please only submit pull requests for the 2.x branch.
-
-Bugs and issues can be submitted/found at https://essentials3.atlassian.net/
-
 
 Other advice
 -----------------
 
-Not all features are 'Essentials Ready'.  Essentials is designed to cover the basic needs of Minecraft server administration, thus, we reject over 80% of feature requests that we deem are unsuitable.
+Not all features are 'EssentialsX Ready'.  EssentialsX is designed to cover the basic needs of Minecraft server administration, thus, we reject over 80% of feature requests that we deem are unsuitable.
 
-Before developing an Essentials feature, we would recommend speaking to a developer in the Essentials IRC channel ([#essentials on irc.esper.net](http://tiny.cc/EssentialsChat)). Click [here](irc://irc.esper.net/#essentials) if you have a IRC client.
+Before developing an EssentialsX feature, we would recommend speaking to a developer in the EssentialsX IRC channel ([#drtshock on irc.esper.net](http://webchat.esper.net/?channels=drtshock&prompt=1)). Click [here](irc://irc.esper.net/#drtshock) if you have a IRC client.
+
+
+Support
+-----------------
+[Issue Tracker](https://github.com/drtshock/Essentials/issues)
+
+[Live Support](http://webchat.esper.net/?channels=drtshock&prompt=1) available business hours (GMT -5)
