@@ -439,6 +439,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 return true;
             } catch (Exception ex) {
                 showError(sender, ex, commandLabel);
+                if(settings.isDebug()) {
+                    ex.printStackTrace();
+                }
                 return true;
             }
         } catch (Throwable ex) {
