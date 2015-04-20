@@ -4,8 +4,14 @@ import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.*;
+import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionEffect;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -197,6 +203,126 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
             }
         }
         return name;
+    }
+
+    @Override
+    public String serialize(ItemStack is) {
+        String mat = is.getType().name();
+        if (is.getData().getData() != 0) {
+            mat = mat + ":" + is.getData().getData();
+        }
+        int quantity = is.getAmount();
+        StringBuilder sb = new StringBuilder(); // Add space AFTER you add something. We can trim at end.
+        sb.append(mat).append(" ").append(quantity).append(" ");
+
+        // ItemMeta applies to anything.
+        if (is.hasItemMeta()) {
+            ItemMeta meta = is.getItemMeta();
+            if (meta.hasDisplayName()) {
+                sb.append("name:").append(meta.getDisplayName().replaceAll(" ", "_")).append(" ");
+            }
+
+            if (meta.hasLore()) {
+                sb.append("lore:");
+                boolean first = true;
+                for (String s : meta.getLore()) {
+                    // Add | before the line if it's not the first one. Easy but weird way
+                    // to do this since we need each line separated by |
+                    if (!first) {
+                        sb.append("|");
+                    }
+                    first = false;
+                    sb.append(s.replaceAll(" ", "_"));
+                }
+                sb.append(" ");
+            }
+
+            if (meta.hasEnchants()) {
+                for (Enchantment e : meta.getEnchants().keySet()) {
+                    sb.append(e.getName().toLowerCase()).append(":").append(meta.getEnchantLevel(e)).append(" ");
+                }
+            }
+        }
+
+        switch (is.getType()) {
+            case WRITTEN_BOOK:
+                // Everything from http://wiki.ess3.net/wiki/Item_Meta#Books in that order.
+                // Interesting as I didn't see a way to do pages or chapters.
+                BookMeta bookMeta = (BookMeta) is.getItemMeta();
+                if (bookMeta.hasTitle()) {
+                    sb.append("title:").append(bookMeta.getTitle()).append(" ");
+                }
+                if (bookMeta.hasAuthor()) {
+                    sb.append("author:").append(bookMeta.getAuthor()).append(" ");
+                }
+                // Only other thing it could have is lore but that's done up there ^^^
+                break;
+            case ENCHANTED_BOOK:
+                EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) is.getItemMeta();
+                for (Enchantment e : enchantmentStorageMeta.getStoredEnchants().keySet()) {
+                    sb.append(e.getName().toLowerCase()).append(":").append(enchantmentStorageMeta.getStoredEnchantLevel(e)).append(" ");
+                }
+                break;
+            case FIREWORK:
+                // Everything from http://wiki.ess3.net/wiki/Item_Meta#Fireworks in that order.
+                FireworkMeta fireworkMeta = (FireworkMeta) is.getItemMeta();
+                if (fireworkMeta.hasEffects()) {
+                    for (FireworkEffect effect : fireworkMeta.getEffects()) {
+                        if (effect.getColors() != null && !effect.getColors().isEmpty()) {
+                            sb.append("color:");
+                            boolean first = true;
+                            for (Color c : effect.getColors()) {
+                                if (!first) {
+                                    sb.append(","); // same thing as above.
+                                }
+                                sb.append(c.toString());
+                                first = false;
+                            }
+                            sb.append(" ");
+                        }
+
+                        sb.append("shape: ").append(effect.getType().name()).append(" ");
+                        if (effect.getFadeColors() != null && !effect.getFadeColors().isEmpty()) {
+                            sb.append("fade:");
+                            boolean first = true;
+                            for (Color c : effect.getFadeColors()) {
+                                if (!first) {
+                                    sb.append(","); // same thing as above.
+                                }
+                                sb.append(c.toString());
+                                first = false;
+                            }
+                            sb.append(" ");
+                        }
+                    }
+                    sb.append("power: ").append(fireworkMeta.getPower()).append(" ");
+                }
+                break;
+            case POTION:
+                Potion potion = Potion.fromItemStack(is);
+                for (PotionEffect e : potion.getEffects()) {
+                    // long but needs to be effect:speed power:2 duration:120 in that order.
+                    sb.append("effect:").append(e.getType().getName().toLowerCase()).append(" ").append("power:").append(e.getAmplifier()).append(" ").append("duration:").append(e.getDuration() / 20).append(" ");
+                }
+                break;
+            case SKULL_ITEM:
+                // item stack with meta
+                SkullMeta skullMeta = (SkullMeta) is.getItemMeta();
+                if (skullMeta != null && skullMeta.hasOwner()) {
+                    sb.append("player:").append(skullMeta.getOwner()).append(" ");
+                }
+                break;
+            case LEATHER_HELMET:
+            case LEATHER_CHESTPLATE:
+            case LEATHER_LEGGINGS:
+            case LEATHER_BOOTS:
+                LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) is.getItemMeta();
+                int rgb = leatherArmorMeta.getColor().asRGB();
+                sb.append("color:").append(rgb).append(" ");
+                break;
+        }
+
+        return sb.toString().trim().replaceAll("§", "&");
     }
 
 

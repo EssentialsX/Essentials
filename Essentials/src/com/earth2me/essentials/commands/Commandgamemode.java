@@ -65,7 +65,7 @@ public class Commandgamemode extends EssentialsCommand {
             throw new NotEnoughArgumentsException(tl("gameModeInvalid"));
         }
 
-        if(sender.isPlayer() && canChangeToMode(sender.getPlayer(), gameMode)) {
+        if (sender.isPlayer() && canChangeToMode(sender.getPlayer(), gameMode)) {
             sender.sendMessage(tl("cantGamemode", gameMode.name()));
             return;
         }

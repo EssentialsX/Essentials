@@ -381,7 +381,7 @@ public class EssentialsConf extends YamlConfiguration {
         }
         return stack;
         /*
-		 * ,
+         * ,
 		 * (byte)getInt(path + ".data", 0)
 		 */
     }

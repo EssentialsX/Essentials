@@ -189,7 +189,7 @@ public class Kit {
                     continue;
                 }
 
-                if(kitItem.startsWith("/")) {
+                if (kitItem.startsWith("/")) {
                     String command = kitItem.substring(1);
                     String name = user.getName();
                     command = command.replace("{player}", name);

@@ -52,6 +52,8 @@ public interface ISettings extends IConf {
 
     ConfigurationSection getKits();
 
+    void addKit(String name, List<String> lines, long delay);
+
     String getLocale();
 
     String getNewbieSpawn();

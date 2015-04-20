@@ -1,7 +1,6 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.StringUtil;
-import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;

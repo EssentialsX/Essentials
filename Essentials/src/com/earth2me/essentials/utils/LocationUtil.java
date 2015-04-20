@@ -170,11 +170,11 @@ public class LocationUtil {
             }
         }
         Collections.sort(pos, new Comparator<Vector3D>() {
-                    @Override
-                    public int compare(Vector3D a, Vector3D b) {
-                        return (a.x * a.x + a.y * a.y + a.z * a.z) - (b.x * b.x + b.y * b.y + b.z * b.z);
-                    }
-                });
+            @Override
+            public int compare(Vector3D a, Vector3D b) {
+                return (a.x * a.x + a.y * a.y + a.z * a.z) - (b.x * b.x + b.y * b.y + b.z * b.z);
+            }
+        });
         VOLUME = pos.toArray(new Vector3D[0]);
     }
 

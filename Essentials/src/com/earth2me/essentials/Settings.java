@@ -308,6 +308,15 @@ public class Settings implements net.ess3.api.ISettings {
         return null;
     }
 
+    @Override
+    public void addKit(String name, List<String> lines, long delay) {
+        // Will overwrite but w/e
+        config.set("kits." + name + ".delay", delay);
+        config.set("kits." + name + ".items", lines);
+        kits = _getKits();
+        config.save();
+    }
+
     private ChatColor operatorColor = null;
 
     @Override

@@ -71,6 +71,10 @@ commands:
     description: Describes your current bearing.
     usage: /<command>
     aliases: [ecompass,direction,edirection]
+  createkit:
+    description: Create a kit in game!
+    usage: /<command> <kitname> <delay>
+    aliases: [kitcreate,createk,kc,ck]
   customtext:
     description: Allows you to create custom text commands.
     usage: /<alias> - Define in bukkit.yml
@@ -132,8 +136,8 @@ commands:
     aliases: [efirework]
   gamemode:
     description: Change player gamemode.
-    usage: /<command> <survival|creative|adventure> [player]
-    aliases: [adventure,eadventure,adventuremode,eadventuremode,creative,eecreative,creativemode,ecreativemode,egamemode,gm,egm,gma,egma,gmc,egmc,gms,egms,gmt,egmt,survival,esurvival,survivalmode,esurvivalmode,gmsp,sp,egmsp,spec]
+    usage: /<command> <survival|creative|adventure|spectator> [player]
+    aliases: [adventure,eadventure,adventuremode,eadventuremode,creative,eecreative,creativemode,ecreativemode,egamemode,gm,egm,gma,egma,gmc,egmc,gms,egms,gmt,egmt,survival,esurvival,survivalmode,esurvivalmode,gmsp,sp,egmsp,spec,spectator]
   gc:
     description: Reports memory, uptime and tick info.
     usage: /<command> [all]
