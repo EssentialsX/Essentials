@@ -24,14 +24,10 @@ public abstract class EssentialsChatPlayer implements Listener {
         this.chatStorage = chatStorage;
     }
 
-    public void onPlayerChat(final AsyncPlayerChatEvent event) {
-    }
+    public abstract void onPlayerChat(final AsyncPlayerChatEvent event);
 
     public boolean isAborted(final AsyncPlayerChatEvent event) {
-        if (event.isCancelled()) {
-            return true;
-        }
-        return false;
+        return event.isCancelled();
     }
 
     public String getChatType(final String message) {

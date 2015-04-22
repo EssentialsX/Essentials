@@ -48,17 +48,12 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer {
             permission.append("essentials.chat.").append(chatStore.getType());
 
             if (user.isAuthorized(permission.toString())) {
-                final StringBuilder format = new StringBuilder();
-                format.append(chatStore.getType()).append("Format");
                 event.setMessage(event.getMessage().substring(1));
-                event.setFormat(tl(format.toString(), event.getFormat()));
+                event.setFormat(tl(chatStore.getType() + "Format", event.getFormat()));
                 return;
             }
 
-            final StringBuilder errorMsg = new StringBuilder();
-            errorMsg.append("notAllowedTo").append(chatStore.getType().substring(0, 1).toUpperCase(Locale.ENGLISH)).append(chatStore.getType().substring(1));
-
-            user.sendMessage(tl(errorMsg.toString()));
+            user.sendMessage(tl("notAllowedTo" + chatStore.getType().substring(0, 1).toUpperCase(Locale.ENGLISH) + chatStore.getType().substring(1)));
             event.setCancelled(true);
             return;
         }
@@ -66,7 +61,7 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer {
         final Location loc = user.getLocation();
         final World world = loc.getWorld();
 
-        if (charge(event, chatStore) == false) {
+        if (!charge(event, chatStore)) {
             return;
         }
 
