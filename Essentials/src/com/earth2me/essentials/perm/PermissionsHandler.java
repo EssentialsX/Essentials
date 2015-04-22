@@ -39,7 +39,7 @@ public class PermissionsHandler implements IPermissionsHandler {
         if (group == null) {
             group = defaultGroup;
         }
-        checkPermLag(start);
+        checkPermLag(start, String.format("Getting group for %s", base.getName()));
         return group;
     }
 
@@ -50,7 +50,7 @@ public class PermissionsHandler implements IPermissionsHandler {
         if (groups == null || groups.isEmpty()) {
             groups = Collections.singletonList(defaultGroup);
         }
-        checkPermLag(start);
+        checkPermLag(start, String.format("Getting groups for %s", base.getName()));
         return Collections.unmodifiableList(groups);
     }
 
@@ -63,7 +63,7 @@ public class PermissionsHandler implements IPermissionsHandler {
     public boolean inGroup(final Player base, final String group) {
         final long start = System.nanoTime();
         final boolean result = handler.inGroup(base, group);
-        checkPermLag(start);
+        checkPermLag(start, String.format("Checking if %s is in group %s", base.getName(), group));
         return result;
     }
 
@@ -79,7 +79,7 @@ public class PermissionsHandler implements IPermissionsHandler {
         if (prefix == null) {
             prefix = "";
         }
-        checkPermLag(start);
+        checkPermLag(start, String.format("Getting prefix for %s", base.getName()));
         return prefix;
     }
 
@@ -90,7 +90,7 @@ public class PermissionsHandler implements IPermissionsHandler {
         if (suffix == null) {
             suffix = "";
         }
-        checkPermLag(start);
+        checkPermLag(start, String.format("Getting suffix for %s", base.getName()));
         return suffix;
     }
 
@@ -194,10 +194,14 @@ public class PermissionsHandler implements IPermissionsHandler {
         return handler.getClass().getSimpleName().replace("Handler", "");
     }
 
-    private void checkPermLag(long start) {
+    private void checkPermLag(long start, String summary) {
         final long elapsed = System.nanoTime() - start;
         if (elapsed > ess.getSettings().getPermissionsLagWarning()) {
-            ess.getLogger().log(Level.INFO, "Lag Notice - Slow Permissions System (" + getName() + ") Response - Request took over {0}ms!", elapsed / 1000000.0);
+            ess.getLogger().log(Level.WARNING, String.format("Permissions lag notice with (%s). Response took %fms. Summary: %s", getName(), elapsed / 1000000.0, summary));
         }
+    }
+
+    private void checkPermLag(long start) {
+        checkPermLag(start, "not defined");
     }
 }
