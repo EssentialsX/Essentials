@@ -97,6 +97,18 @@ public class PermissionsHandler implements IPermissionsHandler {
     public void checkPermissions() {
         final PluginManager pluginManager = ess.getServer().getPluginManager();
 
+        final Plugin vaultAPI = pluginManager.getPlugin("Vault");
+        if (vaultAPI != null && vaultAPI.isEnabled()) {
+            if (!(handler instanceof VaultHandler)) {
+                VaultHandler vault = new VaultHandler(ess);
+                if (vault.setupPermissions()) {
+                    LOGGER.log(Level.INFO, "Essentials: Using Vault based permissions.");
+                    handler = vault;
+                    return;
+                }
+            }
+        }
+
         final Plugin permExPlugin = pluginManager.getPlugin("PermissionsEx");
         if (permExPlugin != null && permExPlugin.isEnabled()) {
             if (!(handler instanceof PermissionsExHandler)) {

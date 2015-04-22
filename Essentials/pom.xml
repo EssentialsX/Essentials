@@ -129,7 +129,7 @@
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>Vault</artifactId>
-            <version>1.2.32</version>
+            <version>1.5.4</version>
         </dependency>
         <dependency>
             <groupId>zPermissions</groupId>
@@ -139,4 +139,10 @@
             <systemPath>${project.basedir}/../lib/zPermissions.jar</systemPath>
         </dependency>
     </dependencies>
+    <repositories>
+        <repository>
+            <id>vault-repo</id>
+            <url>http://nexus.theyeticave.net/content/repositories/pub_releases</url>
+        </repository>
+    </repositories>
 </project>
