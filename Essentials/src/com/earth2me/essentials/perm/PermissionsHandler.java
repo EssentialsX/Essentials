@@ -104,9 +104,9 @@ public class PermissionsHandler implements IPermissionsHandler {
                 if (vault.setupPermissions()) {
                     LOGGER.log(Level.INFO, "Essentials: Using Vault based permissions.");
                     handler = vault;
-                    return;
                 }
             }
+            return;
         }
 
         final Plugin permExPlugin = pluginManager.getPlugin("PermissionsEx");
