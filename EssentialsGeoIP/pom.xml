@@ -9,7 +9,7 @@
         <version>2.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>EssentialsGeoIP</artifactId>
+    <artifactId>EssentialsXGeoIP</artifactId>
 
     <url>http://ess3.net/</url>
 

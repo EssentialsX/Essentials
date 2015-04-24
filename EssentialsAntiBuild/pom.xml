@@ -9,7 +9,7 @@
         <version>2.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>EssentialsAntiBuild</artifactId>
+    <artifactId>EssentialsXAntiBuild</artifactId>
 
     <url>http://ess3.net/</url>
 

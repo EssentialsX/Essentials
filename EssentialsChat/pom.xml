@@ -9,7 +9,7 @@
         <version>2.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>EssentialsChat</artifactId>
+    <artifactId>EssentialsXChat</artifactId>
 
     <url>http://ess3.net/</url>
 
