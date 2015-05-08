@@ -240,7 +240,8 @@ public class EssentialsPlayerListener implements Listener {
                 } else if (message == null) {
                     //NOOP
                 } else if (ess.getSettings().isCustomJoinMessage()) {
-                    ess.getServer().broadcastMessage(ess.getSettings().getCustomJoinMessage().replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName()));
+                    String msg = ess.getSettings().getCustomJoinMessage().replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName()).replace("{UNIQUE}", String.valueOf(ess.getUserMap().getUniqueUsers()));
+                    ess.getServer().broadcastMessage(msg);
                 } else if (ess.getSettings().allowSilentJoinQuit()) {
                     ess.getServer().broadcastMessage(message);
                 }
