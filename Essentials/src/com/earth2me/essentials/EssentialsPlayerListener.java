@@ -356,6 +356,12 @@ public class EssentialsPlayerListener implements Listener {
     public void onPlayerCommandPreprocess(final PlayerCommandPreprocessEvent event) {
         final Player player = event.getPlayer();
         final String cmd = event.getMessage().toLowerCase(Locale.ENGLISH).split(" ")[0].replace("/", "").toLowerCase(Locale.ENGLISH);
+        if (ess.getUser(player).isMuted() && (ess.getSettings().getMuteCommands().contains(cmd) || ess.getSettings().getMuteCommands().contains("*"))) {
+            event.setCancelled(true);
+            player.sendMessage(tl("voiceSilenced"));
+            LOGGER.info(tl("mutedUserSpeaks", player.getName()));
+            return;
+        }
         if (ess.getSettings().getSocialSpyCommands().contains(cmd) || ess.getSettings().getSocialSpyCommands().contains("*")) {
             for (User spyer : ess.getOnlineUsers()) {
                 if (spyer.isSocialSpyEnabled() && !player.equals(spyer.getBase())) {

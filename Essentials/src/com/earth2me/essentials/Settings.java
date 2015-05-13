@@ -254,6 +254,24 @@ public class Settings implements net.ess3.api.ISettings {
         return socialSpyCommands;
     }
 
+    private Set<String> muteCommands = new HashSet<String>();
+
+    private Set<String> _getMuteCommands() {
+        Set<String> muteCommands = new HashSet<String>();
+        if(config.isList("mute-commands")) {
+            for(String s : config.getStringList("mute-commands")) {
+                muteCommands.add(s.toLowerCase(Locale.ENGLISH));
+            }
+        }
+
+        return muteCommands;
+    }
+
+    @Override
+    public Set<String> getMuteCommands() {
+        return muteCommands;
+    }
+
     private String nicknamePrefix = "~";
 
     private String _getNicknamePrefix() {
@@ -489,6 +507,7 @@ public class Settings implements net.ess3.api.ISettings {
         isCustomJoinMessage = !customJoinMessage.equals("none");
         customQuitMessage = _getCustomQuitMessage();
         isCustomQuitMessage = !customQuitMessage.equals("none");
+        muteCommands = _getMuteCommands();
     }
 
     private List<Integer> itemSpawnBl = new ArrayList<Integer>();

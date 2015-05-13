@@ -48,6 +48,8 @@ public interface ISettings extends IConf {
 
     Set<String> getSocialSpyCommands();
 
+    Set<String> getMuteCommands();
+
     Map<String, Object> getKit(String name);
 
     ConfigurationSection getKits();

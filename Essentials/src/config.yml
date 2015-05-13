@@ -138,6 +138,16 @@ socialspy-commands:
   - ewhisper
   - pm
 
+# Mute Commands
+# These commands will be disabled when a player is muted.
+# Use '*' to disable every command.
+# Essentials already disabled Essentials messaging commands by default.
+# It only cars about the root command, not args after that (it sees /f chat the same as /f)
+mute-commands:
+  - f
+  - kittycannon
+ # - '*'
+
 # If you do not wish to use a permission system, you can define a list of 'player perms' below.
 # This list has no effect if you are using a supported permissions system.
 # If you are using an unsupported permissions system, simply delete this section.
