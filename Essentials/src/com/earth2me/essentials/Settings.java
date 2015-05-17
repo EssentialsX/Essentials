@@ -85,6 +85,11 @@ public class Settings implements net.ess3.api.ISettings {
         return chatRadius;
     }
 
+    @Override
+    public int getNearRadius() {
+        return config.getInt("near-radius", 200);
+    }
+
     // #easteregg
     private char chatShout = '!';
 
@@ -258,8 +263,8 @@ public class Settings implements net.ess3.api.ISettings {
 
     private Set<String> _getMuteCommands() {
         Set<String> muteCommands = new HashSet<String>();
-        if(config.isList("mute-commands")) {
-            for(String s : config.getStringList("mute-commands")) {
+        if (config.isList("mute-commands")) {
+            for (String s : config.getStringList("mute-commands")) {
                 muteCommands.add(s.toLowerCase(Locale.ENGLISH));
             }
         }

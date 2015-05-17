@@ -59,6 +59,11 @@ teleport-invulnerability: 4
 # The delay, in seconds, required between /heal or /feed attempts.
 heal-cooldown: 60
 
+# Near Radius
+# The default radius with /near
+# Used to use chat radius but we are going to make it separate.
+near-radius: 200
+
 # What to prevent from /item and /give.
 # e.g item-spawn-blacklist: 10,11,46
 item-spawn-blacklist:

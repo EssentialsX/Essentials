@@ -16,7 +16,7 @@ public class Commandnear extends EssentialsCommand {
 
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        long maxRadius = ess.getSettings().getChatRadius();
+        long maxRadius = ess.getSettings().getNearRadius();
 
         if (maxRadius == 0) {
             maxRadius = 200;

@@ -30,6 +30,8 @@ public interface ISettings extends IConf {
 
     int getChatRadius();
 
+    int getNearRadius();
+
     char getChatShout();
 
     char getChatQuestion();
