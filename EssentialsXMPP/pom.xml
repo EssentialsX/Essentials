@@ -44,7 +44,7 @@
     <dependencies>
         <dependency>
             <groupId>net.ess3</groupId>
-            <artifactId>Essentials</artifactId>
+            <artifactId>EssentialsX</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

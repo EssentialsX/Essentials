@@ -115,37 +115,37 @@
                     <artifactItems>
                         <artifactItem>
                             <groupId>${project.groupId}</groupId>
-                            <artifactId>Essentials</artifactId>
+                            <artifactId>EssentialsX</artifactId>
                             <version>${project.version}</version>
                         </artifactItem>
                         <artifactItem>
                             <groupId>${project.groupId}</groupId>
-                            <artifactId>EssentialsAntiBuild</artifactId>
+                            <artifactId>EssentialsXAntiBuild</artifactId>
                             <version>${project.version}</version>
                         </artifactItem>
                         <artifactItem>
                             <groupId>${project.groupId}</groupId>
-                            <artifactId>EssentialsChat</artifactId>
+                            <artifactId>EssentialsXChat</artifactId>
                             <version>${project.version}</version>
                         </artifactItem>
                         <artifactItem>
                             <groupId>${project.groupId}</groupId>
-                            <artifactId>EssentialsGeoIP</artifactId>
+                            <artifactId>EssentialsXGeoIP</artifactId>
                             <version>${project.version}</version>
                         </artifactItem>
                         <artifactItem>
                             <groupId>${project.groupId}</groupId>
-                            <artifactId>EssentialsProtect</artifactId>
+                            <artifactId>EssentialsXProtect</artifactId>
                             <version>${project.version}</version>
                         </artifactItem>
                         <artifactItem>
                             <groupId>${project.groupId}</groupId>
-                            <artifactId>EssentialsSpawn</artifactId>
+                            <artifactId>EssentialsXSpawn</artifactId>
                             <version>${project.version}</version>
                         </artifactItem>
                         <artifactItem>
                             <groupId>${project.groupId}</groupId>
-                            <artifactId>EssentialsXMPP</artifactId>
+                            <artifactId>EssentialsXXMPP</artifactId>
                             <version>${project.version}</version>
                         </artifactItem>
                     </artifactItems>
