@@ -92,6 +92,8 @@ public interface ISettings extends IConf {
 
     boolean isTeleportSafetyEnabled();
 
+    boolean isForceDisableTeleportSafety();
+
     double getTeleportCooldown();
 
     double getTeleportDelay();

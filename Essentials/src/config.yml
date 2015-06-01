@@ -46,6 +46,10 @@ change-displayname: true
 # If this is set to false, attempted teleports to unsafe locations will be cancelled with a warning.
 teleport-safety: true
 
+# This forcefully disables teleport safety checks without a warning if attempting to teleport to unsafe locations.
+# teleport-safety and this option need to be set to true to force teleportation to dangerous locations.
+force-disable-teleport-safety: false
+
 # The delay, in seconds, required between /home, /tp, etc.
 teleport-cooldown: 0
 
