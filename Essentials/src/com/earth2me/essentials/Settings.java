@@ -128,7 +128,7 @@ public class Settings implements net.ess3.api.ISettings {
     private boolean forceDisableTeleportSafety;
 
     private boolean _isForceDisableTeleportSafety() {
-        return config.getBoolean("force-disable-teleport-safety");
+        return config.getBoolean("force-disable-teleport-safety", false);
     }
 
     @Override
