@@ -95,7 +95,11 @@ public class Teleport implements net.ess3.api.ITeleport {
                 if (teleportee.getBase().isInsideVehicle()) {
                     teleportee.getBase().leaveVehicle();
                 }
-                teleportee.getBase().teleport(LocationUtil.getSafeDestination(teleportee, loc), cause);
+                if (ess.getSettings().isForceDisableTeleportSafety()) {
+                    teleportee.getBase().teleport(loc, cause);
+                } else {
+                    teleportee.getBase().teleport(LocationUtil.getSafeDestination(teleportee, loc), cause);
+                }
             } else {
                 throw new Exception(tl("unsafeTeleportDestination", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
             }
@@ -103,7 +107,11 @@ public class Teleport implements net.ess3.api.ITeleport {
             if (teleportee.getBase().isInsideVehicle()) {
                 teleportee.getBase().leaveVehicle();
             }
-            teleportee.getBase().teleport(LocationUtil.getRoundedDestination(loc), cause);
+            if (ess.getSettings().isForceDisableTeleportSafety()) {
+                teleportee.getBase().teleport(loc, cause);
+            } else {
+                teleportee.getBase().teleport(LocationUtil.getRoundedDestination(loc), cause);
+            }
         }
     }
 

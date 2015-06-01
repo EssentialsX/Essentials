@@ -125,6 +125,17 @@ public class Settings implements net.ess3.api.ISettings {
         return teleportSafety;
     }
 
+    private boolean forceDisableTeleportSafety;
+
+    private boolean _isForceDisableTeleportSafety() {
+        return config.getBoolean("force-disable-teleport-safety");
+    }
+
+    @Override
+    public boolean isForceDisableTeleportSafety() {
+        return forceDisableTeleportSafety;
+    }
+
     @Override
     public double getTeleportDelay() {
         return config.getDouble("teleport-delay", 0);
@@ -471,6 +482,7 @@ public class Settings implements net.ess3.api.ISettings {
         noGodWorlds = new HashSet<String>(config.getStringList("no-god-in-worlds"));
         enabledSigns = _getEnabledSigns();
         teleportSafety = _isTeleportSafetyEnabled();
+        forceDisableTeleportSafety = _isForceDisableTeleportSafety();
         teleportInvulnerabilityTime = _getTeleportInvulnerability();
         teleportInvulnerability = _isTeleportInvulnerability();
         disableItemPickupWhileAfk = _getDisableItemPickupWhileAfk();
