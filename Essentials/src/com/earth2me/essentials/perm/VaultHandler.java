@@ -19,9 +19,10 @@ public class VaultHandler extends SuperpermsHandler {
         this.plugin = plugin;
     }
 
-    public boolean setupPermissions() {
+    public boolean setupProviders() {
         try {
             Class.forName("net.milkbowl.vault.permission.Permission");
+            Class.forName("net.milkbowl.vault.chat.Chat");
         } catch (ClassNotFoundException e) {
             return false;
         }

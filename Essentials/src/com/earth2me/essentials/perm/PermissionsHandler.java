@@ -101,7 +101,7 @@ public class PermissionsHandler implements IPermissionsHandler {
         if (vaultAPI != null && vaultAPI.isEnabled()) {
             if (!(handler instanceof VaultHandler)) {
                 VaultHandler vault = new VaultHandler(ess);
-                if (vault.setupPermissions()) {
+                if (vault.setupProviders()) {
                     LOGGER.log(Level.INFO, "Essentials: Using Vault based permissions.");
                     handler = vault;
                 }
