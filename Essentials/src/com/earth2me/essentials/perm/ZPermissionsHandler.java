@@ -11,6 +11,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 
 public class ZPermissionsHandler extends SuperpermsHandler implements Listener {
@@ -38,7 +39,7 @@ public class ZPermissionsHandler extends SuperpermsHandler implements Listener {
         if (!isReady()) {
             return super.getGroup(base);
         } else {
-            return getPrimaryGroup(base.getName());
+            return getPrimaryGroup(base.getUniqueId());
         }
     }
 
@@ -47,7 +48,7 @@ public class ZPermissionsHandler extends SuperpermsHandler implements Listener {
         if (!isReady()) {
             return super.getGroups(base);
         } else {
-            return new ArrayList<String>(service.getPlayerGroups(base.getName()));
+            return new ArrayList<String>(service.getPlayerGroups(base.getUniqueId()));
         }
     }
 
@@ -56,7 +57,7 @@ public class ZPermissionsHandler extends SuperpermsHandler implements Listener {
         if (!isReady()) {
             return super.inGroup(base, group);
         } else {
-            Set<String> groups = service.getPlayerGroups(base.getName());
+            Set<String> groups = service.getPlayerGroups(base.getUniqueId());
             for (String test : groups) {
                 if (test.equalsIgnoreCase(group)) {
                     return true;
@@ -87,7 +88,7 @@ public class ZPermissionsHandler extends SuperpermsHandler implements Listener {
     private String getPrefixSuffix(Player base, String metadataName) {
         String playerPrefixSuffix;
         try {
-            playerPrefixSuffix = service.getPlayerMetadata(base.getName(), metadataName, String.class);
+            playerPrefixSuffix = service.getPlayerMetadata(base.getUniqueId(), metadataName, String.class);
         } catch (IllegalStateException e) {
             // User error. They set prefix to a non-string.
             playerPrefixSuffix = null;
@@ -95,7 +96,7 @@ public class ZPermissionsHandler extends SuperpermsHandler implements Listener {
         if (playerPrefixSuffix == null) {
             // Try prefix/suffix of their "primary group"
             try {
-                return service.getGroupMetadata(getPrimaryGroup(base.getName()), metadataName, String.class);
+                return service.getGroupMetadata(getPrimaryGroup(base.getUniqueId()), metadataName, String.class);
             } catch (IllegalStateException e) {
                 // User error, again
                 return null;
@@ -125,12 +126,12 @@ public class ZPermissionsHandler extends SuperpermsHandler implements Listener {
         return service != null;
     }
 
-    private String getPrimaryGroup(String playerName) {
+    private String getPrimaryGroup(UUID playerId) {
         if (hasGetPlayerPrimaryGroup) {
-            return service.getPlayerPrimaryGroup(playerName);
+            return service.getPlayerPrimaryGroup(playerId);
         } else {
             // Fall back to using highest-weight assigned group
-            List<String> groups = service.getPlayerAssignedGroups(playerName);
+            List<String> groups = service.getPlayerAssignedGroups(playerId);
             return groups.get(0);
         }
     }
