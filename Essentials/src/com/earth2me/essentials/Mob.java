@@ -56,7 +56,7 @@ public enum Mob {
     EXPERIENCEORB("ExperienceOrb", Enemies.NEUTRAL, EntityType.EXPERIENCE_ORB),
     ARMOR_STAND("ArmorStand", Enemies.NEUTRAL, EntityType.ARMOR_STAND),
     ENDERMITE("Endermite", Enemies.ENEMY, EntityType.ENDERMITE),
-    GUARDIAN("Guradian", Enemies.ENEMY, EntityType.GUARDIAN),
+    GUARDIAN("Guardian", Enemies.ENEMY, EntityType.GUARDIAN),
     RABBIT("Rabbit", Enemies.FRIENDLY, EntityType.RABBIT);
 
     public static final Logger logger = Logger.getLogger("Essentials");
