@@ -50,11 +50,6 @@ public class VaultHandler extends SuperpermsHandler {
     }
 
     @Override
-    public boolean hasPermission(final Player base, String node) {
-        return base.hasPermission(node);
-    }
-
-    @Override
     public String getPrefix(final Player base) {
         String playerPrefix = chat.getPlayerPrefix(base);
         if (playerPrefix == null) {
