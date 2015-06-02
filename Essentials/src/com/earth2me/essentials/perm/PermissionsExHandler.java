@@ -14,7 +14,7 @@ public class PermissionsExHandler extends AbstractVaultHandler {
 
     @Override
     public boolean canBuild(final Player base, final String group) {
-        final PermissionUser user = manager.getUser(base.getName());
+        final PermissionUser user = manager.getUser(base.getUniqueId());
         return user != null && user.getOptionBoolean("build", base.getWorld().getName(), false);
     }
 }
