@@ -37,7 +37,7 @@ public class SpawnerUtil {
             is.setItemMeta(bsm);
         } else {
             // Legacy behavior
-            is.setDurability((short) type.ordinal());
+            is.setDurability(type.getTypeId());
         }
         return is;
     }
