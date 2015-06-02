@@ -1,5 +1,4 @@
-EssentialsX Development Readme
-=============================
+![](https://i.imgur.com/mwJjTRw.png)
 
 This is a fork of Essentials called EssentialsX.
 
