@@ -8,7 +8,6 @@ import org.bukkit.plugin.PluginManager;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 public class PermissionsHandler implements IPermissionsHandler {
@@ -147,9 +146,9 @@ public class PermissionsHandler implements IPermissionsHandler {
                 if (vault.setupProviders()) {
                     ess.getLogger().info("Using generic Vault based permissions.");
                     handler = vault;
+                    return;
                 }
             }
-            return;
         }
 
         if (useSuperperms) {
