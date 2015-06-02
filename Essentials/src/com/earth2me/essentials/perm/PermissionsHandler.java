@@ -101,6 +101,7 @@ public class PermissionsHandler implements IPermissionsHandler {
                 if (!(handler instanceof PermissionsExHandler)) {
                     ess.getLogger().info("Using PermissionsEX based permissions with Vault.");
                     handler = new PermissionsExHandler();
+                    ((AbstractVaultHandler) handler).setupProviders();
                 }
                 return;
             }
@@ -110,6 +111,7 @@ public class PermissionsHandler implements IPermissionsHandler {
                 if (!(handler instanceof GroupManagerHandler)) {
                     ess.getLogger().info("Using GroupManager based permissions with Vault.");
                     handler = new GroupManagerHandler(GMplugin);
+                    ((AbstractVaultHandler) handler).setupProviders();
                 }
                 return;
             }
@@ -119,6 +121,7 @@ public class PermissionsHandler implements IPermissionsHandler {
                 if (!(handler instanceof SimplyPermsHandler)) {
                     ess.getLogger().info("Using SimplyPerms based permissions with Vault.");
                     handler = new SimplyPermsHandler();
+                    ((AbstractVaultHandler) handler).setupProviders();
                 }
                 return;
             }
@@ -128,6 +131,7 @@ public class PermissionsHandler implements IPermissionsHandler {
                 if (!(handler instanceof PrivilegesHandler)) {
                     ess.getLogger().info("Using Privileges based permissions with Vault.");
                     handler = new PrivilegesHandler();
+                    ((AbstractVaultHandler) handler).setupProviders();
                 }
                 return;
             }
@@ -137,6 +141,7 @@ public class PermissionsHandler implements IPermissionsHandler {
                 if (!(handler instanceof BPermissions2Handler)) {
                     ess.getLogger().info("Using bPermissions based permissions with Vault.");
                     handler = new BPermissions2Handler();
+                    ((AbstractVaultHandler) handler).setupProviders();
                 }
                 return;
             }
