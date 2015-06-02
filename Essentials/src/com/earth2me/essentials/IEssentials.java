@@ -6,6 +6,7 @@ import com.earth2me.essentials.api.IWarps;
 import com.earth2me.essentials.metrics.Metrics;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
+import com.earth2me.essentials.utils.SpawnerUtil;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -96,4 +97,6 @@ public interface IEssentials extends Plugin {
     Collection<Player> getOnlinePlayers();
 
     Iterable<User> getOnlineUsers();
+
+    SpawnerUtil getSpawnerUtil();
 }

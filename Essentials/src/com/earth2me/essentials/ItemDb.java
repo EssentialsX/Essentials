@@ -8,6 +8,7 @@ import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.Potion;
@@ -136,7 +137,15 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
         }
         final ItemStack retval = new ItemStack(mat);
         retval.setAmount(mat.getMaxStackSize());
-        retval.setDurability(metaData);
+        if (mat == Material.MOB_SPAWNER) {
+            try {
+                ess.getSpawnerUtil().setEntityType(retval, EntityType.fromId(metaData));
+            } catch (IllegalArgumentException e) {
+                throw new Exception("Can't spawn entity ID " + metaData + " from mob spawners.");
+            }
+        } else {
+            retval.setDurability(metaData);
+        }
         return retval;
     }
 

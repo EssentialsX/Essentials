@@ -30,6 +30,7 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.SpawnerUtil;
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
@@ -95,6 +96,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient EssentialsTimer timer;
     private final transient List<String> vanishedPlayers = new ArrayList<String>();
     private transient Method oldGetOnlinePlayers;
+    private transient SpawnerUtil spawnerUtil;
 
     public Essentials() {
     }
@@ -192,6 +194,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 execTimer.mark("Init(Worth/ItemDB)");
                 jails = new Jails(this);
                 confList.add(jails);
+                spawnerUtil = new SpawnerUtil(this);
                 reload();
             } catch (YAMLException exception) {
                 if (pm.getPlugin("EssentialsUpdate") != null) {
@@ -755,6 +758,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 return getUser(player);
             }
         });
+    }
+
+    @Override
+    public SpawnerUtil getSpawnerUtil() {
+        return spawnerUtil;
     }
 
     private static class EssentialsWorldListener implements Listener, Runnable {
