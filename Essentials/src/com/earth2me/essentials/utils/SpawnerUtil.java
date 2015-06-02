@@ -2,6 +2,7 @@ package com.earth2me.essentials.utils;
 
 import com.google.common.collect.ImmutableMap;
 import net.ess3.api.IEssentials;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
@@ -61,7 +62,7 @@ public class SpawnerUtil {
         } else {
             displayName = type.getName();
         }
-        meta.setDisplayName(displayName + " Spawner");
+        meta.setDisplayName(ChatColor.RESET + displayName + " Spawner");
         is.setItemMeta(meta);
         return is;
     }
