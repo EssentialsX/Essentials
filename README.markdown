@@ -7,6 +7,11 @@ If you are using this, do **NOT** ask Essentials for support.
 
 The official upstream repository is at https://github.com/Essentials/Essentials
 
+Why you should use it
+--------
+
+EssentialsX provides several performance enhancements and fixes that are currently not available in Essentials and Spigot-Essentials. [See the wiki for details.](https://github.com/drtshock/Essentials/wiki)
+
 Downloads
 --------
 Downloads can be found at my [Jenkins site](https://ci.drtshock.net/job/EssentialsX).
