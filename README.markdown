@@ -7,6 +7,10 @@ If you are using this, do **NOT** ask Essentials for support.
 
 The official upstream repository is at https://github.com/Essentials/Essentials
 
+Downloads
+--------
+Downloads can be found at my [Jenkins site](https://ci.drtshock.net/job/EssentialsX).
+
 Building
 --------
 To build with Maven, use the command
