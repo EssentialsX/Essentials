@@ -96,7 +96,7 @@ public class PermissionsHandler implements IPermissionsHandler {
     public void checkPermissions() {
         final PluginManager pluginManager = ess.getServer().getPluginManager();
         final Plugin vaultAPI = pluginManager.getPlugin("Vault");
-        if (vaultAPI != null && vaultAPI.isEnabled()) {
+        if (vaultAPI != null && vaultAPI.isEnabled() && !(handler instanceof AbstractVaultHandler)) {
             AbstractVaultHandler vaultHandler;
             String enabledPermsPlugin = "";
             List<String> specialCasePlugins = Arrays.asList("PermissionsEx", "GroupManager",

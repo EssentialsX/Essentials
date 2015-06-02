@@ -50,12 +50,8 @@ public class Commandgive extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        MetaItemStack metaStack = new MetaItemStack(stack);
-        if (!metaStack.canSpawn(ess)) {
-            throw new Exception(tl("unableToSpawnItem", itemname));
-        }
-
         if (args.length > 3) {
+            MetaItemStack metaStack = new MetaItemStack(stack);
             boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
             if (allowUnsafe && sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.enchantments.allowunsafe")) {
                 allowUnsafe = false;
