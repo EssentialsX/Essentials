@@ -27,7 +27,7 @@ public class SpawnerUtil {
         }
     }
 
-    public ItemStack setEntityType(ItemStack is, EntityType type) {
+    public ItemStack setEntityType(ItemStack is, EntityType type) throws IllegalArgumentException {
         if (useMeta) {
             // Supported in 1.8.3-R0.1-SNAPSHOT and above
             BlockStateMeta bsm = (BlockStateMeta) is.getItemMeta();
