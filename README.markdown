@@ -11,6 +11,8 @@ Why you should use it
 
 EssentialsX provides several performance enhancements and fixes that are currently not available in Essentials and Spigot-Essentials. [See the wiki for details.](https://github.com/drtshock/Essentials/wiki)
 
+EssentialsX is a drop-in replacement for Essentials.
+
 Downloads
 --------
 Downloads can be found at my [Jenkins site](https://ci.drtshock.net/job/EssentialsX).
