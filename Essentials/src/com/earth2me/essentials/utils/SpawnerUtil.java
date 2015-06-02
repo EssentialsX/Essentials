@@ -27,8 +27,7 @@ public class SpawnerUtil {
         }
     }
 
-    public ItemStack setEntityType(EntityType type) {
-        ItemStack is = new ItemStack(Material.MOB_SPAWNER, 1);
+    public ItemStack setEntityType(ItemStack is, EntityType type) {
         if (useMeta) {
             // Supported in 1.8.3-R0.1-SNAPSHOT and above
             BlockStateMeta bsm = (BlockStateMeta) is.getItemMeta();
@@ -38,7 +37,7 @@ public class SpawnerUtil {
             is.setItemMeta(bsm);
         } else {
             // Legacy behavior
-            is.getData().setData((byte) type.ordinal());
+            is.setDurability((short) type.ordinal());
         }
         return is;
     }
