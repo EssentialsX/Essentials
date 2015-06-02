@@ -1,23 +1,17 @@
 package com.earth2me.essentials.perm;
 
-import com.earth2me.essentials.Essentials;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class VaultHandler extends SuperpermsHandler {
-
-    private Essentials plugin;
+public abstract class AbstractVaultHandler extends SuperpermsHandler {
     private static Permission perms = null;
     private static Chat chat = null;
-
-    public VaultHandler(Essentials plugin) {
-        this.plugin = plugin;
-    }
 
     public boolean setupProviders() {
         try {
@@ -27,9 +21,9 @@ public class VaultHandler extends SuperpermsHandler {
             return false;
         }
 
-        RegisteredServiceProvider<Permission> permsProvider = plugin.getServer().getServicesManager().getRegistration(Permission.class);
+        RegisteredServiceProvider<Permission> permsProvider = Bukkit.getServer().getServicesManager().getRegistration(Permission.class);
         perms = permsProvider.getProvider();
-        RegisteredServiceProvider<Chat> chatProvider = plugin.getServer().getServicesManager().getRegistration(Chat.class);
+        RegisteredServiceProvider<Chat> chatProvider = Bukkit.getServer().getServicesManager().getRegistration(Chat.class);
         chat = chatProvider.getProvider();
         return perms != null && chat != null;
     }
