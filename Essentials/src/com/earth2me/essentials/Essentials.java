@@ -193,8 +193,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 confList.add(itemDb);
                 execTimer.mark("Init(Worth/ItemDB)");
                 jails = new Jails(this);
-                spawnerUtil = new SpawnerUtil(this);
                 confList.add(jails);
+                spawnerUtil = new SpawnerUtil(this);
                 reload();
             } catch (YAMLException exception) {
                 if (pm.getPlugin("EssentialsUpdate") != null) {

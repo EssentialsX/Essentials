@@ -1,6 +1,6 @@
 package com.earth2me.essentials.utils;
 
-import com.earth2me.essentials.Essentials;
+import net.ess3.api.IEssentials;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
@@ -12,7 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class SpawnerUtil {
     private boolean useMeta;
 
-    public SpawnerUtil(Essentials ess) {
+    public SpawnerUtil(IEssentials ess) {
         try {
             ItemStack is = new ItemStack(Material.MOB_SPAWNER, 1);
             ItemMeta meta = is.getItemMeta();
