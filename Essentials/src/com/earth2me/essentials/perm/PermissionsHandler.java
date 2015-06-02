@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
@@ -96,66 +97,41 @@ public class PermissionsHandler implements IPermissionsHandler {
         final PluginManager pluginManager = ess.getServer().getPluginManager();
         final Plugin vaultAPI = pluginManager.getPlugin("Vault");
         if (vaultAPI != null && vaultAPI.isEnabled()) {
-            final Plugin permExPlugin = pluginManager.getPlugin("PermissionsEx");
-            if (permExPlugin != null && permExPlugin.isEnabled()) {
-                if (!(handler instanceof PermissionsExHandler)) {
-                    ess.getLogger().info("Using PermissionsEX based permissions with Vault.");
-                    handler = new PermissionsExHandler();
-                    ((AbstractVaultHandler) handler).setupProviders();
+            AbstractVaultHandler vaultHandler;
+            String enabledPermsPlugin = "";
+            List<String> specialCasePlugins = Arrays.asList("PermissionsEx", "GroupManager",
+                    "SimplyPerms", "Privileges", "bPermissions");
+            for (Plugin plugin : pluginManager.getPlugins()) {
+                if (specialCasePlugins.contains(plugin.getName())) {
+                    enabledPermsPlugin = plugin.getName();
+                    break;
                 }
-                return;
             }
 
-            final Plugin GMplugin = pluginManager.getPlugin("GroupManager");
-            if (GMplugin != null && GMplugin.isEnabled()) {
-                if (!(handler instanceof GroupManagerHandler)) {
-                    ess.getLogger().info("Using GroupManager based permissions with Vault.");
-                    handler = new GroupManagerHandler(GMplugin);
-                    ((AbstractVaultHandler) handler).setupProviders();
-                }
-                return;
+            // No switch statements for Strings, this is Java 6
+            if (enabledPermsPlugin.equals("PermissionsEx")) {
+                vaultHandler = new PermissionsExHandler();
+            } else if (enabledPermsPlugin.equals("GroupManager")) {
+                vaultHandler = new GroupManagerHandler(pluginManager.getPlugin(enabledPermsPlugin));
+            } else if (enabledPermsPlugin.equals("SimplyPerms")) {
+                vaultHandler = new SimplyPermsHandler();
+            } else if (enabledPermsPlugin.equals("Privileges")) {
+                vaultHandler = new PrivilegesHandler();
+            } else if (enabledPermsPlugin.equals("bPermissions")) {
+                vaultHandler = new BPermissions2Handler();
+            } else {
+                vaultHandler = new GenericVaultHandler();
             }
 
-            final Plugin simplyPermsPlugin = pluginManager.getPlugin("SimplyPerms");
-            if (simplyPermsPlugin != null && simplyPermsPlugin.isEnabled()) {
-                if (!(handler instanceof SimplyPermsHandler)) {
-                    ess.getLogger().info("Using SimplyPerms based permissions with Vault.");
-                    handler = new SimplyPermsHandler();
-                    ((AbstractVaultHandler) handler).setupProviders();
+            if (vaultHandler.setupProviders()) {
+                if (enabledPermsPlugin.equals("")) {
+                    enabledPermsPlugin = "generic";
                 }
+                handler = vaultHandler;
+                ess.getLogger().info("Using Vault based permissions (" + enabledPermsPlugin + ")");
                 return;
-            }
-
-            final Plugin privPlugin = pluginManager.getPlugin("Privileges");
-            if (privPlugin != null && privPlugin.isEnabled()) {
-                if (!(handler instanceof PrivilegesHandler)) {
-                    ess.getLogger().info("Using Privileges based permissions with Vault.");
-                    handler = new PrivilegesHandler();
-                    ((AbstractVaultHandler) handler).setupProviders();
-                }
-                return;
-            }
-
-            final Plugin bPermPlugin = pluginManager.getPlugin("bPermissions");
-            if (bPermPlugin != null && bPermPlugin.isEnabled()) {
-                if (!(handler instanceof BPermissions2Handler)) {
-                    ess.getLogger().info("Using bPermissions based permissions with Vault.");
-                    handler = new BPermissions2Handler();
-                    ((AbstractVaultHandler) handler).setupProviders();
-                }
-                return;
-            }
-
-            if (!(handler instanceof GenericVaultHandler)) {
-                AbstractVaultHandler vault = new GenericVaultHandler();
-                if (vault.setupProviders()) {
-                    ess.getLogger().info("Using generic Vault based permissions.");
-                    handler = vault;
-                    return;
-                }
             }
         }
-
         if (useSuperperms) {
             if (!(handler instanceof SuperpermsHandler)) {
                 ess.getLogger().info("Using superperms based permissions.");

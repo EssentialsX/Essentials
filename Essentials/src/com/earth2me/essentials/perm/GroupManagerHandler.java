@@ -11,7 +11,6 @@ public class GroupManagerHandler extends AbstractVaultHandler {
     private final transient GroupManager groupManager;
 
     public GroupManagerHandler(final Plugin permissionsPlugin) {
-        super();
         groupManager = ((GroupManager) permissionsPlugin);
     }
 
