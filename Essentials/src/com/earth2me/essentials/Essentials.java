@@ -130,7 +130,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         Economy.setEss(this);
         confList = new ArrayList<IConf>();
         jails = new Jails(this);
-        spawnerUtil = new SpawnerUtil(this);
         registerListeners(server.getPluginManager());
     }
 
