@@ -44,9 +44,11 @@
             <systemPath>${project.basedir}/../lib/BOSEconomy.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>de.bananaco</groupId>
-            <artifactId>bPermissions</artifactId>
-            <version>v2.12-DEV</version>
+            <groupId>ru.tehkode</groupId>
+            <artifactId>PermissionsEx</artifactId>
+            <version>1.20.4</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/../lib/PermissionsEx.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>iConomy</groupId>
@@ -77,44 +79,9 @@
             <systemPath>${project.basedir}/../lib/MultiCurrency.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>com.platymuus</groupId>
-            <artifactId>bukkit-permissions</artifactId>
-            <version>2.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../lib/PermissionsBukkit.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>ru.tehkode</groupId>
-            <artifactId>PermissionsEx</artifactId>
-            <version>1.20.4</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../lib/PermissionsEx.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>Privileges</groupId>
-            <artifactId>Privileges</artifactId>
-            <version>1.8.1</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../lib/Privileges.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>SimplyPerms</groupId>
-            <artifactId>SimplyPerms</artifactId>
-            <version>1.7.6</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../lib/SimplyPerms.jar</systemPath>
-        </dependency>
-        <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>Vault</artifactId>
             <version>1.5.4</version>
-        </dependency>
-        <dependency>
-            <groupId>zPermissions</groupId>
-            <artifactId>zPermissions</artifactId>
-            <version>1.1</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../lib/zPermissions.jar</systemPath>
         </dependency>
     </dependencies>
     <repositories>
