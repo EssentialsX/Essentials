@@ -11,7 +11,7 @@ Why you should use it
 
 EssentialsX provides several performance enhancements and fixes that are currently not available in Essentials and Spigot-Essentials. [See the wiki for details.](https://github.com/drtshock/Essentials/wiki)
 
-EssentialsX is a drop-in replacement for Essentials.
+EssentialsX is almost a completely drop-in replacement for Essentials. **EssentialsX requires [Vault](http://dev.bukkit.org/bukkit-plugins/vault/) if you have a supported permissions plugin.**
 
 Downloads
 --------

@@ -94,44 +94,44 @@ public class PermissionsHandler implements IPermissionsHandler {
     }
 
     public void checkPermissions() {
-        if (!(handler instanceof NullPermissionsHandler)) return;
         final PluginManager pluginManager = ess.getServer().getPluginManager();
         final Plugin vaultAPI = pluginManager.getPlugin("Vault");
         if (vaultAPI != null && vaultAPI.isEnabled()) {
-            AbstractVaultHandler vaultHandler;
-            String enabledPermsPlugin = "";
-            List<String> specialCasePlugins = Arrays.asList("PermissionsEx", "GroupManager",
-                    "SimplyPerms", "Privileges", "bPermissions");
-            for (Plugin plugin : pluginManager.getPlugins()) {
-                if (specialCasePlugins.contains(plugin.getName())) {
-                    enabledPermsPlugin = plugin.getName();
-                    break;
+            if (!(handler instanceof AbstractVaultHandler)) {
+                AbstractVaultHandler vaultHandler;
+                String enabledPermsPlugin = "";
+                List<String> specialCasePlugins = Arrays.asList("PermissionsEx", "GroupManager",
+                        "SimplyPerms", "Privileges", "bPermissions");
+                for (Plugin plugin : pluginManager.getPlugins()) {
+                    if (specialCasePlugins.contains(plugin.getName())) {
+                        enabledPermsPlugin = plugin.getName();
+                        break;
+                    }
                 }
-            }
 
-            // No switch statements for Strings, this is Java 6
-            if (enabledPermsPlugin.equals("PermissionsEx")) {
-                vaultHandler = new PermissionsExHandler();
-            } else if (enabledPermsPlugin.equals("GroupManager")) {
-                vaultHandler = new GroupManagerHandler(pluginManager.getPlugin(enabledPermsPlugin));
-            } else if (enabledPermsPlugin.equals("SimplyPerms")) {
-                vaultHandler = new SimplyPermsHandler();
-            } else if (enabledPermsPlugin.equals("Privileges")) {
-                vaultHandler = new PrivilegesHandler();
-            } else if (enabledPermsPlugin.equals("bPermissions")) {
-                vaultHandler = new BPermissions2Handler();
-            } else {
-                vaultHandler = new GenericVaultHandler();
-            }
+                // No switch statements for Strings, this is Java 6
+                if (enabledPermsPlugin.equals("PermissionsEx")) {
+                    vaultHandler = new PermissionsExHandler();
+                } else if (enabledPermsPlugin.equals("GroupManager")) {
+                    vaultHandler = new GroupManagerHandler(pluginManager.getPlugin(enabledPermsPlugin));
+                } else if (enabledPermsPlugin.equals("SimplyPerms")) {
+                    vaultHandler = new SimplyPermsHandler();
+                } else if (enabledPermsPlugin.equals("Privileges")) {
+                    vaultHandler = new PrivilegesHandler();
+                } else if (enabledPermsPlugin.equals("bPermissions")) {
+                    vaultHandler = new BPermissions2Handler();
+                } else {
+                    vaultHandler = new GenericVaultHandler();
+                }
 
-            if (vaultHandler.setupProviders()) {
                 if (enabledPermsPlugin.equals("")) {
                     enabledPermsPlugin = "generic";
                 }
                 handler = vaultHandler;
                 ess.getLogger().info("Using Vault based permissions (" + enabledPermsPlugin + ")");
-                return;
+                vaultHandler.setupProviders();
             }
+            return;
         }
         if (useSuperperms) {
             if (!(handler instanceof SuperpermsHandler)) {
