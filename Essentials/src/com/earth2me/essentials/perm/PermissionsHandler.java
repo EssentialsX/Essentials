@@ -110,18 +110,25 @@ public class PermissionsHandler implements IPermissionsHandler {
             if (!(handler instanceof AbstractVaultHandler)) {
                 AbstractVaultHandler vaultHandler;
                 // No switch statements for Strings, this is Java 6
-                if (enabledPermsPlugin.equals("PermissionsEx")) {
-                    vaultHandler = new PermissionsExHandler();
-                } else if (enabledPermsPlugin.equals("GroupManager")) {
-                    vaultHandler = new GroupManagerHandler(pluginManager.getPlugin(enabledPermsPlugin));
-                } else if (enabledPermsPlugin.equals("SimplyPerms")) {
-                    vaultHandler = new SimplyPermsHandler();
-                } else if (enabledPermsPlugin.equals("Privileges")) {
-                    vaultHandler = new PrivilegesHandler();
-                } else if (enabledPermsPlugin.equals("bPermissions")) {
-                    vaultHandler = new BPermissions2Handler();
-                } else {
-                    vaultHandler = new GenericVaultHandler();
+                switch (enabledPermsPlugin) {
+                    case "PermissionsEx":
+                        vaultHandler = new PermissionsExHandler();
+                        break;
+                    case "GroupManager":
+                        vaultHandler = new GroupManagerHandler();
+                        break;
+                    case "SimplyPerms":
+                        vaultHandler = new SimplyPermsHandler();
+                        break;
+                    case "Privileges":
+                        vaultHandler = new PrivilegesHandler();
+                        break;
+                    case "bPermissions":
+                        vaultHandler = new BPermissions2Handler();
+                        break;
+                    default:
+                        vaultHandler = new GenericVaultHandler();
+                        break;
                 }
                 if (enabledPermsPlugin.equals("")) {
                     enabledPermsPlugin = "generic";

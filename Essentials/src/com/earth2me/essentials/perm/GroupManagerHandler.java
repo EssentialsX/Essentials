@@ -3,6 +3,7 @@ package com.earth2me.essentials.perm;
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.dataholder.worlds.WorldsHolder;
 import org.anjocaido.groupmanager.permissions.AnjoPermissionsHandler;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -10,8 +11,8 @@ import org.bukkit.plugin.Plugin;
 public class GroupManagerHandler extends AbstractVaultHandler {
     private final transient GroupManager groupManager;
 
-    public GroupManagerHandler(final Plugin permissionsPlugin) {
-        groupManager = ((GroupManager) permissionsPlugin);
+    public GroupManagerHandler() {
+        groupManager = ((GroupManager) Bukkit.getPluginManager().getPlugin("GroupManager"));
     }
 
     @Override

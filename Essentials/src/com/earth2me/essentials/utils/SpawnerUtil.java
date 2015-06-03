@@ -68,7 +68,6 @@ public class SpawnerUtil {
     }
 
     public EntityType getEntityType(ItemStack is) {
-        ItemMeta meta = is.getItemMeta();
         if (useMeta) {
             BlockStateMeta bsm = (BlockStateMeta) is.getItemMeta();
             CreatureSpawner bs = (CreatureSpawner) bsm.getBlockState();
