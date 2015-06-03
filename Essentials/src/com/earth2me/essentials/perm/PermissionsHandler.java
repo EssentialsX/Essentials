@@ -95,20 +95,20 @@ public class PermissionsHandler implements IPermissionsHandler {
 
     public void checkPermissions() {
         final PluginManager pluginManager = ess.getServer().getPluginManager();
+        String enabledPermsPlugin = "";
+        List<String> specialCasePlugins = Arrays.asList("PermissionsEx", "GroupManager",
+                "SimplyPerms", "Privileges", "bPermissions", "zPermissions", "PermissionsBukkit",
+                "DroxPerms", "xPerms");
+        for (Plugin plugin : pluginManager.getPlugins()) {
+            if (specialCasePlugins.contains(plugin.getName())) {
+                enabledPermsPlugin = plugin.getName();
+                break;
+            }
+        }
         final Plugin vaultAPI = pluginManager.getPlugin("Vault");
         if (vaultAPI != null && vaultAPI.isEnabled()) {
             if (!(handler instanceof AbstractVaultHandler)) {
                 AbstractVaultHandler vaultHandler;
-                String enabledPermsPlugin = "";
-                List<String> specialCasePlugins = Arrays.asList("PermissionsEx", "GroupManager",
-                        "SimplyPerms", "Privileges", "bPermissions");
-                for (Plugin plugin : pluginManager.getPlugins()) {
-                    if (specialCasePlugins.contains(plugin.getName())) {
-                        enabledPermsPlugin = plugin.getName();
-                        break;
-                    }
-                }
-
                 // No switch statements for Strings, this is Java 6
                 if (enabledPermsPlugin.equals("PermissionsEx")) {
                     vaultHandler = new PermissionsExHandler();
@@ -123,15 +123,20 @@ public class PermissionsHandler implements IPermissionsHandler {
                 } else {
                     vaultHandler = new GenericVaultHandler();
                 }
-
                 if (enabledPermsPlugin.equals("")) {
                     enabledPermsPlugin = "generic";
                 }
-                handler = vaultHandler;
-                ess.getLogger().info("Using Vault based permissions (" + enabledPermsPlugin + ")");
                 vaultHandler.setupProviders();
+                ess.getLogger().info("Using Vault based permissions (" + enabledPermsPlugin + ")");
+                handler = vaultHandler;
             }
             return;
+        }
+        if (!enabledPermsPlugin.equals("")) {
+            ess.getLogger().warning("Detected supported permissions plugin " + enabledPermsPlugin + " without Vault installed.");
+            ess.getLogger().warning("Features such as chat prefixes/suffixes and group-related functionality will not " +
+                    "work until you install Vault.");
+            useSuperperms = true;
         }
         if (useSuperperms) {
             if (!(handler instanceof SuperpermsHandler)) {
