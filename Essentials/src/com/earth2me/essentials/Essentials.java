@@ -148,7 +148,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     getLogger().warning(tl("versionMismatch", plugin.getDescription().getName()));
                 }
             }
-            execTimer.mark("BukkitCheck");
 
             for (Method method : Server.class.getDeclaredMethods()) {
                 if (method.getName().endsWith("getOnlinePlayers") && method.getReturnType() == Player[].class) {
