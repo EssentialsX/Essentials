@@ -119,7 +119,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 
     @Override
     public void giveMoney(final BigDecimal value) throws MaxMoneyException {
-        giveMoney(value, (CommandSource) null);
+        giveMoney(value, null);
     }
 
     @Override
@@ -151,7 +151,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 
     @Override
     public void takeMoney(final BigDecimal value) {
-        takeMoney(value, (CommandSource) null);
+        takeMoney(value, null);
     }
 
     @Override

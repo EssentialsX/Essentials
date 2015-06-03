@@ -63,7 +63,7 @@ public class Commandwarp extends EssentialsCommand {
     //TODO: Use one of the new text classes, like /help ?
     private void warpList(final CommandSource sender, final String[] args, final IUser user) throws Exception {
         final IWarps warps = ess.getWarps();
-        final List<String> warpNameList = new ArrayList<String>(warps.getList());
+        final List<String> warpNameList = new ArrayList<>(warps.getList());
 
         if (user != null) {
             final Iterator<String> iterator = warpNameList.iterator();

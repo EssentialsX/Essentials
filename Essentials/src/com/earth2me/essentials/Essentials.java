@@ -94,7 +94,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient I18n i18n;
     private transient Metrics metrics;
     private transient EssentialsTimer timer;
-    private final transient List<String> vanishedPlayers = new ArrayList<String>();
+    private final transient List<String> vanishedPlayers = new ArrayList<>();
     private transient Method oldGetOnlinePlayers;
     private transient SpawnerUtil spawnerUtil;
 
@@ -128,7 +128,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         userMap = new UserMap(this);
         permissionsHandler = new PermissionsHandler(this, false);
         Economy.setEss(this);
-        confList = new ArrayList<IConf>();
+        confList = new ArrayList<>();
         jails = new Jails(this);
         registerListeners(server.getPluginManager());
     }
@@ -160,7 +160,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 final EssentialsUpgrade upgrade = new EssentialsUpgrade(this);
                 upgrade.beforeSettings();
                 execTimer.mark("Upgrade");
-                confList = new ArrayList<IConf>();
+                confList = new ArrayList<>();
                 settings = new Settings(this);
                 confList.add(settings);
                 execTimer.mark("Settings");

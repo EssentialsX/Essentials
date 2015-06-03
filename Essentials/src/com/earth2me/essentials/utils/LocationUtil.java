@@ -222,10 +222,7 @@ public class LocationUtil {
         if (below.getType() == Material.BED_BLOCK) {
             return true;
         }
-        if ((!HOLLOW_MATERIALS.contains(world.getBlockAt(x, y, z).getType().getId())) || (!HOLLOW_MATERIALS.contains(world.getBlockAt(x, y + 1, z).getType().getId()))) {
-            return true;
-        }
-        return false;
+        return (!HOLLOW_MATERIALS.contains(world.getBlockAt(x, y, z).getType().getId())) || (!HOLLOW_MATERIALS.contains(world.getBlockAt(x, y + 1, z).getType().getId()));
     }
 
     // Not needed if using getSafeDestination(loc)

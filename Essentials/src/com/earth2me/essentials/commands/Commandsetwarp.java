@@ -32,8 +32,7 @@ public class Commandsetwarp extends EssentialsCommand {
 
         try {
             warpLoc = warps.getWarp(args[0]);
-        } catch (WarpNotFoundException ex) {
-        } catch (InvalidWorldException ex) {
+        } catch (WarpNotFoundException | InvalidWorldException ex) {
         }
 
         if (warpLoc == null || user.isAuthorized("essentials.warp.overwrite." + StringUtil.safeString(args[0]))) {

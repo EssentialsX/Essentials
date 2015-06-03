@@ -92,7 +92,7 @@ public interface IUser {
 
     boolean isIgnoreExempt();
 
-    public void sendMessage(String message);
+    void sendMessage(String message);
 
     /*
      * UserData
@@ -142,5 +142,5 @@ public interface IUser {
 
     CommandSource getSource();
 
-    public String getName();
+    String getName();
 }

@@ -291,8 +291,7 @@ public class EssentialsPlayerListener implements Listener {
             loc = user.getBase().getBedSpawnLocation();
         }
         if (loc != null) {
-            final Location updateLoc = loc;
-            user.getBase().setCompassTarget(updateLoc);
+            user.getBase().setCompassTarget(loc);
         }
     }
 

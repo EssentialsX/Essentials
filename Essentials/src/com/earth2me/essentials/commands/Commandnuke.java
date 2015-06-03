@@ -22,7 +22,7 @@ public class Commandnuke extends EssentialsCommand {
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws NoSuchFieldException, NotEnoughArgumentsException {
         Collection<Player> targets;
         if (args.length > 0) {
-            targets = new ArrayList<Player>();
+            targets = new ArrayList<>();
             int pos = 0;
             for (String arg : args) {
                 targets.add(getPlayer(server, sender, args, pos).getBase());

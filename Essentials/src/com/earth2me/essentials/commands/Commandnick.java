@@ -93,10 +93,7 @@ public class Commandnick extends EssentialsLoopCommand {
                 return true;
             }
         }
-        if (ess.getUser(lowerNick) != null && ess.getUser(lowerNick) != target) {
-            return true;
-        }
-        return false;
+        return ess.getUser(lowerNick) != null && ess.getUser(lowerNick) != target;
     }
 
     private void setNickname(final Server server, final CommandSource sender, final User target, final String nickname) {

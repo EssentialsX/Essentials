@@ -345,5 +345,5 @@ enum KeywordType {
 enum KeywordCachable {
     CACHEABLE, // This keyword can be cached as a string
     SUBVALUE, // This keyword can be cached as a map
-    NOTCACHEABLE; // This keyword should never be cached
+    NOTCACHEABLE // This keyword should never be cached
 }

@@ -28,8 +28,6 @@ public class MetricsStarter implements Runnable {
         EssentialsXMPP
     }
 
-    ;
-
     public MetricsStarter(final IEssentials plugin) {
         ess = plugin;
         try {

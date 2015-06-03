@@ -87,7 +87,7 @@ public interface ITeleport {
      *
      * @throws Exception
      */
-    public void respawn(final Trade chargeFor, PlayerTeleportEvent.TeleportCause cause) throws Exception;
+    void respawn(final Trade chargeFor, PlayerTeleportEvent.TeleportCause cause) throws Exception;
 
     /**
      * Teleport wrapper used to handle /warp teleports
@@ -99,7 +99,7 @@ public interface ITeleport {
      *
      * @throws Exception
      */
-    public void warp(IUser otherUser, String warp, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause) throws Exception;
+    void warp(IUser otherUser, String warp, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause) throws Exception;
 
     /**
      * Teleport wrapper used to handle /back teleports
@@ -108,13 +108,13 @@ public interface ITeleport {
      *
      * @throws Exception
      */
-    public void back(Trade chargeFor) throws Exception;
+    void back(Trade chargeFor) throws Exception;
 
     /**
      * Teleport wrapper used to handle throwing user home after a jail sentence
      *
      * @throws Exception
      */
-    public void back() throws Exception;
+    void back() throws Exception;
 
 }

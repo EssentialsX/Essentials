@@ -223,7 +223,7 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
             try {
                 final Field typeDefField = Constructor.class.getDeclaredField("typeDefinitions");
                 typeDefField.setAccessible(true);
-                typeDefinitions = (Map<Class<? extends Object>, TypeDescription>) typeDefField.get((Constructor) BukkitConstructor.this);
+                typeDefinitions = (Map<Class<? extends Object>, TypeDescription>) typeDefField.get(BukkitConstructor.this);
                 if (typeDefinitions == null) {
                     throw new NullPointerException();
                 }

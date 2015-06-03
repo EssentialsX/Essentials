@@ -109,7 +109,6 @@ public class PermissionsHandler implements IPermissionsHandler {
         if (vaultAPI != null && vaultAPI.isEnabled()) {
             if (!(handler instanceof AbstractVaultHandler)) {
                 AbstractVaultHandler vaultHandler;
-                // No switch statements for Strings, this is Java 6
                 switch (enabledPermsPlugin) {
                     case "PermissionsEx":
                         vaultHandler = new PermissionsExHandler();

@@ -38,8 +38,8 @@ public class ExecuteTimer {
         double duration;
 
         for (ExecuteRecord pair : times) {
-            mark = (String) pair.getMark();
-            time2 = (Long) pair.getTime();
+            mark = pair.getMark();
+            time2 = pair.getTime();
             if (time1 > 0) {
                 duration = (time2 - time1) / 1000000.0;
                 output.append(mark).append(": ").append(decimalFormat.format(duration)).append("ms - ");

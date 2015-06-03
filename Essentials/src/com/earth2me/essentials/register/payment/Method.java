@@ -24,35 +24,35 @@ public interface Method {
      * @see #getName()
      * @see #getVersion()
      */
-    public Object getPlugin();
+    Object getPlugin();
 
     /**
      * Returns the actual name of this method.
      *
      * @return <code>String</code> Plugin name.
      */
-    public String getName();
+    String getName();
 
     /**
      * Returns the reported name of this method.
      *
      * @return <code>String</code> Plugin name.
      */
-    public String getLongName();
+    String getLongName();
 
     /**
      * Returns the actual version of this method.
      *
      * @return <code>String</code> Plugin version.
      */
-    public String getVersion();
+    String getVersion();
 
     /**
      * Returns the amount of decimal places that get stored NOTE: it will return -1 if there is no rounding
      *
      * @return <code>int</code> for each decimal place
      */
-    public int fractionalDigits();
+    int fractionalDigits();
 
     /**
      * Formats amounts into this payment methods style of currency display.
@@ -61,14 +61,14 @@ public interface Method {
      *
      * @return <code>String</code> - Formatted Currency Display.
      */
-    public String format(double amount);
+    String format(double amount);
 
     /**
      * Allows the verification of bank API existence in this payment method.
      *
      * @return <code>boolean</code>
      */
-    public boolean hasBanks();
+    boolean hasBanks();
 
     /**
      * Determines the existence of a bank via name.
@@ -79,7 +79,7 @@ public interface Method {
      *
      * @see #hasBanks
      */
-    public boolean hasBank(String bank);
+    boolean hasBank(String bank);
 
     /**
      * Determines the existence of an account via name.
@@ -88,7 +88,7 @@ public interface Method {
      *
      * @return <code>boolean</code>
      */
-    public boolean hasAccount(String name);
+    boolean hasAccount(String name);
 
     /**
      * Check to see if an account <code>name</code> is tied to a <code>bank</code>.
@@ -98,7 +98,7 @@ public interface Method {
      *
      * @return <code>boolean</code>
      */
-    public boolean hasBankAccount(String bank, String name);
+    boolean hasBankAccount(String bank, String name);
 
     /**
      * Forces an account creation
@@ -107,7 +107,7 @@ public interface Method {
      *
      * @return <code>boolean</code>
      */
-    public boolean createAccount(String name);
+    boolean createAccount(String name);
 
     /**
      * Forces an account creation
@@ -117,7 +117,7 @@ public interface Method {
      *
      * @return <code>boolean</code>
      */
-    public boolean createAccount(String name, Double balance);
+    boolean createAccount(String name, Double balance);
 
     /**
      * Returns a <code>MethodAccount</code> class for an account <code>name</code>.
@@ -126,7 +126,7 @@ public interface Method {
      *
      * @return <code>MethodAccount</code> <em>or</em>  <code>Null</code>
      */
-    public MethodAccount getAccount(String name);
+    MethodAccount getAccount(String name);
 
     /**
      * Returns a <code>MethodBankAccount</code> class for an account <code>name</code>.
@@ -136,7 +136,7 @@ public interface Method {
      *
      * @return <code>MethodBankAccount</code> <em>or</em>  <code>Null</code>
      */
-    public MethodBankAccount getBankAccount(String bank, String name);
+    MethodBankAccount getBankAccount(String bank, String name);
 
     /**
      * Checks to verify the compatibility between this Method and a plugin. Internal usage only, for the most part.
@@ -145,78 +145,78 @@ public interface Method {
      *
      * @return <code>boolean</code>
      */
-    public boolean isCompatible(Plugin plugin);
+    boolean isCompatible(Plugin plugin);
 
     /**
      * Set Plugin data.
      *
      * @param plugin Plugin
      */
-    public void setPlugin(Plugin plugin);
+    void setPlugin(Plugin plugin);
 
 
     /**
      * Contains Calculator and Balance functions for Accounts.
      */
-    public interface MethodAccount {
-        public double balance();
+    interface MethodAccount {
+        double balance();
 
-        public boolean set(double amount);
+        boolean set(double amount);
 
-        public boolean add(double amount);
+        boolean add(double amount);
 
-        public boolean subtract(double amount);
+        boolean subtract(double amount);
 
-        public boolean multiply(double amount);
+        boolean multiply(double amount);
 
-        public boolean divide(double amount);
+        boolean divide(double amount);
 
-        public boolean hasEnough(double amount);
+        boolean hasEnough(double amount);
 
-        public boolean hasOver(double amount);
+        boolean hasOver(double amount);
 
-        public boolean hasUnder(double amount);
+        boolean hasUnder(double amount);
 
-        public boolean isNegative();
+        boolean isNegative();
 
-        public boolean remove();
+        boolean remove();
 
         @Override
-        public String toString();
+        String toString();
     }
 
 
     /**
      * Contains Calculator and Balance functions for Bank Accounts.
      */
-    public interface MethodBankAccount {
-        public double balance();
+    interface MethodBankAccount {
+        double balance();
 
-        public String getBankName();
+        String getBankName();
 
-        public int getBankId();
+        int getBankId();
 
-        public boolean set(double amount);
+        boolean set(double amount);
 
-        public boolean add(double amount);
+        boolean add(double amount);
 
-        public boolean subtract(double amount);
+        boolean subtract(double amount);
 
-        public boolean multiply(double amount);
+        boolean multiply(double amount);
 
-        public boolean divide(double amount);
+        boolean divide(double amount);
 
-        public boolean hasEnough(double amount);
+        boolean hasEnough(double amount);
 
-        public boolean hasOver(double amount);
+        boolean hasOver(double amount);
 
-        public boolean hasUnder(double amount);
+        boolean hasUnder(double amount);
 
-        public boolean isNegative();
+        boolean isNegative();
 
-        public boolean remove();
+        boolean remove();
 
         @Override
-        public String toString();
+        String toString();
     }
 }

@@ -22,7 +22,7 @@ public enum Signs {
     WEATHER(new SignWeather());
     private final EssentialsSign sign;
 
-    private Signs(final EssentialsSign sign) {
+    Signs(final EssentialsSign sign) {
         this.sign = sign;
     }
 

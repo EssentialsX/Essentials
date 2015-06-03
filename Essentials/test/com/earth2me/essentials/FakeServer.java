@@ -890,12 +890,12 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public CachedServerIcon loadServerIcon(File file) throws IllegalArgumentException, Exception {
+    public CachedServerIcon loadServerIcon(File file) throws Exception {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public CachedServerIcon loadServerIcon(BufferedImage bufferedImage) throws IllegalArgumentException, Exception {
+    public CachedServerIcon loadServerIcon(BufferedImage bufferedImage) throws Exception {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -1112,5 +1112,4 @@ public class FakeServer implements Server {
         }
     }
 
-    ;
 }

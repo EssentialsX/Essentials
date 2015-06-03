@@ -13,8 +13,8 @@ import java.util.logging.Logger;
 
 public class AlternativeCommandsHandler {
     private static final Logger LOGGER = Logger.getLogger("Essentials");
-    private final transient Map<String, List<PluginCommand>> altcommands = new HashMap<String, List<PluginCommand>>();
-    private final transient Map<String, String> disabledList = new HashMap<String, String>();
+    private final transient Map<String, List<PluginCommand>> altcommands = new HashMap<>();
+    private final transient Map<String, String> disabledList = new HashMap<>();
     private final transient IEssentials ess;
 
     public AlternativeCommandsHandler(final IEssentials ess) {
@@ -35,7 +35,7 @@ public class AlternativeCommandsHandler {
 
         for (Command command : commands) {
             final PluginCommand pc = (PluginCommand) command;
-            final List<String> labels = new ArrayList<String>(pc.getAliases());
+            final List<String> labels = new ArrayList<>(pc.getAliases());
             labels.add(pc.getName());
 
             PluginCommand reg = ess.getServer().getPluginCommand(pluginName + ":" + pc.getName().toLowerCase(Locale.ENGLISH));
@@ -48,7 +48,7 @@ public class AlternativeCommandsHandler {
             for (String label : labels) {
                 List<PluginCommand> plugincommands = altcommands.get(label.toLowerCase(Locale.ENGLISH));
                 if (plugincommands == null) {
-                    plugincommands = new ArrayList<PluginCommand>();
+                    plugincommands = new ArrayList<>();
                     altcommands.put(label.toLowerCase(Locale.ENGLISH), plugincommands);
                 }
                 boolean found = false;

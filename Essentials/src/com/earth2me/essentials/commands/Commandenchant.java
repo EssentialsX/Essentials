@@ -30,7 +30,7 @@ public class Commandenchant extends EssentialsCommand {
             throw new Exception(tl("nothingInHand"));
         }
         if (args.length == 0) {
-            final Set<String> enchantmentslist = new TreeSet<String>();
+            final Set<String> enchantmentslist = new TreeSet<>();
             for (Map.Entry<String, Enchantment> entry : Enchantments.entrySet()) {
                 final String enchantmentName = entry.getValue().getName().toLowerCase(Locale.ENGLISH);
                 if (enchantmentslist.contains(enchantmentName) || (user.isAuthorized("essentials.enchantments." + enchantmentName) && entry.getValue().canEnchantItem(stack))) {

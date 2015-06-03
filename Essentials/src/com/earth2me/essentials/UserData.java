@@ -200,10 +200,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public boolean hasHome() {
-        if (config.hasProperty("home")) {
-            return true;
-        }
-        return false;
+        return config.hasProperty("home");
     }
 
     private String nickname;

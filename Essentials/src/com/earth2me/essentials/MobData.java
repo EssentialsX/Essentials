@@ -114,12 +114,12 @@ public enum MobData {
         TAMED,
         COLORABLE,
         EXP,
-        SIZE;
+        SIZE
     }
 
     public static final Logger logger = Logger.getLogger("Essentials");
 
-    private MobData(String n, Object type, Object value, boolean isPublic) {
+    MobData(String n, Object type, Object value, boolean isPublic) {
         this.nickname = n;
         this.matched = n;
         this.helpMessage = n;
@@ -128,7 +128,7 @@ public enum MobData {
         this.isPublic = isPublic;
     }
 
-    private MobData(String n, String h, Object type, Object value, boolean isPublic) {
+    MobData(String n, String h, Object type, Object value, boolean isPublic) {
         this.nickname = n;
         this.matched = n;
         this.helpMessage = h;

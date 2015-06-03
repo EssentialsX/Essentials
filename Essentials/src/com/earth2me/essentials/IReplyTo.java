@@ -6,12 +6,12 @@ public interface IReplyTo {
      *
      * @param user
      */
-    public void setReplyTo(CommandSource user);
+    void setReplyTo(CommandSource user);
 
     /**
      * Gets the user the sender should reply to
      *
      * @return
      */
-    public CommandSource getReplyTo();
+    CommandSource getReplyTo();
 }

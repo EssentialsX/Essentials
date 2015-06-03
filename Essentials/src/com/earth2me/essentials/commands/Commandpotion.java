@@ -29,7 +29,7 @@ public class Commandpotion extends EssentialsCommand {
         final ItemStack stack = user.getBase().getItemInHand();
 
         if (args.length == 0) {
-            final Set<String> potionslist = new TreeSet<String>();
+            final Set<String> potionslist = new TreeSet<>();
             for (Map.Entry<String, PotionEffectType> entry : Potions.entrySet()) {
                 final String potionName = entry.getValue().getName().toLowerCase(Locale.ENGLISH);
                 if (potionslist.contains(potionName) || (user.isAuthorized("essentials.potion." + potionName))) {

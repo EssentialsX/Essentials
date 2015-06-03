@@ -38,7 +38,7 @@ public class Commandlist extends EssentialsCommand {
     // Output the standard /list output, when no group is specified
     private void sendGroupedList(CommandSource sender, String commandLabel, Map<String, List<User>> playerList) {
         final Set<String> configGroups = ess.getSettings().getListGroupConfig().keySet();
-        final List<String> asterisk = new ArrayList<String>();
+        final List<String> asterisk = new ArrayList<>();
 
         // Loop through the custom defined groups and display them
         for (String oConfigGroup : configGroups) {
@@ -57,7 +57,7 @@ public class Commandlist extends EssentialsCommand {
                 continue;
             }
 
-            List<User> outputUserList = new ArrayList<User>();
+            List<User> outputUserList = new ArrayList<>();
             final List<User> matchedList = playerList.get(configGroup);
 
             // If the group value is an int, then we might need to truncate it
@@ -85,19 +85,20 @@ public class Commandlist extends EssentialsCommand {
             sender.sendMessage(PlayerList.outputFormat(oConfigGroup, PlayerList.listUsers(ess, outputUserList, ", ")));
         }
 
-        String[] onlineGroups = playerList.keySet().toArray(new String[0]);
+        Set<String> var = playerList.keySet();
+        String[] onlineGroups = var.toArray(new String[var.size()]);
         Arrays.sort(onlineGroups, String.CASE_INSENSITIVE_ORDER);
 
         // If we have an asterisk group, then merge all remaining groups
         if (!asterisk.isEmpty()) {
-            List<User> asteriskUsers = new ArrayList<User>();
+            List<User> asteriskUsers = new ArrayList<>();
             for (String onlineGroup : onlineGroups) {
                 asteriskUsers.addAll(playerList.get(onlineGroup));
             }
             for (String key : asterisk) {
                 playerList.put(key, asteriskUsers);
             }
-            onlineGroups = asterisk.toArray(new String[0]);
+            onlineGroups = asterisk.toArray(new String[asterisk.size()]);
         }
 
         // If we have any groups remaining after the custom groups loop through and display them

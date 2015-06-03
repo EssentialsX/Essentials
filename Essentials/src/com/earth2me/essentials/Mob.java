@@ -61,14 +61,14 @@ public enum Mob {
 
     public static final Logger logger = Logger.getLogger("Essentials");
 
-    private Mob(String n, Enemies en, String s, EntityType type) {
+    Mob(String n, Enemies en, String s, EntityType type) {
         this.suffix = s;
         this.name = n;
         this.type = en;
         this.bukkitType = type;
     }
 
-    private Mob(String n, Enemies en, EntityType type) {
+    Mob(String n, Enemies en, EntityType type) {
         this.name = n;
         this.type = en;
         this.bukkitType = type;
@@ -93,7 +93,7 @@ public enum Mob {
     }
 
     public Entity spawn(final World world, final Server server, final Location loc) throws MobException {
-        final Entity entity = world.spawn(loc, (Class<? extends Entity>) this.bukkitType.getEntityClass());
+        final Entity entity = world.spawn(loc, this.bukkitType.getEntityClass());
         if (entity == null) {
             logger.log(Level.WARNING, tl("unableToSpawnMob"));
             throw new MobException();
@@ -107,7 +107,7 @@ public enum Mob {
         NEUTRAL("neutral"),
         ENEMY("enemy");
 
-        private Enemies(final String type) {
+        Enemies(final String type) {
             this.type = type;
         }
 

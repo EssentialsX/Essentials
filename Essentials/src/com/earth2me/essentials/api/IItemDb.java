@@ -11,11 +11,11 @@ public interface IItemDb {
 
     ItemStack get(final String name) throws Exception;
 
-    public String names(ItemStack item);
+    String names(ItemStack item);
 
-    public String name(ItemStack item);
+    String name(ItemStack item);
 
     List<ItemStack> getMatching(User user, String[] args) throws Exception;
 
-    public String serialize(ItemStack is);
+    String serialize(ItemStack is);
 }

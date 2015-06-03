@@ -95,7 +95,7 @@ public class Commandrecipe extends EssentialsCommand {
                 }
             }
         } else {
-            final HashMap<Material, String> colorMap = new HashMap<Material, String>();
+            final HashMap<Material, String> colorMap = new HashMap<>();
             int i = 1;
             for (Character c : "abcdefghi".toCharArray()) {
                 ItemStack item = recipeMap.get(c);

@@ -58,7 +58,7 @@ public class Commandrepair extends EssentialsCommand {
     }
 
     public void repairAll(User user) throws Exception {
-        final List<String> repaired = new ArrayList<String>();
+        final List<String> repaired = new ArrayList<>();
         repairItems(user.getBase().getInventory().getContents(), user, repaired);
 
         if (user.isAuthorized("essentials.repair.armor")) {

@@ -22,12 +22,12 @@ public class Commandthunder extends EssentialsCommand {
         final boolean setThunder = args[0].equalsIgnoreCase("true");
         if (args.length > 1) {
 
-            world.setThundering(setThunder ? true : false);
+            world.setThundering(setThunder);
             world.setThunderDuration(Integer.parseInt(args[1]) * 20);
             user.sendMessage(tl("thunderDuration", (setThunder ? tl("enabled") : tl("disabled")), Integer.parseInt(args[1])));
 
         } else {
-            world.setThundering(setThunder ? true : false);
+            world.setThundering(setThunder);
             user.sendMessage(tl("thunder", setThunder ? tl("enabled") : tl("disabled")));
         }
 

@@ -481,12 +481,12 @@ public class EssentialsSign {
 
 
     public interface ISign {
-        public String getLine(final int index);
+        String getLine(final int index);
 
-        public void setLine(final int index, final String text);
+        void setLine(final int index, final String text);
 
-        public Block getBlock();
+        Block getBlock();
 
-        public void updateSign();
+        void updateSign();
     }
 }

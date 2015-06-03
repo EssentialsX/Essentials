@@ -22,11 +22,11 @@ public class Commandcondense extends EssentialsCommand {
         super("condense");
     }
 
-    private Map<ItemStack, SimpleRecipe> condenseList = new HashMap<ItemStack, SimpleRecipe>();
+    private Map<ItemStack, SimpleRecipe> condenseList = new HashMap<>();
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        List<ItemStack> is = new ArrayList<ItemStack>();
+        List<ItemStack> is = new ArrayList<>();
 
         boolean validateReverse = false;
         if (args.length > 0) {

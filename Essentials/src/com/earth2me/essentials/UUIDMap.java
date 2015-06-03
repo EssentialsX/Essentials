@@ -84,7 +84,6 @@ public class UUIDMap {
         }
         try {
             Future<?> future = _writeUUIDMap();
-            ;
             if (future != null) {
                 future.get();
             }

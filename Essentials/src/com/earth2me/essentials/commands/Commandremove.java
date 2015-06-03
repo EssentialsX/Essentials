@@ -54,8 +54,8 @@ public class Commandremove extends EssentialsCommand {
     }
 
     private void parseCommand(Server server, CommandSource sender, String[] args, World world, int radius) throws Exception {
-        List<String> types = new ArrayList<String>();
-        List<String> customTypes = new ArrayList<String>();
+        List<String> types = new ArrayList<>();
+        List<String> customTypes = new ArrayList<>();
 
         if (world == null) {
             throw new Exception(tl("invalidWorld"));
@@ -88,8 +88,8 @@ public class Commandremove extends EssentialsCommand {
             radius *= radius;
         }
 
-        ArrayList<ToRemove> removeTypes = new ArrayList<ToRemove>();
-        ArrayList<Mob> customRemoveTypes = new ArrayList<Mob>();
+        ArrayList<ToRemove> removeTypes = new ArrayList<>();
+        ArrayList<Mob> customRemoveTypes = new ArrayList<>();
 
         for (String s : types) {
             removeTypes.add(ToRemove.valueOf(s));
@@ -129,7 +129,7 @@ public class Commandremove extends EssentialsCommand {
                     }
 
                     // We should skip any NAMED animals unless we are specifially targetting them.
-                    if (e instanceof LivingEntity && ((LivingEntity) e).getCustomName() != null && !removeTypes.contains(ToRemove.NAMED)) {
+                    if (e instanceof LivingEntity && e.getCustomName() != null && !removeTypes.contains(ToRemove.NAMED)) {
                         continue;
                     }
 
@@ -141,7 +141,7 @@ public class Commandremove extends EssentialsCommand {
                             }
                             break;
                         case NAMED:
-                            if (e instanceof LivingEntity && ((LivingEntity) e).getCustomName() != null) {
+                            if (e instanceof LivingEntity && e.getCustomName() != null) {
                                 e.remove();
                                 removed++;
                             }

@@ -18,15 +18,15 @@ public enum AntiBuildConfig {
     private final boolean isList;
     private final boolean isString;
 
-    private AntiBuildConfig(final String configName) {
+    AntiBuildConfig(final String configName) {
         this(configName, null, false, true, false);
     }
 
-    private AntiBuildConfig(final String configName, final boolean defValueBoolean) {
+    AntiBuildConfig(final String configName, final boolean defValueBoolean) {
         this(configName, null, defValueBoolean, false, false);
     }
 
-    private AntiBuildConfig(final String configName, final String defValueString, final boolean defValueBoolean, final boolean isList, final boolean isString) {
+    AntiBuildConfig(final String configName, final String defValueString, final boolean defValueBoolean, final boolean isList, final boolean isString) {
         this.configName = configName;
         this.defValueString = defValueString;
         this.defValueBoolean = defValueBoolean;

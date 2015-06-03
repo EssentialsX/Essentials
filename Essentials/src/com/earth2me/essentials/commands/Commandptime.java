@@ -13,7 +13,7 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class Commandptime extends EssentialsCommand {
-    private static final Set<String> getAliases = new HashSet<String>();
+    private static final Set<String> getAliases = new HashSet<>();
 
     static {
         getAliases.add("get");
@@ -146,7 +146,7 @@ public class Commandptime extends EssentialsCommand {
      * Used to parse an argument of the type "users(s) selector"
      */
     private Set<User> getUsers(final Server server, final CommandSource sender, final String selector) throws Exception {
-        final Set<User> users = new TreeSet<User>(new UserNameComparator());
+        final Set<User> users = new TreeSet<>(new UserNameComparator());
         // If there is no selector we want the sender itself. Or all users if sender isn't a user.
         if (selector == null) {
             if (sender.isPlayer()) {
