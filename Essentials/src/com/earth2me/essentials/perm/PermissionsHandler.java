@@ -132,7 +132,7 @@ public class PermissionsHandler implements IPermissionsHandler {
             }
             return;
         }
-        if (!enabledPermsPlugin.equals("")) {
+        if (!enabledPermsPlugin.equals("") && !(handler instanceof SuperpermsHandler)) {
             ess.getLogger().warning("Detected supported permissions plugin " + enabledPermsPlugin + " without Vault installed.");
             ess.getLogger().warning("Features such as chat prefixes/suffixes and group-related functionality will not " +
                     "work until you install Vault.");
