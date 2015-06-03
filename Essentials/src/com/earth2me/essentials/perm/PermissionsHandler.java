@@ -140,7 +140,7 @@ public class PermissionsHandler implements IPermissionsHandler {
             }
         } else {
             if (!(handler instanceof ConfigPermissionsHandler)) {
-                ess.getLogger().info("Essentials: Using config file enhanced permissions.");
+                ess.getLogger().info("Using config file enhanced permissions.");
                 ess.getLogger().info("Permissions listed in as player-commands will be given to all users.");
                 handler = new ConfigPermissionsHandler(ess);
             }

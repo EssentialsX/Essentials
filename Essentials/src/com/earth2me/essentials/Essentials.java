@@ -145,21 +145,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             final PluginManager pm = getServer().getPluginManager();
             for (Plugin plugin : pm.getPlugins()) {
                 if (plugin.getDescription().getName().startsWith("Essentials") && !plugin.getDescription().getVersion().equals(this.getDescription().getVersion()) && !plugin.getDescription().getName().equals("EssentialsAntiCheat")) {
-                    LOGGER.log(Level.WARNING, tl("versionMismatch", plugin.getDescription().getName()));
+                    getLogger().warning(tl("versionMismatch", plugin.getDescription().getName()));
                 }
-            }
-            final Matcher versionMatch = Pattern.compile("git-Bukkit-(?:(?:[0-9]+)\\.)+[0-9]+-R[\\.0-9]+-(?:[0-9]+-g[0-9a-f]+-)?b([0-9]+)jnks.*").matcher(getServer().getVersion());
-            if (versionMatch.matches()) {
-                final int versionNumber = Integer.parseInt(versionMatch.group(1));
-                if (versionNumber < BUKKIT_VERSION && versionNumber > 100) {
-                    wrongVersion();
-                    this.setEnabled(false);
-                    return;
-                }
-            } else {
-                LOGGER.log(Level.INFO, tl("bukkitFormatChanged"));
-                LOGGER.log(Level.INFO, getServer().getVersion());
-                LOGGER.log(Level.INFO, getServer().getBukkitVersion());
             }
             execTimer.mark("BukkitCheck");
 
@@ -216,9 +203,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             execTimer.mark("RegHandler");
 
             final MetricsStarter metricsStarter = new MetricsStarter(this);
-            if (metricsStarter.getStart() != null && metricsStarter.getStart() == true) {
+            if (metricsStarter.getStart() != null && metricsStarter.getStart()) {
                 runTaskLaterAsynchronously(metricsStarter, 1);
-            } else if (metricsStarter.getStart() != null && metricsStarter.getStart() == false) {
+            } else if (metricsStarter.getStart() != null) {
                 final MetricsListener metricsListener = new MetricsListener(this, metricsStarter);
                 pm.registerEvents(metricsListener, this);
             }
@@ -474,13 +461,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         if (getSettings().isDebug()) {
             LOGGER.log(Level.INFO, tl("errorCallingCommand", commandLabel), exception);
         }
-    }
-
-    public static void wrongVersion() {
-        LOGGER.log(Level.SEVERE, " * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! *");
-        LOGGER.log(Level.SEVERE, tl("notRecommendedBukkit"));
-        LOGGER.log(Level.SEVERE, tl("requiredBukkit", Integer.toString(BUKKIT_VERSION)));
-        LOGGER.log(Level.SEVERE, " * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! * ! *");
     }
 
     @Override
