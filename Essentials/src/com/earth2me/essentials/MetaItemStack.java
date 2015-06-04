@@ -90,7 +90,7 @@ public class MetaItemStack {
 
     public boolean canSpawn(final IEssentials ess) {
         try {
-            ess.getServer().getUnsafe().modifyItemStack(stack, "{}");
+            ess.getServer().getUnsafe().modifyItemStack(stack.clone(), "{}");
             return true;
         } catch (NullPointerException npe) {
             if (ess.getSettings().isDebug()) {

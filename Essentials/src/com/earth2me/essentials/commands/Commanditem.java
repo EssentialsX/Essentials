@@ -39,8 +39,13 @@ public class Commanditem extends EssentialsCommand {
         } catch (NumberFormatException e) {
             throw new NotEnoughArgumentsException();
         }
+
+        MetaItemStack metaStack = new MetaItemStack(stack);
+        if (!metaStack.canSpawn(ess)) {
+            throw new Exception(tl("unableToSpawnItem", itemname));
+        }
+
         if (args.length > 2) {
-            MetaItemStack metaStack = new MetaItemStack(stack);
             final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments() && user.isAuthorized("essentials.enchantments.allowunsafe");
 
             metaStack.parseStringMeta(user.getSource(), allowUnsafe, args, 2, ess);
