@@ -34,7 +34,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.8.4-R0.1-SNAPSHOT</version>
+            <version>1.8.7-R0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>BOSEconomy</groupId>
