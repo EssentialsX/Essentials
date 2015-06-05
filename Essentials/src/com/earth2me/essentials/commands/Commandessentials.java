@@ -6,6 +6,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.UserMap;
 import com.earth2me.essentials.metrics.Metrics;
 import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.FloatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.base.Charsets;
 import org.bukkit.Material;
@@ -199,7 +200,7 @@ public class Commandessentials extends EssentialsCommand {
         sender.sendMessage(tl("cleaning"));
 
         final long daysArg = Long.parseLong(args[1]);
-        final double moneyArg = args.length >= 3 ? Double.parseDouble(args[2].replaceAll("[^0-9\\.]", "")) : 0;
+        final double moneyArg = args.length >= 3 ? FloatUtil.parseDouble(args[2].replaceAll("[^0-9\\.]", "")) : 0;
         final int homesArg = args.length >= 4 && NumberUtil.isInt(args[3]) ? Integer.parseInt(args[3]) : 0;
         final UserMap userMap = ess.getUserMap();
 

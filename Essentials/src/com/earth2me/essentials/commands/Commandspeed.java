@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.FloatUtil;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
@@ -107,7 +108,7 @@ public class Commandspeed extends EssentialsCommand {
     private float getMoveSpeed(final String moveSpeed) throws NotEnoughArgumentsException {
         float userSpeed;
         try {
-            userSpeed = Float.parseFloat(moveSpeed);
+            userSpeed = FloatUtil.parseFloat(moveSpeed);
             if (userSpeed > 10f) {
                 userSpeed = 10f;
             } else if (userSpeed < 0.0001f) {
