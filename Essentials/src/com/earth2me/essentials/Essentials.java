@@ -136,6 +136,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public void onEnable() {
         try {
+            LOGGER.setParent(this.getLogger());
+            execTimer = new ExecuteTimer();
+            execTimer.start();
+            i18n = new I18n(this);
+            i18n.onEnable();
+            execTimer.mark("I18n1");
             String serverString = Bukkit.getServer().getClass().getName();
             for (int i = 1; i <= 7; i++) {
                 if (serverString.contains(".v1_" + i + "_R")) {
@@ -145,12 +151,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             if (serverString.contains(".v1_8_R1.")) {
                 getLogger().warning("Detected Bukkit 1.8.0. Spawners will not work properly until you upgrade to 1.8.3 or higher.");
             }
-            LOGGER.setParent(this.getLogger());
-            execTimer = new ExecuteTimer();
-            execTimer.start();
-            i18n = new I18n(this);
-            i18n.onEnable();
-            execTimer.mark("I18n1");
             final PluginManager pm = getServer().getPluginManager();
             for (Plugin plugin : pm.getPlugins()) {
                 if (plugin.getDescription().getName().startsWith("Essentials") && !plugin.getDescription().getVersion().equals(this.getDescription().getVersion()) && !plugin.getDescription().getName().equals("EssentialsAntiCheat")) {
