@@ -148,9 +148,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     throw new Error("Outdated server. This version of Essentials will only work on Bukkit 1.8 or higher.");
                 }
             }
-            if (serverString.contains(".v1_8_R1.")) {
-                getLogger().warning("Detected Bukkit 1.8.0. Spawners will not work properly until you upgrade to 1.8.3 or higher.");
-            }
             final PluginManager pm = getServer().getPluginManager();
             for (Plugin plugin : pm.getPlugins()) {
                 if (plugin.getDescription().getName().startsWith("Essentials") && !plugin.getDescription().getVersion().equals(this.getDescription().getVersion()) && !plugin.getDescription().getName().equals("EssentialsAntiCheat")) {

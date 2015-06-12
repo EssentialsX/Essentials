@@ -33,13 +33,14 @@ public class SpawnerUtil {
             ItemStack is = new ItemStack(Material.MOB_SPAWNER, 1);
             ItemMeta meta = is.getItemMeta();
             useMeta = meta instanceof BlockStateMeta;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             useMeta = false;
         }
         if (useMeta) {
             ess.getLogger().info("Using BlockStateMeta for spawners");
         } else {
-            ess.getLogger().info("Using legacy item data for spawners");
+            ess.getLogger().warning("Using legacy item data for spawners");
+            ess.getLogger().warning(ChatColor.RED + "UPGRADE TO SPIGOT 1.8.3 OR HIGHER FOR WORKING SPAWNERS");
         }
     }
 
