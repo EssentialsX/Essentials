@@ -1197,6 +1197,11 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public void setSpectatorTarget(Entity entity) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public boolean isLeashed() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
