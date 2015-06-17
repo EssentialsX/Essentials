@@ -1,9 +1,11 @@
 package net.ess3.nms;
 
 import com.google.common.collect.ImmutableMap;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Map;
 
@@ -34,5 +36,18 @@ public abstract class SpawnerProvider {
         } catch (Throwable t) {
             return false;
         }
+    }
+
+    protected ItemStack setDisplayName(ItemStack is, EntityType type) {
+        ItemMeta meta = is.getItemMeta();
+        String displayName;
+        if (entityToDisplayName.containsKey(type)) {
+            displayName = entityToDisplayName.get(type);
+        } else {
+            displayName = type.getName();
+        }
+        meta.setDisplayName(ChatColor.RESET + displayName + " Spawner");
+        is.setItemMeta(meta);
+        return is;
     }
 }

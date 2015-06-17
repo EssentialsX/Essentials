@@ -25,16 +25,7 @@ public class v1_8_R1SpawnerProvider extends SpawnerProvider {
         tag = itemStack.getTag().getCompound("BlockEntityTag");
         tag.setString("EntityId", type.getName());
         ItemStack bukkitItemStack = CraftItemStack.asCraftMirror(itemStack).clone();
-        ItemMeta meta = bukkitItemStack.getItemMeta();
-        String displayName;
-        if (entityToDisplayName.containsKey(type)) {
-            displayName = entityToDisplayName.get(type);
-        } else {
-            displayName = type.getName();
-        }
-        meta.setDisplayName(ChatColor.RESET + displayName + " Spawner");
-        bukkitItemStack.setItemMeta(meta);
-        return bukkitItemStack;
+        return setDisplayName(bukkitItemStack, type);
     }
 
     @Override
