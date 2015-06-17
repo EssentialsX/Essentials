@@ -6,7 +6,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class LegacyProvider extends SpawnerProvider {
+public class LegacySpawnerProvider extends SpawnerProvider {
     @Override
     public ItemStack setEntityType(ItemStack is, EntityType type) {
         is.getData().setData((byte) type.getTypeId());

@@ -3,7 +3,7 @@ package com.earth2me.essentials.utils;
 import com.earth2me.essentials.IEssentials;
 import net.ess3.nms.SpawnerProvider;
 import net.ess3.nms.blockmeta.BlockMetaSpawnerProvider;
-import net.ess3.nms.legacy.LegacyProvider;
+import net.ess3.nms.legacy.LegacySpawnerProvider;
 import net.ess3.nms.v1_8_R1.v1_8_R1SpawnerProvider;
 
 import java.util.Arrays;
@@ -20,7 +20,7 @@ public class SpawnerProviderFactory {
         List<Class<? extends SpawnerProvider>> availableProviders = Arrays.asList(
                 BlockMetaSpawnerProvider.class,
                 v1_8_R1SpawnerProvider.class,
-                LegacyProvider.class
+                LegacySpawnerProvider.class
         );
         SpawnerProvider finalProvider = null;
         for (Class<? extends SpawnerProvider> providerClass : availableProviders) {
