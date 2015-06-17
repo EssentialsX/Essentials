@@ -17,20 +17,30 @@ public class SpawnerProviderFactory {
     }
 
     public SpawnerProvider getProvider() {
-        List<SpawnerProvider> availableProviders = Arrays.asList(
-                new BlockMetaSpawnerProvider(),
-                new v1_8_R1SpawnerProvider(),
-                new LegacyProvider()
+        List<Class<? extends SpawnerProvider>> availableProviders = Arrays.asList(
+                BlockMetaSpawnerProvider.class,
+                v1_8_R1SpawnerProvider.class,
+                LegacyProvider.class
         );
         SpawnerProvider finalProvider = null;
-        for (SpawnerProvider provider : availableProviders) {
-            finalProvider = provider;
-            if (finalProvider.tryProvider()) {
+        for (Class<? extends SpawnerProvider> providerClass : availableProviders) {
+            finalProvider = loadProvider(providerClass);
+            if (finalProvider != null && finalProvider.tryProvider()) {
                 break;
             }
         }
         assert finalProvider != null;
         ess.getLogger().info("Using " + finalProvider.getHumanName() + " as spawner provider.");
         return finalProvider;
+    }
+
+    private SpawnerProvider loadProvider(Class<? extends SpawnerProvider> providerClass) {
+        SpawnerProvider provider;
+        try {
+            provider = providerClass.newInstance();
+            return provider;
+        } catch (Throwable ignored) {
+            return null;
+        }
     }
 }
