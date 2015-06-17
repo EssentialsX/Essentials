@@ -915,11 +915,6 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public Spigot spigot() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public BanList getBanList(BanList.Type arg0) {
         throw new UnsupportedOperationException("Not supported yet.");
     }

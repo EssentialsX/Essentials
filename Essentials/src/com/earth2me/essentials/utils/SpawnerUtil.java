@@ -40,7 +40,7 @@ public class SpawnerUtil {
             ess.getLogger().info("Using BlockStateMeta for spawners");
         } else {
             ess.getLogger().warning("Using legacy item data for spawners");
-            ess.getLogger().warning(ChatColor.RED + "UPGRADE TO SPIGOT 1.8.3 OR HIGHER FOR WORKING SPAWNERS");
+            ess.getLogger().warning(ChatColor.RED + "UPGRADE TO 1.8.3 OR HIGHER FOR WORKING SPAWNERS");
         }
     }
 

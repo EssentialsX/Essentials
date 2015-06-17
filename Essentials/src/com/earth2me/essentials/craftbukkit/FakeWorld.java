@@ -628,11 +628,6 @@ public class FakeWorld implements World {
     }
 
     @Override
-    public Spigot spigot() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public List<Entity> getNearbyEntities(Location loc, double x, double y, double z) {
         throw new UnsupportedOperationException("Not supported yet.");
     }

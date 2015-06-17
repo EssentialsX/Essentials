@@ -1292,11 +1292,6 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public Spigot spigot() {
-        return base.getPlayer().spigot();
-    }
-
-    @Override
     public long getFirstPlayed() {
         return base.getFirstPlayed();
     }
