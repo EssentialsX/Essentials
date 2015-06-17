@@ -2,9 +2,11 @@ package net.ess3.nms.v1_8_R1;
 
 import net.ess3.nms.SpawnerProvider;
 import net.minecraft.server.v1_8_R1.NBTTagCompound;
+import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_8_R1.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class v1_8_R1SpawnerProvider extends SpawnerProvider {
     @Override
@@ -22,7 +24,17 @@ public class v1_8_R1SpawnerProvider extends SpawnerProvider {
         }
         tag = itemStack.getTag().getCompound("BlockEntityTag");
         tag.setString("EntityId", type.getName());
-        return CraftItemStack.asCraftMirror(itemStack);
+        ItemStack bukkitItemStack = CraftItemStack.asCraftMirror(itemStack).clone();
+        ItemMeta meta = bukkitItemStack.getItemMeta();
+        String displayName;
+        if (entityToDisplayName.containsKey(type)) {
+            displayName = entityToDisplayName.get(type);
+        } else {
+            displayName = type.getName();
+        }
+        meta.setDisplayName(ChatColor.RESET + displayName + " Spawner");
+        bukkitItemStack.setItemMeta(meta);
+        return bukkitItemStack;
     }
 
     @Override

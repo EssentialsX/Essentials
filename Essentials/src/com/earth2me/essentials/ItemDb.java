@@ -135,17 +135,17 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
         if (mat == null) {
             throw new Exception(tl("unknownItemId", itemid));
         }
-        final ItemStack retval = new ItemStack(mat);
-        retval.setAmount(mat.getMaxStackSize());
+        ItemStack retval = new ItemStack(mat);
         if (mat == Material.MOB_SPAWNER) {
             try {
-                ess.getSpawnerProvider().setEntityType(retval, EntityType.fromId(metaData));
+                retval = ess.getSpawnerProvider().setEntityType(retval, EntityType.fromId(metaData));
             } catch (IllegalArgumentException e) {
                 throw new Exception("Can't spawn entity ID " + metaData + " from mob spawners.");
             }
         } else {
             retval.setDurability(metaData);
         }
+        retval.setAmount(mat.getMaxStackSize());
         return retval;
     }
 
