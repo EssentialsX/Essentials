@@ -19,8 +19,6 @@ EssentialsX is almost a completely drop-in replacement for Essentials. However, 
 
 * **EssentialsX requires Java 7.**
 
-* **EssentialsX requires Spigot/CraftBukkit 1.8, 1.8.3+ recommended (for spawner support)**
-
 Building
 --------
 To build with Maven, use the command

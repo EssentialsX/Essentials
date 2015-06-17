@@ -30,13 +30,14 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.DateUtil;
-import com.earth2me.essentials.utils.SpawnerUtil;
+import com.earth2me.essentials.utils.SpawnerProviderFactory;
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
 import net.ess3.api.*;
 import net.ess3.api.IEssentials;
 import net.ess3.api.ISettings;
+import net.ess3.nms.SpawnerProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
@@ -69,8 +70,6 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -96,7 +95,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient EssentialsTimer timer;
     private final transient List<String> vanishedPlayers = new ArrayList<>();
     private transient Method oldGetOnlinePlayers;
-    private transient SpawnerUtil spawnerUtil;
+    private transient SpawnerProvider spawnerProvider;
 
     public Essentials() {
     }
@@ -186,7 +185,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 execTimer.mark("Init(Worth/ItemDB)");
                 jails = new Jails(this);
                 confList.add(jails);
-                spawnerUtil = new SpawnerUtil(this);
+                spawnerProvider = new SpawnerProviderFactory(this).getProvider();
                 reload();
             } catch (YAMLException exception) {
                 if (pm.getPlugin("EssentialsUpdate") != null) {
@@ -746,8 +745,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     @Override
-    public SpawnerUtil getSpawnerUtil() {
-        return spawnerUtil;
+    public SpawnerProvider getSpawnerProvider() {
+        return spawnerProvider;
     }
 
     private static class EssentialsWorldListener implements Listener, Runnable {

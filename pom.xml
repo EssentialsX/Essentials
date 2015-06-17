@@ -28,7 +28,7 @@
             <url>http://repo.ess3.net/content/groups/public</url>
         </repository>
         <repository>
-            <id>spigot-repo</id>
+            <id>bukkit-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
     </repositories>
@@ -41,6 +41,10 @@
         <module>EssentialsProtect</module>
         <module>EssentialsSpawn</module>
         <module>EssentialsXMPP</module>
+        <module>nms/NMSProvider</module>
+        <module>nms/BlockMetaProvider</module>
+        <module>nms/1_8_R1Provider</module>
+        <module>nms/LegacyProvider</module>
     </modules>
 
     <dependencies>
@@ -48,6 +52,7 @@
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
             <version>1.8.7-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -59,6 +64,7 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.12.2</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

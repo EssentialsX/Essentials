@@ -1,0 +1,1 @@
+Put a 1.8 Spigot/CraftBukkit JAR with filename `craftbukkit-1.8-R0.1-SNAPSHOT.jar` in `lib/org/bukkit/craftbukkit/1.8-R0.1-SNAPSHOT`.
