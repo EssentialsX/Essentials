@@ -35,10 +35,8 @@ public class SpawnerProviderFactory {
     }
 
     private SpawnerProvider loadProvider(Class<? extends SpawnerProvider> providerClass) {
-        SpawnerProvider provider;
         try {
-            provider = providerClass.newInstance();
-            return provider;
+            return providerClass.newInstance();
         } catch (Throwable ignored) {
             return null;
         }
