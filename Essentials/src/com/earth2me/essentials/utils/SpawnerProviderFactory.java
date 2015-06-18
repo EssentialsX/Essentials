@@ -5,6 +5,7 @@ import net.ess3.nms.SpawnerProvider;
 import net.ess3.nms.blockmeta.BlockMetaSpawnerProvider;
 import net.ess3.nms.legacy.LegacySpawnerProvider;
 import net.ess3.nms.v1_8_R1.v1_8_R1SpawnerProvider;
+import net.ess3.nms.v1_8_R2.v1_8_R2SpawnerProvider;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +21,7 @@ public class SpawnerProviderFactory {
         List<Class<? extends SpawnerProvider>> availableProviders = Arrays.asList(
                 BlockMetaSpawnerProvider.class,
                 v1_8_R1SpawnerProvider.class,
+                v1_8_R2SpawnerProvider.class,
                 LegacySpawnerProvider.class
         );
         SpawnerProvider finalProvider = null;
