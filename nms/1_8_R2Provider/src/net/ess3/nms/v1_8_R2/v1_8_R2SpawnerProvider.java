@@ -41,6 +41,6 @@ public class v1_8_R2SpawnerProvider extends SpawnerProvider {
 
     @Override
     public String getHumanName() {
-        return "CraftBukkit 1.8 NMS-based provider";
+        return "CraftBukkit 1.8.3 NMS-based provider";
     }
 }
