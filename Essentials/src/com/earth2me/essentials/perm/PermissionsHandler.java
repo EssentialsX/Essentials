@@ -2,6 +2,7 @@ package com.earth2me.essentials.perm;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.perm.impl.*;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -125,7 +126,10 @@ public class PermissionsHandler implements IPermissionsHandler {
                         ((SuperpermsHandler) handler).getEnabledPermsPlugin() + " without Vault installed.");
                 ess.getLogger().warning("Features such as chat prefixes/suffixes and group-related functionality will not " +
                         "work until you install Vault.");
-            } else {
+            } else if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
+                ess.getLogger().info("Detected Vault but no supported permissions plugin. Using superperms based permissions.");
+            }
+            {
                 ess.getLogger().info("Using superperms-based permissions.");
             }
         } else if (handler instanceof ConfigPermissionsHandler) {
