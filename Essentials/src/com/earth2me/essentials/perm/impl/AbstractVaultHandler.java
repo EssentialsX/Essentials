@@ -1,4 +1,4 @@
-package com.earth2me.essentials.perm;
+package com.earth2me.essentials.perm.impl;
 
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
@@ -62,6 +62,14 @@ public abstract class AbstractVaultHandler extends SuperpermsHandler {
             return chat.getGroupSuffix((String) null, playerGroup);
         } else {
             return playerSuffix;
+        }
+    }
+
+    public boolean canLoad() {
+        try {
+            return setupProviders();
+        } catch (Throwable t) {
+            return false;
         }
     }
 }

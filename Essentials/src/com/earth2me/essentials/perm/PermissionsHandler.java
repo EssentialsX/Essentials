@@ -1,34 +1,23 @@
 package com.earth2me.essentials.perm;
 
 import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.perm.impl.*;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 
-
 public class PermissionsHandler implements IPermissionsHandler {
-    private transient IPermissionsHandler handler = new NullPermissionsHandler();
+    private transient IPermissionsHandler handler = null;
     private transient String defaultGroup = "default";
     private final transient Essentials ess;
     private transient boolean useSuperperms = false;
 
-    public PermissionsHandler(final Essentials plugin) {
-        this.ess = plugin;
-    }
-
     public PermissionsHandler(final Essentials plugin, final boolean useSuperperms) {
         this.ess = plugin;
         this.useSuperperms = useSuperperms;
-    }
-
-    public PermissionsHandler(final Essentials plugin, final String defaultGroup) {
-        this.ess = plugin;
-        this.defaultGroup = defaultGroup;
     }
 
     @Override
@@ -93,68 +82,55 @@ public class PermissionsHandler implements IPermissionsHandler {
         return suffix;
     }
 
+    @Override
+    public boolean tryProvider() {
+        return true;
+    }
+
     public void checkPermissions() {
-        final PluginManager pluginManager = ess.getServer().getPluginManager();
-        String enabledPermsPlugin = "";
-        List<String> specialCasePlugins = Arrays.asList("PermissionsEx", "GroupManager",
-                "SimplyPerms", "Privileges", "bPermissions", "zPermissions", "PermissionsBukkit",
-                "DroxPerms", "xPerms");
-        for (Plugin plugin : pluginManager.getPlugins()) {
-            if (specialCasePlugins.contains(plugin.getName())) {
-                enabledPermsPlugin = plugin.getName();
-                break;
-            }
-        }
-        final Plugin vaultAPI = pluginManager.getPlugin("Vault");
-        if (vaultAPI != null && vaultAPI.isEnabled()) {
-            if (!(handler instanceof AbstractVaultHandler)) {
-                AbstractVaultHandler vaultHandler;
-                switch (enabledPermsPlugin) {
-                    case "PermissionsEx":
-                        vaultHandler = new PermissionsExHandler();
-                        break;
-                    case "GroupManager":
-                        vaultHandler = new GroupManagerHandler();
-                        break;
-                    case "SimplyPerms":
-                        vaultHandler = new SimplyPermsHandler();
-                        break;
-                    case "Privileges":
-                        vaultHandler = new PrivilegesHandler();
-                        break;
-                    case "bPermissions":
-                        vaultHandler = new BPermissions2Handler();
-                        break;
-                    default:
-                        vaultHandler = new GenericVaultHandler();
-                        break;
+        // load and assign a handler
+        List<Class<? extends SuperpermsHandler>> providerClazz = Arrays.asList(
+                BPermissions2Handler.class,
+                GroupManagerHandler.class,
+                PermissionsExHandler.class,
+                PrivilegesHandler.class,
+                SimplyPermsHandler.class,
+                GenericVaultHandler.class,
+                SuperpermsHandler.class
+        );
+        for (Class<? extends IPermissionsHandler> providerClass : providerClazz) {
+            try {
+                IPermissionsHandler provider = providerClass.newInstance();
+                this.handler = provider;
+                if (provider.tryProvider()) {
+                    break;
                 }
-                if (enabledPermsPlugin.equals("")) {
-                    enabledPermsPlugin = "generic";
-                }
-                vaultHandler.setupProviders();
-                ess.getLogger().info("Using Vault based permissions (" + enabledPermsPlugin + ")");
-                handler = vaultHandler;
+            } catch (Throwable ignored) {
             }
-            return;
         }
-        if (!enabledPermsPlugin.equals("") && !(handler instanceof SuperpermsHandler)) {
-            ess.getLogger().warning("Detected supported permissions plugin " + enabledPermsPlugin + " without Vault installed.");
-            ess.getLogger().warning("Features such as chat prefixes/suffixes and group-related functionality will not " +
-                    "work until you install Vault.");
-            useSuperperms = true;
+        if (handler == null) {
+            handler = new ConfigPermissionsHandler(ess);
         }
-        if (useSuperperms) {
-            if (!(handler instanceof SuperpermsHandler)) {
-                ess.getLogger().info("Using superperms based permissions.");
-                handler = new SuperpermsHandler();
+        if (useSuperperms && handler instanceof ConfigPermissionsHandler) {
+            handler = new SuperpermsHandler();
+        }
+        // output handler info
+        if (handler instanceof GenericVaultHandler) {
+            String enabledPermsPlugin = ((GenericVaultHandler) handler).getEnabledPermsPlugin();
+            if (enabledPermsPlugin == null) enabledPermsPlugin = "generic";
+            ess.getLogger().info("Using Vault based permissions (" + enabledPermsPlugin + ")");
+        } else if (handler instanceof SuperpermsHandler) {
+            if (handler.tryProvider()) {
+                ess.getLogger().warning("Detected supported permissions plugin " +
+                        ((SuperpermsHandler) handler).getEnabledPermsPlugin() + " without Vault installed.");
+                ess.getLogger().warning("Features such as chat prefixes/suffixes and group-related functionality will not " +
+                        "work until you install Vault.");
+            } else {
+                ess.getLogger().info("Using superperms-based permissions.");
             }
-        } else {
-            if (!(handler instanceof ConfigPermissionsHandler)) {
-                ess.getLogger().info("Using config file enhanced permissions.");
-                ess.getLogger().info("Permissions listed in as player-commands will be given to all users.");
-                handler = new ConfigPermissionsHandler(ess);
-            }
+        } else if (handler instanceof ConfigPermissionsHandler) {
+            ess.getLogger().info("Using config file enhanced permissions.");
+            ess.getLogger().info("Permissions listed in as player-commands will be given to all users.");
         }
     }
 
@@ -163,7 +139,7 @@ public class PermissionsHandler implements IPermissionsHandler {
     }
 
     public String getName() {
-        return handler.getClass().getSimpleName().replace("Handler", "");
+        return handler.getClass().getSimpleName().replace("Provider", "");
     }
 
     private void checkPermLag(long start, String summary) {

@@ -1,11 +1,10 @@
-package com.earth2me.essentials.perm;
+package com.earth2me.essentials.perm.impl;
 
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.dataholder.worlds.WorldsHolder;
 import org.anjocaido.groupmanager.permissions.AnjoPermissionsHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 
 public class GroupManagerHandler extends AbstractVaultHandler {
@@ -31,5 +30,10 @@ public class GroupManagerHandler extends AbstractVaultHandler {
         } catch (NullPointerException ex) {
             return null;
         }
+    }
+
+    @Override
+    public boolean tryProvider() {
+        return super.canLoad() && groupManager != null;
     }
 }

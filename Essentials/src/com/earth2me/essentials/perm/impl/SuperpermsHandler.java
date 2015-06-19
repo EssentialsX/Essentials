@@ -1,7 +1,11 @@
-package com.earth2me.essentials.perm;
+package com.earth2me.essentials.perm.impl;
 
+import com.earth2me.essentials.perm.IPermissionsHandler;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -53,5 +57,25 @@ public class SuperpermsHandler implements IPermissionsHandler {
     @Override
     public String getSuffix(final Player base) {
         return null;
+    }
+
+    @Override
+    public boolean tryProvider() {
+        return getEnabledPermsPlugin() != null;
+    }
+
+    public String getEnabledPermsPlugin() {
+
+        String enabledPermsPlugin = null;
+        List<String> specialCasePlugins = Arrays.asList("PermissionsEx", "GroupManager",
+                "SimplyPerms", "Privileges", "bPermissions", "zPermissions", "PermissionsBukkit",
+                "DroxPerms", "xPerms");
+        for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
+            if (specialCasePlugins.contains(plugin.getName())) {
+                enabledPermsPlugin = plugin.getName();
+                break;
+            }
+        }
+        return enabledPermsPlugin;
     }
 }

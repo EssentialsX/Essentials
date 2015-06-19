@@ -1,4 +1,4 @@
-package com.earth2me.essentials.perm;
+package com.earth2me.essentials.perm.impl;
 
 import net.ess3.api.IEssentials;
 import org.bukkit.entity.Player;
@@ -23,4 +23,8 @@ public class ConfigPermissionsHandler extends SuperpermsHandler {
         return ess.getSettings().isPlayerCommand(cmds[cmds.length - 1]) || super.hasPermission(base, node);
     }
 
+    @Override
+    public boolean tryProvider() {
+        return true;
+    }
 }
