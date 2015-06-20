@@ -23,7 +23,6 @@ public class EssentialsPluginListener implements Listener, IConf {
         if (event.getPlugin().getName().equals("EssentialsChat")) {
             ess.getSettings().setEssentialsChatActive(true);
         }
-        ess.getPermissionsHandler().checkPermissions();
         ess.getAlternativeCommandsHandler().addPlugin(event.getPlugin());
         if (!Methods.hasMethod() && Methods.setMethod(ess.getServer().getPluginManager())) {
             ess.getLogger().log(Level.INFO, "Payment method found (" + Methods.getMethod().getLongName() + " version: " + ess.getPaymentMethod().getMethod().getVersion() + ")");
