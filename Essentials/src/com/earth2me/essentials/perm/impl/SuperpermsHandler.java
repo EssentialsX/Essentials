@@ -65,7 +65,6 @@ public class SuperpermsHandler implements IPermissionsHandler {
     }
 
     public String getEnabledPermsPlugin() {
-
         String enabledPermsPlugin = null;
         List<String> specialCasePlugins = Arrays.asList("PermissionsEx", "GroupManager",
                 "SimplyPerms", "Privileges", "bPermissions", "zPermissions", "PermissionsBukkit",
