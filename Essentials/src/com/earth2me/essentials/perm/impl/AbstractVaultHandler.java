@@ -65,7 +65,7 @@ public abstract class AbstractVaultHandler extends SuperpermsHandler {
         }
     }
 
-    public boolean canLoad() {
+    protected boolean canLoad() {
         if (Bukkit.getPluginManager().getPlugin("Vault") == null) return false;
         try {
             return setupProviders();
