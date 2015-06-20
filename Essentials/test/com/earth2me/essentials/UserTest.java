@@ -74,10 +74,4 @@ public class UserTest extends TestCase {
 
         assertEquals(user.getMoney(), i);
     }
-
-    public void testGetGroup() {
-        should("return the default group");
-        User user = ess.getUser(base1);
-        assertEquals(user.getGroup(), "default");
-    }
 }
