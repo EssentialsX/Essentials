@@ -43,4 +43,8 @@ public class EssentialsPluginListener implements Listener, IConf {
             ess.getLogger().log(Level.INFO, "Payment method was disabled. No longer accepting payments.");
         }
     }
+
+    @Override
+    public void reloadConfig() {
+    }
 }
