@@ -127,11 +127,9 @@ public class PermissionsHandler implements IPermissionsHandler {
                 ess.getLogger().warning("Features such as chat prefixes/suffixes and group-related functionality will not " +
                         "work until you install Vault.");
             } else if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
-                ess.getLogger().info("Detected Vault but no supported permissions plugin. Using superperms based permissions.");
+                ess.getLogger().info("Detected Vault but no supported permissions plugin.");
             }
-            {
-                ess.getLogger().info("Using superperms-based permissions.");
-            }
+            ess.getLogger().info("Using superperms-based permissions.");
         } else if (handler instanceof ConfigPermissionsHandler) {
             ess.getLogger().info("Using config file enhanced permissions.");
             ess.getLogger().info("Permissions listed in as player-commands will be given to all users.");
