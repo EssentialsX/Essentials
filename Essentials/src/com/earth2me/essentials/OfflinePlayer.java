@@ -1310,4 +1310,9 @@ public class OfflinePlayer implements Player {
     public Map<String, Object> serialize() {
         return base.serialize();
     }
+
+    @Override
+    public Entity getSpectatorTarget() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

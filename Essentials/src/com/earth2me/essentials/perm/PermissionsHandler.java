@@ -102,8 +102,8 @@ public class PermissionsHandler implements IPermissionsHandler {
         for (Class<? extends IPermissionsHandler> providerClass : providerClazz) {
             try {
                 IPermissionsHandler provider = providerClass.newInstance();
-                this.handler = provider;
                 if (provider.tryProvider()) {
+                    this.handler = provider;
                     break;
                 }
             } catch (Throwable ignored) {
@@ -120,17 +120,15 @@ public class PermissionsHandler implements IPermissionsHandler {
             String enabledPermsPlugin = ((GenericVaultHandler) handler).getEnabledPermsPlugin();
             if (enabledPermsPlugin == null) enabledPermsPlugin = "generic";
             ess.getLogger().info("Using Vault based permissions (" + enabledPermsPlugin + ")");
-        } else if (handler instanceof SuperpermsHandler) {
+        } else if (handler.getClass() == SuperpermsHandler.class) {
             if (handler.tryProvider()) {
                 ess.getLogger().warning("Detected supported permissions plugin " +
                         ((SuperpermsHandler) handler).getEnabledPermsPlugin() + " without Vault installed.");
                 ess.getLogger().warning("Features such as chat prefixes/suffixes and group-related functionality will not " +
                         "work until you install Vault.");
-            } else if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
-                ess.getLogger().info("Detected Vault but no supported permissions plugin.");
             }
             ess.getLogger().info("Using superperms-based permissions.");
-        } else if (handler instanceof ConfigPermissionsHandler) {
+        } else if (handler.getClass() == ConfigPermissionsHandler.class) {
             ess.getLogger().info("Using config file enhanced permissions.");
             ess.getLogger().info("Permissions listed in as player-commands will be given to all users.");
         }
