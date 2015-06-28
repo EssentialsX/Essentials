@@ -7,6 +7,7 @@ import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.utils.NumberUtil;
 import org.bukkit.Material;
 import org.bukkit.Server;
+import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Locale;
@@ -85,8 +86,15 @@ public class Commandgive extends EssentialsCommand {
             leftovers = InventoryWorkaround.addItems(giveTo.getBase().getInventory(), stack);
         }
 
+        boolean isDropItemsIfFull = ess.getSettings().isDropItemsIfFull();
+
         for (ItemStack item : leftovers.values()) {
-            sender.sendMessage(tl("giveSpawnFailure", item.getAmount(), itemName, giveTo.getDisplayName()));
+            if (isDropItemsIfFull) {
+                World w = giveTo.getWorld();
+                w.dropItemNaturally(giveTo.getLocation(), item);
+            } else {
+                sender.sendMessage(tl("giveSpawnFailure", item.getAmount(), itemName, giveTo.getDisplayName()));
+            }
         }
 
         giveTo.getBase().updateInventory();

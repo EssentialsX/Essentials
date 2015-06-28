@@ -225,4 +225,6 @@ public interface ISettings extends IConf {
     String getCustomQuitMessage();
 
     boolean isNotifyNoNewMail();
+
+    boolean isDropItemsIfFull();
 }
