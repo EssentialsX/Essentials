@@ -1,43 +1,60 @@
+/*
+ * Copyright 2011-2013 Tyler Blair. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification, are
+ * permitted provided that the following conditions are met:
+ *
+ *    1. Redistributions of source code must retain the above copyright notice, this list of
+ *       conditions and the following disclaimer.
+ *
+ *    2. Redistributions in binary form must reproduce the above copyright notice, this list
+ *       of conditions and the following disclaimer in the documentation and/or other materials
+ *       provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ''AS IS'' AND ANY EXPRESS OR IMPLIED
+ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * The views and conclusions contained in the software and documentation are those of the
+ * authors and contributors and should not be interpreted as representing official policies,
+ * either expressed or implied, of anybody else.
+ */
 package com.earth2me.essentials.metrics;
 
-/*
- * Copyright 2011 Tyler Blair. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
- * following conditions are met:
- *
- * 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following
- * disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
- * following disclaimer in the documentation and/or other materials provided with the distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ''AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
- * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
- * THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
- * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
- * TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- *
- * The views and conclusions contained in the software and documentation are those of the authors and contributors and
- * should not be interpreted as representing official policies, either expressed or implied, of anybody else.
- */
-
-import com.earth2me.essentials.IEssentials;
 import org.bukkit.Bukkit;
+import org.bukkit.Server;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Method;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.zip.GZIPOutputStream;
 
@@ -46,12 +63,12 @@ public class Metrics {
     /**
      * The current revision number
      */
-    private static final int REVISION = 7;
+    private final static int REVISION = 7;
 
     /**
      * The base url of the metrics domain
      */
-    private static final String BASE_URL = "http://report-metrics.essentials3.net";
+    private static final String BASE_URL = "http://report.mcstats.org";
 
     /**
      * The url used to report a server's status
@@ -135,7 +152,6 @@ public class Metrics {
      * website. Plotters can be added to the graph object returned.
      *
      * @param name The name of the graph
-     *
      * @return Graph object created. Will never return NULL under normal circumstances unless bad parameters are given
      */
     public Graph createGraph(final String name) {
@@ -170,21 +186,24 @@ public class Metrics {
      * Start measuring statistics. This will immediately create an async repeating task as the plugin and send the
      * initial data to the metrics backend, and then after that it will post in increments of PING_INTERVAL * 1200
      * ticks.
+     *
+     * @return True if statistics measuring is running, otherwise false.
      */
-    public void start() {
+    public boolean start() {
         synchronized (optOutLock) {
             // Did we opt out?
             if (isOptOut()) {
-                return;
+                return false;
             }
 
             // Is metrics already running?
             if (task != null) {
-                return;
+                return true;
             }
 
             // Begin hitting the server with glorious data
             task = plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
+
                 private boolean firstPost = true;
 
                 public void run() {
@@ -217,6 +236,8 @@ public class Metrics {
                     }
                 }
             }, 0, PING_INTERVAL * 1200);
+
+            return true;
         }
     }
 
@@ -306,16 +327,38 @@ public class Metrics {
     }
 
     /**
+     * Gets the online player (backwards compatibility)
+     *
+     * @return online player amount
+     */
+    private int getOnlinePlayers() {
+        try {
+            Method onlinePlayerMethod = Server.class.getMethod("getOnlinePlayers");
+            if(onlinePlayerMethod.getReturnType().equals(Collection.class)) {
+                return ((Collection<?>)onlinePlayerMethod.invoke(Bukkit.getServer())).size();
+            } else {
+                return ((Player[])onlinePlayerMethod.invoke(Bukkit.getServer())).length;
+            }
+        } catch (Exception ex) {
+            if (debug) {
+                Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
+            }
+        }
+
+        return 0;
+    }
+
+    /**
      * Generic method that posts a plugin to the metrics website
      */
     private void postPlugin(final boolean isPing) throws IOException {
         // Server software specific section
         PluginDescriptionFile description = plugin.getDescription();
-        String pluginName = description.getName();
+        String pluginName = "EssentialsX";
         boolean onlineMode = Bukkit.getServer().getOnlineMode(); // TRUE if online mode is enabled
         String pluginVersion = description.getVersion();
         String serverVersion = Bukkit.getVersion();
-        int playersOnline = ((IEssentials) plugin).getOnlinePlayers().size();
+        int playersOnline = this.getOnlinePlayers();
 
         // END server software specific section -- all code below does not use any code outside of this class / Java
 
@@ -471,7 +514,6 @@ public class Metrics {
      * GZip compress a string of bytes
      *
      * @param input
-     *
      * @return
      */
     public static byte[] gzip(String input) {
@@ -484,11 +526,9 @@ public class Metrics {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (gzos != null) {
-                try {
-                    gzos.close();
-                } catch (IOException ignore) {
-                }
+            if (gzos != null) try {
+                gzos.close();
+            } catch (IOException ignore) {
             }
         }
 
@@ -515,15 +555,16 @@ public class Metrics {
      * @param json
      * @param key
      * @param value
-     *
      * @throws UnsupportedEncodingException
      */
     private static void appendJSONPair(StringBuilder json, String key, String value) throws UnsupportedEncodingException {
-        boolean isValueNumeric;
+        boolean isValueNumeric = false;
 
         try {
-            Double.parseDouble(value);
-            isValueNumeric = true;
+            if (value.equals("0") || !value.endsWith("0")) {
+                Double.parseDouble(value);
+                isValueNumeric = true;
+            }
         } catch (NumberFormatException e) {
             isValueNumeric = false;
         }
@@ -546,7 +587,6 @@ public class Metrics {
      * Escape a string to create a valid JSON string
      *
      * @param text
-     *
      * @return
      */
     private static String escapeJSON(String text) {
@@ -593,23 +633,23 @@ public class Metrics {
      * Encode text as UTF-8
      *
      * @param text the text to encode
-     *
      * @return the encoded text, as UTF-8
      */
     private static String urlEncode(final String text) throws UnsupportedEncodingException {
         return URLEncoder.encode(text, "UTF-8");
     }
 
-
     /**
      * Represents a custom graph on the website
      */
     public static class Graph {
+
         /**
          * The graph's name, alphanumeric and spaces only :) If it does not comply to the above when submitted, it is
          * rejected
          */
         private final String name;
+
         /**
          * The set of plotters that are contained within this graph
          */
@@ -677,11 +717,11 @@ public class Metrics {
         }
     }
 
-
     /**
      * Interface used to collect custom data for a plugin
      */
     public static abstract class Plotter {
+
         /**
          * The plot's name
          */
