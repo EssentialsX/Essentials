@@ -137,6 +137,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
         }
         ItemStack retval = new ItemStack(mat);
         if (mat == Material.MOB_SPAWNER) {
+            if (metaData == 0) metaData = 50;
             try {
                 retval = ess.getSpawnerProvider().setEntityType(retval, EntityType.fromId(metaData));
             } catch (IllegalArgumentException e) {
