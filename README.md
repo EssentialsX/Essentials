@@ -17,6 +17,8 @@ EssentialsX is almost a completely drop-in replacement for Essentials. However, 
 
 * **EssentialsX requires [Vault](http://dev.bukkit.org/bukkit-plugins/vault/) to enable chat prefix/suffixes and group support if you have a supported permissions plugin.**
 
+* If you have an unsupported permissions plugin but still wish to use wildcards, enable `use-bukkit-permissions` in the configuration.
+
 * **EssentialsX requires Java 7.**
 
 Building
