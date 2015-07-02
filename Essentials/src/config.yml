@@ -95,6 +95,9 @@ spawnmob-limit: 10
 # Shall we notify users when using /lightning?
 warn-on-smite: true
 
+# Shall we drop items instead of adding to inventory if the target inventory is full?
+drop-items-if-full: false
+
 # Essentials Mail Notification
 # Should we notify players if they have no new mail?
 notify-no-new-mail: true
