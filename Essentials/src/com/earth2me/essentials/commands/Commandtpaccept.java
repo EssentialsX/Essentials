@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import org.bukkit.Location;
@@ -52,10 +53,14 @@ public class Commandtpaccept extends EssentialsCommand {
         try {
             if (user.isTpRequestHere()) {
                 final Location loc = user.getTpRequestLocation();
-                requester.getTeleport().teleportPlayer(user, user.getTpRequestLocation(), charge, TeleportCause.COMMAND);
+                Teleport teleport = requester.getTeleport();
+                teleport.setTpType(Teleport.TeleportType.TPA);
+                teleport.teleportPlayer(user, user.getTpRequestLocation(), charge, TeleportCause.COMMAND);
                 requester.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
             } else {
-                requester.getTeleport().teleport(user.getBase(), charge, TeleportCause.COMMAND);
+                Teleport teleport = requester.getTeleport();
+                teleport.setTpType(Teleport.TeleportType.TPA);
+                teleport.teleport(user.getBase(), charge, TeleportCause.COMMAND);
             }
         } catch (Exception ex) {
             user.sendMessage(tl("pendingTeleportCancelled"));

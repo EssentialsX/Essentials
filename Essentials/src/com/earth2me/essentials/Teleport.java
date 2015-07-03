@@ -21,9 +21,18 @@ public class Teleport implements net.ess3.api.ITeleport {
     private final IEssentials ess;
     private TimedTeleport timedTeleport;
 
+    private TeleportType tpType;
+
     public Teleport(IUser user, IEssentials ess) {
         this.teleportOwner = user;
         this.ess = ess;
+        tpType = TeleportType.NORMAL;
+    }
+
+    public enum TeleportType {
+        TPA,
+        BACK,
+        NORMAL
     }
 
     public void cooldown(boolean check) throws Exception {
@@ -45,7 +54,8 @@ public class Teleport implements net.ess3.api.ITeleport {
                 // If this happens, let's give the user the benifit of the doubt.
                 teleportOwner.setLastTeleportTimestamp(time.getTimeInMillis());
                 return;
-            } else if (lastTime > earliestLong && !teleportOwner.isAuthorized("essentials.teleport.cooldown.bypass")) {
+            } else if (lastTime > earliestLong
+                    && cooldownApplies()) {
                 time.setTimeInMillis(lastTime);
                 time.add(Calendar.SECOND, (int) cooldown);
                 time.add(Calendar.MILLISECOND, (int) ((cooldown * 1000.0) % 1000.0));
@@ -56,6 +66,25 @@ public class Teleport implements net.ess3.api.ITeleport {
         if (!check) {
             teleportOwner.setLastTeleportTimestamp(time.getTimeInMillis());
         }
+    }
+
+    private boolean cooldownApplies() {
+        boolean applies = true;
+        String globalBypassPerm = "essentials.teleport.cooldown.bypass";
+        switch (tpType) {
+            case NORMAL:
+                applies = !teleportOwner.isAuthorized(globalBypassPerm);
+                break;
+            case BACK:
+                applies = !(teleportOwner.isAuthorized(globalBypassPerm) &&
+                        teleportOwner.isAuthorized("essentials.teleport.cooldown.bypass.back"));
+                break;
+            case TPA:
+                applies = !(teleportOwner.isAuthorized(globalBypassPerm) &&
+                        teleportOwner.isAuthorized("essentials.teleport.cooldown.bypass.tpa"));
+                break;
+        }
+        return applies;
     }
 
     private void warnUser(final IUser user, final double delay) {
@@ -232,6 +261,7 @@ public class Teleport implements net.ess3.api.ITeleport {
     //The back function is a wrapper used to teleportPlayer a player /back to their previous location.
     @Override
     public void back(Trade chargeFor) throws Exception {
+        tpType = TeleportType.BACK;
         final Location loc = teleportOwner.getLastLocation();
         teleportOwner.sendMessage(tl("backUsageMsg", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
         teleport(teleportOwner, new LocationTarget(loc), chargeFor, TeleportCause.COMMAND);
@@ -241,6 +271,10 @@ public class Teleport implements net.ess3.api.ITeleport {
     @Override
     public void back() throws Exception {
         now(teleportOwner, new LocationTarget(teleportOwner.getLastLocation()), TeleportCause.COMMAND);
+    }
+
+    public void setTpType(TeleportType tpType) {
+        this.tpType = tpType;
     }
 
     //If we need to cancelTimer a pending teleportPlayer call this method
