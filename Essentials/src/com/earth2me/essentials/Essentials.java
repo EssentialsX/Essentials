@@ -205,17 +205,17 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             Economy.setEss(this);
             execTimer.mark("RegHandler");
 
+            try {
+                metrics = new MetricsLite(this);
+            } catch (IOException e) {
+                // Failed to submit the stats :-(
+            }
             if (!metrics.isOptOut()) {
                 getLogger().info("Starting Metrics. Opt-out using the global PluginMetrics config.");
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        try {
-                            metrics = new MetricsLite(Essentials.this);
                             metrics.start();
-                        } catch (IOException e) {
-                            // Failed to submit the stats :-(
-                        }
                     }
                 }.runTaskAsynchronously(this);
             } else {
