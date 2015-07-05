@@ -207,19 +207,19 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             try {
                 metrics = new MetricsLite(this);
+                if (!metrics.isOptOut()) {
+                    getLogger().info("Starting Metrics. Opt-out using the global PluginMetrics config.");
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            metrics.start();
+                        }
+                    }.runTaskAsynchronously(this);
+                } else {
+                    getLogger().info("Metrics disabled per PluginMetrics config.");
+                }
             } catch (IOException e) {
                 // Failed to submit the stats :-(
-            }
-            if (!metrics.isOptOut()) {
-                getLogger().info("Starting Metrics. Opt-out using the global PluginMetrics config.");
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                            metrics.start();
-                    }
-                }.runTaskAsynchronously(this);
-            } else {
-                getLogger().info("Metrics disabled per PluginMetrics config.");
             }
 
             final String timeroutput = execTimer.end();
