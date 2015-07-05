@@ -18,9 +18,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.*;
-import com.earth2me.essentials.metrics.Metrics;
-import com.earth2me.essentials.metrics.MetricsListener;
-import com.earth2me.essentials.metrics.MetricsStarter;
+import com.earth2me.essentials.metrics.MetricsLite;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
 import com.earth2me.essentials.signs.SignBlockListener;
@@ -91,7 +89,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient UserMap userMap;
     private transient ExecuteTimer execTimer;
     private transient I18n i18n;
-    private transient Metrics metrics;
+    private transient MetricsLite metrics;
     private transient EssentialsTimer timer;
     private final transient List<String> vanishedPlayers = new ArrayList<>();
     private transient Method oldGetOnlinePlayers;
@@ -206,12 +204,16 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             Economy.setEss(this);
             execTimer.mark("RegHandler");
 
-            final MetricsStarter metricsStarter = new MetricsStarter(this);
-            if (metricsStarter.getStart() != null && metricsStarter.getStart()) {
-                runTaskLaterAsynchronously(metricsStarter, 1);
-            } else if (metricsStarter.getStart() != null) {
-                final MetricsListener metricsListener = new MetricsListener(this, metricsStarter);
-                pm.registerEvents(metricsListener, this);
+            if (!metrics.isOptOut()) {
+                try {
+                    getLogger().info("Starting Metrics. Opt-out using the global PluginMetrics config.");
+                    metrics = new MetricsLite(this);
+                    metrics.start();
+                } catch (IOException e) {
+                    // Failed to submit the stats :-(
+                }
+            } else {
+                getLogger().info("Metrics disabled per PluginMetrics config.");
             }
 
             final String timeroutput = execTimer.end();
@@ -493,12 +495,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     @Override
-    public Metrics getMetrics() {
+    public MetricsLite getMetrics() {
         return metrics;
     }
 
     @Override
-    public void setMetrics(Metrics metrics) {
+    public void setMetrics(MetricsLite metrics) {
         this.metrics = metrics;
     }
 

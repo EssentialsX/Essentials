@@ -3,7 +3,7 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.api.IItemDb;
 import com.earth2me.essentials.api.IJails;
 import com.earth2me.essentials.api.IWarps;
-import com.earth2me.essentials.metrics.Metrics;
+import com.earth2me.essentials.metrics.MetricsLite;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
 import net.ess3.nms.SpawnerProvider;
@@ -86,9 +86,9 @@ public interface IEssentials extends Plugin {
 
     UserMap getUserMap();
 
-    Metrics getMetrics();
+    MetricsLite getMetrics();
 
-    void setMetrics(Metrics metrics);
+    void setMetrics(MetricsLite metrics);
 
     EssentialsTimer getTimer();
 
