@@ -56,6 +56,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 import org.yaml.snakeyaml.error.YAMLException;
@@ -205,13 +206,18 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             execTimer.mark("RegHandler");
 
             if (!metrics.isOptOut()) {
-                try {
-                    getLogger().info("Starting Metrics. Opt-out using the global PluginMetrics config.");
-                    metrics = new MetricsLite(this);
-                    metrics.start();
-                } catch (IOException e) {
-                    // Failed to submit the stats :-(
-                }
+                getLogger().info("Starting Metrics. Opt-out using the global PluginMetrics config.");
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            metrics = new MetricsLite(Essentials.this);
+                            metrics.start();
+                        } catch (IOException e) {
+                            // Failed to submit the stats :-(
+                        }
+                    }
+                }.runTaskAsynchronously(this);
             } else {
                 getLogger().info("Metrics disabled per PluginMetrics config.");
             }
