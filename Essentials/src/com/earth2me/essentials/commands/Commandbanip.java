@@ -52,6 +52,6 @@ public class Commandbanip extends EssentialsCommand {
         ess.getServer().getBanList(BanList.Type.IP).addBan(ipAddress, banReason, null, senderName);
         server.getLogger().log(Level.INFO, tl("playerBanIpAddress", senderName, ipAddress, banReason));
 
-        ess.broadcastMessage("essentials.ban.notify", tl("playerBanIpAddress", senderName, ipAddress, banReason));
+        ess.broadcastMessage("essentials.banip.notify", tl("playerBanIpAddress", senderName, ipAddress, banReason));
     }
 }
