@@ -154,7 +154,7 @@ socialspy-commands:
 # These commands will be disabled when a player is muted.
 # Use '*' to disable every command.
 # Essentials already disabled Essentials messaging commands by default.
-# It only cars about the root command, not args after that (it sees /f chat the same as /f)
+# It only cares about the root command, not args after that (it sees /f chat the same as /f)
 mute-commands:
   - f
   - kittycannon
@@ -514,7 +514,7 @@ max-money: 10000000000000
 
 # Set the minimum amount of money a player can have (must be above the negative of max-money).
 # Setting this to 0, will disable overdrafts/loans completely.  Users need 'essentials.eco.loan' perm to go below 0.
-min-money: -10000
+min-money: 0
 
 # Enable this to log all interactions with trade/buy/sell signs and sell command.
 economy-log-enabled: false
