@@ -26,11 +26,15 @@ public class Commandtppos extends EssentialsCommand {
         final double y = args[1].startsWith("~") ? user.getLocation().getY() + (args[1].length() > 1 ? Integer.parseInt(args[1].substring(1)) : 0) : Integer.parseInt(args[1]);
         final double z = args[2].startsWith("~") ? user.getLocation().getZ() + (args[2].length() > 1 ? Integer.parseInt(args[2].substring(1)) : 0) : Integer.parseInt(args[2]);
         final Location loc = new Location(user.getWorld(), x, y, z, user.getLocation().getYaw(), user.getLocation().getPitch());
-        if (args.length > 3) {
-            loc.setYaw((FloatUtil.parseFloat(args[3]) + 180 + 360) % 360);
+        if (args.length == 4) {
+            loc.setWorld(ess.getWorld(args[3]));
         }
         if (args.length > 4) {
+            loc.setYaw((FloatUtil.parseFloat(args[3]) + 180 + 360) % 360);
             loc.setPitch(FloatUtil.parseFloat(args[4]));
+        }
+        if (args.length > 5) {
+            loc.setWorld(ess.getWorld(args[5]));
         }
         if (x > 30000000 || y > 30000000 || z > 30000000 || x < -30000000 || y < -30000000 || z < -30000000) {
             throw new NotEnoughArgumentsException(tl("teleportInvalidLocation"));
@@ -53,11 +57,15 @@ public class Commandtppos extends EssentialsCommand {
         final double y = args[2].startsWith("~") ? user.getLocation().getY() + (args[2].length() > 1 ? Integer.parseInt(args[2].substring(1)) : 0) : Integer.parseInt(args[2]);
         final double z = args[3].startsWith("~") ? user.getLocation().getZ() + (args[3].length() > 1 ? Integer.parseInt(args[3].substring(1)) : 0) : Integer.parseInt(args[3]);
         final Location loc = new Location(user.getWorld(), x, y, z, user.getLocation().getYaw(), user.getLocation().getPitch());
+        if (args.length == 4) {
+            loc.setWorld(ess.getWorld(args[3]));
+        }
         if (args.length > 4) {
             loc.setYaw((FloatUtil.parseFloat(args[4]) + 180 + 360) % 360);
+            loc.setPitch(FloatUtil.parseFloat(args[5]));
         }
         if (args.length > 5) {
-            loc.setPitch(FloatUtil.parseFloat(args[5]));
+            loc.setWorld(ess.getWorld(args[5]));
         }
         if (x > 30000000 || y > 30000000 || z > 30000000 || x < -30000000 || y < -30000000 || z < -30000000) {
             throw new NotEnoughArgumentsException(tl("teleportInvalidLocation"));
