@@ -38,9 +38,9 @@ public class Commandtp extends EssentialsCommand {
                 if (!user.isAuthorized("essentials.tp.position")) {
                     throw new Exception(tl("noPerm", "essentials.tp.position"));
                 }
-                final double x2 = args[0].startsWith("~") ? user.getLocation().getX() + Integer.parseInt(args[0].substring(1)) : Integer.parseInt(args[0]);
-                final double y2 = args[1].startsWith("~") ? user.getLocation().getY() + Integer.parseInt(args[1].substring(1)) : Integer.parseInt(args[1]);
-                final double z2 = args[2].startsWith("~") ? user.getLocation().getZ() + Integer.parseInt(args[2].substring(1)) : Integer.parseInt(args[2]);
+                final double x2 = args[0].startsWith("~") ? user.getLocation().getX() + (args[0].length() > 1 ? Integer.parseInt(args[0].substring(1)) : 0) : Integer.parseInt(args[0]);
+                final double y2 = args[1].startsWith("~") ? user.getLocation().getY() + (args[1].length() > 1 ? Integer.parseInt(args[1].substring(1)) : 0) : Integer.parseInt(args[1]);
+                final double z2 = args[2].startsWith("~") ? user.getLocation().getZ() + (args[2].length() > 1 ? Integer.parseInt(args[2].substring(1)) : 0) : Integer.parseInt(args[2]);
                 if (x2 > 30000000 || y2 > 30000000 || z2 > 30000000 || x2 < -30000000 || y2 < -30000000 || z2 < -30000000) {
                     throw new NotEnoughArgumentsException(tl("teleportInvalidLocation"));
                 }
@@ -56,9 +56,9 @@ public class Commandtp extends EssentialsCommand {
                     throw new Exception(tl("noPerm", "essentials.tp.position"));
                 }
                 final User target2 = getPlayer(server, user, args, 0);
-                final double x = args[1].startsWith("~") ? target2.getLocation().getX() + Integer.parseInt(args[1].substring(1)) : Integer.parseInt(args[1]);
-                final double y = args[2].startsWith("~") ? target2.getLocation().getY() + Integer.parseInt(args[2].substring(1)) : Integer.parseInt(args[2]);
-                final double z = args[3].startsWith("~") ? target2.getLocation().getZ() + Integer.parseInt(args[3].substring(1)) : Integer.parseInt(args[3]);
+                final double x = args[1].startsWith("~") ? target2.getLocation().getX() + (args[1].length() > 1 ? Integer.parseInt(args[1].substring(1)) : 0) : Integer.parseInt(args[1]);
+                final double y = args[2].startsWith("~") ? target2.getLocation().getY() + (args[2].length() > 1 ? Integer.parseInt(args[2].substring(1)) : 0) : Integer.parseInt(args[2]);
+                final double z = args[3].startsWith("~") ? target2.getLocation().getZ() + (args[3].length() > 1 ? Integer.parseInt(args[3].substring(1)) : 0) : Integer.parseInt(args[3]);
                 if (x > 30000000 || y > 30000000 || z > 30000000 || x < -30000000 || y < -30000000 || z < -30000000) {
                     throw new NotEnoughArgumentsException(tl("teleportInvalidLocation"));
                 }
@@ -104,9 +104,9 @@ public class Commandtp extends EssentialsCommand {
             target.sendMessage(tl("teleportAtoB", Console.NAME, toPlayer.getDisplayName()));
             target.getTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND);
         } else if (args.length > 3) {
-            final double x = args[1].startsWith("~") ? target.getLocation().getX() + Integer.parseInt(args[1].substring(1)) : Integer.parseInt(args[1]);
-            final double y = args[2].startsWith("~") ? target.getLocation().getY() + Integer.parseInt(args[2].substring(1)) : Integer.parseInt(args[2]);
-            final double z = args[3].startsWith("~") ? target.getLocation().getZ() + Integer.parseInt(args[3].substring(1)) : Integer.parseInt(args[3]);
+            final double x = args[1].startsWith("~") ? target.getLocation().getX() + (args[1].length() > 1 ? Integer.parseInt(args[1].substring(1)) : 0) : Integer.parseInt(args[1]);
+            final double y = args[2].startsWith("~") ? target.getLocation().getY() + (args[2].length() > 1 ? Integer.parseInt(args[2].substring(1)) : 0) : Integer.parseInt(args[2]);
+            final double z = args[3].startsWith("~") ? target.getLocation().getZ() + (args[3].length() > 1 ? Integer.parseInt(args[3].substring(1)) : 0) : Integer.parseInt(args[3]);
             if (x > 30000000 || y > 30000000 || z > 30000000 || x < -30000000 || y < -30000000 || z < -30000000) {
                 throw new NotEnoughArgumentsException(tl("teleportInvalidLocation"));
             }
