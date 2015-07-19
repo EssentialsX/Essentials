@@ -1315,4 +1315,14 @@ public class OfflinePlayer implements Player {
     public Entity getSpectatorTarget() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @Override
+    public void resetTitle() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void sendTitle(String title, String subtitle) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }
