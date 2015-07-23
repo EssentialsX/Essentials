@@ -1,13 +1,13 @@
 package com.earth2me.essentials.utils;
 
 import net.ess3.api.IUser;
+import org.bukkit.ChatColor;
 
 import java.util.regex.Pattern;
 
 
 public class FormatUtil {
     //Vanilla patterns used to strip existing formats
-    static final transient Pattern VANILLA_PATTERN = Pattern.compile("\u00a7+[0-9A-FK-ORa-fk-or]?");
     static final transient Pattern VANILLA_COLOR_PATTERN = Pattern.compile("\u00a7+[0-9A-Fa-f]");
     static final transient Pattern VANILLA_MAGIC_PATTERN = Pattern.compile("\u00a7+[Kk]");
     static final transient Pattern VANILLA_FORMAT_PATTERN = Pattern.compile("\u00a7+[L-ORl-or]");
@@ -27,7 +27,7 @@ public class FormatUtil {
         if (input == null) {
             return null;
         }
-        return stripColor(input, VANILLA_PATTERN);
+        return ChatColor.stripColor(input);
     }
 
     //This method is used to simply strip the & convention colour codes
