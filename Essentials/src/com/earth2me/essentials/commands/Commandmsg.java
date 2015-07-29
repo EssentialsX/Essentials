@@ -66,6 +66,9 @@ public class Commandmsg extends EssentialsLoopCommand {
         if (sender.isPlayer() && matchedUser.isIgnoredPlayer(ess.getUser(sender.getPlayer()))) {
             return;
         }
+        if (matchedUser.isIgnoreMsg()) {
+            return;
+        }
 
         matchedUser.sendMessage(tl("msgFormat", senderName, translatedMe, args[0]));
         replyTo.setReplyTo(matchedUser.getSource());
