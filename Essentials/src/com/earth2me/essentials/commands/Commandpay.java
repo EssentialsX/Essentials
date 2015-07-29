@@ -43,6 +43,11 @@ public class Commandpay extends EssentialsLoopCommand {
             Trade.log("Command", "Pay", "Player", user.getName(), new Trade(amount, ess), player.getName(), new Trade(amount, ess), user.getLocation(), ess);
         } catch (MaxMoneyException ex) {
             sender.sendMessage(tl("maxMoney"));
+            try {
+                user.setMoney(user.getMoney().add(amount));
+            } catch (MaxMoneyException ignored) {
+                // this should never happen
+            }
         }
     }
 }
