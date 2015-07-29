@@ -127,6 +127,10 @@ public interface IUser {
 
     boolean isAfk();
 
+    void setIgnoreMsg(boolean ignoreMsg);
+
+    boolean isIgnoreMsg();
+
     void setConfigProperty(String node, Object object);
 
     Set<String> getConfigKeys();

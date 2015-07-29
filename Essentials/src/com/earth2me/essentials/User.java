@@ -46,6 +46,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
     private boolean recipeSee = false;
     private boolean enderSee = false;
     private transient long teleportInvulnerabilityTimestamp = 0;
+    private boolean ignoreMsg = false;
 
     public User(final Player base, final IEssentials ess) {
         super(base, ess);
@@ -591,6 +592,16 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 
     public boolean canInteractVanished() {
         return isAuthorized("essentials.vanish.interact");
+    }
+
+    @Override
+    public boolean isIgnoreMsg() {
+        return ignoreMsg;
+    }
+
+    @Override
+    public void setIgnoreMsg(boolean ignoreMsg) {
+        this.ignoreMsg = ignoreMsg;
     }
 
     @Override
