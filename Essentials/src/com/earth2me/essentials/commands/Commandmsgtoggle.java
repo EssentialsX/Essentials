@@ -41,9 +41,9 @@ public class Commandmsgtoggle extends EssentialsToggleCommand {
 
         user.setIgnoreMsg(enabled);
 
-        user.sendMessage(enabled ? tl("msgEnabled") : tl("msgDisabled"));
+        user.sendMessage(!enabled ? tl("msgEnabled") : tl("msgDisabled"));
         if (!sender.isPlayer() || !sender.getPlayer().equals(user.getBase())) {
-            sender.sendMessage(enabled ? tl("msgEnabledFor", user.getDisplayName()) : tl("msgDisabledFor", user.getDisplayName()));
+            sender.sendMessage(!enabled ? tl("msgEnabledFor", user.getDisplayName()) : tl("msgDisabledFor", user.getDisplayName()));
         }
     }
 }
