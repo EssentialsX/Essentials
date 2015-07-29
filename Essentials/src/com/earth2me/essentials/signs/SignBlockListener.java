@@ -4,6 +4,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -86,7 +87,7 @@ public class SignBlockListener implements Listener {
         for (Signs signs : Signs.values()) {
             final EssentialsSign sign = signs.getSign();
             if (topLine.equalsIgnoreCase(sign.getSuccessName())) {
-                event.setLine(0, FormatUtil.stripFormat(topLine));
+                event.setLine(0, ChatColor.stripColor(topLine));
             }
         }
     }
