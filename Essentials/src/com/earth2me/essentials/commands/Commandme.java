@@ -3,7 +3,14 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Server;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -27,7 +34,47 @@ public class Commandme extends EssentialsCommand {
         message = FormatUtil.formatMessage(user, "essentials.chat", message);
 
         user.setDisplayNick();
-        ess.broadcastMessage(user, tl("action", user.getDisplayName(), message));
+        int radius = ess.getSettings().getChatRadius();
+        String toSend = tl("action", user.getDisplayName(), message);
+        if (radius < 1) {
+            ess.broadcastMessage(user, toSend);
+            return;
+        }
+
+        World world = user.getWorld();
+        Location loc = user.getLocation();
+        Set<Player> outList = new HashSet<>();
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            final User onlineUser = ess.getUser(player);
+            if (!onlineUser.equals(user)) {
+                boolean abort = false;
+                final Location playerLoc = onlineUser.getLocation();
+                if (playerLoc.getWorld() != world) {
+                    abort = true;
+                } else {
+                    final double delta = playerLoc.distanceSquared(loc);
+                    if (delta > radius) {
+                        abort = true;
+                    }
+                }
+                if (abort) {
+                    if (onlineUser.isAuthorized("essentials.chat.spy")) {
+                        outList.add(player); // Just use the same list unless we wanted to format spyying for this.
+                    }
+                } else {
+                    outList.add(player);
+                }
+            }
+        }
+
+        if (outList.size() < 2) {
+            user.sendMessage(tl("localNoOne"));
+        }
+
+        for (Player onlinePlayer : outList) {
+            onlinePlayer.sendMessage(toSend);
+        }
     }
 
     @Override
