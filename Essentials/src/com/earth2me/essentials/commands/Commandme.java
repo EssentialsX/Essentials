@@ -65,6 +65,8 @@ public class Commandme extends EssentialsCommand {
                 } else {
                     outList.add(player);
                 }
+            } else {
+                outList.add(player); // Add yourself to the list.
             }
         }
 
