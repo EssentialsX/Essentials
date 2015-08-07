@@ -26,6 +26,13 @@ public class Commandsell extends EssentialsCommand {
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }
+
+        if (args[0].equalsIgnoreCase("hand") && !user.isAuthorized("essentials.sell.hand")) {
+            throw new Exception(tl("sellHandPermission"));
+        } else if (args[0].equalsIgnoreCase("inventory") || args[0].equalsIgnoreCase("invent") || args[0].equalsIgnoreCase("all") && !user.isAuthorized("essentials.sell.bulk")) {
+            throw new Exception(tl("sellBulkPermission"));
+        }
+
         List<ItemStack> is = ess.getItemDb().getMatching(user, args);
         int count = 0;
 
