@@ -362,9 +362,11 @@ public class EssentialsPlayerListener implements Listener {
             return;
         }
         if (ess.getSettings().getSocialSpyCommands().contains(cmd) || ess.getSettings().getSocialSpyCommands().contains("*")) {
-            for (User spyer : ess.getOnlineUsers()) {
-                if (spyer.isSocialSpyEnabled() && !player.equals(spyer.getBase())) {
-                    spyer.sendMessage(player.getDisplayName() + " : " + event.getMessage());
+            if(!player.hasPermission("essentials.chat.spy.exempt")) {
+                for (User spyer : ess.getOnlineUsers()) {
+                    if (spyer.isSocialSpyEnabled() && !player.equals(spyer.getBase())) {
+                        spyer.sendMessage(player.getDisplayName() + " : " + event.getMessage());
+                    }
                 }
             }
         } else if (!cmd.equalsIgnoreCase("afk")) {
