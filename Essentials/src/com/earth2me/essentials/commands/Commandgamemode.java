@@ -89,7 +89,7 @@ public class Commandgamemode extends EssentialsCommand {
 
     // essentials.gamemode will let them change to any but essentials.gamemode.survival would only let them change to survival.
     private boolean canChangeToMode(Player player, GameMode to) {
-        return player.hasPermission("essentials.gamemode") || player.hasPermission("essentials.gamemode." + to.name().toLowerCase());
+        return player.hasPermission("essentials.gamemode.all") || player.hasPermission("essentials.gamemode." + to.name().toLowerCase());
     }
 
     private GameMode matchGameMode(String modeString) throws NotEnoughArgumentsException {
