@@ -53,9 +53,16 @@ public class Commandgamemode extends EssentialsCommand {
                 throw new NotEnoughArgumentsException();
             }
         }
+
         if (gameMode == null) {
             gameMode = user.getBase().getGameMode() == GameMode.SURVIVAL ? GameMode.CREATIVE : user.getBase().getGameMode() == GameMode.CREATIVE ? GameMode.ADVENTURE : GameMode.SURVIVAL;
         }
+
+        if (!canChangeToMode(user.getBase(), gameMode)) {
+            user.sendMessage(tl("cantGamemode", gameMode.name()));
+            return;
+        }
+
         user.getBase().setGameMode(gameMode);
         user.sendMessage(tl("gameMode", tl(user.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH)), user.getDisplayName()));
     }
