@@ -23,12 +23,21 @@ EssentialsX is almost a completely drop-in replacement for Essentials. However, 
 
 Building
 --------
-To build with Maven, use the command
+
+Because EssentialsX builds against the Spigot/CraftBukkit server software for legacy support, you need to run Spigot's BuildTools for several versions in order to get it to compile.
+
 ```
-mvn package dependency:copy
+java -jar BuildTools.jar --rev 1.8
+java -jar BuildTools.jar --rev 1.8.3
+java -jar BuildTools.jar
 ```
 
-Jar files can then be found in the /jars folder
+Then, to build with Maven, use the command
+```
+mvn package install
+```
+
+Jar files can then be found in the /target folder for each module.
 
 
 Commit Guidelines
