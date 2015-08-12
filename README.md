@@ -34,7 +34,7 @@ java -jar BuildTools.jar
 
 Then, to build with Maven, use the command
 ```
-mvn package install
+mvn clean install
 ```
 
 Jar files can then be found in the /target folder for each module.
