@@ -4,6 +4,9 @@ import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.IUser;
+import net.ess3.api.events.PlayerTeleportToEvent;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -30,8 +33,10 @@ public class Teleport implements net.ess3.api.ITeleport {
     }
 
     public enum TeleportType {
-        TPA,
+        TP,
         BACK,
+        HOME,
+        WARP,
         NORMAL
     }
 
@@ -79,7 +84,7 @@ public class Teleport implements net.ess3.api.ITeleport {
                 applies = !(teleportOwner.isAuthorized(globalBypassPerm) &&
                         teleportOwner.isAuthorized("essentials.teleport.cooldown.bypass.back"));
                 break;
-            case TPA:
+            case TP:
                 applies = !(teleportOwner.isAuthorized(globalBypassPerm) &&
                         teleportOwner.isAuthorized("essentials.teleport.cooldown.bypass.tpa"));
                 break;
@@ -117,7 +122,13 @@ public class Teleport implements net.ess3.api.ITeleport {
     protected void now(IUser teleportee, ITarget target, TeleportCause cause) throws Exception {
         cancel(false);
         teleportee.setLastLocation();
-        final Location loc = target.getLocation();
+        Location loc = target.getLocation();
+ 
+        PlayerTeleportToEvent event = new PlayerTeleportToEvent(teleportee, tpType, loc);
+        Bukkit.getPluginManager().callEvent(event);
+        if(event.isCancelled())
+        	return;
+        loc = event.getLocation();
 
         if (LocationUtil.isBlockUnsafeForUser(teleportee, loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
             if (ess.getSettings().isTeleportSafetyEnabled()) {

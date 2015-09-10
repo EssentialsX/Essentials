@@ -54,12 +54,12 @@ public class Commandtpaccept extends EssentialsCommand {
             if (user.isTpRequestHere()) {
                 final Location loc = user.getTpRequestLocation();
                 Teleport teleport = requester.getTeleport();
-                teleport.setTpType(Teleport.TeleportType.TPA);
+                teleport.setTpType(Teleport.TeleportType.TP);
                 teleport.teleportPlayer(user, user.getTpRequestLocation(), charge, TeleportCause.COMMAND);
                 requester.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
             } else {
                 Teleport teleport = requester.getTeleport();
-                teleport.setTpType(Teleport.TeleportType.TPA);
+                teleport.setTpType(Teleport.TeleportType.TP);
                 teleport.teleport(user.getBase(), charge, TeleportCause.COMMAND);
             }
         } catch (Exception ex) {

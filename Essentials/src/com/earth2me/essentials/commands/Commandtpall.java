@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.User;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -39,6 +40,8 @@ public class Commandtpall extends EssentialsCommand {
                 continue;
             }
             try {
+
+                player.getTeleport().setTpType(Teleport.TeleportType.TP);
                 player.getTeleport().now(loc, false, TeleportCause.COMMAND);
             } catch (Exception ex) {
                 ess.showError(sender, ex, getName());

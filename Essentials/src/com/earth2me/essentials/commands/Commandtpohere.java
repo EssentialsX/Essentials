@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -26,6 +27,7 @@ public class Commandtpohere extends EssentialsCommand {
         }
 
         // Verify permission
+        player.getTeleport().setTpType(Teleport.TeleportType.TP);
         player.getTeleport().now(user.getBase(), false, TeleportCause.COMMAND);
     }
 }
