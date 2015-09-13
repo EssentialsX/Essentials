@@ -78,6 +78,8 @@ public class Commandnick extends EssentialsLoopCommand {
             throw new Exception(tl("nickTooLong"));
         } else if (FormatUtil.stripFormat(newNick).length() < 1) {
             throw new Exception(tl("nickNamesAlpha"));
+        } else if (user != null && (user.isAuthorized("essentials.nick.changecolors") || user.isAuthorized("essentials.nick.changecolours")) && !FormatUtil.stripFormat(newNick).equals(user.getName())) {
+            throw new Exception(tl("nickNamesOnlyColorChanges"));
         }
         return newNick;
     }
