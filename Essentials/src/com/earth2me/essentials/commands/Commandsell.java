@@ -29,7 +29,7 @@ public class Commandsell extends EssentialsCommand {
 
         if (args[0].equalsIgnoreCase("hand") && !user.isAuthorized("essentials.sell.hand")) {
             throw new Exception(tl("sellHandPermission"));
-        } else if (args[0].equalsIgnoreCase("inventory") || args[0].equalsIgnoreCase("invent") || args[0].equalsIgnoreCase("all") && !user.isAuthorized("essentials.sell.bulk")) {
+        } else if ((args[0].equalsIgnoreCase("inventory") || args[0].equalsIgnoreCase("invent") || args[0].equalsIgnoreCase("all")) && !user.isAuthorized("essentials.sell.bulk")) {
             throw new Exception(tl("sellBulkPermission"));
         }
 
