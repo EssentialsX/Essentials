@@ -27,7 +27,7 @@ public class Commandcreatekit extends EssentialsCommand {
         long delay = Long.valueOf(args[1]);
         String kitname = args[0];
         ItemStack[] items = user.getBase().getInventory().getContents();
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         for (ItemStack is : items) {
             if (is != null && is.getType() != null && is.getType() != Material.AIR) {
                 String serialized = ess.getItemDb().serialize(is);

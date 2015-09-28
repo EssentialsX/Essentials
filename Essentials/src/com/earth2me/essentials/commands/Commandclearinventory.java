@@ -33,7 +33,7 @@ public class Commandclearinventory extends EssentialsCommand {
     }
 
     private void parseCommand(Server server, CommandSource sender, String[] args, boolean allowOthers, boolean allowAll) throws Exception {
-        Collection<Player> players = new ArrayList<Player>();
+        Collection<Player> players = new ArrayList<>();
         int offset = 0;
 
         if (sender.isPlayer()) {
@@ -73,11 +73,7 @@ public class Commandclearinventory extends EssentialsCommand {
                 final ItemStack item = ess.getItemDb().get(split[0]);
                 type = item.getTypeId();
 
-                if (split.length > 1 && NumberUtil.isInt(split[1])) {
-                    data = Short.parseShort(split[1]);
-                } else {
-                    data = item.getDurability();
-                }
+                data = split.length > 1 && NumberUtil.isInt(split[1]) ? Short.parseShort(split[1]) : item.getDurability();
             }
         }
 

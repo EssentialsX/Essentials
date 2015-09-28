@@ -17,9 +17,9 @@ public class Backup implements Runnable {
     private static final Logger LOGGER = Logger.getLogger("Essentials");
     private transient final Server server;
     private transient final IEssentials ess;
-    private transient boolean running = false;
+    private transient boolean running;
     private transient int taskId = -1;
-    private transient boolean active = false;
+    private transient boolean active;
 
     public Backup(final IEssentials ess) {
         this.ess = ess;
@@ -108,9 +108,7 @@ public class Backup implements Runnable {
                         }
                     });
                     child.waitFor();
-                } catch (InterruptedException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
+                } catch (InterruptedException | IOException ex) {
                     LOGGER.log(Level.SEVERE, null, ex);
                 } finally {
                     class BackupEnableSaveTask implements Runnable {

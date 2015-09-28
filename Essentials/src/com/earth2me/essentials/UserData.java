@@ -134,15 +134,14 @@ public abstract class UserData extends PlayerExtension implements IConf {
         if (config.isConfigurationSection("homes")) {
             return config.getConfigurationSection("homes").getValues(false);
         }
-        return new HashMap<String, Object>();
+        return new HashMap<>();
     }
 
     private String getHomeName(String search) {
         if (NumberUtil.isInt(search)) {
             try {
                 search = getHomes().get(Integer.parseInt(search) - 1);
-            } catch (NumberFormatException e) {
-            } catch (IndexOutOfBoundsException e) {
+            } catch (NumberFormatException | IndexOutOfBoundsException e) {
             }
         }
         return search;
@@ -174,7 +173,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public List<String> getHomes() {
-        return new ArrayList<String>(homes.keySet());
+        return new ArrayList<>(homes.keySet());
     }
 
     public void setHome(String name, Location loc) {
@@ -250,7 +249,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         if (config.isConfigurationSection("powertools")) {
             return config.getConfigurationSection("powertools").getValues(false);
         }
-        return new HashMap<String, Object>();
+        return new HashMap<>();
     }
 
     public void clearAllPowertools() {
@@ -444,10 +443,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
     @Deprecated
     public boolean isIgnoredPlayer(final String userName) {
         final IUser user = ess.getUser(userName);
-        if (user == null || !user.getBase().isOnline()) {
-            return false;
-        }
-        return isIgnoredPlayer(user);
+        return !(user == null || !user.getBase().isOnline()) && isIgnoredPlayer(user);
     }
 
     public boolean isIgnoredPlayer(IUser user) {
@@ -671,7 +667,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         return isNPC;
     }
 
-    private String lastAccountName = null;
+    private String lastAccountName;
 
     public String getLastAccountName() {
         return lastAccountName;
@@ -722,7 +718,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
         if (config.isConfigurationSection("timestamps.kits")) {
             final ConfigurationSection section = config.getConfigurationSection("timestamps.kits");
-            final Map<String, Long> timestamps = new HashMap<String, Long>();
+            final Map<String, Long> timestamps = new HashMap<>();
             for (String command : section.getKeys(false)) {
                 if (section.isLong(command)) {
                     timestamps.put(command.toLowerCase(Locale.ENGLISH), section.getLong(command));
@@ -732,7 +728,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
             }
             return timestamps;
         }
-        return new HashMap<String, Long>();
+        return new HashMap<>();
     }
 
     public long getKitTimestamp(String name) {
@@ -740,7 +736,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         if (kitTimestamps != null && kitTimestamps.containsKey(name)) {
             return kitTimestamps.get(name);
         }
-        return 0l;
+        return 0L;
     }
 
     public void setKitTimestamp(final String name, final long time) {
@@ -770,21 +766,21 @@ public abstract class UserData extends PlayerExtension implements IConf {
         if (config.isConfigurationSection("info")) {
             return config.getConfigurationSection("info").getKeys(true);
         }
-        return new HashSet<String>();
+        return new HashSet<>();
     }
 
     public Map<String, Object> getConfigMap() {
         if (config.isConfigurationSection("info")) {
             return config.getConfigurationSection("info").getValues(true);
         }
-        return new HashMap<String, Object>();
+        return new HashMap<>();
     }
 
     public Map<String, Object> getConfigMap(String node) {
         if (config.isConfigurationSection("info." + node)) {
             return config.getConfigurationSection("info." + node).getValues(true);
         }
-        return new HashMap<String, Object>();
+        return new HashMap<>();
     }
 
     public UUID getConfigUUID() {

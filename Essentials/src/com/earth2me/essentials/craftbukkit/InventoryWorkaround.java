@@ -51,7 +51,7 @@ public final class InventoryWorkaround {
     // Returns what it couldnt store
     // Set oversizedStack to below normal stack size to disable oversized stacks
     public static Map<Integer, ItemStack> addOversizedItems(final Inventory inventory, final int oversizedStacks, final ItemStack... items) {
-        final Map<Integer, ItemStack> leftover = new HashMap<Integer, ItemStack>();
+        final Map<Integer, ItemStack> leftover = new HashMap<>();
 
 		/*
          * TODO: some optimization - Create a 'firstPartial' with a 'fromIndex' - Record the lastPartial per Material -

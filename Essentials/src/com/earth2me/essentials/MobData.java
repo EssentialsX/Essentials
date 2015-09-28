@@ -145,9 +145,9 @@ public enum MobData {
     private String matched;
 
     public static LinkedHashMap<String, MobData> getPossibleData(final Entity spawned, boolean publicOnly) {
-        LinkedHashMap<String, MobData> mobList = new LinkedHashMap<String, MobData>();
+        LinkedHashMap<String, MobData> mobList = new LinkedHashMap<>();
         for (MobData data : MobData.values()) {
-            if (data.type instanceof EntityType && spawned.getType().equals(data.type) && ((publicOnly && data.isPublic) || !publicOnly)) {
+            if (data.type instanceof EntityType && spawned.getType() == data.type && ((publicOnly && data.isPublic) || !publicOnly)) {
                 mobList.put(data.nickname.toLowerCase(Locale.ENGLISH), data);
             } else if (data.type instanceof Class && ((Class) data.type).isAssignableFrom(spawned.getClass()) && ((publicOnly && data.isPublic) || !publicOnly)) {
                 mobList.put(data.nickname.toLowerCase(Locale.ENGLISH), data);
@@ -158,7 +158,7 @@ public enum MobData {
     }
 
     public static List<String> getValidHelp(final Entity spawned) {
-        List<String> output = new ArrayList<String>();
+        List<String> output = new ArrayList<>();
         LinkedHashMap<String, MobData> posData = getPossibleData(spawned, true);
 
         for (MobData data : posData.values()) {

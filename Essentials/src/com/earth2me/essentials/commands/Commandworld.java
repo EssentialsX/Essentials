@@ -53,11 +53,8 @@ public class Commandworld extends EssentialsCommand {
         double factor;
         if (user.getWorld().getEnvironment() == World.Environment.NETHER && world.getEnvironment() == World.Environment.NORMAL) {
             factor = 8.0;
-        } else if (user.getWorld().getEnvironment() == World.Environment.NORMAL && world.getEnvironment() == World.Environment.NETHER) {
-            factor = 1.0 / 8.0;
-        } else {
-            factor = 1.0;
-        }
+        } else
+            factor = user.getWorld().getEnvironment() == World.Environment.NORMAL && world.getEnvironment() == World.Environment.NETHER ? 1.0 / 8.0 : 1.0;
 
         final Location loc = user.getLocation();
         final Location target = new Location(world, loc.getBlockX() * factor + .5, loc.getBlockY(), loc.getBlockZ() * factor + .5);

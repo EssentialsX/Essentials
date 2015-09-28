@@ -51,7 +51,7 @@ public class Commandsudo extends EssentialsLoopCommand {
         }
 
         final String command = getFinalArg(args, 0);
-        if (command != null && command.length() > 0) {
+        if (command != null && !command.isEmpty()) {
             class SudoCommandTask implements Runnable {
                 @Override
                 public void run() {

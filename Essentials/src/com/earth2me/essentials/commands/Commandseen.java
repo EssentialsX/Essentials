@@ -170,7 +170,7 @@ public class Commandseen extends EssentialsCommand {
                     }
                 }
 
-                if (matches.size() > 0) {
+                if (!matches.isEmpty()) {
                     sender.sendMessage(tl("matchingIPAddress"));
                     sender.sendMessage(StringUtil.joinList(matches));
                 } else {

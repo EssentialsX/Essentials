@@ -10,9 +10,9 @@ import java.util.Map;
 
 
 public class EssentialsAntiBuild extends JavaPlugin implements IAntiBuild {
-    private final transient Map<AntiBuildConfig, Boolean> settingsBoolean = new EnumMap<AntiBuildConfig, Boolean>(AntiBuildConfig.class);
-    private final transient Map<AntiBuildConfig, List<Integer>> settingsList = new EnumMap<AntiBuildConfig, List<Integer>>(AntiBuildConfig.class);
-    private transient EssentialsConnect ess = null;
+    private final transient Map<AntiBuildConfig, Boolean> settingsBoolean = new EnumMap<>(AntiBuildConfig.class);
+    private final transient Map<AntiBuildConfig, List<Integer>> settingsList = new EnumMap<>(AntiBuildConfig.class);
+    private transient EssentialsConnect ess;
 
     @Override
     public void onEnable() {

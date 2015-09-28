@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.logging.Level;
 
 public class PermissionsHandler implements IPermissionsHandler {
-    private transient IPermissionsHandler handler = null;
+    private transient IPermissionsHandler handler;
     private transient String defaultGroup = "default";
     private final transient Essentials ess;
-    private transient boolean useSuperperms = false;
+    private transient boolean useSuperperms;
 
     public PermissionsHandler(final Essentials plugin, final boolean useSuperperms) {
         this.ess = plugin;

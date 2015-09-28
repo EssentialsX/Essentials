@@ -11,6 +11,6 @@ public class PrivilegesHandler extends AbstractVaultHandler {
 
     @Override
     public boolean tryProvider() {
-        return super.canLoad() && Bukkit.getPluginManager().getPlugin("Privileges") != null;
+        return canLoad() && Bukkit.getPluginManager().getPlugin("Privileges") != null;
     }
 }

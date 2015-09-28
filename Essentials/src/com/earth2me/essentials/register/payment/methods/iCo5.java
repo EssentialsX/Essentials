@@ -70,11 +70,8 @@ public class iCo5 implements Method {
 
     @Override
     public boolean createAccount(String name) {
-        if (hasAccount(name)) {
-            return false;
-        }
+        return !hasAccount(name) && com.iConomy.iConomy.Accounts.create(name);
 
-        return com.iConomy.iConomy.Accounts.create(name);
     }
 
     @Override

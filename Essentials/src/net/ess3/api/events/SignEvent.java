@@ -13,13 +13,12 @@ import org.bukkit.event.HandlerList;
  */
 public class SignEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
-    private boolean cancelled = false;
+    private boolean cancelled;
     ISign sign;
     EssentialsSign essSign;
     IUser user;
 
     public SignEvent(final ISign sign, final EssentialsSign essSign, final IUser user) {
-        super();
         this.sign = sign;
         this.essSign = essSign;
         this.user = user;

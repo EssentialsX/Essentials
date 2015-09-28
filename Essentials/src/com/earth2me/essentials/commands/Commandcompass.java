@@ -29,11 +29,7 @@ public class Commandcompass extends EssentialsCommand {
             dir = "SW";
         } else if (bearing < 293) {
             dir = "W";
-        } else if (bearing < 338) {
-            dir = "NW";
-        } else {
-            dir = "N";
-        }
+        } else dir = bearing < 338 ? "NW" : "N";
         user.sendMessage(tl("compassBearing", dir, bearing));
     }
 }

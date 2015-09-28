@@ -96,11 +96,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
             exPlayer = server.getPlayer(searchTerm);
         }
 
-        if (exPlayer != null) {
-            user = ess.getUser(exPlayer);
-        } else {
-            user = ess.getUser(searchTerm);
-        }
+        user = exPlayer != null ? ess.getUser(exPlayer) : ess.getUser(searchTerm);
 
         if (user != null) {
             if (!getOffline && !user.getBase().isOnline()) {
@@ -176,11 +172,8 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
             return !interactee.isHidden();
         }
 
-        if (interactor.isPlayer()) {
-            return canInteractWith(ess.getUser(interactor.getPlayer()), interactee);
-        }
+        return !interactor.isPlayer() || canInteractWith(ess.getUser(interactor.getPlayer()), interactee);
 
-        return true; // console
     }
 
     private static boolean canInteractWith(User interactor, User interactee) {
@@ -188,10 +181,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
             return !interactee.isHidden();
         }
 
-        if (interactor.equals(interactee)) {
-            return true;
-        }
+        return interactor.equals(interactee) || interactor.getBase().canSee(interactee.getBase());
 
-        return interactor.getBase().canSee(interactee.getBase());
     }
 }

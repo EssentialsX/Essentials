@@ -28,7 +28,6 @@ public class EssentialsSpawnPlayerListener implements Listener {
     private final transient SpawnStorage spawns;
 
     public EssentialsSpawnPlayerListener(final IEssentials ess, final SpawnStorage spawns) {
-        super();
         this.ess = ess;
         this.spawns = spawns;
     }
@@ -43,11 +42,7 @@ public class EssentialsSpawnPlayerListener implements Listener {
         if (ess.getSettings().getRespawnAtHome()) {
             Location home;
             final Location bed = user.getBase().getBedSpawnLocation();
-            if (bed != null) {
-                home = bed;
-            } else {
-                home = user.getHome(user.getLocation());
-            }
+            home = bed != null ? bed : user.getHome(user.getLocation());
             if (home != null) {
                 event.setRespawnLocation(home);
                 return;

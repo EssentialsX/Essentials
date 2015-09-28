@@ -18,13 +18,12 @@ import java.util.concurrent.ExecutionException;
 public class UserMap extends CacheLoader<String, User> implements IConf {
     private final transient IEssentials ess;
     private final transient LoadingCache<String, User> users;
-    private final transient ConcurrentSkipListSet<UUID> keys = new ConcurrentSkipListSet<UUID>();
-    private final transient ConcurrentSkipListMap<String, UUID> names = new ConcurrentSkipListMap<String, UUID>();
-    private final transient ConcurrentSkipListMap<UUID, ArrayList<String>> history = new ConcurrentSkipListMap<UUID, ArrayList<String>>();
+    private final transient ConcurrentSkipListSet<UUID> keys = new ConcurrentSkipListSet<>();
+    private final transient ConcurrentSkipListMap<String, UUID> names = new ConcurrentSkipListMap<>();
+    private final transient ConcurrentSkipListMap<UUID, ArrayList<String>> history = new ConcurrentSkipListMap<>();
     private UUIDMap uuidMap;
 
     public UserMap(final IEssentials ess) {
-        super();
         this.ess = ess;
         uuidMap = new UUIDMap(ess);
         //RemovalListener<UUID, User> remListener = new UserMapRemovalListener();
@@ -98,7 +97,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
     public void trackUUID(final UUID uuid, final String name, boolean replace) {
         if (uuid != null) {
             keys.add(uuid);
-            if (name != null && name.length() > 0) {
+            if (name != null && !name.isEmpty()) {
                 final String keyName = StringUtil.safeString(name);
                 if (!names.containsKey(keyName)) {
                     names.put(keyName, uuid);

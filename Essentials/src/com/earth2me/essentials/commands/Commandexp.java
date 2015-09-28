@@ -140,8 +140,8 @@ public class Commandexp extends EssentialsCommand {
         if (amount > Integer.MAX_VALUE) {
             amount = (long) Integer.MAX_VALUE;
         }
-        if (amount < 0l) {
-            amount = 0l;
+        if (amount < 0L) {
+            amount = 0L;
         }
         SetExpFix.setTotalExperience(target.getBase(), (int) amount);
         sender.sendMessage(tl("expSet", target.getDisplayName(), amount));

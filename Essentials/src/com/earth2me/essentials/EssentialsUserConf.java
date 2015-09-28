@@ -46,10 +46,7 @@ public class EssentialsUserConf extends EssentialsConf {
 
     @Override
     public boolean altFileExists() {
-        if (username.equals(username.toLowerCase())) {
-            return false;
-        }
-        return getAltFile().exists();
+        return !username.equals(username.toLowerCase()) && getAltFile().exists();
     }
 
     @Override

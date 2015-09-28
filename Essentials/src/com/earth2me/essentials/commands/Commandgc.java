@@ -23,11 +23,7 @@ public class Commandgc extends EssentialsCommand {
         ChatColor color;
         if (tps >= 18.0) {
             color = ChatColor.GREEN;
-        } else if (tps >= 15.0) {
-            color = ChatColor.YELLOW;
-        } else {
-            color = ChatColor.RED;
-        }
+        } else color = tps >= 15.0 ? ChatColor.YELLOW : ChatColor.RED;
 
         sender.sendMessage(tl("uptime", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime())));
         sender.sendMessage(tl("tps", "" + color + NumberUtil.formatDouble(tps)));

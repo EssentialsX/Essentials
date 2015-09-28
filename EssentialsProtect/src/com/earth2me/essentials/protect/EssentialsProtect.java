@@ -14,10 +14,10 @@ import java.util.logging.Logger;
 
 public class EssentialsProtect extends JavaPlugin implements IProtect {
     private static final Logger LOGGER = Logger.getLogger("Minecraft");
-    private final Map<ProtectConfig, Boolean> settingsBoolean = new EnumMap<ProtectConfig, Boolean>(ProtectConfig.class);
-    private final Map<ProtectConfig, String> settingsString = new EnumMap<ProtectConfig, String>(ProtectConfig.class);
-    private final Map<ProtectConfig, List<Integer>> settingsList = new EnumMap<ProtectConfig, List<Integer>>(ProtectConfig.class);
-    private EssentialsConnect ess = null;
+    private final Map<ProtectConfig, Boolean> settingsBoolean = new EnumMap<>(ProtectConfig.class);
+    private final Map<ProtectConfig, String> settingsString = new EnumMap<>(ProtectConfig.class);
+    private final Map<ProtectConfig, List<Integer>> settingsList = new EnumMap<>(ProtectConfig.class);
+    private EssentialsConnect ess;
 
     @Override
     public void onEnable() {

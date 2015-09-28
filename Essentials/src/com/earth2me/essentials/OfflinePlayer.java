@@ -31,9 +31,9 @@ public class OfflinePlayer implements Player {
     private transient Location location = new Location(null, 0, 0, 0, 0, 0);
     private transient World world;
     private transient org.bukkit.OfflinePlayer base;
-    private boolean allowFlight = false;
-    private boolean isFlying = false;
-    private String name = null;
+    private boolean allowFlight;
+    private boolean isFlying;
+    private String name;
 
     public OfflinePlayer(final UUID uuid, final Server server) {
         this.server = server;

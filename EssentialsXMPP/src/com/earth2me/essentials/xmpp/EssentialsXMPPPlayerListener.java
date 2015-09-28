@@ -17,7 +17,6 @@ class EssentialsXMPPPlayerListener implements Listener {
     private final transient IEssentials ess;
 
     EssentialsXMPPPlayerListener(final IEssentials ess) {
-        super();
         this.ess = ess;
     }
 

@@ -41,8 +41,8 @@ import java.util.logging.Logger;
 
 
 public class FakeServer implements Server {
-    private List<Player> players = new ArrayList<Player>();
-    private final List<World> worlds = new ArrayList<World>();
+    private List<Player> players = new ArrayList<>();
+    private final List<World> worlds = new ArrayList<>();
     PluginManager pluginManager = new FakePluginManager();
 
     public FakeServer() {
@@ -137,7 +137,7 @@ public class FakeServer implements Server {
 
     @Override
     public List<Player> matchPlayer(String string) {
-        List<Player> matches = new ArrayList<Player>();
+        List<Player> matches = new ArrayList<>();
         for (Player player : players) {
             if (player.getName().substring(0, Math.min(player.getName().length(), string.length())).equalsIgnoreCase(string)) {
                 matches.add(player);
@@ -947,7 +947,7 @@ public class FakeServer implements Server {
 
 
     class FakePluginManager implements PluginManager {
-        ArrayList<RegisteredListener> listeners = new ArrayList<RegisteredListener>();
+        ArrayList<RegisteredListener> listeners = new ArrayList<>();
 
         @Override
         public void registerInterface(Class<? extends PluginLoader> loader) throws IllegalArgumentException {

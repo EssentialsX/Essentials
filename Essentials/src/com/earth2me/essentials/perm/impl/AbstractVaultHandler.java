@@ -10,8 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public abstract class AbstractVaultHandler extends SuperpermsHandler {
-    private static Permission perms = null;
-    private static Chat chat = null;
+    private static Permission perms;
+    private static Chat chat;
 
     public boolean setupProviders() {
         try {

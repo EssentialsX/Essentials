@@ -18,7 +18,7 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class Warps implements IConf, net.ess3.api.IWarps {
     private static final Logger logger = Logger.getLogger("Essentials");
-    private final Map<StringIgnoreCase, EssentialsConf> warpPoints = new HashMap<StringIgnoreCase, EssentialsConf>();
+    private final Map<StringIgnoreCase, EssentialsConf> warpPoints = new HashMap<>();
     private final File warpsFolder;
     private final Server server;
 
@@ -38,7 +38,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
 
     @Override
     public Collection<String> getList() {
-        final List<String> keys = new ArrayList<String>();
+        final List<String> keys = new ArrayList<>();
         for (StringIgnoreCase stringIgnoreCase : warpPoints.keySet()) {
             keys.add(stringIgnoreCase.getString());
         }
@@ -93,11 +93,11 @@ public class Warps implements IConf, net.ess3.api.IWarps {
         warpPoints.clear();
         File[] listOfFiles = warpsFolder.listFiles();
         if (listOfFiles.length >= 1) {
-            for (int i = 0; i < listOfFiles.length; i++) {
-                String filename = listOfFiles[i].getName();
-                if (listOfFiles[i].isFile() && filename.endsWith(".yml")) {
+            for (File listOfFile : listOfFiles) {
+                String filename = listOfFile.getName();
+                if (listOfFile.isFile() && filename.endsWith(".yml")) {
                     try {
-                        EssentialsConf conf = new EssentialsConf(listOfFiles[i]);
+                        EssentialsConf conf = new EssentialsConf(listOfFile);
                         conf.load();
                         String name = conf.getString("name");
                         if (name != null) {
@@ -136,10 +136,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
 
         @Override
         public boolean equals(Object o) {
-            if (o instanceof StringIgnoreCase) {
-                return getString().equalsIgnoreCase(((StringIgnoreCase) o).getString());
-            }
-            return false;
+            return o instanceof StringIgnoreCase && getString().equalsIgnoreCase(((StringIgnoreCase) o).getString());
         }
 
         public String getString() {

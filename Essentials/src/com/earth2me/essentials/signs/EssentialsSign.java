@@ -24,7 +24,7 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class EssentialsSign {
-    private static final Set<Material> EMPTY_SET = new HashSet<Material>();
+    private static final Set<Material> EMPTY_SET = new HashSet<>();
     protected static final BigDecimal MINTRANSACTION = new BigDecimal("0.01");
     protected transient final String signName;
 
@@ -54,9 +54,7 @@ public class EssentialsSign {
                 sign.setLine(0, getSuccessName());
             }
             return ret;
-        } catch (ChargeException ex) {
-            showError(ess, user.getSource(), ex, signName);
-        } catch (SignException ex) {
+        } catch (ChargeException | SignException ex) {
             showError(ess, user.getSource(), ex, signName);
         }
         // Return true, so the player sees the wrong sign.
@@ -92,11 +90,8 @@ public class EssentialsSign {
 
             final SignInteractEvent signEvent = new SignInteractEvent(sign, this, user);
             ess.getServer().getPluginManager().callEvent(signEvent);
-            if (signEvent.isCancelled()) {
-                return false;
-            }
+            return !signEvent.isCancelled() && onSignInteract(sign, user, getUsername(user), ess);
 
-            return onSignInteract(sign, user, getUsername(user), ess);
         } catch (ChargeException ex) {
             showError(ess, user.getSource(), ex, signName);
             return false;
@@ -116,11 +111,8 @@ public class EssentialsSign {
 
             final SignBreakEvent signEvent = new SignBreakEvent(sign, this, user);
             ess.getServer().getPluginManager().callEvent(signEvent);
-            if (signEvent.isCancelled()) {
-                return false;
-            }
+            return !signEvent.isCancelled() && onSignBreak(sign, user, getUsername(user), ess);
 
-            return onSignBreak(sign, user, getUsername(user), ess);
         } catch (SignException ex) {
             showError(ess, user.getSource(), ex, signName);
             return false;
@@ -143,9 +135,7 @@ public class EssentialsSign {
         User user = ess.getUser(player);
         try {
             return onBlockPlace(block, user, getUsername(user), ess);
-        } catch (ChargeException ex) {
-            showError(ess, user.getSource(), ex, signName);
-        } catch (SignException ex) {
+        } catch (ChargeException | SignException ex) {
             showError(ess, user.getSource(), ex, signName);
         }
         return false;
@@ -155,9 +145,7 @@ public class EssentialsSign {
         User user = ess.getUser(player);
         try {
             return onBlockInteract(block, user, getUsername(user), ess);
-        } catch (ChargeException ex) {
-            showError(ess, user.getSource(), ex, signName);
-        } catch (SignException ex) {
+        } catch (ChargeException | SignException ex) {
             showError(ess, user.getSource(), ex, signName);
         }
         return false;
@@ -303,9 +291,7 @@ public class EssentialsSign {
 
     protected final int getInteger(final String line) throws SignException {
         try {
-            final int quantity = Integer.parseInt(line);
-
-            return quantity;
+            return Integer.parseInt(line);
         } catch (NumberFormatException ex) {
             throw new SignException("Invalid sign", ex);
         }
@@ -352,9 +338,7 @@ public class EssentialsSign {
     protected final BigDecimal getBigDecimal(final String line) throws SignException {
         try {
             return new BigDecimal(line);
-        } catch (ArithmeticException ex) {
-            throw new SignException(ex.getMessage(), ex);
-        } catch (NumberFormatException ex) {
+        } catch (ArithmeticException | NumberFormatException ex) {
             throw new SignException(ex.getMessage(), ex);
         }
     }

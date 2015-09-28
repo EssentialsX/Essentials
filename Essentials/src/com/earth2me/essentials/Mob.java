@@ -78,8 +78,8 @@ public enum Mob {
     final public String name;
     final public Enemies type;
     final private EntityType bukkitType;
-    private static final Map<String, Mob> hashMap = new HashMap<String, Mob>();
-    private static final Map<EntityType, Mob> bukkitMap = new HashMap<EntityType, Mob>();
+    private static final Map<String, Mob> hashMap = new HashMap<>();
+    private static final Map<EntityType, Mob> bukkitMap = new HashMap<>();
 
     static {
         for (Mob mob : Mob.values()) {

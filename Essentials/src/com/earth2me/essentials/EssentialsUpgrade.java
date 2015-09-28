@@ -553,11 +553,7 @@ public class EssentialsUpgrade {
             final String playerName = conf.getString("lastAccountName");
             if (playerName != null && playerName.length() > 1 && banReason != null && banReason.length() > 1) {
                 try {
-                    if (conf.getConfigurationSection("ban").contains("timeout")) {
-                        banTimeout = Long.parseLong(conf.getConfigurationSection("ban").getString("timeout"));
-                    } else {
-                        banTimeout = 0L;
-                    }
+                    banTimeout = conf.getConfigurationSection("ban").contains("timeout") ? Long.parseLong(conf.getConfigurationSection("ban").getString("timeout")) : 0L;
                 } catch (NumberFormatException n) {
                     banTimeout = 0L;
                 }

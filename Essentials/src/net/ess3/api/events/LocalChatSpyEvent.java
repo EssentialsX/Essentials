@@ -13,7 +13,7 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class LocalChatSpyEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
-    private boolean cancelled = false;
+    private boolean cancelled;
     private String message;
     private String format;
     private Player player;

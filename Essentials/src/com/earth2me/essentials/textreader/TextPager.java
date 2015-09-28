@@ -116,7 +116,7 @@ public class TextPager {
         int chapterend;
         for (chapterend = chapterstart; chapterend < lines.size(); chapterend++) {
             final String line = lines.get(chapterend);
-            if (line.length() > 0 && line.charAt(0) == '#') {
+            if (!line.isEmpty() && line.charAt(0) == '#') {
                 break;
             }
         }

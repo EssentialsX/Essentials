@@ -46,18 +46,14 @@ public class PlayerList {
             }
         }
         String online;
-        if (hiddenCount > 0) {
-            online = tl("listAmountHidden", ess.getOnlinePlayers().size() - playerHidden, hiddenCount, server.getMaxPlayers());
-        } else {
-            online = tl("listAmount", ess.getOnlinePlayers().size() - playerHidden, server.getMaxPlayers());
-        }
+        online = hiddenCount > 0 ? tl("listAmountHidden", ess.getOnlinePlayers().size() - playerHidden, hiddenCount, server.getMaxPlayers()) : tl("listAmount", ess.getOnlinePlayers().size() - playerHidden, server.getMaxPlayers());
         return online;
     }
 
     // Build the basic player list, divided by groups.
     public static Map<String, List<User>> getPlayerLists(final IEssentials ess, final User sender, final boolean showHidden) {
         Server server = ess.getServer();
-        final Map<String, List<User>> playerList = new HashMap<String, List<User>>();
+        final Map<String, List<User>> playerList = new HashMap<>();
         for (User onlineUser : ess.getOnlineUsers()) {
             if ((sender == null && !showHidden && onlineUser.isHidden()) || (sender != null && !showHidden && !sender.getBase().canSee(onlineUser.getBase()))) {
                 continue;
@@ -65,7 +61,7 @@ public class PlayerList {
             final String group = FormatUtil.stripFormat(FormatUtil.stripEssentialsFormat(onlineUser.getGroup().toLowerCase()));
             List<User> list = playerList.get(group);
             if (list == null) {
-                list = new ArrayList<User>();
+                list = new ArrayList<>();
                 playerList.put(group, list);
             }
             list.add(onlineUser);
@@ -76,7 +72,7 @@ public class PlayerList {
     // Handle the merging of groups
     public static List<User> getMergedList(final IEssentials ess, final Map<String, List<User>> playerList, final String groupName) {
         final Set<String> configGroups = ess.getSettings().getListGroupConfig().keySet();
-        final List<User> users = new ArrayList<User>();
+        final List<User> users = new ArrayList<>();
         for (String configGroup : configGroups) {
             if (configGroup.equalsIgnoreCase(groupName)) {
                 String[] groupValues = ess.getSettings().getListGroupConfig().get(configGroup).toString().trim().split(" ");

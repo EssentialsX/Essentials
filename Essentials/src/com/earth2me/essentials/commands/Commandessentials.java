@@ -30,7 +30,7 @@ public class Commandessentials extends EssentialsCommand {
     }
 
     private transient int taskid;
-    private final transient Map<Player, Block> noteBlocks = new HashMap<Player, Block>();
+    private final transient Map<Player, Block> noteBlocks = new HashMap<>();
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
@@ -94,7 +94,7 @@ public class Commandessentials extends EssentialsCommand {
     }
 
     private void run_nya(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        final Map<String, Float> noteMap = new HashMap<String, Float>();
+        final Map<String, Float> noteMap = new HashMap<>();
         noteMap.put("1F#", 0.5f);
         noteMap.put("1G", 0.53f);
         noteMap.put("1G#", 0.56f);
@@ -122,7 +122,7 @@ public class Commandessentials extends EssentialsCommand {
         final String tuneStr = "1D#,1E,2F#,,2A#,1E,1D#,1E,2F#,2B,2D#,2E,2D#,2A#,2B,,2F#,,1D#,1E,2F#,2B,2C#,2A#,2B,2C#,2E,2D#,2E,2C#,,2F#,,2G#,,1D,1D#,,1C#,1D,1C#,1B,,1B,,1C#,,1D,,1D,1C#,1B,1C#,1D#,2F#,2G#,1D#,2F#,1C#,1D#,1B,1C#,1B,1D#,,2F#,,2G#,1D#,2F#,1C#,1D#,1B,1D,1D#,1D,1C#,1B,1C#,1D,,1B,1C#,1D#,2F#,1C#,1D,1C#,1B,1C#,,1B,,1C#,,2F#,,2G#,,1D,1D#,,1C#,1D,1C#,1B,,1B,,1C#,,1D,,1D,1C#,1B,1C#,1D#,2F#,2G#,1D#,2F#,1C#,1D#,1B,1C#,1B,1D#,,2F#,,2G#,1D#,2F#,1C#,1D#,1B,1D,1D#,1D,1C#,1B,1C#,1D,,1B,1C#,1D#,2F#,1C#,1D,1C#,1B,1C#,,1B,,1B,,1B,,1F#,1G#,1B,,1F#,1G#,1B,1C#,1D#,1B,1E,1D#,1E,2F#,1B,,1B,,1F#,1G#,1B,1E,1D#,1C#,1B,,,,1F#,1B,,1F#,1G#,1B,,1F#,1G#,1B,1B,1C#,1D#,1B,1F#,1G#,1F#,1B,,1B,1A#,1B,1F#,1G#,1B,1E,1D#,1E,2F#,1B,,1A#,,1B,,1F#,1G#,1B,,1F#,1G#,1B,1C#,1D#,1B,1E,1D#,1E,2F#,1B,,1B,,1F#,1G#,1B,1F#,1E,1D#,1C#,1B,,,,1F#,1B,,1F#,1G#,1B,,1F#,1G#,1B,1B,1C#,1D#,1B,1F#,1G#,1F#,1B,,1B,1A#,1B,1F#,1G#,1B,1E,1D#,1E,2F#,1B,,1A#,,1B,,1F#,1G#,1B,,1F#,1G#,1B,1C#,1D#,1B,1E,1D#,1E,2F#,1B,,1B,,1F#,1G#,1B,1F#,1E,1D#,1C#,1B,,,,1F#,1B,,1F#,1G#,1B,,1F#,1G#,1B,1B,1C#,1D#,1B,1F#,1G#,1F#,1B,,1B,1A#,1B,1F#,1G#,1B,1E,1D#,1E,2F#,1B,,1A#,,1B,,1F#,1G#,1B,,1F#,1G#,1B,1C#,1D#,1B,1E,1D#,1E,2F#,1B,,1B,,1F#,1G#,1B,1F#,1E,1D#,1C#,1B,,,,1F#,1B,,1F#,1G#,1B,,1F#,1G#,1B,1B,1C#,1D#,1B,1F#,1G#,1F#,1B,,1B,1A#,1B,1F#,1G#,1B,1E,1D#,1E,2F#,1B,,1A#,,1B,,1F#,1G#,1B,,1F#,1G#,1B,1C#,1D#,1B,1E,1D#,1E,2F#,1B,,1B,,1F#,1G#,1B,1F#,1E,1D#,1C#,1B,,,,1F#,1B,,1F#,1G#,1B,,1F#,1G#,1B,1B,1C#,1D#,1B,1F#,1G#,1F#,1B,,1B,1A#,1B,1F#,1G#,1B,1E,1D#,1E,2F#,1B,,1B,,";
         final String[] tune = tuneStr.split(",");
         taskid = ess.scheduleSyncRepeatingTask(new Runnable() {
-            int i = 0;
+            int i;
 
             @Override
             public void run() {
@@ -154,7 +154,7 @@ public class Commandessentials extends EssentialsCommand {
     private final String[] consoleMoo = new String[]{"         (__)", "         (oo)", "   /------\\/", "  / |    ||", " *  /\\---/\\", "    ~~   ~~", "....\"Have you mooed today?\"..."};
     private final String[] playerMoo = new String[]{"            (__)", "            (oo)", "   /------\\/", "  /  |      | |", " *  /\\---/\\", "    ~~    ~~", "....\"Have you mooed today?\"..."};
 
-    private void run_moo(final Server server, final CommandSource sender, final String command, final String args[]) {
+    private void run_moo(final Server server, final CommandSource sender, final String command, final String[] args) {
         if (args.length == 2 && args[1].equals("moo")) {
             for (String s : consoleMoo) {
                 logger.info(s);
@@ -175,7 +175,7 @@ public class Commandessentials extends EssentialsCommand {
         }
     }
 
-    private void run_optout(final Server server, final CommandSource sender, final String command, final String args[]) {
+    private void run_optout(final Server server, final CommandSource sender, final String command, final String[] args) {
         final MetricsLite metrics = ess.getMetrics();
         try {
             sender.sendMessage("Essentials collects simple metrics to highlight which features to concentrate work on in the future.");
@@ -190,7 +190,7 @@ public class Commandessentials extends EssentialsCommand {
         }
     }
 
-    private void run_cleanup(final Server server, final CommandSource sender, final String command, final String args[]) throws Exception {
+    private void run_cleanup(final Server server, final CommandSource sender, final String command, final String[] args) throws Exception {
         if (args.length < 2 || !NumberUtil.isInt(args[1])) {
             sender.sendMessage("This sub-command will delete users who havent logged in in the last <days> days.");
             sender.sendMessage("Optional parameters define the minium amount required to prevent deletion.");

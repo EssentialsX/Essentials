@@ -109,7 +109,7 @@ public class MetricsLite {
     /**
      * Id of the scheduled task
      */
-    private volatile BukkitTask task = null;
+    private volatile BukkitTask task;
 
     public MetricsLite(Plugin plugin) throws IOException {
         if (plugin == null) {
@@ -286,11 +286,7 @@ public class MetricsLite {
     private int getOnlinePlayers() {
         try {
             Method onlinePlayerMethod = Server.class.getMethod("getOnlinePlayers");
-            if(onlinePlayerMethod.getReturnType().equals(Collection.class)) {
-                return ((Collection<?>)onlinePlayerMethod.invoke(Bukkit.getServer())).size();
-            } else {
-                return ((Player[])onlinePlayerMethod.invoke(Bukkit.getServer())).length;
-            }
+            return onlinePlayerMethod.getReturnType().equals(Collection.class) ? ((Collection<?>) onlinePlayerMethod.invoke(Bukkit.getServer())).size() : ((Player[]) onlinePlayerMethod.invoke(Bukkit.getServer())).length;
         } catch (Exception ex) {
             if (debug) {
                 Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
@@ -359,11 +355,7 @@ public class MetricsLite {
 
         // Mineshafter creates a socks proxy, so we can safely bypass it
         // It does not reroute POST requests so we need to go around it
-        if (isMineshafterPresent()) {
-            connection = url.openConnection(Proxy.NO_PROXY);
-        } else {
-            connection = url.openConnection();
-        }
+        connection = isMineshafterPresent() ? url.openConnection(Proxy.NO_PROXY) : url.openConnection();
 
 
         byte[] uncompressed = json.toString().getBytes();

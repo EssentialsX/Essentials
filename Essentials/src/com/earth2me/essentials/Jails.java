@@ -33,7 +33,7 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.settings.Jails> implements net.ess3.api.IJails {
     private static final transient Logger LOGGER = Bukkit.getLogger();
-    private static transient boolean enabled = false;
+    private static transient boolean enabled;
 
     public Jails(final IEssentials ess) {
         super(ess, com.earth2me.essentials.settings.Jails.class);
@@ -71,7 +71,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
     }
 
     private void checkRegister() {
-        if (enabled == false && getCount() > 0) {
+        if (!enabled && getCount() > 0) {
             registerListeners();
         }
     }

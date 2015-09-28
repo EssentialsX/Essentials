@@ -43,11 +43,7 @@ public class Commandbanip extends EssentialsCommand {
         }
 
         String banReason;
-        if (args.length > 1) {
-            banReason = FormatUtil.replaceFormat(getFinalArg(args, 1).replace("\\n", "\n").replace("|", "\n"));
-        } else {
-            banReason = tl("defaultBanReason");
-        }
+        banReason = args.length > 1 ? FormatUtil.replaceFormat(getFinalArg(args, 1).replace("\\n", "\n").replace("|", "\n")) : tl("defaultBanReason");
 
         ess.getServer().getBanList(BanList.Type.IP).addBan(ipAddress, banReason, null, senderName);
         server.getLogger().log(Level.INFO, tl("playerBanIpAddress", senderName, ipAddress, banReason));

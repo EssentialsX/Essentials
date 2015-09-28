@@ -16,8 +16,8 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class Commandmail extends EssentialsCommand {
-    private static int mailsPerMinute = 0;
-    private static long timestamp = 0;
+    private static int mailsPerMinute;
+    private static long timestamp;
 
     public Commandmail() {
         super("mail");
