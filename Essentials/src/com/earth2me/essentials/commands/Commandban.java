@@ -43,11 +43,7 @@ public class Commandban extends EssentialsCommand {
 
         final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
         String banReason;
-        if (args.length > 1) {
-            banReason = FormatUtil.replaceFormat(getFinalArg(args, 1).replace("\\n", "\n").replace("|", "\n"));
-        } else {
-            banReason = tl("defaultBanReason");
-        }
+        banReason = args.length > 1 ? FormatUtil.replaceFormat(getFinalArg(args, 1).replace("\\n", "\n").replace("|", "\n")) : tl("defaultBanReason");
 
         ess.getServer().getBanList(BanList.Type.NAME).addBan(user.getName(), banReason, null, senderName);
 

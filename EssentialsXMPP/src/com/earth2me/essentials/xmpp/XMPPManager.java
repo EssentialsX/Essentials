@@ -33,7 +33,6 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
     private transient boolean threadrunning = true;
 
     public XMPPManager(final IEssentialsXMPP parent) {
-        super();
         this.parent = parent;
         config = new EssentialsConf(new File(parent.getDataFolder(), "config.yml"));
         config.setTemplateName("/config.yml", EssentialsXMPP.class);
@@ -67,7 +66,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
     public void processMessage(final Chat chat, final Message msg) {
         // Normally we should log the error message
         // But we would create a loop if the connection to a log-user fails.
-        if (msg.getType() != Message.Type.error && msg.getBody().length() > 0) {
+        if (msg.getType() != Message.Type.error && !msg.getBody().isEmpty()) {
             final String message = msg.getBody();
             switch (message.charAt(0)) {
                 case '@':
@@ -220,8 +219,8 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
         loggerThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                final Set<LogRecord> copy = new HashSet<LogRecord>();
-                final Set<String> failedUsers = new HashSet<String>();
+                final Set<LogRecord> copy = new HashSet<>();
+                final Set<String> failedUsers = new HashSet<>();
                 while (threadrunning) {
                     synchronized (logrecords) {
                         if (!logrecords.isEmpty()) {

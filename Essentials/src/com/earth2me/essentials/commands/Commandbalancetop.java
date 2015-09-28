@@ -24,7 +24,7 @@ public class Commandbalancetop extends EssentialsCommand {
     private static final int CACHETIME = 2 * 60 * 1000;
     public static final int MINUSERS = 50;
     private static final SimpleTextInput cache = new SimpleTextInput();
-    private static long cacheage = 0;
+    private static long cacheage;
     private static final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
     @Override
@@ -87,7 +87,7 @@ public class Commandbalancetop extends EssentialsCommand {
             try {
                 if (force || cacheage <= System.currentTimeMillis() - CACHETIME) {
                     cache.getLines().clear();
-                    final Map<String, BigDecimal> balances = new HashMap<String, BigDecimal>();
+                    final Map<String, BigDecimal> balances = new HashMap<>();
                     BigDecimal totalMoney = BigDecimal.ZERO;
                     if (ess.getSettings().isEcoDisabled()) {
                         if (ess.getSettings().isDebug()) {
@@ -106,7 +106,7 @@ public class Commandbalancetop extends EssentialsCommand {
                         }
                     }
 
-                    final List<Map.Entry<String, BigDecimal>> sortedEntries = new ArrayList<Map.Entry<String, BigDecimal>>(balances.entrySet());
+                    final List<Map.Entry<String, BigDecimal>> sortedEntries = new ArrayList<>(balances.entrySet());
                     Collections.sort(sortedEntries, new Comparator<Map.Entry<String, BigDecimal>>() {
                         @Override
                         public int compare(final Entry<String, BigDecimal> entry1, final Entry<String, BigDecimal> entry2) {

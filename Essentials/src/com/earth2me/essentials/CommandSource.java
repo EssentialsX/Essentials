@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 
 
 public class CommandSource implements IReplyTo {
-    private CommandSource replyTo = null;
+    private CommandSource replyTo;
     protected CommandSender sender;
 
     public CommandSource(final CommandSender base) {

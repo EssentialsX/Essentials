@@ -92,15 +92,14 @@ public class SignEnchant extends EssentialsSign {
             throw new SignException(tl("missingItems", 1, search.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ')));
         }
 
-        final ItemStack toEnchant = playerHand;
         try {
             if (level == 0) {
-                toEnchant.removeEnchantment(enchantment);
+                playerHand.removeEnchantment(enchantment);
             } else {
                 if (ess.getSettings().allowUnsafeEnchantments() && player.isAuthorized("essentials.signs.enchant.allowunsafe")) {
-                    toEnchant.addUnsafeEnchantment(enchantment, level);
+                    playerHand.addUnsafeEnchantment(enchantment, level);
                 } else {
-                    toEnchant.addEnchantment(enchantment, level);
+                    playerHand.addEnchantment(enchantment, level);
                 }
             }
         } catch (Exception ex) {

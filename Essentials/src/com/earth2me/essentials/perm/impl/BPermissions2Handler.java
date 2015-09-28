@@ -12,6 +12,6 @@ public class BPermissions2Handler extends AbstractVaultHandler {
 
     @Override
     public boolean tryProvider() {
-        return super.canLoad() && Bukkit.getPluginManager().getPlugin("bPermissions") != null;
+        return canLoad() && Bukkit.getPluginManager().getPlugin("bPermissions") != null;
     }
 }

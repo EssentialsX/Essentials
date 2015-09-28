@@ -68,21 +68,9 @@ public class FormatUtil {
             return null;
         }
         String message;
-        if (user.isAuthorized(permBase + ".color") || user.isAuthorized(permBase + ".colour")) {
-            message = replaceColor(input, REPLACE_COLOR_PATTERN);
-        } else {
-            message = stripColor(input, VANILLA_COLOR_PATTERN);
-        }
-        if (user.isAuthorized(permBase + ".magic")) {
-            message = replaceColor(message, REPLACE_MAGIC_PATTERN);
-        } else {
-            message = stripColor(message, VANILLA_MAGIC_PATTERN);
-        }
-        if (user.isAuthorized(permBase + ".format")) {
-            message = replaceColor(message, REPLACE_FORMAT_PATTERN);
-        } else {
-            message = stripColor(message, VANILLA_FORMAT_PATTERN);
-        }
+        message = user.isAuthorized(permBase + ".color") || user.isAuthorized(permBase + ".colour") ? replaceColor(input, REPLACE_COLOR_PATTERN) : stripColor(input, VANILLA_COLOR_PATTERN);
+        message = user.isAuthorized(permBase + ".magic") ? replaceColor(message, REPLACE_MAGIC_PATTERN) : stripColor(message, VANILLA_MAGIC_PATTERN);
+        message = user.isAuthorized(permBase + ".format") ? replaceColor(message, REPLACE_FORMAT_PATTERN) : stripColor(message, VANILLA_FORMAT_PATTERN);
         return message;
     }
 

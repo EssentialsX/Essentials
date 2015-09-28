@@ -50,7 +50,7 @@ public class UserManager implements IConf {
     }
 
     private void setUser(final String username, final String address, final boolean spy) {
-        final Map<String, Object> userdata = new HashMap<String, Object>();
+        final Map<String, Object> userdata = new HashMap<>();
         userdata.put(ADDRESS, address);
         userdata.put(SPY, spy);
         users.setProperty(username, userdata);

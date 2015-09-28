@@ -41,11 +41,7 @@ public abstract class SpawnerProvider {
     protected ItemStack setDisplayName(ItemStack is, EntityType type) {
         ItemMeta meta = is.getItemMeta();
         String displayName;
-        if (entityToDisplayName.containsKey(type)) {
-            displayName = entityToDisplayName.get(type);
-        } else {
-            displayName = type.getName();
-        }
+        displayName = entityToDisplayName.containsKey(type) ? entityToDisplayName.get(type) : type.getName();
         meta.setDisplayName(ChatColor.RESET + displayName + " Spawner");
         is.setItemMeta(meta);
         return is;

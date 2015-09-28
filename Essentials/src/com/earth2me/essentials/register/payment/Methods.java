@@ -26,13 +26,13 @@ import java.util.Set;
  * <http://aol.nexua.org>
  */
 public class Methods {
-    private static String version = null;
-    private static boolean self = false;
-    private static Method Method = null;
+    private static String version;
+    private static boolean self;
+    private static Method Method;
     private static String preferred = "";
-    private static final Set<Method> Methods = new HashSet<Method>();
-    private static final Set<String> Dependencies = new HashSet<String>();
-    private static final Set<Method> Attachables = new HashSet<Method>();
+    private static final Set<Method> Methods = new HashSet<>();
+    private static final Set<String> Dependencies = new HashSet<>();
+    private static final Set<Method> Attachables = new HashSet<>();
 
     static {
         _init();
@@ -189,11 +189,7 @@ public class Methods {
                         }
 
                         if (count == 0) {
-                            if (preferred.equalsIgnoreCase(attached.getName())) {
-                                Method = attached;
-                            } else {
-                                Method = attached;
-                            }
+                            Method = preferred.equalsIgnoreCase(attached.getName()) ? attached : attached;
                         }
                     }
 

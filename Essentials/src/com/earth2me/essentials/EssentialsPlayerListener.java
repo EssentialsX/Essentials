@@ -525,7 +525,7 @@ public class EssentialsPlayerListener implements Listener {
         if (type == InventoryType.PLAYER) {
             final User user = ess.getUser((Player) event.getWhoClicked());
             final InventoryHolder invHolder = top.getHolder();
-            if (invHolder != null && invHolder instanceof HumanEntity) {
+            if (invHolder instanceof HumanEntity) {
                 final User invOwner = ess.getUser((Player) invHolder);
                 if (user.isInvSee() && (!user.isAuthorized("essentials.invsee.modify") || invOwner.isAuthorized("essentials.invsee.preventmodify") || !invOwner.getBase().isOnline())) {
                     event.setCancelled(true);
@@ -586,7 +586,7 @@ public class EssentialsPlayerListener implements Listener {
             }
         } else if (type == InventoryType.CHEST && top.getSize() == 9) {
             final InventoryHolder invHolder = top.getHolder();
-            if (invHolder != null && invHolder instanceof HumanEntity) {
+            if (invHolder instanceof HumanEntity) {
                 final User user = ess.getUser((Player) event.getPlayer());
                 user.setInvSee(false);
                 refreshPlayer = user.getBase();

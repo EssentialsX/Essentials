@@ -26,8 +26,8 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class MetaItemStack {
-    private static final Map<String, DyeColor> colorMap = new HashMap<String, DyeColor>();
-    private static final Map<String, FireworkEffect.Type> fireworkShape = new HashMap<String, FireworkEffect.Type>();
+    private static final Map<String, DyeColor> colorMap = new HashMap<>();
+    private static final Map<String, FireworkEffect.Type> fireworkShape = new HashMap<>();
 
     static {
         for (DyeColor color : DyeColor.values()) {
@@ -43,11 +43,11 @@ public class MetaItemStack {
     private FireworkEffect.Builder builder = FireworkEffect.builder();
     private PotionEffectType pEffectType;
     private PotionEffect pEffect;
-    private boolean validFirework = false;
-    private boolean validPotionEffect = false;
-    private boolean validPotionDuration = false;
-    private boolean validPotionPower = false;
-    private boolean completePotion = false;
+    private boolean validFirework;
+    private boolean validPotionEffect;
+    private boolean validPotionDuration;
+    private boolean validPotionPower;
+    private boolean completePotion;
     private int power = 1;
     private int duration = 120;
 
@@ -151,7 +151,7 @@ public class MetaItemStack {
             meta.setDisplayName(displayName);
             stack.setItemMeta(meta);
         } else if (split.length > 1 && (split[0].equalsIgnoreCase("lore") || split[0].equalsIgnoreCase("desc")) && hasMetaPermission(sender, "lore", false, true, ess)) {
-            final List<String> lore = new ArrayList<String>();
+            final List<String> lore = new ArrayList<>();
             for (String line : split[1].split("\\|")) {
                 lore.add(FormatUtil.replaceFormat(line.replace('_', ' ')));
             }
@@ -235,7 +235,7 @@ public class MetaItemStack {
                     builder = FireworkEffect.builder();
                 }
 
-                List<Color> primaryColors = new ArrayList<Color>();
+                List<Color> primaryColors = new ArrayList<>();
                 String[] colors = split[1].split(",");
                 for (String color : colors) {
                     if (colorMap.containsKey(color.toUpperCase())) {
@@ -258,7 +258,7 @@ public class MetaItemStack {
                     builder.with(finalEffect);
                 }
             } else if (split[0].equalsIgnoreCase("fade") || (allowShortName && split[0].equalsIgnoreCase("f"))) {
-                List<Color> fadeColors = new ArrayList<Color>();
+                List<Color> fadeColors = new ArrayList<>();
                 String[] colors = split[1].split(",");
                 for (String color : colors) {
                     if (colorMap.containsKey(color.toUpperCase())) {
@@ -362,7 +362,7 @@ public class MetaItemStack {
             throw new Exception(tl("enchantmentNotFound"));
         }
         try {
-            if (stack.getType().equals(Material.ENCHANTED_BOOK)) {
+            if (stack.getType() == Material.ENCHANTED_BOOK) {
                 EnchantmentStorageMeta meta = (EnchantmentStorageMeta) stack.getItemMeta();
                 if (level == 0) {
                     meta.removeStoredEnchant(enchantment);

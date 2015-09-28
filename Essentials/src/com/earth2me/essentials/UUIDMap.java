@@ -53,7 +53,7 @@ public class UUIDMap {
                                 final UUID uuid = UUID.fromString(values[1]);
                                 names.put(name, uuid);
                                 if (!history.containsKey(uuid)) {
-                                    final ArrayList<String> list = new ArrayList<String>();
+                                    final ArrayList<String> list = new ArrayList<>();
                                     list.add(name);
                                     history.put(uuid, list);
                                 } else {
@@ -87,9 +87,7 @@ public class UUIDMap {
             if (future != null) {
                 future.get();
             }
-        } catch (InterruptedException ex) {
-            ess.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
-        } catch (ExecutionException ex) {
+        } catch (InterruptedException | ExecutionException ex) {
             ess.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
         }
     }
@@ -100,8 +98,7 @@ public class UUIDMap {
             return null;
         }
         pendingDiskWrites.incrementAndGet();
-        Future<?> future = EXECUTOR_SERVICE.submit(new WriteRunner(ess.getDataFolder(), userList, names, pendingDiskWrites));
-        return future;
+        return EXECUTOR_SERVICE.submit(new WriteRunner(ess.getDataFolder(), userList, names, pendingDiskWrites));
     }
 
 

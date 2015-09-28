@@ -18,7 +18,7 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP {
     private static final Logger LOGGER = Logger.getLogger("Minecraft");
-    private static EssentialsXMPP instance = null;
+    private static EssentialsXMPP instance;
     private transient UserManager users;
     private transient XMPPManager xmpp;
     private transient IEssentials ess;

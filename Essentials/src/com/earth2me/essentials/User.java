@@ -29,7 +29,7 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class User extends UserData implements Comparable<User>, IReplyTo, net.ess3.api.IUser {
     private static final Logger logger = Logger.getLogger("Essentials");
-    private CommandSource replyTo = null;
+    private CommandSource replyTo;
     private transient UUID teleportRequester;
     private transient boolean teleportRequestHere;
     private transient Location teleportLocation;
@@ -39,14 +39,14 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
     private transient long lastOnlineActivity;
     private transient long lastThrottledAction;
     private transient long lastActivity = System.currentTimeMillis();
-    private boolean hidden = false;
-    private boolean rightClickJump = false;
-    private transient Location afkPosition = null;
-    private boolean invSee = false;
-    private boolean recipeSee = false;
-    private boolean enderSee = false;
-    private transient long teleportInvulnerabilityTimestamp = 0;
-    private boolean ignoreMsg = false;
+    private boolean hidden;
+    private boolean rightClickJump;
+    private transient Location afkPosition;
+    private boolean invSee;
+    private boolean recipeSee;
+    private boolean enderSee;
+    private transient long teleportInvulnerabilityTimestamp;
+    private boolean ignoreMsg;
 
     public User(final Player base, final IEssentials ess) {
         super(base, ess);
@@ -259,7 +259,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
         if (this.getBase().isOp()) {
             try {
                 final ChatColor opPrefix = ess.getSettings().getOperatorColor();
-                if (opPrefix != null && opPrefix.toString().length() > 0) {
+                if (opPrefix != null && !opPrefix.toString().isEmpty()) {
                     prefix.insert(0, opPrefix.toString());
                     suffix = "§r";
                 }
@@ -314,7 +314,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
     }
 
     public String getDisplayName() {
-        return super.getBase().getDisplayName() == null ? super.getBase().getName() : super.getBase().getDisplayName();
+        return getBase().getDisplayName() == null ? getBase().getName() : getBase().getDisplayName();
     }
 
     @Override
@@ -382,7 +382,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
             } catch (Exception ex) {
             }
         }
-        super.setMoney(value, true);
+        setMoney(value, true);
         ess.getServer().getPluginManager().callEvent(new UserBalanceUpdateEvent(this.getBase(), oldBalance, value));
         Trade.log("Update", "Set", "API", getName(), new Trade(value, ess), null, null, null, ess);
     }
@@ -393,7 +393,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
         }
         if (Methods.hasMethod() && super.getMoney() != value) {
             try {
-                super.setMoney(value, false);
+                setMoney(value, false);
             } catch (MaxMoneyException ex) {
                 // We don't want to throw any errors here, just updating a cache
             }
@@ -408,7 +408,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
             return;
         }
 
-        this.getBase().setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") ? true : set);
+        this.getBase().setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") || set);
         if (set && !isAfk()) {
             afkPosition = this.getLocation();
         } else if (!set && isAfk()) {
@@ -434,7 +434,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
     @Override
     public void setHidden(final boolean hidden) {
         this.hidden = hidden;
-        if (hidden == true) {
+        if (hidden) {
             setLastLogout(getLastOnlineActivity());
         }
     }
@@ -544,10 +544,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 
     @Override
     public boolean canBuild() {
-        if (this.getBase().isOp()) {
-            return true;
-        }
-        return ess.getPermissionsHandler().canBuild(base, getGroup());
+        return this.getBase().isOp() || ess.getPermissionsHandler().canBuild(base, getGroup());
     }
 
     public long getTeleportRequestTime() {
@@ -697,10 +694,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 
     @Override
     public boolean equals(final Object object) {
-        if (!(object instanceof User)) {
-            return false;
-        }
-        return this.getName().equalsIgnoreCase(((User) object).getName());
+        return object instanceof User && this.getName().equalsIgnoreCase(((User) object).getName());
 
     }
 

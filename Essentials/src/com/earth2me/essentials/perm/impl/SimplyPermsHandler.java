@@ -11,6 +11,6 @@ public class SimplyPermsHandler extends AbstractVaultHandler {
 
     @Override
     public boolean tryProvider() {
-        return super.canLoad() && Bukkit.getPluginManager().getPlugin("SimplyPerms") != null;
+        return canLoad() && Bukkit.getPluginManager().getPlugin("SimplyPerms") != null;
     }
 }

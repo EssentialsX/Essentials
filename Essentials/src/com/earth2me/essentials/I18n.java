@@ -23,7 +23,7 @@ public class I18n implements net.ess3.api.II18n {
     private transient ResourceBundle customBundle;
     private transient ResourceBundle localeBundle;
     private final transient ResourceBundle defaultBundle;
-    private transient Map<String, MessageFormat> messageFormatCache = new HashMap<String, MessageFormat>();
+    private transient Map<String, MessageFormat> messageFormatCache = new HashMap<>();
     private final transient IEssentials ess;
     private static final Pattern NODOUBLEMARK = Pattern.compile("''");
     private static final ResourceBundle NULL_BUNDLE = new ResourceBundle() {
@@ -73,11 +73,7 @@ public class I18n implements net.ess3.api.II18n {
         if (instance == null) {
             return "";
         }
-        if (objects.length == 0) {
-            return NODOUBLEMARK.matcher(instance.translate(string)).replaceAll("'");
-        } else {
-            return instance.format(string, objects);
-        }
+        return objects.length == 0 ? NODOUBLEMARK.matcher(instance.translate(string)).replaceAll("'") : instance.format(string, objects);
     }
 
     public String format(final String string, final Object... objects) {
@@ -110,7 +106,7 @@ public class I18n implements net.ess3.api.II18n {
             }
         }
         ResourceBundle.clearCache();
-        messageFormatCache = new HashMap<String, MessageFormat>();
+        messageFormatCache = new HashMap<>();
         Logger.getLogger("Essentials").log(Level.INFO, String.format("Using locale %s", currentLocale.toString()));
 
         try {
@@ -127,7 +123,7 @@ public class I18n implements net.ess3.api.II18n {
     }
 
     public static String capitalCase(final String input) {
-        return input == null || input.length() == 0 ? input : input.toUpperCase(Locale.ENGLISH).charAt(0) + input.toLowerCase(Locale.ENGLISH).substring(1);
+        return input == null || input.isEmpty() ? input : input.toUpperCase(Locale.ENGLISH).charAt(0) + input.toLowerCase(Locale.ENGLISH).substring(1);
     }
 
 

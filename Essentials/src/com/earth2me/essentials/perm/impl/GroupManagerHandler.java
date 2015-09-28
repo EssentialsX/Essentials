@@ -34,6 +34,6 @@ public class GroupManagerHandler extends AbstractVaultHandler {
 
     @Override
     public boolean tryProvider() {
-        return super.canLoad() && groupManager != null;
+        return canLoad() && groupManager != null;
     }
 }

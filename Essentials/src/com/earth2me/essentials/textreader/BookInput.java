@@ -8,7 +8,7 @@ import java.util.*;
 
 
 public class BookInput implements IText {
-    private final static HashMap<String, SoftReference<BookInput>> cache = new HashMap<String, SoftReference<BookInput>>();
+    private final static HashMap<String, SoftReference<BookInput>> cache = new HashMap<>();
     private final transient List<String> lines;
     private final transient List<String> chapters;
     private final transient Map<String, Integer> bookmarks;
@@ -51,10 +51,10 @@ public class BookInput implements IText {
                 final SoftReference<BookInput> inputRef = cache.get(file.getName());
                 BookInput input;
                 if (inputRef == null || (input = inputRef.get()) == null || input.lastChange < lastChange) {
-                    lines = new ArrayList<String>();
-                    chapters = new ArrayList<String>();
-                    bookmarks = new HashMap<String, Integer>();
-                    cache.put(file.getName(), new SoftReference<BookInput>(this));
+                    lines = new ArrayList<>();
+                    chapters = new ArrayList<>();
+                    bookmarks = new HashMap<>();
+                    cache.put(file.getName(), new SoftReference<>(this));
                     readFromfile = true;
                 } else {
                     lines = Collections.unmodifiableList(input.getLines());
@@ -73,7 +73,7 @@ public class BookInput implements IText {
                         if (line == null) {
                             break;
                         }
-                        if (line.length() > 0 && line.charAt(0) == '#') {
+                        if (!line.isEmpty() && line.charAt(0) == '#') {
                             bookmarks.put(line.substring(1).toLowerCase(Locale.ENGLISH).replaceAll("&[0-9a-fk]", ""), lineNumber);
                             chapters.add(line.substring(1).replace('&', '§').replace("§§", "&"));
                         }

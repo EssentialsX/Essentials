@@ -31,7 +31,7 @@ public class UtilTest extends TestCase {
     }
 
     public void testSafeLocation() {
-        Set<String> testSet = new HashSet<String>();
+        Set<String> testSet = new HashSet<>();
         int count = 0;
         int x, y, z, origX, origY, origZ;
         x = y = z = origX = origY = origZ = 0;

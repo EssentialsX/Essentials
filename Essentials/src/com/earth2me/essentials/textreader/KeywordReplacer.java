@@ -31,11 +31,11 @@ public class KeywordReplacer implements IText {
     private final transient IEssentials ess;
     private final transient boolean includePrivate;
     private transient ExecuteTimer execTimer;
-    private final EnumMap<KeywordType, Object> keywordCache = new EnumMap<KeywordType, Object>(KeywordType.class);
+    private final EnumMap<KeywordType, Object> keywordCache = new EnumMap<>(KeywordType.class);
 
     public KeywordReplacer(final IText input, final CommandSource sender, final IEssentials ess) {
         this.input = input;
-        this.replaced = new ArrayList<String>(this.input.getLines().size());
+        this.replaced = new ArrayList<>(this.input.getLines().size());
         this.ess = ess;
         this.includePrivate = true;
         replaceKeywords(sender);
@@ -43,7 +43,7 @@ public class KeywordReplacer implements IText {
 
     public KeywordReplacer(final IText input, final CommandSource sender, final IEssentials ess, final boolean showPrivate) {
         this.input = input;
-        this.replaced = new ArrayList<String>(this.input.getLines().size());
+        this.replaced = new ArrayList<>(this.input.getLines().size());
         this.ess = ess;
         this.includePrivate = showPrivate;
         replaceKeywords(sender);
@@ -83,9 +83,9 @@ public class KeywordReplacer implements IText {
         try {
             String replacer = null;
             KeywordType validKeyword = KeywordType.valueOf(keyword);
-            if (validKeyword.getType().equals(KeywordCachable.CACHEABLE) && keywordCache.containsKey(validKeyword)) {
+            if (validKeyword.getType() == KeywordCachable.CACHEABLE && keywordCache.containsKey(validKeyword)) {
                 replacer = keywordCache.get(validKeyword).toString();
-            } else if (validKeyword.getType().equals(KeywordCachable.SUBVALUE)) {
+            } else if (validKeyword.getType() == KeywordCachable.SUBVALUE) {
                 String subKeyword = "";
                 if (matchTokens.length > 1) {
                     subKeyword = matchTokens[1].toLowerCase(Locale.ENGLISH);
@@ -162,15 +162,11 @@ public class KeywordReplacer implements IText {
                             outputList = (Map<String, String>) keywordCache.get(validKeyword);
                         } else {
                             final boolean showHidden;
-                            if (user == null) {
-                                showHidden = true;
-                            } else {
-                                showHidden = user.isAuthorized("essentials.list.hidden") || user.canInteractVanished();
-                            }
+                            showHidden = user == null || user.isAuthorized("essentials.list.hidden") || user.canInteractVanished();
 
                             //First lets build the per group playerlist
                             final Map<String, List<User>> playerList = PlayerList.getPlayerLists(ess, user, showHidden);
-                            outputList = new HashMap<String, String>();
+                            outputList = new HashMap<>();
                             for (String groupName : playerList.keySet()) {
                                 final List<User> groupUsers = playerList.get(groupName);
                                 if (groupUsers != null && !groupUsers.isEmpty()) {
@@ -266,7 +262,7 @@ public class KeywordReplacer implements IText {
                 }
 
                 //If this is just a regular keyword, lets throw it into the cache
-                if (validKeyword.getType().equals(KeywordCachable.CACHEABLE)) {
+                if (validKeyword.getType() == KeywordCachable.CACHEABLE) {
                     keywordCache.put(validKeyword, replacer);
                 }
             }

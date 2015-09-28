@@ -21,7 +21,7 @@ public class BookPager {
     public List<String> getPages(final String pageStr) throws Exception {
         List<String> lines = text.getLines();
         List<String> chapters = text.getChapters();
-        List<String> pageLines = new ArrayList<String>();
+        List<String> pageLines = new ArrayList<>();
         Map<String, Integer> bookmarks = text.getBookmarks();
 
         //This checks to see if we have the chapter in the index
@@ -34,12 +34,12 @@ public class BookPager {
         int chapterend;
         for (chapterend = chapterstart; chapterend < lines.size(); chapterend++) {
             final String line = lines.get(chapterend);
-            if (line.length() > 0 && line.charAt(0) == '#') {
+            if (!line.isEmpty() && line.charAt(0) == '#') {
                 break;
             }
         }
 
-        List<String> pages = new ArrayList<String>();
+        List<String> pages = new ArrayList<>();
         double pageLength = 0;
 
         for (int lineNo = chapterstart; lineNo < chapterend; lineNo += 1) {
@@ -96,11 +96,7 @@ public class BookPager {
 
                 if (letter == '\u00a7' && pointer + 1 < lineLength) {
                     Character nextLetter = pageLine.charAt(pointer + 1);
-                    if (nextLetter == 'l' || nextLetter == 'L') {
-                        weight = 1.25;
-                    } else {
-                        weight = 1;
-                    }
+                    weight = nextLetter == 'l' || nextLetter == 'L' ? 1.25 : 1;
                     pointer++;
                 } else if (letter == 'i' || letter == '.' || letter == ',' || letter == '!' || letter == ':' || letter == ';' || letter == '|') {
                     length += (0.34 * weight);
@@ -110,11 +106,7 @@ public class BookPager {
                     length += (0.69 * weight);
                 } else if (letter == 'f' || letter == 'k' || letter == '"' || letter == '*' || letter == '(' || letter == ')' || letter == '{' || letter == '}' || letter == '<' || letter == '>') {
                     length += (0.85 * weight);
-                } else if (letter == '@' || letter == '~') {
-                    length += (1.2 * weight);
-                } else {
-                    length += weight;
-                }
+                } else length += letter == '@' || letter == '~' ? 1.2 * weight : weight;
                 pointer++;
             }
 

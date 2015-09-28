@@ -28,26 +28,26 @@ public class EssentialsProtectBlockListener implements Listener {
             return;
         }
 
-        if (event.getCause().equals(BlockIgniteEvent.IgniteCause.SPREAD)) {
+        if (event.getCause() == BlockIgniteEvent.IgniteCause.SPREAD) {
             event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_fire_spread));
             return;
         }
 
-        if (event.getCause().equals(BlockIgniteEvent.IgniteCause.FLINT_AND_STEEL)) {
+        if (event.getCause() == BlockIgniteEvent.IgniteCause.FLINT_AND_STEEL) {
             event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_flint_fire));
             return;
         }
 
-        if (event.getCause().equals(BlockIgniteEvent.IgniteCause.LAVA)) {
+        if (event.getCause() == BlockIgniteEvent.IgniteCause.LAVA) {
             event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_lava_fire_spread));
             return;
         }
-        if (event.getCause().equals(BlockIgniteEvent.IgniteCause.LIGHTNING)) {
+        if (event.getCause() == BlockIgniteEvent.IgniteCause.LIGHTNING) {
             event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_lightning_fire_spread));
             return;
         }
 
-        if (event.getCause().equals(BlockIgniteEvent.IgniteCause.FIREBALL)) {
+        if (event.getCause() == BlockIgniteEvent.IgniteCause.FIREBALL) {
             event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_fireball_fire));
         }
     }

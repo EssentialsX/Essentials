@@ -26,11 +26,7 @@ public class Commanddelhome extends EssentialsCommand {
 
         //Allowing both formats /sethome khobbits house | /sethome khobbits:house
         final String[] nameParts = args[0].split(":");
-        if (nameParts[0].length() != args[0].length()) {
-            expandedArg = nameParts;
-        } else {
-            expandedArg = args;
-        }
+        expandedArg = nameParts[0].length() != args[0].length() ? nameParts : args;
 
         if (expandedArg.length > 1 && (user == null || user.isAuthorized("essentials.delhome.others"))) {
             user = getPlayer(server, expandedArg, 0, true, true);

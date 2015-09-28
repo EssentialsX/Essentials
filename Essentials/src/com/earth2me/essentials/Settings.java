@@ -74,7 +74,7 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getInt("sethome-multiple." + set, config.getInt("sethome-multiple.default", 3));
     }
 
-    private int chatRadius = 0;
+    private int chatRadius;
 
     private int _getChatRadius() {
         return config.getInt("chat.radius", config.getInt("chat-radius", 0));
@@ -161,7 +161,7 @@ public class Settings implements net.ess3.api.ISettings {
         return isCommandDisabled(cmd.getName());
     }
 
-    private Set<String> disabledCommands = new HashSet<String>();
+    private Set<String> disabledCommands = new HashSet<>();
 
     @Override
     public boolean isCommandDisabled(String label) {
@@ -169,7 +169,7 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     private Set<String> getDisabledCommands() {
-        Set<String> disCommands = new HashSet<String>();
+        Set<String> disCommands = new HashSet<>();
         for (String c : config.getStringList("disabled-commands")) {
             disCommands.add(c.toLowerCase(Locale.ENGLISH));
         }
@@ -249,10 +249,10 @@ public class Settings implements net.ess3.api.ISettings {
         return BigDecimal.ZERO;
     }
 
-    private Set<String> socialSpyCommands = new HashSet<String>();
+    private Set<String> socialSpyCommands = new HashSet<>();
 
     private Set<String> _getSocialSpyCommands() {
-        Set<String> socialspyCommands = new HashSet<String>();
+        Set<String> socialspyCommands = new HashSet<>();
 
         if (config.isList("socialspy-commands")) {
             for (String c : config.getStringList("socialspy-commands")) {
@@ -270,10 +270,10 @@ public class Settings implements net.ess3.api.ISettings {
         return socialSpyCommands;
     }
 
-    private Set<String> muteCommands = new HashSet<String>();
+    private Set<String> muteCommands = new HashSet<>();
 
     private Set<String> _getMuteCommands() {
-        Set<String> muteCommands = new HashSet<String>();
+        Set<String> muteCommands = new HashSet<>();
         if (config.isList("mute-commands")) {
             for (String s : config.getStringList("mute-commands")) {
                 muteCommands.add(s.toLowerCase(Locale.ENGLISH));
@@ -351,7 +351,7 @@ public class Settings implements net.ess3.api.ISettings {
         config.save();
     }
 
-    private ChatColor operatorColor = null;
+    private ChatColor operatorColor;
 
     @Override
     public ChatColor getOperatorColor() {
@@ -467,7 +467,7 @@ public class Settings implements net.ess3.api.ISettings {
                 return values;
             }
         }
-        Map<String, Object> defaultMap = new HashMap<String, Object>();
+        Map<String, Object> defaultMap = new HashMap<>();
         if (config.getBoolean("sort-list-by-groups", false)) {
             defaultMap.put("ListByGroup", "ListByGroup");
         } else {
@@ -479,7 +479,7 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public void reloadConfig() {
         config.load();
-        noGodWorlds = new HashSet<String>(config.getStringList("no-god-in-worlds"));
+        noGodWorlds = new HashSet<>(config.getStringList("no-god-in-worlds"));
         enabledSigns = _getEnabledSigns();
         teleportSafety = _isTeleportSafetyEnabled();
         forceDisableTeleportSafety = _isForceDisableTeleportSafety();
@@ -527,7 +527,7 @@ public class Settings implements net.ess3.api.ISettings {
         muteCommands = _getMuteCommands();
     }
 
-    private List<Integer> itemSpawnBl = new ArrayList<Integer>();
+    private List<Integer> itemSpawnBl = new ArrayList<>();
 
     @Override
     public List<Integer> itemSpawnBlacklist() {
@@ -535,7 +535,7 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     private List<Integer> _getItemSpawnBlacklist() {
-        final List<Integer> epItemSpwn = new ArrayList<Integer>();
+        final List<Integer> epItemSpwn = new ArrayList<>();
         if (ess.getItemDb() == null) {
             logger.log(Level.FINE, "Aborting ItemSpawnBL read, itemDB not yet loaded.");
             return epItemSpwn;
@@ -555,8 +555,8 @@ public class Settings implements net.ess3.api.ISettings {
         return epItemSpwn;
     }
 
-    private List<EssentialsSign> enabledSigns = new ArrayList<EssentialsSign>();
-    private boolean signsEnabled = false;
+    private List<EssentialsSign> enabledSigns = new ArrayList<>();
+    private boolean signsEnabled;
 
     @Override
     public List<EssentialsSign> enabledSigns() {
@@ -564,7 +564,7 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     private List<EssentialsSign> _getEnabledSigns() {
-        List<EssentialsSign> newSigns = new ArrayList<EssentialsSign>();
+        List<EssentialsSign> newSigns = new ArrayList<>();
 
         for (String signName : config.getStringList("enabledSigns")) {
             signName = signName.trim().toUpperCase(Locale.ENGLISH);
@@ -597,8 +597,8 @@ public class Settings implements net.ess3.api.ISettings {
         return warnOnBuildDisallow;
     }
 
-    private boolean debug = false;
-    private boolean configDebug = false;
+    private boolean debug;
+    private boolean configDebug;
 
     private boolean _isDebug() {
         return config.getBoolean("debug", false);
@@ -638,7 +638,7 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     // #easteregg
-    private boolean economyDisabled = false;
+    private boolean economyDisabled;
 
     public boolean _isEcoDisabled() {
         return config.getBoolean("disable-eco", false);
@@ -656,7 +656,7 @@ public class Settings implements net.ess3.api.ISettings {
 
     @Override
     public List<Integer> getProtectList(final String configName) {
-        final List<Integer> list = new ArrayList<Integer>();
+        final List<Integer> list = new ArrayList<>();
         for (String itemName : config.getString(configName, "").split(",")) {
             itemName = itemName.trim();
             if (itemName.isEmpty()) {
@@ -711,7 +711,7 @@ public class Settings implements net.ess3.api.ISettings {
         return minMoney;
     }
 
-    private boolean economyLog = false;
+    private boolean economyLog;
 
     @Override
     public boolean isEcoLogEnabled() {
@@ -723,7 +723,7 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     // #easteregg
-    private boolean economyLogUpdate = false;
+    private boolean economyLogUpdate;
 
     @Override
     public boolean isEcoLogUpdateEnabled() {
@@ -750,7 +750,7 @@ public class Settings implements net.ess3.api.ISettings {
         return changeDisplayName;
     }
 
-    private boolean changePlayerListName = false;
+    private boolean changePlayerListName;
 
     private boolean _changePlayerListName() {
         return config.getBoolean("change-playerlist", false);
@@ -766,9 +766,9 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("use-bukkit-permissions", false);
     }
 
-    private boolean prefixsuffixconfigured = false;
-    private boolean addprefixsuffix = false;
-    private boolean essentialsChatActive = false;
+    private boolean prefixsuffixconfigured;
+    private boolean addprefixsuffix;
+    private boolean essentialsChatActive;
 
     private boolean _addPrefixSuffix() {
         return config.getBoolean("add-prefix-suffix", false);
@@ -789,7 +789,7 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     // #easteregg
-    private boolean disablePrefix = false;
+    private boolean disablePrefix;
 
     private boolean _disablePrefix() {
         return config.getBoolean("disablePrefix", false);
@@ -801,7 +801,7 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     // #easteregg
-    private boolean disableSuffix = false;
+    private boolean disableSuffix;
 
     private boolean _disableSuffix() {
         return config.getBoolean("disableSuffix", false);
@@ -860,7 +860,7 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("death-messages", true);
     }
 
-    private Set<String> noGodWorlds = new HashSet<String>();
+    private Set<String> noGodWorlds = new HashSet<>();
 
     @Override
     public Set<String> getNoGodWorlds() {
@@ -1013,8 +1013,7 @@ public class Settings implements net.ess3.api.ISettings {
 
     private long _getEconomyLagWarning() {
         // Default to 25ms
-        final long value = (long) (config.getDouble("economy-lag-warning", 25.0) * 1000000);
-        return value;
+        return (long) (config.getDouble("economy-lag-warning", 25.0) * 1000000);
     }
 
     @Override

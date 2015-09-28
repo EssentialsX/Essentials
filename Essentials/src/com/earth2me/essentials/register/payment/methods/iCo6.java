@@ -69,20 +69,14 @@ public class iCo6 implements Method {
 
     @Override
     public boolean createAccount(String name) {
-        if (hasAccount(name)) {
-            return false;
-        }
+        return !hasAccount(name) && (new Accounts()).create(name);
 
-        return (new Accounts()).create(name);
     }
 
     @Override
     public boolean createAccount(String name, Double balance) {
-        if (hasAccount(name)) {
-            return false;
-        }
+        return !hasAccount(name) && (new Accounts()).create(name, balance);
 
-        return (new Accounts()).create(name, balance);
     }
 
     @Override

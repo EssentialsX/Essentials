@@ -14,7 +14,7 @@ public interface IEssentialsSpawn extends Plugin {
      *
      * @throws IllegalArgumentException If group is null
      */
-    public void setSpawn(Location loc, String group);
+    void setSpawn(Location loc, String group);
 
     /**
      * Gets the spawn location for a given group.
@@ -25,5 +25,5 @@ public interface IEssentialsSpawn extends Plugin {
      *
      * @throws IllegalArgumentException If group is null
      */
-    public Location getSpawn(String group);
+    Location getSpawn(String group);
 }

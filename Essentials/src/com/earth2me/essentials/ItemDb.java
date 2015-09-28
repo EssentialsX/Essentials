@@ -23,10 +23,10 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class ItemDb implements IConf, net.ess3.api.IItemDb {
     private final transient IEssentials ess;
-    private final transient Map<String, Integer> items = new HashMap<String, Integer>();
-    private final transient Map<ItemData, List<String>> names = new HashMap<ItemData, List<String>>();
-    private final transient Map<ItemData, String> primaryName = new HashMap<ItemData, String>();
-    private final transient Map<String, Short> durabilities = new HashMap<String, Short>();
+    private final transient Map<String, Integer> items = new HashMap<>();
+    private final transient Map<ItemData, List<String>> names = new HashMap<>();
+    private final transient Map<ItemData, String> primaryName = new HashMap<>();
+    private final transient Map<String, Short> durabilities = new HashMap<>();
     private final transient ManagedFile file;
     private final transient Pattern splitPattern = Pattern.compile("((.*)[:+',;.](\\d+))");
 
@@ -50,7 +50,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
 
         for (String line : lines) {
             line = line.trim().toLowerCase(Locale.ENGLISH);
-            if (line.length() > 0 && line.charAt(0) == '#') {
+            if (!line.isEmpty() && line.charAt(0) == '#') {
                 continue;
             }
 
@@ -72,7 +72,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
                 nameList.add(itemName);
                 Collections.sort(nameList, new LengthCompare());
             } else {
-                List<String> nameList = new ArrayList<String>();
+                List<String> nameList = new ArrayList<>();
                 nameList.add(itemName);
                 names.put(itemData, nameList);
                 primaryName.put(itemData, itemName);
@@ -152,7 +152,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
 
     @Override
     public List<ItemStack> getMatching(User user, String[] args) throws Exception {
-        List<ItemStack> is = new ArrayList<ItemStack>();
+        List<ItemStack> is = new ArrayList<>();
 
         if (args.length < 1) {
             is.add(user.getBase().getItemInHand());
@@ -386,7 +386,6 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
 
     class LengthCompare implements java.util.Comparator<String> {
         public LengthCompare() {
-            super();
         }
 
         @Override

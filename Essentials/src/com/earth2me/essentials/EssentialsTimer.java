@@ -9,11 +9,11 @@ import java.util.logging.Level;
 
 public class EssentialsTimer implements Runnable {
     private final transient IEssentials ess;
-    private final transient Set<UUID> onlineUsers = new HashSet<UUID>();
+    private final transient Set<UUID> onlineUsers = new HashSet<>();
     private transient long lastPoll = System.nanoTime();
-    private final LinkedList<Double> history = new LinkedList<Double>();
-    private int skip1 = 0;
-    private int skip2 = 0;
+    private final LinkedList<Double> history = new LinkedList<>();
+    private int skip1;
+    private int skip2;
     private final long maxTime = 10 * 1000000;
     private final long tickInterval = 50;
 

@@ -26,7 +26,7 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class EssentialsGeoIPPlayerListener implements Listener, IConf {
-    LookupService ls = null;
+    LookupService ls;
     private static final Logger logger = Logger.getLogger("Minecraft");
     File databaseFile;
     File dataFolder;
@@ -91,11 +91,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
     public final void reloadConfig() {
         config.load();
 
-        if (config.getBoolean("database.show-cities", false)) {
-            databaseFile = new File(dataFolder, "GeoIPCity.dat");
-        } else {
-            databaseFile = new File(dataFolder, "GeoIP.dat");
-        }
+        databaseFile = config.getBoolean("database.show-cities", false) ? new File(dataFolder, "GeoIPCity.dat") : new File(dataFolder, "GeoIP.dat");
         if (!databaseFile.exists()) {
             if (config.getBoolean("database.download-if-missing", true)) {
                 downloadDatabase();
@@ -114,11 +110,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
     private void downloadDatabase() {
         try {
             String url;
-            if (config.getBoolean("database.show-cities", false)) {
-                url = config.getString("database.download-url-city");
-            } else {
-                url = config.getString("database.download-url");
-            }
+            url = config.getBoolean("database.show-cities", false) ? config.getString("database.download-url-city") : config.getString("database.download-url");
             if (url == null || url.isEmpty()) {
                 logger.log(Level.SEVERE, tl("geoIpUrlEmpty"));
                 return;

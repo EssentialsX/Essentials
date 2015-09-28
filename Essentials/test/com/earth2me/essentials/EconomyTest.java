@@ -62,9 +62,7 @@ public class EconomyTest extends TestCase {
             assertEquals("Divide money", 5.0, Economy.getMoney(PLAYERNAME));
             Economy.setMoney(PLAYERNAME, 10.0);
             assertEquals("Set money", 10.0, Economy.getMoney(PLAYERNAME));
-        } catch (NoLoanPermittedException ex) {
-            fail(ex.getMessage());
-        } catch (UserDoesNotExistException ex) {
+        } catch (NoLoanPermittedException | UserDoesNotExistException ex) {
             fail(ex.getMessage());
         }
 

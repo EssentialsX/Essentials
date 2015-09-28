@@ -19,7 +19,7 @@ public class Commandignore extends EssentialsCommand {
                 sb.append(s).append(" ");
             }
             String ignoredList = sb.toString().trim();
-            user.sendMessage(ignoredList.length() > 0 ? tl("ignoredList", ignoredList) : tl("noIgnored"));
+            user.sendMessage(!ignoredList.isEmpty() ? tl("ignoredList", ignoredList) : tl("noIgnored"));
         } else {
             User player;
             try {

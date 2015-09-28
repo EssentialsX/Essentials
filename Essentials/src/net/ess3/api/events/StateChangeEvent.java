@@ -11,12 +11,11 @@ import org.bukkit.event.HandlerList;
  */
 public class StateChangeEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
-    private boolean cancelled = false;
+    private boolean cancelled;
     IUser affected;
     IUser controller;
 
     public StateChangeEvent(IUser affected, IUser controller) {
-        super();
         this.affected = affected;
         this.controller = controller;
     }

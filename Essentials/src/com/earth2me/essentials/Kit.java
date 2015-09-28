@@ -137,13 +137,7 @@ public class Kit {
         } else if (delay < 0d) {
             // If the kit has a negative kit time, it can only be used once.
             return -1;
-        } else if (delayTime.before(time)) {
-            // If the kit was used in the past, but outside the delay time, it can be used.
-            return 0L;
-        } else {
-            // If the kit has been used recently, return the next time it can be used.
-            return delayTime.getTimeInMillis();
-        }
+        } else return delayTime.before(time) ? 0L : delayTime.getTimeInMillis();
     }
 
     @Deprecated
@@ -156,7 +150,7 @@ public class Kit {
             throw new Exception(tl("kitNotFound"));
         }
         try {
-            final List<String> itemList = new ArrayList<String>();
+            final List<String> itemList = new ArrayList<>();
             final Object kitItems = kit.get("items");
             if (kitItems instanceof List) {
                 for (Object item : (List) kitItems) {
@@ -218,11 +212,7 @@ public class Kit {
 
                 final Map<Integer, ItemStack> overfilled;
                 final boolean allowOversizedStacks = user.isAuthorized("essentials.oversizedstacks");
-                if (allowOversizedStacks) {
-                    overfilled = InventoryWorkaround.addOversizedItems(user.getBase().getInventory(), ess.getSettings().getOversizedStackSize(), metaStack.getItemStack());
-                } else {
-                    overfilled = InventoryWorkaround.addItems(user.getBase().getInventory(), metaStack.getItemStack());
-                }
+                overfilled = allowOversizedStacks ? InventoryWorkaround.addOversizedItems(user.getBase().getInventory(), ess.getSettings().getOversizedStackSize(), metaStack.getItemStack()) : InventoryWorkaround.addItems(user.getBase().getInventory(), metaStack.getItemStack());
                 for (ItemStack itemStack : overfilled.values()) {
                     int spillAmount = itemStack.getAmount();
                     if (!allowOversizedStacks) {

@@ -11,8 +11,8 @@ import java.util.Set;
 
 
 public class Potions {
-    private static final Map<String, PotionEffectType> POTIONS = new HashMap<String, PotionEffectType>();
-    private static final Map<String, PotionEffectType> ALIASPOTIONS = new HashMap<String, PotionEffectType>();
+    private static final Map<String, PotionEffectType> POTIONS = new HashMap<>();
+    private static final Map<String, PotionEffectType> ALIASPOTIONS = new HashMap<>();
 
     static {
 
@@ -117,11 +117,7 @@ public class Potions {
 
     public static PotionEffectType getByName(String name) {
         PotionEffectType peffect;
-        if (NumberUtil.isInt(name)) {
-            peffect = PotionEffectType.getById(Integer.parseInt(name));
-        } else {
-            peffect = PotionEffectType.getByName(name.toUpperCase(Locale.ENGLISH));
-        }
+        peffect = NumberUtil.isInt(name) ? PotionEffectType.getById(Integer.parseInt(name)) : PotionEffectType.getByName(name.toUpperCase(Locale.ENGLISH));
         if (peffect == null) {
             peffect = POTIONS.get(name.toLowerCase(Locale.ENGLISH));
         }

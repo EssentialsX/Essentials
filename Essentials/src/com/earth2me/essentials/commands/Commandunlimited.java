@@ -37,7 +37,7 @@ public class Commandunlimited extends EssentialsCommand {
             int index = 0;
             while (itemList.size() > index) {
                 final Integer item = itemList.get(index);
-                if (toggleUnlimited(user, target, item.toString()) == false) {
+                if (!toggleUnlimited(user, target, item.toString())) {
                     index++;
                 }
             }

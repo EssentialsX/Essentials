@@ -11,8 +11,8 @@ import java.util.Set;
 
 
 public class Enchantments {
-    private static final Map<String, Enchantment> ENCHANTMENTS = new HashMap<String, Enchantment>();
-    private static final Map<String, Enchantment> ALIASENCHANTMENTS = new HashMap<String, Enchantment>();
+    private static final Map<String, Enchantment> ENCHANTMENTS = new HashMap<>();
+    private static final Map<String, Enchantment> ALIASENCHANTMENTS = new HashMap<>();
 
     static {
         ENCHANTMENTS.put("alldamage", Enchantment.DAMAGE_ALL);
@@ -156,11 +156,7 @@ public class Enchantments {
 
     public static Enchantment getByName(String name) {
         Enchantment enchantment;
-        if (NumberUtil.isInt(name)) {
-            enchantment = Enchantment.getById(Integer.parseInt(name));
-        } else {
-            enchantment = Enchantment.getByName(name.toUpperCase(Locale.ENGLISH));
-        }
+        enchantment = NumberUtil.isInt(name) ? Enchantment.getById(Integer.parseInt(name)) : Enchantment.getByName(name.toUpperCase(Locale.ENGLISH));
         if (enchantment == null) {
             enchantment = ENCHANTMENTS.get(name.toLowerCase(Locale.ENGLISH));
         }

@@ -80,11 +80,7 @@ public class Commandgive extends EssentialsCommand {
 
         Map<Integer, ItemStack> leftovers;
 
-        if (giveTo.isAuthorized("essentials.oversizedstacks")) {
-            leftovers = InventoryWorkaround.addOversizedItems(giveTo.getBase().getInventory(), ess.getSettings().getOversizedStackSize(), stack);
-        } else {
-            leftovers = InventoryWorkaround.addItems(giveTo.getBase().getInventory(), stack);
-        }
+        leftovers = giveTo.isAuthorized("essentials.oversizedstacks") ? InventoryWorkaround.addOversizedItems(giveTo.getBase().getInventory(), ess.getSettings().getOversizedStackSize(), stack) : InventoryWorkaround.addItems(giveTo.getBase().getInventory(), stack);
 
         boolean isDropItemsIfFull = ess.getSettings().isDropItemsIfFull();
 

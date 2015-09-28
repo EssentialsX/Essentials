@@ -23,7 +23,7 @@ public class Commandkit extends EssentialsCommand {
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {
             final String kitList = Kit.listKits(ess, user);
-            user.sendMessage(kitList.length() > 0 ? tl("kits", kitList) : tl("noKits"));
+            user.sendMessage(!kitList.isEmpty() ? tl("kits", kitList) : tl("noKits"));
             throw new NoChargeException();
         } else if (args.length > 1 && user.isAuthorized("essentials.kit.others")) {
             final User userTo = getPlayer(server, user, args, 1);
@@ -39,7 +39,7 @@ public class Commandkit extends EssentialsCommand {
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 2) {
             final String kitList = Kit.listKits(ess, null);
-            sender.sendMessage(kitList.length() > 0 ? tl("kits", kitList) : tl("noKits"));
+            sender.sendMessage(!kitList.isEmpty() ? tl("kits", kitList) : tl("noKits"));
             throw new NoChargeException();
         } else {
             final User userTo = getPlayer(server, args, 1, true, false);
@@ -61,7 +61,7 @@ public class Commandkit extends EssentialsCommand {
         }
         String[] kitList = kitNames.split(",");
 
-        List<Kit> kits = new ArrayList<Kit>();
+        List<Kit> kits = new ArrayList<>();
 
         for (final String kitName : kitList) {
             if (kitName.isEmpty()) {

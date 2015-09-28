@@ -43,7 +43,7 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer {
         final User user = chatStore.getUser();
         chatStore.setRadius(radius);
 
-        if (event.getMessage().length() > 1 && chatStore.getType().length() > 0) {
+        if (event.getMessage().length() > 1 && !chatStore.getType().isEmpty()) {
             final StringBuilder permission = new StringBuilder();
             permission.append("essentials.chat.").append(chatStore.getType());
 
@@ -66,7 +66,7 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer {
         }
 
         Set<Player> outList = event.getRecipients();
-        Set<Player> spyList = new HashSet<Player>();
+        Set<Player> spyList = new HashSet<>();
 
         try {
             outList.add(event.getPlayer());
