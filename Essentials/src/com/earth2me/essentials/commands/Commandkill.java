@@ -34,6 +34,7 @@ public class Commandkill extends EssentialsLoopCommand {
         if (ede.isCancelled() && sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.kill.force")) {
             return;
         }
+        ede.getEntity().setLastDamageCause(ede);
         matchPlayer.damage(Short.MAX_VALUE);
 
         if (matchPlayer.getHealth() > 0) {
