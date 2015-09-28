@@ -16,52 +16,69 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class LocationUtil {
     // The player can stand inside these materials
-    public static final Set<Integer> HOLLOW_MATERIALS = new HashSet<Integer>();
-    private static final HashSet<Byte> TRANSPARENT_MATERIALS = new HashSet<Byte>();
+    public static final Set<Material> HOLLOW_MATERIALS = new HashSet<>();
+    private static final Set<Material> TRANSPARENT_MATERIALS = new HashSet<>();
 
     static {
-        HOLLOW_MATERIALS.add(Material.AIR.getId());
-        HOLLOW_MATERIALS.add(Material.SAPLING.getId());
-        HOLLOW_MATERIALS.add(Material.POWERED_RAIL.getId());
-        HOLLOW_MATERIALS.add(Material.DETECTOR_RAIL.getId());
-        HOLLOW_MATERIALS.add(Material.LONG_GRASS.getId());
-        HOLLOW_MATERIALS.add(Material.DEAD_BUSH.getId());
-        HOLLOW_MATERIALS.add(Material.YELLOW_FLOWER.getId());
-        HOLLOW_MATERIALS.add(Material.RED_ROSE.getId());
-        HOLLOW_MATERIALS.add(Material.BROWN_MUSHROOM.getId());
-        HOLLOW_MATERIALS.add(Material.RED_MUSHROOM.getId());
-        HOLLOW_MATERIALS.add(Material.TORCH.getId());
-        HOLLOW_MATERIALS.add(Material.REDSTONE_WIRE.getId());
-        HOLLOW_MATERIALS.add(Material.SEEDS.getId());
-        HOLLOW_MATERIALS.add(Material.SIGN_POST.getId());
-        HOLLOW_MATERIALS.add(Material.WOODEN_DOOR.getId());
-        HOLLOW_MATERIALS.add(Material.LADDER.getId());
-        HOLLOW_MATERIALS.add(Material.RAILS.getId());
-        HOLLOW_MATERIALS.add(Material.WALL_SIGN.getId());
-        HOLLOW_MATERIALS.add(Material.LEVER.getId());
-        HOLLOW_MATERIALS.add(Material.STONE_PLATE.getId());
-        HOLLOW_MATERIALS.add(Material.IRON_DOOR_BLOCK.getId());
-        HOLLOW_MATERIALS.add(Material.WOOD_PLATE.getId());
-        HOLLOW_MATERIALS.add(Material.REDSTONE_TORCH_OFF.getId());
-        HOLLOW_MATERIALS.add(Material.REDSTONE_TORCH_ON.getId());
-        HOLLOW_MATERIALS.add(Material.STONE_BUTTON.getId());
-        HOLLOW_MATERIALS.add(Material.SNOW.getId());
-        HOLLOW_MATERIALS.add(Material.SUGAR_CANE_BLOCK.getId());
-        HOLLOW_MATERIALS.add(Material.DIODE_BLOCK_OFF.getId());
-        HOLLOW_MATERIALS.add(Material.DIODE_BLOCK_ON.getId());
-        HOLLOW_MATERIALS.add(Material.PUMPKIN_STEM.getId());
-        HOLLOW_MATERIALS.add(Material.MELON_STEM.getId());
-        HOLLOW_MATERIALS.add(Material.VINE.getId());
-        HOLLOW_MATERIALS.add(Material.FENCE_GATE.getId());
-        HOLLOW_MATERIALS.add(Material.WATER_LILY.getId());
-        HOLLOW_MATERIALS.add(Material.NETHER_WARTS.getId());
-        HOLLOW_MATERIALS.add(Material.CARPET.getId());
+        // Materials from Material.isTransparent()
+        HOLLOW_MATERIALS.add(Material.AIR);
+        HOLLOW_MATERIALS.add(Material.SAPLING);
+        HOLLOW_MATERIALS.add(Material.POWERED_RAIL);
+        HOLLOW_MATERIALS.add(Material.DETECTOR_RAIL);
+        HOLLOW_MATERIALS.add(Material.LONG_GRASS);
+        HOLLOW_MATERIALS.add(Material.DEAD_BUSH);
+        HOLLOW_MATERIALS.add(Material.YELLOW_FLOWER);
+        HOLLOW_MATERIALS.add(Material.RED_ROSE);
+        HOLLOW_MATERIALS.add(Material.BROWN_MUSHROOM);
+        HOLLOW_MATERIALS.add(Material.RED_MUSHROOM);
+        HOLLOW_MATERIALS.add(Material.TORCH);
+        HOLLOW_MATERIALS.add(Material.FIRE);
+        HOLLOW_MATERIALS.add(Material.REDSTONE_WIRE);
+        HOLLOW_MATERIALS.add(Material.CROPS);
+        HOLLOW_MATERIALS.add(Material.LADDER);
+        HOLLOW_MATERIALS.add(Material.RAILS);
+        HOLLOW_MATERIALS.add(Material.LEVER);
+        HOLLOW_MATERIALS.add(Material.REDSTONE_TORCH_OFF);
+        HOLLOW_MATERIALS.add(Material.REDSTONE_TORCH_ON);
+        HOLLOW_MATERIALS.add(Material.STONE_BUTTON);
+        HOLLOW_MATERIALS.add(Material.SNOW);
+        HOLLOW_MATERIALS.add(Material.SUGAR_CANE_BLOCK);
+        HOLLOW_MATERIALS.add(Material.PORTAL);
+        HOLLOW_MATERIALS.add(Material.DIODE_BLOCK_OFF);
+        HOLLOW_MATERIALS.add(Material.DIODE_BLOCK_ON);
+        HOLLOW_MATERIALS.add(Material.PUMPKIN_STEM);
+        HOLLOW_MATERIALS.add(Material.MELON_STEM);
+        HOLLOW_MATERIALS.add(Material.VINE);
+        HOLLOW_MATERIALS.add(Material.WATER_LILY);
+        HOLLOW_MATERIALS.add(Material.NETHER_WARTS);
+        HOLLOW_MATERIALS.add(Material.ENDER_PORTAL);
+        HOLLOW_MATERIALS.add(Material.COCOA);
+        HOLLOW_MATERIALS.add(Material.TRIPWIRE_HOOK);
+        HOLLOW_MATERIALS.add(Material.TRIPWIRE);
+        HOLLOW_MATERIALS.add(Material.FLOWER_POT);
+        HOLLOW_MATERIALS.add(Material.CARROT);
+        HOLLOW_MATERIALS.add(Material.POTATO);
+        HOLLOW_MATERIALS.add(Material.WOOD_BUTTON);
+        HOLLOW_MATERIALS.add(Material.SKULL);
+        HOLLOW_MATERIALS.add(Material.REDSTONE_COMPARATOR_OFF);
+        HOLLOW_MATERIALS.add(Material.REDSTONE_COMPARATOR_ON);
+        HOLLOW_MATERIALS.add(Material.ACTIVATOR_RAIL);
+        HOLLOW_MATERIALS.add(Material.CARPET);
+        HOLLOW_MATERIALS.add(Material.DOUBLE_PLANT);
 
-        for (Integer integer : HOLLOW_MATERIALS) {
-            TRANSPARENT_MATERIALS.add(integer.byteValue());
-        }
-        TRANSPARENT_MATERIALS.add((byte) Material.WATER.getId());
-        TRANSPARENT_MATERIALS.add((byte) Material.STATIONARY_WATER.getId());
+        // Additional Materials added in by Essentials
+        HOLLOW_MATERIALS.add(Material.SEEDS);
+        HOLLOW_MATERIALS.add(Material.SIGN_POST);
+        HOLLOW_MATERIALS.add(Material.WOODEN_DOOR);
+        HOLLOW_MATERIALS.add(Material.WALL_SIGN);
+        HOLLOW_MATERIALS.add(Material.STONE_PLATE);
+        HOLLOW_MATERIALS.add(Material.IRON_DOOR_BLOCK);
+        HOLLOW_MATERIALS.add(Material.WOOD_PLATE);
+        HOLLOW_MATERIALS.add(Material.FENCE_GATE);
+
+        TRANSPARENT_MATERIALS.addAll(HOLLOW_MATERIALS);
+        TRANSPARENT_MATERIALS.add(Material.WATER);
+        TRANSPARENT_MATERIALS.add(Material.STATIONARY_WATER);
     }
 
     public static final int RADIUS = 3;
@@ -190,7 +207,7 @@ public class LocationUtil {
         if (y > world.getMaxHeight()) {
             return true;
         }
-        return HOLLOW_MATERIALS.contains(world.getBlockAt(x, y - 1, z).getType().getId());
+        return HOLLOW_MATERIALS.contains(world.getBlockAt(x, y - 1, z).getType());
     }
 
     public static boolean isBlockUnsafeForUser(final IUser user, final World world, final int x, final int y, final int z) {
@@ -222,7 +239,7 @@ public class LocationUtil {
         if (below.getType() == Material.BED_BLOCK) {
             return true;
         }
-        return (!HOLLOW_MATERIALS.contains(world.getBlockAt(x, y, z).getType().getId())) || (!HOLLOW_MATERIALS.contains(world.getBlockAt(x, y + 1, z).getType().getId()));
+        return (!HOLLOW_MATERIALS.contains(world.getBlockAt(x, y, z).getType())) || (!HOLLOW_MATERIALS.contains(world.getBlockAt(x, y + 1, z).getType()));
     }
 
     // Not needed if using getSafeDestination(loc)
