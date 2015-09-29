@@ -1,12 +1,11 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.api.IItemDb;
-import com.earth2me.essentials.api.IJails;
-import com.earth2me.essentials.api.IWarps;
-import com.earth2me.essentials.metrics.MetricsLite;
-import com.earth2me.essentials.perm.PermissionsHandler;
-import com.earth2me.essentials.register.payment.Methods;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
+
 import net.ess3.nms.SpawnerProvider;
+
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -15,9 +14,14 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import com.earth2me.essentials.api.IItemDb;
+import com.earth2me.essentials.api.IJails;
+import com.earth2me.essentials.api.IUserEntry;
+import com.earth2me.essentials.api.IUserMap;
+import com.earth2me.essentials.api.IWarps;
+import com.earth2me.essentials.metrics.MetricsLite;
+import com.earth2me.essentials.perm.PermissionsHandler;
+import com.earth2me.essentials.register.payment.Methods;
 
 
 public interface IEssentials extends Plugin {
@@ -84,7 +88,7 @@ public interface IEssentials extends Plugin {
 
     IItemDb getItemDb();
 
-    UserMap getUserMap();
+    IUserMap getUserMap();
 
     MetricsLite getMetrics();
 
@@ -99,4 +103,8 @@ public interface IEssentials extends Plugin {
     Iterable<User> getOnlineUsers();
 
     SpawnerProvider getSpawnerProvider();
+    
+	IUserEntry getOrCreateUserConfig( Player base );
+	IUserEntry getOrCreateUserConfig( UUID uuid, String defaultData );
+	IUserEntry createUserConfig( UUID uuid, String data );
 }

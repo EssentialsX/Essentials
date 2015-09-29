@@ -1,30 +1,43 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.utils.NumberUtil;
-import com.earth2me.essentials.utils.StringUtil;
+import static com.earth2me.essentials.I18n.tl;
+
+import java.io.File;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
 import net.ess3.api.IEssentials;
 import net.ess3.api.InvalidWorldException;
 import net.ess3.api.MaxMoneyException;
+
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.io.File;
-import java.math.BigDecimal;
-import java.util.*;
-
-import static com.earth2me.essentials.I18n.tl;
+import com.earth2me.essentials.api.IUserEntry;
+import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.StringUtil;
 
 
 public abstract class UserData extends PlayerExtension implements IConf {
     protected final transient IEssentials ess;
-    private final EssentialsUserConf config;
-    private final File folder;
+    private final IUserEntry config;
+    private final File folder = null;
 
     protected UserData(Player base, IEssentials ess) {
         super(base);
         this.ess = ess;
+        
+        /*
         folder = new File(ess.getDataFolder(), "userdata");
         if (!folder.exists()) {
             folder.mkdirs();
@@ -37,16 +50,18 @@ public abstract class UserData extends PlayerExtension implements IConf {
             ess.getLogger().warning("Falling back to old username system for " + base.getName());
             filename = base.getName();
         }
-
-        config = new EssentialsUserConf(base.getName(), base.getUniqueId(), new File(folder, filename + ".yml"));
+        */
+        
+        config = ess.getOrCreateUserConfig( base );
+        
+        //config = new EssentialsUserConf(base.getName(), base.getUniqueId(), new File(folder, filename + ".yml"));
         reloadConfig();
     }
 
     public final void reset() {
-        config.forceSave();
-        config.getFile().delete();
-        if (config.username != null) {
-            ess.getUserMap().removeUser(config.username);
+        config.reset();
+        if (this.getLastAccountName() != null) {
+            ess.getUserMap().removeUser(this.getLastAccountName());
         }
     }
 
@@ -56,7 +71,11 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     @Override
     public final void reloadConfig() {
-        config.load();
+        try {
+			config.reload();
+		} catch ( Exception e ) {
+			throw new RuntimeException(e);
+		}
         money = _getMoney();
         unlimited = _getUnlimited();
         powertools = _getPowertools();
@@ -788,7 +807,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public UUID getConfigUUID() {
-        return config.uuid;
+        return config.getUuid();
     }
 
     public void save() {

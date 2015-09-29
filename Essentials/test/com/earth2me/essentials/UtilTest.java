@@ -2,11 +2,14 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.LocationUtil;
+
 import junit.framework.TestCase;
+
 import org.bukkit.World.Environment;
 import org.bukkit.plugin.InvalidDescriptionException;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
@@ -27,7 +30,9 @@ public class UtilTest extends TestCase {
             fail("InvalidDescriptionException");
         } catch (IOException ex) {
             fail("IOException");
-        }
+        } catch ( SQLException e ) {
+            fail("SQLException");
+		}
     }
 
     public void testSafeLocation() {

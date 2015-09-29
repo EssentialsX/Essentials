@@ -2,12 +2,15 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
+
 import junit.framework.TestCase;
+
 import org.bukkit.World.Environment;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.InvalidDescriptionException;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 
 public class ToggleTest extends TestCase {
@@ -26,7 +29,9 @@ public class ToggleTest extends TestCase {
             fail("InvalidDescriptionException");
         } catch (IOException ex) {
             fail("IOException");
-        }
+        } catch ( SQLException e ) {
+            fail("SQLException");
+		}
         base1 = server.createPlayer("testPlayer1");
         server.addPlayer(base1);
         ess.getUser(base1);

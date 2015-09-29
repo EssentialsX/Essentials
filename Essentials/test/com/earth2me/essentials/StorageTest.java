@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import junit.framework.TestCase;
+
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
@@ -8,6 +9,7 @@ import org.bukkit.plugin.InvalidDescriptionException;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 
 public class StorageTest extends TestCase {
@@ -25,7 +27,9 @@ public class StorageTest extends TestCase {
             fail("InvalidDescriptionException");
         } catch (IOException ex) {
             fail("IOException");
-        }
+        } catch ( SQLException e ) {
+            fail("SQLException");
+		}
     }
 
     @Test

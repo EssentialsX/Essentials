@@ -95,7 +95,7 @@ public class UUIDMap {
     }
 
     public Future<?> _writeUUIDMap() {
-        final ConcurrentSkipListMap<String, UUID> names = ess.getUserMap().getNames();
+        final Map<String, UUID> names = ess.getUserMap().getNames();
         if (names.size() < 1) {
             return null;
         }
@@ -108,10 +108,10 @@ public class UUIDMap {
     private static class WriteRunner implements Runnable {
         private final File location;
         private final File endFile;
-        private final ConcurrentSkipListMap<String, UUID> names;
+        private final Map<String, UUID> names;
         private final AtomicInteger pendingDiskWrites;
 
-        private WriteRunner(final File location, final File endFile, final ConcurrentSkipListMap<String, UUID> names, final AtomicInteger pendingDiskWrites) {
+        private WriteRunner(final File location, final File endFile, final Map<String, UUID> names, final AtomicInteger pendingDiskWrites) {
             this.location = location;
             this.endFile = endFile;
             this.names = names;

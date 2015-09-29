@@ -2,13 +2,17 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
+
 import junit.framework.TestCase;
 import net.ess3.api.Economy;
+
 import org.bukkit.World.Environment;
 import org.bukkit.plugin.InvalidDescriptionException;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.logging.Logger;
 
 
 public class EconomyTest extends TestCase {
@@ -27,7 +31,9 @@ public class EconomyTest extends TestCase {
             fail("InvalidDescriptionException");
         } catch (IOException ex) {
             fail("IOException");
-        }
+        } catch ( SQLException e ) {
+            fail("SQLException");
+		}
         server.addPlayer(new OfflinePlayer(PLAYERNAME, ess.getServer()));
     }
 

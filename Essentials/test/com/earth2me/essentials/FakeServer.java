@@ -565,7 +565,7 @@ public class FakeServer implements Server {
                 if (string == "testPlayer1") {
                     return UUID.fromString("3c9ebe1a-9098-43fd-bc0c-a369b76817ba");
                 } else if (string == "npc1") {
-                    return null;
+                    return UUID.fromString( "f4a37409-5c40-3b2c-9cd6-57d3c5abdc76" );
                 }
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }

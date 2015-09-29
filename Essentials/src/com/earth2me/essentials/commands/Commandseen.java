@@ -2,11 +2,12 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.UserMap;
+import com.earth2me.essentials.api.IUserMap;
 import com.earth2me.essentials.craftbukkit.BanLookup;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.StringUtil;
+
 import org.bukkit.BanEntry;
 import org.bukkit.BanList;
 import org.bukkit.Location;
@@ -145,7 +146,7 @@ public class Commandseen extends EssentialsCommand {
     }
 
     private void seenIP(final Server server, final CommandSource sender, final String ipAddress) throws Exception {
-        final UserMap userMap = ess.getUserMap();
+        final IUserMap userMap = ess.getUserMap();
 
         if (ess.getServer().getBanList(BanList.Type.IP).isBanned(ipAddress)) {
             sender.sendMessage(tl("isIpBanned", ipAddress));

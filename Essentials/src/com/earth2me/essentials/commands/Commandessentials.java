@@ -3,12 +3,13 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.EssentialsUpgrade;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.UserMap;
+import com.earth2me.essentials.api.IUserMap;
 import com.earth2me.essentials.metrics.MetricsLite;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FloatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.base.Charsets;
+
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.Sound;
@@ -202,7 +203,7 @@ public class Commandessentials extends EssentialsCommand {
         final long daysArg = Long.parseLong(args[1]);
         final double moneyArg = args.length >= 3 ? FloatUtil.parseDouble(args[2].replaceAll("[^0-9\\.]", "")) : 0;
         final int homesArg = args.length >= 4 && NumberUtil.isInt(args[3]) ? Integer.parseInt(args[3]) : 0;
-        final UserMap userMap = ess.getUserMap();
+        final IUserMap userMap = ess.getUserMap();
 
         ess.runTaskAsynchronously(new Runnable() {
             @Override

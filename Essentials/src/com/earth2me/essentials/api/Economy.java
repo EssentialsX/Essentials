@@ -1,20 +1,18 @@
 package com.earth2me.essentials.api;
 
-import com.earth2me.essentials.EssentialsUserConf;
-import com.earth2me.essentials.Trade;
-import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.NumberUtil;
-import com.earth2me.essentials.utils.StringUtil;
-import com.google.common.base.Charsets;
-import net.ess3.api.IEssentials;
-import net.ess3.api.MaxMoneyException;
-
-import java.io.File;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import net.ess3.api.IEssentials;
+import net.ess3.api.MaxMoneyException;
+
+import com.earth2me.essentials.Trade;
+import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.NumberUtil;
+import com.google.common.base.Charsets;
 
 
 /**
@@ -37,19 +35,28 @@ public class Economy {
     }
 
     private static void createNPCFile(String name) {
+    	/*
         File folder = new File(ess.getDataFolder(), "userdata");
         name = StringUtil.safeString(name);
         if (!folder.exists()) {
             folder.mkdirs();
         }
+        */
         UUID npcUUID = UUID.nameUUIDFromBytes(("NPC:" + name).getBytes(Charsets.UTF_8));
-        EssentialsUserConf npcConfig = new EssentialsUserConf(name, npcUUID, new File(folder, npcUUID.toString() + ".yml"));
-        npcConfig.load();
+        //EssentialsUserConf npcConfig = new EssentialsUserConf(name, npcUUID, new File(folder, npcUUID.toString() + ".yml"));
+        IUserEntry npcConfig = ess.getOrCreateUserConfig( npcUUID, "" );
+       
         npcConfig.setProperty("npc", true);
         npcConfig.setProperty("lastAccountName", name);
         npcConfig.setProperty("money", ess.getSettings().getStartingBalance());
-        npcConfig.forceSave();
+        npcConfig.save();
+        
+
+        ess.getLogger().info("WTF: " + name + " => " + (npcUUID.toString()));
+        
         ess.getUserMap().trackUUID(npcUUID, name, false);
+        
+        ess.getLogger().info("WTF: " + name + " => " + (ess.getUser( name )));
     }
 
     private static void deleteNPC(String name) {

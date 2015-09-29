@@ -1,98 +1,108 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>net.ess3</groupId>
-        <artifactId>EssentialsXParent</artifactId>
-        <version>2.0.1</version>
-    </parent>
+	<parent>
+		<groupId>net.ess3</groupId>
+		<artifactId>EssentialsXParent</artifactId>
+		<version>2.0.1</version>
+	</parent>
 
-    <artifactId>EssentialsX</artifactId>
+	<artifactId>EssentialsX</artifactId>
 
-    <licenses>
-        <license>
-            <name>GPLv3</name>
-            <url>http://www.gnu.org/copyleft/gpl.html</url>
-        </license>
-    </licenses>
+	<licenses>
+		<license>
+			<name>GPLv3</name>
+			<url>http://www.gnu.org/copyleft/gpl.html</url>
+		</license>
+	</licenses>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <showDeprecation>false</showDeprecation>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>1.4</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<showDeprecation>false</showDeprecation>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>1.4</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
-    <dependencies>
+
+	<repositories>
+		<repository>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<id>spigot-repo</id>
+			<name>Spigot Repository</name>
+			<url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
+		</repository>
+		<repository>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<id>rs-public</id>
+			<name>Rennschnitzel Public Repository</name>
+			<url>http://repo.rennschnitzel.de:8081/nexus/content/groups/public/</url>
+		</repository>
+		<repository>
+			<id>vault-repo</id>
+			<url>http://nexus.theyeticave.net/content/repositories/pub_releases</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
         <dependency>
-            <groupId>BOSEconomy</groupId>
-            <artifactId>BOSEconomy</artifactId>
-            <version>v0.7.8.1</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../lib/BOSEconomy.jar</systemPath>
-        </dependency>
+			<groupId>cosine.boseconomy</groupId>
+			<artifactId>BOSEconomy</artifactId>
+			<version>0.7.8.1</version>
+		</dependency>
         <dependency>
-            <groupId>ru.tehkode</groupId>
-            <artifactId>PermissionsEx</artifactId>
-            <version>1.20.4</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../lib/PermissionsEx.jar</systemPath>
-        </dependency>
+			<groupId>ru.tehkode</groupId>
+			<artifactId>PermissionsEx</artifactId>
+			<version>1.23.2</version>
+		</dependency>
         <dependency>
-            <groupId>iConomy</groupId>
-            <artifactId>iConomy5</artifactId>
-            <version>5</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../lib/iCo5.jar</systemPath>
-        </dependency>
+			<groupId>com.iConomy</groupId>
+			<artifactId>iConomy5</artifactId>
+			<version>5.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.iConomy</groupId>
+			<artifactId>iConomy</artifactId>
+			<version>6.0</version>
+		</dependency>
         <dependency>
-            <groupId>iConomy</groupId>
-            <artifactId>iConomy6</artifactId>
-            <version>6</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../lib/iCo6.jar</systemPath>
-        </dependency>
+			<groupId>org.anjocaido</groupId>
+			<artifactId>EssentialsGroupManager</artifactId>
+			<version>2.4</version>
+		</dependency>
         <dependency>
-            <groupId>net.ess3</groupId>
-            <artifactId>GroupManager</artifactId>
-            <version>${project.version}</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../EssentialsGroupManager/dist/EssentialsGroupManager.jar</systemPath>
-        </dependency>
+			<groupId>me.ashtheking</groupId>
+			<artifactId>MultiCurrency</artifactId>
+			<version>2.1</version>
+		</dependency>
         <dependency>
-            <groupId>MultiCurrency</groupId>
-            <artifactId>MultiCurrency</artifactId>
-            <version>2.2</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../lib/MultiCurrency.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>net.milkbowl.vault</groupId>
-            <artifactId>Vault</artifactId>
-            <version>1.5.4</version>
-            <scope>provided</scope>
-        </dependency>
+			<groupId>net.milkbowl</groupId>
+			<artifactId>Vault</artifactId>
+			<version>1.5.6-b49</version>
+		</dependency>
         <dependency>
             <groupId>net.ess3</groupId>
             <artifactId>NMSProvider</artifactId>
@@ -135,11 +145,15 @@
             <version>2.0.1</version>
             <scope>compile</scope>
         </dependency>
-    </dependencies>
-    <repositories>
-        <repository>
-            <id>vault-repo</id>
-            <url>http://nexus.theyeticave.net/content/repositories/pub_releases</url>
-        </repository>
-    </repositories>
+        <dependency>
+            <groupId>net.ess3</groupId>
+            <artifactId>NMSProvider</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+		<dependency>
+			<groupId>org.xerial</groupId>
+			<artifactId>sqlite-jdbc</artifactId>
+			<version>3.8.11.1</version>
+		</dependency>
+	</dependencies>
 </project>

@@ -2,12 +2,14 @@ package com.earth2me.essentials;
 
 import junit.framework.TestCase;
 import net.ess3.api.MaxMoneyException;
+
 import org.bukkit.Location;
 import org.bukkit.World.Environment;
 import org.bukkit.plugin.InvalidDescriptionException;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 
 
 public class UserTest extends TestCase {
@@ -26,7 +28,9 @@ public class UserTest extends TestCase {
             fail("InvalidDescriptionException");
         } catch (IOException ex) {
             fail("IOException");
-        }
+        } catch ( SQLException e ) {
+            fail("SQLException");
+		}
         base1 = server.createPlayer("testPlayer1");
         server.addPlayer(base1);
         ess.getUser(base1);
