@@ -72,7 +72,7 @@ public class Commandseen extends EssentialsCommand {
         user.setDisplayNick();
         sender.sendMessage(tl("seenOnline", user.getDisplayName(), DateUtil.formatDateDiff(user.getLastLogin())));
 
-        if (ess.getSettings().isDebug()) {
+        if (ess.getSettings().isDebug() || sender.hasPermission( "essentials.seen.uuid" )) {
             ess.getLogger().info("UUID: " + user.getBase().getUniqueId().toString());
         }
 
@@ -107,7 +107,7 @@ public class Commandseen extends EssentialsCommand {
             sender.sendMessage(tl("userUnknown", user.getName()));
         }
 
-        if (ess.getSettings().isDebug()) {
+        if (ess.getSettings().isDebug() || sender.hasPermission( "essentials.seen.uuid" )) {
             ess.getLogger().info("UUID: " + user.getBase().getUniqueId().toString());
         }
 

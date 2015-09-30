@@ -37,6 +37,10 @@ public class CommandSource implements IReplyTo {
             sender.sendMessage(message);
         }
     }
+    
+    public boolean hasPermission(String perm) {
+    	return sender.hasPermission( perm );
+    }
 
     @Override
     public void setReplyTo(final CommandSource user) {
