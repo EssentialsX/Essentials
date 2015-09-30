@@ -6,7 +6,10 @@ import com.earth2me.essentials.settings.Spawns;
 import com.earth2me.essentials.storage.YamlStorageWriter;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
+import com.google.common.collect.Maps;
+
 import net.ess3.api.IEssentials;
+
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -16,9 +19,12 @@ import java.io.*;
 import java.math.BigInteger;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -582,7 +588,89 @@ public class EssentialsUpgrade {
             Bukkit.getBanList(BanList.Type.NAME).addBan(playerName, banReason, new Date(banTimeout), Console.NAME);
         }
     }
+    
+    private static final FileFilter YML_FILTER = new FileFilter() {
+		public boolean accept( File pathname ) {
+			return pathname.isFile() && pathname.getName().endsWith( ".yml" );
+		}
+	};
 
+	private static final String PATTERN_CONFIG_UUID_REGEX = "(?mi)^uuid:\\s*([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\\s*$";
+	private static final Pattern PATTERN_CONFIG_UUID = Pattern.compile( PATTERN_CONFIG_UUID_REGEX );
+	
+	private static final String PATTERN_CONFIG_NAME_REGEX = "(?mi)^lastAccountName:\\s*[\"\']?(\\w+)[\"\']?\\s*$";
+	private static final Pattern PATTERN_CONFIG_NAME = Pattern.compile( PATTERN_CONFIG_NAME_REGEX );
+	
+	private void repairUserMap() {
+		if ( doneFile.getBoolean( "userMapRepaired", false ) ) {
+			return;
+		}
+		ess.getLogger().info( "Starting User Map Repair" );
+		
+		File userdataFolder = new File( ess.getDataFolder(), "userdata" );
+		if ( !userdataFolder.isDirectory() ) {
+			ess.getLogger().warning( "No userdata folder ... Aborting User Map Repair!" );
+			return;
+		}
+		File[] files = userdataFolder.listFiles( YML_FILTER );
+		
+		final DecimalFormat format = new DecimalFormat( "#0.00" );
+		final Map<String, UUID> names = Maps.newHashMap();
+		
+		for ( int index = 0; index < files.length; index++ ) {
+			final File file = files[index];
+			try {
+				UUID uuid = null;
+				final String filename = file.getName();
+				final String configData = new String( java.nio.file.Files.readAllBytes( file.toPath() ), Charsets.UTF_8 );
+				
+				if ( filename.length() > 36 ) {
+					try {
+						// ".yml" ending has 4 chars...
+						uuid = UUID.fromString( filename.substring( 0, filename.length() - 4 ) );
+					} catch ( IllegalArgumentException iae ) {
+					}
+				}
+				
+				final Matcher uuidMatcher = PATTERN_CONFIG_UUID.matcher( configData );
+				if ( uuidMatcher.find() ) {
+					try {
+						uuid = UUID.fromString( uuidMatcher.group( 1 ) );
+					} catch ( IllegalArgumentException iae ) {
+					}
+				}
+				
+				if ( uuid == null ) {
+					// Dont import
+					continue;
+				}
+				
+				final Matcher nameMatcher = PATTERN_CONFIG_NAME.matcher( configData );
+				if ( nameMatcher.find() ) {
+					final String username = nameMatcher.group( 1 );
+					if ( username != null && username.length() > 0 ) {
+						names.put( username, uuid );
+					}
+				}
+				
+				if ( index % 1000 == 0 ) {
+					ess.getLogger().info( "Reading: " + format.format( ( 100d * ( double ) index ) / files.length )
+							+ "%" );
+				}
+			} catch ( final IOException e ) {
+				ess.getLogger().log( Level.SEVERE, "Reading Error", e );
+				return;
+			}
+		}
+		
+		ess.getUserMap().getNames().putAll( names );
+		ess.getUserMap().reloadConfig();
+		
+		doneFile.setProperty( "userMapRepaired", true );
+		doneFile.save();
+		ess.getLogger().info( "User Map Repair complete." );
+	}
+    
     public void beforeSettings() {
         if (!ess.getDataFolder().exists()) {
             ess.getDataFolder().mkdirs();
@@ -601,5 +689,6 @@ public class EssentialsUpgrade {
         uuidFileChange();
         banFormatChange();
         warnMetrics();
+        repairUserMap();
     }
 }
