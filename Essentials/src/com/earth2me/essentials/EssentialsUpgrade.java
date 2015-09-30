@@ -649,7 +649,7 @@ public class EssentialsUpgrade {
 				if ( nameMatcher.find() ) {
 					final String username = nameMatcher.group( 1 );
 					if ( username != null && username.length() > 0 ) {
-						names.put( username, uuid );
+						names.put( StringUtil.safeString(username), uuid );
 					}
 				}
 				
