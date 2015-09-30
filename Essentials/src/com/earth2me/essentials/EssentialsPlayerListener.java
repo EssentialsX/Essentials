@@ -155,6 +155,9 @@ public class EssentialsPlayerListener implements Listener {
         }
 
         user.updateActivity(false);
+        if(!user.isHidden()) {
+        	user.setLastLogout( System.currentTimeMillis() );
+        }
         user.stopTransaction();
         
         user.dispose();
