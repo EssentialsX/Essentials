@@ -4,6 +4,7 @@ import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,11 +16,13 @@ import java.util.logging.Level;
 
 import net.ess3.api.IEssentials;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.earth2me.essentials.api.IUserMap;
 import com.earth2me.essentials.sqlite.UserDatabase;
 import com.earth2me.essentials.sqlite.UserDatabase.UserEntry;
+import com.earth2me.essentials.sqlite.UserDatabase.UserHistoryEntry;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.cache.CacheBuilder;
@@ -66,18 +69,40 @@ public class SqlUserMap extends CacheLoader<UUID, User> implements IConf, IUserM
 		} );
 	}
 	
+	protected UserDatabase getDatabase() {
+		return this.database;
+	}
+	
 	public boolean userExists( final UUID uuid ) {
 		return keys.contains( uuid );
 	}
 	
 	public User getUser( final String name ) {
 		try {
-			
-			
 			final String sanitizedName = StringUtil.safeString( name );
 			if ( names.containsKey( sanitizedName ) ) {
 				final UUID uuid = names.get( sanitizedName );
 				return getUser( uuid );
+			}
+			
+			Player player = Bukkit.getPlayerExact( sanitizedName );
+			if(player != null) {
+				names.put( sanitizedName, player.getUniqueId() );
+				try {
+					this.database.insertName( player.getUniqueId(), sanitizedName );
+				} catch ( SQLException e ) {
+					throw new RuntimeException( e );
+				}
+				return getUser(player.getUniqueId());
+			}
+			
+			Set<UserHistoryEntry> search = this.database.searchExact( sanitizedName, 1 );
+			Iterator<UserHistoryEntry> it = search.iterator();
+			if(it.hasNext() ) {
+				UserHistoryEntry e = it.next();
+				final UUID uuid = e.getUuid();
+				this.names.put( e.getUsername(), e.getUuid() );
+				return getUser( uuid );				
 			}
 			
 			/*
@@ -87,7 +112,7 @@ public class SqlUserMap extends CacheLoader<UUID, User> implements IConf, IUserM
 			 * user.getName(), true ); return user; }
 			 */
 			return null;
-		} catch ( UncheckedExecutionException ex ) {
+		} catch ( UncheckedExecutionException | SQLException ex ) {
 			return null;
 		}
 	}
@@ -110,6 +135,22 @@ public class SqlUserMap extends CacheLoader<UUID, User> implements IConf, IUserM
 			if ( name != null && name.length() > 0 ) {
 				final String keyName = StringUtil.safeString( name );
 				
+				boolean contained = names.containsKey( keyName );
+				
+				if(replace || !contained ) {
+					names.put( keyName, uuid );
+					try {
+						this.database.insertName( uuid, keyName );
+					} catch ( SQLException e ) {
+						throw new RuntimeException( e );
+					}
+				} else {
+					if ( ess.getSettings().isDebug() ) {
+						ess.getLogger().info( "Found old UUID for " + name + " (" + uuid.toString()
+								+ "). Not adding to usermap." );
+					}
+				}
+				/*
 				if ( !names.containsKey( keyName ) ) {
 					names.put( keyName, uuid );
 					try {
@@ -133,7 +174,7 @@ public class SqlUserMap extends CacheLoader<UUID, User> implements IConf, IUserM
 									+ "). Not adding to usermap." );
 						}
 					}
-				}
+				}*/
 			}
 		}
 	}
@@ -144,7 +185,7 @@ public class SqlUserMap extends CacheLoader<UUID, User> implements IConf, IUserM
 		Player player = ess.getServer().getPlayer( uuid );
 		if ( player != null ) {
 			final User user = new User( player, ess );
-			trackUUID( uuid, user.getName(), true );
+			trackUUID( uuid, player.getName(), true );
 			return user;
 		}
 		
@@ -171,17 +212,17 @@ public class SqlUserMap extends CacheLoader<UUID, User> implements IConf, IUserM
 	}
 	
 	public void removeUser( final String name ) {
-		if ( names == null ) {
+		if ( name == null ) {
 			ess.getLogger().warning( "Name collection is null, cannot remove user." );
 			return;
 		}
-		UUID uuid = names.get( name );
+		String keyname = StringUtil.safeString( name );
+		UUID uuid = names.get( keyname );
 		if ( uuid != null ) {
 			keys.remove( uuid );
 			users.invalidate( uuid );
 		}
-		names.remove( name );
-		names.remove( StringUtil.safeString( name ) );
+		names.remove( keyname );
 	}
 	
 	public Set<UUID> getAllUniqueUsers() {
@@ -204,7 +245,7 @@ public class SqlUserMap extends CacheLoader<UUID, User> implements IConf, IUserM
 		return history.get( uuid );
 	}
 	
-	public UUIDMap getUUIDMap() {
+	public SqlUUIDMap getUUIDMap() {
 		return uuidMap;
 	}
 	

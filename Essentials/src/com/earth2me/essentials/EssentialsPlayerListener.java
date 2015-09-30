@@ -133,6 +133,8 @@ public class EssentialsPlayerListener implements Listener {
             event.setQuitMessage(ess.getSettings().getCustomQuitMessage().replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName()));
         }
 
+        user.startTransaction();
+        
         if (ess.getSettings().removeGodOnDisconnect() && user.isGodModeEnabled()) {
             user.setGodModeEnabled(false);
         }
@@ -152,9 +154,14 @@ public class EssentialsPlayerListener implements Listener {
                 }
             }
         }
-
+        if(!user.isHidden()) {
+        	user.setLastLogout( System.currentTimeMillis() );
+        }
         user.updateActivity(false);
-        user.dispose();
+        
+        user.stopTransaction();
+        
+        //user.dispose();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -176,9 +183,12 @@ public class EssentialsPlayerListener implements Listener {
             return;
         }
 
+       // ess.getUserMap().trackUUID( player.getUniqueId(), player.getName(), true );
+        
         ess.getBackup().onPlayerJoin();
         final User dUser = ess.getUser(player);
 
+        dUser.startTransaction();
 
         if (dUser.isNPC()) {
             dUser.setNPC(false);
@@ -188,6 +198,8 @@ public class EssentialsPlayerListener implements Listener {
         dUser.checkMuteTimeout(currentTime);
         dUser.updateActivity(false);
 
+        dUser.stopTransaction();
+        
         IText tempInput = null;
 
         if (!ess.getSettings().isCommandDisabled("motd")) {
@@ -212,6 +224,7 @@ public class EssentialsPlayerListener implements Listener {
                 if (!user.getBase().isOnline()) {
                     return;
                 }
+                
 
                 user.startTransaction();
 

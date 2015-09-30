@@ -198,7 +198,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 
     private void _dispose() {
         if (!base.isOnline()) {
-            this.base = new OfflinePlayer(getConfigUUID(), ess.getServer());
+            this.base = new OfflinePlayer(base.getUniqueId(), base.getServer());
         }
         cleanup();
     }
@@ -592,6 +592,10 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
 
     public boolean canInteractVanished() {
         return isAuthorized("essentials.vanish.interact");
+    }
+    
+    public boolean canInteractOffline() {
+        return isAuthorized("essentials.offline.interact");
     }
 
     @Override

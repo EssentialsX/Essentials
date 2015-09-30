@@ -15,6 +15,8 @@ import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
+import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -23,6 +25,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -43,6 +46,7 @@ import com.earth2me.essentials.settings.Spawns;
 import com.earth2me.essentials.storage.YamlStorageWriter;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
+import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 
 public class EssentialsUpgrade {
@@ -621,6 +625,12 @@ public class EssentialsUpgrade {
 		}
 	};
 	
+	private static final String PATTERN_CONFIG_UUID_REGEX = "(?mi)^uuid:\\s*([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\\s*$";
+	private static final Pattern PATTERN_CONFIG_UUID = Pattern.compile( PATTERN_CONFIG_UUID_REGEX );
+	
+	private static final String PATTERN_CONFIG_NAME_REGEX = "(?mi)^lastAccountName:\\s*[\"\']?(\\w+)[\"\']?\\s*$";
+	private static final Pattern PATTERN_CONFIG_NAME = Pattern.compile( PATTERN_CONFIG_NAME_REGEX );
+	
 	public void moveUserdataToSqlLite() {
 		if ( doneFile.getBoolean( "moveUserdataToSqlLite", false ) ) {
 			return;
@@ -630,8 +640,7 @@ public class EssentialsUpgrade {
 		File userdataFolder = new File( ess.getDataFolder(), "userdata" );
 		if ( userdataFolder.isDirectory() ) {
 			
-			
-			if (userdataFolder.listFiles(YML_FILTER).length > 0 ) {
+			if ( userdataFolder.listFiles( YML_FILTER ).length > 0 ) {
 				
 				// First create backup
 				
@@ -642,53 +651,118 @@ public class EssentialsUpgrade {
 					ess.getLogger().log( Level.SEVERE, "Could not create backup from userdata", e );
 				}
 				
-				// Then import files
-				for ( File file : userdataFolder.listFiles(YML_FILTER) ) {
-					try {
-						IUserEntry e = loadUserEntryFromLegacy( file );
-						if ( e != null ) {
-							e.save();
+				final File[] files = new File( ess.getDataFolder(), "bkp-userdata" ).listFiles( YML_FILTER );
+				int index = 0;
+				int completed = 0;
+				final int steps = 1000;
+				
+				final DecimalFormat format = new DecimalFormat( "#0.00" );
+				
+				Map<String, UUID> names;
+				Map<UUID, String> configs;
+				
+				while ( index < files.length ) {
+					names = Maps.newHashMap();
+					configs = Maps.newHashMap();
+					int batchSize = 0;
+					while ( index < files.length && batchSize < steps ) {
+						final File file = files[index];
+						try {
+							UUID uuid = null;
+							final String filename = file.getName();
+							final String configData = Files.toString( file, Charsets.UTF_8 );
+							
+							if ( filename.length() > 36 ) {
+								try {
+									// ".yml" ending has 4 chars...
+									uuid = UUID.fromString( filename.substring( 0, filename.length() - 4 ) );
+								} catch ( IllegalArgumentException iae ) {
+								}
+							}
+							
+							final Matcher uuidMatcher = PATTERN_CONFIG_UUID.matcher( configData );
+							if ( uuidMatcher.find() ) {
+								try {
+									uuid = UUID.fromString( uuidMatcher.group( 1 ) );
+								} catch ( IllegalArgumentException iae ) {
+								}
+							}
+							
+							if ( uuid == null ) {
+								failedToImportToSqlLite( file );
+								continue;
+							}
+							
+							configs.put( uuid, configData );
+							
+							final Matcher nameMatcher = PATTERN_CONFIG_NAME.matcher( configData );
+							if ( nameMatcher.find() ) {
+								final String username = nameMatcher.group( 1 );
+								if ( username != null && username.length() > 0 ) {
+									names.put( username, uuid );
+								}
+							}
+							
+							completed++;
+							if ( completed % steps == 0 ) {
+								ess.getLogger().info( "SQLite Import: "
+										+ format.format( ( 100d * ( double ) completed ) / files.length ) + "%" );
+							}
+						} catch ( final IOException e ) {
+							ess.getLogger().log( Level.SEVERE, "Import Error", e );
+							failedToImportToSqlLite( file );
 						}
-						// File was imported, so we can remove it.
-						file.delete();
-					} catch ( IOException | InvalidConfigurationException e ) {
-						ess.getLogger().log( Level.WARNING, "Failed to import file: " + file.getName(), e );
+						index++;
+						batchSize++;
 					}
+					
+					if ( names.size() > 0 ) {
+						try {
+							( ( Essentials ) ess ).getUserMap().getDatabase().insertNames( names );
+						} catch ( SQLException e ) {
+							ess.getLogger().log( Level.WARNING, "SqlException", e );
+						}
+					}
+					
+					if ( configs.size() > 0 ) {
+						try {
+							( ( Essentials ) ess ).getUserMap().getDatabase().insertConfigs( configs );
+						} catch ( SQLException e ) {
+							ess.getLogger().log( Level.WARNING, "SqlException", e );
+						}
+					}
+					
 				}
 			}
-			
 		}
 		
 		doneFile.set( "moveUserdataToSqlLite", true );
 		doneFile.save();
 		ess.getLogger().info( "Move userdata to sqlLite complete." );
+		ess.getUserMap().reloadConfig();
 	}
 	
-	private static final String PATTERN_CONFIG_UUID_REGEX = "^uuid:\\s*([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\\s*$";
-	private static final Pattern PATTERN_CONFIG_UUID = Pattern
-			.compile( PATTERN_CONFIG_UUID_REGEX, Pattern.CASE_INSENSITIVE & Pattern.MULTILINE );
-		
-	private IUserEntry loadUserEntryFromLegacy( File file ) throws IOException, InvalidConfigurationException {
-		if ( !file.exists() ) {
-			return null;
-		}
-		String data = Files.toString( file, Charsets.UTF_8 );
-		
-		UUID uuid = null;
-		
-		Matcher uuidMatcher = PATTERN_CONFIG_UUID.matcher( data );
-		if ( uuidMatcher.find() ) {
-			try {
-				uuid = UUID.fromString( uuidMatcher.group( 0 ) );
-			} catch ( IllegalArgumentException iae ) {
-				ess.getLogger().log( Level.WARNING, "Failed to import file: " + file.getName(), iae );
-				return null;
+	private Thread createImportThreadToSqlLite( final File[] files, final AtomicInteger index,
+			final AtomicInteger completed, final int steps ) {
+		return new Thread() {
+			public void run() {
+				
 			}
-		} else {
-			return null;
+		};
+	}
+	
+	private void failedToImportToSqlLite( final File file ) {
+		ess.getLogger().log( Level.WARNING, "Failed to import file: " + file.getName() );
+		try {
+			final File oldUserdataFolder = new File( ess.getDataFolder(), "userdata" );
+			if ( !oldUserdataFolder.exists() ) {
+				oldUserdataFolder.mkdirs();
+			}
+			Files.move( file, new File( oldUserdataFolder, file.getName() ) );
+		} catch ( final IOException ex ) {
+			ess.getLogger().log( Level.WARNING, "Move file to old userdata folder: " + file.getName(), ex );
+			ess.getLogger().log( Level.SEVERE, "Move failed", ex );
 		}
-		
-		return ess.createUserConfig( uuid, data );
 	}
 	
 	public void beforeSettings() {

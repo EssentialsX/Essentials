@@ -470,7 +470,12 @@ public class FakeServer implements Server {
 
     @Override
     public Player getPlayerExact(String string) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    	for(Player p : this.players) {
+    		if(p.getName().equalsIgnoreCase( string )) {
+    			return p;
+    		}
+    	}
+    	return null;
     }
 
     @Override

@@ -63,8 +63,7 @@ public class UserDatabase {
 		}
 	}
 	
-	public UserEntry getOrCreate( UUID uuid, String defaultData ) throws SQLException,
-			InvalidConfigurationException {
+	public UserEntry getOrCreate( UUID uuid, String defaultData ) throws SQLException, InvalidConfigurationException {
 		Preconditions.checkNotNull( uuid );
 		UserEntry result = get( uuid );
 		if ( result == null ) {
@@ -75,10 +74,10 @@ public class UserDatabase {
 	
 	public UserEntry create( UUID uuid, String configString ) throws InvalidConfigurationException {
 		Preconditions.checkNotNull( uuid );
-		return new UserEntry( uuid,  configString );
+		return new UserEntry( uuid, configString );
 	}
 	
-	public UserEntry get( UUID uuid ) throws SQLException, InvalidConfigurationException {
+	public synchronized UserEntry get( UUID uuid ) throws SQLException, InvalidConfigurationException {
 		Preconditions.checkNotNull( uuid );
 		try ( Connection con = this.dataSource.getConnection() ) {
 			try ( PreparedStatement stmnt = con.prepareStatement( "SELECT * FROM userdata WHERE uuid = ?;" ) ) {
@@ -97,7 +96,7 @@ public class UserDatabase {
 		return null;
 	}
 	
-	public UUID get( String username ) throws SQLException {
+	public synchronized UUID get( String username ) throws SQLException {
 		try ( Connection con = this.dataSource.getConnection() ) {
 			try ( PreparedStatement stmnt = con.prepareStatement( "SELECT uuid FROM names WHERE username = ? "
 					+ "ORDER BY timestamp DESC LIMIT 1;" ) ) {
@@ -112,19 +111,21 @@ public class UserDatabase {
 		return null;
 	}
 	
-	public void remove( UUID uuid ) throws SQLException {
+	public synchronized void remove( UUID uuid ) throws SQLException {
 		Preconditions.checkNotNull( uuid );
 		try ( Connection con = this.dataSource.getConnection() ) {
 			try ( PreparedStatement stmnt = con.prepareStatement( "DELETE FROM userdata WHERE uuid = ?;" ) ) {
 				stmnt.setString( 1, uuid.toString() );
+				stmnt.executeUpdate();
 			}
 			try ( PreparedStatement stmnt = con.prepareStatement( "DELETE FROM names WHERE uuid = ?;" ) ) {
 				stmnt.setString( 1, uuid.toString() );
+				stmnt.executeUpdate();
 			}
 		}
 	}
 	
-	public Set<UserHistoryEntry> search( String username, int limit ) throws SQLException {
+	public synchronized Set<UserHistoryEntry> search( String username, int limit ) throws SQLException {
 		Preconditions.checkArgument( limit > 0 );
 		Set<UserHistoryEntry> result = Sets.newHashSet();
 		try ( Connection con = this.dataSource.getConnection() ) {
@@ -143,7 +144,7 @@ public class UserDatabase {
 		return result;
 	}
 	
-	public Set<UserHistoryEntry> searchExact( UUID uuid, int limit ) throws SQLException {
+	public synchronized Set<UserHistoryEntry> searchExact( UUID uuid, int limit ) throws SQLException {
 		Preconditions.checkNotNull( uuid );
 		Preconditions.checkArgument( limit > 0 );
 		Set<UserHistoryEntry> result = Sets.newHashSet();
@@ -163,7 +164,7 @@ public class UserDatabase {
 		return result;
 	}
 	
-	public Set<UserHistoryEntry> searchExact( String username, int limit ) throws SQLException {
+	public synchronized Set<UserHistoryEntry> searchExact( String username, int limit ) throws SQLException {
 		Preconditions.checkArgument( limit > 0 );
 		Set<UserHistoryEntry> result = Sets.newHashSet();
 		try ( Connection con = this.dataSource.getConnection() ) {
@@ -182,9 +183,10 @@ public class UserDatabase {
 		return result;
 	}
 	
-	public void insertNames( Map<String, UUID> names ) throws SQLException {
+	public synchronized void insertNames( Map<String, UUID> names ) throws SQLException {
 		try ( Connection con = this.dataSource.getConnection() ) {
-			try ( PreparedStatement stmnt = con.prepareStatement( "INSERT INTO names (uuid, username) VALUES (?,?);" ) ) {
+			try ( PreparedStatement stmnt = con
+					.prepareStatement( "INSERT OR REPLACE INTO names (uuid, username) VALUES (?,?);" ) ) {
 				
 				for ( Map.Entry<String, UUID> e : names.entrySet() ) {
 					stmnt.setString( 1, e.getValue().toString() );
@@ -196,18 +198,20 @@ public class UserDatabase {
 		}
 	}
 	
-	public void insertName( UUID uuid, String username ) throws SQLException {
+	public synchronized void insertName( UUID uuid, String username ) throws SQLException {
 		Preconditions.checkNotNull( uuid );
+		Preconditions.checkNotNull( username );
 		try ( Connection con = this.dataSource.getConnection() ) {
 			try ( PreparedStatement stmnt = con
 					.prepareStatement( "INSERT OR REPLACE INTO names (uuid, username) VALUES (?,?);" ) ) {
 				stmnt.setString( 1, uuid.toString() );
 				stmnt.setString( 2, username );
+				stmnt.executeUpdate();
 			}
 		}
 	}
 	
-	public Map<String, UUID> selectAllNames() throws SQLException {
+	public synchronized Map<String, UUID> selectAllNames() throws SQLException {
 		try ( Connection con = this.dataSource.getConnection() ) {
 			try ( PreparedStatement stmnt = con
 					.prepareStatement( "SELECT username, uuid FROM names GROUP BY (uuid) ORDER BY timestamp DESC;" ) ) {
@@ -222,7 +226,7 @@ public class UserDatabase {
 		}
 	}
 	
-	public ListMultimap<UUID, String> selectNameHistory() throws SQLException {
+	public synchronized ListMultimap<UUID, String> selectNameHistory() throws SQLException {
 		try ( Connection con = this.dataSource.getConnection() ) {
 			try ( PreparedStatement stmnt = con
 					.prepareStatement( "SELECT username, uuid FROM names ORDER BY timestamp DESC;" ) ) {
@@ -242,7 +246,7 @@ public class UserDatabase {
 		}
 	}
 	
-	public Set<UUID> selectAllDistinctUUIDs() throws SQLException {
+	public synchronized Set<UUID> selectAllDistinctUUIDs() throws SQLException {
 		try ( Connection con = this.dataSource.getConnection() ) {
 			try ( PreparedStatement stmnt = con.prepareStatement( "SELECT DISTINCT uuid FROM names;" ) ) {
 				try ( ResultSet rs = stmnt.executeQuery() ) {
@@ -256,7 +260,7 @@ public class UserDatabase {
 		}
 	}
 	
-	public int countAllDistinctUUIDs() throws SQLException {
+	public synchronized int countAllDistinctUUIDs() throws SQLException {
 		try ( Connection con = this.dataSource.getConnection() ) {
 			try ( PreparedStatement stmnt = con.prepareStatement( "SELECT COUNT(*) FROM userdata;" ) ) {
 				try ( ResultSet rs = stmnt.executeQuery() ) {
@@ -267,6 +271,60 @@ public class UserDatabase {
 			}
 		}
 		return 0;
+	}
+	
+	public synchronized void insertConfig( final UUID uuid, String configString ) throws SQLException {
+		Preconditions.checkNotNull( uuid );
+		Preconditions.checkNotNull( configString );
+		try ( Connection con = UserDatabase.this.dataSource.getConnection() ) {
+			try ( final PreparedStatement ps = con
+					.prepareStatement( "INSERT OR REPLACE INTO `userdata` (`uuid`, `userconfig`, `timestamp`) "
+							+ "VALUES (?,?,CURRENT_TIMESTAMP);" ) ) {
+				ps.setString( 1, uuid.toString() );
+				ps.setString( 2, configString );
+				ps.executeUpdate();
+			}
+		}
+	}
+	
+	public synchronized void insertConfigs( final Map<UUID, String> configs ) throws SQLException {
+		Preconditions.checkNotNull( configs );
+		try ( Connection con = UserDatabase.this.dataSource.getConnection() ) {
+			try ( final PreparedStatement ps = con
+					.prepareStatement( "INSERT OR REPLACE INTO `userdata` (`uuid`, `userconfig`, `timestamp`) "
+							+ "VALUES (?,?,CURRENT_TIMESTAMP);" ) ) {
+				for ( Map.Entry<UUID, String> e : configs.entrySet() ) {
+					ps.setString( 1, e.getKey().toString() );
+					ps.setString( 2, e.getValue() );
+					ps.addBatch();
+				}
+				ps.executeBatch();
+			}
+		}
+	}
+	
+	public synchronized void deleteConfig( UUID uuid ) throws SQLException {
+		Preconditions.checkNotNull( uuid );
+		try ( Connection con = UserDatabase.this.dataSource.getConnection() ) {
+			try ( PreparedStatement stmnt = con.prepareStatement( "DELETE FROM userdata WHERE uuid = ?;" ) ) {
+				stmnt.setString( 1, uuid.toString() );
+			}
+		}
+	}
+	
+	public synchronized String loadConfig( UUID uuid ) throws SQLException {
+		Preconditions.checkNotNull( uuid );
+		try ( Connection con = UserDatabase.this.dataSource.getConnection() ) {
+			try ( final PreparedStatement ps = con.prepareStatement( "SELECT userconfig FROM userdata WHERE uuid = ?;" ) ) {
+				ps.setString( 1, uuid.toString() );
+				try ( final ResultSet rs = ps.executeQuery() ) {
+					if ( rs.next() ) {
+						return rs.getString( 1 );
+					}
+				}
+			}
+		}
+		return "";
 	}
 	
 	@Data
@@ -281,8 +339,7 @@ public class UserDatabase {
 		@Getter
 		public final UUID uuid;
 		
-		private UserEntry( final UUID uuid, final String configString )
-				throws InvalidConfigurationException {
+		private UserEntry( final UUID uuid, final String configString ) throws InvalidConfigurationException {
 			super( "userconfig." + uuid.toString(), configString );
 			Preconditions.checkNotNull( uuid );
 			this.uuid = uuid;
@@ -290,40 +347,17 @@ public class UserDatabase {
 		
 		@Override
 		public void delete() throws SQLException {
-			try ( Connection con = UserDatabase.this.dataSource.getConnection() ) {
-				try ( PreparedStatement stmnt = con.prepareStatement( "DELETE FROM userdata WHERE uuid = ?;" ) ) {
-					stmnt.setString( 1, this.uuid.toString() );
-				}
-			}
+			UserDatabase.this.deleteConfig( uuid );
 		}
 		
 		@Override
 		protected String loadConfig() throws SQLException {
-			try ( Connection con = UserDatabase.this.dataSource.getConnection() ) {
-				try ( final PreparedStatement ps = con
-						.prepareStatement( "SELECT userconfig FROM userdata WHERE uuid = ?;" ) ) {
-					ps.setString( 1, uuid.toString() );
-					try ( final ResultSet rs = ps.executeQuery() ) {
-						if ( rs.next() ) {
-							return rs.getString( 1 );
-						}
-					}
-				}
-			}
-			return "";
+			return UserDatabase.this.loadConfig( uuid );
 		}
 		
 		@Override
 		protected void saveConfig( final String configString ) throws SQLException {
-			try ( Connection con = UserDatabase.this.dataSource.getConnection() ) {
-				try ( final PreparedStatement ps = con
-						.prepareStatement( "INSERT OR REPLACE INTO `userdata` (`uuid`, `userconfig`, `timestamp`) "
-								+ "VALUES (?,?,CURRENT_TIMESTAMP);" ) ) {
-					ps.setString( 1, this.uuid.toString() );
-					ps.setString( 2, configString );
-					ps.executeUpdate();
-				}
-			}
+			UserDatabase.this.insertConfig( this.uuid, configString );
 		}
 		
 	}

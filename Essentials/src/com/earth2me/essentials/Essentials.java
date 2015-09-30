@@ -758,7 +758,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 	}
 	
 	@Override
-	public IUserMap getUserMap() {
+	public SqlUserMap getUserMap() {
 		return userMap;
 	}
 	

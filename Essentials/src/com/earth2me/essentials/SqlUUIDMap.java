@@ -32,8 +32,8 @@ public class SqlUUIDMap extends UUIDMap {
 			final ConcurrentSkipListMap<UUID, ArrayList<String>> history ) {
 		try {
 			
-			names.clear();
-			history.clear();
+			//names.clear();
+			//history.clear();
 			
 			names.putAll( this.database.selectAllNames() );
 			
@@ -55,6 +55,7 @@ public class SqlUUIDMap extends UUIDMap {
 	
 	@Override
 	public void forceWriteUUIDMap() {
+		/*
 		if ( ess.getSettings().isDebug() ) {
 			ess.getLogger().log( Level.INFO, "Forcing usermap write to disk" );
 		}
@@ -68,10 +69,12 @@ public class SqlUUIDMap extends UUIDMap {
 		} catch ( ExecutionException ex ) {
 			ess.getLogger().log( Level.SEVERE, ex.getMessage(), ex );
 		}
+		*/
 	}
 	
 	@Override
 	public Future<?> _writeUUIDMap() {
+	/*
 		final Map<String, UUID> names = ess.getUserMap().getNames();
 		if ( names.size() < 1 ) {
 			return null;
@@ -81,6 +84,7 @@ public class SqlUUIDMap extends UUIDMap {
 		} catch ( Exception e ) {
 			Futures.immediateFailedFuture( e );
 		}
+		*/
 		return Futures.immediateFuture( true );
 	}
 }

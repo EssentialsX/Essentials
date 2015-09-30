@@ -57,7 +57,7 @@ public abstract class DatabaseEssentialsConf extends YamlConfiguration implement
 	
 	public DatabaseEssentialsConf( String name, String configString ) throws InvalidConfigurationException {
 		this( name );
-		LOGGER.info( name );
+		//LOGGER.info( name );
 		if ( configString != null ) {
 			this.loadFromString( configString );
 		}

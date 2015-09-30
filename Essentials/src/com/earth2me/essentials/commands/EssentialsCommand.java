@@ -49,6 +49,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
             User user = ess.getUser(sender.getPlayer());
             return getPlayer(server, user, args, pos);
         }
+       //return getPlayer(server, args, pos, true, true);
         return getPlayer(server, args, pos, true, false);
     }
 
@@ -63,7 +64,8 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
 
     // Get online players - only show vanished if source has permission
     protected User getPlayer(final Server server, final User user, final String[] args, final int pos) throws PlayerNotFoundException, NotEnoughArgumentsException {
-        return getPlayer(server, user, args, pos, user.canInteractVanished(), false);
+       //return getPlayer(server, user, args, pos, user.canInteractVanished(), user.canInteractOffline());
+    	return getPlayer(server, user, args, pos, user.canInteractVanished(), false);
     }
 
     // Get online or offline players, this method allows for raw access
@@ -102,7 +104,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
             user = ess.getUser(searchTerm);
         }
 
-        if (user != null) {
+        if (user != null) {        	
             if (!getOffline && !user.getBase().isOnline()) {
                 throw new PlayerNotFoundException();
             }
