@@ -37,6 +37,14 @@
 						<goals>
 							<goal>shade</goal>
 						</goals>
+						<configuration>
+							<artifactSet>
+								<includes>
+									<include>org.xerial:*</include>
+									<include>net.ess3:*</include>
+								</includes>
+							</artifactSet>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>

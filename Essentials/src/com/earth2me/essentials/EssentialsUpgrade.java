@@ -670,7 +670,7 @@ public class EssentialsUpgrade {
 						try {
 							UUID uuid = null;
 							final String filename = file.getName();
-							final String configData = Files.toString( file, Charsets.UTF_8 );
+							final String configData = new String(java.nio.file.Files.readAllBytes( file.toPath() ), Charsets.UTF_8);
 							
 							if ( filename.length() > 36 ) {
 								try {
