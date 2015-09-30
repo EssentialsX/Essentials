@@ -37,8 +37,8 @@ public class UUIDMap {
                     ess.getLogger().log(Level.INFO, "Reading usermap from disk");
                 }
 
-                names.clear();
-                history.clear();
+                //names.clear();
+                //history.clear();
 
                 final BufferedReader reader = new BufferedReader(new FileReader(userList));
                 try {
