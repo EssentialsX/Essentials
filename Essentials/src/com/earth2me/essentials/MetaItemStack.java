@@ -198,9 +198,17 @@ public class MetaItemStack {
             addBannerMeta(sender, false, string, ess);
         } else if (split.length > 1 && (split[0].equalsIgnoreCase("color") || split[0].equalsIgnoreCase("colour")) && (stack.getType() == Material.LEATHER_BOOTS || stack.getType() == Material.LEATHER_CHESTPLATE || stack.getType() == Material.LEATHER_HELMET || stack.getType() == Material.LEATHER_LEGGINGS)) {
             final String[] color = split[1].split("(\\||,)");
-            if(color.length == 1 && NumberUtil.isInt(color[0])) { // int rgb 
+            if(color.length == 1 && (NumberUtil.isInt(color[0]) || color[0].startsWith("#"))) { // int rgb and hex
                 final LeatherArmorMeta meta = (LeatherArmorMeta) stack.getItemMeta();
-                meta.setColor(Color.fromRGB(Integer.parseInt(color[0])));
+                String input = color[0];
+                if(input.startsWith("#")) {
+                    meta.setColor(Color.fromRGB(
+                        Integer.valueOf(input.substring(1, 3), 16),
+                        Integer.valueOf(input.substring(3, 5), 16),
+                        Integer.valueOf(input.substring(5, 7), 16)));
+                } else {
+                    meta.setColor(Color.fromRGB(Integer.parseInt(input)));
+                }
                 stack.setItemMeta(meta);
             } else if (color.length == 3) { // r,g,b
                 final int red = NumberUtil.isInt(color[0]) ? Integer.parseInt(color[0]) : 0;
