@@ -176,12 +176,6 @@
                                     </excludes>
                                     <filtering>true</filtering>
                                 </resource>
-                                <resource>
-                                    <directory>EssentialsGroupManager/dist</directory>
-                                    <includes>
-                                        <include>EssentialsGroupManager.jar</include>
-                                    </includes>
-                                </resource>
                             </resources>
                         </configuration>
                     </execution>

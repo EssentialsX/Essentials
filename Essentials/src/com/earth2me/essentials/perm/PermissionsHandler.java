@@ -91,7 +91,6 @@ public class PermissionsHandler implements IPermissionsHandler {
         // load and assign a handler
         List<Class<? extends SuperpermsHandler>> providerClazz = Arrays.asList(
                 BPermissions2Handler.class,
-                GroupManagerHandler.class,
                 PermissionsExHandler.class,
                 PrivilegesHandler.class,
                 SimplyPermsHandler.class,
