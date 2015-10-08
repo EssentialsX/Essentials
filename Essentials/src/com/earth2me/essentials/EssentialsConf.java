@@ -273,6 +273,7 @@ public class EssentialsConf extends YamlConfiguration {
             return null;
         }
 
+        pendingDiskWrites.incrementAndGet();
         Future<?> future = EXECUTOR_SERVICE.submit(new WriteRunner(configFile, data, pendingDiskWrites));
 
         return future;
