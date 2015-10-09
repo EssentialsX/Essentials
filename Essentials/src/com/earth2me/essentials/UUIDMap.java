@@ -19,6 +19,7 @@ public class UUIDMap {
     private final transient Pattern splitPattern = Pattern.compile(",");
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
     private final AtomicInteger pendingDiskWrites = new AtomicInteger(0);
+    private boolean loaded = false;
 
     public UUIDMap(final net.ess3.api.IEssentials ess) {
         this.ess = ess;
@@ -28,11 +29,12 @@ public class UUIDMap {
 
     public void loadAllUsers(final ConcurrentSkipListMap<String, UUID> names, final ConcurrentSkipListMap<UUID, ArrayList<String>> history) {
         try {
-            if (!userList.exists()) {
-                userList.createNewFile();
-            }
-
             synchronized (pendingDiskWrites) {
+            	
+                if (!userList.exists()) {
+                    userList.createNewFile();
+                }
+                
                 if (ess.getSettings().isDebug()) {
                     ess.getLogger().log(Level.INFO, "Reading usermap from disk");
                 }
@@ -65,6 +67,7 @@ public class UUIDMap {
                             }
                         }
                     }
+                    boolean loaded = true;
                 } finally {
                     reader.close();
                 }
@@ -95,6 +98,11 @@ public class UUIDMap {
     }
 
     public Future<?> _writeUUIDMap() {
+        synchronized (pendingDiskWrites) {
+        	if(!loaded) {
+        		loadAllUsers(ess.getUserMap().getNames(), ess.getUserMap().getHistory());
+        	}
+        }
         final ConcurrentSkipListMap<String, UUID> names = ess.getUserMap().getNames();
         if (names.size() < 1) {
             return null;
