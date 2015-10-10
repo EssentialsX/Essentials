@@ -133,6 +133,7 @@ public class EssentialsPlayerListener implements Listener {
             event.setQuitMessage(ess.getSettings().getCustomQuitMessage().replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName()));
         }
 
+        user.startTransaction();
         if (ess.getSettings().removeGodOnDisconnect() && user.isGodModeEnabled()) {
             user.setGodModeEnabled(false);
         }
@@ -154,6 +155,11 @@ public class EssentialsPlayerListener implements Listener {
         }
 
         user.updateActivity(false);
+        if(!user.isHidden()) {
+        	user.setLastLogout( System.currentTimeMillis() );
+        }
+        user.stopTransaction();
+        
         user.dispose();
     }
 
@@ -179,7 +185,7 @@ public class EssentialsPlayerListener implements Listener {
         ess.getBackup().onPlayerJoin();
         final User dUser = ess.getUser(player);
 
-
+        dUser.startTransaction();
         if (dUser.isNPC()) {
             dUser.setNPC(false);
         }
@@ -187,6 +193,7 @@ public class EssentialsPlayerListener implements Listener {
         final long currentTime = System.currentTimeMillis();
         dUser.checkMuteTimeout(currentTime);
         dUser.updateActivity(false);
+        dUser.stopTransaction();
 
         IText tempInput = null;
 
