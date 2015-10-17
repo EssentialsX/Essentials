@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.api.IWarps;
@@ -108,6 +109,7 @@ public class Commandwarp extends EssentialsCommand {
         if (ess.getSettings().getPerWarpPermission() && !owner.isAuthorized("essentials.warps." + name)) {
             throw new Exception(tl("warpUsePermission"));
         }
+        owner.getTeleport().setTpType(Teleport.TeleportType.WARP);
         owner.getTeleport().warp(user, name, charge, TeleportCause.COMMAND);
     }
 }

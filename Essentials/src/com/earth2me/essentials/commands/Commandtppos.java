@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FloatUtil;
@@ -72,6 +73,7 @@ public class Commandtppos extends EssentialsCommand {
         }
         sender.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
         user.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+        user.getTeleport().setTpType(Teleport.TeleportType.TP);
         user.getTeleport().teleport(loc, null, TeleportCause.COMMAND);
 
     }

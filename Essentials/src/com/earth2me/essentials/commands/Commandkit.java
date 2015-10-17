@@ -4,6 +4,10 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Kit;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.StringUtil;
+
+import net.ess3.api.events.PlayerReceiveKitEvent;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
 
 import java.util.ArrayList;
@@ -80,10 +84,17 @@ public class Commandkit extends EssentialsCommand {
 
                 kit.checkDelay(userFrom);
                 kit.checkAffordable(userFrom);
+
+                PlayerReceiveKitEvent event = new PlayerReceiveKitEvent(userTo, kit);
+                Bukkit.getPluginManager().callEvent(event);
+                if (event.isCancelled())
+                	continue;
+                
                 kit.setTime(userFrom);
                 kit.expandItems(userTo);
                 kit.chargeUser(userTo);
-
+                
+                
                 if (!userFrom.equals(userTo)) {
                     userFrom.sendMessage(tl("kitGiveTo", kit.getName(), userTo.getDisplayName()));
                 }
