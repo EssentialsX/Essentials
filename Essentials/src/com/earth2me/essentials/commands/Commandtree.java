@@ -18,7 +18,7 @@ public class Commandtree extends EssentialsCommand {
         TreeType tree = null;
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
-        } else  {
+        } else {
             for (TreeType type : TreeType.values()) {
                 if (type.name().replace("_", "").equalsIgnoreCase(args[0])) {
                     tree = type;

@@ -53,7 +53,7 @@ force-disable-teleport-safety: false
 # The delay, in seconds, required between /home, /tp, etc.
 teleport-cooldown: 0
 
-# The delay, in seconds, before a user actually teleports.  If the user moves or gets attacked in this timeframe, the teleport never occurs.
+# The delay, in seconds, before a user actually teleports. If the user moves or gets attacked in this timeframe, the teleport is cancelled.
 teleport-delay: 0
 
 # The delay, in seconds, a player can't be attacked by other players after they have been teleported by a command.
@@ -154,7 +154,7 @@ socialspy-commands:
 # These commands will be disabled when a player is muted.
 # Use '*' to disable every command.
 # Essentials already disabled Essentials messaging commands by default.
-# It only cars about the root command, not args after that (it sees /f chat the same as /f)
+# It only cares about the root command, not args after that (it sees /f chat the same as /f)
 mute-commands:
   - f
   - kittycannon
@@ -280,8 +280,8 @@ kits:
     delay: 6000
     items:
       - 401 1 name:Angry_Creeper color:red fade:green type:creeper power:1
-      - 401 1 name:StarryNight color:yellow,orange fade:blue type:star effect:trail,twinkle power:1
-      - 401 2 name:SolarWind color:yellow,orange fade:red shape:large effect:twinkle color:yellow,orange fade:red shape:ball effect:trail color:red,purple fade:pink shape:star effect:trail power:1
+      - 401 1 name:Starry_Night color:yellow,orange fade:blue type:star effect:trail,twinkle power:1
+      - 401 2 name:Solar_Wind color:yellow,orange fade:red shape:large effect:twinkle color:yellow,orange fade:red shape:ball effect:trail color:red,purple fade:pink shape:star effect:trail power:1
 
 # Essentials Sign Control
 # See http://wiki.ess3.net/wiki/Sign_Tutorial for instructions on how to use these.
@@ -483,7 +483,7 @@ tpa-accept-cancellation: 120
 
 ############################################################
 # +------------------------------------------------------+ #
-# |                   EssentialsEco                      | #
+# |                    EssentialsEco                     | #
 # +------------------------------------------------------+ #
 ############################################################
 
