@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.IReplyTo;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.messaging.IMessageRecipient;
 import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.Server;
 
@@ -22,43 +23,23 @@ public class Commandr extends EssentialsCommand {
         }
 
         String message = getFinalArg(args, 0);
-        IReplyTo replyTo;
-        String senderName;
+        IMessageRecipient messageSender;
 
         if (sender.isPlayer()) {
             User user = ess.getUser(sender.getPlayer());
             message = FormatUtil.formatMessage(user, "essentials.msg", message);
-            replyTo = user;
-            senderName = user.getDisplayName();
+            messageSender = user;
         } else {
             message = FormatUtil.replaceFormat(message);
-            replyTo = Console.getConsoleReplyTo();
-            senderName = Console.NAME;
+            messageSender = Console.getInstance();
         }
 
-        final CommandSource target = replyTo.getReplyTo();
-
-        if (target == null || (target.isPlayer() && !target.getPlayer().isOnline())) {
+        final IMessageRecipient target = messageSender.getReplyRecipient();
+        
+        // Check to make sure the sender does have a quick-reply recipient, and that the recipient is online.
+        if (target == null || (target instanceof User && !((User) target).getBase().isOnline())) {
             throw new Exception(tl("foreverAlone"));
         }
-
-        final String targetName = target.isPlayer() ? target.getPlayer().getDisplayName() : Console.NAME;
-
-        sender.sendMessage(tl("msgFormat", tl("me"), targetName, message));
-        if (target.isPlayer()) {
-            User player = ess.getUser(target.getPlayer());
-            if (sender.isPlayer() && player.isIgnoredPlayer(ess.getUser(sender.getPlayer()))) {
-                return;
-            }
-        }
-        target.sendMessage(tl("msgFormat", senderName, tl("me"), message));
-        replyTo.setReplyTo(target);
-        if (target != sender) {
-            if (target.isPlayer()) {
-                ess.getUser(target.getPlayer()).setReplyTo(sender);
-            } else {
-                Console.getConsoleReplyTo().setReplyTo(sender);
-            }
-        }
+        messageSender.sendMessage(target, message);
     }
 }
