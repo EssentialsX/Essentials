@@ -1,6 +1,8 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.IEssentialsCommand;
+import com.earth2me.essentials.messaging.IMessageRecipient;
+import com.earth2me.essentials.messaging.SimpleMessageRecipient;
 import com.earth2me.essentials.register.payment.Method;
 import com.earth2me.essentials.register.payment.Methods;
 import com.earth2me.essentials.utils.DateUtil;
@@ -27,9 +29,9 @@ import java.util.logging.Logger;
 import static com.earth2me.essentials.I18n.tl;
 
 
-public class User extends UserData implements Comparable<User>, IReplyTo, net.ess3.api.IUser {
+public class User extends UserData implements Comparable<User>, IMessageRecipient, net.ess3.api.IUser {
     private static final Logger logger = Logger.getLogger("Essentials");
-    private CommandSource replyTo = null;
+    private IMessageRecipient messageRecipient;
     private transient UUID teleportRequester;
     private transient boolean teleportRequestHere;
     private transient Location teleportLocation;
@@ -57,6 +59,7 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
         if (this.getBase().isOnline()) {
             lastOnlineActivity = System.currentTimeMillis();
         }
+        this.messageRecipient = new SimpleMessageRecipient(ess, this);
     }
 
     User update(final Player base) {
@@ -681,16 +684,6 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
     }
 
     @Override
-    public void setReplyTo(final CommandSource user) {
-        replyTo = user;
-    }
-
-    @Override
-    public CommandSource getReplyTo() {
-        return replyTo;
-    }
-
-    @Override
     public int compareTo(final User other) {
         return FormatUtil.stripFormat(getDisplayName()).compareToIgnoreCase(FormatUtil.stripFormat(other.getDisplayName()));
     }
@@ -717,5 +710,21 @@ public class User extends UserData implements Comparable<User>, IReplyTo, net.es
     @Override
     public String getName() {
         return this.getBase().getName();
+    }
+
+    @Override public MessageResponse sendMessage(IMessageRecipient recipient, String message) {
+        return this.messageRecipient.sendMessage(recipient, message);
+    }
+
+    @Override public MessageResponse onReceiveMessage(IMessageRecipient sender, String message) {
+        return this.messageRecipient.onReceiveMessage(sender, message);
+    }
+
+    @Override public IMessageRecipient getReplyRecipient() {
+        return this.messageRecipient.getReplyRecipient();
+    }
+
+    @Override public void setReplyRecipient(IMessageRecipient recipient) {
+        this.messageRecipient.setReplyRecipient(recipient);
     }
 }

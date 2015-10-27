@@ -4,8 +4,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
-public class CommandSource implements IReplyTo {
-    private CommandSource replyTo = null;
+public class CommandSource {
     protected CommandSender sender;
 
     public CommandSource(final CommandSender base) {
@@ -36,15 +35,5 @@ public class CommandSource implements IReplyTo {
         if (!message.isEmpty()) {
             sender.sendMessage(message);
         }
-    }
-
-    @Override
-    public void setReplyTo(final CommandSource user) {
-        replyTo = user;
-    }
-
-    @Override
-    public CommandSource getReplyTo() {
-        return replyTo;
     }
 }

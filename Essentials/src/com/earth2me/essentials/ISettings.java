@@ -225,4 +225,6 @@ public interface ISettings extends IConf {
     boolean isNotifyNoNewMail();
 
     boolean isDropItemsIfFull();
+    
+    boolean isLastMessageReplyRecipient();
 }
