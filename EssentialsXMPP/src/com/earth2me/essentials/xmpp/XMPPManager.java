@@ -304,7 +304,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
     private void sendCommand(final Chat chat, final String message) {
         if (config.getStringList("op-users").contains(StringUtils.parseBareAddress(chat.getParticipant()))) {
             try {
-                parent.getServer().dispatchCommand(Console.getCommandSender(parent.getServer()), message.substring(1));
+                parent.getServer().dispatchCommand(Console.getInstance().getCommandSender(), message.substring(1));
             } catch (Exception ex) {
                 LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
             }

@@ -1112,4 +1112,8 @@ public class Settings implements net.ess3.api.ISettings {
         long count = Runtime.getRuntime().maxMemory() / 1024 / 96;
         return config.getInt("max-user-cache-count", (int) count);
     }
+
+    @Override public boolean isLastMessageReplyRecipient() {
+        return config.getBoolean("last-message-reply-recipient", false);
+    }
 }

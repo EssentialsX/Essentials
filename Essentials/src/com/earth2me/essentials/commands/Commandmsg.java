@@ -1,18 +1,17 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n.tl;
+
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
-import com.earth2me.essentials.IReplyTo;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.messaging.IMessageRecipient;
 import com.earth2me.essentials.utils.FormatUtil;
-import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 
-import static com.earth2me.essentials.I18n.tl;
+import org.bukkit.Server;
 
 
 public class Commandmsg extends EssentialsLoopCommand {
-    final String translatedMe = tl("me");
 
     public Commandmsg() {
         super("msg");
@@ -38,15 +37,10 @@ public class Commandmsg extends EssentialsLoopCommand {
             canWildcard = true;
         }
 
+        // Sending messages to console
         if (args[0].equalsIgnoreCase(Console.NAME)) {
-            final IReplyTo replyTo = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : Console.getConsoleReplyTo();
-            final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
-
-            sender.sendMessage(tl("msgFormat", translatedMe, Console.NAME, message));
-            CommandSender cs = Console.getCommandSender(server);
-            cs.sendMessage(tl("msgFormat", senderName, translatedMe, message));
-            replyTo.setReplyTo(new CommandSource(cs));
-            Console.getConsoleReplyTo().setReplyTo(sender);
+            IMessageRecipient messageSender = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : Console.getInstance();
+            messageSender.sendMessage(Console.getInstance(), message);
             return;
         }
 
@@ -54,26 +48,8 @@ public class Commandmsg extends EssentialsLoopCommand {
     }
 
     @Override
-    protected void updatePlayer(final Server server, final CommandSource sender, final User matchedUser, final String[] args) {
-        final IReplyTo replyTo = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : Console.getConsoleReplyTo();
-        final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
-
-        if (matchedUser.isAfk()) {
-            sender.sendMessage(tl("userAFK", matchedUser.getDisplayName()));
-        }
-
-        sender.sendMessage(tl("msgFormat", translatedMe, matchedUser.getDisplayName(), args[0]));
-        if (sender.isPlayer() && matchedUser.isIgnoredPlayer(ess.getUser(sender.getPlayer()))) {
-            return;
-        }
-
-        if (matchedUser.isIgnoreMsg()) {
-            sender.sendMessage(tl("msgIgnore", matchedUser.getDisplayName()));
-            return;
-        }
-
-        matchedUser.sendMessage(tl("msgFormat", senderName, translatedMe, args[0]));
-        replyTo.setReplyTo(matchedUser.getSource());
-        matchedUser.setReplyTo(sender);
+    protected void updatePlayer(final Server server, final CommandSource sender, final User messageReceiver, final String[] args) {
+        IMessageRecipient messageSender = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : Console.getInstance();
+        messageSender.sendMessage(messageReceiver, args[0]); // args[0] is the message.
     }
 }

@@ -119,6 +119,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         i18n = new I18n(this);
         i18n.onEnable();
         i18n.updateLocale("en");
+        Console.setInstance(this);
+        
         LOGGER.log(Level.INFO, tl("usingTempFolderForTesting"));
         LOGGER.log(Level.INFO, dataFolder.toString());
         this.initialize(null, server, new PluginDescriptionFile(new FileReader(new File("src" + File.separator + "plugin.yml"))), dataFolder, null, null);
@@ -140,6 +142,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             i18n = new I18n(this);
             i18n.onEnable();
             execTimer.mark("I18n1");
+            
+            Console.setInstance(this);
+            
             String serverString = Bukkit.getServer().getClass().getName();
             for (int i = 1; i <= 7; i++) {
                 if (serverString.contains(".v1_" + i + "_R")) {
