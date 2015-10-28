@@ -11,6 +11,7 @@ import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
 import net.ess3.api.events.AfkStatusChangeEvent;
+import net.ess3.api.events.JailStatusChangeEvent;
 import net.ess3.api.events.UserBalanceUpdateEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -445,19 +446,24 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     //Returns true if status expired during this check
     public boolean checkJailTimeout(final long currentTime) {
         if (getJailTimeout() > 0 && getJailTimeout() < currentTime && isJailed()) {
-            setJailTimeout(0);
-            setJailed(false);
-            sendMessage(tl("haveBeenReleased"));
-            setJail(null);
-            try {
-                getTeleport().back();
-            } catch (Exception ex) {
+            final JailStatusChangeEvent event = new JailStatusChangeEvent(this, null, false);
+            ess.getServer().getPluginManager().callEvent(event);
+
+            if (!event.isCancelled()) {
+                setJailTimeout(0);
+                setJailed(false);
+                sendMessage(tl("haveBeenReleased"));
+                setJail(null);
                 try {
-                    getTeleport().respawn(null, TeleportCause.PLUGIN);
-                } catch (Exception ex1) {
+                    getTeleport().back();
+                } catch (Exception ex) {
+                    try {
+                        getTeleport().respawn(null, TeleportCause.PLUGIN);
+                    } catch (Exception ex1) {
+                    }
                 }
+                return true;
             }
-            return true;
         }
         return false;
     }
