@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
+import org.bukkit.event.world.PortalCreateEvent;
 
 
 public class EssentialsProtectBlockListener implements Listener {
@@ -75,6 +76,13 @@ public class EssentialsProtectBlockListener implements Listener {
     public void onBlockBurn(final BlockBurnEvent event) {
         if (prot.getSettingBool(ProtectConfig.prevent_fire_spread)) {
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onPortalLight(PortalCreateEvent event) {
+        if (event.getReason() == PortalCreateEvent.CreateReason.FIRE) {
+            event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_portal_creation));
         }
     }
 }
