@@ -250,6 +250,10 @@ player-commands:
   - worth
   - xmpp
 
+# When this option is enabled, one-time use kits (ie. delay < 0) will be
+# removed from the /kit list when a player can no longer use it
+skip-used-one-time-kits-from-kit-list: false
+
 # Note: All items MUST be followed by a quantity!
 # All kit names should be lower case, and will be treated as lower in permissions/costs.
 # Syntax: - itemID[:DataValue/Durability] Amount [Enchantment:Level].. [itemmeta:value]...

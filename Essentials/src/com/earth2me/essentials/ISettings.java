@@ -58,6 +58,8 @@ public interface ISettings extends IConf {
 
     void addKit(String name, List<String> lines, long delay);
 
+    boolean isSkippingUsedOneTimeKitsFromKitList();
+
     String getLocale();
 
     String getNewbieSpawn();
