@@ -351,6 +351,11 @@ public class Settings implements net.ess3.api.ISettings {
         config.save();
     }
 
+    @Override
+    public boolean isSkippingUsedOneTimeKitsFromKitList() {
+        return config.getBoolean("skip-used-one-time-kits-from-kit-list", false);
+    }
+
     private ChatColor operatorColor = null;
 
     @Override

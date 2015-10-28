@@ -56,7 +56,10 @@ public class Kit {
                     }
 
                     Kit kit = new Kit(kitItem, ess);
-                    if (kit.getNextUse(user) != 0) {
+                    double nextUse = kit.getNextUse(user);
+                    if (nextUse == -1 && ess.getSettings().isSkippingUsedOneTimeKitsFromKitList()) {
+                        continue;
+                    } else if (nextUse != 0) {
                         name = tl("kitDelay", name);
                     }
 
