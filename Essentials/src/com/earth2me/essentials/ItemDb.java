@@ -312,7 +312,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
                 Potion potion = Potion.fromItemStack(is);
                 for (PotionEffect e : potion.getEffects()) {
                     // long but needs to be effect:speed power:2 duration:120 in that order.
-                    sb.append("effect:").append(e.getType().getName().toLowerCase()).append(" ").append("power:").append(e.getAmplifier()).append(" ").append("duration:").append(e.getDuration() / 20).append(" ");
+                    sb.append("splash:").append(potion.isSplash()).append(" ").append("effect:").append(e.getType().getName().toLowerCase()).append(" ").append("power:").append(e.getAmplifier()).append(" ").append("duration:").append(e.getDuration() / 20).append(" ");
                 }
                 break;
             case SKULL_ITEM:

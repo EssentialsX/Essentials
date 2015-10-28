@@ -15,6 +15,7 @@ import org.bukkit.block.banner.PatternType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
+import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -47,6 +48,7 @@ public class MetaItemStack {
     private boolean validPotionEffect = false;
     private boolean validPotionDuration = false;
     private boolean validPotionPower = false;
+    private boolean isSplashPotion = false;
     private boolean completePotion = false;
     private int power = 1;
     private int duration = 120;
@@ -85,6 +87,7 @@ public class MetaItemStack {
         validPotionEffect = false;
         validPotionDuration = false;
         validPotionPower = false;
+        isSplashPotion = false;
         completePotion = true;
     }
 
@@ -333,6 +336,8 @@ public class MetaItemStack {
                 } else {
                     throw new Exception(tl("invalidPotionMeta", split[1]));
                 }
+            } else if (split[0].equalsIgnoreCase("splash") || allowShortName && split[0].equalsIgnoreCase("s")) {
+                isSplashPotion = Boolean.valueOf(split[1]);
             }
 
             if (isValidPotion()) {
@@ -343,6 +348,9 @@ public class MetaItemStack {
                 }
                 pmeta.addCustomEffect(pEffect, true);
                 stack.setItemMeta(pmeta);
+                Potion potion = Potion.fromItemStack(stack);
+                potion.setSplash(isSplashPotion);
+                potion.apply(stack);
                 resetPotionMeta();
             }
         }
