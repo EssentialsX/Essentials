@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.events.NickChangeEvent;
+import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
@@ -74,12 +75,16 @@ public class Commandnick extends EssentialsLoopCommand {
         String newNick = user == null ? FormatUtil.replaceFormat(nick) : FormatUtil.formatString(user, "essentials.nick", nick);
         if (!newNick.matches("^[a-zA-Z_0-9\u00a7]+$")) {
             throw new Exception(tl("nickNamesAlpha"));
-        } else if (newNick.length() > ess.getSettings().getMaxNickLength()) {
+        } else if (getNickLength(newNick) > ess.getSettings().getMaxNickLength()) {
             throw new Exception(tl("nickTooLong"));
         } else if (FormatUtil.stripFormat(newNick).length() < 1) {
             throw new Exception(tl("nickNamesAlpha"));
         }
         return newNick;
+    }
+
+    private int getNickLength(final String nick) {
+        return ess.getSettings().ignoreColorsInMaxLength() ? ChatColor.stripColor(nick).length() : nick.length();
     }
 
     private boolean nickInUse(final Server server, final User target, String nick) {
