@@ -1046,6 +1046,11 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getInt("max-nick-length", 30);
     }
 
+    @Override
+    public boolean ignoreColorsInMaxLength() {
+        return config.getBoolean("ignore-colors-in-max-nick-length", false);
+    }
+
     private boolean allowSilentJoin;
 
     public boolean _allowSilentJoinQuit() {

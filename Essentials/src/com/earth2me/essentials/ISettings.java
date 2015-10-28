@@ -208,6 +208,8 @@ public interface ISettings extends IConf {
 
     int getMaxNickLength();
 
+    boolean ignoreColorsInMaxLength();
+
     int getMaxUserCacheCount();
 
     boolean allowSilentJoinQuit();
