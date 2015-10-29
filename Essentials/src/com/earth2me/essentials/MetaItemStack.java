@@ -336,7 +336,7 @@ public class MetaItemStack {
                 } else {
                     throw new Exception(tl("invalidPotionMeta", split[1]));
                 }
-            } else if (split[0].equalsIgnoreCase("splash") || allowShortName && split[0].equalsIgnoreCase("s")) {
+            } else if (split[0].equalsIgnoreCase("splash") || (allowShortName && split[0].equalsIgnoreCase("s"))) {
                 isSplashPotion = Boolean.valueOf(split[1]);
             }
 
