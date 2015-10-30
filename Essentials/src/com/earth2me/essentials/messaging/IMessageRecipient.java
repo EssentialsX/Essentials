@@ -57,6 +57,13 @@ public interface IMessageRecipient {
     String getDisplayName();
 
     /**
+     * Returns whether this recipient is reachable. A case where the recipient is not reachable is if they are offline.
+     *
+     * @return whether this recipient is reachable
+     */
+    boolean isReachable();
+
+    /**
      * Returns the {@link IMessageRecipient} this recipient should send replies to.
      *
      * @return message recipient
@@ -82,7 +89,9 @@ public interface IMessageRecipient {
         /** States that the message was <b>NOT</b> received as a result of the receiver ignoring all messages. */
         MESSAGES_IGNORED,
         /** States that the message was <b>NOT</b> received as a result of the sender being ignored by the recipient. */
-        SENDER_IGNORED;
+        SENDER_IGNORED,
+        /** States that the message was <b>NOT</b> received as a result of the recipient being unreachable. */
+        UNREACHABLE;
 
         /**
          * Returns whether this response is a success. In other words equal to {@link #SUCCESS} or {@link #SUCCESS_BUT_AFK}

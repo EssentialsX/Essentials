@@ -50,6 +50,10 @@ public final class Console implements IMessageRecipient {
     @Override public void sendMessage(String message) {
         getCommandSender().sendMessage(message);
     }
+
+    @Override public boolean isReachable() {
+        return true;
+    }
     
     /* ================================
      * >> DELEGATE METHODS

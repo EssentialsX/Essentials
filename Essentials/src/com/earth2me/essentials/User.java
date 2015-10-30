@@ -717,6 +717,10 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     public String getName() {
         return this.getBase().getName();
     }
+    
+    @Override public boolean isReachable() {
+        return getBase().isOnline();
+    }
 
     @Override public MessageResponse sendMessage(IMessageRecipient recipient, String message) {
         return this.messageRecipient.sendMessage(recipient, message);

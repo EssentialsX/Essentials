@@ -23,6 +23,7 @@ import java.lang.ref.WeakReference;
  *     <li>{@link IMessageRecipient#sendMessage(String)}</li>
  *     <li>{@link IMessageRecipient#getName()}</li>
  *     <li>{@link IMessageRecipient#getDisplayName()}</li>
+ *     <li>{@link IMessageRecipient#isReachable()}</li>
  * </ul>
  * 
  * The reply-recipient is wrapped in a {@link WeakReference}.
@@ -56,6 +57,8 @@ public class SimpleMessageRecipient implements IMessageRecipient {
     @Override public MessageResponse sendMessage(IMessageRecipient recipient, String message) {
         MessageResponse messageResponse = recipient.onReceiveMessage(this.parent, message);
         switch (messageResponse) {
+            case UNREACHABLE:
+                sendMessage(tl("recentlyForeverAlone", recipient.getDisplayName()));
             case MESSAGES_IGNORED:
                 sendMessage(tl("msgIgnore", recipient.getDisplayName()));
                 break;
@@ -79,6 +82,10 @@ public class SimpleMessageRecipient implements IMessageRecipient {
 
     @Override
     public MessageResponse onReceiveMessage(IMessageRecipient sender, String message) {
+        if (!isReachable()) {
+            return MessageResponse.UNREACHABLE;
+        }
+        
         User user = this.parent instanceof User ? (User) this.parent : null;
         boolean afk = false;
         if (user != null) {
@@ -98,13 +105,17 @@ public class SimpleMessageRecipient implements IMessageRecipient {
         if (ess.getSettings().isLastMessageReplyRecipient()) {
             // If this recipient doesn't have a reply recipient, initiate by setting the first
             // message sender to this recipient's replyRecipient.
-            if (getReplyRecipient() == null) {
+            if (!isReachable()) {
                 setReplyRecipient(sender);
             }
         } else { // Old message functionality, always set the reply recipient to the last person who sent us a message.
             setReplyRecipient(sender);
         }
         return afk ? MessageResponse.SUCCESS_BUT_AFK : MessageResponse.SUCCESS;
+    }
+
+    @Override public boolean isReachable() {
+        return this.parent.isReachable();
     }
 
     /**

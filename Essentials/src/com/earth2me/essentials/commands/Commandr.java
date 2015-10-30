@@ -34,9 +34,8 @@ public class Commandr extends EssentialsCommand {
         }
 
         final IMessageRecipient target = messageSender.getReplyRecipient();
-        
-        // Check to make sure the sender does have a quick-reply recipient, and that the recipient is online.
-        if (target == null || (target instanceof User && !((User) target).getBase().isOnline())) {
+        // Check to make sure the sender does have a quick-reply recipient
+        if (target == null) {
             throw new Exception(tl("foreverAlone"));
         }
         messageSender.sendMessage(target, message);
