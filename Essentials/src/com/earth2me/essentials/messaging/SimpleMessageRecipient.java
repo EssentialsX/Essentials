@@ -57,13 +57,13 @@ public class SimpleMessageRecipient implements IMessageRecipient {
         MessageResponse messageResponse = recipient.onReceiveMessage(this.parent, message);
         switch (messageResponse) {
             case MESSAGES_IGNORED:
-                sendMessage(tl("msgIgnore", getDisplayName()));
+                sendMessage(tl("msgIgnore", recipient.getDisplayName()));
                 break;
             case SENDER_IGNORED:
                 break;
             // When this recipient is AFK, notify the sender. Then, proceed to send the message.
-            case SUCCESS_BUT_AFK: // TODO double check this functionality!
-                sendMessage(tl("userAFK", getDisplayName()));
+            case SUCCESS_BUT_AFK:
+                sendMessage(tl("userAFK", recipient.getDisplayName()));
             default:
                 sendMessage(tl("msgFormat", tl("me"), recipient.getDisplayName(), message));
         }
