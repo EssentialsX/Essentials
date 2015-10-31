@@ -105,7 +105,7 @@ public class SimpleMessageRecipient implements IMessageRecipient {
         if (ess.getSettings().isLastMessageReplyRecipient()) {
             // If this recipient doesn't have a reply recipient, initiate by setting the first
             // message sender to this recipient's replyRecipient.
-            if (!isReachable()) {
+            if (getReplyRecipient() == null || !getReplyRecipient().isReachable()) {
                 setReplyRecipient(sender);
             }
         } else { // Old message functionality, always set the reply recipient to the last person who sent us a message.
