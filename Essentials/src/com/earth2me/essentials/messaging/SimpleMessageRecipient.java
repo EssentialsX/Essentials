@@ -59,6 +59,7 @@ public class SimpleMessageRecipient implements IMessageRecipient {
         switch (messageResponse) {
             case UNREACHABLE:
                 sendMessage(tl("recentlyForeverAlone", recipient.getDisplayName()));
+                break;
             case MESSAGES_IGNORED:
                 sendMessage(tl("msgIgnore", recipient.getDisplayName()));
                 break;
