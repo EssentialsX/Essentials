@@ -70,12 +70,9 @@ public class SimpleMessageRecipient implements IMessageRecipient {
             default:
                 sendMessage(tl("msgFormat", tl("me"), recipient.getDisplayName(), message));
         }
-
-        if (ess.getSettings().isLastMessageReplyRecipient()) {
-            // If the message was a success, set this sender's reply-recipient to the current recipient.
-            if (messageResponse.isSuccess()) {
-                setReplyRecipient(recipient);
-            }
+        // If the message was a success, set this sender's reply-recipient to the current recipient.
+        if (messageResponse.isSuccess()) {
+            setReplyRecipient(recipient);
         }
         return messageResponse;
     }
