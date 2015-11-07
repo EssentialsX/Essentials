@@ -536,6 +536,9 @@ economy-log-enabled: false
 # Default is false. 
 use-bukkit-permissions: false
 
+# Minimum acceptable amount to be used in /pay.
+minimum-pay-amount: 0.001
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHelp                     | #

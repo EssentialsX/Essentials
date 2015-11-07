@@ -4,6 +4,8 @@ import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.NumberUtil;
+
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.Server;
 
@@ -32,6 +34,9 @@ public class Commandpay extends EssentialsLoopCommand {
         }
 
         amount = new BigDecimal(stringAmount);
+        if (amount.compareTo(ess.getSettings().getMinimumPayAmount()) < 0) { // Check if amount is less than minimum-pay-amount
+            throw new Exception(tl("minimumPayAmount", NumberUtil.displayCurrencyExactly(ess.getSettings().getMinimumPayAmount(), ess)));
+        }
         loopOnlinePlayers(server, user.getSource(), false, user.isAuthorized("essentials.pay.multiple"), args[0], args);
     }
 

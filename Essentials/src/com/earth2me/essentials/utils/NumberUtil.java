@@ -37,6 +37,10 @@ public class NumberUtil {
         return tl("currency", ess.getSettings().getCurrencySymbol(), formatAsCurrency(value));
     }
 
+    public static String displayCurrencyExactly(final BigDecimal value, final IEssentials ess) {
+        return tl("currency", ess.getSettings().getCurrencySymbol(), value.toPlainString());
+    }
+
     public static boolean isInt(final String sInt) {
         try {
             Integer.parseInt(sInt);
