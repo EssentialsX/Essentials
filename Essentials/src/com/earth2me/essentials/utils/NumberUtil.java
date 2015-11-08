@@ -13,7 +13,13 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class NumberUtil {
     static DecimalFormat twoDPlaces = new DecimalFormat("#,###.##");
-    static DecimalFormat currencyFormat = new DecimalFormat("#,##0.00", DecimalFormatSymbols.getInstance(Locale.US));
+    if (ess.getSettings().useCommaSeparatedMoney()) {
+        // Uses comma separated money
+        static DecimalFormat currencyFormat = new DecimalFormat("#,##0.00", DecimalFormatSymbols.getInstance(Locale.US));
+    } else {
+        // Doesn't use comma separated money
+        static DecimalFormat currencyFormat = new DecimalFormat("#0.00", DecimalFormatSymbols.getInstance(Locale.US));
+    }
 
     public static String shortCurrency(final BigDecimal value, final IEssentials ess) {
         return ess.getSettings().getCurrencySymbol() + formatAsCurrency(value);
