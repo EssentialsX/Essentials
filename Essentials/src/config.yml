@@ -539,6 +539,10 @@ use-bukkit-permissions: false
 # Minimum acceptable amount to be used in /pay.
 minimum-pay-amount: 0.001
 
+# Use comma separated money? 
+# e.g. $12,345,678.90 instead of $12345678.90
+use-comma-separated-money: false
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHelp                     | #
