@@ -10,16 +10,16 @@ import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class NumberUtil {
-    static DecimalFormat twoDPlaces = new DecimalFormat("#,###.##");
-    if (ess.getSettings().useCommaSeparatedMoney()) {
-        // Uses comma separated money
-        static DecimalFormat currencyFormat = new DecimalFormat("#,##0.00", DecimalFormatSymbols.getInstance(Locale.US));
-    } else {
-        // Doesn't use comma separated money
-        static DecimalFormat currencyFormat = new DecimalFormat("#0.00", DecimalFormatSymbols.getInstance(Locale.US));
+    {
+       if (ess.getSettings().useCommaSeparatedMoney()) {
+           DecimalFormat currencyFormat = new DecimalFormat("#,##0.00", DecimalFormatSymbols.getInstance(Locale.US));
+        } else {
+           DecimalFormat currencyFormat = new DecimalFormat("#0.00", DecimalFormatSymbols.getInstance(Locale.US));
+        }
     }
+    
+    static DecimalFormat twoDPlaces = new DecimalFormat("#,###.##");
 
     public static String shortCurrency(final BigDecimal value, final IEssentials ess) {
         return ess.getSettings().getCurrencySymbol() + formatAsCurrency(value);
