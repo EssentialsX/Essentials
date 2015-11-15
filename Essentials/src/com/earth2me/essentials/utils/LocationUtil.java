@@ -195,8 +195,18 @@ public class LocationUtil {
         VOLUME = pos.toArray(new Vector3D[0]);
     }
 
+    @SuppressWarnings("deprecation")
     public static Location getTarget(final LivingEntity entity) throws Exception {
-        final Block block = entity.getTargetBlock(TRANSPARENT_MATERIALS, 300);
+        Block block;
+        try {
+            block = entity.getTargetBlock(TRANSPARENT_MATERIALS, 300);
+        } catch (NoSuchMethodError e) {
+            HashSet<Byte> legacyTransparent = new HashSet<>(); // Bukkit API prevents declaring as Set<Byte>
+            for (Material m : TRANSPARENT_MATERIALS) {
+                legacyTransparent.add((byte) m.getId());
+            }
+            block = entity.getTargetBlock(legacyTransparent, 300);
+        }
         if (block == null) {
             throw new Exception("Not targeting a block");
         }
