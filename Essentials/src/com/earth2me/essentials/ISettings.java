@@ -231,4 +231,6 @@ public interface ISettings extends IConf {
     boolean isLastMessageReplyRecipient();
     
     BigDecimal getMinimumPayAmount();
+    
+    long getLastMessageReplyRecipientTimeout();
 }

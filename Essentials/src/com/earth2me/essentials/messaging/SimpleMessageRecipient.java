@@ -33,6 +33,7 @@ public class SimpleMessageRecipient implements IMessageRecipient {
     private final IEssentials ess;
     private final IMessageRecipient parent;
     
+    private long lastMessageMs;
     private WeakReference<IMessageRecipient> replyRecipient;
     
     public SimpleMessageRecipient(IEssentials ess, IMessageRecipient parent) {
@@ -103,12 +104,15 @@ public class SimpleMessageRecipient implements IMessageRecipient {
         if (ess.getSettings().isLastMessageReplyRecipient()) {
             // If this recipient doesn't have a reply recipient, initiate by setting the first
             // message sender to this recipient's replyRecipient.
-            if (getReplyRecipient() == null || !getReplyRecipient().isReachable()) {
+            long timeout = ess.getSettings().getLastMessageReplyRecipientTimeout() * 1000;
+            if (getReplyRecipient() == null || !getReplyRecipient().isReachable() 
+                || System.currentTimeMillis() - this.lastMessageMs > timeout) {
                 setReplyRecipient(sender);
             }
         } else { // Old message functionality, always set the reply recipient to the last person who sent us a message.
             setReplyRecipient(sender);
         }
+        this.lastMessageMs = System.currentTimeMillis();
         return afk ? MessageResponse.SUCCESS_BUT_AFK : MessageResponse.SUCCESS;
     }
 
