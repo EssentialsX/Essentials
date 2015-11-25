@@ -30,7 +30,7 @@ public class Commandtppos extends EssentialsCommand {
             loc.setWorld(ess.getWorld(args[3]));
         }
         if (args.length > 4) {
-            loc.setYaw((FloatUtil.parseFloat(args[3]) + 180 + 360) % 360);
+            loc.setYaw((FloatUtil.parseFloat(args[3]) + 360) % 360);
             loc.setPitch(FloatUtil.parseFloat(args[4]));
         }
         if (args.length > 5) {
