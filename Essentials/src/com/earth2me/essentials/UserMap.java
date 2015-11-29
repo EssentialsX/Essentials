@@ -1,11 +1,13 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.StringUtil;
+import com.google.common.base.Charsets;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.util.concurrent.UncheckedExecutionException;
 import net.ess3.api.IEssentials;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -66,10 +68,20 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
 
     public User getUser(final String name) {
         try {
+            User offlineUser = null;
             final String sanitizedName = StringUtil.safeString(name);
             if (names.containsKey(sanitizedName)) {
                 final UUID uuid = names.get(sanitizedName);
-                return getUser(uuid);
+                offlineUser = getUser(uuid);
+            } else {
+                UUID bukkitUuid = getIdFromBukkit(sanitizedName);
+                if (bukkitUuid != null) {
+                    names.put(sanitizedName, bukkitUuid);
+                    offlineUser = getUser(bukkitUuid);
+                }
+            }
+            if (offlineUser != null) {
+                return offlineUser;
             }
 
             final File userFile = getUserFileFromString(sanitizedName);
@@ -210,4 +222,15 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
 //			}
 //		}
 //	}
+
+    @SuppressWarnings("deprecation")
+    private UUID getIdFromBukkit(String name) {
+        ess.getLogger().warning("Using potentially blocking Bukkit UUID lookup for: " + name);
+        UUID uuid = Bukkit.getOfflinePlayer(name).getUniqueId();
+        if (uuid.equals(UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8)))) {
+            return null;
+        } else {
+            return uuid;
+        }
+    }
 }
