@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.*;
@@ -95,10 +96,15 @@ public class UUIDMap {
     }
 
     public Future<?> _writeUUIDMap() {
-        final ConcurrentSkipListMap<String, UUID> names = ess.getUserMap().getNames();
+        Map<String, UUID> names = ess.getUserMap().getNames();
         if (names.size() < 1) {
             return null;
         }
+        // The _names_ Map is being shallowly cloned because of an issue that occurs during restarts/reloads that
+        // causes UserMap database to be cleared. The assumed culprit is names.clear() when loading in UserMap. 
+        //
+        // For more information, please refer to #213.
+        names = new HashMap<>(names);
         pendingDiskWrites.incrementAndGet();
         Future<?> future = EXECUTOR_SERVICE.submit(new WriteRunner(ess.getDataFolder(), userList, names, pendingDiskWrites));
         return future;
@@ -108,10 +114,10 @@ public class UUIDMap {
     private static class WriteRunner implements Runnable {
         private final File location;
         private final File endFile;
-        private final ConcurrentSkipListMap<String, UUID> names;
+        private final Map<String, UUID> names;
         private final AtomicInteger pendingDiskWrites;
 
-        private WriteRunner(final File location, final File endFile, final ConcurrentSkipListMap<String, UUID> names, final AtomicInteger pendingDiskWrites) {
+        private WriteRunner(final File location, final File endFile, final Map<String, UUID> names, final AtomicInteger pendingDiskWrites) {
             this.location = location;
             this.endFile = endFile;
             this.names = names;
