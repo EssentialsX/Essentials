@@ -15,6 +15,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Pattern;
 
 
 public class UserMap extends CacheLoader<String, User> implements IConf {
@@ -223,11 +224,27 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
 //		}
 //	}
 
+    private final Pattern validUserPattern = Pattern.compile("^[a-zA-Z0-9_]{2,16}$");
+
     @SuppressWarnings("deprecation")
     private UUID getIdFromBukkit(String name) {
         ess.getLogger().warning("Using potentially blocking Bukkit UUID lookup for: " + name);
-        UUID uuid = Bukkit.getOfflinePlayer(name).getUniqueId();
-        if (uuid.equals(UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8)))) {
+        // Don't attempt to look up entirely invalid usernames
+        if (name == null || !validUserPattern.matcher(name).matches()) {
+            return null;
+        }
+        org.bukkit.OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(name);
+        if (offlinePlayer == null) {
+            return null;
+        }
+        UUID uuid;
+        try {
+            uuid = offlinePlayer.getUniqueId();
+        } catch (UnsupportedOperationException | NullPointerException e) {
+            return null;
+        }
+        // This is how Bukkit generates fake UUIDs
+        if (UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8)).equals(uuid)) {
             return null;
         } else {
             return uuid;
