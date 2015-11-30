@@ -233,7 +233,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         if (name == null || !validUserPattern.matcher(name).matches()) {
             return null;
         }
-        org.bukkit.OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(name);
+        org.bukkit.OfflinePlayer offlinePlayer = ess.getServer().getOfflinePlayer(name);
         if (offlinePlayer == null) {
             return null;
         }
