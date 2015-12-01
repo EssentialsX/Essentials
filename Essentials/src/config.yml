@@ -460,6 +460,11 @@ max-tempban-time: -1
 # If false, /r goes to the last person that messaged you.
 last-message-reply-recipient: true
 
+# If last-message-reply-recipient is true, this specifies the duration, in seconds, that would need to elapse for the 
+# reply-recipient to update when receiving a message.
+# Default is 180 (3 minutes)
+last-message-reply-recipient-timeout: 180
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #
@@ -538,11 +543,6 @@ use-bukkit-permissions: false
 
 # Minimum acceptable amount to be used in /pay.
 minimum-pay-amount: 0.001
-
-# If last-message-reply-recipient is true, this specifies the duration, in seconds, that would need to elapse for the 
-# reply-recipient to update when receiving a message.
-# Default is 180 (3 minutes)
-last-message-reply-recipient-timeout: 180
 
 ############################################################
 # +------------------------------------------------------+ #
