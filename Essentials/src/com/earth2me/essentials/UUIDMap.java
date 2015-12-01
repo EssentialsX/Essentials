@@ -96,8 +96,9 @@ public class UUIDMap {
     }
 
     public Future<?> _writeUUIDMap() {
+        Map<String, UUID> names;
         synchronized (pendingDiskWrites) {
-            Map<String, UUID> names = ess.getUserMap().getNames();
+            names = ess.getUserMap().getNames();
             if (names.size() < 1) {
                 return null;
             }
