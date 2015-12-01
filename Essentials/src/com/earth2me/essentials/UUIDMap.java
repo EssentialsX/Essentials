@@ -96,15 +96,17 @@ public class UUIDMap {
     }
 
     public Future<?> _writeUUIDMap() {
-        Map<String, UUID> names = ess.getUserMap().getNames();
-        if (names.size() < 1) {
-            return null;
+        synchronized (pendingDiskWrites) {
+            Map<String, UUID> names = ess.getUserMap().getNames();
+            if (names.size() < 1) {
+                return null;
+            }
+            // The _names_ Map is being shallowly cloned because of an issue that occurs during restarts/reloads that
+            // causes UserMap database to be cleared. The assumed culprit is names.clear() when loading in UserMap. 
+            //
+            // For more information, please refer to #213.
+            names = new HashMap<>(names);
         }
-        // The _names_ Map is being shallowly cloned because of an issue that occurs during restarts/reloads that
-        // causes UserMap database to be cleared. The assumed culprit is names.clear() when loading in UserMap. 
-        //
-        // For more information, please refer to #213.
-        names = new HashMap<>(names);
         pendingDiskWrites.incrementAndGet();
         Future<?> future = EXECUTOR_SERVICE.submit(new WriteRunner(ess.getDataFolder(), userList, names, pendingDiskWrites));
         return future;
