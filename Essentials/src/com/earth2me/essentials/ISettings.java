@@ -233,4 +233,6 @@ public interface ISettings extends IConf {
     BigDecimal getMinimumPayAmount();
     
     long getLastMessageReplyRecipientTimeout();
+
+    boolean isMilkBucketEasterEggEnabled();
 }

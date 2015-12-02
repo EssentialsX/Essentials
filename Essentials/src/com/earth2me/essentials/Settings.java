@@ -1129,4 +1129,8 @@ public class Settings implements net.ess3.api.ISettings {
     @Override public long getLastMessageReplyRecipientTimeout() {
         return config.getLong("last-message-reply-recipient-timeout", 180);
     }
+
+    @Override public boolean isMilkBucketEasterEggEnabled() {
+        return config.getBoolean("milk-bucket-easter-egg", true);
+    }
 }

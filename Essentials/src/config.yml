@@ -460,6 +460,9 @@ max-tempban-time: -1
 # If false, /r goes to the last person that messaged you.
 last-message-reply-recipient: true
 
+# Toggles whether or not right clicking mobs with a milk bucket turns them into a baby.
+milk-bucket-easter-egg: true
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #

@@ -38,7 +38,8 @@ public class EssentialsEntityListener implements Listener {
                 onPlayerVsPlayerDamage(event, (Player) eDefend, attacker);
             } else if (eDefend instanceof Ageable) {
                 final ItemStack hand = attacker.getBase().getItemInHand();
-                if (hand != null && hand.getType() == Material.MILK_BUCKET) {
+                if (ess.getSettings().isMilkBucketEasterEggEnabled()
+                        && hand != null && hand.getType() == Material.MILK_BUCKET) {
                     ((Ageable) eDefend).setBaby();
                     hand.setType(Material.BUCKET);
                     attacker.getBase().setItemInHand(hand);
