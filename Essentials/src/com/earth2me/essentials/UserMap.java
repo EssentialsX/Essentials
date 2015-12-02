@@ -69,20 +69,10 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
 
     public User getUser(final String name) {
         try {
-            User offlineUser = null;
             final String sanitizedName = StringUtil.safeString(name);
             if (names.containsKey(sanitizedName)) {
                 final UUID uuid = names.get(sanitizedName);
-                offlineUser = getUser(uuid);
-            } else {
-                UUID bukkitUuid = getIdFromBukkit(sanitizedName);
-                if (bukkitUuid != null) {
-                    names.put(sanitizedName, bukkitUuid);
-                    offlineUser = getUser(bukkitUuid);
-                }
-            }
-            if (offlineUser != null) {
-                return offlineUser;
+                return getUser(uuid);
             }
 
             final File userFile = getUserFileFromString(sanitizedName);
@@ -227,8 +217,11 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
     private final Pattern validUserPattern = Pattern.compile("^[a-zA-Z0-9_]{2,16}$");
 
     @SuppressWarnings("deprecation")
-    private UUID getIdFromBukkit(String name) {
-        ess.getLogger().warning("Using potentially blocking Bukkit UUID lookup for: " + name);
+    public User getUserFromBukkit(String name) {
+        name = StringUtil.safeString(name);
+        if (ess.getSettings().isDebug()) {
+            ess.getLogger().warning("Using potentially blocking Bukkit UUID lookup for: " + name);
+        }
         // Don't attempt to look up entirely invalid usernames
         if (name == null || !validUserPattern.matcher(name).matches()) {
             return null;
@@ -247,7 +240,8 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         if (UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8)).equals(uuid)) {
             return null;
         } else {
-            return uuid;
+            names.put(name, uuid);
+            return getUser(uuid);
         }
     }
 }

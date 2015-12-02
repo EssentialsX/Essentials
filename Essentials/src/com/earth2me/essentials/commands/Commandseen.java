@@ -51,10 +51,15 @@ public class Commandseen extends EssentialsCommand {
                 sender.sendMessage(tl("whoisBanned", showBan ? BanLookup.getBanEntry(ess, args[0]).getReason() : tl("true")));
                 return;
             } else {
-                try {
-                    player = getPlayer(server, sender, args, 0);
-                } catch (NoSuchFieldException e) {
-                    throw new PlayerNotFoundException();
+                User userFromBukkit = ess.getUserMap().getUserFromBukkit(args[0]);
+                if (userFromBukkit != null) {
+                    player = userFromBukkit;
+                } else {
+                    try {
+                        player = getPlayer(server, sender, args, 0);
+                    } catch (NoSuchFieldException e) {
+                        throw new PlayerNotFoundException();
+                    }
                 }
             }
         }
