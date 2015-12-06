@@ -284,6 +284,11 @@ public class EssentialsPlayerListener implements Listener {
                     user.getBase().setWalkSpeed(0.2f);
                 }
 
+                if (user.isSocialSpyEnabled() && !user.isAuthorized("essentials.socialspy")) {
+                    user.setSocialSpyEnabled(false);
+                    ess.getLogger().log(Level.INFO, "Set socialspy to false for {0} because they had it enabled without permission.", user.getName());
+                }
+
                 user.stopTransaction();
             }
         }
