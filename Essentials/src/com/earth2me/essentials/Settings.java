@@ -569,6 +569,8 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     private List<EssentialsSign> _getEnabledSigns() {
+        this.signsEnabled = false; // Ensure boolean resets on reload.
+
         List<EssentialsSign> newSigns = new ArrayList<EssentialsSign>();
 
         for (String signName : config.getStringList("enabledSigns")) {
