@@ -54,9 +54,7 @@ public class EssentialsSign {
                 sign.setLine(0, getSuccessName());
             }
             return ret;
-        } catch (ChargeException ex) {
-            showError(ess, user.getSource(), ex, signName);
-        } catch (SignException ex) {
+        } catch (ChargeException | SignException ex) {
             showError(ess, user.getSource(), ex, signName);
         }
         // Return true, so the player sees the wrong sign.
@@ -143,9 +141,7 @@ public class EssentialsSign {
         User user = ess.getUser(player);
         try {
             return onBlockPlace(block, user, getUsername(user), ess);
-        } catch (ChargeException ex) {
-            showError(ess, user.getSource(), ex, signName);
-        } catch (SignException ex) {
+        } catch (ChargeException | SignException ex) {
             showError(ess, user.getSource(), ex, signName);
         }
         return false;
@@ -155,9 +151,7 @@ public class EssentialsSign {
         User user = ess.getUser(player);
         try {
             return onBlockInteract(block, user, getUsername(user), ess);
-        } catch (ChargeException ex) {
-            showError(ess, user.getSource(), ex, signName);
-        } catch (SignException ex) {
+        } catch (ChargeException | SignException ex) {
             showError(ess, user.getSource(), ex, signName);
         }
         return false;
@@ -352,9 +346,7 @@ public class EssentialsSign {
     protected final BigDecimal getBigDecimal(final String line) throws SignException {
         try {
             return new BigDecimal(line);
-        } catch (ArithmeticException ex) {
-            throw new SignException(ex.getMessage(), ex);
-        } catch (NumberFormatException ex) {
+        } catch (ArithmeticException | NumberFormatException ex) {
             throw new SignException(ex.getMessage(), ex);
         }
     }

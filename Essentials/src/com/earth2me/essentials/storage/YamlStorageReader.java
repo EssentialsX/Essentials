@@ -43,9 +43,7 @@ public class YamlStorageReader implements IStorageReader {
                 object = clazz.newInstance();
             }
             return object;
-        } catch (IllegalAccessException ex) {
-            throw new ObjectLoadException(ex);
-        } catch (InstantiationException ex) {
+        } catch (IllegalAccessException | InstantiationException ex) {
             throw new ObjectLoadException(ex);
         } finally {
             lock.unlock();

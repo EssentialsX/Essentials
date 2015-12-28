@@ -21,9 +21,7 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
         this.clazz = clazz;
         try {
             this.data = clazz.newInstance();
-        } catch (IllegalAccessException ex) {
-            Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
-        } catch (InstantiationException ex) {
+        } catch (IllegalAccessException | InstantiationException ex) {
             Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
         }
     }
@@ -123,9 +121,7 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
             if (data == null) {
                 try {
                     data = clazz.newInstance();
-                } catch (IllegalAccessException ex) {
-                    Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
-                } catch (InstantiationException ex) {
+                } catch (IllegalAccessException | InstantiationException ex) {
                     Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
                 }
             }
