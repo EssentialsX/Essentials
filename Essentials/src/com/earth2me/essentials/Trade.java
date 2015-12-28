@@ -83,7 +83,7 @@ public class Trade {
     public void isAffordableFor(final IUser user) throws ChargeException {
 
         if (ess.getSettings().isDebug()) {
-            ess.getLogger().log(Level.INFO, "checking if " + user.getName() + " can afford charge.");
+            ess.getLogger().log(Level.INFO, "checking if {0} can afford charge.", user.getName());
         }
 
         if (getMoney() != null && getMoney().signum() > 0 && !user.canAfford(getMoney())) {
@@ -111,7 +111,7 @@ public class Trade {
     public Map<Integer, ItemStack> pay(final IUser user, final OverflowType type) throws MaxMoneyException {
         if (getMoney() != null && getMoney().signum() > 0) {
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.INFO, "paying user " + user.getName() + " via trade " + getMoney().toPlainString());
+                ess.getLogger().log(Level.INFO, "paying user {0} via trade {1}", new Object[]{user.getName(), getMoney().toPlainString()});
             }
             user.giveMoney(getMoney());
         }
@@ -123,7 +123,7 @@ public class Trade {
                 switch (type) {
                     case ABORT:
                         if (ess.getSettings().isDebug()) {
-                            ess.getLogger().log(Level.INFO, "abort paying " + user.getName() + " itemstack " + getItemStack().toString() + " due to lack of inventory space ");
+                            ess.getLogger().log(Level.INFO, "abort paying {0} itemstack {1} due to lack of inventory space ", new Object[]{user.getName(), getItemStack().toString()});
                         }
 
                         return overFlow;
@@ -134,7 +134,7 @@ public class Trade {
                         user.getBase().updateInventory();
 
                         if (ess.getSettings().isDebug()) {
-                            ess.getLogger().log(Level.INFO, "paying " + user.getName() + " partial itemstack " + getItemStack().toString() + " with overflow " + returnStack.get(0).toString());
+                            ess.getLogger().log(Level.INFO, "paying {0} partial itemstack {1} with overflow {2}", new Object[]{user.getName(), getItemStack().toString(), returnStack.get(0).toString()});
                         }
 
                         return returnStack;
@@ -160,11 +160,11 @@ public class Trade {
                             }
                         }
                         if (ess.getSettings().isDebug()) {
-                            ess.getLogger().log(Level.INFO, "paying " + user.getName() + " partial itemstack " + getItemStack().toString() + " and dropping overflow " + leftOver.get(0).toString());
+                            ess.getLogger().log(Level.INFO, "paying {0} partial itemstack {1} and dropping overflow {2}", new Object[]{user.getName(), getItemStack().toString(), leftOver.get(0).toString()});
                         }
                 }
             } else if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.INFO, "paying " + user.getName() + " itemstack " + getItemStack().toString());
+                ess.getLogger().log(Level.INFO, "paying {0} itemstack {1}", new Object[]{user.getName(), getItemStack().toString()});
             }
             user.getBase().updateInventory();
         }
@@ -176,11 +176,11 @@ public class Trade {
 
     public void charge(final IUser user) throws ChargeException {
         if (ess.getSettings().isDebug()) {
-            ess.getLogger().log(Level.INFO, "attempting to charge user " + user.getName());
+            ess.getLogger().log(Level.INFO, "attempting to charge user {0}", user.getName());
         }
         if (getMoney() != null) {
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.INFO, "charging user " + user.getName() + " money " + getMoney().toPlainString());
+                ess.getLogger().log(Level.INFO, "charging user {0} money {1}", new Object[]{user.getName(), getMoney().toPlainString()});
             }
             if (!user.canAfford(getMoney()) && getMoney().signum() > 0) {
                 throw new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(getMoney(), ess)));
@@ -189,7 +189,7 @@ public class Trade {
         }
         if (getItemStack() != null) {
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.INFO, "charging user " + user.getName() + " itemstack " + getItemStack().toString());
+                ess.getLogger().log(Level.INFO, "charging user {0} itemstack {1}", new Object[]{user.getName(), getItemStack().toString()});
             }
             if (!user.getBase().getInventory().containsAtLeast(getItemStack(), getItemStack().getAmount())) {
                 throw new ChargeException(tl("missingItems", getItemStack().getAmount(), getItemStack().getType().toString().toLowerCase(Locale.ENGLISH).replace("_", " ")));
@@ -206,7 +206,7 @@ public class Trade {
         }
         if (getExperience() != null) {
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.INFO, "charging user " + user.getName() + " exp " + getExperience());
+                ess.getLogger().log(Level.INFO, "charging user {0} exp {1}", new Object[]{user.getName(), getExperience()});
             }
             final int experience = SetExpFix.getTotalExperience(user.getBase());
             if (experience < getExperience() && getExperience() > 0) {
@@ -215,7 +215,7 @@ public class Trade {
             SetExpFix.setTotalExperience(user.getBase(), experience - getExperience());
         }
         if (ess.getSettings().isDebug()) {
-            ess.getLogger().log(Level.INFO, "charge user " + user.getName() + " completed");
+            ess.getLogger().log(Level.INFO, "charge user {0} completed", user.getName());
         }
     }
 
@@ -252,7 +252,7 @@ public class Trade {
             }
 
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.INFO, "calculated command (" + command + ") cost for " + user.getName() + " as " + cost);
+                ess.getLogger().log(Level.INFO, "calculated command ({0}) cost for {1} as {2}", new Object[]{command, user.getName(), cost});
             }
         }
         if (cost.signum() != 0 && (user.isAuthorized("essentials.nocommandcost.all") || user.isAuthorized("essentials.nocommandcost." + command))) {

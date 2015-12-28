@@ -15,6 +15,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
 import java.util.regex.Pattern;
 
 
@@ -77,7 +78,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
 
             final File userFile = getUserFileFromString(sanitizedName);
             if (userFile.exists()) {
-                ess.getLogger().info("Importing user " + name + " to usermap.");
+                ess.getLogger().log(Level.INFO, "Importing user {0} to usermap.", name);
                 User user = new User(new OfflinePlayer(sanitizedName, ess.getServer()), ess);
                 trackUUID(user.getBase().getUniqueId(), user.getName(), true);
                 return user;
@@ -91,9 +92,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
     public User getUser(final UUID uuid) {
         try {
             return users.get(uuid.toString());
-        } catch (ExecutionException ex) {
-            return null;
-        } catch (UncheckedExecutionException ex) {
+        } catch (ExecutionException | UncheckedExecutionException ex) {
             return null;
         }
     }
@@ -108,12 +107,12 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
                     uuidMap.writeUUIDMap();
                 } else if (!names.get(keyName).equals(uuid)) {
                     if (replace) {
-                        ess.getLogger().info("Found new UUID for " + name + ". Replacing " + names.get(keyName).toString() + " with " + uuid.toString());
+                        ess.getLogger().log(Level.INFO, "Found new UUID for {0}. Replacing {1} with {2}", new Object[]{name, names.get(keyName).toString(), uuid.toString()});
                         names.put(keyName, uuid);
                         uuidMap.writeUUIDMap();
                     } else {
                         if (ess.getSettings().isDebug()) {
-                            ess.getLogger().info("Found old UUID for " + name + " (" + uuid.toString() + "). Not adding to usermap.");
+                            ess.getLogger().log(Level.INFO, "Found old UUID for {0} ({1}). Not adding to usermap.", new Object[]{name, uuid.toString()});
                         }
                     }
                 }

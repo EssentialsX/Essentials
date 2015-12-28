@@ -41,8 +41,7 @@ public class UUIDMap {
                 names.clear();
                 history.clear();
 
-                final BufferedReader reader = new BufferedReader(new FileReader(userList));
-                try {
+                try (BufferedReader reader = new BufferedReader(new FileReader(userList))) {
                     while (true) {
                         final String line = reader.readLine();
                         if (line == null) {
@@ -66,8 +65,6 @@ public class UUIDMap {
                             }
                         }
                     }
-                } finally {
-                    reader.close();
                 }
             }
         } catch (IOException ex) {
@@ -88,9 +85,7 @@ public class UUIDMap {
             if (future != null) {
                 future.get();
             }
-        } catch (InterruptedException ex) {
-            ess.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
-        } catch (ExecutionException ex) {
+        } catch (InterruptedException | ExecutionException ex) {
             ess.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
         }
     }

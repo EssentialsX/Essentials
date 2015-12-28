@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static com.earth2me.essentials.I18n.tl;
+import java.util.logging.Level;
 
 
 public abstract class UserData extends PlayerExtension implements IConf {
@@ -34,7 +35,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         try {
             filename = base.getUniqueId().toString();
         } catch (Throwable ex) {
-            ess.getLogger().warning("Falling back to old username system for " + base.getName());
+            ess.getLogger().log(Level.WARNING, "Falling back to old username system for {0}", base.getName());
             filename = base.getName();
         }
 
@@ -141,8 +142,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         if (NumberUtil.isInt(search)) {
             try {
                 search = getHomes().get(Integer.parseInt(search) - 1);
-            } catch (NumberFormatException e) {
-            } catch (IndexOutOfBoundsException e) {
+            } catch (NumberFormatException | IndexOutOfBoundsException e) {
             }
         }
         return search;
