@@ -86,7 +86,7 @@ public class SignBlockListener implements Listener {
         //We loop through all sign types here to prevent clashes with preexisting signs later
         for (Signs signs : Signs.values()) {
             final EssentialsSign sign = signs.getSign();
-            if (topLine.equalsIgnoreCase(sign.getSuccessName())) {
+            if (topLine.endsWith(sign.getSuccessName()) && ChatColor.stripColor(topLine).equalsIgnoreCase(ChatColor.stripColor(sign.getSuccessName()))) {
                 event.setLine(0, ChatColor.stripColor(topLine));
             }
         }
