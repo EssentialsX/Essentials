@@ -47,23 +47,23 @@ public class ManagedFile {
         try (InputStreamReader reader = new InputStreamReader(ManagedFile.class.getResourceAsStream(resourceName))) {
             final MessageDigest digest = getDigest();
             try (DigestOutputStream digestStream = new DigestOutputStream(new FileOutputStream(file), digest); OutputStreamWriter writer = new OutputStreamWriter(digestStream)) {
-				final char[] buffer = new char[BUFFERSIZE];
-				do {
-					final int length = reader.read(buffer);
-					if (length >= 0) {
-						writer.write(buffer, 0, length);
-					} else {
-						break;
-					}
-				} while (true);
-				writer.write("\n");
-				writer.flush();
-				final BigInteger hashInt = new BigInteger(1, digest.digest());
-				digestStream.on(false);
-				digestStream.write('#');
-				digestStream.write(hashInt.toString(16).getBytes());
-			}
-		}
+                final char[] buffer = new char[BUFFERSIZE];
+                do {
+                    final int length = reader.read(buffer);
+                    if (length >= 0) {
+                        writer.write(buffer, 0, length);
+                    } else {
+                        break;
+                    }
+                } while (true);
+                writer.write("\n");
+                writer.flush();
+                final BigInteger hashInt = new BigInteger(1, digest.digest());
+                digestStream.on(false);
+                digestStream.write('#');
+                digestStream.write(hashInt.toString(16).getBytes());
+            }
+        }
     }
 
     public static boolean checkForVersion(final File file, final String version) throws IOException {
