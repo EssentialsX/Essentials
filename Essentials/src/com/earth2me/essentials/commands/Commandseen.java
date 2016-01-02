@@ -39,7 +39,15 @@ public class Commandseen extends EssentialsCommand {
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }
-        User player = ess.getOfflineUser(args[0]);
+        User player;
+        // Check by uuid, if it fails check by name.
+        try {
+            UUID uuid = UUID.fromString(args[0]);
+            player = ess.getUser(uuid);
+        }catch (IllegalArgumentException ignored) { // Thrown if invalid UUID from string, check by name.
+            player = ess.getOfflineUser(args[0]);
+        }
+
         if (player == null) {
             if (ipLookup && FormatUtil.validIP(args[0])) {
                 seenIP(server, sender, args[0]);
