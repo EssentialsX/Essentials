@@ -494,6 +494,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     public void checkActivity() {
+        // Graceful time before the first afk check call. 
+        if (System.currentTimeMillis() - lastActivity <= 10000) {
+            return;
+        }
+
         final long autoafkkick = ess.getSettings().getAutoAfkKick();
         if (autoafkkick > 0 && lastActivity > 0 && (lastActivity + (autoafkkick * 1000)) < System.currentTimeMillis() && !isHidden() && !isAuthorized("essentials.kick.exempt") && !isAuthorized("essentials.afk.kickexempt")) {
             final String kickReason = tl("autoAfkKickReason", autoafkkick / 60.0);
