@@ -46,7 +46,9 @@ public class SignBlockListener implements Listener {
     public boolean protectSignsAndBlocks(final Block block, final Player player) throws MaxMoneyException {
         // prevent any signs be broken by destroying the block they are attached to
         if (EssentialsSign.checkIfBlockBreaksSigns(block)) {
-            LOGGER.log(Level.INFO, "Prevented that a block was broken next to a sign.");
+            if (ess.getSettings().isDebug()) {
+                LOGGER.log(Level.INFO, "Prevented that a block was broken next to a sign.");
+            }
             return true;
         }
 
