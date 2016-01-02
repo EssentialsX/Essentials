@@ -52,6 +52,10 @@ commands:
     description: Broadcasts a message to the entire server.
     usage: /<command> <msg>
     aliases: [bc,ebc,bcast,ebcast,ebroadcast,shout,eshout]
+  broadcastworld:
+    description: Broadcasts a message to a world.
+    usage: /<command> <world> <msg>
+    aliases: [bcw,ebcw,bcastw,ebcastw,ebroadcastworld,shoutworld,eshoutworld]
   bigtree:
     description: Spawn a big tree where you are looking.
     usage: /<command> <tree|redwood|jungle>
