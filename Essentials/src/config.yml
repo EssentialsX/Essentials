@@ -788,4 +788,7 @@ respawn-listener-priority: high
 # When users die, should they respawn at their first home or bed, instead of the spawnpoint?
 respawn-at-home: false
 
+#Should players be teleported to spawn when they login
+respawn-on-join: false
+
 # End of file <-- No seriously, you're done with configuration.
