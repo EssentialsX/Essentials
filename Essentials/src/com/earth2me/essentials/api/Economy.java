@@ -21,8 +21,6 @@ import java.util.logging.Logger;
  * Instead of using this api directly, we recommend to use the register plugin: http://bit.ly/RegisterMethod
  */
 public class Economy {
-    public Economy() {
-    }
 
     private static final Logger logger = Logger.getLogger("Essentials");
     private static IEssentials ess;

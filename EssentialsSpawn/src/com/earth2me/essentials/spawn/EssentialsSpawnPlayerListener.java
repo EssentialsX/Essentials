@@ -28,7 +28,6 @@ public class EssentialsSpawnPlayerListener implements Listener {
     private final transient SpawnStorage spawns;
 
     public EssentialsSpawnPlayerListener(final IEssentials ess, final SpawnStorage spawns) {
-        super();
         this.ess = ess;
         this.spawns = spawns;
     }
