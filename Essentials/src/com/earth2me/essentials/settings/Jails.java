@@ -9,8 +9,10 @@ import org.bukkit.Location;
 import java.util.HashMap;
 import java.util.Map;
 
+@Data
+@EqualsAndHashCode(callSuper = false)
+public class Jails implements StorageObject {
 
-@Data @EqualsAndHashCode(callSuper = false) public class Jails implements StorageObject {
     @MapValueType(Location.class)
-    private Map<String, Location> jails = new HashMap<String, Location>();
+    private Map<String, Location> jails = new HashMap<>();
 }
