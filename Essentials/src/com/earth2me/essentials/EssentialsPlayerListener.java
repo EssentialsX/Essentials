@@ -9,6 +9,7 @@ import net.ess3.api.IEssentials;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -381,9 +382,24 @@ public class EssentialsPlayerListener implements Listener {
                     }
                 }
             }
-        } else if (!cmd.equalsIgnoreCase("afk")) {
-            final User user = ess.getUser(player);
-            user.updateActivity(true);
+        } else {
+            boolean broadcast = true; // whether to broadcast the updated activity
+            boolean update = true; // Only modified when the command is afk
+
+            PluginCommand pluginCommand = ess.getServer().getPluginCommand(cmd);
+            if (pluginCommand != null) {
+                // Switch case for commands that shouldn't broadcast afk activity.
+                switch (pluginCommand.getName()) {
+                    case "afk":
+                        update = false;
+                    case "vanish":
+                        broadcast = false;
+                }
+            }
+            if (update) {
+                final User user = ess.getUser(player);
+                user.updateActivity(broadcast);
+            }
         }
     }
 
