@@ -112,13 +112,14 @@ public class Commandtime extends EssentialsCommand {
      * Used to parse an argument of the type "world(s) selector"
      */
     private Set<World> getWorlds(final Server server, final CommandSource sender, final String selector) throws Exception {
+        final String permissionPrefix = "essentials.time.world.";
         final Set<World> worlds = new TreeSet<>(new WorldNameComparator());
         User user = ess.getUser(sender.getPlayer());
 
         // If there is no selector we want the world the user is currently in. Or all worlds if it isn't a user.
         if (selector == null) {
             if (sender.isPlayer()) {
-                if (!user.isAuthorized("essentials.time.set." + normalizeWorldName(user.getWorld()))) {
+                if (!user.isAuthorized(permissionPrefix + normalizeWorldName(user.getWorld()))) {
                     throw new Exception(tl("timeSetWorldPermission", user.getWorld().getName()));
                 }
                 worlds.add(user.getWorld());
@@ -131,7 +132,7 @@ public class Commandtime extends EssentialsCommand {
         // Try to find the world with name = selector
         final World world = server.getWorld(selector);
         if (world != null) {
-            if (user != null && !user.isAuthorized("essentials.time.set." + normalizeWorldName(world))) {
+            if (user != null && !user.isAuthorized(permissionPrefix + normalizeWorldName(world))) {
                 throw new Exception(tl("timeSetWorldPermission", world.getName()));
             }
             worlds.add(world);
@@ -139,12 +140,12 @@ public class Commandtime extends EssentialsCommand {
         // If that fails, Is the argument something like "*" or "all"?
         else if (selector.equalsIgnoreCase("*") || selector.equalsIgnoreCase("all")) {
             // Add all worlds by default if the sender is console or player has the permission.
-            if (user == null || user.isAuthorized("essentials.time.set.all")) {
+            if (user == null || user.isAuthorized(permissionPrefix + "all")) {
                 worlds.addAll(server.getWorlds());
             } else {
                 // They don't have the _all_ permission, add worlds that they have permission for.
                 for (World world1 : server.getWorlds()) {
-                    if (user.isAuthorized("essentials.time.set." + normalizeWorldName(world1))) {
+                    if (user.isAuthorized(permissionPrefix + normalizeWorldName(world1))) {
                         worlds.add(world1);
                     }
                 }
