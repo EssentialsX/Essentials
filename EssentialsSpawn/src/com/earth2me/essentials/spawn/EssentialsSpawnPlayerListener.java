@@ -40,20 +40,7 @@ public class EssentialsSpawnPlayerListener implements Listener {
             return;
         }
 
-        if (ess.getSettings().getRespawnAtHome()) {
-            Location home;
-            final Location bed = user.getBase().getBedSpawnLocation();
-            if (bed != null) {
-                home = bed;
-            } else {
-                home = user.getHome(user.getLocation());
-            }
-            if (home != null) {
-                event.setRespawnLocation(home);
-                return;
-            }
-        }
-        final Location spawn = spawns.getSpawn(user.getGroup());
+        final Location spawn = getRespawnLocation(user);
         if (spawn != null) {
             event.setRespawnLocation(spawn);
         }
@@ -71,6 +58,9 @@ public class EssentialsSpawnPlayerListener implements Listener {
     public void delayedJoin(Player player) {
         if (player.hasPlayedBefore()) {
             LOGGER.log(Level.FINE, "Old player join");
+            if (ess.getSettings().isRespawnOnJoinEnabled()) {
+                ess.scheduleSyncDelayedTask(new PlayerLoginTeleport(ess.getUser(player)), 1L);
+            }
             return;
         }
 
@@ -111,7 +101,44 @@ public class EssentialsSpawnPlayerListener implements Listener {
             }
         }, 2L);
     }
+    
+    private Location getRespawnLocation(User user) {
+        if (ess.getSettings().getRespawnAtHome()) {
+            Location bed = user.getBase().getBedSpawnLocation();
+            if (bed != null) {
+                return bed;
+            }
+            Location home = user.getHome(user.getLocation());
+            if (home != null) {
+                return home;
+            }
+        }
+        return spawns.getSpawn(user.getGroup());
+    }
 
+    private class PlayerLoginTeleport implements Runnable {
+
+        private final User user;
+
+        public PlayerLoginTeleport(User user) {
+            this.user = user;
+        }
+
+        @Override
+        public void run() {
+            if (user.getBase() instanceof OfflinePlayer || !user.getBase().isOnline()) {
+                return;
+            }
+            try {
+                final Location spawn = getRespawnLocation(user);
+                if (spawn != null) {
+                    user.getTeleport().now(spawn, false, TeleportCause.PLUGIN);
+                }
+            } catch (Exception ex) {
+                LOGGER.log(Level.WARNING, tl("teleportLoginPlayerError"), ex);
+            }
+        }
+    }
 
     private class NewPlayerTeleport implements Runnable {
         private final transient User user;
