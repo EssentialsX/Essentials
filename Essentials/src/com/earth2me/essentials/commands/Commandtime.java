@@ -113,12 +113,14 @@ public class Commandtime extends EssentialsCommand {
      */
     private Set<World> getWorlds(final Server server, final CommandSource sender, final String selector) throws Exception {
         final Set<World> worlds = new TreeSet<>(new WorldNameComparator());
+        User user = ess.getUser(sender.getPlayer());
 
         // If there is no selector we want the world the user is currently in. Or all worlds if it isn't a user.
         if (selector == null) {
             if (sender.isPlayer()) {
-
-                final User user = ess.getUser(sender.getPlayer());
+                if (!user.isAuthorized("essentials.time.set." + normalizeWorldName(user.getWorld()))) {
+                    throw new Exception(tl("timeSetWorldPermission", user.getWorld().getName()));
+                }
                 worlds.add(user.getWorld());
             } else {
                 worlds.addAll(server.getWorlds());
@@ -129,11 +131,30 @@ public class Commandtime extends EssentialsCommand {
         // Try to find the world with name = selector
         final World world = server.getWorld(selector);
         if (world != null) {
+            if (user != null && !user.isAuthorized("essentials.time.set." + normalizeWorldName(world))) {
+                throw new Exception(tl("timeSetWorldPermission", world.getName()));
+            }
             worlds.add(world);
         }
         // If that fails, Is the argument something like "*" or "all"?
         else if (selector.equalsIgnoreCase("*") || selector.equalsIgnoreCase("all")) {
-            worlds.addAll(server.getWorlds());
+            // Add all worlds by default if the sender is console or player has the permission.
+            if (user == null || user.isAuthorized("essentials.time.set.all")) {
+                worlds.addAll(server.getWorlds());
+            } else {
+                // They don't have the _all_ permission, add worlds that they have permission for.
+                for (World world1 : server.getWorlds()) {
+                    if (user.isAuthorized("essentials.time.set." + normalizeWorldName(world1))) {
+                        worlds.add(world1);
+                    }
+                }
+
+                // Notify the player if they don't have permission for setting time on all worlds.
+                if (worlds.isEmpty()) {
+                    throw new Exception(tl("timeSetAllPermission"));
+                }
+            }
+
         }
         // We failed to understand the world target...
         else {
@@ -141,6 +162,10 @@ public class Commandtime extends EssentialsCommand {
         }
 
         return worlds;
+    }
+
+    private String normalizeWorldName(World world) {
+        return world.getName().replaceAll("\\s+", "_");
     }
 }
 
