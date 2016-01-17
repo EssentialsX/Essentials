@@ -102,7 +102,7 @@ public class AlternativeCommandsHandler {
     public void executed(final String label, final PluginCommand pc) {
         final String altString = pc.getPlugin().getName() + ":" + pc.getLabel();
         if (ess.getSettings().isDebug()) {
-            LOGGER.log(Level.INFO, "Essentials: Alternative command " + label + " found, using " + altString);
+            LOGGER.log(Level.INFO, "Essentials: Alternative command {0} found, using {1}", new Object[]{label, altString});
         }
         disabledList.put(label, altString);
     }

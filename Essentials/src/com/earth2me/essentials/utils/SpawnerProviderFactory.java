@@ -9,6 +9,7 @@ import net.ess3.nms.v1_8_R2.v1_8_R2SpawnerProvider;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 
 public class SpawnerProviderFactory {
     private IEssentials ess;
@@ -32,7 +33,7 @@ public class SpawnerProviderFactory {
             }
         }
         assert finalProvider != null;
-        ess.getLogger().info("Using " + finalProvider.getHumanName() + " as spawner provider.");
+        ess.getLogger().log(Level.INFO, "Using {0} as spawner provider.", finalProvider.getHumanName());
         return finalProvider;
     }
 

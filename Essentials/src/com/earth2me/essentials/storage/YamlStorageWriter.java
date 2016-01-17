@@ -33,9 +33,7 @@ public class YamlStorageWriter implements IStorageWriter {
     public void save(final StorageObject object) {
         try {
             writeToFile(object, 0, object.getClass());
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(YamlStorageWriter.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
+        } catch (IllegalArgumentException | IllegalAccessException ex) {
             Logger.getLogger(YamlStorageWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

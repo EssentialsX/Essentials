@@ -27,10 +27,12 @@ public class I18n implements net.ess3.api.II18n {
     private final transient IEssentials ess;
     private static final Pattern NODOUBLEMARK = Pattern.compile("''");
     private static final ResourceBundle NULL_BUNDLE = new ResourceBundle() {
+        @Override
         public Enumeration<String> getKeys() {
             return null;
         }
 
+        @Override
         protected Object handleGetObject(String key) {
             return null;
         }

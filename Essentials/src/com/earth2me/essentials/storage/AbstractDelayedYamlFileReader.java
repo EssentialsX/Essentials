@@ -43,7 +43,7 @@ public abstract class AbstractDelayedYamlFileReader<T extends StorageObject> imp
         } catch (FileNotFoundException ex) {
             onException();
             if (plugin.getSettings() == null || plugin.getSettings().isDebug()) {
-                Bukkit.getLogger().log(Level.INFO, "File not found: " + file.toString());
+                Bukkit.getLogger().log(Level.INFO, "File not found: {0}", file.toString());
             }
         } catch (ObjectLoadException ex) {
             onException();

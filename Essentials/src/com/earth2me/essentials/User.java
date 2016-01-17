@@ -82,7 +82,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     public boolean isAuthorized(final String node) {
         final boolean result = isAuthorizedCheck(node);
         if (ess.getSettings().isDebug()) {
-            ess.getLogger().log(Level.INFO, "checking if " + base.getName() + " has " + node + " - " + result);
+            ess.getLogger().log(Level.INFO, "checking if {0} has {1} - {2}", new Object[]{base.getName(), node, result});
         }
         return result;
     }
@@ -99,7 +99,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             if (ess.getSettings().isDebug()) {
                 ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage(), ex);
             } else {
-                ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage());
+                ess.getLogger().log(Level.SEVERE, "Permission System Error: {0} returned: {1}", new Object[]{ess.getPermissionsHandler().getName(), ex.getMessage()});
             }
 
             return false;
@@ -310,13 +310,14 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                     this.getBase().setPlayerListName(name);
                 } catch (IllegalArgumentException e) {
                     if (ess.getSettings().isDebug()) {
-                        logger.log(Level.INFO, "Playerlist for " + name + " was not updated. Name clashed with another online player.");
+                        logger.log(Level.INFO, "Playerlist for {0} was not updated. Name clashed with another online player.", name);
                     }
                 }
             }
         }
     }
 
+	@Override
     public String getDisplayName() {
         return super.getBase().getDisplayName() == null ? super.getBase().getName() : super.getBase().getDisplayName();
     }
@@ -542,7 +543,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     public String getGroup() {
         final String result = ess.getPermissionsHandler().getGroup(base);
         if (ess.getSettings().isDebug()) {
-            ess.getLogger().log(Level.INFO, "looking up groupname of " + base.getName() + " - " + result);
+            ess.getLogger().log(Level.INFO, "looking up groupname of {0} - {1}", new Object[]{base.getName(), result});
         }
         return result;
     }
@@ -551,7 +552,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     public boolean inGroup(final String group) {
         final boolean result = ess.getPermissionsHandler().inGroup(base, group);
         if (ess.getSettings().isDebug()) {
-            ess.getLogger().log(Level.INFO, "checking if " + base.getName() + " is in group " + group + " - " + result);
+            ess.getLogger().log(Level.INFO, "checking if {0} is in group {1} - {2}", new Object[]{base.getName(), group, result});
         }
         return result;
     }
@@ -564,6 +565,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return ess.getPermissionsHandler().canBuild(base, getGroup());
     }
 
+	@Override
     public long getTeleportRequestTime() {
         return teleportRequestTime;
     }
