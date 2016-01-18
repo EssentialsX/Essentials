@@ -153,11 +153,14 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             execTimer.mark("I18n1");
             
             Console.setInstance(this);
-            
-            String serverString = Bukkit.getServer().getClass().getName();
-            for (int i = 1; i <= 7; i++) {
-                if (serverString.contains(".v1_" + i + "_R")) {
-                    throw new Error("Outdated server. This version of Essentials will only work on Bukkit 1.8 or higher.");
+
+            File file = new File(getDataFolder(), ".skipversion");
+            if (!file.exists()) {
+                String serverString = Bukkit.getServer().getClass().getName();
+                for (int i = 1; i <= 7; i++) {
+                    if (serverString.contains(".v1_" + i + "_R")) {
+                        throw new Error("Outdated server. This version of Essentials will only work on Bukkit 1.8 or higher.");
+                    }
                 }
             }
             final PluginManager pm = getServer().getPluginManager();
