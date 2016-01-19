@@ -53,11 +53,11 @@ public enum Mob {
     MINECART_HOPPER("HopperMinecart", Enemies.NEUTRAL, EntityType.MINECART_HOPPER),
     MINECART_MOB_SPAWNER("SpawnerMinecart", Enemies.NEUTRAL, EntityType.MINECART_MOB_SPAWNER),
     ENDERCRYSTAL("EnderCrystal", Enemies.NEUTRAL, EntityType.ENDER_CRYSTAL),
-    EXPERIENCEORB("ExperienceOrb", Enemies.NEUTRAL, EntityType.EXPERIENCE_ORB),
-    ARMOR_STAND("ArmorStand", Enemies.NEUTRAL, EntityType.ARMOR_STAND),
-    ENDERMITE("Endermite", Enemies.ENEMY, EntityType.ENDERMITE),
-    GUARDIAN("Guardian", Enemies.ENEMY, EntityType.GUARDIAN),
-    RABBIT("Rabbit", Enemies.FRIENDLY, EntityType.RABBIT);
+    EXPERIENCEORB("ExperienceOrb", Enemies.NEUTRAL, "EXPERIENCE_ORB"),
+    ARMOR_STAND("ArmorStand", Enemies.NEUTRAL, "ARMOR_STAND"),
+    ENDERMITE("Endermite", Enemies.ENEMY, "ENDERMITE"),
+    GUARDIAN("Guardian", Enemies.ENEMY, "GUARDIAN"),
+    RABBIT("Rabbit", Enemies.FRIENDLY, "RABBIT");
 
     public static final Logger logger = Logger.getLogger("Essentials");
 
@@ -74,17 +74,31 @@ public enum Mob {
         this.bukkitType = type;
     }
 
+    Mob(String n, Enemies en, String typeName) {
+        this.name = n;
+        this.type = en;
+        EntityType entityType;
+        try {
+            entityType = EntityType.valueOf(typeName);
+        } catch (IllegalArgumentException ignored) {
+            entityType = null;
+        }
+        bukkitType = entityType;
+    }
+
     public String suffix = "s";
     final public String name;
     final public Enemies type;
     final private EntityType bukkitType;
-    private static final Map<String, Mob> hashMap = new HashMap<String, Mob>();
-    private static final Map<EntityType, Mob> bukkitMap = new HashMap<EntityType, Mob>();
+    private static final Map<String, Mob> hashMap = new HashMap<>();
+    private static final Map<EntityType, Mob> bukkitMap = new HashMap<>();
 
     static {
         for (Mob mob : Mob.values()) {
             hashMap.put(mob.name.toLowerCase(Locale.ENGLISH), mob);
-            bukkitMap.put(mob.bukkitType, mob);
+            if (mob.bukkitType != null) {
+                bukkitMap.put(mob.bukkitType, mob);
+            }
         }
     }
 
