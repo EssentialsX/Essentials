@@ -4,7 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.EssentialsUpgrade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.UserMap;
-import com.earth2me.essentials.metrics.MetricsLite;
+import com.earth2me.essentials.metrics.Metrics;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FloatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
@@ -176,7 +176,7 @@ public class Commandessentials extends EssentialsCommand {
     }
 
     private void run_optout(final Server server, final CommandSource sender, final String command, final String args[]) {
-        final MetricsLite metrics = ess.getMetrics();
+        final Metrics metrics = ess.getMetrics();
         try {
             sender.sendMessage("Essentials collects simple metrics to highlight which features to concentrate work on in the future.");
             if (metrics.isOptOut()) {
