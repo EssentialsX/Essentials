@@ -28,6 +28,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
     private UUIDMap uuidMap;
 
     private final transient Cache<String, User> users;
+    private static boolean legacy = false;
 
     public UserMap(final IEssentials ess) {
         super();
@@ -37,7 +38,6 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         //users = CacheBuilder.newBuilder().maximumSize(ess.getSettings().getMaxUserCacheCount()).softValues().removalListener(remListener).build(this);
         CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder();
         int maxCount = ess.getSettings().getMaxUserCacheCount();
-        boolean legacy = false;
         try {
             cacheBuilder.maximumSize(maxCount);
         } catch (NoSuchMethodError nsme) {
@@ -107,9 +107,9 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
 
     public User getUser(final UUID uuid) {
         try {
-            try {
+            if (!legacy) {
                 return ((LoadingCache<String, User>) users).get(uuid.toString());
-            } catch (SecurityException | ClassCastException e) {
+            } else {
                 return legacyCacheGet(uuid);
             }
         } catch (ExecutionException ex) {
