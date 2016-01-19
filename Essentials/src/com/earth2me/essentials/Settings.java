@@ -1135,4 +1135,8 @@ public class Settings implements net.ess3.api.ISettings {
     @Override public boolean isMilkBucketEasterEggEnabled() {
         return config.getBoolean("milk-bucket-easter-egg", true);
     }
+
+    @Override public boolean isSendFlyEnableOnJoin() {
+        return config.getBoolean("send-fly-enable-on-join", true);
+    }
 }

@@ -235,4 +235,6 @@ public interface ISettings extends IConf {
     long getLastMessageReplyRecipientTimeout();
 
     boolean isMilkBucketEasterEggEnabled();
+
+    boolean isSendFlyEnableOnJoin();
 }
