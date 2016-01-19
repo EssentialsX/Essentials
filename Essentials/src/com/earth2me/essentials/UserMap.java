@@ -2,15 +2,17 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
+import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.util.concurrent.UncheckedExecutionException;
 import net.ess3.api.IEssentials;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ConcurrentSkipListSet;
@@ -20,11 +22,12 @@ import java.util.regex.Pattern;
 
 public class UserMap extends CacheLoader<String, User> implements IConf {
     private final transient IEssentials ess;
-    private final transient LoadingCache<String, User> users;
-    private final transient ConcurrentSkipListSet<UUID> keys = new ConcurrentSkipListSet<UUID>();
-    private final transient ConcurrentSkipListMap<String, UUID> names = new ConcurrentSkipListMap<String, UUID>();
-    private final transient ConcurrentSkipListMap<UUID, ArrayList<String>> history = new ConcurrentSkipListMap<UUID, ArrayList<String>>();
+    private final transient ConcurrentSkipListSet<UUID> keys = new ConcurrentSkipListSet<>();
+    private final transient ConcurrentSkipListMap<String, UUID> names = new ConcurrentSkipListMap<>();
+    private final transient ConcurrentSkipListMap<UUID, ArrayList<String>> history = new ConcurrentSkipListMap<>();
     private UUIDMap uuidMap;
+
+    private final transient Cache<String, User> users;
 
     public UserMap(final IEssentials ess) {
         super();
@@ -32,7 +35,21 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         uuidMap = new UUIDMap(ess);
         //RemovalListener<UUID, User> remListener = new UserMapRemovalListener();
         //users = CacheBuilder.newBuilder().maximumSize(ess.getSettings().getMaxUserCacheCount()).softValues().removalListener(remListener).build(this);
-        users = CacheBuilder.newBuilder().maximumSize(ess.getSettings().getMaxUserCacheCount()).softValues().build(this);
+        CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder();
+        int maxCount = ess.getSettings().getMaxUserCacheCount();
+        boolean legacy = false;
+        try {
+            cacheBuilder.maximumSize(maxCount);
+        } catch (NoSuchMethodError nsme) {
+            legacy = true;
+            legacyMaximumSize(cacheBuilder, maxCount);
+        }
+        cacheBuilder.softValues();
+        if (!legacy) {
+            users = cacheBuilder.build(this);
+        } else {
+            users = legacyBuild(cacheBuilder);
+        }
     }
 
     private void loadAllUsersAsync(final IEssentials ess) {
@@ -90,7 +107,11 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
 
     public User getUser(final UUID uuid) {
         try {
-            return users.get(uuid.toString());
+            try {
+                return ((LoadingCache<String, User>) users).get(uuid.toString());
+            } catch (SecurityException | ClassCastException e) {
+                return legacyCacheGet(uuid);
+            }
         } catch (ExecutionException ex) {
             return null;
         } catch (UncheckedExecutionException ex) {
@@ -243,5 +264,53 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
             names.put(name, uuid);
             return getUser(uuid);
         }
+    }
+
+    private static Method getLegacy;
+
+    private User legacyCacheGet(UUID uuid) {
+        if (getLegacy == null) {
+            Class<?> usersClass = users.getClass();
+            for (Method m : usersClass.getDeclaredMethods()) {
+                if (m.getName().equals("get")) {
+                    getLegacy = m;
+                    getLegacy.setAccessible(true);
+                    break;
+                }
+            }
+        }
+        try {
+            return (User) getLegacy.invoke(users, uuid.toString());
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            return null;
+        }
+    }
+
+    private void legacyMaximumSize(CacheBuilder builder, int maxCount) {
+        try {
+            Method maxSizeLegacy = builder.getClass().getDeclaredMethod("maximumSize", Integer.TYPE);
+            maxSizeLegacy.invoke(builder, maxCount);
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private Cache<String, User> legacyBuild(CacheBuilder builder) {
+        Method build = null;
+        for (Method method : builder.getClass().getDeclaredMethods()) {
+            if (method.getName().equals("build")) {
+                build = method;
+                break;
+            }
+        }
+        Cache<String, User> legacyUsers;
+        try {
+            assert build != null;
+            legacyUsers = (Cache<String, User>) build.invoke(builder, this);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            legacyUsers = null;
+        }
+        return legacyUsers;
     }
 }
