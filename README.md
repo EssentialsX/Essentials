@@ -11,7 +11,7 @@ The official upstream repository is at https://github.com/Essentials/Essentials
 Why you should use it
 --------
 
-EssentialsX provides several performance enhancements and fixes that are currently not available in Essentials and Spigot-Essentials, most importantly fixed mob spawner support for 1.8+ servers. [See the wiki for details.](https://github.com/drtshock/Essentials/wiki)
+EssentialsX provides several performance enhancements and fixes that are currently not available in Essentials and Spigot-Essentials, most importantly fixed mob spawner support for 1.8+ servers. It also retains compatibility for Minecraft 1.7.10. [See the wiki for details.](https://github.com/drtshock/Essentials/wiki)
 
 EssentialsX is almost a completely drop-in replacement for Essentials. However, it has different requirements:
 
