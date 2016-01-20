@@ -237,4 +237,6 @@ public interface ISettings extends IConf {
     boolean isMilkBucketEasterEggEnabled();
 
     boolean isSendFlyEnableOnJoin();
+    
+    boolean isWorldTimePermissions();
 }

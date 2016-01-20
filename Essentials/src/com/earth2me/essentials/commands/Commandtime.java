@@ -165,7 +165,8 @@ public class Commandtime extends EssentialsCommand {
     }
     
     private boolean canUpdateAll(User user) {
-        return user == null || user.isAuthorized("essentials.time.world.all");
+        return !ess.getSettings().isWorldTimePermissions() // First check if per world permissions are enabled, if not, return true. 
+            || user == null || user.isAuthorized("essentials.time.world.all");
     }
 
     private boolean canUpdateWorld(User user, World world) {

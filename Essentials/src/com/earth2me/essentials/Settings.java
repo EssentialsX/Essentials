@@ -1139,4 +1139,9 @@ public class Settings implements net.ess3.api.ISettings {
     @Override public boolean isSendFlyEnableOnJoin() {
         return config.getBoolean("send-fly-enable-on-join", true);
     }
+
+    @Override
+    public boolean isWorldTimePermissions() {
+        return config.getBoolean("world-time-permissions", false);
+    }
 }

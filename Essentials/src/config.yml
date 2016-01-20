@@ -466,6 +466,11 @@ milk-bucket-easter-egg: true
 # Toggles whether or not the fly status message should be sent to players on join
 send-fly-enable-on-join: true
 
+# Set to true to enable per-world permissions for setting time for individual worlds with essentials commands.
+# This applies to /time, /day, /eday, /night, /enight, /etime.
+# Give someone permission to teleport to a world with essentials.time.world.<worldname>.
+world-time-permissions: false
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #
