@@ -418,6 +418,14 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         } else if (!set && isAfk()) {
             afkPosition = null;
         }
+        if (ess.getSettings().isAfkListName()) {
+            if(set) {
+                String afkName = ess.getSettings().getAfkListName().replace("{PLAYER}", getDisplayName()).replace("{USERNAME}", getName());
+                getBase().setPlayerListName(afkName);
+            } else {
+                getBase().setPlayerListName(null);
+            }
+        }
         _setAfk(set);
     }
 
