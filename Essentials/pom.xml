@@ -128,11 +128,21 @@
             <version>2.0.1</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.supaham.supervisor</groupId>
+            <artifactId>supervisor-bukkit</artifactId>
+            <version>1.3-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     <repositories>
         <repository>
             <id>vault-repo</id>
             <url>http://nexus.theyeticave.net/content/repositories/pub_releases</url>
+        </repository>
+        <repository>
+            <id>ender-zone-repo</id>
+            <url>http://ci.ender.zone/plugin/repository/everything/</url>
         </repository>
     </repositories>
 </project>
