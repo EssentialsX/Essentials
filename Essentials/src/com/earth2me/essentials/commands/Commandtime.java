@@ -86,7 +86,14 @@ public class Commandtime extends EssentialsCommand {
     /**
      * Used to set the time and inform of the change
      */
-    private void setWorldsTime(final CommandSource sender, final Collection<World> worlds, final long ticks, final boolean add) {
+    private void setWorldsTime(final CommandSource sender, final Collection<World> worlds, final long ticks, final boolean add) throws Exception {
+        User user = ess.getUser(sender.getPlayer());
+        for (World world : worlds) {
+            if (!canUpdateWorld(user, world)) {
+                throw new Exception(tl("timeSetWorldPermission", user.getWorld().getName()));
+            }
+        }
+
         // Update the time
         for (World world : worlds) {
             long time = world.getTime();
@@ -113,14 +120,12 @@ public class Commandtime extends EssentialsCommand {
      */
     private Set<World> getWorlds(final Server server, final CommandSource sender, final String selector) throws Exception {
         final Set<World> worlds = new TreeSet<>(new WorldNameComparator());
-        User user = ess.getUser(sender.getPlayer());
 
         // If there is no selector we want the world the user is currently in. Or all worlds if it isn't a user.
         if (selector == null) {
             if (sender.isPlayer()) {
-                if (!canUpdateWorld(user, user.getWorld())) {
-                    throw new Exception(tl("timeSetWorldPermission", user.getWorld().getName()));
-                }
+
+                final User user = ess.getUser(sender.getPlayer());
                 worlds.add(user.getWorld());
             } else {
                 worlds.addAll(server.getWorlds());
@@ -131,30 +136,11 @@ public class Commandtime extends EssentialsCommand {
         // Try to find the world with name = selector
         final World world = server.getWorld(selector);
         if (world != null) {
-            if (!canUpdateWorld(user, world)) {
-                throw new Exception(tl("timeSetWorldPermission", world.getName()));
-            }
             worlds.add(world);
         }
         // If that fails, Is the argument something like "*" or "all"?
         else if (selector.equalsIgnoreCase("*") || selector.equalsIgnoreCase("all")) {
-            // Add all worlds by default if the sender is console or player has the permission.
-            if (canUpdateAll(user)) {
-                worlds.addAll(server.getWorlds());
-            } else {
-                // They don't have the _all_ permission, add worlds that they have permission for.
-                for (World world1 : server.getWorlds()) {
-                    if (canUpdateWorld(user, world1)) {
-                        worlds.add(world1);
-                    }
-                }
-
-                // Notify the player if they don't have permission for setting time on all worlds.
-                if (worlds.isEmpty()) {
-                    throw new Exception(tl("timeSetAllPermission"));
-                }
-            }
-
+            worlds.addAll(server.getWorlds());
         }
         // We failed to understand the world target...
         else {
