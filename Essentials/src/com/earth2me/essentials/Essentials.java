@@ -24,6 +24,7 @@ import com.earth2me.essentials.register.payment.Methods;
 import com.earth2me.essentials.signs.SignBlockListener;
 import com.earth2me.essentials.signs.SignEntityListener;
 import com.earth2me.essentials.signs.SignPlayerListener;
+import com.earth2me.essentials.supervisor.EssentialsReportContext;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
@@ -255,6 +256,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 }
             } catch (IOException e) {
                 // Failed to submit the stats :-(
+            }
+
+            if (getServer().getPluginManager().getPlugin("Supervisor") != null) {
+                EssentialsReportContext.load(this);
             }
 
             final String timeroutput = execTimer.end();

@@ -911,4 +911,8 @@ public abstract class UserData extends PlayerExtension implements IConf {
     public void stopTransaction() {
         config.stopTransaction();
     }
+
+    public EssentialsUserConf getConfig() {
+        return config;
+    }
 }
