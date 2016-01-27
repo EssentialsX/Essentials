@@ -235,7 +235,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
 //		}
 //	}
 
-    private final Pattern validUserPattern = Pattern.compile("^[a-zA-Z0-9_]{2,16}$");
+    private final Pattern validUserPattern = Pattern.compile("^[A-Za-z0-9ㄱ-ㅎㅏ-ㅣ가-힣_]{3,25}$");
 
     @SuppressWarnings("deprecation")
     public User getUserFromBukkit(String name) {
