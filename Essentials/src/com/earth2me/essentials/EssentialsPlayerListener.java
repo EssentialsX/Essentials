@@ -384,24 +384,24 @@ public class EssentialsPlayerListener implements Listener {
                     }
                 }
             }
-        } else {
-            boolean broadcast = true; // whether to broadcast the updated activity
-            boolean update = true; // Only modified when the command is afk
+        }
+        
+        boolean broadcast = true; // whether to broadcast the updated activity
+        boolean update = true; // Only modified when the command is afk
 
-            PluginCommand pluginCommand = ess.getServer().getPluginCommand(cmd);
-            if (pluginCommand != null) {
-                // Switch case for commands that shouldn't broadcast afk activity.
-                switch (pluginCommand.getName()) {
-                    case "afk":
-                        update = false;
-                    case "vanish":
-                        broadcast = false;
-                }
+        PluginCommand pluginCommand = ess.getServer().getPluginCommand(cmd);
+        if (pluginCommand != null) {
+            // Switch case for commands that shouldn't broadcast afk activity.
+            switch (pluginCommand.getName()) {
+                case "afk":
+                    update = false;
+                case "vanish":
+                    broadcast = false;
             }
-            if (update) {
-                final User user = ess.getUser(player);
-                user.updateActivity(broadcast);
-            }
+        }
+        if (update) {
+            final User user = ess.getUser(player);
+            user.updateActivity(broadcast);
         }
     }
 
