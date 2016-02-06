@@ -148,6 +148,12 @@ public class MetaItemStack {
             return;
         }
 
+        Material banner = null;
+
+        try {
+            banner = Material.valueOf("BANNER");
+        } catch(IllegalArgumentException ignored){}
+
         if (split.length > 1 && split[0].equalsIgnoreCase("name") && hasMetaPermission(sender, "name", false, true, ess)) {
             final String displayName = FormatUtil.replaceFormat(split[1].replace('_', ' '));
             final ItemMeta meta = stack.getItemMeta();
@@ -197,7 +203,7 @@ public class MetaItemStack {
             addFireworkMeta(sender, false, string, ess);
         } else if (stack.getType() == Material.POTION) { //WARNING - Meta for potions will be ignored after this point.
             addPotionMeta(sender, false, string, ess);
-        } else if (stack.getType() == Material.BANNER) { //WARNING - Meta for banners will be ignored after this point.
+        } else if (banner != null && stack.getType() == banner) { //WARNING - Meta for banners will be ignored after this point.
             addBannerMeta(sender, false, string, ess);
         } else if (split.length > 1 && (split[0].equalsIgnoreCase("color") || split[0].equalsIgnoreCase("colour")) && (stack.getType() == Material.LEATHER_BOOTS || stack.getType() == Material.LEATHER_CHESTPLATE || stack.getType() == Material.LEATHER_HELMET || stack.getType() == Material.LEATHER_LEGGINGS)) {
             final String[] color = split[1].split("(\\||,)");
