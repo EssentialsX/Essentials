@@ -43,7 +43,6 @@ public class EssentialsConf extends YamlConfiguration {
     private final AtomicBoolean transaction = new AtomicBoolean(false);
 
     public EssentialsConf(final File configFile) {
-        super();
         this.configFile = configFile.getAbsoluteFile();
     }
 

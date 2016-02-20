@@ -31,7 +31,6 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
     private static boolean legacy = false;
 
     public UserMap(final IEssentials ess) {
-        super();
         this.ess = ess;
         uuidMap = new UUIDMap(ess);
         //RemovalListener<UUID, User> remListener = new UserMapRemovalListener();
