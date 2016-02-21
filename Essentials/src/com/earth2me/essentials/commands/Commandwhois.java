@@ -84,7 +84,6 @@ public class Commandwhois extends EssentialsCommand {
             }
         } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException | ClassCastException e) {
             // We'll leave this aswell.
-            e.printStackTrace();
         }
         return null;
     }
@@ -93,7 +92,6 @@ public class Commandwhois extends EssentialsCommand {
         try {
             return (boolean) bungeeField.get( null );
         } catch (IllegalAccessException | ClassCastException e) {
-			e.printStackTrace();
             return false;
         }
     }
