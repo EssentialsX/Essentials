@@ -10,7 +10,6 @@ import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.util.Locale;
@@ -20,15 +19,14 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class Commandwhois extends EssentialsCommand {
 
-    private Field bungeeField = null;
-
     public Commandwhois() {
         super("whois");
 
         try {
             Class spigotConfigClass = Class.forName( "org.spigotmc.SpigotConfig" );
             this.bungeeField = spigotConfigClass.getDeclaredField("bungee");
-        } catch (ClassNotFoundException | NoSuchFieldException ex) {
+            this.playerSpigotMethod = Player.class.getDeclaredMethod("spigot");
+        } catch (ClassNotFoundException | NoSuchFieldException | NoSuchMethodException ex) {
             // Yeah we don't need this.
         }
 
@@ -65,30 +63,39 @@ public class Commandwhois extends EssentialsCommand {
         sender.sendMessage(tl("whoisJail", (user.isJailed() ? user.getJailTimeout() > 0 ? DateUtil.formatDateDiff(user.getJailTimeout()) : tl("true") : tl("false"))));
         sender.sendMessage(tl("whoisMuted", (user.isMuted() ? user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : tl("true") : tl("false"))));
 
-        InetSocketAddress addr = getRawAddress(Bukkit.getServer().getPlayer(user.getConfigUUID()));
+        InetSocketAddress addr = getProxyAddress(Bukkit.getServer().getPlayer(user.getConfigUUID()));
         if( isBungeeCord() && addr != null ) {
             sender.sendMessage(tl("whoisProxyAddress", addr.getAddress().toString()));
         }
 
     }
 
-    public InetSocketAddress getRawAddress(Player player) {
+    public InetSocketAddress getProxyAddress(Player player) {
         if( player == null ) return null;
         try {
-            Object obj = Player.class.getDeclaredMethod("spigot").invoke(player);
-
-            if(obj != null) {
-                Method method = obj.getClass().getDeclaredMethod("getRawAddress");
-                method.setAccessible(true);
-                return (InetSocketAddress) method.invoke(obj);
-            }
-        } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException | ClassCastException e) {
+            return getRawAddress( getPlayerSpigot( player ) );
+        } catch (Exception e) {
             // We'll leave this aswell.
             e.printStackTrace();
         }
         return null;
     }
 
+    private Method getRawAddressMethod = null;
+    public InetSocketAddress getRawAddress( Object obj ) throws Exception {
+        if( getRawAddressMethod == null ) {
+            getRawAddressMethod = obj.getClass().getDeclaredMethod("getRawAddress");
+            getRawAddressMethod.setAccessible(true);
+        }
+        return (InetSocketAddress) getRawAddressMethod.invoke(obj);
+    }
+
+    private Method playerSpigotMethod = null;
+    public Object getPlayerSpigot( Player player ) throws Exception {
+        return playerSpigotMethod.invoke( player );
+    }
+
+    private Field bungeeField = null;
     public boolean isBungeeCord() {
         try {
             return (boolean) bungeeField.get( null );
