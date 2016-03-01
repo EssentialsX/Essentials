@@ -289,6 +289,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
     private void legacyMaximumSize(CacheBuilder builder, int maxCount) {
         try {
             Method maxSizeLegacy = builder.getClass().getDeclaredMethod("maximumSize", Integer.TYPE);
+            maxSizeLegacy.setAccessible(true);
             maxSizeLegacy.invoke(builder, maxCount);
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
@@ -307,6 +308,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         Cache<String, User> legacyUsers;
         try {
             assert build != null;
+            build.setAccessible(true);
             legacyUsers = (Cache<String, User>) build.invoke(builder, this);
         } catch (IllegalAccessException | InvocationTargetException e) {
             legacyUsers = null;
