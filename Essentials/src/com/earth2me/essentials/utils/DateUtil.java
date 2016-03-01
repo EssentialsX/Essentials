@@ -10,6 +10,7 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class DateUtil {
     private static Pattern timePattern = Pattern.compile("(?:([0-9]+)\\s*y[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*mo[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*w[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*d[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*h[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*m[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*(?:s[a-z]*)?)?", Pattern.CASE_INSENSITIVE);
+    private static final int maxYears = 100000;
 
     public static String removeTimePattern(String input) {
         return timePattern.matcher(input).replaceFirst("").trim();
@@ -65,6 +66,9 @@ public class DateUtil {
         }
         Calendar c = new GregorianCalendar();
         if (years > 0) {
+            if (years > maxYears) {
+                years = maxYears;
+            }
             c.add(Calendar.YEAR, years * (future ? 1 : -1));
         }
         if (months > 0) {
@@ -95,7 +99,6 @@ public class DateUtil {
 
     static int dateDiff(int type, Calendar fromDate, Calendar toDate, boolean future) {
         int year = Calendar.YEAR;
-        int maxYears = 100000;
 
         int fromYear = fromDate.get(year);
         int toYear = toDate.get(year);
