@@ -57,7 +57,8 @@ public enum Mob {
     ARMOR_STAND("ArmorStand", Enemies.NEUTRAL, "ARMOR_STAND"),
     ENDERMITE("Endermite", Enemies.ENEMY, "ENDERMITE"),
     GUARDIAN("Guardian", Enemies.ENEMY, "GUARDIAN"),
-    RABBIT("Rabbit", Enemies.FRIENDLY, "RABBIT");
+    RABBIT("Rabbit", Enemies.FRIENDLY, "RABBIT"),
+    SHULKER("Shulker", Enemies.ENEMY, "SHULKER");
 
     public static final Logger logger = Logger.getLogger("Essentials");
 
