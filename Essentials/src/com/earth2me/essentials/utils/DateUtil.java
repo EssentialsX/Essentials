@@ -94,6 +94,16 @@ public class DateUtil {
     }
 
     static int dateDiff(int type, Calendar fromDate, Calendar toDate, boolean future) {
+        int year = Calendar.YEAR;
+        int maxYears = 100000;
+
+        int fromYear = fromDate.get(year);
+        int toYear = toDate.get(year);
+        if (Math.abs(fromYear - toYear) > maxYears) {
+            toDate.set(year, fromYear +
+                    (future ? maxYears : -maxYears));
+        }
+
         int diff = 0;
         long savedDate = fromDate.getTimeInMillis();
         while ((future && !fromDate.after(toDate)) || (!future && !fromDate.before(toDate))) {
