@@ -97,8 +97,7 @@ public class EssentialsConf extends YamlConfiguration {
 
 
         try {
-            final FileInputStream inputStream = new FileInputStream(configFile);
-            try {
+            try (FileInputStream inputStream = new FileInputStream(configFile)) {
                 long startSize = configFile.length();
                 if (startSize > Integer.MAX_VALUE) {
                     throw new InvalidConfigurationException("File too big");
@@ -123,11 +122,11 @@ public class EssentialsConf extends YamlConfiguration {
                 if (result.isError()) {
                     buffer.rewind();
                     data.clear();
-                    LOGGER.log(Level.INFO, "File " + configFile.getAbsolutePath().toString() + " is not utf-8 encoded, trying " + Charset.defaultCharset().displayName());
+                    LOGGER.log(Level.INFO, "File " + configFile.getAbsolutePath() + " is not utf-8 encoded, trying " + Charset.defaultCharset().displayName());
                     decoder = Charset.defaultCharset().newDecoder();
                     result = decoder.decode(buffer, data, true);
                     if (result.isError()) {
-                        throw new InvalidConfigurationException("Invalid Characters in file " + configFile.getAbsolutePath().toString());
+                        throw new InvalidConfigurationException("Invalid Characters in file " + configFile.getAbsolutePath());
                     } else {
                         decoder.flush(data);
                     }
@@ -137,8 +136,6 @@ public class EssentialsConf extends YamlConfiguration {
                 final int end = data.position();
                 data.rewind();
                 super.loadFromString(data.subSequence(0, end).toString());
-            } finally {
-                inputStream.close();
             }
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
@@ -251,9 +248,7 @@ public class EssentialsConf extends YamlConfiguration {
             if (future != null) {
                 future.get();
             }
-        } catch (InterruptedException ex) {
-            LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
-        } catch (ExecutionException ex) {
+        } catch (InterruptedException | ExecutionException ex) {
             LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
         }
     }
@@ -274,9 +269,8 @@ public class EssentialsConf extends YamlConfiguration {
         }
 
         pendingDiskWrites.incrementAndGet();
-        Future<?> future = EXECUTOR_SERVICE.submit(new WriteRunner(configFile, data, pendingDiskWrites));
 
-        return future;
+        return EXECUTOR_SERVICE.submit(new WriteRunner(configFile, data, pendingDiskWrites));
     }
 
 
@@ -318,17 +312,10 @@ public class EssentialsConf extends YamlConfiguration {
                         }
                     }
 
-                    final FileOutputStream fos = new FileOutputStream(configFile);
-                    try {
-                        final OutputStreamWriter writer = new OutputStreamWriter(fos, UTF8);
-
-                        try {
+                    try (FileOutputStream fos = new FileOutputStream(configFile)) {
+                        try (OutputStreamWriter writer = new OutputStreamWriter(fos, UTF8)) {
                             writer.write(data);
-                        } finally {
-                            writer.close();
                         }
-                    } finally {
-                        fos.close();
                     }
                 } catch (IOException e) {
                     LOGGER.log(Level.SEVERE, e.getMessage(), e);
@@ -388,13 +375,13 @@ public class EssentialsConf extends YamlConfiguration {
     }
 
     public void setProperty(final String path, final ItemStack stack) {
-        final Map<String, Object> map = new HashMap<String, Object>();
+        final Map<String, Object> map = new HashMap<>();
         map.put("type", stack.getType().toString());
         map.put("amount", stack.getAmount());
         map.put("damage", stack.getDurability());
         Map<Enchantment, Integer> enchantments = stack.getEnchantments();
         if (!enchantments.isEmpty()) {
-            Map<String, Integer> enchant = new HashMap<String, Integer>();
+            Map<String, Integer> enchant = new HashMap<>();
             for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
                 enchant.put(entry.getKey().getName().toLowerCase(Locale.ENGLISH), entry.getValue());
             }
