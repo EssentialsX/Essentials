@@ -8,8 +8,7 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
 public class PermissionsExHandler extends AbstractVaultHandler {
     @Override
     public boolean canBuild(final Player base, final String group) {
-        final PermissionUser user = PermissionsEx.getPermissionManager().getUser(base.getUniqueId());
-        return user != null && user.getOptionBoolean("build", base.getWorld().getName(), false);
+        return base != null && chat.getPlayerInfoBoolean(base.getWorld().getName(), base, "build", false);
     }
 
     @Override
