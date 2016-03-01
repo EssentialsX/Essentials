@@ -39,7 +39,7 @@ public final class InventoryWorkaround {
         try {
             fakeInventory.setContents(contents);
         } catch (IllegalArgumentException e) {
-            ItemStack[] truncatedContents = new ItemStack[36];
+            ItemStack[] truncatedContents = new ItemStack[fakeInventory.getSize()];
             System.arraycopy(contents, 0, truncatedContents, 0, truncatedContents.length);
             fakeInventory.setContents(truncatedContents);
         }
