@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +35,14 @@ public final class InventoryWorkaround {
     // This will will abort if it couldn't store all items
     public static Map<Integer, ItemStack> addAllItems(final Inventory inventory, final ItemStack... items) {
         final Inventory fakeInventory = Bukkit.getServer().createInventory(null, inventory.getType());
-        fakeInventory.setContents(inventory.getContents());
+        ItemStack[] contents = inventory.getContents();
+        try {
+            fakeInventory.setContents(contents);
+        } catch (IllegalArgumentException e) {
+            ItemStack[] truncatedContents = new ItemStack[36];
+            System.arraycopy(contents, 0, truncatedContents, 0, truncatedContents.length);
+            fakeInventory.setContents(truncatedContents);
+        }
         Map<Integer, ItemStack> overFlow = addItems(fakeInventory, items);
         if (overFlow.isEmpty()) {
             addItems(inventory, items);
