@@ -27,15 +27,16 @@ public class Commandseen extends EssentialsCommand {
 
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        seen(server, sender, args, true, true, true);
+        seen(server, sender, commandLabel, args, true, true, true);
     }
 
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        seen(server, user.getSource(), args, user.isAuthorized("essentials.seen.banreason"), user.isAuthorized("essentials.seen.extra"), user.isAuthorized("essentials.seen.ipsearch"));
+        seen(server, user.getSource(), commandLabel, args, user.isAuthorized("essentials.seen.banreason"), user.isAuthorized("essentials.seen.extra"), user.isAuthorized("essentials.seen.ipsearch"));
     }
 
-    protected void seen(final Server server, final CommandSource sender, final String[] args, final boolean showBan, final boolean extra, final boolean ipLookup) throws Exception {
+    protected void seen(final Server server, final CommandSource sender, final String commandLabel, final String[] args,
+                        final boolean showBan, final boolean extra, final boolean ipLookup) throws Exception {
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }
@@ -58,25 +59,40 @@ public class Commandseen extends EssentialsCommand {
             } else if (BanLookup.isBanned(ess, args[0])) {
                 sender.sendMessage(tl("whoisBanned", showBan ? BanLookup.getBanEntry(ess, args[0]).getReason() : tl("true")));
                 return;
-            } else {
-                User userFromBukkit = ess.getUserMap().getUserFromBukkit(args[0]);
-                if (userFromBukkit != null) {
-                    player = userFromBukkit;
-                } else {
+            }
+            ess.getScheduler().runTaskAsynchronously(ess, new Runnable() {
+                @Override
+                public void run() {
+                    User userFromBukkit = ess.getUserMap().getUserFromBukkit(args[0]);
                     try {
-                        player = getPlayer(server, sender, args, 0);
-                    } catch (NoSuchFieldException e) {
-                        throw new PlayerNotFoundException();
+                        if (userFromBukkit != null) {
+                            showUserSeen(userFromBukkit);
+                        } else {
+                            showUserSeen(getPlayer(server, sender, args, 0));
+                        }
+                    } catch (Exception e) {
+                        ess.showError(sender, e, commandLabel);
                     }
                 }
-            }
+
+                private void showUserSeen(User user) throws Exception {
+                    if (user == null) {
+                        throw new PlayerNotFoundException();
+                    }
+                    showSeenMessage(server, sender, user, showBan, extra);
+                }
+            });
+        } else {
+            showSeenMessage(server, sender, player, showBan, extra);
         }
+    }
+
+    private void showSeenMessage(Server server, CommandSource sender, User player, boolean showBan, boolean extra)  throws Exception {
         if (player.getBase().isOnline() && canInteractWith(sender, player)) {
             seenOnline(server, sender, player, showBan, extra);
         } else {
             seenOffline(server, sender, player, showBan, extra);
         }
-
     }
 
     private void seenOnline(final Server server, final CommandSource sender, final User user, final boolean showBan, final boolean extra) throws Exception {
