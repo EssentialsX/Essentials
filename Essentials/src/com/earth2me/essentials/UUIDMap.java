@@ -53,6 +53,10 @@ public class UUIDMap {
                 ess.getLogger().log(Level.INFO, "Reading usermap from disk");
             }
 
+            if (loading) {
+                return;
+            }
+
             names.clear();
             history.clear();
             loading = true;
