@@ -115,6 +115,9 @@ public class UUIDMap {
         @Override
         public void run() {
             pendingWrite = false;
+            if (names.isEmpty()) {
+                return;
+            }
             File configFile = null;
 
             try {
