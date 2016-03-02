@@ -22,6 +22,8 @@ public class UUIDMap {
     private static final ScheduledExecutorService writeScheduler = Executors.newScheduledThreadPool(1);
     private final Runnable writeTaskRunnable;
 
+    private static boolean loading = false;
+
     public UUIDMap(final net.ess3.api.IEssentials ess) {
         this.ess = ess;
         userList = new File(ess.getDataFolder(), "usermap.csv");
@@ -53,6 +55,7 @@ public class UUIDMap {
 
             names.clear();
             history.clear();
+            loading = true;
 
             try (BufferedReader reader = new BufferedReader(new FileReader(userList))) {
                 while (true) {
@@ -79,6 +82,7 @@ public class UUIDMap {
                     }
                 }
             }
+            loading = false;
         } catch (IOException ex) {
             Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
         }
@@ -115,7 +119,7 @@ public class UUIDMap {
         @Override
         public void run() {
             pendingWrite = false;
-            if (names.isEmpty()) {
+            if (loading || names.isEmpty()) {
                 return;
             }
             File configFile = null;
