@@ -1,6 +1,8 @@
 package com.earth2me.essentials;
 
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
@@ -96,21 +98,6 @@ public class OfflinePlayer implements Player {
 
     @Override
     public void setHealth(double d) {
-    }
-
-    @Override
-    public Egg throwEgg() {
-        return null;
-    }
-
-    @Override
-    public Snowball throwSnowball() {
-        return null;
-    }
-
-    @Override
-    public Arrow shootArrow() {
-        return null;
     }
 
     @Override
@@ -902,6 +889,11 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public InventoryView openMerchant(Villager villager, boolean b) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public void closeInventory() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -1099,6 +1091,16 @@ public class OfflinePlayer implements Player {
     @Override
     public boolean isCustomNameVisible() {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setGlowing(boolean b) {
+
+    }
+
+    @Override
+    public boolean isGlowing() {
+        return false;
     }
 
     @Override
@@ -1322,7 +1324,72 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public void spawnParticle(Particle particle, Location location, int i) {
+
+    }
+
+    @Override
+    public void spawnParticle(Particle particle, double v, double v1, double v2, int i) {
+
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, Location location, int i, T t) {
+
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, double v, double v1, double v2, int i, T t) {
+
+    }
+
+    @Override
+    public void spawnParticle(Particle particle, Location location, int i, double v, double v1, double v2) {
+
+    }
+
+    @Override
+    public void spawnParticle(Particle particle, double v, double v1, double v2, int i, double v3, double v4, double v5) {
+
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, Location location, int i, double v, double v1, double v2, T t) {
+
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, double v, double v1, double v2, int i, double v3, double v4, double v5, T t) {
+
+    }
+
+    @Override
+    public void spawnParticle(Particle particle, Location location, int i, double v, double v1, double v2, double v3) {
+
+    }
+
+    @Override
+    public void spawnParticle(Particle particle, double v, double v1, double v2, int i, double v3, double v4, double v5, double v6) {
+
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, Location location, int i, double v, double v1, double v2, double v3, T t) {
+
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, double v, double v1, double v2, int i, double v3, double v4, double v5, double v6, T t) {
+
+    }
+
+    @Override
     public void sendTitle(String title, String subtitle) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public AttributeInstance getAttribute(Attribute attribute) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

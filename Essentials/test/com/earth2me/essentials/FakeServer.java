@@ -5,6 +5,10 @@ import com.earth2me.essentials.craftbukkit.FakeWorld;
 import org.bukkit.*;
 import org.bukkit.Warning.WarningState;
 import org.bukkit.World.Environment;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarFlag;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
@@ -16,6 +20,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.help.HelpMap;
 import org.bukkit.inventory.*;
 import org.bukkit.map.MapView;
@@ -34,6 +39,7 @@ import org.bukkit.util.CachedServerIcon;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
@@ -906,6 +912,16 @@ public class FakeServer implements Server {
 
     @Override
     public int getIdleTimeout() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public ChunkGenerator.ChunkData createChunkData(World world) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public BossBar createBossBar(String s, BarColor barColor, BarStyle barStyle, BarFlag... barFlags) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

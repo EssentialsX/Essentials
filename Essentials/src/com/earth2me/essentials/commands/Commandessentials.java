@@ -134,8 +134,15 @@ public class Commandessentials extends EssentialsCommand {
                 if (note == null || note.isEmpty()) {
                     return;
                 }
+                Sound noteHarp;
+                try {
+                    noteHarp = Sound.valueOf("NOTE_PIANO"); // pre-1.9, referenced internally as note.harp
+                } catch (IllegalArgumentException e) {
+                    noteHarp = Sound.valueOf("BLOCK_NOTE_HARP"); // 1.9
+                }
+
                 for (Player onlinePlayer : ess.getOnlinePlayers()) {
-                    onlinePlayer.playSound(onlinePlayer.getLocation(), Sound.NOTE_PIANO, 1, noteMap.get(note));
+                    onlinePlayer.playSound(onlinePlayer.getLocation(), noteHarp, 1, noteMap.get(note));
                 }
             }
         }, 20, 2);
@@ -155,19 +162,25 @@ public class Commandessentials extends EssentialsCommand {
     private final String[] playerMoo = new String[]{"            (__)", "            (oo)", "   /------\\/", "  /  |      | |", " *  /\\---/\\", "    ~~    ~~", "....\"Have you mooed today?\"..."};
 
     private void run_moo(final Server server, final CommandSource sender, final String command, final String args[]) {
+        Sound moo;
+        try {
+            moo = Sound.valueOf("COW_IDLE"); // pre-1.9
+        } catch (IllegalArgumentException e) {
+            moo = Sound.valueOf("ENTITY_COW_MILK"); // 1.9
+        }
         if (args.length == 2 && args[1].equals("moo")) {
             for (String s : consoleMoo) {
                 logger.info(s);
             }
             for (Player player : ess.getOnlinePlayers()) {
                 player.sendMessage(playerMoo);
-                player.playSound(player.getLocation(), Sound.COW_IDLE, 1, 1.0f);
+                player.playSound(player.getLocation(), moo, 1, 1.0f);
             }
         } else {
             if (sender.isPlayer()) {
                 sender.getSender().sendMessage(playerMoo);
                 final Player player = sender.getPlayer();
-                player.playSound(player.getLocation(), Sound.COW_IDLE, 1, 1.0f);
+                player.playSound(player.getLocation(), moo, 1, 1.0f);
 
             } else {
                 sender.getSender().sendMessage(consoleMoo);
