@@ -19,6 +19,7 @@ import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
@@ -167,6 +168,8 @@ public class MetaItemStack {
             final ItemMeta meta = stack.getItemMeta();
             meta.setLore(lore);
             stack.setItemMeta(meta);
+        } else if (split.length > 1 && (split[0].equalsIgnoreCase("unbreakable") && hasMetaPermission(sender, "unbreakable", false, true, ess))) {
+            setUnbreakable(stack, Boolean.valueOf(split[1]));
         } else if (split.length > 1 && (split[0].equalsIgnoreCase("player") || split[0].equalsIgnoreCase("owner")) && stack.getType() == Material.SKULL_ITEM && hasMetaPermission(sender, "head", false, true, ess)) {
             if (stack.getDurability() == 3) {
                 final String owner = split[1];
@@ -465,6 +468,28 @@ public class MetaItemStack {
             return false;
         } else {
             throw new Exception(tl("noMetaPerm", metaPerm));
+        }
+    }
+
+    private static Method spigotMethod;
+    private static Method setUnbreakableMethod;
+
+    private void setUnbreakable(ItemStack is, boolean unbreakable) {
+        ItemMeta meta = is.getItemMeta();
+        try {
+            if (spigotMethod == null) {
+                spigotMethod = meta.getClass().getDeclaredMethod("spigot");
+                spigotMethod.setAccessible(true);
+            }
+            Object itemStackSpigot = spigotMethod.invoke(meta);
+            if (setUnbreakableMethod == null) {
+                setUnbreakableMethod = itemStackSpigot.getClass().getDeclaredMethod("setUnbreakable", Boolean.TYPE);
+                setUnbreakableMethod.setAccessible(true);
+            }
+            setUnbreakableMethod.invoke(itemStackSpigot, unbreakable);
+            is.setItemMeta(meta);
+        } catch (Throwable t) {
+            t.printStackTrace();
         }
     }
 }
