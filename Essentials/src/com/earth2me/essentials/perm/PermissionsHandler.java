@@ -15,6 +15,8 @@ public class PermissionsHandler implements IPermissionsHandler {
     private final transient Essentials ess;
     private transient boolean useSuperperms = false;
 
+    private Class<?> lastHandler = null;
+
     public PermissionsHandler(final Essentials plugin, final boolean useSuperperms) {
         this.ess = plugin;
         this.useSuperperms = useSuperperms;
@@ -113,6 +115,14 @@ public class PermissionsHandler implements IPermissionsHandler {
         if (useSuperperms && handler instanceof ConfigPermissionsHandler) {
             handler = new SuperpermsHandler();
         }
+
+        // don't spam logs
+        Class<?> handlerClass = handler.getClass();
+        if (lastHandler != null && lastHandler.equals(handlerClass)) {
+            return;
+        }
+        lastHandler = handlerClass;
+
         // output handler info
         if (handler instanceof GenericVaultHandler) {
             String enabledPermsPlugin = ((GenericVaultHandler) handler).getEnabledPermsPlugin();
