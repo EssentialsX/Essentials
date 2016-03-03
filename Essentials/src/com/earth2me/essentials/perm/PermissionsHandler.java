@@ -110,15 +110,16 @@ public class PermissionsHandler implements IPermissionsHandler {
             }
         }
         if (handler == null) {
-            handler = new ConfigPermissionsHandler(ess);
-        }
-        if (useSuperperms && handler instanceof ConfigPermissionsHandler) {
-            handler = new SuperpermsHandler();
+            if (useSuperperms) {
+                handler = new SuperpermsHandler();
+            } else {
+                handler = new ConfigPermissionsHandler(ess);
+            }
         }
 
         // don't spam logs
         Class<?> handlerClass = handler.getClass();
-        if (lastHandler != null && lastHandler.equals(handlerClass)) {
+        if (lastHandler != null && lastHandler == handlerClass) {
             return;
         }
         lastHandler = handlerClass;
