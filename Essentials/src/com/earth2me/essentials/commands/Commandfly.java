@@ -19,18 +19,7 @@ public class Commandfly extends EssentialsToggleCommand {
 
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        if (args.length == 1) {
-            Boolean toggle = matchToggleArgument(args[0]);
-            if (toggle == null && user.isAuthorized(othersPermission)) {
-                toggleOtherPlayers(server, user.getSource(), args);
-            } else {
-                togglePlayer(user.getSource(), user, toggle);
-            }
-        } else if (args.length == 2 && user.isAuthorized(othersPermission)) {
-            toggleOtherPlayers(server, user.getSource(), args);
-        } else {
-            togglePlayer(user.getSource(), user, null);
-        }
+        handleToggleWithArgs(server, user, args);
     }
 
     @Override

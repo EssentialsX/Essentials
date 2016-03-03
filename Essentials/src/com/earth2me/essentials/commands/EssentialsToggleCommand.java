@@ -16,6 +16,21 @@ public abstract class EssentialsToggleCommand extends EssentialsCommand {
         this.othersPermission = othersPermission;
     }
 
+    protected void handleToggleWithArgs(Server server, User user, String[] args) throws Exception {
+        if (args.length == 1) {
+            Boolean toggle = matchToggleArgument(args[0]);
+            if (toggle == null && user.isAuthorized(othersPermission)) {
+                toggleOtherPlayers(server, user.getSource(), args);
+            } else {
+                togglePlayer(user.getSource(), user, toggle);
+            }
+        } else if (args.length == 2 && user.isAuthorized(othersPermission)) {
+            toggleOtherPlayers(server, user.getSource(), args);
+        } else {
+            togglePlayer(user.getSource(), user, null);
+        }
+    }
+
     protected Boolean matchToggleArgument(final String arg) {
         if (arg.equalsIgnoreCase("on") || arg.startsWith("ena") || arg.equalsIgnoreCase("1")) {
             return true;

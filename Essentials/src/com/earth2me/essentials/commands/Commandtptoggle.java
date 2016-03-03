@@ -19,18 +19,7 @@ public class Commandtptoggle extends EssentialsToggleCommand {
 
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        if (args.length == 1) {
-            Boolean toggle = matchToggleArgument(args[0]);
-            if (toggle == null && user.isAuthorized(othersPermission)) {
-                toggleOtherPlayers(server, user.getSource(), args);
-            } else {
-                togglePlayer(user.getSource(), user, toggle);
-            }
-        } else if (args.length == 2 && user.isAuthorized(othersPermission)) {
-            toggleOtherPlayers(server, user.getSource(), args);
-        } else {
-            togglePlayer(user.getSource(), user, null);
-        }
+        handleToggleWithArgs(server, user, args);
     }
 
     @Override
@@ -42,7 +31,7 @@ public class Commandtptoggle extends EssentialsToggleCommand {
         user.setTeleportEnabled(enabled);
 
         user.sendMessage(enabled ? tl("teleportationEnabled") : tl("teleportationDisabled"));
-        if (!sender.isPlayer() || !sender.getPlayer().equals(user.getBase())) {
+        if (!sender.isPlayer() || !user.getBase().equals(sender.getPlayer())) {
             sender.sendMessage(enabled ? tl("teleportationEnabledFor", user.getDisplayName()) : tl("teleportationDisabledFor", user.getDisplayName()));
         }
     }
