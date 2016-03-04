@@ -41,6 +41,7 @@
         <module>EssentialsProtect</module>
         <module>EssentialsSpawn</module>
         <module>EssentialsXMPP</module>
+        <module>EssentialsGroupManager</module>
         <module>nms/NMSProvider</module>
         <module>nms/BlockMetaProvider</module>
         <module>nms/1_8_R1Provider</module>
