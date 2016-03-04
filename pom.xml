@@ -151,7 +151,7 @@
                         </artifactItem>
                         <artifactItem>
                             <groupId>${project.groupId}</groupId>
-                            <artifactId>EssentialsGroupManager</artifactId>
+                            <artifactId>EssentialsXGroupManager</artifactId>
                             <version>${project.version}</version>
                         </artifactItem>
                     </artifactItems>
