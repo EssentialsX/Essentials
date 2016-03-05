@@ -149,11 +149,24 @@ public class Enchantments {
         ENCHANTMENTS.put("lure", Enchantment.LURE);
         ALIASENCHANTMENTS.put("rodlure", Enchantment.LURE);
 
+        // 1.8
         try {
-            ENCHANTMENTS.put("depthstrider", Enchantment.getByName("DEPTH_STRIDER"));
-            ALIASENCHANTMENTS.put("depth", Enchantment.getByName("DEPTH_STRIDER"));
-            ALIASENCHANTMENTS.put("strider", Enchantment.getByName("DEPTH_STRIDER"));
-        } catch(IllegalArgumentException ignored) {}
+            Enchantment depthStrider = Enchantment.getByName("DEPTH_STRIDER");
+            ENCHANTMENTS.put("depthstrider", depthStrider);
+            ALIASENCHANTMENTS.put("depth", depthStrider);
+            ALIASENCHANTMENTS.put("strider", depthStrider);
+        } catch (IllegalArgumentException ignored) {}
+
+        // 1.9
+        try {
+            Enchantment frostWalker = Enchantment.getByName("FROST_WALKER");
+            ENCHANTMENTS.put("frostwalker", frostWalker);
+            ALIASENCHANTMENTS.put("frost", frostWalker);
+            ALIASENCHANTMENTS.put("walker", frostWalker);
+
+            Enchantment mending = Enchantment.getByName("MENDING");
+            ENCHANTMENTS.put("mending", mending);
+        } catch (IllegalArgumentException ignored) {}
     }
 
     public static Enchantment getByName(String name) {
