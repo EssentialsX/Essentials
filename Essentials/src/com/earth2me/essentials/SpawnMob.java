@@ -153,7 +153,7 @@ public class SpawnMob {
     }
 
     private static void checkSpawnable(IEssentials ess, CommandSource sender, Mob mob) throws Exception {
-        if (mob == null) {
+        if (mob == null || mob.getType() == null) {
             throw new Exception(tl("invalidMob"));
         }
 
