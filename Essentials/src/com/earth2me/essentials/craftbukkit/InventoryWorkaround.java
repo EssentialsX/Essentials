@@ -2,6 +2,7 @@ package com.earth2me.essentials.craftbukkit;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -31,11 +32,19 @@ public final class InventoryWorkaround {
         return -1;
     }
 
+
+    private static final int USABLE_PLAYER_INV_SIZE = 36;
     // Returns what it couldnt store
     // This will will abort if it couldn't store all items
     public static Map<Integer, ItemStack> addAllItems(final Inventory inventory, final ItemStack... items) {
-        final Inventory fakeInventory = Bukkit.getServer().createInventory(null, inventory.getType());
         ItemStack[] contents = inventory.getContents();
+
+        final Inventory fakeInventory;
+        if (inventory.getType() == InventoryType.PLAYER && contents.length > USABLE_PLAYER_INV_SIZE) {
+            fakeInventory = Bukkit.getServer().createInventory(null, USABLE_PLAYER_INV_SIZE);
+        } else {
+            fakeInventory = Bukkit.getServer().createInventory(null, inventory.getType());
+        }
         try {
             fakeInventory.setContents(contents);
         } catch (IllegalArgumentException e) {
