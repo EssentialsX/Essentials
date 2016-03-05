@@ -152,20 +152,26 @@ public class Enchantments {
         // 1.8
         try {
             Enchantment depthStrider = Enchantment.getByName("DEPTH_STRIDER");
-            ENCHANTMENTS.put("depthstrider", depthStrider);
-            ALIASENCHANTMENTS.put("depth", depthStrider);
-            ALIASENCHANTMENTS.put("strider", depthStrider);
+            if (depthStrider != null) {
+                ENCHANTMENTS.put("depthstrider", depthStrider);
+                ALIASENCHANTMENTS.put("depth", depthStrider);
+                ALIASENCHANTMENTS.put("strider", depthStrider);
+            }
         } catch (IllegalArgumentException ignored) {}
 
         // 1.9
         try {
             Enchantment frostWalker = Enchantment.getByName("FROST_WALKER");
-            ENCHANTMENTS.put("frostwalker", frostWalker);
-            ALIASENCHANTMENTS.put("frost", frostWalker);
-            ALIASENCHANTMENTS.put("walker", frostWalker);
+            if (frostWalker != null) {
+                ENCHANTMENTS.put("frostwalker", frostWalker);
+                ALIASENCHANTMENTS.put("frost", frostWalker);
+                ALIASENCHANTMENTS.put("walker", frostWalker);
+            }
 
             Enchantment mending = Enchantment.getByName("MENDING");
-            ENCHANTMENTS.put("mending", mending);
+            if (mending != null) {
+                ENCHANTMENTS.put("mending", mending);
+            }
         } catch (IllegalArgumentException ignored) {}
     }
 
