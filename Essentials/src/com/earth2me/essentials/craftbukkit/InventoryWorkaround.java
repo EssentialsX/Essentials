@@ -6,6 +6,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,11 +44,7 @@ public final class InventoryWorkaround {
 
     private static Inventory makeTruncatedPlayerInventory(PlayerInventory playerInventory) {
         Inventory fakeInventory = Bukkit.getServer().createInventory(null, USABLE_PLAYER_INV_SIZE);
-
-        ItemStack[] truncatedContents = new ItemStack[fakeInventory.getSize()];
-        System.arraycopy(playerInventory.getContents(), 0, truncatedContents, 0, truncatedContents.length);
-        fakeInventory.setContents(truncatedContents);
-
+        fakeInventory.setContents(Arrays.copyOf(playerInventory.getContents(), fakeInventory.getSize()));
         return fakeInventory;
     }
 
