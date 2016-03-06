@@ -2,7 +2,6 @@ package com.earth2me.essentials.craftbukkit;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -32,25 +31,37 @@ public final class InventoryWorkaround {
         return -1;
     }
 
-
+    /*
+    Spigot 1.9, for whatever reason, decided to merge the armor and main player inventories without providing a way
+    to access the main inventory. There's lots of ugly code in here to work around that.
+     */
     private static final int USABLE_PLAYER_INV_SIZE = 36;
-    // Returns what it couldnt store
+
+    private static boolean isCombinedInventory(Inventory inventory) {
+        return inventory instanceof PlayerInventory && inventory.getContents().length > USABLE_PLAYER_INV_SIZE;
+    }
+
+    private static Inventory makeTruncatedPlayerInventory(PlayerInventory playerInventory) {
+        Inventory fakeInventory = Bukkit.getServer().createInventory(null, USABLE_PLAYER_INV_SIZE);
+
+        ItemStack[] truncatedContents = new ItemStack[fakeInventory.getSize()];
+        System.arraycopy(playerInventory.getContents(), 0, truncatedContents, 0, truncatedContents.length);
+        fakeInventory.setContents(truncatedContents);
+
+        return fakeInventory;
+    }
+
+    // Returns what it couldn't store
     // This will will abort if it couldn't store all items
     public static Map<Integer, ItemStack> addAllItems(final Inventory inventory, final ItemStack... items) {
         ItemStack[] contents = inventory.getContents();
 
         final Inventory fakeInventory;
-        if (inventory.getType() == InventoryType.PLAYER && contents.length > USABLE_PLAYER_INV_SIZE) {
-            fakeInventory = Bukkit.getServer().createInventory(null, USABLE_PLAYER_INV_SIZE);
+        if (isCombinedInventory(inventory)) {
+            fakeInventory = makeTruncatedPlayerInventory((PlayerInventory) inventory);
         } else {
             fakeInventory = Bukkit.getServer().createInventory(null, inventory.getType());
-        }
-        try {
             fakeInventory.setContents(contents);
-        } catch (IllegalArgumentException e) {
-            ItemStack[] truncatedContents = new ItemStack[fakeInventory.getSize()];
-            System.arraycopy(contents, 0, truncatedContents, 0, truncatedContents.length);
-            fakeInventory.setContents(truncatedContents);
         }
         Map<Integer, ItemStack> overFlow = addItems(fakeInventory, items);
         if (overFlow.isEmpty()) {
@@ -60,15 +71,24 @@ public final class InventoryWorkaround {
         return addItems(fakeInventory, items);
     }
 
-    // Returns what it couldnt store
+    // Returns what it couldn't store
     public static Map<Integer, ItemStack> addItems(final Inventory inventory, final ItemStack... items) {
-        return addOversizedItems(inventory, 0, items);
+         return addOversizedItems(inventory, 0, items);
     }
 
-    // Returns what it couldnt store
+    // Returns what it couldn't store
     // Set oversizedStack to below normal stack size to disable oversized stacks
     public static Map<Integer, ItemStack> addOversizedItems(final Inventory inventory, final int oversizedStacks, final ItemStack... items) {
-        final Map<Integer, ItemStack> leftover = new HashMap<Integer, ItemStack>();
+        if (isCombinedInventory(inventory)) {
+            Inventory fakeInventory = makeTruncatedPlayerInventory((PlayerInventory) inventory);
+            Map<Integer, ItemStack> overflow = addOversizedItems(fakeInventory, oversizedStacks, items);
+            for (int i = 0; i < fakeInventory.getContents().length; i++) {
+                inventory.setItem(i, fakeInventory.getContents()[i]);
+            }
+            return overflow;
+        }
+
+        final Map<Integer, ItemStack> leftover = new HashMap<>();
 
 		/*
          * TODO: some optimization - Create a 'firstPartial' with a 'fromIndex' - Record the lastPartial per Material -
