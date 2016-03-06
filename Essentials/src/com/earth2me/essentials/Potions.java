@@ -113,6 +113,18 @@ public class Potions {
         ALIASPOTIONS.put("waterbreath", PotionEffectType.WATER_BREATHING);
         ALIASPOTIONS.put("underwaterbreath", PotionEffectType.WATER_BREATHING);
         ALIASPOTIONS.put("air", PotionEffectType.WATER_BREATHING);
+
+        // 1.9
+        try {
+            POTIONS.put("glowing", PotionEffectType.GLOWING);
+            ALIASPOTIONS.put("glow", PotionEffectType.GLOWING);
+
+            POTIONS.put("levitation", PotionEffectType.LEVITATION);
+            ALIASPOTIONS.put("levitate", PotionEffectType.LEVITATION);
+
+            POTIONS.put("luck", PotionEffectType.LUCK);
+            POTIONS.put("unluck", PotionEffectType.UNLUCK);
+        } catch (Throwable ignored) {}
     }
 
     public static PotionEffectType getByName(String name) {
