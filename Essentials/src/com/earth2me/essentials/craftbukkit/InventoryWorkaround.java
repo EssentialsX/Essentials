@@ -60,8 +60,8 @@ public final class InventoryWorkaround {
             fakeInventory = Bukkit.getServer().createInventory(null, inventory.getType());
             fakeInventory.setContents(contents);
         }
-        Map<Integer, ItemStack> overFlow = addItems(fakeInventory, items);
-        if (overFlow.isEmpty()) {
+        Map<Integer, ItemStack> overflow = addItems(fakeInventory, items);
+        if (overflow.isEmpty()) {
             addItems(inventory, items);
             return null;
         }
@@ -70,7 +70,7 @@ public final class InventoryWorkaround {
 
     // Returns what it couldn't store
     public static Map<Integer, ItemStack> addItems(final Inventory inventory, final ItemStack... items) {
-         return addOversizedItems(inventory, 0, items);
+        return addOversizedItems(inventory, 0, items);
     }
 
     // Returns what it couldn't store
