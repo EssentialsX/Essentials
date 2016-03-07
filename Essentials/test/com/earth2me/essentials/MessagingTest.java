@@ -91,7 +91,7 @@ public class MessagingTest {
             }
 
             // Not really much of a strict test, but just "testing" console output. 
-            user1._setAfk(true);
+            user1.setAfk(true);
 
             // Console replies using "/r Hey, son!"
             //
