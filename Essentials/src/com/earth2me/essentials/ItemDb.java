@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import net.ess3.api.IEssentials;
+import net.ess3.nms.v1_9_R1.SpawnEgg1_9;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -145,10 +146,16 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
                 throw new Exception("Can't spawn entity ID " + metaData + " from mob spawners.");
             }
         } else if (mat == Material.MONSTER_EGG) {
+            EntityType type;
             try {
-                retval = new SpawnEgg(EntityType.fromId(metaData)).toItemStack();
+                type = EntityType.fromId(metaData);
             } catch (IllegalArgumentException e) {
                 throw new Exception("Can't spawn entity ID " + metaData + " from spawn eggs.");
+            }
+            try {
+                retval = new SpawnEgg1_9(type).toItemStack();
+            } catch (Throwable t) {
+                retval = new SpawnEgg(type).toItemStack();
             }
         } else {
             retval.setDurability(metaData);
