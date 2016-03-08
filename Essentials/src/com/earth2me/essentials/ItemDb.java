@@ -11,6 +11,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
+import org.bukkit.material.SpawnEgg;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 
@@ -142,6 +143,12 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
                 retval = ess.getSpawnerProvider().setEntityType(retval, EntityType.fromId(metaData));
             } catch (IllegalArgumentException e) {
                 throw new Exception("Can't spawn entity ID " + metaData + " from mob spawners.");
+            }
+        } else if (mat == Material.MONSTER_EGG) {
+            try {
+                retval = new SpawnEgg(EntityType.fromId(metaData)).toItemStack();
+            } catch (IllegalArgumentException e) {
+                throw new Exception("Can't spawn entity ID " + metaData + " from spawn eggs.");
             }
         } else {
             retval.setDurability(metaData);
