@@ -42,6 +42,17 @@ public final class InventoryWorkaround {
         return inventory instanceof PlayerInventory && inventory.getContents().length > USABLE_PLAYER_INV_SIZE;
     }
 
+    // Clears inventory without clearing armor
+    public static void clearInventoryNoArmor(PlayerInventory inventory) {
+        if (isCombinedInventory(inventory)) {
+            for (int i = 0; i < USABLE_PLAYER_INV_SIZE; i++) {
+                inventory.setItem(i, null);
+            }
+        } else {
+            inventory.clear();
+        }
+    }
+
     private static Inventory makeTruncatedPlayerInventory(PlayerInventory playerInventory) {
         Inventory fakeInventory = Bukkit.getServer().createInventory(null, USABLE_PLAYER_INV_SIZE);
         fakeInventory.setContents(Arrays.copyOf(playerInventory.getContents(), fakeInventory.getSize()));

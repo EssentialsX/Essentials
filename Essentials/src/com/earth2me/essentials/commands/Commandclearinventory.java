@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.utils.NumberUtil;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -86,13 +87,13 @@ public class Commandclearinventory extends EssentialsCommand {
             if (showExtended) {
                 sender.sendMessage(tl("inventoryClearingAllItems", player.getDisplayName()));
             }
-            player.getInventory().clear();
+            InventoryWorkaround.clearInventoryNoArmor(player.getInventory());
         } else if (type == -2) // type -2 represents double wildcard or all items and armor
         {
             if (showExtended) {
                 sender.sendMessage(tl("inventoryClearingAllArmor", player.getDisplayName()));
             }
-            player.getInventory().clear();
+            InventoryWorkaround.clearInventoryNoArmor(player.getInventory());
             player.getInventory().setArmorContents(null);
         } else {
             if (data == -1) // data -1 means that all subtypes will be cleared
