@@ -1,23 +1,22 @@
 /*******************************************************************************
  * This file is part of ASkyBlock.
- *
- *     ASkyBlock is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
- *
- *     ASkyBlock is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
- *
- *     You should have received a copy of the GNU General Public License
- *     along with ASkyBlock.  If not, see <http://www.gnu.org/licenses/>.
+ * <p>
+ * ASkyBlock is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * <p>
+ * ASkyBlock is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with ASkyBlock.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package net.ess3.nms.v1_9_R1;
 
 import net.minecraft.server.v1_9_R1.NBTTagCompound;
-
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
@@ -34,6 +33,7 @@ public class SpawnEgg1_9 {
     public SpawnEgg1_9(EntityType type) {
         this.type = type;
     }
+
     /**
      * Get the type of entity this egg will spawn.
      *
@@ -54,12 +54,9 @@ public class SpawnEgg1_9 {
         }
     }
 
+    @Override
     public String toString() {
         return "SPAWN EGG{" + getSpawnedType() + "}";
-    }
-
-    public SpawnEgg1_9 clone() {
-        return (SpawnEgg1_9) this.clone();
     }
 
     /**
@@ -69,7 +66,6 @@ public class SpawnEgg1_9 {
     public ItemStack toItemStack() {
         return toItemStack(1);
     }
-
 
     /**
      * Get an itemstack of spawn eggs
@@ -81,7 +77,7 @@ public class SpawnEgg1_9 {
         ItemStack item = new ItemStack(Material.MONSTER_EGG, amount);
         net.minecraft.server.v1_9_R1.ItemStack stack = CraftItemStack.asNMSCopy(item);
         NBTTagCompound tagCompound = stack.getTag();
-        if(tagCompound == null){
+        if (tagCompound == null) {
             tagCompound = new NBTTagCompound();
         }
         NBTTagCompound id = new NBTTagCompound();
@@ -99,7 +95,7 @@ public class SpawnEgg1_9 {
     public static SpawnEgg1_9 fromItemStack(ItemStack item) {
         if (item == null)
             throw new IllegalArgumentException("item cannot be null");
-        if (item.getType() != Material.MONSTER_EGG )
+        if (item.getType() != Material.MONSTER_EGG)
             throw new IllegalArgumentException("item is not a monster egg");
         net.minecraft.server.v1_9_R1.ItemStack stack = CraftItemStack.asNMSCopy(item);
         NBTTagCompound tagCompound = stack.getTag();
