@@ -23,10 +23,10 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class ItemDb implements IConf, net.ess3.api.IItemDb {
     private final transient IEssentials ess;
-    private final transient Map<String, Integer> items = new HashMap<String, Integer>();
-    private final transient Map<ItemData, List<String>> names = new HashMap<ItemData, List<String>>();
-    private final transient Map<ItemData, String> primaryName = new HashMap<ItemData, String>();
-    private final transient Map<String, Short> durabilities = new HashMap<String, Short>();
+    private final transient Map<String, Integer> items = new HashMap<>();
+    private final transient Map<ItemData, List<String>> names = new HashMap<>();
+    private final transient Map<ItemData, String> primaryName = new HashMap<>();
+    private final transient Map<String, Short> durabilities = new HashMap<>();
     private final transient ManagedFile file;
     private final transient Pattern splitPattern = Pattern.compile("((.*)[:+',;.](\\d+))");
 
@@ -90,7 +90,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
     @Override
     public ItemStack get(final String id) throws Exception {
         int itemid = 0;
-        String itemname = null;
+        String itemname;
         short metaData = 0;
         Matcher parts = splitPattern.matcher(id);
         if (parts.matches()) {
@@ -160,7 +160,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
 
     @Override
     public List<ItemStack> getMatching(User user, String[] args) throws Exception {
-        List<ItemStack> is = new ArrayList<ItemStack>();
+        List<ItemStack> is = new ArrayList<>();
 
         if (args.length < 1) {
             is.add(user.getBase().getItemInHand());
