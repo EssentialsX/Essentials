@@ -1,5 +1,6 @@
 package net.ess3.nms;
 
+import net.ess3.providers.Provider;
 import com.google.common.collect.ImmutableMap;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -9,7 +10,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Map;
 
-public abstract class SpawnerProvider {
+public abstract class SpawnerProvider implements Provider {
     protected Map<EntityType, String> entityToDisplayName = ImmutableMap.<EntityType, String>builder()
             .put(EntityType.CAVE_SPIDER, "Cave Spider")
             .put(EntityType.PIG_ZOMBIE, "Zombie Pigman")
@@ -25,8 +26,8 @@ public abstract class SpawnerProvider {
 
     public abstract ItemStack setEntityType(ItemStack is, EntityType type) throws IllegalArgumentException;
     public abstract EntityType getEntityType(ItemStack is) throws IllegalArgumentException;
-    public abstract String getHumanName();
 
+    @Override
     public boolean tryProvider() {
         try {
             EntityType type = EntityType.CREEPER;

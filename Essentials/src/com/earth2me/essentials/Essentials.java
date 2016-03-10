@@ -28,7 +28,6 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.DateUtil;
-import com.earth2me.essentials.utils.SpawnerProviderFactory;
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
@@ -36,6 +35,11 @@ import net.ess3.api.*;
 import net.ess3.api.IEssentials;
 import net.ess3.api.ISettings;
 import net.ess3.nms.SpawnerProvider;
+import net.ess3.nms.blockmeta.BlockMetaSpawnerProvider;
+import net.ess3.nms.legacy.LegacySpawnerProvider;
+import net.ess3.nms.v1_8_R1.v1_8_R1SpawnerProvider;
+import net.ess3.nms.v1_8_R2.v1_8_R2SpawnerProvider;
+import net.ess3.providers.ProviderFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
@@ -74,7 +78,6 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
-    public static final int BUKKIT_VERSION = 3050;
     private static final Logger LOGGER = Logger.getLogger("Essentials");
     private transient ISettings settings;
     private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
@@ -194,7 +197,13 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 execTimer.mark("Init(Worth/ItemDB)");
                 jails = new Jails(this);
                 confList.add(jails);
-                spawnerProvider = new SpawnerProviderFactory(this).getProvider();
+                spawnerProvider = new ProviderFactory<>(getLogger(),
+                        Arrays.asList(
+                                BlockMetaSpawnerProvider.class,
+                                v1_8_R2SpawnerProvider.class,
+                                v1_8_R1SpawnerProvider.class,
+                                LegacySpawnerProvider.class
+                        ), "mob spawner").getProvider();
                 reload();
             } catch (YAMLException exception) {
                 if (pm.getPlugin("EssentialsUpdate") != null) {
