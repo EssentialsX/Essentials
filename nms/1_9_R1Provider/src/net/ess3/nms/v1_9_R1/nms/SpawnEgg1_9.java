@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ASkyBlock.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
-package net.ess3.nms.v1_9_R1;
+package net.ess3.nms.v1_9_R1.nms;
 
 import net.minecraft.server.v1_9_R1.NBTTagCompound;
 import org.bukkit.Material;
@@ -92,11 +92,11 @@ public class SpawnEgg1_9 {
      * @param item - ItemStack, quantity is disregarded
      * @return SpawnEgg 1.9
      */
-    public static SpawnEgg1_9 fromItemStack(ItemStack item) {
+    public static SpawnEgg1_9 fromItemStack(ItemStack item) throws IllegalArgumentException {
         if (item == null)
-            throw new IllegalArgumentException("item cannot be null");
+            throw new IllegalArgumentException("Item cannot be null");
         if (item.getType() != Material.MONSTER_EGG)
-            throw new IllegalArgumentException("item is not a monster egg");
+            throw new IllegalArgumentException("Item is not a monster egg");
         net.minecraft.server.v1_9_R1.ItemStack stack = CraftItemStack.asNMSCopy(item);
         NBTTagCompound tagCompound = stack.getTag();
         if (tagCompound != null) {
@@ -105,10 +105,10 @@ public class SpawnEgg1_9 {
             if (type != null) {
                 return new SpawnEgg1_9(type);
             } else {
-                return null;
+                throw new IllegalArgumentException("Unable to parse type from item");
             }
         } else {
-            return null;
+            throw new IllegalArgumentException("Item is lacking tag compound");
         }
     }
 }

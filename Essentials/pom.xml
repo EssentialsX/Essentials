@@ -123,7 +123,7 @@
         </dependency>
         <dependency>
             <groupId>net.ess3</groupId>
-            <artifactId>1_9_R1SpawnEggProvider</artifactId>
+            <artifactId>1_9_R1Provider</artifactId>
             <version>2.0.1</version>
             <scope>compile</scope>
         </dependency>

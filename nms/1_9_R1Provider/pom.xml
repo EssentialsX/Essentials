@@ -10,7 +10,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>1_9_R1SpawnEggProvider</artifactId>
+    <artifactId>1_9_R1Provider</artifactId>
 
     <repositories>
         <repository>
@@ -25,6 +25,11 @@
             <artifactId>craftbukkit</artifactId>
             <version>1.9-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.ess3</groupId>
+            <artifactId>NMSProvider</artifactId>
+            <version>2.0.1</version>
         </dependency>
     </dependencies>
 </project>

@@ -3,7 +3,6 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import net.ess3.api.IEssentials;
-import net.ess3.nms.v1_9_R1.SpawnEgg1_9;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -12,7 +11,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
-import org.bukkit.material.SpawnEgg;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 
@@ -152,11 +150,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
             } catch (IllegalArgumentException e) {
                 throw new Exception("Can't spawn entity ID " + metaData + " from spawn eggs.");
             }
-            try {
-                retval = new SpawnEgg1_9(type).toItemStack();
-            } catch (Throwable t) {
-                retval = new SpawnEgg(type).toItemStack();
-            }
+            retval = ess.getSpawnEggProvider().createEggItem(type);
         } else {
             retval.setDurability(metaData);
         }

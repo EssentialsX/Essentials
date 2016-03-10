@@ -34,11 +34,14 @@ import com.google.common.collect.Iterables;
 import net.ess3.api.*;
 import net.ess3.api.IEssentials;
 import net.ess3.api.ISettings;
+import net.ess3.nms.SpawnEggProvider;
 import net.ess3.nms.SpawnerProvider;
 import net.ess3.nms.blockmeta.BlockMetaSpawnerProvider;
+import net.ess3.nms.legacy.LegacySpawnEggProvider;
 import net.ess3.nms.legacy.LegacySpawnerProvider;
 import net.ess3.nms.v1_8_R1.v1_8_R1SpawnerProvider;
 import net.ess3.nms.v1_8_R2.v1_8_R2SpawnerProvider;
+import net.ess3.nms.v1_9_R1.v1_9_R1SpawnEggProvider;
 import net.ess3.providers.ProviderFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -98,6 +101,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private final transient List<String> vanishedPlayers = new ArrayList<>();
     private transient Method oldGetOnlinePlayers;
     private transient SpawnerProvider spawnerProvider;
+    private transient SpawnEggProvider spawnEggProvider;
 
     public Essentials() {
     }
@@ -204,6 +208,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                                 v1_8_R1SpawnerProvider.class,
                                 LegacySpawnerProvider.class
                         ), "mob spawner").getProvider();
+                spawnEggProvider = new ProviderFactory<>(getLogger(),
+                        Arrays.asList(
+                                v1_9_R1SpawnEggProvider.class,
+                                LegacySpawnEggProvider.class
+                        ), "spawn egg").getProvider();
                 reload();
             } catch (YAMLException exception) {
                 if (pm.getPlugin("EssentialsUpdate") != null) {
@@ -774,6 +783,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public SpawnerProvider getSpawnerProvider() {
         return spawnerProvider;
+    }
+
+    @Override
+    public SpawnEggProvider getSpawnEggProvider() {
+        return spawnEggProvider;
     }
 
     private static class EssentialsWorldListener implements Listener, Runnable {
