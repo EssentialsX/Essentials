@@ -1,6 +1,6 @@
 ![](https://i.imgur.com/mwJjTRw.png)
 
-[![Downloads](https://i.imgur.com/G51Alkz.png)](https://github.com/drtshock/Essentials/releases)
+[![Downloads](http://i.imgur.com/MNr6OTb.png)](https://ci.drtshock.net/job/EssentialsX)
 
 This is a fork of Essentials called EssentialsX.
 
