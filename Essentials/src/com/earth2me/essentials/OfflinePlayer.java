@@ -1100,7 +1100,7 @@ public class OfflinePlayer implements Player {
 
     @Override
     public void setGlowing(boolean b) {
-
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
