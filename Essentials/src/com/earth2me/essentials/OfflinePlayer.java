@@ -1224,6 +1224,16 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public boolean isGliding() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setGliding(boolean b) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public <T extends Projectile> T launchProjectile(Class<? extends T> type, Vector vector) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
