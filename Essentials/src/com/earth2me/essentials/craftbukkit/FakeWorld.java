@@ -153,6 +153,11 @@ public class FakeWorld implements World {
     }
 
     @Override
+    public <T extends Arrow> T spawnArrow(Location location, Vector vector, float v, float v1, Class<T> aClass) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public boolean generateTree(Location lctn, TreeType tt) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
