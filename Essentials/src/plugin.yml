@@ -500,6 +500,8 @@ permissions:
   essentials.*:
     default: op
     description: Give players with op everything by default
+    children:
+      essentials.gamemode.*: true
   # These permissions can't be assigned from player-commands for compatibility reasons
   essentials.teleport.cooldown.bypass.tpa:
     default: true
@@ -507,3 +509,9 @@ permissions:
   essentials.teleport.cooldown.bypass.back:
     default: true
     description: If the player does not have this permission, /back will have cooldown even with the parent bypass perm
+  essentials.gamemode.*:
+    default: op
+    children:
+      essentials.gamemode: true
+      essentials.gamemode.others: true
+      essentials.gamemode.all: true
