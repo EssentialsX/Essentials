@@ -8,11 +8,11 @@ install: true
 notifications:
   irc: 
     channels: 
-      - "irc.esper.net#lain"
+      - "irc.esper.net#drtshock"
     on_success: change
     on_failure: always
   email:
     recipients:
-      - "khobbits@ess3.net"
+      - "drtshock13@gmail.com"
     on_success: change
     on_failure: always
