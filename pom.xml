@@ -43,7 +43,7 @@
         <module>EssentialsXMPP</module>
         <module>EssentialsGroupManager</module>
         <module>nms/NMSProvider</module>
-        <module>nms/BlockMetaProvider</module>
+        <module>nms/UpdatedMetaProvider</module>
         <module>nms/1_8_R1Provider</module>
         <module>nms/1_8_R2Provider</module>
         <module>nms/LegacyProvider</module>

@@ -1,16 +1,16 @@
-package com.earth2me.essentials.utils;
+package net.ess3.nms.updatedmeta;
 
 import com.google.common.collect.ImmutableMap;
+import net.ess3.nms.PotionMetaProvider;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 
 import java.util.Map;
 
-public class PotionMetaUtil {
+public class BasePotionDataProvider extends PotionMetaProvider {
     private static Map<Integer, PotionType> damageValueToType = ImmutableMap.<Integer, PotionType>builder()
             .put(1, PotionType.REGEN)
             .put(2, PotionType.SPEED)
@@ -28,7 +28,7 @@ public class PotionMetaUtil {
             .put(14, PotionType.INVISIBILITY)
             .build();
 
-    public static ItemStack createPotionItem(int effectId) throws IllegalArgumentException {
+    public ItemStack createPotionItem(int effectId) throws IllegalArgumentException {
         int damageValue = getBit(effectId, 0) +
                 2 * getBit(effectId, 1) +
                 4 * getBit(effectId, 2) +
@@ -52,7 +52,7 @@ public class PotionMetaUtil {
 
         PotionMeta meta = (PotionMeta) potion.getItemMeta();
         PotionData data = new PotionData(type, extended, upgraded);
-        meta.setBasePotionData(data);
+        meta.setBasePotionData(data); // this method is exclusive to recent 1.9+
         potion.setItemMeta(meta);
 
         return potion;
@@ -60,5 +60,10 @@ public class PotionMetaUtil {
 
     private static int getBit(int n, int k) {
         return (n >> k) & 1;
+    }
+
+    @Override
+    public String getHumanName() {
+        return "1.9+ BasePotionData provider";
     }
 }

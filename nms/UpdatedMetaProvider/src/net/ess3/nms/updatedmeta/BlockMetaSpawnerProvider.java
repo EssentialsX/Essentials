@@ -1,4 +1,4 @@
-package net.ess3.nms.blockmeta;
+package net.ess3.nms.updatedmeta;
 
 import net.ess3.nms.SpawnerProvider;
 import org.bukkit.block.BlockState;

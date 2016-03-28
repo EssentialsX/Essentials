@@ -1,7 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.NumberUtil;
-import com.earth2me.essentials.utils.PotionMetaUtil;
+import net.ess3.nms.updatedmeta.BasePotionDataProvider;
 import com.earth2me.essentials.utils.StringUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.Bukkit;
@@ -153,7 +153,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
             }
             retval = ess.getSpawnEggProvider().createEggItem(type);
         } else if (mat == Material.POTION) {
-            retval = PotionMetaUtil.createPotionItem(metaData);
+            retval = ess.getPotionMetaProvider().createPotionItem(metaData);
         } else {
             retval.setDurability(metaData);
         }
