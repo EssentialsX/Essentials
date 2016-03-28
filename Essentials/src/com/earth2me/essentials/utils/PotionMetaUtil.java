@@ -51,7 +51,9 @@ public class PotionMetaUtil {
         }
 
         PotionMeta meta = (PotionMeta) potion.getItemMeta();
-        PotionData potionType = new PotionData(type, extended, upgraded);
+        PotionData data = new PotionData(type, extended, upgraded);
+        meta.setBasePotionData(data);
+        potion.setItemMeta(meta);
 
         return potion;
     }
