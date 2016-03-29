@@ -28,7 +28,7 @@ public class BasePotionDataProvider extends PotionMetaProvider {
             .put(14, PotionType.INVISIBILITY)
             .build();
 
-    public ItemStack createPotionItem(int effectId) throws IllegalArgumentException {
+    public ItemStack createPotionItem(Material initial, int effectId) throws IllegalArgumentException {
         int damageValue = getBit(effectId, 0) +
                 2 * getBit(effectId, 1) +
                 4 * getBit(effectId, 2) +
@@ -44,10 +44,11 @@ public class BasePotionDataProvider extends PotionMetaProvider {
         boolean splash = getBit(effectId, 14) == 1;
 
         ItemStack potion;
-        if (splash) {
+
+        if (splash && initial == Material.POTION) {
             potion = new ItemStack(Material.SPLASH_POTION, 1);
         } else {
-            potion = new ItemStack(Material.POTION, 1);
+            potion = new ItemStack(initial, 1);
         }
 
         PotionMeta meta = (PotionMeta) potion.getItemMeta();

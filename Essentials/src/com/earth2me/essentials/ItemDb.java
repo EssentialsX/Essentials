@@ -152,8 +152,8 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
                 throw new Exception("Can't spawn entity ID " + metaData + " from spawn eggs.");
             }
             retval = ess.getSpawnEggProvider().createEggItem(type);
-        } else if (mat == Material.POTION) {
-            retval = ess.getPotionMetaProvider().createPotionItem(metaData);
+        } else if (mat.name().endsWith("POTION")) {
+            retval = ess.getPotionMetaProvider().createPotionItem(mat, metaData);
         } else {
             retval.setDurability(metaData);
         }

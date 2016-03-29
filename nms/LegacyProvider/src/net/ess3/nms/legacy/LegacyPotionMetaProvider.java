@@ -6,8 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class LegacyPotionMetaProvider extends PotionMetaProvider {
     @Override
-    public ItemStack createPotionItem(int effectId) {
-        ItemStack potion = new ItemStack(Material.POTION, 1);
+    public ItemStack createPotionItem(Material initial, int effectId) {
+        ItemStack potion = new ItemStack(initial, 1);
         potion.setDurability((short) effectId);
         return potion;
     }
