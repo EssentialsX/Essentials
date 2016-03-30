@@ -149,11 +149,6 @@
                             <artifactId>EssentialsXXMPP</artifactId>
                             <version>${project.version}</version>
                         </artifactItem>
-                        <artifactItem>
-                            <groupId>${project.groupId}</groupId>
-                            <artifactId>EssentialsXGroupManager</artifactId>
-                            <version>${project.version}</version>
-                        </artifactItem>
                     </artifactItems>
                 </configuration>
                 <inherited>false</inherited>
