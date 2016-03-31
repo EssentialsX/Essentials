@@ -92,6 +92,10 @@ public class MetaItemStack {
         completePotion = true;
     }
 
+    private boolean isPotion(Material type) {
+        return type.name().endsWith("POTION");
+    }
+
     public boolean canSpawn(final IEssentials ess) {
         try {
             ess.getServer().getUnsafe().modifyItemStack(stack.clone(), "{}");
@@ -204,7 +208,7 @@ public class MetaItemStack {
             stack.setItemMeta(meta);
         } else if (stack.getType() == Material.FIREWORK) {//WARNING - Meta for fireworks will be ignored after this point.
             addFireworkMeta(sender, false, string, ess);
-        } else if (stack.getType() == Material.POTION) { //WARNING - Meta for potions will be ignored after this point.
+        } else if (isPotion(stack.getType())) { //WARNING - Meta for potions will be ignored after this point.
             addPotionMeta(sender, false, string, ess);
         } else if (banner != null && stack.getType() == banner) { //WARNING - Meta for banners will be ignored after this point.
             addBannerMeta(sender, false, string, ess);
@@ -310,7 +314,7 @@ public class MetaItemStack {
     }
 
     public void addPotionMeta(final CommandSource sender, final boolean allowShortName, final String string, final IEssentials ess) throws Exception {
-        if (stack.getType() == Material.POTION) {
+        if (isPotion(stack.getType())) {
             final String[] split = splitPattern.split(string, 2);
 
             if (split.length < 2) {
