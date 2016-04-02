@@ -30,6 +30,10 @@ public class BasePotionDataProvider extends PotionMetaProvider {
 
     @Override
     public ItemStack createPotionItem(Material initial, int effectId) throws IllegalArgumentException {
+        if (effectId == 0) {
+            return new ItemStack(Material.POTION, 1);
+        }
+
         int damageValue = getBit(effectId, 0) +
                 2 * getBit(effectId, 1) +
                 4 * getBit(effectId, 2) +
