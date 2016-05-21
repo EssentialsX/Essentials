@@ -17,6 +17,6 @@ public class v1_9_R2SpawnEggProvider extends SpawnEggProvider {
 
     @Override
     public String getHumanName() {
-        return "CraftBukkit 1.9 NMS-based provider";
+        return "CraftBukkit 1.9.4 NMS-based provider";
     }
 }
