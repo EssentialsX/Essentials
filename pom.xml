@@ -48,6 +48,7 @@
         <module>nms/LegacyProvider</module>
         <module>nms/1_9_R1Provider</module>
         <module>nms/1_9_R2Provider</module>
+        <module>nms/1_10_R1Provider</module>
     </modules>
 
     <dependencies>
