@@ -27,7 +27,6 @@ import java.util.*;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class OfflinePlayer implements Player {
     private final transient Server server;
     private transient Location location = new Location(null, 0, 0, 0, 0, 0);
@@ -1116,6 +1115,26 @@ public class OfflinePlayer implements Player {
     @Override
     public boolean isInvulnerable() {
         return false;
+    }
+
+    @Override
+    public boolean isSilent() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setSilent(boolean b) {
+
+    }
+
+    @Override
+    public boolean hasGravity() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setGravity(boolean b) {
+
     }
 
     @Override
