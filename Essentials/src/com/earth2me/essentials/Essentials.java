@@ -38,6 +38,7 @@ import net.ess3.nms.PotionMetaProvider;
 import net.ess3.nms.SpawnEggProvider;
 import net.ess3.nms.SpawnerProvider;
 import net.ess3.nms.legacy.LegacyPotionMetaProvider;
+import net.ess3.nms.refl.ReflSpawnEggProvider;
 import net.ess3.nms.updatedmeta.BasePotionDataProvider;
 import net.ess3.nms.updatedmeta.BlockMetaSpawnerProvider;
 import net.ess3.nms.legacy.LegacySpawnEggProvider;
@@ -216,6 +217,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                         ), "mob spawner").getProvider();
                 spawnEggProvider = new ProviderFactory<>(getLogger(),
                         Arrays.asList(
+                                ReflSpawnEggProvider.class,
                                 v1_10_R1SpawnEggProvider.class,
                                 v1_9_R2SpawnEggProvider.class,
                                 v1_9_R1SpawnEggProvider.class,
