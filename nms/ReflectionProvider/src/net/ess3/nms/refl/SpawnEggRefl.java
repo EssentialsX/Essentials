@@ -92,10 +92,10 @@ public class SpawnEggRefl {
             tagCompound = NBTTagCompoundConstructor.newInstance();
         }
         Object id = NBTTagCompoundConstructor.newInstance();
-        Method tagSetString = NBTTagCompoundClass.getDeclaredMethod("setString", String.class, String.class);
+        Method tagSetString = ReflUtil.getMethodCached(NBTTagCompoundClass, "setString", String.class, String.class);
         tagSetString.invoke(id, "id", type.getName());
 
-        Method tagSetTag = NBTTagCompoundClass.getDeclaredMethod("set", String.class, NBTTagCompoundClass.getSuperclass());
+        Method tagSetTag = ReflUtil.getMethodCached(NBTTagCompoundClass, "set", String.class, NBTTagCompoundClass.getSuperclass());
         tagSetTag.invoke(tagCompound, "EntityTag", id);
 
         Method stackSetTag = ReflUtil.getMethodCached(NMSItemStackClass, "setTag", NBTTagCompoundClass);
