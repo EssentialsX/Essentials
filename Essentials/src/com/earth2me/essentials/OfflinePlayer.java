@@ -1213,6 +1213,16 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public void stopSound(Sound sound) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void stopSound(String s) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public boolean isHealthScaled() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
