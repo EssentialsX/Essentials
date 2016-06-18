@@ -375,6 +375,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return;
         }
         final BigDecimal oldBalance = _getMoney();
+        
+        UserBalanceUpdateEvent updateEvent = new UserBalanceUpdateEvent(this.getBase(), oldBalance, value);
+        ess.getServer().getPluginManager().callEvent(updateEvent);
+        BigDecimal newBalance = updateEvent.getNewBalance();
+        
         if (Methods.hasMethod()) {
             try {
                 final Method method = Methods.getMethod();
@@ -382,13 +387,12 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                     throw new Exception();
                 }
                 final Method.MethodAccount account = Methods.getMethod().getAccount(this.getName());
-                account.set(value.doubleValue());
+                account.set(newBalance.doubleValue());
             } catch (Exception ex) {
             }
         }
-        super.setMoney(value, true);
-        ess.getServer().getPluginManager().callEvent(new UserBalanceUpdateEvent(this.getBase(), oldBalance, value));
-        Trade.log("Update", "Set", "API", getName(), new Trade(value, ess), null, null, null, ess);
+        super.setMoney(newBalance, true);
+        Trade.log("Update", "Set", "API", getName(), new Trade(newBalance, ess), null, null, null, ess);
     }
 
     public void updateMoneyCache(final BigDecimal value) {
