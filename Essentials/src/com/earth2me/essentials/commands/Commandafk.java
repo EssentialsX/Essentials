@@ -58,7 +58,7 @@ public class Commandafk extends EssentialsCommand {
             //user.sendMessage(_("markedAsAway"));
             if (!user.isHidden()) {
                 if (message != null) {
-                    msg = tl("userIsAwayWithReason", user.getDisplayName(), message);
+                    msg = tl("userIsAwayWithMessage", user.getDisplayName(), message);
                 } else {
                     msg = tl("userIsAway", user.getDisplayName());
                 }

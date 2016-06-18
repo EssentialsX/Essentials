@@ -70,7 +70,7 @@ public class SimpleMessageRecipient implements IMessageRecipient {
             case SUCCESS_BUT_AFK:
                 // Currently, only IUser can be afk, so we unsafely cast to get the afk message.
                 if (((IUser) recipient).getAfkMessage() != null) {
-                    sendMessage(tl("userAFKWithReason", recipient.getDisplayName(), ((IUser) recipient).getAfkMessage()));
+                    sendMessage(tl("userAFKWithMessage", recipient.getDisplayName(), ((IUser) recipient).getAfkMessage()));
                 } else {
                     sendMessage(tl("userAFK", recipient.getDisplayName()));
                 }
