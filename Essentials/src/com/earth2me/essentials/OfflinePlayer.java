@@ -1459,11 +1459,13 @@ public class OfflinePlayer implements Player {
 
     @Override
     public void sendTitle(String title, String subtitle) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        
     }
 
     @Override
     public AttributeInstance getAttribute(Attribute attribute) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // GetAttribute is nullable as per CraftAttributeMap. This might need to be
+        // improved to support cases where dummy null instances should be returned.
+        return null;
     }
 }
