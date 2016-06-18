@@ -10,7 +10,7 @@ authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xe
 commands:
   afk:
     description: Marks you as away-from-keyboard.
-    usage: /<command> [player]
+    usage: /<command> [player/message...]
     aliases: [eafk,away,eaway]
   antioch:
     description: 'A little surprise for operators.'

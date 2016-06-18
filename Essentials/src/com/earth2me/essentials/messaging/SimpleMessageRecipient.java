@@ -68,7 +68,12 @@ public class SimpleMessageRecipient implements IMessageRecipient {
                 break;
             // When this recipient is AFK, notify the sender. Then, proceed to send the message.
             case SUCCESS_BUT_AFK:
-                sendMessage(tl("userAFK", recipient.getDisplayName()));
+                // Currently, only IUser can be afk, so we unsafely cast to get the afk message.
+                if (((IUser) recipient).getAfkMessage() != null) {
+                    sendMessage(tl("userAFKWithReason", recipient.getDisplayName(), ((IUser) recipient).getAfkMessage()));
+                } else {
+                    sendMessage(tl("userAFK", recipient.getDisplayName()));
+                }
             default:
                 sendMessage(tl("msgFormat", tl("me"), recipient.getDisplayName(), message));
         }
