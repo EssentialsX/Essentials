@@ -8,6 +8,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventPriority;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -243,4 +244,6 @@ public interface ISettings extends IConf {
     boolean isSendFlyEnableOnJoin();
     
     boolean isWorldTimePermissions();
+    
+    NumberFormat getCurrencyFormat();
 }
