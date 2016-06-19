@@ -1163,4 +1163,9 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean isWorldTimePermissions() {
         return config.getBoolean("world-time-permissions", false);
     }
+    
+    @Override
+    public boolean isSpawnOnJoin() {
+        return config.getBoolean("spawn-on-join", false);
+    }
 }

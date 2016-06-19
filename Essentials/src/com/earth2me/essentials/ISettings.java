@@ -243,4 +243,6 @@ public interface ISettings extends IConf {
     boolean isSendFlyEnableOnJoin();
     
     boolean isWorldTimePermissions();
+    
+    boolean isSpawnOnJoin();
 }
