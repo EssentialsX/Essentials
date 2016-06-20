@@ -1176,12 +1176,17 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean isWorldTimePermissions() {
         return config.getBoolean("world-time-permissions", false);
     }
-    
+
+    @Override
+    public boolean isSpawnOnJoin() {
+        return config.getBoolean("spawn-on-join", false);
+    }
+
     private NumberFormat currencyFormat;
 
     private NumberFormat _getCurrencyFormat() {
         String currencyFormatString = config.getString("currency-format", "#,##0.00");
-        
+
         String symbolLocaleString = config.getString("currency-symbol-format-locale");
         DecimalFormatSymbols decimalFormatSymbols;
         if (symbolLocaleString != null) {
@@ -1193,7 +1198,7 @@ public class Settings implements net.ess3.api.ISettings {
 
         DecimalFormat currencyFormat = new DecimalFormat(currencyFormatString, decimalFormatSymbols);
         currencyFormat.setRoundingMode(RoundingMode.FLOOR);
-        
+
         // Updates NumberUtil#PRETTY_FORMAT field so that all of Essentials
         // can follow a single format.
         try {

@@ -68,9 +68,27 @@ public class EssentialsSpawnPlayerListener implements Listener {
         });
     }
 
-    public void delayedJoin(Player player) {
+    public void delayedJoin(final Player player) {
         if (player.hasPlayedBefore()) {
             LOGGER.log(Level.FINE, "Old player join");
+            
+            if (ess.getSettings().isSpawnOnJoin()) {
+                final User user = ess.getUser(player);
+                if (!user.isAuthorized("essentials.spawn-on-join.exempt")) {
+                    ess.scheduleSyncDelayedTask(new Runnable() {
+                        @Override
+                        public void run() {
+                            Location spawn = spawns.getSpawn(user.getGroup());
+                            try {
+                                user.getTeleport().now(spawn, false, TeleportCause.PLUGIN);
+                            } catch (Exception e) {
+                                ess.showError(user.getSource(), e, "spawn-on-join");
+                            }
+                        }
+                    });
+                }
+            }
+
             return;
         }
 
