@@ -245,4 +245,6 @@ public interface ISettings extends IConf {
     boolean isWorldTimePermissions();
     
     boolean isSpawnOnJoin();
+    
+    boolean isTeleportToCenterLocation();
 }

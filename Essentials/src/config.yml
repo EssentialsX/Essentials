@@ -64,6 +64,9 @@ teleport-delay: 0
 # This will also prevent the player attacking other players.
 teleport-invulnerability: 4
 
+# Whether to make all teleportations go to the center of the block; where the x and z coordinates decimal become .5
+teleport-to-center: true
+
 # The delay, in seconds, required between /heal or /feed attempts.
 heal-cooldown: 60
 

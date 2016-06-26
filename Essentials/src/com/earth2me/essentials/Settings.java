@@ -1168,4 +1168,9 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean isSpawnOnJoin() {
         return config.getBoolean("spawn-on-join", false);
     }
+
+    @Override
+    public boolean isTeleportToCenterLocation() {
+        return config.getBoolean("teleport-to-center", true);
+    }
 }
