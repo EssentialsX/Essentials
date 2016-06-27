@@ -93,6 +93,11 @@ public abstract class UserData extends PlayerExtension implements IConf {
         BigDecimal result = ess.getSettings().getStartingBalance();
         BigDecimal maxMoney = ess.getSettings().getMaxMoney();
         BigDecimal minMoney = ess.getSettings().getMinMoney();
+        
+        // NPC banks are not actual player banks, as such they do not have player starting balance.
+        if (isNPC()) {
+            result = BigDecimal.ZERO;
+        }
 
         if (config.hasProperty("money")) {
             result = config.getBigDecimal("money", result);
