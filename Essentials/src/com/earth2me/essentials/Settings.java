@@ -1257,6 +1257,6 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isCommandCooldownPersistent(String label) {
         // TODO: enable per command cooldown specification for persistence.
-        return config.getBoolean("command-cooldown-persistence", false);
+        return config.getBoolean("command-cooldown-persistence", true);
     }
 }

@@ -495,7 +495,7 @@ world-time-permissions: false
 #  '*': 5 # 5 Second cooldown on all commands
 
 # Whether command cooldowns should be persistent past server shutdowns
-#command-cooldown-persistence: false
+command-cooldown-persistence: true
 
 ############################################################
 # +------------------------------------------------------+ #
