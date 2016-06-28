@@ -484,6 +484,19 @@ send-fly-enable-on-join: true
 # Give someone permission to teleport to a world with essentials.time.world.<worldname>.
 world-time-permissions: false
 
+# Specify cooldown for both Essentials commands and external commands as well.
+# All commands do not start with a Forward Slash (/). Instead of /msg, write msg
+#
+# Wildcards are supported. E.g.
+# - '*i*': 50
+# adds a 50 second cooldown to all commands that include the letter i
+#command-cooldowns:
+#  msg: 10 # 10 second cooldown on msg command
+#  '*': 5 # 5 Second cooldown on all commands 
+
+# Whether command cooldowns should be persistent past server shutdowns
+#command-cooldown-persistence: false
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #

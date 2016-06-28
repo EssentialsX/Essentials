@@ -13,6 +13,8 @@ import org.bukkit.inventory.ItemStack;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.Map.Entry;
+import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -85,6 +87,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         ignoredPlayers = _getIgnoredPlayers();
         logoutLocation = _getLogoutLocation();
         lastAccountName = _getLastAccountName();
+        commandCooldowns = _getCommandCooldowns();
     }
 
     private BigDecimal money;
@@ -790,6 +793,88 @@ public abstract class UserData extends PlayerExtension implements IConf {
             return config.getConfigurationSection("info." + node).getValues(true);
         }
         return new HashMap<String, Object>();
+    }
+
+    // Pattern, Date. Pattern for less pattern creations
+    private Map<Pattern, Long> commandCooldowns;
+
+    private Map<Pattern, Long> _getCommandCooldowns() {
+        if (!config.isConfigurationSection("timestamps.command-cooldowns")) {
+            return null;
+        }
+        
+        // See saveCommandCooldowns() for deserialization explanation
+        List<Map<?, ?>> section = config.getMapList("timestamps.command-cooldowns");
+        HashMap<Pattern, Long> result = new HashMap<>();
+        for (Map<?, ?> map : section) {
+            Pattern pattern = Pattern.compile(map.get("pattern").toString());
+            long expiry = ((Number) map.get("expiry")).longValue();
+            result.put(pattern, expiry);
+        }
+        return result;
+    }
+
+    public Map<Pattern, Long> getCommandCooldowns() {
+        if (this.commandCooldowns == null) {
+            return Collections.emptyMap();
+        }
+        return Collections.unmodifiableMap(this.commandCooldowns);
+    }
+
+    public Date getCommandCooldownExpiry(String label) {
+        if (commandCooldowns != null) {
+            for (Entry<Pattern, Long> entry : this.commandCooldowns.entrySet()) {
+                if (entry.getKey().matcher(label).matches()) {
+                    return new Date(entry.getValue());
+                }
+            }
+        }
+        return null;
+    }
+
+    public void addCommandCooldown(Pattern pattern, Date expiresAt, boolean save) {
+        if (this.commandCooldowns == null) {
+            this.commandCooldowns = new HashMap<>();
+        }
+        this.commandCooldowns.put(pattern, expiresAt.getTime());
+        if (save) {
+            saveCommandCooldowns();
+        }
+    }
+    
+    public boolean clearCommandCooldown(Pattern pattern) {
+        if (this.commandCooldowns == null) {
+            return false; // false for no modification
+        }
+        
+        if(this.commandCooldowns.remove(pattern) != null) {
+            saveCommandCooldowns();
+            return true;
+        }
+        return false;
+    }
+    
+    private void saveCommandCooldowns() {
+        // Serialization explanation:
+        //
+        // Serialization is done as a map list instead of a config section due to limitations.
+        // When serializing patterns (which commonly include full stops .) Bukkit/Essentials config framework
+        // interprets it as a path separator, thus it breaks up the regex into sub nodes causing invalid syntax.
+        // Thus each command cooldown is instead stored as a Map of {pattern: .., expiry: ..} to work around this.
+        List<Object> serialized = new ArrayList<>();
+        for (Entry<Pattern, Long> entry : this.commandCooldowns.entrySet()) {
+            // Don't save expired cooldowns
+            if (entry.getValue() < System.currentTimeMillis()) {
+                continue;
+            }
+
+            HashMap<Object, Object> map = new HashMap<>();
+            map.put("pattern", entry.getKey().pattern());
+            map.put("expiry", entry.getValue());
+            serialized.add(map);
+        }
+        config.setProperty("timestamps.command-cooldowns", serialized);
+        save();
     }
 
     public UUID getConfigUUID() {
