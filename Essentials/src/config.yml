@@ -490,6 +490,11 @@ world-time-permissions: false
 # Wildcards are supported. E.g.
 # - '*i*': 50
 # adds a 50 second cooldown to all commands that include the letter i
+#
+# EssentialsX supports regex by starting the command with a caret ^
+# For example, to target commands starting with ban and not banip the following would be used:
+#  '^ban([^ip])( .*)?': 60 # 60 seconds /ban cooldown.
+# Note: If you have a command that starts with ^, then you can escape it using backslash (\). e.g. \^command: 123
 command-cooldowns:
 #  feed: 100 # 100 second cooldown on /feed command
 #  '*': 5 # 5 Second cooldown on all commands
