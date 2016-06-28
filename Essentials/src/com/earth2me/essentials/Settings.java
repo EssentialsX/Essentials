@@ -1224,6 +1224,9 @@ public class Settings implements net.ess3.api.ISettings {
                 continue;
             }
             double cooldown = ((Number) value).doubleValue();
+            if (cooldown < 1) {
+                ess.getLogger().warning("Command cooldown with very short " + cooldown + " cooldown.");
+            }
 
             result.put(pattern, (long) cooldown * 1000); // convert to milliseconds
         }
