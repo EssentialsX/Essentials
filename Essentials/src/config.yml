@@ -490,7 +490,7 @@ world-time-permissions: false
 # Wildcards are supported. E.g.
 # - '*i*': 50
 # adds a 50 second cooldown to all commands that include the letter i
-#command-cooldowns:
+command-cooldowns:
 #  feed: 100 # 100 second cooldown on /feed command
 #  '*': 5 # 5 Second cooldown on all commands
 
