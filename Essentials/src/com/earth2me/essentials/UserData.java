@@ -869,7 +869,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
                 continue;
             }
 
-            ImmutableMap<?, ?> map = ImmutableMap.builder()
+            Map<?, ?> map = ImmutableMap.builder()
                 .put("pattern", entry.getKey().pattern())
                 .put("expiry", entry.getValue())
                 .build();
