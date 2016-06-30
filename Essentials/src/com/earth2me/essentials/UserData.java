@@ -2,6 +2,7 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
+import com.google.common.collect.ImmutableMap;
 import net.ess3.api.IEssentials;
 import net.ess3.api.InvalidWorldException;
 import net.ess3.api.MaxMoneyException;
@@ -868,9 +869,10 @@ public abstract class UserData extends PlayerExtension implements IConf {
                 continue;
             }
 
-            HashMap<Object, Object> map = new HashMap<>();
-            map.put("pattern", entry.getKey().pattern());
-            map.put("expiry", entry.getValue());
+            ImmutableMap<?, ?> map = ImmutableMap.builder()
+                .put("pattern", entry.getKey().pattern())
+                .put("expiry", entry.getValue())
+                .build();
             serialized.add(map);
         }
         config.setProperty("timestamps.command-cooldowns", serialized);
