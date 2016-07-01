@@ -536,6 +536,7 @@ public class Settings implements net.ess3.api.ISettings {
         isCustomQuitMessage = !customQuitMessage.equals("none");
         muteCommands = _getMuteCommands();
         commandCooldowns = _getCommandCooldowns();
+        unprotectedSigns = _getUnprotectedSign();
     }
 
     private List<Integer> itemSpawnBl = new ArrayList<Integer>();
@@ -1261,5 +1262,30 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean isCommandCooldownPersistent(String label) {
         // TODO: enable per command cooldown specification for persistence.
         return config.getBoolean("command-cooldown-persistence", true);
+    }
+
+    private List<EssentialsSign> unprotectedSigns = Collections.emptyList();
+
+    @Override
+    public List<EssentialsSign> getUnprotectedSignNames() {
+        return this.unprotectedSigns;
+    }
+
+    private List<EssentialsSign> _getUnprotectedSign() {
+        List<EssentialsSign> newSigns = new ArrayList<>();
+
+        for (String signName : config.getStringList("unprotected-sign-names")) {
+            signName = signName.trim().toUpperCase(Locale.ENGLISH);
+            if (signName.isEmpty()) {
+                continue;
+            }
+            try {
+                newSigns.add(Signs.valueOf(signName).getSign());
+            } catch (Exception ex) {
+                logger.log(Level.SEVERE, tl("unknownItemInList", signName, "unprotected-sign-names"));
+                continue;
+            }
+        }
+        return newSigns;
     }
 }
