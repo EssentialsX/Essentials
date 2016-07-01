@@ -549,6 +549,7 @@ public class Settings implements net.ess3.api.ISettings {
         commandCooldowns = _getCommandCooldowns();
         npcsInBalanceRanking = _isNpcsInBalanceRanking();
         currencyFormat = _getCurrencyFormat();
+        unprotectedSigns = _getUnprotectedSign();
     }
 
     private List<Integer> itemSpawnBl = new ArrayList<Integer>();
@@ -1327,5 +1328,30 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public NumberFormat getCurrencyFormat() {
         return this.currencyFormat;
+    }
+
+    private List<EssentialsSign> unprotectedSigns = Collections.emptyList();
+
+    @Override
+    public List<EssentialsSign> getUnprotectedSignNames() {
+        return this.unprotectedSigns;
+    }
+
+    private List<EssentialsSign> _getUnprotectedSign() {
+        List<EssentialsSign> newSigns = new ArrayList<>();
+
+        for (String signName : config.getStringList("unprotected-sign-names")) {
+            signName = signName.trim().toUpperCase(Locale.ENGLISH);
+            if (signName.isEmpty()) {
+                continue;
+            }
+            try {
+                newSigns.add(Signs.valueOf(signName).getSign());
+            } catch (Exception ex) {
+                logger.log(Level.SEVERE, tl("unknownItemInList", signName, "unprotected-sign-names"));
+                continue;
+            }
+        }
+        return newSigns;
     }
 }
