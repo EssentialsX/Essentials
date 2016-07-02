@@ -91,11 +91,18 @@ public class SignBlockListener implements Listener {
         //We loop through all sign types here to prevent clashes with preexisting signs later
         for (Signs signs : Signs.values()) {
             final EssentialsSign sign = signs.getSign();
-            // If the top line contains any of the success name (excluding colors), just remove all colours from the first line.
+            // If the top sign line contains any of the success name (excluding colors), just remove all colours from the first line.
             // This is to ensure we are only modifying possible Essentials Sign and not just removing colors from the first line of all signs.
             // Top line and sign#getSuccessName() are both lowercased since contains is case-sensitive.
             String lSuccessName = ChatColor.stripColor(sign.getSuccessName().toLowerCase());
             if (lColorlessTopLine.contains(lSuccessName)) {
+
+                // If this sign is not enabled and it has been requested to not protect it's name (when disabled), then do not protect the name.
+                // By lower-casing it and stripping colours. 
+                if (!ess.getSettings().enabledSigns().contains(sign)
+                    && ess.getSettings().getUnprotectedSignNames().contains(sign)) {
+                    continue;
+                }
                 event.setLine(0, lColorlessTopLine);
             }
         }

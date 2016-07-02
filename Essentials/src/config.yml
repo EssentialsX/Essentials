@@ -325,6 +325,15 @@ enabledSigns:
 # Lower numbers will reduce the possibility of lag, but may annoy players.
 sign-use-per-second: 4
 
+# List of sign names Essentials should not protect. This feature is especially useful when
+# another plugin provides a sign that EssentialsX provides, but Essentials overrides.
+# For example, if a plugin provides a [kit] sign, and you wish to use theirs instead of
+# Essentials's, then simply add kit below and Essentials will not protect it.
+#
+# See https://github.com/drtshock/Essentials/pull/699 for more information.
+unprotected-sign-names:
+  #- kit
+
 # Backup runs a batch/bash command while saving is disabled.
 backup:
   # Interval in minutes.
