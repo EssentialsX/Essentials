@@ -4,6 +4,7 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.TextInput;
 import com.earth2me.essentials.textreader.TextPager;
+import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.GameMode;
@@ -26,11 +27,15 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -399,9 +404,47 @@ public class EssentialsPlayerListener implements Listener {
                     broadcast = false;
             }
         }
+        final User user = ess.getUser(player);
         if (update) {
-            final User user = ess.getUser(player);
             user.updateActivity(broadcast);
+        }
+
+        if (ess.getSettings().isCommandCooldownsEnabled() && pluginCommand != null) {
+            int argStartIndex = event.getMessage().indexOf(" ");
+            String args = argStartIndex == -1 ? event.getMessage() // No arguments present 
+                : event.getMessage().substring(argStartIndex); // arguments start at argStartIndex; substring from there.
+            String fullCommand = pluginCommand.getName() + " " + args;
+
+            // Used to determine whether a user already has an existing cooldown
+            // If so, no need to check for (and write) new ones.
+            boolean cooldownFound = false;
+            
+            // Iterate over a copy of getCommandCooldowns in case of concurrent modifications
+            for (Entry<Pattern, Long> entry : new HashMap<>(user.getCommandCooldowns()).entrySet()) {
+                // Remove any expired cooldowns
+                if (entry.getValue() <= System.currentTimeMillis()) {
+                    user.clearCommandCooldown(entry.getKey());
+                    // Don't break in case there are other command cooldowns left to clear.
+                } else if (entry.getKey().matcher(fullCommand).matches()) {
+                    // User's current cooldown hasn't expired, inform and terminate cooldown code.
+                    if (entry.getValue() > System.currentTimeMillis()) {
+                        String commandCooldownTime = DateUtil.formatDateDiff(entry.getValue());
+                        user.sendMessage(tl("commandCooldown", commandCooldownTime));
+                        cooldownFound = true;
+                        event.setCancelled(true);
+                        break;
+                    }
+                }
+            }
+
+            if (!cooldownFound) {
+                Entry<Pattern, Long> cooldownEntry = ess.getSettings().getCommandCooldownEntry(fullCommand);
+
+                if (cooldownEntry != null) {
+                    Date expiry = new Date(System.currentTimeMillis() + cooldownEntry.getValue());
+                    user.addCommandCooldown(cooldownEntry.getKey(), expiry, ess.getSettings().isCommandCooldownPersistent(fullCommand));
+                }
+            }
         }
     }
 
@@ -409,7 +452,8 @@ public class EssentialsPlayerListener implements Listener {
     public void onPlayerChangedWorldFlyReset(final PlayerChangedWorldEvent event) {
         final User user = ess.getUser(event.getPlayer());
         if (user.getBase().getGameMode() != GameMode.CREATIVE
-            && user.getBase().getGameMode() != GameMode.SPECTATOR
+                // COMPAT: String compare for 1.7.10
+            && !user.getBase().getGameMode().name().equals("SPECTATOR")
             && !user.isAuthorized("essentials.fly")) {
             user.getBase().setFallDistance(0f);
             user.getBase().setAllowFlight(false);

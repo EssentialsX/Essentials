@@ -12,7 +12,9 @@ import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 
 public interface ISettings extends IConf {
@@ -247,6 +249,16 @@ public interface ISettings extends IConf {
     boolean isWorldTimePermissions();
 
     boolean isSpawnOnJoin();
+    
+    boolean isTeleportToCenterLocation();
+    
+    boolean isCommandCooldownsEnabled();
+    
+    long getCommandCooldownMs(String label);
+
+    Entry<Pattern, Long> getCommandCooldownEntry(String label);
+    
+    boolean isCommandCooldownPersistent(String label);
 
     NumberFormat getCurrencyFormat();
 }

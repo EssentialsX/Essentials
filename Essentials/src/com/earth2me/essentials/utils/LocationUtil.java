@@ -13,6 +13,9 @@ import java.util.*;
 
 import static com.earth2me.essentials.I18n.tl;
 
+import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.IEssentials;
+
 
 public class LocationUtil {
     // The player can stand inside these materials
@@ -261,12 +264,26 @@ public class LocationUtil {
         return new Location(world, x + 0.5, y, z + 0.5, loc.getYaw(), loc.getPitch());
     }
 
+    /**
+     * @deprecated Use {@link #getSafeDestination(IEssentials, IUser, Location)}
+     */
+    @Deprecated
     public static Location getSafeDestination(final IUser user, final Location loc) throws Exception {
+        return getSafeDestination(null, user, loc);
+    }
+
+    public static Location getSafeDestination(final IEssentials ess, final IUser user, final Location loc) throws Exception {
         if (user.getBase().isOnline() && loc.getWorld().equals(user.getBase().getWorld()) && (user.getBase().getGameMode() == GameMode.CREATIVE || user.isGodModeEnabled()) && user.getBase().getAllowFlight()) {
             if (shouldFly(loc)) {
                 user.getBase().setFlying(true);
             }
-            return getRoundedDestination(loc);
+            // ess can be null if old deprecated method is calling it.
+            System.out.println((ess == null) + " " + ess.getSettings().isTeleportToCenterLocation());
+            if (ess == null || ess.getSettings().isTeleportToCenterLocation()) {
+                return getRoundedDestination(loc);
+            } else {
+                return loc;
+            }
         }
         return getSafeDestination(loc);
     }

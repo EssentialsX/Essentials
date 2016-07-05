@@ -25,10 +25,13 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.Locale.Category;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import com.google.common.base.Preconditions;
 
@@ -543,7 +546,7 @@ public class Settings implements net.ess3.api.ISettings {
         customQuitMessage = _getCustomQuitMessage();
         isCustomQuitMessage = !customQuitMessage.equals("none");
         muteCommands = _getMuteCommands();
-        
+        commandCooldowns = _getCommandCooldowns();
         currencyFormat = _getCurrencyFormat();
     }
 
@@ -1180,6 +1183,96 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isSpawnOnJoin() {
         return config.getBoolean("spawn-on-join", false);
+    }
+
+    @Override
+    public boolean isTeleportToCenterLocation() {
+        return config.getBoolean("teleport-to-center", true);
+    }
+
+
+    private Map<Pattern, Long> commandCooldowns;
+
+    private Map<Pattern, Long> _getCommandCooldowns() {
+        if (!config.isConfigurationSection("command-cooldowns")) {
+            return null;
+        }
+        ConfigurationSection section = config.getConfigurationSection("command-cooldowns");
+        Map<Pattern, Long> result = new LinkedHashMap<>();
+        for (String cmdEntry : section.getKeys(false)) {
+            Pattern pattern = null;
+
+            /* ================================
+             * >> Regex
+             * ================================ */
+            if (cmdEntry.startsWith("^")) {
+                try {
+                    pattern = Pattern.compile(cmdEntry.substring(1));
+                } catch (PatternSyntaxException e) {
+                    ess.getLogger().warning("Command cooldown error: " + e.getMessage());
+                }
+            } else {
+                // Escape above Regex
+                if (cmdEntry.startsWith("\\^")) {
+                    cmdEntry = cmdEntry.substring(1);
+                }
+                String cmd = cmdEntry
+                    .replaceAll("\\*", ".*"); // Wildcards are accepted as asterisk * as known universally.
+                pattern = Pattern.compile(cmd + "( .*)?"); // This matches arguments, if present, to "ignore" them from the feature.
+            }
+            
+            /* ================================
+             * >> Process cooldown value
+             * ================================ */
+            Object value = section.get(cmdEntry);
+            if (!(value instanceof Number) && value instanceof String) {
+                try {
+                    value = Double.parseDouble(value.toString());
+                } catch (NumberFormatException ignored) {
+                }
+            }
+            if (!(value instanceof Number)) {
+                ess.getLogger().warning("Command cooldown error: '" + value + "' is not a valid cooldown");
+                continue;
+            }
+            double cooldown = ((Number) value).doubleValue();
+            if (cooldown < 1) {
+                ess.getLogger().warning("Command cooldown with very short " + cooldown + " cooldown.");
+            }
+
+            result.put(pattern, (long) cooldown * 1000); // convert to milliseconds
+        }
+        return result;
+    }
+
+    @Override
+    public boolean isCommandCooldownsEnabled() {
+        return commandCooldowns != null;
+    }
+
+    @Override
+    public long getCommandCooldownMs(String label) {
+        Entry<Pattern, Long> result = getCommandCooldownEntry(label);
+        return result != null ? result.getValue() : -1; // return cooldown in milliseconds
+    }
+
+    @Override
+    public Entry<Pattern, Long> getCommandCooldownEntry(String label) {
+        if (isCommandCooldownsEnabled()) {
+            for (Entry<Pattern, Long> entry : this.commandCooldowns.entrySet()) {
+                // Check if label matches current pattern (command-cooldown in config)
+                if (entry.getKey().matcher(label).matches()) {
+                    return entry;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public boolean isCommandCooldownPersistent(String label) {
+        // TODO: enable per command cooldown specification for persistence.
+        return config.getBoolean("command-cooldown-persistence", true);
     }
 
     private NumberFormat currencyFormat;
