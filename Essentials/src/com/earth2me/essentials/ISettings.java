@@ -3,11 +3,13 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.textreader.IText;
+
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventPriority;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -243,9 +245,9 @@ public interface ISettings extends IConf {
     boolean isMilkBucketEasterEggEnabled();
 
     boolean isSendFlyEnableOnJoin();
-    
+
     boolean isWorldTimePermissions();
-    
+
     boolean isSpawnOnJoin();
     
     boolean isTeleportToCenterLocation();
@@ -257,6 +259,8 @@ public interface ISettings extends IConf {
     Entry<Pattern, Long> getCommandCooldownEntry(String label);
     
     boolean isCommandCooldownPersistent(String label);
-    
+
     boolean isNpcsInBalanceRanking();
+
+    NumberFormat getCurrencyFormat();
 }

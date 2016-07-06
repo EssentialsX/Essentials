@@ -585,6 +585,19 @@ use-bukkit-permissions: false
 # Minimum acceptable amount to be used in /pay.
 minimum-pay-amount: 0.001
 
+# The format of currency, excluding symbols. See currency-sumbol-format-locale for symbol configuration.
+#
+# "#,##0.00" is how the majority of countries display currency.
+#currency-format: "#,##0.00"
+
+# Format currency symbols. Some locales use , and . interchangeably.
+# Some formats do not display properly in-game due to faulty Minecraft font rendering.
+#
+# For 1.234,50 use de-DE
+# For 1,234.50 use en-US
+# For 1'234,50 use fr-ch
+#currency-symbol-format-locale: en-US
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHelp                     | #

@@ -6,6 +6,8 @@ import com.earth2me.essentials.signs.Signs;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.FormatUtil;
+import com.earth2me.essentials.utils.NumberUtil;
+
 import net.ess3.api.IEssentials;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -14,8 +16,15 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.*;
+import java.util.Locale.Category;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,6 +32,8 @@ import java.util.logging.Logger;
 import static com.earth2me.essentials.I18n.tl;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+
+import com.google.common.base.Preconditions;
 
 
 public class Settings implements net.ess3.api.ISettings {
@@ -537,6 +548,7 @@ public class Settings implements net.ess3.api.ISettings {
         muteCommands = _getMuteCommands();
         commandCooldowns = _getCommandCooldowns();
         npcsInBalanceRanking = _isNpcsInBalanceRanking();
+        currencyFormat = _getCurrencyFormat();
     }
 
     private List<Integer> itemSpawnBl = new ArrayList<Integer>();
@@ -1168,7 +1180,7 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean isWorldTimePermissions() {
         return config.getBoolean("world-time-permissions", false);
     }
-    
+
     @Override
     public boolean isSpawnOnJoin() {
         return config.getBoolean("spawn-on-join", false);
@@ -1273,5 +1285,47 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isNpcsInBalanceRanking() {
         return npcsInBalanceRanking;
+    }
+    private NumberFormat currencyFormat;
+
+    private NumberFormat _getCurrencyFormat() {
+        String currencyFormatString = config.getString("currency-format", "#,##0.00");
+
+        String symbolLocaleString = config.getString("currency-symbol-format-locale");
+        DecimalFormatSymbols decimalFormatSymbols;
+        if (symbolLocaleString != null) {
+            decimalFormatSymbols = DecimalFormatSymbols.getInstance(Locale.forLanguageTag(symbolLocaleString));
+        } else {
+            // Fallback to the JVM's default locale
+            decimalFormatSymbols = DecimalFormatSymbols.getInstance();
+        }
+
+        DecimalFormat currencyFormat = new DecimalFormat(currencyFormatString, decimalFormatSymbols);
+        currencyFormat.setRoundingMode(RoundingMode.FLOOR);
+
+        // Updates NumberUtil#PRETTY_FORMAT field so that all of Essentials
+        // can follow a single format.
+        try {
+            Field field = NumberUtil.class.getDeclaredField("PRETTY_FORMAT");
+            field.setAccessible(true);
+            Field modifiersField = Field.class.getDeclaredField("modifiers");
+            modifiersField.setAccessible(true);
+            modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+            field.set(null, currencyFormat);
+            modifiersField.setAccessible(false);
+            field.setAccessible(false);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            ess.getLogger().severe("Failed to apply custom currency format: " + e.getMessage());
+            if (isDebug()) {
+                e.printStackTrace();
+            }
+        }
+
+        return currencyFormat;
+    }
+
+    @Override
+    public NumberFormat getCurrencyFormat() {
+        return this.currencyFormat;
     }
 }
