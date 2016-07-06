@@ -536,6 +536,7 @@ public class Settings implements net.ess3.api.ISettings {
         isCustomQuitMessage = !customQuitMessage.equals("none");
         muteCommands = _getMuteCommands();
         commandCooldowns = _getCommandCooldowns();
+        npcsInBalanceRanking = _isNpcsInBalanceRanking();
     }
 
     private List<Integer> itemSpawnBl = new ArrayList<Integer>();
@@ -1261,5 +1262,16 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean isCommandCooldownPersistent(String label) {
         // TODO: enable per command cooldown specification for persistence.
         return config.getBoolean("command-cooldown-persistence", true);
+    }
+    
+    private boolean npcsInBalanceRanking = false;
+    
+    public boolean _isNpcsInBalanceRanking() {
+        return config.getBoolean("npcs-in-balance-ranking", false);
+    }
+    
+    @Override
+    public boolean isNpcsInBalanceRanking() {
+        return npcsInBalanceRanking;
     }
 }
