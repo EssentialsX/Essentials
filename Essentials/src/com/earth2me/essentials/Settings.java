@@ -1266,7 +1266,7 @@ public class Settings implements net.ess3.api.ISettings {
     
     private boolean npcsInBalanceRanking = false;
     
-    public boolean _isNpcsInBalanceRanking() {
+    private boolean _isNpcsInBalanceRanking() {
         return config.getBoolean("npcs-in-balance-ranking", false);
     }
     
