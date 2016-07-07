@@ -13,6 +13,8 @@ import net.ess3.api.MaxMoneyException;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import net.ess3.api.events.JailStatusChangeEvent;
 import net.ess3.api.events.UserBalanceUpdateEvent;
+import net.ess3.nms.refl.ReflUtil;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -305,7 +307,10 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         if (base.isOnline() && ess.getSettings().changeDisplayName()) {
             this.getBase().setDisplayName(getNick(true));
             if (ess.getSettings().changePlayerListName()) {
-                String name = getNick(false);
+                // 1.8 enabled player list-names longer than 16 characters.
+                // If the server is on 1.8 or higher, provide that functionality. Otherwise, keep prior functionality.
+                boolean higherOrEqualTo1_8 = ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_8_R1);
+                String name = getNick(higherOrEqualTo1_8);
                 try {
                     this.getBase().setPlayerListName(name);
                 } catch (IllegalArgumentException e) {
