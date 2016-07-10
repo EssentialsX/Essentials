@@ -157,4 +157,8 @@ public interface IUser {
     CommandSource getSource();
 
     String getName();
+
+    String getAfkMessage();
+
+    void setAfkMessage(final String message);
 }

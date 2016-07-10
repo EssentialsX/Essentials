@@ -52,6 +52,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private boolean enderSee = false;
     private transient long teleportInvulnerabilityTimestamp = 0;
     private boolean ignoreMsg = false;
+    private String afkMessage;
 
     public User(final Player base, final IEssentials ess) {
         super(base, ess);
@@ -426,6 +427,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             afkPosition = this.getLocation();
         } else if (!set && isAfk()) {
             afkPosition = null;
+            this.afkMessage = null;
         }
         if (ess.getSettings().isAfkListName()) {
             if(set) {
@@ -758,5 +760,17 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override public void setReplyRecipient(IMessageRecipient recipient) {
         this.messageRecipient.setReplyRecipient(recipient);
+    }
+
+    @Override
+    public String getAfkMessage() {
+        return this.afkMessage;
+    }
+
+    @Override
+    public void setAfkMessage(String message) {
+        if (isAfk()) {
+            this.afkMessage = message;
+        }
     }
 }
