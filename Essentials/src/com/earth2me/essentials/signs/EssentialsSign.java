@@ -45,6 +45,9 @@ public class EssentialsSign {
         final SignCreateEvent signEvent = new SignCreateEvent(sign, this, user);
         ess.getServer().getPluginManager().callEvent(signEvent);
         if (signEvent.isCancelled()) {
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().info("SignCreateEvent cancelled for sign " + signEvent.getEssentialsSign().getName());
+            }
             return false;
         }
 

@@ -97,6 +97,10 @@ public class Commandbalancetop extends EssentialsCommand {
                         for (UUID u : ess.getUserMap().getAllUniqueUsers()) {
                             final User user = ess.getUserMap().getUser(u);
                             if (user != null) {
+                                if (!ess.getSettings().isNpcsInBalanceRanking() && user.isNPC()) {
+                                    // Don't list NPCs in output
+                                    continue;
+                                }
                                 final BigDecimal userMoney = user.getMoney();
                                 user.updateMoneyCache(userMoney);
                                 totalMoney = totalMoney.add(userMoney);

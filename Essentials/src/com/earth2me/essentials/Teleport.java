@@ -117,7 +117,7 @@ public class Teleport implements net.ess3.api.ITeleport {
     protected void now(IUser teleportee, ITarget target, TeleportCause cause) throws Exception {
         cancel(false);
         teleportee.setLastLocation();
-        final Location loc = target.getLocation();
+        Location loc = target.getLocation();
 
         if (LocationUtil.isBlockUnsafeForUser(teleportee, loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
             if (ess.getSettings().isTeleportSafetyEnabled()) {
@@ -127,7 +127,7 @@ public class Teleport implements net.ess3.api.ITeleport {
                 if (ess.getSettings().isForceDisableTeleportSafety()) {
                     teleportee.getBase().teleport(loc, cause);
                 } else {
-                    teleportee.getBase().teleport(LocationUtil.getSafeDestination(teleportee, loc), cause);
+                    teleportee.getBase().teleport(LocationUtil.getSafeDestination(ess, teleportee, loc), cause);
                 }
             } else {
                 throw new Exception(tl("unsafeTeleportDestination", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
@@ -139,7 +139,10 @@ public class Teleport implements net.ess3.api.ITeleport {
             if (ess.getSettings().isForceDisableTeleportSafety()) {
                 teleportee.getBase().teleport(loc, cause);
             } else {
-                teleportee.getBase().teleport(LocationUtil.getRoundedDestination(loc), cause);
+                if (ess.getSettings().isTeleportToCenterLocation()) {
+                    loc = LocationUtil.getRoundedDestination(loc);
+                }
+                teleportee.getBase().teleport(loc, cause);
             }
         }
     }

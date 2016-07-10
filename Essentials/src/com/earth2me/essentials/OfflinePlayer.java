@@ -25,8 +25,6 @@ import org.bukkit.util.Vector;
 import java.net.InetSocketAddress;
 import java.util.*;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class OfflinePlayer implements Player {
     private final transient Server server;
     private transient Location location = new Location(null, 0, 0, 0, 0, 0);
@@ -147,22 +145,20 @@ public class OfflinePlayer implements Player {
 
     @Override
     public int getRemainingAir() {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return 0;
     }
 
     @Override
     public void setRemainingAir(int i) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public int getMaximumAir() {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return 0;
     }
 
     @Override
     public void setMaximumAir(int i) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
@@ -172,77 +168,72 @@ public class OfflinePlayer implements Player {
 
     @Override
     public void setSneaking(boolean bln) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public void updateInventory() {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public void chat(String string) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public double getEyeHeight() {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return 0D;
     }
 
     @Override
     public double getEyeHeight(boolean bln) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return 0D;
     }
 
     @Override
     public List<Block> getLineOfSight(HashSet<Byte> hs, int i) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return Collections.emptyList();
     }
 
     @Override
     public List<Block> getLineOfSight(Set<Material> mat, int i) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return Collections.emptyList();
     }
 
     @Override
     public Block getTargetBlock(HashSet<Byte> hs, int i) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return null;
     }
 
     @Override
     public Block getTargetBlock(Set<Material> mat, int i) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return null;
     }
 
     @Override
     public List<Block> getLastTwoTargetBlocks(HashSet<Byte> hs, int i) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return Collections.emptyList();
     }
 
     @Override
     public List<Block> getLastTwoTargetBlocks(Set<Material> mat, int i) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return Collections.emptyList();
     }
 
     @Override
     public int getFireTicks() {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return 0;
     }
 
     @Override
     public int getMaxFireTicks() {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return 0;
     }
 
     @Override
     public void setFireTicks(int i) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public void remove() {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
@@ -251,141 +242,131 @@ public class OfflinePlayer implements Player {
     }
 
     public Vector getMomentum() {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return getVelocity();
     }
 
     public void setMomentum(Vector vector) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public void setVelocity(Vector vector) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public Vector getVelocity() {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return new Vector(0, 0, 0);
     }
 
     @Override
     public void damage(double d) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public void damage(double d, Entity entity) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public Location getEyeLocation() {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return null;
     }
 
     @Override
     public void sendRawMessage(String string) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public Location getCompassTarget() {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return null;
     }
 
     @Override
     public int getMaximumNoDamageTicks() {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return 0;
     }
 
     @Override
     public void setMaximumNoDamageTicks(int i) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public double getLastDamage() {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return 0D;
     }
 
     @Override
     public void setLastDamage(double d) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public int getNoDamageTicks() {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return 0;
     }
 
     @Override
     public void setNoDamageTicks(int i) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public boolean teleport(Location lctn) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return false;
     }
 
     @Override
     public boolean teleport(Entity entity) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return false;
     }
 
     @Override
     public Entity getPassenger() {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return null;
     }
 
     @Override
     public boolean setPassenger(Entity entity) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return false;
     }
 
     @Override
     public boolean isEmpty() {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return true;
     }
 
     @Override
     public boolean eject() {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return false;
     }
 
     @Override
     public void saveData() {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public void loadData() {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public boolean isSleeping() {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return false;
     }
 
     @Override
     public int getSleepTicks() {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return 0;
     }
 
     @Override
     public List<Entity> getNearbyEntities(double d, double d1, double d2) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return Collections.emptyList();
     }
 
     @Override
     public boolean isDead() {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return true;
     }
 
     @Override
     public float getFallDistance() {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return 0F;
     }
 
     @Override
@@ -394,147 +375,124 @@ public class OfflinePlayer implements Player {
 
     @Override
     public void setSleepingIgnored(boolean bln) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public boolean isSleepingIgnored() {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return true;
     }
 
     @Override
     public void awardAchievement(Achievement a) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public void removeAchievement(Achievement achievement) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public boolean hasAchievement(Achievement achievement) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return false;
     }
 
     @Override
     public void incrementStatistic(Statistic ststc) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public void decrementStatistic(Statistic statistic) throws IllegalArgumentException {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public void incrementStatistic(Statistic ststc, int i) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public void decrementStatistic(Statistic statistic, int i) throws IllegalArgumentException {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public void setStatistic(Statistic statistic, int i) throws IllegalArgumentException {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public int getStatistic(Statistic statistic) throws IllegalArgumentException {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return 0;
     }
 
     @Override
     public void incrementStatistic(Statistic ststc, Material mtrl) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public void decrementStatistic(Statistic statistic, Material material) throws IllegalArgumentException {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public int getStatistic(Statistic statistic, Material material) throws IllegalArgumentException {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return 0;
     }
 
     @Override
     public void incrementStatistic(Statistic ststc, Material mtrl, int i) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public void decrementStatistic(Statistic statistic, Material material, int i) throws IllegalArgumentException {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public void setStatistic(Statistic statistic, Material material, int i) throws IllegalArgumentException {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public void incrementStatistic(Statistic statistic, EntityType entityType) throws IllegalArgumentException {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public void decrementStatistic(Statistic statistic, EntityType entityType) throws IllegalArgumentException {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public int getStatistic(Statistic statistic, EntityType entityType) throws IllegalArgumentException {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return 0;
     }
 
     @Override
     public void incrementStatistic(Statistic statistic, EntityType entityType, int i) throws IllegalArgumentException {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public void decrementStatistic(Statistic statistic, EntityType entityType, int i) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public void setStatistic(Statistic statistic, EntityType entityType, int i) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public void playNote(Location lctn, byte b, byte b1) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public void sendBlockChange(Location lctn, Material mtrl, byte b) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public void sendBlockChange(Location lctn, int i, byte b) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public void setLastDamageCause(EntityDamageEvent ede) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
     public EntityDamageEvent getLastDamageCause() {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
+        return null;
     }
 
     @Override
     public void playEffect(Location lctn, Effect effect, int i) {
-        throw new UnsupportedOperationException(tl("notSupportedYet"));
     }
 
     @Override
@@ -544,32 +502,29 @@ public class OfflinePlayer implements Player {
 
     @Override
     public void playNote(Location lctn, Instrument i, Note note) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void setPlayerTime(long l, boolean bln) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public long getPlayerTime() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return 0;
     }
 
     @Override
     public long getPlayerTimeOffset() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return 0;
     }
 
     @Override
     public boolean isPlayerTimeRelative() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     @Override
     public void resetPlayerTime() {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -594,27 +549,26 @@ public class OfflinePlayer implements Player {
 
     @Override
     public PermissionAttachment addAttachment(Plugin plugin, String string, boolean bln) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null;
     }
 
     @Override
     public PermissionAttachment addAttachment(Plugin plugin) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null;
     }
 
     @Override
     public PermissionAttachment addAttachment(Plugin plugin, String string, boolean bln, int i) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null;
     }
 
     @Override
     public PermissionAttachment addAttachment(Plugin plugin, int i) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null;
     }
 
     @Override
     public void removeAttachment(PermissionAttachment pa) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -623,82 +577,74 @@ public class OfflinePlayer implements Player {
 
     @Override
     public Set<PermissionAttachmentInfo> getEffectivePermissions() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return Collections.emptySet();
     }
 
     @Override
     public void sendMap(MapView mv) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public GameMode getGameMode() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return GameMode.SURVIVAL;
     }
 
     @Override
     public void setGameMode(GameMode gm) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public int getLevel() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return 0;
     }
 
     @Override
     public void setLevel(int i) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public int getTotalExperience() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return 0;
     }
 
     @Override
     public void setTotalExperience(int i) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public float getExhaustion() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return 0F;
     }
 
     @Override
     public void setExhaustion(float f) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public float getSaturation() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return 0F;
     }
 
     @Override
     public void setSaturation(float f) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public int getFoodLevel() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return 0;
     }
 
     @Override
     public void setFoodLevel(int i) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public boolean isSprinting() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     @Override
     public void setSprinting(boolean bln) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -712,47 +658,44 @@ public class OfflinePlayer implements Player {
 
     @Override
     public int getTicksLived() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return 0;
     }
 
     @Override
     public void setTicksLived(int i) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public double getMaxHealth() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return 0D;
     }
 
     @Override
     public void giveExp(int i) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public float getExp() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return 0F;
     }
 
     @Override
     public void setExp(float f) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public boolean teleport(Location lctn, TeleportCause tc) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     @Override
     public boolean teleport(Entity entity, TeleportCause tc) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     @Override
     public Player getKiller() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null;
     }
 
     void setName(final String name) {
@@ -764,12 +707,11 @@ public class OfflinePlayer implements Player {
 
     @Override
     public void sendPluginMessage(Plugin plugin, String string, byte[] bytes) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public Set<String> getListeningPluginChannels() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return Collections.emptySet();
     }
 
     @Override
@@ -784,67 +726,61 @@ public class OfflinePlayer implements Player {
 
     @Override
     public void setBedSpawnLocation(Location lctn) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void setBedSpawnLocation(Location lctn, boolean force) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void playEffect(EntityEffect ee) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void hidePlayer(Player player) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void showPlayer(Player player) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public boolean canSee(Player player) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     @Override
     public boolean addPotionEffect(PotionEffect pe) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     @Override
     public boolean addPotionEffect(PotionEffect pe, boolean bln) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     @Override
     public boolean addPotionEffects(Collection<PotionEffect> clctn) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     @Override
     public boolean hasPotionEffect(PotionEffectType pet) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     @Override
     public void removePotionEffect(PotionEffectType pet) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public Collection<PotionEffect> getActivePotionEffects() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return Collections.emptyList();
     }
 
     @Override
     public <T extends Projectile> T launchProjectile(Class<? extends T> arg0) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null;
     }
 
     @Override
@@ -854,112 +790,102 @@ public class OfflinePlayer implements Player {
 
     @Override
     public <T> void playEffect(Location lctn, Effect effect, T t) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public boolean setWindowProperty(Property prprt, int i) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     @Override
     public InventoryView getOpenInventory() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null;
     }
 
     @Override
     public InventoryView openInventory(Inventory invntr) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null;
     }
 
     @Override
     public InventoryView openWorkbench(Location lctn, boolean bln) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null;
     }
 
     @Override
     public InventoryView openEnchanting(Location lctn, boolean bln) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null;
     }
 
     @Override
     public void openInventory(InventoryView iv) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public InventoryView openMerchant(Villager villager, boolean b) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null;
     }
 
     @Override
     public void closeInventory() {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public ItemStack getItemOnCursor() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null;
     }
 
     @Override
     public void setItemOnCursor(ItemStack is) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void setMetadata(String string, MetadataValue mv) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public List<MetadataValue> getMetadata(String string) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return Collections.emptyList();
     }
 
     @Override
     public boolean hasMetadata(String string) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     @Override
     public void removeMetadata(String string, Plugin plugin) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public boolean isConversing() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     @Override
     public void acceptConversationInput(String string) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public boolean beginConversation(Conversation c) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     @Override
     public void abandonConversation(Conversation c) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void sendMessage(String[] strings) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public boolean isBlocking() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     @Override
     public void abandonConversation(Conversation arg0, ConversationAbandonedEvent arg1) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -974,132 +900,119 @@ public class OfflinePlayer implements Player {
 
     @Override
     public int getExpToLevel() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return 0;
     }
 
     @Override
     public boolean hasLineOfSight(Entity entity) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     @Override
     public boolean isValid() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     @Override
     public void setFlySpeed(float value) throws IllegalArgumentException {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void setWalkSpeed(float value) throws IllegalArgumentException {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public float getFlySpeed() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return 0.1f;
     }
 
     @Override
     public float getWalkSpeed() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return 0.2f;
     }
 
     @Override
     public Inventory getEnderChest() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null;
     }
 
     @Override
     public MainHand getMainHand() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return MainHand.RIGHT;
     }
 
     @Override
     public void playSound(Location arg0, Sound arg1, float arg2, float arg3) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void giveExpLevels(int i) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public boolean getRemoveWhenFarAway() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     @Override
     public void setRemoveWhenFarAway(boolean bln) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public EntityEquipment getEquipment() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null;
     }
 
     @Override
     public void setCanPickupItems(boolean bln) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public boolean getCanPickupItems() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     @Override
     public Location getLocation(Location lctn) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return lctn;
     }
 
     @Override
     public void setTexturePack(String string) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void setResourcePack(String s) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void setMaxHealth(double i) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void resetMaxHealth() {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void setCustomName(String string) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public String getCustomName() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null;
     }
 
     @Override
     public void setCustomNameVisible(boolean bln) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public boolean isCustomNameVisible() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     @Override
     public void setGlowing(boolean b) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -1109,7 +1022,6 @@ public class OfflinePlayer implements Player {
 
     @Override
     public void setInvulnerable(boolean b) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -1119,147 +1031,132 @@ public class OfflinePlayer implements Player {
 
     @Override
     public boolean isSilent() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     @Override
     public void setSilent(boolean b) {
-
     }
 
     @Override
     public boolean hasGravity() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     @Override
     public void setGravity(boolean b) {
-
     }
 
     @Override
     public void setPlayerWeather(WeatherType arg0) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public WeatherType getPlayerWeather() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null; // per player weather, null means default anyways
     }
 
     @Override
     public void resetPlayerWeather() {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public boolean isOnGround() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     @Override
     public Scoreboard getScoreboard() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null;
     }
 
     @Override
     public void setScoreboard(Scoreboard scrbrd) throws IllegalArgumentException, IllegalStateException {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public int _INVALID_getLastDamage() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return 0;
     }
 
     @Override
     public void _INVALID_setLastDamage(int i) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void _INVALID_damage(int i) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void _INVALID_damage(int i, Entity entity) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public int _INVALID_getHealth() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return 0;
     }
 
     @Override
     public void _INVALID_setHealth(int i) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public int _INVALID_getMaxHealth() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return 0;
     }
 
     @Override
     public void _INVALID_setMaxHealth(int i) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void playSound(Location arg0, String arg1, float arg2, float arg3) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void stopSound(Sound sound) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void stopSound(String s) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public boolean isHealthScaled() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     @Override
     public void setHealthScaled(boolean arg0) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void setHealthScale(double arg0) throws IllegalArgumentException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        
     }
 
     @Override
     public double getHealthScale() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return 0D;
     }
 
     @Override
     public void setSpectatorTarget(Entity entity) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public boolean isLeashed() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     @Override
     public Entity getLeashHolder() throws IllegalStateException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null;
     }
 
     @Override
     public boolean setLeashHolder(Entity arg0) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     @Override
@@ -1269,12 +1166,10 @@ public class OfflinePlayer implements Player {
 
     @Override
     public void setGliding(boolean b) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void setAI(boolean b) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -1284,7 +1179,6 @@ public class OfflinePlayer implements Player {
 
     @Override
     public void setCollidable(boolean b) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -1294,12 +1188,11 @@ public class OfflinePlayer implements Player {
 
     @Override
     public <T extends Projectile> T launchProjectile(Class<? extends T> type, Vector vector) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null;
     }
 
     @Override
     public void sendSignChange(Location arg0, String[] arg1) throws IllegalArgumentException {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -1389,12 +1282,11 @@ public class OfflinePlayer implements Player {
 
     @Override
     public Entity getSpectatorTarget() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null;
     }
 
     @Override
     public void resetTitle() {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override

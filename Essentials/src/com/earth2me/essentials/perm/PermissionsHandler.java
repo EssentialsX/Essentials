@@ -125,8 +125,8 @@ public class PermissionsHandler implements IPermissionsHandler {
         lastHandler = handlerClass;
 
         // output handler info
-        if (handler instanceof GenericVaultHandler) {
-            String enabledPermsPlugin = ((GenericVaultHandler) handler).getEnabledPermsPlugin();
+        if (handler instanceof AbstractVaultHandler) {
+            String enabledPermsPlugin = ((AbstractVaultHandler) handler).getEnabledPermsPlugin();
             if (enabledPermsPlugin == null) enabledPermsPlugin = "generic";
             ess.getLogger().info("Using Vault based permissions (" + enabledPermsPlugin + ")");
         } else if (handler.getClass() == SuperpermsHandler.class) {

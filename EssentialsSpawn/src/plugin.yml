@@ -16,3 +16,7 @@ commands:
     description: Teleport to the spawnpoint.
     usage: /<command> [player]
     aliases: [espawn]
+permissions:
+  essentials.spawn-on-join.exempt:
+    default: false
+    description: "Bypass spawn teleportation on join when spawn-on-join is true."

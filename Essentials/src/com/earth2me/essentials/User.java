@@ -13,6 +13,8 @@ import net.ess3.api.MaxMoneyException;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import net.ess3.api.events.JailStatusChangeEvent;
 import net.ess3.api.events.UserBalanceUpdateEvent;
+import net.ess3.nms.refl.ReflUtil;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -257,7 +259,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         } else if (nick.equalsIgnoreCase(getName())) {
             nickname = nick;
         } else {
-            nickname = ess.getSettings().getNicknamePrefix() + nick;
+            nickname = FormatUtil.replaceFormat(ess.getSettings().getNicknamePrefix()) + nick;
             suffix = "§r";
         }
 
@@ -306,7 +308,10 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         if (base.isOnline() && ess.getSettings().changeDisplayName()) {
             this.getBase().setDisplayName(getNick(true));
             if (ess.getSettings().changePlayerListName()) {
-                String name = getNick(false);
+                // 1.8 enabled player list-names longer than 16 characters.
+                // If the server is on 1.8 or higher, provide that functionality. Otherwise, keep prior functionality.
+                boolean higherOrEqualTo1_8 = ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_8_R1);
+                String name = getNick(higherOrEqualTo1_8);
                 try {
                     this.getBase().setPlayerListName(name);
                 } catch (IllegalArgumentException e) {
@@ -376,6 +381,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return;
         }
         final BigDecimal oldBalance = _getMoney();
+        
+        UserBalanceUpdateEvent updateEvent = new UserBalanceUpdateEvent(this.getBase(), oldBalance, value);
+        ess.getServer().getPluginManager().callEvent(updateEvent);
+        BigDecimal newBalance = updateEvent.getNewBalance();
+        
         if (Methods.hasMethod()) {
             try {
                 final Method method = Methods.getMethod();
@@ -383,13 +393,12 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                     throw new Exception();
                 }
                 final Method.MethodAccount account = Methods.getMethod().getAccount(this.getName());
-                account.set(value.doubleValue());
+                account.set(newBalance.doubleValue());
             } catch (Exception ex) {
             }
         }
-        super.setMoney(value, true);
-        ess.getServer().getPluginManager().callEvent(new UserBalanceUpdateEvent(this.getBase(), oldBalance, value));
-        Trade.log("Update", "Set", "API", getName(), new Trade(value, ess), null, null, null, ess);
+        super.setMoney(newBalance, true);
+        Trade.log("Update", "Set", "API", getName(), new Trade(newBalance, ess), null, null, null, ess);
     }
 
     public void updateMoneyCache(final BigDecimal value) {
