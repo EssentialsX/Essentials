@@ -73,7 +73,33 @@ public class MessagingTest {
     }
 
     @Test(expected = Exception.class) // I really don't like this, but see note below about console reply
-    public void testLastMessageReplyRecipient() throws Exception {
+    public void testNullLastMessageReplyRecipient() throws Exception {
+        User user1 = ess.getUser(base1);
+        Console console = Console.getInstance();
+        if (ess.getSettings().isLastMessageReplyRecipient()) {
+            assertNull(console.getReplyRecipient()); // console never messaged or received messages from anyone.
+
+            // console should now have its reply-recipient as user1, since the console doesn't have a previous recipient.
+            assertEquals(console.getReplyRecipient(), user1);
+
+            if (ess.getSettings().isLastMessageReplyRecipient()) {
+                runCommand("r", user1, "This is me sending you a message using /r without you replying!");
+            }
+
+            // Not really much of a strict test, but just "testing" console output. 
+            user1.setAfk(true);
+
+            // Console replies using "/r Hey, son!"
+            //
+            // This throws Exception because the console hasnt messaged anyone.
+            runConsoleCommand("r", "Hey, son!");
+        } else {
+            throw new Exception(); // Needed to prevent build failures.
+        }
+    }
+
+    @Test
+    public void testNonNullLastMessageReplyRecipient() throws Exception {
         User user1 = ess.getUser(base1);
         Console console = Console.getInstance();
 
@@ -93,12 +119,7 @@ public class MessagingTest {
             // Not really much of a strict test, but just "testing" console output. 
             user1.setAfk(true);
 
-            // Console replies using "/r Hey, son!"
-            //
-            // This throws Exception because the base1 is an OfflinePlayer (isOnline() returns false).
             runConsoleCommand("r", "Hey, son!");
-        } else {
-            throw new Exception(); // Needed to prevent build failures.
         }
     }
 }
