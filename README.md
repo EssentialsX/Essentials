@@ -1,4 +1,4 @@
-![](https://i.imgur.com/mwJjTRw.png)
+![](https://i.imgur.com/HiowDug.png)
 
 [![Downloads](http://i.imgur.com/MNr6OTb.png)](https://ci.drtshock.net/job/EssentialsX)
 
