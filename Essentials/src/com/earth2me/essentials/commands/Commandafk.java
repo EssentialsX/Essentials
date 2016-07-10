@@ -27,10 +27,10 @@ public class Commandafk extends EssentialsCommand {
                 }
                 message = getFinalArg(args, 0);
             }
-            toggleAfk(afkUser, message);
+            toggleAfk(user, afkUser, message);
         } else {
             String message = args.length > 0 ? getFinalArg(args, 0) : null;
-            toggleAfk(user, message);
+            toggleAfk(user, user, message);
         }
     }
 
@@ -39,13 +39,21 @@ public class Commandafk extends EssentialsCommand {
         if (args.length > 0) {
             User afkUser = getPlayer(server, args, 0, true, false);
             String message = args.length > 1 ? getFinalArg(args, 1) : null;
-            toggleAfk(afkUser, message);
+            toggleAfk(null, afkUser, message);
         } else {
             throw new NotEnoughArgumentsException();
         }
     }
 
-    private void toggleAfk(User user, String message) {
+    private void toggleAfk(User sender, User user, String message) throws Exception {
+        if (message != null && sender != null) {
+            if (sender.isMuted()) {
+                throw new Exception(tl("voiceSilenced"));
+            }
+            if (!sender.isAuthorized("essentials.afk.message")) {
+                throw new Exception(tl("noPermToAFKMessage"));
+            }
+        }
         user.setDisplayNick();
         String msg = "";
         if (!user.toggleAfk()) {
