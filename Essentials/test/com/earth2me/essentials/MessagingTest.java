@@ -79,9 +79,6 @@ public class MessagingTest {
         if (ess.getSettings().isLastMessageReplyRecipient()) {
             assertNull(console.getReplyRecipient()); // console never messaged or received messages from anyone.
 
-            // console should now have its reply-recipient as user1, since the console doesn't have a previous recipient.
-            assertEquals(console.getReplyRecipient(), user1);
-
             if (ess.getSettings().isLastMessageReplyRecipient()) {
                 runCommand("r", user1, "This is me sending you a message using /r without you replying!");
             }
@@ -110,7 +107,7 @@ public class MessagingTest {
             runCommand("msg", user1, console.getName() + " Hey, master!");
 
             // console should now have its reply-recipient as user1, since the console doesn't have a previous recipient.
-            assertEquals(console.getReplyRecipient(), user1);
+            assertEquals(user1, console.getReplyRecipient());
 
             if (ess.getSettings().isLastMessageReplyRecipient()) {
                 runCommand("r", user1, "This is me sending you a message using /r without you replying!");
