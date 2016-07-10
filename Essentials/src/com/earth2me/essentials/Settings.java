@@ -1191,8 +1191,7 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean isTeleportToCenterLocation() {
         return config.getBoolean("teleport-to-center", true);
     }
-
-
+    
     private Map<Pattern, Long> commandCooldowns;
 
     private Map<Pattern, Long> _getCommandCooldowns() {
@@ -1276,17 +1275,18 @@ public class Settings implements net.ess3.api.ISettings {
         // TODO: enable per command cooldown specification for persistence.
         return config.getBoolean("command-cooldown-persistence", true);
     }
-    
+
     private boolean npcsInBalanceRanking = false;
-    
+
     private boolean _isNpcsInBalanceRanking() {
         return config.getBoolean("npcs-in-balance-ranking", false);
     }
-    
+
     @Override
     public boolean isNpcsInBalanceRanking() {
         return npcsInBalanceRanking;
     }
+
     private NumberFormat currencyFormat;
 
     private NumberFormat _getCurrencyFormat() {

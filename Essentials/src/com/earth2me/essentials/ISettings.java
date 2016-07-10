@@ -235,9 +235,9 @@ public interface ISettings extends IConf {
     boolean isNotifyNoNewMail();
 
     boolean isDropItemsIfFull();
-    
+
     boolean isLastMessageReplyRecipient();
-    
+
     BigDecimal getMinimumPayAmount();
     
     long getLastMessageReplyRecipientTimeout();
@@ -249,20 +249,20 @@ public interface ISettings extends IConf {
     boolean isWorldTimePermissions();
 
     boolean isSpawnOnJoin();
-    
+
     boolean isTeleportToCenterLocation();
-    
+
     boolean isCommandCooldownsEnabled();
     
     long getCommandCooldownMs(String label);
 
     Entry<Pattern, Long> getCommandCooldownEntry(String label);
-    
+
     boolean isCommandCooldownPersistent(String label);
 
     boolean isNpcsInBalanceRanking();
 
     NumberFormat getCurrencyFormat();
-    
+
     List<EssentialsSign> getUnprotectedSignNames();
 }
