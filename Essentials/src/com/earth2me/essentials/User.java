@@ -554,10 +554,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             // This enables the no-god-in-worlds functionality where the actual player god mode state is never modified in disabled worlds,
             // but this method gets called every time the player takes damage. In the case that the world has god-mode disabled then this method
             // will return false and the player will take damage, even though they are in god mode (isGodModeEnabledRaw()).
-            if (ess.getSettings().getNoGodWorlds().contains(this.getLocation().getWorld().getName())) {
-                return false;
+            if (!ess.getSettings().getNoGodWorlds().contains(this.getLocation().getWorld().getName())) {
+                return true;
             }
-            return true;
         }
         if (isAfk()) {
             // Protect AFK players by representing them in a god mode state to render them invulnerable to damage.
