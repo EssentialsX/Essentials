@@ -80,7 +80,8 @@ public class EssentialsSpawnPlayerListener implements Listener {
                         public void run() {
                             Location spawn = spawns.getSpawn(user.getGroup());
                             try {
-                                user.getTeleport().now(spawn, false, TeleportCause.PLUGIN);
+                                // We don't use user.getTeleport() because it stores last location, which is unwanted in this case.
+                                user.getBase().teleport(spawn, TeleportCause.PLUGIN);
                             } catch (Exception e) {
                                 ess.showError(user.getSource(), e, "spawn-on-join");
                             }
