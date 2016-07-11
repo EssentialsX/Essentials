@@ -484,6 +484,8 @@ public class EssentialsPlayerListener implements Listener {
         user.setDisplayNick();
         updateCompass(user);
         if (ess.getSettings().getNoGodWorlds().contains(newWorld) && user.isGodModeEnabledRaw()) {
+            // Player god mode is never disabled in order to retain it when changing worlds once more.
+            // With that said, players will still take damage as per the result of User#isGodModeEnabled()
             user.sendMessage(tl("noGodWorldWarning"));
         }
 
