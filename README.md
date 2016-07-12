@@ -1,6 +1,6 @@
-![](https://i.imgur.com/VpdDYTX.png)
+![](https://i.imgur.com/CP4SZpB.png)
 
-[![Downloads](http://i.imgur.com/MNr6OTb.png)](https://ci.drtshock.net/job/EssentialsX)
+[![Downloads](https://i.imgur.com/MMc0PJY.png)](https://ci.drtshock.net/job/EssentialsX)
 
 This is a fork of Essentials called EssentialsX.
 
