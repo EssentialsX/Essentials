@@ -27,6 +27,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -253,7 +254,9 @@ public class EssentialsPlayerListener implements Listener {
                 } else if (message == null) {
                     //NOOP
                 } else if (ess.getSettings().isCustomJoinMessage()) {
-                    String msg = ess.getSettings().getCustomJoinMessage().replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName()).replace("{UNIQUE}", String.valueOf(ess.getUserMap().getUniqueUsers()));
+                    String msg = ess.getSettings().getCustomJoinMessage()
+                        .replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName())
+                        .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUserMap().getUniqueUsers()));
                     ess.getServer().broadcastMessage(msg);
                 } else if (ess.getSettings().allowSilentJoinQuit()) {
                     ess.getServer().broadcastMessage(message);
