@@ -265,4 +265,6 @@ public interface ISettings extends IConf {
     NumberFormat getCurrencyFormat();
 
     List<EssentialsSign> getUnprotectedSignNames();
+    
+    boolean isPastebinCreateKit();
 }

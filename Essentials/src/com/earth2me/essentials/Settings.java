@@ -1354,4 +1354,9 @@ public class Settings implements net.ess3.api.ISettings {
         }
         return newSigns;
     }
+
+    @Override
+    public boolean isPastebinCreateKit() {
+        return config.getBoolean("pastebin-createkit", true);
+    }
 }

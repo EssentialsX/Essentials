@@ -515,6 +515,13 @@ command-cooldown-persistence: true
 # NPC balances can include features like factions from FactionsUUID plugin.
 npcs-in-balance-ranking: false
 
+# Determines the functionality of the /createkit command.
+# If this is true, /createkit will give the user a link with the kit code.
+# If this is false, /createkit will add the kit to this config file directly.
+#
+# WARNING: If this is false, the config comments WILL be removed and it won't look the same as it does now.
+pastebin-createkit: true
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #

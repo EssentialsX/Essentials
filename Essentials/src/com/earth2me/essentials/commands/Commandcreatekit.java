@@ -70,15 +70,21 @@ public class Commandcreatekit extends EssentialsCommand {
                 list.add(serialized);
             }
         }
-        ConfigurationSection config = new MemoryConfiguration();
-        config.set("kits." + kitname + ".delay", delay);
-        config.set("kits." + kitname + ".items", list);
+        // Some users might want to directly write to config knowing the consequences. *shrug*
+        if (!ess.getSettings().isPastebinCreateKit()) {
+            ess.getSettings().addKit(kitname, list, delay);
+            user.sendMessage(tl("createdKit", kitname, list.size(), delay));
+        } else {
+            ConfigurationSection config = new MemoryConfiguration();
+            config.set("kits." + kitname + ".delay", delay);
+            config.set("kits." + kitname + ".items", list);
 
-        final Yaml yaml = new Yaml(yamlConstructor, yamlRepresenter, yamlOptions);
-        String fileContents = "# Copy the kit code below into the kits section in your config.yml file\n";
-        fileContents += yaml.dump(config.getValues(false));
+            final Yaml yaml = new Yaml(yamlConstructor, yamlRepresenter, yamlOptions);
+            String fileContents = "# Copy the kit code below into the kits section in your config.yml file\n";
+            fileContents += yaml.dump(config.getValues(false));
 
-        gist(user.getSource(), kitname, delay, fileContents);
+            gist(user.getSource(), kitname, delay, fileContents);
+        }
     }
 
     /**
