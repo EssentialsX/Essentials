@@ -15,6 +15,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.lang.management.ManagementFactory;
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
@@ -144,7 +145,7 @@ public class KeywordReplacer implements IText {
                         replacer = Integer.toString(ess.getOnlinePlayers().size() - playerHidden);
                         break;
                     case UNIQUE:
-                        replacer = Integer.toString(ess.getUserMap().getUniqueUsers());
+                        replacer = NumberFormat.getInstance().format(ess.getUserMap().getUniqueUsers());
                         break;
                     case WORLDS:
                         final StringBuilder worldsBuilder = new StringBuilder();
