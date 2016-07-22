@@ -384,12 +384,18 @@ public class EssentialsPlayerListener implements Listener {
             LOGGER.info(tl("mutedUserSpeaks", player.getName()));
             return;
         }
+        
+        PluginCommand pluginCommand = ess.getServer().getPluginCommand(cmd);
+        
         if (ess.getSettings().getSocialSpyCommands().contains(cmd) || ess.getSettings().getSocialSpyCommands().contains("*")) {
-            User user = ess.getUser(player);
-            if (!user.isAuthorized("essentials.chat.spy.exempt")) {
-                for (User spyer : ess.getOnlineUsers()) {
-                    if (spyer.isSocialSpyEnabled() && !player.equals(spyer.getBase())) {
-                        spyer.sendMessage(player.getDisplayName() + " : " + event.getMessage());
+            if (pluginCommand == null
+                || (!pluginCommand.getName().equals("msg") && !pluginCommand.getName().equals("r"))) { // /msg and /r are handled in SimpleMessageRecipient
+                User user = ess.getUser(player);
+                if (!user.isAuthorized("essentials.chat.spy.exempt")) {
+                    for (User spyer : ess.getOnlineUsers()) {
+                        if (spyer.isSocialSpyEnabled() && !player.equals(spyer.getBase())) {
+                            spyer.sendMessage(player.getDisplayName() + " : " + event.getMessage());
+                        }
                     }
                 }
             }
@@ -398,7 +404,6 @@ public class EssentialsPlayerListener implements Listener {
         boolean broadcast = true; // whether to broadcast the updated activity
         boolean update = true; // Only modified when the command is afk
 
-        PluginCommand pluginCommand = ess.getServer().getPluginCommand(cmd);
         if (pluginCommand != null) {
             // Switch case for commands that shouldn't broadcast afk activity.
             switch (pluginCommand.getName()) {
