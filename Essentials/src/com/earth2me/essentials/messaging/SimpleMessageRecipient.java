@@ -76,6 +76,20 @@ public class SimpleMessageRecipient implements IMessageRecipient {
                 }
             default:
                 sendMessage(tl("msgFormat", tl("me"), recipient.getDisplayName(), message));
+
+                // Better Social Spy
+                User senderUser = getUser();
+                if (senderUser != null // not null if player.
+                    && !senderUser.isAuthorized("essentials.chat.spy.exempt")) {
+                    for (User onlineUser : ess.getOnlineUsers()) {
+                        if (onlineUser.isSocialSpyEnabled()
+                            // Don't send socialspy messages to message sender/receiver to prevent spam
+                            && !onlineUser.equals(senderUser)
+                            && !onlineUser.equals(recipient)) {  
+                            onlineUser.sendMessage(tl("msgFormat", getDisplayName(), recipient.getDisplayName(), message));
+                        }
+                    }
+                }
         }
         // If the message was a success, set this sender's reply-recipient to the current recipient.
         if (messageResponse.isSuccess()) {
@@ -90,7 +104,7 @@ public class SimpleMessageRecipient implements IMessageRecipient {
             return MessageResponse.UNREACHABLE;
         }
         
-        User user = this.parent instanceof User ? (User) this.parent : null;
+        User user = getUser();
         boolean afk = false;
         if (user != null) {
             if (user.isIgnoreMsg()
@@ -119,6 +133,10 @@ public class SimpleMessageRecipient implements IMessageRecipient {
         }
         this.lastMessageMs = System.currentTimeMillis();
         return afk ? MessageResponse.SUCCESS_BUT_AFK : MessageResponse.SUCCESS;
+    }
+    
+    protected User getUser() {
+        return this.parent instanceof User ? (User) this.parent : null;
     }
 
     @Override public boolean isReachable() {
