@@ -58,7 +58,7 @@ public class Commandgamemode extends EssentialsCommand {
             gameMode = user.getBase().getGameMode() == GameMode.SURVIVAL ? GameMode.CREATIVE : user.getBase().getGameMode() == GameMode.CREATIVE ? GameMode.ADVENTURE : GameMode.SURVIVAL;
         }
 
-        if (!canChangeToMode(user.getBase(), gameMode)) {
+        if (!canChangeToMode(user, gameMode)) {
             user.sendMessage(tl("cantGamemode", gameMode.name()));
             return;
         }
@@ -72,7 +72,7 @@ public class Commandgamemode extends EssentialsCommand {
             throw new NotEnoughArgumentsException(tl("gameModeInvalid"));
         }
 
-        if (sender.isPlayer() && !canChangeToMode(sender.getPlayer(), gameMode)) {
+        if (sender.isPlayer() && !canChangeToMode(ess.getUser(sender.getPlayer()), gameMode)) {
             sender.sendMessage(tl("cantGamemode", gameMode.name()));
             return;
         }
@@ -95,8 +95,8 @@ public class Commandgamemode extends EssentialsCommand {
     }
 
     // essentials.gamemode will let them change to any but essentials.gamemode.survival would only let them change to survival.
-    private boolean canChangeToMode(Player player, GameMode to) {
-        return player.hasPermission("essentials.gamemode.all") || player.hasPermission("essentials.gamemode." + to.name().toLowerCase());
+    private boolean canChangeToMode(User user, GameMode to) {
+        return user.isAuthorized("essentials.gamemode.all") || user.isAuthorized("essentials.gamemode." + to.name().toLowerCase());
     }
 
     private GameMode matchGameMode(String modeString) throws NotEnoughArgumentsException {

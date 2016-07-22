@@ -385,7 +385,8 @@ public class EssentialsPlayerListener implements Listener {
             return;
         }
         if (ess.getSettings().getSocialSpyCommands().contains(cmd) || ess.getSettings().getSocialSpyCommands().contains("*")) {
-            if (!player.hasPermission("essentials.chat.spy.exempt")) {
+            User user = ess.getUser(player);
+            if (!user.isAuthorized("essentials.chat.spy.exempt")) {
                 for (User spyer : ess.getOnlineUsers()) {
                     if (spyer.isSocialSpyEnabled() && !player.equals(spyer.getBase())) {
                         spyer.sendMessage(player.getDisplayName() + " : " + event.getMessage());
