@@ -37,7 +37,7 @@ public class Commandgetpos extends EssentialsCommand {
         sender.sendMessage(tl("posX", coords.getBlockX()));
         sender.sendMessage(tl("posY", coords.getBlockY()));
         sender.sendMessage(tl("posZ", coords.getBlockZ()));
-        sender.sendMessage(tl("posYaw", (coords.getYaw() + 180 + 360) % 360));
+        sender.sendMessage(tl("posYaw", (coords.getYaw() + 360) % 360));
         sender.sendMessage(tl("posPitch", coords.getPitch()));
         if (distance != null && coords.getWorld().equals(distance.getWorld())) {
             sender.sendMessage(tl("distance", coords.distance(distance)));
