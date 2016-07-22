@@ -19,6 +19,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -785,6 +787,18 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     public void setAfkMessage(String message) {
         if (isAfk()) {
             this.afkMessage = message;
+        }
+    }
+
+    /**
+     * Returns the {@link ItemStack} in the main hand or off-hand. If the main hand is empty then the offhand item is returned - also nullable.
+     */
+    public ItemStack getItemInHand() {
+        if (ReflUtil.getNmsVersionObject().isLowerThan(ReflUtil.V1_9_R1)) {
+            return getBase().getInventory().getItemInHand();
+        } else {
+            PlayerInventory inventory = getBase().getInventory();
+            return inventory.getItemInMainHand() != null ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
         }
     }
 }

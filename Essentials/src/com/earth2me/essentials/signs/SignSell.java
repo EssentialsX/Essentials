@@ -7,6 +7,10 @@ import com.earth2me.essentials.User;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
 
+import org.bukkit.inventory.ItemStack;
+
+import java.math.BigDecimal;
+
 
 public class SignSell extends EssentialsSign {
     public SignSell() {
@@ -22,8 +26,26 @@ public class SignSell extends EssentialsSign {
 
     @Override
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException, MaxMoneyException {
-        final Trade charge = getTrade(sign, 1, 2, player, ess);
-        final Trade money = getTrade(sign, 3, ess);
+        Trade charge = getTrade(sign, 1, 2, player, ess);
+        Trade money = getTrade(sign, 3, ess);
+
+        // Check if the player is trying to sell in bulk.
+        if (player.getBase().isSneaking()) {
+            ItemStack heldItem = player.getItemInHand();
+            if (charge.getItemStack().isSimilar(heldItem)) {
+                int initialItemAmount = charge.getItemStack().getAmount();
+                int newItemAmount = heldItem.getAmount();
+                ItemStack item = charge.getItemStack();
+                item.setAmount(newItemAmount);
+                charge = new Trade(item, ess);
+
+                BigDecimal chargeAmount = money.getMoney();
+                BigDecimal pricePerSingleItem = chargeAmount.divide(new BigDecimal(initialItemAmount));
+                pricePerSingleItem = pricePerSingleItem.multiply(new BigDecimal(newItemAmount));
+                money = new Trade(pricePerSingleItem, ess);
+            }
+        }
+
         charge.isAffordableFor(player);
         money.pay(player, OverflowType.DROP);
         charge.charge(player);
