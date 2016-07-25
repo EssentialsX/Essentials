@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
+import org.bukkit.block.Banner;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
@@ -351,6 +352,18 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
                         int color = p.getColor().getColor().asRGB();
                         sb.append(type).append(",").append(color).append(" ");
                     }
+                }
+                break;
+            case SHIELD:
+                // Hacky fix for accessing Shield meta - https://github.com/drtshock/Essentials/pull/745#issuecomment-234843795
+                BlockStateMeta shieldMeta = (BlockStateMeta) is.getItemMeta();
+                Banner shieldBannerMeta = (Banner) shieldMeta.getBlockState();
+                int basecolor = shieldBannerMeta.getBaseColor().getColor().asRGB();
+                sb.append("basecolor:").append(basecolor).append(" ");
+                for (org.bukkit.block.banner.Pattern p : shieldBannerMeta.getPatterns()) {
+                    String type = p.getPattern().getIdentifier();
+                    int color = p.getColor().getColor().asRGB();
+                    sb.append(type).append(",").append(color).append(" ");
                 }
                 break;
         }
