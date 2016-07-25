@@ -35,6 +35,13 @@ public class SimpleMessageRecipient implements IMessageRecipient {
     
     private long lastMessageMs;
     private WeakReference<IMessageRecipient> replyRecipient;
+
+    protected static User getUser(IMessageRecipient recipient) {
+        if (recipient instanceof SimpleMessageRecipient) {
+            return ((SimpleMessageRecipient) recipient).parent instanceof User ? (User) ((SimpleMessageRecipient) recipient).parent : null;
+        }
+        return recipient instanceof User ? (User) recipient : null;
+    }
     
     public SimpleMessageRecipient(IEssentials ess, IMessageRecipient parent) {
         this.ess = ess;
@@ -78,9 +85,12 @@ public class SimpleMessageRecipient implements IMessageRecipient {
                 sendMessage(tl("msgFormat", tl("me"), recipient.getDisplayName(), message));
 
                 // Better Social Spy
-                User senderUser = getUser();
+                User senderUser = getUser(this);
+                User recipientUser = getUser(recipient);
                 if (senderUser != null // not null if player.
-                    && !senderUser.isAuthorized("essentials.chat.spy.exempt")) {
+                    // Dont spy on chats involving socialspy exempt players
+                    && !senderUser.isAuthorized("essentials.chat.spy.exempt")
+                    && (recipientUser != null && !recipientUser.isAuthorized("essentials.chat.spy.exempt"))) {
                     for (User onlineUser : ess.getOnlineUsers()) {
                         if (onlineUser.isSocialSpyEnabled()
                             // Don't send socialspy messages to message sender/receiver to prevent spam
@@ -104,7 +114,7 @@ public class SimpleMessageRecipient implements IMessageRecipient {
             return MessageResponse.UNREACHABLE;
         }
         
-        User user = getUser();
+        User user = getUser(this);
         boolean afk = false;
         if (user != null) {
             if (user.isIgnoreMsg()
@@ -133,10 +143,6 @@ public class SimpleMessageRecipient implements IMessageRecipient {
         }
         this.lastMessageMs = System.currentTimeMillis();
         return afk ? MessageResponse.SUCCESS_BUT_AFK : MessageResponse.SUCCESS;
-    }
-    
-    protected User getUser() {
-        return this.parent instanceof User ? (User) this.parent : null;
     }
 
     @Override public boolean isReachable() {
