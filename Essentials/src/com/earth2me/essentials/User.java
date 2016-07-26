@@ -55,6 +55,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private transient long teleportInvulnerabilityTimestamp = 0;
     private boolean ignoreMsg = false;
     private String afkMessage;
+    private long afkSince;
 
     public User(final Player base, final IEssentials ess) {
         super(base, ess);
@@ -427,9 +428,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         this.getBase().setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") ? true : set);
         if (set && !isAfk()) {
             afkPosition = this.getLocation();
+            this.afkSince = System.currentTimeMillis();
         } else if (!set && isAfk()) {
             afkPosition = null;
             this.afkMessage = null;
+            this.afkSince = 0;
         }
         if (ess.getSettings().isAfkListName()) {
             if(set) {
@@ -788,6 +791,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         if (isAfk()) {
             this.afkMessage = message;
         }
+    }
+
+    @Override
+    public long getAfkSince() {
+        return afkSince;
     }
 
     /**

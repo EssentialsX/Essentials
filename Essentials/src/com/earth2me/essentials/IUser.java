@@ -161,4 +161,6 @@ public interface IUser {
     String getAfkMessage();
 
     void setAfkMessage(final String message);
+    
+    long getAfkSince();
 }
