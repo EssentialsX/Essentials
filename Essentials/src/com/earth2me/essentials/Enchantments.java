@@ -148,6 +148,8 @@ public class Enchantments {
 
         ENCHANTMENTS.put("lure", Enchantment.LURE);
         ALIASENCHANTMENTS.put("rodlure", Enchantment.LURE);
+        
+        ENCHANTMENTS.put("mending", Enchantment.MENDING);
 
         // 1.8
         try {
