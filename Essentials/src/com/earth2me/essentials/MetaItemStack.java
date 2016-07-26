@@ -449,12 +449,17 @@ public class MetaItemStack {
             if (split.length < 2) {
                 throw new Exception(tl("invalidBanner", split[1]));
             }
+            
+            PatternType patternType = null;
+            try {
+                patternType = PatternType.valueOf(split[0]);
+            } catch (Exception ignored ) {}
 
             final BannerMeta meta = (BannerMeta) stack.getItemMeta();
             if (split[0].equalsIgnoreCase("basecolor")) {
                 Color color = Color.fromRGB(Integer.valueOf(split[1]));
                 meta.setBaseColor(DyeColor.getByColor(color));
-            } else if (PatternType.valueOf(split[0]) != null) {
+            } else if (patternType != null) {
                 PatternType type = PatternType.valueOf(split[0]);
                 DyeColor color = DyeColor.getByColor(Color.fromRGB(Integer.valueOf(split[1])));
                 org.bukkit.block.banner.Pattern pattern = new org.bukkit.block.banner.Pattern(color, type);
@@ -469,13 +474,18 @@ public class MetaItemStack {
                 throw new Exception(tl("invalidBanner", split[1]));
             }
 
+            PatternType patternType = null;
+            try {
+                patternType = PatternType.valueOf(split[0]);
+            } catch (Exception ignored ) {}
+
             // Hacky fix for accessing Shield meta - https://github.com/drtshock/Essentials/pull/745#issuecomment-234843795
             BlockStateMeta meta = (BlockStateMeta) stack.getItemMeta();
             Banner banner = (Banner) meta.getBlockState();
             if (split[0].equalsIgnoreCase("basecolor")) {
                 Color color = Color.fromRGB(Integer.valueOf(split[1]));
                 banner.setBaseColor(DyeColor.getByColor(color));
-            } else if (PatternType.valueOf(split[0]) != null) {
+            } else if (patternType != null) {
                 PatternType type = PatternType.valueOf(split[0]);
                 DyeColor color = DyeColor.getByColor(Color.fromRGB(Integer.valueOf(split[1])));
                 org.bukkit.block.banner.Pattern pattern = new org.bukkit.block.banner.Pattern(color, type);
