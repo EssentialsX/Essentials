@@ -1359,4 +1359,9 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean isPastebinCreateKit() {
         return config.getBoolean("pastebin-createkit", true);
     }
+
+    @Override
+    public boolean isAllowBulkBuySell() {
+        return config.getBoolean("allow-bulk-buy-sell", false);
+    }
 }

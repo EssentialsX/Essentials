@@ -267,4 +267,6 @@ public interface ISettings extends IConf {
     List<EssentialsSign> getUnprotectedSignNames();
     
     boolean isPastebinCreateKit();
+    
+    boolean isAllowBulkBuySell();
 }

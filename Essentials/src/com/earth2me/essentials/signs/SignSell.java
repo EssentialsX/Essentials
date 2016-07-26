@@ -30,7 +30,7 @@ public class SignSell extends EssentialsSign {
         Trade money = getTrade(sign, 3, ess);
 
         // Check if the player is trying to sell in bulk.
-        if (player.getBase().isSneaking()) {
+        if (ess.getSettings().isAllowBulkBuySell() && player.getBase().isSneaking()) {
             ItemStack heldItem = player.getItemInHand();
             if (charge.getItemStack().isSimilar(heldItem)) {
                 int initialItemAmount = charge.getItemStack().getAmount();

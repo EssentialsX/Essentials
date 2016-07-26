@@ -522,6 +522,10 @@ npcs-in-balance-ranking: false
 # WARNING: If this is false, the config comments WILL be removed and it won't look the same as it does now.
 pastebin-createkit: true
 
+# Allow bulk buying and selling signs when the player is sneaking.
+# This is useful when a sign sells or buys one item at a time and the player wants to sell a bunch at once.
+allow-bulk-buy-sell: true
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #
