@@ -89,6 +89,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         logoutLocation = _getLogoutLocation();
         lastAccountName = _getLastAccountName();
         commandCooldowns = _getCommandCooldowns();
+        acceptingPay = _getAcceptingPay();
     }
 
     private BigDecimal money;
@@ -876,6 +877,22 @@ public abstract class UserData extends PlayerExtension implements IConf {
             serialized.add(map);
         }
         config.setProperty("timestamps.command-cooldowns", serialized);
+        save();
+    }
+
+    private boolean acceptingPay = true; // players accept pay by default
+
+    public boolean _getAcceptingPay() {
+        return config.getBoolean("acceptingPay", true);
+    }
+
+    public boolean isAcceptingPay() {
+        return acceptingPay;
+    }
+
+    public void setAcceptingPay(boolean acceptingPay) {
+        this.acceptingPay = acceptingPay;
+        config.setProperty("acceptingPay", acceptingPay);
         save();
     }
 

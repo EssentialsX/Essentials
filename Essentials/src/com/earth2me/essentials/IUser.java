@@ -163,4 +163,8 @@ public interface IUser {
     void setAfkMessage(final String message);
     
     long getAfkSince();
+    
+    boolean isAcceptingPay();
+    
+    void setAcceptingPay(boolean acceptingPay);
 }

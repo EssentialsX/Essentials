@@ -279,6 +279,10 @@ commands:
     description: Pays another player from your balance.
     usage: /<command> <player> <amount>
     aliases: [epay]
+  paytoggle:
+    description: Toggles whether you are accepting payments.
+    usage: /<command>
+    aliases: [epaytoggle, payoff, epayoff, payon, epayon]
   ping:
     description: Pong!
     usage: /<command>
