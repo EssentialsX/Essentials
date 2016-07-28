@@ -253,6 +253,10 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     public String getNick(final boolean longnick) {
+        return getNick(longnick, true, true);
+    }
+
+    public String getNick(final boolean longnick, final boolean withPrefix, final boolean withSuffix) {
         final StringBuilder prefix = new StringBuilder();
         String nickname;
         String suffix = "";
@@ -279,12 +283,12 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
         if (ess.getSettings().addPrefixSuffix()) {
             //These two extra toggles are not documented, because they are mostly redundant #EasterEgg
-            if (!ess.getSettings().disablePrefix()) {
+            if (withPrefix || !ess.getSettings().disablePrefix()) {
                 final String ptext = ess.getPermissionsHandler().getPrefix(base).replace('&', '§');
                 prefix.insert(0, ptext);
                 suffix = "§r";
             }
-            if (!ess.getSettings().disableSuffix()) {
+            if (withSuffix || !ess.getSettings().disableSuffix()) {
                 final String stext = ess.getPermissionsHandler().getSuffix(base).replace('&', '§');
                 suffix = stext + "§r";
                 suffix = suffix.replace("§f§f", "§f").replace("§f§r", "§r").replace("§r§r", "§r");
@@ -314,7 +318,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 // 1.8 enabled player list-names longer than 16 characters.
                 // If the server is on 1.8 or higher, provide that functionality. Otherwise, keep prior functionality.
                 boolean higherOrEqualTo1_8 = ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_8_R1);
-                String name = getNick(higherOrEqualTo1_8);
+                String name = getNick(higherOrEqualTo1_8, ess.getSettings().isAddingPrefixInPlayerlist(), ess.getSettings().isAddingSuffixInPlayerlist());
                 try {
                     this.getBase().setPlayerListName(name);
                 } catch (IllegalArgumentException e) {

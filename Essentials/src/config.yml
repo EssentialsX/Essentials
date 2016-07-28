@@ -45,6 +45,16 @@ change-displayname: true
 # Do not edit this setting unless you know what you are doing!
 #add-prefix-suffix: false
 
+# When this option is enabled, player prefixes will be shown in the playerlist.
+# This feature only works for Minecraft version 1.8 and higher.
+# This value of change-playerlist has to be true
+#add-prefix-in-playerlist: true
+
+# When this option is enabled, player suffixes will be shown in the playerlist.
+# This feature only works for Minecraft version 1.8 and higher. 
+# This value of change-playerlist has to be true
+#add-suffix-in-playerlist: true
+
 # If the teleport destination is unsafe, should players be teleported to the nearest safe location?
 # If this is set to true, Essentials will attempt to teleport players close to the intended destination.
 # If this is set to false, attempted teleports to unsafe locations will be cancelled with a warning.

@@ -1364,4 +1364,14 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean isAllowBulkBuySell() {
         return config.getBoolean("allow-bulk-buy-sell", false);
     }
+
+    @Override
+    public boolean isAddingPrefixInPlayerlist() {
+        return config.getBoolean("add-prefix-in-playerlist", false);
+    }
+
+    @Override
+    public boolean isAddingSuffixInPlayerlist() {
+        return config.getBoolean("add-suffix-in-playerlist", false);
+    }
 }

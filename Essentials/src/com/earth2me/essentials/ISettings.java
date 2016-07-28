@@ -269,4 +269,8 @@ public interface ISettings extends IConf {
     boolean isPastebinCreateKit();
     
     boolean isAllowBulkBuySell();
+    
+    boolean isAddingPrefixInPlayerlist();
+
+    boolean isAddingSuffixInPlayerlist();
 }
