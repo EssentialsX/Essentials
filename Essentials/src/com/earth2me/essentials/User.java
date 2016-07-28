@@ -528,7 +528,10 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
 
         final long autoafkkick = ess.getSettings().getAutoAfkKick();
-        if (autoafkkick > 0 && lastActivity > 0 && (lastActivity + (autoafkkick * 1000)) < System.currentTimeMillis() && !isHidden() && !isAuthorized("essentials.kick.exempt") && !isAuthorized("essentials.afk.kickexempt")) {
+        if (autoafkkick > 0
+            && lastActivity > 0 && (lastActivity + (autoafkkick * 1000)) < System.currentTimeMillis()
+            && !isAuthorized("essentials.kick.exempt")
+            && !isAuthorized("essentials.afk.kickexempt")) {
             final String kickReason = tl("autoAfkKickReason", autoafkkick / 60.0);
             lastActivity = 0;
             this.getBase().kickPlayer(kickReason);
