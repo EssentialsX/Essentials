@@ -1298,7 +1298,7 @@ public class Settings implements net.ess3.api.ISettings {
             decimalFormatSymbols = DecimalFormatSymbols.getInstance(Locale.forLanguageTag(symbolLocaleString));
         } else {
             // Fallback to the JVM's default locale
-            decimalFormatSymbols = DecimalFormatSymbols.getInstance();
+            decimalFormatSymbols = DecimalFormatSymbols.getInstance(Locale.US);
         }
 
         DecimalFormat currencyFormat = new DecimalFormat(currencyFormatString, decimalFormatSymbols);
