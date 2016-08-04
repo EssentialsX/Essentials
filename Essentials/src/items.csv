@@ -6756,6 +6756,11 @@ eggendermite,383,67
 guardianegg,383,68
 guardianspawnegg,383,68
 eggguardian,383,68
+spawneggshulker,383,69
+spawnshulker,383,69
+shulkerspawnegg,383,69
+shulkeregg,383,69
+shulkegg,383,69
 pigegg,383,90
 eggpig,383,90
 sheepegg,383,91
@@ -7814,11 +7819,6 @@ specterarrow,439,0
 glowstonearrow,439,0
 glowingarrow,439,0
 glowarrow,439,0
-spawneggshulker,383,0
-spawnshulker,383,0
-shulkerspawnegg,383,0
-shulkeregg,383,0
-shulkegg,383,0
 arrowregeneration,440,0
 regenerationarrow,440,0
 arrowregen,440,0
