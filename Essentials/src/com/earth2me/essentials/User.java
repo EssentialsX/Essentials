@@ -314,7 +314,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     public void setDisplayNick() {
         if (base.isOnline() && ess.getSettings().changeDisplayName()) {
             this.getBase().setDisplayName(getNick(true));
-            if (ess.getSettings().changePlayerListName()) {
+            if (isAfk()) {
+                updateAfkListName();
+            } else if (ess.getSettings().changePlayerListName()) {
                 // 1.8 enabled player list-names longer than 16 characters.
                 // If the server is on 1.8 or higher, provide that functionality. Otherwise, keep prior functionality.
                 boolean higherOrEqualTo1_8 = ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_8_R1);
@@ -438,15 +440,19 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             this.afkMessage = null;
             this.afkSince = 0;
         }
+        _setAfk(set);
+        updateAfkListName();
+    }
+    
+    private void updateAfkListName() {
         if (ess.getSettings().isAfkListName()) {
-            if(set) {
+            if(isAfk()) {
                 String afkName = ess.getSettings().getAfkListName().replace("{PLAYER}", getDisplayName()).replace("{USERNAME}", getName());
                 getBase().setPlayerListName(afkName);
             } else {
                 getBase().setPlayerListName(null);
             }
         }
-        _setAfk(set);
     }
 
     public boolean toggleAfk() {
