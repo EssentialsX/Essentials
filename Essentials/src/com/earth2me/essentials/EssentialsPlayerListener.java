@@ -451,6 +451,9 @@ public class EssentialsPlayerListener implements Listener {
                 Entry<Pattern, Long> cooldownEntry = ess.getSettings().getCommandCooldownEntry(fullCommand);
 
                 if (cooldownEntry != null) {
+                    if (ess.getSettings().isDebug()) {
+                        ess.getLogger().info("Applying " + cooldownEntry.getValue() + "ms cooldown on /" + fullCommand + " for" + user.getName() + ".");
+                    }
                     Date expiry = new Date(System.currentTimeMillis() + cooldownEntry.getValue());
                     user.addCommandCooldown(cooldownEntry.getKey(), expiry, ess.getSettings().isCommandCooldownPersistent(fullCommand));
                 }
