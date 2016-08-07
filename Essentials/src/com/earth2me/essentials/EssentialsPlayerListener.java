@@ -421,9 +421,9 @@ public class EssentialsPlayerListener implements Listener {
         if (ess.getSettings().isCommandCooldownsEnabled() && pluginCommand != null
             && !user.isAuthorized("essentials.commandcooldowns.bypass")) {
             int argStartIndex = event.getMessage().indexOf(" ");
-            String args = argStartIndex == -1 ? event.getMessage() // No arguments present 
-                : event.getMessage().substring(argStartIndex); // arguments start at argStartIndex; substring from there.
-            String fullCommand = pluginCommand.getName() + " " + args;
+            String args = argStartIndex == -1 ? "" // No arguments present 
+                : " " + event.getMessage().substring(argStartIndex); // arguments start at argStartIndex; substring from there.
+            String fullCommand = pluginCommand.getName() + args;
 
             // Used to determine whether a user already has an existing cooldown
             // If so, no need to check for (and write) new ones.
