@@ -194,7 +194,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 execTimer.mark("Init(Usermap)");
                 upgrade.afterSettings();
                 execTimer.mark("Upgrade2");
-                i18n.updateLocale(settings.getLocale());
                 warps = new Warps(getServer(), this.getDataFolder());
                 confList.add(warps);
                 execTimer.mark("Init(Spawn/Warp)");
