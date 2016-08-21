@@ -12,6 +12,7 @@ import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import net.ess3.api.events.JailStatusChangeEvent;
+import net.ess3.api.events.MuteStatusChangeEvent;
 import net.ess3.api.events.UserBalanceUpdateEvent;
 import net.ess3.nms.refl.ReflUtil;
 
@@ -505,10 +506,15 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     //Returns true if status expired during this check
     public boolean checkMuteTimeout(final long currentTime) {
         if (getMuteTimeout() > 0 && getMuteTimeout() < currentTime && isMuted()) {
-            setMuteTimeout(0);
-            sendMessage(tl("canTalkAgain"));
-            setMuted(false);
-            return true;
+            final MuteStatusChangeEvent event = new MuteStatusChangeEvent(this, null, false);
+            ess.getServer().getPluginManager().callEvent(event);
+            
+            if (!event.isCancelled()) {
+                setMuteTimeout(0);
+                sendMessage(tl("canTalkAgain"));
+                setMuted(false);
+                return true;
+            }
         }
         return false;
     }
