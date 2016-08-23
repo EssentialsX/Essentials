@@ -282,9 +282,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             LOGGER.log(Level.INFO, "Registering Listeners");
         }
 
-        final EssentialsPluginListener serverListener = new EssentialsPluginListener(this);
-        pm.registerEvents(serverListener, this);
-        confList.add(serverListener);
+        final EssentialsPluginListener pluginListener = new EssentialsPluginListener(this);
+        pm.registerEvents(pluginListener, this);
+        confList.add(pluginListener);
 
         final EssentialsPlayerListener playerListener = new EssentialsPlayerListener(this);
         pm.registerEvents(playerListener, this);
@@ -306,6 +306,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
         final EssentialsWorldListener worldListener = new EssentialsWorldListener(this);
         pm.registerEvents(worldListener, this);
+
+        final EssentialsServerListener serverListener = new EssentialsServerListener(this);
+        pm.registerEvents(serverListener, this);
 
         pm.registerEvents(tntListener, this);
 
