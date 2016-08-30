@@ -28,7 +28,7 @@ public class Commandfly extends EssentialsToggleCommand {
             enabled = !user.getBase().getAllowFlight();
         }
         
- +      final User controller = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null;
+        final User controller = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null;
         FlyStatusChangeEvent event = new FlyStatusChangeEvent(user, controller, enabled);
         ess.getServer().getPluginManager().callEvent(event);
         
