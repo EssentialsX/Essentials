@@ -266,7 +266,7 @@
     </build>
 
     <properties>
-        <build.number>TeamCity</build.number>
+        <build.number>SNAPSHOT</build.number>
         <GMVer>GMBuildVer</GMVer>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
