@@ -2,7 +2,7 @@
 name: EssentialsGeoIP
 main: com.earth2me.essentials.geoip.EssentialsGeoIP
 # Note to developers: This next line cannot change, or the automatic versioning system will break.
-version: ${project.version}-b${BUILD_NUMBER}
+version: ${project.version}-b${build.number}
 website: http://tiny.cc/EssentialsCommands
 description: Shows the country or city of a user on login and /whois.
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology]
