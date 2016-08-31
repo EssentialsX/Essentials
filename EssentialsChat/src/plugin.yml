@@ -2,7 +2,7 @@
 name: EssentialsChat
 main: com.earth2me.essentials.chat.EssentialsChat
 # Note to developers: This next line cannot change, or the automatic versioning system will break.
-version: ${project.version}-b${BUILD_NUMBER}
+version: ${project.version}-b${build.number}
 website: http://tiny.cc/EssentialsCommands
 description: Provides chat control features for Essentials.  Requires Permissions.
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, md_5, Okamosy, Iaccidentally]
