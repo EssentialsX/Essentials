@@ -2,7 +2,7 @@
 name: EssentialsSpawn
 main: com.earth2me.essentials.spawn.EssentialsSpawn
 # Note to developers: This next line cannot change, or the automatic versioning system will break.
-version: ${project.version}-b${BUILD_NUMBER}
+version: ${project.version}-b${build.number}
 website: http://tiny.cc/EssentialsCommands
 description: Provides spawn control commands, utilizing Essentials.
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits]
