@@ -2,7 +2,7 @@
 name: EssentialsXMPP
 main: com.earth2me.essentials.xmpp.EssentialsXMPP
 # Note to developers: This next line cannot change, or the automatic versioning system will break.
-version: ${project.version}-b${BUILD_NUMBER}
+version: ${project.version}-b${build.number}
 website: http://ess.khhq.net/wiki/XMPP
 description: Provides xmpp communication.
 authors:
