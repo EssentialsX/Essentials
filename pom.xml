@@ -25,7 +25,7 @@
     <repositories>
         <repository>
             <id>ess-repo</id>
-            <url>httphttps://ci.drtshock.net/plugin/repository/everything/</url>
+            <url>https://ci.drtshock.net/plugin/repository/everything/</url>
         </repository>
         <repository>
             <id>bukkit-repo</id>
