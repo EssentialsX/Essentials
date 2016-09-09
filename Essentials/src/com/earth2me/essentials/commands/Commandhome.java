@@ -56,6 +56,8 @@ public class Commandhome extends EssentialsCommand {
                 throw new Exception(tl("noHomeSetPlayer"));
             } else if (homes.size() == 1 && player.equals(user)) {
                 goHome(user, player, homes.get(0), charge);
+            } else if (homes.contains("home") && player.equals(user) && args.length == 0) {
+                goHome(user, player, "home", charge);
             } else {
                 final int count = homes.size();
                 if (user.isAuthorized("essentials.home.bed")) {
