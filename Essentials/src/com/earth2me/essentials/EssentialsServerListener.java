@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerListPingEvent;
 
 import java.util.Iterator;
+import java.util.logging.Level;
 
 
 public class EssentialsServerListener implements Listener {
@@ -19,11 +20,18 @@ public class EssentialsServerListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onServerListPing(final ServerListPingEvent event) {
-        Iterator<Player> iterator = event.iterator();
-        while (iterator.hasNext()) {
-            Player player = iterator.next();
-            if (ess.getUser(player).isVanished()) {
-                iterator.remove();
+        try {
+            Iterator<Player> iterator = event.iterator();
+            while (iterator.hasNext()) {
+                Player player = iterator.next();
+                if (ess.getUser(player).isVanished()) {
+                    iterator.remove();
+                }
+            }
+        } catch (UnsupportedOperationException e) {
+            if (ess.getServer().getName().equalsIgnoreCase("Cauldron")) {
+                Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e);
+                Bukkit.getLogger().log(Level.SEVERE, "Please update your server or report this to the developers of your server implementation!");
             }
         }
     }
