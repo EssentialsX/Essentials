@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerListPingEvent;
 
 import java.util.Iterator;
+import java.util.logging.Level;
 
 
 public class EssentialsServerListener implements Listener {
@@ -27,6 +28,11 @@ public class EssentialsServerListener implements Listener {
                     iterator.remove();
                 }
             }
-        } catch (UnsupportedOperationException e) { }
+        } catch (UnsupportedOperationException e) {
+            if (ess.getServer().getName().equalsIgnoreCase("Cauldron")) {
+                Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e);
+                Bukkit.getLogger().log(Level.SEVERE, "Please update your server or report this to the developers of your server implementation!");
+            }
+        }
     }
 }
