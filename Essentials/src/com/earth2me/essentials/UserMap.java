@@ -183,7 +183,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         UUID uuid = names.get(name);
         if (uuid != null) {
             keys.remove(uuid);
-            users.invalidate(uuid);
+            users.invalidate(uuid.toString());
         }
         names.remove(name);
         names.remove(StringUtil.safeString(name));
