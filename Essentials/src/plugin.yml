@@ -353,7 +353,7 @@ commands:
     aliases: [createwarp,ecreatewarp,esetwarp]
   setworth:
     description: Set the sell value of an item.
-    usage: /<command> [itemname|id] <price>
+    usage: /<command> [itemname|id[:durabilityvalue]] <price>
     aliases: [esetworth]
   showkit:
     description: Show contents of a kit.

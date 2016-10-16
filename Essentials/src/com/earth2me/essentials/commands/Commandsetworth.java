@@ -3,13 +3,19 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FloatUtil;
+import com.earth2me.essentials.utils.NumberUtil;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
 
 
 public class Commandsetworth extends EssentialsCommand {
+
+    private final Pattern COLON_PATTERN = Pattern.compile(":");
+
     public Commandsetworth() {
         super("setworth");
     }
@@ -27,7 +33,14 @@ public class Commandsetworth extends EssentialsCommand {
             stack = user.getBase().getInventory().getItemInHand();
             price = args[0];
         } else {
-            stack = ess.getItemDb().get(args[0]);
+            final String stackArg = args[0];
+            if(COLON_PATTERN.matcher(stackArg).find()) {
+                final String[] split = COLON_PATTERN.split(stackArg);
+                if(NumberUtil.isInt(split[1])) {
+                    stack = ess.getItemDb().get(split[0]);
+                    stack.setDurability(Short.parseShort(split[1]));
+                } else throw new NumberFormatException("NaN is not valid");
+            } else stack = ess.getItemDb().get(stackArg);
             price = args[1];
         }
 
@@ -41,7 +54,16 @@ public class Commandsetworth extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        ItemStack stack = ess.getItemDb().get(args[0]);
+        final ItemStack stack;
+        final String stackArg = args[0];
+        if(COLON_PATTERN.matcher(stackArg).find()) {
+            final String[] split = COLON_PATTERN.split(stackArg);
+            if(NumberUtil.isInt(split[1])) {
+                stack = ess.getItemDb().get(split[0]);
+                stack.setDurability(Short.parseShort(split[1]));
+            } else throw new NumberFormatException("NaN is not valid");
+        } else stack = ess.getItemDb().get(stackArg);
+
         ess.getWorth().setPrice(stack, FloatUtil.parseDouble(args[1]));
         sender.sendMessage(tl("worthSet"));
     }
