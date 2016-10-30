@@ -546,6 +546,7 @@ public class Settings implements net.ess3.api.ISettings {
         customQuitMessage = _getCustomQuitMessage();
         isCustomQuitMessage = !customQuitMessage.equals("none");
         muteCommands = _getMuteCommands();
+        spawnOnJoinGroups = _getSpawnOnJoinGroups();
         commandCooldowns = _getCommandCooldowns();
         npcsInBalanceRanking = _isNpcsInBalanceRanking();
         currencyFormat = _getCurrencyFormat();
@@ -1184,7 +1185,41 @@ public class Settings implements net.ess3.api.ISettings {
 
     @Override
     public boolean isSpawnOnJoin() {
-        return config.getBoolean("spawn-on-join", false);
+        return !this.spawnOnJoinGroups.isEmpty();
+    }
+    
+    private List<String> spawnOnJoinGroups;
+
+    public List<String> _getSpawnOnJoinGroups() {
+        List<String> def = Collections.emptyList();
+        if (config.isSet("spawn-on-join")) {
+            if (config.isList("spawn-on-join")) {
+                return new ArrayList<>(config.getStringList("spawn-on-join"));
+            } else if (config.isBoolean("spawn-on-join")) { // List of [*] to make all groups go to spawn on join.
+                // This also maintains backwards compatibility with initial impl of single boolean value.
+                return config.getBoolean("spawn-on-join") ? Collections.singletonList("*") : def;
+            }
+            // Take whatever the value is, convert to string and add it to a list as a single value.
+            String val = config.get("spawn-on-join").toString();
+            return !val.isEmpty() ? Collections.singletonList(val) : def;
+        } else {
+            return def;
+        }
+    }
+
+    @Override
+    public List<String> getSpawnOnJoinGroups() {
+        return this.spawnOnJoinGroups;
+    }
+
+    @Override
+    public boolean isUserInSpawnOnJoinGroup(IUser user) {
+        for (String group : this.spawnOnJoinGroups) {
+            if (group.equals("*") || user.inGroup(group)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

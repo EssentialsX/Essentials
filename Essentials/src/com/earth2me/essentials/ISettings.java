@@ -250,6 +250,10 @@ public interface ISettings extends IConf {
 
     boolean isSpawnOnJoin();
 
+    List<String> getSpawnOnJoinGroups();
+    
+    boolean isUserInSpawnOnJoinGroup(IUser user);
+
     boolean isTeleportToCenterLocation();
 
     boolean isCommandCooldownsEnabled();

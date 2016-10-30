@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -71,10 +72,11 @@ public class EssentialsSpawnPlayerListener implements Listener {
     public void delayedJoin(final Player player) {
         if (player.hasPlayedBefore()) {
             LOGGER.log(Level.FINE, "Old player join");
-            
-            if (ess.getSettings().isSpawnOnJoin()) {
+            List<String> spawnOnJoinGroups = ess.getSettings().getSpawnOnJoinGroups();
+            if (!spawnOnJoinGroups.isEmpty()) {
                 final User user = ess.getUser(player);
-                if (!user.isAuthorized("essentials.spawn-on-join.exempt")) {
+                
+                if (ess.getSettings().isUserInSpawnOnJoinGroup(user) && !user.isAuthorized("essentials.spawn-on-join.exempt")) {
                     ess.scheduleSyncDelayedTask(new Runnable() {
                         @Override
                         public void run() {
