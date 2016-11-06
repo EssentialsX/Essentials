@@ -583,6 +583,9 @@ sethome-multiple:
 # Set to 0 for no timeout.
 tpa-accept-cancellation: 120
 
+# Allow players to set hats by clicking on their helmet slot.
+allow-direct-hat: true
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                    EssentialsEco                     | #

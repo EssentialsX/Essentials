@@ -1421,4 +1421,9 @@ public class Settings implements net.ess3.api.ISettings {
     public int getMotdDelay() {
         return config.getInt("delay-motd", 0);
     }
+
+    @Override
+    public boolean isDirectHatAllowed() {
+        return config.getBoolean("allow-direct-hat", true);
+    }
 }

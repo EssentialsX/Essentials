@@ -283,4 +283,6 @@ public interface ISettings extends IConf {
     int getNotifyPlayerOfMailCooldown();
 
     int getMotdDelay();
+
+    boolean isDirectHatAllowed();
 }

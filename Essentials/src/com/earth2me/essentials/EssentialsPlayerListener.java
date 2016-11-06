@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -27,6 +28,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.io.IOException;
 import java.text.NumberFormat;
@@ -640,6 +642,13 @@ public class EssentialsPlayerListener implements Listener {
         final Inventory top = event.getView().getTopInventory();
         final InventoryType type = top.getType();
 
+        final Inventory clickedInventory;
+        if (event.getRawSlot() < 0) {
+            clickedInventory = null;
+        } else {
+            clickedInventory = event.getRawSlot() < top.getSize() ? top : event.getView().getBottomInventory();
+        }
+
         if (type == InventoryType.PLAYER) {
             final User user = ess.getUser((Player) event.getWhoClicked());
             final InventoryHolder invHolder = top.getHolder();
@@ -668,6 +677,16 @@ public class EssentialsPlayerListener implements Listener {
             if (invHolder != null && invHolder instanceof HumanEntity && user.isInvSee()) {
                 event.setCancelled(true);
                 refreshPlayer = user.getBase();
+            }
+        } else if (clickedInventory != null && clickedInventory.getType() == InventoryType.PLAYER) {
+            if (ess.getSettings().isDirectHatAllowed() && event.getClick() == ClickType.LEFT && event.getSlot() == 39
+                && event.getCursor().getType() != Material.AIR && event.getCursor().getType().getMaxDurability() == 0
+                && ess.getUser(event.getWhoClicked()).isAuthorized("essentials.hat")) {
+                event.setCancelled(true);
+                final PlayerInventory inv = (PlayerInventory) clickedInventory;
+                final ItemStack head = inv.getHelmet();
+                inv.setHelmet(event.getCursor());
+                event.setCursor(head);
             }
         }
 
