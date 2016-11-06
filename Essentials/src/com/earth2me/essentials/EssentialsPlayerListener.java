@@ -623,7 +623,7 @@ public class EssentialsPlayerListener implements Listener {
                 if (user.isInvSee() && (!user.isAuthorized("essentials.invsee.modify") || invOwner.isAuthorized("essentials.invsee.preventmodify") || !invOwner.getBase().isOnline())) {
                     event.setCancelled(true);
                     refreshPlayer = user.getBase();
-                } else if (ess.getSettings().isDirectHatAllowed() && ((Player) event.getWhoClicked()).hasPermission("essentials.hat") && event.getSlot() == 38 && event.getClick() == ClickType.LEFT) {
+                } else if (ess.getSettings().isDirectHatAllowed() && ess.getUser(event.getWhoClicked()).isAuthorized("essentials.hat") && event.getSlot() == 38 && event.getClick() == ClickType.LEFT) {
                     if (event.getCursor().getType() != Material.AIR && event.getCursor().getType().getMaxDurability() == 0) {
                         event.setCancelled(true);
                         final PlayerInventory inv = (PlayerInventory) event.getInventory();
