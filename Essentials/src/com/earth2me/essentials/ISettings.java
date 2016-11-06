@@ -277,4 +277,6 @@ public interface ISettings extends IConf {
     boolean isAddingPrefixInPlayerlist();
 
     boolean isAddingSuffixInPlayerlist();
+
+    boolean isDirectHatAllowed();
 }

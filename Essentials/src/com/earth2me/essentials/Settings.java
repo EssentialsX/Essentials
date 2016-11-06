@@ -1409,4 +1409,9 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean isAddingSuffixInPlayerlist() {
         return config.getBoolean("add-suffix-in-playerlist", false);
     }
+
+    @Override
+    public boolean isDirectHatAllowed() {
+        return config.getBoolean("allow-direct-hat", true);
+    }
 }
