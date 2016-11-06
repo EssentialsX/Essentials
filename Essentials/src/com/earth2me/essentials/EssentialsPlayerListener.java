@@ -12,10 +12,12 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -25,6 +27,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.io.IOException;
 import java.text.NumberFormat;
@@ -621,6 +624,14 @@ public class EssentialsPlayerListener implements Listener {
                 if (user.isInvSee() && (!user.isAuthorized("essentials.invsee.modify") || invOwner.isAuthorized("essentials.invsee.preventmodify") || !invOwner.getBase().isOnline())) {
                     event.setCancelled(true);
                     refreshPlayer = user.getBase();
+                } else if (ess.getConfig().getBoolean("allow-direct-hat") && ((Player) event.getWhoClicked()).hasPermission("essentials.hat") && event.getSlot() == 38) {
+                    if (event.getCursor().getType() != Material.AIR && event.getCursor().getType().getMaxDurability() == 0) {
+                        event.setCancelled(true);
+                        final PlayerInventory inv = (PlayerInventory) event.getInventory();
+                        final ItemStack head = inv.getHelmet();
+                        inv.setHelmet(event.getCursor());
+                        event.setCursor(head);
+                    }
                 }
             }
         } else if (type == InventoryType.ENDER_CHEST) {
