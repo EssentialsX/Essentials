@@ -771,11 +771,6 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public boolean useExactLoginLocation() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public int getTicksPerAnimalSpawns() {
         throw new UnsupportedOperationException("Not supported yet.");
     }

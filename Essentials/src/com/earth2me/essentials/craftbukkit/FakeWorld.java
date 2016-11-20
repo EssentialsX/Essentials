@@ -588,6 +588,16 @@ public class FakeWorld implements World {
     }
 
     @Override
+    public void playSound(Location location, Sound sound, SoundCategory soundCategory, float v, float v1) {
+        
+    }
+
+    @Override
+    public void playSound(Location location, String s, SoundCategory soundCategory, float v, float v1) {
+
+    }
+
+    @Override
     public int getAmbientSpawnLimit() {
         throw new UnsupportedOperationException("Not supported yet.");
     }

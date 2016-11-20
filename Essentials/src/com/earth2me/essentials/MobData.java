@@ -82,7 +82,7 @@ public enum MobData {
     STONE_SWORD_SKELETON("stonesword", EntityType.SKELETON, Material.STONE_SWORD, false),
     SWORD_SKELETON("sword", EntityType.SKELETON, Material.STONE_SWORD, true),
     BOW_SKELETON("bow", EntityType.SKELETON, Material.BOW, true),
-    WHITHER_SKELETON("wither", EntityType.SKELETON, Data.WITHER, true),
+    WITHER_SKELETON("wither", EntityType.SKELETON, Data.WITHER, true),
     POWERED_CREEPER("powered", EntityType.CREEPER, Data.ELECTRIFIED, true),
     ELECTRIC_CREEPER("electric", EntityType.CREEPER, Data.ELECTRIFIED, false),
     CHARGED_CREEPER("charged", EntityType.CREEPER, Data.ELECTRIFIED, false),
