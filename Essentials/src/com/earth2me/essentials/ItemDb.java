@@ -167,9 +167,9 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
         List<ItemStack> is = new ArrayList<>();
 
         if (args.length < 1) {
-            is.add(user.getBase().getItemInHand());
+            is.add(user.getItemInHand());
         } else if (args[0].equalsIgnoreCase("hand")) {
-            is.add(user.getBase().getItemInHand());
+            is.add(user.getItemInHand());
         } else if (args[0].equalsIgnoreCase("inventory") || args[0].equalsIgnoreCase("invent") || args[0].equalsIgnoreCase("all")) {
             for (ItemStack stack : user.getBase().getInventory().getContents()) {
                 if (stack == null || stack.getType() == Material.AIR) {

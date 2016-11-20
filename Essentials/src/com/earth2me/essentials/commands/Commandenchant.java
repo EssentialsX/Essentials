@@ -25,7 +25,7 @@ public class Commandenchant extends EssentialsCommand {
     //TODO: Implement charge costs: final Trade charge = new Trade("enchant-" + enchantmentName, ess);
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        final ItemStack stack = user.getBase().getItemInHand();
+        final ItemStack stack = user.getItemInHand();
         if (stack == null || stack.getType() == Material.AIR) {
             throw new Exception(tl("nothingInHand"));
         }
@@ -55,7 +55,7 @@ public class Commandenchant extends EssentialsCommand {
         final MetaItemStack metaStack = new MetaItemStack(stack);
         final Enchantment enchantment = metaStack.getEnchantment(user, args[0]);
         metaStack.addEnchantment(user.getSource(), allowUnsafe, enchantment, level);
-        user.getBase().getInventory().setItemInHand(metaStack.getItemStack());
+        user.getBase().getInventory().setItemInMainHand(metaStack.getItemStack());
 
         user.getBase().updateInventory();
         final String enchantmentName = enchantment.getName().toLowerCase(Locale.ENGLISH);

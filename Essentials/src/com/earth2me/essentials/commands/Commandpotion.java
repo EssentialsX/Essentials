@@ -26,7 +26,7 @@ public class Commandpotion extends EssentialsCommand {
 
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        final ItemStack stack = user.getBase().getItemInHand();
+        final ItemStack stack = user.getItemInHand();
 
         if (args.length == 0) {
             final Set<String> potionslist = new TreeSet<>();

@@ -17,7 +17,7 @@ public class Commandbook extends EssentialsCommand {
     //TODO: Translate this
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        final ItemStack item = user.getBase().getItemInHand();
+        final ItemStack item = user.getItemInHand();
         final String player = user.getName();
         if (item.getType() == Material.WRITTEN_BOOK) {
             BookMeta bmeta = (BookMeta) item.getItemMeta();
@@ -42,7 +42,7 @@ public class Commandbook extends EssentialsCommand {
                 if (isAuthor(bmeta, player) || user.isAuthorized("essentials.book.others")) {
                     ItemStack newItem = new ItemStack(Material.BOOK_AND_QUILL, item.getAmount());
                     newItem.setItemMeta(bmeta);
-                    user.getBase().setItemInHand(newItem);
+                    user.getBase().getInventory().setItemInMainHand(newItem);
                     user.sendMessage(tl("editBookContents"));
                 } else {
                     throw new Exception(tl("denyBookEdit"));
@@ -55,7 +55,7 @@ public class Commandbook extends EssentialsCommand {
             }
             ItemStack newItem = new ItemStack(Material.WRITTEN_BOOK, item.getAmount());
             newItem.setItemMeta(bmeta);
-            user.getBase().setItemInHand(newItem);
+            user.getBase().getInventory().setItemInMainHand(newItem);
             user.sendMessage(tl("bookLocked"));
         } else {
             throw new Exception(tl("holdBook"));

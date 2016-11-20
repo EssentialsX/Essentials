@@ -224,8 +224,8 @@ public class SpawnMob {
     private static void defaultMobData(final EntityType type, final Entity spawned) {
         if (type == EntityType.SKELETON) {
             final EntityEquipment invent = ((LivingEntity) spawned).getEquipment();
-            invent.setItemInHand(new ItemStack(Material.BOW, 1));
-            invent.setItemInHandDropChance(0.1f);
+            invent.setItemInMainHand(new ItemStack(Material.BOW, 1));
+            invent.setItemInMainHandDropChance(0.1f);
 
             invent.setBoots(new ItemStack(Material.GOLD_BOOTS, 1));
             invent.setBootsDropChance(0.0f);
@@ -233,11 +233,10 @@ public class SpawnMob {
 
         if (type == EntityType.PIG_ZOMBIE) {
             final PigZombie zombie = ((PigZombie) spawned);
-            zombie.setVillager(false);
 
             final EntityEquipment invent = zombie.getEquipment();
-            invent.setItemInHand(new ItemStack(Material.GOLD_SWORD, 1));
-            invent.setItemInHandDropChance(0.1f);
+            invent.setItemInMainHand(new ItemStack(Material.GOLD_SWORD, 1));
+            invent.setItemInMainHandDropChance(0.1f);
 
             invent.setBoots(new ItemStack(Material.GOLD_BOOTS, 1));
             invent.setBootsDropChance(0.0f);
@@ -245,7 +244,6 @@ public class SpawnMob {
 
         if (type == EntityType.ZOMBIE) {
             final Zombie zombie = ((Zombie) spawned);
-            zombie.setVillager(false);
 
             final EntityEquipment invent = zombie.getEquipment();
             invent.setBoots(new ItemStack(Material.GOLD_BOOTS, 1));
