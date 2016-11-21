@@ -832,6 +832,11 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public InventoryView openMerchant(Merchant merchant, boolean b) {
+        return null;
+    }
+
+    @Override
     public void closeInventory() {
     }
 
