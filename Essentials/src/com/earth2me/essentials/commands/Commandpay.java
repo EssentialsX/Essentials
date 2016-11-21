@@ -26,6 +26,10 @@ public class Commandpay extends EssentialsLoopCommand {
         if (args.length < 2) {
             throw new NotEnoughArgumentsException();
         }
+        
+        if (args[1].contains("-")) {
+            throw new Exception(tl("payMustBePositive"));
+        }
 
         String stringAmount = args[1].replaceAll("[^0-9\\.]", "");
 

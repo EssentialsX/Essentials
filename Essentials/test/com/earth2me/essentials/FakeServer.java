@@ -570,6 +570,8 @@ public class FakeServer implements Server {
             public UUID getUniqueId() {
                 if (string == "testPlayer1") {
                     return UUID.fromString("3c9ebe1a-9098-43fd-bc0c-a369b76817ba");
+                } else if (string == "testPlayer2") {
+                    return UUID.fromString("2c9ebe1a-9098-43fd-bc0c-a369b76817ba");
                 } else if (string == "npc1") {
                     return null;
                 }
@@ -817,6 +819,11 @@ public class FakeServer implements Server {
 
     @Override
     public Inventory createInventory(InventoryHolder ih, int i, String string) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Merchant createMerchant(String s) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
