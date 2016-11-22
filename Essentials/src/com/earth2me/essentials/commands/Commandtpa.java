@@ -28,7 +28,7 @@ public class Commandtpa extends EssentialsCommand {
             throw new Exception(tl("noPerm", "essentials.worlds." + player.getWorld().getName()));
         }
         // Don't let sender request teleport twice to the same player.
-        if (user.getConfigUUID().equals(player.getTeleportRequest())
+        if (user.getConfigUUID().equals(player.getTeleportRequest()) && player.hasOutstandingTeleportRequest() // Check timeout
             && player.isTpRequestHere() == false) { // Make sure the last teleport request was actually tpa and not tpahere
             throw new Exception(tl("requestSentAlready", player.getDisplayName()));
         }

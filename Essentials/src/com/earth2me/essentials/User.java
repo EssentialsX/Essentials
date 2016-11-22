@@ -241,6 +241,24 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
     }
 
+    @Override
+    public boolean hasOutstandingTeleportRequest() {
+        if (getTeleportRequest() != null) { // Player has outstanding teleport request.
+            long timeout = ess.getSettings().getTpaAcceptCancellation();
+            if (timeout != 0) {
+                if ((System.currentTimeMillis() - getTeleportRequestTime()) / 1000 <= timeout) { // Player has outstanding request
+                    return true;
+                } else { // outstanding request expired.
+                    requestTeleport(null, false);
+                    return false;
+                }
+            } else { // outstanding request does not expire
+                return true;
+            }
+        }
+        return false;
+    }
+
     public UUID getTeleportRequest() {
         return teleportRequester;
     }
