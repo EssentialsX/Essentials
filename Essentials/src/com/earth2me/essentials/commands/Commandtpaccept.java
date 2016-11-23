@@ -40,7 +40,7 @@ public class Commandtpaccept extends EssentialsCommand {
             throw new Exception(tl("noPendingRequest"));
         }
 
-        if (user.hasOutstandingTeleportRequest()) {
+        if (!user.hasOutstandingTeleportRequest()) {
             user.requestTeleport(null, false);
             throw new Exception(tl("requestTimedOut"));
         }
