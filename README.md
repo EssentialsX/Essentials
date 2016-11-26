@@ -21,6 +21,8 @@ EssentialsX is almost a completely drop-in replacement for Essentials. However, 
 
 * **EssentialsX requires Java 7.**
 
+* **[Build 440](https://ci.drtshock.net/job/EssentialsX/440/) and onwards (8b0659a2b4fe2a722557afbcf6192a74d652c473) only support Minecraft 1.11. For 1.7.10-1.10, use [build 439](https://ci.drtshock.net/job/EssentialsX/439/).**
+
 Building
 --------
 
