@@ -234,7 +234,7 @@ public class SpawnMob {
 
         if (type == EntityType.PIG_ZOMBIE) {
             final PigZombie zombie = ((PigZombie) spawned);
-            setVillager(zombie);
+            setVillager(zombie, false);
 
             final EntityEquipment invent = zombie.getEquipment();
             InventoryWorkaround.setItemInMainHand(invent, new ItemStack(Material.GOLD_SWORD, 1));
@@ -246,6 +246,7 @@ public class SpawnMob {
 
         if (type == EntityType.ZOMBIE) {
             final Zombie zombie = ((Zombie) spawned);
+            setVillager(zombie, false);
 
             final EntityEquipment invent = zombie.getEquipment();
             invent.setBoots(new ItemStack(Material.GOLD_BOOTS, 1));
@@ -258,9 +259,9 @@ public class SpawnMob {
     }
 
     @SuppressWarnings("deprecation")
-    private static void setVillager(Zombie zombie) {
+    private static void setVillager(Zombie zombie, boolean villager) {
         try {
-            zombie.setVillager(false);
+            zombie.setVillager(villager);
         } catch (Exception ignored) {
         }
     }
