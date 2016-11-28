@@ -2,6 +2,8 @@ package com.earth2me.essentials.craftbukkit;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -176,5 +178,65 @@ public final class InventoryWorkaround {
             }
         }
         return leftover;
+    }
+
+    // Hot-ish code so cache
+    private static Boolean hasMainHandSupport = null;
+
+    @SuppressWarnings("deprecation")
+    public static void setItemInMainHand(Player p, ItemStack item) {
+        if (hasMainHandSupport == null) {
+            try {
+                p.getInventory().setItemInMainHand(item);
+                hasMainHandSupport = true;
+            } catch (Exception e) {
+                p.setItemInHand(item);
+                hasMainHandSupport = false;
+            }
+        } else {
+            if (hasMainHandSupport) {
+                p.getInventory().setItemInMainHand(item);
+            } else {
+                p.setItemInHand(item);
+            }
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    public static void setItemInMainHand(EntityEquipment invent, ItemStack item) {
+        if (hasMainHandSupport == null) {
+            try {
+                invent.setItemInMainHand(item);
+                hasMainHandSupport = true;
+            } catch (Exception e) {
+                invent.setItemInHand(item);
+                hasMainHandSupport = false;
+            }
+        } else {
+            if (hasMainHandSupport) {
+                invent.setItemInMainHand(item);
+            } else {
+                invent.setItemInHand(item);
+            }
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    public static void setItemInMainHandDropChance(EntityEquipment invent, float chance) {
+        if (hasMainHandSupport == null) {
+            try {
+                invent.setItemInMainHandDropChance(chance);
+                hasMainHandSupport = true;
+            } catch (Exception e) {
+                invent.setItemInHandDropChance(chance);
+                hasMainHandSupport = false;
+            }
+        } else {
+            if (hasMainHandSupport) {
+                invent.setItemInMainHandDropChance(chance);
+            } else {
+                invent.setItemInHandDropChance(chance);
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.utils.StringUtil;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -240,8 +241,8 @@ public enum MobData {
                 ((Horse) spawned).getInventory().setArmor(new ItemStack((Material) this.value, 1));
             } else if (this.type.equals(EntityType.ZOMBIE.getEntityClass()) || this.type.equals(EntityType.SKELETON)) {
                 final EntityEquipment invent = ((LivingEntity) spawned).getEquipment();
-                invent.setItemInMainHand(new ItemStack((Material) this.value, 1));
-                invent.setItemInMainHandDropChance(0.1f);
+                InventoryWorkaround.setItemInMainHand(invent, new ItemStack((Material) this.value, 1));
+                InventoryWorkaround.setItemInMainHandDropChance(invent, 0.1f);
             }
         }
     }

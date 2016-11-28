@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
@@ -42,7 +43,7 @@ public class Commandbook extends EssentialsCommand {
                 if (isAuthor(bmeta, player) || user.isAuthorized("essentials.book.others")) {
                     ItemStack newItem = new ItemStack(Material.BOOK_AND_QUILL, item.getAmount());
                     newItem.setItemMeta(bmeta);
-                    user.getBase().getInventory().setItemInMainHand(newItem);
+                    InventoryWorkaround.setItemInMainHand(user.getBase(), newItem);
                     user.sendMessage(tl("editBookContents"));
                 } else {
                     throw new Exception(tl("denyBookEdit"));
@@ -55,7 +56,7 @@ public class Commandbook extends EssentialsCommand {
             }
             ItemStack newItem = new ItemStack(Material.WRITTEN_BOOK, item.getAmount());
             newItem.setItemMeta(bmeta);
-            user.getBase().getInventory().setItemInMainHand(newItem);
+            InventoryWorkaround.setItemInMainHand(user.getBase(), newItem);
             user.sendMessage(tl("bookLocked"));
         } else {
             throw new Exception(tl("holdBook"));

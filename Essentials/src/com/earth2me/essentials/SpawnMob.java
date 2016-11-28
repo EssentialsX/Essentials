@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.Mob.MobException;
+import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import net.ess3.api.IEssentials;
@@ -224,8 +225,8 @@ public class SpawnMob {
     private static void defaultMobData(final EntityType type, final Entity spawned) {
         if (type == EntityType.SKELETON) {
             final EntityEquipment invent = ((LivingEntity) spawned).getEquipment();
-            invent.setItemInMainHand(new ItemStack(Material.BOW, 1));
-            invent.setItemInMainHandDropChance(0.1f);
+            InventoryWorkaround.setItemInMainHand(invent, new ItemStack(Material.BOW, 1));
+            InventoryWorkaround.setItemInMainHandDropChance(invent, 0.1f);
 
             invent.setBoots(new ItemStack(Material.GOLD_BOOTS, 1));
             invent.setBootsDropChance(0.0f);
@@ -233,10 +234,11 @@ public class SpawnMob {
 
         if (type == EntityType.PIG_ZOMBIE) {
             final PigZombie zombie = ((PigZombie) spawned);
+            setVillager(zombie);
 
             final EntityEquipment invent = zombie.getEquipment();
-            invent.setItemInMainHand(new ItemStack(Material.GOLD_SWORD, 1));
-            invent.setItemInMainHandDropChance(0.1f);
+            InventoryWorkaround.setItemInMainHand(invent, new ItemStack(Material.GOLD_SWORD, 1));
+            InventoryWorkaround.setItemInMainHandDropChance(invent, 0.1f);
 
             invent.setBoots(new ItemStack(Material.GOLD_BOOTS, 1));
             invent.setBootsDropChance(0.0f);
@@ -252,6 +254,14 @@ public class SpawnMob {
 
         if (type == EntityType.HORSE) {
             ((Horse) spawned).setJumpStrength(1.2);
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    private static void setVillager(Zombie zombie) {
+        try {
+            zombie.setVillager(false);
+        } catch (Exception ignored) {
         }
     }
 }
