@@ -16,6 +16,8 @@
  *******************************************************************************/
 package net.ess3.nms.refl;
 
+import net.ess3.nms.refl.ReflUtil.NMSVersion;
+
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
@@ -93,7 +95,13 @@ public class SpawnEggRefl {
         }
         Object id = NBTTagCompoundConstructor.newInstance();
         Method tagSetString = ReflUtil.getMethodCached(NBTTagCompoundClass, "setString", String.class, String.class);
-        tagSetString.invoke(id, "id", type.getName());
+        
+        String idString = type.getName();
+        if (ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_11_R1)) {
+            // 1.11 requires domain prefix of minecraft.
+            idString = "minecraft:" + idString;
+        }
+        tagSetString.invoke(id, "id", idString);
 
         Method tagSetTag = ReflUtil.getMethodCached(NBTTagCompoundClass, "set", String.class, NBTTagCompoundClass.getSuperclass());
         tagSetTag.invoke(tagCompound, "EntityTag", id);
@@ -128,8 +136,12 @@ public class SpawnEggRefl {
             Object entityTag = tagGetCompound.invoke(tagCompound, "EntityTag");
 
             Method tagGetString = ReflUtil.getMethodCached(entityTag.getClass(), "getString", String.class);
+            String idString = (String) tagGetString.invoke(entityTag, "id");
+            if (ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_11_R1)) {
+                idString = idString.split("minecraft:")[1];
+            }
             @SuppressWarnings("deprecation")
-            EntityType type = EntityType.fromName((String) tagGetString.invoke(entityTag, "id"));
+            EntityType type = EntityType.fromName(idString);
             if (type != null) {
                 return new SpawnEggRefl(type);
             } else {
