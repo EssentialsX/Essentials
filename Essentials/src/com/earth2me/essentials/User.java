@@ -147,10 +147,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     @Override
-    public void payUser(final User reciever, final BigDecimal value) throws ChargeException, MaxMoneyException {
-        if (value.signum() == 0) {
-            return;
+    public void payUser(final User reciever, final BigDecimal value) throws Exception {
+        if (value.compareTo(BigDecimal.ZERO) < 1) {
+            throw new Exception(tl("payMustBePositive"));
         }
+
         if (canAfford(value)) {
             setMoney(getMoney().subtract(value));
             reciever.setMoney(reciever.getMoney().add(value));
