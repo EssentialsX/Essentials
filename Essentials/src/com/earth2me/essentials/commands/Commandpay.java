@@ -61,6 +61,8 @@ public class Commandpay extends EssentialsLoopCommand {
             } catch (MaxMoneyException ignored) {
                 // this should never happen
             }
+        } catch (Exception e) {
+            sender.sendMessage(e.getMessage());
         }
     }
 }
