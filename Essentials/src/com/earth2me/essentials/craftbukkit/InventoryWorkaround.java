@@ -189,7 +189,7 @@ public final class InventoryWorkaround {
             try {
                 p.getInventory().setItemInMainHand(item);
                 hasMainHandSupport = true;
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 p.setItemInHand(item);
                 hasMainHandSupport = false;
             }
@@ -208,7 +208,7 @@ public final class InventoryWorkaround {
             try {
                 invent.setItemInMainHand(item);
                 hasMainHandSupport = true;
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 invent.setItemInHand(item);
                 hasMainHandSupport = false;
             }
@@ -227,7 +227,7 @@ public final class InventoryWorkaround {
             try {
                 invent.setItemInMainHandDropChance(chance);
                 hasMainHandSupport = true;
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 invent.setItemInHandDropChance(chance);
                 hasMainHandSupport = false;
             }
