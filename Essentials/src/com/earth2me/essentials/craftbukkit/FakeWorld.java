@@ -339,6 +339,11 @@ public class FakeWorld implements World {
     }
 
     @Override
+    public <T extends Entity> T spawn(Location location, Class<T> aClass, org.bukkit.util.Consumer<T> consumer) throws IllegalArgumentException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public FallingBlock spawnFallingBlock(Location location, MaterialData materialData) throws IllegalArgumentException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -595,7 +600,7 @@ public class FakeWorld implements World {
 
     @Override
     public void playSound(Location location, Sound sound, SoundCategory soundCategory, float v, float v1) {
-        
+
     }
 
     @Override
