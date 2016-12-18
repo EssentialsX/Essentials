@@ -138,6 +138,12 @@
             <artifactId>supervisor-bukkit</artifactId>
             <version>1.3-SNAPSHOT</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.spigotmc</groupId>
+                    <artifactId>spigot-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
     <repositories>
