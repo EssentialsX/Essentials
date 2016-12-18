@@ -5,8 +5,8 @@ main: com.earth2me.essentials.Essentials
 version: ${project.version}-b${build.number}
 website: http://tiny.cc/EssentialsCommands
 description: Provides an essential, core set of commands for Bukkit.
-softdepend: [Vault]
-authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, md_5, Iaccidentally, drtshock, vemacs]
+softdepend: [Vault, Supervisor]
+authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, md_5, Iaccidentally, drtshock, vemacs, SupaHam]
 commands:
   afk:
     description: Marks you as away-from-keyboard.
