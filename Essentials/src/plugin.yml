@@ -283,6 +283,10 @@ commands:
     description: Toggles whether you are accepting payments.
     usage: /<command>
     aliases: [epaytoggle, payoff, epayoff, payon, epayon]
+  payconfirmtoggle:
+    description: Toggles whether you are prompted to confirm payments.
+    usage: /<command>
+    aliases: [epayconfirmtoggle, payconfirmoff, epayconfirmoff, payconfirmon, epayconfirmon, payconfirm, epayconfirm]
   ping:
     description: Pong!
     usage: /<command>

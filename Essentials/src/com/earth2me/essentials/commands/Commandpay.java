@@ -59,7 +59,7 @@ public class Commandpay extends EssentialsLoopCommand {
                 sender.sendMessage(tl("notAcceptingPay", player.getDisplayName()));
                 return;
             }
-            if (!amount.equals(user.getConfirmingPayments().get(player))) { // checks if exists and if command needs to be repeated.
+            if (user.isPromptingPayConfirm() && !amount.equals(user.getConfirmingPayments().get(player))) { // checks if exists and if command needs to be repeated.
                 // Used to reset confirmations and inform to confirm when a new pay command has been inserted.
                 if (!informToConfirm) {
                     // User hasnt been asked to confirm payment to this player, reset all confirmed payments and ask to confirm again.

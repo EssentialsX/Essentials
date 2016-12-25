@@ -174,6 +174,10 @@ public interface IUser {
     boolean isAcceptingPay();
     
     void setAcceptingPay(boolean acceptingPay);
+    
+    boolean isPromptingPayConfirm();
+    
+    void setPromptingPayConfirm(boolean prompt);
 
     Map<User, BigDecimal> getConfirmingPayments();
 }
