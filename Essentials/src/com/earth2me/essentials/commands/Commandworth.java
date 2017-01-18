@@ -7,7 +7,6 @@ import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -24,12 +23,7 @@ public class Commandworth extends EssentialsCommand {
         BigDecimal totalWorth = BigDecimal.ZERO;
         String type = "";
 
-        List<ItemStack> tmp = ess.getItemDb().getMatching(user, args);
-        List<ItemStack> is = new ArrayList<>(tmp.size());
-        for (ItemStack stack : tmp) {
-            is.add(stack.clone());
-        }
-
+        List<ItemStack> is = ess.getItemDb().getMatching(user, args);
         int count = 0;
 
         boolean isBulk = is.size() > 1;
