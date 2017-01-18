@@ -167,22 +167,22 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
         List<ItemStack> is = new ArrayList<>();
 
         if (args.length < 1) {
-            is.add(user.getItemInHand());
+            is.add(user.getItemInHand().clone());
         } else if (args[0].equalsIgnoreCase("hand")) {
-            is.add(user.getItemInHand());
+            is.add(user.getItemInHand().clone());
         } else if (args[0].equalsIgnoreCase("inventory") || args[0].equalsIgnoreCase("invent") || args[0].equalsIgnoreCase("all")) {
             for (ItemStack stack : user.getBase().getInventory().getContents()) {
                 if (stack == null || stack.getType() == Material.AIR) {
                     continue;
                 }
-                is.add(stack);
+                is.add(stack.clone());
             }
         } else if (args[0].equalsIgnoreCase("blocks")) {
             for (ItemStack stack : user.getBase().getInventory().getContents()) {
                 if (stack == null || stack.getTypeId() > 255 || stack.getType() == Material.AIR) {
                     continue;
                 }
-                is.add(stack);
+                is.add(stack.clone());
             }
         } else {
             is.add(get(args[0]));
