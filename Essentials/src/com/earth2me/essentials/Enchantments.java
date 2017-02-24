@@ -192,6 +192,16 @@ public class Enchantments {
                 
             }
         } catch (IllegalArgumentException ignored) {}
+        
+        // 1.11.1
+        try {
+            Enchantment sweepingEdge = Enchantment.getByName("SWEEPING_EDGE");
+            if (sweepingEdge != null) {
+                ENCHANTMENTS.put("sweepingedge", sweepingEdge);
+                ALIASENCHANTMENTS.put("sweeping", sweepingEdge);
+                ALIASENCHANTMENTS.put("sweep", sweepingEdge);
+            }
+        } catch (IllegalArgumentException ignored) {}        
     }
 
     public static Enchantment getByName(String name) {
