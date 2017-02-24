@@ -195,7 +195,7 @@ public class Enchantments {
         
         // 1.11.1
         try {
-            Enchantment sweepingEdge = Enchantment.getByName("SWEEPING_EDGE");
+            Enchantment sweepingEdge = Enchantment.getById(22);
             if (sweepingEdge != null) {
                 ENCHANTMENTS.put("sweepingedge", sweepingEdge);
                 ALIASENCHANTMENTS.put("sweeping", sweepingEdge);
