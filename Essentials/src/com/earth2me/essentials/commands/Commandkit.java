@@ -104,9 +104,9 @@ public class Commandkit extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            return new ArrayList<>(Settings.getKits().getKeys(false)); // TODO: Move this to its own method
+            return new ArrayList<>(ess.getSettings().getKits().getKeys(false)); // TODO: Move this to its own method
         } else if (args.length == 2) {
-            return getPlayers(server, user);
+            return getPlayers(server, sender);
         } else {
             return Collections.emptyList();
         }
@@ -117,7 +117,7 @@ public class Commandkit extends EssentialsCommand {
         if (args.length == 1) {
             List<String> options = new ArrayList<>();
             // TODO: Move all of this to its own method
-            for (String kitName : Settings.getKits().getKeys(false)) {
+            for (String kitName : ess.getSettings().getKits().getKeys(false)) {
                 if (!user.isAuthorized("essentials.kits." + kitName)) { // Only check perm, not time or money
                     continue;
                 }

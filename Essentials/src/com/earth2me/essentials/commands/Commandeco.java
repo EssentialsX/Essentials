@@ -114,7 +114,7 @@ public class Commandeco extends EssentialsLoopCommand {
             return getPlayers(server, sender);
         } else if (args.length == 3 && !args[0].equalsIgnoreCase(EcoCommands.RESET.name())) {
             if (args[0].equalsIgnoreCase(EcoCommands.SET.name())) {
-                return Lists.newArrayList("0", ess.getSettings().getStartingBalance());
+                return Lists.newArrayList("0", ess.getSettings().getStartingBalance().toString());
             } else {
                 return Lists.newArrayList("1", "10", "100", "1000");
             }

@@ -7,6 +7,7 @@ import net.ess3.api.events.JailStatusChangeEvent;
 import org.bukkit.Server;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -100,9 +101,13 @@ public class Commandtogglejail extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            return getPlayers(server, user);
+            return getPlayers(server, sender);
         } else if (args.length == 2) {
-            return new ArrayList<>(ess.getJails().getList());
+            try {
+                return new ArrayList<>(ess.getJails().getList());
+            } catch (Exception e) {
+                return Collections.emptyList();
+            }
         } else {
             return COMMON_DATE_DIFFS;
         }

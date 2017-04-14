@@ -192,12 +192,12 @@ public class Commandexp extends EssentialsCommand {
                     return Collections.emptyList();
                 }
             } else if (args[0].equalsIgnoreCase("show") && user.isAuthorized("essentials.exp.others")) {
-                return getPlayers(server, sender);
+                return getPlayers(server, user);
             } else {
                 return Collections.emptyList();
             }
         } else if (args.length == 3 && (args[0].equalsIgnoreCase("set") && user.isAuthorized("essentials.exp.set.others")) || (args[0].equalsIgnoreCase("give") && user.isAuthorized("essentials.exp.give.others"))) {
-            return getPlayers(server, sender);
+            return getPlayers(server, user);
         } else {
             return Collections.emptyList();
         }

@@ -167,7 +167,7 @@ public class Commandbalancetop extends EssentialsCommand {
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {
             List<String> options = Lists.newArrayList("1");
-            if (user.isAuthorized("essentials.balancetop.force")) {
+            if (!sender.isPlayer() || ess.getUser(sender.getPlayer()).isAuthorized("essentials.balancetop.force")) {
                 options.add("force");
             }
             return options;

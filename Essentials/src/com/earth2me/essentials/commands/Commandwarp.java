@@ -117,7 +117,7 @@ public class Commandwarp extends EssentialsCommand {
         if (args.length == 1) {
             return new ArrayList<>(ess.getWarps().getList());
         } else if (args.length == 2) {
-            return getPlayers(server, user);
+            return getPlayers(server, sender);
         } else {
             return Collections.emptyList();
         }

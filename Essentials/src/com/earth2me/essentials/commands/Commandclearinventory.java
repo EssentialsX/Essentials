@@ -133,7 +133,7 @@ public class Commandclearinventory extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {
-            List<String> options = getPlayers(server, user);
+            List<String> options = getPlayers(server, sender);
             options.add("*");
             return options;
         } else if (args.length == 2) {

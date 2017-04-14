@@ -68,6 +68,8 @@ public class Commandlightning extends EssentialsLoopCommand {
             return getPlayers(server, sender);
         } else if (args.length == 2) {
             return Lists.newArrayList(Integer.toString(this.power));
+        } else {
+            return Collections.emptyList();
         }
     }
 }

@@ -149,7 +149,7 @@ public class Commandmail extends EssentialsCommand {
             return Lists.newArrayList("send", "sendall");
         } else if (args.length == 2 && args[0].equalsIgnoreCase("send")) {
             return getPlayers(server, sender);
-        } else if ((args.length > 2 && args[0].equalsIgnoreCase("send")) || (args.length > 1 && args[0].equalsIgnoreCase("sendall")) {
+        } else if ((args.length > 2 && args[0].equalsIgnoreCase("send")) || (args.length > 1 && args[0].equalsIgnoreCase("sendall"))) {
             return null; // Use vanilla handler
         } else {
             return Collections.emptyList();
@@ -169,7 +169,7 @@ public class Commandmail extends EssentialsCommand {
             return options;
         } else if (args.length == 2 && args[0].equalsIgnoreCase("send") && user.isAuthorized("essentials.mail.send")) {
             return getPlayers(server, user);
-        } else if ((args.length > 2 && args[0].equalsIgnoreCase("send") && user.isAuthorized("essentials.mail.send")) || (args.length > 1 && args[0].equalsIgnoreCase("sendall") && user.isAuthorized("essentials.mail.sendall")) {
+        } else if ((args.length > 2 && args[0].equalsIgnoreCase("send") && user.isAuthorized("essentials.mail.send")) || (args.length > 1 && args[0].equalsIgnoreCase("sendall") && user.isAuthorized("essentials.mail.sendall"))) {
             return null; // Use vanilla handler
         } else {
             return Collections.emptyList();

@@ -103,7 +103,7 @@ public class Commandhome extends EssentialsCommand {
 
         if (args.length == 1) {
             if (canVisitOthers) {
-                return getPlayers(server, sender);
+                return getPlayers(server, user);
             } else {
                 List<String> homes = user.getHomes();
                 if (user.isAuthorized("essentials.home.bed")) {

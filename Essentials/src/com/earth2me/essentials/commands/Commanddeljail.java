@@ -2,11 +2,9 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import org.bukkit.Server;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import static com.earth2me.essentials.I18n.tl;
 
 
@@ -28,7 +26,11 @@ public class Commanddeljail extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            return new ArrayList<>(ess.getJails().getList());
+            try {
+                return new ArrayList<>(ess.getJails().getList());
+            } catch (Exception e) {
+                return Collections.emptyList();
+            }
         } else {
             return Collections.emptyList();
         }

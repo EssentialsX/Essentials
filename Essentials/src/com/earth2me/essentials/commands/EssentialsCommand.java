@@ -13,6 +13,7 @@ import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -287,7 +288,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         List<String> items = Lists.newArrayList("hand", "inventory", "blocks");
         if (!partial.isEmpty()) {
             // Emphasize the other items if they haven't entered anything yet.
-            items.addAll(getItems()
+            items.addAll(getItems(partial));
         }
         return items;
     }
