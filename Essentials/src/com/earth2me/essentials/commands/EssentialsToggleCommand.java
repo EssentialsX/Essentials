@@ -81,10 +81,10 @@ public abstract class EssentialsToggleCommand extends EssentialsCommand {
             if (user.isAuthorized(othersPermission)) {
                 return getPlayers(server, user);
             } else {
-                return Lists.newArrayList("on", "off");
+                return Lists.newArrayList("enable", "disable");
             }
         } else if (args.length == 2 && user.isAuthorized(othersPermission)) {
-            return Lists.newArrayList("on", "off");
+            return Lists.newArrayList("enable", "disable");
         } else {
             return Collections.emptyList();
         }
@@ -95,7 +95,7 @@ public abstract class EssentialsToggleCommand extends EssentialsCommand {
         if (args.length == 1) {
             return getPlayers(server, sender);
         } else if (args.length == 2) {
-            return Lists.newArrayList("on", "off");
+            return Lists.newArrayList("enable", "disable");
         } else {
             return Collections.emptyList();
         }
