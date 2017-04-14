@@ -30,6 +30,16 @@ public class Commandthunder extends EssentialsCommand {
             world.setThundering(setThunder);
             user.sendMessage(tl("thunder", setThunder ? tl("enabled") : tl("disabled")));
         }
+    }
 
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return Lists.newArrayList("true", "false");
+        } else if (args.length == 2) {
+            return COMMON_DATE_DIFFS;
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

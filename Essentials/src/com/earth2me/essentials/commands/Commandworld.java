@@ -67,4 +67,20 @@ public class Commandworld extends EssentialsCommand {
         user.getTeleport().teleport(target, charge, TeleportCause.COMMAND);
         throw new NoChargeException();
     }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            List<String> worlds = Lists.newArrayList();
+            for (World world : server.getWorlds()) {
+                if (ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + world.getName())) {
+                    continue;
+                }
+                worlds.add(world.getName());
+            }
+            return worlds;
+        } else {
+            return Collections.emptyList();
+        }
+    }
 }

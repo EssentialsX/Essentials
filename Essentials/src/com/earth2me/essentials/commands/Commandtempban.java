@@ -69,7 +69,8 @@ public class Commandtempban extends EssentialsCommand {
         if (args.length == 1) {
             return getPlayers(server, sender);
         } else {
-            return Collections.emptyList();
+            // Note: following args are both date diffs _and_ messages; ideally we'd mix with the vanilla handler
+            return COMMON_DATE_DIFFS;
         }
     }
 }
