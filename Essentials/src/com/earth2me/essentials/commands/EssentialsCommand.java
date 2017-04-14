@@ -276,19 +276,18 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
      * Gets a list of tab-completable items that start with the given name.
      * Due to the number of items, this may not return the entire list.
      */
-    protected List<String> getItems(String partial) {
-        // TODO
-        return Collections.emptyList();
+    protected List<String> getItems() {
+        return new ArrayList<>(ess.getItemDb().listNames());
     }
 
     /**
      * Gets a list of tab-completable items usable for "getMatching".
      */
-    protected List<String> getMatchingItems(String partial) {
+    protected List<String> getMatchingItems(String arg) {
         List<String> items = Lists.newArrayList("hand", "inventory", "blocks");
-        if (!partial.isEmpty()) {
+        if (!arg.isEmpty()) {
             // Emphasize the other items if they haven't entered anything yet.
-            items.addAll(getItems(partial));
+            items.addAll(getItems());
         }
         return items;
     }

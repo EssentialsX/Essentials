@@ -108,7 +108,7 @@ public class Commandgive extends EssentialsCommand {
         if (args.length == 1) {
             return getPlayers(server, sender);
         } else if (args.length == 2) {
-            return getItems(args[1]);
+            return getItems();
         } else if (args.length == 3) {
             return Lists.newArrayList("1", "64");  // TODO: get actual max size
         } else if (args.length == 4) {

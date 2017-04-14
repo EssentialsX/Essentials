@@ -169,7 +169,7 @@ public class Commandrecipe extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            return getItems(args[0]);
+            return getItems();
         } else {
             return Collections.emptyList();
         }

@@ -137,7 +137,7 @@ public class Commandclearinventory extends EssentialsCommand {
             options.add("*");
             return options;
         } else if (args.length == 2) {
-            List<String> items = new ArrayList<>(getItems(args[1]));
+            List<String> items = new ArrayList<>(getItems());
             items.add("*");
             items.add("**");
             return items;
@@ -157,7 +157,7 @@ public class Commandclearinventory extends EssentialsCommand {
                 }
                 return options;
             } else if (args.length == 2) {
-                List<String> items = new ArrayList<>(getItems(args[1]));
+                List<String> items = new ArrayList<>(getItems());
                 items.add("*");
                 items.add("**");
                 return items;
@@ -166,7 +166,7 @@ public class Commandclearinventory extends EssentialsCommand {
             }
         } else {
             if (args.length == 1) {
-                List<String> items = new ArrayList<>(getItems(args[0]));
+                List<String> items = new ArrayList<>(getItems());
                 items.add("*");
                 items.add("**");
                 return items;
