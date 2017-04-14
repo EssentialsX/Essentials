@@ -5,16 +5,18 @@ import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import net.ess3.api.IEssentials;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
-
+import org.bukkit.util.StringUtil;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.logging.Logger;
-
 import static com.earth2me.essentials.I18n.tl;
 
 
@@ -160,6 +162,43 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         throw new Exception(tl("onlyPlayers", commandLabel));
     }
 
+    @Override
+    public final List<String> tabComplete(final Server server, final User user, final String commandLabel, final Command cmd, final String[] args) {
+        if (args.length == 0) {
+            // Shouldn't happen, but bail out early if it does so that args[0] can always be used
+            return Collections.emptyList();
+        }
+        List<String> options = getTabCompleteOptions(server, user, commandLabel, args);
+        if (options == null) {
+            return null;
+        }
+        return StringUtil.copyPartialMatches(args[args.length - 1], options, Lists.<String>newArrayList());
+    }
+
+    // Doesn't need to do any starts-with checks
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
+        return getTabCompleteOptions(server, user.getSource(), commandLabel, args);
+    }
+
+    @Override
+    public final List<String> tabComplete(final Server server, final CommandSource sender, final String commandLabel, final Command cmd, final String[] args) {
+        if (args.length == 0) {
+            // Shouldn't happen, but bail out early if it does so that args[0] can always be used
+            return Collections.emptyList();
+        }
+        List<String> options = getTabCompleteOptions(server, sender, commandLabel, args);
+        if (options == null) {
+            return null;
+        }
+        return StringUtil.copyPartialMatches(args[args.length - 1], options, Lists.<String>newArrayList());
+    }
+
+    // Doesn't need to do any starts-with checks
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
+        // No tab completion results
+        return Collections.emptyList();
+    }
+
     public static String getFinalArg(final String[] args, final int start) {
         final StringBuilder bldr = new StringBuilder();
         for (int i = start; i < args.length; i++) {
@@ -194,4 +233,41 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
 
         return interactor.getBase().canSee(interactee.getBase());
     }
+
+    /**
+     * Gets a list of all player names that can be seen with by the given CommandSource,
+     * for tab completion.
+     */
+    protected List<String> getPlayers(final Server server, final CommandSource interactor) {
+        List<String> players = Lists.newArrayList();
+        for (User user : ess.getOnlineUsers()) {
+            if (canInteractWith(interactor, user)) {
+                players.add(user.getName());
+            }
+        }
+        return players;
+    }
+
+    /**
+     * Gets a list of all player names that can be seen with by the given User,
+     * for tab completion.
+     */
+    protected List<String> getPlayers(final Server server, final User interactor) {
+        List<String> players = Lists.newArrayList();
+        for (User user : ess.getOnlineUsers()) {
+            if (canInteractWith(interactor, user)) {
+                players.add(user.getName());
+            }
+        }
+        return players;
+    }
+
+    /**
+     * Common time durations (in seconds), for use in tab completion.
+     */
+    protected static final List<String> COMMON_DURATIONS = ImmutableList.of("1", "60", "600", "3600", "86400");
+    /**
+     * Common date diffs, for use in tab completion
+     */
+    protected static final List<String> COMMON_DATE_DIFFS = ImmutableList.of("1m", "15m", "1h", "3h", "12h", "1d", "1w", "1mo", "1y");
 }
