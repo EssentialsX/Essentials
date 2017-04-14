@@ -3,6 +3,9 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 
+import java.util.Collections;
+import java.util.List;
+
 import static com.earth2me.essentials.I18n.tl;
 
 
@@ -39,6 +42,15 @@ public class Commandignore extends EssentialsCommand {
                 user.setIgnoredPlayer(player, true);
                 user.sendMessage(tl("ignorePlayer", player.getName()));
             }
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return getPlayers(server, user);
+        } else {
+            return Collections.emptyList();
         }
     }
 }

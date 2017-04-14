@@ -28,6 +28,7 @@ import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -157,5 +158,15 @@ public class Commandcreatekit extends EssentialsCommand {
                 }
             }
         });
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        // Don't handle arg 1, as that's completely user data
+        if (args.length == 2) {
+            return COMMON_DURATIONS;
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

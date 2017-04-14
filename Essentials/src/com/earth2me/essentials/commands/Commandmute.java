@@ -7,6 +7,7 @@ import com.earth2me.essentials.utils.DateUtil;
 import net.ess3.api.events.MuteStatusChangeEvent;
 import org.bukkit.Server;
 
+import java.util.List;
 import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -83,6 +84,15 @@ public class Commandmute extends EssentialsCommand {
                 sender.sendMessage(tl("unmutedPlayer", user.getDisplayName()));
                 user.sendMessage(tl("playerUnmuted"));
             }
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return getPlayers(server, sender);
+        } else {
+            return COMMON_DATE_DIFFS; // Date diff can span multiple words
         }
     }
 }
