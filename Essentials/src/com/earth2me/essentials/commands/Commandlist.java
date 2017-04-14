@@ -116,4 +116,16 @@ public class Commandlist extends EssentialsCommand {
             sender.sendMessage(PlayerList.outputFormat(groupName, PlayerList.listUsers(ess, users, ", ")));
         }
     }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
+        if (args.length == 1 && sender.isPlayer()) {
+            // TODO: better way to get a list of groups
+            User user = ess.getUser(sender.getPlayer());
+            boolean showHidden = user.isAuthorized("essentials.list.hidden") || user.canInteractVanished();
+            return new ArrayList<>(PlayerList.getPlayerLists(ess, user, showHidden));
+        } else {
+            return Collections.emptyList();
+        }
+    }
 }

@@ -263,6 +263,27 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     }
 
     /**
+     * Gets a list of tab-completable items that start with the given name.
+     * Due to the number of items, this may not return the entire list.
+     */
+    protected List<String> getItems(String partial) {
+        // TODO
+        return Collections.emptyList();
+    }
+
+    /**
+     * Gets a list of tab-completable items usable for "getMatching".
+     */
+    protected List<String> getMatchingItems(String partial) {
+        List<String> items = Lists.newArrayList("hand", "inventory", "blocks");
+        if (!partial.isEmpty()) {
+            // Emphasize the other items if they haven't entered anything yet.
+            items.addAll(getItems()
+        }
+        return items;
+    }
+
+    /**
      * Common time durations (in seconds), for use in tab completion.
      */
     protected static final List<String> COMMON_DURATIONS = ImmutableList.of("1", "60", "600", "3600", "86400");

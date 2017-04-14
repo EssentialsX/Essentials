@@ -8,6 +8,8 @@ import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.BanList;
 import org.bukkit.Server;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -61,5 +63,14 @@ public class Commandban extends EssentialsCommand {
         }
 
         ess.broadcastMessage("essentials.ban.notify", tl("playerBanned", senderName, user.getName(), banReason));
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return getPlayers(server, sender);
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

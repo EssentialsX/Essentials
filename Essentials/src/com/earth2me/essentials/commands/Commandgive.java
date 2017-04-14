@@ -5,11 +5,14 @@ import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.google.common.collect.Lists;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -98,5 +101,20 @@ public class Commandgive extends EssentialsCommand {
         }
 
         giveTo.getBase().updateInventory();
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
+        if (args.length == 1) {
+            return getPlayers(server, sender);
+        } else if (args.length == 2) {
+            return getItems(args[1]);
+        } else if (args.length == 3) {
+            return Lists.newArrayList("1", "64");  // TODO: get actual max size
+        } else if (args.length == 4) {
+            return Lists.newArrayList("0");
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

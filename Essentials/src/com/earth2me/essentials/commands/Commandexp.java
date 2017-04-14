@@ -4,9 +4,11 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.SetExpFix;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.google.common.collect.Lists;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -145,5 +147,59 @@ public class Commandexp extends EssentialsCommand {
         }
         SetExpFix.setTotalExperience(target.getBase(), (int) amount);
         sender.sendMessage(tl("expSet", target.getDisplayName(), amount));
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
+        if (args.length == 1) {
+            // TODO: This seems somewhat buggy, both setting and showing - right now, ignoring that
+            return Lists.newArrayList("set", "give", "show");
+        } else if (args.length == 2) {
+            if (args[0].equalsIgnoreCase("set") || args[0].equalsIgnoreCase("give")) {
+                String levellessArg = args[1].toLowerCase(Locale.ENGLISH).replace("l", "");
+                if (NumberUtil.isInt(levellessArg)) {
+                    return Lists.newArrayList(levellessArg, args[1] + "l");
+                } else {
+                    return Collections.emptyList();
+                }
+            } else { // even without 'show'
+                return getPlayers(server, sender);
+            }
+        } else if (args.length == 3 && (args[0].equalsIgnoreCase("set") || args[0].equalsIgnoreCase("give"))) {
+            return getPlayers(server, sender);
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
+        if (args.length == 1) {
+            List<String> options = Lists.newArrayList("show");
+            if (user.isAuthorized("essentials.exp.set")) {
+                options.add("set");
+            }
+            if (user.isAuthorized("essentials.exp.give")) {
+                options.add("give");
+            }
+            return options;
+        } else if (args.length == 2) {
+            if ((args[0].equalsIgnoreCase("set") && user.isAuthorized("essentials.exp.set")) || (args[0].equalsIgnoreCase("give") && user.isAuthorized("essentials.exp.give"))) {
+                String levellessArg = args[1].toLowerCase(Locale.ENGLISH).replace("l", "");
+                if (NumberUtil.isInt(levellessArg)) {
+                    return Lists.newArrayList(levellessArg, args[1] + "l");
+                } else {
+                    return Collections.emptyList();
+                }
+            } else if (args[0].equalsIgnoreCase("show") && user.isAuthorized("essentials.exp.others")) {
+                return getPlayers(server, sender);
+            } else {
+                return Collections.emptyList();
+            }
+        } else if (args.length == 3 && (args[0].equalsIgnoreCase("set") && user.isAuthorized("essentials.exp.set.others")) || (args[0].equalsIgnoreCase("give") && user.isAuthorized("essentials.exp.give.others"))) {
+            return getPlayers(server, sender);
+        } else {
+            return Collections.emptyList();
+        }
     }
 }
