@@ -344,21 +344,79 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String commandLabel, String[] args) {
-        // Allow plugins to override the command via onCommand
+        return onTabCompleteEssentials(sender, command, commandLabel, args, Essentials.class.getClassLoader(),
+            "com.earth2me.essentials.commands.Command", "essentials.", null);
+    }
+
+    @Override
+    public List<String> onTabCompleteEssentials(final CommandSender cSender, final Command command, final String commandLabel, final String[] args,
+                                                final ClassLoader classLoader, final String commandPath, final String permissionPrefix,
+                                                final IEssentialsModule module) {
         if (!getSettings().isCommandOverridden(command.getName()) && (!commandLabel.startsWith("e") || commandLabel.equalsIgnoreCase(command.getName()))) {
             final PluginCommand pc = alternativeCommandsHandler.getAlternative(commandLabel);
             if (pc != null) {
                 try {
                     TabCompleter completer = pc.getTabCompleter();
                     if (completer != null) {
-                        return completer.onTabComplete(sender, command, commandLabel, args);
+                        return completer.onTabComplete(cSender, command, commandLabel, args);
                     }
                 } catch (final Exception ex) {
                     Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
                 }
             }
         }
-        return null;
+
+        try {
+            // Note: The tab completer is always a player, even when tab-completing in a command block
+            User user = null;
+            if (cSender instanceof Player) {
+                user = getUser((Player) cSender);
+            }
+
+            CommandSource sender = new CommandSource(cSender);
+
+            // Check for disabled commands
+            if (getSettings().isCommandDisabled(commandLabel)) {
+                return Collections.emptyList();
+            }
+
+            IEssentialsCommand cmd;
+            try {
+                cmd = (IEssentialsCommand) classLoader.loadClass(commandPath + command.getName()).newInstance();
+                cmd.setEssentials(this);
+                cmd.setEssentialsModule(module);
+            } catch (Exception ex) {
+                sender.sendMessage(tl("commandNotLoaded", commandLabel));
+                LOGGER.log(Level.SEVERE, tl("commandNotLoaded", commandLabel), ex);
+                return Collections.emptyList();
+            }
+
+            // Check authorization
+            if (user != null && !user.isAuthorized(cmd, permissionPrefix)) {
+                return Collections.emptyList();
+            }
+
+            if (user != null && user.isJailed() && !user.isAuthorized(cmd, "essentials.jail.allow.")) {
+                return Collections.emptyList();
+            }
+
+            // Run the command
+            try {
+                if (user == null) {
+                    return cmd.tabComplete(getServer(), sender, commandLabel, command, args);
+                } else {
+                    return cmd.tabComplete(getServer(), user, commandLabel, command, args);
+                }
+            } catch (Exception ex) {
+                showError(sender, ex, commandLabel);
+                // Tab completion shouldn't fail
+                LOGGER.log(Level.SEVERE, tl("commandFailed", commandLabel), ex);
+                return Collections.emptyList();
+            }
+        } catch (Throwable ex) {
+            LOGGER.log(Level.SEVERE, tl("commandFailed", commandLabel), ex);
+            return Collections.emptyList();
+        }
     }
 
     @Override
