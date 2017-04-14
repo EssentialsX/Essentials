@@ -2,9 +2,11 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.google.common.collect.Lists;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
+import java.util.Collections;
 import java.util.List;
 
 
@@ -72,4 +74,30 @@ public abstract class EssentialsToggleCommand extends EssentialsCommand {
 
     // Make sure when implementing this method that all 3 Boolean states are handled, 'null' should toggle the existing state.
     abstract void togglePlayer(CommandSource sender, User user, Boolean enabled) throws NotEnoughArgumentsException;
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
+        if (args.length == 1) {
+            if (user.isAuthorized(othersPermission)) {
+                return getPlayers(server, user);
+            } else {
+                return Lists.newArrayList("on", "off");
+            }
+        } else if (args.length == 2 && user.isAuthorized(othersPermission)) {
+            return Lists.newArrayList("on", "off");
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
+        if (args.length == 1) {
+            return getPlayers(server, sender);
+        } else if (args.length == 2) {
+            return Lists.newArrayList("on", "off");
+        } else {
+            return Collections.emptyList();
+        }
+    }
 }
