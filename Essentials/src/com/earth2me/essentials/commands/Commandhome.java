@@ -7,6 +7,8 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -93,5 +95,36 @@ public class Commandhome extends EssentialsCommand {
             throw new Exception(tl("noPerm", "essentials.worlds." + loc.getWorld().getName()));
         }
         user.getTeleport().teleport(loc, charge, TeleportCause.COMMAND);
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
+        boolean canVisitOthers = user.isAuthorized("essentials.home.others");
+
+        if (args.length == 1) {
+            if (canVisitOthers) {
+                return getPlayers(server, sender);
+            } else {
+                List<String> homes = user.getHomes();
+                if (user.isAuthorized("essentials.home.bed")) {
+                    homes.add("bed");
+                }
+                return homes;
+            }
+        } else if (args.length == 2 && canVisitOthers) {
+            try {
+                User otherUser = getPlayer(server, args, 0, true, true);
+                List<String> homes = otherUser.getHomes();
+                if (user.isAuthorized("essentials.home.bed")) {
+                    homes.add("bed");
+                }
+                return homes;
+            } catch (Exception ex) {
+                // No such user
+                return Collections.emptyList();
+            }
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

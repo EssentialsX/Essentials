@@ -6,6 +6,9 @@ import com.earth2me.essentials.utils.DateUtil;
 import net.ess3.api.events.JailStatusChangeEvent;
 import org.bukkit.Server;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.earth2me.essentials.I18n.tl;
 
 
@@ -91,6 +94,17 @@ public class Commandtogglejail extends EssentialsCommand {
                 }
                 sender.sendMessage(tl("jailReleased", player.getName()));
             }
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
+        if (args.length == 1) {
+            return getPlayers(server, user);
+        } else if (args.length == 2) {
+            return new ArrayList<>(ess.getJails().getList());
+        } else {
+            return COMMON_DATE_DIFFS;
         }
     }
 }

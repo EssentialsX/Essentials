@@ -2,8 +2,12 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Kit;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.Settings;
 import org.bukkit.Server;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -27,6 +31,15 @@ public class Commandshowkit extends EssentialsCommand {
             for (String s : kit.getItems()) {
                 user.sendMessage(tl("kitItem", s));
             }
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
+        if (args.length == 1) {
+            return new ArrayList<>(Settings.getKits().getKeys(false)); // TODO: Move this to its own method
+        } else {
+            return Collections.emptyList();
         }
     }
 }
