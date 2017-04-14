@@ -119,11 +119,8 @@ public class Commandlist extends EssentialsCommand {
 
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
-        if (args.length == 1 && sender.isPlayer()) {
-            // TODO: better way to get a list of groups
-            User user = ess.getUser(sender.getPlayer());
-            boolean showHidden = user.isAuthorized("essentials.list.hidden") || user.canInteractVanished();
-            return new ArrayList<>(PlayerList.getPlayerLists(ess, user, showHidden));
+        if (args.length == 1) {
+            return getGroups();
         } else {
             return Collections.emptyList();
         }

@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.PlayerList;
 import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
@@ -260,6 +261,14 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
             }
         }
         return players;
+    }
+
+    /**
+     * Returns a list of all online groups.
+     */
+    protected List<String> getGroups() {
+        // TODO: A better way to do this
+        return new ArrayList<>(PlayerList.getPlayerLists(ess, null, true).keySet());
     }
 
     /**
