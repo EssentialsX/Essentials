@@ -1,5 +1,7 @@
 package com.earth2me.essentials.commands;
 
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginDescriptionFile;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.PlayerList;
 import com.earth2me.essentials.IEssentialsModule;
@@ -13,12 +15,16 @@ import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
+
 import static com.earth2me.essentials.I18n.tl;
 
 
@@ -290,6 +296,45 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
             items.addAll(getItems());
         }
         return items;
+    }
+
+    /**
+     * Lists all commands.
+     *
+     * TODO: Use the real commandmap to do this automatically.
+     */
+    protected final List<String> getCommands(Server server) {
+        List<String> commands = Lists.newArrayList();
+        for (Plugin p : server.getPluginManager().getPlugins()) {
+            final PluginDescriptionFile desc = p.getDescription();
+            final Map<String, Map<String, Object>> cmds = desc.getCommands();
+            commands.addAll(cmds.keySet());
+        }
+        return commands;
+    }
+
+    /**
+     * Attempts to tab-complete a command or its arguments.
+     */
+    protected final List<String> tabCompleteCommand(CommandSource sender, Server server, String label, String[] args, int index) {
+        // TODO: Pass this to the real commandmap
+        Command command = server.getPluginCommand(label);
+        if (command == null) {
+            return Collections.emptyList();
+        }
+
+        int numArgs = args.length - index - 1;
+        ess.getLogger().info(numArgs + " " + index + " " + Arrays.toString(args));
+        String[] effectiveArgs = new String[numArgs];
+        for (int i = 0; i < numArgs; i++) {
+            effectiveArgs[i] = args[i + index];
+        }
+        if (effectiveArgs.length == 0) {
+            effectiveArgs = new String[] { "" };
+        }
+        ess.getLogger().info(command + " -- " + Arrays.toString(effectiveArgs));
+
+        return command.tabComplete(sender.getSender(), label, effectiveArgs);
     }
 
     /**
