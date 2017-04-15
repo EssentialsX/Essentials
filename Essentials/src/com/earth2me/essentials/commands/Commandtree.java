@@ -2,9 +2,14 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.LocationUtil;
+import com.google.common.collect.Lists;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.TreeType;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -40,6 +45,19 @@ public class Commandtree extends EssentialsCommand {
             user.sendMessage(tl("treeSpawned"));
         } else {
             user.sendMessage(tl("treeFailure"));
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            List<String> options = Lists.newArrayList();
+            for (TreeType type : TreeType.values()) {
+                options.add(type.name().toLowerCase(Locale.ENGLISH).replace("_", ""));
+            }
+            return options;
+        } else {
+            return Collections.emptyList();
         }
     }
 }

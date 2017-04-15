@@ -1,5 +1,7 @@
 package com.earth2me.essentials.commands;
 
+import com.google.common.collect.Lists;
+
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
@@ -149,5 +151,16 @@ public class Commandpweather extends EssentialsCommand {
         }
 
         return users;
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return Lists.newArrayList("get", "reset", "storm", "sun");
+        } else if (args.length == 2 && (getAliases.contains(args[0]) || user == null || user.isAuthorized("essentials.pweather.others"))) {
+            return getPlayers(server, user);
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

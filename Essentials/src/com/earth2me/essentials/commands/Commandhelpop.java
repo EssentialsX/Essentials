@@ -6,6 +6,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.Server;
 
+import java.util.List;
 import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -38,5 +39,10 @@ public class Commandhelpop extends EssentialsCommand {
         server.getLogger().log(Level.INFO, message);
         ess.broadcastMessage("essentials.helpop.receive", message);
         return message;
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        return null;  // Use vanilla handler for message
     }
 }

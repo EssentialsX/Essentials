@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DescParseTickFormat;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.google.common.collect.Lists;
 import org.bukkit.Server;
 import org.bukkit.World;
 
@@ -161,6 +162,35 @@ public class Commandtime extends EssentialsCommand {
 
     private String normalizeWorldName(World world) {
         return world.getName().toLowerCase().replaceAll("\\s+", "_");
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        final User user = ess.getUser(sender.getPlayer());
+
+        if (args.length == 1) {
+            if (user == null || user.isAuthorized("essentials.time.set")) {
+                return Lists.newArrayList("set", "add");
+            } else {
+                return Collections.emptyList();
+            }
+        } else if (args.length == 2 && args[0].equalsIgnoreCase("set")) {
+            return Lists.newArrayList("sunrise", "day", "morning", "noon", "afternoon", "sunset", "night", "midnight");
+            // TODO: handle tab completion for add
+        } else if (args.length == 3 && (args[0].equalsIgnoreCase("set") || args[0].equalsIgnoreCase("add"))) {
+            List<String> worlds = Lists.newArrayList();
+            for (World world : server.getWorlds()) {
+                if (user == null || user.isAuthorized("essentials.time.world." + normalizeWorldName(world))) {
+                    worlds.add(world.getName());
+                }
+            }
+            if (user == null || user.isAuthorized("essentials.time.world.all")) {
+                worlds.add("*");
+            }
+            return worlds;
+        } else {
+            return Collections.emptyList();
+        }
     }
 }
 

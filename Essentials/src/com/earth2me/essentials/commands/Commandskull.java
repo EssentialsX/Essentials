@@ -2,10 +2,14 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
+import com.google.common.collect.Lists;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+
+import java.util.Collections;
+import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -55,6 +59,19 @@ public class Commandskull extends EssentialsCommand {
             user.sendMessage(tl("givenSkull", owner));
         } else {
             user.sendMessage(tl("skullChanged", owner));
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            if (user.isAuthorized("essentials.skull.others")) {
+                return getPlayers(server, user);
+            } else {
+                return Lists.newArrayList(user.getName());
+            }
+        } else {
+            return Collections.emptyList();
         }
     }
 

@@ -5,6 +5,9 @@ import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Collections;
+import java.util.List;
+
 import static com.earth2me.essentials.I18n.tl;
 
 
@@ -40,6 +43,15 @@ public class Commanditemdb extends EssentialsCommand {
         final String itemNameList = ess.getItemDb().names(itemStack);
         if (itemNameList != null) {
             sender.sendMessage(tl("itemNames", ess.getItemDb().names(itemStack)));
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return getItems();
+        } else {
+            return Collections.emptyList();
         }
     }
 }
