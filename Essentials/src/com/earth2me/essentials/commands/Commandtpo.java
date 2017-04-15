@@ -4,6 +4,9 @@ import com.earth2me.essentials.User;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
+import java.util.Collections;
+import java.util.List;
+
 import static com.earth2me.essentials.I18n.tl;
 
 
@@ -40,6 +43,16 @@ public class Commandtpo extends EssentialsCommand {
                 target.getTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND);
                 target.sendMessage(tl("teleportAtoB", user.getDisplayName(), toPlayer.getDisplayName()));
                 break;
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        // Don't handle coords
+        if (args.length == 1 || (args.length == 2 && user.isAuthorized("essentials.tp.others"))) {
+            return getPlayers(server, user);
+        } else {
+            return Collections.emptyList();
         }
     }
 }
