@@ -95,8 +95,8 @@ public class SimpleMessageRecipient implements IMessageRecipient {
                         if (onlineUser.isSocialSpyEnabled()
                             // Don't send socialspy messages to message sender/receiver to prevent spam
                             && !onlineUser.equals(senderUser)
-                            && !onlineUser.equals(recipient)) {  
-                            onlineUser.sendMessage(tl("socialSpyPrefix") + tl("msgFormat", getDisplayName(), recipient.getDisplayName(), message));
+                            && !onlineUser.equals(recipient)) {
+                            onlineUser.sendMessage(tl("socialSpyPrefix") + tl("socialSpyFormat", getDisplayName(), recipient.getDisplayName(), message));
                         }
                     }
                 }
