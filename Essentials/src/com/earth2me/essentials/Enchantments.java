@@ -189,7 +189,12 @@ public class Enchantments {
                 ALIASENCHANTMENTS.put("vanishcurse", vanishingCurse);
                 ALIASENCHANTMENTS.put("vanishing", vanishingCurse);
                 ALIASENCHANTMENTS.put("vanish", vanishingCurse);
-                
+            }
+            Enchantment sweeping = Enchantment.getByName("SWEEPING_EDGE");
+            if (sweeping != null) {
+                ENCHANTMENTS.put("sweepingedge", sweeping);
+                ALIASENCHANTMENTS.put("sweepedge", sweeping);
+                ALIASENCHANTMENTS.put("sweeping", sweeping);
             }
         } catch (IllegalArgumentException ignored) {}
     }
