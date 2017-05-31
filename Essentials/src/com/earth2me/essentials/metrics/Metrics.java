@@ -155,7 +155,7 @@ public class Metrics {
                 Bukkit.getScheduler().runTask(plugin, new Runnable() {
                     @Override
                     public void run() {
-                        submitData();
+                        if (enabled) submitData();
                     }
                 });
             }
@@ -233,6 +233,8 @@ public class Metrics {
      * Collects the data and sends it afterwards.
      */
     private void submitData() {
+        if (!enabled) return;
+
         final JSONObject data = getServerData();
 
         JSONArray pluginData = new JSONArray();
@@ -330,6 +332,22 @@ public class Metrics {
      */
     public boolean isOptOut() {
         return !enabled;
+    }
+
+    /**
+     * Temporarily enable bStats.
+     * This does not change the global config and will reset on server restart.
+     */
+    public void enable() {
+        enabled = true;
+    }
+
+    /**
+     * Temporarily disable bStats.
+     * This does not change the global config and will reset on server restart.
+     */
+    public void disable() {
+        enabled = false;
     }
 
     /**
