@@ -342,6 +342,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
                 int rgb = leatherArmorMeta.getColor().asRGB();
                 sb.append("color:").append(rgb).append(" ");
                 break;
+            case SHIELD:
             case BANNER:
                 BannerMeta bannerMeta = (BannerMeta) is.getItemMeta();
                 if (bannerMeta != null) {
