@@ -435,6 +435,10 @@ commands:
     description: Teleport all online players to another player.
     usage: /<command> <player>
     aliases: [etpall]
+  tpacancel:
+    description: Cancel all outstanding teleport requests. Specify [player] to cancel requests with them.
+    usage: /<command> [player]
+    aliases: [etpacancel]
   tpdeny:
     description: Reject a teleport request.
     usage: /<command>
