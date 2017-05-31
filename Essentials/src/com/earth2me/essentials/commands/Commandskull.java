@@ -19,7 +19,7 @@ public class Commandskull extends EssentialsCommand {
         String owner;
 
         if (args.length > 0 && user.isAuthorized("essentials.skull.others")) {
-            if (!args[0].matches("^[A-Za-z0-9_]+$")) {
+            if (!args[0].matches("^[A-Za-z0-9ㄱ-ㅎㅏ-ㅣ가-힣_]+$")) {
                 throw new IllegalArgumentException(tl("alphaNames"));
             }
             owner = args[0];
