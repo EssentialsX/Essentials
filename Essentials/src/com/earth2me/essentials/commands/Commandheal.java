@@ -18,9 +18,7 @@ public class Commandheal extends EssentialsLoopCommand {
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        if (!user.isAuthorized("essentials.heal.cooldown.bypass")) {
-            user.healCooldown();
-        }
+        user.healCooldown();
 
         if (args.length > 0 && user.isAuthorized("essentials.heal.others")) {
             loopOnlinePlayers(server, user.getSource(), true, true, args[0], null);

@@ -118,18 +118,20 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public void healCooldown() throws Exception {
-        final Calendar now = new GregorianCalendar();
-        if (getLastHealTimestamp() > 0) {
-            final double cooldown = ess.getSettings().getHealCooldown();
-            final Calendar cooldownTime = new GregorianCalendar();
-            cooldownTime.setTimeInMillis(getLastHealTimestamp());
-            cooldownTime.add(Calendar.SECOND, (int) cooldown);
-            cooldownTime.add(Calendar.MILLISECOND, (int) ((cooldown * 1000.0) % 1000.0));
-            if (cooldownTime.after(now) && !isAuthorized("essentials.heal.cooldown.bypass")) {
-                throw new Exception(tl("timeBeforeHeal", DateUtil.formatDateDiff(cooldownTime.getTimeInMillis())));
+        if (!isAuthorized("essentials.heal.cooldown.bypass")) {
+            final Calendar now = new GregorianCalendar();
+            if (getLastHealTimestamp() > 0) {
+                final double cooldown = ess.getSettings().getHealCooldown();
+                final Calendar cooldownTime = new GregorianCalendar();
+                cooldownTime.setTimeInMillis(getLastHealTimestamp());
+                cooldownTime.add(Calendar.SECOND, (int) cooldown);
+                cooldownTime.add(Calendar.MILLISECOND, (int) ((cooldown * 1000.0) % 1000.0));
+                if (cooldownTime.after(now)) {
+                    throw new Exception(tl("timeBeforeHeal", DateUtil.formatDateDiff(cooldownTime.getTimeInMillis())));
+                }
             }
+            setLastHealTimestamp(now.getTimeInMillis());
         }
-        setLastHealTimestamp(now.getTimeInMillis());
     }
 
     @Override
