@@ -153,7 +153,7 @@ public class EssentialsSpawnPlayerListener implements Listener {
                     user.getTeleport().now(spawn, false, TeleportCause.PLUGIN);
                 }
             } catch (Exception ex) {
-                Bukkit.getLogger().log(Level.WARNING, tl("teleportNewPlayerError"), ex);
+                LOGGER.log(Level.WARNING, tl("teleportNewPlayerError"), ex);
             }
         }
     }
