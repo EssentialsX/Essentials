@@ -14,7 +14,6 @@ public class TNTExplodeListener implements Listener, Runnable {
     private transient int timer = -1;
 
     public TNTExplodeListener(final IEssentials ess) {
-        super();
         this.ess = ess;
     }
 

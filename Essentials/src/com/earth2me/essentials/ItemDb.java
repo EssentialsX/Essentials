@@ -409,10 +409,6 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
 
 
     class LengthCompare implements java.util.Comparator<String> {
-        public LengthCompare() {
-            super();
-        }
-
         @Override
         public int compare(String s1, String s2) {
             return s1.length() - s2.length();

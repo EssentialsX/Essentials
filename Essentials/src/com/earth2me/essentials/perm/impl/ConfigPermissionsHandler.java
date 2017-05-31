@@ -2,14 +2,13 @@ package com.earth2me.essentials.perm.impl;
 
 import net.ess3.api.IEssentials;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 
 public class ConfigPermissionsHandler extends SuperpermsHandler {
     private final transient IEssentials ess;
 
-    public ConfigPermissionsHandler(final Plugin ess) {
-        this.ess = (IEssentials) ess;
+    public ConfigPermissionsHandler(final IEssentials ess) {
+        this.ess = ess;
     }
 
     @Override
