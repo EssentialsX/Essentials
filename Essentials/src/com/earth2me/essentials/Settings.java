@@ -1402,11 +1402,11 @@ public class Settings implements net.ess3.api.ISettings {
 
     @Override
     public boolean isAddingPrefixInPlayerlist() {
-        return config.getBoolean("add-prefix-in-playerlist", false);
+        return config.getBoolean("add-prefix-in-playerlist", true);
     }
 
     @Override
     public boolean isAddingSuffixInPlayerlist() {
-        return config.getBoolean("add-suffix-in-playerlist", false);
+        return config.getBoolean("add-suffix-in-playerlist", true);
     }
 }
