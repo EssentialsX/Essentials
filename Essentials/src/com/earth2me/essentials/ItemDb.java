@@ -4,6 +4,7 @@ import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.nms.updatedmeta.BasePotionDataProvider;
 import com.earth2me.essentials.utils.StringUtil;
 import net.ess3.api.IEssentials;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -29,8 +30,10 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
     private final transient Map<ItemData, List<String>> names = new HashMap<>();
     private final transient Map<ItemData, String> primaryName = new HashMap<>();
     private final transient Map<String, Short> durabilities = new HashMap<>();
+    private final transient Map<String, String> nbtData = new HashMap<>();
     private final transient ManagedFile file;
     private final transient Pattern splitPattern = Pattern.compile("((.*)[:+',;.](\\d+))");
+    private final transient Pattern csvSplitPattern = Pattern.compile("(\"([^\"]*)\"|[^,]*)(,|$)");
 
     public ItemDb(final IEssentials ess) {
         this.ess = ess;
@@ -51,34 +54,65 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
         primaryName.clear();
 
         for (String line : lines) {
-            line = line.trim().toLowerCase(Locale.ENGLISH);
             if (line.length() > 0 && line.charAt(0) == '#') {
                 continue;
             }
 
-            final String[] parts = line.split("[^a-z0-9]");
-            if (parts.length < 2) {
+            String itemName = null;
+            int numeric = -1;
+            short data = 0;
+            String nbt = null;
+
+            int col = 0;
+            Matcher matcher = csvSplitPattern.matcher(line);
+            while (matcher.find()) {
+                String match = matcher.group(1);
+                if (StringUtils.stripToNull(match) == null) {
+                    continue;
+                }
+                match = StringUtils.strip(match, "\"");
+                switch (col) {
+                    case 0:
+                        itemName = match.toLowerCase(Locale.ENGLISH);
+                        break;
+                    case 1:
+                        numeric = Integer.parseInt(match);
+                        break;
+                    case 2:
+                        data = Short.parseShort(match);
+                        break;
+                    case 3:
+                        nbt = StringUtils.stripToNull(match);
+                        break;
+                    default:
+                        continue;
+                }
+                col++;
+            }
+            // Invalid row
+            if (itemName == null || numeric < 0) {
                 continue;
             }
-
-            final int numeric = Integer.parseInt(parts[1]);
-            final short data = parts.length > 2 && !parts[2].equals("0") ? Short.parseShort(parts[2]) : 0;
-            String itemName = parts[0].toLowerCase(Locale.ENGLISH);
-
             durabilities.put(itemName, data);
             items.put(itemName, numeric);
+            if (nbt != null) {
+                nbtData.put(itemName, nbt);
+            }
 
             ItemData itemData = new ItemData(numeric, data);
             if (names.containsKey(itemData)) {
                 List<String> nameList = names.get(itemData);
                 nameList.add(itemName);
-                Collections.sort(nameList, new LengthCompare());
             } else {
-                List<String> nameList = new ArrayList<String>();
+                List<String> nameList = new ArrayList<>();
                 nameList.add(itemName);
                 names.put(itemData, nameList);
                 primaryName.put(itemData, itemName);
             }
+        }
+
+        for (List<String> nameList : names.values()) {
+            Collections.sort(nameList, LengthCompare.INSTANCE);
         }
     }
 
@@ -138,6 +172,13 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
             throw new Exception(tl("unknownItemId", itemid));
         }
         ItemStack retval = new ItemStack(mat);
+        if (nbtData.containsKey(itemname)) {
+            String nbt = nbtData.get(itemname);
+            if (nbt.startsWith("*")) {
+                nbt = nbtData.get(nbt.substring(1));
+            }
+            retval = ess.getServer().getUnsafe().modifyItemStack(retval, nbt);
+        }
         if (mat == Material.MOB_SPAWNER) {
             if (metaData == 0) metaData = EntityType.PIG.getTypeId();
             try {
@@ -408,7 +449,10 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
     }
 
 
-    class LengthCompare implements java.util.Comparator<String> {
+    static class LengthCompare implements java.util.Comparator<String> {
+
+        private static final LengthCompare INSTANCE = new LengthCompare();
+
         public LengthCompare() {
             super();
         }
