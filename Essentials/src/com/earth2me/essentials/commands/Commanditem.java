@@ -3,10 +3,13 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
+import com.google.common.collect.Lists;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -66,5 +69,18 @@ public class Commanditem extends EssentialsCommand {
             InventoryWorkaround.addItems(user.getBase().getInventory(), stack);
         }
         user.getBase().updateInventory();
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
+        if (args.length == 1) {
+            return getItems();
+        } else if (args.length == 2) {
+            return Lists.newArrayList("1", "64");  // TODO: get actual max size
+        } else if (args.length == 3) {
+            return Lists.newArrayList("0");
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

@@ -178,4 +178,13 @@ public class Commandcondense extends EssentialsCommand {
             return input.clone();
         }
     }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return getMatchingItems(args[0]);
+        } else {
+            return Collections.emptyList();
+        }
+    }
 }

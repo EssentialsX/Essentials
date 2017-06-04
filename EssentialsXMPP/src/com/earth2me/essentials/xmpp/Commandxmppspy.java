@@ -6,6 +6,7 @@ import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
+import java.util.Collections;
 import java.util.List;
 
 
@@ -33,6 +34,15 @@ public class Commandxmppspy extends EssentialsCommand {
             } catch (Exception ex) {
                 sender.sendMessage("Error: " + ex.getMessage());
             }
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
+        if (args.length == 1) {
+            return getPlayers(server, sender);
+        } else {
+            return Collections.emptyList();
         }
     }
 }

@@ -6,6 +6,9 @@ import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 
+import java.util.Collections;
+import java.util.List;
+
 import static com.earth2me.essentials.I18n.tl;
 
 
@@ -60,5 +63,22 @@ public class Commandfeed extends EssentialsLoopCommand {
         player.setFoodLevel(flce.getFoodLevel() > 20 ? 20 : flce.getFoodLevel());
         player.setSaturation(10);
         player.setExhaustion(0F);
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return getPlayers(server, sender);
+        } else {
+            return Collections.emptyList();
+        }
+    }
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        if (args.length == 1 && user.isAuthorized("essentials.feed.others")) {
+            return getPlayers(server, user);
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

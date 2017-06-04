@@ -8,6 +8,7 @@ import org.bukkit.Server;
 import org.bukkit.inventory.*;
 
 import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -163,5 +164,14 @@ public class Commandrecipe extends EssentialsCommand {
             return tl("recipeNothing");
         }
         return type.toString().replace("_", " ").toLowerCase(Locale.ENGLISH);
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
+        if (args.length == 1) {
+            return getItems();
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

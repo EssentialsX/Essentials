@@ -6,11 +6,13 @@ import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
-
+import com.google.common.collect.Lists;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.Server;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -82,6 +84,17 @@ public class Commandpay extends EssentialsLoopCommand {
             }
         } catch (Exception e) {
             sender.sendMessage(e.getMessage());
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return getPlayers(server, sender);
+        } else if (args.length == 2) {
+            return Lists.newArrayList(ess.getSettings().getMinimumPayAmount().toString());
+        } else {
+            return Collections.emptyList();
         }
     }
 }

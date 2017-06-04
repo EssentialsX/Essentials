@@ -4,10 +4,13 @@ import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.google.common.collect.Lists;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.Server;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -97,5 +100,26 @@ public class Commandeco extends EssentialsLoopCommand {
 
     private enum EcoCommands {
         GIVE, TAKE, SET, RESET
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, final CommandSource sender, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            List<String> options = Lists.newArrayList();
+            for (EcoCommands command : EcoCommands.values()) {
+                options.add(command.name());
+            }
+            return options;
+        } else if (args.length == 2) {
+            return getPlayers(server, sender);
+        } else if (args.length == 3 && !args[0].equalsIgnoreCase(EcoCommands.RESET.name())) {
+            if (args[0].equalsIgnoreCase(EcoCommands.SET.name())) {
+                return Lists.newArrayList("0", ess.getSettings().getStartingBalance().toString());
+            } else {
+                return Lists.newArrayList("1", "10", "100", "1000");
+            }
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

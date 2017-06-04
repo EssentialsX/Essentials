@@ -6,6 +6,8 @@ import com.earth2me.essentials.utils.NumberUtil;
 import org.bukkit.Server;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -36,6 +38,24 @@ public class Commandbalance extends EssentialsCommand {
             user.sendMessage(tl("balance", NumberUtil.displayCurrency(bal, ess)));
         } else {
             throw new NotEnoughArgumentsException();
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return getPlayers(server, sender);
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        if (args.length == 1 && user.isAuthorized("essentials.balance.others")) {
+            return getPlayers(server, user);
+        } else {
+            return Collections.emptyList();
         }
     }
 }

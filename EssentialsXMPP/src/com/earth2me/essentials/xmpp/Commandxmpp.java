@@ -6,6 +6,8 @@ import com.earth2me.essentials.commands.EssentialsCommand;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import org.bukkit.Server;
 
+import java.util.Collections;
+import java.util.List;
 
 public class Commandxmpp extends EssentialsCommand {
     public Commandxmpp() {
@@ -28,6 +30,15 @@ public class Commandxmpp extends EssentialsCommand {
             if (!EssentialsXMPP.getInstance().sendMessage(address, "[" + senderName + "] " + message)) {
                 sender.sendMessage("§cError sending message.");
             }
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
+        if (args.length == 1) {
+            return Collections.emptyList();  // TODO: Is there a way to get a list of addresses?
+        } else {
+            return null;  // Use vanilla tab complete
         }
     }
 }

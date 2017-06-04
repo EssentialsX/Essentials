@@ -218,4 +218,8 @@ public class Enchantments {
     public static Set<Entry<String, Enchantment>> entrySet() {
         return ENCHANTMENTS.entrySet();
     }
+
+    public static Set<String> keySet() {
+        return ENCHANTMENTS.keySet();
+    }
 }

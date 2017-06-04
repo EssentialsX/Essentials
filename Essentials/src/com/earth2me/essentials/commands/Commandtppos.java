@@ -4,9 +4,14 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FloatUtil;
+import com.google.common.collect.Lists;
 import org.bukkit.Location;
 import org.bukkit.Server;
+import org.bukkit.World;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+
+import java.util.Collections;
+import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -74,5 +79,41 @@ public class Commandtppos extends EssentialsCommand {
         user.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
         user.getTeleport().teleport(loc, null, TeleportCause.COMMAND);
 
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return getPlayers(server, sender);
+        } else if (args.length == 2 || args.length == 3 || args.length == 4) {
+            return Lists.newArrayList("~0");
+        } else if (args.length == 5 || args.length == 6) {
+            return Lists.newArrayList("0");
+        } else if (args.length == 7) {
+            List<String> worlds = Lists.newArrayList();
+            for (World world : server.getWorlds()) {
+                worlds.add(world.getName());
+            }
+            return worlds;
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        if (args.length == 1 || args.length == 2 || args.length == 3) {
+            return Lists.newArrayList("~0");
+        } else if (args.length == 4 || args.length == 5) {
+            return Lists.newArrayList("0");
+        } else if (args.length == 6) {
+            List<String> worlds = Lists.newArrayList();
+            for (World world : server.getWorlds()) {
+                worlds.add(world.getName());
+            }
+            return worlds;
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

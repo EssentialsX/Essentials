@@ -2,8 +2,12 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.google.common.collect.Lists;
 import org.bukkit.Server;
 import org.bukkit.World;
+
+import java.util.Collections;
+import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -60,6 +64,34 @@ public class Commandweather extends EssentialsCommand {
         } else {
             world.setStorm(isStorm);
             sender.sendMessage(isStorm ? tl("weatherStorm", world.getName()) : tl("weatherSun", world.getName()));
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            List<String> worlds = Lists.newArrayList();
+            for (World world : server.getWorlds()) {
+                worlds.add(world.getName());
+            }
+            return worlds;
+        } else if (args.length == 2) {
+            return Lists.newArrayList("storm", "sun");
+        } else if (args.length == 3) {
+            return COMMON_DURATIONS;
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return Lists.newArrayList("storm", "sun");
+        } else if (args.length == 2) {
+            return COMMON_DURATIONS;
+        } else {
+            return Collections.emptyList();
         }
     }
 }

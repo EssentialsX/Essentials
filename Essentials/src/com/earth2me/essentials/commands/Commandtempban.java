@@ -7,8 +7,10 @@ import com.earth2me.essentials.utils.DateUtil;
 import org.bukkit.BanList;
 import org.bukkit.Server;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -60,5 +62,15 @@ public class Commandtempban extends EssentialsCommand {
         final String message = tl("playerTempBanned", senderName, user.getName(), expiry, banReason);
         server.getLogger().log(Level.INFO, message);
         ess.broadcastMessage("essentials.ban.notify", message);
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return getPlayers(server, sender);
+        } else {
+            // Note: following args are both date diffs _and_ messages; ideally we'd mix with the vanilla handler
+            return COMMON_DATE_DIFFS;
+        }
     }
 }
