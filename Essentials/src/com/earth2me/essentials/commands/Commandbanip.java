@@ -7,6 +7,8 @@ import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.BanList;
 import org.bukkit.Server;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -53,5 +55,15 @@ public class Commandbanip extends EssentialsCommand {
         server.getLogger().log(Level.INFO, tl("playerBanIpAddress", senderName, ipAddress, banReason));
 
         ess.broadcastMessage("essentials.banip.notify", tl("playerBanIpAddress", senderName, ipAddress, banReason));
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            // TODO: Also list IP addresses?
+            return getPlayers(server, sender);
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

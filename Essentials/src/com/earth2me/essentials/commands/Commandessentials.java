@@ -9,6 +9,7 @@ import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FloatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.base.Charsets;
+import com.google.common.collect.Lists;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.Sound;
@@ -16,7 +17,9 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
@@ -302,5 +305,53 @@ public class Commandessentials extends EssentialsCommand {
 
         UUID offlineuuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8));
         sender.sendMessage("Offline Mode UUID: " + offlineuuid.toString());
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
+        if (args.length == 1) {
+            List<String> options = Lists.newArrayList();
+            options.add("reload");
+            options.add("debug");
+            //options.add("nya");
+            //options.add("moo");
+            options.add("reset");
+            options.add("opt-out");
+            options.add("cleanup");
+            //options.add("uuidconvert");
+            //options.add("uuidtest");
+            return options;
+        } else if (args[0].equalsIgnoreCase("debug")) {
+            // No args
+        } else if (args[0].equalsIgnoreCase("nya")) {
+            // No args
+        } else if (args[0].equalsIgnoreCase("moo")) {
+            if (args.length == 2) {
+                return Lists.newArrayList("moo");
+            }
+        } else if (args[0].equalsIgnoreCase("reset")) {
+            if (args.length == 2) {
+                return getPlayers(server, sender);
+            }
+        } else if (args[0].equalsIgnoreCase("opt-out")) {
+            // No args
+        } else if (args[0].equalsIgnoreCase("cleanup")) {
+            if (args.length == 2) {
+                return COMMON_DURATIONS;
+            } else if (args.length == 3 || args.length == 4) {
+                return Lists.newArrayList("-1", "0");
+            }
+        } else if (args[0].equalsIgnoreCase("uuidconvert")) {
+            if (args.length == 2) {
+                return Lists.newArrayList("ignoreUFCache");
+            }
+        } else if (args[0].equalsIgnoreCase("uuidtest")) {
+            if (args.length == 2) {
+                return getPlayers(server, sender);
+            }
+        } else {
+            // No args
+        }
+        return Collections.emptyList();
     }
 }

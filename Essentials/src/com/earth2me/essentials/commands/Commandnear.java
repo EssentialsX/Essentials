@@ -2,9 +2,13 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.google.common.collect.Lists;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
+
+import java.util.Collections;
+import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -96,5 +100,35 @@ public class Commandnear extends EssentialsCommand {
             }
         }
         return output.length() > 1 ? output.toString() : tl("none");
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        if (user.isAuthorized("essentials.near.others")) {
+            if (args.length == 1) {
+                return getPlayers(server, user);
+            } else if (args.length == 2) {
+                return Lists.newArrayList(Integer.toString(ess.getSettings().getNearRadius()));
+            } else {
+                return Collections.emptyList();
+            }
+        } else {
+            if (args.length == 1) {
+                return Lists.newArrayList(Integer.toString(ess.getSettings().getNearRadius()));
+            } else {
+                return Collections.emptyList();
+            }
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return getPlayers(server, sender);
+        } else if (args.length == 2) {
+            return Lists.newArrayList(Integer.toString(ess.getSettings().getNearRadius()));
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

@@ -7,8 +7,10 @@ import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.textreader.TextPager;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.StringUtil;
+import com.google.common.collect.Lists;
 import org.bukkit.Server;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -138,6 +140,51 @@ public class Commandmail extends EssentialsCommand {
                     user.addMail(message);
                 }
             }
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
+        if (args.length == 1) {
+            List<String> options = Lists.newArrayList("read", "clear");
+            if (user.isAuthorized("essentials.mail.send")) {
+                options.add("send");
+            }
+            if (user.isAuthorized("essentials.mail.sendall")) {
+                options.add("sendall");
+            }
+            return options;
+        } else if (args.length == 2 && args[0].equalsIgnoreCase("send") && user.isAuthorized("essentials.mail.send")) {
+            return getPlayers(server, user);
+        } else if (args.length == 2 && args[0].equalsIgnoreCase("read")) {
+            final List<String> mail = user.getMails();
+            int pages = mail.size() / 9 + (mail.size() % 9 > 0 ? 1 : 0);
+            if (pages == 0) {
+                return Lists.newArrayList("0");
+            } else {
+                List<String> options = Lists.newArrayList("1");
+                if (pages > 1) {
+                    options.add(String.valueOf(pages));
+                }
+                return options;
+            }
+        } else if ((args.length > 2 && args[0].equalsIgnoreCase("send") && user.isAuthorized("essentials.mail.send")) || (args.length > 1 && args[0].equalsIgnoreCase("sendall") && user.isAuthorized("essentials.mail.sendall"))) {
+            return null; // Use vanilla handler
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
+        if (args.length == 1) {
+            return Lists.newArrayList("send", "sendall");
+        } else if (args.length == 2 && args[0].equalsIgnoreCase("send")) {
+            return getPlayers(server, sender);
+        } else if ((args.length > 2 && args[0].equalsIgnoreCase("send")) || (args.length > 1 && args[0].equalsIgnoreCase("sendall"))) {
+            return null; // Use vanilla handler
+        } else {
+            return Collections.emptyList();
         }
     }
 }

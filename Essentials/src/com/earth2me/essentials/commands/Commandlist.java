@@ -116,4 +116,13 @@ public class Commandlist extends EssentialsCommand {
             sender.sendMessage(PlayerList.outputFormat(groupName, PlayerList.listUsers(ess, users, ", ")));
         }
     }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
+        if (args.length == 1) {
+            return getGroups();
+        } else {
+            return Collections.emptyList();
+        }
+    }
 }

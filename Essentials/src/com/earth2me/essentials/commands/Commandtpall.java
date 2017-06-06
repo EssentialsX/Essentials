@@ -6,6 +6,9 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
+import java.util.Collections;
+import java.util.List;
+
 import static com.earth2me.essentials.I18n.tl;
 
 
@@ -43,6 +46,15 @@ public class Commandtpall extends EssentialsCommand {
             } catch (Exception ex) {
                 ess.showError(sender, ex, getName());
             }
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return getPlayers(server, sender);
+        } else {
+            return Collections.emptyList();
         }
     }
 }

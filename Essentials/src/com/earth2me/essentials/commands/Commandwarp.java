@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -109,5 +110,29 @@ public class Commandwarp extends EssentialsCommand {
             throw new Exception(tl("warpUsePermission"));
         }
         owner.getTeleport().warp(user, name, charge, TeleportCause.COMMAND);
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
+        if (args.length == 1) {
+            // Should we be checking "essentials.warp.list" here?
+            return new ArrayList<>(ess.getWarps().getList());
+        } else if (args.length == 2 && (user.isAuthorized("essentials.warp.otherplayers") || user.isAuthorized("essentials.warp.others"))) {
+            //TODO: Remove 'otherplayers' permission.
+            return getPlayers(server, user);
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
+        if (args.length == 1) {
+            return new ArrayList<>(ess.getWarps().getList());
+        } else if (args.length == 2) {
+            return getPlayers(server, sender);
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

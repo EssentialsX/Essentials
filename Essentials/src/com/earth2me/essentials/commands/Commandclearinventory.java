@@ -10,6 +10,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -125,6 +127,52 @@ public class Commandclearinventory extends EssentialsCommand {
                     }
                 }
             }
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        if (user.isAuthorized("essentials.clearinventory.others")) {
+            if (args.length == 1) {
+                List<String> options = getPlayers(server, user);
+                if (user.isAuthorized("essentials.clearinventory.all") || user.isAuthorized("essentials.clearinventory.multiple")) {
+                    // Assume that nobody will have the 'all' permission without the 'others' permission
+                    options.add("*");
+                }
+                return options;
+            } else if (args.length == 2) {
+                List<String> items = new ArrayList<>(getItems());
+                items.add("*");
+                items.add("**");
+                return items;
+            } else {
+                return Collections.emptyList();
+            }
+        } else {
+            if (args.length == 1) {
+                List<String> items = new ArrayList<>(getItems());
+                items.add("*");
+                items.add("**");
+                return items;
+            } else {
+                return Collections.emptyList();
+            }
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            List<String> options = getPlayers(server, sender);
+            options.add("*");
+            return options;
+        } else if (args.length == 2) {
+            List<String> items = new ArrayList<>(getItems());
+            items.add("*");
+            items.add("**");
+            return items;
+        } else {
+            return Collections.emptyList();
         }
     }
 }
