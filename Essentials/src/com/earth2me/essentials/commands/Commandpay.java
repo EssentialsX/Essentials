@@ -30,7 +30,7 @@ public class Commandpay extends EssentialsLoopCommand {
             throw new NotEnoughArgumentsException();
         }
         
-        if (args[1].contains("-")) {
+        if (args[1].contains("-") || amount.compareTo(BigDecimal.ZERO) == 0) {
             throw new Exception(tl("payMustBePositive"));
         }
 
