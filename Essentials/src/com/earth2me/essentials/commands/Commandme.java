@@ -58,6 +58,9 @@ public class Commandme extends EssentialsCommand {
                         abort = true;
                     }
                 }
+                if (onlineUser.isIgnoredPlayer(user)) {
+                    abort = true;
+                }
                 if (abort) {
                     if (onlineUser.isAuthorized("essentials.chat.spy")) {
                         outList.add(player); // Just use the same list unless we wanted to format spyying for this.
