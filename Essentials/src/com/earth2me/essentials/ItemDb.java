@@ -371,6 +371,10 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
         return sb.toString().trim().replaceAll("§", "&");
     }
 
+    @Override
+    public Collection<String> listNames() {
+        return primaryName.values();
+    }
 
     static class ItemData {
         final private int itemNo;

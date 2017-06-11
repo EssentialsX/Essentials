@@ -1,10 +1,13 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import com.google.common.collect.Lists;
 import org.bukkit.Server;
 import org.bukkit.entity.*;
 import org.bukkit.util.Vector;
 
+import java.util.Collections;
+import java.util.List;
 
 public class Commandfireball extends EssentialsCommand {
     public Commandfireball() {
@@ -37,5 +40,14 @@ public class Commandfireball extends EssentialsCommand {
         projectile = (Projectile) user.getWorld().spawn(user.getBase().getEyeLocation().add(direction.getX(), direction.getY(), direction.getZ()), type);
         projectile.setShooter(user.getBase());
         projectile.setVelocity(direction);
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
+        if (args.length == 1) {
+            return Lists.newArrayList("small", "arrow", "skull", "egg", "snowball", "expbottle", "large");
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

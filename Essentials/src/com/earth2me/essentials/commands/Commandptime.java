@@ -1,5 +1,7 @@
 package com.earth2me.essentials.commands;
 
+import com.google.common.collect.Lists;
+
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DescParseTickFormat;
@@ -182,6 +184,19 @@ public class Commandptime extends EssentialsCommand {
         }
 
         return users;
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        final User user = ess.getUser(sender.getPlayer());
+
+        if (args.length == 1) {
+            return Lists.newArrayList("get", "reset", "sunrise", "day", "morning", "noon", "afternoon", "sunset", "night", "midnight");
+        } else if (args.length == 2 && (getAliases.contains(args[0]) || user == null || user.isAuthorized("essentials.ptime.others"))) {
+            return getPlayers(server, sender);
+        } else {
+            return Collections.emptyList();
+        }
     }
 }
 

@@ -3,11 +3,13 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.StringUtil;
+import com.google.common.collect.Lists;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -101,5 +103,60 @@ public class Commandpowertool extends EssentialsCommand {
             user.sendMessage(tl("powerToolsEnabled"));
         }
         user.setPowertool(itemStack, powertools);
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            List<String> options = Lists.newArrayList("d:", "c:", "l:");
+
+            if (user.isAuthorized("essentials.powertool.append")) {
+                for (String command : getCommands(server)) {
+                    options.add("a:" + command);
+                }
+            }
+
+            try {
+                final ItemStack itemStack = user.getBase().getItemInHand();
+                List<String> powertools = user.getPowertool(itemStack);
+                for (String tool : powertools) {
+                    options.add("r:" + tool);
+                }
+            } catch (Exception e) {}
+            return options;
+        } else if (args[0].startsWith("a:")) {
+            return tabCompleteCommand(user.getSource(), server, args[0].substring(2), args, 1);
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return getPlayers(server, sender);
+        } else if (args.length == 2) {
+            return getItems();
+        } else if (args.length == 3) {
+            List<String> options = Lists.newArrayList("d:", "c:", "l:");
+
+            for (String command : getCommands(server)) {
+                options.add("a:" + command);
+            }
+
+            try {
+                final User user = getPlayer(server, args, 0, true, true);
+                final ItemStack itemStack = ess.getItemDb().get(args[1]);
+                List<String> powertools = user.getPowertool(itemStack);
+                for (String tool : powertools) {
+                    options.add("r:" + tool);
+                }
+            } catch (Exception e) {}
+            return options;
+        } else if (args[2].startsWith("a:")) {
+            return tabCompleteCommand(sender, server, args[2].substring(2), args, 3);
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

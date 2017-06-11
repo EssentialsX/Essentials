@@ -3,6 +3,8 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 
+import java.util.Collections;
+import java.util.List;
 
 public class Commandenderchest extends EssentialsCommand {
     public Commandenderchest() {
@@ -22,5 +24,14 @@ public class Commandenderchest extends EssentialsCommand {
             user.setEnderSee(false);
         }
 
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        if (args.length == 1 && user.isAuthorized("essentials.enderchest.others")) {
+            return getPlayers(server, user);
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

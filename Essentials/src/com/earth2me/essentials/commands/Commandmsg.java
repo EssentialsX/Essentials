@@ -10,6 +10,7 @@ import com.earth2me.essentials.utils.FormatUtil;
 
 import org.bukkit.Server;
 
+import java.util.List;
 
 public class Commandmsg extends EssentialsLoopCommand {
 
@@ -51,5 +52,14 @@ public class Commandmsg extends EssentialsLoopCommand {
     protected void updatePlayer(final Server server, final CommandSource sender, final User messageReceiver, final String[] args) {
         IMessageRecipient messageSender = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : Console.getInstance();
         messageSender.sendMessage(messageReceiver, args[0]); // args[0] is the message.
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return getPlayers(server, sender);
+        } else {
+            return null;  // It's a chat message, use the default chat handler
+        }
     }
 }

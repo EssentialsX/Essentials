@@ -3,6 +3,8 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.google.common.collect.Lists;
+import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -11,6 +13,9 @@ import org.bukkit.entity.Firework;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.util.Vector;
+
+import java.util.Collections;
+import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -111,6 +116,62 @@ public class Commandfirework extends EssentialsCommand {
             }
         } else {
             throw new Exception(tl("holdFirework"));
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        // Note: this enforces an order of color fade shape effect, which the actual command doesn't have.  But that's fine. 
+        if (args.length == 1) {
+            List<String> options = Lists.newArrayList();
+            if (args[0].startsWith("color:")) {
+                String prefix;
+                if (args[0].contains(",")) {
+                    prefix = args[0].substring(0, args[0].lastIndexOf(',') + 1);
+                } else {
+                    prefix = "color:";
+                }
+                for (DyeColor color : DyeColor.values()) {
+                    options.add(prefix + color.name().toLowerCase() + ",");
+                }
+                return options;
+            }
+            options.add("clear");
+            options.add("power");
+            options.add("color:");
+            if (user.isAuthorized("essentials.firework.fire")) {
+                options.add("fire");
+            }
+            return options;
+        } else if (args.length == 2) {
+            if (args[0].equals("power")) {
+                return Lists.newArrayList("1", "2", "3", "4");
+            } else if (args[0].equals("fire")) {
+                return Lists.newArrayList("1");
+            } else if (args[0].startsWith("color:")) {
+                List<String> options = Lists.newArrayList();
+                if (!args[1].startsWith("fade:")) {
+                    args[1] = "fade:";
+                }
+                String prefix;
+                if (args[1].contains(",")) {
+                    prefix = args[1].substring(0, args[1].lastIndexOf(',') + 1);
+                } else {
+                    prefix = "fade:";
+                }
+                for (DyeColor color : DyeColor.values()) {
+                    options.add(prefix + color.name().toLowerCase() + ",");
+                }
+                return options;
+            } else {
+                return Collections.emptyList();
+            }
+        } else if (args.length == 3 && args[0].startsWith("color:")) {
+            return Lists.newArrayList("shape:star", "shape:ball", "shape:large", "shape:creeper", "shape:burst");
+        } else if (args.length == 4 && args[0].startsWith("color:")) {
+            return Lists.newArrayList("effect:trail", "effect:twinkle", "effect:trail,twinkle", "effect:twinkle,trail");
+        } else {
+            return Collections.emptyList();
         }
     }
 }

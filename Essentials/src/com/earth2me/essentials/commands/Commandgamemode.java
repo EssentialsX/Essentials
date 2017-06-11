@@ -2,10 +2,12 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.google.common.collect.ImmutableList;
 import org.bukkit.GameMode;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -115,5 +117,46 @@ public class Commandgamemode extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
         return mode;
+    }
+
+    private List<String> STANDARD_OPTIONS = ImmutableList.of("creative", "survival", "adventure", "spectator", "toggle");
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
+        if (args.length == 1) {
+            try {
+                // Direct command?  Don't ask for the mode
+                matchGameMode(commandLabel);
+                return getPlayers(server, sender);
+            } catch (NotEnoughArgumentsException e) {
+                return STANDARD_OPTIONS;
+            }
+        } else if (args.length == 2) {
+            return getPlayers(server, sender);
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
+        boolean isDirectGamemodeCommand;
+        try {
+            // Direct command?
+            matchGameMode(commandLabel);
+            isDirectGamemodeCommand = true;
+        } catch (NotEnoughArgumentsException ex) {
+            isDirectGamemodeCommand = false;
+        }
+        if (args.length == 1) {
+            if (user.isAuthorized("essentials.gamemode.others") && isDirectGamemodeCommand) {
+                return getPlayers(server, user);
+            } else {
+                return STANDARD_OPTIONS;
+            }
+        } else if (args.length == 2 && user.isAuthorized("essentials.gamemode.others") && !isDirectGamemodeCommand) {
+            return getPlayers(server, user);
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

@@ -9,6 +9,8 @@ import org.bukkit.entity.TNTPrimed;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -45,6 +47,15 @@ public class Commandnuke extends EssentialsCommand {
                     final TNTPrimed tnt = world.spawn(tntloc, TNTPrimed.class);
                 }
             }
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return getPlayers(server, sender);
+        } else {
+            return Collections.emptyList();
         }
     }
 }

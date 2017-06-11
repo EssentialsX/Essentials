@@ -5,6 +5,9 @@ import com.earth2me.essentials.User;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
+import java.util.Collections;
+import java.util.List;
+
 import static com.earth2me.essentials.I18n.tl;
 
 
@@ -24,5 +27,14 @@ public class Commandtphere extends EssentialsCommand {
         }
         user.getTeleport().teleportPlayer(player, user.getBase(), new Trade(this.getName(), ess), TeleportCause.COMMAND);
         throw new NoChargeException();
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return getPlayers(server, user);
+        } else {
+            return Collections.emptyList();
+        }
     }
 }
