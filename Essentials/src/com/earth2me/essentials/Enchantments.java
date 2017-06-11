@@ -197,6 +197,16 @@ public class Enchantments {
                 ALIASENCHANTMENTS.put("sweeping", sweeping);
             }
         } catch (IllegalArgumentException ignored) {}
+        
+        // 1.11.1
+        try {
+            Enchantment sweepingEdge = Enchantment.getById(22);
+            if (sweepingEdge != null) {
+                ENCHANTMENTS.put("sweepingedge", sweepingEdge);
+                ALIASENCHANTMENTS.put("sweeping", sweepingEdge);
+                ALIASENCHANTMENTS.put("sweep", sweepingEdge);
+            }
+        } catch (IllegalArgumentException ignored) {}          
     }
 
     public static Enchantment getByName(String name) {
