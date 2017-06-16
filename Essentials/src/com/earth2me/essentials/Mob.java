@@ -53,6 +53,8 @@ public enum Mob {
     MINECART_HOPPER("HopperMinecart", Enemies.NEUTRAL, EntityType.MINECART_HOPPER),
     MINECART_MOB_SPAWNER("SpawnerMinecart", Enemies.NEUTRAL, EntityType.MINECART_MOB_SPAWNER),
     ENDERCRYSTAL("EnderCrystal", Enemies.NEUTRAL, EntityType.ENDER_CRYSTAL),
+    PARROT("Parrot", Enemies.FRIENDLY, EntityType.PARROT),
+    ILLUSIONER("Illusioner", Enemies.ENEMY, "ILLUSIONER"),
     EXPERIENCEORB("ExperienceOrb", Enemies.NEUTRAL, "EXPERIENCE_ORB"),
     ARMOR_STAND("ArmorStand", Enemies.NEUTRAL, "ARMOR_STAND"),
     ENDERMITE("Endermite", Enemies.ENEMY, "ENDERMITE"),
