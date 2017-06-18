@@ -1,9 +1,14 @@
 package com.earth2me.essentials;
 
+import net.ess3.nms.refl.ReflUtil;
+
 import org.bukkit.*;
+import org.bukkit.advancement.Advancement;
+import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
+import org.bukkit.block.PistonMoveReaction;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.entity.*;
@@ -22,6 +27,8 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.util.Vector;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.util.*;
 
@@ -186,11 +193,6 @@ public class OfflinePlayer implements Player {
     @Override
     public double getEyeHeight(boolean bln) {
         return 0D;
-    }
-
-    @Override
-    public List<Block> getLineOfSight(HashSet<Byte> hs, int i) {
-        return Collections.emptyList();
     }
 
     @Override
@@ -1115,41 +1117,6 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public int _INVALID_getLastDamage() {
-        return 0;
-    }
-
-    @Override
-    public void _INVALID_setLastDamage(int i) {
-    }
-
-    @Override
-    public void _INVALID_damage(int i) {
-    }
-
-    @Override
-    public void _INVALID_damage(int i, Entity entity) {
-    }
-
-    @Override
-    public int _INVALID_getHealth() {
-        return 0;
-    }
-
-    @Override
-    public void _INVALID_setHealth(int i) {
-    }
-
-    @Override
-    public int _INVALID_getMaxHealth() {
-        return 0;
-    }
-
-    @Override
-    public void _INVALID_setMaxHealth(int i) {
-    }
-
-    @Override
     public void playSound(Location arg0, String arg1, float arg2, float arg3) {
     }
 
@@ -1293,8 +1260,12 @@ public class OfflinePlayer implements Player {
         return base.isBanned();
     }
 
-    @Override
+    // Removed in 1.12, retain for backwards compatibility.
+    @Deprecated
     public void setBanned(boolean banned) {
+        if (ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_12_R1)) {
+            throw new UnsupportedOperationException("Cannot called setBanned on MC 1.12 and higher.");
+        }
         if (base.getName() == null && getName() != null) {
             if (banned) {
                 server.getBanList(BanList.Type.NAME).addBan(getName(), null, null, null);
@@ -1302,7 +1273,13 @@ public class OfflinePlayer implements Player {
                 server.getBanList(BanList.Type.NAME).pardon(getName());
             }
         }
-        base.setBanned(banned);
+        try {
+            Method method = base.getClass().getDeclaredMethod("setBanned", boolean.class);
+            method.invoke(banned);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            // This will never happen in a normal CraftBukkit pre-1.12 instance
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -1423,6 +1400,82 @@ public class OfflinePlayer implements Player {
     public AttributeInstance getAttribute(Attribute attribute) {
         // GetAttribute is nullable as per CraftAttributeMap. This might need to be
         // improved to support cases where dummy null instances should be returned.
+        return null;
+    }
+
+    @Override
+    public void setResourcePack(String s, byte[] bytes) {
+    }
+
+    @Override
+    public AdvancementProgress getAdvancementProgress(Advancement advancement) {
+        return null;
+    }
+
+    @Override
+    public String getLocale() {
+        return null;
+    }
+
+    @Override
+    public boolean hasCooldown(Material material) {
+        return false;
+    }
+
+    @Override
+    public int getCooldown(Material material) {
+        return 0;
+    }
+
+    @Override
+    public void setCooldown(Material material, int i) {
+    }
+
+    @Override
+    public Entity getShoulderEntityLeft() {
+        return null;
+    }
+
+    @Override
+    public void setShoulderEntityLeft(Entity entity) {
+    }
+
+    @Override
+    public Entity getShoulderEntityRight() {
+        return null;
+    }
+
+    @Override
+    public void setShoulderEntityRight(Entity entity) {
+    }
+
+    @Override
+    public double getHeight() {
+        return 0;
+    }
+
+    @Override
+    public double getWidth() {
+        return 0;
+    }
+
+    @Override
+    public List<Entity> getPassengers() {
+        return null;
+    }
+
+    @Override
+    public boolean addPassenger(Entity entity) {
+        return false;
+    }
+
+    @Override
+    public boolean removePassenger(Entity entity) {
+        return false;
+    }
+
+    @Override
+    public PistonMoveReaction getPistonMoveReaction() {
         return null;
     }
 }

@@ -89,7 +89,13 @@ public enum MobData {
     SMITH_VILLAGER("smith", EntityType.VILLAGER, Villager.Profession.BLACKSMITH, true),
     BUTCHER_VILLAGER("butcher", EntityType.VILLAGER, Villager.Profession.BUTCHER, true),
     SIZE_SLIME("", "<1-100>", EntityType.SLIME.getEntityClass(), Data.SIZE, true),
-    NUM_EXPERIENCE_ORB("", "<1-2000000000>", EntityType.EXPERIENCE_ORB, Data.EXP, true);
+    NUM_EXPERIENCE_ORB("", "<1-2000000000>", EntityType.EXPERIENCE_ORB, Data.EXP, true),
+    RED_PARROT("red", EntityType.PARROT, Parrot.Variant.RED, true),
+    GREEN_PARROT("green", EntityType.PARROT, Parrot.Variant.GREEN, true),
+    BLUE_PARROT("blue", EntityType.PARROT, Parrot.Variant.BLUE, true),
+    CYAN_PARROT("cyan", EntityType.PARROT, Parrot.Variant.CYAN, true),
+    GRAY_PARROT("gray", EntityType.PARROT, Parrot.Variant.GRAY, true),
+    ;
 
 
     public enum Data {
@@ -244,6 +250,8 @@ public enum MobData {
                 InventoryWorkaround.setItemInMainHand(invent, new ItemStack((Material) this.value, 1));
                 InventoryWorkaround.setItemInMainHandDropChance(invent, 0.1f);
             }
+        } else if (this.value instanceof Parrot.Variant) {
+            ((Parrot) spawned).setVariant((Parrot.Variant) this.value);
         }
     }
 }
