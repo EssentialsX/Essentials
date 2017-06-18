@@ -1264,7 +1264,7 @@ public class OfflinePlayer implements Player {
     @Deprecated
     public void setBanned(boolean banned) {
         if (ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_12_R1)) {
-            throw new UnsupportedOperationException("Cannot called setBanned on MC 1.12 and higher.");
+            throw new UnsupportedOperationException("Cannot call setBanned on MC 1.12 and higher.");
         }
         if (base.getName() == null && getName() != null) {
             if (banned) {
