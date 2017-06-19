@@ -1,5 +1,6 @@
 package com.earth2me.essentials.signs;
 
+import com.earth2me.essentials.I18n;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.IEssentials;
@@ -57,7 +58,7 @@ public class SignBlockListener implements Listener {
             final Sign csign = (Sign) block.getState();
 
             for (EssentialsSign sign : ess.getSettings().enabledSigns()) {
-                if (csign.getLine(0).equalsIgnoreCase(sign.getSuccessName()) && !sign.onSignBreak(block, player, ess)) {
+                if (csign.getLine(0).equalsIgnoreCase(sign.getSuccessName(ess)) && !sign.onSignBreak(block, player, ess)) {
                     return true;
                 }
             }
@@ -94,7 +95,13 @@ public class SignBlockListener implements Listener {
             // If the top sign line contains any of the success name (excluding colors), just remove all colours from the first line.
             // This is to ensure we are only modifying possible Essentials Sign and not just removing colors from the first line of all signs.
             // Top line and sign#getSuccessName() are both lowercased since contains is case-sensitive.
-            String lSuccessName = ChatColor.stripColor(sign.getSuccessName().toLowerCase());
+            String successName = sign.getSuccessName(ess);
+            if (successName == null) {
+                event.getPlayer().sendMessage(I18n.tl("errorWithMessage",
+                    "Please report this error to a staff member."));
+                return;
+            }
+            String lSuccessName = ChatColor.stripColor(successName.toLowerCase());
             if (lColorlessTopLine.contains(lSuccessName)) {
 
                 // If this sign is not enabled and it has been requested to not protect it's name (when disabled), then do not protect the name.
@@ -116,7 +123,7 @@ public class SignBlockListener implements Listener {
         }
 
         for (EssentialsSign sign : ess.getSettings().enabledSigns()) {
-            if (event.getLine(0).equalsIgnoreCase(sign.getSuccessName())) {
+            if (event.getLine(0).equalsIgnoreCase(sign.getSuccessName(ess))) {
                 event.setCancelled(true);
                 return;
             }

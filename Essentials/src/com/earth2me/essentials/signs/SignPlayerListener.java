@@ -56,7 +56,7 @@ public class SignPlayerListener implements Listener {
         if (mat == Material.SIGN_POST || mat == Material.WALL_SIGN) {
             final String csign = ((Sign) block.getState()).getLine(0);
             for (EssentialsSign sign : ess.getSettings().enabledSigns()) {
-                if (csign.equalsIgnoreCase(sign.getSuccessName())) {
+                if (csign.equalsIgnoreCase(sign.getSuccessName(ess))) {
                     sign.onSignInteract(block, event.getPlayer(), ess);
                     event.setCancelled(true);
                     return;

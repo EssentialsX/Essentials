@@ -54,7 +54,7 @@ public class EssentialsSign {
         try {
             final boolean ret = onSignCreate(sign, user, getUsername(user), ess);
             if (ret) {
-                sign.setLine(0, getSuccessName());
+                sign.setLine(0, getSuccessName(ess));
             }
             return ret;
         } catch (ChargeException ex) {
@@ -66,8 +66,22 @@ public class EssentialsSign {
         return true;
     }
 
+    public String getSuccessName(IEssentials ess) {
+        String successName = getSuccessName();
+        if (successName == null) {
+            ess.getLogger().severe("signFormatSuccess message must use the {0} argument.");
+        }
+        return successName;
+    }
+
     public String getSuccessName() {
-        return tl("signFormatSuccess", this.signName);
+        String successName = tl("signFormatSuccess", this.signName);
+        if (successName.isEmpty() || !successName.contains(this.signName)) {
+            // Set to null to cause an error in place of no functionality. This makes an error obvious as opposed to leaving users baffled by lack of
+            // functionality.
+            successName = null;
+        }
+        return successName;
     }
 
     public String getTemplateName() {
