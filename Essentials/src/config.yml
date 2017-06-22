@@ -119,6 +119,10 @@ drop-items-if-full: false
 # Should we notify players if they have no new mail?
 notify-no-new-mail: true
 
+# Specifies the duration (in seconds) between each time a player is notified of mail they have.
+# Useful for servers with a lot of mail traffic.
+notify-player-of-mail-cooldown: 60
+
 # The motd and rules are now configured in the files motd.txt and rules.txt.
 
 # When a command conflicts with another plugin, by default, Essentials will try to force the OTHER plugin to take priority.

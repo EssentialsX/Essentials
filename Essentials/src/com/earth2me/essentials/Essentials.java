@@ -462,10 +462,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             // New mail notification
             if (user != null && !getSettings().isCommandDisabled("mail") && !command.getName().equals("mail") && user.isAuthorized("essentials.mail")) {
-                final List<String> mail = user.getMails();
-                if (mail != null && !mail.isEmpty()) {
-                    user.sendMessage(tl("youHaveNewMail", mail.size()));
-                }
+                user.notifyOfMail();
             }
 
             //Print version even if admin command is not available #easteregg

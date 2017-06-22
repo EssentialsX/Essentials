@@ -28,6 +28,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.WeakHashMap;
@@ -60,6 +61,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private String afkMessage;
     private long afkSince;
     private Map<User, BigDecimal> confirmingPayments = new WeakHashMap<>();
+    private long lastNotifiedAboutMailsMs;
 
     public User(final Player base, final IEssentials ess) {
         super(base, ess);
@@ -853,6 +855,17 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         } else {
             PlayerInventory inventory = getBase().getInventory();
             return inventory.getItemInMainHand() != null ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
+        }
+    }
+    
+    public void notifyOfMail() {
+        List<String> mails = getMails();
+        if (mails != null && !mails.isEmpty()) {
+            int notifyPlayerOfMailCooldown = ess.getSettings().getNotifyPlayerOfMailCooldown() * 1000;
+            if (System.currentTimeMillis() - lastNotifiedAboutMailsMs >= notifyPlayerOfMailCooldown) {
+                sendMessage(tl("youHaveNewMail", mails.size()));
+                lastNotifiedAboutMailsMs = System.currentTimeMillis();
+            }
         }
     }
 }
