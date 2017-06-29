@@ -1,6 +1,8 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.NumberUtil;
+
+import net.ess3.nms.refl.ReflUtil;
 import net.ess3.nms.updatedmeta.BasePotionDataProvider;
 import com.earth2me.essentials.utils.StringUtil;
 import net.ess3.api.IEssentials;
@@ -194,7 +196,8 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
                 throw new Exception("Can't spawn entity ID " + metaData + " from spawn eggs.");
             }
             retval = ess.getSpawnEggProvider().createEggItem(type);
-        } else if (mat.name().endsWith("POTION")) {
+        } else if (mat.name().endsWith("POTION")
+            && ReflUtil.getNmsVersionObject().isLowerThan(ReflUtil.V1_11_R1)) { // Only apply this to pre-1.11 as items.csv might only work in 1.11
             retval = ess.getPotionMetaProvider().createPotionItem(mat, metaData);
         } else {
             retval.setDurability(metaData);
