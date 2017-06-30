@@ -186,6 +186,8 @@ mute-commands:
 # If you are using an unsupported permissions system, simply delete this section.
 # Whitelist the commands and permissions you wish to give players by default (everything else is op only).
 # These are the permissions without the "essentials." part.
+#
+# To enable this feature, please set use-bukkit-permissions to false.
 player-commands:
   - afk
   - afk.auto
@@ -613,8 +615,9 @@ economy-log-enabled: false
 
 # Use this option to force superperms-based permissions handler regardless of detected installed perms plugin.
 # This is useful if you want superperms-based permissions (with wildcards) for custom permissions plugins.
-# Default is false. 
-use-bukkit-permissions: false
+# If you wish to use EssentialsX' built-in permissions using the `player-commands` section above, set this to false.
+# Default is true. 
+use-bukkit-permissions: true
 
 # Minimum acceptable amount to be used in /pay.
 minimum-pay-amount: 0.001
