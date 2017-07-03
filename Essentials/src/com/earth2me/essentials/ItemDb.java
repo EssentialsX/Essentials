@@ -72,7 +72,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
                 if (StringUtils.stripToNull(match) == null) {
                     continue;
                 }
-                match = StringUtils.strip(match, "\"");
+                match = StringUtils.strip(match.trim(), "\"");
                 switch (col) {
                     case 0:
                         itemName = match.toLowerCase(Locale.ENGLISH);
