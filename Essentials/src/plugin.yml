@@ -532,1181 +532,1178 @@ permissions:
     description: Allows access to the /bigtree command.
   essentials.break:
     default: false
-  essentials.bigtree:
-  description: Allow access to the /bigtree command.
-  default: false
-essentials.break:
-  description: Allows access to the /break command.
-  default: false
-essentials.break.bedrock:
-  description: Allows the breaking of bedrock.
-  default: false
-essentials.enchant:
-  description: Allows access to the /enchant command.
-  default: false
-essentials.enchantments.[enchantmentname]:
-  description: Allows access to each enchantment type.
-  default: false
-essentials.enchantments.allowunsafe:
-  description: If enabled in the config, this permission allows unsafe enchantments.
-  default: false
-essentials.exp:
-  description: Allow access to the /exp command.
-  default: false
-essentials.exp.give:
-  description: Allows players to give themselves exp.
-  default: false
-essentials.exp.give.others:
-  description: Allows players to give others exp (if they also have essentials.exp.give).
-essentials.exp.others:
-  description: Allows players to see another players exp.
-  default: false
-essentials.exp.set:
-  description: Allows players to set their own exp.
-  default: false
-essentials.exp.set.others:
-  description: Allows players to change others exp (if they also have essentials.exp.set).
-essentials.feed:
-  description: Allows access to the /feed command.
-  default: false
-essentials.feed.cooldown.bypass:
-  description: Bypass the feed cooldown
-essentials.feed.others:
-  description: Allows a player to feed another player.
-  default: false
-essentials.firework:
-  description: Allow access to the /firework command.
-  default: false
-essentials.firework.fire:
-  description: Allows a user to spawn a copy of the firework held in their hands.
-  default: false
-essentials.fly:
-  description: Allow access to the /fly command.
-  default: false
-essentials.fly.others:
-  description: Allows you to toggle fly for other players.
-  default: false
-essentials.fly.safelogin:
-  description: Players with this command will automatically switch to fly mode if they login whilst floating in the air.
-  default: false
-essentials.gamemode:
-  description: Allow access to the /gamemode command.
-  default: false
-essentials.gamemode.others:
-  description: Allows you to change the gamemode of other players.
-  default: false
-essentials.itemspawn.meta-chapter-[chapter]:
-  description: Allows spawning of specific books only, from book.txt.
-  default: false
-essentials.enchantments.[enchantmentname]:
-  description: Allows access to each enchantment type.
-  default: false
-essentials.enchantments.allowunsafe:
-  description: If enabled in the config, this permission allows unsafe enchantments.
-  default: false
-essentials.give:
-  description: Allow access to the /give command.
-  default: false
-essentials.itemspawn.exempt:
-  description: Allows spawning of items on the spawn blacklist.
-  default: false
-essentials.itemspawn.item <itemname>:
-  description: If permission based item spawn: Spawn <itemname.
-  default: false
-essentials.itemspawn.item [itemid]:
-  description: If permission based item spawn: Spawn [itemid.
-  default: false
-essentials.itemspawn.item all:
-  description: If permission based item spawn: Spawn all items
-essentials.itemspawn.meta author:
-  description: Allow author meta to be used in item spawning.
-  default: false
-essentials.itemspawn.meta book:
-  description: Allows spawning of books with pre filled content from books.txt
-essentials.itemspawn.meta firework:
-  description: Allow specific meta for fireworks.
-  default: false
-essentials.itemspawn.meta head:
-  description: Allows spawning of mob heads.
-  default: false
-essentials.itemspawn.meta lore:
-  description: Allow lore meta to be used in item spawning.
-  default: false
-essentials.itemspawn.meta title:
-  description: Allow title meta to be used in item spawning.
-  default: false
-essentials.oversizedstacks:
-  description: Allows spawning of stacks above normal max stack size
-essentials.god:
-  description: Allow access to the /god command.
-  default: false
-essentials.god.others:
-  description: Allows you to god other players
-essentials.god.pvp:
-  description: Allows you to attack other players while in god mode.
-  default: false
-essentials.hat:
-  description: Allow access to the /hat command.
-  default: false
-essentials.heal:
-  description: Allow access to the /heal command.
-  default: false
-essentials.heal.cooldown.bypass:
-  description: Bypass the heal cooldown
-essentials.heal.others:
-  description: Allows healing another player
-essentials.itemspawn.meta chapter [chapter]:
-  description: Allows spawning of specific books only, from book.txt
-essentials.enchantments.[enchantmentname]:
-  description: Allows access to each enchantment type.
-  default: false
-essentials.enchantments.allowunsafe:
-  description: If enabled in the config, this permission allows unsafe enchantments.
-  default: false
-essentials.item:
-  description: Allow access to the /item command.
-  default: false
-essentials.itemspawn.exempt:
-  description: Allows spawning of items on the spawn blacklist.
-  default: false
-essentials.itemspawn.item [itemid]:
-  description: If permission based item spawn: Spawn [itemid.
-  default: false
-essentials.itemspawn.item [itemname]:
-  description: If permission based item spawn: Spawn [itemname.
-  default: false
-essentials.itemspawn.item all:
-  description: If permission based item spawn: Spawn all items.
-  default: false
-essentials.itemspawn.meta author:
-  description: Allow author meta to be used in item spawning.
-  default: false
-essentials.itemspawn.meta book:
-  description: Allows spawning of books with pre filled content from books.txt
-essentials.itemspawn.meta firework:
-  description: Allow specific meta for fireworks.
-  default: false
-essentials.itemspawn.meta head:
-  description: Allows spawning of mob heads.
-  default: false
-essentials.itemspawn.meta lore:
-  description: Allow lore meta to be used in item spawning.
-  default: false
-essentials.itemspawn.meta title:
-  description: Allow title meta to be used in item spawning.
-  default: false
-essentials.kit:
-  description: Allow access to the /kit command.
-  default: false
-essentials.kit.exemptdelay:
-  description: Exempts you from the kit delay feature, this affects signs as well as command.
-  default: false
-essentials.kit.others:
-  description: Allows spawning of kits on other players.
-  default: false
-essentials.kits.*:
-  description: Allows access to all created kits
-essentials.kits.[kitname]:
-  description: Give access to a single kit, where [kitname] is the name of an existing kit.
-  default: false
-essentials.more:
-  description: Allows access to the /more command.
-  default: false
-essentials.ptime:
-  description: Allow access to the /ptime command.
-  default: false
-essentials.ptime.others:
-  description: Allows you to change the time of another online player.
-  default: false
-essentials.repair:
-  description: Allow access to the /repair command.
-  default: false
-essentials.repair.all:
-  description: Unlock the /repair all ability.
-  default: false
-essentials.repair.armor:
-  description: Repair all also repairs equipped armor.
-  default: false
-essentials.repair.enchanted:
-  description: Repairing of enchanted items.
-  default: false
-essentials.skull:
-  description: Allow access to the /skull command.
-  default: false
-essentials.skull.modify:
-  description: Allow changing the owner of an existing player skull.
-  default: false
-essentials.skull.others:
-  description: Allow creating skulls belonging to other players.
-  default: false
-essentials.skull.spawn:
-  description: Allows the spawning of a skull, default if the player isnt holding a skull.
-  default: false
-essentials.speed:
-  description: Allow access to the /speed command.
-  default: false
-essentials.speed.bypass:
-  description: Allows you to bypass the speed limits set in the config.yml
-essentials.speed.fly:
-  description: This permission will allow a player to change fly speed only.
-  default: false
-essentials.speed.others:
-  description: Allows you to modify the speed of other players.
-  default: false
-essentials.speed.walk:
-  description: This permission will allow a player to change walk speed only.
-  default: false
-essentials.time:
-  description: Allow access to the /time command.
-  default: false
-essentials.time.set:
-  description: User is allowed to change the time of the world.
-  default: false
-essentials.tree:
-  description: Allow access to the /tree command.
-  default: false
-essentials.unlimited:
-  description: Allow access to the /unlimited command.
-  default: false
-essentials.unlimited.item [itemid]:
-  description: Allows the player to recieve an unlimited stack of [itemid.
-  default: false
-essentials.unlimited.item [itemname]:
-  description: Allows the player to recieve an unlimited stack of [itemname.
-  default: false
-essentials.unlimited.item all:
-  description: Allows the player to recieve an unlimited stack of any item.
-  default: false
-essentials.unlimited.item bucket:
-  description: Allows the player to recieve an unlimited use of empty/lava/water buckets.
-  default: false
-essentials.unlimited.others:
-  description: Allows the player to gift/remove another player with an unlimited stack.
-  default: false
-essentials.workbench:
-  description: Allow access to the /workbench command.
-  default: false
-essentials.balance:
-  description: Allow access to the /balance command.
-  default: false
-essentials.balance.others:
-  description: Allows you to see the balance of other players
-essentials.balancetop:
-  description: Allow access to the /balancetop command.
-  default: false
-essentials.eco:
-  description: Allow access to the /eco command.
-  default: false
-essentials.eco.loan:
-  description: Allows the player to have a negative balance.
-  default: false
-essentials.pay:
-  description: Allow access to the /pay command.
-  default: false
-essentials.pay.multiple:
-  description: This allows you to pay multiple users in a single command.
-  default: false
-essentials.sell:
-  description: Allow access to the /sell command.
-  default: false
-essentials.setworth:
-  description: Allow access to the /setworth command.
-  default: false
-essentials.worth:
-  description: Allow access to the /worth command.
-  default: false
-essentials.afk:
-  description: Allow access to the /afk command.
-  default: false
-essentials.afk.auto:
-  description: Players with this permission will be set to afk after a period of inaction as defined in the config file.
-  default: false
-essentials.afk.kickexempt:
-  description: Exempts the user from being auto kicked for AFK
-essentials.afk.others:
-  description: Allows you to AFK other players.
-  default: false
-essentials.book:
-  description: Allow access to the /book command.
-  default: false
-essentials.book.author:
-  description: Allows the user to change the author of a book.
-  default: false
-essentials.book.others:
-  description: Allow editing a book belonging to another player.
-  default: false
-essentials.book.title:
-  description: Allows the user to change the title of a written book
-essentials.compass:
-  description: Allow access to the /compass command.
-  default: false
-essentials.customtext:
-  description: Allow access to the /customtext command and all aliases.
-  default: false
-essentials.depth:
-  description: Allow access to the /depth command.
-  default: false
-essentials.getpos:
-  description: Allow access to the /getpos command.
-  default: false
-essentials.getpos.others:
-  description: Allow user to get the position of another player.
-  default: false
-essentials.help:
-  description: Allow access to the /help command.
-  default: false
-essentials.help.[pluginname]:
-  description: Manually adds the commands from a plugin to this groups /help. Name is all lowercase.
-  default: false
-essentials.help.[pluginname].[command]:
-  description: Manually adds a command from a plugin to this groups /help. Name is all lowercase.
-  default: false
-essentials.helpop:
-  description: Allow access to the /helpop command.
-  default: false
-essentials.helpop.receive:
-  description: Allows you to see Helpop messages.
-  default: false
-essentials.chat.ignoreexempt:
-  description: Someone with this permission will not be ignored, even if they are on another persons ignore list.
-  default: false
-essentials.ignore:
-  description: Allow access to the /ignore command.
-  default: false
-essentials.info:
-  description: Allow access to the /info command.
-  default: false
-essentials.itemdb:
-  description: Allows access to the /itemdb command.
-  default: false
-essentials.list:
-  description: Allow access to the /list command.
-  default: false
-essentials.list.hidden:
-  description: Show hidden users
-essentials.mail:
-  description: Allow access to the /mail command.
-  default: false
-essentials.mail.send:
-  description: Send mail.
-  default: false
-essentials.mail.sendall:
-  description: Allows sending mail to all players at the same time.
-  default: false
-essentials.me:
-  description: Allow access to the /me command.
-  default: false
-essentials.motd:
-  description: User sees MOTD on connect, and can use the command.
-  default: false
-essentials.msg:
-  description: Allow access to the /msg command.
-  default: false
-essentials.msg.color:
-  description: This allows you to color your private messages using color codes.
-  default: false
-essentials.msg.format:
-  description: This allows you to format your private messages using format codes.
-  default: false
-essentials.msg.magic:
-  description: This allows you to use the matrix/magic color in your private messages.
-  default: false
-essentials.msg.multiple:
-  description: This allows you to message multiple users in a single command.
-  default: false
-essentials.msg.url:
-  description: This allows you to use urls in your private messages.
-  default: false
-essentials.near:
-  description: Allow access to the /near command.
-  default: false
-essentials.near.maxexempt:
-  description: Allows bypassing the radius limit.
-  default: false
-essentials.near.others:
-  description: Allows using the near command on another player.
-  default: false
-essentials.nick:
-  description: Allow access to the /nick command.
-  default: false
-essentials.nick.color:
-  description: This allows you to color your nickname using color codes.
-  default: false
-essentials.nick.format:
-  description: This allows you to format your nickname using format codes.
-  default: false
-essentials.nick.magic:
-  description: This allows you to use the matrix/magic color in your nickname.
-  default: false
-essentials.nick.others:
-  description: Gives you permission to give other players a nick name.
-  default: false
-essentials.powertool:
-  description: Allow access to the /powertool command.
-  default: false
-essentials.powertool.append:
-  description: Allows adding multiple commands to a single powertool.
-  default: false
-essentials.powertooltoggle:
-  description: Allow access to the /powertooltoggle command.
-  default: false
-essentials.msg:
-  description: Allow access to the /msg command.
-  default: false
-essentials.msg.color:
-  description: This allows you to color your private messages using color codes.
-  default: false
-essentials.msg.format:
-  description: This allows you to format your private messages using format codes.
-  default: false
-essentials.msg.magic:
-  description: This allows you to use the matrix/magic color in your private messages.
-  default: false
-essentials.msg.url:
-  description: This allows you to use urls in your private messages.
-  default: false
-essentials.realname:
-  description: Allow access to the /realname command.
-  default: false
-essentials.recipe:
-  description: Allow access to the /recipe command.
-  default: false
-essentials.rules:
-  description: Allow access to the /rules command.
-  default: false
-essentials.seen:
-  description: Allow access to the /seen command.
-  default: false
-essentials.seen.banreason:
-  description: Allows the user to see why a user is banned.
-  default: false
-essentials.seen.extra:
-  description: Allow the user to see the last IP address a user connected with, and their last logged in location.
-  default: false
-essentials.seen.ipsearch:
-  description: Allows the user to search IPs for username matches.
-  default: false
-essentials.spawner:
-  description: Allow access to the /spawner command.
-  default: false
-essentials.spawner.*:
-  description: Allows the spawning of all mobs.
-  default: false
-essentials.spawner.[mob]:
-  description: Allows access to spawn a specific mob.
-  default: false
-essentials.suicide:
-  description: Allow access to the /suicide command.
-  default: false
-essentials.geoip.show:
-  description: Shows the GeoIP location of a player, if the GeoIP module is installed.
-  default: false
-essentials.whois:
-  description: Allow access to the /whois command.
-  default: false
-essentials.antioch:
-  description: Allow access to the /antioch command.
-  default: false
-essentials.backup:
-  description: Allow access to the /backup command.
-  default: false
-essentials.ban:
-  description: Allow access to the /ban command.
-  default: false
-essentials.ban.exempt:
-  description: Prevents a specified group or player from being banned.
-  default: false
-essentials.ban.notify:
-  description: Players with this permission will receive a notification when a ban is set.
-  default: false
-essentials.ban.offline:
-  description: Allows banning of players who are offline. This may allow you to ban exempt players.
-  default: false
-essentials.ban.notify:
-  description: Players with this permission will receive a notification when an IP ban is set.
-  default: false
-essentials.banip:
-  description: Allow access to the /banip command.
-  default: false
-essentials.broadcast:
-  description: Allow access to the /broadcast command.
-  default: false
-essentials.burn:
-  description: Allow access to the /burn command.
-  default: false
-essentials.clearinventory:
-  description: Allow access to the /clearinventory command.
-  default: false
-essentials.clearinventory.all:
-  description: Allows a player to clear all players inventories.
-  default: false
-essentials.clearinventory.others:
-  description: Allows you to clear other players inventory.
-  default: false
-essentials.deljail:
-  description: Allow access to the /deljail command.
-  default: false
-essentials.enderchest:
-  description: Allow access to the /enderchest command.
-  default: false
-essentials.enderchest.modify:
-  description: Allows you to modify the contents of another players enderchest.
-  default: false
-essentials.enderchest.others:
-  description: Allows you to see the contents of another players enderchest.
-  default: false
-essentials.essentials:
-  description: Allow access to the /essentials command.
-  default: false
-essentials.ext:
-  description: Allow access to the /ext command.
-  default: false
-essentials.fireball:
-  description: Allow access to the /fireball command.
-  default: false
-essentials.gc:
-  description: Allow access to the /gc command.
-  default: false
-essentials.invsee:
-  description: Allow access to the /invsee command.
-  default: false
-essentials.invsee.modify:
-  description: Players can modify the other players inventory (remove/add items).
-essentials.invsee.preventmodify:
-  description: Prevents other players from modifying the players inventory.
-  default: false
-essentials.jails:
-  description: Allow access to the /jails command.
-  default: false
-essentials.kick:
-  description: Allow access to the /kick command.
-  default: false
-essentials.kick.exempt:
-  description: Prevents the player from being kicked.
-  default: false
-essentials.kick.notify:
-  description: User sees a notification when a user is kicked.
-  default: false
-essentials.kickall:
-  description: Allow access to the /kickall command.
-  default: false
-essentials.kill:
-  description: Allow access to the /kill command.
-  default: false
-essentials.kill.exempt:
-  description: Prevents the player from being killed.
-  default: false
-essentials.kill.force:
-  description: Force player death, even if event is cancelled.
-  default: false
-essentials.lightning:
-  description: Allow access to the /lightning command.
-  default: false
-essentials.lightning.others:
-  description: Allows use of /lightning [playername].
-  default: false
-essentials.mute:
-  description: Allow access to the /mute command.
-  default: false
-essentials.mute.exempt:
-  description: Prevents a specified group or player from being muted.
-  default: false
-essentials.mute.notify:
-  description: Players with this permission will receive a notification when a player is muted.
-  default: false
-essentials.mute.offline:
-  description: Allows muting of players who are offline. This may allow you to mute exempt players.
-  default: false
-essentials.nuke:
-  description: Allow access to the /nuke command.
-  default: false
-essentials.ping:
-  description: Allow access to the /ping command.
-  default: false
-essentials.remove:
-  description: Allow access to the /remove command.
-  default: false
-essentials.setjail:
-  description: Allow access to the /setjail command.
-  default: false
-essentials.socialspy:
-  description: Allow access to the /socialspy command.
-  default: false
-essentials.socialspy.others:
-  description: Allows you to toggle the social spy status of others.
-  default: false
-essentials.spawnmob:
-  description: Allow access to the /spawnmob command.
-  default: false
-essentials.spawnmob.*:
-  description: Allow the spawning of all mobs.
-  default: false
-essentials.spawnmob.[mob]:
-  description: Allow access to spawn a specific mob.
-  default: false
-essentials.spawnmob.stack:
-  description: Allows the spawning of stacked mobs.
-  default: false
-essentials.sudo:
-  description: Allow access to the /sudo command.
-  default: false
-essentials.sudo.exempt:
-  description: Prevents the holder from being sudoed by another user.
-  default: false
-essentials.ban.notify:
-  description: Players with this permission will receive a notification when a ban is set.
-  default: false
-essentials.tempban:
-  description: Allow access to the /tempban command.
-  default: false
-essentials.tempban.exempt:
-  description: Prevents a specified group or player from being tempbanned.
-  default: false
-essentials.tempban.offline:
-  description: Allows temp banning of players who are offline. This may allow you to ban exempt players.
-  default: false
-essentials.tempban.unlimited:
-  description: Allows bypassing config file max ban time limit.
-  default: false
-essentials.thunder:
-  description: Allow access to the /thunder command.
-  default: false
-essentials.jail.allow.<command>:
-  description: Allows essentials commands to be used while jailed (requires regular perm).
-essentials.jail.exempt:
-  description: Prevents a specified group or player from being jailed.
-  default: false
-essentials.togglejail:
-  description: Allow access to the /togglejail command.
-  default: false
-essentials.togglejail.offline:
-  description: Allows jailing of players who are offline. This may allow you to jail exempt players.
-  default: false
-essentials.ban.notify:
-  description: Players with this permission will receive a notification when a ban is removed.
-  default: false
-essentials.unban:
-  description: Allow access to the /unban command.
-  default: false
-essentials.ban.notify:
-  description: Players with this permission will receive a notification when an IP ban is removed.
-  default: false
-essentials.unbanip:
-  description: Allow access to the /unbanip command.
-  default: false
-essentials.vanish:
-  description: Allow access to the /vanish command.
-  default: false
-essentials.vanish.effect:
-  description: People with this effect will get the potion effect applied while vanished.
-  default: false
-essentials.vanish.interact:
-  description: Allows the player to use commands which interact with a vanished player.
-  default: false
-essentials.vanish.others:
-  description: Allows you to toggle vanish on others.
-  default: false
-essentials.vanish.pvp:
-  description: Allows players who are vanished to attack other players.
-  default: false
-essentials.vanish.see:
-  description: Allows you to see a vanished player.
-  default: false
-essentials.weather:
-  description: Allow access to the /weather command.
-  default: false
-essentials.setspawn:
-  description: Allow access to the /setspawn command.
-  default: false
-essentials.spawn:
-  description: Allow access to the /spawn command.
-  default: false
-essentials.spawn.others:
-  description: Allows you to teleport other people to spawn.
-  default: false
-essentials.back:
-  description: Allow access to the /back command.
-  default: false
-essentials.back.ondeath:
-  description: Give this permission to allow players to use /back to go to their death spot.
-  default: false
-essentials.keepxp:
-  description: Allows the user to keep their exp on death, instead of dropping it.
-  default: false
-essentials.worlds.<worldname>:
-  description: Allows players access to a specific world.
-  default: false
-essentials.delhome:
-  description: Allow access to the /delhome command.
-  default: false
-essentials.delhome.others:
-  description: Allows you to delete the homes of other players.
-  default: false
-essentials.delwarp:
-  description: Allow access to the /delwarp command.
-  default: false
-essentials.home:
-  description: Allow access to the /home command.
-  default: false
-essentials.home.bed:
-  description: Allow access to the vanilla bed home.
-  default: false
-essentials.home.others:
-  description: Allows you to teleport to homes of other players.
-  default: false
-essentials.worlds.<worldname>:
-  description: Allows players access to a specific world.
-  default: false
-essentials.jump:
-  description: Allow access to the /jump command.
-  default: false
-essentials.sethome:
-  description: Allow access to the /sethome command.
-  default: false
-essentials.sethome.bed:
-  description: Allows the player to right click a bed during daytime to update their bed home.
-  default: false
-essentials.sethome.multiple:
-  description: Allows player to have multiple homes, or create named homes. Required for 2+ homes.
-  default: false
-essentials.sethome.multiple.[set name]:
-  description: Raise the multiple home limit to a setting defined in the config file.
-  default: false
-essentials.sethome.multiple.unlimited:
-  description: Removes the cap on the number of homes people are allowed (if they have multiple homes).
-essentials.sethome.others:
-  description: Allows you to change another users home location.
-  default: false
-essentials.setwarp:
-  description: Allow access to the /setwarp command.
-  default: false
-essentials.warp.overwrite.*:
-  description: Allows overwriting of all existing warps.
-  default: false
-essentials.warp.overwrite.[warpname]:
-  description: Allows overwriting of existing warps.
-  default: false
-essentials.top:
-  description: Allow access to the /top command.
-  default: false
-essentials.tp:
-  description: Allow access to the /tp command.
-  default: false
-essentials.tp.others:
-  description: Allow players to teleport another player.
-  default: false
-essentials.worlds.<worldname>:
-  description: Allows players access to a specific world.
-  default: false
-essentials.tpa:
-  description: Allow access to the /tpa command.
-  default: false
-essentials.worlds.<worldname>:
-  description: Allows players access to a specific world.
-  default: false
-essentials.tpaall:
-  description: Allow access to the /tpaall command.
-  default: false
-essentials.worlds.<worldname>:
-  description: Allows teleporting player to a specific world.
-  default: false
-essentials.tpaccept:
-  description: Allow access to the /tpaccept command.
-  default: false
-essentials.tpahere:
-  description: Allow access to the /tpahere command.
-  default: false
-essentials.worlds.<worldname>:
-  description: Allows teleporting players to a specific world.
-  default: false
-essentials.tpall:
-  description: Allow access to the /tpall command.
-  default: false
-essentials.worlds.<worldname>:
-  description: Allows teleporting players to a specific world.
-  default: false
-essentials.tpdeny:
-  description: Allow access to the /tpdeny command.
-  default: false
-essentials.tphere:
-  description: Allow access to the /tphere command.
-  default: false
-essentials.worlds.<worldname>:
-  description: Allows players access to a specific world.
-  default: false
-essentials.tpo:
-  description: Allow access to the /tpo command.
-  default: false
-essentials.worlds.<worldname>:
-  description: Allows players access to a specific world.
-  default: false
-essentials.tpohere:
-  description: Allow access to the /tpohere command.
-  default: false
-essentials.worlds.<worldname>:
-  description: Allows players access to a specific world.
-  default: false
-essentials.tppos:
-  description: Allow access to the /tppos command.
-  default: false
-essentials.teleport.cooldown.bypass:
-  description: Bypass the teleport cooldown.
-  default: false
-essentials.teleport.timer.bypass:
-  description: Bypass the teleport delay.
-  default: false
-essentials.teleport.timer.move:
-  description: Allows players to move while waiting for teleport.
-  default: false
-essentials.tptoggle:
-  description: Allow access to the /tptoggle command.
-  default: false
-essentials.tptoggle.others:
-  description: Allows a player to toggle the teleport status of another player.
-  default: false
-essentials.vanish.interact:
-  description: Allows the user to teleport to players who are vanished.
-  default: false
-essentials.warp:
-  description: Allow access to the /warp command.
-  default: false
-essentials.warp.list:
-  description: Specifies whether you can view warp list with /warp.
-  default: false
-essentials.warp.otherplayers:
-  description: Allows warping another player.
-  default: false
-essentials.warps.*:
-  description: Allows access to all warps.
-  default: false
-essentials.warps.[warpname]:
-  description: If you have per warp permission set to true in the config.yml then you can limit what warps players can use. This also controls what players would see with /warp.
-  default: false
-essentials.world:
-  description: Allow access to the /world command.
-  default: false
-essentials.worlds.<worldname>:
-  description: Allows players access to a specific world.
-  default: false
-essentials.signs.break.balance:
-  description: Controls who can break balance signs.
-  default: false
-essentials.signs.break.buy:
-  description: Controls who can break buy signs.
-  default: false
-essentials.signs.break.disposal:
-  description: Controls who can break disposal signs.
-  default: false
-essentials.signs.break.enchant:
-  description: Controls who can break enchant signs.
-  default: false
-essentials.signs.break.free:
-  description: Controls who can break free signs.
-  default: false
-essentials.signs.break.gamemode:
-  description: Controls who can break gamemode signs.
-  default: false
-essentials.signs.break.heal:
-  description: Controls who can break heal signs.
-  default: false
-essentials.signs.break.info:
-  description: Controls who can break info signs.
-  default: false
-essentials.signs.break.kit:
-  description: Controls who can break kit signs.
-  default: false
-essentials.signs.break.mail:
-  description: Controls who can break a mail sign.
-  default: false
-essentials.signs.break.protection:
-  description: Controls who can break a protection sign. Typically given to everybody.
-  default: false
-essentials.signs.break.repair:
-  description: Controls who can break repair signs.
-  default: false
-essentials.signs.break.sell:
-  description: Controls who can break sell signs.
-  default: false
-essentials.signs.break.spawnmob:
-  description: Controls who can break spawnmob signs.
-  default: false
-essentials.signs.break.time:
-  description: Controls who can break time signs.
-  default: false
-essentials.signs.break.trade:
-  description: Controls who can break trade signs.
-  default: false
-essentials.signs.break.warp:
-  description: Controls who can break warp signs.
-  default: false
-essentials.signs.break.weather:
-  description: Controls who can break weather signs.
-  default: false
-essentials.signs.color:
-  description: This allows you to color your signs using color codes.
-  default: false
-essentials.signs.create.balance:
-  description: Controls who can create balance signs.
-  default: false
-essentials.signs.create.buy:
-  description: Controls who can create buy signs.
-  default: false
-essentials.signs.create.disposal:
-  description: Controls who can create disposal signs.
-  default: false
-essentials.signs.create.enchant:
-  description: Controls who can create enchant signs.
-  default: false
-essentials.signs.create.free:
-  description: Controls who can create free signs.
-  default: false
-essentials.signs.create.gamemode:
-  description: Controls who can create gamemode signs.
-  default: false
-essentials.signs.create.heal:
-  description: Controls who can create heal signs.
-  default: false
-essentials.signs.create.info:
-  description: Controls who can create info signs.
-  default: false
-essentials.signs.create.kit:
-  description: Controls who can create kit signs.
-  default: false
-essentials.signs.create.mail:
-  description: Controls who can create a mail sign.
-  default: false
-essentials.signs.create.protection:
-  description: Controls who can create a protection sign.
-  default: false
-essentials.signs.create.repair:
-  description: Controls who can create repair signs.
-  default: false
-essentials.signs.create.sell:
-  description: Controls who can create sell signs.
-  default: false
-essentials.signs.create.spawnmob:
-  description: Controls who can create spawnmob signs.
-  default: false
-essentials.signs.create.time:
-  description: Controls who can create time signs.
-  default: false
-essentials.signs.create.trade:
-  description: Controls who can create trade signs.
-  default: false
-essentials.signs.create.warp:
-  description: Controls who can create warp signs.
-  default: false
-essentials.signs.create.weather:
-  description: Controls who can create weather signs.
-  default: false
-essentials.signs.enchant.allowunsafe:
-  description: Allows using [enchant] signs to perform unsafe enchantments.
-  default: false
-essentials.signs.format:
-  description: This allows you to format your signs using format codes.
-  default: false
-essentials.signs.magic:
-  description: This allows you to use the matrix/magic color in your signs.
-  default: false
-essentials.signs.protection.override:
-  description: Used to override any protections. Typically given to mods & admins.
-  default: false
-essentials.signs.trade.override:
-  description: Used to override the creator only protection on trade signs. Typically given to mods & admins.
-  default: false
-essentials.signs.use.balance:
-  description: Controls who can use balance signs.
-  default: false
-essentials.signs.use.buy:
-  description: Controls who can use buy signs.
-  default: false
-essentials.signs.use.disposal:
-  description: Controls who can use disposal signs.
-  default: false
-essentials.signs.use.enchant:
-  description: Controls who can use enchant signs.
-  default: false
-essentials.signs.use.free:
-  description: Controls who can use free signs.
-  default: false
-essentials.signs.use.gamemode:
-  description: Controls who can use gamemode signs.
-  default: false
-essentials.signs.use.heal:
-  description: Controls who can use heal signs.
-  default: false
-essentials.signs.use.info:
-  description: Controls who can use info signs.
-  default: false
-essentials.signs.use.kit:
-  description: Controls who can use kit signs.
-  default: false
-essentials.signs.use.mail:
-  description: Controls who can use a mail sign.
-  default: false
-essentials.signs.use.protection:
-  description: Controls who can use a protection sign. Typically given to everybody.
-  default: false
-essentials.signs.use.repair:
-  description: Controls who can use repair signs.
-  default: false
-essentials.signs.use.sell:
-  description: Controls who can use sell signs.
-  default: false
-essentials.signs.use.spawnmob:
-  description: Controls who can use spawnmob signs.
-  default: false
-essentials.signs.use.time:
-  description: Controls who can use time signs.
-  default: false
-essentials.signs.use.trade:
-  description: Controls who can use trade signs.
-  default: false
-essentials.signs.use.warp:
-  description: Controls who can use warp signs.
-  default: false
-essentials.signs.use.weather:
-  description: Controls who can use weather signs.
-  default: false
-essentials.silentquit:
-  description: Suppress leave/quit messages for users with this permission.
-  default: false
-essentials.sleepingignored:
-  description: User isnt required to be sleeping, for time to be reset.
-  default: false
-essentials.silentjoin:
-  description: Suppress join messages for users with this permission.
-  default: false
-essentials.build:
-  description: Allows people to build when using permission systems which dont support build toggles.
-  default: false
-essentials.build.break.<id>[:datavalue]:
-  description: Allows breaking of a block.
-  default: false
-essentials.build.craft.<id>[:datavalue]:
-  description: Allows crafting of an item.
-  default: false
-essentials.build.drop.<id>[:datavalue]:
-  description: Allows dropping of an item.
-  default: false
-essentials.build.interact.<id>[:datavalue]:
-  description: Allows interacting with a blocks or item.
-  default: false
-essentials.build.pickup.<id>[:datavalue]:
-  description: Allows collecting of an item.
-  default: false
-essentials.build.place.<id>[:datavalue]:
-  description: Allows placing a block.
-  default: false
-essentials.chat.color:
-  description: This allows you to color your chat messages using color codes.
-  default: false
-essentials.chat.format:
-  description: This allows you to format your chat messages using format codes.
-  default: false
-essentials.chat.magic:
-  description: This allows you to use the matrix/magic color in your chat messages.
-  default: false
-essentials.chat.question:
-  description: This allows you to send global qeustions, used if a chat raidus is configured.
-  default: false
-essentials.chat.shout:
-  description: This allows you to send global messages, used if a chat raidus is configured.
-  default: false
-essentials.chat.spy:
-  description: A permission designed for admins, to intercept all local messages (ignoring the chat radius).
-essentials.chat.url:
-  description: This allows you to use urls in your chat messages.
-  default: false
-essentials.geoip.hide:
-  description: Allows you to hide your country and city from people who have permission essentials.geoip.show.
-  default: false
-essentials.geoip.show:
-  description: Allows you to see the country and city of players.
-  default: false
-essentials.joinfullserver:
-  description: Player can join when the server is full.
-  default: false
-essentials.nocommandcost.[command]:
-  description: Removes the command cost of a given command.
-  default: false
-essentials.nocommandcost.all:
-  description: Removes the command cost of all commands.
-  default: false
-essentials.protect:
-  description: Allows the protection of rails and signs, otherwise they are not protected.
-  default: false
-essentials.protect.admin:
-  description: Allows the destruction of signs and rails.
-  default: false
-essentials.protect.alerts:
-  description: Allows a player to recieve protect alerts.
-  default: false
-essentials.protect.alerts.notrigger:
-  description: Users with this permission do not trigger protect alerts.
-  default: false
-essentials.protect.damage.contact:
-  description: Player will receive contact damage.
-  default: false
-essentials.protect.damage.creeper:
-  description: Player will receive creeper damage.
-  default: false
-essentials.protect.damage.disable:
-  description: Admin override to prevent admins from dying.
-  default: false
-essentials.protect.damage.drowning:
-  description: Player will receive drowning damage.
-  default: false
-essentials.protect.damage.fall:
-  description: Player will receive fall damage.
-  default: false
-essentials.protect.damage.fire:
-  description: Player will receive fire damage
-essentials.protect.damage.fireball:
-  description: Player will receive fireball damage.
-  default: false
-essentials.protect.damage.lava:
-  description: Player will receive lava damage.
-  default: false
-essentials.protect.damage.lightning:
-  description: Player will receive lightning damage.
-  default: false
-essentials.protect.damage.projectiles:
-  description: Player will receive projectile damage.
-  default: false
-essentials.protect.damage.suffocation:
-  description: Player will receive suffocation damage.
-  default: false
-essentials.protect.damage.tnt:
-  description: Player will receive tnt damage.
-  default: false
-essentials.protect.entitytarget.bypass:
-  description: Allows a player to be targeted by mobs.
-  default: false
-essentials.protect.exemptbreak:
-  description: Allows a player to ignore the break blacklist.
-  default: false
-essentials.protect.exemptplacement:
-  description: Allows a player to ignore the block placement blacklist.
-  default: false
-essentials.protect.exemptusage:
-  description: Allows a player to ignore the usage blacklist.
-  default: false
-essentials.protect.ownerinfo:
-  description: Allows a player to examine protected objects to find their owner.
-  default: false
-essentials.protect.pvp:
-  description: When prevent PVP is set to true, this allows players to still PVP. Both attacker and defender need to have this permission.
-  default: false
-essentials.pvpdelay.exempt:
-  description: Exempts players from the pvp delay option in the config file.
-  default: false
-essentials.setxmpp:
-  description: Allow access to the /setxmpp command.
-  default: false
-essentials.xmpp:
-  description: Allow access to the /xmpp command.
-  default: false
-essentials.xmppspy:
-  description: Allow access to the /xmppspy command.
-
+  essentials.break:
+    description: Allows access to the /break command.
+    default: false
+  essentials.break.bedrock:
+    description: Allows the breaking of bedrock.
+    default: false
+  essentials.enchant:
+    description: Allows access to the /enchant command.
+    default: false
+  essentials.enchantments.[enchantmentname]:
+    description: Allows access to each enchantment type.
+    default: false
+  essentials.enchantments.allowunsafe:
+    description: If enabled in the config, this permission allows unsafe enchantments.
+    default: false
+  essentials.exp:
+    description: Allow access to the /exp command.
+    default: false
+  essentials.exp.give:
+    description: Allows players to give themselves exp.
+    default: false
+  essentials.exp.give.others:
+    description: Allows players to give others exp (if they also have   essentials.exp.give).
+  essentials.exp.others:
+    description: Allows players to see another players exp.
+    default: false
+  essentials.exp.set:
+    description: Allows players to set their own exp.
+    default: false
+  essentials.exp.set.others:
+    description: Allows players to change others exp (if they also have   essentials.exp.set).
+  essentials.feed:
+    description: Allows access to the /feed command.
+    default: false
+  essentials.feed.cooldown.bypass:
+    description: Bypass the feed cooldown
+  essentials.feed.others:
+    description: Allows a player to feed another player.
+    default: false
+  essentials.firework:
+    description: Allow access to the /firework command.
+    default: false
+  essentials.firework.fire:
+    description: Allows a user to spawn a copy of the firework held in their hands.
+    default: false
+  essentials.fly:
+    description: Allow access to the /fly command.
+    default: false
+  essentials.fly.others:
+    description: Allows you to toggle fly for other players.
+    default: false
+  essentials.fly.safelogin:
+    description: Players with this command will automatically switch to fly mode if they login whilst floating in the air.
+    default: false
+  essentials.gamemode:
+    description: Allow access to the /gamemode command.
+    default: false
+  essentials.gamemode.others:
+    description: Allows you to change the gamemode of other players.
+    default: false
+  essentials.itemspawn.meta-chapter-[chapter]:
+    description: Allows spawning of specific books only, from book.txt.
+    default: false
+  essentials.enchantments.[enchantmentname]:
+    description: Allows access to each enchantment type.
+    default: false
+  essentials.enchantments.allowunsafe:
+    description: If enabled in the config, this permission allows unsafe enchantments.
+    default: false
+  essentials.give:
+    description: Allow access to the /give command.
+    default: false
+  essentials.itemspawn.exempt:
+    description: Allows spawning of items on the spawn blacklist.
+    default: false
+  essentials.itemspawn.item <itemname>:
+    description: If permission based item spawn: Spawn <itemname.
+    default: false
+  essentials.itemspawn.item [itemid]:
+    description: If permission based item spawn: Spawn [itemid.
+    default: false
+  essentials.itemspawn.item all:
+    description: If permission based item spawn: Spawn all items
+  essentials.itemspawn.meta author:
+    description: Allow author meta to be used in item spawning.
+    default: false
+  essentials.itemspawn.meta book:
+    description: Allows spawning of books with pre filled content from books.txt
+  essentials.itemspawn.meta firework:
+    description: Allow specific meta for fireworks.
+    default: false
+  essentials.itemspawn.meta head:
+    description: Allows spawning of mob heads.
+    default: false
+  essentials.itemspawn.meta lore:
+    description: Allow lore meta to be used in item spawning.
+    default: false
+  essentials.itemspawn.meta title:
+    description: Allow title meta to be used in item spawning.
+    default: false
+  essentials.oversizedstacks:
+    description: Allows spawning of stacks above normal max stack size
+  essentials.god:
+    description: Allow access to the /god command.
+    default: false
+  essentials.god.others:
+    description: Allows you to god other players
+  essentials.god.pvp:
+    description: Allows you to attack other players while in god mode.
+    default: false
+  essentials.hat:
+    description: Allow access to the /hat command.
+    default: false
+  essentials.heal:
+    description: Allow access to the /heal command.
+    default: false
+  essentials.heal.cooldown.bypass:
+    description: Bypass the heal cooldown
+  essentials.heal.others:
+    description: Allows healing another player
+  essentials.itemspawn.meta chapter [chapter]:
+    description: Allows spawning of specific books only, from book.txt
+  essentials.enchantments.[enchantmentname]:
+    description: Allows access to each enchantment type.
+    default: false
+  essentials.enchantments.allowunsafe:
+    description: If enabled in the config, this permission allows unsafe enchantments.
+    default: false
+  essentials.item:
+    description: Allow access to the /item command.
+    default: false
+  essentials.itemspawn.exempt:
+    description: Allows spawning of items on the spawn blacklist.
+    default: false
+  essentials.itemspawn.item [itemid]:
+    description: If permission based item spawn: Spawn [itemid.
+    default: false
+  essentials.itemspawn.item [itemname]:
+    description: If permission based item spawn: Spawn [itemname.
+    default: false
+  essentials.itemspawn.item all:
+    description: If permission based item spawn: Spawn all items.
+    default: false
+  essentials.itemspawn.meta author:
+    description: Allow author meta to be used in item spawning.
+    default: false
+  essentials.itemspawn.meta book:
+    description: Allows spawning of books with pre filled content from books.txt
+  essentials.itemspawn.meta firework:
+    description: Allow specific meta for fireworks.
+    default: false
+  essentials.itemspawn.meta head:
+    description: Allows spawning of mob heads.
+    default: false
+  essentials.itemspawn.meta lore:
+    description: Allow lore meta to be used in item spawning.
+    default: false
+  essentials.itemspawn.meta title:
+    description: Allow title meta to be used in item spawning.
+    default: false
+  essentials.kit:
+    description: Allow access to the /kit command.
+    default: false
+  essentials.kit.exemptdelay:
+    description: Exempts you from the kit delay feature, this affects signs as well as command.
+    default: false
+  essentials.kit.others:
+    description: Allows spawning of kits on other players.
+    default: false
+  essentials.kits.*:
+    description: Allows access to all created kits
+  essentials.kits.[kitname]:
+    description: Give access to a single kit, where [kitname] is the name of an existing kit.
+    default: false
+  essentials.more:
+    description: Allows access to the /more command.
+    default: false
+  essentials.ptime:
+    description: Allow access to the /ptime command.
+    default: false
+  essentials.ptime.others:
+    description: Allows you to change the time of another online player.
+    default: false
+  essentials.repair:
+    description: Allow access to the /repair command.
+    default: false
+  essentials.repair.all:
+    description: Unlock the /repair all ability.
+    default: false
+  essentials.repair.armor:
+    description: Repair all also repairs equipped armor.
+    default: false
+  essentials.repair.enchanted:
+    description: Repairing of enchanted items.
+    default: false
+  essentials.skull:
+    description: Allow access to the /skull command.
+    default: false
+  essentials.skull.modify:
+    description: Allow changing the owner of an existing player skull.
+    default: false
+  essentials.skull.others:
+    description: Allow creating skulls belonging to other players.
+    default: false
+  essentials.skull.spawn:
+    description: Allows the spawning of a skull, default if the player isnt holding a skull.
+    default: false
+  essentials.speed:
+    description: Allow access to the /speed command.
+    default: false
+  essentials.speed.bypass:
+    description: Allows you to bypass the speed limits set in the config.yml
+  essentials.speed.fly:
+    description: This permission will allow a player to change fly speed only.
+    default: false
+  essentials.speed.others:
+    description: Allows you to modify the speed of other players.
+    default: false
+  essentials.speed.walk:
+    description: This permission will allow a player to change walk speed only.
+    default: false
+  essentials.time:
+    description: Allow access to the /time command.
+    default: false
+  essentials.time.set:
+    description: User is allowed to change the time of the world.
+    default: false
+  essentials.tree:
+    description: Allow access to the /tree command.
+    default: false
+  essentials.unlimited:
+    description: Allow access to the /unlimited command.
+    default: false
+  essentials.unlimited.item [itemid]:
+    description: Allows the player to recieve an unlimited stack of [itemid.
+    default: false
+  essentials.unlimited.item [itemname]:
+    description: Allows the player to recieve an unlimited stack of [itemname.
+    default: false
+  essentials.unlimited.item all:
+    description: Allows the player to recieve an unlimited stack of any item.
+    default: false
+  essentials.unlimited.item bucket:
+    description: Allows the player to recieve an unlimited use of empty/lava/water buckets.
+    default: false
+  essentials.unlimited.others:
+    description: Allows the player to gift/remove another player with an unlimited stack.
+    default: false
+  essentials.workbench:
+    description: Allow access to the /workbench command.
+    default: false
+  essentials.balance:
+    description: Allow access to the /balance command.
+    default: false
+  essentials.balance.others:
+    description: Allows you to see the balance of other players
+  essentials.balancetop:
+    description: Allow access to the /balancetop command.
+    default: false
+  essentials.eco:
+    description: Allow access to the /eco command.
+    default: false
+  essentials.eco.loan:
+    description: Allows the player to have a negative balance.
+    default: false
+  essentials.pay:
+    description: Allow access to the /pay command.
+    default: false
+  essentials.pay.multiple:
+    description: This allows you to pay multiple users in a single command.
+    default: false
+  essentials.sell:
+    description: Allow access to the /sell command.
+    default: false
+  essentials.setworth:
+    description: Allow access to the /setworth command.
+    default: false
+  essentials.worth:
+    description: Allow access to the /worth command.
+    default: false
+  essentials.afk:
+    description: Allow access to the /afk command.
+    default: false
+  essentials.afk.auto:
+    description: Players with this permission will be set to afk after a period of inaction as defined in the config file.
+    default: false
+  essentials.afk.kickexempt:
+    description: Exempts the user from being auto kicked for AFK
+  essentials.afk.others:
+    description: Allows you to AFK other players.
+    default: false
+  essentials.book:
+    description: Allow access to the /book command.
+    default: false
+  essentials.book.author:
+    description: Allows the user to change the author of a book.
+    default: false
+  essentials.book.others:
+    description: Allow editing a book belonging to another player.
+    default: false
+  essentials.book.title:
+    description: Allows the user to change the title of a written book
+  essentials.compass:
+    description: Allow access to the /compass command.
+    default: false
+  essentials.customtext:
+    description: Allow access to the /customtext command and all aliases.
+    default: false
+  essentials.depth:
+    description: Allow access to the /depth command.
+    default: false
+  essentials.getpos:
+    description: Allow access to the /getpos command.
+    default: false
+  essentials.getpos.others:
+    description: Allow user to get the position of another player.
+    default: false
+  essentials.help:
+    description: Allow access to the /help command.
+    default: false
+  essentials.help.[pluginname]:
+    description: Manually adds the commands from a plugin to this groups /help. Name is all lowercase.
+    default: false
+  essentials.help.[pluginname].[command]:
+    description: Manually adds a command from a plugin to this groups /help. Name is all lowercase.
+    default: false
+  essentials.helpop:
+    description: Allow access to the /helpop command.
+    default: false
+  essentials.helpop.receive:
+    description: Allows you to see Helpop messages.
+    default: false
+  essentials.chat.ignoreexempt:
+    description: Someone with this permission will not be ignored, even if they are on another persons ignore list.
+    default: false
+  essentials.ignore:
+    description: Allow access to the /ignore command.
+    default: false
+  essentials.info:
+    description: Allow access to the /info command.
+    default: false
+  essentials.itemdb:
+    description: Allows access to the /itemdb command.
+    default: false
+  essentials.list:
+    description: Allow access to the /list command.
+    default: false
+  essentials.list.hidden:
+    description: Show hidden users
+  essentials.mail:
+    description: Allow access to the /mail command.
+    default: false
+  essentials.mail.send:
+    description: Send mail.
+    default: false
+  essentials.mail.sendall:
+    description: Allows sending mail to all players at the same time.
+    default: false
+  essentials.me:
+    description: Allow access to the /me command.
+    default: false
+  essentials.motd:
+    description: User sees MOTD on connect, and can use the command.
+    default: false
+  essentials.msg:
+    description: Allow access to the /msg command.
+    default: false
+  essentials.msg.color:
+    description: This allows you to color your private messages using color codes.
+    default: false
+  essentials.msg.format:
+    description: This allows you to format your private messages using format codes.
+    default: false
+  essentials.msg.magic:
+    description: This allows you to use the matrix/magic color in your private messages.
+    default: false
+  essentials.msg.multiple:
+    description: This allows you to message multiple users in a single command.
+    default: false
+  essentials.msg.url:
+    description: This allows you to use urls in your private messages.
+    default: false
+  essentials.near:
+    description: Allow access to the /near command.
+    default: false
+  essentials.near.maxexempt:
+    description: Allows bypassing the radius limit.
+    default: false
+  essentials.near.others:
+    description: Allows using the near command on another player.
+    default: false
+  essentials.nick:
+    description: Allow access to the /nick command.
+    default: false
+  essentials.nick.color:
+    description: This allows you to color your nickname using color codes.
+    default: false
+  essentials.nick.format:
+    description: This allows you to format your nickname using format codes.
+    default: false
+  essentials.nick.magic:
+    description: This allows you to use the matrix/magic color in your nickname.
+    default: false
+  essentials.nick.others:
+    description: Gives you permission to give other players a nick name.
+    default: false
+  essentials.powertool:
+    description: Allow access to the /powertool command.
+    default: false
+  essentials.powertool.append:
+    description: Allows adding multiple commands to a single powertool.
+    default: false
+  essentials.powertooltoggle:
+    description: Allow access to the /powertooltoggle command.
+    default: false
+  essentials.msg:
+    description: Allow access to the /msg command.
+    default: false
+  essentials.msg.color:
+    description: This allows you to color your private messages using color codes.
+    default: false
+  essentials.msg.format:
+    description: This allows you to format your private messages using format codes.
+    default: false
+  essentials.msg.magic:
+    description: This allows you to use the matrix/magic color in your private messages.
+    default: false
+  essentials.msg.url:
+    description: This allows you to use urls in your private messages.
+    default: false
+  essentials.realname:
+    description: Allow access to the /realname command.
+    default: false
+  essentials.recipe:
+    description: Allow access to the /recipe command.
+    default: false
+  essentials.rules:
+    description: Allow access to the /rules command.
+    default: false
+  essentials.seen:
+    description: Allow access to the /seen command.
+    default: false
+  essentials.seen.banreason:
+    description: Allows the user to see why a user is banned.
+    default: false
+  essentials.seen.extra:
+    description: Allow the user to see the last IP address a user connected with, and their last logged in location.
+    default: false
+  essentials.seen.ipsearch:
+    description: Allows the user to search IPs for username matches.
+    default: false
+  essentials.spawner:
+    description: Allow access to the /spawner command.
+    default: false
+  essentials.spawner.*:
+    description: Allows the spawning of all mobs.
+    default: false
+  essentials.spawner.[mob]:
+    description: Allows access to spawn a specific mob.
+    default: false
+  essentials.suicide:
+    description: Allow access to the /suicide command.
+    default: false
+  essentials.geoip.show:
+    description: Shows the GeoIP location of a player, if the GeoIP module is installed.
+    default: false
+  essentials.whois:
+    description: Allow access to the /whois command.
+    default: false
+  essentials.antioch:
+    description: Allow access to the /antioch command.
+    default: false
+  essentials.backup:
+    description: Allow access to the /backup command.
+    default: false
+  essentials.ban:
+    description: Allow access to the /ban command.
+    default: false
+  essentials.ban.exempt:
+    description: Prevents a specified group or player from being banned.
+    default: false
+  essentials.ban.notify:
+    description: Players with this permission will receive a notification when a ban is set.
+    default: false
+  essentials.ban.offline:
+    description: Allows banning of players who are offline. This may allow you to ban exempt players.
+    default: false
+  essentials.ban.notify:
+    description: Players with this permission will receive a notification when an IP ban is set.
+    default: false
+  essentials.banip:
+    description: Allow access to the /banip command.
+    default: false
+  essentials.broadcast:
+    description: Allow access to the /broadcast command.
+    default: false
+  essentials.burn:
+    description: Allow access to the /burn command.
+    default: false
+  essentials.clearinventory:
+    description: Allow access to the /clearinventory command.
+    default: false
+  essentials.clearinventory.all:
+    description: Allows a player to clear all players inventories.
+    default: false
+  essentials.clearinventory.others:
+    description: Allows you to clear other players inventory.
+    default: false
+  essentials.deljail:
+    description: Allow access to the /deljail command.
+    default: false
+  essentials.enderchest:
+    description: Allow access to the /enderchest command.
+    default: false
+  essentials.enderchest.modify:
+    description: Allows you to modify the contents of another players enderchest.
+    default: false
+  essentials.enderchest.others:
+    description: Allows you to see the contents of another players enderchest.
+    default: false
+  essentials.essentials:
+    description: Allow access to the /  essentials.command.
+    default: false
+  essentials.ext:
+    description: Allow access to the /ext command.
+    default: false
+  essentials.fireball:
+    description: Allow access to the /fireball command.
+    default: false
+  essentials.gc:
+    description: Allow access to the /gc command.
+    default: false
+  essentials.invsee:
+    description: Allow access to the /invsee command.
+    default: false
+  essentials.invsee.modify:
+    description: Players can modify the other players inventory (remove/add items).
+  essentials.invsee.preventmodify:
+    description: Prevents other players from modifying the players inventory.
+    default: false
+  essentials.jails:
+    description: Allow access to the /jails command.
+    default: false
+  essentials.kick:
+    description: Allow access to the /kick command.
+    default: false
+  essentials.kick.exempt:
+    description: Prevents the player from being kicked.
+    default: false
+  essentials.kick.notify:
+    description: User sees a notification when a user is kicked.
+    default: false
+  essentials.kickall:
+    description: Allow access to the /kickall command.
+    default: false
+  essentials.kill:
+    description: Allow access to the /kill command.
+    default: false
+  essentials.kill.exempt:
+    description: Prevents the player from being killed.
+    default: false
+  essentials.kill.force:
+    description: Force player death, even if event is cancelled.
+    default: false
+  essentials.lightning:
+    description: Allow access to the /lightning command.
+    default: false
+  essentials.lightning.others:
+    description: Allows use of /lightning [playername].
+    default: false
+  essentials.mute:
+    description: Allow access to the /mute command.
+    default: false
+  essentials.mute.exempt:
+    description: Prevents a specified group or player from being muted.
+    default: false
+  essentials.mute.notify:
+    description: Players with this permission will receive a notification when a player is muted.
+    default: false
+  essentials.mute.offline:
+    description: Allows muting of players who are offline. This may allow you to mute exempt players.
+    default: false
+  essentials.nuke:
+    description: Allow access to the /nuke command.
+    default: false
+  essentials.ping:
+    description: Allow access to the /ping command.
+    default: false
+  essentials.remove:
+    description: Allow access to the /remove command.
+    default: false
+  essentials.setjail:
+    description: Allow access to the /setjail command.
+    default: false
+  essentials.socialspy:
+    description: Allow access to the /socialspy command.
+    default: false
+  essentials.socialspy.others:
+    description: Allows you to toggle the social spy status of others.
+    default: false
+  essentials.spawnmob:
+    description: Allow access to the /spawnmob command.
+    default: false
+  essentials.spawnmob.*:
+    description: Allow the spawning of all mobs.
+    default: false
+  essentials.spawnmob.[mob]:
+    description: Allow access to spawn a specific mob.
+    default: false
+  essentials.spawnmob.stack:
+    description: Allows the spawning of stacked mobs.
+    default: false
+  essentials.sudo:
+    description: Allow access to the /sudo command.
+    default: false
+  essentials.sudo.exempt:
+    description: Prevents the holder from being sudoed by another user.
+    default: false
+  essentials.ban.notify:
+    description: Players with this permission will receive a notification when a ban is set.
+    default: false
+  essentials.tempban:
+    description: Allow access to the /tempban command.
+    default: false
+  essentials.tempban.exempt:
+    description: Prevents a specified group or player from being tempbanned.
+    default: false
+  essentials.tempban.offline:
+    description: Allows temp banning of players who are offline. This may allow you to ban exempt players.
+    default: false
+  essentials.tempban.unlimited:
+    description: Allows bypassing config file max ban time limit.
+    default: false
+  essentials.thunder:
+    description: Allow access to the /thunder command.
+    default: false
+  essentials.jail.allow.<command>:
+    description: Allows   essentials.commands to be used while jailed (requires regular perm).
+  essentials.jail.exempt:
+    description: Prevents a specified group or player from being jailed.
+    default: false
+  essentials.togglejail:
+    description: Allow access to the /togglejail command.
+    default: false
+  essentials.togglejail.offline:
+    description: Allows jailing of players who are offline. This may allow you to jail exempt players.
+    default: false
+  essentials.ban.notify:
+    description: Players with this permission will receive a notification when a ban is removed.
+    default: false
+  essentials.unban:
+    description: Allow access to the /unban command.
+    default: false
+  essentials.ban.notify:
+    description: Players with this permission will receive a notification when an IP ban is removed.
+    default: false
+  essentials.unbanip:
+    description: Allow access to the /unbanip command.
+    default: false
+  essentials.vanish:
+    description: Allow access to the /vanish command.
+    default: false
+  essentials.vanish.effect:
+    description: People with this effect will get the potion effect applied while vanished.
+    default: false
+  essentials.vanish.interact:
+    description: Allows the player to use commands which interact with a vanished player.
+    default: false
+  essentials.vanish.others:
+    description: Allows you to toggle vanish on others.
+    default: false
+  essentials.vanish.pvp:
+    description: Allows players who are vanished to attack other players.
+    default: false
+  essentials.vanish.see:
+    description: Allows you to see a vanished player.
+    default: false
+  essentials.weather:
+    description: Allow access to the /weather command.
+    default: false
+  essentials.setspawn:
+    description: Allow access to the /setspawn command.
+    default: false
+  essentials.spawn:
+    description: Allow access to the /spawn command.
+    default: false
+  essentials.spawn.others:
+    description: Allows you to teleport other people to spawn.
+    default: false
+  essentials.back:
+    description: Allow access to the /back command.
+    default: false
+  essentials.back.ondeath:
+    description: Give this permission to allow players to use /back to go to their death spot.
+    default: false
+  essentials.keepxp:
+    description: Allows the user to keep their exp on death, instead of dropping it.
+    default: false
+  essentials.worlds.<worldname>:
+    description: Allows players access to a specific world.
+    default: false
+  essentials.delhome:
+    description: Allow access to the /delhome command.
+    default: false
+  essentials.delhome.others:
+    description: Allows you to delete the homes of other players.
+    default: false
+  essentials.delwarp:
+    description: Allow access to the /delwarp command.
+    default: false
+  essentials.home:
+    description: Allow access to the /home command.
+    default: false
+  essentials.home.bed:
+    description: Allow access to the vanilla bed home.
+    default: false
+  essentials.home.others:
+    description: Allows you to teleport to homes of other players.
+    default: false
+  essentials.worlds.<worldname>:
+    description: Allows players access to a specific world.
+    default: false
+  essentials.jump:
+    description: Allow access to the /jump command.
+    default: false
+  essentials.sethome:
+    description: Allow access to the /sethome command.
+    default: false
+  essentials.sethome.bed:
+    description: Allows the player to right click a bed during daytime to update their bed home.
+    default: false
+  essentials.sethome.multiple:
+    description: Allows player to have multiple homes, or create named homes. Required for 2+ homes.
+    default: false
+  essentials.sethome.multiple.[set name]:
+    description: Raise the multiple home limit to a setting defined in the config file.
+    default: false
+  essentials.sethome.multiple.unlimited:
+    description: Removes the cap on the number of homes people are allowed (if they have multiple homes).
+  essentials.sethome.others:
+    description: Allows you to change another users home location.
+    default: false
+  essentials.setwarp:
+    description: Allow access to the /setwarp command.
+    default: false
+  essentials.warp.overwrite.*:
+    description: Allows overwriting of all existing warps.
+    default: false
+  essentials.warp.overwrite.[warpname]:
+    description: Allows overwriting of existing warps.
+    default: false
+  essentials.top:
+    description: Allow access to the /top command.
+    default: false
+  essentials.tp:
+    description: Allow access to the /tp command.
+    default: false
+  essentials.tp.others:
+    description: Allow players to teleport another player.
+    default: false
+  essentials.worlds.<worldname>:
+    description: Allows players access to a specific world.
+    default: false
+  essentials.tpa:
+    description: Allow access to the /tpa command.
+    default: false
+  essentials.worlds.<worldname>:
+    description: Allows players access to a specific world.
+    default: false
+  essentials.tpaall:
+    description: Allow access to the /tpaall command.
+    default: false
+  essentials.worlds.<worldname>:
+    description: Allows teleporting player to a specific world.
+    default: false
+  essentials.tpaccept:
+    description: Allow access to the /tpaccept command.
+    default: false
+  essentials.tpahere:
+    description: Allow access to the /tpahere command.
+    default: false
+  essentials.worlds.<worldname>:
+    description: Allows teleporting players to a specific world.
+    default: false
+  essentials.tpall:
+    description: Allow access to the /tpall command.
+    default: false
+  essentials.worlds.<worldname>:
+    description: Allows teleporting players to a specific world.
+    default: false
+  essentials.tpdeny:
+    description: Allow access to the /tpdeny command.
+    default: false
+  essentials.tphere:
+    description: Allow access to the /tphere command.
+    default: false
+  essentials.worlds.<worldname>:
+    description: Allows players access to a specific world.
+    default: false
+  essentials.tpo:
+    description: Allow access to the /tpo command.
+    default: false
+  essentials.worlds.<worldname>:
+    description: Allows players access to a specific world.
+    default: false
+  essentials.tpohere:
+    description: Allow access to the /tpohere command.
+    default: false
+  essentials.worlds.<worldname>:
+    description: Allows players access to a specific world.
+    default: false
+  essentials.tppos:
+    description: Allow access to the /tppos command.
+    default: false
+  essentials.teleport.cooldown.bypass:
+    description: Bypass the teleport cooldown.
+    default: false
+  essentials.teleport.timer.bypass:
+    description: Bypass the teleport delay.
+    default: false
+  essentials.teleport.timer.move:
+    description: Allows players to move while waiting for teleport.
+    default: false
+  essentials.tptoggle:
+    description: Allow access to the /tptoggle command.
+    default: false
+  essentials.tptoggle.others:
+    description: Allows a player to toggle the teleport status of another player.
+    default: false
+  essentials.vanish.interact:
+    description: Allows the user to teleport to players who are vanished.
+    default: false
+  essentials.warp:
+    description: Allow access to the /warp command.
+    default: false
+  essentials.warp.list:
+    description: Specifies whether you can view warp list with /warp.
+    default: false
+  essentials.warp.otherplayers:
+    description: Allows warping another player.
+    default: false
+  essentials.warps.*:
+    description: Allows access to all warps.
+    default: false
+  essentials.warps.[warpname]:
+    description: If you have per warp permission set to true in the config.yml then you can limit what warps players can use. This also controls what players would see with /warp.
+    default: false
+  essentials.world:
+    description: Allow access to the /world command.
+    default: false
+  essentials.worlds.<worldname>:
+    description: Allows players access to a specific world.
+    default: false
+  essentials.signs.break.balance:
+    description: Controls who can break balance signs.
+    default: false
+  essentials.signs.break.buy:
+    description: Controls who can break buy signs.
+    default: false
+  essentials.signs.break.disposal:
+    description: Controls who can break disposal signs.
+    default: false
+  essentials.signs.break.enchant:
+    description: Controls who can break enchant signs.
+    default: false
+  essentials.signs.break.free:
+    description: Controls who can break free signs.
+    default: false
+  essentials.signs.break.gamemode:
+    description: Controls who can break gamemode signs.
+    default: false
+  essentials.signs.break.heal:
+    description: Controls who can break heal signs.
+    default: false
+  essentials.signs.break.info:
+    description: Controls who can break info signs.
+    default: false
+  essentials.signs.break.kit:
+    description: Controls who can break kit signs.
+    default: false
+  essentials.signs.break.mail:
+    description: Controls who can break a mail sign.
+    default: false
+  essentials.signs.break.protection:
+    description: Controls who can break a protection sign. Typically given to everybody.
+    default: false
+  essentials.signs.break.repair:
+    description: Controls who can break repair signs.
+    default: false
+  essentials.signs.break.sell:
+    description: Controls who can break sell signs.
+    default: false
+  essentials.signs.break.spawnmob:
+    description: Controls who can break spawnmob signs.
+    default: false
+  essentials.signs.break.time:
+    description: Controls who can break time signs.
+    default: false
+  essentials.signs.break.trade:
+    description: Controls who can break trade signs.
+    default: false
+  essentials.signs.break.warp:
+    description: Controls who can break warp signs.
+    default: false
+  essentials.signs.break.weather:
+    description: Controls who can break weather signs.
+    default: false
+  essentials.signs.color:
+    description: This allows you to color your signs using color codes.
+    default: false
+  essentials.signs.create.balance:
+    description: Controls who can create balance signs.
+    default: false
+  essentials.signs.create.buy:
+    description: Controls who can create buy signs.
+    default: false
+  essentials.signs.create.disposal:
+    description: Controls who can create disposal signs.
+    default: false
+  essentials.signs.create.enchant:
+    description: Controls who can create enchant signs.
+    default: false
+  essentials.signs.create.free:
+    description: Controls who can create free signs.
+    default: false
+  essentials.signs.create.gamemode:
+    description: Controls who can create gamemode signs.
+    default: false
+  essentials.signs.create.heal:
+    description: Controls who can create heal signs.
+    default: false
+  essentials.signs.create.info:
+    description: Controls who can create info signs.
+    default: false
+  essentials.signs.create.kit:
+    description: Controls who can create kit signs.
+    default: false
+  essentials.signs.create.mail:
+    description: Controls who can create a mail sign.
+    default: false
+  essentials.signs.create.protection:
+    description: Controls who can create a protection sign.
+    default: false
+  essentials.signs.create.repair:
+    description: Controls who can create repair signs.
+    default: false
+  essentials.signs.create.sell:
+    description: Controls who can create sell signs.
+    default: false
+  essentials.signs.create.spawnmob:
+    description: Controls who can create spawnmob signs.
+    default: false
+  essentials.signs.create.time:
+    description: Controls who can create time signs.
+    default: false
+  essentials.signs.create.trade:
+    description: Controls who can create trade signs.
+    default: false
+  essentials.signs.create.warp:
+    description: Controls who can create warp signs.
+    default: false
+  essentials.signs.create.weather:
+    description: Controls who can create weather signs.
+    default: false
+  essentials.signs.enchant.allowunsafe:
+    description: Allows using [enchant] signs to perform unsafe enchantments.
+    default: false
+  essentials.signs.format:
+    description: This allows you to format your signs using format codes.
+    default: false
+  essentials.signs.magic:
+    description: This allows you to use the matrix/magic color in your signs.
+    default: false
+  essentials.signs.protection.override:
+    description: Used to override any protections. Typically given to mods & admins.
+    default: false
+  essentials.signs.trade.override:
+    description: Used to override the creator only protection on trade signs. Typically given to mods & admins.
+    default: false
+  essentials.signs.use.balance:
+    description: Controls who can use balance signs.
+    default: false
+  essentials.signs.use.buy:
+    description: Controls who can use buy signs.
+    default: false
+  essentials.signs.use.disposal:
+    description: Controls who can use disposal signs.
+    default: false
+  essentials.signs.use.enchant:
+    description: Controls who can use enchant signs.
+    default: false
+  essentials.signs.use.free:
+    description: Controls who can use free signs.
+    default: false
+  essentials.signs.use.gamemode:
+    description: Controls who can use gamemode signs.
+    default: false
+  essentials.signs.use.heal:
+    description: Controls who can use heal signs.
+    default: false
+  essentials.signs.use.info:
+    description: Controls who can use info signs.
+    default: false
+  essentials.signs.use.kit:
+    description: Controls who can use kit signs.
+    default: false
+  essentials.signs.use.mail:
+    description: Controls who can use a mail sign.
+    default: false
+  essentials.signs.use.protection:
+    description: Controls who can use a protection sign. Typically given to everybody.
+    default: false
+  essentials.signs.use.repair:
+    description: Controls who can use repair signs.
+    default: false
+  essentials.signs.use.sell:
+    description: Controls who can use sell signs.
+    default: false
+  essentials.signs.use.spawnmob:
+    description: Controls who can use spawnmob signs.
+    default: false
+  essentials.signs.use.time:
+    description: Controls who can use time signs.
+    default: false
+  essentials.signs.use.trade:
+    description: Controls who can use trade signs.
+    default: false
+  essentials.signs.use.warp:
+    description: Controls who can use warp signs.
+    default: false
+  essentials.signs.use.weather:
+    description: Controls who can use weather signs.
+    default: false
+  essentials.silentquit:
+    description: Suppress leave/quit messages for users with this permission.
+    default: false
+  essentials.sleepingignored:
+    description: User isnt required to be sleeping, for time to be reset.
+    default: false
+  essentials.silentjoin:
+    description: Suppress join messages for users with this permission.
+    default: false
+  essentials.build:
+    description: Allows people to build when using permission systems which dont support build toggles.
+    default: false
+  essentials.build.break.<id>[:datavalue]:
+    description: Allows breaking of a block.
+    default: false
+  essentials.build.craft.<id>[:datavalue]:
+    description: Allows crafting of an item.
+    default: false
+  essentials.build.drop.<id>[:datavalue]:
+    description: Allows dropping of an item.
+    default: false
+  essentials.build.interact.<id>[:datavalue]:
+    description: Allows interacting with a blocks or item.
+    default: false
+  essentials.build.pickup.<id>[:datavalue]:
+    description: Allows collecting of an item.
+    default: false
+  essentials.build.place.<id>[:datavalue]:
+    description: Allows placing a block.
+    default: false
+  essentials.chat.color:
+    description: This allows you to color your chat messages using color codes.
+    default: false
+  essentials.chat.format:
+    description: This allows you to format your chat messages using format codes.
+    default: false
+  essentials.chat.magic:
+    description: This allows you to use the matrix/magic color in your chat messages.
+    default: false
+  essentials.chat.question:
+    description: This allows you to send global qeustions, used if a chat raidus is configured.
+    default: false
+  essentials.chat.shout:
+    description: This allows you to send global messages, used if a chat raidus is configured.
+    default: false
+  essentials.chat.spy:
+    description: A permission designed for admins, to intercept all local messages (ignoring the chat radius).
+  essentials.chat.url:
+    description: This allows you to use urls in your chat messages.
+    default: false
+  essentials.geoip.hide:
+    description: Allows you to hide your country and city from people who have permission   essentials.geoip.show.
+    default: false
+  essentials.geoip.show:
+    description: Allows you to see the country and city of players.
+    default: false
+  essentials.joinfullserver:
+    description: Player can join when the server is full.
+    default: false
+  essentials.nocommandcost.[command]:
+    description: Removes the command cost of a given command.
+    default: false
+  essentials.nocommandcost.all:
+    description: Removes the command cost of all commands.
+    default: false
+  essentials.protect:
+    description: Allows the protection of rails and signs, otherwise they are not protected.
+    default: false
+  essentials.protect.admin:
+    description: Allows the destruction of signs and rails.
+    default: false
+  essentials.protect.alerts:
+    description: Allows a player to recieve protect alerts.
+    default: false
+  essentials.protect.alerts.notrigger:
+    description: Users with this permission do not trigger protect alerts.
+    default: false
+  essentials.protect.damage.contact:
+    description: Player will receive contact damage.
+    default: false
+  essentials.protect.damage.creeper:
+    description: Player will receive creeper damage.
+    default: false
+  essentials.protect.damage.disable:
+    description: Admin override to prevent admins from dying.
+    default: false
+  essentials.protect.damage.drowning:
+    description: Player will receive drowning damage.
+    default: false
+  essentials.protect.damage.fall:
+    description: Player will receive fall damage.
+    default: false
+  essentials.protect.damage.fire:
+    description: Player will receive fire damage
+  essentials.protect.damage.fireball:
+    description: Player will receive fireball damage.
+    default: false
+  essentials.protect.damage.lava:
+    description: Player will receive lava damage.
+    default: false
+  essentials.protect.damage.lightning:
+    description: Player will receive lightning damage.
+    default: false
+  essentials.protect.damage.projectiles:
+    description: Player will receive projectile damage.
+    default: false
+  essentials.protect.damage.suffocation:
+    description: Player will receive suffocation damage.
+    default: false
+  essentials.protect.damage.tnt:
+    description: Player will receive tnt damage.
+    default: false
+  essentials.protect.entitytarget.bypass:
+    description: Allows a player to be targeted by mobs.
+    default: false
+  essentials.protect.exemptbreak:
+    description: Allows a player to ignore the break blacklist.
+    default: false
+  essentials.protect.exemptplacement:
+    description: Allows a player to ignore the block placement blacklist.
+    default: false
+  essentials.protect.exemptusage:
+    description: Allows a player to ignore the usage blacklist.
+    default: false
+  essentials.protect.ownerinfo:
+    description: Allows a player to examine protected objects to find their owner.
+    default: false
+  essentials.protect.pvp:
+    description: When prevent PVP is set to true, this allows players to still PVP. Both attacker and defender need to have this permission.
+    default: false
+  essentials.pvpdelay.exempt:
+    description: Exempts players from the pvp delay option in the config file.
+    default: false
+  essentials.setxmpp:
+    description: Allow access to the /setxmpp command.
+    default: false
+  essentials.xmpp:
+    description: Allow access to the /xmpp command.
+    default: false
+  essentials.xmppspy:
+    description: Allow access to the /xmppspy command.
+    default: false
