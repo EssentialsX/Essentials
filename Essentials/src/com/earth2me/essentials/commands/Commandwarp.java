@@ -114,8 +114,7 @@ public class Commandwarp extends EssentialsCommand {
 
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
-        if (args.length == 1) {
-            // Should we be checking "essentials.warp.list" here?
+        if (args.length == 1 && user.isAuthorized("essentials.warp.list")) {
             return new ArrayList<>(ess.getWarps().getList());
         } else if (args.length == 2 && (user.isAuthorized("essentials.warp.otherplayers") || user.isAuthorized("essentials.warp.others"))) {
             //TODO: Remove 'otherplayers' permission.
