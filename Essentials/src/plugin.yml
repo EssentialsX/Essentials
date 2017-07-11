@@ -608,10 +608,10 @@ permissions:
     description: Allows spawning of items on the spawn blacklist.
     default: false
   essentials.itemspawn.item <itemname>:
-    description: If permission based item spawn: Spawn <itemname.
+    description: If permission based item spawn: Spawn <itemname>.
     default: false
   essentials.itemspawn.item [itemid]:
-    description: If permission based item spawn: Spawn [itemid.
+    description: If permission based item spawn: Spawn [itemid].
     default: false
   essentials.itemspawn.item all:
     description: If permission based item spawn: Spawn all items
@@ -652,7 +652,7 @@ permissions:
     description: Bypass the heal cooldown
   essentials.heal.others:
     description: Allows healing another player
-  essentials.itemspawn.meta chapter [chapter]:
+  essentials.itemspawn.meta-chapter-[chapter]:
     description: Allows spawning of specific books only, from book.txt
   essentials.enchantments.[enchantmentname]:
     description: Allows access to each enchantment type.
@@ -666,30 +666,30 @@ permissions:
   essentials.itemspawn.exempt:
     description: Allows spawning of items on the spawn blacklist.
     default: false
-  essentials.itemspawn.item [itemid]:
-    description: If permission based item spawn: Spawn [itemid.
+  essentials.itemspawn.item-[itemid]:
+    description: If permission based item spawn: Spawn [itemid].
     default: false
-  essentials.itemspawn.item [itemname]:
-    description: If permission based item spawn: Spawn [itemname.
+  essentials.itemspawn.item-[itemname]:
+    description: If permission based item spawn: Spawn [itemname].
     default: false
-  essentials.itemspawn.item all:
+  essentials.itemspawn.item-all:
     description: If permission based item spawn: Spawn all items.
     default: false
-  essentials.itemspawn.meta author:
+  essentials.itemspawn.meta-author:
     description: Allow author meta to be used in item spawning.
     default: false
-  essentials.itemspawn.meta book:
+  essentials.itemspawn.meta-book:
     description: Allows spawning of books with pre filled content from books.txt
-  essentials.itemspawn.meta firework:
+  essentials.itemspawn.meta-firework:
     description: Allow specific meta for fireworks.
     default: false
-  essentials.itemspawn.meta head:
+  essentials.itemspawn.meta-head:
     description: Allows spawning of mob heads.
     default: false
-  essentials.itemspawn.meta lore:
+  essentials.itemspawn.meta-lore:
     description: Allow lore meta to be used in item spawning.
     default: false
-  essentials.itemspawn.meta title:
+  essentials.itemspawn.meta-title:
     description: Allow title meta to be used in item spawning.
     default: false
   essentials.kit:
@@ -765,11 +765,11 @@ permissions:
   essentials.unlimited:
     description: Allow access to the /unlimited command.
     default: false
-  essentials.unlimited.item [itemid]:
-    description: Allows the player to recieve an unlimited stack of [itemid.
+  essentials.unlimited.item-[itemid]:
+    description: Allows the player to recieve an unlimited stack of [itemid].
     default: false
-  essentials.unlimited.item [itemname]:
-    description: Allows the player to recieve an unlimited stack of [itemname.
+  essentials.unlimited.item-[itemname]:
+    description: Allows the player to recieve an unlimited stack of [itemname].
     default: false
   essentials.unlimited.item all:
     description: Allows the player to recieve an unlimited stack of any item.
@@ -987,10 +987,10 @@ permissions:
     description: Allow access to the /spawner command.
     default: false
   essentials.spawner.*:
-    description: Allows the spawning of all mobs.
+    description: Allows access to set spawner type to any mob.
     default: false
   essentials.spawner.[mob]:
-    description: Allows access to spawn a specific mob.
+    description: Allows access to set spawner to specified mob type.
     default: false
   essentials.suicide:
     description: Allow access to the /suicide command.
@@ -1169,7 +1169,8 @@ permissions:
     description: Allow access to the /thunder command.
     default: false
   essentials.jail.allow.<command>:
-    description: Allows   essentials.commands to be used while jailed (requires regular perm).
+    description: Allows essentials.commands to be used while jailed (requires regular perm).
+    default: false
   essentials.jail.exempt:
     description: Prevents a specified group or player from being jailed.
     default: false
