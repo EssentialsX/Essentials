@@ -279,4 +279,6 @@ public interface ISettings extends IConf {
     boolean isAddingSuffixInPlayerlist();
 
     int getNotifyPlayerOfMailCooldown();
+
+    long getMotdDelay();
 }
