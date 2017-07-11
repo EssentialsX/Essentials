@@ -542,6 +542,10 @@ pastebin-createkit: true
 # This is useful when a sign sells or buys one item at a time and the player wants to sell a bunch at once.
 allow-bulk-buy-sell: true
 
+# Delay for the MOTD display for players on join, in milliseconds.
+# This has no effect if the MOTD command or permission are disabled.
+delay-motd: 0
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #
