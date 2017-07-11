@@ -262,12 +262,6 @@ public class EssentialsPlayerListener implements Listener {
                     ess.getServer().broadcastMessage(message);
                 }
 
-                if (input != null && user.isAuthorized("essentials.motd")) {
-                    final IText output = new KeywordReplacer(input, user.getSource(), ess);
-                    final TextPager pager = new TextPager(output, true);
-                    pager.showPage("1", null, "motd", user.getSource());
-                }
-
                 if (!ess.getSettings().isCommandDisabled("mail") && user.isAuthorized("essentials.mail")) {
                     final List<String> mail = user.getMails();
                     if (mail.isEmpty()) {
@@ -304,7 +298,21 @@ public class EssentialsPlayerListener implements Listener {
             }
         }
 
+        class DelayMotdTask implements Runnable {
+            @Override
+            public void run() {
+                final User user = ess.getUser(player);
+
+                if (input != null && user.isAuthorized("essentials.motd")) {
+                    final IText output = new KeywordReplacer(input, user.getSource(), ess);
+                    final TextPager pager = new TextPager(output, true);
+                    pager.showPage("1", null, "motd", user.getSource());
+                }
+            }
+        }
+
         ess.scheduleSyncDelayedTask(new DelayJoinTask());
+        ess.scheduleSyncDelayedTask(new DelayMotdTask(), ess.getSettings().getMotdDelay());
     }
 
     // Makes the compass item ingame always point to the first essentials home.  #EasterEgg
