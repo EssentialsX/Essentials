@@ -280,5 +280,5 @@ public interface ISettings extends IConf {
 
     int getNotifyPlayerOfMailCooldown();
 
-    long getMotdDelay();
+    int getMotdDelay();
 }

@@ -1413,7 +1413,7 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
-    public long getMotdDelay() {
-        return config.getInt("delay-motd", 0) / 50;
+    public int getMotdDelay() {
+        return config.getInt("delay-motd", 0);
     }
 }

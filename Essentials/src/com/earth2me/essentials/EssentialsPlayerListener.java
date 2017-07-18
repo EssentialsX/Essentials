@@ -202,23 +202,8 @@ public class EssentialsPlayerListener implements Listener {
         dUser.updateActivity(false);
         dUser.stopTransaction();
 
-        IText tempInput = null;
-
-        if (!ess.getSettings().isCommandDisabled("motd")) {
-            try {
-                tempInput = new TextInput(dUser.getSource(), "motd", true, ess);
-            } catch (IOException ex) {
-                if (ess.getSettings().isDebug()) {
-                    LOGGER.log(Level.WARNING, ex.getMessage(), ex);
-                } else {
-                    LOGGER.log(Level.WARNING, ex.getMessage());
-                }
-            }
-        }
-
-        final IText input = tempInput;
-
         class DelayJoinTask implements Runnable {
+            private IText input;
             @Override
             public void run() {
                 final User user = ess.getUser(player);
@@ -262,6 +247,30 @@ public class EssentialsPlayerListener implements Listener {
                     ess.getServer().broadcastMessage(message);
                 }
 
+                IText tempInput = null;
+
+                if (!ess.getSettings().isCommandDisabled("motd")) {
+                    try {
+                        tempInput = new TextInput(user.getSource(), "motd", true, ess);
+                    } catch (IOException ex) {
+                        if (ess.getSettings().isDebug()) {
+                            LOGGER.log(Level.WARNING, ex.getMessage(), ex);
+                        } else {
+                            LOGGER.log(Level.WARNING, ex.getMessage());
+                        }
+                    }
+                }
+
+                input = tempInput;
+
+                int motdDelay = ess.getSettings().getMotdDelay() / 50;
+                DelayMotdTask motdTask = new DelayMotdTask();
+                if (motdDelay > 0) {
+                    ess.scheduleSyncDelayedTask(motdTask, motdDelay);
+                } else {
+                    motdTask.run();
+                }
+
                 if (!ess.getSettings().isCommandDisabled("mail") && user.isAuthorized("essentials.mail")) {
                     final List<String> mail = user.getMails();
                     if (mail.isEmpty()) {
@@ -296,23 +305,22 @@ public class EssentialsPlayerListener implements Listener {
 
                 user.stopTransaction();
             }
-        }
 
-        class DelayMotdTask implements Runnable {
-            @Override
-            public void run() {
-                final User user = ess.getUser(player);
+            class DelayMotdTask implements Runnable {
+                @Override
+                public void run() {
+                    final User user = ess.getUser(player);
 
-                if (input != null && user.isAuthorized("essentials.motd")) {
-                    final IText output = new KeywordReplacer(input, user.getSource(), ess);
-                    final TextPager pager = new TextPager(output, true);
-                    pager.showPage("1", null, "motd", user.getSource());
+                    if (input != null && user.isAuthorized("essentials.motd")) {
+                        final IText output = new KeywordReplacer(input, user.getSource(), ess);
+                        final TextPager pager = new TextPager(output, true);
+                        pager.showPage("1", null, "motd", user.getSource());
+                    }
                 }
             }
         }
 
         ess.scheduleSyncDelayedTask(new DelayJoinTask());
-        ess.scheduleSyncDelayedTask(new DelayMotdTask(), ess.getSettings().getMotdDelay());
     }
 
     // Makes the compass item ingame always point to the first essentials home.  #EasterEgg
