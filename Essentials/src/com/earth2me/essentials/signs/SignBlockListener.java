@@ -46,7 +46,7 @@ public class SignBlockListener implements Listener {
 
     public boolean protectSignsAndBlocks(final Block block, final Player player) throws MaxMoneyException {
         // prevent any signs be broken by destroying the block they are attached to
-        if (EssentialsSign.checkIfBlockBreaksSigns(ess, block)) {
+        if (EssentialsSign.checkIfBlockBreaksSigns(block)) {
             if (ess.getSettings().isDebug()) {
                 LOGGER.log(Level.INFO, "Prevented that a block was broken next to a sign.");
             }
@@ -142,7 +142,7 @@ public class SignBlockListener implements Listener {
         }
 
         final Block against = event.getBlockAgainst();
-        if ((against.getType() == WALL_SIGN || against.getType() == SIGN_POST) && EssentialsSign.isValidSign(ess, new EssentialsSign.BlockSign(against))) {
+        if ((against.getType() == WALL_SIGN || against.getType() == SIGN_POST) && EssentialsSign.isValidSign(new EssentialsSign.BlockSign(against))) {
             event.setCancelled(true);
             return;
         }
@@ -166,7 +166,7 @@ public class SignBlockListener implements Listener {
         }
 
         final Block block = event.getBlock();
-        if (((block.getType() == WALL_SIGN || block.getType() == SIGN_POST) && EssentialsSign.isValidSign(ess, new EssentialsSign.BlockSign(block))) || EssentialsSign.checkIfBlockBreaksSigns(ess, block)) {
+        if (((block.getType() == WALL_SIGN || block.getType() == SIGN_POST) && EssentialsSign.isValidSign(new EssentialsSign.BlockSign(block))) || EssentialsSign.checkIfBlockBreaksSigns(block)) {
             event.setCancelled(true);
             return;
         }
@@ -186,7 +186,7 @@ public class SignBlockListener implements Listener {
         }
 
         final Block block = event.getBlock();
-        if (((block.getType() == WALL_SIGN || block.getType() == SIGN_POST) && EssentialsSign.isValidSign(ess, new EssentialsSign.BlockSign(block))) || EssentialsSign.checkIfBlockBreaksSigns(ess, block)) {
+        if (((block.getType() == WALL_SIGN || block.getType() == SIGN_POST) && EssentialsSign.isValidSign(new EssentialsSign.BlockSign(block))) || EssentialsSign.checkIfBlockBreaksSigns(block)) {
             event.setCancelled(true);
             return;
         }
@@ -206,7 +206,7 @@ public class SignBlockListener implements Listener {
         }
 
         for (Block block : event.getBlocks()) {
-            if (((block.getType() == WALL_SIGN || block.getType() == SIGN_POST) && EssentialsSign.isValidSign(ess, new EssentialsSign.BlockSign(block))) || EssentialsSign.checkIfBlockBreaksSigns(ess, block)) {
+            if (((block.getType() == WALL_SIGN || block.getType() == SIGN_POST) && EssentialsSign.isValidSign(new EssentialsSign.BlockSign(block))) || EssentialsSign.checkIfBlockBreaksSigns(block)) {
                 event.setCancelled(true);
                 return;
             }
@@ -231,7 +231,7 @@ public class SignBlockListener implements Listener {
             final Block[] affectedBlocks = new Block[]{pistonBaseBlock, pistonBaseBlock.getRelative(event.getDirection()), event.getRetractLocation().getBlock()};
 
             for (Block block : affectedBlocks) {
-                if (((block.getType() == WALL_SIGN || block.getType() == SIGN_POST) && EssentialsSign.isValidSign(ess, new EssentialsSign.BlockSign(block))) || EssentialsSign.checkIfBlockBreaksSigns(ess, block)) {
+                if (((block.getType() == WALL_SIGN || block.getType() == SIGN_POST) && EssentialsSign.isValidSign(new EssentialsSign.BlockSign(block))) || EssentialsSign.checkIfBlockBreaksSigns(block)) {
                     event.setCancelled(true);
                     return;
                 }

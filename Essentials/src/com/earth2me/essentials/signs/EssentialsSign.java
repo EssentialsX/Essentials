@@ -7,7 +7,6 @@ import net.ess3.api.MaxMoneyException;
 import net.ess3.api.events.SignBreakEvent;
 import net.ess3.api.events.SignCreateEvent;
 import net.ess3.api.events.SignInteractEvent;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -211,9 +210,9 @@ public class EssentialsSign {
         return true;
     }
 
-    protected static boolean checkIfBlockBreaksSigns(final IEssentials ess, final Block block) {
+    protected static boolean checkIfBlockBreaksSigns(final Block block) {
         final Block sign = block.getRelative(BlockFace.UP);
-        if (sign.getType() == Material.SIGN_POST && isValidSign(ess, new BlockSign(sign))) {
+        if (sign.getType() == Material.SIGN_POST && isValidSign(new BlockSign(sign))) {
             return true;
         }
         final BlockFace[] directions = new BlockFace[]{BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
@@ -222,7 +221,7 @@ public class EssentialsSign {
             if (signblock.getType() == Material.WALL_SIGN) {
                 try {
                     final org.bukkit.material.Sign signMat = (org.bukkit.material.Sign) signblock.getState().getData();
-                    if (signMat != null && signMat.getFacing() == blockFace && isValidSign(ess, new BlockSign(signblock))) {
+                    if (signMat != null && signMat.getFacing() == blockFace && isValidSign(new BlockSign(signblock))) {
                         return true;
                     }
                 } catch (NullPointerException ex) {
@@ -233,18 +232,8 @@ public class EssentialsSign {
         return false;
     }
 
-    public static boolean isValidSign(final IEssentials ess, final ISign sign) {
-        if (!sign.getLine(0).matches("§1\\[.*\\]"))
-            return false;
-
-        // Validate that the sign is actually an essentials sign
-        String signName = ChatColor.stripColor(sign.getLine(0)).replaceAll("[^a-zA-Z]", "");
-        for (EssentialsSign essSign : ess.getSettings().enabledSigns()) {
-            if (essSign.getName().equalsIgnoreCase(signName))
-                return true;
-        }
-
-        return false;
+    public static boolean isValidSign(final ISign sign) {
+        return sign.getLine(0).matches("§1\\[.*\\]");
     }
 
     protected boolean onBlockPlace(final Block block, final User player, final String username, final IEssentials ess) throws SignException, ChargeException {
