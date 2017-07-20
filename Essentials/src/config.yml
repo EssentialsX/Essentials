@@ -119,6 +119,10 @@ drop-items-if-full: false
 # Should we notify players if they have no new mail?
 notify-no-new-mail: true
 
+# Specifies the duration (in seconds) between each time a player is notified of mail they have.
+# Useful for servers with a lot of mail traffic.
+notify-player-of-mail-cooldown: 60
+
 # The motd and rules are now configured in the files motd.txt and rules.txt.
 
 # When a command conflicts with another plugin, by default, Essentials will try to force the OTHER plugin to take priority.
@@ -182,6 +186,8 @@ mute-commands:
 # If you are using an unsupported permissions system, simply delete this section.
 # Whitelist the commands and permissions you wish to give players by default (everything else is op only).
 # These are the permissions without the "essentials." part.
+#
+# To enable this feature, please set use-bukkit-permissions to false.
 player-commands:
   - afk
   - afk.auto
@@ -609,8 +615,9 @@ economy-log-enabled: false
 
 # Use this option to force superperms-based permissions handler regardless of detected installed perms plugin.
 # This is useful if you want superperms-based permissions (with wildcards) for custom permissions plugins.
-# Default is false. 
-use-bukkit-permissions: false
+# If you wish to use EssentialsX' built-in permissions using the `player-commands` section above, set this to false.
+# Default is true. 
+use-bukkit-permissions: true
 
 # Minimum acceptable amount to be used in /pay.
 minimum-pay-amount: 0.001

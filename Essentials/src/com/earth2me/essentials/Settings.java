@@ -1409,4 +1409,9 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean isAddingSuffixInPlayerlist() {
         return config.getBoolean("add-suffix-in-playerlist", false);
     }
+
+    @Override
+    public int getNotifyPlayerOfMailCooldown() {
+        return config.getInt("notify-player-of-mail-cooldown", 0);
+    }
 }

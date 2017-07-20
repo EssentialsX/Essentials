@@ -275,7 +275,7 @@ public class EssentialsPlayerListener implements Listener {
                             user.sendMessage(tl("noNewMail")); // Only notify if they want us to.
                         }
                     } else {
-                        user.sendMessage(tl("youHaveNewMail", mail.size()));
+                        user.notifyOfMail();
                     }
                 }
 

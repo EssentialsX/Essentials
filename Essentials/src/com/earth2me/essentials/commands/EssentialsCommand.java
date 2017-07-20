@@ -205,7 +205,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     // Doesn't need to do any starts-with checks
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         // No tab completion results
-        return Collections.emptyList();
+        return getPlayers(server, sender);
     }
 
     public static String getFinalArg(final String[] args, final int start) {
