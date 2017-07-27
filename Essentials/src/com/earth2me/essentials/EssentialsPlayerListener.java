@@ -203,7 +203,6 @@ public class EssentialsPlayerListener implements Listener {
         dUser.stopTransaction();
 
         class DelayJoinTask implements Runnable {
-            private IText input;
             @Override
             public void run() {
                 final User user = ess.getUser(player);
@@ -247,24 +246,8 @@ public class EssentialsPlayerListener implements Listener {
                     ess.getServer().broadcastMessage(message);
                 }
 
-                IText tempInput = null;
-
-                if (!ess.getSettings().isCommandDisabled("motd")) {
-                    try {
-                        tempInput = new TextInput(user.getSource(), "motd", true, ess);
-                    } catch (IOException ex) {
-                        if (ess.getSettings().isDebug()) {
-                            LOGGER.log(Level.WARNING, ex.getMessage(), ex);
-                        } else {
-                            LOGGER.log(Level.WARNING, ex.getMessage());
-                        }
-                    }
-                }
-
-                input = tempInput;
-
                 int motdDelay = ess.getSettings().getMotdDelay() / 50;
-                DelayMotdTask motdTask = new DelayMotdTask();
+                DelayMotdTask motdTask = new DelayMotdTask(user);
                 if (motdDelay > 0) {
                     ess.scheduleSyncDelayedTask(motdTask, motdDelay);
                 } else {
@@ -307,9 +290,29 @@ public class EssentialsPlayerListener implements Listener {
             }
 
             class DelayMotdTask implements Runnable {
+                private User user;
+
+                public DelayMotdTask(User user) {
+                    this.user = user;
+                }
+
                 @Override
                 public void run() {
-                    final User user = ess.getUser(player);
+                    IText tempInput = null;
+
+                    if (!ess.getSettings().isCommandDisabled("motd")) {
+                        try {
+                            tempInput = new TextInput(user.getSource(), "motd", true, ess);
+                        } catch (IOException ex) {
+                            if (ess.getSettings().isDebug()) {
+                                LOGGER.log(Level.WARNING, ex.getMessage(), ex);
+                            } else {
+                                LOGGER.log(Level.WARNING, ex.getMessage());
+                            }
+                        }
+                    }
+
+                    final IText input = tempInput;
 
                     if (input != null && user.isAuthorized("essentials.motd")) {
                         final IText output = new KeywordReplacer(input, user.getSource(), ess);
