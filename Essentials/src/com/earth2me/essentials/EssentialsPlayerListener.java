@@ -202,22 +202,6 @@ public class EssentialsPlayerListener implements Listener {
         dUser.updateActivity(false);
         dUser.stopTransaction();
 
-        IText tempInput = null;
-
-        if (!ess.getSettings().isCommandDisabled("motd")) {
-            try {
-                tempInput = new TextInput(dUser.getSource(), "motd", true, ess);
-            } catch (IOException ex) {
-                if (ess.getSettings().isDebug()) {
-                    LOGGER.log(Level.WARNING, ex.getMessage(), ex);
-                } else {
-                    LOGGER.log(Level.WARNING, ex.getMessage());
-                }
-            }
-        }
-
-        final IText input = tempInput;
-
         class DelayJoinTask implements Runnable {
             @Override
             public void run() {
@@ -262,10 +246,12 @@ public class EssentialsPlayerListener implements Listener {
                     ess.getServer().broadcastMessage(message);
                 }
 
-                if (input != null && user.isAuthorized("essentials.motd")) {
-                    final IText output = new KeywordReplacer(input, user.getSource(), ess);
-                    final TextPager pager = new TextPager(output, true);
-                    pager.showPage("1", null, "motd", user.getSource());
+                int motdDelay = ess.getSettings().getMotdDelay() / 50;
+                DelayMotdTask motdTask = new DelayMotdTask(user);
+                if (motdDelay > 0) {
+                    ess.scheduleSyncDelayedTask(motdTask, motdDelay);
+                } else {
+                    motdTask.run();
                 }
 
                 if (!ess.getSettings().isCommandDisabled("mail") && user.isAuthorized("essentials.mail")) {
@@ -301,6 +287,39 @@ public class EssentialsPlayerListener implements Listener {
                 }
 
                 user.stopTransaction();
+            }
+
+            class DelayMotdTask implements Runnable {
+                private User user;
+
+                public DelayMotdTask(User user) {
+                    this.user = user;
+                }
+
+                @Override
+                public void run() {
+                    IText tempInput = null;
+
+                    if (!ess.getSettings().isCommandDisabled("motd")) {
+                        try {
+                            tempInput = new TextInput(user.getSource(), "motd", true, ess);
+                        } catch (IOException ex) {
+                            if (ess.getSettings().isDebug()) {
+                                LOGGER.log(Level.WARNING, ex.getMessage(), ex);
+                            } else {
+                                LOGGER.log(Level.WARNING, ex.getMessage());
+                            }
+                        }
+                    }
+
+                    final IText input = tempInput;
+
+                    if (input != null && user.isAuthorized("essentials.motd")) {
+                        final IText output = new KeywordReplacer(input, user.getSource(), ess);
+                        final TextPager pager = new TextPager(output, true);
+                        pager.showPage("1", null, "motd", user.getSource());
+                    }
+                }
             }
         }
 
