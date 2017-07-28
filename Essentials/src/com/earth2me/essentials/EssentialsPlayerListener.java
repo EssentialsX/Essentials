@@ -7,6 +7,8 @@ import com.earth2me.essentials.textreader.TextPager;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import net.ess3.api.IEssentials;
+import net.ess3.nms.refl.ReflUtil;
+
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -47,6 +49,15 @@ public class EssentialsPlayerListener implements Listener {
 
     public EssentialsPlayerListener(final IEssentials parent) {
         this.ess = parent;
+    }
+
+    public void registerEvents() {
+        ess.getServer().getPluginManager().registerEvents(this, ess);
+        if (ReflUtil.getNmsVersionObject().isLowerThan(ReflUtil.V1_12_R1)) {
+            ess.getServer().getPluginManager().registerEvents(new PlayerListenerPre1_12(), ess);
+        } else {
+            ess.getServer().getPluginManager().registerEvents(new PlayerListener1_12(), ess);
+        }
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -617,15 +628,6 @@ public class EssentialsPlayerListener implements Listener {
         return used;
     }
 
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    public void onPlayerPickupItem(final PlayerPickupItemEvent event) {
-        if (ess.getSettings().getDisableItemPickupWhileAfk()) {
-            if (ess.getUser(event.getPlayer()).isAfk()) {
-                event.setCancelled(true);
-            }
-        }
-    }
-
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onInventoryClickEvent(final InventoryClickEvent event) {
         Player refreshPlayer = null;
@@ -718,5 +720,29 @@ public class EssentialsPlayerListener implements Listener {
     public void onPlayerFishEvent(final PlayerFishEvent event) {
         final User user = ess.getUser(event.getPlayer());
         user.updateActivity(true);
+    }
+    
+    private final class PlayerListenerPre1_12 implements Listener {
+
+        @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+        public void onPlayerPickupItem(final org.bukkit.event.player.PlayerPickupItemEvent event) {
+            if (ess.getSettings().getDisableItemPickupWhileAfk()) {
+                if (ess.getUser(event.getPlayer()).isAfk()) {
+                    event.setCancelled(true);
+                }
+            }
+        }
+    }
+    
+    private final class PlayerListener1_12 implements Listener {
+
+        @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+        public void onPlayerPickupItem(final org.bukkit.event.entity.EntityPickupItemEvent event) {
+            if (ess.getSettings().getDisableItemPickupWhileAfk() && event.getEntity() instanceof Player) {
+                if (ess.getUser((Player) event.getEntity()).isAfk()) {
+                    event.setCancelled(true);
+                }
+            }
+        }
     }
 }

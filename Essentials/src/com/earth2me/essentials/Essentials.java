@@ -276,7 +276,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         confList.add(pluginListener);
 
         final EssentialsPlayerListener playerListener = new EssentialsPlayerListener(this);
-        pm.registerEvents(playerListener, this);
+        playerListener.registerEvents();
 
         final EssentialsBlockListener blockListener = new EssentialsBlockListener(this);
         pm.registerEvents(blockListener, this);
