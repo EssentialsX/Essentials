@@ -54,6 +54,8 @@ public interface ISettings extends IConf {
 
     Set<String> getSocialSpyCommands();
 
+    boolean getSocialSpyListenMutedPlayers();
+
     Set<String> getMuteCommands();
 
     Map<String, Object> getKit(String name);
