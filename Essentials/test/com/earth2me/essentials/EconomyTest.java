@@ -2,9 +2,13 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
+import com.earth2me.essentials.commands.IEssentialsCommand;
+import com.earth2me.essentials.commands.NoChargeException;
+
 import junit.framework.TestCase;
 import net.ess3.api.Economy;
 import org.bukkit.World.Environment;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.InvalidDescriptionException;
 import org.junit.Test;
 
@@ -15,10 +19,12 @@ public class EconomyTest extends TestCase {
     private final transient Essentials ess;
     private static final String NPCNAME = "npc1";
     private static final String PLAYERNAME = "testPlayer1";
+    private static final String PLAYERNAME2 = "testPlayer2";
+    private final FakeServer server;
 
     public EconomyTest(final String testName) {
         super(testName);
-        final FakeServer server = new FakeServer();
+        this.server = new FakeServer();
         server.createWorld("testWorld", Environment.NORMAL);
         ess = new Essentials(server);
         try {
@@ -29,6 +35,7 @@ public class EconomyTest extends TestCase {
             fail("IOException");
         }
         server.addPlayer(new OfflinePlayer(PLAYERNAME, ess.getServer()));
+        server.addPlayer(new OfflinePlayer(PLAYERNAME2, ess.getServer()));
     }
 
     // only one big test, since we use static instances
@@ -94,6 +101,50 @@ public class EconomyTest extends TestCase {
         } catch (NoLoanPermittedException ex) {
             fail(ex.getMessage());
         } catch (UserDoesNotExistException ex) {
+        }
+    }
+
+    private void runCommand(String command, User user, String args) throws Exception {
+        runCommand(command, user, args.split("\\s+"));
+    }
+
+    private void runCommand(String command, User user, String[] args) throws Exception {
+        IEssentialsCommand cmd;
+
+        try {
+            cmd = (IEssentialsCommand) Essentials.class.getClassLoader()
+                .loadClass("com.earth2me.essentials.commands.Command" + command).newInstance();
+            cmd.setEssentials(ess);
+            cmd.run(server, user, command, null, args);
+        } catch (NoChargeException ex) {
+        }
+
+    }
+
+    private void runConsoleCommand(String command, String args) throws Exception {
+        runConsoleCommand(command, args.split("\\s+"));
+    }
+
+    private void runConsoleCommand(String command, String[] args) throws Exception {
+        IEssentialsCommand cmd;
+
+        CommandSender sender = server.getConsoleSender();
+
+        try {
+            cmd = (IEssentialsCommand) Essentials.class.getClassLoader()
+                .loadClass("com.earth2me.essentials.commands.Command" + command).newInstance();
+            cmd.setEssentials(ess);
+            cmd.run(server, new CommandSource(sender), command, null, args);
+        } catch (NoChargeException ex) {
+        }
+    }
+
+    public void testNegativePayCommand() throws Exception {
+        User user1 = ess.getUser(PLAYERNAME);
+        try {
+            runCommand("pay", user1, PLAYERNAME2 + " -123");
+        } catch (Exception e) {
+            assertEquals(I18n.tl("payMustBePositive"), e.getMessage());
         }
     }
 }

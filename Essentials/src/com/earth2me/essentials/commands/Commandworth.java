@@ -3,10 +3,12 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.google.common.collect.Lists;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -97,5 +99,27 @@ public class Commandworth extends EssentialsCommand {
         sender.sendMessage(is.getDurability() != 0 ? tl("worthMeta", is.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""), is.getDurability(), NumberUtil.displayCurrency(result, ess), amount, NumberUtil.displayCurrency(worth, ess)) : tl("worth", is.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""), NumberUtil.displayCurrency(result, ess), amount, NumberUtil.displayCurrency(worth, ess)));
 
         return result;
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return getMatchingItems(args[0]);
+        } else if (args.length == 2) {
+            return Lists.newArrayList("1", "64");
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return getItems();
+        } else if (args.length == 2) {
+            return Lists.newArrayList("1", "64");
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

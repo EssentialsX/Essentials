@@ -6,6 +6,9 @@ import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 
+import java.util.Collections;
+import java.util.List;
+
 import static com.earth2me.essentials.I18n.tl;
 
 
@@ -42,5 +45,14 @@ public class Commandkill extends EssentialsLoopCommand {
         }
 
         sender.sendMessage(tl("kill", matchPlayer.getDisplayName()));
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return getPlayers(server, sender);
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

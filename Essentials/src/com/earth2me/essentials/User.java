@@ -28,7 +28,10 @@ import org.bukkit.potion.PotionEffectType;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -57,6 +60,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private boolean ignoreMsg = false;
     private String afkMessage;
     private long afkSince;
+    private Map<User, BigDecimal> confirmingPayments = new WeakHashMap<>();
+    private long lastNotifiedAboutMailsMs;
 
     public User(final Player base, final IEssentials ess) {
         super(base, ess);
@@ -147,10 +152,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     @Override
-    public void payUser(final User reciever, final BigDecimal value) throws ChargeException, MaxMoneyException {
-        if (value.signum() == 0) {
-            return;
+    public void payUser(final User reciever, final BigDecimal value) throws Exception {
+        if (value.compareTo(BigDecimal.ZERO) < 1) {
+            throw new Exception(tl("payMustBePositive"));
         }
+
         if (canAfford(value)) {
             setMoney(getMoney().subtract(value));
             reciever.setMoney(reciever.getMoney().add(value));
@@ -239,6 +245,24 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         } else {
             teleportLocation = here ? player.getLocation() : this.getLocation();
         }
+    }
+
+    @Override
+    public boolean hasOutstandingTeleportRequest() {
+        if (getTeleportRequest() != null) { // Player has outstanding teleport request.
+            long timeout = ess.getSettings().getTpaAcceptCancellation();
+            if (timeout != 0) {
+                if ((System.currentTimeMillis() - getTeleportRequestTime()) / 1000 <= timeout) { // Player has outstanding request
+                    return true;
+                } else { // outstanding request expired.
+                    requestTeleport(null, false);
+                    return false;
+                }
+            } else { // outstanding request does not expire
+                return true;
+            }
+        }
+        return false;
     }
 
     public UUID getTeleportRequest() {
@@ -817,6 +841,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return afkSince;
     }
 
+    @Override
+    public Map<User, BigDecimal> getConfirmingPayments() {
+        return confirmingPayments;
+    }
+
     /**
      * Returns the {@link ItemStack} in the main hand or off-hand. If the main hand is empty then the offhand item is returned - also nullable.
      */
@@ -826,6 +855,17 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         } else {
             PlayerInventory inventory = getBase().getInventory();
             return inventory.getItemInMainHand() != null ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
+        }
+    }
+    
+    public void notifyOfMail() {
+        List<String> mails = getMails();
+        if (mails != null && !mails.isEmpty()) {
+            int notifyPlayerOfMailCooldown = ess.getSettings().getNotifyPlayerOfMailCooldown() * 1000;
+            if (System.currentTimeMillis() - lastNotifiedAboutMailsMs >= notifyPlayerOfMailCooldown) {
+                sendMessage(tl("youHaveNewMail", mails.size()));
+                lastNotifiedAboutMailsMs = System.currentTimeMillis();
+            }
         }
     }
 }

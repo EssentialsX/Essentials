@@ -1,5 +1,7 @@
 package com.earth2me.essentials.commands;
 
+import com.google.common.collect.Lists;
+
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.User;
@@ -9,6 +11,7 @@ import org.bukkit.World;
 import org.bukkit.entity.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -242,6 +245,24 @@ public class Commandremove extends EssentialsCommand {
         sender.sendMessage(tl("removed", removed));
     }
 
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            List<String> options = Lists.newArrayList();
+            for (ToRemove toRemove : ToRemove.values()) {
+                options.add(toRemove.name().toLowerCase(Locale.ENGLISH));
+            }
+            return options;
+        } else if (args.length == 2) {
+            List<String> worlds = Lists.newArrayList();
+            for (World world : server.getWorlds()) {
+                worlds.add(world.getName());
+            }
+            return worlds;
+        } else {
+            return Collections.emptyList();
+        }
+    }
 
     private enum ToRemove {
         DROPS,

@@ -6,7 +6,7 @@ version: ${project.version}-b${build.number}
 website: http://tiny.cc/EssentialsCommands
 description: Provides an essential, core set of commands for Bukkit.
 softdepend: [Vault]
-authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, md_5, Iaccidentally, drtshock, vemacs]
+authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, md_5, Iaccidentally, drtshock, vemacs, SupaHam, md678685]
 commands:
   afk:
     description: Marks you as away-from-keyboard.
@@ -283,6 +283,10 @@ commands:
     description: Toggles whether you are accepting payments.
     usage: /<command>
     aliases: [epaytoggle, payoff, epayoff, payon, epayon]
+  payconfirmtoggle:
+    description: Toggles whether you are prompted to confirm payments.
+    usage: /<command>
+    aliases: [epayconfirmtoggle, payconfirmoff, epayconfirmoff, payconfirmon, epayconfirmon, payconfirm, epayconfirm]
   ping:
     description: Pong!
     usage: /<command>
@@ -431,6 +435,10 @@ commands:
     description: Teleport all online players to another player.
     usage: /<command> <player>
     aliases: [etpall]
+  tpacancel:
+    description: Cancel all outstanding teleport requests. Specify [player] to cancel requests with them.
+    usage: /<command> [player]
+    aliases: [etpacancel]
   tpdeny:
     description: Reject a teleport request.
     usage: /<command>

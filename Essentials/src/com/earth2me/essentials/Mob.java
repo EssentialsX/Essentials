@@ -57,9 +57,25 @@ public enum Mob {
     ARMOR_STAND("ArmorStand", Enemies.NEUTRAL, "ARMOR_STAND"),
     ENDERMITE("Endermite", Enemies.ENEMY, "ENDERMITE"),
     GUARDIAN("Guardian", Enemies.ENEMY, "GUARDIAN"),
+    ELDER_GUARDIAN("ElderGuardian", Enemies.ENEMY, "ELDER_GUARDIAN"),
     RABBIT("Rabbit", Enemies.FRIENDLY, "RABBIT"),
     SHULKER("Shulker", Enemies.ENEMY, "SHULKER"),
-    POLAR_BEAR("PolarBear", Enemies.NEUTRAL, "POLAR_BEAR");
+    POLAR_BEAR("PolarBear", Enemies.NEUTRAL, "POLAR_BEAR"),
+    WITHER_SKELETON("WitherSkeleton", Enemies.ENEMY, "WITHER_SKELETON"),
+    STRAY_SKELETON("StraySkeleton", Enemies.ENEMY, "STRAY"),
+    ZOMBIE_VILLAGER("ZombieVillager", Enemies.FRIENDLY, "ZOMBIE_VILLAGER"),
+    SKELETON_HORSE("SkeletonHorse", Enemies.FRIENDLY, "SKELETON_HORSE"),
+    ZOMBIE_HORSE("ZombieHorse", Enemies.FRIENDLY, "ZOMBIE_HORSE"),
+    DONKEY("Donkey", Enemies.FRIENDLY, "DONKEY"),
+    MULE("Mule", Enemies.FRIENDLY, "MULE"),
+    EVOKER("Evoker", Enemies.ENEMY, "EVOKER"),
+    VEX("Vex", Enemies.ENEMY, "VEX"),
+    VINDICATOR("Vindicator", Enemies.ENEMY, "VINDICATOR"),
+    LLAMA("Llama", Enemies.NEUTRAL, "LLAMA"),
+    HUSK("Husk", Enemies.ENEMY, "HUSK"),
+    ILLUSIONER("Illusioner", Enemies.ENEMY, "ILLUSIONER"),
+    PARROT("Parrot", Enemies.NEUTRAL, "PARROT"),
+    ;
 
     public static final Logger logger = Logger.getLogger("Essentials");
 

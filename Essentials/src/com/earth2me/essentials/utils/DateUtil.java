@@ -149,7 +149,7 @@ public class DateUtil {
             }
         }
         if (sb.length() == 0) {
-            return "now";
+            return tl("now");
         }
         return sb.toString().trim();
     }

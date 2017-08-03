@@ -24,7 +24,6 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.*;
-import java.util.Locale.Category;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,8 +31,6 @@ import java.util.logging.Logger;
 import static com.earth2me.essentials.I18n.tl;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-
-import com.google.common.base.Preconditions;
 
 
 public class Settings implements net.ess3.api.ISettings {
@@ -282,6 +279,11 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public Set<String> getSocialSpyCommands() {
         return socialSpyCommands;
+    }
+
+    @Override
+    public boolean getSocialSpyListenMutedPlayers() {
+        return config.getBoolean("socialspy-listen-muted-players", true);
     }
 
     private Set<String> muteCommands = new HashSet<String>();
@@ -1408,6 +1410,16 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isAddingSuffixInPlayerlist() {
         return config.getBoolean("add-suffix-in-playerlist", false);
+    }
+
+    @Override
+    public int getNotifyPlayerOfMailCooldown() {
+        return config.getInt("notify-player-of-mail-cooldown", 0);
+    }
+
+    @Override
+    public int getMotdDelay() {
+        return config.getInt("delay-motd", 0);
     }
 
     @Override

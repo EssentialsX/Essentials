@@ -40,6 +40,9 @@
 /out
 .idea/
 *.iml
+*.classpath
+*.project
+*.settings/
 target/
 dependency-reduced-pom.xml
 /Essentials/config.yml

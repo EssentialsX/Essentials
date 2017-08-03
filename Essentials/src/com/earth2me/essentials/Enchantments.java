@@ -173,6 +173,30 @@ public class Enchantments {
                 ENCHANTMENTS.put("mending", mending);
             }
         } catch (IllegalArgumentException ignored) {}
+
+        // 1.11
+        try {
+            Enchantment bindingCurse = Enchantment.getByName("BINDING_CURSE");
+            if (bindingCurse != null) {
+                ENCHANTMENTS.put("bindingcurse", bindingCurse);
+                ALIASENCHANTMENTS.put("bindcurse", bindingCurse);
+                ALIASENCHANTMENTS.put("binding", bindingCurse);
+                ALIASENCHANTMENTS.put("bind", bindingCurse);
+            }
+            Enchantment vanishingCurse = Enchantment.getByName("VANISHING_CURSE");
+            if (vanishingCurse != null) {
+                ENCHANTMENTS.put("vanishingcurse", vanishingCurse);
+                ALIASENCHANTMENTS.put("vanishcurse", vanishingCurse);
+                ALIASENCHANTMENTS.put("vanishing", vanishingCurse);
+                ALIASENCHANTMENTS.put("vanish", vanishingCurse);
+            }
+            Enchantment sweeping = Enchantment.getByName("SWEEPING_EDGE");
+            if (sweeping != null) {
+                ENCHANTMENTS.put("sweepingedge", sweeping);
+                ALIASENCHANTMENTS.put("sweepedge", sweeping);
+                ALIASENCHANTMENTS.put("sweeping", sweeping);
+            }
+        } catch (IllegalArgumentException ignored) {}
     }
 
     public static Enchantment getByName(String name) {
@@ -193,5 +217,9 @@ public class Enchantments {
 
     public static Set<Entry<String, Enchantment>> entrySet() {
         return ENCHANTMENTS.entrySet();
+    }
+
+    public static Set<String> keySet() {
+        return ENCHANTMENTS.keySet();
     }
 }

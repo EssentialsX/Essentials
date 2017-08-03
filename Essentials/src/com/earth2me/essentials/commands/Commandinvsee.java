@@ -4,6 +4,8 @@ import com.earth2me.essentials.User;
 import org.bukkit.Server;
 import org.bukkit.inventory.Inventory;
 
+import java.util.Collections;
+import java.util.List;
 
 public class Commandinvsee extends EssentialsCommand {
     public Commandinvsee() {
@@ -29,5 +31,17 @@ public class Commandinvsee extends EssentialsCommand {
         user.getBase().closeInventory();
         user.getBase().openInventory(inv);
         user.setInvSee(true);
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return getPlayers(server, user);
+        } else {
+            //if (args.length == 2) {
+            //    return Lists.newArrayList("equipped");
+            //}
+            return Collections.emptyList();
+        }
     }
 }

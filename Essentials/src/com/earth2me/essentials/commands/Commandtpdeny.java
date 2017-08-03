@@ -13,6 +13,9 @@ public class Commandtpdeny extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
+        if (user.getTeleportRequest() == null) {
+            throw new Exception(tl("noPendingRequest"));
+        }
         final User player = ess.getUser(user.getTeleportRequest());
         if (player == null) {
             throw new Exception(tl("noPendingRequest"));

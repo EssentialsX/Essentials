@@ -43,6 +43,13 @@ public interface IUser {
 
     void requestTeleport(final User player, final boolean here);
 
+    /**
+     * Returns whether this user has an outstanding teleport request to deal with.
+     *
+     * @return whether there is a teleport request
+     */
+    boolean hasOutstandingTeleportRequest();
+
     ITeleport getTeleport();
 
     BigDecimal getMoney();
@@ -167,4 +174,10 @@ public interface IUser {
     boolean isAcceptingPay();
     
     void setAcceptingPay(boolean acceptingPay);
+    
+    boolean isPromptingPayConfirm();
+    
+    void setPromptingPayConfirm(boolean prompt);
+
+    Map<User, BigDecimal> getConfirmingPayments();
 }

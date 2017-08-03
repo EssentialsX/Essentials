@@ -6,6 +6,8 @@ import com.earth2me.essentials.textreader.*;
 import com.earth2me.essentials.utils.NumberUtil;
 import org.bukkit.Server;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -47,5 +49,14 @@ public class Commandhelp extends EssentialsCommand {
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         sender.sendMessage(tl("helpConsole"));
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return getCommands(server);
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

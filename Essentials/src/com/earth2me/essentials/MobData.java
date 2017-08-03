@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.utils.StringUtil;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -29,11 +30,6 @@ public enum MobData {
     TAME_TAMEABLE("tame", Tameable.class, Data.TAMED, false),
     RANDOM_SHEEP("random", EntityType.SHEEP, Data.COLORABLE, true),
     COLORABLE_SHEEP("", StringUtil.joinList(DyeColor.values()).toLowerCase(Locale.ENGLISH), EntityType.SHEEP, Data.COLORABLE, true),
-    DONKEY_HORSE("donkey", EntityType.HORSE, Horse.Variant.DONKEY, true),
-    MULE_HORSE("mule", EntityType.HORSE, Horse.Variant.MULE, true),
-    SKELETON_HORSE("skeleton", EntityType.HORSE, Horse.Variant.SKELETON_HORSE, true),
-    UNDEAD_HORSE("undead", EntityType.HORSE, Horse.Variant.UNDEAD_HORSE, true),
-    ZOMBIE_HORSE("zombie", EntityType.HORSE, Horse.Variant.UNDEAD_HORSE, false),
     POLKA_HORSE("polka", EntityType.HORSE, Horse.Style.BLACK_DOTS, true),
     SOOTY_HORSE("sooty", EntityType.HORSE, Horse.Style.BLACK_DOTS, false),
     BLAZE_HORSE("blaze", EntityType.HORSE, Horse.Style.WHITE, true),
@@ -56,7 +52,6 @@ public enum MobData {
     DBROWN_HORSE("dbrown", EntityType.HORSE, Horse.Color.DARK_BROWN, false),
     BAY_HORSE("bay", EntityType.HORSE, Horse.Color.BROWN, true),
     BROWN_HORSE("brown", EntityType.HORSE, Horse.Color.BROWN, false),
-    CHEST_HORSE("chest", EntityType.HORSE, Data.CHEST, true),
     SADDLE_HORSE("saddle", EntityType.HORSE, Data.HORSESADDLE, true),
     GOLD_ARMOR_HORSE("goldarmor", EntityType.HORSE, Material.GOLD_BARDING, true),
     DIAMOND_ARMOR_HORSE("diamondarmor", EntityType.HORSE, Material.DIAMOND_BARDING, true),
@@ -68,7 +63,6 @@ public enum MobData {
     TABBY_CAT("tabby", EntityType.OCELOT, Ocelot.Type.RED_CAT, false),
     BLACK_CAT("black", EntityType.OCELOT, Ocelot.Type.BLACK_CAT, true),
     TUXEDO_CAT("tuxedo", EntityType.OCELOT, Ocelot.Type.BLACK_CAT, false),
-    VILLAGER_ZOMBIE("villager", EntityType.ZOMBIE.getEntityClass(), Data.VILLAGER, true),
     BABY_ZOMBIE("baby", EntityType.ZOMBIE.getEntityClass(), Data.BABYZOMBIE, true),
     ADULT_ZOMBIE("adult", EntityType.ZOMBIE.getEntityClass(), Data.ADULTZOMBIE, true),
     DIAMOND_SWORD_ZOMBIE("diamondsword", EntityType.ZOMBIE.getEntityClass(), Material.DIAMOND_SWORD, true),
@@ -82,7 +76,6 @@ public enum MobData {
     STONE_SWORD_SKELETON("stonesword", EntityType.SKELETON, Material.STONE_SWORD, false),
     SWORD_SKELETON("sword", EntityType.SKELETON, Material.STONE_SWORD, true),
     BOW_SKELETON("bow", EntityType.SKELETON, Material.BOW, true),
-    WHITHER_SKELETON("wither", EntityType.SKELETON, Data.WITHER, true),
     POWERED_CREEPER("powered", EntityType.CREEPER, Data.ELECTRIFIED, true),
     ELECTRIC_CREEPER("electric", EntityType.CREEPER, Data.ELECTRIFIED, false),
     CHARGED_CREEPER("charged", EntityType.CREEPER, Data.ELECTRIFIED, false),
@@ -96,7 +89,13 @@ public enum MobData {
     SMITH_VILLAGER("smith", EntityType.VILLAGER, Villager.Profession.BLACKSMITH, true),
     BUTCHER_VILLAGER("butcher", EntityType.VILLAGER, Villager.Profession.BUTCHER, true),
     SIZE_SLIME("", "<1-100>", EntityType.SLIME.getEntityClass(), Data.SIZE, true),
-    NUM_EXPERIENCE_ORB("", "<1-2000000000>", EntityType.EXPERIENCE_ORB, Data.EXP, true);
+    NUM_EXPERIENCE_ORB("", "<1-2000000000>", EntityType.EXPERIENCE_ORB, Data.EXP, true),
+    RED_PARROT("red", EntityType.PARROT, Parrot.Variant.RED, true),
+    GREEN_PARROT("green", EntityType.PARROT, Parrot.Variant.GREEN, true),
+    BLUE_PARROT("blue", EntityType.PARROT, Parrot.Variant.BLUE, true),
+    CYAN_PARROT("cyan", EntityType.PARROT, Parrot.Variant.CYAN, true),
+    GRAY_PARROT("gray", EntityType.PARROT, Parrot.Variant.GRAY, true),
+    ;
 
 
     public enum Data {
@@ -105,11 +104,9 @@ public enum MobData {
         CHEST,
         ADULTZOMBIE,
         BABYZOMBIE,
-        VILLAGER,
         HORSESADDLE,
         PIGSADDLE,
         ELECTRIFIED,
-        WITHER,
         ANGRY,
         TAMED,
         COLORABLE,
@@ -196,9 +193,6 @@ public enum MobData {
             ((Zombie) spawned).setBaby(false);
         } else if (this.value.equals(Data.BABYZOMBIE)) {
             ((Zombie) spawned).setBaby(true);
-        } else if (this.value.equals(Data.CHEST)) {
-            ((Horse) spawned).setTamed(true);
-            ((Horse) spawned).setCarryingChest(true);
         } else if (this.value.equals(Data.ELECTRIFIED)) {
             ((Creeper) spawned).setPowered(true);
         } else if (this.value.equals(Data.HORSESADDLE)) {
@@ -212,10 +206,6 @@ public enum MobData {
             final Tameable tameable = ((Tameable) spawned);
             tameable.setTamed(true);
             tameable.setOwner(target);
-        } else if (this.value.equals(Data.VILLAGER)) {
-            ((Zombie) spawned).setVillager(this.value.equals(Data.VILLAGER));
-        } else if (this.value.equals(Data.WITHER)) {
-            ((Skeleton) spawned).setSkeletonType(Skeleton.SkeletonType.WITHER);
         } else if (this.value.equals(Data.COLORABLE)) {
             final String color = rawData.toUpperCase(Locale.ENGLISH);
             try {
@@ -247,8 +237,6 @@ public enum MobData {
             ((Horse) spawned).setColor((Horse.Color) this.value);
         } else if (this.value instanceof Horse.Style) {
             ((Horse) spawned).setStyle((Horse.Style) this.value);
-        } else if (this.value instanceof Horse.Variant) {
-            ((Horse) spawned).setVariant((Horse.Variant) this.value);
         } else if (this.value instanceof Ocelot.Type) {
             ((Ocelot) spawned).setCatType((Ocelot.Type) this.value);
         } else if (this.value instanceof Villager.Profession) {
@@ -259,9 +247,11 @@ public enum MobData {
                 ((Horse) spawned).getInventory().setArmor(new ItemStack((Material) this.value, 1));
             } else if (this.type.equals(EntityType.ZOMBIE.getEntityClass()) || this.type.equals(EntityType.SKELETON)) {
                 final EntityEquipment invent = ((LivingEntity) spawned).getEquipment();
-                invent.setItemInHand(new ItemStack((Material) this.value, 1));
-                invent.setItemInHandDropChance(0.1f);
+                InventoryWorkaround.setItemInMainHand(invent, new ItemStack((Material) this.value, 1));
+                InventoryWorkaround.setItemInMainHandDropChance(invent, 0.1f);
             }
+        } else if (this.value instanceof Parrot.Variant) {
+            ((Parrot) spawned).setVariant((Parrot.Variant) this.value);
         }
     }
 }

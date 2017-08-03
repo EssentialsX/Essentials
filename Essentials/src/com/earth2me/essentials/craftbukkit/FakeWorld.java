@@ -7,6 +7,7 @@ import org.bukkit.entity.*;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.MaterialData;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
@@ -338,6 +339,16 @@ public class FakeWorld implements World {
     }
 
     @Override
+    public <T extends Entity> T spawn(Location location, Class<T> aClass, org.bukkit.util.Consumer<T> consumer) throws IllegalArgumentException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public FallingBlock spawnFallingBlock(Location location, MaterialData materialData) throws IllegalArgumentException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public ChunkSnapshot getEmptyChunkSnapshot(int i, int i1, boolean bln, boolean bln1) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -585,6 +596,16 @@ public class FakeWorld implements World {
     @Override
     public void playSound(Location location, String s, float v, float v1) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void playSound(Location location, Sound sound, SoundCategory soundCategory, float v, float v1) {
+
+    }
+
+    @Override
+    public void playSound(Location location, String s, SoundCategory soundCategory, float v, float v1) {
+
     }
 
     @Override
