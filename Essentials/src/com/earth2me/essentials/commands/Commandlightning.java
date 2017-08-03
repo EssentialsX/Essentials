@@ -2,9 +2,12 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.google.common.collect.Lists;
 import org.bukkit.Server;
 import org.bukkit.entity.LightningStrike;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.HashSet;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -47,6 +50,26 @@ public class Commandlightning extends EssentialsLoopCommand {
         }
         if (ess.getSettings().warnOnSmite()) {
             matchUser.sendMessage(tl("lightningSmited"));
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
+        if (!user.isAuthorized("essentials.lightning.others")) {
+            // Can't use any params, including power
+            return Collections.emptyList();
+        } else {
+            return super.getTabCompleteOptions(server, user, commandLabel, args);
+        }
+    }
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
+        if (args.length == 1) {
+            return getPlayers(server, sender);
+        } else if (args.length == 2) {
+            return Lists.newArrayList(Integer.toString(this.power));
+        } else {
+            return Collections.emptyList();
         }
     }
 }

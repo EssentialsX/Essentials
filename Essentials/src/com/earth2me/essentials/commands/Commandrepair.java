@@ -4,12 +4,14 @@ import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.StringUtil;
+import com.google.common.collect.Lists;
 import net.ess3.api.IUser;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -114,6 +116,19 @@ public class Commandrepair extends EssentialsCommand {
                 user.sendMessage(ex.getMessage());
             }
             repaired.add(itemName.replace('_', ' '));
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            List<String> options = Lists.newArrayList("hand");
+            if (user.isAuthorized("essentials.repair.all")) {
+                options.add("all");
+            }
+            return options;
+        } else {
+            return Collections.emptyList();
         }
     }
 }

@@ -7,6 +7,7 @@ import com.earth2me.essentials.utils.StringUtil;
 import org.bukkit.Server;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
@@ -97,6 +98,36 @@ public class Commandkit extends EssentialsCommand {
             } catch (Exception ex) {
                 ess.showError(userFrom.getSource(), ex, "\\ kit: " + kit.getName());
             }
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
+        if (args.length == 1) {
+            List<String> options = new ArrayList<>();
+            // TODO: Move all of this to its own method
+            for (String kitName : ess.getSettings().getKits().getKeys(false)) {
+                if (!user.isAuthorized("essentials.kits." + kitName)) { // Only check perm, not time or money
+                    continue;
+                }
+                options.add(kitName);
+            }
+            return options;
+        } else if (args.length == 2 && user.isAuthorized("essentials.kit.others")) {
+            return getPlayers(server, user);
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
+        if (args.length == 1) {
+            return new ArrayList<>(ess.getSettings().getKits().getKeys(false)); // TODO: Move this to its own method
+        } else if (args.length == 2) {
+            return getPlayers(server, sender);
+        } else {
+            return Collections.emptyList();
         }
     }
 }

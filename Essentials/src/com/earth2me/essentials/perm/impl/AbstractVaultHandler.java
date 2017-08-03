@@ -48,7 +48,7 @@ public abstract class AbstractVaultHandler extends SuperpermsHandler {
         String playerPrefix = chat.getPlayerPrefix(base);
         if (playerPrefix == null) {
             String playerGroup = perms.getPrimaryGroup(base);
-            return chat.getGroupPrefix((String) null, playerGroup);
+            return chat.getGroupPrefix(base.getWorld().getName(), playerGroup);
         } else {
             return playerPrefix;
         }
@@ -59,7 +59,7 @@ public abstract class AbstractVaultHandler extends SuperpermsHandler {
         String playerSuffix = chat.getPlayerSuffix(base);
         if (playerSuffix == null) {
             String playerGroup = perms.getPrimaryGroup(base);
-            return chat.getGroupSuffix((String) null, playerGroup);
+            return chat.getGroupSuffix(base.getWorld().getName(), playerGroup);
         } else {
             return playerSuffix;
         }

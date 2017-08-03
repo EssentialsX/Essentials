@@ -7,6 +7,7 @@ import net.ess3.api.MaxMoneyException;
 import net.ess3.api.events.SignBreakEvent;
 import net.ess3.api.events.SignCreateEvent;
 import net.ess3.api.events.SignInteractEvent;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -54,7 +55,7 @@ public class EssentialsSign {
         try {
             final boolean ret = onSignCreate(sign, user, getUsername(user), ess);
             if (ret) {
-                sign.setLine(0, getSuccessName());
+                sign.setLine(0, getSuccessName(ess));
             }
             return ret;
         } catch (ChargeException ex) {
@@ -66,8 +67,22 @@ public class EssentialsSign {
         return true;
     }
 
+    public String getSuccessName(IEssentials ess) {
+        String successName = getSuccessName();
+        if (successName == null) {
+            ess.getLogger().severe("signFormatSuccess message must use the {0} argument.");
+        }
+        return successName;
+    }
+
     public String getSuccessName() {
-        return tl("signFormatSuccess", this.signName);
+        String successName = tl("signFormatSuccess", this.signName);
+        if (successName.isEmpty() || !successName.contains(this.signName)) {
+            // Set to null to cause an error in place of no functionality. This makes an error obvious as opposed to leaving users baffled by lack of
+            // functionality.
+            successName = null;
+        }
+        return successName;
     }
 
     public String getTemplateName() {
@@ -218,8 +233,24 @@ public class EssentialsSign {
         return false;
     }
 
+    /** @deprecated, use {@link #isValidSign(IEssentials, ISign)} if possible */
+    @Deprecated
     public static boolean isValidSign(final ISign sign) {
         return sign.getLine(0).matches("§1\\[.*\\]");
+    }
+
+    public static boolean isValidSign(final IEssentials ess, final ISign sign) {
+        if (!sign.getLine(0).matches("§1\\[.*\\]"))
+            return false;
+
+        // Validate that the sign is actually an essentials sign
+        String signName = ChatColor.stripColor(sign.getLine(0)).replaceAll("[^a-zA-Z]", "");
+        for (EssentialsSign essSign : ess.getSettings().enabledSigns()) {
+            if (essSign.getName().equalsIgnoreCase(signName))
+                return true;
+        }
+
+        return false;
     }
 
     protected boolean onBlockPlace(final Block block, final User player, final String username, final IEssentials ess) throws SignException, ChargeException {

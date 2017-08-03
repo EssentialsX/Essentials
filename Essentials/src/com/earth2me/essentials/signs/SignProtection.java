@@ -105,7 +105,7 @@ public class SignProtection extends EssentialsSign {
     private SignProtectionState checkProtectionSign(final Block block, final User user, final String username) {
         if (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN) {
             final BlockSign sign = new BlockSign(block);
-            if (sign.getLine(0).equals(this.getSuccessName())) {
+            if (sign.getLine(0).equals(this.getSuccessName())) { // TODO call getSuccessName(IEssentials)
                 return checkProtectionSign(sign, user, username);
             }
         }

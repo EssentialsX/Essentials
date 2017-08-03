@@ -3,9 +3,13 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.LocationUtil;
+import com.google.common.collect.Lists;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+
+import java.util.Collections;
+import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -44,5 +48,15 @@ public class Commandjump extends EssentialsCommand {
         charge.isAffordableFor(user);
         user.getTeleport().teleport(loc, charge, TeleportCause.COMMAND);
         throw new NoChargeException();
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        if (args.length == 1 && user.isAuthorized("essentials.jump.lock")) {
+            // XXX these actually do the same thing
+            return Lists.newArrayList("lock", "unlock");
+        } else {
+            return Collections.emptyList();
+        }
     }
 }
