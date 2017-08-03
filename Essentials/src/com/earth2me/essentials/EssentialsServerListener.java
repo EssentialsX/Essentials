@@ -18,7 +18,7 @@ import java.util.logging.Level;
 public class EssentialsServerListener implements Listener {
     private final transient IEssentials ess;
     private boolean errorLogged = false;
-    private Boolean isPaperSample;
+    private boolean isPaperSample;
     private Method setSampleText;
     private Method getSampleText;
 
@@ -38,7 +38,6 @@ public class EssentialsServerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onServerListPing(final ServerListPingEvent event) {
         if (isPaperSample) {
-            // ess.getLogger().info("Paper sample");
             try {
                 List<String> playerNames = (List<String>) getSampleText.invoke(event, null);
                 Iterator<String> iterator = playerNames.iterator();
@@ -56,7 +55,6 @@ public class EssentialsServerListener implements Listener {
                 }
             }
         } else {
-            // ess.getLogger().info("Spigot iterator");
             try {
                 Iterator<Player> iterator = event.iterator();
                 while (iterator.hasNext()) {
