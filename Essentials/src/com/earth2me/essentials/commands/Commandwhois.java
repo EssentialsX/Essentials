@@ -29,6 +29,7 @@ public class Commandwhois extends EssentialsCommand {
         sender.sendMessage(tl("whoisTop", user.getName()));
         user.setDisplayNick();
         sender.sendMessage(tl("whoisNick", user.getDisplayName()));
+        sender.sendMessage(tl("whoisUuid", user.getBase().getUniqueId().toString()));
         sender.sendMessage(tl("whoisHealth", user.getBase().getHealth()));
         sender.sendMessage(tl("whoisHunger", user.getBase().getFoodLevel(), user.getBase().getSaturation()));
         sender.sendMessage(tl("whoisExp", SetExpFix.getTotalExperience(user.getBase()), user.getBase().getLevel()));

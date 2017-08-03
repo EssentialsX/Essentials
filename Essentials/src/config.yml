@@ -171,6 +171,10 @@ socialspy-commands:
   - ewhisper
   - pm
 
+# Whether the private and public messages from muted players should appear in the social spy.
+# If so, they will be differentiated from those sent by normal players.
+socialspy-listen-muted-players: true
+
 # Mute Commands
 # These commands will be disabled when a player is muted.
 # Use '*' to disable every command.
@@ -186,6 +190,8 @@ mute-commands:
 # If you are using an unsupported permissions system, simply delete this section.
 # Whitelist the commands and permissions you wish to give players by default (everything else is op only).
 # These are the permissions without the "essentials." part.
+#
+# To enable this feature, please set use-bukkit-permissions to false.
 player-commands:
   - afk
   - afk.auto
@@ -540,6 +546,10 @@ pastebin-createkit: true
 # This is useful when a sign sells or buys one item at a time and the player wants to sell a bunch at once.
 allow-bulk-buy-sell: true
 
+# Delay for the MOTD display for players on join, in milliseconds.
+# This has no effect if the MOTD command or permission are disabled.
+delay-motd: 0
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #
@@ -613,8 +623,9 @@ economy-log-enabled: false
 
 # Use this option to force superperms-based permissions handler regardless of detected installed perms plugin.
 # This is useful if you want superperms-based permissions (with wildcards) for custom permissions plugins.
-# Default is false. 
-use-bukkit-permissions: false
+# If you wish to use EssentialsX' built-in permissions using the `player-commands` section above, set this to false.
+# Default is true. 
+use-bukkit-permissions: true
 
 # Minimum acceptable amount to be used in /pay.
 minimum-pay-amount: 0.001
