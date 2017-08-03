@@ -10,6 +10,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -89,5 +90,10 @@ public class Commandme extends EssentialsCommand {
         message = FormatUtil.replaceFormat(message);
 
         ess.getServer().broadcastMessage(tl("action", "@", message));
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        return null;  // It's a chat message, use the default chat handler
     }
 }

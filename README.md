@@ -19,7 +19,7 @@ EssentialsX is almost a completely drop-in replacement for Essentials. However, 
 
 * **If you have an unsupported permissions plugin but still wish to use wildcards, enable `use-bukkit-permissions` in the configuration. Otherwise, the plugin will fall back to config-based permissions.**
 
-* **EssentialsX requires Java 7.**
+* **EssentialsX requires Java 7 or higher.**
 
 Building
 --------

@@ -8,20 +8,30 @@ import org.bukkit.Server;
 import org.bukkit.inventory.*;
 
 import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import static com.earth2me.essentials.I18n.tl;
 
+import net.ess3.nms.refl.ReflUtil;
+
 
 public class Commandrecipe extends EssentialsCommand {
     public Commandrecipe() {
         super("recipe");
     }
+    
+    private void disableCommandForVersion1_12() throws Exception {
+        if (ReflUtil.getNmsVersionObject().equals(ReflUtil.V1_12_R1)) {
+            throw new Exception("/recipe is temporarily disabled. Please use the recipe book in your inventory.");
+        }
+    }
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
+        disableCommandForVersion1_12();
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }
@@ -163,5 +173,14 @@ public class Commandrecipe extends EssentialsCommand {
             return tl("recipeNothing");
         }
         return type.toString().replace("_", " ").toLowerCase(Locale.ENGLISH);
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
+        if (args.length == 1) {
+            return getItems();
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

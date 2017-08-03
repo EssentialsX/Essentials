@@ -11,6 +11,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 
 
@@ -38,7 +39,7 @@ public class SignPlayerListener implements Listener {
         if (event.isCancelled() && event.getAction() == Action.RIGHT_CLICK_AIR) {
             Block targetBlock = null;
             try {
-                targetBlock = event.getPlayer().getTargetBlock((HashSet<Byte>) null, 5);
+                targetBlock = event.getPlayer().getTargetBlock((Set<Material>) null, 5);
             } catch (IllegalStateException ex) {
                 if (ess.getSettings().isDebug()) {
                     ess.getLogger().log(Level.WARNING, ex.getMessage(), ex);
@@ -56,7 +57,7 @@ public class SignPlayerListener implements Listener {
         if (mat == Material.SIGN_POST || mat == Material.WALL_SIGN) {
             final String csign = ((Sign) block.getState()).getLine(0);
             for (EssentialsSign sign : ess.getSettings().enabledSigns()) {
-                if (csign.equalsIgnoreCase(sign.getSuccessName())) {
+                if (csign.equalsIgnoreCase(sign.getSuccessName(ess))) {
                     sign.onSignInteract(block, event.getPlayer(), ess);
                     event.setCancelled(true);
                     return;

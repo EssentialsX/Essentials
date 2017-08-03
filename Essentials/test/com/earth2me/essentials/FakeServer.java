@@ -1,10 +1,10 @@
 package com.earth2me.essentials;
 
-import com.avaje.ebean.config.ServerConfig;
 import com.earth2me.essentials.craftbukkit.FakeWorld;
 import org.bukkit.*;
 import org.bukkit.Warning.WarningState;
 import org.bukkit.World.Environment;
+import org.bukkit.advancement.Advancement;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
@@ -14,6 +14,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
@@ -65,11 +66,6 @@ public class FakeServer implements Server {
     @Override
     public String getVersion() {
         return "1.0";
-    }
-
-    @Override
-    public Player[] _INVALID_getOnlinePlayers() {
-        return players.toArray(new Player[0]);
     }
 
     @Override
@@ -365,11 +361,6 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public void configureDbConfig(ServerConfig sc) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public boolean addRecipe(Recipe recipe) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -508,11 +499,6 @@ public class FakeServer implements Server {
 
             @Override
             public boolean isBanned() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-            @Override
-            public void setBanned(boolean bln) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
@@ -963,6 +949,25 @@ public class FakeServer implements Server {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    public void reloadData() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Entity getEntity(UUID uuid) {
+        return getPlayer(uuid);
+    }
+
+    @Override
+    public Advancement getAdvancement(NamespacedKey key) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Iterator<Advancement> advancementIterator() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
     class FakePluginManager implements PluginManager {
         ArrayList<RegisteredListener> listeners = new ArrayList<RegisteredListener>();

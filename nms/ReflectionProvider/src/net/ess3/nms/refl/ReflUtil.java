@@ -22,6 +22,7 @@ public class ReflUtil {
     public static final NMSVersion V1_9_R1 = NMSVersion.fromString("v1_9_R1");
     public static final NMSVersion V1_10_R1 = NMSVersion.fromString("v1_10_R1");
     public static final NMSVersion V1_11_R1 = NMSVersion.fromString("v1_11_R1");
+    public static final NMSVersion V1_12_R1 = NMSVersion.fromString("v1_12_R1");
     private static NMSVersion nmsVersionObject;
     private static String nmsVersion;
 
@@ -233,7 +234,13 @@ public class ReflUtil {
         public static NMSVersion fromString(String string) {
             Preconditions.checkNotNull(string, "string cannot be null.");
             Matcher matcher = VERSION_PATTERN.matcher(string);
-            Preconditions.checkArgument(matcher.matches(), string + " is not in valid version format. e.g. v1_10_R1");
+            if (!matcher.matches()) {
+                if (!Bukkit.getName().equals("Essentials Fake Server")) {
+                    throw new IllegalArgumentException(string + " is not in valid version format. e.g. v1_10_R1");
+                }
+                matcher = VERSION_PATTERN.matcher(V1_12_R1.toString());
+                Preconditions.checkArgument(matcher.matches(), string + " is not in valid version format. e.g. v1_10_R1");
+            }
             return new NMSVersion(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)), Integer.parseInt(matcher.group(3)));
         }
 

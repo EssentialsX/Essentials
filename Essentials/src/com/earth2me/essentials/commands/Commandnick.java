@@ -8,6 +8,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -110,6 +112,24 @@ public class Commandnick extends EssentialsLoopCommand {
         if (!nickEvent.isCancelled()) {
             target.setNickname(nickname);
             target.setDisplayNick();
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
+        if (args.length == 1 && user.isAuthorized("essentials.nick.others")) {
+            return getPlayers(server, user);
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
+        if (args.length == 1) {
+            return getPlayers(server, sender);
+        } else {
+            return Collections.emptyList();
         }
     }
 }

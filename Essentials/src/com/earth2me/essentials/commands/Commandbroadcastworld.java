@@ -8,12 +8,15 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.FormatUtil;
+import com.google.common.collect.Lists;
 
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 
 public class Commandbroadcastworld extends EssentialsCommand {
@@ -55,6 +58,24 @@ public class Commandbroadcastworld extends EssentialsCommand {
                     user.sendMessage(messageText);
                 }
             }
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        return Collections.emptyList(); // The argument is only for non-players
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            List<String> worlds = Lists.newArrayList();
+            for (World world : server.getWorlds()) {
+                worlds.add(world.getName());
+            }
+            return worlds;
+        } else {
+            return Collections.emptyList();
         }
     }
 }
