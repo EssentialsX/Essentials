@@ -6,7 +6,7 @@ import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.event.block.BlockBreakEvent;
 
-import java.util.HashSet;
+import java.util.Set;
 
 import static com.earth2me.essentials.I18n.tl;
 
