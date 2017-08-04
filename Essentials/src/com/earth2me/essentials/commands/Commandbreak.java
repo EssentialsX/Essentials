@@ -19,7 +19,7 @@ public class Commandbreak extends EssentialsCommand {
     //TODO: Switch to use util class
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        final Block block = user.getBase().getTargetBlock((HashSet<Byte>) null, 20);
+        final Block block = user.getBase().getTargetBlock((Set<Material>) null, 20);
         if (block == null) {
             throw new NoChargeException();
         }
