@@ -9,6 +9,8 @@ import org.bukkit.Server;
 import org.bukkit.Statistic;
 
 import java.util.Locale;
+import java.util.Collections;
+import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -56,5 +58,14 @@ public class Commandwhois extends EssentialsCommand {
         sender.sendMessage(tl("whoisJail", (user.isJailed() ? user.getJailTimeout() > 0 ? DateUtil.formatDateDiff(user.getJailTimeout()) : tl("true") : tl("false"))));
         sender.sendMessage(tl("whoisMuted", (user.isMuted() ? user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : tl("true") : tl("false"))));
 
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return getPlayers(server, sender);
+        } else {
+            return Collections.emptyList();
+        }
     }
 }
