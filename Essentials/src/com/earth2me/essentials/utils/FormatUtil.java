@@ -17,7 +17,7 @@ public class FormatUtil {
     //Vanilla patterns used to strip existing formats
     private static final Pattern STRIP_ALL_PATTERN = Pattern.compile("\u00a7+([0-9a-fk-orA-FK-OR])");
     //Essentials '&' convention colour codes
-    private static final Pattern REPLACE_ALL_PATTERN = Pattern.compile("(?<!&)&([0-9a-fk-orA-FK-OR])");
+    private static final Pattern REPLACE_ALL_PATTERN = Pattern.compile("(&)?&([0-9a-fk-orA-FK-OR])");
     //Used to prepare xmpp output
     private static final Pattern LOGCOLOR_PATTERN = Pattern.compile("\\x1B\\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]");
     private static final Pattern URL_PATTERN = Pattern.compile("((?:(?:https?)://)?[\\w-_\\.]{2,})\\.([a-zA-Z]{2,3}(?:/\\S+)?)");
@@ -63,15 +63,18 @@ public class FormatUtil {
         StringBuffer builder = new StringBuffer();
         Matcher matcher = REPLACE_ALL_PATTERN.matcher(input);
         searchLoop: while (matcher.find()) {
-            char code = matcher.group(1).toLowerCase(Locale.ROOT).charAt(0);
-            for (ChatColor color : supported) {
-                if (color.getChar() == code) {
-                    matcher.appendReplacement(builder, "\u00a7$1");
-                    continue searchLoop;
+            boolean isEscaped = (matcher.group(1) != null);
+            if (!isEscaped) {
+                char code = matcher.group(2).toLowerCase(Locale.ROOT).charAt(0);
+                for (ChatColor color : supported) {
+                    if (color.getChar() == code) {
+                        matcher.appendReplacement(builder, "\u00a7$2");
+                        continue searchLoop;
+                    }
                 }
             }
-            // Don't replace
-            matcher.appendReplacement(builder, "$0");
+            // Don't change & to section sign (or replace two &'s with one)
+            matcher.appendReplacement(builder, "&$2");
         }
         matcher.appendTail(builder);
         return builder.toString();

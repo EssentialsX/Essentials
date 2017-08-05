@@ -61,6 +61,21 @@ public class FormatUtilTest {
         checkFormatPerms("§1Te§2st", "§1Te§2st", "dark_blue", "dark_green");
     }
 
+    @Test
+    public void testFormatEscaping() {
+        // Don't do anything to non-format codes
+        checkFormatPerms("True & false", "True & false");
+        checkFormatPerms("True && false", "True && false");
+
+        // Formats are only unescaped if you have the right perms
+        checkFormatPerms("This is &&a message", "This is &&a message");
+        checkFormatPerms("This is &&a message", "This is &a message", "color");
+
+        // Can't put an & before a non-escaped format
+        checkFormatPerms("This is &&&a message", "This is &&&a message");
+        checkFormatPerms("This is &&&a message", "This is &&a message", "color");
+    }
+
     private void checkFormatPerms(String input, String expectedOutput, String... perms) {
         IUser user = mock(IUser.class);
         for (String perm : perms) {
