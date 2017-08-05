@@ -44,6 +44,21 @@ public class FormatUtilTest {
         checkFormatPerms("§f§ltest", "§f§ltest", "color", "format");
     }
 
+    @Test
+    public void testFormatCodePerms() {
+        checkFormatPerms("&1Te&2st", "&1Te&2st");
+        checkFormatPerms("§1Te§2st", "Test");
+
+        checkFormatPerms("&1Te&2st", "§1Te&2st", "code.1");
+        checkFormatPerms("§1Te§2st", "§1Test", "code.1");
+
+        checkFormatPerms("&1Te&2st", "&1Te§2st", "code.2");
+        checkFormatPerms("§1Te§2st", "Te§2st", "code.2");
+
+        checkFormatPerms("&1Te&2st", "§1Te§2st", "code.1", "code.2");
+        checkFormatPerms("§1Te§2st", "§1Te§2st", "code.1", "code.2");
+    }
+
     private void checkFormatPerms(String input, String expectedOutput, String... perms) {
         IUser user = mock(IUser.class);
         for (String perm : perms) {

@@ -111,6 +111,11 @@ public class FormatUtil {
         if (user.isAuthorized(permBase + ".format")) {
             supported.addAll(FORMATS);
         }
+        for (ChatColor chatColor : ChatColor.values()) {
+            if (user.isAuthorized(permBase + "." + chatColor.getChar())) {
+                supported.add(chatColor);
+            }
+        }
         EnumSet<ChatColor> strip = EnumSet.complementOf(supported);
 
         if (!supported.isEmpty()) {
