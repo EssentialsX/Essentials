@@ -20,19 +20,18 @@ public class FormatUtilTest {
     @Test
     public void testFormatCategoryPerms() {
         checkFormatPerms("Test", "Test");
-        checkFormatPerms("Test", "Test", "color", "magic", "format");
+        checkFormatPerms("Test", "Test", "color", "format");
 
         checkFormatPerms("&1C&2o&3l&4o&5r&6m&7a&8t&9i&ac", "&1C&2o&3l&4o&5r&6m&7a&8t&9i&ac"); // Unchanged
         checkFormatPerms("§1C§2o§3l§4o§5r§6m§7a§8t§9i§ac", "Colormatic"); // Removed
         checkFormatPerms("&1C&2o&3l&4o&5r&6m&7a&8t&9i&ac", "§1C§2o§3l§4o§5r§6m§7a§8t§9i§ac", "color"); // Converted
         checkFormatPerms("§1C§2o§3l§4o§5r§6m§7a§8t§9i§ac", "§1C§2o§3l§4o§5r§6m§7a§8t§9i§ac", "color"); // Unchanged
 
+        // Magic isn't included in the format group
         checkFormatPerms("&kFUNKY LOL", "&kFUNKY LOL"); // Unchanged
         checkFormatPerms("§kFUNKY LOL", "FUNKY LOL"); // Removed
         checkFormatPerms("&kFUNKY LOL", "&kFUNKY LOL", "format"); // Unchanged
         checkFormatPerms("§kFUNKY LOL", "FUNKY LOL", "format"); // Removed
-        checkFormatPerms("&kFUNKY LOL", "§kFUNKY LOL", "magic"); // Converted
-        checkFormatPerms("§kFUNKY LOL", "§kFUNKY LOL", "magic"); // Unchanged
 
         checkFormatPerms("&f&ltest", "&f&ltest");
         checkFormatPerms("§f§ltest", "test");
@@ -46,17 +45,20 @@ public class FormatUtilTest {
 
     @Test
     public void testFormatCodePerms() {
+        checkFormatPerms("&kFUNKY LOL", "§kFUNKY LOL", "magic"); // Converted
+        checkFormatPerms("§kFUNKY LOL", "§kFUNKY LOL", "magic"); // Unchanged
+
         checkFormatPerms("&1Te&2st", "&1Te&2st");
         checkFormatPerms("§1Te§2st", "Test");
 
-        checkFormatPerms("&1Te&2st", "§1Te&2st", "code.1");
-        checkFormatPerms("§1Te§2st", "§1Test", "code.1");
+        checkFormatPerms("&1Te&2st", "§1Te&2st", "dark_blue");
+        checkFormatPerms("§1Te§2st", "§1Test", "dark_blue");
 
-        checkFormatPerms("&1Te&2st", "&1Te§2st", "code.2");
-        checkFormatPerms("§1Te§2st", "Te§2st", "code.2");
+        checkFormatPerms("&1Te&2st", "&1Te§2st", "dark_green");
+        checkFormatPerms("§1Te§2st", "Te§2st", "dark_green");
 
-        checkFormatPerms("&1Te&2st", "§1Te§2st", "code.1", "code.2");
-        checkFormatPerms("§1Te§2st", "§1Te§2st", "code.1", "code.2");
+        checkFormatPerms("&1Te&2st", "§1Te§2st", "dark_blue", "dark_green");
+        checkFormatPerms("§1Te§2st", "§1Te§2st", "dark_blue", "dark_green");
     }
 
     private void checkFormatPerms(String input, String expectedOutput, String... perms) {

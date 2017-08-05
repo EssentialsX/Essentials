@@ -13,7 +13,6 @@ import java.util.regex.Pattern;
 public class FormatUtil {
     private static final Set<ChatColor> COLORS = EnumSet.of(ChatColor.BLACK, ChatColor.DARK_BLUE, ChatColor.DARK_GREEN, ChatColor.DARK_AQUA, ChatColor.DARK_RED, ChatColor.DARK_PURPLE, ChatColor.GOLD, ChatColor.GRAY, ChatColor.DARK_GRAY, ChatColor.BLUE, ChatColor.GREEN, ChatColor.AQUA, ChatColor.RED, ChatColor.LIGHT_PURPLE, ChatColor.YELLOW, ChatColor.WHITE);
     private static final Set<ChatColor> FORMATS = EnumSet.of(ChatColor.BOLD, ChatColor.STRIKETHROUGH, ChatColor.UNDERLINE, ChatColor.ITALIC, ChatColor.RESET);
-    private static final Set<ChatColor> MAGIC = EnumSet.of(ChatColor.MAGIC);
 
     //Vanilla patterns used to strip existing formats
     private static final Pattern STRIP_ALL_PATTERN = Pattern.compile("\u00a7+([0-9a-fk-orA-FK-OR])");
@@ -105,14 +104,11 @@ public class FormatUtil {
         if (user.isAuthorized(permBase + ".color")) {
             supported.addAll(COLORS);
         }
-        if (user.isAuthorized(permBase + ".magic")) {
-            supported.addAll(MAGIC);
-        }
         if (user.isAuthorized(permBase + ".format")) {
             supported.addAll(FORMATS);
         }
         for (ChatColor chatColor : ChatColor.values()) {
-            if (user.isAuthorized(permBase + "." + chatColor.getChar())) {
+            if (user.isAuthorized(permBase + "." + chatColor.name().toLowerCase(Locale.ROOT))) {
                 supported.add(chatColor);
             }
         }
