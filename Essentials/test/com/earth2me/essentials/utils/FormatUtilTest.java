@@ -27,6 +27,9 @@ public class FormatUtilTest {
         checkFormatPerms("&1C&2o&3l&4o&5r&6m&7a&8t&9i&ac", "§1C§2o§3l§4o§5r§6m§7a§8t§9i§ac", "color"); // Converted
         checkFormatPerms("§1C§2o§3l§4o§5r§6m§7a§8t§9i§ac", "§1C§2o§3l§4o§5r§6m§7a§8t§9i§ac", "color"); // Unchanged
 
+        checkFormatPerms("&kFUNKY LOL", "§kFUNKY LOL", "magic"); // Converted
+        checkFormatPerms("§kFUNKY LOL", "§kFUNKY LOL", "magic"); // Unchanged
+
         // Magic isn't included in the format group
         checkFormatPerms("&kFUNKY LOL", "&kFUNKY LOL"); // Unchanged
         checkFormatPerms("§kFUNKY LOL", "FUNKY LOL"); // Removed
@@ -45,9 +48,6 @@ public class FormatUtilTest {
 
     @Test
     public void testFormatCodePerms() {
-        checkFormatPerms("&kFUNKY LOL", "§kFUNKY LOL", "magic"); // Converted
-        checkFormatPerms("§kFUNKY LOL", "§kFUNKY LOL", "magic"); // Unchanged
-
         checkFormatPerms("&1Te&2st", "&1Te&2st");
         checkFormatPerms("§1Te§2st", "Test");
 
