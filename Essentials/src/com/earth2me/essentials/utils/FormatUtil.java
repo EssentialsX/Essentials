@@ -117,8 +117,15 @@ public class FormatUtil {
             supported.addAll(MAGIC);
         }
         for (ChatColor chatColor : ChatColor.values()) {
-            if (user.isAuthorized(permBase + "." + chatColor.name().toLowerCase(Locale.ROOT))) {
+            final String node = permBase + "." + chatColor.name().toLowerCase(Locale.ROOT);
+            // Only handle individual colors that are explicitly added or removed.
+            if (!user.isPermissionSet(node)) {
+                continue;
+            }
+            if (user.isAuthorized(node)) {
                 supported.add(chatColor);
+            } else {
+                supported.remove(chatColor);
             }
         }
         EnumSet<ChatColor> strip = EnumSet.complementOf(supported);

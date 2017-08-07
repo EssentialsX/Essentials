@@ -62,6 +62,16 @@ public class FormatUtilTest {
     }
 
     @Test
+    public void testFormatAddRemovePerms() {
+        checkFormatPerms("&1Te&2st&ling", "&1Te§2st&ling", "color", "-dark_blue");
+        checkFormatPerms("§1Te§2st§ling", "Te§2sting", "color", "-dark_blue");
+
+        // Nothing happens when negated without being previously present
+        checkFormatPerms("&1Te&2st&ling", "&1Te§2st&ling", "color", "-dark_blue", "-bold");
+        checkFormatPerms("§1Te§2st§ling", "Te§2sting", "color", "-dark_blue", "-bold");
+    }
+
+    @Test
     public void testFormatEscaping() {
         // Don't do anything to non-format codes
         checkFormatPerms("True & false", "True & false");
@@ -79,7 +89,15 @@ public class FormatUtilTest {
     private void checkFormatPerms(String input, String expectedOutput, String... perms) {
         IUser user = mock(IUser.class);
         for (String perm : perms) {
-            when(user.isAuthorized("essentials.chat." + perm)).thenReturn(true);
+            if (perm.startsWith("-")) {
+                // Negated perms
+                perm = perm.substring(1);
+                when(user.isAuthorized("essentials.chat." + perm)).thenReturn(false);
+            } else {
+                when(user.isAuthorized("essentials.chat." + perm)).thenReturn(true);
+            }
+
+            when(user.isPermissionSet("essentials.chat." + perm)).thenReturn(true);
         }
         assertEquals(expectedOutput, FormatUtil.formatString(user, "essentials.chat", input));
     }

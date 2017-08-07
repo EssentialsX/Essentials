@@ -50,6 +50,11 @@ public class SuperpermsHandler implements IPermissionsHandler {
     }
 
     @Override
+    public boolean isPermissionSet(final Player base, final String node) {
+        return base.isPermissionSet(node);
+    }
+
+    @Override
     public String getPrefix(final Player base) {
         return null;
     }
