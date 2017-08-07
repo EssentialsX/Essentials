@@ -178,8 +178,9 @@ public class MetaItemStack {
             final ItemMeta meta = stack.getItemMeta();
             meta.setLore(lore);
             stack.setItemMeta(meta);
-        } else if (split.length > 1 && (split[0].equalsIgnoreCase("unbreakable") && hasMetaPermission(sender, "unbreakable", false, true, ess))) {
-            setUnbreakable(stack, Boolean.valueOf(split[1]));
+        } else if (split[0].equalsIgnoreCase("unbreakable") && hasMetaPermission(sender, "unbreakable", false, true, ess)) {
+            boolean value = split.length > 1 ? Boolean.valueOf(split[1]) : true; 
+            setUnbreakable(stack, value);
         } else if (split.length > 1 && (split[0].equalsIgnoreCase("player") || split[0].equalsIgnoreCase("owner")) && stack.getType() == Material.SKULL_ITEM && hasMetaPermission(sender, "head", false, true, ess)) {
             if (stack.getDurability() == 3) {
                 final String owner = split[1];
