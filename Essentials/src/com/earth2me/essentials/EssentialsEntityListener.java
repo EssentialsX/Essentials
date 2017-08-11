@@ -120,6 +120,22 @@ public class EssentialsEntityListener implements Listener {
         }
     }
 
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onEntityCombustByEntity(final EntityCombustByEntityEvent event) {
+        if (event.getCombuster() instanceof Arrow) {
+            Arrow combuster = (Arrow) event.getCombuster();
+            if (combuster.getShooter() instanceof Player) {
+                final User srcCombuster = ess.getUser(((Player) combuster.getShooter()).getUniqueId());
+                if (srcCombuster.isGodModeEnabled() && !srcCombuster.isAuthorized("essentials.god.pvp")) {
+                    event.setCancelled(true);
+                }
+                if (srcCombuster.isHidden() && !srcCombuster.isAuthorized("essentials.vanish.pvp")) {
+                    event.setCancelled(true);
+                }
+            }
+        }
+    }
+
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerDeathEvent(final PlayerDeathEvent event) {
         final User user = ess.getUser(event.getEntity());
