@@ -9,6 +9,8 @@ import com.earth2me.essentials.utils.LocationUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.nms.refl.ReflUtil;
 
+import org.bukkit.BanEntry;
+import org.bukkit.BanList;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -347,6 +349,25 @@ public class EssentialsPlayerListener implements Listener {
         }
         if (loc != null) {
             user.getBase().setCompassTarget(loc);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    public void onPlayerLoginBanned(final PlayerLoginEvent event) {
+        switch (event.getResult()) {
+            case KICK_BANNED:
+                BanEntry banEntry = ess.getServer().getBanList(BanList.Type.NAME).getBanEntry(event.getPlayer().getName());
+                if (banEntry != null) {
+                    event.setKickMessage(tl("banJoin", banEntry.getReason()));
+                } else {
+                    banEntry = ess.getServer().getBanList(BanList.Type.IP).getBanEntry(event.getAddress().getHostAddress());
+                    if (banEntry != null) {
+                        event.setKickMessage(tl("banIpJoin", banEntry.getReason()));
+                    }
+                }
+                break;
+            default:
+                break;
         }
     }
 
