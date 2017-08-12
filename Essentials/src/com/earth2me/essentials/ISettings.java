@@ -54,6 +54,8 @@ public interface ISettings extends IConf {
 
     Set<String> getSocialSpyCommands();
 
+    boolean getSocialSpyListenMutedPlayers();
+
     Set<String> getMuteCommands();
 
     Map<String, Object> getKit(String name);
@@ -281,4 +283,6 @@ public interface ISettings extends IConf {
     int getNotifyPlayerOfMailCooldown();
 
     int getMotdDelay();
+
+    boolean isDirectHatAllowed();
 }

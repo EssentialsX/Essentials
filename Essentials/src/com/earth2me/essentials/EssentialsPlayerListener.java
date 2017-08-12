@@ -9,6 +9,8 @@ import com.earth2me.essentials.utils.LocationUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.nms.refl.ReflUtil;
 
+import org.bukkit.BanEntry;
+import org.bukkit.BanList;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,6 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -27,6 +30,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.io.IOException;
 import java.text.NumberFormat;
@@ -77,7 +81,7 @@ public class EssentialsPlayerListener implements Listener {
         if (user.isMuted()) {
             event.setCancelled(true);
             user.sendMessage(tl("voiceSilenced"));
-            LOGGER.info(tl("mutedUserSpeaks", user.getName()));
+            LOGGER.info(tl("mutedUserSpeaks", user.getName(), event.getMessage()));
         }
         try {
             final Iterator<Player> it = event.getRecipients().iterator();
@@ -348,6 +352,25 @@ public class EssentialsPlayerListener implements Listener {
         }
     }
 
+    @EventHandler(priority = EventPriority.LOW)
+    public void onPlayerLoginBanned(final PlayerLoginEvent event) {
+        switch (event.getResult()) {
+            case KICK_BANNED:
+                BanEntry banEntry = ess.getServer().getBanList(BanList.Type.NAME).getBanEntry(event.getPlayer().getName());
+                if (banEntry != null) {
+                    event.setKickMessage(tl("banJoin", banEntry.getReason()));
+                } else {
+                    banEntry = ess.getServer().getBanList(BanList.Type.IP).getBanEntry(event.getAddress().getHostAddress());
+                    if (banEntry != null) {
+                        event.setKickMessage(tl("banIpJoin", banEntry.getReason()));
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerLogin(final PlayerLoginEvent event) {
         switch (event.getResult()) {
@@ -408,27 +431,33 @@ public class EssentialsPlayerListener implements Listener {
     public void onPlayerCommandPreprocess(final PlayerCommandPreprocessEvent event) {
         final Player player = event.getPlayer();
         final String cmd = event.getMessage().toLowerCase(Locale.ENGLISH).split(" ")[0].replace("/", "").toLowerCase(Locale.ENGLISH);
-        if (ess.getUser(player).isMuted() && (ess.getSettings().getMuteCommands().contains(cmd) || ess.getSettings().getMuteCommands().contains("*"))) {
-            event.setCancelled(true);
-            player.sendMessage(tl("voiceSilenced"));
-            LOGGER.info(tl("mutedUserSpeaks", player.getName()));
-            return;
-        }
-        
+
         PluginCommand pluginCommand = ess.getServer().getPluginCommand(cmd);
-        
+
         if (ess.getSettings().getSocialSpyCommands().contains(cmd) || ess.getSettings().getSocialSpyCommands().contains("*")) {
             if (pluginCommand == null
-                || (!pluginCommand.getName().equals("msg") && !pluginCommand.getName().equals("r"))) { // /msg and /r are handled in SimpleMessageRecipient
+                    || (!pluginCommand.getName().equals("msg") && !pluginCommand.getName().equals("r"))) { // /msg and /r are handled in SimpleMessageRecipient
                 User user = ess.getUser(player);
                 if (!user.isAuthorized("essentials.chat.spy.exempt")) {
                     for (User spyer : ess.getOnlineUsers()) {
                         if (spyer.isSocialSpyEnabled() && !player.equals(spyer.getBase())) {
-                            spyer.sendMessage(tl("socialSpyPrefix") + player.getDisplayName() + ": " + event.getMessage());
+                            if (user.isMuted() && ess.getSettings().getSocialSpyListenMutedPlayers()) {
+                                spyer.sendMessage(tl("socialSpyMutedPrefix") + player.getDisplayName() + ": " + event.getMessage());
+                            }
+                            else {
+                                spyer.sendMessage(tl("socialSpyPrefix") + player.getDisplayName() + ": " + event.getMessage());
+                            }
                         }
                     }
                 }
             }
+        }
+
+        if (ess.getUser(player).isMuted() && (ess.getSettings().getMuteCommands().contains(cmd) || ess.getSettings().getMuteCommands().contains("*"))) {
+            event.setCancelled(true);
+            player.sendMessage(tl("voiceSilenced"));
+            LOGGER.info(tl("mutedUserSpeaks", player.getName(), event.getMessage()));
+            return;
         }
         
         boolean broadcast = true; // whether to broadcast the updated activity
@@ -634,6 +663,13 @@ public class EssentialsPlayerListener implements Listener {
         final Inventory top = event.getView().getTopInventory();
         final InventoryType type = top.getType();
 
+        final Inventory clickedInventory;
+        if (event.getRawSlot() < 0) {
+            clickedInventory = null;
+        } else {
+            clickedInventory = event.getRawSlot() < top.getSize() ? top : event.getView().getBottomInventory();
+        }
+
         if (type == InventoryType.PLAYER) {
             final User user = ess.getUser((Player) event.getWhoClicked());
             final InventoryHolder invHolder = top.getHolder();
@@ -662,6 +698,16 @@ public class EssentialsPlayerListener implements Listener {
             if (invHolder != null && invHolder instanceof HumanEntity && user.isInvSee()) {
                 event.setCancelled(true);
                 refreshPlayer = user.getBase();
+            }
+        } else if (clickedInventory != null && clickedInventory.getType() == InventoryType.PLAYER) {
+            if (ess.getSettings().isDirectHatAllowed() && event.getClick() == ClickType.LEFT && event.getSlot() == 39
+                && event.getCursor().getType() != Material.AIR && event.getCursor().getType().getMaxDurability() == 0
+                && ess.getUser(event.getWhoClicked()).isAuthorized("essentials.hat")) {
+                event.setCancelled(true);
+                final PlayerInventory inv = (PlayerInventory) clickedInventory;
+                final ItemStack head = inv.getHelmet();
+                inv.setHelmet(event.getCursor());
+                event.setCursor(head);
             }
         }
 
