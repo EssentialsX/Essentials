@@ -112,12 +112,16 @@ public class FormatUtil {
             supported.addAll(FORMATS);
         }
         if (user.isAuthorized(permBase + ".magic")) {
-            // This same check would be done in the lower loop, but
-            // will break with * perms in there.
             supported.addAll(MAGIC);
         }
         for (ChatColor chatColor : ChatColor.values()) {
-            final String node = permBase + "." + chatColor.name().toLowerCase(Locale.ROOT);
+            String colorName = chatColor.name();
+            if (chatColor == ChatColor.MAGIC) {
+                // Bukkit's name doesn't match with vanilla's
+                colorName = "obfuscated";
+            }
+
+            final String node = permBase + "." + colorName.toLowerCase(Locale.ROOT);
             // Only handle individual colors that are explicitly added or removed.
             if (!user.isPermissionSet(node)) {
                 continue;

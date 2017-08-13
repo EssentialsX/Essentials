@@ -59,6 +59,10 @@ public class FormatUtilTest {
 
         checkFormatPerms("&1Te&2st", "§1Te§2st", "dark_blue", "dark_green");
         checkFormatPerms("§1Te§2st", "§1Te§2st", "dark_blue", "dark_green");
+
+        // Obfuscated behaves the same as magic
+        checkFormatPerms("&kFUNKY LOL", "§kFUNKY LOL", "obfuscated");
+        checkFormatPerms("§kFUNKY LOL", "§kFUNKY LOL", "obfuscated");
     }
 
     @Test
