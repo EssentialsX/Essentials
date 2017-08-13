@@ -78,8 +78,8 @@ public class EssentialsEntityListener implements Listener {
         }
 
         if (attacker.arePowerToolsEnabled()) {
-	    onPlayerVsPlayerPowertool(event, defender, attacker);
-	}
+            onPlayerVsPlayerPowertool(event, defender, attacker);
+        }
     }
 
     private void onPlayerVsPlayerPowertool(final EntityDamageByEntityEvent event, final Player defender, final User attacker) {
