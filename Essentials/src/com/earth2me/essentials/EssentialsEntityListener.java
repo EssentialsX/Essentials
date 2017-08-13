@@ -77,7 +77,9 @@ public class EssentialsEntityListener implements Listener {
             event.setCancelled(true);
         }
 
-        onPlayerVsPlayerPowertool(event, defender, attacker);
+        if (attacker.arePowerToolsEnabled()) {
+	    onPlayerVsPlayerPowertool(event, defender, attacker);
+	}
     }
 
     private void onPlayerVsPlayerPowertool(final EntityDamageByEntityEvent event, final Player defender, final User attacker) {
@@ -85,7 +87,7 @@ public class EssentialsEntityListener implements Listener {
         if (commandList != null && !commandList.isEmpty()) {
             for (final String tempCommand : commandList) {
                 final String command = powertoolPlayer.matcher(tempCommand).replaceAll(defender.getName());
-                if (attacker.arePowerToolsEnabled() && command != null && !command.isEmpty() && !command.equals(tempCommand)) {
+                if (command != null && !command.isEmpty() && !command.equals(tempCommand)) {
 
                     class PowerToolInteractTask implements Runnable {
                         @Override
