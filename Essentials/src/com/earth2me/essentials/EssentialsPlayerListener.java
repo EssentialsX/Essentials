@@ -301,6 +301,11 @@ public class EssentialsPlayerListener implements Listener {
                     ess.getLogger().log(Level.INFO, "Set socialspy to false for {0} because they had it enabled without permission.", user.getName());
                 }
 
+                if (user.isGodModeEnabled() && !user.isAuthorized("essentials.god")) {
+                    user.setGodModeEnabled(false);
+                    ess.getLogger().log(Level.INFO, "Set god mode to false for {0} because they had it enabled without permission.", user.getName());
+                }
+
                 user.stopTransaction();
             }
 
