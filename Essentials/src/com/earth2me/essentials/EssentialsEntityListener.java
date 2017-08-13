@@ -85,7 +85,7 @@ public class EssentialsEntityListener implements Listener {
         if (commandList != null && !commandList.isEmpty()) {
             for (final String tempCommand : commandList) {
                 final String command = powertoolPlayer.matcher(tempCommand).replaceAll(defender.getName());
-                if (command != null && !command.isEmpty() && !command.equals(tempCommand)) {
+                if (attacker.arePowerToolsEnabled() && command != null && !command.isEmpty() && !command.equals(tempCommand)) {
 
                     class PowerToolInteractTask implements Runnable {
                         @Override
