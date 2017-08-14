@@ -58,8 +58,10 @@ public class EssentialsServerListener implements Listener {
             } catch (NullPointerException e) {
                 if (!npeWarned) {
                     npeWarned = true;
-                    throw new Exception("A plugin has fired a ServerListPingEvent "
+                    Exception ex = new Exception("A plugin has fired a ServerListPingEvent "
                             + "without implementing Paper's methods. Point the author to https://git.io/v7Xzl.");
+                    ex.setStackTrace(e.getStackTrace());
+                    throw ex;
                 }
             }
         } else {
