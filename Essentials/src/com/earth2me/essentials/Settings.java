@@ -962,6 +962,9 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     private EventPriority getPriority(String priority) {
+        if ("none".equals(priority)) {
+            return null;
+        }
         if ("lowest".equals(priority)) {
             return EventPriority.LOWEST;
         }
