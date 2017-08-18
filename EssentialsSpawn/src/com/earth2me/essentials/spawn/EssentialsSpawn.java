@@ -7,6 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -41,18 +42,26 @@ public class EssentialsSpawn extends JavaPlugin implements IEssentialsSpawn {
         ess.addReloadListener(spawns);
 
         final EssentialsSpawnPlayerListener playerListener = new EssentialsSpawnPlayerListener(ess, spawns);
-        pluginManager.registerEvent(PlayerRespawnEvent.class, playerListener, ess.getSettings().getRespawnPriority(), new EventExecutor() {
-            @Override
-            public void execute(final Listener ll, final Event event) throws EventException {
-                ((EssentialsSpawnPlayerListener) ll).onPlayerRespawn((PlayerRespawnEvent) event);
-            }
-        }, this);
-        pluginManager.registerEvent(PlayerJoinEvent.class, playerListener, ess.getSettings().getRespawnPriority(), new EventExecutor() {
-            @Override
-            public void execute(final Listener ll, final Event event) throws EventException {
-                ((EssentialsSpawnPlayerListener) ll).onPlayerJoin((PlayerJoinEvent) event);
-            }
-        }, this);
+
+        EventPriority respawnPriority = ess.getSettings().getRespawnPriority();
+        if (respawnPriority != null) {
+            pluginManager.registerEvent(PlayerRespawnEvent.class, playerListener, respawnPriority, new EventExecutor() {
+                @Override
+                public void execute(final Listener ll, final Event event) throws EventException {
+                    ((EssentialsSpawnPlayerListener) ll).onPlayerRespawn((PlayerRespawnEvent) event);
+                }
+            }, this);
+        }
+
+        EventPriority joinPriority = ess.getSettings().getSpawnJoinPriority();
+        if (joinPriority != null) {
+            pluginManager.registerEvent(PlayerJoinEvent.class, playerListener, joinPriority, new EventExecutor() {
+                @Override
+                public void execute(final Listener ll, final Event event) throws EventException {
+                    ((EssentialsSpawnPlayerListener) ll).onPlayerJoin((PlayerJoinEvent) event);
+                }
+            }, this);
+        }
     }
 
     @Override
