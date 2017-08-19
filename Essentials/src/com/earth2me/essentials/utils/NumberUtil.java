@@ -55,11 +55,23 @@ public class NumberUtil {
     }
 
     public static String displayCurrency(final BigDecimal value, final IEssentials ess) {
-        return tl("currency", ess.getSettings().getCurrencySymbol(), formatAsPrettyCurrency(value));
+        String currency = formatAsPrettyCurrency(value);
+        String sign = "";
+        if (value.signum() < 0) {
+            currency = currency.substring(1);
+            sign = "-";
+        }
+        return sign + tl("currency", ess.getSettings().getCurrencySymbol(), currency);
     }
 
     public static String displayCurrencyExactly(final BigDecimal value, final IEssentials ess) {
-        return tl("currency", ess.getSettings().getCurrencySymbol(), value.toPlainString());
+        String currency = value.toPlainString();
+        String sign = "";
+        if (value.signum() < 0) {
+            currency = currency.substring(1);
+            sign = "-";
+        }
+        return sign + tl("currency", ess.getSettings().getCurrencySymbol(), currency);
     }
 
     public static boolean isInt(final String sInt) {
