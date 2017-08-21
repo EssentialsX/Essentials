@@ -17,7 +17,8 @@ import java.util.logging.Level;
 
 public class EssentialsServerListener implements Listener {
     private final transient IEssentials ess;
-    private boolean errorLogged = false;
+    private boolean unsupportedLogged = false;
+    private boolean npeWarned = false;
     private boolean isPaperSample;
     private Method setSampleText;
     private Method getSampleText;
@@ -36,7 +37,7 @@ public class EssentialsServerListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onServerListPing(final ServerListPingEvent event) {
+    public void onServerListPing(final ServerListPingEvent event) throws Exception {
         if (isPaperSample) {
             try {
                 List<String> playerNames = (List<String>) getSampleText.invoke(event, null);
@@ -49,9 +50,18 @@ public class EssentialsServerListener implements Listener {
                 }
                 setSampleText.invoke(event, playerNames);
             } catch (IllegalAccessException | InvocationTargetException | ClassCastException e) {
-                if (!errorLogged) {
-                    ess.getLogger().log(Level.WARNING, "Unable to hide players from server list ping using Paper 1.12+ method!", e);
-                    errorLogged = true;
+                if (!unsupportedLogged) {
+                    ess.getLogger().log(Level.WARNING, "Unable to hide players from server list ping "
+                            + "using Paper 1.12+ method!", e);
+                    unsupportedLogged = true;
+                }
+            } catch (NullPointerException e) {
+                if (!npeWarned) {
+                    npeWarned = true;
+                    Exception ex = new Exception("A plugin has fired a ServerListPingEvent "
+                            + "without implementing Paper's methods. Point the author to https://git.io/v7Xzl.");
+                    ex.setStackTrace(e.getStackTrace());
+                    throw ex;
                 }
             }
         } else {
@@ -64,10 +74,10 @@ public class EssentialsServerListener implements Listener {
                     }
                 }
             } catch (UnsupportedOperationException e) {
-                if (!errorLogged) {
+                if (!unsupportedLogged) {
                     ess.getLogger().warning("Current server implementation does not support "
                             + "hiding players from server list ping. Update or contact the maintainers.");
-                    errorLogged = true;
+                    unsupportedLogged = true;
                 }
             }
         }
