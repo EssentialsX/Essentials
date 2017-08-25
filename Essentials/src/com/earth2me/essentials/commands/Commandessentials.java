@@ -15,6 +15,9 @@ import org.bukkit.Server;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginManager;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -55,6 +58,8 @@ public class Commandessentials extends EssentialsCommand {
             run_uuidconvert(server, sender, commandLabel, args);
         } else if (args[0].equalsIgnoreCase("uuidtest")) {
             run_uuidtest(server, sender, commandLabel, args);
+        } else if (args[0].equalsIgnoreCase("version")) {
+            run_version(server, sender, commandLabel, args);
         } else {
             run_reload(server, sender, commandLabel, args);
         }
@@ -307,6 +312,18 @@ public class Commandessentials extends EssentialsCommand {
         sender.sendMessage("Offline Mode UUID: " + offlineuuid.toString());
     }
 
+    private void run_version(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
+        final PluginManager pm = server.getPluginManager();
+        sender.sendMessage("Server version: " + server.getBukkitVersion());
+        sender.sendMessage("EssentialsX version: " + pm.getPlugin("Essentials").getDescription().getVersion());
+        for (Plugin plugin : pm.getPlugins()) {
+            final PluginDescriptionFile desc = plugin.getDescription();
+            if (desc.getName().startsWith("Essentials")) {
+                sender.sendMessage(desc.getName().replace("Essentials", "EssentialsX") + " version: " + desc.getVersion());
+            }
+        }
+    }
+
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
@@ -320,6 +337,7 @@ public class Commandessentials extends EssentialsCommand {
             options.add("cleanup");
             //options.add("uuidconvert");
             //options.add("uuidtest");
+            options.add("version");
             return options;
         } else if (args[0].equalsIgnoreCase("debug")) {
             // No args
@@ -349,6 +367,8 @@ public class Commandessentials extends EssentialsCommand {
             if (args.length == 2) {
                 return getPlayers(server, sender);
             }
+        } else if (args[0].equalsIgnoreCase("version")) {
+            // No args
         } else {
             // No args
         }
