@@ -313,14 +313,24 @@ public class Commandessentials extends EssentialsCommand {
     }
 
     private void run_version(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
+        boolean isMismatched = false;
         final PluginManager pm = server.getPluginManager();
         sender.sendMessage("Server version: " + server.getBukkitVersion());
-        sender.sendMessage("EssentialsX version: " + pm.getPlugin("Essentials").getDescription().getVersion());
+        final String essVer = pm.getPlugin("Essentials").getDescription().getVersion();
+        sender.sendMessage("EssentialsX version: " + essVer);
         for (Plugin plugin : pm.getPlugins()) {
             final PluginDescriptionFile desc = plugin.getDescription();
             if (desc.getName().startsWith("Essentials")) {
-                sender.sendMessage(desc.getName().replace("Essentials", "EssentialsX") + " version: " + desc.getVersion());
+                String version = desc.getVersion();
+                if (!version.equalsIgnoreCase(essVer)) {
+                    version = "\u00a7c" + version;
+                    isMismatched = true;
+                }
+                sender.sendMessage(desc.getName().replace("Essentials", "EssentialsX") + " version: " + version);
             }
+        }
+        if (isMismatched) {
+            sender.sendMessage("Version mismatch - make sure all EssentialsX plugins are the same version!");
         }
     }
 
