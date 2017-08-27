@@ -68,7 +68,7 @@ public class SuperpermsHandler implements IPermissionsHandler {
         String enabledPermsPlugin = null;
         List<String> specialCasePlugins = Arrays.asList("PermissionsEx", "GroupManager",
                 "SimplyPerms", "Privileges", "bPermissions", "zPermissions", "PermissionsBukkit",
-                "DroxPerms", "xPerms");
+                "DroxPerms", "xPerms", "LuckPerms");
         for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
             if (specialCasePlugins.contains(plugin.getName())) {
                 enabledPermsPlugin = plugin.getName();
