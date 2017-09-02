@@ -575,12 +575,7 @@ public class EssentialsPlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerInteract(final PlayerInteractEvent event) {
-        Boolean updatePlayerActivity = false;
-        
         switch (event.getAction()) {
-            case RIGHT_CLICK_AIR:
-                updatePlayerActivity = true;
-            break;
             case RIGHT_CLICK_BLOCK:
                 if (!event.isCancelled() && event.getClickedBlock().getType() == Material.BED_BLOCK && ess.getSettings().getUpdateBedAtDaytime()) {
                     User player = ess.getUser(event.getPlayer());
@@ -589,7 +584,6 @@ public class EssentialsPlayerListener implements Listener {
                         player.sendMessage(tl("bedSet", player.getLocation().getWorld().getName(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ()));
                     }
                 }
-                updatePlayerActivity = true;
             break;
             case LEFT_CLICK_AIR:
                 if (event.getPlayer().isFlying()) {
@@ -598,7 +592,6 @@ public class EssentialsPlayerListener implements Listener {
                         useFlyClickJump(user);
                     }
                 }
-                updatePlayerActivity = true;
             break;
             case LEFT_CLICK_BLOCK:
                 if (event.getItem() != null && event.getItem().getType() != Material.AIR) {
@@ -607,11 +600,9 @@ public class EssentialsPlayerListener implements Listener {
                         event.setCancelled(true);
                     }
                 }
-                updatePlayerActivity = true;
             break;
         }
-        
-        if (updatePlayerActivity) { ess.getUser(event.getPlayer()).updateActivity(true); }
+        ess.getUser(event.getPlayer()).updateActivity(true);
     }
 
     // This method allows the /jump lock feature to work, allows teleporting while flying #EasterEgg
