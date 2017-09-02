@@ -575,7 +575,12 @@ public class EssentialsPlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerInteract(final PlayerInteractEvent event) {
+        Boolean updatePlayerActivity = false;
+        
         switch (event.getAction()) {
+            case RIGHT_CLICK_AIR:
+                updatePlayerActivity = true;
+            break;
             case RIGHT_CLICK_BLOCK:
                 if (!event.isCancelled() && event.getClickedBlock().getType() == Material.BED_BLOCK && ess.getSettings().getUpdateBedAtDaytime()) {
                     User player = ess.getUser(event.getPlayer());
@@ -584,27 +589,29 @@ public class EssentialsPlayerListener implements Listener {
                         player.sendMessage(tl("bedSet", player.getLocation().getWorld().getName(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ()));
                     }
                 }
-                break;
+                updatePlayerActivity = true;
+            break;
             case LEFT_CLICK_AIR:
                 if (event.getPlayer().isFlying()) {
                     final User user = ess.getUser(event.getPlayer());
                     if (user.isFlyClickJump()) {
                         useFlyClickJump(user);
-                        return;
                     }
                 }
+                updatePlayerActivity = true;
+            break;
             case LEFT_CLICK_BLOCK:
                 if (event.getItem() != null && event.getItem().getType() != Material.AIR) {
                     final User user = ess.getUser(event.getPlayer());
-                    user.updateActivity(true);
                     if (user.hasPowerTools() && user.arePowerToolsEnabled() && usePowertools(user, event.getItem().getTypeId())) {
                         event.setCancelled(true);
                     }
                 }
-                break;
-            default:
-                break;
+                updatePlayerActivity = true;
+            break;
         }
+        
+        if (updatePlayerActivity) { ess.getUser(event.getPlayer()).updateActivity(true); }
     }
 
     // This method allows the /jump lock feature to work, allows teleporting while flying #EasterEgg
