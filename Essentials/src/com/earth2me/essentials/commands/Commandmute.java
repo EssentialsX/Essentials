@@ -52,7 +52,9 @@ public class Commandmute extends EssentialsCommand {
             if (args.length > 1) {
                 final String time = getFinalArg(args, 1);
                 muteTimestamp = DateUtil.parseDateDiff(time, true);
+                String muteReason = DateUtil.removeTimePattern (time);
                 user.setMuted(true);
+                user.setMuteReason (muteReason);
             } else {
                 user.setMuted(!user.getMuted());
             }
@@ -70,6 +72,7 @@ public class Commandmute extends EssentialsCommand {
                     user.sendMessage(tl("playerMutedFor", muteTime));
                 } else {
                     sender.sendMessage(tl("mutedPlayer", user.getDisplayName()));
+                    /** Send the player a message, why they were muted **/
                     user.sendMessage(tl("playerMuted"));
                 }
                 final String message;
