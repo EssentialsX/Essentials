@@ -8,7 +8,6 @@ import com.earth2me.essentials.register.payment.Methods;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
-import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
 import net.ess3.api.events.AfkStatusChangeEvent;
@@ -19,7 +18,6 @@ import net.ess3.nms.refl.ReflUtil;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
@@ -28,7 +26,12 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -219,19 +222,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     @Override
-    public Boolean canSpawnItem(final Material material) {
-        if (ess.getSettings().permissionBasedItemSpawn()) {
-            final String name = material.toString().toLowerCase(Locale.ENGLISH).replace("_", "");
-
-            if (isAuthorized("essentials.itemspawn.item-all") || isAuthorized("essentials.itemspawn.item-" + name)) return true;
-
-            if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01)) {
-                final int id = material.getId();
-                if (isAuthorized("essentials.itemspawn.item-" + id)) return true;
-            }
-        }
-
-        return isAuthorized("essentials.itemspawn.exempt") || !ess.getSettings().itemSpawnBlacklist().contains(material);
+    public Boolean canSpawnItem(final int itemId) {
+        return !ess.getSettings().itemSpawnBlacklist().contains(itemId);
     }
 
     @Override
@@ -367,7 +359,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     public String getDisplayName() {
-        return super.getBase().getDisplayName() == null || (ess.getSettings().hideDisplayNameInVanish() && isHidden()) ? super.getBase().getName() : super.getBase().getDisplayName();
+        return super.getBase().getDisplayName() == null ? super.getBase().getName() : super.getBase().getDisplayName();
     }
 
     @Override
@@ -465,7 +457,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return;
         }
 
-        this.getBase().setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") || set && ess.getSettings().sleepIgnoresAfkPlayers());
+        this.getBase().setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") ? true : set);
         if (set && !isAfk()) {
             afkPosition = this.getLocation();
             this.afkSince = System.currentTimeMillis();
@@ -546,7 +538,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 setMuteTimeout(0);
                 sendMessage(tl("canTalkAgain"));
                 setMuted(false);
-                setMuteReason(null);
+                setMuteReason ("");
                 return true;
             }
         }
@@ -554,7 +546,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     public void updateActivity(final boolean broadcast) {
-        if (isAfk()) {
+        if (isAfk() && ess.getSettings().cancelAfkOnInteract()) {
             setAfk(false);
             if (broadcast && !isHidden()) {
                 setDisplayNick();
@@ -565,18 +557,6 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             }
         }
         lastActivity = System.currentTimeMillis();
-    }
-
-    public void updateActivityOnMove(final boolean broadcast) {
-        if(ess.getSettings().cancelAfkOnMove()) {
-            updateActivity(broadcast);
-        }
-    }
-
-    public void updateActivityOnInteract(final boolean broadcast) {
-        if(ess.getSettings().cancelAfkOnInteract()) {
-            updateActivity(broadcast);
-        }
     }
 
     public void checkActivity() {
@@ -736,7 +716,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 }
             }
             setHidden(true);
-            ess.getVanishedPlayersNew().add(getName());
+            ess.getVanishedPlayers().add(getName());
             if (isAuthorized("essentials.vanish.effect")) {
                 this.getBase().addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false));
             }
@@ -745,7 +725,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 p.showPlayer(getBase());
             }
             setHidden(false);
-            ess.getVanishedPlayersNew().remove(getName());
+            ess.getVanishedPlayers().remove(getName());
             if (isAuthorized("essentials.vanish.effect")) {
                 this.getBase().removePotionEffect(PotionEffectType.INVISIBILITY);
             }
@@ -880,7 +860,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
      * Returns the {@link ItemStack} in the main hand or off-hand. If the main hand is empty then the offhand item is returned - also nullable.
      */
     public ItemStack getItemInHand() {
-        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_9_R01)) {
+        if (ReflUtil.getNmsVersionObject().isLowerThan(ReflUtil.V1_9_R1)) {
             return getBase().getInventory().getItemInHand();
         } else {
             PlayerInventory inventory = getBase().getInventory();

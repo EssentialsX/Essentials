@@ -6,16 +6,14 @@ import com.earth2me.essentials.textreader.TextInput;
 import com.earth2me.essentials.textreader.TextPager;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.LocationUtil;
-import com.earth2me.essentials.utils.MaterialUtil;
-import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
+import net.ess3.nms.refl.ReflUtil;
 
 import org.bukkit.BanEntry;
 import org.bukkit.BanList;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -59,10 +57,10 @@ public class EssentialsPlayerListener implements Listener {
 
     public void registerEvents() {
         ess.getServer().getPluginManager().registerEvents(this, ess);
-        if (isEntityPickupEvent()) {
-            ess.getServer().getPluginManager().registerEvents(new PlayerListener1_12(), ess);
-        } else {
+        if (ReflUtil.getNmsVersionObject().isLowerThan(ReflUtil.V1_12_R1)) {
             ess.getServer().getPluginManager().registerEvents(new PlayerListenerPre1_12(), ess);
+        } else {
+            ess.getServer().getPluginManager().registerEvents(new PlayerListener1_12(), ess);
         }
     }
 
@@ -83,7 +81,12 @@ public class EssentialsPlayerListener implements Listener {
         if (user.isMuted()) {
             event.setCancelled(true);
 
-            user.sendMessage(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
+            if (user.getMuteReason ().equals ("")) {
+                user.sendMessage(tl("voiceSilenced"));
+            }
+            else {
+                user.sendMessage(tl("voiceSilenced") + tl("muteFormat", user.getMuteReason ()));
+            }
 
             LOGGER.info(tl("mutedUserSpeaks", user.getName(), event.getMessage()));
         }
@@ -103,7 +106,7 @@ public class EssentialsPlayerListener implements Listener {
             }
         }
 
-        user.updateActivityOnInteract(true);
+        user.updateActivity(true);
         user.setDisplayNick();
     }
 
@@ -128,8 +131,8 @@ public class EssentialsPlayerListener implements Listener {
             final Location from = event.getFrom();
             final Location origTo = event.getTo();
             final Location to = origTo.clone();
-            if (origTo.getY() >= from.getBlockY() + 1) {
-                user.updateActivityOnMove(true);
+            if (ess.getSettings().cancelAfkOnMove() && origTo.getY() >= from.getBlockY() + 1) {
+                user.updateActivity(true);
                 return;
             }
             to.setX(from.getX());
@@ -144,7 +147,7 @@ public class EssentialsPlayerListener implements Listener {
         }
         final Location afk = user.getAfkPosition();
         if (afk == null || !event.getTo().getWorld().equals(afk.getWorld()) || afk.distanceSquared(event.getTo()) > 9) {
-            user.updateActivityOnMove(true);
+            user.updateActivity(true);
         }
     }
 
@@ -156,12 +159,7 @@ public class EssentialsPlayerListener implements Listener {
             event.setQuitMessage(null);
         } else if (ess.getSettings().isCustomQuitMessage() && event.getQuitMessage() != null) {
             final Player player = event.getPlayer();
-            final String msg = ess.getSettings().getCustomQuitMessage()
-                    .replace("{PLAYER}", player.getDisplayName())
-                    .replace("{USERNAME}", player.getName())
-                    .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()));
-            
-            event.setQuitMessage(msg.isEmpty() ? null : msg);
+            event.setQuitMessage(ess.getSettings().getCustomQuitMessage().replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName()));
         }
 
         user.startTransaction();
@@ -185,7 +183,7 @@ public class EssentialsPlayerListener implements Listener {
             }
         }
 
-        user.updateActivityOnInteract(false);
+        user.updateActivity(false);
         if (!user.isHidden()) {
             user.setLastLogout(System.currentTimeMillis());
         }
@@ -223,7 +221,7 @@ public class EssentialsPlayerListener implements Listener {
 
         final long currentTime = System.currentTimeMillis();
         dUser.checkMuteTimeout(currentTime);
-        dUser.updateActivityOnInteract(false);
+        dUser.updateActivity(false);
         dUser.stopTransaction();
 
         class DelayJoinTask implements Runnable {
@@ -242,14 +240,11 @@ public class EssentialsPlayerListener implements Listener {
                 user.setDisplayNick();
                 updateCompass(user);
 
-                if (!ess.getVanishedPlayersNew().isEmpty() && !user.isAuthorized("essentials.vanish.see")) {
-                    for (String p : ess.getVanishedPlayersNew()) {
+                if (!ess.getVanishedPlayers().isEmpty() && !user.isAuthorized("essentials.vanish.see")) {
+                    for (String p : ess.getVanishedPlayers()) {
                         Player toVanish = ess.getServer().getPlayerExact(p);
                         if (toVanish != null && toVanish.isOnline()) {
                             user.getBase().hidePlayer(toVanish);
-                            if (ess.getSettings().isDebug()) {
-                                ess.getLogger().info("Hiding vanished player: " + p);
-                            }
                         }
                     }
                 }
@@ -267,11 +262,8 @@ public class EssentialsPlayerListener implements Listener {
                 } else if (ess.getSettings().isCustomJoinMessage()) {
                     String msg = ess.getSettings().getCustomJoinMessage()
                         .replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName())
-                        .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUserMap().getUniqueUsers()))
-                        .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()));
-                    if (!msg.isEmpty()) {
-                        ess.getServer().broadcastMessage(msg);
-                    }
+                        .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUserMap().getUniqueUsers()));
+                    ess.getServer().broadcastMessage(msg);
                 } else if (ess.getSettings().allowSilentJoinQuit()) {
                     ess.getServer().broadcastMessage(message);
                 }
@@ -320,9 +312,6 @@ public class EssentialsPlayerListener implements Listener {
                     user.setGodModeEnabled(false);
                     ess.getLogger().log(Level.INFO, "Set god mode to false for {0} because they had it enabled without permission.", user.getName());
                 }
-                
-                user.setConfirmingClearCommand(null);
-                user.getConfirmingPayments().clear();
 
                 user.stopTransaction();
             }
@@ -352,7 +341,7 @@ public class EssentialsPlayerListener implements Listener {
 
                     final IText input = tempInput;
 
-                    if (input != null && !input.getLines().isEmpty() && user.isAuthorized("essentials.motd")) {
+                    if (input != null && user.isAuthorized("essentials.motd")) {
                         final IText output = new KeywordReplacer(input, user.getSource(), ess);
                         final TextPager pager = new TextPager(output, true);
                         pager.showPage("1", null, "motd", user.getSource());
@@ -365,10 +354,7 @@ public class EssentialsPlayerListener implements Listener {
     }
 
     // Makes the compass item ingame always point to the first essentials home.  #EasterEgg
-    // EssentialsX: This can now optionally require a permission to enable, if set in the config.
     private void updateCompass(final User user) {
-        if (ess.getSettings().isCompassTowardsHomePerm() && !user.isAuthorized("essentials.home.compass")) return;
-
         Location loc = user.getHome(user.getLocation());
         if (loc == null) {
             loc = user.getBase().getBedSpawnLocation();
@@ -475,7 +461,8 @@ public class EssentialsPlayerListener implements Listener {
                         if (spyer.isSocialSpyEnabled() && !player.equals(spyer.getBase())) {
                             if (user.isMuted() && ess.getSettings().getSocialSpyListenMutedPlayers()) {
                                 spyer.sendMessage(tl("socialSpyMutedPrefix") + player.getDisplayName() + ": " + event.getMessage());
-                            } else {
+                            }
+                            else {
                                 spyer.sendMessage(tl("socialSpyPrefix") + player.getDisplayName() + ": " + event.getMessage());
                             }
                         }
@@ -505,7 +492,7 @@ public class EssentialsPlayerListener implements Listener {
         }
         final User user = ess.getUser(player);
         if (update) {
-            user.updateActivityOnInteract(broadcast);
+            user.updateActivity(broadcast);
         }
 
         if (ess.getSettings().isCommandCooldownsEnabled() && pluginCommand != null
@@ -603,9 +590,9 @@ public class EssentialsPlayerListener implements Listener {
     public void onPlayerInteract(final PlayerInteractEvent event) {
         switch (event.getAction()) {
             case RIGHT_CLICK_BLOCK:
-                if (!event.isCancelled() && MaterialUtil.isBed(event.getClickedBlock().getType()) && ess.getSettings().getUpdateBedAtDaytime()) {
+                if (!event.isCancelled() && event.getClickedBlock().getType() == Material.BED_BLOCK && ess.getSettings().getUpdateBedAtDaytime()) {
                     User player = ess.getUser(event.getPlayer());
-                    if (player.isAuthorized("essentials.sethome.bed") && player.getWorld().getEnvironment().equals(World.Environment.NORMAL)) {
+                    if (player.isAuthorized("essentials.sethome.bed")) {
                         player.getBase().setBedSpawnLocation(event.getClickedBlock().getLocation());
                         player.sendMessage(tl("bedSet", player.getLocation().getWorld().getName(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ()));
                     }
@@ -622,13 +609,13 @@ public class EssentialsPlayerListener implements Listener {
             case LEFT_CLICK_BLOCK:
                 if (event.getItem() != null && event.getItem().getType() != Material.AIR) {
                     final User user = ess.getUser(event.getPlayer());
-                    if (user.hasPowerTools() && user.arePowerToolsEnabled() && usePowertools(user, event.getItem().getType())) {
+                    if (user.hasPowerTools() && user.arePowerToolsEnabled() && usePowertools(user, event.getItem().getTypeId())) {
                         event.setCancelled(true);
                     }
                 }
                 break;
         }
-            ess.getUser(event.getPlayer()).updateActivityOnInteract(true);
+        ess.getUser(event.getPlayer()).updateActivity(true);
     }
 
     // This method allows the /jump lock feature to work, allows teleporting while flying #EasterEgg
@@ -645,7 +632,7 @@ public class EssentialsPlayerListener implements Listener {
                     while (LocationUtil.isBlockDamaging(loc.getWorld(), loc.getBlockX(), loc.getBlockY() - 1, loc.getBlockZ())) {
                         loc.setY(loc.getY() + 1d);
                     }
-                    PaperLib.teleportAsync(user.getBase(), loc, TeleportCause.PLUGIN);
+                    user.getBase().teleport(loc, TeleportCause.PLUGIN);
                 }
             }
             ess.scheduleSyncDelayedTask(new DelayedClickJumpTask());
@@ -656,8 +643,8 @@ public class EssentialsPlayerListener implements Listener {
         }
     }
 
-    private boolean usePowertools(final User user, final Material material) {
-        final List<String> commandList = user.getPowertool(material);
+    private boolean usePowertools(final User user, final int id) {
+        final List<String> commandList = user.getPowertool(id);
         if (commandList == null || commandList.isEmpty()) {
             return false;
         }
@@ -731,7 +718,6 @@ public class EssentialsPlayerListener implements Listener {
         } else if (clickedInventory != null && clickedInventory.getType() == InventoryType.PLAYER) {
             if (ess.getSettings().isDirectHatAllowed() && event.getClick() == ClickType.LEFT && event.getSlot() == 39
                 && event.getCursor().getType() != Material.AIR && event.getCursor().getType().getMaxDurability() == 0
-                && !MaterialUtil.isSkull(event.getCursor().getType())
                 && ess.getUser(event.getWhoClicked()).isAuthorized("essentials.hat")) {
                 event.setCancelled(true);
                 final PlayerInventory inv = (PlayerInventory) clickedInventory;
@@ -795,18 +781,9 @@ public class EssentialsPlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerFishEvent(final PlayerFishEvent event) {
         final User user = ess.getUser(event.getPlayer());
-            user.updateActivityOnInteract(true);
+        user.updateActivity(true);
     }
-
-    private static boolean isEntityPickupEvent() {
-        try {
-            Class.forName("org.bukkit.event.entity.EntityPickupItemEvent");
-            return true;
-        } catch (ClassNotFoundException ignored) {
-            return false;
-        }
-    }
-
+    
     private final class PlayerListenerPre1_12 implements Listener {
 
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
@@ -818,7 +795,7 @@ public class EssentialsPlayerListener implements Listener {
             }
         }
     }
-
+    
     private final class PlayerListener1_12 implements Listener {
 
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
