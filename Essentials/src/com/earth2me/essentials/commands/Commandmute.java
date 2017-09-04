@@ -68,18 +68,41 @@ public class Commandmute extends EssentialsCommand {
 
             if (muted) {
                 if (muteTimestamp > 0) {
-                    sender.sendMessage(tl("mutedPlayerFor", user.getDisplayName(), muteTime));
-                    user.sendMessage(tl("playerMutedFor", muteTime));
+                    if (user.getMuteReason ().equals ("")) {
+                        sender.sendMessage(tl("mutedPlayerFor", user.getDisplayName(), muteTime));
+                        user.sendMessage(tl("playerMutedFor", muteTime));
+                    }
+                    else {
+                        sender.sendMessage(tl("mutedPlayerFor", user.getDisplayName(), muteTime) + tl("muteFormat",user.getMuteReason()));
+                        user.sendMessage(tl("playerMutedFor", muteTime) + tl("muteFormat",user.getMuteReason()));
+                    }
                 } else {
-                    sender.sendMessage(tl("mutedPlayer", user.getDisplayName()));
-                    /** Send the player a message, why they were muted **/
-                    user.sendMessage(tl("playerMuted"));
+                    if (user.getMuteReason ().equals ("")) {
+                        sender.sendMessage(tl("mutedPlayer", user.getDisplayName()));
+                        /** Send the player a message, why they were muted **/
+                        user.sendMessage(tl("playerMuted"));
+                    }
+                    else {
+                        sender.sendMessage(tl("mutedPlayer", user.getDisplayName()) + tl("muteFormat",user.getMuteReason()));
+                        /** Send the player a message, why they were muted **/
+                        user.sendMessage(tl("playerMuted")+ tl("muteFormat",user.getMuteReason()));
+                    }
                 }
                 final String message;
                 if (muteTimestamp > 0) {
-                    message = tl("muteNotifyFor", sender.getSender().getName(), user.getName(), muteTime);
+                    if (user.getMuteReason ().equals ("")) {
+                        message = tl("muteNotifyFor", sender.getSender().getName(), user.getName(), muteTime);
+                    }
+                    else {
+                        message = (tl("muteNotifyFor", sender.getSender().getName(), user.getName(), muteTime)  + tl("muteFormat",user.getMuteReason()));
+                    }
                 } else {
-                    message = tl("muteNotify", sender.getSender().getName(), user.getName());
+                    if (user.getMuteReason ().equals ("")) {
+                        message = tl("muteNotify", sender.getSender().getName(), user.getName());
+                    }
+                    else {
+                        message = (tl("muteNotify", sender.getSender().getName(), user.getName()) + tl("muteFormat",user.getMuteReason()));
+                    }
                 }
                 server.getLogger().log(Level.INFO, message);
                 ess.broadcastMessage("essentials.mute.notify", message);
