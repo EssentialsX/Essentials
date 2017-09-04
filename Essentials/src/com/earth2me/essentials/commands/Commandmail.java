@@ -48,7 +48,12 @@ public class Commandmail extends EssentialsCommand {
             }
 
             if (user.isMuted()) {
-                throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
+                if (user.getMuteReason ().equals ("")) {
+                    throw new Exception(tl("voiceSilenced"));
+                }
+                else {
+                    throw new Exception(tl("voiceSilenced") + tl("muteFormat", user.getMuteReason ()));
+                }
             }
 
             User u = getPlayer(server, args[1], true, true);
@@ -56,7 +61,8 @@ public class Commandmail extends EssentialsCommand {
                 throw new Exception(tl("playerNeverOnServer", args[1]));
             }
 
-            final String mail = tl("mailFormat", user.getName(), StringUtil.sanitizeString(FormatUtil.stripFormat(getFinalArg(args, 2))));
+            String mail = tl("mailFormat", user.getName(), StringUtil.sanitizeString(FormatUtil.stripFormat(getFinalArg(args, 2))));
+            mail = FormatUtil.formatMessage(user, "essentials.mail", mail);
             if (mail.length() > 1000) {
                 throw new Exception(tl("mailTooLong"));
             }
