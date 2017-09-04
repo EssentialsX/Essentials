@@ -517,12 +517,18 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public String getMuteReason() {
-        return muteReason;
+        if (muteReason != null) {
+            return muteReason;
+        }
+        else {
+            return "";
+        }
     }
 
     public void setMuteReason (String reason) {
         if (reason.equals("")) {
             config.removeProperty ("muteReason");
+            muteReason = null;
         } else {
             muteReason = reason;
             config.setProperty ("muteReason", reason);
