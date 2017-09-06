@@ -541,7 +541,7 @@ permissions:
   essentials.enchant:
     description: Allows access to the /enchant command.
     default: false
-  essentials.enchantments.[enchantmentname]:
+  essentials.enchantments:
     description: Allows access to each enchantment type.
     default: false
   essentials.enchantments.allowunsafe:
@@ -595,7 +595,7 @@ permissions:
   essentials.itemspawn.meta-chapter-[chapter]:
     description: Allows spawning of specific books only, from book.txt.
     default: false
-  essentials.enchantments.[enchantmentname]:
+  essentials.enchantments:
     description: Allows access to each enchantment type.
     default: false
   essentials.enchantments.allowunsafe:
@@ -607,11 +607,8 @@ permissions:
   essentials.itemspawn.exempt:
     description: Allows spawning of items on the spawn blacklist.
     default: false
-  essentials.itemspawn.item <itemname>:
+  essentials.itemspawn.item :
     description: If permission based item spawn: Spawn <itemname>.
-    default: false
-  essentials.itemspawn.item [itemid]:
-    description: If permission based item spawn: Spawn [itemid].
     default: false
   essentials.itemspawn.item all:
     description: If permission based item spawn: Spawn all items
@@ -652,9 +649,9 @@ permissions:
     description: Bypass the heal cooldown
   essentials.heal.others:
     description: Allows healing another player
-  essentials.itemspawn.meta-chapter-[chapter]:
+  essentials.itemspawn.meta-chapter:
     description: Allows spawning of specific books only, from book.txt
-  essentials.enchantments.[enchantmentname]:
+  essentials.enchantments:
     description: Allows access to each enchantment type.
     default: false
   essentials.enchantments.allowunsafe:
@@ -666,11 +663,8 @@ permissions:
   essentials.itemspawn.exempt:
     description: Allows spawning of items on the spawn blacklist.
     default: false
-  essentials.itemspawn.item-[itemid]:
+  essentials.itemspawn:
     description: If permission based item spawn: Spawn [itemid].
-    default: false
-  essentials.itemspawn.item-[itemname]:
-    description: If permission based item spawn: Spawn [itemname].
     default: false
   essentials.itemspawn.item-all:
     description: If permission based item spawn: Spawn all items.
@@ -703,7 +697,7 @@ permissions:
     default: false
   essentials.kits.*:
     description: Allows access to all created kits
-  essentials.kits.[kitname]:
+  essentials.kits:
     description: Give access to a single kit, where [kitname] is the name of an existing kit.
     default: false
   essentials.more:
@@ -764,12 +758,6 @@ permissions:
     default: false
   essentials.unlimited:
     description: Allow access to the /unlimited command.
-    default: false
-  essentials.unlimited.item-[itemid]:
-    description: Allows the player to recieve an unlimited stack of [itemid].
-    default: false
-  essentials.unlimited.item-[itemname]:
-    description: Allows the player to recieve an unlimited stack of [itemname].
     default: false
   essentials.unlimited.item all:
     description: Allows the player to recieve an unlimited stack of any item.
@@ -851,12 +839,6 @@ permissions:
     default: false
   essentials.help:
     description: Allow access to the /help command.
-    default: false
-  essentials.help.[pluginname]:
-    description: Manually adds the commands from a plugin to this groups /help. Name is all lowercase.
-    default: false
-  essentials.help.[pluginname].[command]:
-    description: Manually adds a command from a plugin to this groups /help. Name is all lowercase.
     default: false
   essentials.helpop:
     description: Allow access to the /helpop command.
@@ -989,7 +971,7 @@ permissions:
   essentials.spawner.*:
     description: Allows access to set spawner type to any mob.
     default: false
-  essentials.spawner.[mob]:
+  essentials.spawner:
     description: Allows access to set spawner to specified mob type.
     default: false
   essentials.suicide:
@@ -1138,7 +1120,7 @@ permissions:
   essentials.spawnmob.*:
     description: Allow the spawning of all mobs.
     default: false
-  essentials.spawnmob.[mob]:
+  essentials.spawnmob:
     description: Allow access to spawn a specific mob.
     default: false
   essentials.spawnmob.stack:
@@ -1168,7 +1150,7 @@ permissions:
   essentials.thunder:
     description: Allow access to the /thunder command.
     default: false
-  essentials.jail.allow.<command>:
+  essentials.jail.allow:
     description: Allows essentials.commands to be used while jailed (requires regular perm).
     default: false
   essentials.jail.exempt:
@@ -1231,9 +1213,6 @@ permissions:
   essentials.keepxp:
     description: Allows the user to keep their exp on death, instead of dropping it.
     default: false
-  essentials.worlds.<worldname>:
-    description: Allows players access to a specific world.
-    default: false
   essentials.delhome:
     description: Allow access to the /delhome command.
     default: false
@@ -1252,9 +1231,6 @@ permissions:
   essentials.home.others:
     description: Allows you to teleport to homes of other players.
     default: false
-  essentials.worlds.<worldname>:
-    description: Allows players access to a specific world.
-    default: false
   essentials.jump:
     description: Allow access to the /jump command.
     default: false
@@ -1267,9 +1243,6 @@ permissions:
   essentials.sethome.multiple:
     description: Allows player to have multiple homes, or create named homes. Required for 2+ homes.
     default: false
-  essentials.sethome.multiple.[set name]:
-    description: Raise the multiple home limit to a setting defined in the config file.
-    default: false
   essentials.sethome.multiple.unlimited:
     description: Removes the cap on the number of homes people are allowed (if they have multiple homes).
   essentials.sethome.others:
@@ -1281,7 +1254,7 @@ permissions:
   essentials.warp.overwrite.*:
     description: Allows overwriting of all existing warps.
     default: false
-  essentials.warp.overwrite.[warpname]:
+  essentials.warp.overwrite:
     description: Allows overwriting of existing warps.
     default: false
   essentials.top:
@@ -1293,20 +1266,11 @@ permissions:
   essentials.tp.others:
     description: Allow players to teleport another player.
     default: false
-  essentials.worlds.<worldname>:
-    description: Allows players access to a specific world.
-    default: false
   essentials.tpa:
     description: Allow access to the /tpa command.
     default: false
-  essentials.worlds.<worldname>:
-    description: Allows players access to a specific world.
-    default: false
   essentials.tpaall:
     description: Allow access to the /tpaall command.
-    default: false
-  essentials.worlds.<worldname>:
-    description: Allows teleporting player to a specific world.
     default: false
   essentials.tpaccept:
     description: Allow access to the /tpaccept command.
@@ -1314,14 +1278,8 @@ permissions:
   essentials.tpahere:
     description: Allow access to the /tpahere command.
     default: false
-  essentials.worlds.<worldname>:
-    description: Allows teleporting players to a specific world.
-    default: false
   essentials.tpall:
     description: Allow access to the /tpall command.
-    default: false
-  essentials.worlds.<worldname>:
-    description: Allows teleporting players to a specific world.
     default: false
   essentials.tpdeny:
     description: Allow access to the /tpdeny command.
@@ -1329,20 +1287,14 @@ permissions:
   essentials.tphere:
     description: Allow access to the /tphere command.
     default: false
-  essentials.worlds.<worldname>:
+  essentials.worlds:
     description: Allows players access to a specific world.
     default: false
   essentials.tpo:
     description: Allow access to the /tpo command.
     default: false
-  essentials.worlds.<worldname>:
-    description: Allows players access to a specific world.
-    default: false
   essentials.tpohere:
     description: Allow access to the /tpohere command.
-    default: false
-  essentials.worlds.<worldname>:
-    description: Allows players access to a specific world.
     default: false
   essentials.tppos:
     description: Allow access to the /tppos command.
@@ -1377,7 +1329,7 @@ permissions:
   essentials.warps.*:
     description: Allows access to all warps.
     default: false
-  essentials.warps.[warpname]:
+  essentials.warps:
     description: If you have per warp permission set to true in the config.yml then you can limit what warps players can use. This also controls what players would see with /warp.
     default: false
   essentials.world:
@@ -1578,22 +1530,22 @@ permissions:
   essentials.build:
     description: Allows people to build when using permission systems which dont support build toggles.
     default: false
-  essentials.build.break.<id>[:datavalue]:
+  essentials.build.break:
     description: Allows breaking of a block.
     default: false
-  essentials.build.craft.<id>[:datavalue]:
+  essentials.build.craft:
     description: Allows crafting of an item.
     default: false
-  essentials.build.drop.<id>[:datavalue]:
+  essentials.build.drop:
     description: Allows dropping of an item.
     default: false
-  essentials.build.interact.<id>[:datavalue]:
+  essentials.build.interact:
     description: Allows interacting with a blocks or item.
     default: false
-  essentials.build.pickup.<id>[:datavalue]:
+  essentials.build.pickup:
     description: Allows collecting of an item.
     default: false
-  essentials.build.place.<id>[:datavalue]:
+  essentials.build.place:
     description: Allows placing a block.
     default: false
   essentials.chat.color:
@@ -1625,7 +1577,7 @@ permissions:
   essentials.joinfullserver:
     description: Player can join when the server is full.
     default: false
-  essentials.nocommandcost.[command]:
+  essentials.nocommandcost:
     description: Removes the command cost of a given command.
     default: false
   essentials.nocommandcost.all:
