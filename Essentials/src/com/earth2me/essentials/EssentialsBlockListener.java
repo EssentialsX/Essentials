@@ -40,6 +40,7 @@ public class EssentialsBlockListener implements Listener {
                 if (type != null && Mob.fromBukkitType(type) != null) {
                     if (ess.getUser(event.getPlayer()).isAuthorized("essentials.spawnerconvert." + Mob.fromBukkitType(type).name().toLowerCase(Locale.ENGLISH))) {
                         spawner.setSpawnedType(type);
+                        spawner.update();
                     }
                 }
             }
