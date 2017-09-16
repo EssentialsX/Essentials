@@ -961,9 +961,10 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("disable-item-pickup-while-afk", false);
     }
 
-    @Override
-    public EventPriority getRespawnPriority() {
-        String priority = config.getString("respawn-listener-priority", "normal").toLowerCase(Locale.ENGLISH);
+    private EventPriority getPriority(String priority) {
+        if ("none".equals(priority)) {
+            return null;
+        }
         if ("lowest".equals(priority)) {
             return EventPriority.LOWEST;
         }
@@ -980,6 +981,18 @@ public class Settings implements net.ess3.api.ISettings {
             return EventPriority.HIGHEST;
         }
         return EventPriority.NORMAL;
+    }
+
+    @Override
+    public EventPriority getRespawnPriority() {
+        String priority = config.getString("respawn-listener-priority", "normal").toLowerCase(Locale.ENGLISH);
+        return getPriority(priority);
+    }
+
+    @Override
+    public EventPriority getSpawnJoinPriority() {
+        String priority = config.getString("spawn-join-listener-priority", "normal").toLowerCase(Locale.ENGLISH);
+        return getPriority(priority);
     }
 
     @Override

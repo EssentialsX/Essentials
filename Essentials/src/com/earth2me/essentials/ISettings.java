@@ -192,6 +192,8 @@ public interface ISettings extends IConf {
 
     EventPriority getRespawnPriority();
 
+    EventPriority getSpawnJoinPriority();
+
     long getTpaAcceptCancellation();
 
     long getTeleportInvulnerability();
