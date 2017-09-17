@@ -261,7 +261,7 @@ commands:
     aliases: [emsgtoggle]
   mute:
     description: Mutes or unmutes a player.
-    usage: /<command> <player> [datediff]
+    usage: /<command> <player> [datediff] [reason]
     aliases: [emute,silence,esilence]
   near:
     description: Lists the players near by or around a player.
