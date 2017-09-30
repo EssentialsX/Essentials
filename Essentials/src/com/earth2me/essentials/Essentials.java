@@ -155,7 +155,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public void onEnable() {
         try {
-            LOGGER.setParent(this.getLogger());
+            if (LOGGER != this.getLogger()) {
+                LOGGER.setParent(this.getLogger());
+            }
             execTimer = new ExecuteTimer();
             execTimer.start();
             i18n = new I18n(this);
