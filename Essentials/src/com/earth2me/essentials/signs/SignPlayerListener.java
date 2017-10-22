@@ -44,6 +44,10 @@ public class SignPlayerListener implements Listener {
                 if (ess.getSettings().isDebug()) {
                     ess.getLogger().log(Level.WARNING, ex.getMessage(), ex);
                 }
+            } catch (NoSuchMethodError er) {
+                if (ess.getSettings().isDebug()) {
+                    ess.getLogger().log(Level.WARNING, er.getMessage(), er);
+                }
             }
             block = targetBlock;
         } else {
