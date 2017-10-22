@@ -584,27 +584,25 @@ public class EssentialsPlayerListener implements Listener {
                         player.sendMessage(tl("bedSet", player.getLocation().getWorld().getName(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ()));
                     }
                 }
-                break;
+            break;
             case LEFT_CLICK_AIR:
                 if (event.getPlayer().isFlying()) {
                     final User user = ess.getUser(event.getPlayer());
                     if (user.isFlyClickJump()) {
                         useFlyClickJump(user);
-                        return;
                     }
                 }
+            break;
             case LEFT_CLICK_BLOCK:
                 if (event.getItem() != null && event.getItem().getType() != Material.AIR) {
                     final User user = ess.getUser(event.getPlayer());
-                    user.updateActivity(true);
                     if (user.hasPowerTools() && user.arePowerToolsEnabled() && usePowertools(user, event.getItem().getTypeId())) {
                         event.setCancelled(true);
                     }
                 }
-                break;
-            default:
-                break;
+            break;
         }
+        ess.getUser(event.getPlayer()).updateActivity(true);
     }
 
     // This method allows the /jump lock feature to work, allows teleporting while flying #EasterEgg
