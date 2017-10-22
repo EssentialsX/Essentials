@@ -2,6 +2,8 @@
 
 [![Downloads](https://i.imgur.com/MMc0PJY.png)](http://ci.ender.zone/job/EssentialsX/)
 
+**Mirror**: https://ci.akpmakes.tech/job/EssentialsX/
+
 This is a fork of Essentials called EssentialsX.
 
 If you are using this, do **NOT** ask Essentials for support.
