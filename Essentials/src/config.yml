@@ -635,7 +635,7 @@ use-bukkit-permissions: true
 # Minimum acceptable amount to be used in /pay.
 minimum-pay-amount: 0.001
 
-# The format of currency, excluding symbols. See currency-sumbol-format-locale for symbol configuration.
+# The format of currency, excluding symbols. See currency-symbol-format-locale for symbol configuration.
 #
 # "#,##0.00" is how the majority of countries display currency.
 #currency-format: "#,##0.00"
