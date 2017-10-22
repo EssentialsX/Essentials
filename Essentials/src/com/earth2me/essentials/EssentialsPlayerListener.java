@@ -280,7 +280,7 @@ public class EssentialsPlayerListener implements Listener {
                     }
                 }
 
-                if (user.isAuthorized("essentials.fly.safelogin")) {
+                if (user.isAuthorized("essentials.fly.safelogin") && user.isAuthorized("essentials.fly")) {
                     user.getBase().setFallDistance(0);
                     if (LocationUtil.shouldFly(user.getLocation())) {
                         user.getBase().setAllowFlight(true);
