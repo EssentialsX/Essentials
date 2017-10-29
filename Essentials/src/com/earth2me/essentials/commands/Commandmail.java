@@ -56,7 +56,8 @@ public class Commandmail extends EssentialsCommand {
                 throw new Exception(tl("playerNeverOnServer", args[1]));
             }
 
-            final String mail = tl("mailFormat", user.getName(), StringUtil.sanitizeString(FormatUtil.stripFormat(getFinalArg(args, 2))));
+            String mail = tl("mailFormat", user.getName(), StringUtil.sanitizeString(FormatUtil.stripFormat(getFinalArg(args, 2))));
+            mail = FormatUtil.formatMessage(user, "essentials.mail", mail);
             if (mail.length() > 1000) {
                 throw new Exception(tl("mailTooLong"));
             }
