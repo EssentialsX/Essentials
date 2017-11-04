@@ -91,6 +91,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         commandCooldowns = _getCommandCooldowns();
         acceptingPay = _getAcceptingPay();
         confirmPay = _getConfirmPay();
+        confirmClear = _getConfirmClear();
     }
 
     private BigDecimal money;
@@ -910,6 +911,22 @@ public abstract class UserData extends PlayerExtension implements IConf {
     public void setPromptingPayConfirm(boolean prompt) {
         this.confirmPay = prompt;
         config.setProperty("confirm-pay", prompt);
+        save();
+    }
+
+    private boolean confirmClear = true; // players accept clear confirmation by default
+
+    public boolean _getConfirmClear() {
+        return config.getBoolean("confirm-clear", true);
+    }
+
+    public boolean isPromptingClearConfirm() {
+        return confirmClear;
+    }
+
+    public void setPromptingClearConfirm(boolean prompt) {
+        this.confirmClear = prompt;
+        config.setProperty("confirm-clear", prompt);
         save();
     }
 

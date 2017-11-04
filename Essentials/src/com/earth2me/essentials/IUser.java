@@ -178,6 +178,10 @@ public interface IUser {
     boolean isPromptingPayConfirm();
     
     void setPromptingPayConfirm(boolean prompt);
+    
+    boolean isPromptingClearConfirm();
+    
+    void setPromptingClearConfirm(boolean prompt);
 
     Map<User, BigDecimal> getConfirmingPayments();
 }
