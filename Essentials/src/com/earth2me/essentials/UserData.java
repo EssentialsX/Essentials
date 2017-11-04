@@ -897,7 +897,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         save();
     }
 
-    private boolean confirmPay = true; // players accept pay by default
+    private boolean confirmPay = true; // players accept pay confirmation by default
 
     public boolean _getConfirmPay() {
         return config.getBoolean("confirm-pay", true);
