@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.Plugin;
 import org.yaml.snakeyaml.TypeDescription;
+import org.yaml.snakeyaml.constructor.BaseConstructor;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.constructor.CustomClassLoaderConstructor;
 import org.yaml.snakeyaml.error.YAMLException;
@@ -221,7 +222,7 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
         protected Object constructJavaBean2ndStep(final MappingNode node, final Object object) {
             Map<Class<? extends Object>, TypeDescription> typeDefinitions;
             try {
-                final Field typeDefField = Constructor.class.getDeclaredField("typeDefinitions");
+                final Field typeDefField = BaseConstructor.class.getDeclaredField("typeDefinitions");
                 typeDefField.setAccessible(true);
                 typeDefinitions = (Map<Class<? extends Object>, TypeDescription>) typeDefField.get(BukkitConstructor.this);
                 if (typeDefinitions == null) {
