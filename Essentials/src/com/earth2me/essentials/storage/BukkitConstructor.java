@@ -9,17 +9,11 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.Plugin;
-import org.yaml.snakeyaml.TypeDescription;
-import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.constructor.CustomClassLoaderConstructor;
-import org.yaml.snakeyaml.error.YAMLException;
-import org.yaml.snakeyaml.introspector.Property;
+import org.yaml.snakeyaml.introspector.PropertyUtils;
 import org.yaml.snakeyaml.nodes.*;
 
-import java.lang.reflect.Field;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 
 public class BukkitConstructor extends CustomClassLoaderConstructor {
@@ -30,6 +24,10 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
         this.plugin = plugin;
         yamlClassConstructors.put(NodeId.scalar, new ConstructBukkitScalar());
         yamlClassConstructors.put(NodeId.mapping, new ConstructBukkitMapping());
+
+        PropertyUtils propertyUtils = getPropertyUtils();
+        propertyUtils.setSkipMissingProperties(true);
+        setPropertyUtils(propertyUtils);
     }
 
 
@@ -170,7 +168,6 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
         }
     }
 
-
     private class ConstructBukkitMapping extends ConstructMapping {
         @Override
         public Object construct(final Node node) {
@@ -215,103 +212,6 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
                 return new Location(world, x, y, z, yaw, pitch);
             }
             return super.construct(node);
-        }
-
-        @Override
-        protected Object constructJavaBean2ndStep(final MappingNode node, final Object object) {
-            Map<Class<? extends Object>, TypeDescription> typeDefinitions;
-            try {
-                final Field typeDefField = Constructor.class.getDeclaredField("typeDefinitions");
-                typeDefField.setAccessible(true);
-                typeDefinitions = (Map<Class<? extends Object>, TypeDescription>) typeDefField.get(BukkitConstructor.this);
-                if (typeDefinitions == null) {
-                    throw new NullPointerException();
-                }
-            } catch (Exception ex) {
-                throw new YAMLException(ex);
-            }
-            flattenMapping(node);
-            final Class<? extends Object> beanType = node.getType();
-            final List<NodeTuple> nodeValue = node.getValue();
-            for (NodeTuple tuple : nodeValue) {
-                ScalarNode keyNode;
-                if (tuple.getKeyNode() instanceof ScalarNode) {
-                    // key must be scalar
-                    keyNode = (ScalarNode) tuple.getKeyNode();
-                } else {
-                    throw new YAMLException("Keys must be scalars but found: " + tuple.getKeyNode());
-                }
-                final Node valueNode = tuple.getValueNode();
-                // keys can only be Strings
-                keyNode.setType(String.class);
-                final String key = (String) constructObject(keyNode);
-                try {
-                    Property property;
-                    try {
-                        property = getProperty(beanType, key);
-                    } catch (YAMLException e) {
-                        continue;
-                    }
-                    valueNode.setType(property.getType());
-                    final TypeDescription memberDescription = typeDefinitions.get(beanType);
-                    boolean typeDetected = false;
-                    if (memberDescription != null) {
-                        switch (valueNode.getNodeId()) {
-                            case sequence:
-                                final SequenceNode snode = (SequenceNode) valueNode;
-                                final Class<? extends Object> memberType = memberDescription.getListPropertyType(key);
-                                if (memberType != null) {
-                                    snode.setListType(memberType);
-                                    typeDetected = true;
-                                } else if (property.getType().isArray()) {
-                                    snode.setListType(property.getType().getComponentType());
-                                    typeDetected = true;
-                                }
-                                break;
-                            case mapping:
-                                final MappingNode mnode = (MappingNode) valueNode;
-                                final Class<? extends Object> keyType = memberDescription.getMapKeyType(key);
-                                if (keyType != null) {
-                                    mnode.setTypes(keyType, memberDescription.getMapValueType(key));
-                                    typeDetected = true;
-                                }
-                                break;
-                        }
-                    }
-                    if (!typeDetected && valueNode.getNodeId() != NodeId.scalar) {
-                        // only if there is no explicit TypeDescription
-                        final Class<?>[] arguments = property.getActualTypeArguments();
-                        if (arguments != null) {
-                            // type safe (generic) collection may contain the
-                            // proper class
-                            if (valueNode.getNodeId() == NodeId.sequence) {
-                                final Class<?> t = arguments[0];
-                                final SequenceNode snode = (SequenceNode) valueNode;
-                                snode.setListType(t);
-                            } else if (valueNode.getTag().equals(Tag.SET)) {
-                                final Class<?> t = arguments[0];
-                                final MappingNode mnode = (MappingNode) valueNode;
-                                mnode.setOnlyKeyType(t);
-                                mnode.setUseClassConstructor(true);
-                            } else if (property.getType().isAssignableFrom(Map.class)) {
-                                final Class<?> ketType = arguments[0];
-                                final Class<?> valueType = arguments[1];
-                                final MappingNode mnode = (MappingNode) valueNode;
-                                mnode.setTypes(ketType, valueType);
-                                mnode.setUseClassConstructor(true);
-                            } else {
-                                // the type for collection entries cannot be
-                                // detected
-                            }
-                        }
-                    }
-                    final Object value = constructObject(valueNode);
-                    property.set(object, value);
-                } catch (Exception e) {
-                    throw new YAMLException("Cannot create property=" + key + " for JavaBean=" + object + "; " + e.getMessage(), e);
-                }
-            }
-            return object;
         }
     }
 }
