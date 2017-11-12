@@ -1,9 +1,13 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n.tl;
+
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.StringUtil;
+
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -14,10 +18,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import static com.earth2me.essentials.I18n.tl;
-
 
 public class Commandclearinventory extends EssentialsCommand {
+
     public Commandclearinventory() {
         super("clearinventory");
     }
@@ -27,16 +30,22 @@ public class Commandclearinventory extends EssentialsCommand {
 
     @Override
     public void run(Server server, User user, String commandLabel, String[] args) throws Exception {
-        parseCommand(server, user.getSource(), args, user.isAuthorized("essentials.clearinventory.others"), user.isAuthorized("essentials.clearinventory.all") || user.isAuthorized("essentials.clearinventory.multiple"));
+        parseCommand(server, user.getSource(), commandLabel, args, user.isAuthorized("essentials.clearinventory.others"),
+            user.isAuthorized("essentials.clearinventory.all") || user.isAuthorized("essentials.clearinventory.multiple"));
     }
 
     @Override
     protected void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception {
-        parseCommand(server, sender, args, true, true);
+        parseCommand(server, sender, commandLabel, args, true, true);
     }
 
-    private void parseCommand(Server server, CommandSource sender, String[] args, boolean allowOthers, boolean allowAll) throws Exception {
+    private void parseCommand(Server server, CommandSource sender, String commandLabel, String[] args, boolean allowOthers, boolean allowAll)
+        throws Exception {
         Collection<Player> players = new ArrayList<Player>();
+        User senderUser = ess.getUser(sender.getPlayer());
+        // Clear previous command execution before potential errors to reset confirmation.
+        String previousClearCommand = senderUser.getConfirmingClearCommand();
+        senderUser.setConfirmingClearCommand(null);
         int offset = 0;
 
         if (sender.isPlayer()) {
@@ -55,6 +64,18 @@ public class Commandclearinventory extends EssentialsCommand {
         if (players.size() < 1) {
             throw new PlayerNotFoundException();
         }
+
+
+        // Confirm
+        String formattedCommand = formatCommand(commandLabel, args);
+        if (senderUser != null && senderUser.isPromptingClearConfirm()) {
+            if (!formattedCommand.equals(previousClearCommand)) {
+                senderUser.setConfirmingClearCommand(formattedCommand);
+                senderUser.sendMessage(tl("confirmClear", formattedCommand));
+                return;
+            }
+        }
+
         for (Player player : players) {
             clearHandler(sender, player, args, offset, players.size() < EXTENDED_CAP);
         }
@@ -174,5 +195,9 @@ public class Commandclearinventory extends EssentialsCommand {
         } else {
             return Collections.emptyList();
         }
+    }
+
+    private String formatCommand(String commandLabel, String[] args) {
+        return "/" + commandLabel + " " + StringUtil.joinList(" ", (Object[]) args);
     }
 }
