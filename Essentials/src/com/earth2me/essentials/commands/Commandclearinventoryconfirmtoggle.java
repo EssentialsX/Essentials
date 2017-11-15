@@ -6,9 +6,9 @@ import com.earth2me.essentials.User;
 
 import org.bukkit.Server;
 
-public class Commandclearconfirmtoggle extends EssentialsCommand {
+public class Commandclearinventoryconfirmtoggle extends EssentialsCommand {
 
-    public Commandclearconfirmtoggle() {
+    public Commandclearinventoryconfirmtoggle() {
         super("clearinventoryconfirmtoggle");
     }
 
