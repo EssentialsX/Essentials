@@ -87,7 +87,7 @@ import static com.earth2me.essentials.I18n.tl;
 public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private static final Logger LOGGER = Logger.getLogger("Essentials");
     private transient CommandMap bukkitCommandMap;
-    private transient ISettings settings;
+    private transient net.ess3.api.ISettings settings;
     private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
     private transient Jails jails;
     private transient Warps warps;
@@ -126,7 +126,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     @Override
-    public ISettings getSettings() {
+    public net.ess3.api.ISettings getSettings() {
         return settings;
     }
 
