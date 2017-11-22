@@ -54,23 +54,23 @@ public class HelpInput implements IText {
 
                 for (String c : commands) {
                     Command command = ess.getCommandMap().getCommand(c);
-                    /*
-					IF:
-					- Match doesn't equal an empty string.
-					- Plugin name (lowercase) doesn't contain the match.
-					- Command name (lowercase) contains the match.
-					- The command description exists.
-					- The command description contains the match.
+                     /*
+                    IF:
+                    - Match doesn't equal an empty string.
+                    - Plugin name (lowercase) doesn't contain the match.
+                    - Command name (lowercase) contains the match.
+                    - The command description exists.
+                    - The command description contains the match.
 					 */
                     if (!match.equalsIgnoreCase("") && (!pluginNameLow.contains(match)) && (!command.getName().toLowerCase(Locale.ENGLISH).contains(match)) && (!(command.getDescription() != null && command.getDescription().toLowerCase(Locale.ENGLISH).contains(match))))
                         continue;
                     if (pluginNameLow.contains("essentials")) {
                         final String node = "essentials." + command.getName();
-						/*
-						IF:
-						- The command isn't disabled
-						- The user is authorized for the command
-						 */
+                        /*
+                        IF:
+                        - The command isn't disabled
+                        - The user is authorized for the command
+                         */
                         if (!ess.getSettings().isCommandDisabled(command.getName()) && user.isAuthorized(node)) {
                             pluginLines.add(tl("helpLine", command.getName(), command.getDescription()));
                         }
@@ -100,11 +100,11 @@ public class HelpInput implements IText {
                         }
                     }
                 }
-				/*
-				Before we add the plugin name to the help menu, we need to check if the plugin even has commands. The
-				algorithm above gets any commands from the plugin and adds it to the pluginLines list. Here, we check if
-				the pluginLines list is empty or not. If it isn't empty, we add the plugin to the main help menu.
-				 */
+                /*
+                Before we add the plugin name to the help menu, we need to check if the plugin even has commands. The
+                algorithm above gets any commands from the plugin and adds it to the pluginLines list. Here, we check if
+                the pluginLines list is empty or not. If it isn't empty, we add the plugin to the main help menu.
+                 */
                 if (!pluginLines.isEmpty()) {
                     newLines.addAll(pluginLines);
                     if (pluginNameLow.equals(match)) {
@@ -127,11 +127,13 @@ public class HelpInput implements IText {
     private Set<String> getPluginCommands(Plugin plugin) {
 
         final Set<String> commands = new HashSet<>();
-        // Checks if the command is a PluginIdentifiableCommand,
-        // checks if the command's plugin equals the supplied plugin,
-        // and checks if the commands set doesn't contain this command
-        // already. If all of these are true, we add the command to
-        // the commands set
+        /*
+         Checks if the command is a PluginIdentifiableCommand,
+         checks if the command's plugin equals the supplied plugin,
+         and checks if the commands set doesn't contain this command
+         already. If all of these are true, we add the command to
+         the commands set
+         */
         ((SimpleCommandMap) ess.getCommandMap()).getCommands().stream().filter(command -> (command instanceof PluginIdentifiableCommand) && ((PluginIdentifiableCommand) command).getPlugin().equals(plugin) && (!commands.contains(command.getName()))).forEach(command -> commands.add(command.getName()));
         return commands;
     }
