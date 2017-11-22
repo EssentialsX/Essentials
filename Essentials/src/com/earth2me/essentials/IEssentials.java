@@ -9,6 +9,7 @@ import com.earth2me.essentials.register.payment.Methods;
 import net.ess3.nms.SpawnerProvider;
 import org.bukkit.World;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -101,4 +102,6 @@ public interface IEssentials extends Plugin {
     Iterable<User> getOnlineUsers();
 
     SpawnerProvider getSpawnerProvider();
+    
+    CommandMap getCommandMap();
 }

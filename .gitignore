@@ -33,6 +33,7 @@
 /EssentialsUpdate/build/
 /WebPush/apikey.php
 /WebPush/nbproject/private
+*/target/*
 /EssentialsAntiBuild/nbproject/private/
 /EssentialsAntiBuild/dist/
 /EssentialsAntiBuild/build/
@@ -43,7 +44,6 @@
 *.classpath
 *.project
 *.settings/
-target/
 dependency-reduced-pom.xml
 /Essentials/config.yml
 /Essentials/userdata/testplayer1.yml
