@@ -156,7 +156,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         i18n.onEnable();
         i18n.updateLocale("en");
         Console.setInstance(this);
-        
+
         LOGGER.log(Level.INFO, tl("usingTempFolderForTesting"));
         LOGGER.log(Level.INFO, dataFolder.toString());
         settings = new Settings(this);
@@ -179,7 +179,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             i18n = new I18n(this);
             i18n.onEnable();
             execTimer.mark("I18n1");
-            
+
             Console.setInstance(this);
 
             final PluginManager pm = getServer().getPluginManager();
@@ -195,20 +195,19 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     break;
                 }
             }
-	
-			try {
-				Field field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
-				field.setAccessible(true);
-				bukkitCommandMap = (CommandMap)field.get(Bukkit.getServer());
-			}
-			catch (NoSuchFieldException | IllegalAccessException e) {
-				e.printStackTrace();
-			}
-            
+
+            try {
+                Field field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+                field.setAccessible(true);
+                bukkitCommandMap = (CommandMap) field.get(Bukkit.getServer());
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                LOGGER.log(Level.WARNING, tl("failedToFindCommandMap"), e);
+            }
+
             forceLoadClasses();
 
             try {
-				final EssentialsUpgrade upgrade = new EssentialsUpgrade(this);
+                final EssentialsUpgrade upgrade = new EssentialsUpgrade(this);
                 upgrade.beforeSettings();
                 execTimer.mark("Upgrade");
                 confList = new ArrayList<>();
@@ -372,7 +371,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String commandLabel, String[] args) {
         return onTabCompleteEssentials(sender, command, commandLabel, args, Essentials.class.getClassLoader(),
-            "com.earth2me.essentials.commands.Command", "essentials.", null);
+                "com.earth2me.essentials.commands.Command", "essentials.", null);
     }
 
     @Override
@@ -877,13 +876,13 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     public PotionMetaProvider getPotionMetaProvider() {
         return potionMetaProvider;
     }
-	
-	@Override
-	public CommandMap getCommandMap() {
-		return bukkitCommandMap;
-	}
-	
-	private static class EssentialsWorldListener implements Listener, Runnable {
+
+    @Override
+    public CommandMap getCommandMap() {
+        return bukkitCommandMap;
+    }
+
+    private static class EssentialsWorldListener implements Listener, Runnable {
         private transient final IEssentials ess;
 
         public EssentialsWorldListener(final IEssentials ess) {
