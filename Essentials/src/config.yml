@@ -686,6 +686,7 @@ chat:
 
   format: '<{DISPLAYNAME}> {MESSAGE}'
   #format: '&7[{GROUP}]&r {DISPLAYNAME}&7:&r {MESSAGE}'
+  #format: '&7{VAULTPREFIX}&r {DISPLAYNAME}&r &7{VAULTSUFFIX}&r: {MESSAGE}'
 
   group-formats:
   #  Default: '{WORLDNAME} {DISPLAYNAME}&7:&r {MESSAGE}'
