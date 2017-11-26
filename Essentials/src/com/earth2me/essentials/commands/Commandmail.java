@@ -52,7 +52,7 @@ public class Commandmail extends EssentialsCommand {
                     throw new Exception(tl("voiceSilenced"));
                 }
                 else {
-                    throw new Exception(tl("voiceSilenced") + tl("muteFormat", user.getMuteReason ()));
+                    throw new Exception(tl("voiceSilenced") + tl("muteReason", user.getMuteReason ()));
                 }
             }
 
