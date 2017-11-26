@@ -82,8 +82,7 @@ public class Commandmute extends EssentialsCommand {
                     if (user.getMuteReason ().equals ("")) {
                         sender.sendMessage(tl("mutedPlayerFor", user.getDisplayName(), muteTime));
                         user.sendMessage(tl("playerMutedFor", muteTime));
-                    }
-                    else {
+                    } else {
                         sender.sendMessage(tl("mutedPlayerFor", user.getDisplayName(), muteTime) + tl("muteFormat",user.getMuteReason()));
                         user.sendMessage(tl("playerMutedFor", muteTime) + tl("muteFormat",user.getMuteReason()));
                     }
