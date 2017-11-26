@@ -9,5 +9,7 @@ EssentialsX version (`/essentials`):
 
 Server software (`/version`): 
 
+Server (logs/latest.log):
+
 EssentialsX config (if applicable): 
 
