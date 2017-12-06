@@ -584,15 +584,15 @@ public class EssentialsPlayerListener implements Listener {
                         player.sendMessage(tl("bedSet", player.getLocation().getWorld().getName(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ()));
                     }
                 }
-            break;
+                break;
             case LEFT_CLICK_AIR:
                 if (event.getPlayer().isFlying()) {
                     final User user = ess.getUser(event.getPlayer());
                     if (user.isFlyClickJump()) {
                         useFlyClickJump(user);
+                        break;
                     }
                 }
-            break;
             case LEFT_CLICK_BLOCK:
                 if (event.getItem() != null && event.getItem().getType() != Material.AIR) {
                     final User user = ess.getUser(event.getPlayer());
@@ -600,7 +600,7 @@ public class EssentialsPlayerListener implements Listener {
                         event.setCancelled(true);
                     }
                 }
-            break;
+                break;
         }
         ess.getUser(event.getPlayer()).updateActivity(true);
     }
