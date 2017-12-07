@@ -1,10 +1,10 @@
 Note
 --------
 
-> EssentialsX has been discontinued.
-> 1.12 is the last version of Spigot supported by EssentialsX.
-> There are no plans to officially support 1.13 or above.
-> We suggest you switch to a maintained alternative.
+> EssentialsX has been discontinued.  
+> 1.12 is the last version of Spigot supported by EssentialsX.  
+> There are no plans to officially support 1.13 or above.  
+> We suggest you switch to a maintained alternative.  
 > Thanks for using EssentialsX!
 
 ![](https://i.imgur.com/CP4SZpB.png)
