@@ -20,6 +20,7 @@ import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.*;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,10 +28,12 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class ItemDb implements IConf, net.ess3.api.IItemDb {
+    protected static final Logger LOGGER = Logger.getLogger("Essentials");
     private final transient IEssentials ess;
     private final transient Map<String, Integer> items = new HashMap<>();
     private final transient Map<ItemData, List<String>> names = new HashMap<>();
     private final transient Map<ItemData, String> primaryName = new HashMap<>();
+    private final transient Map<Integer, ItemData> legacyIds = new HashMap<>();
     private final transient Map<String, Short> durabilities = new HashMap<>();
     private final transient Map<String, String> nbtData = new HashMap<>();
     private final transient ManagedFile file;
@@ -95,13 +98,19 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
             if (itemName == null || numeric < 0) {
                 continue;
             }
+
+            Material material = Material.matchMaterial(itemName);
+            if (material == null) {
+                LOGGER.warning(String.format("Failed to find material for %s", itemName));
+                continue;
+            }
             durabilities.put(itemName, data);
             items.put(itemName, numeric);
             if (nbt != null) {
                 nbtData.put(itemName, nbt);
             }
 
-            ItemData itemData = new ItemData(numeric, data);
+            ItemData itemData = new ItemData(material, numeric, data);
             if (names.containsKey(itemData)) {
                 List<String> nameList = names.get(itemData);
                 nameList.add(itemName);
@@ -111,6 +120,8 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
                 names.put(itemData, nameList);
                 primaryName.put(itemData, itemName);
             }
+
+            legacyIds.put(numeric, itemData);
         }
 
         for (List<String> nameList : names.values()) {
@@ -152,16 +163,6 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
                 if (durabilities.containsKey(itemname) && metaData == 0) {
                     metaData = durabilities.get(itemname);
                 }
-            } else if (Material.getMaterial(itemname.toUpperCase(Locale.ENGLISH)) != null) {
-                Material bMaterial = Material.getMaterial(itemname.toUpperCase(Locale.ENGLISH));
-                itemid = bMaterial.getId();
-            } else {
-                try {
-                    Material bMaterial = Bukkit.getUnsafe().getMaterialFromInternalName(itemname.toLowerCase(Locale.ENGLISH));
-                    itemid = bMaterial.getId();
-                } catch (Throwable throwable) {
-                    throw new Exception(tl("unknownItemName", itemname), throwable);
-                }
             }
         }
 
@@ -169,10 +170,12 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
             throw new Exception(tl("unknownItemName", itemname));
         }
 
-        final Material mat = Material.getMaterial(itemid);
-        if (mat == null) {
+        ItemData data = legacyIds.get(itemid);
+        if (data == null) {
             throw new Exception(tl("unknownItemId", itemid));
         }
+
+        Material mat = data.getMaterial();
         ItemStack retval = new ItemStack(mat);
         if (nbtData.containsKey(itemname)) {
             String nbt = nbtData.get(itemname);
@@ -241,10 +244,10 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
 
     @Override
     public String names(ItemStack item) {
-        ItemData itemData = new ItemData(item.getTypeId(), item.getDurability());
+        ItemData itemData = new ItemData(item.getType(), item.getDurability());
         List<String> nameList = names.get(itemData);
         if (nameList == null) {
-            itemData = new ItemData(item.getTypeId(), (short) 0);
+            itemData = new ItemData(item.getType(), (short) 0);
             nameList = names.get(itemData);
             if (nameList == null) {
                 return null;
@@ -259,10 +262,10 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
 
     @Override
     public String name(ItemStack item) {
-        ItemData itemData = new ItemData(item.getTypeId(), item.getDurability());
+        ItemData itemData = new ItemData(item.getType(), item.getDurability());
         String name = primaryName.get(itemData);
         if (name == null) {
-            itemData = new ItemData(item.getTypeId(), (short) 0);
+            itemData = new ItemData(item.getType(), (short) 0);
             name = primaryName.get(itemData);
             if (name == null) {
                 return null;
@@ -416,21 +419,55 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
     }
 
     @Override
+    public Material getFromLegacyId(int id) {
+        ItemData data = this.legacyIds.get(id);
+        if(data == null) {
+            return null;
+        }
+
+        return data.getMaterial();
+    }
+
+    @Override
+    public int getLegacyId(Material material) throws Exception {
+        for(Map.Entry<String, Integer> entry : items.entrySet()) {
+            if(material.name().toLowerCase(Locale.ENGLISH).equalsIgnoreCase(entry.getKey())) {
+                return entry.getValue();
+            }
+        }
+
+        throw new Exception("Itemid not found for material: " + material.name());
+    }
+
+    @Override
     public Collection<String> listNames() {
         return primaryName.values();
     }
 
     static class ItemData {
-        final private int itemNo;
+        final private Material material;
+        private int legacyId;
         final private short itemData;
 
-        ItemData(final int itemNo, final short itemData) {
-            this.itemNo = itemNo;
+        ItemData(Material material, short itemData) {
+            this.material = material;
             this.itemData = itemData;
         }
 
+        @Deprecated
+        ItemData(Material material, final int legacyId, final short itemData) {
+            this.material = material;
+            this.legacyId = legacyId;
+            this.itemData = itemData;
+        }
+
+        public Material getMaterial() {
+            return material;
+        }
+
+        @Deprecated
         public int getItemNo() {
-            return itemNo;
+            return legacyId;
         }
 
         public short getItemData() {
@@ -439,7 +476,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
 
         @Override
         public int hashCode() {
-            return (31 * itemNo) ^ itemData;
+            return (31 * material.hashCode()) ^ itemData;
         }
 
         @Override
@@ -451,7 +488,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
                 return false;
             }
             ItemData pairo = (ItemData) o;
-            return this.itemNo == pairo.getItemNo() && this.itemData == pairo.getItemData();
+            return this.material == pairo.getMaterial() && this.itemData == pairo.getItemData();
         }
     }
 

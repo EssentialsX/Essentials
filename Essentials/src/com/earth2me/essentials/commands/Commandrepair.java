@@ -38,7 +38,7 @@ public class Commandrepair extends EssentialsCommand {
     }
 
     public void repairHand(User user) throws Exception {
-        final ItemStack item = user.getBase().getItemInHand();
+        final ItemStack item = user.getBase().getInventory().getItemInMainHand();
         if (item == null || item.getType().isBlock() || item.getDurability() == 0) {
             throw new Exception(tl("repairInvalidType"));
         }
@@ -47,8 +47,10 @@ public class Commandrepair extends EssentialsCommand {
             throw new Exception(tl("repairEnchanted"));
         }
 
+        int itemId = ess.getItemDb().getLegacyId(item.getType());
+
         final String itemName = item.getType().toString().toLowerCase(Locale.ENGLISH);
-        final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), new Trade("repair-" + item.getTypeId(), new Trade("repair-item", ess), ess), ess);
+        final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), new Trade("repair-" + itemId, new Trade("repair-item", ess), ess), ess);
 
         charge.isAffordableFor(user);
 
@@ -76,7 +78,7 @@ public class Commandrepair extends EssentialsCommand {
     }
 
     private void repairItem(final ItemStack item) throws Exception {
-        final Material material = Material.getMaterial(item.getTypeId());
+        final Material material = item.getType();
         if (material.isBlock() || material.getMaxDurability() < 1) {
             throw new Exception(tl("repairInvalidType"));
         }
@@ -88,13 +90,16 @@ public class Commandrepair extends EssentialsCommand {
         item.setDurability((short) 0);
     }
 
-    private void repairItems(final ItemStack[] items, final IUser user, final List<String> repaired) {
+    private void repairItems(final ItemStack[] items, final IUser user, final List<String> repaired) throws Exception {
         for (ItemStack item : items) {
             if (item == null || item.getType().isBlock() || item.getDurability() == 0) {
                 continue;
             }
+
+            int itemId = ess.getItemDb().getLegacyId(item.getType());
+
             final String itemName = item.getType().toString().toLowerCase(Locale.ENGLISH);
-            final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), new Trade("repair-" + item.getTypeId(), new Trade("repair-item", ess), ess), ess);
+            final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), new Trade("repair-" + itemId, new Trade("repair-item", ess), ess), ess);
             try {
                 charge.isAffordableFor(user);
             } catch (ChargeException ex) {

@@ -21,9 +21,17 @@ public class Worth implements IConf {
         config.load();
     }
 
-    public BigDecimal getPrice(ItemStack itemStack) {
-        String itemname = itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
+    public BigDecimal getPrice(IEssentials essentials, ItemStack itemStack) {
         BigDecimal result;
+        int itemId;
+
+        try {
+            itemId = essentials.getItemDb().getLegacyId(itemStack.getType());
+        } catch (Exception e) {
+            return null;
+        }
+
+        String itemname = itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 
         //First check for matches with item name
         result = config.getBigDecimal("worth." + itemname + "." + itemStack.getDurability(), BigDecimal.ONE.negate());
@@ -42,24 +50,24 @@ public class Worth implements IConf {
 
         //Now we should check for item ID
         if (result.signum() < 0) {
-            result = config.getBigDecimal("worth." + itemStack.getTypeId() + "." + itemStack.getDurability(), BigDecimal.ONE.negate());
+            result = config.getBigDecimal("worth." + itemId + "." + itemStack.getDurability(), BigDecimal.ONE.negate());
         }
         if (result.signum() < 0) {
-            final ConfigurationSection itemNumberMatch = config.getConfigurationSection("worth." + itemStack.getTypeId());
+            final ConfigurationSection itemNumberMatch = config.getConfigurationSection("worth." + itemId);
             if (itemNumberMatch != null && itemNumberMatch.getKeys(false).size() == 1) {
-                result = config.getBigDecimal("worth." + itemStack.getTypeId() + ".0", BigDecimal.ONE.negate());
+                result = config.getBigDecimal("worth." + itemId + ".0", BigDecimal.ONE.negate());
             }
         }
         if (result.signum() < 0) {
-            result = config.getBigDecimal("worth." + itemStack.getTypeId() + ".*", BigDecimal.ONE.negate());
+            result = config.getBigDecimal("worth." + itemId + ".*", BigDecimal.ONE.negate());
         }
         if (result.signum() < 0) {
-            result = config.getBigDecimal("worth." + itemStack.getTypeId(), BigDecimal.ONE.negate());
+            result = config.getBigDecimal("worth." + itemId, BigDecimal.ONE.negate());
         }
 
         //This is to match the old worth syntax
         if (result.signum() < 0) {
-            result = config.getBigDecimal("worth-" + itemStack.getTypeId(), BigDecimal.ONE.negate());
+            result = config.getBigDecimal("worth-" + itemId, BigDecimal.ONE.negate());
         }
         if (result.signum() < 0) {
             return null;
@@ -71,7 +79,15 @@ public class Worth implements IConf {
         if (is == null || is.getType() == Material.AIR) {
             throw new Exception(tl("itemSellAir"));
         }
-        int id = is.getTypeId();
+
+        int id;
+
+        try {
+            id = ess.getItemDb().getLegacyId(is.getType());
+        } catch (Exception e) {
+            return 0;
+        }
+
         int amount = 0;
 
         if (args.length > 1) {
@@ -123,14 +139,22 @@ public class Worth implements IConf {
         return amount;
     }
 
-    public void setPrice(ItemStack itemStack, double price) {
+    public void setPrice(IEssentials ess, ItemStack itemStack, double price) {
         if (itemStack.getType().getData() == null) {
             config.setProperty("worth." + itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""), price);
         } else {
             // Bukkit-bug: getDurability still contains the correct value, while getData().getData() is 0.
             config.setProperty("worth." + itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "") + "." + itemStack.getDurability(), price);
         }
-        config.removeProperty("worth-" + itemStack.getTypeId());
+
+        int itemId;
+        try {
+            itemId = ess.getItemDb().getLegacyId(itemStack.getType());
+        } catch (Exception e) {
+            return;
+        }
+
+        config.removeProperty("worth-" + itemId);
         config.save();
     }
 

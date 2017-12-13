@@ -1,5 +1,6 @@
 package com.earth2me.essentials.protect;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -14,9 +15,9 @@ import java.util.logging.Logger;
 
 public class EssentialsProtect extends JavaPlugin implements IProtect {
     private static final Logger LOGGER = Logger.getLogger("Minecraft");
-    private final Map<ProtectConfig, Boolean> settingsBoolean = new EnumMap<ProtectConfig, Boolean>(ProtectConfig.class);
-    private final Map<ProtectConfig, String> settingsString = new EnumMap<ProtectConfig, String>(ProtectConfig.class);
-    private final Map<ProtectConfig, List<Integer>> settingsList = new EnumMap<ProtectConfig, List<Integer>>(ProtectConfig.class);
+    private final Map<ProtectConfig, Boolean> settingsBoolean = new EnumMap<>(ProtectConfig.class);
+    private final Map<ProtectConfig, String> settingsString = new EnumMap<>(ProtectConfig.class);
+    private final Map<ProtectConfig, List<Material>> settingsList = new EnumMap<>(ProtectConfig.class);
     private EssentialsConnect ess = null;
 
     @Override
@@ -65,7 +66,7 @@ public class EssentialsProtect extends JavaPlugin implements IProtect {
     }
 
     @Override
-    public Map<ProtectConfig, List<Integer>> getSettingsList() {
+    public Map<ProtectConfig, List<Material>> getSettingsList() {
         return settingsList;
     }
 
