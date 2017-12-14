@@ -66,4 +66,4 @@ Support
 -----------------
 [Issue Tracker](https://github.com/EssentialsX/Essentials/issues)
 
-[Live Support](http://webchat.esper.net/?channels=essentialsx&prompt=1) available business hours (GMT -5)
+[Live Support](https://discord.gg/F7gexAQ)
