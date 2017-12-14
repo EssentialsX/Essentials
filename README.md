@@ -25,6 +25,8 @@ EssentialsX is almost a completely drop-in replacement for Essentials. However, 
 
 * **1.7.10 is no longer supported.**
 
+* **1.13 will be supported!**
+
 Building
 --------
 
