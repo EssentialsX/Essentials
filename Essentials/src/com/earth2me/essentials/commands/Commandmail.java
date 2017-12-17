@@ -48,12 +48,8 @@ public class Commandmail extends EssentialsCommand {
             }
 
             if (user.isMuted()) {
-                if (user.getMuteReason ().equals ("")) {
-                    throw new Exception(tl("voiceSilenced"));
-                }
-                else {
-                    throw new Exception(tl("voiceSilenced") + tl("muteFormat", user.getMuteReason ()));
-                }
+                throw new Exception(tl("voiceSilenced") + (user.hasMuteReason() ?
+                        tl("muteReason", user.getMuteReason()) : ""));
             }
 
             User u = getPlayer(server, args[1], true, true);
