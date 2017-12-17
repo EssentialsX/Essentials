@@ -118,7 +118,7 @@ public class Commandseen extends EssentialsCommand {
         }
         if (user.isMuted()) {
             throw new Exception(tl("whoisMuted", (user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : tl("true"))) + (user.hasMuteReason() ?
-                    tl("muteReason", user.getMuteReason()) : ""));
+                    (" " + tl("muteReason", user.getMuteReason())) : ""));
         }
         final String location = user.getGeoLocation();
         if (location != null && (!(sender.isPlayer()) || ess.getUser(sender.getPlayer()).isAuthorized("essentials.geoip.show"))) {

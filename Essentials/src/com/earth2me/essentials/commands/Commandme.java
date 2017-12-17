@@ -25,7 +25,7 @@ public class Commandme extends EssentialsCommand {
     public void run(Server server, User user, String commandLabel, String[] args) throws Exception {
         if (user.isMuted()) {
             throw new Exception(tl("voiceSilenced") + (user.hasMuteReason() ?
-                    tl("muteReason", user.getMuteReason()) : ""));
+                    (" " + tl("muteReason", user.getMuteReason())) : ""));
         }
 
         if (args.length < 1) {

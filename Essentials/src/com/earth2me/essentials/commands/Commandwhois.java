@@ -57,7 +57,7 @@ public class Commandwhois extends EssentialsCommand {
         }
         sender.sendMessage(tl("whoisJail", (user.isJailed() ? user.getJailTimeout() > 0 ? DateUtil.formatDateDiff(user.getJailTimeout()) : tl("true") : tl("false"))));
         throw new Exception(tl("voiceSilenced") + (user.hasMuteReason() ?
-                tl("muteReason", user.getMuteReason()) : ""));
+                (" " + tl("muteReason", user.getMuteReason())) : ""));
     }
 
     @Override
