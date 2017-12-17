@@ -117,8 +117,12 @@ public class Commandseen extends EssentialsCommand {
             sender.sendMessage(tl("whoisJail", (user.getJailTimeout() > 0 ? DateUtil.formatDateDiff(user.getJailTimeout()) : tl("true"))));
         }
         if (user.isMuted()) {
-            throw new Exception(tl("whoisMuted", (user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : tl("true"))) + (user.hasMuteReason() ?
-                    tl("muteReason", user.getMuteReason()) : ""));
+            if (user.getMuteReason ().equals ("")) {
+                sender.sendMessage(tl("whoisMuted", (user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : tl("true"))));
+            }
+            else {
+                sender.sendMessage(tl("whoisMuted", (user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : tl("true"))) + " " + tl("muteReason", user.getMuteReason ()));
+            }
         }
         final String location = user.getGeoLocation();
         if (location != null && (!(sender.isPlayer()) || ess.getUser(sender.getPlayer()).isAuthorized("essentials.geoip.show"))) {
