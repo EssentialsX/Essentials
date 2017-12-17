@@ -24,8 +24,12 @@ public class Commandme extends EssentialsCommand {
     @Override
     public void run(Server server, User user, String commandLabel, String[] args) throws Exception {
         if (user.isMuted()) {
-            throw new Exception(tl("voiceSilenced") + (user.hasMuteReason() ?
-                    tl("muteReason", user.getMuteReason()) : ""));
+            if (user.getMuteReason ().equals ("")) {
+                throw new Exception(tl("voiceSilenced"));
+            }
+            else {
+                throw new Exception(tl("voiceSilenced") + " " + tl("muteReason", user.getMuteReason ()));
+            }
         }
 
         if (args.length < 1) {
@@ -53,8 +57,6 @@ public class Commandme extends EssentialsCommand {
                 boolean abort = false;
                 final Location playerLoc = onlineUser.getLocation();
                 if (playerLoc.getWorld() != world) {
-                    abort = true;
-                } else if (onlineUser.isIgnoredPlayer(user)) {
                     abort = true;
                 } else {
                     final double delta = playerLoc.distanceSquared(loc);

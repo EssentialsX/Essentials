@@ -51,8 +51,12 @@ public class Commandafk extends EssentialsCommand {
     private void toggleAfk(User sender, User user, String message) throws Exception {
         if (message != null && sender != null) {
             if (sender.isMuted()) {
-                throw new Exception(tl("voiceSilenced") + (sender.hasMuteReason() ?
-                        tl("muteReason", sender.getMuteReason()) : ""));
+                if (sender.getMuteReason ().equals ("")) {
+                    throw new Exception(tl("voiceSilenced"));
+                }
+                else {
+                    throw new Exception(tl("voiceSilenced") + " " + tl("muteReason", sender.getMuteReason ()));
+                }
             }
             if (!sender.isAuthorized("essentials.afk.message")) {
                 throw new Exception(tl("noPermToAFKMessage"));
@@ -80,7 +84,6 @@ public class Commandafk extends EssentialsCommand {
         if (!msg.isEmpty()) {
             ess.broadcastMessage(user, msg);
         }
-        user.setDisplayNick(); // Set this again after toggling
     }
 
     @Override
