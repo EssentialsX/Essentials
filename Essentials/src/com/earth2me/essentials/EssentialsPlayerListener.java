@@ -87,7 +87,7 @@ public class EssentialsPlayerListener implements Listener {
                 user.sendMessage(tl("voiceSilenced"));
             }
             else {
-                user.sendMessage(tl("voiceSilenced") + tl("muteReason", user.getMuteReason ()));
+                user.sendMessage(tl("voiceSilenced") + " " + tl("muteReason", user.getMuteReason ()));
             }
 
             LOGGER.info(tl("mutedUserSpeaks", user.getName(), event.getMessage()));
