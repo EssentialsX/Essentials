@@ -121,7 +121,7 @@ public class Commandseen extends EssentialsCommand {
                 sender.sendMessage(tl("whoisMuted", (user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : tl("true"))));
             }
             else {
-                sender.sendMessage(tl("whoisMuted", (user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : tl("true"))) + tl("muteReason", user.getMuteReason ()));
+                sender.sendMessage(tl("whoisMuted", (user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : tl("true"))) + " " + tl("muteReason", user.getMuteReason ()));
             }
         }
         final String location = user.getGeoLocation();
