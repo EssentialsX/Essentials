@@ -29,7 +29,7 @@ public class Commandr extends EssentialsCommand {
 
             if (user.isMuted()) {
                 throw new Exception(tl("voiceSilenced") + (user.hasMuteReason() ?
-                        tl("muteReason", user.getMuteReason()) : ""));
+                        (" " + tl("muteReason", user.getMuteReason())) : ""));
             }
 
             message = FormatUtil.formatMessage(user, "essentials.msg", message);
