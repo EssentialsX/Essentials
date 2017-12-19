@@ -363,7 +363,13 @@ public class EssentialsPlayerListener implements Listener {
             case KICK_BANNED:
                 BanEntry banEntry = ess.getServer().getBanList(BanList.Type.NAME).getBanEntry(event.getPlayer().getName());
                 if (banEntry != null) {
-                    event.setKickMessage(tl("banJoin", banEntry.getReason()));
+                    Date banExpiry = banEntry.getExpiration();
+                    if (banExpiry != null) {
+                        String expiry = DateUtil.formatDateDiff(banExpiry.getTime());
+                        event.setKickMessage(tl("tempbanJoin", expiry, banEntry.getReason()));
+                    } else {
+                        event.setKickMessage(tl("banJoin", banEntry.getReason()));
+                    }
                 } else {
                     banEntry = ess.getServer().getBanList(BanList.Type.IP).getBanEntry(event.getAddress().getHostAddress());
                     if (banEntry != null) {
