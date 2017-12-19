@@ -83,12 +83,8 @@ public class EssentialsPlayerListener implements Listener {
         if (user.isMuted()) {
             event.setCancelled(true);
 
-            if (user.getMuteReason().equals ("")) {
-                user.sendMessage(tl("voiceSilenced"));
-            }
-            else {
-                user.sendMessage(tl("voiceSilenced") + " " + tl("muteReason", user.getMuteReason ()));
-            }
+            user.sendMessage(tl("voiceSilenced") + (user.hasMuteReason() ?
+                    (" " + tl("muteReason", user.getMuteReason())) : ""));
 
             LOGGER.info(tl("mutedUserSpeaks", user.getName(), event.getMessage()));
         }

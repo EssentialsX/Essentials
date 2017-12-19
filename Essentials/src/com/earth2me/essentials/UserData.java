@@ -559,7 +559,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public boolean hasMuteReason(){
-        return getMuteReason().equals("");
+        return !getMuteReason().equals("");
     }
 
     private long muteTimeout;
