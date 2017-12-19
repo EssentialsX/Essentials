@@ -366,7 +366,7 @@ public class EssentialsPlayerListener implements Listener {
                     Date banExpiry = banEntry.getExpiration();
                     if (banExpiry != null) {
                         String expiry = DateUtil.formatDateDiff(banExpiry.getTime());
-                        event.setKickMessage(tl("tempbanJoin", banExpiry.getTime(), banEntry.getReason()));
+                        event.setKickMessage(tl("tempbanJoin", expiry, banEntry.getReason()));
                     } else {
                         event.setKickMessage(tl("banJoin", banEntry.getReason()));
                     }
