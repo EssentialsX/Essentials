@@ -52,7 +52,7 @@ public class Commandafk extends EssentialsCommand {
         if (message != null && sender != null) {
             if (sender.isMuted()) {
                 throw new Exception(tl("voiceSilenced") + (sender.hasMuteReason() ?
-                        tl("muteReason", sender.getMuteReason()) : ""));
+                        (" " + tl("muteReason", sender.getMuteReason())) : ""));
             }
             if (!sender.isAuthorized("essentials.afk.message")) {
                 throw new Exception(tl("noPermToAFKMessage"));
