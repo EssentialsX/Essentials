@@ -1,6 +1,9 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+
+import net.ess3.api.events.TPARequestEvent;
+
 import org.bukkit.Server;
 
 import java.util.Collections;
@@ -24,6 +27,7 @@ public class Commandtpa extends EssentialsCommand {
         if (user.getName().equalsIgnoreCase(player.getName())) {
             throw new NotEnoughArgumentsException();
         }
+        
         if (!player.isTeleportEnabled()) {
             throw new Exception(tl("teleportDisabled", player.getDisplayName()));
         }
@@ -35,9 +39,12 @@ public class Commandtpa extends EssentialsCommand {
             && player.isTpRequestHere() == false) { // Make sure the last teleport request was actually tpa and not tpahere
             throw new Exception(tl("requestSentAlready", player.getDisplayName()));
         }
-
+        TPARequestEvent tpaEvent = new TPARequestEvent(user, player);
+        
         if (!player.isIgnoredPlayer(user)) {
+        	ess.getServer().getPluginManager().callEvent(tpaEvent);
             player.requestTeleport(user, false);
+            if(tpaEvent.isCancelled()) return;
             player.sendMessage(tl("teleportRequest", user.getDisplayName()));
             player.sendMessage(tl("typeTpaccept"));
             player.sendMessage(tl("typeTpdeny"));
@@ -45,8 +52,10 @@ public class Commandtpa extends EssentialsCommand {
                 player.sendMessage(tl("teleportRequestTimeoutInfo", ess.getSettings().getTpaAcceptCancellation()));
             }
         }
-        user.sendMessage(tl("requestSent", player.getDisplayName()));
-        user.sendMessage(tl("typeTpacancel"));
+        if(!tpaEvent.isCancelled()) { //Not sure what to do about the other case, we could add something to the locale, but...
+        	user.sendMessage(tl("requestSent", player.getDisplayName()));
+            user.sendMessage(tl("typeTpacancel"));
+        }
     }
 
     @Override
