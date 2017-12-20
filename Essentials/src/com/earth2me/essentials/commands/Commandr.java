@@ -28,8 +28,7 @@ public class Commandr extends EssentialsCommand {
             User user = ess.getUser(sender.getPlayer());
 
             if (user.isMuted()) {
-                throw new Exception(tl("voiceSilenced") + (user.hasMuteReason() ?
-                        (" " + tl("muteReason", user.getMuteReason())) : ""));
+                throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
             }
 
             message = FormatUtil.formatMessage(user, "essentials.msg", message);
