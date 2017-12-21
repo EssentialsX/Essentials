@@ -1,8 +1,6 @@
 language: java
 jdk:
-  - oraclejdk7
-  - openjdk7
-  - openjdk6
+  - oraclejdk8
 script: mvn compile test
 install: true
 notifications:

@@ -17,7 +17,11 @@
  */
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.commands.*;
+import com.earth2me.essentials.commands.EssentialsCommand;
+import com.earth2me.essentials.commands.IEssentialsCommand;
+import com.earth2me.essentials.commands.NoChargeException;
+import com.earth2me.essentials.commands.NotEnoughArgumentsException;
+import com.earth2me.essentials.commands.QuietAbortException;
 import com.earth2me.essentials.metrics.Metrics;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
@@ -32,17 +36,15 @@ import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
 import net.ess3.api.*;
-import net.ess3.api.IEssentials;
-import net.ess3.api.ISettings;
 import net.ess3.nms.PotionMetaProvider;
 import net.ess3.nms.SpawnEggProvider;
 import net.ess3.nms.SpawnerProvider;
 import net.ess3.nms.legacy.LegacyPotionMetaProvider;
+import net.ess3.nms.legacy.LegacySpawnEggProvider;
+import net.ess3.nms.legacy.LegacySpawnerProvider;
 import net.ess3.nms.refl.ReflSpawnEggProvider;
 import net.ess3.nms.updatedmeta.BasePotionDataProvider;
 import net.ess3.nms.updatedmeta.BlockMetaSpawnerProvider;
-import net.ess3.nms.legacy.LegacySpawnEggProvider;
-import net.ess3.nms.legacy.LegacySpawnerProvider;
 import net.ess3.nms.v1_8_R1.v1_8_R1SpawnerProvider;
 import net.ess3.nms.v1_8_R2.v1_8_R2SpawnerProvider;
 import net.ess3.providers.ProviderFactory;
@@ -66,14 +68,13 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 import org.yaml.snakeyaml.error.YAMLException;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -85,7 +86,8 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private static final Logger LOGGER = Logger.getLogger("Essentials");
-    private transient ISettings settings;
+    private transient CommandMap bukkitCommandMap;
+    private transient net.ess3.api.ISettings settings;
     private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
     private transient Jails jails;
     private transient Warps warps;
@@ -124,7 +126,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     @Override
-    public ISettings getSettings() {
+    public net.ess3.api.ISettings getSettings() {
         return settings;
     }
 
@@ -140,7 +142,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         i18n.onEnable();
         i18n.updateLocale("en");
         Console.setInstance(this);
-        
+
         LOGGER.log(Level.INFO, tl("usingTempFolderForTesting"));
         LOGGER.log(Level.INFO, dataFolder.toString());
         settings = new Settings(this);
@@ -163,7 +165,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             i18n = new I18n(this);
             i18n.onEnable();
             execTimer.mark("I18n1");
-            
+
             Console.setInstance(this);
 
             final PluginManager pm = getServer().getPluginManager();
@@ -178,6 +180,14 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     oldGetOnlinePlayers = method;
                     break;
                 }
+            }
+
+            try {
+                Field field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+                field.setAccessible(true);
+                bukkitCommandMap = (CommandMap) field.get(Bukkit.getServer());
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                LOGGER.log(Level.WARNING, tl("failedToFindCommandMap"), e);
             }
 
             forceLoadClasses();
@@ -347,7 +357,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String commandLabel, String[] args) {
         return onTabCompleteEssentials(sender, command, commandLabel, args, Essentials.class.getClassLoader(),
-            "com.earth2me.essentials.commands.Command", "essentials.", null);
+                "com.earth2me.essentials.commands.Command", "essentials.", null);
     }
 
     @Override
@@ -513,9 +523,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     cmd.run(getServer(), user, commandLabel, command, args);
                 }
                 return true;
-            } catch (NoChargeException ex) {
-                return true;
-            } catch (QuietAbortException ex) {
+            } catch (NoChargeException | QuietAbortException ex) {
                 return true;
             } catch (NotEnoughArgumentsException ex) {
                 sender.sendMessage(command.getDescription());
@@ -851,6 +859,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public PotionMetaProvider getPotionMetaProvider() {
         return potionMetaProvider;
+    }
+
+    @Override
+    public CommandMap getCommandMap() {
+        return bukkitCommandMap;
     }
 
     private static class EssentialsWorldListener implements Listener, Runnable {
