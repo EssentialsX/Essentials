@@ -127,7 +127,6 @@ public class MetaItemStack {
                 String _str = string[i];
                 if (loreIndex == -1) {
                     if (_str.matches("^lore" + splitPattern.pattern() + ".*")) {
-                        System.out.println("YES " + _str);
                         loreIndex = i;
                     }
                 } else {
