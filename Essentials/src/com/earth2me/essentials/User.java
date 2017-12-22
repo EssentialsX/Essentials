@@ -61,6 +61,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private String afkMessage;
     private long afkSince;
     private Map<User, BigDecimal> confirmingPayments = new WeakHashMap<>();
+    private String confirmingClearCommand;
     private long lastNotifiedAboutMailsMs;
 
     public User(final Player base, final IEssentials ess) {
@@ -844,6 +845,14 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     @Override
     public Map<User, BigDecimal> getConfirmingPayments() {
         return confirmingPayments;
+    }
+
+    public String getConfirmingClearCommand() {
+        return confirmingClearCommand;
+    }
+    
+    public void setConfirmingClearCommand(String command) {
+        this.confirmingClearCommand = command;
     }
 
     /**

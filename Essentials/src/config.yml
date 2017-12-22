@@ -428,7 +428,7 @@ cancel-afk-on-move: true
 # Set the player's list name when they are AFK. This is none by default which specifies that Essentials 
 # should not interfere with the AFK player's list name.
 # You may use color codes, use {USERNAME} the player's name or {PLAYER} for the player's displayname.
-afk-list-name: none
+afk-list-name: "none"
 
 # You can disable the death messages of Minecraft here.
 death-messages: true
