@@ -32,14 +32,22 @@ public class Commandtppos extends EssentialsCommand {
         final double z = args[2].startsWith("~") ? user.getLocation().getZ() + (args[2].length() > 1 ? Integer.parseInt(args[2].substring(1)) : 0) : Integer.parseInt(args[2]);
         final Location loc = new Location(user.getWorld(), x, y, z, user.getLocation().getYaw(), user.getLocation().getPitch());
         if (args.length == 4) {
-            loc.setWorld(ess.getWorld(args[3]));
+            World w = ess.getWorld(args[3]);
+            if (user.getWorld() != w && ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + w.getName())) {
+                throw new Exception(tl("noPerm", "essentials.worlds." + w.getName()));
+            }
+            loc.setWorld(w);
         }
         if (args.length > 4) {
             loc.setYaw((FloatUtil.parseFloat(args[3]) + 360) % 360);
             loc.setPitch(FloatUtil.parseFloat(args[4]));
         }
         if (args.length > 5) {
-            loc.setWorld(ess.getWorld(args[5]));
+            World w = ess.getWorld(args[5]);
+            if (user.getWorld() != w && ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + w.getName())) {
+                throw new Exception(tl("noPerm", "essentials.worlds." + w.getName()));
+            }
+            loc.setWorld(w);
         }
         if (x > 30000000 || y > 30000000 || z > 30000000 || x < -30000000 || y < -30000000 || z < -30000000) {
             throw new NotEnoughArgumentsException(tl("teleportInvalidLocation"));
