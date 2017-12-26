@@ -2,7 +2,7 @@
 
 [![Downloads](https://i.imgur.com/MMc0PJY.png)](http://ci.ender.zone/job/EssentialsX/)
 
-**Mirror**: https://ci.akpmakes.tech/job/EssentialsX/
+[![Discord](https://imgur.com/MFRRBn4.png)](https://discord.gg/F7gexAQ)
 
 This is a fork of Essentials called EssentialsX.
 
@@ -13,7 +13,7 @@ The official upstream repository is at https://github.com/Essentials/Essentials
 Why you should use it
 --------
 
-EssentialsX provides several performance enhancements and fixes that are currently not available in Essentials and Spigot-Essentials, most notably mob spawner support for 1.8+ servers and buy/trade sign support for 1.9+ servers. [See the wiki for details.](https://github.com/drtshock/Essentials/wiki)
+EssentialsX provides several performance enhancements and fixes that are currently not available in Essentials and Spigot-Essentials, most notably mob spawner support for 1.8+ servers and buy/trade sign support for 1.9+ servers. [See the wiki for details.](https://github.com/EssentialsX/Essentials/wiki)
 
 EssentialsX is almost a completely drop-in replacement for Essentials. However, it has different requirements:
 
@@ -24,6 +24,8 @@ EssentialsX is almost a completely drop-in replacement for Essentials. However, 
 * **EssentialsX requires Java 7 or higher.**
 
 * **1.7.10 is no longer supported.**
+
+* **1.13 will be supported!**
 
 Building
 --------
@@ -64,6 +66,6 @@ This is an unofficial fork of Essentials. It will be consistently updated and ma
 
 Support
 -----------------
-[Issue Tracker](https://github.com/drtshock/Essentials/issues)
+[Issue Tracker](https://github.com/EssentialsX/Essentials/issues)
 
-[Live Support](http://webchat.esper.net/?channels=essentialsx&prompt=1) available business hours (GMT -5)
+[Live Support](https://discord.gg/F7gexAQ)
