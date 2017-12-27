@@ -117,8 +117,12 @@ public class Commandseen extends EssentialsCommand {
             sender.sendMessage(tl("whoisJail", (user.getJailTimeout() > 0 ? DateUtil.formatDateDiff(user.getJailTimeout()) : tl("true"))));
         }
         if (user.isMuted()) {
-            sender.sendMessage(user.hasMuteReason() ? (tl("whoisMutedReason", (user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : tl("true")), user.getMuteReason())) :
-                    tl("whoisMuted", (user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : tl("true"))));
+            long muteTimeout = user.getMuteTimeout();
+            if (!user.hasMuteReason()) {
+                sender.sendMessage(tl("whoisMuted", (muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : tl("true"))));
+            } else {
+                sender.sendMessage(tl("whoisMutedReason", (muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : tl("true")), user.getMuteReason()));
+            }
         }
         final String location = user.getGeoLocation();
         if (location != null && (!(sender.isPlayer()) || ess.getUser(sender.getPlayer()).isAuthorized("essentials.geoip.show"))) {
@@ -157,6 +161,15 @@ public class Commandseen extends EssentialsCommand {
                     expireString = DateUtil.formatDateDiff(expiry.getTime());
                 }
                 sender.sendMessage(tl("whoisTempBanned", expireString));
+            }
+        }
+
+        if (user.isMuted()) {
+            long muteTimeout = user.getMuteTimeout();
+            if (!user.hasMuteReason()) {
+                sender.sendMessage(tl("whoisMuted", (muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : tl("true"))));
+            } else {
+                sender.sendMessage(tl("whoisMutedReason", (muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : tl("true")), user.getMuteReason()));
             }
         }
 
