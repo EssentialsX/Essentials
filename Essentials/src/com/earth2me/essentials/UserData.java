@@ -73,7 +73,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         godmode = _getGodModeEnabled();
         muted = _getMuted();
         muteTimeout = _getMuteTimeout();
-        muteReason = _getMuteReason ();
+        muteReason = _getMuteReason();
         jailed = _getJailed();
         jailTimeout = _getJailTimeout();
         lastLogin = _getLastLogin();
@@ -522,17 +522,18 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public void setMuteReason(String reason) {
-        if (reason.equals("")) {
-            config.removeProperty ("muteReason");
+        if (reason == null) {
+            config.removeProperty("muteReason");
+            muteReason = null;
         } else {
             muteReason = reason;
-            config.setProperty ("muteReason", reason);
+            config.setProperty("muteReason", reason);
         }
         config.save();
     }
 
     public boolean hasMuteReason(){
-        return !getMuteReason().equals("");
+        return muteReason != null;
     }
 
     private long muteTimeout;
