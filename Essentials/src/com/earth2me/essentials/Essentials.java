@@ -166,6 +166,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             
             Console.setInstance(this);
 
+            LOGGER.warning("EssentialsX has been discontinued and will not support Minecraft 1.13.");
+            LOGGER.warning("Thanks for using EssentialsX!");
+
             final PluginManager pm = getServer().getPluginManager();
             for (Plugin plugin : pm.getPlugins()) {
                 if (plugin.getDescription().getName().startsWith("Essentials") && !plugin.getDescription().getVersion().equals(this.getDescription().getVersion()) && !plugin.getDescription().getName().equals("EssentialsAntiCheat")) {
