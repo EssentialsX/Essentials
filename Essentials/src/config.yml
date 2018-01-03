@@ -308,7 +308,7 @@ kits:
   color:
     delay: 6000
     items:
-      - 387 1 title:&4Book_&9o_&6Colors author:KHobbits lore:Ingame_color_codes book:Colors
+      - 387 1 book:Colors title:&4Book_&9o_&6Colors author:KHobbits lore:Ingame_color_codes
   firework:
     delay: 6000
     items:
