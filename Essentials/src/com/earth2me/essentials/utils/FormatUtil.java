@@ -76,12 +76,12 @@ public class FormatUtil {
         if (user.isAuthorized(permBase + ".magic")) {
             message = replaceColor(message, REPLACE_MAGIC_PATTERN);
         } else {
-            message = stripColor(stripColor(input, REPLACE_MAGIC_PATTERN), VANILLA_MAGIC_PATTERN);
+            message = stripColor(stripColor(message, REPLACE_MAGIC_PATTERN), VANILLA_MAGIC_PATTERN);
         }
         if (user.isAuthorized(permBase + ".format")) {
             message = replaceColor(message, REPLACE_FORMAT_PATTERN);
         } else {
-            message = stripColor(stripColor(input, REPLACE_FORMAT_PATTERN), VANILLA_FORMAT_PATTERN);
+            message = stripColor(stripColor(message, REPLACE_FORMAT_PATTERN), VANILLA_FORMAT_PATTERN);
         }
         return message;
     }
