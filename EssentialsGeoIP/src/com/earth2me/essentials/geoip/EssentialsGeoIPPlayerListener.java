@@ -23,8 +23,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.Date;
 import java.util.zip.GZIPInputStream;
-import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
-import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import com.ice.tar.TarInputStream;
+import com.ice.tar.TarEntry;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -169,10 +169,10 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
             if (url.endsWith(".tar.gz")) {
                 // The new GeoIP2 uses tar.gz to pack the db file along with some other txt. So it makes things a bit complicated here.
                 String filename;
-                TarArchiveInputStream tarInputStream = new TarArchiveInputStream(new GZIPInputStream(input));
-                TarArchiveEntry entry;
-                while ((entry = (TarArchiveEntry) tarInputStream.getNextEntry()) != null) {
-                    if (entry.isFile()) {
+                TarInputStream tarInputStream = new TarInputStream(new GZIPInputStream(input));
+                TarEntry entry;
+                while ((entry = (TarEntry) tarInputStream.getNextEntry()) != null) {
+                    if (!entry.isDirectory()) {
                         filename = entry.getName();
                         if (filename.substring(filename.length() - 5).equalsIgnoreCase(".mmdb")) {
                             byte[] buffer = new byte[2048];
