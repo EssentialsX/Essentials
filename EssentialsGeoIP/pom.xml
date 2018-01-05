@@ -31,9 +31,14 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.maxmind.geoip</groupId>
-            <artifactId>geoip-api</artifactId>
-            <version>1.2.11</version>
+            <groupId>com.maxmind.geoip2</groupId>
+            <artifactId>geoip2</artifactId>
+            <version>2.10.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.2</version>
         </dependency>
     </dependencies>
 
@@ -51,13 +56,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <artifactSet>
-                        <includes>
-                            <include>com.maxmind.geoip:geoip-api</include>
-                        </includes>
-                    </artifactSet>
-                </configuration>
             </plugin>
         </plugins>
     </build>

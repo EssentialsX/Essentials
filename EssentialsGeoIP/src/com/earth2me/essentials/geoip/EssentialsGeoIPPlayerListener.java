@@ -3,9 +3,10 @@ package com.earth2me.essentials.geoip;
 import com.earth2me.essentials.EssentialsConf;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.User;
-import com.maxmind.geoip.Location;
-import com.maxmind.geoip.LookupService;
-import com.maxmind.geoip.regionName;
+import com.maxmind.geoip2.DatabaseReader;
+import com.maxmind.geoip2.model.CityResponse;
+import com.maxmind.geoip2.model.CountryResponse;
+import com.maxmind.geoip2.exception.*;
 import net.ess3.api.IEssentials;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,13 +21,16 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Date;
 import java.util.zip.GZIPInputStream;
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 
 import static com.earth2me.essentials.I18n.tl;
 
 
 public class EssentialsGeoIPPlayerListener implements Listener, IConf {
-    LookupService ls = null;
+    DatabaseReader mmreader = null; // initialize maxmind geoip2 reader
     private static final Logger logger = Logger.getLogger("Minecraft");
     File databaseFile;
     File dataFolder;
@@ -58,22 +62,48 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
         }
         InetAddress address = player.getAddress().getAddress();
         StringBuilder sb = new StringBuilder();
-        if (config.getBoolean("database.show-cities", false)) {
-            Location loc = ls.getLocation(address);
-            if (loc == null) {
-                return;
+        String locale = ess.getI18n().getCurrentLocale().toString().replace('_', '-'); // get locale setting from Essentials
+            try {
+                if (config.getBoolean("database.show-cities", false)) {
+                    CityResponse response = mmreader.city(address);
+                    if (response == null) {
+                        return;
+                    }
+                    String city;
+                    String region;
+                    String country;
+                    if (config.getBoolean("enable-locale", true)) {
+                        // Get geolocation based on locale. If not avaliable in specific language, get the default one.
+                        city = ((city=response.getCity().getNames().get(locale))!=null) ? city : response.getCity().getName();
+                        region = ((region=response.getMostSpecificSubdivision().getNames().get(locale))!=null) ? region : response.getMostSpecificSubdivision().getName();
+                        country = ((country=response.getCountry().getNames().get(locale))!=null) ? country : response.getCountry().getName();
+                    } else {
+                        // Get geolocation regarding locale setting.
+                        city = response.getCity().getName();
+                        region = response.getMostSpecificSubdivision().getName();
+                        country = response.getCountry().getName();
+                    }
+                    if (city != null) {
+                        sb.append(city).append(", ");
+                    }
+                    if (region != null) {
+                        sb.append(region).append(", ");
+                    }
+                    sb.append(country);
+                } else {
+                    CountryResponse response = mmreader.country(address);
+                    sb.append(response.getCountry().getNames().get(locale));
+                }
+            } catch (AddressNotFoundException ex) {
+                // GeoIP2 API forced this when address not found in their DB. jar will not complied without this.
+                // TODO: Maybe, we can set a new custom msg about addr-not-found in messages.properties.
+                logger.log(Level.INFO, tl("cantReadGeoIpDB") + " " + ex.getLocalizedMessage());
+                //logger.log(Level.INFO, tl("cantReadGeoIpDB") + " " + ex.getMessage());
+            } catch (IOException | GeoIp2Exception ex) {
+                // GeoIP2 API forced this when address not found in their DB. jar will not complied without this.
+                logger.log(Level.SEVERE, tl("cantReadGeoIpDB") + " " + ex.getLocalizedMessage());
+                //logger.log(Level.SEVERE, tl("cantReadGeoIpDB") + " " + ex.getMessage());
             }
-            if (loc.city != null) {
-                sb.append(loc.city).append(", ");
-            }
-            String region = regionName.regionNameByCode(loc.countryCode, loc.region);
-            if (region != null) {
-                sb.append(region).append(", ");
-            }
-            sb.append(loc.countryName);
-        } else {
-            sb.append(ls.getCountry(address).getName());
-        }
         if (config.getBoolean("show-on-whois", true)) {
             u.setGeoLocation(sb.toString());
         }
@@ -92,9 +122,9 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
         config.load();
 
         if (config.getBoolean("database.show-cities", false)) {
-            databaseFile = new File(dataFolder, "GeoIPCity.dat");
+            databaseFile = new File(dataFolder, "Geo2-City.mmdb");
         } else {
-            databaseFile = new File(dataFolder, "GeoIP.dat");
+            databaseFile = new File(dataFolder, "Geo2-Country.mmdb");
         }
         if (!databaseFile.exists()) {
             if (config.getBoolean("database.download-if-missing", true)) {
@@ -103,9 +133,15 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
                 logger.log(Level.SEVERE, tl("cantFindGeoIpDB"));
                 return;
             }
+        } else if (config.getBoolean("database.update.enable", true)) {
+            // try to update expired mmdb files
+            long diff = new Date().getTime() - databaseFile.lastModified();
+            if (diff/24/3600/1000>config.getLong("database.update.by-every-x-days")) {
+                downloadDatabase();
+            }
         }
         try {
-            ls = new LookupService(databaseFile);
+            mmreader = new DatabaseReader.Builder(databaseFile).build();
         } catch (IOException ex) {
             logger.log(Level.SEVERE, tl("cantReadGeoIpDB"), ex);
         }
@@ -129,15 +165,27 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
             conn.setConnectTimeout(10000);
             conn.connect();
             InputStream input = conn.getInputStream();
-            if (url.endsWith(".gz")) {
-                input = new GZIPInputStream(input);
-            }
             OutputStream output = new FileOutputStream(databaseFile);
-            byte[] buffer = new byte[2048];
-            int length = input.read(buffer);
-            while (length >= 0) {
-                output.write(buffer, 0, length);
-                length = input.read(buffer);
+            if (url.endsWith(".tar.gz")) {
+                // The new GeoIP2 uses tar.gz to pack the db file along with some other txt. So it makes things a bit complicated here.
+                String filename;
+                TarArchiveInputStream tarInputStream = new TarArchiveInputStream(new GZIPInputStream(input));
+                TarArchiveEntry entry;
+                while ((entry = (TarArchiveEntry) tarInputStream.getNextEntry()) != null) {
+                    if (entry.isFile()) {
+                        filename = entry.getName();
+                        if (filename.substring(filename.length() - 5).equalsIgnoreCase(".mmdb")) {
+                            byte[] buffer = new byte[2048];
+                            int length = tarInputStream.read(buffer);
+                            while (length >= 0) {
+                                output.write(buffer, 0, length);
+                                length = tarInputStream.read(buffer);
+                            }
+                            break;
+                        }
+                    }
+                }
+                tarInputStream.close();
             }
             output.close();
             input.close();
